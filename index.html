@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Overview of Educational Technology</title>
+    <script type="text/javascript" src="lib/browser_detect.js"></script>
+    <script type="text/javascript" src="lib/d3.v3.js"></script>
+    <script type="text/javascript" src="lib/jquery-1.8.1.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.lazyload.js"></script>
+    <script type="text/javascript" src="lib/state-machine.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+  </head>
+  <body id="main">
+    <div id="subdiscipline_title"></div>
+    <div id="chart"></div>
+    <div id="papers_list_container"></div>
+    <div id="paper_frame"></div>
+    <script type="text/javascript">
+        var browser = BrowserDetect.browser;
+        var browser_version = BrowserDetect.version;
+
+        if (browser != "Firefox" && browser != "Safari" && browser != "Chrome") {
+                alert("You are using an unsupported browser. This visualization"
+                        + " was successfully tested with the latest versions of Chrome, Safari, and Firefox.");
+        }
+
+        $("img.lazy").lazyload({
+            effect : "fadeIn",
+            container: $("#preview")
+        });
+    </script>
+    <script type="text/javascript" src="headstart.js"></script>
+    <script type="text/javascript" src="intro.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
+    <script type="text/javascript" src="bubbles.js"></script>
+    <script type="text/javascript" src="papers.js"></script>
+    <script type="text/javascript" src="list.js"></script>
+    <script type="text/javascript" src="vis.js"></script>
+  </body>
+</html>
