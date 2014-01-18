@@ -70,17 +70,21 @@ list.drawList = function() {
     this.drawLabel(show_hide);
     this.drawRightArrow(show_hide);
 
-    var papers_list = list_show_hide_container.append("div")
+    list_show_hide_container.append("div")
+      .attr("id", "input_container")
+      .append("input")
+      .attr("type", "text")
+      .attr("value", "Search...")
+      .attr("oninput", "filterList(event)");
+    list_show_hide_container.append("div")
+      .attr("id", "sort_container");
+
+    var papers_list = list_show_hide_container
+                            .append("div")
                             .attr("id", "papers_list")
                             .style("height", headstart.max_chart_size + 10 + "px")
                             .style("display", "none")
-                            .append("input")
-                            .attr("type", "text")
-                            .attr("value", "Search...")
-                            .attr("oninput", "filterList(event)");
-    list_show_hide_container.append("div")
-                            .attr("id", "sort_container")
-                            .style("display", "none");
+
 
     var container = d3.select("#sort_container")
                       .append("ul")
@@ -112,6 +116,32 @@ list.drawList = function() {
 
     this.papers_list = d3.select("#papers_list");
 }
+
+function sortBy(field) {
+  d3.selectAll("#list_holder")
+    .sort(function(a,b) { return stringCompare(a[field], b[field])})
+
+    d3.selectAll(".selected")
+      .attr("class", "")
+
+    d3.select("#sort_" + field)
+      .attr("class", "selected");
+}
+
+function stringCompare(a, b) {
+  if(typeof a == 'undefined' || typeof b == 'undefined')
+    return;
+
+  else if(typeof a == 'string' && typeof b == 'string') {
+    a = a.toLowerCase();
+    b = b.toLowerCase();
+    return a > b ? 1 : a == b ? 0 : -1;
+  }
+  else {
+    return a > b ? 0 : 1;
+  }
+}
+
 
 list.initListMouseListeners = function() {
   d3.selectAll( "#show_hide" ).on( "mouseover", function (d) {
