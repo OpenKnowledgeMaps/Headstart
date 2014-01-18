@@ -1,5 +1,12 @@
 // StateMachine for List UI element in Headstart
 // Filename: list.js
+
+SORT_OPTIONS = [
+ "readers",
+ "title",
+ "area"
+]
+
 var list = StateMachine.create({
 
     events: [
@@ -66,7 +73,43 @@ list.drawList = function() {
     var papers_list = list_show_hide_container.append("div")
                             .attr("id", "papers_list")
                             .style("height", headstart.max_chart_size + 10 + "px")
+                            .style("display", "none")
+                            .append("input")
+                            .attr("type", "text")
+                            .attr("value", "Search...")
+                            .attr("oninput", "filterList(event)");
+    list_show_hide_container.append("div")
+                            .attr("id", "sort_container")
                             .style("display", "none");
+
+    var container = d3.select("#sort_container")
+                      .append("ul")
+                      .attr("class", "filter");
+
+    addSortOption = function(sort_option, selected) {
+      container.append("li")
+        .append("a")
+        .attr("class", function() { return selected?("selected"):("")})
+        .attr("id", "sort_" + sort_option)
+        .on("click", function() {
+          sortBy(sort_option);
+        }).text(sort_option);
+    }
+
+    addSortOption(SORT_OPTIONS[0], true);
+
+      var counter = 0;
+
+      for (option in SORT_OPTIONS) {
+        if (counter === 0) {
+          counter++;
+          continue;
+        }
+        addSortOption(SORT_OPTIONS[option], false);
+      }
+
+
+
     this.papers_list = d3.select("#papers_list");
 }
 
@@ -129,6 +172,59 @@ list.populateMetaData = function(nodes) {
     .append("span")
     .attr("class", "list_pubyear")
     .html(function (d) { return d.published_in + " (" + d.year + ")" });
+}
+
+filterList = function(event) {
+
+  var filtered_data = d3.selectAll("#list_holder, .paper")
+
+    var data_circle = filtered_data
+    .filter(function (d) {
+      if (headstart.is_zoomed === true)
+      return current_circle.data()[0].title == d.area;
+      else
+      return true;
+    })
+
+  if (event.target.value === "") {
+    data_circle.style("display", "block")
+
+      headstart.bubbles[1].data.forEach(function (d) {
+        d.filtered_out = false;
+      })
+
+    return;
+  }
+
+  data_circle.style("display", "inline")
+
+    var searchtext = event.target.value;
+  var searchtext_processed = searchtext.trim().toLowerCase();
+  var search_words = searchtext_processed.split(" ");
+
+  filtered_data
+    .filter(function (d) {
+      var abstract = d.paper_abstract.toLowerCase();
+      var title = d.title.toLowerCase();
+      var authors = d.authors.toLowerCase();
+      var word_found = true;
+      var count = 0;
+      if(typeof abstract !== 'undefined') {
+        while(word_found && count < search_words.length) {
+          word_found = (abstract.indexOf(search_words[count]) !== -1
+            || title.indexOf(search_words[count]) !== -1
+            || authors.indexOf(search_words[count]) !== -1);
+          count++;
+        }
+        d.filtered_out = word_found?false:true;
+        return d.filtered_out;
+      }
+      else {
+        d.filtered_out = true;
+        return false;
+      }
+    })
+  .style("display", "none")
 }
 
 list.createAbstracts = function(nodes) {
