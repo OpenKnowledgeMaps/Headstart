@@ -711,6 +711,10 @@ BubblesFSM.prototype = {
     }
   },
 
+  onbeforemouseover: function( event, from, to, circle, d ) {
+     this.resetCircleDesign();
+  },
+
   onmouseover: function( event, from, to, circle, d ) {
 
     headstart.current_circle = d3.select(circle);
@@ -739,6 +743,7 @@ BubblesFSM.prototype = {
   // we want to prevent the bubbles from switching from
   // hoversmall.
   onbeforemouseout: function( event, from, to, circle, d ) {
+
 
     if (papers.is("loading")) {
       return false;
