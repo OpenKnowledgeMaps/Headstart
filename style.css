@@ -212,6 +212,20 @@ span.readers_entity {
 
 /* ################ Papers list ############### */
 
+div#input_container {
+    margin-top: 5px;
+    float: left;
+    padding-left: 3px;
+}
+
+div#sort_container {
+    position:relative;  
+    float:right;
+    background:none;
+    cursor: pointer;
+}
+
+
 div#show_hide_container {
   position: absolute;
   top: 0px;
@@ -237,7 +251,7 @@ div#show_hide {
 
 div#papers_list {
   /*margin-left: 20px;*/
-  padding: 10px;
+  padding-top: 10px;
   overflow-y: scroll;
   background-color:white;
 }
@@ -405,4 +419,87 @@ table#legend_table tr {
 
 table#legend_table td {
   border-left: 2px #fff solid;
+}
+
+/* ########### Filters ############## */
+
+ul.filter{
+        float:left;
+	padding:0;
+	margin:0;
+	overflow:hidden;
+	list-style-type:none;
+	font-size:11px;
+	-moz-border-radius:20px;
+	border-radius:20px;
+	border:3px solid #e9e9e9
+}
+
+.filter li{
+	padding:0;
+	margin:0;
+	float:left;
+	list-style-type:none;
+        background:#e9e9e9;
+}
+
+.filter li a{
+	position:relative;
+	display:block;
+	float:left;
+	padding:5px 8px;
+	overflow:hidden;
+	color:#333;
+	background:#e9e9e9;
+	text-shadow:0 1px 0 rgba(255,255,255,0.8);
+	-moz-box-shadow:inset 0 1px 3px rgba(0,0,0,0);
+	-webkit-box-shadow:inset 0 1px 3px rgba(0,0,0,0);
+	box-shadow:inset 0 1px 3px rgba(0,0,0,0);
+	margin-left:-1px;
+	-webkit-transition:.2s;
+	border:1px solid #c6c6c6;
+        text-decoration: none;
+}
+
+.filter li a:hover{
+	border-color:#939393;
+	z-index:2;
+	text-decoration:none
+}
+
+.filter li:first-child a{
+	-moz-border-radius-topleft:20px;
+	-moz-border-radius-bottomleft:20px;
+	border-top-left-radius:20px;
+	border-bottom-left-radius:20px;
+	margin-left:0;
+	padding-left:10px
+}
+
+.filter li:first-child{
+	-moz-border-radius-topleft:20px;
+	-moz-border-radius-bottomleft:20px;
+	border-top-left-radius:20px;
+	border-bottom-left-radius:20px
+}
+
+.filter li:last-child a{
+	-moz-border-radius-topright:20px;
+	-moz-border-radius-bottomright:20px;
+	border-top-right-radius:20px;
+	border-bottom-right-radius:20px;
+	padding-right:10px
+}
+
+.filter li a.selected{
+	float:left;
+	color:#fff;
+	background:#489ac0;
+	text-shadow:0 -1px 0 rgba(0,0,0,0.5);
+	z-index:3;
+	-moz-box-shadow:inset 0 1px 3px rgba(0,0,0,0.3);
+	-webkit-box-shadow:inset 0 1px 3px rgba(0,0,0,0.3);
+	box-shadow:inset 0 1px 3px rgba(0,0,0,0.3);
+	-webkit-transition:.2s;
+	border:1px solid #1e6a8d
 }

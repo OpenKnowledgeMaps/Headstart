@@ -83,6 +83,7 @@ list.drawList = function() {
                             .append("div")
                             .attr("id", "papers_list")
                             .style("height", headstart.max_chart_size + 10 + "px")
+                            .style("width", headstart.list_width - 10 + "px")
                             .style("display", "none")
 
 
