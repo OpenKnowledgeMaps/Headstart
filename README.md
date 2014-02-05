@@ -1,5 +1,5 @@
-Headstart
-=========
+Head Start
+==========
 
 Head Start presents you with the main areas in the field, and lets you zoom into
 the most important publications within each area. It is intended to give
