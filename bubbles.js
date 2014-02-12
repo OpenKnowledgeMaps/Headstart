@@ -712,7 +712,9 @@ BubblesFSM.prototype = {
   },
 
   onbeforemouseover: function( event, from, to, circle, d ) {
-     this.resetCircleDesign();
+     if (headstart.is("normal")) {
+       this.resetCircleDesign();
+     }
   },
 
   onmouseover: function( event, from, to, circle, d ) {
