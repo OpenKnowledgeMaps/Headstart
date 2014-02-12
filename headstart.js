@@ -229,11 +229,15 @@ HeadstartFSM.prototype = {
 
   initMouseClickListeners: function() {
     $("rect").on( "click", function() {
-      headstart.bubbles["1"].zoomout();
+      if(!papers.is("loading")){
+        headstart.bubbles["1"].zoomout();
+      }
     });
 
     $("#chart").on("click", function() {
-      headstart.bubbles["1"].zoomOut();
+      if(!papers.is("loading")){
+        headstart.bubbles["1"].zoomOut();
+      }
     });
   },
 

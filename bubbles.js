@@ -746,7 +746,6 @@ BubblesFSM.prototype = {
   // hoversmall.
   onbeforemouseout: function( event, from, to, circle, d ) {
 
-
     if (papers.is("loading")) {
       return false;
     }
