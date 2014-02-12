@@ -83,7 +83,6 @@ list.drawList = function() {
                             .append("div")
                             .attr("id", "papers_list")
                             .style("height", headstart.max_chart_size + 10 + "px")
-                            .style("width", headstart.list_width - 10 + "px")
                             .style("display", "none")
 
 
@@ -212,7 +211,7 @@ filterList = function(event) {
     var data_circle = filtered_data
     .filter(function (d) {
       if (headstart.is_zoomed === true)
-      return current_circle.data()[0].title == d.area;
+      return headstart.current_circle.data()[0].title == d.area;
       else
       return true;
     })
