@@ -44,6 +44,8 @@ var papers = StateMachine.create({
         { name: "mouseout", from: "behindbubble", to: "behindbubble" },
         { name: "mouseout", from: "behindbigbubble", to: "behindbigbubble" },
 
+        { name: "zoomout", from: "infrontofbigbubble", to: "behindbubble" },
+
         // is ignored
         { name: "click", from: "ready", to: "ready" },
         { name: "zoomout", from: "ready", to: "ready" },

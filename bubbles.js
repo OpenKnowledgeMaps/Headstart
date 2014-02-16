@@ -133,7 +133,9 @@ BubblesFSM.prototype = {
   initCircleListeners: function() {
     var this_bubble = this;
     d3.selectAll("circle").on("mouseover", function(d) {
-      this_bubble.mouseover(this, d);
+      if (!this_bubble.is("hoverbig")){
+        this_bubble.mouseover(this, d);
+      }
     }).on("mouseout", function(d) {
       this_bubble.mouseout(this, d);
     });
@@ -146,7 +148,7 @@ BubblesFSM.prototype = {
   initCircleClickListener: function() {
     var b = this;
     d3.selectAll( "circle" ).on("click", function(d) {
-        b.zoomin(d);
+      b.zoomin(d);
     });
   },
 
@@ -715,6 +717,9 @@ BubblesFSM.prototype = {
      if (headstart.is("normal")) {
        this.resetCircleDesign();
      }
+     if (headstart.bubbles[1].is("zoomedin")) {
+       return false;
+     }
   },
 
   onmouseover: function( event, from, to, circle, d ) {
@@ -745,6 +750,9 @@ BubblesFSM.prototype = {
   // we want to prevent the bubbles from switching from
   // hoversmall.
   onbeforemouseout: function( event, from, to, circle, d ) {
+     if (this.is("zoomedin") || this.is("hoverbig")) {
+       return false;
+     }
 
     if (papers.is("loading")) {
       return false;
@@ -768,8 +776,9 @@ BubblesFSM.prototype = {
     if (headstart.is("normal")) {
       if (event == "notzoomedmouseout") {
         this.resetCircleDesign();
-        if (!papers.is("loading"))
+        if (!papers.is("loading")) {
           papers.mouseout();
+        }
       }
       if (papers.is("infrontofbigbubble")) {
         papers.mouseout();
@@ -785,6 +794,7 @@ BubblesFSM.prototype = {
   },
 
   onzoomout: function( event, from, to ) {
+    this.resetCircleDesign();
     papers.zoomout();
     popup.initClickListenersForNav();
   },
@@ -828,11 +838,10 @@ StateMachine.create({
     // due to mouse not being on circle if zoomed in
     { name: "mouseout",  from: "zoomedin",   to: "zoomedin" },
     { name: "mouseover", from: "hoversmall", to: "hoversmall" },
-
-    { name: "mouseover", from: "hoverbig",   to: "zoomedout" },
+    { name: "zoomout",   from: "hoverbig",   to: "zoomedout" },
 
     // is ignored
-    { name: "zoomout", from: "zoomedout",    to: "zoomedout" },
+    //{ name: "zoomout", from: "zoomedout",    to: "zoomedout" },
     // for the mouseout hack
     { name: "mouseout", from: "zoomedout",   to: "zoomedout" }
   ]
