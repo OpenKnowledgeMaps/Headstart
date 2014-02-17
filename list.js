@@ -28,6 +28,7 @@ var list = StateMachine.create({
 
         onshow: function( event, from, to ) {
             // if the papers_force has stopped.
+            d3.select("#sort_container").style("display", "block"); 
             d3.select( "#papers_list"     ).style("display", "block");
             d3.select( "#left_arrow"      ).text("\u25B2");
             d3.select( "#right_arrow"     ).text("\u25B2");
@@ -35,6 +36,7 @@ var list = StateMachine.create({
         },
 
         onhide: function( event, from, to ) {
+            d3.select("#sort_container").style("display", "none"); 
             d3.select( "#papers_list"     ).style("display", "none");
             d3.select( "#left_arrow"      ).text("\u25BC");
             d3.select( "#right_arrow"     ).text("\u25BC");
@@ -77,7 +79,8 @@ list.drawList = function() {
       .attr("value", "Search...")
       .attr("oninput", "filterList(event)");
     list_show_hide_container.append("div")
-      .attr("id", "sort_container");
+      .attr("id", "sort_container")
+      .style("display", "none");
 
     var papers_list = list_show_hide_container
                             .append("div")
