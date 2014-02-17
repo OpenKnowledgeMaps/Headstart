@@ -448,12 +448,6 @@ BubblesFSM.prototype = {
     d3.selectAll("div.paper_holder")
       .on("mouseover", papers.enlargePaper);
 
-    d3.selectAll("circle")
-      .on("click", function(d) {
-        return bubbles.zoom(d);
-      })
-    .style("display", "block");
-
     zoom_node.style("display", "block");
 
     d3.selectAll(".paper")
@@ -833,7 +827,7 @@ StateMachine.create({
     { name: "mouseover", from: "zoomedin",   to: "hoverbig"   },
     { name: "mouseout",  from: "hoverbig",   to: "zoomedin"   },
 
-    { name: "zoomin",    from: ["hoversmall", "hoverbig"], to: "hoverbig" },
+    { name: "zoomin",    from: ["zoomedout", "hoversmall", "hoverbig"], to: "hoverbig" },
     { name: "zoomout",   from: "zoomedin",   to: "zoomedout"  },
 
     // due to mouse not being on circle if zoomed in

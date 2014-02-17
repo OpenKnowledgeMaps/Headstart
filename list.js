@@ -305,7 +305,7 @@ list.makeTitleClickable = function(d) {
                                   return x.title == d.area
                                 });
 
-    headstart.bubbles["1"].zoom(headstart.current_circle.data()[0]);
+    headstart.bubbles["1"].zoomin(headstart.current_circle.data()[0]);
     papers.mouseoverpaper();
     this.enlargeListItem(d);
     headstart.current_enlarged_paper = d;

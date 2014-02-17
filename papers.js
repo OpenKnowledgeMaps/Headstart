@@ -31,6 +31,7 @@ var papers = StateMachine.create({
 
         { name: "mouseoutpaper",  from: "enlarged", to: "infrontofbigbubble" },
         { name: "mouseoverpaper", from: "infrontofbigbubble", to: "enlarged" },
+        { name: "mouseoverpaper", from: "enlarged", to: "enlarged" },
         // user clicks in list on a paper
         { name: "mouseoverpaper", from: "ready", to: "infrontofbigbubble" },
         { name: "mouseoverpaper", from: "behindbubble", to: "infrontofbigbubble" },
@@ -477,7 +478,7 @@ papers.enlargePaper = function(d,i) {
 
             list.reset();
 
-            headstart.papers_list.selectAll("#list_holder")
+            d3.selectAll("#list_holder")
             .filter(function (x, i) {
                 return (x.area == d.title)
             })
