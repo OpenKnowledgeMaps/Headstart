@@ -122,8 +122,9 @@ popup.drawTimeLineLink = function() {
 popup.drawNormalViewLink = function() {
   // remove event handler
   $("#timelineview").off("click");
-
-  var link = '<a href="/">Normal View</a>';
+  
+  // refreshes page
+  var link = '<a href="javascript:window.location.reload()">Normal View</a>';
   $("#timelineview").html(link);
 }
 
