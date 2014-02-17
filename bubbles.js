@@ -376,7 +376,7 @@ BubblesFSM.prototype = {
 
     if(typeof d != 'undefined') {
       list.papers_list.selectAll("#list_holder")
-        .style("display", "inline");
+        .style("display", function (d) { return d.filtered_out?"none":"inline"});
 
       list.papers_list.selectAll("#list_holder")
         .filter(function (x, i) {
@@ -397,7 +397,7 @@ BubblesFSM.prototype = {
         resetList();
 
         list.papers_list.selectAll("#list_holder")
-          .style("display", "inline");
+          .style("display", function (d) { return d.filtered_out?"none":"inline"});
 
         d3.event.stopPropagation();
         return;
@@ -457,7 +457,7 @@ BubblesFSM.prototype = {
     zoom_node.style("display", "block");
 
     d3.selectAll(".paper")
-      .style("display", "block")
+        .style("display", function (d) { return d.filtered_out?"none":"block"})
 
       d3.selectAll(".paper")
       .filter(function (x, i) {
@@ -504,7 +504,7 @@ BubblesFSM.prototype = {
     }
 
     list.papers_list.selectAll("#list_holder")
-      .style("display", "inline");
+      .style("display", function (d) { return d.filtered_out?"none":"inline"});
 
     var t = headstart.chart.transition()
       .duration(headstart.transition_duration)
@@ -563,7 +563,7 @@ BubblesFSM.prototype = {
 
 
     d3.selectAll(".paper")
-      .style("display", "block");
+      .style("display", function(d) { return d.filtered_out?"none":"block"});
 
     this.resetCirclePosition(t);
 
@@ -753,6 +753,7 @@ BubblesFSM.prototype = {
      if (this.is("zoomedin") || this.is("hoverbig")) {
        return false;
      }
+
 
     if (papers.is("loading")) {
       return false;
