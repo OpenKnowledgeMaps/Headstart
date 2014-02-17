@@ -336,7 +336,7 @@ list.setListHolderDisplay = function(d) {
     .filter(function (x, i) {
       return (x.area == d.area)
     })
-  .style("display", "inline");
+  .style("display", function (d) { return d.filtered_out?"none":"inline"});
 
   this.papers_list.selectAll("#list_holder")
     .filter(function (x, i) {

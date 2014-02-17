@@ -483,7 +483,7 @@ papers.enlargePaper = function(d,i) {
             .filter(function (x, i) {
                 return (x.area == d.title)
             })
-            .style("display", "inline");
+            .style("display", function (d) { return d.filtered_out?"none":"inline"});
 
             if(headstart.current_enlarged_paper != null)
                 headstart.current_enlarged_paper.paper_selected = false;
