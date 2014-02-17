@@ -28,11 +28,13 @@ var list = StateMachine.create({
 
         onshow: function( event, from, to ) {
             // if the papers_force has stopped.
-            d3.select("#sort_container").style("display", "block"); 
-            d3.select( "#papers_list"     ).style("display", "block");
-            d3.select( "#left_arrow"      ).text("\u25B2");
-            d3.select( "#right_arrow"     ).text("\u25B2");
-            d3.select( "#show_hide_label" ).text("Hide papers");
+            if(!papers.is("loading")) {
+                d3.select("#sort_container").style("display", "block"); 
+                d3.select( "#papers_list"     ).style("display", "block");
+                d3.select( "#left_arrow"      ).text("\u25B2");
+                d3.select( "#right_arrow"     ).text("\u25B2");
+                d3.select( "#show_hide_label" ).text("Hide papers");
+            }
         },
 
         onhide: function( event, from, to ) {
