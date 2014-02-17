@@ -306,6 +306,7 @@ list.makeTitleClickable = function(d) {
                                 });
 
     headstart.bubbles["1"].zoomin(headstart.current_circle.data()[0]);
+    headstart.bubbles["1"].current = "hoverbig";
     papers.mouseoverpaper();
     this.enlargeListItem(d);
     headstart.current_enlarged_paper = d;

@@ -724,6 +724,7 @@ BubblesFSM.prototype = {
 
   onmouseover: function( event, from, to, circle, d ) {
 
+                console.log("mouseouver");
     headstart.current_circle = d3.select(circle);
     if (headstart.is("timeline")) {
       this.resetCircleDesignTimeLine(circle);
@@ -754,7 +755,6 @@ BubblesFSM.prototype = {
        return false;
      }
 
-
     if (papers.is("loading")) {
       return false;
     }
@@ -774,6 +774,7 @@ BubblesFSM.prototype = {
 
   onmouseout: function( event, from, to, circle, d ) {
 
+    console.log("mouseout");
     if (headstart.is("normal")) {
       if (event == "notzoomedmouseout") {
         this.resetCircleDesign();
@@ -834,7 +835,7 @@ StateMachine.create({
     { name: "mouseout",  from: "hoverbig",   to: "zoomedin"   },
 
     { name: "zoomin",    from: ["hoversmall", "hoverbig"], to: "hoverbig" },
-    { name: "zoomout",   from: "zoomedin",   to: "zoomedout"  },
+    { name: "zoomin",    from: "zoomedout",   to: "zoomedin"  },
 
     // due to mouse not being on circle if zoomed in
     { name: "mouseout",  from: "zoomedin",   to: "zoomedin" },
@@ -842,7 +843,8 @@ StateMachine.create({
     { name: "zoomout",   from: "hoverbig",   to: "zoomedout" },
 
     // is ignored
-    //{ name: "zoomout", from: "zoomedout",    to: "zoomedout" },
+    { name: "zoomout", from: "zoomedout",    to: "zoomedout" },
+    { name: "zoomout", from: "hoversmall",   to: "hoversmall" },
     // for the mouseout hack
     { name: "mouseout", from: "zoomedout",   to: "zoomedout" }
   ]

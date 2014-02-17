@@ -53,6 +53,7 @@ var papers = StateMachine.create({
         { name: "zoomout", from: "loading", to: "loading" },
         { name: "zoomout", from: "behindbubble", to: "behindbubble" },
         { name: "mouseoutpaper",  from: "infrontofbigbubble", to: "infrontofbigbubble" },
+        { name: "zoom",      from: "behindbubble", to: "infrontofbigbubble" },
         // if user clicks inside bigbubble we just ignore it for now
         { name: "zoom",      from: "infrontofbigbubble", to: "infrontofbigbubble" }
 
