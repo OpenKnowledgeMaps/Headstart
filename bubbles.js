@@ -569,7 +569,7 @@ BubblesFSM.prototype = {
 
     this.initCircleClickListener();
 
-    var circles = d3.selectAll("g.area");
+    var circles = d3.selectAll("g.bubble_frame");
 
     for (var i = 0; i < circles[0].length; i++) {
       var current_node = circles[0][i];
