@@ -368,6 +368,7 @@ img#preview_page {
 
 div#paper_frame {
   background-color: rgba(0,0,0,0.8);
+  z-index:999;
 }
 
 div#paper_frame_inner {

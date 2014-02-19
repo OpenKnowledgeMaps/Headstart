@@ -78,7 +78,7 @@ popup.drawPopUp = function() {
     .style( "width",  popup.width  + "px" )
     .style( "height", popup.height + "px" )
     .style( "margin-top", function (d) {
-      return headstart.max_chart_size/2 - headstart.preview_height/2 + "px";
+      return headstart.max_chart_size/2 - popup.height/2 + "px";
     });
 }
 
@@ -142,3 +142,28 @@ popup.drawInfoLinkWithTitle = function( title ) {
                .html(headstart.subdiscipline_title + whatsthis);
 }
 
+/*popup.loadAndAppendImage =  function( image_src, page_number ) {
+
+    if (list.testImage(image_src)) {
+        this.paper_frame.select("#preview")
+           .append("div")
+            .attr("id", "preview_page_index")
+            .style("width", headstart.preview_image_width + "px")
+            .style("height", "20px")
+            .html("Page " + page_number)
+
+        this.paper_frame.select("#preview")
+           .append("img")
+            .attr("id", "preview_page")
+            .attr("class", "lazy")
+            .attr("src", image_src)
+            .style("height", headstart.preview_image_height + "px")
+            .style("width", headstart.preview_image_width + "px")
+
+    } else {
+        return false;
+    }
+    
+    return true;
+    
+}*/

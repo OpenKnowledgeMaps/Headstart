@@ -723,8 +723,7 @@ BubblesFSM.prototype = {
   },
 
   onmouseover: function( event, from, to, circle, d ) {
-
-                console.log("mouseouver");
+      
     headstart.current_circle = d3.select(circle);
     if (headstart.is("timeline")) {
       this.resetCircleDesignTimeLine(circle);
@@ -773,8 +772,7 @@ BubblesFSM.prototype = {
   },
 
   onmouseout: function( event, from, to, circle, d ) {
-
-    console.log("mouseout");
+      
     if (headstart.is("normal")) {
       if (event == "notzoomedmouseout") {
         this.resetCircleDesign();

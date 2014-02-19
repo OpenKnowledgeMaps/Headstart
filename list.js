@@ -384,6 +384,29 @@ list.loadAndAppendImage = function(image_src, page_number) {
     return true;
 }
 
+list.populateOverlay = function (d) {
+    
+    popup.paper_frame
+    .style("display","block")
+    
+    popup.current = "visible";
+    
+    list.loadAndAppendImage("images/" + d.id + "/page_1.png", 1);
+
+    var images_finished = false
+    , counter = 2;
+
+    while(!images_finished) {
+        var image_src = "images/" + d.id + "/page_" + counter + ".png";
+        
+        if (!list.loadAndAppendImage(image_src, counter)) {
+            images_finished = true;
+        }
+
+        counter++;
+    }
+}
+
 list.setImageForListHolder = function(d) {
   list.papers_list = d3.select("#papers_list");
   var current_item = list.papers_list.selectAll("#list_holder")
@@ -414,7 +437,7 @@ list.setImageForListHolder = function(d) {
       .style("width", headstart.preview_image_width_list + "px")
       .style("height", headstart.preview_image_height_list+ "px")
       .html("Click here to open preview")
-      .on("click", populateOverlay)
+      .on("click", this.populateOverlay)
   }
 
   // EVENTLISTENERS
