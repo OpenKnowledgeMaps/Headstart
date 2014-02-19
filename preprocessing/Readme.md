@@ -8,6 +8,11 @@ The pre-processing scripts are used to generate a data file for the visualizatio
 * Information about which cluster a paper belongs to
 * Cluster names
 
+Authors
+-------
+Peter Kraker (peter.kraker@tugraz.at)
+
+
 Background
 ----------
 
