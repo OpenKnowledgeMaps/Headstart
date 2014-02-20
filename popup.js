@@ -113,7 +113,7 @@ popup.drawPreviewArea = function( paper_frame_inner ) {
 }
 
 popup.drawTimeLineLink = function() {
-  var link = '<span id="timelineview"><a href="#">TimeLineView</a></span>';
+  var link = ' <span id="timelineview"><a href="#">TimeLineView</a></span>';
   $("#info").append(link);
 
   return $("#timelineview");
@@ -124,7 +124,7 @@ popup.drawNormalViewLink = function() {
   $("#timelineview").off("click");
   
   // refreshes page
-  var link = '<a href="javascript:window.location.reload()">Normal View</a>';
+  var link = ' <a href="javascript:window.location.reload()">Normal View</a>';
   $("#timelineview").html(link);
 }
 

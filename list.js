@@ -87,7 +87,7 @@ list.drawList = function() {
     var papers_list = list_show_hide_container
                             .append("div")
                             .attr("id", "papers_list")
-                            .style("height", headstart.max_chart_size + 10 + "px")
+                            .style("height", headstart.max_chart_size - 13 + "px")
                             .style("width", headstart.list_width - 10 + "px")
                             .style("display", "none")
 
