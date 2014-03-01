@@ -1,3 +1,5 @@
+![Head Start](http://science.okfn.org/files/2013/12/headstart.png)
+
 Head Start
 ==========
 
@@ -12,6 +14,7 @@ Authors
 Peter Kraker (peter.kraker@tugraz.at)
 
 Philipp Weißensteiner (philipp.weissensteiner@student.tugraz.at)
+
 
 Features
 --------
@@ -50,4 +53,4 @@ should start a server at http://localhost:8000/.
 
 License
 -------
-Head Start is licensed under LGPL v3.
+Head Start is licensed under [LGPL v3](http://www.gnu.org/copyleft/lesser.html).
