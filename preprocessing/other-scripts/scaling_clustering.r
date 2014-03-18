@@ -1,12 +1,19 @@
 rm(list = ls())
-setwd("") #Don't forget to set your working directory
+
+args <- commandArgs(TRUE)
+wd <- args[1]
+cooc_file <- args[2]
+metadata_file <- args[3]
+output_file <- args[4]
+
+setwd(wd) #Don't forget to set your working directory
 library(GMD)
 library(MASS)
 library(ecodist)
 
 # Read input files
-cooc <- read.table("cooc.csv", header=FALSE, sep="\t", quote=NULL) # You will need to have your own co-occurrence file here
-metadata <- read.csv("metadata.csv")
+cooc <- read.csv(cooc_file, header=FALSE) # You will need to have your own co-occurrence file here
+metadata <- read.csv(metadata_file)
 
 # Create symmetric matrix from co-occurrences list
 cooc_matrix_sym <- tapply(as.numeric(cooc$V3), list(cooc$V1, cooc$V2), max)
@@ -35,6 +42,8 @@ plot(cluster, labels=labels, cex=0.6)
 rect.hclust(cluster, k=num_clusters, border="red")
 dev.off()
 
+cat(num_clusters)
+
 # Perform non-metric multidimensional scaling
 nm = nmds(distance_matrix, mindim=2, maxdim=2)
 nm.nmin = nmds.min(nm)
@@ -42,17 +51,17 @@ x = nm.nmin$X1
 y = nm.nmin$X2
 
 # Plot results from multidimensional scaling, highlight clusters with symbols
-dev.new()
-plot.new()
+pdf("mds.pdf")
 groups <- cutree(cluster, k=num_clusters)
 plot(nm.nmin, pch=groups)
+dev.off()
 
 # Prepare the output
 result = cbind(x,y,groups,labels)
-output = merge(metadata, result, by.x="title", by.y="labels", all=TRUE)
+output = merge(metadata, result, by.x="id", by.y="labels", all=TRUE)
 
 # Write output to file
-file_handle = file("output_scaling_clustering.csv", open="w")
+file_handle = file(output_file, open="w")
 write.csv(output, file=file_handle, row.names=FALSE)
 close(file_handle)
 

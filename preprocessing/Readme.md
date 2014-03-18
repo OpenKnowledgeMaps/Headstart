@@ -24,19 +24,22 @@ Requirements
 
 To get started on the pre-processing, you need two things:
 
-1. A file containing all the metadata of your documents. You can find a template for this file in metadata.csv.
+1. A file containing all the metadata of your documents. You can find a template for this file in output/metadata.csv.
 2. A file containing similarity values between the documents. A template can be found in cooc.csv. Originally, the similarity values were based on readership co-occurrence, but there are many other measures that you can use (e.g. the number of keywords or tags that two papers have in common).
+
+If you want to write an adapter for your favorite data source, you can create a derived class from the base class at headstart\calculation\Calculation.
 
 Procedure
 ---------
 
-There are two scripts involved in the pre-processing. The first one r/scaling_clustering.r takes care of multidimensional scaling (i.e. the ordination of the papers) and clustering (i.e. splitting the papers into research areas). The second one, php/naming.php introduces names for each area.
+There are two classes involved in the pre-processing. The first one headstart\calculation\RCalculation takes care of multidimensional scaling (i.e. the ordination of the papers) and clustering (i.e. splitting the papers into research areas). The second one, headstart\naming\ApiNaming introduces names for each area.
 
-### scaling_clustering.r
-There is one thing you need to take care of before running this script: setting the working directory for R with setwd(pathtoworkingdirectory). The script takes metadata.csv and cooc.csv as inputs and produces the file output\_scaling\_clustering.csv. This file contains the original metadata plus an x/y coordinate for each paper and a designated cluster.
+Before you get started, please create a copy of the file conf/config.ini and rename it to config\_local.ini. Now you need to set a few variables:
+* general/preprocessing_dir: Full path of the preprocessing directory.
+* calculation/binary: Full path to your R binary.
+* naming/api\_key\_zemanta and naming/api\_key\_calais: The naming the clusters is done with the help of the APIs of Zemanta and OpenCalais. Before you can get started you need to acquire (free) API keys for both of them and enter them in the config file.
 
-### naming.php
-This file takes care of naming the clusters with the help of the APIs of Zemanta and OpenCalais. Before you can get started you need to acquire (free) API keys for both of them. You need to enter them in the config.php file. naming.php should be executed via the command line.
+Then you can run the pipeline found in classes/main.php.
 
 
 
