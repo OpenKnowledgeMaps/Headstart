@@ -9,8 +9,6 @@ namespace headstart\connection;
  * @author pkraker
  */
 
-include "IConnection.php";
-
 class Connection {
     
     public function establishConnection() {

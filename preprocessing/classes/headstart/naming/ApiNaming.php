@@ -21,9 +21,10 @@ class ApiNaming extends Naming {
         
         $ini = $this->ini_array["naming"];
         $ini_general = $this->ini_array["general"];
-        $ini_output = $this->ini_array["output_files"];
+        $ini_output = $this->ini_array["output"];
         
-        $WORKING_DIR = $ini_general["output_dir"] . (($ini_general["year"])?($ini_general["year"]):("")) . "/";
+        $WORKING_DIR = $ini_general["preprocessing_dir"] . $ini_output["output_dir"] 
+                . (($ini_general["year"])?($ini_general["year"]):("")) . "/";
         
         //Output of scaling and clustering script
         $CLUSTERS = $WORKING_DIR . $ini_output["output_scaling_clustering"];
@@ -42,7 +43,7 @@ class ApiNaming extends Naming {
         $output = array();
 
         $cluster_text_file = fopen($CLUSTERS, "r");
-        $stop_words_file = fopen($ini["stop_words"], "r");
+        $stop_words_file = fopen($ini_general["preprocessing_dir"] . $ini["stop_words"], "r");
 
         while (($line = fgetcsv($stop_words_file, null, "\t")) !== false) {
             $this->stop_words[] = $line[0];
