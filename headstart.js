@@ -46,11 +46,20 @@ HeadstartFSM = function() {
   this.current_circle = null;
   this.is_zoomed = false;
 
-  this.subdiscipline_title = "Overview of Educational Technology";
+  this.subdiscipline_title = "Overview of UMAP";
+  
+  this.current_file_number = 1;
 
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
   this.bubbles = {}
+  
+  if (typeof String.prototype.startsWith != 'function') {
+    String.prototype.startsWith = function (str){
+      return this.slice(0, str.length) == str;
+    };
+  }
+  
 };
 
 HeadstartFSM.prototype = {
@@ -76,6 +85,43 @@ HeadstartFSM.prototype = {
       alert("state machine is required for headstart");
       console.log("state machine is required for headstart");
     }
+  },
+  
+  resetBubbles: function () {
+    if(this.bubbles) {
+      delete this.bubbles;
+      this.bubbles = {};
+    }
+    
+    // 1
+    var bubbles1 = new BubblesFSM();
+    this.registerBubbles(bubbles1);
+    bubbles1.title = "edu1";
+    bubbles1.file = "data/educational-technology.csv";
+
+    // 2
+    var bubbles2 = new BubblesFSM();
+    this.registerBubbles(bubbles2);
+    bubbles2.title = "edu2";
+    bubbles2.file = "data/edu2.csv";
+
+    // 3
+    var bubbles3 = new BubblesFSM();
+    this.registerBubbles(bubbles3);
+    bubbles3.title = "edu3";
+    bubbles3.file = "data/edu3.csv";
+
+    // 4
+    var bubbles4 = new BubblesFSM();
+    this.registerBubbles(bubbles4);
+    bubbles4.title = "edu4";
+    bubbles4.file = "data/edu4.csv";
+
+    // 5
+    /*var bubbles5 = new BubblesFSM();
+    this.registerBubbles(bubbles5);
+    bubbles5.title = "UMAP 2013";
+    bubbles5.file = "data/umap2013_content.csv";*/
   },
 
   // the rest of headstarts variables, which are initalized by some
@@ -219,21 +265,21 @@ HeadstartFSM.prototype = {
   initMouseMoveListeners: function() {
     $("rect").on( "mouseover", function() {
       if (!headstart.is_zoomed) {
-        headstart.bubbles["1"].onmouseout("notzoomedmouseout");
+        headstart.bubbles[headstart.current_file_number].onmouseout("notzoomedmouseout");
         headstart.current_circle = null;
       }
-      headstart.bubbles["1"].mouseout("outofbigbubble");
+      headstart.bubbles[headstart.current_file_number].mouseout("outofbigbubble");
       popup.initClickListenersForNav();
     });
   },
 
   initMouseClickListeners: function() {
     $("rect").on( "click", function() {
-      headstart.bubbles["1"].zoomout();
+      headstart.bubbles[headstart.current_file_number].zoomout();
     });
 
     $("#chart").on("click", function() {
-      headstart.bubbles["1"].zoomOut();
+      headstart.bubbles[headstart.current_file_number].zoomOut();
     });
   },
 
@@ -260,9 +306,9 @@ HeadstartFSM.prototype = {
   // is established
   checkForcePapers: function() {
     var hs = this;
-    if (hs.is("normal")) {
+    if (hs.is("normal") || hs.is("switchfiles")) {
       checkPapers = window.setInterval(function () {
-        if (hs.is("normal")) {
+        if (hs.is("normal") || hs.is("switchfiles")) {
           if (!papers.is("ready") && !papers.is("none")) {
             if (hs.force_papers.alpha() <= 0) {
               papers.forced();
@@ -348,21 +394,22 @@ HeadstartFSM.prototype = {
 
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
-  onstart: function( event, from, to ) {
+  onstart: function( event, from, to, file ) {
+      
     this.checkThatRequiredLibsArePresent();
     this.initDynamicVariables();
 
     this.setOverflowToHiddenOrAuto( "#main" );
-
-    var bubbles = new BubblesFSM();
-
-    headstart.registerBubbles( bubbles );
+    
+    this.resetBubbles();
+    
+    var bubbles = this.bubbles[this.current_file_number];
 
     // NOTE: async call
     // therefore we need to call the methods which depend on bubbles.data
     // after the csv has been received.
     var hs = this;
-    d3.csv("data/educational-technology.csv", function( csv ) {
+    d3.csv(bubbles.file, function( csv ) {
       hs.drawSvg();
       hs.drawChartCanvas();
       hs.drawTitle();
@@ -394,16 +441,18 @@ HeadstartFSM.prototype = {
   // 2. rendering of new elements, on a bigger
   //    chart
   ontotimeline: function( event, from, to ){
-
-    // remove bubbles
-    delete this.bubbles;
-    this.bubbles = {};
+   
+    this.resetBubbles();
+    
+    window.clearInterval(checkPapers);
+   
     // clear the canvas
     $("#chart_canvas").empty();
 
     // clear the list list
     $("#papers_list_container").empty();
-
+    
+    this.bubbles[headstart.current_file_number].current = "x";
     popup.current  = "hidden";
     papers.current = "none";
     list.current   = "none";
@@ -412,59 +461,67 @@ HeadstartFSM.prototype = {
     popup.drawNormalViewLink();
     this.initDynamicVariables();
 
-    // 1
-    var bubbles = new BubblesFSM();
-    this.registerBubbles(bubbles);
-    bubbles.title = "data1";
-
-    // 2
-    var bubbles2 = new BubblesFSM();
-    this.registerBubbles(bubbles2);
-    bubbles2.title = "data2";
-
-    // 3
-    var bubbles3 = new BubblesFSM();
-    this.registerBubbles(bubbles3),
-    bubbles3.title = "data3";
-
-    // 4
-    var bubbles4 = new BubblesFSM();
-    this.registerBubbles(bubbles4),
-    bubbles4.title = "data4";
-
-    // 5
-    var bubbles5 = new BubblesFSM();
-    this.registerBubbles(bubbles5),
-    bubbles5.title = "data5";
-
     // need a bigger width for the timeline view
     this.svg.attr("width", (this.max_chart_size * this.bubblesSize() + "px") );
     this.svg.attr("height", this.max_chart_size);
     this.chart_id.attr("overflow-x", "scroll");
     $("#main").css("overflow", "scroll");
 
-    // we want to load them in sync (1,2,3) have not come up with a better
-    // way to do this yet.
-    d3.csv("data/educational-technology.csv", function( csv ) {
-      bubbles.start( csv );
-    });
-    d3.csv("data/edu4.csv", function( csv ) {
-      bubbles2.start( csv );
-    });
-    d3.csv("data/edu2.csv", function( csv ) {
-      bubbles3.start( csv );
-    });
-    d3.csv("data/edu3.csv", function( csv ) {
-      bubbles4.start( csv );
-    });
-    d3.csv("data/edu5.csv", function( csv ) {
-      bubbles5.start( csv );
-    });
-
+    // load bubbles in sync
+    
+    $.each(this.bubbles, function (index, elem) {
+      d3.csv(elem.file, function (csv) {
+        elem.start( csv )
+      })
+    })
 
     this.drawGrid();
     this.drawGridTitles();
     this.initMouseListeners();
+  },
+  
+  ontofile: function( event, from, to, file) {
+    
+    window.clearInterval(checkPapers);
+    
+    // clear the canvas
+    $("#chart_canvas").remove();
+
+    // clear the list list
+    $("#papers_list_container").empty();
+    
+    popup.current  = "hidden";
+    papers.current = "none";
+    list.current   = "none";
+
+    this.initDynamicVariables();
+    this.setOverflowToHiddenOrAuto( "#main" );
+    
+    // reset bubbles
+    this.resetBubbles();
+    
+    var bubble = this.bubbles[this.current_file_number];
+
+    var hs = this;
+    d3.csv(bubble.file, function( csv ) {
+        
+      hs.drawChartCanvas();
+      
+      bubble.start( csv );
+
+      hs.initMouseListeners();
+      hs.initForcePapers();
+      hs.initForceAreas();
+
+      papers.start( bubble );
+      // moving this to bubbles.start results in papers being displayed over the
+      // bubbles, unfortunately
+      bubble.draw();
+      bubble.initMouseListeners();
+      list.start( bubble );
+      //popup.start();
+      hs.checkForcePapers();
+    });
   }
 }
 
@@ -477,7 +534,8 @@ StateMachine.create({
 
   events: [
     { name: "start",      from: "none",     to: "normal" },
-    { name: "totimeline", from: "normal",   to: "timeline" }
+    { name: "totimeline", from: ["normal", "switchfiles"],   to: "timeline" },
+    { name: "tofile", from: ["normal", "switchfiles", "timeline"], to: "switchfiles"}
   ]
 
 });

@@ -1,6 +1,7 @@
 // StateMachine for Popup UI element in Headstart
 // Filename: popup.js
 var popup = StateMachine.create({
+    
     events: [
         { name: "start", from:  "none",    to: "hidden"  },
         { name: "show",  from:  "hidden",  to: "visible" },
@@ -20,9 +21,10 @@ var popup = StateMachine.create({
             });
 
             this.drawPreviewArea( paper_frame_inner );
-
+            
             this.drawInfoLinkWithTitle( "What's this?" );
             this.drawTimeLineLink();
+            this.drawDropdown();
             this.initClickListenersForNav();
 
         },
@@ -117,6 +119,30 @@ popup.drawTimeLineLink = function() {
   $("#info").append(link);
 
   return $("#timelineview");
+}
+
+popup.drawDropdown = function() {
+  var dropdown = '<select id="datasets"></select>';
+  
+  $("#info").append(" Select dataset: ");
+  $("#info").append(dropdown);
+
+  $.each(headstart.bubbles, function (index, entry) {
+    var current_item = '<option value="' + entry.file +'">' + entry.title + '</option>';
+    $("#datasets").append(current_item);
+  })
+  
+  //$("#datasets " + headstart.current_file_number + ":selected").text();
+  $("#datasets").val(headstart.bubbles[headstart.current_file_number].file);
+  
+  $("#datasets").change(function() {
+
+    var selected_file_number = datasets.selectedIndex + 1;  
+    if(selected_file_number != headstart.current_file_number) {
+      headstart.current_file_number = selected_file_number;
+      headstart.tofile();
+    }
+  })
 }
 
 popup.drawNormalViewLink = function() {

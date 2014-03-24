@@ -18,7 +18,7 @@ BubblesFSM.prototype = {
   draw: function() {
     var bubbleFrames = this.drawBubbleFrames();
 
-    if (headstart.is("normal")) {
+    if (headstart.is("normal") || headstart.is("switchfiles")) {
       this.positionBubbles( bubbleFrames );
       this.addClassNamesToCircles( bubbleFrames );
     }
@@ -29,7 +29,7 @@ BubblesFSM.prototype = {
     }
 
     this.appendForeignObjectTo( bubbleFrames );
-    this.adjustBubbleTitleSizeTo( bubbleFrames, "13px" );
+    this.adjustBubbleTitleSizeTo( bubbleFrames, "12px" );
     this.resetCirclePosition();
   },
 
@@ -67,7 +67,12 @@ BubblesFSM.prototype = {
         var authors_string = "";
         for(var i=0; i<authors.length-1; i++) {
           var names = authors[i].split(",");
-          authors_string += names[1] + " " + names[0];
+          
+          if(names.length > 1)
+            authors_string += names[1] + " " + names[0];
+          else
+              authors_string += names[0];
+          
           if(i != authors.length-2)
             authors_string += ", ";
         }
@@ -140,7 +145,7 @@ BubblesFSM.prototype = {
       this_bubble.mouseout(this, d);
     });
 
-    if (headstart.is("normal"))
+    if (headstart.is("normal") || headstart.is("switchfiles"))
       this.initCircleClickListener();
   },
 
@@ -155,11 +160,27 @@ BubblesFSM.prototype = {
   // initialize just the mousemovement listeners
   initMouseListenersForTitles: function() {
     d3.selectAll( "#area_title" ).on( "mouseover", function(d) {
-      headstart.bubbles[1].hideCircle(this);
+      if(headstart.current != "timeline")
+        headstart.bubbles[headstart.current_file_number].hideCircle(this);
+      else {
+        
+        var underlying_circle =  d3.selectAll("circle")
+          .filter(function (x) {
+              if (d != null)
+                  return x.title == d.title
+              else
+                  return null
+          })
+
+        headstart.bubbles[headstart.current_file_number].resetCircleDesignTimeLine(underlying_circle[0][0]);
+        headstart.bubbles[headstart.current_file_number].highlightAllCirclesWithLike(underlying_circle[0][0]);
+        headstart.bubbles[headstart.current_file_number].drawConnectionLines(underlying_circle[0][0]);
+      }
     });
 
     d3.selectAll( "#area_title" ).on( "mouseout", function(d) {
-      headstart.bubbles[1].showCircle(this);
+      if(headstart.current != "timeline")
+        headstart.bubbles[headstart.current_file_number].showCircle(this);
     });
   },
 
@@ -475,7 +496,7 @@ BubblesFSM.prototype = {
     var t = headstart.chart.transition()
       .duration(headstart.transition_duration);
 
-    headstart.bubbles[1].createTransition(t, d.title);
+    headstart.bubbles[headstart.current_file_number].createTransition(t, d.title);
 
     d3.event.stopPropagation();
   },
@@ -560,6 +581,7 @@ BubblesFSM.prototype = {
 
     popup.drawInfoLinkWithTitle( "What's this?" );
     popup.drawTimeLineLink();
+    popup.drawDropdown();
 
 
     d3.selectAll(".paper")
@@ -588,7 +610,11 @@ BubblesFSM.prototype = {
 
   resetCircleDesignTimeLine: function( circle ) {
       var class_name = $(circle).attr("class").replace("area ", "");
-      $("." + class_name).css("fill" , "rgb(210, 228, 240)");
+      
+      d3.selectAll("circle")
+              .style("fill" , "rgb(210, 228, 240)")
+              .style("fill-opacity" , "0.8");
+
       d3.selectAll("#area_title_object").style("visibility", "visible");
   },
 
@@ -714,11 +740,8 @@ BubblesFSM.prototype = {
   },
 
   onbeforemouseover: function( event, from, to, circle, d ) {
-     if (headstart.is("normal")) {
+     if (headstart.is("normal") || headstart.is("switchfiles")) {
        this.resetCircleDesign();
-     }
-     if (headstart.bubbles[1].is("zoomedin")) {
-       return false;
      }
   },
 
@@ -729,7 +752,7 @@ BubblesFSM.prototype = {
       this.resetCircleDesignTimeLine(circle);
       this.highlightAllCirclesWithLike(circle);
       this.drawConnectionLines(circle);
-      hideSibling(circle);
+      //hideSibling(circle);
     } else {
       this.resetCircleDesign();
       this.highlightCircle(headstart.current_circle);
@@ -773,7 +796,7 @@ BubblesFSM.prototype = {
 
   onmouseout: function( event, from, to, circle, d ) {
       
-    if (headstart.is("normal")) {
+    if (headstart.is("normal") || headstart.is("switchfiles")) {
       if (event == "notzoomedmouseout") {
         this.resetCircleDesign();
         if (!papers.is("loading")) {
