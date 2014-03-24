@@ -17,14 +17,13 @@ class ApiNaming extends Naming {
     
     private $stop_words = array();
     
-    public function performNaming() {
+    public function performNaming($working_dir) {
         
         $ini = $this->ini_array["naming"];
         $ini_general = $this->ini_array["general"];
         $ini_output = $this->ini_array["output"];
         
-        $WORKING_DIR = $ini_general["preprocessing_dir"] . $ini_output["output_dir"] 
-                . (($ini_general["year"])?($ini_general["year"]):("")) . "/";
+        $WORKING_DIR = $working_dir;
         
         //Output of scaling and clustering script
         $CLUSTERS = $WORKING_DIR . $ini_output["output_scaling_clustering"];
@@ -42,8 +41,8 @@ class ApiNaming extends Naming {
         $stop_words = array();
         $output = array();
 
-        $cluster_text_file = fopen($CLUSTERS, "r");
-        $stop_words_file = fopen($ini_general["preprocessing_dir"] . $ini["stop_words"], "r");
+        $cluster_text_file = library\Toolkit::openFileForReading($CLUSTERS);
+        $stop_words_file = library\Toolkit::openFileForReading($ini_general["preprocessing_dir"] . $ini["stop_words"]);
 
         while (($line = fgetcsv($stop_words_file, null, "\t")) !== false) {
             $this->stop_words[] = $line[0];
@@ -253,7 +252,7 @@ class ApiNaming extends Naming {
             library\Toolkit::info("$counter\n");
         }
 
-        $output_handle = fopen($OUTPUT_FILE, "w+");
+        $output_handle = library\Toolkit::openOrCreateFile($OUTPUT_FILE);
 
         foreach ($output as $line) {
             fputcsv($output_handle, $line);
@@ -466,7 +465,7 @@ class ApiNaming extends Naming {
         $response = curl_exec($ch);
         curl_close($ch);
 
-        file_put_contents($dir . $uri . ".rdf", $response);
+        library\Toolkit::putContentsToFile($dir . $uri . ".rdf", $response);
     }
 
     private function getFullResponseZemanta($text, $uri, $dir) {
@@ -475,7 +474,7 @@ class ApiNaming extends Naming {
         $response = curl_exec($ch);
         curl_close($ch);
 
-        file_put_contents($dir . $uri . ".rdf", $response);
+        library\Toolkit::putContentsToFile($dir . $uri . ".rdf", $response);
     }
 
     private function getFormattedString($old_string) {

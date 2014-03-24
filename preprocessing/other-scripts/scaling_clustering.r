@@ -5,28 +5,60 @@ wd <- args[1]
 cooc_file <- args[2]
 metadata_file <- args[3]
 output_file <- args[4]
+mode <- args[5]
 
 setwd(wd) #Don't forget to set your working directory
 library(GMD)
 library(MASS)
 library(ecodist)
+library(tm)
+library(proxy)
+library(SnowballC)
 
 # Read input files
-cooc <- read.csv(cooc_file, header=FALSE) # You will need to have your own co-occurrence file here
+
 metadata <- read.csv(metadata_file)
 
-# Create symmetric matrix from co-occurrences list
-cooc_matrix_sym <- tapply(as.numeric(cooc$V3), list(cooc$V1, cooc$V2), max)
-
-if(isSymmetric(cooc_matrix_sym) == FALSE)	{
-	stop("Input matrix not symmetric")
+if(mode == "text") {
+  cooc <- read.csv(cooc_file, header=TRUE) # You will need to have your own co-occurrence file here
+  
+  m <- list(Content = "content", ID = "id")
+  
+  myReader <- readTabular(mapping = m)
+  
+  (corpus <- Corpus(DataframeSource(cooc), readerControl = list(reader = myReader)))
+  
+  corpus <- tm_map(corpus, stripWhitespace)
+  
+  corpus <- tm_map(corpus, tolower)
+  
+  corpus <- tm_map(corpus, removeWords, stopwords("english"))
+  
+  corpus <- tm_map(corpus, stemDocument)
+  
+  tdm <- TermDocumentMatrix(corpus)
+  
+  distance_matrix <- dissimilarity(tdm, method="cosine")
+  
+  write.csv(as.matrix(distance_matrix), "matrix.csv")
+  
+} else {
+  
+  cooc <- read.csv(cooc_file, header=FALSE) # You will need to have your own co-occurrence file here
+  
+  # Create symmetric matrix from co-occurrences list
+  cooc_matrix_sym <- tapply(as.numeric(cooc$V3), list(cooc$V1, cooc$V2), max)
+  
+  if(isSymmetric(cooc_matrix_sym) == FALSE)  {
+    stop("Input matrix not symmetric")
+  }
+  
+  # Calculate correlation coefficients
+  cooc_matrix_cor = cor(cooc_matrix_sym, use="pairwise.complete.obs")
+  
+  # Calculate Euclidian distance
+  distance_matrix <- dist(data.matrix(cooc_matrix_cor))
 }
-
-# Calculate correlation coefficients
-cooc_matrix_cor = cor(cooc_matrix_sym, use="pairwise.complete.obs")
-
-# Calculate Euclidian distance
-distance_matrix <- dist(data.matrix(cooc_matrix_cor))
 
 # Perform clustering, use elbow to determine a good number of clusters
 css_cluster <- css.hclust(distance_matrix, hclust.FUN.MoreArgs=list(method="ward"))
@@ -34,7 +66,7 @@ cut_off = elbow.batch(css_cluster)
 num_clusters = cut_off$k
 meta_cluster = attr(css_cluster,"meta")
 cluster = meta_cluster$hclust.obj
-labels = as.vector(row.names(cooc_matrix_cor))
+labels = labels(distance_matrix)
 
 # Plot result of clustering to PDF file
 pdf("clustering.pdf", width=19, height=12)

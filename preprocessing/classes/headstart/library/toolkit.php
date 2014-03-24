@@ -78,6 +78,43 @@ class Toolkit
         $string = strrchr($uri, "/");
         return substr($string, 1);
     }
+    
+    public static function openOrCreateFile($file) {
+        
+        //let's first see if there is a path
+        $file_name_pos = strrpos($file, "/");
+        
+        if($file_name_pos != false) {
+
+            //ok, so there is a path, let's see, if it exists. If not, let's create it.
+            $path = substr($file, 0, $file_name_pos);
+            if(!is_dir($path)) {
+                mkdir($path, 0777, true);
+            }
+        }
+        
+        //now, we should be good, let's open or create the file
+        $handle = fopen($file, "w+");
+        if ($handle == false)
+            throw new Exception("There was an error while opening/creating the following file: " . $file);
+        
+        return $handle;
+    }
+    
+    public static function openFileForReading($file) {
+        $handle = fopen($file, "r");
+        if ($handle == false)
+            throw new \Exception("There was an error while opening/creating the following file: " . $file);
+        
+        return $handle;
+    }
+    
+    public static function putContentsToFile($file, $text) {
+        $handle = self::openOrCreateFile($file);
+        fwrite($handle, $text);
+        fclose($handle);
+    }
+    
 }
 
 ?>
