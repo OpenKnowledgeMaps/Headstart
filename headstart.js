@@ -33,10 +33,10 @@ HeadstartFSM = function() {
 
   this.transition_duration = 750;
 
-  this.max_diameter_size = 50;
-  this.min_diameter_size = 30;
-  this.max_area_size = 110;
-  this.min_area_size = 50;
+  this.max_diameter_size = max_diameter_size;
+  this.min_diameter_size = min_diameter_size;
+  this.max_area_size = max_area_size;
+  this.min_area_size = min_area_size;
 
   this.current_zoom_node = null;
 
@@ -46,7 +46,7 @@ HeadstartFSM = function() {
   this.current_circle = null;
   this.is_zoomed = false;
 
-  this.subdiscipline_title = "Overview of UMAP";
+  this.subdiscipline_title = title;
   
   this.current_file_number = 1;
 
@@ -93,35 +93,12 @@ HeadstartFSM.prototype = {
       this.bubbles = {};
     }
     
-    // 1
-    var bubbles1 = new BubblesFSM();
-    this.registerBubbles(bubbles1);
-    bubbles1.title = "edu1";
-    bubbles1.file = "data/educational-technology.csv";
-
-    // 2
-    var bubbles2 = new BubblesFSM();
-    this.registerBubbles(bubbles2);
-    bubbles2.title = "edu2";
-    bubbles2.file = "data/edu2.csv";
-
-    // 3
-    var bubbles3 = new BubblesFSM();
-    this.registerBubbles(bubbles3);
-    bubbles3.title = "edu3";
-    bubbles3.file = "data/edu3.csv";
-
-    // 4
-    var bubbles4 = new BubblesFSM();
-    this.registerBubbles(bubbles4);
-    bubbles4.title = "edu4";
-    bubbles4.file = "data/edu4.csv";
-
-    // 5
-    /*var bubbles5 = new BubblesFSM();
-    this.registerBubbles(bubbles5);
-    bubbles5.title = "UMAP 2013";
-    bubbles5.file = "data/umap2013_content.csv";*/
+    $.each(files, function(index, elem) {
+      var bubble = new BubblesFSM();
+      headstart.registerBubbles(bubble);
+      bubble.title = elem.title;
+      bubble.file = elem.file;
+    })
   },
 
   // the rest of headstarts variables, which are initalized by some

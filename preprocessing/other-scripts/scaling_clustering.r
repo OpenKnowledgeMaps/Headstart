@@ -1,7 +1,7 @@
 rm(list = ls())
 
 args <- commandArgs(TRUE)
-wd <- args[1]
+wd <-args[1]
 cooc_file <- args[2]
 metadata_file <- args[3]
 output_file <- args[4]
@@ -28,6 +28,8 @@ if(mode == "text") {
   
   (corpus <- Corpus(DataframeSource(cooc), readerControl = list(reader = myReader)))
   
+  corpus <- tm_map(corpus, removePunctuation, preserve_intra_word_dashes = FALSE)
+  
   corpus <- tm_map(corpus, stripWhitespace)
   
   corpus <- tm_map(corpus, tolower)
@@ -38,7 +40,7 @@ if(mode == "text") {
   
   tdm <- TermDocumentMatrix(corpus)
   
-  distance_matrix <- dissimilarity(tdm, method="cosine")
+  distance_matrix <- dissimilarity(tdm, method="Jaccard")
   
   write.csv(as.matrix(distance_matrix), "matrix.csv")
   
@@ -62,7 +64,9 @@ if(mode == "text") {
 
 # Perform clustering, use elbow to determine a good number of clusters
 css_cluster <- css.hclust(distance_matrix, hclust.FUN.MoreArgs=list(method="ward"))
-cut_off = elbow.batch(css_cluster)
+#cut_off = elbow.batch(css_cluster)
+cut_off = elbow.batch(css_cluster,inc.thres=c(0.01,0.05,0.1),
+                      ev.thres=c(0.95,0.9,0.8,0.75,0.67,0.5,0.33,0.2,0.1),precision=3)
 num_clusters = cut_off$k
 meta_cluster = attr(css_cluster,"meta")
 cluster = meta_cluster$hclust.obj
@@ -100,6 +104,7 @@ close(file_handle)
 # Write some stats to a file
 file_handle = file("stats.txt", open="w")
 writeLines(c(paste("Number of Clusters:", num_clusters, sep=" ")
+  , paste("Description:", attributes(cut_off)$description)
   , paste("Stress:", min(nm$stress), sep=" ")
   , paste("R2:", max(nm$r2), sep=" ")
   ), file_handle)
