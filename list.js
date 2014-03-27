@@ -102,6 +102,7 @@ list.drawList = function() {
         .attr("class", function() { return selected?("selected"):("")})
         .attr("id", "sort_" + sort_option)
         .on("click", function() {
+          headstart.recordAction("none", "sortBy", "herecomestheuser", "listsort", null, "sort_option=" + sort_option);
           sortBy(sort_option);
         }).text(sort_option);
     }
@@ -235,9 +236,11 @@ filterList = function(event) {
 
   data_circle.style("display", "inline")
 
-    var searchtext = event.target.value;
+  var searchtext = event.target.value;
   var searchtext_processed = searchtext.trim().toLowerCase();
   var search_words = searchtext_processed.split(" ");
+  
+  headstart.recordAction("none", "filter", "herecomestheuser", "filter_list", null, "search_words=" + search_words);
 
   filtered_data
     .filter(function (d) {
@@ -311,6 +314,9 @@ list.makeTitleClickable = function(d) {
     papers.mouseoverpaper();
     this.enlargeListItem(d);
     headstart.current_enlarged_paper = d;
+
+    headstart.recordAction(d.id, "click_paper_list", "herecomestheuser", "herecomesthestatusoftheitem", null);
+    
     d3.event.stopPropagation();
 }
 
@@ -446,7 +452,10 @@ list.setImageForListHolder = function(d) {
     .on("click", function (d) {
         
       var url = (d.url.startsWith("http://") || d.url.startsWith("https://"))?(d.url):("http://www.mendeley.com/research/" + d.url);
-        
+      
+      recordAction(d.id, "clickOnTitle", d.timestamp, "uri=" + d.uri);
+      headstart.recordAction(d.id, "click_on_title", "herecomestheuser", "herecomesthestatusoftheitem", null, "uri=" + d.uri);
+      
       window.open(url, "_blank");
       d3.event.stopPropagation();
     });

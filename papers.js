@@ -426,8 +426,10 @@ papers.enlargePaper = function(d,i) {
     if(d.resized || !headstart.is_zoomed) {
         return;
     }
-
-    var resize_factor = 1.2;
+    
+    headstart.recordAction(d.id, "enlarge_paper", "herecomestheuser", "herecomesthestatusoftheitem", null);
+ 
+   var resize_factor = 1.2;
 
     var holder_div = d3.select(this);
 
@@ -489,6 +491,8 @@ papers.enlargePaper = function(d,i) {
                 headstart.current_enlarged_paper.paper_selected = false;
 
             headstart.current_enlarged_paper = null;
+
+            headstart.recordAction(d.id, "click_paper_list_enlarge", "herecomestheuser", "herecomesthestatusoftheitem", null);
 
             d3.event.stopPropagation();
         });

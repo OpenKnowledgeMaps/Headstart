@@ -49,7 +49,9 @@ HeadstartFSM = function() {
   this.subdiscipline_title = title;
   
   this.current_file_number = 1;
-
+  
+  this.evaluation_service = "http://localhost/headstart2/evaluation/classes/headstart/writeActionToLog.php";
+  
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
   this.bubbles = {}
@@ -85,6 +87,27 @@ HeadstartFSM.prototype = {
       alert("state machine is required for headstart");
       console.log("state machine is required for headstart");
     }
+  },
+
+  recordAction: function(id, action, user, type, timestamp, additional_params) {
+
+    timestamp = (typeof timestamp !== 'undefined') ? (escape(timestamp)) : ("")
+    additional_params = (typeof additional_params !== 'undefined') ? ('&' + additional_params) : ("")
+
+    $.ajax({
+      url: this.evaluation_service + '?user=' + user 
+              + '&action=' + action
+              + '&item=' + escape(id)
+              + '&type=' + type
+              + '&item_timestamp=' + timestamp
+              + additional_params
+              + '&jsoncallback=?',
+      type: "POST",
+      dataType: "json",
+      success: function(output) {
+        console.log(output)
+      }
+    });
   },
   
   resetBubbles: function () {
