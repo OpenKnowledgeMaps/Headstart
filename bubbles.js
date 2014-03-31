@@ -53,7 +53,7 @@ BubblesFSM.prototype = {
     }
   },
 
-  prepareData: function(init_data) {
+  prepareData: function(init_data, highlight_data) {
 
       // convert to numbers
       init_data.forEach(function(d) {
@@ -106,6 +106,17 @@ BubblesFSM.prototype = {
         }
 
         d.resized = false;
+      });
+      
+      highlight_data.forEach(function(d) {
+        
+        var index = init_data.filter(function (x) { 
+          return x.id == d.contentID 
+        });
+        
+        if(index.length > 0) {
+          index[0].recommended = 1;
+        }
       });
 
       this.data = init_data;
@@ -521,7 +532,6 @@ BubblesFSM.prototype = {
       toFront(headstart.current_zoom_node.parentNode);
       
       var circle_data = d3.select(headstart.current_zoom_node).data();
-      recordAction(circle_data.id, "zoomOut");
       headstart.recordAction(circle_data.id, "zoom_out", "herecomestheuser", "herecomesthestatusoftheitem", null);
     } else {
       headstart.recordAction("none", "zoom_out", "herecomestheuser", "herecomesthestatusoftheitem", null);
@@ -737,14 +747,14 @@ BubblesFSM.prototype = {
       .style("font-size", "11px");
   },
 
-  onstart: function( event, from, to, csv ) {
-    this.prepareData(csv);
-    this.prepareAreas();
+  onstart: function( event, from, to, csv, recommendation_data ) {
+      this.prepareData(csv, recommendation_data);
+      this.prepareAreas();
 
-    if (headstart.is("timeline")) {
-      this.draw();
-      this.initMouseListeners();
-    }
+      if (headstart.is("timeline")) {
+        this.draw();
+        this.initMouseListeners();
+      }
   },
 
   onbeforemouseover: function( event, from, to, circle, d ) {

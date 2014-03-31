@@ -195,12 +195,21 @@ list.populateList = function(list_data) {
 }
 
 list.populateMetaData = function(nodes) {
-  nodes.append("div")
+  
+  var paper_title = nodes.append("div")
     .attr("class", "list_metadata")
     .append("p")
     .attr("id", "list_title")
-    .html(function (d) { return "<a href=\"#\" id=\"paper_list_title\">" + d.title+"</a><br>" })
-    .append("p")
+    .html(function (d) { return "<a href=\"#\" id=\"paper_list_title\">" + d.title+"</a> " })
+  
+  paper_title.filter(function(d) {
+        return d.recommended == 1;    
+    })
+    .append("span")
+     .attr("class", "recommended")
+     .html("recommended");
+  
+  paper_title.append("p")
     .attr("class", "list_details")
     .html(function (d) { return d.authors })
     .append("span")

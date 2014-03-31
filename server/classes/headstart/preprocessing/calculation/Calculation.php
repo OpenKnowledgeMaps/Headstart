@@ -1,6 +1,6 @@
 <?php
 
-namespace headstart\calculation;
+namespace headstart\preprocessing\calculation;
 
 /**
  * Base class for calculating ordination and clustering

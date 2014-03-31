@@ -55,6 +55,7 @@ class Toolkit
 
     public static function info($string) {
         self::initialize();
+        
         fwrite(STDOUT, $string . "\n");
     }
 
@@ -67,6 +68,7 @@ class Toolkit
 
     public static function generateUriFromString($string) {
         self::initialize();
+        
         $uri = preg_replace("/[^A-Za-z0-9\s\-]/", "", strtolower($string));
         $uri = preg_replace("/[\s]/", "-", $uri);
 
@@ -75,11 +77,13 @@ class Toolkit
 
     public static function localName($uri) {
         self::initialize();
+        
         $string = strrchr($uri, "/");
         return substr($string, 1);
     }
     
     public static function openOrCreateFile($file) {
+        self::initialize();
         
         //let's first see if there is a path
         $file_name_pos = strrpos($file, "/");
@@ -102,6 +106,8 @@ class Toolkit
     }
     
     public static function openFileForReading($file) {
+        self::initialize();
+        
         $handle = fopen($file, "r");
         if ($handle == false)
             throw new \Exception("There was an error while opening/creating the following file: " . $file);
@@ -110,9 +116,23 @@ class Toolkit
     }
     
     public static function putContentsToFile($file, $text) {
+        self::initialize();
+        
         $handle = self::openOrCreateFile($file);
         fwrite($handle, $text);
         fclose($handle);
+    }
+    
+    public static function loadIni($path) {
+        self::initialize();
+        
+        if(file_exists($path . 'config_local.ini')) {
+            $ini_array = parse_ini_file($path . "config_local.ini", true);
+        } else {
+            $ini_array = parse_ini_file($path . "config.ini", true);
+        }
+        
+        return $ini_array;
     }
     
 }
