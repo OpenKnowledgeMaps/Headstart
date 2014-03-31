@@ -1,6 +1,6 @@
 <?php
 
-namespace Headstart\Naming;
+namespace headstart\preprocessing\naming;
 
 /**
  * Base class for naming the clusters

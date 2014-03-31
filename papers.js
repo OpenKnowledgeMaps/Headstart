@@ -127,6 +127,7 @@ papers.drawPaperPath = function(nodes) {
 
   nodes.append("path")
     .attr("class", "region")
+    .attr("id", function (d) { return (d.recommended)?("framed"):("unframed"); })
     .attr("d", region);
 }
 

@@ -2,11 +2,11 @@
 
 header('Content-type: application/json');
 
-require_once 'logger/FileLogger.php';
-require_once 'util/CommUtils.php';
+require_once '/../classes/headstart/evaluation/logger/FileLogger.php';
+require_once '/../classes/headstart/library/CommUtils.php';
 
-use headstart\logger;
-use headstart\util;
+use headstart\evaluation\logger;
+use headstart\library;
 
 $serverData = array("addr"=>$_SERVER['REMOTE_ADDR'], "user_agent"=>$_SERVER['HTTP_USER_AGENT']);
 
@@ -17,6 +17,6 @@ $logger->writeToLog($logData);
 
 $jsonData = json_encode($_GET);
 
-util\CommUtils::echoOrCallback($jsonData, $_GET["jsoncallback"]);
+library\CommUtils::echoOrCallback($jsonData, $_GET["jsoncallback"]);
 
 

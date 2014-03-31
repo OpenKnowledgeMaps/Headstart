@@ -50,7 +50,7 @@ HeadstartFSM = function() {
   
   this.current_file_number = 1;
   
-  this.evaluation_service = "http://localhost/headstart2/evaluation/classes/headstart/writeActionToLog.php";
+  this.evaluation_service = "http://localhost/headstart2/server/services/writeActionToLog.php";
   
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
@@ -109,7 +109,7 @@ HeadstartFSM.prototype = {
       }
     });
   },
-  
+     
   resetBubbles: function () {
     if(this.bubbles) {
       delete this.bubbles;
@@ -413,22 +413,23 @@ HeadstartFSM.prototype = {
       hs.drawSvg();
       hs.drawChartCanvas();
       hs.drawTitle();
+      $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=5&jsoncallback=?", function(data) {
+        bubbles.start( csv, data );
 
-      bubbles.start( csv );
 
+        hs.initMouseListeners();
+        hs.initForcePapers();
+        hs.initForceAreas();
 
-      hs.initMouseListeners();
-      hs.initForcePapers();
-      hs.initForceAreas();
-
-      papers.start( bubbles );
-      // moving this to bubbles.start results in papers being displayed over the
-      // bubbles, unfortunately
-      bubbles.draw();
-      bubbles.initMouseListeners();
-      list.start( bubbles );
-      popup.start();
-      hs.checkForcePapers();
+        papers.start( bubbles );
+        // moving this to bubbles.start results in papers being displayed over the
+        // bubbles, unfortunately
+        bubbles.draw();
+        bubbles.initMouseListeners();
+        list.start( bubbles );
+        popup.start();
+        hs.checkForcePapers();
+      });
     });
 
   },

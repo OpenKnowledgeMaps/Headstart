@@ -1,6 +1,6 @@
 <?php
 
-namespace headstart\logger;
+namespace headstart\evaluation\logger;
 /**
  * Description of FileLogger
  *
@@ -8,7 +8,7 @@ namespace headstart\logger;
  */
 
 require "Logger.php";
-require dirname(__FILE__) . '/../../../library/KLogger/src/KLogger.php';
+require dirname(__FILE__) . '/../../library/KLogger/src/KLogger.php';
 
 class FileLogger extends Logger {
     

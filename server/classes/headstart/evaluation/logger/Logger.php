@@ -1,6 +1,6 @@
 <?php
 
-namespace headstart\logger;
+namespace headstart\evaluation\logger;
 /**
  * Description of Logger
  *

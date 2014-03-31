@@ -1,6 +1,6 @@
 <?php
 
-namespace Headstart\Naming;
+namespace headstart\preprocessing\naming;
 
 /**
  * Naming the clusters with the APIs of Zemanta and OpenCalais
@@ -11,7 +11,7 @@ namespace Headstart\Naming;
 use headstart\library;
 
 require_once 'Naming.php';
-require_once '/../library/inflector.php';
+require_once '/../../library/inflector.php';
 
 class ApiNaming extends Naming {
     

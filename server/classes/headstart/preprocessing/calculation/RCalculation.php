@@ -1,6 +1,6 @@
 <?php
 
-namespace headstart\calculation;
+namespace headstart\preprocessing\calculation;
 
 /**
  * Calculation using an R script for ordination and clustering

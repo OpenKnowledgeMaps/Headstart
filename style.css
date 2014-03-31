@@ -62,6 +62,17 @@ path {
   stroke-width: 1px;
 }
 
+#framed {
+    stroke: yellow;
+    stroke-width: 3px;
+}
+
+.recommended {
+    font-size:10pt;
+    color:black; 
+    border: 1px yellow solid;
+}
+
 line {
   stroke: rgb(31, 119, 180);
   stroke-width: 1px;
