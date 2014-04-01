@@ -755,6 +755,8 @@ BubblesFSM.prototype = {
         this.draw();
         this.initMouseListeners();
       }
+      
+      headstart.recordAction("none", "start", "herecomestheuser", "start_bubble", null, null, recommendation_data);
   },
 
   onbeforemouseover: function( event, from, to, circle, d ) {

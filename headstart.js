@@ -52,6 +52,8 @@ HeadstartFSM = function() {
   
   this.evaluation_service = "http://localhost/headstart2/server/services/writeActionToLog.php";
   
+  this.is_evaluation = evaluation;
+  
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
   this.bubbles = {}
@@ -61,6 +63,20 @@ HeadstartFSM = function() {
       return this.slice(0, str.length) == str;
     };
   }
+  
+  if (typeof String.prototype.escapeSpecialChars != 'function') {
+    String.prototype.escapeSpecialChars = function() {
+      return this.replace(/[\\]/g, '\\\\')
+        .replace(/[\/]/g, '\\/')
+        .replace(/[\b]/g, '\\b')
+        .replace(/[\f]/g, '\\f')
+        .replace(/[\n]/g, '\\n')
+        .replace(/[\r]/g, '\\r')
+        .replace(/[\t]/g, '\\t')
+        .replace(/[\"]/g, '\\"')
+        .replace(/\\'/g, "\\'"); 
+       };
+     }
   
 };
 
@@ -89,10 +105,18 @@ HeadstartFSM.prototype = {
     }
   },
 
-  recordAction: function(id, action, user, type, timestamp, additional_params) {
+  recordAction: function(id, action, user, type, timestamp, additional_params, post_data) {
+    
+    if(!this.is_evaluation)
+      return;
 
     timestamp = (typeof timestamp !== 'undefined') ? (escape(timestamp)) : ("")
     additional_params = (typeof additional_params !== 'undefined') ? ('&' + additional_params) : ("")
+    if(typeof post_data !== 'undefined') {
+      post_data = {post_data:post_data};
+    } else {
+      post_data = {};
+    }
 
     $.ajax({
       url: this.evaluation_service + '?user=' + user 
@@ -103,6 +127,7 @@ HeadstartFSM.prototype = {
               + additional_params
               + '&jsoncallback=?',
       type: "POST",
+      data: post_data,
       dataType: "json",
       success: function(output) {
         console.log(output)

@@ -12,10 +12,13 @@ $serverData = array("addr"=>$_SERVER['REMOTE_ADDR'], "user_agent"=>$_SERVER['HTT
 
 $logData = array_merge($serverData, $_GET);
 
+if($_POST != null)
+    $logData = array_merge($logData, $_POST);
+
 $logger = new logger\FileLogger(dirname(__FILE__) . '/../../log/', null);
 $logger->writeToLog($logData);
 
-$jsonData = json_encode($_GET);
+$jsonData = json_encode($logData);
 
 library\CommUtils::echoOrCallback($jsonData, $_GET["jsoncallback"]);
 
