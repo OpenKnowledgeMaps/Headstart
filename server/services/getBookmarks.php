@@ -17,7 +17,10 @@ $conference_id = library\CommUtils::getParameter($_GET, "conference");
 
 $connection = new headstart\personalization\DBConnectionPersonalization($ini_array);
 $connection->establishConnection();
-$data = $connection->getPersonalBookmarks($user_id, $conference_id);
+$bookmarking_data = $connection->getPersonalBookmarks($user_id, $conference_id);
+$recommendation_data = $connection->getPersonalRecommendations($user_id, $conference_id);
+
+$data = array("bookmarks" => $bookmarking_data, "recommendations" => $recommendation_data);
 
 $jsonData = json_encode($data);
 

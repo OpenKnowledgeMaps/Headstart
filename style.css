@@ -67,10 +67,21 @@ path {
     stroke-width: 3px;
 }
 
+#framed_bookmarks {
+    stroke: green;
+    stroke-width: 2px;
+}
+
 .recommended {
     font-size:10pt;
     color:black; 
     border: 1px yellow solid;
+}
+
+.bookmarked {
+    font-size:10pt;
+    color:black; 
+    border: 1px green solid;
 }
 
 line {

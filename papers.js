@@ -127,7 +127,15 @@ papers.drawPaperPath = function(nodes) {
 
   nodes.append("path")
     .attr("class", "region")
-    .attr("id", function (d) { return (d.recommended)?("framed"):("unframed"); })
+    .attr("id", function (d) {
+        if(d.bookmarked) {
+          return "framed_bookmarks"
+        } else if (d.recommended) {
+          return "framed"
+        } else {
+          return "unframed"
+        }
+      })
     .attr("d", region);
 }
 
@@ -193,13 +201,15 @@ papers.populatePapersWithMetaData = function( xhtml ) {
     this.appendMetaDataTitle(metadata);
     this.appendMetaDataDetails(metadata);
     this.appendMetaDataPublicationYear(metadata);
-    this.appendMetaDataReaders(xhtml);
+    if(!headstart.content_based) {
+      this.appendMetaDataReaders(xhtml);
+    }
 }
 
 papers.appendMetaDataCSSClass = function(xhtml) {
  return xhtml.append("div")
              .attr("class", "metadata")
-             .style("height", function (d) { return d.height * 0.8 + "px" })
+             .style("height", function (d) { return (headstart.content_based)?(d.height):(d.height * 0.8 + "px") })
              .style("width",  function (d) { return d.width  * 0.8 + "px" });
 }
 
@@ -406,10 +416,13 @@ papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
     d3.select(current_dogear)
         .attr("d", dogear);
 
+    var height = (headstart.content_based)?(d.height * headstart.circle_zoom * resize_factor + "px"):
+            (d.height * headstart.circle_zoom * resize_factor - 20 + "px");
+    
     holder_div.select("div.metadata")
-        .attr("height", d.height * headstart.circle_zoom * resize_factor - 20 + "px")
+        .attr("height", height)
         .attr("width", d.width * headstart.circle_zoom * resize_factor * (1-headstart.dogear_width) + "px")
-        .style("height", d.height * headstart.circle_zoom * resize_factor - 20 + "px")
+        .style("height", height)
         .style("width", d.width * headstart.circle_zoom * resize_factor * (1-headstart.dogear_width) + "px")
 
     holder_div.select("div.readers")

@@ -52,7 +52,19 @@ HeadstartFSM = function() {
   
   this.evaluation_service = "http://localhost/headstart2/server/services/writeActionToLog.php";
   
-  this.is_evaluation = evaluation;
+  this.is_evaluation = (typeof evaluation != 'undefined')?(evaluation):(false);
+  
+  this.content_based = (typeof content_based != 'undefined')?(content_based):(false);
+  
+  this.sort_options = [
+    "readers",
+    "title",
+    "area"
+   ]
+
+   if(this.content_based) {
+     this.sort_options = ["title", "area"];
+   }
   
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
@@ -438,7 +450,7 @@ HeadstartFSM.prototype = {
       hs.drawSvg();
       hs.drawChartCanvas();
       hs.drawTitle();
-      $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=5&jsoncallback=?", function(data) {
+      $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=49&jsoncallback=?", function(data) {
         bubbles.start( csv, data );
 
 
@@ -530,23 +542,25 @@ HeadstartFSM.prototype = {
 
     var hs = this;
     d3.csv(bubble.file, function( csv ) {
+      $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=49&jsoncallback=?", function(data) {
         
-      hs.drawChartCanvas();
-      
-      bubble.start( csv );
+        hs.drawChartCanvas();
 
-      hs.initMouseListeners();
-      hs.initForcePapers();
-      hs.initForceAreas();
+        bubble.start( csv, data );
 
-      papers.start( bubble );
-      // moving this to bubbles.start results in papers being displayed over the
-      // bubbles, unfortunately
-      bubble.draw();
-      bubble.initMouseListeners();
-      list.start( bubble );
-      //popup.start();
-      hs.checkForcePapers();
+        hs.initMouseListeners();
+        hs.initForcePapers();
+        hs.initForceAreas();
+
+        papers.start( bubble );
+        // moving this to bubbles.start results in papers being displayed over the
+        // bubbles, unfortunately
+        bubble.draw();
+        bubble.initMouseListeners();
+        list.start( bubble );
+        //popup.start();
+        hs.checkForcePapers();
+      });
     });
   }
 }

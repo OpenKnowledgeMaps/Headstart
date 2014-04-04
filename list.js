@@ -1,12 +1,6 @@
 // StateMachine for List UI element in Headstart
 // Filename: list.js
 
-SORT_OPTIONS = [
- "readers",
- "title",
- "area"
-]
-
 var list = StateMachine.create({
 
     events: [
@@ -107,16 +101,16 @@ list.drawList = function() {
         }).text(sort_option);
     }
 
-    addSortOption(SORT_OPTIONS[0], true);
+    addSortOption(headstart.sort_options[0], true);
 
       var counter = 0;
 
-      for (option in SORT_OPTIONS) {
+      for (option in headstart.sort_options) {
         if (counter === 0) {
           counter++;
           continue;
         }
-        addSortOption(SORT_OPTIONS[option], false);
+        addSortOption(headstart.sort_options[option], false);
       }
 
 
@@ -206,8 +200,15 @@ list.populateMetaData = function(nodes) {
         return d.recommended == 1;    
     })
     .append("span")
-     .attr("class", "recommended")
+     .attr("class", function (d) { return (d.bookmarked==1)?("bookmarked"):("recommended"); })
      .html("recommended");
+     
+  paper_title.filter(function(d) {
+        return (d.bookmarked == 1) && (d.recommended != 1);    
+    })
+    .append("span")
+     .attr("class", "bookmarked")
+     .html("bookmarked");
   
   paper_title.append("p")
     .attr("class", "list_details")
@@ -285,14 +286,16 @@ list.createAbstracts = function(nodes) {
 }
 
 list.populateReaders = function(nodes) {
-  nodes.append("div")
+  var areas = nodes.append("div")
     .attr("class", "list_readers")
     .append("p")
     .attr("id", "list_area")
     .html(function(d) {
       return "<b>Area:</b> " + d.area
     })
-  .append("p")
+    
+  if(!headstart.content_based) {
+   areas.append("p")
     .attr("id", "list_readers")
     .html(function (d) {
       return d.readers
@@ -300,6 +303,11 @@ list.populateReaders = function(nodes) {
   .append("span")
     .attr("class", "list_readers_entity")
     .html(" readers&nbsp;");
+    
+  } else {
+    d3.selectAll("#list_area").style("margin-bottom", "5px")
+    
+  }
 }
 
 // called quite often
@@ -331,7 +339,7 @@ list.makeTitleClickable = function(d) {
 
 list.enlargeListItem = function(d) {
     if(headstart.current_enlarged_paper != null) {
-      if(headstart.current_enlarged_paper.title == d.title) {
+      if(headstart.current_enlarged_paper.id == d.id) {
         return;
       } else {
         this.reset();
@@ -356,7 +364,7 @@ list.setListHolderDisplay = function(d) {
 
   this.papers_list.selectAll("#list_holder")
     .filter(function (x, i) {
-      return (x.title != d.title)
+      return (x.id != d.id)
     })
   .style("display", "none");
 }
@@ -427,7 +435,7 @@ list.setImageForListHolder = function(d) {
   list.papers_list = d3.select("#papers_list");
   var current_item = list.papers_list.selectAll("#list_holder")
     .filter(function (x, i) {
-      return (x.title == d.title)
+      return (x.id == d.id)
     });
 
   var image_src = "images/" + d.id + "/page_1.png";
@@ -462,7 +470,6 @@ list.setImageForListHolder = function(d) {
         
       var url = (d.url.startsWith("http://") || d.url.startsWith("https://"))?(d.url):("http://www.mendeley.com/research/" + d.url);
       
-      recordAction(d.id, "clickOnTitle", d.timestamp, "uri=" + d.uri);
       headstart.recordAction(d.id, "click_on_title", "herecomestheuser", "herecomesthestatusoftheitem", null, "uri=" + d.uri);
       
       window.open(url, "_blank");
@@ -514,7 +521,7 @@ function notSureifNeeded() {
   var list_holders_local =
     list.papers_list.selectAll("#list_holder")
     .filter(function (d) {
-      return (headstart.current_enlarged_paper.title == d.title)
+      return (headstart.current_enlarged_paper.id == d.id)
     });
 
   list_holders_local.select("#paper_list_title")

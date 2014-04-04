@@ -54,12 +54,29 @@ BubblesFSM.prototype = {
   },
 
   prepareData: function(init_data, highlight_data) {
-
+      
+      var xy_array = [];
+      
       // convert to numbers
       init_data.forEach(function(d) {
         d.x = parseFloat(d.x);
         d.y = parseFloat(d.y);
-        d.readers = +d.readers;
+        
+        //if two items have the exact same location, that throws off the force-based layout
+        var xy_string = d.x + d.y;
+        
+        while(xy_array.hasOwnProperty(xy_string)) {
+          d.y += 0.00000001;
+          xy_string = d.x + d.y;
+        }
+        
+        xy_array[xy_string] = true;
+        
+        if(headstart.content_based == false) {
+          d.readers = +d.readers;
+        } else {
+          d.readers = 1;
+        }
         d.paper_selected = false;
 
         // convert authors to "[first name] [last name]"
@@ -108,16 +125,34 @@ BubblesFSM.prototype = {
         d.resized = false;
       });
       
-      highlight_data.forEach(function(d) {
-        
-        var index = init_data.filter(function (x) { 
-          return x.id == d.contentID 
-        });
-        
-        if(index.length > 0) {
-          index[0].recommended = 1;
+      if(typeof highlight_data != 'undefined') {
+        if(highlight_data["bookmarks"] != null) {        
+          highlight_data["bookmarks"].forEach(function(d) {
+
+            var index = init_data.filter(function (x) { 
+              return x.id == d.contentID 
+            });
+
+            if(index.length > 0) {
+              index[0].bookmarked = 1;
+            }
+          });
         }
-      });
+        
+        if(highlight_data["recommendations"] != null) {        
+          highlight_data["recommendations"].forEach(function(d) {
+
+            var index = init_data.filter(function (x) { 
+              return x.id == d.contentID 
+            });
+
+            if(index.length > 0) {
+              index[0].recommended = 1;
+            }
+          });
+        }
+        
+      }
 
       this.data = init_data;
   },
@@ -578,7 +613,7 @@ BubblesFSM.prototype = {
         return d.width * (1-headstart.dogear_width) + "px"
       })
     .style("height", function (d) {
-      return d.height * 0.8 + "px"
+      return (headstart.content_based)?(d.height):(d.height * 0.8 + "px")
     });
 
     t.selectAll("div.readers")
@@ -727,7 +762,7 @@ BubblesFSM.prototype = {
 
     t.selectAll("div.metadata")
       .style("height", function (d) {
-        return d.height * headstart.circle_zoom - 20 + "px";
+        return (headstart.content_based)?(d.height * headstart.circle_zoom + "px"):(d.height * headstart.circle_zoom - 20 + "px");
       })
     .style("width", function (d) {
       return d.width * headstart.circle_zoom * (1-headstart.dogear_width) + "px";
