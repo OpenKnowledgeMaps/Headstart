@@ -266,19 +266,52 @@ papers.createPaperPath = function(x, y, width, height, correction_x, correction_
 }
 
 papers.applyForce = function( bubbles ) {
+  
+    headstart.force_areas.start();
+    var areas_count = 0;
+    
+    headstart.force_areas.on("tick", function(e) {
+        
+        var alpha = e.alpha;
+        var current_bubbles = headstart.bubbles[headstart.current_file_number];
+        
+        current_bubbles.areas_array.forEach(function(a, i) {
+            
+            if(a.x - a.r < 0
+                || a.x + a.r > headstart.max_chart_size
+                || a.y - a.r < 0
+                || a.y + a.r > headstart.max_chart_size) {
+                    
+                a.x += (headstart.max_chart_size/2 - a.x) * alpha;
+                a.y += (headstart.max_chart_size/2 - a.y) * alpha;
+                    
+            }
+            
+            current_bubbles.areas_array.slice(i + 1).forEach(function(b) {
+                papers.checkCollisions(a, b, alpha);                
+            });
+        });
+        
+        papers.drawEntity("g.bubble_frame", alpha, areas_count);
+        
+        areas_count++;
+
+    });
 
     headstart.force_papers.start();
     var papers_count = 0;
 
     headstart.force_papers.on("tick", function(e) {
         var alpha = e.alpha;
+        
+        var current_bubbles = headstart.bubbles[headstart.current_file_number];
 
-        bubbles.data.forEach(function(a, i) {
+        current_bubbles.data.forEach(function(a, i) {
             var current_area = "";
 
             for (area in bubbles.areas_array) {
-                if (bubbles.areas_array[area].title == a.area) {
-                    current_area = bubbles.areas_array[area];
+                if (current_bubbles.areas_array[area].title == a.area) {
+                    current_area = current_bubbles.areas_array[area];
                     break;
                 }
             }

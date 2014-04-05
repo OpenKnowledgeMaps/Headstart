@@ -347,7 +347,7 @@ HeadstartFSM.prototype = {
       checkPapers = window.setInterval(function () {
         if (hs.is("normal") || hs.is("switchfiles")) {
           if (!papers.is("ready") && !papers.is("none")) {
-            if (hs.force_papers.alpha() <= 0) {
+            if (hs.force_papers.alpha() <= 0 && hs.force_areas.alpha() <= 0) {
               papers.forced();
               window.clearInterval(checkPapers);
             }
