@@ -1,10 +1,10 @@
 // Headstart
 // filename: headstart.js
 
-HeadstartFSM = function() {
+HeadstartFSM = function(title, files, options) {
 
   // a container for variables
-  this.VERSION = 0.1;
+  this.VERSION = 2.1;
 
   this.min_height = 650;
   this.min_width  = 650;
@@ -33,10 +33,10 @@ HeadstartFSM = function() {
 
   this.transition_duration = 750;
 
-  this.max_diameter_size = max_diameter_size;
-  this.min_diameter_size = min_diameter_size;
-  this.max_area_size = max_area_size;
-  this.min_area_size = min_area_size;
+  this.max_diameter_size = initVar(options.max_diameter_size, 50);
+  this.min_diameter_size = initVar(options.min_diameter_size, 30);
+  this.max_area_size = initVar(options.max_area_size, 110);
+  this.min_area_size = initVar(options.min_area_size, 50);
 
   this.current_zoom_node = null;
 
@@ -46,15 +46,21 @@ HeadstartFSM = function() {
   this.current_circle = null;
   this.is_zoomed = false;
 
-  this.subdiscipline_title = title;
+  this.subdiscipline_title = initVar(title, "");
   
   this.current_file_number = 1;
   
-  this.evaluation_service = "http://localhost/headstart2/server/services/writeActionToLog.php";
+  this.is_evaluation = initVar(options.is_evaluation, false);
   
-  this.is_evaluation = (typeof evaluation != 'undefined')?(evaluation):(false);
+  this.content_based = initVar(options.is_content_based, false);
   
-  this.content_based = (typeof content_based != 'undefined')?(content_based):(false);
+  this.evaluation_service = options.evaluation_service;
+  
+  this.is_force_areas = initVar(options.force_areas, false);
+  
+  this.is_adaptive = initVar(options.adaptive, false);
+  
+  this.files = files;
   
   this.sort_options = [
     "readers",
@@ -95,6 +101,15 @@ HeadstartFSM = function() {
 HeadstartFSM.prototype = {
 
   // prototype methods
+  checkBrowserVersions: function() {
+    var browser = BrowserDetect.browser;
+
+    if (browser != "Firefox" && browser != "Safari" && browser != "Chrome") {
+            alert("You are using an unsupported browser. This visualization"
+                    + " was successfully tested with the latest versions of Chrome, Safari, Opera and Firefox.");
+    }
+  }, 
+   
   // simple check that all required libraries are present at the moment:
   // - d3
   // - jQuery
@@ -153,7 +168,7 @@ HeadstartFSM.prototype = {
       this.bubbles = {};
     }
     
-    $.each(files, function(index, elem) {
+    $.each(this.files, function(index, elem) {
       var bubble = new BubblesFSM();
       headstart.registerBubbles(bubble);
       bubble.title = elem.title;
@@ -346,7 +361,7 @@ HeadstartFSM.prototype = {
     if (hs.is("normal") || hs.is("switchfiles")) {
       checkPapers = window.setInterval(function () {
         if (hs.is("normal") || hs.is("switchfiles")) {
-          if (!papers.is("ready") && !papers.is("none")) {
+          if ((!papers.is("ready") && !papers.is("none")) || (bubbles.is("startup") || bubbles.is("none") || (bubbles.is("start")) )) {
             if (hs.force_papers.alpha() <= 0 && hs.force_areas.alpha() <= 0) {
               papers.forced();
               window.clearInterval(checkPapers);
@@ -432,7 +447,8 @@ HeadstartFSM.prototype = {
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
   onstart: function( event, from, to, file ) {
-      
+    
+    this.checkBrowserVersions();
     this.checkThatRequiredLibsArePresent();
     this.initDynamicVariables();
 
@@ -450,23 +466,13 @@ HeadstartFSM.prototype = {
       hs.drawSvg();
       hs.drawChartCanvas();
       hs.drawTitle();
-      $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=49&jsoncallback=?", function(data) {
-        bubbles.start( csv, data );
-
-
-        hs.initMouseListeners();
-        hs.initForcePapers();
-        hs.initForceAreas();
-
-        papers.start( bubbles );
-        // moving this to bubbles.start results in papers being displayed over the
-        // bubbles, unfortunately
-        bubbles.draw();
-        bubbles.initMouseListeners();
-        list.start( bubbles );
-        popup.start();
-        hs.checkForcePapers();
-      });
+      if(headstart.is_adaptive) {
+        $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=49&jsoncallback=?", function(data) {
+          headstart.startVisualization(hs, bubbles, csv, data, true);
+        });
+      } else {
+        headstart.startVisualization(hs, bubbles, csv, null, true);
+      }
     });
 
   },
@@ -520,7 +526,10 @@ HeadstartFSM.prototype = {
   
   ontofile: function( event, from, to, file) {
     
-    window.clearInterval(checkPapers);
+    this.force_areas.stop();
+    this.force_papers.stop();
+    
+    headstart.current_file_number = file;
     
     // clear the canvas
     $("#chart_canvas").remove();
@@ -538,31 +547,43 @@ HeadstartFSM.prototype = {
     // reset bubbles
     this.resetBubbles();
     
-    var bubble = this.bubbles[this.current_file_number];
+    var bubbles = this.bubbles[this.current_file_number];
 
     var hs = this;
-    d3.csv(bubble.file, function( csv ) {
-      $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=49&jsoncallback=?", function(data) {
-        
-        hs.drawChartCanvas();
-
-        bubble.start( csv, data );
-
-        hs.initMouseListeners();
-        hs.initForcePapers();
-        hs.initForceAreas();
-
-        papers.start( bubble );
-        // moving this to bubbles.start results in papers being displayed over the
-        // bubbles, unfortunately
-        bubble.draw();
-        bubble.initMouseListeners();
-        list.start( bubble );
-        //popup.start();
-        hs.checkForcePapers();
-      });
+    d3.csv(bubbles.file, function( csv ) {
+      hs.drawChartCanvas();
+      
+      if(headstart.is_adaptive) {
+        $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=49&jsoncallback=?", function(data) {
+          headstart.startVisualization(hs, bubbles, csv, data, false);
+        });
+      } else {
+        headstart.startVisualization(hs, bubbles, csv, null, false);
+      }
     });
+  },
+  
+  startVisualization: function(hs, bubbles, csv, adaptive_data, popup_start) {
+    bubbles.start( csv, adaptive_data );
+
+    hs.initMouseListeners();
+    hs.initForcePapers();
+    hs.initForceAreas();
+
+    papers.start( bubbles );
+    // moving this to bubbles.start results in papers being displayed over the
+    // bubbles, unfortunately
+    bubbles.draw();
+    bubbles.initMouseListeners();
+    list.start( bubbles );
+    
+    if(popup_start)
+      popup.start();
+    
+    hs.checkForcePapers();
+    
   }
+  
 }
 
 // State definitions for headstart object

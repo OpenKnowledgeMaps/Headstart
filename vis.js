@@ -21,9 +21,9 @@
  *
  */
 
-// this is the starting point for the visualisation
-var headstart = new HeadstartFSM();
-headstart.start();
+function initVar(variable, default_value) {
+  return typeof variable !== 'undefined' ? variable : default_value;
+}
 
 // ------------------------------------------------------------
 // functions which are not being called at the moment, but might

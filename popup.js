@@ -139,8 +139,7 @@ popup.drawDropdown = function() {
 
     var selected_file_number = datasets.selectedIndex + 1;  
     if(selected_file_number != headstart.current_file_number) {
-      headstart.current_file_number = selected_file_number;
-      headstart.tofile();
+      headstart.tofile(selected_file_number);
     }
   })
 }

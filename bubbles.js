@@ -125,7 +125,7 @@ BubblesFSM.prototype = {
         d.resized = false;
       });
       
-      if(typeof highlight_data != 'undefined') {
+      if(typeof highlight_data != 'undefined' && highlight_data != null) {
         if(highlight_data["bookmarks"] != null) {        
           highlight_data["bookmarks"].forEach(function(d) {
 

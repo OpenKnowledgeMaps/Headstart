@@ -268,11 +268,21 @@ papers.createPaperPath = function(x, y, width, height, correction_x, correction_
 papers.applyForce = function( bubbles ) {
   
     headstart.force_areas.start();
+    
+    if(!headstart.is_force_areas) {
+      headstart.force_areas.alpha(0.0);
+    }
+  
     var areas_count = 0;
     
     headstart.force_areas.on("tick", function(e) {
         
         var alpha = e.alpha;
+        
+        /*if (typeof current_bubbles == 'undefined' || current_bubbles == null) {
+          return true;
+        }*/
+        
         var current_bubbles = headstart.bubbles[headstart.current_file_number];
         
         current_bubbles.areas_array.forEach(function(a, i) {
@@ -305,6 +315,10 @@ papers.applyForce = function( bubbles ) {
         var alpha = e.alpha;
         
         var current_bubbles = headstart.bubbles[headstart.current_file_number];
+        
+        /*if (typeof current_bubbles == 'undefined' || current_bubbles == null) {
+          return true;
+        }*/
 
         current_bubbles.data.forEach(function(a, i) {
             var current_area = "";
