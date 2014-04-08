@@ -62,25 +62,35 @@ path {
   stroke-width: 1px;
 }
 
-#framed {
+.framed {
     stroke: yellow;
     stroke-width: 3px;
 }
 
-#framed_bookmarks {
+.framed_bookmarked{
     stroke: green;
     stroke-width: 2px;
 }
 
 .recommended {
     font-size:10pt;
+    font-weight: bold;
     color:black; 
+    background-color: yellow; 
     border: 1px yellow solid;
 }
 
 .bookmarked {
     font-size:10pt;
-    color:black; 
+    color: black;
+    border: 1px green solid;
+}
+
+.tobookmark {
+    font-size:10pt;
+    font-weight: bold;
+    color:white; 
+    background-color: green;
     border: 1px green solid;
 }
 

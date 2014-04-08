@@ -2,6 +2,10 @@
 // filename: headstart.js
 
 HeadstartFSM = function(title, files, options) {
+  
+  initVar = function(variable, default_value) {
+    return typeof variable !== 'undefined' ? variable : default_value;
+  }
 
   // a container for variables
   this.VERSION = 2.1;
@@ -58,7 +62,7 @@ HeadstartFSM = function(title, files, options) {
   
   this.is_force_areas = initVar(options.force_areas, false);
   
-  this.is_adaptive = initVar(options.adaptive, false);
+  this.is_adaptive = initVar(options.is_adaptive, false);
   
   this.files = files;
   
@@ -467,7 +471,7 @@ HeadstartFSM.prototype = {
       hs.drawChartCanvas();
       hs.drawTitle();
       if(headstart.is_adaptive) {
-        $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=49&jsoncallback=?", function(data) {
+        $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=128&jsoncallback=?", function(data) {
           headstart.startVisualization(hs, bubbles, csv, data, true);
         });
       } else {
@@ -554,7 +558,7 @@ HeadstartFSM.prototype = {
       hs.drawChartCanvas();
       
       if(headstart.is_adaptive) {
-        $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=49&jsoncallback=?", function(data) {
+        $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=128&jsoncallback=?", function(data) {
           headstart.startVisualization(hs, bubbles, csv, data, false);
         });
       } else {

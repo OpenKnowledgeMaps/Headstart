@@ -18,6 +18,7 @@ var list = StateMachine.create({
             this.drawList();
             this.populateList( bubbles.data );
             this.initListMouseListeners();
+            sortBy(headstart.sort_options[0]);
         },
 
         onshow: function( event, from, to ) {
@@ -197,18 +198,35 @@ list.populateMetaData = function(nodes) {
     .html(function (d) { return "<a href=\"#\" id=\"paper_list_title\">" + d.title+"</a> " })
   
   paper_title.filter(function(d) {
-        return d.recommended == 1;    
+        return d.recommended == 1 && d.bookmarked != 1;    
     })
     .append("span")
-     .attr("class", function (d) { return (d.bookmarked==1)?("bookmarked"):("recommended"); })
+     .attr("class", "recommended")
      .html("recommended");
      
   paper_title.filter(function(d) {
-        return (d.bookmarked == 1) && (d.recommended != 1);    
+        return (d.bookmarked != 1);    
+    })
+    .append("span")
+     .attr("class", "tobookmark")
+     .attr("id", "bookmark")
+     .html("Add to schedule")
+     .on("click", function (d) { 
+       list.addBookmark(d);      
+       d3.event.stopPropagation();
+     })
+     
+  paper_title.filter(function(d) {
+        return (d.bookmarked == 1);    
     })
     .append("span")
      .attr("class", "bookmarked")
-     .html("bookmarked");
+     .attr("id", "bookmark")
+     .html("Already in your schedule X")
+     .on("click", function (d) { 
+       list.removeBookmark(d);
+       d3.event.stopPropagation();
+     })
   
   paper_title.append("p")
     .attr("class", "list_details")
@@ -318,6 +336,62 @@ list.createAbstract = function(d, cut_off) {
         }
     }
     return d.paper_abstract
+}
+
+list.addBookmark = function(d)  {
+  $.getJSON("http://localhost/headstart2/server/services/addBookmark.php?"
+    + "user_id=" + 16
+    + "&content_id=" +d.id,
+      function(data) {
+        console.log("Successfully added bookmark");
+
+        d.bookmarked = true;
+
+        d3.selectAll("#bookmark").filter(function(x) {
+          return x.id == d.id;
+        })
+            .attr("class", "bookmarked")
+            .html("Already in your schedule X")
+             .on("click", function (d) { 
+               list.removeBookmark(d); 
+               d3.event.stopPropagation();
+             })
+             
+        d3.selectAll("#region").filter(function (x) {
+          return x.id == d.id
+        })
+          .attr("class", "framed_bookmarked")
+       }
+  );
+}
+
+list.removeBookmark = function(d)  {
+  $.getJSON("http://localhost/headstart2/server/services/removeBookmark.php?"
+    + "user_id=" + 16
+    + "&content_id=" +d.id,
+      function(data) {
+        console.log("Successfully removed bookmark");
+        
+        d.bookmarked = false;
+        
+        d3.selectAll("#bookmark").filter(function(x) {
+         return x.id == d.id;
+       })
+            .attr("class", "tobookmark")
+            .html("Add to schedule")
+             .on("click", function (d) { 
+               list.addBookmark(d); 
+               d3.event.stopPropagation();
+             })
+        
+        d3.selectAll("#region").filter(function (x) {
+          return x.id == d.id
+        })
+            .attr("class", function (d) {
+              return (d.recommended)?("framed"):("unframed");
+            })
+        
+      });
 }
 
 list.makeTitleClickable = function(d) {

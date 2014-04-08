@@ -532,7 +532,7 @@ BubblesFSM.prototype = {
       })
     .style("display", "none");
 
-    d3.selectAll("path.region")
+    d3.selectAll("#region")
       .style("fill-opacity", 1)
 
       headstart.circle_zoom = headstart.circle_zoom_factor / d.r / 2;
@@ -593,7 +593,7 @@ BubblesFSM.prototype = {
         return "translate(" + d.x + "," + d.y +")";
       })
 
-    t.selectAll("path.region")
+    t.selectAll("#region")
       .attr("d", function (d) {
         return papers.createPaperPath(0, 0, d.width, d.height)
       });
@@ -745,7 +745,7 @@ BubblesFSM.prototype = {
           0, d.width*headstart.circle_zoom, d.height*headstart.circle_zoom);
     }
 
-    t.selectAll("path.region")
+    t.selectAll("#region")
       .attr("d", region)
 
       t.selectAll("path.dogear")
@@ -818,7 +818,7 @@ BubblesFSM.prototype = {
       if (papers.is("behindbubble") || papers.is("behindbigbubble")) {
         papers.mouseover();
       }
-      d3.selectAll("path.region").style("fill-opacity", 1);
+      d3.selectAll("#region").style("fill-opacity", 1);
     }
 
 

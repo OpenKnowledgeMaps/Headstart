@@ -126,10 +126,10 @@ papers.drawPaperPath = function(nodes) {
   }
 
   nodes.append("path")
-    .attr("class", "region")
-    .attr("id", function (d) {
+    .attr("id", "region")
+    .attr("class", function (d) {
         if(d.bookmarked) {
-          return "framed_bookmarks"
+          return "framed_bookmarked"
         } else if (d.recommended) {
           return "framed"
         } else {
