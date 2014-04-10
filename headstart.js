@@ -1,14 +1,18 @@
 // Headstart
 // filename: headstart.js
 
-HeadstartFSM = function(title, files, options) {
+HeadstartFSM = function(host, path, tag, files, options) {
   
   initVar = function(variable, default_value) {
     return typeof variable !== 'undefined' ? variable : default_value;
   }
 
   // a container for variables
-  this.VERSION = 2.1;
+  this.VERSION = 2.5;
+  
+  this.host = host;
+  this.path = path;
+  this.tag = tag;
 
   this.min_height = 650;
   this.min_width  = 650;
@@ -34,6 +38,8 @@ HeadstartFSM = function(title, files, options) {
 
   this.top_correction    = 50;
   this.bottom_correction = 0;
+  
+  this.list_height = 51;
 
   this.transition_duration = 750;
 
@@ -50,7 +56,7 @@ HeadstartFSM = function(title, files, options) {
   this.current_circle = null;
   this.is_zoomed = false;
 
-  this.subdiscipline_title = initVar(title, "");
+  this.subdiscipline_title = initVar(options.title, "");
   
   this.current_file_number = 1;
   
@@ -64,6 +70,10 @@ HeadstartFSM = function(title, files, options) {
   
   this.is_adaptive = initVar(options.is_adaptive, false);
   
+  this.show_timeline = initVar(options.show_timeline, true);
+  
+  this.show_dropdown = initVar(options.show_dropdown, true);
+  
   this.files = files;
   
   this.sort_options = [
@@ -75,6 +85,7 @@ HeadstartFSM = function(title, files, options) {
    if(this.content_based) {
      this.sort_options = ["title", "area"];
    }
+   
   
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
@@ -112,7 +123,12 @@ HeadstartFSM.prototype = {
             alert("You are using an unsupported browser. This visualization"
                     + " was successfully tested with the latest versions of Chrome, Safari, Opera and Firefox.");
     }
-  }, 
+  },
+  
+  //TODO: load scripts here instead of here
+  loadScripts: function() {
+  
+  },
    
   // simple check that all required libraries are present at the moment:
   // - d3
@@ -150,7 +166,7 @@ HeadstartFSM.prototype = {
     }
 
     $.ajax({
-      url: this.evaluation_service + '?user=' + user 
+      url: "http://" + headstart.host + headstart.path + "server/services/writeActionToLog.php" + '?user=' + user 
               + '&action=' + action
               + '&item=' + escape(id)
               + '&type=' + type
@@ -184,7 +200,9 @@ HeadstartFSM.prototype = {
   // sort of calculation
   initDynamicVariables: function() {
     // initialize a bunch of variables.
-    this.available_width  = $(document).width();
+       
+    //TODO: Change this to the height of the parent element   
+    this.available_width  = $(document).width();  
     this.available_height = $(document).height();
 
     this.x = d3.scale.linear().range([0, this.circle_zoom_factor]);
@@ -452,6 +470,8 @@ HeadstartFSM.prototype = {
   // the start event transitions headstart from "none" to "normal" view
   onstart: function( event, from, to, file ) {
     
+    this.loadScripts();
+    
     this.checkBrowserVersions();
     this.checkThatRequiredLibsArePresent();
     this.initDynamicVariables();
@@ -471,7 +491,7 @@ HeadstartFSM.prototype = {
       hs.drawChartCanvas();
       hs.drawTitle();
       if(headstart.is_adaptive) {
-        $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=128&jsoncallback=?", function(data) {
+        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference=128&jsoncallback=?", function(data) {
           headstart.startVisualization(hs, bubbles, csv, data, true);
         });
       } else {
@@ -558,7 +578,7 @@ HeadstartFSM.prototype = {
       hs.drawChartCanvas();
       
       if(headstart.is_adaptive) {
-        $.getJSON("http://localhost/headstart2/server/services/getBookmarks.php?user=16&conference=128&jsoncallback=?", function(data) {
+        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference=128&jsoncallback=?", function(data) {
           headstart.startVisualization(hs, bubbles, csv, data, false);
         });
       } else {
@@ -604,3 +624,13 @@ StateMachine.create({
   ]
 
 });
+
+headstart = new HeadstartFSM(
+        host
+        , path
+        , tag
+        , data
+        , options
+);
+
+headstart.start();

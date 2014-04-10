@@ -2,8 +2,8 @@
 
 header('Content-type: application/json');
 
-require_once '/../classes/headstart/evaluation/logger/FileLogger.php';
-require_once '/../classes/headstart/library/CommUtils.php';
+require_once dirname(__FILE__) . '/../classes/headstart/evaluation/logger/FileLogger.php';
+require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 
 use headstart\evaluation\logger;
 use headstart\library;

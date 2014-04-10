@@ -371,6 +371,9 @@ BubblesFSM.prototype = {
       .attr("width",  function (d) { return d.width_html })
       .attr("height", function (d) { return d.height_html })
       .append("xhtml:body")
+      //Webkit problem
+      .style("margin", "0px")
+      .style("padding", "0px")
       .append("div")
       .attr("id", "area_title")
       .style("width",  function (d) { return d.width_html + "px" })

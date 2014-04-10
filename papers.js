@@ -185,6 +185,9 @@ papers.prepareForeignObject = function( nodes ){
             .attr("width", function (d) { return d.width + "px"  })
             .attr("height", function (d) { return d.height + "px" })
            .append("xhtml:body")
+            //Webkit seems to ignore body styles on foreignObjects in the css
+            .style("margin", "0px")
+            .style("padding", "0px")
            .append("div")
             .attr("class", "paper_holder")
             .style("cursor", "default");

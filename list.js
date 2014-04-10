@@ -53,10 +53,11 @@ var list = StateMachine.create({
 list.drawShowHideContainer = function() {
     var list_show_hide_container =
         d3.select ( "#papers_list_container" )
+            .style ( "left",  headstart.max_chart_size+10 + "px" )
            .append( "div" )
-           .attr  ( "id", "show_hide_container" )
-           .style ( "left",  headstart.max_chart_size+10 + "px" )
-           .style ( "width", list.width-10 + "px" );
+            .attr  ( "id", "show_hide_container" )
+            .style ( "width", headstart.list_width-10 + "px" )
+            .style ( "height", headstart.list_height + "px" );
 
     return list_show_hide_container;
 }
@@ -202,8 +203,10 @@ list.populateMetaData = function(nodes) {
     })
     .append("span")
      .attr("class", "recommended")
-     .html("recommended");
-     
+     .html("recommended")
+     .append("span")
+      .html(" ")
+      
   paper_title.filter(function(d) {
         return (d.bookmarked != 1);    
     })
@@ -323,7 +326,7 @@ list.populateReaders = function(nodes) {
     .html(" readers&nbsp;");
     
   } else {
-    d3.selectAll("#list_area").style("margin-bottom", "5px")
+    d3.selectAll("#list_area").style("margin-bottom", "7px")
     
   }
 }
@@ -339,7 +342,7 @@ list.createAbstract = function(d, cut_off) {
 }
 
 list.addBookmark = function(d)  {
-  $.getJSON("http://localhost/headstart2/server/services/addBookmark.php?"
+  $.getJSON("http://" + headstart.host + headstart.path + "server/services/addBookmark.php?"
     + "user_id=" + 16
     + "&content_id=" +d.id,
       function(data) {
@@ -366,7 +369,7 @@ list.addBookmark = function(d)  {
 }
 
 list.removeBookmark = function(d)  {
-  $.getJSON("http://localhost/headstart2/server/services/removeBookmark.php?"
+  $.getJSON("http://" + headstart.host + headstart.path + "server/services/removeBookmark.php?"
     + "user_id=" + 16
     + "&content_id=" +d.id,
       function(data) {

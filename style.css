@@ -1,20 +1,8 @@
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-
-div {
-  font-family: 'Helvetica';
-}
-
 /* ################ Chart ############### */
 
 div#chart {
   position: absolute;
-  left: 0px;
-  top: 40px;
+  font-family: Helvetica;
 }
 
 rect {
@@ -105,7 +93,7 @@ div#subdiscipline_title {
   padding-left: 10px;
 }
 
-h1 {
+div#subdiscipline_title h1 {
   margin-top: 5px;
   margin-left: 5px;
   font-size: 18px;
@@ -113,7 +101,13 @@ h1 {
   font-weight: 400;
 }
 
-h2 {
+div#area_title {
+    margin: 0;
+    padding: 0;
+}
+
+
+div#area_title h2 {
   font-size: 14px;
   font-family: 'Helvetica', sans-serif;
   text-align: center;
@@ -125,29 +119,38 @@ text {
 }
 
 /* ################ Papers ############### */
+foreignObject#article_metadata body,
+foreignObject#area_title_object body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
 
 div.metadata {
   /*white-space: pre-wrap;*/
   white-space: -moz-pre-wrap;
   /*word-wrap: break-word;*/
   overflow:hidden;
+  padding: 0;
+  margin: 0;
 }
 
 foreignObject#article_metadata {
   overflow:hidden;
   line-height: 10px;
-}
-
-div.paper_holder {
+  font-family: Helvetica;
 }
 
 div#intro {
   padding: 10px;
   background-color: white;
+  font-family: Helvetica;
 }
 
 div#intro h2 {
   font-size: 18px;
+  font-family: Helvetica;
 }
 
 div#intro p {
@@ -156,7 +159,9 @@ div#intro p {
   margin-bottom: 10px;
 }
 
-p {
+div#article_metadata p,
+div.metadata p, 
+div.readers p {
   font: 8px 'Helvetica', sans-serif;
   color: rgb(167, 8, 5);
   text-align: left;
@@ -165,7 +170,9 @@ p {
   line-height: 8px;
 }
 
-p.large {
+div#article_metadata p.large,
+div.metadata p.large,
+div.readers p.large {
   font-size: 12px;
   line-height: 12px;
   padding-left: 5px;
@@ -174,7 +181,9 @@ p.large {
   /*font-weight:bold;*/
 }
 
-p.larger {
+div#article_metadata p.larger,
+div.metadata p.larger,
+div.readers p.larger {
   font-size: 14px;
   line-height: 14px;
   padding-left: 5px;
@@ -244,6 +253,11 @@ span.readers_entity {
 
 /* ################ Papers list ############### */
 
+div#papers_list_container {
+    top: -23px;
+    position:relative;
+}
+
 div#input_container {
     margin-top: 5px;
     float: left;
@@ -259,13 +273,14 @@ div#sort_container {
 
 
 div#show_hide_container {
-  position: absolute;
+  position: relative;
   top: 0px;
   cursor: pointer;
   background-color: #EEE;
 }
 
 div#show_hide_label_container {
+  font-family: 'Helvetica';
   float: left;
   text-align: center;
   font-size: 14px;
@@ -286,6 +301,7 @@ div#papers_list {
   padding-top: 10px;
   overflow-y: scroll;
   background-color:white;
+  float: right;
 }
 
 div#left_arrow {
@@ -298,15 +314,20 @@ div#right_arrow {
 }
 
 div.list_metadata {
-  margin-bottom: 10px;
   border-top-style: solid;
   border-top-width: 1px;
-  padding-top: 5px;
+}
+
+div.list_metadata p, 
+.list_details p {
+     font: 12px 'Helvetica', sans-serif;
 }
 
 p#list_title {
   font-size: 14px;
-  line-height: 18px;
+  margin-top: 7px;
+  margin-bottom: 5px;
+  /*line-height: 18px;*/
 }
 
 p#list_title a {
@@ -326,11 +347,13 @@ p#list_title a:hover {
 }
 
 p#list_abstract {
+  font: 12px 'Helvetica', sans-serif;
   border-left: solid 2.5px rgb(233,233,233);
   color: rgb(68, 68, 68);
   font-size: 11px;
   padding-left:7px;
   line-height: 11px;
+  margin-bottom: 5px;
 }
 
 span.list_in {
@@ -343,6 +366,7 @@ span.list_pubyear {
 }
 
 p#list_area {
+  font-family: 'Helvetica';
   color: rgb(0,0,0);
   margin-top: 10px;
   text-align: left;
@@ -492,6 +516,7 @@ ul.filter{
 	-webkit-transition:.2s;
 	border:1px solid #c6c6c6;
         text-decoration: none;
+        font-family: Helvetica;
 }
 
 .filter li a:hover{
