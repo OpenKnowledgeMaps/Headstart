@@ -225,7 +225,7 @@ papers.appendMetaDataTitle = function(metadata) {
 papers.appendMetaDataDetails = function(metadata) {
   metadata.append("p")
     .attr("id", "details")
-    .html(function (d) { return d.authors })
+    .html(function (d) { return d.authors_string })
 }
 
 papers.appendMetaDataPublicationYear = function(metadata) {

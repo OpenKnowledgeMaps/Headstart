@@ -233,7 +233,7 @@ list.populateMetaData = function(nodes) {
   
   paper_title.append("p")
     .attr("class", "list_details")
-    .html(function (d) { return d.authors })
+    .html(function (d) { return d.authors_string })
     .append("span")
     .attr("class", "list_in")
     .html(" in ")
@@ -277,7 +277,7 @@ filterList = function(event) {
     .filter(function (d) {
       var abstract = d.paper_abstract.toLowerCase();
       var title = d.title.toLowerCase();
-      var authors = d.authors.toLowerCase();
+      var authors = d.authors_string.toLowerCase();
       var word_found = true;
       var count = 0;
       if(typeof abstract !== 'undefined') {

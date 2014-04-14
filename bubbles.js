@@ -74,9 +74,23 @@ BubblesFSM.prototype = {
         
         if(headstart.content_based == false) {
           d.readers = +d.readers;
+          d.internal_readers = +d.readers + 1;
         } else {
-          d.readers = 1;
+          d.readers = 0;
+          d.internal_readers = 1;
         }
+        
+        if(highlight_data["bookmarks_all"] != null) {        
+          highlight_data["bookmarks_all"].forEach(function(x) {
+              var id_string = x.id;
+              id_string = id_string.toString();
+              if(id_string == d.id) {
+                d.readers += x.num;
+                d.internal_readers += x.num;
+              }
+          });
+      }
+        
         d.paper_selected = false;
 
         // convert authors to "[first name] [last name]"
@@ -94,18 +108,19 @@ BubblesFSM.prototype = {
             authors_string += ", ";
         }
 
-        d.authors = authors_string;
+        d.authors_string = authors_string;
+        
       });
 
       headstart.chart_x.domain(d3.extent(init_data, function(d) { return d.x }));
       headstart.chart_y.domain(d3.extent(init_data, function(d) { return d.y*-1 }));
-      headstart.diameter_size.domain(d3.extent(init_data, function(d) { return d.readers }));
+      headstart.diameter_size.domain(d3.extent(init_data, function(d) { return d.internal_readers }));
 
       var areas = this.areas;
       init_data.forEach(function(d) {
 
         // construct rectangles of a golden cut
-        d.diameter = headstart.diameter_size(d.readers);
+        d.diameter = headstart.diameter_size(d.internal_readers);
 
         d.width = headstart.paper_width_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
         d.height = headstart.paper_height_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
@@ -394,7 +409,7 @@ BubblesFSM.prototype = {
 
     for(area in areas) {
       var papers = areas[area].papers;
-      var sum_readers = d3.sum(papers, function(d) { return d.readers  });
+      var sum_readers = d3.sum(papers, function(d) { return d.internal_readers  });
 
       readers.push(sum_readers);
     }
@@ -409,7 +424,7 @@ BubblesFSM.prototype = {
       var mean_x = d3.mean(papers_2, function(d) { return d.x  });
       var mean_y = d3.mean(papers_2, function(d) { return d.y  });
 
-      var sum_readers_2 = d3.sum(papers_2, function(d) { return d.readers  });
+      var sum_readers_2 = d3.sum(papers_2, function(d) { return d.internal_readers  });
 
       areas[area].x = mean_x;
       areas[area].y = mean_y;

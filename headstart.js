@@ -79,7 +79,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.sort_options = [
     "readers",
     "title",
-    "area"
+    "authors"
    ]
 
    if(this.content_based) {
