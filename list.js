@@ -123,7 +123,9 @@ list.drawList = function() {
 
 function sortBy(field) {
   d3.selectAll("#list_holder")
-    .sort(function(a,b) { return stringCompare(a[field], b[field])})
+    .sort(function(a,b) { 
+      return stringCompare(a[field], b[field])
+      })
 
     d3.selectAll(".selected")
       .attr("class", "")
@@ -142,7 +144,7 @@ function stringCompare(a, b) {
     return a > b ? 1 : a == b ? 0 : -1;
   }
   else {
-    return a > b ? 0 : 1;
+    return d3.descending(a, b);
   }
 }
 
