@@ -54,6 +54,7 @@ list.drawShowHideContainer = function() {
     var list_show_hide_container =
         d3.select ( "#papers_list_container" )
             .style ( "left",  headstart.max_chart_size+10 + "px" )
+            .style ( "width", headstart.list_width + "px")
            .append( "div" )
             .attr  ( "id", "show_hide_container" )
             .style ( "width", headstart.list_width-10 + "px" )
@@ -206,18 +207,20 @@ list.populateMetaData = function(nodes) {
      .html("recommended")
      .append("span")
       .html(" ")
-      
-  paper_title.filter(function(d) {
-        return (d.bookmarked != 1);    
-    })
-    .append("span")
-     .attr("class", "tobookmark")
-     .attr("id", "bookmark")
-     .html("Add to schedule")
-     .on("click", function (d) { 
-       list.addBookmark(d);      
-       d3.event.stopPropagation();
-     })
+   
+  if(headstart.is_adaptive) {
+    paper_title.filter(function(d) {
+          return (d.bookmarked != 1);    
+      })
+      .append("span")
+       .attr("class", "tobookmark")
+       .attr("id", "bookmark")
+       .html("Add to schedule")
+       .on("click", function (d) { 
+         list.addBookmark(d);      
+         d3.event.stopPropagation();
+       })
+  }
      
   paper_title.filter(function(d) {
         return (d.bookmarked == 1);    

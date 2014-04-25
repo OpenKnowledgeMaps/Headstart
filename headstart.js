@@ -34,7 +34,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.preview_image_width  = 738;
   this.preview_image_height = 984;
   this.abstract_small = 250;
-  this.abstract_large = 600;
+  this.abstract_large = null;
 
   this.top_correction    = 50;
   this.bottom_correction = 0;
@@ -125,7 +125,7 @@ HeadstartFSM.prototype = {
     }
   },
   
-  //TODO: load scripts here instead of here
+  //TODO: load scripts here
   loadScripts: function() {
   
   },
@@ -624,13 +624,3 @@ StateMachine.create({
   ]
 
 });
-
-headstart = new HeadstartFSM(
-        host
-        , path
-        , tag
-        , data
-        , options
-);
-
-headstart.start();

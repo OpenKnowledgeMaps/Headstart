@@ -353,7 +353,6 @@ p#list_abstract {
   font-size: 11px;
   padding-left:7px;
   line-height: 11px;
-  margin-bottom: 5px;
 }
 
 span.list_in {
@@ -372,6 +371,7 @@ p#list_area {
   text-align: left;
   line-height: 11px;
   font-size: 11px;
+  margin-bottom: 0px;
 }
 
 p#list_readers {
@@ -380,6 +380,8 @@ p#list_readers {
   text-align: right;
   line-height: 11px;
   font-size: 11px;
+  margin-top: 5px;
+  margin-bottom: 0px;
 }
 
 span.list_readers_entity {

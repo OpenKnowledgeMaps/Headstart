@@ -79,16 +79,17 @@ BubblesFSM.prototype = {
           d.readers = 0;
           d.internal_readers = 1;
         }
-        
-        if(highlight_data["bookmarks_all"] != null) {        
-          highlight_data["bookmarks_all"].forEach(function(x) {
-              var id_string = x.id;
-              id_string = id_string.toString();
-              if(id_string == d.id) {
-                d.readers += x.num;
-                d.internal_readers += x.num;
-              }
-          });
+        if(typeof highlight_data != 'undefined' && highlight_data != null) {
+          if(highlight_data["bookmarks_all"] != null) {        
+            highlight_data["bookmarks_all"].forEach(function(x) {
+                var id_string = x.id;
+                id_string = id_string.toString();
+                if(id_string == d.id) {
+                  d.readers += x.num;
+                  d.internal_readers += x.num;
+                }
+            });
+          }
       }
         
         d.paper_selected = false;

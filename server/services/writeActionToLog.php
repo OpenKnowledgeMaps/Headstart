@@ -8,7 +8,8 @@ require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 use headstart\evaluation\logger;
 use headstart\library;
 
-$serverData = array("addr"=>$_SERVER['REMOTE_ADDR'], "user_agent"=>$_SERVER['HTTP_USER_AGENT']);
+$user_id = isset($_SESSION['userInfo']['userID'])?($_SESSION['userInfo']['userID']):(library\CommUtils::getParameter($_GET, "user"));
+$serverData = array("addr"=>$_SERVER['REMOTE_ADDR'], "user_agent"=>$_SERVER['HTTP_USER_AGENT'], "user_id"=>$user_id);
 
 $logData = array_merge($serverData, $_GET);
 
