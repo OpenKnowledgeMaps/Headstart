@@ -96,7 +96,7 @@ var papers = StateMachine.create({
           if (holder_div !== undefined)
             this.shrinkPaper(d, holder_div);
 
-          headstart.bubbles[1].mouseout();
+          headstart.bubbles[headstart.current_file_number].mouseout();
         }
 
     }
@@ -154,12 +154,12 @@ papers.initPaperClickHandler = function() {
                 else
                     return null
             })
-
-            //zoom(current_node.data()[0]);
+            
             d3.event.stopPropagation();
+            headstart.bubbles[headstart.current_file_number].zoomin(current_node.data()[0]);
         }
 
-        headstart.bubbles["1"].zoomin(current_node.data()[0]);
+        
     }
   });
 }

@@ -14,18 +14,16 @@ require_once 'Calculation.php';
 
 class RCalculation extends Calculation {
       
-    public function performCalculationAndWriteOutputToFile() {
+    public function performCalculationAndWriteOutputToFile($working_dir) {
         $ini = $this->ini_array["calculation"];
         $output = $this->ini_array["output"];
         
         $base_dir = $this->ini_array["general"]["preprocessing_dir"];
         $binary = $ini["binary"];
         $script = $base_dir . $ini["script"];
-        $wd = $base_dir . $this->ini_array["output"]["output_dir"] 
-                . (($this->ini_array["general"]["year"])?($this->ini_array["general"]["year"]):(""));
         
-        $path = '"' . $binary . '" ' .$script. ' "' . $wd . '" "'
-                . $output["cooc"] . '" "' . $output["metadata"] . '" "' . $output["output_scaling_clustering"] .'"';
+        $path = '"' . $binary . '" ' .$script. ' "' . $working_dir . '" "'
+                . $output["cooc"] . '" "' . $output["metadata"] . '" "' . $output["output_scaling_clustering"] . '" "' . $ini["mode"] .'"';
         
         library\Toolkit::info($path);
         exec($path); 

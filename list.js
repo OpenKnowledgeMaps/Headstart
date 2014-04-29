@@ -213,19 +213,20 @@ list.populateMetaData = function(nodes) {
 filterList = function(event) {
 
   var filtered_data = d3.selectAll("#list_holder, .paper")
-
+  var current_circle = d3.select(headstart.current_zoom_node);
+  
     var data_circle = filtered_data
     .filter(function (d) {
       if (headstart.is_zoomed === true)
-      return headstart.current_circle.data()[0].title == d.area;
+        return current_circle.data()[0].title == d.area;
       else
-      return true;
+        return true;
     })
 
   if (event.target.value === "") {
     data_circle.style("display", "block")
 
-      headstart.bubbles[1].data.forEach(function (d) {
+      headstart.bubbles[headstart.current_file_number].data.forEach(function (d) {
         d.filtered_out = false;
       })
 
@@ -305,8 +306,8 @@ list.makeTitleClickable = function(d) {
                                   return x.title == d.area
                                 });
 
-    headstart.bubbles["1"].zoomin(headstart.current_circle.data()[0]);
-    headstart.bubbles["1"].current = "hoverbig";
+    headstart.bubbles[headstart.current_file_number].zoomin(headstart.current_circle.data()[0]);
+    headstart.bubbles[headstart.current_file_number].current = "hoverbig";
     papers.mouseoverpaper();
     this.enlargeListItem(d);
     headstart.current_enlarged_paper = d;
@@ -443,7 +444,10 @@ list.setImageForListHolder = function(d) {
   // EVENTLISTENERS
   current_item.select("#paper_list_title")
     .on("click", function (d) {
-      window.open("http://mendeley.com/research/" + d.url,"_blank");
+        
+      var url = (d.url.startsWith("http://") || d.url.startsWith("https://"))?(d.url):("http://www.mendeley.com/research/" + d.url);
+        
+      window.open(url, "_blank");
       d3.event.stopPropagation();
     });
 }
@@ -454,9 +458,13 @@ list.testImage = function(image_src) {
 
     var http = new XMLHttpRequest();
     http.open('HEAD', image_src, false);
-    http.send();
-
-    return http.status != 404;
+    try {
+      http.send();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      return http.status != 404;
+    }
 }
 
 // just a wrapper
