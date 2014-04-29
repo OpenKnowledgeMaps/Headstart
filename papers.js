@@ -126,7 +126,16 @@ papers.drawPaperPath = function(nodes) {
   }
 
   nodes.append("path")
-    .attr("class", "region")
+    .attr("id", "region")
+    .attr("class", function (d) {
+        if(d.bookmarked) {
+          return "framed_bookmarked"
+        } else if (d.recommended) {
+          return "framed"
+        } else {
+          return "unframed"
+        }
+      })
     .attr("d", region);
 }
 
@@ -176,6 +185,9 @@ papers.prepareForeignObject = function( nodes ){
             .attr("width", function (d) { return d.width + "px"  })
             .attr("height", function (d) { return d.height + "px" })
            .append("xhtml:body")
+            //Webkit seems to ignore body styles on foreignObjects in the css
+            .style("margin", "0px")
+            .style("padding", "0px")
            .append("div")
             .attr("class", "paper_holder")
             .style("cursor", "default");
@@ -192,13 +204,15 @@ papers.populatePapersWithMetaData = function( xhtml ) {
     this.appendMetaDataTitle(metadata);
     this.appendMetaDataDetails(metadata);
     this.appendMetaDataPublicationYear(metadata);
-    this.appendMetaDataReaders(xhtml);
+    if(!headstart.content_based) {
+      this.appendMetaDataReaders(xhtml);
+    }
 }
 
 papers.appendMetaDataCSSClass = function(xhtml) {
  return xhtml.append("div")
              .attr("class", "metadata")
-             .style("height", function (d) { return d.height * 0.8 + "px" })
+             .style("height", function (d) { return (headstart.content_based)?(d.height):(d.height * 0.8 + "px") })
              .style("width",  function (d) { return d.width  * 0.8 + "px" });
 }
 
@@ -211,7 +225,7 @@ papers.appendMetaDataTitle = function(metadata) {
 papers.appendMetaDataDetails = function(metadata) {
   metadata.append("p")
     .attr("id", "details")
-    .html(function (d) { return d.authors })
+    .html(function (d) { return d.authors_string })
 }
 
 papers.appendMetaDataPublicationYear = function(metadata) {
@@ -255,19 +269,66 @@ papers.createPaperPath = function(x, y, width, height, correction_x, correction_
 }
 
 papers.applyForce = function( bubbles ) {
+  
+    headstart.force_areas.start();
+    
+    if(!headstart.is_force_areas) {
+      headstart.force_areas.alpha(0.0);
+    }
+  
+    var areas_count = 0;
+    
+    headstart.force_areas.on("tick", function(e) {
+        
+        var alpha = e.alpha;
+        
+        /*if (typeof current_bubbles == 'undefined' || current_bubbles == null) {
+          return true;
+        }*/
+        
+        var current_bubbles = headstart.bubbles[headstart.current_file_number];
+        
+        current_bubbles.areas_array.forEach(function(a, i) {
+            
+            if(a.x - a.r < 0
+                || a.x + a.r > headstart.max_chart_size
+                || a.y - a.r < 0
+                || a.y + a.r > headstart.max_chart_size) {
+                    
+                a.x += (headstart.max_chart_size/2 - a.x) * alpha;
+                a.y += (headstart.max_chart_size/2 - a.y) * alpha;
+                    
+            }
+            
+            current_bubbles.areas_array.slice(i + 1).forEach(function(b) {
+                papers.checkCollisions(a, b, alpha);                
+            });
+        });
+        
+        papers.drawEntity("g.bubble_frame", alpha, areas_count);
+        
+        areas_count++;
+
+    });
 
     headstart.force_papers.start();
     var papers_count = 0;
 
     headstart.force_papers.on("tick", function(e) {
         var alpha = e.alpha;
+        
+        var current_bubbles = headstart.bubbles[headstart.current_file_number];
+        
+        /*if (typeof current_bubbles == 'undefined' || current_bubbles == null) {
+          return true;
+        }*/
 
-        bubbles.data.forEach(function(a, i) {
+        current_bubbles.data.forEach(function(a, i) {
             var current_area = "";
 
             for (area in bubbles.areas_array) {
-                if (bubbles.areas_array[area].title == a.area) {
-                    current_area = bubbles.areas_array[area];
+                if (current_bubbles.areas_array[area].title == a.area) {
+                    current_area = current_bubbles.areas_array[area];
                     break;
                 }
             }
@@ -405,10 +466,13 @@ papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
     d3.select(current_dogear)
         .attr("d", dogear);
 
+    var height = (headstart.content_based)?(d.height * headstart.circle_zoom * resize_factor + "px"):
+            (d.height * headstart.circle_zoom * resize_factor - 20 + "px");
+    
     holder_div.select("div.metadata")
-        .attr("height", d.height * headstart.circle_zoom * resize_factor - 20 + "px")
+        .attr("height", height)
         .attr("width", d.width * headstart.circle_zoom * resize_factor * (1-headstart.dogear_width) + "px")
-        .style("height", d.height * headstart.circle_zoom * resize_factor - 20 + "px")
+        .style("height", height)
         .style("width", d.width * headstart.circle_zoom * resize_factor * (1-headstart.dogear_width) + "px")
 
     holder_div.select("div.readers")
@@ -426,8 +490,10 @@ papers.enlargePaper = function(d,i) {
     if(d.resized || !headstart.is_zoomed) {
         return;
     }
-
-    var resize_factor = 1.2;
+    
+    headstart.recordAction(d.id, "enlarge_paper", "herecomestheuser", "herecomesthestatusoftheitem", null);
+ 
+   var resize_factor = 1.2;
 
     var holder_div = d3.select(this);
 
@@ -489,6 +555,8 @@ papers.enlargePaper = function(d,i) {
                 headstart.current_enlarged_paper.paper_selected = false;
 
             headstart.current_enlarged_paper = null;
+
+            headstart.recordAction(d.id, "click_paper_list_enlarge", "herecomestheuser", "herecomesthestatusoftheitem", null);
 
             d3.event.stopPropagation();
         });

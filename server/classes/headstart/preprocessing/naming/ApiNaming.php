@@ -1,6 +1,6 @@
 <?php
 
-namespace Headstart\Naming;
+namespace headstart\preprocessing\naming;
 
 /**
  * Naming the clusters with the APIs of Zemanta and OpenCalais
@@ -11,7 +11,7 @@ namespace Headstart\Naming;
 use headstart\library;
 
 require_once 'Naming.php';
-require_once '/../library/inflector.php';
+require_once '/../../library/inflector.php';
 
 class ApiNaming extends Naming {
     
@@ -58,72 +58,30 @@ class ApiNaming extends Naming {
             }
 
             $output[] = $line;
+            
+            $line_cluster_id = intval($ini["line_cluster_id"]);
+            $line_title = intval($ini["line_title"]);
+            $line_abstract = intval($ini["line_abstract"]);
+            
+            if(!isset($line[$line_cluster_id])) {
+                throw new \Exception("Error in line: " . $line[0]);
+            }
 
-            if (!isset($cluster[$line[$ini["line_cluster_id"]]])) {
-                $cluster[$line[$ini["line_cluster_id"]]] = $line[$ini["line_title"]] . ". " . $line[$ini["line_abstract"]];
-                $cluster_details[$line[$ini["line_cluster_id"]]]["title"] = $line[$ini["line_title"]] . ".";
-                $cluster_details[$line[$ini["line_cluster_id"]]]["abstracts"] = $line[$ini["line_abstract"]];
-                $counts[$line[$ini["line_cluster_id"]]] = 1;
+            if (!isset($cluster[$line[$line_cluster_id]])) {
+                $cluster[$line[$line_cluster_id]] = $line[$line_title] . ". " . $line[$line_abstract];
+                $cluster_details[$line[$line_cluster_id]]["title"] = $line[$line_title] . ".";
+                $cluster_details[$line[$line_cluster_id]]["abstracts"] = $line[$line_abstract];
+                $counts[$line[$line_cluster_id]] = 1;
             } else {
-                $cluster[$line[$ini["line_cluster_id"]]] .= "\n" . $line[$ini["line_title"]] . ". " . $line[$ini["line_abstract"]];
-                $cluster_details[$line[$ini["line_cluster_id"]]]["title"] .= "\n" . $line[$ini["line_title"]] . ".";
-                $cluster_details[$line[$ini["line_cluster_id"]]]["abstracts"] .= "\n" . $line[$ini["line_abstract"]];
-                $counts[$line[$ini["line_cluster_id"]]]++;
+                $cluster[$line[$line_cluster_id]] .= "\n" . $line[$line_title] . ". " . $line[$line_abstract];
+                $cluster_details[$line[$line_cluster_id]]["title"] .= "\n" . $line[$line_title] . ".";
+                $cluster_details[$line[$line_cluster_id]]["abstracts"] .= "\n" . $line[$line_abstract];
+                $counts[$line[$line_cluster_id]]++;
             }
         }
 
-        //Initialize cURL multi
-        $mh_calais_array = array();
-        $counter = 0;
-        $mh_calais_array_counter = 0;
+        $topics = $this->executeCurl($cluster);
 
-        $mh_zemanta = curl_multi_init();
-        $curl_calais_array = array();
-        $curl_zemanta_array = array();
-
-        foreach ($cluster as $id => $text) {
-
-            //Open Calais only allows only for 4 requests at a given time
-            if($counter % 4 == 0) {
-                $mh_calais_array_counter++;
-                $mh_calais_array[$mh_calais_array_counter] = curl_multi_init();
-            }
-            $counter++;
-
-            $curl_calais_array[$id] = $this->createNewCurlHandleCalais($text, "application/json");
-            $curl_zemanta_array[$id] = $this->createNewCurlHandleZemanta($text, "json");
-
-            curl_multi_add_handle($mh_calais_array[$mh_calais_array_counter], $curl_calais_array[$id]);
-            curl_multi_add_handle($mh_zemanta, $curl_zemanta_array[$id]);
-
-        }
-
-        $active1 = null;
-        $active2 = null;
-
-        // Run cURL handles
-        foreach($mh_calais_array as $mh_calais) {
-            do {
-                usleep(100000);
-                $status = curl_multi_exec($mh_calais, $active1);
-
-            } while ($status === CURLM_CALL_MULTI_PERFORM || $active1 > 0);
-
-            $active1 = null;
-        }
-
-        do {
-
-            usleep(10000);
-            $status = curl_multi_exec($mh_zemanta, $active2);
-            $info = curl_multi_info_read($mh_zemanta);
-
-        } while ($status === CURLM_CALL_MULTI_PERFORM || $active2 > 0);
-
-
-
-
-        //
         $cluster_names = array();
 
         foreach ($cluster as $id => $text) {
@@ -153,14 +111,9 @@ class ApiNaming extends Naming {
             }
 
             library\Toolkit::info($id . ": " . print_r($categories, true));
-
-            $result_calais = curl_multi_getcontent($curl_calais_array[$id]);
-            $cluster_names_calais = $this->getClusterNamesCalais($result_calais);
-            curl_multi_remove_handle($mh_calais, $curl_calais_array[$id]);
-
-            $result_zemanta = curl_multi_getcontent($curl_zemanta_array[$id]);
-            $cluster_names_zemanta = $this->getClusterNamesZemanta($result_zemanta);
-            curl_multi_remove_handle($mh_zemanta, $curl_zemanta_array[$id]);
+            
+            $cluster_names_calais = $topics["calais"][$id];
+            $cluster_names_zemanta = $topics["zemanta"][$id];
 
             $cluster_name = "";
 
@@ -235,9 +188,6 @@ class ApiNaming extends Naming {
             $this->getFullResponseCalais($text, $cluster_id, $FULL_CALAIS);
         }
 
-        curl_multi_close($mh_calais);
-        curl_multi_close($mh_zemanta);
-
         //add areas to output array
         array_push($output[0], "area_uri", "area");
 
@@ -246,7 +196,7 @@ class ApiNaming extends Naming {
 
         for($counter = 1; $counter < $size; $counter++) {
 
-            $cluster_id = $output[$counter][$ini["line_cluster_id"]];
+            $cluster_id = $output[$counter][$line_cluster_id];
             array_push($output[$counter], $cluster_names[$cluster_id]["uri"], $cluster_names[$cluster_id]["name"]);
 
             library\Toolkit::info("$counter\n");
@@ -260,6 +210,125 @@ class ApiNaming extends Naming {
 
         fclose($output_handle);
         
+    }
+    
+    public function executeCurl($clusters) {
+        
+        //Initialize cURL multi
+        $mh_calais_array = array();
+        $counter = 0;
+        $mh_calais_array_counter = 0;
+
+        $mh_zemanta = curl_multi_init();
+        $curl_calais_array = array();
+        $curl_zemanta_array = array();
+
+        foreach ($clusters as $id => $text) {
+
+            //Open Calais only allows only for 4 requests at a given time
+            if($counter % 4 == 0) {
+                $mh_calais_array_counter++;
+                $mh_calais_array[$mh_calais_array_counter] = curl_multi_init();
+            }
+            $counter++;
+
+            $curl_calais_array[$id] = $this->createNewCurlHandleCalais($text, "application/json");
+            $curl_zemanta_array[$id] = $this->createNewCurlHandleZemanta($text, "json");
+
+            curl_multi_add_handle($mh_calais_array[$mh_calais_array_counter], $curl_calais_array[$id]);
+            curl_multi_add_handle($mh_zemanta, $curl_zemanta_array[$id]);
+
+        }
+
+        $active1 = null;
+        $active2 = null;
+
+        // Run cURL handles
+        foreach($mh_calais_array as $mh_calais) {
+            do {
+                usleep(100000);
+                $status = curl_multi_exec($mh_calais, $active1);
+
+            } while ($status === CURLM_CALL_MULTI_PERFORM || $active1 > 0);
+
+            $active1 = null;
+        }
+
+        do {
+
+            usleep(10000);
+            $status = curl_multi_exec($mh_zemanta, $active2);
+            $info = curl_multi_info_read($mh_zemanta);
+
+        } while ($status === CURLM_CALL_MULTI_PERFORM || $active2 > 0);
+        
+        $topics = array("calais" => array(), "zemanta" => array());
+        
+        foreach($clusters as $id => $cluster) {
+        
+            $result_calais = curl_multi_getcontent($curl_calais_array[$id]);
+            $topics["calais"][$id] = $this->getClusterNamesCalais($result_calais);
+            curl_multi_remove_handle($mh_calais, $curl_calais_array[$id]);
+
+            $result_zemanta = curl_multi_getcontent($curl_zemanta_array[$id]);
+            $topics["zemanta"][$id] = $this->getClusterNamesZemanta($result_zemanta);
+            curl_multi_remove_handle($mh_zemanta, $curl_zemanta_array[$id]);
+        }
+        
+        curl_multi_close($mh_calais);
+        curl_multi_close($mh_zemanta);
+        
+        return $topics;
+        
+    }
+    
+    public function executeCurlSensium($clusters) {
+        //Initialize cURL multi
+        $mh_sensium_array = array();
+        $counter = 0;
+        $mh_sensium_array_counter = 0;
+
+        foreach ($clusters as $id => $text) {
+
+            //Open Calais only allows only for 4 requests at a given time
+            if($counter % 2 == 0) {
+                $mh_sensium_array_counter++;
+                $mh_sensium_array[$mh_sensium_array_counter] = curl_multi_init();
+            }
+            $counter++;
+
+            $curl_sensium_array[$id] = $this->createNewCurlHandleSensium($text);
+
+            curl_multi_add_handle($mh_sensium_array[$mh_sensium_array_counter], $curl_sensium_array[$id]);
+
+        }
+
+        $active1 = null;
+
+        // Run cURL handles
+        foreach($mh_sensium_array as $mh_sensium) {
+            do {
+                usleep(100000);
+                $status = curl_multi_exec($mh_sensium, $active1);
+
+            } while ($status === CURLM_CALL_MULTI_PERFORM || $active1 > 0);
+
+            $active1 = null;
+        }
+        
+        $topics = array("sensium" => array());
+        
+        foreach($clusters as $id => $cluster) {
+        
+            $result_sensium = curl_multi_getcontent($curl_sensium_array[$id]);
+            $topics["sensium"][$id] = $this->getClusterNamesSensium($result_sensium);
+            curl_multi_remove_handle($mh_sensium, $curl_sensium_array[$id]);
+
+        }
+        
+        curl_multi_close($mh_sensium);
+        
+        return $topics;
     }
     
     private function compareConcepts($cluster_names, $categories, $categories_part) {
@@ -393,6 +462,39 @@ class ApiNaming extends Naming {
         return $ch;
 
     }
+    
+    private function createNewCurlHandleSensium($text) {
+
+        $url = 'https://api.sensium.io/v1/extract';
+        $key = $this->ini_array["naming"]["api_key_sensium"];
+
+        $args = array(
+            'apiKey' => $key,
+            'text' => $text,
+            "extractors" => array("Summary")
+        );
+
+        $header_args = array(
+            'Content-Type: application/json'
+            , 'Accept: application/json'
+            //, 'Accept-encoding: \'gzip\''
+        );
+        
+        $json_args = json_encode($args);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header_args);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        //curl_setopt($ch, CURLOPT_PROXY, '127.0.0.1:8888');
+        //curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($args, '', '&'));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json_args);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
+        return $ch;
+
+    }
 
     private function getClusterNamesCalais($response) {
 
@@ -458,6 +560,26 @@ class ApiNaming extends Naming {
 
         return $categories;
     }
+    
+     private function getClusterNamesSensium($response) {
+
+        $response_object = json_decode($response);
+
+        $categories = array("topics" => array(), "topics_format" => array());
+
+        foreach ($response_object->summary->keyPhrases as $phrase) {
+
+            $categories["topics"][] = $phrase->text;
+
+            $final_string = $this->getFormattedString($phrase->text);
+
+            $categories["topics_format"][] = $final_string;
+        }
+
+        library\Toolkit::info("Sensium: " . print_r($categories["topics_format"], true));
+
+        return $categories;
+    }
 
     private function getFullResponseCalais($text, $uri, $dir) {
 
@@ -488,5 +610,5 @@ class ApiNaming extends Naming {
 
         return trim($final_string);
     }
-    
+
 }

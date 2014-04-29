@@ -1,6 +1,6 @@
 <?php
 
-namespace headstart\connection;
+namespace headstart\preprocessing\connection;
 
 /**
  * Base class for connecting to a data source and creating the metadata and the

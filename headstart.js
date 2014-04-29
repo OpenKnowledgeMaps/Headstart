@@ -1,10 +1,18 @@
 // Headstart
 // filename: headstart.js
 
-HeadstartFSM = function() {
+HeadstartFSM = function(host, path, tag, files, options) {
+  
+  initVar = function(variable, default_value) {
+    return typeof variable !== 'undefined' ? variable : default_value;
+  }
 
   // a container for variables
-  this.VERSION = 0.1;
+  this.VERSION = 2.5;
+  
+  this.host = host;
+  this.path = path;
+  this.tag = tag;
 
   this.min_height = 650;
   this.min_width  = 650;
@@ -26,17 +34,19 @@ HeadstartFSM = function() {
   this.preview_image_width  = 738;
   this.preview_image_height = 984;
   this.abstract_small = 250;
-  this.abstract_large = 600;
+  this.abstract_large = null;
 
   this.top_correction    = 50;
   this.bottom_correction = 0;
+  
+  this.list_height = 51;
 
   this.transition_duration = 750;
 
-  this.max_diameter_size = max_diameter_size;
-  this.min_diameter_size = min_diameter_size;
-  this.max_area_size = max_area_size;
-  this.min_area_size = min_area_size;
+  this.max_diameter_size = initVar(options.max_diameter_size, 50);
+  this.min_diameter_size = initVar(options.min_diameter_size, 30);
+  this.max_area_size = initVar(options.max_area_size, 110);
+  this.min_area_size = initVar(options.min_area_size, 50);
 
   this.current_zoom_node = null;
 
@@ -46,10 +56,37 @@ HeadstartFSM = function() {
   this.current_circle = null;
   this.is_zoomed = false;
 
-  this.subdiscipline_title = title;
+  this.subdiscipline_title = initVar(options.title, "");
   
   this.current_file_number = 1;
+  
+  this.is_evaluation = initVar(options.is_evaluation, false);
+  
+  this.content_based = initVar(options.is_content_based, false);
+  
+  this.evaluation_service = options.evaluation_service;
+  
+  this.is_force_areas = initVar(options.force_areas, false);
+  
+  this.is_adaptive = initVar(options.is_adaptive, false);
+  
+  this.show_timeline = initVar(options.show_timeline, true);
+  
+  this.show_dropdown = initVar(options.show_dropdown, true);
+  
+  this.files = files;
+  
+  this.sort_options = [
+    "readers",
+    "title",
+    "authors"
+   ]
 
+   if(this.content_based) {
+     this.sort_options = ["title", "area"];
+   }
+   
+  
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
   this.bubbles = {}
@@ -60,11 +97,39 @@ HeadstartFSM = function() {
     };
   }
   
+  if (typeof String.prototype.escapeSpecialChars != 'function') {
+    String.prototype.escapeSpecialChars = function() {
+      return this.replace(/[\\]/g, '\\\\')
+        .replace(/[\/]/g, '\\/')
+        .replace(/[\b]/g, '\\b')
+        .replace(/[\f]/g, '\\f')
+        .replace(/[\n]/g, '\\n')
+        .replace(/[\r]/g, '\\r')
+        .replace(/[\t]/g, '\\t')
+        .replace(/[\"]/g, '\\"')
+        .replace(/\\'/g, "\\'"); 
+       };
+     }
+  
 };
 
 HeadstartFSM.prototype = {
 
   // prototype methods
+  checkBrowserVersions: function() {
+    var browser = BrowserDetect.browser;
+
+    if (browser != "Firefox" && browser != "Safari" && browser != "Chrome") {
+            alert("You are using an unsupported browser. This visualization"
+                    + " was successfully tested with the latest versions of Chrome, Safari, Opera and Firefox.");
+    }
+  },
+  
+  //TODO: load scripts here
+  loadScripts: function() {
+  
+  },
+   
   // simple check that all required libraries are present at the moment:
   // - d3
   // - jQuery
@@ -86,14 +151,44 @@ HeadstartFSM.prototype = {
       console.log("state machine is required for headstart");
     }
   },
-  
+
+  recordAction: function(id, action, user, type, timestamp, additional_params, post_data) {
+    
+    if(!this.is_evaluation)
+      return;
+
+    timestamp = (typeof timestamp !== 'undefined') ? (escape(timestamp)) : ("")
+    additional_params = (typeof additional_params !== 'undefined') ? ('&' + additional_params) : ("")
+    if(typeof post_data !== 'undefined') {
+      post_data = {post_data:post_data};
+    } else {
+      post_data = {};
+    }
+
+    $.ajax({
+      url: "http://" + headstart.host + headstart.path + "server/services/writeActionToLog.php" + '?user=' + user 
+              + '&action=' + action
+              + '&item=' + escape(id)
+              + '&type=' + type
+              + '&item_timestamp=' + timestamp
+              + additional_params
+              + '&jsoncallback=?',
+      type: "POST",
+      data: post_data,
+      dataType: "json",
+      success: function(output) {
+        console.log(output)
+      }
+    });
+  },
+     
   resetBubbles: function () {
     if(this.bubbles) {
       delete this.bubbles;
       this.bubbles = {};
     }
     
-    $.each(files, function(index, elem) {
+    $.each(this.files, function(index, elem) {
       var bubble = new BubblesFSM();
       headstart.registerBubbles(bubble);
       bubble.title = elem.title;
@@ -105,7 +200,9 @@ HeadstartFSM.prototype = {
   // sort of calculation
   initDynamicVariables: function() {
     // initialize a bunch of variables.
-    this.available_width  = $(document).width();
+       
+    //TODO: Change this to the height of the parent element   
+    this.available_width  = $(document).width();  
     this.available_height = $(document).height();
 
     this.x = d3.scale.linear().range([0, this.circle_zoom_factor]);
@@ -286,8 +383,8 @@ HeadstartFSM.prototype = {
     if (hs.is("normal") || hs.is("switchfiles")) {
       checkPapers = window.setInterval(function () {
         if (hs.is("normal") || hs.is("switchfiles")) {
-          if (!papers.is("ready") && !papers.is("none")) {
-            if (hs.force_papers.alpha() <= 0) {
+          if ((!papers.is("ready") && !papers.is("none")) || (bubbles.is("startup") || bubbles.is("none") || (bubbles.is("start")) )) {
+            if (hs.force_papers.alpha() <= 0 && hs.force_areas.alpha() <= 0) {
               papers.forced();
               window.clearInterval(checkPapers);
             }
@@ -372,7 +469,10 @@ HeadstartFSM.prototype = {
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
   onstart: function( event, from, to, file ) {
-      
+    
+    this.loadScripts();
+    
+    this.checkBrowserVersions();
     this.checkThatRequiredLibsArePresent();
     this.initDynamicVariables();
 
@@ -390,22 +490,13 @@ HeadstartFSM.prototype = {
       hs.drawSvg();
       hs.drawChartCanvas();
       hs.drawTitle();
-
-      bubbles.start( csv );
-
-
-      hs.initMouseListeners();
-      hs.initForcePapers();
-      hs.initForceAreas();
-
-      papers.start( bubbles );
-      // moving this to bubbles.start results in papers being displayed over the
-      // bubbles, unfortunately
-      bubbles.draw();
-      bubbles.initMouseListeners();
-      list.start( bubbles );
-      popup.start();
-      hs.checkForcePapers();
+      if(headstart.is_adaptive) {
+        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference=128&jsoncallback=?", function(data) {
+          headstart.startVisualization(hs, bubbles, csv, data, true);
+        });
+      } else {
+        headstart.startVisualization(hs, bubbles, csv, null, true);
+      }
     });
 
   },
@@ -459,7 +550,10 @@ HeadstartFSM.prototype = {
   
   ontofile: function( event, from, to, file) {
     
-    window.clearInterval(checkPapers);
+    this.force_areas.stop();
+    this.force_papers.stop();
+    
+    headstart.current_file_number = file;
     
     // clear the canvas
     $("#chart_canvas").remove();
@@ -477,29 +571,43 @@ HeadstartFSM.prototype = {
     // reset bubbles
     this.resetBubbles();
     
-    var bubble = this.bubbles[this.current_file_number];
+    var bubbles = this.bubbles[this.current_file_number];
 
     var hs = this;
-    d3.csv(bubble.file, function( csv ) {
-        
+    d3.csv(bubbles.file, function( csv ) {
       hs.drawChartCanvas();
       
-      bubble.start( csv );
-
-      hs.initMouseListeners();
-      hs.initForcePapers();
-      hs.initForceAreas();
-
-      papers.start( bubble );
-      // moving this to bubbles.start results in papers being displayed over the
-      // bubbles, unfortunately
-      bubble.draw();
-      bubble.initMouseListeners();
-      list.start( bubble );
-      //popup.start();
-      hs.checkForcePapers();
+      if(headstart.is_adaptive) {
+        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference=128&jsoncallback=?", function(data) {
+          headstart.startVisualization(hs, bubbles, csv, data, false);
+        });
+      } else {
+        headstart.startVisualization(hs, bubbles, csv, null, false);
+      }
     });
+  },
+  
+  startVisualization: function(hs, bubbles, csv, adaptive_data, popup_start) {
+    bubbles.start( csv, adaptive_data );
+
+    hs.initMouseListeners();
+    hs.initForcePapers();
+    hs.initForceAreas();
+
+    papers.start( bubbles );
+    // moving this to bubbles.start results in papers being displayed over the
+    // bubbles, unfortunately
+    bubbles.draw();
+    bubbles.initMouseListeners();
+    list.start( bubbles );
+    
+    if(popup_start)
+      popup.start();
+    
+    hs.checkForcePapers();
+    
   }
+  
 }
 
 // State definitions for headstart object

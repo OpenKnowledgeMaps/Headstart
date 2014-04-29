@@ -40,7 +40,7 @@ if(mode == "text") {
   
   tdm <- TermDocumentMatrix(corpus)
   
-  distance_matrix <- dissimilarity(tdm, method="Jaccard")
+  distance_matrix <- dissimilarity(tdm, method="correlation")
   
   write.csv(as.matrix(distance_matrix), "matrix.csv")
   
