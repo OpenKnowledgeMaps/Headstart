@@ -1,0 +1,202 @@
+{
+    "subject-geography": {
+        "10.1371/journal.pone.0072970": {
+            "author_display": [
+                "Juan A. Añel",
+                "Douglas R. Allen",
+                "Guadalupe Sáenz",
+                "Luis Gimeno",
+                "Laura de la Torre"
+            ],
+            "title_display": "Equivalent Latitude Computation Using Regions of Interest (ROI)",
+            "abstract": [
+                "\nThis paper introduces a novel algorithm to compute equivalent latitude by applying regions of interest (ROI). The technique is illustrated using code written in Interactive Data Language (IDL). The ROI method is compared with the “piecewise-constant” method, the approach commonly used in atmospheric sciences, using global fields of atmospheric potential vorticity. The ROI method is considerably more accurate and computationally faster than the piecewise-constant method, and it also works well with irregular grids. Both the ROI and piecewise-constant IDL codes for equivalent latitude are included as a useful reference for the research community.\n"
+            ],
+            "publication_date": "2013-09-25T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 755,
+            "citations": 0,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0072970",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0072970&representation=PDF"
+        },
+        "10.1371/journal.pone.0088666": {
+            "author_display": [
+                "Wei Luo",
+                "Peifeng Yin",
+                "Qian Di",
+                "Frank Hardisty",
+                "Alan M. MacEachren"
+            ],
+            "title_display": "A Geovisual Analytic Approach to Understanding Geo-Social Relationships in the International Trade Network",
+            "abstract": [
+                "\nThe world has become a complex set of geo-social systems interconnected by networks, including transportation networks, telecommunications, and the internet. Understanding the interactions between spatial and social relationships within such geo-social systems is a challenge. This research aims to address this challenge through the framework of geovisual analytics. We present the GeoSocialApp which implements traditional network analysis methods in the context of explicitly spatial and social representations. We then apply it to an exploration of international trade networks in terms of the complex interactions between spatial and social relationships. This exploration using the GeoSocialApp helps us develop a two-part hypothesis: international trade network clusters with structural equivalence are strongly ‘balkanized’ (fragmented) according to the geography of trading partners, and the geographical distance weighted by population within each network cluster has a positive relationship with the development level of countries. In addition to demonstrating the potential of visual analytics to provide insight concerning complex geo-social relationships at a global scale, the research also addresses the challenge of validating insights derived through interactive geovisual analytics. We develop two indicators to quantify the observed patterns, and then use a Monte-Carlo approach to support the hypothesis developed above.\n"
+            ],
+            "publication_date": "2014-02-18T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 1115,
+            "citations": 0,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0088666",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0088666&representation=PDF"
+        },
+        "10.1371/journal.pbio.1001634": {
+            "author_display": [
+                "Joel Hartter",
+                "Sadie J. Ryan",
+                "Catrina A. MacKenzie",
+                "John N. Parker",
+                "Carly A. Strasser"
+            ],
+            "title_display": "Spatially Explicit Data: Stewardship and Ethical Challenges in Science",
+            "abstract": [
+                "\nSharing spatially specific data, which includes the characteristics and behaviors of individuals, households, or communities in geographical space, raises distinct technical and ethical challenges.\n\nScholarly communication is at an unprecedented turning point created in part by the increasing saliency of data stewardship and data sharing. Formal data management plans represent a new emphasis in research, enabling access to data at higher volumes and more quickly, and the potential for replication and augmentation of existing research. Data sharing has recently transformed the practice, scope, content, and applicability of research in several disciplines, in particular in relation to spatially specific data. This lends exciting potentiality, but the most effective ways in which to implement such changes, particularly for disciplines involving human subjects and other sensitive information, demand consideration. Data management plans, stewardship, and sharing, impart distinctive technical, sociological, and ethical challenges that remain to be adequately identified and remedied. Here, we consider these and propose potential solutions for their amelioration.\n"
+            ],
+            "publication_date": "2013-09-03T00:00:00Z",
+            "article_type": "Perspective",
+            "journal": "PLoS Biology",
+            "views": 5860,
+            "citations": 1,
+            "url": "http://www.plosbiology.org/article/info%3Adoi%2F10.1371%2Fjournal.pbio.1001634",
+            "pdf": "http://www.plosbiology.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pbio.1001634&representation=PDF"
+        },
+        "10.1371/journal.pone.0098847": {
+            "author_display": [
+                "Miao Liu",
+                "Yanyan Xu",
+                "Yuanman Hu",
+                "Chunlin Li",
+                "Fengyun Sun",
+                "Tan Chen"
+            ],
+            "title_display": "A Century of the Evolution of the Urban Area in Shenyang, China",
+            "abstract": [
+                "\nAnalyzing spatiotemporal characteristics of the historical urbanization process is essential in understanding the dynamics of urbanization and scientifically planned urban development. Based on historical urban area maps and remote sensing images, this study examined the urban expansion of Shenyang from 1910 to 2010 using area statistics, typology identification, and landscape metrics approaches. The population and gross domestic product were analyzed as driving factors. The results showed that the urban area of Shenyang increased 43.39-fold during the study period and that the growth rate has accelerated since the 1980s. Three urban growth types were distinguished: infilling, edge-expansion, and spontaneous growth. Edge-expansion was the primary growth type. Infilling growth became the main growth type in the periods 1946–70, 1988–97, and 2004–10. Spontaneous growth was concentrated in the period of 1997 to 2000. The results of landscape metrics indicate that the urban landscape of Shenyang originally was highly aggregated, but has become increasingly fragmented. The urban fringe area was the traditional hot zone of urbanization. Shenyang was mainly located north of the Hun River before 1980; however, the south side of the river has been the hot zone of urbanization since the 1980s. The increase of urban area strongly correlated with the growth of GDP and population. Over a long time scale, the urbanization process has been affected by major historical events.\n"
+            ],
+            "publication_date": "2014-06-03T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 117,
+            "citations": 0,
+            "url": "http://www.plosone.org/article/info:doi/10.1371/journal.pone.0098847",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info:doi/10.1371/journal.pone.0098847&representation=PDF"
+        },
+        "10.1371/journal.pone.0016518": {
+            "author_display": [
+                "Gabriell Máté",
+                "Zoltán Néda",
+                "József Benedek"
+            ],
+            "title_display": "Spring-Block Model Reveals Region-Like Structures",
+            "abstract": [
+                "\n        A mechanical spring-block model is used for realizing an objective space partition of settlements from a geographic territory in region-like structures. The method is based on the relaxation-dynamics of the spring-block system and reveals in a hierarchical manner region-like entities at different spatial scales. It takes into account in an elegant manner both the spatiality of the elements and the connectivity relations among them. Spatiality is taken into account by using the geographic coordinates of the settlements, and by detecting the neighbors with the help of a Delaunay triangulation. Connectivity between neighboring settlements are quantified using a Pearson-like correlation for the relative variation of a relevant socio-economic parameter (population size, GDP, tax payed per inhabitant, etc.). The method is implemented in an interactive JAVA application and it is applied with success for an artificially generated society and for the case of USA, Hungary and Transylvania.\n      "
+            ],
+            "publication_date": "2011-02-08T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 1977,
+            "citations": 2,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0016518",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0016518&representation=PDF"
+        },
+        "10.1371/journal.pone.0066293": {
+            "author_display": [
+                "Salvatore Eugenio Pappalardo",
+                "Massimo De Marchi",
+                "Francesco Ferrarese"
+            ],
+            "title_display": "Uncontacted Waorani in the Yasuní Biosphere Reserve: Geographical Validation of the <i>Zona Intangible Tagaeri Taromenane (ZITT)</i>",
+            "abstract": [
+                "\nThe Tagaeri Taromenane People are two indigenous groups belonging to the Waorani first nation living in voluntary isolation within the Napo region of the western Amazon rainforest. To protect their territory the Ecuadorean State has declared and geographically defined, by Decrees, the Zona Intangible Tagaeri Taromenane (ZITT). This zone is located within the UNESCO Yasuní Biosphere Reserve (1989), one of the most biodiverse areas in the world. Due to several hydrocarbon reserve exploitation projects running in the area and the advancing of a large-scale deforestation front, the survival of these groups is presently at risk. The general aim was to validate the ZITT boundary using the geographical references included in the Decree 2187 (2007) by analyzing the geomorphological characteristics of the area. Remote sensing data such as Digital Elevation Models (DEM), Landsat imagery, topographic cartography of IGM-Ecuador, and fieldwork geographical data have been integrated and processed by Geographical Information System (GIS). The ZITT presents two levels of geographic inconsistencies. The first dimension is about the serious cartographical weaknesses in the perimeter delimitation related to the impossibility of linking two rivers belonging to different basins while the second deals with the perimeter line not respecting the hydrographic network. The GIS analysis results clearly show that ZITT boundary is cartographically nonsense due to the impossibility of mapping out the perimeter. Furthermore, GIS analysis of anthropological data shows presence of Tagaeri Taromenane clans outside the ZITT perimeter, within oil production areas and in nearby farmer settlements, reflecting the limits of protection policies for non-contacted indigenous territory. The delimitation of the ZITT followed a traditional pattern of geometric boundary not taking into account the nomadic characteristic of Tagaeri Taromenane: it is necessary to adopt geographical approaches to recognize the indigenous right to their liveable territories in the complex territorialities enacted by different stakeholders.\n"
+            ],
+            "publication_date": "2013-06-19T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 7461,
+            "citations": 1,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0066293",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0066293&representation=PDF"
+        },
+        "10.1371/journal.pone.0045985": {
+            "author_display": [
+                "Maxime Lenormand",
+                "Sylvie Huet",
+                "Floriana Gargiulo",
+                "Guillaume Deffuant"
+            ],
+            "title_display": "A Universal Model of Commuting Networks",
+            "abstract": [
+                "\n        We show that a recently proposed model generates accurate commuting networks on 80 case studies from different regions of the world (Europe and United-States) at different scales (e.g. municipalities, counties, regions). The model takes as input the number of commuters coming in and out of each geographic unit and generates the matrix of commuting flows between the units. The single parameter of the model follows a universal law that depends only on the scale of the geographic units. We show that our model significantly outperforms two other approaches proposing a universal commuting model [1], [2], particularly when the geographic units are small (e.g. municipalities).\n      "
+            ],
+            "publication_date": "2012-10-01T00:00:00Z",
+            "article_type": "Research Article",
+            "views": 1667,
+            "citations": 1,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0045985",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0045985&representation=PDF"
+        },
+        "10.1371/journal.pbio.0030270": {
+            "author_display": [
+                "Mark Stoneking",
+                "Brigitte Pakendorf",
+                "Hiroki Oota"
+            ],
+            "title_display": "Authors' Reply",
+            "abstract": [
+                ""
+            ],
+            "publication_date": "2005-08-16T00:00:00Z",
+            "article_type": "Correspondence and Other Communications",
+            "journal": "PLoS Biology",
+            "views": 1853,
+            "citations": 0,
+            "url": "http://biology.plosjournals.org/perlserv/?request=get-document&doi=10.1371%2Fjournal.pbio.0030270",
+            "pdf": "http://fetchObject.action?uri=http://biology.plosjournals.org/perlserv/?request=get-document&doi=10.1371%2Fjournal.pbio.0030270&representation=PDF"
+        },
+        "10.1371/journal.pbio.0040208": {
+            "author_display": [
+                "C. David L Orme",
+                "Richard G Davies",
+                "Valerie A Olson",
+                "Gavin H Thomas",
+                "Tzung-Su Ding",
+                "Pamela C Rasmussen",
+                "Robert S Ridgely",
+                "Ali J Stattersfield",
+                "Peter M Bennett",
+                "Ian P. F Owens",
+                "Tim M Blackburn",
+                "Kevin J Gaston"
+            ],
+            "title_display": "Global Patterns of Geographic Range Size in Birds",
+            "abstract": [
+                "\n        Large-scale patterns of spatial variation in species geographic range size are central to many fundamental questions in macroecology and conservation biology. However, the global nature of these patterns has remained contentious, since previous studies have been geographically restricted and/or based on small taxonomic groups. Here, using a database on the breeding distributions of birds, we report the first (to our knowledge) global maps of variation in species range sizes for an entire taxonomic class. We show that range area does not follow a simple latitudinal pattern. Instead, the smallest range areas are attained on islands, in mountainous areas, and largely in the southern hemisphere. In contrast, bird species richness peaks around the equator, and towards higher latitudes. Despite these profoundly different latitudinal patterns, spatially explicit models reveal a weak tendency for areas with high species richness to house species with significantly smaller median range area. Taken together, these results show that for birds many spatial patterns in range size described in geographically restricted analyses do not reflect global rules. It remains to be discovered whether global patterns in geographic range size are best interpreted in terms of geographical variation in species assemblage packing, or in the rates of speciation, extinction, and dispersal that ultimately underlie biodiversity.\n      \n        The first global maps of variation in species range sizes for an entire taxonomic class--birds--reveals that range area does not follow a simple latitudinal pattern.\n      "
+            ],
+            "publication_date": "2006-06-20T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS Biology",
+            "views": 14491,
+            "citations": 38,
+            "url": "http://biology.plosjournals.org/perlserv/?request=get-document&doi=10.1371%2Fjournal.pbio.0040208",
+            "pdf": "http://fetchObject.action?uri=http://biology.plosjournals.org/perlserv/?request=get-document&doi=10.1371%2Fjournal.pbio.0040208&representation=PDF"
+        },
+        "10.1371/journal.pone.0077488": {
+            "author_display": [
+                "Guanghua Zhang",
+                "Yuqing Zhang",
+                "Zhenguo Chen"
+            ],
+            "title_display": "Using Trust to Secure Geographic and Energy Aware Routing against Multiple Attacks",
+            "abstract": [
+                "\nTo address the vulnerability of geographic routing to multiple security threats such as false routing information, selective forwarding and the Sybil attack in wireless sensor networks, this paper proposes a trust-based defending model against above-mentioned multiple attacks. Considering the characteristics of resource-constrained sensor nodes, trust values of neighboring nodes on the routing path can be calculated through the Dirichlet distribution function, which is based on data packets' acknowledgements in a certain period instead of energy-consuming monitoring. Trust is combined with the cost of geographic and energy aware routing for selecting the next hop of routing. At the same time, the initial trust is dynamically determined, service requests are restricted for malicious nodes in accordance with trust values, and the impact of node mobility is weakened by the trust evolution. The simulation results and analysis show that the proposed model under multiple attacks has advantages in packet delivery ratio and network lifetime over the existing models.\n"
+            ],
+            "publication_date": "2013-10-21T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 555,
+            "citations": 0,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0077488",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0077488&representation=PDF"
+        }
+    }
+}

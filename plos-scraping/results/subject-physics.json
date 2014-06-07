@@ -1,0 +1,178 @@
+{
+    "subject-physics": {
+        "10.1371/journal.pone.0017503": {
+            "author_display": [
+                "Shinji Deguchi"
+            ],
+            "title_display": "Mechanism of and Threshold Biomechanical Conditions for Falsetto Voice Onset",
+            "abstract": [
+                "\n        The sound source of a voice is produced by the self-excited oscillation of the vocal folds. In modal voice production, a drastic increase in transglottal pressure after vocal fold closure works as a driving force that develops self-excitation. Another type of vocal fold oscillation with less pronounced glottal closure observed in falsetto voice production has been accounted for by the mucosal wave theory. The classical theory assumes a quasi-steady flow, and the expected driving force onto the vocal folds under wavelike motion is derived from the Bernoulli effect. However, wavelike motion is not always observed during falsetto voice production. More importantly, the application of the quasi-steady assumption to a falsetto voice with a fundamental frequency of several hundred hertz is unsupported by experiments. These considerations suggested that the mechanism of falsetto voice onset may be essentially different from that explained by the mucosal wave theory. In this paper, an alternative mechanism is submitted that explains how self-excitation reminiscent of the falsetto voice could be produced independent of the glottal closure and wavelike motion. This new explanation is derived through analytical procedures by employing only general unsteady equations of motion for flow and solids. The analysis demonstrated that a convective acceleration of a flow induced by rapid wall movement functions as a negative damping force, leading to the self-excitation of the vocal folds. The critical subglottal pressure and volume flow are expressed as functions of vocal fold biomechanical properties, geometry, and voice fundamental frequency. The analytically derived conditions are qualitatively and quantitatively reasonable in view of reported measurement data of the thresholds required for falsetto voice onset. Understanding of the voice onset mechanism and the explicit mathematical descriptions of thresholds would be beneficial for the diagnosis and treatment of voice diseases and the development of artificial vocal folds.\n      "
+            ],
+            "publication_date": "2011-03-07T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 2466,
+            "citations": 2,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0017503",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0017503&representation=PDF"
+        },
+        "10.1371/journal.pone.0090280": {
+            "author_display": [
+                "Arshad Khan",
+                "Ilyas Khan",
+                "Farhad Ali",
+                "Sami ulhaq",
+                "Sharidan Shafie"
+            ],
+            "title_display": "Effects of Wall Shear Stress on Unsteady MHD Conjugate Flow in a Porous Medium with Ramped Wall Temperature",
+            "abstract": [
+                "\nThis study investigates the effects of an arbitrary wall shear stress on unsteady magnetohydrodynamic (MHD) flow of a Newtonian fluid with conjugate effects of heat and mass transfer. The fluid is considered in a porous medium over a vertical plate with ramped temperature. The influence of thermal radiation in the energy equations is also considered. The coupled partial differential equations governing the flow are solved by using the Laplace transform technique. Exact solutions for velocity and temperature in case of both ramped and constant wall temperature as well as for concentration are obtained. It is found that velocity solutions are more general and can produce a huge number of exact solutions correlative to various fluid motions. Graphical results are provided for various embedded flow parameters and discussed in details.\n"
+            ],
+            "publication_date": "2014-03-12T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 522,
+            "citations": 0,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0090280",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0090280&representation=PDF"
+        },
+        "10.1371/journal.pone.0061531": {
+            "author_display": [
+                "Ilyas Khan",
+                "Farhad Ali",
+                "Sharidan Shafie"
+            ],
+            "title_display": "Stokes' Second Problem for Magnetohydrodynamics Flow in a Burgers' Fluid: The Cases γ = λ<sup>2</sup>/4 and γ>λ<sup>2</sup>/4",
+            "abstract": [
+                "\nThe present work is concerned with exact solutions of Stokes second problem for magnetohydrodynamics (MHD) flow of a Burgers' fluid. The fluid over a flat plate is assumed to be electrically conducting in the presence of a uniform magnetic field applied in outward transverse direction to the flow. The equations governing the flow are modeled and then solved using the Laplace transform technique. The expressions of velocity field and tangential stress are developed when the relaxation time satisfies the condition γ = λ2/4 or γ>λ2/4. The obtained closed form solutions are presented in the form of simple or multiple integrals in terms of Bessel functions and terms with only Bessel functions. The numerical integration is performed and the graphical results are displayed for the involved flow parameters. It is found that the velocity decreases whereas the shear stress increases when the Hartmann number is increased. The solutions corresponding to the Stokes' first problem for hydrodynamic Burgers' fluids are obtained as limiting cases of the present solutions. Similar solutions for Stokes' second problem of hydrodynamic Burgers' fluids and those for Newtonian and Oldroyd-B fluids can also be obtained as limiting cases of these solutions.\n"
+            ],
+            "publication_date": "2013-05-08T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 1210,
+            "citations": 0,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0061531",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0061531&representation=PDF"
+        },
+        "10.1371/journal.pone.0039999": {
+            "author_display": [
+                "Wade A. Walker"
+            ],
+            "title_display": "The Repeated Replacement Method: A Pure Lagrangian Meshfree Method for Computational Fluid Dynamics",
+            "abstract": [
+                "\n        In this paper we describe the repeated replacement method (RRM), a new meshfree method for computational fluid dynamics (CFD). RRM simulates fluid flow by modeling compressible fluids’ tendency to evolve towards a state of constant density, velocity, and pressure. To evolve a fluid flow simulation forward in time, RRM repeatedly “chops out” fluid from active areas and replaces it with new “flattened” fluid cells with the same mass, momentum, and energy. We call the new cells “flattened” because we give them constant density, velocity, and pressure, even though the chopped-out fluid may have had gradients in these primitive variables. RRM adaptively chooses the sizes and locations of the areas it chops out and replaces. It creates more and smaller new cells in areas of high gradient, and fewer and larger new cells in areas of lower gradient. This naturally leads to an adaptive level of accuracy, where more computational effort is spent on active areas of the fluid, and less effort is spent on inactive areas. We show that for common test problems, RRM produces results similar to other high-resolution CFD methods, while using a very different mathematical framework. RRM does not use Riemann solvers, flux or slope limiters, a mesh, or a stencil, and it operates in a purely Lagrangian mode. RRM also does not evaluate numerical derivatives, does not integrate equations of motion, and does not solve systems of equations.\n      "
+            ],
+            "publication_date": "2012-07-06T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 1458,
+            "citations": 0,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0039999",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0039999&representation=PDF"
+        },
+        "10.1371/journal.pone.0000133": {
+            "author_display": [
+                "Timothy J. Crone",
+                "William S.D. Wilcock",
+                "Andrew H. Barclay",
+                "Jeffrey D. Parsons"
+            ],
+            "title_display": "The Sound Generated by Mid-Ocean Ridge Black Smoker Hydrothermal Vents",
+            "abstract": [
+                "\n            Hydrothermal flow through seafloor black smoker vents is typically turbulent and vigorous, with speeds often exceeding 1 m/s. Although theory predicts that these flows will generate sound, the prevailing view has been that black smokers are essentially silent. Here we present the first unambiguous field recordings showing that these vents radiate significant acoustic energy. The sounds contain a broadband component and narrowband tones which are indicative of resonance. The amplitude of the broadband component shows tidal modulation which is indicative of discharge rate variations related to the mechanics of tidal loading. Vent sounds will provide researchers with new ways to study flow through sulfide structures, and may provide some local organisms with behavioral or navigational cues.\n         "
+            ],
+            "publication_date": "2006-12-27T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 13048,
+            "citations": 5,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0000133",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0000133&representation=PDF"
+        },
+        "10.1371/journal.pone.0078114": {
+            "author_display": [
+                "Michael R. Feldman"
+            ],
+            "title_display": "Re-Examination of Globally Flat Space-Time",
+            "abstract": [
+                "\nIn the following, we offer a novel approach to modeling the observed effects currently attributed to the theoretical concepts of “dark energy,” “dark matter,” and “dark flow.” Instead of assuming the existence of these theoretical concepts, we take an alternative route and choose to redefine what we consider to be inertial motion as well as what constitutes an inertial frame of reference in flat space-time. We adopt none of the features of our current cosmological models except for the requirement that special and general relativity be local approximations within our revised definition of inertial systems. Implicit in our ideas is the assumption that at “large enough” scales one can treat objects within these inertial systems as point-particles having an insignificant effect on the curvature of space-time. We then proceed under the assumption that time and space are fundamentally intertwined such that time- and spatial-translational invariance are not inherent symmetries of flat space-time (i.e., observable clock rates depend upon both relative velocity and spatial position within these inertial systems) and take the geodesics of this theory in the radial Rindler chart as the proper characterization of inertial motion. With this commitment, we are able to model solely with inertial motion the observed effects expected to be the result of “dark energy,” “dark matter,” and “dark flow.” In addition, we examine the potential observable implications of our theory in a gravitational system located within a confined region of an inertial reference frame, subsequently interpreting the Pioneer anomaly as support for our redefinition of inertial motion. As well, we extend our analysis into quantum mechanics by quantizing for a real scalar field and find a possible explanation for the asymmetry between matter and antimatter within the framework of these redefined inertial systems.\n"
+            ],
+            "publication_date": "2013-11-08T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 2866,
+            "citations": 0,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0078114",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0078114&representation=PDF"
+        },
+        "10.1371/journal.pone.0097590": {
+            "author_display": [
+                "Yoichi Ochiai",
+                "Takayuki Hoshi",
+                "Jun Rekimoto"
+            ],
+            "title_display": "Three-Dimensional Mid-Air Acoustic Manipulation by Ultrasonic Phased Arrays",
+            "abstract": [
+                "\nThe essence of levitation technology is the countervailing of gravity. It is known that an ultrasound standing wave is capable of suspending small particles at its sound pressure nodes. The acoustic axis of the ultrasound beam in conventional studies was parallel to the gravitational force, and the levitated objects were manipulated along the fixed axis (i.e. one-dimensionally) by controlling the phases or frequencies of bolted Langevin-type transducers. In the present study, we considered extended acoustic manipulation whereby millimetre-sized particles were levitated and moved three-dimensionally by localised ultrasonic standing waves, which were generated by ultrasonic phased arrays. Our manipulation system has two original features. One is the direction of the ultrasound beam, which is arbitrary because the force acting toward its centre is also utilised. The other is the manipulation principle by which a localised standing wave is generated at an arbitrary position and moved three-dimensionally by opposed and ultrasonic phased arrays. We experimentally confirmed that expanded-polystyrene particles of 0.6 mm, 1 mm, and 2 mm in diameter could be manipulated by our proposed method.\n"
+            ],
+            "publication_date": "2014-05-21T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 479,
+            "citations": 0,
+            "url": "http://www.plosone.org/article/info:doi/10.1371/journal.pone.0097590",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info:doi/10.1371/journal.pone.0097590&representation=PDF"
+        },
+        "10.1371/journal.pone.0047918": {
+            "author_display": [
+                "Andrew Bell"
+            ],
+            "title_display": "A Resonance Approach to Cochlear Mechanics",
+            "abstract": [
+                "Background: How does the cochlea analyse sound into its component frequencies? In the 1850s Helmholtz thought it occurred by resonance, whereas a century later Békésy's work indicated a travelling wave. The latter answer seemed to settle the question, but with the discovery in 1978 that the cochlea emits sound, the mechanics of the cochlea was back on the drawing board. Recent studies have raised questions about whether the travelling wave, as currently understood, is adequate to explain observations. Approach: Applying basic resonance principles, this paper revisits the question. A graded bank of harmonic oscillators with cochlear-like frequencies and quality factors is simultaneously excited, and it is found that resonance gives rise to similar frequency responses, group delays, and travelling wave velocities as observed by experiment. The overall effect of the group delay gradient is to produce a decelerating wave of peak displacement moving from base to apex at characteristic travelling wave speeds. The extensive literature on chains of coupled oscillators is considered, and the occurrence of travelling waves, pseudowaves, phase plateaus, and forced resonance in such systems is noted. Conclusion and significance: This alternative approach to cochlear mechanics shows that a travelling wave can simply arise as an apparently moving amplitude peak which passes along a bank of resonators without carrying energy. This highlights the possible role of the fast pressure wave and indicates how phase delays and group delays of a set of driven harmonic oscillators can generate an apparent travelling wave. It is possible to view the cochlea as a chain of globally forced coupled oscillators, and this model incorporates fundamental aspects of both the resonance and travelling wave theories. "
+            ],
+            "publication_date": "2012-11-08T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 2736,
+            "citations": 1,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0047918",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0047918&representation=PDF"
+        },
+        "10.1371/journal.pone.0081659": {
+            "author_display": [
+                "Shafiq R. Qureshi",
+                "Waqar A. Khan",
+                "Robert Prosser"
+            ],
+            "title_display": "Behaviour of a Premixed Flame Subjected to Acoustic Oscillations",
+            "abstract": [
+                "\nIn this paper, a one dimensional premixed laminar methane flame is subjected to acoustic oscillations and studied. The purpose of this analysis is to investigate the effects of acoustic perturbations on the reaction rates of different species, with a view to their respective contribution to thermoacoustic instabilities. Acoustically transparent non reflecting boundary conditions are employed. The flame response has been studied with acoustic waves of different frequencies and amplitudes. The integral values of the reaction rates, the burning velocities and the heat release of the acoustically perturbed flame are compared with the unperturbed case. We found that the flame's sensitivity to acoustic perturbations is greatest when the wavelength is comparable to the flame thickness. Even in this case, the perturbations are stable with time. We conclude that acoustic fields acting on the chemistry do not contribute significantly to the emergence of large amplitude pressure oscillations.\n"
+            ],
+            "publication_date": "2013-12-20T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 491,
+            "citations": 0,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0081659",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0081659&representation=PDF"
+        },
+        "10.1371/journal.pone.0007963": {
+            "author_display": [
+                "Kareem Elsayad",
+                "Katrin G. Heinze"
+            ],
+            "title_display": "Defining a Superlens Operating Regime for Imaging Fluorescent Molecules",
+            "abstract": [
+                "\nIt has been shown that thin metal-based films can at certain frequencies act as planar near-field lenses for certain polarization components. A desirable property of such “lenses” is that they can also enhance and focus some large transverse spatial frequency components which contain sub-diffraction limit details. Over the last decade there has been much work in optimizing designs to reduce effects (such as material losses and surface roughness) that are detrimental to image reconstruction. One design that can reduce some of these undesirable effects, and which has received a fair amount of attention recently, is the stacked metal-dielectric superlens. Here we theoretically explore the imaging ability of such a design for the specific purpose of imaging a fluorescent dye (the common bio-marker GFP) in the vicinity of the superlens surface. Our calculations take into consideration the interaction (damping) of an oscillating electric dipole with the metallic layers in the superlens. We also assume a Gaussian frequency distribution spectrum for the dipole. We treat the metallic-alloy and dielectric-alloy layers separately using an appropriate effective medium theory. The transmission properties are evaluated via Transfer matrix (-matrix) calculations that were performed in the MatLab and MathCad environments. Our study shows that it is in principle possible to image fluorescent molecules using a simple bilayer planar superlens. We find that optimal parameters for such a superlens occur when the peak dipole emission-frequency is slightly offset from the Surface Plasmon resonance frequency of the metal-dielectric interfaces. The best resolution is obtained when the fluorescent molecules are not too close ( nm) or too far ( nm) from the superlens surface. The realization and application of a superlens with the specified design is possible using current nanofabrication techniques. When combined with e.g. a sub-wavelength grating structure (such as in the far-field superlens design previously proposed [1]) or a fast near-field scanning probe, it could provide a means for fast fluorescent imaging with sub-diffraction limit resolution.\n"
+            ],
+            "publication_date": "2009-12-01T00:00:00Z",
+            "article_type": "Research Article",
+            "journal": "PLoS ONE",
+            "views": 2122,
+            "citations": 1,
+            "url": "http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0007963",
+            "pdf": "http://www.plosone.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pone.0007963&representation=PDF"
+        }
+    }
+}
