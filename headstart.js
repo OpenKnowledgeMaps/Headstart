@@ -47,7 +47,6 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.min_diameter_size = initVar(options.min_diameter_size, 30);
   this.max_area_size = initVar(options.max_area_size, 110);
   this.min_area_size = initVar(options.min_area_size, 50);
-  this.label_readers = initVar(options.label_readers, "readers");
 
   this.current_zoom_node = null;
 
@@ -492,7 +491,7 @@ HeadstartFSM.prototype = {
       hs.drawChartCanvas();
       hs.drawTitle();
       if(headstart.is_adaptive) {
-        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference[]=131&conference[]=132&jsoncallback=?", function(data) {
+        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference=128&jsoncallback=?", function(data) {
           headstart.startVisualization(hs, bubbles, csv, data, true);
         });
       } else {
@@ -579,7 +578,7 @@ HeadstartFSM.prototype = {
       hs.drawChartCanvas();
       
       if(headstart.is_adaptive) {
-        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference[]=131&conference[]=132&jsoncallback=?", function(data) {
+        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference=128&jsoncallback=?", function(data) {
           headstart.startVisualization(hs, bubbles, csv, data, false);
         });
       } else {
