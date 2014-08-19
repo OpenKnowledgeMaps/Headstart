@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
     <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <script type="text/javascript" src="lib/jquery-1.8.1.min.js">
+            <script type="text/javascript" src="vis/lib/jquery-1.8.1.min.js">
             </script>
-            <script type="text/javascript" src="vis.js"></script>
+            <script type="text/javascript" src="vis/vis.js"></script>
     </head>
 
     <body style="margin:0px; padding:0px">
@@ -11,27 +11,27 @@
         <script>
                 var myHeadstart = new Headstart(
                         "localhost/" //host
-                        , "headstart2/" //path
+                        , "hs/Headstart/vis/" //path
                         , "visualization" //append to tag
                         , [{
                                 title: "edu1"
-                                , file: "data/educational-technology.csv"
+                                , file: "vis/data/educational-technology.csv"
                             }
                             , {
                                 title: "edu2"
-                                , file: "data/edu2.csv"
+                                , file: "vis/data/edu2.csv"
                             }
                             , {
                                 title: "edu3"
-                                , file: "data/edu3.csv"
+                                , file: "vis/data/edu3.csv"
                             }
                             , {
                                 title: "edu4"
-                                , file: "data/edu4.csv"
+                                , file: "vis/data/edu4.csv"
                             }
                             , {
                                 title: "edu5"
-                                , file: "data/edu5.csv"
+                                , file: "vis/data/edu5.csv"
                             }] //data
                         , {title: "Overview of Educational Technology"
                             , max_diameter_size: 50
