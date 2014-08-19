@@ -328,7 +328,7 @@ list.populateReaders = function(nodes) {
     })
   .append("span")
     .attr("class", "list_readers_entity")
-    .html(" " + headstart.label_readers + "&nbsp;");
+    .html(" readers&nbsp;");
     
   } else {
     d3.selectAll("#list_area").style("margin-bottom", "7px")

@@ -47,7 +47,6 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.min_diameter_size = initVar(options.min_diameter_size, 30);
   this.max_area_size = initVar(options.max_area_size, 110);
   this.min_area_size = initVar(options.min_area_size, 50);
-  this.label_readers = initVar(options.label_readers, "readers");
 
   this.current_zoom_node = null;
 

@@ -245,7 +245,7 @@ papers.appendMetaDataReaders = function(xhtml) {
     .html(function (d) { return d.readers })
     .append("span")
     .attr("class", "readers_entity")
-    .html(" " + headstart.label_readers);
+    .html(" readers");
 }
 
 // create the path or "border" for papers
