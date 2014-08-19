@@ -491,7 +491,7 @@ HeadstartFSM.prototype = {
       hs.drawChartCanvas();
       hs.drawTitle();
       if(headstart.is_adaptive) {
-        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference[]=131&conference[]=132&jsoncallback=?", function(data) {
+        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference=128&jsoncallback=?", function(data) {
           headstart.startVisualization(hs, bubbles, csv, data, true);
         });
       } else {
@@ -578,7 +578,7 @@ HeadstartFSM.prototype = {
       hs.drawChartCanvas();
       
       if(headstart.is_adaptive) {
-        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference[]=131&conference[]=132&jsoncallback=?", function(data) {
+        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference=128&jsoncallback=?", function(data) {
           headstart.startVisualization(hs, bubbles, csv, data, false);
         });
       } else {
