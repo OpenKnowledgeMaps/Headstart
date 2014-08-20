@@ -92,7 +92,6 @@ div#subdiscipline_title {
   margin: 0px;
   height: 18px;
   padding-left: 10px;
-  width: 700px;
 }
 
 div#subdiscipline_title h1 {
@@ -475,7 +474,7 @@ img#preview_page {
 /* ########### Paper Frame/Popup ########### */
 
 div#paper_frame {
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(255,255,255,0.6);
   z-index:999;
 }
 

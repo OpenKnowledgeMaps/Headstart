@@ -33,7 +33,13 @@ var popup = StateMachine.create({
             }
             
             this.initClickListenersForNav();
-
+            
+        },
+        
+        onstart: function ( event, from, to ) {
+            if(headstart.show_intro) {
+                popup.show();
+            }
         },
 
         onshow: function( event, from, to ) {
@@ -83,7 +89,7 @@ popup.drawPopUp = function() {
          .style( "left", position.left + "px" )
          .style( "width",  width + "px" )
          .style( "height", height + "px" )
-         .style( "display", "none" );
+         .style( "display", "none");
 
     toFront(popup.paper_frame.node());
 

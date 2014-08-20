@@ -74,6 +74,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   
   this.show_dropdown = initVar(options.show_dropdown, true);
   
+  this.show_intro = initVar(options.show_intro, false);
+  
   this.conference_id = initVar(options.conference_id, 0);
   
   this.user_id = initVar(options.user_id, 0);
