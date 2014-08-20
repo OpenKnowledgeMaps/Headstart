@@ -101,6 +101,7 @@ div#subdiscipline_title h1 {
   font-size: 18px;
   font-family: 'Helvetica', sans-serif;
   font-weight: 400;
+  padding: 0px;
 }
 
 div#area_title {
@@ -113,11 +114,20 @@ div#area_title h2 {
   font-size: 14px;
   font-family: 'Helvetica', sans-serif;
   text-align: center;
+  padding: 0px;
   /*background-color: rgb(210, 228, 240);*/
 }
 
 text {
   font: 10px sans-serif;
+}
+
+foreignObject body {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
 }
 
 /* ################ Papers ############### */
@@ -153,12 +163,14 @@ div#intro {
 div#intro h2 {
   font-size: 18px;
   font-family: Helvetica;
+  padding: 0px;
 }
 
 div#intro p {
   font: 16px 'Helvetica', sans-serif;
   color: black;
   margin-bottom: 10px;
+  padding: 0px;
 }
 
 div#article_metadata p,
@@ -180,6 +192,7 @@ div.readers p.large {
   padding-left: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
+  padding-right: 0px;
   /*font-weight:bold;*/
 }
 
@@ -191,6 +204,7 @@ div.readers p.larger {
   padding-left: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
+  padding-right: 0px;
 }
 
 .details {
@@ -202,11 +216,13 @@ p#details {
   /*margin-top: 3px;*/
   padding-top: 3px;
   color: rgb(33, 101, 0);
+  padding: 0px;
 }
 
 
 p#in {
   color: rgb(102, 102, 102);
+  padding-right: 0px;
 }
 
 span.pubyear {
@@ -241,10 +257,12 @@ p#readers {
   vertical-align: text-bottom;
   text-align: right;
   line-height: 8px;
+  padding: 0px;
 }
 
 p#readers.large {
   margin-bottom: 3px;
+  padding: 0px;
 }
 
 span.readers_entity {
@@ -258,7 +276,7 @@ span.readers_entity {
 div#papers_list_container {
     margin-top: -23px;
     margin-bottom: -23px;
-    position:absolute;
+    position: relative;
 }
 
 div#input_container {
@@ -324,12 +342,14 @@ div.list_metadata {
 div.list_metadata p, 
 .list_details p {
      font: 12px 'Helvetica', sans-serif;
+     padding: 0px;
 }
 
 p#list_title {
   font-size: 14px;
   margin-top: 7px;
   margin-bottom: 5px;
+  padding: 0px;
   /*line-height: 18px;*/
 }
 
@@ -356,6 +376,7 @@ p#list_abstract {
   font-size: 11px;
   padding-left:7px;
   line-height: 11px;
+  padding-right: 0px;
 }
 
 span.list_in {
@@ -375,6 +396,7 @@ p#list_area {
   line-height: 11px;
   font-size: 11px;
   margin-bottom: 0px;
+  padding: 0px;
 }
 
 p#list_readers {
@@ -385,6 +407,7 @@ p#list_readers {
   font-size: 11px;
   margin-top: 5px;
   margin-bottom: 0px;
+  padding: 0px;
 }
 
 span.list_readers_entity {

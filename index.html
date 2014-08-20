@@ -7,8 +7,11 @@
     </head>
 
     <body style="margin:0px; padding:0px">
-        <div id="visualization"></div>
+        <div id="visualization" style="width:100%;"></div>
         <script>
+                
+                $("#visualization").css("height", $(document).height() + "px")
+                
                 var myHeadstart = new Headstart(
                         "localhost/" //host
                         , "hs/Headstart/" //path

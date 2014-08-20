@@ -37,7 +37,9 @@ var popup = StateMachine.create({
         },
 
         onshow: function( event, from, to ) {
-          popup.paper_frame.style ( "display", "block" )
+          popup.paper_frame
+                  .style ( "display", "block" )
+                            
           popup.paper_frame.select( "#preview" )
                            .append( "div" )
                            .attr  ( "id", "intro" )
@@ -70,15 +72,18 @@ popup.initClickListenersForNav = function() {
 // The paper frame is the main popup element.
 popup.drawPopUp = function() {
 
-  var width = headstart.max_chart_size + headstart.list_width;
-  var height = headstart.max_chart_size + headstart.top_correction_factor;
+  var width = $("#" + headstart.tag).width();
+  var height = $("#" + headstart.tag).height();
+  
+  var position = $("#" + headstart.tag).position();
 
     popup.paper_frame
          .style( "position", "absolute" )
-         .style( "top", 0 )
-         .style( "width",  "100%" )
-         .style( "height", "100%" )
-         .style("display", "none");
+         .style( "top", position.top + "px" )
+         .style( "left", position.left + "px" )
+         .style( "width",  width + "px" )
+         .style( "height", height + "px" )
+         .style( "display", "none" );
 
     toFront(popup.paper_frame.node());
 

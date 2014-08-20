@@ -210,8 +210,8 @@ HeadstartFSM.prototype = {
     // initialize a bunch of variables.
        
     //TODO: Change this to the height of the parent element   
-    this.available_width  = $(document).width();  
-    this.available_height = $(document).height();
+    this.available_width  = $("#" + this.tag).width();  
+    this.available_height = $("#" + this.tag).height();
 
     this.x = d3.scale.linear().range([0, this.circle_zoom_factor]);
     this.y = d3.scale.linear().range([0, this.circle_zoom_factor]);
@@ -276,10 +276,13 @@ HeadstartFSM.prototype = {
   },
 
   setListWidth: function() {
-    if ( this.available_width > ( this.max_chart_size + this.max_list_size + this.bottom_correction ))
+    if ( this.available_width > ( this.max_chart_size + this.max_list_size )) {
       this.list_width =  this.max_list_size
-    else
+    } else if(this.available_width - this.max_chart_size > this.min_list_size) {
+      this.list_width = this.available_width - this.max_chart_size;  
+    } else {
       this.list_width = this.min_list_size;
+    }
   },
 
   setCircleSize: function() {
