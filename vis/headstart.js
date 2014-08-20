@@ -36,8 +36,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.abstract_small = 250;
   this.abstract_large = null;
 
-  this.top_correction    = 50;
-  this.bottom_correction = 0;
+  this.top_correction    = 0;
+  this.bottom_correction = 34;
   
   this.list_height = 51;
 
@@ -74,13 +74,21 @@ HeadstartFSM = function(host, path, tag, files, options) {
   
   this.show_dropdown = initVar(options.show_dropdown, true);
   
+  this.conference_id = initVar(options.conference_id, 0);
+  
+  this.user_id = initVar(options.user_id, 0);
+  
   this.files = files;
   
-  this.sort_options = [
+  this.service_path = "http://" + this.host + this.path + "server/services/";
+  
+  this.images_path = "http://" + this.host + this.path + "vis/images/";
+  
+  this.sort_options = initVar(options.sort_options, [
     "readers",
     "title",
     "authors"
-   ]
+   ])
 
    if(this.content_based) {
      this.sort_options = ["title", "area"];
@@ -166,7 +174,7 @@ HeadstartFSM.prototype = {
     }
 
     $.ajax({
-      url: "http://" + headstart.host + headstart.path + "server/services/writeActionToLog.php" + '?user=' + user 
+      url: this.service_path + "/writeActionToLog.php" + '?user=' + user 
               + '&action=' + action
               + '&item=' + escape(id)
               + '&type=' + type
@@ -465,6 +473,23 @@ HeadstartFSM.prototype = {
     $(".tl-title").css("text-align", "center");
     $(".tl-title").css("float", "left");
   },
+  
+  createRestUrl: function () {
+      
+      var url = this.service_path + "getBookmarks.php?user=" + this.user_id;
+      
+      if($.isArray(this.conference_id)) {
+          this.conference_id.forEach(function (val) {
+            url += "&conference[]=" + val;
+          })
+      } else {
+          url += "&conference=" + this.conference_id;
+      }
+      
+      url += "&jsoncallback=?";
+      
+      return url;
+  },
 
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
@@ -491,7 +516,10 @@ HeadstartFSM.prototype = {
       hs.drawChartCanvas();
       hs.drawTitle();
       if(headstart.is_adaptive) {
-        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference[]=131&conference[]=132&jsoncallback=?", function(data) {
+        
+        var url = headstart.createRestUrl();
+            
+        $.getJSON(url, function(data) {
           headstart.startVisualization(hs, bubbles, csv, data, true);
         });
       } else {
@@ -578,7 +606,10 @@ HeadstartFSM.prototype = {
       hs.drawChartCanvas();
       
       if(headstart.is_adaptive) {
-        $.getJSON("http://" + headstart.host + headstart.path + "server/services/getBookmarks.php?user=16&conference[]=131&conference[]=132&jsoncallback=?", function(data) {
+        
+        var url = headstart.createRestUrl();
+            
+        $.getJSON(url, function(data) {
           headstart.startVisualization(hs, bubbles, csv, data, false);
         });
       } else {

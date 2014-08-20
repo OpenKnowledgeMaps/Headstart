@@ -3,6 +3,7 @@
 div#chart {
   position: absolute;
   font-family: Helvetica;
+  margin-top: 10px;
 }
 
 rect {
@@ -91,6 +92,7 @@ div#subdiscipline_title {
   margin: 0px;
   height: 18px;
   padding-left: 10px;
+  width: 700px;
 }
 
 div#subdiscipline_title h1 {
@@ -254,8 +256,9 @@ span.readers_entity {
 /* ################ Papers list ############### */
 
 div#papers_list_container {
-    top: -23px;
-    position:relative;
+    margin-top: -23px;
+    margin-bottom: -23px;
+    position:absolute;
 }
 
 div#input_container {

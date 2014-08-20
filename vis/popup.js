@@ -99,7 +99,7 @@ popup.drawHideButton = function() {
                  .style ( "width",  popup.width + "px" )
                  .style ( "height", headstart.preview_top_height + "px" )
                  .append( "img" )
-                 .attr  ( "src", "images/close.png" )
+                 .attr  ( "src", headstart.images_path + "close.png" )
                  .style ( "float", "right")
                  .style ( "margin-right", "5px" );
 

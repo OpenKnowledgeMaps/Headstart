@@ -1,7 +1,9 @@
 var headstart = null;
 
 Headstart = function(host, path, tag, files, options) {
-
+  
+  var vis_directory = "vis/";
+  
   var lib_directory = "lib/";
 
   var lib_sources = [
@@ -51,10 +53,10 @@ Headstart = function(host, path, tag, files, options) {
     return document.getElementsByTagName(tag)[0].appendChild(current_css);
   }
 
-  addCss('http://' + host + path + 'style.css', 'head');
+  addCss('http://' + host + path + vis_directory + 'style.css', 'head');
 
   lib_sources.forEach(function(script_source, i) {
-    var current_script = addScript('http://' + host + path + lib_directory + script_source.source, 'head', false);
+    var current_script = addScript('http://' + host + path + vis_directory + lib_directory + script_source.source, 'head', false);
 
     if (typeof script_source.important !== 'undefined') {
       current_script.onload = function() {
@@ -63,7 +65,7 @@ Headstart = function(host, path, tag, files, options) {
         })
 
         script_sources.forEach(function(script_source) {
-          var source = 'http://' + host + path + script_source.source;
+          var source = 'http://' + host + path + vis_directory + script_source.source;
           var this_script = addScript(source, 'head', false);
           if (typeof script_source.final !== 'undefined') {
               this_script.onload = function() {

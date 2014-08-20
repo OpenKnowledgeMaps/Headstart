@@ -55,6 +55,7 @@ list.drawShowHideContainer = function() {
         d3.select ( "#papers_list_container" )
             .style ( "left",  headstart.max_chart_size+10 + "px" )
             .style ( "width", headstart.list_width + "px")
+            .style ( "height", headstart.list_height + "px" )
            .append( "div" )
             .attr  ( "id", "show_hide_container" )
             .style ( "width", headstart.list_width-10 + "px" )
@@ -84,7 +85,7 @@ list.drawList = function() {
     var papers_list = list_show_hide_container
                             .append("div")
                             .attr("id", "papers_list")
-                            .style("height", headstart.max_chart_size - 13 + "px")
+                            .style("height", headstart.max_chart_size - 29 + "px")
                             .style("width", headstart.list_width - 10 + "px")
                             .style("display", "none")
 
@@ -347,7 +348,7 @@ list.createAbstract = function(d, cut_off) {
 }
 
 list.addBookmark = function(d)  {
-  $.getJSON("http://" + headstart.host + headstart.path + "server/services/addBookmark.php?"
+  $.getJSON(headstart.service_path + "addBookmark.php?"
     + "user_id=" + 16
     + "&content_id=" +d.id,
       function(data) {
@@ -374,7 +375,7 @@ list.addBookmark = function(d)  {
 }
 
 list.removeBookmark = function(d)  {
-  $.getJSON("http://" + headstart.host + headstart.path + "server/services/removeBookmark.php?"
+  $.getJSON(headstart.services_path + "removeBookmark.php?"
     + "user_id=" + 16
     + "&content_id=" +d.id,
       function(data) {
@@ -497,13 +498,13 @@ list.populateOverlay = function (d) {
     
     popup.current = "visible";
     
-    list.loadAndAppendImage("images/" + d.id + "/page_1.png", 1);
+    list.loadAndAppendImage(headstart.images_path + d.id + "/page_1.png", 1);
 
     var images_finished = false
     , counter = 2;
 
     while(!images_finished) {
-        var image_src = "images/" + d.id + "/page_" + counter + ".png";
+        var image_src = headstart.images_path + d.id + "/page_" + counter + ".png";
         
         if (!list.loadAndAppendImage(image_src, counter)) {
             images_finished = true;
@@ -520,7 +521,7 @@ list.setImageForListHolder = function(d) {
       return (x.id == d.id)
     });
 
-  var image_src = "images/" + d.id + "/page_1.png";
+  var image_src = headstart.images_path + d.id + "/page_1.png";
 
   if (this.testImage(image_src)) {
 

@@ -568,13 +568,13 @@ papers.populateOverlay = function(d) {
     paper_frame
     .style("display","block")
 
-    loadAndAppendImage("images/" + d.id + "/page_1.png", 1);
+    loadAndAppendImage(headstart.images_path + d.id + "/page_1.png", 1);
 
     var images_finished = false;
     var counter = 2;
 
     while(!images_finished) {
-        var image_src = "images/" + d.id + "/page_" + counter + ".png";
+        var image_src = headstart.images_path + d.id + "/page_" + counter + ".png";
 
         if (!loadAndAppendImage(image_src, counter)) {
             images_finished = true;
