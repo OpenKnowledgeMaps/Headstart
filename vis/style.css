@@ -115,6 +115,8 @@ div#area_title h2 {
   font-family: 'Helvetica', sans-serif;
   text-align: center;
   padding: 0px;
+  margin-top: 11px;
+  margin-bottom: 11px;
   /*background-color: rgb(210, 228, 240);*/
 }
 
@@ -161,16 +163,38 @@ div#intro {
 }
 
 div#intro h2 {
-  font-size: 18px;
+  font-size: 16px;
   font-family: Helvetica;
+  padding: 0px;
+  margin-bottom: 0px;
+}
+
+div#intro h3 {
   padding: 0px;
 }
 
 div#intro p {
-  font: 16px 'Helvetica', sans-serif;
+  font: 14px 'Helvetica', sans-serif;
   color: black;
   margin-bottom: 10px;
   padding: 0px;
+}
+
+div#intro ul {
+  font-size: 14px;
+  font-family: 'Helvetica', sans-serif;
+  padding-left: 11px;
+  margin-left: 11px;
+  margin-bottom: 11px;
+}
+
+div#intro li {
+  font-size: 14px;
+  font-family: 'Helvetica', sans-serif;
+  padding-left: 11px;
+  margin-left: 11px;
+  margin-left: 11px;
+  margin-bottom: 0px;
 }
 
 div#article_metadata p,
@@ -216,7 +240,7 @@ p#details {
   /*margin-top: 3px;*/
   padding-top: 3px;
   color: rgb(33, 101, 0);
-  padding: 0px;
+  padding-left: 5px;
 }
 
 
@@ -448,7 +472,7 @@ img#preview_page {
   margin-right: auto;
 }
 
-/* ########### Paper Frame ########### */
+/* ########### Paper Frame/Popup ########### */
 
 div#paper_frame {
   background-color: rgba(0,0,0,0.8);

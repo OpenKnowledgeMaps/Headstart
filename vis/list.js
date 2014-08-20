@@ -100,7 +100,7 @@ list.drawList = function() {
         .attr("class", function() { return selected?("selected"):("")})
         .attr("id", "sort_" + sort_option)
         .on("click", function() {
-          headstart.recordAction("none", "sortBy", "herecomestheuser", "listsort", null, "sort_option=" + sort_option);
+          headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
           sortBy(sort_option);
         }).text(sort_option);
     }
@@ -277,7 +277,7 @@ filterList = function(event) {
   var searchtext_processed = searchtext.trim().toLowerCase();
   var search_words = searchtext_processed.split(" ");
   
-  headstart.recordAction("none", "filter", "herecomestheuser", "filter_list", null, "search_words=" + search_words);
+  headstart.recordAction("none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
 
   filtered_data
     .filter(function (d) {
@@ -415,7 +415,7 @@ list.makeTitleClickable = function(d) {
     this.enlargeListItem(d);
     headstart.current_enlarged_paper = d;
 
-    headstart.recordAction(d.id, "click_paper_list", "herecomestheuser", "herecomesthestatusoftheitem", null);
+    headstart.recordAction(d.id, "click_paper_list", headstart.user_id, "herecomesthestatusoftheitem", null);
     
     d3.event.stopPropagation();
 }
@@ -553,7 +553,7 @@ list.setImageForListHolder = function(d) {
         
       var url = (d.url.startsWith("http://") || d.url.startsWith("https://"))?(d.url):("http://www.mendeley.com/research/" + d.url);
       
-      headstart.recordAction(d.id, "click_on_title", "herecomestheuser", "herecomesthestatusoftheitem", null, "uri=" + d.uri);
+      headstart.recordAction(d.id, "click_on_title", headstart.user_id, "herecomesthestatusoftheitem", null, "uri=" + d.uri);
       
       window.open(url, "_blank");
       d3.event.stopPropagation();

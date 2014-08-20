@@ -491,7 +491,7 @@ papers.enlargePaper = function(d,i) {
         return;
     }
     
-    headstart.recordAction(d.id, "enlarge_paper", "herecomestheuser", "herecomesthestatusoftheitem", null);
+    headstart.recordAction(d.id, "enlarge_paper", headstart.user_id, "herecomesthestatusoftheitem", null);
  
    var resize_factor = 1.2;
 
@@ -556,7 +556,7 @@ papers.enlargePaper = function(d,i) {
 
             headstart.current_enlarged_paper = null;
 
-            headstart.recordAction(d.id, "click_paper_list_enlarge", "herecomestheuser", "herecomesthestatusoftheitem", null);
+            headstart.recordAction(d.id, "click_paper_list_enlarge", headstart.user_id, "herecomesthestatusoftheitem", null);
 
             d3.event.stopPropagation();
         });

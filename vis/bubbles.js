@@ -563,7 +563,7 @@ BubblesFSM.prototype = {
 
     headstart.bubbles[headstart.current_file_number].createTransition(t, d.title);
 
-    headstart.recordAction(d.id, "zoom_in", "herecomestheuser", "herecomesthestatusoftheitem", null);
+    headstart.recordAction(d.id, "zoom_in", headstart.user_id, "herecomesthestatusoftheitem", null);
 
     d3.event.stopPropagation();
   },
@@ -586,9 +586,9 @@ BubblesFSM.prototype = {
       toFront(headstart.current_zoom_node.parentNode);
       
       var circle_data = d3.select(headstart.current_zoom_node).data();
-      headstart.recordAction(circle_data.id, "zoom_out", "herecomestheuser", "herecomesthestatusoftheitem", null);
+      headstart.recordAction(circle_data.id, "zoom_out", headstart.user_id, "herecomesthestatusoftheitem", null);
     } else {
-      headstart.recordAction("none", "zoom_out", "herecomestheuser", "herecomesthestatusoftheitem", null);
+      headstart.recordAction("none", "zoom_out", headstart.user_id, "herecomesthestatusoftheitem", null);
     }
 
     if (headstart.current_enlarged_paper !== null) {
@@ -810,7 +810,7 @@ BubblesFSM.prototype = {
         this.initMouseListeners();
       }
       
-      headstart.recordAction("none", "start", "herecomestheuser", "start_bubble", null, null, recommendation_data);
+      headstart.recordAction("none", "start", headstart.user_id, "start_bubble", null, null, recommendation_data);
   },
 
   onbeforemouseover: function( event, from, to, circle, d ) {

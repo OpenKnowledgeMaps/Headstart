@@ -12,7 +12,7 @@ $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 
-$user_id = isset($_SESSION['userInfo']['userID'])?($_SESSION['userInfo']['userID']):(library\CommUtils::getParameter($_GET, "user"));
+$user_id = library\CommUtils::getParameter($_GET, "user");
 $conference_id = library\CommUtils::getParameter($_GET, "conference");
 
 $connection = new headstart\personalization\DBConnectionPersonalization($ini_array);

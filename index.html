@@ -10,7 +10,8 @@
         <div id="visualization" style="width:100%;"></div>
         <script>
                 
-                $("#visualization").css("height", $(document).height() + "px")
+                var height = ($(document).height() < 700)?(700):($(document).height());
+                $("#visualization").css("height", height + "px");
                 
                 var myHeadstart = new Headstart(
                         "localhost/" //host
