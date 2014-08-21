@@ -349,7 +349,7 @@ list.createAbstract = function(d, cut_off) {
 
 list.addBookmark = function(d)  {
   $.getJSON(headstart.service_path + "addBookmark.php?"
-    + "user_id=" + 16
+    + "user_id=" + headstart.user_id
     + "&content_id=" +d.id,
       function(data) {
         console.log("Successfully added bookmark");
@@ -375,8 +375,8 @@ list.addBookmark = function(d)  {
 }
 
 list.removeBookmark = function(d)  {
-  $.getJSON(headstart.services_path + "removeBookmark.php?"
-    + "user_id=" + 16
+  $.getJSON(headstart.service_path + "removeBookmark.php?"
+    + "user_id=" + headstart.user_id
     + "&content_id=" +d.id,
       function(data) {
         console.log("Successfully removed bookmark");
