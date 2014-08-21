@@ -82,9 +82,9 @@ HeadstartFSM = function(host, path, tag, files, options) {
   
   this.files = files;
   
-  this.service_path = "http://" + this.host + this.path + "server/services/";
+  this.service_path = initVar(options.service_path, "http://" + this.host + this.path + "server/services/");
   
-  this.images_path = "http://" + this.host + this.path + "vis/images/";
+  this.images_path = initVar(options.images_path, "http://" + this.host + this.path + "vis/images/");
   
   this.sort_options = initVar(options.sort_options, [
     "readers",
@@ -483,8 +483,11 @@ HeadstartFSM.prototype = {
       
       var url = this.service_path + "getBookmarks.php?user=" + this.user_id;
       
-      if($.isArray(this.conference_id)) {
-          this.conference_id.forEach(function (val) {
+      //sometimes the conference id array is not recognized
+      var conference_id = eval(this.conference_id);
+      
+      if($.isArray(conference_id)) {
+          conference_id.forEach(function (val) {
             url += "&conference[]=" + val;
           })
       } else {
