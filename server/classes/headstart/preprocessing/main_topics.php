@@ -30,30 +30,32 @@ $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]
 $dbconnect = new connection\DBConnectionTopics($ini_array);
 $dbconnect->establishConnection();
 
-$dbconnect->writeMetadataFile($ini_array["general"]["event_id"], 
-        $WORKING_DIR . $ini_array["output"]["metadata"], 
-        $ini_array["general"]["cut_off"]);
-
-$contents = $dbconnect->returnContents($ini_array["general"]["event_id"]);
-
+//$dbconnect->writeMetadataFile($ini_array["general"]["event_id"], 
+//        $WORKING_DIR . $ini_array["output"]["metadata"], 
+//        $ini_array["general"]["cut_off"]);
+//
+//$contents = $dbconnect->returnContents($ini_array["general"]["event_id"]);
+//
 $naming = new naming\ApiNaming($ini_array);
-$topics = $naming->executeCurlSensium($contents);
+//$topics = $naming->executeCurlSensium($contents);
+//
+//foreach($topics as $api => $topic) {
+//    $cluster_names = $topics[$api];
+//    $dbconnect->writeTopicsToDB($cluster_names, $api);
+//}
+//
+//$topics = $naming->executeCurl($contents);
+//
+//foreach($topics as $api => $topic) {
+//    $cluster_names = $topics[$api];
+//    $dbconnect->writeTopicsToDB($cluster_names, $api);
+//}
 
-foreach($topics as $api => $topic) {
-    $cluster_names = $topics[$api];
-    $dbconnect->writeTopicsToDB($cluster_names, $api);
-}
-
-$topics = $naming->executeCurl($contents);
-
-foreach($topics as $api => $topic) {
-    $cluster_names = $topics[$api];
-    $dbconnect->writeTopicsToDB($cluster_names, $api);
-}
-
-$dbconnect->writeCoocFile($ini_array["general"]["event_id"], $ini_array["general"]["cut_off"], $WORKING_DIR . $ini_array["output"]["cooc"]);
-
-
+$dbconnect->writeCoocFile($ini_array["general"]["event_id"], 
+        $ini_array["general"]["cut_off"], 
+        $WORKING_DIR . $ini_array["output"]["cooc"],
+        array("calais", "zemanta", "sensium"),
+        false);
 
 $calculation = new calculation\RCalculation($ini_array);
 $calculation->performCalculationAndWriteOutputToFile($WORKING_DIR);

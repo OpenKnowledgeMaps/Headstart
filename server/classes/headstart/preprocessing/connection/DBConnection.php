@@ -203,4 +203,24 @@ class DBConnection extends Connection {
         return $query;
         
     }
+    
+    protected function createApiString($api) {
+        
+        $query = " AND (";
+        
+        if(is_array($api)) {
+            foreach($api as $value) {
+                $query .= sprintf("(concepts.conceptAPI=\"%s\") OR ", mysql_real_escape_string($value));
+            }
+            
+            $query = substr($query, 0, strlen($query)-4);
+            $query .= ")";
+            
+        } else {
+            $query .= sprintf("concepts.conceptAPI=\"%s\")", mysql_real_escape_string($api));
+        }
+        
+        return $query;
+        
+    }
 }

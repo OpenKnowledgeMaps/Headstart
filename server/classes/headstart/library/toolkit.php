@@ -2,6 +2,8 @@
 
 namespace headstart\library;
 
+include "Inflector.php";
+
 class Toolkit
 {
     private static $initialized = false;
@@ -133,6 +135,19 @@ class Toolkit
         }
         
         return $ini_array;
+    }
+    
+    public static function normalizeString($old_string) {
+        self::initialize();
+
+        $new_string = preg_replace('/[^a-zA-Z0-9\s]/', '', strtolower($old_string));
+        $new_string_array = preg_split('/ /', $new_string);
+        $final_string = "";
+        foreach ($new_string_array as $string) {
+            $final_string .= \Inflector::singularize($string) . " ";
+        }
+
+        return trim($final_string);
     }
     
 }

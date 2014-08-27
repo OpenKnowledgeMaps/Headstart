@@ -74,7 +74,7 @@ labels = labels(distance_matrix)
 
 # Plot result of clustering to PDF file
 pdf("clustering.pdf", width=19, height=12)
-plot(cluster, labels=labels, cex=0.6)
+plot(cluster, labels=metadata$title, cex=0.6)
 rect.hclust(cluster, k=num_clusters, border="red")
 dev.off()
 

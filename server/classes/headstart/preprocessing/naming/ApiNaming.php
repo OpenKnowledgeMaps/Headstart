@@ -511,7 +511,7 @@ class ApiNaming extends Naming {
                 case "socialTag" : {
                         $categories["topics"][] = $attributes->name;
 
-                        $final_string = $this->getFormattedString($attributes->name);
+                        $final_string = library\Toolkit::normalizeString($attributes->name);
 
                         $categories["topics_format"][] = $final_string;
                         break;
@@ -549,7 +549,7 @@ class ApiNaming extends Naming {
                         }
                     } else {
                         $categories["topics"][] = $site->title;
-                        $categories["topics_format"][] = $this->getFormattedString($site->title);
+                        $categories["topics_format"][] = library\Toolkit::normalizeString($site->title);
                         $count++;
                     }
                 }
@@ -571,7 +571,7 @@ class ApiNaming extends Naming {
 
             $categories["topics"][] = $phrase->text;
 
-            $final_string = $this->getFormattedString($phrase->text);
+            $final_string = library\Toolkit::normalizeString($phrase->text);
 
             $categories["topics_format"][] = $final_string;
         }
@@ -598,17 +598,4 @@ class ApiNaming extends Naming {
 
         library\Toolkit::putContentsToFile($dir . $uri . ".rdf", $response);
     }
-
-    private function getFormattedString($old_string) {
-
-        $new_string = preg_replace('/[^a-zA-Z0-9\s]/', '', strtolower($old_string));
-        $new_string_array = preg_split('/ /', $new_string);
-        $final_string = "";
-        foreach ($new_string_array as $string) {
-            $final_string .= \Inflector::singularize($string) . " ";
-        }
-
-        return trim($final_string);
-    }
-
 }
