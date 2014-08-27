@@ -546,14 +546,26 @@ list.setImageForListHolder = function(d) {
       .html("Click here to open preview")
       .on("click", this.populateOverlay)
   }
-
+  
+  /*$("#list_title a").hover(function () {
+      $(this).css("text-decoration", "none");
+  });*/
+  
   // EVENTLISTENERS
   current_item.select("#paper_list_title")
     .on("click", function (d) {
         
-      var url = (d.url.startsWith("http://") || d.url.startsWith("https://"))?(d.url):("http://www.mendeley.com/research/" + d.url);
+      var url = "";
+      if (headstart.url_prefix != null) {
+          url = headstart.url_prefix + d.url;
+      } else if (typeof d.url != 'undefined') {
+          url = d.url;
+      } else {
+          d3.event.stopPropagation();
+          return
+      }
       
-      headstart.recordAction(d.id, "click_on_title", headstart.user_id, "herecomesthestatusoftheitem", null, "uri=" + d.uri);
+      headstart.recordAction(d.id, "click_on_title", headstart.user_id, "herecomesthestatusoftheitem", null, "url=" + d.url);
       
       window.open(url, "_blank");
       d3.event.stopPropagation();

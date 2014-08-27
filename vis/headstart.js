@@ -91,6 +91,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
     "title",
     "authors"
    ])
+   
+   this.url_prefix = initVar(options.url_prefix, null)
 
    if(this.content_based) {
      this.sort_options = ["title", "area"];
