@@ -454,7 +454,7 @@ HeadstartFSM.prototype = {
       .attr("x2", i)
       .attr("y1", "0")
       .attr("y2", "900")
-      .attr("style", "stroke:rgb(0,0,0);stroke-width:0.1");
+      .attr("style", "stroke:rgb(0,0,0);stroke-width:0.1px");
     }
   },
 
@@ -465,7 +465,7 @@ HeadstartFSM.prototype = {
       .attr("x2", this.bubblesSize() * this.max_chart_size)
       .attr("y1", i)
       .attr("y2", i)
-      .attr("style", "stroke:rgb(0,0,0);stroke-width:0.1");
+      .attr("style", "stroke:rgb(0,0,0);stroke-width:0.1px");
     };
   },
 
@@ -550,6 +550,7 @@ HeadstartFSM.prototype = {
    
     this.resetBubbles();
     
+    this.force_papers.alpha(0.0);
     window.clearInterval(checkPapers);
    
     // clear the canvas
