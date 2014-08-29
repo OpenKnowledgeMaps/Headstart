@@ -80,6 +80,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   
   this.user_id = initVar(options.user_id, 0);
   
+   this.max_recommendations = initVar(options.max_recommendations, 10);
+  
   this.files = files;
   
   this.service_path = initVar(options.service_path, "http://" + this.host + this.path + "server/services/");
@@ -454,7 +456,7 @@ HeadstartFSM.prototype = {
       .attr("x2", i)
       .attr("y1", "0")
       .attr("y2", "900")
-      .attr("style", "stroke:rgb(0,0,0);stroke-width:0.1px");
+      .attr("style", "stroke:rgb(0,0,0);stroke-width:0.1");
     }
   },
 
@@ -465,7 +467,7 @@ HeadstartFSM.prototype = {
       .attr("x2", this.bubblesSize() * this.max_chart_size)
       .attr("y1", i)
       .attr("y2", i)
-      .attr("style", "stroke:rgb(0,0,0);stroke-width:0.1px");
+      .attr("style", "stroke:rgb(0,0,0);stroke-width:0.1");
     };
   },
 
@@ -495,6 +497,8 @@ HeadstartFSM.prototype = {
       } else {
           url += "&conference=" + this.conference_id;
       }
+      
+      url += "&max_recommendations=" + this.max_recommendations;
       
       url += "&jsoncallback=?";
       
@@ -550,7 +554,6 @@ HeadstartFSM.prototype = {
    
     this.resetBubbles();
     
-    this.force_papers.alpha(0.0);
     window.clearInterval(checkPapers);
    
     // clear the canvas

@@ -17,12 +17,6 @@ class DBConnectionPersonalization extends connection\DBConnection {
     
     public function getPersonalBookmarks($user_id, $event_id) {
         
-        /*$query = sprintf("SELECT DISTINCT content.contentID
-            FROM bookmarking, content, userinfo, presentation, eventsession 
-            WHERE (userinfo.userID=bookmarking.userID) AND (bookmarking.contentID=content.contentID) 
-					AND (bookmarking.contentID=presentation.contentID) AND (presentation.eventSessionID=eventsession.eventSessionID)
-                AND (userinfo.userID = %d) AND (eventsession.eventID = %d)", mysql_real_escape_string($user_id), mysql_real_escape_string($event_id));*/
-
         $query = sprintf("SELECT DISTINCT content.contentID
             FROM bookmarking, content
             WHERE (bookmarking.contentID=content.contentID)
@@ -41,20 +35,17 @@ class DBConnectionPersonalization extends connection\DBConnection {
         
     }
     
-    public function getPersonalRecommendations($user_id, $event_id) {
-        
-        /*$query = sprintf("SELECT DISTINCT content.contentID
-            FROM predictedscore, content, userinfo, presentation, eventsession 
-            WHERE (userinfo.userID=predictedscore.userID) AND (predictedscore.contentID=content.contentID) 
-					AND (predictedscore.contentID=presentation.contentID) AND (presentation.eventSessionID=eventsession.eventSessionID)
-                AND (userinfo.userID = %d) AND (eventsession.eventID = %d)", mysql_real_escape_string($user_id), mysql_real_escape_string($event_id));*/
-        
+    public function getPersonalRecommendations($user_id, $event_id, $max_recommendations) {
+             
         $query = sprintf("SELECT DISTINCT content.contentID
             FROM predictedscore, content
             WHERE (predictedscore.contentID=content.contentID)
                 AND (predictedscore.userID = %d)", mysql_real_escape_string($user_id));
-
-
+        
+        $query .= $this->createConferenceIDString($event_id);
+        
+        $query .= sprintf("order by score desc limit 0, %d", mysql_real_escape_string($max_recommendations));
+        
         $result = mysql_query($query, $this->db);
 
         $data = array();
