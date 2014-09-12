@@ -80,7 +80,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   
   this.user_id = initVar(options.user_id, 0);
   
-   this.max_recommendations = initVar(options.max_recommendations, 10);
+  this.max_recommendations = initVar(options.max_recommendations, 10);
   
   this.files = files;
   
@@ -95,6 +95,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
    ])
    
    this.url_prefix = initVar(options.url_prefix, null)
+   
+   this.base_unit = initVar(options.base_unit, "readers")
 
    if(this.content_based) {
      this.sort_options = ["title", "area"];

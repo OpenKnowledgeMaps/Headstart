@@ -50,6 +50,8 @@ var popup = StateMachine.create({
                            .append( "div" )
                            .attr  ( "id", "intro" )
                            .html(intro_html);
+         
+         headstart.recordAction("none", "show_popup", headstart.user_id, "none", null);
         },
 
         onhide: function( event, from, to ) {
@@ -59,6 +61,8 @@ var popup = StateMachine.create({
           while (node.hasChildNodes()) {
               node.removeChild(node.lastChild);
           }
+          
+          headstart.recordAction("none", "hide_popup", headstart.user_id, "none", null);
         }
     }
 });

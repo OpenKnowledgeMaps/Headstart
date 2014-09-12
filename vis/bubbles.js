@@ -202,9 +202,11 @@ BubblesFSM.prototype = {
     d3.selectAll("circle").on("mouseover", function(d) {
       if (!this_bubble.is("hoverbig")){
         this_bubble.mouseover(this, d);
+        headstart.recordAction(d.id, "circle_mouseover", headstart.user_id, "none", null);
       }
     }).on("mouseout", function(d) {
       this_bubble.mouseout(this, d);
+      headstart.recordAction(d.id, "circle_mouseout", headstart.user_id, "none", null);
     });
 
     if (headstart.is("normal") || headstart.is("switchfiles"))
@@ -564,7 +566,7 @@ BubblesFSM.prototype = {
 
     headstart.bubbles[headstart.current_file_number].createTransition(t, d.title);
 
-    headstart.recordAction(d.id, "zoom_in", headstart.user_id, "herecomesthestatusoftheitem", null);
+    headstart.recordAction(d.id, "zoom_in", headstart.user_id, "none", null);
 
     d3.event.stopPropagation();
   },
@@ -587,9 +589,9 @@ BubblesFSM.prototype = {
       toFront(headstart.current_zoom_node.parentNode);
       
       var circle_data = d3.select(headstart.current_zoom_node).data();
-      headstart.recordAction(circle_data.id, "zoom_out", headstart.user_id, "herecomesthestatusoftheitem", null);
+      headstart.recordAction(circle_data.id, "zoom_out", headstart.user_id, "none", null);
     } else {
-      headstart.recordAction("none", "zoom_out", headstart.user_id, "herecomesthestatusoftheitem", null);
+      headstart.recordAction("none", "zoom_out", headstart.user_id, "none", null);
     }
 
     if (headstart.current_enlarged_paper !== null) {

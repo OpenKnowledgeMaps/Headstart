@@ -188,6 +188,7 @@ papers.prepareForeignObject = function( nodes ){
             //Webkit seems to ignore body styles on foreignObjects in the css
             .style("margin", "0px")
             .style("padding", "0px")
+            .style("background-color", "transparent")
            .append("div")
             .attr("class", "paper_holder")
             .style("cursor", "default");
@@ -245,7 +246,7 @@ papers.appendMetaDataReaders = function(xhtml) {
     .html(function (d) { return d.readers })
     .append("span")
     .attr("class", "readers_entity")
-    .html(" readers");
+    .html(" " + headstart.base_unit);
 }
 
 // create the path or "border" for papers
@@ -491,7 +492,7 @@ papers.enlargePaper = function(d,i) {
         return;
     }
     
-    headstart.recordAction(d.id, "enlarge_paper", headstart.user_id, "herecomesthestatusoftheitem", null);
+    headstart.recordAction(d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
  
    var resize_factor = 1.2;
 
@@ -528,6 +529,7 @@ papers.enlargePaper = function(d,i) {
 
                 d.paper_selected = true;
                 headstart.current_enlarged_paper = d;
+                headstart.recordAction(d.id, "click_on_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
                 d3.event.stopPropagation();
             }
         })
@@ -556,7 +558,7 @@ papers.enlargePaper = function(d,i) {
 
             headstart.current_enlarged_paper = null;
 
-            headstart.recordAction(d.id, "click_paper_list_enlarge", headstart.user_id, "herecomesthestatusoftheitem", null);
+            headstart.recordAction(d.id, "click_paper_list_enlarge", headstart.user_id, d.bookmarked + " " + d.recommended , null);
 
             d3.event.stopPropagation();
         });

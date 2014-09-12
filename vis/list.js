@@ -43,8 +43,10 @@ var list = StateMachine.create({
         onbeforetoggle: function( event, from, to ) {
             if(this.current == "visible") {
                this.hide();
+               headstart.recordAction("none", "hide_list", headstart.user_id, "none", null);
             } else  {
                 this.show();
+                headstart.recordAction("none", "show_list", headstart.user_id, "none", null);
             }
         }
     }
@@ -77,7 +79,8 @@ list.drawList = function() {
       .append("input")
       .attr("type", "text")
       .attr("value", "Search...")
-      .attr("oninput", "filterList(event)");
+      .attr("oninput", "filterList(event)")
+      .attr("size", 15)
     list_show_hide_container.append("div")
       .attr("id", "sort_container")
       .style("display", "none");
@@ -329,7 +332,7 @@ list.populateReaders = function(nodes) {
     })
   .append("span")
     .attr("class", "list_readers_entity")
-    .html(" readers&nbsp;");
+    .html(" " + headstart.base_unit + "&nbsp;");
     
   } else {
     d3.selectAll("#list_area").style("margin-bottom", "7px")
@@ -353,6 +356,8 @@ list.addBookmark = function(d)  {
     + "&content_id=" +d.id,
       function(data) {
         console.log("Successfully added bookmark");
+        
+        headstart.recordAction(d.id, "add_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
 
         d.bookmarked = true;
 
@@ -380,6 +385,8 @@ list.removeBookmark = function(d)  {
     + "&content_id=" +d.id,
       function(data) {
         console.log("Successfully removed bookmark");
+        
+        headstart.recordAction(d.id, "remove_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
         
         d.bookmarked = false;
         
@@ -415,7 +422,7 @@ list.makeTitleClickable = function(d) {
     this.enlargeListItem(d);
     headstart.current_enlarged_paper = d;
 
-    headstart.recordAction(d.id, "click_paper_list", headstart.user_id, "herecomesthestatusoftheitem", null);
+    headstart.recordAction(d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
     
     d3.event.stopPropagation();
 }
@@ -565,7 +572,7 @@ list.setImageForListHolder = function(d) {
           return
       }
       
-      headstart.recordAction(d.id, "click_on_title", headstart.user_id, "herecomesthestatusoftheitem", null, "url=" + d.url);
+      headstart.recordAction(d.id, "click_on_title", headstart.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
       
       window.open(url, "_blank");
       d3.event.stopPropagation();
