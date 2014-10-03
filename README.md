@@ -28,16 +28,22 @@ Features
 
 The visualization was created with D3.js. It has been successfully tested with Chrome 22, Firefox 15, and Safari 5.1. Unfortunately, Internet Explorer is not supported at this point due to the fact that it is not possible to insert HTML into a foreignObject.
 
+Showcases
+---------
+
+* [Mendeley Labs](http://labs.mendeley.com/headstart). A working prototype for the field of educational technology that includes paper previews. 
+* [Conference Navigator 3](http://halley.exp.sis.pitt.edu/cn3/visualization.php?conferenceID=131) [registration required]. An adaptation of Head Start for the conference scheduling system CN3. This version enables users to schedule papers directly from the visualization. Scheduled papers and recommended papers are highlighted.
+* [Organic Edunet portal](http://organic-edunet.eu/en/#/recommended). Overview of recommended resources in the Organic Eudnet portal.
+
+
 Background
 -----------
 
 The visualization is based on readership co-occurrence in Mendeley. More information can be found in the following papers:
 
-Kraker, P., Jack, K., Schlögl, C., Trattner, C., & Lindstaedt, S. (2013). [Head Start: Improving Academic Literature Search with Overview Visualizations based on Readership Statistics] (http://know-center.tugraz.at/download_extern/papers/websci-cam_ready.pdf). Web Science 2013.
+Kraker, P., Schlögl, C. , Jack, K. & Lindstaedt, S. (2014). [Visualization of Co-Readership Patterns from an Online Reference Management System](http://arxiv.org/abs/1409.0348). Preprint submitted to arXiv.
 
 Kraker, P., Körner, C., Jack, K., & Granitzer, M. (2012). [Harnessing User Library Statistics for Research Evaluation and Knowledge Domain Visualization](http://know-center.tugraz.at/download_extern/papers/user_library_statistics.pdf). Proceedings of the 21st International Conference Companion on World Wide Web (pp. 1017–1024). Lyon: ACM.
-
-A working prototype that includes paper previews can be found on [Mendeley Labs](http://labs.mendeley.com/headstart).
 
 An earlier version of the code can be found on [knwominer.at](https://knowminer.at/svn/opensource/other-licenses/lgpl_v3/headstart/)
 
