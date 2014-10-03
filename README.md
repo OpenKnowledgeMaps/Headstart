@@ -15,12 +15,6 @@ Peter Kraker (peter.kraker@tugraz.at)
 
 Philipp Weißensteiner (philipp.weissensteiner@student.tugraz.at)
 
-Citation
---------
-If you use Head Start in your research, please cite it as follows:
-
-Kraker, Peter; Weißensteiner, Philipp (2014): Head Start. figshare. http://dx.doi.org/10.6084/m9.figshare.1091372
-
 
 Features
 --------
@@ -60,3 +54,10 @@ should start a server at http://localhost:8000/.
 License
 -------
 Head Start is licensed under [LGPL v3](http://www.gnu.org/copyleft/lesser.html).
+
+
+Citation
+--------
+If you use Head Start in your research, please cite it as follows:
+
+Kraker, Peter; Weißensteiner, Philipp (2014): Head Start. figshare. http://dx.doi.org/10.6084/m9.figshare.1091372
