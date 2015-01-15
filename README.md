@@ -41,11 +41,11 @@ Background
 
 The visualization is based on readership co-occurrence in Mendeley. More information can be found in the following papers:
 
-Kraker, P., Schlögl, C. , Jack, K. & Lindstaedt, S. (2014). [Visualization of Co-Readership Patterns from an Online Reference Management System](http://arxiv.org/abs/1409.0348). Preprint submitted to arXiv.
+Kraker, P., Schlögl, C. , Jack, K. & Lindstaedt, S. (2015). [Visualization of Co-Readership Patterns from an Online Reference Management System](http://arxiv.org/abs/1409.0348). Journal of Informetrics, 9(1), 169–182. doi:10.1016/j.joi.2014.12.003
 
-Kraker, P., Körner, C., Jack, K., & Granitzer, M. (2012). [Harnessing User Library Statistics for Research Evaluation and Knowledge Domain Visualization](http://know-center.tugraz.at/download_extern/papers/user_library_statistics.pdf). Proceedings of the 21st International Conference Companion on World Wide Web (pp. 1017–1024). Lyon: ACM.
+Kraker, P., Körner, C., Jack, K., & Granitzer, M. (2012). [Harnessing User Library Statistics for Research Evaluation and Knowledge Domain Visualization](http://know-center.tugraz.at/download_extern/papers/user_library_statistics.pdf). Proceedings of the 21st International Conference Companion on World Wide Web (pp. 1017–1024). Lyon: ACM. doi:10.1145/2187980.2188236
 
-An earlier version of the code can be found on [knwominer.at](https://knowminer.at/svn/opensource/other-licenses/lgpl_v3/headstart/)
+An earlier version of the code can be found on [knowminer.at](https://knowminer.at/svn/opensource/other-licenses/lgpl_v3/headstart/)
 
 
 Installation
