@@ -102,6 +102,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
      this.sort_options = ["title", "area"];
    }
    
+   this.use_area_uri = initVar(options.use_area_uri, false);
+   
   
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()

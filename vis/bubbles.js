@@ -130,12 +130,14 @@ BubblesFSM.prototype = {
         d.x = headstart.chart_x(d.x);
         d.y = headstart.chart_y(d.y*-1);
 
-
-        if(d.area in areas) {
-          areas[d.area].papers.push(d);
+        var area = (headstart.use_area_uri)?(d.area_uri):(d.area);
+        
+        if(area in areas) {
+          areas[area].papers.push(d);
         } else {
-          areas[d.area] = {};
-          areas[d.area].papers = [d];
+          areas[area] = {};
+          areas[area].title = d.area;
+          areas[area].papers = [d];
         }
 
         d.resized = false;
@@ -186,10 +188,14 @@ BubblesFSM.prototype = {
   makePaperClickable: function(d) {
       headstart.current_circle =  headstart.chart.selectAll("circle")
       .filter(function (x) {
-          if (d != null)
-              return x.title == d.area
-          else
+          if (d != null) {
+              if (headstart.use_area_uri)
+                return x.area_uri == d.area_uri;
+              else
+                return x.title == d.area;
+          } else {
               return null
+          }
       })
 
       zoom(headstart.current_circle.data()[0]);
@@ -341,7 +347,7 @@ BubblesFSM.prototype = {
 
   bringPapersToFront:  function( d ) {
     var papers = d3.selectAll(".paper").filter(function (x, i) {
-      return (x.area === d.title)
+      return (headstart.use_area_uri)?(x.area_uri == d.area_uri):(x.area == d.title);
     });
 
     for (var i = 0; i < papers[0].length; i++) {
@@ -442,7 +448,7 @@ BubblesFSM.prototype = {
 
     for (area in areas) {
       var new_area = [];
-      new_area["title"] = area;
+      new_area["title"] = areas[area].title;
       new_area["x"] = headstart.chart_x_circle(areas[area].x);
       new_area["y"] = headstart.chart_y_circle(areas[area].y);
       new_area["r"] = areas[area].r;
@@ -450,6 +456,7 @@ BubblesFSM.prototype = {
       new_area["width_html"] = Math.sqrt(Math.pow(areas[area].r,2)*2);
       new_area["x_html"] = 0 - new_area["width_html"]/2;
       new_area["y_html"] = 0 - new_area["height_html"]/2;
+      new_area["area_uri"] = area;
       new_area["papers"] = areas[area].papers;
       areas_array.push(new_area);
     }
@@ -469,7 +476,7 @@ BubblesFSM.prototype = {
 
       list.papers_list.selectAll("#list_holder")
         .filter(function (x, i) {
-          return (x.area != d.title)
+          return (headstart.use_area_uri)?(x.area_uri != d.area_uri):(x.area != d.title);
         })
       .style("display", "none");
     }
@@ -550,7 +557,7 @@ BubblesFSM.prototype = {
 
       d3.selectAll(".paper")
       .filter(function (x, i) {
-        return (x.area != d.title)
+        return (headstart.use_area_uri)?(x.area_uri != d.area_uri):(x.area != d.title);
       })
     .style("display", "none");
 
@@ -702,8 +709,8 @@ BubblesFSM.prototype = {
       var papers = d3.selectAll(".paper")
         .filter(function (x) {
           if (headstart.current_circle.data()[0] != null) {
-            var area = headstart.current_circle.data()[0].title;
-            return x.area == area;
+            var area = headstart.current_circle.data()[0];
+            return (headstart.use_area_uri)?(x.area_uri == area.area_uri):(x.area == area.title);
           }
           else {
             return null

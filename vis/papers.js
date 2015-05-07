@@ -158,10 +158,14 @@ papers.initPaperClickHandler = function() {
         if(!headstart.is_zoomed) {
             var current_node = headstart.chart.selectAll("circle")
             .filter(function (x) {
-                if (d != null)
-                    return x.title == d.area
-                else
+                if (d != null) {
+                    if (headstart.use_area_uri)
+                        return (x.area_uri == d.area_uri);
+                      else
+                        return (x.title == d.area);
+                } else {
                     return null
+                }
             })
             
             d3.event.stopPropagation();
@@ -539,7 +543,10 @@ papers.enlargePaper = function(d,i) {
 
     headstart.current_circle = headstart.chart.selectAll("circle")
         .filter(function (x, i) {
-            return (x.title == d.area)
+            if (headstart.use_area_uri)
+                return (x.area_uri == d.area_uri);
+            else
+                return (x.title == d.area);
         });
 
     headstart.current_circle
@@ -549,7 +556,7 @@ papers.enlargePaper = function(d,i) {
 
             d3.selectAll("#list_holder")
             .filter(function (x, i) {
-                return (x.area == d.title)
+                return (headstart.use_area_uri)?(x.area_uri == d.area_uri):(x.area == d.title);
             })
             .style("display", function (d) { return d.filtered_out?"none":"inline"});
 

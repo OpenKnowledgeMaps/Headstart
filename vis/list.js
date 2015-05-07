@@ -258,10 +258,14 @@ filterList = function(event) {
   
     var data_circle = filtered_data
     .filter(function (d) {
-      if (headstart.is_zoomed === true)
-        return current_circle.data()[0].title == d.area;
-      else
+      if (headstart.is_zoomed === true) {
+        if (headstart.use_area_uri)
+          return current_circle.data()[0].area_uri == d.area_uri;
+        else
+          return current_circle.data()[0].title == d.area;
+      } else {
         return true;
+      }
     })
 
   if (event.target.value === "") {
@@ -413,7 +417,10 @@ list.removeBookmark = function(d)  {
 list.makeTitleClickable = function(d) {
     headstart.current_circle =  headstart.chart.selectAll("circle").
                                 filter(function (x) {
-                                  return x.title == d.area
+                                  if (headstart.use_area_uri)
+                                    return x.area_uri == d.area_uri;
+                                  else
+                                    return x.title == d.area;
                                 });
 
     headstart.bubbles[headstart.current_file_number].zoomin(headstart.current_circle.data()[0]);
@@ -448,7 +455,10 @@ list.enlargeListItem = function(d) {
 list.setListHolderDisplay = function(d) {
   this.papers_list.selectAll("#list_holder")
     .filter(function (x, i) {
-      return (x.area == d.area)
+        if (headstart.use_area_uri)
+          return (x.area_uri == d.area_uri);
+        else
+          return (x.area == d.area);
     })
   .style("display", function (d) { return d.filtered_out?"none":"inline"});
 
