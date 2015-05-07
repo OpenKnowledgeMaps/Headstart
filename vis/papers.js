@@ -318,7 +318,7 @@ papers.applyForce = function( bubbles ) {
 
     headstart.force_papers.start();
     var papers_count = 0;
-
+      
     headstart.force_papers.on("tick", function(e) {
         var alpha = e.alpha;
         
@@ -332,9 +332,16 @@ papers.applyForce = function( bubbles ) {
             var current_area = "";
 
             for (area in bubbles.areas_array) {
-                if (current_bubbles.areas_array[area].title == a.area) {
-                    current_area = current_bubbles.areas_array[area];
-                    break;
+                if(headstart.use_area_uri) {
+                    if (current_bubbles.areas_array[area].area_uri == a.area_uri) {
+                        current_area = current_bubbles.areas_array[area];
+                        break;
+                    }
+                } else {
+                    if (current_bubbles.areas_array[area].title == a.area) {
+                        current_area = current_bubbles.areas_array[area];
+                        break;
+                    }
                 }
             }
 
