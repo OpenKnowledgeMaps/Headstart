@@ -12,13 +12,13 @@ $ini_array = library\Toolkit::loadIni($INI_DIR);
 
 $persistence = new persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
-$persistence->createTables();
+//$persistence->createTables();
  
-$persistence->createVisualization("test_id", "My Test Vis", "{[some json string;]}");
+//$persistence->createVisualization("test_id", "My Test Vis", "{[some json string;]}");
 
-echo $persistence->getLastVersion("test_id");
+echo $persistence->getLastVersion("vis_id2");
 
-$persistence->writeRevision("test_id", "{[some other json string;]}");
+//$persistence->writeRevision("test_id", "{[some other json string;]}");
         
-echo $persistence->getLastVersion("test_id");
+//echo $persistence->getLastVersion("test_id");
 

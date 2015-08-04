@@ -9,6 +9,7 @@ namespace headstart\preprocessing\naming;
  */
 
 use headstart\library;
+use headstart\persistence;
 
 require_once 'Naming.php';
 require_once '/../../library/inflector.php';
@@ -22,6 +23,7 @@ class ApiNaming extends Naming {
         $ini = $this->ini_array["naming"];
         $ini_general = $this->ini_array["general"];
         $ini_output = $this->ini_array["output"];
+        $ini_connection = $this->ini_array["connection"];
         
         $WORKING_DIR = $working_dir;
         
@@ -30,7 +32,7 @@ class ApiNaming extends Naming {
         
         //Output file
         $OUTPUT_FILE = $WORKING_DIR . $ini_output["output_naming"];
-        
+                
         //Output file for the full API responses
         $FULL_ZEMANTA = $WORKING_DIR . "full_responses/zemanta/";
         $FULL_CALAIS = $WORKING_DIR . "full_responses/calais/";
@@ -210,6 +212,19 @@ class ApiNaming extends Naming {
 
         fclose($output_handle);
         
+        $UNIQUE_ID = $ini_output["unique_id"];
+        $TITLE = $ini_output["title"];
+        $persistence = new persistence\SQLitePersistence($ini_connection["sqlite_db"]);
+        
+        $header = array_shift($output);
+        $json_array = array();
+        foreach ($output as $row) {
+            $json_array[] = array_combine($header, $row);
+        }
+        
+        $json = json_encode($json_array);
+        
+        $persistence->createVisualization($UNIQUE_ID, $TITLE, $json);
     }
     
     public function executeCurl($clusters) {

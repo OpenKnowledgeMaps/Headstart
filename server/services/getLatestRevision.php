@@ -16,6 +16,6 @@ $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
-$jsonData = $persistence->getLastVersion("test_id");
+$jsonData = $persistence->getLastVersion($vis_id);
 
 library\CommUtils::echoOrCallback($jsonData, $_GET);

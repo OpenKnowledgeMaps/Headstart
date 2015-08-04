@@ -104,6 +104,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
    
    this.use_area_uri = initVar(options.use_area_uri, false);
    
+   this.input_format = initVar(options.input_format, "csv");
   
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
@@ -529,7 +530,8 @@ HeadstartFSM.prototype = {
     // therefore we need to call the methods which depend on bubbles.data
     // after the csv has been received.
     var hs = this;
-    d3.csv(bubbles.file, function( csv ) {
+    
+    var setupVisualization = function( csv ) {
       hs.drawSvg();
       hs.drawChartCanvas();
       hs.drawTitle();
@@ -543,7 +545,18 @@ HeadstartFSM.prototype = {
       } else {
         headstart.startVisualization(hs, bubbles, csv, null, true);
       }
-    });
+    }
+    switch(this.input_format) {
+        case "csv":
+            d3.csv(bubbles.file, setupVisualization);
+            break;
+            
+        case "json":
+            d3.json(this.service_path + "getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
+            
+        default:
+                break;
+    }
 
   },
 
@@ -587,9 +600,24 @@ HeadstartFSM.prototype = {
     // load bubbles in sync
     
     $.each(this.bubbles, function (index, elem) {
-      d3.csv(elem.file, function (csv) {
+   
+        
+      var setupVisualization = function (csv) {
         elem.start( csv )
-      })
+      }
+      
+      switch(this.input_format) {
+            case "csv":
+                d3.csv(elem.file, setupVisualization);
+                break;
+
+            case "json":
+                d3.json(this.service_path + "getLatestRevision.php?vis_id=" + elem.file, setupVisualization);
+
+            default:
+                    break;
+        }
+      
     })
 
     this.drawGrid();
@@ -623,7 +651,7 @@ HeadstartFSM.prototype = {
     var bubbles = this.bubbles[this.current_file_number];
 
     var hs = this;
-    d3.csv(bubbles.file, function( csv ) {
+    var setupVisualization = function( csv ) {
       hs.drawChartCanvas();
       
       if(headstart.is_adaptive) {
@@ -636,7 +664,19 @@ HeadstartFSM.prototype = {
       } else {
         headstart.startVisualization(hs, bubbles, csv, null, false);
       }
-    });
+    }
+    
+    switch(this.input_format) {
+        case "csv":
+            d3.csv(bubbles.file, setupVisualization);
+            break;
+            
+        case "json":
+            d3.json(this.service_path + "getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
+            
+        default:
+                break;
+    }
   },
   
   startVisualization: function(hs, bubbles, csv, adaptive_data, popup_start) {
