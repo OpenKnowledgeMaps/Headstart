@@ -30,7 +30,7 @@ class SQLitePersistence extends Persistence {
             'rev_user'	TEXT,
             'rev_timestamp'	NUMERIC,
             'rev_comment'	TEXT,
-            'rev_data'  BLOB,
+            'rev_data'  TEXT,
             PRIMARY KEY(rev_id, rev_vis)
         )");
         
