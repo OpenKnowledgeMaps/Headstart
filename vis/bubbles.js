@@ -662,8 +662,12 @@ BubblesFSM.prototype = {
       .style("font-size", "8px");
 
     popup.drawInfoLinkWithTitle( "What's this?" );
-    popup.drawTimeLineLink();
-    popup.drawDropdown();
+    
+    if (headstart.show_timeline)
+      popup.drawTimeLineLink();
+    
+    if (headstart.show_dropdown)  
+        popup.drawDropdown();
 
 
     d3.selectAll(".paper")
