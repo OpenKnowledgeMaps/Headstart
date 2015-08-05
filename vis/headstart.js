@@ -553,6 +553,7 @@ HeadstartFSM.prototype = {
             
         case "json":
             d3.json(this.service_path + "getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
+            break;
             
         default:
                 break;
@@ -602,17 +603,18 @@ HeadstartFSM.prototype = {
     $.each(this.bubbles, function (index, elem) {
    
         
-      var setupVisualization = function (csv) {
+      var setupTimelineVisualization = function (csv) {
         elem.start( csv )
       }
       
-      switch(this.input_format) {
+      switch(headstart.input_format) {
             case "csv":
-                d3.csv(elem.file, setupVisualization);
+                d3.csv(elem.file, setupTimelineVisualization);
                 break;
 
             case "json":
-                d3.json(this.service_path + "getLatestRevision.php?vis_id=" + elem.file, setupVisualization);
+                d3.json(headstart.service_path + "getLatestRevision.php?vis_id=" + elem.file, setupTimelineVisualization);
+                break;
 
             default:
                     break;
@@ -673,6 +675,7 @@ HeadstartFSM.prototype = {
             
         case "json":
             d3.json(this.service_path + "getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
+            break;
             
         default:
                 break;
