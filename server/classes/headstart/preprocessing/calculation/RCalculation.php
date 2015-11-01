@@ -28,4 +28,21 @@ class RCalculation extends Calculation {
         library\Toolkit::info($path);
         exec($path); 
     }
+    
+    public function performCalculationAndReturnOutputAsJSON($working_dir, $query) {
+        $ini = $this->ini_array["calculation"];
+        $output = $this->ini_array["output"];
+        
+        $base_dir = $this->ini_array["general"]["preprocessing_dir"];
+        $binary = $ini["binary"];
+        $script = $base_dir . $ini["script"];
+        
+        $path = '"' . $binary . '" ' .$script. ' "' . $working_dir . '" "'
+                . $query . '"';
+        
+        library\Toolkit::info($path);
+        exec($path, $output);
+        
+        return $output;
+    }
 }
