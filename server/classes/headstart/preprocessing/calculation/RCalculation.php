@@ -40,9 +40,9 @@ class RCalculation extends Calculation {
         $path = '"' . $binary . '" ' .$script. ' "' . $working_dir . '" "'
                 . $query . '"';
         
-        library\Toolkit::info($path);
-        exec($path, $output);
+        //library\Toolkit::info($path);
+        exec($path, $output_r);
         
-        return $output;
+        return $output_r;
     }
 }
