@@ -19,11 +19,15 @@
         $dirty_query = library\CommUtils::getParameter($_GET, "q");
 
         $query = strip_tags($dirty_query);
+        
+        $unique_id = $query;
 
         $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
-
-        if ($persistence->getLastVersion($query) != null) {
-            echo "Here is the link to your <a href=\"http://localhost/headstart2/index.php?id=" . $query . "\" target=\"_blank\">visualization</a>";
+        
+        $settings = $ini_array["general"];
+        
+        if ($persistence->getLastVersion($unique_id) != null) {
+            header("Location: http://" . $settings["host"] . $settings["vis_path"] . "index.php?id=" . $unique_id); 
             return;
         }
 
@@ -31,20 +35,25 @@
 
         $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
         $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query);
+		
+		//print_r($output);
 
         $output_json = end($output);
         
+        $output_json = mb_convert_encoding($output_json, "UTF-8");
+        
         if(!library\Toolkit::isJSON($output_json)) {
-            echo "Sorry! Something went wrong - most likely we haven't found any documents matching your search term. Please <a href=\"http://localhost/headstart2/search_plos.html\">go back and try again.</a>";
+            echo "Sorry! Something went wrong - most likely we haven't found any documents matching your search term. Please <a href=\"http://" . $settings["host"] . $settings["vis_path"] ."\">go back and try again.</a>";
+        //    echo $output_json;
             return;
         }
 
-        if ($persistence->getLastVersion($query) == null) {
-            $persistence->createVisualization($query, "My Test RPLOS", $output_json);
+        if ($persistence->getLastVersion($unique_id) == null) {
+            $persistence->createVisualization($unique_id, "PLOS Search: " .$query, $output_json);
         } else {
-            $persistence->writeRevision($query, $output_json);
+            $persistence->writeRevision($unique_id, $output_json);
         }
         ?>
-        Here is the link to your <a href="http://localhost/headstart2/index.php?id=<?php echo $query ?>" target="_blank">visualization</a>
+        <?php header("Location: http://" . $settings["host"] . $settings["vis_path"] . "index.php?id=" . $unique_id); ?>
     </body>
 </html>

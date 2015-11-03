@@ -154,7 +154,8 @@ class Toolkit {
         self::initialize();
         
         json_decode($string);
-        return (json_last_error() == JSON_ERROR_NONE);
+        $error = json_last_error();
+        return ($error == JSON_ERROR_NONE);
     }
 
 }

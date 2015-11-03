@@ -12,7 +12,7 @@ use headstart\library;
 use headstart\persistence;
 
 require_once 'Naming.php';
-require_once '/../../library/inflector.php';
+require_once '/../../library/Inflector.php';
 
 class ApiNaming extends Naming {
     

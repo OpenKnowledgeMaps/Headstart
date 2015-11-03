@@ -14,14 +14,15 @@ library(proxy)
 library(SnowballC)
 library(rplos)
 library(jsonlite)
-library(data.table)
+#library(lsa)
+#library(stylo)
 
 # Read input files
 
 start.time <- Sys.time()
 
 search_data <- searchplos(q=query, fl='title,id,counter_total_month,abstract,journal,publication_date,author,everything', 
-                       fq='doc_type:full', limit=100, sort='counter_total_month desc')
+                       fq='doc_type:full', limit=100)
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time
@@ -59,16 +60,30 @@ corpus <- tm_map(corpus, content_transformer(tolower))
 
 corpus <- tm_map(corpus, removeWords, stopwords("english"))
 
+corpus_unstemmed = corpus
+
 corpus <- tm_map(corpus, stemDocument)
 
 tdm <- TermDocumentMatrix(corpus)
 
-#remove sparse terms?
+#tdm <- weightTfIdf(tdm, normalize = TRUE)
 
-distance_matrix_2 <- as.matrix(proxy::dist(t(as.matrix(tdm)), method = "cosine"))
+tdm <- removeSparseTerms(tdm, 0.3)
+
+tdm_matrix = t(as.matrix(tdm))
+#diag(tdm_matrix) <- NA
+distance_matrix_2 <- as.matrix(proxy::dist(tdm_matrix, method = "cosine"))
 distance_matrix = as.dist(distance_matrix_2)
-#diag(distance_matrix) <- NA
-write.csv(as.matrix(distance_matrix), "matrix.csv")
+
+#td.mat <- as.matrix(TermDocumentMatrix(corpus))
+#td.mat.lsa <- lw_bintf(td.mat) * gw_idf(td.mat)
+#lsaSpace <- lsa(td.mat.lsa)
+#tdm_matrix = t(as.textmatrix(lsaSpace))
+#distance_matrix_2 <- as.matrix(proxy::dist(tdm_matrix, method = "cosine"))
+#distance_matrix = as.dist(distance_matrix_2)
+
+#distance_matrix <- apply(distance_matrix, 2, mean, na.rm=TRUE)
+#write.csv(as.matrix(distance_matrix), "matrix.csv")
 
 
 # Perform clustering, use elbow to determine a good number of clusters
@@ -87,7 +102,7 @@ labels = labels(distance_matrix)
 # rect.hclust(cluster, k=num_clusters, border="red")
 # dev.off()
 
-cat(num_clusters)
+num_clusters
 
 # Perform non-metric multidimensional scaling
 nm = nmds(distance_matrix, mindim=2, maxdim=2)
@@ -98,7 +113,7 @@ y = nm.nmin$X2
 # Plot results from multidimensional scaling, highlight clusters with symbols
 # pdf("mds.pdf")
 groups <- cutree(cluster, k=num_clusters)
-# plot(nm.nmin, pch=groups)
+#plot(nm.nmin, pch=groups)
 # dev.off()
 
 # Prepare the output
@@ -107,14 +122,17 @@ output = merge(metadata, result, by.x="id", by.y="labels", all=TRUE)
 names(output)[names(output)=="groups"] <- "area_uri"
 output["area"] = paste("Cluster ", output$area_uri, sep="")
 
-dtm = DocumentTermMatrix(corpus)
+dtm = DocumentTermMatrix(corpus_unstemmed)
+#dtm.idf = weightTfIdf(dtm)
   
 for (i in 1:num_clusters) {
   inGroup <- which(output$area_uri==i)
   within <- dtm[inGroup,]
-  most_freq_term = sort(colSums(as.matrix(within)), decreasing=TRUE)[1]
-  output$area[output$area_uri==i] = names(most_freq_term)
+  most_freq_term = sort(colSums(as.matrix(within)), decreasing=TRUE)[1:3]
+  output$area[output$area_uri==i] = paste(names(most_freq_term), collapse=", ")
 }
+
+output$area
 
 output_json = toJSON(output)
 print(output_json)
