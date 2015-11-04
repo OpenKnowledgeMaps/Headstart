@@ -5,7 +5,6 @@ wd <-args[1]
 query <- args[2]
 
 setwd(wd) #Don't forget to set your working directory
-#setwd(wd) #Don't forget to set your working directory
 library(GMD)
 library(MASS)
 library(ecodist)
@@ -21,17 +20,14 @@ library(jsonlite)
 
 start.time <- Sys.time()
 
-search_data <- searchplos(q=query, fl='title,id,counter_total_month,abstract,journal,publication_date,author,everything', 
+search_data <- searchplos(q=query, fl='title,id,counter_total_month,abstract,journal,publication_date,author,everything,subject', 
                        fq='doc_type:full', limit=100)
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time
 time.taken
 
-# load("search_data.RData")
-
 cooc = search_data$data
-output_json = ""
 
 names(cooc)[names(cooc)=="counter_total_month"] <- "readers"
 names(cooc)[names(cooc)=="abstract"] <- "paper_abstract"
@@ -39,6 +35,7 @@ names(cooc)[names(cooc)=="journal"] <- "published_in"
 names(cooc)[names(cooc)=="publication_date"] <- "year"
 names(cooc)[names(cooc)=="author"] <- "authors"
 cooc["url"] = paste("http://dx.doi.org/", cooc$id, sep="")
+cooc["titleabstract"] = paste(cooc$title, cooc$abstract, sep=" ")
 
 
 metadata = cooc
@@ -46,7 +43,7 @@ metadata$everything <- NULL
 
 m <- list(content = "everything", id = "id", title = "title", counter = "readers"
           , journal = "published_in", date = "year", author = "authors"
-          , abstract = "paper_abstract")
+          , abstract = "paper_abstract", subject = "subject")
 
 myReader <- readTabular(mapping = m)
 
@@ -122,17 +119,43 @@ output = merge(metadata, result, by.x="id", by.y="labels", all=TRUE)
 names(output)[names(output)=="groups"] <- "area_uri"
 output["area"] = paste("Cluster ", output$area_uri, sep="")
 
-dtm = DocumentTermMatrix(corpus_unstemmed)
-#dtm.idf = weightTfIdf(dtm)
-  
-for (i in 1:num_clusters) {
-  inGroup <- which(output$area_uri==i)
-  within <- dtm[inGroup,]
-  most_freq_term = sort(colSums(as.matrix(within)), decreasing=TRUE)[1:3]
-  output$area[output$area_uri==i] = paste(names(most_freq_term), collapse=", ")
-}
+#BigramTokenizer <-
+# function(x)
+#   unlist(lapply(ngrams(words(x), 2), paste, collapse = " "), use.names = FALSE)
 
-output$area
+#dtm <- DocumentTermMatrix(corpus_unstemmed, control = list(tokenize = BigramTokenizer))
+
+# m_naming <- list(content = "titleabstract", id = "id")
+# 
+# myReader_naming <- readTabular(mapping = m_naming)
+# 
+# (corpus_naming <- Corpus(DataframeSource(cooc), readerControl = list(reader = myReader_naming)))
+# 
+# corpus_naming <- tm_map(corpus_naming, removePunctuation)
+# 
+# corpus_naming <- tm_map(corpus_naming, stripWhitespace)
+# 
+# corpus_naming <- tm_map(corpus_naming, content_transformer(tolower))
+# 
+# corpus_naming <- tm_map(corpus_naming, removeWords, stopwords("english"))
+
+#corpus_naming <- tm_map(corpus_naming, stemDocument)
+
+#subjects = cooc$subject
+#subjects = strsplit(subjects, "; ")
+#output$subjects_cleaned = sub(".*[/]", "", subjects)
+
+#dtm = DocumentTermMatrix(corpus_unstemmed)
+#dtm = weightTfIdf(dtm)
+  
+#for (i in 1:num_clusters) {
+  #inGroup <- which(output$area_uri==i)
+  #within <- table(inGroup$subjects_cleaned)
+  #most_freq_term = sort(colSums(as.matrix(within)), decreasing=TRUE)[1:4]
+  #output$area[output$area_uri==i] = paste(names(most_freq_term), collapse=", ")
+#}
+
+#output$area
 
 output_json = toJSON(output)
 print(output_json)

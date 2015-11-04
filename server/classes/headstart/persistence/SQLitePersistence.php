@@ -60,7 +60,7 @@ class SQLitePersistence extends Persistence {
     public function getRevision($vis_id, $rev_id) {
         
         $id = ($rev_id == null)?("revisions.rev_id"):("?");
-        $array = ($rev_id == null)?(array($vis_id)):(array($vis_id, $rev_id));
+        $array = ($rev_id == null)?(array(addslashes($vis_id))):(array(addslashes($vis_id), $rev_id));
         
         $result = $this->prepareExecuteAndReturnFirstResult("SELECT revisions.rev_data FROM revisions, visualizations
                     WHERE visualizations.vis_id = ?
