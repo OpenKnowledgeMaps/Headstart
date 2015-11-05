@@ -512,6 +512,7 @@ div#preview {
   background-color: #EEE;
   padding-top: 5px;
   padding-bottom: 5px;
+  overflow: auto;
 }
 
 table#legend_table {

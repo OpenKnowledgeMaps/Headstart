@@ -55,6 +55,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.circle_zoom = 0;
   this.current_circle = null;
   this.is_zoomed = false;
+  
+  this.url_plos_pdf = "http://www.plosone.org/article/fetchObject.action?representation=PDF&uri=info:doi/";
 
   this.subdiscipline_title = initVar(options.title, "");
   
@@ -105,6 +107,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
    this.use_area_uri = initVar(options.use_area_uri, false);
    
    this.input_format = initVar(options.input_format, "csv");
+   
+   this.preview_type = initVar(options.preview_type, "images");
   
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()

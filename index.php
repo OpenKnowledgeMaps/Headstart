@@ -27,12 +27,13 @@
                             , min_diameter_size: 30
                             , max_area_size: 110
                             , min_area_size: 50
-                            , use_area_uri: false
-                            , input_format: "json"
                             , use_area_uri: true
+                            , input_format: "json"
                             , base_unit: "views"
                             , show_timeline: false
                             , show_dropdown: false
+                            , is_force_areas: true
+                            , preview_type: "pdf"
                             } //options
                 )
         </script>

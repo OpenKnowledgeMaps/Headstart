@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Turn a PLOS search into a visualization</title>
+        <title>Search PLOS and turn it into a visualization</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -14,19 +14,22 @@ and open the template in the editor.
         <!--<script type="text/javascript" src="vis/lib/jquery-1.8.1.min.js"></script>-->
         <script type="text/javascript" src="vis/lib/d3.v3.js"></script>
         <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="vis/style.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     </head>
-    <body>
+    <body style="padding-left:10px; padding-right:10px;">
         <div>
-            <form id="searchform" action="server/services/searchPLOS.php">
+            <h2>Search PLOS and turn it into a visualization</h2>
+            <form id="searchform" action="server/services/searchPLOS.php" style="margin-top:20px">
                 <label for="q">Search term:</label> 
-                <input type="text" name="q" required><br>
+                <input type="text" name="q" size="40" required>
                 <button type="submit" class="btn">Submit</button>
             </form> 
         </div>
 
-        <div id="progress"></div>
+        <div id="progress" style="margin-top: 20px;"></div>
+        
+        <a href="http://github.com/pkraker/Headstart" target="_blank">Github repo</a>
 
         <script type="text/javascript">
             $("#searchform").validate({

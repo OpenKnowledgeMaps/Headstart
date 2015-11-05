@@ -16,8 +16,7 @@ library(jsonlite)
 #library(lsa)
 #library(stylo)
 
-# Read input files
-
+# Get data from PLOS API
 start.time <- Sys.time()
 
 search_data <- searchplos(q=query, fl='title,id,counter_total_month,abstract,journal,publication_date,author,everything,subject', 
@@ -36,6 +35,8 @@ names(cooc)[names(cooc)=="publication_date"] <- "year"
 names(cooc)[names(cooc)=="author"] <- "authors"
 cooc["url"] = paste("http://dx.doi.org/", cooc$id, sep="")
 cooc["titleabstract"] = paste(cooc$title, cooc$abstract, sep=" ")
+dates = as.Date(cooc$year)
+cooc$year = format(dates, format="%B %d %Y")
 
 
 metadata = cooc
