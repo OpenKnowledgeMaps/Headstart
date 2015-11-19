@@ -53,20 +53,21 @@ class SQLitePersistence extends Persistence {
         
     }
     
-    public function getLastVersion($vis_id) {
-        return $this->getRevision($vis_id, null);
+    public function getLastVersion($vis_id, $details=false) {
+        return $this->getRevision($vis_id, null, $details);
     }
     
-    public function getRevision($vis_id, $rev_id) {
+    public function getRevision($vis_id, $rev_id, $details=false) {
         
         $id = ($rev_id == null)?("revisions.rev_id"):("?");
         $array = ($rev_id == null)?(array(addslashes($vis_id))):(array(addslashes($vis_id), $rev_id));
+        $return_fields = ($details==true)?("revisions.*"):("revisions.rev_data");
         
-        $result = $this->prepareExecuteAndReturnFirstResult("SELECT revisions.rev_data FROM revisions, visualizations
+        $result = $this->prepareExecuteAndReturnResult("SELECT $return_fields FROM revisions, visualizations
                     WHERE visualizations.vis_id = ?
                         AND visualizations.vis_id = revisions.rev_vis 
                         AND visualizations.vis_latest =" . $id
-                , $array);
+                , $array, !$details);
 
         return $result;
     }
@@ -76,7 +77,7 @@ class SQLitePersistence extends Persistence {
         $rev = $rev_id;
         
         if($rev == null) {
-            $ver = $this->prepareExecuteAndReturnFirstResult("SELECT vis_latest FROM visualizations WHERE vis_id=?", array($vis_id));
+            $ver = $this->prepareExecuteAndReturnResult("SELECT vis_latest FROM visualizations WHERE vis_id=?", array($vis_id), true);
             $rev = $ver + 1;
         }
         
@@ -102,11 +103,17 @@ class SQLitePersistence extends Persistence {
         return array("status" => $result, "query" => $query);
     }
     
-    private function prepareExecuteAndReturnFirstResult($stmt, $array) {
+    private function prepareExecuteAndReturnResult($stmt, $array, $first=false) {
         $result = $this->prepareAndExecute($stmt, $array);
         $fetch_result = $result["query"]->fetch();
         
-        return $fetch_result[0];
+        if($fetch_result == false) {
+            return false;
+        } else if($first == true) {
+            return $fetch_result[0];
+        } else {
+            return $fetch_result;
+        }
         
     }
     
