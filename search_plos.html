@@ -28,20 +28,24 @@ and open the template in the editor.
         </div>
 
         <div id="progress" style="margin-top: 20px;"></div>
-        
-        <a href="http://github.com/pkraker/Headstart" target="_blank">Github repo</a>
+
+        Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a> and <a href="http://github.com/ropensci/rplos" target="_blank">rplos</a>. All content retrieved from <a href="https://www.plos.org/publications/journals/" target="_blank">Public Library of Science Journals</a> under <a href="http://journals.plos.org/plosone/s/content-license" target="_blank">CC-BY</a>.
 
         <script type="text/javascript">
+            $(window).bind("pageshow", function () {
+                $(".btn").attr("disabled", false);
+            });
+
             $("#searchform").validate({
                 submitHandler: function (form) {
                     $(".btn").attr("disabled", true);
-                    
-                
+
+
                     d3.select("#progress").append("p")
-                        .text("Please be patient, this can take a while...")
-                        .append("div")
-                        .attr("id", "progressbar")
-                
+                            .text("Please be patient, this can take a while...")
+                            .append("div")
+                            .attr("id", "progressbar")
+
                     $("#progressbar").progressbar();
                     var tick_interval = 2;
                     var tick_increment = 1;
@@ -56,7 +60,7 @@ and open the template in the editor.
                         }
                     };
                     window.setTimeout(tick_function, tick_interval * 1000);
-                    
+
                     form.submit();
                 }
             });
