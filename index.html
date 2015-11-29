@@ -9,30 +9,50 @@
     <body style="margin:0px; padding:0px">
         <div id="visualization" style="width:100%;"></div>
         <script>
-                
-                var height = ($(document).height() < 700)?(700):($(document).height());
-                $("#visualization").css("height", height + "px");
-                
-                var myHeadstart = new Headstart(
-                        "localhost/" //host
-                        , "headstart2/" //path
-                        , "visualization" //append to tag
-                        , [{
-                                title: "dna"
-                                , file: "bibliometrics"
-                            }
+                $(function () {
+                    
+                    var height = ($(document).height() < 700) ? (700) : ($(document).height());
+
+                    var myHeadstart = new Headstart(
+                            "localhost/" //host
+                            , "headstart2/" //path
+                            , "visualization" //append to tag
+                            , [{
+                                    title: "edu1"
+                                    , file: "vis/data/educational-technology.csv"
+                                }
+                                , {
+                                    title: "edu2"
+                                    , file: "vis/data/edu2.csv"
+                                }
+                                , {
+                                    title: "edu3"
+                                    , file: "vis/data/edu3.csv"
+                                }
+                                , {
+                                    title: "edu4"
+                                    , file: "vis/data/edu4.csv"
+                                }
+                                , {
+                                    title: "edu5"
+                                    , file: "vis/data/edu5.csv"
+                                }
                             ] //data
-                        , {title: "Overview of dna"
-                            , max_diameter_size: 50
-                            , min_diameter_size: 30
-                            , max_area_size: 110
-                            , min_area_size: 50
-                            , input_format: "json"
-                            , use_area_uri: true
-                            , base_unit: "views"
-                            , force_areas: true
+                            , {title: "Overview of Educational Technology"
+                                , width: 1200
+                                , height: height
+                                , max_diameter_size: 50
+                                , min_diameter_size: 30
+                                , max_area_size: 110
+                                , min_area_size: 50
+                                , input_format: "csv"
+                                , use_area_uri: false
+                                , base_unit: "readers"
+                                , force_areas: false
+                                , url_prefix: "http://mendeley.com/catalog/"
                             } //options
-                )
+                    )
+                })
         </script>
 
     </body>

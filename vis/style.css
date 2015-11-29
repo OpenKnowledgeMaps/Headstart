@@ -1,12 +1,15 @@
 /* ################ Chart ############### */
 
-div#chart {
+.headstart div#headstart-chart {
   position: absolute;
   font-family: Helvetica;
   margin-top: 10px;
 }
 
-rect {
+.headstart #chart-svg {
+    overflow-x: scroll;
+}
+.headstart rect {
   fill: rgb(31, 119, 180);
 
   fill-opacity: .0;
@@ -14,24 +17,19 @@ rect {
   stroke-width: 0px;
 }
 
-rect#area_title_object {
-  fill-opacity: 1;
-  stroke-width: 1px;
-}
-
-circle {
+.headstart circle {
   fill: rgb(31, 119, 180);
   fill-opacity: .25;
   stroke: rgb(31, 119, 180);
   stroke-width: 1px;
 }
 
-circle.zoom_unselected {
+.headstart circle.zoom_unselected {
   fill-opacity: .1;
   stroke-width: 0px;
 }
 
-circle.zoom_selected {
+.headstart circle.zoom_selected {
   /*fill: rgb(31, 119, 180);*/
   fill-opacity: 1;
   /*fill: rgb(219, 233, 243);*/
@@ -39,29 +37,29 @@ circle.zoom_selected {
   stroke-width: 1px;
 }
 
-circle.area {
+.headstart circle.area {
   fill: rgb(210, 228, 240);
   fill-opacity: 0.8;
 }
 
-path {
+.headstart path {
   fill: rgb(255, 255, 255);
   fill-opacity: .25;
   stroke: rgb(128, 128, 128);
   stroke-width: 1px;
 }
 
-.framed {
+.headstart .framed {
     stroke: yellow;
     stroke-width: 3px;
 }
 
-.framed_bookmarked{
+.headstart .framed_bookmarked{
     stroke: green;
     stroke-width: 2px;
 }
 
-.recommended {
+.headstart .recommended {
     font-size:10pt;
     font-weight: bold;
     color:black; 
@@ -69,13 +67,13 @@ path {
     border: 1px yellow solid;
 }
 
-.bookmarked {
+.headstart .bookmarked {
     font-size:10pt;
     color: black;
     border: 1px green solid;
 }
 
-.tobookmark {
+.headstart .tobookmark {
     font-size:10pt;
     font-weight: bold;
     color:white; 
@@ -83,33 +81,32 @@ path {
     border: 1px green solid;
 }
 
-line {
+.headstart line {
   stroke: rgb(31, 119, 180);
   stroke-width: 1px;
 }
 
-div#subdiscipline_title {
+.headstart div#subdiscipline_title {
   margin: 0px;
   height: 18px;
   padding-left: 10px;
 }
 
-div#subdiscipline_title h1 {
+.headstart div#subdiscipline_title h1 {
   margin-top: 5px;
   margin-left: 5px;
-  font-size: 18px;
   font-family: 'Helvetica', sans-serif;
   font-weight: 400;
   padding: 0px;
 }
 
-div#area_title {
+.headstart div#area_title {
     margin: 0;
     padding: 0;
 }
 
 
-div#area_title h2 {
+.headstart div#area_title h2 {
   font-size: 14px;
   font-family: 'Helvetica', sans-serif;
   text-align: center;
@@ -119,11 +116,11 @@ div#area_title h2 {
   /*background-color: rgb(210, 228, 240);*/
 }
 
-text {
+.headstart text {
   font: 10px sans-serif;
 }
 
-foreignObject body {
+.headstart foreignObject body {
     margin: 0px;
     padding: 0px;
     width: 100%;
@@ -132,8 +129,8 @@ foreignObject body {
 }
 
 /* ################ Papers ############### */
-foreignObject#article_metadata body,
-foreignObject#area_title_object body {
+.headstart foreignObject#article_metadata body,
+.headstart foreignObject#area_title_object body {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -141,7 +138,7 @@ foreignObject#area_title_object body {
     background-color: transparent;
 }
 
-div.metadata {
+.headstart div.metadata {
   /*white-space: pre-wrap;*/
   white-space: -moz-pre-wrap;
   /*word-wrap: break-word;*/
@@ -150,45 +147,37 @@ div.metadata {
   margin: 0;
 }
 
-foreignObject#article_metadata {
+.headstart foreignObject#article_metadata {
   overflow:hidden;
   line-height: 10px;
   font-family: Helvetica;
 }
 
-div#intro {
+.headstart div#intro {
   padding: 10px;
   background-color: white;
   font-family: Helvetica;
 }
 
-div#intro h2 {
+.headstart div#intro h2 {
   font-size: 16px;
   font-family: Helvetica;
   padding: 0px;
   margin-bottom: 0px;
 }
 
-div#intro h3 {
+.headstart div#intro h3 {
   padding: 0px;
 }
 
-div#intro p {
+.headstart div#intro p {
   font: 14px 'Helvetica', sans-serif;
   color: black;
   margin-bottom: 10px;
   padding: 0px;
 }
 
-div#intro ul {
-  font-size: 14px;
-  font-family: 'Helvetica', sans-serif;
-  padding-left: 11px;
-  margin-left: 11px;
-  margin-bottom: 11px;
-}
-
-div#intro li {
+.headstart div#intro li {
   font-size: 14px;
   font-family: 'Helvetica', sans-serif;
   padding-left: 11px;
@@ -197,9 +186,9 @@ div#intro li {
   margin-bottom: 0px;
 }
 
-div#article_metadata p,
-div.metadata p, 
-div.readers p {
+.headstart div#article_metadata p,
+.headstart div.metadata p, 
+.headstart div.readers p {
   font: 8px 'Helvetica', sans-serif;
   color: rgb(167, 8, 5);
   text-align: left;
@@ -208,9 +197,9 @@ div.readers p {
   line-height: 8px;
 }
 
-div#article_metadata p.large,
-div.metadata p.large,
-div.readers p.large {
+.headstart div#article_metadata p.large,
+.headstart div.metadata p.large,
+.headstart div.readers p.large {
   font-size: 12px;
   line-height: 12px;
   padding-left: 5px;
@@ -220,9 +209,9 @@ div.readers p.large {
   /*font-weight:bold;*/
 }
 
-div#article_metadata p.larger,
-div.metadata p.larger,
-div.readers p.larger {
+.headstart div#article_metadata p.larger,
+.headstart div.metadata p.larger,
+.headstart div.readers p.larger {
   font-size: 14px;
   line-height: 14px;
   padding-left: 5px;
@@ -231,36 +220,30 @@ div.readers p.larger {
   padding-right: 0px;
 }
 
-.details {
-  font-size: 8px;
-  color: rgb(33, 101, 0);
-}
-
-p#details {
+.headstart p#details {
   /*margin-top: 3px;*/
   padding-top: 3px;
   color: rgb(33, 101, 0);
   padding-left: 5px;
 }
 
-
-p#in {
+.headstart p#in {
   color: rgb(102, 102, 102);
   padding-right: 0px;
 }
 
-span.pubyear {
+.headstart span.pubyear {
   font-style: italic;
   color: rgb(0, 0, 0);
 }
 
-div#area_title {
+.headstart div#area_title {
   vertical-align: middle;
   display: table-cell;
   overflow: no-display;
 }
 
-div.readers {
+.headstart div.readers {
   color: rgb(0, 0, 0);
   text-align: right;
   margin-top: 0px;
@@ -268,7 +251,7 @@ div.readers {
   padding-right: 5px;
 }
 
-div.readers_large {
+.headstart div.readers_large {
   color: rgb(0, 0, 0);
   text-align: right;
   margin-top: 0px;
@@ -276,7 +259,7 @@ div.readers_large {
   padding-right: 5px;
 }
 
-p#readers {
+.headstart p#readers {
   color: rgb(0,0,0);
   vertical-align: text-bottom;
   text-align: right;
@@ -284,12 +267,12 @@ p#readers {
   padding: 0px;
 }
 
-p#readers.large {
+.headstart p#readers.large {
   margin-bottom: 3px;
   padding: 0px;
 }
 
-span.readers_entity {
+.headstart span.readers_entity {
   font: 8px 'Helvetica' sans-serif;
   font-weight: normal;
   color: rgb(102, 102, 102);
@@ -297,19 +280,19 @@ span.readers_entity {
 
 /* ################ Papers list ############### */
 
-div#papers_list_container {
+.headstart div#papers_list_container {
     margin-top: -23px;
     margin-bottom: -23px;
     position: relative;
 }
 
-div#input_container {
+.headstart div#input_container {
     margin-top: 5px;
     float: left;
     padding-left: 3px;
 }
 
-div#sort_container {
+.headstart div#sort_container {
     position:relative;  
     float:right;
     background:none;
@@ -317,31 +300,31 @@ div#sort_container {
 }
 
 
-div#show_hide_container {
+.headstart div#show_hide_container {
   position: relative;
   top: 0px;
   cursor: pointer;
   background-color: #EEE;
 }
 
-div#show_hide_label_container {
+.headstart div#show_hide_label_container {
   font-family: 'Helvetica';
   float: left;
   text-align: center;
   font-size: 14px;
 }
 
-#show_hide_label {
+.headstart #show_hide_label {
   font-size: 14px;
   font-weight: 400;
 }
 
-div#show_hide {
+.headstart div#show_hide {
   background-color: #EEE;
   color: #000;
 }
 
-div#papers_list {
+.headstart div#papers_list {
   /*margin-left: 20px;*/
   padding-top: 10px;
   overflow-y: scroll;
@@ -349,27 +332,27 @@ div#papers_list {
   float: right;
 }
 
-div#left_arrow {
+.headstart div#left_arrow {
   float: left;
 }
 
-div#right_arrow {
+.headstart div#right_arrow {
   text-align: right;
   float: left;
 }
 
-div.list_metadata {
+.headstart div.list_metadata {
   border-top-style: solid;
   border-top-width: 1px;
 }
 
-div.list_metadata p, 
-.list_details p {
+.headstart div.list_metadata p, 
+.headstart .list_details p {
      font: 12px 'Helvetica', sans-serif;
      padding: 0px;
 }
 
-p#list_title {
+.headstart p#list_title {
   font-size: 14px;
   margin-top: 7px;
   margin-bottom: 5px;
@@ -377,23 +360,23 @@ p#list_title {
   /*line-height: 18px;*/
 }
 
-p#list_title a {
+.headstart p#list_title a {
   text-decoration: none;
   color: rgb(167, 8, 5);
 }
 
-p#list_title a:hover {
+.headstart p#list_title a:hover {
   text-decoration: underline;
 }
 
-.list_details {
+.headstart .list_details {
   margin-top: 3px;
   font-size: 12px;
   color: rgb(33, 101, 0);
   line-height: 14px;
 }
 
-p#list_abstract {
+.headstart p#list_abstract {
   font: 12px 'Helvetica', sans-serif;
   border-left: solid 2.5px rgb(233,233,233);
   color: rgb(68, 68, 68);
@@ -403,16 +386,16 @@ p#list_abstract {
   padding-right: 0px;
 }
 
-span.list_in {
+.headstart span.list_in {
   color: rgb(102, 102, 102);
 }
 
-span.list_pubyear {
+.headstart span.list_pubyear {
   font-style: italic;
   color: rgb(0, 0, 0);
 }
 
-p#list_area {
+.headstart p#list_area {
   font-family: 'Helvetica';
   color: rgb(0,0,0);
   margin-top: 10px;
@@ -423,7 +406,7 @@ p#list_area {
   padding: 0px;
 }
 
-p#list_readers {
+.headstart p#list_readers {
   color: rgb(0,0,0);
   vertical-align: text-bottom;
   text-align: right;
@@ -434,13 +417,13 @@ p#list_readers {
   padding: 0px;
 }
 
-span.list_readers_entity {
+.headstart span.list_readers_entity {
   font: 11px 'Helvetica' sans-serif;
   font-weight: normal;
   color: rgb(102, 102, 102);
 }
 
-div#preview_image {
+.headstart div#preview_image {
   border: 1px solid;
   margin-top: 20px;
   display: block;
@@ -448,23 +431,24 @@ div#preview_image {
   margin-right: auto;
 }
 
-div#transbox {
+.headstart div#transbox {
   background-color: rgba(255,255,255,0.6);
   opacity: 0.9;
   display: none;
   cursor: pointer;
 }
 
-div#preview_page_index {
+.headstart div#preview_page_index {
   text-align: center;
   background-color: #EEE;
   padding: 5px;
   margin-top: 15px;
   text-shadow: 0px 1px 1px white;
   font-size: 11px;
+  height: 20px;
 }
 
-img#preview_page {
+.headstart img#preview_page {
   text-align: center;
   border: 1px solid;
   display: block;
@@ -472,14 +456,22 @@ img#preview_page {
   margin-right: auto;
 }
 
+.headstart .title-small {
+    font-size: 16px;
+}
+
+.headstart .title-large {
+    font-size: 18px;
+}
+
 /* ########### Paper Frame/Popup ########### */
 
-div#paper_frame {
+.headstart div#paper_frame {
   background-color: rgba(255,255,255,0.6);
   z-index:999;
 }
 
-div#paper_frame_inner {
+.headstart div#paper_frame_inner {
   padding-bottom: 10px;
   border: 1px solid;
   border-radius: 10px 10px 10px 10px;
@@ -490,50 +482,35 @@ div#paper_frame_inner {
   /*float: right;*/
 }
 
-div#paper_frame_bar {
+.headstart div#paper_frame_bar {
   /*float: right;*/
   cursor: pointer;
   margin-bottom: 5px;
   margin-top: 5px;
 }
 
-div#shadow-top {
+.headstart div#shadow-top {
   height: 5px;
   box-shadow: inset 0px 8px 8px -8px #333;
 }
 
-div#shadow-bottom {
+.headstart div#shadow-bottom {
   height: 5px;
   box-shadow: inset 0px -8px 8px -8px #333;
 }
 
-div#preview {
+.headstart div#preview {
   overflow-y: scroll;
   background-color: #EEE;
   padding-top: 5px;
   padding-bottom: 5px;
   overflow: auto;
-}
-
-table#legend_table {
-  border-collapse: separate;
-  border-spacing: 1px 5px;
-  font-size: 10pt;
-  margin-left: 10px;
-}
-
-table#legend_table tr {
-  line-height: 10px;
-  border-top: 1px #000 solid;
-}
-
-table#legend_table td {
-  border-left: 2px #fff solid;
+  align: center;
 }
 
 /* ########### Filters ############## */
 
-ul.filter{
+.headstart ul.filter{
         float:left;
 	padding:0;
 	margin:0;
@@ -545,7 +522,7 @@ ul.filter{
 	border:3px solid #e9e9e9
 }
 
-.filter li{
+.headstart .filter li{
 	padding:0;
 	margin:0;
 	float:left;
@@ -553,7 +530,7 @@ ul.filter{
         background:#e9e9e9;
 }
 
-.filter li a{
+.headstart .filter li a{
 	position:relative;
 	display:block;
 	float:left;
@@ -572,13 +549,13 @@ ul.filter{
         font-family: Helvetica;
 }
 
-.filter li a:hover{
+.headstart .filter li a:hover{
 	border-color:#939393;
 	z-index:2;
 	text-decoration:none
 }
 
-.filter li:first-child a{
+.headstart .filter li:first-child a{
 	-moz-border-radius-topleft:20px;
 	-moz-border-radius-bottomleft:20px;
 	border-top-left-radius:20px;
@@ -587,14 +564,14 @@ ul.filter{
 	padding-left:10px
 }
 
-.filter li:first-child{
+.headstart .filter li:first-child{
 	-moz-border-radius-topleft:20px;
 	-moz-border-radius-bottomleft:20px;
 	border-top-left-radius:20px;
 	border-bottom-left-radius:20px
 }
 
-.filter li:last-child a{
+.headstart .filter li:last-child a{
 	-moz-border-radius-topright:20px;
 	-moz-border-radius-bottomright:20px;
 	border-top-right-radius:20px;
@@ -602,7 +579,7 @@ ul.filter{
 	padding-right:10px
 }
 
-.filter li a.selected{
+.headstart .filter li a.selected{
 	float:left;
 	color:#fff;
 	background:#489ac0;
@@ -613,4 +590,26 @@ ul.filter{
 	box-shadow:inset 0 1px 3px rgba(0,0,0,0.3);
 	-webkit-transition:.2s;
 	border:1px solid #1e6a8d
+}
+
+.headstart img#close-button {
+    float: right;
+    margin-right: 5px;
+}
+
+/* ########### Timeline ########### */
+
+.headstart line.connection {
+    stroke:rgb(255,0,0);
+    stroke-width:2;
+}
+
+.headstart line {
+    stroke:rgb(0,0,0);
+    stroke-width:0.15px;
+}
+
+.tl-title {
+    text-align: center;
+    float: left;
 }

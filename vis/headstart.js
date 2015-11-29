@@ -40,6 +40,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.bottom_correction = 34;
   
   this.list_height = 51;
+  this.list_height_correction = 29;
 
   this.transition_duration = 750;
 
@@ -62,6 +63,10 @@ HeadstartFSM = function(host, path, tag, files, options) {
   
   this.current_file_number = 1;
   
+  this.vis_width = initVar(options.width, this.min_width);
+  
+  this.vis_height = initVar(options.height, this.min_height);
+  
   this.is_evaluation = initVar(options.is_evaluation, false);
   
   this.content_based = initVar(options.is_content_based, false);
@@ -77,6 +82,10 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.show_dropdown = initVar(options.show_dropdown, true);
   
   this.show_intro = initVar(options.show_intro, false);
+  
+  this.show_infolink = initVar(options.show_infolink, true);
+  
+  this.show_titlerow = initVar(options.show_titlerow, true);
   
   this.conference_id = initVar(options.conference_id, 0);
   
@@ -225,8 +234,8 @@ HeadstartFSM.prototype = {
     // initialize a bunch of variables.
        
     //TODO: Change this to the height of the parent element   
-    this.available_width  = $("#" + this.tag).width();  
-    this.available_height = $("#" + this.tag).height();
+    this.available_width  = this.vis_width; //$("#" + this.tag).width();  
+    this.available_height = this.vis_height; //$("#" + this.tag).height();
 
     this.x = d3.scale.linear().range([0, this.circle_zoom_factor]);
     this.y = d3.scale.linear().range([0, this.circle_zoom_factor]);
@@ -242,7 +251,7 @@ HeadstartFSM.prototype = {
     this.correction_factor_height = ( this.max_chart_size / this.min_height );
     this.setCorrectionFactor();
     this.setListWidth();
-
+    
     // Initialize global scales for zooming
     this.circle_min = ( this.min_area_size * this.correction_factor );
     this.circle_max = ( this.max_area_size * this.correction_factor );
@@ -262,16 +271,24 @@ HeadstartFSM.prototype = {
 
   // either set it to min values or use all space available
   calculateMaxChartSize: function() {
+    var self = this;
+    
+    var getMinSize = function () {
+        if (self.min_height >= self.min_width)
+        return self.min_width;
+      else
+        return self.min_height;
+    }
+    
     if (this.availableSizeIsBiggerThanMinSize()) {
       if (this.available_width >= this.available_height) {
         var corrected_height = this.available_height - this.top_correction - this.bottom_correction;
         this.max_chart_size = corrected_height;
+      } else {
+          this.max_chart_size = getMinSize();
       }
     } else {
-      if (this.min_height >= this.min_width)
-        this.max_chart_size = this.min_width;
-      else
-        this.max_chart_size = this.min_height;
+       this.max_chart_size = getMinSize();
     }
   },
 
@@ -323,21 +340,21 @@ HeadstartFSM.prototype = {
   },
 
     // not needed?
-  setHeight: function( selector ) {
+  /*setHeight: function( selector ) {
     var chart = d3.select( selector );
     chart.style("height", function () { return (this.max_chart_size < 720) ? "35px" : "40px";  });
-  },
+  },*/
 
   // Draw basic SVG canvas
   // NOTE attribute width addition by number of elements
   drawSvg: function() {
 
-    this.chart_id = d3.select( "#chart" );
+    this.chart_id = d3.select( "#headstart-chart" );
 
-    var svg = this.chart_id.append( "svg" );
-    svg.style( "overflow-x", "scroll");
-    svg.attr( "height", this.max_chart_size + "px" );
-    svg.attr( "width",  this.max_chart_size + "px" );
+    var svg = this.chart_id.append( "svg" )
+            .attr("id", "chart-svg")
+            .attr( "height", this.max_chart_size + "px" )
+            .attr( "width",  this.max_chart_size + "px" );
 
     this.svg = svg;
   },
@@ -378,18 +395,25 @@ HeadstartFSM.prototype = {
       headstart.bubbles[headstart.current_file_number].zoomout();
     });
 
-    $("#chart").on("click", function() {
+    $("#headstart-chart").on("click", function() {
       headstart.bubbles[headstart.current_file_number].zoomOut();
     });
   },
 
   // Draws the h1 for headstart
   drawTitle: function() {
+    
+    var self = this;
+      
     d3.select("#subdiscipline_title")
     .append("h1")
-    .style("font-size", function () {
-      return (this.max_chart_size < 720)?("16px"):("18px");
+    .attr("class", function () {
+      return (self.max_chart_size == self.min_width)?("title-small"):("title-large");
     });
+    
+    if(!this.show_titlerow) {
+        $("#subdiscipline_title").hide();
+    }
   },
 
   initForceAreas: function() {
@@ -465,7 +489,6 @@ HeadstartFSM.prototype = {
       .attr("x2", i)
       .attr("y1", "0")
       .attr("y2", "900")
-      .attr("style", "stroke:rgb(0,0,0);stroke-width:0.15px");
     }
   },
 
@@ -476,20 +499,17 @@ HeadstartFSM.prototype = {
       .attr("x2", this.bubblesSize() * this.max_chart_size)
       .attr("y1", i)
       .attr("y2", i)
-      .attr("style", "stroke:rgb(0,0,0);stroke-width:0.15px");
     };
   },
 
   drawGridTitles: function() {
-    $("#chart").append('<div id="tl-titles"></div>');
+    $("#headstart-chart").append('<div id="tl-titles"></div>');
     for (var i = 1; i <= this.bubblesSize(); i++) {
       $("#tl-titles").append('<div class="tl-title">' +
           this.bubbles[i].title
           + '</div>');
     }
     $(".tl-title").css("width", this.max_chart_size);
-    $(".tl-title").css("text-align", "center");
-    $(".tl-title").css("float", "left");
   },
   
   createRestUrl: function () {
@@ -557,6 +577,10 @@ HeadstartFSM.prototype = {
             
         case "json":
             d3.json(this.service_path + "getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
+            break;
+            
+        case "json-direct":
+            setupVisualization(bubbles.file);
             break;
             
         default:

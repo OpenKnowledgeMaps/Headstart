@@ -1,4 +1,5 @@
 var headstart = null;
+var namespace = "headstart";
 
 Headstart = function(host, path, tag, files, options) {
   
@@ -16,7 +17,7 @@ Headstart = function(host, path, tag, files, options) {
   var divs = [
      "main"
      ,"subdiscipline_title"
-     ,"chart"
+     ,"headstart-chart"
      ,"papers_list_container"
      ,"paper_frame"
    ];
@@ -52,7 +53,9 @@ Headstart = function(host, path, tag, files, options) {
     current_css.href = source;
     return document.getElementsByTagName(tag)[0].appendChild(current_css);
   }
-
+  
+  document.getElementById(tag).className = namespace;
+  
   addCss('http://' + host + path + vis_directory + 'style.css', 'head');
 
   lib_sources.forEach(function(script_source, i) {
@@ -105,15 +108,4 @@ function redraw_drag(x, y, dx, dy) {
   console.log("redraw_drag");
   chart.attr("transform",
           "translate(" + dx + ", " + dy + ")");
-}
-
-// not being called?
-function showCatalogEntry(d, i) {
-  d3.select("#paper_frame")
-          .style("display", "block")
-
-  d3.select("#catalouge_entry")
-          .attr("src", "http://www.mendeley.com/research/" + d.url)
-
-  d3.event.stopPropagation();
 }

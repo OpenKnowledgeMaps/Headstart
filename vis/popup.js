@@ -22,7 +22,9 @@ var popup = StateMachine.create({
 
             this.drawPreviewArea( paper_frame_inner );
             
-            this.drawInfoLinkWithTitle( "What's this?" );
+            if(headstart.show_infolink) {
+                this.drawInfoLinkWithTitle( "What's this?" );
+            }
             
             if(headstart.show_timeline) {
               this.drawTimeLineLink();
@@ -115,8 +117,7 @@ popup.drawHideButton = function() {
                  .style ( "height", headstart.preview_top_height + "px" )
                  .append( "img" )
                  .attr  ( "src", headstart.images_path + "close.png" )
-                 .style ( "float", "right")
-                 .style ( "margin-right", "5px" );
+                 .attr  ( "id", "close-button" )
 
     return button;
 }
@@ -128,7 +129,6 @@ popup.drawPreviewArea = function( paper_frame_inner ) {
 
     paper_frame_inner.append("div")
         .attr ( "id", "preview" )
-        .style( "align", "center" )
         .attr ( "width",  popup.width + "px" )
         .attr ( "height", headstart.preview_page_height + "px" )
         .style( "height", headstart.preview_page_height + "px" );

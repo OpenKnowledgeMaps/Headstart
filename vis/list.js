@@ -88,7 +88,7 @@ list.drawList = function() {
     var papers_list = list_show_hide_container
                             .append("div")
                             .attr("id", "papers_list")
-                            .style("height", headstart.max_chart_size - 29 + "px")
+                            .style("height", headstart.max_chart_size - headstart.list_height_correction + "px")
                             .style("width", headstart.list_width - 10 + "px")
                             .style("display", "none")
 
@@ -491,7 +491,6 @@ list.loadAndAppendImage = function(image_src, page_number) {
            .append("div")
             .attr("id", "preview_page_index")
             .style("width", headstart.preview_image_width + "px")
-            .style("height", "20px")
             .html("Page " + page_number)
 
         popup.paper_frame.select("#preview")
@@ -550,7 +549,7 @@ list.setImageForListHolder = function(d) {
       return (x.id == d.id)
     });
 
-  var image_src = (headstart.preview_type=="image")?(headstart.images_path + d.id + "/page_1.png"):(headstart.images_path + "/preview_pdf.png");
+  var image_src = (headstart.preview_type=="images")?(headstart.images_path + d.id + "/page_1.png"):(headstart.images_path + "/preview_pdf.png");
 
   if (this.testImage(image_src)) {
 

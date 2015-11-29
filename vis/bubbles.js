@@ -72,6 +72,10 @@ BubblesFSM.prototype = {
         
         xy_array[xy_string] = true;
         
+        if(d.paper_abstract == null) {
+            d.paper_abstract = "";
+        }
+        
         if(headstart.content_based == false) {
           d.readers = +d.readers;
           d.internal_readers = +d.readers + 1;
@@ -309,7 +313,6 @@ BubblesFSM.prototype = {
         .attr("y1", circleStart.top)
         .attr("y2", circleEnd.top)
         .attr("class", "connection")
-        .attr("style", "stroke:rgb(255,0,0);stroke-width:2");
     }
   },
 
@@ -390,6 +393,7 @@ BubblesFSM.prototype = {
   appendForeignObjectTo: function( bubbles ) {
     bubbles.append( "foreignObject" )
       .attr("id", "area_title_object")
+      .attr("class", namespace)
       .attr("x",      function (d) { return d.x_html })
       .attr("y",      function (d) { return d.y_html })
       .attr("width",  function (d) { return d.width_html })
