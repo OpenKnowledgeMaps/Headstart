@@ -31,9 +31,10 @@ The visualization was created with D3.js. It has been successfully tested with C
 Showcases
 ---------
 
-* [Mendeley Labs](http://labs.mendeley.com/headstart). A working prototype for the field of educational technology that includes paper previews. 
-* [Conference Navigator 3](http://halley.exp.sis.pitt.edu/cn3/visualization.php?conferenceID=131) [registration required]. An adaptation of Head Start for the conference scheduling system CN3. This version enables users to schedule papers directly from the visualization. Scheduled papers and recommended papers are highlighted.
-* [Organic Edunet portal](http://organic-edunet.eu/en/#/recommended). Overview of recommended resources in the Organic Eudnet portal.
+* [PLOS Search Visualization](http://openknowledgemaps.org/mozfest): This prototype creates a visualization on the fly based on a user's PLOS search.
+* [Open Knowledge Maps](http://openknowledgemaps.org): A working prototype for the field of educational technology. 
+* [Conference Navigator 3](http://halley.exp.sis.pitt.edu/cn3/visualization.php?conferenceID=131) [registration required]: An adaptation of Head Start for the conference scheduling system CN3. This version enables users to schedule papers directly from the visualization. Scheduled papers and recommended papers are highlighted.
+* [Organic Edunet portal](http://organic-edunet.eu/en/#/recommended): Overview of recommended resources in the Organic Eudnet portal.
 
 
 Background
@@ -46,8 +47,6 @@ Kraker, P., Schlögl, C. , Jack, K. & Lindstaedt, S. (2015). [Visualization of C
 Kraker, P., Weißensteiner, P., & Brusilovsky, P. (2014). [Altmetrics-based Visualizations Depicting the Evolution of a Knowledge Domain](http://know-center.tugraz.at/download_extern/papers/sti_visualization_evolution_kraker_etal.pdf). In 19th International Conference on Science and Technology Indicators (pp. 330–333).
 
 Kraker, P., Körner, C., Jack, K., & Granitzer, M. (2012). [Harnessing User Library Statistics for Research Evaluation and Knowledge Domain Visualization](http://know-center.tugraz.at/download_extern/papers/user_library_statistics.pdf). Proceedings of the 21st International Conference Companion on World Wide Web (pp. 1017–1024). Lyon: ACM. doi:10.1145/2187980.2188236
-
-An earlier version of the code can be found on [knowminer.at](https://knowminer.at/svn/opensource/other-licenses/lgpl_v3/headstart/)
 
 
 Installation
