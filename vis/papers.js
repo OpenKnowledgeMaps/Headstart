@@ -104,7 +104,7 @@ var papers = StateMachine.create({
 
 papers.drawPapers = function( bubbles ) {
 
-   var nodes = headstart.chart.data(bubbles.data).selectAll("g.node")
+   var nodes = headstart.chart.selectAll("g.node")
                .data(bubbles.data)
                .enter().append("g")
                .attr("class", "paper")
