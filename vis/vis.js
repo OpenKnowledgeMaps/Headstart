@@ -11,6 +11,7 @@ Headstart = function(host, path, tag, files, options) {
      {source: "browser_detect.js"}
        ,{source: "jquery-1.8.1.min.js"}
        ,{source: "state-machine.js"}
+       ,{source: "mediator.min.js"}
        ,{source: "d3.v3.js", important: true}
    ];
 
