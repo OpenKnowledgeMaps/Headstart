@@ -103,8 +103,9 @@ list.drawList = function() {
         .attr("class", function() { return selected?("selected"):("")})
         .attr("id", "sort_" + sort_option)
         .on("click", function() {
-          headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
-          sortBy(sort_option);
+          headstart.mediator.publish("list_sort_click", sort_option);
+          // headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
+          // sortBy(sort_option);
         }).text(sort_option);
     }
 
@@ -164,7 +165,8 @@ list.initListMouseListeners = function() {
   });
 
   d3.selectAll( "#list_title" ).on( "click", function(d) {
-    list.makeTitleClickable(d);
+    headstart.mediator.publish("list_title_clickable", d);
+    // list.makeTitleClickable(d);
   });
 }
 
@@ -573,7 +575,10 @@ list.setImageForListHolder = function(d) {
       .style("width", headstart.preview_image_width_list + "px")
       .style("height", headstart.preview_image_height_list+ "px")
       .html("Click here to open preview")
-      .on("click", this.populateOverlay)
+      .on("click", function(d){
+        headstart.mediator.publish("list_show_popup", d);
+        // this.populateOverlay;
+      })
   }
   
   /*$("#list_title a").hover(function () {
@@ -582,7 +587,13 @@ list.setImageForListHolder = function(d) {
   
   // EVENTLISTENERS
   current_item.select("#paper_list_title")
-    .on("click", function (d) {
+    .on("click", function(d){
+      headstart.mediator.publish("list_title_click", d);
+      // list.title_click();
+    });
+}
+
+list.title_click = function (d) {
         
       var url = "";
       if (headstart.url_prefix != null) {
@@ -598,9 +609,7 @@ list.setImageForListHolder = function(d) {
       
       window.open(url, "_blank");
       d3.event.stopPropagation();
-    });
-}
-
+    }
 
 // test if preview Image is available
 list.testImage = function(image_src) {
@@ -651,7 +660,8 @@ function notSureifNeeded() {
   list_holders_local.select("#paper_list_title")
     // EVENTLISTENERS
     .on("click", function (d) {
-      list.makeTitleClickable(d)
+      headstart.mediator.publish("list_title_clickable", d)
+      // list.makeTitleClickable(d)
     });
 
   var image_node = list_holders_local.select("#preview_image").node();

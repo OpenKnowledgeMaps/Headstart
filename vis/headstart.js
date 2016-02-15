@@ -745,6 +745,10 @@ HeadstartFSM.prototype = {
 
     // list
     headstart.mediator.subscribe("list_toggle", this.list_toggle);
+    headstart.mediator.subscribe("list_show_popup", this.list_show_popup);
+    headstart.mediator.subscribe("list_title_click", this.list_title_click);
+    headstart.mediator.subscribe("list_sort_click", this.list_sort_click);
+    headstart.mediator.subscribe("list_title_clickable", this.list_title_clickable);
 
   },
 
@@ -764,6 +768,23 @@ HeadstartFSM.prototype = {
 
   list_toggle: function() {
     list.toggle();
+  },
+
+  list_show_popup: function(d) {
+    list.populateOverlay(d);
+  },
+
+  list_title_click: function(d) {
+    list.title_click(d);
+  },
+
+  list_sort_click: function(sort_option) {
+    headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
+    sortBy(sort_option);
+  },
+
+  list_title_clickable: function(d) {
+    list.makeTitleClickable(d);
   }
   
 }
