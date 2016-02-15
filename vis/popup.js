@@ -17,7 +17,8 @@ var popup = StateMachine.create({
 
             var button = this.drawHideButton( paper_frame_inner );
             button.on("click", function (d) {
-              popup.hide();
+              headstart.mediator.publish("popup_toggle");
+              // popup.hide();
             });
 
             this.drawPreviewArea( paper_frame_inner );
@@ -40,7 +41,8 @@ var popup = StateMachine.create({
         
         onstart: function ( event, from, to ) {
             if(headstart.show_intro) {
-                popup.show();
+                headstart.mediator.publish("popup_toggle");
+                // popup.show();
             }
         },
 
@@ -71,12 +73,14 @@ var popup = StateMachine.create({
 
 popup.initClickListenersForNav = function() {
   $("#infolink").on("click", function () {
-    popup.show();
+    headstart.mediator.publish("popup_toggle");
+    // popup.show();
   });
 
   $("#timelineview").on("click", function() {
     if ($("#timelineview a").html() == "TimeLineView") {
-      headstart.totimeline();
+      headstart.mediator.publish("to_timeline");
+      // headstart.totimeline();
     }
   });
 }

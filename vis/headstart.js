@@ -122,6 +122,12 @@ HeadstartFSM = function(host, path, tag, files, options) {
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
   this.bubbles = {}
+
+  // mediator
+  this.mediator = new Mediator();
+  this.mediator_states = {
+    popup_visible:false
+  }
   
   if (typeof String.prototype.startsWith != 'function') {
     String.prototype.startsWith = function (str){
@@ -537,6 +543,7 @@ HeadstartFSM.prototype = {
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
   onstart: function( event, from, to, file ) {
+    this.init_mediator();
     
     this.loadScripts();
     
@@ -729,6 +736,26 @@ HeadstartFSM.prototype = {
     
     hs.checkForcePapers();
     
+  },
+
+  init_mediator: function() {
+    // popup
+    headstart.mediator.subscribe("popup_toggle", this.popup_toggle);
+    headstart.mediator.subscribe("to_timeline", this.to_timeline);
+  },
+
+  popup_toggle: function() {
+    if (headstart.mediator_states.popup_visible) {
+      popup.hide();
+      headstart.mediator_states.popup_visible = false;
+    } else {
+      popup.show();
+      headstart.mediator_states.popup_visible = true;
+    }
+  },
+
+  to_timeline: function() {
+    headstart.totimeline();
   }
   
 }
