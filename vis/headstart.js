@@ -742,6 +742,10 @@ HeadstartFSM.prototype = {
     // popup
     headstart.mediator.subscribe("popup_toggle", this.popup_toggle);
     headstart.mediator.subscribe("to_timeline", this.to_timeline);
+
+    // list
+    headstart.mediator.subscribe("list_toggle", this.list_toggle);
+
   },
 
   popup_toggle: function() {
@@ -756,6 +760,10 @@ HeadstartFSM.prototype = {
 
   to_timeline: function() {
     headstart.totimeline();
+  },
+
+  list_toggle: function() {
+    list.toggle();
   }
   
 }
