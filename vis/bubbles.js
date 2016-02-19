@@ -229,7 +229,8 @@ BubblesFSM.prototype = {
   initCircleClickListener: function() {
     var b = this;
     d3.selectAll( "circle" ).on("click", function(d) {
-      b.zoomin(d);
+      headstart.mediator.publish("bubble_click", d, b);
+      // b.zoomin(d);
     });
   },
 

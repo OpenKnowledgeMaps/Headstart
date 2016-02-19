@@ -757,6 +757,7 @@ HeadstartFSM.prototype = {
     // bubbles
     headstart.mediator.subscribe("bubble_mouseout", this.bubble_mouseout);
     headstart.mediator.subscribe("bubble_mouseover", this.bubble_mouseover);
+    headstart.mediator.subscribe("bubble_click", this.bubble_click);
   },
 
   popup_toggle: function() {
@@ -808,8 +809,11 @@ HeadstartFSM.prototype = {
 
   bubble_mouseover: function(d, circle, bubble_fsm) {
     bubble_fsm.mouseover(d, circle);
+  },
+
+  bubble_click: function(d, bubble) {
+    bubble.zoomin(d);
   }
-  
 }
 
 // State definitions for headstart object
