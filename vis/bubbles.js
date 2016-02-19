@@ -553,11 +553,11 @@ BubblesFSM.prototype = {
         headstart.mediator.publish("paper_mouseover", d, this);
       });
 
-    d3.selectAll("circle")
-      .on("click", function(d) {
-        return bubbles.zoom(d);
-      })
-    .style("display", "block");
+    // d3.selectAll("circle")
+    //   .on("click", function(d) {
+    //     return bubbles.zoom(d);
+    //   })
+    // .style("display", "block");
 
     zoom_node.style("display", "block");
 
