@@ -153,29 +153,32 @@ papers.drawDogEarPath = function(nodes) {
 // if the user clicks on the paper inside of a bubble,
 // it should zoom in. (behave same way when, only the bubble is clicked)
 papers.initPaperClickHandler = function() {
-  d3.selectAll(".paper_holder").on( "click", function(d) {
+  d3.selectAll(".paper_holder").on("click", function(d){
+    headstart.mediator.publish("paper_click", d)
+});
+}
+
+papers.paper_click = function(d) {
     if (!papers.is("loading")) {
-        if(!headstart.is_zoomed) {
+        if (!headstart.is_zoomed) {
             var current_node = headstart.chart.selectAll("circle")
-            .filter(function (x) {
-                if (d != null) {
-                    if (headstart.use_area_uri)
-                        return (x.area_uri == d.area_uri);
-                      else
-                        return (x.title == d.area);
-                } else {
-                    return null
-                }
-            })
-            
+                .filter(function(x) {
+                    if (d != null) {
+                        if (headstart.use_area_uri)
+                            return (x.area_uri == d.area_uri);
+                        else
+                            return (x.title == d.area);
+                    } else {
+                        return null
+                    }
+                })
+
             d3.event.stopPropagation();
             headstart.bubbles[headstart.current_file_number].zoomin(current_node.data()[0]);
         }
-
-        
     }
-  });
 }
+
 
 // add #id element to foreignObject and adjust various other attributes
 // <foreignObject id="article_metadata"
@@ -446,7 +449,7 @@ papers.shrinkPaper = function(d,holder) {
 
     d.resized = false;
 
-    holder_div.on("mouseover", papers.enlargePaper);
+    holder_div.on("mouseover", headstart.mediator.publish("paper_mouseover"));
 }
 
 papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
