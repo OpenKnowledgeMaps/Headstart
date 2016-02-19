@@ -756,6 +756,7 @@ HeadstartFSM.prototype = {
 
     // bubbles
     headstart.mediator.subscribe("bubble_mouseout", this.bubble_mouseout);
+    headstart.mediator.subscribe("bubble_mouseover", this.bubble_mouseover);
   },
 
   popup_toggle: function() {
@@ -803,6 +804,10 @@ HeadstartFSM.prototype = {
 
   bubble_mouseout: function(d, circle, bubble_fsm) {
     bubble_fsm.mouseout(d, circle);
+  },
+
+  bubble_mouseover: function(d, circle, bubble_fsm) {
+    bubble_fsm.mouseover(d, circle);
   }
   
 }

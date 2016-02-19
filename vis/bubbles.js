@@ -211,7 +211,8 @@ BubblesFSM.prototype = {
     var this_bubble = this;
     d3.selectAll("circle").on("mouseover", function(d) {
       if (!this_bubble.is("hoverbig")){
-        this_bubble.mouseover(this, d);
+        headstart.mediator.publish("bubble_mouseover", d, this, this_bubble);
+        // this_bubble.mouseover(this, d);
         headstart.recordAction(d.id, "circle_mouseover", headstart.user_id, "none", null);
       }
     }).on("mouseout", function(d) {
@@ -840,7 +841,7 @@ BubblesFSM.prototype = {
      }
   },
 
-  onmouseover: function( event, from, to, circle, d ) {
+  onmouseover: function( event, from, to, d, circle) {
       
     headstart.current_circle = d3.select(circle);
     if (headstart.is("timeline")) {
