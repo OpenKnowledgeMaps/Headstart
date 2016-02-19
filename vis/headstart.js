@@ -402,7 +402,8 @@ HeadstartFSM.prototype = {
     });
 
     $("#headstart-chart").on("click", function() {
-      headstart.bubbles[headstart.current_file_number].zoomOut();
+      headstart.mediator.publish("canvas_click", this.canvas_click);
+      // headstart.bubbles[headstart.current_file_number].zoomOut();
     });
   },
 
@@ -758,6 +759,9 @@ HeadstartFSM.prototype = {
     headstart.mediator.subscribe("bubble_mouseout", this.bubble_mouseout);
     headstart.mediator.subscribe("bubble_mouseover", this.bubble_mouseover);
     headstart.mediator.subscribe("bubble_click", this.bubble_click);
+
+    // canvas
+    headstart.mediator.subscribe("canvas_click", this.canvas_click);
   },
 
   popup_toggle: function() {
@@ -813,8 +817,13 @@ HeadstartFSM.prototype = {
 
   bubble_click: function(d, bubble) {
     bubble.zoomin(d);
-  }
+  },
+
+  canvas_click: function() {
+    headstart.bubbles[headstart.current_file_number].zoomOut();
 }
+}
+
 
 // State definitions for headstart object
 // see "onstart" function for entry point e.g. the first code that
