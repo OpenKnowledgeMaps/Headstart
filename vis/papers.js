@@ -448,8 +448,9 @@ papers.shrinkPaper = function(d,holder) {
         .attr("class", "large");
 
     d.resized = false;
-
-    holder_div.on("mouseover", headstart.mediator.publish("paper_mouseover"));
+    holder_div.on("mouseover", function(d) {
+        headstart.mediator.publish("paper_mouseover", d, this)
+    });
 }
 
 papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
@@ -497,10 +498,9 @@ papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
 
 
 // called far too often
-papers.enlargePaper = function(d,i) {
+papers.enlargePaper = function(d,holder_div,i) {
 
     papers.mouseoverpaper();
-
 
     if(d.resized || !headstart.is_zoomed) {
         return;
@@ -510,7 +510,7 @@ papers.enlargePaper = function(d,i) {
  
    var resize_factor = 1.2;
 
-    var holder_div = d3.select(this);
+    var holder_div = d3.select(holder_div);
 
     holder_div.selectAll("p")
         .attr("class", "larger");

@@ -794,8 +794,8 @@ HeadstartFSM.prototype = {
     papers.paper_click(d);
   },
 
-  paper_mouseover: function() {
-    paper.enlargePaper();
+  paper_mouseover: function(d, holder_div) {
+    papers.enlargePaper(d, holder_div);
   }
   
 }

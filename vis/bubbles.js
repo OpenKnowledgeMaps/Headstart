@@ -546,7 +546,9 @@ BubblesFSM.prototype = {
       d3.select("#subdiscipline_title h1").text("Area: " + d.title);
 
     d3.selectAll("div.paper_holder")
-      .on("mouseover", papers.enlargePaper);
+      .on("mouseover", function(d){
+        headstart.mediator.publish("paper_mouseover", d, this);
+      });
 
     d3.selectAll("circle")
       .on("click", function(d) {
