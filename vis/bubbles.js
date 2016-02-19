@@ -215,7 +215,8 @@ BubblesFSM.prototype = {
         headstart.recordAction(d.id, "circle_mouseover", headstart.user_id, "none", null);
       }
     }).on("mouseout", function(d) {
-      this_bubble.mouseout(this, d);
+      headstart.mediator.publish("bubble_mouseout", d, this, this_bubble);
+      // this_bubble.mouseout(this, d);
       headstart.recordAction(d.id, "circle_mouseout", headstart.user_id, "none", null);
     });
 
@@ -888,7 +889,7 @@ BubblesFSM.prototype = {
     }
   },
 
-  onmouseout: function( event, from, to, circle, d ) {
+  onmouseout: function( event, from, to, d, circle ) {
       
     if (headstart.is("normal") || headstart.is("switchfiles")) {
       if (event == "notzoomedmouseout") {

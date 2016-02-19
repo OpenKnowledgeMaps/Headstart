@@ -753,6 +753,9 @@ HeadstartFSM.prototype = {
     // papers
     headstart.mediator.subscribe("paper_click", this.paper_click);
     headstart.mediator.subscribe("paper_mouseover", this.paper_mouseover);
+
+    // bubbles
+    headstart.mediator.subscribe("bubble_mouseout", this.bubble_mouseout);
   },
 
   popup_toggle: function() {
@@ -796,6 +799,10 @@ HeadstartFSM.prototype = {
 
   paper_mouseover: function(d, holder_div) {
     papers.enlargePaper(d, holder_div);
+  },
+
+  bubble_mouseout: function(d, circle, bubble_fsm) {
+    bubble_fsm.mouseout(d, circle);
   }
   
 }
