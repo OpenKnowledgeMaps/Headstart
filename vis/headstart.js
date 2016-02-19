@@ -274,7 +274,7 @@ HeadstartFSM.prototype = {
     this.chart_x_circle = d3.scale.linear().range( [this.padding, to] );
     this.chart_y_circle = d3.scale.linear().range( [this.padding, to] );
   },
-
+  
   // either set it to min values or use all space available
   calculateMaxChartSize: function() {
     var self = this;
@@ -750,6 +750,9 @@ HeadstartFSM.prototype = {
     headstart.mediator.subscribe("list_sort_click", this.list_sort_click);
     headstart.mediator.subscribe("list_title_clickable", this.list_title_clickable);
 
+    // papers
+    headstart.mediator.subscribe("paper_click", this.paper_click);
+    headstart.mediator.subscribe("paper_mouseover", this.paper_mouseover);
   },
 
   popup_toggle: function() {
@@ -785,6 +788,14 @@ HeadstartFSM.prototype = {
 
   list_title_clickable: function(d) {
     list.makeTitleClickable(d);
+  },
+
+  paper_click: function(d) {
+    papers.paper_click(d);
+  },
+
+  paper_mouseover: function() {
+    paper.enlargePaper();
   }
   
 }
