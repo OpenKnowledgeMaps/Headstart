@@ -763,6 +763,10 @@ HeadstartFSM.prototype = {
 
     // canvas
     headstart.mediator.subscribe("canvas_click", this.canvas_click);
+
+    // bookmarks
+    headstart.mediator.subscribe("bookmark_added", this.bookmark_added);
+    headstart.mediator.subscribe("bookmark_removed", this.bookmark_removed);
   },
 
   popup_toggle: function() {
@@ -826,6 +830,14 @@ HeadstartFSM.prototype = {
 
   currentbubble_click: function(d) {
     papers.currentbubble_click(d);
+  },
+
+  bookmark_added: function(d) {
+    list.addBookmark(d);
+  },
+
+  bookmark_removed: function(d) {
+    list.removeBookmark(d);
   }
 }
 

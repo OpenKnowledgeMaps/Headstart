@@ -225,8 +225,9 @@ list.populateMetaData = function(nodes) {
        .attr("class", "tobookmark")
        .attr("id", "bookmark")
        .html("Add to schedule")
-       .on("click", function (d) { 
-         list.addBookmark(d);      
+       .on("click", function (d) {
+          headstart.mediator.publish("bookmark_added",d);
+         // list.addBookmark(d);      
          d3.event.stopPropagation();
        })
   }
@@ -239,7 +240,8 @@ list.populateMetaData = function(nodes) {
      .attr("id", "bookmark")
      .html("Already in your schedule X")
      .on("click", function (d) { 
-       list.removeBookmark(d);
+        headstart.mediator.publish("bookmark_removed", d);
+       // list.removeBookmark(d);
        d3.event.stopPropagation();
      })
   
@@ -374,7 +376,8 @@ list.addBookmark = function(d)  {
             .attr("class", "bookmarked")
             .html("Already in your schedule X")
              .on("click", function (d) { 
-               list.removeBookmark(d); 
+                headstart.mediator.publish("bookmark_removed", d);
+               // list.removeBookmark(d); 
                d3.event.stopPropagation();
              })
              
@@ -403,7 +406,8 @@ list.removeBookmark = function(d)  {
             .attr("class", "tobookmark")
             .html("Add to schedule")
              .on("click", function (d) { 
-               list.addBookmark(d); 
+                headstart.mediator.publish(d);
+               // list.addBookmark(d); 
                d3.event.stopPropagation();
              })
         
