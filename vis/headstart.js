@@ -754,6 +754,7 @@ HeadstartFSM.prototype = {
     // papers
     headstart.mediator.subscribe("paper_click", this.paper_click);
     headstart.mediator.subscribe("paper_mouseover", this.paper_mouseover);
+    headstart.mediator.subscribe("currentbubble_click", this.currentbubble_click);
 
     // bubbles
     headstart.mediator.subscribe("bubble_mouseout", this.bubble_mouseout);
@@ -821,7 +822,11 @@ HeadstartFSM.prototype = {
 
   canvas_click: function() {
     headstart.bubbles[headstart.current_file_number].zoomOut();
-}
+  },
+
+  currentbubble_click: function(d) {
+    papers.currentbubble_click(d);
+  }
 }
 
 

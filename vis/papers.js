@@ -561,27 +561,32 @@ papers.enlargePaper = function(d,holder_div,i) {
 
     headstart.current_circle
         .on("click", function (d) {
-
-            list.reset();
-
-            d3.selectAll("#list_holder")
-            .filter(function (x, i) {
-                return (headstart.use_area_uri)?(x.area_uri == d.area_uri):(x.area == d.title);
-            })
-            .style("display", function (d) { return d.filtered_out?"none":"inline"});
-
-            if(headstart.current_enlarged_paper != null)
-                headstart.current_enlarged_paper.paper_selected = false;
-
-            headstart.current_enlarged_paper = null;
-
-            headstart.recordAction(d.id, "click_paper_list_enlarge", headstart.user_id, d.bookmarked + " " + d.recommended , null);
-
-            d3.event.stopPropagation();
+            headstart.mediator.publish("currentbubble_click", d);
         });
 
     d.resized = true;
 }
+
+papers.currentbubble_click = function(d) {
+    list.reset();
+
+    d3.selectAll("#list_holder")
+        .filter(function(x, i) {
+            return (headstart.use_area_uri) ? (x.area_uri == d.area_uri) : (x.area == d.title);
+        })
+        .style("display", function(d) {
+            return d.filtered_out ? "none" : "inline" });
+
+    if (headstart.current_enlarged_paper != null)
+        headstart.current_enlarged_paper.paper_selected = false;
+
+    headstart.current_enlarged_paper = null;
+
+    headstart.recordAction(d.id, "click_paper_list_enlarge", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+
+    d3.event.stopPropagation();
+}
+
 
 papers.populateOverlay = function(d) {
     paper_frame
