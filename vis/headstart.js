@@ -750,6 +750,8 @@ HeadstartFSM.prototype = {
     headstart.mediator.subscribe("list_title_click", this.list_title_click);
     headstart.mediator.subscribe("list_sort_click", this.list_sort_click);
     headstart.mediator.subscribe("list_title_clickable", this.list_title_clickable);
+    headstart.mediator.subscribe("preview_mouseover", this.preview_mouseover);
+    headstart.mediator.subscribe("preview_mouseout", this.preview_mouseout);
 
     // papers
     headstart.mediator.subscribe("paper_click", this.paper_click);
@@ -838,6 +840,16 @@ HeadstartFSM.prototype = {
 
   bookmark_removed: function(d) {
     list.removeBookmark(d);
+  },
+
+  preview_mouseover: function(current_item) {
+    current_item.select("#transbox")
+      .style("display", "block");
+  },
+
+  preview_mouseout: function(current_item) {
+    current_item.select("#transbox")
+      .style("display", "none");
   }
 }
 

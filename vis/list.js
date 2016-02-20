@@ -567,22 +567,24 @@ list.setImageForListHolder = function(d) {
       .style("background", "url(" + image_src + ")")
       .style("background-size", headstart.preview_image_width_list + "px, " + headstart.preview_image_height_list+ "px")
       .on("mouseover", function (d) {
-        current_item.select("#transbox")
-        .style("display", "block");
+        headstart.mediator.publish("preview_mouseover", current_item);
+        // current_item.select("#transbox")
+        // .style("display", "block");
       })
-    .on("mouseout", function (d) {
-      current_item.select("#transbox")
-      .style("display", "none");
-    })
-    .append("div")
-      .attr("id", "transbox")
-      .style("width", headstart.preview_image_width_list + "px")
-      .style("height", headstart.preview_image_height_list+ "px")
-      .html("Click here to open preview")
-      .on("click", function(d){
-        headstart.mediator.publish("list_show_popup", d);
-        // this.populateOverlay;
+      .on("mouseout", function (d) {
+        headstart.mediator.publish("preview_mouseout", current_item);
+        // current_item.select("#transbox")
+        // .style("display", "none");
       })
+      .append("div")
+        .attr("id", "transbox")
+        .style("width", headstart.preview_image_width_list + "px")
+        .style("height", headstart.preview_image_height_list+ "px")
+        .html("Click here to open preview")
+        .on("click", function(d){
+          headstart.mediator.publish("list_show_popup", d);
+          // this.populateOverlay;
+        })
   }
   
   /*$("#list_title a").hover(function () {
