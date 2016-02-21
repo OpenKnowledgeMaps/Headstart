@@ -43,10 +43,12 @@ var list = StateMachine.create({
         onbeforetoggle: function( event, from, to ) {
             if(this.current == "visible") {
                this.hide();
-               headstart.recordAction("none", "hide_list", headstart.user_id, "none", null);
+               headstart.mediator.publish("record_action","none", "hide_list", headstart.user_id, "none", null);
+               // headstart.recordAction("none", "hide_list", headstart.user_id, "none", null);
             } else  {
                 this.show();
-                headstart.recordAction("none", "show_list", headstart.user_id, "none", null);
+                headstart.mediator.publish("record_action","none", "show_list", headstart.user_id, "none", null);
+                // headstart.recordAction("none", "show_list", headstart.user_id, "none", null);
             }
         }
     }
@@ -104,6 +106,7 @@ list.drawList = function() {
         .attr("id", "sort_" + sort_option)
         .on("click", function() {
           headstart.mediator.publish("list_sort_click", sort_option);
+          headstart.mediator.publish("record_action","none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
           // headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
           // sortBy(sort_option);
         }).text(sort_option);
@@ -289,7 +292,8 @@ filterList = function(event) {
   var searchtext_processed = searchtext.trim().toLowerCase();
   var search_words = searchtext_processed.split(" ");
   
-  headstart.recordAction("none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
+  headstart.mediator.publish("record_action","none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
+  // headstart.recordAction("none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
 
   filtered_data
     .filter(function (d) {
@@ -366,7 +370,8 @@ list.addBookmark = function(d)  {
       function(data) {
         console.log("Successfully added bookmark");
         
-        headstart.recordAction(d.id, "add_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
+        headstart.mediator.publish("record_action",d.id, "add_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
+        // headstart.recordAction(d.id, "add_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
 
         d.bookmarked = true;
 
@@ -396,7 +401,8 @@ list.removeBookmark = function(d)  {
       function(data) {
         console.log("Successfully removed bookmark");
         
-        headstart.recordAction(d.id, "remove_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
+        headstart.mediator.publish("record_action",d.id, "remove_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
+        // headstart.recordAction(d.id, "remove_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
         
         d.bookmarked = false;
         
@@ -436,7 +442,8 @@ list.makeTitleClickable = function(d) {
     this.enlargeListItem(d);
     headstart.current_enlarged_paper = d;
 
-    headstart.recordAction(d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+    headstart.mediator.publish("record_action", d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+    // headstart.recordAction(d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
     
     d3.event.stopPropagation();
 }
@@ -611,7 +618,8 @@ list.title_click = function (d) {
           return
       }
       
-      headstart.recordAction(d.id, "click_on_title", headstart.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
+      headstart.mediator.publish("record_action",d.id, "click_on_title", headstart.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
+      // headstart.recordAction(d.id, "click_on_title", headstart.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
       
       window.open(url, "_blank");
       d3.event.stopPropagation();

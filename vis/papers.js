@@ -506,7 +506,8 @@ papers.enlargePaper = function(d,holder_div,i) {
         return;
     }
     
-    headstart.recordAction(d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+    headstart.mediator.publish("record_action",d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null); 
+    // headstart.recordAction(d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
  
    var resize_factor = 1.2;
 
@@ -543,7 +544,8 @@ papers.enlargePaper = function(d,holder_div,i) {
 
                 d.paper_selected = true;
                 headstart.current_enlarged_paper = d;
-                headstart.recordAction(d.id, "click_on_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+                headstart.mediator.publish("record_action", d.id, "click_on_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+                // headstart.recordAction(d.id, "click_on_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
                 d3.event.stopPropagation();
             }
         })
@@ -581,8 +583,8 @@ papers.currentbubble_click = function(d) {
         headstart.current_enlarged_paper.paper_selected = false;
 
     headstart.current_enlarged_paper = null;
-
-    headstart.recordAction(d.id, "click_paper_list_enlarge", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+    headstart.mediator.publish("record_action",d.id, "click_paper_list_enlarge", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+    // headstart.recordAction(d.id, "click_paper_list_enlarge", headstart.user_id, d.bookmarked + " " + d.recommended, null);
 
     d3.event.stopPropagation();
 }

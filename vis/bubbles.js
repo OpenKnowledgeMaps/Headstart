@@ -213,12 +213,14 @@ BubblesFSM.prototype = {
       if (!this_bubble.is("hoverbig")){
         headstart.mediator.publish("bubble_mouseover", d, this, this_bubble);
         // this_bubble.mouseover(this, d);
-        headstart.recordAction(d.id, "circle_mouseover", headstart.user_id, "none", null);
+        headstart.mediator.publish("record_action",d.id, "circle_mouseover", headstart.user_id, "none", null);
+        // headstart.recordAction(d.id, "circle_mouseover", headstart.user_id, "none", null);
       }
     }).on("mouseout", function(d) {
       headstart.mediator.publish("bubble_mouseout", d, this, this_bubble);
       // this_bubble.mouseout(this, d);
-      headstart.recordAction(d.id, "circle_mouseout", headstart.user_id, "none", null);
+      headstart.mediator.publish("record_action",d.id, "circle_mouseout", headstart.user_id, "none", null);
+      // headstart.recordAction(d.id, "circle_mouseout", headstart.user_id, "none", null);
     });
 
     if (headstart.is("normal") || headstart.is("switchfiles"))
@@ -582,7 +584,8 @@ BubblesFSM.prototype = {
 
     headstart.bubbles[headstart.current_file_number].createTransition(t, d.title);
 
-    headstart.recordAction(d.id, "zoom_in", headstart.user_id, "none", null);
+    headstart.mediator.publish("record_action", d.id, "zoom_in", headstart.user_id, "none", null);
+    // headstart.recordAction(d.id, "zoom_in", headstart.user_id, "none", null);
 
     d3.event.stopPropagation();
   },
@@ -605,9 +608,11 @@ BubblesFSM.prototype = {
       toFront(headstart.current_zoom_node.parentNode);
       
       var circle_data = d3.select(headstart.current_zoom_node).data();
-      headstart.recordAction(circle_data.id, "zoom_out", headstart.user_id, "none", null);
+      headstart.mediator.publish("record_action", circle_data.id, "zoom_out", headstart.user_id, "none", null);
+      // headstart.recordAction(circle_data.id, "zoom_out", headstart.user_id, "none", null);
     } else {
-      headstart.recordAction("none", "zoom_out", headstart.user_id, "none", null);
+      headstart.mediator.publish("record_action","none", "zoom_out", headstart.user_id, "none", null);
+      // headstart.recordAction("none", "zoom_out", headstart.user_id, "none", null);
     }
 
     if (headstart.current_enlarged_paper !== null) {
@@ -832,8 +837,8 @@ BubblesFSM.prototype = {
         this.draw();
         this.initMouseListeners();
       }
-      
-      headstart.recordAction("none", "start", headstart.user_id, "start_bubble", null, null, recommendation_data);
+      headstart.mediator.publish("record_action","none", "start", headstart.user_id, "start_bubble", null, null, recommendation_data);
+      // headstart.recordAction("none", "start", headstart.user_id, "start_bubble", null, null, recommendation_data);
   },
 
   onbeforemouseover: function( event, from, to, circle, d ) {

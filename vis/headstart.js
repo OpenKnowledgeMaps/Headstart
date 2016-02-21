@@ -769,6 +769,9 @@ HeadstartFSM.prototype = {
     // bookmarks
     headstart.mediator.subscribe("bookmark_added", this.bookmark_added);
     headstart.mediator.subscribe("bookmark_removed", this.bookmark_removed);
+
+    // misc
+    headstart.mediator.subscribe("record_action", this.record_action);
   },
 
   popup_toggle: function() {
@@ -798,7 +801,6 @@ HeadstartFSM.prototype = {
   },
 
   list_sort_click: function(sort_option) {
-    headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
     sortBy(sort_option);
   },
 
@@ -850,6 +852,10 @@ HeadstartFSM.prototype = {
   preview_mouseout: function(current_item) {
     current_item.select("#transbox")
       .style("display", "none");
+  },
+
+  record_action: function(id, action, user, type, timestamp, additional_params, post_data) {
+    headstart.recordAction(id, action, user, type, timestamp, additional_params, post_data);
   }
 }
 
