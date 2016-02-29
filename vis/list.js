@@ -412,7 +412,7 @@ list.removeBookmark = function(d)  {
             .attr("class", "tobookmark")
             .html("Add to schedule")
              .on("click", function (d) { 
-                headstart.mediator.publish(d);
+                headstart.mediator.publish("bookmark_added", d);
                // list.addBookmark(d); 
                d3.event.stopPropagation();
              })
