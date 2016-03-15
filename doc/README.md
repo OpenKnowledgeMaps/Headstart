@@ -6,7 +6,7 @@ Head over to `index.html` and check the path name.
 
 ## Modules
 
-Headstart uses the *mediator pattern* (see [Addy Osmani's article](https://addyosmani.com/largescalejavascript/#mediatorpattern)). The current implementation has not implemented the mediator pattern completely, yet.
+Headstart uses the *mediator pattern* (see [Addy Osmani's article](https://addyosmani.com/largescalejavascript/#mediatorpattern)). Current code has implemented the mediator and the channels for basic functionality, but logic has not been moved yet.
 
 ![architecture](img/headstart_architecture.png "Logo Title Text 1")
 
