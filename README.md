@@ -49,15 +49,6 @@ Kraker, P., Weißensteiner, P., & Brusilovsky, P. (2014). [Altmetrics-based Visu
 Kraker, P., Körner, C., Jack, K., & Granitzer, M. (2012). [Harnessing User Library Statistics for Research Evaluation and Knowledge Domain Visualization](http://know-center.tugraz.at/download_extern/papers/user_library_statistics.pdf). Proceedings of the 21st International Conference Companion on World Wide Web (pp. 1017–1024). Lyon: ACM. doi:10.1145/2187980.2188236
 
 
-Installation
-------------
-
-To get the application running locally you can use the included ruby/server.rb.
-
-    $ ruby server
-
-should start a server at http://localhost:8000/.
-
 License
 -------
 Head Start is licensed under [LGPL v3](http://www.gnu.org/copyleft/lesser.html).
