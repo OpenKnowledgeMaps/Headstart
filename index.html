@@ -1,59 +1,57 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
-    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <script type="text/javascript" src="vis/lib/jquery-1.8.1.min.js">
-            </script>
-            <script type="text/javascript" src="vis/vis.js"></script>
-    </head>
 
-    <body style="margin:0px; padding:0px">
-        <div id="visualization" style="width:100%;"></div>
-        <script>
-                $(function () {
-                    
-                    var height = ($(document).height() < 700) ? (700) : ($(document).height());
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="vis/lib/jquery-1.8.1.min.js">
+    </script>
+    <script type="text/javascript" src="vis/vis.js"></script>
+</head>
 
-                    var myHeadstart = new Headstart(
-                            "localhost/" //host
-                            , "headstart/" //path
-                            , "visualization" //append to tag
-                            , [{
-                                    title: "edu1"
-                                    , file: "vis/data/educational-technology.csv"
-                                }
-                                , {
-                                    title: "edu2"
-                                    , file: "vis/data/edu2.csv"
-                                }
-                                , {
-                                    title: "edu3"
-                                    , file: "vis/data/edu3.csv"
-                                }
-                                , {
-                                    title: "edu4"
-                                    , file: "vis/data/edu4.csv"
-                                }
-                                , {
-                                    title: "edu5"
-                                    , file: "vis/data/edu5.csv"
-                                }
-                            ] //data
-                            , {title: "Overview of Educational Technology"
-                                , width: 1200
-                                , height: height
-                                , max_diameter_size: 50
-                                , min_diameter_size: 30
-                                , max_area_size: 110
-                                , min_area_size: 50
-                                , input_format: "csv"
-                                , use_area_uri: false
-                                , base_unit: "readers"
-                                , force_areas: false
-                                , url_prefix: "http://mendeley.com/catalog/"
-                            } //options
-                    )
-                })
-        </script>
+<body style="margin:0px; padding:0px">
+    <div id="visualization" style="width:100%;"></div>
+    <script>
+    $(function() {
 
-    </body>
+        var height = ($(document).height() < 700) ? (700) : ($(document).height());
+
+        var myHeadstart = new Headstart(
+            "localhost/", //host
+            "headstart/", //path
+            "visualization", //append to tag
+            [{
+                title: "edu1",
+                file: "vis/data/educational-technology.csv"
+            }, {
+                title: "edu2",
+                file: "vis/data/edu2.csv"
+            }, {
+                title: "edu3",
+                file: "vis/data/edu3.csv"
+            }, {
+                title: "edu4",
+                file: "vis/data/edu4.csv"
+            }, {
+                title: "edu5",
+                file: "vis/data/edu5.csv"
+            }] //data
+            , {
+                title: "Overview of Educational Technology",
+                width: 1200,
+                height: height,
+                max_diameter_size: 50,
+                min_diameter_size: 30,
+                max_area_size: 110,
+                min_area_size: 50,
+                input_format: "csv",
+                use_area_uri: false,
+                base_unit: "readers",
+                force_areas: false,
+                url_prefix: "http://mendeley.com/catalog/"
+            } //options
+        )
+    })
+    </script>
+</body>
+
 </html>
