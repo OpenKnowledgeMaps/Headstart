@@ -2,11 +2,13 @@
 
 ## Installation and deployment
 
-### Client
+See [Getting Started](https://github.com/pkraker/Headstart#getting-started) for a minimal working example.
 
-Head over to `index.html` and check the path name.
+## <a name="data"></a>Data format
 
-### Server
+TBD
+
+## <a name="options"></a>Visualisation settings
 
 TBD
 
