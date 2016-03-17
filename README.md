@@ -18,7 +18,7 @@ To run Headstart on the client side you only need to create a new instance of He
         "headstart/", //path
         "visualization", //append to tag
 
-Headstart comes with five example datasets, which are stored in `vis/data`. See [data format](doc/README.md#data) for more details.
+Headstart comes with five example datasets, which are stored in `vis/data`. See [data format](doc/README.md#data-format) for more details.
 
         [{
             title: "edu1",
@@ -37,7 +37,7 @@ Headstart comes with five example datasets, which are stored in `vis/data`. See 
             file: "vis/data/edu5.csv"
         }],
 
-Finally adjust the title and visualization settings according to your needs. See [options](doc/README.md#data) for more details.
+Finally adjust the title and visualization settings according to your needs. See [options](doc/README.md#visualisation-settings) for more details.
 
           {
             title: "Overview of Educational Technology",
