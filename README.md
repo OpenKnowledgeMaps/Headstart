@@ -11,14 +11,19 @@ researchers that are new to a field a head start on their literature review
 
 ### Client
 
-To run Headstart on the client side you only need to create a new instance of Headstart in `index.html`. Setup host and path according to your system. 
+In order to start run an instance of Headstart five parameters need to be set.
 
-    var myHeadstart = new Headstart(
-        "localhost/", //host
-        "headstart/", //path
++ When developing locally set the **host** and **path** to your copy in `index.html`.
+
+        var myHeadstart = new Headstart(
+            "localhost/", //host
+            "headstart/", //path
+
++ The third argument is id of the **tag** that Headstart will be embedded in. In the case of the demo, the map is appended to `<div id="visualization"></div>`.
+
         "visualization", //append to tag
 
-Headstart comes with five example datasets, which are stored in `vis/data`. See [data format](doc/README.md#data-format) for more details.
++ The fourth parameter is the input **data**. Headstart comes with five example datasets, which are stored in `vis/data`. See [data format](doc/README.md#data-format) for more details.
 
         [{
             title: "edu1",
@@ -37,7 +42,7 @@ Headstart comes with five example datasets, which are stored in `vis/data`. See 
             file: "vis/data/edu5.csv"
         }],
 
-Finally adjust the title and visualization settings according to your needs. See [options](doc/README.md#visualisation-settings) for more details.
++ Finally you can set a variety of **options** in order to adjust Headstart to your needs. See [options](doc/README.md#visualisation-settings) for more details.
 
           {
             title: "Overview of Educational Technology",
