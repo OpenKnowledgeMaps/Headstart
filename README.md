@@ -1,5 +1,4 @@
-Head Start
-==========
+# Head Start
 
 Head Start presents you with the main areas in the field, and lets you zoom into
 the most important publications within each area. It is intended to give
@@ -8,16 +7,66 @@ researchers that are new to a field a head start on their literature review
 
 ![Head Start](http://science.okfn.org/files/2013/12/headstart.png)
 
-Authors
--------
+## Getting Started
+
+### Client
+
+To run Headstart on the client side you only need to create a new instance of Headstart in `index.html`. Setup host and path according to your system. 
+
+    var myHeadstart = new Headstart(
+        "localhost/", //host
+        "headstart/", //path
+        "visualization", //append to tag
+
+Headstart comes with five example datasets, which are stored in `vis/data`. See [data format](doc/README.md#data) for more details.
+
+        [{
+            title: "edu1",
+            file: "vis/data/educational-technology.csv"
+        }, {
+            title: "edu2",
+            file: "vis/data/edu2.csv"
+        }, {
+            title: "edu3",
+            file: "vis/data/edu3.csv"
+        }, {
+            title: "edu4",
+            file: "vis/data/edu4.csv"
+        }, {
+            title: "edu5",
+            file: "vis/data/edu5.csv"
+        }],
+
+Finally adjust the title and visualization settings according to your needs. See [options](doc/README.md#data) for more details.
+
+          {
+            title: "Overview of Educational Technology",
+            width: 1200,
+            height: height,
+            max_diameter_size: 50,
+            min_diameter_size: 30,
+            max_area_size: 110,
+            min_area_size: 50,
+            input_format: "csv",
+            use_area_uri: false,
+            base_unit: "readers",
+            force_areas: false,
+            url_prefix: "http://mendeley.com/catalog/"
+        } )
+
+### Server
+
+TBD
+
+## Authors
 
 Peter Kraker (peter.kraker@tugraz.at)
 
 Philipp Weißensteiner (philipp.weissensteiner@student.tugraz.at)
 
+Asura Enkhbayar (asura.enkhbayar@gmail.com)
 
-Features
---------
+## Features
 
 * The main areas in the field are represented by the blue bubbles.
 * Once you click on a bubble, you are presented with the main papers in that area.
@@ -28,8 +77,7 @@ Features
 
 The visualization was created with D3.js. It has been successfully tested with Chrome 22, Firefox 15, and Safari 5.1. Unfortunately, Internet Explorer is not supported at this point due to the fact that it is not possible to insert HTML into a foreignObject.
 
-Showcases
----------
+## Showcases
 
 * [PLOS Search Visualization](http://openknowledgemaps.org/mozfest): This prototype creates a visualization on the fly based on a user's PLOS search.
 * [Open Knowledge Maps](http://openknowledgemaps.org): A working prototype for the field of educational technology. 
@@ -37,8 +85,7 @@ Showcases
 * [Organic Edunet portal](http://organic-edunet.eu/en/#/recommended): Overview of recommended resources in the Organic Eudnet portal.
 
 
-Background
------------
+## Background
 
 The visualization is based on readership co-occurrence in Mendeley. More information can be found in the following papers:
 
@@ -49,13 +96,11 @@ Kraker, P., Weißensteiner, P., & Brusilovsky, P. (2014). [Altmetrics-based Visu
 Kraker, P., Körner, C., Jack, K., & Granitzer, M. (2012). [Harnessing User Library Statistics for Research Evaluation and Knowledge Domain Visualization](http://know-center.tugraz.at/download_extern/papers/user_library_statistics.pdf). Proceedings of the 21st International Conference Companion on World Wide Web (pp. 1017–1024). Lyon: ACM. doi:10.1145/2187980.2188236
 
 
-License
--------
+## License
 Head Start is licensed under [LGPL v3](http://www.gnu.org/copyleft/lesser.html).
 
 
-Citation
---------
+## Citation
 If you use Head Start in your research, please cite it as follows:
 
 Kraker, Peter; Weißensteiner, Philipp (2014): Head Start. figshare. http://dx.doi.org/10.6084/m9.figshare.1091372
