@@ -1,14 +1,45 @@
 # Doc
 
-## Installation and deployment
+## Installation and Deployment
 
-See [Getting Started](https://github.com/pkraker/Headstart#getting-started) for a minimal working example.
+See [Getting Started](../README.md#getting-started) for a minimal working example.
 
-## Data format
+## Input Data Format
 
-TBD
+Each input dataset consists of 12 entries per document.
 
-## Visualisation settings
+1. **id** - Document ID
+1. **title** - Title of the document
+1. **readers** - Readers
+1. **x** - Horizontal position on the map
+1. **y** - Vertical postition on the map
+1. **paper_abstract** - Abstract *optional*
+1. **published_in** - Name of Journal *optional*
+1. **year** - Year *optional*
+1. **url** - URL (common prefix can be defined in the [options](#visualisation-settings))
+1. **file_hash** - 
+1. **authors** - Name of authors
+
+## Visualisation Settings
+
+Basic settings include:
+
+**General settings**
+
++ title - Title of the map
++ width - in px
++ height - in px
+
+**Map settings**
+
+Tweak these values to optimize bubble and paper sizes. 
+
++ max_diameter_size
++ min_diameter_size
++ max_area_size
++ min_area_size
+
+**More settings**
 
 TBD
 
