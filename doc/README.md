@@ -4,11 +4,11 @@
 
 See [Getting Started](https://github.com/pkraker/Headstart#getting-started) for a minimal working example.
 
-## <a name="data"></a>Data format
+## Data format
 
 TBD
 
-## <a name="options"></a>Visualisation settings
+## Visualisation settings
 
 TBD
 
