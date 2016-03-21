@@ -26,26 +26,18 @@ In order to start run an instance of Headstart five parameters need to be set.
 + The fourth parameter is the input **data**. Headstart comes with five example datasets, which are stored in `vis/data`. See [data format](doc/README.md#data-format) for more details.
 
         [{
-            title: "edu1",
-            file: "vis/data/educational-technology.csv"
+            title: "name_dataset1",
+            file: "vis/data/dataset1.csv"
         }, {
-            title: "edu2",
-            file: "vis/data/edu2.csv"
-        }, {
-            title: "edu3",
-            file: "vis/data/edu3.csv"
-        }, {
-            title: "edu4",
-            file: "vis/data/edu4.csv"
-        }, {
-            title: "edu5",
-            file: "vis/data/edu5.csv"
-        }],
+            title: "name_dataset2",
+            file: "vis/data/dataset2.csv"
+        },
+        ...],
 
 + Finally you can set a variety of **options** in order to adjust Headstart to your needs. See [options](doc/README.md#visualisation-settings) for more details.
 
           {
-            title: "Overview of Educational Technology",
+            title: "Name of this map",
             width: 1200,
             height: height,
             max_diameter_size: 50,
