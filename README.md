@@ -11,19 +11,23 @@ researchers that are new to a field a head start on their literature review
 
 ### Client
 
-In order to start run an instance of Headstart five parameters need to be set.
+Load `vis.js` and add a new div to your webpage.
 
-+ When developing locally set the **host** and **path** to your copy in `index.html`.
+    <div id="visualization"></div>
+
+In order to run a new instance of Headstart you need to set the five parameters in `Headstart(host, path, tag, files, options)`.
+
+1. When developing locally set the **host** and **path** to your copy in `index.html`.
 
         var myHeadstart = new Headstart(
-            "localhost/", //host
-            "headstart/", //path
+            "localhost/", // host
+            "headstart/", // path
 
-+ The third argument is id of the **tag** that Headstart will be embedded in. In the case of the demo, the map is appended to `<div id="visualization"></div>`.
+2. The third argument is id of the **tag** that Headstart will be embedded in. In the case of the demo, the map is appended to the new div with `id=visualization`.
 
-        "visualization", //append to tag
+        "visualization", // append to tag
 
-+ The fourth parameter is the input **data**. Headstart comes with five example datasets, which are stored in `vis/data`. See [data format](doc/README.md#data-format) for more details.
+3. The fourth parameter is the input **data**. Headstart comes with five example datasets, which are stored in `vis/data`. See [data format](doc/README.md#data-format) for more details.
 
         [{
             title: "name_dataset1",
@@ -34,7 +38,7 @@ In order to start run an instance of Headstart five parameters need to be set.
         },
         ...],
 
-+ Finally you can set a variety of **options** in order to adjust Headstart to your needs. See [options](doc/README.md#visualisation-settings) for more details.
+4. Finally you can set a variety of **options** in order to adjust Headstart to your needs. See [options](doc/README.md#visualisation-settings) for more details.
 
           {
             title: "Name of this map",
