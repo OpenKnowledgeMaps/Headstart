@@ -414,7 +414,12 @@ BubblesFSM.prototype = {
       .style("height", function (d) { return d.height_html + "px" })
       .append("h2")
       .html(function (d) {
-        return d.title
+        if (d.title.length > headstart.area_title_max_size) {
+          return d.title.substring(0, headstart.area_title_max_size) + '...'
+        } else {
+          return d.title
+        }
+
       });
   },
 
