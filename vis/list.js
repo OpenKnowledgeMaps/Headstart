@@ -80,7 +80,7 @@ list.drawList = function() {
       .attr("id", "input_container")
       .append("input")
       .attr("type", "text")
-      .attr("value", "Search...")
+      .attr("placeholder","Search...")
       .attr("oninput", "filterList(event)")
       .attr("size", 15)
     list_show_hide_container.append("div")
