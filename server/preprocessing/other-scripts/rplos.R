@@ -3,6 +3,7 @@ rm(list = ls())
 args <- commandArgs(TRUE)
 wd <-args[1]
 query <- args[2]
+params_file <- args[3]
 
 setwd(wd) #Don't forget to set your working directory
 library(GMD)
@@ -16,11 +17,23 @@ library(jsonlite)
 
 debug = FALSE
 
+if(!is.null(params_file)) {
+  params <- fromJSON(params_file)
+}
+
+date_string = paste("publication_date:[", params$from, "T00:00:00Z", " TO ", params$to, "T23:59:59Z]", sep="")
+article_types_string = paste("article_type:(", '"', paste(params$article_types, sep='"', collapse='" OR "'), '")', sep="")
+journals_string = paste("cross_published_journal_key:(", '"', paste(params$journals, sep='"', collapse='" OR "'), '")', sep="")
+
+
 # Get data from PLOS API
 start.time <- Sys.time()
 
-search_data <- searchplos(q=query, fl='title,id,counter_total_month,abstract,journal,publication_date,author,everything,subject', 
-                       fq='doc_type:full', limit=100)
+#Format for fq: article_type:("Review" OR "Editorial")'
+
+search_data <- searchplos(q=query, fq=list(article_types_string, journals_string, date_string, "doc_type:full"),
+                          fl='title,id,counter_total_month,abstract,journal,publication_date,author,everything,subject,article_type',
+                          limit=100)
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time

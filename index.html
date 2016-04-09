@@ -9,11 +9,12 @@
 </head>
 
 <body style="margin:0px; padding:0px">
-    <div id="visualization" style="width:100%;"></div>
+    <div id="visualization"></div>
     <script>
     $(function() {
 
-        var height = ($(document).height() < 700) ? (700) : ($(document).height());
+        var height = ($(document).height() < 700)?(700):($(document).height());
+        var width = ($(document).width() < 700)?(700):($(document).width());
 
         var myHeadstart = new Headstart(
             "localhost/", //host
@@ -37,7 +38,7 @@
             }] //data
             , {
                 title: "Overview of Educational Technology",
-                width: 1200,
+                width: width,
                 height: height,
                 max_diameter_size: 50,
                 min_diameter_size: 30,

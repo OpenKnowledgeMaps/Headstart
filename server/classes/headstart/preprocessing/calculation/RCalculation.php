@@ -29,7 +29,7 @@ class RCalculation extends Calculation {
         exec($path); 
     }
     
-    public function performCalculationAndReturnOutputAsJSON($working_dir, $query) {
+    public function performCalculationAndReturnOutputAsJSON($working_dir, $query, $params=null) {
         $ini = $this->ini_array["calculation"];
         $output = $this->ini_array["output"];
         
@@ -39,6 +39,10 @@ class RCalculation extends Calculation {
         
         $path = '"' . $binary . '" ' .$script. ' "' . $working_dir . '" "'
                 . $query . '"';
+        
+        if($params != null) {
+            $path .= ' "' . $params . '"';
+        }
         
         //library\Toolkit::info($path);
         exec($path, $output_r);

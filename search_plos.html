@@ -9,36 +9,132 @@ and open the template in the editor.
         <title>Search PLOS and turn it into a visualization</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <link rel="stylesheet" href="vis/lib/bootstrap.min.css">
+        <script src="vis/lib/jquery-2.1.4.js"></script>
+        <script src="vis/lib/jquery-ui.js"></script>
         <!--<script type="text/javascript" src="vis/lib/jquery-1.8.1.min.js"></script>-->
         <script type="text/javascript" src="vis/lib/d3.v3.js"></script>
+        <script type="text/javascript" src="search_options.js"></script>
         <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="vis/lib/jquery-ui.css">
+        <script type="text/javascript" src="vis/lib/bootstrap.min.js"></script>
+        <script type="text/javascript" src="vis/lib/bootstrap-multiselect.js"></script>
+        
+        <link rel="stylesheet" href="vis/lib/bootstrap-multiselect.css">
+        <link rel="stylesheet" href="options.css">
+         <script type="text/javascript">
+            var options = {
+                dropdowns: [
+                    {id: "time_range", multiple: false, name: "Time Range", type: "dropdown"
+                        , fields: [
+                            {id: "any-time", text: "Any time"}
+                            , {id: "last-month", text: "Last month"}
+                            , {id: "last-year", text: "Last year"}
+                            , {id: "user-defined", text: "Custom range", class: "user-defined",
+                                inputs: [
+                                    {id: "from", label: "From: ", class: "time_input"}
+                                    , {id: "to", label: "To: ", class: "time_input"}
+                                ]}
+                        ]},
+                    {id: "article_types", multiple: true, name: "Article types", type: "dropdown"
+                        , fields: [
+                            {id: "Research Article", text: "Research Article", selected: true}
+                            , {id: "Review", text: "Review", selected: true}
+                            , {id: "Best Practice", text: "Best Practice", selected: true}
+                            , {id: "Book Review", text: "Book Review", selected: true}
+                            , {id: "Book Review/Science in the Media", text: "Book Review/Science in the Media", selected: true}
+                            , {id: "Case Report", text: "Case Report", selected: true}
+                            , {id: "Collection Review", text: "Collection Review", selected: true}
+                            , {id: "Community Page", text: "Community Page", selected: true}
+                            , {id: "Correction", text: "Correction", selected: false}
+                            , {id: "Correspondence", text: "Correspondence", selected: true}
+                            , {id: "Correspondence and Other Communications", text: "Correspondence and Other Communications", selected: true}
+                            , {id: "Deep Reads", text: "Deep Reads", selected: true}
+                            , {id: "Editorial", text: "Editorial", selected: true}
+                            , {id: "Education", text: "Education", selected: true}
+                            , {id: "Essay", text: "Essay", selected: true}
+                            , {id: "Expert Commentary", text: "Expert Commentary", selected: true}
+                            , {id: "Expression of Concern", text: "Expression of Concern", selected: true}
+                            , {id: "Feature", text: "Feature", selected: true}
+                            , {id: "Formal Comment", text: "Formal Comment", selected: true}
+                            , {id: "From Innovation to Application", text: "From Innovation to Application", selected: true}
+                            , {id: "Guidelines and Guidance", text: "Guidelines and Guidance", selected: true}
+                            , {id: "Health in Action", text: "Health in Action", selected: true}
+                            , {id: "Historical and Philosophical Perspectives", text: "Historical and Philosophical Perspectives", selected: true}
+                            , {id: "Historical Profiles and Perspectives", text: "Historical Profiles and Perspectives", selected: true}
+                            , {id: "Interview", text: "Interview", selected: true}
+                            , {id: "Journal Club", text: "Journal Club", selected: true}
+                            , {id: "Learning Forum ", text: "Learning Forum ", selected: true}
+                            , {id: "Message from ISCB", text: "Message from ISCB", selected: true}
+                            , {id: "Neglected Diseases", text: "Neglected Diseases", selected: true}
+                            , {id: "Obituary", text: "Obituary", selected: true}
+                            , {id: "Opinion", text: "Opinion", selected: true}
+                            , {id: "Overview", text: "Overview", selected: true}
+                            , {id: "Pearls", text: "Pearls", selected: true}
+                            , {id: "Perspective", text: "Perspective", selected: true}
+                            , {id: "Photo Quiz", text: "Photo Quiz", selected: false}
+                            , {id: "Policy Forum", text: "Policy Forum", selected: true}
+                            , {id: "Policy Platform", text: "Policy Platform", selected: true}
+                            , {id: "Primer", text: "Primer", selected: true}
+                            , {id: "Quiz", text: "Quiz", selected: false}
+                            , {id: "Research in Translation", text: "Research in Translation", selected: true}
+                            , {id: "Research Matters", text: "Research Matters", selected: true}
+                            , {id: "Retraction", text: "Retraction", selected: false}
+                            , {id: "Special Report", text: "Special Report", selected: true}
+                            , {id: "Student Forum", text: "Student Forum", selected: true}
+                            , {id: "Symposium", text: "Symposium", selected: true}
+                            , {id: "Synopsis", text: "Synopsis", selected: false}
+                            , {id: "The PLoS Medicine Debate", text: "The PLoS Medicine Debate", selected: true}
+                            , {id: "Topic Page", text: "Topic Page", selected: true}
+                            , {id: "Unsolved Mystery", text: "Unsolved Mystery", selected: true}
+                            , {id: "Viewpoints ", text: "Viewpoints ", selected: true}
+
+                        ]},
+                    , {id: "journals", multiple: true, name: "Journals", type: "dropdown"
+                        , fields: [
+                            {id: "PLoSONE", text: "PLOS ONE", selected:true}
+                            , {id: "PLoSGenetics", text: "PLOS Genetics", selected:true}
+                            , {id: "PLoSPathogens", text: "PLOS Pathogens", selected:true}
+                            , {id: "PLoSCompBiol", text: "PLOS Computational Biology", selected:true}
+                            , {id: "PLoSNTD", text: "PLOS Neglected Tropical Diseases", selected:true}
+                            , {id: "PLoSBiology", text: "PLOS Biology", selected:true}
+                            , {id: "PLoSMedicine", text: "PLOS Medicine", selected:true}
+                            , {id: "PLoSClinicalTrials", text: "PLOS Hub for Clinical Trials", selected:true}
+                        ]}
+                ]}
+        </script>
     </head>
     <body style="padding-left:10px; padding-right:10px;">
         <div>
             <h2>Search PLOS and turn it into a visualization</h2>
-            <form id="searchform" action="server/services/searchPLOS.php" style="margin-top:20px">
+            <form id="searchform" action="server/services/searchPLOS.php" style="margin-top:20px" method="post">
                 <label for="q">Search term:</label> 
-                <input type="text" name="q" size="40" required>
+                <input type="text" name="q" size="61" required>
                 <button type="submit" class="btn">Submit</button>
+                <!--<div class="filter-btn" style="display: inline-block"><a href="#" id="submit-btn" class="frontend-btn">Submit</a></div>-->
+                <div id="filter-container"></div>
             </form> 
         </div>
+        
+        
+        
+        <div id="progress"></div>
 
-        <div id="progress" style="margin-top: 20px;"></div>
-
-        Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a> and <a href="http://github.com/ropensci/rplos" target="_blank">rplos</a>. All content retrieved from <a href="https://www.plos.org/publications/journals/" target="_blank">Public Library of Science Journals</a> under <a href="http://journals.plos.org/plosone/s/content-license" target="_blank">CC-BY</a>.
-
+        <div style="margin-top:20px">Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a> and <a href="http://github.com/ropensci/rplos" target="_blank">rplos</a>. All content retrieved from <a href="https://www.plos.org/publications/journals/" target="_blank">Public Library of Science Journals</a> under <a href="http://journals.plos.org/plosone/s/content-license" target="_blank">CC-BY</a>.
+        </div>
+        
         <script type="text/javascript">
+            $("#submit-btn").click(function() {
+                document.forms['searchform'].submit();
+            })
+            
             $(window).bind("pageshow", function () {
-                $(".btn").attr("disabled", false);
+                $(".submit-btn").attr("disabled", false);
             });
 
             $("#searchform").validate({
                 submitHandler: function (form) {
-                    $(".btn").attr("disabled", true);
+                    $(".submit-btn").attr("disabled", true);
 
 
                     d3.select("#progress").append("p")
@@ -64,7 +160,21 @@ and open the template in the editor.
                     form.submit();
                 }
             });
+            
+            $(document).ready(function() {
+                var search_options = SearchOptions;
 
+                search_options.init("#filter-container", options);
+
+                options.dropdowns.forEach(function (entry) {
+                    search_options.select_multi('.dropdown_multi_' + entry.id, entry.name)
+                })
+
+                search_options.addDatePickerFromTo("#from", "#to", "any-time");
+
+                //$("#filters").toggleClass("frontend-hidden");
+
+            })
         </script>
     </body>
 </html>

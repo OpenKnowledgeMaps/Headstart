@@ -4,6 +4,7 @@
     <body>
         <?php
         require dirname(__FILE__) . '/../classes/headstart/preprocessing/calculation/RCalculation.php';
+        require dirname(__FILE__) . '/../classes/headstart/preprocessing/naming/KeywordNaming.php';
         require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
         require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
         require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
@@ -11,77 +12,55 @@
         require 'helper.php';
 
         use headstart\library;
-
-
-        function attachMostUsedKeywords(&$array, $num_keywords) {
-
-            $working_array = array();
-
-            foreach($array as $entry) {
-                $uri = $entry["area_uri"];
-                $keywords = split("; ", $entry["subject"]);
-                foreach($keywords as &$keyword) {
-                    $keyword = substr($keyword, strrpos($keyword, "/") + 1);
-                }
-
-                if(isset($working_array[$uri])) {
-                    $working_array[$uri] = array_merge($working_array[$uri], $keywords);
-                } else {
-                    $working_array[$uri] = $keywords;
-                }
-            }
-            
-            $result_array = array();
-            foreach($working_array as $key => $current_array) {
-                $counted_sorted_array = array_count_values($current_array);
-                arsort($counted_sorted_array);
-                $important_terms = array_keys(array_slice($counted_sorted_array, 0, $num_keywords));
-                $final_string = implode(", ", $important_terms);
-                $result_array[$key] = $final_string;
-            }
-            
-            foreach($array as $key => $entry) {
-                $array[$key]["area"] = $result_array[$entry["area_uri"]];
-            }
-
-        }
         
-        function redirect($url){
-            if (headers_sent()){
-              die('<script type="text/javascript">window.location=\''.$url.'\';</script>');
-            }else{
-              header('Location: ' . $url);
-              die();
-            }    
+        function packParamsJSON($params_array) {
+            
+            $output_array = array();
+            
+            foreach($params_array as $entry) {
+                $current_params = library\CommUtils::getParameter($_POST, $entry);
+                $output_array[$entry] = $current_params;
+            } 
+            
+            return json_encode($output_array);
         }
 
         $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 
         $ini_array = library\Toolkit::loadIni($INI_DIR);
 
-        $dirty_query = library\CommUtils::getParameter($_GET, "q");
+        $dirty_query = library\CommUtils::getParameter($_POST, "q");
 
         $query = strip_tags($dirty_query);
 		
-		$query = strtolower($query);
-
-        $unique_id = addslashes($query);
+	$query = strtolower($query);
+        
+        $query = addslashes($query);
 
         $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
         $settings = $ini_array["general"];
-		
-		$last_version = $persistence->getLastVersion($unique_id);
+              
+        $params_json = packParamsJSON(array("article_types", "journals", "from", "to"));
+        
+        $unique_id = $persistence->createID(array($query, $params_json));
+	
+	$last_version = $persistence->getLastVersion($unique_id, false);
 
-        if ($last_version != null && $last_version != "null" && $last_version != false) {
+        if ($last_version != null && $last_version != "null" && $last_version != false) {           
             redirect("http://" . $settings["host"] . $settings["vis_path"] . "index.php?id=" . $unique_id); 
             return;
         }
-
+        
+        $params_file = tmpfile();
+        $params_meta = stream_get_meta_data($params_file);
+        $params_filename = $params_meta["uri"];
+        fwrite($params_file, $params_json);
+        
         $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
 
         $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
-        $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query);
+        $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename);
 
         //print_r($output);
 
@@ -89,27 +68,33 @@
 
         $output_json = mb_convert_encoding($output_json, "UTF-8");
 
-        if(!library\Toolkit::isJSON($output_json) || $output_json == "null") {
-            echo "Sorry! Something went wrong - please <a href=\"http://" . $settings["host"] . $settings["vis_path"] ."\">go back and try again.</a>";
+        if(!library\Toolkit::isJSON($output_json) || $output_json == "null" || $output_json == null) {
+            echo "Sorry! Something went wrong. Most likely there are not enough documents for your search - please <a href=\"http://" . $settings["host"] . $settings["vis_path"] ."\">go back and try again.</a>";
             //    echo $output_json;
             return;
         }
         
         $result = json_decode($output_json, true);
         
-        attachMostUsedKeywords($result, 3);
+        $naming = new \headstart\preprocessing\naming\KeywordNaming($ini_array);
+
+        $naming->performNamingTfIdf($result, 3);
+
+        //attachMostUsedKeywords($result, 3);
         
         $input_json = json_encode($result);
 		
-		$new_last_version = $persistence->getLastVersion($unique_id);
-
+	$new_last_version = $persistence->getLastVersion($unique_id, false);
+        
+        $vis_title = "PLOS Search: " .$query;
+        
         if ($new_last_version == null || $new_last_version == false) {
-            $persistence->createVisualization($unique_id, "PLOS Search: " .$query, $input_json);
+            $persistence->createVisualization($unique_id, $vis_title, $input_json, $query, $dirty_query, $params_json);
         } else {
             $persistence->writeRevision($unique_id, $input_json);
         }
         
-        redirect("http://" . $settings["host"] . $settings["vis_path"] . "index.php?id=" . $unique_id); 
+        redirect("http://" . $settings["host"] . $settings["vis_path"] . "index.php?query=$query&id=$unique_id"); 
         
         ?>
     </body>

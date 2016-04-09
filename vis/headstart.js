@@ -95,9 +95,9 @@ HeadstartFSM = function(host, path, tag, files, options) {
   
   this.files = files;
   
-  this.service_path = initVar(options.service_path, "http://" + this.host + this.path + "server/services/");
+  this.service_path = initVar(options.service_path, this.host + this.path + "server/services/");
   
-  this.images_path = initVar(options.images_path, "http://" + this.host + this.path + "vis/images/");
+  this.images_path = initVar(options.images_path, this.host + this.path + "vis/images/");
   
   this.sort_options = initVar(options.sort_options, [
     "readers",

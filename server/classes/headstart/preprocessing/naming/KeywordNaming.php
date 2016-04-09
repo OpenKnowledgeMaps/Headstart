@@ -7,41 +7,113 @@ namespace headstart\preprocessing\naming;
  *
  * @author pkraker
  */
-
 require_once 'Naming.php';
 
 class KeywordNaming extends Naming {
 
-    public function performNaming(&$array, $num_keywords, $id="area_uri", $subjects="subject") {
-        
-        $working_array = array();
+    public function performNaming(&$array, $num_keywords, $id = "area_uri", $subjects = "subject") {
 
-            foreach($array as $entry) {
-                $uri = $entry[$id];
-                $keywords = split("; ", $entry[$subjects]);
-                foreach($keywords as &$keyword) {
-                    $keyword = substr($keyword, strrpos($keyword, "/") + 1);
-                }
+        foreach ($array as $entry) {
+            $uri = $entry[$id];
+            $keywords = split("; ", $entry[$subjects]);
+            foreach ($keywords as &$keyword) {
+                $keyword = substr($keyword, strrpos($keyword, "/") + 1);
+            }
 
-                if(isset($working_array[$uri])) {
-                    $working_array[$uri] = array_merge($working_array[$uri], $keywords);
-                } else {
-                    $working_array[$uri] = $keywords;
-                }
+            if (isset($working_array[$uri])) {
+                $working_array[$uri] = array_merge($working_array[$uri], $keywords);
+            } else {
+                $working_array[$uri] = $keywords;
             }
-            
-            $result_array = array();
-            foreach($working_array as $key => $current_array) {
-                $counted_sorted_array = array_count_values($current_array);
-                arsort($counted_sorted_array);
-                $important_terms = array_keys(array_slice($counted_sorted_array, 0, $num_keywords));
-                $final_string = implode(", ", $important_terms);
-                $result_array[$key] = $final_string;
-            }
-            
-            foreach($array as $key => $entry) {
-                $array[$key]["area"] = $result_array[$entry[$id]];
-            }
-        
+        }
+
+        $result_array = array();
+        foreach ($working_array as $key => $current_array) {
+            $counted_sorted_array = array_count_values($current_array);
+            arsort($counted_sorted_array);
+            $important_terms = array_keys(array_slice($counted_sorted_array, 0, $num_keywords));
+            $final_string = implode(", ", $important_terms);
+            $result_array[$key] = $final_string;
+        }
+
+        foreach ($array as $key => $entry) {
+            $array[$key]["area"] = $result_array[$entry[$id]];
+        }
     }
+
+    public function performNamingTfIdf(&$array, $num_keywords, $id = "area_uri", $subjects = "subject") {
+
+        foreach ($array as $entry) {
+            $uri = $entry[$id];
+            $keywords = split("; ", $entry[$subjects]);
+
+            array_walk($keywords, function(&$keyword) {
+                $keyword = substr($keyword, strrpos($keyword, "/") + 1);
+            });
+
+            /* foreach ($keywords as &$keyword) {
+              $keyword = substr($keyword, strrpos($keyword, "/") + 1);
+              } */
+
+            //$working_array[$uri] = array();
+
+            if (isset($working_array[$uri]["all_terms"])) {
+                $working_array[$uri]["all_terms"] = array_merge($working_array[$uri]["all_terms"], $keywords);
+            } else {
+                $working_array[$uri]["all_terms"] = $keywords;
+            }
+        }
+
+        $num_docs_per_term = array();
+
+        foreach ($working_array as $uri => $current_array) {
+            $unique_terms = array_unique($current_array["all_terms"]);
+            $working_array[$uri]["unique_terms"] = $unique_terms;
+
+            foreach ($unique_terms as $term) {
+                if (!isset($num_docs_per_term[$term]))
+                    $num_docs_per_term[$term] = 1;
+                else
+                    $num_docs_per_term[$term] += 1;
+            }
+        }
+
+        $result_array = array();
+        $totalDocs = count($working_array);
+
+        foreach ($working_array as $uri => $current_array) {
+
+            $num_keywords_per = array_count_values($current_array["all_terms"]);
+            $wordCount = count($current_array["all_terms"]);
+            $current_result_array = array();
+
+            foreach ($current_array["unique_terms"] as $term) {
+                $termCount = $num_keywords_per[$term];
+                $docsWithTerm = $num_docs_per_term[$term];
+
+                $tf = $termCount / $wordCount;
+                $idf = log($totalDocs / $docsWithTerm, 2);
+                $tfidf = $tf * $idf;
+                
+                //$tfidf_short = round($tfidf,2);
+                //$current_result_array[$term. " " . $tfidf_short] = $tfidf;
+                
+                $current_result_array[$term] = $tfidf;
+                        
+            }
+            
+            arsort($current_result_array);
+            
+            $important_terms = array_keys(array_slice($current_result_array, 0, $num_keywords));
+            
+            $final_string = implode(", ", $important_terms);
+            $result_array[$uri] = $final_string;
+        }
+        
+        foreach ($array as $uri => $entry) {
+            $array[$uri]["area"] = $result_array[$entry[$id]];
+        }
+
+    }
+
 }
