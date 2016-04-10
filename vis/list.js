@@ -525,10 +525,9 @@ list.populateOverlay = function (d) {
     
     var this_d = d;
     
-    popup.paper_frame
-    .style("display","block")
-    
-    popup.current = "visible";
+	headstart.mediator.publish("popup_toggle");
+	
+	$("#intro").hide();
     
     if(headstart.preview_type == "image") {
         list.loadAndAppendImage(headstart.images_path + d.id + "/page_1.png", 1);
