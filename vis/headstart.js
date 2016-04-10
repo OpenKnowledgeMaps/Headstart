@@ -49,6 +49,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.max_area_size = initVar(options.max_area_size, 110);
   this.min_area_size = initVar(options.min_area_size, 50);
 
+  this.area_title_max_size = 50;
+
   this.current_zoom_node = null;
 
   this.current_enlarged_paper = null;
