@@ -120,6 +120,33 @@ HeadstartFSM = function(host, path, tag, files, options) {
    this.input_format = initVar(options.input_format, "csv");
    
    this.preview_type = initVar(options.preview_type, "images");
+
+   this.language = initVar(options.language, "ger");
+
+   this.localization = {
+    eng: {
+      loading: "Loading...",
+      search_placeholder:"Search...",
+      show_list:"Show list",
+      hide_list:"Hide list",
+      readers:"Lendings",
+      year:"Year",
+      authors:"Authors",
+      title:"Title",
+      area:"Area"
+    },
+    ger:{
+      loading: "Wird geladen...",
+      search_placeholder:"Suche...",
+      show_list:"Liste ausklappen",
+      hide_list:"Liste einklappen",
+      readers:"Ausleihungen",
+      year:"Jahr",
+      authors:"Autor",
+      title:"Titel",
+      area:"Bereich"
+    }
+  }
   
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()

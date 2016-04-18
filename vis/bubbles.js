@@ -553,7 +553,7 @@ BubblesFSM.prototype = {
       .on("mouseover", null)
       .on("mouseout", null)
 
-      d3.select("#subdiscipline_title h1").text("Area: " + d.title);
+      d3.select("#subdiscipline_title h1").text(headstart.localization[headstart.language].area +": " + d.title);
 
     d3.selectAll("div.paper_holder")
       .on("mouseover", function(d){

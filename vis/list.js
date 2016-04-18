@@ -28,7 +28,7 @@ var list = StateMachine.create({
                 d3.select( "#papers_list"     ).style("display", "block");
                 d3.select( "#left_arrow"      ).text("\u25B2");
                 d3.select( "#right_arrow"     ).text("\u25B2");
-                d3.select( "#show_hide_label" ).text("Hide papers");
+                d3.select( "#show_hide_label" ).text(headstart.localization[headstart.language].hide_list);
             }
         },
 
@@ -37,7 +37,7 @@ var list = StateMachine.create({
             d3.select( "#papers_list"     ).style("display", "none");
             d3.select( "#left_arrow"      ).text("\u25BC");
             d3.select( "#right_arrow"     ).text("\u25BC");
-            d3.select( "#show_hide_label" ).text("Show papers");
+            d3.select( "#show_hide_label" ).text(headstart.localization[headstart.language].show_list);
         },
 
         onbeforetoggle: function( event, from, to ) {
@@ -80,7 +80,7 @@ list.drawList = function() {
       .attr("id", "input_container")
       .append("input")
       .attr("type", "text")
-      .attr("placeholder","Search...")
+      .attr("placeholder", headstart.localization[headstart.language].search_placeholder)
       .attr("oninput", "filterList(event)")
       .attr("size", 15)
     list_show_hide_container.append("div")
@@ -109,7 +109,7 @@ list.drawList = function() {
           headstart.mediator.publish("record_action","none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
           // headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
           // sortBy(sort_option);
-        }).text(sort_option);
+        }).text(headstart.localization[headstart.language][sort_option]);
     }
 
     addSortOption(headstart.sort_options[0], true);
@@ -334,7 +334,7 @@ list.populateReaders = function(nodes) {
     .append("p")
     .attr("id", "list_area")
     .html(function(d) {
-      return "<b>Area:</b> " + d.area
+      return "<b>"+ headstart.localization[headstart.language].area + ":</b> " + d.area
     })
     
   if(!headstart.content_based) {
@@ -345,7 +345,7 @@ list.populateReaders = function(nodes) {
     })
   .append("span")
     .attr("class", "list_readers_entity")
-    .html(" " + headstart.base_unit + "&nbsp;");
+    .html(" " + headstart.localization[headstart.language][headstart.base_unit] + "&nbsp;");
     
   } else {
     d3.selectAll("#list_area").style("margin-bottom", "7px")
@@ -660,7 +660,7 @@ list.drawLabel = function(element) {
          .style("width", headstart.list_width - 70 + "px")
          .append("strong")
          .attr("id", "show_hide_label")
-         .text("Show papers");
+         .text(headstart.localization[headstart.language].show_list);
 }
 
 function notSureifNeeded() {
