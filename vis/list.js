@@ -147,13 +147,14 @@ function sortBy(field) {
 }
 
 function stringCompare(a, b) {
-  if(typeof a == 'undefined' || typeof b == 'undefined')
+  if(typeof a == 'undefined' || typeof b == 'undefined'){
     return;
-
-  else if(typeof a == 'string' && typeof b == 'string') {
+  } else if(typeof a == 'string' && typeof b == 'string') {
     a = a.toLowerCase();
     b = b.toLowerCase();
     return a > b ? 1 : a == b ? 0 : -1;
+  } else if(typeof a == 'number' && typeof b == 'number') {
+    return d3.descending(a, b);
   }
   else {
     return d3.descending(a, b);
