@@ -131,9 +131,13 @@ list.drawList = function() {
 
 function sortBy(field) {
   d3.selectAll("#list_holder")
-    .sort(function(a,b) { 
-      return stringCompare(a[field], b[field])
-      })
+    .sort(function(a,b) {
+      if (field == "year") {
+        return stringCompare(b[field], a[field]);
+      } else {
+        return stringCompare(a[field], b[field]);
+      }
+    })
 
     d3.selectAll(".selected")
       .attr("class", "")
