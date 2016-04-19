@@ -104,7 +104,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.sort_options = initVar(options.sort_options, [
     "readers",
     "title",
-    "authors"
+    "authors",
+    "year"
    ])
    
    this.url_prefix = initVar(options.url_prefix, null)
