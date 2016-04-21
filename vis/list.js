@@ -265,6 +265,7 @@ list.populateMetaData = function(nodes) {
 }
 
 filterList = function(event) {
+  highlight(event);
 
   var filtered_data = d3.selectAll("#list_holder, .paper")
   var current_circle = d3.select(headstart.current_zoom_node);
@@ -685,4 +686,23 @@ function notSureifNeeded() {
   var image_node = list_holders_local.select("#preview_image").node();
   if (image_node != null)
     image_node.parentNode.removeChild(image_node);
+}
+
+highlight = function(event) {
+  value = new RegExp(event.target.value,"i");
+
+  $('#area_title h2').highlightRegex();
+  $('#area_title h2').highlightRegex(value, {
+    attrs: {'style': "background:yellow"}
+  });
+
+  $('.metadata #details, .metadata #title, .metadata #in').highlightRegex();
+  $('.metadata #details, .metadata #title, .metadata #in').highlightRegex(value, {
+    attrs: {'style': "background:yellow"}
+  });
+
+  $('#list_title #paper_list_title, #list_title .list_details, #list_abstract').highlightRegex();
+  $('#list_title #paper_list_title, #list_title .list_details, #list_abstract').highlightRegex(value, {
+    attrs: {'style': "background:yellow"}
+  });
 }
