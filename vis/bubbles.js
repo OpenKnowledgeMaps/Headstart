@@ -30,7 +30,6 @@ BubblesFSM.prototype = {
 
     this.appendForeignObjectTo( bubbleFrames );
     this.adjustBubbleTitleSizeTo( bubbleFrames, "12px" );
-    $(".ellipsis").ellipsis(this);
     this.resetCirclePosition();
   },
 
@@ -414,17 +413,8 @@ BubblesFSM.prototype = {
       .style("width",  function (d) { return d.width_html + "px" })
       .style("height", function (d) { return d.height_html + "px" })
       .append("h2")
-      .attr("class", "ellipsis multiline")
-      // .style("width",  function (d) { return d.width_html + "px" })
-      // .style("height", function (d) { return d.height_html + "px" })
       .html(function (d) {
           return d.title;
-        // if (d.title.length > headstart.area_title_max_size) {
-        //   return d.title.substring(0, headstart.area_title_max_size) + '...'
-        // } else {
-        //   return d.title
-        // }
-
       });      
   },
 
@@ -989,46 +979,3 @@ StateMachine.create({
 function hideSibling( circle ) {
   d3.select(circle.nextSibling).style("visibility", "hidden");
 }
-
-(function($) {
-  $.fn.ellipsis = function(BubblesFSM) {
-    return this.each(function() {
-      var el = $(this);
-      
-      var temp = $.grep(BubblesFSM.areas_array, function(e){ return e.title == el.html(); });
-      var el_width = temp[0].width_html;
-      var el_height = temp[0].height_html;
-
-      if (el.css("overflow") == "hidden") {
-        var text = el.html();
-        var multiline = el.hasClass('multiline');
-        var t = $(this.cloneNode(true))
-          .hide()
-          .css('position', 'absolute')
-          .css('overflow', 'visible')
-          .width(multiline ? el_width : 'auto')
-          .height(multiline ? 'auto' : el_height);
-
-        el.after(t);
-
-        function height() {
-          return t.height() > el_height;
-        };
-
-        function width() {
-          return t.width() > el_width;
-        };
-
-        var func = multiline ? height : width;
-
-        while (text.length > 0 && func()) {
-          text = text.substr(0, text.length - 1);
-          t.html(text + "…");
-        }
-
-        el.html(t.html());
-        t.remove();
-      }
-    });
-  };
-})(jQuery);

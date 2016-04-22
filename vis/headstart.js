@@ -766,7 +766,8 @@ HeadstartFSM.prototype = {
       popup.start();
     
     hs.checkForcePapers();
-    
+
+    $("#area_title_object>body").dotdotdot();
   },
 
   init_mediator: function() {

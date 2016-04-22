@@ -613,12 +613,3 @@
     text-align: center;
     float: left;
 }
-
-.ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.ellipsis.multiline {
-  white-space: normal;
-}
