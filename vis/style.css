@@ -240,7 +240,7 @@
 .headstart div#area_title {
   vertical-align: middle;
   display: table-cell;
-  overflow: no-display;
+  overflow: hidden;
 }
 
 .headstart div.readers {
@@ -281,8 +281,8 @@
 /* ################ Papers list ############### */
 
 .headstart div#papers_list_container {
-    margin-top: -23px;
-    margin-bottom: -23px;
+    margin-top: 0px;
+    margin-bottom: 0px;
     position: relative;
 }
 
