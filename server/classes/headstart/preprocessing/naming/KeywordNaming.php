@@ -11,13 +11,17 @@ require_once 'Naming.php';
 
 class KeywordNaming extends Naming {
 
-    public function performNaming(&$array, $num_keywords, $id = "area_uri", $subjects = "subject") {
+    public function performNaming(&$array, $num_keywords, $id="area_uri", $subjects="subject", $keyword_separator=",", $taxonomy_separator="/") {
+
+        $working_array = array();
 
         foreach ($array as $entry) {
             $uri = $entry[$id];
             $keywords = split("; ", $entry[$subjects]);
-            foreach ($keywords as &$keyword) {
-                $keyword = substr($keyword, strrpos($keyword, "/") + 1);
+            foreach($keywords as &$keyword) {
+                if($taxonomy_separator != null) {
+                    $keyword = substr($keyword, strrpos($keyword, $taxonomy_separator) + 1);
+                }
             }
 
             if (isset($working_array[$uri])) {
@@ -41,15 +45,18 @@ class KeywordNaming extends Naming {
         }
     }
 
-    public function performNamingTfIdf(&$array, $num_keywords, $id = "area_uri", $subjects = "subject") {
+    public function performNamingTfIdf(&$array, $num_keywords, $id="area_uri", $subjects="subject", $keyword_separator=",", $taxonomy_separator="/") {
+
+        $working_array = array();
 
         foreach ($array as $entry) {
             $uri = $entry[$id];
-            $keywords = split("; ", $entry[$subjects]);
-
-            array_walk($keywords, function(&$keyword) {
-                $keyword = substr($keyword, strrpos($keyword, "/") + 1);
-            });
+            $keywords = split($keyword_separator, $entry[$subjects]);
+            foreach($keywords as &$keyword) {
+                if($taxonomy_separator != null) {
+                    $keyword = substr($keyword, strrpos($keyword, $taxonomy_separator) + 1);
+                }
+            }
 
             /* foreach ($keywords as &$keyword) {
               $keyword = substr($keyword, strrpos($keyword, "/") + 1);
