@@ -540,6 +540,8 @@ papers.enlargePaper = function(d,holder_div,i) {
                     if(list.current = "hidden") {
                         list.show();
                     }
+                } else {
+                    headstart.mediator.publish("list_title_click", d);
                 }
 
                 d.paper_selected = true;
