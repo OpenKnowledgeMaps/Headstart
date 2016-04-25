@@ -141,7 +141,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
       search_placeholder:"Suche...",
       show_list:"Liste ausklappen",
       hide_list:"Liste einklappen",
-      readers:"Ausleihungen",
+      readers:"Entleihungen",
       year:"Jahr",
       authors:"Autor",
       title:"Titel",
