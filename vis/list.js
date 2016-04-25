@@ -351,7 +351,7 @@ list.populateReaders = function(nodes) {
     })
   .append("span")
     .attr("class", "list_readers_entity")
-    .html(" " + headstart.localization[headstart.language][headstart.base_unit] + "&nbsp;");
+    .html(" " + headstart.base_unit + "&nbsp;");
     
   } else {
     d3.selectAll("#list_area").style("margin-bottom", "7px")
