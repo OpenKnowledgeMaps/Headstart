@@ -40,7 +40,9 @@ BubblesFSM.prototype = {
   },
 
   addClassNamesToCircles: function( bubbleFrames ) {
-    bubbleFrames.append("circle").attr("class", "area");
+    bubbleFrames.append("circle")
+            .attr("class", "area")
+            .append("svg:title").text(function (d) { return d.title });
   },
 
   addClassNamesToCirclesForGrouping: function( bubbleFrames ) {
