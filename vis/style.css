@@ -3,7 +3,7 @@
 .headstart div#headstart-chart {
   position: absolute;
   font-family: Helvetica;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .headstart #chart-svg {
@@ -88,7 +88,7 @@
 
 .headstart div#subdiscipline_title {
   margin: 0px;
-  height: 18px;
+  height: 22px;
   padding-left: 10px;
 }
 
@@ -197,6 +197,15 @@
   line-height: 8px;
 }
 
+.headstart div.readers {
+    overflow: hidden;
+}
+
+.headstart div.readers p.large,
+.headstart div.readers p.larger {  
+ 
+}
+
 .headstart div#article_metadata p.large,
 .headstart div.metadata p.large,
 .headstart div.readers p.large {
@@ -206,6 +215,7 @@
   padding-top: 5px;
   padding-bottom: 5px;
   padding-right: 0px;
+
   /*font-weight:bold;*/
 }
 
@@ -269,7 +279,11 @@
 
 .headstart p#readers.large {
   margin-bottom: 3px;
-  padding: 0px;
+  padding: 3px 2px 0px 0px;
+}
+
+.headstart p#readers.larger {
+  padding: 3px 2px 0px 0px;
 }
 
 .headstart span.readers_entity {
@@ -281,8 +295,8 @@
 /* ################ Papers list ############### */
 
 .headstart div#papers_list_container {
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: -27px;
+    margin-bottom: -27px;
     position: relative;
 }
 

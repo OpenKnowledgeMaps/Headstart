@@ -20,8 +20,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.dogear_width  = 0.1;
   this.dogear_height = 0.1;
 
-  this.min_list_size = 350;
-  this.max_list_size = 500;
+  this.min_list_size = 300;
+  this.max_list_size = 420;
   this.paper_width_factor  = 1.2;
   this.paper_height_factor = 1.6;
   this.preview_image_width_list  = 230;
@@ -132,10 +132,10 @@ HeadstartFSM = function(host, path, tag, files, options) {
       search_placeholder:"Search...",
       show_list:"Show list",
       hide_list:"Hide list",
-      readers:"Lendings",
-      year:"Year",
-      authors:"Authors",
-      title:"Title",
+      readers:"readers",
+      year:"date",
+      authors:"authors",
+      title:"title",
       area:"Area"
     },
     ger:{
@@ -150,6 +150,17 @@ HeadstartFSM = function(host, path, tag, files, options) {
       area:"Bereich"
     }
   }
+  
+  this.plos_journals_to_shortcodes = { 
+            "plos neglected tropical diseases":"plosntds"
+            , "plos one":"plosone"
+            , "plos biology":"plosbiology"
+            , "plos medicine":"plosmedicine"
+            , "plos computational Biology":"ploscompbiol"
+            , "plos genetics":"plosgenetics"
+            , "plos pathogens":"plospathogens"
+            , "plos clinical trials":"plosclinicaltrials"
+        }
   
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
@@ -445,6 +456,7 @@ HeadstartFSM.prototype = {
     var self = this;
       
     d3.select("#subdiscipline_title")
+    .style("width", this.max_chart_size + "px")
     .append("h1")
     .attr("class", function () {
       return (self.max_chart_size == self.min_width)?("title-small"):("title-large");

@@ -40,7 +40,9 @@ BubblesFSM.prototype = {
   },
 
   addClassNamesToCircles: function( bubbleFrames ) {
-    bubbleFrames.append("circle").attr("class", "area");
+    bubbleFrames.append("circle")
+            .attr("class", "area")
+            .append("svg:title").text(function (d) { return d.title });
   },
 
   addClassNamesToCirclesForGrouping: function( bubbleFrames ) {
@@ -549,6 +551,7 @@ BubblesFSM.prototype = {
       .on("mouseout", null)
 
       d3.select("#subdiscipline_title h1").text(headstart.localization[headstart.language].area +": " + d.title);
+      $("#subdiscipline_title").dotdotdot();
 
     d3.selectAll("div.paper_holder")
       .on("mouseover", function(d){
