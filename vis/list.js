@@ -81,11 +81,14 @@ list.drawList = function() {
       .append("input")
       .attr("type", "text")
       .attr("placeholder", headstart.localization[headstart.language].search_placeholder)
-      .attr("oninput", "filterList(event)")
+      // .attr("oninput", "debounce(filterList(event),4000)")
       .attr("size", 15)
     list_show_hide_container.append("div")
       .attr("id", "sort_container")
       .style("display", "none");
+
+    $("#input_container>input").keyup(function(){
+        debounce(filterList(event), 700)})
 
     var papers_list = list_show_hide_container
                             .append("div")
@@ -706,3 +709,18 @@ highlight = function(event) {
     attrs: {'style': "background:yellow"}
   });
 }
+
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+};
