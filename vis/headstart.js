@@ -149,6 +149,17 @@ HeadstartFSM = function(host, path, tag, files, options) {
     }
   }
   
+  this.plos_journals_to_shortcodes = { 
+            "plos neglected tropical diseases":"plosntds"
+            , "plos one":"plosone"
+            , "plos biology":"plosbiology"
+            , "plos medicine":"plosmedicine"
+            , "plos computational Biology":"ploscompbiol"
+            , "plos genetics":"plosgenetics"
+            , "plos pathogens":"plospathogens"
+            , "plos clinical trials":"plosclinicaltrials"
+        }
+  
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
   this.bubbles = {}
