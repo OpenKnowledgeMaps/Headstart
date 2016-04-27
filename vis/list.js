@@ -275,6 +275,8 @@ filterList = function(event) {
       if (headstart.is_zoomed === true) {
         if (headstart.use_area_uri)
           return current_circle.data()[0].area_uri == d.area_uri;
+        else if (headstart.current_enlarged_paper != null)
+            return headstart.current_enlarged_paper.id == d.id;
         else
           return current_circle.data()[0].title == d.area;
       } else {
