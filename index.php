@@ -37,6 +37,7 @@
                             , show_dropdown: false
                             , is_force_areas: true
                             , preview_type: "pdf"
+                            , sort_options: ["readers", "title", "authors"]
                             } //options
                 )
         </script>

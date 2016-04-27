@@ -20,7 +20,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.dogear_width  = 0.1;
   this.dogear_height = 0.1;
 
-  this.min_list_size = 350;
+  this.min_list_size = 300;
   this.max_list_size = 420;
   this.paper_width_factor  = 1.2;
   this.paper_height_factor = 1.6;
