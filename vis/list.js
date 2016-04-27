@@ -273,8 +273,10 @@ filterList = function(event) {
     var data_circle = filtered_data
     .filter(function (d) {
       if (headstart.is_zoomed === true) {
-        if (headstart.use_area_uri)
+        if (headstart.use_area_uri && headstart.current_enlarged_paper == null)
           return current_circle.data()[0].area_uri == d.area_uri;
+        else if (headstart.use_area_uri && headstart.current_enlarged_paper != null)
+            return headstart.current_enlarged_paper.id == d.id;
         else
           return current_circle.data()[0].title == d.area;
       } else {
