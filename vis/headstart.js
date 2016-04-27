@@ -21,7 +21,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.dogear_height = 0.1;
 
   this.min_list_size = 350;
-  this.max_list_size = 500;
+  this.max_list_size = 420;
   this.paper_width_factor  = 1.2;
   this.paper_height_factor = 1.6;
   this.preview_image_width_list  = 230;
@@ -122,7 +122,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
    
    this.preview_type = initVar(options.preview_type, "images");
 
-   this.language = initVar(options.language, "ger");
+   this.language = initVar(options.language, "eng");
 
    this.localization = {
     eng: {
@@ -130,10 +130,10 @@ HeadstartFSM = function(host, path, tag, files, options) {
       search_placeholder:"Search...",
       show_list:"Show list",
       hide_list:"Hide list",
-      readers:"Lendings",
-      year:"Year",
-      authors:"Authors",
-      title:"Title",
+      readers:"readers",
+      year:"date",
+      authors:"authors",
+      title:"title",
       area:"Area"
     },
     ger:{
@@ -443,6 +443,7 @@ HeadstartFSM.prototype = {
     var self = this;
       
     d3.select("#subdiscipline_title")
+    .style("width", this.max_chart_size + "px")
     .append("h1")
     .attr("class", function () {
       return (self.max_chart_size == self.min_width)?("title-small"):("title-large");
