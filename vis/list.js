@@ -87,7 +87,7 @@ list.drawList = function() {
       .attr("id", "sort_container")
       .style("display", "none");
 
-    $("#input_container>input").keyup(function(){
+    $("#input_container>input").keyup(function(event){
         debounce(filterList(event), 700)})
 
     var papers_list = list_show_hide_container
