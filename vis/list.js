@@ -87,7 +87,7 @@ list.drawList = function() {
       .attr("id", "sort_container")
       .style("display", "none");
 
-    $("#input_container>input").keyup(function(){
+    $("#input_container>input").keyup(function(event){
         debounce(filterList(event), 700)})
 
     var papers_list = list_show_hide_container
@@ -276,9 +276,9 @@ filterList = function(event) {
     var data_circle = filtered_data
     .filter(function (d) {
       if (headstart.is_zoomed === true) {
-        if (headstart.use_area_uri)
+        if (headstart.use_area_uri && headstart.current_enlarged_paper == null)
           return current_circle.data()[0].area_uri == d.area_uri;
-        else if (headstart.current_enlarged_paper != null)
+        else if (headstart.use_area_uri && headstart.current_enlarged_paper != null)
             return headstart.current_enlarged_paper.id == d.id;
         else
           return current_circle.data()[0].title == d.area;
