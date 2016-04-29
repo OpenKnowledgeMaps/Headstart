@@ -4,6 +4,8 @@
 
 See [Getting Started](../README.md#getting-started) for a minimal working example.
 
+See [Installing and configuring the server](server_config.md) for instructions on how to install and configure the server.
+
 ## Input Data Format
 
 Each input dataset consists of 12 entries per document.
