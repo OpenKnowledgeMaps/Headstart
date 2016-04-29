@@ -4,18 +4,18 @@ If you want to do more than just displaying static CSV files, you need to config
 
 ## Requirements
 
-Make sure you have the following pacakges installed:
+Make sure you have the following packages installed:
 
 * PHP 5.3+ with curl
 * R 3.1.3+ (https://www.r-project.org/) with the following libraries
-** GMD
-** MASS
-** ecodist
-** jsonlite
-** tm
-** proxy
-** SnowballC
-** rplos
+ * GMD
+ * MASS
+ * ecodist
+ * jsonlite
+ * tm
+ * proxy
+ * SnowballC
+ * rplos
 
 ## Configuration
 
