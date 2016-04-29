@@ -57,7 +57,7 @@ In order to run a new instance of Headstart you need to set the five parameters 
 
 ### Server
 
-See [Installing and configuring the server](server_config.md) for instructions on how to install and configure the server.
+See [Installing and configuring the server](doc/server_config.md) for instructions on how to install and configure the server.
 
 ## Authors
 
