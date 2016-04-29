@@ -57,15 +57,15 @@ In order to run a new instance of Headstart you need to set the five parameters 
 
 ### Server
 
-TBD
+See [Installing and configuring the server](server_config.md) for instructions on how to install and configure the server.
 
 ## Authors
 
 Peter Kraker (peter.kraker@tugraz.at)
 
-Philipp Weißensteiner (philipp.weissensteiner@student.tugraz.at)
-
 Asura Enkhbayar (asura.enkhbayar@gmail.com)
+
+Philipp Weißensteiner (philipp.weissensteiner@student.tugraz.at)
 
 ## Features
 
