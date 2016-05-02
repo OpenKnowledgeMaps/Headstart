@@ -53,7 +53,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
 
   this.current_zoom_node = null;
 
-  this.debounce = 400;
+  this.debounce = 200;
 
   this.current_enlarged_paper = null;
   this.papers_list = null;
@@ -781,8 +781,8 @@ HeadstartFSM.prototype = {
       popup.start();
     
     hs.checkForcePapers();
-
-    $("#area_title_object>body").dotdotdot();
+    
+    $("#area_title_object>body").dotdotdot({wrap:"letter"});
   },
 
   init_mediator: function() {
