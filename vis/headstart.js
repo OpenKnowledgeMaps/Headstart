@@ -781,7 +781,7 @@ HeadstartFSM.prototype = {
       popup.start();
     
     hs.checkForcePapers();
-    
+    $("#area_title>h2").hyphenate('de');
     $("#area_title_object>body").dotdotdot({wrap:"letter"});
   },
 

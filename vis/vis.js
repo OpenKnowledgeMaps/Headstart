@@ -14,6 +14,8 @@ Headstart = function(host, path, tag, files, options) {
        ,{source: "mediator.min.js"}
        ,{source: "highlightRegex.min.js"}
        ,{source: "jquery.dotdotdot.min.js"}
+       ,{source: "jquery.hypher.js"}
+       ,{source: "de.js"}
        ,{source: "d3.v3.js", important: true}
    ];
 
