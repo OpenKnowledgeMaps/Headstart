@@ -415,6 +415,7 @@ BubblesFSM.prototype = {
       .style("width",  function (d) { return d.width_html + "px" })
       .style("height", function (d) { return d.height_html + "px" })
       .append("h2")
+      .classed("highlightable", true)
       .html(function (d) {
           return d.title;
       });      
@@ -826,9 +827,9 @@ BubblesFSM.prototype = {
     .style("margin-top", "3px");
 
     t.selectAll("p")
-      .attr("class", "large")
+      .attr("class", "large highlightable")
 
-      t.selectAll("span.readers_entity")
+    t.selectAll("span.readers_entity")
       .style("font-size", "11px");
   },
 

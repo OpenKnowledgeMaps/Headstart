@@ -227,18 +227,21 @@ papers.appendMetaDataCSSClass = function(xhtml) {
 papers.appendMetaDataTitle = function(metadata) {
   metadata.append("p")
     .attr("id", "title")
+    .attr("class","highlightable")
     .html(function (d) {  return d.title+"<br>" })
 }
 
 papers.appendMetaDataDetails = function(metadata) {
   metadata.append("p")
     .attr("id", "details")
+    .attr("class","highlightable")
     .html(function (d) { return d.authors_string })
 }
 
 papers.appendMetaDataPublicationYear = function(metadata) {
   metadata.append("p")
     .attr("id", "in")
+    .attr("class","highlightable")
     .html("in ")
     .append("span")
     .attr("class", "pubyear")
@@ -445,7 +448,7 @@ papers.shrinkPaper = function(d,holder) {
     papers.resizePaper(d, holder_div, 1, "rgb(255, 255, 255)", "0.25");
 
     holder_div.selectAll("p")
-        .attr("class", "large");
+        .attr("class", "large highlightable");
 
     d.resized = false;
     holder_div.on("mouseover", function(d) {
@@ -514,7 +517,8 @@ papers.enlargePaper = function(d,holder_div,i) {
     var holder_div = d3.select(holder_div);
 
     holder_div.selectAll("p")
-        .attr("class", "larger");
+        .attr("class", "larger")
+
 
     var metadata = holder_div.select("div.metadata");
 

@@ -1,3 +1,83 @@
+var options = {
+                dropdowns: [
+                    {id: "time_range", multiple: false, name: "Time Range", type: "dropdown"
+                        , fields: [
+                            {id: "any-time", text: "Any time"}
+                            , {id: "last-month", text: "Last month"}
+                            , {id: "last-year", text: "Last year"}
+                            , {id: "user-defined", text: "Custom range", class: "user-defined",
+                                inputs: [
+                                    {id: "from", label: "From: ", class: "time_input"}
+                                    , {id: "to", label: "To: ", class: "time_input"}
+                                ]}
+                        ]},
+                    {id: "article_types", multiple: true, name: "Article types", type: "dropdown"
+                        , fields: [
+                            {id: "Research Article", text: "Research Article", selected: true}
+                            , {id: "Review", text: "Review", selected: true}
+                            , {id: "Best Practice", text: "Best Practice", selected: true}
+                            , {id: "Book Review", text: "Book Review", selected: true}
+                            , {id: "Book Review/Science in the Media", text: "Book Review/Science in the Media", selected: true}
+                            , {id: "Case Report", text: "Case Report", selected: true}
+                            , {id: "Collection Review", text: "Collection Review", selected: true}
+                            , {id: "Community Page", text: "Community Page", selected: true}
+                            , {id: "Correction", text: "Correction", selected: false}
+                            , {id: "Correspondence", text: "Correspondence", selected: true}
+                            , {id: "Correspondence and Other Communications", text: "Correspondence and Other Communications", selected: true}
+                            , {id: "Deep Reads", text: "Deep Reads", selected: true}
+                            , {id: "Editorial", text: "Editorial", selected: true}
+                            , {id: "Education", text: "Education", selected: true}
+                            , {id: "Essay", text: "Essay", selected: true}
+                            , {id: "Expert Commentary", text: "Expert Commentary", selected: true}
+                            , {id: "Expression of Concern", text: "Expression of Concern", selected: true}
+                            , {id: "Feature", text: "Feature", selected: true}
+                            , {id: "Formal Comment", text: "Formal Comment", selected: true}
+                            , {id: "From Innovation to Application", text: "From Innovation to Application", selected: true}
+                            , {id: "Guidelines and Guidance", text: "Guidelines and Guidance", selected: true}
+                            , {id: "Health in Action", text: "Health in Action", selected: true}
+                            , {id: "Historical and Philosophical Perspectives", text: "Historical and Philosophical Perspectives", selected: true}
+                            , {id: "Historical Profiles and Perspectives", text: "Historical Profiles and Perspectives", selected: true}
+                            , {id: "Interview", text: "Interview", selected: true}
+                            , {id: "Journal Club", text: "Journal Club", selected: true}
+                            , {id: "Learning Forum ", text: "Learning Forum ", selected: true}
+                            , {id: "Message from ISCB", text: "Message from ISCB", selected: true}
+                            , {id: "Neglected Diseases", text: "Neglected Diseases", selected: true}
+                            , {id: "Obituary", text: "Obituary", selected: true}
+                            , {id: "Opinion", text: "Opinion", selected: true}
+                            , {id: "Overview", text: "Overview", selected: true}
+                            , {id: "Pearls", text: "Pearls", selected: true}
+                            , {id: "Perspective", text: "Perspective", selected: true}
+                            , {id: "Photo Quiz", text: "Photo Quiz", selected: false}
+                            , {id: "Policy Forum", text: "Policy Forum", selected: true}
+                            , {id: "Policy Platform", text: "Policy Platform", selected: true}
+                            , {id: "Primer", text: "Primer", selected: true}
+                            , {id: "Quiz", text: "Quiz", selected: false}
+                            , {id: "Research in Translation", text: "Research in Translation", selected: true}
+                            , {id: "Research Matters", text: "Research Matters", selected: true}
+                            , {id: "Retraction", text: "Retraction", selected: false}
+                            , {id: "Special Report", text: "Special Report", selected: true}
+                            , {id: "Student Forum", text: "Student Forum", selected: true}
+                            , {id: "Symposium", text: "Symposium", selected: true}
+                            , {id: "Synopsis", text: "Synopsis", selected: false}
+                            , {id: "The PLoS Medicine Debate", text: "The PLoS Medicine Debate", selected: true}
+                            , {id: "Topic Page", text: "Topic Page", selected: true}
+                            , {id: "Unsolved Mystery", text: "Unsolved Mystery", selected: true}
+                            , {id: "Viewpoints ", text: "Viewpoints ", selected: true}
+
+                        ]},
+                    , {id: "journals", multiple: true, name: "Journals", type: "dropdown"
+                        , fields: [
+                            {id: "PLoSONE", text: "PLOS ONE", selected:true}
+                            , {id: "PLoSGenetics", text: "PLOS Genetics", selected:true}
+                            , {id: "PLoSPathogens", text: "PLOS Pathogens", selected:true}
+                            , {id: "PLoSCompBiol", text: "PLOS Computational Biology", selected:true}
+                            , {id: "PLoSNTD", text: "PLOS Neglected Tropical Diseases", selected:true}
+                            , {id: "PLoSBiology", text: "PLOS Biology", selected:true}
+                            , {id: "PLoSMedicine", text: "PLOS Medicine", selected:true}
+                            , {id: "PLoSClinicalTrials", text: "PLOS Hub for Clinical Trials", selected:true}
+                        ]}
+                ]}
+
 var SearchOptions = {
     user_defined_date: false,
     init: function (tag, data) {

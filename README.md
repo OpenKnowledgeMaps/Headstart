@@ -57,15 +57,15 @@ In order to run a new instance of Headstart you need to set the five parameters 
 
 ### Server
 
-TBD
+See [Installing and configuring the server](doc/server_config.md) for instructions on how to install and configure the server.
 
 ## Authors
 
 Peter Kraker (peter.kraker@tugraz.at)
 
-Philipp Weißensteiner (philipp.weissensteiner@student.tugraz.at)
-
 Asura Enkhbayar (asura.enkhbayar@gmail.com)
+
+Philipp Weißensteiner (philipp.weissensteiner@student.tugraz.at)
 
 ## Features
 
@@ -104,4 +104,4 @@ Head Start is licensed under [LGPL v3](http://www.gnu.org/copyleft/lesser.html).
 ## Citation
 If you use Head Start in your research, please cite it as follows:
 
-Kraker, Peter; Weißensteiner, Philipp (2014): Head Start. figshare. http://dx.doi.org/10.6084/m9.figshare.1091372
+Kraker, Peter; Enkhbayar, Asura; Weißensteiner, Philipp (2016). Head Start 2.9. Zenodo. http://dx.doi.org/10.5281/zenodo.50715
