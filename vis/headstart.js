@@ -20,8 +20,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.dogear_width  = 0.1;
   this.dogear_height = 0.1;
 
-  this.min_list_size = 300;
-  this.max_list_size = 420;
+  this.min_list_size = 400;
+  this.max_list_size = 500;
   this.paper_width_factor  = 1.2;
   this.paper_height_factor = 1.6;
   this.preview_image_width_list  = 230;
@@ -143,7 +143,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
       search_placeholder:"Suche...",
       show_list:"Liste ausklappen",
       hide_list:"Liste einklappen",
-      readers:"Entleihungen",
+      readers:this.base_unit,
       year:"Jahr",
       authors:"Autor",
       title:"Titel",
