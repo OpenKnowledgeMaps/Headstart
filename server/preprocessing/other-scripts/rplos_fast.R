@@ -105,7 +105,7 @@ if(debug == TRUE) {
 num_clusters
 
 # Perform non-metric multidimensional scaling
-nm = nmds(distance_matrix, mindim=2, maxdim=2, maxit=300)
+nm = nmds(distance_matrix, mindim=2, maxdim=2)
 nm.nmin = nmds.min(nm)
 x = nm.nmin$X1
 y = nm.nmin$X2
