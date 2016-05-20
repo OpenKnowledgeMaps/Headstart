@@ -196,6 +196,7 @@ papers.prepareForeignObject = function( nodes ){
             .style("margin", "0px")
             .style("padding", "0px")
             .style("background-color", "transparent")
+            .style("position", "static")
            .append("div")
             .attr("class", "paper_holder")
             .style("cursor", "default");

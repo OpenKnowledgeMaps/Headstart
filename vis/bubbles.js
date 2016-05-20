@@ -410,6 +410,7 @@ BubblesFSM.prototype = {
       .style("margin", "0px")
       .style("padding", "0px")
       .style("background-color", "transparent")
+      .style("position", "static")
       .append("div")
       .attr("id", "area_title")
       .style("width",  function (d) { return d.width_html + "px" })
