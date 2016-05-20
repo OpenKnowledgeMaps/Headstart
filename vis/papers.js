@@ -285,7 +285,7 @@ papers.applyForce = function( bubbles ) {
     headstart.force_areas.start();
     
     if(!headstart.is_force_areas) {
-      headstart.force_areas.alpha(0.0);
+      headstart.force_areas.alpha(headstart.area_force_alpha);
     }
   
     var areas_count = 0;
