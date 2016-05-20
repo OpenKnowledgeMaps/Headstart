@@ -14,16 +14,49 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.path = path;
   this.tag = tag;
 
+  // map
   this.min_height = 650;
   this.min_width  = 650;
+  this.vis_width = initVar(options.width, this.min_width);
+  this.vis_height = initVar(options.height, this.min_height);
+  this.top_correction    = 0;
+  this.bottom_correction = 34;
 
+  this.is_force_areas = initVar(options.force_areas, false);
+  this.area_force_alpha = 0.02;
+
+  // bubbles
+  this.max_diameter_size = initVar(options.max_diameter_size, 50);
+  this.min_diameter_size = initVar(options.min_diameter_size, 30);
+  this.max_area_size = initVar(options.max_area_size, 110);
+  this.min_area_size = initVar(options.min_area_size, 50);
+  this.area_title_max_size = 50;
+
+  // papers
   this.dogear_width  = 0.1;
   this.dogear_height = 0.1;
-
-  this.min_list_size = 400;
-  this.max_list_size = 500;
   this.paper_width_factor  = 1.2;
   this.paper_height_factor = 1.6;
+
+  // list
+  this.min_list_size = 400;
+  this.max_list_size = 500;
+  this.list_height = 51;
+  this.list_height_correction = 29;
+
+  this.sort_options = initVar(options.sort_options, [
+      "readers",
+      "title",
+      "authors",
+      "year"
+  ])
+
+  this.content_based = initVar(options.is_content_based, false);
+  if (this.content_based) {
+      this.sort_options = ["title", "area"];
+  }
+
+  // preview
   this.preview_image_width_list  = 230;
   this.preview_image_height_list = 300;
   this.circle_zoom_factor = 600;
@@ -35,133 +68,91 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.preview_image_height = 984;
   this.abstract_small = 250;
   this.abstract_large = null;
-
-  this.top_correction    = 0;
-  this.bottom_correction = 34;
   
-  this.list_height = 51;
-  this.list_height_correction = 29;
-
+  // transition
   this.transition_duration = 750;
 
-  this.max_diameter_size = initVar(options.max_diameter_size, 50);
-  this.min_diameter_size = initVar(options.min_diameter_size, 30);
-  this.max_area_size = initVar(options.max_area_size, 110);
-  this.min_area_size = initVar(options.min_area_size, 50);
-
-  this.area_title_max_size = 50;
-
-  this.current_zoom_node = null;
-
+  // misc
   this.debounce = 200;
 
+  // var inits
+  this.current_zoom_node = null;
   this.current_enlarged_paper = null;
+  this.current_file_number = 1;
+  this.current_circle = null;
   this.papers_list = null;
   this.circle_zoom = 0;
-  this.current_circle = null;
   this.is_zoomed = false;
-  
-  this.url_plos_pdf = "http://www.plosone.org/article/fetchObject.action?representation=PDF&uri=info:doi/";
 
-  this.subdiscipline_title = initVar(options.title, "");
-  
-  this.current_file_number = 1;
-  
-  this.vis_width = initVar(options.width, this.min_width);
-  
-  this.vis_height = initVar(options.height, this.min_height);
-  
-  this.is_evaluation = initVar(options.is_evaluation, false);
-  
-  this.content_based = initVar(options.is_content_based, false);
-  
-  this.evaluation_service = options.evaluation_service;
-  
-  this.is_force_areas = initVar(options.force_areas, false);
-  
-  this.is_adaptive = initVar(options.is_adaptive, false);
-  
+  // show 
   this.show_timeline = initVar(options.show_timeline, true);
-  
   this.show_dropdown = initVar(options.show_dropdown, true);
-  
   this.show_intro = initVar(options.show_intro, false);
-  
   this.show_infolink = initVar(options.show_infolink, true);
-  
   this.show_titlerow = initVar(options.show_titlerow, true);
-  
+
+  // behaviour settings (mostly legacy)
+  this.is_evaluation = initVar(options.is_evaluation, false);
+  this.evaluation_service = options.evaluation_service;
+  this.is_adaptive = initVar(options.is_adaptive, false);
   this.conference_id = initVar(options.conference_id, 0);
-  
   this.user_id = initVar(options.user_id, 0);
-  
   this.max_recommendations = initVar(options.max_recommendations, 10);
-  
   this.files = files;
-  
+    
+  // paths
   this.service_path = initVar(options.service_path, this.host + this.path + "server/services/");
-  
   this.images_path = initVar(options.images_path, this.host + this.path + "vis/images/");
+
+  this.preview_type = initVar(options.preview_type, "images");
+
+  // data specific settings
+  this.subdiscipline_title = initVar(options.title, "");
+  this.use_area_uri = initVar(options.use_area_uri, false);
+  this.url_prefix = initVar(options.url_prefix, null)
+  this.input_format = initVar(options.input_format, "csv");
+  this.base_unit = initVar(options.base_unit, "readers")
   
-  this.sort_options = initVar(options.sort_options, [
-    "readers",
-    "title",
-    "authors",
-    "year"
-   ])
-   
-   this.url_prefix = initVar(options.url_prefix, null)
-   
-   this.base_unit = initVar(options.base_unit, "readers")
-
-   if(this.content_based) {
-     this.sort_options = ["title", "area"];
-   }
-   
-   this.use_area_uri = initVar(options.use_area_uri, false);
-   
-   this.input_format = initVar(options.input_format, "csv");
-   
-   this.preview_type = initVar(options.preview_type, "images");
-
-   this.language = initVar(options.language, "eng");
-
-   this.localization = {
-    eng: {
-      loading: "Loading...",
-      search_placeholder:"Search...",
-      show_list:"Show list",
-      hide_list:"Hide list",
-      readers:"readers",
-      year:"date",
-      authors:"authors",
-      title:"title",
-      area:"Area"
-    },
-    ger:{
-      loading: "Wird geladen...",
-      search_placeholder:"Suche...",
-      show_list:"Liste ausklappen",
-      hide_list:"Liste einklappen",
-      readers:this.base_unit,
-      year:"Jahr",
-      authors:"Autor",
-      title:"Titel",
-      area:"Bereich"
-    }
+  // application specific variables
+  this.language = initVar(options.language, "eng");
+  this.localization = {
+      eng: {
+          loading: "Loading...",
+          search_placeholder: "Search...",
+          show_list: "Show list",
+          hide_list: "Hide list",
+          readers: "readers",
+          year: "date",
+          authors: "authors",
+          title: "title",
+          area: "Area"
+      },
+      ger: {
+          loading: "Wird geladen...",
+          search_placeholder: "Suche...",
+          show_list: "Liste ausklappen",
+          hide_list: "Liste einklappen",
+          readers: this.base_unit,
+          year: "Jahr",
+          authors: "Autor",
+          title: "Titel",
+          area: "Bereich"
+      }
   }
-  
-  this.plos_journals_to_shortcodes = { 
-            "plos neglected tropical diseases":"plosntds"
-            , "plos one":"plosone"
-            , "plos biology":"plosbiology"
-            , "plos medicine":"plosmedicine"
-            , "plos computational Biology":"ploscompbiol"
-            , "plos genetics":"plosgenetics"
-            , "plos pathogens":"plospathogens"
-            , "plos clinical trials":"plosclinicaltrials"
-        }
-  
+
+  //plos
+  this.url_plos_pdf = "http://www.plosone.org/article/fetchObject.action?representation=PDF&uri=info:doi/";
+  this.plos_journals_to_shortcodes = {
+      "plos neglected tropical diseases": "plosntds",
+      "plos one": "plosone",
+      "plos biology": "plosbiology",
+      "plos medicine": "plosmedicine",
+      "plos computational Biology": "ploscompbiol",
+      "plos genetics": "plosgenetics",
+      "plos pathogens": "plospathogens",
+      "plos clinical trials": "plosclinicaltrials"
+  }
+
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
   this.bubbles = {}
