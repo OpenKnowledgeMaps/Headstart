@@ -14,8 +14,11 @@ library(proxy)
 library(SnowballC)
 library(rplos)
 library(jsonlite)
+library(parfossil)
 
 debug = FALSE
+
+MAX_CLUSTERS = 15
 
 if(!is.null(params_file)) {
   params <- fromJSON(params_file)
@@ -89,6 +92,11 @@ css_cluster <- css.hclust(distance_matrix, hclust.FUN.MoreArgs=list(method="ward
 cut_off = elbow.batch(css_cluster)
 
 num_clusters = cut_off$k
+
+if(num_clusters > MAX_CLUSTERS) {
+  num_clusters = MAX_CLUSTERS
+}
+
 meta_cluster = attr(css_cluster,"meta")
 cluster = meta_cluster$hclust.obj
 labels = labels(distance_matrix)
@@ -105,7 +113,7 @@ if(debug == TRUE) {
 num_clusters
 
 # Perform non-metric multidimensional scaling
-nm = nmds(distance_matrix, mindim=2, maxdim=2)
+nm = par.nmds(distance_matrix, mindim=2, maxdim=2)
 nm.nmin = nmds.min(nm)
 x = nm.nmin$X1
 y = nm.nmin$X2
