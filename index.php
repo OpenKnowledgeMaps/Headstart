@@ -1,13 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
     <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <?php include ("C://Users/pkraker/xampp/htdocs/OKM/standard_head.php"); ?>
             <script type="text/javascript" src="vis/vis.js"></script>
     </head>
 
     <body style="margin:0px; padding:0px">
-        
-        <?php include ("C://Users/pkraker/xampp/htdocs/OKM/header.php"); ?>
         
         <div id="visualization"></div>
         <script>
@@ -37,7 +34,6 @@
                             , base_unit: "views"
                             , show_timeline: false
                             , show_dropdown: false
-                            , is_force_areas: true
                             , preview_type: "pdf"
                             , sort_options: ["readers", "title", "authors"]
                             } //options
