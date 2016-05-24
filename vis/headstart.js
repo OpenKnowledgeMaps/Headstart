@@ -23,7 +23,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.bottom_correction = 34;
 
   this.is_force_areas = initVar(options.force_areas, false);
-  this.area_force_alpha = 0.02;
+  this.area_force_alpha = initVar(options.force_areas_alpha, 0.02);
 
   // bubbles
   this.max_diameter_size = initVar(options.max_diameter_size, 50);
@@ -137,6 +137,17 @@ HeadstartFSM = function(host, path, tag, files, options) {
           authors: "Autor",
           title: "Titel",
           area: "Bereich"
+      },
+      eng_plos: {
+          loading: "Loading...",
+          search_placeholder: "Search...",
+          show_list: "Show list",
+          hide_list: "Hide list",
+          readers: "views",
+          year: "date",
+          authors: "authors",
+          title: "title",
+          area: "Area"
       }
   }
 
