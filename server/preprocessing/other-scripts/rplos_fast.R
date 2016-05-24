@@ -15,6 +15,8 @@ library(SnowballC)
 library(rplos)
 library(jsonlite)
 library(parfossil)
+library(doParallel)
+registerDoParallel(3)
 
 debug = FALSE
 
@@ -30,7 +32,7 @@ journals_string = paste("cross_published_journal_key:(", '"', paste(params$journ
 
 
 # Get data from PLOS API
-start.time <- Sys.time()
+#start.time <- Sys.time()
 
 #Format for fq: article_type:("Review" OR "Editorial")'
 
@@ -38,9 +40,9 @@ search_data <- searchplos(q=query, fq=list(article_types_string, journals_string
                           fl='title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type',
                           limit=100)
 
-end.time <- Sys.time()
-time.taken <- end.time - start.time
-time.taken
+#end.time <- Sys.time()
+#time.taken <- end.time - start.time
+#time.taken
 
 cooc = search_data$data
 
