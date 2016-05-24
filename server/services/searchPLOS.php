@@ -79,7 +79,7 @@ $result = json_decode($output_json, true);
 
 $naming = new \headstart\preprocessing\naming\KeywordNaming($ini_array);
 
-$naming->performNamingTfIdf($result, 3);
+$naming->performNamingTfIdf($result, 3, $id="area_uri", $subjects="subject", $keyword_separator=";");
 
 //attachMostUsedKeywords($result, 3);
 
