@@ -285,7 +285,6 @@ HeadstartFSM.prototype = {
   initDynamicVariables: function() {
     // initialize a bunch of variables.
        
-    //TODO: Change this to the height of the parent element   
     this.available_width  = this.vis_width; //$("#" + this.tag).width();  
     this.available_height = this.vis_height; //$("#" + this.tag).height();
 
@@ -402,11 +401,13 @@ HeadstartFSM.prototype = {
   drawSvg: function() {
 
     this.chart_id = d3.select( "#headstart-chart" );
-
+    
+    var chart_width = this.max_chart_size;// + this.max_list_size;
+    
     var svg = this.chart_id.append( "svg" )
             .attr("id", "chart-svg")
-            .attr( "height", this.max_chart_size + "px" )
-            .attr( "width",  this.max_chart_size + "px" );
+            .attr( "width", chart_width + "px" )
+            .attr( "height",  this.max_chart_size + "px" );
 
     this.svg = svg;
   },
@@ -419,8 +420,9 @@ HeadstartFSM.prototype = {
 
     // Rectangle to contain nodes in force layout
     var rect = chart.append("rect")
+    var rect_width = this.max_chart_size;// + this.max_list_size;
     rect.attr( "height", this.max_chart_size + "px" )
-    rect.attr( "width",  this.max_chart_size + "px" );
+    rect.attr( "width",  rect_width + "px" );
 
     this.chart = chart;
   },
@@ -443,9 +445,21 @@ HeadstartFSM.prototype = {
   },
 
   initMouseClickListeners: function() {
+    var self = this;  
+      
     $("rect").on( "click", function() {
       headstart.bubbles[headstart.current_file_number].zoomout();
     });
+    
+    $("#" + this.tag).bind('click', function(event) {
+        if(event.target.id === self.tag) {
+            headstart.bubbles[headstart.current_file_number].zoomout();
+        }
+    });
+    
+    /*$("#" + this.tag).on("click", function () {
+      headstart.bubbles[headstart.current_file_number].zoomout();
+    })*/
 
     $("#headstart-chart").on("click", function() {
       //headstart.mediator.publish("canvas_click", this.canvas_click);
