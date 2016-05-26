@@ -83,6 +83,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.papers_list = null;
   this.circle_zoom = 0;
   this.is_zoomed = false;
+  this.zoom_finished = false;
 
   // show 
   this.show_timeline = initVar(options.show_timeline, true);
@@ -447,7 +448,7 @@ HeadstartFSM.prototype = {
     });
 
     $("#headstart-chart").on("click", function() {
-      headstart.mediator.publish("canvas_click", this.canvas_click);
+      //headstart.mediator.publish("canvas_click", this.canvas_click);
       // headstart.bubbles[headstart.current_file_number].zoomOut();
     });
   },

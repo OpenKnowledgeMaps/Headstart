@@ -23,11 +23,13 @@ var papers = StateMachine.create({
 
         // user clicks on a bubble or paper (inside that bubble)
         { name: "zoom",      from: "infrontofbubble", to: "infrontofbigbubble" },
+        { name: "zoom",      from: "enlarged", to: "infrontofbigbubble" },
 
         // user moves mouse out of big bubble
         { name: "mouseout",  from: "infrontofbigbubble", to: "behindbigbubble" },
         { name: "mouseover", from: "behindbigbubble", to: "infrontofbigbubble" },
         { name: "zoomout",   from: "behindbigbubble", to: "behindbubble" },
+        { name: "zoomout",   from: "enlarged", to: "behindbubble" },
 
         { name: "mouseoutpaper",  from: "enlarged", to: "infrontofbigbubble" },
         { name: "mouseoverpaper", from: "infrontofbigbubble", to: "enlarged" },
