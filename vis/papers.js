@@ -129,16 +129,22 @@ papers.drawPaperPath = function(nodes) {
 
   nodes.append("path")
     .attr("id", "region")
+    .attr("d", region);
+    
+    papers.resetPaths();
+}
+
+papers.resetPaths = function() {
+    d3.selectAll("path#region")
     .attr("class", function (d) {
         if(d.bookmarked) {
           return "framed_bookmarked"
         } else if (d.recommended) {
-          return "framed"
+          return "framed_recommended"
         } else {
           return "unframed"
         }
       })
-    .attr("d", region);
 }
 
 // draw the path of the dog-ear for the papers
@@ -545,6 +551,15 @@ papers.enlargePaper = function(d,holder_div,i) {
                 if(!d.paper_selected) {
 
                     list.enlargeListItem(d);
+                    
+                    papers.resetPaths();
+                    
+                    var current_paper = d3.selectAll("path#region")
+                            .filter(function(x) {
+                                return d.id === x.id
+                            })
+                    
+                    current_paper.attr("class", "framed")
 
                     if(list.current = "hidden") {
                         list.show();
@@ -575,6 +590,7 @@ papers.enlargePaper = function(d,holder_div,i) {
     headstart.current_circle
         .on("click", function (d) {
             headstart.mediator.publish("currentbubble_click", d);
+            papers.resetPaths();
         });
 
     d.resized = true;

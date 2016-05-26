@@ -489,6 +489,8 @@ BubblesFSM.prototype = {
     var previous_zoom_node = headstart.current_zoom_node;
 
     list.reset();
+    
+    papers.resetPaths();
 
     if(typeof d != 'undefined') {
       list.papers_list.selectAll("#list_holder")
@@ -511,10 +513,10 @@ BubblesFSM.prototype = {
         }
       } else {
         resetList();
-
+        
         list.papers_list.selectAll("#list_holder")
           .style("display", function (d) { return d.filtered_out?"none":"inline"});
-
+  
         d3.event.stopPropagation();
         return;
       }
@@ -700,7 +702,7 @@ BubblesFSM.prototype = {
 
     t.selectAll("span.readers_entity")
       .style("font-size", "8px");
-
+      
     popup.drawInfoLinkWithTitle( "What's this?" );
     
     if (headstart.show_timeline)
@@ -712,7 +714,7 @@ BubblesFSM.prototype = {
 
     d3.selectAll(".paper")
       .style("display", function(d) { return d.filtered_out?"none":"block"});
-
+      
     this.resetCirclePosition(t);
 
     this.initCircleClickListener();
@@ -723,7 +725,9 @@ BubblesFSM.prototype = {
       var current_node = circles[0][i];
       toFront(current_node);
     }
-
+    
+    papers.resetPaths();
+    
     d3.selectAll("div.paper_holder")
       .on("mouseover", null)
       .on("mouseout", null)

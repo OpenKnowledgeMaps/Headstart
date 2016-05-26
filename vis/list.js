@@ -439,7 +439,7 @@ list.removeBookmark = function(d)  {
           return x.id == d.id
         })
             .attr("class", function (d) {
-              return (d.recommended)?("framed"):("unframed");
+              return (d.recommended)?("framed_recommended"):("unframed");
             })
         
       });

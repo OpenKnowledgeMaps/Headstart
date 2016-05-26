@@ -53,6 +53,11 @@
 }
 
 .headstart .framed {
+    stroke: #e55137;
+    stroke-width: 3px;
+}
+
+.headstart .framed_recommended {
     stroke: yellow;
     stroke-width: 3px;
 }

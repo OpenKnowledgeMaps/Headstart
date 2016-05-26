@@ -91,6 +91,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.show_intro = initVar(options.show_intro, false);
   this.show_infolink = initVar(options.show_infolink, true);
   this.show_titlerow = initVar(options.show_titlerow, true);
+  this.show_list = initVar(options.show_list, false);
 
   // behaviour settings (mostly legacy)
   this.is_evaluation = initVar(options.is_evaluation, false);
@@ -504,6 +505,9 @@ HeadstartFSM.prototype = {
           if ((!papers.is("ready") && !papers.is("none")) || (bubbles.is("startup") || bubbles.is("none") || (bubbles.is("start")) )) {
             if (hs.force_papers.alpha() <= 0 && hs.force_areas.alpha() <= 0) {
               papers.forced();
+              if(headstart.show_list) {
+                list.show();
+              }
               window.clearInterval(checkPapers);
             }
           }
