@@ -459,6 +459,12 @@ list.makeTitleClickable = function(d) {
     papers.mouseoverpaper();
     this.enlargeListItem(d);
     headstart.current_enlarged_paper = d;
+    
+    d3.selectAll("path#region")
+            .filter(function(x) {
+                return x.id === d.id;
+            })
+                .attr("class", "framed");
 
     headstart.mediator.publish("record_action", d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
     // headstart.recordAction(d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
