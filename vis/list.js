@@ -24,7 +24,8 @@ var list = StateMachine.create({
         onshow: function( event, from, to ) {
             // if the papers_force has stopped.
             if(!papers.is("loading")) {
-                d3.select("#sort_container").style("display", "block"); 
+                d3.select("#sort_container").style("display", "block");
+                d3.select("#input_container").style("display", "block"); 
                 d3.select( "#papers_list"     ).style("display", "block");
                 d3.select( "#left_arrow"      ).text("\u25B2");
                 d3.select( "#right_arrow"     ).text("\u25B2");
@@ -33,7 +34,8 @@ var list = StateMachine.create({
         },
 
         onhide: function( event, from, to ) {
-            d3.select("#sort_container").style("display", "none"); 
+            d3.select("#sort_container").style("display", "none");
+            d3.select("#input_container").style("display", "block");
             d3.select( "#papers_list"     ).style("display", "none");
             d3.select( "#left_arrow"      ).text("\u25BC");
             d3.select( "#right_arrow"     ).text("\u25BC");
@@ -54,82 +56,49 @@ var list = StateMachine.create({
     }
 });
 
-list.drawShowHideContainer = function() { 
-    var list_show_hide_container =
-        d3.select ( "#papers_list_container" )
-            .style ( "left",  headstart.max_chart_size+10 + "px" )
-            // .style ( "width", headstart.list_width + "px")
-            .style ( "height", headstart.list_height + "px" )
-           .append( "div" )
-            .attr  ( "id", "show_hide_container" )
-            .style ( "width", headstart.list_width-10 + "px" )
-            .style ( "height", headstart.list_height + "px" );
-
-    return list_show_hide_container;
-}
-
 list.drawList = function() {
+    // Load list template
+    var compiledTemplate = Handlebars.getTemplate('list_container');
+    var list_container = compiledTemplate();
+    $("#papers_list_container").append(list_container);
 
-    var list_show_hide_container = this.drawShowHideContainer();
-    var show_hide = list_show_hide_container.append("div").attr("id", "show_hide");
-    this.drawLeftArrow(show_hide);
-    this.drawLabel(show_hide);
-    this.drawRightArrow(show_hide);
+    // Set localized values
+    $("#input_container>input")
+    .attr("placeholder", headstart.localization[headstart.language].search_placeholder)
+    .keyup(function(event){
+        debounce(filterList(event), 700)
+      })
 
-    list_show_hide_container.append("div")
-      .attr("id", "input_container")
-      .append("input")
-      .attr("type", "text")
-      .attr("placeholder", headstart.localization[headstart.language].search_placeholder)
-      // .attr("oninput", "debounce(filterList(event),4000)")
-      .attr("size", 15)
-    list_show_hide_container.append("div")
-      .attr("id", "sort_container")
-      .style("display", "none");
-
-    $("#input_container>input").keyup(function(event){
-        debounce(filterList(event), 700)})
-
-    var papers_list = list_show_hide_container
-                            .append("div")
-                            .attr("id", "papers_list")
-                            .style("height", headstart.max_chart_size - headstart.list_height_correction + "px")
-                            .style("width", headstart.list_width - 10 + "px")
-                            .style("display", "none")
-
-
-    var container = d3.select("#sort_container")
-                      .append("ul")
-                      .attr("class", "filter");
-
-    addSortOption = function(sort_option, selected) {
-      container.append("li")
-        .append("a")
-        .attr("class", function() { return selected?("selected"):("")})
-        .attr("id", "sort_" + sort_option)
-        .on("click", function() {
-          headstart.mediator.publish("list_sort_click", sort_option);
-          headstart.mediator.publish("record_action","none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
-          // headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
-          // sortBy(sort_option);
-        }).text(headstart.localization[headstart.language][sort_option]);
+    // Add sort options
+    var container = d3.select("#sort_container>ul")
+    var counter = 0;
+    for (option in headstart.sort_options) {
+      if (counter === 0) {
+        addSortOption(container, headstart.sort_options[option], true);
+        continue;
+      }
+      addSortOption(container, headstart.sort_options[option], false);
     }
 
-    addSortOption(headstart.sort_options[0], true);
-
-      var counter = 0;
-
-      for (option in headstart.sort_options) {
-        if (counter === 0) {
-          counter++;
-          continue;
-        }
-        addSortOption(headstart.sort_options[option], false);
-      }
-
-
+    // Set List height
+    // TO-DO: Determine papers_list padding-top automatically
+    paper_list_avail_height = $(window).height() - $("#show_hide_container").height() - 14;
+    $("#papers_list").height(paper_list_avail_height);
 
     this.papers_list = d3.select("#papers_list");
+}
+
+addSortOption = function(parent, sort_option, selected) {
+  parent.append("li")
+    .append("a")
+    .attr("class", function() { return selected?("selected"):("")})
+    .attr("id", "sort_" + sort_option)
+    .on("click", function() {
+      headstart.mediator.publish("list_sort_click", sort_option);
+      headstart.mediator.publish("record_action","none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
+      // headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
+      // sortBy(sort_option);
+    }).text(headstart.localization[headstart.language][sort_option]);
 }
 
 function sortBy(field) {
@@ -164,9 +133,8 @@ function stringCompare(a, b) {
   }
 }
 
-
 list.initListMouseListeners = function() {
-  d3.selectAll( "#show_hide" ).on( "mouseover", function (d) {
+  d3.selectAll( "#show_hide_container" ).on( "mouseover", function (d) {
     list.colorButton( this, '#666', '#EEE' );
   }).on( "mouseout", function (d) {
     list.colorButton( this, '#EEE', '#000' );
@@ -685,31 +653,6 @@ list.testImage = function(image_src) {
     } finally {
       return http.status != 404;
     }
-}
-
-// just a wrapper
-list.drawLeftArrow = function(element) {
-    element.append("div").attr("id", "left_arrow")
-           .style("width", "30px")
-           .text("\u25BC");
-}
-
-// just a wrapper
-list.drawRightArrow = function(element) {
-  element.append("div")
-         .attr("id", "right_arrow")
-         .style("width", "30px")
-         .text("\u25BC");
-}
-
-// just a wrapper
-list.drawLabel = function(element) {
-  element.append("div")
-         .attr("id", "show_hide_label_container")
-         .style("width", headstart.list_width - 70 + "px")
-         .append("strong")
-         .attr("id", "show_hide_label")
-         .text(headstart.localization[headstart.language].show_list);
 }
 
 function notSureifNeeded() {
