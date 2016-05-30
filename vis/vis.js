@@ -19,15 +19,6 @@ Headstart = function(host, path, tag, files, options) {
        ,{source: "d3.v3.js", important: true}
    ];
 
-  var divs = [
-      // "main",
-      // "subdiscipline_title",
-      "vis_row",
-      "headstart-chart",
-      "papers_list_container",
-      "paper_frame"
-  ];
-
   var script_sources = [
     {source: "intro.js"}
      ,{source: "popup.js"}
@@ -37,16 +28,9 @@ Headstart = function(host, path, tag, files, options) {
      ,{source: "headstart.js", final: true}
    ]
 
-  var compiledTemplate = Handlebars.getTemplate('headstart', template_directory);
-  var html = compiledTemplate({ name : 'headstart' });
+  var compiledTemplate = Handlebars.getTemplate('headstart');
+  var html = compiledTemplate();
   $("#visualization").append(html);
-
-  // this is the starting point for the visualisation
-  addDiv = function(id, append_tag) {
-    var current_div = document.createElement('div');
-    current_div.id = id;
-    return document.getElementById(append_tag).appendChild(current_div);
-  }
 
   addScript = function(source, tag, async) {
     var current_script = document.createElement('script');
@@ -70,13 +54,8 @@ Headstart = function(host, path, tag, files, options) {
 
   lib_sources.forEach(function(script_source, i) {
     var current_script = addScript(host + path + vis_directory + lib_directory + script_source.source, 'head', false);
-
     if (typeof script_source.important !== 'undefined') {
       current_script.onload = function() {
-        divs.forEach(function(name) {
-          // addDiv(name, tag);
-        })
-
         script_sources.forEach(function(script_source) {
           var source = host + path + vis_directory + script_source.source;
           var this_script = addScript(source, 'head', false);
@@ -120,7 +99,7 @@ function redraw_drag(x, y, dx, dy) {
           "translate(" + dx + ", " + dy + ")");
 }
 
-Handlebars.getTemplate = function(name, template_directory) {
+Handlebars.getTemplate = function(name) {
     if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
         $.ajax({
             url : template_directory + name + '.handlebars',
