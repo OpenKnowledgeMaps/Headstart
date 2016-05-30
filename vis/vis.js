@@ -102,7 +102,7 @@ function redraw_drag(x, y, dx, dy) {
 Handlebars.getTemplate = function(name) {
     if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
         $.ajax({
-            url : template_directory + name + '.handlebars',
+            url : "vis/templates/" + name + '.handlebars',
             success : function(data) {
                 if (Handlebars.templates === undefined) {
                     Handlebars.templates = {};
