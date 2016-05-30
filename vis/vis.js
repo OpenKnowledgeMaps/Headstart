@@ -9,7 +9,6 @@ Headstart = function(host, path, tag, files, options) {
 
   var lib_sources = [
      {source: "browser_detect.js"}
-       //,{source: "jquery-1.8.1.min.js"}
        ,{source: "state-machine.js"}
        ,{source: "mediator.min.js"}
        ,{source: "highlightRegex.min.js"}
