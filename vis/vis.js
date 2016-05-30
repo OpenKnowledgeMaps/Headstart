@@ -4,6 +4,7 @@ var namespace = "headstart";
 Headstart = function(host, path, tag, files, options) {
   
   var vis_directory = "vis/";
+  var template_directory = "vis/templates/";
   
   var lib_directory = "lib/";
 
@@ -19,12 +20,13 @@ Headstart = function(host, path, tag, files, options) {
    ];
 
   var divs = [
-     "main"
-     ,"subdiscipline_title"
-     ,"headstart-chart"
-     ,"papers_list_container"
-     ,"paper_frame"
-   ];
+      // "main",
+      // "subdiscipline_title",
+      "vis_row",
+      "headstart-chart",
+      "papers_list_container",
+      "paper_frame"
+  ];
 
   var script_sources = [
     {source: "intro.js"}
@@ -34,6 +36,10 @@ Headstart = function(host, path, tag, files, options) {
      ,{source: "list.js"}
      ,{source: "headstart.js", final: true}
    ]
+
+  var compiledTemplate = Handlebars.getTemplate('headstart', template_directory);
+  var html = compiledTemplate({ name : 'headstart' });
+  $("#visualization").append(html);
 
   // this is the starting point for the visualisation
   addDiv = function(id, append_tag) {
@@ -68,7 +74,7 @@ Headstart = function(host, path, tag, files, options) {
     if (typeof script_source.important !== 'undefined') {
       current_script.onload = function() {
         divs.forEach(function(name) {
-          addDiv(name, tag);
+          // addDiv(name, tag);
         })
 
         script_sources.forEach(function(script_source) {
@@ -113,3 +119,19 @@ function redraw_drag(x, y, dx, dy) {
   chart.attr("transform",
           "translate(" + dx + ", " + dy + ")");
 }
+
+Handlebars.getTemplate = function(name, template_directory) {
+    if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
+        $.ajax({
+            url : template_directory + name + '.handlebars',
+            success : function(data) {
+                if (Handlebars.templates === undefined) {
+                    Handlebars.templates = {};
+                }
+                Handlebars.templates[name] = Handlebars.compile(data);
+            },
+            async : false
+        });
+    }
+    return Handlebars.templates[name];
+};
