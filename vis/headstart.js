@@ -106,7 +106,6 @@ HeadstartFSM = function(host, path, tag, files, options) {
   // paths
   this.service_path = initVar(options.service_path, this.host + this.path + "server/services/");
   this.images_path = initVar(options.images_path, this.host + this.path + "vis/images/");
-
   this.preview_type = initVar(options.preview_type, "images");
 
   // data specific settings
@@ -292,7 +291,8 @@ HeadstartFSM.prototype = {
     // this.available_width  = this.vis_width; //$("#" + this.tag).width();  
     // this.available_height = this.vis_height; //$("#" + this.tag).height();
     this.available_width  = $("#headstart-chart").width();
-    this.available_height = this.max_height;
+    // this.available_height = this.max_height;
+    this.available_height = $(window).height() - $("#subdiscipline-title").height() - 20;
 
     d3.select(window)
       .on("resize", function() {
