@@ -396,67 +396,62 @@
     color: rgb(102, 102, 102);
 }
 
-/* ################ Papers list ############### */
+/* ################ List Explorer ############### */
 
-.headstart div#papers_list_container
+.headstart #list_explorer
 {
-    /*    margin-top: -27px;
+/*    margin-top: -27px;
     margin-bottom: -27px;
     position: relative;*/
 }
 
-.headstart div#input_container
+.headstart #explorer_header
 {
-    float: left;
-
-    margin-top: 5px;
-    padding-left: 3px;
-}
-
-.headstart div#sort_container
-{
-    position: relative;
-
-    float: right;
-
-    cursor: pointer;
-
-    background: none;
-}
-
-
-.headstart div#show_hide_container
-{
-    /*  position: relative;
-  top: 0px;*/
-    cursor: pointer;
-
     background-color: #eee;
 }
 
-.headstart div#show_hide_label_container
+.headstart #show_hide_button
+{
+    cursor: pointer;
+}
+
+.headstart #show_hide_button.hover
+{
+    background-color: #666;
+    color: #eee;
+}
+
+.headstart #show_hide_button_label
 {
     font-family: 'Helvetica';
     font-size: 14px;
+    font-weight: 400;
 
     float: left;
 
     text-align: center;
 }
 
-.headstart #show_hide_label
+.headstart #explorer_options
 {
-    font-size: 14px;
-    font-weight: 400;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
-.headstart div#show_hide
+.headstart #filter_container
 {
-    color: #000;
-    background-color: #eee;
+    float: left;
+    display: block;
 }
 
-.headstart div#papers_list
+.headstart #sort_container
+{
+    float: right;
+    cursor: pointer;
+    display: none;
+}
+
+.headstart #papers_list
 {
     float: right;
     overflow-y: scroll;
@@ -464,18 +459,8 @@
     padding-left: 0px;
     padding-right: 0px;
     background-color: white;
-}
 
-.headstart div#left_arrow
-{
-    float: left;
-}
-
-.headstart div#right_arrow
-{
-    float: left;
-
-    text-align: right;
+    display: none;
 }
 
 .headstart div.list_metadata
@@ -705,23 +690,6 @@
 
 /* ########### Filters ############## */
 
-.headstart ul.filter
-{
-    font-size: 11px;
-
-    float: left;
-    overflow: hidden;
-
-    margin: 0;
-    padding: 0;
-
-    list-style-type: none;
-
-    border: 3px solid #e9e9e9;
-    -moz-border-radius: 20px;
-         border-radius: 20px;
-}
-
 .headstart .filter li
 {
     float: left;
@@ -843,3 +811,15 @@
 }
 
 /* ########### Highlightable elements ########### */
+
+/* ########### Bootstrap Customisation ########### */
+
+/* Create a very small input group*/
+.input-group-xs>.form-control,
+.input-group-xs>.input-group-addon,
+.input-group-xs>.input-group-btn>.btn {
+    height: 22px;
+    padding: 1px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+}

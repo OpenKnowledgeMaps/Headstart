@@ -700,7 +700,7 @@ HeadstartFSM.prototype = {
     $("#chart_canvas").empty();
 
     // clear the list list
-    $("#papers_list_container").empty();
+    $("#list_explorer").empty();
     
     this.bubbles[headstart.current_file_number].current = "x";
     popup.current  = "hidden";
@@ -757,7 +757,7 @@ HeadstartFSM.prototype = {
     $("#chart_canvas").remove();
 
     // clear the list list
-    $("#papers_list_container").empty();
+    $("#list_explorer").empty();
     
     popup.current  = "hidden";
     papers.current = "none";
