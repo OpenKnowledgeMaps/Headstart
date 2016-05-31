@@ -302,8 +302,11 @@ HeadstartFSM.prototype = {
         if (self.max_chart_size > self.max_height) {
           self.max_chart_size = self.max_height;
         }
-        d3.select("#chart-svg").attr("width", self.max_chart_size);
-        d3.select("#chart-svg").attr("height", self.max_chart_size);
+        $("#chart-svg").width(self.max_chart_size);
+        $("#chart-svg").height(self.max_chart_size);
+
+        list.fit_list_height();
+
       });
 
     this.x = d3.scale.linear().range([0, this.circle_zoom_factor]);
