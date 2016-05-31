@@ -24,22 +24,20 @@ var list = StateMachine.create({
         onshow: function( event, from, to ) {
             // if the papers_force has stopped.
             if(!papers.is("loading")) {
-                d3.select("#sort_container").style("display", "block");
-                d3.select("#input_container").style("display", "block"); 
-                d3.select( "#papers_list"     ).style("display", "block");
-                d3.select( "#left_arrow"      ).text("\u25B2");
-                d3.select( "#right_arrow"     ).text("\u25B2");
-                d3.select( "#show_hide_label" ).text(headstart.localization[headstart.language].hide_list);
+                d3.select("#sort_container").style("display", "block"); 
+                d3.select("#papers_list").style("display", "block");
+                d3.select("#left_arrow").text("\u25B2");
+                d3.select("#right_arrow").text("\u25B2");
+                d3.select("#show_hide_label").text(headstart.localization[headstart.language].hide_list);
             }
         },
 
         onhide: function( event, from, to ) {
             d3.select("#sort_container").style("display", "none");
-            d3.select("#input_container").style("display", "block");
-            d3.select( "#papers_list"     ).style("display", "none");
-            d3.select( "#left_arrow"      ).text("\u25BC");
-            d3.select( "#right_arrow"     ).text("\u25BC");
-            d3.select( "#show_hide_label" ).text(headstart.localization[headstart.language].show_list);
+            d3.select("#papers_list").style("display", "none");
+            d3.select("#left_arrow").text("\u25BC");
+            d3.select("#right_arrow").text("\u25BC");
+            d3.select("#show_hide_label").text(headstart.localization[headstart.language].show_list);
         },
 
         onbeforetoggle: function( event, from, to ) {
@@ -58,12 +56,12 @@ var list = StateMachine.create({
 
 list.drawList = function() {
     // Load list template
-    var compiledTemplate = Handlebars.getTemplate('list_container');
-    var list_container = compiledTemplate();
-    $("#papers_list_container").append(list_container);
+    compiledTemplate = Handlebars.getTemplate('list_explorer');
+    list_explorer = compiledTemplate();
+    $("#list_explorer").append(list_explorer);
 
     // Set localized values
-    $("#input_container>input")
+    $("#filter_input")
     .attr("placeholder", headstart.localization[headstart.language].search_placeholder)
     .keyup(function(event){
         debounce(filterList(event), 700)
@@ -71,52 +69,59 @@ list.drawList = function() {
 
     // Add sort options
     var container = d3.select("#sort_container>ul")
-    var counter = 0;
+    var first_element = true;
     for (option in headstart.sort_options) {
-      if (counter === 0) {
+      if (first_element) {
         addSortOption(container, headstart.sort_options[option], true);
-        continue;
+        first_element = false;
+      } else {
+        addSortOption(container, headstart.sort_options[option], false);
       }
-      addSortOption(container, headstart.sort_options[option], false);
     }
 
-    // Set List height
-    // TO-DO: Determine papers_list padding-top automatically
-    paper_list_avail_height = $(window).height() - $("#show_hide_container").height() - 14;
-    $("#papers_list").height(paper_list_avail_height);
-
+    this.fit_list_height();
     this.papers_list = d3.select("#papers_list");
 }
 
+list.fit_list_height = function() {
+  paper_list_avail_height = $(window).height() - $("#show_hide_button").height() - 14;
+  $("#papers_list").height(paper_list_avail_height);
+}
+
 addSortOption = function(parent, sort_option, selected) {
-  parent.append("li")
-    .append("a")
-    .attr("class", function() { return selected?("selected"):("")})
-    .attr("id", "sort_" + sort_option)
-    .on("click", function() {
-      headstart.mediator.publish("list_sort_click", sort_option);
-      headstart.mediator.publish("record_action","none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
-      // headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
-      // sortBy(sort_option);
-    }).text(headstart.localization[headstart.language][sort_option]);
+  if (selected) {
+    checked_val = "checked"
+    active_val = "active"
+  } else {
+    checked_val = ""
+    active_val = ""
+  }
+
+  compiledTemplate = Handlebars.getTemplate('select_button');
+  button = compiledTemplate({id:"sort_" + sort_option,
+                                     checked:checked_val,
+                                     label:sort_option,
+                                     active:active_val});
+  $("#sort-buttons").append(button);
+
+  // Event listeners
+  $("#sort_" + sort_option).change(function(event) {
+      sortBy(sort_option);
+      headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
+    })
 }
 
 function sortBy(field) {
-  d3.selectAll("#list_holder")
-    .sort(function(a,b) {
-      if (field == "year") {
-        return stringCompare(b[field], a[field]);
-      } else {
-        return stringCompare(a[field], b[field]);
-      }
-    })
-
-    d3.selectAll(".selected")
-      .attr("class", "")
-
-    d3.select("#sort_" + field)
-      .attr("class", "selected");
+    d3.selectAll("#list_holder")
+        .sort(function(a, b) {
+            if (field == "year") {
+                return stringCompare(b[field], a[field]);
+            } else {
+                return stringCompare(a[field], b[field]);
+            }
+        })
 }
+
 
 function stringCompare(a, b) {
   if(typeof a == 'undefined' || typeof b == 'undefined'){
@@ -134,29 +139,20 @@ function stringCompare(a, b) {
 }
 
 list.initListMouseListeners = function() {
-  d3.selectAll( "#show_hide_container" ).on( "mouseover", function (d) {
-    list.colorButton( this, '#666', '#EEE' );
-  }).on( "mouseout", function (d) {
-    list.colorButton( this, '#EEE', '#000' );
-  }).on( "click", function (d) {
-    headstart.mediator.publish("list_toggle")
-    // list.toggle();
-  });
+    $("#show_hide_button")
+        .on("mouseover", function() {
+            $("#show_hide_button").addClass("hover")
+        })
+        .on("mouseout", function() {
+            $("#show_hide_button").removeClass("hover")
+        })
+        .on("click", function(event) {
+            headstart.mediator.publish("list_toggle")
+        });
 
-  d3.selectAll( "#list_title" ).on( "click", function(d) {
-    headstart.mediator.publish("list_title_clickable", d);
-    // list.makeTitleClickable(d);
-  });
-}
-
-// sets text and background color for a given button
-list.colorButton = function( button, background_color, text_color ) {
-    d3.select( "#show_hide_container" ).style("background-color", background_color );
-    // IE workaround
-    d3.select( "#left_arrow" ).style("background-color", background_color );
-    d3.select( "#right_arrow").style("background-color", background_color );
-    d3.select( "#show_hide_label_container" ).style("background-color", background_color );
-    d3.select(button).style( "color", text_color );
+    d3.selectAll("#list_title").on("click", function(d) {
+        headstart.mediator.publish("list_title_clickable", d);
+    });
 }
 
 list.getPaperNodes = function(list_data) {
