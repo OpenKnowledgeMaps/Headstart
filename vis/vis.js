@@ -26,9 +26,20 @@ Headstart = function(host, path, tag, files, options) {
      ,{source: "headstart.js", final: true}
    ]
 
+
+   viz = $("#visualization");
+
   var compiledTemplate = Handlebars.getTemplate('headstart');
   var html = compiledTemplate();
-  $("#visualization").append(html);
+  viz.append(html);
+
+  compiledTemplate = Handlebars.getTemplate("info_modal");
+  info_modal = compiledTemplate();
+  viz.append(info_modal);
+
+  compiledTemplate = Handlebars.getTemplate("iframe_modal");
+  iframe_modal = compiledTemplate();
+  viz.append(iframe_modal);
 
   addScript = function(source, tag, async) {
     var current_script = document.createElement('script');
