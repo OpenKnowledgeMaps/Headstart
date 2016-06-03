@@ -1,11 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
     <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <script type="text/javascript" src="vis/vis.js"></script>
+        <script type="text/javascript" src="vis/lib/jquery-2.1.4.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="vis/lib/bootstrap.min.css">
+        <script type="text/javascript" src="vis/lib/bootstrap.min.js"></script>
+        <script type="text/javascript" src="vis/vis.js"></script>
+
     </head>
 
     <body style="margin:0px; padding:0px">
-        
+        <div style="margin-top:20px">
+            Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a> and <a href="http://github.com/ropensci/rplos" target="_blank">rplos</a>. All content retrieved from <a href="https://www.plos.org/publications/journals/" target="_blank">Public Library of Science Journals</a> under <a href="http://journals.plos.org/plosone/s/content-license" target="_blank">CC-BY</a>.
+        </div>
         <div id="visualization"></div>
         <script>
                 
@@ -39,8 +45,5 @@
                             } //options
                 )
         </script>
-
-         <div style="margin-top:20px">Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a> and <a href="http://github.com/ropensci/rplos" target="_blank">rplos</a>. All content retrieved from <a href="https://www.plos.org/publications/journals/" target="_blank">Public Library of Science Journals</a> under <a href="http://journals.plos.org/plosone/s/content-license" target="_blank">CC-BY</a>.
-        </div>
     </body>
 </html>

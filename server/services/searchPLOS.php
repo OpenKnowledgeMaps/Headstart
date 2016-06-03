@@ -47,9 +47,9 @@ $unique_id = $persistence->createID(array($query, $params_json));
 $last_version = $persistence->getLastVersion($unique_id, false);
 
 if ($last_version != null && $last_version != "null" && $last_version != false) {
-    //redirect("http://" . $settings["host"] . $settings["vis_path"] . "index.php?id=" . $unique_id); 
-    echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
-    return;
+    redirect("http://" . $settings["host"] . $settings["vis_path"] . "index.php?id=" . $unique_id); 
+    //echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
+    //return;
 }
 
 $params_file = tmpfile();
