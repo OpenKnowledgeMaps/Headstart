@@ -472,8 +472,8 @@ HeadstartFSM.prototype = {
     var text_style = "font-size: 10pt;";
     var link_style = "font-size:8pt; color: rgb(167, 8, 5)";
 
-    var whatsthis = ' <span id="info" style="' + text_style +
-                    '">(<a href="#" id="infolink" style="'   + link_style +
+    var whatsthis = '<span id="info" style="' + text_style +
+                    '">(<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink" style="' + link_style +
                     '">' + "What's this?" + '</a>)</span></h2>';
 
     var info = d3.select( "#subdiscipline_title h4")
@@ -825,14 +825,20 @@ HeadstartFSM.prototype = {
     //$("#area_title>h2").hyphenate('de');
     $("#area_title_object>body").dotdotdot({wrap:"letter"});
 
-    $('#myModal').on('show.bs.modal', function (event) {
-      // var button = $(event.relatedTarget) // Button that triggered the modal
-      // var recipient = button.data('whatever') // Extract info from data-* attributes
-      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    $('#info_modal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      console.log(button)
+      
+      var type = button.data('type') // Extract info from data-* attributes
       var modal = $(this)
-      modal.find('.modal-title').text(intro_title)
-      modal.find('.modal-body').html(intro_body)
+      if (type == "text") {
+          modal.find('.modal-title').text(intro_title)
+          modal.find('.modal-body').html(intro_body)
+        } else {
+          modal.find('.modal-title').text(type)
+          modal.find('.modal-body').html("<strong>HAHA<strong>")
+        }
+
     })
   },
 
@@ -872,7 +878,7 @@ HeadstartFSM.prototype = {
   },
 
   popup_toggle: function() {
-    $("#myModal").modal();
+    // $("#info_modal").modal();
     // if (headstart.mediator_states.popup_visible) {
     //   popup.hide();
     //   headstart.mediator_states.popup_visible = false;
