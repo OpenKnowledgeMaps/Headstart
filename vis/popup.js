@@ -54,9 +54,6 @@ var popup = StateMachine.create({
           //                  .append( "div" )
           //                  .attr  ( "id", "intro" )
           //                  .html(intro_html);
-          compiledTemplate = Handlebars.getTemplate('popup');
-          popup = compiledTemplate();
-          $("#preview").append(popup);
          
          headstart.mediator.publish("record_action","none", "show_popup", headstart.user_id, "none", null);
          // headstart.recordAction("none", "show_popup", headstart.user_id, "none", null);
