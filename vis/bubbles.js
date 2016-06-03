@@ -483,9 +483,6 @@ BubblesFSM.prototype = {
   },
 
   zoom: function(d, i) {
-    
-    
-      
     var previous_zoom_node = headstart.current_zoom_node;
 
     list.reset();
@@ -561,7 +558,7 @@ BubblesFSM.prototype = {
       .on("mouseover", null)
       .on("mouseout", null)
 
-      d3.select("#subdiscipline_title h1").text(headstart.localization[headstart.language].area +": " + d.title);
+      d3.select("#subdiscipline_title h4").text(headstart.localization[headstart.language].area +": " + d.title);
       $("#subdiscipline_title").dotdotdot();
 
     d3.selectAll("div.paper_holder")
@@ -703,7 +700,7 @@ BubblesFSM.prototype = {
     t.selectAll("span.readers_entity")
       .style("font-size", "8px");
       
-    popup.drawInfoLinkWithTitle( "What's this?" );
+    headstart.drawInfoLinkWithTitle( "What's this?" );
     
     if (headstart.show_timeline)
       popup.drawTimeLineLink();
