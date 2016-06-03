@@ -4,8 +4,6 @@ var namespace = "headstart";
 Headstart = function(host, path, tag, files, options) {
   
   var vis_directory = "vis/";
-  var template_directory = "vis/templates/";
-  
   var lib_directory = "lib/";
 
   var lib_sources = [
