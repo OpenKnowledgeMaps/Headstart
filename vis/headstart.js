@@ -469,19 +469,6 @@ HeadstartFSM.prototype = {
 
   // Draws the h1 for headstart
   drawTitle: function() {
-    var self = this;
-
-    d3.select("#subdiscipline_title")
-    // .style("width", this.current_vis_size + "px")
-    .append("h1")
-    .attr("class", function () {
-      return (self.current_vis_size == self.min_width)?("title-small"):("title-large");
-    });
-    
-    if(!this.show_titlerow) {
-        $("#subdiscipline_title").hide();
-    }
-
     var text_style = "font-size: 10pt;";
     var link_style = "font-size:8pt; color: rgb(167, 8, 5)";
 
@@ -489,7 +476,7 @@ HeadstartFSM.prototype = {
                     '">(<a href="#" id="infolink" style="'   + link_style +
                     '">' + "What's this?" + '</a>)</span></h2>';
 
-    var info = d3.select( "#subdiscipline_title h1" )
+    var info = d3.select( "#subdiscipline_title h4")
                  .html(headstart.subdiscipline_title + whatsthis);
   },
 
@@ -622,7 +609,7 @@ HeadstartFSM.prototype = {
           '">(<a href="#" id="infolink" style="' + link_style +
           '">' + title + '</a>)</span></h2>';
 
-      var info = d3.select("#subdiscipline_title h1")
+      var info = d3.select("#subdiscipline_title h4")
           .html(this.subdiscipline_title + whatsthis);
   },
 
