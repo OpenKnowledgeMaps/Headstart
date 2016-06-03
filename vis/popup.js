@@ -23,9 +23,9 @@ var popup = StateMachine.create({
 
             this.drawPreviewArea( paper_frame_inner );
             
-            if(headstart.show_infolink) {
-                this.drawInfoLinkWithTitle( "What's this?" );
-            }
+            // if(headstart.show_infolink) {
+            //     this.drawInfoLinkWithTitle( "What's this?" );
+            // }
             
             if(headstart.show_timeline) {
               this.drawTimeLineLink();
@@ -109,7 +109,7 @@ popup.drawPopUp = function() {
     .style( "width",  popup.width  + "px" )
     .style( "height", popup.height + "px" )
     .style( "margin-top", function (d) {
-      return headstart.max_chart_size/2 - popup.height/2 + "px";
+      return headstart.current_vis_size/2 - popup.height/2 + "px";
     });
 }
 
@@ -180,19 +180,19 @@ popup.drawNormalViewLink = function() {
   $("#timelineview").html(link);
 }
 
-// Create title: "Whats this?"
-popup.drawInfoLinkWithTitle = function( title ) {
+// // Create title: "Whats this?"
+// popup.drawInfoLinkWithTitle = function( title ) {
 
-  var text_style = "font-size: 10pt;";
-  var link_style = "font-size:8pt; color: rgb(167, 8, 5)";
+//   var text_style = "font-size: 10pt;";
+//   var link_style = "font-size:8pt; color: rgb(167, 8, 5)";
 
-  var whatsthis = ' <span id="info" style="' + text_style +
-                  '">(<a href="#" id="infolink" style="'   + link_style +
-                  '">' + title + '</a>)</span></h2>';
+//   var whatsthis = ' <span id="info" style="' + text_style +
+//                   '">(<a href="#" id="infolink" style="'   + link_style +
+//                   '">' + title + '</a>)</span></h2>';
 
-  var info = d3.select( "#subdiscipline_title h1" )
-               .html(headstart.subdiscipline_title + whatsthis);
-}
+//   var info = d3.select( "#subdiscipline_title h1" )
+//                .html(headstart.subdiscipline_title + whatsthis);
+// }
 
 /*popup.loadAndAppendImage =  function( image_src, page_number ) {
 

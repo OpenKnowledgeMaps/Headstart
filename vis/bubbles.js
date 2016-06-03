@@ -381,17 +381,17 @@ BubblesFSM.prototype = {
   },
 
   // for the timelineview we simply translate the "other" bubbles by the
-  // max_chart_size
+  // current_vis_size
   positionBubbles2: function( bubbles, bubbles_id ) {
     bubbles.attr("transform", function (d) {
-      var x_pos = d.x + ((bubbles_id-1) * headstart.max_chart_size);
+      var x_pos = d.x + ((bubbles_id-1) * headstart.current_vis_size);
       return "translate(" + x_pos + "," + d.y + ")";
     });
   },
 
   // set the title size of bubbles to px
   adjustBubbleTitleSizeTo: function( bubbles, px ) {
-    if( headstart.max_chart_size < 720 ) {
+    if( headstart.current_vis_size < 720 ) {
       bubbles.selectAll("h2").style("font-size", px);
     }
   },

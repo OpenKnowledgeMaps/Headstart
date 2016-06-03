@@ -114,8 +114,9 @@
 .headstart div#subdiscipline_title
 {
   margin: 0px;
-  height: 22px;
+  padding-top: 10px;
   padding-left: 10px;
+  padding-bottom: 10px;
 }
 
 .headstart div#subdiscipline_title h1
@@ -123,8 +124,9 @@
     font-family: 'Helvetica', sans-serif;
     font-weight: 400;
 
-    margin-top: 5px;
-    margin-left: 5px;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-bottom: 0px;
     padding: 0;
 
     /*color: black;*/

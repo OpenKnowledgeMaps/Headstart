@@ -17,11 +17,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   // map
   this.min_height = 500;
   this.min_width  = 500;
-  this.max_height = 900;
-  this.vis_width = initVar(options.width, this.min_width);
-  this.vis_height = initVar(options.height, this.min_height);
-  this.top_correction    = 0;
-  this.bottom_correction = 34;
+  this.max_height = 1000;
+  this.timeline_size = 600;
 
   this.is_force_areas = initVar(options.force_areas, false);
   this.area_force_alpha = initVar(options.force_areas_alpha, 0.02);
@@ -281,48 +278,51 @@ HeadstartFSM.prototype = {
     })
   },
 
+  calcChartSize: function() {
+      parent_height = getRealHeight($("#"+this.tag));
+      subtitle_heigth = $("#subdiscipline_title").outerHeight(true);
+      if (parent_height == 0) {
+          this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_heigth;
+      } else {
+          this.available_height = $("#" + this.tag).height() - subtitle_heigth;
+      }
+
+      this.available_width = $("#" + this.tag).width() - $("#list_explorer").width();
+
+      if (this.availableSizeIsBiggerThanMinSize()) {
+          if (this.available_width >= this.available_height) {
+              this.current_vis_size = this.available_height;
+          } else {
+              this.current_vis_size = this.available_width;
+          }
+      } else {
+          this.current_vis_size = this.getMinSize();
+      }
+
+      if (this.current_vis_size > this.max_height) {
+          this.current_vis_size = this.max_height;
+      }
+  },
+
+
   // the rest of headstarts variables, which are initalized by some
   // sort of calculation
   initDynamicVariables: function() {
-    var self = this;
-    // initialize a bunch of variables.
-       
-    //TODO: Change this to the height of the parent element   
-    // this.available_width  = this.vis_width; //$("#" + this.tag).width();  
-    // this.available_height = this.vis_height; //$("#" + this.tag).height();
-    this.available_width  = $("#headstart-chart").width();
-    // this.available_height = this.max_height;
-    this.available_height = $(window).height() - $("#subdiscipline-title").height() - 20;
-
-    d3.select(window)
-      .on("resize", function() {
-        self.available_width  = $("#headstart-chart").width();  
-        self.available_height = $(window).height();
-        self.calculateMaxChartSize()
-        if (self.max_chart_size > self.max_height) {
-          self.max_chart_size = self.max_height;
-        }
-        $("#chart-svg").width(self.max_chart_size);
-        $("#chart-svg").height(self.max_chart_size);
-
-        list.fit_list_height();
-
-      });
+    // Initialize correct chart size
+    
+    if (this.is("timeline")){
+      this.current_vis_size = this.timeline_size;
+    } else {
+      this.calcChartSize()
+    }
 
     this.x = d3.scale.linear().range([0, this.circle_zoom_factor]);
     this.y = d3.scale.linear().range([0, this.circle_zoom_factor]);
 
-    // order of these method calls is important, max_chart_size needs to be calculated before
-    // correction_factor_x
-    if (this.is("timeline")){
-      this.max_chart_size = 400;
-    } else {
-      this.calculateMaxChartSize();
-    }
-    this.correction_factor_width  = ( this.max_chart_size / this.min_width  );
-    this.correction_factor_height = ( this.max_chart_size / this.min_height );
+    this.correction_factor_width  = ( this.current_vis_size / this.min_width  );
+    this.correction_factor_height = ( this.current_vis_size / this.min_height );
     this.setCorrectionFactor();
-    this.setListWidth();
+    // this.setListWidth();
     
     // Initialize global scales for zooming
     this.circle_min = ( this.min_area_size * this.correction_factor );
@@ -332,39 +332,23 @@ HeadstartFSM.prototype = {
     this.setCircleSize();
     this.setDiameterSize();
 
-    var to = this.max_chart_size - this.padding_articles;
+    var to = this.current_vis_size - this.padding_articles;
     this.chart_x = d3.scale.linear().range( [this.padding_articles, to] );
     this.chart_y = d3.scale.linear().range( [this.padding_articles, to] );
 
-    to = this.max_chart_size - this.padding;
+    to = this.current_vis_size - this.padding;
     this.chart_x_circle = d3.scale.linear().range( [this.padding, to] );
     this.chart_y_circle = d3.scale.linear().range( [this.padding, to] );
   },
-  
-  // either set it to min values or use all space available
-  calculateMaxChartSize: function() {
-    var self = this;
-    
-    var getMinSize = function () {
-        if (self.min_height >= self.min_width)
-        return self.min_width;
-      else
-        return self.min_height;
-    }
-    
-    if (this.availableSizeIsBiggerThanMinSize()) {
-      if (this.available_width >= this.available_height) {
-        var corrected_height = this.available_height - this.top_correction - this.bottom_correction;
-        this.max_chart_size = corrected_height;
-      } else {
-          this.max_chart_size = this.available_width;
-      }
-    } else {
-       this.max_chart_size = getMinSize();
-    }
-  },
 
-  // a little more readable
+  // Size <helpers></helpers>
+  getMinSize: function() {
+      if (this.min_height >= this.min_width)
+          return this.min_width;
+      else
+          return this.min_height;
+  },
+  
   availableSizeIsBiggerThanMinSize: function() {
     if ( this.available_width > this.min_width && this.available_height > this.min_height )
       return true;
@@ -377,16 +361,6 @@ HeadstartFSM.prototype = {
       this.correction_factor = this.correction_factor_height;
     else
       this.correction_factor = this.correction_factor_width;
-  },
-
-  setListWidth: function() {
-    if ( this.available_width > ( this.max_chart_size + this.max_list_size )) {
-      this.list_width =  this.max_list_size
-    } else if(this.available_width - this.max_chart_size > this.min_list_size) {
-      this.list_width = this.available_width - this.max_chart_size;  
-    } else {
-      this.list_width = this.min_list_size;
-    }
   },
 
   setCircleSize: function() {
@@ -403,51 +377,54 @@ HeadstartFSM.prototype = {
   setOverflowToHiddenOrAuto: function( selector ) {
     var overflow = "hidden";
 
-    if ( this.max_chart_size > this.available_height ||
-         this.max_chart_size + this.list_width > this.available_width ){
+    if ( this.current_vis_size > this.available_height ||
+         this.current_vis_size + this.list_width > this.available_width ){
         overflow = "auto";
     }
 
     d3.select( selector ).style( "overflow" , overflow );
   },
 
-    // not needed?
-  /*setHeight: function( selector ) {
-    var chart = d3.select( selector );
-    chart.style("height", function () { return (this.max_chart_size < 720) ? "35px" : "40px";  });
-  },*/
-
   // Draw basic SVG canvas
   // NOTE attribute width addition by number of elements
   drawSvg: function() {
+      this.svg = d3.select("#chart-svg");
 
-    this.chart_id = d3.select( "#headstart-chart" );
-    
-    // var chart_width = this.max_chart_size;// + this.max_list_size;
-    
-    var svg = this.chart_id.append( "svg" )
-            .attr("id", "chart-svg")
-            .attr( "height", this.max_chart_size + "px" )
-            .attr( "width",  this.max_chart_size + "px" )
-            .attr( "viewBox",  "0 0 " + this.max_chart_size +" "+  this.max_chart_size)
-            .attr("preserveAspectRatio", "xMidYMid meet");
-
-    this.svg = svg;
+      this.svg.attr("height", this.current_vis_size + "px")
+              .attr("width", this.current_vis_size + "px")
+              .attr("viewBox", "0 0 " + this.current_vis_size + " " + this.current_vis_size)
+              .attr("preserveAspectRatio", "xMidYMid meet");
   },
+
 
   drawChartCanvas: function() {
 
     var chart = this.svg.append("g").attr( "id", "chart_canvas" );
-    chart.attr( "height", this.max_chart_size + "px" )
-    chart.attr( "width",  this.max_chart_size + "px" );
+    chart.attr( "height", this.current_vis_size + "px" )
+    chart.attr( "width",  this.current_vis_size + "px" );
 
     // Rectangle to contain nodes in force layout
     var rect = chart.append("rect")
-    // var rect_width = this.max_chart_size;// + this.max_list_size;
-    rect.attr( "height", this.max_chart_size + "px" )
-    rect.attr( "width",  this.max_chart_size + "px" );
+    // var rect_width = this.current_vis_size;// + this.max_list_size;
+    rect.attr( "height", this.current_vis_size + "px" )
+    rect.attr( "width",  this.current_vis_size + "px" );
 
     this.chart = chart;
+  },
+
+  initEventListeners: function() {
+      self = this;
+      d3.select(window).on("resize", function() {
+          self.calcChartSize()
+
+          d3.select("#chart-svg").attr("width", self.current_vis_size + "px");
+          d3.select("#chart-svg").attr("height", self.current_vis_size + "px");
+          // d3.select("#chart-svg").attr("viewBox", "0 0 " + self.current_vis_size + " " + self.current_vis_size)
+          // d3.select("#chart_canvas").attr("width", self.current_vis_size + "px");
+          // d3.select("#chart_canvas").attr("height", self.current_vis_size + "px");
+
+          list.fit_list_height();
+      });
   },
 
   // Mouse interaction listeners
@@ -495,24 +472,34 @@ HeadstartFSM.prototype = {
     var self = this;
 
     d3.select("#subdiscipline_title")
-    .style("width", this.max_chart_size + "px")
+    // .style("width", this.current_vis_size + "px")
     .append("h1")
     .attr("class", function () {
-      return (self.max_chart_size == self.min_width)?("title-small"):("title-large");
+      return (self.current_vis_size == self.min_width)?("title-small"):("title-large");
     });
     
     if(!this.show_titlerow) {
         $("#subdiscipline_title").hide();
     }
+
+    var text_style = "font-size: 10pt;";
+    var link_style = "font-size:8pt; color: rgb(167, 8, 5)";
+
+    var whatsthis = ' <span id="info" style="' + text_style +
+                    '">(<a href="#" id="infolink" style="'   + link_style +
+                    '">' + "What's this?" + '</a>)</span></h2>';
+
+    var info = d3.select( "#subdiscipline_title h1" )
+                 .html(headstart.subdiscipline_title + whatsthis);
   },
 
   initForceAreas: function() {
-    var padded = this.max_chart_size - this.padding;
+    var padded = this.current_vis_size - this.padding;
     this.force_areas = d3.layout.force().links([]).size([padded, padded]);
   },
 
   initForcePapers: function() {
-    var padded = this.max_chart_size - this.padding;
+    var padded = this.current_vis_size - this.padding;
     this.force_papers = d3.layout.force().nodes([]).links([]).size([padded, padded]);
   },
 
@@ -575,8 +562,8 @@ HeadstartFSM.prototype = {
   },
 
   drawYGrid: function() {
-    var to = (this.bubblesSize() * this.max_chart_size);
-    for (var i = 0; i <= to; i+= this.max_chart_size) {
+    var to = (this.bubblesSize() * this.current_vis_size);
+    for (var i = 0; i <= to; i+= this.current_vis_size) {
       this.svg.append("line")
       .attr("x1", i)
       .attr("x2", i)
@@ -589,7 +576,7 @@ HeadstartFSM.prototype = {
     for (var i = 0; i <= 900; i+=50) {
       this.svg.append("line")
       .attr("x1", "0")
-      .attr("x2", this.bubblesSize() * this.max_chart_size)
+      .attr("x2", this.bubblesSize() * this.current_vis_size)
       .attr("y1", i)
       .attr("y2", i)
     };
@@ -602,7 +589,7 @@ HeadstartFSM.prototype = {
           this.bubbles[i].title
           + '</div>');
     }
-    $(".tl-title").css("width", this.max_chart_size);
+    $(".tl-title").css("width", this.current_vis_size);
   },
   
   createRestUrl: function () {
@@ -627,6 +614,19 @@ HeadstartFSM.prototype = {
       return url;
   },
 
+  drawInfoLinkWithTitle: function(title) {
+      var text_style = "font-size: 10pt;";
+      var link_style = "font-size:8pt; color: rgb(167, 8, 5)";
+
+      var whatsthis = ' <span id="info" style="' + text_style +
+          '">(<a href="#" id="infolink" style="' + link_style +
+          '">' + title + '</a>)</span></h2>';
+
+      var info = d3.select("#subdiscipline_title h1")
+          .html(this.subdiscipline_title + whatsthis);
+  },
+
+
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
   onstart: function( event, from, to, file ) {
@@ -636,6 +636,8 @@ HeadstartFSM.prototype = {
     
     this.checkBrowserVersions();
     this.checkThatRequiredLibsArePresent();
+    this.drawTitle();
+
     this.initDynamicVariables();
 
     this.setOverflowToHiddenOrAuto( "#main" );
@@ -650,9 +652,9 @@ HeadstartFSM.prototype = {
     var hs = this;
     
     var setupVisualization = function( csv ) {
+      // hs.drawTitle();
       hs.drawSvg();
       hs.drawChartCanvas();
-      hs.drawTitle();
       if(headstart.is_adaptive) {
         
         var url = headstart.createRestUrl();
@@ -664,6 +666,7 @@ HeadstartFSM.prototype = {
         headstart.startVisualization(hs, bubbles, csv, null, true);
       }
     }
+
     switch(this.input_format) {
         case "csv":
             d3.csv(bubbles.file, setupVisualization);
@@ -715,9 +718,17 @@ HeadstartFSM.prototype = {
     this.initDynamicVariables();
 
     // need a bigger width for the timeline view
-    this.svg.attr("width", (this.max_chart_size * this.bubblesSize() + "px") );
-    this.svg.attr("height", this.max_chart_size);
-    this.chart_id.attr("overflow-x", "scroll");
+    s = this.timeline_size * Object.keys(this.bubbles).length;
+    this.svg.attr("width", s);
+    this.svg.attr("height", this.timeline_size);  
+    this.svg.attr("viewBox", "0 0 " + s + " " + this.timeline_size)
+
+    d3.select("#chart_canvas").attr("width", s)
+                              .attr("height", this.timeline_size);  
+    // this.svg.attr("preserveAspectRatio", "xMidYMid meet");
+
+    d3.select("#headstart-chart").attr("overflow-x", "scroll");
+    
     $("#main").css("overflow", "auto");
 
     // load bubbles in sync
@@ -807,6 +818,7 @@ HeadstartFSM.prototype = {
   startVisualization: function(hs, bubbles, csv, adaptive_data, popup_start) {
     bubbles.start( csv, adaptive_data );
 
+    hs.initEventListeners();
     hs.initMouseListeners();
     hs.initForcePapers();
     hs.initForceAreas();
@@ -962,3 +974,19 @@ StateMachine.create({
   ]
 
 });
+
+function getRealHeight(element){
+    var height=0;
+    if (element.children().length>0){
+        var temp = $('<div></div>');
+        temp.append(element.children());
+        height = element.height();
+        element.append(temp.children());
+    } else {
+        var html=element.html();
+        element.html('');
+        height = element.height();
+        element.html(html);
+    }
+    return height;
+}

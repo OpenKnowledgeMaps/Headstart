@@ -84,7 +84,7 @@ list.drawList = function() {
 }
 
 list.fit_list_height = function() {
-  paper_list_avail_height = $(window).height() - $("#explorer_header").height() - 10;
+  paper_list_avail_height = $(("#"+headstart.tag)).height() - $("#explorer_header").height() - 10;
   $("#papers_list").height(paper_list_avail_height);
 }
 

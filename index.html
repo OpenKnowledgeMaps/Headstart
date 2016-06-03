@@ -16,10 +16,6 @@
     <div id="visualization"></div>
     <script>
     $(function() {
-
-        var height = ($(document).height() < 700)?(700):($(document).height());
-        var width = ($(document).width() < 700)?(700):($(document).width());
-
         var myHeadstart = new Headstart(
             "http://localhost/", //host
             "headstart3/", //path
@@ -42,11 +38,9 @@
             }] //data
             , {
                 title: "Overview of Educational Technology",
-                width: width,
-                height: height,
-                max_diameter_size: 50,
+                max_diameter_size: 40,
                 min_diameter_size: 30,
-                max_area_size: 110,
+                max_area_size: 80,
                 min_area_size: 50,
                 input_format: "csv",
                 use_area_uri: false,
