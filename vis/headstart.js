@@ -837,6 +837,16 @@ HeadstartFSM.prototype = {
     hs.checkForcePapers();
     //$("#area_title>h2").hyphenate('de');
     $("#area_title_object>body").dotdotdot({wrap:"letter"});
+
+    $('#myModal').on('show.bs.modal', function (event) {
+      // var button = $(event.relatedTarget) // Button that triggered the modal
+      // var recipient = button.data('whatever') // Extract info from data-* attributes
+      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+      var modal = $(this)
+      modal.find('.modal-title').text(intro_title)
+      modal.find('.modal-body').html(intro_body)
+    })
   },
 
   init_mediator: function() {
@@ -875,13 +885,14 @@ HeadstartFSM.prototype = {
   },
 
   popup_toggle: function() {
-    if (headstart.mediator_states.popup_visible) {
-      popup.hide();
-      headstart.mediator_states.popup_visible = false;
-    } else {
-      popup.show();
-      headstart.mediator_states.popup_visible = true;
-    }
+    $("#myModal").modal();
+    // if (headstart.mediator_states.popup_visible) {
+    //   popup.hide();
+    //   headstart.mediator_states.popup_visible = false;
+    // } else {
+    //   popup.show();
+    //   headstart.mediator_states.popup_visible = true;
+    // }
   },
 
   to_timeline: function() {
