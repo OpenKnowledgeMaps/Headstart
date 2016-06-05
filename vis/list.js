@@ -510,18 +510,22 @@ list.loadAndAppendImage = function(image_src, page_number) {
 }
 
 list.writePopup = function(pdf_url) {
-    d3.select("#iframe_modal iframe")
-        .attr("src", function() {
-            return pdf_url+"#view=FitH";
-        })
+    $("#pdf_iframe").attr('src', 'about:blank');
+    setTimeout(function() {
+        $("#pdf_iframe")
+            .attr("src", function() {
+                return pdf_url + "#view=FitH";
+            });
+    }, 100);
+
+    $("#spinner").hide();
+    $("#pdf_iframe").show();
 }
+
 
 list.populateOverlay = function(d) {
 
     var this_d = d;
-    $("#iframe_modal").modal()
-        // $("#intro").hide();
-
     if (headstart.preview_type == "image") {
         list.loadAndAppendImage(headstart.images_path + d.id + "/page_1.png", 1);
 
@@ -538,18 +542,22 @@ list.populateOverlay = function(d) {
             counter++;
         }
     } else if (headstart.preview_type == "pdf") {
-
+        var filename = this_d.id + ".PDF";
+        var local_filename = filename.replace("/", "__");
+        var full_pdf_url = headstart.images_path + local_filename;
         if (this.testImage(full_pdf_url)) {
-            var filename = this_d.id + ".PDF";
-            var local_filename = filename.replace("/", "__");
-            var full_pdf_url = headstart.images_path + local_filename;
             list.writePopup(full_pdf_url)
+            $("#iframe_modal").modal()
         } else {
+            $("#spinner").show();
+            $("#pdf_iframe").hide();
+            $("#iframe_modal").modal()
+
             var journal = this_d.published_in.toLowerCase();
             var url = "http://journals.plos.org/" + headstart.plos_journals_to_shortcodes[journal] + "/article/asset?id=" + filename;
 
             $.getJSON(headstart.service_path + "getPDF.php?url=" + url + "&filename=" + local_filename, function(local_pdf) {
-                list.writePopup(headstart.images_path + local_pdf);
+                list.writePopup(full_pdf_url);
             })
         }
     }

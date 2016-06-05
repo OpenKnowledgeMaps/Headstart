@@ -793,7 +793,7 @@
     stroke-width: .15px;
 }
 
-.tl-title
+.headstart .tl-title
 {
     float: left;
 
@@ -802,11 +802,38 @@
 
 /* ########### Modals ########### */
 
-#iframe_modal > div > div > div.modal-body {
+.headstart #iframe_modal .modal-body {
     height: 75vh;
+    width: 100%;
+    display: table;
 }
 
-.headstart .pdf_viewer {
+.headstart #spinner {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.glyphicon-refresh {
+    font-size: 3em;
+}
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+.headstart #pdf_iframe {
     width: 100%;
     height: 100%;
 }
