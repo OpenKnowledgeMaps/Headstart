@@ -341,7 +341,7 @@ HeadstartFSM.prototype = {
     this.chart_y_circle = d3.scale.linear().range( [this.padding, to] );
   },
 
-  // Size <helpers></helpers>
+  // Size helper functions
   getMinSize: function() {
       if (this.min_height >= this.min_width)
           return this.min_width;
@@ -425,7 +425,18 @@ HeadstartFSM.prototype = {
 
           list.fit_list_height();
       });
+
+      // Info Modal Event Listener
+      $('#info_modal').on('show.bs.modal', function(event) {
+          // var source = $(event.relatedTarget) // Button that triggered the modal
+          // var type = source.data('type') // Extract info from data-* attributes
+
+          var modal = $(this)
+          modal.find('.modal-title').text(intro_title)
+          modal.find('.modal-body').html(intro_body)
+      })
   },
+
 
   // Mouse interaction listeners
   initMouseListeners: function() {
@@ -600,19 +611,6 @@ HeadstartFSM.prototype = {
       
       return url;
   },
-
-  drawInfoLinkWithTitle: function(title) {
-      var text_style = "font-size: 10pt;";
-      var link_style = "font-size:8pt; color: rgb(167, 8, 5)";
-
-      var whatsthis = ' <span id="info" style="' + text_style +
-          '">(<a href="#" id="infolink" style="' + link_style +
-          '">' + title + '</a>)</span></h2>';
-
-      var info = d3.select("#subdiscipline_title h4")
-          .html(this.subdiscipline_title + whatsthis);
-  },
-
 
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
@@ -824,22 +822,6 @@ HeadstartFSM.prototype = {
     hs.checkForcePapers();
     //$("#area_title>h2").hyphenate('de');
     $("#area_title_object>body").dotdotdot({wrap:"letter"});
-
-    $('#info_modal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget) // Button that triggered the modal
-      console.log(button)
-      
-      var type = button.data('type') // Extract info from data-* attributes
-      var modal = $(this)
-      if (type == "text") {
-          modal.find('.modal-title').text(intro_title)
-          modal.find('.modal-body').html(intro_body)
-        } else {
-          modal.find('.modal-title').text(type)
-          modal.find('.modal-body').html("<strong>HAHA<strong>")
-        }
-
-    })
   },
 
   init_mediator: function() {

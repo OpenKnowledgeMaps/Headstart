@@ -700,7 +700,7 @@ BubblesFSM.prototype = {
     t.selectAll("span.readers_entity")
       .style("font-size", "8px");
       
-    headstart.drawInfoLinkWithTitle( "What's this?" );
+    headstart.drawTitle();
     
     if (headstart.show_timeline)
       popup.drawTimeLineLink();
