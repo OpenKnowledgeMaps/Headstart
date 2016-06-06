@@ -32,17 +32,10 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   
   
   # Get data from PLOS API
-  #start.time <- Sys.time()
-  
-  #Format for fq: article_type:("Review" OR "Editorial")'
   
   search_data <- searchplos(q=query, fq=list(article_types_string, journals_string, date_string, "doc_type:full"),
                             fl=fields,
                             limit=limit)
-  
-  #end.time <- Sys.time()
-  #time.taken <- end.time - start.time
-  #time.taken
   
   metadata = search_data$data
   text = data.frame("id" = metadata$id)

@@ -29,7 +29,15 @@ if(!is.null(params_file)) {
   params <- fromJSON(params_file)
 }
 
+#start.time <- Sys.time()
+
+#Format for fq: article_type:("Review" OR "Editorial")'
+
 input_data = get_papers(query, params)
+
+#end.time <- Sys.time()
+#time.taken <- end.time - start.time
+#time.taken
 
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS)
 
