@@ -1,5 +1,14 @@
 library()
 
+# get_papers
+#
+# Params:
+#
+# * query: search query
+# * params: parameters for the search in JSON format
+# * limit: number of search results to return
+# * fields: list of fields to return
+#
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
 #
 # "text" contains the text for similarity analysis; it is expected to have two columns "id" and "content"
@@ -15,6 +24,6 @@ library()
 # * "readers": an indicator of the paper's popularity, e.g. number of readers, views, downloads etc.
 # * "subject": keywords or classification, split by ;
 
-get_papers <- function(query, params, limit=100, fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
+get_papers <- function(query, params, limit=100, fields="") {
   
 }
