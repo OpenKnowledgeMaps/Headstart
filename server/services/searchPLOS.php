@@ -60,7 +60,7 @@ fwrite($params_file, $params_json);
 $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
 
 $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
-$output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename);
+$output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, "plos");
 
 //print_r($output);
 

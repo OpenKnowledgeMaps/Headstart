@@ -29,15 +29,15 @@ class RCalculation extends Calculation {
         exec($path); 
     }
     
-    public function performCalculationAndReturnOutputAsJSON($working_dir, $query, $params) {
+    public function performCalculationAndReturnOutputAsJSON($working_dir, $query, $params, $service) {
         $ini = $this->ini_array["calculation"];
         
         $base_dir = $this->ini_array["general"]["preprocessing_dir"];
         $binary = $ini["binary"];
         $script = $base_dir . $ini["script"];
         
-        $path = '"' . $binary . '" ' .$script. ' "' . $working_dir . '" "'
-                . $query . '"';
+        $path = '"' . $binary . '" ' .$script. ' "' . $working_dir . '" "' . $query . '" "'
+                . $service . '"';
         
         if($params != null) {
             $path .= ' "' . $params . '"';
