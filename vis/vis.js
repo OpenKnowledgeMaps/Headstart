@@ -27,7 +27,7 @@ Headstart = function(host, path, tag, files, options) {
    ]
 
 
-   viz = $("#visualization");
+   viz = $("#"+tag);
 
   var compiledTemplate = Handlebars.getTemplate('headstart');
   var html = compiledTemplate();
