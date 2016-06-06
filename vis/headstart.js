@@ -22,7 +22,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.top_correction    = 0;
   this.bottom_correction = 34;
 
-  this.is_force_areas = initVar(options.force_areas, false);
+  this.is_force_areas = initVar(options.is_force_areas, false);
   this.area_force_alpha = initVar(options.force_areas_alpha, 0.02);
 
   // bubbles
