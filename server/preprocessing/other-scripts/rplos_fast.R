@@ -21,6 +21,8 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   #time.taken
   
   metadata = search_data$data
+  text = data.frame("id" = metadata$id)
+  text$content = paste(metadata$title, metadata$abstract, metadata$journal, metadata$author, metadata$subject, sep=" ")
   
   names(metadata)[names(metadata)=="counter_total_month"] <- "readers"
   names(metadata)[names(metadata)=="abstract"] <- "paper_abstract"
@@ -28,14 +30,9 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   names(metadata)[names(metadata)=="publication_date"] <- "year"
   names(metadata)[names(metadata)=="author"] <- "authors"
   metadata["url"] = paste("http://dx.doi.org/", metadata$id, sep="")
-  metadata["content"] = paste(metadata$title, metadata$abstract, metadata$journal, metadata$author, metadata$subject, sep=" ")
   dates = as.Date(metadata$year)
   metadata$year = format(dates, format="%B %d %Y")
-  
-  
-  text = metadata[,c("id", "content")]
-  metadata$content <- NULL
-  
+
   ret_val=list("metadata" = metadata, "text"=text)
   return(ret_val)
 }

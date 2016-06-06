@@ -15,7 +15,7 @@ switch(service,
          source("rplos_fast.R")
        },
        pubmed={
-         print('pubmed')    
+         source('pubmed.R')    
        },
       {
         source("rplos_fast.R")
