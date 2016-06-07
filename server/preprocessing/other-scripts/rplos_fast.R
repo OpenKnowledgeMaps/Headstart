@@ -33,7 +33,8 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   
   # Get data from PLOS API
   
-  search_data <- searchplos(q=query, fq=list(article_types_string, journals_string, date_string, "doc_type:full"),
+  search_data <- searchplos(q=paste("everything_rev:", query, sep=""), 
+                            fq=list(article_types_string, journals_string, date_string, "doc_type:full"),
                             fl=fields,
                             limit=limit)
   
