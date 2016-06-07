@@ -55,8 +55,8 @@ get_papers <- function(query, params = NULL, limit = 100) {
     }, ""), collapse = "-")
     xauthors <- paste0(vapply(xml2::xml_children(xml2::xml_find_all(z, authors)), function(a) {
       paste(
-        xtext(xml2::xml_find_first(a, ".//LastName")),
-        xtext(xml2::xml_find_first(a, ".//ForeName")),
+        xtext(xml2::xml_find_one(a, ".//LastName")),
+        xtext(xml2::xml_find_one(a, ".//ForeName")),
         sep = ", "
       )
     }, ""), collapse = ";")
@@ -69,8 +69,11 @@ get_papers <- function(query, params = NULL, limit = 100) {
   df <- data.table::setDF(data.table::rbindlist(out, fill = TRUE, use.names = TRUE))
   df <- setNames(df, tolower(names(df)))
   df$url <- paste0("http://www.ncbi.nlm.nih.gov/pubmed/", df$pmid)
+  df$paper_abstract <- gsub("^\\s+|\\s+$", "", gsub("[\r\n]", "", df$paper_abstract))
+  df$content <- df$paper_abstract
+  
 
-  return(list(metadata = df, text = df[,c('id', 'paper_abstract')]))
+  return(list(metadata = df, text = df[,c('id', 'content')]))
 }
 
 xtext <- function(x) xml2::xml_text(x)
