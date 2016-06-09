@@ -47,9 +47,9 @@ $unique_id = $persistence->createID(array($query, $params_json));
 $last_version = $persistence->getLastVersion($unique_id, false);
 
 if ($last_version != null && $last_version != "null" && $last_version != false) {
-    redirect("http://" . $settings["host"] . $settings["vis_path"] . "index.php?id=" . $unique_id); 
-    //echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
-    //return;
+    //redirect("http://" . $settings["host"] . $settings["vis_path"] . "index.php?id=" . $unique_id); 
+    echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
+    return;
 }
 
 $params_file = tmpfile();
@@ -60,7 +60,7 @@ fwrite($params_file, $params_json);
 $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
 
 $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
-$output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, "plos");
+$output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, "pubmed");
 
 //print_r($output);
 

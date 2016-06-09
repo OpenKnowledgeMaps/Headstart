@@ -1,11 +1,35 @@
 rm(list = ls())
 
+library(rstudioapi)
+
+get_script_path <- function() {
+  cmdArgs = commandArgs(trailingOnly = FALSE)
+  needle = "--file="
+  match = grep(needle, cmdArgs)
+  if (length(match) > 0) {
+    # Rscript
+    return(normalizePath(sub(needle, "", cmdArgs[match])))
+  } else {
+    ls_vars = ls(sys.frames()[[1]])
+    if ("fileName" %in% ls_vars) {
+      # Source'd via RStudio
+      return(normalizePath(sys.frames()[[1]]$fileName)) 
+    } else {
+      # Source'd via R console
+      return(normalizePath(sys.frames()[[1]]$ofile))
+    }
+  }
+}
+
 #args <- commandArgs(TRUE)
-wd <-"" #args[1]
+wd <-"C:/Users/pkraker/xampp/htdocs/project-website/search_plos/server/preprocessing/other-scripts/"
+
+setwd(wd) #Don't forget to set your working directory
+
 query <- "frogs" #args[2]
 service <- "plos"
 params_file <- singleString <- paste(readLines("test/params.json"), collapse=" ") #args[3]
-setwd(wd) #Don't forget to set your working directory
+
 
 source("vis_layout.R")
 
@@ -14,7 +38,7 @@ switch(service,
          source("rplos_fast.R")
        },
        pubmed={
-         print('pubmed')    
+         source('pubmed.R')    
        },
     {
       source("rplos_fast.R")

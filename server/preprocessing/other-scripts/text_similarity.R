@@ -30,7 +30,7 @@ if(!is.null(params_file)) {
   params <- fromJSON(params_file)
 }
 
-input_data = get_papers(query, params)
+input_data = get_papers(query) #, params)
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS)
 
 print(output_json)
