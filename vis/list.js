@@ -64,8 +64,23 @@ list.drawList = function() {
     $("#filter_input")
     .attr("placeholder", headstart.localization[headstart.language].search_placeholder)
     .keyup(function(event){
+        if($("#filter_input").val() != "") {
+          $("#searchclear").show()
+        } else {
+          $("#searchclear").hide()
+        }
         debounce(filterList(event), 700)
       })
+
+    // $("#filter_input").change(function(){
+
+    // })
+
+    $("#searchclear").click(function() {
+        $("#filter_input").val('');
+        $("#searchclear").hide()
+    });
+
 
     // Add sort options
     var container = d3.select("#sort_container>ul")

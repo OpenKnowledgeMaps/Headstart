@@ -434,6 +434,11 @@
     display: block;
 }
 
+.headstart #filter_input
+{
+    padding-right: 22px;
+}
+
 .headstart #sort_container
 {
     float: right;
@@ -867,4 +872,20 @@
   display: inline-block;
   text-align: left;
   vertical-align: middle;
+}
+
+/* Clear button in input form */
+#searchclear {
+    position: absolute;
+    right: 5px;
+    top: 0;
+    bottom: 0;
+    height: 14px;
+    margin: auto;
+    font-size: 14px;
+    cursor: pointer;
+    color: #ccc;
+
+    display: none;
+    z-index: 100;
 }
