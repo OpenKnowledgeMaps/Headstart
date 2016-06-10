@@ -889,3 +889,13 @@
     display: none;
     z-index: 100;
 }
+
+#visualization > div.container-fluid {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+#subdiscipline_title > h4 {
+    margin-top: 0px;
+    margin-bottom: 0px; 
+}
