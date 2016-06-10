@@ -586,7 +586,7 @@ BubblesFSM.prototype = {
     d3.selectAll("#region")
       .style("fill-opacity", 1)
 
-      headstart.circle_zoom = headstart.circle_zoom_factor / d.r / 2;
+    headstart.circle_zoom = headstart.current_vis_size / d.r / 2 * headstart.zoom_factor;
     headstart.x.domain([d.x - d.r, d.x + d.r]);
     headstart.y.domain([d.y - d.r, d.y + d.r]);
 

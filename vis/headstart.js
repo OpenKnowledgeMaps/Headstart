@@ -15,19 +15,27 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.tag = tag;
 
   // map
-  this.min_height = 500;
-  this.min_width  = 500;
+  this.min_height = 100;
+  this.min_width  = 100;
   this.max_height = 1000;
   this.timeline_size = 600;
+  this.bubble_min_scale = initVar(options.bubble_min_scale, 1);
+  this.bubble_max_scale = initVar(options.bubble_max_scale, 1);
+  this.paper_min_scale = initVar(options.paper_min_scale, 1);
+  this.paper_max_scale = initVar(options.paper_max_scale, 1);
+  this.zoom_factor = 0.9;
+
+  // map reference sizes
+  this.reference_size = 650;
+  this.max_diameter_size = 50;
+  this.min_diameter_size = 30;
+  this.max_area_size = 110;
+  this.min_area_size = 50;
 
   this.is_force_areas = initVar(options.force_areas, false);
   this.area_force_alpha = initVar(options.force_areas_alpha, 0.02);
 
   // bubbles
-  this.max_diameter_size = initVar(options.max_diameter_size, 50);
-  this.min_diameter_size = initVar(options.min_diameter_size, 30);
-  this.max_area_size = initVar(options.max_area_size, 110);
-  this.min_area_size = initVar(options.min_area_size, 50);
   this.area_title_max_size = 50;
 
   // papers
@@ -57,9 +65,6 @@ HeadstartFSM = function(host, path, tag, files, options) {
   // preview
   this.preview_image_width_list  = 230;
   this.preview_image_height_list = 300;
-  this.circle_zoom_factor = 600;
-  this.padding_articles = 5;
-
   this.preview_page_height = 400;
   this.preview_top_height  = 30;
   this.preview_image_width  = 738;
@@ -305,40 +310,51 @@ HeadstartFSM.prototype = {
   },
 
 
-  // the rest of headstarts variables, which are initalized by some
-  // sort of calculation
-  initDynamicVariables: function() {
-    // Initialize correct chart size
-    
+  // Calculate all scales for the current map
+  initScales: function() {
     if (this.is("timeline")){
       this.current_vis_size = this.timeline_size;
     } else {
       this.calcChartSize()
     }
 
-    this.x = d3.scale.linear().range([0, this.circle_zoom_factor]);
-    this.y = d3.scale.linear().range([0, this.circle_zoom_factor]);
+    // Init all scales
+    this.chart_x = d3.scale.linear();
+    this.chart_y = d3.scale.linear();
 
-    this.correction_factor_width  = ( this.current_vis_size / this.min_width  );
-    this.correction_factor_height = ( this.current_vis_size / this.min_height );
-    this.setCorrectionFactor();
-    // this.setListWidth();
+    this.chart_x_circle = d3.scale.linear();
+    this.chart_y_circle = d3.scale.linear();
+
+    this.x = d3.scale.linear();
+    this.y = d3.scale.linear();
+
+    this.circle_size = d3.scale.sqrt()
+    this.diameter_size = d3.scale.sqrt()
+
+    // Calculate correct scaling factors and paper/circle dimensions
+    this.correction_factor = this.current_vis_size / this.reference_size;
     
-    // Initialize global scales for zooming
-    this.circle_min = ( this.min_area_size * this.correction_factor );
-    this.circle_max = ( this.max_area_size * this.correction_factor );
-    this.padding = this.circle_max / 2 + 45;
+    this.circle_min = (this.min_area_size * this.correction_factor) * this.bubble_min_scale;
+    this.circle_max = (this.max_area_size * this.correction_factor) * this.bubble_max_scale;
+    this.circle_size.range( [this.circle_min, this.circle_max] );
 
-    this.setCircleSize();
-    this.setDiameterSize();
+    this.paper_min = (this.min_diameter_size * this.correction_factor) * this.paper_min_scale;
+    this.paper_max = (this.max_diameter_size * this.correction_factor) * this.paper_max_scale;
+    this.diameter_size.range([this.paper_min, this.paper_max]);
 
-    var to = this.current_vis_size - this.padding_articles;
-    this.chart_x = d3.scale.linear().range( [this.padding_articles, to] );
-    this.chart_y = d3.scale.linear().range( [this.padding_articles, to] );
+    // TODO REMOVE PADDING MAGIC
 
-    to = this.current_vis_size - this.padding;
-    this.chart_x_circle = d3.scale.linear().range( [this.padding, to] );
-    this.chart_y_circle = d3.scale.linear().range( [this.padding, to] );
+    // Set ranges on scales
+    var padding_articles = 5;
+    this.chart_x.range( [padding_articles, this.current_vis_size - padding_articles] );
+    this.chart_y.range( [padding_articles, this.current_vis_size - padding_articles] );
+
+    var padding_circles = this.circle_max/2+45;
+    this.chart_x_circle.range( [padding_circles, this.current_vis_size - padding_circles] );
+    this.chart_y_circle.range( [padding_circles, this.current_vis_size - padding_circles] );
+
+    this.x.range([50, this.current_vis_size-50]);
+    this.y.range([50, this.current_vis_size-50]);
   },
 
   // Size helper functions
@@ -354,23 +370,6 @@ HeadstartFSM.prototype = {
       return true;
     else
       return false;
-  },
-
-  setCorrectionFactor: function() {
-    if ( this.correction_factor_width > this.correction_factor_height )
-      this.correction_factor = this.correction_factor_height;
-    else
-      this.correction_factor = this.correction_factor_width;
-  },
-
-  setCircleSize: function() {
-    this.circle_size = d3.scale.sqrt().range( [this.circle_min, this.circle_max] );
-  },
-
-  setDiameterSize: function() {
-    var from = this.min_diameter_size * this.correction_factor;
-    var to = this.max_diameter_size * this.correction_factor;
-    this.diameter_size = d3.scale.sqrt().range([from, to]);
   },
 
   // auto if enough space is available, else hidden
@@ -623,7 +622,7 @@ HeadstartFSM.prototype = {
     this.checkThatRequiredLibsArePresent();
     this.drawTitle();
 
-    this.initDynamicVariables();
+    this.initScales();
 
     this.setOverflowToHiddenOrAuto( "#main" );
     
@@ -700,7 +699,7 @@ HeadstartFSM.prototype = {
 
     // change heading to give an option to get back to normal view
     popup.drawNormalViewLink();
-    this.initDynamicVariables();
+    this.initScales();
 
     // need a bigger width for the timeline view
     s = this.timeline_size * Object.keys(this.bubbles).length;
@@ -762,7 +761,7 @@ HeadstartFSM.prototype = {
     papers.current = "none";
     list.current   = "none";
 
-    this.initDynamicVariables();
+    this.initScales();
     this.setOverflowToHiddenOrAuto( "#main" );
     
     // reset bubbles
