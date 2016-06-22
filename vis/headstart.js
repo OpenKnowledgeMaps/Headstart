@@ -15,8 +15,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.tag = tag;
 
   // map
-  this.min_height = 100;
-  this.min_width  = 100;
+  this.min_height = 600;
+  this.min_width  = 600;
   this.max_height = 1000;
   this.timeline_size = 600;
   this.bubble_min_scale = initVar(options.bubble_min_scale, 1);
@@ -292,6 +292,8 @@ HeadstartFSM.prototype = {
           this.available_height = $("#" + this.tag).height() - subtitle_heigth;
       }
 
+      this.available_height = this.available_height - 1;
+
       this.available_width = $("#" + this.tag).width() - $("#list_explorer").width();
 
       if (this.availableSizeIsBiggerThanMinSize()) {
@@ -345,11 +347,13 @@ HeadstartFSM.prototype = {
     // TODO REMOVE PADDING MAGIC
 
     // Set ranges on scales
-    var padding_articles = 5;
+    // var padding_articles = 5;
+    var padding_articles = this.paper_max;
     this.chart_x.range( [padding_articles, this.current_vis_size - padding_articles] );
     this.chart_y.range( [padding_articles, this.current_vis_size - padding_articles] );
 
-    var padding_circles = this.circle_max/2+45;
+    // var padding_circles = this.circle_max/2+45;
+    var padding_circles = this.circle_max;
     this.chart_x_circle.range( [padding_circles, this.current_vis_size - padding_circles] );
     this.chart_y_circle.range( [padding_circles, this.current_vis_size - padding_circles] );
 
