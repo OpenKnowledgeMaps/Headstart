@@ -394,7 +394,8 @@ HeadstartFSM.prototype = {
       this.svg = d3.select("#chart-svg");
 
       this.svg.attr("height", this.current_vis_size + "px")
-              .attr("width", this.current_vis_size + "px")
+              // .attr("width", this.current_vis_size + "px")
+              .attr("width", "100%")
               .attr("viewBox", "0 0 " + this.current_vis_size + " " + this.current_vis_size)
               .attr("preserveAspectRatio", "xMidYMid meet");
   },
@@ -403,15 +404,14 @@ HeadstartFSM.prototype = {
   drawChartCanvas: function() {
 
     var chart = this.svg.append("g").attr( "id", "chart_canvas" );
-    chart.attr( "height", this.current_vis_size + "px" )
-    chart.attr( "width",  this.current_vis_size + "px" );
-
     // Rectangle to contain nodes in force layout
     var rect = chart.append("rect")
     // var rect_width = this.current_vis_size;// + this.max_list_size;
     rect.attr( "height", this.current_vis_size + "px" )
     rect.attr( "width",  this.current_vis_size + "px" );
 
+    // chart.attr( "height", this.current_vis_size + "px" )
+    // chart.attr( "width",  this.current_vis_size + "px" );
     this.chart = chart;
   },
 
@@ -420,7 +420,8 @@ HeadstartFSM.prototype = {
       d3.select(window).on("resize", function() {
           self.calcChartSize()
 
-          d3.select("#chart-svg").attr("width", self.current_vis_size + "px");
+          // d3.select("#chart-svg").attr("width", self.current_vis_size + "px");
+          d3.select("#chart-svg").attr("width", "100%");
           d3.select("#chart-svg").attr("height", self.current_vis_size + "px");
           // d3.select("#chart-svg").attr("viewBox", "0 0 " + self.current_vis_size + " " + self.current_vis_size)
           // d3.select("#chart_canvas").attr("width", self.current_vis_size + "px");
@@ -461,7 +462,7 @@ HeadstartFSM.prototype = {
   initMouseClickListeners: function() {
     var self = this;  
       
-    $("rect").on( "click", function() {
+    $("#chart-svg").on( "click", function() {
       headstart.bubbles[headstart.current_file_number].zoomout();
     });
     
@@ -711,8 +712,8 @@ HeadstartFSM.prototype = {
     this.svg.attr("height", this.timeline_size);  
     this.svg.attr("viewBox", "0 0 " + s + " " + this.timeline_size)
 
-    d3.select("#chart_canvas").attr("width", s)
-                              .attr("height", this.timeline_size);  
+    // d3.select("#chart_canvas").attr("width", s)
+    //                           .attr("height", this.timeline_size);  
     // this.svg.attr("preserveAspectRatio", "xMidYMid meet");
 
     d3.select("#headstart-chart").attr("overflow-x", "scroll");

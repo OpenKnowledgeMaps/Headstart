@@ -451,8 +451,8 @@
     float: right;
     overflow-y: scroll;
     padding-top: 10px;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
     background-color: white;
 
     display: none;
@@ -890,12 +890,9 @@
     z-index: 100;
 }
 
-#visualization > div.container-fluid {
-    padding-left: 0px;
-    padding-right: 0px;
-}
-
-#subdiscipline_title > h4 {
-    margin-top: 0px;
-    margin-bottom: 0px; 
+.remove-padding {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0
 }
