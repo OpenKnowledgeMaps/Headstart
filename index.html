@@ -3,21 +3,41 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script type="text/javascript" src="vis/lib/jquery-2.1.4.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="vis/lib/bootstrap.min.css">
-    <script type="text/javascript" src="vis/lib/bootstrap.min.js"></script>
-    <script type="text/javascript" src="vis/lib/handlebars.min-v4.0.5.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="vis/styles/style.css">
+        
+    <script type="text/javascript" src="./node_modules/jquery/dist/jquery.min.js"></script>        
+    <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="node_modules/hypher/dist/jquery.hypher.js"></script>
+    <script type="text/javascript" src="node_modules/jquery-dotdotdot/src/jquery.dotdotdot.js"></script>
+    <script type="text/javascript" src="node_modules/javascript-state-machine/state-machine.js"></script>
+    <script type="text/javascript" src="node_modules/handlebars/dist/handlebars.min.js"></script>
+    <script type="text/javascript" src="node_modules/d3/d3.js"></script>
+    <script type="text/javascript" src="node_modules/mediator-js/mediator.min.js"></script>
+    
+    <script type="text/javascript" src="vis/lib/browser_detect.js"></script>
+    <script type="text/javascript" src="vis/lib/de.js"></script>
+    <script type="text/javascript" src="vis/lib/highlightRegex.min.js"></script>
+    
     <script type="text/javascript" src="vis/templates/templates.js"></script>
+    <script type="text/javascript" src="vis/js/bubbles.js"></script>
+    <script type="text/javascript" src="vis/js/intro.js"></script>
+    <script type="text/javascript" src="vis/js/popup.js"></script>
+    <script type="text/javascript" src="vis/js/papers.js"></script>
+    <script type="text/javascript" src="vis/js/list.js"></script>
+    <script type="text/javascript" src="vis/js/headstart.js"></script>
     <script type="text/javascript" src="vis/vis.js"></script>
+
 </head>
 
 <body style="margin:0px; padding:0px">
-    <div id="visualization"></div>
+    <div id="visualization" class="headstart"></div>
     <script>
     $(function() {
         var myHeadstart = new Headstart(
-            "http://localhost/", //host
-            "headstart3/", //path
+            "", //host
+            "", //path
             "visualization", //append to tag
             [{
                 title: "edu1",

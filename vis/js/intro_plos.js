@@ -1,0 +1,11 @@
+﻿var intro_html = 
+"<h2>Overview Visualization of a PLOS Search Result </h2>"
++"<br><p>This visualization presents you with a topical overview of the 100 most relevant papers for your PLOS search. You can inspect the papers within each topic, and read individual papers within this interface."
++"<p><ul><li>The main topics, derived from PLOS subject areas, are represented by the blue bubbles."
++"<li>Once you click on a bubble, you zoom into the papers related to that topic."
++"<li>By clicking on one of the papers, you can access all metadata for that paper. By clicking on \"Preview PDF\", you can read the paper within the interface. By clicking on the title, you will be transferred to the paper on the PLOS website."
++"<li>By clicking on the white background, you can then zoom out and inspect another area.</ul>"
++"<p>The visualization is based on fulltext similarities. More information can be found in the <a href='http://github.com/pkraker/Headstart' target='_blank'>Github repo</a>. You can contact the maintainer at <a href=\"mailto:peter.kraker@tugraz.at\">peter.kraker@tugraz.at</a>."
++"<p>The visualization was created with <a href=\"http://d3js.org/\" target=\"_blank\">D3.js</a>. It has been successfully tested with Chrome 22, Firefox 15, Safari 5.1, and Opera 20. Unfortunately, Internet Explorer is not supported at this point."
++"<h5>Acknowledgements</h5>"
++"<p>The visualization was created with funding provided by European Commission as part of the FP7 Marie Curie IAPP project TEAM (grant no. 251514), the Austrian Marshallplan Foundation, the Open Knowledge Foundation, and the Know-Center. The Know-Center is funded within the Austrian COMET program - Competence Centers for Excellent Technologies - under the auspices of the Austrian Federal Ministry of Transport, Innovation and Technology, the Austrian Federal Ministry of Economy, Family and Youth, and the State of Styria. COMET is managed by the Austrian Research Promotion Agency FFG."

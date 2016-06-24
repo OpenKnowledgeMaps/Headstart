@@ -1,0 +1,32 @@
+{
+  "name": "headstart",
+  "version": "1.0.0",
+  "description": "Head Start presents you with the main areas in the field, and lets you zoom into the most important publications within each area. It is intended to give researchers that are new to a field a head start on their literature review (hence the name).",
+  "main": "./vis/vis.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pkraker/Headstart.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pkraker/Headstart/issues"
+  },
+  "homepage": "https://github.com/pkraker/Headstart#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "d3": "^3.5.17",
+    "handlebars": "^4.0.5",
+    "hypher": "^0.2.4",
+    "javascript-state-machine": "^2.3.5",
+    "jquery": "^2.1.4",
+    "jquery-dotdotdot": "^1.8.2",
+    "mediator-js": "^0.9.9"
+  }
+}

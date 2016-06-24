@@ -1,0 +1,12 @@
+﻿var intro_html = 
+"<h2>Overview Visualization of EC-TEL and i-KNOW 2014 </h2>"
++"<br><p>This visualization presents you with a topical overview of EC-TEL and i-KNOW 2014, and highlights papers that are recommended for you. You can inspect the papers within each topic, and bookmark papers of interest."
++"<p><ul><li>The main conference topics are represented by the blue bubbles."
++"<li>Once you click on a bubble, you zoom into the papers related to that topic."
++"A <span style='background-color:green'>green</span> border around a paper indicates that you have already bookmarked this paper. A <span style='background-color:yellow'>yellow</span> border around a paper indicates that this paper is recommended for you" 
++"<li>By clicking on one of the papers, you can access all metadata for that paper and bookmark the paper in the right hand pane."
++"<li>By clicking on the white background, you can then zoom out and inspect another area.</ul>"
++"<p>The visualization is based on term co-occurrence. More information can be found in <a href='http://www.marshallplan.at/images/papers_scholarship/2014/Graz_KrakerPeter_2014.pdf' target='_blank'>this report</a> and in this <a href='http://www.mendeley.com/research/altmetricsbased-visualizations-depicting-evolution-knowledge-domain/' target='_blank'>this paper</a>. You can contact the author at <a href=\"mailto:peter.kraker@tugraz.at\">peter.kraker@tugraz.at</a>."
++"<p>Head Start was created with <a href=\"http://d3js.org/\" target=\"_blank\">D3.js</a>. It has been successfully tested with Chrome 22, Firefox 15, Safari 5.1, and Opera 20. Unfortunately, Internet Explorer is not supported at this point."
++"<h3>Acknowledgements</h3>"
++"<p>The visualization was created with funding provided by European Commission as part of the FP7 Marie Curie IAPP project TEAM (grant no. 251514), the Austrian Marshallplan Foundation, the Open Knowledge Foundation, and the Know-Center. The Know-Center is funded within the Austrian COMET program - Competence Centers for Excellent Technologies - under the auspices of the Austrian Federal Ministry of Transport, Innovation and Technology, the Austrian Federal Ministry of Economy, Family and Youth, and the State of Styria. COMET is managed by the Austrian Research Promotion Agency FFG."
