@@ -625,8 +625,11 @@ HeadstartFSM.prototype = {
     
     this.checkBrowserVersions();
     this.checkThatRequiredLibsArePresent();
-    this.drawTitle();
 
+    if (this.show_infolink) {
+      this.drawTitle();
+    }
+  
     this.initScales();
 
     this.setOverflowToHiddenOrAuto( "#main" );
@@ -641,7 +644,9 @@ HeadstartFSM.prototype = {
     var hs = this;
     
     var setupVisualization = function( csv ) {
-      // hs.drawTitle();
+      if (hs.show_infolink) {
+        hs.drawTitle();
+      }
       hs.drawSvg();
       hs.drawChartCanvas();
       if(headstart.is_adaptive) {
