@@ -701,16 +701,20 @@ BubblesFSM.prototype = {
       .style("font-size", "8px");
      
     if (headstart.show_infolink) {
-      headstart.drawTitle();
+        headstart.drawTitle();
     } else {
-      d3.select("#subdiscipline_title h4").text("");
+        d3.select("#subdiscipline_title h4").text("");
     }
-        
-    if (headstart.show_timeline)
-        popup.drawTimeLineLink();
-    if (headstart.show_dropdown)
-        popup.drawDropdown();
 
+    if (headstart.show_timeline) {
+        popup.drawTimeLineLink();
+    }
+
+    if (headstart.show_dropdown) {
+        popup.drawDropdown();
+    }
+
+        
     d3.selectAll(".paper")
       .style("display", function(d) { return d.filtered_out?"none":"block"});
       

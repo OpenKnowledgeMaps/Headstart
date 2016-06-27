@@ -26,8 +26,7 @@ Headstart = function(host, path, tag, files, options) {
      ,{source: "headstart.js", final: true}
    ]
 
-
-   viz = $("#"+tag);
+  viz = $("#"+tag);
 
   var compiledTemplate = Handlebars.getTemplate('headstart');
   var html = compiledTemplate();
