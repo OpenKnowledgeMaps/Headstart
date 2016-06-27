@@ -32,8 +32,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.max_area_size = 110;
   this.min_area_size = 50;
 
-  this.is_force_areas = initVar(options.force_areas, false);
-  this.area_force_alpha = initVar(options.force_areas_alpha, 0.02);
+  this.is_force_areas = initVar(options.is_force_areas, false);
+  this.area_force_alpha = initVar(options.area_force_alpha, 0.02);
 
   // bubbles
   this.area_title_max_size = 50;
