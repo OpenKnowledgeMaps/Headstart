@@ -699,12 +699,8 @@ BubblesFSM.prototype = {
 
     t.selectAll("span.readers_entity")
       .style("font-size", "8px");
-     
-    if (headstart.show_infolink) {
-        headstart.drawTitle();
-    } else {
-        d3.select("#subdiscipline_title h4").text("");
-    }
+
+    headstart.drawTitle();
 
     if (headstart.show_timeline) {
         popup.drawTimeLineLink();

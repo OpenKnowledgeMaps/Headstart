@@ -486,13 +486,17 @@ HeadstartFSM.prototype = {
   drawTitle: function() {
     var text_style = "font-size: 10pt;";
     var link_style = "font-size:8pt; color: rgb(167, 8, 5)";
-
     var whatsthis = '<span id="info" style="' + text_style +
-                    '">(<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink" style="' + link_style +
-                    '">' + "What's this?" + '</a>)</span></h2>';
-
-    var info = d3.select( "#subdiscipline_title h4")
-                 .html(headstart.subdiscipline_title + whatsthis);
+                '">(<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink" style="' + link_style +
+                '">' + "What's this?" + '</a>)</span></h2>';
+                
+    // var info = d3.select( "#subdiscipline_title h4")
+    //              .html(headstart.subdiscipline_title + whatsthis);
+    if (headstart.show_infolink) {
+      $("#subdiscipline_title h4").html("Überblick über " + $(".paper").length + " Artikel " + whatsthis);
+    } else {
+      $("#subdiscipline_title h4").html("Überblick über " + $(".paper").length + " Artikel");
+    }
   },
 
   initForceAreas: function() {
@@ -640,9 +644,6 @@ HeadstartFSM.prototype = {
     var hs = this;
     
     var setupVisualization = function( csv ) {
-      if (hs.show_infolink) {
-        hs.drawTitle();
-      }
       hs.drawSvg();
       hs.drawChartCanvas();
       if(headstart.is_adaptive) {
@@ -655,6 +656,8 @@ HeadstartFSM.prototype = {
       } else {
         headstart.startVisualization(hs, bubbles, csv, null, true);
       }
+
+      hs.drawTitle();
     }
 
     switch(this.input_format) {
