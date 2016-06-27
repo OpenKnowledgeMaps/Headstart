@@ -23,9 +23,9 @@ var popup = StateMachine.create({
 
             // this.drawPreviewArea( paper_frame_inner );
             
-            // if(headstart.show_infolink) {
-            //     this.drawInfoLinkWithTitle( "What's this?" );
-            // }
+            if(headstart.show_infolink) {
+                headstart.drawTitle();
+            }
             
             if(headstart.show_timeline) {
               this.drawTimeLineLink();

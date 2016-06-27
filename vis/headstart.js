@@ -625,10 +625,6 @@ HeadstartFSM.prototype = {
     
     this.checkBrowserVersions();
     this.checkThatRequiredLibsArePresent();
-
-    if (this.show_infolink) {
-      this.drawTitle();
-    }
   
     this.initScales();
 
