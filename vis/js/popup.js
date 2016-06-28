@@ -11,21 +11,21 @@ var popup = StateMachine.create({
     callbacks: {
         onbeforestart: function( event, from, to ) {
             this.paper_frame = d3.select( "#paper_frame" );
-            this.width = 781;
-            this.height = 460;
-            this.drawPopUp();
+            // this.width = 781;
+            // this.height = 460;
+            // this.drawPopUp();
 
-            var button = this.drawHideButton( paper_frame_inner );
-            button.on("click", function (d) {
-              headstart.mediator.publish("popup_toggle");
-              // popup.hide();
-            });
+            // var button = this.drawHideButton( paper_frame_inner );
+            // button.on("click", function (d) {
+            //   headstart.mediator.publish("popup_toggle");
+            //   // popup.hide();
+            // });
 
-            this.drawPreviewArea( paper_frame_inner );
+            // this.drawPreviewArea( paper_frame_inner );
             
-            // if(headstart.show_infolink) {
-            //     this.drawInfoLinkWithTitle( "What's this?" );
-            // }
+            if(headstart.show_infolink) {
+                headstart.drawTitle();
+            }
             
             if(headstart.show_timeline) {
               this.drawTimeLineLink();

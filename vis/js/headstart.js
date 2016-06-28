@@ -32,8 +32,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.max_area_size = 110;
   this.min_area_size = 50;
 
-  this.is_force_areas = initVar(options.force_areas, false);
-  this.area_force_alpha = initVar(options.force_areas_alpha, 0.02);
+  this.is_force_areas = initVar(options.is_force_areas, false);
+  this.area_force_alpha = initVar(options.area_force_alpha, 0.02);
 
   // bubbles
   this.area_title_max_size = 50;
@@ -486,13 +486,17 @@ HeadstartFSM.prototype = {
   drawTitle: function() {
     var text_style = "font-size: 10pt;";
     var link_style = "font-size:8pt; color: rgb(167, 8, 5)";
-
     var whatsthis = '<span id="info" style="' + text_style +
-                    '">(<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink" style="' + link_style +
-                    '">' + "What's this?" + '</a>)</span></h2>';
-
-    var info = d3.select( "#subdiscipline_title h4")
-                 .html(headstart.subdiscipline_title + whatsthis);
+                '">(<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink" style="' + link_style +
+                '">' + "What's this?" + '</a>)</span></h2>';
+                
+    // var info = d3.select( "#subdiscipline_title h4")
+    //              .html(headstart.subdiscipline_title + whatsthis);
+    if (headstart.show_infolink) {
+      $("#subdiscipline_title h4").html("Überblick über " + $(".paper").length + " Artikel " + whatsthis);
+    } else {
+      $("#subdiscipline_title h4").html("Überblick über " + $(".paper").length + " Artikel");
+    }
   },
 
   initForceAreas: function() {
@@ -625,8 +629,7 @@ HeadstartFSM.prototype = {
     
     this.checkBrowserVersions();
     this.checkThatRequiredLibsArePresent();
-    this.drawTitle();
-
+  
     this.initScales();
 
     this.setOverflowToHiddenOrAuto( "#main" );
@@ -641,7 +644,6 @@ HeadstartFSM.prototype = {
     var hs = this;
     
     var setupVisualization = function( csv ) {
-      // hs.drawTitle();
       hs.drawSvg();
       hs.drawChartCanvas();
       if(headstart.is_adaptive) {
@@ -654,6 +656,8 @@ HeadstartFSM.prototype = {
       } else {
         headstart.startVisualization(hs, bubbles, csv, null, true);
       }
+
+      hs.drawTitle();
     }
 
     switch(this.input_format) {

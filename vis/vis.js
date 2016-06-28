@@ -17,6 +17,7 @@ Headstart = function(host, path, tag, files, options) {
   iframe_modal = compiledTemplate();
   viz.append(iframe_modal);
 
+
   document.getElementById(tag).className = namespace;
   
   headstart = new HeadstartFSM(host, path, tag, files, options);
