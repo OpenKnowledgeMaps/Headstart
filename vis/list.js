@@ -56,7 +56,8 @@ var list = StateMachine.create({
 
 list.drawList = function() {
     // Load list template
-    compiledTemplate = Handlebars.getTemplate('list_explorer');
+    console.log(headstart.templ_path)
+    compiledTemplate = Handlebars.getTemplate(headstart.templ_path, 'list_explorer');
     list_explorer = compiledTemplate();
     $("#list_explorer").append(list_explorer);
 
@@ -112,7 +113,7 @@ addSortOption = function(parent, sort_option, selected) {
     active_val = ""
   }
 
-  compiledTemplate = Handlebars.getTemplate('select_button');
+  compiledTemplate = Handlebars.getTemplate(headstart.templ_path, 'select_button');
   button = compiledTemplate({id:"sort_" + sort_option,
                                      checked:checked_val,
                                      label:sort_option,

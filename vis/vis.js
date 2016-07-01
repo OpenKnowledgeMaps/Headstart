@@ -5,6 +5,7 @@ Headstart = function(host, path, tag, files, options) {
   
   var vis_directory = "vis/";
   var lib_directory = "lib/";
+  var templ_path = host + path + vis_directory + "templates/";
 
   var lib_sources = [
      {source: "browser_detect.js"}
@@ -28,15 +29,15 @@ Headstart = function(host, path, tag, files, options) {
 
   viz = $("#"+tag);
 
-  var compiledTemplate = Handlebars.getTemplate('headstart');
+  var compiledTemplate = Handlebars.getTemplate(templ_path, "headstart");
   var html = compiledTemplate();
   viz.append(html);
 
-  compiledTemplate = Handlebars.getTemplate("info_modal");
+  compiledTemplate = Handlebars.getTemplate(templ_path, "info_modal");
   info_modal = compiledTemplate();
   viz.append(info_modal);
 
-  compiledTemplate = Handlebars.getTemplate("iframe_modal");
+  compiledTemplate = Handlebars.getTemplate(templ_path, "iframe_modal");
   iframe_modal = compiledTemplate();
   viz.append(iframe_modal);
 
@@ -76,6 +77,7 @@ Headstart = function(host, path, tag, files, options) {
                          , files
                          , options
                    );
+                    
 
                    headstart.start();
                }
@@ -107,10 +109,10 @@ function redraw_drag(x, y, dx, dy) {
           "translate(" + dx + ", " + dy + ")");
 }
 
-Handlebars.getTemplate = function(name) {
+Handlebars.getTemplate = function(template_path, name) {
     if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
         $.ajax({
-            url : "vis/templates/" + name + '.handlebars',
+            url : template_path + name + '.handlebars',
             success : function(data) {
                 if (Handlebars.templates === undefined) {
                     Handlebars.templates = {};

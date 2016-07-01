@@ -13,6 +13,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.host = host;
   this.path = path;
   this.tag = tag;
+  this.templ_path = host + path + "vis/templates/";
 
   // map
   this.min_height = 600;
