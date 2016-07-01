@@ -639,7 +639,7 @@ BubblesFSM.prototype = {
       .style("display", function (d) { return d.filtered_out?"none":"inline"});
 
     var t = headstart.chart.transition()
-      .duration(headstart.transition_duration)
+      .duration(headstart.zoomout_transition)
       .each('end', function (d) {
         headstart.chart.selectAll("#area_title_object")
             .style("display", "block")
@@ -676,7 +676,7 @@ BubblesFSM.prototype = {
       .attr("width", function (d) { return d.width })
       .attr("height", function (d) { return d.height })
 
-      t.selectAll("div.metadata")
+    t.selectAll("div.metadata")
       .style("width", function (d) {
         return d.width * (1-headstart.dogear_width) + "px"
       })

@@ -74,6 +74,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   
   // transition
   this.transition_duration = 750;
+  this.zoomout_transition = 1000;
 
   // misc
   this.debounce = 200;
