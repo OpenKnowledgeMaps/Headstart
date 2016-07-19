@@ -847,17 +847,17 @@ BubblesFSM.prototype = {
       return d.width * headstart.circle_zoom * (1-headstart.dogear_width) + "px";
     });
 
-    d3.selectAll("div.readers")
+    t.selectAll("div.readers")
       .style("height", "15px")
       .style("width", function (d) {
         return d.width * headstart.circle_zoom + "px";
       })
     .style("margin-top", "3px");
 
-    d3.selectAll("p")
+    t.selectAll("p")
       .attr("class", "large highlightable")
 
-    d3.selectAll("span.readers_entity")
+    t.selectAll("span.readers_entity")
       .style("font-size", "11px");
   },
 
