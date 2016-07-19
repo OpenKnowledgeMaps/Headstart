@@ -589,10 +589,17 @@ BubblesFSM.prototype = {
     headstart.circle_zoom = headstart.current_vis_size / d.r / 2 * headstart.zoom_factor;
     headstart.x.domain([d.x - d.r, d.x + d.r]);
     headstart.y.domain([d.y - d.r, d.y + d.r]);
-
+    
+    var n = 0;
+    
     var t = headstart.chart.transition()
       .duration(headstart.transition_duration)
+      .each("start", function () { n++; })
       .each("end", function () {
+          if (--n !== 0) {
+              return;
+          }
+          
           headstart.zoom_finished = true;
     });
 
@@ -636,21 +643,25 @@ BubblesFSM.prototype = {
     }
 
     list.papers_list.selectAll("#list_holder")
-      .style("display", function (d) { return d.filtered_out?"none":"inline"});
-
+      .style("display", function (d) { return d.filtered_out?"none":"inline"}); 
+       
+    var n = 0;
     var t = headstart.chart.transition()
       .duration(headstart.zoomout_transition)
-      .each('end', function (d) {
+      .each("start", function () {
+          n++;
+        })
+      .each("end", function() {
+        if(--n !== 0) {
+            return;
+        } 
+          
         headstart.chart.selectAll("#area_title_object")
             .style("display", "block")
             .filter(function(d) {
                 return d3.select(this.previousSibling).attr("class") != "zoom_selected";
             })
                 .style("visibility", "visible");
-          
-        /*headstart.chart.selectAll("#area_title_object")
-                .style("display", "block")
-                .style("visibility", "visible");*/
 
         headstart.current_zoom_node = null;    
         headstart.is_zoomed = false;
@@ -967,7 +978,6 @@ BubblesFSM.prototype = {
     papers.zoom();
     popup.initClickListenersForNav();
   }
-
 };
 
 
