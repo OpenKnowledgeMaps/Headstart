@@ -643,15 +643,15 @@ BubblesFSM.prototype = {
     }
 
     list.papers_list.selectAll("#list_holder")
-      .style("display", function (d) { return d.filtered_out?"none":"inline"}); 
-       
+      .style("display", function (d) { return d.filtered_out?"none":"inline"});
+      
     var n = 0;
     var t = headstart.chart.transition()
       .duration(headstart.zoomout_transition)
       .each("start", function () {
           n++;
         })
-      .each("end", function() {
+      .each("end", function() {      
         if(--n !== 0) {
             return;
         } 
@@ -662,7 +662,7 @@ BubblesFSM.prototype = {
                 return d3.select(this.previousSibling).attr("class") != "zoom_selected";
             })
                 .style("visibility", "visible");
-
+              
         headstart.current_zoom_node = null;    
         headstart.is_zoomed = false;
       });
@@ -705,10 +705,10 @@ BubblesFSM.prototype = {
     .style("margin-top", "0px");
 
 
-    t.selectAll("p")
+    d3.selectAll("p")
       .attr("class", "");
 
-    t.selectAll("span.readers_entity")
+    d3.selectAll("span.readers_entity")
       .style("font-size", "8px");
 
     headstart.drawTitle();
@@ -796,13 +796,7 @@ BubblesFSM.prototype = {
   // on zoom IN
   createTransition: function(t, zoom_area) {
 
-    var zoom_node_t =
-      t.selectAll("circle")
-      .filter(function (x, i) {
-        return (x.title == zoom_area)
-      });
-
-    t.selectAll("#area_title_object")
+    d3.selectAll("#area_title_object")
       .style("display", "none");
 
     t.selectAll("circle")
@@ -853,17 +847,17 @@ BubblesFSM.prototype = {
       return d.width * headstart.circle_zoom * (1-headstart.dogear_width) + "px";
     });
 
-    t.selectAll("div.readers")
+    d3.selectAll("div.readers")
       .style("height", "15px")
       .style("width", function (d) {
         return d.width * headstart.circle_zoom + "px";
       })
     .style("margin-top", "3px");
 
-    t.selectAll("p")
+    d3.selectAll("p")
       .attr("class", "large highlightable")
 
-    t.selectAll("span.readers_entity")
+    d3.selectAll("span.readers_entity")
       .style("font-size", "11px");
   },
 
