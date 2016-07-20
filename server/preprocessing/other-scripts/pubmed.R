@@ -66,13 +66,14 @@ get_papers <- function(query, params = NULL, limit = 100) {
     lst[vapply(lst, length, 1) != 1] <- NA
     return(lst)
   })
+  
   df <- data.table::setDF(data.table::rbindlist(out, fill = TRUE, use.names = TRUE))
   df <- setNames(df, tolower(names(df)))
   df$url <- paste0("http://www.ncbi.nlm.nih.gov/pubmed/", df$pmid)
   df$paper_abstract <- gsub("^\\s+|\\s+$", "", gsub("[\r\n]", "", df$paper_abstract))
-  df$content <- df$paper_abstract
+  df$content <- paste(df$title, df$paper_abstract, df$authors, df$subject, df$published_in, sep= " ")
+  df$id = df$pmid
   
-
   return(list(metadata = df, text = df[,c('id', 'content')]))
 }
 

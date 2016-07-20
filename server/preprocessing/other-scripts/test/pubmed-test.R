@@ -2,28 +2,20 @@ rm(list = ls())
 
 library(rstudioapi)
 
-wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
+options(warn=1)
+
+wd <- dirname(rstudioapi::getActiveDocumentContext()$path) 
 
 setwd(wd) #Don't forget to set your working directory
 
-query <- "frogs"
-service <- "plos"
-params_file <- singleString <- paste(readLines("test/params.json"), collapse=" ")
+query <- "potato" #args[2]
+service <- "pubmed"
+params <- NULL
+params_file <- NULL
 
+source("../vis_layout.R")
+source('../pubmed.R')
 
-source("vis_layout.R")
-
-switch(service, 
-       plos={
-         source("rplos_fast.R")
-       },
-       pubmed={
-         source('pubmed.R')    
-       },
-    {
-      source("rplos_fast.R")
-    }
-)
 
 debug = FALSE
 

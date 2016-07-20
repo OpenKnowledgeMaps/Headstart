@@ -45,7 +45,7 @@ class KeywordNaming extends Naming {
         }
     }
 
-    public function performNamingTfIdf(&$array, $num_keywords, $id="area_uri", $subjects="subject", $keyword_separator=",", $taxonomy_separator="/") {
+    public function performNamingTfIdf(&$array, $num_keywords, $keyword_separator, $taxonomy_separator, $id="area_uri", $subjects="subject") {
 
         $working_array = array();
 
@@ -57,10 +57,6 @@ class KeywordNaming extends Naming {
                     $keyword = substr($keyword, strrpos($keyword, $taxonomy_separator) + 1);
                 }
             }
-
-            /* foreach ($keywords as &$keyword) {
-              $keyword = substr($keyword, strrpos($keyword, "/") + 1);
-              } */
 
             //$working_array[$uri] = array();
 
@@ -89,13 +85,15 @@ class KeywordNaming extends Naming {
         $totalDocs = count($working_array);
 
         foreach ($working_array as $uri => $current_array) {
+            
+            $current_array["all_terms"] = array_replace($current_array["all_terms"], array_fill_keys(array_keys($current_array["all_terms"], null),''));
 
             $num_keywords_per = array_count_values($current_array["all_terms"]);
             $wordCount = count($current_array["all_terms"]);
             $current_result_array = array();
 
             foreach ($current_array["unique_terms"] as $term) {
-                $termCount = $num_keywords_per[$term];
+                $termCount = isset($num_keywords_per[$term])?($num_keywords_per[$term]):(0);
                 $docsWithTerm = $num_docs_per_term[$term];
 
                 $tf = $termCount / $wordCount;
