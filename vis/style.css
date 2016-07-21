@@ -442,7 +442,6 @@
 .headstart #sort_container
 {
     float: right;
-    cursor: pointer;
     display: none;
 }
 
