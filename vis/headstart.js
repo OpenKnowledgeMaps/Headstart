@@ -319,51 +319,48 @@ HeadstartFSM.prototype = {
 
   // Calculate all scales for the current map
   initScales: function() {
-    if (this.is("timeline")){
-      this.current_vis_size = this.timeline_size;
-    } else {
-      this.calcChartSize()
-    }
+      if (this.is("timeline")) {
+          this.current_vis_size = this.timeline_size;
+      } else {
+          this.calcChartSize()
+      }
 
-    // Init all scales
-    this.chart_x = d3.scale.linear();
-    this.chart_y = d3.scale.linear();
+      // Init all scales
+      this.chart_x = d3.scale.linear();
+      this.chart_y = d3.scale.linear();
 
-    this.chart_x_circle = d3.scale.linear();
-    this.chart_y_circle = d3.scale.linear();
+      this.chart_x_circle = d3.scale.linear();
+      this.chart_y_circle = d3.scale.linear();
 
-    this.x = d3.scale.linear();
-    this.y = d3.scale.linear();
+      this.x = d3.scale.linear();
+      this.y = d3.scale.linear();
 
-    this.circle_size = d3.scale.sqrt()
-    this.diameter_size = d3.scale.sqrt()
+      this.circle_size = d3.scale.sqrt()
+      this.diameter_size = d3.scale.sqrt()
 
-    // Calculate correct scaling factors and paper/circle dimensions
-    this.correction_factor = this.current_vis_size / this.reference_size;
-    
-    this.circle_min = (this.min_area_size * this.correction_factor) * this.bubble_min_scale;
-    this.circle_max = (this.max_area_size * this.correction_factor) * this.bubble_max_scale;
-    this.circle_size.range( [this.circle_min, this.circle_max] );
+      // Calculate correct scaling factors and paper/circle dimensions
+      this.correction_factor = this.current_vis_size / this.reference_size;
 
-    this.paper_min = (this.min_diameter_size * this.correction_factor) * this.paper_min_scale;
-    this.paper_max = (this.max_diameter_size * this.correction_factor) * this.paper_max_scale;
-    this.diameter_size.range([this.paper_min, this.paper_max]);
+      this.circle_min = (this.min_area_size * this.correction_factor) * this.bubble_min_scale;
+      this.circle_max = (this.max_area_size * this.correction_factor) * this.bubble_max_scale;
+      this.circle_size.range([this.circle_min, this.circle_max]);
 
-    // TODO REMOVE PADDING MAGIC
+      this.paper_min = (this.min_diameter_size * this.correction_factor) * this.paper_min_scale;
+      this.paper_max = (this.max_diameter_size * this.correction_factor) * this.paper_max_scale;
+      this.diameter_size.range([this.paper_min, this.paper_max]);
 
-    // Set ranges on scales
-    // var padding_articles = 5;
-    var padding_articles = this.paper_max;
-    this.chart_x.range( [padding_articles, this.current_vis_size - padding_articles] );
-    this.chart_y.range( [padding_articles, this.current_vis_size - padding_articles] );
+      // Set ranges on scales
+      var padding_articles = this.paper_max;
+      this.chart_x.range([padding_articles, this.current_vis_size - padding_articles]);
+      this.chart_y.range([padding_articles, this.current_vis_size - padding_articles]);
 
-    // var padding_circles = this.circle_max/2+45;
-    var padding_circles = this.circle_max;
-    this.chart_x_circle.range( [padding_circles, this.current_vis_size - padding_circles] );
-    this.chart_y_circle.range( [padding_circles, this.current_vis_size - padding_circles] );
+      var circle_padding = 0;
+      this.chart_x_circle.range([circle_padding, this.current_vis_size - circle_padding]);
+      this.chart_y_circle.range([circle_padding, this.current_vis_size - circle_padding]);
 
-    this.x.range([50, this.current_vis_size-50]);
-    this.y.range([50, this.current_vis_size-50]);
+      var zoom_padding = 50;
+      this.x.range([zoom_padding, this.current_vis_size - zoom_padding]);
+      this.y.range([zoom_padding, this.current_vis_size - zoom_padding]);
   },
 
   // Size helper functions
@@ -625,62 +622,61 @@ HeadstartFSM.prototype = {
 
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
-  onstart: function( event, from, to, file ) {
-    this.init_mediator();
-    
-    this.loadScripts();
-    
-    this.checkBrowserVersions();
-    this.checkThatRequiredLibsArePresent();
-  
-    this.initScales();
+  onstart: function(event, from, to, file) {
+      this.init_mediator();
+      this.loadScripts();
 
-    this.setOverflowToHiddenOrAuto( "#main" );
+      this.initScales();
     
-    this.resetBubbles();
-    
-    var bubbles = this.bubbles[this.current_file_number];
+      this.checkBrowserVersions();
+      this.checkThatRequiredLibsArePresent();
 
-    // NOTE: async call
-    // therefore we need to call the methods which depend on bubbles.data
-    // after the csv has been received.
-    var hs = this;
-    
-    var setupVisualization = function( csv ) {
-      hs.drawSvg();
-      hs.drawChartCanvas();
-      if(headstart.is_adaptive) {
-        
-        var url = headstart.createRestUrl();
-            
-        $.getJSON(url, function(data) {
-          headstart.startVisualization(hs, bubbles, csv, data, true);
-        });
-      } else {
-        headstart.startVisualization(hs, bubbles, csv, null, true);
+      this.setOverflowToHiddenOrAuto("#main");
+      this.resetBubbles();
+
+      var bubbles = this.bubbles[this.current_file_number];
+
+      // NOTE: async call
+      // therefore we need to call the methods which depend on bubbles.data
+      // after the csv has been received.
+      var hs = this;
+
+      var setupVisualization = function(csv) {
+          hs.drawSvg();
+          hs.drawChartCanvas();
+          if (headstart.is_adaptive) {
+
+              var url = headstart.createRestUrl();
+
+              $.getJSON(url, function(data) {
+                  headstart.startVisualization(hs, bubbles, csv, data, true);
+              });
+          } else {
+              headstart.startVisualization(hs, bubbles, csv, null, true);
+          }
+
+          hs.drawTitle();
       }
 
-      hs.drawTitle();
-    }
+      switch (this.input_format) {
+          case "csv":
+              d3.csv(bubbles.file, setupVisualization);
+              break;
 
-    switch(this.input_format) {
-        case "csv":
-            d3.csv(bubbles.file, setupVisualization);
-            break;
-            
-        case "json":
-            d3.json(this.service_path + "getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
-            break;
-            
-        case "json-direct":
-            setupVisualization(bubbles.file);
-            break;
-            
-        default:
-                break;
-    }
+          case "json":
+              d3.json(this.service_path + "getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
+              break;
 
+          case "json-direct":
+              setupVisualization(bubbles.file);
+
+              break;
+
+          default:
+              break;
+      }
   },
+
 
   // 'ontotimeline' transitions from Headstarts "normal" view to the timeline
   // view. In a nutshell:

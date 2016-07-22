@@ -448,23 +448,43 @@ BubblesFSM.prototype = {
     var area_x = [];
     var area_y = [];
 
+    var min_x = headstart.current_vis_size; 
+    var max_x = 0; 
+    var min_y = headstart.current_vis_size; 
+    var max_y = 0; 
+
     for(area in areas) {
-      var papers_2 = areas[area].papers;
+      var papers = areas[area].papers;
+      var sum_readers = d3.sum(papers, function(d) { return d.internal_readers  });
 
-      var mean_x = d3.mean(papers_2, function(d) { return d.x  });
-      var mean_y = d3.mean(papers_2, function(d) { return d.y  });
+      var mean_x = d3.mean(papers, function(d) { return d.x  });
+      var mean_y = d3.mean(papers, function(d) { return d.y  });
+      var r = headstart.circle_size(sum_readers);
 
-      var sum_readers_2 = d3.sum(papers_2, function(d) { return d.internal_readers  });
+      area_x.push(mean_x);
+      area_y.push(mean_y);
 
       areas[area].x = mean_x;
       areas[area].y = mean_y;
-      area_x.push(mean_x);
-      area_y.push(mean_y);
-      areas[area].r = headstart.circle_size(sum_readers_2);
+      areas[area].r = r;
+
+      if(mean_x-r < min_x) {
+        min_x = mean_x-r
+      }      
+      if(mean_x+r > max_x) {
+        max_x = mean_x+r
+      }     
+      if(mean_y-r < min_y) {
+        min_y = mean_y-r
+      }      
+      if(mean_y+r > max_y) {
+        max_y = mean_y+r
+      }  
     }
 
-    headstart.chart_x_circle.domain(d3.extent(area_x));
-    headstart.chart_y_circle.domain(d3.extent(area_y));
+    headstart.chart_x_circle.domain([min_x, max_x]);
+    headstart.chart_y_circle.domain([min_y, max_y]);
+
 
     for (area in areas) {
       var new_area = [];
