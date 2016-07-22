@@ -289,8 +289,8 @@ HeadstartFSM.prototype = {
   },
 
   calcChartSize: function() {
-      parent_height = getRealHeight($("#"+this.tag));
-      subtitle_heigth = $("#subdiscipline_title").outerHeight(true);
+      var parent_height = getRealHeight($("#"+this.tag));
+      var subtitle_heigth = $("#subdiscipline_title").outerHeight(true);
       if (parent_height == 0) {
           this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_heigth;
       } else {
@@ -319,12 +319,6 @@ HeadstartFSM.prototype = {
 
   // Calculate all scales for the current map
   initScales: function() {
-      if (this.is("timeline")) {
-          this.current_vis_size = this.timeline_size;
-      } else {
-          this.calcChartSize()
-      }
-
       // Init all scales
       this.chart_x = d3.scale.linear();
       this.chart_y = d3.scale.linear();
@@ -337,7 +331,9 @@ HeadstartFSM.prototype = {
 
       this.circle_size = d3.scale.sqrt()
       this.diameter_size = d3.scale.sqrt()
+  },
 
+  setScaleRanges: function() {
       // Calculate correct scaling factors and paper/circle dimensions
       this.correction_factor = this.current_vis_size / this.reference_size;
 
@@ -358,9 +354,9 @@ HeadstartFSM.prototype = {
       this.chart_x_circle.range([circle_padding, this.current_vis_size - circle_padding]);
       this.chart_y_circle.range([circle_padding, this.current_vis_size - circle_padding]);
 
-      var zoom_padding = 50;
-      this.x.range([zoom_padding, this.current_vis_size - zoom_padding]);
-      this.y.range([zoom_padding, this.current_vis_size - zoom_padding]);
+      var zoomed_article_padding = 60;
+      this.x.range([zoomed_article_padding, this.current_vis_size - zoomed_article_padding]);
+      this.y.range([zoomed_article_padding, this.current_vis_size - zoomed_article_padding]);
   },
 
   // Size helper functions
@@ -513,11 +509,16 @@ HeadstartFSM.prototype = {
   // is established
   checkForcePapers: function() {
     var hs = this;
+    var bubble = hs.bubbles[this.current_file_number];
     if (hs.is("normal") || hs.is("switchfiles")) {
+      var alpha = 0
+      if (hs.is_force_areas) {
+        var alpha = hs.area_force_alpha
+      }
       checkPapers = window.setInterval(function () {
         if (hs.is("normal") || hs.is("switchfiles")) {
-          if ((!papers.is("ready") && !papers.is("none")) || (bubbles.is("startup") || bubbles.is("none") || (bubbles.is("start")) )) {
-            if (hs.force_papers.alpha() <= 0 && hs.force_areas.alpha() <= 0) {
+          if ((!papers.is("ready") && !papers.is("none")) || (bubble.is("startup") || bubble.is("none") || (bubble.is("start")) )) {
+            if (hs.force_papers.alpha() <= alpha && hs.force_areas.alpha() <= alpha) {
               papers.forced();
               if(headstart.show_list) {
                 list.show();
@@ -626,6 +627,12 @@ HeadstartFSM.prototype = {
       this.init_mediator();
       this.loadScripts();
 
+      if (this.is("timeline")) {
+          this.current_vis_size = this.timeline_size;
+      } else {
+          this.calcChartSize();
+      }
+
       this.initScales();
     
       this.checkBrowserVersions();
@@ -642,6 +649,21 @@ HeadstartFSM.prototype = {
       var hs = this;
 
       var setupVisualization = function(csv) {
+          if (hs.show_infolink) {
+              hs.drawTitle();
+          }
+      
+          if(hs.show_timeline) {
+            popup.drawTimeLineLink();
+          }
+          
+          if(hs.show_dropdown) {
+            popup.drawDropdown();
+          }
+
+          hs.calcChartSize();
+          hs.setScaleRanges();
+
           hs.drawSvg();
           hs.drawChartCanvas();
           if (headstart.is_adaptive) {
@@ -654,9 +676,8 @@ HeadstartFSM.prototype = {
           } else {
               headstart.startVisualization(hs, bubbles, csv, null, true);
           }
-
-          hs.drawTitle();
       }
+
 
       switch (this.input_format) {
           case "csv":
@@ -686,7 +707,6 @@ HeadstartFSM.prototype = {
   // 2. rendering of new elements, on a bigger
   //    chart
   ontotimeline: function( event, from, to ){
-    
     window.clearInterval(checkPapers);
     
     this.force_areas.stop();
@@ -752,60 +772,64 @@ HeadstartFSM.prototype = {
     this.initMouseListeners();
   },
   
-  ontofile: function( event, from, to, file) {
-    
-    this.force_areas.stop();
-    this.force_papers.stop();
-    
-    headstart.current_file_number = file;
-    
-    // clear the canvas
-    $("#chart_canvas").remove();
+  ontofile: function(event, from, to, file) {
 
-    // clear the list list
-    $("#list_explorer").empty();
-    
-    popup.current  = "hidden";
-    papers.current = "none";
-    list.current   = "none";
+      this.force_areas.stop();
+      this.force_papers.stop();
 
-    this.initScales();
-    this.setOverflowToHiddenOrAuto( "#main" );
-    
-    // reset bubbles
-    this.resetBubbles();
-    
-    var bubbles = this.bubbles[this.current_file_number];
+      headstart.current_file_number = file;
 
-    var hs = this;
-    var setupVisualization = function( csv ) {
-      hs.drawChartCanvas();
-      
-      if(headstart.is_adaptive) {
-        
-        var url = headstart.createRestUrl();
-            
-        $.getJSON(url, function(data) {
-          headstart.startVisualization(hs, bubbles, csv, data, false);
-        });
-      } else {
-        headstart.startVisualization(hs, bubbles, csv, null, false);
+      // clear the canvas
+      $("#chart_canvas").remove();
+
+      // clear the list list
+      $("#list_explorer").empty();
+
+      popup.current = "hidden";
+      papers.current = "none";
+      list.current = "none";
+
+      // this.initScales();
+      this.setOverflowToHiddenOrAuto("#main");
+
+      // reset bubbles
+      this.resetBubbles();
+
+      var bubbles = this.bubbles[this.current_file_number];
+
+      var hs = this;
+      var setupVisualization = function(csv) {
+          hs.calcChartSize();
+          hs.setScaleRanges();
+
+          hs.drawChartCanvas();
+
+          if (hs.is_adaptive) {
+
+              var url = hs.createRestUrl();
+
+              $.getJSON(url, function(data) {
+                  headstart.startVisualization(hs, bubbles, csv, data, false);
+              });
+          } else {
+              headstart.startVisualization(hs, bubbles, csv, null, false);
+          }
       }
-    }
-    
-    switch(this.input_format) {
-        case "csv":
-            d3.csv(bubbles.file, setupVisualization);
-            break;
-            
-        case "json":
-            d3.json(this.service_path + "getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
-            break;
-            
-        default:
-                break;
-    }
+
+      switch (this.input_format) {
+          case "csv":
+              d3.csv(bubbles.file, setupVisualization);
+              break;
+
+          case "json":
+              d3.json(this.service_path + "getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
+              break;
+
+          default:
+              break;
+      }
   },
+
   
   startVisualization: function(hs, bubbles, csv, adaptive_data, popup_start) {
     bubbles.start( csv, adaptive_data );
@@ -949,9 +973,8 @@ HeadstartFSM.prototype = {
 
   record_action: function(id, action, user, type, timestamp, additional_params, post_data) {
     headstart.recordAction(id, action, user, type, timestamp, additional_params, post_data);
-  }
-}
-
+  },
+},
 
 // State definitions for headstart object
 // see "onstart" function for entry point e.g. the first code that

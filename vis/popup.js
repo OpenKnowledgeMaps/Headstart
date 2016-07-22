@@ -23,17 +23,17 @@ var popup = StateMachine.create({
 
             // this.drawPreviewArea( paper_frame_inner );
             
-            if(headstart.show_infolink) {
-                headstart.drawTitle();
-            }
+            // if(headstart.show_infolink) {
+            //     headstart.drawTitle();
+            // }
             
-            if(headstart.show_timeline) {
-              this.drawTimeLineLink();
-            }
+            // if(headstart.show_timeline) {
+            //   this.drawTimeLineLink();
+            // }
             
-            if(headstart.show_dropdown) {
-              this.drawDropdown();
-            }
+            // if(headstart.show_dropdown) {
+            //   this.drawDropdown();
+            // }
             
             this.initClickListenersForNav();
             

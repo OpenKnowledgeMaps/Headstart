@@ -111,13 +111,18 @@
     stroke-width: 1px;
 }
 
-.headstart div#subdiscipline_title
-{
-  margin: 0px;
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-bottom: 10px;
+.headstart div#subdiscipline_title {
+    margin: 0px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
 }
+
+.headstart div#subdiscipline_title h4 {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
 
 .headstart div#area_title
 {
