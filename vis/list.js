@@ -70,16 +70,13 @@ list.drawList = function() {
         } else {
           $("#searchclear").hide()
         }
-        debounce(filterList(event), 700)
+        debounce(filterList(event.target.value.split(" ")), 700)
       })
 
-    // $("#filter_input").change(function(){
-
-    // })
-
-    $("#searchclear").click(function() {
+    $("#searchclear").click(function(event) {
         $("#filter_input").val('');
-        $("#searchclear").hide()
+        $("#searchclear").hide();
+        debounce(filterList([""]), 700);
     });
 
 
@@ -248,9 +245,8 @@ list.populateMetaData = function(nodes) {
     .html(function (d) { return d.published_in + " (" + d.year + ")" });
 }
 
-filterList = function(event) {
+filterList = function(search_words) {
   clear_highlights();
-  var search_words = event.target.value.split(" ");
   search_words.forEach(function(str){
     highlight(str);
   });
