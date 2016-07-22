@@ -127,6 +127,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
           search_placeholder: "Search...",
           show_list: "Show list",
           hide_list: "Hide list",
+          intro_label:"What's this?",
           readers: "readers",
           year: "date",
           authors: "authors",
@@ -138,7 +139,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
           search_placeholder: "Suche...",
           show_list: "Liste ausklappen",
           hide_list: "Liste einklappen",
-          readers: this.base_unit,
+          intro_label :"Was ist das?",
+          readers: "Leser",
           year: "Jahr",
           authors: "Autor",
           title: "Titel",
@@ -149,6 +151,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
           search_placeholder: "Search...",
           show_list: "Show list",
           hide_list: "Hide list",
+          intro_label :"What's this?",
           readers: "views",
           year: "date",
           authors: "authors",
@@ -486,11 +489,9 @@ HeadstartFSM.prototype = {
 
   // Draws the h1 for headstart
   drawTitle: function() {
-    var text_style = "font-size: 10pt;";
-    var link_style = "font-size:8pt; color: rgb(167, 8, 5)";
-    var whatsthis = '<span id="info" style="' + text_style +
-                '">(<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink" style="' + link_style +
-                '">' + "What's this?" + '</a>)</span></h2>';
+    var link_style = "color: rgb(167, 8, 5)";
+    var whatsthis = '<span id="info">(<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink" style="' + link_style +
+                '">' + headstart.localization[headstart.language].intro_label + '</a>)</span></h2>';
                 
     // var info = d3.select( "#subdiscipline_title h4")
     //              .html(headstart.subdiscipline_title + whatsthis);

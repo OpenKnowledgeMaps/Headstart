@@ -56,9 +56,8 @@ var list = StateMachine.create({
 
 list.drawList = function() {
     // Load list template
-    console.log(headstart.templ_path)
     compiledTemplate = Handlebars.getTemplate(headstart.templ_path, 'list_explorer');
-    list_explorer = compiledTemplate();
+    list_explorer = compiledTemplate({show_list:headstart.localization[headstart.language].show_list});
     $("#list_explorer").append(list_explorer);
 
     // Set localized values
@@ -78,7 +77,6 @@ list.drawList = function() {
         $("#searchclear").hide();
         debounce(filterList([""]), 700);
     });
-
 
     // Add sort options
     var container = d3.select("#sort_container>ul")
@@ -111,11 +109,14 @@ addSortOption = function(parent, sort_option, selected) {
   }
 
   compiledTemplate = Handlebars.getTemplate(headstart.templ_path, 'select_button');
-  button = compiledTemplate({id:"sort_" + sort_option,
-                                     checked:checked_val,
-                                     label:sort_option,
-                                     active:active_val});
+  button = compiledTemplate({
+      id: "sort_" + sort_option,
+      checked: checked_val,
+      label: headstart.localization[headstart.language][sort_option],
+      active: active_val
+  });
   $("#sort-buttons").append(button);
+
 
   // Event listeners
   $("#sort_" + sort_option).change(function(event) {
