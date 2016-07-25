@@ -96,7 +96,6 @@ list.drawList = function() {
 
 list.fit_list_height = function() {
   var paper_list_avail_height = $("#subdiscipline_title").outerHeight(true) + $("#headstart-chart").outerHeight(true) - $("#explorer_header").height() - 10;
-  console.log(paper_list_avail_height)
   $("#papers_list").height(paper_list_avail_height);
 }
 
