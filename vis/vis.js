@@ -21,7 +21,7 @@ Headstart = function(host, path, tag, files, options) {
 
   var script_sources = [
     {source: "intro.js"}
-     ,{source: "popup.js"}
+     // ,{source: "popup.js"}
      ,{source: "bubbles.js"}
      ,{source: "papers.js"}
      ,{source: "list.js"}

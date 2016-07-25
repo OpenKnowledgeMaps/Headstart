@@ -502,13 +502,14 @@ list.reset = function() {
 list.loadAndAppendImage = function(image_src, page_number) {
 
     if (this.testImage(image_src)) {
-        popup.paper_frame.select("#preview")
+        var paper_frame = d3.select( "#paper_frame" );
+        paper_frame.select("#preview")
            .append("div")
             .attr("id", "preview_page_index")
             .style("width", headstart.preview_image_width + "px")
             .html("Page " + page_number)
 
-        popup.paper_frame.select("#preview")
+        paper_frame.select("#preview")
            .append("img")
             .attr("id", "preview_page")
             .attr("class", "lazy")

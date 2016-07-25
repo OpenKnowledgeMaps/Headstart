@@ -482,9 +482,10 @@ HeadstartFSM.prototype = {
   },
 
   initClickListenersForNav: function() {
+    var self = this;
       $("#timelineview").on("click", function() {
           if ($("#timelineview a").html() == "TimeLineView") {
-              this.mediator.publish("to_timeline");
+              self.mediator.publish("to_timeline");
           }
       });
   },
@@ -757,7 +758,7 @@ HeadstartFSM.prototype = {
     $("#list_explorer").empty();
     
     this.bubbles[headstart.current_file_number].current = "x";
-    popup.current  = "hidden";
+    // popup.current  = "hidden";
     papers.current = "none";
     list.current   = "none";
 
@@ -821,7 +822,7 @@ HeadstartFSM.prototype = {
       // clear the list list
       $("#list_explorer").empty();
 
-      popup.current = "hidden";
+      // popup.current = "hidden";
       papers.current = "none";
       list.current = "none";
 
