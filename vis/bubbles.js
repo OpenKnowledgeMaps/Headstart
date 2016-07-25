@@ -578,8 +578,8 @@ BubblesFSM.prototype = {
       .on("mouseover", null)
       .on("mouseout", null)
 
-      d3.select("#subdiscipline_title h4").text(headstart.localization[headstart.language].area +": " + d.title);
-      $("#subdiscipline_title").dotdotdot();
+    d3.select("#subdiscipline_title h4").text(headstart.localization[headstart.language].area +": " + d.title);
+    $("#subdiscipline_title").dotdotdot();
 
     d3.selectAll("div.paper_holder")
       .on("mouseover", function(d){
@@ -597,7 +597,7 @@ BubblesFSM.prototype = {
     d3.selectAll(".paper")
         .style("display", function (d) { return d.filtered_out?"none":"block"})
 
-      d3.selectAll(".paper")
+    d3.selectAll(".paper")
       .filter(function (x, i) {
         return (headstart.use_area_uri)?(x.area_uri != d.area_uri):(x.area != d.title);
       })
@@ -606,7 +606,10 @@ BubblesFSM.prototype = {
     d3.selectAll("#region")
       .style("fill-opacity", 1)
 
-    headstart.circle_zoom = headstart.current_vis_size / d.r / 2 * headstart.zoom_factor;
+    // Determine new zooming factor based on the viewbox
+    var svg = document.getElementById("chart-svg");
+    var viewbox = svg.getAttribute("viewBox").split(/\s+|,/);
+    headstart.circle_zoom = viewbox[3] / d.r / 2 * headstart.zoom_factor;
     headstart.x.domain([d.x - d.r, d.x + d.r]);
     headstart.y.domain([d.y - d.r, d.y + d.r]);
     
