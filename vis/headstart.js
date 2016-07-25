@@ -649,9 +649,7 @@ HeadstartFSM.prototype = {
       var hs = this;
 
       var setupVisualization = function(csv) {
-          if (hs.show_infolink) {
-              hs.drawTitle();
-          }
+          hs.drawTitle();
       
           if(hs.show_timeline) {
             popup.drawTimeLineLink();
