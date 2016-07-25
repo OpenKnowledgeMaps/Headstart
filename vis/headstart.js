@@ -674,6 +674,10 @@ HeadstartFSM.prototype = {
           } else {
               headstart.startVisualization(hs, bubbles, csv, null, true);
           }
+
+          // Horrible solution but the first call is needed to calculate the chart height
+          // and this call sets the final number of articles in the viz
+          hs.drawTitle();
       }
 
 
