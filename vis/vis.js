@@ -15,6 +15,7 @@ Headstart = function(host, path, tag, files, options) {
        ,{source: "jquery.dotdotdot.min.js"}
        ,{source: "jquery.hypher.js"}
        ,{source: "de.js"}
+       ,{source: "en.js"}
        ,{source: "d3.v3.js", important: true}
    ];
 

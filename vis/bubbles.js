@@ -423,7 +423,7 @@ BubblesFSM.prototype = {
       .style("width",  function (d) { return d.width_html + "px" })
       .style("height", function (d) { return d.height_html + "px" })
       .append("h2")
-      .classed("highlightable", true)
+      // .classed("highlightable", true)
       .html(function (d) {
           return d.title;
       });      

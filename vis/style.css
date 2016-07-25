@@ -332,6 +332,7 @@
 
 .headstart div#area_title
 {
+    word-break: break-word;
     display: table-cell;
     overflow: hidden;
 
