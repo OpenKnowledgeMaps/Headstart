@@ -503,6 +503,9 @@ HeadstartFSM.prototype = {
   initForcePapers: function() {
     var padded = this.current_vis_size - this.padding;
     this.force_papers = d3.layout.force().nodes([]).links([]).size([padded, padded]);
+    if (typeof checkPapers !== 'undefined') {
+        window.clearInterval(checkPapers);
+    }
   },
 
   // calls itself over and over until the forced layout of the papers
@@ -511,14 +514,10 @@ HeadstartFSM.prototype = {
     var hs = this;
     var bubble = hs.bubbles[this.current_file_number];
     if (hs.is("normal") || hs.is("switchfiles")) {
-      var alpha = 0
-      if (hs.is_force_areas) {
-        var alpha = hs.area_force_alpha
-      }
       checkPapers = window.setInterval(function () {
         if (hs.is("normal") || hs.is("switchfiles")) {
           if ((!papers.is("ready") && !papers.is("none")) || (bubble.is("startup") || bubble.is("none") || (bubble.is("start")) )) {
-            if (hs.force_papers.alpha() <= alpha && hs.force_areas.alpha() <= alpha) {
+            if (hs.force_papers.alpha() <= 0 && hs.force_areas.alpha() <= 0) {
               papers.forced();
               if(headstart.show_list) {
                 list.show();
