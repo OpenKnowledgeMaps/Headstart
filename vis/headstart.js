@@ -444,6 +444,7 @@ HeadstartFSM.prototype = {
   initMouseListeners: function() {
     this.initMouseMoveListeners();
     this.initMouseClickListeners();
+    this.initClickListenersForNav();
   },
 
   initMouseMoveListeners: function() {
@@ -453,13 +454,13 @@ HeadstartFSM.prototype = {
         headstart.current_circle = null;
       }
       headstart.bubbles[headstart.current_file_number].mouseout("outofbigbubble");
-      popup.initClickListenersForNav();
+      headstart.initClickListenersForNav();
     });
   },
 
   initMouseClickListeners: function() {
     var self = this;  
-      
+    
     $("#chart-svg").on( "click", function() {
       headstart.bubbles[headstart.current_file_number].zoomout();
     });
@@ -469,7 +470,7 @@ HeadstartFSM.prototype = {
             headstart.bubbles[headstart.current_file_number].zoomout();
         }
     });
-    
+
     /*$("#" + this.tag).on("click", function () {
       headstart.bubbles[headstart.current_file_number].zoomout();
     })*/
@@ -480,20 +481,62 @@ HeadstartFSM.prototype = {
     });
   },
 
-  // Draws the h1 for headstart
-  drawTitle: function() {
-    var link_style = "color: rgb(167, 8, 5)";
-    var whatsthis = '<span id="info">(<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink" style="' + link_style +
-                '">' + headstart.localization[headstart.language].intro_label + '</a>)</span></h2>';
-                
-    // var info = d3.select( "#subdiscipline_title h4")
-    //              .html(headstart.subdiscipline_title + whatsthis);
-    if (headstart.show_infolink) {
-      $("#subdiscipline_title h4").html("Überblick über " + $(".paper").length + " Artikel " + whatsthis);
-    } else {
-      $("#subdiscipline_title h4").html("Überblick über " + $(".paper").length + " Artikel");
-    }
+  initClickListenersForNav: function() {
+      $("#timelineview").on("click", function() {
+          if ($("#timelineview a").html() == "TimeLineView") {
+              this.mediator.publish("to_timeline");
+          }
+      });
   },
+
+
+  // Draws the header for headstart
+  drawTitle: function() {
+
+    if (headstart.language == "eng") {
+        var chart_title = 'Overview of <span id="num_articles"></span> articles';
+    } else {
+        var chart_title = 'Überblick über <span id="num_articles"></span> Artikel';
+    }
+
+    $("#subdiscipline_title h4").html(chart_title);
+    $("#num_articles").html($(".paper").length);
+
+    if (headstart.show_infolink) {
+        infolink =  ' (<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>)'
+        $("#subdiscipline_title h4").append(infolink);
+        $("#infolink").text(headstart.localization[headstart.language].intro_label);  
+    }
+
+    if (headstart.show_timeline) {
+        var link = ' <span id="timelineview"><a href="#">TimeLineView</a></span>';
+        $("#subdiscipline_title>h4").append(link);
+    }
+
+    if (headstart.show_dropdown) {
+        var dropdown = '<select id="datasets"></select>';
+
+        $("#subdiscipline_title>h4").append(" Select dataset: ");
+        $("#subdiscipline_title>h4").append(dropdown);
+
+        $.each(headstart.bubbles, function(index, entry) {
+            var current_item = '<option value="' + entry.file + '">' + entry.title + '</option>';
+            $("#datasets").append(current_item);
+        })
+
+        //$("#datasets " + headstart.current_file_number + ":selected").text();
+        $("#datasets").val(headstart.bubbles[headstart.current_file_number].file);
+
+        $("#datasets").change(function() {
+
+            var selected_file_number = datasets.selectedIndex + 1;
+            if (selected_file_number != headstart.current_file_number) {
+                headstart.tofile(selected_file_number);
+            }
+        })
+    }
+},
+
 
   initForceAreas: function() {
     var padded = this.current_vis_size - this.padding;
@@ -649,14 +692,6 @@ HeadstartFSM.prototype = {
 
       var setupVisualization = function(csv) {
           hs.drawTitle();
-      
-          if(hs.show_timeline) {
-            popup.drawTimeLineLink();
-          }
-          
-          if(hs.show_dropdown) {
-            popup.drawDropdown();
-          }
 
           hs.calcChartSize();
           hs.setScaleRanges();
@@ -727,7 +762,7 @@ HeadstartFSM.prototype = {
     list.current   = "none";
 
     // change heading to give an option to get back to normal view
-    popup.drawNormalViewLink();
+    this.drawNormalViewLink();
     this.initScales();
 
     // need a bigger width for the timeline view
@@ -815,6 +850,8 @@ HeadstartFSM.prototype = {
           } else {
               headstart.startVisualization(hs, bubbles, csv, null, false);
           }
+
+          hs.drawTitle()
       }
 
       switch (this.input_format) {
@@ -848,12 +885,25 @@ HeadstartFSM.prototype = {
     bubbles.initMouseListeners();
     list.start( bubbles );
     
-    if(popup_start)
-      popup.start();
-    
     hs.checkForcePapers();
+
+    if (headstart.show_intro) {
+        $("#infolink").click();
+    }
+
+
+
     $("#area_title>h2").hyphenate('en');
     $("#area_title_object>body").dotdotdot({wrap:"letter"});
+  },
+
+  drawNormalViewLink: function() {
+      // remove event handler
+      $("#timelineview").off("click");
+
+      // refreshes page
+      var link = ' <a href="javascript:window.location.reload()">Normal View</a>';
+      $("#timelineview").html(link);
   },
 
   init_mediator: function() {

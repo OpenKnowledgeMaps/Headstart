@@ -733,15 +733,6 @@ BubblesFSM.prototype = {
 
     headstart.drawTitle();
 
-    if (headstart.show_timeline) {
-        popup.drawTimeLineLink();
-    }
-
-    if (headstart.show_dropdown) {
-        popup.drawDropdown();
-    }
-
-        
     d3.selectAll(".paper")
       .style("display", function(d) { return d.filtered_out?"none":"block"});
       
@@ -974,7 +965,7 @@ BubblesFSM.prototype = {
     this.zoomOut();
     this.resetCircleDesign();
     papers.zoomout();
-    popup.initClickListenersForNav();
+    headstart.initClickListenersForNav();
   },
 
   // we only whant to be able to "zoom" when the papers are
@@ -990,7 +981,7 @@ BubblesFSM.prototype = {
     }
     this.initMouseListeners();
     papers.zoom();
-    popup.initClickListenersForNav();
+    headstart.initClickListenersForNav();
   }
 };
 

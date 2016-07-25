@@ -901,3 +901,7 @@
     margin-left: 0;
     margin-right: 0
 }
+
+.headstart #infolink {
+    color: rgb(167, 8, 5);
+}
