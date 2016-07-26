@@ -111,13 +111,18 @@
     stroke-width: 1px;
 }
 
-.headstart div#subdiscipline_title
-{
-  margin: 0px;
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-bottom: 10px;
+.headstart div#subdiscipline_title {
+    margin: 0px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
 }
+
+.headstart div#subdiscipline_title h4 {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
 
 .headstart div#area_title
 {
@@ -327,6 +332,7 @@
 
 .headstart div#area_title
 {
+    word-break: break-word;
     display: table-cell;
     overflow: hidden;
 
@@ -442,7 +448,6 @@
 .headstart #sort_container
 {
     float: right;
-    cursor: pointer;
     display: none;
 }
 
@@ -895,4 +900,8 @@
     padding-right: 0;
     margin-left: 0;
     margin-right: 0
+}
+
+.headstart #infolink {
+    color: rgb(167, 8, 5);
 }
