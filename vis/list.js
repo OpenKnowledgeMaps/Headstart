@@ -63,7 +63,7 @@ list.drawList = function() {
     // Set localized values
     $("#filter_input")
     .attr("placeholder", headstart.localization[headstart.language].search_placeholder)
-    .keyup(function(event){
+    .on("input", function(event){
         if($("#filter_input").val() != "") {
           $("#searchclear").show()
         } else {
@@ -251,16 +251,20 @@ list.populateMetaData = function(nodes) {
 }
 
 filterList = function(search_words) {
+  var search_words = search_words.map(function(e) {
+      e = e.trim().toLowerCase();
+      return e;
+  });
+
   clear_highlights();
   search_words.forEach(function(str){
     highlight(str);
   });
   
-
   var filtered_data = d3.selectAll("#list_holder, .paper")
   var current_circle = d3.select(headstart.current_zoom_node);
   
-    var data_circle = filtered_data
+  var data_circle = filtered_data
     .filter(function (d) {
       if (headstart.is_zoomed === true) {
         if (headstart.use_area_uri && headstart.current_enlarged_paper == null)
@@ -274,7 +278,7 @@ filterList = function(search_words) {
       }
     })
 
-  if (event.target.value === "") {
+  if (search_words.length == 0) {
     data_circle.style("display", "block")
 
       headstart.bubbles[headstart.current_file_number].data.forEach(function (d) {
@@ -285,10 +289,6 @@ filterList = function(search_words) {
   }
 
   data_circle.style("display", "inline")
-
-  var searchtext = event.target.value;
-  var searchtext_processed = searchtext.trim().toLowerCase();
-  var search_words = searchtext_processed.split(" ");
   
   headstart.mediator.publish("record_action","none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
   // headstart.recordAction("none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
@@ -620,7 +620,6 @@ list.setImageForListHolder = function(d) {
         .html("Click here to open preview")
         .on("click", function(d){
           headstart.mediator.publish("list_show_popup", d);
-          console.log("im here")
           // this.populateOverlay;
         })
   }
