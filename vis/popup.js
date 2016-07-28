@@ -11,49 +11,34 @@ var popup = StateMachine.create({
     callbacks: {
         onbeforestart: function( event, from, to ) {
             this.paper_frame = d3.select( "#paper_frame" );
-            this.width = 781;
-            this.height = 460;
-            this.drawPopUp();
+            // this.width = 781;
+            // this.height = 460;
+            // this.drawPopUp();
 
-            var button = this.drawHideButton( paper_frame_inner );
-            button.on("click", function (d) {
-              headstart.mediator.publish("popup_toggle");
-              // popup.hide();
-            });
+            // var button = this.drawHideButton( paper_frame_inner );
+            // button.on("click", function (d) {
+            //   headstart.mediator.publish("popup_toggle");
+            //   // popup.hide();
+            // });
 
-            this.drawPreviewArea( paper_frame_inner );
+            // this.drawPreviewArea( paper_frame_inner );
             
-            if(headstart.show_infolink) {
-                this.drawInfoLinkWithTitle( "What's this?" );
-            }
-            
-            if(headstart.show_timeline) {
-              this.drawTimeLineLink();
-            }
-            
-            if(headstart.show_dropdown) {
-              this.drawDropdown();
-            }
-            
-            this.initClickListenersForNav();
+            // this.initClickListenersForNav();
             
         },
         
         onstart: function ( event, from, to ) {
-            if(headstart.show_intro) {
-                headstart.mediator.publish("popup_toggle");
-                // popup.show();
-            }
+
         },
 
         onshow: function( event, from, to ) {
-          popup.paper_frame
-                  .style ( "display", "block" )
+          // popup.paper_frame
+          //         .style ( "display", "block" )
                             
-          popup.paper_frame.select( "#preview" )
-                           .append( "div" )
-                           .attr  ( "id", "intro" )
-                           .html(intro_html);
+          // popup.paper_frame.select( "#preview" )
+          //                  .append( "div" )
+          //                  .attr  ( "id", "intro" )
+          //                  .html(intro_html);
          
          headstart.mediator.publish("record_action","none", "show_popup", headstart.user_id, "none", null);
          // headstart.recordAction("none", "show_popup", headstart.user_id, "none", null);
@@ -71,20 +56,6 @@ var popup = StateMachine.create({
         }
     }
 });
-
-popup.initClickListenersForNav = function() {
-  $("#infolink").on("click", function () {
-    headstart.mediator.publish("popup_toggle");
-    // popup.show();
-  });
-
-  $("#timelineview").on("click", function() {
-    if ($("#timelineview a").html() == "TimeLineView") {
-      headstart.mediator.publish("to_timeline");
-      // headstart.totimeline();
-    }
-  });
-}
 
 // The paper frame is the main popup element.
 popup.drawPopUp = function() {
@@ -109,7 +80,7 @@ popup.drawPopUp = function() {
     .style( "width",  popup.width  + "px" )
     .style( "height", popup.height + "px" )
     .style( "margin-top", function (d) {
-      return headstart.max_chart_size/2 - popup.height/2 + "px";
+      return headstart.current_vis_size/2 - popup.height/2 + "px";
     });
 }
 
@@ -139,59 +110,6 @@ popup.drawPreviewArea = function( paper_frame_inner ) {
         .style( "height", headstart.preview_page_height + "px" );
 
     paper_frame_inner.append("div").attr( "id","shadow-bottom" );
-}
-
-popup.drawTimeLineLink = function() {
-  var link = ' <span id="timelineview"><a href="#">TimeLineView</a></span>';
-  $("#info").append(link);
-
-  return $("#timelineview");
-}
-
-popup.drawDropdown = function() {
-  var dropdown = '<select id="datasets"></select>';
-  
-  $("#info").append(" Select dataset: ");
-  $("#info").append(dropdown);
-
-  $.each(headstart.bubbles, function (index, entry) {
-    var current_item = '<option value="' + entry.file +'">' + entry.title + '</option>';
-    $("#datasets").append(current_item);
-  })
-  
-  //$("#datasets " + headstart.current_file_number + ":selected").text();
-  $("#datasets").val(headstart.bubbles[headstart.current_file_number].file);
-  
-  $("#datasets").change(function() {
-
-    var selected_file_number = datasets.selectedIndex + 1;  
-    if(selected_file_number != headstart.current_file_number) {
-      headstart.tofile(selected_file_number);
-    }
-  })
-}
-
-popup.drawNormalViewLink = function() {
-  // remove event handler
-  $("#timelineview").off("click");
-  
-  // refreshes page
-  var link = ' <a href="javascript:window.location.reload()">Normal View</a>';
-  $("#timelineview").html(link);
-}
-
-// Create title: "Whats this?"
-popup.drawInfoLinkWithTitle = function( title ) {
-
-  var text_style = "font-size: 10pt;";
-  var link_style = "font-size:8pt; color: rgb(167, 8, 5)";
-
-  var whatsthis = ' <span id="info" style="' + text_style +
-                  '">(<a href="#" id="infolink" style="'   + link_style +
-                  '">' + title + '</a>)</span></h2>';
-
-  var info = d3.select( "#subdiscipline_title h1" )
-               .html(headstart.subdiscipline_title + whatsthis);
 }
 
 /*popup.loadAndAppendImage =  function( image_src, page_number ) {

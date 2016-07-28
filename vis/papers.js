@@ -313,12 +313,12 @@ papers.applyForce = function( bubbles ) {
         current_bubbles.areas_array.forEach(function(a, i) {
             
             if(a.x - a.r < 0
-                || a.x + a.r > headstart.max_chart_size
+                || a.x + a.r > headstart.current_vis_size
                 || a.y - a.r < 0
-                || a.y + a.r > headstart.max_chart_size) {
+                || a.y + a.r > headstart.current_vis_size) {
                     
-                a.x += (headstart.max_chart_size/2 - a.x) * alpha;
-                a.y += (headstart.max_chart_size/2 - a.y) * alpha;
+                a.x += (headstart.current_vis_size/2 - a.x) * alpha;
+                a.y += (headstart.current_vis_size/2 - a.y) * alpha;
                     
             }
             

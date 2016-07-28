@@ -4,8 +4,8 @@ var namespace = "headstart";
 Headstart = function(host, path, tag, files, options) {
   
   var vis_directory = "vis/";
-  
   var lib_directory = "lib/";
+  var templ_path = host + path + vis_directory + "templates/";
 
   var lib_sources = [
      {source: "browser_detect.js"}
@@ -15,32 +15,32 @@ Headstart = function(host, path, tag, files, options) {
        ,{source: "jquery.dotdotdot.min.js"}
        ,{source: "jquery.hypher.js"}
        ,{source: "de.js"}
+       ,{source: "en.js"}
        ,{source: "d3.v3.js", important: true}
-   ];
-
-  var divs = [
-     "main"
-     ,"subdiscipline_title"
-     ,"headstart-chart"
-     ,"papers_list_container"
-     ,"paper_frame"
    ];
 
   var script_sources = [
     {source: "intro.js"}
-     ,{source: "popup.js"}
+     // ,{source: "popup.js"}
      ,{source: "bubbles.js"}
      ,{source: "papers.js"}
      ,{source: "list.js"}
      ,{source: "headstart.js", final: true}
    ]
 
-  // this is the starting point for the visualisation
-  addDiv = function(id, append_tag) {
-    var current_div = document.createElement('div');
-    current_div.id = id;
-    return document.getElementById(append_tag).appendChild(current_div);
-  }
+  viz = $("#"+tag);
+
+  var compiledTemplate = Handlebars.getTemplate(templ_path, "headstart");
+  var html = compiledTemplate();
+  viz.append(html);
+
+  compiledTemplate = Handlebars.getTemplate(templ_path, "info_modal");
+  info_modal = compiledTemplate();
+  viz.append(info_modal);
+
+  compiledTemplate = Handlebars.getTemplate(templ_path, "iframe_modal");
+  iframe_modal = compiledTemplate();
+  viz.append(iframe_modal);
 
   addScript = function(source, tag, async) {
     var current_script = document.createElement('script');
@@ -58,20 +58,14 @@ Headstart = function(host, path, tag, files, options) {
     return document.getElementsByTagName(tag)[0].appendChild(current_css);
   }
   
-  document.getElementById(tag).className = namespace;
+  // document.getElementById(tag).className = namespace;
   
   addCss(host + path + vis_directory + 'style.css', 'head');
-  addCss('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', 'head');
 
   lib_sources.forEach(function(script_source, i) {
     var current_script = addScript(host + path + vis_directory + lib_directory + script_source.source, 'head', false);
-
     if (typeof script_source.important !== 'undefined') {
       current_script.onload = function() {
-        divs.forEach(function(name) {
-          addDiv(name, tag);
-        })
-
         script_sources.forEach(function(script_source) {
           var source = host + path + vis_directory + script_source.source;
           var this_script = addScript(source, 'head', false);
@@ -84,6 +78,7 @@ Headstart = function(host, path, tag, files, options) {
                          , files
                          , options
                    );
+                    
 
                    headstart.start();
                }
@@ -114,3 +109,19 @@ function redraw_drag(x, y, dx, dy) {
   chart.attr("transform",
           "translate(" + dx + ", " + dy + ")");
 }
+
+Handlebars.getTemplate = function(template_path, name) {
+    if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
+        $.ajax({
+            url : template_path + name + '.handlebars',
+            success : function(data) {
+                if (Handlebars.templates === undefined) {
+                    Handlebars.templates = {};
+                }
+                Handlebars.templates[name] = Handlebars.compile(data);
+            },
+            async : false
+        });
+    }
+    return Handlebars.templates[name];
+};
