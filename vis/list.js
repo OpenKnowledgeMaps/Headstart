@@ -25,19 +25,19 @@ var list = StateMachine.create({
             // if the papers_force has stopped.
             if(!papers.is("loading")) {
                 d3.select("#sort_container").style("display", "block"); 
-                d3.select( "#papers_list"     ).style("display", "block");
-                d3.select( "#left_arrow"      ).text("\u25B2");
-                d3.select( "#right_arrow"     ).text("\u25B2");
-                d3.select( "#show_hide_label" ).text(headstart.localization[headstart.language].hide_list);
+                d3.select("#papers_list").style("display", "block");
+                d3.select("#left_arrow").text("\u25B2");
+                d3.select("#right_arrow").text("\u25B2");
+                d3.select("#show_hide_label").text(headstart.localization[headstart.language].hide_list);
             }
         },
 
         onhide: function( event, from, to ) {
-            d3.select("#sort_container").style("display", "none"); 
-            d3.select( "#papers_list"     ).style("display", "none");
-            d3.select( "#left_arrow"      ).text("\u25BC");
-            d3.select( "#right_arrow"     ).text("\u25BC");
-            d3.select( "#show_hide_label" ).text(headstart.localization[headstart.language].show_list);
+            d3.select("#sort_container").style("display", "none");
+            d3.select("#papers_list").style("display", "none");
+            d3.select("#left_arrow").text("\u25BC");
+            d3.select("#right_arrow").text("\u25BC");
+            d3.select("#show_hide_label").text(headstart.localization[headstart.language].show_list);
         },
 
         onbeforetoggle: function( event, from, to ) {
@@ -54,100 +54,88 @@ var list = StateMachine.create({
     }
 });
 
-list.drawShowHideContainer = function() { 
-    var list_show_hide_container =
-        d3.select ( "#papers_list_container" )
-            .style ( "left",  headstart.max_chart_size+10 + "px" )
-            .style ( "width", headstart.list_width + "px")
-            .style ( "height", headstart.list_height + "px" )
-           .append( "div" )
-            .attr  ( "id", "show_hide_container" )
-            .style ( "width", headstart.list_width-10 + "px" )
-            .style ( "height", headstart.list_height + "px" );
-
-    return list_show_hide_container;
-}
-
 list.drawList = function() {
+    // Load list template
+    compiledTemplate = Handlebars.getTemplate(headstart.templ_path, 'list_explorer');
+    list_explorer = compiledTemplate({show_list:headstart.localization[headstart.language].show_list});
+    $("#list_explorer").append(list_explorer);
 
-    var list_show_hide_container = this.drawShowHideContainer();
-    var show_hide = list_show_hide_container.append("div").attr("id", "show_hide");
-    this.drawLeftArrow(show_hide);
-    this.drawLabel(show_hide);
-    this.drawRightArrow(show_hide);
+    // Set localized values
+    $("#filter_input")
+    .attr("placeholder", headstart.localization[headstart.language].search_placeholder)
+    .on("input", function(event){
+        if($("#filter_input").val() != "") {
+          $("#searchclear").show()
+        } else {
+          $("#searchclear").hide()
+        }
+        debounce(filterList(event.target.value.split(" ")), 700)
+      })
 
-    list_show_hide_container.append("div")
-      .attr("id", "input_container")
-      .append("input")
-      .attr("type", "text")
-      .attr("placeholder", headstart.localization[headstart.language].search_placeholder)
-      // .attr("oninput", "debounce(filterList(event),4000)")
-      .attr("size", 15)
-    list_show_hide_container.append("div")
-      .attr("id", "sort_container")
-      .style("display", "none");
+    $("#searchclear").click(function(event) {
+        $("#filter_input").val('');
+        $("#searchclear").hide();
+        debounce(filterList([""]), 700);
+    });
 
-    $("#input_container>input").keyup(function(event){
-        debounce(filterList(event), 700)})
-
-    var papers_list = list_show_hide_container
-                            .append("div")
-                            .attr("id", "papers_list")
-                            .style("height", headstart.max_chart_size - headstart.list_height_correction + "px")
-                            .style("width", headstart.list_width - 10 + "px")
-                            .style("display", "none")
-
-
-    var container = d3.select("#sort_container")
-                      .append("ul")
-                      .attr("class", "filter");
-
-    addSortOption = function(sort_option, selected) {
-      container.append("li")
-        .append("a")
-        .attr("class", function() { return selected?("selected"):("")})
-        .attr("id", "sort_" + sort_option)
-        .on("click", function() {
-          headstart.mediator.publish("list_sort_click", sort_option);
-          headstart.mediator.publish("record_action","none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
-          // headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
-          // sortBy(sort_option);
-        }).text(headstart.localization[headstart.language][sort_option]);
+    // Add sort options
+    var container = d3.select("#sort_container>ul")
+    var first_element = true;
+    for (option in headstart.sort_options) {
+      if (first_element) {
+        addSortOption(container, headstart.sort_options[option], true);
+        first_element = false;
+      } else {
+        addSortOption(container, headstart.sort_options[option], false);
+      }
     }
 
-    addSortOption(headstart.sort_options[0], true);
-
-      var counter = 0;
-
-      for (option in headstart.sort_options) {
-        if (counter === 0) {
-          counter++;
-          continue;
-        }
-        addSortOption(headstart.sort_options[option], false);
-      }
-
-
-
+    this.fit_list_height();
     this.papers_list = d3.select("#papers_list");
 }
 
-function sortBy(field) {
-  d3.selectAll("#list_holder")
-    .sort(function(a,b) {
-      if (field == "year") {
-        return stringCompare(b[field], a[field]);
-      } else {
-        return stringCompare(a[field], b[field]);
-      }
-    })
-
-    d3.selectAll(".selected")
-      .attr("class", "")
-
-    d3.select("#sort_" + field)
-      .attr("class", "selected");
+list.fit_list_height = function() {
+  var paper_list_avail_height = $("#subdiscipline_title").outerHeight(true) + $("#headstart-chart").outerHeight(true) - $("#explorer_header").height() - 10;
+  $("#papers_list").height(paper_list_avail_height);
 }
+
+addSortOption = function(parent, sort_option, selected) {
+  if (selected) {
+    checked_val = "checked"
+    active_val = "active"
+  } else {
+    checked_val = ""
+    active_val = ""
+  }
+
+  compiledTemplate = Handlebars.getTemplate(headstart.templ_path, 'select_button');
+  button = compiledTemplate({
+      id: "sort_" + sort_option,
+      checked: checked_val,
+      label: headstart.localization[headstart.language][sort_option],
+      active: active_val
+  });
+  $("#sort-buttons").append(button);
+
+
+  // Event listeners
+  $("#sort_" + sort_option).change(function(event) {
+      sortBy(sort_option);
+      headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
+    })
+}
+
+function sortBy(field) {
+    d3.selectAll("#list_holder")
+        .sort(function(a, b) {
+            if (field == "year") {
+                return stringCompare(b[field], a[field]);
+            } else {
+                return stringCompare(a[field], b[field]);
+            }
+        })
+}
+
 
 function stringCompare(a, b) {
   if(typeof a == 'undefined' || typeof b == 'undefined'){
@@ -164,31 +152,21 @@ function stringCompare(a, b) {
   }
 }
 
-
 list.initListMouseListeners = function() {
-  d3.selectAll( "#show_hide" ).on( "mouseover", function (d) {
-    list.colorButton( this, '#666', '#EEE' );
-  }).on( "mouseout", function (d) {
-    list.colorButton( this, '#EEE', '#000' );
-  }).on( "click", function (d) {
-    headstart.mediator.publish("list_toggle")
-    // list.toggle();
-  });
+    $("#show_hide_button")
+        .on("mouseover", function() {
+            $("#show_hide_button").addClass("hover")
+        })
+        .on("mouseout", function() {
+            $("#show_hide_button").removeClass("hover")
+        })
+        .on("click", function(event) {
+            headstart.mediator.publish("list_toggle")
+        });
 
-  d3.selectAll( "#list_title" ).on( "click", function(d) {
-    headstart.mediator.publish("list_title_clickable", d);
-    // list.makeTitleClickable(d);
-  });
-}
-
-// sets text and background color for a given button
-list.colorButton = function( button, background_color, text_color ) {
-    d3.select( "#show_hide_container" ).style("background-color", background_color );
-    // IE workaround
-    d3.select( "#left_arrow" ).style("background-color", background_color );
-    d3.select( "#right_arrow").style("background-color", background_color );
-    d3.select( "#show_hide_label_container" ).style("background-color", background_color );
-    d3.select(button).style( "color", text_color );
+    d3.selectAll("#list_title").on("click", function(d) {
+        headstart.mediator.publish("list_title_clickable", d);
+    });
 }
 
 list.getPaperNodes = function(list_data) {
@@ -272,18 +250,21 @@ list.populateMetaData = function(nodes) {
     .html(function (d) { return d.published_in + " (" + d.year + ")" });
 }
 
-filterList = function(event) {
+filterList = function(search_words) {
+  var search_words = search_words.map(function(e) {
+      e = e.trim().toLowerCase();
+      return e;
+  });
+
   clear_highlights();
-  var search_words = event.target.value.split(" ");
   search_words.forEach(function(str){
     highlight(str);
   });
   
-
   var filtered_data = d3.selectAll("#list_holder, .paper")
   var current_circle = d3.select(headstart.current_zoom_node);
   
-    var data_circle = filtered_data
+  var data_circle = filtered_data
     .filter(function (d) {
       if (headstart.is_zoomed === true) {
         if (headstart.use_area_uri && headstart.current_enlarged_paper == null)
@@ -297,7 +278,7 @@ filterList = function(event) {
       }
     })
 
-  if (event.target.value === "") {
+  if (search_words.length == 0) {
     data_circle.style("display", "block")
 
       headstart.bubbles[headstart.current_file_number].data.forEach(function (d) {
@@ -308,10 +289,6 @@ filterList = function(event) {
   }
 
   data_circle.style("display", "inline")
-
-  var searchtext = event.target.value;
-  var searchtext_processed = searchtext.trim().toLowerCase();
-  var search_words = searchtext_processed.split(" ");
   
   headstart.mediator.publish("record_action","none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
   // headstart.recordAction("none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
@@ -529,13 +506,14 @@ list.reset = function() {
 list.loadAndAppendImage = function(image_src, page_number) {
 
     if (this.testImage(image_src)) {
-        popup.paper_frame.select("#preview")
+        var paper_frame = d3.select( "#paper_frame" );
+        paper_frame.select("#preview")
            .append("div")
             .attr("id", "preview_page_index")
             .style("width", headstart.preview_image_width + "px")
             .html("Page " + page_number)
 
-        popup.paper_frame.select("#preview")
+        paper_frame.select("#preview")
            .append("img")
             .attr("id", "preview_page")
             .attr("class", "lazy")
@@ -549,21 +527,30 @@ list.loadAndAppendImage = function(image_src, page_number) {
     return true;
 }
 
-list.populateOverlay = function (d) {
-    
+list.writePopup = function(pdf_url) {
+    $("#pdf_iframe").attr('src', 'about:blank');
+    setTimeout(function() {
+        $("#pdf_iframe")
+            .attr("src", function() {
+                return pdf_url + "#view=FitH";
+            });
+    }, 100);
+
+    $("#spinner").hide();
+    $("#pdf_iframe").show();
+}
+
+
+list.populateOverlay = function(d) {
+
     var this_d = d;
-    
-	headstart.mediator.publish("popup_toggle");
-	
-	$("#intro").hide();
-    
-    if(headstart.preview_type == "image") {
+    if (headstart.preview_type == "image") {
         list.loadAndAppendImage(headstart.images_path + d.id + "/page_1.png", 1);
 
-        var images_finished = false
-        , counter = 2;
+        var images_finished = false,
+            counter = 2;
 
-        while(!images_finished) {
+        while (!images_finished) {
             var image_src = headstart.images_path + d.id + "/page_" + counter + ".png";
 
             if (!list.loadAndAppendImage(image_src, counter)) {
@@ -573,40 +560,28 @@ list.populateOverlay = function (d) {
             counter++;
         }
     } else if (headstart.preview_type == "pdf") {
-        
-        var writePopup = function(pdf_url) {
-            popup.paper_frame.select("#preview")
-           .append("iframe")
-           .attr("width", 781 - 4)
-           .attr("height", 460 - 75)
-           .attr("src", function() { 
-               return pdf_url;
-            })
-        }
-        
         var filename = this_d.id + ".PDF";
         var local_filename = filename.replace("/", "__");
-        
         var full_pdf_url = headstart.images_path + local_filename;
-        
         if (this.testImage(full_pdf_url)) {
-            writePopup(full_pdf_url)
+            list.writePopup(full_pdf_url)
+            $("#iframe_modal").modal()
         } else {
-            popup.paper_frame.select("#preview").append("img")
-                    .attr("src", headstart.images_path + "ajax-loader.gif")
-                    .style("margin", "0 auto")
-                    .style("display", "block")
-            
+            $("#spinner").show();
+            $("#pdf_iframe").hide();
+            $("#iframe_modal").modal()
+
             var journal = this_d.published_in.toLowerCase();
             var url = "http://journals.plos.org/" + headstart.plos_journals_to_shortcodes[journal] + "/article/asset?id=" + filename;
 
-            $.getJSON(headstart.service_path + "getPDF.php?url=" + url + "&filename=" + local_filename, function (local_pdf) {
-                d3.select("#preview img").remove();
-                writePopup(headstart.images_path + local_pdf);
+            $.getJSON(headstart.service_path + "getPDF.php?url=" + url + "&filename=" + local_filename, function(local_pdf) {
+                list.writePopup(full_pdf_url);
             })
         }
     }
 }
+
+
 
 list.setImageForListHolder = function(d) {
   list.papers_list = d3.select("#papers_list");
@@ -637,6 +612,9 @@ list.setImageForListHolder = function(d) {
       })
       .append("div")
         .attr("id", "transbox")
+        // .attr("data-toggle","modal")
+        // .attr("data-type",headstart.images_path+d.id +".PDF".replace("/", "__"))
+        // .attr("data-target","#info_modal")
         .style("width", headstart.preview_image_width_list + "px")
         .style("height", headstart.preview_image_height_list+ "px")
         .html("Click here to open preview")
@@ -689,31 +667,6 @@ list.testImage = function(image_src) {
     } finally {
       return http.status != 404;
     }
-}
-
-// just a wrapper
-list.drawLeftArrow = function(element) {
-    element.append("div").attr("id", "left_arrow")
-           .style("width", "30px")
-           .text("\u25BC");
-}
-
-// just a wrapper
-list.drawRightArrow = function(element) {
-  element.append("div")
-         .attr("id", "right_arrow")
-         .style("width", "30px")
-         .text("\u25BC");
-}
-
-// just a wrapper
-list.drawLabel = function(element) {
-  element.append("div")
-         .attr("id", "show_hide_label_container")
-         .style("width", headstart.list_width - 70 + "px")
-         .append("strong")
-         .attr("id", "show_hide_label")
-         .text(headstart.localization[headstart.language].show_list);
 }
 
 function notSureifNeeded() {
