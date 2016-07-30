@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Headstart from "./js/vis"
+import { Headstart } from "./js/vis";
 
 $(function() {
     var myHeadstart = new Headstart(

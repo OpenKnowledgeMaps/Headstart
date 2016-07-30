@@ -3,7 +3,7 @@
 import $ from 'jquery';
 import StateMachine from 'javascript-state-machine';
 
-export function HeadstartFSM(host, path, tag, files, options) {
+export var HeadstartFSM = function(host, path, tag, files, options) {
 
   initVar = function(variable, default_value) {
     return typeof variable !== 'undefined' ? variable : default_value;

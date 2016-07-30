@@ -1,12 +1,12 @@
 import $ from 'jquery';
 import Handlebars from 'handlebars';
 
-import HeadstartFSM from "./headstart"
+import { HeadstartFSM } from "./headstart"
 
 var headstart = null;
 var namespace = "headstart";
 
-export function Headstart(host, path, tag, files, options) {
+export var Headstart = function(host, path, tag, files, options) {
 
   viz = $("#"+tag);
 
