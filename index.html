@@ -3,76 +3,15 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+
     <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="vis/styles/style.css">
-        
-    <script type="text/javascript" src="./node_modules/jquery/dist/jquery.min.js"></script>        
-    <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="node_modules/hypher/dist/jquery.hypher.js"></script>
-    <script type="text/javascript" src="node_modules/jquery-dotdotdot/src/jquery.dotdotdot.js"></script>
-    <script type="text/javascript" src="node_modules/javascript-state-machine/state-machine.js"></script>
-    <script type="text/javascript" src="node_modules/handlebars/dist/handlebars.min.js"></script>
-    <script type="text/javascript" src="node_modules/d3/d3.js"></script>
-    <script type="text/javascript" src="node_modules/mediator-js/mediator.min.js"></script>
-    
-    <script type="text/javascript" src="vis/lib/browser_detect.js"></script>
-    <script type="text/javascript" src="vis/lib/de.js"></script>
-    <script type="text/javascript" src="vis/lib/highlightRegex.min.js"></script>
-    
-    <script type="text/javascript" src="vis/templates/templates.js"></script>
-    <script type="text/javascript" src="vis/js/bubbles.js"></script>
-    <script type="text/javascript" src="vis/js/intro.js"></script>
-    <script type="text/javascript" src="vis/js/popup.js"></script>
-    <script type="text/javascript" src="vis/js/papers.js"></script>
-    <script type="text/javascript" src="vis/js/list.js"></script>
-    <script type="text/javascript" src="vis/js/headstart.js"></script>
-    <script type="text/javascript" src="vis/vis.js"></script>
 
 </head>
 
 <body style="margin:0px; padding:0px">
     <div id="visualization" class="headstart"></div>
-    <script>
-    $(function() {
-        var myHeadstart = new Headstart(
-            "", //host
-            "", //path
-            "visualization", //append to tag
-            [{
-                title: "edu1",
-                file: "vis/data/educational-technology.csv"
-            }, {
-                title: "edu2",
-                file: "vis/data/edu2.csv"
-            }, {
-                title: "edu3",
-                file: "vis/data/edu3.csv"
-            }, {
-                title: "edu4",
-                file: "vis/data/edu4.csv"
-            }, {
-                title: "edu5",
-                file: "vis/data/edu5.csv"
-            }] //data
-            , {
-                title: "Overview of Educational Technology",
-                paper_max_scale: 1,
-                paper_min_scale: 1,
-                bubble_max_scale: 1,
-                bubble_min_scale: 1,
-                input_format: "csv",
-                use_area_uri: false,
-                base_unit: "readers",
-                is_force_areas: false,
-                url_prefix: "http://mendeley.com/catalog/",
-                show_timeline: false,
-                show_dropdown: true,
-                show_intro: false
-            } //options
-        )
-    })
-    </script>
+    <script src="./dist/bundle.js"></script>
 </body>
 
 </html>

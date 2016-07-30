@@ -1,7 +1,12 @@
+import $ from 'jquery';
+import Handlebars from 'handlebars';
+
+import HeadstartFSM from "./headstart"
+
 var headstart = null;
 var namespace = "headstart";
 
-Headstart = function(host, path, tag, files, options) {
+export function Headstart(host, path, tag, files, options) {
 
   viz = $("#"+tag);
 
@@ -26,20 +31,20 @@ Headstart = function(host, path, tag, files, options) {
 
 }
 
-function initVar(variable, default_value) {
+export function initVar(variable, default_value) {
   return typeof variable !== 'undefined' ? variable : default_value;
 }
 
 // ------------------------------------------------------------
 // functions which are not being called at the moment, but might
 // mausrad -> zoomen
-function redraw() {
+export function redraw() {
   chart.attr("transform",
           "translate(" + d3.event.translate + ")"
           + " scale(" + d3.event.scale + ")");
 }
 
-function redraw_drag(x, y, dx, dy) {
+export function redraw_drag(x, y, dx, dy) {
   console.log("redraw_drag");
   chart.attr("transform",
           "translate(" + dx + ", " + dy + ")");

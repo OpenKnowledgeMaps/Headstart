@@ -1,15 +1,17 @@
 // Headstart
 // filename: headstart.js
+import $ from 'jquery';
+import StateMachine from 'javascript-state-machine';
 
-HeadstartFSM = function(host, path, tag, files, options) {
-  
+export function HeadstartFSM(host, path, tag, files, options) {
+
   initVar = function(variable, default_value) {
     return typeof variable !== 'undefined' ? variable : default_value;
   }
 
   // a container for variables
   this.VERSION = 2.5;
-  
+
   this.host = host;
   this.path = path;
   this.tag = tag;
@@ -72,7 +74,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.preview_image_height = 984;
   this.abstract_small = 250;
   this.abstract_large = null;
-  
+
   // transition
   this.transition_duration = 750;
   this.zoomout_transition = 750;
@@ -90,7 +92,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.is_zoomed = false;
   this.zoom_finished = false;
 
-  // show 
+  // show
   this.show_timeline = initVar(options.show_timeline, true);
   this.show_dropdown = initVar(options.show_dropdown, true);
   this.show_intro = initVar(options.show_intro, false);
@@ -106,7 +108,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.user_id = initVar(options.user_id, 0);
   this.max_recommendations = initVar(options.max_recommendations, 10);
   this.files = files;
-    
+
   // paths
   this.service_path = initVar(options.service_path, this.host + this.path + "server/services/");
   this.images_path = initVar(options.images_path, this.host + this.path + "vis/images/");
@@ -118,7 +120,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.url_prefix = initVar(options.url_prefix, null)
   this.input_format = initVar(options.input_format, "csv");
   this.base_unit = initVar(options.base_unit, "readers")
-  
+
   // application specific variables
   this.language = initVar(options.language, "eng");
   this.localization = {
@@ -182,13 +184,13 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.mediator_states = {
     popup_visible:false
   }
-  
+
   if (typeof String.prototype.startsWith != 'function') {
     String.prototype.startsWith = function (str){
       return this.slice(0, str.length) == str;
     };
   }
-  
+
   if (typeof String.prototype.escapeSpecialChars != 'function') {
     String.prototype.escapeSpecialChars = function() {
       return this.replace(/[\\]/g, '\\\\')
@@ -199,10 +201,10 @@ HeadstartFSM = function(host, path, tag, files, options) {
         .replace(/[\r]/g, '\\r')
         .replace(/[\t]/g, '\\t')
         .replace(/[\"]/g, '\\"')
-        .replace(/\\'/g, "\\'"); 
+        .replace(/\\'/g, "\\'");
        };
      }
-  
+
 };
 
 HeadstartFSM.prototype = {
@@ -216,12 +218,12 @@ HeadstartFSM.prototype = {
                     + " was successfully tested with the latest versions of Chrome, Safari, Opera and Firefox.");
     }
   },
-  
+
   //TODO: load scripts here
   loadScripts: function() {
-  
+
   },
-   
+
   // simple check that all required libraries are present at the moment:
   // - d3
   // - jQuery
@@ -245,7 +247,7 @@ HeadstartFSM.prototype = {
   },
 
   recordAction: function(id, action, user, type, timestamp, additional_params, post_data) {
-    
+
     if(!this.is_evaluation)
       return;
 
@@ -258,7 +260,7 @@ HeadstartFSM.prototype = {
     }
 
     $.ajax({
-      url: this.service_path + "/writeActionToLog.php" + '?user=' + user 
+      url: this.service_path + "/writeActionToLog.php" + '?user=' + user
               + '&action=' + action
               + '&item=' + escape(id)
               + '&type=' + type
@@ -273,13 +275,13 @@ HeadstartFSM.prototype = {
       }
     });
   },
-     
+
   resetBubbles: function () {
     if(this.bubbles) {
       delete this.bubbles;
       this.bubbles = {};
     }
-    
+
     $.each(this.files, function(index, elem) {
       var bubble = new BubblesFSM();
       headstart.registerBubbles(bubble);
@@ -366,7 +368,7 @@ HeadstartFSM.prototype = {
       else
           return this.min_height;
   },
-  
+
   availableSizeIsBiggerThanMinSize: function() {
     if ( this.available_width > this.min_width && this.available_height > this.min_height )
       return true;
@@ -459,12 +461,12 @@ HeadstartFSM.prototype = {
   },
 
   initMouseClickListeners: function() {
-    var self = this;  
-    
+    var self = this;
+
     $("#chart-svg").on( "click", function() {
       headstart.bubbles[headstart.current_file_number].zoomout();
     });
-    
+
     $("#" + this.tag).bind('click', function(event) {
         if(event.target.id === self.tag) {
             headstart.bubbles[headstart.current_file_number].zoomout();
@@ -506,7 +508,7 @@ HeadstartFSM.prototype = {
     if (headstart.show_infolink) {
         infolink =  ' (<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>)'
         $("#subdiscipline_title h4").append(infolink);
-        $("#infolink").text(headstart.localization[headstart.language].intro_label);  
+        $("#infolink").text(headstart.localization[headstart.language].intro_label);
     }
 
     if (headstart.show_timeline) {
@@ -641,14 +643,14 @@ HeadstartFSM.prototype = {
     }
     $(".tl-title").css("width", this.current_vis_size);
   },
-  
+
   createRestUrl: function () {
-      
+
       var url = this.service_path + "getBookmarks.php?user=" + this.user_id;
-      
+
       //sometimes the conference id array is not recognized
       var conference_id = eval(this.conference_id);
-      
+
       if($.isArray(conference_id)) {
           conference_id.forEach(function (val) {
             url += "&conference[]=" + val;
@@ -656,11 +658,11 @@ HeadstartFSM.prototype = {
       } else {
           url += "&conference=" + this.conference_id;
       }
-      
+
       url += "&max_recommendations=" + this.max_recommendations;
-      
+
       url += "&jsoncallback=?";
-      
+
       return url;
   },
 
@@ -677,7 +679,7 @@ HeadstartFSM.prototype = {
       }
 
       this.initScales();
-    
+
       this.checkBrowserVersions();
       this.checkThatRequiredLibsArePresent();
 
@@ -745,18 +747,18 @@ HeadstartFSM.prototype = {
   //    chart
   ontotimeline: function( event, from, to ){
     window.clearInterval(checkPapers);
-    
+
     this.force_areas.stop();
     this.force_papers.stop();
-   
+
     this.resetBubbles();
-   
+
     // clear the canvas
     $("#chart_canvas").empty();
 
     // clear the list list
     $("#list_explorer").empty();
-    
+
     this.bubbles[headstart.current_file_number].current = "x";
     // popup.current  = "hidden";
     papers.current = "none";
@@ -769,26 +771,26 @@ HeadstartFSM.prototype = {
     // need a bigger width for the timeline view
     s = this.timeline_size * Object.keys(this.bubbles).length;
     this.svg.attr("width", s);
-    this.svg.attr("height", this.timeline_size);  
+    this.svg.attr("height", this.timeline_size);
     this.svg.attr("viewBox", "0 0 " + s + " " + this.timeline_size)
 
     // d3.select("#chart_canvas").attr("width", s)
-    //                           .attr("height", this.timeline_size);  
+    //                           .attr("height", this.timeline_size);
     // this.svg.attr("preserveAspectRatio", "xMidYMid meet");
 
     d3.select("#headstart-chart").attr("overflow-x", "scroll");
-    
+
     $("#main").css("overflow", "auto");
 
     // load bubbles in sync
-    
+
     $.each(this.bubbles, function (index, elem) {
-   
-        
+
+
       var setupTimelineVisualization = function (csv) {
         elem.start( csv )
       }
-      
+
       switch(headstart.input_format) {
             case "csv":
                 d3.csv(elem.file, setupTimelineVisualization);
@@ -801,14 +803,14 @@ HeadstartFSM.prototype = {
             default:
                     break;
         }
-      
+
     })
 
     this.drawGrid();
     this.drawGridTitles();
     this.initMouseListeners();
   },
-  
+
   ontofile: function(event, from, to, file) {
 
       this.force_areas.stop();
@@ -869,7 +871,7 @@ HeadstartFSM.prototype = {
       }
   },
 
-  
+
   startVisualization: function(hs, bubbles, csv, adaptive_data, popup_start) {
     bubbles.start( csv, adaptive_data );
 
@@ -885,7 +887,7 @@ HeadstartFSM.prototype = {
 
     bubbles.initMouseListeners();
     list.start( bubbles );
-    
+
     hs.checkForcePapers();
 
     if (headstart.show_intro) {
@@ -1043,7 +1045,7 @@ StateMachine.create({
 
 });
 
-function getRealHeight(element){
+export function getRealHeight(element){
     var height=0;
     if (element.children().length>0){
         var temp = $('<div></div>');
