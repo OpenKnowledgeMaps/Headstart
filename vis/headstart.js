@@ -13,6 +13,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.host = host;
   this.path = path;
   this.tag = tag;
+  this.viz = $("#" + tag);
   this.templ_path = host + path + "vis/templates/";
 
   // map
@@ -275,14 +276,16 @@ HeadstartFSM.prototype = {
   },
      
   resetBubbles: function () {
+    self = this;
+
     if(this.bubbles) {
       delete this.bubbles;
       this.bubbles = {};
     }
-    
+
     $.each(this.files, function(index, elem) {
       var bubble = new BubblesFSM();
-      headstart.registerBubbles(bubble);
+      self.registerBubbles(bubble);
       bubble.title = elem.title;
       bubble.file = elem.file;
     })
@@ -771,11 +774,11 @@ HeadstartFSM.prototype = {
       list.current = "none";
 
       // change heading to give an option to get back to normal view
-      viz.empty()
+      this.viz.empty()
 
       var compiledTemplate = Handlebars.getTemplate(this.templ_path, "timeline");
       var timeline = compiledTemplate();
-      viz.append(timeline);
+      this.viz.append(timeline);
 
       this.drawTitle()
       this.drawGridTitles();
@@ -832,7 +835,6 @@ HeadstartFSM.prototype = {
 
       // clear the canvas
       $("#chart_canvas").remove();
-      this.drawChartCanvas()
 
       // clear the list list
       $("#list_explorer").empty();
