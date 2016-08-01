@@ -28,18 +28,18 @@ Headstart = function(host, path, tag, files, options) {
      ,{source: "headstart.js", final: true}
    ]
 
-  viz = $("#"+tag);
+  var viz = $("#"+tag);
 
   var compiledTemplate = Handlebars.getTemplate(templ_path, "headstart");
   var html = compiledTemplate();
   viz.append(html);
 
-  compiledTemplate = Handlebars.getTemplate(templ_path, "info_modal");
-  info_modal = compiledTemplate();
+  var compiledTemplate = Handlebars.getTemplate(templ_path, "info_modal");
+  var info_modal = compiledTemplate();
   viz.append(info_modal);
 
-  compiledTemplate = Handlebars.getTemplate(templ_path, "iframe_modal");
-  iframe_modal = compiledTemplate();
+  var compiledTemplate = Handlebars.getTemplate(templ_path, "iframe_modal");
+  var iframe_modal = compiledTemplate();
   viz.append(iframe_modal);
 
   addScript = function(source, tag, async) {
