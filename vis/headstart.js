@@ -289,8 +289,9 @@ HeadstartFSM.prototype = {
   },
 
   calcChartSize: function() {
-      var parent_height = getRealHeight($("#"+this.tag));
+      var parent_height = getRealHeight($("#" + this.tag));
       var subtitle_heigth = $("#subdiscipline_title").outerHeight(true);
+
       if (parent_height == 0) {
           this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_heigth;
       } else {
@@ -299,7 +300,13 @@ HeadstartFSM.prototype = {
 
       this.available_height = this.available_height - 1;
 
-      this.available_width = $("#" + this.tag).width() - $("#list_explorer").width();
+      if (this.is("timeline")) {
+          var timeline_height = $(".tl-title").outerHeight(true);
+          this.available_height =  this.available_height - timeline_height;
+          this.available_width = $("#" + this.tag).width()
+      } else {
+          this.available_width = $("#" + this.tag).width() - $("#list_explorer").width(); 
+      }
 
       if (this.availableSizeIsBiggerThanMinSize()) {
           if (this.available_width >= this.available_height) {
@@ -388,16 +395,25 @@ HeadstartFSM.prototype = {
 
   // Draw basic SVG canvas
   // NOTE attribute width addition by number of elements
-  drawSvg: function() {
+  drawSvg: function(update = false) {
       this.svg = d3.select("#chart-svg");
 
-      this.svg.attr("height", this.current_vis_size + "px")
-              // .attr("width", this.current_vis_size + "px")
+      if (this.is("timeline")) {
+          s = this.current_vis_size * Object.keys(this.bubbles).length;
+          this.svg.attr("width", s)
+                  .attr("height", this.current_vis_size);
+          if (update === false) {
+            this.svg.attr("viewBox", "0 0 " + s + " " + this.current_vis_size)
+          }
+      } else {
+          this.svg.attr("height", this.current_vis_size + "px")
               .attr("width", "100%")
-              .attr("viewBox", "0 0 " + this.current_vis_size + " " + this.current_vis_size)
               .attr("preserveAspectRatio", "xMidYMid meet");
+          if (update === false) {
+            this.svg.attr("viewBox", "0 0 " + this.current_vis_size + " " + this.current_vis_size);
+          }
+      }
   },
-
 
   drawChartCanvas: function() {
 
@@ -416,15 +432,8 @@ HeadstartFSM.prototype = {
   initEventListeners: function() {
       self = this;
       d3.select(window).on("resize", function() {
-          self.calcChartSize()
-
-          // d3.select("#chart-svg").attr("width", self.current_vis_size + "px");
-          d3.select("#chart-svg").attr("width", "100%");
-          d3.select("#chart-svg").attr("height", self.current_vis_size + "px");
-          // d3.select("#chart-svg").attr("viewBox", "0 0 " + self.current_vis_size + " " + self.current_vis_size)
-          // d3.select("#chart_canvas").attr("width", self.current_vis_size + "px");
-          // d3.select("#chart_canvas").attr("height", self.current_vis_size + "px");
-
+          self.calcChartSize();
+          self.drawSvg(true);
           list.fit_list_height();
       });
 
@@ -632,14 +641,18 @@ HeadstartFSM.prototype = {
     };
   },
 
-  drawGridTitles: function() {
-    $("#headstart-chart").append('<div id="tl-titles"></div>');
-    for (var i = 1; i <= this.bubblesSize(); i++) {
-      $("#tl-titles").append('<div class="tl-title">' +
-          this.bubbles[i].title
-          + '</div>');
-    }
-    $(".tl-title").css("width", this.current_vis_size);
+  drawGridTitles: function(update = false) {
+      if (update === true) {
+          $("#tl-titles").width(this.current_vis_size * Object.keys(this.bubbles).length);
+          $(".tl-title").css("width", this.current_vis_size);
+      } else {
+          for (var i = 1; i <= this.bubblesSize(); i++) {
+              $("#tl-titles").append(
+                  '<div class="tl-title"><h3>' + this.bubbles[i].title + '</h3></div>');
+          }
+          $("#tl-titles").width(this.current_vis_size * Object.keys(this.bubbles).length);
+          $(".tl-title").css("width", this.current_vis_size)
+      }
   },
   
   createRestUrl: function () {
@@ -670,11 +683,7 @@ HeadstartFSM.prototype = {
       this.init_mediator();
       this.loadScripts();
 
-      if (this.is("timeline")) {
-          this.current_vis_size = this.timeline_size;
-      } else {
-          this.calcChartSize();
-      }
+      this.calcChartSize();
 
       this.initScales();
     
@@ -743,71 +752,76 @@ HeadstartFSM.prototype = {
   //    - the canvas
   // 2. rendering of new elements, on a bigger
   //    chart
-  ontotimeline: function( event, from, to ){
-    window.clearInterval(checkPapers);
-    
-    this.force_areas.stop();
-    this.force_papers.stop();
-   
-    this.resetBubbles();
-   
-    // clear the canvas
-    $("#chart_canvas").empty();
+  ontotimeline: function(event, from, to) {
+      window.clearInterval(checkPapers);
 
-    // clear the list list
-    $("#list_explorer").empty();
-    
-    this.bubbles[headstart.current_file_number].current = "x";
-    // popup.current  = "hidden";
-    papers.current = "none";
-    list.current   = "none";
+      this.force_areas.stop();
+      this.force_papers.stop();
 
-    // change heading to give an option to get back to normal view
-    this.drawNormalViewLink();
-    this.initScales();
+      this.resetBubbles();
 
-    // need a bigger width for the timeline view
-    s = this.timeline_size * Object.keys(this.bubbles).length;
-    this.svg.attr("width", s);
-    this.svg.attr("height", this.timeline_size);  
-    this.svg.attr("viewBox", "0 0 " + s + " " + this.timeline_size)
+      // clear the canvas
+      $("#chart_canvas").empty();
 
-    // d3.select("#chart_canvas").attr("width", s)
-    //                           .attr("height", this.timeline_size);  
-    // this.svg.attr("preserveAspectRatio", "xMidYMid meet");
+      // clear the list list
+      $("#list_explorer").empty();
 
-    d3.select("#headstart-chart").attr("overflow-x", "scroll");
-    
-    $("#main").css("overflow", "auto");
+      this.bubbles[headstart.current_file_number].current = "x";
+      papers.current = "none";
+      list.current = "none";
 
-    // load bubbles in sync
-    
-    $.each(this.bubbles, function (index, elem) {
-   
-        
-      var setupTimelineVisualization = function (csv) {
-        elem.start( csv )
-      }
+      // change heading to give an option to get back to normal view
+      viz.empty()
+
+      var compiledTemplate = Handlebars.getTemplate(this.templ_path, "timeline");
+      var timeline = compiledTemplate();
+      viz.append(timeline);
+
+      this.drawTitle()
+      this.drawGridTitles();
+
+      this.drawNormalViewLink();
+      this.initScales();
+
+      this.calcChartSize();
+      this.setScaleRanges();
+      this.drawSvg();
+      this.drawChartCanvas()
       
-      switch(headstart.input_format) {
-            case "csv":
-                d3.csv(elem.file, setupTimelineVisualization);
-                break;
+      this.drawGridTitles(true);
 
-            case "json":
-                d3.json(headstart.service_path + "getLatestRevision.php?vis_id=" + elem.file, setupTimelineVisualization);
-                break;
 
-            default:
-                    break;
-        }
-      
-    })
+      d3.select("#headstart-chart").attr("overflow-x", "scroll");
 
-    this.drawGrid();
-    this.drawGridTitles();
-    this.initMouseListeners();
+      $("#main").css("overflow", "auto");
+
+      var hs = this;
+
+      // load bubbles in sync
+
+      $.each(this.bubbles, function(index, elem) {
+          var setupTimelineVisualization = function(csv) {
+              elem.start(csv)
+          }
+
+          switch (headstart.input_format) {
+              case "csv":
+                  d3.csv(elem.file, setupTimelineVisualization);
+                  break;
+
+              case "json":
+                  d3.json(headstart.service_path + "getLatestRevision.php?vis_id=" + elem.file, setupTimelineVisualization);
+                  break;
+
+              default:
+                  break;
+          }
+      });
+
+      this.drawGrid();
+      this.initMouseListeners();
   },
+
   
   ontofile: function(event, from, to, file) {
 
@@ -818,6 +832,7 @@ HeadstartFSM.prototype = {
 
       // clear the canvas
       $("#chart_canvas").remove();
+      this.drawChartCanvas()
 
       // clear the list list
       $("#list_explorer").empty();
@@ -903,7 +918,7 @@ HeadstartFSM.prototype = {
       $("#timelineview").off("click");
 
       // refreshes page
-      var link = ' <a href="javascript:window.location.reload()">Normal View</a>';
+      var link = ' <a href="" id="normal_link">Normal View</a>';
       $("#timelineview").html(link);
   },
 
