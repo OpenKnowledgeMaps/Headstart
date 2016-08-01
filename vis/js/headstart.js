@@ -2,10 +2,12 @@
 // filename: headstart.js
 import $ from 'jquery';
 import StateMachine from 'javascript-state-machine';
+import Mediator from 'mediator-js';
+
 
 export var HeadstartFSM = function(host, path, tag, files, options) {
 
-  initVar = function(variable, default_value) {
+  let initVar = function(variable, default_value) {
     return typeof variable !== 'undefined' ? variable : default_value;
   }
 
@@ -205,7 +207,7 @@ export var HeadstartFSM = function(host, path, tag, files, options) {
        };
      }
 
-};
+}; // end HeadstartFSM constructor
 
 HeadstartFSM.prototype = {
 

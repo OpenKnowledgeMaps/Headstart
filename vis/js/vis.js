@@ -1,25 +1,28 @@
 import $ from 'jquery';
 import Handlebars from 'handlebars';
 
-import { HeadstartFSM } from "./headstart"
+import { HeadstartFSM } from "./headstart";
 
-var headstart = null;
-var namespace = "headstart";
+let namespace = "headstart";
 
 export var Headstart = function(host, path, tag, files, options) {
 
-  viz = $("#"+tag);
+  let vis_directory = "vis/";
+  let lib_directory = "lib/";
+  let templ_path = host + path + vis_directory + "templates/";
+
+  let viz = $("#"+tag);
 
   var compiledTemplate = Handlebars.getTemplate(templ_path, "headstart");
   var html = compiledTemplate();
   viz.append(html);
 
   compiledTemplate = Handlebars.getTemplate(templ_path, "info_modal");
-  info_modal = compiledTemplate();
+  let info_modal = compiledTemplate();
   viz.append(info_modal);
 
   compiledTemplate = Handlebars.getTemplate(templ_path, "iframe_modal");
-  iframe_modal = compiledTemplate();
+  let iframe_modal = compiledTemplate();
   viz.append(iframe_modal);
 
 
