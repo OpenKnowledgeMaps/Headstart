@@ -3,7 +3,7 @@
 
 /* ################ Chart ############### */
 
-div#headstart-chart {
+#headstart-chart {
     /*position: absolute;*/
     font-family: Helvetica;
     /*margin-top: 6px;*/
@@ -34,59 +34,4 @@ line {
 
 text {
   font: 10px sans-serif;
-}
-
-.framed {
-    stroke: #e55137;
-    stroke-width: 3px;
-}
-
-.framed_recommended {
-    stroke: yellow;
-    stroke-width: 3px;
-}
-
-.framed_bookmarked {
-    stroke: green;
-    stroke-width: 2px;
-}
-
-.recommended {
-    font-size: 10pt;
-    font-weight: bold;
-    color: black;
-    border: 1px yellow solid;
-    background-color: yellow;
-}
-
-.bookmarked {
-    font-size: 10pt;
-    color: black;
-    border: 1px green solid;
-}
-
-.tobookmark {
-    font-size: 10pt;
-    font-weight: bold;
-    color: white;
-    border: 1px green solid;
-    background-color: green;
-}
-
-
-#area_title {
-    margin: 0;
-    padding: 0;
-    h2 {
-        font-family: 'Helvetica', sans-serif;
-        font-size: 14px;
-        font-weight: bold;
-        margin-top: 11px;
-        margin-bottom: 11px;
-        padding: 0;
-        text-align: center;
-        text-transform: none;
-        color: black;
-        background-color: transparent;
-    }
 }

@@ -76,3 +76,40 @@
         color: black;
     }
 }
+
+.framed {
+    stroke: #e55137;
+    stroke-width: 3px;
+}
+
+.framed_recommended {
+    stroke: yellow;
+    stroke-width: 3px;
+}
+
+.framed_bookmarked {
+    stroke: green;
+    stroke-width: 2px;
+}
+
+.recommended {
+    font-size: 10pt;
+    font-weight: bold;
+    color: black;
+    border: 1px yellow solid;
+    background-color: yellow;
+}
+
+.bookmarked {
+    font-size: 10pt;
+    color: black;
+    border: 1px green solid;
+}
+
+.tobookmark {
+    font-size: 10pt;
+    font-weight: bold;
+    color: white;
+    border: 1px green solid;
+    background-color: green;
+}
