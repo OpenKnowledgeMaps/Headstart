@@ -1,0 +1,151 @@
+/* ################ Papers ############### */
+
+div.metadata {
+  /*word-wrap: break-word;*/
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  /*white-space: pre-wrap;*/
+  white-space: -moz-pre-wrap;
+}
+
+foreignobject#article_metadata {
+  font-family: Helvetica;
+  line-height: 10px;
+  overflow: hidden;
+}
+
+div {
+  &#intro {
+    font-family: Helvetica;
+    padding: 10px;
+    background-color: white;
+    h2 {
+      font-family: Helvetica;
+      font-size: 16px;
+      margin-bottom: 0;
+      padding: 0;
+      color: black;
+      background-color: transparent;
+    }
+    h3 {
+      padding: 0;
+    }
+    p {
+      font: 14px 'Helvetica', sans-serif;
+      margin-bottom: 10px;
+      padding: 0;
+      color: black;
+    }
+    ul {
+      margin-bottom: 10px;
+      list-style: disc;
+    }
+    li {
+      font-family: 'Helvetica', sans-serif;
+      font-size: 14px;
+      margin-bottom: 0;
+      margin-left: 11px;
+      margin-left: 11px;
+      padding-left: 11px;
+    }
+  }
+  &#article_metadata p, &.metadata p {
+    font: 8px 'Helvetica', sans-serif;
+    line-height: 8px;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    color: rgb(167, 8, 5);
+  }
+  &.readers {
+    p {
+      font: 8px 'Helvetica', sans-serif;
+      line-height: 8px;
+      margin: 0;
+      padding: 0;
+      text-align: left;
+      color: rgb(167, 8, 5);
+    }
+    overflow: hidden;
+  }
+  &#article_metadata p.large, &.metadata p.large, &.readers p.large {
+    font-size: 12px;
+    line-height: 12px;
+    padding-top: 5px;
+    padding-right: 0;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    /*font-weight:bold;*/
+  }
+  &#article_metadata p.larger, &.metadata p.larger, &.readers p.larger {
+    font-size: 14px;
+    line-height: 14px;
+    padding-top: 5px;
+    padding-right: 0;
+    padding-bottom: 5px;
+    padding-left: 5px;
+  }
+}
+
+p {
+  &#details {
+    /*margin-top: 3px;*/
+    padding-top: 3px;
+    padding-left: 5px;
+    color: rgb(33, 101, 0);
+  }
+  &#in {
+    padding-right: 0;
+    color: rgb(102, 102, 102);
+  }
+}
+
+span.pubyear {
+  font-style: italic;
+  color: rgb(0, 0, 0);
+}
+
+div {
+  &#area_title {
+    word-break: break-word;
+    display: table-cell;
+    overflow: hidden;
+    vertical-align: middle;
+  }
+  &.readers {
+    margin-top: 0;
+    padding-right: 5px;
+    padding-bottom: 0;
+    text-align: right;
+    color: rgb(0, 0, 0);
+  }
+  &.readers_large {
+    margin-top: 0;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    text-align: right;
+    color: rgb(0, 0, 0);
+  }
+}
+
+p#readers {
+  line-height: 8px;
+  padding: 0;
+  text-align: right;
+  vertical-align: text-bottom;
+  color: rgb(0, 0, 0);
+  &.large {
+    margin-bottom: 3px;
+    padding: 3px 2px 0 0;
+  }
+  &.larger {
+    padding: 3px 2px 0 0;
+  }
+}
+
+span.readers_entity {
+  font: 8px 'Helvetica' sans-serif;
+  font-weight: normal;
+  color: rgb(102, 102, 102);
+}
