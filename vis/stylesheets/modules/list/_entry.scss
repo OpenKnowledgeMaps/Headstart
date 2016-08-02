@@ -1,0 +1,129 @@
+div.list_metadata {
+    border-top-width: 1px;
+    border-top-style: solid;
+
+    p {
+        font: 12px 'Helvetica', sans-serif;
+        padding: 0;
+    }
+}
+
+.list_details p {
+    font: 12px 'Helvetica', sans-serif;
+    padding: 0;
+}
+
+p#list_title {
+    font-size: 14px;
+    margin-top: 7px;
+    margin-bottom: 5px;
+    padding: 0;
+
+    /*line-height: 18px;*/
+    a {
+        text-decoration: none;
+        color: rgb(167, 8, 5);
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+a.outlink {
+    font-family: FontAwesome;
+    text-decoration: none;
+}
+
+.list_details {
+    font-size: 12px;
+    line-height: 14px;
+    margin-top: 3px;
+    color: rgb(33, 101, 0);
+}
+
+p#list_abstract {
+    font: 12px 'Helvetica', sans-serif;
+    font-size: 11px;
+    line-height: 11px;
+    padding-right: 0;
+    padding-left: 7px;
+    color: rgb(68, 68, 68);
+    border-left: solid 2.5px rgb(233, 233, 233);
+}
+
+span {
+    &.list_in {
+        color: rgb(102, 102, 102);
+    }
+
+    &.list_pubyear {
+        font-style: italic;
+        color: rgb(0, 0, 0);
+    }
+}
+
+p {
+    &#list_area {
+        font-family: 'Helvetica';
+        font-size: 11px;
+        line-height: 11px;
+        margin-top: 10px;
+        margin-bottom: 0;
+        padding: 0;
+        text-align: left;
+        color: rgb(0, 0, 0);
+    }
+
+    &#list_readers {
+        font-size: 11px;
+        line-height: 11px;
+        margin-top: 5px;
+        margin-bottom: 0;
+        padding: 0;
+        text-align: right;
+        vertical-align: text-bottom;
+        color: rgb(0, 0, 0);
+    }
+}
+
+span.list_readers_entity {
+    font: 11px 'Helvetica' sans-serif;
+    font-weight: normal;
+    color: rgb(102, 102, 102);
+}
+
+div {
+    &#preview_image {
+        display: block;
+        margin-top: 20px;
+        margin-right: auto;
+        margin-left: auto;
+        border: 1px solid;
+    }
+
+    &#transbox {
+        display: none;
+        cursor: pointer;
+        opacity: .9;
+        background-color: rgba(255, 255, 255, 0.6);
+    }
+
+    &#preview_page_index {
+        font-size: 11px;
+        height: 20px;
+        margin-top: 15px;
+        padding: 5px;
+        text-align: center;
+        background-color: #eee;
+        text-shadow: 0 1px 1px white;
+    }
+}
+
+img#preview_page {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+    border: 1px solid;
+}

@@ -1,0 +1,24 @@
+@import "list-show-button";
+
+#explorer_header {
+    background-color: #eee;
+}
+
+#explorer_options {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#filter_container {
+    float: left;
+    display: block;
+}
+
+#filter_input {
+    padding-right: 22px;
+}
+
+#sort_container {
+    float: right;
+    display: none;
+}
