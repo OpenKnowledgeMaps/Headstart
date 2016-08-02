@@ -20,36 +20,20 @@ rect {
     stroke-width: 0;
 }
 
-circle {
-    /*fill: rgb(31, 119, 180);
-fill-opacity: .25;*/
-    fill: rgb(210, 228, 240);
-    fill-opacity: .8;
-    stroke: rgb(31, 119, 180);
-    stroke-width: 1px;
-    &.zoom_unselected {
-        fill: rgb(31, 119, 180);
-        fill-opacity: .1;
-        stroke-width: 0;
-    }
-    &.zoom_selected {
-        /*fill: rgb(31, 119, 180);*/
-        fill-opacity: 1;
-        /*fill: rgb(219, 233, 243);*/
-        fill: rgb(241, 246, 250);
-        stroke-width: 1px;
-    }
-    &.area {
-        fill: rgb(210, 228, 240);
-        fill-opacity: .8;
-    }
-}
-
 path {
     fill: rgb(255, 255, 255);
     fill-opacity: .25;
     stroke: rgb(128, 128, 128);
     stroke-width: 1px;
+}
+
+line {
+    stroke: rgb(31, 119, 180);
+    stroke-width: 1px;
+}
+
+text {
+  font: 10px sans-serif;
 }
 
 .framed {
@@ -89,10 +73,6 @@ path {
     background-color: green;
 }
 
-line {
-    stroke: rgb(31, 119, 180);
-    stroke-width: 1px;
-}
 
 #area_title {
     margin: 0;
@@ -109,39 +89,4 @@ line {
         color: black;
         background-color: transparent;
     }
-}
-
-text {
-  font: 10px sans-serif;
-}
-
-foreignobject {
-  body {
-    position: static;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    word-break: break-all;
-    background-color: transparent;
-  }
-  &#article_metadata body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: transparent;
-  }
-  &#area_title_object {
-    body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      background-color: transparent;
-    }
-    &.is_hidden {
-      visibility: hidden;
-    }
-  }
 }
