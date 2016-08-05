@@ -15,12 +15,12 @@
 }
 
 .paper_holder {
+    overflow: hidden;
+
     .metadata {
         font: 8px 'Helvetica', sans-serif;
         line-height: .95;
-
         overflow: hidden;
-
         text-align: left;
 
         .large {
@@ -51,7 +51,7 @@
         }
 
         span {
-          color: rgb(102, 102, 102);
+            color: rgb(102, 102, 102);
         }
     }
 }
