@@ -170,12 +170,118 @@ list.initListMouseListeners = function() {
 }
 
 list.getPaperNodes = function(list_data) {
-  return list.papers_list.data(list_data).selectAll("div")
+  var compiledTemplate = Handlebars.getTemplate(headstart.templ_path, "list_entry");
+  var list_entry = compiledTemplate();
+
+  return list.papers_list.selectAll("div")
                   .data(list_data)
-                  .enter().append("div")
+                  .enter()
+                  .append("div")
                   .attr("id", "list_holder")
+                  .html(list_entry)
                   .sort(function(a,b) {  return b.readers - a.readers; });
 }
+
+list.populateMetaData = function(nodes) {
+    nodes[0].forEach(function(elem) {
+        var list_metadata = d3.select(elem).select(".list_metadata")
+
+        list_metadata.select("#paper_list_title")
+            .html(function(d) {
+                return d.title
+            })
+
+        list_metadata.select(".outlink")
+            .attr("href", function(d) {
+                return d.url
+            })
+            .on("click", function() { d3.event.stopPropagation(); })
+
+        list_metadata.select(".list_authors")
+            .html(function(d) {
+                return d.authors_string })
+            
+        list_metadata.select(".list_pubyear")
+            .html(function(d) {
+                return d.published_in + " (" + d.year + ")" });
+
+        // Following part should probably be moved to a separate function
+        var paper_title = d3.select(elem).select("#list_title")
+        paper_title.filter(function(d) {
+                return d.recommended == 1 && d.bookmarked != 1;
+            })
+            .append("span")
+            .attr("class", "recommended")
+            .html("recommended")
+            .append("span")
+            .html(" ")
+
+        if (headstart.is_adaptive) {
+            paper_title.filter(function(d) {
+                    return (d.bookmarked != 1);
+                })
+                .append("span")
+                .attr("class", "tobookmark")
+                .attr("id", "bookmark")
+                .html("Add to schedule")
+                .on("click", function(d) {
+                    headstart.mediator.publish("bookmark_added", d);
+                    // list.addBookmark(d);      
+                    d3.event.stopPropagation();
+                })
+        }
+
+        paper_title.filter(function(d) {
+                return (d.bookmarked == 1);
+            })
+            .append("span")
+            .attr("class", "bookmarked")
+            .attr("id", "bookmark")
+            .html("Already in your schedule X")
+            .on("click", function(d) {
+                headstart.mediator.publish("bookmark_removed", d);
+                // list.removeBookmark(d);
+                d3.event.stopPropagation();
+            })
+
+    })
+}
+
+list.createAbstracts = function(nodes) {
+    nodes[0].forEach(function(elem) {
+        d3.select(elem).select("#list_abstract")
+            .html(function(d) {
+                return list.createAbstract(d, headstart.abstract_small);
+            })
+    })
+}
+
+list.populateReaders = function(nodes) {
+    nodes[0].forEach(function(elem) {
+        var areas = d3.select(elem).select("#list_area");
+        var readers = d3.select(elem).select(".list_readers");
+
+        areas.select(".area_tag").html(function(d) {
+            return headstart.localization[headstart.language].area + ":"
+        })
+        areas.select(".area_name").html(function(d) {
+            return d.area
+        })
+
+        if (!headstart.content_based) {
+            readers.select(".num_readers")
+                .html(function(d) {
+                    return d.readers
+                });
+            readers.select(".list_readers_entity")
+                .html(headstart.base_unit);
+
+        } else {
+            areas.select.style("margin-bottom", "7px")
+        }
+    })
+}
+
 
 list.populateList = function(list_data) {
 
@@ -187,67 +293,6 @@ list.populateList = function(list_data) {
     this.populateMetaData(paper_nodes);
     this.createAbstracts(paper_nodes);
     this.populateReaders(paper_nodes);
-}
-
-list.populateMetaData = function(nodes) {
-  
-  var paper_title = nodes.append("div")
-    .attr("class", "list_metadata")
-    .append("p")
-    .attr("id", "list_title")
-    .attr("class","highlightable")
-    .html(function (d) { return "<a href=\"#\" id=\"paper_list_title\" class=\"highlightable\">" + d.title+"</a> " })
-  
-  paper_title.filter(function(d) {
-        return d.recommended == 1 && d.bookmarked != 1;    
-    })
-    .append("span")
-     .attr("class", "recommended")
-     .html("recommended")
-     .append("span")
-      .html(" ")
-   
-  if(headstart.is_adaptive) {
-    paper_title.filter(function(d) {
-          return (d.bookmarked != 1);    
-      })
-      .append("span")
-       .attr("class", "tobookmark")
-       .attr("id", "bookmark")
-       .html("Add to schedule")
-       .on("click", function (d) {
-          headstart.mediator.publish("bookmark_added",d);
-         // list.addBookmark(d);      
-         d3.event.stopPropagation();
-       })
-  }
-     
-  paper_title.filter(function(d) {
-        return (d.bookmarked == 1);    
-    })
-    .append("span")
-     .attr("class", "bookmarked")
-     .attr("id", "bookmark")
-     .html("Already in your schedule X")
-     .on("click", function (d) { 
-        headstart.mediator.publish("bookmark_removed", d);
-       // list.removeBookmark(d);
-       d3.event.stopPropagation();
-     })
-  
-  paper_title.append("a")
-          .html(function(d) {return '<a href="' + d.url + '" target="_blank" class="outlink">&nbsp;&#xf08e;</a>'})
-          .on("click", function () { d3.event.stopPropagation(); })
-  
-  paper_title.append("p")
-    .attr("class", "list_details highlightable")
-    .html(function (d) { return d.authors_string })
-    .append("span")
-    .attr("class", "list_in")
-    .html(" in ")
-    .append("span")
-    .attr("class", "list_pubyear")
-    .html(function (d) { return d.published_in + " (" + d.year + ")" });
 }
 
 filterList = function(search_words) {
@@ -316,40 +361,6 @@ filterList = function(search_words) {
       }
     })
   .style("display", "none")
-}
-
-list.createAbstracts = function(nodes) {
-  nodes.append("div")
-    .attr("class", "abstract")
-    .append("p")
-    .attr("id", "list_abstract")
-    .attr("class","highlightable")
-    .html(function (d) { return list.createAbstract(d, headstart.abstract_small) });
-}
-
-list.populateReaders = function(nodes) {
-  var areas = nodes.append("div")
-    .attr("class", "list_readers")
-    .append("p")
-    .attr("id", "list_area")
-    .html(function(d) {
-      return "<b>"+ headstart.localization[headstart.language].area + ":</b> " + d.area
-    })
-    
-  if(!headstart.content_based) {
-   areas.append("p")
-    .attr("id", "list_readers")
-    .html(function (d) {
-      return d.readers
-    })
-  .append("span")
-    .attr("class", "list_readers_entity")
-    .html(" " + headstart.base_unit + "&nbsp;");
-    
-  } else {
-    d3.selectAll("#list_area").style("margin-bottom", "7px")
-    
-  }
 }
 
 // called quite often
