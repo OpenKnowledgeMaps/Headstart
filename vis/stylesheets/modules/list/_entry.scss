@@ -6,7 +6,7 @@
 
     #paper_list_title {
         text-decoration: none;
-        color: rgb(167, 8, 5);
+        color: $dark-red;
 
         &:hover {
             text-decoration: underline;
@@ -14,6 +14,7 @@
     }
 
     .outlink {
+        color: $dark-red;
         font-family: FontAwesome;
         text-decoration: none;
     }
@@ -22,17 +23,17 @@
         font: 12px 'Helvetica', sans-serif;
         font-size: 12px;
         line-height: 14px;
-        color: rgb(33, 101, 0);
+        color: $author-green;
         padding: 0;
 
 
         .list_in {
-            color: rgb(102, 102, 102);
+            color: $journal-gray;
         }
 
         .list_pubyear {
             font-style: italic;
-            color: rgb(0, 0, 0);
+            color: black;
         }
     }
 }
@@ -43,8 +44,8 @@
     line-height: 11px;
     padding-right: 0;
     padding-left: 7px;
-    color: rgb(68, 68, 68);
-    border-left: solid 2.5px rgb(233, 233, 233);
+    color: $abstract-gray;
+    border-left: solid 2.5px $okm-light-gray;
 }
 
 #list_area {
@@ -55,7 +56,7 @@
     margin-bottom: 0;
     padding: 0;
     text-align: left;
-    color: rgb(0, 0, 0);
+    color: black;
 
     .area_tag {
         font-weight: bold;
@@ -70,12 +71,12 @@
     padding: 0;
     text-align: right;
     vertical-align: text-bottom;
-    color: rgb(0, 0, 0);
+    color: black;
 
     .list_readers_entity {
         font: 11px 'Helvetica' sans-serif;
         font-weight: normal;
-        color: rgb(102, 102, 102);
+        color: $okm-gray;
     }
 }
 
