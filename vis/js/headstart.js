@@ -3,6 +3,9 @@
 import $ from 'jquery';
 import StateMachine from 'javascript-state-machine';
 import Mediator from 'mediator-js';
+import d3 from 'd3';
+
+var BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js")
 
 
 export var HeadstartFSM = function(host, path, tag, files, options) {
@@ -286,7 +289,7 @@ HeadstartFSM.prototype = {
 
     $.each(this.files, function(index, elem) {
       var bubble = new BubblesFSM();
-      headstart.registerBubbles(bubble);
+      this.registerBubbles(bubble);
       bubble.title = elem.title;
       bubble.file = elem.file;
     })
@@ -453,12 +456,12 @@ HeadstartFSM.prototype = {
 
   initMouseMoveListeners: function() {
     $("rect").on( "mouseover", function() {
-      if (!headstart.is_zoomed) {
-        headstart.bubbles[headstart.current_file_number].onmouseout("notzoomedmouseout");
-        headstart.current_circle = null;
+      if (!this.is_zoomed) {
+        this.bubbles[this.current_file_number].onmouseout("notzoomedmouseout");
+        this.current_circle = null;
       }
-      headstart.bubbles[headstart.current_file_number].mouseout("outofbigbubble");
-      headstart.initClickListenersForNav();
+      this.bubbles[this.current_file_number].mouseout("outofbigbubble");
+      this.initClickListenersForNav();
     });
   },
 
@@ -466,12 +469,12 @@ HeadstartFSM.prototype = {
     var self = this;
 
     $("#chart-svg").on( "click", function() {
-      headstart.bubbles[headstart.current_file_number].zoomout();
+      this.bubbles[this.current_file_number].zoomout();
     });
 
     $("#" + this.tag).bind('click', function(event) {
         if(event.target.id === self.tag) {
-            headstart.bubbles[headstart.current_file_number].zoomout();
+            this.bubbles[this.current_file_number].zoomout();
         }
     });
 
@@ -495,10 +498,10 @@ HeadstartFSM.prototype = {
   },
 
 
-  // Draws the header for headstart
+  // Draws the header for this
   drawTitle: function() {
 
-    if (headstart.language == "eng") {
+    if (this.language == "eng") {
         var chart_title = 'Overview of <span id="num_articles"></span> articles';
     } else {
         var chart_title = 'Überblick über <span id="num_articles"></span> Artikel';
@@ -507,36 +510,36 @@ HeadstartFSM.prototype = {
     $("#subdiscipline_title h4").html(chart_title);
     $("#num_articles").html($(".paper").length);
 
-    if (headstart.show_infolink) {
+    if (this.show_infolink) {
         infolink =  ' (<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>)'
         $("#subdiscipline_title h4").append(infolink);
-        $("#infolink").text(headstart.localization[headstart.language].intro_label);
+        $("#infolink").text(this.localization[this.language].intro_label);
     }
 
-    if (headstart.show_timeline) {
+    if (this.show_timeline) {
         var link = ' <span id="timelineview"><a href="#">TimeLineView</a></span>';
         $("#subdiscipline_title>h4").append(link);
     }
 
-    if (headstart.show_dropdown) {
+    if (this.show_dropdown) {
         var dropdown = '<select id="datasets"></select>';
 
         $("#subdiscipline_title>h4").append(" Select dataset: ");
         $("#subdiscipline_title>h4").append(dropdown);
 
-        $.each(headstart.bubbles, function(index, entry) {
+        $.each(this.bubbles, function(index, entry) {
             var current_item = '<option value="' + entry.file + '">' + entry.title + '</option>';
             $("#datasets").append(current_item);
         })
 
         //$("#datasets " + headstart.current_file_number + ":selected").text();
-        $("#datasets").val(headstart.bubbles[headstart.current_file_number].file);
+        $("#datasets").val(this.bubbles[this.current_file_number].file);
 
         $("#datasets").change(function() {
 
             var selected_file_number = datasets.selectedIndex + 1;
-            if (selected_file_number != headstart.current_file_number) {
-                headstart.tofile(selected_file_number);
+            if (selected_file_number != this.current_file_number) {
+                this.tofile(selected_file_number);
             }
         })
     }
@@ -567,7 +570,7 @@ HeadstartFSM.prototype = {
           if ((!papers.is("ready") && !papers.is("none")) || (bubble.is("startup") || bubble.is("none") || (bubble.is("start")) )) {
             if (hs.force_papers.alpha() <= 0 && hs.force_areas.alpha() <= 0) {
               papers.forced();
-              if(headstart.show_list) {
+              if(this.show_list) {
                 list.show();
               }
               window.clearInterval(checkPapers);
@@ -703,15 +706,15 @@ HeadstartFSM.prototype = {
 
           hs.drawSvg();
           hs.drawChartCanvas();
-          if (headstart.is_adaptive) {
+          if (this.is_adaptive) {
 
-              var url = headstart.createRestUrl();
+              var url = this.createRestUrl();
 
               $.getJSON(url, function(data) {
-                  headstart.startVisualization(hs, bubbles, csv, data, true);
+                  this.startVisualization(hs, bubbles, csv, data, true);
               });
           } else {
-              headstart.startVisualization(hs, bubbles, csv, null, true);
+              this.startVisualization(hs, bubbles, csv, null, true);
           }
 
           // Horrible solution but the first call is needed to calculate the chart height
@@ -761,7 +764,7 @@ HeadstartFSM.prototype = {
     // clear the list list
     $("#list_explorer").empty();
 
-    this.bubbles[headstart.current_file_number].current = "x";
+    this.bubbles[this.current_file_number].current = "x";
     // popup.current  = "hidden";
     papers.current = "none";
     list.current   = "none";
@@ -793,13 +796,13 @@ HeadstartFSM.prototype = {
         elem.start( csv )
       }
 
-      switch(headstart.input_format) {
+      switch(this.input_format) {
             case "csv":
                 d3.csv(elem.file, setupTimelineVisualization);
                 break;
 
             case "json":
-                d3.json(headstart.service_path + "getLatestRevision.php?vis_id=" + elem.file, setupTimelineVisualization);
+                d3.json(this.service_path + "getLatestRevision.php?vis_id=" + elem.file, setupTimelineVisualization);
                 break;
 
             default:
@@ -818,7 +821,7 @@ HeadstartFSM.prototype = {
       this.force_areas.stop();
       this.force_papers.stop();
 
-      headstart.current_file_number = file;
+      this.current_file_number = file;
 
       // clear the canvas
       $("#chart_canvas").remove();
@@ -850,10 +853,10 @@ HeadstartFSM.prototype = {
               var url = hs.createRestUrl();
 
               $.getJSON(url, function(data) {
-                  headstart.startVisualization(hs, bubbles, csv, data, false);
+                  this.startVisualization(hs, bubbles, csv, data, false);
               });
           } else {
-              headstart.startVisualization(hs, bubbles, csv, null, false);
+              this.startVisualization(hs, bubbles, csv, null, false);
           }
 
           hs.drawTitle()
@@ -892,7 +895,7 @@ HeadstartFSM.prototype = {
 
     hs.checkForcePapers();
 
-    if (headstart.show_intro) {
+    if (this.show_intro) {
         $("#infolink").click();
     }
 
@@ -913,52 +916,52 @@ HeadstartFSM.prototype = {
 
   init_mediator: function() {
     // popup
-    headstart.mediator.subscribe("popup_toggle", this.popup_toggle);
-    headstart.mediator.subscribe("to_timeline", this.to_timeline);
+    this.mediator.subscribe("popup_toggle", this.popup_toggle);
+    this.mediator.subscribe("to_timeline", this.to_timeline);
 
     // list
-    headstart.mediator.subscribe("list_toggle", this.list_toggle);
-    headstart.mediator.subscribe("list_show_popup", this.list_show_popup);
-    headstart.mediator.subscribe("list_title_click", this.list_title_click);
-    headstart.mediator.subscribe("list_sort_click", this.list_sort_click);
-    headstart.mediator.subscribe("list_title_clickable", this.list_title_clickable);
-    headstart.mediator.subscribe("preview_mouseover", this.preview_mouseover);
-    headstart.mediator.subscribe("preview_mouseout", this.preview_mouseout);
+    this.mediator.subscribe("list_toggle", this.list_toggle);
+    this.mediator.subscribe("list_show_popup", this.list_show_popup);
+    this.mediator.subscribe("list_title_click", this.list_title_click);
+    this.mediator.subscribe("list_sort_click", this.list_sort_click);
+    this.mediator.subscribe("list_title_clickable", this.list_title_clickable);
+    this.mediator.subscribe("preview_mouseover", this.preview_mouseover);
+    this.mediator.subscribe("preview_mouseout", this.preview_mouseout);
 
     // papers
-    headstart.mediator.subscribe("paper_click", this.paper_click);
-    headstart.mediator.subscribe("paper_mouseover", this.paper_mouseover);
-    headstart.mediator.subscribe("currentbubble_click", this.currentbubble_click);
+    this.mediator.subscribe("paper_click", this.paper_click);
+    this.mediator.subscribe("paper_mouseover", this.paper_mouseover);
+    this.mediator.subscribe("currentbubble_click", this.currentbubble_click);
 
     // bubbles
-    headstart.mediator.subscribe("bubble_mouseout", this.bubble_mouseout);
-    headstart.mediator.subscribe("bubble_mouseover", this.bubble_mouseover);
-    headstart.mediator.subscribe("bubble_click", this.bubble_click);
+    this.mediator.subscribe("bubble_mouseout", this.bubble_mouseout);
+    this.mediator.subscribe("bubble_mouseover", this.bubble_mouseover);
+    this.mediator.subscribe("bubble_click", this.bubble_click);
 
     // canvas
-    headstart.mediator.subscribe("canvas_click", this.canvas_click);
+    this.mediator.subscribe("canvas_click", this.canvas_click);
 
     // bookmarks
-    headstart.mediator.subscribe("bookmark_added", this.bookmark_added);
-    headstart.mediator.subscribe("bookmark_removed", this.bookmark_removed);
+    this.mediator.subscribe("bookmark_added", this.bookmark_added);
+    this.mediator.subscribe("bookmark_removed", this.bookmark_removed);
 
     // misc
-    headstart.mediator.subscribe("record_action", this.record_action);
+    this.mediator.subscribe("record_action", this.record_action);
   },
 
   popup_toggle: function() {
     // $("#info_modal").modal();
-    // if (headstart.mediator_states.popup_visible) {
+    // if (this.mediator_states.popup_visible) {
     //   popup.hide();
-    //   headstart.mediator_states.popup_visible = false;
+    //   this.mediator_states.popup_visible = false;
     // } else {
     //   popup.show();
-    //   headstart.mediator_states.popup_visible = true;
+    //   this.mediator_states.popup_visible = true;
     // }
   },
 
   to_timeline: function() {
-    headstart.totimeline();
+    this.totimeline();
   },
 
   list_toggle: function() {
@@ -1002,7 +1005,7 @@ HeadstartFSM.prototype = {
   },
 
   canvas_click: function() {
-    headstart.bubbles[headstart.current_file_number].zoomOut();
+    this.bubbles[this.current_file_number].zoomOut();
   },
 
   currentbubble_click: function(d) {
@@ -1028,7 +1031,7 @@ HeadstartFSM.prototype = {
   },
 
   record_action: function(id, action, user, type, timestamp, additional_params, post_data) {
-    headstart.recordAction(id, action, user, type, timestamp, additional_params, post_data);
+    this.recordAction(id, action, user, type, timestamp, additional_params, post_data);
   },
 },
 
