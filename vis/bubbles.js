@@ -613,6 +613,9 @@ BubblesFSM.prototype = {
     headstart.x.domain([d.x - d.r, d.x + d.r]);
     headstart.y.domain([d.y - d.r, d.y + d.r]);
     
+    headstart.paper_x.domain([d.x - d.r, d.x + d.r]);
+    headstart.paper_y.domain([d.y - d.r, d.y + d.r]);
+    
     var n = 0;
     
     var t = headstart.chart.transition()
@@ -826,7 +829,7 @@ BubblesFSM.prototype = {
 
     t.selectAll("g.paper")
       .attr("transform", function (g) {
-        return "translate(" + headstart.x(g.x) + "," + headstart.y(g.y) + ")";
+        return "translate(" + headstart.paper_x(g.x) + "," + headstart.paper_y(g.y) + ")";
       });
 
     var region = function(d) {

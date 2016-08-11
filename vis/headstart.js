@@ -338,6 +338,9 @@ HeadstartFSM.prototype = {
 
       this.x = d3.scale.linear();
       this.y = d3.scale.linear();
+      
+      this.paper_x = d3.scale.linear();
+      this.paper_y = d3.scale.linear();
 
       this.circle_size = d3.scale.sqrt()
       this.diameter_size = d3.scale.sqrt()
@@ -367,6 +370,10 @@ HeadstartFSM.prototype = {
       var zoomed_article_padding = 60;
       this.x.range([zoomed_article_padding, this.current_vis_size - zoomed_article_padding]);
       this.y.range([zoomed_article_padding, this.current_vis_size - zoomed_article_padding]);
+      
+      var zoomed_article_padding_paper = 35;
+      this.paper_x.range([zoomed_article_padding_paper, this.current_vis_size - zoomed_article_padding_paper]);
+      this.paper_y.range([zoomed_article_padding_paper, this.current_vis_size - zoomed_article_padding_paper]);
   },
 
   // Size helper functions
