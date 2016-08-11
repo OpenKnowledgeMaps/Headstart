@@ -1,7 +1,10 @@
 // StateMachine for Bubbles UI elements in Headstart
 // Filename: bubbles.js
+import StateMachine from 'javascript-state-machine';
 
-BubblesFSM = function() {
+import { headstart } from './vis';
+
+export var BubblesFSM = function() {
   this.id = 0;
   this.areas = {};
   this.areas_array = [];
@@ -56,28 +59,28 @@ BubblesFSM.prototype = {
   },
 
   prepareData: function(init_data, highlight_data) {
-      
+
       var xy_array = [];
-      
+
       // convert to numbers
       init_data.forEach(function(d) {
         d.x = parseFloat(d.x);
         d.y = parseFloat(d.y);
-        
+
         //if two items have the exact same location, that throws off the force-based layout
         var xy_string = d.x + d.y;
-        
+
         while(xy_array.hasOwnProperty(xy_string)) {
           d.y += 0.00000001;
           xy_string = d.x + d.y;
         }
-        
+
         xy_array[xy_string] = true;
-        
+
         if(d.paper_abstract == null) {
             d.paper_abstract = "";
         }
-        
+
         if(headstart.content_based == false) {
           d.readers = +d.readers;
           d.internal_readers = +d.readers + 1;
@@ -86,7 +89,7 @@ BubblesFSM.prototype = {
           d.internal_readers = 1;
         }
         if(typeof highlight_data != 'undefined' && highlight_data != null) {
-          if(highlight_data["bookmarks_all"] != null) {        
+          if(highlight_data["bookmarks_all"] != null) {
             highlight_data["bookmarks_all"].forEach(function(x) {
                 var id_string = x.id;
                 id_string = id_string.toString();
@@ -97,7 +100,7 @@ BubblesFSM.prototype = {
             });
           }
       }
-        
+
         d.paper_selected = false;
 
         // convert authors to "[first name] [last name]"
@@ -105,18 +108,18 @@ BubblesFSM.prototype = {
         var authors_string = "";
         for(var i=0; i<authors.length-1; i++) {
           var names = authors[i].split(",");
-          
+
           if(names.length > 1)
             authors_string += names[1] + " " + names[0];
           else
               authors_string += names[0];
-          
+
           if(i != authors.length-2)
             authors_string += ", ";
         }
 
         d.authors_string = authors_string;
-        
+
       });
 
       headstart.chart_x.domain(d3.extent(init_data, function(d) { return d.x }));
@@ -137,7 +140,7 @@ BubblesFSM.prototype = {
         d.y = headstart.chart_y(d.y*-1);
 
         var area = (headstart.use_area_uri)?(d.area_uri):(d.area);
-        
+
         if(area in areas) {
           areas[area].papers.push(d);
         } else {
@@ -148,13 +151,13 @@ BubblesFSM.prototype = {
 
         d.resized = false;
       });
-      
+
       if(typeof highlight_data != 'undefined' && highlight_data != null) {
-        if(highlight_data["bookmarks"] != null) {        
+        if(highlight_data["bookmarks"] != null) {
           highlight_data["bookmarks"].forEach(function(d) {
 
-            var index = init_data.filter(function (x) { 
-              return x.id == d.contentID 
+            var index = init_data.filter(function (x) {
+              return x.id == d.contentID
             });
 
             if(index.length > 0) {
@@ -162,12 +165,12 @@ BubblesFSM.prototype = {
             }
           });
         }
-        
-        if(highlight_data["recommendations"] != null) {        
+
+        if(highlight_data["recommendations"] != null) {
           highlight_data["recommendations"].forEach(function(d) {
 
-            var index = init_data.filter(function (x) { 
-              return x.id == d.contentID 
+            var index = init_data.filter(function (x) {
+              return x.id == d.contentID
             });
 
             if(index.length > 0) {
@@ -175,7 +178,7 @@ BubblesFSM.prototype = {
             }
           });
         }
-        
+
       }
 
       this.data = init_data;
@@ -237,10 +240,10 @@ BubblesFSM.prototype = {
       headstart.mediator.publish("bubble_click", d, b);
       // b.zoomin(d);
     });
-    
+
     d3.selectAll('circle').on("dblclick", function(d) {
       if(b.is("hoverbig") && headstart.is_zoomed && headstart.zoom_finished) {
-            b.zoomout();   
+            b.zoomout();
             //d3.event.stopPropagation();
       }
     });
@@ -252,7 +255,7 @@ BubblesFSM.prototype = {
       if(headstart.current != "timeline")
         headstart.bubbles[headstart.current_file_number].hideCircle(this);
       else {
-        
+
         var underlying_circle =  d3.selectAll("circle")
           .filter(function (x) {
               if (d != null)
@@ -426,7 +429,7 @@ BubblesFSM.prototype = {
       // .classed("highlightable", true)
       .html(function (d) {
           return d.title;
-      });      
+      });
   },
 
   // prepare the areas for the bubbles
@@ -448,10 +451,10 @@ BubblesFSM.prototype = {
     var area_x = [];
     var area_y = [];
 
-    var min_x = headstart.current_vis_size; 
-    var max_x = 0; 
-    var min_y = headstart.current_vis_size; 
-    var max_y = 0; 
+    var min_x = headstart.current_vis_size;
+    var max_x = 0;
+    var min_y = headstart.current_vis_size;
+    var max_y = 0;
 
     for(area in areas) {
       var papers = areas[area].papers;
@@ -470,16 +473,16 @@ BubblesFSM.prototype = {
 
       if(mean_x-r < min_x) {
         min_x = mean_x-r
-      }      
+      }
       if(mean_x+r > max_x) {
         max_x = mean_x+r
-      }     
+      }
       if(mean_y-r < min_y) {
         min_y = mean_y-r
-      }      
+      }
       if(mean_y+r > max_y) {
         max_y = mean_y+r
-      }  
+      }
     }
 
     headstart.chart_x_circle.domain([min_x, max_x]);
@@ -506,7 +509,7 @@ BubblesFSM.prototype = {
     var previous_zoom_node = headstart.current_zoom_node;
 
     list.reset();
-    
+
     papers.resetPaths();
 
     if(typeof d != 'undefined') {
@@ -530,10 +533,10 @@ BubblesFSM.prototype = {
         }
       } else {
         resetList();
-        
+
         list.papers_list.selectAll("#list_holder")
           .style("display", function (d) { return d.filtered_out?"none":"inline"});
-  
+
         d3.event.stopPropagation();
         return;
       }
@@ -612,9 +615,9 @@ BubblesFSM.prototype = {
     headstart.circle_zoom = viewbox[3] / d.r / 2 * headstart.zoom_factor;
     headstart.x.domain([d.x - d.r, d.x + d.r]);
     headstart.y.domain([d.y - d.r, d.y + d.r]);
-    
+
     var n = 0;
-    
+
     var t = headstart.chart.transition()
       .duration(headstart.transition_duration)
       .each("start", function () { n++; })
@@ -622,7 +625,7 @@ BubblesFSM.prototype = {
           if (--n !== 0) {
               return;
           }
-          
+
           headstart.zoom_finished = true;
     });
 
@@ -632,7 +635,7 @@ BubblesFSM.prototype = {
     // headstart.recordAction(d.id, "zoom_in", headstart.user_id, "none", null);
 
     d3.event.stopPropagation();
-    
+
     headstart.is_zoomed = true;
     headstart.zoom_finished = false;
   },
@@ -651,7 +654,7 @@ BubblesFSM.prototype = {
 
     if (headstart.current_zoom_node !== null) {
       toFront(headstart.current_zoom_node.parentNode);
-      
+
       var circle_data = d3.select(headstart.current_zoom_node).data();
       headstart.mediator.publish("record_action", circle_data.id, "zoom_out", headstart.user_id, "none", null);
       // headstart.recordAction(circle_data.id, "zoom_out", headstart.user_id, "none", null);
@@ -667,26 +670,26 @@ BubblesFSM.prototype = {
 
     list.papers_list.selectAll("#list_holder")
       .style("display", function (d) { return d.filtered_out?"none":"inline"});
-      
+
     var n = 0;
     var t = headstart.chart.transition()
       .duration(headstart.zoomout_transition)
       .each("start", function () {
           n++;
         })
-      .each("end", function() {      
+      .each("end", function() {
         if(--n !== 0) {
             return;
-        } 
-          
+        }
+
         headstart.chart.selectAll("#area_title_object")
             .style("display", "block")
             .filter(function(d) {
                 return d3.select(this.previousSibling).attr("class") != "zoom_selected";
             })
                 .style("visibility", "visible");
-              
-        headstart.current_zoom_node = null;    
+
+        headstart.current_zoom_node = null;
         headstart.is_zoomed = false;
       });
 
@@ -738,7 +741,7 @@ BubblesFSM.prototype = {
 
     d3.selectAll(".paper")
       .style("display", function(d) { return d.filtered_out?"none":"block"});
-      
+
     this.resetCirclePosition(t);
 
     this.initCircleClickListener();
@@ -749,9 +752,9 @@ BubblesFSM.prototype = {
       var current_node = circles[0][i];
       toFront(current_node);
     }
-    
+
     papers.resetPaths();
-    
+
     d3.selectAll("div.paper_holder")
       .on("mouseover", null)
       .on("mouseout", null)
@@ -762,7 +765,7 @@ BubblesFSM.prototype = {
 
   resetCircleDesignTimeLine: function( circle ) {
       var class_name = $(circle).attr("class").replace("area ", "");
-      
+
       d3.selectAll("circle")
               .style("fill" , "rgb(210, 228, 240)")
               .style("fill-opacity" , "0.8");
@@ -894,7 +897,7 @@ BubblesFSM.prototype = {
   },
 
   onmouseover: function( event, from, to, d, circle) {
-      
+
     headstart.current_circle = d3.select(circle);
     if (headstart.is("timeline")) {
       this.resetCircleDesignTimeLine(circle);
@@ -943,7 +946,7 @@ BubblesFSM.prototype = {
   },
 
   onmouseout: function( event, from, to, d, circle ) {
-      
+
     if (headstart.is("normal") || headstart.is("switchfiles")) {
       if (event == "notzoomedmouseout") {
         this.resetCircleDesign();

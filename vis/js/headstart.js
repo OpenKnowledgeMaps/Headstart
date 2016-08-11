@@ -7,6 +7,8 @@ import d3 from 'd3';
 
 var BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js")
 
+import BubblesFSM from './bubbles';
+
 
 export var HeadstartFSM = function(host, path, tag, files, options) {
 

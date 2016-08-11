@@ -29,6 +29,8 @@ export var Headstart = function(host, path, tag, files, options) {
   document.getElementById(tag).className = namespace;
 
   let headstart = new HeadstartFSM(host, path, tag, files, options);
+  // make headstart global
+  window.headstart = headstart;
 
   headstart.start();
 
