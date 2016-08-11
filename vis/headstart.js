@@ -398,7 +398,10 @@ HeadstartFSM.prototype = {
 
   // Draw basic SVG canvas
   // NOTE attribute width addition by number of elements
-  drawSvg: function(update = false) {
+  drawSvg: function(update) {
+      
+      update = typeof update !== 'undefined' ? update : false;
+      
       this.svg = d3.select("#chart-svg");
 
       if (this.is("timeline")) {
@@ -644,7 +647,10 @@ HeadstartFSM.prototype = {
     };
   },
 
-  drawGridTitles: function(update = false) {
+  drawGridTitles: function(update) {
+      
+      update = typeof update !== 'undefined' ? update : false;
+      
       if (update === true) {
           $("#tl-titles").width(this.current_vis_size * Object.keys(this.bubbles).length);
           $(".tl-title").css("width", this.current_vis_size);
