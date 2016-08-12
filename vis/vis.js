@@ -58,7 +58,7 @@ Headstart = function(host, path, tag, files, options) {
     return document.getElementsByTagName(tag)[0].appendChild(current_css);
   }
   
-  // document.getElementById(tag).className = namespace;
+  document.getElementById(tag).className = namespace;
   
   addCss(host + path + vis_directory + 'style.css', 'head');
   addCss('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', 'head');
