@@ -1,0 +1,14 @@
+@import "list/header";
+@import "list/entry";
+
+/* ################ List Explorer ############### */
+
+#papers_list {
+    float: right;
+    overflow-y: scroll;
+    padding-top: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: white;
+    display: none;
+}
