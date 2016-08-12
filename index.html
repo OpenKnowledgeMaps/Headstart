@@ -6,17 +6,15 @@
     <script type="text/javascript" src="vis/lib/jquery-2.1.4.min.js"></script>
     <link rel="stylesheet" type="text/css" href="vis/lib/bootstrap.min.css">
     <script type="text/javascript" src="vis/lib/bootstrap.min.js"></script>
+    <script type="text/javascript" src="vis/lib/handlebars.min-v4.0.5.js"></script>
+    <script type="text/javascript" src="vis/templates/templates.js"></script>
     <script type="text/javascript" src="vis/vis.js"></script>
 </head>
 
 <body style="margin:0px; padding:0px">
-    <div id="visualization"></div>
+    <div id="visualization" class="headstart"></div>
     <script>
     $(function() {
-
-        var height = ($(document).height() < 700)?(700):($(document).height());
-        var width = ($(document).width() < 700)?(700):($(document).width());
-
         var myHeadstart = new Headstart(
             "http://localhost/", //host
             "headstart3/", //path
@@ -39,17 +37,18 @@
             }] //data
             , {
                 title: "Overview of Educational Technology",
-                width: width,
-                height: height,
-                max_diameter_size: 50,
-                min_diameter_size: 30,
-                max_area_size: 110,
-                min_area_size: 50,
+                paper_max_scale: 1,
+                paper_min_scale: 1,
+                bubble_max_scale: 1,
+                bubble_min_scale: 1,
                 input_format: "csv",
                 use_area_uri: false,
                 base_unit: "readers",
                 is_force_areas: false,
-                url_prefix: "http://mendeley.com/catalog/"
+                url_prefix: "http://mendeley.com/catalog/",
+                show_timeline: true,
+                show_dropdown: true,
+                show_intro: false
             } //options
         )
     })

@@ -13,23 +13,31 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.host = host;
   this.path = path;
   this.tag = tag;
+  this.viz = $("#" + tag);
+  this.templ_path = host + path + "vis/templates/";
 
   // map
-  this.min_height = 650;
-  this.min_width  = 650;
-  this.vis_width = initVar(options.width, this.min_width);
-  this.vis_height = initVar(options.height, this.min_height);
-  this.top_correction    = 0;
-  this.bottom_correction = 34;
+  this.min_height = 600;
+  this.min_width  = 600;
+  this.max_height = 1000;
+  this.timeline_size = 600;
+  this.bubble_min_scale = initVar(options.bubble_min_scale, 1);
+  this.bubble_max_scale = initVar(options.bubble_max_scale, 1);
+  this.paper_min_scale = initVar(options.paper_min_scale, 1);
+  this.paper_max_scale = initVar(options.paper_max_scale, 1);
+  this.zoom_factor = 0.9;
+
+  // map reference sizes
+  this.reference_size = 650;
+  this.max_diameter_size = 50;
+  this.min_diameter_size = 30;
+  this.max_area_size = 110;
+  this.min_area_size = 50;
 
   this.is_force_areas = initVar(options.is_force_areas, false);
-  this.area_force_alpha = initVar(options.force_areas_alpha, 0.02);
+  this.area_force_alpha = initVar(options.area_force_alpha, 0.02);
 
   // bubbles
-  this.max_diameter_size = initVar(options.max_diameter_size, 50);
-  this.min_diameter_size = initVar(options.min_diameter_size, 30);
-  this.max_area_size = initVar(options.max_area_size, 110);
-  this.min_area_size = initVar(options.min_area_size, 50);
   this.area_title_max_size = 50;
 
   // papers
@@ -59,9 +67,6 @@ HeadstartFSM = function(host, path, tag, files, options) {
   // preview
   this.preview_image_width_list  = 230;
   this.preview_image_height_list = 300;
-  this.circle_zoom_factor = 600;
-  this.padding_articles = 5;
-
   this.preview_page_height = 400;
   this.preview_top_height  = 30;
   this.preview_image_width  = 738;
@@ -71,6 +76,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   
   // transition
   this.transition_duration = 750;
+  this.zoomout_transition = 750;
 
   // misc
   this.debounce = 200;
@@ -105,7 +111,6 @@ HeadstartFSM = function(host, path, tag, files, options) {
   // paths
   this.service_path = initVar(options.service_path, this.host + this.path + "server/services/");
   this.images_path = initVar(options.images_path, this.host + this.path + "vis/images/");
-
   this.preview_type = initVar(options.preview_type, "images");
 
   // data specific settings
@@ -123,6 +128,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
           search_placeholder: "Search...",
           show_list: "Show list",
           hide_list: "Hide list",
+          intro_label:"What's this?",
           readers: "readers",
           year: "date",
           authors: "authors",
@@ -134,7 +140,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
           search_placeholder: "Suche...",
           show_list: "Liste ausklappen",
           hide_list: "Liste einklappen",
-          readers: this.base_unit,
+          intro_label :"Was ist das?",
+          readers: "Leser",
           year: "Jahr",
           authors: "Autor",
           title: "Titel",
@@ -145,6 +152,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
           search_placeholder: "Search...",
           show_list: "Show list",
           hide_list: "Hide list",
+          intro_label :"What's this?",
           readers: "views",
           year: "date",
           authors: "authors",
@@ -268,83 +276,114 @@ HeadstartFSM.prototype = {
   },
      
   resetBubbles: function () {
+    self = this;
+
     if(this.bubbles) {
       delete this.bubbles;
       this.bubbles = {};
     }
-    
+
     $.each(this.files, function(index, elem) {
       var bubble = new BubblesFSM();
-      headstart.registerBubbles(bubble);
+      self.registerBubbles(bubble);
       bubble.title = elem.title;
       bubble.file = elem.file;
     })
   },
 
-  // the rest of headstarts variables, which are initalized by some
-  // sort of calculation
-  initDynamicVariables: function() {
-    // initialize a bunch of variables.
-       
-    this.available_width  = this.vis_width; //$("#" + this.tag).width();  
-    this.available_height = this.vis_height; //$("#" + this.tag).height();
+  calcChartSize: function() {
+      var parent_height = getRealHeight($("#" + this.tag));
+      var subtitle_heigth = $("#subdiscipline_title").outerHeight(true);
 
-    this.x = d3.scale.linear().range([0, this.circle_zoom_factor]);
-    this.y = d3.scale.linear().range([0, this.circle_zoom_factor]);
+      if (parent_height == 0) {
+          this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_heigth;
+      } else {
+          this.available_height = $("#" + this.tag).height() - subtitle_heigth;
+      }
 
-    // order of these method calls is important, max_chart_size needs to be calculated before
-    // correction_factor_x
-    if (this.is("timeline")){
-      this.max_chart_size = 400;
-    } else {
-      this.calculateMaxChartSize();
-    }
-    this.correction_factor_width  = ( this.max_chart_size / this.min_width  );
-    this.correction_factor_height = ( this.max_chart_size / this.min_height );
-    this.setCorrectionFactor();
-    this.setListWidth();
-    
-    // Initialize global scales for zooming
-    this.circle_min = ( this.min_area_size * this.correction_factor );
-    this.circle_max = ( this.max_area_size * this.correction_factor );
-    this.padding = this.circle_max / 2 + 45;
+      this.available_height = this.available_height - 1;
 
-    this.setCircleSize();
-    this.setDiameterSize();
+      if (this.is("timeline")) {
+          var timeline_height = $(".tl-title").outerHeight(true);
+          this.available_height =  this.available_height - timeline_height;
+          this.available_width = $("#" + this.tag).width()
+      } else {
+          this.available_width = $("#" + this.tag).width() - $("#list_explorer").width(); 
+      }
 
-    var to = this.max_chart_size - this.padding_articles;
-    this.chart_x = d3.scale.linear().range( [this.padding_articles, to] );
-    this.chart_y = d3.scale.linear().range( [this.padding_articles, to] );
+      if (this.availableSizeIsBiggerThanMinSize()) {
+          if (this.available_width >= this.available_height) {
+              this.current_vis_size = this.available_height;
+          } else {
+              this.current_vis_size = this.available_width;
+          }
+      } else {
+          this.current_vis_size = this.getMinSize();
+      }
 
-    to = this.max_chart_size - this.padding;
-    this.chart_x_circle = d3.scale.linear().range( [this.padding, to] );
-    this.chart_y_circle = d3.scale.linear().range( [this.padding, to] );
+      if (this.current_vis_size > this.max_height) {
+          this.current_vis_size = this.max_height;
+      }
+  },
+
+
+  // Calculate all scales for the current map
+  initScales: function() {
+      // Init all scales
+      this.chart_x = d3.scale.linear();
+      this.chart_y = d3.scale.linear();
+
+      this.chart_x_circle = d3.scale.linear();
+      this.chart_y_circle = d3.scale.linear();
+
+      this.x = d3.scale.linear();
+      this.y = d3.scale.linear();
+      
+      this.paper_x = d3.scale.linear();
+      this.paper_y = d3.scale.linear();
+
+      this.circle_size = d3.scale.sqrt()
+      this.diameter_size = d3.scale.sqrt()
+  },
+
+  setScaleRanges: function() {
+      // Calculate correct scaling factors and paper/circle dimensions
+      this.correction_factor = this.current_vis_size / this.reference_size;
+
+      this.circle_min = (this.min_area_size * this.correction_factor) * this.bubble_min_scale;
+      this.circle_max = (this.max_area_size * this.correction_factor) * this.bubble_max_scale;
+      this.circle_size.range([this.circle_min, this.circle_max]);
+
+      this.paper_min = (this.min_diameter_size * this.correction_factor) * this.paper_min_scale;
+      this.paper_max = (this.max_diameter_size * this.correction_factor) * this.paper_max_scale;
+      this.diameter_size.range([this.paper_min, this.paper_max]);
+
+      // Set ranges on scales
+      var padding_articles = this.paper_max;
+      this.chart_x.range([padding_articles, this.current_vis_size - padding_articles]);
+      this.chart_y.range([padding_articles, this.current_vis_size - padding_articles]);
+
+      var circle_padding = 0;
+      this.chart_x_circle.range([circle_padding, this.current_vis_size - circle_padding]);
+      this.chart_y_circle.range([circle_padding, this.current_vis_size - circle_padding]);
+
+      var zoomed_article_padding = 60;
+      this.x.range([zoomed_article_padding, this.current_vis_size - zoomed_article_padding]);
+      this.y.range([zoomed_article_padding, this.current_vis_size - zoomed_article_padding]);
+      
+      var zoomed_article_padding_paper = 35;
+      this.paper_x.range([zoomed_article_padding_paper, this.current_vis_size - zoomed_article_padding_paper]);
+      this.paper_y.range([zoomed_article_padding_paper, this.current_vis_size - zoomed_article_padding_paper]);
+  },
+
+  // Size helper functions
+  getMinSize: function() {
+      if (this.min_height >= this.min_width)
+          return this.min_width;
+      else
+          return this.min_height;
   },
   
-  // either set it to min values or use all space available
-  calculateMaxChartSize: function() {
-    var self = this;
-    
-    var getMinSize = function () {
-        if (self.min_height >= self.min_width)
-        return self.min_width;
-      else
-        return self.min_height;
-    }
-    
-    if (this.availableSizeIsBiggerThanMinSize()) {
-      if (this.available_width >= this.available_height) {
-        var corrected_height = this.available_height - this.top_correction - this.bottom_correction;
-        this.max_chart_size = corrected_height;
-      } else {
-          this.max_chart_size = getMinSize();
-      }
-    } else {
-       this.max_chart_size = getMinSize();
-    }
-  },
-
-  // a little more readable
   availableSizeIsBiggerThanMinSize: function() {
     if ( this.available_width > this.min_width && this.available_height > this.min_height )
       return true;
@@ -352,86 +391,82 @@ HeadstartFSM.prototype = {
       return false;
   },
 
-  setCorrectionFactor: function() {
-    if ( this.correction_factor_width > this.correction_factor_height )
-      this.correction_factor = this.correction_factor_height;
-    else
-      this.correction_factor = this.correction_factor_width;
-  },
-
-  setListWidth: function() {
-    if ( this.available_width > ( this.max_chart_size + this.max_list_size )) {
-      this.list_width =  this.max_list_size
-    } else if(this.available_width - this.max_chart_size > this.min_list_size) {
-      this.list_width = this.available_width - this.max_chart_size;  
-    } else {
-      this.list_width = this.min_list_size;
-    }
-  },
-
-  setCircleSize: function() {
-    this.circle_size = d3.scale.sqrt().range( [this.circle_min, this.circle_max] );
-  },
-
-  setDiameterSize: function() {
-    var from = this.min_diameter_size * this.correction_factor;
-    var to = this.max_diameter_size * this.correction_factor;
-    this.diameter_size = d3.scale.sqrt().range([from, to]);
-  },
-
   // auto if enough space is available, else hidden
   setOverflowToHiddenOrAuto: function( selector ) {
     var overflow = "hidden";
 
-    if ( this.max_chart_size > this.available_height ||
-         this.max_chart_size + this.list_width > this.available_width ){
+    if ( this.current_vis_size > this.available_height ||
+         this.current_vis_size + this.list_width > this.available_width ){
         overflow = "auto";
     }
 
     d3.select( selector ).style( "overflow" , overflow );
   },
 
-    // not needed?
-  /*setHeight: function( selector ) {
-    var chart = d3.select( selector );
-    chart.style("height", function () { return (this.max_chart_size < 720) ? "35px" : "40px";  });
-  },*/
-
   // Draw basic SVG canvas
   // NOTE attribute width addition by number of elements
-  drawSvg: function() {
+  drawSvg: function(update) {
+      
+      update = typeof update !== 'undefined' ? update : false;
+      
+      this.svg = d3.select("#chart-svg");
 
-    this.chart_id = d3.select( "#headstart-chart" );
-    
-    var chart_width = this.max_chart_size;// + this.max_list_size;
-    
-    var svg = this.chart_id.append( "svg" )
-            .attr("id", "chart-svg")
-            .attr( "width", chart_width + "px" )
-            .attr( "height",  this.max_chart_size + "px" );
-
-    this.svg = svg;
+      if (this.is("timeline")) {
+          s = this.current_vis_size * Object.keys(this.bubbles).length;
+          this.svg.attr("width", s)
+                  .attr("height", this.current_vis_size);
+          if (update === false) {
+            this.svg.attr("viewBox", "0 0 " + s + " " + this.current_vis_size)
+          }
+      } else {
+          this.svg.attr("height", this.current_vis_size + "px")
+              .attr("width", "100%")
+              .attr("preserveAspectRatio", "xMidYMid meet");
+          if (update === false) {
+            this.svg.attr("viewBox", "0 0 " + this.current_vis_size + " " + this.current_vis_size);
+          }
+      }
   },
 
   drawChartCanvas: function() {
 
     var chart = this.svg.append("g").attr( "id", "chart_canvas" );
-    chart.attr( "height", this.max_chart_size + "px" )
-    chart.attr( "width",  this.max_chart_size + "px" );
-
     // Rectangle to contain nodes in force layout
     var rect = chart.append("rect")
-    var rect_width = this.max_chart_size;// + this.max_list_size;
-    rect.attr( "height", this.max_chart_size + "px" )
-    rect.attr( "width",  rect_width + "px" );
+    // var rect_width = this.current_vis_size;// + this.max_list_size;
+    rect.attr( "height", this.current_vis_size + "px" )
+    rect.attr( "width",  this.current_vis_size + "px" );
 
+    // chart.attr( "height", this.current_vis_size + "px" )
+    // chart.attr( "width",  this.current_vis_size + "px" );
     this.chart = chart;
   },
+
+  initEventListeners: function() {
+      self = this;
+      d3.select(window).on("resize", function() {
+          self.calcChartSize();
+          self.drawSvg(true);
+          list.fit_list_height();
+      });
+
+      // Info Modal Event Listener
+      $('#info_modal').on('show.bs.modal', function(event) {
+          // var source = $(event.relatedTarget) // Button that triggered the modal
+          // var type = source.data('type') // Extract info from data-* attributes
+
+          var modal = $(this)
+          modal.find('.modal-title').text(intro_title)
+          modal.find('.modal-body').html(intro_body)
+      })
+  },
+
 
   // Mouse interaction listeners
   initMouseListeners: function() {
     this.initMouseMoveListeners();
     this.initMouseClickListeners();
+    this.initClickListenersForNav();
   },
 
   initMouseMoveListeners: function() {
@@ -441,14 +476,14 @@ HeadstartFSM.prototype = {
         headstart.current_circle = null;
       }
       headstart.bubbles[headstart.current_file_number].mouseout("outofbigbubble");
-      popup.initClickListenersForNav();
+      headstart.initClickListenersForNav();
     });
   },
 
   initMouseClickListeners: function() {
     var self = this;  
-      
-    $("rect").on( "click", function() {
+    
+    $("#chart-svg").on( "click", function() {
       headstart.bubbles[headstart.current_file_number].zoomout();
     });
     
@@ -457,7 +492,7 @@ HeadstartFSM.prototype = {
             headstart.bubbles[headstart.current_file_number].zoomout();
         }
     });
-    
+
     /*$("#" + this.tag).on("click", function () {
       headstart.bubbles[headstart.current_file_number].zoomout();
     })*/
@@ -468,41 +503,86 @@ HeadstartFSM.prototype = {
     });
   },
 
-  // Draws the h1 for headstart
-  drawTitle: function() {
-    
+  initClickListenersForNav: function() {
     var self = this;
-      
-    d3.select("#subdiscipline_title")
-    .style("width", this.max_chart_size + "px")
-    .append("h1")
-    .attr("class", function () {
-      return (self.max_chart_size == self.min_width)?("title-small"):("title-large");
-    });
-    
-    if(!this.show_titlerow) {
-        $("#subdiscipline_title").hide();
-    }
+      $("#timelineview").on("click", function() {
+          if ($("#timelineview a").html() == "TimeLineView") {
+              self.mediator.publish("to_timeline");
+          }
+      });
   },
 
+
+  // Draws the header for headstart
+  drawTitle: function() {
+
+    if (headstart.language == "eng") {
+        var chart_title = 'Overview of <span id="num_articles"></span> articles';
+    } else {
+        var chart_title = 'Überblick über <span id="num_articles"></span> Artikel';
+    }
+
+    $("#subdiscipline_title h4").html(chart_title);
+    $("#num_articles").html($(".paper").length);
+
+    if (headstart.show_infolink) {
+        infolink =  ' (<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>)'
+        $("#subdiscipline_title h4").append(infolink);
+        $("#infolink").text(headstart.localization[headstart.language].intro_label);  
+    }
+
+    if (headstart.show_timeline) {
+        var link = ' <span id="timelineview"><a href="#">TimeLineView</a></span>';
+        $("#subdiscipline_title>h4").append(link);
+    }
+
+    if (headstart.show_dropdown) {
+        var dropdown = '<select id="datasets"></select>';
+
+        $("#subdiscipline_title>h4").append(" Select dataset: ");
+        $("#subdiscipline_title>h4").append(dropdown);
+
+        $.each(headstart.bubbles, function(index, entry) {
+            var current_item = '<option value="' + entry.file + '">' + entry.title + '</option>';
+            $("#datasets").append(current_item);
+        })
+
+        //$("#datasets " + headstart.current_file_number + ":selected").text();
+        $("#datasets").val(headstart.bubbles[headstart.current_file_number].file);
+
+        $("#datasets").change(function() {
+
+            var selected_file_number = datasets.selectedIndex + 1;
+            if (selected_file_number != headstart.current_file_number) {
+                headstart.tofile(selected_file_number);
+            }
+        })
+    }
+},
+
+
   initForceAreas: function() {
-    var padded = this.max_chart_size - this.padding;
+    var padded = this.current_vis_size - this.padding;
     this.force_areas = d3.layout.force().links([]).size([padded, padded]);
   },
 
   initForcePapers: function() {
-    var padded = this.max_chart_size - this.padding;
+    var padded = this.current_vis_size - this.padding;
     this.force_papers = d3.layout.force().nodes([]).links([]).size([padded, padded]);
+    if (typeof checkPapers !== 'undefined') {
+        window.clearInterval(checkPapers);
+    }
   },
 
   // calls itself over and over until the forced layout of the papers
   // is established
   checkForcePapers: function() {
     var hs = this;
+    var bubble = hs.bubbles[this.current_file_number];
     if (hs.is("normal") || hs.is("switchfiles")) {
       checkPapers = window.setInterval(function () {
         if (hs.is("normal") || hs.is("switchfiles")) {
-          if ((!papers.is("ready") && !papers.is("none")) || (bubbles.is("startup") || bubbles.is("none") || (bubbles.is("start")) )) {
+          if ((!papers.is("ready") && !papers.is("none")) || (bubble.is("startup") || bubble.is("none") || (bubble.is("start")) )) {
             if (hs.force_papers.alpha() <= 0 && hs.force_areas.alpha() <= 0) {
               papers.forced();
               if(headstart.show_list) {
@@ -554,8 +634,8 @@ HeadstartFSM.prototype = {
   },
 
   drawYGrid: function() {
-    var to = (this.bubblesSize() * this.max_chart_size);
-    for (var i = 0; i <= to; i+= this.max_chart_size) {
+    var to = (this.bubblesSize() * this.current_vis_size);
+    for (var i = 0; i <= to; i+= this.current_vis_size) {
       this.svg.append("line")
       .attr("x1", i)
       .attr("x2", i)
@@ -568,20 +648,27 @@ HeadstartFSM.prototype = {
     for (var i = 0; i <= 900; i+=50) {
       this.svg.append("line")
       .attr("x1", "0")
-      .attr("x2", this.bubblesSize() * this.max_chart_size)
+      .attr("x2", this.bubblesSize() * this.current_vis_size)
       .attr("y1", i)
       .attr("y2", i)
     };
   },
 
-  drawGridTitles: function() {
-    $("#headstart-chart").append('<div id="tl-titles"></div>');
-    for (var i = 1; i <= this.bubblesSize(); i++) {
-      $("#tl-titles").append('<div class="tl-title">' +
-          this.bubbles[i].title
-          + '</div>');
-    }
-    $(".tl-title").css("width", this.max_chart_size);
+  drawGridTitles: function(update) {
+      
+      update = typeof update !== 'undefined' ? update : false;
+      
+      if (update === true) {
+          $("#tl-titles").width(this.current_vis_size * Object.keys(this.bubbles).length);
+          $(".tl-title").css("width", this.current_vis_size);
+      } else {
+          for (var i = 1; i <= this.bubblesSize(); i++) {
+              $("#tl-titles").append(
+                  '<div class="tl-title"><h3>' + this.bubbles[i].title + '</h3></div>');
+          }
+          $("#tl-titles").width(this.current_vis_size * Object.keys(this.bubbles).length);
+          $(".tl-title").css("width", this.current_vis_size)
+      }
   },
   
   createRestUrl: function () {
@@ -608,59 +695,71 @@ HeadstartFSM.prototype = {
 
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
-  onstart: function( event, from, to, file ) {
-    this.init_mediator();
-    
-    this.loadScripts();
-    
-    this.checkBrowserVersions();
-    this.checkThatRequiredLibsArePresent();
-    this.initDynamicVariables();
+  onstart: function(event, from, to, file) {
+      this.init_mediator();
+      this.loadScripts();
 
-    this.setOverflowToHiddenOrAuto( "#main" );
-    
-    this.resetBubbles();
-    
-    var bubbles = this.bubbles[this.current_file_number];
+      this.calcChartSize();
 
-    // NOTE: async call
-    // therefore we need to call the methods which depend on bubbles.data
-    // after the csv has been received.
-    var hs = this;
+      this.initScales();
     
-    var setupVisualization = function( csv ) {
-      hs.drawSvg();
-      hs.drawChartCanvas();
-      hs.drawTitle();
-      if(headstart.is_adaptive) {
-        
-        var url = headstart.createRestUrl();
-            
-        $.getJSON(url, function(data) {
-          headstart.startVisualization(hs, bubbles, csv, data, true);
-        });
-      } else {
-        headstart.startVisualization(hs, bubbles, csv, null, true);
+      this.checkBrowserVersions();
+      this.checkThatRequiredLibsArePresent();
+
+      this.setOverflowToHiddenOrAuto("#main");
+      this.resetBubbles();
+
+      var bubbles = this.bubbles[this.current_file_number];
+
+      // NOTE: async call
+      // therefore we need to call the methods which depend on bubbles.data
+      // after the csv has been received.
+      var hs = this;
+
+      var setupVisualization = function(csv) {
+          hs.drawTitle();
+
+          hs.calcChartSize();
+          hs.setScaleRanges();
+
+          hs.drawSvg();
+          hs.drawChartCanvas();
+          if (headstart.is_adaptive) {
+
+              var url = headstart.createRestUrl();
+
+              $.getJSON(url, function(data) {
+                  headstart.startVisualization(hs, bubbles, csv, data, true);
+              });
+          } else {
+              headstart.startVisualization(hs, bubbles, csv, null, true);
+          }
+
+          // Horrible solution but the first call is needed to calculate the chart height
+          // and this call sets the final number of articles in the viz
+          hs.drawTitle();
       }
-    }
-    switch(this.input_format) {
-        case "csv":
-            d3.csv(bubbles.file, setupVisualization);
-            break;
-            
-        case "json":
-            d3.json(this.service_path + "getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
-            break;
-            
-        case "json-direct":
-            setupVisualization(bubbles.file);
-            break;
-            
-        default:
-                break;
-    }
 
+
+      switch (this.input_format) {
+          case "csv":
+              d3.csv(bubbles.file, setupVisualization);
+              break;
+
+          case "json":
+              d3.json(this.service_path + "getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
+              break;
+
+          case "json-direct":
+              setupVisualization(bubbles.file);
+
+              break;
+
+          default:
+              break;
+      }
   },
+
 
   // 'ontotimeline' transitions from Headstarts "normal" view to the timeline
   // view. In a nutshell:
@@ -669,123 +768,142 @@ HeadstartFSM.prototype = {
   //    - the canvas
   // 2. rendering of new elements, on a bigger
   //    chart
-  ontotimeline: function( event, from, to ){
-    
-    window.clearInterval(checkPapers);
-    
-    this.force_areas.stop();
-    this.force_papers.stop();
-   
-    this.resetBubbles();
-   
-    // clear the canvas
-    $("#chart_canvas").empty();
+  ontotimeline: function(event, from, to) {
+      window.clearInterval(checkPapers);
 
-    // clear the list list
-    $("#papers_list_container").empty();
-    
-    this.bubbles[headstart.current_file_number].current = "x";
-    popup.current  = "hidden";
-    papers.current = "none";
-    list.current   = "none";
+      this.force_areas.stop();
+      this.force_papers.stop();
 
-    // change heading to give an option to get back to normal view
-    popup.drawNormalViewLink();
-    this.initDynamicVariables();
+      this.resetBubbles();
 
-    // need a bigger width for the timeline view
-    this.svg.attr("width", (this.max_chart_size * this.bubblesSize() + "px") );
-    this.svg.attr("height", this.max_chart_size);
-    this.chart_id.attr("overflow-x", "scroll");
-    $("#main").css("overflow", "auto");
+      // clear the canvas
+      $("#chart_canvas").empty();
 
-    // load bubbles in sync
-    
-    $.each(this.bubbles, function (index, elem) {
-   
-        
-      var setupTimelineVisualization = function (csv) {
-        elem.start( csv )
-      }
+      // clear the list list
+      $("#list_explorer").empty();
+
+      this.bubbles[headstart.current_file_number].current = "x";
+      papers.current = "none";
+      list.current = "none";
+
+      // change heading to give an option to get back to normal view
+      this.viz.empty()
+
+      var compiledTemplate = Handlebars.getTemplate(this.templ_path, "timeline");
+      var timeline = compiledTemplate();
+      this.viz.append(timeline);
+
+      this.drawTitle()
+      this.drawGridTitles();
+
+      this.drawNormalViewLink();
+      this.initScales();
+
+      this.calcChartSize();
+      this.setScaleRanges();
+      this.drawSvg();
+      this.drawChartCanvas()
       
-      switch(headstart.input_format) {
-            case "csv":
-                d3.csv(elem.file, setupTimelineVisualization);
-                break;
+      this.drawGridTitles(true);
 
-            case "json":
-                d3.json(headstart.service_path + "getLatestRevision.php?vis_id=" + elem.file, setupTimelineVisualization);
-                break;
 
-            default:
-                    break;
-        }
-      
-    })
+      d3.select("#headstart-chart").attr("overflow-x", "scroll");
 
-    this.drawGrid();
-    this.drawGridTitles();
-    this.initMouseListeners();
+      $("#main").css("overflow", "auto");
+
+      var hs = this;
+
+      // load bubbles in sync
+
+      $.each(this.bubbles, function(index, elem) {
+          var setupTimelineVisualization = function(csv) {
+              elem.start(csv)
+          }
+
+          switch (headstart.input_format) {
+              case "csv":
+                  d3.csv(elem.file, setupTimelineVisualization);
+                  break;
+
+              case "json":
+                  d3.json(headstart.service_path + "getLatestRevision.php?vis_id=" + elem.file, setupTimelineVisualization);
+                  break;
+
+              default:
+                  break;
+          }
+      });
+
+      this.drawGrid();
+      this.initMouseListeners();
   },
+
   
-  ontofile: function( event, from, to, file) {
-    
-    this.force_areas.stop();
-    this.force_papers.stop();
-    
-    headstart.current_file_number = file;
-    
-    // clear the canvas
-    $("#chart_canvas").remove();
+  ontofile: function(event, from, to, file) {
 
-    // clear the list list
-    $("#papers_list_container").empty();
-    
-    popup.current  = "hidden";
-    papers.current = "none";
-    list.current   = "none";
+      this.force_areas.stop();
+      this.force_papers.stop();
 
-    this.initDynamicVariables();
-    this.setOverflowToHiddenOrAuto( "#main" );
-    
-    // reset bubbles
-    this.resetBubbles();
-    
-    var bubbles = this.bubbles[this.current_file_number];
+      headstart.current_file_number = file;
 
-    var hs = this;
-    var setupVisualization = function( csv ) {
-      hs.drawChartCanvas();
-      
-      if(headstart.is_adaptive) {
-        
-        var url = headstart.createRestUrl();
-            
-        $.getJSON(url, function(data) {
-          headstart.startVisualization(hs, bubbles, csv, data, false);
-        });
-      } else {
-        headstart.startVisualization(hs, bubbles, csv, null, false);
+      // clear the canvas
+      $("#chart_canvas").remove();
+
+      // clear the list list
+      $("#list_explorer").empty();
+
+      // popup.current = "hidden";
+      papers.current = "none";
+      list.current = "none";
+
+      // this.initScales();
+      this.setOverflowToHiddenOrAuto("#main");
+
+      // reset bubbles
+      this.resetBubbles();
+
+      var bubbles = this.bubbles[this.current_file_number];
+
+      var hs = this;
+      var setupVisualization = function(csv) {
+          hs.calcChartSize();
+          hs.setScaleRanges();
+
+          hs.drawChartCanvas();
+
+          if (hs.is_adaptive) {
+
+              var url = hs.createRestUrl();
+
+              $.getJSON(url, function(data) {
+                  headstart.startVisualization(hs, bubbles, csv, data, false);
+              });
+          } else {
+              headstart.startVisualization(hs, bubbles, csv, null, false);
+          }
+
+          hs.drawTitle()
       }
-    }
-    
-    switch(this.input_format) {
-        case "csv":
-            d3.csv(bubbles.file, setupVisualization);
-            break;
-            
-        case "json":
-            d3.json(this.service_path + "getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
-            break;
-            
-        default:
-                break;
-    }
+
+      switch (this.input_format) {
+          case "csv":
+              d3.csv(bubbles.file, setupVisualization);
+              break;
+
+          case "json":
+              d3.json(this.service_path + "getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
+              break;
+
+          default:
+              break;
+      }
   },
+
   
   startVisualization: function(hs, bubbles, csv, adaptive_data, popup_start) {
     bubbles.start( csv, adaptive_data );
 
+    hs.initEventListeners();
     hs.initMouseListeners();
     hs.initForcePapers();
     hs.initForceAreas();
@@ -798,12 +916,25 @@ HeadstartFSM.prototype = {
     bubbles.initMouseListeners();
     list.start( bubbles );
     
-    if(popup_start)
-      popup.start();
-    
     hs.checkForcePapers();
-    //$("#area_title>h2").hyphenate('de');
+
+    if (headstart.show_intro) {
+        $("#infolink").click();
+    }
+
+
+
+    $("#area_title>h2").hyphenate('en');
     $("#area_title_object>body").dotdotdot({wrap:"letter"});
+  },
+
+  drawNormalViewLink: function() {
+      // remove event handler
+      $("#timelineview").off("click");
+
+      // refreshes page
+      var link = ' <a href="" id="normal_link">Normal View</a>';
+      $("#timelineview").html(link);
   },
 
   init_mediator: function() {
@@ -842,13 +973,14 @@ HeadstartFSM.prototype = {
   },
 
   popup_toggle: function() {
-    if (headstart.mediator_states.popup_visible) {
-      popup.hide();
-      headstart.mediator_states.popup_visible = false;
-    } else {
-      popup.show();
-      headstart.mediator_states.popup_visible = true;
-    }
+    // $("#info_modal").modal();
+    // if (headstart.mediator_states.popup_visible) {
+    //   popup.hide();
+    //   headstart.mediator_states.popup_visible = false;
+    // } else {
+    //   popup.show();
+    //   headstart.mediator_states.popup_visible = true;
+    // }
   },
 
   to_timeline: function() {
@@ -923,9 +1055,8 @@ HeadstartFSM.prototype = {
 
   record_action: function(id, action, user, type, timestamp, additional_params, post_data) {
     headstart.recordAction(id, action, user, type, timestamp, additional_params, post_data);
-  }
-}
-
+  },
+},
 
 // State definitions for headstart object
 // see "onstart" function for entry point e.g. the first code that
@@ -941,3 +1072,19 @@ StateMachine.create({
   ]
 
 });
+
+function getRealHeight(element){
+    var height=0;
+    if (element.children().length>0){
+        var temp = $('<div></div>');
+        temp.append(element.children());
+        height = element.height();
+        element.append(temp.children());
+    } else {
+        var html=element.html();
+        element.html('');
+        height = element.height();
+        element.html(html);
+    }
+    return height;
+}
