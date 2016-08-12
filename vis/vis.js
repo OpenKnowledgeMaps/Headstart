@@ -61,6 +61,7 @@ Headstart = function(host, path, tag, files, options) {
   document.getElementById(tag).className = namespace;
   
   addCss(host + path + vis_directory + 'style.css', 'head');
+  addCss('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', 'head');
 
   lib_sources.forEach(function(script_source, i) {
     var current_script = addScript(host + path + vis_directory + lib_directory + script_source.source, 'head', false);

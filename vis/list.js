@@ -257,6 +257,10 @@ list.populateMetaData = function(nodes) {
        d3.event.stopPropagation();
      })
   
+  paper_title.append("a")
+          .html(function(d) {return '<a href="' + d.url + '" target="_blank" class="outlink">&nbsp;&#xf08e;</a>'})
+          .on("click", function () { d3.event.stopPropagation(); })
+  
   paper_title.append("p")
     .attr("class", "list_details highlightable")
     .html(function (d) { return d.authors_string })

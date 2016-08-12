@@ -407,6 +407,11 @@
   text-decoration: underline;
 }
 
+.headstart a.outlink {
+    font-family: FontAwesome; 
+    text-decoration: none;
+}
+
 .headstart .list_details {
   margin-top: 3px;
   font-size: 12px;
