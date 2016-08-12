@@ -55,8 +55,8 @@ get_papers <- function(query, params = NULL, limit = 100) {
     }, ""), collapse = "-")
     xauthors <- paste0(vapply(xml2::xml_children(xml2::xml_find_all(z, authors)), function(a) {
       paste(
-        xtext(xml2::xml_find_one(a, ".//LastName")),
-        xtext(xml2::xml_find_one(a, ".//ForeName")),
+        xtext(xml2::xml_find_first(a, ".//LastName")),
+        xtext(xml2::xml_find_first(a, ".//ForeName")),
         sep = ", "
       )
     }, ""), collapse = ";")
