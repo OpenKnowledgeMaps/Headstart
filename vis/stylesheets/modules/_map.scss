@@ -36,3 +36,26 @@ line {
 text {
   font: 10px sans-serif;
 }
+
+.container-headstart {
+    margin: 0px auto;
+    min-width: 900px;
+}
+
+.vis-col {
+    display: inline-block;
+    width: 60%;
+}
+
+.list-col {
+    display: inline-block;
+    width:39%;
+    vertical-align:top;
+    float:right;
+}
+
+.h4, h4 {
+    font-size: 18px;
+    min-height: 50px;
+}
+

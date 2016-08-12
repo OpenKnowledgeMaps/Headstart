@@ -5,8 +5,7 @@
 }
 
 #explorer_options {
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding: 5px 15px;
 }
 
 #filter_container {
@@ -21,4 +20,18 @@
 #sort_container {
     float: right;
     display: none;
+}
+
+@media screen and (max-width: 1050px) {
+    #sort_container {
+    float: none;
+    display: block;
+    }
+    #sort-buttons {
+    padding: 5px 0px;
+    }
+    
+    .pull-right {
+    float: none !important;
+    }
 }
