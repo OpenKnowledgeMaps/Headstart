@@ -7,7 +7,7 @@ import d3 from 'd3';
 
 var BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js")
 
-import BubblesFSM from './bubbles';
+import { BubblesFSM } from './bubbles';
 
 
 export var HeadstartFSM = function(host, path, tag, files, options) {
@@ -289,7 +289,7 @@ HeadstartFSM.prototype = {
       this.bubbles = {};
     }
 
-    $.each(this.files, function(index, elem) {
+    $.each(this.files, (index, elem) => {
       var bubble = new BubblesFSM();
       this.registerBubbles(bubble);
       bubble.title = elem.title;
@@ -513,7 +513,7 @@ HeadstartFSM.prototype = {
     $("#num_articles").html($(".paper").length);
 
     if (this.show_infolink) {
-        infolink =  ' (<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>)'
+        let infolink =  ' (<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>)'
         $("#subdiscipline_title h4").append(infolink);
         $("#infolink").text(this.localization[this.language].intro_label);
     }
@@ -700,14 +700,14 @@ HeadstartFSM.prototype = {
       // after the csv has been received.
       var hs = this;
 
-      var setupVisualization = function(csv) {
-          hs.drawTitle();
+      var setupVisualization = (csv) => {
+          this.drawTitle();
 
-          hs.calcChartSize();
-          hs.setScaleRanges();
+          this.calcChartSize();
+          this.setScaleRanges();
 
-          hs.drawSvg();
-          hs.drawChartCanvas();
+          this.drawSvg();
+          this.drawChartCanvas();
           if (this.is_adaptive) {
 
               var url = this.createRestUrl();
@@ -721,7 +721,7 @@ HeadstartFSM.prototype = {
 
           // Horrible solution but the first call is needed to calculate the chart height
           // and this call sets the final number of articles in the viz
-          hs.drawTitle();
+          this.drawTitle();
       }
 
 
@@ -843,16 +843,15 @@ HeadstartFSM.prototype = {
 
       var bubbles = this.bubbles[this.current_file_number];
 
-      var hs = this;
-      var setupVisualization = function(csv) {
-          hs.calcChartSize();
-          hs.setScaleRanges();
+      var setupVisualization = (csv) => {
+          this.calcChartSize();
+          this.setScaleRanges();
 
-          hs.drawChartCanvas();
+          this.drawChartCanvas();
 
-          if (hs.is_adaptive) {
+          if (this.is_adaptive) {
 
-              var url = hs.createRestUrl();
+              var url = this.createRestUrl();
 
               $.getJSON(url, function(data) {
                   this.startVisualization(hs, bubbles, csv, data, false);
@@ -861,7 +860,7 @@ HeadstartFSM.prototype = {
               this.startVisualization(hs, bubbles, csv, null, false);
           }
 
-          hs.drawTitle()
+          this.drawTitle()
       }
 
       switch (this.input_format) {
@@ -1032,10 +1031,10 @@ HeadstartFSM.prototype = {
       .style("display", "none");
   },
 
-  record_action: function(id, action, user, type, timestamp, additional_params, post_data) {
+  record_action: function (id, action, user, type, timestamp, additional_params, post_data) {
     this.recordAction(id, action, user, type, timestamp, additional_params, post_data);
   },
-},
+}; // end HeadstartFSM prototype definition
 
 // State definitions for headstart object
 // see "onstart" function for entry point e.g. the first code that

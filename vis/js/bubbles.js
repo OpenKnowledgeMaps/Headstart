@@ -2,8 +2,6 @@
 // Filename: bubbles.js
 import StateMachine from 'javascript-state-machine';
 
-import { headstart } from './vis';
-
 export var BubblesFSM = function() {
   this.id = 0;
   this.areas = {};
@@ -433,14 +431,14 @@ BubblesFSM.prototype = {
   },
 
   // prepare the areas for the bubbles
-  prepareAreas: function() {
+  prepareAreas: function () {
 
     var areas = this.areas;
     var areas_array = this.areas_array;
 
     var readers = [];
 
-    for(area in areas) {
+    for(var area in areas) {
       var papers = areas[area].papers;
       var sum_readers = d3.sum(papers, function(d) { return d.internal_readers  });
 
