@@ -560,7 +560,8 @@ list.writePopup = function(pdf_url) {
         $("#pdf_iframe")
             .attr("src", function() {
                 return headstart.host + headstart.path + "vis/lib/pdfjs-hypothesis/web/viewer.html?file=" + pdf_url; //#view=FitH
-            });
+            })
+            .attr("scrolling", "no");
     }, 100);
 
     $("#spinner").hide();
@@ -597,7 +598,7 @@ list.populateOverlay = function(d) {
             $("#spinner").show();
             $("#pdf_iframe").hide();
             $("#iframe_modal").modal()
-
+            
             var journal = this_d.published_in.toLowerCase();
             var url = "http://journals.plos.org/" + headstart.plos_journals_to_shortcodes[journal] + "/article/asset?id=" + filename;
 
