@@ -559,7 +559,7 @@ list.writePopup = function(pdf_url) {
     setTimeout(function() {
         $("#pdf_iframe")
             .attr("src", function() {
-                return pdf_url + "#view=FitH";
+                return headstart.host + headstart.path + "vis/lib/pdfjs-hypothesis/web/viewer.html?file=" + pdf_url; //#view=FitH
             });
     }, 100);
 
