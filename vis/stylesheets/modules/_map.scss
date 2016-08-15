@@ -1,0 +1,62 @@
+@import 'map/header';
+@import 'map/bubbles';
+@import 'map/papers';
+
+/* ################ Chart ############### */
+
+.headstart {
+    #headstart-chart {
+        /*position: absolute;*/
+        font-family: Helvetica;
+        /*margin-top: 6px;*/
+    }
+
+    #chart-svg {
+        overflow-x: scroll;
+    }
+
+    rect {
+        fill: rgb(31, 119, 180);
+        fill-opacity: .0;
+        stroke: rgb(31, 119, 180);
+        stroke-width: 0;
+    }
+
+    path {
+        fill: rgb(255, 255, 255);
+        fill-opacity: .25;
+        stroke: rgb(128, 128, 128);
+        stroke-width: 1px;
+    }
+
+    line {
+        stroke: rgb(31, 119, 180);
+        stroke-width: 1px;
+    }
+
+    text {
+        font: 10px sans-serif;
+    }
+
+    .container-headstart {
+        margin: 0px auto;
+        min-width: 900px;
+    }
+
+    .vis-col {
+        display: inline-block;
+        width: 60%;
+    }
+
+    .list-col {
+        display: inline-block;
+        width:39%;
+        vertical-align:top;
+        float:right;
+    }
+
+    .h4, h4 {
+        font-size: 18px;
+        min-height: 50px;
+    }
+}

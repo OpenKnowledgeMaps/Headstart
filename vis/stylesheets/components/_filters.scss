@@ -1,0 +1,71 @@
+/* ########### Filters ############## */
+
+.filter li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    background: #e9e9e9;
+
+    a {
+        font-family: Helvetica;
+        position: relative;
+        display: block;
+        float: left;
+        overflow: hidden;
+        margin-left: -1px;
+        padding: 5px 8px;
+        -webkit-transition: .2s;
+        text-decoration: none;
+        color: #333;
+        border: 1px solid #c6c6c6;
+        background: #e9e9e9;
+        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0);
+        -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0);
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0);
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+
+        &:hover {
+            z-index: 2;
+            text-decoration: none;
+            border-color: #939393;
+        }
+    }
+
+    &:first-child {
+        a {
+            margin-left: 0;
+            padding-left: 10px;
+            -moz-border-radius-topleft: 20px;
+            border-top-left-radius: 20px;
+            -moz-border-radius-bottomleft: 20px;
+            border-bottom-left-radius: 20px;
+        }
+
+        -moz-border-radius-topleft: 20px;
+        border-top-left-radius: 20px;
+        -moz-border-radius-bottomleft: 20px;
+        border-bottom-left-radius: 20px;
+    }
+
+    &:last-child a {
+        padding-right: 10px;
+        -moz-border-radius-topright: 20px;
+        border-top-right-radius: 20px;
+        -moz-border-radius-bottomright: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    a.selected {
+        z-index: 3;
+        float: left;
+        -webkit-transition: .2s;
+        color: #fff;
+        border: 1px solid #1e6a8d;
+        background: #489ac0;
+        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+    }
+}

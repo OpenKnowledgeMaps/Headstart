@@ -11,7 +11,9 @@ researchers that are new to a field a head start on their literature review
 
 ### Client
 
-Load `vis.js` and add a new div to your webpage.
+To create the main stylesheet, you need to first install SASS. Check out [this wiki](https://github.com/Bubblbu/Headstart/wiki/Headstart-SASS-Intro) for more information. 
+
+Once you have successfully created the file `main.css` in the stylesheets folder, load `vis.js` and add a new div to your webpage.
 
     <div id="visualization"></div>
 
