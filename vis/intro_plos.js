@@ -1,6 +1,5 @@
-﻿var intro_html = 
-"<h2>Overview Visualization of a PLOS Search Result </h2>"
-+"<br><p>This visualization presents you with a topical overview of the 100 most relevant papers for your PLOS search. You can inspect the papers within each topic, and read individual papers within this interface."
+﻿var intro_title = "Overview Visualization of a PLOS Search Result"
+var intro_body = "<p>This visualization presents you with a topical overview of the 100 most relevant papers for your PLOS search. You can inspect the papers within each topic, and read individual papers within this interface."
 +"<p><ul><li>The main topics, derived from PLOS subject areas, are represented by the blue bubbles."
 +"<li>Once you click on a bubble, you zoom into the papers related to that topic."
 +"<li>By clicking on one of the papers, you can access all metadata for that paper. By clicking on \"Preview PDF\", you can read the paper within the interface. By clicking on the title, you will be transferred to the paper on the PLOS website."

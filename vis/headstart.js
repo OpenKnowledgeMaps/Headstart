@@ -515,11 +515,17 @@ HeadstartFSM.prototype = {
 
   // Draws the header for headstart
   drawTitle: function() {
-
-    if (headstart.language == "eng") {
-        var chart_title = 'Overview of <span id="num_articles"></span> articles';
+    
+    chart_title = "";
+    
+    if(this.subdiscipline_title === "") {
+        if (headstart.language == "eng") {
+            chart_title = 'Overview of <span id="num_articles"></span> articles';
+        } else {
+            chart_title = 'Überblick über <span id="num_articles"></span> Artikel';
+        }
     } else {
-        var chart_title = 'Überblick über <span id="num_articles"></span> Artikel';
+        chart_title = this.subdiscipline_title;
     }
 
     $("#subdiscipline_title h4").html(chart_title);

@@ -869,7 +869,7 @@ BubblesFSM.prototype = {
       .style("width", function (d) {
         return d.width * headstart.circle_zoom + "px";
       })
-    .style("margin-top", "3px");
+      .style("margin-top", "4px");
 
     t.selectAll("p")
       .attr("class", "large highlightable")

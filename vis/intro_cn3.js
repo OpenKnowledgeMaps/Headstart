@@ -1,6 +1,5 @@
-﻿var intro_html = 
-"<h2>Overview Visualization of EC-TEL and i-KNOW 2014 </h2>"
-+"<br><p>This visualization presents you with a topical overview of EC-TEL and i-KNOW 2014, and highlights papers that are recommended for you. You can inspect the papers within each topic, and bookmark papers of interest."
+﻿var intro_title = "Overview Visualization of EC-TEL and i-KNOW 2014"
+var intro_body = "<p>This visualization presents you with a topical overview of EC-TEL and i-KNOW 2014, and highlights papers that are recommended for you. You can inspect the papers within each topic, and bookmark papers of interest."
 +"<p><ul><li>The main conference topics are represented by the blue bubbles."
 +"<li>Once you click on a bubble, you zoom into the papers related to that topic."
 +"A <span style='background-color:green'>green</span> border around a paper indicates that you have already bookmarked this paper. A <span style='background-color:yellow'>yellow</span> border around a paper indicates that this paper is recommended for you" 

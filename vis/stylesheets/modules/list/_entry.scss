@@ -4,13 +4,20 @@
         border-top-style: solid;
         padding-top: 7px;
         margin-bottom: 10px;
+        font-family: Helvetica;
+        
+        .list_title {
+            font-size: 14px;
+            margin-bottom: 4px;
 
-        #paper_list_title {
-            text-decoration: none;
-            color: $dark-red;
+            #paper_list_title {
+                text-decoration: none;
+                color: $dark-red;
 
-            &:hover {
-                text-decoration: underline;
+
+                &:hover {
+                    text-decoration: underline;
+                }
             }
         }
 
@@ -37,6 +44,10 @@
                 color: black;
             }
         }
+    }
+    
+    .list_authors {
+        color: $author-green;
     }
 
     #list_abstract {

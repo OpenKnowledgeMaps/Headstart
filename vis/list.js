@@ -281,7 +281,7 @@ list.populateReaders = function(nodes) {
                 .html(headstart.base_unit);
 
         } else {
-            areas.select.style("margin-bottom", "7px")
+            readers.style("line-height", "0px")
         }
     })
 }
