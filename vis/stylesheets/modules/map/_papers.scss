@@ -43,23 +43,25 @@
             text-align: right;
             vertical-align: text-bottom;
             font-family: Helvetica;
+            font-weight: bold;
 
             &.large {
-                font-size: 12px;
+                font-size: 11px;
             }
 
             &.larger {
-                font-size: 14px;
+                font-size: 12px;
             }
 
             span {
-                color: rgb(102, 102, 102);
+                color: black;
             }
         }
     }
 
     #title {
         color: $dark-red;
+        font-weight: bold;
     }
 
     #details {

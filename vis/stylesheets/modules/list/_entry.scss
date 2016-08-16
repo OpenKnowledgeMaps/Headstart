@@ -1,16 +1,18 @@
 .headstart {
     .list_metadata {
-        border-top-width: 1px;
+        border-top-width: 2px;
         border-top-style: solid;
-        border-color: $okm-gray;
-        padding-top: 7px;
+        border-color: $okm-light-gray;
+        padding-top: 10px;
         margin-bottom: 10px;
         font-family: Helvetica;
         
         .list_title {
             font-size: 14px;
             margin-bottom: 4px;
-            max-width:500px;
+            max-width:480px;
+            display: inline-block;
+            font-weight: bold;
 
             #paper_list_title {
                 text-decoration: none;
@@ -23,11 +25,25 @@
                 }
             }
         }
+        
+        
+        .list_links {
+            float: right;
+            vertical-align: top;
+            display: inline-block;
+            
+        }
+        
+        .list_links a {
+            color: $okm-red;
+            text-decoration: none;
+            
+        }
 
         .outlink {
-            color: $dark-red;
+            
             font-family: FontAwesome;
-            text-decoration: none;
+            
         }
 
         .list_details {
@@ -36,7 +52,7 @@
             line-height: 14px;
             color: $author-green;
             padding: 0;
-            max-width: 500px;
+            max-width: 480px;
             
             .list_authors {
                 color: $author-green;
@@ -45,27 +61,29 @@
             .list_in {
                 color: $journal-gray;
             }
+            
+            .list_published_in {
+                color: black;
+                font-style: italic;
+            }
 
             .list_pubyear {
-                font-style: italic;
-                color: $journal-gray;
+                font-weight: bold;
+                color: black;
             }
         }
     }
     
-    .list_authors {
-        color: $author-green;
-    }
 
     #list_abstract {
-        max-width: 500px;
+        max-width: 480px;
         font: 12px 'Helvetica', sans-serif;
         font-size: 11px;
-        line-height: 11px;
+        line-height: 13px;
         padding-right: 0;
-        padding-left: 7px;
+        padding-left: 0px;
         color: $abstract-gray;
-        border-left: solid 2.5px $okm-light-gray;
+        //border-left: solid 2.5px $okm-light-gray;
     }
 
     #list_area {

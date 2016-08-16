@@ -10,11 +10,18 @@
         h4 {
             margin-bottom: 0px;
             margin-top: 0px;
+            font-weight: bold;
         }
     }
 
     #infolink {
-        color: $dark-red;
+        color: $okm-red;
+    }
+    
+    #timelineview {
+        a {
+            color: $dark-red;
+        }
     }
 
 }
