@@ -234,27 +234,33 @@ papers.appendMetaDataCSSClass = function(xhtml) {
 }
 
 papers.appendMetaDataTitle = function(metadata) {
-  metadata.append("p")
+  metadata_title = metadata.append("p")
     .attr("id", "title")
     .attr("class","highlightable")
     .html(function (d) {  return d.title+"<br>" })
+    
+  $(metadata_title[0]).hyphenate("en");
 }
 
 papers.appendMetaDataDetails = function(metadata) {
-  metadata.append("p")
+  metadata_details = metadata.append("p")
     .attr("id", "details")
     .attr("class","highlightable")
-    .html(function (d) { return d.authors_string })
+    .html(function (d) { return d.authors_short_string })
+    
+ $(metadata_details[0]).hyphenate("en");
 }
 
 papers.appendMetaDataPublicationYear = function(metadata) {
-  metadata.append("p")
+  metadata_publication = metadata.append("p")
     .attr("id", "in")
     .attr("class","highlightable")
     .html("in ")
     .append("span")
     .attr("class", "pubyear")
     .html(function (d) { return d.published_in + " (" + d.year + ")" });
+  
+  $(metadata_publication[0]).hyphenate("en");
 }
 
 papers.appendMetaDataReaders = function(xhtml) {

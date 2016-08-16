@@ -195,7 +195,11 @@ list.populateMetaData = function(nodes) {
 
         list_metadata.select(".outlink")
             .attr("href", function(d) {
-                return d.url
+                if (headstart.url_prefix != null) {
+                    return headstart.url_prefix + d.url;
+                } else if (typeof d.url != 'undefined') {
+                    return d.url;
+                }
             })
             .on("click", function() { d3.event.stopPropagation(); })
 

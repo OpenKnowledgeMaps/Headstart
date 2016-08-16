@@ -103,19 +103,26 @@ BubblesFSM.prototype = {
         // convert authors to "[first name] [last name]"
         var authors = d.authors.split(";");
         var authors_string = "";
+        var authors_short_string = "";
         for(var i=0; i<authors.length-1; i++) {
           var names = authors[i].split(",");
           
-          if(names.length > 1)
+          if(names.length > 1) {
             authors_string += names[1] + " " + names[0];
-          else
+            authors_short_string += names[1].substr(0,1) + ". " + names[0];
+         } else {
               authors_string += names[0];
+              authors_short_string += names[0];
+         }
           
-          if(i != authors.length-2)
+          if(i != authors.length-2) {
             authors_string += ", ";
+            authors_short_string += ", ";
+          }
         }
 
         d.authors_string = authors_string;
+        d.authors_short_string = authors_short_string;
         
       });
 

@@ -10,7 +10,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            word-break: break-all;
+            word-break: break-word;
             background-color: transparent;
         }
     }
@@ -61,7 +61,7 @@
 
     #title {
         color: $dark-red;
-        font-weight: bold;
+        font-weight: bold;       
     }
 
     #details {
