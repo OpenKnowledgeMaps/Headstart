@@ -255,10 +255,15 @@ papers.appendMetaDataPublicationYear = function(metadata) {
   metadata_publication = metadata.append("p")
     .attr("id", "in")
     .attr("class","highlightable")
-    .html("in ")
-    .append("span")
+    .html("in ");
+ 
+  metadata_publication.append("span")
+    .attr("class", "published_in")
+    .html(function (d) { return d.published_in });
+  
+  metadata_publication.append("span")
     .attr("class", "pubyear")
-    .html(function (d) { return d.published_in + " (" + d.year + ")" });
+    .html(function (d) { return " (" + d.year + ")" });
   
   $(metadata_publication[0]).hyphenate("en");
 }
