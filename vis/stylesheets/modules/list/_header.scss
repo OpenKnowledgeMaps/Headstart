@@ -32,10 +32,11 @@
         }
         #sort-buttons {
             padding: 5px 0px;
+            
+            &.pull-right {
+                float: none !important;
+            }
         }
-
-        .pull-right {
-            float: none !important;
-        }
+        
     }
 }
