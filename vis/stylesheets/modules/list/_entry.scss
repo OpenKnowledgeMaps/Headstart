@@ -33,7 +33,10 @@
             line-height: 14px;
             color: $author-green;
             padding: 0;
-
+            
+            .list_authors {
+                color: $author-green;
+            }
 
             .list_in {
                 color: $journal-gray;
