@@ -14,7 +14,7 @@
         &.zoom_selected {
             fill-opacity: 1;
             fill: $lightest-blue;
-            stroke-width: 1px;
+            stroke-width: 3px;
         }
 
         &.area {
@@ -54,7 +54,7 @@
             padding: 0;
             text-align: center;
             text-transform: none;
-            color: black;
+            color: $okm-blue;
             background-color: transparent;
         }
     }

@@ -2,6 +2,7 @@
     .list_metadata {
         border-top-width: 1px;
         border-top-style: solid;
+        border-color: $okm-gray;
         padding-top: 7px;
         margin-bottom: 10px;
         font-family: Helvetica;
@@ -9,10 +10,12 @@
         .list_title {
             font-size: 14px;
             margin-bottom: 4px;
+            max-width:500px;
 
             #paper_list_title {
                 text-decoration: none;
                 color: $dark-red;
+                
 
 
                 &:hover {
@@ -33,6 +36,7 @@
             line-height: 14px;
             color: $author-green;
             padding: 0;
+            max-width: 500px;
             
             .list_authors {
                 color: $author-green;
@@ -44,7 +48,7 @@
 
             .list_pubyear {
                 font-style: italic;
-                color: black;
+                color: $journal-gray;
             }
         }
     }
@@ -54,6 +58,7 @@
     }
 
     #list_abstract {
+        max-width: 500px;
         font: 12px 'Helvetica', sans-serif;
         font-size: 11px;
         line-height: 11px;
@@ -68,10 +73,11 @@
         font-size: 11px;
         line-height: 11px;
         margin-top: 10px;
-        margin-bottom: 0;
+        margin-bottom: 10px;
         padding: 0;
         text-align: left;
         color: black;
+        display: inline-block;
 
         .area_tag {
             font-weight: bold;
@@ -81,17 +87,18 @@
     .list_readers {
         font-size: 11px;
         line-height: 11px;
-        margin-top: 5px;
-        margin-bottom: 0;
+        margin-top: 10px;
+        margin-bottom: 10px;
         padding: 0;
-        text-align: right;
-        vertical-align: text-bottom;
+        float: right;
         color: black;
+        display:inline-block;
+        font-weight: bold;
 
         .list_readers_entity {
             font: 11px 'Helvetica' sans-serif;
             font-weight: normal;
-            color: $okm-gray;
+            
         }
     }
 
