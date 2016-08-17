@@ -4,23 +4,31 @@
         fill-opacity: 1;
         stroke: $dark-blue;
         stroke-width: 1px;
+        
+        &:hover {
+                cursor: zoom-in;
+            }
 
         &.zoom_unselected {
             fill: $dark-blue;
             fill-opacity: .1;
             stroke-width: 0;
+            cursor: auto;
         }
 
         &.zoom_selected {
             fill-opacity: 1;
             fill: $lightest-blue;
-            stroke-width: 3px;
+            stroke-width: 2px;
         }
 
         &.area {
             fill: $light-blue;
-            fill-opacity: .8;
+            fill-opacity: .9;
+            
+            
         }
+       
     }
 
     #area_title_object {

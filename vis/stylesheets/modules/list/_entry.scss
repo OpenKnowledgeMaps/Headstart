@@ -10,7 +10,7 @@
         .list_title {
             font-size: 14px;
             margin-bottom: 4px;
-            max-width:480px;
+            max-width:82%;
             display: inline-block;
             font-weight: bold;
 
@@ -52,7 +52,7 @@
             line-height: 14px;
             color: $author-green;
             padding: 0;
-            max-width: 480px;
+            max-width: 82%;
             
             .list_authors {
                 color: $author-green;
@@ -76,7 +76,7 @@
     
 
     #list_abstract {
-        max-width: 480px;
+        max-width: 82%;
         font: 12px 'Helvetica', sans-serif;
         font-size: 11px;
         line-height: 13px;
