@@ -16,6 +16,8 @@ Make sure you have the following packages installed:
  * proxy
  * SnowballC
  * rplos
+ * parfossil
+ * doParallel
 
 ## Configuration
 
