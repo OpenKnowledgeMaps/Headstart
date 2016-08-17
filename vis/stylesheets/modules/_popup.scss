@@ -59,6 +59,26 @@
         
     }
     
+    #images_modal {
+        
+        .modal-lg {
+            max-width: 788px;
+        }
+        
+        .modal-body {
+            height: 80vh;
+            width: 100%;
+            display: table;
+            overflow: scroll;
+            
+            #images_holder {
+                width: 100%;
+                height: 75vh;
+                overflow-y: scroll;
+            }
+        }
+    }
+    
     #pdf_iframe {
         width: 100%;
         height: 75vh;
