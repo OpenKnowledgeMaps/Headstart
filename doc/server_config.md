@@ -16,6 +16,11 @@ Make sure you have the following packages installed:
  * proxy
  * SnowballC
  * rplos
+ * parfossil
+ * doParallel
+ * rentrez
+ * data.table
+ * xml2
 
 ## Configuration
 
