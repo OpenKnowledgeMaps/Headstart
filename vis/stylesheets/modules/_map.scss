@@ -1,62 +1,61 @@
-@import 'map/header';
-@import 'map/bubbles';
-@import 'map/papers';
+@import "map/header";
+@import "map/bubbles";
+@import "map/papers";
 
 /* ################ Chart ############### */
 
-.headstart {
-    #headstart-chart {
-        /*position: absolute;*/
-        font-family: Helvetica;
-        /*margin-top: 6px;*/
-    }
+#headstart-chart {
+    /*position: absolute;*/
+    font-family: Helvetica;
 
-    #chart-svg {
-        overflow-x: scroll;
-    }
+    /*margin-top: 6px;*/
+}
 
-    rect {
-        fill: rgb(31, 119, 180);
-        fill-opacity: .0;
-        stroke: rgb(31, 119, 180);
-        stroke-width: 0;
-    }
+#chart-svg {
+    overflow-x: scroll;
+}
 
-    path {
-        fill: rgb(255, 255, 255);
-        fill-opacity: .25;
-        stroke: $okm-gray;
-        stroke-width: 1px;
-    }
+rect {
+    fill: rgb(31, 119, 180);
+    fill-opacity: .0;
+    stroke: rgb(31, 119, 180);
+    stroke-width: 0;
+}
 
-    line {
-        stroke: rgb(31, 119, 180);
-        stroke-width: 1px;
-    }
+path {
+    fill: rgb(255, 255, 255);
+    fill-opacity: .25;
+    stroke: $okm-gray;
+    stroke-width: 1px;
+}
 
-    text {
-        font: 10px sans-serif;
-    }
+line {
+    stroke: rgb(31, 119, 180);
+    stroke-width: 1px;
+}
 
-    .container-headstart {
-        margin: 0px auto;
-        min-width: 900px;
-    }
+text {
+    font: 10px sans-serif;
+}
 
-    .vis-col {
-        display: inline-block;
-        width: 60%;
-    }
+.container-headstart {
+    margin: 0px auto;
+    min-width: 900px;
+}
 
-    .list-col {
-        display: inline-block;
-        width:39%;
-        vertical-align:top;
-        float:right;
-    }
+.vis-col {
+    display: inline-block;
+    width: 60%;
+}
 
-    .h4, h4 {
-        font-size: 18px;
-        min-height: 50px;
-    }
+.list-col {
+    display: inline-block;
+    width: 39%;
+    vertical-align: top;
+    float: right;
+}
+
+.h4, h4 {
+    font-size: 18px;
+    min-height: 50px;
 }
