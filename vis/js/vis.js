@@ -3,7 +3,8 @@ import Handlebars from 'handlebars';
 
 import { HeadstartFSM } from "./headstart";
 
-let namespace = "headstart";
+// make namespace global - should be moved to CONSTANTS file
+window.namespace = "headstart";
 
 export var Headstart = function(host, path, tag, files, options) {
 

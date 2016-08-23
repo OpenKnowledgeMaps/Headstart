@@ -1,6 +1,7 @@
 // Headstart
 // filename: headstart.js
 import $ from 'jquery';
+import hyphenate from 'hypher';
 import StateMachine from 'javascript-state-machine';
 import Mediator from 'mediator-js';
 import d3 from 'd3';
@@ -8,6 +9,8 @@ import d3 from 'd3';
 var BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js")
 
 import { BubblesFSM } from './bubbles';
+import { papers } from './papers';
+import { list } from './list';
 
 
 export var HeadstartFSM = function(host, path, tag, files, options) {
@@ -567,7 +570,7 @@ HeadstartFSM.prototype = {
     var hs = this;
     var bubble = hs.bubbles[this.current_file_number];
     if (hs.is("normal") || hs.is("switchfiles")) {
-      checkPapers = window.setInterval(function () {
+      let checkPapers = window.setInterval(function () {
         if (hs.is("normal") || hs.is("switchfiles")) {
           if ((!papers.is("ready") && !papers.is("none")) || (bubble.is("startup") || bubble.is("none") || (bubble.is("start")) )) {
             if (hs.force_papers.alpha() <= 0 && hs.force_areas.alpha() <= 0) {
@@ -1032,7 +1035,7 @@ HeadstartFSM.prototype = {
   },
 
   record_action: function (id, action, user, type, timestamp, additional_params, post_data) {
-    this.recordAction(id, action, user, type, timestamp, additional_params, post_data);
+    headstart.recordAction(id, action, user, type, timestamp, additional_params, post_data);
   },
 }; // end HeadstartFSM prototype definition
 

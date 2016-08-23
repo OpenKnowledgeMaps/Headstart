@@ -1,7 +1,9 @@
 // StateMachine for Papers UI element in Headstart
 // Filename: papers_count.js
+import StateMachine from 'javascript-state-machine';
 
-var papers = StateMachine.create({
+
+export var papers = StateMachine.create({
 
     events: [
         // when the application starts, we go into loading state,
@@ -130,7 +132,7 @@ papers.drawPaperPath = function(nodes) {
   nodes.append("path")
     .attr("id", "region")
     .attr("d", region);
-    
+
     papers.resetPaths();
 }
 
@@ -289,58 +291,58 @@ papers.createPaperPath = function(x, y, width, height, correction_x, correction_
 }
 
 papers.applyForce = function( bubbles ) {
-  
+
     headstart.force_areas.start();
-    
+
     if(headstart.is_force_areas) {
       headstart.force_areas.alpha(headstart.area_force_alpha);
     } else {
-      headstart.force_areas.alpha(0);  
+      headstart.force_areas.alpha(0);
     }
-  
+
     var areas_count = 0;
-    
+
     headstart.force_areas.on("tick", function(e) {
-        
+
         var alpha = e.alpha;
-        
+
         /*if (typeof current_bubbles == 'undefined' || current_bubbles == null) {
           return true;
         }*/
-        
+
         var current_bubbles = headstart.bubbles[headstart.current_file_number];
-        
+
         current_bubbles.areas_array.forEach(function(a, i) {
-            
+
             if(a.x - a.r < 0
                 || a.x + a.r > headstart.current_vis_size
                 || a.y - a.r < 0
                 || a.y + a.r > headstart.current_vis_size) {
-                    
+
                 a.x += (headstart.current_vis_size/2 - a.x) * alpha;
                 a.y += (headstart.current_vis_size/2 - a.y) * alpha;
-                    
+
             }
-            
+
             current_bubbles.areas_array.slice(i + 1).forEach(function(b) {
-                papers.checkCollisions(a, b, alpha);                
+                papers.checkCollisions(a, b, alpha);
             });
         });
-        
+
         papers.drawEntity("g.bubble_frame", alpha, areas_count);
-        
+
         areas_count++;
 
     });
 
     headstart.force_papers.start();
     var papers_count = 0;
-      
+
     headstart.force_papers.on("tick", function(e) {
         var alpha = e.alpha;
-        
+
         var current_bubbles = headstart.bubbles[headstart.current_file_number];
-        
+
         /*if (typeof current_bubbles == 'undefined' || current_bubbles == null) {
           return true;
         }*/
@@ -348,7 +350,7 @@ papers.applyForce = function( bubbles ) {
         current_bubbles.data.forEach(function(a, i) {
             var current_area = "";
 
-            for (area in bubbles.areas_array) {
+            for (let area in bubbles.areas_array) {
                 if(headstart.use_area_uri) {
                     if (current_bubbles.areas_array[area].area_uri == a.area_uri) {
                         current_area = current_bubbles.areas_array[area];
@@ -498,7 +500,7 @@ papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
 
     var height = (headstart.content_based)?(d.height * headstart.circle_zoom * resize_factor + "px"):
             (d.height * headstart.circle_zoom * resize_factor - 20 + "px");
-    
+
     holder_div.select("div.metadata")
         .attr("height", height)
         .attr("width", d.width * headstart.circle_zoom * resize_factor * (1-headstart.dogear_width) + "px")
@@ -519,10 +521,10 @@ papers.enlargePaper = function(d,holder_div,i) {
     if(d.resized || !headstart.is_zoomed) {
         return;
     }
-    
-    headstart.mediator.publish("record_action",d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null); 
+
+    headstart.mediator.publish("record_action",d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
     // headstart.recordAction(d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
- 
+
    var resize_factor = 1.2;
 
     var holder_div = d3.select(holder_div);
@@ -551,14 +553,14 @@ papers.enlargePaper = function(d,holder_div,i) {
                 if(!d.paper_selected) {
 
                     list.enlargeListItem(d);
-                    
+
                     papers.resetPaths();
-                    
+
                     var current_paper = d3.selectAll("path#region")
                             .filter(function(x) {
                                 return d.id === x.id
                             })
-                    
+
                     current_paper.attr("class", "framed")
 
                     if(list.current = "hidden") {
@@ -678,4 +680,3 @@ function toBack(node) {
 function toFront(node) {
     node.parentNode.appendChild(node);
 }
-

@@ -1,7 +1,9 @@
 // StateMachine for List UI element in Headstart
 // Filename: list.js
+import StateMachine from 'javascript-state-machine';
+import Handlebars from 'handlebars';
 
-var list = StateMachine.create({
+export var list = StateMachine.create({
 
     events: [
         { name: "start",  from: "none",    to: "hidden"  },
@@ -24,7 +26,7 @@ var list = StateMachine.create({
         onshow: function( event, from, to ) {
             // if the papers_force has stopped.
             if(!papers.is("loading")) {
-                d3.select("#sort_container").style("display", "block"); 
+                d3.select("#sort_container").style("display", "block");
                 d3.select("#papers_list").style("display", "block");
                 d3.select("#left_arrow").text("\u25B2");
                 d3.select("#right_arrow").text("\u25B2");
@@ -56,8 +58,8 @@ var list = StateMachine.create({
 
 list.drawList = function() {
     // Load list template
-    compiledTemplate = Handlebars.getTemplate(headstart.templ_path, 'list_explorer');
-    list_explorer = compiledTemplate({show_list:headstart.localization[headstart.language].show_list});
+    let compiledTemplate = Handlebars.getTemplate(headstart.templ_path, 'list_explorer');
+    let list_explorer = compiledTemplate({show_list:headstart.localization[headstart.language].show_list});
     $("#list_explorer").append(list_explorer);
 
     // Set localized values
@@ -81,7 +83,7 @@ list.drawList = function() {
     // Add sort options
     var container = d3.select("#sort_container>ul")
     var first_element = true;
-    for (option in headstart.sort_options) {
+    for (let option in headstart.sort_options) {
       if (first_element) {
         addSortOption(container, headstart.sort_options[option], true);
         first_element = false;
@@ -99,7 +101,9 @@ list.fit_list_height = function() {
   $("#papers_list").height(paper_list_avail_height);
 }
 
-addSortOption = function(parent, sort_option, selected) {
+let checked_val = ""
+let active_val = ""
+let addSortOption = function(parent, sort_option, selected) {
   if (selected) {
     checked_val = "checked"
     active_val = "active"
@@ -108,8 +112,8 @@ addSortOption = function(parent, sort_option, selected) {
     active_val = ""
   }
 
-  compiledTemplate = Handlebars.getTemplate(headstart.templ_path, 'select_button');
-  button = compiledTemplate({
+  let compiledTemplate = Handlebars.getTemplate(headstart.templ_path, 'select_button');
+  let button = compiledTemplate({
       id: "sort_" + sort_option,
       checked: checked_val,
       label: headstart.localization[headstart.language][sort_option],
@@ -190,26 +194,26 @@ list.populateList = function(list_data) {
 }
 
 list.populateMetaData = function(nodes) {
-  
+
   var paper_title = nodes.append("div")
     .attr("class", "list_metadata")
     .append("p")
     .attr("id", "list_title")
     .attr("class","highlightable")
     .html(function (d) { return "<a href=\"#\" id=\"paper_list_title\" class=\"highlightable\">" + d.title+"</a> " })
-  
+
   paper_title.filter(function(d) {
-        return d.recommended == 1 && d.bookmarked != 1;    
+        return d.recommended == 1 && d.bookmarked != 1;
     })
     .append("span")
      .attr("class", "recommended")
      .html("recommended")
      .append("span")
       .html(" ")
-   
+
   if(headstart.is_adaptive) {
     paper_title.filter(function(d) {
-          return (d.bookmarked != 1);    
+          return (d.bookmarked != 1);
       })
       .append("span")
        .attr("class", "tobookmark")
@@ -217,24 +221,24 @@ list.populateMetaData = function(nodes) {
        .html("Add to schedule")
        .on("click", function (d) {
           headstart.mediator.publish("bookmark_added",d);
-         // list.addBookmark(d);      
+         // list.addBookmark(d);
          d3.event.stopPropagation();
        })
   }
-     
+
   paper_title.filter(function(d) {
-        return (d.bookmarked == 1);    
+        return (d.bookmarked == 1);
     })
     .append("span")
      .attr("class", "bookmarked")
      .attr("id", "bookmark")
      .html("Already in your schedule X")
-     .on("click", function (d) { 
+     .on("click", function (d) {
         headstart.mediator.publish("bookmark_removed", d);
        // list.removeBookmark(d);
        d3.event.stopPropagation();
      })
-  
+
   paper_title.append("p")
     .attr("class", "list_details highlightable")
     .html(function (d) { return d.authors_string })
@@ -246,16 +250,16 @@ list.populateMetaData = function(nodes) {
     .html(function (d) { return d.published_in + " (" + d.year + ")" });
 }
 
-filterList = function(search_words) {
+let filterList = function(search_words) {
   clear_highlights();
   search_words.forEach(function(str){
     highlight(str);
   });
-  
+
 
   var filtered_data = d3.selectAll("#list_holder, .paper")
   var current_circle = d3.select(headstart.current_zoom_node);
-  
+
     var data_circle = filtered_data
     .filter(function (d) {
       if (headstart.is_zoomed === true) {
@@ -285,7 +289,7 @@ filterList = function(search_words) {
   var searchtext = event.target.value;
   var searchtext_processed = searchtext.trim().toLowerCase();
   var search_words = searchtext_processed.split(" ");
-  
+
   headstart.mediator.publish("record_action","none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
   // headstart.recordAction("none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
 
@@ -331,7 +335,7 @@ list.populateReaders = function(nodes) {
     .html(function(d) {
       return "<b>"+ headstart.localization[headstart.language].area + ":</b> " + d.area
     })
-    
+
   if(!headstart.content_based) {
    areas.append("p")
     .attr("id", "list_readers")
@@ -341,10 +345,10 @@ list.populateReaders = function(nodes) {
   .append("span")
     .attr("class", "list_readers_entity")
     .html(" " + headstart.base_unit + "&nbsp;");
-    
+
   } else {
     d3.selectAll("#list_area").style("margin-bottom", "7px")
-    
+
   }
 }
 
@@ -364,7 +368,7 @@ list.addBookmark = function(d)  {
     + "&content_id=" +d.id,
       function(data) {
         console.log("Successfully added bookmark");
-        
+
         headstart.mediator.publish("record_action",d.id, "add_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
         // headstart.recordAction(d.id, "add_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
 
@@ -375,12 +379,12 @@ list.addBookmark = function(d)  {
         })
             .attr("class", "bookmarked")
             .html("Already in your schedule X")
-             .on("click", function (d) { 
+             .on("click", function (d) {
                 headstart.mediator.publish("bookmark_removed", d);
-               // list.removeBookmark(d); 
+               // list.removeBookmark(d);
                d3.event.stopPropagation();
              })
-             
+
         d3.selectAll("#region").filter(function (x) {
           return x.id == d.id
         })
@@ -395,30 +399,30 @@ list.removeBookmark = function(d)  {
     + "&content_id=" +d.id,
       function(data) {
         console.log("Successfully removed bookmark");
-        
+
         headstart.mediator.publish("record_action",d.id, "remove_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
         // headstart.recordAction(d.id, "remove_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
-        
+
         d.bookmarked = false;
-        
+
         d3.selectAll("#bookmark").filter(function(x) {
          return x.id == d.id;
        })
             .attr("class", "tobookmark")
             .html("Add to schedule")
-             .on("click", function (d) { 
+             .on("click", function (d) {
                 headstart.mediator.publish("bookmark_added", d);
-               // list.addBookmark(d); 
+               // list.addBookmark(d);
                d3.event.stopPropagation();
              })
-        
+
         d3.selectAll("#region").filter(function (x) {
           return x.id == d.id
         })
             .attr("class", function (d) {
               return (d.recommended)?("framed_recommended"):("unframed");
             })
-        
+
       });
 }
 
@@ -436,7 +440,7 @@ list.makeTitleClickable = function(d) {
     papers.mouseoverpaper();
     this.enlargeListItem(d);
     headstart.current_enlarged_paper = d;
-    
+
     d3.selectAll("path#region")
             .filter(function(x) {
                 return x.id === d.id;
@@ -445,7 +449,7 @@ list.makeTitleClickable = function(d) {
 
     headstart.mediator.publish("record_action", d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
     // headstart.recordAction(d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
-    
+
     d3.event.stopPropagation();
 }
 
@@ -620,11 +624,11 @@ list.setImageForListHolder = function(d) {
           // this.populateOverlay;
         })
   }
-  
+
   /*$("#list_title a").hover(function () {
       $(this).css("text-decoration", "none");
   });*/
-  
+
   // EVENTLISTENERS
   current_item.select("#paper_list_title")
     .on("click", function(d){
@@ -634,7 +638,7 @@ list.setImageForListHolder = function(d) {
 }
 
 list.title_click = function (d) {
-        
+
       var url = "";
       if (headstart.url_prefix != null) {
           url = headstart.url_prefix + d.url;
@@ -644,10 +648,10 @@ list.title_click = function (d) {
           d3.event.stopPropagation();
           return
       }
-      
+
       headstart.mediator.publish("record_action",d.id, "click_on_title", headstart.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
       // headstart.recordAction(d.id, "click_on_title", headstart.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
-      
+
       window.open(url, "_blank");
       d3.event.stopPropagation();
     }
@@ -685,7 +689,7 @@ function notSureifNeeded() {
     image_node.parentNode.removeChild(image_node);
 }
 
-highlight = function(str) {
+let highlight = function(str) {
   value = new RegExp("\\b"+str,"i");
 
   $('.highlightable').highlightRegex(value, {
@@ -693,7 +697,7 @@ highlight = function(str) {
   });
 }
 
-clear_highlights = function() {
+let clear_highlights = function() {
   $('.highlightable').highlightRegex();
 }
 
