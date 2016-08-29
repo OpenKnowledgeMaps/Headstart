@@ -19,6 +19,7 @@ Make sure you have the following packages installed:
  * parfossil
  * doParallel
  * rentrez
+ * curl
  * data.table
  * xml2
 
