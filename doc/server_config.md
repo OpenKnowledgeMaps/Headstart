@@ -19,6 +19,7 @@ Make sure you have the following packages installed:
  * parfossil
  * doParallel
  * rentrez
+ * curl
  * data.table
  * xml2
 
@@ -39,4 +40,4 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 * general->path: relative path to the client visualization
 * general->images_path: full path to the images directory for the client 
 * calculation->binary: path to R binary
-* connection->sqlite_db: duplicate headstart.sqlite in server/storage/ and rename it to a filename of your choice. Enter the path to this file here.
+* connection->sqlite_db: duplicate headstart.sqlite in server/storage/ and rename it to a filename of your choice. Enter the path to this file here. Make sure that your webserver has write access to this file.
