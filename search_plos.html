@@ -77,7 +77,12 @@ and open the template in the editor.
                         url: "server/services/searchPLOS.php",
                         data: $("#searchform").serialize(),
                         success: function (data) {
-                            window.location.replace("index.php?query=" + data.query + "&id=" + data.id);
+                            if (data.status === "success") {
+                                window.location.replace("index.php?query=" + data.query + "&id=" + data.id);
+                            } else {
+                                 $("#progress").html("Sorry! Something went wrong.");
+                                 $(".btn").attr("disabled", false);
+                            }   
                         }
                     });
                 }
