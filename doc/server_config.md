@@ -20,6 +20,7 @@ Make sure you have the following packages installed:
  * doParallel
  * rentrez
  * curl
+ * tibble
  * data.table
  * xml2
 
