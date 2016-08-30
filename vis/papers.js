@@ -117,8 +117,10 @@ papers.drawPapers = function( bubbles ) {
     this.drawPaperPath(nodes);
     this.drawDogEarPath(nodes);
 
-    var xhtml = this.prepareForeignObject(nodes);
-    this.populatePapersWithMetaData(xhtml);
+    this.prepareForeignObject(nodes);
+
+    d3.selectAll("#article_metadata").select(".paper_holder").select(".metadata");
+    d3.selectAll("#article_metadata").select(".readers");
 }
 
 // draw the path "around" the papers, perhaps "border" would be a better name
@@ -189,84 +191,29 @@ papers.paper_click = function(d) {
 
 
 // add #id element to foreignObject and adjust various other attributes
-// <foreignObject id="article_metadata"
-//                width="28.03096927844192px"
-//                height="37.37462570458923px
-// <body><div class="paper_holder" style="cursor: default;">
-papers.prepareForeignObject = function( nodes ){
-    var xhtml =
-        nodes.append("foreignObject")
-            .attr("id", "article_metadata")
-            .attr("width", function (d) { return d.width + "px"  })
-            .attr("height", function (d) { return d.height + "px" })
-           .append("xhtml:body")
-            //Webkit seems to ignore body styles on foreignObjects in the css
-            .style("margin", "0px")
-            .style("padding", "0px")
-            .style("background-color", "transparent")
-            .style("position", "static")
-           .append("div")
-            .attr("class", "paper_holder")
-            .style("cursor", "default");
-    return xhtml;
+papers.prepareForeignObject = function(nodes) {
+    var paperTemplate = Handlebars.getTemplate(headstart.templ_path, "paper");
+
+    nodes.append("foreignObject")
+        .attr({
+            "id": "article_metadata",
+            "width": function(d) {
+                return d.width + "px"
+            },
+            "height": function(d) {
+                return d.height + "px"
+            }
+        }).append("xhtml:body")
+        .html(function(d) {
+            return paperTemplate({
+                'metadata_height': (headstart.content_based) ? (d.height) : (d.height * 0.8),
+                'metadata_width': d.width * 0.8,
+                'd': d,
+                'base_unit': headstart.base_unit
+            });
+        });
 }
 
-// add metadata to papers, consisting of
-// Title, Details, PublicationYear, Readers
-// <div class="metadata"
-// style="height: 29.899700563671384px;
-// width: 22.424775422753537px;">
-papers.populatePapersWithMetaData = function( xhtml ) {
-    var metadata = this.appendMetaDataCSSClass(xhtml);
-    this.appendMetaDataTitle(metadata);
-    this.appendMetaDataDetails(metadata);
-    this.appendMetaDataPublicationYear(metadata);
-    if(!headstart.content_based) {
-      this.appendMetaDataReaders(xhtml);
-    }
-}
-
-papers.appendMetaDataCSSClass = function(xhtml) {
- return xhtml.append("div")
-             .attr("class", "metadata")
-             .style("height", function (d) { return (headstart.content_based)?(d.height):(d.height * 0.8 + "px") })
-             .style("width",  function (d) { return d.width  * 0.8 + "px" });
-}
-
-papers.appendMetaDataTitle = function(metadata) {
-  metadata.append("p")
-    .attr("id", "title")
-    .attr("class","highlightable")
-    .html(function (d) {  return d.title+"<br>" })
-}
-
-papers.appendMetaDataDetails = function(metadata) {
-  metadata.append("p")
-    .attr("id", "details")
-    .attr("class","highlightable")
-    .html(function (d) { return d.authors_string })
-}
-
-papers.appendMetaDataPublicationYear = function(metadata) {
-  metadata.append("p")
-    .attr("id", "in")
-    .attr("class","highlightable")
-    .html("in ")
-    .append("span")
-    .attr("class", "pubyear")
-    .html(function (d) { return d.published_in + " (" + d.year + ")" });
-}
-
-papers.appendMetaDataReaders = function(xhtml) {
-  xhtml.append("div")
-    .attr("class", "readers")
-    .append("p")
-    .attr("id", "readers")
-    .html(function (d) { return d.readers })
-    .append("span")
-    .attr("class", "readers_entity")
-    .html(" " + headstart.base_unit);
-}
 
 // create the path or "border" for papers
 papers.createPaperPath = function(x, y, width, height, correction_x, correction_y) {
@@ -468,35 +415,32 @@ papers.shrinkPaper = function(d,holder) {
 }
 
 papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
-
-    var current_div = holder_div.node()
-        ,current_foreignObject = current_div.parentNode.parentNode
-        ,current_g = current_foreignObject.parentNode
-        ,current_path = current_g.firstChild
-        ,current_dogear = current_g.childNodes[1];
+    let current_div = holder_div.node();
+    let current_g_paper = d3.select(current_div.parentNode.parentNode.parentNode);
+    let current_foreignObject = current_g_paper.select("foreignObject");
+    let current_path = current_g_paper.select("path#region");
+    let current_dogear = current_g_paper.select("path.dogear");
 
     //current_g.parentNode.appendChild(current_g);
-    toFront(current_g);
+    toFront(current_g_paper.node());
 
-    var region = papers.createPaperPath(0, 0, d.width*headstart.circle_zoom*resize_factor, d.height*headstart.circle_zoom*resize_factor);
+    let region = papers.createPaperPath(0, 0, d.width*headstart.circle_zoom*resize_factor, d.height*headstart.circle_zoom*resize_factor);
+    let dogear = papers.createDogearPath(d.width*(1-headstart.dogear_width)*headstart.circle_zoom*resize_factor, 0, d.width*headstart.circle_zoom*resize_factor, d.height*headstart.circle_zoom*resize_factor);
 
-    var dogear = papers.createDogearPath(d.width*(1-headstart.dogear_width)*headstart.circle_zoom*resize_factor, 0, d.width*headstart.circle_zoom*resize_factor, d.height*headstart.circle_zoom*resize_factor);
-
-    d3.select(current_foreignObject)
+    current_foreignObject
         .attr("width", d.width * headstart.circle_zoom * resize_factor + "px")
         .attr("height", d.height * headstart.circle_zoom * resize_factor + "px")
         .style("width", d.width * headstart.circle_zoom * resize_factor + "px")
         .style("height", d.height * headstart.circle_zoom * resize_factor + "px")
 
-    d3.select(current_path)
+    current_path
         //.style("fill-opacity", opacity)
         .style("fill", color)
         .attr("d", region)
 
-    d3.select(current_dogear)
-        .attr("d", dogear);
+    current_dogear.attr("d", dogear);
 
-    var height = (headstart.content_based)?(d.height * headstart.circle_zoom * resize_factor + "px"):
+    let height = (headstart.content_based)?(d.height * headstart.circle_zoom * resize_factor + "px"):
             (d.height * headstart.circle_zoom * resize_factor - 20 + "px");
     
     holder_div.select("div.metadata")
@@ -507,7 +451,6 @@ papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
 
     holder_div.select("div.readers")
         .style("width", d.width * headstart.circle_zoom * resize_factor + "px");
-
 }
 
 
@@ -529,7 +472,6 @@ papers.enlargePaper = function(d,holder_div,i) {
 
     holder_div.selectAll("p")
         .attr("class", "larger")
-
 
     var metadata = holder_div.select("div.metadata");
 
