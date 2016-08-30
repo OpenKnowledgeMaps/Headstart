@@ -571,6 +571,7 @@ list.populateOverlay = function(d) {
         
         $("#spinner-images").show();
         $("#images_holder").hide();
+        $("#status").hide();
         $("#images_modal").modal()
         
         list.loadAndAppendImage(headstart.images_path + d.id + "/page_1.png", 1);
@@ -599,6 +600,7 @@ list.populateOverlay = function(d) {
             list.writePopup(full_pdf_url)
             $("#iframe_modal").modal()
         } else {
+            $("#status").hide();
             $("#spinner-iframe").show();
             $("#pdf_iframe").hide();
             $("#iframe_modal").modal()
@@ -608,7 +610,12 @@ list.populateOverlay = function(d) {
 
             $.getJSON(headstart.service_path + "getPDF.php?url=" + url + "&filename=" + local_filename, function(local_pdf) {
                 list.writePopup(full_pdf_url);
-            })
+            }).fail( function(d, textStatus, error) {
+                $("#spinner-iframe").hide();
+                $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + list.createOutlink(this_d) + "\" target=\"_blank\">this website</a>.")
+                console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+                $("#status").show();
+            });
         }
     }
 }
@@ -666,14 +673,23 @@ list.setImageForListHolder = function(d) {
     });
 }
 
+list.createOutlink = function(d) {
+    
+    var url = false;
+    
+    if (headstart.url_prefix != null) {
+        url = headstart.url_prefix + d.url;
+    } else if (typeof d.url != 'undefined') {
+        url = d.url;
+    }
+    
+    return url;
+}
+
 list.title_click = function (d) {
         
-      var url = "";
-      if (headstart.url_prefix != null) {
-          url = headstart.url_prefix + d.url;
-      } else if (typeof d.url != 'undefined') {
-          url = d.url;
-      } else {
+      var url = createOutlink(d);
+      if (url === false) {
           d3.event.stopPropagation();
           return
       }
