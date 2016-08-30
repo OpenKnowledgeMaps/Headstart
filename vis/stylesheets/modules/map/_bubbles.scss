@@ -1,0 +1,63 @@
+.headstart {
+    circle {
+        fill: $light-blue;
+        fill-opacity: 1;
+        stroke: $dark-blue;
+        stroke-width: 1px;
+
+        &.zoom_unselected {
+            fill: $dark-blue;
+            fill-opacity: .1;
+            stroke-width: 0;
+        }
+
+        &.zoom_selected {
+            fill-opacity: 1;
+            fill: $lightest-blue;
+            stroke-width: 1px;
+        }
+
+        &.area {
+            fill: $light-blue;
+            fill-opacity: .8;
+        }
+    }
+
+    #area_title_object {
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            position:static;
+            background-color: transparent;
+        }
+
+        &.is_hidden {
+            visibility: hidden;
+        }
+    }
+
+    #area_title {
+        margin: 0;
+        padding: 0;
+
+        word-break: break-word;
+        display: table-cell;
+        overflow: hidden;
+        vertical-align: middle;
+        h2 {
+            font-family: 'Helvetica', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 11px;
+            margin-bottom: 11px;
+            padding: 0;
+            text-align: center;
+            text-transform: none;
+            color: black;
+            background-color: transparent;
+        }
+    }
+
+}

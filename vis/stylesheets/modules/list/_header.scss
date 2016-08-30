@@ -1,0 +1,41 @@
+@import "list-show-button";
+
+.headstart {
+    #explorer_header {
+        background-color: #eee;
+    }
+
+    #explorer_options {
+        padding: 5px 15px;
+    }
+
+    #filter_container {
+        float: left;
+        display: block;
+    }
+
+    #filter_input {
+        padding-right: 22px;
+    }
+
+    #sort_container {
+        float: right;
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1050px) {
+    .headstart {
+        #sort_container {
+            float: none;
+            display: block;
+        }
+        #sort-buttons {
+            padding: 5px 0px;
+        }
+
+        .pull-right {
+            float: none !important;
+        }
+    }
+}

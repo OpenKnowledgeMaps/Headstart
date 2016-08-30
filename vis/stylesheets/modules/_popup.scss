@@ -1,0 +1,132 @@
+/* ########### Paper Frame/Popup ########### */
+.headstart {
+    div {
+        &#paper_frame {
+            z-index: 999;
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        &#paper_frame_inner {
+            display: block;
+            margin-right: auto;
+            margin-left: auto;
+            padding-bottom: 10px;
+            border: 1px solid;
+            border-radius: 10px 10px 10px 10px;
+            background-color: white;
+
+            /*float: right;*/
+        }
+
+        &#paper_frame_bar {
+            margin-top: 5px;
+            margin-bottom: 5px;
+
+            /*float: right;*/
+            cursor: pointer;
+        }
+
+        &#shadow-top {
+            height: 5px;
+            box-shadow: inset 0 8px 8px -8px #333;
+        }
+
+        &#shadow-bottom {
+            height: 5px;
+            box-shadow: inset 0 -8px 8px -8px #333;
+        }
+
+        &#preview {
+            overflow: auto;
+            overflow-y: scroll;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            background-color: #eee;
+            align: center;
+        }
+    }
+
+    /* ########### Modals ########### */
+
+    #iframe_modal .modal-body {
+        height: 75vh;
+        width: 100%;
+        display: table;
+    }
+
+    #pdf_iframe {
+        width: 100%;
+        height: 100%;
+    }
+
+    .modal {
+        text-align: center;
+        padding: 0 !important;
+
+        &:before {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            margin-right: -4px;
+
+            /* Adjusts for spacing */
+        }
+    }
+
+    .modal-dialog {
+        display: inline-block;
+        text-align: left;
+        vertical-align: middle;
+    }
+    
+    .modal-header {
+        padding-bottom: 0px;
+    }
+    
+    h5 {
+        padding-top: 10px;
+    }
+
+    // Intro text in the intro/info modal - not applied at the moment
+    #intro {
+        font-family: Helvetica;
+        padding: 10px;
+        background-color: white;
+
+        h2 {
+            font-family: Helvetica;
+            font-size: 16px;
+            margin-bottom: 0;
+            padding: 0;
+            color: black;
+            background-color: transparent;
+        }
+
+        h3 {
+            padding: 0;
+        }
+
+        p {
+            font: 14px 'Helvetica', sans-serif;
+            margin-bottom: 10px;
+            padding: 0;
+            color: black;
+        }
+
+        ul {
+            margin-bottom: 10px;
+            list-style: disc;
+        }
+
+        li {
+            font-family: 'Helvetica', sans-serif;
+            font-size: 14px;
+            margin-bottom: 0;
+            margin-left: 11px;
+            margin-left: 11px;
+            padding-left: 11px;
+        }
+    }
+
+}

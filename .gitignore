@@ -4,3 +4,6 @@ server/preprocessing/other-scripts/.Rhistory
 *_local.*
 vis/images/
 node_modules/
+**/.sass-cache/*
+vis/stylesheets/*.css
+*.map
