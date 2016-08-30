@@ -688,7 +688,7 @@ list.createOutlink = function(d) {
 
 list.title_click = function (d) {
         
-      var url = createOutlink(d);
+      var url = list.createOutlink(d);
       if (url === false) {
           d3.event.stopPropagation();
           return
