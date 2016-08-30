@@ -13,12 +13,19 @@ module.exports = {
   module: {
     loaders: [
       {
+        test: require.resolve("jquery"),
+        loader: "expose?$!expose?jQuery",
+      },
+      {
         test: /.js?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
           presets: ['es2015']
         }
+      },
+      { test: require.resolve("jquery-dotdotdot"),
+        loader: 'imports?jQuery=jquery,$=jquery,this=>window'
       }
     ]
   },

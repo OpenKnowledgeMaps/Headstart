@@ -1,6 +1,11 @@
 // StateMachine for Bubbles UI elements in Headstart
 // Filename: bubbles.js
 import StateMachine from 'javascript-state-machine';
+import Handlebars from 'handlebars';
+import d3 from 'd3';
+
+import { papers, toBack, toFront } from './papers';
+import { list } from './list';
 
 export var BubblesFSM = function() {
   this.id = 0;
@@ -567,7 +572,7 @@ BubblesFSM.prototype = {
       .on("mouseout", null)
 
     d3.select("#subdiscipline_title h4").text(headstart.localization[headstart.language].area +": " + d.title);
-    $("#subdiscipline_title").dotdotdot();
+    // $("#subdiscipline_title").dotdotdot();
 
     d3.selectAll("div.paper_holder")
       .on("mouseover", function(d){

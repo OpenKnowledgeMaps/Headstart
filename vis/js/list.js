@@ -3,6 +3,9 @@
 import StateMachine from 'javascript-state-machine';
 import Handlebars from 'handlebars';
 
+import { BubblesFSM } from './bubbles';
+import { papers } from './papers';
+
 export var list = StateMachine.create({
 
     events: [
@@ -73,13 +76,13 @@ list.drawList = function() {
         } else {
           $("#searchclear").hide()
         }
-        debounce(filterList(event.target.value.split(" ")), 700)
+        debounce(list.filterList(event.target.value.split(" ")), 700)
       })
 
     $("#searchclear").click(function(event) {
         $("#filter_input").val('');
         $("#searchclear").hide();
-        debounce(filterList([""]), 700);
+        debounce(list.filterList([""]), 700);
     });
 
     // Add sort options
@@ -303,7 +306,7 @@ list.populateList = function(list_data) {
     this.populateReaders(paper_nodes);
 }
 
-filterList = function (search_words) {
+list.filterList = function (search_words) {
     list.current_search_words = search_words;
 
     var search_words = search_words.map(function (e) {

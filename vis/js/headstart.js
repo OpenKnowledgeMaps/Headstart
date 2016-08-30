@@ -1,17 +1,18 @@
 // Headstart
 // filename: headstart.js
 import $ from 'jquery';
-import hyphenate from 'hypher';
 import StateMachine from 'javascript-state-machine';
 import Mediator from 'mediator-js';
 import d3 from 'd3';
 
 var BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js")
+var Hypher = require('hypher'),
+    english = require('hyphenation.en-us'),
+    h = new Hypher(english);
 
 import { BubblesFSM } from './bubbles';
 import { papers } from './papers';
 import { list } from './list';
-
 
 export var HeadstartFSM = function(host, path, tag, files, options) {
 
@@ -482,13 +483,14 @@ HeadstartFSM.prototype = {
   },
 
   initMouseMoveListeners: function() {
+    var self = this;
     $("rect").on( "mouseover", function() {
-      if (!this.is_zoomed) {
-        this.bubbles[this.current_file_number].onmouseout("notzoomedmouseout");
-        this.current_circle = null;
+      if (!self.is_zoomed) {
+        self.bubbles[self.current_file_number].onmouseout("notzoomedmouseout");
+        self.current_circle = null;
       }
-      this.bubbles[this.current_file_number].mouseout("outofbigbubble");
-      this.initClickListenersForNav();
+      self.bubbles[self.current_file_number].mouseout("outofbigbubble");
+      self.initClickListenersForNav();
     });
   },
 
@@ -496,12 +498,12 @@ HeadstartFSM.prototype = {
     var self = this;
 
     $("#chart-svg").on( "click", function() {
-      this.bubbles[this.current_file_number].zoomout();
+      self.bubbles[self.current_file_number].zoomout();
     });
 
     $("#" + this.tag).bind('click', function(event) {
         if(event.target.id === self.tag) {
-            this.bubbles[this.current_file_number].zoomout();
+            self.bubbles[self.current_file_number].zoomout();
         }
     });
 
@@ -528,7 +530,7 @@ HeadstartFSM.prototype = {
   // Draws the header for this
   drawTitle: function() {
     
-    chart_title = "";
+    let chart_title = "";
     
     if(this.subdiscipline_title === "") {
         if (headstart.language == "eng") {
@@ -939,10 +941,11 @@ HeadstartFSM.prototype = {
         $("#infolink").click();
     }
 
-
-
-    $("#area_title>h2").hyphenate('en');
-    $("#area_title_object>body").dotdotdot({wrap:"letter"});
+    $("#area_title>h2").each(function(index, value) {
+      let text = $(value).text();
+      $(value).text(h.hyphenateText(text));
+    });
+    // $("#area_title_object>body").dotdotdot({wrap:"letter"});
   },
 
   drawNormalViewLink: function() {

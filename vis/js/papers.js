@@ -1,7 +1,10 @@
 // StateMachine for Papers UI element in Headstart
 // Filename: papers_count.js
 import StateMachine from 'javascript-state-machine';
+import Handlebars from 'handlebars';
 
+import { BubblesFSM } from './bubbles';
+import { list } from './list';
 
 export var papers = StateMachine.create({
 
@@ -615,10 +618,10 @@ papers.createDogearPath = function(x, y, width, height, correction_x, correction
     return path;
 }
 
-function toBack(node) {
+export var toBack = function(node) {
     node.parentNode.insertBefore(node, node.parentNode.childNodes[1]);
 }
 
-function toFront(node) {
+export var toFront = function(node) {
     node.parentNode.appendChild(node);
 }
