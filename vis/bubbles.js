@@ -396,37 +396,24 @@ BubblesFSM.prototype = {
     }
   },
 
-  // append the foreignObject to each of the bubbles
-  //
-  //      <foreignObject id="area_title_object"
-  //                     x="-59.45975218530764"
-  //                     y="-59.45975218530764"
-  //                     width="118.91950437061529"
-  //                     height="118.91950437061529"
-  //                     style="visibility: visible;">
-  appendForeignObjectTo: function( bubbles ) {
-    bubbles.append( "foreignObject" )
-      .attr("id", "area_title_object")
-      .attr("class", namespace)
-      .attr("x",      function (d) { return d.x_html })
-      .attr("y",      function (d) { return d.y_html })
-      .attr("width",  function (d) { return d.width_html })
-      .attr("height", function (d) { return d.height_html })
-      .append("xhtml:body")
-      //Webkit problem
-      .style("margin", "0px")
-      .style("padding", "0px")
-      .style("background-color", "transparent")
-      .style("position", "static")
-      .append("div")
-      .attr("id", "area_title")
-      .style("width",  function (d) { return d.width_html + "px" })
-      .style("height", function (d) { return d.height_html + "px" })
-      .append("h2")
-      .classed("highlightable", true)
-      .html(function (d) {
-          return d.title;
-      });      
+  appendForeignObjectTo: function( bubbleFrame ) {
+    var bubbleTemplate = Handlebars.getTemplate(headstart.templ_path, "bubble");
+    bubbleFrame.append('foreignObject')
+        .attr({
+            'id': 'area_title_object',
+            'class': namespace,
+            'x': function(d) {
+                return d.x_html },
+            'y': function(d) {
+                return d.y_html },
+            'width': function(d) {
+                return d.width_html },
+            'height': function(d) {
+                return d.height_html },
+        }).append("xhtml:body")
+        .html(function(d) {
+            return bubbleTemplate(d);
+        });
   },
 
   // prepare the areas for the bubbles
