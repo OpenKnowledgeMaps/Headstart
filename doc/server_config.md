@@ -36,9 +36,9 @@ Set the following variables in php.ini:
 
 Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local.ini. Adapt the following variables:
 
-* general->preprocessing_dir: full path to the preprocessing directory
-* general->host: host of the client visualization
-* general->path: relative path to the client visualization
-* general->images_path: full path to the images directory for the client 
-* calculation->binary: path to R binary
-* connection->sqlite_db: duplicate headstart.sqlite in server/storage/ and rename it to a filename of your choice. Enter the path to this file here. Make sure that your webserver has write access to this file.
+* general->preprocessing_dir: Full path to the preprocessing directory
+* general->host: Host of the client visualization
+* general->path: Relative path to the client visualization. Needs to be in the public_html/www directory.
+* general->images_path: Full path to the images directory for the client. Needs to be in the public_html/www directory. Make sure that your webserver has write access to this directory. 
+* calculation->binary: Path to R binary
+* connection->sqlite_db: Full path to the sqlite datatabase file. Make sure that your webserver has write access to this file. For development purposes, duplicate headstart.sqlite in server/storage/ and rename it to a filename of your choice. Enter the path to this file here.
