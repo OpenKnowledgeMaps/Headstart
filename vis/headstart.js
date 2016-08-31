@@ -6,7 +6,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   initVar = function(variable, default_value) {
     return typeof variable !== 'undefined' ? variable : default_value;
   }
-
+  
   // a container for variables
   this.VERSION = 2.5;
   
@@ -17,8 +17,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.templ_path = host + path + "vis/templates/";
 
   // map
-  this.min_height = 600;
-  this.min_width  = 600;
+  this.min_height = 300;
+  this.min_width  = 300;
   this.max_height = 1000;
   this.timeline_size = 600;
   this.bubble_min_scale = initVar(options.bubble_min_scale, 1);
@@ -420,10 +420,10 @@ HeadstartFSM.prototype = {
           }
       } else {
           this.svg.attr("height", this.current_vis_size + "px")
-              .attr("width", "100%")
-              .attr("preserveAspectRatio", "xMidYMid meet");
+              .attr("width", this.current_vis_size + "px")
+              //.attr("preserveAspectRatio", "xMidYMid meet");
           if (update === false) {
-            this.svg.attr("viewBox", "0 0 " + this.current_vis_size + " " + this.current_vis_size);
+            //this.svg.attr("viewBox", "0 0 " + this.current_vis_size + " " + this.current_vis_size);
           }
       }
   },
@@ -434,21 +434,129 @@ HeadstartFSM.prototype = {
     // Rectangle to contain nodes in force layout
     var rect = chart.append("rect")
     // var rect_width = this.current_vis_size;// + this.max_list_size;
-    rect.attr( "height", this.current_vis_size + "px" )
-    rect.attr( "width",  this.current_vis_size + "px" );
+    this.updateChartCanvas();
 
-    // chart.attr( "height", this.current_vis_size + "px" )
-    // chart.attr( "width",  this.current_vis_size + "px" );
+    //chart.attr( "height", this.current_vis_size + "px" )
+    //chart.attr( "width",  this.current_vis_size + "px" );
     this.chart = chart;
+  },
+  
+  updateChartCanvas: function () {
+      d3.select("rect")
+        .attr( "height", this.current_vis_size + "px" )
+        .attr( "width",  this.current_vis_size + "px" );
+  },
+  
+  calcTitleFontSize: function () {
+    if (this.current_vis_size <= 600) {
+          return "12px";
+    } else if (this.current_vis_size <= 1000) {
+          return "14px";
+    } else {
+          return "16px";
+    }
   },
 
   initEventListeners: function() {
       self = this;
       d3.select(window).on("resize", function() {
-          self.calcChartSize();
-          self.drawSvg(true);
-          list.fit_list_height();
-      });
+        
+        var new_circle_scale_x = d3.scale.linear();
+        var new_circle_scale_y = d3.scale.linear();
+        
+        var new_chart_x = d3.scale.linear();
+        var new_chart_y = d3.scale.linear();
+        
+        var circle_padding = 0;
+        new_circle_scale_x.domain([circle_padding, self.current_vis_size - circle_padding]);
+        new_circle_scale_y.domain([circle_padding, self.current_vis_size - circle_padding]);
+        
+        var padding_articles = self.paper_max;
+        new_chart_x.domain([padding_articles, self.current_vis_size - padding_articles]);
+        new_chart_y.domain([padding_articles, self.current_vis_size - padding_articles]);
+
+        self.calcChartSize();
+        self.setScaleRanges();
+        self.drawSvg(true);
+        self.updateChartCanvas();
+        list.fit_list_height();
+        
+        new_circle_scale_x.range([circle_padding, self.current_vis_size - circle_padding]);
+        new_circle_scale_y.range([circle_padding, self.current_vis_size - circle_padding]);
+        
+        new_chart_x.range([padding_articles, self.current_vis_size - padding_articles]);
+        new_chart_y.range([padding_articles, self.current_vis_size - padding_articles]);
+          
+        d3.selectAll("g.bubble_frame")
+            .attr("transform", function (d) {
+              d.x = new_circle_scale_x(d.x);
+              d.y = new_circle_scale_y(d.y);
+              return "translate(" + d.x + "," + d.y + ")";
+          })
+        
+        d3.selectAll("circle")
+          .attr("r", function(d) { 
+              d.r = self.circle_size(d.readers);
+              return d.r; 
+        })
+        
+        var area_title_objects = d3.selectAll("#area_title_object")
+        
+        area_title_objects.each(function(d) {
+            d.height_html = Math.sqrt(Math.pow(d.r,2)*2);
+            d.width_html = Math.sqrt(Math.pow(d.r,2)*2);
+            d.x_html = 0 - d.width_html/2;
+            d.y_html = 0 - d.height_html/2;
+        })
+        
+         area_title_objects
+            .attr("x",      function (d) { return d.x_html })
+            .attr("y",      function (d) { return d.y_html })
+            .attr("width",  function (d) { return d.width_html })
+            .attr("height", function (d) { return d.height_html })
+        
+        area_title_objects.each(function(d) {
+            d3.select(this).select("#area_title")
+                .style("width",  function (d) { 
+               return d.width_html + "px" 
+                })
+               .style("height", function (d) { return d.height_html + "px" })
+        });
+        
+        $("#area_title>h2").css("font-size", self.calcTitleFontSize());
+        $("#area_title>h2").hyphenate('en');
+        
+        d3.selectAll("g.paper")
+          .attr("transform", function (d) {
+              d.x = new_chart_x(d.x);
+              d.y = new_chart_y(d.y);
+              return "translate(" + d.x + "," + d.y + ")";
+        })
+        
+        var paper_holders = d3.selectAll("div.paper_holder")
+        
+        paper_holders.each(function (d) {
+            d.diameter = self.diameter_size(d.internal_readers);
+            d.width = self.paper_width_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
+            d.height = self.paper_height_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
+            
+            var node = this;
+            
+            papers.resizePaperUnzoomed(d, node);
+        })
+        
+        //$("#area_title_object>body>#area_title>h2").trigger("update")
+        
+        /*var width = self.current_vis_size;
+        var height = self.current_vis_size;
+        
+        d3.selectAll("circle")
+          .attr("r", function(d) { return self.circle_size(d.readers); })
+        
+        self.force_areas.size([width, height]).resume();
+        self.force_papers.size([width, height]).resume();*/
+
+    })
 
       // Info Modal Event Listener
       $('#info_modal').on('show.bs.modal', function(event) {

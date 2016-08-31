@@ -138,7 +138,10 @@ BubblesFSM.prototype = {
 
         d.width = headstart.paper_width_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
         d.height = headstart.paper_height_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
-
+        
+        d.orig_x = d.x;
+        d.orig_y = d.y;
+        
         // scale x and y
         d.x = headstart.chart_x(d.x);
         d.y = headstart.chart_y(d.y*-1);
@@ -398,9 +401,7 @@ BubblesFSM.prototype = {
 
   // set the title size of bubbles to px
   adjustBubbleTitleSizeTo: function( bubbles, px ) {
-    if( headstart.current_vis_size < 720 ) {
-      bubbles.selectAll("h2").style("font-size", px);
-    }
+    bubbles.selectAll("h2").style("font-size", headstart.calcTitleFontSize());
   },
 
   // append the foreignObject to each of the bubbles
@@ -463,6 +464,8 @@ BubblesFSM.prototype = {
     for(area in areas) {
       var papers = areas[area].papers;
       var sum_readers = d3.sum(papers, function(d) { return d.internal_readers  });
+      
+      areas[area].readers = sum_readers;
 
       var mean_x = d3.mean(papers, function(d) { return d.x  });
       var mean_y = d3.mean(papers, function(d) { return d.y  });
@@ -488,6 +491,9 @@ BubblesFSM.prototype = {
         max_y = mean_y+r
       }  
     }
+    
+    //var areas_as_array = Object.keys(areas).map(function (key) {return areas[key]});
+    //headstart.chart_x_circle.domain(areas_as_array, function(d) { return d.x } );
 
     headstart.chart_x_circle.domain([min_x, max_x]);
     headstart.chart_y_circle.domain([min_y, max_y]);
@@ -498,12 +504,15 @@ BubblesFSM.prototype = {
       new_area["title"] = areas[area].title;
       new_area["x"] = headstart.chart_x_circle(areas[area].x);
       new_area["y"] = headstart.chart_y_circle(areas[area].y);
+      new_area["orig_x"] = areas[area].x;
+      new_area["orig_y"] = areas[area].y;
       new_area["r"] = areas[area].r;
       new_area["height_html"] = Math.sqrt(Math.pow(areas[area].r,2)*2);
       new_area["width_html"] = Math.sqrt(Math.pow(areas[area].r,2)*2);
       new_area["x_html"] = 0 - new_area["width_html"]/2;
       new_area["y_html"] = 0 - new_area["height_html"]/2;
       new_area["area_uri"] = area;
+      new_area["readers"] = areas[area].readers;
       new_area["papers"] = areas[area].papers;
       areas_array.push(new_area);
     }
@@ -614,9 +623,9 @@ BubblesFSM.prototype = {
       .style("fill-opacity", 1)
 
     // Determine new zooming factor based on the viewbox
-    var svg = document.getElementById("chart-svg");
-    var viewbox = svg.getAttribute("viewBox").split(/\s+|,/);
-    headstart.circle_zoom = viewbox[3] / d.r / 2 * headstart.zoom_factor;
+    //var svg = document.getElementById("chart-svg");
+    //var viewbox = svg.getAttribute("viewBox").split(/\s+|,/);
+    headstart.circle_zoom = headstart.current_vis_size / d.r / 2 * headstart.zoom_factor;
     headstart.x.domain([d.x - d.r, d.x + d.r]);
     headstart.y.domain([d.y - d.r, d.y + d.r]);
     

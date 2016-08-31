@@ -4,10 +4,6 @@
         fill-opacity: 1;
         stroke: $dark-blue;
         stroke-width: 1px;
-        
-        &:hover {
-                cursor: zoom-in;
-            }
 
         &.zoom_unselected {
             fill: $dark-blue;
@@ -25,10 +21,10 @@
         &.area {
             fill: $light-blue;
             fill-opacity: .9;
-            
-            
+
+
         }
-       
+
     }
 
     #area_title_object {
@@ -64,6 +60,66 @@
             text-transform: none;
             color: $okm-blue;
             background-color: transparent;
+        }
+    }
+
+    @media screen and (max-width: 1600px) {
+
+        #area_title {
+
+            h2 {
+                font-size: 16px;
+            }
+        }
+    }
+    
+    @media screen and (max-height: 1600px) {
+
+        #area_title {
+
+            h2 {
+                font-size: 16px;
+            }
+        }
+    }
+    
+    @media screen and (max-width: 1200px) {
+
+        #area_title {
+
+            h2 {
+                font-size: 14px;
+            }
+        }
+    }
+    
+    @media screen and (max-height: 1200px) {
+
+        #area_title {
+
+            h2 {
+                font-size: 14px;
+            }
+        }
+    }
+
+    @media screen and (max-width: 600px) {
+
+        #area_title {
+
+            h2 {
+                font-size: 12px;
+            }
+        }
+    }
+    
+    @media screen and (max-height: 600px) {
+
+        #area_title {
+
+            h2 {
+                font-size: 12px;
+            }
         }
     }
 
