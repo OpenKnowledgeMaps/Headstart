@@ -8,11 +8,13 @@
     #headstart-chart {
         /*position: absolute;*/
         font-family: Helvetica;
+        margin: 0 auto;
+        display: table;
         /*margin-top: 6px;*/
     }
 
     #chart-svg {
-        overflow-x: scroll;
+        overflow: visible;
     }
 
     rect {
