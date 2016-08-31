@@ -596,7 +596,7 @@ HeadstartFSM.prototype = {
     });
     
     $("#" + this.tag).bind('click', function(event) {
-        if(event.target.id === self.tag) {
+        if(event.target.className === "container-headstart" || event.target.className === "vis-col") {
             headstart.bubbles[headstart.current_file_number].zoomout();
         }
     });
