@@ -41,6 +41,6 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 * general->preprocessing_dir: Full path to the preprocessing directory
 * general->host: Host of the client visualization
 * general->path: Relative path to the client visualization. Needs to be in the public_html/www directory.
-* general->images_path: Full path to the images directory for the client. Needs to be in the public_html/www directory. Make sure that your webserver has write access to this directory. 
+* general->images_path: Full path to the images directory for the client. Needs to be in the public_html/www directory. **Make sure that your webserver has write access to this directory.**
 * calculation->binary: Path to R binary
-* connection->sqlite_db: Full path to the sqlite datatabase file. Make sure that your webserver has write access to this file. For development purposes, duplicate headstart.sqlite in server/storage/ and rename it to a filename of your choice. Enter the path to this file here.
+* connection->sqlite_db: Full path to the sqlite datatabase file. Make sure that your webserver has write access to this file. For development purposes, duplicate headstart.sqlite in server/storage/ and rename it to a filename of your choice. **Enter the path to this file here.**
