@@ -1,18 +1,17 @@
 // Headstart
 // filename: headstart.js
-import $ from 'jquery';
 import StateMachine from 'javascript-state-machine';
 import Mediator from 'mediator-js';
 import d3 from 'd3';
+
+import { BubblesFSM } from './bubbles';
+import { papers } from './papers';
+import { list } from './list';
 
 var BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js")
 var Hypher = require('hypher'),
     english = require('hyphenation.en-us'),
     h = new Hypher(english);
-
-import { BubblesFSM } from './bubbles';
-import { papers } from './papers';
-import { list } from './list';
 
 export var HeadstartFSM = function(host, path, tag, files, options) {
 
@@ -945,7 +944,12 @@ HeadstartFSM.prototype = {
       let text = $(value).text();
       $(value).text(h.hyphenateText(text));
     });
-    // $("#area_title_object>body").dotdotdot({wrap:"letter"});
+
+    $("#area_title_object>body").dotdotdot({wrap:"letter"});
+    // $("#area_title_object>body").each(function(index, value) {
+    //   let text = $(value).text();
+    //   $(value).text();
+    // });
   },
 
   drawNormalViewLink: function() {

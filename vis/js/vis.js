@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import Handlebars from 'handlebars';
 
 import { HeadstartFSM } from "./headstart";

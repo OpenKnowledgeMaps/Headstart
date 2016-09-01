@@ -722,13 +722,13 @@ function notSureifNeeded() {
 
 let highlight = function(str) {
 
-    new_str = "";
+    let new_str = "";
 
     for (var i = 0, len = str.length; i < len; i++) {
         new_str += str[i] + "[\\u00AD]*";
     }
 
-    value = new RegExp(new_str, "i");
+    let value = new RegExp(new_str, "i");
 
     $('.highlightable, .large.highlightable, .list_details.highlightable').highlightRegex(value, {
         attrs: {'style': "background:yellow"}

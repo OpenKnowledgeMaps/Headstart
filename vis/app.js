@@ -1,4 +1,9 @@
+require("./stylesheets/main.scss")
+
 import $ from 'jquery';
+import './lib/highlightRegex.min.js';
+import '../node_modules/jquery-dotdotdot/src/jquery.dotdotdot.min.js';
+
 import { Headstart } from "./js/vis";
 
 $(function() {
