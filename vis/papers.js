@@ -343,8 +343,15 @@ papers.applyForce = function( bubbles ) {
         areas_count++;
 
     });
-
+    
     headstart.force_papers.start();
+    
+    if(headstart.is_force_papers) {
+      headstart.force_papers.alpha(headstart.papers_force_alpha);
+    } else {
+      headstart.force_papers.alpha(0);  
+    }
+    
     var papers_count = 0;
       
     headstart.force_papers.on("tick", function(e) {
@@ -518,44 +525,6 @@ papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
 
     holder_div.select("div.readers")
         .style("width", d.width * headstart.circle_zoom * resize_factor + "px");
-
-}
-
-papers.resizePaperUnzoomed = function(d, holder_div) {
-
-    var current_div = holder_div
-        ,current_foreignObject = current_div.parentNode.parentNode
-        ,current_g = current_foreignObject.parentNode
-        ,current_path = current_g.firstChild
-        ,current_dogear = current_g.childNodes[1];
-
-    var region = papers.createPaperPath(0, 0, d.width, d.height);
-
-    var dogear = papers.createDogearPath(d.width*(1-headstart.dogear_width), 0, d.width, d.height);
-
-    d3.select(current_foreignObject)
-        .attr("width", d.width + "px")
-        .attr("height", d.height + "px")
-        .style("width", d.width + "px")
-        .style("height", d.height + "px")
-
-    d3.select(current_path)
-        .attr("d", region)
-
-    d3.select(current_dogear)
-        .attr("d", dogear);
-
-    var height = (headstart.content_based)?(d.height + "px"):
-            (d.height*0.8 + "px");
-    
-    var div = d3.select(holder_div)
-        .attr("height", height)
-        .attr("width", d.width * (1-headstart.dogear_width) + "px")
-        .style("height", height)
-        .style("width", d.width * (1-headstart.dogear_width) + "px")
-
-    div.select("div.readers")
-        .style("width", d.width + "px");
 
 }
 
