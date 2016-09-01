@@ -3,15 +3,17 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const TARGET = process.env.npm_lifecycle_event;
 
 const common = {
+    devtool: 'eval-source-map',
     entry: ['./vis/app.js'],
 
     output: {
         path: path.resolve(__dirname, "dist"),
-        publicPath: "/dist/",
+        // publicPath: 'dist/',
         filename: 'bundle.js'
     },
 
@@ -26,6 +28,18 @@ const common = {
             query: {
                 presets: ['es2015']
             }
+        }, {
+            test: /\.handlebars$/,
+            loader: "handlebars-loader"
+        }, {
+            test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+            loader: 'url-loader?limit=10000&minetype=application/font-woff&name=assets/[hash].[ext]'
+        }, {
+            test: /\.(ttf|eot|svg|png)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+            loader: 'file?name=assets/[hash].[ext]'
+        }, {
+            test: /\.csv$/,
+            loader: 'file?name=data/[hash].[ext]'
         }]
     },
 
@@ -34,17 +48,21 @@ const common = {
     },
 
     plugins: [
-        // Global Import for jquery
-        // new webpack.ProvidePlugin({
-        //     '$': 'jquery',
-        //     'jQuery': 'jquery',
-        //     'window.jQuery': 'jquery'
-        // })
+        new CleanWebpackPlugin(['dist'], {
+            root: path.resolve(__dirname, ""),
+            verbose: true,
+            dry: false,
+            exclude: []
+        }),
+        new HtmlWebpackPlugin({
+            title: 'Headstart',
+            template: '!!handlebars!./vis/templates/index.handlebars'
+        })
     ],
 
     resolve: {
         alias: {
-            handlebars: 'handlebars/dist/handlebars.js'
+            'handlebars': 'handlebars/dist/handlebars.js'
         }
     }
 };
@@ -52,8 +70,6 @@ const common = {
 switch (TARGET) {
     case 'dev':
         module.exports = merge(common, {
-            // Use sourcemaps
-            devtool: 'eval-source-map',
             debug: true,
 
             module: {
@@ -62,9 +78,6 @@ switch (TARGET) {
                     {
                         test: /\.scss$/,
                         loaders: ["style", "css?sourceMap", "sass?sourceMap"]
-                    }, {
-                        test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
-                        loader: "file"
                     }
                 ]
             }
@@ -73,13 +86,14 @@ switch (TARGET) {
 
     case 'prod':
         module.exports = merge(common, {
+            output: {
+                publicPath: ""
+            },
+
             module: {
                 loaders: [{
                     test: /\.scss$/,
                     loader: ExtractTextPlugin.extract('css!sass')
-                }, {
-                    test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
-                    loader: "file"
                 }]
             },
             plugins: [
@@ -88,12 +102,6 @@ switch (TARGET) {
                     compress: {
                         warnings: false
                     }
-                }),
-                new CleanWebpackPlugin(['dist', 'build'], {
-                    root: path.join(__dirname, 'dist'),
-                    verbose: true,
-                    dry: false,
-                    exclude: []
                 })
             ]
         });

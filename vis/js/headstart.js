@@ -8,10 +8,12 @@ import { BubblesFSM } from './bubbles';
 import { papers } from './papers';
 import { list } from './list';
 
-var BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js")
-var Hypher = require('hypher'),
+const BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js")
+const Hypher = require('hypher'),
     english = require('hyphenation.en-us'),
     h = new Hypher(english);
+
+const timelineTemplate = require('../templates/timeline.handlebars')
 
 export var HeadstartFSM = function(host, path, tag, files, options) {
 
@@ -230,11 +232,6 @@ HeadstartFSM.prototype = {
     }
   },
 
-  //TODO: load scripts here
-  loadScripts: function() {
-
-  },
-
   // simple check that all required libraries are present at the moment:
   // - d3
   // - jQuery
@@ -288,8 +285,6 @@ HeadstartFSM.prototype = {
   },
 
   resetBubbles: function () {
-    self = this;
-
     if(this.bubbles) {
       delete this.bubbles;
       this.bubbles = {};
@@ -455,10 +450,9 @@ HeadstartFSM.prototype = {
   },
 
   initEventListeners: function() {
-      self = this;
-      d3.select(window).on("resize", function() {
-          self.calcChartSize();
-          self.drawSvg(true);
+      d3.select(window).on("resize", () => {
+          this.calcChartSize();
+          this.drawSvg(true);
           list.fit_list_height();
       });
 
@@ -482,45 +476,33 @@ HeadstartFSM.prototype = {
   },
 
   initMouseMoveListeners: function() {
-    var self = this;
-    $("rect").on( "mouseover", function() {
-      if (!self.is_zoomed) {
-        self.bubbles[self.current_file_number].onmouseout("notzoomedmouseout");
-        self.current_circle = null;
+    $("rect").on( "mouseover", () => {
+      if (!this.is_zoomed) {
+        this.bubbles[this.current_file_number].onmouseout("notzoomedmouseout");
+        this.current_circle = null;
       }
-      self.bubbles[self.current_file_number].mouseout("outofbigbubble");
-      self.initClickListenersForNav();
+      this.bubbles[this.current_file_number].mouseout("outofbigbubble");
+      this.initClickListenersForNav();
     });
   },
 
   initMouseClickListeners: function() {
-    var self = this;
+      $("#chart-svg").on("click", () => {
+          this.bubbles[this.current_file_number].zoomout();
+      });
 
-    $("#chart-svg").on( "click", function() {
-      self.bubbles[self.current_file_number].zoomout();
-    });
-
-    $("#" + this.tag).bind('click', function(event) {
-        if(event.target.id === self.tag) {
-            self.bubbles[self.current_file_number].zoomout();
-        }
-    });
-
-    /*$("#" + this.tag).on("click", function () {
-      headstart.bubbles[headstart.current_file_number].zoomout();
-    })*/
-
-    $("#headstart-chart").on("click", function() {
-      //headstart.mediator.publish("canvas_click", this.canvas_click);
-      // headstart.bubbles[headstart.current_file_number].zoomOut();
-    });
+      $("#" + this.tag).bind('click', (event) => {
+          if (event.target.id === this.tag) {
+              this.bubbles[this.current_file_number].zoomout();
+          }
+      });
   },
 
+
   initClickListenersForNav: function() {
-    var self = this;
-      $("#timelineview").on("click", function() {
+      $("#timelineview").on("click", () => {
           if ($("#timelineview a").html() == "TimeLineView") {
-              self.mediator.publish("to_timeline");
+              this.mediator.publish("to_timeline", this);
           }
       });
   },
@@ -528,11 +510,10 @@ HeadstartFSM.prototype = {
 
   // Draws the header for this
   drawTitle: function() {
-    
     let chart_title = "";
     
     if(this.subdiscipline_title === "") {
-        if (headstart.language == "eng") {
+        if (this.language == "eng") {
             chart_title = 'Overview of <span id="num_articles"></span> articles';
         } else {
             chart_title = 'Überblick über <span id="num_articles"></span> Artikel';
@@ -551,27 +532,26 @@ HeadstartFSM.prototype = {
     }
 
     if (this.show_timeline) {
-        var link = ' <span id="timelineview"><a href="#">TimeLineView</a></span>';
+        let link = ' <span id="timelineview"><a href="#">TimeLineView</a></span>';
         $("#subdiscipline_title>h4").append(link);
     }
 
     if (this.show_dropdown) {
-        var dropdown = '<select id="datasets"></select>';
+        let dropdown = '<select id="datasets"></select>';
 
         $("#subdiscipline_title>h4").append(" Select dataset: ");
         $("#subdiscipline_title>h4").append(dropdown);
 
-        $.each(this.bubbles, function(index, entry) {
-            var current_item = '<option value="' + entry.file + '">' + entry.title + '</option>';
+        $.each(this.bubbles, (index, entry) => {
+            let current_item = '<option value="' + entry.file + '">' + entry.title + '</option>';
             $("#datasets").append(current_item);
         })
 
         //$("#datasets " + headstart.current_file_number + ":selected").text();
         $("#datasets").val(this.bubbles[this.current_file_number].file);
 
-        $("#datasets").change(function() {
-
-            var selected_file_number = datasets.selectedIndex + 1;
+        $("#datasets").change(() => {
+            let selected_file_number = datasets.selectedIndex + 1;
             if (selected_file_number != this.current_file_number) {
                 this.tofile(selected_file_number);
             }
@@ -581,12 +561,12 @@ HeadstartFSM.prototype = {
 
 
   initForceAreas: function() {
-    var padded = this.current_vis_size - this.padding;
+    let padded = this.current_vis_size - this.padding;
     this.force_areas = d3.layout.force().links([]).size([padded, padded]);
   },
 
   initForcePapers: function() {
-    var padded = this.current_vis_size - this.padding;
+    let padded = this.current_vis_size - this.padding;
     this.force_papers = d3.layout.force().nodes([]).links([]).size([padded, padded]);
     if (typeof checkPapers !== 'undefined') {
         window.clearInterval(checkPapers);
@@ -596,13 +576,13 @@ HeadstartFSM.prototype = {
   // calls itself over and over until the forced layout of the papers
   // is established
   checkForcePapers: function() {
-    var hs = this;
-    var bubble = hs.bubbles[this.current_file_number];
-    if (hs.is("normal") || hs.is("switchfiles")) {
-      let checkPapers = window.setInterval(function () {
-        if (hs.is("normal") || hs.is("switchfiles")) {
+    var bubble = this.bubbles[this.current_file_number];
+
+    if (this.is("normal") || this.is("switchfiles")) {
+      var checkPapers = window.setInterval(() => {
+        if (this.is("normal") || this.is("switchfiles")) {
           if ((!papers.is("ready") && !papers.is("none")) || (bubble.is("startup") || bubble.is("none") || (bubble.is("start")) )) {
-            if (hs.force_papers.alpha() <= 0 && hs.force_areas.alpha() <= 0) {
+            if (this.force_papers.alpha() <= 0 && this.force_areas.alpha() <= 0) {
               papers.forced();
               if(this.show_list) {
                 list.show();
@@ -716,8 +696,6 @@ HeadstartFSM.prototype = {
   // the start event transitions headstart from "none" to "normal" view
   onstart: function(event, from, to, file) {
       this.init_mediator();
-      this.loadScripts();
-
       this.calcChartSize();
 
       this.initScales();
@@ -733,8 +711,6 @@ HeadstartFSM.prototype = {
       // NOTE: async call
       // therefore we need to call the methods which depend on bubbles.data
       // after the csv has been received.
-      var hs = this;
-
       var setupVisualization = (csv) => {
           this.drawTitle();
 
@@ -747,11 +723,11 @@ HeadstartFSM.prototype = {
 
               var url = this.createRestUrl();
 
-              $.getJSON(url, function(data) {
-                  this.startVisualization(hs, bubbles, csv, data, true);
+              $.getJSON(url, (data) => {
+                  this.startVisualization(this, bubbles, csv, data, true);
               });
           } else {
-              this.startVisualization(hs, bubbles, csv, null, true);
+              this.startVisualization(this, bubbles, csv, null, true);
           }
 
           // Horrible solution but the first call is needed to calculate the chart height
@@ -759,10 +735,11 @@ HeadstartFSM.prototype = {
           this.drawTitle();
       }
 
-
       switch (this.input_format) {
           case "csv":
-              d3.csv(bubbles.file, setupVisualization);
+              let filename = bubbles.file.split("/")[2]
+              let data = require("../data/" + filename)
+              d3.csv(data, setupVisualization);
               break;
 
           case "json":
@@ -788,7 +765,9 @@ HeadstartFSM.prototype = {
   // 2. rendering of new elements, on a bigger
   //    chart
   ontotimeline: function(event, from, to) {
-      window.clearInterval(checkPapers);
+      if (typeof checkPapers !== 'undefined') {
+        window.clearInterval(checkPapers);
+      }
 
       this.force_areas.stop();
       this.force_papers.stop();
@@ -801,15 +780,14 @@ HeadstartFSM.prototype = {
       // clear the list list
       $("#list_explorer").empty();
 
-    this.bubbles[this.current_file_number].current = "x";
+      this.bubbles[this.current_file_number].current = "x";
       papers.current = "none";
       list.current = "none";
 
       // change heading to give an option to get back to normal view
       this.viz.empty()
 
-      var compiledTemplate = Handlebars.getTemplate(this.templ_path, "timeline");
-      var timeline = compiledTemplate();
+      let timeline = timelineTemplate();
       this.viz.append(timeline);
 
       this.drawTitle()
@@ -830,22 +808,23 @@ HeadstartFSM.prototype = {
 
       $("#main").css("overflow", "auto");
 
-      var hs = this;
-
       // load bubbles in sync
 
-      $.each(this.bubbles, function(index, elem) {
+      $.each(this.bubbles, (index, elem) => {
           var setupTimelineVisualization = function(csv) {
               elem.start(csv)
           }
 
-      switch(this.input_format) {
+          switch (this.input_format) {
               case "csv":
-                  d3.csv(elem.file, setupTimelineVisualization);
+                  let filename = elem.file.split("/")[2]
+                  let data = require("../data/" + filename)
+                  console.log(data)
+                  d3.csv(data, setupTimelineVisualization);
                   break;
 
               case "json":
-                d3.json(this.service_path + "getLatestRevision.php?vis_id=" + elem.file, setupTimelineVisualization);
+                  d3.json(this.service_path + "getLatestRevision.php?vis_id=" + elem.file, setupTimelineVisualization);
                   break;
 
               default:
@@ -859,7 +838,6 @@ HeadstartFSM.prototype = {
 
   
   ontofile: function(event, from, to, file) {
-
       this.force_areas.stop();
       this.force_papers.stop();
 
@@ -893,11 +871,11 @@ HeadstartFSM.prototype = {
 
               var url = this.createRestUrl();
 
-              $.getJSON(url, function(data) {
-                  this.startVisualization(hs, bubbles, csv, data, false);
+              $.getJSON(url, (data) => {
+                  this.startVisualization(this, bubbles, csv, data, false);
               });
           } else {
-              this.startVisualization(hs, bubbles, csv, null, false);
+              this.startVisualization(this, bubbles, csv, null, false);
           }
 
           this.drawTitle()
@@ -905,7 +883,9 @@ HeadstartFSM.prototype = {
 
       switch (this.input_format) {
           case "csv":
-              d3.csv(bubbles.file, setupVisualization);
+              let filename = bubbles.file.split("/")[2]
+              let data = require("../data/" + filename)
+              d3.csv(data, setupVisualization);
               break;
 
           case "json":
@@ -936,7 +916,7 @@ HeadstartFSM.prototype = {
 
     hs.checkForcePapers();
 
-    if (this.show_intro) {
+    if (hs.show_intro) {
         $("#infolink").click();
     }
 
@@ -946,10 +926,6 @@ HeadstartFSM.prototype = {
     });
 
     $("#area_title_object>body").dotdotdot({wrap:"letter"});
-    // $("#area_title_object>body").each(function(index, value) {
-    //   let text = $(value).text();
-    //   $(value).text();
-    // });
   },
 
   drawNormalViewLink: function() {
@@ -963,7 +939,6 @@ HeadstartFSM.prototype = {
 
   init_mediator: function() {
     // popup
-    this.mediator.subscribe("popup_toggle", this.popup_toggle);
     this.mediator.subscribe("to_timeline", this.to_timeline);
 
     // list
@@ -996,19 +971,8 @@ HeadstartFSM.prototype = {
     this.mediator.subscribe("record_action", this.record_action);
   },
 
-  popup_toggle: function() {
-    // $("#info_modal").modal();
-    // if (this.mediator_states.popup_visible) {
-    //   popup.hide();
-    //   this.mediator_states.popup_visible = false;
-    // } else {
-    //   popup.show();
-    //   this.mediator_states.popup_visible = true;
-    // }
-  },
-
-  to_timeline: function() {
-    this.totimeline();
+  to_timeline: function(hs) {
+    hs.ontotimeline();
   },
 
   list_toggle: function() {
@@ -1052,7 +1016,8 @@ HeadstartFSM.prototype = {
   },
 
   canvas_click: function() {
-    this.bubbles[this.current_file_number].zoomOut();
+    // console.log(this)
+    // this.bubbles[this.current_file_number].zoomOut();
   },
 
   currentbubble_click: function(d) {

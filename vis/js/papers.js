@@ -6,6 +6,8 @@ import Handlebars from 'handlebars';
 import { BubblesFSM } from './bubbles';
 import { list } from './list';
 
+const paperTemplate = require("../templates/paper.handlebars");
+
 export var papers = StateMachine.create({
 
     events: [
@@ -197,8 +199,6 @@ papers.paper_click = function(d) {
 
 // add #id element to foreignObject and adjust various other attributes
 papers.prepareForeignObject = function(nodes) {
-    var paperTemplate = Handlebars.getTemplate(headstart.templ_path, "paper");
-
     nodes.append("foreignObject")
         .attr({
             "id": "article_metadata",

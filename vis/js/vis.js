@@ -2,33 +2,34 @@ import Handlebars from 'handlebars';
 
 import { HeadstartFSM } from "./headstart";
 
+const headstartTemplate = require("../templates/headstart.handlebars");
+const InfoTemplate = require("../templates/info_modal.handlebars");
+const IFrameTemplate = require("../templates/iframe_modal.handlebars");
+
 // make namespace global - should be moved to CONSTANTS file
 window.namespace = "headstart";
 
 export var Headstart = function(host, path, tag, files, options) {
 
-  let vis_directory = "vis/";
-  let lib_directory = "lib/";
-  let templ_path = host + path + vis_directory + "templates/";
+  const vis_directory = "vis/";
+  const lib_directory = "lib/";
+  const templ_path = host + path + vis_directory + "templates/";
 
-  let viz = $("#"+tag);
+  const viz = $("#"+tag);
 
-  var compiledTemplate = Handlebars.getTemplate(templ_path, "headstart");
-  var html = compiledTemplate();
-  viz.append(html);
+  let elem = headstartTemplate();
+  viz.append(elem);
 
-  compiledTemplate = Handlebars.getTemplate(templ_path, "info_modal");
-  let info_modal = compiledTemplate();
-  viz.append(info_modal);
+  elem = InfoTemplate();
+  viz.append(elem);
 
-  compiledTemplate = Handlebars.getTemplate(templ_path, "iframe_modal");
-  let iframe_modal = compiledTemplate();
-  viz.append(iframe_modal);
+  elem = IFrameTemplate();
+  viz.append(elem);
 
 
   document.getElementById(tag).className = namespace;
 
-  let headstart = new HeadstartFSM(host, path, tag, files, options);
+  const headstart = new HeadstartFSM(host, path, tag, files, options);
   // make headstart global
   window.headstart = headstart;
 
@@ -54,19 +55,3 @@ export function redraw_drag(x, y, dx, dy) {
   chart.attr("transform",
           "translate(" + dx + ", " + dy + ")");
 }
-
-Handlebars.getTemplate = function(template_path, name) {
-    if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
-        $.ajax({
-            url : template_path + name + '.handlebars',
-            success : function(data) {
-                if (Handlebars.templates === undefined) {
-                    Handlebars.templates = {};
-                }
-                Handlebars.templates[name] = Handlebars.compile(data);
-            },
-            async : false
-        });
-    }
-    return Handlebars.templates[name];
-};

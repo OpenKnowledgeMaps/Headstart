@@ -6,6 +6,10 @@ import Handlebars from 'handlebars';
 import { BubblesFSM } from './bubbles';
 import { papers } from './papers';
 
+const listTemplate = require('../templates/list_explorer.handlebars');
+const selectButtonTemplate = require('../templates/select_button.handlebars');
+const listEntryTemplate = require("../templates/list_entry.handlebars");
+
 export var list = StateMachine.create({
 
     events: [
@@ -63,8 +67,7 @@ list.current_search_words;
 
 list.drawList = function() {
     // Load list template
-    let compiledTemplate = Handlebars.getTemplate(headstart.templ_path, 'list_explorer');
-    let list_explorer = compiledTemplate({show_list:headstart.localization[headstart.language].show_list});
+    let list_explorer = listTemplate({show_list:headstart.localization[headstart.language].show_list});
     $("#list_explorer").append(list_explorer);
 
     // Set localized values
@@ -117,8 +120,7 @@ let addSortOption = function(parent, sort_option, selected) {
     active_val = ""
   }
 
-  let compiledTemplate = Handlebars.getTemplate(headstart.templ_path, 'select_button');
-  let button = compiledTemplate({
+  let button = selectButtonTemplate({
       id: "sort_" + sort_option,
       checked: checked_val,
       label: headstart.localization[headstart.language][sort_option],
@@ -179,8 +181,7 @@ list.initListMouseListeners = function() {
 }
 
 list.getPaperNodes = function(list_data) {
-  var compiledTemplate = Handlebars.getTemplate(headstart.templ_path, "list_entry");
-  var list_entry = compiledTemplate();
+  var list_entry = listEntryTemplate();
 
   return list.papers_list.selectAll("div")
                   .data(list_data)

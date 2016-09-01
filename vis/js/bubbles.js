@@ -7,6 +7,8 @@ import d3 from 'd3';
 import { papers, toBack, toFront } from './papers';
 import { list } from './list';
 
+const bubbleTemplate = require('../templates/bubble.handlebars');
+
 export var BubblesFSM = function() {
   this.id = 0;
   this.areas = {};
@@ -403,7 +405,6 @@ BubblesFSM.prototype = {
   },
 
   appendForeignObjectTo: function( bubbleFrame ) {
-    var bubbleTemplate = Handlebars.getTemplate(headstart.templ_path, "bubble");
     bubbleFrame.append('foreignObject')
         .attr({
             'id': 'area_title_object',
