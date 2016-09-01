@@ -7,6 +7,8 @@ import d3 from 'd3';
 import { BubblesFSM } from './bubbles';
 import { papers } from './papers';
 import { list } from './list';
+import { intro, intro_cn3, intro_plos } from './intro';
+
 
 const BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js")
 const Hypher = require('hypher'),
@@ -437,16 +439,15 @@ HeadstartFSM.prototype = {
 
   drawChartCanvas: function() {
 
-    var chart = this.svg.append("g").attr( "id", "chart_canvas" );
+    this.chart = this.svg.append("g").attr( "id", "chart_canvas" );
     // Rectangle to contain nodes in force layout
-    var rect = chart.append("rect")
+    let rect = this.chart.append("rect")
     // var rect_width = this.current_vis_size;// + this.max_list_size;
     rect.attr( "height", this.current_vis_size + "px" )
     rect.attr( "width",  this.current_vis_size + "px" );
 
     // chart.attr( "height", this.current_vis_size + "px" )
     // chart.attr( "width",  this.current_vis_size + "px" );
-    this.chart = chart;
   },
 
   initEventListeners: function() {
@@ -460,10 +461,9 @@ HeadstartFSM.prototype = {
       $('#info_modal').on('show.bs.modal', function(event) {
           // var source = $(event.relatedTarget) // Button that triggered the modal
           // var type = source.data('type') // Extract info from data-* attributes
-
-          var modal = $(this)
-          modal.find('.modal-title').text(intro_title)
-          modal.find('.modal-body').html(intro_body)
+          // var modal = $()  
+          $(this).find('.modal-title ').text(intro.title);
+          $(this).find('.modal-body').html(intro.body);
       })
   },
 
@@ -526,7 +526,7 @@ HeadstartFSM.prototype = {
     $("#num_articles").html($(".paper").length);
 
     if (this.show_infolink) {
-        let infolink =  ' (<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>)'
+        let infolink = ' (<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>)'
         $("#subdiscipline_title h4").append(infolink);
         $("#infolink").text(this.localization[this.language].intro_label);
     }
@@ -678,7 +678,7 @@ HeadstartFSM.prototype = {
       var conference_id = eval(this.conference_id);
 
       if($.isArray(conference_id)) {
-          conference_id.forEach(function (val) {
+          conference_id.forEach((val) => {
             url += "&conference[]=" + val;
           })
       } else {
@@ -811,7 +811,7 @@ HeadstartFSM.prototype = {
       // load bubbles in sync
 
       $.each(this.bubbles, (index, elem) => {
-          var setupTimelineVisualization = function(csv) {
+          var setupTimelineVisualization = (csv) => {
               elem.start(csv)
           }
 

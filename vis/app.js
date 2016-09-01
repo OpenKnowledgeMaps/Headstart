@@ -1,4 +1,5 @@
 require("./stylesheets/main.scss")
+require('bootstrap-loader');
 
 import $ from 'jquery';
 import './lib/highlightRegex.min.js';
