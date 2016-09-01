@@ -39,7 +39,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.is_force_areas = initVar(options.is_force_areas, false);
   this.area_force_alpha = initVar(options.area_force_alpha, 0.02);
   
-  this.is_force_papers = initVar(options.is_force_papers, false);
+  this.is_force_papers = initVar(options.is_force_papers, true);
   this.papers_force_alpha = initVar(options.papers_force_alpha, 0.1);
 
   // bubbles
