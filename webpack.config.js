@@ -56,7 +56,7 @@ const common = {
         }),
         new HtmlWebpackPlugin({
             title: 'Headstart',
-            template: '!!handlebars!./vis/templates/index.handlebars'
+            template: '!!handlebars!./vis/templates/index-files/index.handlebars'
         })
     ],
 
