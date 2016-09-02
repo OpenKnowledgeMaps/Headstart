@@ -343,8 +343,15 @@ papers.applyForce = function( bubbles ) {
         areas_count++;
 
     });
-
+    
     headstart.force_papers.start();
+    
+    if(headstart.is_force_papers) {
+      headstart.force_papers.alpha(headstart.papers_force_alpha);
+    } else {
+      headstart.force_papers.alpha(0);  
+    }
+    
     var papers_count = 0;
       
     headstart.force_papers.on("tick", function(e) {
@@ -520,7 +527,6 @@ papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
         .style("width", d.width * headstart.circle_zoom * resize_factor + "px");
 
 }
-
 
 // called far too often
 papers.enlargePaper = function(d,holder_div,i) {

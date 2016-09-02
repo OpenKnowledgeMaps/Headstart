@@ -6,7 +6,7 @@ HeadstartFSM = function(host, path, tag, files, options) {
   initVar = function(variable, default_value) {
     return typeof variable !== 'undefined' ? variable : default_value;
   }
-
+  
   // a container for variables
   this.VERSION = 2.5;
   
@@ -26,6 +26,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.paper_min_scale = initVar(options.paper_min_scale, 1);
   this.paper_max_scale = initVar(options.paper_max_scale, 1);
   this.zoom_factor = 0.9;
+  this.padding_articles = 0;
+  this.circle_padding = 0;
 
   // map reference sizes
   this.reference_size = 650;
@@ -36,6 +38,9 @@ HeadstartFSM = function(host, path, tag, files, options) {
 
   this.is_force_areas = initVar(options.is_force_areas, false);
   this.area_force_alpha = initVar(options.area_force_alpha, 0.02);
+  
+  this.is_force_papers = initVar(options.is_force_papers, true);
+  this.papers_force_alpha = initVar(options.papers_force_alpha, 0.1);
 
   // bubbles
   this.area_title_max_size = 50;
@@ -359,13 +364,13 @@ HeadstartFSM.prototype = {
       this.diameter_size.range([this.paper_min, this.paper_max]);
 
       // Set ranges on scales
-      var padding_articles = this.paper_max;
-      this.chart_x.range([padding_articles, this.current_vis_size - padding_articles]);
-      this.chart_y.range([padding_articles, this.current_vis_size - padding_articles]);
+      this.padding_articles = 5; //this.paper_max;
+      this.chart_x.range([this.padding_articles, this.current_vis_size - this.padding_articles]);
+      this.chart_y.range([this.padding_articles, this.current_vis_size - this.padding_articles]);
 
-      var circle_padding = 0;
-      this.chart_x_circle.range([circle_padding, this.current_vis_size - circle_padding]);
-      this.chart_y_circle.range([circle_padding, this.current_vis_size - circle_padding]);
+      this.circle_padding = this.circle_max/2 + 45;
+      this.chart_x_circle.range([this.circle_padding, this.current_vis_size - this.circle_padding]);
+      this.chart_y_circle.range([this.circle_padding, this.current_vis_size - this.circle_padding]);
 
       var zoomed_article_padding = 60;
       this.x.range([zoomed_article_padding, this.current_vis_size - zoomed_article_padding]);
@@ -420,10 +425,10 @@ HeadstartFSM.prototype = {
           }
       } else {
           this.svg.attr("height", this.current_vis_size + "px")
-              .attr("width", "100%")
-              .attr("preserveAspectRatio", "xMidYMid meet");
+              .attr("width", this.current_vis_size + "px")
+              //.attr("preserveAspectRatio", "xMidYMid meet");
           if (update === false) {
-            this.svg.attr("viewBox", "0 0 " + this.current_vis_size + " " + this.current_vis_size);
+            //this.svg.attr("viewBox", "0 0 " + this.current_vis_size + " " + this.current_vis_size);
           }
       }
   },
@@ -434,21 +439,177 @@ HeadstartFSM.prototype = {
     // Rectangle to contain nodes in force layout
     var rect = chart.append("rect")
     // var rect_width = this.current_vis_size;// + this.max_list_size;
-    rect.attr( "height", this.current_vis_size + "px" )
-    rect.attr( "width",  this.current_vis_size + "px" );
+    this.updateChartCanvas();
 
-    // chart.attr( "height", this.current_vis_size + "px" )
-    // chart.attr( "width",  this.current_vis_size + "px" );
+    //chart.attr( "height", this.current_vis_size + "px" )
+    //chart.attr( "width",  this.current_vis_size + "px" );
     this.chart = chart;
+  },
+  
+  updateChartCanvas: function () {
+      d3.select("rect")
+        .attr( "height", this.current_vis_size + "px" )
+        .attr( "width",  this.current_vis_size + "px" );
+  },
+  
+  calcTitleFontSize: function () {
+    if (this.current_vis_size <= 600) {
+          return "12px";
+    } else if (this.current_vis_size <= 1000) {
+          return "14px";
+    } else {
+          return "16px";
+    }
   },
 
   initEventListeners: function() {
       self = this;
       d3.select(window).on("resize", function() {
-          self.calcChartSize();
-          self.drawSvg(true);
-          list.fit_list_height();
-      });
+          
+        if (self.is("timeline"))
+            return;
+          
+        var resized_scale_x = d3.scale.linear();
+        var resized_scale_y = d3.scale.linear();
+        
+        resized_scale_x.domain([0, self.current_vis_size]);
+        resized_scale_y.domain([0, self.current_vis_size]);
+
+        self.calcChartSize();
+        self.setScaleRanges();
+        self.drawSvg(true);
+        self.updateChartCanvas();
+        list.fit_list_height();
+        
+        resized_scale_x.range([0, self.current_vis_size]);
+        resized_scale_y.range([0, self.current_vis_size]);
+          
+        
+        
+        d3.selectAll("g.bubble_frame")
+            .attr("transform", function (d) {
+                d.x_zoomed = resized_scale_x(d.x_zoomed);
+                d.y_zoomed = resized_scale_y(d.y_zoomed);
+                d.x = resized_scale_x(d.x);
+                d.y = resized_scale_y(d.y);
+                if (self.is_zoomed === true) {
+                    return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
+                } else {
+                    return "translate(" + d.x + "," + d.y + ")";
+                }
+        })
+        
+        d3.selectAll("circle")
+          .attr("r", function(d) {
+              d.r_zoomed = self.circle_size(d.readers) * self.circle_zoom;
+              d.r = self.circle_size(d.readers);
+              if (self.is_zoomed === true) {
+                return d.r_zoomed;
+              } else {
+                return d.r; 
+              }
+          })
+        
+        var area_title_objects = d3.selectAll("#area_title_object")
+        
+        area_title_objects.each(function(d) {
+            d.height_html = Math.sqrt(Math.pow(d.r,2)*2);
+            d.width_html = Math.sqrt(Math.pow(d.r,2)*2);
+            d.x_html = 0 - d.width_html/2;
+            d.y_html = 0 - d.height_html/2;
+        })
+        
+         area_title_objects
+            .attr("x",      function (d) { return d.x_html })
+            .attr("y",      function (d) { return d.y_html })
+            .attr("width",  function (d) { return d.width_html })
+            .attr("height", function (d) { return d.height_html })
+        
+        area_title_objects.each(function(d) {
+            d3.select(this).select("#area_title")
+                .style("width",  function (d) { 
+               return d.width_html + "px" 
+                })
+               .style("height", function (d) { return d.height_html + "px" })
+        });
+        
+        $("#area_title>h2").css("font-size", self.calcTitleFontSize());
+        $("#area_title>h2").hyphenate('en');
+        
+        d3.selectAll("g.paper")
+          .attr("transform", function (d) {
+                d.x_zoomed = resized_scale_x(d.x_zoomed);
+                d.y_zoomed = resized_scale_y(d.y_zoomed);
+                d.x = resized_scale_x(d.x);
+                d.y = resized_scale_y(d.y);
+              if (self.is_zoomed === true) {
+                return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";  
+              } else {
+                return "translate(" + d.x + "," + d.y + ")";
+              }
+        })
+        
+        var paper_holders = d3.selectAll("div.paper_holder")
+        
+        paper_holders.each(function (d) {
+            d.diameter = self.diameter_size(d.internal_readers);
+            d.width = self.paper_width_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
+            d.height = self.paper_height_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
+            d.top_factor = (1-self.dogear_width);
+            
+            d.width_zoomed = d.width * self.circle_zoom;
+            d.height_zoomed = d.height * self.circle_zoom;
+            
+            d.resize_width = (self.is_zoomed)?(d.width_zoomed):(d.width);
+            d.resize_height = (self.is_zoomed)?(d.height_zoomed):(d.height);
+        })
+        
+        d3.selectAll("#region")
+        .attr("d", function (d) {
+          return papers.createPaperPath(0, 0, d.resize_width, d.resize_height)
+        });
+
+        d3.selectAll("path.dogear")
+          .attr("d", function (d) {            
+            return papers.createDogearPath(d.resize_width*d.top_factor, 0, d.resize_width, d.resize_height);
+          });
+
+        //webkit bug
+        d3.selectAll("#article_metadata")
+          .attr("width", function (d) { return d.resize_width; })
+          .attr("height", function (d) { return d.resize_height; })
+
+        d3.selectAll("div.metadata")
+          .style("width", function (d) {
+            return d.resize_width * d.top_factor + "px"
+          })
+        .style("height", function (d) {
+          if(!self.is_zoomed)
+            return (self.content_based)?(d.resize_height):(d.resize_height * 0.8 + "px")
+          else
+            return (self.content_based)?(d.resize_height + "px"):(d.resize_height - 20 + "px");
+        });
+
+        d3.selectAll("div.readers")
+          .style("height", function (d) {
+            if(self.is_zoomed === false)
+                return d.resize_height * 0.2 + "px"
+            else
+                return "15px";
+          })
+        .style("width", function (d) {
+          return d.resize_width + "px"
+        })
+        /*var width = self.current_vis_size;
+        var height = self.current_vis_size;
+        
+        d3.selectAll("circle")
+          .attr("r", function(d) { return self.circle_size(d.readers); })
+        
+        self.force_areas.size([width, height]).resume();
+        self.force_papers.size([width, height]).resume();*/
+
+    })
 
       // Info Modal Event Listener
       $('#info_modal').on('show.bs.modal', function(event) {
@@ -488,7 +649,7 @@ HeadstartFSM.prototype = {
     });
     
     $("#" + this.tag).bind('click', function(event) {
-        if(event.target.id === self.tag) {
+        if(event.target.className === "container-headstart" || event.target.className === "vis-col" || event.target.id === "headstart-chart") {
             headstart.bubbles[headstart.current_file_number].zoomout();
         }
     });
