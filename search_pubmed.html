@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Search Pubmed and turn it into a visualization</title>
+        <title>Search PubMed and turn it into a visualization</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="vis/lib/bootstrap.min.css">
@@ -26,7 +26,7 @@ and open the template in the editor.
     </head>
     <body style="padding-left:10px; padding-right:10px;">
         <div>
-            <h2>Search Pubmed and turn it into a visualization</h2>
+            <h2>Search PubMed and turn it into a visualization</h2>
             <form id="searchform" style="margin-top:20px">
                 <label for="q">Search term:</label> 
                 <input type="text" name="q" size="61" required>
@@ -39,7 +39,7 @@ and open the template in the editor.
 
         <div id="progress"></div>
 
-        <div style="margin-top:20px">Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a> and <a href="http://github.com/ropensci/rplos" target="_blank">rplos</a>. All content retrieved from <a href="https://www.plos.org/publications/journals/" target="_blank">Public Library of Science Journals</a> under <a href="http://journals.plos.org/plosone/s/content-license" target="_blank">CC-BY</a>.
+        <div style="margin-top:20px">Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a> and <a href="https://github.com/ropensci/rentrez" target="_blank">rentrez</a>. All content retrieved from <a href="http://www.ncbi.nlm.nih.gov/pubmed" target="_blank">PubMed</a>.
         </div>
 
         <script type="text/javascript">
@@ -50,6 +50,7 @@ and open the template in the editor.
             $("#searchform").validate({
                 submitHandler: function (form) {
                     $(".btn").attr("disabled", true);
+                    $("#progress").html("");
 
 
                     d3.select("#progress").append("p")
@@ -78,9 +79,9 @@ and open the template in the editor.
                         data: $("#searchform").serialize(),
                         success: function (data) {
                             if (data.status === "success") {
-                                window.location.replace("index_pubmed.php?query=" + data.query + "&id=" + data.id);
+                                window.location = "index_pubmed.php?query=" + data.query + "&id=" + data.id;
                             } else {
-                                 $("#progress").html("Sorry! Something went wrong.");
+                                 $("#progress").html("Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again with a different query.");
                                  $(".btn").attr("disabled", false);
                             }
                         }

@@ -50,7 +50,7 @@ and open the template in the editor.
             $("#searchform").validate({
                 submitHandler: function (form) {
                     $(".btn").attr("disabled", true);
-
+                    $("#progress").html("");
 
                     d3.select("#progress").append("p")
                             .text("Please be patient, this can take a while...")
@@ -78,9 +78,9 @@ and open the template in the editor.
                         data: $("#searchform").serialize(),
                         success: function (data) {
                             if (data.status === "success") {
-                                window.location.replace("index.php?query=" + data.query + "&id=" + data.id);
+                                window.location = "index.php?query=" + data.query + "&id=" + data.id;
                             } else {
-                                 $("#progress").html("Sorry! Something went wrong.");
+                                 $("#progress").html("Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again with a different query.");
                                  $(".btn").attr("disabled", false);
                             }   
                         }
