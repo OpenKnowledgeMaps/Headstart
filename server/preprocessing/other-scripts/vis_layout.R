@@ -40,13 +40,13 @@ create_tdm_matrix <- function(metadata, text, sparsity=1, lang="english") {
   
   corpus <- tm_map(corpus, removePunctuation)
   
+  corpus <- tm_map(corpus, content_transformer(tolower))
+  
   corpus <- tm_map(corpus, removeWords, stopwords(lang))
   
   metadata_full_subjects <- replace_keywords_if_empty(corpus, metadata)
   
   corpus <- tm_map(corpus, stripWhitespace)
-  
-  corpus <- tm_map(corpus, content_transformer(tolower))
   
   corpus_unstemmed = corpus
   
