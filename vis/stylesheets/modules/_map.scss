@@ -60,3 +60,13 @@ text {
     font-size: 18px;
     min-height: 50px;
 }
+
+@media screen and (max-width: 1000px) {
+    .vis-col {
+        width: 70%;
+    }
+
+    .list-col {
+        width: 29%
+    }
+}

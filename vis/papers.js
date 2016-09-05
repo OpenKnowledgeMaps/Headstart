@@ -208,6 +208,7 @@ papers.prepareForeignObject = function( nodes ){
            .append("div")
             .attr("class", "paper_holder")
             .style("cursor", "default");
+            
     return xhtml;
 }
 
