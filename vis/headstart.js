@@ -17,8 +17,8 @@ HeadstartFSM = function(host, path, tag, files, options) {
   this.templ_path = host + path + "vis/templates/";
 
   // map
-  this.min_height = 600;
-  this.min_width  = 600;
+  this.min_height = 500;
+  this.min_width  = 500;
   this.max_height = 1000;
   this.timeline_size = 600;
   this.bubble_min_scale = initVar(options.bubble_min_scale, 1);
