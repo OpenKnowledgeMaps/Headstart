@@ -1,7 +1,6 @@
 // StateMachine for Papers UI element in Headstart
 // Filename: papers_count.js
 import StateMachine from 'javascript-state-machine';
-import Handlebars from 'handlebars';
 
 import { BubblesFSM } from 'bubbles';
 import { list } from 'list';

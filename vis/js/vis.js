@@ -1,5 +1,3 @@
-import Handlebars from 'handlebars';
-
 import { HeadstartFSM } from "./headstart";
 
 const headstartTemplate = require("templates/headstart.handlebars");
@@ -10,11 +8,6 @@ const IFrameTemplate = require("templates/misc/iframe_modal.handlebars");
 window.namespace = "headstart";
 
 export var Headstart = function(host, path, tag, files, options) {
-
-  const vis_directory = "vis/";
-  const lib_directory = "lib/";
-  const templ_path = host + path + vis_directory + "templates/";
-
   const viz = $("#"+tag);
 
   let elem = headstartTemplate();

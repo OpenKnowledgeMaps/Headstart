@@ -1,7 +1,6 @@
 // StateMachine for List UI element in Headstart
 // Filename: list.js
 import StateMachine from 'javascript-state-machine';
-import Handlebars from 'handlebars';
 
 import { BubblesFSM } from 'bubbles';
 import { papers } from 'papers';

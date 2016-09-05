@@ -25,6 +25,15 @@ export function toFront(node) {
     node.parentNode.appendChild(node);
 }
 
+
+/*
+ * just a wrapper to avoid confusing function call
+ */
+export function hideSibling( circle ) {
+  d3.select(circle.nextSibling).style("visibility", "hidden");
+}
+
+
 /**
  * Debounce any function
  */

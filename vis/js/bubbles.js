@@ -1,12 +1,11 @@
 // StateMachine for Bubbles UI elements in Headstart
 // Filename: bubbles.js
 import StateMachine from 'javascript-state-machine';
-import Handlebars from 'handlebars';
 import d3 from 'd3';
 
 import { papers} from 'papers';
 import { list } from 'list';
-import { toBack, toFront } from 'helpers';
+import { toBack, toFront, hideSibling} from 'helpers';
 
 const bubbleTemplate = require('templates/map/bubble.handlebars');
 
@@ -1017,9 +1016,3 @@ StateMachine.create({
   ]
 
 });
-
-
-// just a wrapper to avoid confusing function call
-function hideSibling( circle ) {
-  d3.select(circle.nextSibling).style("visibility", "hidden");
-}
