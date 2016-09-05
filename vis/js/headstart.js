@@ -4,25 +4,16 @@ import StateMachine from 'javascript-state-machine';
 import Mediator from 'mediator-js';
 import d3 from 'd3';
 
-import { BubblesFSM } from './bubbles';
-import { papers } from './papers';
-import { list } from './list';
-import { intro, intro_cn3, intro_plos } from './intro';
+import { BubblesFSM } from 'bubbles';
+import { papers } from 'papers';
+import { list } from 'list';
+import { intro, intro_cn3, intro_plos } from 'intro';
+import { getRealHeight, initVar } from "helpers";
+import { BrowserDetect, h } from "helpers";
 
-
-const BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js")
-const Hypher = require('hypher'),
-    english = require('hyphenation.en-us'),
-    h = new Hypher(english);
-
-const timelineTemplate = require('../templates/timeline.handlebars')
+const timelineTemplate = require('templates/timeline.handlebars')
 
 export var HeadstartFSM = function(host, path, tag, files, options) {
-
-  let initVar = function(variable, default_value) {
-    return typeof variable !== 'undefined' ? variable : default_value;
-  }
-
   // a container for variables
   this.VERSION = 2.5;
 
@@ -1061,19 +1052,3 @@ StateMachine.create({
   ]
 
 });
-
-export function getRealHeight(element){
-    var height=0;
-    if (element.children().length>0){
-        var temp = $('<div></div>');
-        temp.append(element.children());
-        height = element.height();
-        element.append(temp.children());
-    } else {
-        var html=element.html();
-        element.html('');
-        height = element.height();
-        element.html(html);
-    }
-    return height;
-}

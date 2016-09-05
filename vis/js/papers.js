@@ -3,10 +3,11 @@
 import StateMachine from 'javascript-state-machine';
 import Handlebars from 'handlebars';
 
-import { BubblesFSM } from './bubbles';
-import { list } from './list';
+import { BubblesFSM } from 'bubbles';
+import { list } from 'list';
+import { toBack, toFront } from 'helpers';
 
-const paperTemplate = require("../templates/paper.handlebars");
+const paperTemplate = require("templates/map/paper.handlebars");
 
 export var papers = StateMachine.create({
 
@@ -616,12 +617,4 @@ papers.createDogearPath = function(x, y, width, height, correction_x, correction
     var path = "M " + x + " " + y + " v " + v + " h " + h;
 
     return path;
-}
-
-export var toBack = function(node) {
-    node.parentNode.insertBefore(node, node.parentNode.childNodes[1]);
-}
-
-export var toFront = function(node) {
-    node.parentNode.appendChild(node);
 }

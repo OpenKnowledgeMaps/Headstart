@@ -48,12 +48,6 @@ const common = {
     },
 
     plugins: [
-        new CleanWebpackPlugin(['dist'], {
-            root: path.resolve(__dirname, ""),
-            verbose: true,
-            dry: false,
-            exclude: []
-        }),
         new HtmlWebpackPlugin({
             title: 'Headstart',
             template: '!!handlebars!./vis/templates/index-files/index.handlebars'
@@ -62,8 +56,16 @@ const common = {
 
     resolve: {
         alias: {
-            'handlebars': 'handlebars/dist/handlebars.js'
-        }
+            'handlebars': 'handlebars/dist/handlebars.js',
+            'templates' : path.resolve(__dirname, 'vis/templates'),
+            'helpers': path.resolve(__dirname, 'vis/js/helpers.js'),
+            'headstart': path.resolve(__dirname, 'vis/js/headstart.js'),
+            'bubbles': path.resolve(__dirname, 'vis/js/bubbles.js'),
+            'list': path.resolve(__dirname, 'vis/js/list.js'),
+            'papers': path.resolve(__dirname, 'vis/js/papers.js'),
+            'intro': path.resolve(__dirname, 'vis/js/intro.js'),
+            'mediator': path.resolve(__dirname, 'vis/js/mediator.js'),
+        },
     }
 };
 
@@ -97,6 +99,12 @@ switch (TARGET) {
                 }]
             },
             plugins: [
+                new CleanWebpackPlugin(['dist'], {
+                    root: path.resolve(__dirname, ""),
+                    verbose: true,
+                    dry: false,
+                    exclude: []
+                }),
                 new ExtractTextPlugin("style.css"),
                 new webpack.optimize.UglifyJsPlugin({
                     compress: {

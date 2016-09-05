@@ -3,12 +3,13 @@
 import StateMachine from 'javascript-state-machine';
 import Handlebars from 'handlebars';
 
-import { BubblesFSM } from './bubbles';
-import { papers } from './papers';
+import { BubblesFSM } from 'bubbles';
+import { papers } from 'papers';
+import { debounce, highlight, clear_highlights } from 'helpers';
 
-const listTemplate = require('../templates/list_explorer.handlebars');
-const selectButtonTemplate = require('../templates/select_button.handlebars');
-const listEntryTemplate = require("../templates/list_entry.handlebars");
+const listTemplate = require('templates/list/list_explorer.handlebars');
+const selectButtonTemplate = require('templates/list/select_button.handlebars');
+const listEntryTemplate = require("templates/list/list_entry.handlebars");
 
 export var list = StateMachine.create({
 
@@ -109,32 +110,35 @@ list.fit_list_height = function() {
   $("#papers_list").height(paper_list_avail_height);
 }
 
-let checked_val = ""
-let active_val = ""
 let addSortOption = function(parent, sort_option, selected) {
-  if (selected) {
-    checked_val = "checked"
-    active_val = "active"
-  } else {
-    checked_val = ""
-    active_val = ""
-  }
 
-  let button = selectButtonTemplate({
-      id: "sort_" + sort_option,
-      checked: checked_val,
-      label: headstart.localization[headstart.language][sort_option],
-      active: active_val
-  });
-  $("#sort-buttons").append(button);
+    let checked_val = ""
+    let active_val = ""
+
+    if (selected) {
+        checked_val = "checked"
+        active_val = "active"
+    } else {
+        checked_val = ""
+        active_val = ""
+    }
+
+    let button = selectButtonTemplate({
+        id: "sort_" + sort_option,
+        checked: checked_val,
+        label: headstart.localization[headstart.language][sort_option],
+        active: active_val
+    });
+    $("#sort-buttons").append(button);
 
 
-  // Event listeners
-  $("#sort_" + sort_option).change(function(event) {
-      sortBy(sort_option);
-      headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
+    // Event listeners
+    $("#sort_" + sort_option).change(function(event) {
+        sortBy(sort_option);
+        headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
     })
 }
+
 
 function sortBy(field) {
     d3.selectAll("#list_holder")
@@ -720,37 +724,3 @@ function notSureifNeeded() {
   if (image_node != null)
     image_node.parentNode.removeChild(image_node);
 }
-
-let highlight = function(str) {
-
-    let new_str = "";
-
-    for (var i = 0, len = str.length; i < len; i++) {
-        new_str += str[i] + "[\\u00AD]*";
-    }
-
-    let value = new RegExp(new_str, "i");
-
-    $('.highlightable, .large.highlightable, .list_details.highlightable').highlightRegex(value, {
-        attrs: {'style': "background:yellow"}
-    });
-}
-
-let clear_highlights = function() {
-  $('.highlightable').highlightRegex();
-}
-
-function debounce(func, wait, immediate) {
-  var timeout;
-  return function() {
-    var context = this, args = arguments;
-    var later = function() {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    var callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
-};

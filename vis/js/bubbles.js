@@ -4,10 +4,11 @@ import StateMachine from 'javascript-state-machine';
 import Handlebars from 'handlebars';
 import d3 from 'd3';
 
-import { papers, toBack, toFront } from './papers';
-import { list } from './list';
+import { papers} from 'papers';
+import { list } from 'list';
+import { toBack, toFront } from 'helpers';
 
-const bubbleTemplate = require('../templates/bubble.handlebars');
+const bubbleTemplate = require('templates/map/bubble.handlebars');
 
 export var BubblesFSM = function() {
   this.id = 0;
