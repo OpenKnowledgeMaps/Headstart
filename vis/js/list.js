@@ -542,7 +542,6 @@ list.reset = function() {
 // display a preview image of paper and page if preview image is
 // available
 list.loadAndAppendImage = function(image_src, page_number) {
-
     if (this.testImage(image_src)) {
         var paper_frame = d3.select( "#paper_frame" );
         paper_frame.select("#preview")
@@ -579,8 +578,7 @@ list.writePopup = function(pdf_url) {
 }
 
 
-list.populateOverlay = function(d) {
-
+list.populateOverlay = function(d) {   
     var this_d = d;
     if (headstart.preview_type == "image") {
         list.loadAndAppendImage(headstart.images_path + d.id + "/page_1.png", 1);
@@ -626,15 +624,16 @@ list.setImageForListHolder = function(d) {
       return (x.id == d.id)
     });
 
-  var image_src = (headstart.preview_type=="images")?(headstart.images_path + d.id + "/page_1.png"):(headstart.images_path + "/preview_pdf.png");
+  let image_src = (headstart.preview_type=="images")?(d.id + "/page_1.png"):("preview_pdf.png");
+  
+  try {
+      let img = require("images/" + image_src);
 
-  if (this.testImage(image_src)) {
-
-    current_item.append("div")
+      current_item.append("div")
       .attr("id", "preview_image")
       .style("width", headstart.preview_image_width_list + "px")
       .style("height", headstart.preview_image_height_list+ "px")
-      .style("background", "url(" + image_src + ")")
+      .style("background", "url(" + img + ")")
       .style("background-size", headstart.preview_image_width_list + "px, " + headstart.preview_image_height_list+ "px")
       .on("mouseover", function (d) {
         mediator.publish("preview_mouseover", current_item);
@@ -658,7 +657,41 @@ list.setImageForListHolder = function(d) {
           mediator.publish("list_show_popup", d);
           // this.populateOverlay;
         })
+  } catch (e) {
+      console.log(e)
   }
+
+  // if (this.testImage(image_src)) {
+
+  //   current_item.append("div")
+  //     .attr("id", "preview_image")
+  //     .style("width", headstart.preview_image_width_list + "px")
+  //     .style("height", headstart.preview_image_height_list+ "px")
+  //     .style("background", "url(" + image_src + ")")
+  //     .style("background-size", headstart.preview_image_width_list + "px, " + headstart.preview_image_height_list+ "px")
+  //     .on("mouseover", function (d) {
+  //       mediator.publish("preview_mouseover", current_item);
+  //       // current_item.select("#transbox")
+  //       // .style("display", "block");
+  //     })
+  //     .on("mouseout", function (d) {
+  //       mediator.publish("preview_mouseout", current_item);
+  //       // current_item.select("#transbox")
+  //       // .style("display", "none");
+  //     })
+  //     .append("div")
+  //       .attr("id", "transbox")
+  //       // .attr("data-toggle","modal")
+  //       // .attr("data-type",headstart.images_path+d.id +".PDF".replace("/", "__"))
+  //       // .attr("data-target","#info_modal")
+  //       .style("width", headstart.preview_image_width_list + "px")
+  //       .style("height", headstart.preview_image_height_list+ "px")
+  //       .html("Click here to open preview")
+  //       .on("click", function(d){
+  //         mediator.publish("list_show_popup", d);
+  //         // this.populateOverlay;
+  //       })
+  // }
 
   /*$("#list_title a").hover(function () {
       $(this).css("text-decoration", "none");
@@ -693,17 +726,17 @@ list.title_click = function (d) {
 
 // test if preview Image is available
 list.testImage = function(image_src) {
-
     var http = new XMLHttpRequest();
     http.open('HEAD', image_src, false);
     try {
-      http.send();
+        http.send();
     } catch (e) {
-      console.log(e);
+        console.log(e);
     } finally {
-      return http.status != 404;
+        return http.status != 404;
     }
 }
+
 
 function notSureifNeeded() {
   var list_holders_local =

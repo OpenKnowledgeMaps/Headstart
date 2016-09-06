@@ -35,12 +35,16 @@ const common = {
             test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             loader: 'url-loader?limit=10000&minetype=application/font-woff&name=assets/[hash].[ext]'
         }, {
-            test: /\.(ttf|eot|svg|png)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+            test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             loader: 'file?name=assets/[hash].[ext]'
         }, {
             test: /\.csv$/,
             loader: 'file?name=data/[hash].[ext]'
-        }]
+        }, {
+            test: /\.(php|png)$/,
+            loader: 'file'
+        }
+        ]
     },
 
     sassLoader: {
@@ -56,8 +60,15 @@ const common = {
 
     resolve: {
         alias: {
+            // 
             'handlebars': 'handlebars/dist/handlebars.js',
-            'templates' : path.resolve(__dirname, 'vis/templates'),
+
+            // paths
+            'templates': path.resolve(__dirname, 'vis/templates'),
+            'images':path.resolve(__dirname, 'vis/images'),
+            'services': path.resolve(__dirname, 'server/services'),
+
+            // modules
             'helpers': path.resolve(__dirname, 'vis/js/helpers.js'),
             'headstart': path.resolve(__dirname, 'vis/js/headstart.js'),
             'bubbles': path.resolve(__dirname, 'vis/js/bubbles.js'),
