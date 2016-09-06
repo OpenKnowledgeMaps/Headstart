@@ -599,14 +599,15 @@ list.populateOverlay = function(d) {
     } else if (headstart.preview_type == "pdf") {
         var filename = this_d.id + ".PDF";
         var local_filename = filename.replace("/", "__");
-        var full_pdf_url = headstart.images_path + local_filename;
-        if (this.testImage(full_pdf_url)) {
-            list.writePopup(full_pdf_url)
-            $("#iframe_modal").modal()
-        } else {
+         
+        try { 
+            var full_pdf_url = require("images/" + local_filename);
+            list.writePopup(full_pdf_url);
+            $("#iframe_modal").modal();
+        } catch (e) {
             $("#spinner").show();
             $("#pdf_iframe").hide();
-            $("#iframe_modal").modal()
+            $("#iframe_modal").modal();
 
             var journal = this_d.published_in.toLowerCase();
             var url = "http://journals.plos.org/" + headstart.plos_journals_to_shortcodes[journal] + "/article/asset?id=" + filename;
@@ -654,38 +655,6 @@ list.setImageForListHolder = function(d) {
       console.log(e)
   }
 
-  // if (this.testImage(image_src)) {
-
-  //   current_item.append("div")
-  //     .attr("id", "preview_image")
-  //     .style("width", headstart.preview_image_width_list + "px")
-  //     .style("height", headstart.preview_image_height_list+ "px")
-  //     .style("background", "url(" + image_src + ")")
-  //     .style("background-size", headstart.preview_image_width_list + "px, " + headstart.preview_image_height_list+ "px")
-  //     .on("mouseover", function (d) {
-  //       mediator.publish("preview_mouseover", current_item);
-  //       // current_item.select("#transbox")
-  //       // .style("display", "block");
-  //     })
-  //     .on("mouseout", function (d) {
-  //       mediator.publish("preview_mouseout", current_item);
-  //       // current_item.select("#transbox")
-  //       // .style("display", "none");
-  //     })
-  //     .append("div")
-  //       .attr("id", "transbox")
-  //       // .attr("data-toggle","modal")
-  //       // .attr("data-type",headstart.images_path+d.id +".PDF".replace("/", "__"))
-  //       // .attr("data-target","#info_modal")
-  //       .style("width", headstart.preview_image_width_list + "px")
-  //       .style("height", headstart.preview_image_height_list+ "px")
-  //       .html("Click here to open preview")
-  //       .on("click", function(d){
-  //         mediator.publish("list_show_popup", d);
-  //         // this.populateOverlay;
-  //       })
-  // }
-
   /*$("#list_title a").hover(function () {
       $(this).css("text-decoration", "none");
   });*/
@@ -699,7 +668,6 @@ list.setImageForListHolder = function(d) {
 }
 
 list.title_click = function (d) {
-
       var url = "";
       if (headstart.url_prefix != null) {
           url = headstart.url_prefix + d.url;
@@ -716,20 +684,6 @@ list.title_click = function (d) {
       window.open(url, "_blank");
       d3.event.stopPropagation();
     }
-
-// test if preview Image is available
-list.testImage = function(image_src) {
-    var http = new XMLHttpRequest();
-    http.open('HEAD', image_src, false);
-    try {
-        http.send();
-    } catch (e) {
-        console.log(e);
-    } finally {
-        return http.status != 404;
-    }
-}
-
 
 function notSureifNeeded() {
   var list_holders_local =

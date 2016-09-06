@@ -114,9 +114,6 @@ export var HeadstartFSM = function(host, path, tag, files, options) {
   this.user_id = initVar(options.user_id, 0);
   this.max_recommendations = initVar(options.max_recommendations, 10);
   this.files = files;
-
-  // paths
-  this.images_path = initVar(options.images_path, "../vis/images/");
   this.preview_type = initVar(options.preview_type, "image");
 
   // data specific settings

@@ -563,27 +563,6 @@ papers.currentbubble_click = function(d) {
     d3.event.stopPropagation();
 }
 
-
-papers.populateOverlay = function(d) {
-    paper_frame
-    .style("display","block")
-
-    loadAndAppendImage(headstart.images_path + d.id + "/page_1.png", 1);
-
-    var images_finished = false;
-    var counter = 2;
-
-    while(!images_finished) {
-        var image_src = headstart.images_path + d.id + "/page_" + counter + ".png";
-
-        if (!loadAndAppendImage(image_src, counter)) {
-            images_finished = true;
-        }
-
-        counter++;
-    }
-}
-
 papers.calcResizeFactor = function(metadata) {
     var current_paper = metadata.node();
     var new_height = current_paper.scrollHeight;
