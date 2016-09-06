@@ -41,8 +41,11 @@ get_papers <- function(query, params = NULL, limit = 100) {
   authors <- './/AuthorList'
   keywords <- './/Keyword'
   doi <- ".//PubmedData/ArticleIdList/ArticleId[@IdType=\"doi\"]"
-  query <- paste0(query, " \"journal article\"[Publication Type]")
-  x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit, mindate = params$from, maxdate = params$to)
+  from = gsub("-", "/", params$from)
+  to = gsub("-", "/", params$to)
+  article_types_string = paste0(" ((", '"', paste(params$article_types, sep='"', collapse='"[Publication Type] OR "'), '"[Publication Type]))')
+  query <- paste0(query, article_types_string)
+  x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit, mindate = from, maxdate = to)
   res <- rentrez::entrez_fetch(db = "pubmed", id = x$ids, rettype = "abstract")
   xml <- xml2::xml_children(xml2::read_xml(res))
   out <- lapply(xml, function(z) {
