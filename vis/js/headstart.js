@@ -117,7 +117,7 @@ export var HeadstartFSM = function(host, path, tag, files, options) {
 
   // paths
   this.images_path = initVar(options.images_path, "../vis/images/");
-  this.preview_type = initVar(options.preview_type, "images");
+  this.preview_type = initVar(options.preview_type, "image");
 
   // data specific settings
   this.subdiscipline_title = initVar(options.title, "");
