@@ -51,8 +51,8 @@ MyMediator.prototype = {
         this.mediator.publish(...arguments);
     },
 
-    to_timeline: function(hs) {
-        hs.ontotimeline();
+    to_timeline: function() {
+        headstart.totimeline();
     },
 
     list_toggle: function() {

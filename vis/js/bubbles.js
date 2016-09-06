@@ -877,7 +877,7 @@ BubblesFSM.prototype = {
         this.draw();
         this.initMouseListeners();
       };
-      // mediator.publish("record_action","none", "start", headstart.user_id, "start_bubble", null, null, recommendation_data);
+      mediator.publish("record_action","none", "start", headstart.user_id, "start_bubble", null, null, recommendation_data);
       // headstart.recordAction("none", "start", headstart.user_id, "start_bubble", null, null, recommendation_data);
   },
 

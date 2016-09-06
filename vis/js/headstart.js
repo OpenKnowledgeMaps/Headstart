@@ -404,7 +404,7 @@ HeadstartFSM.prototype = {
       this.svg = d3.select("#chart-svg");
 
       if (this.is("timeline")) {
-          s = this.current_vis_size * Object.keys(this.bubbles).length;
+          let s = this.current_vis_size * Object.keys(this.bubbles).length;
           this.svg.attr("width", s)
                   .attr("height", this.current_vis_size);
           if (update === false) {
@@ -485,7 +485,7 @@ HeadstartFSM.prototype = {
   initClickListenersForNav: function() {
       $("#timelineview").on("click", () => {
           if ($("#timelineview a").html() == "TimeLineView") {
-              mediator.publish("to_timeline", this);
+              mediator.publish("to_timeline");
           }
       });
   },
