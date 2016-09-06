@@ -1,12 +1,13 @@
 // Headstart
 // filename: headstart.js
 import StateMachine from 'javascript-state-machine';
-import Mediator from 'mediator-js';
 import d3 from 'd3';
 
+import { mediator } from 'mediator';
 import { BubblesFSM } from 'bubbles';
 import { papers } from 'papers';
 import { list } from 'list';
+
 import { intro, intro_cn3, intro_plos } from 'intro';
 import { getRealHeight, initVar } from "helpers";
 import { BrowserDetect, h } from "helpers";
@@ -184,12 +185,6 @@ export var HeadstartFSM = function(host, path, tag, files, options) {
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
   this.bubbles = {}
-
-  // mediator
-  this.mediator = new Mediator();
-  this.mediator_states = {
-    popup_visible:false
-  }
 
   if (typeof String.prototype.startsWith != 'function') {
     String.prototype.startsWith = function (str){
@@ -493,7 +488,7 @@ HeadstartFSM.prototype = {
   initClickListenersForNav: function() {
       $("#timelineview").on("click", () => {
           if ($("#timelineview a").html() == "TimeLineView") {
-              this.mediator.publish("to_timeline", this);
+              mediator.publish("to_timeline", this);
           }
       });
   },
@@ -686,7 +681,6 @@ HeadstartFSM.prototype = {
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
   onstart: function(event, from, to, file) {
-      this.init_mediator();
       this.calcChartSize();
 
       this.initScales();
@@ -810,7 +804,6 @@ HeadstartFSM.prototype = {
               case "csv":
                   let filename = elem.file.split("/")[2]
                   let data = require("../data/" + filename)
-                  console.log(data)
                   d3.csv(data, setupTimelineVisualization);
                   break;
 
@@ -926,116 +919,7 @@ HeadstartFSM.prototype = {
       // refreshes page
       var link = ' <a href="" id="normal_link">Normal View</a>';
       $("#timelineview").html(link);
-  },
-
-  init_mediator: function() {
-    // popup
-    this.mediator.subscribe("to_timeline", this.to_timeline);
-
-    // list
-    this.mediator.subscribe("list_toggle", this.list_toggle);
-    this.mediator.subscribe("list_show_popup", this.list_show_popup);
-    this.mediator.subscribe("list_title_click", this.list_title_click);
-    this.mediator.subscribe("list_sort_click", this.list_sort_click);
-    this.mediator.subscribe("list_title_clickable", this.list_title_clickable);
-    this.mediator.subscribe("preview_mouseover", this.preview_mouseover);
-    this.mediator.subscribe("preview_mouseout", this.preview_mouseout);
-
-    // papers
-    this.mediator.subscribe("paper_click", this.paper_click);
-    this.mediator.subscribe("paper_mouseover", this.paper_mouseover);
-    this.mediator.subscribe("currentbubble_click", this.currentbubble_click);
-
-    // bubbles
-    this.mediator.subscribe("bubble_mouseout", this.bubble_mouseout);
-    this.mediator.subscribe("bubble_mouseover", this.bubble_mouseover);
-    this.mediator.subscribe("bubble_click", this.bubble_click);
-
-    // canvas
-    this.mediator.subscribe("canvas_click", this.canvas_click);
-
-    // bookmarks
-    this.mediator.subscribe("bookmark_added", this.bookmark_added);
-    this.mediator.subscribe("bookmark_removed", this.bookmark_removed);
-
-    // misc
-    this.mediator.subscribe("record_action", this.record_action);
-  },
-
-  to_timeline: function(hs) {
-    hs.ontotimeline();
-  },
-
-  list_toggle: function() {
-    list.toggle();
-  },
-
-  list_show_popup: function(d) {
-    list.populateOverlay(d);
-  },
-
-  list_title_click: function(d) {
-    list.title_click(d);
-  },
-
-  list_sort_click: function(sort_option) {
-    sortBy(sort_option);
-  },
-
-  list_title_clickable: function(d) {
-    list.makeTitleClickable(d);
-  },
-
-  paper_click: function(d) {
-    papers.paper_click(d);
-  },
-
-  paper_mouseover: function(d, holder_div) {
-    papers.enlargePaper(d, holder_div);
-  },
-
-  bubble_mouseout: function(d, circle, bubble_fsm) {
-    bubble_fsm.mouseout(d, circle);
-  },
-
-  bubble_mouseover: function(d, circle, bubble_fsm) {
-    bubble_fsm.mouseover(d, circle);
-  },
-
-  bubble_click: function(d, bubble) {
-    bubble.zoomin(d);
-  },
-
-  canvas_click: function() {
-    // console.log(this)
-    // this.bubbles[this.current_file_number].zoomOut();
-  },
-
-  currentbubble_click: function(d) {
-    papers.currentbubble_click(d);
-  },
-
-  bookmark_added: function(d) {
-    list.addBookmark(d);
-  },
-
-  bookmark_removed: function(d) {
-    list.removeBookmark(d);
-  },
-
-  preview_mouseover: function(current_item) {
-    current_item.select("#transbox")
-      .style("display", "block");
-  },
-
-  preview_mouseout: function(current_item) {
-    current_item.select("#transbox")
-      .style("display", "none");
-  },
-
-  record_action: function (id, action, user, type, timestamp, additional_params, post_data) {
-    headstart.recordAction(id, action, user, type, timestamp, additional_params, post_data);
-  },
+  }
 }; // end HeadstartFSM prototype definition
 
 // State definitions for headstart object

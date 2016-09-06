@@ -3,6 +3,7 @@
 import StateMachine from 'javascript-state-machine';
 import d3 from 'd3';
 
+import { mediator } from 'mediator';
 import { papers} from 'papers';
 import { list } from 'list';
 import { toBack, toFront, hideSibling} from 'helpers';
@@ -218,19 +219,15 @@ BubblesFSM.prototype = {
 
   // initialize mouseover, mouseout circle listeners
   initCircleListeners: function() {
-    var this_bubble = this;
+    var this_bubble_fsm = this;
     d3.selectAll("circle").on("mouseover", function(d) {
-      if (!this_bubble.is("hoverbig")){
-        headstart.mediator.publish("bubble_mouseover", d, this, this_bubble);
-        // this_bubble.mouseover(this, d);
-        headstart.mediator.publish("record_action",d.id, "circle_mouseover", headstart.user_id, "none", null);
-        // headstart.recordAction(d.id, "circle_mouseover", headstart.user_id, "none", null);
+      if (!this_bubble_fsm.is("hoverbig")){
+        mediator.publish("bubble_mouseover", d, this, this_bubble_fsm);
+        mediator.publish("record_action",d.id, "circle_mouseover", headstart.user_id, "none", null);
       }
     }).on("mouseout", function(d) {
-      headstart.mediator.publish("bubble_mouseout", d, this, this_bubble);
-      // this_bubble.mouseout(this, d);
-      headstart.mediator.publish("record_action",d.id, "circle_mouseout", headstart.user_id, "none", null);
-      // headstart.recordAction(d.id, "circle_mouseout", headstart.user_id, "none", null);
+      mediator.publish("bubble_mouseout", d, this, this_bubble_fsm);
+      mediator.publish("record_action",d.id, "circle_mouseout", headstart.user_id, "none", null);
     });
 
     if (headstart.is("normal") || headstart.is("switchfiles"))
@@ -239,16 +236,16 @@ BubblesFSM.prototype = {
 
   // initialize just the circle click listeners
   initCircleClickListener: function() {
-    var b = this;
+    var self = this;
 
     d3.selectAll('circle').on("click", function(d) {
-      headstart.mediator.publish("bubble_click", d, b);
-      // b.zoomin(d);
+      mediator.publish("bubble_click", d, self);
+      // self.zoomin(d);
     });
 
     d3.selectAll('circle').on("dblclick", function(d) {
-      if(b.is("hoverbig") && headstart.is_zoomed && headstart.zoom_finished) {
-            b.zoomout();
+      if(self.is("hoverbig") && headstart.is_zoomed && headstart.zoom_finished) {
+            self.zoomout();
             //d3.event.stopPropagation();
       }
     });
@@ -577,7 +574,7 @@ BubblesFSM.prototype = {
 
     d3.selectAll("div.paper_holder")
       .on("mouseover", function(d){
-        headstart.mediator.publish("paper_mouseover", d, this);
+        mediator.publish("paper_mouseover", d, this);
       });
 
     // d3.selectAll("circle")
@@ -625,7 +622,7 @@ BubblesFSM.prototype = {
 
     headstart.bubbles[headstart.current_file_number].createTransition(t, d.title);
 
-    headstart.mediator.publish("record_action", d.id, "zoom_in", headstart.user_id, "none", null);
+    mediator.publish("record_action", d.id, "zoom_in", headstart.user_id, "none", null);
     // headstart.recordAction(d.id, "zoom_in", headstart.user_id, "none", null);
 
     d3.event.stopPropagation();
@@ -650,10 +647,10 @@ BubblesFSM.prototype = {
       toFront(headstart.current_zoom_node.parentNode);
 
       var circle_data = d3.select(headstart.current_zoom_node).data();
-      headstart.mediator.publish("record_action", circle_data.id, "zoom_out", headstart.user_id, "none", null);
+      mediator.publish("record_action", circle_data.id, "zoom_out", headstart.user_id, "none", null);
       // headstart.recordAction(circle_data.id, "zoom_out", headstart.user_id, "none", null);
     } else {
-      headstart.mediator.publish("record_action","none", "zoom_out", headstart.user_id, "none", null);
+      mediator.publish("record_action","none", "zoom_out", headstart.user_id, "none", null);
       // headstart.recordAction("none", "zoom_out", headstart.user_id, "none", null);
     }
 
@@ -879,8 +876,8 @@ BubblesFSM.prototype = {
       if (headstart.is("timeline")) {
         this.draw();
         this.initMouseListeners();
-      }
-      headstart.mediator.publish("record_action","none", "start", headstart.user_id, "start_bubble", null, null, recommendation_data);
+      };
+      // mediator.publish("record_action","none", "start", headstart.user_id, "start_bubble", null, null, recommendation_data);
       // headstart.recordAction("none", "start", headstart.user_id, "start_bubble", null, null, recommendation_data);
   },
 

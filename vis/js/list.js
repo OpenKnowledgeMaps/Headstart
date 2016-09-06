@@ -2,7 +2,7 @@
 // Filename: list.js
 import StateMachine from 'javascript-state-machine';
 
-import { BubblesFSM } from 'bubbles';
+import { mediator } from 'mediator';
 import { papers } from 'papers';
 import { debounce, highlight, clear_highlights } from 'helpers';
 
@@ -10,7 +10,7 @@ const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
 const listEntryTemplate = require("templates/list/list_entry.handlebars");
 
-export var list = StateMachine.create({
+export const list = StateMachine.create({
 
     events: [
         { name: "start",  from: "none",    to: "hidden"  },
@@ -52,11 +52,11 @@ export var list = StateMachine.create({
         onbeforetoggle: function( event, from, to ) {
             if(this.current == "visible") {
                this.hide();
-               headstart.mediator.publish("record_action","none", "hide_list", headstart.user_id, "none", null);
+               mediator.publish("record_action","none", "hide_list", headstart.user_id, "none", null);
                // headstart.recordAction("none", "hide_list", headstart.user_id, "none", null);
             } else  {
                 this.show();
-                headstart.mediator.publish("record_action","none", "show_list", headstart.user_id, "none", null);
+                mediator.publish("record_action","none", "show_list", headstart.user_id, "none", null);
                 // headstart.recordAction("none", "show_list", headstart.user_id, "none", null);
             }
         }
@@ -175,11 +175,11 @@ list.initListMouseListeners = function() {
             $("#show_hide_button").removeClass("hover")
         })
         .on("click", function(event) {
-            headstart.mediator.publish("list_toggle")
+            mediator.publish("list_toggle")
         });
 
     d3.selectAll("#paper_list_title").on("click", function(d) {
-        headstart.mediator.publish("list_title_clickable", d);
+        mediator.publish("list_title_clickable", d);
     });
 }
 
@@ -238,7 +238,7 @@ list.populateMetaData = function(nodes) {
                 .attr("id", "bookmark")
                 .html("Add to schedule")
                 .on("click", function(d) {
-                    headstart.mediator.publish("bookmark_added", d);
+                    mediator.publish("bookmark_added", d);
                     // list.addBookmark(d);      
                     d3.event.stopPropagation();
                 })
@@ -252,7 +252,7 @@ list.populateMetaData = function(nodes) {
             .attr("id", "bookmark")
             .html("Already in your schedule X")
             .on("click", function(d) {
-                headstart.mediator.publish("bookmark_removed", d);
+                mediator.publish("bookmark_removed", d);
                 // list.removeBookmark(d);
                 d3.event.stopPropagation();
             })
@@ -349,7 +349,7 @@ list.filterList = function (search_words) {
 
     data_circle.style("display", "inline")
 
-    headstart.mediator.publish("record_action", "none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
+    mediator.publish("record_action", "none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
     // headstart.recordAction("none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
 
     filtered_data
@@ -403,7 +403,7 @@ list.addBookmark = function(d)  {
       function(data) {
         console.log("Successfully added bookmark");
 
-        headstart.mediator.publish("record_action",d.id, "add_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
+        mediator.publish("record_action",d.id, "add_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
         // headstart.recordAction(d.id, "add_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
 
         d.bookmarked = true;
@@ -414,7 +414,7 @@ list.addBookmark = function(d)  {
             .attr("class", "bookmarked")
             .html("Already in your schedule X")
              .on("click", function (d) {
-                headstart.mediator.publish("bookmark_removed", d);
+                mediator.publish("bookmark_removed", d);
                // list.removeBookmark(d);
                d3.event.stopPropagation();
              })
@@ -434,7 +434,7 @@ list.removeBookmark = function(d)  {
       function(data) {
         console.log("Successfully removed bookmark");
 
-        headstart.mediator.publish("record_action",d.id, "remove_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
+        mediator.publish("record_action",d.id, "remove_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
         // headstart.recordAction(d.id, "remove_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
 
         d.bookmarked = false;
@@ -445,7 +445,7 @@ list.removeBookmark = function(d)  {
             .attr("class", "tobookmark")
             .html("Add to schedule")
              .on("click", function (d) {
-                headstart.mediator.publish("bookmark_added", d);
+                mediator.publish("bookmark_added", d);
                // list.addBookmark(d);
                d3.event.stopPropagation();
              })
@@ -481,7 +481,7 @@ list.makeTitleClickable = function(d) {
             })
                 .attr("class", "framed");
 
-    headstart.mediator.publish("record_action", d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+    mediator.publish("record_action", d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
     // headstart.recordAction(d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
 
     d3.event.stopPropagation();
@@ -637,12 +637,12 @@ list.setImageForListHolder = function(d) {
       .style("background", "url(" + image_src + ")")
       .style("background-size", headstart.preview_image_width_list + "px, " + headstart.preview_image_height_list+ "px")
       .on("mouseover", function (d) {
-        headstart.mediator.publish("preview_mouseover", current_item);
+        mediator.publish("preview_mouseover", current_item);
         // current_item.select("#transbox")
         // .style("display", "block");
       })
       .on("mouseout", function (d) {
-        headstart.mediator.publish("preview_mouseout", current_item);
+        mediator.publish("preview_mouseout", current_item);
         // current_item.select("#transbox")
         // .style("display", "none");
       })
@@ -655,7 +655,7 @@ list.setImageForListHolder = function(d) {
         .style("height", headstart.preview_image_height_list+ "px")
         .html("Click here to open preview")
         .on("click", function(d){
-          headstart.mediator.publish("list_show_popup", d);
+          mediator.publish("list_show_popup", d);
           // this.populateOverlay;
         })
   }
@@ -667,7 +667,7 @@ list.setImageForListHolder = function(d) {
   // EVENTLISTENERS
   current_item.select("#paper_list_title")
     .on("click", function(d){
-      headstart.mediator.publish("list_title_click", d);
+      mediator.publish("list_title_click", d);
       // list.title_click();
     });
 }
@@ -684,7 +684,7 @@ list.title_click = function (d) {
           return
       }
 
-      headstart.mediator.publish("record_action",d.id, "click_on_title", headstart.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
+      mediator.publish("record_action",d.id, "click_on_title", headstart.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
       // headstart.recordAction(d.id, "click_on_title", headstart.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
 
       window.open(url, "_blank");
@@ -715,7 +715,7 @@ function notSureifNeeded() {
   list_holders_local.select("#paper_list_title")
     // EVENTLISTENERS
     .on("click", function (d) {
-      headstart.mediator.publish("list_title_clickable", d)
+      mediator.publish("list_title_clickable", d)
       // list.makeTitleClickable(d)
     });
 

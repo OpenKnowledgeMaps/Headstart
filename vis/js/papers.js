@@ -2,13 +2,13 @@
 // Filename: papers_count.js
 import StateMachine from 'javascript-state-machine';
 
-import { BubblesFSM } from 'bubbles';
+import { mediator } from 'mediator';
 import { list } from 'list';
 import { toBack, toFront } from 'helpers';
 
 const paperTemplate = require("templates/map/paper.handlebars");
 
-export var papers = StateMachine.create({
+export const papers = StateMachine.create({
 
     events: [
         // when the application starts, we go into loading state,
@@ -171,7 +171,7 @@ papers.drawDogEarPath = function(nodes) {
 // it should zoom in. (behave same way when, only the bubble is clicked)
 papers.initPaperClickHandler = function() {
   d3.selectAll(".paper_holder").on("click", function(d){
-    headstart.mediator.publish("paper_click", d)
+    mediator.publish("paper_click", d)
 });
 }
 
@@ -415,7 +415,7 @@ papers.shrinkPaper = function(d,holder) {
 
     d.resized = false;
     holder_div.on("mouseover", function(d) {
-        headstart.mediator.publish("paper_mouseover", d, this)
+        mediator.publish("paper_mouseover", d, this)
     });
 }
 
@@ -468,7 +468,7 @@ papers.enlargePaper = function(d,holder_div,i) {
         return;
     }
 
-    headstart.mediator.publish("record_action",d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+    mediator.publish("record_action",d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
     // headstart.recordAction(d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
 
    var resize_factor = 1.2;
@@ -512,12 +512,12 @@ papers.enlargePaper = function(d,holder_div,i) {
                         list.show();
                     }
                 } else {
-                    headstart.mediator.publish("list_title_click", d);
+                    mediator.publish("list_title_click", d);
                 }
 
                 d.paper_selected = true;
                 headstart.current_enlarged_paper = d;
-                headstart.mediator.publish("record_action", d.id, "click_on_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+                mediator.publish("record_action", d.id, "click_on_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
                 // headstart.recordAction(d.id, "click_on_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
                 d3.event.stopPropagation();
             }
@@ -536,7 +536,7 @@ papers.enlargePaper = function(d,holder_div,i) {
 
     headstart.current_circle
         .on("click", function (d) {
-            headstart.mediator.publish("currentbubble_click", d);
+            mediator.publish("currentbubble_click", d);
             papers.resetPaths();
         });
 
@@ -557,7 +557,7 @@ papers.currentbubble_click = function(d) {
         headstart.current_enlarged_paper.paper_selected = false;
 
     headstart.current_enlarged_paper = null;
-    headstart.mediator.publish("record_action",d.id, "click_paper_list_enlarge", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+    mediator.publish("record_action",d.id, "click_paper_list_enlarge", headstart.user_id, d.bookmarked + " " + d.recommended, null);
     // headstart.recordAction(d.id, "click_paper_list_enlarge", headstart.user_id, d.bookmarked + " " + d.recommended, null);
 
     d3.event.stopPropagation();
