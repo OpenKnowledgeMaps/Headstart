@@ -75,27 +75,30 @@ get_papers <- function(query, params = NULL, limit = 100) {
   df$url <- paste0("http://www.ncbi.nlm.nih.gov/pubmed/", df$pmid)
   df$paper_abstract <- gsub("^\\s+|\\s+$", "", gsub("[\r\n]", "", df$paper_abstract))
   df$content <- paste(df$title, df$paper_abstract, df$authors, df$subject, df$published_in, sep= " ")
+  df$doi = df$id
   df$id = df$pmid
   
   summary <- rentrez::entrez_summary(db="pubmed", id = x$ids)
   df$readers <- extract_from_esummary(summary, "pmcrefcount")
   df$readers <- replace(df$readers, df$readers=="", 0)
   
-  pmc_ids = c()
+  oa = c()
   idlist = extract_from_esummary(summary, "articleids")
   
   for(i in 1:nrow(df)) {
     current_ids = idlist[,i]
     current_pmcid = current_ids$value[current_ids$idtype=="pmc"]
     if(identical(current_pmcid, character(0))) {
-      current_pmcid = "";
+      current_oa = FALSE;
+    } else {
+      current_oa = TRUE;
     }
-    pmc_ids[i] = current_pmcid
+    oa[i] = current_oa
   }
   
-  df$pmcid = pmc_ids
+  df$oa = oa
   
-  return(list(metadata = df, text = df[,c('id', 'content')], xml = summary))
+  return(list(metadata = df, text = df[,c('id', 'content')]))
 }
 
 xtext <- function(x) xml2::xml_text(x)
