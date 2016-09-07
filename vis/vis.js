@@ -21,7 +21,6 @@ Headstart = function(host, path, tag, files, options) {
 
   var script_sources = [
     {source: "intro.js"}
-     // ,{source: "popup.js"}
      ,{source: "bubbles.js"}
      ,{source: "papers.js"}
      ,{source: "list.js"}
@@ -41,6 +40,10 @@ Headstart = function(host, path, tag, files, options) {
   var compiledTemplate = Handlebars.getTemplate(templ_path, "iframe_modal");
   var iframe_modal = compiledTemplate();
   viz.append(iframe_modal);
+  
+  var compiledTemplate = Handlebars.getTemplate(templ_path, "images_modal");
+  var images_modal = compiledTemplate();
+  viz.append(images_modal);
 
   addScript = function(source, tag, async) {
     var current_script = document.createElement('script');
