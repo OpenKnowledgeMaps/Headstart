@@ -82,21 +82,19 @@ get_papers <- function(query, params = NULL, limit = 100) {
   df$readers <- extract_from_esummary(summary, "pmcrefcount")
   df$readers <- replace(df$readers, df$readers=="", 0)
   
-  oa = c()
+  pmc_ids = c()
   idlist = extract_from_esummary(summary, "articleids")
   
   for(i in 1:nrow(df)) {
     current_ids = idlist[,i]
     current_pmcid = current_ids$value[current_ids$idtype=="pmc"]
     if(identical(current_pmcid, character(0))) {
-      current_oa = FALSE;
-    } else {
-      current_oa = TRUE;
+      current_pmcid = "";
     }
-    oa[i] = current_oa
+    pmc_ids[i] = current_pmcid
   }
   
-  df$oa = oa
+  df$pmcid = pmc_ids
   
   return(list(metadata = df, text = df[,c('id', 'content')]))
 }
