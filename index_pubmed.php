@@ -23,11 +23,11 @@
                                 , file: "<?php echo $_GET["id"] ?>"
                             }
                             ] //data
-                        , {title: "Overview of PLOS articles for <?php echo (!isset($_GET["query"])?($_GET["id"]):($_GET["query"])) ?>"
-                            , paper_max_scale: 1
-							, paper_min_scale: 1
-							, bubble_max_scale: 1
-							, bubble_min_scale: 1
+                        , {title: "Overview of PubMed articles for <?php echo (!isset($_GET["query"])?($_GET["id"]):($_GET["query"])) ?>"
+                            , max_diameter_size: 45
+                            , min_diameter_size: 25
+                            , max_area_size: 90
+                            , min_area_size: 50
                             , use_area_uri: true
                             , input_format: "json"
                             , base_unit: "views"
@@ -39,11 +39,12 @@
                             , localization: "eng_plos"
                             , force_areas_alpha: 0.015
                             , show_list: true
+                            , is_content_based: true
                             } //options
                 )
         </script>
 
-         <div style="margin-top:20px">Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a> and <a href="http://github.com/ropensci/rplos" target="_blank">rplos</a>. All content retrieved from <a href="https://www.plos.org/publications/journals/" target="_blank">Public Library of Science Journals</a> under <a href="http://journals.plos.org/plosone/s/content-license" target="_blank">CC-BY</a>.
+         <div style="margin-top:20px">Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a> and <a href="https://github.com/ropensci/rentrez" target="_blank">rentrez</a>. All content retrieved from <a href="http://www.ncbi.nlm.nih.gov/pubmed" target="_blank">PubMed</a>.
         </div>
     </body>
 </html>

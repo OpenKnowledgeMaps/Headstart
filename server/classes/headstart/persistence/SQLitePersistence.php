@@ -49,12 +49,20 @@ class SQLitePersistence extends Persistence {
 
     public function createVisualization($vis_id, $vis_title, $data, $vis_clean_query=null, $vis_query = null, $params = null) {
         //create entry in visualization and first revision
-
+        
         $this->prepareAndExecute("INSERT INTO visualizations (vis_id, vis_query, vis_clean_query, vis_title, vis_params) "
                 . "VALUES (?, ?, ?, ?, ?)"
                 , array($vis_id, $vis_query, $vis_clean_query, $vis_title, $params));
 
         $this->writeRevision($vis_id, $data, $rev_id = 1);
+    }
+    
+    public function existsVisualization($vis_id) {
+        $result = $this->prepareExecuteAndReturnResult(
+                "SELECT EXISTS(SELECT 1 FROM visualizations WHERE vis_id=?)"
+                , array($vis_id));
+        
+        return $result;
     }
 
     public function getLastVersion($vis_id, $details = false) {
@@ -105,9 +113,14 @@ class SQLitePersistence extends Persistence {
     }
 
     private function prepareAndExecute($stmt, $array) {
-        $query = $this->db->prepare($stmt);
-        $result = $query->execute($array);
-        return array("status" => $result, "query" => $query);
+        try {
+            $query = $this->db->prepare($stmt);
+            $result = $query->execute($array);
+            return array("status" => $result, "query" => $query);
+        } catch (PDOException $err) {
+            var_dump($err->getMessage());
+            die("..");
+        }
     }
 
     private function prepareExecuteAndReturnResult($stmt, $array, $first = false) {
