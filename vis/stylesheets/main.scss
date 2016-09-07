@@ -21,7 +21,9 @@
 @import "components/buttons";
 @import "components/input";
 
-@import "modules/map";
-@import "modules/list";
-@import "modules/timeline";
-@import "modules/popup";
+.headstart {
+    @import "modules/map";
+    @import "modules/list";
+    @import "modules/timeline";
+    @import "modules/popup";
+}

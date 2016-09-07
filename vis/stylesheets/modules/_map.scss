@@ -1,62 +1,72 @@
-@import 'map/header';
-@import 'map/bubbles';
-@import 'map/papers';
+@import "map/header";
+@import "map/bubbles";
+@import "map/papers";
 
 /* ################ Chart ############### */
 
-.headstart {
-    #headstart-chart {
-        /*position: absolute;*/
-        font-family: Helvetica;
-        /*margin-top: 6px;*/
-    }
+#headstart-chart {
+    /*position: absolute;*/
+    font-family: Helvetica;
+        margin: 0 auto;
+        display: table;
+    /*margin-top: 6px;*/
+}
 
-    #chart-svg {
-        overflow-x: scroll;
-    }
+#chart-svg {
+        overflow: visible;
+}
 
-    rect {
-        fill: rgb(31, 119, 180);
-        fill-opacity: .0;
-        stroke: rgb(31, 119, 180);
-        stroke-width: 0;
-    }
+rect {
+    fill: rgb(31, 119, 180);
+    fill-opacity: .0;
+    stroke: rgb(31, 119, 180);
+    stroke-width: 0;
+}
 
-    path {
-        fill: rgb(255, 255, 255);
-        fill-opacity: .25;
-        stroke: rgb(128, 128, 128);
-        stroke-width: 1px;
-    }
+path {
+    fill: rgb(255, 255, 255);
+    fill-opacity: .25;
+    stroke: $okm-gray;
+    stroke-width: 1px;
+}
 
-    line {
-        stroke: rgb(31, 119, 180);
-        stroke-width: 1px;
-    }
+line {
+    stroke: rgb(31, 119, 180);
+    stroke-width: 1px;
+}
 
-    text {
-        font: 10px sans-serif;
-    }
+text {
+    font: 10px sans-serif;
+}
 
-    .container-headstart {
-        margin: 0px auto;
-        min-width: 900px;
-    }
+.container-headstart {
+    margin: 0px auto;
+    min-width: 900px;
+}
 
+.vis-col {
+    display: inline-block;
+    width: 60%;
+}
+
+.list-col {
+    display: inline-block;
+    width: 39%;
+    vertical-align: top;
+    float: right;
+}
+
+.h4, h4 {
+    font-size: 18px;
+    min-height: 50px;
+}
+
+@media screen and (max-width: 1000px) {
     .vis-col {
-        display: inline-block;
-        width: 60%;
+        width: 70%;
     }
 
     .list-col {
-        display: inline-block;
-        width:39%;
-        vertical-align:top;
-        float:right;
-    }
-
-    .h4, h4 {
-        font-size: 18px;
-        min-height: 50px;
+        width: 29%
     }
 }

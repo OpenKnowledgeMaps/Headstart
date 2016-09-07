@@ -1,119 +1,127 @@
-.headstart {
-    #article_metadata {
-        font-family: Helvetica;
+#article_metadata {
+    font-family: Helvetica;
+    line-height: 100%;
+    overflow: hidden;
+
+    body {
+        position: static;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        word-break: break-word;
+        background-color: transparent;
+    }
+}
+
+.paper_holder {
+    overflow: hidden;
+
+    .metadata {
+        font: 8px 'Helvetica', sans-serif;
         line-height: 100%;
         overflow: hidden;
+        text-align: left;
 
-        body {
-            position: static;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            word-break: break-all;
-            background-color: transparent;
-        }
-    }
-
-    .paper_holder {
-        overflow: hidden;
-
-        .metadata {
-            font: 8px 'Helvetica', sans-serif;
-            line-height: .95;
-            overflow: hidden;
-            text-align: left;
-
-            .large {
-                font-size: 12px;
-                padding: 5px 0 5px 5px;
-            }
-
-            .larger {
-                font-size: 14px;
-                padding: 5px 0 5px 5px;
-            }
+        .large {
+            
+            font-size: 12px;
+            padding: 5px 0 5px 5px;
+            line-height: 120%;
         }
 
-        #readers {
-            font-size: 8px;
-            line-height: 8px;
-            margin-bottom: 3px;
-            padding: 3px 7px 3px 0;
-            text-align: right;
-            vertical-align: text-bottom;
-            font-family: Helvetica;
-
-            &.large {
-                font-size: 12px;
-            }
-
-            &.larger {
-                font-size: 14px;
-            }
-
-            span {
-                color: rgb(102, 102, 102);
-            }
+        .larger {
+            font-size: 14px;
+            padding: 10px 0 10px 10px;
+            line-height: 120%;
         }
     }
+    
+    
 
-    #title {
-        color: rgb(167, 8, 5);
-    }
+    #readers {
+        font-size: 8px;
+        line-height: 8px;
+        margin-bottom: 3px;
+        padding: 3px 7px 3px 0;
+        text-align: right;
+        vertical-align: text-bottom;
+        font-family: Helvetica;
+        font-weight: bold;
 
-    #details {
-        /*margin-top: 3px;*/
-        padding-top: 3px;
-        padding-left: 5px;
-        color: rgb(33, 101, 0);
-    }
+        &.large {
+            font-size: 11px;
+        }
 
-    #in {
-        color: rgb(102, 102, 102);
+        &.larger {
+            font-size: 12px;
+        }
 
         span {
-            font-style: italic;
-            padding-right: 0;
             color: black;
         }
     }
+}
 
-    .framed {
-        stroke: #e55137;
-        stroke-width: 3px;
-    }
+#title {
+    color: $dark-red;
 
-    .framed_recommended {
-        stroke: yellow;
-        stroke-width: 3px;
-    }
+    //font-weight: bold;
+}
 
-    .framed_bookmarked {
-        stroke: green;
-        stroke-width: 2px;
-    }
+#details {
+    /*margin-top: 3px;*/
+    padding-top: 3px;
+    color: $author-green;
+}
 
-    .recommended {
-        font-size: 10pt;
-        font-weight: bold;
+#in {
+    color: rgb(102, 102, 102);
+
+    span {
+        font-style: italic;
+        padding-right: 0;
         color: black;
-        border: 1px yellow solid;
-        background-color: yellow;
     }
 
-    .bookmarked {
-        font-size: 10pt;
-        color: black;
-        border: 1px green solid;
+    .pubyear {
+        font-style: normal;
     }
+}
 
-    .tobookmark {
-        font-size: 10pt;
-        font-weight: bold;
-        color: white;
-        border: 1px green solid;
-        background-color: green;
-    }
+.framed {
+    stroke: #e55137;
+    stroke-width: 3px;
+}
 
+.framed_recommended {
+    stroke: yellow;
+    stroke-width: 3px;
+}
+
+.framed_bookmarked {
+    stroke: green;
+    stroke-width: 2px;
+}
+
+.recommended {
+    font-size: 10pt;
+    font-weight: bold;
+    color: black;
+    border: 1px yellow solid;
+    background-color: yellow;
+}
+
+.bookmarked {
+    font-size: 10pt;
+    color: black;
+    border: 1px green solid;
+}
+
+.tobookmark {
+    font-size: 10pt;
+    font-weight: bold;
+    color: white;
+    border: 1px green solid;
+    background-color: green;
 }

@@ -206,17 +206,25 @@ list.populateMetaData = function(nodes) {
 
         list_metadata.select(".outlink")
             .attr("href", function(d) {
-                return d.url
+                if (headstart.url_prefix != null) {
+                    return headstart.url_prefix + d.url;
+                } else if (typeof d.url != 'undefined') {
+                    return d.url;
+                }
             })
             .on("click", function() { d3.event.stopPropagation(); })
 
         list_metadata.select(".list_authors")
             .html(function(d) {
                 return d.authors_string })
-            
+        
+        list_metadata.select(".list_published_in")
+            .html(function(d) {
+                return d.published_in; });
+        
         list_metadata.select(".list_pubyear")
             .html(function(d) {
-                return d.published_in + " (" + d.year + ")" });
+                return " (" + d.year + ")" });
 
         // Following part should probably be moved to a separate function
         var paper_title = d3.select(elem).select("#list_title")

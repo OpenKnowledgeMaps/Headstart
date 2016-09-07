@@ -1,18 +1,16 @@
-.headstart {
-    #show_hide_button {
-        cursor: pointer;
+#show_hide_button {
+    cursor: pointer;
 
-        &.hover {
-            background-color: #666;
-            color: #eee;
-        }
+    &.hover {
+        background-color: $okm-blue;
+        color: white;
     }
+}
 
-    #show_hide_button_label {
-        font-family: 'Helvetica';
-        font-size: 14px;
-        font-weight: 400;
-        float: left;
-        text-align: center;
-    }
+#show_hide_button_label {
+    font-family: 'Helvetica';
+    font-size: 14px;
+    font-weight: 400;
+    float: left;
+    text-align: center;
 }
