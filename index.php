@@ -24,10 +24,10 @@
                             }
                             ] //data
                         , {title: "Overview of PLOS articles for <?php echo (!isset($_GET["query"])?($_GET["id"]):($_GET["query"])) ?>"
-                            , max_diameter_size: 45
-                            , min_diameter_size: 25
-                            , max_area_size: 90
-                            , min_area_size: 50
+                            , paper_max_scale: 1
+							, paper_min_scale: 1
+							, bubble_max_scale: 1
+							, bubble_min_scale: 1
                             , use_area_uri: true
                             , input_format: "json"
                             , base_unit: "views"
@@ -35,6 +35,9 @@
                             , show_dropdown: false
                             , preview_type: "pdf"
                             , sort_options: ["readers", "title", "authors"]
+							, show_timeline: false
+							, force_areas: true
+							, force_areas_alpha: 0.015
                             } //options
                 )
         </script>

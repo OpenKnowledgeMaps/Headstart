@@ -1,41 +1,44 @@
 @import "list-show-button";
 
-.headstart {
-    #explorer_header {
-        background-color: #eee;
-    }
+#explorer_header {
+    background-color: $okm-light-gray;
+}
 
-    #explorer_options {
-        padding: 5px 15px;
-    }
+#explorer_options {
+    padding: 5px 15px;
+}
 
-    #filter_container {
-        float: left;
-        display: block;
-    }
+#filter_container {
+    float: left;
+    display: block;
+}
 
-    #filter_input {
-        padding-right: 22px;
-    }
+#filter_input {
+    padding-right: 22px;
+}
 
-    #sort_container {
-        float: right;
-        display: none;
-    }
+#sort_container {
+    float: right;
+    display: none;
+}
+
+.btn-default.active, .btn-default:active, .open > .dropdown-toggle.btn-default {
+    color: white;
+    background-color: #2c3d51;
+    border-color: #2c3d51;
 }
 
 @media screen and (max-width: 1050px) {
-    .headstart {
-        #sort_container {
-            float: none;
-            display: block;
-        }
-        #sort-buttons {
-            padding: 5px 0px;
-        }
+    #sort_container {
+        float: none;
+        display: block;
+    }
 
-        .pull-right {
-            float: none !important;
-        }
+    #sort-buttons {
+        padding: 5px 0px;
+    }
+
+    .pull-right {
+        float: none !important;
     }
 }

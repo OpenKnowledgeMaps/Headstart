@@ -2,15 +2,13 @@
 @import "list/entry";
 
 /* ################ List Explorer ############### */
-.headstart {
-    #papers_list {
-        float: right;
-        overflow-y: scroll;
-        padding-top: 10px;
-        padding-left: 5px;
-        padding-right: 5px;
-        background-color: white;
-        display: none;
-        font: 12px 'Helvetica', sans-serif;
-    }
+#papers_list {
+    float: right;
+    overflow-y: scroll;
+    padding-top: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: white;
+    display: none;
+    font: 12px 'Helvetica', sans-serif;
 }

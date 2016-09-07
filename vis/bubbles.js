@@ -103,19 +103,26 @@ BubblesFSM.prototype = {
         // convert authors to "[first name] [last name]"
         var authors = d.authors.split(";");
         var authors_string = "";
+        var authors_short_string = "";
         for(var i=0; i<authors.length-1; i++) {
           var names = authors[i].split(",");
           
-          if(names.length > 1)
+          if(names.length > 1) {
             authors_string += names[1] + " " + names[0];
-          else
+            authors_short_string += names[1].substr(0,1) + ". " + names[0];
+         } else {
               authors_string += names[0];
+              authors_short_string += names[0];
+         }
           
-          if(i != authors.length-2)
+          if(i != authors.length-2) {
             authors_string += ", ";
+            authors_short_string += ", ";
+          }
         }
 
         d.authors_string = authors_string;
+        d.authors_short_string = authors_short_string;
         
       });
 
@@ -131,7 +138,10 @@ BubblesFSM.prototype = {
 
         d.width = headstart.paper_width_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
         d.height = headstart.paper_height_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
-
+        
+        d.orig_x = d.x;
+        d.orig_y = d.y;
+        
         // scale x and y
         d.x = headstart.chart_x(d.x);
         d.y = headstart.chart_y(d.y*-1);
@@ -391,9 +401,7 @@ BubblesFSM.prototype = {
 
   // set the title size of bubbles to px
   adjustBubbleTitleSizeTo: function( bubbles, px ) {
-    if( headstart.current_vis_size < 720 ) {
-      bubbles.selectAll("h2").style("font-size", px);
-    }
+    bubbles.selectAll("h2").style("font-size", headstart.calcTitleFontSize());
   },
 
   // append the foreignObject to each of the bubbles
@@ -448,14 +456,11 @@ BubblesFSM.prototype = {
     var area_x = [];
     var area_y = [];
 
-    var min_x = headstart.current_vis_size; 
-    var max_x = 0; 
-    var min_y = headstart.current_vis_size; 
-    var max_y = 0; 
-
     for(area in areas) {
       var papers = areas[area].papers;
       var sum_readers = d3.sum(papers, function(d) { return d.internal_readers  });
+      
+      areas[area].readers = sum_readers;
 
       var mean_x = d3.mean(papers, function(d) { return d.x  });
       var mean_y = d3.mean(papers, function(d) { return d.y  });
@@ -467,36 +472,25 @@ BubblesFSM.prototype = {
       areas[area].x = mean_x;
       areas[area].y = mean_y;
       areas[area].r = r;
-
-      if(mean_x-r < min_x) {
-        min_x = mean_x-r
-      }      
-      if(mean_x+r > max_x) {
-        max_x = mean_x+r
-      }     
-      if(mean_y-r < min_y) {
-        min_y = mean_y-r
-      }      
-      if(mean_y+r > max_y) {
-        max_y = mean_y+r
-      }  
     }
-
-    headstart.chart_x_circle.domain([min_x, max_x]);
-    headstart.chart_y_circle.domain([min_y, max_y]);
-
+    
+    headstart.chart_x_circle.domain(d3.extent(area_x));
+    headstart.chart_y_circle.domain(d3.extent(area_y));
 
     for (area in areas) {
       var new_area = [];
       new_area["title"] = areas[area].title;
       new_area["x"] = headstart.chart_x_circle(areas[area].x);
       new_area["y"] = headstart.chart_y_circle(areas[area].y);
+      new_area["orig_x"] = areas[area].x;
+      new_area["orig_y"] = areas[area].y;
       new_area["r"] = areas[area].r;
       new_area["height_html"] = Math.sqrt(Math.pow(areas[area].r,2)*2);
       new_area["width_html"] = Math.sqrt(Math.pow(areas[area].r,2)*2);
       new_area["x_html"] = 0 - new_area["width_html"]/2;
       new_area["y_html"] = 0 - new_area["height_html"]/2;
       new_area["area_uri"] = area;
+      new_area["readers"] = areas[area].readers;
       new_area["papers"] = areas[area].papers;
       areas_array.push(new_area);
     }
@@ -607,9 +601,9 @@ BubblesFSM.prototype = {
       .style("fill-opacity", 1)
 
     // Determine new zooming factor based on the viewbox
-    var svg = document.getElementById("chart-svg");
-    var viewbox = svg.getAttribute("viewBox").split(/\s+|,/);
-    headstart.circle_zoom = viewbox[3] / d.r / 2 * headstart.zoom_factor;
+    //var svg = document.getElementById("chart-svg");
+    //var viewbox = svg.getAttribute("viewBox").split(/\s+|,/);
+    headstart.circle_zoom = headstart.current_vis_size / d.r / 2 * headstart.zoom_factor;
     headstart.x.domain([d.x - d.r, d.x + d.r]);
     headstart.y.domain([d.y - d.r, d.y + d.r]);
     
@@ -692,7 +686,12 @@ BubblesFSM.prototype = {
         headstart.current_zoom_node = null;    
         headstart.is_zoomed = false;
       });
-
+    
+    t.selectAll("g.bubble_frame")
+        .attr("transform", function (d) {
+            return "translate(" + d.x + "," + d.y + ")";
+    })
+    
     t.selectAll("g.paper")//.each(function(d, i) {
       .attr("transform", function (d) {
         return "translate(" + d.x + "," + d.y +")";
@@ -815,21 +814,26 @@ BubblesFSM.prototype = {
 
     d3.selectAll("#area_title_object")
       .style("display", "none");
-
-    t.selectAll("circle")
-      .attr("cx", function(d) {
-        return headstart.x(d.x) - d.x;
-      })
-    .attr("cy", function(d) {
-      return headstart.y(d.y) - d.y;
+    
+    t.selectAll("g.bubble_frame")
+      .attr("transform", function (d) {
+          d.x_zoomed = headstart.x(d.x);
+          d.y_zoomed = headstart.y(d.y);
+          
+          return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
     })
-    .attr("r", function(d) {
-      return headstart.circle_zoom * d.r;
-    });
-
+    
+    t.selectAll("circle")
+     .attr("r", function(d) {
+        d.r_zoomed = headstart.circle_zoom * d.r;
+        return d.r_zoomed;
+      });
+    
     t.selectAll("g.paper")
       .attr("transform", function (g) {
-        return "translate(" + headstart.paper_x(g.x) + "," + headstart.paper_y(g.y) + ")";
+        g.x_zoomed = headstart.paper_x(g.x);
+        g.y_zoomed = headstart.paper_y(g.y);
+        return "translate(" + g.x_zoomed + "," + g.y_zoomed + ")";
       });
 
     var region = function(d) {

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            #canvas {
+                width: 100%;
+                display: inline-block;
+            }
+
+            #chart {
+                width: 70%;
+                border: 1px solid black;
+                display: inline-block;
+            }
+
+            #list {
+                width: 20%;
+                border: 1px solid black;
+                display: inline-block;
+            }
+
+        </style>
+
+        <script type="text/javascript" src="vis/lib/d3.v3.js"></script>
+        <script type="text/javascript" src="vis/lib/jquery-2.1.4.min.js"></script>
+    </head>
+    <body>
+        <div id="canvas">
+            <div id="chart">
+                <svg id="map">
+                </svg>
+            </div>
+            <div id="list">
+
+            </div>
+        </div>
+        <script>
+            var rects = [{x: -1, y: -1, r: 20}, {x: 0, y: 0, r: 20}, {x: 1, y: 1, r: 30}]
+            
+            //$("#canvas").height($(document).height());
+            
+            var width = $("#chart").width();
+            var height = $(window).height() - 25;
+            
+            $("#map").height(height)
+            $("#map").width(width)
+            
+            var scale_x = d3.scale.linear();
+            var scale_y = d3.scale.linear();
+
+            scale_x.domain([-1,1])/*d3.extent(rects, function (d) {
+                return d.x
+            }))*/
+            scale_x.range([30, width-30])
+
+            scale_y.domain([-1,1])/*d3.extent(rects, function (d) {
+                return d.y
+            }))*/
+            scale_y.range([30, height-30])
+
+            var bubble_frames = d3.select("#map").data(rects).selectAll("g.node").data(rects)
+                    .enter().append("g").attr("class", "bubble_frame")
+                    .attr("transform", function (d) {
+                        d.x = scale_x(d.x);
+                        d.y = scale_y(d.y);
+                        return "translate(" + d.x + "," + d.y + ")";
+                    });
+                    
+             bubble_frames.append("circle")
+                     .attr("cx", 0)
+                     .attr("cy", 0)
+                     .attr("r", function (d) { return d.r; }) 
+             
+             
+             d3.select(window).on('resize', function(event) {
+                 
+                 debounce(resizeWindow(), 500);
+             })
+             
+             
+             function resizeWindow() {                
+                 var new_scale_x = d3.scale.linear();
+                 var new_scale_y = d3.scale.linear();
+                 
+                 new_scale_x.domain([30, width - 30]);
+                 new_scale_y.domain([30, height - 30]);
+                 
+                 var resized_width = $("#chart").width();
+                 var resized_height = $(window).height() - 25;
+                 
+                 new_scale_x.range([30, resized_width-30]);
+                 new_scale_y.range([30, resized_height-30]);
+                 
+                 $("#map").height(resized_height);
+                 $("#map").width(resized_width);
+                 
+                 width = resized_width;
+                 height = resized_height;
+                 
+                 bubble_frames.attr("transform", function (d) {
+                        d.x = new_scale_x(d.x);
+                        d.y = new_scale_y(d.y);
+                        //d.x = new_scale_x(d.x) - d.x;
+                        //d.y = new_scale_y(d.y) - d.y;
+                        return "translate(" + d.x + "," + d.y + ")";
+                    });
+                 
+             };
+             
+             function debounce(func, wait, immediate) {
+                var timeout;
+                return function() {
+                  var context = this, args = arguments;
+                  var later = function() {
+                    timeout = null;
+                    if (!immediate) func.apply(context, args);
+                  };
+                  var callNow = immediate && !timeout;
+                  clearTimeout(timeout);
+                  timeout = setTimeout(later, wait);
+                  if (callNow) func.apply(context, args);
+                };
+              };
+             
+        </script>
+
+    </body>
+</html>

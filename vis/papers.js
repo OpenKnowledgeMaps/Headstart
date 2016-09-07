@@ -208,6 +208,7 @@ papers.prepareForeignObject = function( nodes ){
            .append("div")
             .attr("class", "paper_holder")
             .style("cursor", "default");
+            
     return xhtml;
 }
 
@@ -234,27 +235,38 @@ papers.appendMetaDataCSSClass = function(xhtml) {
 }
 
 papers.appendMetaDataTitle = function(metadata) {
-  metadata.append("p")
+  metadata_title = metadata.append("p")
     .attr("id", "title")
     .attr("class","highlightable")
     .html(function (d) {  return d.title+"<br>" })
+    
+  $(metadata_title[0]).hyphenate("en");
 }
 
 papers.appendMetaDataDetails = function(metadata) {
-  metadata.append("p")
+  metadata_details = metadata.append("p")
     .attr("id", "details")
     .attr("class","highlightable")
-    .html(function (d) { return d.authors_string })
+    .html(function (d) { return d.authors_short_string })
+    
+ $(metadata_details[0]).hyphenate("en");
 }
 
 papers.appendMetaDataPublicationYear = function(metadata) {
-  metadata.append("p")
+  metadata_publication = metadata.append("p")
     .attr("id", "in")
     .attr("class","highlightable")
-    .html("in ")
-    .append("span")
+    .html("in ");
+ 
+  metadata_publication.append("span")
+    .attr("class", "published_in")
+    .html(function (d) { return d.published_in });
+  
+  metadata_publication.append("span")
     .attr("class", "pubyear")
-    .html(function (d) { return d.published_in + " (" + d.year + ")" });
+    .html(function (d) { return " (" + d.year + ")" });
+  
+  $(metadata_publication[0]).hyphenate("en");
 }
 
 papers.appendMetaDataReaders = function(xhtml) {
@@ -332,8 +344,15 @@ papers.applyForce = function( bubbles ) {
         areas_count++;
 
     });
-
+    
     headstart.force_papers.start();
+    
+    if(headstart.is_force_papers) {
+      headstart.force_papers.alpha(headstart.papers_force_alpha);
+    } else {
+      headstart.force_papers.alpha(0);  
+    }
+    
     var papers_count = 0;
       
     headstart.force_papers.on("tick", function(e) {
@@ -509,7 +528,6 @@ papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
         .style("width", d.width * headstart.circle_zoom * resize_factor + "px");
 
 }
-
 
 // called far too often
 papers.enlargePaper = function(d,holder_div,i) {
