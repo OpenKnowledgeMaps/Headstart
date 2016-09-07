@@ -137,8 +137,12 @@ div {
         text-align: center;
         background-color: #eee;
         text-shadow: 0 1px 1px white;
+            
+            &:first-child {
+                margin-top:0px;
+            }
+        }
     }
-}
 
 img#preview_page {
     display: block;

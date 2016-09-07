@@ -41,7 +41,7 @@ const common = {
             test: /\.csv$/,
             loader: 'file?name=data/[hash].[ext]'
         }, {
-            test: /\.(php|png)$/,
+            test: /\.(php|png|html)$/,
             loader: 'file'
         }
         ]
@@ -67,6 +67,7 @@ const common = {
             'templates': path.resolve(__dirname, 'vis/templates'),
             'images':path.resolve(__dirname, 'vis/images'),
             'services': path.resolve(__dirname, 'server/services'),
+            'lib': path.resolve(__dirname, 'vis/lib'),
 
             // modules
             'helpers': path.resolve(__dirname, 'vis/js/helpers.js'),

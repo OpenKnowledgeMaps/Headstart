@@ -31,14 +31,10 @@
 @media screen and (max-width: 1050px) {
     #sort_container {
         float: none;
-        display: block;
     }
 
     #sort-buttons {
         padding: 5px 0px;
-    }
-
-    .pull-right {
-        float: none !important;
-    }
+	float: none !important;
+	}
 }

@@ -2,7 +2,7 @@ require("./stylesheets/main.scss")
 require('bootstrap-loader');
 
 import $ from 'jquery';
-import './lib/highlightRegex.min.js';
+import 'lib/highlightRegex.min.js';
 import 'jquery-dotdotdot/src/jquery.dotdotdot.min.js';
 import 'hypher/dist/jquery.hypher.js';
 

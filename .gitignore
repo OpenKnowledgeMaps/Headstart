@@ -2,7 +2,7 @@ server/preprocessing/other-scripts/.Rhistory
 /nbproject/private/
 /server/nbproject/private/
 *_local.*
-vis/images/
+vis/images/*.pdf
 node_modules/
 **/.sass-cache/*
 vis/stylesheets/*.css

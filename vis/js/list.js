@@ -552,20 +552,17 @@ list.reset = function() {
 list.loadAndAppendImage = function(image_src, page_number) {
     try {
         let img = require("images/" + image_src);
-        let paper_frame = d3.select("#paper_frame");
-        paper_frame.select("#preview")
-            .append("div")
+
+        let paper_frame = d3.select("#images_holder")
+
+
+        paper_frame.append("div")
             .attr("id", "preview_page_index")
-            .style("width", headstart.preview_image_width + "px")
             .html("Page " + page_number)
 
-        paper_frame.select("#preview")
-            .append("img")
+        paper_frame.append("img")
             .attr("id", "preview_page")
-            .attr("class", "lazy")
-            .attr("src", image_src)
-            .style("height", headstart.preview_image_height + "px")
-            .style("width", headstart.preview_image_width + "px")
+            .attr("src", img)
     } catch (e) {
         return false;
     }
@@ -578,11 +575,13 @@ list.writePopup = function(pdf_url) {
     setTimeout(function() {
         $("#pdf_iframe")
             .attr("src", function() {
-                return pdf_url + "#view=FitH";
-            });
+                let pdf_viewer = require('lib/pdfjs-hypothesis/web/viewer.html');
+                return pdf_viewer + "?file=" + pdf_url; //#view=FitH
+            })
+            .attr("scrolling", "no");
     }, 100);
 
-    $("#spinner").hide();
+    $("#spinner-iframe").hide();
     $("#pdf_iframe").show();
 }
 
@@ -590,6 +589,11 @@ list.writePopup = function(pdf_url) {
 list.populateOverlay = function(d) {   
     let this_d = d;
     if (headstart.preview_type == "image") {
+        $("#spinner-images").show();
+        $("#images_holder").hide();
+        $("#status").hide();
+        $("#images_modal").modal()
+        
         list.loadAndAppendImage(d.id + "/page_1.png", 1);
 
         let images_finished = false,
@@ -604,6 +608,9 @@ list.populateOverlay = function(d) {
 
             counter++;
         }
+        
+        $("#spinner-images").hide();
+        $("#images_holder").show();        
     } else if (headstart.preview_type == "pdf") {
         var filename = this_d.id + ".PDF";
         var local_filename = filename.replace("/", "__");
@@ -613,16 +620,21 @@ list.populateOverlay = function(d) {
             list.writePopup(full_pdf_url);
             $("#iframe_modal").modal();
         } catch (e) {
-            $("#spinner").show();
+            $("#spinner-iframe").show();
             $("#pdf_iframe").hide();
             $("#iframe_modal").modal();
-
+            
             var journal = this_d.published_in.toLowerCase();
             var url = "http://journals.plos.org/" + headstart.plos_journals_to_shortcodes[journal] + "/article/asset?id=" + filename;
 
             $.getJSON(headstart.service_path + "getPDF.php?url=" + url + "&filename=" + local_filename, function(local_pdf) {
                 list.writePopup(full_pdf_url);
-            })
+            }).fail( function(d, textStatus, error) {
+                $("#spinner-iframe").hide();
+                $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + list.createOutlink(this_d) + "\" target=\"_blank\">this website</a>.")
+                console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+                $("#status").show();
+            });
         }
     }
 }
@@ -675,13 +687,22 @@ list.setImageForListHolder = function(d) {
     });
 }
 
+list.createOutlink = function(d) {
+    
+    var url = false;
+    if (headstart.url_prefix != null) {
+        url = headstart.url_prefix + d.url;
+    } else if (typeof d.url != 'undefined') {
+        url = d.url;
+    }
+    
+    return url;
+}
+
 list.title_click = function (d) {
-      var url = "";
-      if (headstart.url_prefix != null) {
-          url = headstart.url_prefix + d.url;
-      } else if (typeof d.url != 'undefined') {
-          url = d.url;
-      } else {
+        
+      var url = list.createOutlink(d);
+      if (url === false) {
           d3.event.stopPropagation();
           return
       }
