@@ -24,10 +24,10 @@
                             }
                             ] //data
                         , {title: "Overview of PubMed articles for <?php echo (!isset($_GET["query"])?($_GET["id"]):($_GET["query"])) ?>"
-                            , max_diameter_size: 45
-                            , min_diameter_size: 25
-                            , max_area_size: 90
-                            , min_area_size: 50
+                            , max_diameter_size: 1
+                            , min_diameter_size: 1
+                            , max_area_size: 1
+                            , min_area_size: 1
                             , use_area_uri: true
                             , input_format: "json"
                             , base_unit: "views"
@@ -39,7 +39,7 @@
                             , localization: "eng_plos"
                             , force_areas_alpha: 0.015
                             , show_list: true
-                            , is_content_based: true
+                            , is_content_based: false
                             } //options
                 )
         </script>
