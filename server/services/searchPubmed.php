@@ -11,7 +11,7 @@ $dirty_query = library\CommUtils::getParameter($_POST, "q");
 
 $post_params = $_POST;
 
-$result = search("pubmed", $dirty_query, $post_params, array(), ";", null);
+$result = search("pubmed", $dirty_query, $post_params, array("article_types", "from", "to"), ";", null);
 
 echo $result
 

@@ -31,7 +31,7 @@ and open the template in the editor.
                 <label for="q">Search term:</label> 
                 <input type="text" name="q" size="61" required>
                 <button type="submit" class="btn">Submit</button>
-                <!--<div id="filter-container"></div>-->
+                <div id="filter-container"></div>
             </form> 
         </div>
 
@@ -92,13 +92,13 @@ and open the template in the editor.
             $(document).ready(function () {
                 var search_options = SearchOptions;
 
-                search_options.init("#filter-container", options);
+                search_options.init("#filter-container", options_pubmed);
 
                 options.dropdowns.forEach(function (entry) {
                     search_options.select_multi('.dropdown_multi_' + entry.id, entry.name)
                 })
 
-                search_options.addDatePickerFromTo("#from", "#to", "any-time");
+                search_options.addDatePickerFromTo("#from", "#to", "any-time", "1809-01-01");
 
                 $("#searchform").submit(function (e) { // intercepts the submit event
                     e.preventDefault();
