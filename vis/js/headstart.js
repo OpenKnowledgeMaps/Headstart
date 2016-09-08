@@ -680,6 +680,7 @@ HeadstartFSM.prototype = {
 
   // Draws the header for this
   drawTitle: function() {
+    let self = this;
     let chart_title = "";
     
     if(this.subdiscipline_title === "") {
@@ -720,10 +721,10 @@ HeadstartFSM.prototype = {
         //$("#datasets " + headstart.current_file_number + ":selected").text();
         $("#datasets").val(this.bubbles[this.current_file_number].file);
 
-        $("#datasets").change(() => {
+        $("#datasets").change(function() {
             let selected_file_number = this.selectedIndex + 1;
-            if (selected_file_number != this.current_file_number) {
-                this.tofile(selected_file_number);
+            if (selected_file_number != self.current_file_number) {
+                self.tofile(selected_file_number);
             }
         });
     }
@@ -1031,7 +1032,7 @@ HeadstartFSM.prototype = {
       // reset bubbles
       this.resetBubbles();
 
-      var bubbles = this.bubbles[this.current_file_number];
+      var current_bubble_fsm = this.bubbles[this.current_file_number];
 
       var setupVisualization = (csv) => {
           this.calcChartSize();
@@ -1044,10 +1045,10 @@ HeadstartFSM.prototype = {
               var url = this.createRestUrl();
 
               $.getJSON(url, (data) => {
-                  this.startVisualization(this, bubbles, csv, data, false);
+                  this.startVisualization(this, current_bubble_fsm, csv, data, false);
               });
           } else {
-              this.startVisualization(this, bubbles, csv, null, false);
+              this.startVisualization(this, current_bubble_fsm, csv, null, false);
           }
 
           this.drawTitle();
@@ -1055,14 +1056,14 @@ HeadstartFSM.prototype = {
 
       switch (this.input_format) {
           case "csv":
-              let filename = bubbles.file.split("/")[2];
+              let filename = current_bubble_fsm.file.split("/")[2];
               let data = require("../data/" + filename);
               d3.csv(data, setupVisualization);
               break;
 
           case "json":
               let php_script = require('services/getLatestRevision.php');
-              d3.json(php_script + "?vis_id=" + bubbles.file, setupVisualization);
+              d3.json(php_script + "?vis_id=" + current_bubble_fsm.file, setupVisualization);
               break;
 
           default:

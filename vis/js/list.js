@@ -511,7 +511,7 @@ list.reset = function() {
     this.createHighlights(this.current_search_words);
 
     if (headstart.current_enlarged_paper !== null) {
-      notSureifNeeded();
+      this.notSureifNeeded();
     }
 }
 
@@ -694,7 +694,8 @@ list.title_click = function (d) {
       d3.event.stopPropagation();
     }
 
-function notSureifNeeded() {
+// Yes it is currently needed. :D
+list.notSureifNeeded = function() {
   var list_holders_local =
     this.papers_list.selectAll("#list_holder")
     .filter(function (d) {
