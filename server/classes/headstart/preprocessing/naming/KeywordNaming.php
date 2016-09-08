@@ -11,15 +11,15 @@ require_once 'Naming.php';
 
 class KeywordNaming extends Naming {
 
-    public function performNaming(&$array, $num_keywords, $id="area_uri", $subjects="subject", $keyword_separator=",", $taxonomy_separator="/") {
+    public function performNaming(&$array, $num_keywords, $id = "area_uri", $subjects = "subject", $keyword_separator = ",", $taxonomy_separator = "/") {
 
         $working_array = array();
 
         foreach ($array as $entry) {
             $uri = $entry[$id];
             $keywords = split("; ", $entry[$subjects]);
-            foreach($keywords as &$keyword) {
-                if($taxonomy_separator != null) {
+            foreach ($keywords as &$keyword) {
+                if ($taxonomy_separator != null) {
                     $keyword = substr($keyword, strrpos($keyword, $taxonomy_separator) + 1);
                 }
             }
@@ -45,22 +45,18 @@ class KeywordNaming extends Naming {
         }
     }
 
-    public function performNamingTfIdf(&$array, $num_keywords, $id="area_uri", $subjects="subject", $keyword_separator=",", $taxonomy_separator="/") {
+    public function performNamingTfIdf(&$array, $num_keywords, $keyword_separator, $taxonomy_separator, $id = "area_uri", $subjects = "subject") {
 
         $working_array = array();
 
         foreach ($array as $entry) {
             $uri = $entry[$id];
             $keywords = split($keyword_separator, $entry[$subjects]);
-            foreach($keywords as &$keyword) {
-                if($taxonomy_separator != null) {
+            foreach ($keywords as &$keyword) {
+                if ($taxonomy_separator != null) {
                     $keyword = substr($keyword, strrpos($keyword, $taxonomy_separator) + 1);
                 }
             }
-
-            /* foreach ($keywords as &$keyword) {
-              $keyword = substr($keyword, strrpos($keyword, "/") + 1);
-              } */
 
             //$working_array[$uri] = array();
 
@@ -90,37 +86,41 @@ class KeywordNaming extends Naming {
 
         foreach ($working_array as $uri => $current_array) {
 
+            $current_array["all_terms"] = array_replace($current_array["all_terms"], array_fill_keys(array_keys($current_array["all_terms"], null), ''));
+
             $num_keywords_per = array_count_values($current_array["all_terms"]);
             $wordCount = count($current_array["all_terms"]);
             $current_result_array = array();
 
             foreach ($current_array["unique_terms"] as $term) {
-                $termCount = $num_keywords_per[$term];
+                $termCount = isset($num_keywords_per[$term]) ? ($num_keywords_per[$term]) : (0);
                 $docsWithTerm = $num_docs_per_term[$term];
 
                 $tf = $termCount / $wordCount;
                 $idf = log($totalDocs / $docsWithTerm, 2);
                 $tfidf = $tf * $idf;
-                
+
                 //$tfidf_short = round($tfidf,2);
                 //$current_result_array[$term. " " . $tfidf_short] = $tfidf;
-                
+
                 $current_result_array[$term] = $tfidf;
-                        
             }
-            
+
             arsort($current_result_array);
-            
+
             $important_terms = array_keys(array_slice($current_result_array, 0, $num_keywords));
-            
+
+            array_walk($important_terms, function(&$value, &$key) {
+                $value = ucfirst($value);
+            });
+
             $final_string = implode(", ", $important_terms);
             $result_array[$uri] = $final_string;
         }
-        
+
         foreach ($array as $uri => $entry) {
             $array[$uri]["area"] = $result_array[$entry[$id]];
         }
-
     }
 
 }

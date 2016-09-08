@@ -41,9 +41,12 @@ get_papers <- function(query, params = NULL, limit = 100) {
   authors <- './/AuthorList'
   keywords <- './/Keyword'
   doi <- ".//PubmedData/ArticleIdList/ArticleId[@IdType=\"doi\"]"
-  query <- paste0(query, " \"journal article\"[Publication Type]")
-  x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit, mindate = params$from, maxdate = params$to)
-  res <- rentrez::entrez_fetch(db = "pubmed", id = x$ids, rettype = "abstract")
+  from = gsub("-", "/", params$from)
+  to = gsub("-", "/", params$to)
+  article_types_string = paste0(" ((", '"', paste(params$article_types, sep='"', collapse='"[Publication Type] OR "'), '"[Publication Type]))')
+  query <- paste0(query, article_types_string)
+  x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit, mindate = from, maxdate = to, sort="relevance")
+  res <- rentrez::entrez_fetch(db = "pubmed", id = x$ids, rettype = "xml")
   xml <- xml2::xml_children(xml2::read_xml(res))
   out <- lapply(xml, function(z) {
     tmp <- setNames(
@@ -55,8 +58,8 @@ get_papers <- function(query, params = NULL, limit = 100) {
     }, ""), collapse = "-")
     xauthors <- paste0(vapply(xml2::xml_children(xml2::xml_find_all(z, authors)), function(a) {
       paste(
-        xtext(xml2::xml_find_one(a, ".//LastName")),
-        xtext(xml2::xml_find_one(a, ".//ForeName")),
+        xtext(xml2::xml_find_first(a, ".//LastName")),
+        xtext(xml2::xml_find_first(a, ".//ForeName")),
         sep = ", "
       )
     }, ""), collapse = ";")
@@ -66,13 +69,33 @@ get_papers <- function(query, params = NULL, limit = 100) {
     lst[vapply(lst, length, 1) != 1] <- NA
     return(lst)
   })
+  
   df <- data.table::setDF(data.table::rbindlist(out, fill = TRUE, use.names = TRUE))
   df <- setNames(df, tolower(names(df)))
   df$url <- paste0("http://www.ncbi.nlm.nih.gov/pubmed/", df$pmid)
   df$paper_abstract <- gsub("^\\s+|\\s+$", "", gsub("[\r\n]", "", df$paper_abstract))
-  df$content <- df$paper_abstract
+  df$content <- paste(df$title, df$paper_abstract, df$authors, df$subject, df$published_in, sep= " ")
+  df$doi = df$id
+  df$id = df$pmid
   
-
+  summary <- rentrez::entrez_summary(db="pubmed", id = x$ids)
+  df$readers <- extract_from_esummary(summary, "pmcrefcount")
+  df$readers <- replace(df$readers, df$readers=="", 0)
+  
+  pmc_ids = c()
+  idlist = extract_from_esummary(summary, "articleids")
+  
+  for(i in 1:nrow(df)) {
+    current_ids = idlist[,i]
+    current_pmcid = current_ids$value[current_ids$idtype=="pmc"]
+    if(identical(current_pmcid, character(0))) {
+      current_pmcid = "";
+    }
+    pmc_ids[i] = current_pmcid
+  }
+  
+  df$pmcid = pmc_ids
+  
   return(list(metadata = df, text = df[,c('id', 'content')]))
 }
 

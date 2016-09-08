@@ -15,11 +15,17 @@ debug = FALSE
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
 
 vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2) {
-  tdm_matrix <- create_tdm_matrix(metadata, text);
-  normalized_matrix <- normalize_matrix(tdm_matrix);
+  print("calc matrix")
+  result <- create_tdm_matrix(metadata, text);
+  metadata_full_subjects = result$metadata_full_subjects
+  
+  print("normalize matrix")
+  normalized_matrix <- normalize_matrix(result$tdm_matrix);
+  
+  print("create clusters")
   clusters <- create_clusters(normalized_matrix, max_clusters=15);
   layout <- create_ordination(normalized_matrix, maxit=500, mindim=2, maxdim=2)
-  output <- create_output(clusters, layout, metadata)
+  output <- create_output(clusters, layout, metadata_full_subjects)
   
   return(output)
   
@@ -34,11 +40,13 @@ create_tdm_matrix <- function(metadata, text, sparsity=1, lang="english") {
   
   corpus <- tm_map(corpus, removePunctuation)
   
-  corpus <- tm_map(corpus, stripWhitespace)
-  
   corpus <- tm_map(corpus, content_transformer(tolower))
   
   corpus <- tm_map(corpus, removeWords, stopwords(lang))
+  
+  metadata_full_subjects <- replace_keywords_if_empty(corpus, metadata)
+  
+  corpus <- tm_map(corpus, stripWhitespace)
   
   corpus_unstemmed = corpus
   
@@ -52,7 +60,27 @@ create_tdm_matrix <- function(metadata, text, sparsity=1, lang="english") {
   
   tdm_matrix = t(as.matrix(tdm))
   
-  return(tdm_matrix)
+  return(list(tdm_matrix = tdm_matrix, metadata_full_subjects = metadata_full_subjects))
+}
+
+replace_keywords_if_empty <- function(corpus, metadata) {
+  
+  dtm = DocumentTermMatrix(corpus)
+  
+  i = 1
+  
+  for(i in 1:nrow(metadata)) {
+    if (metadata$subject[i] == "") {
+      freq_terms = as.matrix(dtm[i,])
+      freq_terms_sorted = sort(colSums(freq_terms), decreasing=TRUE)
+      top_terms = head(freq_terms_sorted, 10)
+      
+      metadata$subject[i] = paste0(names(top_terms), collapse=";")
+    }
+  }
+  
+  return(metadata)
+  
 }
 
 normalize_matrix <- function(tdm_matrix, method = "cosine") {

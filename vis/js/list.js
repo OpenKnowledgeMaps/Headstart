@@ -627,6 +627,12 @@ list.populateOverlay = function(d) {
             var journal = this_d.published_in.toLowerCase();
             var url = "http://journals.plos.org/" + headstart.plos_journals_to_shortcodes[journal] + "/article/asset?id=" + filename;
 
+            if(typeof d.pmcid !== "undefined") {
+                if (d.pmcid !== "") {
+                    url = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + d.pmcid + "/pdf/"
+                }
+            }
+
             $.getJSON(headstart.service_path + "getPDF.php?url=" + url + "&filename=" + local_filename, function(local_pdf) {
                 list.writePopup(full_pdf_url);
             }).fail( function(d, textStatus, error) {
@@ -640,6 +646,13 @@ list.populateOverlay = function(d) {
 }
 
 list.setImageForListHolder = function(d) {
+    
+    if(typeof d.pmcid !== "undefined") {
+        if (d.pmcid === "") {
+            return;
+        }
+    }
+    
   list.papers_list = d3.select("#papers_list");
   var current_item = list.papers_list.selectAll("#list_holder")
     .filter(function (x, i) {

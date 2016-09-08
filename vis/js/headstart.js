@@ -166,6 +166,18 @@ export var HeadstartFSM = function(host, path, tag, files, options) {
           authors: "authors",
           title: "title",
           area: "Area"
+      },
+      eng_pubmed: {
+          loading: "Loading...",
+          search_placeholder: "Search...",
+          show_list: "Show list",
+          hide_list: "Hide list",
+          intro_label :"What's this?",
+          readers: "citations",
+          year: "year",
+          authors: "authors",
+          title: "title",
+          area: "Area"
       }
   }
 
