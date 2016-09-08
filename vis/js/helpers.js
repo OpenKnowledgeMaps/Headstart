@@ -1,3 +1,6 @@
+import d3 from 'd3';
+
+
 // -------------------------------------
 // -------- General helpers ------------
 // -------------------------------------
@@ -5,7 +8,7 @@
 /**
  * Helper function to initialise the variables in headstart.js
  */
-export const BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js")
+export const BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js");
 
 export function initVar(variable, default_value) {
     return typeof variable !== 'undefined' ? variable : default_value;
@@ -51,7 +54,7 @@ export function debounce(func, wait, immediate) {
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
     };
-};
+}
 
 // -------------------------------------
 // ---------- Text Modification --------
@@ -65,7 +68,7 @@ export function sortBy(field) {
             } else {
                 return stringCompare(a[field], b[field]);
             }
-        })
+        });
 }
 
 function stringCompare(a, b) {
@@ -133,13 +136,13 @@ export function getRealHeight(element) {
 
 // functions which are not being called at the moment, but might
 // mausrad -> zoomen
-export function redraw() {
-    chart.attr("transform",
-        "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
-}
+// export function redraw() {
+//     chart.attr("transform",
+//         "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+// }
 
-export function redraw_drag(x, y, dx, dy) {
-    console.log("redraw_drag");
-    chart.attr("transform",
-        "translate(" + dx + ", " + dy + ")");
-}
+// export function redraw_drag(x, y, dx, dy) {
+//     console.log("redraw_drag");
+//     chart.attr("transform",
+//         "translate(" + dx + ", " + dy + ")");
+// }

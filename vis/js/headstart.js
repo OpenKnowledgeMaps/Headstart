@@ -107,7 +107,7 @@ export var HeadstartFSM = function(tag, files, options) {
   this.zoomout_transition = 750;
 
   // misc
-  this.debounce = 700;
+  this.debounce = 50;
 
   // var inits
   this.current_zoom_node = null;
