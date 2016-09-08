@@ -1,6 +1,8 @@
 import Mediator from 'mediator-js';
+import { headstart } from '../app.js';
 import { papers } from 'papers';
 import { list } from 'list';
+import { sortBy } from 'helpers'; 
 
 var MyMediator = function() {
 

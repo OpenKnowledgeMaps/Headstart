@@ -2,6 +2,7 @@
 // Filename: papers_count.js
 import StateMachine from 'javascript-state-machine';
 
+import { headstart } from '../app.js';
 import { mediator } from 'mediator';
 import { list } from 'list';
 import { toBack, toFront } from 'helpers';

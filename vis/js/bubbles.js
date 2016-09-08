@@ -3,6 +3,7 @@
 import StateMachine from 'javascript-state-machine';
 import d3 from 'd3';
 
+import { headstart } from '../app.js';
 import { mediator } from 'mediator';
 import { papers} from 'papers';
 import { list } from 'list';

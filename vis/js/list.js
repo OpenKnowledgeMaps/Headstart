@@ -2,9 +2,10 @@
 // Filename: list.js
 import StateMachine from 'javascript-state-machine';
 
+import { headstart } from '../app.js';
 import { mediator } from 'mediator';
 import { papers } from 'papers';
-import { debounce, highlight, clear_highlights } from 'helpers';
+import { debounce, highlight, clear_highlights, sortBy } from 'helpers';
 
 const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
@@ -30,7 +31,7 @@ export const list = StateMachine.create({
             sortBy(headstart.sort_options[0]);
         },
 
-        onshow: function( event, from, to ) {
+        onshow: function() {
             // if the papers_force has stopped.
             if(!papers.is("loading")) {
                 d3.select("#sort_container").style("display", "block");
@@ -41,7 +42,7 @@ export const list = StateMachine.create({
             }
         },
 
-        onhide: function( event, from, to ) {
+        onhide: function() {
             d3.select("#sort_container").style("display", "none");
             d3.select("#papers_list").style("display", "none");
             d3.select("#left_arrow").text("\u25BC");
@@ -49,21 +50,17 @@ export const list = StateMachine.create({
             d3.select("#show_hide_label").text(headstart.localization[headstart.language].show_list);
         },
 
-        onbeforetoggle: function( event, from, to ) {
+        onbeforetoggle: function() {
             if(this.current == "visible") {
                this.hide();
                mediator.publish("record_action","none", "hide_list", headstart.user_id, "none", null);
-               // headstart.recordAction("none", "hide_list", headstart.user_id, "none", null);
             } else  {
                 this.show();
                 mediator.publish("record_action","none", "show_list", headstart.user_id, "none", null);
-                // headstart.recordAction("none", "show_list", headstart.user_id, "none", null);
             }
         }
     }
 });
-
-list.current_search_words;
 
 list.drawList = function() {
     // Load list template
@@ -73,19 +70,19 @@ list.drawList = function() {
     // Set localized values
     $("#filter_input")
     .attr("placeholder", headstart.localization[headstart.language].search_placeholder)
-    .on("input", function(event){
-        if($("#filter_input").val() != "") {
+    .on("input", (event) => {
+        if($("#filter_input").val() !== "") {
           $("#searchclear").show()
         } else {
           $("#searchclear").hide()
         }
-        debounce(list.filterList(event.target.value.split(" ")), 700)
+        debounce(this.filterList(event.target.value.split(" ")), 700)
       })
 
-    $("#searchclear").click(function(event) {
+    $("#searchclear").click(() => {
         $("#filter_input").val('');
         $("#searchclear").hide();
-        debounce(list.filterList([""]), 700);
+        debounce(this.filterList([""]), 700);
     });
 
     // Add sort options
@@ -138,34 +135,6 @@ let addSortOption = function(parent, sort_option, selected) {
     })
 }
 
-
-function sortBy(field) {
-    d3.selectAll("#list_holder")
-        .sort(function(a, b) {
-            if (field == "year") {
-                return stringCompare(b[field], a[field]);
-            } else {
-                return stringCompare(a[field], b[field]);
-            }
-        })
-}
-
-
-function stringCompare(a, b) {
-  if(typeof a == 'undefined' || typeof b == 'undefined'){
-    return;
-  } else if(typeof a == 'string' && typeof b == 'string') {
-    a = a.toLowerCase();
-    b = b.toLowerCase();
-    return a > b ? 1 : a == b ? 0 : -1;
-  } else if(typeof a == 'number' && typeof b == 'number') {
-    return d3.descending(a, b);
-  }
-  else {
-    return d3.descending(a, b);
-  }
-}
-
 list.initListMouseListeners = function() {
     $("#show_hide_button")
         .on("mouseover", function() {
@@ -181,19 +150,21 @@ list.initListMouseListeners = function() {
     d3.selectAll("#paper_list_title").on("click", function(d) {
         mediator.publish("list_title_clickable", d);
     });
-}
+};
 
 list.getPaperNodes = function(list_data) {
-  var list_entry = listEntryTemplate();
+    let list_entry = listEntryTemplate();
 
-  return list.papers_list.selectAll("div")
-                  .data(list_data)
-                  .enter()
-                  .append("div")
-                  .attr("id", "list_holder")
-                  .html(list_entry)
-                  .sort(function(a,b) {  return b.readers - a.readers; });
-}
+    return this.papers_list.selectAll("div")
+        .data(list_data)
+        .enter()
+        .append("div")
+        .attr("id", "list_holder")
+        .html(list_entry)
+        .sort(function(a, b) {
+            return b.readers - a.readers; });
+};
+
 
 list.populateMetaData = function(nodes) {
     nodes[0].forEach(function(elem) {
@@ -246,8 +217,7 @@ list.populateMetaData = function(nodes) {
                 .attr("id", "bookmark")
                 .html("Add to schedule")
                 .on("click", function(d) {
-                    mediator.publish("bookmark_added", d);
-                    // list.addBookmark(d);      
+                    mediator.publish("bookmark_added", d);    
                     d3.event.stopPropagation();
                 })
         }
@@ -261,7 +231,6 @@ list.populateMetaData = function(nodes) {
             .html("Already in your schedule X")
             .on("click", function(d) {
                 mediator.publish("bookmark_removed", d);
-                // list.removeBookmark(d);
                 d3.event.stopPropagation();
             })
 
@@ -269,15 +238,15 @@ list.populateMetaData = function(nodes) {
 }
 
 list.createAbstracts = function(nodes) {
-    nodes[0].forEach(function(elem) {
+    nodes[0].forEach((elem) => {
         d3.select(elem).select("#list_abstract")
-            .html(function(d) {
-                return list.createAbstract(d, headstart.abstract_small);
-            })
-    })
+            .html((d) => {
+                return this.createAbstract(d, headstart.abstract_small);
+            });
+    });
     
-    list.createHighlights(list.current_search_words);
-}
+    this.createHighlights(this.current_search_words);
+};
 
 list.populateReaders = function(nodes) {
     nodes[0].forEach(function(elem) {
@@ -285,7 +254,7 @@ list.populateReaders = function(nodes) {
         var readers = d3.select(elem).select(".list_readers");
 
         areas.select(".area_tag").html(function(d) {
-            return headstart.localization[headstart.language].area + ":"
+            return headstart.localization[headstart.language].area + ":";
         })
         areas.select(".area_name").html(function(d) {
             return d.area
@@ -313,20 +282,21 @@ list.populateList = function(list_data) {
     });
 
     var paper_nodes = this.getPaperNodes(list_data);
+    
     this.populateMetaData(paper_nodes);
     this.createAbstracts(paper_nodes);
     this.populateReaders(paper_nodes);
 }
 
 list.filterList = function (search_words) {
-    list.current_search_words = search_words;
+    this.current_search_words = search_words;
 
     var search_words = search_words.map(function (e) {
         e = e.trim().toLowerCase();
         return e;
     });
 
-    list.createHighlights(search_words);
+    this.createHighlights(search_words);
 
     var filtered_data = d3.selectAll("#list_holder, .paper")
     var current_circle = d3.select(headstart.current_zoom_node);
@@ -423,7 +393,6 @@ list.addBookmark = function(d)  {
             .html("Already in your schedule X")
              .on("click", function (d) {
                 mediator.publish("bookmark_removed", d);
-               // list.removeBookmark(d);
                d3.event.stopPropagation();
              })
 
@@ -454,7 +423,6 @@ list.removeBookmark = function(d)  {
             .html("Add to schedule")
              .on("click", function (d) {
                 mediator.publish("bookmark_added", d);
-               // list.addBookmark(d);
                d3.event.stopPropagation();
              })
 
@@ -510,7 +478,7 @@ list.enlargeListItem = function(d) {
     this.papers_list.selectAll("#list_abstract")
                     .html(this.createAbstract(d,headstart.abstract_large));
     
-    list.createHighlights(list.current_search_words);
+    this.createHighlights(this.current_search_words);
 
     this.setImageForListHolder(d);
 }
@@ -536,11 +504,11 @@ list.setListHolderDisplay = function(d) {
 list.reset = function() {
 
     d3.selectAll("#list_abstract")
-    .html(function (d) {
-        return list.createAbstract(d, headstart.abstract_small)
+    .html((d) => {
+        return this.createAbstract(d, headstart.abstract_small)
     });
     
-    list.createHighlights(list.current_search_words);
+    this.createHighlights(this.current_search_words);
 
     if (headstart.current_enlarged_paper !== null) {
       notSureifNeeded();
@@ -594,7 +562,7 @@ list.populateOverlay = function(d) {
         $("#status").hide();
         $("#images_modal").modal()
         
-        list.loadAndAppendImage(d.id + "/page_1.png", 1);
+        this.loadAndAppendImage(d.id + "/page_1.png", 1);
 
         let images_finished = false,
             counter = 2;
@@ -602,7 +570,7 @@ list.populateOverlay = function(d) {
         while (!images_finished) {
             let image_src = d.id + "/page_" + counter + ".png";
 
-            if (!list.loadAndAppendImage(image_src, counter)) {
+            if (!this.loadAndAppendImage(image_src, counter)) {
                 images_finished = true;
             }
 
@@ -617,7 +585,7 @@ list.populateOverlay = function(d) {
          
         try { 
             var full_pdf_url = require("images/" + local_filename);
-            list.writePopup(full_pdf_url);
+            this.writePopup(full_pdf_url);
             $("#iframe_modal").modal();
         } catch (e) {
             $("#spinner-iframe").show();
@@ -634,10 +602,10 @@ list.populateOverlay = function(d) {
             }
 
             $.getJSON(headstart.service_path + "getPDF.php?url=" + url + "&filename=" + local_filename, function(local_pdf) {
-                list.writePopup(full_pdf_url);
-            }).fail( function(d, textStatus, error) {
+                this.writePopup(full_pdf_url);
+            }).fail((d, textStatus, error) => {
                 $("#spinner-iframe").hide();
-                $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + list.createOutlink(this_d) + "\" target=\"_blank\">this website</a>.")
+                $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this.createOutlink(this_d) + "\" target=\"_blank\">this website</a>.")
                 console.error("getJSON failed, status: " + textStatus + ", error: "+error)
                 $("#status").show();
             });
@@ -653,8 +621,8 @@ list.setImageForListHolder = function(d) {
         }
     }
     
-  list.papers_list = d3.select("#papers_list");
-  var current_item = list.papers_list.selectAll("#list_holder")
+  
+  var current_item = this.papers_list.selectAll("#list_holder")
     .filter(function (x, i) {
       return (x.id == d.id)
     });
@@ -696,7 +664,6 @@ list.setImageForListHolder = function(d) {
   current_item.select("#paper_list_title")
     .on("click", function(d){
       mediator.publish("list_title_click", d);
-      // list.title_click();
     });
 }
 
@@ -714,7 +681,7 @@ list.createOutlink = function(d) {
 
 list.title_click = function (d) {
         
-      var url = list.createOutlink(d);
+      var url = this.createOutlink(d);
       if (url === false) {
           d3.event.stopPropagation();
           return
@@ -729,7 +696,7 @@ list.title_click = function (d) {
 
 function notSureifNeeded() {
   var list_holders_local =
-    list.papers_list.selectAll("#list_holder")
+    this.papers_list.selectAll("#list_holder")
     .filter(function (d) {
       return (headstart.current_enlarged_paper.id == d.id)
     });
@@ -738,7 +705,6 @@ function notSureifNeeded() {
     // EVENTLISTENERS
     .on("click", function (d) {
       mediator.publish("list_title_clickable", d)
-      // list.makeTitleClickable(d)
     });
 
   var image_node = list_holders_local.select("#preview_image").node();

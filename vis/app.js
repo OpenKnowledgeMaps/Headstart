@@ -1,4 +1,4 @@
-require("./stylesheets/main.scss")
+require('./stylesheets/main.scss')
 require('bootstrap-loader');
 
 import $ from 'jquery';
@@ -6,12 +6,12 @@ import 'lib/highlightRegex.min.js';
 import 'jquery-dotdotdot/src/jquery.dotdotdot.min.js';
 import 'hypher/dist/jquery.hypher.js';
 
-import { Headstart } from "./js/vis";
+import { HeadstartFSM } from "headstart";
 
-$(function() {
-    var myHeadstart = new Headstart(
-        "", //host
-        "", //path
+// make namespace global - should be moved to CONSTANTS file
+window.namespace = "headstart";
+
+export const headstart = new HeadstartFSM(
         "visualization", //append to tag
         [{
             title: "edu1",
@@ -45,4 +45,5 @@ $(function() {
             show_intro: false
         } //options
     )
-})
+
+headstart.start()

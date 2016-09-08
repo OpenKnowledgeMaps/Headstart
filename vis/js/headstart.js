@@ -10,18 +10,34 @@ import { list } from 'list';
 
 import { intro, intro_cn3, intro_plos } from 'intro';
 import { getRealHeight, initVar } from "helpers";
-import { BrowserDetect, h } from "helpers";
+import { BrowserDetect } from "helpers";
   
-const timelineTemplate = require('templates/timeline.handlebars')
+const timelineTemplate = require('templates/timeline.handlebars');
+const headstartTemplate = require("templates/headstart.handlebars");
+const infoTemplate = require("templates/misc/info_modal.handlebars");
+const iFrameTemplate = require("templates/misc/iframe_modal.handlebars");
+const imageTemplate = require("templates/misc/images_modal.handlebars");
 
-export var HeadstartFSM = function(host, path, tag, files, options) {
+export var HeadstartFSM = function(tag, files, options) {
   // a container for variables
   this.VERSION = 2.5;
 
-  this.host = host;
-  this.path = path;
+  // INIT
   this.tag = tag;
+
   this.viz = $("#" + tag);
+  this.viz.addClass("headstart");
+
+  this.viz.append(headstartTemplate());
+  this.viz.append(infoTemplate());
+  this.viz.append(iFrameTemplate());
+  this.viz.append(imageTemplate());
+
+  // contains bubbles objects for the timline view
+  // elements get added to bubbles by calling registerBubbles()
+  this.bubbles = {};
+
+  // config
 
   // map
   this.min_height = 600;
@@ -69,7 +85,7 @@ export var HeadstartFSM = function(host, path, tag, files, options) {
       "title",
       "authors",
       "year"
-  ])
+  ]);
 
   this.content_based = initVar(options.is_content_based, false);
   if (this.content_based) {
@@ -124,9 +140,9 @@ export var HeadstartFSM = function(host, path, tag, files, options) {
   // data specific settings
   this.subdiscipline_title = initVar(options.title, "");
   this.use_area_uri = initVar(options.use_area_uri, false);
-  this.url_prefix = initVar(options.url_prefix, null)
+  this.url_prefix = initVar(options.url_prefix, null);
   this.input_format = initVar(options.input_format, "csv");
-  this.base_unit = initVar(options.base_unit, "readers")
+  this.base_unit = initVar(options.base_unit, "readers");
 
   // application specific variables
   this.language = initVar(options.language, "eng");
@@ -179,7 +195,7 @@ export var HeadstartFSM = function(host, path, tag, files, options) {
           title: "title",
           area: "Area"
       }
-  }
+  };
 
   //plos
   this.url_plos_pdf = "http://www.plosone.org/article/fetchObject.action?representation=PDF&uri=info:doi/";
@@ -192,31 +208,27 @@ export var HeadstartFSM = function(host, path, tag, files, options) {
       "plos genetics": "plosgenetics",
       "plos pathogens": "plospathogens",
       "plos clinical trials": "plosclinicaltrials"
-  }
-
-  // contains bubbles objects for the timline view
-  // elements get added to bubbles by calling registerBubbles()
-  this.bubbles = {}
+  };
 
   if (typeof String.prototype.startsWith != 'function') {
-    String.prototype.startsWith = function (str){
-      return this.slice(0, str.length) == str;
-    };
+      String.prototype.startsWith = function(str) {
+          return this.slice(0, str.length) == str;
+      };
   }
 
   if (typeof String.prototype.escapeSpecialChars != 'function') {
-    String.prototype.escapeSpecialChars = function() {
-      return this.replace(/[\\]/g, '\\\\')
-        .replace(/[\/]/g, '\\/')
-        .replace(/[\b]/g, '\\b')
-        .replace(/[\f]/g, '\\f')
-        .replace(/[\n]/g, '\\n')
-        .replace(/[\r]/g, '\\r')
-        .replace(/[\t]/g, '\\t')
-        .replace(/[\"]/g, '\\"')
-        .replace(/\\'/g, "\\'");
-       };
-     }
+      String.prototype.escapeSpecialChars = function() {
+          return this.replace(/[\\]/g, '\\\\')
+              .replace(/[\/]/g, '\\/')
+              .replace(/[\b]/g, '\\b')
+              .replace(/[\f]/g, '\\f')
+              .replace(/[\n]/g, '\\n')
+              .replace(/[\r]/g, '\\r')
+              .replace(/[\t]/g, '\\t')
+              .replace(/[\"]/g, '\\"')
+              .replace(/\\'/g, "\\'");
+      };
+  }
 
 }; // end HeadstartFSM constructor
 
@@ -227,8 +239,7 @@ HeadstartFSM.prototype = {
     var browser = BrowserDetect.browser;
 
     if (browser != "Firefox" && browser != "Safari" && browser != "Chrome") {
-            alert("You are using an unsupported browser. This visualization"
-                    + " was successfully tested with the latest versions of Chrome, Safari, Opera and Firefox.");
+            alert("You are using an unsupported browser. This visualization was successfully tested with the latest versions of Chrome, Safari, Opera and Firefox.");
     }
   },
 
@@ -256,35 +267,35 @@ HeadstartFSM.prototype = {
 
   recordAction: function(id, action, user, type, timestamp, additional_params, post_data) {
 
-    if(!this.is_evaluation)
+    if(!this.is_evaluation) {
       return;
+    }
 
-    timestamp = (typeof timestamp !== 'undefined') ? (escape(timestamp)) : ("")
-    additional_params = (typeof additional_params !== 'undefined') ? ('&' + additional_params) : ("")
+    timestamp = (typeof timestamp !== 'undefined') ? (escape(timestamp)) : ("");
+    additional_params = (typeof additional_params !== 'undefined') ? ('&' + additional_params) : ("");
     if(typeof post_data !== 'undefined') {
       post_data = {post_data:post_data};
     } else {
       post_data = {};
     }
 
-    let php_script = require("services/writeActionToLog.php")
+    let php_script = require("services/writeActionToLog.php");
 
     $.ajax({
-      url: php_script + '?user=' + user
-              + '&action=' + action
-              + '&item=' + escape(id)
-              + '&type=' + type
-              + '&item_timestamp=' + timestamp
-              + additional_params
-              + '&jsoncallback=?',
-      type: "POST",
-      data: post_data,
-      dataType: "json",
-      success: function(output) {
-        console.log(output)
-      }
+        url: php_script +
+        '?user=' + user +
+        '&action=' + action +
+        '&item=' + escape(id) +
+        '&type=' + type +
+        '&item_timestamp=' + timestamp + additional_params + '&jsoncallback=?',
+        type: "POST",
+        data: post_data,
+        dataType: "json",
+        success: function(output) {
+            console.log(output);
+        }
     });
-  },
+    },
 
   resetBubbles: function () {
     if(this.bubbles) {
@@ -297,14 +308,14 @@ HeadstartFSM.prototype = {
       this.registerBubbles(bubble);
       bubble.title = elem.title;
       bubble.file = elem.file;
-    })
+    });
   },
 
   calcChartSize: function() {
       var parent_height = getRealHeight($("#" + this.tag));
       var subtitle_heigth = $("#subdiscipline_title").outerHeight(true);
 
-      if (parent_height == 0) {
+      if (parent_height === 0) {
           this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_heigth;
       } else {
           this.available_height = $("#" + this.tag).height() - subtitle_heigth;
@@ -315,7 +326,7 @@ HeadstartFSM.prototype = {
       if (this.is("timeline")) {
           var timeline_height = $(".tl-title").outerHeight(true);
           this.available_height =  this.available_height - timeline_height;
-          this.available_width = $("#" + this.tag).width()
+          this.available_width = $("#" + this.tag).width();
       } else {
           this.available_width = $("#" + this.tag).width() - $("#list_explorer").width(); 
       }
@@ -351,8 +362,8 @@ HeadstartFSM.prototype = {
       this.paper_x = d3.scale.linear();
       this.paper_y = d3.scale.linear();
 
-      this.circle_size = d3.scale.sqrt()
-      this.diameter_size = d3.scale.sqrt()
+      this.circle_size = d3.scale.sqrt();
+      this.diameter_size = d3.scale.sqrt();
   },
 
   setScaleRanges: function() {
@@ -387,17 +398,19 @@ HeadstartFSM.prototype = {
 
   // Size helper functions
   getMinSize: function() {
-      if (this.min_height >= this.min_width)
+      if (this.min_height >= this.min_width) {
           return this.min_width;
-      else
+      } else {
           return this.min_height;
+      }
   },
 
   availableSizeIsBiggerThanMinSize: function() {
-    if ( this.available_width > this.min_width && this.available_height > this.min_height )
+    if ( this.available_width > this.min_width && this.available_height > this.min_height ) {
       return true;
-    else
+    } else {
       return false;
+    }
   },
 
   // auto if enough space is available, else hidden
@@ -425,11 +438,11 @@ HeadstartFSM.prototype = {
           this.svg.attr("width", s)
                   .attr("height", this.current_vis_size);
           if (update === false) {
-            this.svg.attr("viewBox", "0 0 " + s + " " + this.current_vis_size)
+            this.svg.attr("viewBox", "0 0 " + s + " " + this.current_vis_size);
           }
       } else {
           this.svg.attr("height", this.current_vis_size + "px")
-              .attr("width", this.current_vis_size + "px")
+              .attr("width", this.current_vis_size + "px");
               //.attr("preserveAspectRatio", "xMidYMid meet");
           if (update === false) {
             //this.svg.attr("viewBox", "0 0 " + this.current_vis_size + " " + this.current_vis_size);
@@ -441,7 +454,7 @@ HeadstartFSM.prototype = {
 
     this.chart = this.svg.append("g").attr( "id", "chart_canvas" );
     // Rectangle to contain nodes in force layout
-    let rect = this.chart.append("rect")
+    this.chart.append("rect");
     // var rect_width = this.current_vis_size;// + this.max_list_size;
     this.updateChartCanvas();
 
@@ -467,28 +480,28 @@ HeadstartFSM.prototype = {
 
   initEventListeners: function() {
       d3.select(window).on("resize", () => {
-          this.calcChartSize();
+        let self = this;
+        this.calcChartSize();
           
-        if (self.is("timeline"))
-            return;
+        if (this.is("timeline")) {
+          return;
+        }
           
         var resized_scale_x = d3.scale.linear();
         var resized_scale_y = d3.scale.linear();
         
-        resized_scale_x.domain([0, self.current_vis_size]);
-        resized_scale_y.domain([0, self.current_vis_size]);
+        resized_scale_x.domain([0, this.current_vis_size]);
+        resized_scale_y.domain([0, this.current_vis_size]);
 
-        self.calcChartSize();
-        self.setScaleRanges();
-        self.drawSvg(true);
-        self.updateChartCanvas();
+        this.calcChartSize();
+        this.setScaleRanges();
+        this.drawSvg(true);
+        this.updateChartCanvas();
         list.fit_list_height();
         
-        resized_scale_x.range([0, self.current_vis_size]);
-        resized_scale_y.range([0, self.current_vis_size]);
+        resized_scale_x.range([0, this.current_vis_size]);
+        resized_scale_y.range([0, this.current_vis_size]);
           
-        
-        
         d3.selectAll("g.bubble_frame")
             .attr("transform", function (d) {
                 d.x_zoomed = resized_scale_x(d.x_zoomed);
@@ -500,7 +513,7 @@ HeadstartFSM.prototype = {
                 } else {
                     return "translate(" + d.x + "," + d.y + ")";
                 }
-        })
+        });
         
         d3.selectAll("circle")
           .attr("r", function(d) {
@@ -511,29 +524,29 @@ HeadstartFSM.prototype = {
               } else {
                 return d.r; 
               }
-          })
+          });
         
-        var area_title_objects = d3.selectAll("#area_title_object")
+        var area_title_objects = d3.selectAll("#area_title_object");
         
         area_title_objects.each(function(d) {
             d.height_html = Math.sqrt(Math.pow(d.r,2)*2);
             d.width_html = Math.sqrt(Math.pow(d.r,2)*2);
             d.x_html = 0 - d.width_html/2;
             d.y_html = 0 - d.height_html/2;
-        })
+        });
         
          area_title_objects
-            .attr("x",      function (d) { return d.x_html })
-            .attr("y",      function (d) { return d.y_html })
-            .attr("width",  function (d) { return d.width_html })
-            .attr("height", function (d) { return d.height_html })
+            .attr("x",      function (d) { return d.x_html;})
+            .attr("y",      function (d) { return d.y_html;})
+            .attr("width",  function (d) { return d.width_html;})
+            .attr("height", function (d) { return d.height_html;});
         
-        area_title_objects.each(function(d) {
+        area_title_objects.each(function() {
             d3.select(this).select("#area_title")
                 .style("width",  function (d) { 
-               return d.width_html + "px" 
+               return d.width_html + "px";
                 })
-               .style("height", function (d) { return d.height_html + "px" })
+               .style("height", function (d) { return d.height_html + "px";});
         });
         
         $("#area_title>h2").css("font-size", self.calcTitleFontSize());
@@ -551,9 +564,9 @@ HeadstartFSM.prototype = {
               } else {
                 return "translate(" + d.x + "," + d.y + ")";
               }
-        })
+        });
         
-        var paper_holders = d3.selectAll("div.paper_holder")
+        var paper_holders = d3.selectAll("div.paper_holder");
         
         paper_holders.each(function (d) {
             d.diameter = self.diameter_size(d.internal_readers);
@@ -566,11 +579,11 @@ HeadstartFSM.prototype = {
             
             d.resize_width = (self.is_zoomed)?(d.width_zoomed):(d.width);
             d.resize_height = (self.is_zoomed)?(d.height_zoomed):(d.height);
-        })
+        });
         
         d3.selectAll("#region")
         .attr("d", function (d) {
-          return papers.createPaperPath(0, 0, d.resize_width, d.resize_height)
+          return papers.createPaperPath(0, 0, d.resize_width, d.resize_height);
         });
 
         d3.selectAll("path.dogear")
@@ -581,29 +594,32 @@ HeadstartFSM.prototype = {
         //webkit bug
         d3.selectAll("#article_metadata")
           .attr("width", function (d) { return d.resize_width; })
-          .attr("height", function (d) { return d.resize_height; })
+          .attr("height", function (d) { return d.resize_height; });
 
         d3.selectAll("div.metadata")
           .style("width", function (d) {
-            return d.resize_width * d.top_factor + "px"
+            return d.resize_width * d.top_factor + "px";
           })
         .style("height", function (d) {
-          if(!self.is_zoomed)
-            return (self.content_based)?(d.resize_height):(d.resize_height * 0.8 + "px")
-          else
+          if(!self.is_zoomed) {
+            return (self.content_based)?(d.resize_height):(d.resize_height * 0.8 + "px");
+          } else {
             return (self.content_based)?(d.resize_height + "px"):(d.resize_height - 20 + "px");
+          }
         });
 
         d3.selectAll("div.readers")
-          .style("height", function (d) {
-            if(self.is_zoomed === false)
-                return d.resize_height * 0.2 + "px"
-            else
-                return "15px";
-          })
+            .style("height", function(d) {
+                if (self.is_zoomed === false) {
+                    return d.resize_height * 0.2 + "px";
+                } else {
+                    return "15px";
+                }
+            })
+
         .style("width", function (d) {
-          return d.resize_width + "px"
-        })
+          return d.resize_width + "px";
+        });
         /*var width = self.current_vis_size;
         var height = self.current_vis_size;
         
@@ -612,17 +628,13 @@ HeadstartFSM.prototype = {
         
         self.force_areas.size([width, height]).resume();
         self.force_papers.size([width, height]).resume();*/
-
-    })
+    });
 
       // Info Modal Event Listener
-      $('#info_modal').on('show.bs.modal', function(event) {
-          // var source = $(event.relatedTarget) // Button that triggered the modal
-          // var type = source.data('type') // Extract info from data-* attributes
-          // var modal = $()  
+      $('#info_modal').on('show.bs.modal', function() {
           $(this).find('.modal-title ').text(intro.title);
           $(this).find('.modal-body').html(intro.body);
-      })
+      });
   },
 
 
@@ -684,7 +696,7 @@ HeadstartFSM.prototype = {
     $("#num_articles").html($(".paper").length);
 
     if (this.show_infolink) {
-        let infolink = ' (<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>)'
+        let infolink = ' (<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>)';
         $("#subdiscipline_title h4").append(infolink);
         $("#infolink").text(this.localization[this.language].intro_label);
     }
@@ -703,17 +715,17 @@ HeadstartFSM.prototype = {
         $.each(this.bubbles, (index, entry) => {
             let current_item = '<option value="' + entry.file + '">' + entry.title + '</option>';
             $("#datasets").append(current_item);
-        })
+        });
 
         //$("#datasets " + headstart.current_file_number + ":selected").text();
         $("#datasets").val(this.bubbles[this.current_file_number].file);
 
         $("#datasets").change(() => {
-            let selected_file_number = datasets.selectedIndex + 1;
+            let selected_file_number = this.selectedIndex + 1;
             if (selected_file_number != this.current_file_number) {
                 this.tofile(selected_file_number);
             }
-        })
+        });
     }
 },
 
@@ -771,10 +783,11 @@ HeadstartFSM.prototype = {
   },
 
   bubblesSize: function() {
-    var size = 0, key;
-    for (key in this.bubbles) {
-      if (this.bubbles.hasOwnProperty(key));
-      size++;
+    let size = 0;
+    for (let key in this.bubbles) {
+      if (this.bubbles.hasOwnProperty(key)) {
+        size++;
+      }
     }
     return size;
   },
@@ -797,7 +810,7 @@ HeadstartFSM.prototype = {
       .attr("x1", i)
       .attr("x2", i)
       .attr("y1", "0")
-      .attr("y2", "900")
+      .attr("y2", "900");
     }
   },
 
@@ -807,8 +820,8 @@ HeadstartFSM.prototype = {
       .attr("x1", "0")
       .attr("x2", this.bubblesSize() * this.current_vis_size)
       .attr("y1", i)
-      .attr("y2", i)
-    };
+      .attr("y2", i);
+    }
   },
 
   drawGridTitles: function(update) {
@@ -824,7 +837,7 @@ HeadstartFSM.prototype = {
                   '<div class="tl-title"><h3>' + this.bubbles[i].title + '</h3></div>');
           }
           $("#tl-titles").width(this.current_vis_size * Object.keys(this.bubbles).length);
-          $(".tl-title").css("width", this.current_vis_size)
+          $(".tl-title").css("width", this.current_vis_size);
       }
   },
 
@@ -837,7 +850,7 @@ HeadstartFSM.prototype = {
       if($.isArray(conference_id)) {
           conference_id.forEach((val) => {
             url += "&conference[]=" + val;
-          })
+          });
       } else {
           url += "&conference=" + this.conference_id;
       }
@@ -851,7 +864,7 @@ HeadstartFSM.prototype = {
 
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
-  onstart: function(event, from, to, file) {
+  onstart: function() {
       this.calcChartSize();
 
       this.initScales();
@@ -889,14 +902,14 @@ HeadstartFSM.prototype = {
           // Horrible solution but the first call is needed to calculate the chart height
           // and this call sets the final number of articles in the viz
           this.drawTitle();
-      }
+      };
 
       
 
       switch (this.input_format) {
           case "csv":
-              let filename = bubbles.file.split("/")[2]
-              let data = require("../data/" + filename)
+              let filename = bubbles.file.split("/")[2];
+              let data = require("../data/" + filename);
               d3.csv(data, setupVisualization);
               break;
 
@@ -923,7 +936,7 @@ HeadstartFSM.prototype = {
   //    - the canvas
   // 2. rendering of new elements, on a bigger
   //    chart
-  ontotimeline: function(event, from, to) {
+  ontotimeline: function() {
       if (typeof checkPapers !== 'undefined') {
         window.clearInterval(checkPapers);
       }
@@ -944,12 +957,12 @@ HeadstartFSM.prototype = {
       list.current = "none";
 
       // change heading to give an option to get back to normal view
-      this.viz.empty()
+      this.viz.empty();
 
       let timeline = timelineTemplate();
       this.viz.append(timeline);
 
-      this.drawTitle()
+      this.drawTitle();
       this.drawGridTitles();
 
       this.drawNormalViewLink();
@@ -958,7 +971,7 @@ HeadstartFSM.prototype = {
       this.calcChartSize();
       this.setScaleRanges();
       this.drawSvg();
-      this.drawChartCanvas()
+      this.drawChartCanvas();
       
       this.drawGridTitles(true);
 
@@ -971,13 +984,13 @@ HeadstartFSM.prototype = {
 
       $.each(this.bubbles, (index, elem) => {
           var setupTimelineVisualization = (csv) => {
-              elem.start(csv)
-          }
+              elem.start(csv);
+          };
 
           switch (this.input_format) {
               case "csv":
-                  let filename = elem.file.split("/")[2]
-                  let data = require("../data/" + filename)
+                  let filename = elem.file.split("/")[2];
+                  let data = require("../data/" + filename);
                   d3.csv(data, setupTimelineVisualization);
                   break;
 
@@ -1037,13 +1050,13 @@ HeadstartFSM.prototype = {
               this.startVisualization(this, bubbles, csv, null, false);
           }
 
-          this.drawTitle()
-      }
+          this.drawTitle();
+      };
 
       switch (this.input_format) {
           case "csv":
-              let filename = bubbles.file.split("/")[2]
-              let data = require("../data/" + filename)
+              let filename = bubbles.file.split("/")[2];
+              let data = require("../data/" + filename);
               d3.csv(data, setupVisualization);
               break;
 
@@ -1058,7 +1071,7 @@ HeadstartFSM.prototype = {
   },
 
 
-  startVisualization: function(hs, bubbles, csv, adaptive_data, popup_start) {
+  startVisualization: function(hs, bubbles, csv, adaptive_data) {
     bubbles.start( csv, adaptive_data );
 
     hs.initEventListeners();
@@ -1072,6 +1085,7 @@ HeadstartFSM.prototype = {
     bubbles.draw();
 
     bubbles.initMouseListeners();
+    
     list.start( bubbles );
 
     hs.checkForcePapers();
