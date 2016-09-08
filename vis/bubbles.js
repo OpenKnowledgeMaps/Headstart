@@ -107,12 +107,15 @@ BubblesFSM.prototype = {
         for(var i=0; i<authors.length-1; i++) {
           var names = authors[i].split(",");
           
+          var last_name = names[0].trim()
+          var first_name = names[1].trim()
+          
           if(names.length > 1) {
-            authors_string += names[1] + " " + names[0];
-            authors_short_string += names[1].substr(0,1) + ". " + names[0];
+            authors_string += first_name + " " + last_name;
+            authors_short_string += first_name.substr(0,1) + ". " + last_name;
          } else {
-              authors_string += names[0];
-              authors_short_string += names[0];
+              authors_string += last_name;
+              authors_short_string += last_name;
          }
           
           if(i != authors.length-2) {

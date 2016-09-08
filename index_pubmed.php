@@ -30,13 +30,13 @@
                             , min_area_size: 1
                             , use_area_uri: true
                             , input_format: "json"
-                            , base_unit: "views"
+                            , base_unit: "citations"
                             , show_timeline: false
                             , show_dropdown: false
                             , preview_type: "pdf"
-                            , sort_options: ["readers", "title", "authors"]
+                            , sort_options: ["readers", "title", "authors", "year"]
                             , is_force_areas: true
-                            , localization: "eng_plos"
+                            , localization: "eng_pubmed"
                             , force_areas_alpha: 0.015
                             , show_list: true
                             , is_content_based: false
