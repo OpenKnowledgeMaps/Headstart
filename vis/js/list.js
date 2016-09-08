@@ -1,6 +1,7 @@
 // StateMachine for List UI element in Headstart
 // Filename: list.js
 import StateMachine from 'javascript-state-machine';
+import d3 from 'd3';
 
 import { headstart } from '../app.js';
 import { mediator } from 'mediator';
@@ -72,21 +73,21 @@ list.drawList = function() {
     .attr("placeholder", headstart.localization[headstart.language].search_placeholder)
     .on("input", (event) => {
         if($("#filter_input").val() !== "") {
-          $("#searchclear").show()
+          $("#searchclear").show();
         } else {
-          $("#searchclear").hide()
+          $("#searchclear").hide();
         }
-        debounce(this.filterList(event.target.value.split(" ")), 700)
-      })
+        debounce(this.filterList(event.target.value.split(" ")), headstart.debounce);
+      });
 
     $("#searchclear").click(() => {
         $("#filter_input").val('');
         $("#searchclear").hide();
-        debounce(this.filterList([""]), 700);
+        debounce(this.filterList([""]), headstart.debounce);
     });
 
     // Add sort options
-    var container = d3.select("#sort_container>ul")
+    var container = d3.select("#sort_container>ul");
     var first_element = true;
     for (let option in headstart.sort_options) {
       if (first_element) {
@@ -99,24 +100,24 @@ list.drawList = function() {
 
     this.fit_list_height();
     this.papers_list = d3.select("#papers_list");
-}
+};
 
 list.fit_list_height = function() {
   var paper_list_avail_height = $("#subdiscipline_title").outerHeight(true) + $("#headstart-chart").outerHeight(true) - $("#explorer_header").height() - 10;
   $("#papers_list").height(paper_list_avail_height);
-}
+};
 
 let addSortOption = function(parent, sort_option, selected) {
 
-    let checked_val = ""
-    let active_val = ""
+    let checked_val = "";
+    let active_val = "";
 
     if (selected) {
-        checked_val = "checked"
-        active_val = "active"
+        checked_val = "checked";
+        active_val = "active";
     } else {
-        checked_val = ""
-        active_val = ""
+        checked_val = "";
+        active_val = "";
     }
 
     let button = selectButtonTemplate({
@@ -129,22 +130,22 @@ let addSortOption = function(parent, sort_option, selected) {
 
 
     // Event listeners
-    $("#sort_" + sort_option).change(function(event) {
+    $("#sort_" + sort_option).change(function() {
         sortBy(sort_option);
         headstart.recordAction("none", "sortBy", headstart.user_id, "listsort", null, "sort_option=" + sort_option);
-    })
-}
+    });
+};
 
 list.initListMouseListeners = function() {
     $("#show_hide_button")
         .on("mouseover", function() {
-            $("#show_hide_button").addClass("hover")
+            $("#show_hide_button").addClass("hover");
         })
         .on("mouseout", function() {
-            $("#show_hide_button").removeClass("hover")
+            $("#show_hide_button").removeClass("hover");
         })
-        .on("click", function(event) {
-            mediator.publish("list_toggle")
+        .on("click", function() {
+            mediator.publish("list_toggle");
         });
 
     d3.selectAll("#paper_list_title").on("click", function(d) {
@@ -168,26 +169,26 @@ list.getPaperNodes = function(list_data) {
 
 list.populateMetaData = function(nodes) {
     nodes[0].forEach(function(elem) {
-        var list_metadata = d3.select(elem).select(".list_metadata")
+        var list_metadata = d3.select(elem).select(".list_metadata");
 
         list_metadata.select("#paper_list_title")
             .html(function(d) {
-                return d.title
-            })
+                return d.title;
+            });
 
         list_metadata.select(".outlink")
             .attr("href", function(d) {
-                if (headstart.url_prefix != null) {
+                if (headstart.url_prefix !== null) {
                     return headstart.url_prefix + d.url;
                 } else if (typeof d.url != 'undefined') {
                     return d.url;
                 }
             })
-            .on("click", function() { d3.event.stopPropagation(); })
+            .on("click", function() { d3.event.stopPropagation(); });
 
         list_metadata.select(".list_authors")
             .html(function(d) {
-                return d.authors_string })
+                return d.authors_string; });
         
         list_metadata.select(".list_published_in")
             .html(function(d) {
@@ -195,10 +196,10 @@ list.populateMetaData = function(nodes) {
         
         list_metadata.select(".list_pubyear")
             .html(function(d) {
-                return " (" + d.year + ")" });
+                return " (" + d.year + ")"; });
 
         // Following part should probably be moved to a separate function
-        var paper_title = d3.select(elem).select("#list_title")
+        var paper_title = d3.select(elem).select("#list_title");
         paper_title.filter(function(d) {
                 return d.recommended == 1 && d.bookmarked != 1;
             })
@@ -206,7 +207,7 @@ list.populateMetaData = function(nodes) {
             .attr("class", "recommended")
             .html("recommended")
             .append("span")
-            .html(" ")
+            .html(" ");
 
         if (headstart.is_adaptive) {
             paper_title.filter(function(d) {
@@ -219,7 +220,7 @@ list.populateMetaData = function(nodes) {
                 .on("click", function(d) {
                     mediator.publish("bookmark_added", d);    
                     d3.event.stopPropagation();
-                })
+                });
         }
 
         paper_title.filter(function(d) {
@@ -232,10 +233,9 @@ list.populateMetaData = function(nodes) {
             .on("click", function(d) {
                 mediator.publish("bookmark_removed", d);
                 d3.event.stopPropagation();
-            })
-
-    })
-}
+            });
+    });
+};
 
 list.createAbstracts = function(nodes) {
     nodes[0].forEach((elem) => {
@@ -253,26 +253,27 @@ list.populateReaders = function(nodes) {
         var areas = d3.select(elem).select("#list_area");
         var readers = d3.select(elem).select(".list_readers");
 
-        areas.select(".area_tag").html(function(d) {
+        areas.select(".area_tag").html(function() {
             return headstart.localization[headstart.language].area + ":";
-        })
+        });
+
         areas.select(".area_name").html(function(d) {
-            return d.area
-        })
+            return d.area;
+        });
 
         if (!headstart.content_based) {
             readers.select(".num_readers")
                 .html(function(d) {
-                    return d.readers
+                    return d.readers;
                 });
             readers.select(".list_readers_entity")
                 .html(headstart.base_unit);
 
         } else {
-            readers.style("line-height", "0px")
+            readers.style("line-height", "0px");
         }
-    })
-}
+    });
+};
 
 
 list.populateList = function(list_data) {
@@ -286,46 +287,47 @@ list.populateList = function(list_data) {
     this.populateMetaData(paper_nodes);
     this.createAbstracts(paper_nodes);
     this.populateReaders(paper_nodes);
-}
+};
 
 list.filterList = function (search_words) {
     this.current_search_words = search_words;
 
-    var search_words = search_words.map(function (e) {
+    search_words = search_words.map(function (e) {
         e = e.trim().toLowerCase();
         return e;
     });
 
     this.createHighlights(search_words);
 
-    var filtered_data = d3.selectAll("#list_holder, .paper")
+    var filtered_data = d3.selectAll("#list_holder, .paper");
     var current_circle = d3.select(headstart.current_zoom_node);
 
     var data_circle = filtered_data
             .filter(function (d) {
                 if (headstart.is_zoomed === true) {
-                    if (headstart.use_area_uri && headstart.current_enlarged_paper == null)
+                    if (headstart.use_area_uri && headstart.current_enlarged_paper === null) {
                         return current_circle.data()[0].area_uri == d.area_uri;
-                    else if (headstart.use_area_uri && headstart.current_enlarged_paper != null)
+                    } else if (headstart.use_area_uri && headstart.current_enlarged_paper !== null) {
                         return headstart.current_enlarged_paper.id == d.id;
-                    else
+                    } else {
                         return current_circle.data()[0].title == d.area;
+                    }
                 } else {
                     return true;
                 }
-            })
+            });
 
-    if (search_words.length == 0) {
-        data_circle.style("display", "block")
+    if (search_words.length === 0) {
+        data_circle.style("display", "block");
 
         headstart.bubbles[headstart.current_file_number].data.forEach(function (d) {
             d.filtered_out = false;
-        })
+        });
 
         return;
     }
 
-    data_circle.style("display", "inline")
+    data_circle.style("display", "inline");
 
     mediator.publish("record_action", "none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
     // headstart.recordAction("none", "filter", headstart.user_id, "filter_list", null, "search_words=" + search_words);
@@ -339,9 +341,9 @@ list.filterList = function (search_words) {
                 var count = 0;
                 if (typeof abstract !== 'undefined') {
                     while (word_found && count < search_words.length) {
-                        word_found = (abstract.indexOf(search_words[count]) !== -1
-                                || title.indexOf(search_words[count]) !== -1
-                                || authors.indexOf(search_words[count]) !== -1);
+                        word_found = (abstract.indexOf(search_words[count]) !== -1 || 
+                            title.indexOf(search_words[count]) !== -1 || 
+                            authors.indexOf(search_words[count]) !== -1);
                         count++;
                     }
                     d.filtered_out = word_found ? false : true;
@@ -351,18 +353,19 @@ list.filterList = function (search_words) {
                     return false;
                 }
             })
-            .style("display", "none")
-}
+            .style("display", "none");
+};
 
 list.createHighlights = function (search_words) {
-    if(typeof search_words === "undefined")
+    if(typeof search_words === "undefined") {
         return;
+    }
 
     clear_highlights();
     search_words.forEach(function (str) {
         highlight(str);
     });
-}
+};
 
 // called quite often
 list.createAbstract = function(d, cut_off) {
@@ -371,13 +374,13 @@ list.createAbstract = function(d, cut_off) {
             return d.paper_abstract.substr(0,cut_off) + "...";
         }
     }
-    return d.paper_abstract
-}
+    return d.paper_abstract;
+};
 
 list.addBookmark = function(d)  {
-  $.getJSON(headstart.service_path + "addBookmark.php?"
-    + "user_id=" + headstart.user_id
-    + "&content_id=" +d.id,
+  $.getJSON(require("services/addBookmark.php") + "?" + 
+    "user_id=" + headstart.user_id + 
+    "&content_id=" + d.id,
       function(data) {
         console.log("Successfully added bookmark");
 
@@ -394,20 +397,20 @@ list.addBookmark = function(d)  {
              .on("click", function (d) {
                 mediator.publish("bookmark_removed", d);
                d3.event.stopPropagation();
-             })
+             });
 
         d3.selectAll("#region").filter(function (x) {
-          return x.id == d.id
+          return x.id == d.id;
         })
-          .attr("class", "framed_bookmarked")
+          .attr("class", "framed_bookmarked");
        }
   );
-}
+};
 
 list.removeBookmark = function(d)  {
-  $.getJSON(headstart.service_path + "removeBookmark.php?"
-    + "user_id=" + headstart.user_id
-    + "&content_id=" +d.id,
+  $.getJSON(require("services/addBookmark.php") + "?" +
+    "user_id=" + headstart.user_id +
+    "&content_id=" + d.id,
       function(data) {
         console.log("Successfully removed bookmark");
 
@@ -424,26 +427,26 @@ list.removeBookmark = function(d)  {
              .on("click", function (d) {
                 mediator.publish("bookmark_added", d);
                d3.event.stopPropagation();
-             })
+             });
 
         d3.selectAll("#region").filter(function (x) {
-          return x.id == d.id
+          return x.id == d.id;
         })
             .attr("class", function (d) {
               return (d.recommended)?("framed_recommended"):("unframed");
-            })
-
+            });
       });
-}
+};
 
 list.makeTitleClickable = function(d) {
-    headstart.current_circle =  headstart.chart.selectAll("circle").
-                                filter(function (x) {
-                                  if (headstart.use_area_uri)
-                                    return x.area_uri == d.area_uri;
-                                  else
-                                    return x.title == d.area;
-                                });
+    headstart.current_circle = headstart.chart.selectAll("circle").
+    filter(function(x) {
+        if (headstart.use_area_uri) {
+            return x.area_uri == d.area_uri;
+        } else {
+            return x.title == d.area;
+        }
+    });
 
     headstart.bubbles[headstart.current_file_number].zoomin(headstart.current_circle.data()[0]);
     headstart.bubbles[headstart.current_file_number].current = "hoverbig";
@@ -452,19 +455,20 @@ list.makeTitleClickable = function(d) {
     headstart.current_enlarged_paper = d;
 
     d3.selectAll("path#region")
-            .filter(function(x) {
-                return x.id === d.id;
-            })
-                .attr("class", "framed");
+        .filter(function(x) {
+            return x.id === d.id;
+        })
+        .attr("class", "framed");
 
     mediator.publish("record_action", d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
     // headstart.recordAction(d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
 
     d3.event.stopPropagation();
-}
+};
+
 
 list.enlargeListItem = function(d) {
-    if(headstart.current_enlarged_paper != null) {
+    if(headstart.current_enlarged_paper !== null) {
       if(headstart.current_enlarged_paper.id == d.id) {
         return;
       } else {
@@ -481,31 +485,32 @@ list.enlargeListItem = function(d) {
     this.createHighlights(this.current_search_words);
 
     this.setImageForListHolder(d);
-}
+};
 
 list.setListHolderDisplay = function(d) {
   this.papers_list.selectAll("#list_holder")
-    .filter(function (x, i) {
-        if (headstart.use_area_uri)
+    .filter(function (x) {
+        if (headstart.use_area_uri) {
           return (x.area_uri == d.area_uri);
-        else
+        } else {
           return (x.area == d.area);
+        }
     })
-  .style("display", function (d) { return d.filtered_out?"none":"inline"});
+  .style("display", function (d) { return d.filtered_out?"none":"inline"; });
 
   this.papers_list.selectAll("#list_holder")
-    .filter(function (x, i) {
-      return (x.id != d.id)
+    .filter(function (x) {
+      return (x.id != d.id);
     })
   .style("display", "none");
-}
+};
 
 // recreates abstracts, if we zoom out from circle
 list.reset = function() {
 
     d3.selectAll("#list_abstract")
     .html((d) => {
-        return this.createAbstract(d, headstart.abstract_small)
+        return this.createAbstract(d, headstart.abstract_small);
     });
     
     this.createHighlights(this.current_search_words);
@@ -513,7 +518,7 @@ list.reset = function() {
     if (headstart.current_enlarged_paper !== null) {
       this.notSureifNeeded();
     }
-}
+};
 
 // display a preview image of paper and page if preview image is
 // available
@@ -521,21 +526,21 @@ list.loadAndAppendImage = function(image_src, page_number) {
     try {
         let img = require("images/" + image_src);
 
-        let paper_frame = d3.select("#images_holder")
+        let paper_frame = d3.select("#images_holder");
 
 
         paper_frame.append("div")
             .attr("id", "preview_page_index")
-            .html("Page " + page_number)
+            .html("Page " + page_number);
 
         paper_frame.append("img")
             .attr("id", "preview_page")
-            .attr("src", img)
+            .attr("src", img);
     } catch (e) {
         return false;
     }
     return true;
-}
+};
 
 
 list.writePopup = function(pdf_url) {
@@ -551,7 +556,7 @@ list.writePopup = function(pdf_url) {
 
     $("#spinner-iframe").hide();
     $("#pdf_iframe").show();
-}
+};
 
 
 list.populateOverlay = function(d) {   
@@ -560,7 +565,7 @@ list.populateOverlay = function(d) {
         $("#spinner-images").show();
         $("#images_holder").hide();
         $("#status").hide();
-        $("#images_modal").modal()
+        $("#images_modal").modal();
         
         this.loadAndAppendImage(d.id + "/page_1.png", 1);
 
@@ -597,94 +602,96 @@ list.populateOverlay = function(d) {
 
             if(typeof d.pmcid !== "undefined") {
                 if (d.pmcid !== "") {
-                    url = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + d.pmcid + "/pdf/"
+                    url = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + d.pmcid + "/pdf/";
                 }
             }
 
-            $.getJSON(headstart.service_path + "getPDF.php?url=" + url + "&filename=" + local_filename, function(local_pdf) {
+            $.getJSON(headstart.service_path + "getPDF.php?url=" + url + "&filename=" + local_filename, function() {
                 this.writePopup(full_pdf_url);
             }).fail((d, textStatus, error) => {
                 $("#spinner-iframe").hide();
-                $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this.createOutlink(this_d) + "\" target=\"_blank\">this website</a>.")
-                console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+                $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this.createOutlink(this_d) + "\" target=\"_blank\">this website</a>.");
+                console.error("getJSON failed, status: " + textStatus + ", error: "+error);
                 $("#status").show();
             });
         }
     }
-}
+};
 
 list.setImageForListHolder = function(d) {
-    
-    if(typeof d.pmcid !== "undefined") {
+
+    if (typeof d.pmcid !== "undefined") {
         if (d.pmcid === "") {
             return;
         }
     }
-    
-  
-  var current_item = this.papers_list.selectAll("#list_holder")
-    .filter(function (x, i) {
-      return (x.id == d.id)
-    });
 
-  let image_src = (headstart.preview_type=="image")?(d.id + "/page_1.png"):("preview_pdf.png");
 
-  try {
-      let img = require("images/" + image_src);
+    var current_item = this.papers_list.selectAll("#list_holder")
+        .filter(function(x) {
+            return (x.id == d.id);
+        });
 
-      current_item.append("div")
-      .attr("id", "preview_image")
-      .style("width", headstart.preview_image_width_list + "px")
-      .style("height", headstart.preview_image_height_list+ "px")
-      .style("background", "url(" + img + ")")
-      .style("background-size", headstart.preview_image_width_list + "px, " + headstart.preview_image_height_list+ "px")
-      .on("mouseover", function (d) {
-        mediator.publish("preview_mouseover", current_item);
-      })
-      .on("mouseout", function (d) {
-        mediator.publish("preview_mouseout", current_item);
-      })
-      .append("div")
-        .attr("id", "transbox")
-        .style("width", headstart.preview_image_width_list + "px")
-        .style("height", headstart.preview_image_height_list+ "px")
-        .html("Click here to open preview")
-        .on("click", function(d){
-          mediator.publish("list_show_popup", d);
-        })
-  } catch (e) {
-      console.log(e)
-  }
+    let image_src = (headstart.preview_type == "image") ? (d.id + "/page_1.png") : ("preview_pdf.png");
 
-  /*$("#list_title a").hover(function () {
-      $(this).css("text-decoration", "none");
-  });*/
+    try {
+        let img = require("images/" + image_src);
 
-  // EVENTLISTENERS
-  current_item.select("#paper_list_title")
-    .on("click", function(d){
-      mediator.publish("list_title_click", d);
-    });
-}
+        current_item.append("div")
+            .attr("id", "preview_image")
+            .style("width", headstart.preview_image_width_list + "px")
+            .style("height", headstart.preview_image_height_list + "px")
+            .style("background", "url(" + img + ")")
+            .style("background-size", headstart.preview_image_width_list + "px, " + headstart.preview_image_height_list + "px")
+            .on("mouseover", function() {
+                mediator.publish("preview_mouseover", current_item);
+            })
+            .on("mouseout", function() {
+                mediator.publish("preview_mouseout", current_item);
+            })
+            .append("div")
+            .attr("id", "transbox")
+            .style("width", headstart.preview_image_width_list + "px")
+            .style("height", headstart.preview_image_height_list + "px")
+            .html("Click here to open preview")
+            .on("click", function() {
+                mediator.publish("list_show_popup", d);
+            });
+    } catch (e) {
+        console.log(e);
+    }
+
+    /*$("#list_title a").hover(function () {
+        $(this).css("text-decoration", "none");
+    });*/
+
+    // EVENTLISTENERS
+    current_item.select("#paper_list_title")
+        .on("click", function(d) {
+            mediator.publish("list_title_click", d);
+        });
+};
+
+
 
 list.createOutlink = function(d) {
     
     var url = false;
-    if (headstart.url_prefix != null) {
+    if (headstart.url_prefix !== null) {
         url = headstart.url_prefix + d.url;
     } else if (typeof d.url != 'undefined') {
         url = d.url;
     }
     
     return url;
-}
+};
 
 list.title_click = function (d) {
         
       var url = this.createOutlink(d);
       if (url === false) {
           d3.event.stopPropagation();
-          return
+          return;
       }
 
       mediator.publish("record_action",d.id, "click_on_title", headstart.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
@@ -692,23 +699,25 @@ list.title_click = function (d) {
 
       window.open(url, "_blank");
       d3.event.stopPropagation();
-    }
+    };
 
 // Yes it is currently needed. :D
 list.notSureifNeeded = function() {
-  var list_holders_local =
-    this.papers_list.selectAll("#list_holder")
-    .filter(function (d) {
-      return (headstart.current_enlarged_paper.id == d.id)
-    });
+    var list_holders_local =
+        this.papers_list.selectAll("#list_holder")
+        .filter(function(d) {
+            return (headstart.current_enlarged_paper.id == d.id);
+        });
 
-  list_holders_local.select("#paper_list_title")
-    // EVENTLISTENERS
-    .on("click", function (d) {
-      mediator.publish("list_title_clickable", d)
-    });
+    list_holders_local.select("#paper_list_title")
+        // EVENTLISTENERS
+        .on("click", function(d) {
+            mediator.publish("list_title_clickable", d);
+        });
 
-  var image_node = list_holders_local.select("#preview_image").node();
-  if (image_node != null)
-    image_node.parentNode.removeChild(image_node);
-}
+    var image_node = list_holders_local.select("#preview_image").node();
+    if (image_node !== null) {
+        image_node.parentNode.removeChild(image_node);
+    }
+};
+

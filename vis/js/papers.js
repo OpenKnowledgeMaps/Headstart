@@ -1,11 +1,12 @@
 // StateMachine for Papers UI element in Headstart
 // Filename: papers_count.js
 import StateMachine from 'javascript-state-machine';
+import d3 from "d3";
 
 import { headstart } from '../app.js';
 import { mediator } from 'mediator';
 import { list } from 'list';
-import { toBack, toFront } from 'helpers';
+import { toFront } from 'helpers';
 
 const paperTemplate = require("templates/map/paper.handlebars");
 
@@ -77,18 +78,19 @@ export const papers = StateMachine.create({
           this.initPaperClickHandler();
         },
 
-        onbeforeclick: function( event, from, to ) {
-          if (this.is("loading"))
+        onbeforeclick: function() {
+          if (this.is("loading")) {
             return false;
+          }
         },
 
         onclick: function( event, from, to, d ) {
           if(!headstart.is_zoomed) {
-            return bubbles.makePaperClickable(d);
+            return headstart.bubbles.makePaperClickable(d);
           }
         },
 
-        onforced: function( event, from, to ) {
+        onforced: function() {
           papers.force_stopped = true;
         },
 
@@ -103,8 +105,9 @@ export const papers = StateMachine.create({
         },
 
         onmouseout: function( event, from, to, d, holder_div ) {
-          if (holder_div !== undefined)
+          if (holder_div !== undefined) {
             this.shrinkPaper(d, holder_div);
+          }
 
           headstart.bubbles[headstart.current_file_number].mouseout();
         }
@@ -129,73 +132,76 @@ papers.drawPapers = function( bubbles ) {
 
     d3.selectAll("#article_metadata").select(".paper_holder").select(".metadata");
     d3.selectAll("#article_metadata").select(".readers");
-}
+};
 
 // draw the path "around" the papers, perhaps "border" would be a better name
 papers.drawPaperPath = function(nodes) {
   var region = function(d) {
     return papers.createPaperPath(0, 0, d.width, d.height, 0.2, 0.2);
-  }
+  };
 
   nodes.append("path")
     .attr("id", "region")
     .attr("d", region);
 
     papers.resetPaths();
-}
+};
 
 papers.resetPaths = function() {
     d3.selectAll("path#region")
     .attr("class", function (d) {
         if(d.bookmarked) {
-          return "framed_bookmarked"
+          return "framed_bookmarked";
         } else if (d.recommended) {
-          return "framed_recommended"
+          return "framed_recommended";
         } else {
-          return "unframed"
+          return "unframed";
         }
-      })
-}
+      });
+};
 
 // draw the path of the dog-ear for the papers
 papers.drawDogEarPath = function(nodes) {
   var dogear = function(d) {
     return papers.createDogearPath(d.width*0.8, 0, d.width, d.height, 0.2, 0.2);
-  }
+  };
 
   nodes.append("path")
     .attr("class", "dogear")
     .attr("d", dogear);
-}
+};
 
 // if the user clicks on the paper inside of a bubble,
 // it should zoom in. (behave same way when, only the bubble is clicked)
 papers.initPaperClickHandler = function() {
-  d3.selectAll(".paper_holder").on("click", function(d){
-    mediator.publish("paper_click", d)
-});
-}
+    d3.selectAll(".paper_holder").on("click", function(d) {
+        mediator.publish("paper_click", d);
+    });
+};
+
 
 papers.paper_click = function(d) {
     if (!papers.is("loading")) {
         if (!headstart.is_zoomed) {
             var current_node = headstart.chart.selectAll("circle")
                 .filter(function(x) {
-                    if (d != null) {
-                        if (headstart.use_area_uri)
+                    if (d !== null) {
+                        if (headstart.use_area_uri) {
                             return (x.area_uri == d.area_uri);
-                        else
+                        }
+                        else {
                             return (x.title == d.area);
+                        }
                     } else {
-                        return null
+                        return null;
                     }
-                })
+                });
 
             d3.event.stopPropagation();
             headstart.bubbles[headstart.current_file_number].zoomin(current_node.data()[0]);
         }
     }
-}
+};
 
 
 // add #id element to foreignObject and adjust various other attributes
@@ -204,10 +210,10 @@ papers.prepareForeignObject = function(nodes) {
         .attr({
             "id": "article_metadata",
             "width": function(d) {
-                return d.width + "px"
+                return d.width + "px";
             },
             "height": function(d) {
-                return d.height + "px"
+                return d.height + "px";
             }
         }).append("xhtml:body")
         .html(function(d) {
@@ -222,28 +228,30 @@ papers.prepareForeignObject = function(nodes) {
     $(".metadata #title").hyphenate("en");
     $(".metadata #details").hyphenate("en");
     $(".metadata #in").hyphenate("en");
-}
+};
 
 
 // create the path or "border" for papers
 papers.createPaperPath = function(x, y, width, height, correction_x, correction_y) {
 
-    if (!correction_x)
+    if (!correction_x) {
         correction_x = headstart.dogear_width;
+    }
 
-    if (!correction_y)
+    if (!correction_y) {
         correction_y = headstart.dogear_height;
+    }
 
     var h = width * (1 - correction_x);
     var l = width * correction_x;
     var v = height * (1 - correction_y);
 
-    var path = "M " + x + " " + y + " h " + h + " l " + l +  " "
-               + (height * correction_y)
-               +  " v " + v +  " h " + (-1 * width) +  " v " + (-1 * height);
+    var path = "M " + x + " " + y + " h " + h + " l " + l +  " " + 
+               (height * correction_y) +
+               " v " + v +  " h " + (-1 * width) +  " v " + (-1 * height);
 
     return path;
-}
+};
 
 papers.applyForce = function( bubbles ) {
 
@@ -269,15 +277,15 @@ papers.applyForce = function( bubbles ) {
 
         current_bubbles.areas_array.forEach(function(a, i) {
 
-            if(a.x - a.r < 0
-                || a.x + a.r > headstart.current_vis_size
-                || a.y - a.r < 0
-                || a.y + a.r > headstart.current_vis_size) {
+            if (a.x - a.r < 0 ||
+                a.x + a.r > headstart.current_vis_size ||
+                a.y - a.r < 0 ||
+                a.y + a.r > headstart.current_vis_size) {
 
-                a.x += (headstart.current_vis_size/2 - a.x) * alpha;
-                a.y += (headstart.current_vis_size/2 - a.y) * alpha;
-
+                a.x += (headstart.current_vis_size / 2 - a.x) * alpha;
+                a.y += (headstart.current_vis_size / 2 - a.y) * alpha;
             }
+
 
             current_bubbles.areas_array.slice(i + 1).forEach(function(b) {
                 papers.checkCollisions(a, b, alpha);
@@ -329,8 +337,8 @@ papers.applyForce = function( bubbles ) {
             var paper_a = papers.constructCircle(a);
 
             var distance = Math.sqrt(
-                Math.pow(current_area.x - paper_a.x, 2)
-                + Math.pow(current_area.y - paper_a.y, 2)
+                Math.pow(current_area.x - paper_a.x, 2) + 
+                Math.pow(current_area.y - paper_a.y, 2)
                 );
 
             if (distance > Math.abs(current_area.r - paper_a.r)) {
@@ -344,7 +352,7 @@ papers.applyForce = function( bubbles ) {
 
                 var paper_b = papers.constructCircle(b);
 
-                papers.checkCollisions(paper_a, paper_b, alpha)
+                papers.checkCollisions(paper_a, paper_b, alpha);
 
                 a.x = paper_a.x - a.width/2;
                 a.y = paper_a.y - a.height/2;
@@ -357,8 +365,7 @@ papers.applyForce = function( bubbles ) {
 
         papers_count++;
     });
-
-}
+};
 
 // construct circle around paper
 papers.constructCircle = function( a ) {
@@ -369,29 +376,29 @@ papers.constructCircle = function( a ) {
     paper_a.r = (a.diameter/2)*1.2;
 
     return paper_a;
-}
+};
 
 // figure out translate coordinates
-papers.drawEntity = function( entity, alpha, count ) {
+papers.drawEntity = function(entity, alpha, count) {
 
-    if (   alpha > 0.09 && count % 2 == 0
-        || alpha <= 0.09 && alpha >= 0.08 && count %  2 == 0
-        || alpha <= 0.08 && alpha >= 0.07 && count %  4 == 0
-        || alpha <= 0.07 && alpha >= 0.06 && count %  4 == 0
-        || alpha <= 0.06 && alpha >= 0.05 && count %  6 == 0
-        || alpha <= 0.05 && alpha >= 0.04 && count %  6 == 0
-        || alpha <= 0.04 && alpha >= 0.03 && count %  8 == 0
-        || alpha <= 0.03 && alpha >= 0.02 && count %  8 == 0
-        || alpha <= 0.02 && alpha >= 0.01 && count %  10 == 0
-        || alpha <= 0.01 && count %  10 == 0 ) {
+    if (alpha > 0.09 && count % 2 === 0 ||
+        alpha <= 0.09 && alpha >= 0.08 && count % 2 === 0 ||
+        alpha <= 0.08 && alpha >= 0.07 && count % 4 === 0 ||
+        alpha <= 0.07 && alpha >= 0.06 && count % 4 === 0 ||
+        alpha <= 0.06 && alpha >= 0.05 && count % 6 === 0 ||
+        alpha <= 0.05 && alpha >= 0.04 && count % 6 === 0 ||
+        alpha <= 0.04 && alpha >= 0.03 && count % 8 === 0 ||
+        alpha <= 0.03 && alpha >= 0.02 && count % 8 === 0 ||
+        alpha <= 0.02 && alpha >= 0.01 && count % 10 === 0 ||
+        alpha <= 0.01 && count % 10 === 0) {
 
         headstart.chart.selectAll(entity)
-        .attr("transform", function (d) {
-            return "translate(" + d.x + "," + d.y + ")";
-        });
+            .attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
     }
+};
 
-}
 
 
 // test for collisions of papers, so they dont overlap
@@ -410,7 +417,7 @@ papers.checkCollisions = function(a, b, alpha) {
         b.x += dx;
         b.y += dy;
     }
-}
+};
 
 papers.shrinkPaper = function(d,holder) {
 
@@ -427,11 +434,11 @@ papers.shrinkPaper = function(d,holder) {
 
     d.resized = false;
     holder_div.on("mouseover", function(d) {
-        mediator.publish("paper_mouseover", d, this)
+        mediator.publish("paper_mouseover", d, this);
     });
-}
+};
 
-papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
+papers.resizePaper = function(d, holder_div, resize_factor, color) {
     let current_div = holder_div.node();
     let current_g_paper = d3.select(current_div.parentNode.parentNode.parentNode);
     let current_foreignObject = current_g_paper.select("foreignObject");
@@ -448,12 +455,12 @@ papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
         .attr("width", d.width * headstart.circle_zoom * resize_factor + "px")
         .attr("height", d.height * headstart.circle_zoom * resize_factor + "px")
         .style("width", d.width * headstart.circle_zoom * resize_factor + "px")
-        .style("height", d.height * headstart.circle_zoom * resize_factor + "px")
+        .style("height", d.height * headstart.circle_zoom * resize_factor + "px");
 
     current_path
         //.style("fill-opacity", opacity)
         .style("fill", color)
-        .attr("d", region)
+        .attr("d", region);
 
     current_dogear.attr("d", dogear);
 
@@ -464,14 +471,14 @@ papers.resizePaper = function(d, holder_div, resize_factor, color, opacity) {
         .attr("height", height)
         .attr("width", d.width * headstart.circle_zoom * resize_factor * (1-headstart.dogear_width) + "px")
         .style("height", height)
-        .style("width", d.width * headstart.circle_zoom * resize_factor * (1-headstart.dogear_width) + "px")
+        .style("width", d.width * headstart.circle_zoom * resize_factor * (1-headstart.dogear_width) + "px");
 
     holder_div.select("div.readers")
         .style("width", d.width * headstart.circle_zoom * resize_factor + "px");
-}
+};
 
 // called far too often
-papers.enlargePaper = function(d,holder_div,i) {
+papers.enlargePaper = function(d,holder_div) {
 
     papers.mouseoverpaper();
 
@@ -482,14 +489,14 @@ papers.enlargePaper = function(d,holder_div,i) {
     mediator.publish("record_action",d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
     // headstart.recordAction(d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
 
-   var resize_factor = 1.2;
+   let resize_factor = 1.2;
 
-    var holder_div = d3.select(holder_div);
+    holder_div = d3.select(holder_div);
 
     holder_div.selectAll("p")
-        .attr("class", "larger")
+        .attr("class", "larger");
 
-    var metadata = holder_div.select("div.metadata");
+    let metadata = holder_div.select("div.metadata");
 
     if(metadata.node().offsetHeight < metadata.node().scrollHeight) {
         resize_factor = papers.calcResizeFactor(metadata);
@@ -503,7 +510,7 @@ papers.enlargePaper = function(d,holder_div,i) {
         .on("click", function (d) {
 
             if(!headstart.is_zoomed) {
-                return bubbles.makePaperClickable(d);
+                return headstart.bubbles.makePaperClickable(d);
             } else {
 
                 if(!d.paper_selected) {
@@ -514,12 +521,12 @@ papers.enlargePaper = function(d,holder_div,i) {
 
                     var current_paper = d3.selectAll("path#region")
                             .filter(function(x) {
-                                return d.id === x.id
-                            })
+                                return d.id === x.id;
+                            });
 
-                    current_paper.attr("class", "framed")
+                    current_paper.attr("class", "framed");
 
-                    if(list.current = "hidden") {
+                    if(list.current == "hidden") {
                         list.show();
                     }
                 } else {
@@ -538,11 +545,12 @@ papers.enlargePaper = function(d,holder_div,i) {
     });
 
     headstart.current_circle = headstart.chart.selectAll("circle")
-        .filter(function (x, i) {
-            if (headstart.use_area_uri)
+        .filter(function (x) {
+            if (headstart.use_area_uri) {
                 return (x.area_uri == d.area_uri);
-            else
+            } else {
                 return (x.title == d.area);
+            }
         });
 
     headstart.current_circle
@@ -552,27 +560,28 @@ papers.enlargePaper = function(d,holder_div,i) {
         });
 
     d.resized = true;
-}
+};
 
 papers.currentbubble_click = function(d) {
     list.reset();
 
     d3.selectAll("#list_holder")
-        .filter(function(x, i) {
+        .filter(function(x) {
             return (headstart.use_area_uri) ? (x.area_uri == d.area_uri) : (x.area == d.title);
         })
         .style("display", function(d) {
-            return d.filtered_out ? "none" : "inline" });
+            return d.filtered_out ? "none" : "inline"; });
 
-    if (headstart.current_enlarged_paper != null)
+    if (headstart.current_enlarged_paper !== null) {
         headstart.current_enlarged_paper.paper_selected = false;
+    }
 
     headstart.current_enlarged_paper = null;
     mediator.publish("record_action",d.id, "click_paper_list_enlarge", headstart.user_id, d.bookmarked + " " + d.recommended, null);
     // headstart.recordAction(d.id, "click_paper_list_enlarge", headstart.user_id, d.bookmarked + " " + d.recommended, null);
 
     d3.event.stopPropagation();
-}
+};
 
 papers.calcResizeFactor = function(metadata) {
     var current_paper = metadata.node();
@@ -589,16 +598,18 @@ papers.calcResizeFactor = function(metadata) {
     }
 
     return new_width/current_paper.offsetWidth;
-}
+};
 
 // creates the dog-ears path for the papers
 papers.createDogearPath = function(x, y, width, height, correction_x, correction_y) {
 
-    if (!correction_x)
+    if (!correction_x) {
         correction_x = headstart.dogear_width;
+    }
 
-    if (!correction_y)
+    if (!correction_y) {
         correction_y = headstart.dogear_height;
+    }
 
     var v = height * correction_x;
     var h = width * correction_y;
@@ -606,4 +617,4 @@ papers.createDogearPath = function(x, y, width, height, correction_x, correction
     var path = "M " + x + " " + y + " v " + v + " h " + h;
 
     return path;
-}
+};
