@@ -5,14 +5,7 @@ import d3 from 'd3';
 // -------- General helpers ------------
 // -------------------------------------
 
-/**
- * Helper function to initialise the variables in headstart.js
- */
 export const BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js");
-
-export function initVar(variable, default_value) {
-    return typeof variable !== 'undefined' ? variable : default_value;
-}
 
 /**
  * Move nodes backwards in DOM

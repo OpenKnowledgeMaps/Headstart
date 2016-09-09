@@ -70,6 +70,7 @@ const common = {
             'lib': path.resolve(__dirname, 'vis/lib'),
 
             // modules
+            'config': path.resolve(__dirname, 'vis/js/default-config.js'),
             'helpers': path.resolve(__dirname, 'vis/js/helpers.js'),
             'headstart': path.resolve(__dirname, 'vis/js/headstart.js'),
             'bubbles': path.resolve(__dirname, 'vis/js/bubbles.js'),
