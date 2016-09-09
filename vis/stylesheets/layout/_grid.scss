@@ -1,6 +1,33 @@
 .remove-padding {
-  padding-left: 0;
-  padding-right: 0;
-  margin-left: 0;
-  margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.container-headstart {
+    margin: 0px auto;
+    min-width: 900px;
+}
+
+.vis-col {
+    display: inline-block;
+    width: 60%;
+}
+
+.list-col {
+    display: inline-block;
+    width: 39%;
+    vertical-align: top;
+    float: right;
+}
+
+@media screen and (max-width: 1000px) {
+    .vis-col {
+        width: 70%;
+    }
+
+    .list-col {
+        width: 29%;
+    }
 }

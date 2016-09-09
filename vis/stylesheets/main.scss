@@ -1,11 +1,11 @@
 // Main style file
 
 // Don't use reset yet, because Vendors are currently loaded earlier
-// @import 'base/reset';
+@import 'base/reset';
 
 // Load base settings
 /* Base */
-// @import 'base/typography';
+@import 'base/typography';
 @import "base/colors";
 
 /* Vendor Dependencies */
