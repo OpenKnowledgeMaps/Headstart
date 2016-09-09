@@ -91,7 +91,7 @@ export const papers = StateMachine.create({
         },
 
         onforced: function() {
-          papers.force_stopped = true;
+          this.force_stopped = true;
         },
 
         onbeforemouseout: function( event, from, to, d, holder_div ) {
@@ -136,15 +136,15 @@ papers.drawPapers = function( bubbles ) {
 
 // draw the path "around" the papers, perhaps "border" would be a better name
 papers.drawPaperPath = function(nodes) {
-  var region = function(d) {
-    return papers.createPaperPath(0, 0, d.width, d.height, 0.2, 0.2);
+  var region = (d) => {
+    return this.createPaperPath(0, 0, d.width, d.height, 0.2, 0.2);
   };
 
   nodes.append("path")
     .attr("id", "region")
     .attr("d", region);
 
-    papers.resetPaths();
+    this.resetPaths();
 };
 
 papers.resetPaths = function() {
@@ -162,8 +162,8 @@ papers.resetPaths = function() {
 
 // draw the path of the dog-ear for the papers
 papers.drawDogEarPath = function(nodes) {
-  var dogear = function(d) {
-    return papers.createDogearPath(d.width*0.8, 0, d.width, d.height, 0.2, 0.2);
+  var dogear = (d) => {
+    return this.createDogearPath(d.width*0.8, 0, d.width, d.height, 0.2, 0.2);
   };
 
   nodes.append("path")
@@ -181,7 +181,7 @@ papers.initPaperClickHandler = function() {
 
 
 papers.paper_click = function(d) {
-    if (!papers.is("loading")) {
+    if (!this.is("loading")) {
         if (!headstart.is_zoomed) {
             var current_node = headstart.chart.selectAll("circle")
                 .filter(function(x) {
@@ -254,6 +254,7 @@ papers.createPaperPath = function(x, y, width, height, correction_x, correction_
 };
 
 papers.applyForce = function( bubbles ) {
+    let self = this;
 
     headstart.force_areas.start();
 
@@ -288,11 +289,11 @@ papers.applyForce = function( bubbles ) {
 
 
             current_bubbles.areas_array.slice(i + 1).forEach(function(b) {
-                papers.checkCollisions(a, b, alpha);
+                this.checkCollisions(a, b, alpha);
             });
         });
 
-        papers.drawEntity("g.bubble_frame", alpha, areas_count);
+        this.drawEntity("g.bubble_frame", alpha, areas_count);
 
         areas_count++;
 
@@ -334,7 +335,7 @@ papers.applyForce = function( bubbles ) {
                 }
             }
 
-            var paper_a = papers.constructCircle(a);
+            var paper_a = self.constructCircle(a);
 
             var distance = Math.sqrt(
                 Math.pow(current_area.x - paper_a.x, 2) + 
@@ -348,11 +349,11 @@ papers.applyForce = function( bubbles ) {
                 a.y = paper_a.y - a.height/2;
             }
 
-            bubbles.data.slice(i + 1).forEach(function(b) {
+            bubbles.data.slice(i + 1).forEach((b) => {
 
-                var paper_b = papers.constructCircle(b);
+                var paper_b = self.constructCircle(b);
 
-                papers.checkCollisions(paper_a, paper_b, alpha);
+                self.checkCollisions(paper_a, paper_b, alpha);
 
                 a.x = paper_a.x - a.width/2;
                 a.y = paper_a.y - a.height/2;
@@ -361,7 +362,7 @@ papers.applyForce = function( bubbles ) {
             });
         });
 
-        papers.drawEntity("g.paper", alpha, papers_count);
+        self.drawEntity("g.paper", alpha, papers_count);
 
         papers_count++;
     });
@@ -427,7 +428,7 @@ papers.shrinkPaper = function(d,holder) {
 
     var holder_div = holder ? holder : d3.select(this);
 
-    papers.resizePaper(d, holder_div, 1, "rgb(255, 255, 255)", "0.25");
+    this.resizePaper(d, holder_div, 1, "rgb(255, 255, 255)", "0.25");
 
     holder_div.selectAll("p")
         .attr("class", "large highlightable");
@@ -448,8 +449,8 @@ papers.resizePaper = function(d, holder_div, resize_factor, color) {
     //current_g.parentNode.appendChild(current_g);
     toFront(current_g_paper.node());
 
-    let region = papers.createPaperPath(0, 0, d.width*headstart.circle_zoom*resize_factor, d.height*headstart.circle_zoom*resize_factor);
-    let dogear = papers.createDogearPath(d.width*(1-headstart.dogear_width)*headstart.circle_zoom*resize_factor, 0, d.width*headstart.circle_zoom*resize_factor, d.height*headstart.circle_zoom*resize_factor);
+    let region = this.createPaperPath(0, 0, d.width*headstart.circle_zoom*resize_factor, d.height*headstart.circle_zoom*resize_factor);
+    let dogear = this.createDogearPath(d.width*(1-headstart.dogear_width)*headstart.circle_zoom*resize_factor, 0, d.width*headstart.circle_zoom*resize_factor, d.height*headstart.circle_zoom*resize_factor);
 
     current_foreignObject
         .attr("width", d.width * headstart.circle_zoom * resize_factor + "px")
@@ -480,7 +481,7 @@ papers.resizePaper = function(d, holder_div, resize_factor, color) {
 // called far too often
 papers.enlargePaper = function(d,holder_div) {
 
-    papers.mouseoverpaper();
+    this.mouseoverpaper();
 
     if(d.resized || !headstart.is_zoomed) {
         return;
@@ -499,15 +500,15 @@ papers.enlargePaper = function(d,holder_div) {
     let metadata = holder_div.select("div.metadata");
 
     if(metadata.node().offsetHeight < metadata.node().scrollHeight) {
-        resize_factor = papers.calcResizeFactor(metadata);
+        resize_factor = this.calcResizeFactor(metadata);
     }
 
-    papers.resizePaper(d, holder_div, resize_factor, "rgb(255, 255, 255)", "1");
+    this.resizePaper(d, holder_div, resize_factor, "rgb(255, 255, 255)", "1");
 
     holder_div
     //.style("overflow-y", "scroll")
         .style("cursor", "pointer")
-        .on("click", function (d) {
+        .on("click", (d) => {
 
             if(!headstart.is_zoomed) {
                 return headstart.bubbles.makePaperClickable(d);
@@ -517,7 +518,7 @@ papers.enlargePaper = function(d,holder_div) {
 
                     list.enlargeListItem(d);
 
-                    papers.resetPaths();
+                    this.resetPaths();
 
                     var current_paper = d3.selectAll("path#region")
                             .filter(function(x) {
@@ -540,8 +541,8 @@ papers.enlargePaper = function(d,holder_div) {
                 d3.event.stopPropagation();
             }
         })
-    .on("mouseout", function (d) {
-        papers.mouseoutpaper(d, holder_div);
+    .on("mouseout", (d) => {
+        this.mouseoutpaper(d, holder_div);
     });
 
     headstart.current_circle = headstart.chart.selectAll("circle")
@@ -554,9 +555,9 @@ papers.enlargePaper = function(d,holder_div) {
         });
 
     headstart.current_circle
-        .on("click", function (d) {
+        .on("click", (d) => {
             mediator.publish("currentbubble_click", d);
-            papers.resetPaths();
+            this.resetPaths();
         });
 
     d.resized = true;
