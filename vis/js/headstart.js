@@ -2,8 +2,8 @@
 // filename: headstart.js
 import StateMachine from 'javascript-state-machine';
 import d3 from 'd3';
-
 import config from 'config';
+
 import { mediator } from 'mediator';
 import { BubblesFSM } from 'bubbles';
 import { papers } from 'papers';
@@ -20,6 +20,7 @@ const infoTemplate = require("templates/misc/info_modal.handlebars");
 const iFrameTemplate = require("templates/misc/iframe_modal.handlebars");
 const imageTemplate = require("templates/misc/images_modal.handlebars");
 
+export var headstart;
 export var HeadstartFSM = function(tag, files, options) {
   this.VERSION = 2.5;
 
@@ -749,9 +750,7 @@ HeadstartFSM.prototype = {
 
       switch (this.input_format) {
           case "csv":
-              let filename = bubbles.file.split("/")[2];
-              let data = require("../data/" + filename);
-              d3.csv(data, setupVisualization);
+              d3.csv(bubbles.file, setupVisualization);
               break;
 
           case "json":
@@ -830,9 +829,7 @@ HeadstartFSM.prototype = {
 
           switch (this.input_format) {
               case "csv":
-                  let filename = elem.file.split("/")[2];
-                  let data = require("../data/" + filename);
-                  d3.csv(data, setupTimelineVisualization);
+                  d3.csv(elem.file, setupTimelineVisualization);
                   break;
 
               case "json":
@@ -896,9 +893,7 @@ HeadstartFSM.prototype = {
 
       switch (this.input_format) {
           case "csv":
-              let filename = current_bubble_fsm.file.split("/")[2];
-              let data = require("../data/" + filename);
-              d3.csv(data, setupVisualization);
+              d3.csv(current_bubble_fsm.file, setupVisualization);
               break;
 
           case "json":

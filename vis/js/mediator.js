@@ -1,5 +1,5 @@
 import Mediator from 'mediator-js';
-import { headstart } from '../app.js';
+import { headstart } from 'headstart';
 import { papers } from 'papers';
 import { list } from 'list';
 import { sortBy } from 'helpers'; 
@@ -13,8 +13,6 @@ var MyMediator = function() {
     this.mediator_states = {
         popup_visible: false
     };
-
-
 };
 
 MyMediator.prototype = {

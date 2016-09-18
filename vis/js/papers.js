@@ -3,7 +3,7 @@
 import StateMachine from 'javascript-state-machine';
 import d3 from "d3";
 
-import { headstart } from '../app.js';
+import { headstart } from 'headstart';
 import { mediator } from 'mediator';
 import { list } from 'list';
 import { toFront } from 'helpers';

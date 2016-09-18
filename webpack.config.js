@@ -33,16 +33,19 @@ const common = {
             loader: "handlebars-loader"
         }, {
             test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            loader: 'url-loader?limit=10000&minetype=application/font-woff&name=assets/[hash].[ext]'
+            loader: 'url-loader?limit=10000&minetype=application/font-woff&name=assets/[name].[ext]'
         }, {
-            test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            loader: 'file?name=assets/[hash].[ext]'
+            test: /\.(ttf|eot|svg|html)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+            loader: 'file?name=assets/[name].[ext]'
         }, {
             test: /\.csv$/,
-            loader: 'file?name=data/[hash].[ext]'
+            loader: 'file?name=data/[name].[ext]'
         }, {
-            test: /\.(php|png|html)$/,
-            loader: 'file'
+            test: /\.png$/,
+            loader: 'file?name=img/[name].[ext]'
+        }, {
+            test: /\.(php)$/,
+            loader: 'file?name=services/[name].[ext]'
         }
         ]
     },
@@ -52,10 +55,11 @@ const common = {
     },
 
     plugins: [
-        new HtmlWebpackPlugin({
-            title: 'Headstart',
-            template: '!!handlebars!./vis/templates/index-files/index.handlebars'
-        })
+        // new HtmlWebpackPlugin({
+        //     title: 'Headstart',
+        //     filename: '../examples/local_files/index.html',
+        //     template: '!!handlebars!./vis/templates/index-files/index.handlebars'
+        // })
     ],
 
     resolve: {
@@ -68,6 +72,8 @@ const common = {
             'images':path.resolve(__dirname, 'vis/images'),
             'services': path.resolve(__dirname, 'server/services'),
             'lib': path.resolve(__dirname, 'vis/lib'),
+            'styles': path.resolve(__dirname, 'vis/stylesheets'),
+            'examples': path.resolve(__dirname, 'examples'),
 
             // modules
             'config': path.resolve(__dirname, 'vis/js/default-config.js'),

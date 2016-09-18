@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Search PLOS and turn it into a visualization</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="vis/lib/bootstrap.min.css">
+        <script type="text/javascript" src="vis/lib/jquery-2.1.4.min.js"></script>
+        <script src="vis/lib/jquery-ui.js"></script>
+        <script type="text/javascript" src="vis/lib/d3.v3.js"></script>
+        <script type="text/javascript" src="search_options.js"></script>
+        <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+        <link rel="stylesheet" href="vis/lib/jquery-ui.css">
+        <script type="text/javascript" src="vis/lib/bootstrap.min.js"></script>
+        <script type="text/javascript" src="vis/lib/bootstrap-multiselect.js"></script>
+        <script type="text/javascript" src="vis/lib/handlebars.min-v4.0.5.js"></script>
+        <script type="text/javascript" src="vis/templates/templates.js"></script>
+
+        <link rel="stylesheet" href="vis/lib/bootstrap-multiselect.css">
+        <link rel="stylesheet" href="options.css">
+    </head>
+    <body style="padding-left:10px; padding-right:10px;">
+        <div>
+            <h2>Search PLOS and turn it into a visualization</h2>
+            <form id="searchform" style="margin-top:20px">
+                <label for="q">Search term:</label> 
+                <input type="text" name="q" size="61" required>
+                <button type="submit" class="btn">Submit</button>
+                <div id="filter-container"></div>
+            </form> 
+        </div>
+
+
+
+        <div id="progress"></div>
+
+        <div style="margin-top:20px">Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a> and <a href="http://github.com/ropensci/rplos" target="_blank">rplos</a>. All content retrieved from <a href="https://www.plos.org/publications/journals/" target="_blank">Public Library of Science Journals</a> under <a href="http://journals.plos.org/plosone/s/content-license" target="_blank">CC-BY</a>.
+        </div>
+
+        <script type="text/javascript">
+            $(window).bind("pageshow", function () {
+                $(".btn").attr("disabled", false);
+            });
+
+            $("#searchform").validate({
+                submitHandler: function (form) {
+                    $(".btn").attr("disabled", true);
+                    $("#progress").html("");
+
+                    d3.select("#progress").append("p")
+                            .text("Please be patient, this can take a while...")
+                            .append("div")
+                            .attr("id", "progressbar")
+
+                    $("#progressbar").progressbar();
+                    var tick_interval = 2;
+                    var tick_increment = 1;
+                    var tick_function = function () {
+                        var value = $("#progressbar").progressbar("option", "value");
+                        value += tick_increment;
+                        $("#progressbar").progressbar("option", "value", value);
+                        if (value < 100) {
+                            window.setTimeout(tick_function, tick_interval * 1000);
+                        } else {
+                            //alert("Done");
+                        }
+                    };
+                    window.setTimeout(tick_function, tick_interval * 1000);
+                    
+                    $.ajax({// make an AJAX request
+                        type: "POST",
+                        url: "server/services/searchPLOS.php",
+                        data: $("#searchform").serialize(),
+                        success: function (data) {
+                            if (data.status === "success") {
+                                window.location = "index.php?query=" + data.query + "&id=" + data.id;
+                            } else {
+                                 $("#progress").html("Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again with a different query.");
+                                 $(".btn").attr("disabled", false);
+                            }   
+                        }
+                    });
+                }
+            });
+
+            $(document).ready(function () {
+                var search_options = SearchOptions;
+
+                search_options.init("#filter-container", options);
+
+                options.dropdowns.forEach(function (entry) {
+                    search_options.select_multi('.dropdown_multi_' + entry.id, entry.name)
+                })
+
+                search_options.addDatePickerFromTo("#from", "#to", "any-time");
+
+                $("#searchform").submit(function (e) { // intercepts the submit event
+                    e.preventDefault();
+                });
+            })
+        </script>
+    </body>
+</html>
