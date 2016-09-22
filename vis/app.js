@@ -13,10 +13,8 @@ import 'hypher/dist/jquery.hypher.js';
 import * as hs from 'headstart';
 
 /* app configs from the example applications */
-import { app_config } from 'examples/local_files/app-config.js'
-
-// import { app_config } from 'examples/plos_search/app-config.js'
-// import { app_config } from 'examples/pubmed_search/app-config.js'
+// import { app_config } from 'examples/local_files/app-config.js'
+import { app_config } from 'examples/repos/headstart/app-config.js'
 
 
 /* Initiliase HeadstartFSM */

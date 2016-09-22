@@ -289,11 +289,11 @@ papers.applyForce = function( bubbles ) {
 
 
             current_bubbles.areas_array.slice(i + 1).forEach(function(b) {
-                this.checkCollisions(a, b, alpha);
+                self.checkCollisions(a, b, alpha);
             });
         });
 
-        this.drawEntity("g.bubble_frame", alpha, areas_count);
+        self.drawEntity("g.bubble_frame", alpha, areas_count);
 
         areas_count++;
 

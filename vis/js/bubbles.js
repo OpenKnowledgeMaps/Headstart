@@ -115,12 +115,13 @@ BubblesFSM.prototype = {
         var authors_string = "";
         var authors_short_string = "";
         for(var i=0; i<authors.length-1; i++) {
-          var names = authors[i].split(",");
+          var names = authors[i].trim().split(",");
 
           var last_name = names[0].trim();
-          var first_name = names[1].trim();
+          
           
           if(names.length > 1) {
+            var first_name = names[1].trim();
             authors_string += first_name + " " + last_name;
             authors_short_string += first_name.substr(0,1) + ". " + last_name;
          } else {
@@ -215,7 +216,6 @@ BubblesFSM.prototype = {
   // blasen -> wenn über blase gehovered und paper sichtbar
   // dann soll auch auf paper geclicked werden können.
   makePaperClickable: function(d) {
-    console.log("hello ")
       headstart.current_circle =  headstart.chart.selectAll("circle")
       .filter(function (x) {
           if (d !== null) {

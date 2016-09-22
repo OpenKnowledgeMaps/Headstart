@@ -120,7 +120,7 @@ HeadstartFSM.prototype = {
       post_data = {};
     }
 
-    let php_script = require("services/writeActionToLog.php");
+    let php_script = this.service_path + "/writeActionToLog.php";
 
     $.ajax({
         url: php_script +
@@ -684,7 +684,7 @@ HeadstartFSM.prototype = {
   },
 
   createRestUrl: function () {
-      let url = require("services/getBookmarks.php") + "?user=" + this.user_id;
+      let url = this.service_path + "getBookmarks.php?user=" + this.user_id;
 
       //sometimes the conference id array is not recognized
       let conference_id = eval(this.conference_id);
@@ -754,8 +754,7 @@ HeadstartFSM.prototype = {
               break;
 
           case "json":
-              let php_script = require('services/getLatestRevision.php');
-              d3.json(php_script + "?vis_id=" + bubbles.file, setupVisualization);
+              d3.json(this.service_path + "/getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
               break;
 
           case "json-direct":
@@ -833,8 +832,7 @@ HeadstartFSM.prototype = {
                   break;
 
               case "json":
-                  let php_script = require('services/getLatestRevision.php');
-                  d3.json(php_script + "?vis_id=" + elem.file, setupTimelineVisualization);
+                  d3.json(this.service_path + "/getLatestRevision.php?vis_id=" + elem.file, setupTimelineVisualization);
                   break;
 
               default:
@@ -897,7 +895,7 @@ HeadstartFSM.prototype = {
               break;
 
           case "json":
-              let php_script = require('services/getLatestRevision.php');
+              let php_script = this.service_path + "getLatestRevision.php";
               d3.json(php_script + "?vis_id=" + current_bubble_fsm.file, setupVisualization);
               break;
 

@@ -377,41 +377,34 @@ list.createAbstract = function(d, cut_off) {
     return d.paper_abstract;
 };
 
-list.addBookmark = function(d)  {
-  $.getJSON(require("services/addBookmark.php") + "?" + 
-    "user_id=" + headstart.user_id + 
-    "&content_id=" + d.id,
-      function(data) {
+list.addBookmark = function(d) {
+    $.getJSON(this.service_path + "addBookmark.php?user_id=" + headstart.user_id + "&content_id=" + d.id, function(data) {
         console.log("Successfully added bookmark");
 
-        mediator.publish("record_action",d.id, "add_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
+        mediator.publish("record_action", d.id, "add_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
         // headstart.recordAction(d.id, "add_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
 
         d.bookmarked = true;
 
         d3.selectAll("#bookmark").filter(function(x) {
-          return x.id == d.id;
-        })
+                return x.id == d.id;
+            })
             .attr("class", "bookmarked")
             .html("Already in your schedule X")
-             .on("click", function (d) {
+            .on("click", function(d) {
                 mediator.publish("bookmark_removed", d);
-               d3.event.stopPropagation();
-             });
+                d3.event.stopPropagation();
+            });
 
-        d3.selectAll("#region").filter(function (x) {
-          return x.id == d.id;
-        })
-          .attr("class", "framed_bookmarked");
-       }
-  );
+        d3.selectAll("#region").filter(function(x) {
+                return x.id == d.id;
+            })
+            .attr("class", "framed_bookmarked");
+    });
 };
 
 list.removeBookmark = function(d)  {
-  $.getJSON(require("services/addBookmark.php") + "?" +
-    "user_id=" + headstart.user_id +
-    "&content_id=" + d.id,
-      function(data) {
+  $.getJSON(this.service_path + "addBookmark.php?user_id=" + headstart.user_id + "&content_id=" + d.id, function(data) {
         console.log("Successfully removed bookmark");
 
         mediator.publish("record_action",d.id, "remove_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
@@ -439,14 +432,14 @@ list.removeBookmark = function(d)  {
 };
 
 list.makeTitleClickable = function(d) {
-    headstart.current_circle = headstart.chart.selectAll("circle").
-    filter(function(x) {
-        if (headstart.use_area_uri) {
-            return x.area_uri == d.area_uri;
-        } else {
-            return x.title == d.area;
-        }
-    });
+    headstart.current_circle = headstart.chart.selectAll("circle")
+        .filter(function(x) {
+            if (headstart.use_area_uri) {
+                return x.area_uri == d.area_uri;
+            } else {
+                return x.title == d.area;
+            }
+        });
 
     headstart.bubbles[headstart.current_file_number].zoomin(headstart.current_circle.data()[0]);
     headstart.bubbles[headstart.current_file_number].current = "hoverbig";
@@ -465,6 +458,7 @@ list.makeTitleClickable = function(d) {
 
     d3.event.stopPropagation();
 };
+
 
 
 list.enlargeListItem = function(d) {

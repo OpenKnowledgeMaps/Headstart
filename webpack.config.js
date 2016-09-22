@@ -9,11 +9,12 @@ const TARGET = process.env.npm_lifecycle_event;
 
 const common = {
     devtool: 'eval-source-map',
-    entry: ['./vis/app.js'],
+    context: path.resolve(__dirname, "vis"),
+    entry: './app.js',
 
     output: {
         path: path.resolve(__dirname, "dist"),
-        // publicPath: 'dist/',
+        publicPath: '/bubblbu_headstart/dist/',
         filename: 'bundle.js'
     },
 
@@ -41,9 +42,6 @@ const common = {
             test: /\.png$/,
             loader: 'file?name=img/[name].[ext]',
             exclude: /examples/
-        }, {
-            test: /\.(php)$/,
-            loader: 'file?emitFile=false'
         }
         ]
     },
