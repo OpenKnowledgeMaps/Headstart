@@ -4,6 +4,7 @@ const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const TARGET = process.env.npm_lifecycle_event;
 
@@ -36,14 +37,13 @@ const common = {
             test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             loader: 'url-loader?limit=10000&minetype=application/font-woff&name=assets/[name].[ext]'
         }, {
-            test: /\.(ttf|eot|svg|html)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+            test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             loader: 'file?name=assets/[name].[ext]'
         }, {
             test: /\.png$/,
             loader: 'file?name=img/[name].[ext]',
             exclude: /examples/
-        }
-        ]
+        }]
     },
 
     sassLoader: {
@@ -56,6 +56,11 @@ const common = {
         //     filename: '../examples/local_files/index.html',
         //     template: '!!handlebars!./vis/templates/index-files/index.handlebars'
         // })
+        new CopyWebpackPlugin([
+            // {output}/file.txt 
+            { from: 'lib/pdfjs-hypothesis/web', to: 'pdfjs-hypothesis/web' },
+            { from: 'lib/pdfjs-hypothesis/build', to: 'pdfjs-hypothesis/build' },
+        ])
     ],
 
     resolve: {
@@ -65,7 +70,7 @@ const common = {
 
             // paths
             'templates': path.resolve(__dirname, 'vis/templates'),
-            'images':path.resolve(__dirname, 'vis/images'),
+            'images': path.resolve(__dirname, 'vis/images'),
             'services': path.resolve(__dirname, 'server/services'),
             'lib': path.resolve(__dirname, 'vis/lib'),
             'styles': path.resolve(__dirname, 'vis/stylesheets'),

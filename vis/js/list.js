@@ -544,15 +544,13 @@ list.loadAndAppendImage = function(image_src, page_number) {
     }
 };
 
-
-
 list.writePopup = function(pdf_url) {
     $("#pdf_iframe").attr('src', 'about:blank');
     setTimeout(function() {
         $("#pdf_iframe")
             .attr("src", function() {
-                let pdf_viewer = require('lib/pdfjs-hypothesis/web/viewer.html');
-                return pdf_viewer + "?file=" + pdf_url; //#view=FitH
+                let viewer = require("file?name=pdfjs-hypothesis/[name].[ext]&emitFile=false!../lib/pdfjs-hypothesis/web/viewer.html");
+                return viewer + "?file=" + pdf_url; //#view=FitH
             })
             .attr("scrolling", "no");
     }, 100);
@@ -584,14 +582,13 @@ list.populateOverlay = function(d) {
         $("#spinner-images").hide();
         $("#images_holder").show();        
     } else if (headstart.preview_type == "pdf") {
-        var filename = this_d.id + ".PDF";
-        var local_filename = filename.replace("/", "__");
+        let filename = this_d.id + ".PDF";
+        let local_filename = "paper_preview/" + filename.replace("/", "__");
          
-        try {
-            var full_pdf_url = "paper_preview/" + local_filename;
+        if (this.checkIfFileAvailable(local_filename)) {
             this.writePopup(full_pdf_url);
             $("#iframe_modal").modal();
-        } catch (e) {
+        } else {
             $("#spinner-iframe").show();
             $("#pdf_iframe").hide();
             $("#iframe_modal").modal();
@@ -632,8 +629,10 @@ list.setImageForListHolder = function(d) {
         });
 
     let image_src = "paper_preview/" + d.id + "/page_1.png";
-    if (headstart.preview_type == "image" && this.checkIfFileAvailable(image_src)) {
-        current_item.append("div")
+    let pdf_preview = require("images/preview_pdf.png")
+    if (headstart.preview_type == "image") {
+        if (this.checkIfFileAvailable(image_src)) {
+            current_item.append("div")
             .attr("id", "preview_image")
             .style("width", headstart.preview_image_width_list + "px")
             .style("height", headstart.preview_image_height_list + "px")
@@ -652,18 +651,36 @@ list.setImageForListHolder = function(d) {
             .html("Click here to open preview")
             .on("click", function() {
                 mediator.publish("list_show_popup", d);
+            });        
+        }
+    } else {
+        current_item.append("div")
+            .attr("id", "preview_image")
+            .style("width", headstart.preview_image_width_list + "px")
+            .style("height", headstart.preview_image_height_list + "px")
+            .style("background", "url(" + pdf_preview + ")")
+            .on("mouseover", function() {
+                mediator.publish("preview_mouseover", current_item);
+            })
+            .on("mouseout", function() {
+                mediator.publish("preview_mouseout", current_item);
+            })
+            .append("div")
+            .attr("id", "transbox")
+            .style("width", headstart.preview_image_width_list + "px")
+            .style("height", headstart.preview_image_height_list + "px")
+            .html("Click here to open preview")
+            .on("click", function() {
+                mediator.publish("list_show_popup", d);
             });
+    }
 
-        // EVENTLISTENERS
+            // EVENTLISTENERS
         current_item.select("#paper_list_title")
             .on("click", function(d) {
                 mediator.publish("list_title_click", d);
             });
-    }
 };
-
-
-
 
 list.createOutlink = function(d) {
     
