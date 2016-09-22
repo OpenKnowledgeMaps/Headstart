@@ -733,7 +733,7 @@ BubblesFSM.prototype = {
     .style("margin-top", "0px");
 
 
-    d3.selectAll("p")
+    t.selectAll("p")
       .attr("class", "highlightable");
 
     d3.selectAll("span.readers_entity")
