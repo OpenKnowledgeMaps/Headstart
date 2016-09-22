@@ -7,6 +7,7 @@ library(SnowballC)
 library(jsonlite)
 library(parfossil)
 library(doParallel)
+library(tau)
 registerDoParallel(3)
 
 debug = FALSE
@@ -63,19 +64,41 @@ create_tdm_matrix <- function(metadata, text, sparsity=1, lang="english") {
   return(list(tdm_matrix = tdm_matrix, metadata_full_subjects = metadata_full_subjects))
 }
 
+BigramTokenizer <-
+  function(x)
+    unlist(lapply(ngrams(words(x), 2), paste, collapse = " "), use.names = FALSE)
+
+TrigramTokenizer <-
+  function(x)
+    unlist(lapply(ngrams(words(x), 3), paste, collapse = " "), use.names = FALSE)
+
 replace_keywords_if_empty <- function(corpus, metadata) {
   
   dtm = DocumentTermMatrix(corpus)
+  dtm2 = DocumentTermMatrix(corpus, control = list(tokenize = BigramTokenizer))
+  dtm3 = DocumentTermMatrix(corpus, control = list(tokenize = TrigramTokenizer))
   
   i = 1
   
   for(i in 1:nrow(metadata)) {
     if (metadata$subject[i] == "") {
+      print(metadata$pmid[i])
       freq_terms = as.matrix(dtm[i,])
       freq_terms_sorted = sort(colSums(freq_terms), decreasing=TRUE)
-      top_terms = head(freq_terms_sorted, 10)
+      top_terms = head(freq_terms_sorted, 3)
       
-      metadata$subject[i] = paste0(names(top_terms), collapse=";")
+      freq_terms2 = as.matrix(dtm2[i,])
+      freq_terms_sorted2 = sort(colSums(freq_terms2), decreasing=TRUE)
+      top_terms2 = head(freq_terms_sorted2, 3)
+      
+      freq_terms3 = as.matrix(dtm3[i,])
+      freq_terms_sorted3 = sort(colSums(freq_terms3), decreasing=TRUE)
+      top_terms3 = head(freq_terms_sorted3, 2)
+      
+      all_top_terms = unique(unlist(c(names(top_terms), names(top_terms2), names(top_terms3))))
+      
+      metadata$subject[i] = paste0(all_top_terms, collapse=";")
+      
     }
   }
   
@@ -120,7 +143,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 }
 
 create_ordination <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
-
+  
   # Perform non-metric multidimensional scaling
   nm = par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
   nm.nmin = nmds.min(nm)
@@ -136,7 +159,7 @@ create_ordination <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
 }
 
 create_output <- function(clusters, layout, metadata) {
-
+  
   x = layout$X1
   y = layout$X2
   labels = clusters$labels
@@ -170,5 +193,5 @@ create_output <- function(clusters, layout, metadata) {
   }
   
   return(output_json)
-
+  
 }
