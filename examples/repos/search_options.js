@@ -1,4 +1,4 @@
-var options = {
+var options_plos = {
     dropdowns: [
         {id: "time_range", multiple: false, name: "Time Range", type: "dropdown"
             , fields: [
