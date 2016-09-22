@@ -520,14 +520,22 @@ list.reset = function() {
     }
 };
 
+list.checkIfFileAvailable = function(fileurl) {
+    var http = new XMLHttpRequest();
+    http.open('HEAD', fileurl, false);
+    http.send();
+    if (http.status != 404) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // display a preview image of paper and page if preview image is
 // available
 list.loadAndAppendImage = function(image_src, page_number) {
-    try {
-        let img = require("images/" + image_src);
-
+    if(this.checkIfFileAvailable(image_src)) {    
         let paper_frame = d3.select("#images_holder");
-
 
         paper_frame.append("div")
             .attr("id", "preview_page_index")
@@ -535,12 +543,13 @@ list.loadAndAppendImage = function(image_src, page_number) {
 
         paper_frame.append("img")
             .attr("id", "preview_page")
-            .attr("src", img);
-    } catch (e) {
+            .attr("src", image_src);
+        return true;
+    } else {
         return false;
     }
-    return true;
 };
+
 
 
 list.writePopup = function(pdf_url) {
@@ -566,19 +575,15 @@ list.populateOverlay = function(d) {
         $("#images_holder").hide();
         $("#status").hide();
         $("#images_modal").modal();
-        
-        this.loadAndAppendImage(d.id + "/page_1.png", 1);
 
-        let images_finished = false,
-            counter = 2;
+        let images_finished = false;
+        let counter = 1;
 
         while (!images_finished) {
-            let image_src = d.id + "/page_" + counter + ".png";
-
+            let image_src = "paper_preview/" + d.id + "/page_" + counter + ".png";
             if (!this.loadAndAppendImage(image_src, counter)) {
                 images_finished = true;
             }
-
             counter++;
         }
         
@@ -588,8 +593,8 @@ list.populateOverlay = function(d) {
         var filename = this_d.id + ".PDF";
         var local_filename = filename.replace("/", "__");
          
-        try { 
-            var full_pdf_url = require("images/" + local_filename);
+        try {
+            var full_pdf_url = "paper_preview/" + local_filename;
             this.writePopup(full_pdf_url);
             $("#iframe_modal").modal();
         } catch (e) {
@@ -632,16 +637,13 @@ list.setImageForListHolder = function(d) {
             return (x.id == d.id);
         });
 
-    let image_src = (headstart.preview_type == "image") ? (d.id + "/page_1.png") : ("preview_pdf.png");
-
-    try {
-        let img = require("images/" + image_src);
-
+    let image_src = "paper_preview/" + d.id + "/page_1.png";
+    if (headstart.preview_type == "image" && this.checkIfFileAvailable(image_src)) {
         current_item.append("div")
             .attr("id", "preview_image")
             .style("width", headstart.preview_image_width_list + "px")
             .style("height", headstart.preview_image_height_list + "px")
-            .style("background", "url(" + img + ")")
+            .style("background", "url(" + image_src + ")")
             .style("background-size", headstart.preview_image_width_list + "px, " + headstart.preview_image_height_list + "px")
             .on("mouseover", function() {
                 mediator.publish("preview_mouseover", current_item);
@@ -657,20 +659,15 @@ list.setImageForListHolder = function(d) {
             .on("click", function() {
                 mediator.publish("list_show_popup", d);
             });
-    } catch (e) {
-        console.log(e);
+
+        // EVENTLISTENERS
+        current_item.select("#paper_list_title")
+            .on("click", function(d) {
+                mediator.publish("list_title_click", d);
+            });
     }
-
-    /*$("#list_title a").hover(function () {
-        $(this).css("text-decoration", "none");
-    });*/
-
-    // EVENTLISTENERS
-    current_item.select("#paper_list_title")
-        .on("click", function(d) {
-            mediator.publish("list_title_click", d);
-        });
 };
+
 
 
 

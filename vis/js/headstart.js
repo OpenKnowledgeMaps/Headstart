@@ -38,8 +38,7 @@ export var HeadstartFSM = function(tag, files, options) {
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
   this.bubbles = {};
-  this.files = files;
-
+  
   this.current_zoom_node = null;
   this.current_enlarged_paper = null;
   this.current_file_number = 1;
@@ -51,6 +50,7 @@ export var HeadstartFSM = function(tag, files, options) {
 
   // Load default config + local settings and extend headstart object
   Object.assign(this, config, options);
+  Object.assign(this, data_config);
 
   if (typeof String.prototype.startsWith != 'function') {
       String.prototype.startsWith = function(str) {
