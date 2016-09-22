@@ -1,6 +1,7 @@
-window.data_config = {
+var data_config = {
     title: "Overview of Educational Technology",
     input_format: "csv",
+    base_unit: "readers",
 
     files: [{
         title: "edu1",

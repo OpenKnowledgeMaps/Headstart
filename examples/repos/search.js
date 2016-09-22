@@ -1,13 +1,17 @@
 var service_url;
 var service_name;
-switch(service){
-    case 'plos': 
-        service_url = "../../server/services/searchPLOS.php"
+var options;
+
+switch(data_config.service){
+    case 'plos':
+        service_url = data_config.server_url + "services/searchPLOS.php"
         service_name = "PLOS";
+        options = options_plos;
         break;
     case 'pubmed':
-        service_url = "../../server/services/searchPubmed.php"
+        service_url = data_config.server_url + "services/searchPubmed.php"
         service_name = "PubMed";
+        options = options_pubmed;
         break;
 }
 
@@ -49,7 +53,7 @@ $("#searchform").validate({
                     var title = "Overview of " + service_name + " articles for " + data.query + ":" + data.id;
                     var file = data.id;
 
-                    window.location = "headstart/headstart.php?title=" + title + "&file=" + file;
+                    window.location = "headstart.php?title=" + title + "&file=" + file;
                     return false;
                 } else {
                     $("#progress").html("Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again with a different query.");
@@ -62,16 +66,7 @@ $("#searchform").validate({
 
 $(document).ready(function() {
     var search_options = SearchOptions;
-    var options; 
-    switch(service) {
-        case 'plos':
-            options = options_plos;
-            break;
-        case 'pubmed':
-            options = options_pubmed;
-            break;
-    }
-
+    
     search_options.init("#filter-container", options);
 
     options.dropdowns.forEach(function(entry) {

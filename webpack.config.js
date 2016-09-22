@@ -2,9 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const TARGET = process.env.npm_lifecycle_event;
 
@@ -50,18 +48,7 @@ const common = {
         includePaths: [path.resolve(__dirname, "vis/stylesheets")]
     },
 
-    plugins: [
-        // new HtmlWebpackPlugin({
-        //     title: 'Headstart',
-        //     filename: '../examples/local_files/index.html',
-        //     template: '!!handlebars!./vis/templates/index-files/index.handlebars'
-        // })
-        new CopyWebpackPlugin([
-            // {output}/file.txt 
-            { from: 'lib/pdfjs-hypothesis/web', to: 'pdfjs-hypothesis/web' },
-            { from: 'lib/pdfjs-hypothesis/build', to: 'pdfjs-hypothesis/build' },
-        ])
-    ],
+    plugins: [],
 
     resolve: {
         alias: {
@@ -71,10 +58,8 @@ const common = {
             // paths
             'templates': path.resolve(__dirname, 'vis/templates'),
             'images': path.resolve(__dirname, 'vis/images'),
-            'services': path.resolve(__dirname, 'server/services'),
             'lib': path.resolve(__dirname, 'vis/lib'),
             'styles': path.resolve(__dirname, 'vis/stylesheets'),
-            'examples': path.resolve(__dirname, 'examples'),
 
             // modules
             'config': path.resolve(__dirname, 'vis/js/default-config.js'),

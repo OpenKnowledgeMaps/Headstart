@@ -378,7 +378,7 @@ list.createAbstract = function(d, cut_off) {
 };
 
 list.addBookmark = function(d) {
-    $.getJSON(this.service_path + "addBookmark.php?user_id=" + headstart.user_id + "&content_id=" + d.id, function(data) {
+    $.getJSON(this.headstart_server + "services/addBookmark.php?user_id=" + headstart.user_id + "&content_id=" + d.id, function(data) {
         console.log("Successfully added bookmark");
 
         mediator.publish("record_action", d.id, "add_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
@@ -404,7 +404,7 @@ list.addBookmark = function(d) {
 };
 
 list.removeBookmark = function(d)  {
-  $.getJSON(this.service_path + "addBookmark.php?user_id=" + headstart.user_id + "&content_id=" + d.id, function(data) {
+  $.getJSON(this.headstart_server + "services/addBookmark.php?user_id=" + headstart.user_id + "&content_id=" + d.id, function(data) {
         console.log("Successfully removed bookmark");
 
         mediator.publish("record_action",d.id, "remove_bookmark", headstart.user_id, d.bookmarked + " " + d.recommended, data);
@@ -549,7 +549,7 @@ list.writePopup = function(pdf_url) {
     setTimeout(function() {
         $("#pdf_iframe")
             .attr("src", function() {
-                let viewer = require("file?name=pdfjs-hypothesis/[name].[ext]&emitFile=false!../lib/pdfjs-hypothesis/web/viewer.html");
+                let viewer = headstart.server_url + "services/pdfjs-hypothesis/web/viewer.html";
                 return viewer + "?file=" + pdf_url; //#view=FitH
             })
             .attr("scrolling", "no");
@@ -583,27 +583,27 @@ list.populateOverlay = function(d) {
         $("#images_holder").show();        
     } else if (headstart.preview_type == "pdf") {
         let filename = this_d.id + ".PDF";
-        let local_filename = "paper_preview/" + filename.replace("/", "__");
+        let pdf_url = filename.replace("/", "__");
          
-        if (this.checkIfFileAvailable(local_filename)) {
-            this.writePopup(full_pdf_url);
+        if (this.checkIfFileAvailable(headstart.server_url + "paper_preview/" + pdf_url)) {
+            this.writePopup(headstart.server_url + "paper_preview/" + pdf_url);
             $("#iframe_modal").modal();
         } else {
             $("#spinner-iframe").show();
             $("#pdf_iframe").hide();
             $("#iframe_modal").modal();
             
-            var journal = this_d.published_in.toLowerCase();
-            var url = "http://journals.plos.org/" + headstart.plos_journals_to_shortcodes[journal] + "/article/asset?id=" + filename;
+            let journal = this_d.published_in.toLowerCase();
+            let article_url = "http://journals.plos.org/" + headstart.plos_journals_to_shortcodes[journal] + "/article/asset?id=" + filename;
 
             if(typeof d.pmcid !== "undefined") {
                 if (d.pmcid !== "") {
-                    url = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + d.pmcid + "/pdf/";
+                    article_url = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + d.pmcid + "/pdf/";
                 }
             }
 
-            $.getJSON(headstart.service_path + "getPDF.php?url=" + url + "&filename=" + local_filename, function() {
-                this.writePopup(full_pdf_url);
+            $.getJSON(headstart.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url, () => {
+                this.writePopup(headstart.server_url + "paper_preview/" + pdf_url);
             }).fail((d, textStatus, error) => {
                 $("#spinner-iframe").hide();
                 $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this.createOutlink(this_d) + "\" target=\"_blank\">this website</a>.");
