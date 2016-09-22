@@ -38,14 +38,12 @@ const common = {
             test: /\.(ttf|eot|svg|html)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             loader: 'file?name=assets/[name].[ext]'
         }, {
-            test: /\.csv$/,
-            loader: 'file?name=data/[name].[ext]'
-        }, {
             test: /\.png$/,
-            loader: 'file?name=img/[name].[ext]'
+            loader: 'file?name=img/[name].[ext]',
+            exclude: /examples/
         }, {
             test: /\.(php)$/,
-            loader: 'file?name=services/[name].[ext]'
+            loader: 'file?emitFile=false'
         }
         ]
     },
