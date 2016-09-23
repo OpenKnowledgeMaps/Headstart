@@ -13,17 +13,17 @@ print(params_file)
 
 setwd(wd) #Don't forget to set your working directory
 
-source("vis_layout.R")
+source(paste("../other-scripts/vis_layout.R", sep=""))
 
 switch(service, 
        plos={
-         source("rplos_fast.R")
+         source("../other-scripts/rplos_fast.R")
        },
        pubmed={
-         source('pubmed.R')    
+         source('../other-scripts/pubmed.R')    
        },
       {
-        source("rplos_fast.R")
+        source("../other-scripts/rplos_fast.R")
       }
 )
 

@@ -11,51 +11,37 @@ researchers that are new to a field a head start on their literature review
 
 ### Client
 
-To create the main stylesheet, you need to first install SASS. Check out [this wiki](https://github.com/Bubblbu/Headstart/wiki/Headstart-SASS-Intro) for more information. 
+We are using [webpack](https://webpack.github.io/) to build our client-side application. In order to get started quickly just make sure to have `npm` installed and run the following two commands to build the Headstart Client. 
 
-Once you have successfully created the file `main.css` in the stylesheets folder, load `vis.js` and add a new div to your webpage.
+    `npm install`
+    `npm run dev`
 
-    <div id="visualization"></div>
+`webpack` is started in *watch mode* which means that changes to files are tracked and the created `bundle.js` is automatically updated. In order to change the look and behaviour of Headstart, feel free to fiddle with `vis/app-config.js` or the actual SASS files in `vis/stylesheets`. Also see visualization [options](doc/README.md#visualisation-settings).
 
-In order to run a new instance of Headstart you need to set the five parameters in `Headstart(host, path, tag, files, options)`.
+#### Set up your `index.html`
 
-1. When developing locally set the **host** and **path** to your copy in `index.html`.
+Three lines will set up the basics of Headstart.
 
-        var myHeadstart = new Headstart(
-            "localhost/", // host
-            "headstart/", // path
+    <div id="some_id" class="headstart"></div>                             // Headstart's div
+    <script type="text/javascript" src="path/to/data-config.js"></script>  // Runtime Config
+    <script type="text/javascript" src="path/to/dist/bundle.js"></script>  // The Core Lib
 
-2. The third argument is id of the **tag** that Headstart will be embedded in. In the case of the demo, the map is appended to the new div with `id=visualization`.
+#### Configuration - `data-config.js`
 
-        "visualization", // append to tag
+At the moment Headstart supports three different modes and some might require a few more configurations. The [examples](https://github.com/Bubblbu/Headstart/tree/package-manager-examples/examples) contain a complete setup for each of the three modes.
 
-3. The fourth parameter is the input **data**. Headstart comes with five example datasets, which are stored in `vis/data`. See [data format](doc/README.md#data-format) for more details.
++ Show static maps *from a headstart server*
+    
+    Set the mode to `serve_static_files`, adjust the `server_url` and you are ready to go.
 
-        [{
-            title: "name_dataset1",
-            file: "vis/data/dataset1.csv"
-        }, {
-            title: "name_dataset2",
-            file: "vis/data/dataset2.csv"
-        },
-        ...],
++ Show *local maps* from client-side
 
-4. Finally you can set a variety of **options** in order to adjust Headstart to your needs. See [options](doc/README.md#visualisation-settings) for more details.
+    In order to show local, pre-calculated maps adjust the `data-config.files` array to mirror your local file structure.
 
-          {
-            title: "Name of this map",
-            width: 1200,
-            height: height,
-            max_diameter_size: 50,
-            min_diameter_size: 30,
-            max_area_size: 110,
-            min_area_size: 50,
-            input_format: "csv",
-            use_area_uri: false,
-            base_unit: "readers",
-            force_areas: false,
-            url_prefix: "http://mendeley.com/catalog/"
-        } )
++ Perform queries against *third-party APIs* and create new maps
+
+    `data-config.js` allows you to choose (currently) 1 of 2 possible repositories to query against. ("plos", "pubmed")
+
 
 ### Server
 
