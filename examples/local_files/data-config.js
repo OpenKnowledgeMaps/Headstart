@@ -1,4 +1,7 @@
 var data_config = {
+    tag: "visualization",
+    mode: "local_files",
+    
     title: "Overview of Educational Technology",
     input_format: "csv",
     base_unit: "readers",
@@ -16,7 +19,7 @@ var data_config = {
         title: "edu4",
         file: "./data/edu4.csv"
     }, {
-        title: "edu5",
+^        title: "edu5",
         file: "./data/edu5.csv"
     }]
 };

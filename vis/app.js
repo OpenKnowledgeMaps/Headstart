@@ -21,8 +21,6 @@ import { app_config } from './app-config.js'
 window.namespace = "headstart";
 
 hs.headstart = new hs.HeadstartFSM(
-    "visualization",
-    app_config.data,
     app_config.options
 );
 hs.headstart.start();

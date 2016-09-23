@@ -30,7 +30,23 @@ const repos_options = {
     is_content_based: false,
 };
 
+const static_options = {
+    paper_max_scale: 1,
+    paper_min_scale: 1,
+    bubble_max_scale: 1,
+    bubble_min_scale: 1,
+
+    use_area_uri: false,
+    is_force_areas: false,
+    url_prefix: "http://mendeley.com/catalog/",
+    show_timeline: false,
+    show_dropdown: true,
+    show_intro: false
+};
+
+// Toggle the two options to switch between configs
 export const app_config = {
     // options: repos_options
-    options: local_options
+    // options: local_options
+    options: static_options
 }

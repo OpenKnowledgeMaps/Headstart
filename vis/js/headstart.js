@@ -21,13 +21,14 @@ const iFrameTemplate = require("templates/misc/iframe_modal.handlebars");
 const imageTemplate = require("templates/misc/images_modal.handlebars");
 
 export var headstart;
-export var HeadstartFSM = function(tag, files, options) {
+export var HeadstartFSM = function(options) {
   this.VERSION = 2.5;
 
-  // INIT
-  this.tag = tag;
+  // Load default config + local settings and extend headstart object
+  Object.assign(this, config, options);
+  Object.assign(this, data_config);
 
-  this.viz = $("#" + tag);
+  this.viz = $("#" + this.tag);
   this.viz.addClass("headstart");
 
   this.viz.append(headstartTemplate());
@@ -47,10 +48,6 @@ export var HeadstartFSM = function(tag, files, options) {
   this.circle_zoom = 0;
   this.is_zoomed = false;
   this.zoom_finished = false;
-
-  // Load default config + local settings and extend headstart object
-  Object.assign(this, config, options);
-  Object.assign(this, data_config);
 
   if (typeof String.prototype.startsWith != 'function') {
       String.prototype.startsWith = function(str) {
@@ -717,12 +714,12 @@ HeadstartFSM.prototype = {
       this.setOverflowToHiddenOrAuto("#main");
       this.resetBubbles();
 
-      var bubbles = this.bubbles[this.current_file_number];
+      let bubbles = this.bubbles[this.current_file_number];
 
       // NOTE: async call
       // therefore we need to call the methods which depend on bubbles.data
       // after the csv has been received.
-      var setupVisualization = (csv) => {
+      let setupVisualization = (csv) => {
           this.drawTitle();
 
           this.calcChartSize();
@@ -732,7 +729,7 @@ HeadstartFSM.prototype = {
           this.drawChartCanvas();
           if (this.is_adaptive) {
 
-              var url = this.createRestUrl();
+              let url = this.createRestUrl();
 
               $.getJSON(url, (data) => {
                   this.startVisualization(this, bubbles, csv, data, true);
@@ -748,18 +745,53 @@ HeadstartFSM.prototype = {
 
       
 
-      switch (this.input_format) {
-          case "csv":
-              d3.csv(bubbles.file, setupVisualization);
+      switch (this.mode) {
+          case "local":
+              switch (this.input_format) {
+                case "csv":
+                  d3.csv(bubbles.file, setupVisualization);
+                  break;
+                case "json":
+                  d3.json(bubbles.file, setupVisualization);
+                  break;
+              }
               break;
 
-          case "json":
+          case "search_repos":
               d3.json(this.server_url + "services/getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
+              break;
+
+          case "serve_static":
+              switch (this.input_format) {
+                case "csv":
+                    $.ajax({
+                        type: 'POST',
+                        url: this.server_url + "services/staticFiles.php",
+                        data: "",
+                        dataType: 'JSON',
+                        success: (json) => {
+                            let a = [];
+                            for (let key in json) {
+                              a.push({
+                                "title":json[key].title,
+                                "file": this.server_url + "static" + json[key].file
+                              });
+                            }
+                            this.files = a;
+                            this.resetBubbles()
+                            bubbles = this.bubbles[this.current_file_number];
+                            d3.csv(bubbles.file, setupVisualization);
+                        }
+                    });
+                  break;
+                case "json":
+                  d3.json(bubbles.file, setupVisualization);
+                  break;bubbles
+              }
               break;
 
           case "json-direct":
               setupVisualization(bubbles.file);
-
               break;
 
           default:
