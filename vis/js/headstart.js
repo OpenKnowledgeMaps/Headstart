@@ -746,7 +746,7 @@ HeadstartFSM.prototype = {
       
 
       switch (this.mode) {
-          case "local":
+          case "local_files":
               switch (this.input_format) {
                 case "csv":
                   d3.csv(bubbles.file, setupVisualization);
@@ -761,7 +761,7 @@ HeadstartFSM.prototype = {
               d3.json(this.server_url + "services/getLatestRevision.php?vis_id=" + bubbles.file, setupVisualization);
               break;
 
-          case "serve_static":
+          case "server_files":
               switch (this.input_format) {
                 case "csv":
                     $.ajax({

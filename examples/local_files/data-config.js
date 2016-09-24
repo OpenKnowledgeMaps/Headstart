@@ -19,7 +19,7 @@ var data_config = {
         title: "edu4",
         file: "./data/edu4.csv"
     }, {
-^        title: "edu5",
+        title: "edu5",
         file: "./data/edu5.csv"
     }]
 };

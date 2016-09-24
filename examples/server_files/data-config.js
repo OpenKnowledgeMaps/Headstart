@@ -1,6 +1,6 @@
 var data_config = {
     tag: "visualization",
-    mode: "serve_static",
+    mode: "server_files",
     server_url: "http://localhost/headstart/server/",
     title: "Overview of Educational Technology",
     input_format: "csv",

@@ -13,7 +13,7 @@ const common = {
 
     output: {
         path: path.resolve(__dirname, "dist"),
-        publicPath: '/bubblbu_headstart/dist/',
+        publicPath: path.resolve(__dirname, "dist"),
         filename: 'bundle.js'
     },
 
