@@ -942,6 +942,9 @@ HeadstartFSM.prototype = {
     if (hs.show_intro) {
         $("#infolink").click();
     }
+    
+    $("#area_title>h2").hyphenate('en');
+    $("#area_title_object>body").dotdotdot({wrap:"letter"});
   },
 
   drawNormalViewLink: function() {
