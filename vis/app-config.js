@@ -25,7 +25,7 @@ const repos_options = {
     sort_options: ["readers", "title", "authors", "year"],
     is_force_areas: true,
     language: "eng_pubmed",
-    force_areas_alpha: 0.015,
+    area_force_alpha: 0.015,
     show_list: true,
     is_content_based: false,
 };
@@ -46,7 +46,7 @@ const static_options = {
 
 // Toggle the two options to switch between configs
 export const app_config = {
-    // options: repos_options
-    options: local_options
+    options: repos_options
+    // options: local_options
     // options: static_options
 }

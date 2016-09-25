@@ -388,7 +388,7 @@ HeadstartFSM.prototype = {
         
         $("#area_title>h2").css("font-size", self.calcTitleFontSize());
         $("#area_title>h2").hyphenate('en');
-        //$("#area_title_object>body").dotdotdot({wrap:"letter"});
+        $("#area_title_object>body").dotdotdot({wrap:"letter"});
         
         d3.selectAll("g.paper")
           .attr("transform", function (d) {
