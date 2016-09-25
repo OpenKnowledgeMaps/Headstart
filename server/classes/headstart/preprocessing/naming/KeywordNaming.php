@@ -17,7 +17,7 @@ class KeywordNaming extends Naming {
 
         foreach ($array as $entry) {
             $uri = $entry[$id];
-            $keywords = split("; ", $entry[$subjects]);
+            $keywords = explode("; ", $entry[$subjects]);
             foreach ($keywords as &$keyword) {
                 if ($taxonomy_separator != null) {
                     $keyword = substr($keyword, strrpos($keyword, $taxonomy_separator) + 1);
@@ -51,7 +51,7 @@ class KeywordNaming extends Naming {
 
         foreach ($array as $entry) {
             $uri = $entry[$id];
-            $keywords = split($keyword_separator, $entry[$subjects]);
+            $keywords = explode($keyword_separator, $entry[$subjects]);
             foreach ($keywords as &$keyword) {
                 if ($taxonomy_separator != null) {
                     $keyword = substr($keyword, strrpos($keyword, $taxonomy_separator) + 1);
