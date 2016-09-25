@@ -1,6 +1,7 @@
 // StateMachine for List UI element in Headstart
 // Filename: list.js
 import StateMachine from 'javascript-state-machine';
+import $ from 'jquery';
 import d3 from 'd3';
 
 import { headstart } from 'headstart';
@@ -624,7 +625,6 @@ list.setImageForListHolder = function(d) {
             return;
         }
     }
-
 
     var current_item = this.papers_list.selectAll("#list_holder")
         .filter(function(x) {

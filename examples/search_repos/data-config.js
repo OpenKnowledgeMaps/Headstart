@@ -2,7 +2,7 @@ var data_config = {
     tag: "visualization",
     mode: "search_repos",
     
-    server_url: "http://localhost/bubblbu_headstart/server/",
+    server_url: "public/path/to/server/",
 	service: "plos",
     
     title: "",

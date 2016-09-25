@@ -1,6 +1,7 @@
 // Headstart
 // filename: headstart.js
 import StateMachine from 'javascript-state-machine';
+import $ from 'jquery';
 import d3 from 'd3';
 import config from 'config';
 
@@ -12,7 +13,6 @@ import { list } from 'list';
 import { intro, intro_cn3, intro_plos } from 'intro';
 import { getRealHeight } from "helpers";
 import { BrowserDetect } from "helpers";
-
   
 const timelineTemplate = require('templates/timeline.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");

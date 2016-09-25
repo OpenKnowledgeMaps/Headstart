@@ -1,6 +1,7 @@
 // StateMachine for Papers UI element in Headstart
 // Filename: papers_count.js
 import StateMachine from 'javascript-state-machine';
+import $ from 'jquery';
 import d3 from "d3";
 
 import { headstart } from 'headstart';

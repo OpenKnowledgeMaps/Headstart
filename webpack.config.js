@@ -18,10 +18,8 @@ const common = {
     },
 
     module: {
-        loaders: [{
-            test: require.resolve("jquery"),
-            loader: "expose?$!expose?jQuery",
-        }, {
+        loaders: [
+        {
             test: /.js?$/,
             loader: 'babel-loader',
             exclude: /node_modules/,
@@ -48,7 +46,12 @@ const common = {
         includePaths: [path.resolve(__dirname, "vis/stylesheets")]
     },
 
-    plugins: [],
+    plugins: [
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery"
+        })
+    ],
 
     resolve: {
         alias: {

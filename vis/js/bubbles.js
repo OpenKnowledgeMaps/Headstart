@@ -1,6 +1,7 @@
 // StateMachine for Bubbles UI elements in Headstart
 // Filename: bubbles.js
 import StateMachine from 'javascript-state-machine';
+import $ from 'jquery';
 import d3 from 'd3';
 
 import { headstart } from 'headstart';
