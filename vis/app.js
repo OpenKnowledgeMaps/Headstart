@@ -7,6 +7,7 @@ import $ from 'jquery';
 import 'lib/highlightRegex.min.js';
 import 'jquery-dotdotdot/src/jquery.dotdotdot.min.js';
 import 'hypher/dist/jquery.hypher.js';
+import 'lib/en.js';
 
 /* Import headstart module to initiliase HeadstartFSM */
 /* Notice 'import * as hs' -> hs.headstart is not read-only */
