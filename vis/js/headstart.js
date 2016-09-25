@@ -279,24 +279,24 @@ HeadstartFSM.prototype = {
       d3.select(window).on("resize", () => {
         this.calcChartSize();
           
-        if (self.is("timeline")) {
+        if (this.is("timeline")) {
           return;
         }
           
         let resized_scale_x = d3.scale.linear();
         let resized_scale_y = d3.scale.linear();
         
-        resized_scale_x.domain([0, self.current_vis_size]);
-        resized_scale_y.domain([0, self.current_vis_size]);
+        resized_scale_x.domain([0, this.current_vis_size]);
+        resized_scale_y.domain([0, this.current_vis_size]);
 
-        self.calcChartSize();
-        self.setScaleRanges();
-        self.drawSvg(true);
-        self.updateChartCanvas();
+        this.calcChartSize();
+        this.setScaleRanges();
+        this.drawSvg(true);
+        this.updateChartCanvas();
         list.fit_list_height();
         
-        resized_scale_x.range([0, self.current_vis_size]);
-        resized_scale_y.range([0, self.current_vis_size]);
+        resized_scale_x.range([0, this.current_vis_size]);
+        resized_scale_y.range([0, this.current_vis_size]);
           
         d3.selectAll("g.bubble_frame")
             .attr("transform", (d) => {
