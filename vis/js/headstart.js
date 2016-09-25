@@ -277,8 +277,6 @@ HeadstartFSM.prototype = {
 
   initEventListeners: function() {
       d3.select(window).on("resize", () => {
-        this.calcChartSize();
-          
         if (this.is("timeline")) {
           return;
         }
