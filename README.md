@@ -13,10 +13,22 @@ researchers that are new to a field a head start on their literature review
 
 We are using [webpack](https://webpack.github.io/) to build our client-side application. In order to get started quickly just make sure to have `npm` installed and run the following two commands to build the Headstart Client. 
 
-    `npm install`
-    `npm run dev`
+    npm install
+    npm run dev
 
-`webpack` is started in *watch mode* which means that changes to files are tracked and the created `bundle.js` is automatically updated. In order to change the look and behaviour of Headstart, feel free to fiddle with `vis/app-config.js` or the actual SASS files in `vis/stylesheets`. Also see visualization [options](doc/README.md#visualisation-settings).
+`webpack` is started in *watch mode* which means that changes to files are tracked and the created `bundle.js` is automatically updated. 
+
+Now you can run a local dev server:
+
+	npm start
+
+Point your browser to the following address:
+
+	http://localhost:8080/examples/local_files/index.html
+
+If everything has worked out, you should see the visualization shown above.
+
+In order to change the look and behaviour of Headstart, feel free to fiddle with `vis/app-config.js` or the actual SASS files in `vis/stylesheets`. Also see visualization [options](doc/README.md#visualisation-settings).
 
 #### Set up your `index.html`
 
