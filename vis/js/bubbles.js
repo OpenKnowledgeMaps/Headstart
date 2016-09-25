@@ -574,7 +574,7 @@ BubblesFSM.prototype = {
 
 
     d3.select("#subdiscipline_title h4").text(headstart.localization[headstart.language].area +": " + d.title);
-    // $("#subdiscipline_title").dotdotdot();
+    $("#subdiscipline_title").dotdotdot();
 
     d3.selectAll("div.paper_holder")
       .on("mouseover", function(d){

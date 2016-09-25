@@ -369,6 +369,9 @@ list.createHighlights = function (search_words) {
 
 // called quite often
 list.createAbstract = function(d, cut_off) {
+    if (typeof d.paper_abstract === "undefined")
+        return "";
+    
     if(cut_off) {
         if(d.paper_abstract.length > cut_off) {
             return d.paper_abstract.substr(0,cut_off) + "...";

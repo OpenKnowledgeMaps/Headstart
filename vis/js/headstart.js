@@ -319,26 +319,25 @@ HeadstartFSM.prototype = {
   initEventListeners: function() {
       d3.select(window).on("resize", () => {
         let self = this;
-        this.calcChartSize();
           
-        if (this.is("timeline")) {
+        if (self.is("timeline")) {
           return;
         }
           
         var resized_scale_x = d3.scale.linear();
         var resized_scale_y = d3.scale.linear();
         
-        resized_scale_x.domain([0, this.current_vis_size]);
-        resized_scale_y.domain([0, this.current_vis_size]);
+        resized_scale_x.domain([0, self.current_vis_size]);
+        resized_scale_y.domain([0, self.current_vis_size]);
 
-        this.calcChartSize();
-        this.setScaleRanges();
-        this.drawSvg(true);
-        this.updateChartCanvas();
+        self.calcChartSize();
+        self.setScaleRanges();
+        self.drawSvg(true);
+        self.updateChartCanvas();
         list.fit_list_height();
         
-        resized_scale_x.range([0, this.current_vis_size]);
-        resized_scale_y.range([0, this.current_vis_size]);
+        resized_scale_x.range([0, self.current_vis_size]);
+        resized_scale_y.range([0, self.current_vis_size]);
           
         d3.selectAll("g.bubble_frame")
             .attr("transform", function (d) {
@@ -389,7 +388,7 @@ HeadstartFSM.prototype = {
         
         $("#area_title>h2").css("font-size", self.calcTitleFontSize());
         $("#area_title>h2").hyphenate('en');
-        $("#area_title_object>body").dotdotdot({wrap:"letter"});
+        //$("#area_title_object>body").dotdotdot({wrap:"letter"});
         
         d3.selectAll("g.paper")
           .attr("transform", function (d) {
