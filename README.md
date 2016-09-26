@@ -34,7 +34,7 @@ See [client configuration](doc/README.md) for details on adapting the client.
 
 ### Server
 
-See [Installing and configuring the server](doc/server_config.md) for instructions on how to install and configure the server.
+See [Installing and configuring the server](doc/server_config.md) for instructions on how to install and configure the server. Also, see [HOWTO: Get the search repos example to work](howto_search_repos.md).
 
 ## Contributors
 
