@@ -46,7 +46,7 @@ const static_options = {
 
 // Toggle the two options to switch between configs
 export const app_config = {
-    options: repos_options
-    // options: local_options
+    // options: repos_options
+    options: local_options
     // options: static_options
 }

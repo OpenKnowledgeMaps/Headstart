@@ -660,6 +660,7 @@ list.setImageForListHolder = function(d) {
             .style("width", headstart.preview_image_width_list + "px")
             .style("height", headstart.preview_image_height_list + "px")
             .style("background", "url(" + pdf_preview + ")")
+            .style("background-size", headstart.preview_image_width_list + "px, " + headstart.preview_image_height_list + "px")
             .on("mouseover", function() {
                 mediator.publish("preview_mouseover", current_item);
             })
