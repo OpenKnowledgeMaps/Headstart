@@ -18,28 +18,37 @@ const common = {
     },
 
     module: {
-        loaders: [
-        {
-            test: /.js?$/,
-            loader: 'babel-loader',
-            exclude: /node_modules/,
-            query: {
-                presets: ['es2015']
-            }
-        }, {
-            test: /\.handlebars$/,
-            loader: "handlebars-loader"
-        }, {
-            test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            loader: 'url-loader?limit=10000&minetype=application/font-woff&name=assets/[name].[ext]'
-        }, {
-            test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            loader: 'file?name=assets/[name].[ext]'
-        }, {
-            test: /\.png$/,
-            loader: 'file?name=img/[name].[ext]',
-            exclude: /examples/
-        }]
+        loaders: [{
+                test: require.resolve("jquery-dotdotdot/src/jquery.dotdotdot.min.js"),
+                loader: "imports?$=jquery,jQuery=jquery"
+            }, {
+                test: require.resolve("hypher/dist/jquery.hypher.js"),
+                loader: "imports?$=jquery,jQuery=jquery"
+            }, {
+                test: /lib\/*.js/,
+                loader: "imports?$=jquery"
+            }, {
+                test: /.js?$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                query: {
+                    presets: ['es2015']
+                }
+            }, {
+                test: /\.handlebars$/,
+                loader: "handlebars-loader"
+            }, {
+                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: 'url-loader?limit=10000&minetype=application/font-woff&name=assets/[name].[ext]'
+            }, {
+                test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: 'file?name=assets/[name].[ext]'
+            }, {
+                test: /\.png$/,
+                loader: 'file?name=img/[name].[ext]',
+                exclude: /examples/
+            },
+        ]
     },
 
     sassLoader: {
@@ -49,7 +58,8 @@ const common = {
     plugins: [
         new webpack.ProvidePlugin({
             $: "jquery",
-            jQuery: "jquery"
+            jQuery: "jquery",
+            d3: "d3"
         })
     ],
 
@@ -57,6 +67,9 @@ const common = {
         alias: {
             // 
             'handlebars': 'handlebars/dist/handlebars.js',
+            'dotdotdot': 'jquery-dotdotdot/src/jquery.dotdotdot.min.js',
+            'hypher': 'hypher/dist/jquery.hypher.js',
+            // 'highlightRegex': 
 
             // paths
             'templates': path.resolve(__dirname, 'vis/templates'),

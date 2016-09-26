@@ -1,8 +1,7 @@
 // Headstart
 // filename: headstart.js
 import StateMachine from 'javascript-state-machine';
-import $ from 'jquery';
-import d3 from 'd3';
+
 import config from 'config';
 
 import { mediator } from 'mediator';
@@ -19,6 +18,10 @@ const headstartTemplate = require("templates/headstart.handlebars");
 const infoTemplate = require("templates/misc/info_modal.handlebars");
 const iFrameTemplate = require("templates/misc/iframe_modal.handlebars");
 const imageTemplate = require("templates/misc/images_modal.handlebars");
+
+import 'hypher';
+import 'lib/en.js';
+import 'dotdotdot';
 
 export var headstart;
 export var HeadstartFSM = function(options) {
@@ -691,6 +694,7 @@ HeadstartFSM.prototype = {
           $("#area_title>h2").css("font-size", this.calcTitleFontSize());
           $("#area_title>h2").hyphenate('en');
           $("#area_title_object>body").dotdotdot({ wrap: "letter" });
+
       };
 
       switch (this.mode) {

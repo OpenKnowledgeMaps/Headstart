@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import Mediator from 'mediator-js';
 import { headstart } from 'headstart';
 import { papers } from 'papers';

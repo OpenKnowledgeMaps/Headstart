@@ -1,13 +1,6 @@
-/* Load stylesheets and bootstrap */
+ /* Load stylesheets and bootstrap */
 require('styles/main.scss');
 require('bootstrap-loader');
-
-/* Global jQuery and jquery-plugins */
-import $ from 'jquery';
-import 'lib/highlightRegex.min.js';
-import 'jquery-dotdotdot/src/jquery.dotdotdot.min.js';
-import 'hypher/dist/jquery.hypher.js';
-import 'lib/en.js';
 
 /* Import headstart module to initiliase HeadstartFSM */
 /* Notice 'import * as hs' -> hs.headstart is not read-only */

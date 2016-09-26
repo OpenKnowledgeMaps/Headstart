@@ -1,8 +1,9 @@
 // StateMachine for Papers UI element in Headstart
 // Filename: papers_count.js
 import StateMachine from 'javascript-state-machine';
-import $ from 'jquery';
-import d3 from "d3";
+
+import 'hypher';
+import 'lib/en.js';
 
 import { headstart } from 'headstart';
 import { mediator } from 'mediator';

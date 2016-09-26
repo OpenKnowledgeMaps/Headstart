@@ -1,7 +1,3 @@
-import $ from 'jquery';
-import d3 from 'd3';
-
-
 // -------------------------------------
 // -------- General helpers ------------
 // -------------------------------------
@@ -99,9 +95,9 @@ export function clear_highlights() {
     $('.highlightable').highlightRegex();
 }
 
-const Hypher = require('hypher');
-const english = require('hyphenation.en-us');
-export const h = new Hypher(english);
+// const Hypher = require('hypher').default;
+// const english = require('hyphenation.en-us');
+// export const h = new Hypher(english);
 
 // -------------------------------------
 // -------------- Drawing --------------

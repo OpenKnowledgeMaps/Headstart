@@ -4,6 +4,7 @@ server/preprocessing/other-scripts/.Rhistory
 *_local.*
 vis/images/*.pdf
 node_modules/
+npm-debug.log
 **/.sass-cache/*
 vis/stylesheets/*.css
 *.map

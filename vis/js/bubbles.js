@@ -1,8 +1,6 @@
 // StateMachine for Bubbles UI elements in Headstart
 // Filename: bubbles.js
 import StateMachine from 'javascript-state-machine';
-import $ from 'jquery';
-import d3 from 'd3';
 
 import { headstart } from 'headstart';
 import { mediator } from 'mediator';
@@ -11,6 +9,10 @@ import { list } from 'list';
 import { toBack, toFront, hideSibling} from 'helpers';
 
 const bubbleTemplate = require('templates/map/bubble.handlebars');
+
+import 'hypher';
+import 'lib/en.js';
+import 'dotdotdot';
 
 export var BubblesFSM = function() {
   this.id = 0;
