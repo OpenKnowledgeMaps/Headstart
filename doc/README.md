@@ -20,7 +20,7 @@ At the moment, Headstart supports three different modes. The examples contain a 
 
 + Perform queries against *third-party APIs* and create new maps
 
-    `data-config.js` allows you to choose (currently) 1 of 2 possible repositories to query against. ("plos", "pubmed"). Follow the instructions in [Installing and configuring the server](server_config.md). Afterwards, adjust the `server_url` and also set the `publicPath` in `webpack.config.json`. 
+    `data-config.js` allows you to choose (currently) 1 of 2 possible repositories to query against. ("plos", "pubmed"). Follow the instructions in [HOWTO: Get the search repos example to work](howto_search_repos.md).
 
 ## Visualisation Settings
 
