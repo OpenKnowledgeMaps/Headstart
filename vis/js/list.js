@@ -586,6 +586,7 @@ list.populateOverlay = function(d) {
     } else if (headstart.preview_type == "pdf") {
         let filename = this_d.id + ".PDF";
         let pdf_url = filename.replace("/", "__");
+        $("#status").hide();
          
         if (this.checkIfFileAvailable(headstart.server_url + "paper_preview/" + pdf_url)) {
             this.writePopup(headstart.server_url + "paper_preview/" + pdf_url);
