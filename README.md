@@ -28,32 +28,9 @@ Point your browser to the following address:
 
 If everything has worked out, you should see the visualization shown above.
 
-In order to change the look and behaviour of Headstart, feel free to fiddle with `vis/app-config.js` or the actual SASS files in `vis/stylesheets`. Also see visualization [options](doc/README.md#visualisation-settings).
+See [client configuration](doc/README.md) for details on adapting the client.
 
-#### Set up your `index.html`
-
-Three lines will set up the basics of Headstart.
-
-    <div id="some_id" class="headstart"></div>                             // Headstart's div
-    <script type="text/javascript" src="path/to/data-config.js"></script>  // Runtime Config
-    <script type="text/javascript" src="path/to/dist/bundle.js"></script>  // The Core Lib
-
-#### Configuration - `data-config.js`
-
-At the moment Headstart supports three different modes and some might require a few more configurations. The [examples](https://github.com/Bubblbu/Headstart/tree/package-manager-examples/examples) contain a complete setup for each of the three modes.
-
-+ Show static maps *from a headstart server*
-    
-    Set the mode to `serve_static_files`, adjust the `server_url` and you are ready to go.
-
-+ Show *local maps* from client-side
-
-    In order to show local, pre-calculated maps adjust the `data-config.files` array to mirror your local file structure.
-
-+ Perform queries against *third-party APIs* and create new maps
-
-    `data-config.js` allows you to choose (currently) 1 of 2 possible repositories to query against. ("plos", "pubmed")
-
+ Also see visualization [options](doc/README.md#visualisation-settings).
 
 ### Server
 

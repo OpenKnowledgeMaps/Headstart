@@ -25,7 +25,7 @@ Make sure you have the following packages installed:
  * curl
  * tibble
  * data.table
- * xml2
+ * xml2 **(Version 1.0 or higher)**
 
 ## Configuration
 
