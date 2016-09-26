@@ -691,10 +691,6 @@ HeadstartFSM.prototype = {
           // Horrible solution but the first call is needed to calculate the chart height
           // and this call sets the final number of articles in the viz
           this.drawTitle();
-          $("#area_title>h2").css("font-size", this.calcTitleFontSize());
-          $("#area_title>h2").hyphenate('en');
-          $("#area_title_object>body").dotdotdot({ wrap: "letter" });
-
       };
 
       switch (this.mode) {
