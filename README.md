@@ -5,7 +5,7 @@ the most important publications within each area. It is intended to give
 researchers that are new to a field a head start on their literature review
 (hence the name).
 
-![Head Start](http://science.okfn.org/files/2013/12/headstart.png)
+![Head Start](headstart.png)
 
 ## Getting Started
 
@@ -36,13 +36,12 @@ See [client configuration](doc/README.md) for details on adapting the client.
 
 See [Installing and configuring the server](doc/server_config.md) for instructions on how to install and configure the server.
 
-## Authors
+## Contributors
 
-Peter Kraker (peter.kraker@tugraz.at)
+Maintainer: Peter Kraker ([opendiscovery@gmx.at](mailto:opendiscovery@gmx.at))
 
-Asura Enkhbayar (asura.enkhbayar@gmail.com)
+Authors: [Asura Enkhbayar](https://github.com/Bubblbu), [Scott Chamberlain](https://github.com/sckott), [Chris Kittel](https://github.com/chreman), [Philipp Weissensteiner](https://github.com/wpp), and the [Open Knowledge Maps team](http://openknowledgemaps.org/team)
 
-Philipp Weißensteiner (philipp.weissensteiner@student.tugraz.at)
 
 ## Features
 
@@ -57,15 +56,15 @@ The visualization was created with D3.js. It has been successfully tested with C
 
 ## Showcases
 
-* [PLOS Search Visualization](http://openknowledgemaps.org/mozfest): This prototype creates a visualization on the fly based on a user's PLOS search.
-* [Open Knowledge Maps](http://openknowledgemaps.org): A working prototype for the field of educational technology. 
+* [Open Knowledge Maps](http://openknowledgemaps.org/): Creates a visualization on the fly based on a user's PLOS search.
+* [Overview of Educational Technology](http://openknowledgemaps.org/educational-technology): A working prototype for the field of educational technology. 
 * [Conference Navigator 3](http://halley.exp.sis.pitt.edu/cn3/visualization.php?conferenceID=131) [registration required]: An adaptation of Head Start for the conference scheduling system CN3. This version enables users to schedule papers directly from the visualization. Scheduled papers and recommended papers are highlighted.
 * [Organic Edunet portal](http://organic-edunet.eu/en/#/recommended): Overview of recommended resources in the Organic Eudnet portal.
 
 
 ## Background
 
-The visualization is based on readership co-occurrence in Mendeley. More information can be found in the following papers:
+More information can be found in the following papers:
 
 Kraker, P., Schlögl, C. , Jack, K. & Lindstaedt, S. (2015). [Visualization of Co-Readership Patterns from an Online Reference Management System](http://arxiv.org/abs/1409.0348). Journal of Informetrics, 9(1), 169–182. doi:10.1016/j.joi.2014.12.003
 
