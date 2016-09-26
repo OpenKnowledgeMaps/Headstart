@@ -630,7 +630,7 @@ list.setImageForListHolder = function(d) {
         });
 
     let image_src = "paper_preview/" + d.id + "/page_1.png";
-    let pdf_preview = require("images/preview_pdf.png")
+    let pdf_preview = require("images/preview_pdf.png");
     if (headstart.preview_type == "image") {
         if (this.checkIfFileAvailable(image_src)) {
             current_item.append("div")
