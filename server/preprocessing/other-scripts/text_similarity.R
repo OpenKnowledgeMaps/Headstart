@@ -22,6 +22,9 @@ switch(service,
        pubmed={
          source('../other-scripts/pubmed.R')    
        },
+       doaj={
+        source('../other-scripts/doaj.R')   
+       },
       {
         source("../other-scripts/rplos_fast.R")
       }
