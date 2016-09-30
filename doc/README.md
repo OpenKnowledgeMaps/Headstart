@@ -6,23 +6,25 @@ See [Getting Started](../README.md#getting-started) for a minimal working exampl
 
 See [Installing and configuring the server](server_config.md) for instructions on how to install and configure the server.
 
-## Input Data Format
+## Configuration
 
-Each input dataset consists of 12 entries per document.
+At the moment, Headstart supports three different modes. The examples contain a complete setup for each of the three modes.
 
-1. **id** - Document ID
-1. **title** - Title of the document
-1. **readers** - Readers
-1. **x** - Horizontal position on the map
-1. **y** - Vertical postition on the map
-1. **paper_abstract** - Abstract *optional*
-1. **published_in** - Name of Journal *optional*
-1. **year** - Year *optional*
-1. **url** - URL (common prefix can be defined in the [options](#visualisation-settings))
-1. **file_hash** - 
-1. **authors** - Name of authors
++ Show static maps *from a headstart server*
+    
+    Set the mode to `serve_static_files`, adjust the `server_url` and you are ready to go.
+
++ Show *local maps* from client-side
+
+    In order to show local, pre-calculated maps adjust the `data-config.files` array to mirror your local file structure.
+
++ Perform queries against *third-party APIs* and create new maps
+
+    `data-config.js` allows you to choose (currently) 1 of 2 possible repositories to query against. ("plos", "pubmed"). Follow the instructions in [HOWTO: Get the search repos example to work](howto_search_repos.md).
 
 ## Visualisation Settings
+
+In order to change the look and behaviour of Headstart, adapt the options in `data-config.js` provided with each example. For an overview of all options, see `vis/js/default-config.js`
 
 Basic settings include:
 
@@ -43,7 +45,36 @@ Tweak these values to optimize bubble and paper sizes.
 
 **More settings**
 
-TBD
++ TBD
+
+To change the look of Headstart beyond these options, modify the actual SASS files in `vis/stylesheets`.
+
+## Setting up a vanilla `index.html`
+
+Our suggestion would be to build from the examples provided, but in case you want to start from scratch, here's a guidline
+
+Three lines will set up the basics of Headstart.
+
+    <div id="some_id" class="headstart"></div>                             // Headstart's div
+    <script type="text/javascript" src="path/to/data-config.js"></script>  // Runtime Config
+    <script type="text/javascript" src="path/to/dist/bundle.js"></script>  // The Core Lib
+
+
+## Input Data Format
+
+Each input dataset consists of 12 entries per document.
+
+1. **id** - Document ID
+1. **title** - Title of the document
+1. **readers** - Readers
+1. **x** - Horizontal position on the map
+1. **y** - Vertical postition on the map
+1. **paper_abstract** - Abstract *optional*
+1. **published_in** - Name of Journal *optional*
+1. **year** - Year *optional*
+1. **url** - URL (common prefix can be defined in the [options](#visualisation-settings))
+1. **file_hash** - 
+1. **authors** - Name of authors
 
 ## Architecture
 

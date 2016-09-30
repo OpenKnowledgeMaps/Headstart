@@ -5,69 +5,43 @@ the most important publications within each area. It is intended to give
 researchers that are new to a field a head start on their literature review
 (hence the name).
 
-![Head Start](http://science.okfn.org/files/2013/12/headstart.png)
+![Head Start](headstart.png)
 
 ## Getting Started
 
 ### Client
 
-To create the main stylesheet, you need to first install SASS. Check out [this wiki](https://github.com/Bubblbu/Headstart/wiki/Headstart-SASS-Intro) for more information. 
+In order to get started quickly just make sure to have `npm` installed (it comes with Node.js, you can [download installers here](https://nodejs.org/en/download/)) and run the following two commands to build the Headstart Client. 
 
-Once you have successfully created the file `main.css` in the stylesheets folder, load `vis.js` and add a new div to your webpage.
+    npm install
+    npm run dev
 
-    <div id="visualization"></div>
+We are using [webpack](https://webpack.github.io/) to build our client-side application. `webpack` is started in *watch mode* which means that changes to files are tracked and the created `bundle.js` is automatically updated. 
 
-In order to run a new instance of Headstart you need to set the five parameters in `Headstart(host, path, tag, files, options)`.
+Now you can run a local dev server:
 
-1. When developing locally set the **host** and **path** to your copy in `index.html`.
+	npm start
 
-        var myHeadstart = new Headstart(
-            "localhost/", // host
-            "headstart/", // path
+Point your browser to the following address:
 
-2. The third argument is id of the **tag** that Headstart will be embedded in. In the case of the demo, the map is appended to the new div with `id=visualization`.
+	http://localhost:8080/examples/local_files/index.html
 
-        "visualization", // append to tag
+If everything has worked out, you should see the visualization shown above.
 
-3. The fourth parameter is the input **data**. Headstart comes with five example datasets, which are stored in `vis/data`. See [data format](doc/README.md#data-format) for more details.
+See [client configuration](doc/README.md) for details on adapting the client.
 
-        [{
-            title: "name_dataset1",
-            file: "vis/data/dataset1.csv"
-        }, {
-            title: "name_dataset2",
-            file: "vis/data/dataset2.csv"
-        },
-        ...],
-
-4. Finally you can set a variety of **options** in order to adjust Headstart to your needs. See [options](doc/README.md#visualisation-settings) for more details.
-
-          {
-            title: "Name of this map",
-            width: 1200,
-            height: height,
-            max_diameter_size: 50,
-            min_diameter_size: 30,
-            max_area_size: 110,
-            min_area_size: 50,
-            input_format: "csv",
-            use_area_uri: false,
-            base_unit: "readers",
-            force_areas: false,
-            url_prefix: "http://mendeley.com/catalog/"
-        } )
+ Also see visualization [options](doc/README.md#visualisation-settings).
 
 ### Server
 
-See [Installing and configuring the server](doc/server_config.md) for instructions on how to install and configure the server.
+See [Installing and configuring the server](doc/server_config.md) for instructions on how to install and configure the server. Also, see [HOWTO: Get the search repos example to work](doc/howto_search_repos.md).
 
-## Authors
+## Contributors
 
-Peter Kraker (peter.kraker@tugraz.at)
+Maintainer: Peter Kraker ([opendiscovery@gmx.at](mailto:opendiscovery@gmx.at))
 
-Asura Enkhbayar (asura.enkhbayar@gmail.com)
+Authors: [Asura Enkhbayar](https://github.com/Bubblbu), [Scott Chamberlain](https://github.com/sckott), [Chris Kittel](https://github.com/chreman), [Philipp Weissensteiner](https://github.com/wpp), and the [Open Knowledge Maps team](http://openknowledgemaps.org/team)
 
-Philipp Weißensteiner (philipp.weissensteiner@student.tugraz.at)
 
 ## Features
 
@@ -82,15 +56,15 @@ The visualization was created with D3.js. It has been successfully tested with C
 
 ## Showcases
 
-* [PLOS Search Visualization](http://openknowledgemaps.org/mozfest): This prototype creates a visualization on the fly based on a user's PLOS search.
-* [Open Knowledge Maps](http://openknowledgemaps.org): A working prototype for the field of educational technology. 
+* [Open Knowledge Maps](http://openknowledgemaps.org/): Creates a visualization on the fly based on a user's PLOS search.
+* [Overview of Educational Technology](http://openknowledgemaps.org/educational-technology): A working prototype for the field of educational technology. 
 * [Conference Navigator 3](http://halley.exp.sis.pitt.edu/cn3/visualization.php?conferenceID=131) [registration required]: An adaptation of Head Start for the conference scheduling system CN3. This version enables users to schedule papers directly from the visualization. Scheduled papers and recommended papers are highlighted.
 * [Organic Edunet portal](http://organic-edunet.eu/en/#/recommended): Overview of recommended resources in the Organic Eudnet portal.
 
 
 ## Background
 
-The visualization is based on readership co-occurrence in Mendeley. More information can be found in the following papers:
+More information can be found in the following papers:
 
 Kraker, P., Schlögl, C. , Jack, K. & Lindstaedt, S. (2015). [Visualization of Co-Readership Patterns from an Online Reference Management System](http://arxiv.org/abs/1409.0348). Journal of Informetrics, 9(1), 169–182. doi:10.1016/j.joi.2014.12.003
 

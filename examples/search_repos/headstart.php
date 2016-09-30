@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body style="margin:0px; padding:0px">
+        
+        <div id="visualization"></div>
+        <script type="text/javascript" src="data-config.js"></script>
+        <script>
+        	data_config.title = <?php echo json_encode($_GET['title']) ?>;
+        	data_config.files = [{
+        		title: <?php echo json_encode($_GET['title']) ?>,
+        		file: <?php echo json_encode($_GET['file']) ?>
+        	}]
+        </script>
+        <script type="text/javascript" src="../../dist/bundle.js"></script>
+        <link type="text/css" rel="stylesheet" href="../../dist/style.css"></link>
+         <div style="margin-top:20px">Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a> and <a href="http://github.com/ropensci/rplos" target="_blank">rplos</a>. All content retrieved from <a href="https://www.plos.org/publications/journals/" target="_blank">Public Library of Science Journals</a> under <a href="http://journals.plos.org/plosone/s/content-license" target="_blank">CC-BY</a>.
+        </div>
+    </body>
+</html>

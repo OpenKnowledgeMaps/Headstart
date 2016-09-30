@@ -20,6 +20,9 @@ $images_path = $ini_array["general"]["images_path"];
 $output_path = $images_path . $filename;
 
 $pdf = file_get_contents($url);
-file_put_contents($output_path, $pdf);
+
+if ($pdf !== false) {
+    file_put_contents($output_path, $pdf);
+}
 
 library\CommUtils::echoOrCallback(json_encode($filename), $_GET);
