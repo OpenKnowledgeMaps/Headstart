@@ -31,29 +31,32 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   #year_to = substr(params$to, 1, 4)
   #month_to = substr(params$to, 6, 8)
   
-  date_string = paste0("year:[", params$from, ":", params$to , "]")
+  #date_string = paste0("year:[", params$from, ":", params$to , "]")
   
-  res = jaod_article_search(query="health AND license:CC-BY", pageSize=100)
+  res = jaod_article_search(query=paste0(query, ' AND language:"English"'), pageSize=100)
   
   metadata = res$results
   names(metadata)[names(metadata) == "bibjson.title"] = "title"
   names(metadata)[names(metadata) == "bibjson.abstract"] = "paper_abstract"
   names(metadata)[names(metadata) == "bibjson.journal.title"] = "published_in"
   metadata$year = paste0(metadata$bibjson.year, "-", metadata$bibjson.month)
-  names(metadata)[names(metadata) == "bibjson.link"] = "url"
   
   metadata$subject = sapply(metadata$bibjson.keywords, paste0, collapse=";")
   
   authors = c()
+  link = c()
   
   for(i in 1:nrow(metadata)) {
-    authors[i] = paste0(metadata$bibjson.author[[i]]$name, collapse =";")  
+    authors[i] = paste0(metadata$bibjson.author[[i]]$name, collapse =";") 
+    link[i] = metadata$bibjson.link[[i]]$url
   }
   
   metadata$authors = authors
+  metadata$link = link
+  metadata$url = metadata$id
   
   text = data.frame("id" = metadata$id)
-  text$content = paste(metadata$title, metadata$abstract, metadata$journal, metadata$author, metadata$subject, sep=" ")
+  text$content = paste(metadata$title, metadata$paper_abstract, metadata$published_in, metadata$authors, sep=" ")
   
   ret_val=list("metadata" = metadata, "text"=text)
   return(ret_val)

@@ -603,7 +603,13 @@ list.populateOverlay = function(d) {
                 if (d.pmcid !== "") {
                     article_url = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + d.pmcid + "/pdf/";
                 }
+            } else if(typeof d.link !== "undefined") {
+                if (d.pmcid !== "") {
+                    article_url = d.link;
+                }
             }
+            
+            
 
             $.getJSON(headstart.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url, () => {
                 this.writePopup(headstart.server_url + "paper_preview/" + pdf_url);
