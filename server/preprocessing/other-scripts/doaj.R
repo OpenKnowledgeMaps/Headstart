@@ -47,8 +47,11 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   link = c()
   
   for(i in 1:nrow(metadata)) {
-    authors[i] = paste0(metadata$bibjson.author[[i]]$name, collapse =";") 
-    link[i] = metadata$bibjson.link[[i]]$url
+    authors[i] = paste0(metadata$bibjson.author[[i]]$name, collapse =";")
+    if(!is.null(metadata$bibjson.link[[i]])) {
+      link[i] = metadata$bibjson.link[[i]]$url
+    }
+    #link[i] = metadata$bibjson.link[[i]]$url
   }
   
   metadata$authors = authors
@@ -56,7 +59,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   metadata$url = metadata$id
   
   text = data.frame("id" = metadata$id)
-  text$content = paste(metadata$title, metadata$paper_abstract, metadata$published_in, metadata$authors, sep=" ")
+  text$content = paste(metadata$title, metadata$paper_abstract, metadata$published_in, metadata$authors, metadata$subject, sep=" ")
   
   ret_val=list("metadata" = metadata, "text"=text)
   return(ret_val)
