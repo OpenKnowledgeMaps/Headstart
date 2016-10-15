@@ -10,6 +10,7 @@ Make sure you have the following packages installed:
   * curl
   * pdo_sqlite
   * mbstring
+  * fileinfo
 * R 3.1.3+ (https://www.r-project.org/) with the following libraries. **Make sure you install these packages for all users, so that Apache can load them.**
  * GMD
  * MASS
