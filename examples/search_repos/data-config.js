@@ -17,5 +17,5 @@ var data_config = {
     language: "eng_pubmed",
     area_force_alpha: 0.015,
     show_list: true,
-    is_content_based: false,
+    content_based: false,
 };
