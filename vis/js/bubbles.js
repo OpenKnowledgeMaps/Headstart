@@ -87,7 +87,7 @@ BubblesFSM.prototype = {
 
         xy_array[xy_string] = true;
 
-        if(d.paper_abstract === null) {
+        if(d.paper_abstract === null || typeof d.paper_abstract === "undefined") {
             d.paper_abstract = "";
         }
 

@@ -25,15 +25,13 @@ library(jaod)
 
 get_papers <- function(query, params, limit=100, fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
   
-  #year_from = substr(params$from, 1, 4)
-  #month_from = substr(params$from, 6, 8)
+  year_from = params$from
   
-  #year_to = substr(params$to, 1, 4)
-  #month_to = substr(params$to, 6, 8)
+  year_to = params$to
   
-  #date_string = paste0("year:[", params$from, ":", params$to , "]")
+  date_string = paste0("bibjson.year:[", params$from, " TO ", params$to , "]")
   
-  res = jaod_article_search(query=paste0(query, ' AND language:"English"'), pageSize=100)
+  res = jaod_article_search(query=paste0(query, ' AND ', date_string, ' AND language:"English"'), pageSize=100)
   
   metadata = res$results
   names(metadata)[names(metadata) == "bibjson.title"] = "title"
@@ -51,7 +49,6 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
     if(!is.null(metadata$bibjson.link[[i]])) {
       link[i] = metadata$bibjson.link[[i]]$url
     }
-    #link[i] = metadata$bibjson.link[[i]]$url
   }
   
   metadata$authors = authors

@@ -174,6 +174,21 @@ var options_pubmed = {
                 , {id: "webcasts", text: "Webcasts", selected: true}]}
     ]}
 
+var options_doaj = {
+    dropdowns: [
+        {id: "year_range", multiple: false, name: "Time Range", type: "dropdown"
+            , fields: [
+                {id: "any-time-years", text: "Any time"}
+                , {id: "this-year", text: "This year"}
+                , {id: "last-year-years", text: "Last year"}
+                , {id: "user-defined", text: "Custom range", class: "user-defined",
+                    inputs: [
+                        {id: "from", label: "From: ", class: "time_input"}
+                        , {id: "to", label: "To: ", class: "time_input"}
+                    ]}
+            ]}
+    ]}
+
 var SearchOptions = {
     user_defined_date: false,
     init: function (tag, data) {
@@ -327,19 +342,17 @@ var SearchOptions = {
         })
     },
     setDateRangeFromPreset: function (from, to, val, start_date) {
-        var self = this;
-
-        var start = new Date();
-        var end = new Date();
-        end.setHours(start.getHours() + (start.getTimezoneOffset() / 60) * -1);
-
+        var current_date = new Date();
+        var current_year = current_date.getFullYear();
+        
         switch (val) {
 
             case "user-defined":
                 self.user_defined_date = true;
                 d3.select("#input-container").style("display", "block");
                 break;
-
+            
+            //full date
             case "any-time":
                 if(typeof start_date === "undefined") {
                     start.setTime(0);
@@ -357,6 +370,26 @@ var SearchOptions = {
             case "last-year":
                 start.setFullYear(end.getFullYear() - 1);
                 this.setDateFields(from, to, start, end);
+                break;
+            
+            //years only
+            case "any-time-years":
+                if(typeof start_date === "undefined") {
+                    $(from).val("1809");
+                } else {
+                    $(from).val(start_date);
+                }
+                $(to).val(current_year);
+                break;
+
+            case "this-year":
+                $(from).val(current_year);
+                $(to).val(current_year);
+                break;
+
+            case "last-year-years":
+                $(from).val(current_year - 1);
+                $(to).val(current_year - 1);
                 break;
 
             default:

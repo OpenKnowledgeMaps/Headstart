@@ -16,7 +16,7 @@ switch(data_config.service){
     case 'doaj':
         service_url = data_config.server_url + "services/searchDOAJ.php"
         service_name = "DOAJ";
-        options = options_pubmed;
+        options = options_doaj;
         break;
 }
 
@@ -77,6 +77,17 @@ $(document).ready(function() {
     options.dropdowns.forEach(function(entry) {
         search_options.select_multi('.dropdown_multi_' + entry.id, entry.name)
     })
-
-    search_options.addDatePickerFromTo("#from", "#to", "any-time");
+    
+    var valueExists = function(key, value) {
+        var find = options.dropdowns.filter(
+            function(data){return data[key] == value}
+        );
+        
+        return (find.length > 0)?(true):(false);
+    }
+    if(valueExists("id", "time_range")) {
+        search_options.addDatePickerFromTo("#from", "#to", "any-time");
+    } else if(valueExists("id", "year_range")) {
+        search_options.setDateRangeFromPreset("#from", "#to", "any-time-years", "1809");
+    }
 });

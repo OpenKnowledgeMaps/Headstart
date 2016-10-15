@@ -611,12 +611,19 @@ list.populateOverlay = function(d) {
             
             
 
-            $.getJSON(headstart.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url, () => {
-                this.writePopup(headstart.server_url + "paper_preview/" + pdf_url);
+            $.getJSON(headstart.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url, (data) => {
+                if (data.status === "success") {
+                    this.writePopup(headstart.server_url + "paper_preview/" + pdf_url);
+                } else if (data.status === "error") {
+                     $("#spinner-iframe").hide();
+                     $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this.createOutlink(this_d) + "\" target=\"_blank\">this website</a>.");
+                     $("#status").show();
+                }
+                
             }).fail((d, textStatus, error) => {
+                console.error("getJSON failed, status: " + textStatus + ", error: "+error);
                 $("#spinner-iframe").hide();
                 $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this.createOutlink(this_d) + "\" target=\"_blank\">this website</a>.");
-                console.error("getJSON failed, status: " + textStatus + ", error: "+error);
                 $("#status").show();
             });
         }
