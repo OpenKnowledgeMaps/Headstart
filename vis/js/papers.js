@@ -447,6 +447,13 @@ papers.resizePaper = function(d, holder_div, resize_factor, color) {
     let current_foreignObject = current_g_paper.select("foreignObject");
     let current_path = current_g_paper.select("path#region");
     let current_dogear = current_g_paper.select("path.dogear");
+    
+    var current_size = d.height * headstart.circle_zoom;
+    var max_size = headstart.current_vis_size/2;
+    
+    if (current_size * resize_factor > max_size) {
+        resize_factor = max_size/current_size;
+    }
 
     //current_g.parentNode.appendChild(current_g);
     toFront(current_g_paper.node());
