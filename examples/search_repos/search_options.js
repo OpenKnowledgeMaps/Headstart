@@ -323,6 +323,7 @@ var SearchOptions = {
                 , buttonWidth: '150px'
                 , numberDisplayed: 2
                 , maxHeight: 250
+                , includeSelectAllOption: true
                 , onChange: function (element, checked) {
                     if (checked === true) {
 
