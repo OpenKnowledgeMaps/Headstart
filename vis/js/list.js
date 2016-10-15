@@ -336,13 +336,15 @@ list.filterList = function (search_words) {
                 var abstract = d.paper_abstract.toLowerCase();
                 var title = d.title.toLowerCase();
                 var authors = d.authors_string.toLowerCase();
+                var journals = d.published_in.toLowerCase();
                 var word_found = true;
                 var count = 0;
                 if (typeof abstract !== 'undefined') {
                     while (word_found && count < search_words.length) {
                         word_found = (abstract.indexOf(search_words[count]) !== -1 || 
                             title.indexOf(search_words[count]) !== -1 || 
-                            authors.indexOf(search_words[count]) !== -1);
+                            authors.indexOf(search_words[count]) !== -1 ||
+                            journals.indexOf(search_words[count]) !== -1);
                         count++;
                     }
                     d.filtered_out = word_found ? false : true;
@@ -603,14 +605,27 @@ list.populateOverlay = function(d) {
                 if (d.pmcid !== "") {
                     article_url = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + d.pmcid + "/pdf/";
                 }
+            } else if(typeof d.link !== "undefined") {
+                if (d.pmcid !== "") {
+                    article_url = d.link;
+                }
             }
+            
+            
 
-            $.getJSON(headstart.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url, () => {
-                this.writePopup(headstart.server_url + "paper_preview/" + pdf_url);
+            $.getJSON(headstart.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url, (data) => {
+                if (data.status === "success") {
+                    this.writePopup(headstart.server_url + "paper_preview/" + pdf_url);
+                } else if (data.status === "error") {
+                     $("#spinner-iframe").hide();
+                     $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this.createOutlink(this_d) + "\" target=\"_blank\">this website</a>.");
+                     $("#status").show();
+                }
+                
             }).fail((d, textStatus, error) => {
+                console.error("getJSON failed, status: " + textStatus + ", error: "+error);
                 $("#spinner-iframe").hide();
                 $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this.createOutlink(this_d) + "\" target=\"_blank\">this website</a>.");
-                console.error("getJSON failed, status: " + textStatus + ", error: "+error);
                 $("#status").show();
             });
         }

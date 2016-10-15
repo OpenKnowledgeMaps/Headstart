@@ -87,8 +87,12 @@ BubblesFSM.prototype = {
 
         xy_array[xy_string] = true;
 
-        if(d.paper_abstract === null) {
+        if(d.paper_abstract === null || typeof d.paper_abstract === "undefined") {
             d.paper_abstract = "";
+        }
+        
+        if(d.published_in === null || typeof d.published_in === "undefined") {
+            d.published_in = "";
         }
 
         if(headstart.content_based === false) {
