@@ -494,7 +494,8 @@ list.setListHolderDisplay = function(d) {
           return (x.area == d.area);
         }
     })
-  .style("display", function (d) { return d.filtered_out?"none":"inline"; });
+  .style("display", function (d) { return d.filtered_out?"none":"inline"; })
+        .select(".list_entry").attr("class", "list_entry_full");
 
   this.papers_list.selectAll("#list_holder")
     .filter(function (x) {
@@ -512,7 +513,9 @@ list.reset = function() {
     });
     
     this.createHighlights(this.current_search_words);
-
+    
+    d3.selectAll(".list_entry_full").attr("class", "list_entry");
+    
     if (headstart.current_enlarged_paper !== null) {
       this.notSureifNeeded();
     }
@@ -644,7 +647,7 @@ list.setImageForListHolder = function(d) {
         .filter(function(x) {
             return (x.id == d.id);
         });
-
+    
     let image_src = "paper_preview/" + d.id + "/page_1.png";
     let pdf_preview = require("images/preview_pdf.png");
     if (headstart.preview_type == "image") {

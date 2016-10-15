@@ -1,3 +1,14 @@
+.list_entry {
+    border-bottom: 2px solid #E1E5E6; 
+    padding-left: 15px; 
+    border-left: 0px solid #E1E5E6;
+}
+
+.list_entry_full {
+    border-bottom: 0px; 
+    padding-left: 15px; 
+}
+
 .list_metadata {
     /*border-top-width: 2px;
     border-top-style: solid;
