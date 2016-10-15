@@ -345,6 +345,10 @@ var SearchOptions = {
     setDateRangeFromPreset: function (from, to, val, start_date) {
         var current_date = new Date();
         var current_year = current_date.getFullYear();
+		
+		var start = new Date();
+        var end = new Date();
+        end.setHours(start.getHours() + (start.getTimezoneOffset() / 60) * -1);
         
         switch (val) {
 
