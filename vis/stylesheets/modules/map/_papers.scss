@@ -16,7 +16,7 @@
 
 .paper_holder {
     overflow: hidden;
-    
+
     p {
         margin: 0 0 5px;
     }
@@ -27,37 +27,43 @@
         text-align: left;
         padding: 2px;
         margin: 0px;
-        }
+    }
 
-        .large {
-            
-            font-size: 11px;
-            padding: 5px 0px 0px 10px;
-            line-height: 120%;
-        }
+    .large {
 
-        .larger {
-            font-size: 14px;
-            padding: 5px 0px 0px 10px;
-            line-height: 120%;
-        }
-        #outlink  {
+        font-size: 11px;
+        padding: 5px 0px 0px 10px;
+        line-height: 120%;
+    }
+
+    .larger {
+        font-size: 14px;
+        padding: 5px 0px 0px 10px;
+        line-height: 120%;
+    }
+    #outlink  {
+        display:none;
+        font-size: 0px;
+        font-family: FontAwesome;
+        vertical-align: top;
+        margin-left:0px;
+        
+        &.large {
             display:inline-block;
-            font-size: 2px;
-            font-family: FontAwesome;
-            vertical-align: top;
-            margin-left:10px;
+            font-size: 12px;
         }
-            
-          #outlink.large  {
-                font-size: 11px;
-                
-            }
-            a {
-                color: $okm-red;
-            }
+        &.larger {
+            display:inline-block;
+            font-size: 12px;
         }
-        #readers {
+    }
+
+    
+    a {
+        color: $okm-red;
+    }
+
+    #readers {
         font-size: 9px;
         line-height: 8px;
         margin-bottom: 3px;
@@ -66,7 +72,7 @@
         vertical-align: text-bottom;
         font-family: Helvetica;
         font-weight: bold;
-        
+
 
         &.large {
             font-size: 11px;
@@ -77,36 +83,34 @@
             font-size: 12px;
             padding: 0px 10px;
         }
-        
-        
+
+
 
         span {
             color: black;
         }
     }
-   
+
 }
 
 
-        
- #open-access-logo {
-            padding: 0px 0px;
-            display:inline-block;
-            max-width:12px;
-            width:50%; 
-            height:auto;
-            
-            &.large {
-                width:100%;
-                max-width:12px;
-                padding: 5px 0px 2px 10px;
-            }
-            
-            &.larger {
-                width:100%;
-                padding: 5px 0px 2px 10px;
-            }
-        }       
+
+#open-access-logo {
+    
+    padding: 0px 0px 0px 0px;
+    display:inline-block;
+
+    &.large {
+        width:12px;
+        padding: 5px 8px 2px 10px;
+    }
+
+    &.larger {
+        width:12px;
+        padding: 5px 8px 2px 10px;
+    
+    }
+}       
 
 
 

@@ -98,6 +98,15 @@
     }
 }
 
+.link2 {
+   
+    display: block;
+    margin-top: 10px;
+   
+}
+
+
+
 .list_readers {
     font-size: 11px;
     line-height: 11px;
@@ -121,9 +130,7 @@ div {
     &#preview_image {
         display: block;
         margin-top: 20px;
-        margin-right: auto;
-        margin-left: auto;
-        border: 1px solid;
+        margin-left: 15px;
     }
 
     &#transbox {
