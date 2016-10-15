@@ -27,6 +27,7 @@ Make sure you have the following packages installed:
  * tibble
  * data.table
  * xml2 **(Version 1.0 or higher)**
+ * jaod (Currently, a Github repository only: http://github.com/ropenscilabs/jaod. Install with devtools.)
 
 ## Configuration
 
@@ -46,4 +47,4 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 * general->images_path: Full path to the images directory for the client. Needs to be in the public_html/www directory. **Make sure that your webserver has write access to this directory.**
 * general->services_path: Relative path to the client REST services. Needs to be in the public_html/www directory.
 * calculation->binary: Path to RScript binary
-* connection->sqlite_db: Full path to the sqlite datatabase file. For development purposes, duplicate headstart.sqlite in server/storage/ and rename it to a filename of your choice. Enter the path to this file here. **Make sure that your webserver has write access to this file.**
+* connection->sqlite_db: Full path to the sqlite datatabase file. For development purposes, duplicate headstart.sqlite in server/storage/ and rename it to a filename of your choice. Enter the path to this file here. **Make sure that your webserver has write access to this file and the containing directory.**
