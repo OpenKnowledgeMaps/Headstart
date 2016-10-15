@@ -41,6 +41,13 @@
         padding: 5px 0px 0px 10px;
         line-height: 120%;
     }
+    
+    #title {
+        &.larger {
+            margin-top: 8px;
+        }
+    }
+    
     #outlink  {
         display:none;
         font-size: 0px;
