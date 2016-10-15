@@ -1,7 +1,7 @@
 .list_metadata {
-    border-top-width: 2px;
+    /*border-top-width: 2px;
     border-top-style: solid;
-    border-color: $okm-light-gray;
+    border-color: $okm-light-gray;*/
     padding-top: 10px;
     margin-bottom: 10px;
     font-family: Helvetica;
@@ -32,7 +32,11 @@
     .list_links a {
         color: $okm-red;
         text-decoration: none;
+        &:hover {
+        color: $okm-blue;
     }
+    }
+    
 
     .outlink_symbol {
         font-family: FontAwesome;

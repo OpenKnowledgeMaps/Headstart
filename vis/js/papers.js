@@ -220,7 +220,7 @@ papers.prepareForeignObject = function(nodes) {
         }).append("xhtml:body")
         .html(function(d) {
             return paperTemplate({
-                'metadata_height': (headstart.content_based) ? (d.height) : (d.height * 0.8),
+                'metadata_height': (headstart.content_based) ? (d.height) : (d.height * 0.75),
                 'metadata_width': d.width * 0.8,
                 'd': d,
                 'base_unit': headstart.base_unit

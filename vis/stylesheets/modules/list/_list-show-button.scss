@@ -1,9 +1,12 @@
 #show_hide_button {
     cursor: pointer;
+    padding: 5px 0px;
+    background-color: $okm-blue;
+    color: white;
 
     &.hover {
-        background-color: $okm-blue;
-        color: white;
+        background-color: white;
+        color: $okm-blue;
     }
 }
 

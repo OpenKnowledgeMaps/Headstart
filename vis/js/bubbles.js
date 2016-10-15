@@ -721,12 +721,12 @@ BubblesFSM.prototype = {
         return d.width * (1-headstart.dogear_width) + "px";
       })
     .style("height", function (d) {
-      return (headstart.content_based)?(d.height):(d.height * 0.8 + "px");
+      return (headstart.content_based)?(d.height):(d.height * 0.75 + "px");
     });
 
     t.selectAll("div.readers")
       .style("height", function (d) {
-        return d.height * 0.2 + "px";
+        return d.height * 0.25 + "px";
       })
     .style("width", function (d) {
       return d.width + "px";
@@ -871,11 +871,11 @@ BubblesFSM.prototype = {
     });
 
     t.selectAll("div.readers")
-      .style("height", "15px")
+      //.style("height", "15px")
       .style("width", function (d) {
         return d.width * headstart.circle_zoom + "px";
       })
-      .style("margin-top", "4px");
+      //.style("margin-top", "4px");
 
     t.selectAll("p")
       .attr("class", "large highlightable");
