@@ -99,6 +99,7 @@ list.drawList = function() {
 
     this.fit_list_height();
     this.papers_list = d3.select("#papers_list");
+    
 };
 
 list.fit_list_height = function() {
@@ -177,14 +178,29 @@ list.populateMetaData = function(nodes) {
 
         list_metadata.select(".outlink")
             .attr("href", function(d) {
-                if (headstart.url_prefix !== null) {
-                    return headstart.url_prefix + d.url;
-                } else if (typeof d.url != 'undefined') {
-                    return d.url;
-                }
+                return d.outlink;
             })
             .on("click", function() { d3.event.stopPropagation(); });
-
+        
+        list_metadata.select("#open-access-logo_list")
+                .style("display", function (d) {
+                    if (d.oa === false) {
+                        return "none";
+                    } 
+                });
+                
+        var paper_link = list_metadata.select(".link2")
+        
+        paper_link.style("display", function (d) {
+                    if (d.oa === false) {
+                        return "none";
+                    }
+                });
+                
+        paper_link.attr("href", function (d) {
+            return d.oa_link;
+        })
+        
         list_metadata.select(".list_authors")
             .html(function(d) {
                 return d.authors_string; });
@@ -601,34 +617,21 @@ list.populateOverlay = function(d) {
             $("#pdf_iframe").hide();
             $("#iframe_modal").modal();
             
-            let journal = this_d.published_in.toLowerCase();
-            let article_url = "http://journals.plos.org/" + headstart.plos_journals_to_shortcodes[journal] + "/article/asset?id=" + filename;
-
-            if(typeof d.pmcid !== "undefined") {
-                if (d.pmcid !== "") {
-                    article_url = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + d.pmcid + "/pdf/";
-                }
-            } else if(typeof d.link !== "undefined") {
-                if (d.pmcid !== "") {
-                    article_url = d.link;
-                }
-            }
-            
-            
+            let article_url = d.oa_link;
 
             $.getJSON(headstart.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url, (data) => {
                 if (data.status === "success") {
                     this.writePopup(headstart.server_url + "paper_preview/" + pdf_url);
                 } else if (data.status === "error") {
                      $("#spinner-iframe").hide();
-                     $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this.createOutlink(this_d) + "\" target=\"_blank\">this website</a>.");
+                     $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
                      $("#status").show();
                 }
                 
             }).fail((d, textStatus, error) => {
                 console.error("getJSON failed, status: " + textStatus + ", error: "+error);
                 $("#spinner-iframe").hide();
-                $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this.createOutlink(this_d) + "\" target=\"_blank\">this website</a>.");
+                $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
                 $("#status").show();
             });
         }
@@ -636,12 +639,6 @@ list.populateOverlay = function(d) {
 };
 
 list.setImageForListHolder = function(d) {
-
-    if (typeof d.pmcid !== "undefined") {
-        if (d.pmcid === "") {
-            return;
-        }
-    }
 
     var current_item = this.papers_list.selectAll("#list_holder")
         .filter(function(x) {
@@ -674,6 +671,10 @@ list.setImageForListHolder = function(d) {
             });        
         }
     } else {
+        if(d.oa === false) {
+            return;
+        }
+        
         current_item.append("div")
             .attr("id", "preview_image")
             .style("width", headstart.preview_image_width_list + "px")
@@ -717,7 +718,7 @@ list.createOutlink = function(d) {
 
 list.title_click = function (d) {
         
-      var url = this.createOutlink(d);
+      var url = d.outlink;
       if (url === false) {
           d3.event.stopPropagation();
           return;

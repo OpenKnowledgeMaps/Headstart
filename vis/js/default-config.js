@@ -77,7 +77,7 @@ var config = {
 
     // misc
     debounce: 50,
-
+    service: "none",
     language: "eng",
 
     // behaviour settings (mostly legacy)
