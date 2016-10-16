@@ -875,11 +875,11 @@ BubblesFSM.prototype = {
     });
 
     t.selectAll("div.readers")
-      //.style("height", "15px")
+      .style("height", "15px")
       .style("width", function (d) {
         return d.width * headstart.circle_zoom + "px";
       })
-      //.style("margin-top", "4px");
+      .style("margin-top", "3px");
 
     t.selectAll("p")
       .attr("class", "large highlightable");
