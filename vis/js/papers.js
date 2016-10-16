@@ -135,6 +135,13 @@ papers.drawPapers = function (bubbles) {
     d3.selectAll("#article_metadata").select(".paper_holder").select(".metadata");
     d3.selectAll("#article_metadata").select(".readers");
     
+    d3.selectAll("#article_metadata").select("#icons")
+            .style("height", function (d) {
+                if(d.oa === true) {
+                    return "20px";
+                }
+            })
+    
     d3.selectAll("#article_metadata").select("#open-access-logo")
             .style("display", function (d) {
                 if(d.oa === false) {
@@ -554,7 +561,7 @@ papers.enlargePaper = function (d, holder_div) {
                             list.show();
                         }
                     } else {
-                        mediator.publish("list_title_click", d);
+                        //mediator.publish("list_title_click", d);
                     }
 
                     d.paper_selected = true;
