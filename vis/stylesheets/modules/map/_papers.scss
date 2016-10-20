@@ -55,6 +55,8 @@
         vertical-align: top;
         margin-left:0px;
         
+        
+        
         &.large {
             display:inline-block;
             font-size: 12px;
@@ -100,7 +102,14 @@
 
 }
 
-
+.outlink_symbol  {
+    color: $okm-red;
+    
+    &:hover, &:active, &:focus {
+        color: $okm-blue;
+        text-decoration: none;
+    }
+}
 
 #open-access-logo {
     
