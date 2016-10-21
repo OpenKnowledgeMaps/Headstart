@@ -305,6 +305,12 @@ BubblesFSM.prototype = {
 
         d3.selectAll("#area_title").on("mouseout", function () {
             if (headstart.current != "timeline") {
+                                                
+                //if mouse out to child element, abort
+                if(d3.event.target.parentElement == this) { 
+                    return false; 
+                }
+                
                 headstart.bubbles[headstart.current_file_number].showCircle(this);
             }
         });

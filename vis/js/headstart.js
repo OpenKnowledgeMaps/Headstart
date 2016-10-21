@@ -932,8 +932,6 @@ HeadstartFSM.prototype = {
     // moving this to bubbles.start results in papers being displayed over the
     // bubbles, unfortunately
     bubbles.draw();
-
-    bubbles.initMouseListeners();
     
     list.start( bubbles );
 
@@ -945,6 +943,9 @@ HeadstartFSM.prototype = {
     
     $("#area_title>h2").hyphenate('en');
     $("#area_title_object>body").dotdotdot({wrap:"letter"});
+    
+    bubbles.initMouseListeners();
+    
   },
 
   drawNormalViewLink: function() {
