@@ -548,8 +548,6 @@ BubblesFSM.prototype = {
                     .style("display", "none");
         }
 
-        d3.event.stopPropagation();
-
         if (previous_zoom_node !== null && typeof previous_zoom_node != 'undefined') {
 
             if (typeof d != 'undefined') {
@@ -566,7 +564,7 @@ BubblesFSM.prototype = {
                 return;
             }
         }
-
+        
         var zoom_node = headstart.chart.selectAll("circle")
                 .filter(function (x) {
                     if (d !== null) {
@@ -644,8 +642,11 @@ BubblesFSM.prototype = {
         //var svg = document.getElementById("chart-svg");
         //var viewbox = svg.getAttribute("viewBox").split(/\s+|,/);
         headstart.circle_zoom = headstart.current_vis_size / d.r / 2 * headstart.zoom_factor;
-        headstart.x.domain([d.x - d.r, d.x + d.r]);
-        headstart.y.domain([d.y - d.r, d.y + d.r]);
+        
+        var padding = d.r * 0.08;
+        
+        headstart.x.domain([d.x - d.r + padding, d.x + d.r - padding]);
+        headstart.y.domain([d.y - d.r + padding, d.y + d.r - padding]);
 
         headstart.paper_x.domain([d.x - d.r, d.x + d.r]);
         headstart.paper_y.domain([d.y - d.r, d.y + d.r]);
@@ -671,7 +672,10 @@ BubblesFSM.prototype = {
         // headstart.recordAction(d.id, "zoom_in", headstart.user_id, "none", null);
 
         d3.event.stopPropagation();
-
+        
+        //Fix Webkit overflow behaviour
+        d3.select("rect").attr("width", headstart.available_width + "px")
+        
         headstart.is_zoomed = true;
         headstart.zoom_finished = false;
     },
@@ -685,6 +689,9 @@ BubblesFSM.prototype = {
         if (papers.is("loading")) {
             return;
         }
+        
+        //Fix for Chrome's overflow behaviour
+        d3.select("rect").attr("width", headstart.current_vis_size + "px")
 
         list.reset();
 
