@@ -37,7 +37,7 @@ var config = {
 
     // preview
     preview_image_width_list: 230,
-    preview_image_height_list: 300,
+    preview_image_height_list: 298,
     preview_page_height: 400,
     preview_top_height: 30,
     preview_image_width: 738,
@@ -77,7 +77,7 @@ var config = {
 
     // misc
     debounce: 50,
-
+    service: "none",
     language: "eng",
 
     // behaviour settings (mostly legacy)

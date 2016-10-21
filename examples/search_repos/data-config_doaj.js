@@ -2,9 +2,9 @@ var data_config = {
     tag: "visualization",
     mode: "search_repos",
     
-    server_url: "public/path/to/server/",
+    server_url: "http://localhost/headstart_master/server/",
 
-    service: "plos",
+    service: "doaj",
 
     title: "",
     base_unit: "citations",
@@ -17,5 +17,6 @@ var data_config = {
     language: "eng_pubmed",
     area_force_alpha: 0.015,
     show_list: true,
-    content_based: false,
+    content_based: true,
+    url_prefix: "https://doaj.org/article/"
 };

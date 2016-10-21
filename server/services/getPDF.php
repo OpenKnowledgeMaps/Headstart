@@ -23,6 +23,21 @@ $pdf = file_get_contents($url);
 
 if ($pdf !== false) {
     file_put_contents($output_path, $pdf);
+} else {
+    library\CommUtils::echoOrCallback(json_encode(array("status" => "error")), $_GET);
+    exit();
 }
 
-library\CommUtils::echoOrCallback(json_encode($filename), $_GET);
+$finfo = finfo_open(FILEINFO_MIME_TYPE); 
+
+$mime_type = finfo_file($finfo, $output_path);
+
+finfo_close($finfo);
+
+if (strtolower($mime_type) != "application/pdf") {
+    unlink($output_path);
+    library\CommUtils::echoOrCallback(json_encode(array("status" => "error")), $_GET);
+    exit();
+}
+
+library\CommUtils::echoOrCallback(json_encode(array("status" => "success", "file" => $filename)), $_GET);

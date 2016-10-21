@@ -77,7 +77,7 @@ replace_keywords_if_empty <- function(corpus, metadata) {
   i = 1
 
   for(i in 1:nrow(metadata)) {
-    if (metadata$subject[i] == "") {
+    if (metadata$subject[i] == "" || metadata$subject[i] == "n/a") {
       freq_terms = as.matrix(dtm[i,])
       freq_terms_sorted = sort(colSums(freq_terms), decreasing=TRUE)
       top_terms = head(freq_terms_sorted, 9)

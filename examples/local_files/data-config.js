@@ -12,6 +12,8 @@ var data_config = {
     show_timeline: false,
     show_dropdown: true,
     show_intro: false,
+    show_list:true,
+    is_force_papers:false,
 
     files: [{
         title: "edu1",

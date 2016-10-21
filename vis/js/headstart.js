@@ -471,14 +471,14 @@ HeadstartFSM.prototype = {
     let self = this;
     let chart_title = "";
     
-    if(this.subdiscipline_title === "") {
+    if(this.title === "") {
         if (this.language === "eng") {
             chart_title = 'Overview of <span id="num_articles"></span> articles';
         } else {
             chart_title = 'Überblick über <span id="num_articles"></span> Artikel';
         }
     } else {
-        chart_title = this.subdiscipline_title;
+        chart_title = this.title;
     }
 
     $("#subdiscipline_title h4").html(chart_title);
