@@ -80,11 +80,11 @@ replace_keywords_if_empty <- function(corpus, metadata) {
     if (metadata$subject[i] == "") {
       freq_terms = as.matrix(dtm[i,])
       freq_terms_sorted = sort(colSums(freq_terms), decreasing=TRUE)
-      top_terms = head(freq_terms_sorted, 7)
+      top_terms = head(freq_terms_sorted, 9)
 
       freq_terms2 = as.matrix(dtm2[i,])
       freq_terms_sorted2 = sort(colSums(freq_terms2), decreasing=TRUE)
-      top_terms2 = head(freq_terms_sorted2, 3)
+      top_terms2 = head(freq_terms_sorted2, 1)
 
       freq_terms3 = as.matrix(dtm3[i,])
       freq_terms_sorted3 = sort(colSums(freq_terms3), decreasing=TRUE)
@@ -111,7 +111,7 @@ normalize_matrix <- function(tdm_matrix, method = "cosine") {
 create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
   # Perform clustering, use elbow to determine a good number of clusters
   css_cluster <- css.hclust(distance_matrix, hclust.FUN.MoreArgs=list(method="ward.D"))
-  cut_off = elbow.batch(css_cluster)
+  cut_off <<- elbow.batch(css_cluster)
 
   num_clusters = cut_off$k
 
@@ -140,7 +140,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 create_ordination <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
 
   # Perform non-metric multidimensional scaling
-  nm = par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
+  nm <<- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
   nm.nmin = nmds.min(nm)
 
   if(debug == TRUE) {
@@ -154,24 +154,35 @@ create_ordination <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
 }
 
 
+splitter <- function(x) {
+  x = strsplit(x, split=";")
+  x = unlist(x)
+  return(x)
+}
+
 SplitTokenizer <- function(x) {
-  tokens = unlist(lapply(strsplit(words(x), split=";"), paste, collapse = " "), use.names = FALSE)
+  tokens = unlist(lapply(strsplit(words(x), split=";"), paste), use.names = FALSE)
   return(tokens)
 }
 
-create_node_names <- function(md) {
-  nn_corpus <- Corpus(VectorSource(md$subject), readerControl = list("subject"))
-  # nn_corpus <- tm_map(nn_corpus, content_transformer(tolower))
+create_cluster_names <- function(clusters, metadata_full_subjects, top_n) {
+  subjectlist = list()
+  for (k in seq(1, clusters$num_clusters)) {
+    group = c(names(clusters$groups[clusters$groups == k]))
+    matches = which(metadata_full_subjects$id%in%group)
+    subjects = paste(metadata_full_subjects$subject[c(matches)], collapse=";")
+    subjectlist = c(subjectlist, subjects)
+  }
+  nn_corpus <- Corpus(VectorSource(subjectlist))
+  nn_corpus <- tm_map(nn_corpus, content_transformer(tolower))
   # nn_corpus <- tm_map(nn_corpus, content_transformer(splitter))
-  # nn_corpus <- tm_map(nn_corpus, removeWords, stopwords("english"))
-  # nn_corpus <- tm_map(nn_corpus, removePunctuation)
-  nn_tfidf <- DocumentTermMatrix(nn_corpus, control = list(weighting = weightTfIdf, tokenize=SplitTokenizer))
-
+  nn_corpus <- tm_map(nn_corpus, removeWords, stopwords("english"))
+  nn_tfidf <- DocumentTermMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = weightTfIdf))
   tfidf_top <- apply(nn_tfidf, 1, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
-  tfidf_top5 <- lapply(tfidf_top, function(x) head(x, 5))
-  tfidf_top5_names <- lapply(tfidf_top5, names)
-  md$tfidf_top5 <- tfidf_top5_names
-  return(md)
+  tfidf_top <- lapply(tfidf_top, function(x) head(x, top_n))
+  tfidf_top_names <- lapply(tfidf_top, names)
+  clusters$cluster_names <- tfidf_top_names
+  return(clusters)
 }
 
 create_output <- function(clusters, layout, metadata) {
