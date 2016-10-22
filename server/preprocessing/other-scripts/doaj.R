@@ -54,6 +54,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   metadata$authors = authors
   metadata$link = link
   metadata$url = metadata$id
+  metadata$relevance = c(nrow(metadata):1)
   
   text = data.frame("id" = metadata$id)
   text$content = paste(metadata$title, metadata$paper_abstract, metadata$published_in, metadata$authors, metadata$subject, sep=" ")

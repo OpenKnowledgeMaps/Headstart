@@ -133,6 +133,7 @@ var config = {
             show_list: "Show list",
             hide_list: "Hide list",
             intro_label: "What's this?",
+            relevance: "relevance",
             readers: "citations",
             year: "year",
             authors: "authors",

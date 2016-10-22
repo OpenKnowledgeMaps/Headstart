@@ -2,7 +2,7 @@ var data_config = {
     tag: "visualization",
     mode: "search_repos",
     
-    server_url: "public/path/to/server/",
+    server_url: "http://localhost/project-website/search/server/",
 
     service: "plos",
 
