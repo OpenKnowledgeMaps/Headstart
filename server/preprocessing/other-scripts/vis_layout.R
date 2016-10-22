@@ -63,7 +63,14 @@ create_tdm_matrix <- function(metadata, text, sparsity=1, lang="english") {
   return(list(tdm_matrix = tdm_matrix, metadata_full_subjects = metadata_full_subjects))
 }
 
+
+
 replace_keywords_if_empty <- function(corpus, metadata) {
+  
+  remove_alone_numbers <- content_transformer(function(x)
+    gsub('\\b\\d+\\s','', x))
+  
+  corpus <- tm_map(corpus, remove_alone_numbers)
   
   dtm = DocumentTermMatrix(corpus)
   

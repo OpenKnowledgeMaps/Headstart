@@ -70,6 +70,12 @@ class KeywordNaming extends Naming {
         $num_docs_per_term = array();
 
         foreach ($working_array as $uri => $current_array) {
+            $current_array["all_terms"] = array_filter($current_array["all_terms"]);
+            $current_array["all_terms"] = array_map('trim', $current_array["all_terms"]);
+            array_walk($current_array["all_terms"], function(&$value, &$key) {
+                $value = ucfirst($value);
+            });
+            
             $unique_terms = array_unique($current_array["all_terms"]);
             $working_array[$uri]["unique_terms"] = $unique_terms;
 
@@ -109,10 +115,6 @@ class KeywordNaming extends Naming {
             arsort($current_result_array);
 
             $important_terms = array_keys(array_slice($current_result_array, 0, $num_keywords));
-
-            array_walk($important_terms, function(&$value, &$key) {
-                $value = ucfirst($value);
-            });
 
             $final_string = implode(", ", $important_terms);
             $result_array[$uri] = $final_string;
