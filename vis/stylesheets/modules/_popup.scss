@@ -8,6 +8,13 @@
         display: table;
         overflow: hidden;
     }
+    
+    #status {
+        a {
+            text-decoration: underline;
+            color: $okm-red;
+        }
+    }
 
 }
 
