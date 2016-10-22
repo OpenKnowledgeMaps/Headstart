@@ -9,7 +9,7 @@ import { BubblesFSM } from 'bubbles';
 import { papers } from 'papers';
 import { list } from 'list';
 
-import { intro, intro_cn3, intro_plos } from 'intro';
+import { intros } from 'intro';
 import { getRealHeight } from "helpers";
 import { BrowserDetect } from "helpers";
   
@@ -278,6 +278,8 @@ HeadstartFSM.prototype = {
   },
 
   initEventListeners: function() {
+      var self = this;
+      
       d3.select(window).on("resize", () => {
         if (this.is("timeline")) {
           return;
@@ -420,6 +422,10 @@ HeadstartFSM.prototype = {
 
       // Info Modal Event Listener
       $('#info_modal').on('show.bs.modal', function() {
+          var current_intro = self.intro;
+          
+          var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(self.intro)
+          
           $(this).find('.modal-title ').text(intro.title);
           $(this).find('.modal-body').html(intro.body);
       });

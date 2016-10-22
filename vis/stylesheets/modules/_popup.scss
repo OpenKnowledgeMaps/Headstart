@@ -1,39 +1,47 @@
 /* ########### Popups/Modals ########### */
 
-    #iframe_modal {
-        
-        .modal-body {
-            height: 80vh;
+#iframe_modal {
+
+    .modal-body {
+        height: 80vh;
+        width: 100%;
+        display: table;
+        overflow: hidden;
+    }
+
+}
+
+#images_modal {
+
+    .modal-lg {
+        max-width: 788px;
+    }
+
+    .modal-body {
+        height: 80vh;
+        width: 100%;
+        display: table;
+        overflow: scroll;
+
+        #images_holder {
             width: 100%;
-            display: table;
-            overflow: hidden;
-    }
-
-    }
-
-    #images_modal {
-
-        .modal-lg {
-            max-width: 788px;
-    }
-
-        .modal-body {
-            height: 80vh;
-            width: 100%;
-            display: table;
-            overflow: scroll;
-
-            #images_holder {
-                width: 100%;
-                height: 75vh;
-                overflow-y: scroll;
-            }
+            height: 75vh;
+            overflow-y: scroll;
         }
+    }
+}
+
+#info_modal {
+    
+    .modal-dialog {
+        width: 80%;
+        max-width: 700px;
+    }
 }
 
 #pdf_iframe {
     width: 100%;
-        height: 75vh;
+    height: 75vh;
 }
 
 .modal {
@@ -48,23 +56,23 @@
         margin-right: -4px;
         /* Adjusts for spacing */
     }
-        
-        //Firefox bug
-        .glyphicon-refresh-animate {
-            animation: spin .7s infinite linear;
-            -webkit-animation: spin2 .7s infinite linear;
-        }
 
-        @-webkit-keyframes spin2 {
-            from { -webkit-transform: rotate(0deg);}
-            to { -webkit-transform: rotate(360deg);}
-        }
-
-        @keyframes spin {
-            from { transform: scale(1) rotate(0deg);}
-            to { transform: scale(1) rotate(360deg);}
-        }
+    //Firefox bug
+    .glyphicon-refresh-animate {
+        animation: spin .7s infinite linear;
+        -webkit-animation: spin2 .7s infinite linear;
     }
+
+    @-webkit-keyframes spin2 {
+        from { -webkit-transform: rotate(0deg);}
+        to { -webkit-transform: rotate(360deg);}
+    }
+
+    @keyframes spin {
+        from { transform: scale(1) rotate(0deg);}
+        to { transform: scale(1) rotate(360deg);}
+    }
+}
 
 .modal-dialog {
     display: inline-block;
@@ -74,7 +82,7 @@
 
 .modal-header {
     padding-bottom: 0px;
-        border-bottom: 0px;
+    border-bottom: 0px;
 }
 
 h5 {

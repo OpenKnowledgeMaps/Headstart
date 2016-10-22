@@ -86,6 +86,9 @@ var config = {
     conference_id: 0,
     user_id: 0,
     max_recommendations: 10,
+    
+    //intro
+    intro: "intro_hs",
 
     localization: {
         eng: {
