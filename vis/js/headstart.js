@@ -263,8 +263,8 @@ HeadstartFSM.prototype = {
   
   updateChartCanvas: function () {
       d3.select("rect")
-        .attr( "height", this.current_vis_size + "px" )
-        .attr( "width",  this.current_vis_size + "px" );
+        .attr( "height", this.current_vis_size )
+        .attr( "width",  this.current_vis_size );
   },
   
   calcTitleFontSize: function () {

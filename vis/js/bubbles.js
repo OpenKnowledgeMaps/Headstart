@@ -563,6 +563,15 @@ BubblesFSM.prototype = {
                 d3.event.stopPropagation();
                 return;
             }
+        } else {
+            //Fix Webkit overflow behaviour
+            d3.select("rect")
+                    .attr("x", function () {
+                        return (headstart.available_width/2 - this.getAttribute("width")/2)*-1
+                    })
+                    .attr("width", headstart.available_width)
+                    .attr("height", $(".vis-col").height() + 45)
+                    .attr("y", $("#subdiscipline_title").outerHeight(true)*-1)
         }
         
         var zoom_node = headstart.chart.selectAll("circle")
@@ -673,9 +682,6 @@ BubblesFSM.prototype = {
 
         d3.event.stopPropagation();
         
-        //Fix Webkit overflow behaviour
-        d3.select("rect").attr("width", headstart.available_width + "px")
-        
         headstart.is_zoomed = true;
         headstart.zoom_finished = false;
     },
@@ -691,7 +697,7 @@ BubblesFSM.prototype = {
         }
         
         //Fix for Chrome's overflow behaviour
-        d3.select("rect").attr("width", headstart.current_vis_size + "px")
+        d3.select("rect").attr("width", headstart.current_vis_size)
 
         list.reset();
 
@@ -772,7 +778,7 @@ BubblesFSM.prototype = {
                     return d.width * (1 - headstart.dogear_width) + "px";
                 })
                 .style("height", function (d) {
-                    return (headstart.content_based) ? (d.height) : (d.height * 0.75 + "px");
+                    return (headstart.content_based) ? (d.height + "px") : (d.height * 0.75 + "px");
                 });
 
         t.selectAll("div.readers")
@@ -1027,6 +1033,10 @@ BubblesFSM.prototype = {
     },
 
     onzoomout: function () {
+        if(papers.is("infrontofbubble")) {
+            return;
+        }
+        
         this.zoomOut();
         this.resetCircleDesign();
         papers.zoomout();

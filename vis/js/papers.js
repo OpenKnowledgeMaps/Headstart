@@ -133,7 +133,11 @@ papers.drawPapers = function (bubbles) {
     this.prepareForeignObject(nodes);
 
     d3.selectAll("#article_metadata").select(".paper_holder").select(".metadata");
-    d3.selectAll("#article_metadata").select(".readers");
+    var readers = d3.selectAll("#article_metadata").select(".readers");
+    
+    if (headstart.content_based) {
+        readers.style("display", "none");
+    }
     
     d3.selectAll("#article_metadata").select("#icons")
             .style("height", function (d) {
@@ -455,6 +459,10 @@ papers.shrinkPaper = function (d, holder) {
 
     holder_div.selectAll("p")
             .attr("class", "large highlightable");
+    
+    holder_div.selectAll(".readers")
+            .style("height", "15px")
+            .style("margin-top", "5px")
 
     d.resized = false;
     holder_div.on("mouseover", function (d) {
@@ -526,6 +534,10 @@ papers.enlargePaper = function (d, holder_div) {
 
     holder_div.selectAll("p")
             .attr("class", "larger");
+    
+    holder_div.selectAll(".readers")
+            .style("height", "25px")
+            .style("margin-top", "5px")
 
     let metadata = holder_div.select("div.metadata");
 
