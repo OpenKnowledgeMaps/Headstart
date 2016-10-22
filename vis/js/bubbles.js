@@ -569,7 +569,9 @@ BubblesFSM.prototype = {
             //Fix Webkit overflow behaviour
             d3.select("rect")
                     .attr("x", function () {
-                        return ($(".vis-col").width()/2 - this.getAttribute("width")/2)*-1
+                        var x_new = ($(".vis-col").width()/2 - this.getAttribute("width")/2)*-1;
+                        console.log(x_new);
+                        return x_new
                     })
                     .attr("width", $(".vis-col").width())
                     .attr("height", $(".vis-col").height() + 45)
@@ -697,6 +699,8 @@ BubblesFSM.prototype = {
         if (papers.is("loading")) {
             return;
         }
+        
+        d3.select("rect").attr("width", headstart.current_vis_size)
 
         list.reset();
 
