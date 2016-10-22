@@ -563,13 +563,15 @@ BubblesFSM.prototype = {
                 d3.event.stopPropagation();
                 return;
             }
-        } else {
+        } 
+        
+        if (!headstart.is_zoomed){
             //Fix Webkit overflow behaviour
             d3.select("rect")
                     .attr("x", function () {
-                        return (headstart.available_width/2 - this.getAttribute("width")/2)*-1
+                        return ($(".vis-col").width()/2 - this.getAttribute("width")/2)*-1
                     })
-                    .attr("width", headstart.available_width)
+                    .attr("width", $(".vis-col").width())
                     .attr("height", $(".vis-col").height() + 45)
                     .attr("y", $("#subdiscipline_title").outerHeight(true)*-1)
         }
@@ -695,9 +697,6 @@ BubblesFSM.prototype = {
         if (papers.is("loading")) {
             return;
         }
-        
-        //Fix for Chrome's overflow behaviour
-        d3.select("rect").attr("width", headstart.current_vis_size)
 
         list.reset();
 
