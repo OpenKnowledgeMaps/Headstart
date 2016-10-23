@@ -22,7 +22,7 @@
     display: none;
 }
 
-.btn-default.active, .btn-default:active, .open > .dropdown-toggle.btn-default {
+.btn-default.active, .btn-default:active, .btn-default:focus, .btn-default.active:focus, .btn-default.active.focus, .btn-default.focus, .open > .dropdown-toggle.btn-default {
     color: white;
     background-color: #2c3d51;
     border-color: #2c3d51;
