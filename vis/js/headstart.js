@@ -11,7 +11,7 @@ import { list } from 'list';
 
 import { intros } from 'intro';
 import { getRealHeight } from "helpers";
-import { BrowserDetect } from "helpers";
+import { BrowserDetect, highlight } from "helpers";
   
 const timelineTemplate = require('templates/timeline.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
@@ -949,6 +949,8 @@ HeadstartFSM.prototype = {
     
     $("#area_title>h2").hyphenate('en');
     $("#area_title_object>body").dotdotdot({wrap:"letter"});
+    
+    //highlight(data_config.files[0].title);
     
     bubbles.initMouseListeners();
     
