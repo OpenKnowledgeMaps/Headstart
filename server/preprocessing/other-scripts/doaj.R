@@ -37,7 +37,8 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   names(metadata)[names(metadata) == "bibjson.title"] = "title"
   names(metadata)[names(metadata) == "bibjson.abstract"] = "paper_abstract"
   names(metadata)[names(metadata) == "bibjson.journal.title"] = "published_in"
-  metadata$year = paste0(metadata$bibjson.year, "-", metadata$bibjson.month)
+  metadata$year = ifelse(is.na(metadata$bibjson.month), metadata$bibjson.year, 
+                         paste0(metadata$bibjson.year, "-", metadata$bibjson.month))
   
   metadata$subject = sapply(metadata$bibjson.keywords, paste0, collapse=";")
   
