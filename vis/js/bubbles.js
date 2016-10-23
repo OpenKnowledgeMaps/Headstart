@@ -700,7 +700,11 @@ BubblesFSM.prototype = {
             return;
         }
         
-        d3.select("rect").attr("width", headstart.current_vis_size)
+        d3.select("rect")
+                .attr("width", headstart.current_vis_size)
+                .attr("height", headstart.current_vis_size)
+                .attr("x", 0)
+                .attr("y", 0)
 
         list.reset();
 
