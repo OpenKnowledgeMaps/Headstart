@@ -94,7 +94,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
 
     $input_json = json_encode($result);
 
-    $vis_title = $repository . "search: " . $query;
+    $vis_title = $repository;
     
     $exists = $persistence->existsVisualization($unique_id);
 
