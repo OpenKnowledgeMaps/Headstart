@@ -147,7 +147,7 @@ BubblesFSM.prototype = {
                 d.oa_link = d.link;
             } else if( headstart.service === "plos") {
                 d.oa = true;
-                var journal = this_d.published_in.toLowerCase();
+                var journal = d.published_in.toLowerCase();
                 d.oa_link = "http://journals.plos.org/" + headstart.plos_journals_to_shortcodes[journal] + "/article/asset?id=" + filename;
             } else if (typeof d.pmcid !== "undefined") {
                 if (d.pmcid !== "") {
