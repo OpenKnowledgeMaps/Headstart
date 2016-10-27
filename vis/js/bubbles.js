@@ -93,6 +93,10 @@ BubblesFSM.prototype = {
             if (d.published_in === null || typeof d.published_in === "undefined") {
                 d.published_in = "";
             }
+			
+			if (d.title === null || typeof d.title === "undefined") {
+                d.title = headstart.localization[headstart.language]["no_title"];
+            }
 
             if (headstart.content_based === false) {
                 d.readers = +d.readers;
