@@ -574,7 +574,6 @@ BubblesFSM.prototype = {
             d3.select("rect")
                     .attr("x", function () {
                         var x_new = ($(".vis-col").width()/2 - this.getAttribute("width")/2)*-1;
-                        console.log(x_new);
                         return x_new
                     })
                     .attr("width", $(".vis-col").width())
