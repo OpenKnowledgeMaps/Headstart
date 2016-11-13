@@ -101,7 +101,8 @@ var config = {
             year: "date",
             authors: "authors",
             title: "title",
-            area: "Area"
+            area: "Area",
+			no_title: "No title"
         },
         ger: {
             loading: "Wird geladen...",
@@ -113,7 +114,8 @@ var config = {
             year: "Jahr",
             authors: "Autor",
             title: "Titel",
-            area: "Bereich"
+            area: "Bereich",
+			no_title: "Kein Titel"
         },
         eng_plos: {
             loading: "Loading...",
@@ -125,7 +127,8 @@ var config = {
             year: "date",
             authors: "authors",
             title: "title",
-            area: "Area"
+            area: "Area",
+			no_title: "No title"
         },
         eng_pubmed: {
             loading: "Loading...",
@@ -138,7 +141,8 @@ var config = {
             year: "year",
             authors: "authors",
             title: "title",
-            area: "Area"
+            area: "Area",
+			no_title: "No title"
         }
     },
 
