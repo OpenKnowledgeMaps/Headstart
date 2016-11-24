@@ -12,7 +12,7 @@ const common = {
 
     output: {
         path: path.resolve(__dirname, "dist"),
-        publicPath: "path/to/dist/",
+        publicPath: "http://localhost/project-website/search_plos/dist/",
         filename: 'bundle.js'
     },
 

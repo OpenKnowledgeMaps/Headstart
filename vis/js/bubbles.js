@@ -144,7 +144,8 @@ BubblesFSM.prototype = {
             d.authors_string = authors_string;
             d.authors_short_string = authors_short_string;
             
-            d.oa = false;
+            if(typeof d.oa == "undefined")
+                        d.oa = false;
             
             if (headstart.service === "doaj") {
                 d.oa = true;

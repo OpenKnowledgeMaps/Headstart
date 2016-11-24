@@ -6,7 +6,7 @@
     <body style="margin:0px; padding:0px">
         
         <div id="visualization"></div>
-        <script type="text/javascript" src="data-config.js"></script>
+        <script type="text/javascript" src="data-config_base.js"></script>
         <script>
         	data_config.title = <?php echo json_encode($_GET['title']) ?>;
         	data_config.files = [{
