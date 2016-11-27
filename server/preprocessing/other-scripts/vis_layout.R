@@ -69,7 +69,12 @@ BigramTokenizer <- function(x) unlist(lapply(ngrams(words(x), 2), paste, collaps
 TrigramTokenizer <- function(x) unlist(lapply(ngrams(words(x), 3), paste, collapse = " "), use.names = FALSE)
 
 replace_keywords_if_empty <- function(corpus, metadata) {
-
+  
+  remove_alone_numbers <- content_transformer(function(x)
+    gsub('\\b\\d+\\s','', x))
+  
+  corpus <- tm_map(corpus, remove_alone_numbers)
+  
   dtm = DocumentTermMatrix(corpus)
   dtm2 = DocumentTermMatrix(corpus, control = list(tokenize = BigramTokenizer))
   dtm3 = DocumentTermMatrix(corpus, control = list(tokenize = TrigramTokenizer))

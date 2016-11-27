@@ -1,7 +1,8 @@
 ## Setup experiments
 
+* change working directory to `other-scripts/experiments`
+
 * In experiments/run_experiment.R:
-  * `line 9`: change working directory to the full path of the experiments-folder - it looks for the preprocessing scripts in relative paths
   * `line 45`: change the experiment_name, it should be something the reflects the parameters - the pdfs are named accordingly
   * `line 36`: for additional output, set `debug = TRUE`
 

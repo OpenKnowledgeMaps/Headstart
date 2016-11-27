@@ -13,7 +13,7 @@ var data_config = {
     show_dropdown: true,
     show_intro: false,
     show_list:true,
-    is_force_papers:false,
+    is_force_papers:true,
 
     files: [{
         title: "edu1",

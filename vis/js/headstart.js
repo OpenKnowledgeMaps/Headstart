@@ -9,9 +9,9 @@ import { BubblesFSM } from 'bubbles';
 import { papers } from 'papers';
 import { list } from 'list';
 
-import { intro, intro_cn3, intro_plos } from 'intro';
+import { intros } from 'intro';
 import { getRealHeight } from "helpers";
-import { BrowserDetect } from "helpers";
+import { BrowserDetect, highlight } from "helpers";
   
 const timelineTemplate = require('templates/timeline.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
@@ -263,8 +263,8 @@ HeadstartFSM.prototype = {
   
   updateChartCanvas: function () {
       d3.select("rect")
-        .attr( "height", this.current_vis_size + "px" )
-        .attr( "width",  this.current_vis_size + "px" );
+        .attr( "height", this.current_vis_size )
+        .attr( "width",  this.current_vis_size );
   },
   
   calcTitleFontSize: function () {
@@ -278,6 +278,8 @@ HeadstartFSM.prototype = {
   },
 
   initEventListeners: function() {
+      var self = this;
+      
       d3.select(window).on("resize", () => {
         if (this.is("timeline")) {
           return;
@@ -420,6 +422,10 @@ HeadstartFSM.prototype = {
 
       // Info Modal Event Listener
       $('#info_modal').on('show.bs.modal', function() {
+          var current_intro = self.intro;
+          
+          var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(self.intro)
+          
           $(this).find('.modal-title ').text(intro.title);
           $(this).find('.modal-body').html(intro.body);
       });
@@ -932,8 +938,6 @@ HeadstartFSM.prototype = {
     // moving this to bubbles.start results in papers being displayed over the
     // bubbles, unfortunately
     bubbles.draw();
-
-    bubbles.initMouseListeners();
     
     list.start( bubbles );
 
@@ -945,6 +949,11 @@ HeadstartFSM.prototype = {
     
     $("#area_title>h2").hyphenate('en');
     $("#area_title_object>body").dotdotdot({wrap:"letter"});
+    
+    //highlight(data_config.files[0].title);
+    
+    bubbles.initMouseListeners();
+    
   },
 
   drawNormalViewLink: function() {

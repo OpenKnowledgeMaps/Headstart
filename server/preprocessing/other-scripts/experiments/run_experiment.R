@@ -1,12 +1,21 @@
 rm(list = ls())
+args = commandArgs(trailingOnly=TRUE)
+
+# test if there is at least one argument: if not, return an error
+# expected: query, service
+if (length(args)<2) {
+  stop("At least two argument must be supplied: 'query' 'service'", call.=FALSE)
+} else if (length(args)==1) {
+  # default output file
+  args[2] = "pubmed"
+}
 
 library(tm)
 
 options(warn=1)
 
 wd <- getwd()
-
-setwd("your_path_to/Headstart/server/preprocessing/other-scripts/experiments") #Don't forget to set your working directory
+#setwd("your_path_to/Headstart/server/preprocessing/other-scripts/experiments") #Don't forget to set your working directory
 
 query <- "operant learning" #args[2]
 service <- "pubmed"
@@ -15,7 +24,7 @@ params_file <- "../test/params_pubmed.json"
 
 source("../vis_layout.R")
 source('../pubmed.R')
-
+# source('../doaj.R')
 
 
 plot_clusters <- function (experiment_name, cluster, num_clusters) {
