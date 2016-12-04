@@ -172,7 +172,8 @@ create_cluster_names <- function(clusters, metadata_full_subjects, weightingspec
     titles =  metadata_full_subjects$title[c(matches)]
     titles = lapply(titles, function(x)paste(removeWords(x, stopwords('english')), collapse=""))
     titles = lapply(titles, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
-    title_bigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=";") # have to collapse with "_" or else tokenizers will split ngrams again at that point
+    # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
+    title_bigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=";")
     title_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=";")
     title_quadgrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 4), paste, collapse="_"))), paste, collapse=";")
     subjects = paste(metadata_full_subjects$subject[c(matches)], title_bigrams, title_trigrams, title_quadgrams, collapse=";")
