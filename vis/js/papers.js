@@ -292,14 +292,15 @@ papers.applyForce = function (bubbles) {
     }
 
     var areas_count = 0;
+    var ticks_per_render_areas = 5;
+    var multiplier_areas = ticks_per_render_areas+1;
 
-    headstart.force_areas.on("tick", function (e) {
-
-        var alpha = e.alpha;
-
-        /*if (typeof current_bubbles == 'undefined' || current_bubbles == null) {
-         return true;
-         }*/
+    requestAnimationFrame(function render() {
+        var alpha = headstart.force_areas.alpha();
+        
+        for (var i = 0; i < ticks_per_render_areas; i++) {
+            headstart.force_areas.tick();
+        }
 
         var current_bubbles = headstart.bubbles[headstart.current_file_number];
 
@@ -310,19 +311,23 @@ papers.applyForce = function (bubbles) {
                     a.y - a.r < 0 ||
                     a.y + a.r > headstart.current_vis_size) {
 
-                a.x += (headstart.current_vis_size / 2 - a.x) * alpha;
-                a.y += (headstart.current_vis_size / 2 - a.y) * alpha;
+                a.x += (headstart.current_vis_size / 2 - a.x) * alpha * multiplier_areas;
+                a.y += (headstart.current_vis_size / 2 - a.y) * alpha * multiplier_areas;
             }
 
 
             current_bubbles.areas_array.slice(i + 1).forEach(function (b) {
-                self.checkCollisions(a, b, alpha);
+                self.checkCollisions(a, b, alpha * multiplier_areas);
             });
         });
 
         self.drawEntity("g.bubble_frame", alpha, areas_count);
 
         areas_count++;
+        
+        if (alpha > 0) {
+            requestAnimationFrame(render);
+        }
 
     });
 
@@ -335,15 +340,17 @@ papers.applyForce = function (bubbles) {
     }
 
     var papers_count = 0;
-
-    headstart.force_papers.on("tick", function (e) {
-        var alpha = e.alpha;
+    var ticks_per_render_papers = 10;
+    var multiplier_areas = ticks_per_render_papers + 1;
+    
+    requestAnimationFrame(function render() {
+        var alpha = headstart.force_papers.alpha();
+        
+        for (var i = 0; i < ticks_per_render_papers; i++) {
+            headstart.force_papers.tick();
+        }
 
         var current_bubbles = headstart.bubbles[headstart.current_file_number];
-
-        /*if (typeof current_bubbles == 'undefined' || current_bubbles == null) {
-         return true;
-         }*/
 
         current_bubbles.data.forEach(function (a, i) {
             var current_area = "";
@@ -370,8 +377,8 @@ papers.applyForce = function (bubbles) {
                     );
 
             if (distance > Math.abs(current_area.r - paper_a.r)) {
-                paper_a.y += (current_area.y - paper_a.y) * alpha;
-                paper_a.x += (current_area.x - paper_a.x) * alpha;
+                paper_a.y += (current_area.y - paper_a.y) * alpha * multiplier_areas;
+                paper_a.x += (current_area.x - paper_a.x) * alpha * multiplier_areas;
                 a.x = paper_a.x - a.width / 2;
                 a.y = paper_a.y - a.height / 2;
             }
@@ -380,7 +387,7 @@ papers.applyForce = function (bubbles) {
 
                 var paper_b = self.constructCircle(b);
 
-                self.checkCollisions(paper_a, paper_b, alpha);
+                self.checkCollisions(paper_a, paper_b, alpha * multiplier_areas);
 
                 a.x = paper_a.x - a.width / 2;
                 a.y = paper_a.y - a.height / 2;
@@ -392,6 +399,10 @@ papers.applyForce = function (bubbles) {
         self.drawEntity("g.paper", alpha, papers_count);
 
         papers_count++;
+        
+        if (alpha > 0) {
+            requestAnimationFrame(render);
+        }
     });
 };
 
