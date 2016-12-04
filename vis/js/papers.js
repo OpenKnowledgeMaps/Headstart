@@ -170,7 +170,7 @@ papers.drawPaperPath = function (nodes) {
 
     nodes.append("path")
             .attr("id", "region")
-            .attr("d", region);
+            .attr("d", region); 
 
     this.resetPaths();
 };
