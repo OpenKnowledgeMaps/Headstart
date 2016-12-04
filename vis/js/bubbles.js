@@ -93,6 +93,10 @@ BubblesFSM.prototype = {
             if (d.published_in === null || typeof d.published_in === "undefined") {
                 d.published_in = "";
             }
+			
+			if (d.title === null || typeof d.title === "undefined") {
+                d.title = headstart.localization[headstart.language]["no_title"];
+            }
 
             if (headstart.content_based === false) {
                 d.readers = +d.readers;
@@ -147,8 +151,8 @@ BubblesFSM.prototype = {
                 d.oa_link = d.link;
             } else if( headstart.service === "plos") {
                 d.oa = true;
-                var journal = this_d.published_in.toLowerCase();
-                d.oa_link = "http://journals.plos.org/" + headstart.plos_journals_to_shortcodes[journal] + "/article/asset?id=" + filename;
+                var journal = d.published_in.toLowerCase();
+                d.oa_link = "http://journals.plos.org/" + headstart.plos_journals_to_shortcodes[journal] + "/article/asset?id=" + d.id + ".PDF";
             } else if (typeof d.pmcid !== "undefined") {
                 if (d.pmcid !== "") {
                     d.oa = true;
@@ -305,6 +309,12 @@ BubblesFSM.prototype = {
 
         d3.selectAll("#area_title").on("mouseout", function () {
             if (headstart.current != "timeline") {
+                                                
+                //if mouse out to child element, abort
+                if(d3.event.target.parentElement == this) { 
+                    return false; 
+                }
+                
                 headstart.bubbles[headstart.current_file_number].showCircle(this);
             }
         });
@@ -542,8 +552,6 @@ BubblesFSM.prototype = {
                     .style("display", "none");
         }
 
-        d3.event.stopPropagation();
-
         if (previous_zoom_node !== null && typeof previous_zoom_node != 'undefined') {
 
             if (typeof d != 'undefined') {
@@ -559,8 +567,20 @@ BubblesFSM.prototype = {
                 d3.event.stopPropagation();
                 return;
             }
+        } 
+        
+        if (!headstart.is_zoomed){
+            //Fix Webkit overflow behaviour
+            d3.select("rect")
+                    .attr("x", function () {
+                        var x_new = ($(".vis-col").width()/2 - this.getAttribute("width")/2)*-1;
+                        return x_new
+                    })
+                    .attr("width", $(".vis-col").width())
+                    .attr("height", $(".vis-col").height() + 45)
+                    .attr("y", $("#subdiscipline_title").outerHeight(true)*-1)
         }
-
+        
         var zoom_node = headstart.chart.selectAll("circle")
                 .filter(function (x) {
                     if (d !== null) {
@@ -638,8 +658,11 @@ BubblesFSM.prototype = {
         //var svg = document.getElementById("chart-svg");
         //var viewbox = svg.getAttribute("viewBox").split(/\s+|,/);
         headstart.circle_zoom = headstart.current_vis_size / d.r / 2 * headstart.zoom_factor;
-        headstart.x.domain([d.x - d.r, d.x + d.r]);
-        headstart.y.domain([d.y - d.r, d.y + d.r]);
+        
+        var padding = d.r * 0.08;
+        
+        headstart.x.domain([d.x - d.r + padding, d.x + d.r - padding]);
+        headstart.y.domain([d.y - d.r + padding, d.y + d.r - padding]);
 
         headstart.paper_x.domain([d.x - d.r, d.x + d.r]);
         headstart.paper_y.domain([d.y - d.r, d.y + d.r]);
@@ -665,7 +688,7 @@ BubblesFSM.prototype = {
         // headstart.recordAction(d.id, "zoom_in", headstart.user_id, "none", null);
 
         d3.event.stopPropagation();
-
+        
         headstart.is_zoomed = true;
         headstart.zoom_finished = false;
     },
@@ -679,6 +702,12 @@ BubblesFSM.prototype = {
         if (papers.is("loading")) {
             return;
         }
+        
+        d3.select("rect")
+                .attr("width", headstart.current_vis_size)
+                .attr("height", headstart.current_vis_size)
+                .attr("x", 0)
+                .attr("y", 0)
 
         list.reset();
 
@@ -759,7 +788,7 @@ BubblesFSM.prototype = {
                     return d.width * (1 - headstart.dogear_width) + "px";
                 })
                 .style("height", function (d) {
-                    return (headstart.content_based) ? (d.height) : (d.height * 0.75 + "px");
+                    return (headstart.content_based) ? (d.height + "px") : (d.height * 0.75 + "px");
                 });
 
         t.selectAll("div.readers")
@@ -1014,6 +1043,10 @@ BubblesFSM.prototype = {
     },
 
     onzoomout: function () {
+        if(papers.is("infrontofbubble")) {
+            return;
+        }
+        
         this.zoomOut();
         this.resetCircleDesign();
         papers.zoomout();

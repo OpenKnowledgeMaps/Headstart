@@ -86,6 +86,9 @@ var config = {
     conference_id: 0,
     user_id: 0,
     max_recommendations: 10,
+    
+    //intro
+    intro: "intro_hs",
 
     localization: {
         eng: {
@@ -98,7 +101,8 @@ var config = {
             year: "date",
             authors: "authors",
             title: "title",
-            area: "Area"
+            area: "Area",
+			no_title: "No title"
         },
         ger: {
             loading: "Wird geladen...",
@@ -110,7 +114,8 @@ var config = {
             year: "Jahr",
             authors: "Autor",
             title: "Titel",
-            area: "Bereich"
+            area: "Bereich",
+			no_title: "Kein Titel"
         },
         eng_plos: {
             loading: "Loading...",
@@ -122,7 +127,8 @@ var config = {
             year: "date",
             authors: "authors",
             title: "title",
-            area: "Area"
+            area: "Area",
+			no_title: "No title"
         },
         eng_pubmed: {
             loading: "Loading...",
@@ -130,11 +136,13 @@ var config = {
             show_list: "Show list",
             hide_list: "Hide list",
             intro_label: "What's this?",
+            relevance: "relevance",
             readers: "citations",
             year: "year",
             authors: "authors",
             title: "title",
-            area: "Area"
+            area: "Area",
+			no_title: "No title"
         }
     },
 

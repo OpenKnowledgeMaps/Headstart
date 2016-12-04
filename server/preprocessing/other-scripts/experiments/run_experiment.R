@@ -1,27 +1,43 @@
 rm(list = ls())
+args = commandArgs(trailingOnly=TRUE)
+
+
+# query <- "operant learning" #args[1]
+# service <- "pubmed" #args[2]
+params <- NULL
+params_file <- "../test/params_pubmed.json"
+
+# test if there is at least one argument: if not, return an error
+# expected: query, service
+if (length(args)<3) {
+  stop("Three arguments must be supplied: 'query' 'service' 'weighting' # see weightingSMART for options", call.=FALSE)
+} else if (length(args)==3) {
+# default output file
+  query <- args[1]
+  service <- args[2]
+  weightingspec <- args[3]
+  experiment_name <- paste(query, service, weightingspec, sep="_")
+}
+
 
 library(tm)
 
 options(warn=1)
 
 wd <- getwd()
+# Don't forget to set your working directory when working in Rstudio!
+#setwd("your_path_to/Headstart/server/preprocessing/other-scripts/experiments")
 
-setwd("your_path_to/Headstart/server/preprocessing/other-scripts/experiments") #Don't forget to set your working directory
-
-query <- "operant learning" #args[2]
-service <- "pubmed"
-params <- NULL
-params_file <- "../test/params_pubmed.json"
 
 source("../vis_layout.R")
-source('../pubmed.R')
-
+if (service == "pubmed"){source('../pubmed.R')}
+if (service == "doaj"){source('../doaj.R')}
 
 
 plot_clusters <- function (experiment_name, cluster, num_clusters) {
   # Plot result of clustering to PDF file
   pdf(paste(experiment_name, "clustering.pdf", sep="_"), width=19, height=12)
-  plot(cluster, labels=paste(metadata$title, metadata_full_subjects$cluster_name, sep="-"), cex=0.6)
+  plot(cluster, labels=paste(substr(metadata$title, 0, 120), metadata_full_subjects$cluster_name, sep=" - "), cex=0.6)
   rect.hclust(cluster, k=num_clusters, border="red")
   dev.off()
 }
@@ -46,6 +62,7 @@ write_stats <- function (clusters, layout, metadata) {
   output = merge(metadata, result, by.x="id", by.y="labels", all=TRUE)
   names(output)[names(output)=="groups"] <- "area_uri"
   output["area"] = paste("Cluster ", output$area_uri, sep="")
+  output = lapply(output, as.String)
   # Write output to file
   file_handle = file(paste(experiment_name, "output_file.csv"), open="w")
   write.csv(output, file=file_handle, row.names=FALSE)
@@ -69,7 +86,6 @@ if(!is.null(params_file)) {
 }
 
 #start.time <- Sys.time()
-experiment_name <- paste(query, "730", "tfidf", sep="_") # 730 stands for the combination of 1-grams, 2-grams, 3-grams that has to be hacked in vis_layout->replace_keywords_if_empty
 input_data = get_papers(query, params)
 
 #output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS)
@@ -87,12 +103,14 @@ normalized_matrix <- normalize_matrix(result$tdm_matrix);
 
 print("create clusters")
 clusters <- create_clusters(normalized_matrix, max_clusters=15);
-clusters_with_names <- create_cluster_names(clusters, metadata_full_subjects, 3)
+print("add cluster names")
+clusters_with_names <- create_cluster_names(clusters, metadata_full_subjects, weightingspec, 3)
 
+metadata_full_subjects$cluster_name = "" # need to initialize column first?
 for (k in seq(1, clusters$num_clusters)) {
   group = c(names(clusters$groups[clusters$groups == k]))
   matches = which(metadata_full_subjects$id%in%group)
-  metadata_full_subjects$cluster_name[c(matches)] = paste(unlist(clusters_with_names$cluster_names[k]), collapse=" ")
+  metadata_full_subjects$cluster_name[c(matches)] = paste(unlist(clusters_with_names$cluster_names[k]), collapse=", ")
 }
 
 cluster <- clusters$cluster
@@ -101,5 +119,5 @@ num_clusters <- clusters$num_clusters
 plot_clusters(experiment_name, cluster, num_clusters)
 layout <- create_ordination(normalized_matrix, maxit=500, mindim=2, maxdim=2)
 plot_layout(experiment_name, layout, groups)
-write_stats(clusters, layout, metadata_full_subjects)
+# write_stats(clusters, layout, metadata_full_subjects)
 output_json <- create_output(clusters, layout, metadata_full_subjects)

@@ -94,9 +94,11 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
 
     $input_json = json_encode($result);
 
-    $vis_title = $repository . "search: " . $query;
+    $vis_title = $repository;
+    
+    $exists = $persistence->existsVisualization($unique_id);
 
-    if ($persistence->existsVisualization($unique_id)) {
+    if (!$exists) {
         $persistence->createVisualization($unique_id, $vis_title, $input_json, $query, $dirty_query, $params_json);
     } else {
         $persistence->writeRevision($unique_id, $input_json);

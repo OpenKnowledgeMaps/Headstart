@@ -2,7 +2,7 @@ var service_url;
 var service_name;
 var options;
 
-switch(data_config.service){
+switch (data_config.service) {
     case 'plos':
         service_url = data_config.server_url + "services/searchPLOS.php"
         service_name = "PLOS";
@@ -20,24 +20,24 @@ switch(data_config.service){
         break;
 }
 
-$(window).bind("pageshow", function() {
+$(window).bind("pageshow", function () {
     $(".btn").attr("disabled", false);
 });
 
 $("#searchform").validate({
-    submitHandler: function(form) {
+    submitHandler: function (form) {
         $(".btn").attr("disabled", true);
         $("#progress").html("");
 
         d3.select("#progress").append("p")
-            .text("Please be patient, this can take a while...")
-            .append("div")
-            .attr("id", "progressbar")
+                .text("Please be patient, this can take a while...")
+                .append("div")
+                .attr("id", "progressbar")
 
         $("#progressbar").progressbar();
         var tick_interval = 2;
         var tick_increment = 1;
-        var tick_function = function() {
+        var tick_function = function () {
             var value = $("#progressbar").progressbar("option", "value");
             value += tick_increment;
             $("#progressbar").progressbar("option", "value", value);
@@ -49,11 +49,15 @@ $("#searchform").validate({
         };
         window.setTimeout(tick_function, tick_interval * 1000);
 
-        $.ajax({ // make an AJAX request
+        var data = $("#searchform").serialize();
+
+        data += "&today=" + new Date().toLocaleDateString("en-US");
+
+        $.ajax({// make an AJAX request
             type: "POST",
             url: service_url,
-            data: $("#searchform").serialize(),
-            success: function(data) {
+            data: data,
+            success: function (data) {
                 if (data.status === "success") {
                     var title = "Overview of " + service_name + " articles for " + data.query + ":" + data.id;
                     var file = data.id;
@@ -69,25 +73,27 @@ $("#searchform").validate({
     }
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
     var search_options = SearchOptions;
-    
+
     search_options.init("#filter-container", options);
 
-    options.dropdowns.forEach(function(entry) {
+    options.dropdowns.forEach(function (entry) {
         search_options.select_multi('.dropdown_multi_' + entry.id, entry.name)
     })
-    
-    var valueExists = function(key, value) {
+
+    var valueExists = function (key, value) {
         var find = options.dropdowns.filter(
-            function(data){return data[key] == value}
+                function (data) {
+                    return data[key] == value
+                }
         );
-        
-        return (find.length > 0)?(true):(false);
+
+        return (find.length > 0) ? (true) : (false);
     }
-    if(valueExists("id", "time_range")) {
+    if (valueExists("id", "time_range")) {
         search_options.addDatePickerFromTo("#from", "#to", "any-time");
-    } else if(valueExists("id", "year_range")) {
+    } else if (valueExists("id", "year_range")) {
         search_options.setDateRangeFromPreset("#from", "#to", "any-time-years", "1809");
     }
 });

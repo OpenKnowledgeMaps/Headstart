@@ -62,7 +62,7 @@ class SQLitePersistence extends Persistence {
                 "SELECT EXISTS(SELECT 1 FROM visualizations WHERE vis_id=?)"
                 , array($vis_id));
         
-        return $result;
+        return $result[0];
     }
 
     public function getLastVersion($vis_id, $details = false) {

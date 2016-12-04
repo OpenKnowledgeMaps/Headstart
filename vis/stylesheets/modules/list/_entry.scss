@@ -51,6 +51,7 @@
     .list_links a {
         color: $okm-red;
         text-decoration: none;
+        cursor: pointer;
         &:hover {
         color: $okm-blue;
     }
@@ -111,6 +112,7 @@
     text-align: left;
     color: black;
     display: inline-block;
+    max-width: 82%;
 
     .area_tag {
         font-weight: bold;
