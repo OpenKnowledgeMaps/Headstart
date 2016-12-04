@@ -175,18 +175,37 @@ create_cluster_names <- function(clusters, metadata_full_subjects, weightingspec
     # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
     title_bigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=";")
     title_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=";")
-    title_quadgrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 4), paste, collapse="_"))), paste, collapse=";")
-    subjects = paste(metadata_full_subjects$subject[c(matches)], title_bigrams, title_trigrams, title_quadgrams, collapse=";")
+    #title_quadgrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 4), paste, collapse="_"))), paste, collapse=";")
+    subjects = paste(metadata_full_subjects$subject[c(matches)], title_bigrams, title_trigrams, collapse=";")
     subjectlist = c(subjectlist, subjects)
   }
   nn_corpus <- Corpus(VectorSource(subjectlist))
   nn_corpus <- tm_map(nn_corpus, removeWords, stopwords("english"))
   nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec=weightingspec)))
   tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
-  tfidf_top <- lapply(tfidf_top, function(x) head(x, top_n))
   tfidf_top_names <- lapply(tfidf_top, names)
+  tfidf_top_names <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, top_n))
   clusters$cluster_names <- tfidf_top_names
   return(clusters)
+}
+
+filter_out_nested_ngrams <- function(top_ngrams, top_n) {
+  top_names <- list()
+  for (ngram in top_ngrams) {
+    ngram_in_top_names = grepl(ngram, top_names)
+    top_names_with_ngram = sapply(top_names, function(x)(grepl(x, ngram)))
+    # ngram substring of any top_name, and no top_name substring of ngram -> skip ngram
+    if (any(ngram_in_top_names == TRUE) && all(top_names_with_ngram == FALSE)) {}
+    # ngram not substring of any top_name, but at least one top_name is a substring of ngram -> replace top_name with ngram
+    else if (all(ngram_in_top_names == FALSE) && any(top_names_with_ngram == TRUE)) {
+      top_names[which(top_names_with_ngram)] <- ngram
+    }
+    # a not substring of b, b not substring of a -> add b, next
+    else if (all(ngram_in_top_names == FALSE) && all(top_names_with_ngram == FALSE)) {
+      top_names <- unlist(c(top_names, ngram))
+    }
+  }
+  return(head(top_names, top_n))
 }
 
 create_output <- function(clusters, layout, metadata) {
