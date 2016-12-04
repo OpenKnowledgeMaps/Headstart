@@ -205,7 +205,7 @@ filter_out_nested_ngrams <- function(top_ngrams, top_n) {
       top_names <- unlist(c(top_names, ngram))
     }
   }
-  return(head(top_names, top_n))
+  return(head(unique(top_names), top_n))
 }
 
 create_output <- function(clusters, layout, metadata) {
