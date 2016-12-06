@@ -292,7 +292,7 @@ papers.applyForce = function (bubbles) {
     }
 
     var areas_count = 0;
-    var ticks_per_render_areas = 5;
+    var ticks_per_render_areas = 10;
     var multiplier_areas = ticks_per_render_areas+1;
 
     requestAnimationFrame(function render() {
@@ -327,6 +327,8 @@ papers.applyForce = function (bubbles) {
         
         if (alpha > 0) {
             requestAnimationFrame(render);
+        } else {
+            self.drawEntity("g.bubble_frame", alpha, areas_count, true);
         }
 
     });
@@ -340,7 +342,7 @@ papers.applyForce = function (bubbles) {
     }
 
     var papers_count = 0;
-    var ticks_per_render_papers = 10;
+    var ticks_per_render_papers = 15;
     var multiplier_areas = ticks_per_render_papers + 1;
     
     requestAnimationFrame(function render() {
@@ -402,6 +404,8 @@ papers.applyForce = function (bubbles) {
         
         if (alpha > 0) {
             requestAnimationFrame(render);
+        } else {
+            self.drawEntity("g.paper", alpha, papers_count, true);
         }
     });
 };
@@ -418,9 +422,9 @@ papers.constructCircle = function (a) {
 };
 
 // figure out translate coordinates
-papers.drawEntity = function (entity, alpha, count) {
+papers.drawEntity = function (entity, alpha, count, forced=false) {
 
-    if (alpha > 0.09 && count % 2 === 0 ||
+    if (forced || alpha > 0.09 && count % 2 === 0 ||
             alpha <= 0.09 && alpha >= 0.08 && count % 2 === 0 ||
             alpha <= 0.08 && alpha >= 0.07 && count % 4 === 0 ||
             alpha <= 0.07 && alpha >= 0.06 && count % 4 === 0 ||
