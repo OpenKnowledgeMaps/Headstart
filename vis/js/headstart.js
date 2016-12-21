@@ -656,6 +656,25 @@ HeadstartFSM.prototype = {
 
       return url;
   },
+  
+  makeSetupVisualisation: function () {
+      let hs = this;
+      let current_bubble = this.bubbles[this.current_file_number];
+      let adaptive_data = null;
+      // NOTE: async call
+      // therefore we need to call the methods which depend on bubbles.data
+      // after the csv has been received.
+      let setupVisualization = (csv) => {
+        this.drawTitle();
+        this.calcChartSize();
+        this.setScaleRanges();
+        this.drawSvg();
+        this.drawChartCanvas();
+        this.startVisualization(this, current_bubble, csv, null, true);
+        this.drawTitle();
+      };
+      return setupVisualization;
+  },
 
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
@@ -665,21 +684,7 @@ HeadstartFSM.prototype = {
       this.checkBrowserVersions();
       this.setOverflowToHiddenOrAuto("#main");
       this.resetBubbles();
-      let current_bubble = this.bubbles[this.current_file_number];
-
-      // NOTE: async call
-      // therefore we need to call the methods which depend on bubbles.data
-      // after the csv has been received.
-      let setupVisualization = (csv) => {
-          this.drawTitle();
-          this.calcChartSize();
-          this.setScaleRanges();
-          this.drawSvg();
-          this.drawChartCanvas();
-          this.startVisualization(this, current_bubble, csv, null, true);
-          this.drawTitle();
-      };
-
+      let setupVisualization = this.makeSetupVisualisation();
       switch (this.mode) {
           case "local_files":
               var file = this.files[this.current_file_number];
