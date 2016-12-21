@@ -818,7 +818,6 @@ HeadstartFSM.prototype = {
 
   
   ontofile: function(event, from, to, file) {
-      // TODO THIS IS CURRENTLY BROKEN
       this.force_areas.stop();
       this.force_papers.stop();
 
@@ -890,10 +889,6 @@ HeadstartFSM.prototype = {
   startVisualization: function(hs, bubbles, csv, adaptive_data) {
     mediator.publish("prepare_data", adaptive_data, csv);
     mediator.publish("prepare_areas");
-    bubbles.data = mediator.io_get_prepared_data();
-    var ars = mediator.io_get_prepared_areas();
-    bubbles.areas = ars.areas;
-    bubbles.areas_array = ars.areas_array;
     bubbles.start( csv, adaptive_data );
 
     hs.initEventListeners();
