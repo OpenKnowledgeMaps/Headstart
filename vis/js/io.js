@@ -52,6 +52,8 @@ IO.prototype = {
         }
     },
     prepareData: function (highlight_data, fs) {
+        this.areas = {};
+        this.areas_array = [];
         var _this = this;
         var xy_array = [];
         // convert to numbers

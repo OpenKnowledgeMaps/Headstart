@@ -694,7 +694,7 @@ HeadstartFSM.prototype = {
       let setupVisualization = this.makeSetupVisualisation();
       switch (this.mode) {
           case "local_files":
-              var file = this.files[this.current_file_number];
+              var file = this.files[this.current_file_number - 1];
               mediator.io_async_get_data(file, this.input_format, setupVisualization);
               break;
 
@@ -834,42 +834,14 @@ HeadstartFSM.prototype = {
 
       // this.initScales();
       this.setOverflowToHiddenOrAuto("#main");
-
       // reset bubbles
       this.resetBubbles();
-
       let current_bubble = this.bubbles[this.current_file_number];
-
-      var setupVisualization = (csv) => {
-          this.calcChartSize();
-          this.setScaleRanges();
-
-          this.drawChartCanvas();
-
-          if (this.is_adaptive) {
-
-              var url = this.createRestUrl();
-
-              $.getJSON(url, (data) => {
-                  this.startVisualization(this, current_bubble, csv, data, false);
-              });
-          } else {
-              this.startVisualization(this, current_bubble, csv, null, false);
-          }
-
-          this.drawTitle();
-      };
-
+      let setupVisualization = this.makeSetupVisualisation();
       switch (this.mode) {
           case "local_files":
-              switch (this.input_format) {
-                  case "csv":
-                      d3.csv(current_bubble.file, setupVisualization);
-                      break;
-                  case "json":
-                      d3.json(current_bubble.file, setupVisualization);
-                      break;
-              }
+              var file = this.files[this.current_file_number - 1];
+              mediator.io_async_get_data(file, this.input_format, setupVisualization);
               break;
 
           case "search_repos":
