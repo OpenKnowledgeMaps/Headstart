@@ -58,16 +58,10 @@ MyMediator.prototype = {
         this.mediator.publish(...arguments);
     },
 
-    headstart_init: function (files, input_format) {
-        console.log("HEADSTART INIT");
-        io.init(files, input_format);
+    io_async_get_data: function (file, input_format, callback) {
+        io.async_get_data(file, input_format, callback);
     },
 
-    io_init_done: function (d) {
-        console.log("IO INIT DONE");
-        this.fileData = d;
-    },
-    
     io_prepare_data: function (highlight_data, cur_fil_num) {
         console.log("IO PREPARE DATA");
        io.prepareData(highlight_data, cur_fil_num);
@@ -89,7 +83,6 @@ MyMediator.prototype = {
     io_prepare_areas_done: function (d) {
         console.log("IO PREPARE AREAS DONE");
         this.preparedAreas = d;
-        console.log(this.preparedAreas);
     },
 
     io_get_prepared_areas: function (d) {

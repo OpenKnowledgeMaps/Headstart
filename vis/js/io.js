@@ -14,19 +14,13 @@ var IO = function() {
 
 IO.prototype = {
     // get, transform and serve data to other modules
-    init: function (files, input_format) {
-        console.log("IO INIT");
-        this.get_data(this, files, input_format);
-        mediator.io_init_done(this.data);
+    async_get_data: function(file, input_format, callback) {
+        console.log("ASYNC GET DATA")
+        d3[input_format](file.file, (csv) => {
+            callback(csv);
+        })
     },
 
-    get_data: function(obj, files, input_format) {
-       $.each(files, (index, file) => {
-           d3[input_format](file.file, (csv) => {
-               obj["fs"].push(csv)
-           });
-       });
-    },
     convertToFirstNameLastName: function (authors) {
         var authors = authors.split(";");
         var authors_string = "";
@@ -57,12 +51,12 @@ IO.prototype = {
             return element;
         }
     },
-    prepareData: function (highlight_data, cur_fil_num) {
+    prepareData: function (highlight_data, fs) {
         var _this = this;
         var xy_array = [];
         // convert to numbers
-        console.log(this.fs);
-        var cur_data = this.fs[cur_fil_num];
+        console.log("PREPARE DATA");
+        var cur_data = fs;
         cur_data.forEach(function (d) {
             d.x = parseFloat(d.x);
             d.y = parseFloat(d.y);
