@@ -670,7 +670,14 @@ HeadstartFSM.prototype = {
         this.setScaleRanges();
         this.drawSvg();
         this.drawChartCanvas();
-        this.startVisualization(this, current_bubble, csv, null, true);
+        if (this.is_adaptive) {
+          let url = this.createRestUrl();
+          $.getJSON(url, (data) => {
+              this.startVisualization(this, current_bubble, csv, data, true);
+            });
+        } else {
+          this.startVisualization(this, current_bubble, csv, null, true);
+        }
         this.drawTitle();
       };
       return setupVisualization;
@@ -811,6 +818,7 @@ HeadstartFSM.prototype = {
 
   
   ontofile: function(event, from, to, file) {
+      // TODO THIS IS CURRENTLY BROKEN
       this.force_areas.stop();
       this.force_papers.stop();
 
