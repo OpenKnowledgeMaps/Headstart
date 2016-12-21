@@ -51,6 +51,8 @@ export var HeadstartFSM = function() {
   this.circle_zoom = 0;
   this.is_zoomed = false;
   this.zoom_finished = false;
+
+  mediator.publish("headstart_init", this.files, this.input_format);
 }; // end HeadstartFSM constructor
 
 HeadstartFSM.prototype = {
@@ -927,6 +929,12 @@ HeadstartFSM.prototype = {
 
 
   startVisualization: function(hs, bubbles, csv, adaptive_data) {
+    mediator.publish("prepare_data", adaptive_data, this.current_file_number);
+    mediator.publish("prepare_areas");
+    bubbles.data = mediator.io_get_prepared_data();
+    var ars = mediator.io_get_prepared_areas();
+    bubbles.areas = ars.areas;
+    bubbles.areas_array = ars.areas_array;
     bubbles.start( csv, adaptive_data );
 
     hs.initEventListeners();
