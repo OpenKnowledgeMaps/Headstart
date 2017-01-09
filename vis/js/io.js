@@ -15,7 +15,6 @@ var IO = function() {
 IO.prototype = {
     // get, transform and serve data to other modules
     async_get_data: function(file, input_format, callback) {
-        console.log("ASYNC GET DATA")
         d3[input_format](file.file, (csv) => {
             callback(csv);
         })
@@ -57,7 +56,6 @@ IO.prototype = {
         var _this = this;
         var xy_array = [];
         // convert to numbers
-        console.log("PREPARE DATA");
         var cur_data = fs;
         cur_data.forEach(function (d) {
             d.x = parseFloat(d.x);
@@ -257,7 +255,6 @@ IO.prototype = {
         mediator.io_prepare_areas_done(ret);
     },
     getData: function () {
-        console.log(this.data);
         return this.data;
     },
     getAreas: function() {

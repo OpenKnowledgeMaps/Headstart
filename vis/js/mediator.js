@@ -63,12 +63,10 @@ MyMediator.prototype = {
     },
 
     io_prepare_data: function (highlight_data, cur_fil_num) {
-        console.log("IO PREPARE DATA");
        io.prepareData(highlight_data, cur_fil_num);
     },
 
     io_prepare_areas: function () {
-        console.log("IO PREPARE AREAS");
         io.prepareAreas();
     },
 
@@ -81,7 +79,6 @@ MyMediator.prototype = {
     },
 
     io_prepare_areas_done: function (d) {
-        console.log("IO PREPARE AREAS DONE");
         this.preparedAreas = d;
     },
 
