@@ -24,6 +24,9 @@ MyMediator.prototype = {
         this.mediator.subscribe("prepare_data", this.io_prepare_data);
         this.mediator.subscribe("prepare_areas", this.io_prepare_areas);
 
+        // async calls
+        this.mediator.subscribe("get_data_from_files", this.io_async_get_data);
+
         // popup
         this.mediator.subscribe("to_timeline", this.to_timeline);
 
@@ -45,6 +48,7 @@ MyMediator.prototype = {
         this.mediator.subscribe("bubble_mouseout", this.bubble_mouseout);
         this.mediator.subscribe("bubble_mouseover", this.bubble_mouseover);
         this.mediator.subscribe("bubble_click", this.bubble_click);
+        this.mediator.subscribe("bubbles_update_data_and_areas", this.bubbles_update_data_and_areas);
 
         // bookmarks
         this.mediator.subscribe("bookmark_added", this.bookmark_added);
@@ -63,27 +67,17 @@ MyMediator.prototype = {
     },
 
     io_prepare_data: function (highlight_data, cur_fil_num) {
-       io.prepareData(highlight_data, cur_fil_num);
+        io.prepareData(highlight_data, cur_fil_num);
     },
 
     io_prepare_areas: function () {
         io.prepareAreas();
     },
 
-    io_prepare_data_done: function (d) {
-        this.preparedData = d;
-    },
-
-    io_get_prepared_data: function (d) {
-        return this.preparedData;
-    },
-
-    io_prepare_areas_done: function (d) {
-        this.preparedAreas = d;
-    },
-
-    io_get_prepared_areas: function (d) {
-        return this.preparedAreas;
+    bubbles_update_data_and_areas: function(bubbles) {
+        bubbles.data = io.data;
+        bubbles.areas = io.areas;
+        bubbles.areas_array = io.areas_array;
     },
 
     to_timeline: function() {

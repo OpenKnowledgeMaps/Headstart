@@ -734,12 +734,7 @@ BubblesFSM.prototype = {
     },
 
     onstart: function (event, from, to, csv, recommendation_data) {
-
-        let data = mediator.io_get_prepared_data();
-        let areas = mediator.io_get_prepared_areas();
-        this.areas = areas.areas;
-        this.areas_array = areas.areas_array;
-        this.data = data;
+        mediator.publish('bubbles_update_data_and_areas', this);
         if (headstart.is("timeline")) {
             this.draw();
             this.initMouseListeners();

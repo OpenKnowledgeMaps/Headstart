@@ -695,10 +695,11 @@ HeadstartFSM.prototype = {
       switch (this.mode) {
           case "local_files":
               var file = this.files[this.current_file_number - 1];
-              mediator.io_async_get_data(file, this.input_format, setupVisualization);
+              mediator.publish("get_data_from_files", file, this.input_format, setupVisualization);
               break;
 
           case "search_repos":
+              let current_bubble = this.bubbles[this.current_file_number];
               d3.json(this.server_url + "services/getLatestRevision.php?vis_id=" + current_bubble.file, setupVisualization);
               break;
 
@@ -840,7 +841,7 @@ HeadstartFSM.prototype = {
       switch (this.mode) {
           case "local_files":
               var file = this.files[this.current_file_number - 1];
-              mediator.io_async_get_data(file, this.input_format, setupVisualization);
+              mediator.publish("get_data_from_files", file, this.input_format, setupVisualization);
               break;
 
           case "search_repos":

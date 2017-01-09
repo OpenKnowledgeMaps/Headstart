@@ -182,8 +182,7 @@ IO.prototype = {
 
         }
 
-        this.data =cur_data;
-        mediator.io_prepare_data_done(this.data);
+        this.data = cur_data;
     },
 
     // prepare the areas for the bubbles
@@ -251,8 +250,8 @@ IO.prototype = {
             new_area.papers = areas[area].papers;
             areas_array.push(new_area);
         }
-        var ret = {areas: areas, areas_array: areas_array};
-        mediator.io_prepare_areas_done(ret);
+        this.areas = areas;
+        this.areas_array = areas_array;
     },
     getData: function () {
         return this.data;
