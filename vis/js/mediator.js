@@ -2,21 +2,28 @@ import Mediator from 'mediator-js';
 import { headstart } from 'headstart';
 import { papers } from 'papers';
 import { list } from 'list';
-import { sortBy } from 'helpers'; 
+import { sortBy } from 'helpers';
+import { io } from 'io';
 
 var MyMediator = function() {
 
     // mediator
+    this.fileData = [];
     this.mediator = new Mediator();
     this.init();
-
-    this.mediator_states = {
-        popup_visible: false
-    };
 };
 
 MyMediator.prototype = {
+    constructor: MyMediator,
     init: function() {
+        // init logic
+        this.mediator.subscribe("headstart_init", this.headstart_init);
+        this.mediator.subscribe("io_init_done", this.io_init_done);
+
+        // data handling
+        this.mediator.subscribe("prepare_data", this.io_prepare_data);
+        this.mediator.subscribe("prepare_areas", this.io_prepare_areas);
+
         // popup
         this.mediator.subscribe("to_timeline", this.to_timeline);
 
@@ -49,6 +56,34 @@ MyMediator.prototype = {
 
     publish: function() {
         this.mediator.publish(...arguments);
+    },
+
+    io_async_get_data: function (file, input_format, callback) {
+        io.async_get_data(file, input_format, callback);
+    },
+
+    io_prepare_data: function (highlight_data, cur_fil_num) {
+       io.prepareData(highlight_data, cur_fil_num);
+    },
+
+    io_prepare_areas: function () {
+        io.prepareAreas();
+    },
+
+    io_prepare_data_done: function (d) {
+        this.preparedData = d;
+    },
+
+    io_get_prepared_data: function (d) {
+        return this.preparedData;
+    },
+
+    io_prepare_areas_done: function (d) {
+        this.preparedAreas = d;
+    },
+
+    io_get_prepared_areas: function (d) {
+        return this.preparedAreas;
     },
 
     to_timeline: function() {
