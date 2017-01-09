@@ -5,7 +5,6 @@ args = commandArgs(trailingOnly=TRUE)
 # query <- "operant learning" #args[1]
 # service <- "pubmed" #args[2]
 params <- NULL
-params_file <- "../test/params_pubmed.json"
 
 # test if there is at least one argument: if not, return an error
 # expected: query, service
@@ -31,7 +30,9 @@ wd <- getwd()
 
 source("../vis_layout.R")
 if (service == "pubmed"){source('../pubmed.R')}
+if (service == "pubmed"){params_file <- "../test/params_pubmed.json"}
 if (service == "doaj"){source('../doaj.R')}
+if (service == "doaj"){params_file <- "../test/params_doaj.json"}
 
 
 plot_clusters <- function (experiment_name, cluster, num_clusters) {
