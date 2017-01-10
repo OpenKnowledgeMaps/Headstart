@@ -16,13 +16,11 @@ var MyMediator = function() {
 MyMediator.prototype = {
     constructor: MyMediator,
     init: function() {
-        // init logic
-        this.mediator.subscribe("headstart_init", this.headstart_init);
-        this.mediator.subscribe("io_init_done", this.io_init_done);
-
         // data handling
         this.mediator.subscribe("prepare_data", this.io_prepare_data);
         this.mediator.subscribe("prepare_areas", this.io_prepare_areas);
+
+        this.mediator.subscribe("window_resized", this.window_resize);
 
         // async calls
         this.mediator.subscribe("get_data_from_files", this.io_async_get_data);
@@ -60,6 +58,170 @@ MyMediator.prototype = {
 
     publish: function() {
         this.mediator.publish(...arguments);
+    },
+
+    window_resize: function(self) {
+        if (headstart.is("timeline")) {
+            return;
+        }
+
+        let resized_scale_x = d3.scale.linear();
+        let resized_scale_y = d3.scale.linear();
+
+        resized_scale_x.domain([0, headstart.current_vis_size]);
+        resized_scale_y.domain([0, headstart.current_vis_size]);
+
+        headstart.calcChartSize();
+        headstart.setScaleRanges();
+        headstart.drawSvg(true);
+        headstart.updateChartCanvas();
+        list.fit_list_height();
+
+        resized_scale_x.range([0, headstart.current_vis_size]);
+        resized_scale_y.range([0, headstart.current_vis_size]);
+
+        self.transform_bubble_frames(resized_scale_x, resized_scale_y);
+        self.change_circle_radii();
+        self.scale_area_title_objects();
+        self.transform_papers(resized_scale_x, resized_scale_y);
+        self.transform_paper_holders();
+        self.transform_metadata();
+        self.transform_readers();
+    },
+
+    transform_bubble_frames: function(resized_scale_x, resized_scale_y) {
+        d3.selectAll("g.bubble_frame")
+          .attr("transform", (d) => {
+              d.x_zoomed = resized_scale_x(d.x_zoomed);
+              d.y_zoomed = resized_scale_y(d.y_zoomed);
+              d.x = resized_scale_x(d.x);
+              d.y = resized_scale_y(d.y);
+              if (headstart.is_zoomed === true) {
+                  return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
+              } else {
+                  return "translate(" + d.x + "," + d.y + ")";
+              }
+          });
+    },
+
+    change_circle_radii: function() {
+        d3.selectAll("circle")
+          .attr("r", (d) => {
+              d.r_zoomed = headstart.circle_size(d.readers) * headstart.circle_zoom;
+              d.r = headstart.circle_size(d.readers);
+              if (headstart.is_zoomed === true) {
+                  return d.r_zoomed;
+              } else {
+                  return d.r;
+              }
+          });
+    },
+
+    scale_area_title_objects: function() {
+        var area_title_objects = d3.selectAll("#area_title_object");
+
+        area_title_objects.each((d) => {
+            d.height_html = Math.sqrt(Math.pow(d.r,2)*2);
+            d.width_html = Math.sqrt(Math.pow(d.r,2)*2);
+            d.x_html = 0 - d.width_html/2;
+            d.y_html = 0 - d.height_html/2;
+        });
+
+        area_title_objects
+          .attr("x",      (d) => { return d.x_html;})
+          .attr("y",      (d) => { return d.y_html;})
+          .attr("width",  (d) => { return d.width_html;})
+          .attr("height", (d) => { return d.height_html;});
+
+        area_title_objects.each(function() {
+            d3.select(this).select("#area_title")
+              .style("width", (d) => {
+                  return d.width_html + "px";
+              })
+              .style("height", (d) => {
+                  return d.height_html + "px"; });
+        });
+
+        $("#area_title>h2").css("font-size", headstart.calcTitleFontSize());
+        $("#area_title>h2").hyphenate('en');
+        $("#area_title_object>body").dotdotdot({wrap:"letter"});
+    },
+
+    transform_papers: function(resized_scale_x, resized_scale_y) {
+        d3.selectAll("g.paper")
+          .attr("transform", (d) => {
+              d.x_zoomed = resized_scale_x(d.x_zoomed);
+              d.y_zoomed = resized_scale_y(d.y_zoomed);
+              d.x = resized_scale_x(d.x);
+              d.y = resized_scale_y(d.y);
+              if (headstart.is_zoomed === true) {
+                  return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
+              } else {
+                  return "translate(" + d.x + "," + d.y + ")";
+              }
+          });
+    },
+
+    transform_paper_holders: function() {
+
+
+        var paper_holders = d3.selectAll("div.paper_holder");
+
+        paper_holders.each((d) => {
+            d.diameter = headstart.diameter_size(d.internal_readers);
+            d.width = headstart.paper_width_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
+            d.height = headstart.paper_height_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
+            d.top_factor = (1-headstart.dogear_width);
+
+            d.width_zoomed = d.width * headstart.circle_zoom;
+            d.height_zoomed = d.height * headstart.circle_zoom;
+
+            d.resize_width = (headstart.is_zoomed)?(d.width_zoomed):(d.width);
+            d.resize_height = (headstart.is_zoomed)?(d.height_zoomed):(d.height);
+        });
+
+        d3.selectAll("#region")
+          .attr("d", (d) => {
+              return papers.createPaperPath(0, 0, d.resize_width, d.resize_height);
+          });
+
+        d3.selectAll("path.dogear")
+          .attr("d", (d) => {
+              return papers.createDogearPath(d.resize_width*d.top_factor, 0, d.resize_width, d.resize_height);
+          });
+    },
+
+    transform_metadata: function() {
+        //webkit bug
+        d3.selectAll("#article_metadata")
+          .attr("width", (d) => { return d.resize_width; })
+          .attr("height", (d) => { return d.resize_height; });
+
+        d3.selectAll("div.metadata")
+          .style("width", (d) => {
+              return d.resize_width * d.top_factor + "px";
+          })
+          .style("height", (d) => {
+              if(!headstart.is_zoomed) {
+                  return (headstart.content_based)?(d.resize_height):(d.resize_height * 0.8 + "px");
+              } else {
+                  return (headstart.content_based)?(d.resize_height + "px"):(d.resize_height - 20 + "px");
+              }
+          });
+    },
+
+    transform_readers: function() {
+        d3.selectAll("div.readers")
+          .style("height", (d) => {
+              if (headstart.is_zoomed === false) {
+                  return d.resize_height * 0.2 + "px";
+              } else {
+                  return "15px";
+              }
+          })
+          .style("width", function(d) {
+              return d.resize_width + "px";
+          });
     },
 
     io_async_get_data: function (file, input_format, callback) {
