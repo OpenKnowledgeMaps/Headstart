@@ -263,7 +263,32 @@ MyMediator.prototype = {
     },
 
     list_title_clickable: function(d) {
-        list.makeTitleClickable(d);
+        console.log("LIST TITLE CLICKABLE");
+        mediator.get_circle_and_zoom_in(d);
+        papers.mouseoverpaper();
+        list.enlargeListItem(d);
+        mediator.publish("record_action", d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+        d3.event.stopPropagation();
+    },
+
+    get_circle_and_zoom_in: function(d) {
+        headstart.current_circle = headstart.chart.selectAll("circle")
+          .filter(function(x) {
+              if (headstart.use_area_uri) {
+                  return x.area_uri == d.area_uri;
+              } else {
+                  return x.title == d.area;
+              }
+          });
+
+        headstart.bubbles[headstart.current_file_number].zoomin(headstart.current_circle.data()[0]);
+        headstart.bubbles[headstart.current_file_number].current = "hoverbig";
+        headstart.current_enlarged_paper = d;
+        d3.selectAll("path#region")
+          .filter(function(x) {
+              return x.id === d.id;
+          })
+          .attr("class", "framed");
     },
 
     paper_click: function(d) {

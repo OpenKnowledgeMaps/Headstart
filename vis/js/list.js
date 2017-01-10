@@ -473,36 +473,6 @@ list.removeBookmark = function(d)  {
       });
 };
 
-list.makeTitleClickable = function(d) {
-    headstart.current_circle = headstart.chart.selectAll("circle")
-        .filter(function(x) {
-            if (headstart.use_area_uri) {
-                return x.area_uri == d.area_uri;
-            } else {
-                return x.title == d.area;
-            }
-        });
-
-    headstart.bubbles[headstart.current_file_number].zoomin(headstart.current_circle.data()[0]);
-    headstart.bubbles[headstart.current_file_number].current = "hoverbig";
-    papers.mouseoverpaper();
-    this.enlargeListItem(d);
-    headstart.current_enlarged_paper = d;
-
-    d3.selectAll("path#region")
-        .filter(function(x) {
-            return x.id === d.id;
-        })
-        .attr("class", "framed");
-
-    mediator.publish("record_action", d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
-    // headstart.recordAction(d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
-
-    d3.event.stopPropagation();
-};
-
-
-
 list.enlargeListItem = function(d) {
     if(headstart.current_enlarged_paper !== null) {
       if(headstart.current_enlarged_paper.id == d.id) {
