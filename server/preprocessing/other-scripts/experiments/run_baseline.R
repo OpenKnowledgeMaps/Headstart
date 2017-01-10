@@ -51,7 +51,7 @@ get_metrics <- function(file) {
 
 for (file in files) {
   tryCatch(get_metrics(file),
-           error = function(e) {logerror('%s %s', e, file)}
+           error = function(e) {logerror('%s %s', file, e)}
   )
 } 
   

@@ -15,7 +15,7 @@ params <- fromJSON(params_file)
 for (query in top_terms$Term) {
   if(file.exists(paste("baseline/baseline", service, query, sep="_"))) next
   papers = tryCatch(get_papers(query, params=params),
-                    error = function(e) {logerror('%s %s %s', e, query, service)}
+                    error = function(e) {logerror('%s %s %s', query, service, e)}
                     )
   json = toJSON(papers)
   file_handle = file(paste("baseline/baseline", service, query, sep="_"), open="w")
@@ -31,7 +31,7 @@ params <- fromJSON(params_file)
 for (query in top_terms$Term) {
   if(file.exists(paste("baseline/baseline", service, query, sep="_"))) next
   papers = tryCatch(get_papers(query, params=params),
-                    error = function(e) {logerror('%s %s %s', e, query, service)}
+                    error = function(e) {logerror('%s %s %s', query, service, e)}
                     )
   json = toJSON(papers)
   file_handle = file(paste("baseline/baseline", service, query, sep="_"), open="w")
