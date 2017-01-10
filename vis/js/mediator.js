@@ -47,6 +47,8 @@ MyMediator.prototype = {
         this.mediator.subscribe("bubble_mouseover", this.bubble_mouseover);
         this.mediator.subscribe("bubble_click", this.bubble_click);
         this.mediator.subscribe("bubbles_update_data_and_areas", this.bubbles_update_data_and_areas);
+        this.mediator.subscribe("bubbles_zoom", this.list_zoom);
+        this.mediator.subscribe("bubbles_zoomout", this.list_zoomout);
 
         // bookmarks
         this.mediator.subscribe("bookmark_added", this.bookmark_added);
@@ -244,6 +246,38 @@ MyMediator.prototype = {
 
     to_timeline: function() {
         headstart.totimeline();
+    },
+
+    list_zoom: function(d, prev_zoom_node) {
+        console.log("LIST ZOOM");
+        list.reset();
+        if (typeof d != 'undefined') {
+            list.papers_list.selectAll("#list_holder")
+              .style("display", function (d) {
+                  return d.filtered_out ? "none" : "inline";
+              });
+            list.papers_list.selectAll("#list_holder")
+              .filter(function (x) {
+                  return (headstart.use_area_uri) ? (x.area_uri != d.area_uri) : (x.area != d.title);
+              })
+              .style("display", "none");
+        } else {
+            if (prev_zoom_node !== null && typeof prev_zoom_node != 'undefined') {
+                list.papers_list.selectAll("#list_holder")
+                  .style("display", function (d) {
+                      return d.filtered_out ? "none" : "inline";
+                  });
+            }
+        }
+    },
+
+    list_zoomout: function() {
+        console.log("LIST ZOOMOUT");
+        list.reset();
+        list.papers_list.selectAll("#list_holder")
+          .style("display", function (d) {
+              return d.filtered_out ? "none" : "inline";
+          });
     },
 
     list_toggle: function() {
