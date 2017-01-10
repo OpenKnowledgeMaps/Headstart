@@ -656,61 +656,50 @@ HeadstartFSM.prototype = {
 
       return url;
   },
+  
+  makeSetupVisualisation: function () {
+      let hs = this;
+      let current_bubble = this.bubbles[this.current_file_number];
+      let adaptive_data = null;
+      // NOTE: async call
+      // therefore we need to call the methods which depend on bubbles.data
+      // after the csv has been received.
+      let setupVisualization = (csv) => {
+        this.drawTitle();
+        this.calcChartSize();
+        this.setScaleRanges();
+        this.drawSvg();
+        this.drawChartCanvas();
+        if (this.is_adaptive) {
+          let url = this.createRestUrl();
+          $.getJSON(url, (data) => {
+              this.startVisualization(this, current_bubble, csv, data, true);
+            });
+        } else {
+          this.startVisualization(this, current_bubble, csv, null, true);
+        }
+        this.drawTitle();
+      };
+      return setupVisualization;
+  },
 
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
   onstart: function() {
       this.calcChartSize();
-
       this.initScales();
-
       this.checkBrowserVersions();
-
       this.setOverflowToHiddenOrAuto("#main");
-
       this.resetBubbles();
-      let current_bubble = this.bubbles[this.current_file_number];
-
-      // NOTE: async call
-      // therefore we need to call the methods which depend on bubbles.data
-      // after the csv has been received.
-      let setupVisualization = (csv) => {
-          this.drawTitle();
-
-          this.calcChartSize();
-          this.setScaleRanges();
-
-          this.drawSvg();
-          this.drawChartCanvas();
-          if (this.is_adaptive) {
-
-              let url = this.createRestUrl();
-
-              $.getJSON(url, (data) => {
-                  this.startVisualization(this, current_bubble, csv, data, true);
-              });
-          } else {
-              this.startVisualization(this, current_bubble, csv, null, true);
-          }
-
-          // Horrible solution but the first call is needed to calculate the chart height
-          // and this call sets the final number of articles in the viz
-          this.drawTitle();
-      };
-
+      let setupVisualization = this.makeSetupVisualisation();
       switch (this.mode) {
           case "local_files":
-              switch (this.input_format) {
-                case "csv":
-                  d3.csv(current_bubble.file, setupVisualization);
-                  break;
-                case "json":
-                  d3.json(current_bubble.file, setupVisualization);
-                  break;
-              }
+              var file = this.files[this.current_file_number - 1];
+              mediator.publish("get_data_from_files", file, this.input_format, setupVisualization);
               break;
 
           case "search_repos":
+              let current_bubble = this.bubbles[this.current_file_number];
               d3.json(this.server_url + "services/getLatestRevision.php?vis_id=" + current_bubble.file, setupVisualization);
               break;
 
@@ -845,42 +834,14 @@ HeadstartFSM.prototype = {
 
       // this.initScales();
       this.setOverflowToHiddenOrAuto("#main");
-
       // reset bubbles
       this.resetBubbles();
-
       let current_bubble = this.bubbles[this.current_file_number];
-
-      var setupVisualization = (csv) => {
-          this.calcChartSize();
-          this.setScaleRanges();
-
-          this.drawChartCanvas();
-
-          if (this.is_adaptive) {
-
-              var url = this.createRestUrl();
-
-              $.getJSON(url, (data) => {
-                  this.startVisualization(this, current_bubble, csv, data, false);
-              });
-          } else {
-              this.startVisualization(this, current_bubble, csv, null, false);
-          }
-
-          this.drawTitle();
-      };
-
+      let setupVisualization = this.makeSetupVisualisation();
       switch (this.mode) {
           case "local_files":
-              switch (this.input_format) {
-                  case "csv":
-                      d3.csv(current_bubble.file, setupVisualization);
-                      break;
-                  case "json":
-                      d3.json(current_bubble.file, setupVisualization);
-                      break;
-              }
+              var file = this.files[this.current_file_number - 1];
+              mediator.publish("get_data_from_files", file, this.input_format, setupVisualization);
               break;
 
           case "search_repos":
@@ -927,6 +888,8 @@ HeadstartFSM.prototype = {
 
 
   startVisualization: function(hs, bubbles, csv, adaptive_data) {
+    mediator.publish("prepare_data", adaptive_data, csv);
+    mediator.publish("prepare_areas");
     bubbles.start( csv, adaptive_data );
 
     hs.initEventListeners();
