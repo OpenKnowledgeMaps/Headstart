@@ -1,4 +1,8 @@
 var config = {
+    render_bubbles_papers: false,
+    render_list: true,
+    render_title: true,
+
     bubble_min_scale: 1,
     bubble_max_scale: 1,
     paper_min_scale: 1,

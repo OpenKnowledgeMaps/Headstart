@@ -1,4 +1,5 @@
 import Mediator from 'mediator-js';
+import config from 'config';
 import { headstart } from 'headstart';
 import { papers } from 'papers';
 import { list } from 'list';
@@ -20,7 +21,6 @@ MyMediator.prototype = {
         this.mediator.subscribe("prepare_data", this.io_prepare_data);
         this.mediator.subscribe("prepare_areas", this.io_prepare_areas);
 
-        this.mediator.subscribe("window_resized", this.window_resize);
 
         // async calls
         this.mediator.subscribe("get_data_from_files", this.io_async_get_data);
@@ -33,7 +33,6 @@ MyMediator.prototype = {
         this.mediator.subscribe("list_show_popup", this.list_show_popup);
         this.mediator.subscribe("list_title_click", this.list_title_click);
         this.mediator.subscribe("list_sort_click", this.list_sort_click);
-        this.mediator.subscribe("list_title_clickable", this.list_title_clickable);
         this.mediator.subscribe("preview_mouseover", this.preview_mouseover);
         this.mediator.subscribe("preview_mouseout", this.preview_mouseout);
 
@@ -47,8 +46,6 @@ MyMediator.prototype = {
         this.mediator.subscribe("bubble_mouseover", this.bubble_mouseover);
         this.mediator.subscribe("bubble_click", this.bubble_click);
         this.mediator.subscribe("bubbles_update_data_and_areas", this.bubbles_update_data_and_areas);
-        this.mediator.subscribe("bubbles_zoom", this.list_zoom);
-        this.mediator.subscribe("bubbles_zoomout", this.list_zoomout);
 
         // bookmarks
         this.mediator.subscribe("bookmark_added", this.bookmark_added);
@@ -56,13 +53,29 @@ MyMediator.prototype = {
 
         // misc
         this.mediator.subscribe("record_action", this.record_action);
+
+        // events - bubbles
+        if (config.render_bubbles_papers) {
+            this.mediator.subscribe("window_resized", this.window_resize_hs);
+            this.mediator.subscribe("list_title_clickable", this.list_title_clickable_bubbles);
+        }
+
+        // events - list
+        if (config.render_list) {
+            this.mediator.subscribe("window_resized", this.window_resize_list);
+            this.mediator.subscribe("list_title_clickable", this.list_title_clickable_list);
+            this.mediator.subscribe("bubbles_zoom", this.list_zoom);
+            this.mediator.subscribe("bubbles_zoomout", this.list_zoomout);
+            this.mediator.subscribe("paper_click_zoomed", this.paper_click_zoomed);
+        }
+
     },
 
     publish: function() {
         this.mediator.publish(...arguments);
     },
 
-    window_resize: function(self) {
+    window_resize_hs: function(self) {
         if (headstart.is("timeline")) {
             return;
         }
@@ -77,7 +90,6 @@ MyMediator.prototype = {
         headstart.setScaleRanges();
         headstart.drawSvg(true);
         headstart.updateChartCanvas();
-        list.fit_list_height();
 
         resized_scale_x.range([0, headstart.current_vis_size]);
         resized_scale_y.range([0, headstart.current_vis_size]);
@@ -89,6 +101,10 @@ MyMediator.prototype = {
         self.transform_paper_holders();
         self.transform_metadata();
         self.transform_readers();
+    },
+
+    window_resize_list: function() {
+        list.fit_list_height();
     },
 
     transform_bubble_frames: function(resized_scale_x, resized_scale_y) {
@@ -296,10 +312,12 @@ MyMediator.prototype = {
         sortBy(sort_option);
     },
 
-    list_title_clickable: function(d) {
-        console.log("LIST TITLE CLICKABLE");
+    list_title_clickable_bubbles: function(d) {
         mediator.get_circle_and_zoom_in(d);
         papers.mouseoverpaper();
+    },
+
+    list_title_clickable_list: function(d) {
         list.enlargeListItem(d);
         mediator.publish("record_action", d.id, "click_paper_list", headstart.user_id, d.bookmarked + " " + d.recommended, null);
         d3.event.stopPropagation();
@@ -331,6 +349,13 @@ MyMediator.prototype = {
 
     paper_mouseover: function(d, holder_div) {
         papers.enlargePaper(d, holder_div);
+    },
+
+    paper_click_zoomed: function(d) {
+        list.enlargeListItem(d);
+        if (list.current == "hidden") {
+            list.show();
+        }
     },
 
     bubble_mouseout: function(d, circle, bubble_fsm) {

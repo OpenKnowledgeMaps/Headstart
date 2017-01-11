@@ -572,8 +572,7 @@ papers.enlargePaper = function (d, holder_div) {
                 } else {
 
                     if (!d.paper_selected) {
-
-                        list.enlargeListItem(d);
+                        mediator.publish("paper_click_zoomed", d);
 
                         this.resetPaths();
 
@@ -584,9 +583,6 @@ papers.enlargePaper = function (d, holder_div) {
 
                         current_paper.attr("class", "framed");
 
-                        if (list.current == "hidden") {
-                            list.show();
-                        }
                     } else {
                         //mediator.publish("list_title_click", d);
                     }
