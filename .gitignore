@@ -9,4 +9,3 @@ npm-debug.log
 vis/stylesheets/*.css
 *.map
 dist/
-.idea/
