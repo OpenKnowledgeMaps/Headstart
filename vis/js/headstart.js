@@ -39,6 +39,14 @@ export var HeadstartFSM = function() {
   this.viz.append(iFrameTemplate());
   this.viz.append(imageTemplate());
 
+  if (!this.render_bubbles_papers) {
+    d3.select("div.vis-col").attr("style", "width:0px;height:0px;visibility:hidden");
+    d3.select("div.list-col").attr("style", "width:100%");
+  }
+
+  if (!this.render_list) {
+    d3.select("div.list-col").attr("style", "visibility:hidden;width:0%");
+  }
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
   this.bubbles = {};
@@ -519,20 +527,25 @@ HeadstartFSM.prototype = {
 
       return url;
   },
+
+  setupChart: function() {
+      this.calcChartSize();
+      this.initScales();
+      this.setScaleRanges();
+      this.drawSvg();
+      this.drawChartCanvas();
+  },
   
   makeSetupVisualisation: function () {
       let hs = this;
       let current_bubble = this.bubbles[this.current_file_number];
       let adaptive_data = null;
+      this.drawTitle();
+      this.setupChart();
       // NOTE: async call
       // therefore we need to call the methods which depend on bubbles.data
       // after the csv has been received.
       let setupVisualization = (csv) => {
-        this.drawTitle();
-        this.calcChartSize();
-        this.setScaleRanges();
-        this.drawSvg();
-        this.drawChartCanvas();
         if (this.is_adaptive) {
           let url = this.createRestUrl();
           $.getJSON(url, (data) => {
@@ -541,7 +554,6 @@ HeadstartFSM.prototype = {
         } else {
           this.startVisualization(this, current_bubble, csv, null, true);
         }
-        this.drawTitle();
       };
       return setupVisualization;
   },
@@ -549,8 +561,6 @@ HeadstartFSM.prototype = {
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
   onstart: function() {
-      this.calcChartSize();
-      this.initScales();
       this.checkBrowserVersions();
       this.setOverflowToHiddenOrAuto("#main");
       this.resetBubbles();
@@ -753,33 +763,29 @@ HeadstartFSM.prototype = {
   startVisualization: function(hs, bubbles, csv, adaptive_data) {
     mediator.publish("prepare_data", adaptive_data, csv);
     mediator.publish("prepare_areas");
-    bubbles.start( csv, adaptive_data );
+    mediator.publish('bubbles_update_data_and_areas', bubbles);
 
-    hs.initEventListeners();
-    hs.initMouseListeners();
-    hs.initForcePapers();
-    hs.initForceAreas();
-
-    papers.start( bubbles );
-    // moving this to bubbles.start results in papers being displayed over the
-    // bubbles, unfortunately
-    bubbles.draw();
-    
-    list.start( bubbles );
-
-    hs.checkForcePapers();
-
-    if (hs.show_intro) {
+    if (hs.render_bubbles_papers) {
+      bubbles.start(csv, adaptive_data);
+      hs.initEventListeners();
+      hs.initMouseListeners();
+      hs.initForcePapers();
+      hs.initForceAreas();
+      papers.start(bubbles);
+      bubbles.draw();
+      hs.checkForcePapers();
+      if (hs.show_intro) {
         $("#infolink").click();
+      }
+      $("#area_title>h2").hyphenate('en');
+      $("#area_title_object>body").dotdotdot({wrap: "letter"});
+      bubbles.initMouseListeners();
     }
-    
-    $("#area_title>h2").hyphenate('en');
-    $("#area_title_object>body").dotdotdot({wrap:"letter"});
-    
-    //highlight(data_config.files[0].title);
-    
-    bubbles.initMouseListeners();
-    
+
+    if (hs.render_list) {
+      list.start( bubbles );
+      if (!hs.render_bubbles_papers) list.show();
+    }
   },
 
   drawNormalViewLink: function() {

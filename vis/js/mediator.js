@@ -21,7 +21,6 @@ MyMediator.prototype = {
         this.mediator.subscribe("prepare_data", this.io_prepare_data);
         this.mediator.subscribe("prepare_areas", this.io_prepare_areas);
 
-
         // async calls
         this.mediator.subscribe("get_data_from_files", this.io_async_get_data);
 
@@ -67,6 +66,7 @@ MyMediator.prototype = {
             this.mediator.subscribe("bubbles_zoom", this.list_zoom);
             this.mediator.subscribe("bubbles_zoomout", this.list_zoomout);
             this.mediator.subscribe("paper_click_zoomed", this.paper_click_zoomed);
+            this.mediator.subscribe("currentbubble_clicked", this.list_currentbubble_click)
         }
 
     },
@@ -265,7 +265,6 @@ MyMediator.prototype = {
     },
 
     list_zoom: function(d, prev_zoom_node) {
-        console.log("LIST ZOOM");
         list.reset();
         if (typeof d != 'undefined') {
             list.papers_list.selectAll("#list_holder")
@@ -288,9 +287,20 @@ MyMediator.prototype = {
     },
 
     list_zoomout: function() {
-        console.log("LIST ZOOMOUT");
         list.reset();
         list.papers_list.selectAll("#list_holder")
+          .style("display", function (d) {
+              return d.filtered_out ? "none" : "inline";
+          });
+    },
+
+    list_currentbubble_click: function(d) {
+        list.reset();
+
+        d3.selectAll("#list_holder")
+          .filter(function (x) {
+              return (headstart.use_area_uri) ? (x.area_uri == d.area_uri) : (x.area == d.title);
+          })
           .style("display", function (d) {
               return d.filtered_out ? "none" : "inline";
           });

@@ -617,16 +617,7 @@ papers.enlargePaper = function (d, holder_div) {
 };
 
 papers.currentbubble_click = function (d) {
-    list.reset();
-
-    d3.selectAll("#list_holder")
-            .filter(function (x) {
-                return (headstart.use_area_uri) ? (x.area_uri == d.area_uri) : (x.area == d.title);
-            })
-            .style("display", function (d) {
-                return d.filtered_out ? "none" : "inline";
-            });
-
+    mediator.publish("currentbubble_clicked", d);
     if (headstart.current_enlarged_paper !== null) {
         headstart.current_enlarged_paper.paper_selected = false;
     }
