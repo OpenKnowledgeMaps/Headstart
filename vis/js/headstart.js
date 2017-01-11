@@ -39,6 +39,14 @@ export var HeadstartFSM = function() {
   this.viz.append(iFrameTemplate());
   this.viz.append(imageTemplate());
 
+  if (!this.render_bubbles_papers) {
+    d3.select("div.vis-col").attr("style", "width:0px;height:0px;visibility:hidden");
+    d3.select("div.list-col").attr("style", "width:100%");
+  }
+
+  if (!this.render_list) {
+    d3.select("div.list-col").attr("style", "visibility:hidden;width:0%");
+  }
   // contains bubbles objects for the timline view
   // elements get added to bubbles by calling registerBubbles()
   this.bubbles = {};
@@ -280,148 +288,11 @@ HeadstartFSM.prototype = {
   initEventListeners: function() {
       var self = this;
       
-      d3.select(window).on("resize", () => {
-        if (this.is("timeline")) {
-          return;
-        }
-          
-        let resized_scale_x = d3.scale.linear();
-        let resized_scale_y = d3.scale.linear();
-        
-        resized_scale_x.domain([0, this.current_vis_size]);
-        resized_scale_y.domain([0, this.current_vis_size]);
-
-        this.calcChartSize();
-        this.setScaleRanges();
-        this.drawSvg(true);
-        this.updateChartCanvas();
-        list.fit_list_height();
-        
-        resized_scale_x.range([0, this.current_vis_size]);
-        resized_scale_y.range([0, this.current_vis_size]);
-          
-        d3.selectAll("g.bubble_frame")
-            .attr("transform", (d) => {
-                d.x_zoomed = resized_scale_x(d.x_zoomed);
-                d.y_zoomed = resized_scale_y(d.y_zoomed);
-                d.x = resized_scale_x(d.x);
-                d.y = resized_scale_y(d.y);
-                if (this.is_zoomed === true) {
-                    return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
-                } else {
-                    return "translate(" + d.x + "," + d.y + ")";
-                }
-        });
-        
-        d3.selectAll("circle")
-          .attr("r", (d) => {
-              d.r_zoomed = this.circle_size(d.readers) * this.circle_zoom;
-              d.r = this.circle_size(d.readers);
-              if (this.is_zoomed === true) {
-                return d.r_zoomed;
-              } else {
-                return d.r; 
-              }
-          });
-        
-        var area_title_objects = d3.selectAll("#area_title_object");
-        
-        area_title_objects.each((d) => {
-            d.height_html = Math.sqrt(Math.pow(d.r,2)*2);
-            d.width_html = Math.sqrt(Math.pow(d.r,2)*2);
-            d.x_html = 0 - d.width_html/2;
-            d.y_html = 0 - d.height_html/2;
-        });
-        
-         area_title_objects
-            .attr("x",      (d) => { return d.x_html;})
-            .attr("y",      (d) => { return d.y_html;})
-            .attr("width",  (d) => { return d.width_html;})
-            .attr("height", (d) => { return d.height_html;});
-        
-        area_title_objects.each(function() {
-            d3.select(this).select("#area_title")
-                .style("width", (d) => {
-                    return d.width_html + "px";
-                })
-                .style("height", (d) => {
-                    return d.height_html + "px"; });
-        });
- 
-        $("#area_title>h2").css("font-size", this.calcTitleFontSize());
-        $("#area_title>h2").hyphenate('en');
-        $("#area_title_object>body").dotdotdot({wrap:"letter"});
-        
-        d3.selectAll("g.paper")
-          .attr("transform", (d) => {
-                d.x_zoomed = resized_scale_x(d.x_zoomed);
-                d.y_zoomed = resized_scale_y(d.y_zoomed);
-                d.x = resized_scale_x(d.x);
-                d.y = resized_scale_y(d.y);
-              if (this.is_zoomed === true) {
-                return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";  
-              } else {
-                return "translate(" + d.x + "," + d.y + ")";
-              }
-        });
-        
-        var paper_holders = d3.selectAll("div.paper_holder");
-        
-        paper_holders.each((d) => {
-            d.diameter = this.diameter_size(d.internal_readers);
-            d.width = this.paper_width_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
-            d.height = this.paper_height_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
-            d.top_factor = (1-this.dogear_width);
-            
-            d.width_zoomed = d.width * this.circle_zoom;
-            d.height_zoomed = d.height * this.circle_zoom;
-            
-            d.resize_width = (this.is_zoomed)?(d.width_zoomed):(d.width);
-            d.resize_height = (this.is_zoomed)?(d.height_zoomed):(d.height);
-        });
-        
-        d3.selectAll("#region")
-        .attr("d", (d) => {
-          return papers.createPaperPath(0, 0, d.resize_width, d.resize_height);
-        });
-
-        d3.selectAll("path.dogear")
-          .attr("d", (d) => {            
-            return papers.createDogearPath(d.resize_width*d.top_factor, 0, d.resize_width, d.resize_height);
-          });
-
-        //webkit bug
-        d3.selectAll("#article_metadata")
-          .attr("width", (d) => { return d.resize_width; })
-          .attr("height", (d) => { return d.resize_height; });
-
-        d3.selectAll("div.metadata")
-          .style("width", (d) => {
-            return d.resize_width * d.top_factor + "px";
-          })
-        .style("height", (d) => {
-          if(!this.is_zoomed) {
-            return (this.content_based)?(d.resize_height):(d.resize_height * 0.8 + "px");
-          } else {
-            return (this.content_based)?(d.resize_height + "px"):(d.resize_height - 20 + "px");
-          }
-        });
-
-        d3.selectAll("div.readers")
-            .style("height", (d) => {
-                if (this.is_zoomed === false) {
-                    return d.resize_height * 0.2 + "px";
-                } else {
-                    return "15px";
-                }
-            })
-            .style("width", function(d) {
-                return d.resize_width + "px";
-            });
-    });
+      d3.select(window).on("resize", () => { mediator.publish("window_resized", mediator); });
 
       // Info Modal Event Listener
       $('#info_modal').on('show.bs.modal', function() {
+          console.log("MODAL INFO SHOW");
           var current_intro = self.intro;
           
           var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(self.intro)
@@ -657,60 +528,51 @@ HeadstartFSM.prototype = {
       return url;
   },
 
-  // FSM callbacks
-  // the start event transitions headstart from "none" to "normal" view
-  onstart: function() {
+  setupChart: function() {
       this.calcChartSize();
-
       this.initScales();
-
-      this.checkBrowserVersions();
-
-      this.setOverflowToHiddenOrAuto("#main");
-
-      this.resetBubbles();
+      this.setScaleRanges();
+      this.drawSvg();
+      this.drawChartCanvas();
+  },
+  
+  makeSetupVisualisation: function () {
+      let hs = this;
       let current_bubble = this.bubbles[this.current_file_number];
-
+      let adaptive_data = null;
+      this.drawTitle();
+      this.setupChart();
       // NOTE: async call
       // therefore we need to call the methods which depend on bubbles.data
       // after the csv has been received.
       let setupVisualization = (csv) => {
-          this.drawTitle();
-
-          this.calcChartSize();
-          this.setScaleRanges();
-
-          this.drawSvg();
-          this.drawChartCanvas();
-          if (this.is_adaptive) {
-
-              let url = this.createRestUrl();
-
-              $.getJSON(url, (data) => {
-                  this.startVisualization(this, current_bubble, csv, data, true);
-              });
-          } else {
-              this.startVisualization(this, current_bubble, csv, null, true);
-          }
-
-          // Horrible solution but the first call is needed to calculate the chart height
-          // and this call sets the final number of articles in the viz
-          this.drawTitle();
+        if (this.is_adaptive) {
+          let url = this.createRestUrl();
+          $.getJSON(url, (data) => {
+              this.startVisualization(this, current_bubble, csv, data, true);
+            });
+        } else {
+          this.startVisualization(this, current_bubble, csv, null, true);
+        }
       };
+      return setupVisualization;
+  },
 
+  // FSM callbacks
+  // the start event transitions headstart from "none" to "normal" view
+  onstart: function() {
+      this.checkBrowserVersions();
+      this.setOverflowToHiddenOrAuto("#main");
+      this.resetBubbles();
+      let setupVisualization = this.makeSetupVisualisation();
       switch (this.mode) {
           case "local_files":
-              switch (this.input_format) {
-                case "csv":
-                  d3.csv(current_bubble.file, setupVisualization);
-                  break;
-                case "json":
-                  d3.json(current_bubble.file, setupVisualization);
-                  break;
-              }
+              var file = this.files[this.current_file_number - 1];
+              mediator.publish("get_data_from_files", file, this.input_format, setupVisualization);
               break;
 
           case "search_repos":
+              let current_bubble = this.bubbles[this.current_file_number];
               d3.json(this.server_url + "services/getLatestRevision.php?vis_id=" + current_bubble.file, setupVisualization);
               break;
 
@@ -845,42 +707,14 @@ HeadstartFSM.prototype = {
 
       // this.initScales();
       this.setOverflowToHiddenOrAuto("#main");
-
       // reset bubbles
       this.resetBubbles();
-
       let current_bubble = this.bubbles[this.current_file_number];
-
-      var setupVisualization = (csv) => {
-          this.calcChartSize();
-          this.setScaleRanges();
-
-          this.drawChartCanvas();
-
-          if (this.is_adaptive) {
-
-              var url = this.createRestUrl();
-
-              $.getJSON(url, (data) => {
-                  this.startVisualization(this, current_bubble, csv, data, false);
-              });
-          } else {
-              this.startVisualization(this, current_bubble, csv, null, false);
-          }
-
-          this.drawTitle();
-      };
-
+      let setupVisualization = this.makeSetupVisualisation();
       switch (this.mode) {
           case "local_files":
-              switch (this.input_format) {
-                  case "csv":
-                      d3.csv(current_bubble.file, setupVisualization);
-                      break;
-                  case "json":
-                      d3.json(current_bubble.file, setupVisualization);
-                      break;
-              }
+              var file = this.files[this.current_file_number - 1];
+              mediator.publish("get_data_from_files", file, this.input_format, setupVisualization);
               break;
 
           case "search_repos":
@@ -927,33 +761,31 @@ HeadstartFSM.prototype = {
 
 
   startVisualization: function(hs, bubbles, csv, adaptive_data) {
-    bubbles.start( csv, adaptive_data );
+    mediator.publish("prepare_data", adaptive_data, csv);
+    mediator.publish("prepare_areas");
+    mediator.publish('bubbles_update_data_and_areas', bubbles);
 
-    hs.initEventListeners();
-    hs.initMouseListeners();
-    hs.initForcePapers();
-    hs.initForceAreas();
-
-    papers.start( bubbles );
-    // moving this to bubbles.start results in papers being displayed over the
-    // bubbles, unfortunately
-    bubbles.draw();
-    
-    list.start( bubbles );
-
-    hs.checkForcePapers();
-
-    if (hs.show_intro) {
+    if (hs.render_bubbles_papers) {
+      bubbles.start(csv, adaptive_data);
+      hs.initEventListeners();
+      hs.initMouseListeners();
+      hs.initForcePapers();
+      hs.initForceAreas();
+      papers.start(bubbles);
+      bubbles.draw();
+      hs.checkForcePapers();
+      if (hs.show_intro) {
         $("#infolink").click();
+      }
+      $("#area_title>h2").hyphenate('en');
+      $("#area_title_object>body").dotdotdot({wrap: "letter"});
+      bubbles.initMouseListeners();
     }
-    
-    $("#area_title>h2").hyphenate('en');
-    $("#area_title_object>body").dotdotdot({wrap:"letter"});
-    
-    //highlight(data_config.files[0].title);
-    
-    bubbles.initMouseListeners();
-    
+
+    if (hs.render_list) {
+      list.start( bubbles );
+      if (!hs.render_bubbles_papers) list.show();
+    }
   },
 
   drawNormalViewLink: function() {

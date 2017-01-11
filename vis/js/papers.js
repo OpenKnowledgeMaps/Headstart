@@ -572,8 +572,7 @@ papers.enlargePaper = function (d, holder_div) {
                 } else {
 
                     if (!d.paper_selected) {
-
-                        list.enlargeListItem(d);
+                        mediator.publish("paper_click_zoomed", d);
 
                         this.resetPaths();
 
@@ -584,9 +583,6 @@ papers.enlargePaper = function (d, holder_div) {
 
                         current_paper.attr("class", "framed");
 
-                        if (list.current == "hidden") {
-                            list.show();
-                        }
                     } else {
                         //mediator.publish("list_title_click", d);
                     }
@@ -621,16 +617,7 @@ papers.enlargePaper = function (d, holder_div) {
 };
 
 papers.currentbubble_click = function (d) {
-    list.reset();
-
-    d3.selectAll("#list_holder")
-            .filter(function (x) {
-                return (headstart.use_area_uri) ? (x.area_uri == d.area_uri) : (x.area == d.title);
-            })
-            .style("display", function (d) {
-                return d.filtered_out ? "none" : "inline";
-            });
-
+    mediator.publish("currentbubble_clicked", d);
     if (headstart.current_enlarged_paper !== null) {
         headstart.current_enlarged_paper.paper_selected = false;
     }
