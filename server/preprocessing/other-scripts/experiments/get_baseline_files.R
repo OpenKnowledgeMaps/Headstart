@@ -4,7 +4,15 @@ basicConfig(level='INFO')
 addHandler(writeToFile, file="getting_baseline_files.log", level='INFO')
 
 
-setwd("/home/chris/projects/Headstart/server/preprocessing/other-scripts/experiments/")
+
+wd <- tryCatch(dirname(rstudioapi::getActiveDocumentContext()$path),
+               error = function(e) {
+                                  logerror('%s', e)
+                                  wd <<- getwd()
+               }
+)
+setwd(wd)
+
 top_terms <- read.csv("topterms.csv", header=TRUE, stringsAsFactors=FALSE)
 service <- "pubmed"
 if (service == "pubmed"){source('../pubmed.R')}
