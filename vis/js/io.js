@@ -2,6 +2,7 @@
 // Filename: io.js
 import { headstart } from 'headstart';
 import { mediator } from 'mediator';
+import { my_canvas } from 'canvas';
 
 var IO = function() {
     this.test = 0;
@@ -122,27 +123,27 @@ IO.prototype = {
             d.outlink = _this.createOutlink(d);
 
         });
-        headstart.chart_x.domain(d3.extent(cur_data, function (d) {
+        my_canvas.chart_x.domain(d3.extent(cur_data, function (d) {
             return d.x;
         }));
-        headstart.chart_y.domain(d3.extent(cur_data, function (d) {
+        my_canvas.chart_y.domain(d3.extent(cur_data, function (d) {
             return d.y * -1;
         }));
-        headstart.diameter_size.domain(d3.extent(cur_data, function (d) {
+        my_canvas.diameter_size.domain(d3.extent(cur_data, function (d) {
             return d.internal_readers;
         }));
         var areas = this.areas;
         cur_data.forEach(function (d) {
 
             // construct rectangles of a golden cut
-            d.diameter = headstart.diameter_size(d.internal_readers);
+            d.diameter = my_canvas.diameter_size(d.internal_readers);
             d.width = headstart.paper_width_factor * Math.sqrt(Math.pow(d.diameter, 2) / 2.6);
             d.height = headstart.paper_height_factor * Math.sqrt(Math.pow(d.diameter, 2) / 2.6);
             d.orig_x = d.x;
             d.orig_y = d.y;
             // scale x and y
-            d.x = headstart.chart_x(d.x);
-            d.y = headstart.chart_y(d.y * -1);
+            d.x = my_canvas.chart_x(d.x);
+            d.y = my_canvas.chart_y(d.y * -1);
             var area = (headstart.use_area_uri) ? (d.area_uri) : (d.area);
             if (area in areas) {
                 areas[area].papers.push(d);
@@ -201,7 +202,7 @@ IO.prototype = {
             readers.push(sum_readers);
         }
 
-        headstart.circle_size.domain(d3.extent(readers));
+        my_canvas.circle_size.domain(d3.extent(readers));
         var area_x = [];
         var area_y = [];
 
@@ -219,7 +220,7 @@ IO.prototype = {
             var mean_y = d3.mean(papers, function (d) {
                 return d.y;
             });
-            var r = headstart.circle_size(sum_readers);
+            var r = my_canvas.circle_size(sum_readers);
 
             area_x.push(mean_x);
             area_y.push(mean_y);
@@ -229,14 +230,14 @@ IO.prototype = {
             areas[area].r = r;
         }
 
-        headstart.chart_x_circle.domain(d3.extent(area_x));
-        headstart.chart_y_circle.domain(d3.extent(area_y));
+        my_canvas.chart_x_circle.domain(d3.extent(area_x));
+        my_canvas.chart_y_circle.domain(d3.extent(area_y));
 
         for (area in areas) {
             var new_area = [];
             new_area.title = areas[area].title;
-            new_area.x = headstart.chart_x_circle(areas[area].x);
-            new_area.y = headstart.chart_y_circle(areas[area].y);
+            new_area.x = my_canvas.chart_x_circle(areas[area].x);
+            new_area.y = my_canvas.chart_y_circle(areas[area].y);
             new_area.orig_x = areas[area].x;
             new_area.orig_y = areas[area].y;
             new_area.r = areas[area].r;
