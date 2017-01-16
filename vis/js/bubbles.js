@@ -7,7 +7,7 @@ import { mediator } from 'mediator';
 import { papers} from 'papers';
 import { list } from 'list';
 import { toBack, toFront, hideSibling} from 'helpers';
-import { my_canvas } from 'canvas';
+import { canvas } from 'canvas';
 
 const bubbleTemplate = require('templates/map/bubble.handlebars');
 
@@ -48,7 +48,7 @@ BubblesFSM.prototype = {
     },
 
     drawBubbleFrames: function () {
-        return my_canvas.chart.data(this.areas_array).selectAll("g.node")
+        return canvas.chart.data(this.areas_array).selectAll("g.node")
                 .data(this.areas_array)
                 .enter().append("g").attr("class", "bubble_frame");
     },
@@ -82,7 +82,7 @@ BubblesFSM.prototype = {
     // blasen -> wenn über blase gehovered und paper sichtbar
     // dann soll auch auf paper geclicked werden können.
     makePaperClickable: function (d) {
-        headstart.current_circle = my_canvas.chart.selectAll("circle")
+        headstart.current_circle = canvas.chart.selectAll("circle")
                 .filter(function (x) {
                     if (d !== null) {
                         if (headstart.use_area_uri) {
@@ -214,7 +214,7 @@ BubblesFSM.prototype = {
         for (var i = 0; i < sorted_circles.length - 1; i++) {
             var circleStart = sorted_circles[i].getBoundingClientRect();
             var circleEnd = sorted_circles[i + 1].getBoundingClientRect();
-            my_canvas.svg.append("line")
+            canvas.svg.append("line")
                     .attr("x1", circleStart.right + window.pageXOffset)
                     .attr("x2", circleEnd.left + window.pageXOffset)
                     .attr("y1", circleStart.top)
@@ -279,14 +279,14 @@ BubblesFSM.prototype = {
     // current_vis_size
     positionBubbles2: function (bubbles, bubbles_id) {
         bubbles.attr("transform", function (d) {
-            var x_pos = d.x + ((bubbles_id - 1) * my_canvas.current_vis_size);
+            var x_pos = d.x + ((bubbles_id - 1) * canvas.current_vis_size);
             return "translate(" + x_pos + "," + d.y + ")";
         });
     },
 
     // set the title size of bubbles to px
     adjustBubbleTitleSizeTo: function (bubbles) {
-        bubbles.selectAll("h2").style("font-size", my_canvas.calcTitleFontSize());
+        bubbles.selectAll("h2").style("font-size", canvas.calcTitleFontSize());
     },
 
     appendForeignObjectTo: function (bubbleFrame) {
@@ -361,7 +361,7 @@ BubblesFSM.prototype = {
                     .attr("y", $("#subdiscipline_title").outerHeight(true)*-1)
         }
         
-        var zoom_node = my_canvas.chart.selectAll("circle")
+        var zoom_node = canvas.chart.selectAll("circle")
                 .filter(function (x) {
                     if (d !== null) {
                         return x.title == d.title;
@@ -386,11 +386,11 @@ BubblesFSM.prototype = {
         zoom_node.on("mouseover", null)
                 .on("mouseout", null);
 
-        my_canvas.chart.selectAll("circle")
+        canvas.chart.selectAll("circle")
                 .attr("class", "zoom_selected")
                 .style("fill-opacity", "1");
 
-        my_canvas.chart.selectAll("circle")
+        canvas.chart.selectAll("circle")
                 .filter(function (x) {
                     if (d !== null) {
                         return (x.title != d.title);
@@ -437,19 +437,19 @@ BubblesFSM.prototype = {
         // Determine new zooming factor based on the viewbox
         //var svg = document.getElementById("chart-svg");
         //var viewbox = svg.getAttribute("viewBox").split(/\s+|,/);
-        headstart.circle_zoom = my_canvas.current_vis_size / d.r / 2 * headstart.zoom_factor;
+        headstart.circle_zoom = canvas.current_vis_size / d.r / 2 * headstart.zoom_factor;
 
         var padding = d.r * 0.08;
 
-        my_canvas.x.domain([d.x - d.r + padding, d.x + d.r - padding]);
-        my_canvas.y.domain([d.y - d.r + padding, d.y + d.r - padding]);
+        canvas.x.domain([d.x - d.r + padding, d.x + d.r - padding]);
+        canvas.y.domain([d.y - d.r + padding, d.y + d.r - padding]);
 
-        my_canvas.paper_x.domain([d.x - d.r, d.x + d.r]);
-        my_canvas.paper_y.domain([d.y - d.r, d.y + d.r]);
+        canvas.paper_x.domain([d.x - d.r, d.x + d.r]);
+        canvas.paper_y.domain([d.y - d.r, d.y + d.r]);
 
         var n = 0;
 
-        var t = my_canvas.chart.transition()
+        var t = canvas.chart.transition()
                 .duration(headstart.transition_duration)
                 .each("start", function () {
                     n++;
@@ -484,8 +484,8 @@ BubblesFSM.prototype = {
         }
         
         d3.select("rect")
-                .attr("width", my_canvas.current_vis_size)
-                .attr("height", my_canvas.current_vis_size)
+                .attr("width", canvas.current_vis_size)
+                .attr("height", canvas.current_vis_size)
                 .attr("x", 0)
                 .attr("y", 0)
 
@@ -513,7 +513,7 @@ BubblesFSM.prototype = {
                 });
 
         var n = 0;
-        var t = my_canvas.chart.transition()
+        var t = canvas.chart.transition()
                 .duration(headstart.zoomout_transition)
                 .each("start", function () {
                     n++;
@@ -523,7 +523,7 @@ BubblesFSM.prototype = {
                         return;
                     }
 
-                    my_canvas.chart.selectAll("#area_title_object")
+                    canvas.chart.selectAll("#area_title_object")
                             .style("display", "block")
                             .filter(function () {
                                 return d3.select(this.previousSibling).attr("class") != "zoom_selected";
@@ -587,7 +587,7 @@ BubblesFSM.prototype = {
         d3.selectAll("span.readers_entity")
                 .style("font-size", "8px");
 
-        my_canvas.drawTitle();
+        canvas.drawTitle();
 
         d3.selectAll(".paper")
                 .style("display", function (d) {
@@ -669,8 +669,8 @@ BubblesFSM.prototype = {
 
         t.selectAll("g.bubble_frame")
                 .attr("transform", function (d) {
-                    d.x_zoomed = my_canvas.x(d.x);
-                    d.y_zoomed = my_canvas.y(d.y);
+                    d.x_zoomed = canvas.x(d.x);
+                    d.y_zoomed = canvas.y(d.y);
 
                     return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
                 });
@@ -683,8 +683,8 @@ BubblesFSM.prototype = {
 
         t.selectAll("g.paper")
                 .attr("transform", function (g) {
-                    g.x_zoomed = my_canvas.paper_x(g.x);
-                    g.y_zoomed = my_canvas.paper_y(g.y);
+                    g.x_zoomed = canvas.paper_x(g.x);
+                    g.y_zoomed = canvas.paper_y(g.y);
                     return "translate(" + g.x_zoomed + "," + g.y_zoomed + ")";
                 });
 
@@ -828,7 +828,7 @@ BubblesFSM.prototype = {
         this.zoomOut();
         this.resetCircleDesign();
         papers.zoomout();
-        my_canvas.initClickListenersForNav();
+        canvas.initClickListenersForNav();
     },
 
     // we only whant to be able to "zoom" when the papers are
@@ -845,7 +845,7 @@ BubblesFSM.prototype = {
         }
         this.initMouseListeners();
         papers.zoom();
-        my_canvas.initClickListenersForNav();
+        canvas.initClickListenersForNav();
     }
 };
 

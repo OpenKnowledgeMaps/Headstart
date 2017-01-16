@@ -421,12 +421,12 @@ class Canvas {
   }
 
   initForceAreas() {
-    let padded = my_canvas.current_vis_size - headstart.padding;
+    let padded = canvas.current_vis_size - headstart.padding;
     headstart.force_areas = d3.layout.force().links([]).size([padded, padded]);
   }
 
   initForcePapers() {
-    let padded = my_canvas.current_vis_size - headstart.padding;
+    let padded = canvas.current_vis_size - headstart.padding;
     headstart.force_papers = d3.layout.force().nodes([]).links([]).size([padded, padded]);
     if (typeof checkPapers !== 'undefined') {
       window.clearInterval(checkPapers);
@@ -513,4 +513,4 @@ class Canvas {
   }
 }
 
-export const my_canvas = new Canvas('superCanvas');
+export const canvas = new Canvas('superCanvas');

@@ -8,7 +8,7 @@ import { mediator } from 'mediator';
 import { BubblesFSM } from 'bubbles';
 import { papers } from 'papers';
 import { list } from 'list';
-import { my_canvas } from 'canvas';
+import { canvas } from 'canvas';
 
 import { intros } from 'intro';
 import { getRealHeight } from "helpers";
@@ -167,11 +167,11 @@ HeadstartFSM.prototype = {
       // therefore we need to call the methods which depend on bubbles.data
       // after the csv has been received.
       let setupVisualization = (csv) => {
-        my_canvas.drawTitle();
-        my_canvas.calcChartSize();
-        my_canvas.setScaleRanges();
-        my_canvas.drawSvg();
-        my_canvas.drawChartCanvas();
+        canvas.drawTitle();
+        canvas.calcChartSize();
+        canvas.setScaleRanges();
+        canvas.drawSvg();
+        canvas.drawChartCanvas();
         if (this.is_adaptive) {
           let url = this.createRestUrl();
           $.getJSON(url, (data) => {
@@ -180,7 +180,7 @@ HeadstartFSM.prototype = {
         } else {
           this.startVisualization(this, current_bubble, csv, null, true);
         }
-        my_canvas.drawTitle();
+        canvas.drawTitle();
       };
       return setupVisualization;
   },
@@ -188,10 +188,10 @@ HeadstartFSM.prototype = {
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
   onstart: function() {
-      my_canvas.calcChartSize();
-      my_canvas.initScales();
+      canvas.calcChartSize();
+      canvas.initScales();
       this.checkBrowserVersions();
-      my_canvas.setOverflowToHiddenOrAuto("#main");
+      canvas.setOverflowToHiddenOrAuto("#main");
       this.resetBubbles();
       let setupVisualization = this.makeSetupVisualisation();
       switch (this.mode) {
@@ -242,7 +242,6 @@ HeadstartFSM.prototype = {
       }
   },
 
-
   // 'ontotimeline' transitions from Headstarts "normal" view to the timeline
   // view. In a nutshell:
   // 1. it requires some cleanup
@@ -276,15 +275,15 @@ HeadstartFSM.prototype = {
       let timeline = timelineTemplate();
       this.viz.append(timeline);
 
-      my_canvas.drawTitle();
-      my_canvas.drawGridTitles();
-      my_canvas.drawNormalViewLink();
-      my_canvas.initScales();
-      my_canvas.calcChartSize();
-      my_canvas.setScaleRanges();
-      my_canvas.drawSvg();
-      my_canvas.drawChartCanvas();
-      my_canvas.drawGridTitles(true);
+      canvas.drawTitle();
+      canvas.drawGridTitles();
+      canvas.drawNormalViewLink();
+      canvas.initScales();
+      canvas.calcChartSize();
+      canvas.setScaleRanges();
+      canvas.drawSvg();
+      canvas.drawChartCanvas();
+      canvas.drawGridTitles(true);
 
 
       d3.select("#headstart-chart").attr("overflow-x", "scroll");
@@ -314,8 +313,8 @@ HeadstartFSM.prototype = {
           }
       });
 
-      my_canvas.drawGrid();
-      my_canvas.initMouseListeners();
+      canvas.drawGrid();
+      canvas.initMouseListeners();
   },
 
   ontofile: function(event, from, to, file) {
@@ -332,7 +331,7 @@ HeadstartFSM.prototype = {
       list.current = "none";
 
       // this.initScales();
-      my_canvas.setOverflowToHiddenOrAuto("#main");
+      canvas.setOverflowToHiddenOrAuto("#main");
       // reset bubbles
       this.resetBubbles();
       let current_bubble = this.bubbles[this.current_file_number];
@@ -389,10 +388,10 @@ HeadstartFSM.prototype = {
     mediator.publish("prepare_areas");
     bubbles.start( csv, adaptive_data );
 
-    my_canvas.initEventListeners();
-    my_canvas.initMouseListeners();
-    my_canvas.initForcePapers();
-    my_canvas.initForceAreas();
+    canvas.initEventListeners();
+    canvas.initMouseListeners();
+    canvas.initForcePapers();
+    canvas.initForceAreas();
 
     papers.start( bubbles );
     // moving this to bubbles.start results in papers being displayed over the
@@ -401,7 +400,7 @@ HeadstartFSM.prototype = {
     
     list.start( bubbles );
 
-    my_canvas.checkForcePapers();
+    canvas.checkForcePapers();
 
     if (hs.show_intro) {
         $("#infolink").click();
