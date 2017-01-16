@@ -796,6 +796,8 @@ HeadstartFSM.prototype = {
 
       $.each(this.bubbles, (index, elem) => {
           var setupTimelineVisualization = (csv) => {
+              mediator.publish("prepare_data", null, csv);
+              mediator.publish("prepare_areas");
               elem.start(csv);
           };
 

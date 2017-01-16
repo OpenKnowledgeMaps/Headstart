@@ -2,7 +2,6 @@
 // Filename: io.js
 import { headstart } from 'headstart';
 import { mediator } from 'mediator';
-import { list } from 'list';
 
 var IO = function() {
     this.test = 0;
