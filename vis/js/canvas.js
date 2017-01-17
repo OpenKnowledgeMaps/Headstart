@@ -428,9 +428,6 @@ class Canvas {
   initForcePapers() {
     let padded = canvas.current_vis_size - headstart.padding;
     headstart.force_papers = d3.layout.force().nodes([]).links([]).size([padded, padded]);
-    if (typeof checkPapers !== 'undefined') {
-      window.clearInterval(checkPapers);
-    }
   }
 
   // Grid drawing methods

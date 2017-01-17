@@ -1,5 +1,7 @@
 // Headstart
 // filename: headstart.js
+
+"use strict";
 import StateMachine from 'javascript-state-machine';
 
 import config from 'config';
@@ -59,9 +61,12 @@ HeadstartFSM.prototype = {
   // prototype methods
   checkBrowserVersions: function() {
     var browser = BrowserDetect.browser;
-
-    if (browser !== "Firefox" && browser !== "Safari" && browser !== "Chrome") {
-            alert("You are using an unsupported browser. This visualization was successfully tested with the latest versions of Chrome, Safari, Opera and Firefox.");
+    if (!(browser == "Firefox" || browser == "Safari" || browser == "Chrome")) {
+            var alert_message = 'You are using an unsupported browser.' +
+                                'This visualization was successfully tested' +
+                                'with the latest versions of Chrome, Safari,' +
+                                'Opera and Firefox.';
+            alert(alert_message);
     }
   },
 
@@ -94,7 +99,7 @@ HeadstartFSM.prototype = {
         success: function(output) {
             console.log(output);
         }
-    });
+      });
     },
 
   resetBubbles: function () {
@@ -129,13 +134,7 @@ HeadstartFSM.prototype = {
   },
 
   bubblesSize: function() {
-    let size = 0;
-    for (let key in this.bubbles) {
-      if (this.bubbles.hasOwnProperty(key)) {
-        size++;
-      }
-    }
-    return size;
+    return Object.keys(this.bubbles).length;
   },
 
   createRestUrl: function () {
@@ -158,20 +157,14 @@ HeadstartFSM.prototype = {
 
       return url;
   },
-  
+
   makeSetupVisualisation: function () {
-      let hs = this;
       let current_bubble = this.bubbles[this.current_file_number];
       let adaptive_data = null;
       // NOTE: async call
       // therefore we need to call the methods which depend on bubbles.data
       // after the csv has been received.
       let setupVisualization = (csv) => {
-        canvas.drawTitle();
-        canvas.calcChartSize();
-        canvas.setScaleRanges();
-        canvas.drawSvg();
-        canvas.drawChartCanvas();
         if (this.is_adaptive) {
           let url = this.createRestUrl();
           $.getJSON(url, (data) => {
@@ -180,66 +173,73 @@ HeadstartFSM.prototype = {
         } else {
           this.startVisualization(this, current_bubble, csv, null, true);
         }
-        canvas.drawTitle();
       };
       return setupVisualization;
+  },
+
+  get_files: {
+      local_files: function(that, setupVis) {
+        var file = that.files[that.current_file_number - 1];
+        mediator.publish("get_data_from_files", file, that.input_format, setupVis);
+      },
+
+      search_repos: function(that, setupVis) {
+        let current_bubble = that.bubbles[that.current_file_number];
+        d3.json(that.server_url + "services/getLatestRevision.php?vis_id=" + current_bubble.file, setupVis);
+      },
+
+      server_files: {
+        csv: function(that, setupVis) {
+          $.ajax({
+            type: 'POST',
+            url: that.server_url + "services/staticFiles.php",
+            data: "",
+            dataType: 'JSON',
+            success: (json) => {
+              that.files = [];
+              for (let i = 0; i < json.length; i++) {
+                that.files.push({
+                  "title": json[i].title,
+                  "file": that.server_url + "static" + json[i].file
+                });
+              }
+              that.resetBubbles();
+              let current_bubble = that.bubbles[that.current_file_number];
+              d3.csv(current_bubble.file, setupVis);
+            }
+          });
+        },
+
+        json: function(that, setupVis) {
+          let current_bubble = that.bubbles[that.current_file_number];
+          d3.json(current_bubble.file, setupVis);
+        }
+      },
+
+      json_direct: function(that, setupVis) {
+        let current_bubble = that.bubbles[that.current_file_number];
+        setupVis(current_bubble.file);
+      },
+  },
+
+  setupCanvas: function() {
+    canvas.initScales();
+    canvas.setOverflowToHiddenOrAuto("#main");
+    canvas.drawTitle();
+    canvas.calcChartSize();
+    canvas.setScaleRanges();
+    canvas.drawSvg();
+    canvas.drawChartCanvas();
   },
 
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
   onstart: function() {
-      canvas.calcChartSize();
-      canvas.initScales();
       this.checkBrowserVersions();
-      canvas.setOverflowToHiddenOrAuto("#main");
       this.resetBubbles();
       let setupVisualization = this.makeSetupVisualisation();
-      switch (this.mode) {
-          case "local_files":
-              var file = this.files[this.current_file_number - 1];
-              mediator.publish("get_data_from_files", file, this.input_format, setupVisualization);
-              break;
-
-          case "search_repos":
-              let current_bubble = this.bubbles[this.current_file_number];
-              d3.json(this.server_url + "services/getLatestRevision.php?vis_id=" + current_bubble.file, setupVisualization);
-              break;
-
-          case "server_files":
-              switch (this.input_format) {
-                case "csv":
-                    $.ajax({
-                        type: 'POST',
-                        url: this.server_url + "services/staticFiles.php",
-                        data: "",
-                        dataType: 'JSON',
-                        success: (json) => {
-                            this.files = [];
-                            for (let i = 0; i < json.length; i++) {
-                                this.files.push({
-                                    "title": json[i].title,
-                                    "file": this.server_url + "static" + json[i].file
-                                });
-                            }
-                            this.resetBubbles();
-                            current_bubble = this.bubbles[this.current_file_number]; 
-                            d3.csv(current_bubble.file, setupVisualization);
-                        }
-                    });
-                  break;
-                case "json":
-                  d3.json(current_bubble.file, setupVisualization);
-                  break;
-              }
-              break;
-
-          case "json-direct":
-              setupVisualization(current_bubble.file);
-              break;
-
-          default:
-              break;
-      }
+      let hs = this;
+      this.get_files[this.mode](hs, setupVisualization);
   },
 
   // 'ontotimeline' transitions from Headstarts "normal" view to the timeline
@@ -250,9 +250,6 @@ HeadstartFSM.prototype = {
   // 2. rendering of new elements, on a bigger
   //    chart
   ontotimeline: function() {
-      if (typeof checkPapers !== 'undefined') {
-        window.clearInterval(checkPapers);
-      }
 
       this.force_areas.stop();
       this.force_papers.stop();
@@ -275,14 +272,10 @@ HeadstartFSM.prototype = {
       let timeline = timelineTemplate();
       this.viz.append(timeline);
 
-      canvas.drawTitle();
       canvas.drawGridTitles();
-      canvas.drawNormalViewLink();
       canvas.initScales();
-      canvas.calcChartSize();
-      canvas.setScaleRanges();
-      canvas.drawSvg();
-      canvas.drawChartCanvas();
+      this.setupCanvas();
+      canvas.drawNormalViewLink();
       canvas.drawGridTitles(true);
 
 
@@ -336,54 +329,12 @@ HeadstartFSM.prototype = {
       this.resetBubbles();
       let current_bubble = this.bubbles[this.current_file_number];
       let setupVisualization = this.makeSetupVisualisation();
-      switch (this.mode) {
-          case "local_files":
-              var file = this.files[this.current_file_number - 1];
-              mediator.publish("get_data_from_files", file, this.input_format, setupVisualization);
-              break;
-
-          case "search_repos":
-              d3.json(this.server_url + "services/getLatestRevision.php?vis_id=" + current_bubble.file, setupVisualization);
-              break;
-
-          case "server_files":
-              switch (this.input_format) {
-                  case "csv":
-                     $.ajax({
-                         type: 'POST',
-                         url: this.server_url + "services/staticFiles.php",
-                         data: "",
-                         dataType: 'JSON',
-                         success: (json) => {
-                             this.files = [];
-                             for (let i = 0; i < json.length; i++) {
-                                 this.files.push({
-                                     "title": json[i].title,
-                                     "file": this.server_url + "static" + json[i].file
-                                 });
-                             }
-                             this.resetBubbles();
-                             current_bubble = this.bubbles[this.current_file_number];
-                             d3.csv(current_bubble.file, setupVisualization);
-                         }
-                     });
-                     break;
-                  case "json":
-                      d3.json(current_bubble.file, setupVisualization);
-                      break;
-              }
-              break;
-
-          case "json-direct":
-              setupVisualization(current_bubble.file);
-              break;
-
-          default:
-              break;
-      }
+      let hs = this;
+      this.get_files[this.mode](hs, setupVisualization);
   },
 
   startVisualization: function(hs, bubbles, csv, adaptive_data) {
+    this.setupCanvas();
     mediator.publish("prepare_data", adaptive_data, csv);
     mediator.publish("prepare_areas");
     bubbles.start( csv, adaptive_data );
@@ -412,7 +363,6 @@ HeadstartFSM.prototype = {
     //highlight(data_config.files[0].title);
     
     bubbles.initMouseListeners();
-    
   }
 }; // end HeadstartFSM prototype definition
 
