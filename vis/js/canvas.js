@@ -550,6 +550,20 @@ class Canvas {
     this.initForcePapers();
     this.initForceAreas();
   }
+
+  showInfoModal() {
+    if (this.show_intro) {
+      $("#infolink").click();
+    }
+  }
+
+  hyphenateAreaTitles() {
+    $("#area_title>h2").hyphenate('en');
+  }
+
+  dotdotdotAreaTitles() {
+    $("#area_title_object>body").dotdotdot({wrap:"letter"});
+  }
 }
 
 export const canvas = new Canvas('superCanvas');

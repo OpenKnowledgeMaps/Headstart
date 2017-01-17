@@ -216,9 +216,11 @@ HeadstartFSM.prototype = {
 
       canvas.setupTimelineCanvas();
       // load bubbles in sync
+      debugger;
       $.each(this.bubbles, (index, elem) => {
           var setupTimelineVisualization = (csv) => {
-              mediator.publish("start_visualization", null, csv);
+              mediator.publish("prepare_data", null, csv);
+              mediator.publish("prepare_areas");
               elem.start(csv);
           };
           switch (this.input_format) {
@@ -242,36 +244,13 @@ HeadstartFSM.prototype = {
   ontofile: function(event, from, to, file) {
       this.current_file_number = file;
       mediator.publish("ontofile");
-
       let hs = this;
       this.get_files[this.mode](hs, this.makeSetupVisualisation());
   },
 
   startVisualization: function(csv, adaptive_data) {
     var bubble = this.bubbles[this.current_file_number];
-    canvas.setupCanvas();
-    mediator.publish("start_visualization", adaptive_data, csv);
-    bubble.start( csv, adaptive_data );
-
-    canvas.initEventsAndLayout();
-
-    papers.start( bubble );
-    // moving this to bubbles.start results in papers being displayed over the
-    // bubbles, unfortunately
-    bubble.draw();
-    
-    list.start( bubble );
-
-    canvas.checkForcePapers();
-
-    if (this.show_intro) {
-        $("#infolink").click();
-    }
-    
-    $("#area_title>h2").hyphenate('en');
-    $("#area_title_object>body").dotdotdot({wrap:"letter"});
-    
-    bubble.initMouseListeners();
+    mediator.publish("start_visualization", adaptive_data, csv, bubble);
   }
 }; // end HeadstartFSM prototype definition
 

@@ -20,8 +20,7 @@ MyMediator.prototype = {
         // init logic
         this.mediator.subscribe("headstart_init", this.headstart_init);
         this.mediator.subscribe("io_init_done", this.io_init_done);
-        this.mediator.subscribe("start_visualization", this.io_prepare_data);
-        this.mediator.subscribe("start_visualization", this.io_prepare_areas);
+        this.mediator.subscribe("start_visualization", this.init_start_visualization);
         this.mediator.subscribe("ontofile", this.init_ontofile);
 
         // data handling
@@ -82,6 +81,22 @@ MyMediator.prototype = {
         papers.current = "none";
         list.current = "none";
         canvas.setupToFileCanvas();
+    },
+
+    init_start_visualization: function(highlight_data, csv, bubble) {
+        canvas.setupCanvas();
+        io.prepareData(highlight_data, csv);
+        io.prepareAreas();
+        bubble.start( csv, highlight_data );
+        canvas.initEventsAndLayout();
+        papers.start( bubble );
+        bubble.draw();
+        list.start( bubble );
+        canvas.checkForcePapers();
+        canvas.showInfoModal();
+        canvas.hyphenateAreaTitles();
+        canvas.dotdotdotAreaTitles();
+        bubble.initMouseListeners();
     },
 
     bubbles_update_data_and_areas: function(bubbles) {
