@@ -3,6 +3,7 @@ import { headstart } from 'headstart';
 import { list } from 'list';
 import { papers } from 'papers';
 import { mediator } from 'mediator';
+import { intros } from 'intro';
 
 class Canvas {
   constructor(name) {
