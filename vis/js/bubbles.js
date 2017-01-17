@@ -856,7 +856,7 @@ StateMachine.create({
 
     events: [
         {name: "startup", from: "none", to: "x"},
-        {name: "start", from: "x", to: "zoomedout"},
+        {name: "start", from: ["x","zoomedout","hoversmall"] , to: "zoomedout"},
 
         {name: "mouseover", from: "zoomedout", to: "hoversmall"},
         {name: "mouseout", from: "hoversmall", to: "zoomedout"},

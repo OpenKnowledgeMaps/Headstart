@@ -284,12 +284,12 @@ papers.createPaperPath = function (x, y, width, height, correction_x, correction
 papers.applyForce = function (bubbles) {
     let self = this;
 
-    headstart.force_areas.start();
+    canvas.force_areas.start();
 
     if (headstart.is_force_areas) {
-        headstart.force_areas.alpha(headstart.area_force_alpha);
+        canvas.force_areas.alpha(headstart.area_force_alpha);
     } else {
-        headstart.force_areas.alpha(0);
+        canvas.force_areas.alpha(0);
     }
 
     var areas_count = 0;
@@ -297,10 +297,10 @@ papers.applyForce = function (bubbles) {
     var multiplier_areas = ticks_per_render_areas+1;
 
     requestAnimationFrame(function render() {
-        var alpha = headstart.force_areas.alpha();
+        var alpha = canvas.force_areas.alpha();
         
         for (var i = 0; i < ticks_per_render_areas; i++) {
-            headstart.force_areas.tick();
+            canvas.force_areas.tick();
         }
 
         var current_bubbles = headstart.bubbles[headstart.current_file_number];
@@ -334,12 +334,12 @@ papers.applyForce = function (bubbles) {
 
     });
 
-    headstart.force_papers.start();
+    canvas.force_papers.start();
 
     if (headstart.is_force_papers) {
-        headstart.force_papers.alpha(headstart.papers_force_alpha);
+        canvas.force_papers.alpha(headstart.papers_force_alpha);
     } else {
-        headstart.force_papers.alpha(0);
+        canvas.force_papers.alpha(0);
     }
 
     var papers_count = 0;
@@ -347,10 +347,10 @@ papers.applyForce = function (bubbles) {
     var multiplier_areas = ticks_per_render_papers + 1;
     
     requestAnimationFrame(function render() {
-        var alpha = headstart.force_papers.alpha();
+        var alpha = canvas.force_papers.alpha();
         
         for (var i = 0; i < ticks_per_render_papers; i++) {
-            headstart.force_papers.tick();
+            canvas.force_papers.tick();
         }
 
         var current_bubbles = headstart.bubbles[headstart.current_file_number];

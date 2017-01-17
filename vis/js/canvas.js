@@ -412,7 +412,7 @@ class Canvas {
       $("#datasets").val(headstart.bubbles[headstart.current_file_number].file);
 
       $("#datasets").change(function() {
-        let selected_file_number = this.selectedIndex + 1;
+        let selected_file_number = this.selectedIndex;
         if (selected_file_number !== headstart.current_file_number) {
           headstart.tofile(selected_file_number);
         }
@@ -422,12 +422,12 @@ class Canvas {
 
   initForceAreas() {
     let padded = canvas.current_vis_size - headstart.padding;
-    headstart.force_areas = d3.layout.force().links([]).size([padded, padded]);
+    this.force_areas = d3.layout.force().links([]).size([padded, padded]);
   }
 
   initForcePapers() {
     let padded = canvas.current_vis_size - headstart.padding;
-    headstart.force_papers = d3.layout.force().nodes([]).links([]).size([padded, padded]);
+    this.force_papers = d3.layout.force().nodes([]).links([]).size([padded, padded]);
   }
 
   // Grid drawing methods
@@ -442,7 +442,7 @@ class Canvas {
   }
 
   drawYGrid() {
-  var to = (headstart.bubblesSize() * this.current_vis_size);
+  var to = ((headstart.bubbles.length + 1) * this.current_vis_size);
   for (var i = 0; i <= to; i+= this.current_vis_size) {
     this.svg.append("line")
       .attr("x1", i)
@@ -456,7 +456,7 @@ class Canvas {
     for (var i = 0; i <= 900; i+=50) {
       this.svg.append("line")
         .attr("x1", "0")
-        .attr("x2", headstart.bubblesSize() * this.current_vis_size)
+        .attr("x2", (headstart.bubbles.length + 1) * this.current_vis_size)
         .attr("y1", i)
         .attr("y2", i);
     }
@@ -471,7 +471,7 @@ class Canvas {
       var checkPapers = window.setInterval(() => {
         if (headstart.is("normal") || headstart.is("switchfiles")) {
           if ((!papers.is("ready") && !papers.is("none")) || (bubble.is("startup") || bubble.is("none") || (bubble.is("start")) )) {
-            if (headstart.force_papers.alpha() <= 0 && headstart.force_areas.alpha() <= 0) {
+            if (this.force_papers.alpha() <= 0 && this.force_areas.alpha() <= 0) {
               papers.forced();
               if(headstart.show_list) {
                 list.show();
@@ -491,7 +491,7 @@ class Canvas {
       $("#tl-titles").width(this.current_vis_size * Object.keys(headstart.bubbles).length);
       $(".tl-title").css("width", this.current_vis_size);
     } else {
-      for (var i = 1; i <= headstart.bubblesSize(); i++) {
+      for (var i = 0; i < headstart.bubbles.length; i++) {
         $("#tl-titles").append(
           '<div class="tl-title"><h3>' + headstart.bubbles[i].title + '</h3></div>');
       }
@@ -507,6 +507,48 @@ class Canvas {
     // refreshes page
     var link = ' <a href="" id="normal_link">Normal View</a>';
     id_timelineview.html(link);
+  }
+
+  setupCanvas() {
+    this.initScales();
+    this.setOverflowToHiddenOrAuto("#main");
+    this.drawTitle();
+    this.calcChartSize();
+    this.setScaleRanges();
+    this.drawSvg();
+    this.drawChartCanvas();
+  }
+
+  setupTimelineCanvas() {
+    this.force_areas.stop();
+    this.force_papers.stop();
+    // clear the canvas
+    $("#chart_canvas").empty();
+    // clear the list list
+    $("#list_explorer").empty();
+
+    this.drawGridTitles();
+    this.initScales();
+    this.setupCanvas();
+    this.drawNormalViewLink();
+    this.drawGridTitles(true);
+    d3.select("#headstart-chart").attr("overflow-x", "scroll");
+    $("#main").css("overflow", "auto");
+  }
+
+  setupToFileCanvas() {
+    this.force_areas.stop();
+    this.force_papers.stop();
+    // clear the canvas & list
+    $("#chart_canvas").remove();
+    $("#list_explorer").empty();
+  }
+
+  initEventsAndLayout() {
+    this.initEventListeners();
+    this.initMouseListeners();
+    this.initForcePapers();
+    this.initForceAreas();
   }
 }
 

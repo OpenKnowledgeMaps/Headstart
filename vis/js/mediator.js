@@ -4,6 +4,7 @@ import { papers } from 'papers';
 import { list } from 'list';
 import { sortBy } from 'helpers';
 import { io } from 'io';
+import { canvas } from 'canvas';
 
 var MyMediator = function() {
 
@@ -19,6 +20,9 @@ MyMediator.prototype = {
         // init logic
         this.mediator.subscribe("headstart_init", this.headstart_init);
         this.mediator.subscribe("io_init_done", this.io_init_done);
+        this.mediator.subscribe("start_visualization", this.io_prepare_data);
+        this.mediator.subscribe("start_visualization", this.io_prepare_areas);
+        this.mediator.subscribe("ontofile", this.init_ontofile);
 
         // data handling
         this.mediator.subscribe("prepare_data", this.io_prepare_data);
@@ -72,6 +76,12 @@ MyMediator.prototype = {
 
     io_prepare_areas: function () {
         io.prepareAreas();
+    },
+
+    init_ontofile: function () {
+        papers.current = "none";
+        list.current = "none";
+        canvas.setupToFileCanvas();
     },
 
     bubbles_update_data_and_areas: function(bubbles) {
