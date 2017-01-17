@@ -10,7 +10,6 @@ import { papers } from 'papers';
 import { list } from 'list';
 import { canvas } from 'canvas';
 
-import { intros } from 'intro';
 import { getRealHeight } from "helpers";
 import { BrowserDetect, highlight } from "helpers";
   
