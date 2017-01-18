@@ -47,12 +47,18 @@ MyMediator.prototype = {
         this.mediator.subscribe("paper_click", this.paper_click);
         this.mediator.subscribe("paper_mouseover", this.paper_mouseover);
         this.mediator.subscribe("currentbubble_click", this.currentbubble_click);
+        this.mediator.subscribe("papers_leave_loading",
+          () => {console.log("")});
+        this.mediator.subscribe("paper_holder_clicked", this.paper_holder_clicked);
+        this.mediator.subscribe("paper_current_bubble_clicked", this.paper_current_bubble_clicked);
 
         // bubbles
         this.mediator.subscribe("bubble_mouseout", this.bubble_mouseout);
         this.mediator.subscribe("bubble_mouseover", this.bubble_mouseover);
         this.mediator.subscribe("bubble_click", this.bubble_click);
         this.mediator.subscribe("bubbles_update_data_and_areas", this.bubbles_update_data_and_areas);
+        this.mediator.subscribe("bubble_zoomin", this.bubble_zoomin);
+        this.mediator.subscribe("bubble_zoomout", this.bubble_zoomout);
 
         // bookmarks
         this.mediator.subscribe("bookmark_added", this.bookmark_added);
@@ -148,6 +154,18 @@ MyMediator.prototype = {
         papers.enlargePaper(d, holder_div);
     },
 
+    paper_holder_clicked: function(holder) {
+        list.enlargeListItem(holder);
+        if (list.current == "hidden") {
+            list.show();
+        }
+    },
+
+    paper_current_bubble_clicked: function(area) {
+        list.reset();
+        list.filterListByArea(area);
+    },
+
     bubble_mouseout: function(d, circle, bubble_fsm) {
         bubble_fsm.mouseout(d, circle);
     },
@@ -160,6 +178,22 @@ MyMediator.prototype = {
         bubble.zoomin(d);
     },
 
+    bubble_zoomin: function(d) {
+        list.reset();
+        if (typeof d != 'undefined') {
+            list.updateByFiltered();
+            list.filterListByAreaURIorArea(d);
+        }
+        if (headstart.current_zoom_mode !== null && typeof headstart.current_zoom_mode != 'undefined') {
+            if (typeof d != 'undefined') {
+                list.updateByFiltered();
+            }
+        }
+    },
+    bubble_zoomout: function() {
+        list.reset();
+        list.updateByFiltered();
+    },
     currentbubble_click: function(d) {
         papers.currentbubble_click(d);
     },

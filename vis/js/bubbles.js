@@ -6,7 +6,6 @@ import config from 'config';
 import { headstart } from 'headstart';
 import { mediator } from 'mediator';
 import { papers} from 'papers';
-import { list } from 'list';
 import { toBack, toFront, hideSibling} from 'helpers';
 import { canvas } from 'canvas';
 
@@ -315,23 +314,8 @@ BubblesFSM.prototype = {
 
     zoom: function (d) {
         var previous_zoom_node = headstart.current_zoom_node;
-
-        list.reset();
-
+        mediator.publish("bubble_zoomin", d);
         papers.resetPaths();
-
-        if (typeof d != 'undefined') {
-            list.papers_list.selectAll("#list_holder")
-                    .style("display", function (d) {
-                        return d.filtered_out ? "none" : "inline";
-                    });
-
-            list.papers_list.selectAll("#list_holder")
-                    .filter(function (x) {
-                        return (config.use_area_uri) ? (x.area_uri != d.area_uri) : (x.area != d.title);
-                    })
-                    .style("display", "none");
-        }
 
         if (previous_zoom_node !== null && typeof previous_zoom_node != 'undefined') {
 
@@ -340,11 +324,6 @@ BubblesFSM.prototype = {
                     return;
                 }
             } else {
-                list.papers_list.selectAll("#list_holder")
-                        .style("display", function (d) {
-                            return d.filtered_out ? "none" : "inline";
-                        });
-
                 d3.event.stopPropagation();
                 return;
             }
@@ -490,7 +469,7 @@ BubblesFSM.prototype = {
                 .attr("x", 0)
                 .attr("y", 0)
 
-        list.reset();
+        mediator.publish("bubble_zoomout");
 
         if (headstart.current_zoom_node !== null) {
             toFront(headstart.current_zoom_node.parentNode);
@@ -508,10 +487,6 @@ BubblesFSM.prototype = {
             headstart.current_enlarged_paper = null;
         }
 
-        list.papers_list.selectAll("#list_holder")
-                .style("display", function (d) {
-                    return d.filtered_out ? "none" : "inline";
-                });
 
         var n = 0;
         var t = canvas.chart.transition()

@@ -8,7 +8,6 @@ import 'lib/en.js';
 import config from 'config';
 import { headstart } from 'headstart';
 import { mediator } from 'mediator';
-import { list } from 'list';
 import { toFront } from 'helpers';
 import { canvas } from 'canvas';
 
@@ -80,6 +79,10 @@ export const papers = StateMachine.create({
             this.drawPapers(bubbles);
             this.applyForce(bubbles);
             this.initPaperClickHandler();
+        },
+
+        onleaveloading: function() {
+            mediator.publish("papers_leave_loading");
         },
 
         onbeforeclick: function () {
@@ -574,8 +577,7 @@ papers.enlargePaper = function (d, holder_div) {
                 } else {
 
                     if (!d.paper_selected) {
-
-                        list.enlargeListItem(d);
+                        mediator.publish("paper_holder_clicked", d);
 
                         this.resetPaths();
 
@@ -585,10 +587,6 @@ papers.enlargePaper = function (d, holder_div) {
                                 });
 
                         current_paper.attr("class", "framed");
-
-                        if (list.current == "hidden") {
-                            list.show();
-                        }
                     } else {
                         //mediator.publish("list_title_click", d);
                     }
@@ -623,15 +621,7 @@ papers.enlargePaper = function (d, holder_div) {
 };
 
 papers.currentbubble_click = function (d) {
-    list.reset();
-
-    d3.selectAll("#list_holder")
-            .filter(function (x) {
-                return (config.use_area_uri) ? (x.area_uri == d.area_uri) : (x.area == d.title);
-            })
-            .style("display", function (d) {
-                return d.filtered_out ? "none" : "inline";
-            });
+    mediator.publish("paper_current_bubble_clicked", d);
 
     if (headstart.current_enlarged_paper !== null) {
         headstart.current_enlarged_paper.paper_selected = false;

@@ -24,7 +24,7 @@ export const list = StateMachine.create({
 
     callbacks: {
         onbeforestart: function( event, from, to, bubbles ) {
-            this.width = headstart.list_width;
+            this.width = config.list_width;
             this.papers_list = null;
             this.drawList();
             this.populateList( bubbles.data );
@@ -133,7 +133,8 @@ let addSortOption = function(parent, sort_option, selected) {
     // Event listeners
     $("#sort_" + sort_option).change(function() {
         sortBy(sort_option);
-        headstart.recordAction("none", "sortBy", config.user_id, "listsort", null, "sort_option=" + sort_option);
+        mediator.publish("record_action","none", "sortBy",
+          config.user_id, "listsort", null, "sort_option=" + sort_option);
     });
 };
 
@@ -167,6 +168,30 @@ list.getPaperNodes = function(list_data) {
             return b.readers - a.readers; });
 };
 
+list.updateByFiltered = function() {
+    list.papers_list.selectAll("#list_holder")
+      .style("display", function (d) {
+          return d.filtered_out ? "none" : "inline";
+      });
+};
+
+list.filterListByAreaURIorArea = function(area) {
+    list.papers_list.selectAll("#list_holder")
+      .filter(function (x) {
+          return (config.use_area_uri) ? (x.area_uri != area.area_uri) : (x.area != area.title);
+      })
+      .style("display", "none");
+};
+
+list.filterListByArea = function(area) {
+    d3.selectAll("#list_holder")
+      .filter(function (x) {
+          return (config.use_area_uri) ? (x.area_uri == area.area_uri) : (x.area == area.title);
+      })
+      .style("display", function (d) {
+          return d.filtered_out ? "none" : "inline";
+      });
+};
 
 list.populateMetaData = function(nodes) {
     nodes[0].forEach(function(elem) {
