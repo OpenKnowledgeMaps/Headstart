@@ -207,21 +207,23 @@ HeadstartFSM.prototype = {
           case "server_files":
               switch (this.input_format) {
                 case "csv":
+                    var that = this;
                     $.ajax({
                         type: 'POST',
-                        url: this.server_url + "services/staticFiles.php",
+                        url: that.server_url + "services/staticFiles.php",
                         data: "",
                         dataType: 'JSON',
                         success: (json) => {
-                            this.files = [];
+                            that.files = [];
                             for (let i = 0; i < json.length; i++) {
-                                this.files.push({
+                                that.files.push({
                                     "title": json[i].title,
-                                    "file": this.server_url + "static" + json[i].file
+                                    "file": that.server_url + "static" + json[i].file
                                 });
                             }
-                            this.resetBubbles();
-                            let current_bubble = this.bubbles[this.current_file_number]; 
+                            that.resetBubbles();
+                            let current_bubble = that.bubbles[that.current_file_number];
+                            let setupVisualization = that.makeSetupVisualisation();
                             d3.csv(current_bubble.file, setupVisualization);
                         }
                     });
@@ -348,26 +350,29 @@ HeadstartFSM.prototype = {
           case "server_files":
               switch (this.input_format) {
                   case "csv":
+                     var that = this;
                      $.ajax({
                          type: 'POST',
-                         url: this.server_url + "services/staticFiles.php",
+                         url: that.server_url + "services/staticFiles.php",
                          data: "",
                          dataType: 'JSON',
                          success: (json) => {
-                             this.files = [];
+                             that.files = [];
                              for (let i = 0; i < json.length; i++) {
-                                 this.files.push({
+                                 that.files.push({
                                      "title": json[i].title,
-                                     "file": this.server_url + "static" + json[i].file
+                                     "file": that.server_url + "static" + json[i].file
                                  });
                              }
-                             this.resetBubbles();
-                             current_bubble = this.bubbles[this.current_file_number];
+                             that.resetBubbles();
+                             let current_bubble = that.bubbles[that.current_file_number];
+                             let setupVisualization = that.makeSetupVisualisation();
                              d3.csv(current_bubble.file, setupVisualization);
                          }
                      });
                      break;
                   case "json":
+                      debugger;
                       d3.json(current_bubble.file, setupVisualization);
                       break;
               }
