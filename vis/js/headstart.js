@@ -221,7 +221,7 @@ HeadstartFSM.prototype = {
                                 });
                             }
                             this.resetBubbles();
-                            current_bubble = this.bubbles[this.current_file_number]; 
+                            let current_bubble = this.bubbles[this.current_file_number]; 
                             d3.csv(current_bubble.file, setupVisualization);
                         }
                     });
