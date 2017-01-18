@@ -1,7 +1,6 @@
 import { getRealHeight } from "helpers";
 import config from 'config';
 import { headstart } from 'headstart';
-import { list } from 'list';
 import { papers } from 'papers';
 import { mediator } from 'mediator';
 
@@ -10,6 +9,17 @@ class Canvas {
     this.available_height = null;
     this.available_width = null;
     this.current_vis_size = null;
+  }
+
+  getCurrentCircle(d) {
+    return canvas.chart.selectAll("circle")
+          .filter(function(x) {
+              if (config.use_area_uri) {
+                  return x.area_uri == d.area_uri;
+              } else {
+                  return x.title == d.area;
+              }
+          })
   }
 
   calcChartSize() {
@@ -176,7 +186,6 @@ class Canvas {
   }
 
   initEventListeners() {
-    var self = headstart;
     var cv = this;
 
     d3.select(window).on("resize", () => {
@@ -194,7 +203,7 @@ class Canvas {
       this.setScaleRanges();
       this.drawSvg(true);
       this.updateChartCanvas();
-      list.fit_list_height();
+      mediator.publish("window_resize");
 
       resized_scale_x.range([0, this.current_vis_size]);
       resized_scale_y.range([0, this.current_vis_size]);
@@ -370,7 +379,6 @@ class Canvas {
 
   // Draws the header for this
   drawTitle() {
-    let self = headstart;
     let chart_title = "";
 
     if(config.title === "") {
@@ -473,9 +481,7 @@ class Canvas {
           if ((!papers.is("ready") && !papers.is("none")) || (bubble.is("startup") || bubble.is("none") || (bubble.is("start")) )) {
             if (this.force_papers.alpha() <= 0 && this.force_areas.alpha() <= 0) {
               papers.forced();
-              if (config.show_list) {
-                list.show();
-              }
+              mediator.publish("check_force_papers");
               window.clearInterval(checkPapers);
             }
           }
@@ -520,16 +526,13 @@ class Canvas {
   }
 
   setupTimelineCanvas() {
-    papers.current = "none";
-    list.current = "none";
+    mediator.publish("setup_timeline_canvas");
 
     // change heading to give an option to get back to normal view
     this.force_areas.stop();
     this.force_papers.stop();
     // clear the canvas
     $("#chart_canvas").empty();
-    // clear the list list
-    $("#list_explorer").empty();
 
     this.drawGridTitles();
     this.initScales();
@@ -541,11 +544,11 @@ class Canvas {
   }
 
   setupToFileCanvas() {
+    mediator.publish("setup_tofile_canvas");
     this.force_areas.stop();
     this.force_papers.stop();
     // clear the canvas & list
     $("#chart_canvas").remove();
-    $("#list_explorer").empty();
   }
 
   initEventsAndLayout() {

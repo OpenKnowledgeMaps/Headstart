@@ -669,3 +669,11 @@ papers.createDogearPath = function (x, y, width, height, correction_x, correctio
 
     return path;
 };
+
+papers.framePaper = function(p) {
+    d3.selectAll("path#region")
+      .filter(function(x) {
+          return x.id === p.id;
+      })
+      .attr("class", "framed");
+};

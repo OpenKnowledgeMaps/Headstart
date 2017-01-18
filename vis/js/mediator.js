@@ -42,6 +42,7 @@ MyMediator.prototype = {
         this.mediator.subscribe("list_title_clickable", this.list_title_clickable);
         this.mediator.subscribe("preview_mouseover", this.preview_mouseover);
         this.mediator.subscribe("preview_mouseout", this.preview_mouseout);
+        this.mediator.subscribe("list_click_paper_list", this.list_click_paper_list);
 
         // papers
         this.mediator.subscribe("paper_click", this.paper_click);
@@ -66,6 +67,10 @@ MyMediator.prototype = {
 
         // misc
         this.mediator.subscribe("record_action", this.record_action);
+        this.mediator.subscribe("window_resize", this.window_resize);
+        this.mediator.subscribe("check_force_papers", this.check_force_papers);
+        this.mediator.subscribe("setup_timeline_canvas", this.setup_timeline_canvas);
+        this.mediator.subscribe("setup_tofile_canvas", this.setup_tofile_canvas);
     },
 
     publish: function() {
@@ -218,6 +223,34 @@ MyMediator.prototype = {
 
     record_action: function(id, action, user, type, timestamp, additional_params, post_data) {
         headstart.recordAction(id, action, user, type, timestamp, additional_params, post_data);
+    },
+
+    window_resize: function() {
+        list.fit_list_height();
+    },
+    check_force_papers: function() {
+        if (config.show_list) {
+            list.show();
+        }
+    },
+    setup_timeline_canvas: function() {
+        papers.current = "none";
+        list.current = "none";
+        // clear the list list
+        $("#list_explorer").empty();
+    },
+
+    setup_tofile_canvas: function() {
+        $("#list_explorer").empty();
+    },
+
+    list_click_paper_list: function(d) {
+        headstart.current_circle = canvas.getCurrentCircle(d);
+        headstart.bubbles[headstart.current_file_number].zoomin(headstart.current_circle.data()[0]);
+        headstart.bubbles[headstart.current_file_number].current = "hoverbig";
+        papers.mouseoverpaper();
+        headstart.current_enlarged_paper = d;
+        papers.framePaper(d);
     }
 };
 

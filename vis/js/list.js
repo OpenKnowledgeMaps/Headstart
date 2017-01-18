@@ -5,7 +5,7 @@ import StateMachine from 'javascript-state-machine';
 import config from 'config';
 import { headstart } from 'headstart';
 import { mediator } from 'mediator';
-import { papers } from 'papers';
+import { canvas } from 'canvas';
 import { debounce, highlight, clear_highlights, sortBy } from 'helpers';
 
 const listTemplate = require('templates/list/list_explorer.handlebars');
@@ -33,14 +33,11 @@ export const list = StateMachine.create({
         },
 
         onshow: function() {
-            // if the papers_force has stopped.
-            if(!papers.is("loading")) {
-                d3.select("#sort_container").style("display", "block");
-                d3.select("#papers_list").style("display", "block");
-                d3.select("#left_arrow").text("\u25B2");
-                d3.select("#right_arrow").text("\u25B2");
-                d3.select("#show_hide_label").text(config.localization[config.language].hide_list);
-            }
+            d3.select("#sort_container").style("display", "block");
+            d3.select("#papers_list").style("display", "block");
+            d3.select("#left_arrow").text("\u25B2");
+            d3.select("#right_arrow").text("\u25B2");
+            d3.select("#show_hide_label").text(config.localization[config.language].hide_list);
         },
 
         onhide: function() {
@@ -500,30 +497,10 @@ list.removeBookmark = function(d)  {
 };
 
 list.makeTitleClickable = function(d) {
-    headstart.current_circle = canvas.chart.selectAll("circle")
-        .filter(function(x) {
-            if (config.use_area_uri) {
-                return x.area_uri == d.area_uri;
-            } else {
-                return x.title == d.area;
-            }
-        });
-
-    headstart.bubbles[headstart.current_file_number].zoomin(headstart.current_circle.data()[0]);
-    headstart.bubbles[headstart.current_file_number].current = "hoverbig";
-    papers.mouseoverpaper();
     this.enlargeListItem(d);
-    headstart.current_enlarged_paper = d;
-
-    d3.selectAll("path#region")
-        .filter(function(x) {
-            return x.id === d.id;
-        })
-        .attr("class", "framed");
-
+    mediator.publish("list_click_paper_list", d);
     mediator.publish("record_action", d.id, "click_paper_list", config.user_id, d.bookmarked + " " + d.recommended, null);
     // headstart.recordAction(d.id, "click_paper_list", config.user_id, d.bookmarked + " " + d.recommended, null);
-
     d3.event.stopPropagation();
 };
 
