@@ -8,9 +8,6 @@ import config from 'config';
 
 import { mediator } from 'mediator';
 import { BubblesFSM } from 'bubbles';
-import { papers } from 'papers';
-import { list } from 'list';
-import { canvas } from 'canvas';
 
 import { intros } from 'intro';
 import { getRealHeight } from "helpers";

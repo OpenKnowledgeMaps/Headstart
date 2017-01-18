@@ -1,7 +1,6 @@
 // Class for data IO
 // Filename: io.js
 import config from 'config';
-import { headstart } from 'headstart';
 import { mediator } from 'mediator';
 import { canvas } from 'canvas';
 
