@@ -1,5 +1,6 @@
 // Class for data IO
 // Filename: io.js
+import config from 'config';
 import { headstart } from 'headstart';
 import { mediator } from 'mediator';
 import { canvas } from 'canvas';
@@ -72,9 +73,9 @@ IO.prototype = {
             d.paper_abstract = _this.setToStringIfNullOrUndefined(d.paper_abstract, "");
             d.published_in = _this.setToStringIfNullOrUndefined(d.published_in, "");
             d.title = _this.setToStringIfNullOrUndefined(d.title,
-                headstart.localization[headstart.language]["no_title"]);
+                config.localization[config.language]["no_title"]);
 
-            if (headstart.content_based === false) {
+            if (config.content_based === false) {
                 d.readers = +d.readers;
                 d.internal_readers = +d.readers + 1;
             } else {
@@ -104,14 +105,14 @@ IO.prototype = {
 
             d.oa = false;
 
-            if (headstart.service === "doaj") {
+            if (config.service === "doaj") {
                 d.oa = true;
                 d.oa_link = d.link;
-            } else if (headstart.service === "plos") {
+            } else if (config.service === "plos") {
                 d.oa = true;
                 var journal = d.published_in.toLowerCase();
                 d.oa_link = "http://journals.plos.org/" +
-                    headstart.plos_journals_to_shortcodes[journal]
+                    config.plos_journals_to_shortcodes[journal]
                   + "/article/asset?id=" + d.id + ".PDF";
             } else if (typeof d.pmcid !== "undefined") {
                 if (d.pmcid !== "") {
@@ -137,14 +138,14 @@ IO.prototype = {
 
             // construct rectangles of a golden cut
             d.diameter = canvas.diameter_size(d.internal_readers);
-            d.width = headstart.paper_width_factor * Math.sqrt(Math.pow(d.diameter, 2) / 2.6);
-            d.height = headstart.paper_height_factor * Math.sqrt(Math.pow(d.diameter, 2) / 2.6);
+            d.width = config.paper_width_factor * Math.sqrt(Math.pow(d.diameter, 2) / 2.6);
+            d.height = config.paper_height_factor * Math.sqrt(Math.pow(d.diameter, 2) / 2.6);
             d.orig_x = d.x;
             d.orig_y = d.y;
             // scale x and y
             d.x = canvas.chart_x(d.x);
             d.y = canvas.chart_y(d.y * -1);
-            var area = (headstart.use_area_uri) ? (d.area_uri) : (d.area);
+            var area = (config.use_area_uri) ? (d.area_uri) : (d.area);
             if (area in areas) {
                 areas[area].papers.push(d);
             } else {
@@ -261,8 +262,8 @@ IO.prototype = {
     },
     createOutlink: function(d) {
         var url = false;
-        if (headstart.url_prefix !== null) {
-            url = headstart.url_prefix + d.url;
+        if (config.url_prefix !== null) {
+            url = config.url_prefix + d.url;
         } else if (typeof d.url != 'undefined') {
             url = d.url;
         }

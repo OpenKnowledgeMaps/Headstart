@@ -1,4 +1,5 @@
 import { getRealHeight } from "helpers";
+import config from 'config';
 import { headstart } from 'headstart';
 import { list } from 'list';
 import { papers } from 'papers';
@@ -13,13 +14,13 @@ class Canvas {
   }
 
   calcChartSize() {
-    var parent_height = getRealHeight($("#" + headstart.tag));
+    var parent_height = getRealHeight($("#" + config.tag));
     var subtitle_heigth = $("#subdiscipline_title").outerHeight(true);
 
     if (parent_height === 0) {
       this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_heigth;
     } else {
-      this.available_height = $("#" + headstart.tag).height() - subtitle_heigth;
+      this.available_height = $("#" + config.tag).height() - subtitle_heigth;
     }
 
     this.available_height = this.available_height - 1;
@@ -27,9 +28,9 @@ class Canvas {
     if (headstart.is("timeline")) {
       var timeline_height = $(".tl-title").outerHeight(true);
       this.available_height =  this.available_height - timeline_height;
-      this.available_width = $("#" + headstart.tag).width();
+      this.available_width = $("#" + config.tag).width();
     } else {
-      this.available_width = $("#" + headstart.tag).width() - $("#list_explorer").width();
+      this.available_width = $("#" + config.tag).width() - $("#list_explorer").width();
     }
 
     if (this.availableSizeIsBiggerThanMinSize()) {
@@ -42,8 +43,8 @@ class Canvas {
       this.current_vis_size = this.getMinSize();
     }
 
-    if (this.current_vis_size > headstart.max_height) {
-      this.current_vis_size = headstart.max_height;
+    if (this.current_vis_size > config.max_height) {
+      this.current_vis_size = config.max_height;
     }
   }
 
@@ -68,22 +69,22 @@ class Canvas {
 
   setScaleRanges() {
     // Calculate correct scaling factors and paper/circle dimensions
-    this.correction_factor = this.current_vis_size / headstart.reference_size;
+    const correction_factor = this.current_vis_size / config.reference_size;
 
-    this.circle_min = (headstart.min_area_size * this.correction_factor) * headstart.bubble_min_scale;
-    this.circle_max = (headstart.max_area_size * this.correction_factor) * headstart.bubble_max_scale;
-    this.circle_size.range([this.circle_min, this.circle_max]);
+    const circle_min = (config.min_area_size * correction_factor) * config.bubble_min_scale;
+    const circle_max = (config.max_area_size * correction_factor) * config.bubble_max_scale;
+    this.circle_size.range([circle_min, circle_max]);
 
-    this.paper_min = (headstart.min_diameter_size * this.correction_factor) * headstart.paper_min_scale;
-    this.paper_max = (headstart.max_diameter_size * this.correction_factor) * headstart.paper_max_scale;
-    this.diameter_size.range([this.paper_min, this.paper_max]);
+    const paper_min = (config.min_diameter_size * correction_factor) * config.paper_min_scale;
+    const paper_max = (config.max_diameter_size * correction_factor) * config.paper_max_scale;
+    this.diameter_size.range([paper_min, paper_max]);
 
     // Set ranges on scales
-    this.padding_articles = 5; //this.paper_max;
+    this.padding_articles = 5;
     this.chart_x.range([this.padding_articles, this.current_vis_size - this.padding_articles]);
     this.chart_y.range([this.padding_articles, this.current_vis_size - this.padding_articles]);
 
-    this.circle_padding = this.circle_max/2 + 45;
+    this.circle_padding = circle_max/2 + 45;
     this.chart_x_circle.range([this.circle_padding, this.current_vis_size - this.circle_padding]);
     this.chart_y_circle.range([this.circle_padding, this.current_vis_size - this.circle_padding]);
 
@@ -97,15 +98,15 @@ class Canvas {
   }
   // Size helper functions
   getMinSize() {
-    if (headstart.min_height >= headstart.min_width) {
-      return headstart.min_width;
+    if (config.min_height >= config.min_width) {
+      return config.min_width;
     } else {
-      return headstart.min_height;
+      return config.min_height;
     }
   }
 
   availableSizeIsBiggerThanMinSize() {
-    if ( this.available_width > headstart.min_width && this.available_height > headstart.min_height ) {
+    if ( this.available_width > config.min_width && this.available_height > config.min_height ) {
       return true;
     } else {
       return false;
@@ -152,7 +153,7 @@ class Canvas {
     this.chart = this.svg.append("g").attr( "id", "chart_canvas" );
     // Rectangle to contain nodes in force layout
     this.chart.append("rect");
-    // var rect_width = this.current_vis_size;// + headstart.max_list_size;
+    // var rect_width = this.current_vis_size;// + config.max_list_size;
     this.updateChartCanvas();
 
     //chart.attr( "height", this.current_vis_size + "px" )
@@ -268,9 +269,9 @@ class Canvas {
 
       paper_holders.each((d) => {
         d.diameter = this.diameter_size(d.internal_readers);
-        d.width = headstart.paper_width_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
-        d.height = headstart.paper_height_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
-        d.top_factor = (1-headstart.dogear_width);
+        d.width = config.paper_width_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
+        d.height = config.paper_height_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
+        d.top_factor = (1-config.dogear_width);
 
         d.width_zoomed = d.width * headstart.circle_zoom;
         d.height_zoomed = d.height * headstart.circle_zoom;
@@ -300,9 +301,9 @@ class Canvas {
         })
         .style("height", (d) => {
           if(!headstart.is_zoomed) {
-            return (headstart.content_based)?(d.resize_height):(d.resize_height * 0.8 + "px");
+            return (config.content_based)?(d.resize_height):(d.resize_height * 0.8 + "px");
           } else {
-            return (headstart.content_based)?(d.resize_height + "px"):(d.resize_height - 20 + "px");
+            return (config.content_based)?(d.resize_height + "px"):(d.resize_height - 20 + "px");
           }
         });
 
@@ -321,9 +322,9 @@ class Canvas {
 
     // Info Modal Event Listener
     $('#info_modal').on('show.bs.modal', function() {
-      var current_intro = self.intro;
+      var current_intro = config.intro;
 
-      var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(self.intro)
+      var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(config.intro)
 
       $(headstart).find('.modal-title ').text(intro.title);
       $(headstart).find('.modal-body').html(intro.body);
@@ -353,7 +354,7 @@ class Canvas {
       headstart.bubbles[headstart.current_file_number].zoomout();
     });
 
-    $("#" + headstart.tag).bind('click', (event) => {
+    $("#" + config.tag).bind('click', (event) => {
       if(event.target.className === "container-headstart" || event.target.className === "vis-col" || event.target.id === "headstart-chart") {
         headstart.bubbles[headstart.current_file_number].zoomout();
       }
@@ -373,37 +374,37 @@ class Canvas {
     let self = headstart;
     let chart_title = "";
 
-    if(headstart.title === "") {
-      if (headstart.language === "eng") {
+    if(config.title === "") {
+      if (config.language === "eng") {
         chart_title = 'Overview of <span id="num_articles"></span> articles';
       } else {
         chart_title = 'Überblick über <span id="num_articles"></span> Artikel';
       }
     } else {
-      chart_title = headstart.title;
+      chart_title = config.title;
     }
     var subdiscipline_title_h4 = $("#subdiscipline_title h4");
     subdiscipline_title_h4.html(chart_title);
     $("#num_articles").html($(".paper").length);
 
-    if (headstart.show_infolink) {
+    if (config.show_infolink) {
       let infolink = ' (<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>)';
       subdiscipline_title_h4.append(infolink);
-      $("#infolink").text(headstart.localization[headstart.language].intro_label);
+      $("#infolink").text(config.localization[config.language].intro_label);
     }
 
-    if (headstart.show_timeline) {
+    if (config.show_timeline) {
       let link = ' <span id="timelineview"><a href="#">TimeLineView</a></span>';
       subdiscipline_title_h4.append(link);
     }
 
-    if (headstart.show_dropdown) {
+    if (config.show_dropdown) {
       let dropdown = '<select id="datasets"></select>';
 
       subdiscipline_title_h4.append(" Select dataset: ");
       subdiscipline_title_h4.append(dropdown);
 
-      $.each(headstart.files, (index, entry) => {
+      $.each(config.files, (index, entry) => {
         let current_item = '<option value="' + entry.file + '">' + entry.title + '</option>';
         $("#datasets").append(current_item);
       });
@@ -473,7 +474,7 @@ class Canvas {
           if ((!papers.is("ready") && !papers.is("none")) || (bubble.is("startup") || bubble.is("none") || (bubble.is("start")) )) {
             if (this.force_papers.alpha() <= 0 && this.force_areas.alpha() <= 0) {
               papers.forced();
-              if(headstart.show_list) {
+              if (config.show_list) {
                 list.show();
               }
               window.clearInterval(checkPapers);
@@ -520,6 +521,10 @@ class Canvas {
   }
 
   setupTimelineCanvas() {
+    papers.current = "none";
+    list.current = "none";
+
+    // change heading to give an option to get back to normal view
     this.force_areas.stop();
     this.force_papers.stop();
     // clear the canvas
@@ -552,7 +557,7 @@ class Canvas {
   }
 
   showInfoModal() {
-    if (this.show_intro) {
+    if (config.show_intro) {
       $("#infolink").click();
     }
   }

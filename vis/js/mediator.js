@@ -1,4 +1,5 @@
 import Mediator from 'mediator-js';
+import config from 'config';
 import { headstart } from 'headstart';
 import { papers } from 'papers';
 import { list } from 'list';
@@ -22,6 +23,7 @@ MyMediator.prototype = {
         this.mediator.subscribe("io_init_done", this.io_init_done);
         this.mediator.subscribe("start_visualization", this.init_start_visualization);
         this.mediator.subscribe("ontofile", this.init_ontofile);
+        this.mediator.subscribe("ontotimeline", this.init_ontotimeline);
 
         // data handling
         this.mediator.subscribe("prepare_data", this.io_prepare_data);
@@ -81,6 +83,11 @@ MyMediator.prototype = {
         papers.current = "none";
         list.current = "none";
         canvas.setupToFileCanvas();
+    },
+
+    init_ontotimeline: function() {
+        headstart.bubbles[headstart.current_file_number].current = "x";
+        canvas.setupTimelineCanvas();
     },
 
     init_start_visualization: function(highlight_data, csv, bubble) {
