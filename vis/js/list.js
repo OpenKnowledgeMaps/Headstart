@@ -474,7 +474,7 @@ list.removeBookmark = function(d)  {
 };
 
 list.makeTitleClickable = function(d) {
-    headstart.current_circle = headstart.chart.selectAll("circle")
+    headstart.current_circle = canvas.chart.selectAll("circle")
         .filter(function(x) {
             if (headstart.use_area_uri) {
                 return x.area_uri == d.area_uri;

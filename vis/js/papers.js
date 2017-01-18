@@ -9,6 +9,7 @@ import { headstart } from 'headstart';
 import { mediator } from 'mediator';
 import { list } from 'list';
 import { toFront } from 'helpers';
+import { canvas } from 'canvas';
 
 const paperTemplate = require("templates/map/paper.handlebars");
 
@@ -119,7 +120,7 @@ export const papers = StateMachine.create({
 
 papers.drawPapers = function (bubbles) {
 
-    var nodes = headstart.chart.selectAll("g.node")
+    var nodes = canvas.chart.selectAll("g.node")
             .data(bubbles.data)
             .enter().append("g")
             .attr("class", "paper")
@@ -211,7 +212,7 @@ papers.initPaperClickHandler = function () {
 papers.paper_click = function (d) {
     if (!this.is("loading")) {
         if (!headstart.is_zoomed) {
-            var current_node = headstart.chart.selectAll("circle")
+            var current_node = canvas.chart.selectAll("circle")
                     .filter(function (x) {
                         if (d !== null) {
                             if (headstart.use_area_uri) {
@@ -307,12 +308,12 @@ papers.applyForce = function (bubbles) {
         current_bubbles.areas_array.forEach(function (a, i) {
 
             if (a.x - a.r < 0 ||
-                    a.x + a.r > headstart.current_vis_size ||
+                    a.x + a.r > canvas.current_vis_size ||
                     a.y - a.r < 0 ||
-                    a.y + a.r > headstart.current_vis_size) {
+                    a.y + a.r > canvas.current_vis_size) {
 
-                a.x += (headstart.current_vis_size / 2 - a.x) * alpha * multiplier_areas;
-                a.y += (headstart.current_vis_size / 2 - a.y) * alpha * multiplier_areas;
+                a.x += (canvas.current_vis_size / 2 - a.x) * alpha * multiplier_areas;
+                a.y += (canvas.current_vis_size / 2 - a.y) * alpha * multiplier_areas;
             }
 
 
@@ -435,7 +436,7 @@ papers.drawEntity = function (entity, alpha, count, forced=false) {
             alpha <= 0.02 && alpha >= 0.01 && count % 10 === 0 ||
             alpha <= 0.01 && count % 10 === 0) {
 
-        headstart.chart.selectAll(entity)
+        canvas.chart.selectAll(entity)
                 .attr("transform", function (d) {
                     return "translate(" + d.x + "," + d.y + ")";
                 });
@@ -493,7 +494,7 @@ papers.resizePaper = function (d, holder_div, resize_factor, color) {
     let current_dogear = current_g_paper.select("path.dogear");
 
     var current_size = d.height * headstart.circle_zoom;
-    var max_size = headstart.current_vis_size / 2;
+    var max_size = canvas.current_vis_size / 2;
 
     if (current_size * resize_factor > max_size) {
         resize_factor = max_size / current_size;
@@ -602,7 +603,7 @@ papers.enlargePaper = function (d, holder_div) {
                 this.mouseoutpaper(d, holder_div);
             });
 
-    headstart.current_circle = headstart.chart.selectAll("circle")
+    headstart.current_circle = canvas.chart.selectAll("circle")
             .filter(function (x) {
                 if (headstart.use_area_uri) {
                     return (x.area_uri == d.area_uri);
