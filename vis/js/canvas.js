@@ -6,8 +6,7 @@ import { papers } from 'papers';
 import { mediator } from 'mediator';
 
 class Canvas {
-  constructor(name) {
-    this.name = name;
+  constructor() {
     this.available_height = null;
     this.available_width = null;
     this.current_vis_size = null;
@@ -80,19 +79,19 @@ class Canvas {
     this.diameter_size.range([paper_min, paper_max]);
 
     // Set ranges on scales
-    this.padding_articles = 5;
-    this.chart_x.range([this.padding_articles, this.current_vis_size - this.padding_articles]);
-    this.chart_y.range([this.padding_articles, this.current_vis_size - this.padding_articles]);
+    const padding_articles = 5;
+    this.chart_x.range([padding_articles, this.current_vis_size - padding_articles]);
+    this.chart_y.range([padding_articles, this.current_vis_size - padding_articles]);
 
-    this.circle_padding = circle_max/2 + 45;
-    this.chart_x_circle.range([this.circle_padding, this.current_vis_size - this.circle_padding]);
-    this.chart_y_circle.range([this.circle_padding, this.current_vis_size - this.circle_padding]);
+    const circle_padding = circle_max/2 + 45;
+    this.chart_x_circle.range([circle_padding, this.current_vis_size - circle_padding]);
+    this.chart_y_circle.range([circle_padding, this.current_vis_size - circle_padding]);
 
-    var zoomed_article_padding = 60;
+    const zoomed_article_padding = 60;
     this.x.range([zoomed_article_padding, this.current_vis_size - zoomed_article_padding]);
     this.y.range([zoomed_article_padding, this.current_vis_size - zoomed_article_padding]);
 
-    var zoomed_article_padding_paper = 35;
+    const zoomed_article_padding_paper = 35;
     this.paper_x.range([zoomed_article_padding_paper, this.current_vis_size - zoomed_article_padding_paper]);
     this.paper_y.range([zoomed_article_padding_paper, this.current_vis_size - zoomed_article_padding_paper]);
   }
@@ -117,7 +116,7 @@ class Canvas {
     var overflow = "hidden";
 
     if ( this.current_vis_size > this.available_height ||
-      this.current_vis_size + headstart.list_width > this.available_width ){
+      this.current_vis_size + config.list_width > this.available_width ){
       overflow = "auto";
     }
 
@@ -571,4 +570,4 @@ class Canvas {
   }
 }
 
-export const canvas = new Canvas('superCanvas');
+export const canvas = new Canvas();
