@@ -156,8 +156,7 @@ HeadstartFSM.prototype = {
         d3.json(that.server_url + "services/getLatestRevision.php?vis_id=" + current_bubble.file, setupVis);
       },
 
-      server_files: {
-        csv: function(that, setupVis) {
+      server_files: function(that, setupVis) {
           $.ajax({
             type: 'POST',
             url: that.server_url + "services/staticFiles.php",
@@ -173,15 +172,9 @@ HeadstartFSM.prototype = {
               }
               that.registerBubbles();
               let current_bubble = that.bubbles[that.current_file_number];
-              d3.csv(current_bubble.file, setupVis);
+              d3[that.input_format](current_bubble.file, setupVis);
             }
           });
-        },
-
-        json: function(that, setupVis) {
-          let current_bubble = that.bubbles[that.current_file_number];
-          d3.json(current_bubble.file, setupVis);
-        }
       },
 
       json_direct: function(that, setupVis) {
