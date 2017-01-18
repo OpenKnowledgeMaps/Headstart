@@ -133,13 +133,14 @@ HeadstartFSM.prototype = {
 
   makeSetupVisualisation: function () {
       return (csv) => {
+        var bubble = this.bubbles[this.current_file_number];
         if (this.is_adaptive) {
           let url = this.createRestUrl();
           $.getJSON(url, (data) => {
-              this.startVisualization(csv, data, true);
+              mediator.publish("start_visualization", data, csv, bubble);
             });
         } else {
-          this.startVisualization(csv, null, true);
+          mediator.publish("start_visualization", null, csv, bubble);
         }
       }
   },
@@ -186,7 +187,7 @@ HeadstartFSM.prototype = {
       json_direct: function(that, setupVis) {
         let current_bubble = that.bubbles[that.current_file_number];
         setupVis(current_bubble.file);
-      },
+      }
   },
 
   // FSM callbacks
@@ -216,7 +217,6 @@ HeadstartFSM.prototype = {
 
       canvas.setupTimelineCanvas();
       // load bubbles in sync
-      debugger;
       $.each(this.bubbles, (index, elem) => {
           var setupTimelineVisualization = (csv) => {
               mediator.publish("prepare_data", null, csv);
@@ -247,11 +247,6 @@ HeadstartFSM.prototype = {
       let hs = this;
       this.get_files[this.mode](hs, this.makeSetupVisualisation());
   },
-
-  startVisualization: function(csv, adaptive_data) {
-    var bubble = this.bubbles[this.current_file_number];
-    mediator.publish("start_visualization", adaptive_data, csv, bubble);
-  }
 }; // end HeadstartFSM prototype definition
 
 // State definitions for headstart object
