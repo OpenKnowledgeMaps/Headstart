@@ -19,11 +19,10 @@ MyMediator.prototype = {
     constructor: MyMediator,
     init: function() {
         // init logic
-        this.mediator.subscribe("headstart_init", this.headstart_init);
-        this.mediator.subscribe("io_init_done", this.io_init_done);
         this.mediator.subscribe("start_visualization", this.init_start_visualization);
         this.mediator.subscribe("ontofile", this.init_ontofile);
         this.mediator.subscribe("ontotimeline", this.init_ontotimeline);
+        this.mediator.subscribe("ontotimeline_finish", this.finish_ontotimeline);
 
         // data handling
         this.mediator.subscribe("prepare_data", this.io_prepare_data);
@@ -88,6 +87,11 @@ MyMediator.prototype = {
     init_ontotimeline: function() {
         headstart.bubbles[headstart.current_file_number].current = "x";
         canvas.setupTimelineCanvas();
+    },
+
+    finish_ontotimeline: function() {
+        canvas.drawGrid();
+        canvas.initMouseListeners();
     },
 
     init_start_visualization: function(highlight_data, csv, bubble) {

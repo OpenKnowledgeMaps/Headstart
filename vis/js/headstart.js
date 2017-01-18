@@ -209,8 +209,7 @@ HeadstartFSM.prototype = {
           };
           that.get_timeline_files(elem.file, setupTimelineVisualization);
       });
-      canvas.drawGrid();
-      canvas.initMouseListeners();
+      mediator.publish("ontotimeline_finish")
   },
 
   get_timeline_files: function(file, callback) {
