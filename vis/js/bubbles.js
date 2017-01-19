@@ -7,6 +7,7 @@ import { mediator } from 'mediator';
 import { papers} from 'papers';
 import { list } from 'list';
 import { toBack, toFront, hideSibling} from 'helpers';
+import { canvas } from 'canvas';
 
 const bubbleTemplate = require('templates/map/bubble.handlebars');
 
@@ -47,7 +48,7 @@ BubblesFSM.prototype = {
     },
 
     drawBubbleFrames: function () {
-        return headstart.chart.data(this.areas_array).selectAll("g.node")
+        return canvas.chart.data(this.areas_array).selectAll("g.node")
                 .data(this.areas_array)
                 .enter().append("g").attr("class", "bubble_frame");
     },
@@ -70,160 +71,6 @@ BubblesFSM.prototype = {
         }
     },
 
-    prepareData: function (init_data, highlight_data) {
-
-        var xy_array = [];
-
-        // convert to numbers
-        init_data.forEach(function (d) {
-            d.x = parseFloat(d.x);
-            d.y = parseFloat(d.y);
-            //if two items have the exact same location, that throws off the force-based layout
-            var xy_string = d.x + d.y;
-            while (xy_array.hasOwnProperty(xy_string)) {
-                d.y += 0.00000001;
-                xy_string = d.x + d.y;
-            }
-
-            xy_array[xy_string] = true;
-            if (d.paper_abstract === null || typeof d.paper_abstract === "undefined") {
-                d.paper_abstract = "";
-            }
-
-            if (d.published_in === null || typeof d.published_in === "undefined") {
-                d.published_in = "";
-            }
-			
-			if (d.title === null || typeof d.title === "undefined") {
-                d.title = headstart.localization[headstart.language]["no_title"];
-            }
-
-            if (headstart.content_based === false) {
-                d.readers = +d.readers;
-                d.internal_readers = +d.readers + 1;
-            } else {
-                d.readers = 0;
-                d.internal_readers = 1;
-            }
-            if (typeof highlight_data != 'undefined' && highlight_data !== null) {
-                if (highlight_data.bookmarks_all !== null) {
-                    highlight_data.bookmarks_all.forEach(function (x) {
-                        var id_string = x.id;
-                        id_string = id_string.toString();
-                        if (id_string == d.id) {
-                            d.readers += x.num;
-                            d.internal_readers += x.num;
-                        }
-                    });
-                }
-            }
-
-            d.paper_selected = false;
-            // convert authors to "[first name] [last name]"
-            var authors = d.authors.split(";");
-            var authors_string = "";
-            var authors_short_string = "";
-            for (var i = 0; i < authors.length - 1; i++) {
-                var names = authors[i].trim().split(",");
-                var last_name = names[0].trim();
-                if (names.length > 1) {
-                    var first_name = names[1].trim();
-                    authors_string += first_name + " " + last_name;
-                    authors_short_string += first_name.substr(0, 1) + ". " + last_name;
-                } else {
-                    authors_string += last_name;
-                    authors_short_string += last_name;
-                }
-
-                if (i != authors.length - 2) {
-                    authors_string += ", ";
-                    authors_short_string += ", ";
-                }
-            }
-
-            d.authors_string = authors_string;
-            d.authors_short_string = authors_short_string;
-            
-            d.oa = false;
-            
-            if (headstart.service === "doaj") {
-                d.oa = true;
-                d.oa_link = d.link;
-            } else if( headstart.service === "plos") {
-                d.oa = true;
-                var journal = d.published_in.toLowerCase();
-                d.oa_link = "http://journals.plos.org/" + headstart.plos_journals_to_shortcodes[journal] + "/article/asset?id=" + d.id + ".PDF";
-            } else if (typeof d.pmcid !== "undefined") {
-                if (d.pmcid !== "") {
-                    d.oa = true;
-                    d.oa_link = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + d.pmcid + "/pdf/";
-                }
-            }
-            
-            d.outlink = list.createOutlink(d);
-
-        });
-        headstart.chart_x.domain(d3.extent(init_data, function (d) {
-            return d.x;
-        }));
-        headstart.chart_y.domain(d3.extent(init_data, function (d) {
-            return d.y * -1;
-        }));
-        headstart.diameter_size.domain(d3.extent(init_data, function (d) {
-            return d.internal_readers;
-        }));
-        var areas = this.areas;
-        init_data.forEach(function (d) {
-
-            // construct rectangles of a golden cut
-            d.diameter = headstart.diameter_size(d.internal_readers);
-            d.width = headstart.paper_width_factor * Math.sqrt(Math.pow(d.diameter, 2) / 2.6);
-            d.height = headstart.paper_height_factor * Math.sqrt(Math.pow(d.diameter, 2) / 2.6);
-            d.orig_x = d.x;
-            d.orig_y = d.y;
-            // scale x and y
-            d.x = headstart.chart_x(d.x);
-            d.y = headstart.chart_y(d.y * -1);
-            var area = (headstart.use_area_uri) ? (d.area_uri) : (d.area);
-            if (area in areas) {
-                areas[area].papers.push(d);
-            } else {
-                areas[area] = {};
-                areas[area].title = d.area;
-                areas[area].papers = [d];
-            }
-
-            d.resized = false;
-        });
-        if (typeof highlight_data != 'undefined' && highlight_data !== null) {
-            if (highlight_data.bookmarks !== null) {
-                highlight_data.bookmarks.forEach(function (d) {
-
-                    var index = init_data.filter(function (x) {
-                        return x.id == d.contentID;
-                    });
-                    if (index.length > 0) {
-                        index[0].bookmarked = 1;
-                    }
-                });
-            }
-
-            if (highlight_data.recommendations !== null) {
-                highlight_data.recommendations.forEach(function (d) {
-
-                    var index = init_data.filter(function (x) {
-                        return x.id == d.contentID;
-                    });
-                    if (index.length > 0) {
-                        index[0].recommended = 1;
-                    }
-                });
-            }
-
-        }
-
-        this.data = init_data;
-    },
     // initialize all "mouseover", "mouseout" event listeners
     // for bubbles
     initMouseListeners: function () {
@@ -235,7 +82,7 @@ BubblesFSM.prototype = {
     // blasen -> wenn über blase gehovered und paper sichtbar
     // dann soll auch auf paper geclicked werden können.
     makePaperClickable: function (d) {
-        headstart.current_circle = headstart.chart.selectAll("circle")
+        headstart.current_circle = canvas.chart.selectAll("circle")
                 .filter(function (x) {
                     if (d !== null) {
                         if (headstart.use_area_uri) {
@@ -367,7 +214,7 @@ BubblesFSM.prototype = {
         for (var i = 0; i < sorted_circles.length - 1; i++) {
             var circleStart = sorted_circles[i].getBoundingClientRect();
             var circleEnd = sorted_circles[i + 1].getBoundingClientRect();
-            headstart.svg.append("line")
+            canvas.svg.append("line")
                     .attr("x1", circleStart.right + window.pageXOffset)
                     .attr("x2", circleEnd.left + window.pageXOffset)
                     .attr("y1", circleStart.top)
@@ -432,14 +279,14 @@ BubblesFSM.prototype = {
     // current_vis_size
     positionBubbles2: function (bubbles, bubbles_id) {
         bubbles.attr("transform", function (d) {
-            var x_pos = d.x + ((bubbles_id - 1) * headstart.current_vis_size);
+            var x_pos = d.x + ((bubbles_id - 1) * canvas.current_vis_size);
             return "translate(" + x_pos + "," + d.y + ")";
         });
     },
 
     // set the title size of bubbles to px
     adjustBubbleTitleSizeTo: function (bubbles) {
-        bubbles.selectAll("h2").style("font-size", headstart.calcTitleFontSize());
+        bubbles.selectAll("h2").style("font-size", canvas.calcTitleFontSize());
     },
 
     appendForeignObjectTo: function (bubbleFrame) {
@@ -463,73 +310,6 @@ BubblesFSM.prototype = {
                 .html(function (d) {
                     return bubbleTemplate(d);
                 });
-    },
-
-    // prepare the areas for the bubbles
-    prepareAreas: function () {
-
-        var areas = this.areas;
-        var areas_array = this.areas_array;
-
-        var readers = [];
-
-        for (var area in areas) {
-            var papers = areas[area].papers;
-            var sum_readers = d3.sum(papers, function (d) {
-                return d.internal_readers;
-            });
-
-            readers.push(sum_readers);
-        }
-
-        headstart.circle_size.domain(d3.extent(readers));
-        var area_x = [];
-        var area_y = [];
-
-        for (area in areas) {
-            let papers = areas[area].papers;
-            let sum_readers = d3.sum(papers, function (d) {
-                return d.internal_readers;
-            });
-
-            areas[area].readers = sum_readers;
-
-            var mean_x = d3.mean(papers, function (d) {
-                return d.x;
-            });
-            var mean_y = d3.mean(papers, function (d) {
-                return d.y;
-            });
-            var r = headstart.circle_size(sum_readers);
-
-            area_x.push(mean_x);
-            area_y.push(mean_y);
-
-            areas[area].x = mean_x;
-            areas[area].y = mean_y;
-            areas[area].r = r;
-        }
-
-        headstart.chart_x_circle.domain(d3.extent(area_x));
-        headstart.chart_y_circle.domain(d3.extent(area_y));
-
-        for (area in areas) {
-            var new_area = [];
-            new_area.title = areas[area].title;
-            new_area.x = headstart.chart_x_circle(areas[area].x);
-            new_area.y = headstart.chart_y_circle(areas[area].y);
-            new_area.orig_x = areas[area].x;
-            new_area.orig_y = areas[area].y;
-            new_area.r = areas[area].r;
-            new_area.height_html = Math.sqrt(Math.pow(areas[area].r, 2) * 2);
-            new_area.width_html = Math.sqrt(Math.pow(areas[area].r, 2) * 2);
-            new_area.x_html = 0 - new_area.width_html / 2;
-            new_area.y_html = 0 - new_area.height_html / 2;
-            new_area.area_uri = area;
-            new_area.readers = areas[area].readers;
-            new_area.papers = areas[area].papers;
-            areas_array.push(new_area);
-        }
     },
 
     zoom: function (d) {
@@ -581,7 +361,7 @@ BubblesFSM.prototype = {
                     .attr("y", $("#subdiscipline_title").outerHeight(true)*-1)
         }
         
-        var zoom_node = headstart.chart.selectAll("circle")
+        var zoom_node = canvas.chart.selectAll("circle")
                 .filter(function (x) {
                     if (d !== null) {
                         return x.title == d.title;
@@ -606,11 +386,11 @@ BubblesFSM.prototype = {
         zoom_node.on("mouseover", null)
                 .on("mouseout", null);
 
-        headstart.chart.selectAll("circle")
+        canvas.chart.selectAll("circle")
                 .attr("class", "zoom_selected")
                 .style("fill-opacity", "1");
 
-        headstart.chart.selectAll("circle")
+        canvas.chart.selectAll("circle")
                 .filter(function (x) {
                     if (d !== null) {
                         return (x.title != d.title);
@@ -657,19 +437,19 @@ BubblesFSM.prototype = {
         // Determine new zooming factor based on the viewbox
         //var svg = document.getElementById("chart-svg");
         //var viewbox = svg.getAttribute("viewBox").split(/\s+|,/);
-        headstart.circle_zoom = headstart.current_vis_size / d.r / 2 * headstart.zoom_factor;
-        
-        var padding = d.r * 0.08;
-        
-        headstart.x.domain([d.x - d.r + padding, d.x + d.r - padding]);
-        headstart.y.domain([d.y - d.r + padding, d.y + d.r - padding]);
+        headstart.circle_zoom = canvas.current_vis_size / d.r / 2 * headstart.zoom_factor;
 
-        headstart.paper_x.domain([d.x - d.r, d.x + d.r]);
-        headstart.paper_y.domain([d.y - d.r, d.y + d.r]);
+        var padding = d.r * 0.08;
+
+        canvas.x.domain([d.x - d.r + padding, d.x + d.r - padding]);
+        canvas.y.domain([d.y - d.r + padding, d.y + d.r - padding]);
+
+        canvas.paper_x.domain([d.x - d.r, d.x + d.r]);
+        canvas.paper_y.domain([d.y - d.r, d.y + d.r]);
 
         var n = 0;
 
-        var t = headstart.chart.transition()
+        var t = canvas.chart.transition()
                 .duration(headstart.transition_duration)
                 .each("start", function () {
                     n++;
@@ -704,8 +484,8 @@ BubblesFSM.prototype = {
         }
         
         d3.select("rect")
-                .attr("width", headstart.current_vis_size)
-                .attr("height", headstart.current_vis_size)
+                .attr("width", canvas.current_vis_size)
+                .attr("height", canvas.current_vis_size)
                 .attr("x", 0)
                 .attr("y", 0)
 
@@ -733,7 +513,7 @@ BubblesFSM.prototype = {
                 });
 
         var n = 0;
-        var t = headstart.chart.transition()
+        var t = canvas.chart.transition()
                 .duration(headstart.zoomout_transition)
                 .each("start", function () {
                     n++;
@@ -743,7 +523,7 @@ BubblesFSM.prototype = {
                         return;
                     }
 
-                    headstart.chart.selectAll("#area_title_object")
+                    canvas.chart.selectAll("#area_title_object")
                             .style("display", "block")
                             .filter(function () {
                                 return d3.select(this.previousSibling).attr("class") != "zoom_selected";
@@ -807,7 +587,7 @@ BubblesFSM.prototype = {
         d3.selectAll("span.readers_entity")
                 .style("font-size", "8px");
 
-        headstart.drawTitle();
+        canvas.drawTitle();
 
         d3.selectAll(".paper")
                 .style("display", function (d) {
@@ -889,8 +669,8 @@ BubblesFSM.prototype = {
 
         t.selectAll("g.bubble_frame")
                 .attr("transform", function (d) {
-                    d.x_zoomed = headstart.x(d.x);
-                    d.y_zoomed = headstart.y(d.y);
+                    d.x_zoomed = canvas.x(d.x);
+                    d.y_zoomed = canvas.y(d.y);
 
                     return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
                 });
@@ -903,8 +683,8 @@ BubblesFSM.prototype = {
 
         t.selectAll("g.paper")
                 .attr("transform", function (g) {
-                    g.x_zoomed = headstart.paper_x(g.x);
-                    g.y_zoomed = headstart.paper_y(g.y);
+                    g.x_zoomed = canvas.paper_x(g.x);
+                    g.y_zoomed = canvas.paper_y(g.y);
                     return "translate(" + g.x_zoomed + "," + g.y_zoomed + ")";
                 });
 
@@ -955,9 +735,7 @@ BubblesFSM.prototype = {
     },
 
     onstart: function (event, from, to, csv, recommendation_data) {
-        this.prepareData(csv, recommendation_data);
-        this.prepareAreas();
-
+        mediator.publish('bubbles_update_data_and_areas', this);
         if (headstart.is("timeline")) {
             this.draw();
             this.initMouseListeners();
@@ -1050,7 +828,7 @@ BubblesFSM.prototype = {
         this.zoomOut();
         this.resetCircleDesign();
         papers.zoomout();
-        headstart.initClickListenersForNav();
+        canvas.initClickListenersForNav();
     },
 
     // we only whant to be able to "zoom" when the papers are
@@ -1067,7 +845,7 @@ BubblesFSM.prototype = {
         }
         this.initMouseListeners();
         papers.zoom();
-        headstart.initClickListenersForNav();
+        canvas.initClickListenersForNav();
     }
 };
 

@@ -90,6 +90,8 @@ const common = {
             'papers': path.resolve(__dirname, 'vis/js/papers.js'),
             'intro': path.resolve(__dirname, 'vis/js/intro.js'),
             'mediator': path.resolve(__dirname, 'vis/js/mediator.js'),
+            'io' : path.resolve(__dirname, 'vis/js/io.js'),
+            'canvas' : path.resolve(__dirname, 'vis/js/canvas.js')
         },
     }
 };
