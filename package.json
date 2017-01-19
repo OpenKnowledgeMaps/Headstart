@@ -54,7 +54,6 @@
     "handlebars-loader": "*",
     "html-webpack-plugin": "*",
     "imports-loader": "^0.6.5",
-    "ismobilejs": "*",
     "node-sass": "*",
     "php-loader": "^0.2.0",
     "sass-loader": "*",

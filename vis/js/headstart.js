@@ -12,7 +12,6 @@ import { list } from 'list';
 import { intros } from 'intro';
 import { getRealHeight } from "helpers";
 import { BrowserDetect, highlight } from "helpers";
-import isMobile from 'ismobilejs';
   
 const timelineTemplate = require('templates/timeline.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
@@ -59,13 +58,10 @@ HeadstartFSM.prototype = {
   // prototype methods
   checkBrowserVersions: function() {
     var browser = BrowserDetect.browser;
-    
-    if(isMobile.any) {
-        alert("Note: our interface isn't optimized for mobile devices yet. We are working on it, but in the meantime you may encounter some rough edges.");
-    } else if (browser !== "Firefox" && browser !== "Safari" && browser !== "Chrome") {
+
+    if (browser !== "Firefox" && browser !== "Safari" && browser !== "Chrome") {
             alert("You are using an unsupported browser. This visualization was successfully tested with the latest versions of Chrome, Safari, Opera and Firefox.");
     }
-    
   },
 
   recordAction: function(id, action, user, type, timestamp, additional_params, post_data) {
