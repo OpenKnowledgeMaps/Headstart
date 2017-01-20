@@ -5,6 +5,7 @@ import StateMachine from 'javascript-state-machine';
 import { headstart } from 'headstart';
 import { mediator } from 'mediator';
 import { papers } from 'papers';
+import { canvas } from 'canvas';
 import { debounce, highlight, clear_highlights, sortBy } from 'helpers';
 
 const listTemplate = require('templates/list/list_explorer.handlebars');
