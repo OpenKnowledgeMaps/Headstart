@@ -47,6 +47,7 @@ export var HeadstartFSM = function() {
   this.circle_zoom = 0;
   this.is_zoomed = false;
   this.zoom_finished = false;
+  mediator.publish("initState");
 }; // end HeadstartFSM constructor
 
 HeadstartFSM.prototype = {
@@ -95,19 +96,6 @@ HeadstartFSM.prototype = {
       });
     },
 
-  registerBubbles: function() {
-    this.bubbles = [];
-    $.each(config.files, (index, elem) => {
-      var bubble = new BubblesFSM();
-      if (bubble.id === 0) {
-        bubble.id = this.bubbles.length + 1; // start id with 1
-      }
-      bubble.file = elem.file;
-      bubble.title = elem.title;
-      this.bubbles.push(bubble);
-    });
-  },
-
   createRestUrl: function () {
       let url = config.server_url + "services/getBookmarks.php?user=" + config.user_id;
 
@@ -128,7 +116,6 @@ HeadstartFSM.prototype = {
 
   makeSetupVisualisation: function () {
       return (csv) => {
-        var bubble = this.bubbles[this.current_file_number];
         if (config.is_adaptive) {
           let url = this.createRestUrl();
           $.getJSON(url, (data) => {
@@ -142,13 +129,11 @@ HeadstartFSM.prototype = {
 
   get_files: {
       local_files: function(that, setupVis) {
-        var file = config.files[that.current_file_number];
-        mediator.publish("get_data_from_files", file, config.input_format, setupVis);
+        mediator.publish("get_data_from_files", config.input_format, setupVis);
       },
 
       search_repos: function(that, setupVis) {
-        let current_bubble = that.bubbles[that.current_file_number];
-        d3.json(config.server_url + "services/getLatestRevision.php?vis_id=" + current_bubble.file, setupVis);
+        d3.json(config.server_url + "services/getLatestRevision.php?vis_id=" + mediator.current_bubble.file, setupVis);
       },
 
       server_files: function(that, setupVis) {
@@ -165,9 +150,8 @@ HeadstartFSM.prototype = {
                   "file": config.server_url + "static" + json[i].file
                 });
               }
-              that.registerBubbles();
-              let current_bubble = that.bubbles[that.current_file_number];
-              d3[config.input_format](current_bubble.file, setupVis);
+              mediator.publish("registerBubbles");
+              d3[config.input_format](mediator.current_bubble.file, setupVis);
             }
           });
       },
@@ -183,7 +167,7 @@ HeadstartFSM.prototype = {
   // the start event transitions headstart from "none" to "normal" view
   onstart: function() {
       this.checkBrowserVersions();
-      this.registerBubbles();
+      mediator.publish("registerBubbles");
       let hs = this;
       this.get_files[config.mode](hs, this.makeSetupVisualisation());
   },
@@ -201,7 +185,7 @@ HeadstartFSM.prototype = {
       mediator.publish("ontotimeline");
       // load bubbles in sync
       var that = this;
-      $.each(this.bubbles, (index, elem) => {
+      $.each(mediator.bubbles, (index, elem) => {
           var setupTimelineVisualization = (csv) => {
               mediator.publish("prepare_data", null, csv);
               mediator.publish("prepare_areas");
@@ -230,7 +214,7 @@ HeadstartFSM.prototype = {
 
   ontofile: function(event, from, to, file) {
       this.current_file_number = file;
-      mediator.publish("ontofile");
+      mediator.publish("ontofile", file);
       let hs = this;
       this.get_files[config.mode](hs, this.makeSetupVisualisation());
   },

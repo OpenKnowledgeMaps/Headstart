@@ -2,6 +2,7 @@ import { headstart } from 'headstart';
 import Mediator from 'mediator-js';
 import config from 'config';
 import { papers } from 'papers';
+import { BubblesFSM } from 'bubbles';
 import { list } from 'list';
 import { sortBy } from 'helpers';
 import { io } from 'io';
@@ -23,6 +24,8 @@ MyMediator.prototype = {
         this.mediator.subscribe("ontofile", this.init_ontofile);
         this.mediator.subscribe("ontotimeline", this.init_ontotimeline);
         this.mediator.subscribe("ontotimeline_finish", this.finish_ontotimeline);
+        this.mediator.subscribe("registerBubbles", this.registerBubbles);
+        this.mediator.subscribe("initState", this.initState);
 
         // data handling
         this.mediator.subscribe("prepare_data", this.io_prepare_data);
@@ -73,6 +76,31 @@ MyMediator.prototype = {
         this.mediator.subscribe("setup_tofile_canvas", this.setup_tofile_canvas);
     },
 
+    initState: function() {
+        mediator.current_zoom_node = null;
+        mediator.current_enlarged_paper = null;
+        mediator.current_file_number = 0;
+        mediator.current_circle = null;
+        mediator.papers_list = null;
+        mediator.circle_zoom = 0;
+        mediator.is_zoomed = false;
+        mediator.zoom_finished = false;
+    },
+
+    registerBubbles: function() {
+        mediator.bubbles = [];
+        $.each(config.files, (index, elem) => {
+            var bubble = new BubblesFSM();
+            if (bubble.id === 0) {
+            bubble.id = mediator.bubbles.length + 1; // start id with 1
+        }
+        bubble.file = elem.file;
+        bubble.title = elem.title;
+        mediator.bubbles.push(bubble);
+        });
+        mediator.current_bubble = mediator.bubbles[mediator.current_file_number];
+    },
+
     tryToCall: function(func) {
         try {
             func();
@@ -86,11 +114,12 @@ MyMediator.prototype = {
         this.mediator.publish(...arguments);
     },
 
-    io_async_get_data: function (file, input_format, callback) {
+    io_async_get_data: function (input_format, callback) {
         // WORKAROUND, if I try to add headstart earlier it doesn't work
         // TODO find reason
         mediator.modules.headstart = headstart;
-        mediator.tryToCall(() => { mediator.modules.io.async_get_data(file, input_format, callback); });
+        mediator.current_file = config.files[mediator.current_file_number];
+        mediator.tryToCall(() => { mediator.modules.io.async_get_data(mediator.current_file, input_format, callback); });
     },
 
     io_prepare_data: function (highlight_data, cur_fil_num) {
@@ -101,14 +130,17 @@ MyMediator.prototype = {
         mediator.tryToCall(() => { mediator.modules.io.prepareAreas(); });
     },
 
-    init_ontofile: function () {
+    init_ontofile: function (file) {
+        mediator.current_file_number = file;
+        mediator.current_bubble = mediator.bubbles[mediator.current_file_number];
+        mediator.current_file = config.files[mediator.current_file_number];
         papers.current = "none";
         list.current = "none";
         mediator.tryToCall(() => { mediator.modules.canvas.setupToFileCanvas(); });
     },
 
     init_ontotimeline: function() {
-        headstart.bubbles[headstart.current_file_number].current = "x";
+        mediator.current_bubble.current = "x";
         mediator.tryToCall(() => { mediator.modules.canvas.setupTimelineCanvas(); });
     },
 
@@ -118,20 +150,19 @@ MyMediator.prototype = {
     },
 
     init_start_visualization: function(highlight_data, csv) {
-        let current_bubble = mediator.modules.headstart.bubbles[mediator.modules.headstart.current_file_number];
         mediator.tryToCall(() => { mediator.modules.canvas.setupCanvas(); });
         mediator.tryToCall(() => { mediator.modules.io.prepareData(highlight_data, csv); });
         mediator.tryToCall(() => { mediator.modules.io.prepareAreas(); });
-        mediator.tryToCall(() => { current_bubble.start( csv, highlight_data ); });
+        mediator.tryToCall(() => { mediator.current_bubble.start( csv, highlight_data ); });
         mediator.tryToCall(() => { mediator.modules.canvas.initEventsAndLayout(); });
-        mediator.tryToCall(() => { mediator.modules.papers.start( current_bubble ); });
-        mediator.tryToCall(() => { current_bubble.draw(); });
-        mediator.tryToCall(() => { mediator.modules.list.start( current_bubble ); });
+        mediator.tryToCall(() => { mediator.modules.papers.start( mediator.current_bubble ); });
+        mediator.tryToCall(() => { mediator.current_bubble.draw(); });
+        mediator.tryToCall(() => { mediator.modules.list.start( mediator.current_bubble ); });
         mediator.tryToCall(() => { mediator.modules.canvas.checkForcePapers(); });
         mediator.tryToCall(() => { mediator.modules.canvas.showInfoModal(); });
         mediator.tryToCall(() => { mediator.modules.canvas.hyphenateAreaTitles(); });
         mediator.tryToCall(() => { mediator.modules.canvas.dotdotdotAreaTitles(); });
-        mediator.tryToCall(() => { current_bubble.initMouseListeners(); });
+        mediator.tryToCall(() => { mediator.current_bubble.initMouseListeners(); });
     },
 
     bubbles_update_data_and_areas: function(bubbles) {
@@ -259,8 +290,8 @@ MyMediator.prototype = {
 
     list_click_paper_list: function(d) {
         headstart.current_circle = canvas.getCurrentCircle(d);
-        headstart.bubbles[headstart.current_file_number].zoomin(headstart.current_circle.data()[0]);
-        headstart.bubbles[headstart.current_file_number].current = "hoverbig";
+        mediator.current_bubble.zoomin(headstart.current_circle.data()[0]);
+        mediator.current_bubble.current = "hoverbig";
         mediator.tryToCall(() => { mediator.modules.papers.mouseoverpaper(); });
         headstart.current_enlarged_paper = d;
         mediator.tryToCall(() => { mediator.modules.papers.framePaper(d); });

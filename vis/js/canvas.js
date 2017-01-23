@@ -142,7 +142,7 @@ class Canvas {
     this.svg = d3.select("#chart-svg");
 
     if (headstart.is("timeline")) {
-      let s = this.current_vis_size * Object.keys(headstart.bubbles).length;
+      let s = this.current_vis_size * Object.keys(mediator.bubbles).length;
       this.svg.attr("width", s)
         .attr("height", this.current_vis_size);
       if (update === false) {
@@ -349,22 +349,22 @@ class Canvas {
   initMouseMoveListeners() {
     $("rect").on( "mouseover", () => {
       if (!headstart.is_zoomed) {
-        headstart.bubbles[headstart.current_file_number].onmouseout("notzoomedmouseout");
+        mediator.current_bubble.onmouseout("notzoomedmouseout");
         headstart.current_circle = null;
       }
-      headstart.bubbles[headstart.current_file_number].mouseout("outofbigbubble");
+      mediator.current_bubble.mouseout("outofbigbubble");
       this.initClickListenersForNav();
     });
   }
 
   initMouseClickListeners() {
     $("#chart-svg").on("click", () => {
-      headstart.bubbles[headstart.current_file_number].zoomout();
+      mediator.current_bubble.zoomout();
     });
 
     $("#" + config.tag).bind('click', (event) => {
       if(event.target.className === "container-headstart" || event.target.className === "vis-col" || event.target.id === "headstart-chart") {
-        headstart.bubbles[headstart.current_file_number].zoomout();
+        mediator.current_bubble.zoomout();
       }
     });
   }
@@ -416,12 +416,11 @@ class Canvas {
         $("#datasets").append(current_item);
       });
 
-      //$("#datasets " + headstart.current_file_number + ":selected").text();
-      $("#datasets").val(headstart.bubbles[headstart.current_file_number].file);
+      $("#datasets").val(mediator.current_bubble.file);
 
       $("#datasets").change(function() {
         let selected_file_number = this.selectedIndex;
-        if (selected_file_number !== headstart.current_file_number) {
+        if (selected_file_number !== mediator.current_file_number) {
           headstart.tofile(selected_file_number);
         }
       });
@@ -450,7 +449,7 @@ class Canvas {
   }
 
   drawYGrid() {
-  var to = ((headstart.bubbles.length + 1) * this.current_vis_size);
+  var to = ((mediator.bubbles.length + 1) * this.current_vis_size);
   for (var i = 0; i <= to; i+= this.current_vis_size) {
     this.svg.append("line")
       .attr("x1", i)
@@ -464,7 +463,7 @@ class Canvas {
     for (var i = 0; i <= 900; i+=50) {
       this.svg.append("line")
         .attr("x1", "0")
-        .attr("x2", (headstart.bubbles.length + 1) * this.current_vis_size)
+        .attr("x2", (mediator.bubbles.length + 1) * this.current_vis_size)
         .attr("y1", i)
         .attr("y2", i);
     }
@@ -473,12 +472,10 @@ class Canvas {
   // calls itself over and over until the forced layout of the papers
   // is established
   checkForcePapers() {
-    var bubble = headstart.bubbles[headstart.current_file_number];
-
     if (headstart.is("normal") || headstart.is("switchfiles")) {
       var checkPapers = window.setInterval(() => {
         if (headstart.is("normal") || headstart.is("switchfiles")) {
-          if ((!papers.is("ready") && !papers.is("none")) || (bubble.is("startup") || bubble.is("none") || (bubble.is("start")) )) {
+          if ((!papers.is("ready") && !papers.is("none")) || (mediator.current_bubble.is("startup") || mediator.current_bubble.is("none") || (mediator.current_bubble.is("start")) )) {
             if (this.force_papers.alpha() <= 0 && this.force_areas.alpha() <= 0) {
               papers.forced();
               mediator.publish("check_force_papers");
@@ -494,14 +491,14 @@ class Canvas {
     update = typeof update !== 'undefined' ? update : false;
 
     if (update === true) {
-      $("#tl-titles").width(this.current_vis_size * Object.keys(headstart.bubbles).length);
+      $("#tl-titles").width(this.current_vis_size * Object.keys(mediator.bubbles).length);
       $(".tl-title").css("width", this.current_vis_size);
     } else {
-      for (var i = 0; i < headstart.bubbles.length; i++) {
+      for (var i = 0; i < mediator.bubbles.length; i++) {
         $("#tl-titles").append(
-          '<div class="tl-title"><h3>' + headstart.bubbles[i].title + '</h3></div>');
+          '<div class="tl-title"><h3>' + mediator.bubbles[i].title + '</h3></div>');
       }
-      $("#tl-titles").width(this.current_vis_size * Object.keys(headstart.bubbles).length);
+      $("#tl-titles").width(this.current_vis_size * Object.keys(mediator.bubbles).length);
       $(".tl-title").css("width", this.current_vis_size);
     }
   }

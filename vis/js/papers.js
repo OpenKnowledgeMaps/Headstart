@@ -93,7 +93,7 @@ export const papers = StateMachine.create({
 
         onclick: function (event, from, to, d) {
             if (!headstart.is_zoomed) {
-                return headstart.bubbles.makePaperClickable(d);
+                return mediator.bubbles.makePaperClickable(d);
             }
         },
 
@@ -116,7 +116,7 @@ export const papers = StateMachine.create({
                 this.shrinkPaper(d, holder_div);
             }
 
-            headstart.bubbles[headstart.current_file_number].mouseout();
+            mediator.current_bubble.mouseout();
         }
 
     }
@@ -230,7 +230,7 @@ papers.paper_click = function (d) {
                     });
 
             d3.event.stopPropagation();
-            headstart.bubbles[headstart.current_file_number].zoomin(current_node.data()[0]);
+            mediator.current_bubble.zoomin(current_node.data()[0]);
         }
     }
 };
@@ -307,9 +307,7 @@ papers.applyForce = function (bubbles) {
             canvas.force_areas.tick();
         }
 
-        var current_bubbles = headstart.bubbles[headstart.current_file_number];
-
-        current_bubbles.areas_array.forEach(function (a, i) {
+        mediator.current_bubble.areas_array.forEach(function (a, i) {
 
             if (a.x - a.r < 0 ||
                     a.x + a.r > canvas.current_vis_size ||
@@ -321,7 +319,7 @@ papers.applyForce = function (bubbles) {
             }
 
 
-            current_bubbles.areas_array.slice(i + 1).forEach(function (b) {
+            mediator.current_bubble.areas_array.slice(i + 1).forEach(function (b) {
                 self.checkCollisions(a, b, alpha * multiplier_areas);
             });
         });
@@ -357,20 +355,18 @@ papers.applyForce = function (bubbles) {
             canvas.force_papers.tick();
         }
 
-        var current_bubbles = headstart.bubbles[headstart.current_file_number];
-
-        current_bubbles.data.forEach(function (a, i) {
+        mediator.current_bubble.data.forEach(function (a, i) {
             var current_area = "";
 
             for (let area in bubbles.areas_array) {
                 if (config.use_area_uri) {
-                    if (current_bubbles.areas_array[area].area_uri == a.area_uri) {
-                        current_area = current_bubbles.areas_array[area];
+                    if (mediator.current_bubble.areas_array[area].area_uri == a.area_uri) {
+                        current_area = mediator.current_bubble.areas_array[area];
                         break;
                     }
                 } else {
-                    if (current_bubbles.areas_array[area].title == a.area) {
-                        current_area = current_bubbles.areas_array[area];
+                    if (mediator.current_bubble.areas_array[area].title == a.area) {
+                        current_area = mediator.current_bubble.areas_array[area];
                         break;
                     }
                 }
@@ -573,7 +569,7 @@ papers.enlargePaper = function (d, holder_div) {
             .on("click", (d) => {
 
                 if (!headstart.is_zoomed) {
-                    return headstart.bubbles.makePaperClickable(d);
+                    return mediator.bubbles.makePaperClickable(d);
                 } else {
 
                     if (!d.paper_selected) {

@@ -373,7 +373,7 @@ list.filterList = function (search_words) {
         data_circle_list.style("display", "block");
         data_circle_papers.style("display", "block");
 
-        headstart.bubbles[headstart.current_file_number].data.forEach(function (d) {
+        mediator.current_bubble.data.forEach(function (d) {
             d.filtered_out = false;
         });
 
