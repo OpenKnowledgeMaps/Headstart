@@ -19,7 +19,7 @@ class Canvas {
               } else {
                   return x.title == d.area;
               }
-          })
+          });
   }
 
   calcChartSize() {
@@ -332,7 +332,7 @@ class Canvas {
     $('#info_modal').on('show.bs.modal', function() {
       var current_intro = config.intro;
 
-      var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(config.intro)
+      var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(config.intro);
 
       $(headstart).find('.modal-title ').text(intro.title);
       $(headstart).find('.modal-body').html(intro.body);

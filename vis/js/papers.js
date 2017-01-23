@@ -149,21 +149,21 @@ papers.drawPapers = function (bubbles) {
                 if(d.oa === true) {
                     return "20px";
                 }
-            })
+            });
     
     d3.selectAll("#article_metadata").select("#open-access-logo")
             .style("display", function (d) {
                 if(d.oa === false) {
                     return "none";
                 }
-            })
+            });
     
     d3.selectAll("#article_metadata").select("#outlink")
             .style("display", function (d) {
                 if(d.oa === false) {
                     return "none";
                 }
-            })
+            });
     
 };
 
@@ -482,7 +482,7 @@ papers.shrinkPaper = function (d, holder) {
     
     holder_div.selectAll(".readers")
             .style("height", "15px")
-            .style("margin-top", "5px")
+            .style("margin-top", "5px");
 
     d.resized = false;
     holder_div.on("mouseover", function (d) {
@@ -557,7 +557,7 @@ papers.enlargePaper = function (d, holder_div) {
     
     holder_div.selectAll(".readers")
             .style("height", "25px")
-            .style("margin-top", "5px")
+            .style("margin-top", "5px");
 
     let metadata = holder_div.select("div.metadata");
 

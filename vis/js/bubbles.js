@@ -334,11 +334,11 @@ BubblesFSM.prototype = {
             d3.select("rect")
                     .attr("x", function () {
                         var x_new = ($(".vis-col").width()/2 - this.getAttribute("width")/2)*-1;
-                        return x_new
+                        return x_new;
                     })
                     .attr("width", $(".vis-col").width())
                     .attr("height", $(".vis-col").height() + 45)
-                    .attr("y", $("#subdiscipline_title").outerHeight(true)*-1)
+                    .attr("y", $("#subdiscipline_title").outerHeight(true)*-1);
         }
         
         var zoom_node = canvas.chart.selectAll("circle")
@@ -467,7 +467,7 @@ BubblesFSM.prototype = {
                 .attr("width", canvas.current_vis_size)
                 .attr("height", canvas.current_vis_size)
                 .attr("x", 0)
-                .attr("y", 0)
+                .attr("y", 0);
 
         mediator.publish("bubble_zoomout");
 

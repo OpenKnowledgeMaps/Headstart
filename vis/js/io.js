@@ -17,7 +17,7 @@ IO.prototype = {
     async_get_data: function(file, input_format, callback) {
         d3[input_format](file.file, (csv) => {
             callback(csv);
-        })
+        });
     },
 
     convertToFirstNameLastName: function (authors) {
@@ -41,7 +41,7 @@ IO.prototype = {
                 authors_short_string += ", ";
             }
         }
-        return { string: authors_string, short_string: authors_short_string }
+        return { string: authors_string, short_string: authors_short_string };
     },
     setToStringIfNullOrUndefined: function (element, strng) {
         if (element === null || typeof element === "undefined") {

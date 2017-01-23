@@ -49,7 +49,7 @@ MyMediator.prototype = {
         this.mediator.subscribe("paper_mouseover", this.paper_mouseover);
         this.mediator.subscribe("currentbubble_click", this.currentbubble_click);
         this.mediator.subscribe("papers_leave_loading",
-          () => {console.log("")});
+          () => {console.log("");});
         this.mediator.subscribe("paper_holder_clicked", this.paper_holder_clicked);
         this.mediator.subscribe("paper_current_bubble_clicked", this.paper_current_bubble_clicked);
 

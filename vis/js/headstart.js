@@ -1,7 +1,6 @@
 // Headstart
 // filename: headstart.js
 
-"use strict";
 import StateMachine from 'javascript-state-machine';
 
 import config from 'config';
@@ -25,6 +24,7 @@ import 'dotdotdot';
 
 export var headstart;
 export var HeadstartFSM = function() {
+  'use strict';
   this.VERSION = 2.9;
   Object.assign(config, data_config);
 
@@ -137,7 +137,7 @@ HeadstartFSM.prototype = {
         } else {
           mediator.publish("start_visualization", null, csv, bubble);
         }
-      }
+      };
   },
 
   get_files: {
@@ -209,7 +209,7 @@ HeadstartFSM.prototype = {
           };
           that.get_timeline_files(elem.file, setupTimelineVisualization);
       });
-      mediator.publish("ontotimeline_finish")
+      mediator.publish("ontotimeline_finish");
   },
 
   get_timeline_files: function(file, callback) {
@@ -223,7 +223,7 @@ HeadstartFSM.prototype = {
       default: function() {
         throw "WRONG INPUT FORMAT";
       }
-    }
+    };
     var method = (formats[config.input_format] || formats['default']);
     method(file, callback);
   },

@@ -212,7 +212,7 @@ list.populateMetaData = function(nodes) {
                     } 
                 });
                 
-        var paper_link = list_metadata.select(".link2")
+        var paper_link = list_metadata.select(".link2");
         
         paper_link.style("display", function (d) {
                     if (d.oa === false) {
@@ -222,7 +222,7 @@ list.populateMetaData = function(nodes) {
                 
         paper_link.attr("href", function (d) {
             return d.oa_link;
-        })
+        });
         
         list_metadata.select(".list_authors")
             .html(function(d) {
@@ -416,7 +416,7 @@ list.hideEntries = function(object, search_words) {
                 }
             })
             .style("display", "none");
-}
+};
 
 list.createHighlights = function (search_words) {
     if(typeof search_words === "undefined") {
@@ -571,7 +571,7 @@ list.checkIfFileAvailable = function(fileurl) {
     } else {
         return false;
     }
-}
+};
 
 // display a preview image of paper and page if preview image is
 // available
