@@ -1,5 +1,7 @@
 // Headstart
 // filename: headstart.js
+/* jshint undef: false */
+/* globals data_config, alert, escape, d3, console*/
 
 import StateMachine from 'javascript-state-machine';
 
@@ -7,7 +9,6 @@ import config from 'config';
 
 import { mediator } from 'mediator';
 import { BubblesFSM } from 'bubbles';
-
 import { intros } from 'intro';
 import { getRealHeight } from "helpers";
 import { BrowserDetect, highlight } from "helpers";
@@ -18,13 +19,12 @@ const infoTemplate = require("templates/misc/info_modal.handlebars");
 const iFrameTemplate = require("templates/misc/iframe_modal.handlebars");
 const imageTemplate = require("templates/misc/images_modal.handlebars");
 
+
 import 'hypher';
 import 'lib/en.js';
 import 'dotdotdot';
 
-export var headstart;
 export var HeadstartFSM = function() {
-  'use strict';
   this.VERSION = 2.9;
   Object.assign(config, data_config);
 
@@ -132,10 +132,10 @@ HeadstartFSM.prototype = {
         if (config.is_adaptive) {
           let url = this.createRestUrl();
           $.getJSON(url, (data) => {
-              mediator.publish("start_visualization", data, csv, bubble);
+              mediator.publish("start_visualization", data, csv);
             });
         } else {
-          mediator.publish("start_visualization", null, csv, bubble);
+          mediator.publish("start_visualization", null, csv);
         }
       };
   },
@@ -239,7 +239,7 @@ HeadstartFSM.prototype = {
 // State definitions for headstart object
 // see "onstart" function for entry point e.g. the first code that
 // gets excuted here.
-StateMachine.create({
+export var headstart = StateMachine.create({
 
   target: HeadstartFSM.prototype,
 

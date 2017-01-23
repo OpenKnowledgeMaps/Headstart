@@ -1,6 +1,6 @@
+import { headstart } from 'headstart';
 import Mediator from 'mediator-js';
 import config from 'config';
-import { headstart } from 'headstart';
 import { papers } from 'papers';
 import { list } from 'list';
 import { sortBy } from 'helpers';
@@ -8,7 +8,6 @@ import { io } from 'io';
 import { canvas } from 'canvas';
 
 var MyMediator = function() {
-
     // mediator
     this.fileData = [];
     this.mediator = new Mediator();
@@ -19,6 +18,7 @@ MyMediator.prototype = {
     constructor: MyMediator,
     init: function() {
         // init logic
+        this.modules = { papers: papers, list: list, io: io, canvas: canvas};
         this.mediator.subscribe("start_visualization", this.init_start_visualization);
         this.mediator.subscribe("ontofile", this.init_ontofile);
         this.mediator.subscribe("ontotimeline", this.init_ontotimeline);
@@ -49,7 +49,7 @@ MyMediator.prototype = {
         this.mediator.subscribe("paper_mouseover", this.paper_mouseover);
         this.mediator.subscribe("currentbubble_click", this.currentbubble_click);
         this.mediator.subscribe("papers_leave_loading",
-          () => {console.log("");});
+          () => {return;});
         this.mediator.subscribe("paper_holder_clicked", this.paper_holder_clicked);
         this.mediator.subscribe("paper_current_bubble_clicked", this.paper_current_bubble_clicked);
 
@@ -73,52 +73,65 @@ MyMediator.prototype = {
         this.mediator.subscribe("setup_tofile_canvas", this.setup_tofile_canvas);
     },
 
+    tryToCall: function(func) {
+        try {
+            func();
+        }
+        catch(e) {
+            console.log(`I ignored error ${e} in ${func}`);
+        }
+    },
+
     publish: function() {
         this.mediator.publish(...arguments);
     },
 
     io_async_get_data: function (file, input_format, callback) {
-        io.async_get_data(file, input_format, callback);
+        // WORKAROUND, if I try to add headstart earlier it doesn't work
+        // TODO find reason
+        mediator.modules.headstart = headstart;
+        mediator.tryToCall(() => { mediator.modules.io.async_get_data(file, input_format, callback); });
     },
 
     io_prepare_data: function (highlight_data, cur_fil_num) {
-        io.prepareData(highlight_data, cur_fil_num);
+        mediator.tryToCall(() => { mediator.modules.io.prepareData(highlight_data, cur_fil_num); });
     },
 
     io_prepare_areas: function () {
-        io.prepareAreas();
+        mediator.tryToCall(() => { mediator.modules.io.prepareAreas(); });
     },
 
     init_ontofile: function () {
         papers.current = "none";
         list.current = "none";
-        canvas.setupToFileCanvas();
+        mediator.tryToCall(() => { mediator.modules.canvas.setupToFileCanvas(); });
     },
 
     init_ontotimeline: function() {
         headstart.bubbles[headstart.current_file_number].current = "x";
-        canvas.setupTimelineCanvas();
+        mediator.tryToCall(() => { mediator.modules.canvas.setupTimelineCanvas(); });
     },
 
     finish_ontotimeline: function() {
-        canvas.drawGrid();
-        canvas.initMouseListeners();
+        mediator.tryToCall(() => { mediator.modules.canvas.drawGrid(); });
+        mediator.tryToCall(() => { mediator.modules.canvas.initMouseListeners(); });
     },
 
-    init_start_visualization: function(highlight_data, csv, bubble) {
-        canvas.setupCanvas();
-        io.prepareData(highlight_data, csv);
-        io.prepareAreas();
-        bubble.start( csv, highlight_data );
-        canvas.initEventsAndLayout();
-        papers.start( bubble );
-        bubble.draw();
-        list.start( bubble );
-        canvas.checkForcePapers();
-        canvas.showInfoModal();
-        canvas.hyphenateAreaTitles();
-        canvas.dotdotdotAreaTitles();
-        bubble.initMouseListeners();
+    init_start_visualization: function(highlight_data, csv) {
+        let current_bubble = mediator.modules.headstart.bubbles[mediator.modules.headstart.current_file_number];
+        mediator.tryToCall(() => { mediator.modules.canvas.setupCanvas(); });
+        mediator.tryToCall(() => { mediator.modules.io.prepareData(highlight_data, csv); });
+        mediator.tryToCall(() => { mediator.modules.io.prepareAreas(); });
+        mediator.tryToCall(() => { current_bubble.start( csv, highlight_data ); });
+        mediator.tryToCall(() => { mediator.modules.canvas.initEventsAndLayout(); });
+        mediator.tryToCall(() => { mediator.modules.papers.start( current_bubble ); });
+        mediator.tryToCall(() => { current_bubble.draw(); });
+        mediator.tryToCall(() => { mediator.modules.list.start( current_bubble ); });
+        mediator.tryToCall(() => { mediator.modules.canvas.checkForcePapers(); });
+        mediator.tryToCall(() => { mediator.modules.canvas.showInfoModal(); });
+        mediator.tryToCall(() => { mediator.modules.canvas.hyphenateAreaTitles(); });
+        mediator.tryToCall(() => { mediator.modules.canvas.dotdotdotAreaTitles(); });
+        mediator.tryToCall(() => { current_bubble.initMouseListeners(); });
     },
 
     bubbles_update_data_and_areas: function(bubbles) {
@@ -128,47 +141,47 @@ MyMediator.prototype = {
     },
 
     to_timeline: function() {
-        headstart.totimeline();
+        mediator.tryToCall(() => { mediator.modules.headstart.totimeline(); });
     },
 
     list_toggle: function() {
-        list.toggle();
+        mediator.tryToCall(() => { mediator.modules.list.toggle(); });
     },
 
     list_show_popup: function(d) {
-        list.populateOverlay(d);
+        mediator.tryToCall(() => { mediator.modules.list.populateOverlay(d); });
     },
 
     list_title_click: function(d) {
-        list.title_click(d);
+        mediator.tryToCall(() => { mediator.modules.list.title_click(d); });
     },
 
     list_sort_click: function(sort_option) {
-        sortBy(sort_option);
+        mediator.tryToCall(() => { mediator.modules.sortBy(sort_option); });
     },
 
     list_title_clickable: function(d) {
-        list.makeTitleClickable(d);
+        mediator.tryToCall(() => { mediator.modules.list.makeTitleClickable(d); });
     },
 
     paper_click: function(d) {
-        papers.paper_click(d);
+        mediator.tryToCall(() => { mediator.modules.papers.paper_click(d); });
     },
 
     paper_mouseover: function(d, holder_div) {
-        papers.enlargePaper(d, holder_div);
+        mediator.tryToCall(() => { mediator.modules.papers.enlargePaper(d, holder_div); });
     },
 
     paper_holder_clicked: function(holder) {
-        list.enlargeListItem(holder);
-        if (list.current == "hidden") {
-            list.show();
+        mediator.tryToCall(() => { mediator.modules.list.enlargeListItem(holder); });
+        if (mediator.modules.list.current == "hidden") {
+            mediator.tryToCall(() => { mediator.modules.list.show(); });
         }
     },
 
     paper_current_bubble_clicked: function(area) {
-        list.reset();
-        list.filterListByArea(area);
+        mediator.tryToCall(() => { mediator.modules.list.reset(); });
+        mediator.tryToCall(() => { mediator.modules.list.filterListByArea(area); });
     },
 
     bubble_mouseout: function(d, circle, bubble_fsm) {
@@ -184,31 +197,31 @@ MyMediator.prototype = {
     },
 
     bubble_zoomin: function(d) {
-        list.reset();
+        mediator.tryToCall(() => { mediator.modules.list.reset(); });
         if (typeof d != 'undefined') {
-            list.updateByFiltered();
-            list.filterListByAreaURIorArea(d);
+            mediator.tryToCall(() => { mediator.modules.list.updateByFiltered(); });
+            mediator.tryToCall(() => { mediator.modules.list.filterListByAreaURIorArea(d); });
         }
         if (headstart.current_zoom_mode !== null && typeof headstart.current_zoom_mode != 'undefined') {
             if (typeof d != 'undefined') {
-                list.updateByFiltered();
+                mediator.tryToCall(() => { mediator.modules.list.updateByFiltered(); });
             }
         }
     },
     bubble_zoomout: function() {
-        list.reset();
-        list.updateByFiltered();
+        mediator.tryToCall(() => { mediator.modules.list.reset(); });
+        mediator.tryToCall(() => { mediator.modules.list.updateByFiltered(); });
     },
     currentbubble_click: function(d) {
-        papers.currentbubble_click(d);
+        mediator.tryToCall(() => { mediator.modules.papers.currentbubble_click(d); });
     },
 
     bookmark_added: function(d) {
-        list.addBookmark(d);
+        mediator.tryToCall(() => { mediator.modules.list.addBookmark(d); });
     },
 
     bookmark_removed: function(d) {
-        list.removeBookmark(d);
+        mediator.tryToCall(() => { mediator.modules.list.removeBookmark(d); });
     },
 
     preview_mouseover: function(current_item) {
@@ -226,11 +239,11 @@ MyMediator.prototype = {
     },
 
     window_resize: function() {
-        list.fit_list_height();
+        mediator.tryToCall(() => { mediator.modules.list.fit_list_height(); });
     },
     check_force_papers: function() {
         if (config.show_list) {
-            list.show();
+            mediator.tryToCall(() => { mediator.modules.list.show(); });
         }
     },
     setup_timeline_canvas: function() {
@@ -248,9 +261,9 @@ MyMediator.prototype = {
         headstart.current_circle = canvas.getCurrentCircle(d);
         headstart.bubbles[headstart.current_file_number].zoomin(headstart.current_circle.data()[0]);
         headstart.bubbles[headstart.current_file_number].current = "hoverbig";
-        papers.mouseoverpaper();
+        mediator.tryToCall(() => { mediator.modules.papers.mouseoverpaper(); });
         headstart.current_enlarged_paper = d;
-        papers.framePaper(d);
+        mediator.tryToCall(() => { mediator.modules.papers.framePaper(d); });
     }
 };
 
