@@ -214,7 +214,7 @@ class Canvas {
           d.y_zoomed = resized_scale_y(d.y_zoomed);
           d.x = resized_scale_x(d.x);
           d.y = resized_scale_y(d.y);
-          if (headstart.is_zoomed === true) {
+          if (mediator.is_zoomed === true) {
             return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
           } else {
             return "translate(" + d.x + "," + d.y + ")";
@@ -223,9 +223,9 @@ class Canvas {
 
       d3.selectAll("circle")
         .attr("r", (d) => {
-          d.r_zoomed = this.circle_size(d.readers) * headstart.circle_zoom;
+          d.r_zoomed = this.circle_size(d.readers) * mediator.circle_zoom;
           d.r = this.circle_size(d.readers);
-          if (headstart.is_zoomed === true) {
+          if (mediator.is_zoomed === true) {
             return d.r_zoomed;
           } else {
             return d.r;
@@ -266,7 +266,7 @@ class Canvas {
           d.y_zoomed = resized_scale_y(d.y_zoomed);
           d.x = resized_scale_x(d.x);
           d.y = resized_scale_y(d.y);
-          if (headstart.is_zoomed === true) {
+          if (mediator.is_zoomed === true) {
             return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
           } else {
             return "translate(" + d.x + "," + d.y + ")";
@@ -281,11 +281,11 @@ class Canvas {
         d.height = config.paper_height_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
         d.top_factor = (1-config.dogear_width);
 
-        d.width_zoomed = d.width * headstart.circle_zoom;
-        d.height_zoomed = d.height * headstart.circle_zoom;
+        d.width_zoomed = d.width * mediator.circle_zoom;
+        d.height_zoomed = d.height * mediator.circle_zoom;
 
-        d.resize_width = (headstart.is_zoomed)?(d.width_zoomed):(d.width);
-        d.resize_height = (headstart.is_zoomed)?(d.height_zoomed):(d.height);
+        d.resize_width = (mediator.is_zoomed)?(d.width_zoomed):(d.width);
+        d.resize_height = (mediator.is_zoomed)?(d.height_zoomed):(d.height);
       });
 
       d3.selectAll("#region")
@@ -308,7 +308,7 @@ class Canvas {
           return d.resize_width * d.top_factor + "px";
         })
         .style("height", (d) => {
-          if(!headstart.is_zoomed) {
+          if(!mediator.is_zoomed) {
             return (config.content_based)?(d.resize_height):(d.resize_height * 0.8 + "px");
           } else {
             return (config.content_based)?(d.resize_height + "px"):(d.resize_height - 20 + "px");
@@ -317,7 +317,7 @@ class Canvas {
 
       d3.selectAll("div.readers")
         .style("height", (d) => {
-          if (headstart.is_zoomed === false) {
+          if (mediator.is_zoomed === false) {
             return d.resize_height * 0.2 + "px";
           } else {
             return "15px";
@@ -348,9 +348,9 @@ class Canvas {
 
   initMouseMoveListeners() {
     $("rect").on( "mouseover", () => {
-      if (!headstart.is_zoomed) {
+      if (!mediator.is_zoomed) {
         mediator.current_bubble.onmouseout("notzoomedmouseout");
-        headstart.current_circle = null;
+        mediator.current_circle = null;
       }
       mediator.current_bubble.mouseout("outofbigbubble");
       this.initClickListenersForNav();

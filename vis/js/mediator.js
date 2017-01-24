@@ -77,14 +77,14 @@ MyMediator.prototype = {
     },
 
     initState: function() {
-        mediator.current_zoom_node = null;
-        mediator.current_enlarged_paper = null;
-        mediator.current_file_number = 0;
-        mediator.current_circle = null;
-        mediator.papers_list = null;
-        mediator.circle_zoom = 0;
-        mediator.is_zoomed = false;
-        mediator.zoom_finished = false;
+        MyMediator.prototype.current_zoom_node = null;
+        MyMediator.prototype.current_enlarged_paper = null;
+        MyMediator.prototype.current_file_number = 0;
+        MyMediator.prototype.current_circle = null;
+        MyMediator.prototype.papers_list = null;
+        MyMediator.prototype.circle_zoom = 0;
+        MyMediator.prototype.is_zoomed = false;
+        MyMediator.prototype.zoom_finished = false;
     },
 
     registerBubbles: function() {
@@ -289,12 +289,12 @@ MyMediator.prototype = {
     },
 
     list_click_paper_list: function(d) {
-        headstart.current_circle = canvas.getCurrentCircle(d);
-        mediator.current_bubble.zoomin(headstart.current_circle.data()[0]);
+        mediator.current_circle = canvas.getCurrentCircle(d);
+        mediator.current_bubble.zoomin(mediator.current_circle.data()[0]);
         mediator.current_bubble.current = "hoverbig";
         mediator.tryToCall(() => { mediator.modules.papers.mouseoverpaper(); });
-        headstart.current_enlarged_paper = d;
         mediator.tryToCall(() => { mediator.modules.papers.framePaper(d); });
+        mediator.current_enlarged_paper = d;
     }
 };
 

@@ -36,18 +36,6 @@ export var HeadstartFSM = function() {
   this.viz.append(infoTemplate());
   this.viz.append(iFrameTemplate());
   this.viz.append(imageTemplate());
-
-  // contains bubbles objects for the timline view
-  // elements get added to bubbles by calling registerBubbles()
-  this.current_zoom_node = null;
-  this.current_enlarged_paper = null;
-  this.current_file_number = 0;
-  this.current_circle = null;
-  this.papers_list = null;
-  this.circle_zoom = 0;
-  this.is_zoomed = false;
-  this.zoom_finished = false;
-  mediator.publish("initState");
 }; // end HeadstartFSM constructor
 
 HeadstartFSM.prototype = {
@@ -157,8 +145,7 @@ HeadstartFSM.prototype = {
       },
 
       json_direct: function(that, setupVis) {
-        let current_bubble = that.bubbles[that.current_file_number];
-        setupVis(current_bubble.file);
+        setupVis(mediator.current_bubble.file);
       }
   },
 
@@ -213,7 +200,6 @@ HeadstartFSM.prototype = {
   },
 
   ontofile: function(event, from, to, file) {
-      this.current_file_number = file;
       mediator.publish("ontofile", file);
       let hs = this;
       this.get_files[config.mode](hs, this.makeSetupVisualisation());

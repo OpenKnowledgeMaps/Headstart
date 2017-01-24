@@ -6,7 +6,6 @@ import 'hypher';
 import 'lib/en.js';
 
 import config from 'config';
-import { headstart } from 'headstart';
 import { mediator } from 'mediator';
 import { toFront } from 'helpers';
 import { canvas } from 'canvas';
@@ -74,10 +73,10 @@ export const papers = StateMachine.create({
     ],
 
     callbacks: {
-        onstart: function (event, from, to, bubbles) {
+        onstart: function (event, from, to) {
             this.force_stopped = false;
-            this.drawPapers(bubbles);
-            this.applyForce(bubbles);
+            this.drawPapers();
+            this.applyForce();
             this.initPaperClickHandler();
         },
 
@@ -92,7 +91,7 @@ export const papers = StateMachine.create({
         },
 
         onclick: function (event, from, to, d) {
-            if (!headstart.is_zoomed) {
+            if (!mediator.is_zoomed) {
                 return mediator.bubbles.makePaperClickable(d);
             }
         },
@@ -122,10 +121,9 @@ export const papers = StateMachine.create({
     }
 });
 
-papers.drawPapers = function (bubbles) {
-
+papers.drawPapers = function () {
     var nodes = canvas.chart.selectAll("g.node")
-            .data(bubbles.data)
+            .data(mediator.current_bubble.data)
             .enter().append("g")
             .attr("class", "paper")
             .attr("transform", function (d) {
@@ -215,7 +213,7 @@ papers.initPaperClickHandler = function () {
 
 papers.paper_click = function (d) {
     if (!this.is("loading")) {
-        if (!headstart.is_zoomed) {
+        if (!mediator.is_zoomed) {
             var current_node = canvas.chart.selectAll("circle")
                     .filter(function (x) {
                         if (d !== null) {
@@ -285,7 +283,7 @@ papers.createPaperPath = function (x, y, width, height, correction_x, correction
     return path;
 };
 
-papers.applyForce = function (bubbles) {
+papers.applyForce = function () {
     let self = this;
 
     canvas.force_areas.start();
@@ -358,7 +356,7 @@ papers.applyForce = function (bubbles) {
         mediator.current_bubble.data.forEach(function (a, i) {
             var current_area = "";
 
-            for (let area in bubbles.areas_array) {
+            for (let area in mediator.current_bubble.areas_array) {
                 if (config.use_area_uri) {
                     if (mediator.current_bubble.areas_array[area].area_uri == a.area_uri) {
                         current_area = mediator.current_bubble.areas_array[area];
@@ -386,7 +384,7 @@ papers.applyForce = function (bubbles) {
                 a.y = paper_a.y - a.height / 2;
             }
 
-            bubbles.data.slice(i + 1).forEach((b) => {
+            mediator.current_bubble.data.slice(i + 1).forEach((b) => {
 
                 var paper_b = self.constructCircle(b);
 
@@ -465,7 +463,7 @@ papers.checkCollisions = function (a, b, alpha) {
 
 papers.shrinkPaper = function (d, holder) {
 
-    if (!headstart.is_zoomed) {
+    if (!mediator.is_zoomed) {
         return;
     }
 
@@ -493,7 +491,7 @@ papers.resizePaper = function (d, holder_div, resize_factor, color) {
     let current_path = current_g_paper.select("path#region");
     let current_dogear = current_g_paper.select("path.dogear");
 
-    var current_size = d.height * headstart.circle_zoom;
+    var current_size = d.height * mediator.circle_zoom;
     var max_size = canvas.current_vis_size / 2;
 
     if (current_size * resize_factor > max_size) {
@@ -503,14 +501,14 @@ papers.resizePaper = function (d, holder_div, resize_factor, color) {
     //current_g.parentNode.appendChild(current_g);
     toFront(current_g_paper.node());
 
-    let region = this.createPaperPath(0, 0, d.width * headstart.circle_zoom * resize_factor, d.height * headstart.circle_zoom * resize_factor);
-    let dogear = this.createDogearPath(d.width * (1 - config.dogear_width) * headstart.circle_zoom * resize_factor, 0, d.width * headstart.circle_zoom * resize_factor, d.height * headstart.circle_zoom * resize_factor);
+    let region = this.createPaperPath(0, 0, d.width * mediator.circle_zoom * resize_factor, d.height * mediator.circle_zoom * resize_factor);
+    let dogear = this.createDogearPath(d.width * (1 - config.dogear_width) * mediator.circle_zoom * resize_factor, 0, d.width * mediator.circle_zoom * resize_factor, d.height * mediator.circle_zoom * resize_factor);
 
     current_foreignObject
-            .attr("width", d.width * headstart.circle_zoom * resize_factor + "px")
-            .attr("height", d.height * headstart.circle_zoom * resize_factor + "px")
-            .style("width", d.width * headstart.circle_zoom * resize_factor + "px")
-            .style("height", d.height * headstart.circle_zoom * resize_factor + "px");
+            .attr("width", d.width * mediator.circle_zoom * resize_factor + "px")
+            .attr("height", d.height * mediator.circle_zoom * resize_factor + "px")
+            .style("width", d.width * mediator.circle_zoom * resize_factor + "px")
+            .style("height", d.height * mediator.circle_zoom * resize_factor + "px");
 
     current_path
             //.style("fill-opacity", opacity)
@@ -519,17 +517,17 @@ papers.resizePaper = function (d, holder_div, resize_factor, color) {
 
     current_dogear.attr("d", dogear);
 
-    let height = (config.content_based) ? (d.height * headstart.circle_zoom * resize_factor + "px") :
-            (d.height * headstart.circle_zoom * resize_factor - 20 + "px");
+    let height = (config.content_based) ? (d.height * mediator.circle_zoom * resize_factor + "px") :
+            (d.height * mediator.circle_zoom * resize_factor - 20 + "px");
 
     holder_div.select("div.metadata")
             .attr("height", height)
-            .attr("width", d.width * headstart.circle_zoom * resize_factor * (1 - config.dogear_width) + "px")
+            .attr("width", d.width * mediator.circle_zoom * resize_factor * (1 - config.dogear_width) + "px")
             .style("height", height)
-            .style("width", d.width * headstart.circle_zoom * resize_factor * (1 - config.dogear_width) + "px");
+            .style("width", d.width * mediator.circle_zoom * resize_factor * (1 - config.dogear_width) + "px");
 
     holder_div.select("div.readers")
-            .style("width", d.width * headstart.circle_zoom * resize_factor + "px");
+            .style("width", d.width * mediator.circle_zoom * resize_factor + "px");
 };
 
 // called far too often
@@ -537,12 +535,11 @@ papers.enlargePaper = function (d, holder_div) {
 
     this.mouseoverpaper();
 
-    if (d.resized || !headstart.is_zoomed) {
+    if (d.resized || !mediator.is_zoomed) {
         return;
     }
 
     mediator.publish("record_action", d.id, "enlarge_paper", config.user_id, d.bookmarked + " " + d.recommended, null);
-    // headstart.recordAction(d.id, "enlarge_paper", config.user_id, d.bookmarked + " " + d.recommended, null);
 
     let resize_factor = 1.2;
 
@@ -568,7 +565,7 @@ papers.enlargePaper = function (d, holder_div) {
             .style("cursor", "pointer")
             .on("click", (d) => {
 
-                if (!headstart.is_zoomed) {
+                if (!mediator.is_zoomed) {
                     return mediator.bubbles.makePaperClickable(d);
                 } else {
 
@@ -588,9 +585,8 @@ papers.enlargePaper = function (d, holder_div) {
                     }
 
                     d.paper_selected = true;
-                    headstart.current_enlarged_paper = d;
+                    mediator.current_enlarged_paper = d;
                     mediator.publish("record_action", d.id, "click_on_paper", config.user_id, d.bookmarked + " " + d.recommended, null);
-                    // headstart.recordAction(d.id, "click_on_paper", config.user_id, d.bookmarked + " " + d.recommended, null);
                     d3.event.stopPropagation();
                 }
             })
@@ -598,7 +594,7 @@ papers.enlargePaper = function (d, holder_div) {
                 this.mouseoutpaper(d, holder_div);
             });
 
-    headstart.current_circle = canvas.chart.selectAll("circle")
+    mediator.current_circle = canvas.chart.selectAll("circle")
             .filter(function (x) {
                 if (config.use_area_uri) {
                     return (x.area_uri == d.area_uri);
@@ -607,7 +603,7 @@ papers.enlargePaper = function (d, holder_div) {
                 }
             });
 
-    headstart.current_circle
+    mediator.current_circle
             .on("click", (d) => {
                 mediator.publish("currentbubble_click", d);
                 this.resetPaths();
@@ -619,13 +615,12 @@ papers.enlargePaper = function (d, holder_div) {
 papers.currentbubble_click = function (d) {
     mediator.publish("paper_current_bubble_clicked", d);
 
-    if (headstart.current_enlarged_paper !== null) {
-        headstart.current_enlarged_paper.paper_selected = false;
+    if (mediator.current_enlarged_paper !== null) {
+        mediator.current_enlarged_paper.paper_selected = false;
     }
 
-    headstart.current_enlarged_paper = null;
+    mediator.current_enlarged_paper = null;
     mediator.publish("record_action", d.id, "click_paper_list_enlarge", config.user_id, d.bookmarked + " " + d.recommended, null);
-    // headstart.recordAction(d.id, "click_paper_list_enlarge", config.user_id, d.bookmarked + " " + d.recommended, null);
 
     d3.event.stopPropagation();
 };

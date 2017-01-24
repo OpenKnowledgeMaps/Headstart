@@ -3,7 +3,6 @@
 import StateMachine from 'javascript-state-machine';
 
 import config from 'config';
-import { headstart } from 'headstart';
 import { mediator } from 'mediator';
 import { canvas } from 'canvas';
 import { debounce, highlight, clear_highlights, sortBy } from 'helpers';
@@ -23,11 +22,11 @@ export const list = StateMachine.create({
     ],
 
     callbacks: {
-        onbeforestart: function( event, from, to, bubbles ) {
+        onbeforestart: function( event, from, to) {
             this.width = config.list_width;
             this.papers_list = null;
             this.drawList();
-            this.populateList( bubbles.data );
+            this.populateList( mediator.current_bubble.data );
             this.initListMouseListeners();
             sortBy(config.sort_options[0]);
         },
@@ -339,15 +338,16 @@ list.filterList = function (search_words) {
 
     var filtered_data_list = d3.selectAll("#list_holder");
     var filtered_data_papers = d3.selectAll(".paper");
-    var current_circle = d3.select(headstart.current_zoom_node);
+    //TODO why not mediator.current_circle
+    var current_circle = d3.select(mediator.current_zoom_node);
 
     var data_circle_list = filtered_data_list
             .filter(function (d) {
-                if (headstart.is_zoomed === true) {
-                    if (config.use_area_uri && headstart.current_enlarged_paper === null) {
+                if (mediator.is_zoomed === true) {
+                    if (config.use_area_uri && mediator.current_enlarged_paper === null) {
                         return current_circle.data()[0].area_uri == d.area_uri;
-                    } else if (config.use_area_uri && headstart.current_enlarged_paper !== null) {
-                       return headstart.current_enlarged_paper.id == d.id;
+                    } else if (config.use_area_uri && mediator.current_enlarged_paper !== null) {
+                       return mediator.current_enlarged_paper.id == d.id;
                     } else {
                         return current_circle.data()[0].title == d.area;
                     }
@@ -358,7 +358,7 @@ list.filterList = function (search_words) {
     
     var data_circle_papers = filtered_data_papers
                 .filter(function (d) {
-                            if (headstart.is_zoomed === true) {
+                            if (mediator.is_zoomed === true) {
                                 if (config.use_area_uri) {
                                     return current_circle.data()[0].area_uri == d.area_uri;
                                 } else {
@@ -384,7 +384,6 @@ list.filterList = function (search_words) {
     data_circle_papers.style("display", "inline");
 
     mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words);
-    // headstart.recordAction("none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words);
     
     this.hideEntries(filtered_data_list, search_words);
     this.hideEntries(filtered_data_papers, search_words);
@@ -447,7 +446,6 @@ list.addBookmark = function(d) {
         console.log("Successfully added bookmark");
 
         mediator.publish("record_action", d.id, "add_bookmark", config.user_id, d.bookmarked + " " + d.recommended, data);
-        // headstart.recordAction(d.id, "add_bookmark", config.user_id, d.bookmarked + " " + d.recommended, data);
 
         d.bookmarked = true;
 
@@ -473,7 +471,6 @@ list.removeBookmark = function(d)  {
         console.log("Successfully removed bookmark");
 
         mediator.publish("record_action",d.id, "remove_bookmark", config.user_id, d.bookmarked + " " + d.recommended, data);
-        // headstart.recordAction(d.id, "remove_bookmark", config.user_id, d.bookmarked + " " + d.recommended, data);
 
         d.bookmarked = false;
 
@@ -500,19 +497,18 @@ list.makeTitleClickable = function(d) {
     this.enlargeListItem(d);
     mediator.publish("list_click_paper_list", d);
     mediator.publish("record_action", d.id, "click_paper_list", config.user_id, d.bookmarked + " " + d.recommended, null);
-    // headstart.recordAction(d.id, "click_paper_list", config.user_id, d.bookmarked + " " + d.recommended, null);
     d3.event.stopPropagation();
 };
 
 
 
 list.enlargeListItem = function(d) {
-    if(headstart.current_enlarged_paper !== null) {
-      if(headstart.current_enlarged_paper.id == d.id) {
+    if(mediator.current_enlarged_paper !== null) {
+      if(mediator.current_enlarged_paper.id == d.id) {
         return;
       } else {
         this.reset();
-        headstart.current_enlarged_paper.paper_selected = false;
+        mediator.current_enlarged_paper.paper_selected = false;
       }
     }
 
@@ -557,7 +553,7 @@ list.reset = function() {
     
     d3.selectAll(".list_entry_full").attr("class", "list_entry");
     
-    if (headstart.current_enlarged_paper !== null) {
+    if (mediator.current_enlarged_paper !== null) {
       this.notSureifNeeded();
     }
 };
@@ -750,7 +746,6 @@ list.title_click = function (d) {
       }
 
       mediator.publish("record_action",d.id, "click_on_title", config.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
-      // headstart.recordAction(d.id, "click_on_title", config.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
 
       window.open(url, "_blank");
       d3.event.stopPropagation();
@@ -761,7 +756,7 @@ list.notSureifNeeded = function() {
     var list_holders_local =
         this.papers_list.selectAll("#list_holder")
         .filter(function(d) {
-            return (headstart.current_enlarged_paper.id == d.id);
+            return (mediator.current_enlarged_paper.id == d.id);
         });
 
     list_holders_local.select("#paper_list_title")
