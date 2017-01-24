@@ -296,7 +296,8 @@ MyMediator.prototype = {
 
     window_resize: function(resized_scale_x, resized_scale_y) {
         mediator.manager.call('list', 'fit_list_height', []);
-        mediator.manager.call('bubble', 'onWindowResize' [resized_scale_x, resized_scale_y]);
+        mediator.manager.call('bubble', 'onWindowResize', [resized_scale_x, resized_scale_y]);
+        mediator.manager.call('papers', 'onWindowResize', [resized_scale_x, resized_scale_y]);
     },
 
     check_force_papers: function() {

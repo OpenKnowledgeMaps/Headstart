@@ -71,6 +71,32 @@ BubblesFSM.prototype = {
         }
     },
 
+    onWindowResize: function(resized_scale_x, resized_scale_y) {
+        d3.selectAll("g.bubble_frame")
+          .attr("transform", (d) => {
+            d.x_zoomed = resized_scale_x(d.x_zoomed);
+            d.y_zoomed = resized_scale_y(d.y_zoomed);
+            d.x = resized_scale_x(d.x);
+            d.y = resized_scale_y(d.y);
+            if (mediator.is_zoomed === true) {
+              return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
+            } else {
+              return "translate(" + d.x + "," + d.y + ")";
+            }
+          });
+
+      d3.selectAll("circle")
+        .attr("r", (d) => {
+          d.r_zoomed = canvas.circle_size(d.readers) * mediator.circle_zoom;
+          d.r = canvas.circle_size(d.readers);
+          if (mediator.is_zoomed === true) {
+            return d.r_zoomed;
+          } else {
+            return d.r;
+          }
+        });
+    },
+
     // initialize all "mouseover", "mouseout" event listeners
     // for bubbles
     initMouseListeners: function () {

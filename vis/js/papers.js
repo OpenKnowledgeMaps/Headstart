@@ -668,3 +668,100 @@ papers.framePaper = function(p) {
       })
       .attr("class", "framed");
 };
+
+papers.onWindowResize = function(resized_scale_x, resized_scale_y) {
+      var area_title_objects = d3.selectAll("#area_title_object");
+
+      area_title_objects.each((d) => {
+        d.height_html = Math.sqrt(Math.pow(d.r,2)*2);
+        d.width_html = Math.sqrt(Math.pow(d.r,2)*2);
+        d.x_html = 0 - d.width_html/2;
+        d.y_html = 0 - d.height_html/2;
+      });
+
+      area_title_objects
+        .attr("x",      (d) => { return d.x_html;})
+        .attr("y",      (d) => { return d.y_html;})
+        .attr("width",  (d) => { return d.width_html;})
+        .attr("height", (d) => { return d.height_html;});
+
+      area_title_objects.each(function() {
+        d3.select(this).select("#area_title")
+          .style("width", (d) => {
+            return d.width_html + "px";
+          })
+          .style("height", (d) => {
+            return d.height_html + "px"; });
+      });
+
+      $("#area_title>h2").css("font-size", canvas.calcTitleFontSize());
+      $("#area_title>h2").hyphenate('en');
+      $("#area_title_object>body").dotdotdot({wrap:"letter"});
+
+      d3.selectAll("g.paper")
+        .attr("transform", (d) => {
+          d.x_zoomed = resized_scale_x(d.x_zoomed);
+          d.y_zoomed = resized_scale_y(d.y_zoomed);
+          d.x = resized_scale_x(d.x);
+          d.y = resized_scale_y(d.y);
+          if (mediator.is_zoomed === true) {
+            return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
+          } else {
+            return "translate(" + d.x + "," + d.y + ")";
+          }
+        });
+
+      var paper_holders = d3.selectAll("div.paper_holder");
+
+      paper_holders.each((d) => {
+        d.diameter = canvas.diameter_size(d.internal_readers);
+        d.width = config.paper_width_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
+        d.height = config.paper_height_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
+        d.top_factor = (1-config.dogear_width);
+
+        d.width_zoomed = d.width * mediator.circle_zoom;
+        d.height_zoomed = d.height * mediator.circle_zoom;
+
+        d.resize_width = (mediator.is_zoomed)?(d.width_zoomed):(d.width);
+        d.resize_height = (mediator.is_zoomed)?(d.height_zoomed):(d.height);
+      });
+
+      d3.selectAll("#region")
+        .attr("d", (d) => {
+          return papers.createPaperPath(0, 0, d.resize_width, d.resize_height);
+        });
+
+      d3.selectAll("path.dogear")
+        .attr("d", (d) => {
+          return papers.createDogearPath(d.resize_width*d.top_factor, 0, d.resize_width, d.resize_height);
+        });
+
+      //webkit bug
+      d3.selectAll("#article_metadata")
+        .attr("width", (d) => { return d.resize_width; })
+        .attr("height", (d) => { return d.resize_height; });
+
+      d3.selectAll("div.metadata")
+        .style("width", (d) => {
+          return d.resize_width * d.top_factor + "px";
+        })
+        .style("height", (d) => {
+          if(!mediator.is_zoomed) {
+            return (config.content_based)?(d.resize_height):(d.resize_height * 0.8 + "px");
+          } else {
+            return (config.content_based)?(d.resize_height + "px"):(d.resize_height - 20 + "px");
+          }
+        });
+
+      d3.selectAll("div.readers")
+        .style("height", (d) => {
+          if (mediator.is_zoomed === false) {
+            return d.resize_height * 0.2 + "px";
+          } else {
+            return "15px";
+          }
+        })
+        .style("width", function(d) {
+          return d.resize_width + "px";
+        });
+}
