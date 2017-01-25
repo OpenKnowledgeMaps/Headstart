@@ -4,7 +4,6 @@ import StateMachine from 'javascript-state-machine';
 
 import config from 'config';
 import { mediator } from 'mediator';
-import { canvas } from 'canvas';
 import { debounce, highlight, clear_highlights, sortBy } from 'helpers';
 
 const listTemplate = require('templates/list/list_explorer.handlebars');
@@ -26,7 +25,7 @@ export const list = StateMachine.create({
             this.width = config.list_width;
             this.papers_list = null;
             this.drawList();
-            this.populateList( mediator.current_bubble.data );
+            this.populateList();
             this.initListMouseListeners();
             sortBy(config.sort_options[0]);
         },
@@ -313,8 +312,8 @@ list.populateReaders = function(nodes) {
 };
 
 
-list.populateList = function(list_data) {
-
+list.populateList = function() {
+    var list_data = mediator.current_bubble.data;
     list_data.filter(function(el){
         return el !== null;
     });

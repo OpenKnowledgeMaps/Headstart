@@ -76,6 +76,7 @@ var config = {
     zoomout_transition: 750,
 
     // misc
+    debug: true,
     debounce: 50,
     service: "none",
     language: "eng",
@@ -101,6 +102,7 @@ var config = {
             year: "date",
             authors: "authors",
             title: "title",
+            default_title: 'Overview of <span id="num_articles"></span> articles', 
             area: "Area",
 			no_title: "No title"
         },
@@ -114,6 +116,7 @@ var config = {
             year: "Jahr",
             authors: "Autor",
             title: "Titel",
+            default_title: 'Überblick über <span id="num_articles"></span> Artikel',
             area: "Bereich",
 			no_title: "Kein Titel"
         },

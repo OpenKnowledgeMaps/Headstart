@@ -6,36 +6,17 @@
 import StateMachine from 'javascript-state-machine';
 
 import config from 'config';
-
 import { mediator } from 'mediator';
-import { BubblesFSM } from 'bubbles';
 import { intros } from 'intro';
 import { getRealHeight } from "helpers";
 import { BrowserDetect, highlight } from "helpers";
   
-const timelineTemplate = require('templates/timeline.handlebars');
-const headstartTemplate = require("templates/headstart.handlebars");
-const infoTemplate = require("templates/misc/info_modal.handlebars");
-const iFrameTemplate = require("templates/misc/iframe_modal.handlebars");
-const imageTemplate = require("templates/misc/images_modal.handlebars");
-
-
 import 'hypher';
 import 'lib/en.js';
 import 'dotdotdot';
 
 export var HeadstartFSM = function() {
   this.VERSION = 2.9;
-  Object.assign(config, data_config);
-
-  // Build Headstart skeleton
-  this.viz = $("#" + config.tag);
-  this.viz.addClass("headstart");
-
-  this.viz.append(headstartTemplate());
-  this.viz.append(infoTemplate());
-  this.viz.append(iFrameTemplate());
-  this.viz.append(imageTemplate());
 }; // end HeadstartFSM constructor
 
 HeadstartFSM.prototype = {
@@ -167,8 +148,6 @@ HeadstartFSM.prototype = {
   // 2. rendering of new elements, on a bigger
   //    chart
   ontotimeline: function() {
-      this.viz.empty();
-      this.viz.append(timelineTemplate());
       mediator.publish("ontotimeline");
       // load bubbles in sync
       var that = this;

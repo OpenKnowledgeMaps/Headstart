@@ -4,11 +4,27 @@ import { headstart } from 'headstart';
 import { papers } from 'papers';
 import { mediator } from 'mediator';
 
+const timelineTemplate = require('templates/timeline.handlebars');
+const headstartTemplate = require("templates/headstart.handlebars");
+const infoTemplate = require("templates/misc/info_modal.handlebars");
+const iFrameTemplate = require("templates/misc/iframe_modal.handlebars");
+const imageTemplate = require("templates/misc/images_modal.handlebars");
+
 class Canvas {
   constructor() {
     this.available_height = null;
     this.available_width = null;
     this.current_vis_size = null;
+
+    // Build Headstart skeleton
+    Object.assign(config, data_config);
+    this.viz = $("#" + config.tag);
+    this.viz.addClass("headstart");
+
+    this.viz.append(headstartTemplate());
+    this.viz.append(infoTemplate());
+    this.viz.append(iFrameTemplate());
+    this.viz.append(imageTemplate());
   }
 
   getCurrentCircle(d) {
@@ -195,23 +211,20 @@ class Canvas {
 
   initMouseMoveListeners() {
     $("rect").on( "mouseover", () => {
-      if (!mediator.is_zoomed) {
-        mediator.current_bubble.onmouseout("notzoomedmouseout");
-        mediator.current_circle = null;
-      }
-      mediator.current_bubble.mouseout("outofbigbubble");
-      this.initClickListenersForNav();
+      mediator.publish("on_rect_mouseover");
     });
   }
 
   initMouseClickListeners() {
     $("#chart-svg").on("click", () => {
-      mediator.current_bubble.zoomout();
+      mediator.publish('chart_svg_click');
     });
 
     $("#" + config.tag).bind('click', (event) => {
-      if(event.target.className === "container-headstart" || event.target.className === "vis-col" || event.target.id === "headstart-chart") {
-        mediator.current_bubble.zoomout();
+      if(event.target.className === "container-headstart" || 
+         event.target.className === "vis-col"             || 
+         event.target.id        === "headstart-chart") {
+        mediator.publish('chart_svg_click');
       }
     });
   }
@@ -227,16 +240,9 @@ class Canvas {
   // Draws the header for this
   drawTitle() {
     let chart_title = "";
+    chart_title = config.localization[config.language].default_title;
+    if(config.title) chart_title = config.title;
 
-    if(config.title === "") {
-      if (config.language === "eng") {
-        chart_title = 'Overview of <span id="num_articles"></span> articles';
-      } else {
-        chart_title = 'Überblick über <span id="num_articles"></span> Artikel';
-      }
-    } else {
-      chart_title = config.title;
-    }
     var subdiscipline_title_h4 = $("#subdiscipline_title h4");
     subdiscipline_title_h4.html(chart_title);
     $("#num_articles").html($(".paper").length);
@@ -366,10 +372,10 @@ class Canvas {
   }
 
   setupCanvas() {
-    this.initScales();
     this.setOverflowToHiddenOrAuto("#main");
     this.drawTitle();
     this.calcChartSize();
+    this.initScales();
     this.setScaleRanges();
     this.drawSvg();
     this.drawChartCanvas();
@@ -393,7 +399,8 @@ class Canvas {
   }
 
   setupTimelineCanvas() {
-    mediator.publish("setup_timeline_canvas");
+    this.viz.empty();
+    this.viz.append(timelineTemplate());
 
     // change heading to give an option to get back to normal view
     this.force_areas.stop();
@@ -402,10 +409,10 @@ class Canvas {
     $("#chart_canvas").empty();
 
     this.drawGridTitles();
-    this.initScales();
     this.setOverflowToHiddenOrAuto("#main");
     this.drawTitle();
     this.calcChartSize();
+    this.initScales();
     this.setScaleRanges();
     this.drawTimelineSvg();
     this.drawChartCanvas();
@@ -442,6 +449,46 @@ class Canvas {
 
   dotdotdotAreaTitles() {
     $("#area_title_object>body").dotdotdot({wrap:"letter"});
+  }
+
+  updateCanvasDomains(data) {
+    this.chart_x.domain(d3.extent(data, function (d) {
+        return d.x;
+    }));
+    this.chart_y.domain(d3.extent(data, function (d) {
+        return d.y * -1;
+    }));
+    this.diameter_size.domain(d3.extent(data, function (d) {
+        return d.internal_readers;
+    }));
+  }
+
+  updateData(data) {
+    data.forEach(function(d) {
+      // construct rectangles of a golden cut
+      d.diameter = canvas.diameter_size(d.internal_readers);
+      d.width = config.paper_width_factor * Math.sqrt(Math.pow(d.diameter, 2) / 2.6);
+      d.height = config.paper_height_factor * Math.sqrt(Math.pow(d.diameter, 2) / 2.6);
+      d.orig_x = d.x;
+      d.orig_y = d.y;
+      // scale x and y
+      d.x = canvas.chart_x(d.x);
+    });      
+  }
+
+  setDomain(prop, extent) {
+    this[prop].domain(extent);
+  }
+
+  setAreaRadii(areas) {
+    for (var area in areas) {
+      areas[area].r = this.circle_size(areas[area].readers);
+    }
+  }
+
+  setNewAreaCoords(new_area, area) {
+    new_area.x = this.chart_x_circle(area.x);
+    new_area.y = this.chart_y_circle(area.y);
   }
 }
 

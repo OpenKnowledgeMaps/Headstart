@@ -18,9 +18,9 @@ class ModuleManager {
     }
 
     call(name, methodName, args) {
-        if(this.modules[name][methodName]){
-            const func = this.modules[name][methodName];
+        if(this.modules[name]){
             if(config.debug) console.log(`calling ${name} method ${methodName}`);
+            const func = this.modules[name][methodName];
             func.apply(this.modules[name], args);
         }
     }
@@ -32,9 +32,9 @@ var MyMediator = function() {
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
     this.manager.registerModule(list, 'list');
-    this.manager.registerModule(canvas, 'canvas');
+    //this.manager.registerModule(canvas, 'canvas');
     this.manager.registerModule(io, 'io');
-    this.manager.registerModule(papers, 'papers');
+    //this.manager.registerModule(papers, 'papers');
     this.init();
     this.initState();
 };
@@ -94,9 +94,15 @@ MyMediator.prototype = {
         // misc
         this.mediator.subscribe("record_action", this.record_action);
         this.mediator.subscribe("window_resize", this.window_resize);
+        this.mediator.subscribe("on_rect_mouseover", this.on_rect_mouseover);
+        this.mediator.subscribe("chart_svg_click", this.chart_svg_click);
         this.mediator.subscribe("check_force_papers", this.check_force_papers);
-        this.mediator.subscribe("setup_timeline_canvas", this.setup_timeline_canvas);
         this.mediator.subscribe("setup_tofile_canvas", this.setup_tofile_canvas);
+        this.mediator.subscribe("update_canvas_domains", this.update_canvas_domains);
+        this.mediator.subscribe("update_canvas_data", this.update_canvas_data);
+        this.mediator.subscribe("canvas_set_domain", this.canvas_set_domain);
+        this.mediator.subscribe("set_area_radii", this.set_area_radii);
+        this.mediator.subscribe("set_new_area_coords", this.set_new_area_coords);
     },
 
     initState: function() {
@@ -122,7 +128,7 @@ MyMediator.prototype = {
         mediator.bubbles.push(bubble);
         });
         mediator.current_bubble = mediator.bubbles[mediator.current_file_number];
-        mediator.manager.registerModule(mediator.current_bubble, 'bubble');
+        //mediator.manager.registerModule(mediator.current_bubble, 'bubble');
     },
 
     tryToCall: function(func) {
@@ -142,7 +148,6 @@ MyMediator.prototype = {
         // WORKAROUND, if I try to add headstart earlier it doesn't work
         // TODO find reason
         mediator.modules.headstart = headstart;
-        mediator.manager.registerModule(headstart, 'headstart');
         mediator.current_file = config.files[mediator.current_file_number];
         mediator.manager.call('io', 'async_get_data', [mediator.current_file, input_format, callback]);
 
@@ -159,7 +164,7 @@ MyMediator.prototype = {
     init_ontofile: function (file) {
         mediator.current_file_number = file;
         mediator.current_bubble = mediator.bubbles[mediator.current_file_number];
-        mediator.manager.registerModule(mediator.current_bubble, 'bubble');
+        // mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.current_file = config.files[mediator.current_file_number];
         papers.current = "none";
         list.current = "none";
@@ -168,6 +173,10 @@ MyMediator.prototype = {
 
     init_ontotimeline: function() {
         mediator.current_bubble.current = "x";
+        papers.current = "none";
+        list.current = "none";
+        // clear the list list
+        $("#list_explorer").empty();
         mediator.manager.call('canvas', 'setupTimelineCanvas', []);
     },
 
@@ -177,19 +186,42 @@ MyMediator.prototype = {
     },
 
     init_start_visualization: function(highlight_data, csv) {
+        mediator.manager.registerModule(headstart, 'headstart');
+        //mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.manager.call('canvas', 'setupCanvas', []);
         mediator.manager.call('io', 'prepareData', [highlight_data, csv]);
         mediator.manager.call('io', 'prepareAreas', []);
+        mediator.bubbles_update_data_and_areas(mediator.current_bubble);
         mediator.manager.call('bubble', 'start', [csv, highlight_data]);
         mediator.manager.call('canvas', 'initEventsAndLayout', []);
         mediator.manager.call('papers', 'start', [ mediator.current_bubble ]);
         mediator.manager.call('bubble', 'draw', []);
-        mediator.manager.call('list', 'start', [ mediator.current_bubble ]);
+        mediator.manager.call('list', 'start');
         mediator.manager.call('canvas', 'checkForcePapers', []);
         mediator.manager.call('canvas', 'showInfoModal', []);
         mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
         mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
         mediator.manager.call('bubble', 'initMouseListeners', []);
+    },
+
+    update_canvas_domains: function(data) {
+        mediator.manager.call('canvas', 'updateCanvasDomains', [data]);
+    },
+
+    update_canvas_data: function(data) {
+        mediator.manager.call('canvas', 'updateData', [data]);
+    },
+
+    canvas_set_domain: function(prop, extent) {
+        mediator.manager.call('canvas', 'setDomain', [prop, extent]);
+    },
+
+    set_area_radii: function(areas) {
+        mediator.manager.call('canvas', 'setAreaRadii', [areas]);
+    },
+
+    set_new_area_coords: function(new_area, area) {
+        mediator.manager.call('canvas', 'setNewAreaCoords', [new_area, area]);
     },
 
     bubbles_update_data_and_areas: function(bubbles) {
@@ -303,16 +335,23 @@ MyMediator.prototype = {
         mediator.manager.call('papers', 'onWindowResize', []);
     },
 
+    on_rect_mouseover: function() {
+        console.log("rect mouseover");
+        if (!mediator.is_zoomed) {
+          mediator.manager.call('bubble', 'onmouseout', ['notzoomedmouseout']);
+          mediator.current_circle = null;
+        }
+        mediator.manager.call('bubble', 'mouseout', ['outofbigbubble']);
+    },
+
+    chart_svg_click: function() {
+        mediator.manager.call('bubble', 'zoomout', []);
+    },
+
     check_force_papers: function() {
         if (config.show_list) {
             mediator.manager.call('list', 'show', []);
         }
-    },
-    setup_timeline_canvas: function() {
-        papers.current = "none";
-        list.current = "none";
-        // clear the list list
-        $("#list_explorer").empty();
     },
 
     setup_tofile_canvas: function() {
