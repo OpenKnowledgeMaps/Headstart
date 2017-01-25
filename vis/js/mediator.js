@@ -337,7 +337,6 @@ MyMediator.prototype = {
     },
 
     on_rect_mouseover: function() {
-        console.log("rect mouseover");
         if (!mediator.is_zoomed) {
           mediator.manager.call('bubble', 'onmouseout', ['notzoomedmouseout']);
           mediator.current_circle = null;
