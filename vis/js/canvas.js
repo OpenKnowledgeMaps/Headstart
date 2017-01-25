@@ -22,10 +22,12 @@ class Canvas {
           });
   }
 
+  // Set this.available_height, this.available_width and this.current_vis_size
   calcChartSize() {
     var parent_height = getRealHeight($("#" + config.tag));
     var subtitle_heigth = $("#subdiscipline_title").outerHeight(true);
 
+    // Set available_height and available_width
     if (parent_height === 0) {
       this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_heigth;
     } else {
@@ -42,7 +44,8 @@ class Canvas {
       this.available_width = $("#" + config.tag).width() - $("#list_explorer").width();
     }
 
-    if (this.availableSizeIsBiggerThanMinSize()) {
+    // Set current_vis_size
+    if ( this.available_width > config.min_width && this.available_height > config.min_height) {
       if (this.available_width >= this.available_height) {
         this.current_vis_size = this.available_height;
       } else {
@@ -114,13 +117,6 @@ class Canvas {
     }
   }
 
-  availableSizeIsBiggerThanMinSize() {
-    if ( this.available_width > config.min_width && this.available_height > config.min_height ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
   // auto if enough space is available, else hidden
   setOverflowToHiddenOrAuto( selector ) {
     var overflow = "hidden";
@@ -135,38 +131,26 @@ class Canvas {
 
   // Draw basic SVG canvas
   // NOTE attribute width addition by number of elements
-  drawSvg(update) {
+  drawSvg() {
+    const svg = d3.select("#chart-svg");
+    svg.attr("height", this.current_vis_size + "px")
+       .attr("width", this.current_vis_size + "px");
+  }
 
-    update = typeof update !== 'undefined' ? update : false;
-
-    this.svg = d3.select("#chart-svg");
-
-    if (headstart.is("timeline")) {
-      let s = this.current_vis_size * Object.keys(mediator.bubbles).length;
-      this.svg.attr("width", s)
-        .attr("height", this.current_vis_size);
-      if (update === false) {
-        this.svg.attr("viewBox", "0 0 " + s + " " + this.current_vis_size);
-      }
-    } else {
-      this.svg.attr("height", this.current_vis_size + "px")
-        .attr("width", this.current_vis_size + "px");
-      //.attr("preserveAspectRatio", "xMidYMid meet");
-      if (update === false) {
-        //this.svg.attr("viewBox", "0 0 " + this.current_vis_size + " " + this.current_vis_size);
-      }
-    }
+  drawTimelineSvg() {
+    const svg = d3.select("#chart-svg");
+    let s = this.current_vis_size * Object.keys(mediator.bubbles).length;
+    svg.attr("width", s)
+      .attr("height", this.current_vis_size);
+    svg.attr("viewBox", "0 0 " + s + " " + this.current_vis_size);
   }
 
   drawChartCanvas() {
-    this.chart = this.svg.append("g").attr( "id", "chart_canvas" );
+    const svg = d3.select("#chart-svg");
+    this.chart = svg.append("g").attr( "id", "chart_canvas" );
     // Rectangle to contain nodes in force layout
     this.chart.append("rect");
-    // var rect_width = this.current_vis_size;// + config.max_list_size;
     this.updateChartCanvas();
-
-    //chart.attr( "height", this.current_vis_size + "px" )
-    //chart.attr( "width",  this.current_vis_size + "px" );
   }
 
   updateChartCanvas() {
@@ -186,33 +170,17 @@ class Canvas {
   }
 
   initEventListeners() {
-    var cv = this;
-
     d3.select(window).on("resize", () => {
       if (headstart.is("timeline")) {
         return;
       }
-
-      let resized_scale_x = d3.scale.linear();
-      let resized_scale_y = d3.scale.linear();
-
-      resized_scale_x.domain([0, this.current_vis_size]);
-      resized_scale_y.domain([0, this.current_vis_size]);
-      this.calcChartSize();
-      this.setScaleRanges();
-      this.drawSvg(true);
-      this.updateChartCanvas();
-      resized_scale_x.range([0, this.current_vis_size]);
-      resized_scale_y.range([0, this.current_vis_size]);
-
-      mediator.publish("window_resize", resized_scale_x, resized_scale_y);
+      mediator.publish("window_resize");
     });
+
     // Info Modal Event Listener
     $('#info_modal').on('show.bs.modal', function() {
       var current_intro = config.intro;
-
       var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(config.intro);
-
       $(headstart).find('.modal-title ').text(intro.title);
       $(headstart).find('.modal-body').html(intro.body);
     });
@@ -328,9 +296,10 @@ class Canvas {
   }
 
   drawYGrid() {
+  const svg = d3.select("#chart-svg");
   var to = ((mediator.bubbles.length + 1) * this.current_vis_size);
   for (var i = 0; i <= to; i+= this.current_vis_size) {
-    this.svg.append("line")
+    svg.append("line")
       .attr("x1", i)
       .attr("x2", i)
       .attr("y1", "0")
@@ -339,8 +308,9 @@ class Canvas {
   }
 
   drawXGrid() {
+  const svg = d3.select("#chart-svg");
     for (var i = 0; i <= 900; i+=50) {
-      this.svg.append("line")
+      svg.append("line")
         .attr("x1", "0")
         .attr("x2", (mediator.bubbles.length + 1) * this.current_vis_size)
         .attr("y1", i)
@@ -353,15 +323,19 @@ class Canvas {
   checkForcePapers() {
     if (headstart.is("normal") || headstart.is("switchfiles")) {
       var checkPapers = window.setInterval(() => {
-        if (headstart.is("normal") || headstart.is("switchfiles")) {
-          if ((!papers.is("ready") && !papers.is("none")) || (mediator.current_bubble.is("startup") || mediator.current_bubble.is("none") || (mediator.current_bubble.is("start")) )) {
-            if (this.force_papers.alpha() <= 0 && this.force_areas.alpha() <= 0) {
-              papers.forced();
-              mediator.publish("check_force_papers");
-              window.clearInterval(checkPapers);
+        if (
+            ((!papers.is("ready") && !papers.is("none")) || 
+
+            (mediator.current_bubble.is("startup")|| 
+             mediator.current_bubble.is("none")   || 
+            (mediator.current_bubble.is("start"))   ))   &&
+
+            (this.force_papers.alpha() <= 0 && this.force_areas.alpha() <= 0)
+           ) {
+               papers.forced();
+               mediator.publish("check_force_papers");
+               window.clearInterval(checkPapers);
             }
-          }
-        }
       }, 10);
     }
   }
@@ -401,6 +375,23 @@ class Canvas {
     this.drawChartCanvas();
   }
 
+  setupResizedCanvas() {
+      // Set domain to old this.current_vis_size
+      mediator.resized_scale_x.domain([0, this.current_vis_size]);
+      mediator.resized_scale_y.domain([0, this.current_vis_size]);
+      this.calcChartSize(); // Calculate new this.current_vis_size
+      // Set range to new this.current_vis_size
+      mediator.resized_scale_x.range([0, this.current_vis_size]);
+      mediator.resized_scale_y.range([0, this.current_vis_size]);
+
+      // Call setScaleRanges again to set the new Range of 
+      // this . chart_x,y chart_x,y_circle, x,y, paper_x, paper_y,
+      // circle_size, diameter_size
+      this.setScaleRanges();
+      this.drawSvg();
+      this.updateChartCanvas();
+  }
+
   setupTimelineCanvas() {
     mediator.publish("setup_timeline_canvas");
 
@@ -412,7 +403,12 @@ class Canvas {
 
     this.drawGridTitles();
     this.initScales();
-    this.setupCanvas();
+    this.setOverflowToHiddenOrAuto("#main");
+    this.drawTitle();
+    this.calcChartSize();
+    this.setScaleRanges();
+    this.drawTimelineSvg();
+    this.drawChartCanvas();
     this.drawNormalViewLink();
     this.drawGridTitles(true);
     d3.select("#headstart-chart").attr("overflow-x", "scroll");

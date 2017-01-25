@@ -669,7 +669,7 @@ papers.framePaper = function(p) {
       .attr("class", "framed");
 };
 
-papers.onWindowResize = function(resized_scale_x, resized_scale_y) {
+papers.onWindowResize = function() {
       var area_title_objects = d3.selectAll("#area_title_object");
 
       area_title_objects.each((d) => {
@@ -700,10 +700,10 @@ papers.onWindowResize = function(resized_scale_x, resized_scale_y) {
 
       d3.selectAll("g.paper")
         .attr("transform", (d) => {
-          d.x_zoomed = resized_scale_x(d.x_zoomed);
-          d.y_zoomed = resized_scale_y(d.y_zoomed);
-          d.x = resized_scale_x(d.x);
-          d.y = resized_scale_y(d.y);
+          d.x_zoomed = mediator.resized_scale_x(d.x_zoomed);
+          d.y_zoomed = mediator.resized_scale_y(d.y_zoomed);
+          d.x = mediator.resized_scale_x(d.x);
+          d.y = mediator.resized_scale_y(d.y);
           if (mediator.is_zoomed === true) {
             return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
           } else {

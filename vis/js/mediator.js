@@ -294,10 +294,13 @@ MyMediator.prototype = {
         headstart.recordAction(id, action, user, type, timestamp, additional_params, post_data);
     },
 
-    window_resize: function(resized_scale_x, resized_scale_y) {
+    window_resize: function() {
+        mediator.resized_scale_x = d3.scale.linear();
+        mediator.resized_scale_y = d3.scale.linear();
+        mediator.manager.call('canvas', 'setupResizedCanvas', []);
         mediator.manager.call('list', 'fit_list_height', []);
-        mediator.manager.call('bubble', 'onWindowResize', [resized_scale_x, resized_scale_y]);
-        mediator.manager.call('papers', 'onWindowResize', [resized_scale_x, resized_scale_y]);
+        mediator.manager.call('bubble', 'onWindowResize', []);
+        mediator.manager.call('papers', 'onWindowResize', []);
     },
 
     check_force_papers: function() {

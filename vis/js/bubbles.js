@@ -71,13 +71,13 @@ BubblesFSM.prototype = {
         }
     },
 
-    onWindowResize: function(resized_scale_x, resized_scale_y) {
+    onWindowResize: function() {
         d3.selectAll("g.bubble_frame")
           .attr("transform", (d) => {
-            d.x_zoomed = resized_scale_x(d.x_zoomed);
-            d.y_zoomed = resized_scale_y(d.y_zoomed);
-            d.x = resized_scale_x(d.x);
-            d.y = resized_scale_y(d.y);
+            d.x_zoomed = mediator.resized_scale_x(d.x_zoomed);
+            d.y_zoomed = mediator.resized_scale_y(d.y_zoomed);
+            d.x = mediator.resized_scale_x(d.x);
+            d.y = mediator.resized_scale_y(d.y);
             if (mediator.is_zoomed === true) {
               return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
             } else {
@@ -231,6 +231,7 @@ BubblesFSM.prototype = {
     // sensible manner.
     // the sortCircle method achieves this in a rudamentary way for now.
     drawConnectionLines: function (circle) {
+        const svg = d3.select("#chart-svg");
         var class_name = $(circle).attr("class").replace("area ", "");
         var circles = $("." + class_name);
         var sorted_circles = this.sortCircles(circles);
@@ -240,7 +241,7 @@ BubblesFSM.prototype = {
         for (var i = 0; i < sorted_circles.length - 1; i++) {
             var circleStart = sorted_circles[i].getBoundingClientRect();
             var circleEnd = sorted_circles[i + 1].getBoundingClientRect();
-            canvas.svg.append("line")
+            svg.append("line")
                     .attr("x1", circleStart.right + window.pageXOffset)
                     .attr("x2", circleEnd.left + window.pageXOffset)
                     .attr("y1", circleStart.top)
