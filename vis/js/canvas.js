@@ -12,12 +12,12 @@ const imageTemplate = require("templates/misc/images_modal.handlebars");
 
 class Canvas {
   constructor() {
+    Object.assign(config, data_config);
     this.available_height = null;
     this.available_width = null;
     this.current_vis_size = null;
 
     // Build Headstart skeleton
-    Object.assign(config, data_config);
     this.viz = $("#" + config.tag);
     this.viz.addClass("headstart");
 
@@ -28,7 +28,7 @@ class Canvas {
   }
 
   getCurrentCircle(d) {
-    return canvas.chart.selectAll("circle")
+    mediator.current_circle = canvas.chart.selectAll("circle")
           .filter(function(x) {
               if (config.use_area_uri) {
                   return x.area_uri == d.area_uri;
@@ -76,7 +76,6 @@ class Canvas {
     }
   }
 
-  // Calculate all scales for the current map
   initScales() {
     // Init all scales
     this.chart_x = d3.scale.linear();

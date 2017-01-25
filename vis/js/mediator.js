@@ -28,13 +28,14 @@ class ModuleManager {
 
 var MyMediator = function() {
     // mediator
+    Object.assign(config, data_config);
     this.fileData = [];
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
     this.manager.registerModule(list, 'list');
-    //this.manager.registerModule(canvas, 'canvas');
+    this.manager.registerModule(canvas, 'canvas');
     this.manager.registerModule(io, 'io');
-    //this.manager.registerModule(papers, 'papers');
+    this.manager.registerModule(papers, 'papers');
     this.init();
     this.initState();
 };
@@ -187,7 +188,7 @@ MyMediator.prototype = {
 
     init_start_visualization: function(highlight_data, csv) {
         mediator.manager.registerModule(headstart, 'headstart');
-        //mediator.manager.registerModule(mediator.current_bubble, 'bubble');
+        mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.manager.call('canvas', 'setupCanvas', []);
         mediator.manager.call('io', 'prepareData', [highlight_data, csv]);
         mediator.manager.call('io', 'prepareAreas', []);
@@ -359,7 +360,7 @@ MyMediator.prototype = {
     },
 
     list_click_paper_list: function(d) {
-        mediator.current_circle = canvas.getCurrentCircle(d);
+        mediator.manager.call('canvas', 'getCurrentCircle', [d]);
         mediator.current_bubble.zoomin(mediator.current_circle.data()[0]);
         mediator.current_bubble.current = "hoverbig";
         mediator.manager.call('papers', 'mouseoverpaper', []);
