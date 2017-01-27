@@ -12,7 +12,7 @@ const common = {
 
     output: {
         path: path.resolve(__dirname, "dist"),
-        publicPath: "path/to/dist/",
+        publicPath: "//localhost/project-website/search/dist/",
         filename: 'bundle.js'
     },
 
@@ -106,7 +106,7 @@ switch (TARGET) {
                     // Define development specific SASS setup
                     {
                         test: /\.scss$/,
-                        loaders: ["style", "css?sourceMap", "sass?sourceMap"]
+                        loaders: ["style", "css", "sass?sourceMap"]
                     }
                 ]
             }
