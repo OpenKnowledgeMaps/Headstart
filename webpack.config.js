@@ -12,7 +12,7 @@ const common = {
 
     output: {
         path: path.resolve(__dirname, "dist"),
-        publicPath: "path/to/dist/",
+        publicPath: "//localhost/project-website/search/dist/",
         filename: 'bundle.js'
     },
 
@@ -36,7 +36,8 @@ const common = {
             }
         }, {
             test: /\.handlebars$/,
-            loader: "handlebars-loader"
+            loader: "handlebars-loader", 
+            query: { inlineRequires: '\/images\/' }
         }, {
             test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             loader: 'url-loader?limit=10000&minetype=application/font-woff&name=/assets/[name].[ext]'

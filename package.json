@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --progress --colors --watch",
-    "prod": "webpack --progress --colors --watch",
+    "prod": "webpack --progress --colors",
     "start": "webpack-dev-server -d --progress"
   },
   "repository": {
