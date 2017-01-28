@@ -12,7 +12,8 @@ const common = {
 
     output: {
         path: path.resolve(__dirname, "dist"),
-        publicPath: "//localhost/project-website/search/dist/",
+		//dev: specify a full path including protocol, production: specify full path excluding protocol
+        publicPath: "http://localhost/project-website/search/dist/",
         filename: 'bundle.js'
     },
 
