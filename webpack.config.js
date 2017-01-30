@@ -12,8 +12,8 @@ const common = {
 
     output: {
         path: path.resolve(__dirname, "dist"),
-		//dev: specify a full path including protocol
-		//production: specify full path excluding protocol
+		//dev: specify a full path _including_ protocol, e.g. http://localhost:8080/dist
+		//production: specify full path _excluding_ protocol, e.g. //mydomain.org/headstart/dist
         publicPath: "http://path/to/dist/",
         filename: 'bundle.js'
     },
