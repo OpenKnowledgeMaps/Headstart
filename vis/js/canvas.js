@@ -31,7 +31,6 @@ class Canvas {
       $(".vis-col").remove();
       this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
       if(config.render_list) {
-        debugger;
         $(".list-col").height(this.available_height);
         $("#papers_list").height(this.available_height);
       }

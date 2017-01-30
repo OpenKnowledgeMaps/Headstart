@@ -41,23 +41,23 @@ var MyMediator = function() {
     }
 
     this.init();
-    this.initState();
+    this.init_state();
 };
 
 MyMediator.prototype = {
     constructor: MyMediator,
     init: function() {
-        // init logic
+        // init logic and state switching
         this.modules = { papers: papers, list: list, io: io, canvas: canvas};
         this.mediator.subscribe("start_visualization", this.init_start_visualization);
-        this.mediator.subscribe("normalMode", this.set_normal_mode);
+        this.mediator.subscribe("normal_mode", this.set_normal_mode);
         this.mediator.subscribe("ontofile", this.init_ontofile);
         this.mediator.subscribe("ontotimeline", this.init_ontotimeline);
-        this.mediator.subscribe("ontotimeline_finish", this.finish_ontotimeline);
-        this.mediator.subscribe("registerBubbles", this.registerBubbles);
-        this.mediator.subscribe("initState", this.initState);
+        this.mediator.subscribe("ontotimeline_finish", this.ontotimeline_finish);
+        this.mediator.subscribe("register_bubbles", this.register_bubbles);
+        this.mediator.subscribe("to_timeline", this.to_timeline);
 
-        // data handling
+        // data transformation and calculation of bubble/paper sizes
         this.mediator.subscribe("prepare_data", this.io_prepare_data);
         this.mediator.subscribe("prepare_areas", this.io_prepare_areas);
 
@@ -65,8 +65,6 @@ MyMediator.prototype = {
         this.mediator.subscribe("get_data_from_files", this.io_async_get_data);
         this.mediator.subscribe("get_server_files", this.io_get_server_files);
 
-        // popup
-        this.mediator.subscribe("to_timeline", this.to_timeline);
 
         // list
         this.mediator.subscribe("list_toggle", this.list_toggle);
@@ -76,17 +74,19 @@ MyMediator.prototype = {
         this.mediator.subscribe("preview_mouseover", this.preview_mouseover);
         this.mediator.subscribe("preview_mouseout", this.preview_mouseout);
         this.mediator.subscribe("list_click_paper_list", this.list_click_paper_list);
+        // list --> bookmarks
+        this.mediator.subscribe("bookmark_added", this.bookmark_added);
+        this.mediator.subscribe("bookmark_removed", this.bookmark_removed);
 
-        // papers
+        // papers events
         this.mediator.subscribe("paper_click", this.paper_click);
         this.mediator.subscribe("paper_mouseover", this.paper_mouseover);
         this.mediator.subscribe("currentbubble_click", this.currentbubble_click);
-        this.mediator.subscribe("papers_leave_loading",
-          () => {return;});
+        this.mediator.subscribe("papers_leave_loading", () => {return;});
         this.mediator.subscribe("paper_holder_clicked", this.paper_holder_clicked);
         this.mediator.subscribe("paper_current_bubble_clicked", this.paper_current_bubble_clicked);
 
-        // bubbles
+        // bubbles events
         this.mediator.subscribe("bubble_mouseout", this.bubble_mouseout);
         this.mediator.subscribe("bubble_mouseover", this.bubble_mouseover);
         this.mediator.subscribe("bubble_click", this.bubble_click);
@@ -94,25 +94,25 @@ MyMediator.prototype = {
         this.mediator.subscribe("bubble_zoomin", this.bubble_zoomin);
         this.mediator.subscribe("bubble_zoomout", this.bubble_zoomout);
 
-        // bookmarks
-        this.mediator.subscribe("bookmark_added", this.bookmark_added);
-        this.mediator.subscribe("bookmark_removed", this.bookmark_removed);
-
         // misc
         this.mediator.subscribe("record_action", this.record_action);
+        this.mediator.subscribe("check_force_papers", this.check_force_papers);
+
+        // canvas events
         this.mediator.subscribe("window_resize", this.window_resize);
         this.mediator.subscribe("on_rect_mouseover", this.on_rect_mouseover);
         this.mediator.subscribe("chart_svg_click", this.chart_svg_click);
-        this.mediator.subscribe("check_force_papers", this.check_force_papers);
-        this.mediator.subscribe("setup_tofile_canvas", this.setup_tofile_canvas);
+
+        // needed in io.js = prepareData and prepareAreas to
+        // delegate some things to the canvas class
         this.mediator.subscribe("update_canvas_domains", this.update_canvas_domains);
-        this.mediator.subscribe("update_canvas_data", this.update_canvas_data);
-        this.mediator.subscribe("canvas_set_domain", this.canvas_set_domain);
-        this.mediator.subscribe("set_area_radii", this.set_area_radii);
         this.mediator.subscribe("set_new_area_coords", this.set_new_area_coords);
+        this.mediator.subscribe("set_area_radii", this.set_area_radii);
+        this.mediator.subscribe("canvas_set_domain", this.canvas_set_domain);
+        this.mediator.subscribe("update_canvas_data", this.update_canvas_data);
     },
 
-    initState: function() {
+    init_state: function() {
         MyMediator.prototype.current_zoom_node = null;
         MyMediator.prototype.current_enlarged_paper = null;
         MyMediator.prototype.current_file_number = 0;
@@ -124,7 +124,7 @@ MyMediator.prototype = {
         MyMediator.prototype.is_in_normal_mode = true;
     },
 
-    registerBubbles: function() {
+    register_bubbles: function() {
         mediator.bubbles = [];
         $.each(config.files, (index, elem) => {
             var bubble = new BubblesFSM();
@@ -178,6 +178,7 @@ MyMediator.prototype = {
         mediator.current_file = config.files[mediator.current_file_number];
         papers.current = "none";
         list.current = "none";
+        $("#list_explorer").empty();
         mediator.manager.call('canvas', 'setupToFileCanvas', []);
     },
 
@@ -198,7 +199,7 @@ MyMediator.prototype = {
     },
 
 
-    finish_ontotimeline: function() {
+    ontotimeline_finish: function() {
         mediator.manager.call('canvas', 'drawGrid', []);
         mediator.manager.call('canvas', 'initMouseListeners', []);
     },
@@ -369,10 +370,6 @@ MyMediator.prototype = {
         if (config.show_list) {
             mediator.manager.call('list', 'show', []);
         }
-    },
-
-    setup_tofile_canvas: function() {
-        $("#list_explorer").empty();
     },
 
     list_click_paper_list: function(d) {

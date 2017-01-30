@@ -33,7 +33,7 @@ IO.prototype = {
                 "file": config.server_url + "static" + json[i].file
               });
             }
-            mediator.publish("registerBubbles");
+            mediator.publish("register_bubbles");
             d3[config.input_format](mediator.current_bubble.file, callback);
           }
         });
