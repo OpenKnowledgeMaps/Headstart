@@ -3,7 +3,6 @@
 import StateMachine from 'javascript-state-machine';
 
 import config from 'config';
-import { headstart } from 'headstart';
 import { mediator } from 'mediator';
 import { papers} from 'papers';
 import { toBack, toFront, hideSibling} from 'helpers';
@@ -32,12 +31,12 @@ BubblesFSM.prototype = {
     draw: function () {
         var bubbleFrames = this.drawBubbleFrames();
 
-        if (headstart.is("normal") || headstart.is("switchfiles")) {
+      if (mediator.is_in_normal_mode) {
             this.positionBubbles(bubbleFrames);
             this.addClassNamesToCircles(bubbleFrames);
         }
 
-        if (headstart.is("timeline")) {
+        if (mediator.is_in_timeline_mode) {
             this.positionBubbles2(bubbleFrames, this.id);
             this.addClassNamesToCirclesForGrouping(bubbleFrames);
         }
@@ -138,7 +137,7 @@ BubblesFSM.prototype = {
             mediator.publish("record_action", d.id, "circle_mouseout", config.user_id, "none", null);
         });
 
-        if (headstart.is("normal") || headstart.is("switchfiles")) {
+        if (mediator.is_in_normal_mode) {
             this.initCircleClickListener();
         }
     },
@@ -162,7 +161,7 @@ BubblesFSM.prototype = {
     // initialize just the mousemovement listeners
     initMouseListenersForTitles: function () {
         d3.selectAll("#area_title").on("mouseover", function (d) {
-            if (headstart.current != "timeline") {
+            if (mediator.is_in_normal_mode) {
                 mediator.current_bubble.hideCircle(this);
             } else {
                 var underlying_circle = d3.selectAll("circle")
@@ -181,7 +180,7 @@ BubblesFSM.prototype = {
         });
 
         d3.selectAll("#area_title").on("mouseout", function () {
-            if (headstart.current != "timeline") {
+            if (mediator.is_in_timeline_mode) {
                                                 
                 //if mouse out to child element, abort
                 if(d3.event.target.parentElement == this) { 
@@ -736,7 +735,7 @@ BubblesFSM.prototype = {
 
     onstart: function (event, from, to, csv, recommendation_data) {
         mediator.publish('bubbles_update_data_and_areas', this);
-        if (headstart.is("timeline")) {
+        if (mediator.is_in_timeline_mode) {
             this.draw();
             this.initMouseListeners();
         }
@@ -744,7 +743,7 @@ BubblesFSM.prototype = {
     },
 
     onbeforemouseover: function () {
-        if (headstart.is("normal") || headstart.is("switchfiles")) {
+        if (mediator.is_in_normal_mode) {
             this.resetCircleDesign();
         }
     },
@@ -752,7 +751,7 @@ BubblesFSM.prototype = {
     onmouseover: function (event, from, to, d, circle) {
 
         mediator.current_circle = d3.select(circle);
-        if (headstart.is("timeline")) {
+        if (mediator.is_in_timeline_mode) {
             this.resetCircleDesignTimeLine(circle);
             this.highlightAllCirclesWithLike(circle);
             this.drawConnectionLines(circle);
@@ -777,7 +776,7 @@ BubblesFSM.prototype = {
     // we want to prevent the bubbles from switching from
     // hoversmall.
     onbeforemouseout: function (event, from, to, circle) {
-        if (this.is("zoomedin") || this.is("hoverbig")) {
+        if (this.is("zoomedin") ||this.is("hoverbig")) {
             return false;
         }
 
@@ -800,7 +799,7 @@ BubblesFSM.prototype = {
 
     onmouseout: function (event, from, to, d, circle) {
 
-        if (headstart.is("normal") || headstart.is("switchfiles")) {
+        if (mediator.is_in_normal_mode) {
             if (event == "notzoomedmouseout") {
                 this.resetCircleDesign();
                 if (!papers.is("loading")) {
@@ -812,7 +811,7 @@ BubblesFSM.prototype = {
             }
         }
 
-        if (headstart.is("timeline")) {
+        if (mediator.is_in_timeline_mode) {
             this.resetCircleDesignTimeLine(circle);
             this.removeAllConnections();
         } else {

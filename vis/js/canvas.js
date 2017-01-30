@@ -196,7 +196,7 @@ class Canvas {
 
     // Info Modal Event Listener
     $('#info_modal').on('show.bs.modal', function() {
-      var current_intro = headstart.intro;
+      var current_intro = config.intro;
       var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(headstart.intro)
       $('.modal-title').text(intro.title);
       $('.modal-body').html(intro.body);

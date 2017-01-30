@@ -14,8 +14,28 @@ var IO = function() {
 IO.prototype = {
     // get, transform and serve data to other modules
     async_get_data: function(file, input_format, callback) {
-        d3[input_format](file.file, (csv) => {
+        d3[input_format](file, (csv) => {
             callback(csv);
+        });
+    },
+
+    get_server_files: function(callback) {
+        $.ajax({
+          type: 'POST',
+          url: config.server_url + "services/staticFiles.php",
+          data: "",
+          dataType: 'JSON',
+          success: (json) => {
+            config.files = [];
+            for (let i = 0; i < json.length; i++) {
+              config.files.push({
+                "title": json[i].title,
+                "file": config.server_url + "static" + json[i].file
+              });
+            }
+            mediator.publish("registerBubbles");
+            d3[config.input_format](mediator.current_bubble.file, callback);
+          }
         });
     },
 

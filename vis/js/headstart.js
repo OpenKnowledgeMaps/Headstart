@@ -102,31 +102,17 @@ HeadstartFSM.prototype = {
 
   get_files: {
       local_files: function(that, setupVis) {
-        mediator.publish("get_data_from_files", config.input_format, setupVis);
+        let url = config.files[mediator.current_file_number].file;
+        mediator.publish("get_data_from_files", url, config.input_format, setupVis);
       },
 
       search_repos: function(that, setupVis) {
-        d3.json(config.server_url + "services/getLatestRevision.php?vis_id=" + mediator.current_bubble.file, setupVis);
+        let url = config.server_url + "services/getLatestRevision.php?vis_id=" + mediator.current_bubble.file; 
+        mediator.publish("get_data_from_files", url, 'json', setupVis);
       },
 
       server_files: function(that, setupVis) {
-          $.ajax({
-            type: 'POST',
-            url: config.server_url + "services/staticFiles.php",
-            data: "",
-            dataType: 'JSON',
-            success: (json) => {
-              config.files = [];
-              for (let i = 0; i < json.length; i++) {
-                config.files.push({
-                  "title": json[i].title,
-                  "file": config.server_url + "static" + json[i].file
-                });
-              }
-              mediator.publish("registerBubbles");
-              d3[config.input_format](mediator.current_bubble.file, setupVis);
-            }
-          });
+        mediator.publish("get_server_files", setupVis);
       },
 
       json_direct: function(that, setupVis) {
@@ -139,6 +125,7 @@ HeadstartFSM.prototype = {
   // the start event transitions headstart from "none" to "normal" view
   onstart: function() {
       this.checkBrowserVersions();
+      mediator.publish("normalMode");
       mediator.publish("registerBubbles");
       let hs = this;
       this.get_files[config.mode](hs, this.makeSetupVisualisation());

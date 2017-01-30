@@ -46,6 +46,7 @@ MyMediator.prototype = {
         // init logic
         this.modules = { papers: papers, list: list, io: io, canvas: canvas};
         this.mediator.subscribe("start_visualization", this.init_start_visualization);
+        this.mediator.subscribe("normalMode", this.set_normal_mode);
         this.mediator.subscribe("ontofile", this.init_ontofile);
         this.mediator.subscribe("ontotimeline", this.init_ontotimeline);
         this.mediator.subscribe("ontotimeline_finish", this.finish_ontotimeline);
@@ -58,6 +59,7 @@ MyMediator.prototype = {
 
         // async calls
         this.mediator.subscribe("get_data_from_files", this.io_async_get_data);
+        this.mediator.subscribe("get_server_files", this.io_get_server_files);
 
         // popup
         this.mediator.subscribe("to_timeline", this.to_timeline);
@@ -115,6 +117,7 @@ MyMediator.prototype = {
         MyMediator.prototype.circle_zoom = 0;
         MyMediator.prototype.is_zoomed = false;
         MyMediator.prototype.zoom_finished = false;
+        MyMediator.prototype.is_in_normal_mode = true;
     },
 
     registerBubbles: function() {
@@ -145,13 +148,15 @@ MyMediator.prototype = {
         this.mediator.publish(...arguments);
     },
 
-    io_async_get_data: function (input_format, callback) {
+    io_async_get_data: function (url, input_format, callback) {
         // WORKAROUND, if I try to add headstart earlier it doesn't work
         // TODO find reason
         mediator.modules.headstart = headstart;
-        mediator.current_file = config.files[mediator.current_file_number];
-        mediator.manager.call('io', 'async_get_data', [mediator.current_file, input_format, callback]);
+        mediator.manager.call('io', 'async_get_data', [url, input_format, callback]);
+    },
 
+    io_get_server_files: function(callback) {
+        mediator.manager.call('io', 'get_server_files', [callback]);
     },
 
     io_prepare_data: function (highlight_data, cur_fil_num) {
@@ -163,6 +168,8 @@ MyMediator.prototype = {
     },
 
     init_ontofile: function (file) {
+        mediator.is_in_normal_mode = true;
+        mediator.is_in_timeline_mode = false;
         mediator.current_file_number = file;
         mediator.current_bubble = mediator.bubbles[mediator.current_file_number];
         // mediator.manager.registerModule(mediator.current_bubble, 'bubble');
@@ -173,6 +180,8 @@ MyMediator.prototype = {
     },
 
     init_ontotimeline: function() {
+        mediator.is_in_normal_mode = false;
+        mediator.is_in_timeline_mode = true;
         mediator.current_bubble.current = "x";
         papers.current = "none";
         list.current = "none";
@@ -180,6 +189,12 @@ MyMediator.prototype = {
         $("#list_explorer").empty();
         mediator.manager.call('canvas', 'setupTimelineCanvas', []);
     },
+
+    set_normal_mode: function() {
+        mediator.is_in_normal_mode = true;
+        mediator.is_in_timeline_mode = false;
+    },
+
 
     finish_ontotimeline: function() {
         mediator.manager.call('canvas', 'drawGrid', []);
