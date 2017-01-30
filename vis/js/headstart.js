@@ -7,10 +7,6 @@ import StateMachine from 'javascript-state-machine';
 
 import config from 'config';
 import { mediator } from 'mediator';
-import { BubblesFSM } from 'bubbles';
-import { papers } from 'papers';
-import { list } from 'list';
-import { canvas } from 'canvas';
 
 import { getRealHeight } from "helpers";
 import { BrowserDetect, highlight } from "helpers";

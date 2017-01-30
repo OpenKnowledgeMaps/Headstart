@@ -59,6 +59,9 @@ var config = {
     is_force_papers: true,
     papers_force_alpha: 0.1,
 
+    render_list: true,
+    render_bubbles: true,
+
     // show
     show_timeline: true,
     show_dropdown: true,

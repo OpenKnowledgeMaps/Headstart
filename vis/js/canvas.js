@@ -27,6 +27,18 @@ class Canvas {
     this.viz.append(infoTemplate());
     this.viz.append(iFrameTemplate());
     this.viz.append(imageTemplate());
+    if (!config.render_bubbles) {
+      $(".vis-col").remove();
+      this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+      if(config.render_list) {
+        debugger;
+        $(".list-col").height(this.available_height);
+        $("#papers_list").height(this.available_height);
+      }
+    }
+    if (!config.render_list) {
+      $(".list-col").remove();
+    }
   }
 
   getCurrentCircle(d) {

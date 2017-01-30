@@ -32,10 +32,14 @@ var MyMediator = function() {
     this.fileData = [];
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
-    this.manager.registerModule(list, 'list');
-    this.manager.registerModule(canvas, 'canvas');
     this.manager.registerModule(io, 'io');
-    this.manager.registerModule(papers, 'papers');
+
+    if(config.render_list) this.manager.registerModule(list, 'list');
+    if(config.render_bubbles) {
+      this.manager.registerModule(canvas, 'canvas');
+      this.manager.registerModule(papers, 'papers');
+    }
+
     this.init();
     this.initState();
 };
@@ -132,7 +136,6 @@ MyMediator.prototype = {
         mediator.bubbles.push(bubble);
         });
         mediator.current_bubble = mediator.bubbles[mediator.current_file_number];
-        //mediator.manager.registerModule(mediator.current_bubble, 'bubble');
     },
 
     tryToCall: function(func) {
@@ -172,7 +175,6 @@ MyMediator.prototype = {
         mediator.is_in_timeline_mode = false;
         mediator.current_file_number = file;
         mediator.current_bubble = mediator.bubbles[mediator.current_file_number];
-        // mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.current_file = config.files[mediator.current_file_number];
         papers.current = "none";
         list.current = "none";
@@ -203,7 +205,7 @@ MyMediator.prototype = {
 
     init_start_visualization: function(highlight_data, csv) {
         mediator.manager.registerModule(headstart, 'headstart');
-        mediator.manager.registerModule(mediator.current_bubble, 'bubble');
+        if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.manager.call('canvas', 'setupCanvas', []);
         mediator.manager.call('io', 'prepareData', [highlight_data, csv]);
         mediator.manager.call('io', 'prepareAreas', []);
