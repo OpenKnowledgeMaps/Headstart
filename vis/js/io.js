@@ -19,11 +19,18 @@ IO.prototype = {
         });
     },
 
-    convertToFirstNameLastName: function (authors) {
-        var authors = authors.split(";");
+    convertToFirstNameLastName: function (authors_string) {
+        var authors = authors_string.split(";");
+        
+        for(var i = authors.length - 1; i >= 0; i--) {
+            if(authors[i] === "") {
+               authors.splice(i, 1);
+            }
+        }
+        
         var authors_string = "";
         var authors_short_string = "";
-        for (var i = 0; i < authors.length - 1; i++) {
+        for (var i = 0; i < authors.length; i++) {            
             var names = authors[i].trim().split(",");
             var last_name = names[0].trim();
             if (names.length > 1) {
@@ -35,7 +42,7 @@ IO.prototype = {
                 authors_short_string += last_name;
             }
 
-            if (i != authors.length - 2) {
+            if (i < (authors.length - 1)) {
                 authors_string += ", ";
                 authors_short_string += ", ";
             }

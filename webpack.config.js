@@ -12,7 +12,8 @@ const common = {
 
     output: {
         path: path.resolve(__dirname, "dist"),
-        publicPath: "path/to/dist/",
+		//dev: specify a full path including protocol, production: specify full path excluding protocol
+        publicPath: "http://localhost/project-website/search/dist/",
         filename: 'bundle.js'
     },
 
@@ -31,11 +32,13 @@ const common = {
             loader: 'babel-loader',
             exclude: /node_modules/,
             query: {
-                presets: ['es2015']
+                presets: ['es2015'],
+                plugins: ['transform-object-assign']
             }
         }, {
             test: /\.handlebars$/,
-            loader: "handlebars-loader"
+            loader: "handlebars-loader",
+            query: { inlineRequires: '\/images\/' }
         }, {
             test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             loader: 'url-loader?limit=10000&minetype=application/font-woff&name=/assets/[name].[ext]'

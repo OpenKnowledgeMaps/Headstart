@@ -1,8 +1,10 @@
+/* globals $, d3, data_config */
 import { getRealHeight } from "helpers";
 import config from 'config';
 import { headstart } from 'headstart';
 import { papers } from 'papers';
 import { mediator } from 'mediator';
+import { intros } from 'intro';
 
 const timelineTemplate = require('templates/timeline.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
@@ -194,10 +196,10 @@ class Canvas {
 
     // Info Modal Event Listener
     $('#info_modal').on('show.bs.modal', function() {
-      var current_intro = config.intro;
-      var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(config.intro);
-      $(headstart).find('.modal-title ').text(intro.title);
-      $(headstart).find('.modal-body').html(intro.body);
+      var current_intro = headstart.intro;
+      var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(headstart.intro)
+      $('.modal-title').text(intro.title);
+      $('.modal-body').html(intro.body);
     });
   }
 

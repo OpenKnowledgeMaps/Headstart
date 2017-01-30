@@ -1,5 +1,6 @@
 // StateMachine for List UI element in Headstart
 // Filename: list.js
+/* globals $ d3 */
 import StateMachine from 'javascript-state-machine';
 
 import config from 'config';
