@@ -121,7 +121,7 @@ BubblesFSM.prototype = {
                     }
                 });
 
-        zoom(mediator.current_circle.data()[0]);
+        this.zoom(mediator.current_circle.data()[0]);
         d3.event.stopPropagation(); // click stopps, "event bubbles up"
     },
 
