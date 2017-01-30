@@ -378,6 +378,7 @@ MyMediator.prototype = {
         mediator.current_bubble.zoomin(mediator.current_circle.data()[0]);
         mediator.current_bubble.current = "hoverbig";
         mediator.manager.call('papers', 'mouseoverpaper', []);
+        mediator.manager.call('list', 'enlargeListItem', [d]);
         mediator.current_enlarged_paper = d;
         mediator.manager.call('papers', 'framePaper', [d]);
     }

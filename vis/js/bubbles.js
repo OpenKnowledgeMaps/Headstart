@@ -31,7 +31,7 @@ BubblesFSM.prototype = {
     draw: function () {
         var bubbleFrames = this.drawBubbleFrames();
 
-      if (mediator.is_in_normal_mode) {
+        if (mediator.is_in_normal_mode) {
             this.positionBubbles(bubbleFrames);
             this.addClassNamesToCircles(bubbleFrames);
         }
