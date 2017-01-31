@@ -102,7 +102,7 @@ list.fit_list_height = function() {
   var paper_list_avail_height = $("#subdiscipline_title").outerHeight(true) + $("#headstart-chart").outerHeight(true) - $("#explorer_header").height() - 10;
   $("#papers_list").height(paper_list_avail_height);
   if (!config.render_bubbles) {
-    const available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - $("#explorer_header").height();
+    const available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - $("#explorer_header").height() - 20; 
     $(".list-col").width("100%");
     $("#papers_list").height(available_height);
   }
