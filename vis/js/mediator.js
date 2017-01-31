@@ -216,6 +216,7 @@ MyMediator.prototype = {
         mediator.manager.call('papers', 'start', [ mediator.current_bubble ]);
         mediator.manager.call('bubble', 'draw', []);
         mediator.manager.call('list', 'start');
+        if (!config.render_bubbles && config.show_list) mediator.manager.call('list', 'show');
         mediator.manager.call('canvas', 'checkForcePapers', []);
         mediator.manager.call('canvas', 'showInfoModal', []);
         mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
