@@ -435,7 +435,6 @@ class Canvas {
   }
 
   setupToFileCanvas() {
-    mediator.publish("setup_tofile_canvas");
     this.force_areas.stop();
     this.force_papers.stop();
     // clear the canvas & list
