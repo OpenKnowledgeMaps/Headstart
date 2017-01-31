@@ -103,6 +103,7 @@ list.fit_list_height = function() {
   $("#papers_list").height(paper_list_avail_height);
   if (!config.render_bubbles) {
     const available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - $("#explorer_header").height();
+    $(".list-col").width("100%");
     $("#papers_list").height(available_height);
   }
 };
