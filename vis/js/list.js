@@ -5,7 +5,7 @@ import StateMachine from 'javascript-state-machine';
 
 import config from 'config';
 import { mediator } from 'mediator';
-import { debounce, highlight, clear_highlights, sortBy } from 'helpers';
+import { debounce, highlight, clear_highlights, sortBy, getRealHeight } from 'helpers';
 
 const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
@@ -95,17 +95,30 @@ list.drawList = function() {
     }
 
     this.fit_list_height();
+    if(!config.render_bubbles) d3.select(window).on("resize", () => { this.fit_list_height(); });
+
     this.papers_list = d3.select("#papers_list");
 };
 
 list.fit_list_height = function() {
-  var paper_list_avail_height = $("#subdiscipline_title").outerHeight(true) + $("#headstart-chart").outerHeight(true) - $("#explorer_header").height() - 10;
-  $("#papers_list").height(paper_list_avail_height);
+  var paper_list_avail_height = null;
+  const PAPER_LIST_CORRECTION = 10;
   if (!config.render_bubbles) {
-    const available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - $("#explorer_header").height() - 20; 
+    var parent_height = getRealHeight($("#" + config.tag));
+    var available_height = 0;
+    if (parent_height === 0) {
+      available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    } else {
+      available_height = $("#" + config.tag).height();
+    }
+    available_height = available_height - 1;
     $(".list-col").width("100%");
-    $("#papers_list").height(available_height);
+    $(".container-headstart").css({"min-width":"300px"});
+    paper_list_avail_height = available_height - $("#explorer_header").height() - PAPER_LIST_CORRECTION;
+  } else {
+    paper_list_avail_height = $("#subdiscipline_title").outerHeight(true) + $("#headstart-chart").outerHeight(true) - $("#explorer_header").height() - PAPER_LIST_CORRECTION;
   }
+  $("#papers_list").height(paper_list_avail_height);
 };
 
 let addSortOption = function(parent, sort_option, selected) {
