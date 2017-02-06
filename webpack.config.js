@@ -14,7 +14,9 @@ const common = {
         path: path.resolve(__dirname, "dist"),
 		//dev: specify a full path including protocol, production: specify full path excluding protocol
         publicPath: "http://localhost/project-website/search/dist/",
-        filename: 'bundle.js'
+        filename: 'bundle.js',
+        libraryTarget: 'var',
+        library: 'hstart'
     },
 
     module: {

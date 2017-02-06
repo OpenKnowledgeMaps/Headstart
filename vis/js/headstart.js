@@ -10,13 +10,14 @@ import { mediator } from 'mediator';
 
 import { getRealHeight } from "helpers";
 import { BrowserDetect, highlight } from "helpers";
-  
+
 import 'hypher';
 import 'lib/en.js';
 import 'dotdotdot';
 
-export var HeadstartFSM = function() {
+export var HeadstartFSM = function(json_direct_data) {
   this.VERSION = 2.9;
+  mediator.json_direct_data = json_direct_data;
 }; // end HeadstartFSM constructor
 
 HeadstartFSM.prototype = {
@@ -103,7 +104,7 @@ HeadstartFSM.prototype = {
       },
 
       search_repos: function(that, setupVis) {
-        let url = config.server_url + "services/getLatestRevision.php?vis_id=" + mediator.current_bubble.file; 
+        let url = config.server_url + "services/getLatestRevision.php?vis_id=" + mediator.current_bubble.file;
         mediator.publish("get_data_from_files", url, 'json', setupVis);
       },
 
@@ -111,8 +112,11 @@ HeadstartFSM.prototype = {
         mediator.publish("get_server_files", setupVis);
       },
 
-      json_direct: function(that, setupVis) {
-        setupVis(mediator.current_bubble.file);
+      json_direct: function() {
+        config.files = mediator.json_direct_data;
+        mediator.publish("register_bubbles");
+        mediator.current_bubble.data = mediator.current_bubble.file;
+        mediator.publish("start_visualization", null, mediator.current_bubble.data);
       }
   },
 

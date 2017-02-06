@@ -339,7 +339,7 @@ class Canvas {
   // calls itself over and over until the forced layout of the papers
   // is established
   checkForcePapers() {
-    if (headstart.is("normal") || headstart.is("switchfiles")) {
+    if (mediator.is_in_normal_mode) {
       var checkPapers = window.setInterval(() => {
         if (
             ((!papers.is("ready") && !papers.is("none")) || 
