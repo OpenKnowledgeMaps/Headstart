@@ -57,7 +57,7 @@ Three lines will set up the basics of Headstart.
 
     <div id="some_id" class="headstart"></div>                             // Headstart's div
     <script type="text/javascript" src="path/to/data-config.js"></script>  // Runtime Config
-    <script type="text/javascript" src="path/to/dist/bundle.js"></script>  // The Core Lib
+    <script type="text/javascript" src="path/to/dist/headstart.js"></script>  // The Core Lib
 
 
 ## Input Data Format

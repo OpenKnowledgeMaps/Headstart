@@ -118,7 +118,6 @@ HeadstartFSM.prototype = {
       }
   },
 
-
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
   onstart: function() {

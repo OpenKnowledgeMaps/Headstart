@@ -1,4 +1,3 @@
-/* globals $, d3, data_config */
 import { getRealHeight } from "helpers";
 import config from 'config';
 import { headstart } from 'headstart';

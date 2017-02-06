@@ -4,7 +4,6 @@ import config from 'config';
 import { papers } from 'papers';
 import { BubblesFSM } from 'bubbles';
 import { list } from 'list';
-import { sortBy } from 'helpers';
 import { io } from 'io';
 import { canvas } from 'canvas';
 
