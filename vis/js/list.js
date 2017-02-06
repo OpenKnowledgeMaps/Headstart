@@ -220,34 +220,34 @@ list.populateMetaData = function(nodes) {
                 return d.outlink;
             })
             .on("click", function() { d3.event.stopPropagation(); });
-        
+
         list_metadata.select("#open-access-logo_list")
                 .style("display", function (d) {
                     if (d.oa === false) {
                         return "none";
-                    } 
+                    }
                 });
-                
+
         var paper_link = list_metadata.select(".link2");
-        
+
         paper_link.style("display", function (d) {
                     if (d.oa === false) {
                         return "none";
                     }
                 });
-                
+
         paper_link.attr("href", function (d) {
             return d.oa_link;
         });
-        
+
         list_metadata.select(".list_authors")
             .html(function(d) {
                 return d.authors_string; });
-        
+
         list_metadata.select(".list_published_in")
             .html(function(d) {
                 return d.published_in; });
-        
+
         list_metadata.select(".list_pubyear")
             .html(function(d) {
                 return " (" + d.year + ")"; });
@@ -272,7 +272,7 @@ list.populateMetaData = function(nodes) {
                 .attr("id", "bookmark")
                 .html("Add to schedule")
                 .on("click", function(d) {
-                    mediator.publish("bookmark_added", d);    
+                    mediator.publish("bookmark_added", d);
                     d3.event.stopPropagation();
                 });
         }
@@ -298,7 +298,7 @@ list.createAbstracts = function(nodes) {
                 return this.createAbstract(d, config.abstract_small);
             });
     });
-    
+
     this.createHighlights(this.current_search_words);
 };
 
@@ -337,7 +337,7 @@ list.populateList = function() {
     });
 
     var paper_nodes = this.getPaperNodes(list_data);
-    
+
     this.populateMetaData(paper_nodes);
     this.createAbstracts(paper_nodes);
     this.populateReaders(paper_nodes);
@@ -372,7 +372,7 @@ list.filterList = function (search_words) {
                     return true;
                 }
             });
-    
+
     var data_circle_papers = filtered_data_papers
                 .filter(function (d) {
                             if (mediator.is_zoomed === true) {
@@ -401,10 +401,10 @@ list.filterList = function (search_words) {
     data_circle_papers.style("display", "inline");
 
     mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words);
-    
+
     this.hideEntries(filtered_data_list, search_words);
     this.hideEntries(filtered_data_papers, search_words);
-    
+
 };
 
 list.hideEntries = function(object, search_words) {
@@ -418,8 +418,8 @@ list.hideEntries = function(object, search_words) {
                 var count = 0;
                 if (typeof abstract !== 'undefined') {
                     while (word_found && count < search_words.length) {
-                        word_found = (abstract.indexOf(search_words[count]) !== -1 || 
-                            title.indexOf(search_words[count]) !== -1 || 
+                        word_found = (abstract.indexOf(search_words[count]) !== -1 ||
+                            title.indexOf(search_words[count]) !== -1 ||
                             authors.indexOf(search_words[count]) !== -1 ||
                             journals.indexOf(search_words[count]) !== -1);
                         count++;
@@ -449,7 +449,7 @@ list.createHighlights = function (search_words) {
 list.createAbstract = function(d, cut_off) {
     if (typeof d.paper_abstract === "undefined")
         return "";
-    
+
     if(cut_off) {
         if(d.paper_abstract.length > cut_off) {
             return d.paper_abstract.substr(0,cut_off) + "...";
@@ -533,7 +533,7 @@ list.enlargeListItem = function(d) {
 
     this.papers_list.selectAll("#list_abstract")
                     .html(this.createAbstract(d,config.abstract_large));
-    
+
     this.createHighlights(this.current_search_words);
 
     this.setImageForListHolder(d);
@@ -565,11 +565,11 @@ list.reset = function() {
     .html((d) => {
         return this.createAbstract(d, config.abstract_small);
     });
-    
+
     this.createHighlights(this.current_search_words);
-    
+
     d3.selectAll(".list_entry_full").attr("class", "list_entry");
-    
+
     if (mediator.current_enlarged_paper !== null) {
       this.notSureifNeeded();
     }
@@ -589,7 +589,7 @@ list.checkIfFileAvailable = function(fileurl) {
 // display a preview image of paper and page if preview image is
 // available
 list.loadAndAppendImage = function(image_src, page_number) {
-    if(this.checkIfFileAvailable(image_src)) {    
+    if(this.checkIfFileAvailable(image_src)) {
         let paper_frame = d3.select("#images_holder");
 
         paper_frame.append("div")
@@ -621,7 +621,7 @@ list.writePopup = function(pdf_url) {
 };
 
 
-list.populateOverlay = function(d) {   
+list.populateOverlay = function(d) {
     let this_d = d;
     if (config.preview_type == "image") {
         $("#spinner-images").show();
@@ -639,14 +639,14 @@ list.populateOverlay = function(d) {
             }
             counter++;
         }
-        
+
         $("#spinner-images").hide();
-        $("#images_holder").show();        
+        $("#images_holder").show();
     } else if (config.preview_type == "pdf") {
         let filename = this_d.id + ".PDF";
         let pdf_url = filename.replace("/", "__");
         $("#status").hide();
-         
+
         if (this.checkIfFileAvailable(config.server_url + "paper_preview/" + pdf_url)) {
             this.writePopup(config.server_url + "paper_preview/" + pdf_url);
             $("#iframe_modal").modal();
@@ -654,7 +654,7 @@ list.populateOverlay = function(d) {
             $("#spinner-iframe").show();
             $("#pdf_iframe").hide();
             $("#iframe_modal").modal();
-            
+
             let article_url = d.oa_link;
 
             $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url, (data) => {
@@ -665,7 +665,7 @@ list.populateOverlay = function(d) {
                      $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
                      $("#status").show();
                 }
-                
+
             }).fail((d, textStatus, error) => {
                 console.error("getJSON failed, status: " + textStatus + ", error: "+error);
                 $("#spinner-iframe").hide();
@@ -682,7 +682,7 @@ list.setImageForListHolder = function(d) {
         .filter(function(x) {
             return (x.id == d.id);
         });
-    
+
     let image_src = "paper_preview/" + d.id + "/page_1.png";
     let pdf_preview = require("images/preview_pdf.png");
     if (config.preview_type == "image") {
@@ -706,13 +706,13 @@ list.setImageForListHolder = function(d) {
             .html("Click here to open preview")
             .on("click", function() {
                 mediator.publish("list_show_popup", d);
-            });        
+            });
         }
     } else {
         if(d.oa === false) {
             return;
         }
-        
+
         current_item.append("div")
             .attr("id", "preview_image")
             .style("width", config.preview_image_width_list + "px")
@@ -743,19 +743,19 @@ list.setImageForListHolder = function(d) {
 };
 
 list.createOutlink = function(d) {
-    
+
     var url = false;
     if (config.url_prefix !== null) {
         url = config.url_prefix + d.url;
     } else if (typeof d.url != 'undefined') {
         url = d.url;
     }
-    
+
     return url;
 };
 
 list.title_click = function (d) {
-        
+
       var url = d.outlink;
       if (url === false) {
           d3.event.stopPropagation();

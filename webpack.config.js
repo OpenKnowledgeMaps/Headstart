@@ -74,7 +74,7 @@ const common = {
 
     resolve: {
         alias: {
-            // 
+            //
             'handlebars': 'handlebars/dist/handlebars.js',
             'dotdotdot': 'jquery-dotdotdot/src/jquery.dotdotdot.min.js',
             'hypher': 'hypher/dist/jquery.hypher.js',

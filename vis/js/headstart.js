@@ -1,7 +1,5 @@
 // Headstart
 // filename: headstart.js
-/* jshint undef: false */
-/* globals data_config, alert, escape, d3, console*/
 
 import StateMachine from 'javascript-state-machine';
 

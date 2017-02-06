@@ -233,8 +233,8 @@ class Canvas {
     });
 
     $("#" + config.tag).bind('click', (event) => {
-      if(event.target.className === "container-headstart" || 
-         event.target.className === "vis-col"             || 
+      if(event.target.className === "container-headstart" ||
+         event.target.className === "vis-col"             ||
          event.target.id        === "headstart-chart") {
         mediator.publish('chart_svg_click');
       }
@@ -342,10 +342,10 @@ class Canvas {
     if (mediator.is_in_normal_mode) {
       var checkPapers = window.setInterval(() => {
         if (
-            ((!papers.is("ready") && !papers.is("none")) || 
+            ((!papers.is("ready") && !papers.is("none")) ||
 
-            (mediator.current_bubble.is("startup")|| 
-             mediator.current_bubble.is("none")   || 
+            (mediator.current_bubble.is("startup")||
+             mediator.current_bubble.is("none")   ||
             (mediator.current_bubble.is("start"))   ))   &&
 
             (this.force_papers.alpha() <= 0 && this.force_areas.alpha() <= 0)
@@ -402,7 +402,7 @@ class Canvas {
       mediator.resized_scale_x.range([0, this.current_vis_size]);
       mediator.resized_scale_y.range([0, this.current_vis_size]);
 
-      // Call setScaleRanges again to set the new Range of 
+      // Call setScaleRanges again to set the new Range of
       // this . chart_x,y chart_x,y_circle, x,y, paper_x, paper_y,
       // circle_size, diameter_size
       this.setScaleRanges();
@@ -484,7 +484,7 @@ class Canvas {
       d.orig_y = d.y;
       // scale x and y
       d.x = canvas.chart_x(d.x);
-    });      
+    });
   }
 
   setDomain(prop, extent) {

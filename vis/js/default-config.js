@@ -90,7 +90,7 @@ var config = {
     conference_id: 0,
     user_id: 0,
     max_recommendations: 10,
-    
+
     //intro
     intro: "intro_hs",
 
@@ -105,7 +105,7 @@ var config = {
             year: "date",
             authors: "authors",
             title: "title",
-            default_title: 'Overview of <span id="num_articles"></span> articles', 
+            default_title: 'Overview of <span id="num_articles"></span> articles',
             area: "Area",
 			no_title: "No title"
         },
