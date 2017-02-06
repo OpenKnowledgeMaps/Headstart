@@ -5,11 +5,6 @@ import { papers } from 'papers';
 import { mediator } from 'mediator';
 import { intros } from 'intro';
 
-const timelineTemplate = require('templates/timeline.handlebars');
-const headstartTemplate = require("templates/headstart.handlebars");
-const infoTemplate = require("templates/misc/info_modal.handlebars");
-const iFrameTemplate = require("templates/misc/iframe_modal.handlebars");
-const imageTemplate = require("templates/misc/images_modal.handlebars");
 
 class Canvas {
   constructor() {
@@ -18,25 +13,6 @@ class Canvas {
     this.available_width = null;
     this.current_vis_size = null;
 
-    // Build Headstart skeleton
-    this.viz = $("#" + config.tag);
-    this.viz.addClass("headstart");
-
-    this.viz.append(headstartTemplate());
-    this.viz.append(infoTemplate());
-    this.viz.append(iFrameTemplate());
-    this.viz.append(imageTemplate());
-    if (!config.render_bubbles) {
-      $(".vis-col").remove();
-      this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-      if(config.render_list) {
-        $(".list-col").height(this.available_height);
-        $("#papers_list").height(this.available_height);
-      }
-    }
-    if (!config.render_list) {
-      $(".list-col").remove();
-    }
   }
 
   getCurrentCircle(d) {

@@ -7,6 +7,12 @@ import { list } from 'list';
 import { io } from 'io';
 import { canvas } from 'canvas';
 
+const timelineTemplate = require('templates/timeline.handlebars');
+const headstartTemplate = require("templates/headstart.handlebars");
+const infoTemplate = require("templates/misc/info_modal.handlebars");
+const iFrameTemplate = require("templates/misc/iframe_modal.handlebars");
+const imageTemplate = require("templates/misc/images_modal.handlebars");
+
 class ModuleManager {
     constructor() {
         this.modules = {};
@@ -197,13 +203,13 @@ MyMediator.prototype = {
         mediator.is_in_timeline_mode = false;
     },
 
-
     ontotimeline_finish: function() {
         mediator.manager.call('canvas', 'drawGrid', []);
         mediator.manager.call('canvas', 'initMouseListeners', []);
     },
 
     init_start_visualization: function(highlight_data, csv) {
+        mediator.buildHeadstartHTML();
         mediator.manager.registerModule(headstart, 'headstart');
         if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.manager.call('canvas', 'setupCanvas', []);
@@ -243,6 +249,28 @@ MyMediator.prototype = {
         mediator.manager.call('canvas', 'setNewAreaCoords', [new_area, area]);
     },
 
+    buildHeadstartHTML: function() {
+        // Build Headstart skeleton
+        this.viz = $("#" + config.tag);
+        this.viz.addClass("headstart");
+
+        this.viz.append(headstartTemplate());
+        this.viz.append(infoTemplate());
+        this.viz.append(iFrameTemplate());
+        this.viz.append(imageTemplate());
+        if (!config.render_bubbles) {
+            $(".vis-col").remove();
+            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            if(config.render_list) {
+                $(".list-col").height(this.available_height);
+                $("#papers_list").height(this.available_height);
+            }
+        }
+        if (!config.render_list) {
+            $(".list-col").remove();
+        }
+    },
+
     bubbles_update_data_and_areas: function(bubbles) {
         bubbles.data = io.data;
         bubbles.areas = io.areas;
@@ -252,7 +280,6 @@ MyMediator.prototype = {
     to_timeline: function() {
         mediator.manager.call('headstart', 'totimeline', []);
     },
-
 
     list_toggle: function() {
         mediator.manager.call('list', 'toggle', []);
