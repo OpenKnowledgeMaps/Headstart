@@ -1,11 +1,11 @@
 circle {
-    fill: $light-blue;
+    fill: $circle-fill;
     fill-opacity: 1;
-    stroke: $dark-blue;
+    stroke: $circle-stroke;
     stroke-width: 1px;
 
     &.zoom_unselected {
-        fill: $dark-blue;
+        fill: $circle-zoom-unselected-fill;
         fill-opacity: .1;
         stroke-width: 0;
         cursor: auto;
@@ -13,12 +13,12 @@ circle {
 
     &.zoom_selected {
         fill-opacity: 1;
-        fill: $lightest-blue;
+        fill: $circle-zoom-selected-fill;
         stroke-width: 2px;
     }
 
     &.area {
-        fill: $light-blue;
+        fill: $circle-area;
         fill-opacity: .9;
     }
 }
@@ -55,7 +55,7 @@ circle {
         padding: 0;
         text-align: center;
         text-transform: none;
-        color: $okm-blue;
+        color: $area-title-h2;
         background-color: transparent;
         cursor: default;
     }
@@ -68,7 +68,7 @@ circle {
             }
         }
     }
-    
+
     @media screen and (max-height: 1600px) {
 
         #area_title {
@@ -78,7 +78,7 @@ circle {
             }
         }
     }
-    
+
     @media screen and (max-width: 1200px) {
 
         #area_title {
@@ -88,7 +88,7 @@ circle {
             }
         }
     }
-    
+
     @media screen and (max-height: 1200px) {
 
         #area_title {
@@ -108,7 +108,7 @@ circle {
             }
         }
     }
-    
+
     @media screen and (max-height: 600px) {
 
         #area_title {
