@@ -33,7 +33,6 @@ class ModuleManager {
 
 var MyMediator = function() {
     // mediator
-    Object.assign(config, data_config);
     this.fileData = [];
     this.mediator = new Mediator();
     this.manager = new ModuleManager();

@@ -8,7 +8,6 @@ import { intros } from 'intro';
 
 class Canvas {
   constructor() {
-    Object.assign(config, data_config);
     this.available_height = null;
     this.available_width = null;
     this.current_vis_size = null;
