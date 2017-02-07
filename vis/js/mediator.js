@@ -227,6 +227,7 @@ MyMediator.prototype = {
         mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
         mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
         mediator.manager.call('bubble', 'initMouseListeners', []);
+        mediator.manager.call('canvas', 'drawTitle', []);
     },
 
     update_canvas_domains: function(data) {

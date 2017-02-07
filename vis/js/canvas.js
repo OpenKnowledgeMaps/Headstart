@@ -360,12 +360,12 @@ class Canvas {
 
   setupCanvas() {
     this.setOverflowToHiddenOrAuto("#main");
-    this.drawTitle();
     this.calcChartSize();
     this.initScales();
     this.setScaleRanges();
     this.drawSvg();
     this.drawChartCanvas();
+    this.drawTitle();
   }
 
   setupResizedCanvas() {

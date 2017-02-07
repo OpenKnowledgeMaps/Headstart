@@ -126,7 +126,7 @@ switch (TARGET) {
                 }]
             },
             plugins: [
-                new ExtractTextPlugin("style.css"),
+                new ExtractTextPlugin("headstart.css"),
                 new webpack.optimize.UglifyJsPlugin({
                     compress: {
                         warnings: false
