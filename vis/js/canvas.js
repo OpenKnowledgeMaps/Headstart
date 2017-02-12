@@ -183,8 +183,8 @@ class Canvas {
     $('#info_modal').on('show.bs.modal', function() {
       var current_intro = config.intro;
       var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(headstart.intro)
-      $('.modal-title').text(intro.title);
-      $('.modal-body').html(intro.body);
+      $('#info-title').text(intro.title);
+      $('#info-body').html(intro.body);
     });
   }
 
