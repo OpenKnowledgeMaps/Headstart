@@ -79,7 +79,7 @@ var config = {
     zoomout_transition: 750,
 
     // misc
-    debug: true,
+    debug: false,
     debounce: 50,
     service: "none",
     language: "eng",
