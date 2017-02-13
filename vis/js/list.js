@@ -510,7 +510,6 @@ list.removeBookmark = function(d)  {
 };
 
 list.makeTitleClickable = function(d) {
-    this.enlargeListItem(d);
     mediator.publish("list_click_paper_list", d);
     mediator.publish("record_action", d.id, "click_paper_list", config.user_id, d.bookmarked + " " + d.recommended, null);
     d3.event.stopPropagation();
