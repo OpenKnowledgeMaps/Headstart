@@ -61,12 +61,12 @@ Three lines will set up the basics of Headstart.
     <script type="text/javascript" src="path/to/data-config.js"></script>  // Runtime Config
     <script type="text/javascript" src="path/to/dist/headstart.js"></script>  // The Core Lib
     
-Now, the only thing needed to run Headstart, is to call the `headstart.start()`:
+Now, the only thing needed to run Headstart, is to call `headstart.start()`:
 
     <script type="text/javascript">
-	$(document).ready(function() {    
+        $(document).ready(function() {    
         	headstart.start();
-	});
+        });
     </script>
 
 ## Deploying the client
