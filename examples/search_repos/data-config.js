@@ -2,7 +2,7 @@ var data_config = {
     tag: "visualization",
     mode: "search_repos",
     
-    server_url: "http://localhost/vis/js/headstart/server/",
+    server_url: "/path/to/headstart/server/",
 
     service: "pubmed",
 
