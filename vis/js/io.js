@@ -229,7 +229,7 @@ IO.prototype = {
                 return d.x;
             });
             var mean_y = d3.mean(papers, function (d) {
-                return d.y;
+                return d.y*(-1);
             });
 
             area_x.push(mean_x);
