@@ -5,9 +5,8 @@ import StateMachine from 'javascript-state-machine';
 import 'hypher';
 import 'lib/en.js';
 
-import { headstart } from 'headstart';
+import config from 'config';
 import { mediator } from 'mediator';
-import { list } from 'list';
 import { toFront } from 'helpers';
 import { canvas } from 'canvas';
 
@@ -74,11 +73,15 @@ export const papers = StateMachine.create({
     ],
 
     callbacks: {
-        onstart: function (event, from, to, bubbles) {
+        onstart: function (event, from, to) {
             this.force_stopped = false;
-            this.drawPapers(bubbles);
-            this.applyForce(bubbles);
+            this.drawPapers();
+            this.applyForce();
             this.initPaperClickHandler();
+        },
+
+        onleaveloading: function() {
+            mediator.publish("papers_leave_loading");
         },
 
         onbeforeclick: function () {
@@ -88,8 +91,8 @@ export const papers = StateMachine.create({
         },
 
         onclick: function (event, from, to, d) {
-            if (!headstart.is_zoomed) {
-                return headstart.bubbles.makePaperClickable(d);
+            if (!mediator.is_zoomed) {
+                return mediator.bubbles.makePaperClickable(d);
             }
         },
 
@@ -112,16 +115,15 @@ export const papers = StateMachine.create({
                 this.shrinkPaper(d, holder_div);
             }
 
-            headstart.bubbles[headstart.current_file_number].mouseout();
+            mediator.current_bubble.mouseout();
         }
 
     }
 });
 
-papers.drawPapers = function (bubbles) {
-
+papers.drawPapers = function () {
     var nodes = canvas.chart.selectAll("g.node")
-            .data(bubbles.data)
+            .data(mediator.current_bubble.data)
             .enter().append("g")
             .attr("class", "paper")
             .attr("transform", function (d) {
@@ -136,7 +138,7 @@ papers.drawPapers = function (bubbles) {
     d3.selectAll("#article_metadata").select(".paper_holder").select(".metadata");
     var readers = d3.selectAll("#article_metadata").select(".readers");
     
-    if (headstart.content_based) {
+    if (config.content_based) {
         readers.style("display", "none");
     }
     
@@ -145,21 +147,21 @@ papers.drawPapers = function (bubbles) {
                 if(d.oa === true) {
                     return "20px";
                 }
-            })
+            });
     
     d3.selectAll("#article_metadata").select("#open-access-logo")
             .style("display", function (d) {
                 if(d.oa === false) {
                     return "none";
                 }
-            })
+            });
     
     d3.selectAll("#article_metadata").select("#outlink")
             .style("display", function (d) {
                 if(d.oa === false) {
                     return "none";
                 }
-            })
+            });
     
 };
 
@@ -211,11 +213,11 @@ papers.initPaperClickHandler = function () {
 
 papers.paper_click = function (d) {
     if (!this.is("loading")) {
-        if (!headstart.is_zoomed) {
+        if (!mediator.is_zoomed) {
             var current_node = canvas.chart.selectAll("circle")
                     .filter(function (x) {
                         if (d !== null) {
-                            if (headstart.use_area_uri) {
+                            if (config.use_area_uri) {
                                 return (x.area_uri == d.area_uri);
                             } else {
                                 return (x.title == d.area);
@@ -226,7 +228,7 @@ papers.paper_click = function (d) {
                     });
 
             d3.event.stopPropagation();
-            headstart.bubbles[headstart.current_file_number].zoomin(current_node.data()[0]);
+            mediator.current_bubble.zoomin(current_node.data()[0]);
         }
     }
 };
@@ -246,10 +248,10 @@ papers.prepareForeignObject = function (nodes) {
             }).append("xhtml:body")
             .html(function (d) {
                 return paperTemplate({
-                    'metadata_height': (headstart.content_based) ? (d.height) : (d.height * 0.75),
+                    'metadata_height': (config.content_based) ? (d.height) : (d.height * 0.75),
                     'metadata_width': d.width * 0.8,
                     'd': d,
-                    'base_unit': headstart.base_unit
+                    'base_unit': config.base_unit
                 });
             });
 
@@ -263,11 +265,11 @@ papers.prepareForeignObject = function (nodes) {
 papers.createPaperPath = function (x, y, width, height, correction_x, correction_y) {
 
     if (!correction_x) {
-        correction_x = headstart.dogear_width;
+        correction_x = config.dogear_width;
     }
 
     if (!correction_y) {
-        correction_y = headstart.dogear_height;
+        correction_y = config.dogear_height;
     }
 
     var h = width * (1 - correction_x);
@@ -281,15 +283,15 @@ papers.createPaperPath = function (x, y, width, height, correction_x, correction
     return path;
 };
 
-papers.applyForce = function (bubbles) {
+papers.applyForce = function () {
     let self = this;
 
-    headstart.force_areas.start();
+    canvas.force_areas.start();
 
-    if (headstart.is_force_areas) {
-        headstart.force_areas.alpha(headstart.area_force_alpha);
+    if (config.is_force_areas) {
+        canvas.force_areas.alpha(config.area_force_alpha);
     } else {
-        headstart.force_areas.alpha(0);
+        canvas.force_areas.alpha(0);
     }
 
     var areas_count = 0;
@@ -297,15 +299,13 @@ papers.applyForce = function (bubbles) {
     var multiplier_areas = ticks_per_render_areas+1;
 
     requestAnimationFrame(function render() {
-        var alpha = headstart.force_areas.alpha();
+        var alpha = canvas.force_areas.alpha();
         
         for (var i = 0; i < ticks_per_render_areas; i++) {
-            headstart.force_areas.tick();
+            canvas.force_areas.tick();
         }
 
-        var current_bubbles = headstart.bubbles[headstart.current_file_number];
-
-        current_bubbles.areas_array.forEach(function (a, i) {
+        mediator.current_bubble.areas_array.forEach(function (a, i) {
 
             if (a.x - a.r < 0 ||
                     a.x + a.r > canvas.current_vis_size ||
@@ -317,7 +317,7 @@ papers.applyForce = function (bubbles) {
             }
 
 
-            current_bubbles.areas_array.slice(i + 1).forEach(function (b) {
+            mediator.current_bubble.areas_array.slice(i + 1).forEach(function (b) {
                 self.checkCollisions(a, b, alpha * multiplier_areas);
             });
         });
@@ -334,12 +334,12 @@ papers.applyForce = function (bubbles) {
 
     });
 
-    headstart.force_papers.start();
+    canvas.force_papers.start();
 
-    if (headstart.is_force_papers) {
-        headstart.force_papers.alpha(headstart.papers_force_alpha);
+    if (config.is_force_papers) {
+        canvas.force_papers.alpha(config.papers_force_alpha);
     } else {
-        headstart.force_papers.alpha(0);
+        canvas.force_papers.alpha(0);
     }
 
     var papers_count = 0;
@@ -347,26 +347,24 @@ papers.applyForce = function (bubbles) {
     var multiplier_areas = ticks_per_render_papers + 1;
     
     requestAnimationFrame(function render() {
-        var alpha = headstart.force_papers.alpha();
+        var alpha = canvas.force_papers.alpha();
         
         for (var i = 0; i < ticks_per_render_papers; i++) {
-            headstart.force_papers.tick();
+            canvas.force_papers.tick();
         }
 
-        var current_bubbles = headstart.bubbles[headstart.current_file_number];
-
-        current_bubbles.data.forEach(function (a, i) {
+        mediator.current_bubble.data.forEach(function (a, i) {
             var current_area = "";
 
-            for (let area in bubbles.areas_array) {
-                if (headstart.use_area_uri) {
-                    if (current_bubbles.areas_array[area].area_uri == a.area_uri) {
-                        current_area = current_bubbles.areas_array[area];
+            for (let area in mediator.current_bubble.areas_array) {
+                if (config.use_area_uri) {
+                    if (mediator.current_bubble.areas_array[area].area_uri == a.area_uri) {
+                        current_area = mediator.current_bubble.areas_array[area];
                         break;
                     }
                 } else {
-                    if (current_bubbles.areas_array[area].title == a.area) {
-                        current_area = current_bubbles.areas_array[area];
+                    if (mediator.current_bubble.areas_array[area].title == a.area) {
+                        current_area = mediator.current_bubble.areas_array[area];
                         break;
                     }
                 }
@@ -386,7 +384,7 @@ papers.applyForce = function (bubbles) {
                 a.y = paper_a.y - a.height / 2;
             }
 
-            bubbles.data.slice(i + 1).forEach((b) => {
+            mediator.current_bubble.data.slice(i + 1).forEach((b) => {
 
                 var paper_b = self.constructCircle(b);
 
@@ -465,7 +463,7 @@ papers.checkCollisions = function (a, b, alpha) {
 
 papers.shrinkPaper = function (d, holder) {
 
-    if (!headstart.is_zoomed) {
+    if (!mediator.is_zoomed) {
         return;
     }
 
@@ -478,7 +476,7 @@ papers.shrinkPaper = function (d, holder) {
     
     holder_div.selectAll(".readers")
             .style("height", "15px")
-            .style("margin-top", "5px")
+            .style("margin-top", "5px");
 
     d.resized = false;
     holder_div.on("mouseover", function (d) {
@@ -493,7 +491,7 @@ papers.resizePaper = function (d, holder_div, resize_factor, color) {
     let current_path = current_g_paper.select("path#region");
     let current_dogear = current_g_paper.select("path.dogear");
 
-    var current_size = d.height * headstart.circle_zoom;
+    var current_size = d.height * mediator.circle_zoom;
     var max_size = canvas.current_vis_size / 2;
 
     if (current_size * resize_factor > max_size) {
@@ -503,14 +501,14 @@ papers.resizePaper = function (d, holder_div, resize_factor, color) {
     //current_g.parentNode.appendChild(current_g);
     toFront(current_g_paper.node());
 
-    let region = this.createPaperPath(0, 0, d.width * headstart.circle_zoom * resize_factor, d.height * headstart.circle_zoom * resize_factor);
-    let dogear = this.createDogearPath(d.width * (1 - headstart.dogear_width) * headstart.circle_zoom * resize_factor, 0, d.width * headstart.circle_zoom * resize_factor, d.height * headstart.circle_zoom * resize_factor);
+    let region = this.createPaperPath(0, 0, d.width * mediator.circle_zoom * resize_factor, d.height * mediator.circle_zoom * resize_factor);
+    let dogear = this.createDogearPath(d.width * (1 - config.dogear_width) * mediator.circle_zoom * resize_factor, 0, d.width * mediator.circle_zoom * resize_factor, d.height * mediator.circle_zoom * resize_factor);
 
     current_foreignObject
-            .attr("width", d.width * headstart.circle_zoom * resize_factor + "px")
-            .attr("height", d.height * headstart.circle_zoom * resize_factor + "px")
-            .style("width", d.width * headstart.circle_zoom * resize_factor + "px")
-            .style("height", d.height * headstart.circle_zoom * resize_factor + "px");
+            .attr("width", d.width * mediator.circle_zoom * resize_factor + "px")
+            .attr("height", d.height * mediator.circle_zoom * resize_factor + "px")
+            .style("width", d.width * mediator.circle_zoom * resize_factor + "px")
+            .style("height", d.height * mediator.circle_zoom * resize_factor + "px");
 
     current_path
             //.style("fill-opacity", opacity)
@@ -519,17 +517,17 @@ papers.resizePaper = function (d, holder_div, resize_factor, color) {
 
     current_dogear.attr("d", dogear);
 
-    let height = (headstart.content_based) ? (d.height * headstart.circle_zoom * resize_factor + "px") :
-            (d.height * headstart.circle_zoom * resize_factor - 20 + "px");
+    let height = (config.content_based) ? (d.height * mediator.circle_zoom * resize_factor + "px") :
+            (d.height * mediator.circle_zoom * resize_factor - 20 + "px");
 
     holder_div.select("div.metadata")
             .attr("height", height)
-            .attr("width", d.width * headstart.circle_zoom * resize_factor * (1 - headstart.dogear_width) + "px")
+            .attr("width", d.width * mediator.circle_zoom * resize_factor * (1 - config.dogear_width) + "px")
             .style("height", height)
-            .style("width", d.width * headstart.circle_zoom * resize_factor * (1 - headstart.dogear_width) + "px");
+            .style("width", d.width * mediator.circle_zoom * resize_factor * (1 - config.dogear_width) + "px");
 
     holder_div.select("div.readers")
-            .style("width", d.width * headstart.circle_zoom * resize_factor + "px");
+            .style("width", d.width * mediator.circle_zoom * resize_factor + "px");
 };
 
 // called far too often
@@ -537,12 +535,11 @@ papers.enlargePaper = function (d, holder_div) {
 
     this.mouseoverpaper();
 
-    if (d.resized || !headstart.is_zoomed) {
+    if (d.resized || !mediator.is_zoomed) {
         return;
     }
 
-    mediator.publish("record_action", d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
-    // headstart.recordAction(d.id, "enlarge_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+    mediator.publish("record_action", d.id, "enlarge_paper", config.user_id, d.bookmarked + " " + d.recommended, null);
 
     let resize_factor = 1.2;
 
@@ -553,7 +550,7 @@ papers.enlargePaper = function (d, holder_div) {
     
     holder_div.selectAll(".readers")
             .style("height", "25px")
-            .style("margin-top", "5px")
+            .style("margin-top", "5px");
 
     let metadata = holder_div.select("div.metadata");
 
@@ -568,13 +565,12 @@ papers.enlargePaper = function (d, holder_div) {
             .style("cursor", "pointer")
             .on("click", (d) => {
 
-                if (!headstart.is_zoomed) {
-                    return headstart.bubbles.makePaperClickable(d);
+                if (!mediator.is_zoomed) {
+                    return mediator.bubbles.makePaperClickable(d);
                 } else {
 
                     if (!d.paper_selected) {
-
-                        list.enlargeListItem(d);
+                        mediator.publish("paper_holder_clicked", d);
 
                         this.resetPaths();
 
@@ -584,18 +580,13 @@ papers.enlargePaper = function (d, holder_div) {
                                 });
 
                         current_paper.attr("class", "framed");
-
-                        if (list.current == "hidden") {
-                            list.show();
-                        }
                     } else {
                         //mediator.publish("list_title_click", d);
                     }
 
                     d.paper_selected = true;
-                    headstart.current_enlarged_paper = d;
-                    mediator.publish("record_action", d.id, "click_on_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
-                    // headstart.recordAction(d.id, "click_on_paper", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+                    mediator.current_enlarged_paper = d;
+                    mediator.publish("record_action", d.id, "click_on_paper", config.user_id, d.bookmarked + " " + d.recommended, null);
                     d3.event.stopPropagation();
                 }
             })
@@ -603,16 +594,16 @@ papers.enlargePaper = function (d, holder_div) {
                 this.mouseoutpaper(d, holder_div);
             });
 
-    headstart.current_circle = canvas.chart.selectAll("circle")
+    mediator.current_circle = canvas.chart.selectAll("circle")
             .filter(function (x) {
-                if (headstart.use_area_uri) {
+                if (config.use_area_uri) {
                     return (x.area_uri == d.area_uri);
                 } else {
                     return (x.title == d.area);
                 }
             });
 
-    headstart.current_circle
+    mediator.current_circle
             .on("click", (d) => {
                 mediator.publish("currentbubble_click", d);
                 this.resetPaths();
@@ -622,23 +613,14 @@ papers.enlargePaper = function (d, holder_div) {
 };
 
 papers.currentbubble_click = function (d) {
-    list.reset();
+    mediator.publish("paper_current_bubble_clicked", d);
 
-    d3.selectAll("#list_holder")
-            .filter(function (x) {
-                return (headstart.use_area_uri) ? (x.area_uri == d.area_uri) : (x.area == d.title);
-            })
-            .style("display", function (d) {
-                return d.filtered_out ? "none" : "inline";
-            });
-
-    if (headstart.current_enlarged_paper !== null) {
-        headstart.current_enlarged_paper.paper_selected = false;
+    if (mediator.current_enlarged_paper !== null) {
+        mediator.current_enlarged_paper.paper_selected = false;
     }
 
-    headstart.current_enlarged_paper = null;
-    mediator.publish("record_action", d.id, "click_paper_list_enlarge", headstart.user_id, d.bookmarked + " " + d.recommended, null);
-    // headstart.recordAction(d.id, "click_paper_list_enlarge", headstart.user_id, d.bookmarked + " " + d.recommended, null);
+    mediator.current_enlarged_paper = null;
+    mediator.publish("record_action", d.id, "click_paper_list_enlarge", config.user_id, d.bookmarked + " " + d.recommended, null);
 
     d3.event.stopPropagation();
 };
@@ -648,12 +630,12 @@ papers.calcResizeFactor = function (metadata) {
     var new_height = current_paper.scrollHeight;
     var new_width = current_paper.offsetWidth;
 
-    var ratio_old = headstart.paper_width_factor / headstart.paper_height_factor;
+    var ratio_old = config.paper_width_factor / config.paper_height_factor;
     var ratio_new = new_height / new_width;
 
     while (ratio_new.toFixed(1) > ratio_old.toFixed(1)) {
-        new_height -= Math.pow(headstart.paper_height_factor, 3);
-        new_width += Math.pow(headstart.paper_width_factor, 3);
+        new_height -= Math.pow(config.paper_height_factor, 3);
+        new_width += Math.pow(config.paper_width_factor, 3);
         ratio_new = new_height / new_width;
     }
 
@@ -664,11 +646,11 @@ papers.calcResizeFactor = function (metadata) {
 papers.createDogearPath = function (x, y, width, height, correction_x, correction_y) {
 
     if (!correction_x) {
-        correction_x = headstart.dogear_width;
+        correction_x = config.dogear_width;
     }
 
     if (!correction_y) {
-        correction_y = headstart.dogear_height;
+        correction_y = config.dogear_height;
     }
 
     var v = height * correction_x;
@@ -678,3 +660,108 @@ papers.createDogearPath = function (x, y, width, height, correction_x, correctio
 
     return path;
 };
+
+papers.framePaper = function(p) {
+    d3.selectAll("path#region")
+      .filter(function(x) {
+          return x.id === p.id;
+      })
+      .attr("class", "framed");
+};
+
+papers.onWindowResize = function() {
+      var area_title_objects = d3.selectAll("#area_title_object");
+
+      area_title_objects.each((d) => {
+        d.height_html = Math.sqrt(Math.pow(d.r,2)*2);
+        d.width_html = Math.sqrt(Math.pow(d.r,2)*2);
+        d.x_html = 0 - d.width_html/2;
+        d.y_html = 0 - d.height_html/2;
+      });
+
+      area_title_objects
+        .attr("x",      (d) => { return d.x_html;})
+        .attr("y",      (d) => { return d.y_html;})
+        .attr("width",  (d) => { return d.width_html;})
+        .attr("height", (d) => { return d.height_html;});
+
+      area_title_objects.each(function() {
+        d3.select(this).select("#area_title")
+          .style("width", (d) => {
+            return d.width_html + "px";
+          })
+          .style("height", (d) => {
+            return d.height_html + "px"; });
+      });
+
+      $("#area_title>h2").css("font-size", canvas.calcTitleFontSize());
+      $("#area_title>h2").hyphenate('en');
+      $("#area_title_object>body").dotdotdot({wrap:"letter"});
+
+      d3.selectAll("g.paper")
+        .attr("transform", (d) => {
+          d.x_zoomed = mediator.resized_scale_x(d.x_zoomed);
+          d.y_zoomed = mediator.resized_scale_y(d.y_zoomed);
+          d.x = mediator.resized_scale_x(d.x);
+          d.y = mediator.resized_scale_y(d.y);
+          if (mediator.is_zoomed === true) {
+            return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
+          } else {
+            return "translate(" + d.x + "," + d.y + ")";
+          }
+        });
+
+      var paper_holders = d3.selectAll("div.paper_holder");
+
+      paper_holders.each((d) => {
+        d.diameter = canvas.diameter_size(d.internal_readers);
+        d.width = config.paper_width_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
+        d.height = config.paper_height_factor*Math.sqrt(Math.pow(d.diameter,2)/2.6);
+        d.top_factor = (1-config.dogear_width);
+
+        d.width_zoomed = d.width * mediator.circle_zoom;
+        d.height_zoomed = d.height * mediator.circle_zoom;
+
+        d.resize_width = (mediator.is_zoomed)?(d.width_zoomed):(d.width);
+        d.resize_height = (mediator.is_zoomed)?(d.height_zoomed):(d.height);
+      });
+
+      d3.selectAll("#region")
+        .attr("d", (d) => {
+          return papers.createPaperPath(0, 0, d.resize_width, d.resize_height);
+        });
+
+      d3.selectAll("path.dogear")
+        .attr("d", (d) => {
+          return papers.createDogearPath(d.resize_width*d.top_factor, 0, d.resize_width, d.resize_height);
+        });
+
+      //webkit bug
+      d3.selectAll("#article_metadata")
+        .attr("width", (d) => { return d.resize_width; })
+        .attr("height", (d) => { return d.resize_height; });
+
+      d3.selectAll("div.metadata")
+        .style("width", (d) => {
+          return d.resize_width * d.top_factor + "px";
+        })
+        .style("height", (d) => {
+          if(!mediator.is_zoomed) {
+            return (config.content_based)?(d.resize_height):(d.resize_height * 0.8 + "px");
+          } else {
+            return (config.content_based)?(d.resize_height + "px"):(d.resize_height - 20 + "px");
+          }
+        });
+
+      d3.selectAll("div.readers")
+        .style("height", (d) => {
+          if (mediator.is_zoomed === false) {
+            return d.resize_height * 0.2 + "px";
+          } else {
+            return "15px";
+          }
+        })
+        .style("width", function(d) {
+          return d.resize_width + "px";
+        });
+}

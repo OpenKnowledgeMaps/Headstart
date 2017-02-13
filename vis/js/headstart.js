@@ -1,56 +1,21 @@
 // Headstart
 // filename: headstart.js
+
 import StateMachine from 'javascript-state-machine';
 
 import config from 'config';
-
 import { mediator } from 'mediator';
-import { BubblesFSM } from 'bubbles';
-import { papers } from 'papers';
-import { list } from 'list';
-import { canvas } from 'canvas';
 
 import { getRealHeight } from "helpers";
 import { BrowserDetect, highlight } from "helpers";
-  
-const timelineTemplate = require('templates/timeline.handlebars');
-const headstartTemplate = require("templates/headstart.handlebars");
-const infoTemplate = require("templates/misc/info_modal.handlebars");
-const iFrameTemplate = require("templates/misc/iframe_modal.handlebars");
-const imageTemplate = require("templates/misc/images_modal.handlebars");
 
 import 'hypher';
 import 'lib/en.js';
 import 'dotdotdot';
 
-export var headstart;
-export var HeadstartFSM = function() {
+export var HeadstartFSM = function(json_direct_data) {
   this.VERSION = 2.9;
-
-  // Load default config + local settings and extend headstart object
-  Object.assign(this, config, data_config);
-
-  // Build Headstart skeleton
-  this.viz = $("#" + this.tag);
-  this.viz.addClass("headstart");
-
-  this.viz.append(headstartTemplate());
-  this.viz.append(infoTemplate());
-  this.viz.append(iFrameTemplate());
-  this.viz.append(imageTemplate());
-
-  // contains bubbles objects for the timline view
-  // elements get added to bubbles by calling registerBubbles()
-  this.bubbles = {};
-  
-  this.current_zoom_node = null;
-  this.current_enlarged_paper = null;
-  this.current_file_number = 1;
-  this.current_circle = null;
-  this.papers_list = null;
-  this.circle_zoom = 0;
-  this.is_zoomed = false;
-  this.zoom_finished = false;
+  mediator.json_direct_data = json_direct_data;
 }; // end HeadstartFSM constructor
 
 HeadstartFSM.prototype = {
@@ -58,15 +23,18 @@ HeadstartFSM.prototype = {
   // prototype methods
   checkBrowserVersions: function() {
     var browser = BrowserDetect.browser;
-
-    if (browser !== "Firefox" && browser !== "Safari" && browser !== "Chrome") {
-            alert("You are using an unsupported browser. This visualization was successfully tested with the latest versions of Chrome, Safari, Opera and Firefox.");
+    if (!(browser == "Firefox" || browser == "Safari" || browser == "Chrome")) {
+            var alert_message = 'You are using an unsupported browser.' +
+                                'This visualization was successfully tested' +
+                                'with the latest versions of Chrome, Safari,' +
+                                'Opera and Firefox.';
+            alert(alert_message);
     }
   },
 
   recordAction: function(id, action, user, type, timestamp, additional_params, post_data) {
 
-    if(!this.is_evaluation) {
+    if(!config.is_evaluation) {
       return;
     }
 
@@ -78,7 +46,7 @@ HeadstartFSM.prototype = {
       post_data = {};
     }
 
-    let php_script = this.server_url + "services/writeActionToLog.php";
+    let php_script = config.server_url + "services/writeActionToLog.php";
 
     $.ajax({
         url: php_script +
@@ -93,55 +61,14 @@ HeadstartFSM.prototype = {
         success: function(output) {
             console.log(output);
         }
-    });
+      });
     },
 
-  resetBubbles: function () {
-    if(this.bubbles) {
-      delete this.bubbles;
-      this.bubbles = {};
-    }
-    
-    $.each(this.files, (index, elem) => {
-      var bubble = new BubblesFSM();
-      this.registerBubbles(bubble);
-      bubble.title = elem.title;
-      bubble.file = elem.file;
-    });
-  },
-
-  // for the timelineview new bubbles are registered with headstart and kept
-  // in headstart.bubbles = {} object
-  registerBubbles: function( new_bubbles ) {
-    if (new_bubbles.id === 0) {
-      new_bubbles.id = this.bubblesSize() + 1; // start id with 1
-    }
-
-    // add bubbles if not registered already
-    if ( !(new_bubbles.id in this.bubbles) ) {
-      this.bubbles[new_bubbles.id] = new_bubbles;
-    } else {
-      return false;
-    }
-
-    return true;
-  },
-
-  bubblesSize: function() {
-    let size = 0;
-    for (let key in this.bubbles) {
-      if (this.bubbles.hasOwnProperty(key)) {
-        size++;
-      }
-    }
-    return size;
-  },
-
   createRestUrl: function () {
-      let url = this.server_url + "services/getBookmarks.php?user=" + this.user_id;
+      let url = config.server_url + "services/getBookmarks.php?user=" + config.user_id;
 
       //sometimes the conference id array is not recognized
-      let conference_id = eval(this.conference_id);
+      let conference_id = eval(config.conference_id);
 
       if($.isArray(conference_id)) {
           conference_id.forEach((val) => {
@@ -150,280 +77,106 @@ HeadstartFSM.prototype = {
       } else {
           url += "&conference=" + this.conference_id;
       }
-
-      url += "&max_recommendations=" + this.max_recommendations;
-
+      url += "&max_recommendations=" + config.max_recommendations;
       url += "&jsoncallback=?";
-
       return url;
   },
-  
+
   makeSetupVisualisation: function () {
-      let hs = this;
-      let current_bubble = this.bubbles[this.current_file_number];
-      let adaptive_data = null;
-      // NOTE: async call
-      // therefore we need to call the methods which depend on bubbles.data
-      // after the csv has been received.
-      let setupVisualization = (csv) => {
-        canvas.drawTitle();
-        canvas.calcChartSize();
-        canvas.setScaleRanges();
-        canvas.drawSvg();
-        canvas.drawChartCanvas();
-        if (this.is_adaptive) {
+      return (csv) => {
+        if (config.is_adaptive) {
           let url = this.createRestUrl();
           $.getJSON(url, (data) => {
-              this.startVisualization(this, current_bubble, csv, data, true);
+              mediator.publish("start_visualization", data, csv);
             });
         } else {
-          this.startVisualization(this, current_bubble, csv, null, true);
+          mediator.publish("start_visualization", null, csv);
         }
-        canvas.drawTitle();
       };
-      return setupVisualization;
+  },
+
+  get_files: {
+      local_files: function(that, setupVis) {
+        let url = config.files[mediator.current_file_number].file;
+        mediator.publish("get_data_from_files", url, config.input_format, setupVis);
+      },
+
+      search_repos: function(that, setupVis) {
+        let url = config.server_url + "services/getLatestRevision.php?vis_id=" + mediator.current_bubble.file;
+        mediator.publish("get_data_from_files", url, 'json', setupVis);
+      },
+
+      server_files: function(that, setupVis) {
+        mediator.publish("get_server_files", setupVis);
+      },
+
+      json_direct: function() {
+        config.files = mediator.json_direct_data;
+        mediator.publish("register_bubbles");
+        mediator.current_bubble.data = mediator.current_bubble.file;
+        mediator.publish("start_visualization", null, mediator.current_bubble.data);
+      }
   },
 
   // FSM callbacks
   // the start event transitions headstart from "none" to "normal" view
   onstart: function() {
-      canvas.calcChartSize();
-      canvas.initScales();
       this.checkBrowserVersions();
-      canvas.setOverflowToHiddenOrAuto("#main");
-      this.resetBubbles();
-      let setupVisualization = this.makeSetupVisualisation();
-      switch (this.mode) {
-          case "local_files":
-              var file = this.files[this.current_file_number - 1];
-              mediator.publish("get_data_from_files", file, this.input_format, setupVisualization);
-              break;
-
-          case "search_repos":
-              let current_bubble = this.bubbles[this.current_file_number];
-              d3.json(this.server_url + "services/getLatestRevision.php?vis_id=" + current_bubble.file, setupVisualization);
-              break;
-
-          case "server_files":
-              switch (this.input_format) {
-                case "csv":
-                    var that = this;
-                    $.ajax({
-                        type: 'POST',
-                        url: that.server_url + "services/staticFiles.php",
-                        data: "",
-                        dataType: 'JSON',
-                        success: (json) => {
-                            that.files = [];
-                            for (let i = 0; i < json.length; i++) {
-                                that.files.push({
-                                    "title": json[i].title,
-                                    "file": that.server_url + "static" + json[i].file
-                                });
-                            }
-                            that.resetBubbles();
-                            let current_bubble = that.bubbles[that.current_file_number];
-                            let setupVisualization = that.makeSetupVisualisation();
-                            d3.csv(current_bubble.file, setupVisualization);
-                        }
-                    });
-                  break;
-                case "json":
-                  d3.json(current_bubble.file, setupVisualization);
-                  break;
-              }
-              break;
-
-          case "json-direct":
-              setupVisualization(current_bubble.file);
-              break;
-
-          default:
-              break;
-      }
+      mediator.publish("normal_mode");
+      mediator.publish("register_bubbles");
+      let hs = this;
+      this.get_files[config.mode](hs, this.makeSetupVisualisation());
   },
 
   // 'ontotimeline' transitions from Headstarts "normal" view to the timeline
   // view. In a nutshell:
   // 1. it requires some cleanup
-  //    - objects which are no longer needed
+  //    - objects which re no longer needed
   //    - the canvas
   // 2. rendering of new elements, on a bigger
   //    chart
   ontotimeline: function() {
-      if (typeof checkPapers !== 'undefined') {
-        window.clearInterval(checkPapers);
-      }
-
-      this.force_areas.stop();
-      this.force_papers.stop();
-
-      this.resetBubbles();
-
-      // clear the canvas
-      $("#chart_canvas").empty();
-
-      // clear the list list
-      $("#list_explorer").empty();
-
-      this.bubbles[this.current_file_number].current = "x";
-      papers.current = "none";
-      list.current = "none";
-
-      // change heading to give an option to get back to normal view
-      this.viz.empty();
-
-      let timeline = timelineTemplate();
-      this.viz.append(timeline);
-
-      canvas.drawTitle();
-      canvas.drawGridTitles();
-      canvas.drawNormalViewLink();
-      canvas.initScales();
-      canvas.calcChartSize();
-      canvas.setScaleRanges();
-      canvas.drawSvg();
-      canvas.drawChartCanvas();
-      canvas.drawGridTitles(true);
-
-
-      d3.select("#headstart-chart").attr("overflow-x", "scroll");
-
-      $("#main").css("overflow", "auto");
-
+      mediator.publish("ontotimeline");
       // load bubbles in sync
-
-      $.each(this.bubbles, (index, elem) => {
+      var that = this;
+      $.each(mediator.bubbles, (index, elem) => {
           var setupTimelineVisualization = (csv) => {
               mediator.publish("prepare_data", null, csv);
               mediator.publish("prepare_areas");
               elem.start(csv);
           };
-
-          switch (this.input_format) {
-              case "csv":
-                  d3.csv(elem.file, setupTimelineVisualization);
-                  break;
-
-              case "json":
-                  d3.json(this.server_url + "services/getLatestRevision.php?vis_id=" + elem.file, setupTimelineVisualization);
-                  break;
-
-              default:
-                  break;
-          }
+          that.get_timeline_files(elem.file, setupTimelineVisualization);
       });
+      mediator.publish("ontotimeline_finish");
+  },
 
-      canvas.drawGrid();
-      canvas.initMouseListeners();
+  get_timeline_files: function(file, callback) {
+    var formats = {
+      csv: function (file, callback) {
+        d3.csv(file, callback);
+      },
+      json: function (file, callback) {
+        d3.json(config.server_url + "services/getLatestRevision.php?vis_id=" + file, callback);
+      },
+      default: function() {
+        throw "WRONG INPUT FORMAT";
+      }
+    };
+    var method = (formats[config.input_format] || formats['default']);
+    method(file, callback);
   },
 
   ontofile: function(event, from, to, file) {
-      this.force_areas.stop();
-      this.force_papers.stop();
-      this.current_file_number = file;
-
-      // clear the canvas & list
-      $("#chart_canvas").remove();
-      $("#list_explorer").empty();
-
-      // popup.current = "hidden";
-      papers.current = "none";
-      list.current = "none";
-
-      // this.initScales();
-      canvas.setOverflowToHiddenOrAuto("#main");
-      // reset bubbles
-      this.resetBubbles();
-      let current_bubble = this.bubbles[this.current_file_number];
-      let setupVisualization = this.makeSetupVisualisation();
-      switch (this.mode) {
-          case "local_files":
-              var file = this.files[this.current_file_number - 1];
-              mediator.publish("get_data_from_files", file, this.input_format, setupVisualization);
-              break;
-
-          case "search_repos":
-              d3.json(this.server_url + "services/getLatestRevision.php?vis_id=" + current_bubble.file, setupVisualization);
-              break;
-
-          case "server_files":
-              switch (this.input_format) {
-                  case "csv":
-                     var that = this;
-                     $.ajax({
-                         type: 'POST',
-                         url: that.server_url + "services/staticFiles.php",
-                         data: "",
-                         dataType: 'JSON',
-                         success: (json) => {
-                             that.files = [];
-                             for (let i = 0; i < json.length; i++) {
-                                 that.files.push({
-                                     "title": json[i].title,
-                                     "file": that.server_url + "static" + json[i].file
-                                 });
-                             }
-                             that.resetBubbles();
-                             let current_bubble = that.bubbles[that.current_file_number];
-                             let setupVisualization = that.makeSetupVisualisation();
-                             d3.csv(current_bubble.file, setupVisualization);
-                         }
-                     });
-                     break;
-                  case "json":
-                      debugger;
-                      d3.json(current_bubble.file, setupVisualization);
-                      break;
-              }
-              break;
-
-          case "json-direct":
-              setupVisualization(current_bubble.file);
-              break;
-
-          default:
-              break;
-      }
+      mediator.publish("ontofile", file);
+      let hs = this;
+      this.get_files[config.mode](hs, this.makeSetupVisualisation());
   },
-
-  startVisualization: function(hs, bubbles, csv, adaptive_data) {
-    mediator.publish("prepare_data", adaptive_data, csv);
-    mediator.publish("prepare_areas");
-    bubbles.start( csv, adaptive_data );
-
-    canvas.initEventListeners();
-    canvas.initMouseListeners();
-    canvas.initForcePapers();
-    canvas.initForceAreas();
-
-    papers.start( bubbles );
-    // moving this to bubbles.start results in papers being displayed over the
-    // bubbles, unfortunately
-    bubbles.draw();
-    
-    list.start( bubbles );
-
-    canvas.checkForcePapers();
-
-    if (hs.show_intro) {
-        $("#infolink").click();
-    }
-    
-    $("#area_title>h2").hyphenate('en');
-    $("#area_title_object>body").dotdotdot({wrap:"letter"});
-    
-    //highlight(data_config.files[0].title);
-    
-    bubbles.initMouseListeners();
-    
-  }
 }; // end HeadstartFSM prototype definition
 
 // State definitions for headstart object
 // see "onstart" function for entry point e.g. the first code that
 // gets excuted here.
-StateMachine.create({
+export var headstart = StateMachine.create({
 
   target: HeadstartFSM.prototype,
 

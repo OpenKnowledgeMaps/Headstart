@@ -59,6 +59,9 @@ var config = {
     is_force_papers: true,
     papers_force_alpha: 0.1,
 
+    render_list: true,
+    render_bubbles: true,
+
     // show
     show_timeline: true,
     show_dropdown: true,
@@ -76,6 +79,7 @@ var config = {
     zoomout_transition: 750,
 
     // misc
+    debug: false,
     debounce: 50,
     service: "none",
     language: "eng",
@@ -86,7 +90,7 @@ var config = {
     conference_id: 0,
     user_id: 0,
     max_recommendations: 10,
-    
+
     //intro
     intro: "intro_hs",
 
@@ -101,6 +105,7 @@ var config = {
             year: "date",
             authors: "authors",
             title: "title",
+            default_title: 'Overview of <span id="num_articles"></span> articles',
             area: "Area",
 			no_title: "No title"
         },
@@ -114,6 +119,7 @@ var config = {
             year: "Jahr",
             authors: "Autor",
             title: "Titel",
+            default_title: 'Überblick über <span id="num_articles"></span> Artikel',
             area: "Bereich",
 			no_title: "Kein Titel"
         },

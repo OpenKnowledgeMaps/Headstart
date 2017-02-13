@@ -12,10 +12,11 @@ const common = {
 
     output: {
         path: path.resolve(__dirname, "dist"),
-		//dev: specify a full path _including_ protocol, e.g. http://localhost:8080/dist
-		//production: specify full path _excluding_ protocol, e.g. //mydomain.org/headstart/dist
+		//dev: specify a full path including protocol, production: specify full path excluding protocol
         publicPath: "http://path/to/dist/",
-        filename: 'bundle.js'
+        filename: 'headstart.js',
+        libraryTarget: 'var',
+        library: 'headstart'
     },
 
     module: {
@@ -38,7 +39,7 @@ const common = {
             }
         }, {
             test: /\.handlebars$/,
-            loader: "handlebars-loader", 
+            loader: "handlebars-loader",
             query: { inlineRequires: '\/images\/' }
         }, {
             test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -73,7 +74,7 @@ const common = {
 
     resolve: {
         alias: {
-            // 
+            //
             'handlebars': 'handlebars/dist/handlebars.js',
             'dotdotdot': 'jquery-dotdotdot/src/jquery.dotdotdot.min.js',
             'hypher': 'hypher/dist/jquery.hypher.js',
@@ -125,7 +126,7 @@ switch (TARGET) {
                 }]
             },
             plugins: [
-                new ExtractTextPlugin("style.css"),
+                new ExtractTextPlugin("headstart.css"),
                 new webpack.optimize.UglifyJsPlugin({
                     compress: {
                         warnings: false

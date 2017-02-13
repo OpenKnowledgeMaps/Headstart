@@ -94,34 +94,34 @@ function calculateCooccurrences($array, $key) {
         array_walk($keywords, function(&$value, &$key) {
             $value = trim($value);
         });
-        
+
         $working[$id] = $keywords;
     }
-    
-    
+
+
     $row = 0;
     $keys = array_keys($working);
     foreach($working as $id => $keywords) {
-        
+
         for ($corow = $row; $corow < count($working); $corow++) {
             $id2 = $keys[$corow];
             $intersect = array_intersect($keywords, $working[$id2]);
-            
+
             if ($corow == $row) {
                 $output[] = array("id1" => $id, "id2" => $id2, "count" => count($intersect));
             } else {
                 $output[] = array("id1" => $id, "id2" => $id2, "count" => count($intersect));
                 $output[] = array("id1" => $id2, "id2" => $id, "count" => count($intersect));
             }
-            
+
             $corow++;
         }
-        
+
         $row++;
     }
-    
+
     return $output;
-     
+
 }
 
 function entities_to_unicode($str) {

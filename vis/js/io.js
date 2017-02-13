@@ -1,8 +1,7 @@
 // Class for data IO
 // Filename: io.js
-import { headstart } from 'headstart';
+import config from 'config';
 import { mediator } from 'mediator';
-import { canvas } from 'canvas';
 
 var IO = function() {
     this.test = 0;
@@ -15,9 +14,29 @@ var IO = function() {
 IO.prototype = {
     // get, transform and serve data to other modules
     async_get_data: function(file, input_format, callback) {
-        d3[input_format](file.file, (csv) => {
+        d3[input_format](file, (csv) => {
             callback(csv);
-        })
+        });
+    },
+
+    get_server_files: function(callback) {
+        $.ajax({
+          type: 'POST',
+          url: config.server_url + "services/staticFiles.php",
+          data: "",
+          dataType: 'JSON',
+          success: (json) => {
+            config.files = [];
+            for (let i = 0; i < json.length; i++) {
+              config.files.push({
+                "title": json[i].title,
+                "file": config.server_url + "static" + json[i].file
+              });
+            }
+            mediator.publish("register_bubbles");
+            d3[config.input_format](mediator.current_bubble.file, callback);
+          }
+        });
     },
 
     convertToFirstNameLastName: function (authors_string) {
@@ -48,7 +67,7 @@ IO.prototype = {
                 authors_short_string += ", ";
             }
         }
-        return { string: authors_string, short_string: authors_short_string }
+        return { string: authors_string, short_string: authors_short_string };
     },
     setToStringIfNullOrUndefined: function (element, strng) {
         if (element === null || typeof element === "undefined") {
@@ -79,9 +98,9 @@ IO.prototype = {
             d.paper_abstract = _this.setToStringIfNullOrUndefined(d.paper_abstract, "");
             d.published_in = _this.setToStringIfNullOrUndefined(d.published_in, "");
             d.title = _this.setToStringIfNullOrUndefined(d.title,
-                headstart.localization[headstart.language]["no_title"]);
+                config.localization[config.language]["no_title"]);
 
-            if (headstart.content_based === false) {
+            if (config.content_based === false) {
                 d.readers = +d.readers;
                 d.internal_readers = +d.readers + 1;
             } else {
@@ -111,14 +130,14 @@ IO.prototype = {
 
             d.oa = false;
 
-            if (headstart.service === "doaj") {
+            if (config.service === "doaj") {
                 d.oa = true;
                 d.oa_link = d.link;
-            } else if (headstart.service === "plos") {
+            } else if (config.service === "plos") {
                 d.oa = true;
                 var journal = d.published_in.toLowerCase();
                 d.oa_link = "http://journals.plos.org/" +
-                    headstart.plos_journals_to_shortcodes[journal]
+                    config.plos_journals_to_shortcodes[journal]
                   + "/article/asset?id=" + d.id + ".PDF";
             } else if (typeof d.pmcid !== "undefined") {
                 if (d.pmcid !== "") {
@@ -130,28 +149,13 @@ IO.prototype = {
             d.outlink = _this.createOutlink(d);
 
         });
-        canvas.chart_x.domain(d3.extent(cur_data, function (d) {
-            return d.x;
-        }));
-        canvas.chart_y.domain(d3.extent(cur_data, function (d) {
-            return d.y * -1;
-        }));
-        canvas.diameter_size.domain(d3.extent(cur_data, function (d) {
-            return d.internal_readers;
-        }));
+
+        mediator.publish("update_canvas_domains", cur_data);
+        mediator.publish("update_canvas_data", cur_data);
+        
         var areas = this.areas;
         cur_data.forEach(function (d) {
-
-            // construct rectangles of a golden cut
-            d.diameter = canvas.diameter_size(d.internal_readers);
-            d.width = headstart.paper_width_factor * Math.sqrt(Math.pow(d.diameter, 2) / 2.6);
-            d.height = headstart.paper_height_factor * Math.sqrt(Math.pow(d.diameter, 2) / 2.6);
-            d.orig_x = d.x;
-            d.orig_y = d.y;
-            // scale x and y
-            d.x = canvas.chart_x(d.x);
-            d.y = canvas.chart_y(d.y * -1);
-            var area = (headstart.use_area_uri) ? (d.area_uri) : (d.area);
+            var area = (config.use_area_uri) ? (d.area_uri) : (d.area);
             if (area in areas) {
                 areas[area].papers.push(d);
             } else {
@@ -209,7 +213,7 @@ IO.prototype = {
             readers.push(sum_readers);
         }
 
-        canvas.circle_size.domain(d3.extent(readers));
+        mediator.publish('canvas_set_domain', 'circle_size', d3.extent(readers));
         var area_x = [];
         var area_y = [];
 
@@ -225,26 +229,23 @@ IO.prototype = {
                 return d.x;
             });
             var mean_y = d3.mean(papers, function (d) {
-                return d.y;
+                return d.y*(-1);
             });
-            var r = canvas.circle_size(sum_readers);
 
             area_x.push(mean_x);
             area_y.push(mean_y);
 
             areas[area].x = mean_x;
             areas[area].y = mean_y;
-            areas[area].r = r;
         }
-
-        canvas.chart_x_circle.domain(d3.extent(area_x));
-        canvas.chart_y_circle.domain(d3.extent(area_y));
+        mediator.publish("set_area_radii", areas);
+        mediator.publish('canvas_set_domain', 'chart_x_circle', d3.extent(area_x));
+        mediator.publish('canvas_set_domain', 'chart_y_circle', d3.extent(area_y));
 
         for (area in areas) {
             var new_area = [];
             new_area.title = areas[area].title;
-            new_area.x = canvas.chart_x_circle(areas[area].x);
-            new_area.y = canvas.chart_y_circle(areas[area].y);
+            mediator.publish("set_new_area_coords", new_area, areas[area]);
             new_area.orig_x = areas[area].x;
             new_area.orig_y = areas[area].y;
             new_area.r = areas[area].r;
@@ -268,8 +269,8 @@ IO.prototype = {
     },
     createOutlink: function(d) {
         var url = false;
-        if (headstart.url_prefix !== null) {
-            url = headstart.url_prefix + d.url;
+        if (config.url_prefix !== null) {
+            url = config.url_prefix + d.url;
         } else if (typeof d.url != 'undefined') {
             url = d.url;
         }

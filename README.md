@@ -15,7 +15,7 @@ In order to get started quickly, Make sure to have `npm` installed (it comes wit
     npm install
     npm run dev
 
-We are using [webpack](https://webpack.github.io/) to build our client-side application. `webpack` is started in *watch mode* which means that changes to files are tracked and the created `bundle.js` is automatically updated. 
+We are using [webpack](https://webpack.github.io/) to build our client-side application. `webpack` is started in *watch mode* which means that changes to files are tracked and the created `headstart.js` is automatically updated.
 
 Now you can run a local dev server:
 

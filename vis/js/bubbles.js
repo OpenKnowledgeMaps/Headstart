@@ -2,10 +2,9 @@
 // Filename: bubbles.js
 import StateMachine from 'javascript-state-machine';
 
-import { headstart } from 'headstart';
+import config from 'config';
 import { mediator } from 'mediator';
 import { papers} from 'papers';
-import { list } from 'list';
 import { toBack, toFront, hideSibling} from 'helpers';
 import { canvas } from 'canvas';
 
@@ -32,12 +31,12 @@ BubblesFSM.prototype = {
     draw: function () {
         var bubbleFrames = this.drawBubbleFrames();
 
-        if (headstart.is("normal") || headstart.is("switchfiles")) {
+        if (mediator.is_in_normal_mode) {
             this.positionBubbles(bubbleFrames);
             this.addClassNamesToCircles(bubbleFrames);
         }
 
-        if (headstart.is("timeline")) {
+        if (mediator.is_in_timeline_mode) {
             this.positionBubbles2(bubbleFrames, this.id);
             this.addClassNamesToCirclesForGrouping(bubbleFrames);
         }
@@ -71,6 +70,32 @@ BubblesFSM.prototype = {
         }
     },
 
+    onWindowResize: function() {
+        d3.selectAll("g.bubble_frame")
+          .attr("transform", (d) => {
+            d.x_zoomed = mediator.resized_scale_x(d.x_zoomed);
+            d.y_zoomed = mediator.resized_scale_y(d.y_zoomed);
+            d.x = mediator.resized_scale_x(d.x);
+            d.y = mediator.resized_scale_y(d.y);
+            if (mediator.is_zoomed === true) {
+              return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
+            } else {
+              return "translate(" + d.x + "," + d.y + ")";
+            }
+          });
+
+      d3.selectAll("circle")
+        .attr("r", (d) => {
+          d.r_zoomed = canvas.circle_size(d.readers) * mediator.circle_zoom;
+          d.r = canvas.circle_size(d.readers);
+          if (mediator.is_zoomed === true) {
+            return d.r_zoomed;
+          } else {
+            return d.r;
+          }
+        });
+    },
+
     // initialize all "mouseover", "mouseout" event listeners
     // for bubbles
     initMouseListeners: function () {
@@ -82,10 +107,10 @@ BubblesFSM.prototype = {
     // blasen -> wenn über blase gehovered und paper sichtbar
     // dann soll auch auf paper geclicked werden können.
     makePaperClickable: function (d) {
-        headstart.current_circle = canvas.chart.selectAll("circle")
+        mediator.current_circle = canvas.chart.selectAll("circle")
                 .filter(function (x) {
                     if (d !== null) {
-                        if (headstart.use_area_uri) {
+                        if (config.use_area_uri) {
                             return x.area_uri == d.area_uri;
                         } else {
                             return x.title == d.area;
@@ -95,7 +120,7 @@ BubblesFSM.prototype = {
                     }
                 });
 
-        zoom(headstart.current_circle.data()[0]);
+        this.zoom(mediator.current_circle.data()[0]);
         d3.event.stopPropagation(); // click stopps, "event bubbles up"
     },
 
@@ -105,14 +130,14 @@ BubblesFSM.prototype = {
         d3.selectAll("circle").on("mouseover", function (d) {
             if (!this_bubble_fsm.is("hoverbig")) {
                 mediator.publish("bubble_mouseover", d, this, this_bubble_fsm);
-                mediator.publish("record_action", d.id, "circle_mouseover", headstart.user_id, "none", null);
+                mediator.publish("record_action", d.id, "circle_mouseover", config.user_id, "none", null);
             }
         }).on("mouseout", function (d) {
             mediator.publish("bubble_mouseout", d, this, this_bubble_fsm);
-            mediator.publish("record_action", d.id, "circle_mouseout", headstart.user_id, "none", null);
+            mediator.publish("record_action", d.id, "circle_mouseout", config.user_id, "none", null);
         });
 
-        if (headstart.is("normal") || headstart.is("switchfiles")) {
+        if (mediator.is_in_normal_mode) {
             this.initCircleClickListener();
         }
     },
@@ -127,7 +152,7 @@ BubblesFSM.prototype = {
         });
 
         d3.selectAll('circle').on("dblclick", function () {
-            if (self.is("hoverbig") && headstart.is_zoomed && headstart.zoom_finished) {
+            if (self.is("hoverbig") && mediator.is_zoomed && mediator.zoom_finished) {
                 self.zoomout();
             }
         });
@@ -136,8 +161,8 @@ BubblesFSM.prototype = {
     // initialize just the mousemovement listeners
     initMouseListenersForTitles: function () {
         d3.selectAll("#area_title").on("mouseover", function (d) {
-            if (headstart.current != "timeline") {
-                headstart.bubbles[headstart.current_file_number].hideCircle(this);
+            if (mediator.is_in_normal_mode) {
+                mediator.current_bubble.hideCircle(this);
             } else {
                 var underlying_circle = d3.selectAll("circle")
                         .filter(function (x) {
@@ -148,21 +173,21 @@ BubblesFSM.prototype = {
                             }
                         });
 
-                headstart.bubbles[headstart.current_file_number].resetCircleDesignTimeLine(underlying_circle[0][0]);
-                headstart.bubbles[headstart.current_file_number].highlightAllCirclesWithLike(underlying_circle[0][0]);
-                headstart.bubbles[headstart.current_file_number].drawConnectionLines(underlying_circle[0][0]);
+                mediator.current_bubble.resetCircleDesignTimeLine(underlying_circle[0][0]);
+                mediator.current_bubble.highlightAllCirclesWithLike(underlying_circle[0][0]);
+                mediator.current_bubble.drawConnectionLines(underlying_circle[0][0]);
             }
         });
 
         d3.selectAll("#area_title").on("mouseout", function () {
-            if (headstart.current != "timeline") {
+            if (mediator.is_in_timeline_mode) {
                                                 
                 //if mouse out to child element, abort
                 if(d3.event.target.parentElement == this) { 
                     return false; 
                 }
                 
-                headstart.bubbles[headstart.current_file_number].showCircle(this);
+                mediator.current_bubble.showCircle(this);
             }
         });
     },
@@ -205,6 +230,7 @@ BubblesFSM.prototype = {
     // sensible manner.
     // the sortCircle method achieves this in a rudamentary way for now.
     drawConnectionLines: function (circle) {
+        const svg = d3.select("#chart-svg");
         var class_name = $(circle).attr("class").replace("area ", "");
         var circles = $("." + class_name);
         var sorted_circles = this.sortCircles(circles);
@@ -214,7 +240,7 @@ BubblesFSM.prototype = {
         for (var i = 0; i < sorted_circles.length - 1; i++) {
             var circleStart = sorted_circles[i].getBoundingClientRect();
             var circleEnd = sorted_circles[i + 1].getBoundingClientRect();
-            canvas.svg.append("line")
+            svg.append("line")
                     .attr("x1", circleStart.right + window.pageXOffset)
                     .attr("x2", circleEnd.left + window.pageXOffset)
                     .attr("y1", circleStart.top)
@@ -259,7 +285,7 @@ BubblesFSM.prototype = {
 
     bringPapersToFront: function (d) {
         var papers = d3.selectAll(".paper").filter(function (x) {
-            return (headstart.use_area_uri) ? (x.area_uri == d.area_uri) : (x.area == d.title);
+            return (config.use_area_uri) ? (x.area_uri == d.area_uri) : (x.area == d.title);
         });
 
         for (let i = 0; i < papers[0].length; i++) {
@@ -313,24 +339,9 @@ BubblesFSM.prototype = {
     },
 
     zoom: function (d) {
-        var previous_zoom_node = headstart.current_zoom_node;
-
-        list.reset();
-
+        var previous_zoom_node = mediator.current_zoom_node;
+        mediator.publish("bubble_zoomin", d);
         papers.resetPaths();
-
-        if (typeof d != 'undefined') {
-            list.papers_list.selectAll("#list_holder")
-                    .style("display", function (d) {
-                        return d.filtered_out ? "none" : "inline";
-                    });
-
-            list.papers_list.selectAll("#list_holder")
-                    .filter(function (x) {
-                        return (headstart.use_area_uri) ? (x.area_uri != d.area_uri) : (x.area != d.title);
-                    })
-                    .style("display", "none");
-        }
 
         if (previous_zoom_node !== null && typeof previous_zoom_node != 'undefined') {
 
@@ -339,26 +350,21 @@ BubblesFSM.prototype = {
                     return;
                 }
             } else {
-                list.papers_list.selectAll("#list_holder")
-                        .style("display", function (d) {
-                            return d.filtered_out ? "none" : "inline";
-                        });
-
                 d3.event.stopPropagation();
                 return;
             }
         } 
         
-        if (!headstart.is_zoomed){
+        if (!mediator.is_zoomed){
             //Fix Webkit overflow behaviour
             d3.select("rect")
                     .attr("x", function () {
                         var x_new = ($(".vis-col").width()/2 - this.getAttribute("width")/2)*-1;
-                        return x_new
+                        return x_new;
                     })
                     .attr("width", $(".vis-col").width())
                     .attr("height", $(".vis-col").height() + 45)
-                    .attr("y", $("#subdiscipline_title").outerHeight(true)*-1)
+                    .attr("y", $("#subdiscipline_title").outerHeight(true)*-1);
         }
         
         var zoom_node = canvas.chart.selectAll("circle")
@@ -370,10 +376,10 @@ BubblesFSM.prototype = {
                     }
                 });
 
-        headstart.current_zoom_node = zoom_node.node();
+        mediator.current_zoom_node = zoom_node.node();
 
-        if (headstart.current_zoom_node !== null) {
-            toFront(headstart.current_zoom_node.parentNode);
+        if (mediator.current_zoom_node !== null) {
+            toFront(mediator.current_zoom_node.parentNode);
         }
 
         if (previous_zoom_node !== null) {
@@ -404,7 +410,7 @@ BubblesFSM.prototype = {
                 .on("mouseout", null);
 
 
-        d3.select("#subdiscipline_title h4").text(headstart.localization[headstart.language].area + ": " + d.title);
+        d3.select("#subdiscipline_title h4").text(config.localization[config.language].area + ": " + d.title);
         $("#subdiscipline_title").dotdotdot();
 
         d3.selectAll("div.paper_holder")
@@ -427,7 +433,7 @@ BubblesFSM.prototype = {
 
         d3.selectAll(".paper")
                 .filter(function (x) {
-                    return (headstart.use_area_uri) ? (x.area_uri != d.area_uri) : (x.area != d.title);
+                    return (config.use_area_uri) ? (x.area_uri != d.area_uri) : (x.area != d.title);
                 })
                 .style("display", "none");
 
@@ -437,7 +443,7 @@ BubblesFSM.prototype = {
         // Determine new zooming factor based on the viewbox
         //var svg = document.getElementById("chart-svg");
         //var viewbox = svg.getAttribute("viewBox").split(/\s+|,/);
-        headstart.circle_zoom = canvas.current_vis_size / d.r / 2 * headstart.zoom_factor;
+        mediator.circle_zoom = canvas.current_vis_size / d.r / 2 * config.zoom_factor;
 
         var padding = d.r * 0.08;
 
@@ -450,7 +456,7 @@ BubblesFSM.prototype = {
         var n = 0;
 
         var t = canvas.chart.transition()
-                .duration(headstart.transition_duration)
+                .duration(config.transition_duration)
                 .each("start", function () {
                     n++;
                 })
@@ -459,23 +465,22 @@ BubblesFSM.prototype = {
                         return;
                     }
 
-                    headstart.zoom_finished = true;
+                    mediator.zoom_finished = true;
                 });
 
-        headstart.bubbles[headstart.current_file_number].createTransition(t, d.title);
+        mediator.current_bubble.createTransition(t, d.title);
 
-        mediator.publish("record_action", d.id, "zoom_in", headstart.user_id, "none", null);
-        // headstart.recordAction(d.id, "zoom_in", headstart.user_id, "none", null);
+        mediator.publish("record_action", d.id, "zoom_in", config.user_id, "none", null);
 
         d3.event.stopPropagation();
         
-        headstart.is_zoomed = true;
-        headstart.zoom_finished = false;
+        mediator.is_zoomed = true;
+        mediator.zoom_finished = false;
     },
 
     zoomOut: function () {
 
-        if (!headstart.is_zoomed) {
+        if (!mediator.is_zoomed) {
             return;
         }
 
@@ -487,34 +492,28 @@ BubblesFSM.prototype = {
                 .attr("width", canvas.current_vis_size)
                 .attr("height", canvas.current_vis_size)
                 .attr("x", 0)
-                .attr("y", 0)
+                .attr("y", 0);
 
-        list.reset();
+        mediator.publish("bubble_zoomout");
 
-        if (headstart.current_zoom_node !== null) {
-            toFront(headstart.current_zoom_node.parentNode);
+        if (mediator.current_zoom_node !== null) {
+            toFront(mediator.current_zoom_node.parentNode);
 
-            var circle_data = d3.select(headstart.current_zoom_node).data();
-            mediator.publish("record_action", circle_data.id, "zoom_out", headstart.user_id, "none", null);
-            // headstart.recordAction(circle_data.id, "zoom_out", headstart.user_id, "none", null);
+            var circle_data = d3.select(mediator.current_zoom_node).data();
+            mediator.publish("record_action", circle_data.id, "zoom_out", config.user_id, "none", null);
         } else {
-            mediator.publish("record_action", "none", "zoom_out", headstart.user_id, "none", null);
-            // headstart.recordAction("none", "zoom_out", headstart.user_id, "none", null);
+            mediator.publish("record_action", "none", "zoom_out", config.user_id, "none", null);
         }
 
-        if (headstart.current_enlarged_paper !== null) {
-            headstart.current_enlarged_paper.paper_selected = false;
-            headstart.current_enlarged_paper = null;
+        if (mediator.current_enlarged_paper !== null) {
+            mediator.current_enlarged_paper.paper_selected = false;
+            mediator.current_enlarged_paper = null;
         }
 
-        list.papers_list.selectAll("#list_holder")
-                .style("display", function (d) {
-                    return d.filtered_out ? "none" : "inline";
-                });
 
         var n = 0;
         var t = canvas.chart.transition()
-                .duration(headstart.zoomout_transition)
+                .duration(config.zoomout_transition)
                 .each("start", function () {
                     n++;
                 })
@@ -530,8 +529,8 @@ BubblesFSM.prototype = {
                             })
                             .style("visibility", "visible");
 
-                    headstart.current_zoom_node = null;
-                    headstart.is_zoomed = false;
+                    mediator.current_zoom_node = null;
+                    mediator.is_zoomed = false;
                 });
 
         t.selectAll("g.bubble_frame")
@@ -551,7 +550,7 @@ BubblesFSM.prototype = {
 
         t.selectAll("path.dogear")
                 .attr("d", function (d) {
-                    return papers.createDogearPath(d.width * (1 - headstart.dogear_width), 0, d.width, d.height);
+                    return papers.createDogearPath(d.width * (1 - config.dogear_width), 0, d.width, d.height);
                 });
 
         //webkit bug
@@ -565,10 +564,10 @@ BubblesFSM.prototype = {
 
         t.selectAll("div.metadata")
                 .style("width", function (d) {
-                    return d.width * (1 - headstart.dogear_width) + "px";
+                    return d.width * (1 - config.dogear_width) + "px";
                 })
                 .style("height", function (d) {
-                    return (headstart.content_based) ? (d.height + "px") : (d.height * 0.75 + "px");
+                    return (config.content_based) ? (d.height + "px") : (d.height * 0.75 + "px");
                 });
 
         t.selectAll("div.readers")
@@ -624,16 +623,16 @@ BubblesFSM.prototype = {
     },
 
     resetCircleDesign: function () {
-        if (headstart.current_circle !== null) {
+        if (mediator.current_circle !== null) {
             d3.selectAll("circle")
                     .attr("class", "area")
                     .style("fill-opacity", "0.8");
 
             var papers = d3.selectAll(".paper")
                     .filter(function (x) {
-                        if (headstart.current_circle.data()[0] !== null) {
-                            var area = headstart.current_circle.data()[0];
-                            return (headstart.use_area_uri) ? (x.area_uri == area.area_uri) : (x.area == area.title);
+                        if (mediator.current_circle.data()[0] !== null) {
+                            var area = mediator.current_circle.data()[0];
+                            return (config.use_area_uri) ? (x.area_uri == area.area_uri) : (x.area == area.title);
                         } else {
                             return null;
                         }
@@ -677,7 +676,7 @@ BubblesFSM.prototype = {
 
         t.selectAll("circle")
                 .attr("r", function (d) {
-                    d.r_zoomed = headstart.circle_zoom * d.r;
+                    d.r_zoomed = mediator.circle_zoom * d.r;
                     return d.r_zoomed;
                 });
 
@@ -689,12 +688,12 @@ BubblesFSM.prototype = {
                 });
 
         var region = function (d) {
-            return papers.createPaperPath(0, 0, d.width * headstart.circle_zoom, d.height * headstart.circle_zoom);
+            return papers.createPaperPath(0, 0, d.width * mediator.circle_zoom, d.height * mediator.circle_zoom);
         };
 
         var dogear = function (d) {
-            return papers.createDogearPath(d.width * (1 - headstart.dogear_width) * headstart.circle_zoom,
-                    0, d.width * headstart.circle_zoom, d.height * headstart.circle_zoom);
+            return papers.createDogearPath(d.width * (1 - config.dogear_width) * mediator.circle_zoom,
+                    0, d.width * mediator.circle_zoom, d.height * mediator.circle_zoom);
         };
 
         t.selectAll("#region")
@@ -706,24 +705,24 @@ BubblesFSM.prototype = {
         //webkit bug
         t.selectAll("#article_metadata")
                 .attr("width", function (d) {
-                    return d.width * headstart.circle_zoom;
+                    return d.width * mediator.circle_zoom;
                 })
                 .attr("height", function (d) {
-                    return d.height * headstart.circle_zoom;
+                    return d.height * mediator.circle_zoom;
                 });
 
         t.selectAll("div.metadata")
                 .style("height", function (d) {
-                    return (headstart.content_based) ? (d.height * headstart.circle_zoom + "px") : (d.height * headstart.circle_zoom - 20 + "px");
+                    return (config.content_based) ? (d.height * mediator.circle_zoom + "px") : (d.height * mediator.circle_zoom - 20 + "px");
                 })
                 .style("width", function (d) {
-                    return d.width * headstart.circle_zoom * (1 - headstart.dogear_width) + "px";
+                    return d.width * mediator.circle_zoom * (1 - config.dogear_width) + "px";
                 });
 
         t.selectAll("div.readers")
                 .style("height", "15px")
                 .style("width", function (d) {
-                    return d.width * headstart.circle_zoom + "px";
+                    return d.width * mediator.circle_zoom + "px";
                 })
                 .style("margin-top", "3px");
 
@@ -736,31 +735,31 @@ BubblesFSM.prototype = {
 
     onstart: function (event, from, to, csv, recommendation_data) {
         mediator.publish('bubbles_update_data_and_areas', this);
-        if (headstart.is("timeline")) {
+        if (mediator.is_in_timeline_mode) {
             this.draw();
             this.initMouseListeners();
         }
-        mediator.publish("record_action", "none", "start", headstart.user_id, "start_bubble", null, null, recommendation_data);
+        mediator.publish("record_action", "none", "start", config.user_id, "start_bubble", null, null, recommendation_data);
     },
 
     onbeforemouseover: function () {
-        if (headstart.is("normal") || headstart.is("switchfiles")) {
+        if (mediator.is_in_normal_mode) {
             this.resetCircleDesign();
         }
     },
 
     onmouseover: function (event, from, to, d, circle) {
 
-        headstart.current_circle = d3.select(circle);
-        if (headstart.is("timeline")) {
+        mediator.current_circle = d3.select(circle);
+        if (mediator.is_in_timeline_mode) {
             this.resetCircleDesignTimeLine(circle);
             this.highlightAllCirclesWithLike(circle);
             this.drawConnectionLines(circle);
             //hideSibling(circle);
         } else {
             this.resetCircleDesign();
-            this.highlightCircle(headstart.current_circle);
-            toFront(headstart.current_circle.node().parentNode);
+            this.highlightCircle(mediator.current_circle);
+            toFront(mediator.current_circle.node().parentNode);
             this.bringPapersToFront(d);
             hideSibling(circle);
 
@@ -777,7 +776,7 @@ BubblesFSM.prototype = {
     // we want to prevent the bubbles from switching from
     // hoversmall.
     onbeforemouseout: function (event, from, to, circle) {
-        if (this.is("zoomedin") || this.is("hoverbig")) {
+        if (this.is("zoomedin") ||this.is("hoverbig")) {
             return false;
         }
 
@@ -800,7 +799,7 @@ BubblesFSM.prototype = {
 
     onmouseout: function (event, from, to, d, circle) {
 
-        if (headstart.is("normal") || headstart.is("switchfiles")) {
+        if (mediator.is_in_normal_mode) {
             if (event == "notzoomedmouseout") {
                 this.resetCircleDesign();
                 if (!papers.is("loading")) {
@@ -812,7 +811,7 @@ BubblesFSM.prototype = {
             }
         }
 
-        if (headstart.is("timeline")) {
+        if (mediator.is_in_timeline_mode) {
             this.resetCircleDesignTimeLine(circle);
             this.removeAllConnections();
         } else {
@@ -856,7 +855,7 @@ StateMachine.create({
 
     events: [
         {name: "startup", from: "none", to: "x"},
-        {name: "start", from: "x", to: "zoomedout"},
+        {name: "start", from: ["x","zoomedout","hoversmall"] , to: "zoomedout"},
 
         {name: "mouseover", from: "zoomedout", to: "hoversmall"},
         {name: "mouseout", from: "hoversmall", to: "zoomedout"},

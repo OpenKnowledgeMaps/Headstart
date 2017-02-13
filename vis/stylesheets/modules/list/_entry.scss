@@ -1,18 +1,18 @@
 .list_entry {
-    border-bottom: 2px solid #E1E5E6; 
-    padding-left: 15px; 
+    border-bottom: 2px solid #E1E5E6;
+    padding-left: 15px;
     border-left: 0px solid #E1E5E6;
 }
 
 .list_entry_full {
-    border-bottom: 0px; 
-    padding-left: 15px; 
+    border-bottom: 0px;
+    padding-left: 15px;
 }
 
 .list_metadata {
     /*border-top-width: 2px;
     border-top-style: solid;
-    border-color: $okm-light-gray;*/
+    border-color: $list_metadata_border_color;*/
     padding-top: 10px;
     margin-bottom: 10px;
     font-family: Helvetica;
@@ -26,19 +26,19 @@
 
         #paper_list_title {
             text-decoration: none;
-            color: $dark-red;
+            color: $list_metadata_title_paper;
 
             &:hover {
                 text-decoration: underline;
             }
         }
     }
-    
+
     #outlink_list {
-        vertical-align:top; 
+        vertical-align:top;
         width: 12px;
         height: 12px;
-        padding-left:0px; 
+        padding-left:0px;
         margin-top:0px;
     }
 
@@ -49,14 +49,14 @@
     }
 
     .list_links a {
-        color: $okm-red;
+        color: $list_links;
         text-decoration: none;
         cursor: pointer;
         &:hover {
-        color: $okm-blue;
+        color: $list_links_hover;
     }
     }
-    
+
 
     .outlink_symbol {
         font-family: FontAwesome;
@@ -66,16 +66,16 @@
         font: 12px 'Helvetica', sans-serif;
         font-size: 12px;
         line-height: 14px;
-        color: $author-green;
+        color: $list_detail;
         padding: 0;
         max-width: 82%;
 
         .list_authors {
-            color: $author-green;
+            color: $list_detail_authors;
         }
 
         .list_in {
-            color: $journal-gray;
+            color: $list_detail_in;
         }
 
         .list_published_in {
@@ -97,9 +97,9 @@
     line-height: 13px;
     padding-right: 0;
     padding-left: 0px;
-    color: $abstract-gray;
+    color: $list_abstract;
 
-    //border-left: solid 2.5px $okm-light-gray;
+    //border-left: solid 2.5px $list_abstract_border_left;
 }
 
 #list_area {
@@ -120,10 +120,10 @@
 }
 
 .link2 {
-   
+
     display: block;
     margin-top: 10px;
-   
+
 }
 
 
@@ -169,7 +169,7 @@ div {
         text-align: center;
         background-color: #eee;
         text-shadow: 0 1px 1px white;
-            
+
             &:first-child {
                 margin-top:0px;
             }
