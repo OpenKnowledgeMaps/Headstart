@@ -60,6 +60,14 @@ Three lines will set up the basics of Headstart.
     <div id="some_id" class="headstart"></div>                             // Headstart's div
     <script type="text/javascript" src="path/to/data-config.js"></script>  // Runtime Config
     <script type="text/javascript" src="path/to/dist/headstart.js"></script>  // The Core Lib
+    
+Now, the only thing needed to run Headstart, is to call the `headstart.start()`:
+
+    <script type="text/javascript">
+	$(document).ready(function() {    
+        	headstart.start();
+	});
+    </script>
 
 ## Deploying the client
 
@@ -71,7 +79,7 @@ First, remove the protocol from your publicPath to enable https. It should look 
 
 Second, add the stylesheets to your `index.html`:
 
-	<link rel="stylesheet" href="path/to/dist/style.css">
+	<link rel="stylesheet" href="path/to/dist/headstart.css">
 
 Third, run the following command to create a production build of Headstart:
 
