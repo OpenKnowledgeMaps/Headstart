@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --progress --colors --watch",
-    "prod": "webpack --progress --colors --watch",
+    "prod": "webpack --progress --colors",
     "start": "webpack-dev-server -d --progress"
   },
   "repository": {
@@ -26,7 +26,7 @@
     "bootstrap-loader": "^1.1.4",
     "bootstrap-sass": "^3.3.6",
     "d3": "^3.5.17",
-	"font-awesome": "*",
+    "font-awesome": "*",
     "handlebars": "^4.0.5",
     "hyphenation.en-us": "*",
     "hypher": "^0.2.4",
@@ -40,6 +40,7 @@
   "devDependencies": {
     "babel-core": "^6.11.4",
     "babel-loader": "^6.2.4",
+    "babel-plugin-transform-object-assign": "*",
     "babel-preset-es2015": "^6.9.0",
     "clean-webpack-plugin": "*",
     "copy-webpack-plugin": "^3.0.1",
