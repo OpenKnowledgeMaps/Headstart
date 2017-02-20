@@ -352,12 +352,13 @@ list.filterList = function (search_words) {
 
     this.createHighlights(search_words);
 
-    var filtered_data_list = d3.selectAll("#list_holder[style = \"display: inline;\"]");
-    var filtered_data_papers = d3.selectAll(".paper");
+    // Full list of items in the map/list
+    let all_list_items = d3.selectAll("#list_holder");
+    let all_map_items = d3.selectAll(".paper");
     //TODO why not mediator.current_circle
-    var current_circle = d3.select(mediator.current_zoom_node);
+    let current_circle = d3.select(mediator.current_zoom_node);
 
-    var data_circle_list = filtered_data_list
+    let filtered_list_items = all_list_items
             .filter(function (d) {
                 if (mediator.is_zoomed === true) {
                     if (config.use_area_uri && mediator.current_enlarged_paper === null) {
@@ -372,7 +373,8 @@ list.filterList = function (search_words) {
                 }
             });
 
-    var data_circle_papers = filtered_data_papers
+    // Filter out items based on searchterm
+    let filtered_map_items = all_map_items
                 .filter(function (d) {
                             if (mediator.is_zoomed === true) {
                                 if (config.use_area_uri) {
@@ -385,9 +387,21 @@ list.filterList = function (search_words) {
                             }
                         });
 
+    // Deal with selected papers in list
+    let selected_list_items = filtered_list_items
+        .filter(function(d) {
+            if (d.paper_selected === true) {
+                return true;
+            }
+        });
+
+    if (selected_list_items[0].length === 0) {
+        selected_list_items = filtered_list_items;
+    }
+
     if (search_words[0].length === 0) {
-        data_circle_list.style("display", "block");
-        data_circle_papers.style("display", "block");
+        selected_list_items.style("display", "block");
+        filtered_map_items.style("display", "block");
 
         mediator.current_bubble.data.forEach(function (d) {
             d.filtered_out = false;
@@ -396,13 +410,13 @@ list.filterList = function (search_words) {
         return;
     }
 
-    data_circle_list.style("display", "inline");
-    data_circle_papers.style("display", "inline");
+    selected_list_items.style("display", "inline");
+    filtered_map_items.style("display", "inline");
 
     mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words);
 
-    this.hideEntries(filtered_data_list, search_words);
-    this.hideEntries(filtered_data_papers, search_words);
+    this.hideEntries(all_list_items, search_words);
+    this.hideEntries(all_map_items, search_words);
 
 };
 
