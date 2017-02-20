@@ -625,7 +625,7 @@ list.populateOverlay = function(d) {
         $("#spinner-images").show();
         $("#images_holder").hide();
         $("#status").hide();
-        $("#images_modal").modal();
+        $("#images_modal").modal({keyboard:true});
 
         let images_finished = false;
         let counter = 1;
@@ -647,11 +647,11 @@ list.populateOverlay = function(d) {
 
         if (this.checkIfFileAvailable(config.server_url + "paper_preview/" + pdf_url)) {
             this.writePopup(config.server_url + "paper_preview/" + pdf_url);
-            $("#iframe_modal").modal();
+            $("#iframe_modal").modal({keyboard:true});
         } else {
             $("#spinner-iframe").show();
             $("#pdf_iframe").hide();
-            $("#iframe_modal").modal();
+            $("#iframe_modal").modal({keyboard:true});
 
             let article_url = d.oa_link;
 
