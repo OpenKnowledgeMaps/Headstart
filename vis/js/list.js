@@ -423,18 +423,20 @@ list.filterList = function (search_words) {
 list.hideEntries = function(object, search_words) {
     object
             .filter(function (d) {
-                var abstract = d.paper_abstract.toLowerCase();
-                var title = d.title.toLowerCase();
-                var authors = d.authors_string.toLowerCase();
-                var journals = d.published_in.toLowerCase();
-                var word_found = true;
-                var count = 0;
+                let abstract = d.paper_abstract.toLowerCase();
+                let title = d.title.toLowerCase();
+                let authors = d.authors_string.toLowerCase();
+                let journals = d.published_in.toLowerCase();
+                let year = d.year;
+                let word_found = true;
+                let count = 0;
                 if (typeof abstract !== 'undefined') {
                     while (word_found && count < search_words.length) {
                         word_found = (abstract.indexOf(search_words[count]) !== -1 ||
                             title.indexOf(search_words[count]) !== -1 ||
                             authors.indexOf(search_words[count]) !== -1 ||
-                            journals.indexOf(search_words[count]) !== -1);
+                            journals.indexOf(search_words[count]) !== -1 ||
+                            year.indexOf(search_words[count]) !== -1);
                         count++;
                     }
                     d.filtered_out = word_found ? false : true;
