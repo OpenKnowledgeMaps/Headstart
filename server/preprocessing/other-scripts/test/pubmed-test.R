@@ -8,10 +8,10 @@ wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
 setwd(wd) #Don't forget to set your working directory
 
-query <- "health" #args[2]
+query <- "russian" #args[2]
 service <- "pubmed"
 params <- NULL
-params_file <- "params_pubmed.json"
+params_file <- "params_pubmed2.json"
 
 source("../vis_layout.R")
 source('../pubmed.R')
