@@ -352,7 +352,7 @@ list.filterList = function (search_words) {
 
     this.createHighlights(search_words);
 
-    var filtered_data_list = d3.selectAll("#list_holder");
+    var filtered_data_list = d3.selectAll("#list_holder[style = \"display: inline;\"]");
     var filtered_data_papers = d3.selectAll(".paper");
     //TODO why not mediator.current_circle
     var current_circle = d3.select(mediator.current_zoom_node);
