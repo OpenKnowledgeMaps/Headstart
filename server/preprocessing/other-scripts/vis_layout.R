@@ -73,7 +73,7 @@ replace_keywords_if_empty <- function(corpus, metadata) {
   candidates = lapply(candidates, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
   candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
   candidates = mapply(paste, candidates, candidates_bigrams)
-  candidates = lappy(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
+  candidates = lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
 
   nn_corpus <- Corpus(VectorSource(candidates))
   nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
