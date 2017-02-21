@@ -175,7 +175,7 @@ create_cluster_names <- function(clusters, metadata_full_subjects, weightingspec
   }
   nn_corpus <- Corpus(VectorSource(subjectlist))
   nn_corpus <- tm_map(nn_corpus, removeWords, stopwords("english"))
-  nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec=weightingspec)))
+  nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
   tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
   tfidf_top_names <- lapply(tfidf_top, names)
   tfidf_top_names <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, top_n))
