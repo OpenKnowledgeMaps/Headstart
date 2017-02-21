@@ -84,13 +84,12 @@ list.drawList = function() {
     // Add sort options
     var container = d3.select("#sort_container>ul");
     var first_element = true;
-    const numberOfOptions = config.sort_options.length;
-    for (var i = 0; i < numberOfOptions; i++) {
+    for (let option in config.sort_options) {
       if (first_element) {
-        addSortOption(container, config.sort_options[i], true);
+        addSortOption(container, config.sort_options[option], true);
         first_element = false;
       } else {
-        addSortOption(container, config.sort_options[i], false);
+        addSortOption(container, config.sort_options[option], false);
       }
     }
 
