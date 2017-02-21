@@ -180,6 +180,7 @@ create_cluster_names <- function(clusters, metadata_full_subjects, weightingspec
   tfidf_top_names <- lapply(tfidf_top, names)
   tfidf_top_names <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, top_n))
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {gsub("_", " ", x)})
+  tfidf_top_names <- lapply(tfidf_top_names, function(x) {paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))})
   clusters$cluster_names <- tfidf_top_names
   return(clusters)
 }
