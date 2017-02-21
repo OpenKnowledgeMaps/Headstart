@@ -405,7 +405,6 @@ MyMediator.prototype = {
         mediator.current_bubble.current = "hoverbig";
         mediator.manager.call('papers', 'mouseoverpaper', []);
         mediator.manager.call('list', 'enlargeListItem', [d]);
-        d.paper_selected = true;
         mediator.current_enlarged_paper = d;
         mediator.manager.call('papers', 'framePaper', [d]);
     }

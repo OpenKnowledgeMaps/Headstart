@@ -551,6 +551,7 @@ list.enlargeListItem = function(d) {
     this.createHighlights(this.current_search_words);
 
     this.setImageForListHolder(d);
+    d.paper_selected = true;
 };
 
 list.setListHolderDisplay = function(d) {
