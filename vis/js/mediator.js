@@ -47,7 +47,10 @@ MyMediator.prototype = {
         // init logic and state switching
         this.modules = { papers: papers, list: list, io: io, canvas: canvas};
         this.mediator.subscribe("start_visualization", this.init_start_visualization);
-        this.mediator.subscribe("normal_mode", this.set_normal_mode);
+        this.mediator.subscribe("start", this.buildHeadstartHTML);
+        this.mediator.subscribe("start", this.set_normal_mode);
+        this.mediator.subscribe("start", this.register_bubbles);
+        this.mediator.subscribe("start", this.init_modules);
         this.mediator.subscribe("ontofile", this.init_ontofile);
         this.mediator.subscribe("ontotimeline", this.init_ontotimeline);
         this.mediator.subscribe("ontotimeline_finish", this.ontotimeline_finish);
@@ -124,10 +127,10 @@ MyMediator.prototype = {
     init_modules: function() {
         mediator.manager.registerModule(io, 'io');
 
-        if(config.render_list) this.manager.registerModule(list, 'list');
+        if(config.render_list) mediator.manager.registerModule(list, 'list');
         if(config.render_bubbles) {
-            this.manager.registerModule(canvas, 'canvas');
-            this.manager.registerModule(papers, 'papers');
+            mediator.manager.registerModule(canvas, 'canvas');
+            mediator.manager.registerModule(papers, 'papers');
         }
     },
 
@@ -211,8 +214,6 @@ MyMediator.prototype = {
     },
 
     init_start_visualization: function(highlight_data, csv) {
-        mediator.buildHeadstartHTML();
-        mediator.init_modules();
         mediator.manager.registerModule(headstart, 'headstart');
         if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.manager.call('canvas', 'setupCanvas', []);
