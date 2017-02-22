@@ -18,15 +18,15 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
   print("calc matrix")
   result <- create_tdm_matrix(metadata, text);
   metadata_full_subjects = result$metadata_full_subjects
-  metadata_full_subjects_tfidf_top5 <- create_node_names(metadata_full_subjects)
 
   print("normalize matrix")
   normalized_matrix <- normalize_matrix(result$tdm_matrix);
 
   print("create clusters")
   clusters <- create_clusters(normalized_matrix, max_clusters=15);
+  named_clusters <- create_cluster_labels(clusters, metadata_full_subjects, weightingspec="ntn", top_n=3, lang="english", taxonomy_separator=NULL)
   layout <- create_ordination(normalized_matrix, maxit=500, mindim=2, maxdim=2)
-  output <- create_output(clusters, layout, metadata_full_subjects)
+  output <- create_output(named_clusters, layout, metadata_full_subjects)
 
   return(output)
 
@@ -41,13 +41,13 @@ create_tdm_matrix <- function(metadata, text, sparsity=1, lang="english") {
 
   corpus <- tm_map(corpus, removePunctuation)
 
+  corpus <- tm_map(corpus, content_transformer(tolower))
+
   corpus <- tm_map(corpus, removeWords, stopwords(lang))
 
   corpus <- tm_map(corpus, stripWhitespace)
 
-  metadata_full_subjects <- replace_keywords_if_empty(corpus, metadata)
-
-  # corpus <- tm_map(corpus, content_transformer(tolower))
+  metadata_full_subjects <- replace_keywords_if_empty(corpus, metadata, lang)
 
   corpus_unstemmed = corpus
 
@@ -64,29 +64,57 @@ create_tdm_matrix <- function(metadata, text, sparsity=1, lang="english") {
   return(list(tdm_matrix = tdm_matrix, metadata_full_subjects = metadata_full_subjects))
 }
 
-replace_keywords_if_empty <- function(corpus, metadata) {
+replace_keywords_if_empty <- function(corpus, metadata, lang) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
 
   candidates = mapply(paste, metadata$title[missing_subjects], metadata$paper_abstract[missing_subjects])
-  candidates = lapply(candidates, function(x)paste(removeWords(x, stopwords('english')), collapse=""))
+  candidates = lapply(candidates, tolower)
+  candidates = lapply(candidates, function(x)paste(removeWords(x, stopwords(lang)), collapse=""))
   candidates = lapply(candidates, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
   candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
   candidates = mapply(paste, candidates, candidates_bigrams)
-  candidates = lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
+  #candidates = lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
+  candidates = lapply(candidates, function(x) {gsub("[^[:alnum:]]", " ", x)})
 
-  nn_corpus <- Corpus(VectorSource(candidates))
-  nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
-  tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
-  tfidf_top_names <- lapply(tfidf_top, names)
-  replacement_keywords <- lapply(tfidf_top_names, FUN = function(x) {paste(unlist(x), collapse="; ")})
-  replacement_keywords <- gsub("_", " ", replacement_keywords)
+  nn_corpus = Corpus(VectorSource(candidates))
+  nn_tfidf = TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
+  tfidf_top = apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
+  tfidf_top_names = lapply(tfidf_top, names)
+  replacement_keywords = lapply(tfidf_top_names, FUN = function(x) {paste(unlist(x), collapse=";")})
+  replacement_keywords = gsub("_", " ", replacement_keywords)
 
   metadata$subject[missing_subjects] <- replacement_keywords
 
   return(metadata)
 
 }
+
+# DEPRECATED
+# replace_keywords_if_empty <- function(corpus, metadata) {
+#
+#   remove_alone_numbers <- content_transformer(function(x)
+#     gsub('\\b\\d+\\s','', x))
+#
+#   corpus <- tm_map(corpus, remove_alone_numbers)
+#
+#   dtm = DocumentTermMatrix(corpus)
+#
+#   i = 1
+#
+#   for(i in 1:nrow(metadata)) {
+#     if (metadata$subject[i] == "" || metadata$subject[i] == "n/a") {
+#       freq_terms = as.matrix(dtm[i,])
+#       freq_terms_sorted = sort(colSums(freq_terms), decreasing=TRUE)
+#       top_terms = head(freq_terms_sorted, 10)
+#
+#       metadata$subject[i] = paste0(names(top_terms), collapse=";")
+#     }
+#   }
+#
+#   return(metadata)
+#
+# }
 
 normalize_matrix <- function(tdm_matrix, method = "cosine") {
   distance_matrix_2 <- as.matrix(proxy::dist(tdm_matrix, method))
@@ -140,14 +168,15 @@ create_ordination <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
   return(nm.nmin)
 }
 
-
 SplitTokenizer <- function(x) {
   tokens = unlist(lapply(strsplit(words(x), split=";"), paste), use.names = FALSE)
   return(tokens)
 }
 
+trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
-create_cluster_names <- function(clusters, metadata_full_subjects, weightingspec, top_n) {
+
+create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspec, top_n, lang, taxonomy_separator=NULL) {
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
     group = c(names(clusters$groups[clusters$groups == k]))
@@ -155,11 +184,22 @@ create_cluster_names <- function(clusters, metadata_full_subjects, weightingspec
 
     titles =  metadata_full_subjects$title[c(matches)]
     subjects = metadata_full_subjects$subject[c(matches)]
+
+    if (!is.null(taxonomy_separator)) {
+      subjects = mapply(function(x){strsplit(x, ";")}, subjects)
+      taxons = lapply(subjects, function(y){Filter(function(x){grepl(taxonomy_separator, x)}, y)})
+      subjects = lapply(subjects, function(y){Filter(function(x){!grepl(taxonomy_separator, x)}, y)})
+      taxons = lapply(taxons, function(x){lapply(strsplit(x, taxonomy_separator), function(y){tail(y,1)})})
+      taxons = lapply(taxons, function(x){paste(unlist(x), collapse=";")})
+      subjects = lapply(subjects, function(x){paste(unlist(x), collapse=";")})
+      subjects = mapply(paste, subjects, taxons, collapse=";")
+    }
+
     texts = mapply(paste, titles, subjects)
     texts = lapply(texts, function(x) {gsub("[^[:alnum:]]", " ", x)})
-
-    texts = lapply(texts, function(x)paste(removeWords(x, stopwords('english')), collapse=""))
     texts = lapply(texts, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
+    texts = lapply(texts, tolower)
+    texts = lapply(texts, function(x) {removeWords(x, stopwords(lang))})
 
     # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
     texts_bigrams = lapply(lapply(texts, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
@@ -170,14 +210,13 @@ create_cluster_names <- function(clusters, metadata_full_subjects, weightingspec
     subjectlist = c(subjectlist, subjects)
   }
   nn_corpus <- Corpus(VectorSource(subjectlist))
-  nn_corpus <- tm_map(nn_corpus, removeWords, stopwords("english"))
   nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
-  tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
+  tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[5]]})
   tfidf_top_names <- lapply(tfidf_top, names)
+  tfidf_top_names <- lapply(tfidf_top_names, function(x) {x = gsub("_", " ", x); trim(x)})
   tfidf_top_names <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, top_n))
-  tfidf_top_names <- lapply(tfidf_top_names, function(x) {gsub("_", " ", x)})
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))})
-  clusters$cluster_names <- tfidf_top_names
+  clusters$cluster_labels <- lapply(tfidf_top_names, function(x) {paste(unlist(trim(x)), collapse=", ")})
   return(clusters)
 }
 
@@ -200,7 +239,6 @@ filter_out_nested_ngrams <- function(top_ngrams, top_n) {
   return(head(unique(top_names), top_n))
 }
 
-
 create_output <- function(clusters, layout, metadata) {
 
   x = layout$X1
@@ -209,6 +247,7 @@ create_output <- function(clusters, layout, metadata) {
   groups = clusters$groups
   cluster = clusters$cluster
   num_clusters = clusters$num_clusters
+  cluster_labels = clusters$cluster_labels
 
   # Prepare the output
   result = cbind(x,y,groups,labels)
