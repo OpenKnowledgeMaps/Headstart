@@ -84,13 +84,12 @@ list.drawList = function() {
     // Add sort options
     var container = d3.select("#sort_container>ul");
     var first_element = true;
-    const numberOfOptions = config.sort_options.length;
-    for (var i = 0; i < numberOfOptions; i++) {
+    for (let option in config.sort_options) {
       if (first_element) {
-        addSortOption(container, config.sort_options[i], true);
+        addSortOption(container, config.sort_options[option], true);
         first_element = false;
       } else {
-        addSortOption(container, config.sort_options[i], false);
+        addSortOption(container, config.sort_options[option], false);
       }
     }
 
@@ -353,12 +352,13 @@ list.filterList = function (search_words) {
 
     this.createHighlights(search_words);
 
-    var filtered_data_list = d3.selectAll("#list_holder");
-    var filtered_data_papers = d3.selectAll(".paper");
+    // Full list of items in the map/list
+    let all_list_items = d3.selectAll("#list_holder");
+    let all_map_items = d3.selectAll(".paper");
     //TODO why not mediator.current_circle
-    var current_circle = d3.select(mediator.current_zoom_node);
+    let current_circle = d3.select(mediator.current_zoom_node);
 
-    var data_circle_list = filtered_data_list
+    let filtered_list_items = all_list_items
             .filter(function (d) {
                 if (mediator.is_zoomed === true) {
                     if (config.use_area_uri && mediator.current_enlarged_paper === null) {
@@ -373,7 +373,8 @@ list.filterList = function (search_words) {
                 }
             });
 
-    var data_circle_papers = filtered_data_papers
+    // Filter out items based on searchterm
+    let filtered_map_items = all_map_items
                 .filter(function (d) {
                             if (mediator.is_zoomed === true) {
                                 if (config.use_area_uri) {
@@ -386,9 +387,21 @@ list.filterList = function (search_words) {
                             }
                         });
 
+    // Deal with selected papers in list
+    let selected_list_items = filtered_list_items
+        .filter(function(d) {
+            if (d.paper_selected === true) {
+                return true;
+            }
+        });
+
+    if (selected_list_items[0].length === 0) {
+        selected_list_items = filtered_list_items;
+    }
+
     if (search_words[0].length === 0) {
-        data_circle_list.style("display", "block");
-        data_circle_papers.style("display", "block");
+        selected_list_items.style("display", "block");
+        filtered_map_items.style("display", "block");
 
         mediator.current_bubble.data.forEach(function (d) {
             d.filtered_out = false;
@@ -397,31 +410,33 @@ list.filterList = function (search_words) {
         return;
     }
 
-    data_circle_list.style("display", "inline");
-    data_circle_papers.style("display", "inline");
+    selected_list_items.style("display", "inline");
+    filtered_map_items.style("display", "inline");
 
     mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words);
 
-    this.hideEntries(filtered_data_list, search_words);
-    this.hideEntries(filtered_data_papers, search_words);
+    this.hideEntries(all_list_items, search_words);
+    this.hideEntries(all_map_items, search_words);
 
 };
 
 list.hideEntries = function(object, search_words) {
     object
             .filter(function (d) {
-                var abstract = d.paper_abstract.toLowerCase();
-                var title = d.title.toLowerCase();
-                var authors = d.authors_string.toLowerCase();
-                var journals = d.published_in.toLowerCase();
-                var word_found = true;
-                var count = 0;
+                let abstract = d.paper_abstract.toLowerCase();
+                let title = d.title.toLowerCase();
+                let authors = d.authors_string.toLowerCase();
+                let journals = d.published_in.toLowerCase();
+                let year = d.year;
+                let word_found = true;
+                let count = 0;
                 if (typeof abstract !== 'undefined') {
                     while (word_found && count < search_words.length) {
                         word_found = (abstract.indexOf(search_words[count]) !== -1 ||
                             title.indexOf(search_words[count]) !== -1 ||
                             authors.indexOf(search_words[count]) !== -1 ||
-                            journals.indexOf(search_words[count]) !== -1);
+                            journals.indexOf(search_words[count]) !== -1 ||
+                            year.indexOf(search_words[count]) !== -1);
                         count++;
                     }
                     d.filtered_out = word_found ? false : true;
@@ -536,6 +551,7 @@ list.enlargeListItem = function(d) {
     this.createHighlights(this.current_search_words);
 
     this.setImageForListHolder(d);
+    d.paper_selected = true;
 };
 
 list.setListHolderDisplay = function(d) {
@@ -626,7 +642,7 @@ list.populateOverlay = function(d) {
         $("#spinner-images").show();
         $("#images_holder").hide();
         $("#status").hide();
-        $("#images_modal").modal();
+        $("#images_modal").modal({keyboard:true});
 
         let images_finished = false;
         let counter = 1;
@@ -648,11 +664,11 @@ list.populateOverlay = function(d) {
 
         if (this.checkIfFileAvailable(config.server_url + "paper_preview/" + pdf_url)) {
             this.writePopup(config.server_url + "paper_preview/" + pdf_url);
-            $("#iframe_modal").modal();
+            $("#iframe_modal").modal({keyboard:true});
         } else {
             $("#spinner-iframe").show();
             $("#pdf_iframe").hide();
-            $("#iframe_modal").modal();
+            $("#iframe_modal").modal({keyboard:true});
 
             let article_url = d.oa_link;
 

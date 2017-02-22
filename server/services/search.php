@@ -93,6 +93,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $result = utf8_converter($result);
 
     $input_json = json_encode($result);
+    $input_json = preg_replace("/\<U\+(.*?)>/", "&#x$1;", $input_json);
 
     $vis_title = $repository;
     

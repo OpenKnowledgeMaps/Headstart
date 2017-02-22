@@ -53,6 +53,7 @@ class KeywordNaming extends Naming {
             $uri = $entry[$id];
             $keywords = explode($keyword_separator, $entry[$subjects]);
             foreach ($keywords as &$keyword) {
+                $keyword = preg_replace("/\<U\+(.*?)>/", "&#x$1;", $keyword);
                 if ($taxonomy_separator != null) {
                     $keyword = substr($keyword, strrpos($keyword, $taxonomy_separator) + 1);
                 }

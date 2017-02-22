@@ -36,6 +36,13 @@ var MyMediator = function() {
     this.fileData = [];
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
+    this.manager.registerModule(io, 'io');
+
+    if(config.render_list) this.manager.registerModule(list, 'list');
+    if(config.render_bubbles) {
+      this.manager.registerModule(canvas, 'canvas');
+      this.manager.registerModule(papers, 'papers');
+    }
 
     this.init();
     this.init_state();
@@ -217,7 +224,6 @@ MyMediator.prototype = {
         mediator.manager.registerModule(headstart, 'headstart');
         if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.manager.call('canvas', 'setupCanvas', []);
-        mediator.manager.call('io', 'initializeMissingData', [csv]);
         mediator.manager.call('io', 'prepareData', [highlight_data, csv]);
         mediator.manager.call('io', 'prepareAreas', []);
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
