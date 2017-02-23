@@ -256,10 +256,10 @@ create_output <- function(clusters, layout, metadata) {
   cluster_labels = clusters$cluster_labels
 
   # Prepare the output
-  result = cbind(x,y,groups,labels)
+  result = cbind(x,y,groups,labels, cluster_labels)
   output = merge(metadata, result, by.x="id", by.y="labels", all=TRUE)
   names(output)[names(output)=="groups"] <- "area_uri"
-  output["area"] = cluster_labels
+  output["area"] = output$cluster_labels
 
   output_json = toJSON(output)
 
