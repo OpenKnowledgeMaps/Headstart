@@ -216,7 +216,13 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {x = gsub("_", " ", x); trim(x)})
   tfidf_top_names <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, top_n))
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))})
-  clusters$cluster_labels <- lapply(tfidf_top_names, function(x) {paste(unlist(trim(x)), collapse=", ")})
+  tfidf_top_names <- lapply(tfidf_top_names, function(x) {paste(unlist(trim(x)), collapse=", ")})
+  clusters$cluster_labels = ""
+  for (k in seq(1, clusters$num_clusters)) {
+    group = c(names(clusters$groups[clusters$groups == k]))
+    matches = which(clusters$labels%in%group)
+    clusters$cluster_labels[c(matches)] = tfidf_top_names[k]
+  }
   return(clusters)
 }
 
@@ -253,7 +259,7 @@ create_output <- function(clusters, layout, metadata) {
   result = cbind(x,y,groups,labels)
   output = merge(metadata, result, by.x="id", by.y="labels", all=TRUE)
   names(output)[names(output)=="groups"] <- "area_uri"
-  output["area"] = paste("Cluster ", output$area_uri, sep="")
+  output["area"] = cluster_labels
 
   output_json = toJSON(output)
 
