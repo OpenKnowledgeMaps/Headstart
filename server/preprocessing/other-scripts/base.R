@@ -29,9 +29,16 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   
   year_to = params$to
   
-  date_string = ""; #paste0("dcyear:[", params$from, " TO ", params$to , "]")
+  date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   
-  (res <- bs_search(hits=100, query = paste(query, date_string, sep=""), boost = "oa"))
+  document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
+  
+  #Make sure that the abstract exists. NOT WORKING:
+  #abstract_exists = "dcdescription:?"
+  
+  (res <- bs_search(hits=100, query = paste(query, date_string, document_types, collapse=" ")))
+  
+  print(paste(query, date_string, document_types, sep=" "));
   
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
   
@@ -47,7 +54,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   metadata$authors = check_metadata(res$dccreator)
   
   metadata$link = check_metadata(res$dclink)
-  metadata$oa = res$dcoa
+  metadata$oa_state = res$dcoa
   metadata$url = metadata$id
   metadata$relevance = c(nrow(metadata):1)
   

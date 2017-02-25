@@ -22,7 +22,7 @@ switch (data_config.service) {
     case 'base':
         service_url = data_config.server_url + "services/searchBASE.php"
         service_name = "BASE";
-        options = options_doaj;
+        options = options_base;
         break;
 }
 
