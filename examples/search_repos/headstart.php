@@ -14,8 +14,11 @@
         		file: <?php echo json_encode($_GET['file']) ?>
         	}]
         </script>
-        <script type="text/javascript" src="../../dist/bundle.js"></script>
-        <link type="text/css" rel="stylesheet" href="../../dist/style.css"></link>
+        <script type="text/javascript" src="../../dist/headstart.js"></script>
+        <link type="text/css" rel="stylesheet" href="../../dist/headstart.css"></link>
+        <script type="text/javascript">
+            headstart.start();
+        </script>
          <div style="margin-top:20px">Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a> and <a href="http://github.com/ropensci/rplos" target="_blank">rplos</a>. All content retrieved from <a href="https://www.plos.org/publications/journals/" target="_blank">Public Library of Science Journals</a> under <a href="http://journals.plos.org/plosone/s/content-license" target="_blank">CC-BY</a>.
         </div>
     </body>

@@ -4,6 +4,8 @@
 
 See [Getting Started](../README.md#getting-started) for a minimal working example.
 
+See [Deploying the client](#deploying-the-client) for instructions on how to deploy the client on a production system.
+
 See [Installing and configuring the server](server_config.md) for instructions on how to install and configure the server.
 
 ## Configuration
@@ -20,7 +22,7 @@ At the moment, Headstart supports three different modes. The examples contain a 
 
 + Perform queries against *third-party APIs* and create new maps
 
-    `data-config.js` allows you to choose (currently) 1 of 2 possible repositories to query against. ("plos", "pubmed"). Follow the instructions in [HOWTO: Get the search repos example to work](howto_search_repos.md).
+    `data-config.js` allows you to choose (currently) one of three possible repositories to query against. ("plos", "pubmed", "doaj"). Follow the instructions in [HOWTO: Get the search repos example to work](howto_search_repos.md).
 
 ## Visualisation Settings
 
@@ -51,14 +53,39 @@ To change the look of Headstart beyond these options, modify the actual SASS fil
 
 ## Setting up a vanilla `index.html`
 
-Our suggestion would be to build from the examples provided, but in case you want to start from scratch, here's a guidline
+Our suggestion would be to build from the examples provided, but in case you want to start from scratch, here's a guideline
 
 Three lines will set up the basics of Headstart.
 
     <div id="some_id" class="headstart"></div>                             // Headstart's div
     <script type="text/javascript" src="path/to/data-config.js"></script>  // Runtime Config
-    <script type="text/javascript" src="path/to/dist/bundle.js"></script>  // The Core Lib
+    <script type="text/javascript" src="path/to/dist/headstart.js"></script>  // The Core Lib
+    
+Now, the only thing needed to run Headstart, is to call `headstart.start()`:
 
+    <script type="text/javascript">
+        $(document).ready(function() {    
+        	headstart.start();
+        });
+    </script>
+
+## Deploying the client
+
+To deploy Headstart, you need to make a few changes to your configuration.
+
+First, remove the protocol from your publicPath to enable https. It should look something like this:
+
+	publicPath: "//mydomain.org/headstart/dist",
+
+Second, add the stylesheets to your `index.html`:
+
+	<link rel="stylesheet" href="path/to/dist/headstart.css">
+
+Third, run the following command to create a production build of Headstart:
+
+	npm run prod
+
+Now, you only need to copy the `dist` folder to the desired location on your web server.
 
 ## Input Data Format
 

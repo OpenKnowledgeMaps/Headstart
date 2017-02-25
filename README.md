@@ -10,13 +10,12 @@ researchers that are new to a field a head start on their literature review
 ## Getting Started
 
 ### Client
-
-In order to get started quickly just make sure to have `npm` installed (it comes with Node.js, you can [download installers here](https://nodejs.org/en/download/)) and run the following two commands to build the Headstart Client. 
+In order to get started quickly, Make sure to have `npm` installed (it comes with Node.js, you can [download installers here](https://nodejs.org/en/download/)) and run the following two commands to build the Headstart Client. 
 
     npm install
     npm run dev
 
-We are using [webpack](https://webpack.github.io/) to build our client-side application. `webpack` is started in *watch mode* which means that changes to files are tracked and the created `bundle.js` is automatically updated. 
+We are using [webpack](https://webpack.github.io/) to build our client-side application. `webpack` is started in *watch mode* which means that changes to files are tracked and the created `headstart.js` is automatically updated.
 
 Now you can run a local dev server:
 
@@ -26,7 +25,13 @@ Point your browser to the following address:
 
 	http://localhost:8080/examples/local_files/index.html
 
-If everything has worked out, you should see the visualization shown above.
+If everything has worked out, you should see the visualization shown above. You will notice, however, that not all of the resources are loaded correctly. To make everything work, you need to edit the file `webpack.config.js`. Find the following line under òutput`:
+
+	publicPath: "http://path/to/dist/",
+
+and change the publicPath to the location of your `dist` folder. In case of the local dev server it should read: 
+
+	publicPath: "http://localhost:8080/dist",
 
 See [client configuration](doc/README.md) for details on adapting the client.
 

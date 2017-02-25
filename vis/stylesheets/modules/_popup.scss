@@ -8,11 +8,11 @@
         display: table;
         overflow: hidden;
     }
-    
+
     #status {
         a {
             text-decoration: underline;
-            color: $okm-red;
+            color: $iframe_modal_status;
         }
     }
 
@@ -39,7 +39,7 @@
 }
 
 #info_modal {
-    
+
     .modal-dialog {
         width: 80%;
         max-width: 700px;

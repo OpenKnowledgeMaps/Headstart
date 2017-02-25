@@ -12,8 +12,11 @@ const common = {
 
     output: {
         path: path.resolve(__dirname, "dist"),
-        publicPath: "http://localhost/project-website/search_plos/dist/",
-        filename: 'bundle.js'
+		//dev: specify a full path including protocol, production: specify full path excluding protocol
+        publicPath: "http://path/to/dist/",
+        filename: 'headstart.js',
+        libraryTarget: 'var',
+        library: 'headstart'
     },
 
     module: {
@@ -31,11 +34,13 @@ const common = {
             loader: 'babel-loader',
             exclude: /node_modules/,
             query: {
-                presets: ['es2015']
+                presets: ['es2015'],
+                plugins: ['transform-object-assign']
             }
         }, {
             test: /\.handlebars$/,
-            loader: "handlebars-loader"
+            loader: "handlebars-loader",
+            query: { inlineRequires: '\/images\/' }
         }, {
             test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             loader: 'url-loader?limit=10000&minetype=application/font-woff&name=/assets/[name].[ext]'
@@ -69,7 +74,7 @@ const common = {
 
     resolve: {
         alias: {
-            // 
+            //
             'handlebars': 'handlebars/dist/handlebars.js',
             'dotdotdot': 'jquery-dotdotdot/src/jquery.dotdotdot.min.js',
             'hypher': 'hypher/dist/jquery.hypher.js',
@@ -89,6 +94,8 @@ const common = {
             'papers': path.resolve(__dirname, 'vis/js/papers.js'),
             'intro': path.resolve(__dirname, 'vis/js/intro.js'),
             'mediator': path.resolve(__dirname, 'vis/js/mediator.js'),
+            'io' : path.resolve(__dirname, 'vis/js/io.js'),
+            'canvas' : path.resolve(__dirname, 'vis/js/canvas.js')
         },
     }
 };
@@ -119,7 +126,7 @@ switch (TARGET) {
                 }]
             },
             plugins: [
-                new ExtractTextPlugin("style.css"),
+                new ExtractTextPlugin("headstart.css"),
                 new webpack.optimize.UglifyJsPlugin({
                     compress: {
                         warnings: false

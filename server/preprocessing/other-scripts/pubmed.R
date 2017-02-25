@@ -36,6 +36,9 @@ get_papers <- function(query, params = NULL, limit = 100) {
 
   fields <- c('.//ArticleTitle', './/MedlineCitation/PMID', './/Title', './/Abstract',
               './/MedlineCitation/DateCreated/Year')
+  book_fields <- c('.//BookDocument/Book/BookTitle', './/BookDocument/PMID',
+                   './/BookDocument/Book/Publisher/PublisherName', './/Abstract',
+                   './/BookDocument/Book/PubDate/Year')
   fnames <- c('title', 'pmid', 'published_in', 'paper_abstract', 'year')
   date <- './/MedlineCitation/DateCreated'
   authors <- './/AuthorList'
@@ -49,8 +52,16 @@ get_papers <- function(query, params = NULL, limit = 100) {
   res <- rentrez::entrez_fetch(db = "pubmed", id = x$ids, rettype = "xml")
   xml <- xml2::xml_children(xml2::read_xml(res))
   out <- lapply(xml, function(z) {
-    tmp <- setNames(
-      lapply(fields, function(w) xml2::xml_text(xml2::xml_find_all(z, w))),
+    flds <- switch(
+      xml2::xml_name(z),
+      PubmedArticle = fields,
+      PubmedBookArticle = book_fields
+    )
+    tmp <- stats::setNames(
+      lapply(
+        flds,
+        function(w) xml2::xml_text(xml2::xml_find_all(z, w))
+      ),
       fnames
     )
     xdate <- paste0(vapply(xml2::xml_children(xml2::xml_find_all(z, date)), function(a) {
@@ -69,7 +80,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
     lst[vapply(lst, length, 1) != 1] <- NA
     return(lst)
   })
-  
+
   df <- data.table::setDF(data.table::rbindlist(out, fill = TRUE, use.names = TRUE))
   df <- setNames(df, tolower(names(df)))
   df$url <- paste0("http://www.ncbi.nlm.nih.gov/pubmed/", df$pmid)
@@ -77,14 +88,14 @@ get_papers <- function(query, params = NULL, limit = 100) {
   df$content <- paste(df$title, df$paper_abstract, df$authors, df$subject, df$published_in, sep= " ")
   df$doi = df$id
   df$id = df$pmid
-  
+
   summary <- rentrez::entrez_summary(db="pubmed", id = x$ids)
   df$readers <- extract_from_esummary(summary, "pmcrefcount")
   df$readers <- replace(df$readers, df$readers=="", 0)
-  
+
   pmc_ids = c()
   idlist = extract_from_esummary(summary, "articleids")
-  
+
   for(i in 1:nrow(df)) {
     current_ids = idlist[,i]
     current_pmcid = current_ids$value[current_ids$idtype=="pmc"]
@@ -93,9 +104,9 @@ get_papers <- function(query, params = NULL, limit = 100) {
     }
     pmc_ids[i] = current_pmcid
   }
-  
+
   df$pmcid = pmc_ids
-  
+
   return(list(metadata = df, text = df[,c('id', 'content')]))
 }
 
