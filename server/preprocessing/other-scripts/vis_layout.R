@@ -14,9 +14,9 @@ debug = FALSE
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
 
-vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2) {
+vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english") {
   print("calc matrix")
-  result <- create_tdm_matrix(metadata, text);
+  result <- create_tdm_matrix(metadata, text, lang);
   metadata_full_subjects = result$metadata_full_subjects
 
   print("normalize matrix")
@@ -24,7 +24,7 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
 
   print("create clusters")
   clusters <- create_clusters(normalized_matrix, max_clusters=15);
-  named_clusters <- create_cluster_labels(clusters, metadata_full_subjects, weightingspec="ntn", top_n=3, lang="english", taxonomy_separator=NULL)
+  named_clusters <- create_cluster_labels(clusters, metadata_full_subjects, weightingspec="ntn", top_n=3, lang=lang, taxonomy_separator=NULL)
   layout <- create_ordination(normalized_matrix, maxit=500, mindim=2, maxdim=2)
   output <- create_output(named_clusters, layout, metadata_full_subjects)
 
@@ -32,7 +32,7 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
 
 }
 
-create_tdm_matrix <- function(metadata, text, sparsity=1, lang="english") {
+create_tdm_matrix <- function(metadata, text, lang, sparsity=1) {
   m <- list(content = "content", id = "id")
 
   myReader <- readTabular(mapping = m)
