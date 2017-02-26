@@ -15,8 +15,13 @@ debug = FALSE
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
 
 vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english") {
+  stops <- stopwords(lang)
+  if (lang=="english"){
+    additional_stops <- scan("../../resources/english.stop", what="", sep="\n")
+    stops = c(stops, additional_stops)
+  }
   print("calc matrix")
-  result <- create_tdm_matrix(metadata, text, lang);
+  result <- create_tdm_matrix(metadata, text, stops);
   metadata_full_subjects = result$metadata_full_subjects
 
   print("normalize matrix")
@@ -24,7 +29,7 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
 
   print("create clusters")
   clusters <- create_clusters(normalized_matrix, max_clusters=15);
-  named_clusters <- create_cluster_labels(clusters, metadata_full_subjects, weightingspec="ntn", top_n=3, lang=lang, taxonomy_separator=NULL)
+  named_clusters <- create_cluster_labels(clusters, metadata_full_subjects, weightingspec="ntn", top_n=3, stops=stops, taxonomy_separator=NULL)
   layout <- create_ordination(normalized_matrix, maxit=500, mindim=2, maxdim=2)
   output <- create_output(named_clusters, layout, metadata_full_subjects)
 
@@ -32,7 +37,7 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
 
 }
 
-create_tdm_matrix <- function(metadata, text, lang, sparsity=1) {
+create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
   m <- list(content = "content", id = "id")
 
   myReader <- readTabular(mapping = m)
@@ -43,11 +48,11 @@ create_tdm_matrix <- function(metadata, text, lang, sparsity=1) {
 
   corpus <- tm_map(corpus, content_transformer(tolower))
 
-  corpus <- tm_map(corpus, removeWords, stopwords(lang))
+  corpus <- tm_map(corpus, removeWords, stops)
 
   corpus <- tm_map(corpus, stripWhitespace)
 
-  metadata_full_subjects <- replace_keywords_if_empty(corpus, metadata, lang)
+  metadata_full_subjects <- replace_keywords_if_empty(corpus, metadata, stops)
 
   corpus_unstemmed = corpus
 
@@ -64,13 +69,13 @@ create_tdm_matrix <- function(metadata, text, lang, sparsity=1) {
   return(list(tdm_matrix = tdm_matrix, metadata_full_subjects = metadata_full_subjects))
 }
 
-replace_keywords_if_empty <- function(corpus, metadata, lang) {
+replace_keywords_if_empty <- function(corpus, metadata, stops) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
 
   candidates = mapply(paste, metadata$title[missing_subjects], metadata$paper_abstract[missing_subjects])
   candidates = lapply(candidates, tolower)
-  candidates = lapply(candidates, function(x)paste(removeWords(x, stopwords(lang)), collapse=""))
+  candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
   candidates = lapply(candidates, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
   candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
   candidates = mapply(paste, candidates, candidates_bigrams)
@@ -176,7 +181,7 @@ SplitTokenizer <- function(x) {
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
-create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspec, top_n, lang, taxonomy_separator=NULL) {
+create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspec, top_n, stops, taxonomy_separator="/") {
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
     group = c(names(clusters$groups[clusters$groups == k]))
@@ -184,7 +189,18 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
 
     titles =  metadata_full_subjects$title[c(matches)]
     subjects = metadata_full_subjects$subject[c(matches)]
+    
+    titles = lapply(titles, function(x) {gsub("[^[:alnum:]]", " ", x)})
+    #titles = lapply(titles, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
+    titles = lapply(titles, gsub, pattern="  ", replacement=" ")
+    titles = lapply(titles, tolower)
+    titles = lapply(titles, function(x) {removeWords(x, stops)})
+    # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
+    titles_bigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
+    titles_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
 
+    subjects = mapply(gsub, subjects, pattern=" ", replacement="_")
+    
     if (!is.null(taxonomy_separator)) {
       subjects = mapply(function(x){strsplit(x, ";")}, subjects)
       taxons = lapply(subjects, function(y){Filter(function(x){grepl(taxonomy_separator, x)}, y)})
@@ -195,19 +211,9 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
       subjects = mapply(paste, subjects, taxons, collapse=";")
     }
 
-    texts = mapply(paste, titles, subjects)
-    texts = lapply(texts, function(x) {gsub("[^[:alnum:]]", " ", x)})
-    texts = lapply(texts, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
-    texts = lapply(texts, tolower)
-    texts = lapply(texts, function(x) {removeWords(x, stopwords(lang))})
-
-    # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
-    texts_bigrams = lapply(lapply(texts, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
-    texts_trigrams = lapply(lapply(texts, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
-
-    subjects = paste(metadata_full_subjects$subject[c(matches)], texts_bigrams, texts_trigrams, collapse=" ")
-    subjects = gsub(",", ";", subjects)
-    subjectlist = c(subjectlist, subjects)
+    all_subjects = paste(subjects, titles_bigrams, titles_trigrams, collapse=" ")
+    all_subjects = gsub(",", ";", all_subjects)
+    subjectlist = c(subjectlist, all_subjects)
   }
   nn_corpus <- Corpus(VectorSource(subjectlist))
   nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
