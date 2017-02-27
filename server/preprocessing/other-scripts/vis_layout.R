@@ -182,7 +182,7 @@ trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
 filter_out <- function(ngrams, stops){
-  tokens = mapply(strsplit, ngrams, split=" ")
+  tokens = mapply(strsplit, ngrams, split=" |;")
   tokens = mapply(strsplit, tokens, split="_")
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
@@ -197,6 +197,8 @@ filter_out <- function(ngrams, stops){
                                       !(x[1]==tail(x,1))
                                         }, y)})
   tokens = lapply(tokens, function(y){Filter(function(x){length(x)>1},y)})
+  empties = which(lapply(tokens, length)==0)
+  tokens[c(empties)] = list("")
   tokens = lapply(tokens, function(x){mapply(paste, x, collapse="_")})
   tokens = lapply(tokens, paste, collapse=";")
   return (tokens)
