@@ -181,6 +181,27 @@ SplitTokenizer <- function(x) {
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
+filter_out <- function(ngrams, stops){
+  tokens = mapply(strsplit, ngrams, split=" ")
+  tokens = mapply(strsplit, tokens, split="_")
+  tokens = lapply(tokens, function(y){
+                          Filter(function(x){
+                                      !any(grepl(x[1], c(stops)))
+                                            }, y)})
+  tokens = lapply(tokens, function(y){
+                          Filter(function(x){
+                                      !any(grepl(tail(x,1), c(stops)))
+                                            }, y)})
+  tokens = lapply(tokens, function(y){
+                          Filter(function(x){
+                                      !(x[1]==tail(x,1))
+                                        }, y)})
+  tokens = lapply(tokens, function(y){Filter(function(x){length(x)>1},y)})
+  tokens = lapply(tokens, function(x){mapply(paste, x, collapse="_")})
+  tokens = lapply(tokens, paste, collapse=";")
+  return (tokens)
+}
+
 create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspec, top_n, stops, taxonomy_separator="/") {
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
@@ -194,10 +215,12 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
     #titles = lapply(titles, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
     titles = lapply(titles, gsub, pattern="  ", replacement=" ")
     titles = lapply(titles, tolower)
-    titles = lapply(titles, function(x) {removeWords(x, stops)})
     # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
     titles_bigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
+    titles_bigrams = filter_out(titles_bigrams, stops)
     titles_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
+    titles_trigrams = filter_out(titles_trigrams, stops)
+    titles = lapply(titles, function(x) {removeWords(x, stops)})
 
     subjects = mapply(gsub, subjects, pattern=" ", replacement="_")
     
