@@ -11,7 +11,7 @@ Make sure you have the following packages installed:
   * pdo_sqlite
   * mbstring
   * fileinfo
-* R 3.3+ (https://www.r-project.org/) with the following libraries. **Make sure you install these packages for all users, so that Apache can load them.**
+* R 3.3+ (https://www.r-project.org/) with current updates, with the following libraries. **Make sure you install these packages for all users, so that Apache can load them.**
  * GMD
  * MASS
  * ecodist
