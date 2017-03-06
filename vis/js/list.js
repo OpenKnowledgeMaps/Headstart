@@ -84,12 +84,13 @@ list.drawList = function() {
     // Add sort options
     var container = d3.select("#sort_container>ul");
     var first_element = true;
-    for (let option in config.sort_options) {
+    const numberOfOptions = config.sort_options.length;
+    for (var i = 0; i < numberOfOptions; i++) {
       if (first_element) {
-        addSortOption(container, config.sort_options[option], true);
+        addSortOption(container, config.sort_options[i], true);
         first_element = false;
       } else {
-        addSortOption(container, config.sort_options[option], false);
+        addSortOption(container, config.sort_options[i], false);
       }
     }
 
@@ -314,7 +315,7 @@ list.populateReaders = function(nodes) {
             return d.area;
         });
 
-        if (!config.content_based) {
+        if (!config.content_based && config.base_unit !== "") {
             readers.select(".num_readers")
                 .html(function(d) {
                     return d.readers;
@@ -541,6 +542,10 @@ list.enlargeListItem = function(d) {
         this.reset();
         mediator.current_enlarged_paper.paper_selected = false;
       }
+    }
+
+    if (!config.render_bubbles) {
+        return;
     }
 
     this.setListHolderDisplay(d);
