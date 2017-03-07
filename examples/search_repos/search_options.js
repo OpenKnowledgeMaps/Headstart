@@ -189,6 +189,49 @@ var options_doaj = {
             ]}
     ]}
 
+var options_base = {
+    dropdowns: [
+        {id: "time_range", multiple: false, name: "Time Range", type: "dropdown"
+            , fields: [
+                {id: "any-time", text: "Any time"}
+                , {id: "last-month", text: "Last month"}
+                , {id: "last-year", text: "Last year"}
+                , {id: "user-defined", text: "Custom range", class: "user-defined",
+                    inputs: [
+                        {id: "from", label: "From: ", class: "time_input"}
+                        , {id: "to", label: "To: ", class: "time_input"}
+                    ]}
+            ]},
+        {id: "document_types", multiple: true, name: "Document types", type: "dropdown"
+            , fields: [
+                {id: "4", text: "Audio", selected: false}
+                , {id: "11", text: "Book", selected: false}
+                , {id: "111", text: "Book part", selected: false}
+                , {id: "13", text: "Conference object", selected: true}
+                , {id: "16", text: "Course material", selected: false}
+                , {id: "7", text: "Dataset", selected: false}                
+                , {id: "5", text: "Image/video", selected: false}                
+                , {id: "121", text: "Journal/newspaper article", selected: true}
+                , {id: "122", text: "Journal/newspaper other content", selected: false}
+                , {id: "17", text: "Lecture", selected: false}
+                , {id: "19", text: "Manuscript", selected: false}
+                , {id: "3", text: "Map", selected: false}
+                , {id: "2", text: "Musical notation", selected: false}   
+                , {id: "F", text: "Other/Unknown material", selected: false}                
+                , {id: "1A", text: "Patent", selected: false}
+                , {id: "14", text: "Report", selected: false}
+                , {id: "15", text: "Review", selected: true}
+                , {id: "6", text: "Software", selected: false}                
+                , {id: "51", text: "Still image", selected: false}
+                , {id: "1", text: "Text", selected: false}       
+                , {id: "181", text: "Thesis: bachelor", selected: false}
+                , {id: "183", text: "Thesis: doctoral and postdoctoral", selected: false}
+                , {id: "182", text: "Thesis: master", selected: false}
+                , {id: "52", text: "Video/moving image", selected: false}
+            ]}
+    ]
+}
+
 var SearchOptions = {
     user_defined_date: false,
     init: function (tag, data) {

@@ -18,6 +18,12 @@ switch (data_config.service) {
         service_name = "DOAJ";
         options = options_doaj;
         break;
+		
+    case 'base':
+        service_url = data_config.server_url + "services/searchBASE.php"
+        service_name = "BASE";
+        options = options_base;
+        break;
 }
 
 $(window).bind("pageshow", function () {

@@ -25,6 +25,9 @@ switch(service,
        doaj={
         source('../other-scripts/doaj.R')   
        },
+       base={
+         source('../other-scripts/base.R')   
+       }, 
       {
         source("../other-scripts/rplos_fast.R")
       }
