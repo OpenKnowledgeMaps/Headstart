@@ -17,7 +17,8 @@ debug = FALSE
 vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english") {
   stops <- stopwords(lang)
   if (lang=="english"){
-    additional_stops <- scan("../../resources/english.stop", what="", sep="\n")
+    # relative path is problematic as file is called from different sources
+    additional_stops <- scan("../resources/english.stop", what="", sep="\n")
     stops = c(stops, additional_stops)
   }
   print("calc matrix")
