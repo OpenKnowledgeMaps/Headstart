@@ -31,14 +31,15 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   
-  document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
+  document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" "), ")", sep="")
   
   #Make sure that the abstract exists. NOT WORKING:
-  #abstract_exists = "dcdescription:?"
+  abstract_exists = "dcdescription:?"
   
-  (res <- bs_search(hits=100, query = paste(query, date_string, document_types, collapse=" ")))
+  (res <- bs_search(hits=100, query = paste(query, date_string, document_types, abstract_exists, collapse=" "),
+                    fields="dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa"))
   
-  print(paste(query, date_string, document_types, sep=" "));
+  print(paste(query, date_string, document_types, abstract_exists, sep=" "));
   
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
   
