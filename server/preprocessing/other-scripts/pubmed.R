@@ -47,7 +47,8 @@ get_papers <- function(query, params = NULL, limit = 100) {
   from = gsub("-", "/", params$from)
   to = gsub("-", "/", params$to)
   article_types_string = paste0(" ((", '"', paste(params$article_types, sep='"', collapse='"[Publication Type] OR "'), '"[Publication Type]))')
-  query <- paste0(query, article_types_string)
+  exclude_articles_with_abstract = " AND hasabstract"
+  query <- paste0(query, article_types_string, exclude_articles_with_abstract)
   x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit, mindate = from, maxdate = to, sort="relevance")
   res <- rentrez::entrez_fetch(db = "pubmed", id = x$ids, rettype = "xml")
   xml <- xml2::xml_children(xml2::read_xml(res))

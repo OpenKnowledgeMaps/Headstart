@@ -31,7 +31,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   
   date_string = paste0("bibjson.year:[", params$from, " TO ", params$to , "]")
   
-  res = jaod_article_search(query=paste0(query, ' AND ', date_string, ' AND language:"English"'), pageSize=100)
+  res = jaod_article_search(query=paste0(query, ' AND ', date_string, ' AND language:"English" AND _exists_:bibjson.abstract'), pageSize=100)
   
   metadata = res$results
   names(metadata)[names(metadata) == "bibjson.title"] = "title"
