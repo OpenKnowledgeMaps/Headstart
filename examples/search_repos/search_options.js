@@ -207,7 +207,7 @@ var options_base = {
                 {id: "4", text: "Audio", selected: false}
                 , {id: "11", text: "Book", selected: false}
                 , {id: "111", text: "Book part", selected: false}
-                , {id: "13", text: "Conference object", selected: true}
+                , {id: "13", text: "Conference object", selected: false}
                 , {id: "16", text: "Course material", selected: false}
                 , {id: "7", text: "Dataset", selected: false}                
                 , {id: "5", text: "Image/video", selected: false}                
@@ -220,7 +220,7 @@ var options_base = {
                 , {id: "F", text: "Other/Unknown material", selected: false}                
                 , {id: "1A", text: "Patent", selected: false}
                 , {id: "14", text: "Report", selected: false}
-                , {id: "15", text: "Review", selected: true}
+                , {id: "15", text: "Review", selected: false}
                 , {id: "6", text: "Software", selected: false}                
                 , {id: "51", text: "Still image", selected: false}
                 , {id: "1", text: "Text", selected: false}       
