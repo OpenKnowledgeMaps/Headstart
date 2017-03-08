@@ -50,7 +50,25 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   metadata$published_in = check_metadata(res$dcsource)
   metadata$year = check_metadata(res$dcdate)
   
-  metadata$subject = check_metadata(res$dcsubject)
+  subject_all = check_metadata(res$dcsubject)
+  
+  #subject = ifelse(subject !="", paste(unique(strsplit(subject, "; ")), "; "),"")
+  
+  subject_cleaned = gsub("DOAJ:[^;]*(;|$)?", "", subject_all) # remove DOAJ classification
+  subject_cleaned = gsub("/dk/atira[^;]*(;|$)?", "", subject_cleaned) # remove atira classification
+  subject_cleaned = gsub("ddc:[0-9]+(;|$)?", "", subject_cleaned) # remove Dewey Decimal Classification
+  subject_cleaned = gsub("[A-Z,0-9]{2,}-[A-Z,0-9\\.]{2,}(;|$)?", "", subject_cleaned) #remove LOC classification
+  subject_cleaned = gsub("[^\\(;]+\\(General\\)(;|$)?", "", subject_cleaned) # remove general subjects
+  subject_cleaned = gsub("[^\\(;]+\\(all\\)(;|$)?", "", subject_cleaned) # remove general subjects
+  subject_cleaned = gsub("[^:;]+ :: [^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
+  subject_cleaned = gsub("[^\\[;]+\\[[A-Z,0-9]+\\](;|$)?", "", subject_cleaned) # remove WHO classification
+  subject_cleaned = gsub("</keyword><keyword>", "", subject_cleaned) # remove </keyword><keyword>
+  subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification
+  subject_cleaned = gsub("[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
+  
+  
+  
+  metadata$subject = subject_cleaned
   
   metadata$authors = check_metadata(res$dccreator)
   
@@ -61,7 +79,8 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   
   text = data.frame(matrix(nrow=length(res$dcdocid)))
   text$id = metadata$id
-  text$content = paste(metadata$title, metadata$paper_abstract, metadata$published_in, metadata$authors, metadata$subject, sep=" ")
+  # Add all keywords, including classification to text
+  text$content = paste(metadata$title, metadata$paper_abstract, subject_all, metadata$published_in, metadata$authors, sep=" ")
   
   ret_val=list("metadata" = metadata, "text"=text)
   return(ret_val)
