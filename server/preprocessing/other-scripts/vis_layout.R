@@ -38,6 +38,9 @@ create_tdm_matrix <- function(metadata, text, sparsity=1, lang="english") {
   
   (corpus <- Corpus(DataframeSource(text), readerControl = list(reader = myReader)))
   
+  # Replace non-convertible bytes in with strings showing their hex codes, see http://tm.r-forge.r-project.org/faq.html
+  corpus <- tm_map(corpus,  content_transformer(function(x) iconv(enc2utf8(x), sub = "byte")))
+  
   corpus <- tm_map(corpus, removePunctuation)
   
   corpus <- tm_map(corpus, content_transformer(tolower))
