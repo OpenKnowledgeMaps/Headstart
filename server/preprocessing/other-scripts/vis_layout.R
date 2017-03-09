@@ -14,10 +14,10 @@ debug = FALSE
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
 
-vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english") {
+vis_layout <- function(text, metadata, stopwordsfilepath, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english") {
   stops <- stopwords(lang)
   if (lang=="english"){
-    additional_stops <- scan("../../resources/english.stop", what="", sep="\n")
+    additional_stops <- scan(stopwordsfilepath, what="", sep="\n")
     stops = c(stops, additional_stops)
   }
   print("calc matrix")
