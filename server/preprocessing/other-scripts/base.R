@@ -25,6 +25,15 @@ library(rbace)
 
 get_papers <- function(query, params, limit=100, fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
   
+  exact_query = "";
+  
+  if(startsWith(query, '"') && endsWith(query, '"')) {
+    exact_query = paste("textus:", query, sep="") 
+  } else {
+    exact_query = gsub("(?<!\\S)(?=\\S)", "textus:", query, perl=T)
+    
+  }
+  
   year_from = params$from
   
   year_to = params$to
@@ -36,7 +45,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   #Make sure that the abstract exists. NOT WORKING:
   abstract_exists = "dcdescription:?"
   
-  (res <- bs_search(hits=100, query = paste(query, date_string, document_types, abstract_exists, collapse=" "),
+  (res <- bs_search(hits=100, query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" "),
                     fields="dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa"))
   
   print(paste(query, date_string, document_types, abstract_exists, sep=" "));
