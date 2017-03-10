@@ -264,8 +264,12 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
 filter_out_nested_ngrams <- function(top_ngrams, top_n) {
   top_names <- list()
   for (ngram in top_ngrams) {
-    ngram_in_top_names = grepl(ngram, top_names)
-    top_names_with_ngram = sapply(top_names, function(x)(grepl(x, ngram)))
+    if (ngram == "")
+      next;
+    
+    ngram_in_top_names = stringi::stri_detect_fixed(top_names, ngram)
+    top_names_with_ngram = sapply(top_names, function(x)(stringi::stri_detect_fixed(ngram, x)))
+
     # ngram substring of any top_name, and no top_name substring of ngram -> skip ngram
     if (any(ngram_in_top_names == TRUE) && all(top_names_with_ngram == FALSE)) {}
     # ngram not substring of any top_name, but at least one top_name is a substring of ngram -> replace top_name with ngram
