@@ -145,7 +145,7 @@ IO.prototype = {
                     d.oa_link = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + d.pmcid + "/pdf/";
                 }
             } else if(config.service === "base") {
-                d.oa = (d.oa_state === "1")?(true):(false);
+                d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
                 d.oa_link = d.link;
             }
 
@@ -272,7 +272,9 @@ IO.prototype = {
     },
     createOutlink: function(d) {
         var url = false;
-        if (config.url_prefix !== null) {
+        if (config.service == "base") {
+          url = d.oa_link;
+        } else if(config.url_prefix !== null) {
             url = config.url_prefix + d.url;
         } else if (typeof d.url != 'undefined') {
             url = d.url;
