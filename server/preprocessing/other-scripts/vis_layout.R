@@ -14,13 +14,19 @@ debug = FALSE
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
 
-vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english") {
+vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english",  add_stop_words=NULL, testing=FALSE) {
   stops <- stopwords(lang)
-  if (lang=="english"){
-    # relative path is problematic as file is called from different sources
-    additional_stops <- scan("../resources/english.stop", what="", sep="\n")
+
+  if (!is.null(add_stop_words)){
+    if (isTRUE(testing)) {
+        add_stop_path <- paste0("../../resources/", add_stop_words, ".stop")
+      } else {
+        add_stop_path <- paste0("../resources/", add_stop_words, ".stop")
+      }
+    additional_stops <- scan(add_stop_path, what="", sep="\n")
     stops = c(stops, additional_stops)
   }
+
   print("calc matrix")
   result <- create_tdm_matrix(metadata, text, stops);
   metadata_full_subjects = result$metadata_full_subjects
