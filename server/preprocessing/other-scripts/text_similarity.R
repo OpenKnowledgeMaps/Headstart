@@ -49,6 +49,6 @@ input_data = get_papers(query, params)
 
 print("got the input")
 
-output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS)
+output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS, stopwordsfilepath="../resources/english.stop")
 
 print(output_json)
