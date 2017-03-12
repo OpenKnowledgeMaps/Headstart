@@ -15,9 +15,12 @@ setwd(wd) #Don't forget to set your working directory
 
 source(paste("../other-scripts/vis_layout.R", sep=""))
 
+taxonomy_separator = NULL
+
 switch(service, 
        plos={
          source("../other-scripts/rplos_fast.R")
+         taxonomy_separator = "/"
        },
        pubmed={
          source('../other-scripts/pubmed.R')    
@@ -53,6 +56,6 @@ input_data = get_papers(query, params)
 
 print("got the input")
 
-output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS)
+output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS, taxonomy_separator=taxonomy_separator)
 
 print(output_json)

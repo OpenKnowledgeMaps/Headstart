@@ -15,7 +15,7 @@ debug = FALSE
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
 
-vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english",  add_stop_words=NULL, testing=FALSE) {
+vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english", add_stop_words=NULL, testing=FALSE, taxonomy_separator=NULL) {
   stops <- stopwords(lang)
 
   if (!is.null(add_stop_words)){
@@ -37,7 +37,7 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
 
   print("create clusters")
   clusters <- create_clusters(normalized_matrix, max_clusters=15);
-  named_clusters <- create_cluster_labels(clusters, metadata_full_subjects, weightingspec="ntn", top_n=3, stops=stops, taxonomy_separator=NULL)
+  named_clusters <- create_cluster_labels(clusters, metadata_full_subjects, weightingspec="ntn", top_n=3, stops=stops, taxonomy_separator)
   layout <- create_ordination(normalized_matrix, maxit=500, mindim=2, maxdim=2)
   output <- create_output(named_clusters, layout, metadata_full_subjects)
 
