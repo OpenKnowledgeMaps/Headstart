@@ -2,7 +2,7 @@
 
 The search repos example lets you perform a search in either PLOS or Pubmed and visualize the result. Getting it to work can be a little tricky, that's why we have created a little guide.
 
-##Setup
+## Setup
 
 ### First things first
 
@@ -12,11 +12,11 @@ The search repos example lets you perform a search in either PLOS or Pubmed and 
 
 ### Setup the example
 
-Duplicate the `search_repos` folder in the examples and rename it to a folder name of your choice. In the new folder, open `data-config.js` and set the `server_url` to the URL of your web server. Open the `webpack.config.json` file and set the `publicPath` to the URL of the `dist` folder on your web server.
+Duplicate the `search_repos` folder in the examples and rename it to a folder name of your choice. In the new folder, open `data-config_server.js` and set the `data_config.server_url` to the URL of your web server. Open the `webpack.config.json` file and set the `publicPath` to the URL of the `dist` folder on your web server.
 
 ### Test your setup
 
-Direct your browser to either `search_plos.html` for PLOS or `search_pubmed.html` for Pubmed. Enter a search term, e.g. "health" and click on `Submit`. If everything is setup correctly, you should see a visualization after 15-30 seconds.
+Direct your browser to either `search_plos.html` for PLOS, `search_pubmed.html` for Pubmed and so on. Enter a search term, e.g. "health" and click on `Submit`. If everything is setup correctly, you should see a visualization after 15-30 seconds.
 
 ##Troubleshooting
 

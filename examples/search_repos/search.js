@@ -68,7 +68,7 @@ $("#searchform").validate({
                     var title = "Overview of " + service_name + " articles for " + data.query + ":" + data.id;
                     var file = data.id;
 
-                    window.location = "headstart.php?title=" + title + "&file=" + file;
+                    window.location = "headstart.php?title=" + title + "&file=" + file + "&service=" + data_config.service;
                     return false;
                 } else {
                     $("#progress").html("Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again with a different query.");
