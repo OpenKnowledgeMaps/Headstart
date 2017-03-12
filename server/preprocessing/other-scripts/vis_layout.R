@@ -14,12 +14,19 @@ debug = FALSE
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
 
-vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english") {
+vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english",  add_stop_words=NULL, testing=FALSE) {
   stops <- stopwords(lang)
-  if (lang=="english"){
-    additional_stops <- scan("../../resources/english.stop", what="", sep="\n")
+
+  if (!is.null(add_stop_words)){
+    if (isTRUE(testing)) {
+        add_stop_path <- paste0("../../resources/", add_stop_words, ".stop")
+      } else {
+        add_stop_path <- paste0("../resources/", add_stop_words, ".stop")
+      }
+    additional_stops <- scan(add_stop_path, what="", sep="\n")
     stops = c(stops, additional_stops)
   }
+
   print("calc matrix")
   result <- create_tdm_matrix(metadata, text, stops);
   metadata_full_subjects = result$metadata_full_subjects
@@ -43,7 +50,10 @@ create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
   myReader <- readTabular(mapping = m)
 
   (corpus <- Corpus(DataframeSource(text), readerControl = list(reader = myReader)))
-
+  
+  # Replace non-convertible bytes in with strings showing their hex codes, see http://tm.r-forge.r-project.org/faq.html
+  corpus <- tm_map(corpus,  content_transformer(function(x) iconv(enc2utf8(x), sub = "byte")))
+  
   corpus <- tm_map(corpus, removePunctuation)
 
   corpus <- tm_map(corpus, content_transformer(tolower))
@@ -260,8 +270,12 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
 filter_out_nested_ngrams <- function(top_ngrams, top_n) {
   top_names <- list()
   for (ngram in top_ngrams) {
-    ngram_in_top_names = grepl(ngram, top_names)
-    top_names_with_ngram = sapply(top_names, function(x)(grepl(x, ngram)))
+    if (ngram == "")
+      next;
+    
+    ngram_in_top_names = stringi::stri_detect_fixed(top_names, ngram)
+    top_names_with_ngram = sapply(top_names, function(x)(stringi::stri_detect_fixed(ngram, x)))
+
     # ngram substring of any top_name, and no top_name substring of ngram -> skip ngram
     if (any(ngram_in_top_names == TRUE) && all(top_names_with_ngram == FALSE)) {}
     # ngram not substring of any top_name, but at least one top_name is a substring of ngram -> replace top_name with ngram

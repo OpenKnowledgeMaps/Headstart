@@ -25,6 +25,9 @@ switch(service,
        doaj={
         source('../other-scripts/doaj.R')   
        },
+       base={
+         source('../other-scripts/base.R')   
+       }, 
       {
         source("../other-scripts/rplos_fast.R")
       }
@@ -33,6 +36,7 @@ switch(service,
 debug = FALSE
 
 MAX_CLUSTERS = 15
+ADDITIONAL_STOP_WORDS = "english"
 
 print("inhere")
 
@@ -49,6 +53,6 @@ input_data = get_papers(query, params)
 
 print("got the input")
 
-output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS)
+output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS)
 
 print(output_json)

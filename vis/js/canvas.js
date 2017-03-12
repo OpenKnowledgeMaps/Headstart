@@ -458,6 +458,7 @@ class Canvas {
       d.orig_y = d.y;
       // scale x and y
       d.x = canvas.chart_x(d.x);
+      d.y = canvas.chart_y(d.y);
     });
   }
 

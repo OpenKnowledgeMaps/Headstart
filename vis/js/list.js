@@ -673,19 +673,24 @@ list.populateOverlay = function(d) {
             let article_url = d.oa_link;
 
             $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url, (data) => {
+                
+                var showError = function () {
+                    var link = (config.service === "base")?(this_d.link):(this_d.outlink);
+                    $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
+                    $("#status").show();
+                }
+                
                 if (data.status === "success") {
                     this.writePopup(config.server_url + "paper_preview/" + pdf_url);
                 } else if (data.status === "error") {
                      $("#spinner-iframe").hide();
-                     $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
-                     $("#status").show();
+                     showError();
                 }
 
             }).fail((d, textStatus, error) => {
                 console.error("getJSON failed, status: " + textStatus + ", error: "+error);
                 $("#spinner-iframe").hide();
-                $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
-                $("#status").show();
+                showError();
             });
         }
     }
@@ -755,18 +760,6 @@ list.setImageForListHolder = function(d) {
             .on("click", function(d) {
                 mediator.publish("list_title_click", d);
             });
-};
-
-list.createOutlink = function(d) {
-
-    var url = false;
-    if (config.url_prefix !== null) {
-        url = config.url_prefix + d.url;
-    } else if (typeof d.url != 'undefined') {
-        url = d.url;
-    }
-
-    return url;
 };
 
 list.title_click = function (d) {

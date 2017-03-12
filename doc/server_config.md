@@ -16,7 +16,7 @@ Make sure you have the following packages installed:
  * MASS
  * ecodist
  * jsonlite
- * tm
+ * tm **(Version 0.6-\* -- do not use 0.7-\*)**
  * proxy
  * SnowballC
  * rplos
