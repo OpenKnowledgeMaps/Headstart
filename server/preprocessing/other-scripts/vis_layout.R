@@ -7,6 +7,7 @@ library(SnowballC)
 library(jsonlite)
 library(parfossil)
 library(doParallel)
+library(stringi)
 registerDoParallel(3)
 
 debug = FALSE

@@ -26,6 +26,7 @@ Make sure you have the following packages installed:
  * curl
  * tibble
  * data.table
+ * stringi
  * xml2 **(Version 1.0 or higher)**
  * jaod (Currently, a Github repository only: http://github.com/ropenscilabs/jaod. Install with devtools.)
 
