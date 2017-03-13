@@ -69,6 +69,7 @@ IO.prototype = {
         }
         return { string: authors_string, short_string: authors_short_string };
     },
+
     setToStringIfNullOrUndefined: function (element, strng) {
         if (element === null || typeof element === "undefined") {
             return strng;
@@ -76,6 +77,33 @@ IO.prototype = {
             return element;
         }
     },
+
+    setDefaultIfNullOrUndefined: function (object, element, defaultVal) {
+        if (object[element] === null || typeof object[element] === "undefined") {
+            if (config.debug) console.log(`Sanitized a value ${object[element]} of ${element} to ${defaultVal}`);
+            object[element] = defaultVal;
+        }
+    },
+
+    initializeMissingData: function(data) {
+        let that = this;
+        let locale = config.localization[config.language];
+        data.forEach((d) => {
+            that.setDefaultIfNullOrUndefined(d, 'area', locale.default_area);
+            that.setDefaultIfNullOrUndefined(d, 'authors', locale.default_author);
+            that.setDefaultIfNullOrUndefined(d, 'file_hash', locale.default_hash);
+            that.setDefaultIfNullOrUndefined(d, 'id', locale.default_id);
+            that.setDefaultIfNullOrUndefined(d, 'paper_abstract', locale.default_abstract);
+            that.setDefaultIfNullOrUndefined(d, 'published_in', locale.default_published_in);
+            that.setDefaultIfNullOrUndefined(d, 'readers', locale.default_readers);
+            that.setDefaultIfNullOrUndefined(d, 'title', locale.no_title);
+            that.setDefaultIfNullOrUndefined(d, 'url', locale.default_url);
+            that.setDefaultIfNullOrUndefined(d, 'x', locale.default_x);
+            that.setDefaultIfNullOrUndefined(d, 'y', locale.default_y);
+            that.setDefaultIfNullOrUndefined(d, 'year', locale.default_year);
+        })
+    },
+
     prepareData: function (highlight_data, fs) {
         this.areas = {};
         this.areas_array = [];
@@ -264,12 +292,15 @@ IO.prototype = {
         this.areas = areas;
         this.areas_array = areas_array;
     },
+
     getData: function () {
         return this.data;
     },
+
     getAreas: function() {
         return this.areas;
     },
+
     createOutlink: function(d) {
         var url = false;
         if (config.service == "base") {
