@@ -40,7 +40,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   
-  document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" "), ")", sep="")
+  document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
   
   #Make sure that the abstract exists. NOT WORKING:
   abstract_exists = "dcdescription:?"
