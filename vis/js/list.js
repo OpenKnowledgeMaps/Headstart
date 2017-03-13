@@ -246,8 +246,14 @@ list.populateMetaData = function(nodes) {
 
         list_metadata.select(".list_published_in")
             .html(function(d) {
-                return d.published_in; });
-
+                //Remove the "in" if there is no publication name
+                if (d.published_in === "") {
+                    var parent = $(this.parentNode);
+                    $(".list_in", parent).css("display", "none");
+                }
+                
+                return d.published_in; 
+            })
         list_metadata.select(".list_pubyear")
             .html(function(d) {
                 return " (" + d.year + ")"; });
