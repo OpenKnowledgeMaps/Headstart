@@ -46,13 +46,15 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   abstract_exists = "dcdescription:?"
   
   (res <- bs_search(hits=100, query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" "),
-                    fields="dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa"))
+                    fields="dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"))
   
   print(paste(query, date_string, document_types, abstract_exists, sep=" "));
   
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
   
   metadata$id = res$dcdocid
+  metadata$relation = res$dcrelation
+  metadata$identifier = res$dcidentifier
   
   metadata$title = check_metadata(res$dctitle)
   metadata$paper_abstract = check_metadata(res$dcdescription)

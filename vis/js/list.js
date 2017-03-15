@@ -683,7 +683,7 @@ list.populateOverlay = function(d) {
 
             let article_url = d.oa_link;
 
-            $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url, (data) => {
+            $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service, (data) => {
                 
                 var showError = function () {
                     var link = (config.service === "base")?(this_d.link):(this_d.outlink);
