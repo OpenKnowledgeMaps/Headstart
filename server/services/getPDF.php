@@ -106,7 +106,7 @@ function parsePDFLink($source, $url) {
     
     if($has_match) {
         $best_match = $matches[1][0];
-        if(!startsWith($best_match, "http://") || !startsWith($best_match, "https://") || !startsWith($best_match, "ftp://")) {
+        if(!startsWith($best_match, "http://") && !startsWith($best_match, "https://") && !startsWith($best_match, "ftp://")) {
             return substr($url, 0, strrpos( $url, '/')) . $best_match;
         } else {
             return $best_match;
