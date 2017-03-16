@@ -18,10 +18,11 @@ $ini_array = library\Toolkit::loadIni($INI_DIR);
 $url = library\CommUtils::getParameter($_GET, "url");
 $filename = library\CommUtils::getParameter($_GET, "filename");
 $service = library\CommUtils::getParameter($_GET, "service");
+$pdf_urls = library\CommUtils::getParameter($_GET, "pdf_urls");
 $images_path = $ini_array["general"]["images_path"];
 
 if ($service == "base") {
-  $pdf_link = getPDFLinkforBASE($url);
+  $pdf_link = getPDFLinkforBASE($pdf_urls);
   if($pdf_link != false) {
       getPDFAndDownload($pdf_link, $images_path, $filename);
   } else {
@@ -57,7 +58,7 @@ function getPDFLinkforBASE($url) {
       }
   }
     
-  return getRedirectURL($link_list[0]);
+  return getRedirectURL($GLOABLS[$url]);
 }
 
 //Example:

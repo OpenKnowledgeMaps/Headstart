@@ -682,8 +682,12 @@ list.populateOverlay = function(d) {
             $("#iframe_modal").modal({keyboard:true});
 
             let article_url = d.oa_link;
+            let possible_pdfs = "";
+            if(config.service === "base") {
+                possible_pdfs = d.link + ";" + d.identifier + ";" + d.relation;
+            }
 
-            $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service, (data) => {
+            $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service + "&pdf_urls=" + possible_pdfs, (data) => {
                 
                 var showError = function () {
                     var link = (config.service === "base")?(this_d.link):(this_d.outlink);
