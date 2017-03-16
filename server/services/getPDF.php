@@ -35,8 +35,6 @@ library\CommUtils::echoOrCallback(json_encode(array("status" => "success", "file
 
 function getPDFLinkforBASE($url) {
   $link_list = preg_split("/;/", $url);
-  //Remove all entries that are not URLs
-  //$link_list = array_filter($link_list, function($item) { return filter_var($item, FILTER_VALIDATE_URL); });
   
   $matches_pdf = array_filter($link_list, function($item) { return substr($item, -strlen(".pdf")) === ".pdf"; }); 
   if(count($matches_pdf) != 0) {
@@ -53,10 +51,14 @@ function getPDFLinkforBASE($url) {
       $url = getRedirectDOAJ(array_values($matches_doaj)[0]);
       if($url != false) {
         return getRedirectURL($url);
+      } else {
+          //Remove all DOAJ entries and all entries that are not URLs
+          $link_list = array_filter($link_list, function($item) { return !strpos($item, "doaj.org"); });
+          $link_list = array_filter($link_list, function($item) { return filter_var($item, FILTER_VALIDATE_URL); });
       }
   }
     
-  return getRedirectURL($link_list[0]);
+  return getRedirectURL(array_values($link_list)[0]);
 }
 
 //Example:
