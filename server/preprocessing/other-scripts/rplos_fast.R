@@ -28,7 +28,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   
   date_string = paste("publication_date:[", params$from, "T00:00:00Z", " TO ", params$to, "T23:59:59Z]", sep="")
   article_types_string = paste("article_type:(", '"', paste(params$article_types, sep='"', collapse='" OR "'), '")', sep="")
-  journals_string = paste("cross_published_journal_key:(", '"', paste(params$journals, sep='"', collapse='" OR "'), '")', sep="")
+  journals_string = paste("journal_key:(", '"', paste(params$journals, sep='"', collapse='" OR "'), '")', sep="")
   
   
   # Get data from PLOS API

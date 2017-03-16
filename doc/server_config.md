@@ -16,7 +16,7 @@ Make sure you have the following packages installed:
  * MASS
  * ecodist
  * jsonlite
- * tm
+ * tm **(Version 0.6-\* -- do not use 0.7-\*)**
  * proxy
  * SnowballC
  * rplos
@@ -26,6 +26,7 @@ Make sure you have the following packages installed:
  * curl
  * tibble
  * data.table
+ * stringi
  * xml2 **(Version 1.0 or higher)**
  * jaod (Currently, a Github repository only: http://github.com/ropenscilabs/jaod. Install with devtools.)
 

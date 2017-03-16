@@ -1,8 +1,6 @@
 var data_config = {
     tag: "visualization",
     mode: "search_repos",
-    
-    server_url: "/path/to/headstart/server/",
 
     service: "pubmed",
 

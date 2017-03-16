@@ -54,7 +54,10 @@ MyMediator.prototype = {
         // init logic and state switching
         this.modules = { papers: papers, list: list, io: io, canvas: canvas};
         this.mediator.subscribe("start_visualization", this.init_start_visualization);
-        this.mediator.subscribe("normal_mode", this.set_normal_mode);
+        this.mediator.subscribe("start", this.buildHeadstartHTML);
+        this.mediator.subscribe("start", this.set_normal_mode);
+        this.mediator.subscribe("start", this.register_bubbles);
+        this.mediator.subscribe("start", this.init_modules);
         this.mediator.subscribe("ontofile", this.init_ontofile);
         this.mediator.subscribe("ontotimeline", this.init_ontotimeline);
         this.mediator.subscribe("ontotimeline_finish", this.ontotimeline_finish);
@@ -126,6 +129,16 @@ MyMediator.prototype = {
         MyMediator.prototype.is_zoomed = false;
         MyMediator.prototype.zoom_finished = false;
         MyMediator.prototype.is_in_normal_mode = true;
+    },
+
+    init_modules: function() {
+        mediator.manager.registerModule(io, 'io');
+
+        if(config.render_list) mediator.manager.registerModule(list, 'list');
+        if(config.render_bubbles) {
+            mediator.manager.registerModule(canvas, 'canvas');
+            mediator.manager.registerModule(papers, 'papers');
+        }
     },
 
     register_bubbles: function() {
@@ -208,7 +221,6 @@ MyMediator.prototype = {
     },
 
     init_start_visualization: function(highlight_data, csv) {
-        mediator.buildHeadstartHTML();
         mediator.manager.registerModule(headstart, 'headstart');
         if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.manager.call('canvas', 'setupCanvas', []);

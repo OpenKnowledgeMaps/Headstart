@@ -122,8 +122,7 @@ HeadstartFSM.prototype = {
   // the start event transitions headstart from "none" to "normal" view
   onstart: function() {
       this.checkBrowserVersions();
-      mediator.publish("normal_mode");
-      mediator.publish("register_bubbles");
+      mediator.publish("start");
       let hs = this;
       this.get_files[config.mode](hs, this.makeSetupVisualisation());
   },

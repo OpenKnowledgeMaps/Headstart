@@ -18,6 +18,12 @@ switch (data_config.service) {
         service_name = "DOAJ";
         options = options_doaj;
         break;
+		
+    case 'base':
+        service_url = data_config.server_url + "services/searchBASE.php"
+        service_name = "BASE";
+        options = options_base;
+        break;
 }
 
 $(window).bind("pageshow", function () {
@@ -62,7 +68,7 @@ $("#searchform").validate({
                     var title = "Overview of " + service_name + " articles for " + data.query + ":" + data.id;
                     var file = data.id;
 
-                    window.location = "headstart.php?title=" + title + "&file=" + file;
+                    window.location = "headstart.php?title=" + title + "&file=" + file + "&service=" + data_config.service;
                     return false;
                 } else {
                     $("#progress").html("Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again with a different query.");

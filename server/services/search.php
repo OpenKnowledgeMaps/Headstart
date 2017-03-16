@@ -75,7 +75,6 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, $repository);
 
     $output_json = end($output);
-
     $output_json = mb_convert_encoding($output_json, "UTF-8");
 
     if (!library\Toolkit::isJSON($output_json) || $output_json == "null" || $output_json == null) {
@@ -85,14 +84,8 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     }
 
     $result = json_decode($output_json, true);
-
-    $naming = new \headstart\preprocessing\naming\KeywordNaming($ini_array);
-
-    $naming->performNamingTfIdf($result, $num_labels, $keyword_separator, $taxonomy_separator, $id="area_uri", $subjects="subject");
-
-    $result = utf8_converter($result);
-
-    $input_json = json_encode($result);
+ 
+    $input_json = json_encode(utf8_converter($result));
     $input_json = preg_replace("/\<U\+(.*?)>/", "&#x$1;", $input_json);
 
     $vis_title = $repository;
