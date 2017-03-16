@@ -811,3 +811,7 @@ list.notSureifNeeded = function() {
     }
 };
 
+list.scrollTop = function() {
+    $("#papers_list").animate({ scrollTop: 0 }, 0);
+}
+

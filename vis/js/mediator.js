@@ -337,6 +337,7 @@ MyMediator.prototype = {
 
     bubble_zoomin: function(d) {
         mediator.manager.call('list', 'reset', []);
+        mediator.manager.call('list', 'scrollTop', []);
         if (typeof d != 'undefined') {
             mediator.manager.call('list', 'updateByFiltered', []);
             mediator.manager.call('list', 'filterListByAreaURIorArea', [d]);
@@ -350,6 +351,7 @@ MyMediator.prototype = {
     bubble_zoomout: function() {
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'updateByFiltered', []);
+        mediator.manager.call('list', 'scrollTop', []);
     },
 
     currentbubble_click: function(d) {
