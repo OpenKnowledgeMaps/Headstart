@@ -50,24 +50,47 @@ function getPDFLinkforBASE($url) {
   if(count($matches_doaj) != 0) {
       return getRedirectURL(getRedirectDOAJ($matches_doaj[0]));
   }
-  
-  return false;
+    
+  return getRedirectURL($link_list[0]);
 }
 
+//Example:
+//https://doaj.org/api/v1/search/articles/id%3A90764de0bd144959b1d2727c91285eb3
 function getRedirectDOAJ($doaj_url) {
-    //Example:
-    //https://doaj.org/api/v1/search/articles/id%3A90764de0bd144959b1d2727c91285eb3
+    $id = substr(strrchr($doaj_url, '/' ), 1);
+    $ch = curl_init();
+    $url = "https://doaj.org/api/v1/search/articles/id%3A" . $id;
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $response = curl_exec($ch);
+    $redir = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+    curl_close($ch);
+    
+    $array = json_decode($response, true);
+    $link = $array["results"][0]["link"][0]["url"];
+    return $link;
 }
 
 function getRedirectURL($doi_link) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $doi_link);
-    curl_setopt($ch, CURLOPT_HEADER, TRUE);
-    //curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-    $header = curl_exec($ch);
+    $response = curl_exec($ch);
     $redir = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
-    return $redir;
+    curl_close($ch);
+
+    return parsePDFLink($response);
+}
+
+function parsePDFLink($source) {
+    $has_match = preg_match_all('/["\']?([^"\'>]+(?:\.pdf))["\']?/', $source, $matches);
+    
+    if($has_match) {
+        return $matches[1][0];
+    } else {
+       return false; 
+    }
 }
 
 function getPDFAndDownload($url, $images_path, $filename) {
