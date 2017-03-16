@@ -102,8 +102,15 @@ function getRedirectURL($link) {
 }
 
 function parsePDFLink($source, $url) {
-    $has_match = preg_match_all('/["\']?([^"\'\s>]+(?:\.pdf))["\']?/i', $source, $matches);
+    $has_match = preg_match_all('/meta[\s]+content=["\']+([^"\']+)["\']+[\s]+name[\s]*=[\s]*["\']+citation_pdf_url["\']+/i', $source, $matches);
+    if(!$has_match) {
+        $has_match = preg_match_all('/meta[\s]+name[\s]*=[\s]*["\']+citation_pdf_url["\']+[\s]+content=["\']+([^"\']+)["\']+/i', $source, $matches);
     
+        if(!$has_match) {
+            $has_match = preg_match_all('/["\']?([^"\'\s>]+(?:\.pdf))["\']?/i', $source, $matches);
+        }
+    }
+
     if($has_match) {
         $best_match = $matches[1][0];
         if(!startsWith($best_match, "http://") && !startsWith($best_match, "https://") && !startsWith($best_match, "ftp://")) {
