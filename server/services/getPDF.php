@@ -9,8 +9,6 @@ require 'helper.php';
 
 use headstart\library;
 
-$USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13';
-
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 
 $ini_array = library\Toolkit::loadIni($INI_DIR);
@@ -58,7 +56,7 @@ function getPDFLinkforBASE($url) {
       }
   }
     
-  return getRedirectURL($GLOABLS[$url]);
+  return getRedirectURL($link_list[0]);
 }
 
 //Example:
@@ -70,13 +68,15 @@ function getRedirectDOAJ($doaj_url) {
     $response = file_get_contents($url);
     
     $array = json_decode($response, true);
-    $links = $array["results"][0]["bibjson"]["link"];
     $fulltext_link = null;
-    foreach($links as $link) {
-        if($link["type"] === "fulltext") {
-            $fulltext_link = $link["url"];
-        }
-    }        
+    if($array["total"] > 0) {
+        $links = $array["results"][0]["bibjson"]["link"];
+        foreach($links as $link) {
+            if($link["type"] === "fulltext") {
+                $fulltext_link = $link["url"];
+            }
+        }   
+    }
     return ($fulltext_link === null)?(false):($fulltext_link);
 }
 
@@ -87,7 +87,7 @@ function getContentFromURL($link) {
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_VERBOSE, true);
-    curl_setopt($ch, CURLOPT_USERAGENT, $GLOBALS["USER_AGENT"]);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
     $response = curl_exec($ch);
     $redir = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
     curl_close($ch);
