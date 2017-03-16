@@ -24,6 +24,7 @@ if ($service == "base") {
       getPDFAndDownload($pdf_link, $images_path, $filename);
   } else {
       library\CommUtils::echoOrCallback(json_encode(array("status" => "error")), $_GET);
+      exit();
   }
 } else {
     getPDFAndDownload($url, $images_path, $filename);
@@ -32,13 +33,13 @@ if ($service == "base") {
 library\CommUtils::echoOrCallback(json_encode(array("status" => "success", "file" => $filename)), $_GET);
 
 function getPDFLinkforBASE($url) {
-   $link_list = preg_split("/;/", $url);
+  $link_list = preg_split("/;/", $url);
   //Remove all entries that are not URLs
   $link_list = array_filter($link_list, function($item) { return filter_var($item, FILTER_VALIDATE_URL); });
   
   $matches_pdf = array_filter($link_list, function($item) { return substr($item, -strlen(".pdf")) === ".pdf"; }); 
   if(count($matches_pdf) != 0) {
-      return $matches_pdf[0];
+      return array_values($matches_pdf)[0];
   }
   
   $matches_doi = array_filter($link_list, function($item) { return strpos($item, "dx.doi.org"); });
@@ -48,7 +49,10 @@ function getPDFLinkforBASE($url) {
   
   $matches_doaj = array_filter($link_list, function($item) { return strpos($item, "doaj.org"); });
   if(count($matches_doaj) != 0) {
-      return getRedirectURL(getRedirectDOAJ($matches_doaj[0]));
+      $url = getRedirectDOAJ($matches_doaj[0]);
+      if($url != false) {
+        return getRedirectURL($url);
+      }
   }
     
   return getRedirectURL($link_list[0]);
@@ -58,17 +62,19 @@ function getPDFLinkforBASE($url) {
 //https://doaj.org/api/v1/search/articles/id%3A90764de0bd144959b1d2727c91285eb3
 function getRedirectDOAJ($doaj_url) {
     $id = substr(strrchr($doaj_url, '/' ), 1);
-    $ch = curl_init();
     $url = "https://doaj.org/api/v1/search/articles/id%3A" . $id;
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    $response = curl_exec($ch);
-    $redir = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
-    curl_close($ch);
+    
+    $response = file_get_contents($url);
     
     $array = json_decode($response, true);
-    $link = $array["results"][0]["link"][0]["url"];
-    return $link;
+    $links = $array["results"][0]["bibjson"]["link"];
+    $fulltext_link = null;
+    foreach($links as $link) {
+        if($link["type"] === "fulltext") {
+            $fulltext_link = $link["url"];
+        }
+    }        
+    return ($fulltext_link === null)?(false):($fulltext_link);
 }
 
 function getRedirectURL($doi_link) {
