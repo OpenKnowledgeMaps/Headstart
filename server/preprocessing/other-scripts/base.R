@@ -59,7 +59,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   
   metadata$title = check_metadata(res$dctitle)
   metadata$paper_abstract = check_metadata(res$dcdescription)
-  metadata$published_in = check_metadata(res$dcsource)
+  metadata$published_in = ifelse(!is.null(res$dcsource), check_metadata(res$dcsource), "")
   metadata$year = check_metadata(res$dcdate)
   
   subject_all = check_metadata(res$dcsubject)
