@@ -54,12 +54,12 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
   
   metadata$id = res$dcdocid
-  metadata$relation = res$dcrelation
-  metadata$identifier = res$dcidentifier
+  metadata$relation = check_metadata(res$dcrelation)
+  metadata$identifier = check_metadata(res$dcidentifier)
   
   metadata$title = check_metadata(res$dctitle)
   metadata$paper_abstract = check_metadata(res$dcdescription)
-  metadata$published_in = ifelse(!is.null(res$dcsource), check_metadata(res$dcsource), "")
+  metadata$published_in = check_metadata(res$dcsource)
   metadata$year = check_metadata(res$dcdate)
   
   subject_all = check_metadata(res$dcsubject)
@@ -100,5 +100,9 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
 }
 
 check_metadata <- function (field) {
-  return (ifelse(is.na(field), '', field))
+  if(!is.null(field)) {
+    return (ifelse(is.na(field), '', field))
+  } else {
+    return ('')
+  }
 }
