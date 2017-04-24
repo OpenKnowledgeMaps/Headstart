@@ -1,9 +1,6 @@
 # Head Start
 
-Head Start presents you with the main areas in the field, and lets you zoom into
-the most important publications within each area. It is intended to give
-researchers that are new to a field a head start on their literature review
-(hence the name).
+Head Start is a web-based knowledge mapping software intended to give researchers  a head start on their literature review (hence the name). It comes with a powerful backend that is is capable of automatically producing knowledge maps from a variety of data, including text, metadata and references.
 
 ![Head Start](headstart.png)
 
@@ -43,33 +40,38 @@ See [Installing and configuring the server](doc/server_config.md) for instructio
 
 ## Contributors
 
-Maintainer: Peter Kraker ([opendiscovery@gmx.at](mailto:opendiscovery@gmx.at))
+Maintainer: [Peter Kraker](https://github.com/pkraker) ([pkraker@openknowledgemaps.org](mailto:pkraker@openknowledgemaps.org))
 
-Authors: [Asura Enkhbayar](https://github.com/Bubblbu), [Scott Chamberlain](https://github.com/sckott), [Chris Kittel](https://github.com/chreman), [Philipp Weissensteiner](https://github.com/wpp), and the [Open Knowledge Maps team](http://openknowledgemaps.org/team)
+Authors: [Asura Enkhbayar](https://github.com/Bubblbu), [Scott Chamberlain](https://github.com/sckott), [Chris Kittel](https://github.com/chreman), [Maxi Schramm](https://github.com/tanteuschi), [Rainer Bachleitner](https://github.com/rbachleitner), [Mike Skaug](https://github.com/mikeskaug), [Philipp Weissensteiner](https://github.com/wpp), and the [Open Knowledge Maps team](http://openknowledgemaps.org/team)
 
 
 ## Features
 
-* The main areas in the field are represented by the blue bubbles.
-* Once you click on a bubble, you are presented with the main papers in that area.
-* The dropdown on the right displays the same data in list form. By clicking on one of the papers, you can access all metadata for that paper.
-* If a preview is available, you can retrieve it by clicking on the thumbnail in the metadata panel.
-* By clicking on the white background, you can then zoom out and inspect another area.
-* To access the an overview over time, click on TimeLineView.
+* Interactive, web-based knowledge maps based on [D3.js](https://d3js.org), following Shneiderman's principle of "overview first, zoom and filter, then details-on-demand"
+* Synchronized list representation of documents complementing the knowledge map
+* Integrated PDF viewer and annotation tool, courtesy of [Hypothes.is](https://hypothes.is)
+* Powerful server component written in PHP and R for the creation of knowledge maps, including algorithms for clustering, ordination and labelling
+* Connectors to a number of academic search engines through [rOpenSci](https://ropensci.org), including [BASE](https://base-search.net), [PubMed](https://www.ncbi.nlm.nih.gov/pubmed), [PLOS](https://plos.org) and [DOAJ](https://doaj.org)
+* Persistence and versioning system based on SQLite
 
-The visualization was created with D3.js. It has been successfully tested with Chrome 22, Firefox 15, and Safari 5.1. Unfortunately, Internet Explorer is not supported at this point due to the fact that it is not possible to insert HTML into a foreignObject.
 
 ## Showcases
 
-* [Open Knowledge Maps](http://openknowledgemaps.org/): Creates a visualization on the fly based on a user's PLOS search.
-* [Overview of Educational Technology](http://openknowledgemaps.org/educational-technology): A working prototype for the field of educational technology. 
+* [Open Knowledge Maps](http://openknowledgemaps.org/): Creates a visualization on the fly based on a user's search in either BASE or PubMed.
+* [Overview of Educational Technology](http://openknowledgemaps.org/educational-technology): A working prototype for the field of educational technology based on co-readership.
+* [Timeline of UMAP Conferences](http://stellar.know-center.tugraz.at/umap/): A prototype showcasing an overview of two years of the UMAP Conferences.
 * [Conference Navigator 3](http://halley.exp.sis.pitt.edu/cn3/visualization.php?conferenceID=131) [registration required]: An adaptation of Head Start for the conference scheduling system CN3. This version enables users to schedule papers directly from the visualization. Scheduled papers and recommended papers are highlighted.
 * [Organic Edunet portal](http://organic-edunet.eu/en/#/recommended): Overview of recommended resources in the Organic Eudnet portal.
 
+## Compatibility 
+
+The visualization has been successfully tested with Chrome, Firefox, Safari and Microsoft Edge. Unfortunately, Internet Explorer is not supported due to the fact that it is not possible to insert HTML into a foreignObject.
 
 ## Background
 
 More information can be found in the following papers:
+
+Kraker, P., Kittel, C., & Enkhbayar, A. (2016). [Open Knowledge Maps: Creating a Visual Interface to the World’s Scientific Knowledge Based on Natural Language Processing](http://0277.ch/ojs/index.php/cdrs_0277/article/view/157/355). 027.7 Journal for Library Culture, 4(2), 98–103. doi:10.12685/027.7-4-2-157
 
 Kraker, P., Schlögl, C. , Jack, K. & Lindstaedt, S. (2015). [Visualization of Co-Readership Patterns from an Online Reference Management System](http://arxiv.org/abs/1409.0348). Journal of Informetrics, 9(1), 169–182. doi:10.1016/j.joi.2014.12.003
 
