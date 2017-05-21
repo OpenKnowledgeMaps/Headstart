@@ -8,6 +8,7 @@ library(jsonlite)
 library(parfossil)
 library(doParallel)
 library(stringi)
+library(stringdist)
 registerDoParallel(3)
 
 debug = FALSE
@@ -15,7 +16,16 @@ debug = FALSE
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
 
-vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english", add_stop_words=NULL, testing=FALSE, taxonomy_separator=NULL) {
+vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english", 
+                       add_stop_words=NULL, testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
+  
+  #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
+  if(list_size > -1 && list_size < length(metadata$id)) {
+    output = deduplicate_titles(metadata, list_size)
+    text = subset(text, id %in% output)
+    metadata = subset(metadata, id %in% output)
+  }
+  
   stops <- stopwords(lang)
 
   if (!is.null(add_stop_words)){
@@ -43,6 +53,39 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
 
   return(output)
 
+}
+
+deduplicate_titles <- function(metadata, list_size) {
+  output <- c()
+  max_replacements = length(metadata$id) - list_size
+  ids = metadata$id
+  titles = metadata$title
+  replacements = 0
+  count = 1
+  
+  while((count <= length(titles)) && (length(output) < list_size)) {
+    print(paste0("count: ", count))
+    
+    if((replacements == max_replacements) || (levenshtein_ratio(titles[count], titles[count+1]) > 1/15.83)) {
+      print("here")
+      output = append(output, ids[count])
+      count = count + 1
+    }
+    else {
+      print("there")
+      output = append(output, ids[count])
+      z = count
+      count = count + 1
+      replacements = replacements + 1
+      while(levenshtein_ratio(titles[z], titles[count+1]) < 1/15.83 && replacements < max_replacements) {
+        count = count + 1
+        replacements = replacements + 1
+      }
+      count = count + 1
+    }
+  }
+  return(output)
+  
 }
 
 create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
@@ -328,4 +371,10 @@ create_output <- function(clusters, layout, metadata) {
 
   return(output_json)
 
+}
+
+levenshtein_ratio <- function(a, b) {
+  lv_dist = stringdist(a, b, method = "lv")
+  lv_ratio = lv_dist/(max(stri_length(a), stri_length(b)))
+  return(lv_ratio)
 }

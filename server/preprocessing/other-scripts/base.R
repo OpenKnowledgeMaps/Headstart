@@ -45,7 +45,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   #Make sure that the abstract exists. NOT WORKING:
   abstract_exists = "dcdescription:?"
   
-  (res_raw <- bs_search(hits=100, query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" "),
+  (res_raw <- bs_search(hits=limit, query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" "),
                         fields="dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"))
   res <- res_raw$docs
   
