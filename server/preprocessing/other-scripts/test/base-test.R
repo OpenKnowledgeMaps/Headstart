@@ -27,12 +27,13 @@ if(!is.null(params_file)) {
 
 #start.time <- Sys.time()
 
-input_data = get_papers(query, params)
+input_data = get_papers(query, params, limit=30)
 
 #end.time <- Sys.time()
 #time.taken <- end.time - start.time
 #time.taken
 
-output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
+output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS, 
+                         add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=20)
 
 print(output_json)
