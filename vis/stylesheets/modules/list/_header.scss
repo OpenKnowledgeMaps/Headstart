@@ -28,6 +28,13 @@
     border-color: #2c3d51;
 }
 
+#sortby {
+    margin-right: 10px;
+    padding: 10px 0px;
+    line-height: 230%;
+    font-size: 12px;
+}
+
 @media screen and (max-width: 1050px) {
     #sort_container {
         float: none;

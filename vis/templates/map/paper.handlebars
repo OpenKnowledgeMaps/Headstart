@@ -2,18 +2,18 @@
 
     <div class="metadata" style="height:{{{ metadata_height }}}px; width:{{{ metadata_width }}}px;">
         <div id="icons" style="overflow: hidden;">    
-           <p id="open-access-logo"><img src="../../images/open-access-logo.png"></p>
-           <p id="outlink" ><a href="{{{ d.oa_link }}}" target="_blank" class="outlink_symbol">&nbsp;&#xf019;</a></p>
+           <p id="open-access-logo">&#xf09c;</p>
+           <!--<p id="outlink" ><a href="{{{ d.oa_link }}}" target="_blank" class="outlink_symbol">&nbsp;&#xf019;</a></p>
            <p id="outlink"><a href="{{{ d.outlink }}}" target="_blank"><span class="outlink_symbol">&nbsp;&#xf08e;</span></a></p>
-
+-->
         </div>
     <p id="title" class="highlightable">
     {{{ d.title }}}<br /></p>
         <p id="details" class="highlightable">{{{ d.authors_string }}}</p>
-        <p id="in">in <span class="pubyear highlightable">{{{ d.published_in }}} ({{{ d.year }}})</span></p>
+        <p id="in">in <span class="highlightable">{{{ d.published_in }}} <span class="pubyear">({{{ d.year }}})</span></span></p>
     </div>
     <div class="readers">
-        <p id="readers">{{{ d.readers }}}<span class="readers_entity"> {{{ base_unit }}}</span></p>
+        <p id="readers"><span id="num-readers">{{{ d.readers }}}</span><span class="readers_entity"> {{{ base_unit }}}</span></p>
 
     </div>
 </div>

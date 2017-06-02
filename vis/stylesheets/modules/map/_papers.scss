@@ -69,9 +69,13 @@
 
 
     a {
-        color: $papers_holder_a;
+        
+        color: $journal-gray;
+        
     }
-
+    #num-readers {
+        font-weight: bold;
+    }
     #readers {
         font-size: 9px;
         line-height: 8px;
@@ -80,7 +84,7 @@
         text-align: left;
         vertical-align: text-bottom;
         font-family: Helvetica;
-        font-weight: bold;
+       
 
 
         &.large {
@@ -102,29 +106,23 @@
 
 }
 
-.outlink_symbol  {
-    color: $papers_outlink_symbol;
-
-    &:hover, &:active, &:focus {
-        color: $papers_outlink_symbol_haf;
-        text-decoration: none;
-    }
-}
 
 #open-access-logo {
-
+    font-family: 'FontAwesome';
     padding: 0px 0px 0px 0px;
     display:inline-block;
+    background-color: $open-access;
+    color: white;
+    padding:4px;
+    font-size: 8px;
+    border-radius: 3px;
 
     &.large {
-        width:12px;
-        padding: 5px 8px 2px 10px;
+        font-size: 10px;
     }
 
     &.larger {
-        width:12px;
-        padding: 5px 8px 2px 10px;
-
+        font-size: 10px;
     }
 
     img {
@@ -132,7 +130,6 @@
         vertical-align: top;
     }
 }
-
 
 
 #title {
@@ -157,7 +154,8 @@
     }
 
     .pubyear {
-        font-style: italic;
+        font-weight: bold;
+        font-style: normal;
     }
 }
 

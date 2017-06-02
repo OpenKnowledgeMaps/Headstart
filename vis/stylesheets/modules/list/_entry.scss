@@ -9,6 +9,16 @@
     padding-left: 15px;
 }
 
+#open-access-logo_list {
+    background-color: $open-access;
+    color: white;
+    padding: 2px;
+    border-radius: 5px;
+    font-size: 10px;
+}
+
+
+
 .list_metadata {
     /*border-top-width: 2px;
     border-top-style: solid;
@@ -17,6 +27,11 @@
     margin-bottom: 10px;
     font-family: Helvetica;
 
+    /*.list_title.oa a {
+            color: $okm-red;
+            }*/
+            
+    
     .list_title {
         font-size: 14px;
         margin-bottom: 4px;
@@ -24,14 +39,15 @@
         display: inline-block;
         font-weight: bold;
 
-        #paper_list_title {
+            a {
             text-decoration: none;
             color: $list_metadata_title_paper;
 
             &:hover {
                 text-decoration: underline;
             }
-        }
+            }
+    
     }
 
     #outlink_list {
@@ -46,14 +62,30 @@
         float: right;
         vertical-align: top;
         display: inline-block;
+        text-align: center;
+        padding-top: 5px;
+    }
+    
+    .list_links a.pdf-link {
+        color: $open-access;
+        border: 1px solid $open-access;
+        &:hover {
+        background-color: $open-access;
+        color: white;
+    }
     }
 
     .list_links a {
-        color: $list_links;
+        background-color: white;
         text-decoration: none;
         cursor: pointer;
+        padding: 5px;
+        border-radius: 5px;
+        color: $journal-gray;
+        border: 1px solid $journal-gray;
         &:hover {
-        color: $list_links_hover;
+        background-color: $journal-gray;
+        color: white;
     }
     }
 
@@ -93,7 +125,6 @@
 #list_abstract {
     max-width: 82%;
     font: 12px 'Helvetica', sans-serif;
-    font-size: 11px;
     line-height: 13px;
     padding-right: 0;
     padding-left: 0px;
