@@ -28,6 +28,14 @@
     border-color: #2c3d51;
 }
 
+#sortby, #sort-buttons {
+    vertical-align: middle;
+}
+
+#sortby {
+    margin-right: 10px;
+}
+
 @media screen and (max-width: 1050px) {
     #sort_container {
         float: none;

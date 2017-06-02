@@ -46,14 +46,20 @@
         float: right;
         vertical-align: top;
         display: inline-block;
+        text-align: center;
     }
 
     .list_links a {
-        color: $list_links;
+        background-color: white;
         text-decoration: none;
         cursor: pointer;
+        padding: 5px;
+        border-radius: 5px;
+        color: $journal-gray;
+        border: 1px solid $journal-gray;
         &:hover {
-        color: $list_links_hover;
+        background-color: $journal-gray;
+        color: white;
     }
     }
 
