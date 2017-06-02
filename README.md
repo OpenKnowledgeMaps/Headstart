@@ -87,4 +87,4 @@ Head Start is licensed under [LGPL v3](http://www.gnu.org/copyleft/lesser.html).
 ## Citation
 If you use Head Start in your research, please cite it as follows:
 
-Kraker, Peter; Enkhbayar, Asura; Weißensteiner, Philipp (2016). Head Start 2.9. Zenodo. http://dx.doi.org/10.5281/zenodo.50715
+Kraker, P., Enkhbayar, A., Chamberlain, S., Kittel, C., Schramm, M., Bachleitner, R., Weissensteiner, P. & Skaug, M. (2017). Headstart v3.5. Zenodo. http://doi.org/10.5281/zenodo.569062
