@@ -8,6 +8,7 @@ library(jsonlite)
 library(parfossil)
 library(doParallel)
 library(stringi)
+library(stringdist)
 registerDoParallel(3)
 
 debug = FALSE
@@ -15,7 +16,16 @@ debug = FALSE
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
 
-vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english", add_stop_words=NULL, testing=FALSE, taxonomy_separator=NULL) {
+vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english", 
+                       add_stop_words=NULL, testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
+  
+  #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
+  if(list_size > -1 && list_size < length(metadata$id)) {
+    output = deduplicate_titles(metadata, list_size)
+    text = subset(text, id %in% output)
+    metadata = subset(metadata, id %in% output)
+  }
+  
   stops <- stopwords(lang)
 
   if (!is.null(add_stop_words)){
@@ -43,6 +53,39 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
 
   return(output)
 
+}
+
+deduplicate_titles <- function(metadata, list_size) {
+  output <- c()
+  max_replacements = length(metadata$id) - list_size
+  ids = metadata$id
+  titles = metadata$title
+  replacements = 0
+  count = 1
+  
+  while((count <= length(titles)) && (length(output) < list_size)) {
+    print(paste0("count: ", count))
+    
+    if((replacements == max_replacements) || (levenshtein_ratio(titles[count], titles[count+1]) > 1/15.83)) {
+      print("here")
+      output = append(output, ids[count])
+      count = count + 1
+    }
+    else {
+      print("there")
+      output = append(output, ids[count])
+      z = count
+      count = count + 1
+      replacements = replacements + 1
+      while(levenshtein_ratio(titles[z], titles[count+1]) < 1/15.83 && replacements < max_replacements) {
+        count = count + 1
+        replacements = replacements + 1
+      }
+      count = count + 1
+    }
+  }
+  return(output)
+  
 }
 
 create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
@@ -83,21 +126,22 @@ create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
 replace_keywords_if_empty <- function(corpus, metadata, stops) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
-
   candidates = mapply(paste, metadata$title[missing_subjects], metadata$paper_abstract[missing_subjects])
   candidates = lapply(candidates, tolower)
   candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
-  candidates = lapply(candidates, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
+  candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
+  candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
   candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
+  #candidates_trigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
   candidates = mapply(paste, candidates, candidates_bigrams)
   #candidates = lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
-  candidates = lapply(candidates, function(x) {gsub("[^[:alnum:]]", " ", x)})
-
+  
   nn_corpus = Corpus(VectorSource(candidates))
   nn_tfidf = TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
   tfidf_top = apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
   tfidf_top_names = lapply(tfidf_top, names)
-  replacement_keywords = lapply(tfidf_top_names, FUN = function(x) {paste(unlist(x), collapse=";")})
+  replacement_keywords <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, 3))
+  replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse=";")})
   replacement_keywords = gsub("_", " ", replacement_keywords)
 
   metadata$subject[missing_subjects] <- replacement_keywords
@@ -233,6 +277,10 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
     titles_bigrams = filter_out(titles_bigrams, stops)
     titles_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
     titles_trigrams = filter_out(titles_trigrams, stops)
+    #titles_quadgrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 4), paste, collapse="_"))), paste, collapse=" ")
+    #titles_quadgrams = filter_out(titles_quadgrams, stops)
+    #titles_fivegrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 5), paste, collapse="_"))), paste, collapse=" ")
+    #titles_fivegrams = filter_out(titles_fivegrams, stops)
     titles = lapply(titles, function(x) {removeWords(x, stops)})
 
     subjects = mapply(gsub, subjects, pattern=" ", replacement="_")
@@ -328,4 +376,10 @@ create_output <- function(clusters, layout, metadata) {
 
   return(output_json)
 
+}
+
+levenshtein_ratio <- function(a, b) {
+  lv_dist = stringdist(a, b, method = "lv")
+  lv_ratio = lv_dist/(max(stri_length(a), stri_length(b)))
+  return(lv_ratio)
 }
