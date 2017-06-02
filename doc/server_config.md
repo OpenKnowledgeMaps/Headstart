@@ -27,6 +27,7 @@ Make sure you have the following packages installed:
  * tibble
  * data.table
  * stringi
+ * stringdist
  * xml2 **(Version 1.0 or higher)**
  * jaod (Currently, a Github repository only: http://github.com/ropenscilabs/jaod. Install with devtools.)
 
