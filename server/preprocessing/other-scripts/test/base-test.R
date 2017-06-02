@@ -8,7 +8,7 @@ wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
 setwd(wd) #Don't forget to set your working directory
 
-query <- "health issues" #args[2]
+query <- "brain" #args[2]
 service <- "base"
 params <- NULL
 params_file <- "params_base.json"
@@ -27,13 +27,13 @@ if(!is.null(params_file)) {
 
 #start.time <- Sys.time()
 
-input_data = get_papers(query, params, limit=30)
+input_data = get_papers(query, params, limit=125)
 
 #end.time <- Sys.time()
 #time.taken <- end.time - start.time
 #time.taken
 
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS, 
-                         add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=20)
+                         add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
 
 print(output_json)
