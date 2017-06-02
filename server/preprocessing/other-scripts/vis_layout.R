@@ -132,8 +132,8 @@ replace_keywords_if_empty <- function(corpus, metadata, stops) {
   candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
   candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
   candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
-  candidates_trigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
-  candidates = mapply(paste, candidates, candidates_bigrams, candidates_trigrams)
+  #candidates_trigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
+  candidates = mapply(paste, candidates, candidates_bigrams)
   #candidates = lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
   
   nn_corpus = Corpus(VectorSource(candidates))
@@ -277,10 +277,10 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
     titles_bigrams = filter_out(titles_bigrams, stops)
     titles_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
     titles_trigrams = filter_out(titles_trigrams, stops)
-    titles_quadgrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 4), paste, collapse="_"))), paste, collapse=" ")
-    titles_quadgrams = filter_out(titles_quadgrams, stops)
-    titles_fivegrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 5), paste, collapse="_"))), paste, collapse=" ")
-    titles_fivegrams = filter_out(titles_fivegrams, stops)
+    #titles_quadgrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 4), paste, collapse="_"))), paste, collapse=" ")
+    #titles_quadgrams = filter_out(titles_quadgrams, stops)
+    #titles_fivegrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 5), paste, collapse="_"))), paste, collapse=" ")
+    #titles_fivegrams = filter_out(titles_fivegrams, stops)
     titles = lapply(titles, function(x) {removeWords(x, stops)})
 
     subjects = mapply(gsub, subjects, pattern=" ", replacement="_")
@@ -295,7 +295,7 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
       subjects = mapply(paste, subjects, taxons, collapse=";")
     }
 
-    all_subjects = paste(subjects, titles_bigrams, titles_trigrams, titles_quadgrams, titles_fivegrams, collapse=" ")
+    all_subjects = paste(subjects, titles_bigrams, titles_trigrams, collapse=" ")
     all_subjects = gsub(",", ";", all_subjects)
     subjectlist = c(subjectlist, all_subjects)
   }
