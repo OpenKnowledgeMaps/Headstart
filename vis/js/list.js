@@ -209,6 +209,15 @@ list.filterListByArea = function(area) {
 list.populateMetaData = function(nodes) {
     nodes[0].forEach(function(elem) {
         var list_metadata = d3.select(elem).select(".list_metadata");
+        
+        list_metadata.select(".list_title")
+            .attr("class", function(d) {
+                if(d.oa) {
+                    return "list_title oa"
+                } else {
+                    return "list_title"
+                }
+        })
 
         list_metadata.select("#paper_list_title")
             .html(function(d) {
