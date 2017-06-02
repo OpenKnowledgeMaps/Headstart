@@ -83,21 +83,22 @@ create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
 replace_keywords_if_empty <- function(corpus, metadata, stops) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
-
   candidates = mapply(paste, metadata$title[missing_subjects], metadata$paper_abstract[missing_subjects])
   candidates = lapply(candidates, tolower)
   candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
-  candidates = lapply(candidates, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
+  candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
+  candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
   candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
-  candidates = mapply(paste, candidates, candidates_bigrams)
+  candidates_trigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
+  candidates = mapply(paste, candidates, candidates_bigrams, candidates_trigrams)
   #candidates = lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
-  candidates = lapply(candidates, function(x) {gsub("[^[:alnum:]]", " ", x)})
-
+  
   nn_corpus = Corpus(VectorSource(candidates))
   nn_tfidf = TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
   tfidf_top = apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
   tfidf_top_names = lapply(tfidf_top, names)
-  replacement_keywords = lapply(tfidf_top_names, FUN = function(x) {paste(unlist(x), collapse=";")})
+  replacement_keywords <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, 3))
+  replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse=";")})
   replacement_keywords = gsub("_", " ", replacement_keywords)
 
   metadata$subject[missing_subjects] <- replacement_keywords
@@ -233,6 +234,10 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
     titles_bigrams = filter_out(titles_bigrams, stops)
     titles_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
     titles_trigrams = filter_out(titles_trigrams, stops)
+    titles_quadgrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 4), paste, collapse="_"))), paste, collapse=" ")
+    titles_quadgrams = filter_out(titles_quadgrams, stops)
+    titles_fivegrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 5), paste, collapse="_"))), paste, collapse=" ")
+    titles_fivegrams = filter_out(titles_fivegrams, stops)
     titles = lapply(titles, function(x) {removeWords(x, stops)})
 
     subjects = mapply(gsub, subjects, pattern=" ", replacement="_")
@@ -247,7 +252,7 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
       subjects = mapply(paste, subjects, taxons, collapse=";")
     }
 
-    all_subjects = paste(subjects, titles_bigrams, titles_trigrams, collapse=" ")
+    all_subjects = paste(subjects, titles_bigrams, titles_trigrams, titles_quadgrams, titles_fivegrams, collapse=" ")
     all_subjects = gsub(",", ";", all_subjects)
     subjectlist = c(subjectlist, all_subjects)
   }
