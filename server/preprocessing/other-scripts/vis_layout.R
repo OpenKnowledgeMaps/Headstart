@@ -22,8 +22,12 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
   #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
   if(list_size > -1 && list_size < length(metadata$id)) {
     output = deduplicate_titles(metadata, list_size)
-    text = subset(text, id %in% output)
-    metadata = subset(metadata, id %in% output)
+    text = subset(text, !(id %in% output))
+    metadata = subset(metadata, !(id %in% output))
+    
+    text = head(text, list_size)
+    metadata = head(metadata, list_size)
+    
   }
   
   stops <- stopwords(lang)
@@ -60,30 +64,22 @@ deduplicate_titles <- function(metadata, list_size) {
   max_replacements = length(metadata$id) - list_size
   ids = metadata$id
   titles = metadata$title
-  replacements = 0
   count = 1
   
-  while((count <= length(titles)) && (length(output) < list_size)) {
-    print(paste0("count: ", count))
-    
-    if((replacements == max_replacements) || (levenshtein_ratio(titles[count], titles[count+1]) > 1/15.83)) {
-      print("here")
-      output = append(output, ids[count])
-      count = count + 1
-    }
-    else {
-      print("there")
-      output = append(output, ids[count])
-      z = count
-      count = count + 1
-      replacements = replacements + 1
-      while(levenshtein_ratio(titles[z], titles[count+1]) < 1/15.83 && replacements < max_replacements) {
-        count = count + 1
-        replacements = replacements + 1
-      }
-      count = count + 1
-    }
-  }
+  lv_matrix = stringdistmatrix(titles, method="lv")
+  length_matrix <- stri_length(titles)
+  n = length(length_matrix)
+  str_matrix = matrix(length_matrix, n, n)
+  str_matrix_t <- t(str_matrix)
+  str_max_matrix = pmax(str_matrix, str_matrix_t)
+  lv_ratio_matrix = as.matrix(lv_matrix)/str_max_matrix
+  
+  duplicates <- lv_ratio_matrix < 1/15.83
+  duplicates[lower.tri(duplicates, diag=TRUE)] <- NA
+  remove_ids <- which(apply(duplicates, 2, FUN=function(x){any(x)}))
+  remove_ids = ids[remove_ids]
+  output = head(remove_ids, max_replacements)
+  
   return(output)
   
 }
