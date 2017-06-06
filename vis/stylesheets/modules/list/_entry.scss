@@ -1,6 +1,6 @@
 .list_entry {
     border-bottom: 2px solid #E1E5E6;
-    padding-left: 15px;
+    padding: 10px 0px 10px 15px;
     border-left: 0px solid #E1E5E6;
 }
 
@@ -64,6 +64,7 @@
         display: inline-block;
         text-align: center;
         padding-top: 5px;
+        padding-right: 10px;
     }
     
     .list_links a.pdf-link {
@@ -137,7 +138,6 @@
     font-family: 'Helvetica';
     font-size: 11px;
     line-height: 11px;
-    margin-top: 10px;
     margin-bottom: 10px;
     padding: 0;
     text-align: left;
@@ -169,6 +169,7 @@
     color: black;
     display: inline-block;
     font-weight: bold;
+    padding-right: 10px;
 
     .list_readers_entity {
         font: 11px 'Helvetica' sans-serif;
