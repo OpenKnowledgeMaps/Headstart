@@ -66,16 +66,17 @@ deduplicate_titles <- function(metadata, list_size) {
   metadata = metadata[order(-as.numeric(metadata$oa_state),-stri_length(metadata$subject),
                       -stri_length(metadata$paper_abstract),-stri_length(metadata$authors),
                       -stri_length(metadata$published_in)),]
-  num_items = length(metadata$id)
-  max_replacements = -1
   
-  if(num_items > list_size) {
-    max_replacements = num_items - list_size
-  }
+  index = (grepl(" ", metadata$title) == FALSE | stri_length(metadata$title) < 15)
+  metadata$title[index] <- paste(metadata$title[index], metadata$authors[index], sep=" ")
+  
+  num_items = length(metadata$id)
+  max_replacements = ifelse(num_items > list_size, num_items - list_size, -1)
   
   ids = metadata$id
   titles = metadata$title
   count = 1
+  
   
   lv_matrix = stringdistmatrix(titles, method="lv")
   length_matrix <- stri_length(titles)
