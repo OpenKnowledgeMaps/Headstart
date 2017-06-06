@@ -236,7 +236,7 @@ class Canvas {
     if (config.show_infolink) {
       let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
       subdiscipline_title_h4.append(infolink);
-      $("#infolink").text(config.localization[config.language].intro_label);
+      $("#infolink").html(config.localization[config.language].intro_label + ' <span id="whatsthis">&#xf05a;</span>');
     }
 
     if (config.show_timeline) {
