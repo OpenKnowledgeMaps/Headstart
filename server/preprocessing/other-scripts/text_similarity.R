@@ -17,7 +17,6 @@ source(paste("../other-scripts/vis_layout.R", sep=""))
 
 taxonomy_separator = NULL
 limit = 100
-list_size = 100
 
 switch(service, 
        plos={
@@ -33,6 +32,7 @@ switch(service,
        base={
          source('../other-scripts/base.R')
          limit = 120
+         list_size = 100
          
        }, 
       {
