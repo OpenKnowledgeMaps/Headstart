@@ -18,7 +18,6 @@ source(paste("../other-scripts/vis_layout.R", sep=""))
 taxonomy_separator = NULL
 limit = 100
 list_size = -1
-
 switch(service, 
        plos={
          source("../other-scripts/rplos_fast.R")
