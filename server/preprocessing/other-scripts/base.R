@@ -45,7 +45,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   #Make sure that the abstract exists. NOT WORKING:
   abstract_exists = "dcdescription:?"
   
-  (res_raw <- bs_search(hits=100, query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" "),
+  (res_raw <- bs_search(hits=limit, query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" "),
                         fields="dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"))
   res <- res_raw$docs
   
@@ -72,7 +72,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   subject_cleaned = gsub("[A-Z,0-9]{2,}-[A-Z,0-9\\.]{2,}(;|$)?", "", subject_cleaned) #remove LOC classification
   subject_cleaned = gsub("[^\\(;]+\\(General\\)(;|$)?", "", subject_cleaned) # remove general subjects
   subject_cleaned = gsub("[^\\(;]+\\(all\\)(;|$)?", "", subject_cleaned) # remove general subjects
-  subject_cleaned = gsub("[^:;]+ :: [^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
+  subject_cleaned = gsub("[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
   subject_cleaned = gsub("[^\\[;]+\\[[A-Z,0-9]+\\](;|$)?", "", subject_cleaned) # remove WHO classification
   subject_cleaned = gsub("</keyword><keyword>", "", subject_cleaned) # remove </keyword><keyword>
   subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification
