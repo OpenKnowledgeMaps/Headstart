@@ -20,7 +20,7 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
                        add_stop_words=NULL, testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
   
   #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
-  if(list_size > -1 && list_size < length(metadata$id)) {
+  if(list_size > -1) {
     output = deduplicate_titles(metadata, list_size)
     text = subset(text, !(id %in% output))
     metadata = subset(metadata, !(id %in% output))
@@ -61,7 +61,18 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
 
 deduplicate_titles <- function(metadata, list_size) {
   output <- c()
-  max_replacements = length(metadata$id) - list_size
+  
+  metadata$oa_state[metadata$oa_state == "2"] <- 0
+  metadata = metadata[order(-as.numeric(metadata$oa_state),-stri_length(metadata$subject),
+                      -stri_length(metadata$paper_abstract),-stri_length(metadata$authors),
+                      -stri_length(metadata$published_in)),]
+  num_items = length(metadata$id)
+  max_replacements = -1
+  
+  if(num_items > list_size) {
+    max_replacements = num_items - list_size
+  }
+  
   ids = metadata$id
   titles = metadata$title
   count = 1
@@ -77,8 +88,15 @@ deduplicate_titles <- function(metadata, list_size) {
   duplicates <- lv_ratio_matrix < 1/15.83
   duplicates[lower.tri(duplicates, diag=TRUE)] <- NA
   remove_ids <- which(apply(duplicates, 2, FUN=function(x){any(x)}))
-  remove_ids = ids[remove_ids]
-  output = head(remove_ids, max_replacements)
+  output = ids[remove_ids]
+  
+  print(paste0("Number of max. duplicate entries: ", length(output)))
+  
+  if(max_replacements > -1) {
+    output = head(output, max_replacements)
+  }
+  
+  print(paste0("Number of duplicate entries: ", length(output)))
   
   return(output)
   
