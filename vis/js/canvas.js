@@ -234,7 +234,7 @@ class Canvas {
     $("#num_articles").html($(".paper").length);
 
     if (config.show_infolink) {
-      let infolink = ' (<a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>)';
+      let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
       subdiscipline_title_h4.append(infolink);
       $("#infolink").text(config.localization[config.language].intro_label);
     }

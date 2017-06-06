@@ -8,13 +8,29 @@
     h4 {
         margin-bottom: 0px;
         margin-top: 0px;
-        font-weight: bold;
         font-size: 18px;
     }
 }
 
+#search-term-unique {
+    font-weight: bold;
+}
+
 #infolink {
     color: $infolink;
+    border: 1px solid $infolink;
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: normal;
+    font-size: 10px;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
+#infolink:hover, #infolink:focus, #infolink:active {
+    text-decoration: none;
+    background-color: $infolink;
+    color: white;
 }
 
 #timelineview {
