@@ -1,12 +1,13 @@
 #show_hide_button {
     cursor: pointer;
     padding: 5px 0px;
-    background-color: $list_show_hide_button;
-    color: white;
+    border: 2px solid $list_show_hide_button_border;
+    background-color: white;
+    color: $list_show_hide_button;
 
     &.hover {
-        background-color: white;
-        color: $list_show_hide_button_hover;
+        background-color: $list_show_hide_button;
+        color: white;
     }
 }
 
