@@ -2,7 +2,7 @@
     margin: 0px;
     padding-top: 15px;
     padding-left: 50px;
-        //padding-bottom: 10px;
+    //padding-bottom: 10px;
     font-family: 'Open Sans', sans-serif;
 
     h4 {
@@ -44,5 +44,17 @@
 #timelineview {
     a {
         color: $timelineview;
+    }
+}
+
+@media screen and (max-width: 640px) {
+
+    #subdiscipline_title {
+        padding-left: 20px;
+        font-size: 14px;
+
+        h4 {
+            font-size: 14px; 
+        }
     }
 }

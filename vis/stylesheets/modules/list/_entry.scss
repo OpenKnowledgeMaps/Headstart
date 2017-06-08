@@ -30,8 +30,8 @@
     /*.list_title.oa a {
             color: $okm-red;
             }*/
-            
-    
+
+
     .list_title {
         font-size: 14px;
         margin-bottom: 4px;
@@ -39,15 +39,15 @@
         display: inline-block;
         font-weight: bold;
 
-            a {
+        a {
             text-decoration: none;
             color: $list_metadata_title_paper;
 
             &:hover {
                 text-decoration: underline;
             }
-            }
-    
+        }
+
     }
 
     #outlink_list {
@@ -66,14 +66,14 @@
         padding-top: 5px;
         padding-right: 10px;
     }
-    
+
     .list_links a.pdf-link {
         color: $open-access;
         border: 1px solid $open-access;
         &:hover {
-        background-color: $open-access;
-        color: white;
-    }
+            background-color: $open-access;
+            color: white;
+        }
     }
 
     .list_links a {
@@ -85,9 +85,9 @@
         color: $journal-gray;
         border: 1px solid $journal-gray;
         &:hover {
-        background-color: $journal-gray;
-        color: white;
-    }
+            background-color: $journal-gray;
+            color: white;
+        }
     }
 
 
@@ -203,11 +203,11 @@ div {
         background-color: #eee;
         text-shadow: 0 1px 1px white;
 
-            &:first-child {
-                margin-top:0px;
-            }
+        &:first-child {
+            margin-top:0px;
         }
     }
+}
 
 img#preview_page {
     display: block;
@@ -215,4 +215,31 @@ img#preview_page {
     margin-left: auto;
     text-align: center;
     border: 1px solid;
+}
+
+@media screen and (max-width: 950px) {
+
+    .list_metadata {
+
+        .list_links {
+            float:none;
+            margin-bottom: 15px;
+
+            a {
+                display: inline;
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .list_metadata .list_title {
+        font-size: 12px;
+    }
+
+    .list_readers {
+        margin-top: 0px;
+        float: none;
+        display: block;
+        padding-right: 0px;
+    }
 }

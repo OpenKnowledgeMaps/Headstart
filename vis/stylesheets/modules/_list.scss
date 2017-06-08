@@ -12,3 +12,10 @@
     display: none;
     font: 10px 'Helvetica', sans-serif;
 }
+
+@media screen and (max-width: 1100px) {
+    
+#papers_list {
+        font: 8px 'Helvetica', sans-serif;
+    }
+}
