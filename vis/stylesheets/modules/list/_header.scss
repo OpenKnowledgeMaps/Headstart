@@ -47,7 +47,8 @@
     }
 
     #sort-buttons {
-        padding: 5px 0px;
+        padding: 0px 0px;
+        float: none !important;
     }
     
     #sortby {
@@ -63,10 +64,6 @@
     
     #filter_container {
         float: none;
-    }
-    
-    #sort-buttons {
-        float: none !important;
     }
 
 }
