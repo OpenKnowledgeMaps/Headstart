@@ -42,6 +42,21 @@
 
 @media screen and (max-width: 1220px) {
 
+    .btn-sm, .btn-group-sm > .btn {
+        font-size: 10px;
+    }
+
+    #sort-buttons {
+        padding: 5px 0px;
+    }
+    
+    #sortby {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 1160px) {
+
     #sort_container {
         float: none;
     }
@@ -49,17 +64,9 @@
     #filter_container {
         float: none;
     }
-
-    .btn-sm, .btn-group-sm > .btn {
-        font-size: 10px;
-    }
-
+    
     #sort-buttons {
-        padding: 5px 0px;
         float: none !important;
     }
-    
-    #sortby {
-        font-size: 10px;
-    }
+
 }
