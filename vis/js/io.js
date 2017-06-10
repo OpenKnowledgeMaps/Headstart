@@ -155,7 +155,7 @@ IO.prototype = {
             var authors = _this.convertToFirstNameLastName(d.authors);
             d.authors_string = authors.string;
             d.authors_short_string = authors.short_string;
-
+			
             d.oa = false;
 
             if (config.service === "doaj") {
@@ -175,7 +175,9 @@ IO.prototype = {
             } else if(config.service === "base") {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
                 d.oa_link = d.link;
-            }
+            } else {
+				d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
+			}
 
             d.outlink = _this.createOutlink(d);
 
