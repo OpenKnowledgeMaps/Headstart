@@ -182,7 +182,7 @@ class Canvas {
     // Info Modal Event Listener
     $('#info_modal').on('show.bs.modal', function() {
       var current_intro = config.intro;
-      var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(headstart.intro)
+      var intro = (typeof intros[current_intro] != "undefined")?(intros[current_intro]):(current_intro)
       $('#info-title').text(intro.title);
       $('#info-body').html(intro.body);
     });
@@ -458,6 +458,7 @@ class Canvas {
       d.orig_y = d.y;
       // scale x and y
       d.x = canvas.chart_x(d.x);
+      d.y = canvas.chart_y(d.y);
     });
   }
 

@@ -6,17 +6,17 @@ If you want to do more than just displaying static CSV files, you need to config
 
 Make sure you have the following packages installed:
 
-* PHP 5.3+ with the following extensions: 
+* PHP 5.3+ with the following extensions:
   * curl
   * pdo_sqlite
   * mbstring
   * fileinfo
-* R 3.1.3+ (https://www.r-project.org/) with the following libraries. **Make sure you install these packages for all users, so that Apache can load them.**
+* R 3.3+ (https://www.r-project.org/) with current updates, with the following libraries. **Make sure you install these packages for all users, so that Apache can load them.**
  * GMD
  * MASS
  * ecodist
  * jsonlite
- * tm
+ * tm (Version 0.6 - **do not use 0.7**)
  * proxy
  * SnowballC
  * rplos
@@ -26,8 +26,11 @@ Make sure you have the following packages installed:
  * curl
  * tibble
  * data.table
+ * stringi
+ * stringdist
  * xml2 **(Version 1.0 or higher)**
  * jaod (Currently, a Github repository only: http://github.com/ropenscilabs/jaod. Install with devtools.)
+ * rbace (Currently, a Github repository only: http://github.com/ropenscilabs/rbace. Install with devtools.)
 
 ## Configuration
 

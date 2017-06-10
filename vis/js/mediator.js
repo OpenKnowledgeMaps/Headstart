@@ -36,13 +36,6 @@ var MyMediator = function() {
     this.fileData = [];
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
-    this.manager.registerModule(io, 'io');
-
-    if(config.render_list) this.manager.registerModule(list, 'list');
-    if(config.render_bubbles) {
-      this.manager.registerModule(canvas, 'canvas');
-      this.manager.registerModule(papers, 'papers');
-    }
 
     this.init();
     this.init_state();
@@ -54,7 +47,10 @@ MyMediator.prototype = {
         // init logic and state switching
         this.modules = { papers: papers, list: list, io: io, canvas: canvas};
         this.mediator.subscribe("start_visualization", this.init_start_visualization);
-        this.mediator.subscribe("normal_mode", this.set_normal_mode);
+        this.mediator.subscribe("start", this.buildHeadstartHTML);
+        this.mediator.subscribe("start", this.set_normal_mode);
+        this.mediator.subscribe("start", this.register_bubbles);
+        this.mediator.subscribe("start", this.init_modules);
         this.mediator.subscribe("ontofile", this.init_ontofile);
         this.mediator.subscribe("ontotimeline", this.init_ontotimeline);
         this.mediator.subscribe("ontotimeline_finish", this.ontotimeline_finish);
@@ -126,6 +122,16 @@ MyMediator.prototype = {
         MyMediator.prototype.is_zoomed = false;
         MyMediator.prototype.zoom_finished = false;
         MyMediator.prototype.is_in_normal_mode = true;
+    },
+
+    init_modules: function() {
+        mediator.manager.registerModule(io, 'io');
+
+        if(config.render_list) mediator.manager.registerModule(list, 'list');
+        if(config.render_bubbles) {
+            mediator.manager.registerModule(canvas, 'canvas');
+            mediator.manager.registerModule(papers, 'papers');
+        }
     },
 
     register_bubbles: function() {
@@ -208,10 +214,10 @@ MyMediator.prototype = {
     },
 
     init_start_visualization: function(highlight_data, csv) {
-        mediator.buildHeadstartHTML();
         mediator.manager.registerModule(headstart, 'headstart');
         if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.manager.call('canvas', 'setupCanvas', []);
+        mediator.manager.call('io', 'initializeMissingData', [csv]);
         mediator.manager.call('io', 'prepareData', [highlight_data, csv]);
         mediator.manager.call('io', 'prepareAreas', []);
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
@@ -331,6 +337,7 @@ MyMediator.prototype = {
 
     bubble_zoomin: function(d) {
         mediator.manager.call('list', 'reset', []);
+        mediator.manager.call('list', 'scrollTop', []);
         if (typeof d != 'undefined') {
             mediator.manager.call('list', 'updateByFiltered', []);
             mediator.manager.call('list', 'filterListByAreaURIorArea', [d]);
@@ -344,6 +351,7 @@ MyMediator.prototype = {
     bubble_zoomout: function() {
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'updateByFiltered', []);
+        mediator.manager.call('list', 'scrollTop', []);
     },
 
     currentbubble_click: function(d) {

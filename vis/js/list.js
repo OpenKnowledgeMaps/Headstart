@@ -84,12 +84,13 @@ list.drawList = function() {
     // Add sort options
     var container = d3.select("#sort_container>ul");
     var first_element = true;
-    for (let option in config.sort_options) {
+    const numberOfOptions = config.sort_options.length;
+    for (var i = 0; i < numberOfOptions; i++) {
       if (first_element) {
-        addSortOption(container, config.sort_options[option], true);
+        addSortOption(container, config.sort_options[i], true);
         first_element = false;
       } else {
-        addSortOption(container, config.sort_options[option], false);
+        addSortOption(container, config.sort_options[i], false);
       }
     }
 
@@ -245,8 +246,14 @@ list.populateMetaData = function(nodes) {
 
         list_metadata.select(".list_published_in")
             .html(function(d) {
-                return d.published_in; });
-
+                //Remove the "in" if there is no publication name
+                if (d.published_in === "") {
+                    var parent = $(this.parentNode);
+                    $(".list_in", parent).css("display", "none");
+                }
+                
+                return d.published_in; 
+            })
         list_metadata.select(".list_pubyear")
             .html(function(d) {
                 return " (" + d.year + ")"; });
@@ -314,7 +321,7 @@ list.populateReaders = function(nodes) {
             return d.area;
         });
 
-        if (!config.content_based) {
+        if (!config.content_based && config.base_unit !== "") {
             readers.select(".num_readers")
                 .html(function(d) {
                     return d.readers;
@@ -352,12 +359,13 @@ list.filterList = function (search_words) {
 
     this.createHighlights(search_words);
 
-    var filtered_data_list = d3.selectAll("#list_holder");
-    var filtered_data_papers = d3.selectAll(".paper");
+    // Full list of items in the map/list
+    let all_list_items = d3.selectAll("#list_holder");
+    let all_map_items = d3.selectAll(".paper");
     //TODO why not mediator.current_circle
-    var current_circle = d3.select(mediator.current_zoom_node);
+    let current_circle = d3.select(mediator.current_zoom_node);
 
-    var data_circle_list = filtered_data_list
+    let filtered_list_items = all_list_items
             .filter(function (d) {
                 if (mediator.is_zoomed === true) {
                     if (config.use_area_uri && mediator.current_enlarged_paper === null) {
@@ -372,7 +380,8 @@ list.filterList = function (search_words) {
                 }
             });
 
-    var data_circle_papers = filtered_data_papers
+    // Filter out items based on searchterm
+    let filtered_map_items = all_map_items
                 .filter(function (d) {
                             if (mediator.is_zoomed === true) {
                                 if (config.use_area_uri) {
@@ -385,9 +394,21 @@ list.filterList = function (search_words) {
                             }
                         });
 
+    // Deal with selected papers in list
+    let selected_list_items = filtered_list_items
+        .filter(function(d) {
+            if (d.paper_selected === true) {
+                return true;
+            }
+        });
+
+    if (selected_list_items[0].length === 0) {
+        selected_list_items = filtered_list_items;
+    }
+
     if (search_words[0].length === 0) {
-        data_circle_list.style("display", "block");
-        data_circle_papers.style("display", "block");
+        selected_list_items.style("display", "block");
+        filtered_map_items.style("display", "block");
 
         mediator.current_bubble.data.forEach(function (d) {
             d.filtered_out = false;
@@ -396,31 +417,33 @@ list.filterList = function (search_words) {
         return;
     }
 
-    data_circle_list.style("display", "inline");
-    data_circle_papers.style("display", "inline");
+    selected_list_items.style("display", "inline");
+    filtered_map_items.style("display", "inline");
 
     mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words);
 
-    this.hideEntries(filtered_data_list, search_words);
-    this.hideEntries(filtered_data_papers, search_words);
+    this.hideEntries(all_list_items, search_words);
+    this.hideEntries(all_map_items, search_words);
 
 };
 
 list.hideEntries = function(object, search_words) {
     object
             .filter(function (d) {
-                var abstract = d.paper_abstract.toLowerCase();
-                var title = d.title.toLowerCase();
-                var authors = d.authors_string.toLowerCase();
-                var journals = d.published_in.toLowerCase();
-                var word_found = true;
-                var count = 0;
+                let abstract = d.paper_abstract.toLowerCase();
+                let title = d.title.toLowerCase();
+                let authors = d.authors_string.toLowerCase();
+                let journals = d.published_in.toLowerCase();
+                let year = d.year;
+                let word_found = true;
+                let count = 0;
                 if (typeof abstract !== 'undefined') {
                     while (word_found && count < search_words.length) {
                         word_found = (abstract.indexOf(search_words[count]) !== -1 ||
                             title.indexOf(search_words[count]) !== -1 ||
                             authors.indexOf(search_words[count]) !== -1 ||
-                            journals.indexOf(search_words[count]) !== -1);
+                            journals.indexOf(search_words[count]) !== -1 ||
+                            year.indexOf(search_words[count]) !== -1);
                         count++;
                     }
                     d.filtered_out = word_found ? false : true;
@@ -527,6 +550,10 @@ list.enlargeListItem = function(d) {
       }
     }
 
+    if (!config.render_bubbles) {
+        return;
+    }
+
     this.setListHolderDisplay(d);
 
     this.papers_list.selectAll("#list_abstract")
@@ -535,6 +562,7 @@ list.enlargeListItem = function(d) {
     this.createHighlights(this.current_search_words);
 
     this.setImageForListHolder(d);
+    d.paper_selected = true;
 };
 
 list.setListHolderDisplay = function(d) {
@@ -654,21 +682,30 @@ list.populateOverlay = function(d) {
             $("#iframe_modal").modal({keyboard:true});
 
             let article_url = d.oa_link;
+            let possible_pdfs = "";
+            if(config.service === "base") {
+                possible_pdfs = d.link + ";" + d.identifier + ";" + d.relation;
+            }
 
-            $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url, (data) => {
+            $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service + "&pdf_urls=" + possible_pdfs, (data) => {
+                
+                var showError = function () {
+                    var link = (config.service === "base")?(this_d.link):(this_d.outlink);
+                    $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
+                    $("#status").show();
+                }
+                
                 if (data.status === "success") {
                     this.writePopup(config.server_url + "paper_preview/" + pdf_url);
                 } else if (data.status === "error") {
                      $("#spinner-iframe").hide();
-                     $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
-                     $("#status").show();
+                     showError();
                 }
 
             }).fail((d, textStatus, error) => {
                 console.error("getJSON failed, status: " + textStatus + ", error: "+error);
                 $("#spinner-iframe").hide();
-                $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
-                $("#status").show();
+                showError();
             });
         }
     }
@@ -740,18 +777,6 @@ list.setImageForListHolder = function(d) {
             });
 };
 
-list.createOutlink = function(d) {
-
-    var url = false;
-    if (config.url_prefix !== null) {
-        url = config.url_prefix + d.url;
-    } else if (typeof d.url != 'undefined') {
-        url = d.url;
-    }
-
-    return url;
-};
-
 list.title_click = function (d) {
 
       var url = d.outlink;
@@ -785,4 +810,8 @@ list.notSureifNeeded = function() {
         image_node.parentNode.removeChild(image_node);
     }
 };
+
+list.scrollTop = function() {
+    $("#papers_list").animate({ scrollTop: 0 }, 0);
+}
 
