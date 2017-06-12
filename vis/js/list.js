@@ -244,10 +244,13 @@ list.populateMetaData = function(nodes) {
                         return "none";
                     }
                 });
-
-        paper_link.attr("href", function (d) {
-            return d.oa_link;
+        
+        paper_link.on("click", function(d) {
+                mediator.publish("list_show_popup", d);
         });
+        /*paper_link.attr("href", function (d) {
+            return "#";
+        });*/
 
         list_metadata.select(".list_authors")
             .html(function(d) {
