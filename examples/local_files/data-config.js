@@ -17,7 +17,7 @@ var data_config = {
 
     files: [{
         title: "edu1",
-        file: "./data/educational-technology.csv"
+        file: "./data/edu1.csv"
     }, {
         title: "edu2",
         file: "./data/edu2.csv"
