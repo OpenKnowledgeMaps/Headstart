@@ -43,6 +43,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
   date <- './/MedlineCitation/DateCreated'
   authors <- './/AuthorList'
   keywords <- './/Keyword'
+  meshtags <- './/MeshHeading/DescriptorName'
   doi <- ".//PubmedData/ArticleIdList/ArticleId[@IdType=\"doi\"]"
   from = gsub("-", "/", params$from)
   to = gsub("-", "/", params$to)
@@ -77,7 +78,8 @@ get_papers <- function(query, params = NULL, limit = 100) {
     }, ""), collapse = ";")
     xkeywords <- paste0(xtext(xml2::xml_find_all(z, keywords)), collapse = ";")
     xdoi <- xtext(xml2::xml_find_all(z, doi))
-    lst <- c(tmp, date = xdate, id = xdoi, authors = list(xauthors), subject = list(xkeywords))
+    xmesh <- paste0(xtext(xml2::xml_find_all(z, meshtags)), collapse = ";")
+    lst <- c(tmp, date = xdate, id = xdoi, authors = list(xauthors), subject = list(xkeywords), meshtags = list(xmesh))
     lst[vapply(lst, length, 1) != 1] <- NA
     return(lst)
   })
@@ -86,7 +88,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
   df <- setNames(df, tolower(names(df)))
   df$url <- paste0("http://www.ncbi.nlm.nih.gov/pubmed/", df$pmid)
   df$paper_abstract <- gsub("^\\s+|\\s+$", "", gsub("[\r\n]", "", df$paper_abstract))
-  df$content <- paste(df$title, df$paper_abstract, df$authors, df$subject, df$published_in, sep= " ")
+  df$content <- paste(df$title, df$paper_abstract, df$authors, df$subject, df$published_in, df$meshtags, sep= " ")
   df$doi = df$id
   df$id = df$pmid
 

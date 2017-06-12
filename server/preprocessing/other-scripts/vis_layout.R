@@ -122,6 +122,16 @@ create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
 replace_keywords_if_empty <- function(corpus, metadata, stops) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
+  # first replace missing subjects with meshtags, some papers won't have them
+  # only works for pubmed
+  if("meshtags" %in% colnames(metadata)){
+    replacement_tags = metadata$meshtags[missing_subjects]
+    replacement_tags = lapply(replacement_tags, tolower)
+    metadata$subject[missing_subjects] <- replacement_tags
+  }
+  
+  # for any remaining papers without subjects generate them
+  missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
   candidates = mapply(paste, metadata$title[missing_subjects], metadata$paper_abstract[missing_subjects])
   candidates = lapply(candidates, tolower)
   candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
