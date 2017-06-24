@@ -1,19 +1,21 @@
 #show_hide_button {
     cursor: pointer;
     padding: 5px 0px;
-    background-color: $list_show_hide_button;
-    color: white;
+    border: 2px solid $list_show_hide_button_border;
+    background-color: white;
+    color: $list_show_hide_button;
 
     &.hover {
-        background-color: white;
-        color: $list_show_hide_button_hover;
+        background-color: $list_show_hide_button;
+        color: white;
     }
 }
 
 #show_hide_button_label {
     font-family: 'Helvetica';
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 700;
     float: left;
     text-align: center;
 }
+

@@ -8,7 +8,7 @@ wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
 setwd(wd) #Don't forget to set your working directory
 
-query <- "brain" #args[2]
+query <- "editorial" #args[2]
 service <- "base"
 params <- NULL
 params_file <- "params_base.json"
@@ -27,7 +27,7 @@ if(!is.null(params_file)) {
 
 #start.time <- Sys.time()
 
-input_data = get_papers(query, params, limit=125)
+input_data = get_papers(query, params, limit=120)
 
 #end.time <- Sys.time()
 #time.taken <- end.time - start.time

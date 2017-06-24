@@ -2,23 +2,59 @@
     margin: 0px;
     padding-top: 15px;
     padding-left: 50px;
-        //padding-bottom: 10px;
-    font-family: Helvetica;
+    //padding-bottom: 10px;
+    font-family: 'Open Sans', sans-serif;
 
     h4 {
         margin-bottom: 0px;
         margin-top: 0px;
-        font-weight: bold;
         font-size: 18px;
     }
 }
 
+#area-bold {
+    font-weight: 800;
+}
+
+#search-term-unique {
+    font-weight: 800;
+}
+
 #infolink {
     color: $infolink;
+    border: 1px solid $infolink;
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: normal;
+    font-size: 10px;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+#whatsthis {
+    font-family: 'FontAwesome';
+    font-size: 12px;
+}
+
+#infolink:hover, #infolink:focus, #infolink:active {
+    text-decoration: none;
+    background-color: $infolink;
+    color: white;
 }
 
 #timelineview {
     a {
         color: $timelineview;
+    }
+}
+
+@media screen and (max-width: 640px) {
+
+    #subdiscipline_title {
+        padding-left: 20px;
+        font-size: 14px;
+
+        h4 {
+            font-size: 14px; 
+        }
     }
 }

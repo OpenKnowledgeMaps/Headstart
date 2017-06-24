@@ -24,9 +24,9 @@ HeadstartFSM.prototype = {
   checkBrowserVersions: function() {
     var browser = BrowserDetect.browser;
     if (!(browser == "Firefox" || browser == "Safari" || browser == "Chrome")) {
-            var alert_message = 'You are using an unsupported browser.' +
-                                'This visualization was successfully tested' +
-                                'with the latest versions of Chrome, Safari,' +
+            var alert_message = 'You are using an unsupported browser. ' +
+                                'This visualization was successfully tested ' +
+                                'with the latest versions of Chrome, Safari, ' +
                                 'Opera and Firefox.';
             alert(alert_message);
     }

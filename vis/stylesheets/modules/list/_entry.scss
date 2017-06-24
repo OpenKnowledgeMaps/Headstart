@@ -1,12 +1,22 @@
 .list_entry {
     border-bottom: 2px solid #E1E5E6;
-    padding-left: 15px;
+    padding: 10px 0px 10px 15px;
     border-left: 0px solid #E1E5E6;
 }
 
 .list_entry_full {
     border-bottom: 0px;
     padding-left: 15px;
+}
+
+#open-access-logo_list {
+    background-color: $open-access;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 5px;
+    font-size: 10px;
+    vertical-align: top;
+    font-weight: normal;
 }
 
 .list_metadata {
@@ -17,6 +27,11 @@
     margin-bottom: 10px;
     font-family: Helvetica;
 
+    /*.list_title.oa a {
+            color: $okm-red;
+            }*/
+
+
     .list_title {
         font-size: 14px;
         margin-bottom: 4px;
@@ -24,7 +39,7 @@
         display: inline-block;
         font-weight: bold;
 
-        #paper_list_title {
+        a {
             text-decoration: none;
             color: $list_metadata_title_paper;
 
@@ -32,6 +47,7 @@
                 text-decoration: underline;
             }
         }
+
     }
 
     #outlink_list {
@@ -46,20 +62,42 @@
         float: right;
         vertical-align: top;
         display: inline-block;
+        text-align: center;
+        padding-top: 5px;
+        padding-right: 10px;
+        
+        .outlink_symbol {
+        vertical-align: baseline;
+    }
+    }
+
+    .list_links a.pdf-link {
+        color: $open-access;
+        border: 1px solid $open-access;
+        &:hover {
+            background-color: $open-access;
+            color: white;
+        }
     }
 
     .list_links a {
-        color: $list_links;
+        background-color: white;
         text-decoration: none;
         cursor: pointer;
+        padding: 5px;
+        border-radius: 5px;
+        color: $journal-gray;
+        border: 1px solid $journal-gray;
         &:hover {
-        color: $list_links_hover;
-    }
+            background-color: $journal-gray;
+            color: white;
+        }
     }
 
 
     .outlink_symbol {
         font-family: FontAwesome;
+        vertical-align: top;
     }
 
     .list_details {
@@ -93,7 +131,6 @@
 #list_abstract {
     max-width: 82%;
     font: 12px 'Helvetica', sans-serif;
-    font-size: 11px;
     line-height: 13px;
     padding-right: 0;
     padding-left: 0px;
@@ -106,7 +143,6 @@
     font-family: 'Helvetica';
     font-size: 11px;
     line-height: 11px;
-    margin-top: 10px;
     margin-bottom: 10px;
     padding: 0;
     text-align: left;
@@ -138,6 +174,7 @@
     color: black;
     display: inline-block;
     font-weight: bold;
+    padding-right: 10px;
 
     .list_readers_entity {
         font: 11px 'Helvetica' sans-serif;
@@ -170,11 +207,11 @@ div {
         background-color: #eee;
         text-shadow: 0 1px 1px white;
 
-            &:first-child {
-                margin-top:0px;
-            }
+        &:first-child {
+            margin-top:0px;
         }
     }
+}
 
 img#preview_page {
     display: block;
@@ -182,4 +219,31 @@ img#preview_page {
     margin-left: auto;
     text-align: center;
     border: 1px solid;
+}
+
+@media screen and (max-width: 950px) {
+
+    .list_metadata {
+
+        .list_links {
+            float:none;
+            margin-bottom: 15px;
+
+            a {
+                display: inline;
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .list_metadata .list_title {
+        font-size: 12px;
+    }
+
+    .list_readers {
+        margin-top: 0px;
+        float: none;
+        display: block;
+        padding-right: 0px;
+    }
 }
