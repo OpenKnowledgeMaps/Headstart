@@ -13,7 +13,6 @@ registerDoParallel(3)
 
 source("../preprocessing.R")
 source("../clustering.R")
-source("../labeling.R")
 
 debug <- FALSE
 
@@ -23,7 +22,8 @@ debug <- FALSE
 vis_layout <- function(text, metadata,
                        max_clusters=15, maxit=500, mindim=2, maxdim=2,
                        lang="english", add_stop_words=NULL,
-                       testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
+                       testing=FALSE, taxonomy_separator=NULL, list_size=-1,
+                       labeling_method = "tfidf") {
 
   # If list_size is greater than -1 and smaller than the actual list size,
   # deduplicate titles
@@ -56,6 +56,12 @@ vis_layout <- function(text, metadata,
 
   print("create clusters")
   clusters <- create_clusters(normalized_matrix, max_clusters = 15);
+  if (labeling_method == "tfidf") {
+    source("../labeling-tfidf.R")
+  }
+  if (labeling_method == "textrank") {
+    source("../labeling-textrank.R")
+  }
   named_clusters <- create_cluster_labels(clusters, metadata_full_subjects,
                                           weightingspec = "ntn", top_n = 3,
                                           stops = stops, taxonomy_separator)
