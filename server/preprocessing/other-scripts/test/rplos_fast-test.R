@@ -13,15 +13,15 @@ params_file <- singleString <- paste(readLines("params.json"), collapse=" ")
 
 source("../vis_layout.R")
 
-switch(service, 
+switch(service,
        plos={
-         source("../rplos_fast.R")
+         source("../apis/rplos_fast.R")
        },
        pubmed={
-         source('../pubmed.R')    
+         source('../apis/pubmed.R')
        },
     {
-      source("../rplos_fast.R")
+      source("../apis/rplos_fast.R")
     }
 )
 

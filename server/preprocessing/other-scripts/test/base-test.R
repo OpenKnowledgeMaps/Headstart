@@ -4,7 +4,7 @@ library(rstudioapi)
 
 options(warn=1)
 
-wd <- dirname(rstudioapi::getActiveDocumentContext()$path) 
+wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
 setwd(wd) #Don't forget to set your working directory
 
@@ -14,7 +14,7 @@ params <- NULL
 params_file <- "params_base.json"
 
 source("../vis_layout.R")
-source('../base.R')
+source('../apis/base.R')
 
 debug = FALSE
 
@@ -33,7 +33,7 @@ input_data = get_papers(query, params, limit=125)
 #time.taken <- end.time - start.time
 #time.taken
 
-output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS, 
+output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
 
 print(output_json)
