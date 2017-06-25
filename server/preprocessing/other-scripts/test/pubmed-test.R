@@ -17,7 +17,7 @@ source("../vis_layout.R")
 source('../apis/pubmed.R')
 source("../preprocessing.R")
 source("../clustering.R")
-source("../labeling.R")
+source("../labeling-tfidf.R")
 
 debug = FALSE
 

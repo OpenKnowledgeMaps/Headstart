@@ -21,7 +21,7 @@ vis_layout <- function(text, metadata,
                        max_clusters=15, maxit=500, mindim=2, maxdim=2,
                        lang="english", add_stop_words=NULL,
                        testing=FALSE, taxonomy_separator=NULL, list_size=-1,
-                       labeling_method = "tfidf") {
+                       labeling_method = "textrank") {
 
   # If list_size is greater than -1 and smaller than the actual list size,
   # deduplicate titles
