@@ -15,6 +15,9 @@ params_file <- "params_doaj.json"
 
 source("../vis_layout.R")
 source('../apis/doaj.R')
+source("../preprocessing.R")
+source("../clustering.R")
+source("../labeling.R")
 
 debug = FALSE
 

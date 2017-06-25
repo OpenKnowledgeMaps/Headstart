@@ -14,6 +14,9 @@ print(params_file)
 setwd(wd) #Don't forget to set your working directory
 
 source(paste("../other-scripts/vis_layout.R", sep=""))
+source("../other-scripts/preprocessing.R")
+source("../other-scripts/clustering.R")
+source("../other-scripts/labeling.R")
 
 taxonomy_separator = NULL
 limit = 100
