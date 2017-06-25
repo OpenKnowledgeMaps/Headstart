@@ -123,3 +123,12 @@ levenshtein_ratio <- function(a, b) {
   lv_ratio <- lv_dist / (max(stri_length(a), stri_length(b)))
   return(lv_ratio)
 }
+
+SplitTokenizer <- function(x) {
+  tokens <- unlist(
+              lapply(
+                strsplit(words(x), split = ";"),
+                paste),
+              use.names <- FALSE)
+  return(tokens)
+}

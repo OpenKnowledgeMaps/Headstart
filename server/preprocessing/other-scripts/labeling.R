@@ -1,3 +1,4 @@
+source("../preprocessing.R")
 
 create_cluster_labels <- function(clusters, metadata_full_subjects,
                                   weightingspec, top_n,
@@ -91,15 +92,6 @@ create_cluster_labels <- function(clusters, metadata_full_subjects,
 }
 
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
-
-SplitTokenizer <- function(x) {
-  tokens <- unlist(
-              lapply(
-                strsplit(words(x), split = ";"),
-                paste),
-              use.names <- FALSE)
-  return(tokens)
-}
 
 filter_out <- function(ngrams, stops){
   tokens <- mapply(strsplit, ngrams, split = " |;")
