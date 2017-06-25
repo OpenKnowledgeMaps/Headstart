@@ -12,6 +12,9 @@ params_file <- singleString <- paste(readLines("params.json"), collapse=" ")
 
 
 source("../vis_layout.R")
+source("../preprocessing.R")
+source("../clustering.R")
+source("../labeling.R")
 
 switch(service,
        plos={

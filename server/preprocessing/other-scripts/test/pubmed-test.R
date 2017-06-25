@@ -15,6 +15,9 @@ params_file <- "params_pubmed.json"
 
 source("../vis_layout.R")
 source('../apis/pubmed.R')
+source("../preprocessing.R")
+source("../clustering.R")
+source("../labeling.R")
 
 debug = FALSE
 
