@@ -132,3 +132,32 @@ SplitTokenizer <- function(x) {
               use.names <- FALSE)
   return(tokens)
 }
+
+filter_out_nested_ngrams <- function(top_ngrams, top_n) {
+  top_names <- list()
+  for (ngram in top_ngrams) {
+    if (ngram == "")
+      next;
+
+    ngram_in_top_names <- stringi::stri_detect_fixed(top_names, ngram)
+    top_names_with_ngram <- sapply(top_names,
+                                   function(x)(stringi::stri_detect_fixed(ngram, x)))
+
+    # ngram substring of any top_name, and no top_name substring of ngram
+    # -> skip ngram
+    if (any(ngram_in_top_names == TRUE) &&
+        all(top_names_with_ngram == FALSE)) {}
+    # ngram not substring of any top_name, but at least one top_name is a
+    # substring of ngram -> replace top_name with ngram
+    else if (all(ngram_in_top_names == FALSE) &&
+             any(top_names_with_ngram == TRUE)) {
+      top_names[which(top_names_with_ngram)] <- ngram
+    }
+    # a not substring of b, b not substring of a -> add b, next
+    else if (all(ngram_in_top_names == FALSE) &&
+             all(top_names_with_ngram == FALSE)) {
+      top_names <- unlist(c(top_names, ngram))
+    }
+  }
+  return(head(unique(top_names), top_n))
+}
