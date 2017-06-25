@@ -13,7 +13,7 @@ registerDoParallel(3)
 
 # depending on different working dirs
 # would be better handled with some wd-hierarchy-check
-if (dir.exists("other-scripts")) {
+if (dir.exists("../other-scripts")) {
   source("../other-scripts/preprocessing.R")
   source("../other-scripts/clustering.R")
   source("../other-scripts/labeling.R")
