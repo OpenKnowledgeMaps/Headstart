@@ -8,10 +8,13 @@ setwd(wd) #Don't forget to set your working directory
 
 query <- "frogs"
 service <- "plos"
-params_file <- singleString <- paste(readLines("params.json"), collapse=" ")
+params_file <- singleString <- paste(readLines("../api-params/params.json"), collapse=" ")
 
 
 source("../vis_layout.R")
+source("../preprocessing.R")
+source("../clustering.R")
+source("../labeling.R")
 
 switch(service,
        plos={

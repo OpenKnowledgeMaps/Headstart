@@ -11,10 +11,13 @@ setwd(wd) #Don't forget to set your working directory
 query <- "russian" #args[2]
 service <- "pubmed"
 params <- NULL
-params_file <- "params_pubmed.json"
+params_file <- "../api-params/params_pubmed.json"
 
 source("../vis_layout.R")
 source('../apis/pubmed.R')
+source("../preprocessing.R")
+source("../clustering.R")
+source("../labeling.R")
 
 debug = FALSE
 

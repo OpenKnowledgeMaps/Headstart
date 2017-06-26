@@ -1,4 +1,3 @@
-source("../preprocessing.R")
 
 normalize_matrix <- function(tdm_matrix, method = "cosine") {
   distance_matrix_2 <- as.matrix(proxy::dist(tdm_matrix, method))

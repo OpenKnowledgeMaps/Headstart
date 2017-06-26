@@ -1,4 +1,3 @@
-source("../preprocessing.R")
 
 create_cluster_labels <- function(clusters, metadata_full_subjects,
                                   weightingspec, top_n,

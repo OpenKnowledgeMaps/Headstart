@@ -11,9 +11,6 @@ library(stringi)
 library(stringdist)
 registerDoParallel(3)
 
-source("../preprocessing.R")
-source("../clustering.R")
-source("../labeling.R")
 
 debug <- FALSE
 
