@@ -11,13 +11,10 @@ setwd(wd) #Don't forget to set your working directory
 query <- "editorial" #args[2]
 service <- "base"
 params <- NULL
-params_file <- "../api-params/params_base.json"
+params_file <- "api-params/params_base.json"
 
-source("../vis_layout.R")
+source("../vis_layout.R", chdir=T)
 source('../apis/base.R')
-source("../preprocessing.R")
-source("../clustering.R")
-source("../labeling.R")
 
 debug = FALSE
 

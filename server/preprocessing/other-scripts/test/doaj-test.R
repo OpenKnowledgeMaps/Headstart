@@ -11,13 +11,10 @@ setwd(wd) #Don't forget to set your working directory
 query <- "marketing" #args[2]
 service <- "doaj"
 params <- NULL
-params_file <- "../api-params/params_doaj.json"
+params_file <- "api-params/params_doaj.json"
 
-source("../vis_layout.R")
-source('../apis/doaj.R')
-source("../preprocessing.R")
-source("../clustering.R")
-source("../labeling.R")
+source("../vis_layout.R", chdir=T)
+source("../apis/doaj.R")
 
 debug = FALSE
 
