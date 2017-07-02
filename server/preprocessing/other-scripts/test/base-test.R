@@ -13,7 +13,7 @@ service <- "base"
 params <- NULL
 params_file <- "api-params/params_base.json"
 
-source("../vis_layout.R")
+source("../vis_layout.R", chdir=T)
 source('../apis/base.R')
 
 debug = FALSE

@@ -13,30 +13,30 @@ print(params_file)
 
 setwd(wd) #Don't forget to set your working directory
 
-source(paste("../other-scripts/vis_layout.R", sep=""))
+source("../other-scripts/vis_layout.R", chdir=T)
 
 taxonomy_separator = NULL
 limit = 100
 list_size = -1
-switch(service, 
+switch(service,
        plos={
-         source("../other-scripts/rplos_fast.R")
+         source("../other-scripts/apis/rplos_fast.R")
          taxonomy_separator = "/"
        },
        pubmed={
-         source('../other-scripts/pubmed.R')    
+         source('../other-scripts/apis/pubmed.R')
        },
        doaj={
-        source('../other-scripts/doaj.R')   
+        source('../other-scripts/apis/doaj.R')
        },
        base={
-         source('../other-scripts/base.R')
+         source('../other-scripts/apis/base.R')
          limit = 120
          list_size = 100
-         
-       }, 
+
+       },
       {
-        source("../other-scripts/rplos_fast.R")
+        source("../other-scripts/apis/rplos_fast.R")
       }
 )
 
@@ -56,11 +56,14 @@ if(!is.null(params_file) && !is.na(params_file)) {
 print("reading stuff")
 print(params)
 
-input_data = get_papers(query, params, limit=limit)
+input_data = get_papers(query, params, limit = limit)
 
 print("got the input")
 
-output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS, 
-                         taxonomy_separator=taxonomy_separator, list_size = list_size)
+output_json = vis_layout(input_data$text, input_data$metadata,
+                         max_clusters = MAX_CLUSTERS,
+                         add_stop_words = ADDITIONAL_STOP_WORDS,
+                         taxonomy_separator = taxonomy_separator,
+                         list_size = list_size)
 
 print(output_json)

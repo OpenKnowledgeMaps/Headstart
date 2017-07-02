@@ -13,8 +13,8 @@ service <- "doaj"
 params <- NULL
 params_file <- "api-params/params_doaj.json"
 
-source("../vis_layout.R")
-source('../apis/doaj.R')
+source("../vis_layout.R", chdir=T)
+source("../apis/doaj.R")
 
 debug = FALSE
 

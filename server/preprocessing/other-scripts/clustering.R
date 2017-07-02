@@ -5,7 +5,7 @@ normalize_matrix <- function(tdm_matrix, method = "cosine") {
   return(distance_matrix)
 }
 
-create_clusters <- function(distance_matrix, max_clusters = -1,
+create_clusters <- function(distance_matrix, max_clusters=-1,
                             method="ward.D") {
   # Perform clustering, use elbow to determine a good number of clusters
   css_cluster <- css.hclust(distance_matrix,
@@ -37,7 +37,7 @@ create_clusters <- function(distance_matrix, max_clusters = -1,
 }
 
 create_ordination <- function(distance_matrix,
-                              mindim = 2, maxdim = 2, maxit = 500) {
+                              mindim=2, maxdim=2, maxit=500) {
 
   # Perform non-metric multidimensional scaling
   nm <<- par.nmds(distance_matrix,

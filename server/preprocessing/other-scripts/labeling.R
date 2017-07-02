@@ -2,12 +2,6 @@
 create_cluster_labels <- function(clusters, metadata_full_subjects,
                                   weightingspec, top_n,
                                   stops, taxonomy_separator = "/") {
-  raw_clusters <<- clusters
-  metadata_full_subjects <<- metadata_full_subjects
-  weightingspec <<- weightingspec
-  top_n <<- top_n
-  stops <<- stops
-  taxonomy_separator <<- taxonomy_separator
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
     group = c(names(clusters$groups[clusters$groups == k]))

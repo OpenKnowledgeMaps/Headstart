@@ -13,7 +13,7 @@ service <- "pubmed"
 params <- NULL
 params_file <- "api-params/params_pubmed.json"
 
-source("../vis_layout.R")
+source("../vis_layout.R", chdir=T)
 source('../apis/pubmed.R')
 
 debug = FALSE
