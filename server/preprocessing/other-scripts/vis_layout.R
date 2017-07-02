@@ -15,7 +15,7 @@ source("preprocessing.R")
 source("clustering.R")
 source("labeling.R")
 
-debug <- FALSE
+debug = FALSE
 
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
@@ -28,11 +28,11 @@ vis_layout <- function(text, metadata,
   # If list_size is greater than -1 and smaller than the actual list size,
   # deduplicate titles
   if (list_size > -1 && list_size < length(metadata$id)) {
-    output <- deduplicate_titles(metadata, list_size)
-    text <- subset(text, !(id %in% output))
-    metadata <- subset(metadata, !(id %in% output))
-    text <- head(text, list_size)
-    metadata <- head(metadata, list_size)
+    output = deduplicate_titles(metadata, list_size)
+    text = subset(text, !(id %in% output))
+    metadata = subset(metadata, !(id %in% output))
+    text = head(text, list_size)
+    metadata = head(metadata, list_size)
   }
 
   stops <- stopwords(lang)
@@ -44,7 +44,7 @@ vis_layout <- function(text, metadata,
         add_stop_path <- paste0("../resources/", add_stop_words, ".stop")
       }
     additional_stops <- scan(add_stop_path, what = "", sep = "\n")
-    stops <- c(stops, additional_stops)
+    stops = c(stops, additional_stops)
   }
 
   print("calc matrix")
@@ -77,8 +77,8 @@ create_output <- function(clusters, layout, metadata) {
   cluster_labels <- clusters$cluster_labels
 
   # Prepare the output
-  result <- cbind(x, y, groups, labels, cluster_labels)
-  output <- merge(metadata, result, by.x = "id", by.y = "labels", all = TRUE)
+  result = cbind(x, y, groups, labels, cluster_labels)
+  output = merge(metadata, result, by.x = "id", by.y = "labels", all = TRUE)
   names(output)[names(output) == "groups"] <- "area_uri"
   output["area"] <- paste(output$cluster_labels, sep = "")
 
@@ -86,12 +86,12 @@ create_output <- function(clusters, layout, metadata) {
 
   if (debug == TRUE) {
     # Write output to file
-    file_handle <- file("output_file.csv", open = "w")
+    file_handle = file("output_file.csv", open = "w")
     write.csv(output, file = file_handle, row.names = FALSE)
     close(file_handle)
 
     # Write some stats to a file
-    file_handle <- file("stats.txt", open = "w")
+    file_handle = file("stats.txt", open = "w")
     writeLines(c(paste("Number of Clusters:", num_clusters, sep = " ")
                  , paste("Description:", attributes(cut_off)$description)
                  , paste("Stress:", min(nm$stress), sep = " ")

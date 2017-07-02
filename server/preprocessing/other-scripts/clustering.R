@@ -1,7 +1,6 @@
-
 normalize_matrix <- function(tdm_matrix, method = "cosine") {
   distance_matrix_2 <- as.matrix(proxy::dist(tdm_matrix, method))
-  distance_matrix <- as.dist(distance_matrix_2)
+  distance_matrix = as.dist(distance_matrix_2)
 
   return(distance_matrix)
 }
@@ -13,15 +12,15 @@ create_clusters <- function(distance_matrix, max_clusters=-1,
                             hclust.FUN.MoreArgs = list(method = "ward.D"))
   cut_off <<- elbow.batch(css_cluster)
 
-  num_clusters <- cut_off$k
+  num_clusters = cut_off$k
 
   if (max_clusters > -1 && num_clusters > max_clusters) {
-    num_clusters <- MAX_CLUSTERS
+    num_clusters = MAX_CLUSTERS
   }
 
-  meta_cluster <- attr(css_cluster, "meta")
-  cluster <- meta_cluster$hclust.obj
-  labels <- labels(distance_matrix)
+  meta_cluster = attr(css_cluster, "meta")
+  cluster = meta_cluster$hclust.obj
+  labels = labels(distance_matrix)
   groups <- cutree(cluster, k = num_clusters)
 
   if (debug == TRUE) {
@@ -32,7 +31,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1,
     dev.off()
   }
 
-  clusters <- list("labels" = labels, "cluster" = cluster,
+  clusters = list("labels" = labels, "cluster" = cluster,
                   "groups" = groups, "num_clusters" = num_clusters)
   return(clusters)
 }
@@ -43,7 +42,7 @@ create_ordination <- function(distance_matrix,
   # Perform non-metric multidimensional scaling
   nm <<- par.nmds(distance_matrix,
                   mindim = mindim, maxdim = maxdim, maxit = maxit)
-  nm.nmin <- nmds.min(nm)
+  nm.nmin = nmds.min(nm)
 
   if (debug == TRUE) {
     # Plot results from multidimensional scaling,

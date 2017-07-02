@@ -18,13 +18,13 @@ create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
 
   metadata_full_subjects <- replace_keywords_if_empty(corpus, metadata, stops)
 
-  corpus_unstemmed <- corpus
+  corpus_unstemmed = corpus
   corpus <- tm_map(corpus, stemDocument)
   tdm <- TermDocumentMatrix(corpus)
   if (sparsity < 1) {
     tdm <- removeSparseTerms(tdm, sparsity)
   }
-  tdm_matrix <- t(as.matrix(tdm))
+  tdm_matrix = t(as.matrix(tdm))
 
   return(list(tdm_matrix = tdm_matrix,
               metadata_full_subjects = metadata_full_subjects))
@@ -77,40 +77,40 @@ make_ngrams <- function(candidates, n) {
 
 replace_keywords_if_empty <- function(corpus, metadata, stops) {
 
-  missing_subjects <- which(lapply(metadata$subject,
+  missing_subjects = which(lapply(metadata$subject,
                                   function(x) {nchar(x)}) <= 1)
-  candidates <- mapply(paste,
+  candidates = mapply(paste,
                       metadata$title[missing_subjects],
                       metadata$paper_abstract[missing_subjects])
-  candidates <- lapply(candidates, tolower)
-  candidates <- lapply(candidates,
+  candidates = lapply(candidates, tolower)
+  candidates = lapply(candidates,
                        function(x)paste(removeWords(x, stops), collapse = ""))
-  candidates <- lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
-  candidates <- lapply(candidates, function(x) {gsub(" +", " ", x)})
-  candidates_bigrams <- make_ngrams(candidates, 2)
-  # candidates_trigrams <- make_ngrams(candidates, 3)
-  candidates <- mapply(paste, candidates, candidates_bigrams)
-  # candidates <- lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
+  candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
+  candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
+  candidates_bigrams = make_ngrams(candidates, 2)
+  # candidates_trigrams = make_ngrams(candidates, 3)
+  candidates = mapply(paste, candidates, candidates_bigrams)
+  # candidates = lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
 
-  nn_corpus <- Corpus(VectorSource(candidates))
-  nn_tfidf <- TermDocumentMatrix(nn_corpus,
+  nn_corpus = Corpus(VectorSource(candidates))
+  nn_tfidf = TermDocumentMatrix(nn_corpus,
                                 control = list(tokenize = SplitTokenizer,
                                                weighting = function(x)
                                                            weightSMART(x,
                                                              spec = "ntn")))
-  tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);
+  tfidf_top = apply(nn_tfidf, 2, function(x) {x2 = sort(x, TRUE);
                                                      x2[x2 >= x2[3]]
                                               }
                )
-  tfidf_top_names <- lapply(tfidf_top, names)
+  tfidf_top_names = lapply(tfidf_top, names)
   replacement_keywords <- lapply(tfidf_top_names,
                                  function(x) filter_out_nested_ngrams(x, 3))
-  replacement_keywords <- lapply(replacement_keywords,
+  replacement_keywords = lapply(replacement_keywords,
                                 FUN = function(x) {paste(unlist(x),
                                                          collapse = ";")
                                                   }
                           )
-  replacement_keywords <- gsub("_", " ", replacement_keywords)
+  replacement_keywords = gsub("_", " ", replacement_keywords)
 
   metadata$subject[missing_subjects] <- replacement_keywords
 
@@ -119,13 +119,13 @@ replace_keywords_if_empty <- function(corpus, metadata, stops) {
 
 
 levenshtein_ratio <- function(a, b) {
-  lv_dist <- stringdist(a, b, method = "lv")
-  lv_ratio <- lv_dist / (max(stri_length(a), stri_length(b)))
+  lv_dist = stringdist(a, b, method = "lv")
+  lv_ratio = lv_dist / (max(stri_length(a), stri_length(b)))
   return(lv_ratio)
 }
 
 SplitTokenizer <- function(x) {
-  tokens <- unlist(
+  tokens = unlist(
               lapply(
                 strsplit(words(x), split = ";"),
                 paste),
