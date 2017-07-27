@@ -57,7 +57,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
 
     $unique_id = $persistence->createID(array($query, $params_json));
 
-    $last_version = $persistence->getLastVersion($unique_id, false);
+    $last_version = false; //$persistence->getLastVersion($unique_id, false);
 
     if ($last_version != null && $last_version != "null" && $last_version != false) {
         echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));

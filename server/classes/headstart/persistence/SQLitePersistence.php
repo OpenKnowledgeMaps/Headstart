@@ -60,7 +60,8 @@ class SQLitePersistence extends Persistence {
     public function existsVisualization($vis_id) {
         $result = $this->prepareExecuteAndReturnResult(
                 "SELECT EXISTS(SELECT 1 FROM visualizations WHERE vis_id=?)"
-                , array($vis_id));
+                , array($vis_id)
+                , $first = true);
         
         return $result[0];
     }
@@ -83,17 +84,38 @@ class SQLitePersistence extends Persistence {
 
         return $result;
     }
+    
+    public function getLatestRevisions($limit=30, $details=false) {
+        
+        $count_query = $this->prepareExecuteAndReturnResult("SELECT Count(*) FROM revisions", array(), $first = true);
+        $count = $count_query[0];
+        $start_index = $count - $limit;
+        
+        $return_fields = "revisions.rev_vis, revisions.rev_timestamp, revisions.vis_query, visualizations.vis_title";
+        $return_fields .= ($details==true)?(", revisions.rev_data"):("");
+        
+        $result = $this->prepareExecuteAndReturnResult("SELECT $return_fields FROM revisions, visualizations
+                    WHERE visualizations.vis_id = revisions.rev_vis
+                    LIMIT ?, ?"
+                , array($start_index, $limit), $first = false);
+
+        return $result;
+    }
 
     public function writeRevision($vis_id, $data, $rev_id=null) {
         
         $rev = $rev_id;
         
         if($rev == null) {
-            $ver = $this->prepareExecuteAndReturnResult("SELECT vis_latest FROM visualizations WHERE vis_id=?", array($vis_id), true);
-            $rev = $ver + 1;
+            $ver = $this->prepareExecuteAndReturnResult("SELECT vis_latest FROM visualizations WHERE vis_id=?", 
+                    array($vis_id), 
+                    $first = true);
+            $rev = $ver[0] + 1;
         }
         
-        $query = $this->prepareExecuteAndReturnResult("SELECT vis_clean_query FROM visualizations WHERE vis_id=?", array($vis_id), true);
+        $query = $this->prepareExecuteAndReturnResult("SELECT vis_clean_query FROM visualizations WHERE vis_id=?", 
+                array($vis_id), 
+                $first = true);
         
         $this->prepareAndExecute("INSERT INTO revisions (rev_id, rev_vis, rev_user, rev_timestamp, rev_comment, rev_data, vis_query)
                     VALUES (:rev_id, :rev_vis, :rev_user, :rev_timestamp, :rev_comment, :rev_data, :vis_query)"
@@ -104,7 +126,7 @@ class SQLitePersistence extends Persistence {
                     ,":rev_timestamp" => date("Y-m-d H:i:s", time())
                     ,":rev_comment" => "Visualization created"
                     ,":rev_data" => $data
-                    ,":vis_query" => $query
+                    ,":vis_query" => $query[0]
                 ));
         
         $this->prepareAndExecute("UPDATE visualizations SET vis_latest=? WHERE vis_id=?"
@@ -125,7 +147,7 @@ class SQLitePersistence extends Persistence {
 
     private function prepareExecuteAndReturnResult($stmt, $array, $first = false) {
         $result = $this->prepareAndExecute($stmt, $array);
-        $fetch_result = $result["query"]->fetch();
+        $fetch_result = $result["query"]->fetchAll();
 
         if ($fetch_result == false) {
             return false;

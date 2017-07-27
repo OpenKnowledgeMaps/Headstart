@@ -18,4 +18,4 @@ $persistence = new headstart\persistence\SQLitePersistence($ini_array["connectio
 
 $jsonData = $persistence->getLastVersion($vis_id);
 
-library\CommUtils::echoOrCallback($jsonData, $_GET);
+library\CommUtils::echoOrCallback($jsonData[0], $_GET);
