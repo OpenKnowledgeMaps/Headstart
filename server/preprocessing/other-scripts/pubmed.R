@@ -43,7 +43,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
   date <- './/MedlineCitation/DateCreated'
   authors <- './/AuthorList'
   keywords <- './/Keyword'
-  meshtags <- './/MeshHeading/DescriptorName'
+  meshtags <- ".//MeshHeading/DescriptorName[@MajorTopicYN=\"N\"]"
   doi <- ".//PubmedData/ArticleIdList/ArticleId[@IdType=\"doi\"]"
   from = gsub("-", "/", params$from)
   to = gsub("-", "/", params$to)
