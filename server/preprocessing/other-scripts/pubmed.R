@@ -50,8 +50,9 @@ get_papers <- function(query, params = NULL, limit = 100) {
   article_types_string = paste0(" ((", '"', paste(params$article_types, sep='"', collapse='"[Publication Type] OR "'), '"[Publication Type]))')
   exclude_articles_with_abstract = " AND hasabstract"
   query <- paste0(query, article_types_string, exclude_articles_with_abstract)
-  x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit, mindate = from, maxdate = to, sort="relevance")
-  res <- rentrez::entrez_fetch(db = "pubmed", id = x$ids, rettype = "xml")
+  x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit, 
+                              mindate = from, maxdate = to, sort="relevance", use_history=TRUE)
+  res <- rentrez::entrez_fetch(db = "pubmed", web_history = x$web_history, retmax = limit, rettype = "xml")
   xml <- xml2::xml_children(xml2::read_xml(res))
   out <- lapply(xml, function(z) {
     flds <- switch(
@@ -92,7 +93,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
   df$doi = df$id
   df$id = df$pmid
 
-  summary <- rentrez::entrez_summary(db="pubmed", id = x$ids)
+  summary <- rentrez::entrez_summary(db="pubmed", web_history = x$web_history, retmax = limit)
   df$readers <- extract_from_esummary(summary, "pmcrefcount")
   df$readers <- replace(df$readers, df$readers=="", 0)
 
