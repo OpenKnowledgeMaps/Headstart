@@ -13,7 +13,8 @@
         	data_config.files = [{
         		title: <?php echo json_encode($_GET['title']) ?>,
         		file: <?php echo json_encode($_GET['file']) ?>
-        	}]
+        	}];
+        	data_config.nodot = <?php echo json_encode($_GET['nodot']) ?>;
         </script>
         <script type="text/javascript" src="../../dist/headstart.js"></script>
         <link type="text/css" rel="stylesheet" href="../../dist/headstart.css"></link>

@@ -433,7 +433,9 @@ class Canvas {
   }
 
   dotdotdotAreaTitles() {
-    // $("#area_title_object>body").dotdotdot({wrap:"letter"});
+    const check = config.hasOwnProperty('nodot');
+    if ((check && config.nodot === null) || !check)
+      $("#area_title_object>body").dotdotdot({wrap:"letter"});
   }
 
   updateCanvasDomains(data) {

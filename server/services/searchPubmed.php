@@ -21,7 +21,7 @@ $result = search("pubmed", $dirty_query, $post_params, array("article_types", "f
 $id = json_decode($result)->id;
 $query = json_decode($result)->query;
 $title = 'Overview of PubMed articles for ' . $query . ':' . $id;
-$command = 'nohup '. $settings["phantomjs_path"] . ' ' . $settings["getsvg_path"] . ' "' . $settings["host"] . 'examples/search_repos/headstart.php?title='.$title.'&service=pubmed' . $post_params['service'] . '&file=' . $id . '" '. $settings["storage_path"] . $id .'.png "1200px" 1>/dev/null 2>/dev/null &';
+$command = 'nohup '. $settings["phantomjs_path"] . ' ' . $settings["getsvg_path"] . ' "' . $settings["host"] . 'examples/search_repos/headstart.php?nodot=1&title='.$title.'&service=pubmed' . $post_params['service'] . '&file=' . $id . '" '. $settings["storage_path"] . $id .'.png "1200px" 1>/dev/null 2>/dev/null &';
 exec($command);
 
 echo $result
