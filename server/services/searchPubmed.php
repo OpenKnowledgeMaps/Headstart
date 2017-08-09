@@ -18,6 +18,7 @@ $dirty_query = library\CommUtils::getParameter($_POST, "q");
 $post_params = $_POST;
 
 $result = search("pubmed", $dirty_query, $post_params, array("article_types", "from", "to"), ";", null);
+
 $id = json_decode($result)->id;
 $query = json_decode($result)->query;
 $title = 'Overview of PubMed articles for ' . $query . ':' . $id;

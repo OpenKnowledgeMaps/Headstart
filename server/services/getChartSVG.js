@@ -56,7 +56,7 @@ if (system.args.length < 3 || system.args.length > 5) {
             phantom.exit(1);
         } else {
             window.setTimeout(function () {
-                page.viewportSize = { width: 1400, height: 1080 };
+                page.viewportSize = { width: 1500, height: 1080 };
                 var svgClipRect = page.evaluate( function() {
                     var visCol = document.getElementsByClassName("vis-col")[0];
                     return visCol.getBoundingClientRect();
