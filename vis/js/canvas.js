@@ -433,7 +433,7 @@ class Canvas {
   }
 
   dotdotdotAreaTitles() {
-    $("#area_title_object>body>div").dotdotdot({wrap:"letter"});
+    // $("#area_title_object>body").dotdotdot({wrap:"letter"});
   }
 
   updateCanvasDomains(data) {
