@@ -59,6 +59,7 @@ if (system.args.length < 3 || system.args.length > 5) {
                 page.viewportSize = { width: 1500, height: 1080 };
                 var svgClipRect = page.evaluate( function() {
                     var visCol = document.getElementsByClassName("vis-col")[0];
+                    document.getElementById("infolink").remove();
                     return visCol.getBoundingClientRect();
                 });
                 page.clipRect = svgClipRect;
