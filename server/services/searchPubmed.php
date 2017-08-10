@@ -22,20 +22,20 @@ $resultDecoded = json_decode($result);
 
 $id = $resultDecoded->id;
 $query = $resultDecoded->query;
-$title = 'Overview of PubMed articles for ' . $query . ':' . $id;
+//$title = 'Overview of PubMed articles for ' . $query . ':' . $id;
 $command = 'nohup '.
     $settings["phantomjs_path"] . ' ' .
     $settings["getsvg_path"] .
     ' "' .
     $general["host"] .
     $settings["snapshot_php"] . '?'.
-    'title='.$title.
+    'query='.$query.
+    '&service_name=PubMed'.
     '&service=pubmed'.
     '&file=' . $id . '" '.
     $settings["storage_path"] .
     $id .'.png '. $settings["snapshot_width"] .' 1>/dev/null 2>/dev/null &';
 exec($command);
-
 echo $result
 
 ?>
