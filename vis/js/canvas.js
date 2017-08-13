@@ -224,14 +224,30 @@ class Canvas {
   }
 
   // Draws the header for this
-  drawTitle() {
+  drawTitle(context) {
     let chart_title = "";
+    
     chart_title = config.localization[config.language].default_title;
-    if(config.title) chart_title = config.title;
+    if(config.title) {
+        chart_title = config.title;
+    } else if (config.create_title_from_context) {
+        chart_title = config.localization[config.language].overview_label 
+                + ' <span id="search-term-unique">' + context.query + '</span>';
+    }
 
     var subdiscipline_title_h4 = $("#subdiscipline_title h4");
     subdiscipline_title_h4.html(chart_title);
-    $("#num_articles").html($(".paper").length);
+    
+    if(config.show_context) {
+        $("#context").css("display", "block");
+        $("#num_articles").html("#" + $(".paper").length + " " + config.localization[config.language].articles_label);
+        $("#source").html("#" + config.localization[config.language].source_label + ": " + context.service);
+        $("#timespan").html("#" + context.params.from + " - " + context.params.to);
+        let num_document_types = context.params.document_types.length;
+        $("#document_types").html("#" + num_document_types + " " + config.localization[config.language].documenttypes_label);
+    } else {
+        $("#num_articles").html($(".paper").length);
+    }
 
     if (config.show_infolink) {
       let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
@@ -364,7 +380,6 @@ class Canvas {
     this.setScaleRanges();
     this.drawSvg();
     this.drawChartCanvas();
-    this.drawTitle();
   }
 
   setupResizedCanvas() {

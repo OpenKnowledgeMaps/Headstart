@@ -412,6 +412,7 @@ BubblesFSM.prototype = {
 
         $("#subdiscipline_title h4").html('<span id="area-bold">'+config.localization[config.language].area + ":</span> " + d.title);
         $("#subdiscipline_title").dotdotdot();
+        $("#context").css("display", "none");
 
         d3.selectAll("div.paper_holder")
                 .on("mouseover", function (d) {
@@ -586,7 +587,7 @@ BubblesFSM.prototype = {
         d3.selectAll("span.readers_entity")
                 .style("font-size", "8px");
 
-        canvas.drawTitle();
+        mediator.publish("draw_title");
 
         d3.selectAll(".paper")
                 .style("display", function (d) {

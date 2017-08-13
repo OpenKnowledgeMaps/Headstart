@@ -66,21 +66,27 @@ class SQLitePersistence extends Persistence {
         return $result[0];
     }
 
-    public function getLastVersion($vis_id, $details = false) {
-        return $this->getRevision($vis_id, null, $details);
+    public function getLastVersion($vis_id, $details = false, $context = false) {
+        return $this->getRevision($vis_id, null, $details, $context);
     }
 
-    public function getRevision($vis_id, $rev_id, $details=false) {
+    public function getRevision($vis_id, $rev_id, $details=false, $context = false) {
         
         $id = ($rev_id == null)?("revisions.rev_id"):("?");
         $array = ($rev_id == null)?(array(addslashes($vis_id))):(array(addslashes($vis_id), $rev_id));
-        $return_fields = ($details==true)?("revisions.*"):("revisions.rev_data");
+        $return_fields = "";
+        if($context === false) {
+            $return_fields = ($details==true)?("revisions.*"):("revisions.rev_data");
+        } else {
+            $return_fields = "revisions.rev_vis, revisions.vis_query, visualizations.vis_title, "
+                    . "revisions.rev_timestamp, visualizations.vis_params, revisions.rev_data";
+        }
         
         $result = $this->prepareExecuteAndReturnResult("SELECT $return_fields FROM revisions, visualizations
                     WHERE visualizations.vis_id = ?
                         AND visualizations.vis_id = revisions.rev_vis 
                         AND visualizations.vis_latest =" . $id
-                , $array, !$details);
+                , $array, (!$details && !$context));
 
         return $result;
     }

@@ -9,6 +9,7 @@ var IO = function() {
     this.areas_array = [];
     this.fs = [];
     this.title = "default-title";
+    this.context = {};
 };
 
 IO.prototype = {
@@ -82,6 +83,13 @@ IO.prototype = {
         if (object[element] === null || typeof object[element] === "undefined") {
             if (config.debug) console.log(`Sanitized a value ${object[element]} of ${element} to ${defaultVal}`);
             object[element] = defaultVal;
+        }
+    },
+    
+    setContext: function(context) {
+        this.context = context;
+        if(context.hasOwnProperty("params")) {
+            context.params = JSON.parse(context.params);
         }
     },
 

@@ -102,6 +102,7 @@ MyMediator.prototype = {
         this.mediator.subscribe("window_resize", this.window_resize);
         this.mediator.subscribe("on_rect_mouseover", this.on_rect_mouseover);
         this.mediator.subscribe("chart_svg_click", this.chart_svg_click);
+        this.mediator.subscribe("draw_title", this.draw_title);
 
         // needed in io.js = prepareData and prepareAreas to
         // delegate some things to the canvas class
@@ -217,11 +218,18 @@ MyMediator.prototype = {
         mediator.manager.registerModule(headstart, 'headstart');
         if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.manager.call('canvas', 'setupCanvas', []);
-        mediator.manager.call('io', 'initializeMissingData', [csv]);
-        mediator.manager.call('io', 'prepareData', [highlight_data, csv]);
+        
+        let data = (config.show_context)?(JSON.parse(csv.data)):csv;
+        let context = (config.show_context)?(csv.context):{};
+        
+        mediator.manager.call('io', 'initializeMissingData', [data]);
+        mediator.manager.call('io', 'prepareData', [highlight_data, data]);
         mediator.manager.call('io', 'prepareAreas', []);
+        mediator.manager.call('io', 'setContext', [context]);
+        mediator.manager.call('canvas', 'drawTitle', [context]);
+        
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
-        mediator.manager.call('bubble', 'start', [csv, highlight_data]);
+        mediator.manager.call('bubble', 'start', [data, highlight_data]);
         mediator.manager.call('canvas', 'initEventsAndLayout', []);
         mediator.manager.call('papers', 'start', [ mediator.current_bubble ]);
         mediator.manager.call('bubble', 'draw', []);
@@ -232,7 +240,7 @@ MyMediator.prototype = {
         mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
         mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
         mediator.manager.call('bubble', 'initMouseListeners', []);
-        mediator.manager.call('canvas', 'drawTitle', []);
+        mediator.manager.call('canvas', 'drawTitle', [context]);
     },
 
     update_canvas_domains: function(data) {
@@ -405,6 +413,11 @@ MyMediator.prototype = {
         if (config.show_list) {
             mediator.manager.call('list', 'show', []);
         }
+    },
+    
+    draw_title: function () {
+        let context = io.context;
+        mediator.manager.call('canvas', 'drawTitle', [context]);
     },
 
     list_click_paper_list: function(d) {
