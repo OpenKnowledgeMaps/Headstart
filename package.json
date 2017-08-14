@@ -33,6 +33,7 @@
     "javascript-state-machine": "^2.3.5",
     "jquery": "^2.1.4",
     "jquery-dotdotdot": "^1.8.2",
+    "dateformat": "^2.0.0",
     "mediator-js": "^0.9.9",
     "resolve-url-loader": "^1.6.0",
     "truncate": "*"

@@ -225,7 +225,7 @@ MyMediator.prototype = {
         mediator.manager.call('io', 'initializeMissingData', [data]);
         mediator.manager.call('io', 'prepareData', [highlight_data, data]);
         mediator.manager.call('io', 'prepareAreas', []);
-        mediator.manager.call('io', 'setContext', [context]);
+        mediator.manager.call('io', 'setContext', [context, data.length]);
         mediator.manager.call('canvas', 'drawTitle', [context]);
         
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
@@ -240,7 +240,6 @@ MyMediator.prototype = {
         mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
         mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
         mediator.manager.call('bubble', 'initMouseListeners', []);
-        mediator.manager.call('canvas', 'drawTitle', [context]);
     },
 
     update_canvas_domains: function(data) {

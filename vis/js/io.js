@@ -86,11 +86,12 @@ IO.prototype = {
         }
     },
     
-    setContext: function(context) {
+    setContext: function(context, num_documents) {
         this.context = context;
         if(context.hasOwnProperty("params")) {
             context.params = JSON.parse(context.params);
         }
+        this.context.num_documents = num_documents;
     },
 
     initializeMissingData: function(data) {
