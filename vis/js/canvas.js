@@ -298,8 +298,8 @@ class Canvas {
                 document_types_string += type_obj[0].text + ", ";
             })
             
-            $("#document_types").html(num_document_types + " " + config.localization[config.language].documenttypes_label
-                    + " (" + document_types_string.substr(0, document_types_string.length - 2) + ")");
+            $("#document_types").html(num_document_types + " " + config.localization[config.language].documenttypes_label);
+            $("#document_types_details").html(" (" + document_types_string.substr(0, document_types_string.length - 2) + ")");
         } else {
             $("#num_articles").html(context.num_documents);
         }
