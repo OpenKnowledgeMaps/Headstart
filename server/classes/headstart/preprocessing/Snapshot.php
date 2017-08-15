@@ -5,14 +5,12 @@ namespace headstart\preprocessing;
 class Snapshot
 {
     protected $cmd;
-    public function __construct($ini_array, $search_result, $service)
-    {
-        $decoded_result = json_decode($search_result);
+    public function __construct($ini_array, $query, $id, $service, $service_name) {
         $post_data = array(
-            "query" => $decoded_result->query,
-            "file" => $decoded_result->id,
-            "service_name" => $service["name"],
-            "service" => $service["service"]
+            "query" => $query,
+            "file" => $id,
+            "service_name" => $service_name,
+            "service" => $service
         );
         $url_postfix = http_build_query($post_data);
 
@@ -33,7 +31,7 @@ class Snapshot
             pclose(popen("start /B ". $this->cmd, "r"));
         }
         else {
-            exec($this->cmd . " 1>/dev/null 2>/dev/null  &");
+            exec($this->cmd . " &");
         }
     }
 }

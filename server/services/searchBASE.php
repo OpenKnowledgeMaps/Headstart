@@ -19,9 +19,6 @@ $post_params = $_POST;
 
 $result = search("base", $dirty_query, $post_params, array("from", "to", "document_types"), ";", null);
 
-$snapshot = new \headstart\preprocessing\Snapshot($ini_array, $result, $service);
-$snapshot->takeSnapshot();
-
 echo $result
 
 ?>
