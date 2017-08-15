@@ -18,13 +18,14 @@ class Snapshot
 
         $phantomjs = $ini_array["snapshot"]["phantomjs_path"];
         $getsvg = $ini_array["snapshot"]["getsvg_path"];
-        $host = $ini_array["general"]["host"];
+        $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+        $host = $protocol . $ini_array["general"]["host"];
         $snap_php = $ini_array["snapshot"]["snapshot_php"];
         $storage = $ini_array["snapshot"]["storage_path"];
         $width = $ini_array["snapshot"]["snapshot_width"];
 
         $url = "{$host}{$snap_php}?{$url_postfix}";
-        $this->cmd = "{$phantomjs} {$getsvg} '{$url}' {$storage}{$post_data['file']}.png {$width}";
+        $this->cmd = "{$phantomjs} {$getsvg} \"{$url}\" {$storage}{$post_data['file']}.png {$width}";
     }
 
     public function takeSnapshot() {
