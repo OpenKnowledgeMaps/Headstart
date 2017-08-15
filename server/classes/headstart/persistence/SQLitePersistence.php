@@ -91,6 +91,19 @@ class SQLitePersistence extends Persistence {
         return $result;
     }
     
+     public function getContext($vis_id) {
+         $return_fields = "revisions.rev_vis, revisions.vis_query, visualizations.vis_title, "
+                    . "revisions.rev_timestamp, visualizations.vis_params";
+         
+         $result = $this->prepareExecuteAndReturnResult("SELECT $return_fields FROM revisions, visualizations
+                    WHERE visualizations.vis_id = ?
+                        AND visualizations.vis_id = revisions.rev_vis 
+                        AND visualizations.vis_latest = revisions.rev_id"
+                , array($vis_id));
+
+        return $result;
+     }
+    
     public function getLatestRevisions($limit=30, $details=false) {
         
         $count_query = $this->prepareExecuteAndReturnResult("SELECT Count(*) FROM revisions", array(), $first = true);
