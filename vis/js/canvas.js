@@ -16,7 +16,7 @@ class Canvas {
     }
 
     getCurrentCircle(d) {
-        mediator.current_circle = canvas.chart.selectAll("circle")
+        mediator.current_circle = canvas.chart.selectAll("#headstart-chart circle")
                 .filter(function (x) {
                     if (config.use_area_uri) {
                         return x.area_uri == d.area_uri;
@@ -276,7 +276,7 @@ class Canvas {
 
     drawContext(context) {
         if (config.show_context) {
-            $("#context").css("display", "block");
+            $("#context").css({"visibility": "visible", "display": "block"});
             $("#num_articles").html(context.num_documents + " " + config.localization[config.language].articles_label);
             
             $("#source").html(config.localization[config.language].source_label 
