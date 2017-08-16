@@ -15,6 +15,8 @@
             }];
             data_config.nodot = 1;
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "../../";
+			data_config.show_context = false;
+			data_config.create_title_from_context= false;
         </script>
         <script type="text/javascript" src="../../../dist/headstart.js"></script>
         <link type="text/css" rel="stylesheet" href="../../../dist/headstart.css"></link>
