@@ -287,26 +287,29 @@ class Canvas {
             
             let dtypes = (context.params.hasOwnProperty("document_types"))?("document_types"):("article_types");
             let num_document_types = context.params[dtypes].length;
-            
-            let document_types_string = "";
-
-            let document_types = config.options.filter(function(obj) {
-                return obj.id == dtypes;
-            });
-            
-            context.params[dtypes].forEach(function (type) {
-                let type_obj = document_types[0].fields.filter(function(obj) {
-                    return obj.id == type;
-                })
-                document_types_string += type_obj[0].text + ", ";
-            })
-            document_types_string = document_types_string.substr(0, document_types_string.length - 2);
-            
             $("#document_types").html(num_document_types + " " + config.localization[config.language].documenttypes_label);
-            $("#document_types").attr({
-                "data-content": document_types_string
-                , "title": document_types_string
-            });
+
+            if(typeof config.options !== "undefined") {
+                
+                let document_types_string = "";
+                
+                let document_types = config.options.filter(function(obj) {
+                    return obj.id == dtypes;
+                });
+
+                context.params[dtypes].forEach(function (type) {
+                    let type_obj = document_types[0].fields.filter(function(obj) {
+                        return obj.id == type;
+                    })
+                    document_types_string += type_obj[0].text + ", ";
+                })
+                document_types_string = document_types_string.substr(0, document_types_string.length - 2);
+                
+                $("#document_types").attr({
+                    "data-content": document_types_string
+                    , "title": document_types_string
+                });
+            }
         } else {
             $("#num_articles").html(context.num_documents);
         }
