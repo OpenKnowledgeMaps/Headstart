@@ -289,15 +289,13 @@ class Canvas {
             let time_macro = (config.service === "doaj")?("yyyy"):("d mmm yyyy");
             
             $("#timespan").html(
-                    ((this.paramExists(context.params.from))?(dateFormat(new Date(context.params.from), "d mmm yyyy")):(""))
-                    + " - " + ((this.paramExists(context.params.to))?(dateFormat(new Date(context.params.to), "d mmm yyyy")):(""))
+                    ((this.paramExists(context.params.from))?(dateFormat(new Date(context.params.from), time_macro)):(""))
+                    + " - " + ((this.paramExists(context.params.to))?(dateFormat(new Date(context.params.to), time_macro)):(""))
             );
-            
-            let dtypes = (context.params.hasOwnProperty("document_types"))?("document_types"):("article_types");
-            let num_document_types = context.params[dtypes].length;
-            $("#document_types").html(num_document_types + " " + config.localization[config.language].documenttypes_label);
 
             if(this.paramExists(config.options)) {
+                
+                let dtypes = (context.params.hasOwnProperty("document_types"))?("document_types"):("article_types");
                 
                 let document_types_string = "";
                 
@@ -306,6 +304,9 @@ class Canvas {
                 });
                 
                 if(context.params.hasOwnProperty(dtypes)) {
+                    let num_document_types = context.params[dtypes].length;
+                    $("#document_types").html(num_document_types + " " + config.localization[config.language].documenttypes_label);
+                    
                     context.params[dtypes].forEach(function (type) {
                         let type_obj = document_types[0].fields.filter(function(obj) {
                             return obj.id == type;
