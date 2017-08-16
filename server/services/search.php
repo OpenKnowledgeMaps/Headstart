@@ -98,5 +98,13 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
         $persistence->writeRevision($unique_id, $input_json);
     }
     
+    $repo_mapping = array("plos" => "PLOS"
+                            , "pubmed" => "PubMed"
+                            , "doaj" => "DOAJ"
+                            , "base" => "BASE");
+    
+    $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $repository, $repo_mapping[$repository]);
+    $snapshot->takeSnapshot();
+    
     return json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
 }
