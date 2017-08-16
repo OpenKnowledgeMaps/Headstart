@@ -3,6 +3,7 @@
 require dirname(__FILE__) . '/../classes/headstart/preprocessing/calculation/RCalculation.php';
 require dirname(__FILE__) . '/../classes/headstart/preprocessing/naming/KeywordNaming.php';
 require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
+require_once dirname(__FILE__) . '/../classes/headstart/preprocessing/Snapshot.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
 
