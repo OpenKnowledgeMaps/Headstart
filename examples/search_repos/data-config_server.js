@@ -1,1 +1,1 @@
-data_config.server_url = "http://path/to/server/";
+data_config.server_url = "http://localhost/server/";
