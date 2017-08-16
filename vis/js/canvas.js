@@ -273,6 +273,10 @@ class Canvas {
             });
         }
     }
+    
+    paramExists(param) {
+        return (typeof param !== "undefined" && param !== "null" && param !== null)
+    }
 
     drawContext(context) {
         if (config.show_context) {
@@ -282,14 +286,16 @@ class Canvas {
             $("#source").html(config.localization[config.language].source_label 
                     + ": " + config.service_names[context.service]);
             
-            $("#timespan").html(dateFormat(new Date(context.params.from), "d mmm yyyy") 
-                    + " - " + dateFormat(new Date(context.params.to), "d mmm yyyy"));
+            $("#timespan").html(
+                    ((this.paramExists(context.params.from))?(dateFormat(new Date(context.params.from), "d mmm yyyy")):(""))
+                    + " - " + ((this.paramExists(context.params.to))?(dateFormat(new Date(context.params.to), "d mmm yyyy")):(""))
+                    );
             
             let dtypes = (context.params.hasOwnProperty("document_types"))?("document_types"):("article_types");
             let num_document_types = context.params[dtypes].length;
             $("#document_types").html(num_document_types + " " + config.localization[config.language].documenttypes_label);
 
-            if(typeof config.options !== "undefined") {
+            if(this.paramExists(config.options)) {
                 
                 let document_types_string = "";
                 
