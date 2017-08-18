@@ -69,9 +69,9 @@ var config = {
     show_infolink: true,
     show_titlerow: true,
     show_list: false,
-    show_context: true,
+    show_context: false,
     
-    create_title_from_context: true,
+    create_title_from_context: false,
 
     sort_options: ["readers", "title", "authors", "year"],
 

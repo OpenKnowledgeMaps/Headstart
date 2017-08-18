@@ -12,7 +12,7 @@ The search repos example lets you perform a search in either PLOS or Pubmed and 
 
 ### Setup the example
 
-Duplicate the `search_repos` folder in the examples and rename it to a folder name of your choice. In the new folder, open `data-config_server.js` and set the `data_config.server_url` to the URL of your web server. Open the `webpack.config.json` file and set the `publicPath` to the URL of the `dist` folder on your web server.
+Duplicate the `search_repos` folder in the examples and rename it to a folder name of your choice. Open the `webpack.config.json` file and set the `publicPath` to the URL of the `dist` folder on your web server.
 
 ### Test your setup
 
