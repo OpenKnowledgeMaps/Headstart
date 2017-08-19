@@ -42,6 +42,7 @@
         a {
             text-decoration: none;
             color: $list_metadata_title_paper;
+            cursor: pointer;
 
             &:hover {
                 text-decoration: underline;
