@@ -281,7 +281,15 @@ class Canvas {
     drawContext(context) {
         if (config.show_context) {
             $("#context").css({"visibility": "visible", "display": "block"});
-            $("#num_articles").html(context.num_documents + " " + config.localization[config.language].articles_label);
+            let modifier = "";
+            if (this.paramExists(context.params.sorting)) {
+                if(context.params.sorting === "most-recent") {
+                    modifier = " " + config.localization[config.language].most_recent_label + " ";
+                } else {
+                    modifier = " "
+                }
+            }
+            $("#num_articles").html(context.num_documents + modifier + config.localization[config.language].articles_label);
             
             $("#source").html(config.localization[config.language].source_label 
                     + ": " + config.service_names[context.service]);
