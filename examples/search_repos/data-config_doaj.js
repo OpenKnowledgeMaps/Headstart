@@ -16,5 +16,8 @@ var data_config = {
     area_force_alpha: 0.015,
     show_list: true,
     content_based: true,
-    url_prefix: "https://doaj.org/article/"
+    url_prefix: "https://doaj.org/article/",
+	
+	show_context: true,
+	create_title_from_context: true
 };

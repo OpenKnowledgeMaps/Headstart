@@ -16,7 +16,7 @@ Make sure you have the following packages installed:
  * MASS
  * ecodist
  * jsonlite
- * tm **(Version 0.6-\* -- do not use 0.7-\*)**
+ * tm (Version 0.6 - **do not use 0.7**)
  * proxy
  * SnowballC
  * rplos
@@ -27,8 +27,10 @@ Make sure you have the following packages installed:
  * tibble
  * data.table
  * stringi
+ * stringdist
  * xml2 **(Version 1.0 or higher)**
  * jaod (Currently, a Github repository only: http://github.com/ropenscilabs/jaod. Install with devtools.)
+ * rbace (Currently, a Github repository only: http://github.com/ropenscilabs/rbace. Install with devtools.)
 
 ## Configuration
 
@@ -49,3 +51,8 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 * general->services_path: Relative path to the client REST services. Needs to be in the public_html/www directory.
 * calculation->binary: Path to RScript binary
 * connection->sqlite_db: Full path to the sqlite datatabase file. For development purposes, duplicate headstart.sqlite in server/storage/ and rename it to a filename of your choice. Enter the path to this file here. **Make sure that your webserver has write access to this file and the containing directory.**
+* snapshot->phantomjs_path: Absolute path to phantomjs binary
+* snapshot->getsvg_path: Absolute path to getChartSVG.js
+* snapshot->storage_path: Absolute path to the directory, where the snapshots are stored. **Make sure that your webserver has write access to this file and the containing directory.**
+* snapshot->snapshot_php: PHP File responsible for rendering the bubble in a way to be snapshotted. Relative path to general host snapshot->headstart_snapshot.php"
+* snapshot->snapshot_width: Thumbnail width

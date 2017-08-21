@@ -24,9 +24,9 @@ HeadstartFSM.prototype = {
   checkBrowserVersions: function() {
     var browser = BrowserDetect.browser;
     if (!(browser == "Firefox" || browser == "Safari" || browser == "Chrome")) {
-            var alert_message = 'You are using an unsupported browser.' +
-                                'This visualization was successfully tested' +
-                                'with the latest versions of Chrome, Safari,' +
+            var alert_message = 'You are using an unsupported browser. ' +
+                                'This visualization was successfully tested ' +
+                                'with the latest versions of Chrome, Safari, ' +
                                 'Opera and Firefox.';
             alert(alert_message);
     }
@@ -102,7 +102,8 @@ HeadstartFSM.prototype = {
       },
 
       search_repos: function(that, setupVis) {
-        let url = config.server_url + "services/getLatestRevision.php?vis_id=" + mediator.current_bubble.file;
+        let url = config.server_url + "services/getLatestRevision.php?vis_id=" + mediator.current_bubble.file 
+                + "&context=" + config.show_context;
         mediator.publish("get_data_from_files", url, 'json', setupVis);
       },
 

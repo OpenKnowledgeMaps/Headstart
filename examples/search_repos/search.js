@@ -65,10 +65,10 @@ $("#searchform").validate({
             data: data,
             success: function (data) {
                 if (data.status === "success") {
-                    var title = "Overview of " + service_name + " articles for " + data.query + ":" + data.id;
                     var file = data.id;
 
-                    window.location = "headstart.php?title=" + title + "&file=" + file + "&service=" + data_config.service;
+                    window.location = "headstart.php?query=" + data.query + "&file=" + file +
+                      "&service=" + data_config.service + "&service_name=" + service_name;
                     return false;
                 } else {
                     $("#progress").html("Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again with a different query.");

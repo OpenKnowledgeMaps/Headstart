@@ -3,6 +3,7 @@
 require dirname(__FILE__) . '/../classes/headstart/preprocessing/calculation/RCalculation.php';
 require dirname(__FILE__) . '/../classes/headstart/preprocessing/naming/KeywordNaming.php';
 require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
+require_once dirname(__FILE__) . '/../classes/headstart/preprocessing/Snapshot.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
 
@@ -97,6 +98,14 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     } else {
         $persistence->writeRevision($unique_id, $input_json);
     }
+    
+    $repo_mapping = array("plos" => "PLOS"
+                            , "pubmed" => "PubMed"
+                            , "doaj" => "DOAJ"
+                            , "base" => "BASE");
+    
+    $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $repository, $repo_mapping[$repository]);
+    $snapshot->takeSnapshot();
     
     return json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
 }

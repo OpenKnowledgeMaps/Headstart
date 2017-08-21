@@ -45,14 +45,17 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   #Make sure that the abstract exists. NOT WORKING:
   abstract_exists = "dcdescription:?"
   
-  (res <- bs_search(hits=100, query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" "),
-                    fields="dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa"))
+  (res_raw <- bs_search(hits=limit, query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" "),
+                        fields="dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"))
+  res <- res_raw$docs
   
   print(paste(query, date_string, document_types, abstract_exists, sep=" "));
   
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
   
   metadata$id = res$dcdocid
+  metadata$relation = check_metadata(res$dcrelation)
+  metadata$identifier = check_metadata(res$dcidentifier)
   
   metadata$title = check_metadata(res$dctitle)
   metadata$paper_abstract = check_metadata(res$dcdescription)
@@ -66,14 +69,17 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   subject_cleaned = gsub("DOAJ:[^;]*(;|$)?", "", subject_all) # remove DOAJ classification
   subject_cleaned = gsub("/dk/atira[^;]*(;|$)?", "", subject_cleaned) # remove atira classification
   subject_cleaned = gsub("ddc:[0-9]+(;|$)?", "", subject_cleaned) # remove Dewey Decimal Classification
+  subject_cleaned = gsub("([\\w\\/\\:-])*?\\/ddc\\/([\\/0-9\\.])*", "", subject_cleaned) # remove Dewey Decimal Classification in URI form
   subject_cleaned = gsub("[A-Z,0-9]{2,}-[A-Z,0-9\\.]{2,}(;|$)?", "", subject_cleaned) #remove LOC classification
   subject_cleaned = gsub("[^\\(;]+\\(General\\)(;|$)?", "", subject_cleaned) # remove general subjects
   subject_cleaned = gsub("[^\\(;]+\\(all\\)(;|$)?", "", subject_cleaned) # remove general subjects
-  subject_cleaned = gsub("[^:;]+ :: [^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
+  subject_cleaned = gsub("[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
   subject_cleaned = gsub("[^\\[;]+\\[[A-Z,0-9]+\\](;|$)?", "", subject_cleaned) # remove WHO classification
   subject_cleaned = gsub("</keyword><keyword>", "", subject_cleaned) # remove </keyword><keyword>
   subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification
   subject_cleaned = gsub("[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
+  subject_cleaned = gsub(" -- ", "; ", subject_cleaned) #replace inconsistent keyword separation
+  subject_cleaned = gsub(" \\(  ", "; ", subject_cleaned) #replace inconsistent keyword separation
   
   
   
@@ -97,5 +103,9 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
 }
 
 check_metadata <- function (field) {
-  return (ifelse(is.na(field), '', field))
+  if(!is.null(field)) {
+    return (ifelse(is.na(field), '', field))
+  } else {
+    return ('')
+  }
 }

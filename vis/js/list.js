@@ -209,6 +209,15 @@ list.filterListByArea = function(area) {
 list.populateMetaData = function(nodes) {
     nodes[0].forEach(function(elem) {
         var list_metadata = d3.select(elem).select(".list_metadata");
+        
+        list_metadata.select(".list_title")
+            .attr("class", function(d) {
+                if(d.oa) {
+                    return "list_title oa"
+                } else {
+                    return "list_title"
+                }
+        })
 
         list_metadata.select("#paper_list_title")
             .html(function(d) {
@@ -235,10 +244,13 @@ list.populateMetaData = function(nodes) {
                         return "none";
                     }
                 });
-
-        paper_link.attr("href", function (d) {
-            return d.oa_link;
+        
+        paper_link.on("click", function(d) {
+                mediator.publish("list_show_popup", d);
         });
+        /*paper_link.attr("href", function (d) {
+            return "#";
+        });*/
 
         list_metadata.select(".list_authors")
             .html(function(d) {
@@ -682,8 +694,12 @@ list.populateOverlay = function(d) {
             $("#iframe_modal").modal({keyboard:true});
 
             let article_url = d.oa_link;
+            let possible_pdfs = "";
+            if(config.service === "base") {
+                possible_pdfs = d.link + ";" + d.identifier + ";" + d.relation;
+            }
 
-            $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url, (data) => {
+            $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service + "&pdf_urls=" + possible_pdfs, (data) => {
                 
                 var showError = function () {
                     var link = (config.service === "base")?(this_d.link):(this_d.outlink);
@@ -806,4 +822,8 @@ list.notSureifNeeded = function() {
         image_node.parentNode.removeChild(image_node);
     }
 };
+
+list.scrollTop = function() {
+    $("#papers_list").animate({ scrollTop: 0 }, 0);
+}
 

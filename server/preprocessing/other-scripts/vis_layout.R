@@ -8,6 +8,7 @@ library(jsonlite)
 library(parfossil)
 library(doParallel)
 library(stringi)
+library(stringdist)
 registerDoParallel(3)
 
 debug = FALSE
@@ -15,7 +16,20 @@ debug = FALSE
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
 
-vis_layout <- function(text, metadata, stopwordsfilepath, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english") {
+vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english",
+                       add_stop_words=NULL, testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
+
+  #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
+  if(list_size > -1) {
+    output = deduplicate_titles(metadata, list_size)
+    text = subset(text, !(id %in% output))
+    metadata = subset(metadata, !(id %in% output))
+
+    text = head(text, list_size)
+    metadata = head(metadata, list_size)
+
+  }
+
   stops <- stopwords(lang)
   if (lang=="english"){
     additional_stops <- scan(stopwordsfilepath, what="", sep="\n")
@@ -38,16 +52,60 @@ vis_layout <- function(text, metadata, stopwordsfilepath, max_clusters=15, maxit
 
 }
 
+deduplicate_titles <- function(metadata, list_size) {
+  output <- c()
+
+  metadata$oa_state[metadata$oa_state == "2"] <- 0
+  metadata = metadata[order(-as.numeric(metadata$oa_state),-stri_length(metadata$subject),
+                      -stri_length(metadata$paper_abstract),-stri_length(metadata$authors),
+                      -stri_length(metadata$published_in)),]
+
+  index = (grepl(" ", metadata$title) == FALSE | stri_length(metadata$title) < 15)
+  metadata$title[index] <- paste(metadata$title[index], metadata$authors[index], sep=" ")
+
+  num_items = length(metadata$id)
+  max_replacements = ifelse(num_items > list_size, num_items - list_size, -1)
+
+  ids = metadata$id
+  titles = metadata$title
+  count = 1
+
+
+  lv_matrix = stringdistmatrix(titles, method="lv")
+  length_matrix <- stri_length(titles)
+  n = length(length_matrix)
+  str_matrix = matrix(length_matrix, n, n)
+  str_matrix_t <- t(str_matrix)
+  str_max_matrix = pmax(str_matrix, str_matrix_t)
+  lv_ratio_matrix = as.matrix(lv_matrix)/str_max_matrix
+
+  duplicates <- lv_ratio_matrix < 1/15.83
+  duplicates[lower.tri(duplicates, diag=TRUE)] <- NA
+  remove_ids <- which(apply(duplicates, 2, FUN=function(x){any(x)}))
+  output = ids[remove_ids]
+
+  print(paste0("Number of max. duplicate entries: ", length(output)))
+
+  if(max_replacements > -1) {
+    output = head(output, max_replacements)
+  }
+
+  print(paste0("Number of duplicate entries: ", length(output)))
+
+  return(output)
+
+}
+
 create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
   m <- list(content = "content", id = "id")
 
   myReader <- readTabular(mapping = m)
 
   (corpus <- Corpus(DataframeSource(text), readerControl = list(reader = myReader)))
-  
+
   # Replace non-convertible bytes in with strings showing their hex codes, see http://tm.r-forge.r-project.org/faq.html
   corpus <- tm_map(corpus,  content_transformer(function(x) iconv(enc2utf8(x), sub = "byte")))
-  
+
   corpus <- tm_map(corpus, removePunctuation)
 
   corpus <- tm_map(corpus, content_transformer(tolower))
@@ -76,21 +134,22 @@ create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
 replace_keywords_if_empty <- function(corpus, metadata, stops) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
-
   candidates = mapply(paste, metadata$title[missing_subjects], metadata$paper_abstract[missing_subjects])
   candidates = lapply(candidates, tolower)
   candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
-  candidates = lapply(candidates, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
+  candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
+  candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
   candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
+  #candidates_trigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
   candidates = mapply(paste, candidates, candidates_bigrams)
   #candidates = lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
-  candidates = lapply(candidates, function(x) {gsub("[^[:alnum:]]", " ", x)})
 
   nn_corpus = Corpus(VectorSource(candidates))
   nn_tfidf = TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
   tfidf_top = apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
   tfidf_top_names = lapply(tfidf_top, names)
-  replacement_keywords = lapply(tfidf_top_names, FUN = function(x) {paste(unlist(x), collapse=";")})
+  replacement_keywords <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, 3))
+  replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse=";")})
   replacement_keywords = gsub("_", " ", replacement_keywords)
 
   metadata$subject[missing_subjects] <- replacement_keywords
@@ -216,7 +275,7 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
 
     titles =  metadata_full_subjects$title[c(matches)]
     subjects = metadata_full_subjects$subject[c(matches)]
-    
+
     titles = lapply(titles, function(x) {gsub("[^[:alnum:]]", " ", x)})
     #titles = lapply(titles, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
     titles = lapply(titles, gsub, pattern="  ", replacement=" ")
@@ -226,10 +285,14 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
     titles_bigrams = filter_out(titles_bigrams, stops)
     titles_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
     titles_trigrams = filter_out(titles_trigrams, stops)
+    #titles_quadgrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 4), paste, collapse="_"))), paste, collapse=" ")
+    #titles_quadgrams = filter_out(titles_quadgrams, stops)
+    #titles_fivegrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 5), paste, collapse="_"))), paste, collapse=" ")
+    #titles_fivegrams = filter_out(titles_fivegrams, stops)
     titles = lapply(titles, function(x) {removeWords(x, stops)})
 
     subjects = mapply(gsub, subjects, pattern=" ", replacement="_")
-    
+
     if (!is.null(taxonomy_separator)) {
       subjects = mapply(function(x){strsplit(x, ";")}, subjects)
       taxons = lapply(subjects, function(y){Filter(function(x){grepl(taxonomy_separator, x)}, y)})
@@ -266,7 +329,7 @@ filter_out_nested_ngrams <- function(top_ngrams, top_n) {
   for (ngram in top_ngrams) {
     if (ngram == "")
       next;
-    
+
     ngram_in_top_names = stringi::stri_detect_fixed(top_names, ngram)
     top_names_with_ngram = sapply(top_names, function(x)(stringi::stri_detect_fixed(ngram, x)))
 
@@ -321,4 +384,10 @@ create_output <- function(clusters, layout, metadata) {
 
   return(output_json)
 
+}
+
+levenshtein_ratio <- function(a, b) {
+  lv_dist = stringdist(a, b, method = "lv")
+  lv_ratio = lv_dist/(max(stri_length(a), stri_length(b)))
+  return(lv_ratio)
 }
