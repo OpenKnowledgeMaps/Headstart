@@ -82,6 +82,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   subject_cleaned = gsub(" \\(  ", "; ", subject_cleaned) #replace inconsistent keyword separation
   subject_cleaned = gsub("(\\w* \\w*(\\.)( \\w* \\w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
   subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
+  subject_cleaned = gsub("[\\d]-[\\d]+\\.[\\d]+", "", subject_cleaned) # replace residuals like '5-76.95'
 
 
   metadata$subject = subject_cleaned
