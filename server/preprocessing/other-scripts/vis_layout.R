@@ -31,10 +31,17 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
   }
 
   stops <- stopwords(lang)
-  if (lang=="english"){
-    additional_stops <- scan(stopwordsfilepath, what="", sep="\n")
+
+  if (!is.null(add_stop_words)){
+    if (isTRUE(testing)) {
+      add_stop_path <- paste0("../../resources/", add_stop_words, ".stop")
+    } else {
+      add_stop_path <- paste0("../resources/", add_stop_words, ".stop")
+    }
+    additional_stops <- scan(add_stop_path, what="", sep="\n")
     stops = c(stops, additional_stops)
   }
+
   print("calc matrix")
   result <- create_tdm_matrix(metadata, text, stops);
   metadata_full_subjects = result$metadata_full_subjects
@@ -308,7 +315,10 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
     subjectlist = c(subjectlist, all_subjects)
   }
   nn_corpus <- Corpus(VectorSource(subjectlist))
-  nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
+  nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer,
+                                                           weighting = function(x) weightSMART(x, spec="ntn"),
+                                                           bounds = list(local = c(2, Inf))
+                                                           ))
   tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[5]]})
   tfidf_top_names <- lapply(tfidf_top, names)
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {x = gsub("_", " ", x); trim(x)})
