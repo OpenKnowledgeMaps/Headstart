@@ -214,7 +214,7 @@ papers.initPaperClickHandler = function () {
 papers.paper_click = function (d) {
     if (!this.is("loading")) {
         if (!mediator.is_zoomed) {
-            var current_node = canvas.chart.selectAll("circle")
+            var current_node = canvas.chart.selectAll("#headstart-chart circle")
                     .filter(function (x) {
                         if (d !== null) {
                             if (config.use_area_uri) {
@@ -594,7 +594,7 @@ papers.enlargePaper = function (d, holder_div) {
                 this.mouseoutpaper(d, holder_div);
             });
 
-    mediator.current_circle = canvas.chart.selectAll("circle")
+    mediator.current_circle = canvas.chart.selectAll("#headstart-chart circle")
             .filter(function (x) {
                 if (config.use_area_uri) {
                     return (x.area_uri == d.area_uri);

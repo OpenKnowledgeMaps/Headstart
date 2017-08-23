@@ -84,7 +84,7 @@ BubblesFSM.prototype = {
             }
           });
 
-      d3.selectAll("circle")
+      d3.selectAll("#headstart-chart circle")
         .attr("r", (d) => {
           d.r_zoomed = canvas.circle_size(d.readers) * mediator.circle_zoom;
           d.r = canvas.circle_size(d.readers);
@@ -107,7 +107,7 @@ BubblesFSM.prototype = {
     // blasen -> wenn über blase gehovered und paper sichtbar
     // dann soll auch auf paper geclicked werden können.
     makePaperClickable: function (d) {
-        mediator.current_circle = canvas.chart.selectAll("circle")
+        mediator.current_circle = canvas.chart.selectAll("#headstart-chart circle")
                 .filter(function (x) {
                     if (d !== null) {
                         if (config.use_area_uri) {
@@ -127,7 +127,7 @@ BubblesFSM.prototype = {
     // initialize mouseover, mouseout circle listeners
     initCircleListeners: function () {
         var this_bubble_fsm = this;
-        d3.selectAll("circle").on("mouseover", function (d) {
+        d3.selectAll("#headstart-chart circle").on("mouseover", function (d) {
             if (!this_bubble_fsm.is("hoverbig")) {
                 mediator.publish("bubble_mouseover", d, this, this_bubble_fsm);
                 mediator.publish("record_action", d.id, "circle_mouseover", config.user_id, "none", null);
@@ -164,7 +164,7 @@ BubblesFSM.prototype = {
             if (mediator.is_in_normal_mode) {
                 mediator.current_bubble.hideCircle(this);
             } else {
-                var underlying_circle = d3.selectAll("circle")
+                var underlying_circle = d3.selectAll("#headstart-chart circle")
                         .filter(function (x) {
                             if (d !== null) {
                                 return x.title == d.title;
@@ -367,7 +367,7 @@ BubblesFSM.prototype = {
                     .attr("y", $("#subdiscipline_title").outerHeight(true)*-1);
         }
         
-        var zoom_node = canvas.chart.selectAll("circle")
+        var zoom_node = canvas.chart.selectAll("#headstart-chart circle")
                 .filter(function (x) {
                     if (d !== null) {
                         return x.title == d.title;
@@ -392,11 +392,11 @@ BubblesFSM.prototype = {
         zoom_node.on("mouseover", null)
                 .on("mouseout", null);
 
-        canvas.chart.selectAll("circle")
+        canvas.chart.selectAll("#headstart-chart circle")
                 .attr("class", "zoom_selected")
                 .style("fill-opacity", "1");
 
-        canvas.chart.selectAll("circle")
+        canvas.chart.selectAll("#headstart-chart circle")
                 .filter(function (x) {
                     if (d !== null) {
                         return (x.title != d.title);
@@ -412,13 +412,14 @@ BubblesFSM.prototype = {
 
         $("#subdiscipline_title h4").html('<span id="area-bold">'+config.localization[config.language].area + ":</span> " + d.title);
         $("#subdiscipline_title").dotdotdot();
+        $("#context").css("visibility", "hidden");
 
         d3.selectAll("div.paper_holder")
                 .on("mouseover", function (d) {
                     mediator.publish("paper_mouseover", d, this);
                 });
 
-        // d3.selectAll("circle")
+        // d3.selectAll("#headstart-chart circle")
         //   .on("click", function(d) {
         //     return bubbles.zoom(d);
         //   })
@@ -586,7 +587,7 @@ BubblesFSM.prototype = {
         d3.selectAll("span.readers_entity")
                 .style("font-size", "8px");
 
-        canvas.drawTitle();
+        mediator.publish("draw_title");
 
         d3.selectAll(".paper")
                 .style("display", function (d) {
@@ -615,7 +616,7 @@ BubblesFSM.prototype = {
     },
 
     resetCircleDesignTimeLine: function () {
-        d3.selectAll("circle")
+        d3.selectAll("#headstart-chart circle")
                 .style("fill", "rgb(210, 228, 240)")
                 .style("fill-opacity", "0.8");
 
@@ -624,7 +625,7 @@ BubblesFSM.prototype = {
 
     resetCircleDesign: function () {
         if (mediator.current_circle !== null) {
-            d3.selectAll("circle")
+            d3.selectAll("#headstart-chart circle")
                     .attr("class", "area")
                     .style("fill-opacity", "0.8");
 
@@ -651,7 +652,7 @@ BubblesFSM.prototype = {
             obj = d3;
         }
 
-        obj.selectAll("circle")
+        obj.selectAll("#headstart-chart circle")
                 .style("fill-opacity", "0.8")
                 .attr("r", function (d) {
                     return d.r;
@@ -674,7 +675,7 @@ BubblesFSM.prototype = {
                     return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
                 });
 
-        t.selectAll("circle")
+        t.selectAll("#headstart-chart circle")
                 .attr("r", function (d) {
                     d.r_zoomed = mediator.circle_zoom * d.r;
                     return d.r_zoomed;
