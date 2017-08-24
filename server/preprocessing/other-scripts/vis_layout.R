@@ -298,7 +298,9 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
     #titles_fivegrams = filter_out(titles_fivegrams, stops)
     titles = lapply(titles, function(x) {removeWords(x, stops)})
 
+    subjects = mapply(gsub, subjects, pattern = "; ", replacement=";")
     subjects = mapply(gsub, subjects, pattern=" ", replacement="_")
+    titles = mapply(gsub, titles, pattern=" ", replacement=";")
 
     if (!is.null(taxonomy_separator)) {
       subjects = mapply(function(x){strsplit(x, ";")}, subjects)
