@@ -75,6 +75,7 @@ deduplicate_titles <- function(metadata, list_size) {
 
   ids = metadata$id
   titles = metadata$title
+  titles = unlist(lapply(titles, tolower))
   count = 1
 
 
