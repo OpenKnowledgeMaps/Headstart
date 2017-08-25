@@ -151,9 +151,13 @@
     display: inline-block;
     max-width: 82%;
 
-    .area_tag {
+    .area_tag, .keyword_tag {
         font-weight: bold;
     }
+}
+
+#list_keywords {
+    margin-bottom: 20px;
 }
 
 .link2 {

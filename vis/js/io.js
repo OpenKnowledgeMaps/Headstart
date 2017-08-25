@@ -120,6 +120,7 @@ IO.prototype = {
         var xy_array = [];
         // convert to numbers
         var cur_data = fs;
+        var has_keywords = false;
         cur_data.forEach(function (d) {
             d.x = parseFloat(d.x);
             d.y = parseFloat(d.y);
@@ -189,8 +190,14 @@ IO.prototype = {
 			}
 
             d.outlink = _this.createOutlink(d);
+            
+            if(d.hasOwnProperty("subject_orig")) {
+                has_keywords = true;
+            }
 
         });
+        
+        config.show_keywords = (has_keywords)?(true):(false);
 
         mediator.publish("update_canvas_domains", cur_data);
         mediator.publish("update_canvas_data", cur_data);

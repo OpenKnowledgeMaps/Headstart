@@ -324,6 +324,19 @@ list.populateReaders = function(nodes) {
     nodes[0].forEach(function(elem) {
         var areas = d3.select(elem).select("#list_area");
         var readers = d3.select(elem).select(".list_readers");
+        var keywords = d3.select(elem).select("#list_keywords");
+        
+        keywords.style("display", "none");
+        
+        if(config.show_keywords) {
+            keywords.select(".keyword_tag").html(function() {
+                return config.localization[config.language].keywords + ":";
+            });
+
+            keywords.select(".keywords").html(function(d) {
+                return ((d.hasOwnProperty("subject_orig"))?(d.subject_orig):(""))
+            });
+        }
 
         areas.select(".area_tag").html(function() {
             return config.localization[config.language].area + ":";
@@ -577,10 +590,8 @@ list.enlargeListItem = function(d) {
     this.createHighlights(this.current_search_words);
 
     this.setImageForListHolder(d);
-    
-    if(d.hasOwnProperty("subject_orig")) {
-        d3.select(".keyword_tag").text("Keywords: ")
-        d3.select(".keywords").text(d.subject_orig)
+    if(config.show_keywords) {
+        d3.selectAll("#list_keywords").style("display", "inline-block");
     }
     
     d.paper_selected = true;
@@ -616,6 +627,7 @@ list.reset = function() {
     this.createHighlights(this.current_search_words);
 
     d3.selectAll(".list_entry_full").attr("class", "list_entry");
+    d3.selectAll("#list_keywords").style("display", "none");
 
     if (mediator.current_enlarged_paper !== null) {
       this.notSureifNeeded();
