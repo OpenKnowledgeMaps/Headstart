@@ -591,7 +591,7 @@ list.enlargeListItem = function(d) {
 
     this.setImageForListHolder(d);
     if(config.show_keywords) {
-        d3.selectAll("#list_keywords").style("display", "inline-block");
+        d3.selectAll("#list_keywords").style("display", "block");
     }
     
     d.paper_selected = true;
