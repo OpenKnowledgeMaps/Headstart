@@ -284,9 +284,9 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
     titles =  metadata_full_subjects$title[c(matches)]
     subjects = metadata_full_subjects$subject[c(matches)]
 
-    titles = lapply(titles, function(x) {gsub("[^[:alnum:]]", " ", x)})
+    titles = lapply(titles, function(x) {gsub("[^[:alpha:]]", " ", x)})
     #titles = lapply(titles, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
-    titles = lapply(titles, gsub, pattern="  ", replacement=" ")
+    titles = lapply(titles, gsub, pattern="\\s+", replacement=" ")
     titles = lapply(titles, tolower)
     # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
     titles_bigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")

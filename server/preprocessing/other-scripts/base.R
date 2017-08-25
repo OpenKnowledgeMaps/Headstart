@@ -46,7 +46,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   abstract_exists = "dcdescription:?"
 
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
-  
+
   (res_raw <- bs_search(hits=limit
                         , query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" ")
                         , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"
@@ -86,8 +86,8 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   subject_cleaned = gsub(" \\(  ", "; ", subject_cleaned) #replace inconsistent keyword separation
   subject_cleaned = gsub("(\\w* \\w*(\\.)( \\w* \\w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
   subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
-  subject_cleaned = gsub(" ?\\d-\\d+.\\d+", "", subject_cleaned) # replace residuals like '5-76.95'
-
+  subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
+  subject_cleaned = gsub("\\w+:\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
 
   metadata$subject = subject_cleaned
 
