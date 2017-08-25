@@ -41,6 +41,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
                          paste0(metadata$bibjson.year, "-", metadata$bibjson.month))
   
   metadata$subject = sapply(metadata$bibjson.keywords, paste0, collapse=";")
+  metadata$subject_orig = metadata$subject
   
   authors = c()
   link = c()

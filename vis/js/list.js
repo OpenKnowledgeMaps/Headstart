@@ -448,6 +448,7 @@ list.hideEntries = function(object, search_words) {
                 let journals = d.published_in.toLowerCase();
                 let year = d.year;
                 let word_found = true;
+                let keywords = (d.hasOwnProperty("subject_orig"))?(d.subject_orig.toLowerCase()):("");
                 let count = 0;
                 if (typeof abstract !== 'undefined') {
                     while (word_found && count < search_words.length) {
@@ -455,7 +456,9 @@ list.hideEntries = function(object, search_words) {
                             title.indexOf(search_words[count]) !== -1 ||
                             authors.indexOf(search_words[count]) !== -1 ||
                             journals.indexOf(search_words[count]) !== -1 ||
-                            year.indexOf(search_words[count]) !== -1);
+                            year.indexOf(search_words[count]) !== -1 ||
+                            keywords.indexOf(search_words[count]) !== -1
+                            );
                         count++;
                     }
                     d.filtered_out = word_found ? false : true;
@@ -574,6 +577,12 @@ list.enlargeListItem = function(d) {
     this.createHighlights(this.current_search_words);
 
     this.setImageForListHolder(d);
+    
+    if(d.hasOwnProperty("subject_orig")) {
+        d3.select(".keyword_tag").text("Keywords: ")
+        d3.select(".keywords").text(d.subject_orig)
+    }
+    
     d.paper_selected = true;
 };
 
