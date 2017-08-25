@@ -91,6 +91,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
   df$content <- paste(df$title, df$paper_abstract, df$authors, df$subject, df$published_in, sep= " ")
   df$doi = df$id
   df$id = df$pmid
+  df$subject_orig = df$subject
 
   summary <- rentrez::entrez_summary(db="pubmed", web_history = x$web_history, retmax = limit)
   df$readers <- extract_from_esummary(summary, "pmcrefcount")

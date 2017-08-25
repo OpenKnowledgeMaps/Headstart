@@ -51,6 +51,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   metadata["url"] = paste("http://dx.doi.org/", metadata$id, sep="")
   dates = as.Date(metadata$year)
   metadata$year = format(dates, format="%B %d %Y")
+  metadata$subject_orig = metadata$subject
 
   ret_val=list("metadata" = metadata, "text"=text)
   return(ret_val)

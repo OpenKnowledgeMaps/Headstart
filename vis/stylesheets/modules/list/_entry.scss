@@ -140,7 +140,7 @@
     //border-left: solid 2.5px $list_abstract_border_left;
 }
 
-#list_area {
+#list_area, #list_keywords {
     font-family: 'Helvetica';
     font-size: 11px;
     line-height: 11px;
@@ -151,9 +151,13 @@
     display: inline-block;
     max-width: 82%;
 
-    .area_tag {
+    .area_tag, .keyword_tag {
         font-weight: bold;
     }
+}
+
+#list_keywords {
+    margin-bottom: 20px;
 }
 
 .link2 {

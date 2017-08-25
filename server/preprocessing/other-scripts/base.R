@@ -67,6 +67,8 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   metadata$year = check_metadata(res$dcdate)
 
   subject_all = check_metadata(res$dcsubject)
+  
+  metadata$subject_orig = subject_all
 
   #subject = ifelse(subject !="", paste(unique(strsplit(subject, "; ")), "; "),"")
 
