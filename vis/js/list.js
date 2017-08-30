@@ -750,6 +750,11 @@ list.setImageForListHolder = function(d) {
         .filter(function(x) {
             return (x.id == d.id);
         });
+    // EVENTLISTENERS
+    current_item.select("#paper_list_title")
+        .on("click", function(d) {
+            mediator.publish("list_title_click", d);
+        });
 
     let image_src = "paper_preview/" + d.id + "/page_1.png";
     let pdf_preview = require("images/preview_pdf.png");
@@ -803,11 +808,6 @@ list.setImageForListHolder = function(d) {
             });
     }
 
-            // EVENTLISTENERS
-        current_item.select("#paper_list_title")
-            .on("click", function(d) {
-                mediator.publish("list_title_click", d);
-            });
 };
 
 list.title_click = function (d) {
