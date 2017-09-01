@@ -322,7 +322,14 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
                                                            weighting = function(x) weightSMART(x, spec="ntn"),
                                                            bounds = list(local = c(2, Inf))
                                                            ))
+  empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
+  replacement_nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer,
+                                                          weighting = function(x) weightSMART(x, spec="ntn"),
+                                                          bounds = list(local = c(1, Inf))
+                                                           ))
   tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[5]]})
+  replacement_tfidf_top <- apply(replacement_nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[5]]})
+  tfidf_top[c(empty_tfidf)] <- replacement_tfidf_top[c(empty_tfidf)]
   tfidf_top_names <- lapply(tfidf_top, names)
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {x = gsub("_", " ", x); trim(x)})
   tfidf_top_names <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, top_n))
