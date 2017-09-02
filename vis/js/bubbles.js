@@ -160,7 +160,13 @@ BubblesFSM.prototype = {
 
     // initialize just the mousemovement listeners
     initMouseListenersForTitles: function () {
-        d3.selectAll("#area_title").on("mouseover", function (d) {
+        var this_bubble_fsm = this;
+        d3.selectAll("#area_title")
+        .on("click", function () {
+            let d = this.parentElement.parentElement.previousElementSibling;
+            mediator.publish("bubble_mouseover", d3.select(d).data()[0], d, this_bubble_fsm);
+        })
+        .on("mouseover", function (d) {
             if (mediator.is_in_normal_mode) {
                 mediator.current_bubble.hideCircle(this);
             } else {
