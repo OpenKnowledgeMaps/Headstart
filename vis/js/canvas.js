@@ -203,23 +203,12 @@ class Canvas {
     }
 
     initMouseClickListeners() {
-        /*$("#chart-svg").bind("click", (event) => {
-            if(event.target.id === "chart-svg")
-                mediator.publish('chart_svg_click');
-        });*/
-
         $("#" + config.tag + ",#chart-svg").bind('click', (event) => {
             if (event.target.className === "container-headstart" ||
                     event.target.className === "vis-col" ||
                     event.target.id === "headstart-chart" ||
                     event.target.id === "chart-svg" ||
                     event.target.id === "map-rect") {
-                mediator.publish('chart_svg_click');
-            }
-        });
-        
-        $("#" + config.tag + ",#chart-svg").bind('dblclick', (event) => {
-            if (event.target.className.baseVal === "area") {
                 mediator.publish('chart_svg_click');
             }
         });

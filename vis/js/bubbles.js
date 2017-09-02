@@ -146,12 +146,12 @@ BubblesFSM.prototype = {
     initCircleClickListener: function () {
         var self = this;
 
-        d3.selectAll('circle').on("click", function (d) {
+        d3.selectAll('#headstart-chart circle').on("click", function (d) {
             mediator.publish("bubble_click", d, self);
             // self.zoomin(d);
         });
 
-        d3.selectAll('circle').on("dblclick", function () {
+        d3.selectAll('#headstart-chart circle').on("dblclick", function () {
             if (self.is("hoverbig") && mediator.is_zoomed && mediator.zoom_finished) {
                 self.zoomout();
             }
