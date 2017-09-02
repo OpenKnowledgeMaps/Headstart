@@ -348,7 +348,7 @@ BubblesFSM.prototype = {
         var previous_zoom_node = mediator.current_zoom_node;
         mediator.publish("bubble_zoomin", d);
         papers.resetPaths();
-
+        
         if (previous_zoom_node !== null && typeof previous_zoom_node != 'undefined') {
 
             if (typeof d != 'undefined') {
@@ -474,11 +474,11 @@ BubblesFSM.prototype = {
 
                     mediator.zoom_finished = true;
                 });
-
+        
         mediator.current_bubble.createTransition(t, d.title);
 
         mediator.publish("record_action", d.id, "zoom_in", config.user_id, "none", null);
-
+        
         d3.event.stopPropagation();
         
         mediator.is_zoomed = true;

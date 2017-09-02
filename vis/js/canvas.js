@@ -152,7 +152,7 @@ class Canvas {
         const svg = d3.select("#chart-svg");
         this.chart = svg.append("g").attr("id", "chart_canvas");
         // Rectangle to contain nodes in force layout
-        this.chart.append("rect");
+        this.chart.append("rect").attr("id", "map-rect")
         this.updateChartCanvas();
     }
 
@@ -203,14 +203,13 @@ class Canvas {
     }
 
     initMouseClickListeners() {
-        $("#chart-svg").on("click", () => {
-            mediator.publish('chart_svg_click');
-        });
 
         $("#" + config.tag).bind('click', (event) => {
             if (event.target.className === "container-headstart" ||
                     event.target.className === "vis-col" ||
-                    event.target.id === "headstart-chart") {
+                    event.target.id === "headstart-chart" ||
+                    event.target.id === "chart-svg" ||
+                    event.target.id === "map-rect") {
                 mediator.publish('chart_svg_click');
             }
         });

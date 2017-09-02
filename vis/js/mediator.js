@@ -339,7 +339,6 @@ MyMediator.prototype = {
     },
 
     bubble_click: function(d, bubble) {
-        d3.event.stopPropagation();
         bubble.zoomin(d);
     },
 
