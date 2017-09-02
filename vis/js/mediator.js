@@ -326,7 +326,7 @@ MyMediator.prototype = {
     },
 
     paper_current_bubble_clicked: function(area) {
-        d3.event.stopPropagation();
+        //d3.event.stopPropagation();
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'filterListByArea', [area]);
     },
@@ -340,7 +340,7 @@ MyMediator.prototype = {
     },
 
     bubble_click: function(d, bubble) {
-        d3.event.stopPropagation();
+        //d3.event.stopPropagation();
         bubble.zoomin(d);
     },
 
@@ -364,7 +364,7 @@ MyMediator.prototype = {
     },
 
     currentbubble_click: function(d) {
-        d3.event.stopPropagation();
+        //d3.event.stopPropagation();
         mediator.manager.call('papers', 'currentbubble_click', [d]);
     },
 

@@ -152,7 +152,6 @@ BubblesFSM.prototype = {
         });
 
         d3.selectAll('circle').on("dblclick", function () {
-            alert(self.is("hoverbig") && mediator.is_zoomed && mediator.zoom_finished);
             if (self.is("hoverbig") && mediator.is_zoomed && mediator.zoom_finished) {
                 self.zoomout();
             }
