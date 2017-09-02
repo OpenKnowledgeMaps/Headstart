@@ -203,8 +203,13 @@ class Canvas {
     }
 
     initMouseClickListeners() {
+        /*$("#chart-svg").bind("click", (event) => {
+            if(event.target.id === "chart-svg")
+                mediator.publish('chart_svg_click');
+        });*/
 
-        $("#" + config.tag).bind('click', (event) => {
+        $("#" + config.tag + ",#chart-svg").bind('click', (event) => {
+            alert(event.target.id + " " + event.target.className);
             if (event.target.className === "container-headstart" ||
                     event.target.className === "vis-col" ||
                     event.target.id === "headstart-chart" ||
