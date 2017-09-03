@@ -148,36 +148,27 @@ BubblesFSM.prototype = {
         var self = this;
 
         d3.selectAll('#headstart-chart circle').on("click", function (d) {
+            d3.event.stopPropagation();
             mediator.publish("bubble_click", d, self);
-            // self.zoomin(d);
-        });
-
-        d3.selectAll('#headstart-chart circle').on("dblclick", function () {
-            if (self.is("hoverbig") && mediator.is_zoomed && mediator.zoom_finished) {
-                self.zoomout();
-            }
         });
         
-        var tappedTwice = false;
-        $('#headstart-chart circle').on("touchstart", function (event) {
-            if(!tappedTwice) {
-                tappedTwice = true;
-                setTimeout( function() { tappedTwice = false; }, 300 );
-                mediator.publish("bubble_click", d, self);
-                return false;
-            }
-            event.preventDefault();
+        d3.selectAll('#headstart-chart circle').on("touchstart", function (d) {
+            d3.event.stopPropagation();
+            mediator.publish("bubble_click", d, self);
+        });
+
+        $('#headstart-chart circle').on("dblclick doubletap", function () {
             if (self.is("hoverbig") && mediator.is_zoomed && mediator.zoom_finished) {
                 self.zoomout();
             }
-	});
+        });
     },
 
     // initialize just the mousemovement listeners
     initMouseListenersForTitles: function () {
         var this_bubble_fsm = this;
         d3.selectAll("#area_title")
-        .on("click", function () {
+        .on("touchstart", function () {
             let d = this.parentElement.parentElement.previousElementSibling;
             mediator.publish("bubble_mouseover", d3.select(d).data()[0], d, this_bubble_fsm);
         })
@@ -901,3 +892,33 @@ StateMachine.create({
     ]
 
 });
+
+(function($){
+
+  $.event.special.doubletap = {
+    bindType: 'touchend',
+    delegateType: 'touchend',
+
+    handle: function(event) {
+      var handleObj   = event.handleObj,
+          targetData  = jQuery.data(event.target),
+          now         = new Date().getTime(),
+          delta       = targetData.lastTouch ? now - targetData.lastTouch : 0,
+          delay       = delay == null ? 300 : delay;
+
+      if (delta < delay && delta > 30) {
+        targetData.lastTouch = null;
+        event.type = handleObj.origType;
+        ['clientX', 'clientY', 'pageX', 'pageY'].forEach(function(property) {
+          event[property] = event.originalEvent.changedTouches[0][property];
+        })
+
+        // let jQuery handle the triggering of "doubletap" event handlers
+        handleObj.handler.apply(this, arguments);
+      } else {
+        targetData.lastTouch = now;
+      }
+    }
+  };
+
+})(jQuery);
