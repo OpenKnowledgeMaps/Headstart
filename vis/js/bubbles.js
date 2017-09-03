@@ -168,7 +168,7 @@ BubblesFSM.prototype = {
     initMouseListenersForTitles: function () {
         var this_bubble_fsm = this;
         d3.selectAll("#area_title")
-        .on("touchstart", function () {
+        .on("touchend", function () {
             let d = this.parentElement.parentElement.previousElementSibling;
             mediator.publish("bubble_mouseover", d3.select(d).data()[0], d, this_bubble_fsm);
         })
