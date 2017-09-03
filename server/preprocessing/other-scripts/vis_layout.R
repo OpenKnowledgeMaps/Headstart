@@ -327,8 +327,8 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
                                                           weighting = function(x) weightSMART(x, spec="ntn"),
                                                           bounds = list(local = c(1, Inf))
                                                            ))
-  tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[5]]})
-  replacement_tfidf_top <- apply(replacement_nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[5]]})
+  tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
+  replacement_tfidf_top <- apply(replacement_nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
   tfidf_top[c(empty_tfidf)] <- replacement_tfidf_top[c(empty_tfidf)]
   tfidf_top_names <- lapply(tfidf_top, names)
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {x = gsub("_", " ", x); trim(x)})
