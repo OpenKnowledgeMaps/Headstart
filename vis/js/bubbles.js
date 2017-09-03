@@ -20,6 +20,7 @@ export var BubblesFSM = function () {
     this.areas_array = [];
     this.startup();
     this.title = "default-title";
+    this.tappedTwice = false;
 };
 
 BubblesFSM.prototype = {
@@ -156,6 +157,20 @@ BubblesFSM.prototype = {
                 self.zoomout();
             }
         });
+        
+        var tappedTwice = false;
+        $('#headstart-chart circle').on("touchstart", function (event) {
+            if(!tappedTwice) {
+                tappedTwice = true;
+                setTimeout( function() { tappedTwice = false; }, 300 );
+                mediator.publish("bubble_click", d, self);
+                return false;
+            }
+            event.preventDefault();
+            if (self.is("hoverbig") && mediator.is_zoomed && mediator.zoom_finished) {
+                self.zoomout();
+            }
+	});
     },
 
     // initialize just the mousemovement listeners
