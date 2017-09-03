@@ -284,9 +284,9 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
     titles =  metadata_full_subjects$title[c(matches)]
     subjects = metadata_full_subjects$subject[c(matches)]
 
-    titles = lapply(titles, function(x) {gsub("[^[:alnum:]]", " ", x)})
+    titles = lapply(titles, function(x) {gsub("[^[:alpha:]]", " ", x)})
     #titles = lapply(titles, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
-    titles = lapply(titles, gsub, pattern="  ", replacement=" ")
+    titles = lapply(titles, gsub, pattern="\\s+", replacement=" ")
     titles = lapply(titles, tolower)
     # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
     titles_bigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
@@ -322,7 +322,14 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
                                                            weighting = function(x) weightSMART(x, spec="ntn"),
                                                            bounds = list(local = c(2, Inf))
                                                            ))
-  tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[5]]})
+  empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
+  replacement_nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer,
+                                                          weighting = function(x) weightSMART(x, spec="ntn"),
+                                                          bounds = list(local = c(1, Inf))
+                                                           ))
+  tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
+  replacement_tfidf_top <- apply(replacement_nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
+  tfidf_top[c(empty_tfidf)] <- replacement_tfidf_top[c(empty_tfidf)]
   tfidf_top_names <- lapply(tfidf_top, names)
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {x = gsub("_", " ", x); trim(x)})
   tfidf_top_names <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, top_n))

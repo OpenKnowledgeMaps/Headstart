@@ -11,6 +11,11 @@ var options_plos = {
                         , {id: "to", label: "To: ", class: "time_input"}
                     ]}
             ]},
+        {id: "sorting", multiple: false, name: "Sorting", type: "dropdown"
+            , fields: [
+                {id: "most-relevant", text: "Most relevant"}
+                , {id: "most-recent", text: "Most recent"}
+            ]},
         {id: "article_types", multiple: true, name: "Article types", type: "dropdown"
             , fields: [
                 {id: "Research Article", text: "Research Article", selected: true}
@@ -90,6 +95,11 @@ var options_pubmed = {
                         {id: "from", label: "From: ", class: "time_input"}
                         , {id: "to", label: "To: ", class: "time_input"}
                     ]}
+            ]},
+        {id: "sorting", multiple: false, name: "Sorting", type: "dropdown"
+            , fields: [
+                {id: "most-relevant", text: "Most relevant"}
+                , {id: "most-recent", text: "Most recent"}
             ]},
         {id: "article_types", multiple: true, name: "Article types", type: "dropdown"
             , fields: [
@@ -186,6 +196,11 @@ var options_doaj = {
                         {id: "from", label: "From: ", class: "time_input"}
                         , {id: "to", label: "To: ", class: "time_input"}
                     ]}
+            ]},
+        {id: "sorting", multiple: false, name: "Sorting", type: "dropdown"
+            , fields: [
+                {id: "most-relevant", text: "Most relevant"}
+                , {id: "most-recent", text: "Most recent"}
             ]}
     ]}
 
@@ -201,6 +216,11 @@ var options_base = {
                         {id: "from", label: "From: ", class: "time_input"}
                         , {id: "to", label: "To: ", class: "time_input"}
                     ]}
+            ]},
+        {id: "sorting", multiple: false, name: "Sorting", type: "dropdown"
+            , fields: [
+                {id: "most-relevant", text: "Most relevant"}
+                , {id: "most-recent", text: "Most recent"}
             ]},
         {id: "document_types", multiple: true, name: "Document types", type: "dropdown"
             , fields: [
