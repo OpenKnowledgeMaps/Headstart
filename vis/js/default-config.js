@@ -102,7 +102,7 @@ var config = {
     localization: {
         eng: {
             loading: "Loading...",
-            search_placeholder: "Search...",
+            search_placeholder: "Search within map...",
             show_list: "Show list",
             hide_list: "Hide list",
             intro_label: "",
@@ -133,7 +133,7 @@ var config = {
         },
         ger: {
             loading: "Wird geladen...",
-            search_placeholder: "Suche...",
+            search_placeholder: "Suche in der Liste...",
             show_list: "Liste ausklappen",
             hide_list: "Liste einklappen",
             intro_label: "",
@@ -164,7 +164,7 @@ var config = {
         },
         eng_plos: {
             loading: "Loading...",
-            search_placeholder: "Search...",
+            search_placeholder: "Search within map...",
             show_list: "Show list",
             hide_list: "Hide list",
             intro_label: "",
@@ -194,7 +194,7 @@ var config = {
         },
         eng_pubmed: {
             loading: "Loading...",
-            search_placeholder: "Search...",
+            search_placeholder: "Search within map...",
             show_list: "Show list",
             hide_list: "Hide list",
             intro_label: "",
