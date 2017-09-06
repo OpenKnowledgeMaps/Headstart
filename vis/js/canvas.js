@@ -312,9 +312,7 @@ class Canvas {
 				//TODO: quick fix for date issue in snapshots, needs to be fixed
 				if(this.paramExists(config.is_phantomjs)) {
 					if (config.is_phantomjs) {
-						today.setTime(today.getTime() + 10*60*60*1000 );
-						from.setTime(from.getTime() + 10*60*60*1000 );
-						to.setTime(to.getTime() + 10*60*60*1000 );
+						return;
 					}
 				}
                 
