@@ -297,13 +297,6 @@ class Canvas {
                     + ": " + config.service_names[context.service]);
             
             if (this.paramExists(context.params.from) && this.paramExists(context.params.to)) {
-				
-				//TODO: quick fix for date issue in snapshots, needs to be fixed
-				if(this.paramExists(config.is_phantomjs)) {
-					if (config.is_phantomjs) {
-						return;
-					}
-				}
             
                 let time_macro_display = (config.service === "doaj")?("yyyy"):("d mmm yyyy");
                 let time_macro_internal = (config.service === "doaj")?("yyyy"):("yyyy-mm-dd");
@@ -315,6 +308,15 @@ class Canvas {
 				today.setTime(today.getTime() + today.getTimezoneOffset()*60*1000 );
 				from.setTime(from.getTime() + from.getTimezoneOffset()*60*1000 );
 				to.setTime(to.getTime() + to.getTimezoneOffset()*60*1000 );
+				
+				//TODO: quick fix for date issue in snapshots, needs to be fixed
+				if(this.paramExists(config.is_phantomjs)) {
+					if (config.is_phantomjs) {
+						today.setTime(today.getTime() + 10*60*60*1000 );
+						from.setTime(from.getTime() + 10*60*60*1000 );
+						to.setTime(to.getTime() + 10*60*60*1000 );
+					}
+				}
                 
                 let default_from_date = (function(service) {  
                     switch(service) {
