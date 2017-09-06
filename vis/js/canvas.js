@@ -304,6 +304,10 @@ class Canvas {
                 let today = new Date();
                 let from = new Date(context.params.from)
                 let to = new Date(context.params.to)
+				
+				today.setTime(today.getTime() + today.getTimezoneOffset()*60*1000 );
+				from.setTime(from.getTime() + from.getTimezoneOffset()*60*1000 );
+				to.setTime(to.getTime() + to.getTimezoneOffset()*60*1000 );
                 
                 let default_from_date = (function(service) {  
                     switch(service) {
