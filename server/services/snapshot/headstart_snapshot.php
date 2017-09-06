@@ -18,6 +18,7 @@
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "../../";
             data_config.show_context = true;
             data_config.create_title_from_context= true;
+			data_config.is_phantomjs = true;
 			data_config.options = options_<?php $_GET['service'] ?>.dropdowns;
         </script>
         <script type="text/javascript" src="../../../dist/headstart.js"></script>
