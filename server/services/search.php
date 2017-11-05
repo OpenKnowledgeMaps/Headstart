@@ -104,8 +104,10 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
                             , "doaj" => "DOAJ"
                             , "base" => "BASE");
     
-    $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $repository, $repo_mapping[$repository]);
-    $snapshot->takeSnapshot();
+    if(!isset($ini_array["snapshot"]["snapshot_enabled"]) || $ini_array["snapshot"]["snapshot_enabled"] > 0) {
+        $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $repository, $repo_mapping[$repository]);
+        $snapshot->takeSnapshot();
+    }
     
     return json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
 }

@@ -12,25 +12,26 @@ Make sure you have the following packages installed:
   * mbstring
   * fileinfo
 * R 3.3+ (https://www.r-project.org/) with current updates, with the following libraries. **Make sure you install these packages for all users, so that Apache can load them.**
- * GMD
- * MASS
- * ecodist
- * jsonlite
- * tm (Version 0.6 - **do not use 0.7**)
- * proxy
- * SnowballC
- * rplos
- * parfossil
- * doParallel
- * rentrez
- * curl
- * tibble
- * data.table
- * stringi
- * stringdist
- * xml2 **(Version 1.0 or higher)**
- * jaod (Currently, a Github repository only: http://github.com/ropenscilabs/jaod. Install with devtools.)
- * rbace (Currently, a Github repository only: http://github.com/ropenscilabs/rbace. Install with devtools.)
+  * GMD
+  * MASS
+  * ecodist
+  * jsonlite
+  * tm (Version 0.6 - **do not use 0.7**)
+  * proxy
+  * SnowballC
+  * rplos
+  * parfossil
+  * doParallel
+  * rentrez
+  * curl
+  * tibble
+  * data.table
+  * stringi
+  * stringdist
+  * xml2 **(Version 1.0 or higher)**
+  * jaod (Currently, a Github repository only: http://github.com/ropenscilabs/jaod. Install with  devtools.)
+  * rbace (Currently, a Github repository only: http://github.com/ropenscilabs/rbace. Install with devtools.)
+* phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
 
 ## Configuration
 
@@ -51,8 +52,9 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 * general->services_path: Relative path to the client REST services. Needs to be in the public_html/www directory.
 * calculation->binary: Path to RScript binary
 * connection->sqlite_db: Full path to the sqlite datatabase file. For development purposes, duplicate headstart.sqlite in server/storage/ and rename it to a filename of your choice. Enter the path to this file here. **Make sure that your webserver has write access to this file and the containing directory.**
+* snapshot->snapshot_enabled: Set to 1 to enable snapshot feature, 0 to disable
 * snapshot->phantomjs_path: Absolute path to phantomjs binary
 * snapshot->getsvg_path: Absolute path to getChartSVG.js
 * snapshot->storage_path: Absolute path to the directory, where the snapshots are stored. **Make sure that your webserver has write access to this file and the containing directory.**
-* snapshot->snapshot_php: PHP File responsible for rendering the bubble in a way to be snapshotted. Relative path to general host snapshot->headstart_snapshot.php"
+* snapshot->snapshot_php: PHP File responsible for rendering the bubble in a way to be snapshotted. Relative path to general->host
 * snapshot->snapshot_width: Thumbnail width
