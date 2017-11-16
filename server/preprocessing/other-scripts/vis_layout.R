@@ -50,7 +50,7 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
   normalized_matrix <- normalize_matrix(result$tdm_matrix);
 
   print("create clusters")
-  clusters <- create_clusters(normalized_matrix, max_clusters=15);
+  clusters <- create_clusters(normalized_matrix, max_clusters=max_clusters);
   named_clusters <- create_cluster_labels(clusters, metadata_full_subjects, weightingspec="ntn", top_n=3, stops=stops, taxonomy_separator)
   layout <- create_ordination(normalized_matrix, maxit=500, mindim=2, maxdim=2)
   output <- create_output(named_clusters, layout, metadata_full_subjects)
