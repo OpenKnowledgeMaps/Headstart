@@ -7,7 +7,7 @@ Head Start is a web-based knowledge mapping software intended to give researcher
 ## Getting Started
 
 ### Client
-In order to get started quickly, Make sure to have `npm` installed (it comes with Node.js, you can [download installers here](https://nodejs.org/en/download/)) and run the following two commands to build the Headstart Client. 
+In order to get started quickly, Make sure to have `npm` version 3.10.10 installed (it comes with Node.js 6.12.0, you can [download installers here](https://nodejs.org/dist/latest-v6.x/)) and run the following two commands to build the Headstart Client. 
 
     npm install
     npm run dev
