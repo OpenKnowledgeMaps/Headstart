@@ -14,13 +14,15 @@ var data_config = {
     show_intro: false,
     show_list:true,
     is_force_papers:true,
+    preview_type: "pdf",
+    
 	
 	show_context: false,
 	create_title_from_context: false,
 
     files: [{
         title: "edu1",
-        file: "./data/edu1.csv"
+        file: "./data/datasets.csv"
     }, {
         title: "edu2",
         file: "./data/edu2.csv"
