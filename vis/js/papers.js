@@ -151,8 +151,15 @@ papers.drawPapers = function () {
     
     d3.selectAll("#article_metadata").select("#open-access-logo")
             .style("display", function (d) {
-                if(d.oa === false) {
+                if(d.oa === false || d.doctype === 'dataset') {
                     return "none";
+                }
+            });
+
+    d3.selectAll('#article_metadata').select('#open-data-logo')
+            .style('display', function(d) {
+                if (d.doctype !== 'dataset') {
+                    return 'none';
                 }
             });
     
