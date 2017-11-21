@@ -111,11 +111,9 @@
 
 }
 
-
-#open-access-logo {
+#open-access-logo, #open-data-logo {
     font-family: 'FontAwesome';
     display:inline-block;
-    background-color: $open-access;
     color: white;
     padding: 6px 4px;
     font-size: 8px;
@@ -135,6 +133,14 @@
         max-width: initial;
         vertical-align: top;
     }
+}
+
+#open-access-logo {
+    background-color: $open-access;
+}
+
+#open-data-logo {
+    background-color: $open-data;
 }
 
 
