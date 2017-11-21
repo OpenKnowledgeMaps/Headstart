@@ -255,7 +255,7 @@ list.populateMetaData = function(nodes) {
         var paper_link = list_metadata.select(".link2");
 
         paper_link.style("display", function (d) {
-                    if (d.oa === false) {
+                    if (d.oa === false || d.doctype === 'dataset') {
                         return "none";
                     }
                 });
