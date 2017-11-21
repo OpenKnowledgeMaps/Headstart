@@ -232,8 +232,15 @@ list.populateMetaData = function(nodes) {
 
         list_metadata.select("#open-access-logo_list")
                 .style("display", function (d) {
-                    if (d.oa === false) {
+                    if (d.oa === false || d.doctype === 'dataset') {
                         return "none";
+                    }
+                });
+
+			list_metadata.select("#open-data-logo_list")
+                .style("display", function (d) {
+                    if (d.doctype !== 'dataset') {
+                      return "none";
                     }
                 });
 
