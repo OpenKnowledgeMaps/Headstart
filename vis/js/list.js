@@ -228,7 +228,15 @@ list.populateMetaData = function(nodes) {
             .attr("href", function(d) {
                 return d.outlink;
             })
-            .on("click", function() { d3.event.stopPropagation(); });
+            .on("click", function() { d3.event.stopPropagation(); })
+            .select('.outlink_text')
+              .text(function(d) {
+                if (d.doctype === 'dataset') {
+                  return 'Data ';
+                } else {
+                  return 'HTML ';
+                }
+              });
 
         list_metadata.select("#open-access-logo_list")
                 .style("display", function (d) {
