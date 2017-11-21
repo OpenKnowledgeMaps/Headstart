@@ -247,7 +247,7 @@ list.populateMetaData = function(nodes) {
 
 			list_metadata.select("#open-data-logo_list")
                 .style("display", function (d) {
-                    if (d.doctype !== 'dataset') {
+                    if (d.oa === false || d.doctype !== 'dataset') {
                       return "none";
                     }
                 });
