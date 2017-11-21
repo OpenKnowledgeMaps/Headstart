@@ -49,7 +49,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
 
   (res_raw <- bs_search(hits=limit
                         , query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" ")
-                        , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"
+                        , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctypenorm"
                         , sortby = sortby_string))
   res <- res_raw$docs
 
@@ -90,8 +90,40 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
   subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
   subject_cleaned = gsub("\\w+:\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
-
+  
+  dctype_dict = list("4"= "audio", 
+                "11"= "book", 
+                "111"= "book_part", 
+                "13"= "conference_object", 
+                "16"= "course_material", 
+                "7"= "dataset", 
+                "121"= "journal_newspaper_article",
+                "122"= "journal_newspaper_other", 
+                "17"= "lecture", 
+                "19"= "manuscript", 
+                "3"= "map", 
+                "2"= "musical_notation", 
+                "F"= "other", 
+                "1A"= "patent", 
+                "14"= "report", 
+                "15"= "review", 
+                "6"= "software", 
+                "51"= "image", 
+                "1"= "text", 
+                "181"= "thesis_bachelor", 
+                "183"= "thesis_phd", 
+                "182"= "thesis_master", 
+                "52"= "video")
+  
   metadata$subject = subject_cleaned
+  
+  unique(metadata$dctypenorm)
+  
+  metadata$doctype = res$dctypenorm
+  
+  for (i in 1:nrow(metadata)) {
+    metadata[i,]$doctype = dctype_dict[[metadata[i,]$doctype]]
+  }
 
   metadata$authors = check_metadata(res$dccreator)
 
