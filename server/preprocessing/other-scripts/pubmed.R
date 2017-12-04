@@ -34,12 +34,12 @@ library("xml2")
 # get_papers(query = "ecology", params = list(from = "2016/04/01", to = "2016/06/05"))
 get_papers <- function(query, params = NULL, limit = 100) {
 
-  fields <- c('.//ArticleTitle', './/MedlineCitation/PMID', './/Title', './/Abstract',
-              './/MedlineCitation/DateCreated/Year')
+  fields <- c('.//ArticleTitle', './/MedlineCitation/PMID', './/Title', './/Abstract')
+  year = './/Article/Journal/JournalIssue/PubDate'
   book_fields <- c('.//BookDocument/Book/BookTitle', './/BookDocument/PMID',
-                   './/BookDocument/Book/Publisher/PublisherName', './/Abstract',
-                   './/BookDocument/Book/PubDate/Year')
-  fnames <- c('title', 'pmid', 'published_in', 'paper_abstract', 'year')
+                   './/BookDocument/Book/Publisher/PublisherName', './/Abstract')
+  book_year = './/BookDocument/Book/PubDate'
+  fnames <- c('title', 'pmid', 'published_in', 'paper_abstract')
   date <- './/MedlineCitation/DateCreated'
   authors <- './/AuthorList'
   keywords <- './/Keyword'
@@ -70,16 +70,35 @@ get_papers <- function(query, params = NULL, limit = 100) {
     xdate <- paste0(vapply(xml2::xml_children(xml2::xml_find_all(z, date)), function(a) {
       xtext(a)
     }, ""), collapse = "-")
+    
+    year_fld <- switch(
+      xml2::xml_name(z),
+      PubmedArticle = year,
+      PubmedBookArticle = book_year
+    )
+
+    xyear <- vapply(xml2::xml_find_all(z, year_fld), function(a) {
+      if(!is.na(xml2::xml_find_first(a, ".//Year"))) {
+        xtext(xml2::xml_find_first(a, ".//Year"))
+      } else {
+        substr(xtext(xml2::xml_find_first(a, ".//MedlineDate")),0,4)
+      }
+    }, "")
+    
     xauthors <- paste0(vapply(xml2::xml_children(xml2::xml_find_all(z, authors)), function(a) {
-      paste(
-        xtext(xml2::xml_find_first(a, ".//LastName")),
-        xtext(xml2::xml_find_first(a, ".//ForeName")),
-        sep = ", "
-      )
+      if(!is.na(xml2::xml_find_first(a, ".//CollectiveName"))) {
+        xtext(xml2::xml_find_first(a, ".//CollectiveName"))
+      } else {
+        paste(
+          xtext(xml2::xml_find_first(a, ".//LastName")),
+          xtext(xml2::xml_find_first(a, ".//ForeName")),
+          sep = ", "
+        )
+      }
     }, ""), collapse = ";")
     xkeywords <- paste0(xtext(xml2::xml_find_all(z, keywords)), collapse = ";")
     xdoi <- xtext(xml2::xml_find_all(z, doi))
-    lst <- c(tmp, date = xdate, id = xdoi, authors = list(xauthors), subject = list(xkeywords))
+    lst <- c(tmp, date = xdate, year = xyear, id = xdoi, authors = list(xauthors), subject = list(xkeywords))
     lst[vapply(lst, length, 1) != 1] <- NA
     return(lst)
   })
