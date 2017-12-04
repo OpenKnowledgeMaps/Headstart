@@ -129,7 +129,7 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: 2017
+            default_year: ""
         },
         ger: {
             loading: "Wird geladen...",
@@ -160,7 +160,7 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: 2017
+            default_year: ""
         },
         eng_plos: {
             loading: "Loading...",
@@ -190,7 +190,7 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: 2017
+            default_year: ""
         },
         eng_pubmed: {
             loading: "Loading...",
@@ -221,7 +221,7 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: 2017
+            default_year: ""
         }
     },
 
