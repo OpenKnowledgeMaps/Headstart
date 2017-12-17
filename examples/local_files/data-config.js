@@ -15,12 +15,15 @@ var data_config = {
     show_list:true,
     is_force_papers:true,
 	
+	preview_type: "pdf",
+	server_url: window.location.href.replace(/[^/]*$/, '') + "../../server/",
+	
 	show_context: false,
 	create_title_from_context: false,
 
     files: [{
         title: "edu1",
-        file: "./data/edu1.csv"
+        file: "./data/edu_pdf.csv"
     }, {
         title: "edu2",
         file: "./data/edu2.csv"
