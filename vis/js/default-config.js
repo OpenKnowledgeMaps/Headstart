@@ -69,6 +69,9 @@ var config = {
     show_infolink: true,
     show_titlerow: true,
     show_list: false,
+    show_context: false,
+    
+    create_title_from_context: false,
 
     sort_options: ["readers", "title", "authors", "year"],
 
@@ -93,20 +96,28 @@ var config = {
 
     //intro
     intro: "intro_hs",
+    
+    service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ"},
 
     localization: {
         eng: {
             loading: "Loading...",
-            search_placeholder: "Search...",
+            search_placeholder: "Search within map...",
             show_list: "Show list",
             hide_list: "Hide list",
-            intro_label: "What's this?",
+            intro_label: "",
             readers: "readers",
             year: "date",
             authors: "authors",
             title: "title",
-            default_title: 'Overview of <span id="num_articles"></span> articles',
+            default_title: 'Overview of <span id="num_articles"></span> documents',
+            overview_label: 'Overview of',
+            articles_label: 'documents',
+            most_recent_label: 'most recent',
+            source_label: 'Source',
+            documenttypes_label: 'Document types',
             area: "Area",
+            keywords: "Keywords",
             no_title: "No title",
             default_area: "No area",
             default_author: "",
@@ -118,21 +129,27 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: 2017
+            default_year: ""
         },
         ger: {
             loading: "Wird geladen...",
-            search_placeholder: "Suche...",
+            search_placeholder: "Suche in der Liste...",
             show_list: "Liste ausklappen",
             hide_list: "Liste einklappen",
-            intro_label: "Was ist das?",
+            intro_label: "",
             readers: "Leser",
             year: "Jahr",
             authors: "Autor",
             title: "Titel",
             default_title: 'Überblick über <span id="num_articles"></span> Artikel',
+            overview_label: 'Überblick über',
+            most_recent_label: 'neueste',
+            articles_label: 'Artikel',
+            source_label: 'Quelle',
+            documenttypes_label: 'Publikationsarten',
             area: "Bereich",
-			no_title: "Kein Titel",
+            keywords: "Keywords",
+            no_title: "Kein Titel",
             default_area: "Kein Bereich",
             default_author: "",
             default_id: "defaultid",
@@ -143,20 +160,26 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: 2017
+            default_year: ""
         },
         eng_plos: {
             loading: "Loading...",
-            search_placeholder: "Search...",
+            search_placeholder: "Search within map...",
             show_list: "Show list",
             hide_list: "Hide list",
-            intro_label: "What's this?",
+            intro_label: "",
             readers: "views",
             year: "date",
             authors: "authors",
             title: "title",
             area: "Area",
+            keywords: "Keywords",
             no_title: "No title",
+            overview_label: 'Overview of',
+            articles_label: 'documents',
+            most_recent_label: 'most recent',
+            source_label: 'Source',
+            documenttypes_label: 'Article types',
             default_area: "No area",
             default_author: "",
             default_id: "defaultid",
@@ -167,21 +190,27 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: 2017
+            default_year: ""
         },
         eng_pubmed: {
             loading: "Loading...",
-            search_placeholder: "Search...",
+            search_placeholder: "Search within map...",
             show_list: "Show list",
             hide_list: "Hide list",
-            intro_label: "What's this?",
+            intro_label: "",
             relevance: "relevance",
             readers: "citations",
             year: "year",
             authors: "authors",
             title: "title",
             area: "Area",
+            keywords: "Keywords",
             no_title: "No title",
+            overview_label: 'Overview of',
+            articles_label: 'documents',
+            most_recent_label: 'most recent',
+            source_label: 'Source',
+            documenttypes_label: 'Article types',
             default_area: "No area",
             default_author: "",
             default_id: "defaultid",
@@ -192,7 +221,7 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: 2017
+            default_year: ""
         }
     },
 

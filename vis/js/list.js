@@ -209,6 +209,15 @@ list.filterListByArea = function(area) {
 list.populateMetaData = function(nodes) {
     nodes[0].forEach(function(elem) {
         var list_metadata = d3.select(elem).select(".list_metadata");
+        
+        list_metadata.select(".list_title")
+            .attr("class", function(d) {
+                if(d.oa) {
+                    return "list_title oa"
+                } else {
+                    return "list_title"
+                }
+        })
 
         list_metadata.select("#paper_list_title")
             .html(function(d) {
@@ -235,10 +244,13 @@ list.populateMetaData = function(nodes) {
                         return "none";
                     }
                 });
-
-        paper_link.attr("href", function (d) {
-            return d.oa_link;
+        
+        paper_link.on("click", function(d) {
+                mediator.publish("list_show_popup", d);
         });
+        /*paper_link.attr("href", function (d) {
+            return "#";
+        });*/
 
         list_metadata.select(".list_authors")
             .html(function(d) {
@@ -312,6 +324,19 @@ list.populateReaders = function(nodes) {
     nodes[0].forEach(function(elem) {
         var areas = d3.select(elem).select("#list_area");
         var readers = d3.select(elem).select(".list_readers");
+        var keywords = d3.select(elem).select("#list_keywords");
+        
+        keywords.style("display", "none");
+        
+        if(config.show_keywords) {
+            keywords.select(".keyword_tag").html(function() {
+                return config.localization[config.language].keywords + ":";
+            });
+
+            keywords.select(".keywords").html(function(d) {
+                return ((d.hasOwnProperty("subject_orig"))?(d.subject_orig):(""))
+            });
+        }
 
         areas.select(".area_tag").html(function() {
             return config.localization[config.language].area + ":";
@@ -436,6 +461,7 @@ list.hideEntries = function(object, search_words) {
                 let journals = d.published_in.toLowerCase();
                 let year = d.year;
                 let word_found = true;
+                let keywords = (d.hasOwnProperty("subject_orig"))?(d.subject_orig.toLowerCase()):("");
                 let count = 0;
                 if (typeof abstract !== 'undefined') {
                     while (word_found && count < search_words.length) {
@@ -443,7 +469,9 @@ list.hideEntries = function(object, search_words) {
                             title.indexOf(search_words[count]) !== -1 ||
                             authors.indexOf(search_words[count]) !== -1 ||
                             journals.indexOf(search_words[count]) !== -1 ||
-                            year.indexOf(search_words[count]) !== -1);
+                            year.indexOf(search_words[count]) !== -1 ||
+                            keywords.indexOf(search_words[count]) !== -1
+                            );
                         count++;
                     }
                     d.filtered_out = word_found ? false : true;
@@ -562,6 +590,10 @@ list.enlargeListItem = function(d) {
     this.createHighlights(this.current_search_words);
 
     this.setImageForListHolder(d);
+    if(config.show_keywords) {
+        d3.selectAll("#list_keywords").style("display", "block");
+    }
+    
     d.paper_selected = true;
 };
 
@@ -595,6 +627,7 @@ list.reset = function() {
     this.createHighlights(this.current_search_words);
 
     d3.selectAll(".list_entry_full").attr("class", "list_entry");
+    d3.selectAll("#list_keywords").style("display", "none");
 
     if (mediator.current_enlarged_paper !== null) {
       this.notSureifNeeded();
@@ -717,6 +750,11 @@ list.setImageForListHolder = function(d) {
         .filter(function(x) {
             return (x.id == d.id);
         });
+    // EVENTLISTENERS
+    current_item.select("#paper_list_title")
+        .on("click", function(d) {
+            mediator.publish("list_title_click", d);
+        });
 
     let image_src = "paper_preview/" + d.id + "/page_1.png";
     let pdf_preview = require("images/preview_pdf.png");
@@ -770,11 +808,6 @@ list.setImageForListHolder = function(d) {
             });
     }
 
-            // EVENTLISTENERS
-        current_item.select("#paper_list_title")
-            .on("click", function(d) {
-                mediator.publish("list_title_click", d);
-            });
 };
 
 list.title_click = function (d) {

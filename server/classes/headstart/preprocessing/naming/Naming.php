@@ -16,9 +16,9 @@ class Naming {
         $this->ini_array = $ini_array;
 
     }
-
-    public function performNaming() {
-
+   
+    public function performNaming(&$array, $num_keywords) {
+        
     }
 
 }

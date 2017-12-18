@@ -8,15 +8,15 @@ namespace headstart\persistence;
  */
 class Persistence {
     
-    public function createVisualization() {
+    public function createVisualization($vis_id, $vis_title, $data) {
         
     }
     
-    public function getRevision() {
+    public function getRevision($vis_id, $rev_id) {
         
     }
     
-    public function writeRevision() {
+    public function writeRevision($vis_id, $data) {
         
     }
 }

@@ -9,6 +9,8 @@ var IO = function() {
     this.areas_array = [];
     this.fs = [];
     this.title = "default-title";
+    this.context = {};
+    this.num_oa;
 };
 
 IO.prototype = {
@@ -84,6 +86,15 @@ IO.prototype = {
             object[element] = defaultVal;
         }
     },
+    
+    setContext: function(context, num_documents) {
+        this.context = context;
+        if(context.hasOwnProperty("params")) {
+            context.params = JSON.parse(context.params);
+        }
+        this.context.num_documents = num_documents;
+        this.context.share_oa = this.num_oa;
+    },
 
     initializeMissingData: function(data) {
         let that = this;
@@ -111,6 +122,8 @@ IO.prototype = {
         var xy_array = [];
         // convert to numbers
         var cur_data = fs;
+        var has_keywords = false;
+        var num_oa = 0;
         cur_data.forEach(function (d) {
             d.x = parseFloat(d.x);
             d.y = parseFloat(d.y);
@@ -155,7 +168,7 @@ IO.prototype = {
             var authors = _this.convertToFirstNameLastName(d.authors);
             d.authors_string = authors.string;
             d.authors_short_string = authors.short_string;
-
+			
             d.oa = false;
 
             if (config.service === "doaj") {
@@ -175,11 +188,22 @@ IO.prototype = {
             } else if(config.service === "base") {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
                 d.oa_link = d.link;
-            }
+            } else {
+				d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
+			}
 
             d.outlink = _this.createOutlink(d);
+            
+            num_oa += (d.oa)?(1):(0);
+            
+            if(d.hasOwnProperty("subject_orig")) {
+                has_keywords = true;
+            }
 
         });
+        
+        config.show_keywords = (has_keywords)?(true):(false);
+        this.num_oa = num_oa;
 
         mediator.publish("update_canvas_domains", cur_data);
         mediator.publish("update_canvas_data", cur_data);

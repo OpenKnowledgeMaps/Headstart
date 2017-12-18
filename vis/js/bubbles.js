@@ -20,6 +20,7 @@ export var BubblesFSM = function () {
     this.areas_array = [];
     this.startup();
     this.title = "default-title";
+    this.tappedTwice = false;
 };
 
 BubblesFSM.prototype = {
@@ -84,7 +85,7 @@ BubblesFSM.prototype = {
             }
           });
 
-      d3.selectAll("circle")
+      d3.selectAll("#headstart-chart circle")
         .attr("r", (d) => {
           d.r_zoomed = canvas.circle_size(d.readers) * mediator.circle_zoom;
           d.r = canvas.circle_size(d.readers);
@@ -107,7 +108,7 @@ BubblesFSM.prototype = {
     // blasen -> wenn über blase gehovered und paper sichtbar
     // dann soll auch auf paper geclicked werden können.
     makePaperClickable: function (d) {
-        mediator.current_circle = canvas.chart.selectAll("circle")
+        mediator.current_circle = canvas.chart.selectAll("#headstart-chart circle")
                 .filter(function (x) {
                     if (d !== null) {
                         if (config.use_area_uri) {
@@ -127,7 +128,7 @@ BubblesFSM.prototype = {
     // initialize mouseover, mouseout circle listeners
     initCircleListeners: function () {
         var this_bubble_fsm = this;
-        d3.selectAll("circle").on("mouseover", function (d) {
+        d3.selectAll("#headstart-chart circle").on("mouseover", function (d) {
             if (!this_bubble_fsm.is("hoverbig")) {
                 mediator.publish("bubble_mouseover", d, this, this_bubble_fsm);
                 mediator.publish("record_action", d.id, "circle_mouseover", config.user_id, "none", null);
@@ -146,12 +147,17 @@ BubblesFSM.prototype = {
     initCircleClickListener: function () {
         var self = this;
 
-        d3.selectAll('circle').on("click", function (d) {
+        d3.selectAll('#headstart-chart circle').on("click", function (d) {
+            d3.event.stopPropagation();
             mediator.publish("bubble_click", d, self);
-            // self.zoomin(d);
+        });
+        
+        d3.selectAll('#headstart-chart circle').on("touchstart", function (d) {
+            d3.event.stopPropagation();
+            mediator.publish("bubble_click", d, self);
         });
 
-        d3.selectAll('circle').on("dblclick", function () {
+        $('#headstart-chart circle').on("dblclick doubletap", function () {
             if (self.is("hoverbig") && mediator.is_zoomed && mediator.zoom_finished) {
                 self.zoomout();
             }
@@ -160,11 +166,17 @@ BubblesFSM.prototype = {
 
     // initialize just the mousemovement listeners
     initMouseListenersForTitles: function () {
-        d3.selectAll("#area_title").on("mouseover", function (d) {
+        var this_bubble_fsm = this;
+        d3.selectAll("#area_title")
+        .on("touchend", function () {
+            let d = this.parentElement.parentElement.previousElementSibling;
+            mediator.publish("bubble_mouseover", d3.select(d).data()[0], d, this_bubble_fsm);
+        })
+        .on("mouseover", function (d) {
             if (mediator.is_in_normal_mode) {
                 mediator.current_bubble.hideCircle(this);
             } else {
-                var underlying_circle = d3.selectAll("circle")
+                var underlying_circle = d3.selectAll("#headstart-chart circle")
                         .filter(function (x) {
                             if (d !== null) {
                                 return x.title == d.title;
@@ -342,7 +354,7 @@ BubblesFSM.prototype = {
         var previous_zoom_node = mediator.current_zoom_node;
         mediator.publish("bubble_zoomin", d);
         papers.resetPaths();
-
+        
         if (previous_zoom_node !== null && typeof previous_zoom_node != 'undefined') {
 
             if (typeof d != 'undefined') {
@@ -367,7 +379,7 @@ BubblesFSM.prototype = {
                     .attr("y", $("#subdiscipline_title").outerHeight(true)*-1);
         }
         
-        var zoom_node = canvas.chart.selectAll("circle")
+        var zoom_node = canvas.chart.selectAll("#headstart-chart circle")
                 .filter(function (x) {
                     if (d !== null) {
                         return x.title == d.title;
@@ -392,11 +404,11 @@ BubblesFSM.prototype = {
         zoom_node.on("mouseover", null)
                 .on("mouseout", null);
 
-        canvas.chart.selectAll("circle")
+        canvas.chart.selectAll("#headstart-chart circle")
                 .attr("class", "zoom_selected")
                 .style("fill-opacity", "1");
 
-        canvas.chart.selectAll("circle")
+        canvas.chart.selectAll("#headstart-chart circle")
                 .filter(function (x) {
                     if (d !== null) {
                         return (x.title != d.title);
@@ -410,15 +422,16 @@ BubblesFSM.prototype = {
                 .on("mouseout", null);
 
 
-        $("#subdiscipline_title h4").html(config.localization[config.language].area + ": " + d.title);
+        $("#subdiscipline_title h4").html('<span id="area-bold">'+config.localization[config.language].area + ":</span> " + d.title);
         $("#subdiscipline_title").dotdotdot();
+        $("#context").css("visibility", "hidden");
 
         d3.selectAll("div.paper_holder")
                 .on("mouseover", function (d) {
                     mediator.publish("paper_mouseover", d, this);
                 });
 
-        // d3.selectAll("circle")
+        // d3.selectAll("#headstart-chart circle")
         //   .on("click", function(d) {
         //     return bubbles.zoom(d);
         //   })
@@ -467,11 +480,11 @@ BubblesFSM.prototype = {
 
                     mediator.zoom_finished = true;
                 });
-
+        
         mediator.current_bubble.createTransition(t, d.title);
 
         mediator.publish("record_action", d.id, "zoom_in", config.user_id, "none", null);
-
+        
         d3.event.stopPropagation();
         
         mediator.is_zoomed = true;
@@ -586,7 +599,7 @@ BubblesFSM.prototype = {
         d3.selectAll("span.readers_entity")
                 .style("font-size", "8px");
 
-        canvas.drawTitle();
+        mediator.publish("draw_title");
 
         d3.selectAll(".paper")
                 .style("display", function (d) {
@@ -615,7 +628,7 @@ BubblesFSM.prototype = {
     },
 
     resetCircleDesignTimeLine: function () {
-        d3.selectAll("circle")
+        d3.selectAll("#headstart-chart circle")
                 .style("fill", "rgb(210, 228, 240)")
                 .style("fill-opacity", "0.8");
 
@@ -624,7 +637,7 @@ BubblesFSM.prototype = {
 
     resetCircleDesign: function () {
         if (mediator.current_circle !== null) {
-            d3.selectAll("circle")
+            d3.selectAll("#headstart-chart circle")
                     .attr("class", "area")
                     .style("fill-opacity", "0.8");
 
@@ -651,7 +664,7 @@ BubblesFSM.prototype = {
             obj = d3;
         }
 
-        obj.selectAll("circle")
+        obj.selectAll("#headstart-chart circle")
                 .style("fill-opacity", "0.8")
                 .attr("r", function (d) {
                     return d.r;
@@ -674,7 +687,7 @@ BubblesFSM.prototype = {
                     return "translate(" + d.x_zoomed + "," + d.y_zoomed + ")";
                 });
 
-        t.selectAll("circle")
+        t.selectAll("#headstart-chart circle")
                 .attr("r", function (d) {
                     d.r_zoomed = mediator.circle_zoom * d.r;
                     return d.r_zoomed;
@@ -879,3 +892,33 @@ StateMachine.create({
     ]
 
 });
+
+(function($){
+
+  $.event.special.doubletap = {
+    bindType: 'touchend',
+    delegateType: 'touchend',
+
+    handle: function(event) {
+      var handleObj   = event.handleObj,
+          targetData  = jQuery.data(event.target),
+          now         = new Date().getTime(),
+          delta       = targetData.lastTouch ? now - targetData.lastTouch : 0,
+          delay       = delay == null ? 300 : delay;
+
+      if (delta < delay && delta > 30) {
+        targetData.lastTouch = null;
+        event.type = handleObj.origType;
+        ['clientX', 'clientY', 'pageX', 'pageY'].forEach(function(property) {
+          event[property] = event.originalEvent.changedTouches[0][property];
+        })
+
+        // let jQuery handle the triggering of "doubletap" event handlers
+        handleObj.handler.apply(this, arguments);
+      } else {
+        targetData.lastTouch = now;
+      }
+    }
+  };
+
+})(jQuery);

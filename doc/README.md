@@ -73,15 +73,11 @@ Now, the only thing needed to run Headstart, is to call `headstart.start()`:
 
 To deploy Headstart, you need to make a few changes to your configuration.
 
-First, remove the protocol from your publicPath to enable https. It should look something like this:
-
-	publicPath: "//mydomain.org/headstart/dist",
-
-Second, add the stylesheets to your `index.html`:
+First, add the stylesheets to your `index.html`:
 
 	<link rel="stylesheet" href="path/to/dist/headstart.css">
 
-Third, run the following command to create a production build of Headstart:
+Second, run the following command to create a production build of Headstart:
 
 	npm run prod
 

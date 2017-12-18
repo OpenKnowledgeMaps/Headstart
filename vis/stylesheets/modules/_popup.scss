@@ -41,9 +41,19 @@
 #info_modal {
 
     .modal-dialog {
-        width: 80%;
-        max-width: 700px;
+        width: 100%;
+        max-width: 800px;
+        
+        .modal-content {
+            padding: 30px;
+        }
     }
+    
+    
+}
+
+.modal-title {
+    color: $okm-red;
 }
 
 #pdf_iframe {
@@ -57,9 +67,9 @@
 
     &:before {
         content: '';
-        display: inline-block;
+        /*display: inline-block;*/
         height: 100%;
-        vertical-align: middle;
+        /*vertical-align: middle;*/
         margin-right: -4px;
         /* Adjusts for spacing */
     }
