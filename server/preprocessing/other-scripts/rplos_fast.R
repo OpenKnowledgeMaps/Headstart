@@ -29,13 +29,14 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   date_string = paste("publication_date:[", params$from, "T00:00:00Z", " TO ", params$to, "T23:59:59Z]", sep="")
   article_types_string = paste("article_type:(", '"', paste(params$article_types, sep='"', collapse='" OR "'), '")', sep="")
   journals_string = paste("journal_key:(", '"', paste(params$journals, sep='"', collapse='" OR "'), '")', sep="")
-  
+  sortby_string = ifelse(params$sorting == "most-recent", "publication_date desc", "")
   
   # Get data from PLOS API
   
   search_data <- searchplos(q=paste("everything_rev:", query, sep=""), 
                             fq=list(article_types_string, journals_string, date_string, "doc_type:full"),
                             fl=fields,
+                            sort=sortby_string,
                             limit=limit)
   
   metadata = search_data$data
@@ -50,6 +51,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   metadata["url"] = paste("http://dx.doi.org/", metadata$id, sep="")
   dates = as.Date(metadata$year)
   metadata$year = format(dates, format="%B %d %Y")
+  metadata$subject_orig = metadata$subject
 
   ret_val=list("metadata" = metadata, "text"=text)
   return(ret_val)

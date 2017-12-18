@@ -33,6 +33,7 @@
     "javascript-state-machine": "^2.3.5",
     "jquery": "^2.1.4",
     "jquery-dotdotdot": "^1.8.2",
+    "dateformat": "^2.0.0",
     "mediator-js": "^0.9.9",
     "resolve-url-loader": "^1.6.0",
     "truncate": "*"
@@ -56,7 +57,7 @@
     "imports-loader": "^0.6.5",
     "node-sass": "3.13.1",
     "php-loader": "^0.2.0",
-    "sass-loader": "3.2.0",
+    "sass-loader": "4.1.1",
     "style-loader": "*",
     "url-loader": "*",
     "webpack": "1.15.0",

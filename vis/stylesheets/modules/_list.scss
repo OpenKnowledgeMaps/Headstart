@@ -10,5 +10,12 @@
     padding-right: 5px;
     background-color: white;
     display: none;
-    font: 12px 'Helvetica', sans-serif;
+    font: 10px 'Helvetica', sans-serif;
+}
+
+@media screen and (max-width: 1100px) {
+    
+#papers_list {
+        font: 8px 'Helvetica', sans-serif;
+    }
 }

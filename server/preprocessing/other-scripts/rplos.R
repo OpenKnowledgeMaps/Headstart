@@ -31,8 +31,11 @@ start.time <- Sys.time()
 
 #Format for fq: article_type:("Review" OR "Editorial")'
 
+sortby_string = ifelse(params$sorting == "most-recent", "publication_date desc", "")
+
 search_data <- searchplos(q=query, fq=list(article_types_string, journals_string, date_string, "doc_type:full"),
                           fl='title,id,counter_total_month,abstract,journal,publication_date,author,everything,subject,article_type',
+                          sort=sortby_string,
                           limit=100)
 
 end.time <- Sys.time()
