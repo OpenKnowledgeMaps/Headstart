@@ -5,14 +5,17 @@
         //padding-bottom: 10px;
     font-family: 'Open Sans', sans-serif;
     min-height: 50px;
-    position: relative;
-    z-index: 3;
 
     h4 {
         margin-bottom: 0px;
         margin-top: 0px;
         font-size: 18px;
         min-height: 24px;
+    }
+
+    #area-not-bold {
+        position: relative;
+        z-index: 3;
     }
 }
 
@@ -68,7 +71,7 @@
         font-size: 14px;
 
         h4 {
-            font-size: 14px; 
+            font-size: 14px;
         }
     }
 }
