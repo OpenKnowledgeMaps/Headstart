@@ -4,7 +4,7 @@ import { headstart } from 'headstart';
 import { papers } from 'papers';
 import { mediator } from 'mediator';
 import { intros } from 'intro';
-// import dateFormat from 'dateformat';
+import dateFormat from 'dateformat';
 
 
 class Canvas {
