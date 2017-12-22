@@ -209,7 +209,7 @@ list.filterListByArea = function(area) {
 list.populateMetaData = function(nodes) {
     nodes[0].forEach(function(elem) {
         var list_metadata = d3.select(elem).select(".list_metadata");
-        
+
         list_metadata.select(".list_title")
             .attr("class", function(d) {
                 if(d.oa) {
@@ -244,7 +244,7 @@ list.populateMetaData = function(nodes) {
                         return "none";
                     }
                 });
-        
+
         paper_link.on("click", function(d) {
                 mediator.publish("list_show_popup", d);
         });
@@ -263,8 +263,8 @@ list.populateMetaData = function(nodes) {
                     var parent = $(this.parentNode);
                     $(".list_in", parent).css("display", "none");
                 }
-                
-                return d.published_in; 
+
+                return d.published_in;
             })
         list_metadata.select(".list_pubyear")
             .html(function(d) {
@@ -325,9 +325,9 @@ list.populateReaders = function(nodes) {
         var areas = d3.select(elem).select("#list_area");
         var readers = d3.select(elem).select(".list_readers");
         var keywords = d3.select(elem).select("#list_keywords");
-        
+
         keywords.style("display", "none");
-        
+
         if(config.show_keywords) {
             keywords.select(".keyword_tag").html(function() {
                 return config.localization[config.language].keywords + ":";
@@ -593,7 +593,7 @@ list.enlargeListItem = function(d) {
     if(config.show_keywords) {
         d3.selectAll("#list_keywords").style("display", "block");
     }
-    
+
     d.paper_selected = true;
 };
 
@@ -681,12 +681,40 @@ list.writePopup = function(pdf_url) {
 
 
 list.populateOverlay = function(d) {
+    //making the modals draggable
+    function drag_start(event) {
+        var style = window.getComputedStyle(event.target, null);
+        event.dataTransfer.setData("text/plain",
+        (parseInt(style.getPropertyValue("left"),10) - event.clientX) + ',' + (parseInt(style.getPropertyValue("top"),10) - event.clientY));
+    }
+    function drag_over(event) {
+        event.preventDefault();
+        return false;
+    }
+    function drop(event) {
+        var offset = event.dataTransfer.getData("text/plain").split(',');
+        currentModal.style.left = (event.clientX + parseInt(offset[0],10)) + 'px';
+        currentModal.style.top = (event.clientY + parseInt(offset[1],10)) + 'px';
+        event.preventDefault();
+        return false;
+    }
+
     let this_d = d;
     if (config.preview_type == "image") {
         $("#spinner-images").show();
         $("#images_holder").hide();
         $("#status").hide();
         $("#images_modal").modal({keyboard:true});
+
+        //making the images modal draggable
+        var currentModal = document.getElementById('images_modal');
+        currentModal.style.left = '0px';
+        currentModal.style.top = '0px';
+        currentModal.addEventListener('dragstart',drag_start,false);
+        document.body.addEventListener('dragover',drag_over,false);
+        document.body.addEventListener('drop',drop,false);
+
+
 
         let images_finished = false;
         let counter = 1;
@@ -701,6 +729,8 @@ list.populateOverlay = function(d) {
 
         $("#spinner-images").hide();
         $("#images_holder").show();
+
+
     } else if (config.preview_type == "pdf") {
         let filename = this_d.id + ".PDF";
         let pdf_url = filename.replace("/", "__");
@@ -709,6 +739,17 @@ list.populateOverlay = function(d) {
         if (this.checkIfFileAvailable(config.server_url + "paper_preview/" + pdf_url)) {
             this.writePopup(config.server_url + "paper_preview/" + pdf_url);
             $("#iframe_modal").modal({keyboard:true});
+
+            //making the pdf modal draggable
+            var currentModal = document.getElementById('pdf-modal');
+            currentModal.style.left = '0px';
+            currentModal.style.top = '0px';
+            currentModal.addEventListener('dragstart',drag_start,false);
+            document.body.addEventListener('dragover',drag_over,false);
+            document.body.addEventListener('drop',drop,false);
+
+
+
         } else {
             $("#spinner-iframe").show();
             $("#pdf_iframe").hide();
@@ -721,15 +762,16 @@ list.populateOverlay = function(d) {
             }
 
             $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service + "&pdf_urls=" + possible_pdfs, (data) => {
-                
+
                 var showError = function () {
                     var link = (config.service === "base")?(this_d.link):(this_d.outlink);
                     $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
                     $("#status").show();
                 }
-                
+
                 if (data.status === "success") {
                     this.writePopup(config.server_url + "paper_preview/" + pdf_url);
+
                 } else if (data.status === "error") {
                      $("#spinner-iframe").hide();
                      showError();
@@ -743,6 +785,9 @@ list.populateOverlay = function(d) {
         }
     }
 };
+
+
+
 
 list.setImageForListHolder = function(d) {
 
@@ -847,4 +892,3 @@ list.notSureifNeeded = function() {
 list.scrollTop = function() {
     $("#papers_list").animate({ scrollTop: 0 }, 0);
 }
-

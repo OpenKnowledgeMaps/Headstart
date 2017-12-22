@@ -231,7 +231,7 @@ class Canvas {
             chart_title = config.title;
         } else if (config.create_title_from_context) {
             let query_clean = context.query.replace(/\\(.?)/g, "$1");
-            
+
             chart_title = config.localization[config.language].overview_label
                     + ' <span id="search-term-unique">' + query_clean + '</span>';
         }
@@ -273,7 +273,7 @@ class Canvas {
             });
         }
     }
-    
+
     paramExists(param) {
         return (typeof param !== "undefined" && param !== "null" && param !== null)
     }
@@ -292,20 +292,20 @@ class Canvas {
             $("#num_articles").html(context.num_documents + modifier
                     + " " + config.localization[config.language].articles_label
                     + " (" + context.share_oa + " open access)" );
-            
-            $("#source").html(config.localization[config.language].source_label 
+
+            $("#source").html(config.localization[config.language].source_label
                     + ": " + config.service_names[context.service]);
-            
+
             if (this.paramExists(context.params.from) && this.paramExists(context.params.to)) {
-            
+
                 let time_macro_display = (config.service === "doaj")?("yyyy"):("d mmm yyyy");
                 let time_macro_internal = (config.service === "doaj")?("yyyy"):("yyyy-mm-dd");
-                
+
                 let today = new Date();
                 let from = new Date(context.params.from)
                 let to = new Date(context.params.to)
-                
-                let default_from_date = (function(service) {  
+
+                let default_from_date = (function(service) {
                     switch(service) {
                       case 'doaj':
                         return '1809';
@@ -317,7 +317,7 @@ class Canvas {
                           return '1970-01-01';
                     }
                   })(config.service);
-                
+
                 if (dateFormat(from, time_macro_internal) === default_from_date) {
                     if(dateFormat(today, time_macro_internal) === dateFormat(to, time_macro_internal)) {
                         $("#timespan").html("All time");
@@ -333,27 +333,27 @@ class Canvas {
             }
 
             if(this.paramExists(config.options)) {
-                
+
                 let dtypes = (context.params.hasOwnProperty("document_types"))?("document_types"):("article_types");
-                
+
                 let document_types_string = "";
-                
+
                 let document_types = config.options.filter(function(obj) {
                     return obj.id == dtypes;
                 });
-                
+
                 if(context.params.hasOwnProperty(dtypes)) {
                     let num_document_types = context.params[dtypes].length;
-                    
+
                     context.params[dtypes].forEach(function (type) {
                         let type_obj = document_types[0].fields.filter(function(obj) {
                             return obj.id == type;
                         })
                         document_types_string += type_obj[0].text + ", ";
                     })
-                    
+
                     document_types_string = document_types_string.substr(0, document_types_string.length - 2);
-                        
+
                     if (num_document_types > 1) {
                         $("#document_types").html(config.localization[config.language].documenttypes_label);
 
@@ -362,7 +362,7 @@ class Canvas {
                             , "title": "The following document types were taken into consideration in the creation of this map (not all of them may appear in the map):\n\n" + document_types_string
                             , "class": "context_moreinfo"
                         })
-                       
+
                     } else {
                         $("#document_types").html("Document type: " + document_types_string);
                     }
