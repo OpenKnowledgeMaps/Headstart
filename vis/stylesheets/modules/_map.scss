@@ -10,6 +10,8 @@
         margin: 0 auto;
         display: table;
     /*margin-top: 6px;*/
+    position: relative;
+    z-index: 0;
 }
 
 #chart-svg {
