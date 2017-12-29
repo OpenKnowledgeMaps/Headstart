@@ -2,7 +2,7 @@
     margin: 0px;
     padding-top: 15px;
     padding-left: 50px;
-    //padding-bottom: 10px;
+        //padding-bottom: 10px;
     font-family: 'Open Sans', sans-serif;
     min-height: 50px;
 
@@ -11,6 +11,11 @@
         margin-top: 0px;
         font-size: 18px;
         min-height: 24px;
+    }
+
+    #area-not-bold, #area-bold {
+        position: relative;
+        z-index: 3;
     }
 }
 
@@ -66,7 +71,7 @@
         font-size: 14px;
 
         h4 {
-            font-size: 14px; 
+            font-size: 14px;
         }
     }
 }
