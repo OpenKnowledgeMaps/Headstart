@@ -745,8 +745,8 @@ list.populateOverlay = function(d) {
             currentModal.style.left = '0px';
             currentModal.style.top = '0px';
             currentModal.addEventListener('dragstart',drag_start,false);
-            document.body.addEventListener('dragover',drag_over,false);
-            document.body.addEventListener('drop',drop,false);
+            document.addEventListener('dragover',drag_over,false);
+            document.addEventListener('drop',drop,false);
 
 
 
