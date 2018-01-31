@@ -101,6 +101,7 @@ MyMediator.prototype = {
         // canvas events
         this.mediator.subscribe("window_resize", this.window_resize);
         this.mediator.subscribe("on_rect_mouseover", this.on_rect_mouseover);
+        this.mediator.subscribe("on_rect_mouseout", this.on_rect_mouseout);
         this.mediator.subscribe("chart_svg_click", this.chart_svg_click);
         this.mediator.subscribe("draw_title", this.draw_title);
 
@@ -343,6 +344,7 @@ MyMediator.prototype = {
     },
 
     bubble_zoomin: function(d) {
+        $("#chart-svg").css("cursor", 'zoom-out');
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'scrollTop', []);
         if (typeof d != 'undefined') {
@@ -356,6 +358,7 @@ MyMediator.prototype = {
         }
     },
     bubble_zoomout: function() {
+        $("#chart-svg").css("cursor", 'zoom-in');
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'updateByFiltered', []);
         mediator.manager.call('list', 'scrollTop', []);
@@ -397,11 +400,25 @@ MyMediator.prototype = {
     },
 
     on_rect_mouseover: function() {
+        $("#chart-svg").css("cursor", 'default');
         if (!mediator.is_zoomed) {
           mediator.manager.call('bubble', 'onmouseout', ['notzoomedmouseout']);
           mediator.current_circle = null;
         }
+        else {
+          $("#chart-svg").css("cursor", 'zoom-out');
+        }
         mediator.manager.call('bubble', 'mouseout', ['outofbigbubble']);
+    },
+
+    on_rect_mouseout: function () {
+        if (!mediator.is_zoomed) {
+          $("#chart-svg").css("cursor", 'zoom-in');
+          $(".paper_holder").css("cursor", "zoom-in");
+        }
+        else {
+          $("#chart-svg").css("cursor", 'zoom-out');
+        }
     },
 
     chart_svg_click: function() {
