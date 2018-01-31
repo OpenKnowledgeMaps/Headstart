@@ -200,6 +200,10 @@ class Canvas {
         $("rect").on("mouseover", () => {
             mediator.publish("on_rect_mouseover");
         });
+
+        $("rect").on("mouseout", () => {
+            mediator.publish("on_rect_mouseout");
+        });
     }
 
     initMouseClickListeners() {
