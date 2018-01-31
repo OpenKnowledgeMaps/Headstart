@@ -358,10 +358,16 @@ MyMediator.prototype = {
         }
     },
     bubble_zoomout: function() {
-        $("#chart-svg").css("cursor", 'zoom-in');
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'updateByFiltered', []);
         mediator.manager.call('list', 'scrollTop', []);
+
+        $("#chart-svg").css("cursor", 'zoom-in');
+        $(".paper_holder").css("cursor", "zoom-in");
+        if ($("circle:hover").length < 1) {
+            $("#chart-svg").css("cursor", 'default');
+            $(".paper_holder").css("cursor", "zoom-in");
+        }
     },
 
     currentbubble_click: function(d) {
