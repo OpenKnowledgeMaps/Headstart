@@ -716,6 +716,9 @@ list.writePopup = function(pdf_url) {
 
 
 list.populateOverlay = function(d) {
+
+
+
     //making the modals draggable
     function drag_start(event) {
         var style = window.getComputedStyle(event.target, null);
@@ -727,7 +730,7 @@ list.populateOverlay = function(d) {
             coverDiv.style.height = '93%';
             coverDiv.style.width = '100%';
             $(coverDiv).css('position', 'absolute').css('left', '0').css('top', '0');
-            $(".modal-body").append(coverDiv);
+            $(".text-center").append(coverDiv);
     }
 
     function drag_over(event) {
@@ -740,7 +743,8 @@ list.populateOverlay = function(d) {
         currentModal.style.left = (event.clientX + parseInt(offset[0], 10)) + 'px';
         currentModal.style.top = (event.clientY + parseInt(offset[1], 10)) + 'px';
         event.preventDefault();
-        $('#tempdragdiv').remove();
+        var cover = document.getElementById("tempdragdiv");
+        cover.parentElement.removeChild(cover);
         return false;
     }
 
