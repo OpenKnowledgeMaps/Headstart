@@ -716,21 +716,19 @@ list.writePopup = function(pdf_url) {
 
 
 list.populateOverlay = function(d) {
-
-
-
-    //making the modals draggable
+    // making the modals draggable
     function drag_start(event) {
         var style = window.getComputedStyle(event.target, null);
         event.dataTransfer.setData("text/plain",
             (parseInt(style.getPropertyValue("left"), 10) - event.clientX) + ',' + (parseInt(style.getPropertyValue("top"), 10) - event.clientY));
-            //fix of dragging bug where you cant drop inside the ifram
-            var coverDiv = document.createElement('div');
-            $(coverDiv).attr('id', 'tempdragdiv');
-            coverDiv.style.height = '93%';
-            coverDiv.style.width = '100%';
-            $(coverDiv).css('position', 'absolute').css('left', '0').css('top', '0');
-            $(".text-center").append(coverDiv);
+        //fix of dragging bug where you cant drop inside the ifram
+        var coverDiv = document.createElement('div');
+        $(coverDiv).attr('id', 'tempdragdiv');
+        coverDiv.style.height = '93%';
+        coverDiv.style.width = '100%';
+        $(coverDiv).css('position', 'absolute').css('left', '0').css('top', '0');
+        $(".text-center").append(coverDiv);
+
     }
 
     function drag_over(event) {
@@ -742,9 +740,9 @@ list.populateOverlay = function(d) {
         var offset = event.dataTransfer.getData("text/plain").split(',');
         currentModal.style.left = (event.clientX + parseInt(offset[0], 10)) + 'px';
         currentModal.style.top = (event.clientY + parseInt(offset[1], 10)) + 'px';
-        event.preventDefault();
         var cover = document.getElementById("tempdragdiv");
         cover.parentElement.removeChild(cover);
+        event.preventDefault();
         return false;
     }
 
@@ -764,7 +762,6 @@ list.populateOverlay = function(d) {
         currentModal.addEventListener('dragstart', drag_start, false);
         document.body.addEventListener('dragover', drag_over, false);
         document.body.addEventListener('drop', drop, false);
-
 
 
         let images_finished = false;
@@ -798,8 +795,8 @@ list.populateOverlay = function(d) {
             currentModal.style.left = '0px';
             currentModal.style.top = '0px';
             currentModal.addEventListener('dragstart', drag_start, false);
-            document.addEventListener('dragover', drag_over, false);
-            document.addEventListener('drop', drop, false);
+            document.body.addEventListener('dragover', drag_over, false);
+            document.body.addEventListener('drop', drop, false);
 
 
 
