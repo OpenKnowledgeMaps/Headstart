@@ -1,6 +1,8 @@
 // StateMachine for List UI element in Headstart
 // Filename: list.js
 import StateMachine from 'javascript-state-machine';
+import "../lib/jquery-ui.min.js";
+
 
 import config from 'config';
 import {
@@ -716,35 +718,6 @@ list.writePopup = function(pdf_url) {
 
 
 list.populateOverlay = function(d) {
-    // making the modals draggable
-    function drag_start(event) {
-        var style = window.getComputedStyle(event.target, null);
-        event.dataTransfer.setData("text/plain",
-            (parseInt(style.getPropertyValue("left"), 10) - event.clientX) + ',' + (parseInt(style.getPropertyValue("top"), 10) - event.clientY));
-        //fix of dragging bug where you cant drop inside the ifram
-        var coverDiv = document.createElement('div');
-        $(coverDiv).attr('id', 'tempdragdiv');
-        coverDiv.style.height = '93%';
-        coverDiv.style.width = '100%';
-        $(coverDiv).css('position', 'absolute').css('left', '0').css('top', '0');
-        $(".text-center").append(coverDiv);
-
-    }
-
-    function drag_over(event) {
-        event.preventDefault();
-        return false;
-    }
-
-    function drop(event) {
-        var offset = event.dataTransfer.getData("text/plain").split(',');
-        currentModal.style.left = (event.clientX + parseInt(offset[0], 10)) + 'px';
-        currentModal.style.top = (event.clientY + parseInt(offset[1], 10)) + 'px';
-        var cover = document.getElementById("tempdragdiv");
-        cover.parentElement.removeChild(cover);
-        event.preventDefault();
-        return false;
-    }
 
     let this_d = d;
     if (config.preview_type == "image") {
@@ -755,13 +728,18 @@ list.populateOverlay = function(d) {
             keyboard: true
         });
 
-        //making the images modal draggable
-        var currentModal = document.getElementById('images_modal');
+        //making the images modal draggable and resizable
+        let currentModal = document.getElementById('image-modal');
         currentModal.style.left = '0px';
         currentModal.style.top = '0px';
-        currentModal.addEventListener('dragstart', drag_start, false);
-        document.body.addEventListener('dragover', drag_over, false);
-        document.body.addEventListener('drop', drop, false);
+        let imagesHolder = $("#images_holder").attr("id");
+        let imageModal = $("#image-modal").attr("id");
+        let alsos = "#" + imagesHolder + ", #" + imageModal;
+        $("#image-modal").draggable();
+        $(".modal-content").resizable({
+            alsoResize: alsos
+        });
+
 
 
         let images_finished = false;
@@ -790,14 +768,17 @@ list.populateOverlay = function(d) {
                 keyboard: true
             });
 
-            //making the pdf modal draggable
-            var currentModal = document.getElementById('pdf-modal');
+            //making the pdf modal draggable and resizable
+            let currentModal = document.getElementById('pdf-modal');
             currentModal.style.left = '0px';
             currentModal.style.top = '0px';
-            currentModal.addEventListener('dragstart', drag_start, false);
-            document.body.addEventListener('dragover', drag_over, false);
-            document.body.addEventListener('drop', drop, false);
-
+            let dialog = $("#pdf-modal").attr("id");
+            let pdfIframe = $("#pdf_iframe").attr("id");
+            let alsos = "#" + dialog + ", #" + pdfIframe;
+            $("#pdf-modal").draggable();
+            $(".modal-content").resizable({
+                alsoResize: alsos
+            });
 
 
         } else {
