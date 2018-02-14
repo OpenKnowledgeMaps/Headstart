@@ -344,7 +344,10 @@ MyMediator.prototype = {
     },
 
     bubble_zoomin: function(d) {
-        $("#chart-svg").css("cursor", 'zoom-out');
+        $("#map-rect").removeClass("zoomed_out").addClass('zoomed_in');
+        $("#region.unframed").addClass("zoomed_in");
+        $(".paper_holder").addClass("zoomed_in");
+
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'scrollTop', []);
         if (typeof d != 'undefined') {
@@ -362,12 +365,9 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'updateByFiltered', []);
         mediator.manager.call('list', 'scrollTop', []);
 
-        $("#chart-svg").css("cursor", 'zoom-in');
-        $(".paper_holder").css("cursor", "zoom-in");
-        if ($("circle:hover").length < 1) {
-            $("#chart-svg").css("cursor", 'default');
-            $(".paper_holder").css("cursor", "zoom-in");
-        }
+        $("#map-rect").removeClass("zoomed_in").addClass('zoomed_out');
+        $("#region.unframed").removeClass("zoomed_in");
+        $(".paper_holder").removeClass("zoomed_in");
     },
 
     currentbubble_click: function(d) {
@@ -406,25 +406,16 @@ MyMediator.prototype = {
     },
 
     on_rect_mouseover: function() {
-        $("#chart-svg").css("cursor", 'default');
         if (!mediator.is_zoomed) {
           mediator.manager.call('bubble', 'onmouseout', ['notzoomedmouseout']);
           mediator.current_circle = null;
         }
         else {
-          $("#chart-svg").css("cursor", 'zoom-out');
         }
         mediator.manager.call('bubble', 'mouseout', ['outofbigbubble']);
     },
 
     on_rect_mouseout: function () {
-        if (!mediator.is_zoomed) {
-          $("#chart-svg").css("cursor", 'zoom-in');
-          $(".paper_holder").css("cursor", "zoom-in");
-        }
-        else {
-          $("#chart-svg").css("cursor", 'zoom-out');
-        }
     },
 
     chart_svg_click: function() {
