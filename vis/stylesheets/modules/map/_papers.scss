@@ -16,6 +16,11 @@
 
 .paper_holder {
     overflow: hidden;
+    cursor: zoom-in;
+
+    &.zoomed_in {
+        cursor: pointer;
+    }
 
     p {
         margin: 0 0 5px;
