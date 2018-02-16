@@ -179,14 +179,17 @@ papers.drawPaperPath = function (nodes) {
 };
 
 papers.resetPaths = function () {
+    // this seems illogical but has to be this way because
+    // the is_zoomed flag is set after this is executed
+    const zoomedClass = mediator.is_zoomed ? "" : " zoomed_in";
     d3.selectAll("path#region")
             .attr("class", function (d) {
                 if (d.bookmarked) {
-                    return "framed_bookmarked";
+                    return "framed_bookmarked" + zoomedClass;
                 } else if (d.recommended) {
-                    return "framed_recommended";
+                    return "framed_recommended" + zoomedClass;
                 } else {
-                    return "unframed";
+                    return "unframed" + zoomedClass;
                 }
             });
 };
@@ -561,8 +564,6 @@ papers.enlargePaper = function (d, holder_div) {
     this.resizePaper(d, holder_div, resize_factor, "rgb(255, 255, 255)", "1");
 
     holder_div
-            //.style("overflow-y", "scroll")
-            .style("cursor", "pointer")
             .on("click", (d) => {
 
                 if (!mediator.is_zoomed) {

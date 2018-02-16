@@ -18,6 +18,21 @@
         overflow: visible;
 }
 
+#map-rect {
+
+    &.zoomed_in {
+        &:hover {
+            cursor: zoom-out;
+        }
+    }
+
+    &.zoomed_out {
+        &:hover {
+            cursor: default;
+        }
+    }
+}
+
 rect {
     fill: rgb(31, 119, 180);
     fill-opacity: .0;
@@ -30,6 +45,13 @@ path {
     fill-opacity: 1;
     stroke: #cacfd3;
     stroke-width: 1px;
+    cursor: zoom-in;
+
+    &#region {
+        &.zoomed_in {
+            cursor: pointer;
+        }
+    }
 }
 
 .dogear {

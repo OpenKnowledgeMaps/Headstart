@@ -101,6 +101,7 @@ MyMediator.prototype = {
         // canvas events
         this.mediator.subscribe("window_resize", this.window_resize);
         this.mediator.subscribe("on_rect_mouseover", this.on_rect_mouseover);
+        this.mediator.subscribe("on_rect_mouseout", this.on_rect_mouseout);
         this.mediator.subscribe("chart_svg_click", this.chart_svg_click);
         this.mediator.subscribe("draw_title", this.draw_title);
 
@@ -343,6 +344,10 @@ MyMediator.prototype = {
     },
 
     bubble_zoomin: function(d) {
+        $("#map-rect").removeClass("zoomed_out").addClass('zoomed_in');
+        $("#region.unframed").addClass("zoomed_in");
+        $(".paper_holder").addClass("zoomed_in");
+
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'scrollTop', []);
         if (typeof d != 'undefined') {
@@ -359,6 +364,10 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'updateByFiltered', []);
         mediator.manager.call('list', 'scrollTop', []);
+
+        $("#map-rect").removeClass("zoomed_in").addClass('zoomed_out');
+        $("#region.unframed").removeClass("zoomed_in");
+        $(".paper_holder").removeClass("zoomed_in");
     },
 
     currentbubble_click: function(d) {
@@ -401,7 +410,12 @@ MyMediator.prototype = {
           mediator.manager.call('bubble', 'onmouseout', ['notzoomedmouseout']);
           mediator.current_circle = null;
         }
+        else {
+        }
         mediator.manager.call('bubble', 'mouseout', ['outofbigbubble']);
+    },
+
+    on_rect_mouseout: function () {
     },
 
     chart_svg_click: function() {

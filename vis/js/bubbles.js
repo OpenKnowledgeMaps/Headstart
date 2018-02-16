@@ -220,6 +220,8 @@ BubblesFSM.prototype = {
     // highlight a cirlce
     highlightCircle: function (circle) {
         circle.attr("class", "zoom_selected");
+        if (!mediator.is_zoomed)
+            circle.attr("class", "zoomed_out");
         circle.style("fill-opacity", 1);
     },
 
@@ -621,8 +623,7 @@ BubblesFSM.prototype = {
 
         d3.selectAll("div.paper_holder")
                 .on("mouseover", null)
-                .on("mouseout", null)
-                .style("cursor", "default");
+                .on("mouseout", null);
 
         papers.initPaperClickHandler();
     },
