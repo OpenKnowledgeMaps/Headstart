@@ -107,14 +107,14 @@ h5 {
 }
 
 //draggable functionality
-.modal-content {
+.modal-header {
     cursor: move; /* fallback: no `url()` support or images disabled */
     cursor: -webkit-grab; /* Chrome 1-21, Safari 4+ */
     cursor:    -moz-grab; /* Firefox 1.5-26 */
     cursor:         grab; /* W3C standards syntax, should come least */
 }
 
-.modal-content:active {
+.modal-header-active {
     cursor: -webkit-grabbing;
     cursor:    -moz-grabbing;
     cursor:         grabbing;

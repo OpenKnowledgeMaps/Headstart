@@ -718,6 +718,14 @@ list.writePopup = function(pdf_url) {
 
 
 list.populateOverlay = function(d) {
+    //imitating active pseudo class for grabbing cursor
+    $(".modal-header").mousedown(function() {
+        $(".modal-header").addClass("modal-header-active");
+    });
+
+    $(".modal-header").mouseup(function() {
+        $(".modal-header").removeClass("modal-header-active");
+    });
 
     let this_d = d;
     if (config.preview_type == "image") {
