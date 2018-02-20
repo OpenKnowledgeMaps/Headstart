@@ -139,10 +139,6 @@ h5 {
 	touch-action: none;
 }
 
-// .ui-icon, .ui-widget-content .ui-icon {
-//     background-image: url("../images/ui-icons_444444_256x240.png");
-// }
-
 
 .ui-resizable-disabled .ui-resizable-handle,
 .ui-resizable-autohide .ui-resizable-handle {
@@ -164,7 +160,7 @@ h5 {
 }
 .ui-resizable-e {
 	cursor: e-resize;
-	width: 47px;
+	width: 10px;
 	right: -5px;
 	top: 0;
 	height: 100%;
