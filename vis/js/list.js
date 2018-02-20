@@ -736,11 +736,18 @@ list.populateOverlay = function(d) {
             keyboard: true
         });
 
+
         //making the images modal draggable and resizable
         let currentModal = document.getElementById('image-modal');
         currentModal.style.left = '0px';
         currentModal.style.top = '0px';
+        let imagesHolder = $("#images_holder").attr("id");
+        let imageModal = $("#image-modal").attr("id");
+        let alsos = "#" + imagesHolder;
         $("#image-modal").draggable();
+        $(".modal-content").resizable({
+            alsoResize: alsos
+        });
 
 
 
@@ -774,8 +781,14 @@ list.populateOverlay = function(d) {
             let currentModal = document.getElementById('pdf-modal');
             currentModal.style.left = '0px';
             currentModal.style.top = '0px';
+            let dialog = $("#pdf-modal").attr("id");
+            let pdfIframe = $("#pdf_iframe").attr("id");
+            let modalBody = $("#modalBody").attr("id");
+            let alsos = "#" + pdfIframe + ", #" + modalBody;
             $("#pdf-modal").draggable();
-
+            $(".modal-content").resizable({
+                alsoResize: alsos
+            });
 
 
         } else {
