@@ -43,13 +43,13 @@
     .modal-dialog {
         width: 100%;
         max-width: 800px;
-        
+
         .modal-content {
             padding: 30px;
         }
     }
-    
-    
+
+
 }
 
 .modal-title {
@@ -104,4 +104,25 @@
 
 h5 {
     padding-top: 10px;
+}
+
+//draggable functionality
+.modal-header {
+    cursor: move; /* fallback: no `url()` support or images disabled */
+    cursor: -webkit-grab; /* Chrome 1-21, Safari 4+ */
+    cursor:    -moz-grab; /* Firefox 1.5-26 */
+    cursor:         grab; /* W3C standards syntax, should come least */
+}
+
+.modal-header-active {
+    cursor: -webkit-grabbing;
+    cursor:    -moz-grabbing;
+    cursor:         grabbing;
+}
+
+
+// draggable styles taken from jquery-ui
+.ui-draggable-handle {
+	-ms-touch-action: none;
+	touch-action: none;
 }
