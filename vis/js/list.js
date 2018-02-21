@@ -727,7 +727,22 @@ list.populateOverlay = function(d) {
     $(".modal-header").mouseup(function() {
         $(".modal-header").removeClass("modal-header-active");
     });
-    
+
+    //for the occasional firefox dragging bug
+    if (/firefox/i.test(navigator.userAgent)) {
+        window.oldGetComputedStyle = window.getComputedStyle;
+        window.getComputedStyle = function(element, pseudoElt) {
+            var t = window.oldGetComputedStyle(element, pseudoElt);
+            if (t === null) {
+                return {
+                    getPropertyValue: function() {}
+                };
+            } else {
+                return t;
+            }
+        };
+    }
+
     if (config.preview_type == "image") {
         $("#spinner-images").show();
         $("#images_holder").hide();
