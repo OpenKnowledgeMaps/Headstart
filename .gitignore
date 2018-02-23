@@ -10,3 +10,4 @@ vis/stylesheets/*.css
 *.map
 dist/
 .idea/
+config.js
