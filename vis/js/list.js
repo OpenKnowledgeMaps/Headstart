@@ -728,20 +728,6 @@ list.populateOverlay = function(d) {
         $(".modal-header").removeClass("modal-header-active");
     });
 
-    //for the occasional firefox dragging bug
-    if (/firefox/i.test(navigator.userAgent)) {
-        window.oldGetComputedStyle = window.getComputedStyle;
-        window.getComputedStyle = function(element, pseudoElt) {
-            var t = window.oldGetComputedStyle(element, pseudoElt);
-            if (t === null) {
-                return {
-                    getPropertyValue: function() {}
-                };
-            } else {
-                return t;
-            }
-        };
-    }
 
     if (config.preview_type == "image") {
         $("#spinner-images").show();
@@ -771,7 +757,9 @@ list.populateOverlay = function(d) {
 
         $("#spinner-images").hide();
         $("#images_holder").show();
+
     } else if (config.preview_type == "pdf") {
+
         let filename = this_d.id + ".PDF";
         let pdf_url = filename.replace("/", "__");
         $("#status").hide();
@@ -782,6 +770,12 @@ list.populateOverlay = function(d) {
                 keyboard: true
             });
 
+            // fixing the firefox dragging bug
+            $("#iframe_modal").css("visibility", "visible");
+            $(".pull-right").click(() => {
+                $("#iframe_modal").css({"visibility":"hidden"});
+            });
+            
             //making the pdf modal draggable and resizable
             let currentModal = document.getElementById('pdf-modal');
             currentModal.style.left = '0px';
