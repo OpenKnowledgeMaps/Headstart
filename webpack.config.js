@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const config = require('./config.example.js');
+const config = require('./config.js');
 
 const TARGET = process.env.npm_lifecycle_event;
 

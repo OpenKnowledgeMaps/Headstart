@@ -7,12 +7,16 @@ Head Start is a web-based knowledge mapping software intended to give researcher
 ## Getting Started
 
 ### Client
-In order to get started quickly, Make sure to have `npm` version 3.10.10 installed (it comes with Node.js 6.12.0, you can [download installers here](https://nodejs.org/dist/latest-v6.x/)) and run the following two commands to build the Headstart Client. 
+In order to get started quickly, Make sure to have `npm` version 3.10.10 installed (it comes with Node.js 6.12.0, you can [download installers here](https://nodejs.org/dist/latest-v6.x/)) and run the following two commands to build the Headstart Client.
 
     npm install
     npm run dev
 
 We are using [webpack](https://webpack.github.io/) to build our client-side application. `webpack` is started in *watch mode* which means that changes to files are tracked and the created `headstart.js` is automatically updated.
+
+Open a new file named `config.js` in the main `Headstart` folder, looking like `config.example.js`, and change the publicPath to the path of the dist directory.
+Dev: specify a full path including protocol (it's usually the same path specified in the example).
+Production: specify full path excluding protocol e.g. `//openknowledgemaps.org/headstart/dist`
 
 Now you can run a local dev server:
 
@@ -57,7 +61,7 @@ Authors: [Asura Enkhbayar](https://github.com/Bubblbu), [Scott Chamberlain](http
 * [Conference Navigator 3](http://halley.exp.sis.pitt.edu/cn3/visualization.php?conferenceID=131) [registration required]: An adaptation of Head Start for the conference scheduling system CN3. This version enables users to schedule papers directly from the visualization. Scheduled papers and recommended papers are highlighted.
 * [Organic Edunet portal](http://organic-edunet.eu/en/#/recommended): Overview of recommended resources in the Organic Eudnet portal.
 
-## Compatibility 
+## Compatibility
 
 The visualization has been successfully tested with Chrome, Firefox, Safari and Microsoft Edge. Unfortunately, Internet Explorer is not supported due to the fact that it is not possible to insert HTML into a foreignObject.
 
