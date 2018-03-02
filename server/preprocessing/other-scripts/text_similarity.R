@@ -7,6 +7,12 @@ service <- args[3]
 params_file <- args[4]
 language <- args[5]
 
+if (language %in% c('english', 'german')){
+    language = language
+  } else {
+    language <- 'english'
+  }
+
 print(wd)
 print(query)
 print(service)
