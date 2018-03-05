@@ -1,4 +1,4 @@
 
 module.exports = {
-    publicPath : "http://localhost/headstart/dist"
+    publicPath : "http://localhost:8080/dist/"
 };

@@ -14,14 +14,16 @@ In order to get started quickly, Make sure to have `npm` version 3.10.10 install
 
 We are using [webpack](https://webpack.github.io/) to build our client-side application. `webpack` is started in *watch mode* which means that changes to files are tracked and the created `headstart.js` is automatically updated.
 
-Open a new file named `config.js` in the main `Headstart` folder, looking like `config.example.js`, and change the publicPath to the path of the dist directory.
-Dev: specify a full path including protocol (it's usually the same path specified in the example).
-Production: specify full path excluding protocol e.g. `//openknowledgemaps.org/headstart/dist`
+Duplicate the file `config.example.js` in the root folder and rename it to `config.js`.
 
 Now you can run a local dev server:
 
 	npm start
 
+To run Headstart on a different server (e.g. Apache), you need to set the publicPath in `config.js` to the URL of the `dist` directory:
+* Dev: specify the full path including protocol, e.g. `http://localhost/headstart/dist`
+* Production: specify the full path excluding protocol, e.g. `//example.org/headstart/dist`
+    
 Point your browser to the following address:
 
 	http://localhost:8080/examples/local_files/index.html
