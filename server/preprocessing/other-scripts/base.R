@@ -67,7 +67,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   metadata$year = check_metadata(res$dcdate)
 
   subject_all = check_metadata(res$dcsubject)
-  
+
   metadata$subject_orig = subject_all
 
   #subject = ifelse(subject !="", paste(unique(strsplit(subject, "; ")), "; "),"")
@@ -103,7 +103,9 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   text = data.frame(matrix(nrow=length(res$dcdocid)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(metadata$title, metadata$paper_abstract, subject_all, metadata$published_in, metadata$authors, sep=" ")
+  text$content = paste(metadata$title, metadata$paper_abstract,
+                       subject_all, metadata$published_in, metadata$authors,
+                       sep=" ")
 
   ret_val=list("metadata" = metadata, "text"=text)
   return(ret_val)
