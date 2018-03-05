@@ -23,7 +23,9 @@ library(rbace)
 # * "readers": an indicator of the paper's popularity, e.g. number of readers, views, downloads etc.
 # * "subject": keywords or classification, split by ;
 
-get_papers <- function(query, params, limit=100, fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
+get_papers <- function(query, params, limit=100,
+                       fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type",
+                       language='english') {
 
   exact_query = "";
 
@@ -31,26 +33,29 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
     exact_query = paste("textus:", query, sep="")
   } else {
     exact_query = gsub("(?<!\\S)(?=\\S)", "textus:", query, perl=T)
-
   }
 
   year_from = params$from
-
   year_to = params$to
-
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
 
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
-
   #Make sure that the abstract exists. NOT WORKING:
   abstract_exists = "dcdescription:?"
-
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
 
-  (res_raw <- bs_search(hits=limit
-                        , query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" ")
-                        , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"
-                        , sortby = sortby_string))
+
+  query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" ")
+  # language query field flag
+  if(language=='german'){
+    query = paste(query, "dclang:ger", collapse=" ")
+  }
+
+  # execute search
+  (res_raw <- bs_search(hits=limit,
+                        query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" "),
+                        fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation",
+                        sortby = sortby_string))
   res <- res_raw$docs
 
   print(paste(query, date_string, document_types, abstract_exists, sep=" "));
@@ -67,7 +72,7 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   metadata$year = check_metadata(res$dcdate)
 
   subject_all = check_metadata(res$dcsubject)
-  
+
   metadata$subject_orig = subject_all
 
   #subject = ifelse(subject !="", paste(unique(strsplit(subject, "; ")), "; "),"")

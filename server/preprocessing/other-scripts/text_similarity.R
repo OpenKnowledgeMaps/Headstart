@@ -63,7 +63,7 @@ if(!is.null(params_file) && !is.na(params_file)) {
 print("reading stuff")
 print(params)
 
-input_data = get_papers(query, params, limit = limit)
+input_data = get_papers(query, params, limit = limit, language = language)
 
 print("got the input")
 
