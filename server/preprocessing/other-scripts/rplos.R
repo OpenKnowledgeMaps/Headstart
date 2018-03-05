@@ -49,7 +49,7 @@ names(cooc)[names(cooc)=="abstract"] <- "paper_abstract"
 names(cooc)[names(cooc)=="journal"] <- "published_in"
 names(cooc)[names(cooc)=="publication_date"] <- "year"
 names(cooc)[names(cooc)=="author"] <- "authors"
-cooc["url"] = paste("http://dx.doi.org/", cooc$id, sep="")
+cooc["url"] = paste("https://doi.org/", cooc$id, sep="")
 cooc["titleabstract"] = paste(cooc$title, cooc$abstract, sep=" ")
 dates = as.Date(cooc$year)
 cooc$year = format(dates, format="%B %d %Y")
