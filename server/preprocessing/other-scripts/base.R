@@ -24,8 +24,7 @@ library(rbace)
 # * "subject": keywords or classification, split by ;
 
 get_papers <- function(query, params, limit=100,
-                       fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type",
-                       language='english') {
+                       fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
 
   exact_query = "";
 
@@ -38,6 +37,11 @@ get_papers <- function(query, params, limit=100,
   year_from = params$from
   year_to = params$to
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
+  if ('language' %in% params){
+      language = params$language
+    } else {
+      language <- 'english'
+    }
 
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
   #Make sure that the abstract exists. NOT WORKING:
@@ -53,7 +57,7 @@ get_papers <- function(query, params, limit=100,
 
   # execute search
   (res_raw <- bs_search(hits=limit,
-                        query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" "),
+                        query = query,
                         fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation",
                         sortby = sortby_string))
   res <- res_raw$docs

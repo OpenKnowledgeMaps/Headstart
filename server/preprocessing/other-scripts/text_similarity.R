@@ -5,13 +5,6 @@ wd <- args[1]
 query <- args[2]
 service <- args[3]
 params_file <- args[4]
-language <- args[5]
-
-if (language %in% c('english', 'german')){
-    language = language
-  } else {
-    language <- 'english'
-  }
 
 print(wd)
 print(query)
@@ -50,7 +43,6 @@ switch(service,
 debug = FALSE
 
 MAX_CLUSTERS = 15
-ADDITIONAL_STOP_WORDS = language
 
 print("inhere")
 
@@ -60,6 +52,13 @@ if(!is.null(params_file) && !is.na(params_file)) {
   params <- NULL
 }
 
+if ('language' %in% params){
+    language = params$language
+  } else {
+    language <- 'english'
+  }
+
+ADDITIONAL_STOP_WORDS = language
 print("reading stuff")
 print(params)
 
@@ -71,6 +70,7 @@ output_json = vis_layout(input_data$text, input_data$metadata,
                          max_clusters = MAX_CLUSTERS,
                          add_stop_words = ADDITIONAL_STOP_WORDS,
                          taxonomy_separator = taxonomy_separator,
+                         language = language,
                          list_size = list_size)
 
 print(output_json)
