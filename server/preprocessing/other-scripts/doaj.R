@@ -24,13 +24,11 @@ library(jaod)
 # * "subject": keywords or classification, split by ;
 
 get_papers <- function(query, params, limit=100,
-                       fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type",
-                       language='english') {
+                       fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
 
+  # set params
   year_from = params$from
-
   year_to = params$to
-
   date_string = paste0("bibjson.year:[", params$from, " TO ", params$to , "]")
 
   #Does not seem to work:

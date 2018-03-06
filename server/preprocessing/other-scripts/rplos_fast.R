@@ -25,8 +25,7 @@ library(rplos)
 # * "subject": keywords or classification, split by ;
 
 get_papers <- function(query, params, limit=100,
-                       fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type",
-                       language='english') {
+                       fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
 
   date_string = paste("publication_date:[", params$from, "T00:00:00Z", " TO ", params$to, "T23:59:59Z]", sep="")
   article_types_string = paste("article_type:(", '"', paste(params$article_types, sep='"', collapse='" OR "'), '")', sep="")

@@ -32,7 +32,7 @@ library("xml2")
 # Examples:
 # get_papers(query = "ecology")
 # get_papers(query = "ecology", params = list(from = "2016/04/01", to = "2016/06/05"))
-get_papers <- function(query, params = NULL, limit = 100, language = 'english') {
+get_papers <- function(query, params = NULL, limit = 100) {
 
   fields <- c('.//ArticleTitle', './/MedlineCitation/PMID', './/Title', './/Abstract')
   year = './/Article/Journal/JournalIssue/PubDate'
