@@ -59,4 +59,4 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 * snapshot->getsvg_path: Absolute path to getChartSVG.js
 * snapshot->storage_path: Absolute path to the directory, where the snapshots are stored. **Make sure that your webserver has write access to this file and the containing directory.**
 * snapshot->snapshot_php: PHP File responsible for rendering the bubble in a way to be snapshotted. Relative path to general->host
-* snapshot->snapshot_width: Thumbnail width
+* snapshot->snapshot_width: Snapshot width
