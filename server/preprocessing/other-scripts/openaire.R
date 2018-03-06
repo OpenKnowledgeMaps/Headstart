@@ -26,8 +26,11 @@ library(ropenaire)
 
 get_papers <- function(query, params) {
   # parse params
-  pubs <- roa_pubs(fp7 = query)
-  datasets = roa_datasets(fp7 = query)
+  funding_stream <- params$funding_stream
+  call_id <- params$call_id
+  # run searches
+  pubs <- roa_pubs(funding_stream = query, format='json')
+  datasets = roa_datasets(funding_stream = query, format='json')
   all_artifacts <- rbind(pubs, datasets)
 
 
@@ -38,7 +41,7 @@ get_papers <- function(query, params) {
 
   metadata$title = check_metadata(all_artifacts$Title)
   metadata$subject = check_metadata(all_artifacts$subject)
-  metadata$paper_abstract = check_metadata(all_artifacts$abstract)
+  metadata$paper_abstract = check_metadata(all_artifacts$response$results$result$metadata$`oaf:entity`$`oaf:result`$description)
   metadata$published_in = check_metadata(all_artifacts$Journal)
   metadata$year = check_metadata(all_artifacts$`Publication Year`)
 
