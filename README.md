@@ -7,17 +7,23 @@ Head Start is a web-based knowledge mapping software intended to give researcher
 ## Getting Started
 
 ### Client
-In order to get started quickly, Make sure to have `npm` version 3.10.10 installed (it comes with Node.js 6.12.0, you can [download installers here](https://nodejs.org/dist/latest-v6.x/)) and run the following two commands to build the Headstart Client. 
+In order to get started quickly, Make sure to have `npm` version 3.10.10 installed (it comes with Node.js 6.12.0, you can [download installers here](https://nodejs.org/dist/latest-v6.x/)) and run the following two commands to build the Headstart Client.
 
     npm install
     npm run dev
 
 We are using [webpack](https://webpack.github.io/) to build our client-side application. `webpack` is started in *watch mode* which means that changes to files are tracked and the created `headstart.js` is automatically updated.
 
+Duplicate the file `config.example.js` in the root folder and rename it to `config.js`.
+
 Now you can run a local dev server:
 
 	npm start
 
+To run Headstart on a different server (e.g. Apache), you need to set the publicPath in `config.js` to the URL of the `dist` directory:
+* Dev: specify the full path including protocol, e.g. `http://localhost/headstart/dist`
+* Production: specify the full path excluding protocol, e.g. `//example.org/headstart/dist`
+    
 Point your browser to the following address:
 
 	http://localhost:8080/examples/local_files/index.html
@@ -57,7 +63,7 @@ Authors: [Asura Enkhbayar](https://github.com/Bubblbu), [Scott Chamberlain](http
 * [Conference Navigator 3](http://halley.exp.sis.pitt.edu/cn3/visualization.php?conferenceID=131) [registration required]: An adaptation of Head Start for the conference scheduling system CN3. This version enables users to schedule papers directly from the visualization. Scheduled papers and recommended papers are highlighted.
 * [Organic Edunet portal](http://organic-edunet.eu/en/#/recommended): Overview of recommended resources in the Organic Eudnet portal.
 
-## Compatibility 
+## Compatibility
 
 The visualization has been successfully tested with Chrome, Firefox, Safari and Microsoft Edge. Unfortunately, Internet Explorer is not supported due to the fact that it is not possible to insert HTML into a foreignObject.
 
