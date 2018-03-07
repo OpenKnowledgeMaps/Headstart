@@ -8,7 +8,7 @@ wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
 setwd(wd) #Don't forget to set your working directory
 
-query <- "283595" #args[2]
+query <- "247153" #args[2]
 service <- "openaire"
 params <- NULL
 params_file <- "params_openaire.json"

@@ -26,21 +26,18 @@ library(ropenaire)
 
 get_papers <- function(query, params) {
   # parse params
-  pubs <- roa_pubs(fp7 = query)
-  datasets = roa_datasets(fp7 = query)
-  all_artifacts <- rbind(pubs, datasets)
+  call_id <- params$call_id
+  funding_stream <- params$funding_stream
+
+  # run searches for publications and data
+  pubs <- roa_pubs(fp7 = query, format='json')
+  datasets = roa_datasets(fp7 = query, format='json')
+  pubs_md <- pubs$response$results$result$metadata$`oaf:entity`$`oaf:result`
+  datasets_md <- datasets$response$results$result$metadata$`oaf:entity`$`oaf:result`
+
+  pubs_md <- data.frame(matrix(nrow=length(pubs_md)))
 
 
-
-  metadata = data.frame(matrix(nrow=length(all_artifacts$DOI)))
-  metadata$id = check_metadata(all_artifacts$DOI)
-  metadata$url = check_metadata(all_artifacts$`Download From`)
-
-  metadata$title = check_metadata(all_artifacts$Title)
-  metadata$subject = check_metadata(all_artifacts$subject)
-  metadata$paper_abstract = check_metadata(all_artifacts$abstract)
-  metadata$published_in = check_metadata(all_artifacts$Journal)
-  metadata$year = check_metadata(all_artifacts$`Publication Year`)
 
 
 
@@ -51,8 +48,29 @@ get_papers <- function(query, params) {
   text$content = paste(metadata$title,
                        sep = " ")
   ret_val=list("metadata" = metadata, "text"=text)
+  return (ret_val)
 }
 
+
+build_pubs_metadata <- function(pubs_md) {
+  metadata = data.frame(matrix(nrow=nrow(pubs_md)))
+  metadata$id = check_metadata(all_artifacts$DOI)
+  metadata$url = check_metadata(pubs_md$fulltext)
+
+  metadata$title = check_metadata(pubs_md$title$`$`)
+  metadata$subject = check_metadata(
+                        lapply(pubs_md$subject,
+                               function(x){paste(x$'$', collapse=", ")}))
+  metadata$authors = check_metadata(
+                        lapply(pubs_md$creator,
+                               function(x){paste(x$'$', collapse=", ")}))
+  metadata$paper_abstract = check_metadata(pubs_md$description)
+  metadata$published_in = check_metadata(pubs_md$journal$`$`)
+  metadata$year = check_metadata(all_artifacts$`Publication Year`)
+  metadata$language = check_metadata(pubs_md$language$'@classname')
+  metadata$publisher = check_metadata(pubs_md$publisher)
+  return (metadata)
+}
 
 
 check_metadata <- function (field) {
