@@ -1,4 +1,5 @@
 library(ropenaire)
+library(plyr)
 
 # get_papers
 #
@@ -29,9 +30,8 @@ get_papers <- function(query, params) {
   funding_stream <- params$funding_stream
   call_id <- params$call_id
   # run searches
-  pubs <- roa_pubs(funding_stream = query, format='json')
-  datasets = roa_datasets(funding_stream = query, format='json')
-  all_artifacts <- rbind(pubs, datasets)
+  pubs <- roa_pubs(fp7 = query, format='json')
+  datasets = roa_datasets(fp7 = query, format='json')
 
   # run searches for publications and data
   pubs <- roa_pubs(fp7 = query, format='json')
@@ -39,44 +39,59 @@ get_papers <- function(query, params) {
   pubs_md <- pubs$response$results$result$metadata$`oaf:entity`$`oaf:result`
   datasets_md <- datasets$response$results$result$metadata$`oaf:entity`$`oaf:result`
 
-  pubs_md <- data.frame(matrix(nrow=length(pubs_md)))
+  pubs_metadata <- build_pubs_metadata(pubs_md)
+  datasets_metadata <- build_datasets_metadata(datasets_md)
+  all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
 
-
-  metadata$title = check_metadata(all_artifacts$Title)
-  metadata$subject = check_metadata(all_artifacts$subject)
-  metadata$paper_abstract = check_metadata(all_artifacts$response$results$result$metadata$`oaf:entity`$`oaf:result`$description)
-  metadata$published_in = check_metadata(all_artifacts$Journal)
-  metadata$year = check_metadata(all_artifacts$`Publication Year`)
-
-
-
-  text = data.frame(matrix(nrow=length(all_artifacts$DOI)))
-  text$id = metadata$id
+  text = data.frame(matrix(nrow=length(all_artifacts$id)))
+  text$id = all_artifacts$id
   # paste whats available and makes sense
-  text$content = paste(metadata$title,
-                       sep = " ")
-  ret_val=list("metadata" = metadata, "text"=text)
+  text$content = paste(all_artifacts$title,
+                       all_artifacts$paper_abstract,
+                       all_artifacts$subject,
+                       all_artifacts$authors,
+                       all_artifacts$year,
+                      sep = " ")
+  ret_val=list("metadata" = all_artifacts, "text"=text)
   return (ret_val)
+}
+
+
+build_datasets_metadata <- function(datasets_md){
+  metadata = data.frame(matrix(nrow=nrow(datasets_md)))
+  metadata$title = check_metadata(datasets_md$title$`$`)
+  metadata$language = check_metadata(datasets_md$language$'@classname')
+  metadata$authors = unlist(check_metadata(
+                        lapply(datasets_md$creator,
+                               function(x){paste(x$'$', collapse=", ")})))
+  metadata$resulttype = check_metadata(datasets_md$resulttype$'@classid')
+  metadata$publisher = check_metadata(datasets_md$publisher$`$`)
+  metadata$paper_abstract = check_metadata(datasets_md$description)
+  metadata$id = check_metadata(datasets_md$pid$'$')
+  metadata$year = check_metadata(datasets_md$dateofacceptance$`$`)
+  return (metadata)
 }
 
 
 build_pubs_metadata <- function(pubs_md) {
   metadata = data.frame(matrix(nrow=nrow(pubs_md)))
-  metadata$id = check_metadata(all_artifacts$DOI)
-  metadata$url = check_metadata(pubs_md$fulltext)
-
+  metadata$url = check_metadata(pubs_md$fulltext$'$')
   metadata$title = check_metadata(pubs_md$title$`$`)
-  metadata$subject = check_metadata(
+  metadata$subject = unlist(check_metadata(
                         lapply(pubs_md$subject,
-                               function(x){paste(x$'$', collapse=", ")}))
-  metadata$authors = check_metadata(
+                               function(x){paste(x$'$', collapse=", ")})))
+  metadata$authors = unlist(check_metadata(
                         lapply(pubs_md$creator,
-                               function(x){paste(x$'$', collapse=", ")}))
-  metadata$paper_abstract = check_metadata(pubs_md$description)
+                               function(x){paste(x$'$', collapse=", ")})))
+  metadata$paper_abstract = check_metadata(pubs_md$description$`$`)
   metadata$published_in = check_metadata(pubs_md$journal$`$`)
-  metadata$year = check_metadata(all_artifacts$`Publication Year`)
   metadata$language = check_metadata(pubs_md$language$'@classname')
-  metadata$publisher = check_metadata(pubs_md$publisher)
+  metadata$publisher = check_metadata(pubs_md$publisher$`$`)
+  metadata$year = check_metadata(pubs_md$dateofacceptance$`$`)
+  metadata$id = unlist(check_metadata(
+                        lapply(pubs_md$pid,
+                               extract_doi)))
+  metadata$resulttype = check_metadata(pubs_md$resulttype$'@classid')
   return (metadata)
 }
 
@@ -87,4 +102,13 @@ check_metadata <- function (field) {
   } else {
     return ('')
   }
+}
+
+extract_doi <- function(artifact){
+  doi_ind = which(artifact$'@classid' == 'doi')
+  doi = artifact$'$'[doi_ind]
+  if (is.null(doi)){
+    doi = ''
+  }
+  return (doi)
 }
