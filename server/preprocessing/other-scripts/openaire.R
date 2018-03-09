@@ -57,12 +57,12 @@ get_papers <- function(query, params, limit=NULL) {
 
   pubs_md <- pubs$response$results$result$metadata$`oaf:entity`$`oaf:result`
   pubs_metadata <- build_pubs_metadata(pubs_md)
-  pubs_metadata$id <- pubs$response$results$result$header$`dri:objIdentifier`
+  pubs_metadata$id <- pubs$response$results$result$header$`dri:objIdentifier`$`$`
 
   if (!is.null(nrow(datasets))){
     datasets_md <- datasets$response$results$result$metadata$`oaf:entity`$`oaf:result`
     datasets_metadata <- build_datasets_metadata(datasets_md)
-    datasets_metadata$id <- datasets$response$results$result$header$`dri:objIdentifier`
+    datasets_metadata$id <- datasets$response$results$result$header$`dri:objIdentifier`$`$`
     all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
   } else {
     all_artifacts <- pubs_metadata
