@@ -57,10 +57,12 @@ get_papers <- function(query, params, limit=NULL) {
 
   pubs_md <- pubs$response$results$result$metadata$`oaf:entity`$`oaf:result`
   pubs_metadata <- build_pubs_metadata(pubs_md)
+  pubs_metadata$id <- pubs$response$results$result$header$`dri:objIdentifier`
 
   if (!is.null(nrow(datasets))){
     datasets_md <- datasets$response$results$result$metadata$`oaf:entity`$`oaf:result`
     datasets_metadata <- build_datasets_metadata(datasets_md)
+    datasets_metadata$id <- datasets$response$results$result$header$`dri:objIdentifier`
     all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
   } else {
     all_artifacts <- pubs_metadata
@@ -81,7 +83,6 @@ get_papers <- function(query, params, limit=NULL) {
 
 build_datasets_metadata <- function(datasets_md){
   metadata = data.frame(matrix(nrow=nrow(datasets_md)))
-  metadata$id = check_metadata(datasets_md$children$instance$'@id')
   metadata$title = check_metadata(datasets_md$title$`$`)
   metadata$language = check_metadata(datasets_md$language$'@classname')
   metadata$authors = unlist(check_metadata(
@@ -115,9 +116,6 @@ build_pubs_metadata <- function(pubs_md) {
     metadata$subject = ''
   }
   )
-  metadata$id = unlist(check_metadata(
-                        lapply(pubs_md$children$instance,
-                               function(x){x[1]$'@id'[1]})))
   metadata$authors = unlist(check_metadata(
                         lapply(pubs_md$creator,
                                function(x){paste(x$'$', collapse=", ")})))
