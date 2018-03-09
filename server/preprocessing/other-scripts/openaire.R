@@ -27,31 +27,33 @@ library(plyr)
 
 get_papers <- function(query, params) {
   # parse params
-  funding_stream <- params$funding_stream
+  grant_id <- params$grant_id
   call_id <- params$call_id
 
   # identify search on projects
-  project <- roa_projects(acronym = query)
-  grant_id <- project$grantID
-  funding_stream <- tolower(project$funding_level_0)
+  # project <- roa_projects(acronym = query)
+  # grant_id <- project$grantID
+  # funding_stream <- tolower(project$funding_level_0)
 
+  # currently not used
   # if funding_stream not as expected, default to fp7
-  if (!(funding_stream %in% c('fp7', 'h2020'))){
-    funding_stream <- 'fp7'
-  }
-
+  # if (!(funding_stream %in% c('fp7', 'h2020'))){
+  #   funding_stream <- 'fp7'
+  # }
   # run searches for publications and data
   # switch according to detected funding stream
-  switch(funding_stream,
-    fp7 = {
-      pubs <- roa_pubs(fp7 = grant_id, format = 'json')
-      datasets <- roa_datasets(fp7 = grant_id, format = 'json')
-    },
-    h2020 = {
-      pubs <- roa_pubs(h2020 = grant_id, format = 'json')
-      datasets <- roa_datasets(h2020 = grant_id, format = 'json')
-    }
-  )
+  # switch(funding_stream,
+  #   fp7 = {
+  #     pubs <- roa_pubs(fp7 = grant_id, format = 'json')
+  #     datasets <- roa_datasets(fp7 = grant_id, format = 'json')
+  #   },
+  #   h2020 = {
+  #     pubs <- roa_pubs(h2020 = grant_id, format = 'json')
+  #     datasets <- roa_datasets(h2020 = grant_id, format = 'json')
+  #   }
+  # )
+  pubs <- roa_pubs(fp7 = grant_id, format = 'json')
+  datasets <- roa_datasets(fp7 = grant_id, format = 'json')
 
   pubs_md <- pubs$response$results$result$metadata$`oaf:entity`$`oaf:result`
   pubs_metadata <- build_pubs_metadata(pubs_md)
@@ -63,7 +65,6 @@ get_papers <- function(query, params) {
   } else {
     all_artifacts <- pubs_metadata
   }
-
   text = data.frame(matrix(nrow=length(all_artifacts$id)))
   text$id = all_artifacts$id
   # paste whats available and makes sense
@@ -88,13 +89,7 @@ build_datasets_metadata <- function(datasets_md){
   metadata$resulttype = check_metadata(datasets_md$resulttype$'@classid')
   metadata$publisher = check_metadata(datasets_md$publisher$`$`)
   metadata$paper_abstract = check_metadata(datasets_md$description)
-  tryCatch({
-      metadata$id = check_metadata(lapply(datasets_md$pid, extract_doi))
-    }, error = function(err){
-    }, finally = {
-      metadata$id = check_metadata(datasets_md$pid$'$')
-    }
-    )
+  metadata$id = unlist(check_metadata(lapply(datasets_md$pid, extract_doi)))
   metadata$year = check_metadata(datasets_md$dateofacceptance$`$`)
   return (metadata)
 }
@@ -102,11 +97,23 @@ build_datasets_metadata <- function(datasets_md){
 
 build_pubs_metadata <- function(pubs_md) {
   metadata = data.frame(matrix(nrow=nrow(pubs_md)))
-  metadata$url = check_metadata(pubs_md$fulltext$'$')
+  tryCatch({
+      metadata$url = check_metadata(pubs_md$fulltext$'$')
+    }, error = function(err){
+    }, finally = {
+      metadata$url = ''
+    }
+    )
   metadata$title = check_metadata(pubs_md$title$`$`)
-  metadata$subject = unlist(check_metadata(
-                        lapply(pubs_md$subject,
-                               function(x){paste(x$'$', collapse=", ")})))
+  tryCatch({
+    metadata$subject = unlist(check_metadata(
+      lapply(pubs_md$subject,
+             function(x){paste(x$'$', collapse=", ")})))
+  }, error = function(err){
+  }, finally = {
+    metadata$subject = ''
+  }
+  )
   metadata$authors = unlist(check_metadata(
                         lapply(pubs_md$creator,
                                function(x){paste(x$'$', collapse=", ")})))
@@ -115,13 +122,7 @@ build_pubs_metadata <- function(pubs_md) {
   metadata$language = check_metadata(pubs_md$language$'@classname')
   metadata$publisher = check_metadata(pubs_md$publisher$`$`)
   metadata$year = check_metadata(pubs_md$dateofacceptance$`$`)
-  tryCatch({
-      metadata$id = check_metadata(lapply(pubs_md$pid, extract_doi))
-    }, error = function(err){
-    }, finally = {
-      metadata$id = check_metadata(pubs_md$pid$'$')
-    }
-    )
+  metadata$id = unlist(check_metadata(lapply(pubs_md$pid, extract_doi)))
   metadata$resulttype = check_metadata(pubs_md$resulttype$'@classid')
   return (metadata)
 }
