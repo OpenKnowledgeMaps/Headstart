@@ -10,7 +10,7 @@ setwd(wd) #Don't forget to set your working directory
 
 # query: project acryonm
 # params: grant_id and funding_stream
-query <- "ANTHOS" #args[2]
+query <- "GRINDOOR" #args[2]
 service <- "openaire"
 params <- NULL
 params_file <- "params_openaire.json"
@@ -34,3 +34,5 @@ output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=-1)
 
 print(output_json)
+
+fromJSON(output_json)$area
