@@ -6,7 +6,7 @@ library(plyr)
 # Params:
 #
 # * query: project acronym
-# * params: parameters for the search in JSON format: call_id and funding stream
+# * params: parameters for the search in JSON format: funding_level and funding stream
 # * limit: number of search results to return
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
@@ -28,7 +28,7 @@ library(plyr)
 get_papers <- function(query, params, limit=NULL) {
   # parse params
   project_id <- params$project_id
-  call_id <- params$call_id
+  funding_level <- params$funding_level
 
   # identify search on projects
   # project <- roa_projects(acronym = query)
