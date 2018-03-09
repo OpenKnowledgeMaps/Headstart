@@ -81,6 +81,7 @@ get_papers <- function(query, params, limit=NULL) {
 
 build_datasets_metadata <- function(datasets_md){
   metadata = data.frame(matrix(nrow=nrow(datasets_md)))
+  metadata$id = check_metadata(datasets_md$children$instance$'@id')
   metadata$title = check_metadata(datasets_md$title$`$`)
   metadata$language = check_metadata(datasets_md$language$'@classname')
   metadata$authors = unlist(check_metadata(
@@ -89,7 +90,7 @@ build_datasets_metadata <- function(datasets_md){
   metadata$resulttype = check_metadata(datasets_md$resulttype$'@classid')
   metadata$publisher = check_metadata(datasets_md$publisher$`$`)
   metadata$paper_abstract = check_metadata(datasets_md$description)
-  metadata$id = unlist(check_metadata(lapply(datasets_md$pid, extract_doi)))
+  metadata$doi = unlist(check_metadata(lapply(datasets_md$pid, extract_doi)))
   metadata$year = check_metadata(datasets_md$dateofacceptance$`$`)
   return (metadata)
 }
@@ -114,6 +115,9 @@ build_pubs_metadata <- function(pubs_md) {
     metadata$subject = ''
   }
   )
+  metadata$id = unlist(check_metadata(
+                        lapply(pubs_md$children$instance,
+                               function(x){x[1]$'@id'[1]})))
   metadata$authors = unlist(check_metadata(
                         lapply(pubs_md$creator,
                                function(x){paste(x$'$', collapse=", ")})))
@@ -122,7 +126,7 @@ build_pubs_metadata <- function(pubs_md) {
   metadata$language = check_metadata(pubs_md$language$'@classname')
   metadata$publisher = check_metadata(pubs_md$publisher$`$`)
   metadata$year = check_metadata(pubs_md$dateofacceptance$`$`)
-  metadata$id = unlist(check_metadata(lapply(pubs_md$pid, extract_doi)))
+  metadata$doi = unlist(check_metadata(lapply(pubs_md$pid, extract_doi)))
   metadata$resulttype = check_metadata(pubs_md$resulttype$'@classid')
   return (metadata)
 }
