@@ -31,6 +31,9 @@ Make sure you have the following packages installed:
   * xml2 **(Version 1.0 or higher)**
   * jaod (Currently, a Github repository only: http://github.com/ropenscilabs/jaod. Install with  devtools.)
   * rbace (Currently, a Github repository only: http://github.com/ropenscilabs/rbace. Install with devtools.)
+  * ropenaire (For VIPER. Currently, a Github repository only: https://github.com/sckott/ropenaire. Install with devtools.)
+  * readr (for ropenair/VIPER only)
+  * plyr (for better data munging)
 * phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
 
 ## Configuration
@@ -57,4 +60,4 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 * snapshot->getsvg_path: Absolute path to getChartSVG.js
 * snapshot->storage_path: Absolute path to the directory, where the snapshots are stored. **Make sure that your webserver has write access to this file and the containing directory.**
 * snapshot->snapshot_php: PHP File responsible for rendering the bubble in a way to be snapshotted. Relative path to general->host
-* snapshot->snapshot_width: Thumbnail width
+* snapshot->snapshot_width: Snapshot width
