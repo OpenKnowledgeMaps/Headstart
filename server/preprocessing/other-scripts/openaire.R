@@ -25,35 +25,35 @@ library(plyr)
 # * "subject": keywords or classification, split by ;
 
 
-get_papers <- function(query, params) {
+get_papers <- function(query, params, limit=NULL) {
   # parse params
-  grant_id <- params$grant_id
+  project_id <- params$project_id
   call_id <- params$call_id
 
   # identify search on projects
   # project <- roa_projects(acronym = query)
-  # grant_id <- project$grantID
-  # funding_stream <- tolower(project$funding_level_0)
+  # project_id <- project$grantID
+  # funding_level <- tolower(project$funding_level_0)
 
   # currently not used
-  # if funding_stream not as expected, default to fp7
-  # if (!(funding_stream %in% c('fp7', 'h2020'))){
-  #   funding_stream <- 'fp7'
+  # if funding_level not as expected, default to fp7
+  # if (!(funding_level %in% c('fp7', 'h2020'))){
+  #   funding_level <- 'fp7'
   # }
   # run searches for publications and data
   # switch according to detected funding stream
-  # switch(funding_stream,
+  # switch(funding_level,
   #   fp7 = {
-  #     pubs <- roa_pubs(fp7 = grant_id, format = 'json')
-  #     datasets <- roa_datasets(fp7 = grant_id, format = 'json')
+  #     pubs <- roa_pubs(fp7 = project_id, format = 'json')
+  #     datasets <- roa_datasets(fp7 = project_id, format = 'json')
   #   },
   #   h2020 = {
-  #     pubs <- roa_pubs(h2020 = grant_id, format = 'json')
-  #     datasets <- roa_datasets(h2020 = grant_id, format = 'json')
+  #     pubs <- roa_pubs(h2020 = project_id, format = 'json')
+  #     datasets <- roa_datasets(h2020 = project_id, format = 'json')
   #   }
   # )
-  pubs <- roa_pubs(fp7 = grant_id, format = 'json')
-  datasets <- roa_datasets(fp7 = grant_id, format = 'json')
+  pubs <- roa_pubs(fp7 = project_id, format = 'json')
+  datasets <- roa_datasets(fp7 = project_id, format = 'json')
 
   pubs_md <- pubs$response$results$result$metadata$`oaf:entity`$`oaf:result`
   pubs_metadata <- build_pubs_metadata(pubs_md)
