@@ -29,19 +29,40 @@ get_papers <- function(query, params) {
   # parse params
   funding_stream <- params$funding_stream
   call_id <- params$call_id
-  # run searches
-  pubs <- roa_pubs(fp7 = query, format='json')
-  datasets = roa_datasets(fp7 = query, format='json')
+
+  # identify search on projects
+  project <- roa_projects(acronym = query)
+  grant_id <- project$grantID
+  funding_stream <- tolower(project$funding_level_0)
+
+  # if funding_stream not as expected, default to fp7
+  if (!(funding_stream %in% c('fp7', 'h2020'))){
+    funding_stream <- 'fp7'
+  }
 
   # run searches for publications and data
-  pubs <- roa_pubs(fp7 = query, format='json')
-  datasets = roa_datasets(fp7 = query, format='json')
-  pubs_md <- pubs$response$results$result$metadata$`oaf:entity`$`oaf:result`
-  datasets_md <- datasets$response$results$result$metadata$`oaf:entity`$`oaf:result`
+  # switch according to detected funding stream
+  switch(funding_stream,
+    fp7 = {
+      pubs <- roa_pubs(fp7 = grant_id, format = 'json')
+      datasets <- roa_datasets(fp7 = grant_id, format = 'json')
+    },
+    h2020 = {
+      pubs <- roa_pubs(h2020 = grant_id, format = 'json')
+      datasets <- roa_datasets(h2020 = grant_id, format = 'json')
+    }
+  )
 
+  pubs_md <- pubs$response$results$result$metadata$`oaf:entity`$`oaf:result`
   pubs_metadata <- build_pubs_metadata(pubs_md)
-  datasets_metadata <- build_datasets_metadata(datasets_md)
-  all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
+
+  if (!is.null(nrow(datasets))){
+    datasets_md <- datasets$response$results$result$metadata$`oaf:entity`$`oaf:result`
+    datasets_metadata <- build_datasets_metadata(datasets_md)
+    all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
+  } else {
+    all_artifacts <- pubs_metadata
+  }
 
   text = data.frame(matrix(nrow=length(all_artifacts$id)))
   text$id = all_artifacts$id
@@ -67,7 +88,13 @@ build_datasets_metadata <- function(datasets_md){
   metadata$resulttype = check_metadata(datasets_md$resulttype$'@classid')
   metadata$publisher = check_metadata(datasets_md$publisher$`$`)
   metadata$paper_abstract = check_metadata(datasets_md$description)
-  metadata$id = check_metadata(datasets_md$pid$'$')
+  tryCatch({
+      metadata$id = check_metadata(lapply(datasets_md$pid, extract_doi))
+    }, error = function(err){
+    }, finally = {
+      metadata$id = check_metadata(datasets_md$pid$'$')
+    }
+    )
   metadata$year = check_metadata(datasets_md$dateofacceptance$`$`)
   return (metadata)
 }
@@ -88,9 +115,13 @@ build_pubs_metadata <- function(pubs_md) {
   metadata$language = check_metadata(pubs_md$language$'@classname')
   metadata$publisher = check_metadata(pubs_md$publisher$`$`)
   metadata$year = check_metadata(pubs_md$dateofacceptance$`$`)
-  metadata$id = unlist(check_metadata(
-                        lapply(pubs_md$pid,
-                               extract_doi)))
+  tryCatch({
+      metadata$id = check_metadata(lapply(pubs_md$pid, extract_doi))
+    }, error = function(err){
+    }, finally = {
+      metadata$id = check_metadata(pubs_md$pid$'$')
+    }
+    )
   metadata$resulttype = check_metadata(pubs_md$resulttype$'@classid')
   return (metadata)
 }
@@ -104,9 +135,9 @@ check_metadata <- function (field) {
   }
 }
 
-extract_doi <- function(artifact){
-  doi_ind = which(artifact$'@classid' == 'doi')
-  doi = artifact$'$'[doi_ind]
+extract_doi <- function(pid){
+  doi_ind = which(pid$'@classid' == 'doi')
+  doi = pid$'$'[doi_ind]
   if (is.null(doi)){
     doi = ''
   }
