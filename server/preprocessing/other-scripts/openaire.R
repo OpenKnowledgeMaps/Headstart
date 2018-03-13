@@ -53,20 +53,38 @@ get_papers <- function(query, params, limit=NULL) {
   #   }
   # )
   pubs <- roa_pubs(fp7 = project_id, format = 'json')
-  datasets <- roa_datasets(fp7 = project_id, format = 'json')
-
   pubs_md <- pubs$response$results$result$metadata$`oaf:entity`$`oaf:result`
-  pubs_metadata <- build_pubs_metadata(pubs_md)
-  pubs_metadata$id <- pubs$response$results$result$header$`dri:objIdentifier`$`$`
 
-  if (!is.null(nrow(datasets))){
-    datasets_md <- datasets$response$results$result$metadata$`oaf:entity`$`oaf:result`
+  datasets <- roa_datasets(fp7 = project_id, format = 'json')
+  datasets_md <- datasets$response$results$result$metadata$`oaf:entity`$`oaf:result`
+
+  tryCatch({
+    pubs_metadata <- build_pubs_metadata(pubs_md)
+    pubs_metadata$id <- pubs$response$results$result$header$`dri:objIdentifier`$`$`
+  }, error = function(err){
+    print(err)
+    pubs_metadata <- data.frame(matrix(nrow=1))
+  }, finally = {
+  })
+
+  tryCatch({
     datasets_metadata <- build_datasets_metadata(datasets_md)
     datasets_metadata$id <- datasets$response$results$result$header$`dri:objIdentifier`$`$`
-    all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
-  } else {
-    all_artifacts <- pubs_metadata
-  }
+  }, error = function(err) {
+    print(err)
+    datasets_metadata <- data.frame(matrix(nrow=1))
+  }, finally = {
+  })
+
+  tryCatch({
+      all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
+    }, error = function(err){
+      print(err)
+    }, finally = {
+      all_artifacts <- pubs_metadata
+    })
+
+
   text = data.frame(matrix(nrow=length(all_artifacts$id)))
   text$id = all_artifacts$id
   # paste whats available and makes sense
