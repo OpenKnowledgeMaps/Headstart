@@ -49,7 +49,9 @@ get_papers <- function(query, params = NULL, limit = 100) {
   to = gsub("-", "/", params$to)
   article_types_string = paste0(" ((", '"', paste(params$article_types, sep='"', collapse='"[Publication Type] OR "'), '"[Publication Type]))')
   exclude_articles_with_abstract = " AND hasabstract"
-  query <- paste0(query, article_types_string, exclude_articles_with_abstract)
+  #HOTFIX - article_types cause a 414 with PubMed
+  #query <- paste0(query, article_types_string, exclude_articles_with_abstract)
+  query <- paste0(query, exclude_articles_with_abstract)
   x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit, 
                               mindate = from, maxdate = to, sort=sortby, use_history=TRUE)
   res <- rentrez::entrez_fetch(db = "pubmed", web_history = x$web_history, retmax = limit, rettype = "xml")
