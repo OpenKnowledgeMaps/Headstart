@@ -202,7 +202,13 @@ normalize_matrix <- function(tdm_matrix, method = "cosine") {
 create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
   # Perform clustering, use elbow to determine a good number of clusters
   css_cluster <- css.hclust(distance_matrix, hclust.FUN.MoreArgs=list(method="ward.D"))
-  cut_off <<- elbow.batch(css_cluster)
+  tryCatch({
+    cut_off <<- elbow.batch(css_cluster)
+  }, error = function(err) {
+    print(err)
+  }, finally = {
+    cut_off <<- elbow.batch(css_cluster, ev.thres=0.25, inc.thres=0.5)
+})
 
   num_clusters = cut_off$k
 
