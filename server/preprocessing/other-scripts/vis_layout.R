@@ -212,10 +212,16 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
   css_cluster <- css.hclust(distance_matrix, hclust.FUN.MoreArgs=list(method="ward.D"))
   cut_off <- NULL
   attempt <- 1
-  while (is.null(cut_off)) {
-    try(cut_off <- get_cut_off(css_cluster, attempt))
-    attempt <- attempt+1
-  }
+  tryCatch({
+    cut_off <- elbow.batch(css_cluster)
+  }, error = function(err){
+    print(err)
+  }, finally = {
+    while (is.null(cut_off)) {
+      try(cut_off <- get_cut_off(css_cluster, attempt))
+      attempt <- attempt+1
+    }
+  })
 
   num_clusters = cut_off$k
 
