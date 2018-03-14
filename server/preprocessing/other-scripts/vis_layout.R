@@ -202,6 +202,7 @@ normalize_matrix <- function(tdm_matrix, method = "cosine") {
 get_cut_off <- function(css_cluster, attempt=1){
   evthres = 0.9**attempt
   incthres = 1 - (0.9**attempt)
+  print(paste("ev.thres:", evthres, "inc.thres:", incthres))
   cut_off <- elbow.batch(css_cluster,
                          ev.thres = evthres, inc.thres = incthres)
   return (cut_off)
@@ -218,8 +219,13 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
     print(err)
   }, finally = {
     while (is.null(cut_off)) {
-      try(cut_off <- get_cut_off(css_cluster, attempt))
-      attempt <- attempt+1
+      tryCatch({
+        cut_off <- get_cut_off(css_cluster, attempt)
+      }, error = function(err){
+        print(err)
+      }, finally = {
+        attempt <- attempt+1
+      })
     }
   })
 
