@@ -59,21 +59,21 @@ get_papers <- function(query, params, limit=NULL) {
   datasets_md <- datasets$response$results$result$metadata$`oaf:entity`$`oaf:result`
 
   tryCatch({
-    pubs_metadata <- build_pubs_metadata(pubs_md)
+    pubs_metadata <- parse_publications(pubs_md)
     pubs_metadata$id <- pubs$response$results$result$header$`dri:objIdentifier`$`$`
   }, error = function(err){
     print(err)
-    pubs_metadata <- data.frame(matrix(nrow=1))
   }, finally = {
+    pubs_metadata <- data.frame(matrix(nrow=1))
   })
 
   tryCatch({
-    datasets_metadata <- build_datasets_metadata(datasets_md)
+    datasets_metadata <- parse_datasets(datasets_md)
     datasets_metadata$id <- datasets$response$results$result$header$`dri:objIdentifier`$`$`
   }, error = function(err) {
     print(err)
-    datasets_metadata <- data.frame(matrix(nrow=1))
   }, finally = {
+    datasets_metadata <- data.frame(matrix(nrow=1))
   })
 
   tryCatch({
@@ -99,7 +99,17 @@ get_papers <- function(query, params, limit=NULL) {
 }
 
 
-build_datasets_metadata <- function(datasets_md){
+parse_datasets <- function(datasets_md){
+  xml_names <- c(
+    title = "//code",
+    language = "//acronym",
+    authors = "//title",
+    resulttype = "//startdate",
+    publisher = "//enddate",
+    paper_abstract = "//callidentifier",
+    doi = "//ecsc39",
+    year = "//funding_level_0/name"
+  )
   metadata = data.frame(matrix(nrow=nrow(datasets_md)))
   metadata$title = check_metadata(datasets_md$title$`$`)
   metadata$language = check_metadata(datasets_md$language$'@classname')
@@ -115,7 +125,19 @@ build_datasets_metadata <- function(datasets_md){
 }
 
 
-build_pubs_metadata <- function(pubs_md) {
+parse_publications <- function(pubs_md) {
+  xml_names <- c(
+    url = "//",
+    title = "//code",
+    language = "//acronym",
+    authors = "//title",
+    resulttype = "//startdate",
+    publisher = "//enddate",
+    paper_abstract = "//callidentifier",
+    doi = "//ecsc39",
+    published_ind = "//funding_level_0/name",
+    year = "//funding_level_0/name"
+  )
   metadata = data.frame(matrix(nrow=nrow(pubs_md)))
   tryCatch({
       metadata$url = check_metadata(pubs_md$fulltext$'$')
@@ -134,16 +156,16 @@ build_pubs_metadata <- function(pubs_md) {
     metadata$subject = ''
   }
   )
+  metadata$language = check_metadata(pubs_md$language$'@classname')
   metadata$authors = unlist(check_metadata(
                         lapply(pubs_md$creator,
                                function(x){paste(x$'$', collapse=", ")})))
-  metadata$paper_abstract = check_metadata(pubs_md$description$`$`)
-  metadata$published_in = check_metadata(pubs_md$journal$`$`)
-  metadata$language = check_metadata(pubs_md$language$'@classname')
-  metadata$publisher = check_metadata(pubs_md$publisher$`$`)
-  metadata$year = check_metadata(pubs_md$dateofacceptance$`$`)
-  metadata$doi = unlist(check_metadata(lapply(pubs_md$pid, extract_doi)))
   metadata$resulttype = check_metadata(pubs_md$resulttype$'@classid')
+  metadata$publisher = check_metadata(pubs_md$publisher$`$`)
+  metadata$paper_abstract = check_metadata(pubs_md$description$`$`)
+  metadata$doi = unlist(check_metadata(lapply(pubs_md$pid, extract_doi)))
+  metadata$published_in = check_metadata(pubs_md$journal$`$`)
+  metadata$year = check_metadata(pubs_md$dateofacceptance$`$`)
   return (metadata)
 }
 
