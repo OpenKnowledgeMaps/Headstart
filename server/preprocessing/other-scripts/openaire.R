@@ -30,6 +30,7 @@ get_papers <- function(query, params, limit=NULL) {
   # parse params
   project_id <- params$project_id
   funding_level <- params$funding_level
+  project_id <- "911723"
 
   # identify search on projects
   # project <- roa_projects(acronym = query)
@@ -55,16 +56,16 @@ get_papers <- function(query, params, limit=NULL) {
   # )
 
   tryCatch({
-    res <- roa_pubs(fp7 = project_id, format = 'xml')
-    pubs_metadata <- parse_response(res)
+    response <- roa_pubs(fp7 = project_id, format = 'xml')
+    pubs_metadata <- parse_response(response)
   }, error = function(err){
     print(err)
     pubs_metadata <- data.frame(matrix(nrow=1))
   })
 
   tryCatch({
-    res <- roa_datasets(fp7 = project_id, format = 'xml')
-    datasets_metadata <- parse_response(res)
+    response <- roa_datasets(fp7 = project_id, format = 'xml')
+    datasets_metadata <- parse_response(response)
   }, error = function(err) {
     print(err)
     datasets_metadata <- data.frame(matrix(nrow=1))
@@ -79,7 +80,7 @@ get_papers <- function(query, params, limit=NULL) {
 
   # crude filling
   all_artifacts[is.na(all_artifacts)] <- ""
-  
+
   text = data.frame(matrix(nrow=nrow(all_artifacts)))
   text$id = all_artifacts$id
   # paste whats available and makes sense
@@ -109,15 +110,15 @@ fields <- c(
   id = ".//result[@objidentifier]"
 )
 
-parse_response <- function(xml) {
+parse_response <- function(reponse) {
   results <- xml_find_all(xml, "//results/result")
-  tmp <- lapply (results, function(res){
+  tmp <- lapply (results, function(result){
     lapply(fields, function(field){
-      xml_text(xml_find_first(res, field))
+      xml_text(xml_find_first(result, field))
     })
   })
   df <- data.frame(data.table::rbindlist(tmp, fill = TRUE, use.names = TRUE))
-  df$id <- unlist(lapply(xml_find_all(xml, ".//dri:objIdentifier"), xml_text))
+  df$id <- unlist(lapply(xml_find_all(response, ".//dri:objIdentifier"), xml_text))
   return (df)
 }
 
