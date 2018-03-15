@@ -75,12 +75,21 @@ get_papers <- function(query, params, limit=NULL) {
       all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
     }, error = function(err){
       print(err)
-      all_artifacts <- pubs_metadata
     })
 
+  tryCatch({
+    get_return_values(all_artifacts)
+    }, error = function(err){
+      print(err)
+      print(paste("Empty returns, most likely no results found for project_id", project_id))
+      return (NULL)
+    })
+}
+
+get_return_values <- function(all_artifacts){
   # crude filling
   all_artifacts[is.na(all_artifacts)] <- ""
-
+  
   text = data.frame(matrix(nrow=nrow(all_artifacts)))
   text$id = all_artifacts$id
   # paste whats available and makes sense
@@ -89,11 +98,10 @@ get_papers <- function(query, params, limit=NULL) {
                        all_artifacts$subject,
                        all_artifacts$authors,
                        all_artifacts$year,
-                      sep = " ")
+                       sep = " ")
   ret_val=list("metadata" = all_artifacts, "text" = text)
   return (ret_val)
 }
-
 
 fields <- c(
   subject = ".//subject",
@@ -117,9 +125,14 @@ parse_response <- function(response) {
       xml_text(xml_find_first(result, field))
     })
   })
-  df <- data.frame(data.table::rbindlist(tmp, fill = TRUE, use.names = TRUE))
-  df$id <- unlist(lapply(xml_find_all(response, ".//dri:objIdentifier"), xml_text))
-  return (df)
+  if (!(length(tmp) == 0)) {
+    df <- data.frame(data.table::rbindlist(tmp, fill = TRUE, use.names = TRUE))
+    df$id <- unlist(lapply(xml_find_all(response, ".//dri:objIdentifier"), xml_text))
+    return (df)
+  } else {
+    print("No results found")
+    return (NULL)
+  }
 }
 
 
