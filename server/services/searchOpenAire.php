@@ -7,11 +7,11 @@ require 'search.php';
 
 use headstart\library;
 
-$acronym = library\CommUtils::getParameter($_POST, "acronym");
+$acronym = library\CommUtils::getParameter($_POST, "q");
 
 $post_params = $_POST;
 
-$result = search("openaire", $acronym, $post_params, array("call_id", "funding_stream"), ";", null);
+$result = search("openaire", $acronym, $post_params, array("project_id", "funding_level"), ";", null);
 
 echo $result
 
