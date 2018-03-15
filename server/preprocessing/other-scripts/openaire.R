@@ -110,8 +110,8 @@ fields <- c(
   id = ".//result[@objidentifier]"
 )
 
-parse_response <- function(reponse) {
-  results <- xml_find_all(xml, "//results/result")
+parse_response <- function(response) {
+  results <- xml_find_all(response, "//results/result")
   tmp <- lapply (results, function(result){
     lapply(fields, function(field){
       xml_text(xml_find_first(result, field))
