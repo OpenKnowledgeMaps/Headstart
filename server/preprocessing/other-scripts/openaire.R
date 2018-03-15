@@ -55,18 +55,18 @@ get_papers <- function(query, params, limit=NULL) {
   # )
 
   tryCatch({
-    pubs_metadata <- parse_response(roa_pubs(fp7 = project_id, format = 'xml'))
+    res <- roa_pubs(fp7 = project_id, format = 'xml')
+    pubs_metadata <- parse_response(res)
   }, error = function(err){
     print(err)
-  }, finally = {
     pubs_metadata <- data.frame(matrix(nrow=1))
   })
 
   tryCatch({
-    datasets_metadata <- parse_response(roa_datasets(fp7 = project_id, format = 'xml'))
+    res <- roa_datasets(fp7 = project_id, format = 'xml')
+    datasets_metadata <- parse_response(res)
   }, error = function(err) {
     print(err)
-  }, finally = {
     datasets_metadata <- data.frame(matrix(nrow=1))
   })
 
@@ -74,12 +74,13 @@ get_papers <- function(query, params, limit=NULL) {
       all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
     }, error = function(err){
       print(err)
-    }, finally = {
       all_artifacts <- pubs_metadata
     })
 
-
-  text = data.frame(matrix(nrow=length(all_artifacts$id)))
+  # crude filling
+  all_artifacts[is.na(all_artifacts)] <- ""
+  
+  text = data.frame(matrix(nrow=nrow(all_artifacts)))
   text$id = all_artifacts$id
   # paste whats available and makes sense
   text$content = paste(all_artifacts$title,
@@ -88,7 +89,7 @@ get_papers <- function(query, params, limit=NULL) {
                        all_artifacts$authors,
                        all_artifacts$year,
                       sep = " ")
-  ret_val=list("metadata" = all_artifacts, "text"=text)
+  ret_val=list("metadata" = all_artifacts, "text" = text)
   return (ret_val)
 }
 
@@ -104,8 +105,8 @@ fields <- c(
   journal = ".//journal",
   url = ".//fulltext",
   paper_abstract = ".//description",
-  id = ".//originalId",
-  doi = ".//pid[@schemeid=\"doi\"]"
+  doi = ".//pid[@schemeid=\"doi\"]",
+  id = ".//result[@objidentifier]"
 )
 
 parse_response <- function(xml) {
@@ -116,6 +117,7 @@ parse_response <- function(xml) {
     })
   })
   df <- data.frame(data.table::rbindlist(tmp, fill = TRUE, use.names = TRUE))
+  df$id <- unlist(lapply(xml_find_all(xml, ".//dri:objIdentifier"), xml_text))
   return (df)
 }
 
