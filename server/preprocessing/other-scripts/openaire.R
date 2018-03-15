@@ -110,7 +110,7 @@ fields <- c(
 )
 
 parse_response <- function(xml) {
-  results <- xml_find_all(xml, "//result")
+  results <- xml_find_all(xml, "//results/result")
   tmp <- lapply (results, function(res){
     lapply(fields, function(field){
       xml_text(xml_find_first(res, field))
