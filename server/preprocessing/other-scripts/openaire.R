@@ -30,7 +30,6 @@ get_papers <- function(query, params, limit=NULL) {
   # parse params
   project_id <- params$project_id
   funding_level <- params$funding_level
-  project_id <- "911723"
 
   # identify search on projects
   # project <- roa_projects(acronym = query)
@@ -81,15 +80,14 @@ get_papers <- function(query, params, limit=NULL) {
     get_return_values(all_artifacts)
     }, error = function(err){
       print(err)
-      print(paste("Empty returns, most likely no results found for project_id", project_id))
-      return (NULL)
+      stop(paste("Empty returns, most likely no results found for project_id", project_id))
     })
 }
 
 get_return_values <- function(all_artifacts){
   # crude filling
   all_artifacts[is.na(all_artifacts)] <- ""
-  
+
   text = data.frame(matrix(nrow=nrow(all_artifacts)))
   text$id = all_artifacts$id
   # paste whats available and makes sense
@@ -130,8 +128,7 @@ parse_response <- function(response) {
     df$id <- unlist(lapply(xml_find_all(response, ".//dri:objIdentifier"), xml_text))
     return (df)
   } else {
-    print("No results found")
-    return (NULL)
+    stop("Length of results: ", length(tmp))
   }
 }
 
