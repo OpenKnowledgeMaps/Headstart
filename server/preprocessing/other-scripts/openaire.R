@@ -120,13 +120,13 @@ fields <- c(
   journal = ".//journal",
   url = ".//fulltext",
   paper_abstract = ".//description",
-  doi = ".//pid[@schemeid=\"doi\"]",
+  doi = ".//pid[@classid=\"doi\"]",
   id = ".//result[@objidentifier]"
 )
 
 parse_response <- function(response) {
   results <- xml_find_all(response, "//results/result")
-  tmp <- lapply (results, function(result){
+  tmp <- lapply(results, function(result){
     lapply(fields, function(field){
       xml_text(xml_find_first(result, field))
     })
