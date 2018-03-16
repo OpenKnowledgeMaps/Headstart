@@ -134,6 +134,7 @@ parse_response <- function(response) {
   if (!(length(tmp) == 0)) {
     df <- data.frame(data.table::rbindlist(tmp, fill = TRUE, use.names = TRUE))
     df$id <- unlist(lapply(xml_find_all(response, ".//dri:objIdentifier"), xml_text))
+    df$year <- unlist(lapply(df$year, function(x){substr(x, 0, 4)}))
     return (df)
   } else {
     stop("Length of results: ", length(tmp))
