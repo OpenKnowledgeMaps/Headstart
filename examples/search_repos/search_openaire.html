@@ -17,6 +17,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <link type="text/css" rel="stylesheet" href="options.css">
+    <link type="text/css" rel="stylesheet" href="spinner.css">
 </head>
 
 <body style="padding-left:10px; padding-right:10px;">
@@ -27,6 +28,9 @@
             <input type="text" name="keywords" id="ipt-keywords" size="61" required>
             <button type="submit" class="btn">Search</button>
         </form>
+        <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        <div id="oa-searching">Searching OpenAire for Projects</div>
+        <div id="okm-making">Building OpenKnowledgeMap</div>
         <table id="tbl-project-search-results">
             <thead>
                 <tr>
