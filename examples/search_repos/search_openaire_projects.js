@@ -1,15 +1,21 @@
 $("#search-projects-form").validate({
   debug: true,
   submitHandler: function (form, event) {
+    $('#oa-searching').show()
+    $('.lds-spinner').show()
     event.preventDefault()
     var urlEncKW = encodeURIComponent($("#ipt-keywords").val())
     $.get('http://api.openaire.eu/search/projects?hasECFunding=true&format=json&size=50&keywords=' + urlEncKW, handleResponse)
+    $("#search-projects-form input").prop("disabled", true);
+    $("#search-projects-form button").prop("disabled", true);
   }
 })
 
 var handleResponse = function (response) {
   var dataSet = response.response.results.result.map(rawResponseMapper)
   $('#tbl-project-search-results').show()
+  $('#oa-searching').hide()
+  $('.lds-spinner').hide()
   var table = $('#tbl-project-search-results').DataTable({
     data: dataSet,
     searching: false,
@@ -26,6 +32,9 @@ var handleResponse = function (response) {
     } ]
   })
   $('#tbl-project-search-results tbody').on( 'click', 'button', function () {
+    $('#okm-making').show()
+    $('.lds-spinner').show()
+    $('#tbl-project-search-results').hide()
     var data = table.row( $(this).parents('tr') ).data();
     var submitObj = {
       'project_id': data[0],
@@ -68,6 +77,9 @@ var rawResponseMapper = function (result) {
 
 $(document).ready(function () {
   $('#tbl-project-search-results').hide()
+  $('#oa-searching').hide()
+  $('#okm-making').hide()
+  $('.lds-spinner').hide()
 })
 
 // Standard deep get function adapted from https://github.com/joshuacc/drabs
