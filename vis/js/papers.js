@@ -265,7 +265,11 @@ papers.prepareForeignObject = function (nodes) {
 
 
 // create the path or "border" for papers
-papers.createPaperPath = function (x, y, width, height, correction_x, correction_y) {
+papers.createPaperPath = function (x, y, width, height, correction_x, correction_y, drawType) {
+
+    if(drawType == "dataset") {
+        return this.createDatasetPath(x, y, width, height, correction_x)
+    }
 
     if (!correction_x) {
         correction_x = config.dogear_width;
@@ -284,6 +288,25 @@ papers.createPaperPath = function (x, y, width, height, correction_x, correction
             " v " + v + " h " + (-1 * width) + " v " + (-1 * height);
 
     return path;
+};
+
+// create the path or "border" for datasets
+papers.createDatasetPath = function (x, y, width, height, correction) {
+    let r = correction ? correction * 10 : 10
+    let corner = correction ? correction * 10 : 10
+    let x_left = corner
+    let x_right = width - corner
+    let y_bottom = height - corner
+    let y_top = corner
+    return `M ${x},${y_top} \
+    A ${r},${r} 0 0,1 ${x_left},${0} \
+    L ${x_right},${0} \
+    A ${r},${r} 0 0,1 ${width},${y_top} \
+    L ${width},${y_bottom} \
+    A ${r},${r} 0 0,1 ${x_right},${height} \
+    L ${x_left},${height} \
+    A${r},${r} 0 0,1 ${0},${y_bottom} \
+    L ${0},${y_top} Z`
 };
 
 papers.applyForce = function () {
