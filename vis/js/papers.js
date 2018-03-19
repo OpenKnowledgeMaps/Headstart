@@ -168,7 +168,7 @@ papers.drawPapers = function () {
 // draw the path "around" the papers, perhaps "border" would be a better name
 papers.drawPaperPath = function (nodes) {
     var region = (d) => {
-        return this.createPaperPath(0, 0, d.width, d.height, 0.2, 0.2);
+            return this.createPaperPath(0, 0, d.width, d.height, 0.2, 0.2, d.resulttype);
     };
 
     nodes.append("path")
@@ -197,7 +197,7 @@ papers.resetPaths = function () {
 // draw the path of the dog-ear for the papers
 papers.drawDogEarPath = function (nodes) {
     var dogear = (d) => {
-        return this.createDogearPath(d.width * 0.8, 0, d.width, d.height, 0.2, 0.2);
+        return this.createDogearPath(d.width * 0.8, 0, d.width, d.height, 0.2, 0.2, d.resulttype);
     };
 
     nodes.append("path")
@@ -527,8 +527,14 @@ papers.resizePaper = function (d, holder_div, resize_factor, color) {
     //current_g.parentNode.appendChild(current_g);
     toFront(current_g_paper.node());
 
-    let region = this.createPaperPath(0, 0, d.width * mediator.circle_zoom * resize_factor, d.height * mediator.circle_zoom * resize_factor);
-    let dogear = this.createDogearPath(d.width * (1 - config.dogear_width) * mediator.circle_zoom * resize_factor, 0, d.width * mediator.circle_zoom * resize_factor, d.height * mediator.circle_zoom * resize_factor);
+    let region = this.createPaperPath(0, 0, d.width * mediator.circle_zoom * resize_factor, d.height * mediator.circle_zoom * resize_factor, undefined, undefined, d.resulttype);
+    let dogear = this.createDogearPath(d.width * (1 - config.dogear_width) * mediator.circle_zoom * resize_factor,
+                                        0,
+                                        d.width * mediator.circle_zoom * resize_factor,
+                                        d.height * mediator.circle_zoom * resize_factor,
+                                        undefined,
+                                        undefined,
+                                        d.resulttype);
 
     current_foreignObject
             .attr("width", d.width * mediator.circle_zoom * resize_factor + "px")
@@ -756,12 +762,12 @@ papers.onWindowResize = function() {
 
       d3.selectAll("#region")
         .attr("d", (d) => {
-          return papers.createPaperPath(0, 0, d.resize_width, d.resize_height);
+          return papers.createPaperPath(0, 0, d.resize_width, d.resize_height, undefined, undefined, d.resulttype);
         });
 
       d3.selectAll("path.dogear")
         .attr("d", (d) => {
-          return papers.createDogearPath(d.resize_width*d.top_factor, 0, d.resize_width, d.resize_height);
+          return papers.createDogearPath(d.resize_width*d.top_factor, 0, d.resize_width, d.resize_height, undefined, undefined, d.resulttype);
         });
 
       //webkit bug
