@@ -259,6 +259,12 @@ list.populateMetaData = function(nodes) {
             .attr("href", function(d) {
                 return d.outlink;
             })
+            .attr("class", function(d){
+                if(d.oa){
+                    return "oa-link"
+                }
+                return "outlink"
+            })
             .on("click", function() {
                 d3.event.stopPropagation();
             });
@@ -273,7 +279,7 @@ list.populateMetaData = function(nodes) {
         var paper_link = list_metadata.select(".link2");
 
         paper_link.style("display", function(d) {
-            if (d.oa === false) {
+            if (d.oa === false || d.resulttype == "dataset") {
                 return "none";
             }
         });
