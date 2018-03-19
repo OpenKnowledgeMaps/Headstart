@@ -667,7 +667,11 @@ papers.calcResizeFactor = function (metadata) {
 };
 
 // creates the dog-ears path for the papers
-papers.createDogearPath = function (x, y, width, height, correction_x, correction_y) {
+papers.createDogearPath = function (x, y, width, height, correction_x, correction_y, drawType) {
+
+    if(drawType == "dataset") {
+        return undefined
+    }
 
     if (!correction_x) {
         correction_x = config.dogear_width;
