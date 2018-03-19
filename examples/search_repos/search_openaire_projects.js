@@ -32,7 +32,7 @@ var handleResponse = function (response) {
     $('.lds-spinner').show()
     $('#tbl-project-search-results').hide()
     var data = table.row( $(this).parents('tr') ).data();
-    doSubmit('project_id='+data[0]+'&funding_level='+data[7]+'&q='+encodeURIComponent( $("#ipt-keywords").val()) )
+    doSubmit('project_id='+data[0]+'&funding_level='+data[7]+'&q='+data[1] )
   })
   // TODO: Handle repeated searches
 }
