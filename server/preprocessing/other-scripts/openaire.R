@@ -7,7 +7,7 @@ library(xml2)
 # Params:
 #
 # * query: project acronym
-# * params: parameters for the search in JSON format: funding_level and funding stream
+# * params: parameters for the search in JSON format: funding_stream and funding stream
 # * limit: number of search results to return
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
@@ -29,21 +29,21 @@ library(xml2)
 get_papers <- function(query, params, limit=NULL) {
   # parse params
   project_id <- params$project_id
-  funding_level <- params$funding_level
+  funding_stream <- params$funding_stream
 
   # identify search on projects
   # project <- roa_projects(acronym = query)
   # project_id <- project$grantID
-  # funding_level <- tolower(project$funding_level_0)
+  # funding_stream <- tolower(project$funding_stream_0)
 
   # currently not used
-  # if funding_level not as expected, default to fp7
-  # if (!(funding_level %in% c('fp7', 'h2020'))){
-  #   funding_level <- 'fp7'
+  # if funding_stream not as expected, default to fp7
+  # if (!(funding_stream %in% c('fp7', 'h2020'))){
+  #   funding_stream <- 'fp7'
   # }
   # run searches for publications and data
   # switch according to detected funding stream
-  # switch(funding_level,
+  # switch(funding_stream,
   #   fp7 = {
   #     pubs <- roa_pubs(fp7 = project_id, format = 'json')
   #     datasets <- roa_datasets(fp7 = project_id, format = 'json')
