@@ -153,7 +153,7 @@ get_doi <- function(title) {
 fill_dois <- function(df) {
   missing_doi_indices <- which(df$doi == "")
   titles <- df[missing_doi_indices,]$title
-  df[missing_doi_indices,]$doi <- lapply(titles, get_doi)
+  df$doi[c(missing_doi_indices)] <- unlist(lapply(titles, get_doi))
   return (df)
 }
 
