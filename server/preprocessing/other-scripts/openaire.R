@@ -1,6 +1,7 @@
-library(ropenaire)
-library(plyr)
 library(xml2)
+library(plyr)
+library(ropenaire)
+library(rcrossref)
 
 # get_papers
 #
@@ -57,6 +58,7 @@ get_papers <- function(query, params, limit=NULL) {
   tryCatch({
     response <- roa_pubs(fp7 = project_id, format = 'xml')
     pubs_metadata <- parse_response(response)
+    pubs_metadata <- fill_dois(pubs_metadata)
   }, error = function(err){
     print(err)
     pubs_metadata <- data.frame(matrix(nrow=1))
@@ -141,6 +143,19 @@ parse_response <- function(response) {
   }
 }
 
+get_doi <- function(title) {
+  matches <- cr_works(flq = c('query.title'=title))$data
+  matches$sdist <- unlist(lapply(matches$title, function(x){stringdist(x, title)}))
+  matches <- matches[order(matches$sdist),]
+  return (matches$DOI[1])
+}
+
+fill_dois <- function(df) {
+  missing_doi_indices <- which(df$doi == "")
+  titles <- df[missing_doi_indices,]$title
+  df[missing_doi_indices,]$doi <- lapply(titles, get_doi)
+  return (df)
+}
 
 check_metadata <- function (field) {
   if(!is.null(field)) {
