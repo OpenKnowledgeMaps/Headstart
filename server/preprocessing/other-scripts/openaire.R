@@ -26,8 +26,6 @@ library(rcrossref)
 # * "readers": an indicator of the paper's popularity, e.g. number of readers, views, downloads etc.
 # * "subject": keywords or classification, split by ;
 
-DEBUG <- TRUE
-
 get_papers <- function(query, params, limit=NULL) {
   # parse params
   project_id <- params$project_id
@@ -147,7 +145,7 @@ parse_response <- function(response) {
 fill_dois <- function(df) {
   missing_doi_indices <- which(is.na(df$doi))
   titles <- df[missing_doi_indices,]$title
-  if (DEBUG) {
+  if (debug) {
     print(paste("Missing DOIs:", length(titles)))
     print("Time for filling missing DOIs")
     print(system.time(cr_works(query=queries(titles), async=TRUE)))
