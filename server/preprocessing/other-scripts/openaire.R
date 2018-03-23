@@ -8,7 +8,7 @@ library(rcrossref)
 # Params:
 #
 # * query: project acronym
-# * params: parameters for the search in JSON format: funding_stream and funding stream
+# * params: parameters for the search in JSON format: project_id and funding stream
 # * limit: number of search results to return
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
@@ -152,9 +152,14 @@ fill_dois <- function(df) {
     print("Time for filling missing DOIs")
     print(system.time(cr_works(query=queries(titles), async=TRUE)))
   }
-  response <- cr_works(query=queries(titles), async=TRUE)
-  candidates <- lapply(response, function(x){x[1,c('DOI', 'title')]})
-  dois <- mapply(check_distance, titles, candidates, USE.NAMES=FALSE)
+  if (length(titles) > 1) {
+    response <- cr_works(query=queries(titles), async=TRUE)
+    candidates <- lapply(response, function(x){x[1,c('DOI', 'title')]})
+    dois <- mapply(check_distance, titles, candidates, USE.NAMES=FALSE)
+  } else {
+    response <- cr_works(flq=c('query.title'=titles))$data
+    doi <- check_distance(titles, response[1,])
+  }
   df$doi[c(missing_doi_indices)] <- dois
   return (df)
 }
