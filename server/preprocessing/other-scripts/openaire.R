@@ -144,27 +144,38 @@ parse_response <- function(response) {
   }
 }
 
-get_doi <- function(title) {
-  matches <- cr_works(flq = c('query.title'=title), async=TRUE)$data
-  matches$sdist <- unlist(lapply(matches$title, function(x){stringdist(x, title)}))
-  matches <- matches[order(matches$sdist),]
-  if (matches$sdist[1] <= 5){
-    return (matches$DOI[1])
-  } else {
-    return ("")
-  }
-}
-
 fill_dois <- function(df) {
   missing_doi_indices <- which(is.na(df$doi))
   titles <- df[missing_doi_indices,]$title
   if (DEBUG) {
     print(paste("Missing DOIs:", length(titles)))
     print("Time for filling missing DOIs")
-    print(system.time(lapply(titles, get_doi)))
+    print(system.time(cr_works(query=queries(titles), async=TRUE)))
   }
-  df$doi[c(missing_doi_indices)] <- unlist(lapply(titles, get_doi))
+  response <- cr_works(query=queries(titles), async=TRUE)
+  candidates <- lapply(response, function(x){x[1,c('DOI', 'title')]})
+  dois <- mapply(check_distance, titles, candidates, USE.NAMES=FALSE)
+  df$doi[c(missing_doi_indices)] <- dois
   return (df)
+}
+
+check_distance <- function(title, candidate) {
+  sdist <- stringdist(title, candidate$title)
+  if (sdist <= 5){
+    doi <- candidate$DOI
+  } else {
+    doi <- ""
+  }
+  return (doi)
+}
+
+queries <- function(titles){
+  queries <- c()
+  for (title in titles){
+    nq <- list('query.title'=title)
+    queries <- c(queries, nq)
+  }
+  return (queries)
 }
 
 check_metadata <- function (field) {
