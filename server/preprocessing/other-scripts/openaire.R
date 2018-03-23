@@ -156,7 +156,7 @@ fill_dois <- function(df) {
     dois <- mapply(check_distance, titles, candidates, USE.NAMES=FALSE)
   } else {
     response <- cr_works(flq=c('query.title'=titles))$data
-    doi <- check_distance(titles, response[1,])
+    dois <- check_distance(titles, response[1,])
   }
   df$doi[c(missing_doi_indices)] <- dois
   return (df)
