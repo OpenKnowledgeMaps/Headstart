@@ -26,6 +26,7 @@ library(rcrossref)
 # * "readers": an indicator of the paper's popularity, e.g. number of readers, views, downloads etc.
 # * "subject": keywords or classification, split by ;
 
+DEBUG <- TRUE
 
 get_papers <- function(query, params, limit=NULL) {
   # parse params
@@ -144,15 +145,24 @@ parse_response <- function(response) {
 }
 
 get_doi <- function(title) {
-  matches <- cr_works(flq = c('query.title'=title))$data
+  matches <- cr_works(flq = c('query.title'=title), async=TRUE)$data
   matches$sdist <- unlist(lapply(matches$title, function(x){stringdist(x, title)}))
   matches <- matches[order(matches$sdist),]
-  return (matches$DOI[1])
+  if (matches$sdist[1] <= 5){
+    return (matches$DOI[1])
+  } else {
+    return ("")
+  }
 }
 
 fill_dois <- function(df) {
-  missing_doi_indices <- which(df$doi == "")
+  missing_doi_indices <- which(is.na(df$doi))
   titles <- df[missing_doi_indices,]$title
+  if (DEBUG) {
+    print(paste("Missing DOIs:", length(titles)))
+    print("Time for filling missing DOIs")
+    print(system.time(lapply(titles, get_doi)))
+  }
   df$doi[c(missing_doi_indices)] <- unlist(lapply(titles, get_doi))
   return (df)
 }
