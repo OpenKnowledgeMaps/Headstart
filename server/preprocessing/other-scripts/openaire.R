@@ -154,9 +154,11 @@ fill_dois <- function(df) {
     response <- cr_works(query=queries(titles), async=TRUE)
     candidates <- lapply(response, function(x){x[1,c('DOI', 'title')]})
     dois <- mapply(check_distance, titles, candidates, USE.NAMES=FALSE)
-  } else {
+  } else if (length(titles) == 1) {
     response <- cr_works(flq=c('query.title'=titles))$data
     dois <- check_distance(titles, response[1,])
+  } else {
+    dois <- ""
   }
   df$doi[c(missing_doi_indices)] <- dois
   return (df)
