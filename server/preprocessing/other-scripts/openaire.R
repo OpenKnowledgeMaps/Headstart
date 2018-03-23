@@ -34,7 +34,7 @@ get_papers <- function(query, params, limit=NULL) {
   # identify search on projects
   # project <- roa_projects(acronym = query)
   # project_id <- project$grantID
-  # funding_stream <- tolower(project$funding_stream_0)
+  # funding_stream <- tolower(project$funding_level_0)
 
   # currently not used
   # if funding_stream not as expected, default to fp7
