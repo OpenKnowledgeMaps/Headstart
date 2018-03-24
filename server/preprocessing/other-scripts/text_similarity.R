@@ -37,7 +37,7 @@ switch(service,
        },
        openaire={
          source('../other-scripts/openaire.R')
-       }
+       },
       {
         source("../other-scripts/rplos_fast.R")
       }
