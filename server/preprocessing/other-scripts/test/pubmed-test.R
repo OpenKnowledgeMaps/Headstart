@@ -4,7 +4,7 @@ library(rstudioapi)
 
 options(warn=1)
 
-wd <- dirname(rstudioapi::getActiveDocumentContext()$path) 
+wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
 setwd(wd) #Don't forget to set your working directory
 
@@ -15,6 +15,7 @@ params_file <- "params_pubmed.json"
 
 source("../vis_layout.R")
 source('../pubmed.R')
+source('../utils.R')
 
 debug = FALSE
 
