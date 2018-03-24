@@ -1,9 +1,12 @@
 library('rAltmetric')
+library('rcrossref')
 
-enrich_input <- function(input_data){
-  dois <- input_data$metadata$doi
-  results <- get_altmetrics(dois)
-  input_data$metadata <- merge(input_data$metadata, results, by='doi', all=TRUE)
+enrich_output <- function(output){
+  results <- get_altmetrics(output$doi)
+  results <- results[c('doi', 'cited_by_tweeters_count', 'readers.mendeley')]
+  output <- merge(output, results, by='doi', all=TRUE)
+  output <- add_citations(output)
+  return (output)
 }
 
 get_altmetrics <- function(dois){
@@ -19,4 +22,12 @@ get_altmetrics <- function(dois){
     })
   }
   return (results)
+}
+
+add_citations <- function(output){
+  dois <- output$doi
+  valid_dois <- which(dois!="")
+  cit_count <- check_metadata(unlist(lapply(dois[valid_dois], function(x) cr_citation_count(doi=x))))
+  output$citation_count[c(valid_dois)] <- cit_count
+  return (output)
 }

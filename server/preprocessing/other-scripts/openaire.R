@@ -182,10 +182,3 @@ queries <- function(titles){
   return (queries)
 }
 
-check_metadata <- function (field) {
-  if(!is.null(field)) {
-    return (ifelse(is.na(field), '', field))
-  } else {
-    return ('')
-  }
-}
