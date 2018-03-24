@@ -36,8 +36,6 @@ Make sure you have the following packages installed:
   * rcrossref (for VIPER)
   * rAltmetric
   * plyr (for better data munging)
-  * magrittr
-  * purrr
 * phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
 
 ## Configuration
