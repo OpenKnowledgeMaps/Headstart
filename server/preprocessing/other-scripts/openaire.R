@@ -164,8 +164,8 @@ fill_dois <- function(df) {
 }
 
 check_distance <- function(title, candidate) {
-  sdist <- stringdist(title, candidate$title)
-  if (sdist <= 5){
+  lv_ratio <- levenshtein_ratio(tolower(title), tolower(candidate$title))
+  if (lv_ratio <= 1/15.83){
     doi <- candidate$DOI
   } else {
     doi <- ""
