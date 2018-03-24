@@ -1,6 +1,4 @@
-library(rAltmetric)
-library(magrittr)
-library(purrr)
+library('rAltmetric')
 
 enrich_input <- function(input_data){
   dois <- input_data$metadata$doi
