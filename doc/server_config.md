@@ -34,7 +34,10 @@ Make sure you have the following packages installed:
   * ropenaire (For VIPER. Currently, a Github repository only: https://github.com/sckott/ropenaire. Install with devtools.)
   * readr (for ropenair/VIPER)
   * rcrossref (for VIPER)
+  * rAltmetric
   * plyr (for better data munging)
+  * magrittr
+  * purrr
 * phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
 
 ## Configuration
