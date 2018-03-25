@@ -25,10 +25,13 @@ if(!is.null(params_file)) {
 }
 
 if ('language' %in% params){
-    language = params$language
-  } else {
-    language <- 'english'
+  language = params$language
+  if (language == 'all'){
+    language == 'english'
   }
+} else {
+  language <- 'english'
+}
 
 #start.time <- Sys.time()
 

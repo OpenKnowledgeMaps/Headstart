@@ -54,6 +54,9 @@ if(!is.null(params_file) && !is.na(params_file)) {
 
 if ('language' %in% params){
     language = params$language
+    if (language == 'all'){
+      language == 'english'
+    }
   } else {
     language <- 'english'
   }
@@ -62,7 +65,7 @@ ADDITIONAL_STOP_WORDS = language
 print("reading stuff")
 print(params)
 
-input_data = get_papers(query, params, limit = limit, language = language)
+input_data = get_papers(query, params, limit = limit)
 
 print("got the input")
 
