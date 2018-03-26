@@ -1,12 +1,14 @@
 library('rAltmetric')
 library('rcrossref')
 
-enrich_output <- function(output){
+enrich_output_json <- function(output_json){
+  output<- fromJSON(output_json)
   results <- get_altmetrics(output$doi)
   results <- results[c('doi', 'cited_by_tweeters_count', 'readers.mendeley')]
   output <- merge(output, results, by='doi', all=TRUE)
   output <- add_citations(output)
-  return (output)
+  output_json <- toJSON(output)
+  return (output_json)
 }
 
 get_altmetrics <- function(dois){
