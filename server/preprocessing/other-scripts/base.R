@@ -37,7 +37,7 @@ get_papers <- function(query, params, limit=100,
   year_from = params$from
   year_to = params$to
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
-  if ('language' %in% params){
+  if ('language' %in% names(params)){
       language = params$language
     } else {
       language <- NULL
@@ -52,7 +52,7 @@ get_papers <- function(query, params, limit=100,
   query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" ")
   # language query field flag
   if(!is.null(language) && language=='german'){
-    query = paste(query, "dclang:ger", collapse=" ")
+    query <- paste(query, "dclang:ger", collapse=" ")
   }
 
   # execute search
