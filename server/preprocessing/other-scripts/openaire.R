@@ -35,7 +35,7 @@ get_papers <- function(query, params, limit=NULL) {
   tryCatch({
     response <- roa_pubs(project_id = project_id,
                          funder = funder,
-                         format = 'xml', size=100)
+                         format = 'xml')
     pubs_metadata <- parse_response(response)
     pubs_metadata <- fill_dois(pubs_metadata)
   }, error = function(err){
