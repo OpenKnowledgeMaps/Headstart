@@ -34,6 +34,7 @@ Make sure you have the following packages installed:
   * ropenaire (For VIPER. Currently, a Github repository only: https://github.com/sckott/ropenaire. Install with devtools.)
   * readr (for ropenair/VIPER)
   * rcrossref (for VIPER) with the async dev version: install with `remotes::install_github("ropensci/rcrossref@async")`
+  * rAltmetric
   * plyr (for better data munging)
 * phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
 
