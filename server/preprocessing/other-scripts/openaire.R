@@ -31,29 +31,6 @@ get_papers <- function(query, params, limit=NULL) {
   project_id <- params$project_id
   funding_stream <- params$funding_stream
 
-  # identify search on projects
-  # project <- roa_projects(acronym = query)
-  # project_id <- project$grantID
-  # funding_stream <- tolower(project$funding_level_0)
-
-  # currently not used
-  # if funding_stream not as expected, default to fp7
-  # if (!(funding_stream %in% c('fp7', 'h2020'))){
-  #   funding_stream <- 'fp7'
-  # }
-  # run searches for publications and data
-  # switch according to detected funding stream
-  # switch(funding_stream,
-  #   fp7 = {
-  #     pubs <- roa_pubs(fp7 = project_id, format = 'json')
-  #     datasets <- roa_datasets(fp7 = project_id, format = 'json')
-  #   },
-  #   h2020 = {
-  #     pubs <- roa_pubs(h2020 = project_id, format = 'json')
-  #     datasets <- roa_datasets(h2020 = project_id, format = 'json')
-  #   }
-  # )
-
   tryCatch({
     response <- roa_pubs(fp7 = project_id, format = 'xml')
     pubs_metadata <- parse_response(response)
