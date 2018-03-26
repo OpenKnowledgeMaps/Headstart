@@ -40,7 +40,7 @@ get_papers <- function(query, params, limit=100,
   if ('language' %in% params){
       language = params$language
     } else {
-      language <- 'english'
+      language <- NULL
     }
 
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
