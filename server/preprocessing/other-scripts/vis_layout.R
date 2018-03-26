@@ -386,7 +386,9 @@ create_output <- function(clusters, layout, metadata) {
   # Prepare the output
   result = cbind(x,y,groups,labels, cluster_labels)
   output = merge(metadata, result, by.x="id", by.y="labels", all=TRUE)
-  output = enrich_output(output)
+  if (service=='openaire'){
+    output = enrich_output(output)
+  }
   names(output)[names(output)=="groups"] <- "area_uri"
   output["area"] = paste(output$cluster_labels, sep="")
 
