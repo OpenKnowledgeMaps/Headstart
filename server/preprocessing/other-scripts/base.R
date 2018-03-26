@@ -51,7 +51,7 @@ get_papers <- function(query, params, limit=100,
 
   query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" ")
   # language query field flag
-  if(language=='german'){
+  if(!is.null(language) && language=='german'){
     query = paste(query, "dclang:ger", collapse=" ")
   }
 
