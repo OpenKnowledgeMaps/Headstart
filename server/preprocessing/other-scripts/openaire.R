@@ -8,7 +8,8 @@ library(rcrossref)
 # Params:
 #
 # * query: project acronym
-# * params: parameters for the search in JSON format: project_id and funding stream
+# * params: parameters for the search in JSON format: project_id and funder
+#           where funder one of http://api.openaire.eu/bulk-projects.html
 # * limit: number of search results to return
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
@@ -29,10 +30,12 @@ library(rcrossref)
 get_papers <- function(query, params, limit=NULL) {
   # parse params
   project_id <- params$project_id
-  funding_stream <- params$funding_stream
+  funder <- params$funder
 
   tryCatch({
-    response <- roa_pubs(fp7 = project_id, format = 'xml')
+    response <- roa_pubs(projectID = project_id,
+                         funder = funder,
+                         format = 'xml', size=100)
     pubs_metadata <- parse_response(response)
     pubs_metadata <- fill_dois(pubs_metadata)
   }, error = function(err){
@@ -41,7 +44,9 @@ get_papers <- function(query, params, limit=NULL) {
   })
 
   tryCatch({
-    response <- roa_datasets(fp7 = project_id, format = 'xml')
+    response <- roa_datasets(projectID = project_id,
+                             funder = funder,
+                             format = 'xml')
     datasets_metadata <- parse_response(response)
   }, error = function(err) {
     print(err)
@@ -99,7 +104,8 @@ fields <- c(
   url = ".//fulltext",
   paper_abstract = ".//description",
   doi = ".//pid[@classid=\"doi\"]",
-  id = ".//result[@objidentifier]"
+  id = ".//result[@objidentifier]",
+  project_id = ".//code"
 )
 
 parse_response <- function(response) {
