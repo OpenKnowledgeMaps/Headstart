@@ -11,6 +11,8 @@ library(stringi)
 library(stringdist)
 registerDoParallel(3)
 
+
+
 debug = FALSE
 
 # Expects the following metadata fields:
@@ -19,6 +21,10 @@ debug = FALSE
 vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english",
                        add_stop_words=NULL, testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
 
+  tryCatch({
+   if(!isTRUE(testing)) source("utils.R")
+  }, error = function(err) print(err)
+  )
   #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
   if(list_size > -1) {
     output = deduplicate_titles(metadata, list_size)
