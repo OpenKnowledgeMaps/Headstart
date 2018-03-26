@@ -25,9 +25,9 @@ if(!is.null(params_file)) {
 }
 
 if ('language' %in% names(params)){
-  language = params$language
+  language <- params$language
   if (language == 'all'){
-    language == 'english'
+    language <- 'english'
   }
 } else {
   language <- 'english'
