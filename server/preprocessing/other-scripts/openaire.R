@@ -33,7 +33,7 @@ get_papers <- function(query, params, limit=NULL) {
   funder <- params$funder
 
   tryCatch({
-    response <- roa_pubs(projectID = project_id,
+    response <- roa_pubs(project_id = project_id,
                          funder = funder,
                          format = 'xml', size=100)
     pubs_metadata <- parse_response(response)
@@ -44,7 +44,7 @@ get_papers <- function(query, params, limit=NULL) {
   })
 
   tryCatch({
-    response <- roa_datasets(projectID = project_id,
+    response <- roa_datasets(project_id = project_id,
                              funder = funder,
                              format = 'xml')
     datasets_metadata <- parse_response(response)
