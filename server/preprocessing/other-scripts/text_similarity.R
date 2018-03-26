@@ -55,7 +55,7 @@ if(!is.null(params_file) && !is.na(params_file)) {
 if ('language' %in% params){
     language = params$language
     if (language == 'all'){
-      language == 'english'
+      language <- 'english'
     }
   } else {
     language <- 'english'
