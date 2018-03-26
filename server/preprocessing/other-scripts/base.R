@@ -38,7 +38,7 @@ get_papers <- function(query, params, limit=100,
   year_to = params$to
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   if ('language' %in% names(params)){
-      language = params$language
+      language <- params$language
     } else {
       language <- NULL
     }
