@@ -380,6 +380,7 @@ create_output <- function(clusters, layout, metadata) {
   # Prepare the output
   result = cbind(x,y,groups,labels, cluster_labels)
   output = merge(metadata, result, by.x="id", by.y="labels", all=TRUE)
+  output = enrich_output(output)
   names(output)[names(output)=="groups"] <- "area_uri"
   output["area"] = paste(output$cluster_labels, sep="")
 
@@ -404,10 +405,4 @@ create_output <- function(clusters, layout, metadata) {
 
   return(output_json)
 
-}
-
-levenshtein_ratio <- function(a, b) {
-  lv_dist = stringdist(a, b, method = "lv")
-  lv_ratio = lv_dist/(max(stri_length(a), stri_length(b)))
-  return(lv_ratio)
 }
