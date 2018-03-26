@@ -35,7 +35,7 @@ get_papers <- function(query, params, limit=NULL) {
   tryCatch({
     response <- roa_pubs(project_id = project_id,
                          funder = funder,
-                         format = 'xml', size=100)
+                         format = 'xml')
     pubs_metadata <- parse_response(response)
     pubs_metadata <- fill_dois(pubs_metadata)
   }, error = function(err){
@@ -118,6 +118,7 @@ parse_response <- function(response) {
   if (!(length(tmp) == 0)) {
     df <- data.frame(data.table::rbindlist(tmp, fill = TRUE, use.names = TRUE))
     df$id <- unlist(lapply(xml_find_all(response, ".//dri:objIdentifier"), xml_text))
+    df$doi <- unlist(lapply(df$doi, tolower))
     return (df)
   } else {
     stop("Length of results: ", length(tmp))
