@@ -52,7 +52,7 @@ if(!is.null(params_file) && !is.na(params_file)) {
   params <- NULL
 }
 
-if ('language' %in% params){
+if ('language' %in% names(params)){
     language <- params$language
     if (language == 'all'){
       language <- 'english'

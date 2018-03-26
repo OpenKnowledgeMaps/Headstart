@@ -24,7 +24,7 @@ if(!is.null(params_file)) {
   params <- fromJSON(params_file)
 }
 
-if ('language' %in% params){
+if ('language' %in% names(params)){
   language = params$language
   if (language == 'all'){
     language == 'english'
