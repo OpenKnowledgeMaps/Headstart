@@ -111,11 +111,3 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   return(ret_val)
 
 }
-
-check_metadata <- function (field) {
-  if(!is.null(field)) {
-    return (ifelse(is.na(field), '', field))
-  } else {
-    return ('')
-  }
-}

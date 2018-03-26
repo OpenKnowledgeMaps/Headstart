@@ -1,13 +1,14 @@
-library(ropenaire)
-library(plyr)
 library(xml2)
+library(plyr)
+library(ropenaire)
+library(rcrossref)
 
 # get_papers
 #
 # Params:
 #
 # * query: project acronym
-# * params: parameters for the search in JSON format: funding_level and funding stream
+# * params: parameters for the search in JSON format: project_id and funding stream
 # * limit: number of search results to return
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
@@ -25,25 +26,24 @@ library(xml2)
 # * "readers": an indicator of the paper's popularity, e.g. number of readers, views, downloads etc.
 # * "subject": keywords or classification, split by ;
 
-
 get_papers <- function(query, params, limit=NULL) {
   # parse params
   project_id <- params$project_id
-  funding_level <- params$funding_level
+  funding_stream <- params$funding_stream
 
   # identify search on projects
   # project <- roa_projects(acronym = query)
   # project_id <- project$grantID
-  # funding_level <- tolower(project$funding_level_0)
+  # funding_stream <- tolower(project$funding_level_0)
 
   # currently not used
-  # if funding_level not as expected, default to fp7
-  # if (!(funding_level %in% c('fp7', 'h2020'))){
-  #   funding_level <- 'fp7'
+  # if funding_stream not as expected, default to fp7
+  # if (!(funding_stream %in% c('fp7', 'h2020'))){
+  #   funding_stream <- 'fp7'
   # }
   # run searches for publications and data
   # switch according to detected funding stream
-  # switch(funding_level,
+  # switch(funding_stream,
   #   fp7 = {
   #     pubs <- roa_pubs(fp7 = project_id, format = 'json')
   #     datasets <- roa_datasets(fp7 = project_id, format = 'json')
@@ -57,6 +57,7 @@ get_papers <- function(query, params, limit=NULL) {
   tryCatch({
     response <- roa_pubs(fp7 = project_id, format = 'xml')
     pubs_metadata <- parse_response(response)
+    pubs_metadata <- fill_dois(pubs_metadata)
   }, error = function(err){
     print(err)
     pubs_metadata <- data.frame(matrix(nrow=1))
@@ -140,11 +141,44 @@ parse_response <- function(response) {
   }
 }
 
-
-check_metadata <- function (field) {
-  if(!is.null(field)) {
-    return (ifelse(is.na(field), '', field))
-  } else {
-    return ('')
+fill_dois <- function(df) {
+  missing_doi_indices <- which(is.na(df$doi))
+  titles <- df[missing_doi_indices,]$title
+  if (debug) {
+    print(paste("Missing DOIs:", length(titles)))
+    print("Time for filling missing DOIs")
+    print(system.time(cr_works(query=queries(titles), async=TRUE)))
   }
+  if (length(titles) > 1) {
+    response <- cr_works(query=queries(titles), async=TRUE)
+    candidates <- lapply(response, function(x){x[1,c('DOI', 'title')]})
+    dois <- mapply(check_distance, titles, candidates, USE.NAMES=FALSE)
+  } else if (length(titles) == 1) {
+    response <- cr_works(flq=c('query.title'=titles))$data
+    dois <- check_distance(titles, response[1,])
+  } else {
+    dois <- ""
+  }
+  df$doi[c(missing_doi_indices)] <- dois
+  return (df)
 }
+
+check_distance <- function(title, candidate) {
+  lv_ratio <- levenshtein_ratio(tolower(title), tolower(candidate$title))
+  if (lv_ratio <= 1/15.83){
+    doi <- candidate$DOI
+  } else {
+    doi <- ""
+  }
+  return (doi)
+}
+
+queries <- function(titles){
+  queries <- c()
+  for (title in titles){
+    nq <- list('query.title'=title)
+    queries <- c(queries, nq)
+  }
+  return (queries)
+}
+

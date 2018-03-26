@@ -14,6 +14,8 @@ print(params_file)
 setwd(wd) #Don't forget to set your working directory
 
 source(paste("../other-scripts/vis_layout.R", sep=""))
+source('../other-scripts/altmetrics.R')
+source('../other-scripts/utils.R')
 
 taxonomy_separator = NULL
 limit = 100
@@ -36,7 +38,7 @@ switch(service,
        },
        openaire={
          source('../other-scripts/openaire.R')
-       }
+       },
       {
         source("../other-scripts/rplos_fast.R")
       }

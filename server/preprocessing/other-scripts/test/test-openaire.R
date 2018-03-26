@@ -17,6 +17,8 @@ params_file <- "params_openaire.json"
 
 source("../vis_layout.R")
 source('../openaire.R')
+source('../altmetrics.R')
+source('../utils.R')
 
 debug = FALSE
 
