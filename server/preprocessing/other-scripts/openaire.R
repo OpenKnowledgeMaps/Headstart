@@ -9,7 +9,7 @@ library(rcrossref)
 #
 # * query: project acronym
 # * params: parameters for the search in JSON format: project_id and funder
-#           where funder one of http://api.openaire.eu/bulk-projects.html
+#           where funder one of WT | EC | ARC | ANDS | NSF | FCT | NHMRC
 # * limit: number of search results to return
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
