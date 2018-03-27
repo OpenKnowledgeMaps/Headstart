@@ -116,7 +116,7 @@ fields <- c(
   authors = ".//creator",
   year = ".//dateofacceptance",
   publisher = ".//publisher",
-  resulttype = ".//resulttype",
+  resulttype = ".//resulttype/@classid",
   language = ".//language",
   journal = ".//journal",
   url = ".//fulltext",
