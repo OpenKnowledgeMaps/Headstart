@@ -250,6 +250,26 @@ list.populateMetaData = function(nodes) {
                 }
             })
 
+        list_metadata.select("#file-icon_list")
+            .style("display", function (d) {
+                if (d.resulttype == "dataset") {
+                    return "none"
+                }
+                else {
+                    return "inline"
+                }
+            })
+
+        list_metadata.select("#dataset-icon_list")
+            .style("display", function (d) {
+                if (d.resulttype == "dataset") {
+                    return "inline"
+                }
+                else {
+                    return "none"
+                }
+            })
+
         list_metadata.select("#paper_list_title")
             .html(function(d) {
                 return d.title;
