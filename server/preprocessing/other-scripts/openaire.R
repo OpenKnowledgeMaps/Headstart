@@ -57,7 +57,6 @@ get_papers <- function(query, params, limit=NULL) {
       all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
     }, error = function(err){
       print(err)
-    }, finally = {
       if (nrow(pubs_metadata) > 0) {
         all_artifacts <- pubs_metadata
       } else if (nrow(datasets_metadata) > 0){
@@ -165,4 +164,3 @@ queries <- function(titles){
   }
   return (queries)
 }
-
