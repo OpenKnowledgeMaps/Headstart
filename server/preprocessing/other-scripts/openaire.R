@@ -98,7 +98,7 @@ fields <- c(
   authors = ".//creator",
   year = ".//dateofacceptance",
   publisher = ".//publisher",
-  resulttype = ".//resulttype",
+  resulttype = ".//resulttype/@classid",
   language = ".//language",
   journal = ".//journal",
   url = ".//fulltext",
@@ -165,10 +165,3 @@ queries <- function(titles){
   return (queries)
 }
 
-check_metadata <- function (field) {
-  if(!is.null(field)) {
-    return (ifelse(is.na(field), '', field))
-  } else {
-    return ('')
-  }
-}
