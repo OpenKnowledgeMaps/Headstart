@@ -79,7 +79,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $output_json = mb_convert_encoding($output_json, "UTF-8");
 
     if (!library\Toolkit::isJSON($output_json) || $output_json == "null" || $output_json == null) {
-       
+
         echo json_encode(array("status" => "error"));;
         return;
     }
@@ -102,7 +102,8 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $repo_mapping = array("plos" => "PLOS"
                             , "pubmed" => "PubMed"
                             , "doaj" => "DOAJ"
-                            , "base" => "BASE");
+                            , "base" => "BASE"
+                            , "openaire" => "OpenAire");
     
     if(!isset($ini_array["snapshot"]["snapshot_enabled"]) || $ini_array["snapshot"]["snapshot_enabled"] > 0) {
         $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $repository, $repo_mapping[$repository]);

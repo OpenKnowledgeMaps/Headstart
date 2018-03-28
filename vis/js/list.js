@@ -250,6 +250,26 @@ list.populateMetaData = function(nodes) {
                 }
             })
 
+        list_metadata.select("#file-icon_list")
+            .style("display", function (d) {
+                if (d.resulttype == "dataset") {
+                    return "none"
+                }
+                else {
+                    return "inline"
+                }
+            })
+
+        list_metadata.select("#dataset-icon_list")
+            .style("display", function (d) {
+                if (d.resulttype == "dataset") {
+                    return "inline"
+                }
+                else {
+                    return "none"
+                }
+            })
+
         list_metadata.select("#paper_list_title")
             .html(function(d) {
                 return d.title;
@@ -258,6 +278,12 @@ list.populateMetaData = function(nodes) {
         list_metadata.select(".outlink")
             .attr("href", function(d) {
                 return d.outlink;
+            })
+            .attr("class", function(d){
+                if(d.oa){
+                    return "oa-link"
+                }
+                return "outlink"
             })
             .on("click", function() {
                 d3.event.stopPropagation();
@@ -273,7 +299,7 @@ list.populateMetaData = function(nodes) {
         var paper_link = list_metadata.select(".link2");
 
         paper_link.style("display", function(d) {
-            if (d.oa === false) {
+            if (d.oa === false || d.resulttype == "dataset") {
                 return "none";
             }
         });
