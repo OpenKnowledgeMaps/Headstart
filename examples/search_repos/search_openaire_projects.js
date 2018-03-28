@@ -1,3 +1,5 @@
+var table
+
 $("#search-projects-form").validate({
   debug: true,
   submitHandler: function (form, event) {
@@ -13,24 +15,14 @@ $("#search-projects-form").validate({
 
 var handleResponse = function (response) {
   var dataSet = response.response.results.result.map(rawResponseMapper)
+  table.clear()
+  table.rows.add(dataSet).draw()
   $('#tbl-project-search-results').show()
   $('#oa-searching').hide()
   $('.lds-spinner').hide()
-  var table = $('#tbl-project-search-results').DataTable({
-    data: dataSet,
-    searching: false,
-    lengthChange: false,
-    ordering: false,
-    "columnDefs": [ {
-      "targets": -1,
-      "data": null,
-      "defaultContent": "<button>Make Map</button>"
-    },
-    {
-      targets: 10,
-      visible: false
-    } ]
-  })
+  $("#search-projects-form input").prop("disabled", false);
+  $("#search-projects-form button").prop("disabled", false);
+
   $('#tbl-project-search-results tbody').on( 'click', 'button', function () {
     $('#okm-making').show()
     $('.lds-spinner').show()
@@ -52,7 +44,7 @@ var handleResponse = function (response) {
     }
     doSubmit($.param(submitObj))
 } )
-  // TODO: Handle repeated searches
+
 }
 
 var rawResponseMapper = function (result) {
@@ -80,6 +72,22 @@ $(document).ready(function () {
   $('#oa-searching').hide()
   $('#okm-making').hide()
   $('.lds-spinner').hide()
+
+  table = $('#tbl-project-search-results').DataTable({
+    searching: false,
+    lengthChange: false,
+    ordering: false,
+    "columnDefs": [ {
+      "targets": -1,
+      "data": null,
+      "defaultContent": "<button>Make Map</button>"
+    },
+    {
+      targets: 10,
+      visible: false
+    } ]
+  })
+
 })
 
 // Standard deep get function adapted from https://github.com/joshuacc/drabs
@@ -119,8 +127,6 @@ function digFundingTree (rootTree, fundingNames) {
   var r = /^funding_level_[0-9]+$/
   var nestedTree = keys.find(r.test.bind(r))
   fundingNames.push(deepGet(rootTree, [nestedTree, 'name', '$']))
-  console.log(fundingNames)
-  console.log(nestedTree)
   if (nestedTree === 'funding_level_0') {
     return fundingNames
   } else {
