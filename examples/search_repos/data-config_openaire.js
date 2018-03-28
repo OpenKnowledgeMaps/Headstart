@@ -19,5 +19,10 @@ var data_config = {
 	//debug: true,
 	show_context: true,
     create_title_from_context: true,
-    scale_types: ['citation_count', 'cited_by_tweeters_count', 'readers.mendeley']
+    scale_types: ['citation_count', 'cited_by_tweeters_count', 'readers.mendeley'],
+    scale_explaination: {
+        citation_count: 'Scaleum Ipsum Sit Dolor scaled by Citations',
+        cited_by_tweeters_count: 'Scaleum Ipsum Sit Dolor scaled by Tweets',
+        'readers.mendeley': 'Scaleum Ipsum Sit Dolor scaled by Mendeley Readers'
+    }
 };

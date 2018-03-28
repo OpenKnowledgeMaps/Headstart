@@ -28,6 +28,7 @@ class Scale {
   doScale (type) {
     config.scale_by = type
     $('#curr-scale-type').text(type)
+    $('#curr-scale-explaination').text(config.scale_explaination[type])
     headstart.tofile(mediator.current_file_number)
   }
 
