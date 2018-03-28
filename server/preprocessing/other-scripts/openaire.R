@@ -8,7 +8,8 @@ library(rcrossref)
 # Params:
 #
 # * query: project acronym
-# * params: parameters for the search in JSON format: project_id and funding stream
+# * params: parameters for the search in JSON format: project_id and funder
+#           where funder one of WT | EC | ARC | ANDS | NSF | FCT | NHMRC
 # * limit: number of search results to return
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
@@ -29,60 +30,45 @@ library(rcrossref)
 get_papers <- function(query, params, limit=NULL) {
   # parse params
   project_id <- params$project_id
-  funding_stream <- params$funding_stream
+  funder <- params$funder
 
-  # identify search on projects
-  # project <- roa_projects(acronym = query)
-  # project_id <- project$grantID
-  # funding_stream <- tolower(project$funding_level_0)
-
-  # currently not used
-  # if funding_stream not as expected, default to fp7
-  # if (!(funding_stream %in% c('fp7', 'h2020'))){
-  #   funding_stream <- 'fp7'
-  # }
-  # run searches for publications and data
-  # switch according to detected funding stream
-  # switch(funding_stream,
-  #   fp7 = {
-  #     pubs <- roa_pubs(fp7 = project_id, format = 'json')
-  #     datasets <- roa_datasets(fp7 = project_id, format = 'json')
-  #   },
-  #   h2020 = {
-  #     pubs <- roa_pubs(h2020 = project_id, format = 'json')
-  #     datasets <- roa_datasets(h2020 = project_id, format = 'json')
-  #   }
-  # )
-
-  tryCatch({
-    response <- roa_pubs(fp7 = project_id, format = 'xml')
+  pubs_metadata <- tryCatch({
+    response <- roa_pubs(project_id = project_id,
+                         funder = funder,
+                         format = 'xml')
     pubs_metadata <- parse_response(response)
     pubs_metadata <- fill_dois(pubs_metadata)
-  }, error = function(err){
-    print(err)
-    pubs_metadata <- data.frame(matrix(nrow=1))
+  },
+  error = function(err){
+    print(paste0("publications: ", err))
+    pubs_metadata <- data.frame()
+    return (data.frame())
   })
 
-  tryCatch({
-    response <- roa_datasets(fp7 = project_id, format = 'xml')
+  datasets_metadata <- tryCatch({
+    response <- roa_datasets(project_id = project_id,
+                             funder = funder,
+                             format = 'xml')
     datasets_metadata <- parse_response(response)
-  }, error = function(err) {
-    print(err)
-    datasets_metadata <- data.frame(matrix(nrow=1))
+  },
+  error = function(err){
+    print(paste0("datasets: ", err))
+    datasets_metadata <-
+    return (data.frame())
   })
 
-  tryCatch({
+  all_artifacts <- tryCatch({
       all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
     }, error = function(err){
       print(err)
-    }, finally = {
       if (nrow(pubs_metadata) > 0) {
         all_artifacts <- pubs_metadata
       } else if (nrow(datasets_metadata) > 0){
         all_artifacts <- datasets_metadata
       } else {
-        all_artifacts <- data.frame(matrix(nrow=1))
+        all_artifacts <- data.frame()
       }
+      return (data.frame())
     })
 
   tryCatch({
@@ -116,13 +102,14 @@ fields <- c(
   authors = ".//creator",
   year = ".//dateofacceptance",
   publisher = ".//publisher",
-  resulttype = ".//resulttype",
+  resulttype = ".//resulttype/@classid",
   language = ".//language",
   journal = ".//journal",
   url = ".//fulltext",
   paper_abstract = ".//description",
   doi = ".//pid[@classid=\"doi\"]",
-  id = ".//result[@objidentifier]"
+  id = ".//result[@objidentifier]",
+  project_id = ".//code"
 )
 
 parse_response <- function(response) {
@@ -135,6 +122,7 @@ parse_response <- function(response) {
   if (!(length(tmp) == 0)) {
     df <- data.frame(data.table::rbindlist(tmp, fill = TRUE, use.names = TRUE))
     df$id <- unlist(lapply(xml_find_all(response, ".//dri:objIdentifier"), xml_text))
+    df$doi <- unlist(lapply(df$doi, tolower))
     return (df)
   } else {
     stop("Length of results: ", length(tmp))
@@ -181,4 +169,3 @@ queries <- function(titles){
   }
   return (queries)
 }
-

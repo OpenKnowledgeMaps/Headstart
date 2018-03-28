@@ -560,12 +560,12 @@ BubblesFSM.prototype = {
 
         t.selectAll("#region")
                 .attr("d", function (d) {
-                    return papers.createPaperPath(0, 0, d.width, d.height);
+                    return papers.createPaperPath(0, 0, d.width, d.height, undefined, undefined, d.resulttype);
                 });
 
         t.selectAll("path.dogear")
                 .attr("d", function (d) {
-                    return papers.createDogearPath(d.width * (1 - config.dogear_width), 0, d.width, d.height);
+                    return papers.createDogearPath(d.width * (1 - config.dogear_width), 0, d.width, d.height, undefined, undefined, d.resulttype);
                 });
 
         //webkit bug
@@ -702,12 +702,17 @@ BubblesFSM.prototype = {
                 });
 
         var region = function (d) {
-            return papers.createPaperPath(0, 0, d.width * mediator.circle_zoom, d.height * mediator.circle_zoom);
+            return papers.createPaperPath(0, 0, d.width * mediator.circle_zoom, d.height * mediator.circle_zoom, undefined, undefined, d.resulttype);
         };
 
         var dogear = function (d) {
             return papers.createDogearPath(d.width * (1 - config.dogear_width) * mediator.circle_zoom,
-                    0, d.width * mediator.circle_zoom, d.height * mediator.circle_zoom);
+                                        0,
+                                        d.width * mediator.circle_zoom,
+                                        d.height * mediator.circle_zoom,
+                                        undefined,
+                                        undefined,
+                                        d.resulttype);
         };
 
         t.selectAll("#region")
