@@ -144,9 +144,12 @@ IO.prototype = {
             d.title = _this.setToStringIfNullOrUndefined(d.title,
                 config.localization[config.language]["no_title"]);
 
-            if (config.content_based === false) {
+            if (config.content_based === false && !(config.scale_by)) {
                 d.readers = +d.readers;
                 d.internal_readers = +d.readers + 1;
+            } else if (config.scale_by) {
+                d.readers = +d[config.scale_by]
+                d.internal_readers = +d[config.scale_by] + 1
             } else {
                 d.readers = 0;
                 d.internal_readers = 1;
