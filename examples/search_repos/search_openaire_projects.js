@@ -19,30 +19,50 @@ var handleResponse = function (response) {
       "targets": -1,
       "data": null,
       "defaultContent": "<button>Make Map</button>"
-  } ]
+    },
+    {
+      targets: 10,
+      visible: false
+    } ]
   })
   $('#tbl-project-search-results tbody').on( 'click', 'button', function () {
     var data = table.row( $(this).parents('tr') ).data();
-    console.log(data)
-    doSubmit('project_id='+data[0]+'&funding_level='+data[7]+'&q='+encodeURIComponent( $("#ipt-keywords").val()) )
+    var submitObj = {
+      'project_id': data[0],
+      'funder': data[8],
+      'acronym': data[1],
+      'title': data[2],
+      "funding_tree": data[11],
+      "call_id": data[5],
+      "start_date": data[3],
+      "end_date": data[4],
+      "oa_mandate": data[9],
+      "special_clause": data[6],
+      "organisations": data[10],
+      "openaire_link": data[12]
+    }
+    doSubmit($.param(submitObj))
 } )
   // TODO: Handle repeated searches
 }
 
 var rawResponseMapper = function (result) {
-  console.log(result)
+  var projectMetadata = deepGet(result, ['metadata', 'oaf:entity', 'oaf:project'])
   return [
-    deepGet(result, ['metadata', 'oaf:entity', 'oaf:project', 'code', '$'], ''),
-    deepGet(result, ['metadata', 'oaf:entity', 'oaf:project', 'acronym', '$'], ''),
-    deepGet(result, ['metadata', 'oaf:entity', 'oaf:project', 'title', '$'], ''),
-    deepGet(result, ['metadata', 'oaf:entity', 'oaf:project', 'startdate', '$'], ''),
-    
-    deepGet(result, ['metadata', 'oaf:entity', 'oaf:project', 'enddate', '$'], ''),
-    deepGet(result, ['metadata', 'oaf:entity', 'oaf:project', 'callidentifier', '$'], ''),
-    deepGet(result, ['metadata', 'oaf:entity', 'oaf:project', 'ecsc39', '$'], ''),
-    getFundingLevel0(result),
-    '', // TODO: Generate like which correctly uses search.js to make a backend request like the others
-    
+    deepGet(projectMetadata, ['code', '$'], ''),
+    deepGet(projectMetadata, ['acronym', '$'], ''),
+    deepGet(projectMetadata, ['title', '$'], ''),
+    deepGet(projectMetadata, ['startdate', '$'], ''),
+    deepGet(projectMetadata, ['enddate', '$'], ''),
+    deepGet(projectMetadata, ['callidentifier', '$'], ''),
+    deepGet(projectMetadata, ['ecsc39', '$'], ''),
+    getFundingLevels(result).slice(-1)[0],
+    deepGet(projectMetadata, ['fundingtree', 'funder', 'shortname', '$'], ''),
+    deepGet(projectMetadata, ['oamandatepublications', '$'], ''),
+    getOrganisations(projectMetadata),
+    getFundingLevels(result),
+    deepGet(projectMetadata, ['websiteurl', '$'], ''),
+    '' // Blank column for button
   ]
 }
 
@@ -63,16 +83,35 @@ function deepGet (obj, props, defaultValue) {
   return deepGet(foundSoFar, remainingProps, defaultValue);
 }
 
-function getFundingLevel0 (result) {
-  var funding_tree = deepGet(result, ['metadata', 'oaf:entity', 'oaf:project', 'fundingtree'])
-  return digFundingTree(funding_tree)
+function getFunding(foo) {
+  return 'TODO'
+}
+
+function getOrganisations(project) {
+  return deepGet(project, ['rels', 'rel']).map(function (entry) {
+    return {
+      name: deepGet(entry, ['legalshortname', '$']),
+      url: deepGet(entry, ['websiteurl', '$'])
+    }
+  })
+}
+
+function getFundingLevels (result) {
+  var funding_tree = deepGet(result, ['metadata', 'oaf:entity', 'oaf:project', 'fundingtree'], [])
+  return digFundingTree(funding_tree, [])
 }
 
 // call this recursively until we work our way down to funding_level_0
-function digFundingTree (rootTree) {
+function digFundingTree (rootTree, fundingNames) {
   var keys = (Object.getOwnPropertyNames(rootTree))
   var r = /^funding_level_[0-9]+$/
   var nestedTree = keys.find(r.test.bind(r))
-  if (nestedTree === 'funding_level_0') return deepGet(rootTree, ['funding_level_0', 'name', '$'])
-  else return digFundingTree(rootTree[nestedTree]['parent'])
+  fundingNames.push(deepGet(rootTree, [nestedTree, 'name', '$']))
+  console.log(fundingNames)
+  console.log(nestedTree)
+  if (nestedTree === 'funding_level_0') {
+    return fundingNames
+  } else {
+    return digFundingTree(rootTree[nestedTree]['parent'], fundingNames)
+  }
 }
