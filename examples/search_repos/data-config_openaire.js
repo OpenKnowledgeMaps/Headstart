@@ -16,7 +16,8 @@ var data_config = {
     area_force_alpha: 0.015,
     show_list: true,
     content_based: false,
-	
+	//debug: true,
 	show_context: true,
-	create_title_from_context: true
+    create_title_from_context: true,
+    scale_types: ['citation_count', 'cited_by_tweeters_count', 'readers.mendeley']
 };
