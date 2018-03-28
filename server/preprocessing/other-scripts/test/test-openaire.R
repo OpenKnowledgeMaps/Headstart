@@ -17,6 +17,7 @@ params_file <- "params_openaire.json"
 
 source("../vis_layout.R")
 source('../openaire.R')
+source('../altmetrics.R')
 source('../utils.R')
 
 debug = FALSE
@@ -33,5 +34,9 @@ input_data = get_papers(query, params)
 
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=-1)
+
+if (service=='openaire'){
+  output_json = enrich_output_json(output_json)
+}
 
 print(output_json)
