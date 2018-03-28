@@ -24,9 +24,9 @@ var handleResponse = function (response) {
   $("#search-projects-form button").prop("disabled", false);
 
   $('#tbl-project-search-results tbody').on( 'click', 'button', function () {
-    $('#okm-making').show()
-    $('.lds-spinner').show()
-    $('#tbl-project-search-results').hide()
+    var self = $(this)
+    // button show spinner
+    self.html('<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>')
     var data = table.row( $(this).parents('tr') ).data();
     var submitObj = {
       'project_id': data[0],
@@ -42,7 +42,16 @@ var handleResponse = function (response) {
       "organisations": data[10],
       "openaire_link": data[12]
     }
-    doSubmit($.param(submitObj))
+    doSubmit($.param(submitObj), true, function (success){
+      if (success) {
+        self.attr('class', 'btn-success')
+        self.html('Map in New Tab')
+      }
+      else {
+        self.attr('class', 'btn-warning')
+        self.text('Error Making Map')
+      }
+    })
 } )
 
 }
