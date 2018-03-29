@@ -18,5 +18,6 @@ var data_config = {
     content_based: false,
 	
 	show_context: true,
-	create_title_from_context: true
+    create_title_from_context: true,
+    intro: 'intro_openaire'
 };
