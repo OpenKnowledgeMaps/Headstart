@@ -2,6 +2,7 @@
 // Filename: io.js
 import config from 'config';
 import { mediator } from 'mediator';
+import { intros } from 'intro';
 
 var IO = function() {
     this.test = 0;
@@ -94,6 +95,21 @@ IO.prototype = {
         }
         this.context.num_documents = num_documents;
         this.context.share_oa = this.num_oa;
+    },
+
+    setInfo: function(context) {
+        var current_intro = config.intro
+        var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
+        if (intro.dynamic) { 
+            intro.params = context.params
+            // if organisations build pretty url list
+            if (typeof intro.params.organisations != "undefined") {
+                intro.params.html_organisations = intro.params.organisations.map((org) => {
+                    return `<a href='${org.url}'>${org.name}</a>`
+                }).join(', ')
+                delete intro.params.organisations
+            }
+        }
     },
 
     initializeMissingData: function(data) {
