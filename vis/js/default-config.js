@@ -252,7 +252,9 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            dataset_count_label: "datasets",
+            paper_count_label: "papers"
         }
     },
 
