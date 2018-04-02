@@ -31,10 +31,16 @@ get_papers <- function(query, params, limit=100, fields="title,id,counter_total_
   
   date_string = paste0("bibjson.year:[", params$from, " TO ", params$to , "]")
   
-  #Does not seem to work:
-  sortby_string = ifelse(params$sorting == "most-recent", " bibjson.year:desc", "")
+  sortby_string =
+
+  if (params$sorting == "most-recent") {
+    sortby_string = "year:desc"
+  }
   
-  res = jaod_article_search(query=paste0(query, ' AND ', date_string, ' AND language:"English" AND _exists_:bibjson.abstract')
+  res = jaod_article_search(query=paste0(query
+                                         , ' AND ', date_string
+                                         #, ' AND index.language:"English"'
+                                         , 'AND _exists_:bibjson.abstract')
                             , sort=sortby_string
                             , pageSize=100)
   
