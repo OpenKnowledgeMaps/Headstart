@@ -39,7 +39,8 @@ var handleResponse = function (response) {
       "oa_mandate": data[9],
       "special_clause": data[6],
       "organisations": data[10],
-      "openaire_link": data[12]
+      "openaire_link": data[12],
+      "obj_id": data[13],
     }
     doSubmit($.param(submitObj))
 } )
@@ -62,6 +63,7 @@ var rawResponseMapper = function (result) {
     getOrganisations(projectMetadata),
     getFundingLevels(result),
     deepGet(projectMetadata, ['websiteurl', '$'], ''),
+    deepGet(result, ['header', 'dri:objIdentifier', '$']),
     '' // Blank column for button
   ]
 }
