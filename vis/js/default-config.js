@@ -261,7 +261,9 @@ var config = {
               missing project files or change your project information
               <p> Here is a screenshot of an example of a project page.\
               To add or change files you need to use the links in your app box.`,
-            viper_edit_button_text: 'continue to openaire'
+            viper_edit_button_text: 'continue to openaire',
+            viper_embed_button_text: 'Copy',
+            viper_embed_title: 'embed map',
         }
     },
 

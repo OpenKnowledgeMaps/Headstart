@@ -73,6 +73,24 @@
 
 }
 
+#viper_embed_modal {
+
+    .modal-dialog {
+        width: 100%;
+        max-width: 800px;
+
+        .modal-content {
+            padding: 30px;
+            textarea {
+                width: 100%;
+                display: block;
+            }
+        }
+    }
+
+
+}
+
 .modal-title {
     color: $okm-red;
 }
