@@ -19,5 +19,6 @@ var data_config = {
 	
 	show_context: true,
     create_title_from_context: true,
-    viper_edit_modal: true
+    viper_edit_modal: true,
+    viper_embed_modal: true,
 };
