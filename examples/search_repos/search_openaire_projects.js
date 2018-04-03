@@ -117,12 +117,20 @@ function getFunding(foo) {
 }
 
 function getOrganisations(project) {
-  return deepGet(project, ['rels', 'rel']).map(function (entry) {
+  var rel = deepGet(project, ['rels', 'rel'], [])
+  if (Array.isArray(rel)) {
+    return rel.map(function (entry) {
+      return {
+        name: deepGet(entry, ['legalshortname', '$']),
+        url: deepGet(entry, ['websiteurl', '$'])
+      }
+    })
+  } else {
     return {
-      name: deepGet(entry, ['legalshortname', '$']),
-      url: deepGet(entry, ['websiteurl', '$'])
+      name: deepGet(rel, ['legalshortname', '$']),
+      url: deepGet(rel, ['websiteurl', '$'])
     }
-  })
+  }
 }
 
 function getFundingLevels (result) {
