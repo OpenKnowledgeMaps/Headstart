@@ -12,6 +12,7 @@ const headstartTemplate = require("templates/headstart.handlebars");
 const infoTemplate = require("templates/misc/info_modal.handlebars");
 const iFrameTemplate = require("templates/misc/iframe_modal.handlebars");
 const imageTemplate = require("templates/misc/images_modal.handlebars");
+const editTemplate = require("templates/misc/viper_edit_modal.handlebars");
 
 class ModuleManager {
     constructor() {
@@ -272,6 +273,7 @@ MyMediator.prototype = {
         this.viz.append(infoTemplate());
         this.viz.append(iFrameTemplate());
         this.viz.append(imageTemplate());
+        this.viz.append(editTemplate());
         if (!config.render_bubbles) {
             $(".vis-col").remove();
             this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);

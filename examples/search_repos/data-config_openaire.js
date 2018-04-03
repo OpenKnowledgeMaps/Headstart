@@ -12,11 +12,12 @@ var data_config = {
     preview_type: "pdf",
     sort_options: ["readers", "title", "authors", "year"],
     is_force_areas: true,
-    language: "eng_pubmed",
+    language: "eng_openaire",
     area_force_alpha: 0.015,
     show_list: true,
     content_based: false,
 	
 	show_context: true,
-	create_title_from_context: true
+    create_title_from_context: true,
+    viper_edit_modal: true
 };
