@@ -6,6 +6,8 @@ import { mediator } from 'mediator';
 import { intros } from 'intro';
 import dateFormat from 'dateformat';
 
+const viperEditModalButton = require('templates/misc/viper_edit_button.handlebars')
+const viperEmbedModalButton = require('templates/misc/viper_embed_button.handlebars')
 
 class Canvas {
     constructor() {
@@ -244,6 +246,7 @@ class Canvas {
         subdiscipline_title_h4.html(chart_title);
 
         this.drawContext(context);
+        this.drawModals(context)
 
         if (config.show_infolink) {
             let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
@@ -275,6 +278,33 @@ class Canvas {
                     headstart.tofile(selected_file_number);
                 }
             });
+        }
+    }
+
+    drawModals(context) {
+        $('#modals').empty()
+        if (config.viper_edit_modal) {
+            $('#modals').append(viperEditModalButton)
+            $('#viper-edit-screenshot').attr('src', require('images/viper-project-screenshot.png'))
+            $('#edit-title').html(config.localization[config.language].viper_edit_title)
+            $('#edit-modal-text').html(config.localization[config.language].viper_edit_desc_label)
+            $('#viper-edit-button').text(config.localization[config.language].viper_edit_button_text)
+            $('#viper-edit-button').attr('href', `https://www.openaire.eu/search/project?projectId=${context.params.obj_id}`)
+        }
+        if (config.viper_embed_modal) {
+            $('#modals').append(viperEmbedModalButton)
+            $('#embed-title').html(config.localization[config.language].viper_embed_title)
+            $('#embed-modal-text').val(`<iframe width="1024" height="800" src="headstart.php?query=${context.query}&file=${context.id}&service=${context.service}"></iframe>`)
+
+            $('#viper-embed-button').text(config.localization[config.language].viper_embed_button_text)
+            .on('click', (event) => {
+                event.preventDefault();
+                let embedString = $('#embed-modal-text')[0];
+                embedString.focus();
+                embedString.setSelectionRange(0, embedString.value.length);
+                document.execCommand("copy");
+                return false;
+            })
         }
     }
 
