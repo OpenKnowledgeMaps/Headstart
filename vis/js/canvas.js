@@ -6,6 +6,7 @@ import { mediator } from 'mediator';
 import { intros } from 'intro';
 import dateFormat from 'dateformat';
 
+const viperEditModalButton = require('templates/misc/viper_edit_button.handlebars')
 
 class Canvas {
     constructor() {
@@ -244,6 +245,7 @@ class Canvas {
         subdiscipline_title_h4.html(chart_title);
 
         this.drawContext(context);
+        this.drawModals(context)
 
         if (config.show_infolink) {
             let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
@@ -275,6 +277,17 @@ class Canvas {
                     headstart.tofile(selected_file_number);
                 }
             });
+        }
+    }
+
+    drawModals(context) {
+        if (config.viper_edit_modal) {
+            $('#modals').html(viperEditModalButton)
+            $('#viper-edit-screenshot').attr('src', require('images/viper-project-screenshot.png'))
+            $('#edit-title').html(config.localization[config.language].viper_edit_title)
+            $('#edit-modal-text').html(config.localization[config.language].viper_edit_desc_label)
+            $('#viper-edit-button').text(config.localization[config.language].viper_edit_button_text)
+            $('#viper-edit-button').attr('href', `https://www.openaire.eu/search/project?projectId=${context.params.obj_id}`)
         }
     }
 

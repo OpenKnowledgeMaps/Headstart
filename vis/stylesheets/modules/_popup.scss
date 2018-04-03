@@ -52,6 +52,27 @@
 
 }
 
+#viper_edit_modal {
+
+    .modal-dialog {
+        width: 100%;
+        max-width: 800px;
+
+        .modal-content {
+            padding: 30px;
+            overflow: hidden;
+
+            #viper-edit-screenshot {
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+
+    }
+
+
+}
+
 .modal-title {
     color: $okm-red;
 }

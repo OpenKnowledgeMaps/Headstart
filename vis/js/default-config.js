@@ -222,6 +222,46 @@ var config = {
             default_x: 1.,
             default_y: 1.,
             default_year: ""
+        },
+        eng_openaire: {
+            loading: "Loading...",
+            search_placeholder: "Search within map...",
+            show_list: "Show list",
+            hide_list: "Hide list",
+            intro_label: "more info",
+            relevance: "relevance",
+            readers: "citations",
+            year: "year",
+            authors: "authors",
+            title: "title",
+            area: "Area",
+            keywords: "Keywords",
+            no_title: "No title",
+            overview_label: 'Overview ofg',
+            articles_label: 'documents',
+            most_recent_label: 'most recent',
+            source_label: 'Source',
+            documenttypes_label: 'Article types',
+            default_area: "No area",
+            default_author: "",
+            default_id: "defaultid",
+            default_hash: "hashHash",
+            default_abstract: "No Abstract",
+            default_published_in: "",
+            default_readers: 0,
+            default_url: "",
+            default_x: 1.,
+            default_y: 1.,
+            default_year: "",
+            dataset_count_label: "datasets",
+            paper_count_label: "papers",
+            viper_edit_title: "How to add or change project files",
+            viper_edit_desc_label: `<p>You are <b>leaving the Viper overview</b> now\
+             and will be directed to your openaire page, where you can add\
+              missing project files or change your project information
+              <p> Here is a screenshot of an example of a project page.\
+              To add or change files you need to use the links in your app box.`,
+            viper_edit_button_text: 'continue to openaire'
         }
     },
 
