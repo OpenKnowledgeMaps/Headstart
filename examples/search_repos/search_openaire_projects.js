@@ -64,11 +64,15 @@ var setupPaginator = function (searchTerm) {
         $('#viper-search-results').html(html)
       },
       dataFilter: function (data, type) {
+        try {
         mungedData = JSON.parse(data)
         if (!Array.isArray(mungedData.response.results.result)) {
           mungedData.response.results.result = [ mungedData.response.results.result ]
         }
         return JSON.stringify(mungedData)
+        } catch (e) {
+          return data
+        }
       }
     },
     locator: 'response.results.result',
