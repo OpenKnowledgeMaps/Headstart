@@ -26,7 +26,6 @@
 
     <script>
         $ ( document ).ready(function () {
-            console.log(window.dataParamsForOpening)
             if (window.dataParamsForOpening) {
                 var params = window.dataParamsForOpening
                 doSubmit(params.data, params.service_name, params.service, params.search_url)
@@ -64,7 +63,12 @@
                     url: service_url,
                     data: params,
                     success: openInThisWindow,
-                    error: console.log
+                    error: function (error) { 
+                        $("#progress").html(
+                            "Sorry! Something went wrong. Probably an error from the backend. Check the console for details."
+                        )
+                        console.log(error)
+                    }
                 });
             }
     </script>
