@@ -62,6 +62,13 @@ var setupPaginator = function (searchTerm) {
         var html = '<div>Loading Results from OpenAire...</div>' +
         '<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'
         $('#viper-search-results').html(html)
+      },
+      dataFilter: function (data, type) {
+        mungedData = JSON.parse(data)
+        if (!Array.isArray(mungedData.response.results.result)) {
+          mungedData.response.results.result = [ mungedData.response.results.result ]
+        }
+        return JSON.stringify(mungedData)
       }
     },
     locator: 'response.results.result',
