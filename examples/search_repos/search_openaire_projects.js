@@ -1,81 +1,119 @@
-var table
-
 $("#search-projects-form").validate({
   debug: true,
   submitHandler: function (form, event) {
-    $('#oa-searching').show()
-    $('.lds-spinner').show()
     event.preventDefault()
-    var urlEncKW = encodeURIComponent($("#ipt-keywords").val())
-    $.get('http://api.openaire.eu/search/projects?hasECFunding=true&format=json&size=50&keywords=' + urlEncKW, handleResponse)
-    $("#search-projects-form input").prop("disabled", true);
-    $("#search-projects-form button").prop("disabled", true);
+    var urlEncKW = encodeURIComponent($('#ipt-keywords').val())
+    setupPaginator(urlEncKW)
   }
 })
 
+function simpleTemplating (data) {
+  var html = $('<ul class="list-group">')
+  $.each(data, function (index, item) {
+    html.append($('<li class="list-group-item">')
+    .html($('<a>')
+    .attr('class', 'project-title')
+    .attr('href', '#')
+    .text(item.title).on('click', function () {
+      var win = window.open("building_map.html")
+      win.dataParamsForOpening = {
+        data: $.param(item),
+        service_name: service_name,
+        service: data_config.service,
+        search_url: service_url,
+      }
+    }))
+    .append('<span class="project-code">(' + item.project_id +
+      ')</span><div class="project-funders">Funder Tree is: ' + item.funding_tree.join(', ') +
+      '</div><div class="project-dates">Date range is: ' + item.start_date.slice(0, 4) +'-'+ item.end_date.slice(0,4) +
+      '</div><div class="project-organisations">Orgs is: ' + formatOrganisationLinks(item.organisations).slice(0,2).join(', ') + '</div>'))
+  })
+  return html
+}
+
+var formatOrganisationLinks = function (organisations) {
+  return organisations.map(function (org) {
+    return '<a href="+' +org.url + '">'+org.name+'</a>'
+  })
+}
+
+var setupPaginator = function (searchTerm) {
+  var paginator = $('#viper-search-pager')
+  paginator.pagination({
+    dataSource: 'http://api.openaire.eu/search/projects?format=json&hasECFunding=true&keywords=' + searchTerm,
+    callback: function (data, pagination) {
+      var header = '<div id="project_count">Projects: ' + pagination.totalNumber + ' results</div>'
+      var html = simpleTemplating(data)
+      $('#viper-search-results').html(header)
+      .append(html)
+      if (pagination.totalNumber === 0) {
+        $('#viper-search-results').append('<div class="viper-no-results-err">Sorry, no projects found for your search terms. Please try again</div>')
+      }
+    },
+    formatAjaxError: function (jqXHR, textStatus, errorThrown) {
+      $('#viper-search-results').text('Error Searching: Check your search terms. See Console for error details')
+      console.log(jqXHR, textStatus, errorThrown)
+    },
+    alias: {
+      pageSize: 'size',
+      pageNumber: 'page'
+    },
+    ajaxDataType: 'get',
+    ajax: {
+      cache: true, //required or JQuery's cache busting causes OpenAire API to throw a stacktrace
+      beforeSend: function () {
+        var html = '<div>Loading Results from OpenAire...</div>' +
+        '<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'
+        $('#viper-search-results').html(html)
+      },
+      dataFilter: function (data, type) {
+        try {
+          mungedData = JSON.parse(data)
+          if(mungedData.response.results === null) { // Edge case for no results
+            mungedData.response.results = {}
+            mungedData.response.results.result = []
+            console.log(mungedData)
+          } else if (!Array.isArray(mungedData.response.results.result)) { // Edge case for 1 result
+            mungedData.response.results.result = [ mungedData.response.results.result ]
+          }
+          return JSON.stringify(mungedData)
+        } catch (e) {
+          console.log(e)
+          return data
+        }
+      }
+    },
+    locator: 'response.results.result',
+    className: 'paginationjs-theme-blue',
+    formatResult: handleResponse,
+    totalNumberLocator: function (response) {
+      return response.response.header.total.$
+    },
+  })
+}
+
 var handleResponse = function (response) {
-  var dataSet = response.response.results.result.map(rawResponseMapper)
-  table.clear()
-  table.rows.add(dataSet).draw()
-  $('#tbl-project-search-results').show()
-  $('#oa-searching').hide()
-  $('.lds-spinner').hide()
-  $("#search-projects-form input").prop("disabled", false);
-  $("#search-projects-form button").prop("disabled", false);
-
-  $('#tbl-project-search-results tbody').on( 'click', 'button', function () {
-    var self = $(this)
-    // button show spinner
-    self.html('<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>')
-    var data = table.row( $(this).parents('tr') ).data();
-    var submitObj = {
-      'project_id': data[0],
-      'funder': data[8],
-      'acronym': data[1],
-      'title': data[2],
-      "funding_tree": data[11],
-      "call_id": data[5],
-      "start_date": data[3],
-      "end_date": data[4],
-      "oa_mandate": data[9],
-      "special_clause": data[6],
-      "organisations": data[10],
-      "openaire_link": data[12],
-      "obj_id": data[13],
-    }
-    doSubmit($.param(submitObj), true, function (success){
-      if (success) {
-        self.attr('class', 'btn-success')
-        self.html('Map in New Tab')
-      }
-      else {
-        self.attr('class', 'btn-warning')
-        self.text('Error Making Map')
-      }
-    })
-} )
-
+  return response.map(rawResponseMapper)
 }
 
 var rawResponseMapper = function (result) {
   var projectMetadata = deepGet(result, ['metadata', 'oaf:entity', 'oaf:project'])
-  return [
-    deepGet(projectMetadata, ['code', '$'], ''),
-    deepGet(projectMetadata, ['acronym', '$'], ''),
-    deepGet(projectMetadata, ['title', '$'], ''),
-    deepGet(projectMetadata, ['startdate', '$'], ''),
-    deepGet(projectMetadata, ['enddate', '$'], ''),
-    deepGet(projectMetadata, ['callidentifier', '$'], ''),
-    deepGet(projectMetadata, ['ecsc39', '$'], ''),
-    getFundingLevels(result).slice(-1)[0],
-    deepGet(projectMetadata, ['fundingtree', 'funder', 'shortname', '$'], ''),
-    deepGet(projectMetadata, ['oamandatepublications', '$'], ''),
-    getOrganisations(projectMetadata),
-    getFundingLevels(result),
-    deepGet(projectMetadata, ['websiteurl', '$'], ''),
-    deepGet(result, ['header', 'dri:objIdentifier', '$']),
-    '' // Blank column for button
-  ]
+  return {
+    project_id: deepGet(projectMetadata, ['code', '$'], ''),
+    acronym: deepGet(projectMetadata, ['acronym', '$'], ''),
+    title: deepGet(projectMetadata, ['title', '$'], ''),
+    start_date: deepGet(projectMetadata, ['startdate', '$'], ''),
+    end_date: deepGet(projectMetadata, ['enddate', '$'], ''),
+    call_id: deepGet(projectMetadata, ['callidentifier', '$'], ''),
+    special_clause: deepGet(projectMetadata, ['ecsc39', '$'], ''),
+    funding_stream: getFundingLevels(result).slice(-1)[0],
+    funder: deepGet(projectMetadata, ['fundingtree', 'funder', 'shortname', '$'], ''),
+    oa_mandate: deepGet(projectMetadata, ['oamandatepublications', '$'], ''),
+    organisations: getOrganisations(projectMetadata),
+    funding_tree: getFundingLevels(result),
+    openaire_link: deepGet(projectMetadata, ['websiteurl', '$'], ''),
+    obj_id: deepGet(result, ['header', 'dri:objIdentifier', '$'])
+  }
 }
 
 $(document).ready(function () {
@@ -83,22 +121,6 @@ $(document).ready(function () {
   $('#oa-searching').hide()
   $('#okm-making').hide()
   $('.lds-spinner').hide()
-
-  table = $('#tbl-project-search-results').DataTable({
-    searching: false,
-    lengthChange: false,
-    ordering: false,
-    "columnDefs": [ {
-      "targets": -1,
-      "data": null,
-      "defaultContent": "<button>Make Map</button>"
-    },
-    {
-      targets: 10,
-      visible: false
-    } ]
-  })
-
 })
 
 // Standard deep get function adapted from https://github.com/joshuacc/drabs
@@ -114,10 +136,6 @@ function deepGet (obj, props, defaultValue) {
   return deepGet(foundSoFar, remainingProps, defaultValue);
 }
 
-function getFunding(foo) {
-  return 'TODO'
-}
-
 function getOrganisations(project) {
   var rel = deepGet(project, ['rels', 'rel'], [])
   if (Array.isArray(rel)) {
@@ -128,10 +146,10 @@ function getOrganisations(project) {
       }
     })
   } else {
-    return {
+    return [{
       name: deepGet(rel, ['legalshortname', '$']),
       url: deepGet(rel, ['websiteurl', '$'])
-    }
+    }]
   }
 }
 
@@ -149,6 +167,11 @@ function digFundingTree (rootTree, fundingNames) {
   if (nestedTree === 'funding_level_0') {
     return fundingNames
   } else {
-    return digFundingTree(rootTree[nestedTree]['parent'], fundingNames)
+    try {
+      return digFundingTree(rootTree[nestedTree]['parent'], fundingNames)
+    }
+    catch (e) {
+      console.log(rootTree)
+    }
   }
 }

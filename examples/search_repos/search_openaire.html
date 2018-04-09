@@ -16,8 +16,10 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="pagination.min.js"></script>
     <link type="text/css" rel="stylesheet" href="options.css">
     <link type="text/css" rel="stylesheet" href="spinner.css">
+    <link type="text/css" rel="stylesheet" href="pagination.css">
 </head>
 
 <body style="padding-left:10px; padding-right:10px;">
@@ -28,30 +30,14 @@
             <input type="text" name="keywords" id="ipt-keywords" size="61" required>
             <button type="submit" class="btn">Search</button>
         </form>
-        <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         <div id="oa-searching">Searching OpenAire for Projects</div>
         <div id="okm-making">Building OpenKnowledgeMap</div>
-        <table id="tbl-project-search-results">
-            <thead>
-                <tr>
-                    <th>grantID</th>
-                    <th>acronym</th>
-                    <th>title</th>
-                    <th>startdate</th>
-                    <th>enddate</th>
-                    <th>callidentifier</th>
-                    <th>ecsc39</th>
-                    <th>funding_level_0</th>
-                    <th>funder</th>
-                    <th>oa_mandate</th>
-                    <th>Organisations</th>
-                    <th>Funding</th>
-                    <th>websiteURL</th>
-                    <th>obj_id</th>
-                    <th>VIPER Map</th>
-                </tr>
-            </thead>
-        </table>
+        <div id="viper-search-results">
+
+        </div>
+        <div id="viper-search-pager">
+
+        </div>
     </div>
     <div style="margin-top:20px ">Built with <a href="http://github.com/pkraker/Headstart " target="_blank ">Headstart</a>.
     </div>
