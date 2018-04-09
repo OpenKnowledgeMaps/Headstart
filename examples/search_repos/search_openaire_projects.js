@@ -46,6 +46,9 @@ var setupPaginator = function (searchTerm) {
       var html = simpleTemplating(data)
       $('#viper-search-results').html(header)
       .append(html)
+      if (pagination.totalNumber === 0) {
+        $('#viper-search-results').append('<div class="viper-no-results-err">Sorry, no projects found for your search terms. Please try again</div>')
+      }
     },
     formatAjaxError: function (jqXHR, textStatus, errorThrown) {
       $('#viper-search-results').text('Error Searching: Check your search terms. See Console for error details')
@@ -65,12 +68,17 @@ var setupPaginator = function (searchTerm) {
       },
       dataFilter: function (data, type) {
         try {
-        mungedData = JSON.parse(data)
-        if (!Array.isArray(mungedData.response.results.result)) {
-          mungedData.response.results.result = [ mungedData.response.results.result ]
-        }
-        return JSON.stringify(mungedData)
+          mungedData = JSON.parse(data)
+          if(mungedData.response.results === null) { // Edge case for no results
+            mungedData.response.results = {}
+            mungedData.response.results.result = []
+            console.log(mungedData)
+          } else if (!Array.isArray(mungedData.response.results.result)) { // Edge case for 1 result
+            mungedData.response.results.result = [ mungedData.response.results.result ]
+          }
+          return JSON.stringify(mungedData)
         } catch (e) {
+          console.log(e)
           return data
         }
       }
