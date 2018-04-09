@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Building Your Map</title>
+    <meta http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js" integrity="sha256-8WqyJLuWKRBVhxXIL1jBDD7SDxU936oZkCnxQbWwJVw=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link type="text/css" rel="stylesheet" href="spinner.css">
+</head>
+
+<body style="padding-left:10px; padding-right:10px;">
+    <div>
+        <h2>Please wait: we're building your map for you now</h2>
+        
+        <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        <div id="progress"></div>
+    </div>
+    <div style="margin-top:20px ">Built with <a href="http://github.com/pkraker/Headstart " target="_blank ">Headstart</a>.
+    </div>
+
+    <script>
+        $ ( document ).ready(function () {
+            if (window.dataParamsForOpening) {
+                var params = window.dataParamsForOpening
+                doSubmit(params.data, params.service_name, params.service, params.search_url)
+            } else {
+                window.alert('No Parameter Passed; don\'t access the page directly. Use the search')
+            }
+        })
+
+        var doSubmit = function (params, service_name, service, service_url) {
+                params += "&today=" + new Date().toLocaleDateString("en-US");
+                var openInThisWindow = function (data) {
+                    console.log(data)
+                    if (data.status === "success") {
+                        var file = data.id;
+                        window.location =
+                            "headstart.php?query=" +
+                            data.query +
+                            "&file=" +
+                            file +
+                            "&service=" +
+                            service +
+                            "&service_name=" +
+                            service_name;
+                        return false;
+                    } else {
+                        $("#progress").html(
+                            "Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again."
+                        );
+                    }
+                }
+
+                $.ajax({
+                    // make an AJAX request
+                    type: "POST",
+                    url: service_url,
+                    data: params,
+                    success: openInThisWindow,
+                    error: function (error) { 
+                        $("#progress").html(
+                            "Sorry! Something went wrong. Probably an error from the backend. Check the console for details."
+                        )
+                        console.log(error)
+                    }
+                });
+            }
+    </script>
+
+</body>
+
+</html>
