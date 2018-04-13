@@ -71,7 +71,16 @@ var setupPaginator = function (searchTerm) {
       beforeSend: function () {
         var html = '<div>Loading Results from OpenAire...</div>' +
         '<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'
-        $('#viper-search-results').html(html)
+        $('#viper-search-results').html(html);
+        
+        var active_page = $('.paginationjs').find("li.active");
+        active_page.removeClass('active');
+        
+        if(active_page.next() !== null && active_page.next() !== undefined ){
+            active_page.next().addClass('active');  
+        } else {
+            $('.pagination').find("li:first").addClass("active")
+        }                
       },
       dataFilter: function (data, type) {
         try {
