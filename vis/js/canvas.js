@@ -345,6 +345,9 @@ class Canvas {
             $("#num_articles").html(context.num_documents + modifier
                     + " " + config.localization[config.language].articles_label
                     + " (" + context.share_oa + " open access)" );
+            
+            $("#source").html(config.localization[config.language].source_label
+                           + ": " + config.service_names[context.service]);
 
             if (config.create_title_from_context_style === 'openaire') {
                 $("#context-dataset_count").text(
@@ -353,17 +356,14 @@ class Canvas {
                 $("#context-paper_count").text(
                     `${context.num_papers} ${config.localization[config.language].paper_count_label}`
                 )
-                $("#context-funding_stream").text(
-                    `${context.params.funding_stream}`
+                $("#context-funder").text(
+                    `Funder: ${context.params.funder}`
                 )
                 $("#context-project_runtime").text(
-                    `${context.params.start_date}–${context.params.end_date}`
+                    `${context.params.start_date.slice(0, 4)}–${context.params.end_date.slice(0, 4)}`
                 )
-            } else {
-                $("#source").html(config.localization[config.language].source_label
-                           + ": " + config.service_names[context.service]);
             }
-
+            
             if (this.paramExists(context.params.from) && this.paramExists(context.params.to)) {
 
                 let time_macro_display = (config.service === "doaj")?("yyyy"):("d mmm yyyy");

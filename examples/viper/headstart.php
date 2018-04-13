@@ -9,7 +9,6 @@
         <script type="text/javascript" src="data-config_<?php echo $_GET['service'] ?>.js"></script>
         <script type="text/javascript" src="../search_repos/data-config_server.js"></script>
         <script>
-            data_config.title = '<?php echo 'Overview of <span id="search-term-unique">' . $_GET['query'] . '</span>' ?>';
         	data_config.files = [{
         		title: <?php echo json_encode($_GET['query']) ?>,
         		file: <?php echo json_encode($_GET['file']) ?>
