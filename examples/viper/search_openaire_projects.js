@@ -21,6 +21,7 @@ function simpleTemplating (data) {
         service_name: service_name,
         service: data_config.service,
         search_url: service_url,
+        acronymtitle: item.acronymtitle
       }
     }))
     .append('<span class="project-code"> (' + item.project_id +
