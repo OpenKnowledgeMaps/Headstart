@@ -171,3 +171,8 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 .paginationjs.paginationjs-theme-blue .paginationjs-pages li.active > a:hover {
     background: #3B42B1;
 }
+
+#progress {
+    color: #fff;
+    text-align: center;
+}
