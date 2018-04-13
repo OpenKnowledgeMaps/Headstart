@@ -6,6 +6,16 @@
   width: 64px;
   height: 64px;
 }
+
+.search-box .lds-spinner {
+    display: block;
+    margin:0px auto;
+}
+
+.search-box .lds-spinner div:after {
+    background: rgb(255, 255, 255);
+}
+
 .lds-spinner div {
   transform-origin: 32px 32px;
   animation: lds-spinner 1.2s linear infinite;
@@ -19,7 +29,7 @@
   width: 5px;
   height: 14px;
   border-radius: 20%;
-  background: rgb(32, 117, 160);
+  background: rgb(1, 183, 240);/*rgb(59, 66, 177)*/
 }
 .lds-spinner div:nth-child(1) {
   transform: rotate(0deg);

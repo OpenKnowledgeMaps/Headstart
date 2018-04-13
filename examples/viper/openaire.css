@@ -1,0 +1,178 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    background-color: white;
+}
+
+body {
+    color: black;
+    font-family: 'Open Sans', Helvetica;
+    font-weight: 300;
+    margin: 0px auto 0;
+    width: 100%;
+    /*max-width: 1600px;*/
+    -webkit-font-smoothing: subpixel-antialiased;
+    clear:both;
+    position: relative;
+    top: 0px;
+    /*     -ms-word-break: break-all;*/
+    word-break: break-word;
+    word-wrap: break-word; 
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    -o-hyphens: auto;
+}
+
+a {
+    color: #2D72D6;
+}
+
+a:hover {
+    color: #DF512E;
+}
+
+.search-box {
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.6))/*, 
+        url(../img/start3.png)*/;
+    background-color: #3B42B1;
+    background-repeat: no-repeat; 
+    background-position: 100% 70%;
+    background-size: 100%;
+    padding: 190px 0px 100px;
+}
+
+.search-box .background2 .team p {
+    color: #3B42B1;
+}
+
+.search-box .background2 .team p:last-child {
+    margin: 0px auto 40px;
+}
+
+.search-box #about-page, .search-box #about-page .background2 {
+    background-color: transparent;
+}
+
+.search-box .background2 .team {
+    padding: 0px 20px;
+}
+
+.search-box .background2 {
+    background-color: transparent;
+    margin: 0px auto;
+    padding: 0px;
+}
+
+.search-box .background2 .team p:first-child, .search-box .background2 .team p:last-child {
+    color: white;
+    text-align: center;
+}
+
+.background2 .team p:first-child {
+    max-width: 750px;
+    font-weight: 800;
+    margin: 0px auto;
+    font-size: 40px;
+    text-align: center;
+}
+
+.background2 .team p:last-child {
+    font-size: 24px;
+    max-width: 850px;
+}
+
+.mittig2 {
+    max-width: 750px;
+    width: 100%;
+    margin: 0px auto;
+    background-color: white;
+    padding: 30px 50px;
+    border-radius: 5px;
+}
+
+.mittig2 .text-field {
+    height: 45px;
+    padding-left: 5px;
+    width: 87%;
+}
+
+.submit-btn {
+    margin-left: -5px;
+    margin-top: -2px;
+    background-color: #3B42B1;
+    color: white;
+    font-weight: bold;
+    width: 13%;
+    height: 45px;
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 0px 0px;
+    vertical-align: middle;
+    border-width: 3px;
+    border-style: solid;
+    border-color: #3B42B1;
+    display: inline-block;
+}
+
+.submit-btn:hover {
+    background-color: #01B7F0;
+    color: white;
+    border-color: #01B7F0;
+}
+
+a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
+    border: 2px solid #01B7F0;
+    color: white;
+    background-color: #01B7F0;
+}
+
+.newsletter2 {
+    border-radius: 5px;
+    padding: 5px;
+    border: 2px solid #eee;
+    color: #eee;
+    background-color: transparent;
+    font-weight: 300;
+    text-decoration: none;
+}
+
+#viper-search-results, #viper-search-pager {
+    max-width: 800px;
+    width: 100%;
+    margin: 0px auto;
+}
+
+#project_count, .loading {
+    padding: 20px 0;
+}
+
+.paginationjs.paginationjs-theme-blue .paginationjs-pages li.active > a {
+    background: #3B42B1;
+}
+
+.paginationjs.paginationjs-theme-blue .paginationjs-go-input > input[type="text"], .paginationjs.paginationjs-theme-blue .paginationjs-pages li {
+    border-color: #3B42B1;
+}
+
+.paginationjs.paginationjs-theme-blue .paginationjs-pages li > a {
+    color: #3B42B1;
+}
+
+.paginationjs.paginationjs-theme-blue .paginationjs-pages li > a:hover {
+    background: #f9f9f9;
+}
+
+.paginationjs.paginationjs-theme-blue .paginationjs-pages li.active > a:hover {
+    background: #3B42B1;
+}
+
+#progress {
+    color: #fff;
+    text-align: center;
+}

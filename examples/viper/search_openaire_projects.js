@@ -49,12 +49,12 @@ var setupPaginator = function (searchTerm) {
   paginator.pagination({
     dataSource: 'http://api.openaire.eu/search/projects?format=json&keywords=' + searchTerm,
     callback: function (data, pagination) {
-      var header = '<div id="project_count">Projects: ' + pagination.totalNumber + ' results</div>'
+      var header = '<div id="project_count">Projects: ' + pagination.totalNumber + ' results for <span style="font-weight:bold;">' + searchTerm + '</span></div>'
       var html = simpleTemplating(data)
       $('#viper-search-results').html(header)
       .append(html)
       if (pagination.totalNumber === 0) {
-        $('#viper-search-results').append('<div class="viper-no-results-err">Sorry, no projects found for your search terms. Please try again</div>')
+        $('#viper-search-results').append('<div class="viper-no-results-err">Sorry, no projects found for <span style="font-weight:bold;">' + searchTerm + '</span> Please try another search term.</div>')
       }
     },
     formatAjaxError: function (jqXHR, textStatus, errorThrown) {
@@ -69,7 +69,7 @@ var setupPaginator = function (searchTerm) {
     ajax: {
       cache: true, //required or JQuery's cache busting causes OpenAire API to throw a stacktrace
       beforeSend: function () {
-        var html = '<div>Loading Results from OpenAire...</div>' +
+        var html = '<div class="loading">Loading Results from OpenAire...</div>' +
         '<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'
         $('#viper-search-results').html(html);
         
