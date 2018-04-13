@@ -109,7 +109,8 @@ fields <- c(
   paper_abstract = ".//description",
   doi = ".//pid[@classid=\"doi\"]",
   id = ".//result[@objidentifier]",
-  project_id = ".//code"
+  project_id = ".//code",
+  accessright = ".//bestaccessright/@classname"
 )
 
 parse_response <- function(response) {
