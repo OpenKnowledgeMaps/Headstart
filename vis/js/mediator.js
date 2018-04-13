@@ -229,6 +229,7 @@ MyMediator.prototype = {
         mediator.manager.call('io', 'prepareData', [highlight_data, data]);
         mediator.manager.call('io', 'prepareAreas', []);
         mediator.manager.call('io', 'setContext', [context, data.length]);
+        mediator.manager.call('io', 'setInfo', [context]);
         mediator.manager.call('canvas', 'drawTitle', [context]);
         
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);

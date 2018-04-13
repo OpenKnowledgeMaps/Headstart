@@ -23,4 +23,6 @@ var data_config = {
     create_title_from_context: true,
     viper_edit_modal: true,
     viper_embed_modal: true,
+
+    intro: 'intro_openaire'
 };
