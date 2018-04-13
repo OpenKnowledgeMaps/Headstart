@@ -14,7 +14,7 @@ function simpleTemplating (data) {
     .html($('<a>')
     .attr('class', 'project-title')
     .attr('href', '#')
-    .text('Overview of ' + item.acronym + ' - ' + item.title).on('click', function () {
+    .text('Overview of ' + item.acronymtitle).on('click', function () {
       var win = window.open("building_map.html")
       win.dataParamsForOpening = {
         data: $.param(item),
@@ -114,7 +114,7 @@ var handleResponse = function (response) {
 
 var rawResponseMapper = function (result) {
   var projectMetadata = deepGet(result, ['metadata', 'oaf:entity', 'oaf:project'])
-  return {
+  var items = {
     project_id: deepGet(projectMetadata, ['code', '$'], ''),
     acronym: deepGet(projectMetadata, ['acronym', '$'], ''),
     title: deepGet(projectMetadata, ['title', '$'], ''),
@@ -128,8 +128,11 @@ var rawResponseMapper = function (result) {
     organisations: getOrganisations(projectMetadata),
     funding_tree: getFundingLevels(result),
     openaire_link: deepGet(projectMetadata, ['websiteurl', '$'], ''),
-    obj_id: deepGet(result, ['header', 'dri:objIdentifier', '$'])
+    obj_id: deepGet(result, ['header', 'dri:objIdentifier', '$']),
   }
+  items.acronymtitle = ((items.acronym !== '')?(items.acronym + ' - '):('')) + items.title;
+  
+  return items;
 }
 
 $(document).ready(function () {
