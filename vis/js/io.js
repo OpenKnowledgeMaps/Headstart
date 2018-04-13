@@ -12,6 +12,8 @@ var IO = function() {
     this.title = "default-title";
     this.context = {};
     this.num_oa;
+    this.num_papers;
+    this.num_datasets;
 };
 
 IO.prototype = {
@@ -95,6 +97,8 @@ IO.prototype = {
         }
         this.context.num_documents = num_documents;
         this.context.share_oa = this.num_oa;
+        this.context.num_datasets = this.num_datasets;
+        this.context.num_papers = this.num_papers;
     },
 
     setInfo: function(context) {
@@ -141,6 +145,8 @@ IO.prototype = {
         var cur_data = fs;
         var has_keywords = false;
         var num_oa = 0;
+        var num_papers = 0;
+        var num_datasets = 0;
         cur_data.forEach(function (d) {
             d.x = parseFloat(d.x);
             d.y = parseFloat(d.y);
@@ -215,7 +221,9 @@ IO.prototype = {
             d.outlink = _this.createOutlink(d);
             
             num_oa += (d.oa)?(1):(0);
-            
+            num_papers += (d.resulttype != 'dataset')?(1):(0);
+            num_datasets += (d.oa === 'dataset')?(1):(0);
+
             if(d.hasOwnProperty("subject_orig")) {
                 has_keywords = true;
             }
@@ -224,6 +232,8 @@ IO.prototype = {
         
         config.show_keywords = (has_keywords)?(true):(false);
         this.num_oa = num_oa;
+        this.num_papers = num_papers;
+        this.num_datasets = num_datasets;
 
         mediator.publish("update_canvas_domains", cur_data);
         mediator.publish("update_canvas_data", cur_data);

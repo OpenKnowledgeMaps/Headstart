@@ -3,8 +3,6 @@ var data_config = {
     mode: "search_repos",
 
     service: "openaire",
-
-    title: "",
     base_unit: "citations",
     use_area_uri: true,
     show_timeline: false,
@@ -21,6 +19,9 @@ var data_config = {
     
     show_context: true,
     create_title_from_context: true,
+    create_title_from_context_style: 'openaire',
+    infolink_style: 'openaire',
+    
     viper_edit_modal: true,
     viper_embed_modal: true,
 

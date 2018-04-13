@@ -245,9 +245,13 @@ class Canvas {
         chart_title = config.localization[config.language].default_title;
         if (config.title) {
             chart_title = config.title;
+        } else if (config.create_title_from_context_style === 'openaire') {
+            let maxTitleLength = 47 // This should probably make it's way to a more global config
+            let compressedTitle = ( context.params.title.length > maxTitleLength ) ? context.params.title.slice(0, maxTitleLength - 3) + '...' : context.params.title
+            chart_title = `Overview of <span class="truncated-project-title">${compressedTitle}</span>\
+                            <span class="project-id">(${context.params.project_id})</span>`
         } else if (config.create_title_from_context) {
             let query_clean = context.query.replace(/\\(.?)/g, "$1");
-
             chart_title = config.localization[config.language].overview_label
                     + ' <span id="search-term-unique">' + query_clean + '</span>';
         }
@@ -261,7 +265,12 @@ class Canvas {
         if (config.show_infolink) {
             let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
             subdiscipline_title_h4.append(infolink);
-            $("#infolink").html(config.localization[config.language].intro_label + ' <span id="whatsthis">&#xf05a;</span>');
+
+            if(config.infolink_style === "openaire") {
+                $("#infolink").text(config.localization[config.language].intro_label)
+            } else {
+                $("#infolink").html(config.localization[config.language].intro_label + ' <span id="whatsthis">&#xf05a;</span>');
+            }
         }
 
         if (config.show_timeline) {
@@ -337,8 +346,23 @@ class Canvas {
                     + " " + config.localization[config.language].articles_label
                     + " (" + context.share_oa + " open access)" );
 
-            $("#source").html(config.localization[config.language].source_label
-                    + ": " + config.service_names[context.service]);
+            if (config.create_title_from_context_style === 'openaire') {
+                $("#context-dataset_count").text(
+                    `${context.num_datasets} ${config.localization[config.language].dataset_count_label}`
+                )
+                $("#context-paper_count").text(
+                    `${context.num_papers} ${config.localization[config.language].paper_count_label}`
+                )
+                $("#context-funding_stream").text(
+                    `${context.params.funding_stream}`
+                )
+                $("#context-project_runtime").text(
+                    `${context.params.start_date}–${context.params.end_date}`
+                )
+            } else {
+                $("#source").html(config.localization[config.language].source_label
+                           + ": " + config.service_names[context.service]);
+            }
 
             if (this.paramExists(context.params.from) && this.paramExists(context.params.to)) {
 
