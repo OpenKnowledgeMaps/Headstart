@@ -268,6 +268,8 @@ var config = {
         }
     },
 
+    scale_types: [],
+
     url_plos_pdf: "http://www.plosone.org/article/fetchObject.action?representation=PDF&uri=info:doi/",
     plos_journals_to_shortcodes: {
         "plos neglected tropical diseases": "plosntds",

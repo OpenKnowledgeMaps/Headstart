@@ -25,5 +25,12 @@ var data_config = {
     viper_edit_modal: true,
     viper_embed_modal: true,
 
-    intro: 'intro_openaire'
+    intro: 'intro_openaire',
+    
+    scale_types: ['citation_count', 'cited_by_tweeters_count', 'readers.mendeley'],
+    scale_explaination: {
+        citation_count: 'Scaleum Ipsum Sit Dolor scaled by Citations',
+        cited_by_tweeters_count: 'Scaleum Ipsum Sit Dolor scaled by Tweets',
+        'readers.mendeley': 'Scaleum Ipsum Sit Dolor scaled by Mendeley Readers'
+    }
 };
