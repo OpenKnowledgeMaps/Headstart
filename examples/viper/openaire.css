@@ -142,20 +142,14 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
     text-decoration: none;
 }
 
-#viper-search-results {
+#viper-search-results, #viper-search-pager {
     max-width: 800px;
     width: 100%;
     margin: 0px auto;
 }
 
-#viper-search-pager {
-    max-width: 300px;
-    margin: 0px auto;
-}
-
-#project_count {
+#project_count, .loading {
     padding: 20px 0;
-    
 }
 
 .paginationjs.paginationjs-theme-blue .paginationjs-pages li.active > a {
@@ -168,4 +162,12 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 
 .paginationjs.paginationjs-theme-blue .paginationjs-pages li > a {
     color: #3B42B1;
+}
+
+.paginationjs.paginationjs-theme-blue .paginationjs-pages li > a:hover {
+    background: #f9f9f9;
+}
+
+.paginationjs.paginationjs-theme-blue .paginationjs-pages li.active > a:hover {
+    background: #3B42B1;
 }
