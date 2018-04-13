@@ -98,7 +98,7 @@ var config = {
     //intro
     intro: "intro_hs",
     
-    service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ"},
+    service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE"},
 
     localization: {
         eng: {
@@ -238,7 +238,7 @@ var config = {
             area: "Area",
             keywords: "Keywords",
             no_title: "No title",
-            overview_label: 'Overview ofg',
+            overview_label: 'Overview of',
             articles_label: 'documents',
             most_recent_label: 'most recent',
             source_label: 'Source',

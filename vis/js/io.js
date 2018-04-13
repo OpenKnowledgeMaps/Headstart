@@ -221,8 +221,8 @@ IO.prototype = {
             d.outlink = _this.createOutlink(d);
             
             num_oa += (d.oa)?(1):(0);
-            num_papers += (d.resulttype != 'dataset')?(1):(0);
-            num_datasets += (d.oa === 'dataset')?(1):(0);
+            num_papers += (d.resulttype === 'publication')?(1):(0);
+            num_datasets += (d.resulttype === 'dataset')?(1):(0);
 
             if(d.hasOwnProperty("subject_orig")) {
                 has_keywords = true;
