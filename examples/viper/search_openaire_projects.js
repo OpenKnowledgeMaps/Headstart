@@ -24,7 +24,8 @@ function simpleTemplating (data) {
       }
     }))
     .append('<span class="project-code"> (' + item.project_id +
-      ')</span><div class="project-funders">' + item.funder + ', ' + item.funding_tree[item.funding_tree.length-1] +
+      ')</span><div class="project-funders">' + item.funder + 
+      ((item.funding_tree.length > 0)?(', ' + item.funding_tree[item.funding_tree.length-1]):('')) +
       ' (' + item.start_date.slice(0, 4) +' - '+ item.end_date.slice(0,4) + ')' +
       '</div><div class="project-organisations">Participants: ' + formatOrganisationLinks(item.organisations).slice(0,15).join(', ') + 
       ((item.organisations.length > 15)?(',...'):('')) + '</div>'))
@@ -41,7 +42,7 @@ var formatOrganisationLinks = function (organisations) {
 var setupPaginator = function (searchTerm) {
   var paginator = $('#viper-search-pager')
   paginator.pagination({
-    dataSource: 'http://api.openaire.eu/search/projects?format=json&hasECFunding=true&keywords=' + searchTerm,
+    dataSource: 'http://api.openaire.eu/search/projects?format=json&keywords=' + searchTerm,
     callback: function (data, pagination) {
       var header = '<div id="project_count">Projects: ' + pagination.totalNumber + ' results</div>'
       var html = simpleTemplating(data)
@@ -164,6 +165,8 @@ function digFundingTree (rootTree, fundingNames) {
   var keys = (Object.getOwnPropertyNames(rootTree))
   var r = /^funding_level_[0-9]+$/
   var nestedTree = keys.find(r.test.bind(r))
+    if(typeof nestedTree === 'undefined') 
+      return fundingNames
   fundingNames.push(deepGet(rootTree, [nestedTree, 'name', '$']))
   if (nestedTree === 'funding_level_0') {
     return fundingNames
