@@ -193,6 +193,7 @@ class Canvas {
                     if (paramName.slice(0,4) === 'html') {
                         $('.info-modal-'+paramName).html(value)
                     } else {
+                        value = (value === "true")?("yes"):(value);
                         $('.info-modal-'+paramName).text(value)
                     }
                 })
