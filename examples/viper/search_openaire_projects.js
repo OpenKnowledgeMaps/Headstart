@@ -14,7 +14,7 @@ function simpleTemplating (data) {
     .html($('<a>')
     .attr('class', 'project-title')
     .attr('href', '#')
-    .text(item.title).on('click', function () {
+    .text('Overview of ' + item.acronym + ' - ' + item.title).on('click', function () {
       var win = window.open("building_map.html")
       win.dataParamsForOpening = {
         data: $.param(item),
@@ -23,10 +23,11 @@ function simpleTemplating (data) {
         search_url: service_url,
       }
     }))
-    .append('<span class="project-code">(' + item.project_id +
-      ')</span><div class="project-funders">Funder Tree is: ' + item.funding_tree.join(', ') +
-      '</div><div class="project-dates">Date range is: ' + item.start_date.slice(0, 4) +'-'+ item.end_date.slice(0,4) +
-      '</div><div class="project-organisations">Orgs is: ' + formatOrganisationLinks(item.organisations).slice(0,2).join(', ') + '</div>'))
+    .append('<span class="project-code"> (' + item.project_id +
+      ')</span><div class="project-funders">' + item.funder + ', ' + item.funding_tree[item.funding_tree.length-1] +
+      ' (' + item.start_date.slice(0, 4) +' - '+ item.end_date.slice(0,4) + ')' +
+      '</div><div class="project-organisations">Participants: ' + formatOrganisationLinks(item.organisations).slice(0,15).join(', ') + 
+      ((item.organisations.length > 15)?(',...'):('')) + '</div>'))
   })
   return html
 }
