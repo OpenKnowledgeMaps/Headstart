@@ -8,12 +8,12 @@ var data_config = {
     show_timeline: false,
     show_dropdown: false,
     preview_type: "pdf",
-    sort_options: ["readers", "title", "authors", "year"],
+    sort_options: ["title", "authors", "year"],
     is_force_areas: true,
     language: "eng_openaire",
     area_force_alpha: 0.015,
     show_list: true,
-    content_based: false,
+    content_based: true,
     url_prefix: "https://www.openaire.eu/search/publication?articleId=",
     url_prefix_datasets: "https://www.openaire.eu/en/search/dataset?datasetId=",
     
@@ -27,10 +27,23 @@ var data_config = {
 
     intro: 'intro_openaire',
     
-    scale_types: ['citation_count', 'cited_by_tweeters_count', 'readers.mendeley'],
+    scale_types: ['content_based', 'citation_count', 'cited_by_tweeters_count', 'readers.mendeley'],
     scale_explaination: {
-        citation_count: 'Scaleum Ipsum Sit Dolor scaled by Citations',
-        cited_by_tweeters_count: 'Scaleum Ipsum Sit Dolor scaled by Tweets',
-        'readers.mendeley': 'Scaleum Ipsum Sit Dolor scaled by Mendeley Readers'
-    }
+        content_based: 'Scaled by number of documents',
+        citation_count: 'Scaled by number of citations',
+        cited_by_tweeters_count: 'Scaled by number of tweets',
+        'readers.mendeley': 'Scaled by number of Mendeley readers'
+    },
+    scale_label: {
+        content_based: 'Documents',
+        citation_count: 'Citations',
+        cited_by_tweeters_count: 'Tweets',
+        'readers.mendeley': 'Readers'
+    },
+    scale_base_unit: {
+        citation_count: 'citations',
+        cited_by_tweeters_count: 'tweets',
+        'readers.mendeley': 'readers'
+    },
+    
 };
