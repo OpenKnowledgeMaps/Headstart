@@ -134,29 +134,45 @@ papers.drawPapers = function () {
     this.drawDogEarPath(nodes);
 
     this.prepareForeignObject(nodes);
+    
+    let article_metadata = d3.selectAll("#article_metadata");
 
-    d3.selectAll("#article_metadata").select(".paper_holder").select(".metadata");
-    var readers = d3.selectAll("#article_metadata").select(".readers");
+    article_metadata.select(".paper_holder").select(".metadata");
+    var readers = article_metadata.select(".readers");
     
     if (config.content_based) {
         readers.style("display", "none");
     }
     
-    d3.selectAll("#article_metadata").select("#icons")
+    article_metadata.select("#icons")
             .style("height", function (d) {
                 if(d.oa === true) {
                     return "20px";
                 }
             });
     
-    d3.selectAll("#article_metadata").select("#open-access-logo")
+    article_metadata.select("#open-access-logo")
             .style("display", function (d) {
                 if(d.oa === false) {
                     return "none";
                 }
             });
     
-    d3.selectAll("#article_metadata").select("#outlink")
+    article_metadata.select("#file-icon_paper")
+        .style("display", function (d) {
+            if (d.resulttype !== "publication") {
+                return "none"
+            }
+        });
+
+    article_metadata.select("#dataset-icon_paper")
+        .style("display", function (d) {
+            if (d.resulttype !== "dataset") {
+                return "none"
+            }
+        });
+    
+    article_metadata.select("#outlink")
             .style("display", function (d) {
                 if(d.oa === false) {
                     return "none";
