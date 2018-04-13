@@ -784,7 +784,8 @@ list.populateOverlay = function(d) {
         $("#images_holder").show();
     } else if (config.preview_type == "pdf") {
         let filename = this_d.id + ".PDF";
-        let pdf_url = filename.replace("/", "__");
+        let pdf_url = filename.replace(/\/|:/g, "__");
+        
         $("#status").hide();
 
         if (this.checkIfFileAvailable(config.server_url + "paper_preview/" + pdf_url)) {
@@ -810,6 +811,8 @@ list.populateOverlay = function(d) {
             let possible_pdfs = "";
             if (config.service === "base") {
                 possible_pdfs = d.link + ";" + d.identifier + ";" + d.relation;
+            } else if (config.service === "openaire") {
+                possible_pdfs  = d.link + ";" + d.fulltext;
             }
 
             $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service + "&pdf_urls=" + possible_pdfs, (data) => {
