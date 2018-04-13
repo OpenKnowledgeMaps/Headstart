@@ -26,6 +26,8 @@ library(rcrossref)
 # * "url": URL to the landing page
 # * "readers": an indicator of the paper's popularity, e.g. number of readers, views, downloads etc.
 # * "subject": keywords or classification, split by ;
+# * "oa_state": indicating the open access status of the item (0 = closed access, 1 = open access, 2 = unknown)
+# * "link": link to the open access PDF or a landing page linking to the PDF
 
 get_papers <- function(query, params, limit=NULL) {
   # parse params
@@ -82,6 +84,9 @@ get_papers <- function(query, params, limit=NULL) {
 get_return_values <- function(all_artifacts){
   # crude filling
   all_artifacts[is.na(all_artifacts)] <- ""
+  
+  all_artifacts$oa_state = ifelse(all_artifacts$accessright == "Open Access", 1, 0)
+  all_artifacts$url = all_artifacts$id
 
   text = data.frame(matrix(nrow=nrow(all_artifacts)))
   text$id = all_artifacts$id
@@ -105,11 +110,13 @@ fields <- c(
   resulttype = ".//resulttype/@classid",
   language = ".//language",
   journal = ".//journal",
-  url = ".//fulltext",
+  link = ".//children/instance/webresource/url",
+  fulltext = ".//fulltext",
   paper_abstract = ".//description",
   doi = ".//pid[@classid=\"doi\"]",
   id = ".//result[@objidentifier]",
-  project_id = ".//code"
+  project_id = ".//code",
+  accessright = ".//bestaccessright/@classname"
 )
 
 parse_response <- function(response) {

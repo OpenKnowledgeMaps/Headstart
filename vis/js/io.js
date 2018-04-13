@@ -188,9 +188,12 @@ IO.prototype = {
             } else if(config.service === "base") {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
                 d.oa_link = d.link;
+            } else if(config.service = "openaire") {
+                d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
+                d.oa_link = d.link;
             } else {
-				d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
-			}
+                d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
+            }
 
             d.outlink = _this.createOutlink(d);
             
@@ -329,6 +332,8 @@ IO.prototype = {
         var url = false;
         if (config.service == "base") {
           url = d.oa_link;
+        } else if (config.service == "openaire" && d.resulttype == "dataset") {
+            url = config.url_prefix_datasets + d.url;
         } else if(config.url_prefix !== null) {
             url = config.url_prefix + d.url;
         } else if (typeof d.url != 'undefined') {
