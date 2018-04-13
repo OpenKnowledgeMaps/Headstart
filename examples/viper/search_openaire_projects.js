@@ -35,7 +35,12 @@ function simpleTemplating (data) {
 
 var formatOrganisationLinks = function (organisations) {
   return organisations.map(function (org) {
-    return '<a href="+' +org.url + '">'+org.name+'</a>'
+    if (typeof org.name !== "undefined") {
+        return '<a href="' +org.url + '" target="_blank">'+org.name+'</a>';
+    } else {
+        return '';
+    }
+    
   })
 }
 
