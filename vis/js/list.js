@@ -877,7 +877,7 @@ list.setImageForListHolder = function(d) {
                 });
         }
     } else {
-        if (d.oa === false) {
+        if (d.oa === false || d.resulttype === "dataset") {
             return;
         }
 
