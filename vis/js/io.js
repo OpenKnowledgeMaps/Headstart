@@ -105,10 +105,11 @@ IO.prototype = {
             // if organisations build pretty url list
             if (typeof intro.params.organisations != "undefined") {
                 intro.params.html_organisations = intro.params.organisations.map((org) => {
-                    return `<a href='${org.url}'>${org.name}</a>`
+                    return `<a href='${org.url}' target='_blank'>${org.name}</a>`
                 }).join(', ')
                 delete intro.params.organisations
             }
+            intro.params.html_openaire_link = `<a href='https://www.openaire.eu/search/project?projectId=${intro.params.obj_id}' target='_blank'>Link</a>`
         }
     },
 
