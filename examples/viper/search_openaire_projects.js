@@ -54,7 +54,7 @@ var setupPaginator = function (searchTerm) {
       $('#viper-search-results').html(header)
       .append(html)
       if (pagination.totalNumber === 0) {
-        $('#viper-search-results').append('<div class="viper-no-results-err">Sorry, no projects found for your search terms. Please try another search term.</div>')
+        $('#viper-search-results').append('<div class="viper-no-results-err">Sorry, no projects found for <span style="font-weight:bold;">' + searchTerm + '</span> Please try another search term.</div>')
       }
     },
     formatAjaxError: function (jqXHR, textStatus, errorThrown) {
