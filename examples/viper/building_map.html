@@ -12,17 +12,28 @@
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <link type="text/css" rel="stylesheet" href="spinner.css">
+    <link type="text/css" rel="stylesheet" href="openaire.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,800' rel='stylesheet' type='text/css'>
 </head>
 
 <body style="padding-left:10px; padding-right:10px;">
-    <div>
-        <h2>Please wait: we're building your map for you now</h2>
+    <div class="search-box">
+
+                <div class="background2">
+                    <div class="team">
+                        <p>Your overview for insert search term is being created</p>
+                        <p>Please be patient this may take a while</p>
+                        
+                    </div>
+       
         
         <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         <div id="progress"></div>
     </div>
-    <div style="margin-top:20px ">Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a>.
     </div>
+    <div style="text-align:center; margin: 20px 0; font-size:12px;">
+            Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>.
+        </div>
 
     <script>
         $ ( document ).ready(function () {
