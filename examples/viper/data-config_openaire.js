@@ -16,8 +16,10 @@ var data_config = {
     area_force_alpha: 0.015,
     show_list: true,
     content_based: false,
-	
-	show_context: true,
+    url_prefix: "https://www.openaire.eu/search/publication?articleId=",
+    url_prefix_datasets: "https://www.openaire.eu/en/search/dataset?datasetId=",
+    
+    show_context: true,
     create_title_from_context: true,
     viper_edit_modal: true,
     viper_embed_modal: true,

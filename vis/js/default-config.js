@@ -49,6 +49,7 @@ var config = {
     subdiscipline_title: "",
     use_area_uri: false,
     url_prefix: null,
+    url_prefix_datasets: null,
     input_format: "csv",
     base_unit: "readers",
     preview_type: "image",
