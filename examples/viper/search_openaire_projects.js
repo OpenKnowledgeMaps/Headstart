@@ -49,10 +49,11 @@ var setupPaginator = function (searchTerm) {
     callback: function (data, pagination) {
       var header = '<div id="project_count">Projects: ' + pagination.totalNumber + ' results for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span></div>'
       var html = simpleTemplating(data)
-      $('#viper-search-results').html(header)
-      .append(html)
       if (pagination.totalNumber === 0) {
-        $('#viper-search-results').append('<div class="viper-no-results-err">Sorry, no projects found for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span> Please try another search term.</div>')
+        $('#viper-search-results').html('<div class="viper-no-results-err">Sorry, no projects found for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span>. Please try another search term.</div>')
+      } else {
+        $('#viper-search-results').html(header)
+            .append(html)
       }
       if(pagination.totalNumber <= pagination.pageSize) {
           $("#viper-search-pager").hide();
