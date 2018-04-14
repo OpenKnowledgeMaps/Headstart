@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<?php
+    include 'config.php';
+?>
 <html>
 
     <head>
@@ -69,9 +72,14 @@
         </div>
         <script type="text/javascript" src="search_openaire_projects.js"></script>
         <script type="text/javascript" src="data-config_openaire.js"></script>
-        <script type="text/javascript" src="data-config_server.js"></script>
         <script type="text/javascript" src="search_options.js"></script>
-        <script type="text/javascript" src="search.js"></script> 
+        <script type="text/javascript" src="search.js"></script>
+        <script type ="text/javascript">
+            $(document).ready(function () {
+                data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
+                service_url = data_config.server_url + "services/searchOpenAire.php"
+            })           
+        </script>
     </body>
 
 </html>
