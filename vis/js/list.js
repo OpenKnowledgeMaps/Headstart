@@ -206,6 +206,13 @@ list.getPaperNodes = function(list_data) {
         .enter()
         .append("div")
         .attr("id", "list_holder")
+        .attr("class", function (d) {
+            if (d.resulttype === "dataset") {
+                return "dataset";
+            } else {
+                return "paper";
+            }
+        })
         .html(list_entry)
         .sort(function(a, b) {
             return b.readers - a.readers;
