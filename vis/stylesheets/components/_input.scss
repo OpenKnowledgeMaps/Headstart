@@ -8,3 +8,10 @@
         line-height: 1.5;
     }
 }
+
+.form-control::-moz-placeholder {
+    color: #999;
+    opacity: 1;
+    font-weight: lighter;
+    font-family: $link-font-family;
+}
