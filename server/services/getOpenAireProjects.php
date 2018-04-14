@@ -9,12 +9,16 @@ use headstart\library;
 $keywords = library\CommUtils::getParameter($_GET, "keywords");
 $page = library\CommUtils::getParameter($_GET, "page");
 $size = library\CommUtils::getParameter($_GET, "size");
+$funders = library\CommUtils::getParameter($_GET, "funders");
+
+$url = 'http://api.openaire.eu/search/projects?format=json&keywords=' 
+    . urlencode($keywords) . "&page=" . $page . "&size=" . $size . (($funders !== "all")?("&funder=" . $funders):(""));
 
 $ch = curl_init();
 
 curl_setopt_array($ch, array(
     CURLOPT_RETURNTRANSFER => 1,
-    CURLOPT_URL => 'http://api.openaire.eu/search/projects?format=json&keywords=' . $keywords . "&page=" . $page . "&size=" . $size
+    CURLOPT_URL => $url
 ));
 
 $jsonData = curl_exec($ch);

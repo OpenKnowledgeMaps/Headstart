@@ -12,14 +12,6 @@ $(window).bind("pageshow", function () {
     $(".btn").attr("disabled", false);
 });
 
-$("#searchform").submit(function () {
-    $(".btn").attr("disabled", true);
-
-    var data = $("#searchform").serialize();
-
-    doSubmit(data)
-});
-
 var doSubmit = function (data, newWindow, callback) {
     data += "&today=" + new Date().toLocaleDateString("en-US");
 
@@ -104,18 +96,5 @@ $(document).ready(function () {
     } else if (valueExists("id", "year_range")) {
         search_options.setDateRangeFromPreset("#from", "#to", "any-time-years", "1809");
     }
-
-
-    $("#searchform").submit(function () {
-        var ua = window.navigator.userAgent;
-        var iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
-        var webkit = !!ua.match(/WebKit/i);
-        var iOSSafari = iOS && webkit && !ua.match(/CriOS/i);
-
-        if (iOSSafari) {
-            $("#searchform").attr("target", "");
-        }
-
-    })
     
 });

@@ -1,7 +1,8 @@
 $("#search-projects-form").submit(function (event) {
     event.preventDefault()
     var urlEncKW = encodeURIComponent($('#ipt-keywords').val())
-    setupPaginator(urlEncKW)
+    let params = $("#search-projects-form").serialize();
+    setupPaginator(urlEncKW, params)
 })
 
 function simpleTemplating (data) {
@@ -42,10 +43,10 @@ var formatOrganisationLinks = function (organisations) {
   })
 }
 
-var setupPaginator = function (searchTerm) {
+var setupPaginator = function (searchTerm, params) {
   var paginator = $('#viper-search-pager')
   paginator.pagination({
-    dataSource: data_config.server_url + 'services/getOpenAireProjects.php?keywords=' + encodeURI(searchTerm),
+    dataSource: data_config.server_url + 'services/getOpenAireProjects.php?' + encodeURI(params),
     callback: function (data, pagination) {
       var header = '<div id="project_count">Projects: ' + pagination.totalNumber + ' results for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span></div>'
       var html = simpleTemplating(data)
