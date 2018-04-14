@@ -1,10 +1,7 @@
-$("#search-projects-form").validate({
-  debug: true,
-  submitHandler: function (form, event) {
+$("#search-projects-form").submit(function (event) {
     event.preventDefault()
     var urlEncKW = encodeURIComponent($('#ipt-keywords').val())
     setupPaginator(urlEncKW)
-  }
 })
 
 function simpleTemplating (data) {

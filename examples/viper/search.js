@@ -2,69 +2,22 @@ var service_url;
 var service_name;
 var options;
 
-switch (data_config.service) {
-    case 'plos':
-        service_url = data_config.server_url + "services/searchPLOS.php"
-        service_name = "PLOS";
-        options = options_plos;
-        break;
-    case 'pubmed':
-        service_url = data_config.server_url + "services/searchPubmed.php"
-        service_name = "PubMed";
-        options = options_pubmed;
-        break;
-    case 'doaj':
-        service_url = data_config.server_url + "services/searchDOAJ.php"
-        service_name = "DOAJ";
-        options = options_doaj;
-        break;
-		
-    case 'base':
-        service_url = data_config.server_url + "services/searchBASE.php"
-        service_name = "BASE";
-        options = options_base;
-        break;
-    
-    case 'openaire':
-        service_url = data_config.server_url + "services/searchOpenAire.php"
-        service_name = "OpenAire";
-        options = options_base;
-        break;
-}
+$(document).ready(function () {
+    service_url = data_config.server_url + "services/searchOpenAire.php"
+    service_name = "OpenAire";
+    options = options_base;
+})
 
 $(window).bind("pageshow", function () {
     $(".btn").attr("disabled", false);
 });
 
-$("#searchform").validate({
-    submitHandler: function (form) {
-        $(".btn").attr("disabled", true);
-        $("#progress").html("");
+$("#searchform").submit(function (){
+    $(".btn").attr("disabled", true);
 
-        d3.select("#progress").append("p")
-                .text("Please be patient, this can take a while...")
-                .append("div")
-                .attr("id", "progressbar")
+    var data = $("#searchform").serialize();
 
-        $("#progressbar").progressbar();
-        var tick_interval = 2;
-        var tick_increment = 1;
-        var tick_function = function () {
-            var value = $("#progressbar").progressbar("option", "value");
-            value += tick_increment;
-            $("#progressbar").progressbar("option", "value", value);
-            if (value < 100) {
-                window.setTimeout(tick_function, tick_interval * 1000);
-            } else {
-                //alert("Done");
-            }
-        };
-        window.setTimeout(tick_function, tick_interval * 1000);
-
-        var data = $("#searchform").serialize();
-
-        doSubmit(data)
-    }
+    doSubmit(data)
 });
 
 var doSubmit = function (data, newWindow, callback) {
