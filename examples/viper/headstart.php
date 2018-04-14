@@ -7,7 +7,7 @@
         
         <div id="visualization"></div>
         <script type="text/javascript" src="data-config_<?php echo $_GET['service'] ?>.js"></script>
-        <script type="text/javascript" src="../search_repos/data-config_server.js"></script>
+        <script type="text/javascript" src="data-config_server.js"></script>
         <script>
         	data_config.files = [{
         		title: <?php echo json_encode($_GET['query']) ?>,
