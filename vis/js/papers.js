@@ -125,7 +125,13 @@ papers.drawPapers = function () {
     var nodes = canvas.chart.selectAll("g.node")
             .data(mediator.current_bubble.data)
             .enter().append("g")
-            .attr("class", "paper")
+            .attr("class", function (d) {
+                if (d.resulttype === "dataset") {
+                    return "paper resulttype-dataset";
+                } else {
+                    return "paper";
+                }
+            })
             .attr("transform", function (d) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
