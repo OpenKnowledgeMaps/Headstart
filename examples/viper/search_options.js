@@ -1,6 +1,6 @@
 var options_openaire = {
     dropdowns: [
-        {id: "year_range", multiple: false, name: "Start year", type: "dropdown"
+        /*{id: "year_range", multiple: false, name: "Start year", type: "dropdown"
             , fields: [
                 {id: "any-time-years", text: "Any time"}
                 , {id: "this-year", text: "This year"}
@@ -10,26 +10,26 @@ var options_openaire = {
                         {id: "from", label: "From: ", class: "time_input"}
                         , {id: "to", label: "To: ", class: "time_input"}
                     ]}
-            ]},
-        {id: "funders", multiple: true, name: "Funders", type: "dropdown"
+            ]},*/
+        {id: "funders", multiple: false, name: "Funders", type: "dropdown"
             , fields: [
-                {id: "ec", text: "EC - European Commission", selected: true}
-                , {id: "arc", text: "ARC - Australian Research Council", selected: true}
-                , {id: "hrzz", text: "CSF - Croatian Science Foundation", selected: true}
-                , {id: "fct", text: "FCT - Fundação para a Ciência e a Tecnologia, I.P.", selected: true}
-                , {id: "fwf", text: "FWF - Austrian Science Fund", selected: true}
-                , {id: "mestd", text: "MESTD - Ministry of Education, Science and Technological Development of Republic of Serbia", selected: true}
-                , {id: "mzos", text: "MSES - Ministry of Science, Education and Sports of the Republic of Croatia", selected: true}               
-                , {id: "nhmrc", text: "NHRMC - National Health and Medical Research Council", selected: true}
-                , {id: "nih", text: "NIH - National Institutes of Health", selected: true}
-                , {id: "nsf", text: "NSF - National Science Foundation", selected: true}
-                , {id: "nwo", text: "NWO - Netherlands Organisation for Scientific Research", selected: true}        
-                , {id: "rcuk", text: "RCUK - Research Council UK", selected: true}
-                , {id: "sfi", text: "SFI - Science Foundation Ireland", selected: true}                
-                , {id: "snsf", text: "SNSF - Swiss National Science Foundation", selected: true}
-                , {id: "tubitak", text: "TUBITAK - Türkiye Bilimsel ve Teknolojik Araştırma Kurumu", selected: true}                
-                , {id: "wt", text: "WT - Wellcome Trust", selected: true}
-                
+                {id: "all", text: "All funders"}
+                , {id: "ec", text: "EC - European Commission", selected: true}
+                , {id: "arc", text: "ARC - Australian Research Council"}
+                , {id: "hrzz", text: "CSF - Croatian Science Foundation"}
+                , {id: "fct", text: "FCT - Fundação para a Ciência e a Tecnologia, I.P."}
+                , {id: "fwf", text: "FWF - Austrian Science Fund"}
+                , {id: "mestd", text: "MESTD - Ministry of Education, Science and Technological Development of Republic of Serbia"}
+                , {id: "mzos", text: "MSES - Ministry of Science, Education and Sports of the Republic of Croatia"}               
+                , {id: "nhmrc", text: "NHRMC - National Health and Medical Research Council"}
+                , {id: "nih", text: "NIH - National Institutes of Health"}
+                , {id: "nsf", text: "NSF - National Science Foundation"}
+                , {id: "nwo", text: "NWO - Netherlands Organisation for Scientific Research"}        
+                , {id: "rcuk", text: "RCUK - Research Council UK"}
+                , {id: "sfi", text: "SFI - Science Foundation Ireland"}                
+                , {id: "snsf", text: "SNSF - Swiss National Science Foundation"}
+                , {id: "tubitak", text: "TUBITAK - Türkiye Bilimsel ve Teknolojik Araştırma Kurumu"}                
+                , {id: "wt", text: "WT - Wellcome Trust"}                
             ]}
     ]}
 
