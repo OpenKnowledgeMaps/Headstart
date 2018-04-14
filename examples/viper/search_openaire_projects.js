@@ -48,7 +48,7 @@ var formatOrganisationLinks = function (organisations) {
 var setupPaginator = function (searchTerm) {
   var paginator = $('#viper-search-pager')
   paginator.pagination({
-    dataSource: 'http://api.openaire.eu/search/projects?format=json&keywords=' + searchTerm,
+    dataSource: data_config.server_url + 'services/getOpenAireProjects.php?keywords=' + searchTerm,
     callback: function (data, pagination) {
       var header = '<div id="project_count">Projects: ' + pagination.totalNumber + ' results for <span style="font-weight:bold;">' + searchTerm + '</span></div>'
       var html = simpleTemplating(data)
