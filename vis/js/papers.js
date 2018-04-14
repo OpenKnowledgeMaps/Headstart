@@ -517,7 +517,7 @@ papers.shrinkPaper = function (d, holder) {
 
     var holder_div = holder ? holder : d3.select(this);
 
-    this.resizePaper(d, holder_div, 1, "rgb(255, 255, 255)", "0.25");
+    this.resizePaper(d, holder_div, 1);
 
     holder_div.selectAll("p")
             .attr("class", "large highlightable");
@@ -532,7 +532,7 @@ papers.shrinkPaper = function (d, holder) {
     });
 };
 
-papers.resizePaper = function (d, holder_div, resize_factor, color) {
+papers.resizePaper = function (d, holder_div, resize_factor) {
     let current_div = holder_div.node();
     let current_g_paper = d3.select(current_div.parentNode.parentNode.parentNode);
     let current_foreignObject = current_g_paper.select("foreignObject");
@@ -565,8 +565,6 @@ papers.resizePaper = function (d, holder_div, resize_factor, color) {
             .style("height", d.height * mediator.circle_zoom * resize_factor + "px");
 
     current_path
-            //.style("fill-opacity", opacity)
-            .style("fill", color)
             .attr("d", region);
 
     current_dogear.attr("d", dogear);
@@ -612,7 +610,7 @@ papers.enlargePaper = function (d, holder_div) {
         resize_factor = this.calcResizeFactor(metadata);
     }
 
-    this.resizePaper(d, holder_div, resize_factor, "rgb(255, 255, 255)", "1");
+    this.resizePaper(d, holder_div, resize_factor);
 
     holder_div
             .on("click", (d) => {
