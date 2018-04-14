@@ -208,9 +208,9 @@ list.getPaperNodes = function(list_data) {
         .attr("id", "list_holder")
         .attr("class", function (d) {
             if (d.resulttype === "dataset") {
-                return "dataset";
+                return "resulttype-dataset";
             } else {
-                return "paper";
+                return "resulttype-paper";
             }
         })
         .html(list_entry)
