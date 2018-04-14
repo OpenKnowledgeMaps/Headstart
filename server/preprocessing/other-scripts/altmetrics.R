@@ -35,7 +35,8 @@ get_altmetrics <- function(dois){
 add_citations <- function(output){
   dois <- output$doi
   valid_dois <- which(dois!="")
-  cit_count <- check_metadata(unlist(lapply(dois[valid_dois], function(x) cr_citation_count(doi=x))))
-  output$citation_count[c(valid_dois)] <- cit_count
+  cit_count = cr_citation_count(doi=dois[valid_dois], async=TRUE)
+  output = merge(x=output, y=cit_count, by='doi', all.x = TRUE)
+  names(output)[names(output)=="count"] <- "citation_count"
   return (output)
 }
