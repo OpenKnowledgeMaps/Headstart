@@ -54,6 +54,9 @@ var setupPaginator = function (searchTerm) {
       if (pagination.totalNumber === 0) {
         $('#viper-search-results').append('<div class="viper-no-results-err">Sorry, no projects found for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span> Please try another search term.</div>')
       }
+      if(pagination.totalNumber <= pagination.pageSize) {
+          $("#viper-search-pager").hide();
+      }
     },
     formatAjaxError: function (jqXHR, textStatus, errorThrown) {
       $('#viper-search-results').text('Error Searching: Check your search terms. See Console for error details')
@@ -78,7 +81,9 @@ var setupPaginator = function (searchTerm) {
             active_page.next().addClass('active');  
         } else {
             $('.pagination').find("li:first").addClass("active")
-        }                
+        }
+        
+        $("#viper-search-pager").show();
       },
       dataFilter: function (data, type) {
         try {
