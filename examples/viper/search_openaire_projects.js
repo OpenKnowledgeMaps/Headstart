@@ -48,14 +48,14 @@ var formatOrganisationLinks = function (organisations) {
 var setupPaginator = function (searchTerm) {
   var paginator = $('#viper-search-pager')
   paginator.pagination({
-    dataSource: data_config.server_url + 'services/getOpenAireProjects.php?keywords=' + searchTerm,
+    dataSource: data_config.server_url + 'services/getOpenAireProjects.php?keywords=' + encodeURI(searchTerm),
     callback: function (data, pagination) {
-      var header = '<div id="project_count">Projects: ' + pagination.totalNumber + ' results for <span style="font-weight:bold;">' + searchTerm + '</span></div>'
+      var header = '<div id="project_count">Projects: ' + pagination.totalNumber + ' results for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span></div>'
       var html = simpleTemplating(data)
       $('#viper-search-results').html(header)
       .append(html)
       if (pagination.totalNumber === 0) {
-        $('#viper-search-results').append('<div class="viper-no-results-err">Sorry, no projects found for <span style="font-weight:bold;">' + searchTerm + '</span> Please try another search term.</div>')
+        $('#viper-search-results').append('<div class="viper-no-results-err">Sorry, no projects found for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span> Please try another search term.</div>')
       }
     },
     formatAjaxError: function (jqXHR, textStatus, errorThrown) {
