@@ -5,14 +5,14 @@ var options;
 $(document).ready(function () {
     service_url = data_config.server_url + "services/searchOpenAire.php"
     service_name = "OpenAire";
-    options = options_base;
+    options = options_openaire;
 })
 
 $(window).bind("pageshow", function () {
     $(".btn").attr("disabled", false);
 });
 
-$("#searchform").submit(function (){
+$("#searchform").submit(function () {
     $(".btn").attr("disabled", true);
 
     var data = $("#searchform").serialize();
@@ -21,55 +21,55 @@ $("#searchform").submit(function (){
 });
 
 var doSubmit = function (data, newWindow, callback) {
-  data += "&today=" + new Date().toLocaleDateString("en-US");
+    data += "&today=" + new Date().toLocaleDateString("en-US");
 
-  var openInNewWindow= function(data) {
-    if (data.status === "success") {
-      var file = data.id;
-      window.open("headstart.php?query=" +
-        data.query +
-        "&file=" +
-        file +
-        "&service=" +
-        data_config.service +
-        "&service_name=" +
-        service_name, '_blank')
-      console.log('opening')
-      callback(true)
-      return false;
-    } else {
-        callback(false)
+    var openInNewWindow = function (data) {
+        if (data.status === "success") {
+            var file = data.id;
+            window.open("headstart.php?query=" +
+                    data.query +
+                    "&file=" +
+                    file +
+                    "&service=" +
+                    data_config.service +
+                    "&service_name=" +
+                    service_name, '_blank')
+            console.log('opening')
+            callback(true)
+            return false;
+        } else {
+            callback(false)
+        }
     }
-  }
 
-  var openInThisWindow = function(data) {
-    if (data.status === "success") {
-      var file = data.id;
-      window.location =
-        "headstart.php?query=" +
-        data.query +
-        "&file=" +
-        file +
-        "&service=" +
-        data_config.service +
-        "&service_name=" +
-        service_name;
-      return false;
-    } else {
-      $("#progress").html(
-        "Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again with a different query."
-      );
-      $(".btn").prop("disabled", false);
+    var openInThisWindow = function (data) {
+        if (data.status === "success") {
+            var file = data.id;
+            window.location =
+                    "headstart.php?query=" +
+                    data.query +
+                    "&file=" +
+                    file +
+                    "&service=" +
+                    data_config.service +
+                    "&service_name=" +
+                    service_name;
+            return false;
+        } else {
+            $("#progress").html(
+                    "Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again with a different query."
+                    );
+            $(".btn").prop("disabled", false);
+        }
     }
-  }
 
-  $.ajax({
-    // make an AJAX request
-    type: "POST",
-    url: service_url,
-    data: data,
-    success: newWindow ? openInNewWindow : openInThisWindow
-  });
+    $.ajax({
+        // make an AJAX request
+        type: "POST",
+        url: service_url,
+        data: data,
+        success: newWindow ? openInNewWindow : openInThisWindow
+    });
 };
 
 $(document).ready(function () {
@@ -78,7 +78,10 @@ $(document).ready(function () {
     search_options.init("#filter-container", options);
 
     options.dropdowns.forEach(function (entry) {
-        search_options.select_multi('.dropdown_multi_' + entry.id, entry.name)
+        if (typeof entry.width === "undefined") {
+            entry.width = "110px";
+        }
+        search_options.select_multi('.dropdown_multi_' + entry.id, entry.name, entry.width, options)
     })
 
     var valueExists = function (key, value) {
@@ -91,8 +94,28 @@ $(document).ready(function () {
         return (find.length > 0) ? (true) : (false);
     }
     if (valueExists("id", "time_range")) {
-        search_options.addDatePickerFromTo("#from", "#to", "any-time");
+        if (service_name === "pubmed") {
+            search_options.addDatePickerFromTo("#from", "#to", "any-time", "1809-01-01");
+        } else if (service_name === "base") {
+            search_options.addDatePickerFromTo("#from", "#to", "any-time", "1665-01-01");
+        } else {
+            search_options.addDatePickerFromTo("#from", "#to", "any-time", "1809-01-01");
+        }
     } else if (valueExists("id", "year_range")) {
         search_options.setDateRangeFromPreset("#from", "#to", "any-time-years", "1809");
     }
+
+
+    $("#searchform").submit(function () {
+        var ua = window.navigator.userAgent;
+        var iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
+        var webkit = !!ua.match(/WebKit/i);
+        var iOSSafari = iOS && webkit && !ua.match(/CriOS/i);
+
+        if (iOSSafari) {
+            $("#searchform").attr("target", "");
+        }
+
+    })
+    
 });
