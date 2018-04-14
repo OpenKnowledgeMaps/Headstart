@@ -1,9 +1,10 @@
 // Overview over variables used
 
 // Typography
-$text-color: black;
+$text-color: $black;
 $base-font-size: 10px;
-$base-font-family: Helvetica;
+$base-font-family: Helvetica, sans-serif;
+$link-font-family: Helvetica, sans-serif;
 $base-font-weight: normal;
 
 // Map
@@ -27,7 +28,6 @@ $list_detail: $black;
 $list_detail_authors: $black;
 $list_detail_in: $journal-gray;
 $list_abstract: $abstract-gray;
-$list_show_hide_button: $journal-gray;
 $list_show_hide_button_hover: $okm-blue;
 $list_explorer_header: $okm-clouds;
 $list_metadata_border_color: $okm-light-gray; // unused
@@ -41,3 +41,6 @@ $papers_details: $black;
 $papers_holder_a: $okm-red;
 
 $iframe_modal_status: $okm-red;
+$list_show_hide_button_border: $okm-clouds;
+$open-access: $okm-red;
+$list_metadata_title_paper: $medium-blue;

@@ -6,9 +6,9 @@
 
 #headstart-chart {
     /*position: absolute;*/
-    font-family: Helvetica;
+    
         margin: 0 auto;
-        display: table;
+        display: inline-block; /*table;*/
     /*margin-top: 6px;*/
     position: relative;
     z-index: 0;
@@ -65,4 +65,40 @@ line {
 
 text {
     font: 10px sans-serif;
+}
+
+.scale-toolbar {
+    padding: 20px 0 20px 50px;
+    background-color: $okm-clouds;
+    display:block;
+}
+
+#curr-scale-explaination {
+    margin-left: 10px;
+}
+
+#scale-menu {
+    color: $okm-modal-btn;
+    background-color: $white;
+    border-color: $okm-modal-btn;
+}
+
+#scale-menu:hover {
+    color: $white;
+    background-color: $okm-modal-btn;
+    border-color: $okm-modal-btn;
+}
+.dropdown-menu, #scale-menu {
+    width: 208px;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+    text-decoration: none;
+    color: $black;
+    background-color: $okm-clouds;
+    cursor: pointer;
+}
+
+#curr-scale-type {
+    font-weight: bold;
 }
