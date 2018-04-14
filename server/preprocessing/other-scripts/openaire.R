@@ -146,7 +146,7 @@ fill_dois <- function(df) {
   }
   if (length(titles) > 1) {
     response <- cr_works(query=queries(titles), async=TRUE)
-    candidates <- lapply(response, function(x){x[1,c('DOI', 'title')]})
+    candidates <- lapply(response, function(x){x[1,c('doi', 'title')]})
     dois <- mapply(check_distance, titles, candidates, USE.NAMES=FALSE)
   } else if (length(titles) == 1) {
     response <- cr_works(flq=c('query.title'=titles))$data
@@ -161,7 +161,7 @@ fill_dois <- function(df) {
 check_distance <- function(title, candidate) {
   lv_ratio <- levenshtein_ratio(tolower(title), tolower(candidate$title))
   if (lv_ratio <= 1/15.83){
-    doi <- candidate$DOI
+    doi <- candidate$doi
   } else {
     doi <- ""
   }
