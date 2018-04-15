@@ -12,7 +12,7 @@ function simpleTemplating (data) {
     .html($('<a>')
     .attr('class', 'project-title')
     .attr('href', '#')
-    .text('Overview of ' + item.acronymtitle).on('click', function () {
+    .html('<span class="awesome"> </span>Overview of ' + item.acronymtitle).on('click', function () {
       var win = window.open("building_map.html")
       win.dataParamsForOpening = {
         data: $.param(item),
