@@ -37,7 +37,7 @@
                         <!--<p>Faster, more efficient literature search</p>-->
                     </div>
                     <form class="mittig2" id="search-projects-form" style="margin-top:20px">
-                        <p>Search within the OpenAIRE database</p>
+                        <p>Search projects within the OpenAIRE database with the following funding agency:</p>
                         <div style="text-align: left; margin: 0px auto;">
                             
                             <div id="filter-container"></div>
