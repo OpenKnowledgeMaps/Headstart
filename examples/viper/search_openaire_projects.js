@@ -169,10 +169,10 @@ function getOrganisations(project) {
   var rel = deepGet(project, ['rels', 'rel'], [])
   if (Array.isArray(rel)) {
     return rel.map(function (entry) {
-      let short_name = deepGet(rel, ['legalshortname', '$']);
-      let long_name = deepGet(rel, ['legalname', '$']);
-      let website = deepGet(rel, ['websiteurl', '$']);
-      let org_id = deepGet(rel, ['to', '$']);
+      let short_name = deepGet(entry, ['legalshortname', '$']);
+      let long_name = deepGet(entry, ['legalname', '$']);
+      let website = deepGet(entry, ['websiteurl', '$']);
+      let org_id = deepGet(entry, ['to', '$']);
       return {
         name: ((typeof short_name === "undefined")?(long_name):(short_name)),
         url: ((typeof website === "undefined")
