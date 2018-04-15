@@ -825,8 +825,8 @@ list.populateOverlay = function(d) {
             $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service + "&pdf_urls=" + possible_pdfs, (data) => {
 
                 var showError = function() {
-                    var link = (config.service === "base") ? (this_d.link) : (this_d.outlink);
-                    $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
+                    var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
+                    $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + pdf_location_link + "\" target=\"_blank\">this website</a>.");
                     $("#status").show();
                 }
 
