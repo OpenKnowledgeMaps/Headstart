@@ -65,7 +65,7 @@
             </div>
         
         <div style="text-align:center; margin: 20px 0; font-size:12px;">
-            Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>.
+            Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. This project received funding from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
         </div>
         <script type="text/javascript" src="search_openaire_projects.js"></script>
         <script type="text/javascript" src="data-config_openaire.js"></script>
