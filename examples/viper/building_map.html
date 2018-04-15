@@ -23,6 +23,7 @@
                 <div class="team">
                     <p>Your overview for <span class="project_name"></span> is being created</p>
                     <p>Please be patient this may take a while</p>
+                    <p id="info-totals"></p>
 
                 </div>
 
@@ -44,6 +45,12 @@
                     window.alert('No Parameter Passed; don\'t access the page directly. Use the search')
                 }
                 $(".project_name").text(params.acronymtitle);
+                let totals_url = params.server_url + "services/getOpenAireTotals.php?funder[]=" + params.funder 
+                        + "&project_id[]=" + params.project_id + "&obj_id[]=" + params.obj_id;
+                $.getJSON(totals_url, function (data) {
+                    $("#info-totals").html("<p>Your project has " 
+                            + data[params.obj_id].publications + " publications and " + data[params.obj_id].datasets + " datasets");
+                })
             })
 
             var doSubmit = function (params, service_name, service, service_url) {
@@ -63,6 +70,7 @@
                                 service_name;
                         return false;
                     } else {
+                        $(".lds-spinner").hide();
                         $("#progress").html(
                                 "Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again."
                                 );

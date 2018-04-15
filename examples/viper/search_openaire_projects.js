@@ -18,8 +18,12 @@ function simpleTemplating (data) {
         data: $.param(item),
         service_name: service_name,
         service: data_config.service,
+        server_url: data_config.server_url,
         search_url: service_url,
-        acronymtitle: item.acronymtitle
+        acronymtitle: item.acronymtitle,
+        funder: item.funder,
+        project_id: item.project_id,
+        obj_id: item.obj_id
       }
     }))
     .append('<span class="project-code"> (' + item.project_id +
