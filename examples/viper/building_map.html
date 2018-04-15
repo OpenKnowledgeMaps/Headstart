@@ -61,7 +61,7 @@
                         var file = data.id;
                         window.location =
                                 "headstart.php?query=" +
-                                data.query +
+                                encodeURIComponent(data.query) +
                                 "&file=" +
                                 file +
                                 "&service=" +
