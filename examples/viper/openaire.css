@@ -44,7 +44,7 @@ a:hover {
     background-repeat: no-repeat; 
     background-position: 100% 70%;
     background-size: 100%;
-    padding: 190px 0px 100px;
+    padding: 100px 0px;
 }
 
 .search-box .background2 .team p {
@@ -220,6 +220,7 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 
 .waiting-page .waiting-description  {
     font-size: 18px;
+    margin: 40px auto 0;
 }
 
 .waiting-page .waiting-title .project_name {
@@ -229,4 +230,5 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 #info-totals {
     text-align:center;
     font-size: 18px;
+    margin-top: 40px;
 }
