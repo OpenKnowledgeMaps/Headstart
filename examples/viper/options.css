@@ -244,6 +244,11 @@ button {
     vertical-align: middle;
 }
 
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:focus, .dropdown-menu > .active > a:hover {
+    background-color: #01B7F0;
+    color: white;
+}
+
 @media screen and (max-width: 710px) {
 
     .text-field {
