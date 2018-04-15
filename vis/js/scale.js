@@ -27,7 +27,7 @@ class Scale {
     }
   }
 
-  doScale (type) {
+  doScale (type) {     
     config.scale_by = type
     config.base_unit = config.scale_base_unit[type];
     
