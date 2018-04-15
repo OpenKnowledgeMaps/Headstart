@@ -97,6 +97,7 @@ button {
     font-size: 18px;
     font-family: 'Open Sans', Helvetica;
     color: #2D72D6;
+    display: none;
 }
 
 .refine-search:hover {

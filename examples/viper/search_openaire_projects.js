@@ -169,15 +169,27 @@ function getOrganisations(project) {
   var rel = deepGet(project, ['rels', 'rel'], [])
   if (Array.isArray(rel)) {
     return rel.map(function (entry) {
+      let short_name = deepGet(rel, ['legalshortname', '$']);
+      let long_name = deepGet(rel, ['legalname', '$']);
+      let website = deepGet(rel, ['websiteurl', '$']);
+      let org_id = deepGet(rel, ['to', '$']);
       return {
-        name: deepGet(entry, ['legalshortname', '$']),
-        url: deepGet(entry, ['websiteurl', '$'])
+        name: ((typeof short_name === "undefined")?(long_name):(short_name)),
+        url: ((typeof website === "undefined")
+            ?("https://www.openaire.eu/search/organization?organizationId=" + org_id)
+            :(website))
       }
     })
   } else {
+    let short_name = deepGet(rel, ['legalshortname', '$']);
+    let long_name = deepGet(rel, ['legalname', '$']);
+    let website = deepGet(rel, ['websiteurl', '$']);
+    let org_id = deepGet(rel, ['to', '$']);
     return [{
-      name: deepGet(rel, ['legalshortname', '$']),
-      url: deepGet(rel, ['websiteurl', '$'])
+      name: ((typeof short_name === "undefined")?(long_name):(short_name)),
+      url: ((typeof website === "undefined")
+            ?("https://www.openaire.eu/search/organization?organizationId=" + org_id)
+            :(website))
     }]
   }
 }
