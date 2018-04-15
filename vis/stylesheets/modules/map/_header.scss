@@ -49,11 +49,14 @@
     //border: 1px solid $infolink;
     //padding: 5px;
     //border-radius: 5px;
-    font-weight: normal;
+    font-weight: 400;
+    margin-left: 5px;
+    font-size: 12px;
     //text-transform: uppercase;
     //vertical-align: middle;
     text-decoration: underline;
 }
+
 #whatsthis {
     font-family: 'FontAwesome';
     font-size: 18px;
@@ -61,7 +64,7 @@
 
 #infolink:hover, #infolink:focus, #infolink:active {
     text-decoration: none;
-    color: $okm-blue;
+    color: $infolink;
 }
 
 #timelineview {
