@@ -59,11 +59,11 @@ var SearchOptions = {
 
         var filters = d3.select(tag).append('div')
                 .attr('id', 'filters')
-                .attr('class', 'divity frontend-hidden')
+                .attr('class', 'divity')
 
         d3.select(tag).append('div')
                 .attr('id', 'input-container')
-                .attr('class', 'divity frontend-hidden')
+                .attr('class', 'divity')
 
         data.dropdowns.forEach(function (entry) {
             
@@ -175,6 +175,7 @@ var SearchOptions = {
                 , numberDisplayed: 2
                 , maxHeight: 250
                 , includeSelectAllOption: true
+                , buttonWidth: 200
                 , onChange: function (element, checked) {
                     if (checked === true) {
 
