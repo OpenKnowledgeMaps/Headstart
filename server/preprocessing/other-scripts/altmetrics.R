@@ -5,6 +5,12 @@ enrich_output_json <- function(output_json){
   output<- fromJSON(output_json)
   results <- get_altmetrics(output$doi)
   if (nrow(results) > 0){
+    if (!("cited_by_tweeters_count" %in% names(results))) {
+      results[["cited_by_tweeters_count"]]  = NA
+    }
+    if (!("readers.mendeley" %in% names(results))) {
+      results[["readers.mendeley"]]  = NA
+    }
     results <- results[c('doi', 'cited_by_tweeters_count', 'readers.mendeley')]
     output <- merge(x = output, y = results, by='doi', all.x=TRUE)
   } else {
