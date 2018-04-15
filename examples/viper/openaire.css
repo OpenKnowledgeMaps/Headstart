@@ -48,7 +48,11 @@ a:hover {
 }
 
 .search-box .background2 .team p {
-    color: white;
+    color: #3B42B1;
+}
+
+.search-box .background2 .team p:last-child {
+    margin: 0px auto 40px;
 }
 
 .search-box #about-page, .search-box #about-page .background2 {
@@ -65,12 +69,12 @@ a:hover {
     padding: 0px;
 }
 
-.waiting-description, .waiting-title  {
+.search-box .background2 .team p:first-child, .search-box .background2 .team p:last-child {
     color: white;
     text-align: center;
 }
 
-.waiting-title {
+.background2 .team p:first-child {
     max-width: 750px;
     font-weight: 800;
     margin: 0px auto;
@@ -78,10 +82,9 @@ a:hover {
     text-align: center;
 }
 
-.waiting-description {
+.background2 .team p:last-child {
     font-size: 24px;
     max-width: 850px;
-    margin: 0px auto 40px;
 }
 
 .mittig2 {
@@ -105,7 +108,7 @@ a:hover {
     background-color: #3B42B1;
     color: white;
     font-weight: bold;
-    width: 10%;
+    width: 13%;
     height: 45px;
     font-size: 20px;
     border-radius: 5px;
@@ -172,61 +175,4 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 #progress {
     color: #fff;
     text-align: center;
-}
-
-.awesome {
-    font-family: 'FontAwesome';
-}
-
-.list-group-item {
-    margin-bottom: 0px;
-    border-width: 1px 0px 0;
-    border-style: solid; 
-    border-color: #ddd;
-    padding: 10px 0px;
-}
-
-.list-group {
-    border-bottom: 1px solid #ddd;
-}
-.project-title {
-    font-size: 16px;
-}
-
-.project-code {
-    color: grey;
-    font-size: 12px;
-    margin-left: 5px;
-}
-
-.project-funders {
-    margin-top: 10px;
-    font-size: 12px;
-    color: grey;
-}
-
-.project-organisations {
-    font-size: 12px;
-}
-
-.waiting-page .waiting-title  {
-    font-size: 24px;
-}
-
-.waiting-page .waiting-title,  .waiting-page .waiting-description {
-    font-weight: normal;
-    max-width: 900px;
-}
-
-.waiting-page .waiting-description  {
-    font-size: 18px;
-}
-
-.waiting-page .waiting-title .project_name {
-    font-weight: bold;
-}
-
-#info-totals {
-    text-align:center;
-    font-size: 18px;
 }

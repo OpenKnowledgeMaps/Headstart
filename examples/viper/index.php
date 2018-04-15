@@ -32,8 +32,8 @@
 
                 <div class="background2">
                     <div class="team">
-                        <p class="waiting-title">Map a research project with VIPER</p>
-                        <p class="waiting-description">Get an overview - Find papers and data sets - Identify relevant concepts</p>
+                        <p>Map a research project with VIPER</p>
+                        <p>Get an overview - Find papers and data sets - Identify relevant concepts</p>
                         <!--<p>Faster, more efficient literature search</p>-->
                     </div>
                     <form class="mittig2" id="search-projects-form" style="margin-top:20px">
@@ -53,7 +53,7 @@
                     </form>
 
                 </div>
-                <p style="text-align:center; margin-top: 30px;"><a class="newsletter2" href="">What is VIPER?</a><p>
+                <p style="text-align:center; margin-top: 30px;"><a class="newsletter2" href="about">What is VIPER?</a><p>
             </div>
             <div id="oa-searching">Searching OpenAire for Projects</div>
             <div id="okm-making">Building OpenKnowledgeMap</div>
@@ -64,7 +64,7 @@
 
             </div>
         
-        <div style="text-align:center; margin: 30px 0 20px; font-size:12px;">
+        <div style="text-align:center; margin: 20px 0; font-size:12px;">
             Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. This project received funding from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
         </div>
         <script type="text/javascript" src="search_openaire_projects.js"></script>

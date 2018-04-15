@@ -96,22 +96,18 @@ button {
 .refine-search {
     font-size: 18px;
     font-family: 'Open Sans', Helvetica;
-    color: #2D72D6;
-}
-
-.refine-search:hover {
-    cursor: pointer;
     text-decoration: underline;
+    color: black;
 }
 
 .filter-btn-highlight, .open > .dropdown-toggle.btn-default, .open > .dropdown-toggle.btn-default:hover, .open > .dropdown-toggle.btn-default:active,
 .btn-default:active, .btn-default:hover, .btn-default:focus {
-    background-color: #3B42B1 !important;
+    background-color: #2D3E52 !important;
     color: white !important;
 }
 
 .btn-default:hover {
-    border-color: #3B42B1;
+    border-color: #2D3E52;
 }
 
 #filters {
@@ -132,16 +128,16 @@ button {
     color: #FFFFFF;
     padding: 9px 10px 9px 10px;
     text-decoration: none;
-    border: solid #3B42B1 0px;
-    background-color: #3B42B1;
+    border: solid #2D3E52 0px;
+    background-color: #2D3E52;
 }
 
 #filter-container .frontend-btn, .btn {
     font-size: 14px;
-    color: #3B42B1;
+    color: #2D3E52;
     padding: 9px 10px 9px 10px;
     text-decoration: none;
-    border: 1px solid #3B42B1;
+    border: 1px solid #2D3E52;
     background-color: white;
     border-radius: 5px;
 }
