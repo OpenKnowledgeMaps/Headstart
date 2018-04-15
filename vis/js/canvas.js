@@ -307,13 +307,15 @@ class Canvas {
             $('#viper-edit-screenshot').attr('src', require('images/viper-project-screenshot.png'))
             $('#edit-title').html(config.localization[config.language].viper_edit_title)
             $('#edit-modal-text').html(config.localization[config.language].viper_edit_desc_label)
+            $('#edit-button-text').html(config.localization[config.language].viper_button_desc_label)
             $('#viper-edit-button').text(config.localization[config.language].viper_edit_button_text)
             $('#viper-edit-button').attr('href', `https://www.openaire.eu/search/project?projectId=${context.params.obj_id}`)
         }
         if (config.viper_embed_modal) {
             $('#modals').append(viperEmbedModalButton)
             $('#embed-title').html(config.localization[config.language].viper_embed_title)
-            $('#embed-modal-text').val(`<iframe width="1024" height="800" src="headstart.php?query=${context.query}&file=${context.id}&service=${context.service}"></iframe>`)
+            //$('#embed-modal-text').val(`<iframe width="1024" height="800" src="headstart.php?query=${context.query}&file=${context.id}&service=${context.service}"></iframe>`)
+            $('#embed-modal-text').val(`<iframe width="1024" height="800" src="${window.location}"></iframe>`)
 
             $('#viper-embed-button').text(config.localization[config.language].viper_embed_button_text)
             .on('click', (event) => {

@@ -23,7 +23,8 @@ function simpleTemplating (data) {
         acronymtitle: item.acronymtitle,
         funder: item.funder,
         project_id: item.project_id,
-        obj_id: item.obj_id
+        obj_id: item.obj_id,
+        acronym: item.acronym
       }
     }))
     .append('<span class="project-code"> (' + item.project_id +
