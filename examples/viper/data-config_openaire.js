@@ -29,10 +29,10 @@ var data_config = {
     
     scale_types: ['content_based', 'citation_count', 'cited_by_tweeters_count', 'readers.mendeley'],
     scale_explaination: {
-        content_based: 'Scaled by number of documents',
-        citation_count: 'Scaled by number of citations',
-        cited_by_tweeters_count: 'Scaled by number of tweets',
-        'readers.mendeley': 'Scaled by number of Mendeley readers'
+        content_based: 'The size of the bubbles is relative to the number of documents related to them.',
+        citation_count: 'The size of the documents and bubbles is relative to the number of citations related to them.',
+        cited_by_tweeters_count: 'The size of the documents and bubbles is relative to the number of tweets related to them.',
+        'readers.mendeley': 'The size of the documents and bubbles is relative to the number of Mendeley readers related to them.'
     },
     scale_label: {
         content_based: 'Documents',

@@ -256,12 +256,12 @@ var config = {
             default_year: "",
             dataset_count_label: "datasets",
             paper_count_label: "papers",
-            viper_edit_title: "How to add or change project files",
-            viper_edit_desc_label: `<p>You are <b>leaving the Viper overview</b> now\
-             and will be directed to your openaire page, where you can add\
-              missing project files or change your project information
-              <p> Here is a screenshot of an example of a project page.\
-              To add or change files you need to use the links in your app box.`,
+            viper_edit_title: "How to add project resources",
+            viper_edit_desc_label: `<p>You can link further resources to this project\
+             on the OpenAIRE website. Use the button indicated in the exemplary screenshot\
+              to do so.`,
+            viper_button_desc_label: `<p>By clicking on the button below, you are redirected to this\
+                project's site on the OpenAIRE website.`,
             viper_edit_button_text: 'continue to openaire',
             viper_embed_button_text: 'Copy',
             viper_embed_title: 'embed map',
