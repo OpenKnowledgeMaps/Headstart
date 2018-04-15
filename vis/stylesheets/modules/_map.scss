@@ -6,16 +6,16 @@
 
 #headstart-chart {
     /*position: absolute;*/
-    
-        margin: 0 auto;
-        display: inline-block; /*table;*/
+
+    margin: 0 auto;
+    display: inline-block; /*table;*/
     /*margin-top: 6px;*/
     position: relative;
     z-index: 0;
 }
 
 #chart-svg {
-        overflow: visible;
+    overflow: visible;
 }
 
 #map-rect {
@@ -73,6 +73,12 @@ text {
     display:block;
 }
 
+.scale-toolbar .dropdown-menu > li > a {
+    padding: 10px;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+
 #curr-scale-explaination {
     margin-left: 10px;
 }
@@ -101,4 +107,14 @@ text {
 
 #curr-scale-type {
     font-weight: bold;
+}
+
+#scale-menu, .dropdown-menu {
+    padding: 0px 0;
+    margin: 0px 0 0;
+}
+
+.dropdown-menu > li > a:active {
+    background-color: #2d72d6;
+    color: white;
 }
