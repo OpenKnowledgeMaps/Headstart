@@ -45,7 +45,6 @@
 }
 
 #infolink {
-    color: $infolink;
     //border: 1px solid $infolink;
     //padding: 5px;
     //border-radius: 5px;
@@ -64,7 +63,6 @@
 
 #infolink:hover, #infolink:focus, #infolink:active {
     text-decoration: none;
-    color: $infolink;
 }
 
 #timelineview {

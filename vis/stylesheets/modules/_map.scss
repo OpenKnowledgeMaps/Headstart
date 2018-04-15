@@ -71,6 +71,7 @@ text {
     padding: 20px 0 20px 50px;
     background-color: $okm-clouds;
     display:block;
+    font-family: 'Open Sans', Helvetica, sans-serif;
 }
 
 .scale-toolbar .dropdown-menu > li > a {
@@ -109,10 +110,7 @@ text {
     font-weight: bold;
 }
 
-#scale-menu, .dropdown-menu {
-    padding: 0px 0;
-    margin: 0px 0 0;
-}
+
 
 .dropdown-menu > li > a:active {
     background-color: #2d72d6;

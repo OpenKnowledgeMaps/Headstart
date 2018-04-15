@@ -22,7 +22,7 @@ include 'config.php';
         <script type="text/javascript">
             headstart.start();
         </script>
-         <div style="margin-top:20px; text-align: center; font-size: 12px;"> 
+         <div style="margin-top:20px; text-align: center; font-size: 12px; font-family: 'Open Sans', sans-serif;"> 
              Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. This project received funding from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
         </div>
     </body>
