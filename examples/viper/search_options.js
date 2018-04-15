@@ -52,7 +52,7 @@ var SearchOptions = {
 
         div.append('a')
                 .attr("class", "pointer refine-search")
-                .text("Refine your search ")
+                .text("Select a funding agency ")
                 .append('span')
                 .attr("class", "awesome")
                 .text("")

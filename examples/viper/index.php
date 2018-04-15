@@ -33,7 +33,7 @@
                 <div class="background2">
                     <div class="team">
                         <p class="waiting-title">Map a research project with VIPER</p>
-                        <p class="waiting-description">Get an overview - Find papers and data sets - Identify relevant concepts</p>
+                        <p class="waiting-description">Step 1 find a project - Step 2 create an overview</p>
                         <!--<p>Faster, more efficient literature search</p>-->
                     </div>
                     <form class="mittig2" id="search-projects-form" style="margin-top:20px">
