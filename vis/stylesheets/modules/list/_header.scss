@@ -29,6 +29,10 @@
     font-weight: bold;
 }
 
+.btn-default {
+    font-family: 'Open Sans', Helvetica, sans-serif;
+}
+
 .btn:active, .btn.active {
     outline: 0;
     background-image: none;
@@ -46,6 +50,7 @@
     padding: 10px 0px;
     line-height: 250%;
     font-size: 12px;
+    font-family: 'Open Sans', Helvetica, sans-serif;
 }
 
 @media screen and (max-width: 1220px) {
