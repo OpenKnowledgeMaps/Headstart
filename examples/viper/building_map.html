@@ -48,7 +48,7 @@
                 let totals_url = params.server_url + "services/getOpenAireTotals.php?funder[]=" + params.funder 
                         + "&project_id[]=" + params.project_id + "&obj_id[]=" + params.obj_id;
                 $.getJSON(totals_url, function (data) {
-                    $("#info-totals").html("<p>Your project has " 
+                    $("#info-totals").html("<p>This project has " 
                             + data[params.obj_id].publications + " publications and " + data[params.obj_id].datasets + " datasets");
                 })
             })
@@ -72,7 +72,7 @@
                     } else {
                         $(".lds-spinner").hide();
                         $("#progress").html(
-                                "Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again."
+                                'Sorry! We could not create your map, because the project does not have enough resources linked to it. You can link further resources <a href="https://www.openaire.eu/search/project?projectId=' + window.dataParamsForOpening.obj_id + '" target="_blank">on the OpenAIRE website</a>.'
                                 );
                     }
                 }
