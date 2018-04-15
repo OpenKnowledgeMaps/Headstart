@@ -39,7 +39,7 @@ function utf8_converter($array)
 }
 
 function search($repository, $dirty_query, $post_params, $param_types, $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
-        , $num_labels = 3, $id = "area_uri", $subjects = "subject") {
+        , $retrieve_cached_map = true, $num_labels = 3, $id = "area_uri", $subjects = "subject") {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 
     $ini_array = library\Toolkit::loadIni($INI_DIR);
@@ -60,11 +60,13 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
 
     $unique_id = $persistence->createID(array($query, $params_json));
 
-    $last_version = $persistence->getLastVersion($unique_id, false);
+    if($retrieve_cached_map) {
+        $last_version = $persistence->getLastVersion($unique_id, false);
 
-    if ($last_version != null && $last_version != "null" && $last_version != false) {
-        echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
-        return;
+        if ($last_version != null && $last_version != "null" && $last_version != false) {
+            echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
+            return;
+        }
     }
 
     $params_file = tmpfile();
