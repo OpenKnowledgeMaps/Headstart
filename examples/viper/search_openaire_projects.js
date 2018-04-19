@@ -172,7 +172,7 @@ function getOrganisations(project) {
         return createOrganisations(entry);
     })
   } else {
-    return createOrganisations(rel);
+    return [createOrganisations(rel)];
   }
 }
 
@@ -202,10 +202,10 @@ function createOrganisations(source) {
         }
     }
     
-    return [{
+    return {
       name: org_name(short_name, long_name),
       url: org_website(website, org_id)
-    }]
+    }
 }
 
 function getFundingLevels (result) {
