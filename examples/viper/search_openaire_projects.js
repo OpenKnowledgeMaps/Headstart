@@ -167,36 +167,51 @@ function deepGet (obj, props, defaultValue) {
 
 function getOrganisations(project) {
   var rel = deepGet(project, ['rels', 'rel'], [])
-  if (Array.isArray(rel)) {
+  if (Array.isArray(rel) && rel.length > 0) {
     return rel.map(function (entry) {
-      let short_name = deepGet(entry, ['legalshortname', '$']);
-      let long_name = deepGet(entry, ['legalname', '$']);
-      let website = deepGet(entry, ['websiteurl', '$']);
-      let org_id = deepGet(entry, ['to', '$']);
-      return {
-        name: ((typeof short_name === "undefined")?(long_name):(short_name)),
-        url: ((typeof website === "undefined")
-            ?("https://www.openaire.eu/search/organization?organizationId=" + org_id)
-            :(website))
-      }
+        return createOrganisations(entry);
     })
   } else {
-    let short_name = deepGet(rel, ['legalshortname', '$']);
-    let long_name = deepGet(rel, ['legalname', '$']);
-    let website = deepGet(rel, ['websiteurl', '$']);
-    let org_id = deepGet(rel, ['to', '$']);
-    return [{
-      name: ((typeof short_name === "undefined")?(long_name):(short_name)),
-      url: ((typeof website === "undefined")
-            ?("https://www.openaire.eu/search/organization?organizationId=" + org_id)
-            :(website))
-    }]
+    return createOrganisations(rel);
   }
+}
+
+function createOrganisations(source) {
+    let short_name = deepGet(source, ['legalshortname', '$']);
+    let long_name = deepGet(source, ['legalname', '$']);
+    let website = deepGet(source, ['websiteurl', '$']);
+    let org_id = deepGet(source, ['to', '$']);
+    
+    let org_name = function(short_name, long_name) {
+        if (typeof short_name === "undefined" && typeof long_name === "undefined") {
+            return "";
+        } else if (typeof short_name === "undefined" && typeof long_name !== "undefined") {
+            return long_name;
+        } else {
+            return short_name;
+        }
+    }
+    
+    let org_website = function(website, org_id) {
+        if (typeof website === "undefined" && typeof org_id === undefined) {
+            return "";
+        } else if (typeof website === "undefined" && typeof org_id !== undefined) {
+            return "https://www.openaire.eu/search/organization?organizationId=" + org_id;
+        } else {
+            return website;
+        }
+    }
+    
+    return [{
+      name: org_name(short_name, long_name),
+      url: org_website(website, org_id)
+    }]
 }
 
 function getFundingLevels (result) {
   var funding_tree = deepGet(result, ['metadata', 'oaf:entity', 'oaf:project', 'fundingtree'], [])
-  return digFundingTree(funding_tree, [])
+  let funding_levels = digFundingTree(funding_tree, []);
+  return ((funding_levels.length === 0)?(""):(funding_levels))
 }
 
 // call this recursively until we work our way down to funding_level_0
