@@ -23,10 +23,10 @@ $results = array();
 $mh = curl_multi_init();
 
 foreach ($project_ids as $i => $project_id) {
-  $url_publications = "http://api.openaire.eu/search/publications?projectID=" . $project_id . 
+  $url_publications = "http://api.openaire.eu/search/publications?projectID=" . urlencode($project_id) . 
           "&funder=" . $funders[$i] . "&format=json&size=0";
   
-  $url_datasets = "http://api.openaire.eu/search/datasets?projectID=" . $project_id . 
+  $url_datasets = "http://api.openaire.eu/search/datasets?projectID=" . urlencode($project_id) . 
           "&funder=" . $funders[$i] . "&format=json&size=0";
   
   $id = $obj_ids[$i];
