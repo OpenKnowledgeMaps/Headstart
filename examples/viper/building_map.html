@@ -59,7 +59,7 @@
                     console.log(data)
                     if (data.status === "success") {
                         var file = data.id;
-                        window.location =
+                        window.location.replace(
                                 "headstart.php?query=" +
                                 encodeURIComponent(data.query) +
                                 "&file=" +
@@ -67,7 +67,7 @@
                                 "&service=" +
                                 service +
                                 "&service_name=" +
-                                service_name;
+                                service_name);
                         return false;
                     } else {
                         $(".lds-spinner").hide();
