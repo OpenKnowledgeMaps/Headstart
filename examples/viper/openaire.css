@@ -209,6 +209,11 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
     font-size: 12px;
 }
 
+.project-resources {
+    font-size: 12px;
+    padding-top: 10px;
+}
+
 .waiting-page .waiting-title  {
     font-size: 24px;
 }
