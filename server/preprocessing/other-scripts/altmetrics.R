@@ -19,6 +19,10 @@ enrich_output_json <- function(output_json){
     print("No altmetrics found for any paper in this dataset.")
   }
   output <- add_citations(output)
+  
+  #Remove duplicate lines - TODO: check for root of this problem
+  output = unique(output)
+  
   output_json <- toJSON(output)
   return (output_json)
 }
