@@ -260,8 +260,8 @@ var config = {
             viper_edit_desc_label: `<p>You can link further resources to this project\
              on the OpenAIRE website. Use the button indicated in the exemplary screenshot\
               to do so.`,
-            viper_button_desc_label: `<p>By clicking on the button below, you are redirected to this\
-                project's site on the OpenAIRE website.`,
+            viper_button_desc_label: `<p>By clicking on the button below, you are redirected to the\
+                OpenAIRE page for`,
             viper_edit_button_text: 'continue to openaire',
             viper_embed_button_text: 'Copy',
             viper_embed_title: 'embed map',
