@@ -247,7 +247,8 @@ class Canvas {
             chart_title = config.title;
         } else if (config.create_title_from_context_style === 'openaire') {
             let maxTitleLength = 47 // This should probably make it's way to a more global config
-            let compressedTitle = ( context.params.title.length > maxTitleLength ) ? context.params.title.slice(0, maxTitleLength - 3) + '...' : context.params.title
+            let acronymtitle = ( (context.params.acronym !== "") ? (context.params.acronym + " - " + context.params.title) : (context.params.title) );
+            let compressedTitle = ( acronymtitle.length > maxTitleLength ) ? acronymtitle.slice(0, maxTitleLength - 3) + '...' : acronymtitle
             chart_title = `Overview of <span class="truncated-project-title">${compressedTitle}</span>\
                             <span class="project-id">(${context.params.project_id})</span>`
         } else if (config.create_title_from_context) {
