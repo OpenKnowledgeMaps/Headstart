@@ -32,7 +32,9 @@ function simpleTemplating (data) {
       ((item.funding_tree.length > 0)?(', ' + item.funding_tree[item.funding_tree.length-1]):('')) +
       ' (' + item.start_date.slice(0, 4) +' - '+ item.end_date.slice(0,4) + ')' +
       '</div><div class="project-organisations">Participants: ' + formatOrganisationLinks(item.organisations).slice(0,15).join(', ') + 
-      ((item.organisations.length > 15)?(',...'):('')) + '</div>'))
+      ((item.organisations.length > 15)?(',...'):('')) + '</div>' +
+      '<div class="project-resources">Number of project resources: ' + item.num_project_resources + '</div>'
+      ))
   })
   return html
 }
@@ -53,17 +55,7 @@ var setupPaginator = function (searchTerm, params) {
   paginator.pagination({
     dataSource: data_config.server_url + 'services/getOpenAireProjects.php?' + encodeURI(params),
     callback: function (data, pagination) {
-      var header = '<div id="project_count">Projects: ' + pagination.totalNumber + ' results for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span></div>'
-      var html = simpleTemplating(data)
-      if (pagination.totalNumber === 0) {
-        $('#viper-search-results').html('<div class="viper-no-results-err">Sorry, no projects found for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span>. Please try another search term.</div>')
-      } else {
-        $('#viper-search-results').html(header)
-            .append(html)
-      }
-      if(pagination.totalNumber <= pagination.pageSize) {
-          $("#viper-search-pager").hide();
-      }
+        getResourcesAndSetupList(data, pagination, searchTerm);
     },
     formatAjaxError: function (jqXHR, textStatus, errorThrown) {
       $('#viper-search-results').text('Error Searching: Check your search terms. See Console for error details')
@@ -116,6 +108,52 @@ var setupPaginator = function (searchTerm, params) {
       return response.response.header.total.$
     },
   })
+}
+
+var getResourcesAndSetupList = function(data, pagination, searchTerm) {
+    $("oa-searching").text("Gathering additional information")
+    
+    let project_ids = "";
+    let funders = "";
+    let obj_ids = "";
+
+    data.forEach(function(item) {
+        project_ids += "&project_id[]=" + item.project_id;
+        funders += "&funder[]=" + item.funder;
+        obj_ids += "&obj_id[]=" + item.obj_id;
+    })  
+
+    $.ajax({
+        dataType: "json",
+        url: data_config.server_url + "services/getOpenAireTotals.php?" + project_ids + funders + obj_ids,
+        timeout: 2000
+    })
+        .fail( function(xhr, status) {
+            if( status === "timeout" ) {
+                $('#viper-search-results').text('Timeout while searching. Please try again! If the error persists, please contact us at <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>')
+            }
+        })
+        .success(function (totals) {
+            data.forEach(function (entry) {
+            entry.num_project_resources = totals[entry.obj_id].publications + totals[entry.obj_id].datasets;
+            setupList(data, pagination, searchTerm);
+        })         
+      })
+    
+}
+
+var setupList = function(data, pagination, searchTerm) {
+    var header = '<div id="project_count">Projects: ' + pagination.totalNumber + ' results for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span></div>'
+    var html = simpleTemplating(data)
+    if (pagination.totalNumber === 0) {
+      $('#viper-search-results').html('<div class="viper-no-results-err">Sorry, no projects found for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span>. Please try another search term.</div>')
+    } else {
+      $('#viper-search-results').html(header)
+          .append(html)
+    }
+    if(pagination.totalNumber <= pagination.pageSize) {
+        $("#viper-search-pager").hide();
+    } 
 }
 
 var handleResponse = function (response) {
