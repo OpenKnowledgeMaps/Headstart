@@ -88,6 +88,8 @@
                     data: params,
                     success: openInThisWindow,
                     error: function (error) {
+                        $(".lds-spinner").hide();
+                        $(".waiting-description").hide();
                         $("#progress").html(
                                 "Sorry! Something went wrong. Probably an error from the backend. Check the console for details."
                                 )
