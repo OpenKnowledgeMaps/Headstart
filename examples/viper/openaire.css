@@ -172,6 +172,7 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 #progress {
     color: #fff;
     text-align: center;
+    font-size: 18px;
 }
 
 .awesome {
@@ -212,6 +213,15 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 .project-resources {
     font-size: 12px;
     padding-top: 10px;
+}
+
+.error-building-map-button {
+    text-align:center; 
+    margin-top: 30px;
+}
+
+.error-building-map-image {
+    margin-top: 30px;
 }
 
 .waiting-page .waiting-title  {
