@@ -43,7 +43,7 @@
                             <div id="filter-container"></div>
 
                             <input type="text" name="keywords" size="89" required class="text-field" 
-                                   id="ipt-keywords" placeholder="Search project by keywords or project name or project ID">
+                                   id="ipt-keywords" placeholder="Search by keywords, project name, grant number, institution etc.">
                             <button type="submit" class="submit-btn">GO</button>
                            
                         </div>
