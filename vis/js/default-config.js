@@ -49,6 +49,7 @@ var config = {
     subdiscipline_title: "",
     use_area_uri: false,
     url_prefix: null,
+    url_prefix_datasets: null,
     input_format: "csv",
     base_unit: "readers",
     preview_type: "image",
@@ -97,7 +98,7 @@ var config = {
     //intro
     intro: "intro_hs",
     
-    service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ"},
+    service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE"},
 
     localization: {
         eng: {
@@ -222,8 +223,52 @@ var config = {
             default_x: 1.,
             default_y: 1.,
             default_year: ""
+        },
+        eng_openaire: {
+            loading: "Loading...",
+            search_placeholder: "Search within map...",
+            show_list: "Show list",
+            hide_list: "Hide list",
+            intro_label: "more info",
+            relevance: "relevance",
+            readers: "citations",
+            year: "year",
+            authors: "authors",
+            title: "title",
+            area: "Area",
+            keywords: "Keywords",
+            no_title: "No title",
+            overview_label: 'Overview of',
+            articles_label: 'documents',
+            most_recent_label: 'most recent',
+            source_label: 'Source',
+            documenttypes_label: 'Article types',
+            default_area: "No area",
+            default_author: "",
+            default_id: "defaultid",
+            default_hash: "hashHash",
+            default_abstract: "No Abstract",
+            default_published_in: "",
+            default_readers: 0,
+            default_url: "",
+            default_x: 1.,
+            default_y: 1.,
+            default_year: "",
+            dataset_count_label: "datasets",
+            paper_count_label: "papers",
+            viper_edit_title: "How to add project resources",
+            viper_edit_desc_label: `<p>You can link further resources to this project\
+             on the OpenAIRE website. Use the button indicated in the exemplary screenshot\
+              to do so.`,
+            viper_button_desc_label: `<p>By clicking on the button below, you are redirected to the\
+                OpenAIRE page for`,
+            viper_edit_button_text: 'continue to openaire',
+            viper_embed_button_text: 'Copy',
+            viper_embed_title: 'embed map',
         }
     },
+
+    scale_types: [],
 
     url_plos_pdf: "http://www.plosone.org/article/fetchObject.action?representation=PDF&uri=info:doi/",
     plos_journals_to_shortcodes: {

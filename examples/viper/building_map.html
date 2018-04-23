@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Building Your Map</title>
+        <meta http-equiv="Content-Type">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js" integrity="sha256-8WqyJLuWKRBVhxXIL1jBDD7SDxU936oZkCnxQbWwJVw=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <link type="text/css" rel="stylesheet" href="spinner.css">
+        <link type="text/css" rel="stylesheet" href="openaire.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,800' rel='stylesheet' type='text/css'>
+    </head>
+
+    <body class="waiting-page">
+        <div class="search-box">
+
+            <div class="background2">
+                <div class="team">
+                    <p class="waiting-title">Your overview for <span class="project_name"></span> is being created</p>
+                    <p class="waiting-description">Please be patient this may take a while</p>
+                    <p id="info-totals"></p>
+
+                </div>
+
+
+                <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                <div id="progress"></div>
+            </div>
+        </div>
+        <div style="text-align:center; margin: 20px 0; font-size:12px;">
+            Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>.
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                if (window.dataParamsForOpening) {
+                    var params = window.dataParamsForOpening
+                    doSubmit(params.data, params.service_name, params.service, params.search_url)
+                } else {
+                    window.alert('No Parameter Passed; don\'t access the page directly. Use the search')
+                }
+                $(".project_name").text(params.acronymtitle);
+                let totals_url = params.server_url + "services/getOpenAireTotals.php?funder[]=" + params.funder 
+                        + "&project_id[]=" + params.project_id + "&obj_id[]=" + params.obj_id;
+                $.getJSON(totals_url, function (data) {
+                    $("#info-totals").html("<p>This project has " 
+                            + data[params.obj_id].publications + " publications and " + data[params.obj_id].datasets + " datasets");
+                })
+            })
+
+            var doSubmit = function (params, service_name, service, service_url) {
+                params += "&today=" + new Date().toLocaleDateString("en-US");
+                var openInThisWindow = function (data) {
+                    console.log(data)
+                    if (data.status === "success") {
+                        var file = data.id;
+                        window.location.replace(
+                                "headstart.php?query=" +
+                                encodeURIComponent(data.query) +
+                                "&file=" +
+                                file +
+                                "&service=" +
+                                service +
+                                "&service_name=" +
+                                service_name);
+                        return false;
+                    } else {
+                        $(".lds-spinner").hide();
+                        $(".waiting-description").hide();
+                        $("#progress").html(
+                                `Sorry! We could not create your map, because the project does not have enough resources linked to it. \n\
+                                You can link further resources to this project on the OpenAIRE website. Use the button indicated in the exemplary screenshot to do so. \n\
+                                <p><a href="https://www.openaire.eu/search/project?projectId=` + window.dataParamsForOpening.obj_id + `" target="_blank"><img src="viper-project-screenshot.png" class="error-building-map-image"></a>\n\
+                                <p class="error-building-map-button"><a class="newsletter2" href="https://www.openaire.eu/search/project?projectId=` + window.dataParamsForOpening.obj_id + `" target="_blank">Go to the OpenAIRE project website</a></p>`
+                                );
+                    }
+                }
+
+                $.ajax({
+                    // make an AJAX request
+                    type: "POST",
+                    url: service_url,
+                    data: params,
+                    success: openInThisWindow,
+                    error: function (error) {
+                        $(".lds-spinner").hide();
+                        $(".waiting-description").hide();
+                        $("#progress").html(
+                                "Sorry! Something went wrong. Probably an error from the backend. Check the console for details."
+                                )
+                        console.log(error)
+                    }
+                });
+            }
+        </script>
+
+    </body>
+
+</html>

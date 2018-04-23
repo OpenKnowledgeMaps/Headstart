@@ -12,9 +12,8 @@
 }
 
 #show_hide_button_label {
-    font-family: 'Helvetica';
+    font-family: $link-font-family;
     font-size: 14px;
-    font-weight: 700;
     float: left;
     text-align: center;
 }

@@ -2,6 +2,7 @@
 // Filename: io.js
 import config from 'config';
 import { mediator } from 'mediator';
+import { intros } from 'intro';
 
 var IO = function() {
     this.test = 0;
@@ -11,6 +12,8 @@ var IO = function() {
     this.title = "default-title";
     this.context = {};
     this.num_oa;
+    this.num_papers;
+    this.num_datasets;
 };
 
 IO.prototype = {
@@ -94,6 +97,24 @@ IO.prototype = {
         }
         this.context.num_documents = num_documents;
         this.context.share_oa = this.num_oa;
+        this.context.num_datasets = this.num_datasets;
+        this.context.num_papers = this.num_papers;
+    },
+
+    setInfo: function(context) {
+        var current_intro = config.intro
+        var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
+        if (intro.dynamic) { 
+            intro.params = context.params
+            // if organisations build pretty url list
+            if (typeof intro.params.organisations != "undefined") {
+                intro.params.html_organisations = intro.params.organisations.map((org) => {
+                    return `<a href='${org.url}' target='_blank'>${org.name}</a>`
+                }).join(', ')
+                delete intro.params.organisations
+            }
+            intro.params.html_openaire_link = `<a href='https://www.openaire.eu/search/project?projectId=${intro.params.obj_id}' target='_blank'>Link</a>`
+        }
     },
 
     initializeMissingData: function(data) {
@@ -112,6 +133,9 @@ IO.prototype = {
             that.setDefaultIfNullOrUndefined(d, 'x', locale.default_x);
             that.setDefaultIfNullOrUndefined(d, 'y', locale.default_y);
             that.setDefaultIfNullOrUndefined(d, 'year', locale.default_year);
+            config.scale_types.forEach((type) => {
+                that.setDefaultIfNullOrUndefined(d, type, locale.default_readers);
+            })
         })
     },
 
@@ -124,6 +148,8 @@ IO.prototype = {
         var cur_data = fs;
         var has_keywords = false;
         var num_oa = 0;
+        var num_papers = 0;
+        var num_datasets = 0;
         cur_data.forEach(function (d) {
             d.x = parseFloat(d.x);
             d.y = parseFloat(d.y);
@@ -141,9 +167,12 @@ IO.prototype = {
             d.title = _this.setToStringIfNullOrUndefined(d.title,
                 config.localization[config.language]["no_title"]);
 
-            if (config.content_based === false) {
+            if (config.content_based === false && !(config.scale_by)) {
                 d.readers = +d.readers;
                 d.internal_readers = +d.readers + 1;
+            } else if (config.scale_by) {
+                d.readers = +d[config.scale_by]
+                d.internal_readers = +d[config.scale_by] + 1
             } else {
                 d.readers = 0;
                 d.internal_readers = 1;
@@ -188,14 +217,19 @@ IO.prototype = {
             } else if(config.service === "base") {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
                 d.oa_link = d.link;
+            } else if(config.service = "openaire") {
+                d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
+                d.oa_link = d.link;
             } else {
-				d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
-			}
+                d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
+            }
 
             d.outlink = _this.createOutlink(d);
             
             num_oa += (d.oa)?(1):(0);
-            
+            num_papers += (d.resulttype === 'publication')?(1):(0);
+            num_datasets += (d.resulttype === 'dataset')?(1):(0);
+
             if(d.hasOwnProperty("subject_orig")) {
                 has_keywords = true;
             }
@@ -204,6 +238,8 @@ IO.prototype = {
         
         config.show_keywords = (has_keywords)?(true):(false);
         this.num_oa = num_oa;
+        this.num_papers = num_papers;
+        this.num_datasets = num_datasets;
 
         mediator.publish("update_canvas_domains", cur_data);
         mediator.publish("update_canvas_data", cur_data);
@@ -329,6 +365,8 @@ IO.prototype = {
         var url = false;
         if (config.service == "base") {
           url = d.oa_link;
+        } else if (config.service == "openaire" && d.resulttype == "dataset") {
+            url = config.url_prefix_datasets + d.url;
         } else if(config.url_prefix !== null) {
             url = config.url_prefix + d.url;
         } else if (typeof d.url != 'undefined') {

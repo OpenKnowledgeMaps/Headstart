@@ -5,6 +5,12 @@ enrich_output_json <- function(output_json){
   output<- fromJSON(output_json)
   results <- get_altmetrics(output$doi)
   if (nrow(results) > 0){
+    if (!("cited_by_tweeters_count" %in% names(results))) {
+      results[["cited_by_tweeters_count"]]  = NA
+    }
+    if (!("readers.mendeley" %in% names(results))) {
+      results[["readers.mendeley"]]  = NA
+    }
     results <- results[c('doi', 'cited_by_tweeters_count', 'readers.mendeley')]
     output <- merge(x = output, y = results, by='doi', all.x=TRUE)
   } else {
@@ -13,6 +19,10 @@ enrich_output_json <- function(output_json){
     print("No altmetrics found for any paper in this dataset.")
   }
   output <- add_citations(output)
+  
+  #Remove duplicate lines - TODO: check for root of this problem
+  output = unique(output)
+  
   output_json <- toJSON(output)
   return (output_json)
 }
@@ -35,7 +45,8 @@ get_altmetrics <- function(dois){
 add_citations <- function(output){
   dois <- output$doi
   valid_dois <- which(dois!="")
-  cit_count <- check_metadata(unlist(lapply(dois[valid_dois], function(x) cr_citation_count(doi=x))))
-  output$citation_count[c(valid_dois)] <- cit_count
+  cit_count = cr_citation_count(doi=dois[valid_dois], async=TRUE)
+  output = merge(x=output, y=cit_count, by='doi', all.x = TRUE)
+  names(output)[names(output)=="count"] <- "citation_count"
   return (output)
 }
