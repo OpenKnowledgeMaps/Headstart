@@ -57,8 +57,6 @@
                            
                         </div>
                         
-
-                        
                     </form>
 
                 </div>
@@ -70,11 +68,12 @@
 
             </div>
             <div id="viper-search-pager">
-
             </div>
         
         <div style="text-align:center; margin: 30px 0 20px; font-size:12px;">
-            Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. This project received funding from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
+            <p>Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. 
+                This project received funding from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
+            For more information please contact <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>.</p>
         </div>
         <script type="text/javascript" src="search_openaire_projects.js"></script>
         <script type="text/javascript" src="data-config_openaire.js"></script>
@@ -84,5 +83,4 @@
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
         </script>
     </body>
-
 </html>
