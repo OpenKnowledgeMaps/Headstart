@@ -23,9 +23,21 @@
 }
 
 .btn-default.active, .btn-default:active, .btn-default:focus, .btn-default.active:focus, .btn-default.active.focus, .btn-default.focus, .open > .dropdown-toggle.btn-default {
-    color: white;
-    background-color: $journal-gray;
+    color: $journal-gray;
+    background-color: $white;
     border-color: $journal-gray;
+    font-weight: bold;
+}
+
+.btn-default {
+    font-family: 'Open Sans', Helvetica, sans-serif;
+}
+
+.btn:active, .btn.active {
+    outline: 0;
+    background-image: none;
+    -webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
+    box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
 }
 
 .btn-default.active:hover, .btn-default:hover {
@@ -38,6 +50,7 @@
     padding: 10px 0px;
     line-height: 250%;
     font-size: 12px;
+    font-family: 'Open Sans', Helvetica, sans-serif;
 }
 
 @media screen and (max-width: 1220px) {

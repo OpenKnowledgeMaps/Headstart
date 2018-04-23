@@ -1,3 +1,11 @@
+.paper {
+    &.resulttype-dataset {
+        #region {
+            fill: #F8F8F8;
+        }
+    }
+}
+    
 #article_metadata {
     font-family: Helvetica;
     line-height: 100%;
@@ -174,7 +182,7 @@
 
 
 .framed {
-    stroke: #e55137;
+    stroke: $framed-item;
     stroke-width: 3px;
 }
 

@@ -125,7 +125,13 @@ papers.drawPapers = function () {
     var nodes = canvas.chart.selectAll("g.node")
             .data(mediator.current_bubble.data)
             .enter().append("g")
-            .attr("class", "paper")
+            .attr("class", function (d) {
+                if (d.resulttype === "dataset") {
+                    return "paper resulttype-dataset";
+                } else {
+                    return "paper";
+                }
+            })
             .attr("transform", function (d) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
@@ -134,29 +140,45 @@ papers.drawPapers = function () {
     this.drawDogEarPath(nodes);
 
     this.prepareForeignObject(nodes);
+    
+    let article_metadata = d3.selectAll("#article_metadata");
 
-    d3.selectAll("#article_metadata").select(".paper_holder").select(".metadata");
-    var readers = d3.selectAll("#article_metadata").select(".readers");
+    article_metadata.select(".paper_holder").select(".metadata");
+    var readers = article_metadata.select(".readers");
     
     if (config.content_based) {
         readers.style("display", "none");
     }
     
-    d3.selectAll("#article_metadata").select("#icons")
+    article_metadata.select("#icons")
             .style("height", function (d) {
                 if(d.oa === true) {
                     return "20px";
                 }
             });
     
-    d3.selectAll("#article_metadata").select("#open-access-logo")
+    article_metadata.select("#open-access-logo")
             .style("display", function (d) {
                 if(d.oa === false) {
                     return "none";
                 }
             });
     
-    d3.selectAll("#article_metadata").select("#outlink")
+    article_metadata.select("#file-icon_paper")
+        .style("display", function (d) {
+            if (d.resulttype !== "publication") {
+                return "none"
+            }
+        });
+
+    article_metadata.select("#dataset-icon_paper")
+        .style("display", function (d) {
+            if (d.resulttype !== "dataset") {
+                return "none"
+            }
+        });
+    
+    article_metadata.select("#outlink")
             .style("display", function (d) {
                 if(d.oa === false) {
                     return "none";
@@ -495,7 +517,7 @@ papers.shrinkPaper = function (d, holder) {
 
     var holder_div = holder ? holder : d3.select(this);
 
-    this.resizePaper(d, holder_div, 1, "rgb(255, 255, 255)", "0.25");
+    this.resizePaper(d, holder_div, 1);
 
     holder_div.selectAll("p")
             .attr("class", "large highlightable");
@@ -510,7 +532,7 @@ papers.shrinkPaper = function (d, holder) {
     });
 };
 
-papers.resizePaper = function (d, holder_div, resize_factor, color) {
+papers.resizePaper = function (d, holder_div, resize_factor) {
     let current_div = holder_div.node();
     let current_g_paper = d3.select(current_div.parentNode.parentNode.parentNode);
     let current_foreignObject = current_g_paper.select("foreignObject");
@@ -543,8 +565,6 @@ papers.resizePaper = function (d, holder_div, resize_factor, color) {
             .style("height", d.height * mediator.circle_zoom * resize_factor + "px");
 
     current_path
-            //.style("fill-opacity", opacity)
-            .style("fill", color)
             .attr("d", region);
 
     current_dogear.attr("d", dogear);
@@ -590,7 +610,7 @@ papers.enlargePaper = function (d, holder_div) {
         resize_factor = this.calcResizeFactor(metadata);
     }
 
-    this.resizePaper(d, holder_div, resize_factor, "rgb(255, 255, 255)", "1");
+    this.resizePaper(d, holder_div, resize_factor);
 
     holder_div
             .on("click", (d) => {

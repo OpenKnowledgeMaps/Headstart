@@ -206,6 +206,13 @@ list.getPaperNodes = function(list_data) {
         .enter()
         .append("div")
         .attr("id", "list_holder")
+        .attr("class", function (d) {
+            if (d.resulttype === "dataset") {
+                return "resulttype-dataset";
+            } else {
+                return "resulttype-paper";
+            }
+        })
         .html(list_entry)
         .sort(function(a, b) {
             return b.readers - a.readers;
@@ -784,7 +791,8 @@ list.populateOverlay = function(d) {
         $("#images_holder").show();
     } else if (config.preview_type == "pdf") {
         let filename = this_d.id + ".PDF";
-        let pdf_url = filename.replace("/", "__");
+        let pdf_url = filename.replace(/\/|:/g, "__");
+        
         $("#status").hide();
 
         if (this.checkIfFileAvailable(config.server_url + "paper_preview/" + pdf_url)) {
@@ -810,13 +818,15 @@ list.populateOverlay = function(d) {
             let possible_pdfs = "";
             if (config.service === "base") {
                 possible_pdfs = d.link + ";" + d.identifier + ";" + d.relation;
+            } else if (config.service === "openaire") {
+                possible_pdfs  = d.link + ";" + d.fulltext;
             }
 
             $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service + "&pdf_urls=" + possible_pdfs, (data) => {
 
                 var showError = function() {
-                    var link = (config.service === "base") ? (this_d.link) : (this_d.outlink);
-                    $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
+                    var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
+                    $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + pdf_location_link + "\" target=\"_blank\">this website</a>.");
                     $("#status").show();
                 }
 
@@ -874,7 +884,7 @@ list.setImageForListHolder = function(d) {
                 });
         }
     } else {
-        if (d.oa === false) {
+        if (d.oa === false || d.resulttype === "dataset") {
             return;
         }
 
