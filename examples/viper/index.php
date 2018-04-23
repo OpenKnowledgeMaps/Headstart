@@ -18,7 +18,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
         <script type="text/javascript" src="pagination.min.js"></script>
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,800' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" >
         <link type="text/css" rel="stylesheet" href="options.css">
         <link type="text/css" rel="stylesheet" href="spinner.css">
@@ -27,12 +27,21 @@
     </head>
 
     <body>
+        <div style="background-color: #3696e0; max-width:100%; height: 80px; padding: 20px 50px;">
+            <div style="width:80%;display:inline-block;"><img style="display:inline-block; vertical-align: bottom;" src="viper-logo.png">
+            <div style="display:inline-block; vertical-align: bottom; color:white;"><h2 style="margin-bottom: 0px; font-weight: 300;">VIPER</h2><span style="display:block; font-size: 18;">the visual project explorer</span>
+            </div></div>
+            <div style="width:19%;display:inline-block; text-align:right;"><a style="text-decoration:none; color:white; border-bottom: 2px solid white;" href="about">What is VIPER?</a></div>
+            
+        </div>
         
             <div class="search-box">
+                
 
                 <div class="background2">
                     <div class="team">
-                        <p class="waiting-title">Map a research project with VIPER</p>
+                        
+                        <p class="waiting-title">Map a research project</p>
                         <p class="waiting-description">Step 1: Find a project - Step 2: Create an overview</p>
                         <!--<p>Faster, more efficient literature search</p>-->
                     </div>
@@ -53,7 +62,7 @@
                     </form>
 
                 </div>
-                <p style="text-align:center; margin-top: 30px;"><a class="newsletter2" href="">What is VIPER?</a><p>
+                <!--<p style="text-align:center; margin-top: 30px;"><a class="newsletter2" href="">What is VIPER?</a><p>-->
             </div>
             <div id="oa-searching">Searching OpenAire for Projects</div>
             <div id="okm-making">Building OpenKnowledgeMap</div>
