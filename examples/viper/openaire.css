@@ -263,6 +263,10 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
     margin-left: 10px;
 }
 
+.try-out-maps {
+   margin: 20px 0 0 0;
+}
+
 .underline, .underline:focus {
     text-decoration: underline;
 }

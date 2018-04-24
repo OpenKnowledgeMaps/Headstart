@@ -29,18 +29,18 @@ include 'config.php';
     <body>
         <div style="background-color: #3696e0; max-width:100%; height: 80px; padding: 20px 50px;">
             <div style="max-width:1600px; width:100%; margin:0px auto;">
-            <div style="width:30%;display:inline-block;"><img style="display:inline-block; vertical-align: bottom;" src="viper-logo.png">
-                <div style="display:inline-block; vertical-align: bottom; color:white;"><h2 style="margin-bottom: 0px; font-weight: 300;">VIPER</h2><span style="display:block; font-size: 18;">the visual project explorer</span>
-                </div></div>
-            <div style="width:69%;display:inline-block; text-align:right;">
-                <ul>
-                    <li style="display:inline; margin-right: 20px;"><a style="text-decoration:none; color:white;" href="https://openknowledgemaps.org" target="_blank">
-                            <span class="awesome"></span> back to Open Knowledge Maps</a></li>
-                    <li style="display:inline; margin-right: 20px;"><a style="text-decoration:none; color:white;" href="mailto:info@openknowledgemaps.org">
-                            <span class="awesome"></span> Contact</a></li>
-                    <li style="display:inline"><a style="text-decoration:none; color:white; border-bottom: 2px solid white;" href="about"><span class="awesome"></span> What is VIPER?</a></li>
-                </ul>
-            </div>
+                <div style="width:30%;display:inline-block;"><img style="display:inline-block; vertical-align: bottom;" src="viper-logo.png">
+                    <div style="display:inline-block; vertical-align: bottom; color:white;"><h2 style="margin-bottom: 0px; font-weight: 300;">VIPER</h2><span style="display:block; font-size: 18;">the visual project explorer</span>
+                    </div></div>
+                <div style="width:69%;display:inline-block; text-align:right;">
+                    <ul>
+                        <li style="display:inline; margin-right: 20px;"><a style="text-decoration:none; color:white;" href="https://openknowledgemaps.org" target="_blank">
+                                <span class="awesome"></span> back to Open Knowledge Maps</a></li>
+                        <li style="display:inline; margin-right: 20px;"><a style="text-decoration:none; color:white;" href="mailto:info@openknowledgemaps.org">
+                                <span class="awesome"></span> Contact</a></li>
+                        <li style="display:inline"><a style="text-decoration:none; color:white; border-bottom: 2px solid white;" href="about"><span class="awesome"></span> What is VIPER?</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -65,26 +65,26 @@ include 'config.php';
                         <button type="submit" class="submit-btn">GO</button>
 
                     </div>
-
+                    
+                    <p class="try-out-maps">Try out: 
+                        
+                            <a class="underline" target="_blank" href=""><span class="awesome"></span> Overview of OpenAIRE</a>
+                        
+                    </p>
                 </form>
 
             </div>
             <!--<p style="text-align:center; margin-top: 30px;"><a class="newsletter2" href="">What is VIPER?</a><p>-->
         </div>
 
-        <!--<div id="viper-search-results">
-            <p class="try-out-maps">Here are some examples you can try out: 
-                <span class="map-examples base">
-                    <a class="underline" target="_blank" href=""><span class="awesome"></span> Overview of OpenAIRE</a>
-                    <a class="underline" target="_blank" href=""><span class="awesome"></span> Overview of </a>
-                </span>
-            </p>
-        </div>-->
+        <div id="viper-search-results">
+
+        </div>
         <div id="viper-search-pager">
         </div>
 
         <div style="text-align:center; margin: 30px 0 20px; font-size:12px;">
-            
+
             <p>Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. 
                 This project received funding from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
                 For more information please contact <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>.</p>
