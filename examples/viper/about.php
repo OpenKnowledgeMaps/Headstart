@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php
-    include 'config.php';
+include 'config.php';
 ?>
 <html>
 
@@ -27,29 +27,38 @@
     </head>
 
     <body>
-        
+
         <div style="background-color: #3696e0; max-width:100%; height: 80px; padding: 20px 50px;">
-            <div style="width:80%;display:inline-block;"><img style="display:inline-block; vertical-align: bottom;" src="viper-logo.png">
-            <div style="display:inline-block; vertical-align: bottom; color:white;"><h2 style="margin-bottom: 0px; font-weight: 300;">VIPER</h2><span style="display:block; font-size: 18;">the visual project explorer</span>
-            </div></div>
-            <div style="width:19%;display:inline-block; text-align:right;"><a style="text-decoration:none; color:white; border-bottom: 2px solid white;" href="index">Create a Map with VIPER!</a></div>
+            <div style="width:60%;display:inline-block;"><img style="display:inline-block; vertical-align: bottom;" src="viper-logo.png">
+                <div style="display:inline-block; vertical-align: bottom; color:white;"><h2 style="margin-bottom: 0px; font-weight: 300;">VIPER</h2><span style="display:block; font-size: 18;">the visual project explorer</span>
+                </div></div>
             
+                <ul style="width:39%;display:inline-block; text-align:right;">
+                    <li style="display:inline; margin-right: 20px;"><a style="text-decoration:none; color:white;" href="https://openknowledgemaps.org" target="_blank">
+                            <span class="awesome"></span> back to Open Knowledge Maps</a></li>
+                            <li style="display:inline; margin-right: 20px;"><a style="text-decoration:none; color:white;" href="mailto:info@openknowledgemaps.org">
+                                    <span class="awesome"></span> Contact</a></li>
+                    <li style="display:inline"><a style="text-decoration:none; color:white; border-bottom: 2px solid white;" href="index">
+                            Try out VIPER!</a></li>
+                </ul>
+            
+
         </div>
         <div style="max-width:800px; margin: 0px auto; width:100%; font-size: 18px;">
             <h2 class="headline-viper"><img src="viper-logo-color.png"><br>VIPER: A Visual Project Explorer<br>
                 <span style="font-size:18px;">by <a target="_blank" href="https://openknowledgemaps.org">Open Knowledge Maps</a></span></h2>
-            
-                
+
+
             <p>The Visual Project Explorer (VIPER) is a unique open science application that provides overviews of research projects indexed by OpenAIRE. 
                 It enables funders, institutions and researchers to systematically explore a project’s output, and to understand its impact in different areas. 
             </p>
-            
+
             <p>In VIPER, each project is represented by an interactive knowledge map: a visualization showing a topical clustering of a project’s publications 
                 and datasets, complemented by a list view of these outputs (see image above). Users can interact with the visualization by zooming into a 
                 particular cluster and inspect the underlying outputs in detail (see image below). Users will even be able to view open access publications 
                 within the same interface.
             </p>
-            
+
             <p>
                 Clusters and outputs will be scaled according to different metrics, including open citation data and altmetrics. 
                 Therefore, VIPER will help projects keep track of the reception of their project in a multifaceted and contextualized way 
@@ -57,31 +66,43 @@
                 renowned bibliometrics experts and will take into account recommendations by the <a href="http://www.leidenmanifesto.org/" target="_blank">Leiden Manifesto</a> and the Report of 
                 <a href="https://ec.europa.eu/research/openscience/pdf/report.pdf" target="_blank">the European Commission Expert Group on Altmetrics</a>.
             </p>
-            
+
             <p>
                 While VIPER can be used on its own, project representations can also be embedded on other websites, e.g. on project websites or 
                 within institutional dashboards using a simple JavaScript snippet. On project websites, the visual representation can be used as 
                 an automatically updated dissemination page.
             </p>
-            
+
             <p>
                 To realize this idea, we will visualize publications and datasets of projects in the OpenAIRE database with our award-winning open 
                 source mapping software <a href="https://github.com/OpenKnowledgeMaps/Headstart" target="_blank">Head Start</a>. Users will be able to create project representations on demand, using a dedicated interface on 
                 <a target="_blank" href="https://openknowledgemaps.org">openknowledgemaps.org</a>. These representations will be automatically updated by a processing component that queries the OpenAIRE API at 
                 regular intervals. 
             </p>
-            
+
             <p>
                 VIPER exploits a unique property of OpenAIRE data: the link between projects and publications and datasets. This, in turn, enables us to realize this innovative open science application.
             </p>
+            <p class="try-out-maps">Here are some examples you can try out: 
+                <span class="map-examples base">
+                    <a class="underline" target="_blank" href=""><span class="awesome"></span> Overview of OpenAIRE</a>
+                    <a class="underline" target="_blank" href=""><span class="awesome"></span> Overview of </a>
+                </span>
+            </p>
             <p style="margin-top:40px; text-align: center;">
-            <a style="background-color: #3696e0; border-radius: 3px; padding: 10px; color:white;" href="index">Create a map with VIPER</a>
+                <a class="create-map" href="index">Create a map with VIPER</a>
             </p>
         </div>
-        
-        
+
+
         <div style="text-align:center; margin: 50px 0 20px; font-size:12px;">
-            Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. This project received funding from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
+            
+            <p>Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. 
+                This project received funding from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
+                For more information please contact <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>.</p>
+            <p style="margin-top: 20px;"><a href="https://openknowledgemaps.org/" target="_blank"><img style="margin-right:20px" width="70px" src="okmaps-logo.png"></a>
+                <a href="https://openaire.eu" target="_blank"><img width="70px" src="openaire-logo.png"></a>
+            </p>
         </div>
         <script type="text/javascript" src="search_openaire_projects.js"></script>
         <script type="text/javascript" src="data-config_openaire.js"></script>

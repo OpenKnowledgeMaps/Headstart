@@ -111,7 +111,6 @@ var setupPaginator = function (searchTerm, params) {
 }
 
 var getResourcesAndSetupList = function(data, pagination, searchTerm) {
-    $("oa-searching").text("Gathering additional information")
     
     let project_ids = "";
     let funders = "";
@@ -185,8 +184,6 @@ var rawResponseMapper = function (result) {
 
 $(document).ready(function () {
   $('#tbl-project-search-results').hide()
-  $('#oa-searching').hide()
-  $('#okm-making').hide()
   $('.lds-spinner').hide()
 })
 
