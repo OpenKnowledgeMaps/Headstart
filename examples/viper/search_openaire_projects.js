@@ -12,7 +12,7 @@ function simpleTemplating (data) {
     .html($('<a>')
     .attr('class', 'project-title')
     .attr('href', '#')
-    .html('<span class="awesome"> </span>Overview of ' + item.acronymtitle).on('click', function () {
+    .html('<span class="awesome"> </span>Overview of ' + item.acronymtitle).on('click', function (event) {
       var win = window.open("building_map.html")
       win.dataParamsForOpening = {
         data: $.param(item),
@@ -26,6 +26,7 @@ function simpleTemplating (data) {
         obj_id: item.obj_id,
         acronym: item.acronym
       }
+      event.preventDefault();
     }))
     .append('<span class="project-code"> (' + item.project_id +
       ')</span><div class="project-funders">' + item.funder + 
@@ -129,8 +130,8 @@ var getResourcesAndSetupList = function(data, pagination, searchTerm) {
         timeout: 2000
     })
         .fail( function(xhr, status) {
-            if( status === "timeout" ) {
-                $('#viper-search-results').text('Timeout while searching. Please try again! If the error persists, please contact us at <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>')
+            if(status === "timeout") {
+                $('#viper-search-results').html('Timeout while searching. Please try again! If the error persists, please contact us at <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>')
             }
         })
         .success(function (totals) {
