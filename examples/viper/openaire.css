@@ -13,6 +13,7 @@ body {
     font-weight: 300;
     margin: 0px auto 0;
     width: 100%;
+    font-size:16px;
     /*max-width: 1600px;*/
     -webkit-font-smoothing: subpixel-antialiased;
     clear:both;
@@ -143,11 +144,11 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 #viper-search-results, #viper-search-pager {
     max-width: 800px;
     width: 100%;
-    margin: 0px auto;
+    margin: 20px auto;
 }
 
 #project_count, .loading {
-    padding: 20px 0;
+    padding: 0px 0 20px;
 }
 
 .paginationjs.paginationjs-theme-blue .paginationjs-pages li.active > a {
@@ -255,6 +256,28 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
     margin: 50px auto;
     font-size: 40px;
     text-align: center;
-    color: #3696e0;
-    
+    color: #3696e0;   
+}
+
+.try-out-maps a {
+    margin-left: 10px;
+}
+
+.underline, .underline:focus {
+    text-decoration: underline;
+}
+
+.create-map {
+    background-color: #3696e0; 
+    border-radius: 3px; 
+    padding: 10px; 
+    color:white;
+    border: 2px solid #3696e0;
+}
+
+.create-map:hover {
+    background-color: white;
+    border: 2px solid #3696e0;
+    color:#3696e0;
+    text-decoration: none;
 }
