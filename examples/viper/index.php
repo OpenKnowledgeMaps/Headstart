@@ -68,7 +68,7 @@ include 'config.php';
                     
                     <p class="try-out-maps">Try out: 
                         
-                            <a class="underline" target="_blank" href=""><span class="awesome"></span> Overview of OpenAIRE</a>
+                            <a class="underline" target="_blank" href="">Overview of OpenAIRE</a>
                         
                     </p>
                 </form>
