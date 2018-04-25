@@ -83,10 +83,9 @@ include 'config.php';
             <p>
                 VIPER exploits a unique property of OpenAIRE data: the link between projects and publications and datasets. This, in turn, enables us to realize this innovative open science application.
             </p>
-            <p class="try-out-maps">Here are some examples you can try out: 
+            <p class="try-out-maps">Try out: 
                 <span class="map-examples base">
-                    <a class="underline" target="_blank" href=""><span class="awesome"></span> Overview of OpenAIRE</a>
-                    <a class="underline" target="_blank" href=""><span class="awesome"></span> Overview of </a>
+                    <a class="underline" target="_blank" href="">Overview of OpenAIRE</a>
                 </span>
             </p>
             <p style="margin-top:40px; text-align: center;">
