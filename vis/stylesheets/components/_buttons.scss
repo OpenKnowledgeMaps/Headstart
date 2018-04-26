@@ -25,6 +25,7 @@ img#close-button {
     vertical-align:top;
     margin: 20px 20px 0 0;
     font-family: 'Open Sans', Helvetica, sans-serif;
+    font-weight: 300;
 }
 
 #modals .btn {
@@ -54,6 +55,8 @@ img#close-button {
     color: #fff;
     background-color: $okm-modal-btn;
     border-color: $okm-modal-btn;
+    font-family: 'Open Sans', Helvetica, sans-serif;
+    font-weight: 300;
 }
     
 .modal-content .btn-primary:hover {
