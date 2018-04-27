@@ -223,7 +223,6 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
     cut_off <- elbow.batch(css_cluster)
   }, error = function(err){
     print(err)
-  }, finally = {
     while (is.null(cut_off)) {
       tryCatch({
         cut_off <- get_cut_off(css_cluster, attempt)
@@ -239,6 +238,11 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 
   if(max_clusters > -1 && num_clusters > max_clusters) {
     num_clusters = MAX_CLUSTERS
+  }
+
+  if(nrow(distance_matrix) <= 30){
+    print("Low content number, lowering max_k.")
+    num_clusters = round(sqrt(nrow(distance_matrix))) + 1
   }
 
   meta_cluster = attr(css_cluster,"meta")
