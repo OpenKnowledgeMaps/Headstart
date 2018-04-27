@@ -1,7 +1,7 @@
 <?php
 
 namespace headstart\persistence;
-require 'SQLitePersistence.php';
+require_once 'SQLitePersistence.php';
 
 class ViperUpdater extends SQLitePersistence {
 
@@ -17,12 +17,16 @@ class ViperUpdater extends SQLitePersistence {
   }
 
   public function getUpdateMaps($vis_changed = false) {
-    $return_fields = "revisions.rev_vis, revisions.rev_timestamp, revisions.vis_query, visualizations.vis_title";
+    $return_fields = "visualizations.vis_title,
+                      visualizations.vis_query,
+                      visualizations.vis_params";
     if ($vis_changed == false) {
-        $stmt = "SELECT $return_fields FROM revisions, visualizations
+        $stmt = "SELECT $return_fields FROM visualizations
+                  WHERE visualizations.vis_title == 'base'
                   LIMIT 10";
     } else {
-        $stmt = "SELECT $return_fields FROM revisions, visualizations
+        $stmt = "SELECT $return_fields FROM visualizations
+                  WHERE visualizations.vis_title == 'base'
                   WHERE visualizations.vis_changed = 1
                   LIMIT 10";
     }
