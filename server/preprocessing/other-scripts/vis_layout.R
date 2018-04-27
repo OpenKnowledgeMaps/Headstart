@@ -240,9 +240,9 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
     num_clusters = MAX_CLUSTERS
   }
 
-  if(nrow(distance_matrix) <= 36){
+  if(nrow(distance_matrix) <= 30){
     print("Low content number, lowering max_k.")
-    num_clusters = round(sqrt(nrow(distance_matrix)))
+    num_clusters = round(sqrt(nrow(distance_matrix))) + 1
   }
 
   meta_cluster = attr(css_cluster,"meta")
