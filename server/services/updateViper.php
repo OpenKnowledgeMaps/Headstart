@@ -121,14 +121,12 @@ function runUpdate($acronymtitle, $params) {
   echo $result;
 }
 
-
 function runUpdates($updateCandidates) {
   foreach($updateCandidates as $acronymtitle => $params) {
     runUpdate($acronymtitle, $params);
     sleep(10);
   }
 }
-
 
 function decodeParams($paramString) {
   $post_params = array();
