@@ -11,25 +11,90 @@ use headstart\search;
 
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
+
+# persistence is a SQLitePersistence class with added Viper functionalities
 $persistence = new headstart\persistence\ViperUpdater($ini_array["connection"]["sqlite_db"]);
 
-$maps = $persistence->getUpdateMaps($vis_changed = false);
+# define options
+# vis_changed, required: true/false
+# object_ids, optional: series of unique object IDs as given by openaire
+# funder, optional: funder ID
+# project_id, optional: project_id
+$shortopts = "";
+$longopts = array(
+  "vis_changed:",
+  "object_ids::",
+  "funder::",
+  "project_id::"
+);
 
-$updateCandidates = array();
-foreach($maps as $map) {
-  $params = json_decode($map['vis_params'], true);
-  $updateCandidates[$map['vis_query']] = $params;
+
+# parse options and determine action
+
+$options = getopt($shortopts, $longopts);
+
+if ($options['vis_changed'] == 'true') {
+  $vis_changed = true;
+} elseif ($options['vis_changed'] == 'false') {
+  $vis_changed = false;
+} else {
+  echo "invalid argument for vis_changed";
+};
+$action = parseOptions($options);
+echo "$action";
+
+
+# main logic
+# currently defaults to getCandidates if no specific action is identified
+if ($action == 'getByObjectIDs') {
+  $updateCandidates = getCandidatesByObjectIDs($vis_changed, $persistence, $options);
+} elseif ($action == 'getByFunderProject') {
+  $updateCandidates = getCandidates($vis_changed, $persistence);
+} else {
+  $updateCandidates = getCandidates($vis_changed, $persistence);
+}
+#runUpdates($updateCandidates);
+
+
+# define functions
+
+function parseOptions($options) {
+  if (array_key_exists('object_ids', $options) and
+      !array_key_exists('funder', $options) and
+      !array_key_exists('project_id', $options)) {
+    $action = "getByObjectIDs";
+  } elseif (array_key_exists('funder', $options) and
+            array_key_exists('project_id', $options) and
+            !array_key_exists('object_ids', $options)) {
+    $action = "getByFunderProject";
+  } else {
+    echo "Invalid combination of options.";
+    $action = NULL;
+  }
+  return $action;
 }
 
-#var_dump($updateCandidates);
+function getCandidates($vis_changed, $persistence) {
+  # get candidates via DB query
+  $maps = $persistence->getUpdateMaps($vis_changed);
+  $updateCandidates = array();
+  foreach($maps as $map) {
+    $params = json_decode($map['vis_params'], true);
+    $updateCandidates[$map['vis_query']] = $params;
+  }
+  return $updateCandidates;
+}
 
-# require search.php
-# decode params and use packParamsJSON
-# build openaire query with query as $acronymtitle and decoded params as $post_params
-# create new revision with results; check search.php for code on that
-
-runUpdates($updateCandidates);
-
+function getCandidatesByObjectIDs($vis_changed, $persistence, $options) {
+  # get candidates via DB query
+  $maps = $persistence->getUpdateMaps($vis_changed);
+  $updateCandidates = array();
+  foreach($maps as $map) {
+    $params = json_decode($map['vis_params'], true);
+    $updateCandidates[$map['vis_query']] = $params;
+  }
+  return $updateCandidates;
+}
 
 function runUpdate($acronymtitle, $params) {
   echo "$acronymtitle";
@@ -49,6 +114,7 @@ function runUpdate($acronymtitle, $params) {
 function runUpdates($updateCandidates) {
   foreach($updateCandidates as $acronymtitle => $params) {
     runUpdate($acronymtitle, $params);
+    sleep(10);
   }
 }
 
