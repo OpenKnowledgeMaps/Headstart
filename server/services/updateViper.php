@@ -87,7 +87,18 @@ function getCandidates($vis_changed, $persistence) {
 
 function getCandidatesByObjectIDs($vis_changed, $persistence, $options) {
   # get candidates via DB query
-  $maps = $persistence->getUpdateMaps($vis_changed);
+  $maps = $persistence->getUpdateMapsByID($vis_changed);
+  $updateCandidates = array();
+  foreach($maps as $map) {
+    $params = json_decode($map['vis_params'], true);
+    $updateCandidates[$map['vis_query']] = $params;
+  }
+  return $updateCandidates;
+}
+
+function getCandidatesByFunderProject($vis_changed, $persistence, $options) {
+  # get candidates via DB query
+  $maps = $persistence->getUpdateMapsByFunderProject($vis_changed);
   $updateCandidates = array();
   foreach($maps as $map) {
     $params = json_decode($map['vis_params'], true);
