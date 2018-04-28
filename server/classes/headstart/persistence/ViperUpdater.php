@@ -16,7 +16,7 @@ class ViperUpdater extends SQLitePersistence {
       }
   }
 
-  public function getUpdateMaps($vis_changed = false) {
+  public function getUpdateMaps($vis_changed) {
     $return_fields = "visualizations.vis_title,
                       visualizations.vis_query,
                       visualizations.vis_params";
@@ -36,7 +36,7 @@ class ViperUpdater extends SQLitePersistence {
     return $result;
   }
 
-  public function getUpdateMapsByID($vis_changed = false) {
+  public function getUpdateMapsByID($vis_changed) {
     $return_fields = "visualizations.vis_title,
                       visualizations.vis_query,
                       visualizations.vis_params";
@@ -56,7 +56,7 @@ class ViperUpdater extends SQLitePersistence {
     return $result;
   }
 
-  public function getUpdateMapsByFunderProject($vis_changed = false) {
+  public function getUpdateMapsByFunderProject($vis_changed) {
     $return_fields = "visualizations.vis_title,
                       visualizations.vis_query,
                       visualizations.vis_params";
