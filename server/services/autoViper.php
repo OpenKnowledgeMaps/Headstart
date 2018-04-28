@@ -50,8 +50,8 @@ function filterProjects($projects) {
 
 function getProjectsbyFunder($funder, $params) {
   $funder = "EC";
-  $startYear = "2016";
-  $endYear = "2016";
+  $startYear = "2017";
+  $endYear = "2018";
 
   $url = 'http://api.openaire.eu/search/projects?format=xml'
       . "&funder=" . $funder
@@ -90,7 +90,6 @@ function getResourceCounts($parsed_response) {
     $url_publications = "http://api.openaire.eu/search/publications?projectID="
             . urlencode($project_id)
             . "&funder=" . $funder . "&format=json&size=0";
-
     $url_datasets = "http://api.openaire.eu/search/datasets?projectID="
             . urlencode($project_id)
             . "&funder=" . $funder . "&format=json&size=0";
