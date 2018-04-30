@@ -42,7 +42,14 @@
                     var params = window.dataParamsForOpening
                     doSubmit(params.data, params.service_name, params.service, params.search_url)
                 } else {
-                    window.alert('No Parameter Passed; don\'t access the page directly. Use the search')
+                    //window.alert('No Parameter Passed; don\'t access the page directly. Use the search')
+                    
+                    //TODO: Remove - test parameters set for styling
+                    window.dataParamsForOpening = {};
+                    window.dataParamsForOpening.obj_id = "corda__h2020::94c962e736df90a5075a7f660ba3d7f6"
+                    $(".project_name").text("OpenAIRE - CONNECTing scientific results in support of Open Science");
+                    $("#info-totals").html("<p>This project has 0 publications and 0 datasets");
+                    showErrorCreation();
                 }
                 $(".project_name").text(params.acronymtitle);
                 let totals_url = params.server_url + "services/getOpenAireTotals.php?funder[]=" + params.funder 
@@ -70,14 +77,7 @@
                                 service_name);
                         return false;
                     } else {
-                        $(".lds-spinner").hide();
-                        $(".waiting-description").hide();
-                        $("#progress").html(
-                                `Sorry! We could not create your map, because the project does not have enough resources linked to it. \n\
-                                You can link further resources to this project on the OpenAIRE website. Use the button indicated in the exemplary screenshot to do so. \n\
-                                <p><a href="https://www.openaire.eu/search/project?projectId=` + window.dataParamsForOpening.obj_id + `" target="_blank"><img src="viper-project-screenshot.png" class="error-building-map-image"></a>\n\
-                                <p class="error-building-map-button"><a class="newsletter2" href="https://www.openaire.eu/search/project?projectId=` + window.dataParamsForOpening.obj_id + `" target="_blank">Go to the OpenAIRE project website</a></p>`
-                                );
+                        showErrorCreation();
                     }
                 }
 
@@ -88,14 +88,29 @@
                     data: params,
                     success: openInThisWindow,
                     error: function (error) {
-                        $(".lds-spinner").hide();
-                        $(".waiting-description").hide();
-                        $("#progress").html(
-                                "Sorry! Something went wrong. Probably an error from the backend. Check the console for details."
-                                )
-                        console.log(error)
+                        showErrorBackend(error);
                     }
                 });
+            }
+            
+            var showErrorCreation = function() {
+                $(".lds-spinner").hide();
+                $(".waiting-description").hide();
+                $("#progress").html(
+                        `Sorry! We could not create your map, because the project does not have enough resources linked to it. \n\
+                        You can link further resources to this project on the OpenAIRE website. Use the button indicated in the exemplary screenshot to do so. \n\
+                        <p><a href="https://www.openaire.eu/search/project?projectId=` + window.dataParamsForOpening.obj_id + `" target="_blank"><img src="viper-project-screenshot.png" class="error-building-map-image"></a>\n\
+                        <p class="error-building-map-button"><a class="newsletter2" href="https://www.openaire.eu/search/project?projectId=` + window.dataParamsForOpening.obj_id + `" target="_blank">Go to the OpenAIRE project website</a></p>`
+                        );
+            }
+            
+            var showErrorBackend = function(error) {
+                $(".lds-spinner").hide();
+                $(".waiting-description").hide();
+                $("#progress").html(
+                        "Sorry! Something went wrong. Probably an error from the backend. Check the console for details."
+                        )
+                console.log(error)
             }
         </script>
 
