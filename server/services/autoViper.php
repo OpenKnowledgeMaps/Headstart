@@ -44,7 +44,9 @@ function parseProjects($response) {
   return array($parsed_projects, $parsed_ids);
 }
 
-function filterProjects($projects) {
+function filterProjects($resource_counts) {
+  $filtered_projects = array();
+  foreach()
 }
 
 
