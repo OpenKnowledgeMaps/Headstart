@@ -33,15 +33,14 @@ $longopts = array(
 
 $options = getopt($shortopts, $longopts);
 
+$action = parseOptions($options);
 if ($options['vis_changed'] == 'true') {
   $vis_changed = true;
 } elseif ($options['vis_changed'] == 'false') {
   $vis_changed = false;
 } else {
-  echo "invalid argument for vis_changed";
+  echo "invalid argument for vis_changed\n";
 };
-$action = parseOptions($options);
-echo "$action";
 
 
 # main logic
@@ -50,16 +49,22 @@ if ($action == 'getByObjectIDs') {
   $updateCandidates = getCandidatesByObjectIDs($vis_changed, $persistence, $options);
 } elseif ($action == 'getByFunderProject') {
   $updateCandidates = getCandidates($vis_changed, $persistence);
-} else {
+} elseif ($action == 'getByFlag') {
   $updateCandidates = getCandidates($vis_changed, $persistence);
+} else {
+  echo "No valid action.\n";
 }
-#runUpdates($updateCandidates);
+runUpdates($updateCandidates);
 
 
 # define functions
 
 function parseOptions($options) {
-  if (array_key_exists('object_ids', $options) and
+  if (array_key_exists('vis_changed', $options) and
+      !array_key_exists('object_ids', $options) and
+      !array_key_exists('funder', $options)) {
+    $action = "getByFlag";
+  } elseif (array_key_exists('object_ids', $options) and
       !array_key_exists('funder', $options) and
       !array_key_exists('project_id', $options)) {
     $action = "getByObjectIDs";
@@ -68,7 +73,7 @@ function parseOptions($options) {
             !array_key_exists('object_ids', $options)) {
     $action = "getByFunderProject";
   } else {
-    echo "Invalid combination of options.";
+    echo "Invalid combination of options.\n";
     $action = NULL;
   }
   return $action;
@@ -115,7 +120,7 @@ function runUpdate($acronymtitle, $params) {
   $param_types = $decoded_params[1];
   var_dump($param_types);
   var_dump($post_params);
-  $result = search("base", $acronymtitle,
+  $result = search("openaire", $acronymtitle,
                                      $params, $param_types,
                                      ";", null, false, false);
   echo $result;
