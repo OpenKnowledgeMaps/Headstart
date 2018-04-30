@@ -84,7 +84,7 @@ get_papers <- function(query, params, limit=NULL) {
 get_return_values <- function(all_artifacts){
   # crude filling
   all_artifacts[is.na(all_artifacts)] <- ""
-  
+  all_artifacts <- preprocess_data(all_artifacts)
   all_artifacts$oa_state = ifelse(all_artifacts$accessright == "Open Access", 1, 0)
   all_artifacts$url = all_artifacts$id
 
@@ -99,6 +99,20 @@ get_return_values <- function(all_artifacts){
                        sep = " ")
   ret_val=list("metadata" = all_artifacts, "text" = text)
   return (ret_val)
+}
+
+preprocess_data <- function(all_artifacts){
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\[[A-Za-z \\.-]+\\]", "", x)})) # removes [ INFO.INFO-MA ] Computer Science [cs]/Multiagent Systems [cs.MA]
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub(" ?/", ";", x)}))
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\:.*\\:\\:", "", x)})) # keeps only last part after :: ":Enginyeria de la telecomunicació::Processament del senyal::Reconeixement de formes [Àrees temàtiques de la UPC]"
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("Q[A-Z]?\\d{1,2}.*\\. ?", "", x)})) # keeps only last part, here Computer science "QA75 Electronic computers. Computer science; számítástechnika, számítógéptudomány"     
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("QA\\d{1,2}", "", x)}))
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("info:eu-repo;classification;ddc;\\d+", "", x)}))
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("ddc:\\d+", "", x)}))
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("jel:[A-Z]+\\d+", "", x)}))
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("[A-Z]{2}\\d+-\\d+", "", x)})) # e.g. "TA1-2040" 
+  all_artifacts$paper_abstract <- unlist(lapply(all_artifacts$paper_abstract, function(x){gsub("\\n", " ", x)}))
+  return (all_artifacts)
 }
 
 fields <- c(
