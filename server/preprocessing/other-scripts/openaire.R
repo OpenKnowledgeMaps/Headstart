@@ -107,7 +107,7 @@ preprocess_data <- function(all_artifacts){
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\:.*\\:\\:", "", x)})) # keeps only last part after :: ":Enginyeria de la telecomunicació::Processament del senyal::Reconeixement de formes [Àrees temàtiques de la UPC]"
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("Q[A-Z]?\\d{1,2}.*\\. ?", "", x)})) # keeps only last part, here Computer science "QA75 Electronic computers. Computer science; számítástechnika, számítógéptudomány"
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("QA\\d{1,2}", "", x)}))
-  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("QA\\d{1,2}", "", x)})) # 007.52
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\d+\\.\\d+", "", x)})) # 007.52
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("info:eu-repo;classification;ddc;\\d+", "", x)})) # ddc classification
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("info:eu-repo;classification;acm;\\w+.\\d+.\\d+ ", "", x)})) # acm classification
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("ddc:\\d+", "", x)}))
