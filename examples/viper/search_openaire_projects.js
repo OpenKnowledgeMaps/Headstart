@@ -113,6 +113,12 @@ var setupPaginator = function (searchTerm, params) {
 
 var getResourcesAndSetupList = function(data, pagination, searchTerm) {
     
+    if (data.length <= 0) {
+      $('.lds-spinner').hide();
+      $('#viper-search-results').html('<div class="viper-no-results-err">Sorry, no projects found for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span>. Please try another search term.</div>')
+      return;
+    }
+    
     let project_ids = "";
     let funders = "";
     let obj_ids = "";
@@ -126,7 +132,7 @@ var getResourcesAndSetupList = function(data, pagination, searchTerm) {
     $.ajax({
         dataType: "json",
         url: data_config.server_url + "services/getOpenAireTotals.php?" + project_ids + funders + obj_ids,
-        timeout: 2000
+        timeout: 4000
     })
         .fail( function(xhr, status) {
             if(status === "timeout") {

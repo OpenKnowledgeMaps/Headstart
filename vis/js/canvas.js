@@ -412,6 +412,8 @@ class Canvas {
                             dateFormat(from, time_macro_display) + " - " + dateFormat(to, time_macro_display)
                     );
                 }
+            } else {
+                $("#timespan").hide()
             }
 
             if(this.paramExists(config.options)) {
@@ -449,6 +451,8 @@ class Canvas {
                         $("#document_types").html("Document type: " + document_types_string);
                     }
                 }
+            } else {
+                $("#document_types").hide()
             }
         } else {
             $("#num_articles").html(context.num_documents)
