@@ -145,6 +145,7 @@ create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
   return(list(tdm_matrix = tdm_matrix, metadata_full_subjects = metadata_full_subjects))
 }
 
+
 replace_keywords_if_empty <- function(corpus, metadata, stops) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
@@ -219,7 +220,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
   css_cluster <- css.hclust(distance_matrix, hclust.FUN.MoreArgs=list(method="ward.D"))
   cut_off <- NULL
   attempt <- 1
-  tryCatch({
+  cut_off <<- tryCatch({
     cut_off <- elbow.batch(css_cluster)
   }, error = function(err){
     print(err)
@@ -236,7 +237,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 
   num_clusters = cut_off$k
 
-  if(max_clusters > -1 && num_clusters > max_clusters) {
+  if(!is.null(num_clusters) && max_clusters > -1 && num_clusters > max_clusters) {
     num_clusters = MAX_CLUSTERS
   }
 
@@ -315,7 +316,6 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
   for (k in seq(1, clusters$num_clusters)) {
     group = c(names(clusters$groups[clusters$groups == k]))
     matches = which(metadata_full_subjects$id%in%group)
-
     titles =  metadata_full_subjects$title[c(matches)]
     subjects = metadata_full_subjects$subject[c(matches)]
 
