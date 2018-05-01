@@ -31,13 +31,14 @@ class Canvas {
     // Set this.available_height, this.available_width and this.current_vis_size
     calcChartSize() {
         var parent_height = getRealHeight($("#" + config.tag));
-        var subtitle_heigth = $("#subdiscipline_title").outerHeight(true);
+        var subtitle_height = $("#subdiscipline_title").outerHeight(true);
+        var scale_toolbar_height = $(".scale-toolbar").outerHeight(true) || 0;
 
         // Set available_height and available_width
         if (parent_height === 0) {
-            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_heigth;
+            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_height - scale_toolbar_height;
         } else {
-            this.available_height = $("#" + config.tag).height() - subtitle_heigth;
+            this.available_height = $("#" + config.tag).height() - subtitle_height - scale_toolbar_height;
         }
 
         this.available_height = this.available_height - 1;
