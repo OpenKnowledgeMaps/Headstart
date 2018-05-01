@@ -22,13 +22,11 @@ class ViperUpdater extends SQLitePersistence {
                       visualizations.vis_params";
     if ($vis_changed == false) {
         $stmt = "SELECT $return_fields FROM visualizations
-                  WHERE visualizations.vis_title == 'openaire'
-                  LIMIT 10";
+                 WHERE visualizations.vis_title == 'openaire'";
     } else {
         $stmt = "SELECT $return_fields FROM visualizations
-                  WHERE visualizations.vis_title == 'openaire'
-                  WHERE visualizations.vis_changed = 1
-                  LIMIT 10";
+                 WHERE visualizations.vis_title == 'openaire'
+                 AND visualizations.vis_changed = 1";
     }
     $query = $this->db->query($stmt);
     $result = $query->fetchAll();
@@ -42,13 +40,11 @@ class ViperUpdater extends SQLitePersistence {
                       visualizations.vis_params";
     if ($vis_changed == false) {
         $stmt = "SELECT $return_fields FROM visualizations
-                  WHERE visualizations.vis_title == 'openaire'
-                  LIMIT 10";
+                 WHERE visualizations.vis_title == 'openaire'";
     } else {
         $stmt = "SELECT $return_fields FROM visualizations
-                  WHERE visualizations.vis_title == 'openaire'
-                  WHERE visualizations.vis_changed = 1
-                  LIMIT 10";
+                 WHERE visualizations.vis_title == 'openaire'
+                 AND visualizations.vis_changed = 1";
     }
     $query = $this->db->query($stmt);
     $result = $query->fetchAll();
@@ -62,13 +58,11 @@ class ViperUpdater extends SQLitePersistence {
                       visualizations.vis_params";
     if ($vis_changed == false) {
         $stmt = "SELECT $return_fields FROM visualizations
-                  WHERE visualizations.vis_title == 'openaire'
-                  LIMIT 10";
+                 WHERE visualizations.vis_title == 'openaire'";
     } else {
         $stmt = "SELECT $return_fields FROM visualizations
-                  WHERE visualizations.vis_title == 'openaire'
-                  WHERE visualizations.vis_changed = 1
-                  LIMIT 10";
+                 WHERE visualizations.vis_title == 'openaire'
+                 AND visualizations.vis_changed = 1";
     }
     $query = $this->db->query($stmt);
     $result = $query->fetchAll();
