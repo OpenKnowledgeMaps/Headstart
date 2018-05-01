@@ -12,22 +12,22 @@ use headstart\search;
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 
-# persistence is a SQLitePersistence class with added Viper functionalities
-$persistence = new headstart\persistence\ViperUpdater($ini_array["connection"]["sqlite_db"]);
+
 
 # define options
 # vis_changed, required: true/false
 # object_ids, optional: series of unique object IDs as given by openaire
 # funder, optional: funder ID
 # project_id, optional: project_id
+# test: flag for testing purposes
 $shortopts = "";
 $longopts = array(
   "vis_changed:",
   "object_ids::",
   "funder::",
-  "project_id::"
+  "project_id::",
+  "test::"
 );
-
 
 # parse options and determine action
 
@@ -41,6 +41,15 @@ if ($options['vis_changed'] == 'true') {
 } else {
   echo "invalid argument for vis_changed\n";
 };
+
+
+
+# persistence is a SQLitePersistence class with added Viper functionalities
+if (array_key_exists('test', $options)) {
+  $persistence = new headstart\persistence\ViperUpdater('server/storage/headstart_test.sqlite');
+} else {
+  $persistence = new headstart\persistence\ViperUpdater($ini_array["connection"]["sqlite_db"]);
+}
 
 
 # main logic
@@ -120,8 +129,6 @@ function runUpdate($acronymtitle, $params) {
   $decoded_params = decodeParams($params);
   $post_params = $decoded_params[0];
   $param_types = $decoded_params[1];
-  var_dump($param_types);
-  var_dump($post_params);
   $result = search("openaire", $acronymtitle,
                                      $params, $param_types,
                                      ";", null, false, false);
