@@ -8,6 +8,7 @@ import dateFormat from 'dateformat';
 
 const viperEditModalButton = require('templates/misc/viper_edit_button.handlebars')
 const viperEmbedModalButton = require('templates/misc/viper_embed_button.handlebars')
+const viperShareButton = require('templates/misc/viper_share_button.handlebars')
 
 class Canvas {
     constructor() {
@@ -327,6 +328,9 @@ class Canvas {
                 document.execCommand("copy");
                 return false;
             })
+        }
+        if (config.viper_share_modal) {
+            $('#modals').append(viperShareButton)
         }
     }
 
