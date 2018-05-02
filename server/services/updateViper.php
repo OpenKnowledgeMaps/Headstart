@@ -16,7 +16,7 @@ $ini_array = library\Toolkit::loadIni($INI_DIR);
 
 # define options
 # vis_changed, required: true/false
-# object_ids, optional: series of unique object IDs as given by openaire
+# object_ids, optional: path to csv of series of unique object IDs as given by openaire
 # funder, optional: funder ID
 # project_id, optional: project_id
 # test: flag for testing purposes
@@ -32,7 +32,6 @@ $longopts = array(
 # parse options and determine action
 
 $options = getopt($shortopts, $longopts);
-
 $action = parseOptions($options);
 if ($options['vis_changed'] == 'true') {
   $vis_changed = true;
@@ -55,7 +54,8 @@ if (array_key_exists('test', $options)) {
 # main logic
 # currently defaults to getCandidates if no specific action is identified
 if ($action == 'getByObjectIDs') {
-  $updateCandidates = getCandidatesByObjectIDs($vis_changed, $persistence, $options);
+  $object_ids = array_map('str_getcsv', file($options['object_ids']));
+  $updateCandidates = getCandidatesByObjectIDs($vis_changed, $persistence, $object_ids);
 } elseif ($action == 'getByFunderProject') {
   $updateCandidates = getCandidates($vis_changed, $persistence);
 } elseif ($action == 'getByFlag') {
@@ -63,7 +63,8 @@ if ($action == 'getByObjectIDs') {
 } else {
   echo "No valid action.\n";
 }
-runUpdates($updateCandidates);
+var_dump($updateCandidates);
+#runUpdates($updateCandidates);
 
 
 
@@ -101,9 +102,16 @@ function getCandidates($vis_changed, $persistence) {
   return $updateCandidates;
 }
 
-function getCandidatesByObjectIDs($vis_changed, $persistence, $options) {
+function getCandidatesByObjectIDs($vis_changed, $persistence, $object_ids) {
   # get candidates via DB query
-  $maps = $persistence->getUpdateMapsByID($vis_changed);
+  # object IDs needs to be a comma separated list of IDs
+  $obj_ids = array();
+  foreach($object_ids as $obj_id){
+    $obj_ids[] = $obj_id[0];
+  }
+  $obj_ids = implode(", ", $obj_ids);
+  var_dump($obj_ids);
+  $maps = $persistence->getUpdateMapsByID($vis_changed, $obj_ids);
   $updateCandidates = array();
   foreach($maps as $map) {
     $params = json_decode($map['vis_params'], true);
