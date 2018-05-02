@@ -22,11 +22,13 @@ class ViperUpdater extends SQLitePersistence {
                       visualizations.vis_params";
     if ($vis_changed == false) {
         $stmt = "SELECT $return_fields FROM visualizations
-                 WHERE visualizations.vis_title == 'openaire'";
+                 WHERE visualizations.vis_title == 'openaire'
+                 ";
     } else {
         $stmt = "SELECT $return_fields FROM visualizations
                  WHERE visualizations.vis_title == 'openaire'
-                 AND visualizations.vis_changed = 1";
+                 AND visualizations.vis_changed = 1
+                 ";
     }
     $query = $this->db->query($stmt);
     $result = $query->fetchAll();
@@ -39,15 +41,18 @@ class ViperUpdater extends SQLitePersistence {
                       visualizations.vis_query,
                       visualizations.vis_params";
     if ($vis_changed == false) {
-        $stmt = "SELECT $return_fields FROM visualizations
-                 WHERE visualizations.vis_title == 'openaire'";
-    } else {
-        $stmt = "SELECT $return_fields,
-                        JSON_VALUE(visualizations.vis_params, '$.obj_id') AS ObjID
+        $stmt = "SELECT $return_fields
                  FROM visualizations
                  WHERE visualizations.vis_title == 'openaire'
-                 AND ObjID IN $object_ids
-                 AND visualizations.vis_changed = 1";
+                 AND JSON_VALUE(visualizations.vis_params, '$.obj_id') IN $object_ids
+                 ";
+    } else {
+        $stmt = "SELECT $return_fields
+                 FROM visualizations
+                 WHERE visualizations.vis_title == 'openaire'
+                 AND JSON_VALUE(visualizations.vis_params, '$.obj_id') IN $object_ids
+                 AND visualizations.vis_changed = 1
+                 ";
     }
     $query = $this->db->query($stmt);
     $result = $query->fetchAll();
@@ -55,20 +60,30 @@ class ViperUpdater extends SQLitePersistence {
     return $result;
   }
 
-  public function getUpdateMapsByFunderProject($vis_changed) {
+  public function getUpdateMapsByFunderProject($vis_changed, $funder, $project_id) {
+    # only works with JSON1 extension
     $return_fields = "visualizations.vis_title,
                       visualizations.vis_query,
                       visualizations.vis_params";
     if ($vis_changed == false) {
-        $stmt = "SELECT $return_fields FROM visualizations
-                 WHERE visualizations.vis_title == 'openaire'";
-    } else {
-        $stmt = "SELECT $return_fields FROM visualizations
+        $stmt = "SELECT $return_fields
+                 FROM visualizations
                  WHERE visualizations.vis_title == 'openaire'
-                 AND visualizations.vis_changed = 1";
+                   AND JSON_VALUE(visualizations.vis_params, '$.funder') = " . $funder .
+                 " AND JSON_VALUE(visualizations.vis_params, '$.project_id') = " . $project_id . "
+                 ";
+    } else {
+        $stmt = "SELECT $return_fields,
+                        JSON_VALUE(visualizations.vis_params, '$.project_id') AS pid
+                 FROM visualizations
+                 WHERE visualizations.vis_title == 'openaire'
+                 AND visualizations.vis_changed = 1
+                 ";
     }
+    echo ($stmt);
     $query = $this->db->query($stmt);
     $result = $query->fetchAll();
+    var_dump($result);
 
     return $result;
   }
