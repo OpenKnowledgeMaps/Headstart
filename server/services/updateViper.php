@@ -24,8 +24,7 @@ $shortopts = "";
 $longopts = array(
   "vis_changed:",
   "object_ids::",
-  "funder::",
-  "project_id::",
+  "funderproject::",
   "test::"
 );
 
@@ -57,14 +56,15 @@ if ($action == 'getByObjectIDs') {
   $object_ids = array_map('str_getcsv', file($options['object_ids']));
   $updateCandidates = getCandidatesByObjectIDs($vis_changed, $persistence, $object_ids);
 } elseif ($action == 'getByFunderProject') {
-  $updateCandidates = getCandidates($vis_changed, $persistence);
+  $funderprojects = array_map('str_getcsv', file($options['funderproject']));
+  $updateCandidates = getCandidatesByFunderProject($vis_changed, $persistence, $funderprojects);
 } elseif ($action == 'getByFlag') {
   $updateCandidates = getCandidates($vis_changed, $persistence);
 } else {
   echo "No valid action.\n";
 }
-var_dump($updateCandidates);
-#runUpdates($updateCandidates);
+
+runUpdates($updateCandidates);
 
 
 
@@ -74,14 +74,12 @@ var_dump($updateCandidates);
 function parseOptions($options) {
   if (array_key_exists('vis_changed', $options) and
       !array_key_exists('object_ids', $options) and
-      !array_key_exists('funder', $options)) {
+      !array_key_exists('funderproject', $options)) {
     $action = "getByFlag";
   } elseif (array_key_exists('object_ids', $options) and
-      !array_key_exists('funder', $options) and
-      !array_key_exists('project_id', $options)) {
+      !array_key_exists('funderproject', $options)) {
     $action = "getByObjectIDs";
-  } elseif (array_key_exists('funder', $options) and
-            array_key_exists('project_id', $options) and
+  } elseif (array_key_exists('funderproject', $options) and
             !array_key_exists('object_ids', $options)) {
     $action = "getByFunderProject";
   } else {
@@ -110,7 +108,6 @@ function getCandidatesByObjectIDs($vis_changed, $persistence, $object_ids) {
     $obj_ids[] = $obj_id[0];
   }
   $obj_ids = implode(", ", $obj_ids);
-  var_dump($obj_ids);
   $maps = $persistence->getUpdateMapsByID($vis_changed, $obj_ids);
   $updateCandidates = array();
   foreach($maps as $map) {
@@ -120,13 +117,17 @@ function getCandidatesByObjectIDs($vis_changed, $persistence, $object_ids) {
   return $updateCandidates;
 }
 
-function getCandidatesByFunderProject($vis_changed, $persistence, $options) {
+function getCandidatesByFunderProject($vis_changed, $persistence, $funderproject) {
   # get candidates via DB query
-  $maps = $persistence->getUpdateMapsByFunderProject($vis_changed);
   $updateCandidates = array();
-  foreach($maps as $map) {
-    $params = json_decode($map['vis_params'], true);
-    $updateCandidates[$map['vis_query']] = $params;
+  $maps = $persistence->getUpdateMaps($vis_changed);
+  foreach($funderproject as $fp){
+    foreach($maps as $map) {
+      $params = json_decode($map['vis_params'], true);
+      if ($params['funder'] == $fp[0] and $params['project_id'] == $fp[1]) {
+        $updateCandidates[$map['vis_query']] = $params;
+      }
+    }
   }
   return $updateCandidates;
 }
