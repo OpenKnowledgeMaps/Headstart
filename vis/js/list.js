@@ -19,6 +19,7 @@ import {
 const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
 const listEntryTemplate = require("templates/list/list_entry.handlebars");
+const sortDropdownEntryTemplate = require("templates/list/sort_dropdown_entry.handlebars");
 
 export const list = StateMachine.create({
 
@@ -85,7 +86,8 @@ export const list = StateMachine.create({
 list.drawList = function() {
     // Load list template
     let list_explorer = listTemplate({
-        show_list: config.localization[config.language].show_list
+        show_list: config.localization[config.language].show_list,
+        dropdown: config.sort_menu_dropdown
     });
     $("#list_explorer").append(list_explorer);
 
@@ -107,16 +109,22 @@ list.drawList = function() {
         debounce(this.filterList([""]), config.debounce);
     });
 
-    // Add sort options
+    // Add sort button options
     var container = d3.select("#sort_container>ul");
-    var first_element = true;
     const numberOfOptions = config.sort_options.length;
-    for (var i = 0; i < numberOfOptions; i++) {
-        if (first_element) {
-            addSortOption(container, config.sort_options[i], true);
-            first_element = false;
-        } else {
-            addSortOption(container, config.sort_options[i], false);
+    if(!config.sort_menu_dropdown) {
+        var first_element = true;
+        for (var i = 0; i < numberOfOptions; i++) {
+            if (first_element) {
+                addSortOptionButton(container, config.sort_options[i], true);
+                first_element = false;
+            } else {
+                addSortOptionButton(container, config.sort_options[i], false);
+            }
+        }
+    } else {
+        for(var i=0; i<numberOfOptions; i++) {
+            addSortOptionDropdownEntry(config.sort_options[i])
         }
     }
 
@@ -151,7 +159,21 @@ list.fit_list_height = function() {
     $("#papers_list").height(paper_list_avail_height);
 };
 
-let addSortOption = function(parent, sort_option, selected) {
+let addSortOptionDropdownEntry = function(sort_option) {
+    let entry = sortDropdownEntryTemplate({
+        sort_by_string: config.localization[config.language].sort_by_label,
+        sorter_label: config.localization[config.language][sort_option]
+    })
+    var newEntry = $(entry).appendTo('#sort-menu-entries')
+    newEntry.on("click", () => {
+        sortBy(sort_option)
+        mediator.publish("record_action", "none", "sortBy",
+            config.user_id, "listsort", null, "sort_option=" + sort_option)
+        $('#curr-sort-type').text(config.localization[config.language][sort_option])
+    })
+}
+
+let addSortOptionButton = function(parent, sort_option, selected) {
 
     let checked_val = "";
     let active_val = "";

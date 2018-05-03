@@ -75,6 +75,7 @@ var config = {
     create_title_from_context: false,
 
     sort_options: ["readers", "title", "authors", "year"],
+    sort_menu_dropdown: false,
 
     content_based: false,
 
@@ -265,6 +266,7 @@ var config = {
             viper_edit_button_text: 'continue to openaire',
             viper_embed_button_text: 'Copy',
             viper_embed_title: 'embed map',
+            sort_by_label: 'sort by:',
         }
     },
 
