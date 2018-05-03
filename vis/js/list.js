@@ -87,7 +87,8 @@ list.drawList = function() {
     // Load list template
     let list_explorer = listTemplate({
         show_list: config.localization[config.language].show_list,
-        dropdown: config.sort_menu_dropdown
+        dropdown: config.sort_menu_dropdown,
+        sort_by_label: config.localization[config.language].sort_by_label,
     });
     $("#list_explorer").append(list_explorer);
 
