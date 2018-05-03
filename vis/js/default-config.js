@@ -238,6 +238,7 @@ var config = {
             readers: "citations",
             year: "year",
             authors: "authors",
+            citations: "citations",
             title: "title",
             area: "Area",
             keywords: "Keywords",
