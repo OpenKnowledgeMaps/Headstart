@@ -131,7 +131,8 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            sort_by_label: 'sort by:',
         },
         ger: {
             loading: "Wird geladen...",
@@ -192,7 +193,8 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            sort_by_label: 'sort by:',
         },
         eng_pubmed: {
             loading: "Loading...",
@@ -223,7 +225,8 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            sort_by_label: 'sort by:',
         },
         eng_openaire: {
             loading: "Loading...",
@@ -267,6 +270,7 @@ var config = {
             viper_embed_button_text: 'Copy',
             viper_embed_title: 'embed map',
             sort_by_label: 'sort by:',
+            scale_by_label: 'Scale map by:',
         }
     },
 
