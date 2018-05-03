@@ -45,15 +45,125 @@
         max-width: 800px;
 
         .modal-content {
-            padding: 30px;
+            padding: 40px;
+
+            p {
+                font-weight: 300;
+                font-family: 'Open Sans', Helvetica, sans-serif;
+                font-size: 16px;
+            }
+
         }
     }
 
 
 }
 
+
+#viper_edit_modal {
+
+    .modal-dialog {
+        width: 100%;
+        max-width: 800px;
+
+        .modal-content {
+            padding: 40px;
+            overflow: hidden;
+
+            p {
+                font-weight: 300;
+                font-family: 'Open Sans', Helvetica, sans-serif;
+                font-size: 16px;
+            }
+
+            #viper-edit-screenshot {
+                max-width: 100%;
+                max-height: 100%;
+                -moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+                box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+            }
+        }
+
+    }
+
+
+}
+
+#viper_embed_modal {
+
+    .modal-dialog {
+        width: 100%;
+        max-width: 800px;
+
+        .modal-content {
+            padding: 40px;
+
+            textarea {
+                width: 100%;
+                display: block;
+                padding: 10px;
+
+            }
+        }
+
+        .modal-body {
+            p {
+                font-weight: 300;
+                font-family: 'Open Sans', Helvetica, sans-serif;
+                font-size: 16px;
+            }
+        }
+    }
+
+
+}
+
+.modal-body, .modal-header {
+    padding: 0px;
+}
+
+.modal-content th {
+    color: $black;
+    width: 200px;
+}
+
+#pdf-modal .modal-content {
+    padding: 15px;
+}
+
 .modal-title {
-    color: $okm-red;
+    color: $medium-blue;
+    font-size: 20px;
+    font-weight: 700;
+    margin:0px !important;
+    text-transform: uppercase;
+}
+
+.modal-header {
+    margin-bottom: 20px;
+}
+
+h3 {
+    margin: 0px;
+}
+#info-body h3  {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 14px;
+    margin: 20px 0px 10px;
+    color: $medium-blue;
+}
+
+.modal-content table {
+    border: 3px solid $okm-clouds;
+    font-weight: 300;
+    font-family: 'Open Sans', Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+.viper-modal-title {
+    color: $medium-blue;
+    text-transform: uppercase;
 }
 
 #pdf_iframe {
@@ -123,6 +233,15 @@ h5 {
 
 // draggable styles taken from jquery-ui
 .ui-draggable-handle {
-	-ms-touch-action: none;
-	touch-action: none;
+    -ms-touch-action: none;
+    touch-action: none;
+}
+
+.table > thead > tr > th, .table > thead > tr > td, .table > tbody > tr > th, .table > tbody > tr > td, .table > tfoot > tr > th, .table > tfoot > tr > td {
+
+    border-top: 3px solid $okm-clouds;
+}
+
+#embed-modal-text, #viper-edit-screenshot {
+    margin: 20px 0;
 }

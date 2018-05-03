@@ -19,6 +19,7 @@ import {
 const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
 const listEntryTemplate = require("templates/list/list_entry.handlebars");
+const sortDropdownEntryTemplate = require("templates/list/sort_dropdown_entry.handlebars");
 
 export const list = StateMachine.create({
 
@@ -85,7 +86,9 @@ export const list = StateMachine.create({
 list.drawList = function() {
     // Load list template
     let list_explorer = listTemplate({
-        show_list: config.localization[config.language].show_list
+        show_list: config.localization[config.language].show_list,
+        dropdown: config.sort_menu_dropdown,
+        sort_by_label: config.localization[config.language].sort_by_label,
     });
     $("#list_explorer").append(list_explorer);
 
@@ -107,16 +110,22 @@ list.drawList = function() {
         debounce(this.filterList([""]), config.debounce);
     });
 
-    // Add sort options
+    // Add sort button options
     var container = d3.select("#sort_container>ul");
-    var first_element = true;
     const numberOfOptions = config.sort_options.length;
-    for (var i = 0; i < numberOfOptions; i++) {
-        if (first_element) {
-            addSortOption(container, config.sort_options[i], true);
-            first_element = false;
-        } else {
-            addSortOption(container, config.sort_options[i], false);
+    if(!config.sort_menu_dropdown) {
+        var first_element = true;
+        for (var i = 0; i < numberOfOptions; i++) {
+            if (first_element) {
+                addSortOptionButton(container, config.sort_options[i], true);
+                first_element = false;
+            } else {
+                addSortOptionButton(container, config.sort_options[i], false);
+            }
+        }
+    } else {
+        for(var i=0; i<numberOfOptions; i++) {
+            addSortOptionDropdownEntry(config.sort_options[i])
         }
     }
 
@@ -151,7 +160,21 @@ list.fit_list_height = function() {
     $("#papers_list").height(paper_list_avail_height);
 };
 
-let addSortOption = function(parent, sort_option, selected) {
+let addSortOptionDropdownEntry = function(sort_option) {
+    let entry = sortDropdownEntryTemplate({
+        sort_by_string: config.localization[config.language].sort_by_label,
+        sorter_label: config.localization[config.language][sort_option]
+    })
+    var newEntry = $(entry).appendTo('#sort-menu-entries')
+    newEntry.on("click", () => {
+        sortBy(sort_option)
+        mediator.publish("record_action", "none", "sortBy",
+            config.user_id, "listsort", null, "sort_option=" + sort_option)
+        $('#curr-sort-type').text(config.localization[config.language][sort_option])
+    })
+}
+
+let addSortOptionButton = function(parent, sort_option, selected) {
 
     let checked_val = "";
     let active_val = "";
@@ -206,6 +229,13 @@ list.getPaperNodes = function(list_data) {
         .enter()
         .append("div")
         .attr("id", "list_holder")
+        .attr("class", function (d) {
+            if (d.resulttype === "dataset") {
+                return "resulttype-dataset";
+            } else {
+                return "resulttype-paper";
+            }
+        })
         .html(list_entry)
         .sort(function(a, b) {
             return b.readers - a.readers;
@@ -250,6 +280,26 @@ list.populateMetaData = function(nodes) {
                 }
             })
 
+        list_metadata.select("#file-icon_list")
+            .style("display", function (d) {
+                if (d.resulttype == "dataset") {
+                    return "none"
+                }
+                else {
+                    return "inline"
+                }
+            })
+
+        list_metadata.select("#dataset-icon_list")
+            .style("display", function (d) {
+                if (d.resulttype == "dataset") {
+                    return "inline"
+                }
+                else {
+                    return "none"
+                }
+            })
+
         list_metadata.select("#paper_list_title")
             .html(function(d) {
                 return d.title;
@@ -258,6 +308,12 @@ list.populateMetaData = function(nodes) {
         list_metadata.select(".outlink")
             .attr("href", function(d) {
                 return d.outlink;
+            })
+            .attr("class", function(d){
+                if(d.oa){
+                    return "oa-link"
+                }
+                return "outlink"
             })
             .on("click", function() {
                 d3.event.stopPropagation();
@@ -273,7 +329,7 @@ list.populateMetaData = function(nodes) {
         var paper_link = list_metadata.select(".link2");
 
         paper_link.style("display", function(d) {
-            if (d.oa === false) {
+            if (d.oa === false || d.resulttype == "dataset") {
                 return "none";
             }
         });
@@ -758,7 +814,8 @@ list.populateOverlay = function(d) {
         $("#images_holder").show();
     } else if (config.preview_type == "pdf") {
         let filename = this_d.id + ".PDF";
-        let pdf_url = filename.replace("/", "__");
+        let pdf_url = filename.replace(/\/|:/g, "__");
+        
         $("#status").hide();
 
         if (this.checkIfFileAvailable(config.server_url + "paper_preview/" + pdf_url)) {
@@ -784,13 +841,15 @@ list.populateOverlay = function(d) {
             let possible_pdfs = "";
             if (config.service === "base") {
                 possible_pdfs = d.link + ";" + d.identifier + ";" + d.relation;
+            } else if (config.service === "openaire") {
+                possible_pdfs  = d.link + ";" + d.fulltext;
             }
 
             $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service + "&pdf_urls=" + possible_pdfs, (data) => {
 
                 var showError = function() {
-                    var link = (config.service === "base") ? (this_d.link) : (this_d.outlink);
-                    $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
+                    var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
+                    $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + pdf_location_link + "\" target=\"_blank\">this website</a>.");
                     $("#status").show();
                 }
 
@@ -848,7 +907,7 @@ list.setImageForListHolder = function(d) {
                 });
         }
     } else {
-        if (d.oa === false) {
+        if (d.oa === false || d.resulttype === "dataset") {
             return;
         }
 

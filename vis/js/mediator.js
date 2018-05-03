@@ -6,12 +6,16 @@ import { BubblesFSM } from 'bubbles';
 import { list } from 'list';
 import { io } from 'io';
 import { canvas } from 'canvas';
+import { scale } from './scale';
 
 const timelineTemplate = require('templates/timeline.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
 const infoTemplate = require("templates/misc/info_modal.handlebars");
 const iFrameTemplate = require("templates/misc/iframe_modal.handlebars");
 const imageTemplate = require("templates/misc/images_modal.handlebars");
+const editTemplate = require("templates/misc/viper_edit_modal.handlebars");
+const embedTemplate = require("templates/misc/viper_embed_modal.handlebars");
+const scaleToolbarTemplate = require("templates/misc/scale_toolbar.handlebars");
 
 class ModuleManager {
     constructor() {
@@ -45,7 +49,7 @@ MyMediator.prototype = {
     constructor: MyMediator,
     init: function() {
         // init logic and state switching
-        this.modules = { papers: papers, list: list, io: io, canvas: canvas};
+        this.modules = { papers: papers, list: list, io: io, canvas: canvas, scale: scale};
         this.mediator.subscribe("start_visualization", this.init_start_visualization);
         this.mediator.subscribe("start", this.buildHeadstartHTML);
         this.mediator.subscribe("start", this.set_normal_mode);
@@ -134,6 +138,9 @@ MyMediator.prototype = {
             mediator.manager.registerModule(canvas, 'canvas');
             mediator.manager.registerModule(papers, 'papers');
         }
+        if(config.scale_types.lenght > 0) {
+            mediator.manager.registerModule(scale, 'scale')
+        }
     },
 
     register_bubbles: function() {
@@ -219,7 +226,8 @@ MyMediator.prototype = {
         mediator.manager.registerModule(headstart, 'headstart');
         if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.manager.call('canvas', 'setupCanvas', []);
-        
+        mediator.manager.registerModule(scale, 'scale')
+        mediator.manager.call('scale', 'drawScaleTypes', [])
         let data = (config.show_context)?(JSON.parse(csv.data)):csv;
         let context = (config.show_context)?(csv.context):{};
         
@@ -227,6 +235,7 @@ MyMediator.prototype = {
         mediator.manager.call('io', 'prepareData', [highlight_data, data]);
         mediator.manager.call('io', 'prepareAreas', []);
         mediator.manager.call('io', 'setContext', [context, data.length]);
+        mediator.manager.call('io', 'setInfo', [context]);
         mediator.manager.call('canvas', 'drawTitle', [context]);
         
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
@@ -267,11 +276,19 @@ MyMediator.prototype = {
         // Build Headstart skeleton
         this.viz = $("#" + config.tag);
         this.viz.addClass("headstart");
-
         this.viz.append(headstartTemplate());
         this.viz.append(infoTemplate());
         this.viz.append(iFrameTemplate());
         this.viz.append(imageTemplate());
+        this.viz.append(editTemplate());
+        this.viz.append(embedTemplate());
+        
+        if (config.scale_types.length > 0) {
+            this.viz.append(scaleToolbarTemplate({
+                scale_by_label: config.localization[config.language].scale_by_label
+            }));
+        }
+        
         if (!config.render_bubbles) {
             $(".vis-col").remove();
             this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);

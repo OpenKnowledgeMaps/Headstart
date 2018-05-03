@@ -125,7 +125,13 @@ papers.drawPapers = function () {
     var nodes = canvas.chart.selectAll("g.node")
             .data(mediator.current_bubble.data)
             .enter().append("g")
-            .attr("class", "paper")
+            .attr("class", function (d) {
+                if (d.resulttype === "dataset") {
+                    return "paper resulttype-dataset";
+                } else {
+                    return "paper";
+                }
+            })
             .attr("transform", function (d) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
@@ -134,29 +140,45 @@ papers.drawPapers = function () {
     this.drawDogEarPath(nodes);
 
     this.prepareForeignObject(nodes);
+    
+    let article_metadata = d3.selectAll("#article_metadata");
 
-    d3.selectAll("#article_metadata").select(".paper_holder").select(".metadata");
-    var readers = d3.selectAll("#article_metadata").select(".readers");
+    article_metadata.select(".paper_holder").select(".metadata");
+    var readers = article_metadata.select(".readers");
     
     if (config.content_based) {
         readers.style("display", "none");
     }
     
-    d3.selectAll("#article_metadata").select("#icons")
+    article_metadata.select("#icons")
             .style("height", function (d) {
                 if(d.oa === true) {
                     return "20px";
                 }
             });
     
-    d3.selectAll("#article_metadata").select("#open-access-logo")
+    article_metadata.select("#open-access-logo")
             .style("display", function (d) {
                 if(d.oa === false) {
                     return "none";
                 }
             });
     
-    d3.selectAll("#article_metadata").select("#outlink")
+    article_metadata.select("#file-icon_paper")
+        .style("display", function (d) {
+            if (d.resulttype !== "publication") {
+                return "none"
+            }
+        });
+
+    article_metadata.select("#dataset-icon")
+        .style("display", function (d) {
+            if (d.resulttype !== "dataset") {
+                return "none"
+            }
+        });
+    
+    article_metadata.select("#outlink")
             .style("display", function (d) {
                 if(d.oa === false) {
                     return "none";
@@ -168,7 +190,7 @@ papers.drawPapers = function () {
 // draw the path "around" the papers, perhaps "border" would be a better name
 papers.drawPaperPath = function (nodes) {
     var region = (d) => {
-        return this.createPaperPath(0, 0, d.width, d.height, 0.2, 0.2);
+            return this.createPaperPath(0, 0, d.width, d.height, 0.2, 0.2, d.resulttype);
     };
 
     nodes.append("path")
@@ -197,7 +219,7 @@ papers.resetPaths = function () {
 // draw the path of the dog-ear for the papers
 papers.drawDogEarPath = function (nodes) {
     var dogear = (d) => {
-        return this.createDogearPath(d.width * 0.8, 0, d.width, d.height, 0.2, 0.2);
+        return this.createDogearPath(d.width * 0.8, 0, d.width, d.height, 0.2, 0.2, d.resulttype);
     };
 
     nodes.append("path")
@@ -265,7 +287,11 @@ papers.prepareForeignObject = function (nodes) {
 
 
 // create the path or "border" for papers
-papers.createPaperPath = function (x, y, width, height, correction_x, correction_y) {
+papers.createPaperPath = function (x, y, width, height, correction_x, correction_y, drawType) {
+
+    if(drawType == "dataset") {
+        return this.createDatasetPath(x, y, width, height, correction_x)
+    }
 
     if (!correction_x) {
         correction_x = config.dogear_width;
@@ -284,6 +310,25 @@ papers.createPaperPath = function (x, y, width, height, correction_x, correction
             " v " + v + " h " + (-1 * width) + " v " + (-1 * height);
 
     return path;
+};
+
+// create the path or "border" for datasets
+papers.createDatasetPath = function (x, y, width, height, correction) {
+    let r = correction ? correction * 10 : 10
+    let corner = correction ? correction * 10 : 10
+    let x_left = corner
+    let x_right = width - corner
+    let y_bottom = height - corner
+    let y_top = corner
+    return `M ${x},${y_top} \
+    A ${r},${r} 0 0,1 ${x_left},${0} \
+    L ${x_right},${0} \
+    A ${r},${r} 0 0,1 ${width},${y_top} \
+    L ${width},${y_bottom} \
+    A ${r},${r} 0 0,1 ${x_right},${height} \
+    L ${x_left},${height} \
+    A${r},${r} 0 0,1 ${0},${y_bottom} \
+    L ${0},${y_top} Z`
 };
 
 papers.applyForce = function () {
@@ -472,7 +517,7 @@ papers.shrinkPaper = function (d, holder) {
 
     var holder_div = holder ? holder : d3.select(this);
 
-    this.resizePaper(d, holder_div, 1, "rgb(255, 255, 255)", "0.25");
+    this.resizePaper(d, holder_div, 1);
 
     holder_div.selectAll("p")
             .attr("class", "large highlightable");
@@ -487,7 +532,7 @@ papers.shrinkPaper = function (d, holder) {
     });
 };
 
-papers.resizePaper = function (d, holder_div, resize_factor, color) {
+papers.resizePaper = function (d, holder_div, resize_factor) {
     let current_div = holder_div.node();
     let current_g_paper = d3.select(current_div.parentNode.parentNode.parentNode);
     let current_foreignObject = current_g_paper.select("foreignObject");
@@ -504,8 +549,14 @@ papers.resizePaper = function (d, holder_div, resize_factor, color) {
     //current_g.parentNode.appendChild(current_g);
     toFront(current_g_paper.node());
 
-    let region = this.createPaperPath(0, 0, d.width * mediator.circle_zoom * resize_factor, d.height * mediator.circle_zoom * resize_factor);
-    let dogear = this.createDogearPath(d.width * (1 - config.dogear_width) * mediator.circle_zoom * resize_factor, 0, d.width * mediator.circle_zoom * resize_factor, d.height * mediator.circle_zoom * resize_factor);
+    let region = this.createPaperPath(0, 0, d.width * mediator.circle_zoom * resize_factor, d.height * mediator.circle_zoom * resize_factor, undefined, undefined, d.resulttype);
+    let dogear = this.createDogearPath(d.width * (1 - config.dogear_width) * mediator.circle_zoom * resize_factor,
+                                        0,
+                                        d.width * mediator.circle_zoom * resize_factor,
+                                        d.height * mediator.circle_zoom * resize_factor,
+                                        undefined,
+                                        undefined,
+                                        d.resulttype);
 
     current_foreignObject
             .attr("width", d.width * mediator.circle_zoom * resize_factor + "px")
@@ -514,8 +565,6 @@ papers.resizePaper = function (d, holder_div, resize_factor, color) {
             .style("height", d.height * mediator.circle_zoom * resize_factor + "px");
 
     current_path
-            //.style("fill-opacity", opacity)
-            .style("fill", color)
             .attr("d", region);
 
     current_dogear.attr("d", dogear);
@@ -561,7 +610,7 @@ papers.enlargePaper = function (d, holder_div) {
         resize_factor = this.calcResizeFactor(metadata);
     }
 
-    this.resizePaper(d, holder_div, resize_factor, "rgb(255, 255, 255)", "1");
+    this.resizePaper(d, holder_div, resize_factor);
 
     holder_div
             .on("click", (d) => {
@@ -644,7 +693,11 @@ papers.calcResizeFactor = function (metadata) {
 };
 
 // creates the dog-ears path for the papers
-papers.createDogearPath = function (x, y, width, height, correction_x, correction_y) {
+papers.createDogearPath = function (x, y, width, height, correction_x, correction_y, drawType) {
+
+    if(drawType == "dataset") {
+        return undefined
+    }
 
     if (!correction_x) {
         correction_x = config.dogear_width;
@@ -729,12 +782,12 @@ papers.onWindowResize = function() {
 
       d3.selectAll("#region")
         .attr("d", (d) => {
-          return papers.createPaperPath(0, 0, d.resize_width, d.resize_height);
+          return papers.createPaperPath(0, 0, d.resize_width, d.resize_height, undefined, undefined, d.resulttype);
         });
 
       d3.selectAll("path.dogear")
         .attr("d", (d) => {
-          return papers.createDogearPath(d.resize_width*d.top_factor, 0, d.resize_width, d.resize_height);
+          return papers.createDogearPath(d.resize_width*d.top_factor, 0, d.resize_width, d.resize_height, undefined, undefined, d.resulttype);
         });
 
       //webkit bug

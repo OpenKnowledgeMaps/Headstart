@@ -1,3 +1,18 @@
+.paper {
+    &.resulttype-dataset {
+        #region {
+            stroke: $dataset;
+            /*stroke-width: 2px;*/
+
+
+        }
+        #region.framed {
+            stroke: $framed-item;
+            /*stroke-width: 3px;*/
+        }
+    }
+}
+
 #article_metadata {
     font-family: Helvetica;
     line-height: 100%;
@@ -34,29 +49,25 @@
         padding: 2px;
         margin: 0px;
     }
-    
+
     #icons {
         padding-top: 2px;
         padding-left: 2px;
+        font-size: 0px;
+
+
     }
 
     .large {
-
-        font-size: 11px;
+        font-size: 12px;
         padding: 5px 0px 0px 10px;
         line-height: 120%;
     }
 
     .larger {
-        font-size: 14px;
+        font-size: 12px;
         padding: 5px 0px 0px 10px;
         line-height: 120%;
-    }
-
-    #title {
-        &.larger {
-            margin-top: 8px;
-        }
     }
 
     #outlink  {
@@ -80,9 +91,9 @@
 
 
     a {
-        
+
         color: $journal-gray;
-        
+
     }
     #num-readers {
         font-weight: bold;
@@ -95,11 +106,11 @@
         text-align: left;
         vertical-align: text-bottom;
         font-family: Helvetica;
-       
+
 
 
         &.large {
-            font-size: 11px;
+            font-size: 12px;
             padding: 5px 10px 0px;
         }
 
@@ -117,23 +128,46 @@
 
 }
 
+#dataset-icon {
+    display: inline-block;
+    border: 0px solid $black;
+    border-radius: 3px;
+    color: $black;
+
+    &.large {
+        display: inline-block;
+        border: 1px solid $black;
+        padding: 4px;
+        margin: 0 0 0 5px;
+    }
+
+    &.larger {
+        border: 1px solid $black;
+        padding: 4px;
+        display: inline-block;
+        margin: 0 0 0 5px;
+    }
+
+}
 
 #open-access-logo {
     font-family: 'FontAwesome';
     display:inline-block;
     background-color: $open-access;
     color: white;
-    padding: 6px 4px;
-    font-size: 8px;
+    padding: 4px;
+    font-size: 6px;
     border-radius: 3px;
 
     &.large {
-        font-size: 10px;
+        margin: 0 0 0 5px;
+        font-size: 12px;
         padding: 4px;
     }
 
     &.larger {
-        font-size: 10px;
+        font-size: 12px;
+        margin: 0 0 0 5px;
         padding: 4px;
     }
 
@@ -146,8 +180,15 @@
 
 #title {
     color: $papers_title;
-
+    margin-top: 0px;
     //font-weight: bold;
+
+    &.large {
+        margin-top: 10px;
+    }
+    &.larger {
+        margin-top: 10px;
+    }
 }
 
 #details {
@@ -157,12 +198,12 @@
 }
 
 #in {
-    color: rgb(102, 102, 102);
+    color: $black;
 
     span {
         font-style: italic;
         padding-right: 0;
-        color: black;
+        color: $black;
     }
 
     .pubyear {
@@ -171,10 +212,8 @@
     }
 }
 
-
-
 .framed {
-    stroke: #e55137;
+    stroke: $framed-item;
     stroke-width: 3px;
 }
 

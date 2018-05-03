@@ -1,12 +1,17 @@
 .list_entry {
-    border-bottom: 2px solid #E1E5E6;
+    border-bottom: 2px solid $okm-clouds;
     padding: 10px 0px 10px 15px;
-    border-left: 0px solid #E1E5E6;
+    border-left: 0px solid $okm-clouds;
 }
 
 .list_entry_full {
     border-bottom: 0px;
     padding-left: 15px;
+}
+
+
+#oa {
+    margin-bottom: 10px;
 }
 
 #open-access-logo_list {
@@ -19,13 +24,25 @@
     font-weight: normal;
 }
 
+.dataset-tag {
+    color: $dataset;
+    border: 1px solid $dataset;
+    background-color: white;
+    padding: 2px 4px;
+    border-radius: 5px;
+}
+
+.resulttype-dataset {
+    border: $dataset;
+}
+
 .list_metadata {
     /*border-top-width: 2px;
     border-top-style: solid;
     border-color: $list_metadata_border_color;*/
     padding-top: 10px;
     margin-bottom: 10px;
-    font-family: Helvetica;
+    font-family: $link-font-family;
 
     /*.list_title.oa a {
             color: $okm-red;
@@ -37,7 +54,8 @@
         margin-bottom: 4px;
         max-width: 82%;
         display: inline-block;
-        font-weight: bold;
+        color: $list_metadata_title_paper;
+        font-weight: $bold;
 
         a {
             text-decoration: none;
@@ -72,7 +90,7 @@
     }
     }
 
-    .list_links a.pdf-link {
+    .list_links a.oa-link {
         color: $open-access;
         border: 1px solid $open-access;
         &:hover {
@@ -141,7 +159,7 @@
 }
 
 #list_area, #list_keywords {
-    font-family: 'Helvetica';
+    font-family: $link-font-family;
     font-size: 11px;
     line-height: 11px;
     margin-bottom: 10px;
@@ -172,7 +190,7 @@
 .list_readers {
     font-size: 11px;
     line-height: 11px;
-    margin-top: 10px;
+    margin-top: 0px;
     margin-bottom: 10px;
     padding: 0;
     float: right;
