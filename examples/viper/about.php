@@ -49,22 +49,20 @@ include 'config.php';
                 <span style="font-size:18px;">by <a target="_blank" href="https://openknowledgemaps.org">Open Knowledge Maps</a></span></h2>
 
 
-            <p>The Visual Project Explorer (VIPER) is a unique open science application that provides overviews of research projects indexed by OpenAIRE. 
+            <p>The Visual Project Explorer (VIPER) is a unique open science application that provides overviews of research projects indexed by <a href="http://openaire.eu" target="_blank">OpenAIRE</a>. 
                 It enables funders, institutions and researchers to systematically explore a project’s output, and to understand its impact in different areas. 
             </p>
 
             <p>In VIPER, each project is represented by an interactive knowledge map: a visualization showing a topical clustering of a project’s publications 
                 and datasets, complemented by a list view of these outputs (see image above). Users can interact with the visualization by zooming into a 
-                particular cluster and inspect the underlying outputs in detail (see image below). Users will even be able to view open access publications 
+                particular cluster and inspect the underlying outputs in detail (see image below). Users are even be able to view open access publications 
                 within the same interface.
             </p>
 
             <p>
-                Clusters and outputs will be scaled according to different metrics, including open citation data and altmetrics. 
+                Clusters and outputs are scaled according to different metrics, including open citation data and altmetrics. 
                 Therefore, VIPER will help projects keep track of the reception of their project in a multifaceted and contextualized way 
-                that goes beyond simple aggregate numbers and rankings. The metrics used in VIPER will be defined in collaboration with 
-                renowned bibliometrics experts and will take into account recommendations by the <a href="http://www.leidenmanifesto.org/" target="_blank">Leiden Manifesto</a> and the Report of 
-                <a href="https://ec.europa.eu/research/openscience/pdf/report.pdf" target="_blank">the European Commission Expert Group on Altmetrics</a>.
+                that goes beyond simple aggregate numbers and rankings.
             </p>
 
             <p>
@@ -74,10 +72,7 @@ include 'config.php';
             </p>
 
             <p>
-                To realize this idea, we will visualize publications and datasets of projects in the OpenAIRE database with our award-winning open 
-                source mapping software <a href="https://github.com/OpenKnowledgeMaps/Headstart" target="_blank">Head Start</a>. Users will be able to create project representations on demand, using a dedicated interface on 
-                <a target="_blank" href="https://openknowledgemaps.org">openknowledgemaps.org</a>. These representations will be automatically updated by a processing component that queries the OpenAIRE API at 
-                regular intervals. 
+                VIPER is based on the OpenAIRE database. We use the <a href="http://api.openaire.eu" target="_blank">OpenAIRE API</a> to retrieve publications and datasets related to a project and visualize them with our award-winning open source mapping software <a href="https://github.com/OpenKnowledgeMaps/Headstart" target="_blank">Head Start</a>. The resulting maps are automatically updated by a processing component that queries the OpenAIRE API at regular intervals. 
             </p>
 
             <p>
