@@ -337,6 +337,9 @@ class Canvas {
 
     drawContext(context) {
         if (config.show_context) {
+            if(!this.paramExists(context.params)) {
+                return;
+            }
             $("#context").css({"visibility": "visible", "display": "block"});
             let modifier = "";
             if (this.paramExists(context.params.sorting)) {

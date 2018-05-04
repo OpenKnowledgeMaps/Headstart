@@ -227,8 +227,9 @@ MyMediator.prototype = {
         if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.manager.call('canvas', 'setupCanvas', []);
         mediator.manager.registerModule(scale, 'scale')
-        mediator.manager.call('scale', 'drawScaleTypes', [])
-        let data = (config.show_context)?(JSON.parse(csv.data)):csv;
+        mediator.manager.call('scale', 'drawScaleTypes', []);
+        mediator.manager.call('io', 'get_data', [csv]);
+        let data = io.data;
         let context = (config.show_context)?(csv.context):{};
         
         mediator.manager.call('io', 'initializeMissingData', [data]);

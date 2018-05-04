@@ -14,6 +14,7 @@ var IO = function() {
     this.num_oa;
     this.num_papers;
     this.num_datasets;
+    this.data;
 };
 
 IO.prototype = {
@@ -42,6 +43,20 @@ IO.prototype = {
             d3[config.input_format](mediator.current_bubble.file, callback);
           }
         });
+    },
+    
+    get_data: function(csv) {
+        var self = this;
+        
+        if (config.show_context) {
+            if(typeof csv.data === "object") {
+                self.data = csv.data;
+            } else {
+                self.data = JSON.parse(csv.data);
+            }
+        } else {
+            self.data = csv;
+        }
     },
 
     convertToFirstNameLastName: function (authors_string) {
