@@ -20,6 +20,7 @@ const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
 const listEntryTemplate = require("templates/list/list_entry.handlebars");
 const filterDropdownEntryTemplate = require("templates/list/filter_dropdown_entry.handlebars");
+const showHideLabel = require("templates/list/show_hide_label.handlebars")
 
 export const list = StateMachine.create({
 
@@ -55,6 +56,7 @@ export const list = StateMachine.create({
             sortBy(config.sort_options[0]);
             this.current_search_words = []
             this.current_filter_param = ''
+            debounce(this.count_visible_items_to_header, config.debounce)()
         },
 
         onshow: function() {
@@ -62,7 +64,11 @@ export const list = StateMachine.create({
             d3.select("#papers_list").style("display", "block");
             d3.select("#left_arrow").text("\u25B2");
             d3.select("#right_arrow").text("\u25B2");
-            d3.select("#show_hide_label").text(config.localization[config.language].hide_list);
+            d3.select("#show_hide_label").html(showHideLabel({
+                show_or_hide_list: config.localization[config.language].hide_list,
+                items: config.localization[config.language].items,
+                item_count: this.list_item_count,
+            }));
         },
 
         onhide: function() {
@@ -70,7 +76,11 @@ export const list = StateMachine.create({
             d3.select("#papers_list").style("display", "none");
             d3.select("#left_arrow").text("\u25BC");
             d3.select("#right_arrow").text("\u25BC");
-            d3.select("#show_hide_label").text(config.localization[config.language].show_list);
+            d3.select("#show_hide_label").html(showHideLabel({
+                show_or_hide_list: config.localization[config.language].hide_list,
+                items: config.localization[config.language].items,
+                item_count: this.list_item_count,
+            }));
         },
 
         onbeforetoggle: function() {
@@ -93,6 +103,7 @@ list.drawList = function() {
         show_list: config.localization[config.language].show_list,
         filter_dropdown: config.filter_menu_dropdown,
         filter_by_label: config.localization[config.language].filter_by_label,
+        items: config.localization[config.language].items
     });
     $("#list_explorer").append(list_explorer);
 
@@ -140,7 +151,33 @@ list.drawList = function() {
     });
 
     this.papers_list = d3.select("#papers_list");
+    debounce(this.count_visible_items_to_header, config.debounce)()
 };
+
+list.count_visible_items_to_header = function() {
+    setTimeout(function () {
+    var count = 0
+    let current_circle = d3.select(mediator.current_zoom_node)
+    d3.selectAll("#list_holder").filter(function(d) {
+        if (mediator.is_zoomed === true) {
+            if (config.use_area_uri && mediator.current_enlarged_paper === null) {
+                return current_circle.data()[0].area_uri == d.area_uri;
+            } else if (config.use_area_uri && mediator.current_enlarged_paper !== null) {
+                return mediator.current_enlarged_paper.id == d.id;
+            } else {
+                return current_circle.data()[0].title == d.area;
+            }
+        } else {
+            return true;
+        }
+    }).each(function (d) {
+        if (!d.filtered_out) {
+            count++
+        }
+    })
+    $('#list_item_count').text(count)
+    }, 1000)
+}
 
 list.fit_list_height = function() {
     var paper_list_avail_height = null;
@@ -250,6 +287,7 @@ list.updateByFiltered = function() {
         .style("display", function(d) {
             return d.filtered_out ? "none" : "inline";
         });
+    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
 list.filterListByAreaURIorArea = function(area) {
@@ -258,6 +296,7 @@ list.filterListByAreaURIorArea = function(area) {
             return (config.use_area_uri) ? (x.area_uri != area.area_uri) : (x.area != area.title);
         })
         .style("display", "none");
+    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
 list.filterListByArea = function(area) {
@@ -268,6 +307,7 @@ list.filterListByArea = function(area) {
         .style("display", function(d) {
             return d.filtered_out ? "none" : "inline";
         });
+    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
 list.populateMetaData = function(nodes) {
@@ -552,6 +592,7 @@ list.filterList = function(search_words, filter_param) {
 
     this.hideEntriesByParam(all_list_items, filter_param);
     this.hideEntriesByParam(all_map_items, filter_param);
+    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
 // Returns true if document has parameter or if no parameter is passed

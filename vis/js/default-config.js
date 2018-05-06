@@ -273,6 +273,7 @@ var config = {
             open_access: "Open Access",
             publication: "papers",
             dataset: "datasets",
+            items: "items",
         }
     },
 

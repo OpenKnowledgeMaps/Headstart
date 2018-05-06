@@ -374,6 +374,7 @@ MyMediator.prototype = {
                 mediator.manager.call('list', 'updateByFiltered', []);
             }
         }
+        mediator.manager.call('list', 'filterList')
     },
     bubble_zoomout: function() {
         mediator.manager.call('list', 'reset', []);
@@ -383,6 +384,7 @@ MyMediator.prototype = {
         $("#map-rect").removeClass("zoomed_in").addClass('zoomed_out');
         $("#region.unframed").removeClass("zoomed_in");
         $(".paper_holder").removeClass("zoomed_in");
+        mediator.manager.call('list', 'filterList')
     },
 
     currentbubble_click: function(d) {
