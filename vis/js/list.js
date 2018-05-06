@@ -140,6 +140,7 @@ list.drawList = function() {
 
     // Add filter options
     if(config.filter_menu_dropdown) {
+        $('#curr-filter-type').text(config.localization[config.language]['all'])
         for (var i = 0; i < config.filter_options.length; i++) {
             self.addFilterOptionDropdownEntry(config.filter_options[i])
         }
