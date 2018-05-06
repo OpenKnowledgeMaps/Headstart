@@ -265,6 +265,9 @@ var config = {
             viper_edit_button_text: 'continue to openaire',
             viper_embed_button_text: 'Copy',
             viper_embed_title: 'embed map',
+            tweets: "Tweets: ",
+            readers: "Readers: ",
+            citations: "Citations: ",
         }
     },
 
