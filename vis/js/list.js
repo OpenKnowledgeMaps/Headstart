@@ -545,15 +545,15 @@ list.findEntriesWithParam = function (param, d) {
     
 }
 
+// These functions only hide items. They shouldn't unhide them.
 list.hideEntriesByParam = function (object, param) {
     var self = this
     object.filter(function (d) {
         if (!self.findEntriesWithParam(param, d)) {
             d.filtered_out = true
-        } else {
-            d.filtered_out = false
+            return true
         }
-        return d.filtered_out
+        return false
     })
     .style("display", "none")
 }
@@ -579,8 +579,11 @@ list.hideEntriesByWord = function(object, search_words) {
                 );
                 i++;
             }
-            d.filtered_out = word_found ? false : true;
-            return d.filtered_out;
+            if (word_found === false) {
+                d.filtered_out = true
+                return true
+            }
+            return false
         })
         .style("display", "none");
 };
