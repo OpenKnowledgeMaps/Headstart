@@ -114,8 +114,8 @@ preprocess_data <- function(all_artifacts){
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("jel:[A-Z]+\\d+", "", x)}))
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("[A-Z]{2}\\d+-\\d+", "", x)})) # e.g. "TA1-2040"
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\w*\\:\\:", "", x)})) # keeps only last part of e.g. Physics::Optics
-  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("[\\w ]*\\ - ", "", x)})) # keeps only last part of e.g. Physics - Atomic Physics
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\w+_[A-Z]+-?[A-Z]+", "", x)})) # removes ComputerSystemsOrganization_COMPUTER-COMMUNICATIONNETWORKS
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub(".*- ", "", x)})) # keeps only last part of e.g. High energy physics - lattice
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {if (grepl("pubmedpublicationtype", x)) {
                                                                               return ("")}
                                                                              else {
