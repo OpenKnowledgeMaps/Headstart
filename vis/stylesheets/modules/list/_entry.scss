@@ -24,6 +24,18 @@
     font-weight: normal;
 }
 
+.dataset-tag {
+    color: $dataset;
+    border: 1px solid $dataset;
+    background-color: white;
+    padding: 2px 4px;
+    border-radius: 5px;
+}
+
+.resulttype-dataset {
+    border: $dataset;
+}
+
 .list_metadata {
     /*border-top-width: 2px;
     border-top-style: solid;
@@ -178,7 +190,7 @@
 .list_readers {
     font-size: 11px;
     line-height: 11px;
-    margin-top: 10px;
+    margin-top: 0px;
     margin-bottom: 10px;
     padding: 0;
     float: right;

@@ -23,7 +23,11 @@
     font-weight: 800;
 }
 
- 
+#modals {
+    position: relative;
+    z-index: 3;
+}
+
 #context {
     font-size: 11px;
     color: $black;

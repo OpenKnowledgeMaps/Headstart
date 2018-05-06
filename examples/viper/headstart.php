@@ -23,7 +23,7 @@ include 'config.php';
             headstart.start();
         </script>
          <div style="margin-top:20px; text-align: center; font-size: 12px; font-family: 'Open Sans', sans-serif;"> 
-             Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. This project received funding from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
+             Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. All metadata retrieved from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>. All citation data retrieved from <a href="https://crossref.org" target="_blank">CrossRef</a>. All other metrics data retrieved from <a href="https://altmetric.com" target="_blank">Altmetric</a>. This project received funding from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
         </div>
     </body>
 </html>
