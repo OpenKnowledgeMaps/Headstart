@@ -458,7 +458,8 @@ list.filterList = function(search_words) {
     //TODO why not mediator.current_circle
     let current_circle = d3.select(mediator.current_zoom_node);
 
-    let filtered_list_items = all_list_items
+    // Find all the list items, that without any filtering should be in the view
+    let normally_visible_list_items = all_list_items
         .filter(function(d) {
             if (mediator.is_zoomed === true) {
                 if (config.use_area_uri && mediator.current_enlarged_paper === null) {
@@ -473,8 +474,8 @@ list.filterList = function(search_words) {
             }
         });
 
-    // Filter out items based on searchterm
-    let filtered_map_items = all_map_items
+    // Find items that, without any filtering, should be in the view
+    let normally_visible_map_items = all_map_items
         .filter(function(d) {
             if (mediator.is_zoomed === true) {
                 if (config.use_area_uri) {
@@ -487,21 +488,27 @@ list.filterList = function(search_words) {
             }
         });
 
-    // Deal with selected papers in list
-    let selected_list_items = filtered_list_items
+    //Find if any paper was selected previously
+    let selected_list_items = normally_visible_list_items
         .filter(function(d) {
             if (d.paper_selected === true) {
                 return true;
             }
         });
 
+    //If it wasn't then treat every normally visible paper as selected
     if (selected_list_items[0].length === 0) {
-        selected_list_items = filtered_list_items;
+        selected_list_items = normally_visible_list_items;
     }
 
+    //If the search box is empty make every thing 'selected' in the list
+    // or normally visible in the map visible
+    // TODO: this causes a bug if the search box begins with a space
+    // no filtering is then done.
     if (search_words[0].length === 0) {
+        // Why is block used here? everything is inline before and when any filtering is done
         selected_list_items.style("display", "block");
-        filtered_map_items.style("display", "block");
+        normally_visible_map_items.style("display", "block");
 
         mediator.current_bubble.data.forEach(function(d) {
             d.filtered_out = false;
@@ -510,11 +517,14 @@ list.filterList = function(search_words) {
         return;
     }
 
+    //Even if the search box isn't empty make everything visible
     selected_list_items.style("display", "inline");
-    filtered_map_items.style("display", "inline");
+    normally_visible_map_items.style("display", "inline");
 
+    // Record that we've done some filtering
     mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words);
 
+    // Now actually do the filtering (i.e. remove some object from list and map)
     this.hideEntries(all_list_items, search_words);
     this.hideEntries(all_map_items, search_words);
 
@@ -530,24 +540,19 @@ list.hideEntries = function(object, search_words) {
             let year = d.year;
             let word_found = true;
             let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toLowerCase()) : ("");
-            let count = 0;
-            if (typeof abstract !== 'undefined') {
-                while (word_found && count < search_words.length) {
-                    word_found = (abstract.indexOf(search_words[count]) !== -1 ||
-                        title.indexOf(search_words[count]) !== -1 ||
-                        authors.indexOf(search_words[count]) !== -1 ||
-                        journals.indexOf(search_words[count]) !== -1 ||
-                        year.indexOf(search_words[count]) !== -1 ||
-                        keywords.indexOf(search_words[count]) !== -1
-                    );
-                    count++;
-                }
-                d.filtered_out = word_found ? false : true;
-                return d.filtered_out;
-            } else {
-                d.filtered_out = true;
-                return false;
+            let i = 0;
+            while (word_found && i < search_words.length) {
+                word_found = (abstract.indexOf(search_words[i]) !== -1 ||
+                    title.indexOf(search_words[i]) !== -1 ||
+                    authors.indexOf(search_words[i]) !== -1 ||
+                    journals.indexOf(search_words[i]) !== -1 ||
+                    year.indexOf(search_words[i]) !== -1 ||
+                    keywords.indexOf(search_words[i]) !== -1
+                );
+                i++;
             }
+            d.filtered_out = word_found ? false : true;
+            return d.filtered_out;
         })
         .style("display", "none");
 };
