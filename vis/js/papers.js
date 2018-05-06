@@ -171,7 +171,7 @@ papers.drawPapers = function () {
             }
         });
 
-    article_metadata.select("#dataset-icon_paper")
+    article_metadata.select("#dataset-icon")
         .style("display", function (d) {
             if (d.resulttype !== "dataset") {
                 return "none"

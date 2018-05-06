@@ -29,7 +29,7 @@
   width: 5px;
   height: 14px;
   border-radius: 20%;
-  background: rgb(1, 183, 240);/*rgb(59, 66, 177)*/
+  background: #3696e0;/*rgb(59, 66, 177)*/
 }
 .lds-spinner div:nth-child(1) {
   transform: rotate(0deg);

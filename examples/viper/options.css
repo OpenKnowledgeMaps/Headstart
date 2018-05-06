@@ -107,12 +107,8 @@ button {
 
 .filter-btn-highlight, .open > .dropdown-toggle.btn-default, .open > .dropdown-toggle.btn-default:hover, .open > .dropdown-toggle.btn-default:active,
 .btn-default:active, .btn-default:hover, .btn-default:focus {
-    background-color: #3B42B1 !important;
+    background-color: #2d3e52 !important;
     color: white !important;
-}
-
-.btn-default:hover {
-    border-color: #3B42B1;
 }
 
 #filters {
@@ -139,16 +135,16 @@ button {
 
 #filter-container .frontend-btn, .btn {
     font-size: 14px;
-    color: #3B42B1;
+    color:  #3696e0;
     padding: 9px 10px 9px 10px;
     text-decoration: none;
-    border: 1px solid #3B42B1;
+    border: 1px solid  #3696e0;
     background-color: white;
     border-radius: 5px;
 }
 
 .frontend-btn:hover, .frontend-btn:active, .frontend-btn:focus {
-    background: #e55137;
+    background:  #2d3e52;
     color: white;
     /*background-image: -webkit-linear-gradient(top, #f5f2f5, #c9c9c9);
     background-image: -moz-linear-gradient(top, #f5f2f5, #c9c9c9);
@@ -159,7 +155,7 @@ button {
 }
 
 #filter-container .frontend-btn:hover, #filter-container .frontend-btn:active, #filter-container .frontend-btn:focus, .btn:hover {
-    background: #2D3E52;
+    background:  #2d3e52;
     color: white;
     /*background-image: -webkit-linear-gradient(top, #f5f2f5, #c9c9c9);
     background-image: -moz-linear-gradient(top, #f5f2f5, #c9c9c9);
@@ -246,7 +242,7 @@ button {
 }
 
 .dropdown-menu > .active > a, .dropdown-menu > .active > a:focus, .dropdown-menu > .active > a:hover {
-    background-color: #01B7F0;
+    background-color:  #2d3e52;
     color: white;
 }
 
