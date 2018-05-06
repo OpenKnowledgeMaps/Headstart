@@ -547,11 +547,11 @@ list.filterList = function(search_words, filter_param) {
     mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words + "filter_param="+filter_param);
 
     // Now actually do the filtering (i.e. remove some object from list and map)
-    this.hideEntriesByWord(all_list_items, search_words);
-    this.hideEntriesByWord(all_map_items, search_words);
+    this.hideEntriesByWord(selected_list_items, search_words);
+    this.hideEntriesByWord(normally_visible_map_items, search_words);
 
-    this.hideEntriesByParam(all_list_items, filter_param);
-    this.hideEntriesByParam(all_map_items, filter_param);
+    this.hideEntriesByParam(selected_list_items, filter_param);
+    this.hideEntriesByParam(normally_visible_map_items, filter_param);
 };
 
 // Returns true if document has parameter or if no parameter is passed
