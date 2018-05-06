@@ -510,27 +510,16 @@ list.filterList = function(search_words, filter_param) {
         selected_list_items = normally_visible_list_items;
     }
 
-    //If the search box is empty make every thing 'selected' in the list
-    // or normally visible in the map visible
-    // TODO: this causes a bug if the search box begins with a space
-    // no filtering is then done.
-    if (search_words[0].length === 0) {
-        // Why is block used here? everything is inline before and when any filtering is done
-        selected_list_items.style("display", "block");
-        normally_visible_map_items.style("display", "block");
-
-        mediator.current_bubble.data.forEach(function(d) {
-            d.filtered_out = false;
-        });
-
-        return;
-    }
-
     //Even if the search box isn't empty make everything visible
     selected_list_items.style("display", "inline");
     normally_visible_map_items.style("display", "inline");
 
-    // Record that we've done some filtering
+    //set everything that should be visible to unfiltered
+    selected_list_items.each(function (d) {
+        d.filtered_out = false
+    })
+
+    // Record that we're about to do some filtering
     mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words + "filter_param="+filter_param);
 
     // Now actually do the filtering (i.e. remove some object from list and map)
