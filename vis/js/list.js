@@ -591,9 +591,11 @@ list.createHighlights = function(search_words) {
     }
 
     clear_highlights();
-    search_words.forEach(function(str) {
-        highlight(str);
-    });
+    if( !(search_words === "") ) {
+        search_words.forEach(function(str) {
+            highlight(str);
+        });
+    }
 };
 
 // called quite often
