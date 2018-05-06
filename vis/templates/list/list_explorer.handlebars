@@ -18,12 +18,21 @@
                     <span id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
                 </div>
             </div>
-
             <div class="" id="sort_container">
 <span id="sortby">sort by:</span>
                 <div id="sort-buttons" class="btn-group btn-group-sm pull-right" data-toggle="buttons" role="group">
                 </div>
             </div>
+            {{#if filter_dropdown}}
+            <div class="" id="filter_parameter_container">
+                <button class="btn btn-primary dropdown-toggle" id="filter_params" type="button" data-toggle="dropdown">{{filter_by_label}}
+                    <span id="curr-filter-type"></span>
+                    <span class="caret"></span>
+                </button>
+                <ul id="filter-menu-entries" class="dropdown-menu" role="menu" aria-labelledby="sort-menu">
+                </ul>
+            </div>
+            {{/if}}
         </div>
     </div>
 <div class="col-xs-12" id="papers_list"></div>

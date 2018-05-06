@@ -19,6 +19,7 @@ import {
 const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
 const listEntryTemplate = require("templates/list/list_entry.handlebars");
+const filterDropdownEntryTemplate = require("templates/list/filter_dropdown_entry.handlebars");
 
 export const list = StateMachine.create({
 
@@ -52,7 +53,7 @@ export const list = StateMachine.create({
             this.populateList();
             this.initListMouseListeners();
             sortBy(config.sort_options[0]);
-            this.current_search_words = ''
+            this.current_search_words = []
             this.current_filter_param = ''
         },
 
@@ -85,9 +86,13 @@ export const list = StateMachine.create({
 });
 
 list.drawList = function() {
+    let self = this
+
     // Load list template
     let list_explorer = listTemplate({
-        show_list: config.localization[config.language].show_list
+        show_list: config.localization[config.language].show_list,
+        filter_dropdown: config.filter_menu_dropdown,
+        filter_by_label: config.localization[config.language].filter_by_label,
     });
     $("#list_explorer").append(list_explorer);
 
@@ -119,6 +124,13 @@ list.drawList = function() {
             first_element = false;
         } else {
             addSortOption(container, config.sort_options[i], false);
+        }
+    }
+
+    // Add filter options
+    if(config.filter_menu_dropdown) {
+        for (var i = 0; i < config.filter_options.length; i++) {
+            self.addFilterOptionDropdownEntry(config.filter_options[i])
         }
     }
 
@@ -182,6 +194,18 @@ let addSortOption = function(parent, sort_option, selected) {
             config.user_id, "listsort", null, "sort_option=" + sort_option);
     });
 };
+
+list.addFilterOptionDropdownEntry = function (filter_option) {
+    let entry = filterDropdownEntryTemplate({
+        filter_by_string: config.localization[config.language].filter_by_label,
+        filter_label: config.localization[config.language][filter_option]
+    })
+    var newEntry = $(entry).appendTo('#filter-menu-entries')
+    newEntry.on("click", () => {
+        this.filterList(undefined, filter_option)
+        $('#curr-filter-type').text(config.localization[config.language][filter_option])
+    })
+}
 
 list.initListMouseListeners = function() {
     $("#show_hide_button")
