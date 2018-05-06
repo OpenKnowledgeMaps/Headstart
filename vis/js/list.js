@@ -52,6 +52,8 @@ export const list = StateMachine.create({
             this.populateList();
             this.initListMouseListeners();
             sortBy(config.sort_options[0]);
+            this.current_search_words = ''
+            this.current_filter_param = ''
         },
 
         onshow: function() {
@@ -442,7 +444,14 @@ list.populateList = function() {
     this.populateReaders(paper_nodes);
 };
 
-list.filterList = function(search_words) {
+list.filterList = function(search_words, filter_param) {
+    if (search_words === undefined) {
+        search_words = this.current_search_words
+    }
+
+    if (filter_param === undefined) {
+        filter_param = this.current_filter_param
+    }
     this.current_search_words = search_words;
 
     search_words = search_words.map(function(e) {
@@ -522,15 +531,45 @@ list.filterList = function(search_words) {
     normally_visible_map_items.style("display", "inline");
 
     // Record that we've done some filtering
-    mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words);
+    mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words + "filter_param="+filter_param);
 
     // Now actually do the filtering (i.e. remove some object from list and map)
-    this.hideEntries(all_list_items, search_words);
-    this.hideEntries(all_map_items, search_words);
+    this.hideEntriesByWord(all_list_items, search_words);
+    this.hideEntriesByWord(all_map_items, search_words);
 
+    this.hideEntriesByParam(all_list_items, filter_param);
+    this.hideEntriesByParam(all_map_items, filter_param);
 };
 
-list.hideEntries = function(object, search_words) {
+// Returns true if document has parameter or if no parameter is passed
+list.findEntriesWithParam = function (param, d) {
+    if (param === 'open_access') {
+        console.log('filtering by OA status. Status: ' + d.oa)
+        return d.oa
+    } else if (param === 'publication') {
+        return d.resulttype === 'publication'
+    } else if (param === 'dataset') {
+        return d.resulttype === 'dataset'
+    } else {
+        return true
+    }
+    
+}
+
+list.hideEntriesByParam = function (object, param) {
+    var self = this
+    object.filter(function (d) {
+        if (!self.findEntriesWithParam(param, d)) {
+            d.filtered_out = true
+        } else {
+            d.filtered_out = false
+        }
+        return d.filtered_out
+    })
+    .style("display", "none")
+}
+
+list.hideEntriesByWord = function(object, search_words) {
     object
         .filter(function(d) {
             let abstract = d.paper_abstract.toLowerCase();
