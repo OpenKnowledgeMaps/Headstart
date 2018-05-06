@@ -32,6 +32,8 @@ var data_config = {
     viper_embed_modal: true,
 
     intro: 'intro_openaire',
+
+    viper_metric_list: true,
     
     scale_types: ['content_based', 'citation_count', 'cited_by_tweeters_count', 'readers.mendeley'],
     scale_explaination: {
