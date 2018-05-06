@@ -75,8 +75,11 @@ var config = {
     create_title_from_context: false,
 
     sort_options: ["readers", "title", "authors", "year"],
+    filter_options: ["all", "open_access", "publication", "dataset"],
 
     content_based: false,
+
+    filter_menu_dropdown: false,
 
     // transition
     transition_duration: 750,
@@ -265,6 +268,11 @@ var config = {
             viper_edit_button_text: 'continue to openaire',
             viper_embed_button_text: 'Copy',
             viper_embed_title: 'embed map',
+            filter_by_label: 'show: ',
+            all: "any",
+            open_access: "Open Access",
+            publication: "papers",
+            dataset: "datasets",
         }
     },
 
