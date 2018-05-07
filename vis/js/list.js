@@ -19,6 +19,7 @@ import {
 const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
 const listEntryTemplate = require("templates/list/list_entry.handlebars");
+const viperMetricTemplate = require('templates/list/viper_metrics.handlebars');
 const filterDropdownEntryTemplate = require("templates/list/filter_dropdown_entry.handlebars");
 const showHideLabel = require("templates/list/show_hide_label.handlebars")
 const sortDropdownEntryTemplate = require("templates/list/sort_dropdown_entry.handlebars");
@@ -488,6 +489,7 @@ list.populateReaders = function(nodes) {
         var areas = d3.select(elem).select("#list_area");
         var readers = d3.select(elem).select(".list_readers");
         var keywords = d3.select(elem).select("#list_keywords");
+        var viper_metrics = d3.select(elem).select(".viper_metrics");
 
         keywords.style("display", "none");
 
@@ -519,6 +521,19 @@ list.populateReaders = function(nodes) {
 
         } else {
             readers.style("line-height", "0px");
+        }
+
+        if (config.viper_metric_list) {
+            viper_metrics.html(function (d) {
+                return viperMetricTemplate({
+                    tweets_label: config.localization[config.language].tweets,
+                    tweets_count: d.cited_by_tweeters_count,
+                    readers_label: config.localization[config.language].readers,
+                    readers_count: d['readers.mendeley'],
+                    citations_label: config.localization[config.language].citations,
+                    citations_count: d.citation_count,
+                })
+            })
         }
     });
 };
