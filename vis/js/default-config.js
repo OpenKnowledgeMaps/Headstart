@@ -75,6 +75,7 @@ var config = {
     create_title_from_context: false,
 
     sort_options: ["readers", "title", "authors", "year"],
+    sort_menu_dropdown: false,
 
     content_based: false,
 
@@ -130,7 +131,8 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            sort_by_label: 'sort by:',
         },
         ger: {
             loading: "Wird geladen...",
@@ -191,7 +193,8 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            sort_by_label: 'sort by:',
         },
         eng_pubmed: {
             loading: "Loading...",
@@ -222,7 +225,8 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            sort_by_label: 'sort by:',
         },
         eng_openaire: {
             loading: "Loading...",
@@ -234,6 +238,7 @@ var config = {
             readers: "citations",
             year: "year",
             authors: "authors",
+            citations: "citations",
             title: "title",
             area: "Area",
             keywords: "Keywords",
@@ -265,6 +270,8 @@ var config = {
             viper_edit_button_text: 'continue to openaire',
             viper_embed_button_text: 'Copy',
             viper_embed_title: 'embed map',
+            sort_by_label: 'sort by:',
+            scale_by_label: 'Scale map by:',
         }
     },
 
