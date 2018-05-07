@@ -11,19 +11,26 @@
         <div id="explorer_options" class="row">
             <div class="" id="filter_container">
                 <div class="input-group input-group-sm">
-{{!--                     <div class="input-group-addon input-sm">
-                      <span class="glyphicon glyphicon-search"></span>
-                    </div> --}}
                     <input id="filter_input" type="text" class="form-control">
                     <span id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
                 </div>
             </div>
 
             <div class="" id="sort_container">
-<span id="sortby">sort by:</span>
-                <div id="sort-buttons" class="btn-group btn-group-sm pull-right" data-toggle="buttons" role="group">
+                {{#if dropdown}}
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" id="sort" type="button" data-toggle="dropdown">
+                        {{sort_by_label}}
+                        <span id="curr-sort-type"></span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul id="sort-menu-entries" class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="sort-menu">
+                    </ul>
+                    {{else}}
+                    <span id="sortby">{{sort_by_label}}</span>
+                    <div id="sort-buttons" class="btn-group btn-group-sm pull-right" data-toggle="buttons" role="group"></div>
+                    {{/if}}
                 </div>
             </div>
         </div>
-    </div>
-<div class="col-xs-12" id="papers_list"></div>
+        <div class="col-xs-12" id="papers_list"></div>
