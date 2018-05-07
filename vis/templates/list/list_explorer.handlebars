@@ -3,7 +3,7 @@
         <div id="show_hide_button" class="row">
             <div class="col-xs-2" >▼</div>
             <div class="col-xs-8" id="show_hide_button_label">
-                <span id="show_hide_label">{{ show_list }}</span>
+                <span id="show_hide_label"></span>
             </div>
             <div class="col-xs-2 text-right">▼</div>
         </div>
@@ -15,7 +15,6 @@
                     <span id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
                 </div>
             </div>
-
             <div class="" id="sort_container">
                 {{#if dropdown}}
                 <div class="dropdown">
@@ -32,5 +31,15 @@
                     {{/if}}
                 </div>
             </div>
+            {{#if filter_dropdown}}
+            <div class="" id="filter_parameter_container">
+                <button class="btn btn-primary dropdown-toggle" id="filter_params" type="button" data-toggle="dropdown">{{filter_by_label}}
+                    <span id="curr-filter-type"></span>
+                    <span class="caret"></span>
+                </button>
+                <ul id="filter-menu-entries" class="dropdown-menu" role="menu" aria-labelledby="sort-menu">
+                </ul>
+            </div>
+            {{/if}}
         </div>
         <div class="col-xs-12" id="papers_list"></div>
