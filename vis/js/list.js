@@ -130,7 +130,7 @@ list.drawList = function() {
 
 list.fit_list_height = function() {
     var paper_list_avail_height = null;
-    const PAPER_LIST_CORRECTION = 10;
+    const PAPER_LIST_CORRECTION = -5;
     if (!config.render_bubbles) {
         var parent_height = getRealHeight($("#" + config.tag));
         var available_height = 0;
