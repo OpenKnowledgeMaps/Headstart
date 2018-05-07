@@ -559,6 +559,9 @@ list.populateReaders = function(nodes) {
                     citations_count: d.citation_count,
                 })
             })
+            if(!config.content_based) {
+                $(".viper_metrics_" + config.base_unit).addClass("scaled-metric")
+            }
         }
     });
 };
