@@ -97,6 +97,7 @@ MyMediator.prototype = {
         this.mediator.subscribe("bubbles_update_data_and_areas", this.bubbles_update_data_and_areas);
         this.mediator.subscribe("bubble_zoomin", this.bubble_zoomin);
         this.mediator.subscribe("bubble_zoomout", this.bubble_zoomout);
+        this.mediator.subscribe("zoomout_complete", this.zoomout_complete);
 
         // misc
         this.mediator.subscribe("record_action", this.record_action);
@@ -388,6 +389,10 @@ MyMediator.prototype = {
         $("#region.unframed").removeClass("zoomed_in");
         $(".paper_holder").removeClass("zoomed_in");
     },
+    
+    zoomout_complete: function() {
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
+    },
 
     currentbubble_click: function(d) {
         mediator.manager.call('papers', 'currentbubble_click', [d]);
@@ -445,6 +450,7 @@ MyMediator.prototype = {
         if (config.show_list) {
             mediator.manager.call('list', 'show', []);
         }
+        mediator.manager.call('list', 'count_visible_items_to_header')
     },
     
     draw_title: function () {
