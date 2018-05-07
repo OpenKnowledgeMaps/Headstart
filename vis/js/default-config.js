@@ -76,6 +76,7 @@ var config = {
 
     sort_options: ["readers", "title", "authors", "year"],
     filter_options: ["all", "open_access", "publication", "dataset"],
+    sort_menu_dropdown: false,
 
     content_based: false,
 
@@ -133,7 +134,8 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            sort_by_label: 'sort by:',
         },
         ger: {
             loading: "Wird geladen...",
@@ -194,7 +196,8 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            sort_by_label: 'sort by:',
         },
         eng_pubmed: {
             loading: "Loading...",
@@ -225,7 +228,8 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            sort_by_label: 'sort by:',
         },
         eng_openaire: {
             loading: "Loading...",
@@ -237,6 +241,7 @@ var config = {
             readers: "citations",
             year: "year",
             authors: "authors",
+            citations: "citations",
             title: "title",
             area: "Area",
             keywords: "Keywords",
@@ -274,6 +279,8 @@ var config = {
             publication: "papers",
             dataset: "datasets",
             items: "items",
+            sort_by_label: 'sort by:',
+            scale_by_label: 'Scale map by:',
         }
     },
 
