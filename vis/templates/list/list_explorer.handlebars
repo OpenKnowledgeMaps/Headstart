@@ -15,7 +15,7 @@
                     <span id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
                 </div>
             </div>
-            <div class="" id="sort_container">
+            <div class="dropdown" id="sort_container">
                 {{#if dropdown}}
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" id="sort" type="button" data-toggle="dropdown">
@@ -32,12 +32,12 @@
                 </div>
             </div>
             {{#if filter_dropdown}}
-            <div class="" id="filter_parameter_container">
+            <div class="dropdown" id="filter_parameter_container">
                 <button class="btn btn-primary dropdown-toggle" id="filter_params" type="button" data-toggle="dropdown">{{filter_by_label}}
                     <span id="curr-filter-type"></span>
                     <span class="caret"></span>
                 </button>
-                <ul id="filter-menu-entries" class="dropdown-menu" role="menu" aria-labelledby="sort-menu">
+                <ul id="filter-menu-entries" class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="filter-menu">
                 </ul>
             </div>
             {{/if}}

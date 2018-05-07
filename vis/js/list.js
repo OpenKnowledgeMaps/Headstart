@@ -158,7 +158,11 @@ list.drawList = function() {
     if(config.filter_menu_dropdown) {
         $('#curr-filter-type').text(config.localization[config.language]['all'])
         for (var i = 0; i < config.filter_options.length; i++) {
-            self.addFilterOptionDropdownEntry(config.filter_options[i])
+            if (i === 0) {
+                self.addFilterOptionDropdownEntry(config.filter_options[i], true);
+            } else {
+                self.addFilterOptionDropdownEntry(config.filter_options[i], false);
+            }
         }
     }
 
@@ -279,15 +283,25 @@ let addSortOptionButton = function(parent, sort_option, selected) {
     });
 };
 
-list.addFilterOptionDropdownEntry = function (filter_option) {
+list.addFilterOptionDropdownEntry = function (filter_option, first_item) {
     let entry = filterDropdownEntryTemplate({
         filter_by_string: config.localization[config.language].filter_by_label,
         filter_label: config.localization[config.language][filter_option]
     })
     var newEntry = $(entry).appendTo('#filter-menu-entries')
+    if(first_item === true) {
+        newEntry.find('.filter_radio')
+            .removeClass('fa-circle-o')
+            .addClass('fa-circle')
+    }
+    
     newEntry.on("click", () => {
         this.filterList(undefined, filter_option)
         $('#curr-filter-type').text(config.localization[config.language][filter_option])
+        d3.selectAll('.filter_radio').attr('class', 'filter_radio fa fa-circle-o')
+        newEntry.find('.filter_radio')
+            .removeClass('fa-circle-o')
+            .addClass('fa-circle')
     })
 }
 
