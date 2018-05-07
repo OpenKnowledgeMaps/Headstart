@@ -132,7 +132,7 @@ var getResourcesAndSetupList = function(data, pagination, searchTerm) {
     $.ajax({
         dataType: "json",
         url: data_config.server_url + "services/getOpenAireTotals.php?" + project_ids + funders + obj_ids,
-        timeout: 4000
+        timeout: 8000
     })
         .fail( function(xhr, status) {
             if(status === "timeout") {
