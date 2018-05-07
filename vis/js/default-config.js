@@ -81,6 +81,8 @@ var config = {
     content_based: false,
 
     filter_menu_dropdown: false,
+    
+    scale_toolbar: true,
 
     // transition
     transition_duration: 750,
