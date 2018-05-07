@@ -284,7 +284,9 @@ MyMediator.prototype = {
         this.viz.append(embedTemplate());
         
         if (config.scale_types.length > 0) {
-            this.viz.append(scaleToolbarTemplate());
+            this.viz.append(scaleToolbarTemplate({
+                scale_by_label: config.localization[config.language].scale_by_label
+            }));
         }
         
         if (!config.render_bubbles) {

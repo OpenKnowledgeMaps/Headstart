@@ -15,6 +15,8 @@ var data_config = {
     show_dropdown: false,
     preview_type: "pdf",
     sort_options: ["title", "authors", "year"],
+    filter_menu_dropdown: true,
+    sort_menu_dropdown: true,
     is_force_areas: true,
     language: "eng_openaire",
     area_force_alpha: 0.015,
@@ -30,10 +32,13 @@ var data_config = {
     
     viper_edit_modal: true,
     viper_embed_modal: true,
+    viper_share_modal: true,
 
     viper_outlink: true,
 
     intro: 'intro_openaire',
+
+    viper_metric_list: true,
     
     scale_types: ['content_based', 'citation_count', 'cited_by_tweeters_count', 'readers.mendeley'],
     scale_explaination: {
