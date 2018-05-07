@@ -198,7 +198,7 @@ list.count_visible_items_to_header = function() {
 
 list.fit_list_height = function() {
     var paper_list_avail_height = null;
-    const PAPER_LIST_CORRECTION = -5;
+    const PAPER_LIST_CORRECTION = -2;
     if (!config.render_bubbles) {
         var parent_height = getRealHeight($("#" + config.tag));
         var available_height = 0;
@@ -214,7 +214,13 @@ list.fit_list_height = function() {
         });
         paper_list_avail_height = available_height - $("#explorer_header").height() - PAPER_LIST_CORRECTION;
     } else {
-        paper_list_avail_height = $("#subdiscipline_title").outerHeight(true) + $("#headstart-chart").outerHeight(true) - $("#explorer_header").height() - PAPER_LIST_CORRECTION;
+        paper_list_avail_height = 
+                $("#subdiscipline_title").outerHeight(true) 
+                    + $("#headstart-chart").outerHeight(true) 
+                    - $("#show_hide_button").outerHeight(true) 
+                    - $("#explorer_options").outerHeight(true)
+                    - $("#scale_toolbar").outerHeight(true)
+                    - PAPER_LIST_CORRECTION;
     }
     $("#papers_list").height(paper_list_avail_height);
 };
