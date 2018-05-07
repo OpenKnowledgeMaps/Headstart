@@ -19,6 +19,7 @@ import {
 const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
 const listEntryTemplate = require("templates/list/list_entry.handlebars");
+const viperOutlinkTemplate = require("templates/list/viper_outlink.handlebars");
 
 export const list = StateMachine.create({
 
@@ -337,6 +338,20 @@ list.populateMetaData = function(nodes) {
             .html(function(d) {
                 return " (" + d.year + ")";
             });
+
+        if (config.viper_outlink) {
+            list_metadata.select(".viper_outlink")
+            .html(function (d) {
+                console.log(d)
+                var has_doi = !(d.doi === "")
+                return viperOutlinkTemplate({
+                    has_doi,
+                    link_label: config.localization[config.language].link,
+                    link: has_doi ? "https://dx.doi.org/"+d.doi : d.link,
+                    link_text: has_doi ? d.doi : d.link,
+                })
+            })
+        }
 
         // Following part should probably be moved to a separate function
         var paper_title = d3.select(elem).select("#list_title");

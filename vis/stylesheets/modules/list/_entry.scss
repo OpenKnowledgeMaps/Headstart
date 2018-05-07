@@ -113,6 +113,10 @@
         }
     }
 
+    .viper_outlink_link {
+        color: $abstract-gray;
+        text-decoration: underline;
+    }
 
     .outlink_symbol {
         font-family: FontAwesome;
