@@ -68,7 +68,7 @@ include 'config.php';
                     
                     <p class="try-out-maps">Try out: 
                         
-                            <a class="underline" target="_blank" href="">Overview of OpenAIRE</a>
+                            <a class="underline" target="_blank" href="https://openknowledgemaps.org/preview/viper/headstart.php?query=OPENAIRE%20-%20Open%20Access%20Infrastructure%20for%20Research%20in%20Europe&file=9b34f83d3940dc249c4ae9420c8fb2e2&service=openaire&service_name=OpenAire">Overview of OpenAIRE</a>
                         
                     </p>
                 </form>
