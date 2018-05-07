@@ -551,11 +551,11 @@ list.populateReaders = function(nodes) {
         if (config.viper_metric_list) {
             viper_metrics.html(function (d) {
                 return viperMetricTemplate({
-                    tweets_label: config.localization[config.language].tweets,
+                    tweets_label: config.localization[config.language].tweets_count_label,
                     tweets_count: d.cited_by_tweeters_count,
-                    readers_label: config.localization[config.language].readers,
+                    readers_label: config.localization[config.language].readers_count_label,
                     readers_count: d['readers.mendeley'],
-                    citations_label: config.localization[config.language].citations,
+                    citations_label: config.localization[config.language].citations_count_label,
                     citations_count: d.citation_count,
                 })
             })
