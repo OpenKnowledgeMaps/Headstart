@@ -176,7 +176,7 @@ list.drawList = function() {
 };
 
 list.count_visible_items_to_header = function() {
-    setTimeout(function () {
+
     var count = 0
     let current_circle = d3.select(mediator.current_zoom_node)
     d3.selectAll("#list_holder").filter(function(d) {
@@ -197,7 +197,7 @@ list.count_visible_items_to_header = function() {
         }
     })
     $('#list_item_count').text(count)
-    }, 1000)
+
 }
 
 list.fit_list_height = function() {
