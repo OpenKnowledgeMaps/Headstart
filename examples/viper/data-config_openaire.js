@@ -30,6 +30,7 @@ var data_config = {
     
     viper_edit_modal: true,
     viper_embed_modal: true,
+    viper_share_modal: true,
 
     intro: 'intro_openaire',
     
