@@ -124,6 +124,7 @@ list.drawList = function() {
             }
         }
     } else {
+        $('#curr-sort-type').text(config.localization[config.language][config.sort_options[0]])
         for(var i=0; i<numberOfOptions; i++) {
             addSortOptionDropdownEntry(config.sort_options[i])
         }
@@ -163,7 +164,7 @@ list.fit_list_height = function() {
 let addSortOptionDropdownEntry = function(sort_option) {
     let entry = sortDropdownEntryTemplate({
         sort_by_string: config.localization[config.language].sort_by_label,
-        sorter_label: config.localization[config.language][sort_option]
+        sorter_label: config.localization[config.language][sort_option],
     })
     var newEntry = $(entry).appendTo('#sort-menu-entries')
     newEntry.on("click", () => {
