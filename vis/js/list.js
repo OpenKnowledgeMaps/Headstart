@@ -146,7 +146,11 @@ list.drawList = function() {
     } else {
         $('#curr-sort-type').text(config.localization[config.language][config.sort_options[0]])
         for(var i=0; i<numberOfOptions; i++) {
-            addSortOptionDropdownEntry(config.sort_options[i])
+            if(i === 0) {
+                addSortOptionDropdownEntry(config.sort_options[i], true)
+            } else {
+                addSortOptionDropdownEntry(config.sort_options[i], false)
+            }
         }
     }
 
@@ -215,12 +219,18 @@ list.fit_list_height = function() {
     $("#papers_list").height(paper_list_avail_height);
 };
 
-let addSortOptionDropdownEntry = function(sort_option) {
+let addSortOptionDropdownEntry = function(sort_option, first_item) {
     let entry = sortDropdownEntryTemplate({
         sort_by_string: config.localization[config.language].sort_by_label,
         sorter_label: config.localization[config.language][sort_option],
     })
     var newEntry = $(entry).appendTo('#sort-menu-entries')
+    if(first_item === true) {
+        newEntry.find('.sort_radio')
+            .removeClass('fa-circle-o')
+            .addClass('fa-circle')
+    }
+    
     newEntry.on("click", () => {
         sortBy(sort_option)
         mediator.publish("record_action", "none", "sortBy",
@@ -228,8 +238,8 @@ let addSortOptionDropdownEntry = function(sort_option) {
         $('#curr-sort-type').text(config.localization[config.language][sort_option])
         d3.selectAll('.sort_radio').attr('class', 'sort_radio fa fa-circle-o')
         newEntry.find('.sort_radio')
-        .removeClass('fa-circle-o')
-        .addClass('fa-circle')
+            .removeClass('fa-circle-o')
+            .addClass('fa-circle')
     })
 }
 
