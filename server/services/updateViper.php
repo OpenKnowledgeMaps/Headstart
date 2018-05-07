@@ -95,7 +95,10 @@ function getCandidates($vis_changed, $persistence) {
   $updateCandidates = array();
   foreach($maps as $map) {
     $params = json_decode($map['vis_params'], true);
-    $updateCandidates[$map['vis_query']] = $params;
+    $vis_id = $map['vis_id'];
+    $updateCandidates[$vis_id]['vis_query'] = $map['vis_query'];
+    $updateCandidates[$vis_id]['vis_params'] = $params;
+    $updateCandidates[$vis_id]['vis_changed_timestamp'] = $map['vis_changed_timestamp'];
   }
   return $updateCandidates;
 }
@@ -144,9 +147,21 @@ function runUpdate($acronymtitle, $params) {
   echo $result;
 }
 
+function checkFlagAge($acronymtitle, $vis_changed_timestamp) {
+  $timestamp = strtotime($vis_changed_timestamp);
+  $curtime = time();
+  if(($curtime-$timestamp) > 86400) {
+    echo "Resetting flag for $acronymtitle";
+  }
+}
+
 function runUpdates($updateCandidates) {
-  foreach($updateCandidates as $acronymtitle => $params) {
+  foreach($updateCandidates as $vis_id => $map) {
+    $params = $map['vis_params'];
+    $acronymtitle = $map['vis_query'];
+    $vis_changed_timestamp = $map['vis_changed_timestamp'];
     runUpdate($acronymtitle, $params);
+    checkFlagAge($acronymtitle, $vis_changed_timestamp);
     sleep(10);
   }
 }
