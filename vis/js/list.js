@@ -172,6 +172,10 @@ let addSortOptionDropdownEntry = function(sort_option) {
         mediator.publish("record_action", "none", "sortBy",
             config.user_id, "listsort", null, "sort_option=" + sort_option)
         $('#curr-sort-type').text(config.localization[config.language][sort_option])
+        d3.selectAll('.sort_radio').attr('class', 'sort_radio fa fa-circle-o')
+        newEntry.find('.sort_radio')
+        .removeClass('fa-circle-o')
+        .addClass('fa-circle')
     })
 }
 
