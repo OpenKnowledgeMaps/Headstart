@@ -20,6 +20,9 @@ const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
 const listEntryTemplate = require("templates/list/list_entry.handlebars");
 const viperMetricTemplate = require('templates/list/viper_metrics.handlebars');
+const filterDropdownEntryTemplate = require("templates/list/filter_dropdown_entry.handlebars");
+const showHideLabel = require("templates/list/show_hide_label.handlebars")
+const sortDropdownEntryTemplate = require("templates/list/sort_dropdown_entry.handlebars");
 
 export const list = StateMachine.create({
 
@@ -53,6 +56,9 @@ export const list = StateMachine.create({
             this.populateList();
             this.initListMouseListeners();
             sortBy(config.sort_options[0]);
+            this.current_search_words = []
+            this.current_filter_param = ''
+            debounce(this.count_visible_items_to_header, config.debounce)()
         },
 
         onshow: function() {
@@ -60,7 +66,11 @@ export const list = StateMachine.create({
             d3.select("#papers_list").style("display", "block");
             d3.select("#left_arrow").text("\u25B2");
             d3.select("#right_arrow").text("\u25B2");
-            d3.select("#show_hide_label").text(config.localization[config.language].hide_list);
+            d3.select("#show_hide_label").html(showHideLabel({
+                show_or_hide_list: config.localization[config.language].hide_list,
+                items: config.localization[config.language].items,
+                item_count: this.list_item_count,
+            }));
         },
 
         onhide: function() {
@@ -68,7 +78,11 @@ export const list = StateMachine.create({
             d3.select("#papers_list").style("display", "none");
             d3.select("#left_arrow").text("\u25BC");
             d3.select("#right_arrow").text("\u25BC");
-            d3.select("#show_hide_label").text(config.localization[config.language].show_list);
+            d3.select("#show_hide_label").html(showHideLabel({
+                show_or_hide_list: config.localization[config.language].hide_list,
+                items: config.localization[config.language].items,
+                item_count: this.list_item_count,
+            }));
         },
 
         onbeforetoggle: function() {
@@ -84,9 +98,16 @@ export const list = StateMachine.create({
 });
 
 list.drawList = function() {
+    let self = this
+
     // Load list template
     let list_explorer = listTemplate({
-        show_list: config.localization[config.language].show_list
+        show_list: config.localization[config.language].show_list,
+        filter_dropdown: config.filter_menu_dropdown,
+        filter_by_label: config.localization[config.language].filter_by_label,
+        items: config.localization[config.language].items,
+        dropdown: config.sort_menu_dropdown,
+        sort_by_label: config.localization[config.language].sort_by_label,
     });
     $("#list_explorer").append(list_explorer);
 
@@ -108,16 +129,31 @@ list.drawList = function() {
         debounce(this.filterList([""]), config.debounce);
     });
 
-    // Add sort options
+    // Add sort button options
     var container = d3.select("#sort_container>ul");
-    var first_element = true;
     const numberOfOptions = config.sort_options.length;
-    for (var i = 0; i < numberOfOptions; i++) {
-        if (first_element) {
-            addSortOption(container, config.sort_options[i], true);
-            first_element = false;
-        } else {
-            addSortOption(container, config.sort_options[i], false);
+    if(!config.sort_menu_dropdown) {
+        var first_element = true;
+        for (var i = 0; i < numberOfOptions; i++) {
+            if (first_element) {
+                addSortOptionButton(container, config.sort_options[i], true);
+                first_element = false;
+            } else {
+                addSortOptionButton(container, config.sort_options[i], false);
+            }
+        }
+    } else {
+        $('#curr-sort-type').text(config.localization[config.language][config.sort_options[0]])
+        for(var i=0; i<numberOfOptions; i++) {
+            addSortOptionDropdownEntry(config.sort_options[i])
+        }
+    }
+
+    // Add filter options
+    if(config.filter_menu_dropdown) {
+        $('#curr-filter-type').text(config.localization[config.language]['all'])
+        for (var i = 0; i < config.filter_options.length; i++) {
+            self.addFilterOptionDropdownEntry(config.filter_options[i])
         }
     }
 
@@ -127,7 +163,33 @@ list.drawList = function() {
     });
 
     this.papers_list = d3.select("#papers_list");
+    debounce(this.count_visible_items_to_header, config.debounce)()
 };
+
+list.count_visible_items_to_header = function() {
+    setTimeout(function () {
+    var count = 0
+    let current_circle = d3.select(mediator.current_zoom_node)
+    d3.selectAll("#list_holder").filter(function(d) {
+        if (mediator.is_zoomed === true) {
+            if (config.use_area_uri && mediator.current_enlarged_paper === null) {
+                return current_circle.data()[0].area_uri == d.area_uri;
+            } else if (config.use_area_uri && mediator.current_enlarged_paper !== null) {
+                return mediator.current_enlarged_paper.id == d.id;
+            } else {
+                return current_circle.data()[0].title == d.area;
+            }
+        } else {
+            return true;
+        }
+    }).each(function (d) {
+        if (!d.filtered_out) {
+            count++
+        }
+    })
+    $('#list_item_count').text(count)
+    }, 1000)
+}
 
 list.fit_list_height = function() {
     var paper_list_avail_height = null;
@@ -152,7 +214,25 @@ list.fit_list_height = function() {
     $("#papers_list").height(paper_list_avail_height);
 };
 
-let addSortOption = function(parent, sort_option, selected) {
+let addSortOptionDropdownEntry = function(sort_option) {
+    let entry = sortDropdownEntryTemplate({
+        sort_by_string: config.localization[config.language].sort_by_label,
+        sorter_label: config.localization[config.language][sort_option],
+    })
+    var newEntry = $(entry).appendTo('#sort-menu-entries')
+    newEntry.on("click", () => {
+        sortBy(sort_option)
+        mediator.publish("record_action", "none", "sortBy",
+            config.user_id, "listsort", null, "sort_option=" + sort_option)
+        $('#curr-sort-type').text(config.localization[config.language][sort_option])
+        d3.selectAll('.sort_radio').attr('class', 'sort_radio fa fa-circle-o')
+        newEntry.find('.sort_radio')
+        .removeClass('fa-circle-o')
+        .addClass('fa-circle')
+    })
+}
+
+let addSortOptionButton = function(parent, sort_option, selected) {
 
     let checked_val = "";
     let active_val = "";
@@ -181,6 +261,18 @@ let addSortOption = function(parent, sort_option, selected) {
             config.user_id, "listsort", null, "sort_option=" + sort_option);
     });
 };
+
+list.addFilterOptionDropdownEntry = function (filter_option) {
+    let entry = filterDropdownEntryTemplate({
+        filter_by_string: config.localization[config.language].filter_by_label,
+        filter_label: config.localization[config.language][filter_option]
+    })
+    var newEntry = $(entry).appendTo('#filter-menu-entries')
+    newEntry.on("click", () => {
+        this.filterList(undefined, filter_option)
+        $('#curr-filter-type').text(config.localization[config.language][filter_option])
+    })
+}
 
 list.initListMouseListeners = function() {
     $("#show_hide_button")
@@ -225,6 +317,7 @@ list.updateByFiltered = function() {
         .style("display", function(d) {
             return d.filtered_out ? "none" : "inline";
         });
+    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
 list.filterListByAreaURIorArea = function(area) {
@@ -233,6 +326,7 @@ list.filterListByAreaURIorArea = function(area) {
             return (config.use_area_uri) ? (x.area_uri != area.area_uri) : (x.area != area.title);
         })
         .style("display", "none");
+    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
 list.filterListByArea = function(area) {
@@ -243,6 +337,7 @@ list.filterListByArea = function(area) {
         .style("display", function(d) {
             return d.filtered_out ? "none" : "inline";
         });
+    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
 list.populateMetaData = function(nodes) {
@@ -457,7 +552,14 @@ list.populateList = function() {
     this.populateReaders(paper_nodes);
 };
 
-list.filterList = function(search_words) {
+list.filterList = function(search_words, filter_param) {
+    if (search_words === undefined) {
+        search_words = this.current_search_words
+    }
+
+    if (filter_param === undefined) {
+        filter_param = this.current_filter_param
+    }
     this.current_search_words = search_words;
 
     search_words = search_words.map(function(e) {
@@ -473,7 +575,8 @@ list.filterList = function(search_words) {
     //TODO why not mediator.current_circle
     let current_circle = d3.select(mediator.current_zoom_node);
 
-    let filtered_list_items = all_list_items
+    // Find all the list items, that without any filtering should be in the view
+    let normally_visible_list_items = all_list_items
         .filter(function(d) {
             if (mediator.is_zoomed === true) {
                 if (config.use_area_uri && mediator.current_enlarged_paper === null) {
@@ -488,8 +591,8 @@ list.filterList = function(search_words) {
             }
         });
 
-    // Filter out items based on searchterm
-    let filtered_map_items = all_map_items
+    // Find items that, without any filtering, should be in the view
+    let normally_visible_map_items = all_map_items
         .filter(function(d) {
             if (mediator.is_zoomed === true) {
                 if (config.use_area_uri) {
@@ -502,40 +605,69 @@ list.filterList = function(search_words) {
             }
         });
 
-    // Deal with selected papers in list
-    let selected_list_items = filtered_list_items
+    //Find if any paper was selected previously
+    let selected_list_items = normally_visible_list_items
         .filter(function(d) {
             if (d.paper_selected === true) {
                 return true;
             }
         });
 
+    //If it wasn't then treat every normally visible paper as selected
     if (selected_list_items[0].length === 0) {
-        selected_list_items = filtered_list_items;
+        selected_list_items = normally_visible_list_items;
     }
 
-    if (search_words[0].length === 0) {
-        selected_list_items.style("display", "block");
-        filtered_map_items.style("display", "block");
-
-        mediator.current_bubble.data.forEach(function(d) {
-            d.filtered_out = false;
-        });
-
-        return;
-    }
-
+    //Even if the search box isn't empty make everything visible
     selected_list_items.style("display", "inline");
-    filtered_map_items.style("display", "inline");
+    normally_visible_map_items.style("display", "inline");
 
-    mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words);
+    //set everything that should be visible to unfiltered
+    all_list_items.each(function (d) {
+        d.filtered_out = false
+    })
 
-    this.hideEntries(all_list_items, search_words);
-    this.hideEntries(all_map_items, search_words);
+    // Record that we're about to do some filtering
+    mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words + "filter_param="+filter_param);
 
+    // Now actually do the filtering (i.e. remove some object from list and map)
+    this.hideEntriesByWord(all_list_items, search_words);
+    this.hideEntriesByWord(all_map_items, search_words);
+
+    this.hideEntriesByParam(all_list_items, filter_param);
+    this.hideEntriesByParam(all_map_items, filter_param);
+    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
-list.hideEntries = function(object, search_words) {
+// Returns true if document has parameter or if no parameter is passed
+list.findEntriesWithParam = function (param, d) {
+    if (param === 'open_access') {
+        console.log('filtering by OA status. Status: ' + d.oa)
+        return d.oa
+    } else if (param === 'publication') {
+        return d.resulttype === 'publication'
+    } else if (param === 'dataset') {
+        return d.resulttype === 'dataset'
+    } else {
+        return true
+    }
+    
+}
+
+// These functions only hide items. They shouldn't unhide them.
+list.hideEntriesByParam = function (object, param) {
+    var self = this
+    object.filter(function (d) {
+        if (!self.findEntriesWithParam(param, d)) {
+            d.filtered_out = true
+            return true
+        }
+        return false
+    })
+    .style("display", "none")
+}
+
+list.hideEntriesByWord = function(object, search_words) {
     object
         .filter(function(d) {
             let abstract = d.paper_abstract.toLowerCase();
@@ -545,24 +677,22 @@ list.hideEntries = function(object, search_words) {
             let year = d.year;
             let word_found = true;
             let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toLowerCase()) : ("");
-            let count = 0;
-            if (typeof abstract !== 'undefined') {
-                while (word_found && count < search_words.length) {
-                    word_found = (abstract.indexOf(search_words[count]) !== -1 ||
-                        title.indexOf(search_words[count]) !== -1 ||
-                        authors.indexOf(search_words[count]) !== -1 ||
-                        journals.indexOf(search_words[count]) !== -1 ||
-                        year.indexOf(search_words[count]) !== -1 ||
-                        keywords.indexOf(search_words[count]) !== -1
-                    );
-                    count++;
-                }
-                d.filtered_out = word_found ? false : true;
-                return d.filtered_out;
-            } else {
-                d.filtered_out = true;
-                return false;
+            let i = 0;
+            while (word_found && i < search_words.length) {
+                word_found = (abstract.indexOf(search_words[i]) !== -1 ||
+                    title.indexOf(search_words[i]) !== -1 ||
+                    authors.indexOf(search_words[i]) !== -1 ||
+                    journals.indexOf(search_words[i]) !== -1 ||
+                    year.indexOf(search_words[i]) !== -1 ||
+                    keywords.indexOf(search_words[i]) !== -1
+                );
+                i++;
             }
+            if (word_found === false) {
+                d.filtered_out = true
+                return true
+            }
+            return false
         })
         .style("display", "none");
 };
@@ -573,9 +703,11 @@ list.createHighlights = function(search_words) {
     }
 
     clear_highlights();
-    search_words.forEach(function(str) {
-        highlight(str);
-    });
+    if( !(search_words === "") ) {
+        search_words.forEach(function(str) {
+            highlight(str);
+        });
+    }
 };
 
 // called quite often
