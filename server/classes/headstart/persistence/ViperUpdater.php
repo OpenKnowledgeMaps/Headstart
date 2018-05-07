@@ -19,7 +19,9 @@ class ViperUpdater extends SQLitePersistence {
   public function getUpdateMaps($vis_changed) {
     $return_fields = "visualizations.vis_title,
                       visualizations.vis_query,
-                      visualizations.vis_params";
+                      visualizations.vis_params,
+                      visualizations.vis_changed_timestamp,
+                      visualizations.vis_id";
     if ($vis_changed == false) {
         $stmt = "SELECT $return_fields FROM visualizations
                  WHERE visualizations.vis_title == 'openaire'
@@ -86,6 +88,13 @@ class ViperUpdater extends SQLitePersistence {
     var_dump($result);
 
     return $result;
+  }
+
+  public function resetFlag($funder, $project_id) {
+    $stmt = "UPDATE visualizations
+             SET visualizations.vis_changed=0
+             WHERE visualizations.vis_title == 'openaire'
+             AND visualizations.vis_query == $project_id";
   }
 
 }
