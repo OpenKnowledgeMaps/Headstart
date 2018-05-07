@@ -104,7 +104,7 @@ list.drawList = function() {
         show_list: config.localization[config.language].show_list,
         filter_dropdown: config.filter_menu_dropdown,
         filter_by_label: config.localization[config.language].filter_by_label,
-        items: config.localization[config.language].items
+        items: config.localization[config.language].items,
         dropdown: config.sort_menu_dropdown,
         sort_by_label: config.localization[config.language].sort_by_label,
     });
