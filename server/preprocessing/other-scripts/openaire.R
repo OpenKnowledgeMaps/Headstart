@@ -2,6 +2,7 @@ library(xml2)
 library(plyr)
 library(ropenaire)
 library(rcrossref)
+library(stringr)
 
 # get_papers
 #
@@ -122,6 +123,7 @@ preprocess_data <- function(all_artifacts){
                                                                                return (x)}
                                                                               })) # removes ;dk;atira;pure;researchoutput;pubmedpublicationtype;D013486
   all_artifacts$paper_abstract <- unlist(lapply(all_artifacts$paper_abstract, function(x){gsub("\\n", " ", x)}))
+  all_artifacts$doi <- unlist(lapply(all_artifacts$doi, function(x) {str_replace_all(x, "[\r\n\t]" , "")}))
   return (all_artifacts)
 }
 
