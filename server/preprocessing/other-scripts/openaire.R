@@ -2,6 +2,7 @@ library(xml2)
 library(plyr)
 library(ropenaire)
 library(rcrossref)
+library(stringr)
 
 # get_papers
 #
@@ -105,12 +106,13 @@ preprocess_data <- function(all_artifacts){
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\[[A-Za-z \\.-]+\\]", "", x)})) # removes [ INFO.INFO-MA ] Computer Science [cs]/Multiagent Systems [cs.MA]
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub(" ?/", ";", x)}))
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\:.*\\:\\:", "", x)})) # keeps only last part after :: ":Enginyeria de la telecomunicació::Processament del senyal::Reconeixement de formes [Àrees temàtiques de la UPC]"
-  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("Q[A-Z]?\\d{1,2}.*\\. ?", "", x)})) # keeps only last part, here Computer science "QA75 Electronic computers. Computer science; számítástechnika, számítógéptudomány"     
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("Q[A-Z]?\\d{1,2}.*\\. ?", "", x)})) # keeps only last part, here Computer science "QA75 Electronic computers. Computer science; számítástechnika, számítógéptudomány"
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("QA\\d{1,2}", "", x)}))
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("info:eu-repo;classification;ddc;\\d+", "", x)}))
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("ddc:\\d+", "", x)}))
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("jel:[A-Z]+\\d+", "", x)}))
-  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("[A-Z]{2}\\d+-\\d+", "", x)})) # e.g. "TA1-2040" 
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("[A-Z]{2}\\d+-\\d+", "", x)})) # e.g. "TA1-2040"
+  all_artifacts$doi <- unlist(lapply(all_artifacts$doi, function(x) {str_replace_all(x, "[\r\n\t]" , "")}))
   all_artifacts$paper_abstract <- unlist(lapply(all_artifacts$paper_abstract, function(x){gsub("\\n", " ", x)}))
   return (all_artifacts)
 }
