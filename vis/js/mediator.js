@@ -97,6 +97,7 @@ MyMediator.prototype = {
         this.mediator.subscribe("bubbles_update_data_and_areas", this.bubbles_update_data_and_areas);
         this.mediator.subscribe("bubble_zoomin", this.bubble_zoomin);
         this.mediator.subscribe("bubble_zoomout", this.bubble_zoomout);
+        this.mediator.subscribe("zoomout_complete", this.zoomout_complete);
 
         // misc
         this.mediator.subscribe("record_action", this.record_action);
@@ -138,7 +139,7 @@ MyMediator.prototype = {
             mediator.manager.registerModule(canvas, 'canvas');
             mediator.manager.registerModule(papers, 'papers');
         }
-        if(config.scale_types.lenght > 0) {
+        if(config.scale_toolbar) {
             mediator.manager.registerModule(scale, 'scale')
         }
     },
@@ -226,8 +227,10 @@ MyMediator.prototype = {
         mediator.manager.registerModule(headstart, 'headstart');
         if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
         mediator.manager.call('canvas', 'setupCanvas', []);
-        mediator.manager.registerModule(scale, 'scale')
-        mediator.manager.call('scale', 'drawScaleTypes', [])
+        if(config.scale_toolbar) {
+            mediator.manager.registerModule(scale, 'scale')
+            mediator.manager.call('scale', 'drawScaleTypes', [])
+        }
         let data = (config.show_context)?(JSON.parse(csv.data)):csv;
         let context = (config.show_context)?(csv.context):{};
         
@@ -283,8 +286,10 @@ MyMediator.prototype = {
         this.viz.append(editTemplate());
         this.viz.append(embedTemplate());
         
-        if (config.scale_types.length > 0) {
-            this.viz.append(scaleToolbarTemplate());
+        if (config.scale_toolbar) {
+            this.viz.append(scaleToolbarTemplate({
+                scale_by_label: config.localization[config.language].scale_by_label
+            }));
         }
         
         if (!config.render_bubbles) {
@@ -384,6 +389,10 @@ MyMediator.prototype = {
         $("#region.unframed").removeClass("zoomed_in");
         $(".paper_holder").removeClass("zoomed_in");
     },
+    
+    zoomout_complete: function() {
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
+    },
 
     currentbubble_click: function(d) {
         mediator.manager.call('papers', 'currentbubble_click', [d]);
@@ -441,6 +450,7 @@ MyMediator.prototype = {
         if (config.show_list) {
             mediator.manager.call('list', 'show', []);
         }
+        mediator.manager.call('list', 'count_visible_items_to_header')
     },
     
     draw_title: function () {
