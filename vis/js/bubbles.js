@@ -546,6 +546,8 @@ BubblesFSM.prototype = {
 
                     mediator.current_zoom_node = null;
                     mediator.is_zoomed = false;
+                    
+                    mediator.publish("zoomout_complete")
                 });
 
         t.selectAll("g.bubble_frame")
