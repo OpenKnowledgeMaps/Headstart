@@ -36,7 +36,7 @@ if ($options['vis_changed'] == 'true') {
 } elseif ($options['vis_changed'] == 'false') {
   $vis_changed = false;
 } else {
-  echo "invalid argument for vis_changed\n";
+  // echo "invalid argument for vis_changed\n";
 };
 
 
@@ -60,7 +60,7 @@ if ($action == 'getByObjectIDs') {
 } elseif ($action == 'getByFlag') {
   $updateCandidates = getCandidates($vis_changed, $persistence);
 } else {
-  echo "No valid action.\n";
+  // echo "No valid action.\n";
 }
 
 runUpdates($updateCandidates);
@@ -82,7 +82,7 @@ function parseOptions($options) {
             !array_key_exists('object_ids', $options)) {
     $action = "getByFunderProject";
   } else {
-    echo "Invalid combination of options.\n";
+    // echo "Invalid combination of options.\n";
     $action = NULL;
   }
   return $action;
@@ -135,8 +135,8 @@ function getCandidatesByFunderProject($vis_changed, $persistence, $funderproject
 }
 
 function runUpdate($acronymtitle, $params) {
-  echo "$acronymtitle";
-  echo "\n";
+  // echo "$acronymtitle";
+  // echo "\n";
   $decoded_params = decodeParams($params);
   $post_params = $decoded_params[0];
   $param_types = $decoded_params[1];
@@ -150,7 +150,7 @@ function checkFlagAge($acronymtitle, $vis_changed_timestamp) {
   $timestamp = strtotime($vis_changed_timestamp);
   $curtime = time();
   if(($curtime-$timestamp) > 86400) {
-    echo "Resetting flag for $acronymtitle";
+    // echo "Resetting flag for $acronymtitle";
   }
 }
 
