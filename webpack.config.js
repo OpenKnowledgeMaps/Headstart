@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const config = require('./config.js');
 
 const TARGET = process.env.npm_lifecycle_event;
 
@@ -14,7 +13,7 @@ const common = {
     output: {
         path: path.resolve(__dirname, "dist"),
 		//dev: specify a full path including protocol, production: specify full path excluding protocol
-        publicPath: config.publicPath,
+        publicPath: ".",
         filename: 'headstart.js',
         libraryTarget: 'var',
         library: 'headstart'
