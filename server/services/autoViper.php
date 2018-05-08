@@ -12,17 +12,33 @@ use headstart\search;
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 
-// $funder = library\CommUtils::getParameter($_GET, "funder");
-// $startYear = library\CommUtils::getParameter($_GET, "startYear");
-// $endYear = library\CommUtils::getParameter($_GET, "endYear");
-// $participantCountries = library\CommUtils::getParameter($_GET, "participantCountries");
-// $participantAcronyms = library\CommUtils::getParameter($_GET, "participantAcronyms");
+$shortopts = "";
+$longopts = array(
+  "object_ids::",
+  "funderparams::",
+  "test::"
+);
+
+
+# parse options and determine action
+
+$options = getopt($shortopts, $longopts);
+$action = parseOptions($options);
+if ($options['vis_changed'] == 'true') {
+  $vis_changed = true;
+} elseif ($options['vis_changed'] == 'false') {
+  $vis_changed = false;
+} else {
+  echo "invalid argument for vis_changed\n";
+};
+
 
 
 $response = getProjectsbyFunder("FWF", NULL);
 $parsed_response = parseProjects($response);
 $resource_counts = getResourceCounts($parsed_response);
-var_dump($resource_counts);
+$filtered_projects = filterProjects($resource_counts);
+var_dump($filtered_projects);
 
 
 function createMaps($projects) {
@@ -39,14 +55,23 @@ function parseProjects($response) {
   $project_ids = $xml->xpath("//code");
   $funders = $xml->xpath("//fundingtree/funder/shortname");
   $obj_ids = $xml->xpath("//header//dri:objIdentifier");
+  $obj_idstr = array();
+  foreach($obj_ids as $obj_id){
+    $obj_idstr[] = (string)$obj_id;
+  }
   $parsed_projects = array_combine($project_ids, $funders);
-  $parsed_ids = array_combine($project_ids, $obj_ids);
-  return array($parsed_projects, $parsed_ids);
+  $projid2objid = array_combine($project_ids, $obj_idstr);
+  $objid2projid = array_combine($obj_idstr, $project_ids);
+  return array($parsed_projects, $projid2objid, $objid2projid);
 }
 
 function filterProjects($resource_counts) {
   $filtered_projects = array();
-  foreach()
+  foreach($resource_counts as $obj_id => $rc) {
+    if($rc['publications'] + $rc['datasets'] > 0){
+      $filtered_projects[] = $obj_id;
+    }
+  }
 }
 
 
@@ -57,7 +82,7 @@ function getProjectsbyFunder($funder, $params) {
 
   $url = 'http://api.openaire.eu/search/projects?format=xml'
       . "&funder=" . $funder
-      . "&size=" . "100"
+      . "&size=" . "1000"
       . "&startYear=" . $startYear
       . "&endYear=" . $endYear;
   $ch = curl_init();
@@ -84,7 +109,7 @@ function createAndAddMultiHandle($url, &$multi_array, &$mh, $id) {
 
 function getResourceCounts($parsed_response) {
   $parsed_projects = $parsed_response[0];
-  $parsed_ids = $parsed_response[1];
+  $projid2objid = $parsed_response[1];
   $multi_array = array();
   $results = array();
   $mh = curl_multi_init();
@@ -96,7 +121,7 @@ function getResourceCounts($parsed_response) {
             . urlencode($project_id)
             . "&funder=" . $funder . "&format=json&size=0";
 
-    $id = $parsed_ids[$project_id];
+    $id = $projid2objid[$project_id];
     createAndAddMultiHandle($url_publications, $multi_array, $mh, "p_" . $id);
     createAndAddMultiHandle($url_datasets, $multi_array, $mh, "d_" . $id);
   }
