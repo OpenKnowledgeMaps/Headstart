@@ -41,6 +41,28 @@ $filtered_projects = filterProjects($resource_counts);
 var_dump($filtered_projects);
 
 
+# define functions
+
+function parseOptions($options) {
+  if (array_key_exists('vis_changed', $options) and
+      !array_key_exists('object_ids', $options) and
+      !array_key_exists('funderproject', $options)) {
+    $action = "getByFlag";
+  } elseif (array_key_exists('object_ids', $options) and
+      !array_key_exists('funderproject', $options)) {
+    $action = "getByObjectIDs";
+  } elseif (array_key_exists('funderproject', $options) and
+            !array_key_exists('object_ids', $options)) {
+    $action = "getByFunderProject";
+  } else {
+    echo "Invalid combination of options.\n";
+    $action = NULL;
+  }
+  return $action;
+}
+
+
+
 function createMaps($projects) {
 
 }
