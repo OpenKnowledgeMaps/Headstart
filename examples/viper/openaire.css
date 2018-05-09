@@ -285,3 +285,12 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
     color:#3696e0;
     text-decoration: none;
 }
+
+.ui-widget-header {
+
+    background: #3696e0;
+    border: 1px solid #DDDDDD;
+    color: #333333;
+    font-weight: bold;
+
+}
