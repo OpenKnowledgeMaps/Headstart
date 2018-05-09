@@ -11,7 +11,6 @@
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
         <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <link type="text/css" rel="stylesheet" href="spinner.css">
         <link type="text/css" rel="stylesheet" href="openaire.css">
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,800' rel='stylesheet' type='text/css'>
     </head>
@@ -28,7 +27,7 @@
                 </div>
 
 
-                <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                <div id="progressbar"></div>
                 <div id="progress"></div>
             </div>
         </div>
@@ -65,6 +64,9 @@
                 var openInThisWindow = function (data) {
                     console.log(data)
                     if (data.status === "success") {
+                        $("#progressbar").progressbar("option", "value", 100);
+                        window.clearTimeout(progessbar_timeout);
+                        
                         var file = data.id;
                         window.location.replace(
                                 "headstart.php?query=" +
@@ -94,7 +96,7 @@
             }
             
             var showErrorCreation = function() {
-                $(".lds-spinner").hide();
+                $("#progressbar").hide();
                 $(".waiting-description").hide();
                 $("#progress").html(
                         `Sorry! We could not create your map, because the project does not have enough resources linked to it. \n\
@@ -105,13 +107,41 @@
             }
             
             var showErrorBackend = function(error) {
-                $(".lds-spinner").hide();
+                $("#progressbar").hide();
                 $(".waiting-description").hide();
                 $("#progress").html(
                         "Sorry! Something went wrong. Probably an error from the backend. Check the console for details."
                         )
                 console.log(error)
             }
+            
+            $("#progressbar").progressbar();
+            $("#progressbar").progressbar("value", 2);
+
+            var tick_function = function () {
+
+                var value = $("#progressbar").progressbar("option", "value");
+
+                value += tick_increment;
+
+                $("#progressbar").progressbar("option", "value", value);
+
+                progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
+
+                if (value >= 100) {
+
+                    $("#status").html("<span style='color:red'>Creating your visualization takes longer than expected. Please stay tuned!</span>")
+
+                    $("#progressbar").progressbar("value", 5);
+
+                }
+
+            };
+            
+            var tick_interval = 1;
+            var tick_increment = 2;
+            var milliseconds = 500;
+            var progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
         </script>
 
     </body>
