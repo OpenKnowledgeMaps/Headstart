@@ -72,6 +72,7 @@ export const list = StateMachine.create({
                 items: config.localization[config.language].items,
                 item_count: this.list_item_count,
             }));
+            list.count_visible_items_to_header();
         },
 
         onhide: function() {
@@ -80,10 +81,11 @@ export const list = StateMachine.create({
             d3.select("#left_arrow").text("\u25BC");
             d3.select("#right_arrow").text("\u25BC");
             d3.select("#show_hide_label").html(showHideLabel({
-                show_or_hide_list: config.localization[config.language].hide_list,
+                show_or_hide_list: config.localization[config.language].show_list,
                 items: config.localization[config.language].items,
                 item_count: this.list_item_count,
             }));
+            list.count_visible_items_to_header();
         },
 
         onbeforetoggle: function() {
