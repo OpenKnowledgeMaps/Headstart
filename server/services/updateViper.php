@@ -109,15 +109,17 @@ function getCandidatesByObjectIDs($vis_changed, $persistence, $object_ids) {
   foreach($object_ids as $obj_id){
     $obj_ids[] = $obj_id[0];
   }
-  $obj_ids = implode(", ", $obj_ids);
-  $maps = $persistence->getUpdateMapsByID($vis_changed, $obj_ids);
+  $maps = $persistence->getUpdateMaps($vis_changed);
   $updateCandidates = array();
   foreach($maps as $map) {
     $params = json_decode($map['vis_params'], true);
-    $vis_id = $map['vis_id'];
-    $updateCandidates[$vis_id]['vis_query'] = $map['vis_query'];
-    $updateCandidates[$vis_id]['vis_params'] = $params;
-    $updateCandidates[$vis_id]['vis_changed_timestamp'] = $map['vis_changed_timestamp'];
+    $obj_id = $params['obj_id'];
+    if (in_array($obj_id, $obj_ids)) {
+      $vis_id = $map['vis_id'];
+      $updateCandidates[$vis_id]['vis_query'] = $map['vis_query'];
+      $updateCandidates[$vis_id]['vis_params'] = $params;
+      $updateCandidates[$vis_id]['vis_changed_timestamp'] = $map['vis_changed_timestamp'];
+    }
   }
   return $updateCandidates;
 }
