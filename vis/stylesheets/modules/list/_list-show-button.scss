@@ -3,7 +3,7 @@
     padding: 5px 0px;
     border: 2px solid $list_show_hide_button_border;
     background-color: white;
-    color: $list_show_hide_button;
+    color: $black;
 
     &.hover {
         background-color: $list_show_hide_button;
@@ -13,8 +13,11 @@
 
 #show_hide_button_label {
     font-family: $link-font-family;
-    font-size: 14px;
+    font-size: 11px;
     float: left;
     text-align: center;
 }
 
+#curr-filter-type, #curr-sort-type {
+    font-weight: 800;
+}
