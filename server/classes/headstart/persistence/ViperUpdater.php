@@ -39,6 +39,7 @@ class ViperUpdater extends SQLitePersistence {
   }
 
   public function getUpdateMapsByID($vis_changed, $object_ids) {
+    # currently defunct, only works with JSON1 extension
     $return_fields = "visualizations.vis_title,
                       visualizations.vis_query,
                       visualizations.vis_params";
@@ -63,7 +64,7 @@ class ViperUpdater extends SQLitePersistence {
   }
 
   public function getUpdateMapsByFunderProject($vis_changed, $funder, $project_id) {
-    # only works with JSON1 extension
+    # currently defunct, only works with JSON1 extension
     $return_fields = "visualizations.vis_title,
                       visualizations.vis_query,
                       visualizations.vis_params";
@@ -85,16 +86,16 @@ class ViperUpdater extends SQLitePersistence {
     echo ($stmt);
     $query = $this->db->query($stmt);
     $result = $query->fetchAll();
-    var_dump($result);
 
     return $result;
   }
 
-  public function resetFlag($funder, $project_id) {
+  public function resetFlag($vis_id) {
     $stmt = "UPDATE visualizations
-             SET visualizations.vis_changed=0
-             WHERE visualizations.vis_title == 'openaire'
-             AND visualizations.vis_query == $project_id";
+             SET vis_changed=0
+             WHERE vis_title == 'openaire'
+             AND vis_id == '$vis_id'";
+    $this->db->query($stmt);
   }
 
 }
