@@ -481,6 +481,7 @@ BubblesFSM.prototype = {
                     }
 
                     mediator.zoom_finished = true;
+                    mediator.publish("zoomin_complete")
                 });
 
         mediator.current_bubble.createTransition(t, d.title);
