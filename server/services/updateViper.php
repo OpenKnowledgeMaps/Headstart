@@ -63,7 +63,7 @@ if ($action == 'getByObjectIDs') {
   // echo "No valid action.\n";
 }
 
-runUpdates($updateCandidates);
+runUpdates($updateCandidates, $persistence);
 
 
 
@@ -114,7 +114,10 @@ function getCandidatesByObjectIDs($vis_changed, $persistence, $object_ids) {
   $updateCandidates = array();
   foreach($maps as $map) {
     $params = json_decode($map['vis_params'], true);
-    $updateCandidates[$map['vis_query']] = $params;
+    $vis_id = $map['vis_id'];
+    $updateCandidates[$vis_id]['vis_query'] = $map['vis_query'];
+    $updateCandidates[$vis_id]['vis_params'] = $params;
+    $updateCandidates[$vis_id]['vis_changed_timestamp'] = $map['vis_changed_timestamp'];
   }
   return $updateCandidates;
 }
@@ -127,7 +130,10 @@ function getCandidatesByFunderProject($vis_changed, $persistence, $funderproject
     foreach($maps as $map) {
       $params = json_decode($map['vis_params'], true);
       if ($params['funder'] == $fp[0] and $params['project_id'] == $fp[1]) {
-        $updateCandidates[$map['vis_query']] = $params;
+        $vis_id = $map['vis_id'];
+        $updateCandidates[$vis_id]['vis_query'] = $map['vis_query'];
+        $updateCandidates[$vis_id]['vis_params'] = $params;
+        $updateCandidates[$vis_id]['vis_changed_timestamp'] = $map['vis_changed_timestamp'];
       }
     }
   }
@@ -146,21 +152,21 @@ function runUpdate($acronymtitle, $params) {
   echo $result;
 }
 
-function checkFlagAge($acronymtitle, $vis_changed_timestamp) {
+function checkFlagAge($vis_id, $vis_changed_timestamp, $persistence) {
   $timestamp = strtotime($vis_changed_timestamp);
   $curtime = time();
   if(($curtime-$timestamp) > 86400) {
-    // echo "Resetting flag for $acronymtitle";
+    $persistence->resetFlag($vis_id);
   }
 }
 
-function runUpdates($updateCandidates) {
+function runUpdates($updateCandidates, $persistence) {
   foreach($updateCandidates as $vis_id => $map) {
     $params = $map['vis_params'];
     $acronymtitle = $map['vis_query'];
     $vis_changed_timestamp = $map['vis_changed_timestamp'];
     runUpdate($acronymtitle, $params);
-    checkFlagAge($acronymtitle, $vis_changed_timestamp);
+    checkFlagAge($vis_id, $vis_changed_timestamp, $persistence);
     sleep(10);
   }
 }
