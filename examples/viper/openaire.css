@@ -285,3 +285,15 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
     color:#3696e0;
     text-decoration: none;
 }
+
+.ie-message {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+.invisible {
+    display: none;
+}

@@ -76,6 +76,29 @@ include 'config.php';
             </div>
             <!--<p style="text-align:center; margin-top: 30px;"><a class="newsletter2" href="">What is VIPER?</a><p>-->
         </div>
+        
+        <div class="ie-message">
+            VIPER does not support Internet Explorer due to the use of advanced web technologies. 
+            Please use a modern browser such as Mozilla Firefox, Google Chrome and Microsoft Edge.
+        </div>
+        
+        <script type="text/javascript">
+            if (isIE()) {
+                $(".ie-message").addClass("visible");
+                $(".search-box").addClass("invisible");
+            }
+
+            function isIE() {
+                
+                var user_agent = window.navigator.userAgent;
+                
+                if (user_agent.indexOf('MSIE ') > 0 || user_agent.indexOf('Trident/') > 0) {
+                  return true;
+                } else {
+                    return false;
+                }
+            }
+        </script>
 
         <div id="viper-search-results">
 
