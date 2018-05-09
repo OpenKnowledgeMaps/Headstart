@@ -1,11 +1,8 @@
 @import "list-show-button";
 
-#explorer_header {
-    background-color: $list_explorer_header;
-}
-
 #explorer_options {
     padding: 15px;
+    background-color: $list_explorer_header;
 }
 
 #filter_container {
