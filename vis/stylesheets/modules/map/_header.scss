@@ -24,7 +24,7 @@
 }
 
 #modals {
-    position: relative;
+    position: fixed;
     z-index: 3;
 }
 
@@ -52,12 +52,14 @@
     //border: 1px solid $infolink;
     //padding: 5px;
     //border-radius: 5px;
+    color: $black;
     font-weight: 400;
     margin-left: 5px;
     font-size: 12px;
     //text-transform: uppercase;
     //vertical-align: middle;
-    text-decoration: underline;
+    text-decoration: none;
+    border-bottom: 1px solid $black;
 }
 
 #whatsthis {
@@ -67,6 +69,7 @@
 
 #infolink:hover, #infolink:focus, #infolink:active {
     text-decoration: none;
+    border-bottom: 3px solid $framed-item;
 }
 
 #timelineview {

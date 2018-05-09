@@ -11,7 +11,7 @@
 
 
 #oa {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 #open-access-logo_list {
@@ -51,7 +51,8 @@
 
     .list_title {
         font-size: 14px;
-        margin-bottom: 4px;
+        line-height:120%;
+        margin-bottom: 10px;
         max-width: 82%;
         display: inline-block;
         color: $list_metadata_title_paper;
@@ -114,8 +115,14 @@
     }
 
     .viper_outlink_link {
-        color: $abstract-gray;
-        text-decoration: underline;
+        color: $black;
+        text-decoration: none;
+        border-bottom: 1px solid $black;
+        
+        
+        &:hover {
+            border-bottom: 3px solid $framed-item;
+        }
     }
 
     .outlink_symbol {
@@ -123,7 +130,7 @@
         vertical-align: top;
     }
 
-    .list_details {
+    .list_details, .viper_outlink {
         font: 12px 'Helvetica', sans-serif;
         font-size: 12px;
         line-height: 14px;
@@ -133,6 +140,7 @@
 
         .list_authors {
             color: $list_detail_authors;
+            font-weight: bold;
         }
 
         .list_in {
@@ -140,13 +148,13 @@
         }
 
         .list_published_in {
-            color: black;
+            color: $black;
             font-style: italic;
         }
 
         .list_pubyear {
             font-weight: bold;
-            color: black;
+            color: $black;
         }
     }
 }
@@ -154,7 +162,7 @@
 #list_abstract {
     max-width: 82%;
     font: 12px 'Helvetica', sans-serif;
-    line-height: 13px;
+    line-height: 120%;
     padding-right: 0;
     padding-left: 0px;
     color: $list_abstract;
@@ -183,13 +191,27 @@
 }
 
 .link2 {
-
     display: block;
     margin-top: 10px;
-
 }
 
+.bold-list {
+    font-weight:800;
+}
 
+#papers_list .viper_metrics {
+    font: 11px 'Open Sans', Helvetica, sans-serif;
+    margin-bottom:5px;
+    color: $black;
+}
+
+.viper_metrics_tweets, .viper_metrics_readers {
+    margin-right:10px;
+}
+
+.scaled-metric {
+    font-weight: 800;
+}
 
 .list_readers {
     font-size: 11px;
@@ -199,7 +221,7 @@
     padding: 0;
     float: right;
     color: black;
-    display: inline-block;
+    display: none;
     font-weight: bold;
     padding-right: 10px;
 
