@@ -13,7 +13,7 @@ const common = {
     output: {
         path: path.resolve(__dirname, "dist"),
 		//dev: specify a full path including protocol, production: specify full path excluding protocol
-        publicPath: "config.publicPath",
+        publicPath: config.publicPath,
         filename: 'headstart.js',
         libraryTarget: 'var',
         library: 'headstart'
