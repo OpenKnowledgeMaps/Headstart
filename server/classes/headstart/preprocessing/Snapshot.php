@@ -18,6 +18,8 @@ class Snapshot
         $getsvg = $ini_array["snapshot"]["getsvg_path"];
         if (isset($_SERVER) and array_key_exists('SERVER_PROTOCOL', $_SERVER)) {
           $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+        } elseif (array_key_exists('snapshot_local_protocol', $ini_array) {
+          $protocol = $ini_array['snapshot_local_protocol'];
         } else {
           $protocol = 'http://';
         }
