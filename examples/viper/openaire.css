@@ -175,6 +175,8 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
     color: #fff;
     text-align: center;
     font-size: 18px;
+    max-width:650px;
+    margin:0px auto;
 }
 
 .awesome {
@@ -224,6 +226,8 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 
 .error-building-map-image {
     margin-top: 30px;
+    max-width: 650px;
+    text-align:center;
 }
 
 .waiting-page .waiting-title  {
