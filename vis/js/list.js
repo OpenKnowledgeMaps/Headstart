@@ -412,7 +412,7 @@ list.populateMetaData = function(nodes) {
             })
             .attr("class", function(d){
                 if(d.oa){
-                    return "oa-link"
+                    return "oa-link oa-link-hidden"
                 }
                 return "outlink"
             })
@@ -426,9 +426,9 @@ list.populateMetaData = function(nodes) {
                     return "none";
                 }
             });
-
+              
         var paper_link = list_metadata.select(".link2");
-
+        
         paper_link.style("display", function(d) {
             if (d.oa === false || d.resulttype == "dataset") {
                 return "none";
