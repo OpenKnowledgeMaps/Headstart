@@ -172,11 +172,9 @@ list.drawList = function() {
     });
 
     this.papers_list = d3.select("#papers_list");
-    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
 list.count_visible_items_to_header = function() {
-
     var count = 0
     let current_circle = d3.select(mediator.current_zoom_node)
     d3.selectAll("#list_holder").filter(function(d) {
@@ -348,7 +346,6 @@ list.updateByFiltered = function() {
         .style("display", function(d) {
             return d.filtered_out ? "none" : "inline";
         });
-    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
 list.filterListByAreaURIorArea = function(area) {
@@ -357,7 +354,6 @@ list.filterListByAreaURIorArea = function(area) {
             return (config.use_area_uri) ? (x.area_uri != area.area_uri) : (x.area != area.title);
         })
         .style("display", "none");
-    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
 list.filterListByArea = function(area) {
@@ -368,7 +364,6 @@ list.filterListByArea = function(area) {
         .style("display", function(d) {
             return d.filtered_out ? "none" : "inline";
         });
-    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
 list.populateMetaData = function(nodes) {
@@ -684,7 +679,6 @@ list.filterList = function(search_words, filter_param) {
 
     this.hideEntriesByParam(all_list_items, filter_param);
     this.hideEntriesByParam(all_map_items, filter_param);
-    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
 // Returns true if document has parameter or if no parameter is passed
@@ -858,6 +852,7 @@ list.enlargeListItem = function(d) {
     }
 
     d.paper_selected = true;
+    this.count_visible_items_to_header()
 };
 
 list.setListHolderDisplay = function(d) {

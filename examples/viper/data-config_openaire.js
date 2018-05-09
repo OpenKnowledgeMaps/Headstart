@@ -1,7 +1,7 @@
 var data_config = {
     tag: "visualization",
     mode: "search_repos",
-    
+
     bubble_min_scale: 1,
     bubble_max_scale: 1,
     
