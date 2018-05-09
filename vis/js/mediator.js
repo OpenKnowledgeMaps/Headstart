@@ -98,6 +98,7 @@ MyMediator.prototype = {
         this.mediator.subscribe("bubble_zoomin", this.bubble_zoomin);
         this.mediator.subscribe("bubble_zoomout", this.bubble_zoomout);
         this.mediator.subscribe("zoomout_complete", this.zoomout_complete);
+        this.mediator.subscribe("zoomin_complete", this.zoomin_complete);
 
         // misc
         this.mediator.subscribe("record_action", this.record_action);
@@ -333,6 +334,7 @@ MyMediator.prototype = {
 
     paper_click: function(d) {
         mediator.manager.call('papers', 'paper_click', [d]);
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
 
     paper_mouseover: function(d, holder_div) {
@@ -344,11 +346,18 @@ MyMediator.prototype = {
         if (mediator.modules.list.current == "hidden") {
             mediator.manager.call('list', 'show', []);
         }
+        mediator.current_enlarged_paper = holder;
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
 
     paper_current_bubble_clicked: function(area) {
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'filterListByArea', [area]);
+        if (mediator.current_enlarged_paper) {
+            mediator.current_enlarged_paper.paper_selected = false
+        }
+        mediator.current_enlarged_paper = null
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
 
     bubble_mouseout: function(d, circle, bubble_fsm) {
@@ -379,6 +388,7 @@ MyMediator.prototype = {
                 mediator.manager.call('list', 'updateByFiltered', []);
             }
         }
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
     bubble_zoomout: function() {
         mediator.manager.call('list', 'reset', []);
@@ -394,8 +404,13 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
 
+    zoomin_complete: function() {
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
+    },
+
     currentbubble_click: function(d) {
         mediator.manager.call('papers', 'currentbubble_click', [d]);
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
 
     bookmark_added: function(d) {
@@ -466,6 +481,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'enlargeListItem', [d]);
         mediator.current_enlarged_paper = d;
         mediator.manager.call('papers', 'framePaper', [d]);
+        mediator.manager.call('list', 'count_visible_items_to_header')
     }
 };
 
