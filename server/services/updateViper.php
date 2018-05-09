@@ -11,7 +11,6 @@ use headstart\search;
 
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
-$ini_array["snapshot"]["snapshot_local"] = true;
 
 # define options
 # vis_changed, required: true/false
