@@ -80,6 +80,11 @@
                         showErrorCreation();
                     }
                 }
+                
+                if(window.dataParamsForOpening.num_project_resources <= 1) {
+                    showErrorCreation();
+                    return;
+                }
 
                 $.ajax({
                     // make an AJAX request
@@ -96,6 +101,7 @@
             var showErrorCreation = function() {
                 $(".lds-spinner").hide();
                 $(".waiting-description").hide();
+                $(".waiting-title"). html('Creating an overview for <span class="project_name">' + window.dataParamsForOpening.acronymtitle + '</span> failed.');
                 $("#progress").html(
                         `Sorry! We could not create your map, because the project does not have enough resources linked to it. \n\
                         You can link further resources to this project on the OpenAIRE website. Use the button indicated in the exemplary screenshot to do so. \n\
@@ -107,8 +113,9 @@
             var showErrorBackend = function(error) {
                 $(".lds-spinner").hide();
                 $(".waiting-description").hide();
+                $(".waiting-title"). html('Creating an overview for <span class="project_name">' + window.dataParamsForOpening.acronymtitle + '</span> failed.');
                 $("#progress").html(
-                        "Sorry! Something went wrong. Probably an error from the backend. Check the console for details."
+                        'Sorry! Something went wrong. Please <a href=\"index.php\">try again</a> in a few minutes. If you think that If you think that there is something wrong with our site, please let us know at <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>.'
                         )
                 console.log(error)
             }
