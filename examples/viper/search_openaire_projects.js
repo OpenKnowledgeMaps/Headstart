@@ -36,7 +36,9 @@ function simpleTemplating (data) {
       ' (' + item.start_date.slice(0, 4) +' - '+ item.end_date.slice(0,4) + ')' +
       '</div><div class="project-organisations">Participants: ' + formatOrganisationLinks(item.organisations).slice(0,15).join(', ') + 
       ((item.organisations.length > 15)?(',...'):('')) + '</div>' +
-      '<div class="project-resources">Number of project resources: ' + item.num_project_resources + '</div>'
+      '<div class="project-resources">Number of project resources: <span class="num-resources'
+      + ((item.num_project_resources <= 1)?(" insufficient-resources"):("")) +
+      '">' + item.num_project_resources + '<span></div>'
       ))
   })
   return html
