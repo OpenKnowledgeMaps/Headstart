@@ -297,3 +297,7 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 .invisible {
     display: none;
 }
+
+.insufficient-resources {
+    color: red;
+}
