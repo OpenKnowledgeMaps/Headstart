@@ -13,20 +13,22 @@ function simpleTemplating (data) {
     .attr('class', 'project-title')
     .attr('href', '#')
     .html('<span class="awesome"> </span>Overview of ' + item.acronymtitle).on('click', function (event) {
-      var win = window.open("building_map.html")
-      win.dataParamsForOpening = {
-        data: $.param(item),
-        service_name: service_name,
-        service: data_config.service,
-        server_url: data_config.server_url,
-        search_url: service_url,
-        acronymtitle: item.acronymtitle,
-        funder: item.funder,
-        project_id: item.project_id,
-        obj_id: item.obj_id,
-        acronym: item.acronym
-      }
-      event.preventDefault();
+ 
+        event.preventDefault();
+        
+        var win = window.open("building_map.html")
+        win.dataParamsForOpening = {
+          data: $.param(item),
+          service_name: service_name,
+          service: data_config.service,
+          server_url: data_config.server_url,
+          search_url: service_url,
+          acronymtitle: item.acronymtitle,
+          funder: item.funder,
+          project_id: item.project_id,
+          obj_id: item.obj_id,
+          acronym: item.acronym
+        }
     }))
     .append('<span class="project-code"> (' + item.project_id +
       ')</span><div class="project-funders">' + item.funder + 
