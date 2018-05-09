@@ -27,7 +27,8 @@ function simpleTemplating (data) {
           funder: item.funder,
           project_id: item.project_id,
           obj_id: item.obj_id,
-          acronym: item.acronym
+          acronym: item.acronym,
+          num_project_resources: item.num_project_resources
         }
     }))
     .append('<span class="project-code"> (' + item.project_id +
