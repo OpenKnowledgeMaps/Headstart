@@ -87,8 +87,8 @@ BubblesFSM.prototype = {
 
       d3.selectAll("#headstart-chart circle")
         .attr("r", (d) => {
-          d.r_zoomed = canvas.circle_size(d.readers) * mediator.circle_zoom;
-          d.r = canvas.circle_size(d.readers);
+          d.r_zoomed = canvas.circle_size(d.num_readers) * mediator.circle_zoom;
+          d.r = canvas.circle_size(d.num_readers);
           if (mediator.is_zoomed === true) {
             return d.r_zoomed;
           } else {

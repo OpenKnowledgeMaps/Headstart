@@ -166,28 +166,34 @@ IO.prototype = {
             d.published_in = _this.setToStringIfNullOrUndefined(d.published_in, "");
             d.title = _this.setToStringIfNullOrUndefined(d.title,
                 config.localization[config.language]["no_title"]);
+                
+            var prepareMetric = function(d, metric) {
+                 if(d.hasOwnProperty(metric)) {
+                     if(d[metric] === "N/A") {
+                         return "n/a"
+                     } else {
+                         return +d[metric];
+                     }
+                 }
+            }
+            
+            var prepareInternalMetric = function(d, metric) {
+                if(d[metric] === "n/a" || d[metric] === "N/A") {
+                     return 0;
+                 } else {
+                     return +d[metric];
+                 }
+            }
 
             if (config.content_based === false && !(config.scale_by)) {
-                d.num_readers = +d.readers;
-                d.internal_readers = +d.readers + 1;
+                d.num_readers = prepareMetric(d, "readers");
+                d.internal_readers = prepareInternalMetric(d, "readers") + 1;
             } else if (config.scale_by) {
-                d.num_readers = +d[config.scale_by]
-                d.internal_readers = +d[config.scale_by] + 1
+                d.num_readers = prepareMetric(d, config.scale_by);
+                d.internal_readers = prepareInternalMetric(d, config.scale_by) + 1
             } else {
                 d.num_readers = 0;
                 d.internal_readers = 1;
-            }
-            
-            if(d.hasOwnProperty("cited_by_tweeters_count")) {
-                d.tweets = +d.cited_by_tweeters_count;
-            }
-            
-            if(d.hasOwnProperty("citation_count")) {
-                d.citations = +d.citation_count;
-            }
-            
-            if(d.hasOwnProperty("readers.mendeley")) {
-                d.readers = +d["readers.mendeley"];
             }
             
             if (typeof highlight_data != 'undefined' && highlight_data !== null) {
@@ -202,6 +208,10 @@ IO.prototype = {
                     });
                 }
             }
+            
+            d.tweets = prepareMetric(d, "cited_by_tweeters_count")
+            d.citations = prepareMetric(d, "citation_count")
+            d.readers = prepareMetric(d, "readers.mendeley")
 
             d.paper_selected = false;
 
@@ -358,7 +368,7 @@ IO.prototype = {
             new_area.x_html = 0 - new_area.width_html / 2;
             new_area.y_html = 0 - new_area.height_html / 2;
             new_area.area_uri = area;
-            new_area.readers = areas[area].num_readers;
+            new_area.num_readers = areas[area].num_readers;
             new_area.papers = areas[area].papers;
             areas_array.push(new_area);
         }

@@ -55,12 +55,22 @@ export function debounce(func, wait, immediate) {
 export function sortBy(field) {
     d3.selectAll("#list_holder")
         .sort(function(a, b) {
-            if (field == "year") {
+            if (field === "year") {
                 return stringCompare(b[field], a[field]);
+            } else if (field === "citations" || field === "readers" || field === "tweets") {
+                //TODO: does not work yet
+                if(typeof a[field] === "string") { a[field] = 0 }
+                if(typeof b[field] === "string") { b[field] = 0 }
+                stringCompare(a[field], b[field]);
             } else {
                 return stringCompare(a[field], b[field]);
             }
         });
+}
+
+function stringCompareMixed(a, b) {
+    
+    return d3.descending(a, b);
 }
 
 function stringCompare(a, b) {
@@ -72,7 +82,7 @@ function stringCompare(a, b) {
     return a > b ? 1 : a == b ? 0 : -1;
   } else if(typeof a == 'number' && typeof b == 'number') {
     return d3.descending(a, b);
-  }
+  } 
   else {
     return d3.descending(a, b);
   }

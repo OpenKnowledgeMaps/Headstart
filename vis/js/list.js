@@ -331,7 +331,7 @@ list.getPaperNodes = function(list_data) {
         })
         .html(list_entry)
         .sort(function(a, b) {
-            return b.readers - a.readers;
+            return b.internal_readers - a.internal_readers;
         });
 };
 
@@ -547,7 +547,7 @@ list.populateReaders = function(nodes) {
         if (!config.content_based && config.base_unit !== "") {
             readers.select(".num_readers")
                 .html(function(d) {
-                    return d.readers;
+                    return d.num_readers;
                 });
             readers.select(".list_readers_entity")
                 .html(config.base_unit);
