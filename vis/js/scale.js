@@ -45,7 +45,6 @@ class Scale {
         config.content_based = true;
     } else {
         config.content_based = false;
-        config.localization[config.language].readers = config.scale_base_unit[type];
     }
     $('#curr-scale-type').text(config.scale_label[type])
     $('#curr-scale-explanation').html(config.scale_explanation[type])
