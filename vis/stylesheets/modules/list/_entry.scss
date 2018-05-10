@@ -209,12 +209,17 @@
     color: $black;
 }
 
-.viper_metrics_tweets, .viper_metrics_readers {
+.viper_metrics_citations, .viper_metrics_tweets {
     margin-right:10px;
 }
 
-.scaled-metric {
-    font-weight: 800;
+/*.scaled-metric {
+    color: $framed-item;
+    font-weight:800;
+}*/
+
+#curr-scale-explaination {
+    font-size: 12px;
 }
 
 .list_readers {
