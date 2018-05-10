@@ -465,7 +465,6 @@ list.populateMetaData = function(nodes) {
         if (config.viper_outlink) {
             list_metadata.select(".viper_outlink")
             .html(function (d) {
-                console.log(d)
                 var has_doi = !(d.doi === "")
                 return viperOutlinkTemplate({
                     has_doi,
@@ -681,12 +680,13 @@ list.filterList = function(search_words, filter_param) {
 
     this.hideEntriesByParam(all_list_items, filter_param);
     this.hideEntriesByParam(all_map_items, filter_param);
+    
+    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
 // Returns true if document has parameter or if no parameter is passed
 list.findEntriesWithParam = function (param, d) {
     if (param === 'open_access') {
-        console.log('filtering by OA status. Status: ' + d.oa)
         return d.oa
     } else if (param === 'publication') {
         return d.resulttype === 'publication'
