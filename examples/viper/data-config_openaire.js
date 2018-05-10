@@ -43,12 +43,15 @@ var data_config = {
     scale_toolbar: true,
     
     scale_types: ['content_based', 'citation_count', 'cited_by_tweeters_count', 'readers.mendeley'],
-    scale_explaination: {
+    scale_explanation: {
         content_based: 'The size of the bubbles is relative to the number of documents related to them.',
         citation_count: 'The size of the documents and bubbles is relative to the number of citations related to them. The citation data was retrieved from Crossref.',
         cited_by_tweeters_count: 'The size of the documents and bubbles is relative to the number of tweets related to them. The tweet data was retrieved from Altmetric.com.',
         'readers.mendeley': 'The size of the documents and bubbles is relative to the number of Mendeley readers related to them. The readership data was retrieved from Altmetric.com.'
     },
+    scale_addendum: 'Metrics are provided for indicative purposes only and cannot be used as-is in an evaluation. \n\
+                    If you intend to use the metrics provided for evaluative purposes, consider relevant \n\
+                    guidelines such as the <a href="http://www.leidenmanifesto.org/" target="_blank">Leiden Manifesto for Research Metrics</a>',
     scale_label: {
         content_based: 'Documents',
         citation_count: 'Citations',
