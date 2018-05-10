@@ -78,7 +78,7 @@ include 'config.php';
                         
                     </p>-->
                 </form>
-                <p class="error-building-map-button"><a class="newsletter2" href="" target="_blank">Try out the Overview of OpenAIRE</a></p>
+                <p class="error-building-map-button"><a class="newsletter2" href="https://openknowledgemaps.org/preview/viper/headstart.php?query=OPENAIRE%20-%20Open%20Access%20Infrastructure%20for%20Research%20in%20Europe&file=9b34f83d3940dc249c4ae9420c8fb2e2&service=openaire&service_name=OpenAire" target="_blank">Try it out: Overview of OpenAIRE</a></p>
             </div>
             <!--<p style="text-align:center; margin-top: 30px;"><a class="newsletter2" href="">What is VIPER?</a><p>-->
         </div>
