@@ -32,7 +32,7 @@
             </div>
         </div>
         
-        <?php include($COMPONENTS_PATH . 'footer.php'); ?>
+        <?php include('footer.php'); ?>
 
         <script>
             $(document).ready(function () {

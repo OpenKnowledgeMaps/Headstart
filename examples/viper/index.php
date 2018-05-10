@@ -112,7 +112,7 @@ include 'config.php';
         <div id="viper-search-pager">
         </div>
 
-        <?php include($COMPONENTS_PATH . 'footer.php'); ?>
+        <?php include('footer.php'); ?>
 <script type="text/javascript" src="search_openaire_projects.js"></script>
 <script type="text/javascript" src="data-config_openaire.js"></script>
 <script type="text/javascript" src="search_options.js"></script>
