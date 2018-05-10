@@ -14,7 +14,7 @@ var data_config = {
     show_timeline: false,
     show_dropdown: false,
     preview_type: "pdf",
-    sort_options: ["title", "authors", "year"],
+    sort_options: ["title", "authors", "year", "citations", "tweets", "readers"],
     filter_menu_dropdown: true,
     sort_menu_dropdown: true,
     is_force_areas: true,

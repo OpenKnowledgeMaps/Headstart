@@ -42,10 +42,8 @@ class Scale {
     
     if(type === "content_based") {
         config.content_based = true;
-        config.sort_options = ["title", "authors", "year"];
     } else {
         config.content_based = false;
-        config.sort_options = ["readers", "title", "authors", "year"];
         config.localization[config.language].readers = config.scale_base_unit[type];
     }
     $('#curr-scale-type').text(config.scale_label[type])
