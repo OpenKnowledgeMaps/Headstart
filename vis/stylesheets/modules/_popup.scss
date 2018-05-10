@@ -51,6 +51,7 @@
                 font-weight: 300;
                 font-family: 'Open Sans', Helvetica, sans-serif;
                 font-size: 16px;
+                margin: 0 0 30px !important;
             }
 
         }
@@ -59,7 +60,9 @@
 
 }
 
-
+#edit-button-text p {
+    margin: 0 0 30px !important;
+}
 #viper_edit_modal {
 
     .modal-dialog {
