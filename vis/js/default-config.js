@@ -77,6 +77,7 @@ var config = {
     sort_options: ["readers", "title", "authors", "year"],
     filter_options: ["all", "open_access", "publication", "dataset"],
     sort_menu_dropdown: false,
+    initial_sort: null,
 
     content_based: false,
 

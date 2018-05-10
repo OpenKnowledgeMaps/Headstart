@@ -43,12 +43,13 @@ class Scale {
     
     if(type === "content_based") {
         config.content_based = true;
+        config.initial_sort = null;
     } else {
         config.content_based = false;
+        config.initial_sort = config.scale_base_unit[type];
     }
     $('#curr-scale-type').text(config.scale_label[type])
     $('#curr-scale-explanation').html(config.scale_explanation[type])
-    $('#scale-note').html(config.scale_addendum)
     headstart.tofile(mediator.current_file_number)
   }
 
