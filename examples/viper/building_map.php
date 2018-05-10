@@ -31,9 +31,8 @@
                 <div id="progress"></div>
             </div>
         </div>
-        <div style="text-align:center; margin: 20px 0; font-size:12px;">
-            Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>.
-        </div>
+        
+        <?php include($COMPONENTS_PATH . 'footer.php'); ?>
 
         <script>
             $(document).ready(function () {
@@ -42,7 +41,7 @@
                     doSubmit(params.data, params.service_name, params.service, params.search_url)
                 } else {
                     //window.alert('No Parameter Passed; don\'t access the page directly. Use the search')
-                    
+
                     //TODO: Remove - test parameters set for styling
                     window.dataParamsForOpening = {};
                     window.dataParamsForOpening.obj_id = "corda__h2020::94c962e736df90a5075a7f660ba3d7f6"
@@ -51,10 +50,10 @@
                     showErrorCreation();
                 }
                 $(".project_name").text(params.acronymtitle);
-                let totals_url = params.server_url + "services/getOpenAireTotals.php?funder[]=" + params.funder 
+                let totals_url = params.server_url + "services/getOpenAireTotals.php?funder[]=" + params.funder
                         + "&project_id[]=" + params.project_id + "&obj_id[]=" + params.obj_id;
                 $.getJSON(totals_url, function (data) {
-                    $("#info-totals").html("<p>This project has " 
+                    $("#info-totals").html("<p>This project has "
                             + data[params.obj_id].publications + " publications and " + data[params.obj_id].datasets + " datasets");
                 })
             })
@@ -66,7 +65,7 @@
                     if (data.status === "success") {
                         $("#progressbar").progressbar("option", "value", 100);
                         window.clearTimeout(progessbar_timeout);
-                        
+
                         var file = data.id;
                         window.location.replace(
                                 "headstart.php?query=" +
@@ -82,8 +81,8 @@
                         showErrorCreation();
                     }
                 }
-                
-                if(window.dataParamsForOpening.num_project_resources <= 1) {
+
+                if (window.dataParamsForOpening.num_project_resources <= 1) {
                     showErrorCreation();
                     return;
                 }
@@ -99,11 +98,11 @@
                     }
                 });
             }
-            
-            var showErrorCreation = function() {
+
+            var showErrorCreation = function () {
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
-                $(".waiting-title"). html('Creating an overview for <span class="project_name">' + window.dataParamsForOpening.acronymtitle + '</span> failed.');
+                $(".waiting-title").html('Creating an overview for <span class="project_name">' + window.dataParamsForOpening.acronymtitle + '</span> failed.');
                 $("#progress").html(
                         `Sorry! We could not create your map, because the project does not have enough resources linked to it. \n\
                         You can link further resources to this project on the OpenAIRE website. Use the button indicated in the exemplary screenshot to do so. \n\
@@ -111,17 +110,17 @@
                         <p class="error-building-map-button"><a class="newsletter2" href="https://www.openaire.eu/search/project?projectId=` + window.dataParamsForOpening.obj_id + `" target="_blank">Go to the OpenAIRE project website</a></p>`
                         );
             }
-            
-            var showErrorBackend = function(error) {
+
+            var showErrorBackend = function (error) {
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
-                $(".waiting-title"). html('Creating an overview for <span class="project_name">' + window.dataParamsForOpening.acronymtitle + '</span> failed.');
+                $(".waiting-title").html('Creating an overview for <span class="project_name">' + window.dataParamsForOpening.acronymtitle + '</span> failed.');
                 $("#progress").html(
                         'Sorry! Something went wrong. Please <a href=\"index.php\">try again</a> in a few minutes. If you think that If you think that there is something wrong with our site, please let us know at <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>.'
                         )
                 console.log(error)
             }
-            
+
             $("#progressbar").progressbar();
             $("#progressbar").progressbar("value", 2);
 
@@ -144,7 +143,7 @@
                 }
 
             };
-            
+
             var tick_interval = 1;
             var tick_increment = 2;
             var milliseconds = 500;

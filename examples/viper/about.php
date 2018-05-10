@@ -28,28 +28,35 @@ include 'config.php';
 
     <body>
 
-        <div style="background-color: #3696e0; max-width:100%; height: 80px; padding: 20px 50px;">
-            <div style="width:60%;display:inline-block;"><img style="display:inline-block; vertical-align: bottom;" src="viper-logo.png">
-                <div style="display:inline-block; vertical-align: bottom; color:white;"><h2 style="margin-bottom: 0px; font-weight: 300;">VIPER</h2><span style="display:block; font-size: 18;">the visual project explorer</span>
-                </div></div>
-            
-                <ul style="width:39%;display:inline-block; text-align:right;">
-                    <li style="display:inline; margin-right: 20px;"><a style="text-decoration:none; color:white;" href="https://openknowledgemaps.org" target="_blank">
-                            <span class="awesome"></span> back to Open Knowledge Maps</a></li>
-                            <li style="display:inline; margin-right: 20px;"><a style="text-decoration:none; color:white;" href="mailto:info@openknowledgemaps.org">
-                                    <span class="awesome"></span> Contact</a></li>
-                    <li style="display:inline"><a style="text-decoration:none; color:white; border-bottom: 2px solid white;" href="index">
-                            Try out VIPER!</a></li>
-                </ul>
-            
-
+        <div class="vipercanvas">
+            <div class="viperheader">
+                <a href="index.php"><div class="viperlogo"><img src="viper-logo.png">
+                    <div class="viperdescr"><h2>VIPER</h2>
+                        <span>The Visual Project Explorer</span>
+                        </div>
+                    </div></a>
+                
+                
+                    
+                    <ul class="vipermenu">
+                        <li><a href="index.php">
+<!--<span class="awesome"></span>--> Try out Viper</a></li>
+                        <li><a target="_blank" href="https://openknowledgemaps.org/getintouch">
+                                <!--<span class="awesome"></span>-->Get in touch</a>
+                        </li>
+                        <li><a href="https://openknowledgemaps.org" target="_blank">
+                                openknowledgemaps.org</a>
+                        </li>
+                    </ul>
+                
+            </div>
         </div>
         <div style="max-width:800px; margin: 0px auto; width:100%; font-size: 18px;">
-            <h2 class="headline-viper"><img src="viper-logo-color.png"><br>VIPER: A Visual Project Explorer<br>
+            <h2 class="headline-viper"><img src="viper-logo-color.png"><br>VIPER: The Visual Project Explorer<br>
                 <span style="font-size:18px;">by <a target="_blank" href="https://openknowledgemaps.org">Open Knowledge Maps</a></span></h2>
 
 
-            <p>The Visual Project Explorer (VIPER) is a unique open science application that provides overviews of research projects indexed by <a href="http://openaire.eu" target="_blank">OpenAIRE</a>. 
+                <p><a href="index.php">The Visual Project Explorer (VIPER)</a> is a unique open science application that provides overviews of research projects indexed by <a href="http://openaire.eu" target="_blank">OpenAIRE</a>. 
                 It enables funders, institutions and researchers to systematically explore a project’s output, and to understand its impact in different areas. 
             </p>
 
@@ -78,33 +85,14 @@ include 'config.php';
             <p>
                 VIPER exploits a unique property of OpenAIRE data: the link between projects and publications and datasets. This, in turn, enables us to realize this innovative open science application.
             </p>
-            <p class="try-out-maps">Try out: 
-                <span class="map-examples base">
-                    <a class="underline" target="_blank" href="">Overview of OpenAIRE</a>
-                </span>
-            </p>
+            
             <p style="margin-top:40px; text-align: center;">
                 <a class="create-map" href="index">Create a map with VIPER</a>
             </p>
         </div>
 
 
-        <div style="text-align:center; margin: 50px 0 20px; font-size:12px;">
-            
-            <p>Built with <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. 
-                This project received funding from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
-                For more information please contact <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>.</p>
-            <p style="margin-top: 20px;"><a href="https://openknowledgemaps.org/" target="_blank"><img style="margin-right:20px" width="70px" src="okmaps-logo.png"></a>
-                <a href="https://openaire.eu" target="_blank"><img width="70px" src="openaire-logo.png"></a>
-            </p>
-        </div>
-        <script type="text/javascript" src="search_openaire_projects.js"></script>
-        <script type="text/javascript" src="data-config_openaire.js"></script>
-        <script type="text/javascript" src="search_options.js"></script>
-        <script type="text/javascript" src="search.js"></script>
-        <script type ="text/javascript">
-            data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
-        </script>
+         <?php include($COMPONENTS_PATH . 'footer.php'); ?>
     </body>
 
 </html>
