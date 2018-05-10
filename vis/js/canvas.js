@@ -666,7 +666,7 @@ class Canvas {
 
     setAreaRadii(areas) {
         for (var area in areas) {
-            areas[area].r = this.circle_size(areas[area].readers);
+            areas[area].r = this.circle_size(areas[area].num_readers);
         }
     }
 

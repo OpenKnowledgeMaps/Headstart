@@ -168,15 +168,28 @@ IO.prototype = {
                 config.localization[config.language]["no_title"]);
 
             if (config.content_based === false && !(config.scale_by)) {
-                d.readers = +d.readers;
+                d.num_readers = +d.readers;
                 d.internal_readers = +d.readers + 1;
             } else if (config.scale_by) {
-                d.readers = +d[config.scale_by]
+                d.num_readers = +d[config.scale_by]
                 d.internal_readers = +d[config.scale_by] + 1
             } else {
-                d.readers = 0;
+                d.num_readers = 0;
                 d.internal_readers = 1;
             }
+            
+            if(d.hasOwnProperty("cited_by_tweeters_count")) {
+                d.tweets = +d.cited_by_tweeters_count;
+            }
+            
+            if(d.hasOwnProperty("citation_count")) {
+                d.citations = +d.citation_count;
+            }
+            
+            if(d.hasOwnProperty("readers.mendeley")) {
+                d.readers = +d["readers.mendeley"];
+            }
+            
             if (typeof highlight_data != 'undefined' && highlight_data !== null) {
                 if (highlight_data.bookmarks_all !== null) {
                     highlight_data.bookmarks_all.forEach(function (x) {
@@ -314,7 +327,7 @@ IO.prototype = {
                 return d.internal_readers;
             });
 
-            areas[area].readers = sum_readers;
+            areas[area].num_readers = sum_readers;
 
             var mean_x = d3.mean(papers, function (d) {
                 return d.x;
@@ -345,7 +358,7 @@ IO.prototype = {
             new_area.x_html = 0 - new_area.width_html / 2;
             new_area.y_html = 0 - new_area.height_html / 2;
             new_area.area_uri = area;
-            new_area.readers = areas[area].readers;
+            new_area.readers = areas[area].num_readers;
             new_area.papers = areas[area].papers;
             areas_array.push(new_area);
         }
