@@ -56,7 +56,11 @@ export const list = StateMachine.create({
             this.drawList();
             this.populateList();
             this.initListMouseListeners();
-            sortBy(config.sort_options[0]);
+            if(config.initial_sort === null) {
+              sortBy(config.sort_options[0]);
+            } else {
+              sortBy(config.initial_sort);
+            }
             this.current_search_words = []
             this.current_filter_param = ''
             debounce(this.count_visible_items_to_header, config.debounce)()
@@ -146,7 +150,8 @@ list.drawList = function() {
             }
         }
     } else {
-        $('#curr-sort-type').text(config.localization[config.language][config.sort_options[0]])
+        let initial_sort_option = (config.initial_sort === null)?(config.sort_options[0]):(config.initial_sort)
+        $('#curr-sort-type').text(config.localization[config.language][initial_sort_option])
         for(var i=0; i<numberOfOptions; i++) {
             if(i === 0) {
                 addSortOptionDropdownEntry(config.sort_options[i], true)
@@ -235,7 +240,9 @@ let addSortOptionDropdownEntry = function(sort_option, first_item) {
         sorter_label: config.localization[config.language][sort_option],
     })
     var newEntry = $(entry).appendTo('#sort-menu-entries')
-    if(first_item === true) {
+    if(first_item === true && config.initial_sort === null) {
+        newEntry.addClass('active')
+    } else if (config.initial_sort === sort_option) {
         newEntry.addClass('active')
     }
     
