@@ -135,7 +135,7 @@ fields <- c(
   publisher = ".//publisher",
   resulttype = ".//resulttype/@classid",
   language = ".//language",
-  journal = ".//journal",
+  published_in = ".//journal",
   link = ".//children/instance/webresource/url",
   fulltext = ".//fulltext",
   paper_abstract = ".//description",

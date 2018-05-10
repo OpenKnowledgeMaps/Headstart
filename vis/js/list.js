@@ -451,7 +451,11 @@ list.populateMetaData = function(nodes) {
             })
         list_metadata.select(".list_pubyear")
             .html(function(d) {
-                return " (" + d.year + ")";
+                if(d.year !== "") {
+                    return " (" + d.year + ")";
+                } else {
+                    return "";
+                }
             });
 
         if (config.viper_outlink) {
