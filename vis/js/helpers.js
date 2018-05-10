@@ -24,8 +24,8 @@ export function toFront(node) {
 /*
  * just a wrapper to avoid confusing function call
  */
-export function hideSibling( circle ) {
-  d3.select(circle.nextSibling).style("visibility", "hidden");
+export function hideSibling(circle) {
+    d3.select(circle.nextSibling).style("visibility", "hidden");
 }
 
 
@@ -34,17 +34,19 @@ export function hideSibling( circle ) {
  */
 export function debounce(func, wait, immediate) {
     var timeout;
-    return function() {
+    return function () {
         var context = this,
-            args = arguments;
-        var later = function() {
+                args = arguments;
+        var later = function () {
             timeout = null;
-            if (!immediate) func.apply(context, args);
+            if (!immediate)
+                func.apply(context, args);
         };
         var callNow = immediate && !timeout;
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
+        if (callNow)
+            func.apply(context, args);
     };
 }
 
@@ -54,38 +56,61 @@ export function debounce(func, wait, immediate) {
 
 export function sortBy(field) {
     d3.selectAll("#list_holder")
-        .sort(function(a, b) {
-            if (field === "year") {
-                return stringCompare(b[field], a[field]);
-            } else if (field === "citations" || field === "readers" || field === "tweets") {
-                //TODO: does not work yet
-                if(typeof a[field] === "string") { a[field] = 0 }
-                if(typeof b[field] === "string") { b[field] = 0 }
-                stringCompare(a[field], b[field]);
-            } else {
-                return stringCompare(a[field], b[field]);
-            }
-        });
+            .sort(function (a, b) {
+                if (field === "year") {
+                    return stringCompare(a[field], b[field], "desc");
+                } else if (field === "citations" || field === "readers" || field === "tweets") {
+                    stringCompareMixed(a[field], b[field]);
+                } else {
+                    return stringCompare(a[field], b[field], "asc");
+                }
+            });
 }
 
 function stringCompareMixed(a, b) {
-    
+    if (a === "N/A" || a === "n/a")
+        return 1;
+    if (b === "N/A" || b === "n/a")
+        return -1;
     return d3.descending(a, b);
 }
 
-function stringCompare(a, b) {
-  if(typeof a == 'undefined' || typeof b == 'undefined'){
-    return;
-  } else if(typeof a == 'string' && typeof b == 'string') {
-    a = a.toLowerCase();
-    b = b.toLowerCase();
-    return a > b ? 1 : a == b ? 0 : -1;
-  } else if(typeof a == 'number' && typeof b == 'number') {
-    return d3.descending(a, b);
-  } 
-  else {
-    return d3.descending(a, b);
-  }
+function stringCompare(a, b, sort_order) {
+    if (typeof a == 'undefined' || typeof b == 'undefined') {
+        return;
+    } else if (typeof a == 'string' && typeof b == 'string') {
+        if (a === "" || a === null)
+            return 1;
+        if (b === "" || b === null)
+            return -1;
+        
+        
+        if (sort_order === "desc") {
+            let c = a;
+            a = b;
+            b = c;
+        }
+        
+        a = a.toLowerCase();
+        b = b.toLowerCase();
+        
+        if (a === b)
+            return 0;
+  
+        return a < b ? -1 : 1;
+    } else if (typeof a == 'number' && typeof b == 'number') {
+        if (sort_order === "desc") {
+            return d3.descending(a, b);
+        } else {
+            return d3.ascending(a, b);
+        }
+    } else {
+        if (sort_order === "desc") {
+            return d3.descending(a, b);
+        } else {
+            return d3.ascending(a, b);
+        }
+    }
 }
 
 export function highlight(str) {
@@ -99,7 +124,7 @@ export function highlight(str) {
     let value = new RegExp(new_str, "i");
 
     $('.highlightable, .large.highlightable, .list_details.highlightable').highlightRegex(value, {
-        attrs: { 'style': "background:yellow" }
+        attrs: {'style': "background:yellow"}
     });
 }
 
