@@ -8,11 +8,15 @@ $("#search-projects-form").submit(function (event) {
 function simpleTemplating (data) {
   var html = $('<ul class="list-group">')
   $.each(data, function (index, item) {
+    let title = (item.num_project_resources <= 1)
+                ?(item.acronymtitle)
+                :('<span class="awesome"> </span>Overview of ' + item.acronymtitle)
+      
     html.append($('<li class="list-group-item">')
     .html($('<a>')
     .attr('class', 'project-title')
     .attr('href', '#')
-    .html('<span class="awesome"> </span>Overview of ' + item.acronymtitle).on('click', function (event) {
+    .html(title).on('click', function (event) {
  
         event.preventDefault();
         
