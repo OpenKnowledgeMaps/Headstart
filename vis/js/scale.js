@@ -32,7 +32,8 @@ class Scale {
       });
       d3.select('.scale_item').classed('active', true);
       d3.select('#curr-scale-type').text(config.scale_label[config.scale_types[0]])
-      d3.select('#curr-scale-explaination').text(config.scale_explaination[config.scale_types[0]])
+      d3.select('#curr-scale-explanation').html(config.scale_explanation[config.scale_types[0]])
+      d3.select('#scale-note').html(config.scale_addendum)
     }
   }
 
@@ -47,7 +48,8 @@ class Scale {
         config.localization[config.language].readers = config.scale_base_unit[type];
     }
     $('#curr-scale-type').text(config.scale_label[type])
-    $('#curr-scale-explaination').text(config.scale_explaination[type])
+    $('#curr-scale-explanation').html(config.scale_explanation[type])
+    $('#scale-note').html(config.scale_addendum)
     headstart.tofile(mediator.current_file_number)
   }
 

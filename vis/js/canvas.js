@@ -190,6 +190,7 @@ class Canvas {
             var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
             $('#info-title').text(intro.title);
             $('#info-body').html(intro.body);
+            $('.metric-info').html(config.scale_addendum);
             if (intro.dynamic) {
                 $.each(intro.params, function (paramName, value) {
                     if (paramName.slice(0,4) === 'html') {
