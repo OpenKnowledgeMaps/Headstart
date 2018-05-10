@@ -8,15 +8,16 @@ enrich_output_json <- function(output_json){
   
   if (nrow(results) > 0){
     if (!("cited_by_tweeters_count" %in% names(results))) {
-      results[["cited_by_tweeters_count"]]  = "N/A"
+      results[["cited_by_tweeters_count"]]  = NA
     }
     if (!("readers.mendeley" %in% names(results))) {
-      results[["readers.mendeley"]]  = "N/A"
+      results[["readers.mendeley"]]  = NA
     }
+    results <- results[c('doi', 'cited_by_tweeters_count', 'readers.mendeley')]
     output <- merge(x = output, y = results, by='doi', all.x=TRUE)
   } else {
-    output$'cited_by_tweeters_count' <- "N/A"
-    output$'readers.mendeley' <- "N/A"
+    output$'cited_by_tweeters_count' <- NA
+    output$'readers.mendeley' <- NA
     print("No altmetrics found for any paper in this dataset.")
   }
   output <- add_citations(output)
