@@ -236,20 +236,16 @@ let addSortOptionDropdownEntry = function(sort_option, first_item) {
     })
     var newEntry = $(entry).appendTo('#sort-menu-entries')
     if(first_item === true) {
-        newEntry.find('.sort_radio')
-            .removeClass('fa-circle-o')
-            .addClass('fa-circle')
+        newEntry.addClass('active')
     }
     
     newEntry.on("click", () => {
         sortBy(sort_option)
         mediator.publish("record_action", "none", "sortBy",
-            config.user_id, "listsort", null, "sort_option=" + sort_option)
+        config.user_id, "listsort", null, "sort_option=" + sort_option)
         $('#curr-sort-type').text(config.localization[config.language][sort_option])
-        d3.selectAll('.sort_radio').attr('class', 'sort_radio fa fa-circle-o')
-        newEntry.find('.sort_radio')
-            .removeClass('fa-circle-o')
-            .addClass('fa-circle')
+        $('.sort_entry').removeClass('active');
+        newEntry.addClass("active")
     })
 }
 
@@ -290,18 +286,14 @@ list.addFilterOptionDropdownEntry = function (filter_option, first_item) {
     })
     var newEntry = $(entry).appendTo('#filter-menu-entries')
     if(first_item === true) {
-        newEntry.find('.filter_radio')
-            .removeClass('fa-circle-o')
-            .addClass('fa-circle')
+        newEntry.addClass('active')
     }
     
     newEntry.on("click", () => {
         this.filterList(undefined, filter_option)
         $('#curr-filter-type').text(config.localization[config.language][filter_option])
-        d3.selectAll('.filter_radio').attr('class', 'filter_radio fa fa-circle-o')
-        newEntry.find('.filter_radio')
-            .removeClass('fa-circle-o')
-            .addClass('fa-circle')
+        $('.filter_entry').removeClass('active');
+        newEntry.addClass("active")
     })
 }
 
