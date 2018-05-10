@@ -241,8 +241,7 @@ let addSortOptionDropdownEntry = function(sort_option, first_item) {
     
     newEntry.on("click", () => {
         sortBy(sort_option)
-        mediator.publish("record_action", "none", "sortBy",
-        config.user_id, "listsort", null, "sort_option=" + sort_option)
+        mediator.publish("record_action", "none", "sortBy", config.user_id, "listsort", null, "sort_option=" + sort_option)
         $('#curr-sort-type').text(config.localization[config.language][sort_option])
         $('.sort_entry').removeClass('active');
         newEntry.addClass("active")

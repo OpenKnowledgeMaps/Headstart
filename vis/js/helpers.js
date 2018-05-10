@@ -60,19 +60,11 @@ export function sortBy(field) {
                 if (field === "year") {
                     return stringCompare(a[field], b[field], "desc");
                 } else if (field === "citations" || field === "readers" || field === "tweets") {
-                    stringCompareMixed(a[field], b[field]);
+                    return stringCompare(a[field], b[field], "desc");
                 } else {
                     return stringCompare(a[field], b[field], "asc");
                 }
             });
-}
-
-function stringCompareMixed(a, b) {
-    if (a === "N/A" || a === "n/a")
-        return 1;
-    if (b === "N/A" || b === "n/a")
-        return -1;
-    return d3.descending(a, b);
 }
 
 function stringCompare(a, b, sort_order) {
@@ -98,6 +90,21 @@ function stringCompare(a, b, sort_order) {
             return 0;
   
         return a < b ? -1 : 1;
+    } else if ((typeof a === "string" && typeof b === "number") || (typeof a === "number" && typeof b === "string")) {
+        
+        if (a === "N/A" || a === "n/a" || typeof a !== "number")
+            return 1;
+        if (b === "N/A" || b === "n/a" || typeof b !== "number")
+            return -1;
+        if (a === b)
+            return 0;
+
+        if (sort_order === "desc") {
+            return d3.descending(a, b);
+        } else {
+            return d3.ascending(a, b);
+        }
+    
     } else if (typeof a == 'number' && typeof b == 'number') {
         if (sort_order === "desc") {
             return d3.descending(a, b);
