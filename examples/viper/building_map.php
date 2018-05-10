@@ -120,34 +120,35 @@
                         )
                 console.log(error)
             }
+            
+            $(document).ready(function() {
+                $("#progressbar").progressbar();
+                $("#progressbar").progressbar("value", 2);
 
-            $("#progressbar").progressbar();
-            $("#progressbar").progressbar("value", 2);
+                var tick_function = function () {
 
-            var tick_function = function () {
+                    var value = $("#progressbar").progressbar("option", "value");
 
-                var value = $("#progressbar").progressbar("option", "value");
+                    value += tick_increment;
 
-                value += tick_increment;
+                    $("#progressbar").progressbar("option", "value", value);
 
-                $("#progressbar").progressbar("option", "value", value);
+                    progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
 
-                progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
+                    if (value >= 100) {
+                        $("#progress").html("Creating your visualization takes longer than expected. Please stay tuned!")
 
-                if (value >= 100) {
+                        $("#progressbar").progressbar("value", 5);
 
-                    $("#status").html("<span style='color:red'>Creating your visualization takes longer than expected. Please stay tuned!</span>")
+                    }
 
-                    $("#progressbar").progressbar("value", 5);
+                };
 
-                }
-
-            };
-
-            var tick_interval = 1;
-            var tick_increment = 2;
-            var milliseconds = 500;
-            var progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
+                var tick_interval = 1;
+                var tick_increment = 2;
+                var milliseconds = 500;
+                var progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
+            });
         </script>
 
     </body>
