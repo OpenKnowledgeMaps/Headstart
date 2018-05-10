@@ -75,11 +75,16 @@ text {
     font-family: 'Open Sans', Helvetica, sans-serif;
 }
 
-.scale-toolbar .dropdown-menu > li > a {
+.scale-toolbar .dropdown-menu > li > a, #explorer_options .dropdown-menu > li > a {
     padding: 10px;
     border-bottom: 1px solid #e4e4e4;
 }
-
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    color: #fff;
+    text-decoration: none;
+    outline: 0;
+    background-color: $okm-modal-btn;
+}
 
 #curr-scale-explaination {
     margin-left: 10px;
@@ -114,7 +119,21 @@ text {
 }
 
 .dropdown-menu, #scale-menu {
-    width: 208px;
+    width: 190px;
+    font-size: 12px;
+}
+
+.dropdown-menu {
+    padding: 0px 0;
+}
+
+#filter_params, #sort, #sort-menu-entries, #filter-menu-entries {
+    width: 160px;
+    font-size: 12px;
+}
+
+#filter-menu-entries {
+    margin-right: 10px;
 }
 
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
@@ -131,6 +150,6 @@ text {
 
 
 .dropdown-menu > li > a:active {
-    background-color: #2d72d6;
+    background-color: $okm-modal-btn;
     color: white;
 }
