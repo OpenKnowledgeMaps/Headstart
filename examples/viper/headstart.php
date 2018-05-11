@@ -5,9 +5,10 @@ include 'config.php';
 <html>
     <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
         <link type="text/css" rel="stylesheet" href="openaire.css"></link>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js" integrity="sha256-8WqyJLuWKRBVhxXIL1jBDD7SDxU936oZkCnxQbWwJVw=" crossorigin="anonymous"></script>
     </head>
 
-    <body style="margin:0px; padding:0px">
+    <body style="margin:0px; padding:0px; max-width:1600px; margin: 0px auto;">
         
         <div id="visualization"></div>
         <script type="text/javascript" src="data-config_<?php echo $_GET['service'] ?>.js"></script>
@@ -23,6 +24,6 @@ include 'config.php';
         <script type="text/javascript">
             headstart.start();
         </script>
-        <?php include("footer.php"); ?>
+        <?php include("footer.php"); ?>    
     </body>
 </html>
