@@ -32,7 +32,9 @@ function simpleTemplating (data) {
           project_id: item.project_id,
           obj_id: item.obj_id,
           acronym: item.acronym,
-          num_project_resources: item.num_project_resources
+          num_project_resources: item.num_project_resources,
+          num_publications: item.num_publications,
+          num_datasets: item.num_datasets
         }
     }))
     .append('<span class="project-code"> (' + item.project_id +
@@ -150,8 +152,11 @@ var getResourcesAndSetupList = function(data, pagination, searchTerm) {
         })
         .success(function (totals) {
             data.forEach(function (entry) {
-            entry.num_project_resources = totals[entry.obj_id].publications + totals[entry.obj_id].datasets;
-            setupList(data, pagination, searchTerm);
+                entry.num_publications = totals[entry.obj_id].publications;
+                entry.num_datasets = totals[entry.obj_id].datasets;
+                entry.num_project_resources = entry.num_publications + entry.num_datasets;
+            
+                setupList(data, pagination, searchTerm);
         })         
       })
     

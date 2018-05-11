@@ -40,22 +40,12 @@
                     var params = window.dataParamsForOpening
                     doSubmit(params.data, params.service_name, params.service, params.search_url)
                 } else {
-                    //window.alert('No Parameter Passed; don\'t access the page directly. Use the search')
-
-                    //TODO: Remove - test parameters set for styling
                     window.dataParamsForOpening = {};
-                    window.dataParamsForOpening.obj_id = "corda__h2020::94c962e736df90a5075a7f660ba3d7f6"
-                    $(".project_name").text("OpenAIRE - CONNECTing scientific results in support of Open Science");
-                    $("#info-totals").html("<p>This project has 0 publications and 0 datasets");
                     showErrorCreation();
                 }
                 $(".project_name").text(params.acronymtitle);
-                let totals_url = params.server_url + "services/getOpenAireTotals.php?funder[]=" + params.funder
-                        + "&project_id[]=" + params.project_id + "&obj_id[]=" + params.obj_id;
-                $.getJSON(totals_url, function (data) {
-                    $("#info-totals").html("<p>This project has "
-                            + data[params.obj_id].publications + " publications and " + data[params.obj_id].datasets + " datasets");
-                })
+                $("#info-totals").html("<p>This project has "
+                        + params.num_publications + " publications and " + params.num_datasets + " datasets");
             })
 
             var doSubmit = function (params, service_name, service, service_url) {
@@ -121,34 +111,32 @@
                 console.log(error)
             }
             
-            $(document).ready(function() {
-                $("#progressbar").progressbar();
-                $("#progressbar").progressbar("value", 2);
+            $("#progressbar").progressbar();
+            $("#progressbar").progressbar("value", 2);
 
-                var tick_function = function () {
+            var tick_function = function () {
 
-                    var value = $("#progressbar").progressbar("option", "value");
+                var value = $("#progressbar").progressbar("option", "value");
 
-                    value += tick_increment;
+                value += tick_increment;
 
-                    $("#progressbar").progressbar("option", "value", value);
+                $("#progressbar").progressbar("option", "value", value);
 
-                    progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
+                progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
 
-                    if (value >= 100) {
-                        $("#progress").html("Creating your visualization takes longer than expected. Please stay tuned!")
+                if (value >= 100) {
+                    $("#progress").html("Creating your visualization takes longer than expected. Please stay tuned!")
 
-                        $("#progressbar").progressbar("value", 5);
+                    $("#progressbar").progressbar("value", 5);
 
-                    }
+                }
 
-                };
-
-                var tick_interval = 1;
-                var tick_increment = 2;
-                var milliseconds = 500;
-                var progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
-            });
+            }
+            
+            var tick_interval = 1;
+            var tick_increment = 2;
+            var milliseconds = 500;
+            var progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
         </script>
 
     </body>
