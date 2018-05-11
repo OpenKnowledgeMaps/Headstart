@@ -31,7 +31,7 @@ include 'config.php';
             <div class="viperheader">
                 <div class="viperlogo"><img src="viper-logo.png">
                     <div class="viperdescr"><h2>VIPER</h2>
-                        <span>The Visual Project Explorer</span>
+                        <!--<span>The Visual Project Explorer</span>-->
                     </div>
                     </div>
                 
@@ -39,9 +39,7 @@ include 'config.php';
                     <ul class="vipermenu">
                         <li><a href="about">
 <!--<span class="awesome"></span>--> About</a></li>
-                        <li><a target="_blank" href="https://openknowledgemaps.org/getintouch">
-                                <!--<span class="awesome"></span>-->Get in touch</a>
-                        </li>
+                        
                         <li><a href="https://openknowledgemaps.org" target="_blank">
                                 openknowledgemaps.org</a>
                         </li>
@@ -56,7 +54,7 @@ include 'config.php';
             <div class="background2">
                 <div class="team">
 
-                    <p class="waiting-title">Map a research project</p>
+                    <p class="waiting-title">The Visual Project Explorer</p>
                     <p class="waiting-description">Step 1: Find a project - Step 2: Create an overview</p>
                     <!--<p>Faster, more efficient literature search</p>-->
                 </div>
