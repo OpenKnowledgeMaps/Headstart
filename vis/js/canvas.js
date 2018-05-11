@@ -310,7 +310,7 @@ class Canvas {
             $('#modals').append(viperEmbedModalButton)
             $('#embed-title').html(config.localization[config.language].viper_embed_title)
             //$('#embed-modal-text').val(`<iframe width="1024" height="800" src="headstart.php?query=${context.query}&file=${context.id}&service=${context.service}"></iframe>`)
-            $('#embed-modal-text').val(`<iframe width="1024" height="800" src="${window.location}"></iframe>`)
+            $('#embed-modal-text').val(`<iframe width="1600" height="900" src="${window.location}"></iframe>`)
 
             $('#viper-embed-button').text(config.localization[config.language].viper_embed_button_text)
             .on('click', (event) => {
