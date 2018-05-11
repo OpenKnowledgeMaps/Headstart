@@ -94,7 +94,8 @@ var setupPaginator = function (searchTerm, params) {
             $('.pagination').find("li:first").addClass("active")
         }
         
-        $("#viper-search-pager").show();
+        $(".paginationjs").hide();
+        $("#viper-search-results").show();
       },
       dataFilter: function (data, type) {
         try {
@@ -124,6 +125,7 @@ var setupPaginator = function (searchTerm, params) {
 
 var getResourcesAndSetupList = function(data, pagination, searchTerm) {
     
+    $(".paginationjs").show();
     $('#viper-search-results, #viper-search-pager').show();  
     
     if (data.length <= 0) {

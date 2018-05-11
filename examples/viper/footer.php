@@ -1,9 +1,9 @@
 <footer class="builtby">
     <div style="max-width:1600px; width:100%; margin:0px auto; text-align:center;">
     <div class="info">
-        <h3 style="margin-bottom: 10px;">Viper</h3>
-        <p>Built by <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. 
-        This project received funding from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
+        <h3 style="margin-bottom: 10px;">VIPER</h3>
+        <p>is a service created by <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. 
+        with funding received from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
         For more information please contact <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>.</p>
         <a href="https://openknowledgemaps.org/" target="_blank"><img class="logoimg" style="margin-right:10px" src="okmaps-logo.png"></a>
         <a href="https://openaire.eu" target="_blank"><img class="logoimg" src="openaire-logo.png"></a>
