@@ -29,6 +29,12 @@ body {
     -o-hyphens: auto;
 }
 
+.info h3 {
+    font-size: 20px;
+    font-family: 'Open Sans', Helvetica, sans-serif;
+    font-weight: 300;
+}
+
 a {
     color: #3696e0;
 }
