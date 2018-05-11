@@ -4,11 +4,11 @@
 }
 
 html {
-    background-color: white;
+    background-color: #eff3f4;
 }
 
 body {
-    color: black;
+    color: #333;
     font-family: 'Open Sans', Helvetica;
     font-weight: 300;
     margin: 0px auto 0;
@@ -93,6 +93,7 @@ a:hover {
     background-color: white;
     padding: 30px 50px;
     border-radius: 5px;
+    moz-border-radius: 5px;
 }
 
 .mittig2 .text-field {
@@ -112,6 +113,7 @@ a:hover {
     height: 45px;
     font-size: 20px;
     border-radius: 5px;
+    moz-border-radius: 5px;
     padding: 0px 0px;
     vertical-align: middle;
     border-width: 3px;
@@ -134,6 +136,7 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 .newsletter2 {
     font-size: 12px;
     border-radius: 5px;
+    moz-border-radius: 5px;
     padding: 5px;
     border: 2px solid #eee;
     color: #eee;
@@ -143,9 +146,10 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 }
 
 #viper-search-results, #viper-search-pager {
+    display: none;
     max-width: 800px;
     width: 100%;
-    margin: 20px auto;
+    margin: 30px auto;
 }
 
 #project_count, .loading {
@@ -279,7 +283,8 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 
 .create-map {
     background-color: #3696e0; 
-    border-radius: 3px; 
+    border-radius: 5px; 
+    moz-border-radius: 5px;
     padding: 10px; 
     color:white;
     border: 2px solid #3696e0;
@@ -334,26 +339,27 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 .vipermenu li a {
     color: white;
     text-decoration: none;
-    border-bottom: 2px solid transparent;
+    border-bottom: 2px solid white;
 }
 
 .vipermenu li a:hover {
     color: white;
     text-decoration: none;
-    border-bottom: 2px solid white;
+    border-bottom: 0px solid white;
 }
 
 .logoimg {
-    border: 1px solid #f5f5f5;
-    border-radius: 3px;
+    border-radius: 5px;
+    moz-border-radius: 5px;
     padding: 10px;
     max-width: 60px;
+    background-color:white;
 }
 
 .builtby {
-    text-align:center; 
-    margin: 50px 0 20px; 
-    font-size:12px;  
+    background-color: #eff3f4;
+    font-size: 12px;
+    padding: 50px;
 }
 
 .vipercanvas {
@@ -394,4 +400,35 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 
 .viperdescr span {
     font-size: 18; margin-left:5px;
+}
+
+.info {
+    display:inline-block; 
+    vertical-align:top;
+    margin-right: 40px;
+    max-width: 300px;
+    font-size: 12px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.nav_bottom {
+    display: block;
+    background-color: transparent;
+    line-height: 180%;
+    padding: 0px 0px 0px;
+}
+
+.nav_bottom a {
+    text-decoration: none;
+    border-bottom: 1px solid #3696e0;
+}
+
+.nav_bottom a:hover, .nav_bottom a:active, .nav_bottom a:focus  {
+    text-decoration: none;
+    border-bottom: 0px;
+}
+
+ul {
+    list-style: none;
 }
