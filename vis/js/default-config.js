@@ -270,7 +270,7 @@ var config = {
             paper_count_label: "papers",
             viper_edit_title: "How to add project resources",
             viper_edit_desc_label: `<p>Are you missing relevant publications and datasets related to this project? \ 
-            <p>No problem: simply link further resources to this project on the OpenAIRE website. \ 
+            <p>No problem: simply link further resources on the OpenAIRE website. \ 
             The resources will then be be automatically added to the map. \ 
             <p>Use the button indicated in the exemplary screenshot to do so: `,
             viper_button_desc_label: `<p>By clicking on the button below, you are redirected to the\
