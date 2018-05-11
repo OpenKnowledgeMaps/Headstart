@@ -124,6 +124,8 @@ var setupPaginator = function (searchTerm, params) {
 
 var getResourcesAndSetupList = function(data, pagination, searchTerm) {
     
+    $('#viper-search-results, #viper-search-pager').show();  
+    
     if (data.length <= 0) {
       $('.lds-spinner').hide();
       $('#viper-search-results').html('<div class="viper-no-results-err">Sorry, no projects found for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span>. Please try another search term.</div>')
