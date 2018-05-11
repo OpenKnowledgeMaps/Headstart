@@ -332,7 +332,11 @@ class Canvas {
             $('#edit-modal-text').html(config.localization[config.language].viper_edit_desc_label)
             $('#edit-button-text').html(config.localization[config.language].viper_button_desc_label + " <b>" + ((context.params.acronym !== "")?(context.params.acronym + " - "):("")) + context.params.title + "</b>.")
             $('#viper-edit-button').text(config.localization[config.language].viper_edit_button_text)
-            $('.viper-edit-link').attr('href', `https://www.openaire.eu/search/project?projectId=${context.params.obj_id}`)
+            $('.viper-edit-link, viper-edit-screenshot').click(function (event) {
+                event.preventDefault();
+                mediator.publish("mark_project_changed", context.id);
+                window.open(`https://www.openaire.eu/search/project?projectId=${context.params.obj_id}`);
+            })
         }
     }
 
