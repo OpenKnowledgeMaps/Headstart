@@ -32,7 +32,7 @@ include 'config.php';
             <div class="viperheader">
                 <a href="index.php"><div class="viperlogo"><img src="viper-logo.png">
                     <div class="viperdescr"><h2>VIPER</h2>
-                        <span>The Visual Project Explorer</span>
+                        <!--<span>The Visual Project Explorer</span>-->
                         </div>
                     </div></a>
                 
