@@ -11,7 +11,7 @@ require 'Persistence.php';
 
 class SQLitePersistence extends Persistence {
 
-    private $db;
+    protected $db;
 
     public function __construct($db) {
         try {
@@ -153,7 +153,7 @@ class SQLitePersistence extends Persistence {
         
     }
 
-    private function prepareAndExecute($stmt, $array) {
+    protected function prepareAndExecute($stmt, $array) {
         try {
             $query = $this->db->prepare($stmt);
             $result = $query->execute($array);

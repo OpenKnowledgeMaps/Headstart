@@ -63,6 +63,21 @@ HeadstartFSM.prototype = {
         }
       });
     },
+  
+  markProjectChanged: function (id) {
+      
+    let php_script = config.server_url + "services/markProjectChanged.php";
+
+    $.ajax({
+        url: php_script + '?vis_id=' + id,
+        type: "GET",
+        dataType: "json",
+        success: function(output) {
+            console.log(output);
+        }
+      });
+      
+  },
 
   createRestUrl: function () {
       let url = config.server_url + "services/getBookmarks.php?user=" + config.user_id;

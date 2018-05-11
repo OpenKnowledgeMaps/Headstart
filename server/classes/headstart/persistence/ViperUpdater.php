@@ -5,17 +5,6 @@ require_once 'SQLitePersistence.php';
 
 class ViperUpdater extends SQLitePersistence {
 
-  private $db;
-
-  public function __construct($db) {
-      try {
-          $this->db = new \PDO('sqlite:' . $db);
-          $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-      } catch (PDOException $e) {
-          echo 'Connection failed: ' . $e->getMessage();
-      }
-  }
-
   public function getUpdateMaps($vis_changed) {
     $return_fields = "visualizations.vis_title,
                       visualizations.vis_query,
@@ -42,8 +31,21 @@ class ViperUpdater extends SQLitePersistence {
     $stmt = "UPDATE visualizations
              SET vis_changed=0
              WHERE vis_title == 'openaire'
-             AND vis_id == '$vis_id'";
-    $this->db->query($stmt);
+             AND vis_id ==?";
+    
+    $this->prepareAndExecute($stmt, array($vis_id));
+  }
+  
+  public function markVisChanged($vis_id) {
+    $stmt = "UPDATE visualizations
+             SET vis_changed = 1, vis_changed_timestamp = ?
+             WHERE vis_title == 'openaire'
+             AND vis_id == ?";
+    
+    $now = date("Y-m-d H:i:s");
+    
+    $this->prepareAndExecute($stmt, array($now, $vis_id));
+    
   }
 
 }

@@ -103,6 +103,7 @@ MyMediator.prototype = {
         // misc
         this.mediator.subscribe("record_action", this.record_action);
         this.mediator.subscribe("check_force_papers", this.check_force_papers);
+        this.mediator.subscribe("mark_project_changed", this.mark_project_changed);
 
         // canvas events
         this.mediator.subscribe("window_resize", this.window_resize);
@@ -433,6 +434,10 @@ MyMediator.prototype = {
 
     record_action: function(id, action, user, type, timestamp, additional_params, post_data) {
         headstart.recordAction(id, action, user, type, timestamp, additional_params, post_data);
+    },
+    
+    mark_project_changed: function(id) {
+        headstart.markProjectChanged(id);
     },
 
     window_resize: function() {
