@@ -7,7 +7,9 @@ Head Start is a web-based knowledge mapping software intended to give researcher
 ## Getting Started
 
 ### Client
-To get started, clone this repository. Duplicate the file `config.example.js` in the root folder and rename it to `config.js`. Make sure to have `npm` version 3.10.10 installed (it comes with Node.js 6.12.0, you can [download installers here](https://nodejs.org/dist/latest-v6.x/)) and run the following two commands to build the Headstart client:
+To get started, clone this repository. Next, duplicate the file `config.example.js` in the root folder and rename it to `config.js`. 
+
+Make sure to have `npm` version 3.10.10 installed (it comes with Node.js 6.12.0, you can [download installers here](https://nodejs.org/dist/latest-v6.x/)) and run the following two commands to build the Headstart client:
 
     npm install
     npm run dev
