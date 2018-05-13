@@ -64,6 +64,30 @@
     margin-right: 10px;
 }
 
+@media screen and (max-width: 1650px) {
+    #filter_container input {
+        width: 240px;
+    }
+}
+
+@media screen and (max-width: 1600px) {
+    #filter_container input {
+        width: 220px;
+    }
+}
+
+@media screen and (max-width: 1500px) {
+    #filter_container input {
+        width: 200px;
+    }
+}
+
+@media screen and (max-width: 1460px) {
+    #filter_container input {
+        width: 180px;
+    }
+}
+
 @media screen and (max-width: 1220px) {
 
     .btn-sm, .btn-group-sm > .btn {
