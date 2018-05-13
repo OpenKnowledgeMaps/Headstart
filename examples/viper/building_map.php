@@ -4,6 +4,7 @@
     <head>
         <title>Building Your Map</title>
         <meta http-equiv="Content-Type">
+        <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
@@ -20,6 +21,7 @@
 
             <div class="background2">
                 <div class="team">
+                    <p style="text-align:center; margin:0px auto 20px;"><img style="width:70px;" src="viper-logo.png"></p>
                     <p class="waiting-title">Your overview for <span class="project_name"></span> is being created</p>
                     <p class="waiting-description">Please be patient this may take a while</p>
                     <p id="info-totals"></p>
@@ -41,7 +43,7 @@
                     doSubmit(params.data, params.service_name, params.service, params.search_url)
                 } else {
                     window.dataParamsForOpening = {};
-                    showErrorCreation();
+                    //showErrorCreation();
                 }
                 $(".project_name").text(params.acronymtitle);
                 $("#info-totals").html("<p>This project has "

@@ -33,6 +33,7 @@ body {
     font-size: 20px;
     font-family: 'Open Sans', Helvetica, sans-serif;
     font-weight: 300;
+    margin-top: 0px;
 }
 
 a {
@@ -320,16 +321,21 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 }
 
 .ui-widget-header {
-    background: #3696e0;
+    background: white;
     border: 1px solid #DDDDDD;
     color: #333333;
     font-weight: bold;
 }
 
 #progressbar {
-    max-width: 800px;
-    margin: 0px auto;
+    max-width: 650px;
+    margin: 0px auto 10px;
     text-align: center;
+    height: 20px;
+}
+
+.ui-widget-content {
+    background: transparent;
 }
 
 .vipermenu {
@@ -357,9 +363,10 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 .logoimg {
     border-radius: 5px;
     moz-border-radius: 5px;
-    padding: 10px;
-    max-width: 60px;
+    padding: 5px;
+    width: 60px;
     background-color:white;
+    border: 1px solid #eff3f4;
 }
 
 .builtby {
