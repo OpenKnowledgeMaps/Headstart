@@ -90,6 +90,7 @@
             }
 
             var showErrorCreation = function () {
+                clearTimeout(progessbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
                 $(".waiting-title").html('Creating an overview for <span class="project_name">' + window.dataParamsForOpening.acronymtitle + '</span> failed.');
@@ -102,6 +103,7 @@
             }
 
             var showErrorBackend = function (error) {
+                clearTimeout(progessbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
                 $(".waiting-title").html('Creating an overview for <span class="project_name">' + window.dataParamsForOpening.acronymtitle + '</span> failed.');
