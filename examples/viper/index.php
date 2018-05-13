@@ -33,18 +33,18 @@ include 'config.php';
                     <div class="viperdescr"><h2>VIPER</h2>
                         <!--<span>The Visual Project Explorer</span>-->
                     </div>
-                    </div>
-                
-                
-                    <ul class="vipermenu">
-                        <li><a href="about">
+                </div>
+
+
+                <ul class="vipermenu">
+                    <li><a href="about">
 <!--<span class="awesome"></span>--> About</a></li>
-                        
-                        <li><a href="https://openknowledgemaps.org" target="_blank">
-                                openknowledgemaps.org</a>
-                        </li>
-                    </ul>
-                
+
+                    <li class="okmapslink"><a href="https://openknowledgemaps.org" target="_blank">
+                            openknowledgemaps.org</a>
+                    </li>
+                </ul>
+
             </div>
         </div>
 
@@ -58,7 +58,9 @@ include 'config.php';
                     <p class="waiting-description">Step 1: Find a project - Step 2: Create an overview</p>
                     <!--<p>Faster, more efficient literature search</p>-->
                 </div>
-                <form class="mittig2" id="search-projects-form" style="margin-top:20px">
+
+                <form class="mittig2" id="search-projects-form">
+                    <div class="paddingform">
                     <p>Search projects within the OpenAIRE database with the following funding agency:</p>
                     <div style="text-align: left; margin: 0px auto;">
 
@@ -69,23 +71,23 @@ include 'config.php';
                         <button type="submit" class="submit-btn">GO</button>
 
                     </div>
-                    
-                    <!--<p class="try-out-maps">Try out: 
-                        
-                            <a class="underline" target="_blank" href="https://openknowledgemaps.org/preview/viper/headstart.php?query=OPENAIRE%20-%20Open%20Access%20Infrastructure%20for%20Research%20in%20Europe&file=9b34f83d3940dc249c4ae9420c8fb2e2&service=openaire&service_name=OpenAire">Overview of OpenAIRE</a>
-                        
-                    </p>-->
+                    </div>
+<!--<p class="try-out-maps">Try out: 
+    
+        <a class="underline" target="_blank" href="https://openknowledgemaps.org/preview/viper/headstart.php?query=OPENAIRE%20-%20Open%20Access%20Infrastructure%20for%20Research%20in%20Europe&file=9b34f83d3940dc249c4ae9420c8fb2e2&service=openaire&service_name=OpenAire">Overview of OpenAIRE</a>
+    </div>
+</p>-->
                 </form>
                 <p class="error-building-map-button"><a class="newsletter2" href="https://openknowledgemaps.org/preview/viper/headstart.php?query=OPENAIRE%20-%20Open%20Access%20Infrastructure%20for%20Research%20in%20Europe&file=9b34f83d3940dc249c4ae9420c8fb2e2&service=openaire&service_name=OpenAire" target="_blank">Try it out: Overview of OpenAIRE</a></p>
             </div>
             <!--<p style="text-align:center; margin-top: 30px;"><a class="newsletter2" href="">What is VIPER?</a><p>-->
         </div>
-        
+
         <div class="ie-message">
             VIPER does not support Internet Explorer due to the use of advanced web technologies. 
             Please use a modern browser such as Mozilla Firefox, Google Chrome and Microsoft Edge.
         </div>
-        
+
         <script type="text/javascript">
             if (isIE()) {
                 $(".ie-message").addClass("visible");
@@ -93,11 +95,11 @@ include 'config.php';
             }
 
             function isIE() {
-                
+
                 var user_agent = window.navigator.userAgent;
-                
+
                 if (user_agent.indexOf('MSIE ') > 0 || user_agent.indexOf('Trident/') > 0) {
-                  return true;
+                    return true;
                 } else {
                     return false;
                 }
@@ -111,12 +113,12 @@ include 'config.php';
         </div>
 
         <?php include('footer.php'); ?>
-<script type="text/javascript" src="search_openaire_projects.js"></script>
-<script type="text/javascript" src="data-config_openaire.js"></script>
-<script type="text/javascript" src="search_options.js"></script>
-<script type="text/javascript" src="search.js"></script>
-<script type ="text/javascript">
-    data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
-</script>
-</body>
+        <script type="text/javascript" src="search_openaire_projects.js"></script>
+        <script type="text/javascript" src="data-config_openaire.js"></script>
+        <script type="text/javascript" src="search_options.js"></script>
+        <script type="text/javascript" src="search.js"></script>
+        <script type ="text/javascript">
+                    data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
+        </script>
+    </body>
 </html>

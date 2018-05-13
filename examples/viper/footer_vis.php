@@ -1,5 +1,5 @@
 <footer class="builtby" style="background-color: white; border-top: 2px solid #eff3f4;">
-    <div style="max-width:1600px; width:100%; margin:0px auto; text-align:center; padding-top:20px;">
+    <div class="builtby-container">
 
         <div class="info">
             <a href="" target="_blank"><img style="max-width:100px; width:100%;" src="viper-logo-color.png"></a>
