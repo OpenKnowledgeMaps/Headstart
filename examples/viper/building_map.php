@@ -43,7 +43,7 @@
                     doSubmit(params.data, params.service_name, params.service, params.search_url)
                 } else {
                     window.dataParamsForOpening = {};
-                    //showErrorCreation();
+                    showErrorCreation();
                 }
                 $(".project_name").text(params.acronymtitle);
                 $("#info-totals").html("<p>This project has "
