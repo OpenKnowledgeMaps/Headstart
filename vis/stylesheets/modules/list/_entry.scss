@@ -109,7 +109,7 @@
         color: $list_show_hide_button;
         border: 1px solid $list_show_hide_button;
         &:hover {
-            background-color: $journal-gray;
+            background-color: $framed-item;
             color: white;
         }
     }
