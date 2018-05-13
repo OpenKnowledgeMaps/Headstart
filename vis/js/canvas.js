@@ -165,6 +165,9 @@ class Canvas {
         d3.select("rect")
                 .attr("height", this.current_vis_size)
                 .attr("width", this.current_vis_size);
+        
+        d3.select("#headstart-chart")
+                .style("width", this.current_vis_size + "px");
     }
 
     calcTitleFontSize() {

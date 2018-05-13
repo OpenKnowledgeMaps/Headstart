@@ -8,11 +8,11 @@
     /*position: absolute;*/
 
     margin: 0 auto;
-    display: inline-block; /*table;*/
+    //display: inline-block; /*table;*/
     /*margin-top: 6px;*/
     position: relative;
     z-index: 0;
-    margin-left: 50px;
+    //margin-left: 50px;
 }
 
 #chart-svg {
@@ -154,4 +154,10 @@ text {
 .dropdown-menu > li > a:active {
     background-color: $okm-modal-btn;
     color: white;
+}
+
+@media screen and (max-width: 1250px) {
+    #headstart-chart {
+        margin-left: 50px;
+    }
 }
