@@ -24,6 +24,6 @@ include 'config.php';
         <script type="text/javascript">
             headstart.start();
         </script>
-        <?php include("footer.php"); ?>    
+        <?php include("footer_vis.php"); ?>    
     </body>
 </html>
