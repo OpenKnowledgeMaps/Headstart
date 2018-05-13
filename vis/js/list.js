@@ -67,7 +67,7 @@ export const list = StateMachine.create({
         },
 
         onshow: function() {
-            d3.select("#sort_container").style("display", "block");
+            d3.select("#sort_container").style("display", "inline-block");
             d3.select("#papers_list").style("display", "block");
             d3.select("#left_arrow").text("\u25B2");
             d3.select("#right_arrow").text("\u25B2");

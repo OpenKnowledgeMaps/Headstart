@@ -5,6 +5,7 @@
   position: relative;
   width: 64px;
   height: 64px;
+  padding: 0 20px;
 }
 
 .search-box .lds-spinner {

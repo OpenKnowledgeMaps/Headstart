@@ -247,7 +247,6 @@ button {
 }
 
 @media screen and (max-width: 710px) {
-
     .text-field {
         padding-left: 5px;
         display: inline-block;
@@ -256,18 +255,16 @@ button {
     .btn-group {
         margin-left: 0px;
     }
-
 }
 
 @media screen and (max-width: 490px) {
-
     .submit-btn {
         font-size: 14px;
     }
-
-    #filter-container {
-        display:none;
-    }
+    /*
+        #filter-container {
+            display:none;
+        }*/
 
     input {
         font-size: 12px;

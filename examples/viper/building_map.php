@@ -18,7 +18,7 @@
 
     <body class="waiting-page">
         <div class="search-box">
-
+            <div style="padding: 20px;">
             <div class="background2">
                 <div class="team">
                     <p style="text-align:center; margin:0px auto 20px;"><img style="width:70px;" src="viper-logo.png"></p>
@@ -31,6 +31,7 @@
 
                 <div id="progressbar"></div>
                 <div id="progress"></div>
+            </div>
             </div>
         </div>
         

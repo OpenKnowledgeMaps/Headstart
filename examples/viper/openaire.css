@@ -45,6 +45,7 @@ a:hover {
 }
 
 .search-box {
+
     background-image: linear-gradient(rgba(54, 150, 224, 1), rgba(45, 62, 82, 1)) /*rgba(80, 200, 173, 1)*/
         /*url(../img/start3.png)*/;
     background-color: #3696e0;/*#5497cb;*/
@@ -67,6 +68,9 @@ a:hover {
 }
 
 .search-box .background2 {
+    max-width: 1600px;
+    width:100%;
+    margin:0px auto;
     background-color: transparent;
     margin: 0px auto;
     padding: 0px;
@@ -96,9 +100,9 @@ a:hover {
 .mittig2 {
     max-width: 750px;
     width: 100%;
-    margin: 0px auto;
+    margin: 20px auto 0;
     background-color: white;
-    padding: 30px 50px;
+    /*padding: 30px 50px;*/
     border-radius: 5px;
     moz-border-radius: 5px;
 }
@@ -106,7 +110,11 @@ a:hover {
 .mittig2 .text-field {
     height: 45px;
     padding-left: 5px;
-    width: 87%;
+    width: 80%;
+}
+
+.paddingform {
+    padding: 30px 50px;
 }
 
 .submit-btn {
@@ -116,7 +124,7 @@ a:hover {
     border-color: #2D3E52;
     color: white;
     font-weight: 300;
-    width: 10%;
+    width: 13%;
     height: 45px;
     font-size: 20px;
     border-radius: 5px;
@@ -160,7 +168,12 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 }
 
 #project_count, .loading {
-    padding: 0px 0 20px;
+    padding: 0px 20px 20px;
+}
+
+.list-group, .paginationjs, .viper-no-results-err {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
 }
 
 .paginationjs.paginationjs-theme-blue .paginationjs-pages li.active > a {
@@ -204,7 +217,7 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 }
 
 .list-group {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 0px solid #ddd;
 }
 .project-title {
     font-size: 16px;
@@ -239,6 +252,7 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 .error-building-map-image {
     margin-top: 30px;
     max-width: 800px;
+    width: 100%;
     text-align:center;
 }
 
@@ -270,7 +284,7 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 .headline-viper {
     max-width: 800px;
     font-weight: 300;
-    margin: 50px auto;
+    margin: 0px auto 50px;
     font-size: 40px;
     text-align: center;
     color: #3696e0;   
@@ -432,16 +446,124 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
     padding: 0px 0px 0px;
 }
 
-.nav_bottom a {
+.nav_bottom a, .linkvar1 {
     text-decoration: none;
     border-bottom: 1px solid #3696e0;
 }
 
-.nav_bottom a:hover, .nav_bottom a:active, .nav_bottom a:focus  {
+.nav_bottom a:hover, .nav_bottom a:active, .nav_bottom a:focus, .linkvar1:hover,  .linkvar1:focus, .linkvar1:active {
     text-decoration: none;
     border-bottom: 0px;
 }
 
 ul {
     list-style: none;
+}
+
+.builtby-container {
+    max-width:1600px; 
+    width:100%; 
+    margin:0px auto; 
+    text-align:center; 
+    padding-top:20px;
+}
+
+.vipermenu li.okmapslink {
+    display: inline;
+}
+
+.aboutviper {
+    max-width:800px; 
+    margin: 0px auto 50px; 
+    width:100%;
+    font-size: 18px;
+}
+
+.headline-viperimg {
+    max-width:200px;
+    width:100%;
+    margin: 50px auto 10px;
+    text-align:center;
+}
+
+@media screen and (max-width:1140px) {
+    .builtby-container {
+        text-align:left;
+    }
+}
+
+@media screen and (max-width:750px) {
+
+    .mittig2 {
+        width:90%;
+    }
+
+    .paddingform {
+        padding: 20px;
+    }
+
+    p, .vipermenu li, .waiting-description {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width:600px) {
+    .viperlogo img {
+        width:50px;
+    }
+
+    .vipercanvas {
+        padding: 20px;
+        height: 40px;
+    }
+
+    .viperdescr h2 {
+        font-size: 18px;
+    }
+
+    .viperdescr {
+        margin-left: -20px;
+    }
+
+}
+
+@media screen and (max-width:500px) {
+    .vipermenu li.okmapslink {
+        display: none;
+    }
+
+    .vipermenu {
+        width:67%;
+    }
+
+    .builtby {
+        padding: 20px;
+    }
+    .search-box {
+        padding: 20px 0 30px;
+    }
+
+    .waiting-title, .headline-viper {
+        font-size:24px;
+    }
+
+    .headline-viperimg img {
+        width:80px;
+    }
+
+    .submit-btn {
+        font-size: 14px;
+    }
+    
+    .waiting-page .waiting-title {
+        font-size: 18px;
+    }
+    
+    .waiting-page #progress {
+        font-size: 12px;
+    }
+    
+    #info-totals {
+        margin: 20px auto 0;
+    }
 }

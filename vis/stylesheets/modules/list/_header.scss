@@ -6,8 +6,9 @@
 }
 
 #filter_container {
-    float: left;
-    display: block;
+    vertical-align: top;
+    float: none;
+    display: inline-block;
 }
 
 #filter_input {
@@ -15,12 +16,14 @@
 }
 
 #filter_parameter_container {
-    float: right;
-    display: block;
+    vertical-align: top;
+    float: none;
+    display: inline-block;
 }
 
 #sort_container {
-    float: right;
+    vertical-align: top;
+    float: none;
     display: none;
 }
 
@@ -55,6 +58,12 @@
     font-family: 'Open Sans', Helvetica, sans-serif;
 }
 
+#filter_container input {
+    width: 260px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
 @media screen and (max-width: 1220px) {
 
     .btn-sm, .btn-group-sm > .btn {
@@ -75,7 +84,7 @@
 
     #sort_container {
         float: none;
-        margin-top: 10px;
+        margin-top: 0px;
     }
     
     #filter_container {

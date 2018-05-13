@@ -42,16 +42,18 @@ include 'config.php';
                         <li><a href="index.php">
 <!--<span class="awesome"></span>--> Try out Viper</a></li>
                         
-                        <li><a href="https://openknowledgemaps.org" target="_blank">
+                        <li class="okmapslink"><a href="https://openknowledgemaps.org" target="_blank">
                                 openknowledgemaps.org</a>
                         </li>
                     </ul>
                 
             </div>
         </div>
-        <div style="max-width:800px; margin: 0px auto 50px; width:100%; font-size: 18px;">
-            <h2 class="headline-viper"><img src="viper-logo-color.png"><br>VIPER: The Visual Project Explorer<br>
-                <span style="font-size:18px;">by <a target="_blank" href="https://openknowledgemaps.org">Open Knowledge Maps</a></span></h2>
+        <div class="aboutviper">
+            <div style="padding: 0px 20px;">
+                <p class="headline-viperimg"><img src="viper-logo-color.png"></p>
+            <h2 class="headline-viper">VIPER: The Visual Project Explorer
+                <span style="font-size:18px; display: block; margin-top:20px;">by <a class="linkvar1" target="_blank" href="https://openknowledgemaps.org">Open Knowledge Maps</a></span></h2>
 
 
                 <p><a href="index.php">The Visual Project Explorer (VIPER)</a> is a unique open science application that provides overviews of research projects indexed by <a href="http://openaire.eu" target="_blank">OpenAIRE</a>. 
@@ -87,6 +89,7 @@ include 'config.php';
             <p style="margin-top:40px; text-align: center;">
                 <a class="create-map" href="index">Create a map with VIPER</a>
             </p>
+            </div>
         </div>
 
 

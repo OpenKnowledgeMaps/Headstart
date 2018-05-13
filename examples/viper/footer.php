@@ -1,5 +1,5 @@
 <footer class="builtby">
-    <div style="max-width:1600px; width:100%; margin:0px auto; text-align:center;">
+    <div class="builtby-container">
     <div class="info">
         <h3 style="margin-bottom: 10px;">VIPER</h3>
         <p>is a service created by <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. 
