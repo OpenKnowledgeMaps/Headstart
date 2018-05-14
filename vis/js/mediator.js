@@ -290,7 +290,8 @@ MyMediator.prototype = {
         
         if (config.scale_toolbar) {
             this.viz.append(scaleToolbarTemplate({
-                scale_by_label: config.localization[config.language].scale_by_label
+                scale_by_label: config.localization[config.language].scale_by_label,
+                viper_credit: config.viper_credit
             }));
         }
         
