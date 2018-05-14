@@ -3,7 +3,24 @@
 include 'config.php';
 ?>
 <html>
-    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+    <head>       
+        <?php 
+        include 'head_viper.php'; 
+        
+        $query = $_GET['query'];
+        $id = $_GET['file'];
+        
+        $override_labels = array(
+            "tweet-text" => "Check out this visual overview of the research project $query!"
+            , "title" => "Overview of the research project $query"
+            , "app-name" => "VIPER"
+            , "description" => "Get an overview of $query, find relevant resources, and understand their reception in different areas."
+            , "twitter-type" => "summary_large_image"
+            , "twitter-image" => "$SNAPSHOT_PATH$id.png"
+            , "fb-image" => "$SNAPSHOT_PATH$id.png"
+        );
+        ?>
+        
         <link type="text/css" rel="stylesheet" href="openaire.css"></link>
         <script src="https://code.jquery.com/jquery-2.1.4.min.js" integrity="sha256-8WqyJLuWKRBVhxXIL1jBDD7SDxU936oZkCnxQbWwJVw=" crossorigin="anonymous"></script>
     </head>
