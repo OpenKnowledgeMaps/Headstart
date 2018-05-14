@@ -21,7 +21,7 @@ include 'config.php';
         </script>
         <script type="text/javascript" src="<?php echo $HEADSTART_PATH; ?>dist/headstart.js"></script>
         <link type="text/css" rel="stylesheet" href="<?php echo $HEADSTART_PATH; ?>dist/headstart.css"></link>
-        <?php if ($_GET['embed'] === 'true'){
+        <?php if (isset($_GET['embed']) && $_GET['embed'] === 'true'){
             echo '<script>data_config.viper_credit = true</script>';
         } else {
             include("footer_vis.php");
