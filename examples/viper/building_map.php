@@ -115,7 +115,7 @@ include 'config.php';
                 $(".waiting-description").hide();
                 $(".waiting-title").html('Creating an overview for <span class="project_name">' + window.dataParamsForOpening.acronymtitle + '</span> failed.');
                 $("#progress").html(
-                        'Sorry! Something went wrong. Please <a href=\"index.php\">try again</a> in a few minutes. If you think that If you think that there is something wrong with our site, please let us know at <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>.'
+                        'Sorry! Something went wrong. Please <a href=\"index.php\">try again</a> in a few minutes. If you think that there is something wrong with our site, please let us know at <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>.'
                         )
                 console.log(error)
             }
