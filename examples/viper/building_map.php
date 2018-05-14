@@ -28,7 +28,7 @@ include 'config.php';
                 <div class="team">
                     <p style="text-align:center; margin:0px auto 20px;"><img style="width:70px;" src="viper-logo.png"></p>
                     <p class="waiting-title">Your overview for <span class="project_name"></span> is being created</p>
-                    <p class="waiting-description">Please be patient this may take a while</p>
+                    <p class="waiting-description"></p>
                     <p id="info-totals"></p>
 
                 </div>
@@ -54,6 +54,17 @@ include 'config.php';
                 $(".project_name").text(params.acronymtitle);
                 $("#info-totals").html("<p>This project has "
                         + params.num_publications + " publications and " + params.num_datasets + " datasets");
+                $(".waiting-description").text(function () {
+                    if (params.num_project_resources < 50) {
+                       return "Please be patient, this takes around 15 seconds";
+                    } else if (params.num_project_resources >= 50 && params.num_project_resources < 150) {
+                        return "Please be patient, this takes around 30 seconds";
+                    } else if (params.num_project_resources >= 150 && params.num_project_resources < 500) {
+                        return "Please be patient, this may take a while";
+                    } else if (params.num_project_resources >= 500) {
+                        return "You have selected a very large project. This may take between 10 and 15 minutes.";
+                    }
+                })
             })
 
             var doSubmit = function (params, service_name, service, service_url) {
@@ -146,6 +157,24 @@ include 'config.php';
             var tick_interval = 1;
             var tick_increment = 2;
             var milliseconds = 500;
+            
+            if (window.dataParamsForOpening.num_project_resources > 50 && window.dataParamsForOpening.num_project_resources < 150) {
+                tick_interval = 1;
+                tick_increment = 1;
+            } else if (window.dataParamsForOpening.num_project_resources >= 150 && window.dataParamsForOpening.num_project_resources < 250) {
+                tick_interval = 1;
+                tick_increment = 1;
+                var milliseconds = 1000;
+            } else if (window.dataParamsForOpening.num_project_resources >= 250 && window.dataParamsForOpening.num_project_resources < 500) {
+                tick_interval = 1;
+                tick_increment = 1;
+                var milliseconds = 2000;
+            } else if (window.dataParamsForOpening.num_project_resources > 500) {
+                tick_interval = 1;
+                tick_increment = 1;
+                var milliseconds = 6000;
+            }
+            
             var progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
         </script>
 
