@@ -130,7 +130,6 @@ preprocess_data <- function(all_artifacts){
 fields <- c(
   subject = ".//subject",
   title = ".//title",
-  authors = ".//creator",
   year = ".//dateofacceptance",
   publisher = ".//publisher",
   resulttype = ".//resulttype/@classid",
@@ -156,6 +155,9 @@ parse_response <- function(response) {
     df <- data.frame(data.table::rbindlist(tmp, fill = TRUE, use.names = TRUE))
     df$id <- unlist(lapply(xml_find_all(response, ".//dri:objIdentifier"), xml_text))
     df$doi <- unlist(lapply(df$doi, tolower))
+    df$authors <- unlist(lapply(results, function(result){
+        paste(unlist(lapply(xml_find_all(result, ".//creator"), xml_text)), collapse="; ")
+    }))
     return (df)
   } else {
     stop("Length of results: ", length(tmp))
