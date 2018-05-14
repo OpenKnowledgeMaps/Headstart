@@ -40,6 +40,8 @@ var data_config = {
 
     viper_metric_list: true,
     
+    viper_credit: false,
+
     scale_toolbar: true,
     
     scale_types: ['content_based', 'citation_count', 'cited_by_tweeters_count', 'readers.mendeley'],
