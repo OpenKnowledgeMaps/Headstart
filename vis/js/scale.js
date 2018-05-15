@@ -39,6 +39,7 @@ class Scale {
   doScale (type) {     
     config.scale_by = type
     config.base_unit = config.scale_base_unit[type];
+    config.dynamic_sizing = false;
     
     if(type === "content_based") {
         config.content_based = true;

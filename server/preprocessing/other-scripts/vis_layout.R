@@ -237,15 +237,34 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
       }
     )
   }
+  
+  num_items = nrow(distance_matrix)
 
   if(!is.null(num_clusters) && max_clusters > -1 && num_clusters > max_clusters) {
     num_clusters = MAX_CLUSTERS
+    
+    if(num_items >= 150) {
+      print("High content number, increasing max_k.")
+      if(num_items >= 150 && num_items < 200) {
+        num_clusters = 16
+      } else if (num_items >= 200 && num_items < 300) {
+        num_clusters = 17
+      } else if (num_items >= 300 && num_items < 400) {
+        num_clusters = 18
+      } else if (num_items >= 400 && num_items < 500) {
+        num_clusters = 19
+      } else if (num_items >= 500) {
+        num_clusters = 20
+      }
+    }
   }
 
-  if(nrow(distance_matrix) <= 30){
+  if(num_items <= 30){
     print("Low content number, lowering max_k.")
     num_clusters = round(sqrt(nrow(distance_matrix))) + 1
   }
+  
+  
 
   meta_cluster = attr(css_cluster,"meta")
   cluster = meta_cluster$hclust.obj

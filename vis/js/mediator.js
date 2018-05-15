@@ -226,19 +226,27 @@ MyMediator.prototype = {
     },
 
     init_start_visualization: function(highlight_data, csv) {
+        let data = (config.show_context)?(JSON.parse(csv.data)):csv;
+        let context = (config.show_context)?(csv.context):{};
+        
         mediator.manager.registerModule(headstart, 'headstart');
+        
+        if(config.is_force_papers && config.dynamic_force_papers) mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
+        if(config.is_force_area && config.dynamic_force_area) mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
+        if(config.dynamic_sizing) mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
         if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
+        
         mediator.manager.call('canvas', 'setupCanvas', []);
         if(config.scale_toolbar) {
             mediator.manager.registerModule(scale, 'scale')
             mediator.manager.call('scale', 'drawScaleTypes', [])
         }
-        let data = (config.show_context)?(JSON.parse(csv.data)):csv;
-        let context = (config.show_context)?(csv.context):{};
+        
         
         mediator.manager.call('io', 'initializeMissingData', [data]);
         mediator.manager.call('io', 'prepareData', [highlight_data, data]);
         mediator.manager.call('io', 'prepareAreas', []);
+
         mediator.manager.call('io', 'setContext', [context, data.length]);
         mediator.manager.call('io', 'setInfo', [context]);
         mediator.manager.call('canvas', 'drawTitle', [context]);
