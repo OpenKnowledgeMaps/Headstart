@@ -14,7 +14,7 @@ import 'lib/en.js';
 import 'dotdotdot';
 
 export var HeadstartFSM = function(json_direct_data) {
-  this.VERSION = 2.9;
+  this.VERSION = 4.0;
   mediator.json_direct_data = json_direct_data;
 }; // end HeadstartFSM constructor
 
