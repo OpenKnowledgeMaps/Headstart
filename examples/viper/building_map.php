@@ -114,8 +114,8 @@ include 'config.php';
                 $(".waiting-description").hide();
                 $(".waiting-title").html('Creating an overview for <span class="project_name">' + window.dataParamsForOpening.acronymtitle + '</span> failed.');
                 $("#progress").html(
-                        `Sorry! We could not create your map, because the project does not have enough resources linked to it. \n\
-                        You can link further resources to this project on the OpenAIRE website. Use the button indicated in the exemplary screenshot to do so. \n\
+                        `Sorry! We could not create your map, most likely because the project does not have enough resources linked to it. \n\
+                        You can link further resources to this project on the OpenAIRE website. Use the button indicated in the exemplary screenshot to do so. <br><br>If you think that there is something wrong with our site, please let us know at <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>. \n\
                         <p><a href="https://www.openaire.eu/search/project?projectId=` + window.dataParamsForOpening.obj_id + `" target="_blank"><img src="viper-project-screenshot.png" class="error-building-map-image"></a>\n\
                         <p class="error-building-map-button"><a class="newsletter2" href="https://www.openaire.eu/search/project?projectId=` + window.dataParamsForOpening.obj_id + `" target="_blank">Go to the OpenAIRE project website</a></p>`
                         );
