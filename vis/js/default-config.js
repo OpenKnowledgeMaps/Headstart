@@ -6,6 +6,7 @@ var config = {
     zoom_factor: 0.9,
     padding_articles: 0,
     circle_padding: 0,
+    dynamic_sizing: false,
 
     // map
     min_height: 600,
@@ -59,6 +60,9 @@ var config = {
 
     is_force_papers: true,
     papers_force_alpha: 0.1,
+    
+    dynamic_force_area: false,
+    dynamic_force_papers: false,
 
     render_list: true,
     render_bubbles: true,

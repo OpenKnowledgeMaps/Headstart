@@ -7,6 +7,10 @@ var data_config = {
     
     paper_min_scale: 1,
     paper_max_scale: 1,
+    
+    dynamic_sizing: true,
+    dynamic_force_area: true,
+    dynamic_force_papers: true,
 
     service: "openaire",
     base_unit: "citations",
