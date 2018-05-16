@@ -7,8 +7,15 @@ include 'config.php';
         <?php 
         include 'head_viper.php'; 
         
-        $query = $_GET['query'];
         $id = $_GET['file'];
+
+        $protocol = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://';
+        
+        $current_path = $_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
+
+        $context_json = curl_get_contents($protocol . $current_path . "/" . $HEADSTART_PATH . "server/services/getContext.php?vis_id=$id");
+        $context = json_decode($context_json);
+        $query = $context->query;
         
         $override_labels = array(
             "tweet-text" => "Check out this visual overview of the research project $query!"
@@ -48,3 +55,17 @@ include 'config.php';
         </script>
     </body>
 </html>
+
+<?php
+
+function curl_get_contents($url) {
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    $data = curl_exec($ch);
+    curl_close($ch);
+    return $data;
+}
+?>
