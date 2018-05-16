@@ -35,11 +35,11 @@ include 'config.php';
     <body style="margin:0px; padding:0px; max-width:1600px; margin: 0px auto;">
         
         <div id="visualization"></div>
-        <script type="text/javascript" src="data-config_<?php echo $_GET['service'] ?>.js"></script>
+        <script type="text/javascript" src="data-config_openaire.js"></script>
         <script>
         	data_config.files = [{
-        		title: <?php echo json_encode($_GET['query']) ?>,
-        		file: <?php echo json_encode($_GET['file']) ?>
+        		title: "<?php echo $query; ?>",
+        		file: "<?php echo $id; ?>"
         	}];
                 data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
         </script>
