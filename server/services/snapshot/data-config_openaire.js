@@ -34,9 +34,9 @@ var data_config = {
     create_title_from_context_style: 'openaire',
     infolink_style: 'openaire',
     
-    viper_edit_modal: true,
-    viper_embed_modal: true,
-    viper_share_modal: true,
+    viper_edit_modal: false,
+    viper_embed_modal: false,
+    viper_share_modal: false,
 
     viper_outlink: true,
 
