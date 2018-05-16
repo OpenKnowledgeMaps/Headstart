@@ -52,8 +52,18 @@ add_citations <- function(output){
   dois <- output$doi
   valid_dois <- which(dois!="")
   
-  cit_count = cr_citation_count(doi=dois[valid_dois], async=TRUE)
-
+  # doc_parse_raw exception hotfix
+  #cit_count = cr_citation_count(doi=dois[valid_dois], async=TRUE)
+  cit_count = data.frame()
+  for (doi in dois[valid_dois]){
+    cc <- tryCatch({
+      cr_citation_count(doi=doi, async=TRUE)
+      }, error = function(err){
+          print(paste(err, doi))
+          return(list(doi=doi, count=NA))
+      })
+    cit_count <- rbind(cit_count, cc)
+  }
   output = merge(x=output, y=cit_count, by='doi', all.x = TRUE)
   names(output)[names(output)=="count"] <- "citation_count"
   return (output)
