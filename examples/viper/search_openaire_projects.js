@@ -20,7 +20,7 @@ function simpleTemplating (data) {
  
         event.preventDefault();
         
-        var win = window.open("building_map.php")
+        var win = window.open("building_map")
         win.dataParamsForOpening = {
           data: $.param(item),
           service_name: service_name,

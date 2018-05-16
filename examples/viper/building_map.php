@@ -76,15 +76,7 @@ include 'config.php';
                         window.clearTimeout(progessbar_timeout);
 
                         var file = data.id;
-                        window.location.replace(
-                                "headstart.php?query=" +
-                                encodeURIComponent(data.query) +
-                                "&file=" +
-                                file +
-                                "&service=" +
-                                service +
-                                "&service_name=" +
-                                service_name);
+                        window.location.replace("project?id=" + file);
                         return false;
                     } else {
                         showErrorCreation();
