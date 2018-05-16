@@ -54,7 +54,7 @@ include 'config.php';
                     It enables funders, institutions and researchers to systematically explore a project’s output, and to understand its impact in different areas. 
                 </p>
 
-                <a href="">
+                <a href="https://openknowledgemaps.org/viper/project?id=6fd986ceb58e4e9b48fdd21f7f53abde" target="_blank">
                     <img style="max-width:900px; margin: 30px auto; background-color: #eff3f4; padding:5px; border-radius: 5px; moz-border-radius: 5px; width:100%;" src="overview-openaire.png">
                 </a>
 
@@ -64,7 +64,7 @@ include 'config.php';
                     within the same interface.
                 </p>
 
-                <a href="">
+                <a href="https://openknowledgemaps.org/viper/project?id=6fd986ceb58e4e9b48fdd21f7f53abde" target="_blank">
                     <img style="max-width:900px; margin: 30px auto; background-color: #eff3f4; padding:5px; border-radius: 5px; moz-border-radius: 5px; width:100%;" src="detail-openaire.png"></p>
                 </a>
 

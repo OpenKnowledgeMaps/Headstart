@@ -73,7 +73,8 @@ include 'config.php';
                     </div>
                     </div>
                 </form>
-                <p class="error-building-map-button"><a class="newsletter2" href="https://openknowledgemaps.org/viper/project?id=9b34f83d3940dc249c4ae9420c8fb2e2" target="_blank">Try it out: Overview of OpenAIRE2020</a></p>
+                <p class="error-building-map-button"><a class="newsletter2" 
+                href="https://openknowledgemaps.org/viper/project?id=6fd986ceb58e4e9b48fdd21f7f53abde" target="_blank">Try it out: Overview of OpenAIRE2020</a></p>
             </div>
             <!--<p style="text-align:center; margin-top: 30px;"><a class="newsletter2" href="">What is VIPER?</a><p>-->
         </div>
