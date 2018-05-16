@@ -4,8 +4,7 @@ include 'config.php';
 ?>
 <html>
     <head>       
-        <?php 
-        include 'head_viper.php'; 
+        <?php
         
         $id = $_GET['id'];
 
@@ -26,6 +25,8 @@ include 'config.php';
             , "twitter-image" => "$SNAPSHOT_PATH$id.png"
             , "fb-image" => "$SNAPSHOT_PATH$id.png"
         );
+        
+        include 'head_viper.php'; 
         ?>
         
         <link type="text/css" rel="stylesheet" href="openaire.css"></link>
