@@ -7,7 +7,7 @@ include 'config.php';
         <?php 
         include 'head_viper.php'; 
         
-        $id = $_GET['file'];
+        $id = $_GET['id'];
 
         $protocol = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://';
         
