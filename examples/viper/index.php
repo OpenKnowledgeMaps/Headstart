@@ -9,27 +9,27 @@ include 'config.php';
         include 'head_viper.php';
         ?>
         
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-        <script type="text/javascript" src="pagination.min.js"></script>
+        <link rel="stylesheet" href="./lib/bootstrap.min.css">
+        <link type="text/css" rel="stylesheet" href="./lib/bootstrap-multiselect.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+        <script type="text/javascript" src="./lib/bootstrap.min.js"></script>
+        <script type="text/javascript" src="./lib/d3.min.js"></script>
+        <script type="text/javascript" src="./lib/bootstrap-multiselect.js"></script>
+        <script type="text/javascript" src="./lib/pagination.min.js"></script>
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" >
-        <link type="text/css" rel="stylesheet" href="options.css">
-        <link type="text/css" rel="stylesheet" href="spinner.css">
-        <link type="text/css" rel="stylesheet" href="pagination.css">
-        <link type="text/css" rel="stylesheet" href="openaire.css">
+        <link rel="stylesheet" href="./lib/font-awesome.min.css" >
+        <link type="text/css" rel="stylesheet" href="./css/options.css">
+        <link type="text/css" rel="stylesheet" href="./css/spinner.css">
+        <link type="text/css" rel="stylesheet" href="./lib/pagination.css">
+        <link type="text/css" rel="stylesheet" href="./css/openaire.css">
     </head>
 
     <body>
         <div class="vipercanvas">
             <div class="viperheader">
-                <div class="viperlogo"><img src="viper-logo.png">
+                <div class="viperlogo"><img src="./img/viper-logo.png">
                     <div class="viperdescr"><h2>VIPER</h2>
                         <!--<span>The Visual Project Explorer</span>-->
                     </div>
@@ -109,10 +109,10 @@ include 'config.php';
         </div>
 
         <?php include('footer.php'); ?>
-        <script type="text/javascript" src="search_openaire_projects.js"></script>
-        <script type="text/javascript" src="data-config_openaire.js"></script>
-        <script type="text/javascript" src="search_options.js"></script>
-        <script type="text/javascript" src="search.js"></script>
+        <script type="text/javascript" src="./js/search_openaire_projects.js"></script>
+        <script type="text/javascript" src="./js/data-config_openaire.js"></script>
+        <script type="text/javascript" src="./js/search_options.js"></script>
+        <script type="text/javascript" src="./js/search.js"></script>
         <script type ="text/javascript">
                     data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
         </script>

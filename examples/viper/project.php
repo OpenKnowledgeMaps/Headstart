@@ -29,14 +29,14 @@ include 'config.php';
         include 'head_viper.php'; 
         ?>
         
-        <link type="text/css" rel="stylesheet" href="openaire.css"></link>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="./css/openaire.css"></link>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     </head>
 
     <body style="margin:0px; padding:0px; max-width:1600px; margin: 0px auto;">
         
         <div id="visualization"></div>
-        <script type="text/javascript" src="data-config_openaire.js"></script>
+        <script type="text/javascript" src="./js/data-config_openaire.js"></script>
         <script>
         	data_config.files = [{
         		title: "<?php echo $query; ?>",
