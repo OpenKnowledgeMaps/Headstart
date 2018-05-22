@@ -11,14 +11,14 @@ include 'config.php';
             "title" => "Building your map - VIPER"
         );
         ?>
-        
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-        <link type="text/css" rel="stylesheet" href="openaire.css">
+        <script type="text/javascript" src="./lib/bootstrap.min.css"></script>  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+       
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,800' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" >
+        <link rel="stylesheet" href="./lib/font-awesome.min.css">
+        <link type="text/css" rel="stylesheet" href="./css/openaire.css">
     </head>
 
     <body class="waiting-page">
@@ -26,7 +26,7 @@ include 'config.php';
             <div style="padding: 20px;">
             <div class="background2">
                 <div class="team">
-                    <p style="text-align:center; margin:0px auto 20px;"><img style="width:70px;" src="viper-logo.png"></p>
+                    <p style="text-align:center; margin:0px auto 20px;"><img style="width:70px;" src="./img/viper-logo.png"></p>
                     <p class="waiting-title">Your overview for <span class="project_name"></span> is being created</p>
                     <p class="waiting-description"></p>
                     <p id="info-totals"></p>
@@ -108,7 +108,7 @@ include 'config.php';
                 $("#progress").html(
                         `Sorry! We could not create your map, most likely because the project does not have enough resources linked to it. \n\
                         You can link further resources to this project on the OpenAIRE website. Use the button indicated in the exemplary screenshot to do so. <br><br>If you think that there is something wrong with our site, please let us know at <a href="mailto:info@openknowledgemaps.org" style="color:white; text-decoration:underline;">info@openknowledgemaps.org</a>. \n\
-                        <p><a href="https://www.openaire.eu/search/project?projectId=` + window.dataParamsForOpening.obj_id + `" target="_blank"><img src="viper-project-screenshot.png" class="error-building-map-image"></a>\n\
+                        <p><a href="https://www.openaire.eu/search/project?projectId=` + window.dataParamsForOpening.obj_id + `" target="_blank"><img src="./img/viper-project-screenshot.png" class="error-building-map-image"></a>\n\
                         <p class="error-building-map-button"><a class="newsletter2" href="https://www.openaire.eu/search/project?projectId=` + window.dataParamsForOpening.obj_id + `" target="_blank">Go to the OpenAIRE project website</a></p>`
                         );
             }

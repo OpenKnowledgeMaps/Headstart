@@ -12,19 +12,19 @@ include 'config.php';
         );
         ?>
         
-        <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link type="text/css" rel="stylesheet" href="./lib/bootstrap.min.css">
         <script src="https://code.jquery.com/jquery-2.1.4.min.js" integrity="sha256-8WqyJLuWKRBVhxXIL1jBDD7SDxU936oZkCnxQbWwJVw=" crossorigin="anonymous"></script>
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" >
-        <link type="text/css" rel="stylesheet" href="options.css">
-        <link type="text/css" rel="stylesheet" href="openaire.css">
+        <link rel="stylesheet" href="./lib/font-awesome.min.css" >
+        <link type="text/css" rel="stylesheet" href="./css/options.css">
+        <link type="text/css" rel="stylesheet" href="./css/openaire.css">
     </head>
 
     <body>
 
         <div class="vipercanvas">
             <div class="viperheader">
-                <a href="index.php"><div class="viperlogo"><img src="viper-logo.png">
+                <a href="index.php"><div class="viperlogo"><img src="./img/viper-logo.png">
                         <div class="viperdescr"><h2>VIPER</h2>
                             <!--<span>The Visual Project Explorer</span>-->
                         </div>
@@ -45,7 +45,7 @@ include 'config.php';
         </div>
         <div class="aboutviper">
             <div style="padding: 0px 20px;">
-                <p class="headline-viperimg"><img src="viper-logo-color.png"></p>
+                <p class="headline-viperimg"><img src="./img/viper-logo-color.png"></p>
                 <h2 class="headline-viper">VIPER: The Visual Project Explorer
                     <span style="font-size:18px; display: block; margin-top:20px;">by <a class="linkvar1" target="_blank" href="https://openknowledgemaps.org">Open Knowledge Maps</a></span></h2>
 
@@ -55,7 +55,7 @@ include 'config.php';
                 </p>
 
                 <a href="https://openknowledgemaps.org/viper/project?id=6fd986ceb58e4e9b48fdd21f7f53abde" target="_blank">
-                    <img style="max-width:900px; margin: 30px auto; background-color: #eff3f4; padding:5px; border-radius: 5px; moz-border-radius: 5px; width:100%;" src="overview-openaire.png">
+                    <img style="max-width:900px; margin: 30px auto; background-color: #eff3f4; padding:5px; border-radius: 5px; moz-border-radius: 5px; width:100%;" src="./img/overview-openaire.png">
                 </a>
 
                 <p style="max-width: 650px; margin:0px auto;">In VIPER, each project is represented by an interactive knowledge map: a visualization showing a topical clustering of a project’s publications 
@@ -65,7 +65,7 @@ include 'config.php';
                 </p>
 
                 <a href="https://openknowledgemaps.org/viper/project?id=6fd986ceb58e4e9b48fdd21f7f53abde" target="_blank">
-                    <img style="max-width:900px; margin: 30px auto; background-color: #eff3f4; padding:5px; border-radius: 5px; moz-border-radius: 5px; width:100%;" src="detail-openaire.png"></p>
+                    <img style="max-width:900px; margin: 30px auto; background-color: #eff3f4; padding:5px; border-radius: 5px; moz-border-radius: 5px; width:100%;" src="./img/detail-openaire.png"></p>
                 </a>
 
                 <p style="max-width: 650px; margin:0px auto;">

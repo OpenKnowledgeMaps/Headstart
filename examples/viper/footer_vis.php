@@ -2,7 +2,7 @@
     <div class="builtby-container">
 
         <div class="info">
-            <a href="" target="_blank"><img style="max-width:100px; width:100%;" src="viper-logo-color.png"></a>
+            <a href="" target="_blank"><img style="max-width:100px; width:100%;" src="./img/viper-logo-color.png"></a>
         </div>
 
         <div class="info">
@@ -10,8 +10,8 @@
             <p>is a service created by <a href="https://openknowledgemaps.org/" target="_blank">Open Knowledge Maps</a>. 
                 with funding received from <a href="https://openaire.eu" target="_blank">OpenAIRE</a>.
                 For more information please contact <a href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>.</p>
-            <a href="https://openknowledgemaps.org/" target="_blank"><img class="logoimg" style="margin-right:10px" src="okmaps-logo.png"></a>
-            <a href="https://openaire.eu" target="_blank"><img class="logoimg" src="openaire-logo.png"></a>
+            <a href="https://openknowledgemaps.org/" target="_blank"><img class="logoimg" style="margin-right:10px" src="./img/okmaps-logo.png"></a>
+            <a href="https://openaire.eu" target="_blank"><img class="logoimg" src="./img/openaire-logo.png"></a>
         </div>
 
         <div class="info">
