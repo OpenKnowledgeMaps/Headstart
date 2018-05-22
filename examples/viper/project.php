@@ -30,7 +30,7 @@ include 'config.php';
         ?>
         
         <link type="text/css" rel="stylesheet" href="openaire.css"></link>
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js" integrity="sha256-8WqyJLuWKRBVhxXIL1jBDD7SDxU936oZkCnxQbWwJVw=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     </head>
 
     <body style="margin:0px; padding:0px; max-width:1600px; margin: 0px auto;">
