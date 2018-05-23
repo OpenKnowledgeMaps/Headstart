@@ -109,6 +109,8 @@ var config = {
     //intro
     intro: "intro_hs",
     
+    use_hypothesis: false,
+    
     service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE"},
 
     localization: {

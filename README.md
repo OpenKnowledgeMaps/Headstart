@@ -42,7 +42,7 @@ See [Installing and configuring the server](doc/server_config.md) for instructio
 
 Maintainer: [Peter Kraker](https://github.com/pkraker) ([pkraker@openknowledgemaps.org](mailto:pkraker@openknowledgemaps.org))
 
-Authors: [Asura Enkhbayar](https://github.com/Bubblbu), [Scott Chamberlain](https://github.com/sckott), [Chris Kittel](https://github.com/chreman), [Maxi Schramm](https://github.com/tanteuschi), [Rainer Bachleitner](https://github.com/rbachleitner), [Mike Skaug](https://github.com/mikeskaug), [Philipp Weissensteiner](https://github.com/wpp), and the [Open Knowledge Maps team](http://openknowledgemaps.org/team)
+Authors: [Maxi Schramm](https://github.com/tanteuschi), [Christopher Kittel](https://github.com/chreman), [Asura Enkhbayar](https://github.com/Bubblbu), [Scott Chamberlain](https://github.com/sckott), [Rainer Bachleitner](https://github.com/rbachleitner), [Yael Stein](https://github.com/jaels), [Thomas Arrow](https://github.com/tarrow), [Mike Skaug](https://github.com/mikeskaug), [Philipp Weissensteiner](https://github.com/wpp), and the [Open Knowledge Maps team](http://openknowledgemaps.org/team)
 
 
 ## Features
@@ -57,11 +57,11 @@ Authors: [Asura Enkhbayar](https://github.com/Bubblbu), [Scott Chamberlain](http
 
 ## Showcases
 
-* [Open Knowledge Maps](http://openknowledgemaps.org/): Creates a visualization on the fly based on a user's search in either BASE or PubMed.
-* [Overview of Educational Technology](http://openknowledgemaps.org/educational-technology): A working prototype for the field of educational technology based on co-readership.
-* [Timeline of UMAP Conferences](http://stellar.know-center.tugraz.at/umap/): A prototype showcasing an overview of two years of the UMAP Conferences.
+* [Open Knowledge Maps](https://openknowledgemaps.org/): Creates a visualization on the fly based on a user's search in either BASE or PubMed.
+* [VIPER - The Visual Project Explorer](https://openknowledgemaps.org/viper/): Provides overviews of research projects indexed by OpenAIRE.
+* [Overview of Educational Technology](https://openknowledgemaps.org/educational-technology): A working prototype for the field of educational technology based on co-readership.
+* [OpenUP Dissemination Toolbox](https://www.openuphub.eu/tools): A prototype showcasing an overview of innovative dissemination case studies.
 * [Conference Navigator 3](http://halley.exp.sis.pitt.edu/cn3/visualization.php?conferenceID=131) [registration required]: An adaptation of Head Start for the conference scheduling system CN3. This version enables users to schedule papers directly from the visualization. Scheduled papers and recommended papers are highlighted.
-* [Organic Edunet portal](http://organic-edunet.eu/en/#/recommended): Overview of recommended resources in the Organic Eudnet portal.
 
 ## Compatibility
 
@@ -81,7 +81,7 @@ Kraker, P., Körner, C., Jack, K., & Granitzer, M. (2012). [Harnessing User Libr
 
 
 ## License
-Head Start is licensed under [LGPL v3](http://www.gnu.org/copyleft/lesser.html).
+Head Start is licensed under [MIT](LICENSE).
 
 
 ## Citation
