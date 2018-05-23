@@ -707,7 +707,11 @@ list.writePopup = function(pdf_url) {
         $("#pdf_iframe")
             .attr("src", function() {
                 let viewer = config.server_url + "services/pdfjs-hypothesis/web/viewer.html";
-                return viewer + "?file=" + pdf_url; //#view=FitH
+                if(config.use_hypothesis) {
+                    return viewer + "?file=" + pdf_url; //#view=FitH
+                } else {
+                    return pdf_url;
+                }
             })
             .attr("scrolling", "no");
     }, 100);
