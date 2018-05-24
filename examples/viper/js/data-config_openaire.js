@@ -36,7 +36,7 @@ var data_config = {
     
     viper_edit_modal: true,
     viper_embed_modal: true,
-    viper_share_modal: true,
+    viper_share_modal: false,
 
     viper_outlink: true,
 
