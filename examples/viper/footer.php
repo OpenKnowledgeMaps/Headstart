@@ -32,7 +32,8 @@
         <h3 style="margin-bottom: 10px;">Details</h3>
         <ul class="nav_bottom">
             <li><a href="https://openknowledgemaps.org/imprint" target="_blank"><span class="awesome">&#xf0c1;</span> Impressum / Legal Notice</a></li>
-            <li><a href="https://openknowledgemaps.org/privacy" target="_blank"><span class="awesome">&#xf023;</span> Datenschutzerklärung / Privacy Policy</a></li>
+            <li><a href="https://openknowledgemaps.org/datenschutz" target="_blank"><span class="awesome">&#xf023;</span> Datenschutzerklärung</a></li>
+            <li><a href="https://openknowledgemaps.org/privacy" target="_blank"><span class="awesome">&#xf023;</span> Privacy Policy</a></li>
         </ul>
     </div>
     </div>
