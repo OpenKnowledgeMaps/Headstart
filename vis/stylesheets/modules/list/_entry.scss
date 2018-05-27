@@ -185,6 +185,10 @@
     }
 }
 
+.list_subentry_showmore, .list_subentry_show_statistics {
+    display: none;
+}
+
 #list_keywords {
     margin-bottom: 20px;
 }

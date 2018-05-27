@@ -15,10 +15,15 @@ import {
     sortBy,
     getRealHeight
 } from 'helpers';
+import { io } from 'io';
 
 const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
 const listEntryTemplate = require("templates/list/list_entry.handlebars");
+const listEntryTemplateCris = require("templates/list/cris/list_entry_cris.handlebars");
+const listSubEntryTemplateCris = require("templates/list/cris/list_subentry_cris.handlebars");
+const listSubEntryStatisticsTemplateCris = require("templates/list/cris/list_subentry_statistics_cris.handlebars");
+const listSubEntryStatisticDistributionTemplateCris = require("templates/list/cris/list_subentry_statistic_distribution_cris.handlebars");
 const viperOutlinkTemplate = require("templates/list/viper_outlink.handlebars");
 const viperMetricTemplate = require('templates/list/viper_metrics.handlebars');
 const filterDropdownEntryTemplate = require("templates/list/filter_dropdown_entry.handlebars");
@@ -321,24 +326,39 @@ list.initListMouseListeners = function() {
 };
 
 list.getPaperNodes = function(list_data) {
-    let list_entry = listEntryTemplate();
+    if ((config.list_sub_entries)) {
+        let list_entry = listEntryTemplateCris();
 
-    return this.papers_list.selectAll("div")
-        .data(list_data)
-        .enter()
-        .append("div")
-        .attr("id", "list_holder")
-        .attr("class", function (d) {
-            if (d.resulttype === "dataset") {
-                return "resulttype-dataset";
-            } else {
-                return "resulttype-paper";
-            }
-        })
-        .html(list_entry)
-        .sort(function(a, b) {
-            return b.internal_readers - a.internal_readers;
-        });
+        return this.papers_list.selectAll("div")
+            .data(list_data)
+            .enter()
+            .append("div")
+            .attr("id", "list_holder")
+            .html(list_entry)
+            .sort(function(a, b) {
+                return b.internal_readers - a.internal_readers;
+            });
+            
+    } else {
+        let list_entry = listEntryTemplate();
+
+        return this.papers_list.selectAll("div")
+            .data(list_data)
+            .enter()
+            .append("div")
+            .attr("id", "list_holder")
+            .attr("class", function (d) {
+                if (d.resulttype === "dataset") {
+                    return "resulttype-dataset";
+                } else {
+                    return "resulttype-paper";
+                }
+            })
+            .html(list_entry)
+            .sort(function(a, b) {
+                return b.internal_readers - a.internal_readers;
+            });
+        }
 };
 
 list.updateByFiltered = function() {
@@ -758,16 +778,93 @@ list.createHighlights = function(search_words) {
 
 // called quite often
 list.createAbstract = function(d, cut_off) {
-    if (typeof d.paper_abstract === "undefined")
-        return "";
+    if(config.list_sub_entries) {
+        return list.createAbstractCris(d, cut_off);
+    } else {
+        if (typeof d.paper_abstract === "undefined")
+            return "";
 
-    if (cut_off) {
-        if (d.paper_abstract.length > cut_off) {
-            return d.paper_abstract.substr(0, cut_off) + "...";
+        if (cut_off) {
+            if (d.paper_abstract.length > cut_off) {
+                return d.paper_abstract.substr(0, cut_off) + "...";
+            }
+        }
+        return d.paper_abstract;
+    }
+};
+
+list.createAbstractCris = function(d, cut_off) {
+    let list_abstract_template = listSubEntryTemplateCris();
+    let list_abstract = document.createElement("div");
+    
+    for (let elem of d.paper_abstract) {
+        let current_abstract = d3.select(list_abstract)
+                .append("div")
+                .html(list_abstract_template);
+        
+        current_abstract.select(".list_subentry_title")
+                .text(elem.abstract)
+        
+        current_abstract.select(".list_subentry_readers")
+                .text(elem.readers)
+        
+        current_abstract.select(".list_subentry_readers_entity")
+                .text(config.base_unit)
+        
+        if(cut_off) {
+            let showmore = current_abstract.select(".list_subentry_showmore")
+                                .style("display", "block")
+                        
+            showmore.select(".list_subentry_showmore_text")
+                    .text(config.localization[config.language].showmore_questions_label)
+                    
+            break;
+        } else {
+            let show_statistics = current_abstract.select(".list_subentry_show_statistics")
+                    .style("display", "block")
+            
+            show_statistics.select(".list_subentry_show_statistics_text")
+                    .text(config.localization[config.language].distributions_label)
+            
+            show_statistics.select(".list_subentry_show_statistics_numbers")
+                    .text(elem.readers + " " + config.base_unit)
+            
+            show_statistics.select(".list_subentry_show_statistics_verb")
+                    .text(config.localization[config.language].show_verb_label)
+            
+            let statistics_div = current_abstract.select(".list_subentry_statistics")
+            
+            let list_subentry_statistics = listSubEntryStatisticsTemplateCris();
+            
+            let current_context = io.context.distributions_abstracts[elem.id];
+    
+            for (let context_elem in current_context) {
+                if (current_context.hasOwnProperty(context_elem)) {
+                    let subentry_statistics = statistics_div.append("div").html(list_subentry_statistics);
+                    subentry_statistics.select(".list_subentry_statistic_title")
+                        .text(context_elem)
+                    this.createAbstractStatistics(subentry_statistics, current_context[context_elem])
+                }
+            }
         }
     }
-    return d.paper_abstract;
+    
+    return list_abstract.outerHTML;
+    
 };
+
+list.createAbstractStatistics = function(div, distributions) {
+    
+    let list_subentry_statistics_distribution = listSubEntryStatisticDistributionTemplateCris();
+    distributions.forEach(function(distribution) {
+        let div_distribution = div.append("div")
+                .html(list_subentry_statistics_distribution);
+        
+        div_distribution.select(".list_subentry_statistic_distribution_title").text(distribution.name);
+        div_distribution.select(".list_subentry_statistic_distribution_number").text(distribution.share);
+    })
+
+}
 
 list.addBookmark = function(d) {
     $.getJSON(this.headstart_server + "services/addBookmark.php?user_id=" + config.user_id + "&content_id=" + d.id, function(data) {

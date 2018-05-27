@@ -199,8 +199,19 @@ IO.prototype = {
                      return +d[metric];
                  }
             }
+            
+            var prepareSubMetric = function(d, metric) {
+                let num = 0;
+                d.paper_abstract.forEach(function (element) {
+                    num += +element.readers;
+                })
+                return num;
+            }
 
-            if (config.content_based === false && !(config.scale_by)) {
+            if (config.list_sub_entries) {
+                d.num_readers = prepareSubMetric(d, "readers");
+                d.internal_readers = d.num_readers + 1;
+            } else if (config.content_based === false && !(config.scale_by)) {
                 d.num_readers = prepareMetric(d, "readers");
                 d.internal_readers = prepareInternalMetric(d, "readers") + 1;
             } else if (config.scale_by) {

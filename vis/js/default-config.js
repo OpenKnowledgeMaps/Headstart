@@ -111,6 +111,8 @@ var config = {
     
     use_hypothesis: false,
     
+    list_sub_entries: false,
+    
     service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE"},
 
     localization: {
@@ -296,7 +298,42 @@ var config = {
             items: "items",
             sort_by_label: 'sort by:',
             scale_by_label: 'Scale map by:',
-        }
+        },
+         ger_cris: {
+            loading: "Wird geladen...",
+            search_placeholder: "Suche in der Liste...",
+            show_list: "Liste ausklappen",
+            hide_list: "Liste einklappen",
+            intro_label: "",
+            readers: "Leser",
+            year: "Jahr",
+            authors: "Autor",
+            title: "Titel",
+            default_title: 'Überblick über <span id="num_articles"></span> Artikel',
+            overview_label: 'Überblick über',
+            most_recent_label: 'neueste',
+            articles_label: 'Artikel',
+            source_label: 'Quelle',
+            documenttypes_label: 'Publikationsarten',
+            area: "Bereich",
+            keywords: "Keywords",
+            no_title: "Kein Titel",
+            default_area: "Kein Bereich",
+            default_author: "",
+            default_id: "defaultid",
+            default_hash: "hashHash",
+            default_abstract: "",
+            default_published_in: "",
+            default_readers: 0,
+            default_url: "",
+            default_x: 1.,
+            default_y: 1.,
+            default_year: "",
+            showmore_questions_label: "alle Fragen anzeigen",
+            distributions_label: "Verteilungen der",
+            show_verb_label: "ausklappen",
+            hide_verb_label: "einklappen"
+        },
     },
 
     scale_types: [],

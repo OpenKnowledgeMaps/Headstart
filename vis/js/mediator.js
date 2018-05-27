@@ -226,7 +226,17 @@ MyMediator.prototype = {
     },
 
     init_start_visualization: function(highlight_data, csv) {
-        let data = (config.show_context)?(JSON.parse(csv.data)):csv;
+        let data = function () {
+            if (config.show_context) {
+                if(typeof csv.data === "string") {
+                    return JSON.parse(csv.data);
+                } else {
+                    return csv.data;
+                }
+            } else {
+                return csv;
+            }
+        }();
         let context = (config.show_context)?(csv.context):{};
         
         mediator.manager.registerModule(headstart, 'headstart');
