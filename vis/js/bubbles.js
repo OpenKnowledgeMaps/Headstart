@@ -87,8 +87,8 @@ BubblesFSM.prototype = {
 
       d3.selectAll("#headstart-chart circle")
         .attr("r", (d) => {
-          d.r_zoomed = canvas.circle_size(d.readers) * mediator.circle_zoom;
-          d.r = canvas.circle_size(d.readers);
+          d.r_zoomed = canvas.circle_size(d.num_readers) * mediator.circle_zoom;
+          d.r = canvas.circle_size(d.num_readers);
           if (mediator.is_zoomed === true) {
             return d.r_zoomed;
           } else {
@@ -481,6 +481,7 @@ BubblesFSM.prototype = {
                     }
 
                     mediator.zoom_finished = true;
+                    mediator.publish("zoomin_complete")
                 });
 
         mediator.current_bubble.createTransition(t, d.title);
@@ -546,6 +547,8 @@ BubblesFSM.prototype = {
 
                     mediator.current_zoom_node = null;
                     mediator.is_zoomed = false;
+                    
+                    mediator.publish("zoomout_complete")
                 });
 
         t.selectAll("g.bubble_frame")

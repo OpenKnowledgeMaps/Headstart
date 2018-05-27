@@ -8,25 +8,34 @@ $("#search-projects-form").submit(function (event) {
 function simpleTemplating (data) {
   var html = $('<ul class="list-group">')
   $.each(data, function (index, item) {
+    let title = (item.num_project_resources <= 1)
+                ?(item.acronymtitle)
+                :('<span class="awesome"> </span>Overview of ' + item.acronymtitle)
+      
     html.append($('<li class="list-group-item">')
     .html($('<a>')
     .attr('class', 'project-title')
     .attr('href', '#')
-    .html('<span class="awesome"> </span>Overview of ' + item.acronymtitle).on('click', function (event) {
-      var win = window.open("building_map.html")
-      win.dataParamsForOpening = {
-        data: $.param(item),
-        service_name: service_name,
-        service: data_config.service,
-        server_url: data_config.server_url,
-        search_url: service_url,
-        acronymtitle: item.acronymtitle,
-        funder: item.funder,
-        project_id: item.project_id,
-        obj_id: item.obj_id,
-        acronym: item.acronym
-      }
-      event.preventDefault();
+    .html(title).on('click', function (event) {
+ 
+        event.preventDefault();
+        
+        var win = window.open("building_map")
+        win.dataParamsForOpening = {
+          data: $.param(item),
+          service_name: service_name,
+          service: data_config.service,
+          server_url: data_config.server_url,
+          search_url: service_url,
+          acronymtitle: item.acronymtitle,
+          funder: item.funder,
+          project_id: item.project_id,
+          obj_id: item.obj_id,
+          acronym: item.acronym,
+          num_project_resources: item.num_project_resources,
+          num_publications: item.num_publications,
+          num_datasets: item.num_datasets
+        }
     }))
     .append('<span class="project-code"> (' + item.project_id +
       ')</span><div class="project-funders">' + item.funder + 
@@ -34,7 +43,9 @@ function simpleTemplating (data) {
       ' (' + item.start_date.slice(0, 4) +' - '+ item.end_date.slice(0,4) + ')' +
       '</div><div class="project-organisations">Participants: ' + formatOrganisationLinks(item.organisations).slice(0,15).join(', ') + 
       ((item.organisations.length > 15)?(',...'):('')) + '</div>' +
-      '<div class="project-resources">Number of project resources: ' + item.num_project_resources + '</div>'
+      '<div class="project-resources">Number of project resources: <span class="num-resources'
+      + ((item.num_project_resources <= 1)?(" insufficient-resources"):("")) +
+      '">' + item.num_project_resources + '<span></div>'
       ))
   })
   return html
@@ -83,7 +94,8 @@ var setupPaginator = function (searchTerm, params) {
             $('.pagination').find("li:first").addClass("active")
         }
         
-        $("#viper-search-pager").show();
+        $(".paginationjs").hide();
+        $("#viper-search-results").show();
       },
       dataFilter: function (data, type) {
         try {
@@ -113,6 +125,9 @@ var setupPaginator = function (searchTerm, params) {
 
 var getResourcesAndSetupList = function(data, pagination, searchTerm) {
     
+    $(".paginationjs").show();
+    $('#viper-search-results, #viper-search-pager').show();  
+    
     if (data.length <= 0) {
       $('.lds-spinner').hide();
       $('#viper-search-results').html('<div class="viper-no-results-err">Sorry, no projects found for <span style="font-weight:bold;">' + decodeURI(searchTerm) + '</span>. Please try another search term.</div>')
@@ -132,7 +147,7 @@ var getResourcesAndSetupList = function(data, pagination, searchTerm) {
     $.ajax({
         dataType: "json",
         url: data_config.server_url + "services/getOpenAireTotals.php?" + project_ids + funders + obj_ids,
-        timeout: 4000
+        timeout: 8000
     })
         .fail( function(xhr, status) {
             if(status === "timeout") {
@@ -141,8 +156,11 @@ var getResourcesAndSetupList = function(data, pagination, searchTerm) {
         })
         .success(function (totals) {
             data.forEach(function (entry) {
-            entry.num_project_resources = totals[entry.obj_id].publications + totals[entry.obj_id].datasets;
-            setupList(data, pagination, searchTerm);
+                entry.num_publications = totals[entry.obj_id].publications;
+                entry.num_datasets = totals[entry.obj_id].datasets;
+                entry.num_project_resources = entry.num_publications + entry.num_datasets;
+            
+                setupList(data, pagination, searchTerm);
         })         
       })
     

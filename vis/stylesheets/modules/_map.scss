@@ -8,10 +8,11 @@
     /*position: absolute;*/
 
     margin: 0 auto;
-    display: inline-block; /*table;*/
+    //display: inline-block; /*table;*/
     /*margin-top: 6px;*/
     position: relative;
     z-index: 0;
+    //margin-left: 50px;
 }
 
 #chart-svg {
@@ -68,35 +69,73 @@ text {
 }
 
 .scale-toolbar {
-    padding: 20px 0 20px 50px;
+    padding: 20px 0 15px 50px;
     background-color: $okm-clouds;
     display:block;
     font-family: 'Open Sans', Helvetica, sans-serif;
 }
 
-.scale-toolbar .dropdown-menu > li > a {
+.scale-toolbar .dropdown-menu > li > a, #explorer_options .dropdown-menu > li > a {
     padding: 10px;
     border-bottom: 1px solid #e4e4e4;
 }
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    color: #fff;
+    text-decoration: none;
+    outline: 0;
+    background-color: $okm-modal-btn;
+}
 
-
-#curr-scale-explaination {
-    margin-left: 10px;
+#curr-scale-explanation {
+    padding: 0px 10px;
+    font-size: 12px;
 }
 
 #scale-menu {
+    color: $white;
+    background-color: $okm-modal-btn;
+    border-color: $okm-modal-btn;
+}
+
+#scale-menu:hover {
     color: $okm-modal-btn;
     background-color: $white;
     border-color: $okm-modal-btn;
 }
 
-#scale-menu:hover {
+#filter_params, #sort {
+    color: $okm-modal-btn;
+    background-color: $white;
+    border-color: $okm-modal-btn;
+}
+
+#filter_params {
+    margin-right:10px;
+    margin-bottom: 10px;
+}
+
+#filter_params:hover, #sort:hover {
     color: $white;
     background-color: $okm-modal-btn;
     border-color: $okm-modal-btn;
 }
+
 .dropdown-menu, #scale-menu {
-    width: 208px;
+    width: 190px;
+    font-size: 12px;
+}
+
+.dropdown-menu {
+    padding: 0px 0;
+}
+
+#filter_params, #sort, #sort-menu-entries, #filter-menu-entries {
+    width: 160px;
+    font-size: 12px;
+}
+
+#filter-menu-entries {
+    margin-right: 10px;
 }
 
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
@@ -113,6 +152,12 @@ text {
 
 
 .dropdown-menu > li > a:active {
-    background-color: #2d72d6;
+    background-color: $okm-modal-btn;
     color: white;
+}
+
+@media screen and (max-width: 1250px) {
+    #headstart-chart {
+        margin-left: 50px;
+    }
 }

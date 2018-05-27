@@ -18,14 +18,7 @@ var doSubmit = function (data, newWindow, callback) {
     var openInNewWindow = function (data) {
         if (data.status === "success") {
             var file = data.id;
-            window.open("headstart.php?query=" +
-                    data.query +
-                    "&file=" +
-                    file +
-                    "&service=" +
-                    data_config.service +
-                    "&service_name=" +
-                    service_name, '_blank')
+            window.open("project?&id=" + file, '_blank')
             console.log('opening')
             callback(true)
             return false;
@@ -37,15 +30,7 @@ var doSubmit = function (data, newWindow, callback) {
     var openInThisWindow = function (data) {
         if (data.status === "success") {
             var file = data.id;
-            window.location =
-                    "headstart.php?query=" +
-                    data.query +
-                    "&file=" +
-                    file +
-                    "&service=" +
-                    data_config.service +
-                    "&service_name=" +
-                    service_name;
+            window.location = "project?&id=" + file;
             return false;
         } else {
             $("#progress").html(

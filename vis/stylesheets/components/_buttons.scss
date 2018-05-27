@@ -2,9 +2,9 @@
 
 #searchclear {
     position: absolute;
-    right: 5px;
+    right: 15px;
     top: 0;
-    bottom: 0;
+    bottom: 10px;
     height: 14px;
     margin: auto;
     font-size: 14px;
@@ -20,15 +20,17 @@ img#close-button {
 }
 
 #modals {
-    display:inline-block;
-    width:50px;
+    /*display:inline-block;
+    width:50px;*/
     vertical-align:top;
     margin: 20px 20px 0 0;
     font-family: 'Open Sans', Helvetica, sans-serif;
     font-weight: 300;
+    
 }
 
 #modals .btn {
+    font-size: 20px;
     background-color: $okm-modal-btn;
     border-color: $okm-modal-btn;
     margin-bottom: 5px;
@@ -47,7 +49,7 @@ img#close-button {
     box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
 }
 
-#modals .fa-pencil-square-o, #modals .fa-code {
+#modals .fa-pencil-square-o, #modals .fa-code, #modals .fa-share-alt {
     font-size:20px;
 }
 

@@ -3,7 +3,9 @@ library('rcrossref')
 
 enrich_output_json <- function(output_json){
   output<- fromJSON(output_json)
+  
   results <- get_altmetrics(output$doi)
+  
   if (nrow(results) > 0){
     if (!("cited_by_tweeters_count" %in% names(results))) {
       results[["cited_by_tweeters_count"]]  = NA
@@ -22,6 +24,10 @@ enrich_output_json <- function(output_json){
   
   #Remove duplicate lines - TODO: check for root of this problem
   output = unique(output)
+
+  output$cited_by_tweeters_count[is.na(output$cited_by_tweeters_count)] <- "N/A"  
+  output$citation_count[is.na(output$citation_count)] <- "N/A"
+  output$'readers.mendeley'[is.na(output$'readers.mendeley')] <- "N/A"
   
   output_json <- toJSON(output)
   return (output_json)
@@ -45,7 +51,19 @@ get_altmetrics <- function(dois){
 add_citations <- function(output){
   dois <- output$doi
   valid_dois <- which(dois!="")
-  cit_count = cr_citation_count(doi=dois[valid_dois], async=TRUE)
+  
+  # doc_parse_raw exception hotfix
+  #cit_count = cr_citation_count(doi=dois[valid_dois], async=TRUE)
+  cit_count = data.frame()
+  for (doi in dois[valid_dois]){
+    cc <- tryCatch({
+      cr_citation_count(doi=doi, async=TRUE)
+      }, error = function(err){
+          print(paste(err, doi))
+          return(list(doi=doi, count=NA))
+      })
+    cit_count <- rbind(cit_count, cc)
+  }
   output = merge(x=output, y=cit_count, by='doi', all.x = TRUE)
   names(output)[names(output)=="count"] <- "citation_count"
   return (output)
