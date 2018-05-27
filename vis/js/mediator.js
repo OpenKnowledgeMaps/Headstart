@@ -97,10 +97,13 @@ MyMediator.prototype = {
         this.mediator.subscribe("bubbles_update_data_and_areas", this.bubbles_update_data_and_areas);
         this.mediator.subscribe("bubble_zoomin", this.bubble_zoomin);
         this.mediator.subscribe("bubble_zoomout", this.bubble_zoomout);
+        this.mediator.subscribe("zoomout_complete", this.zoomout_complete);
+        this.mediator.subscribe("zoomin_complete", this.zoomin_complete);
 
         // misc
         this.mediator.subscribe("record_action", this.record_action);
         this.mediator.subscribe("check_force_papers", this.check_force_papers);
+        this.mediator.subscribe("mark_project_changed", this.mark_project_changed);
 
         // canvas events
         this.mediator.subscribe("window_resize", this.window_resize);
@@ -138,7 +141,7 @@ MyMediator.prototype = {
             mediator.manager.registerModule(canvas, 'canvas');
             mediator.manager.registerModule(papers, 'papers');
         }
-        if(config.scale_types.lenght > 0) {
+        if(config.scale_toolbar) {
             mediator.manager.registerModule(scale, 'scale')
         }
     },
@@ -223,18 +226,27 @@ MyMediator.prototype = {
     },
 
     init_start_visualization: function(highlight_data, csv) {
-        mediator.manager.registerModule(headstart, 'headstart');
-        if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
-        mediator.manager.call('canvas', 'setupCanvas', []);
-        mediator.manager.registerModule(scale, 'scale')
-        mediator.manager.call('scale', 'drawScaleTypes', []);
-        mediator.manager.call('io', 'get_data', [csv]);
-        let data = io.data;
+        let data = (config.show_context)?(JSON.parse(csv.data)):csv;
         let context = (config.show_context)?(csv.context):{};
+        
+        mediator.manager.registerModule(headstart, 'headstart');
+        
+        if(config.is_force_papers && config.dynamic_force_papers) mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
+        if(config.is_force_area && config.dynamic_force_area) mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
+        if(config.dynamic_sizing) mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
+        if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
+        
+        mediator.manager.call('canvas', 'setupCanvas', []);
+        if(config.scale_toolbar) {
+            mediator.manager.registerModule(scale, 'scale')
+            mediator.manager.call('scale', 'drawScaleTypes', [])
+        }
+        
         
         mediator.manager.call('io', 'initializeMissingData', [data]);
         mediator.manager.call('io', 'prepareData', [highlight_data, data]);
         mediator.manager.call('io', 'prepareAreas', []);
+
         mediator.manager.call('io', 'setContext', [context, data.length]);
         mediator.manager.call('io', 'setInfo', [context]);
         mediator.manager.call('canvas', 'drawTitle', [context]);
@@ -284,8 +296,11 @@ MyMediator.prototype = {
         this.viz.append(editTemplate());
         this.viz.append(embedTemplate());
         
-        if (config.scale_types.length > 0) {
-            this.viz.append(scaleToolbarTemplate());
+        if (config.scale_toolbar) {
+            this.viz.append(scaleToolbarTemplate({
+                scale_by_label: config.localization[config.language].scale_by_label,
+                viper_credit: config.viper_credit
+            }));
         }
         
         if (!config.render_bubbles) {
@@ -329,6 +344,7 @@ MyMediator.prototype = {
 
     paper_click: function(d) {
         mediator.manager.call('papers', 'paper_click', [d]);
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
 
     paper_mouseover: function(d, holder_div) {
@@ -340,11 +356,18 @@ MyMediator.prototype = {
         if (mediator.modules.list.current == "hidden") {
             mediator.manager.call('list', 'show', []);
         }
+        mediator.current_enlarged_paper = holder;
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
 
     paper_current_bubble_clicked: function(area) {
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'filterListByArea', [area]);
+        if (mediator.current_enlarged_paper) {
+            mediator.current_enlarged_paper.paper_selected = false
+        }
+        mediator.current_enlarged_paper = null
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
 
     bubble_mouseout: function(d, circle, bubble_fsm) {
@@ -375,6 +398,7 @@ MyMediator.prototype = {
                 mediator.manager.call('list', 'updateByFiltered', []);
             }
         }
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
     bubble_zoomout: function() {
         mediator.manager.call('list', 'reset', []);
@@ -385,9 +409,18 @@ MyMediator.prototype = {
         $("#region.unframed").removeClass("zoomed_in");
         $(".paper_holder").removeClass("zoomed_in");
     },
+    
+    zoomout_complete: function() {
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
+    },
+
+    zoomin_complete: function() {
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
+    },
 
     currentbubble_click: function(d) {
         mediator.manager.call('papers', 'currentbubble_click', [d]);
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
 
     bookmark_added: function(d) {
@@ -410,6 +443,10 @@ MyMediator.prototype = {
 
     record_action: function(id, action, user, type, timestamp, additional_params, post_data) {
         headstart.recordAction(id, action, user, type, timestamp, additional_params, post_data);
+    },
+    
+    mark_project_changed: function(id) {
+        headstart.markProjectChanged(id);
     },
 
     window_resize: function() {
@@ -442,6 +479,7 @@ MyMediator.prototype = {
         if (config.show_list) {
             mediator.manager.call('list', 'show', []);
         }
+        mediator.manager.call('list', 'count_visible_items_to_header')
     },
     
     draw_title: function () {
@@ -457,6 +495,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'enlargeListItem', [d]);
         mediator.current_enlarged_paper = d;
         mediator.manager.call('papers', 'framePaper', [d]);
+        mediator.manager.call('list', 'count_visible_items_to_header')
     }
 };
 

@@ -6,6 +6,7 @@ var config = {
     zoom_factor: 0.9,
     padding_articles: 0,
     circle_padding: 0,
+    dynamic_sizing: false,
 
     // map
     min_height: 600,
@@ -59,6 +60,9 @@ var config = {
 
     is_force_papers: true,
     papers_force_alpha: 0.1,
+    
+    dynamic_force_area: false,
+    dynamic_force_papers: false,
 
     render_list: true,
     render_bubbles: true,
@@ -75,8 +79,15 @@ var config = {
     create_title_from_context: false,
 
     sort_options: ["readers", "title", "authors", "year"],
+    filter_options: ["all", "open_access", "publication", "dataset"],
+    sort_menu_dropdown: false,
+    initial_sort: null,
 
     content_based: false,
+
+    filter_menu_dropdown: false,
+    
+    scale_toolbar: false,
 
     // transition
     transition_duration: 750,
@@ -97,6 +108,8 @@ var config = {
 
     //intro
     intro: "intro_hs",
+    
+    use_hypothesis: false,
     
     service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE"},
 
@@ -130,7 +143,8 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            sort_by_label: 'sort by:',
         },
         ger: {
             loading: "Wird geladen...",
@@ -191,7 +205,8 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            sort_by_label: 'sort by:',
         },
         eng_pubmed: {
             loading: "Loading...",
@@ -222,7 +237,8 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            sort_by_label: 'sort by:',
         },
         eng_openaire: {
             loading: "Loading...",
@@ -231,9 +247,11 @@ var config = {
             hide_list: "Hide list",
             intro_label: "more info",
             relevance: "relevance",
-            readers: "citations",
+            readers: "readers",
+            tweets: "tweets",
             year: "year",
             authors: "authors",
+            citations: "citations",
             title: "title",
             area: "Area",
             keywords: "Keywords",
@@ -257,14 +275,27 @@ var config = {
             dataset_count_label: "datasets",
             paper_count_label: "papers",
             viper_edit_title: "How to add project resources",
-            viper_edit_desc_label: `<p>You can link further resources to this project\
-             on the OpenAIRE website. Use the button indicated in the exemplary screenshot\
-              to do so.`,
+            viper_edit_desc_label: `<p>Are you missing relevant publications and datasets related to this project? \ 
+            <p>No problem: simply link further resources on the OpenAIRE website. \ 
+            The resources will then be be automatically added to the map. \ 
+            <p>Use the button indicated in the exemplary screenshot to do so: `,
             viper_button_desc_label: `<p>By clicking on the button below, you are redirected to the\
                 OpenAIRE page for`,
             viper_edit_button_text: 'continue to openaire',
             viper_embed_button_text: 'Copy',
             viper_embed_title: 'embed map',
+            link: 'link',
+            tweets_count_label: " tweets",
+            readers_count_label: " readers (Mendeley)",
+            citations_count_label: " citations (Crossref)",
+            filter_by_label: 'show: ',
+            all: "any",
+            open_access: "Open Access",
+            publication: "papers",
+            dataset: "datasets",
+            items: "items",
+            sort_by_label: 'sort by:',
+            scale_by_label: 'Scale map by:',
         }
     },
 

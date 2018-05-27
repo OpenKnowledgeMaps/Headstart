@@ -36,7 +36,7 @@ output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=-1)
 
 if (service=='openaire'){
-  output_json = enrich_output_json(output_json)
+  output_json_with_metrics = enrich_output_json(output_json)
 }
 
-print(output_json)
+print(output_json_with_metrics)

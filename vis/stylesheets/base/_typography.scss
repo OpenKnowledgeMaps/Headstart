@@ -4,3 +4,7 @@
 }
 
 $bold: bold;
+
+@if $skin == 'viper' {
+    $bold: normal;
+}

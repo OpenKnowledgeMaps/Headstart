@@ -8,6 +8,7 @@ import dateFormat from 'dateformat';
 
 const viperEditModalButton = require('templates/misc/viper_edit_button.handlebars')
 const viperEmbedModalButton = require('templates/misc/viper_embed_button.handlebars')
+const viperShareButton = require('templates/misc/viper_share_button.handlebars')
 
 class Canvas {
     constructor() {
@@ -33,6 +34,7 @@ class Canvas {
         var parent_height = getRealHeight($("#" + config.tag));
         var subtitle_height = $("#subdiscipline_title").outerHeight(true);
         var scale_toolbar_height = $(".scale-toolbar").outerHeight(true) || 0;
+        const CHART_HEIGHT_CORRECTION = 14;
 
         // Set available_height and available_width
         if (parent_height === 0) {
@@ -41,14 +43,14 @@ class Canvas {
             this.available_height = $("#" + config.tag).height() - subtitle_height - scale_toolbar_height;
         }
 
-        this.available_height = this.available_height - 1;
+        this.available_height = this.available_height - CHART_HEIGHT_CORRECTION;
 
         if (headstart.is("timeline")) {
             var timeline_height = $(".tl-title").outerHeight(true);
             this.available_height = this.available_height - timeline_height;
             this.available_width = $("#" + config.tag).width();
         } else {
-            this.available_width = $("#" + config.tag).width() - $("#list_explorer").width();
+            this.available_width = $("#" + config.tag).width() - $("#list_explorer").width() - $("#modals").width();
         }
 
         // Set current_vis_size
@@ -163,6 +165,9 @@ class Canvas {
         d3.select("rect")
                 .attr("height", this.current_vis_size)
                 .attr("width", this.current_vis_size);
+        
+        d3.select("#headstart-chart")
+                .style("width", this.current_vis_size + "px");
     }
 
     calcTitleFontSize() {
@@ -304,20 +309,11 @@ class Canvas {
 
     drawModals(context) {
         $('#modals').empty()
-        if (config.viper_edit_modal) {
-            $('#modals').append(viperEditModalButton)
-            $('#viper-edit-screenshot').attr('src', require('images/viper-project-screenshot.png'))
-            $('#edit-title').html(config.localization[config.language].viper_edit_title)
-            $('#edit-modal-text').html(config.localization[config.language].viper_edit_desc_label)
-            $('#edit-button-text').html(config.localization[config.language].viper_button_desc_label + " <b>" + ((context.params.acronym !== "")?(context.params.acronym + " - "):("")) + context.params.title + "</b>.")
-            $('#viper-edit-button').text(config.localization[config.language].viper_edit_button_text)
-            $('#viper-edit-button').attr('href', `https://www.openaire.eu/search/project?projectId=${context.params.obj_id}`)
-        }
         if (config.viper_embed_modal) {
             $('#modals').append(viperEmbedModalButton)
             $('#embed-title').html(config.localization[config.language].viper_embed_title)
             //$('#embed-modal-text').val(`<iframe width="1024" height="800" src="headstart.php?query=${context.query}&file=${context.id}&service=${context.service}"></iframe>`)
-            $('#embed-modal-text').val(`<iframe width="1024" height="800" src="${window.location}"></iframe>`)
+            $('#embed-modal-text').val(`<iframe width="1600" height="900" src="${window.location}&embed=true"></iframe>`)
 
             $('#viper-embed-button').text(config.localization[config.language].viper_embed_button_text)
             .on('click', (event) => {
@@ -327,6 +323,22 @@ class Canvas {
                 embedString.setSelectionRange(0, embedString.value.length);
                 document.execCommand("copy");
                 return false;
+            })
+        }
+        if (config.viper_share_modal) {
+            $('#modals').append(viperShareButton)
+        }
+        if (config.viper_edit_modal) {
+            $('#modals').append(viperEditModalButton)
+            $('#viper-edit-screenshot').attr('src', require('images/viper-project-screenshot.png'))
+            $('#edit-title').html(config.localization[config.language].viper_edit_title)
+            $('#edit-modal-text').html(config.localization[config.language].viper_edit_desc_label)
+            $('#edit-button-text').html(config.localization[config.language].viper_button_desc_label + " <b>" + ((context.params.acronym !== "")?(context.params.acronym + " - "):("")) + context.params.title + "</b>.")
+            $('#viper-edit-button').text(config.localization[config.language].viper_edit_button_text)
+            $('.viper-edit-link, viper-edit-screenshot').click(function (event) {
+                event.preventDefault();
+                mediator.publish("mark_project_changed", context.id);
+                window.open(`https://www.openaire.eu/search/project?projectId=${context.params.obj_id}`);
             })
         }
     }
@@ -665,7 +677,7 @@ class Canvas {
 
     setAreaRadii(areas) {
         for (var area in areas) {
-            areas[area].r = this.circle_size(areas[area].readers);
+            areas[area].r = this.circle_size(areas[area].num_readers);
         }
     }
 

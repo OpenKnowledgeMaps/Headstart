@@ -2,6 +2,7 @@ library(xml2)
 library(plyr)
 library(ropenaire)
 library(rcrossref)
+library(stringr)
 
 # get_papers
 #
@@ -105,25 +106,35 @@ preprocess_data <- function(all_artifacts){
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\[[A-Za-z \\.-]+\\]", "", x)})) # removes [ INFO.INFO-MA ] Computer Science [cs]/Multiagent Systems [cs.MA]
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub(" ?/", ";", x)}))
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\:.*\\:\\:", "", x)})) # keeps only last part after :: ":Enginyeria de la telecomunicació::Processament del senyal::Reconeixement de formes [Àrees temàtiques de la UPC]"
-  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("Q[A-Z]?\\d{1,2}.*\\. ?", "", x)})) # keeps only last part, here Computer science "QA75 Electronic computers. Computer science; számítástechnika, számítógéptudomány"     
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("Q[A-Z]?\\d{1,2}.*\\. ?", "", x)})) # keeps only last part, here Computer science "QA75 Electronic computers. Computer science; számítástechnika, számítógéptudomány"
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("QA\\d{1,2}", "", x)}))
-  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("info:eu-repo;classification;ddc;\\d+", "", x)}))
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\d+\\.\\d+", "", x)})) # 007.52
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("info:eu-repo;classification;ddc;\\d+", "", x)})) # ddc classification
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("info:eu-repo;classification;acm;\\w+.\\d+.\\d+ ", "", x)})) # acm classification
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("ddc:\\d+", "", x)}))
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("jel:[A-Z]+\\d+", "", x)}))
-  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("[A-Z]{2}\\d+-\\d+", "", x)})) # e.g. "TA1-2040" 
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("[A-Z]{2}\\d+-\\d+", "", x)})) # e.g. "TA1-2040"
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\w*\\:\\:", "", x)})) # keeps only last part of e.g. Physics::Optics
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\w+_[A-Z]+-?[A-Z]+", "", x)})) # removes ComputerSystemsOrganization_COMPUTER-COMMUNICATIONNETWORKS
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub(".*- ", "", x)})) # keeps only last part of e.g. High energy physics - lattice
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {if (grepl("pubmedpublicationtype", x)) {
+                                                                              return ("")}
+                                                                             else {
+                                                                               return (x)}
+                                                                              })) # removes ;dk;atira;pure;researchoutput;pubmedpublicationtype;D013486
   all_artifacts$paper_abstract <- unlist(lapply(all_artifacts$paper_abstract, function(x){gsub("\\n", " ", x)}))
+  all_artifacts$doi <- unlist(lapply(all_artifacts$doi, function(x) {str_replace_all(x, "[\r\n\t]" , "")}))
   return (all_artifacts)
 }
 
 fields <- c(
   subject = ".//subject",
   title = ".//title",
-  authors = ".//creator",
   year = ".//dateofacceptance",
   publisher = ".//publisher",
   resulttype = ".//resulttype/@classid",
   language = ".//language",
-  journal = ".//journal",
+  published_in = ".//journal",
   link = ".//children/instance/webresource/url",
   fulltext = ".//fulltext",
   paper_abstract = ".//description",
@@ -144,6 +155,9 @@ parse_response <- function(response) {
     df <- data.frame(data.table::rbindlist(tmp, fill = TRUE, use.names = TRUE))
     df$id <- unlist(lapply(xml_find_all(response, ".//dri:objIdentifier"), xml_text))
     df$doi <- unlist(lapply(df$doi, tolower))
+    df$authors <- unlist(lapply(results, function(result){
+        paste(unlist(lapply(xml_find_all(result, ".//creator"), xml_text)), collapse="; ")
+    }))
     return (df)
   } else {
     stop("Length of results: ", length(tmp))

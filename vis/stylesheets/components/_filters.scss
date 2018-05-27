@@ -69,3 +69,8 @@
         text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
     }
 }
+
+.scale-toolbar .dropdown-menu > .active > a, .scale-toolbar .dropdown-menu > .active > a:hover, .scale-toolbar .dropdown-menu > .active > a:focus {
+    background-color: $framed-item !important;
+}
+

@@ -30,3 +30,35 @@ $okm-modal-btn: #4d7199;
 $infolink: #E55137;
 $framed-item: #f1c500;
 $dataset: #2C3E52;
+
+@if $skin == 'viper' {
+        // Map Bubble Colors
+    $white: white;
+    $lightest-blue: #F1F6FA; //old: #F1F6FA
+    $light-blue: #D2E4F0;
+    $dark-blue: #444444; // old: #1F77B4, #2C3E52
+
+    // OKMaps
+    $okm-red: #e55137;
+    $okm-blue: #444444;
+    $okm-gray: #808B8D;
+    $okm-light-gray: #f9f9f9;
+    $okm-green: #51c9ae;
+    $okm-clouds: #F8F8F8;
+
+    // Text colors
+    $medium-blue: #3696e0;
+    $dark-red: #A70805;
+    $black: #444444;
+    $author-green: #216500;
+    $abstract-gray: #333; //#5c6d7f; //old: #444444
+    $journal-gray: #000000; // old:#666666
+    $list_metadata_title_paper: #3696e0;
+    $list_show_hide_button: #3696e0;
+
+    // Additional colors
+    $okm-modal-btn: #3696e0;
+    $infolink: #3696e0;
+    $framed-item: #3696e0;
+    $dataset: #444444;
+}
