@@ -32,6 +32,7 @@ var data_config = {
     sort_options: ["title", "readers"],
     
     sort_menu_dropdown: true,
+    visual_distributions: true,
 
     files: [{
         title: "edu1",

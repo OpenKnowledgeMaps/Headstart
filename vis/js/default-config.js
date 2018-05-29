@@ -112,6 +112,7 @@ var config = {
     use_hypothesis: false,
     
     list_sub_entries: false,
+    visual_distributions: false,
     
     service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE"},
 
