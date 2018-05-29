@@ -28,6 +28,10 @@ var data_config = {
     area_force_alpha: 0.008,
     
     language: "ger_cris",
+    
+    sort_options: ["title", "readers"],
+    
+    sort_menu_dropdown: true,
 
     files: [{
         title: "edu1",

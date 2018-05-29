@@ -301,14 +301,14 @@ var config = {
         },
          ger_cris: {
             loading: "Wird geladen...",
-            search_placeholder: "Suche in der Liste...",
+            search_placeholder: "Suchwort eingeben",
             show_list: "Liste ausklappen",
             hide_list: "Liste einklappen",
             intro_label: "",
-            readers: "Leser",
+            readers: "Nennungen",
             year: "Jahr",
             authors: "Autor",
-            title: "Titel",
+            title: "alphabetisch",
             default_title: 'Überblick über <span id="num_articles"></span> Artikel',
             overview_label: 'Überblick über',
             most_recent_label: 'neueste',
@@ -332,7 +332,8 @@ var config = {
             showmore_questions_label: "alle Fragen anzeigen",
             distributions_label: "Verteilungen der",
             show_verb_label: "ausklappen",
-            hide_verb_label: "einklappen"
+            hide_verb_label: "einklappen",
+            sort_by_label: 'sortieren: ',
         },
     },
 
