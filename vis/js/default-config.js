@@ -107,7 +107,7 @@ var config = {
     max_recommendations: 10,
 
     //intro
-    intro: "intro_hs",
+    intro: "intro_cris",
     
     use_hypothesis: false,
     
