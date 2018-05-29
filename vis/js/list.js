@@ -386,6 +386,47 @@ list.filterListByArea = function(area) {
         });
 };
 
+list.populateVisualDistributions = function(nodes) {
+    nodes[0].forEach(function(elem) {
+        let d = d3.select(elem).datum();
+        let current_context = io.context.distributions_papers[d.id]["Bundesland"];
+        let overall_context = io.context.distributions_all["Bundesland"];
+        let list_visual_distributions = d3.select(elem).select(".list_visual_dstributions");
+        
+        for(let element in current_context) {
+            let statistic = current_context[element];
+            
+            if(statistic.share <= 0) {
+                continue;
+            }
+            
+            list_visual_distributions
+                    .append("span")
+                        .html(statistic.id)
+                        .attr("class", function () {
+                            let overall_statistic = overall_context.filter(function (el) {
+                                return statistic.id === el.id;
+                            });
+
+                            let current_overall_statistic = overall_statistic[0];
+
+                            if (statistic.share <= current_overall_statistic.share) {
+                                return "lower_value";
+                            } else {
+                                return "higher_value"
+                            }
+                            
+                        })
+                        
+            
+            
+            
+        }
+        
+    })
+    
+};
+
 list.populateMetaData = function(nodes) {
     nodes[0].forEach(function(elem) {
         var list_metadata = d3.select(elem).select(".list_metadata");
@@ -613,7 +654,9 @@ list.populateList = function() {
     });
 
     var paper_nodes = this.getPaperNodes(list_data);
-
+    if(config.visual_distributions) {
+        this.populateVisualDistributions(paper_nodes);
+    }
     this.populateMetaData(paper_nodes);
     this.createAbstracts(paper_nodes);
     this.populateReaders(paper_nodes);
@@ -965,6 +1008,9 @@ list.enlargeListItem = function(d) {
 };
 
 list.attachClickHandlerAbstract = function(enlarged) {
+    if(!config.list_sub_entries)
+        return;
+    
     if(enlarged) {
         d3.selectAll(".list_subentry_show_statistics").on("click", function() {
             let click_div = d3.select(d3.event.target.parentElement)
