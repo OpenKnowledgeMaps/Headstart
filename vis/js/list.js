@@ -574,7 +574,7 @@ list.populateReaders = function(nodes) {
             return d.area;
         });
 
-        if (!config.content_based && config.base_unit !== "") {
+        if (!config.content_based && config.base_unit !== "" && !config.viper_metric_list) {
             readers.select(".num_readers")
                 .html(function(d) {
                     return d.num_readers;
