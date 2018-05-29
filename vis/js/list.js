@@ -545,6 +545,7 @@ list.createAbstracts = function(nodes) {
     });
 
     this.createHighlights(this.current_search_words);
+    this.attachClickHandlerAbstract(false);
 };
 
 list.populateReaders = function(nodes) {
@@ -820,6 +821,9 @@ list.createAbstractCris = function(d, cut_off) {
                     
             break;
         } else {
+            current_abstract.select(".list_subentry_showmore")
+                    .style("display", "none")
+            
             let show_statistics = current_abstract.select(".list_subentry_show_statistics")
                     .style("display", "block")
             
@@ -857,11 +861,13 @@ list.createAbstractStatistics = function(div, distributions) {
     
     let list_subentry_statistics_distribution = listSubEntryStatisticDistributionTemplateCris();
     distributions.forEach(function(distribution) {
-        let div_distribution = div.append("div")
+        if(distribution.share > 0) {
+            let div_distribution = div.append("div")
                 .html(list_subentry_statistics_distribution);
         
-        div_distribution.select(".list_subentry_statistic_distribution_title").text(distribution.name);
-        div_distribution.select(".list_subentry_statistic_distribution_number").text(distribution.share);
+            div_distribution.select(".list_subentry_statistic_distribution_title").text(distribution.name);
+            div_distribution.select(".list_subentry_statistic_distribution_number").text(distribution.share);
+        }
     })
 
 }
@@ -946,6 +952,8 @@ list.enlargeListItem = function(d) {
         .html(this.createAbstract(d, config.abstract_large));
 
     this.createHighlights(this.current_search_words);
+    
+    this.attachClickHandlerAbstract(true);
 
     this.setImageForListHolder(d);
     if (config.show_keywords) {
@@ -955,6 +963,31 @@ list.enlargeListItem = function(d) {
     d.paper_selected = true;
     this.count_visible_items_to_header()
 };
+
+list.attachClickHandlerAbstract = function(enlarged) {
+    if(enlarged) {
+        d3.selectAll(".list_subentry_show_statistics").on("click", function() {
+            let click_div = d3.select(d3.event.target.parentElement)
+            let statistics_div = d3.select(d3.event.target.parentElement.nextElementSibling)
+            if(statistics_div.style("display") === "none") {
+                statistics_div.style("display", "block")
+                click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "none");
+                click_div.select(".list_subentry_show_statistics_arrow_up").style("display", "inline-block");
+            } else {
+                statistics_div.style("display", "none")
+                click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "inline-block");
+                click_div.select(".list_subentry_show_statistics_arrow_up").style("display", "none");
+            }
+        })
+    } else {
+        d3.selectAll(".list_subentry_showmore").on("click", function() {
+            let d = d3.select(d3.event.target.parentElement.parentElement.parentElement.parentElement.parentElement).datum()
+            mediator.publish("list_click_paper_list", d);
+            mediator.publish("record_action", d.id, "click_paper_list", config.user_id, d.bookmarked + " " + d.recommended, null);
+            d3.event.stopPropagation();
+        })
+    }
+}
 
 list.setListHolderDisplay = function(d) {
     this.papers_list.selectAll("#list_holder")
@@ -984,8 +1017,9 @@ list.reset = function() {
         .html((d) => {
             return this.createAbstract(d, config.abstract_small);
         });
-
+      
     this.createHighlights(this.current_search_words);
+    this.attachClickHandlerAbstract(false);
 
     d3.selectAll(".list_entry_full").attr("class", "list_entry");
     d3.selectAll("#list_keywords").style("display", "none");

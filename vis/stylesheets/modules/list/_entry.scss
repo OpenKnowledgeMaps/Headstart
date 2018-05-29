@@ -187,6 +187,16 @@
 
 .list_subentry_showmore, .list_subentry_show_statistics {
     display: none;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.list_subentry_show_statistics_arrow_up {
+    display: none;
+}
+
+.list_subentry_statistics {
+    display: none;
 }
 
 #list_keywords {
