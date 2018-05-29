@@ -235,9 +235,13 @@ IO.prototype = {
                 }
             }
             
-            d.tweets = prepareMetric(d, "cited_by_tweeters_count")
-            d.citations = prepareMetric(d, "citation_count")
-            d.readers = prepareMetric(d, "readers.mendeley")
+            if(config.viper_metric_list) {
+                d.tweets = prepareMetric(d, "cited_by_tweeters_count")
+                d.citations = prepareMetric(d, "citation_count")
+                d.readers = prepareMetric(d, "readers.mendeley")
+            } else {
+                d.readers = d.num_readers;
+            }
 
             d.paper_selected = false;
 
