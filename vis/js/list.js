@@ -416,11 +416,7 @@ list.populateVisualDistributions = function(nodes) {
                                 return "higher_value"
                             }
                             
-                        })
-                        
-            
-            
-            
+                        }) 
         }
         
     })

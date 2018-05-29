@@ -1,4 +1,5 @@
 const OAInfoTemplate = require("templates/info_modal_content/oa_info_modal.handlebars")
+const CRISInfoTemplate = require("templates/info_modal_content/cris_info_modal.handlebars")
 
 export var intros = { 
     intro_hs: {
@@ -14,5 +15,8 @@ export var intros = {
         title: "What's This?",
         body: OAInfoTemplate(),
         dynamic: true
+    }, intro_cris: {
+        title: "Verteilung der Nennungen für das Themenfeld Entstigmatisierung",
+        body: CRISInfoTemplate()
     }
 };
