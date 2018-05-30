@@ -1023,10 +1023,14 @@ list.attachClickHandlerAbstract = function(enlarged) {
                 statistics_div.style("display", "block")
                 click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "none");
                 click_div.select(".list_subentry_show_statistics_arrow_up").style("display", "inline-block");
+                click_div.select(".list_subentry_show_statistics_verb")
+                    .text(config.localization[config.language].hide_verb_label)
             } else {
                 statistics_div.style("display", "none")
                 click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "inline-block");
                 click_div.select(".list_subentry_show_statistics_arrow_up").style("display", "none");
+                click_div.select(".list_subentry_show_statistics_verb")
+                    .text(config.localization[config.language].show_verb_label)
             }
         })
     } else {
