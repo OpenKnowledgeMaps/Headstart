@@ -903,7 +903,8 @@ list.createAbstractStatistics = function(div, distributions) {
         if(distribution.share > 0) {
             let div_distribution = div.append("div")
                 .html(list_subentry_statistics_distribution);
-        
+            
+            div_distribution.select(".list_subentry_statistic_distribution_id").text(distribution.id);
             div_distribution.select(".list_subentry_statistic_distribution_title").text(distribution.name);
             div_distribution.select(".list_subentry_statistic_distribution_number").text(distribution.share);
         }
