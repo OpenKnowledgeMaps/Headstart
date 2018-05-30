@@ -222,6 +222,13 @@ IO.prototype = {
                 d.internal_readers = 1;
             }
             
+            if (config.list_sub_entries) {
+                d.abstract_search = "";
+                d.paper_abstract.forEach(function(obj) {
+                    d.abstract_search += obj.abstract + " ";
+                })
+            }
+            
             if (typeof highlight_data != 'undefined' && highlight_data !== null) {
                 if (highlight_data.bookmarks_all !== null) {
                     highlight_data.bookmarks_all.forEach(function (x) {
