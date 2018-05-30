@@ -336,6 +336,7 @@ var config = {
             show_verb_label: "ausklappen",
             hide_verb_label: "einklappen",
             sort_by_label: 'sortieren: ',
+            items: "Themen",
         },
     },
 
