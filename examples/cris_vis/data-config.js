@@ -23,6 +23,7 @@ var data_config = {
     
     content_based: false,
     list_sub_entries: true,
+    list_show_all_papers: true,
     
     is_force_areas: true,
     area_force_alpha: 0.008,

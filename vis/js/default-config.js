@@ -82,6 +82,7 @@ var config = {
     filter_options: ["all", "open_access", "publication", "dataset"],
     sort_menu_dropdown: false,
     initial_sort: null,
+    list_show_all_papers: false,
 
     content_based: false,
 

@@ -988,6 +988,9 @@ list.enlargeListItem = function(d) {
     this.setListHolderDisplay(d);
 
     this.papers_list.selectAll("#list_abstract")
+        .filter(function(x) {
+                    return (x.id === d.id);
+                })
         .html(this.createAbstract(d, config.abstract_large));
 
     this.createHighlights(this.current_search_words);
@@ -996,7 +999,11 @@ list.enlargeListItem = function(d) {
 
     this.setImageForListHolder(d);
     if (config.show_keywords) {
-        d3.selectAll("#list_keywords").style("display", "block");
+        d3.selectAll("#list_keywords")
+            .filter(function(x) {
+                return (x.id === d.id);
+            })
+            .style("display", "block");
     }
 
     d.paper_selected = true;
@@ -1045,11 +1052,13 @@ list.setListHolderDisplay = function(d) {
         })
         .select(".list_entry").attr("class", "list_entry_full");
 
-    this.papers_list.selectAll("#list_holder")
-        .filter(function(x) {
-            return (x.id != d.id);
-        })
-        .style("display", "none");
+    if(!config.list_show_all_papers) {
+        this.papers_list.selectAll("#list_holder")
+            .filter(function(x) {
+                return (x.id != d.id);
+            })
+            .style("display", "none");
+    }
 };
 
 // recreates abstracts, if we zoom out from circle
