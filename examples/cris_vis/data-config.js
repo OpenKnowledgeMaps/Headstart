@@ -24,6 +24,10 @@ var data_config = {
     content_based: false,
     list_sub_entries: true,
     list_show_all_papers: false,
+    list_additional_images: true,
+    list_images: ["Altersgruppe", "Background", "Bundesland", "Geschlecht",
+                    "Höchste Ausbildung", "Land"],
+    list_images_path: "img/",
     
     is_force_areas: true,
     area_force_alpha: 0.008,

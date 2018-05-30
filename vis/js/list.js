@@ -999,6 +999,9 @@ list.enlargeListItem = function(d) {
     this.attachClickHandlerAbstract(true);
 
     this.setImageForListHolder(d);
+    
+    this.setAdditionalImagesForListHolder(d);
+    
     if (config.show_keywords) {
         d3.selectAll("#list_keywords")
             .filter(function(x) {
@@ -1010,6 +1013,22 @@ list.enlargeListItem = function(d) {
     d.paper_selected = true;
     this.count_visible_items_to_header()
 };
+
+list.setAdditionalImagesForListHolder = function(d) {
+    let current_item = d3.selectAll("#list_holder")
+            .filter(function(x) {
+                return (x.id === d.id);
+            })
+        
+        for (let item in config.list_images) {
+            let image = config.list_images[item];
+            current_item.select(".list_images").append("img")
+                    .attr("class", "list_image")
+                    .attr("src", function(x) {
+                        return config.list_images_path + x.id + "_" + image + ".svg";
+                    })
+        }
+}
 
 list.attachClickHandlerAbstract = function(enlarged) {
     if(!config.list_sub_entries)
@@ -1079,6 +1098,7 @@ list.reset = function() {
 
     d3.selectAll(".list_entry_full").attr("class", "list_entry");
     d3.selectAll("#list_keywords").style("display", "none");
+    d3.selectAll(".list_images").html("");
 
     if (mediator.current_enlarged_paper !== null) {
         this.notSureifNeeded();
