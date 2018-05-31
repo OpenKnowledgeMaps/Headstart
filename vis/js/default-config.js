@@ -347,6 +347,7 @@ var config = {
     },
 
     scale_types: [],
+    scale_by_metrics: true,
 
     url_plos_pdf: "http://www.plosone.org/article/fetchObject.action?representation=PDF&uri=info:doi/",
     plos_journals_to_shortcodes: {
