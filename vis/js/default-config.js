@@ -77,6 +77,7 @@ var config = {
     show_context: false,
     
     create_title_from_context: false,
+    is_title_clickable: true,
 
     sort_options: ["readers", "title", "authors", "year"],
     filter_options: ["all", "open_access", "publication", "dataset"],

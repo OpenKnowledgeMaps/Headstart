@@ -1320,7 +1320,7 @@ list.setImageForListHolder = function(d) {
 list.title_click = function(d) {
 
     var url = d.outlink;
-    if (url === false) {
+    if (url === false || !config.is_title_clickable) {
         d3.event.stopPropagation();
         return;
     }
