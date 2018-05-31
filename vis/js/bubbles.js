@@ -5,7 +5,7 @@ import StateMachine from 'javascript-state-machine';
 import config from 'config';
 import { mediator } from 'mediator';
 import { papers} from 'papers';
-import { toBack, toFront, hideSibling} from 'helpers';
+import { toBack, toFront, hideSibling, updateTags} from 'helpers';
 import { canvas } from 'canvas';
 import { io } from 'io';
 
@@ -353,50 +353,22 @@ BubblesFSM.prototype = {
                 });
                 
         if(config.visual_distributions) {
-            this.addVisualDistributions(bubbleFrame);
+            this.updateVisualDistributions(config.scale_types[0]);
         }
     },
     
-    addVisualDistributions: function(bubble_frames) {
+    updateVisualDistributions: function(attribute) {
+        let bubble_frames = d3.selectAll("g.bubble_frame")
         let  bubble_data = bubble_frames.data();
         for(let i in bubble_data) {           
             let d = bubble_data[i];
             
-            let current_context = io.context.distributions_areas[d.area_uri]["Bundesland"];
-            let overall_context = io.context.distributions_all["Bundesland"];
+            let current_context = io.context.distributions_areas[d.area_uri][attribute];
+            let overall_context = io.context.distributions_all[attribute];
 
-            let area_visual_distributions = d3.select("#area_" + d.area_uri)
-
-            for(let element in current_context) {
-                let statistic = current_context[element];
-
-                if(statistic.share <= 0) {
-                    continue;
-                }
-
-                area_visual_distributions
-                        .style("display", "block")
-                        .append("span")
-                            .html(statistic.id)
-                            .attr("class", function () {
-                                let overall_statistic = overall_context.filter(function (el) {
-                                    return statistic.id === el.id;
-                                });
-
-                                let current_overall_statistic = overall_statistic[0];
-
-                                if (statistic.share <= current_overall_statistic.share) {
-                                    return "lower_value";
-                                } else {
-                                    return "higher_value"
-                                }
-
-                            })
-            }
-            
+            let area_visual_distributions = d3.select("#area_" + d.area_uri);
+            updateTags(current_context, overall_context, area_visual_distributions);
         }
-        
-        
     },
 
     zoom: function (d) {

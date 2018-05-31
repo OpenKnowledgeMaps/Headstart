@@ -119,6 +119,9 @@ MyMediator.prototype = {
         this.mediator.subscribe("set_area_radii", this.set_area_radii);
         this.mediator.subscribe("canvas_set_domain", this.canvas_set_domain);
         this.mediator.subscribe("update_canvas_data", this.update_canvas_data);
+        
+        //scale
+        this.mediator.subscribe("update_visual_distributions", this.update_visual_distributions);
     },
 
     init_state: function() {
@@ -506,6 +509,12 @@ MyMediator.prototype = {
         mediator.current_enlarged_paper = d;
         mediator.manager.call('papers', 'framePaper', [d]);
         mediator.manager.call('list', 'count_visible_items_to_header')
+    },
+    
+    update_visual_distributions: function(type) {
+        mediator.manager.call('bubble', 'updateVisualDistributions', [type]);
+        //mediator.manager.call('papers', 'updateVisualDistributions', type);
+        mediator.manager.call('list', 'updateVisualDistributions', [type]);
     }
 };
 

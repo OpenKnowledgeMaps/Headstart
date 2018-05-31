@@ -13,7 +13,8 @@ import {
     highlight,
     clear_highlights,
     sortBy,
-    getRealHeight
+    getRealHeight,
+    updateTags
 } from 'helpers';
 import { io } from 'io';
 
@@ -386,38 +387,15 @@ list.filterListByArea = function(area) {
         });
 };
 
-list.populateVisualDistributions = function(nodes) {
+list.updateVisualDistributions = function(attribute) {
+    let nodes = d3.selectAll("#list_holder");
     nodes[0].forEach(function(elem) {
         let d = d3.select(elem).datum();
-        let current_context = io.context.distributions_papers[d.id]["Bundesland"];
-        let overall_context = io.context.distributions_all["Bundesland"];
+        let current_context = io.context.distributions_papers[d.id][attribute];
+        let overall_context = io.context.distributions_all[attribute];
         let list_visual_distributions = d3.select(elem).select(".list_visual_dstributions");
         
-        for(let element in current_context) {
-            let statistic = current_context[element];
-            
-            if(statistic.share <= 0) {
-                continue;
-            }
-            
-            list_visual_distributions
-                    .append("span")
-                        .html(statistic.id)
-                        .attr("class", function () {
-                            let overall_statistic = overall_context.filter(function (el) {
-                                return statistic.id === el.id;
-                            });
-
-                            let current_overall_statistic = overall_statistic[0];
-
-                            if (statistic.share <= current_overall_statistic.share) {
-                                return "lower_value";
-                            } else {
-                                return "higher_value"
-                            }
-                            
-                        }) 
-        }
+        updateTags(current_context, overall_context, list_visual_distributions);
         
     })
     
@@ -651,7 +629,7 @@ list.populateList = function() {
 
     var paper_nodes = this.getPaperNodes(list_data);
     if(config.visual_distributions) {
-        this.populateVisualDistributions(paper_nodes);
+        this.updateVisualDistributions(config.scale_types[0]);
     }
     this.populateMetaData(paper_nodes);
     this.createAbstracts(paper_nodes);
