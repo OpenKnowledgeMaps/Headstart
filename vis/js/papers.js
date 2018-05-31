@@ -9,6 +9,8 @@ import config from 'config';
 import { mediator } from 'mediator';
 import { toFront } from 'helpers';
 import { canvas } from 'canvas';
+import { updateTags } from 'helpers';
+import { io } from 'io';
 
 const paperTemplate = require("templates/map/paper.handlebars");
 
@@ -283,7 +285,26 @@ papers.prepareForeignObject = function (nodes) {
     $(".metadata #title").hyphenate("en");
     $(".metadata #details").hyphenate("en");
     $(".metadata #in").hyphenate("en");
+    
+    if(config.visual_distributions) {
+        this.updateVisualDistributions(config.scale_types[0]);
+    }
 };
+
+papers.updateVisualDistributions = function(attribute) {
+    let articles = d3.selectAll("#article_metadata")
+    let  article_data = articles.data();
+    for(let i in article_data) {           
+        let d = article_data[i];
+
+        let current_context = io.context.distributions_papers[d.id][attribute];
+        let overall_context = io.context.distributions_all[attribute];
+
+        let paper_visual_distributions = d3.select(articles[0][i]).select(".paper_visual_distributions");
+        updateTags(current_context, overall_context, paper_visual_distributions);
+    }
+};
+        
 
 
 // create the path or "border" for papers
