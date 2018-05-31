@@ -40,12 +40,12 @@ var data_config = {
     rescale_map: false,
     scale_types: ['Altersgruppe', 'Background', 'Bundesland', 'Geschlecht', 'Höchste Ausbildung', 'Land'],
     scale_explanation: {
-        Altersgruppe: 'Die Verteilung für <strong>Altersgruppe</strong> bezieht sich auf das Themenfeld. Anteile in absteiGeschlecht Reihenfolge.',
-        Background: 'Die Verteilung für <strong>Background</strong> bezieht sich auf das Themenfeld. Anteile in absteiGeschlecht Reihenfolge.',
-        Bundesland: 'Die Verteilung für <strong>Bundesländer AT</strong> bezieht sich auf das Themenfeld. Anteile in absteiGeschlecht Reihenfolge.',
-        Geschlecht: 'Die Verteilung für <strong>Geschlecht</strong> bezieht sich auf das Themenfeld. Anteile in absteiGeschlecht Reihenfolge.',
-        'Höchste Ausbildung': 'Die Verteilung für <strong>Höchste Ausbildung</strong> bezieht sich auf das Themenfeld. Anteile in absteiGeschlecht Reihenfolge.',
-        Land: 'Die Verteilung für <strong>Land</strong> bezieht sich auf das Themenfeld. Anteile in absteiGeschlecht Reihenfolge.',
+        Altersgruppe: 'Die Verteilung für <strong>Altersgruppe</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
+        Background: 'Die Verteilung für <strong>Background</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
+        Bundesland: 'Die Verteilung für <strong>Bundesländer AT</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
+        Geschlecht: 'Die Verteilung für <strong>Geschlecht</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
+        'Höchste Ausbildung': 'Die Verteilung für <strong>Höchste Ausbildung</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
+        Land: 'Die Verteilung für <strong>Land</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
     },
     scale_label: {
         Altersgruppe: 'Altersgruppe',
