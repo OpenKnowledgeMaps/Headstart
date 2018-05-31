@@ -5,8 +5,7 @@ var data_config = {
     title: "Übersicht für <b>Forschungsfragen zum Thema psychische Gesundheit</b>",
     input_format: "json",
     base_unit: "Nennungen",
-    use_area_uri: false,
-    is_force_areas: false,
+    use_area_uri: true,
     
     show_timeline: false,
     show_dropdown: false,
@@ -15,7 +14,7 @@ var data_config = {
     is_force_papers:true,
     is_title_clickable: false,
 	
-    show_context: false,
+    show_context: true,
     create_title_from_context: false,
     
     scale_toolbar: true,
