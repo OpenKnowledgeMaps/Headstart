@@ -11,7 +11,7 @@ include 'config.php';
             "title" => "Building your map - VIPER"
         );
         ?>
-        <script type="text/javascript" src="./lib/bootstrap.min.css"></script>  
+        <link type="text/css" rel="stylesheet" href="./lib/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <link type="text/css" rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">

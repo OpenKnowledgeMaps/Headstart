@@ -289,8 +289,8 @@ var config = {
             viper_button_desc_label: `<p>By clicking on the button below, you are redirected to the\
                 OpenAIRE page for`,
             viper_edit_button_text: 'continue to openaire',
-            viper_embed_button_text: 'Copy',
-            viper_embed_title: 'embed map',
+            embed_button_text: 'Copy',
+            embed_title: 'embed map',
             link: 'link',
             tweets_count_label: " tweets",
             readers_count_label: " readers (Mendeley)",
