@@ -168,6 +168,38 @@ export function getRealHeight(element) {
     return height;
 }
 
+export function updateTags(current_context, overall_context, div) {
+    div.html("");
+
+    for(let element in current_context) {
+        let statistic = current_context[element];
+
+        if(statistic.share <= 0) {
+            continue;
+        }
+
+        div
+        .style("display", "block")
+        .append("span")
+            .html(statistic.id)
+            .attr("class", function () {
+                let overall_statistic = overall_context.filter(function (el) {
+                    return statistic.id === el.id;
+                });
+
+                let current_overall_statistic = overall_statistic[0];
+
+                if (statistic.share <= current_overall_statistic.share) {
+                    return "lower_value";
+                } else {
+                    return "higher_value"
+                }
+
+            })
+    }
+
+}
+
 // functions which are not being called at the moment, but might
 // mausrad -> zoomen
 // export function redraw() {

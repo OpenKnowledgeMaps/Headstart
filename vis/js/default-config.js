@@ -343,11 +343,12 @@ var config = {
             sort_by_label: 'sortieren: ',
             items: "Themen",
             scale_by_infolink_label: '',
+            scale_by_label: 'Verteilung für:',
         },
     },
 
     scale_types: [],
-    scale_by_metrics: true,
+    rescale_map: true,
 
     url_plos_pdf: "http://www.plosone.org/article/fetchObject.action?representation=PDF&uri=info:doi/",
     plos_journals_to_shortcodes: {

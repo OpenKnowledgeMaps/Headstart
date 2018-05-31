@@ -37,21 +37,27 @@ class Scale {
     }
   }
 
-  doScale (type) {     
-    config.scale_by = type
-    config.base_unit = config.scale_base_unit[type];
-    config.dynamic_sizing = false;
-    
-    if(type === "content_based") {
-        config.content_based = true;
-        config.initial_sort = null;
-    } else {
-        config.content_based = false;
-        config.initial_sort = config.scale_base_unit[type];
-    }
+  doScale (type) {
+      
     $('#curr-scale-type').text(config.scale_label[type])
     $('#curr-scale-explanation').html(config.scale_explanation[type])
-    headstart.tofile(mediator.current_file_number)
+        
+    if(config.rescale_map) {
+        config.scale_by = type
+        config.base_unit = config.scale_base_unit[type];
+        config.dynamic_sizing = false;
+
+        if(type === "content_based") {
+            config.content_based = true;
+            config.initial_sort = null;
+        } else {
+            config.content_based = false;
+            config.initial_sort = config.scale_base_unit[type];
+        }
+        headstart.tofile(mediator.current_file_number)
+    } else {
+        mediator.publish("update_visual_distributions", type);
+    }
   }
 
 }
