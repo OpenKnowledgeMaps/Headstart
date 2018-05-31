@@ -304,6 +304,7 @@ var config = {
             items: "items",
             sort_by_label: 'sort by:',
             scale_by_label: 'Scale map by:',
+            scale_by_infolink_label: 'notes on use of metrics'
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -341,6 +342,7 @@ var config = {
             hide_verb_label: "einklappen",
             sort_by_label: 'sortieren: ',
             items: "Themen",
+            scale_by_infolink_label: '',
         },
     },
 

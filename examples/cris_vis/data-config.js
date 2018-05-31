@@ -18,8 +18,7 @@ var data_config = {
     show_context: false,
     create_title_from_context: false,
     
-    show_context: true,
-    scale_toolbar: false,
+    scale_toolbar: true,
     
     content_based: false,
     list_sub_entries: true,
@@ -38,6 +37,24 @@ var data_config = {
     
     sort_menu_dropdown: true,
     visual_distributions: true,
+    
+    scale_types: ['age', 'background', 'state', 'gender', 'highest_degree', 'country'],
+    scale_explanation: {
+        age: 'Die Verteilung für <strong>Alter</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
+        background: 'Die Verteilung für <strong>Background</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
+        state: 'Die Verteilung für <strong>Bundesländer AT</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
+        gender: 'Die Verteilung für <strong>Geschlecht</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
+        highest_degree: 'Die Verteilung für <strong>Höchste Ausbildung</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
+        country: 'Die Verteilung für <strong>Land</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
+    },
+    scale_label: {
+        age: 'Alter',
+        background: 'Background',
+        state: 'Bundesländer AT',
+        gender: 'Geschlecht',
+        highest_degree: 'Höchste Ausbildung',
+        country: 'Land',
+    },
 
     files: [{
         title: "edu1",
