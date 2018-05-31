@@ -19,8 +19,8 @@ import {
 const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
 const listEntryTemplate = require("templates/list/list_entry.handlebars");
-const viperOutlinkTemplate = require("templates/list/viper_outlink.handlebars");
-const viperMetricTemplate = require('templates/list/viper_metrics.handlebars');
+const doiOutlinkTemplate = require("templates/list/doi_outlink.handlebars");
+const listMetricTemplate = require('templates/list/list_metrics.handlebars');
 const filterDropdownEntryTemplate = require("templates/list/filter_dropdown_entry.handlebars");
 const showHideLabel = require("templates/list/show_hide_label.handlebars")
 const sortDropdownEntryTemplate = require("templates/list/sort_dropdown_entry.handlebars");
@@ -464,11 +464,11 @@ list.populateMetaData = function(nodes) {
                 }
             });
 
-        if (config.viper_outlink) {
-            list_metadata.select(".viper_outlink")
+        if (config.doi_outlink) {
+            list_metadata.select(".doi_outlink")
             .html(function (d) {
                 var has_doi = !(d.doi === "")
-                return viperOutlinkTemplate({
+                return doiOutlinkTemplate({
                     has_doi,
                     link_label: config.localization[config.language].link,
                     link: has_doi ? "https://dx.doi.org/"+d.doi : d.link,
@@ -532,7 +532,7 @@ list.populateReaders = function(nodes) {
         var areas = d3.select(elem).select("#list_area");
         var readers = d3.select(elem).select(".list_readers");
         var keywords = d3.select(elem).select("#list_keywords");
-        var viper_metrics = d3.select(elem).select(".viper_metrics");
+        var list_metrics = d3.select(elem).select(".list_metrics");
 
         keywords.style("display", "none");
 
@@ -554,7 +554,7 @@ list.populateReaders = function(nodes) {
             return d.area;
         });
 
-        if (!config.content_based && config.base_unit !== "" && !config.viper_metric_list) {
+        if (!config.content_based && config.base_unit !== "" && !config.metric_list) {
             readers.select(".num_readers")
                 .html(function(d) {
                     return d.num_readers;
@@ -566,9 +566,9 @@ list.populateReaders = function(nodes) {
             readers.style("line-height", "0px");
         }
 
-        if (config.viper_metric_list) {
-            viper_metrics.html(function (d) {
-                return viperMetricTemplate({
+        if (config.metric_list) {
+            list_metrics.html(function (d) {
+                return listMetricTemplate({
                     tweets_label: config.localization[config.language].tweets_count_label,
                     tweets_count: d.cited_by_tweeters_count,
                     readers_label: config.localization[config.language].readers_count_label,
@@ -578,7 +578,7 @@ list.populateReaders = function(nodes) {
                 })
             })
             if(!config.content_based) {
-                $(".viper_metrics_" + config.base_unit).addClass("scaled-metric")
+                $(".list_metrics_" + config.base_unit).addClass("scaled-metric")
             }
         }
     });

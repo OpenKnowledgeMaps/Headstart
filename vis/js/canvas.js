@@ -6,9 +6,9 @@ import { mediator } from 'mediator';
 import { intros } from 'intro';
 import dateFormat from 'dateformat';
 
-const viperEditModalButton = require('templates/misc/viper_edit_button.handlebars')
-const viperEmbedModalButton = require('templates/misc/viper_embed_button.handlebars')
-const viperShareButton = require('templates/misc/viper_share_button.handlebars')
+const editModalButton = require('templates/buttons/edit_button.handlebars')
+const embedModalButton = require('templates/buttons/embed_button.handlebars')
+const shareButton = require('templates/buttons/share_button.handlebars')
 
 class Canvas {
     constructor() {
@@ -251,7 +251,7 @@ class Canvas {
         chart_title = config.localization[config.language].default_title;
         if (config.title) {
             chart_title = config.title;
-        } else if (config.create_title_from_context_style === 'openaire') {
+        } else if (config.create_title_from_context_style === 'viper') {
             let maxTitleLength = 47 // This should probably make it's way to a more global config
             let acronymtitle = ( (context.params.acronym !== "") ? (context.params.acronym + " - " + context.params.title) : (context.params.title) );
             let compressedTitle = ( acronymtitle.length > maxTitleLength ) ? acronymtitle.slice(0, maxTitleLength - 3) + '...' : acronymtitle
@@ -273,7 +273,7 @@ class Canvas {
             let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
             subdiscipline_title_h4.append(infolink);
 
-            if(config.infolink_style === "openaire") {
+            if(config.infolink_style === "viper") {
                 $("#infolink").text(config.localization[config.language].intro_label)
             } else {
                 $("#infolink").html(config.localization[config.language].intro_label + ' <span id="whatsthis">&#xf05a;</span>');
@@ -309,13 +309,13 @@ class Canvas {
 
     drawModals(context) {
         $('#modals').empty()
-        if (config.viper_embed_modal) {
-            $('#modals').append(viperEmbedModalButton)
-            $('#embed-title').html(config.localization[config.language].viper_embed_title)
+        if (config.embed_modal) {
+            $('#modals').append(embedModalButton)
+            $('#embed-title').html(config.localization[config.language].embed_title)
             //$('#embed-modal-text').val(`<iframe width="1024" height="800" src="headstart.php?query=${context.query}&file=${context.id}&service=${context.service}"></iframe>`)
             $('#embed-modal-text').val(`<iframe width="1600" height="900" src="${window.location}&embed=true"></iframe>`)
 
-            $('#viper-embed-button').text(config.localization[config.language].viper_embed_button_text)
+            $('#embed-button').text(config.localization[config.language].embed_button_text)
             .on('click', (event) => {
                 event.preventDefault();
                 let embedString = $('#embed-modal-text')[0];
@@ -325,11 +325,11 @@ class Canvas {
                 return false;
             })
         }
-        if (config.viper_share_modal) {
-            $('#modals').append(viperShareButton)
+        if (config.share_modal) {
+            $('#modals').append(shareButton)
         }
         if (config.viper_edit_modal) {
-            $('#modals').append(viperEditModalButton)
+            $('#modals').append(editModalButton)
             $('#viper-edit-screenshot').attr('src', require('images/viper-project-screenshot.png'))
             $('#edit-title').html(config.localization[config.language].viper_edit_title)
             $('#edit-modal-text').html(config.localization[config.language].viper_edit_desc_label)
@@ -365,7 +365,7 @@ class Canvas {
             $("#source").html(config.localization[config.language].source_label
                            + ": " + config.service_names[context.service]);
 
-            if (config.create_title_from_context_style === 'openaire') {
+            if (config.create_title_from_context_style === 'viper') {
                 $("#context-dataset_count").text(
                     `${context.num_datasets} ${config.localization[config.language].dataset_count_label}`
                 )

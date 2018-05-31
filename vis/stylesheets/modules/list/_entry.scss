@@ -114,7 +114,7 @@
         }
     }
 
-    .viper_outlink_link {
+    .doi_outlink_link {
         color: $black;
         text-decoration: none;
         border-bottom: 1px solid $black;
@@ -130,7 +130,7 @@
         vertical-align: top;
     }
 
-    .list_details, .viper_outlink {
+    .list_details, .doi_outlink {
         font: 12px 'Helvetica', sans-serif;
         font-size: 12px;
         line-height: 14px;
@@ -206,13 +206,13 @@
     text-transform: lowercase;
 }
 
-#papers_list .viper_metrics {
+#papers_list .list_metrics {
     font: 11px 'Open Sans', Helvetica, sans-serif;
     margin-bottom:5px;
     color: $black;
 }
 
-.viper_metrics_citations, .viper_metrics_tweets {
+.list_metrics_citations, .list_metrics_tweets {
     margin-right:10px;
 }
 
