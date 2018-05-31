@@ -1,5 +1,5 @@
 const ViperInfoTemplate = require("templates/modals/viper_info_modal.handlebars")
-const CRISInfoTemplate = require("templates/info_modal_content/cris_info_modal.handlebars")
+const CRISInfoTemplate = require("templates/modals/cris_info_modal.handlebars")
 
 export var intros = { 
     intro_hs: {
@@ -16,7 +16,7 @@ export var intros = {
         body: ViperInfoTemplate(),
         dynamic: true
     }, intro_cris: {
-        title: "Verteilung der Nennungen für das Themenfeld Entstigmatisierung",
+        title: "VISUALISIERUNG DER FORSCHUNGSFRAGEN ZUM THEMA PSYCHISCHE GESUNDHEIT",
         body: CRISInfoTemplate()
     }
 };
