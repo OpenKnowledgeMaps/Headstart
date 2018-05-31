@@ -31,20 +31,20 @@ var data_config = {
     
     show_context: true,
     create_title_from_context: true,
-    create_title_from_context_style: 'openaire',
-    infolink_style: 'openaire',
+    create_title_from_context_style: 'viper',
+    infolink_style: 'viper',
     
     viper_edit_modal: true,
-    viper_embed_modal: true,
-    viper_share_modal: false,
+    embed_modal: true,
+    share_modal: false,
 
-    viper_outlink: true,
+    doi_outlink: true,
 
-    intro: 'intro_openaire',
+    intro: 'intro_viper',
 
-    viper_metric_list: true,
+    metric_list: true,
     
-    viper_credit: false,
+    credit: false,
 
     scale_toolbar: true,
     

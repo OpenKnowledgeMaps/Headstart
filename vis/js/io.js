@@ -209,7 +209,7 @@ IO.prototype = {
                 }
             }
             
-            if(config.viper_metric_list) {
+            if(config.metric_list) {
                 d.tweets = prepareMetric(d, "cited_by_tweeters_count")
                 d.citations = prepareMetric(d, "citation_count")
                 d.readers = prepareMetric(d, "readers.mendeley")

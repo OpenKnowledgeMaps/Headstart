@@ -10,12 +10,12 @@ import { scale } from './scale';
 
 const timelineTemplate = require('templates/timeline.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
-const infoTemplate = require("templates/misc/info_modal.handlebars");
-const iFrameTemplate = require("templates/misc/iframe_modal.handlebars");
-const imageTemplate = require("templates/misc/images_modal.handlebars");
-const editTemplate = require("templates/misc/viper_edit_modal.handlebars");
-const embedTemplate = require("templates/misc/viper_embed_modal.handlebars");
-const scaleToolbarTemplate = require("templates/misc/scale_toolbar.handlebars");
+const infoTemplate = require("templates/modals/info_modal.handlebars");
+const iFrameTemplate = require("templates/modals/iframe_modal.handlebars");
+const imageTemplate = require("templates/modals/images_modal.handlebars");
+const viperEditTemplate = require("templates/modals/viper_edit_modal.handlebars");
+const embedTemplate = require("templates/modals/embed_modal.handlebars");
+const scaleToolbarTemplate = require("templates/toolbars/scale_toolbar.handlebars");
 
 class ModuleManager {
     constructor() {
@@ -293,13 +293,13 @@ MyMediator.prototype = {
         this.viz.append(infoTemplate());
         this.viz.append(iFrameTemplate());
         this.viz.append(imageTemplate());
-        this.viz.append(editTemplate());
+        this.viz.append(viperEditTemplate());
         this.viz.append(embedTemplate());
         
         if (config.scale_toolbar) {
             this.viz.append(scaleToolbarTemplate({
                 scale_by_label: config.localization[config.language].scale_by_label,
-                viper_credit: config.viper_credit
+                credit: config.credit
             }));
         }
         
