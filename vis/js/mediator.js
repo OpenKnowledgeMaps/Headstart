@@ -479,6 +479,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'fit_list_height', []);
         mediator.manager.call('bubble', 'onWindowResize', []);
         mediator.manager.call('papers', 'onWindowResize', []);
+        mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
     },
 
     on_rect_mouseover: function() {
@@ -531,6 +532,7 @@ MyMediator.prototype = {
         if(config.cris_legend) {
             mediator.manager.call('scale', 'updateLegend', [type, context]);
         }
+        mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
     }
 };
 
