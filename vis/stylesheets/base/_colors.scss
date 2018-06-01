@@ -62,3 +62,13 @@ $dataset: #2C3E52;
     $framed-item: #3696e0;
     $dataset: #444444;
 }
+
+@if $skin == 'cris_vis' {
+    $dark-blue: #2C316E;
+    $okm-blue: #2C316E;
+    $medium-blue: #2C316E;
+    
+    $okm-modal-btn: #7A77A5;
+    $framed-item: #2C316E;
+    $okm-clouds: #F4F4F6;
+}

@@ -294,6 +294,26 @@ img#preview_page {
     text-align: center;
     border: 1px solid;
 }
+.list_subentry_showmore_arrow_down {
+    color: $okm-modal-btn;
+}
+
+.list_subentry_showmore_text {
+    color: $okm-modal-btn;
+    border-bottom: 1px solid $okm-modal-btn;
+    
+    &:hover, &:focus, &:active {
+       border-bottom: 3px solid $okm-modal-btn; 
+    }
+}
+
+.list_subentry_showmore {
+    margin:10px 0px;
+    text-decoration: none;
+    
+}
+
+
 
 @media screen and (max-width: 950px) {
 

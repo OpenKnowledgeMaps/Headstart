@@ -48,6 +48,35 @@
     font-weight: 800;
 }
 
+#whatsthis {
+    font-family: 'FontAwesome';
+    font-size: 18px;
+}
+
+#infolink:hover, #infolink:focus, #infolink:active {
+    text-decoration: none;
+}
+
+#timelineview {
+    a {
+        color: $timelineview;
+    }
+}
+
+
+@media screen and (max-width: 640px) {
+
+    #subdiscipline_title {
+        padding-left: 20px;
+        font-size: 14px;
+
+        h4 {
+            font-size: 14px;
+        }
+    }
+}
+
+@if $skin == 'viper' {
 #infolink {
     //border: 1px solid $infolink;
     //padding: 5px;
@@ -62,30 +91,31 @@
     border-bottom: 1px solid $black;
 }
 
-#whatsthis {
-    font-family: 'FontAwesome';
-    font-size: 18px;
-}
+
 
 #infolink:hover, #infolink:focus, #infolink:active {
-    text-decoration: none;
     border-bottom: 3px solid $framed-item;
 }
-
-#timelineview {
-    a {
-        color: $timelineview;
-    }
 }
 
-@media screen and (max-width: 640px) {
+@if $skin == 'cris_vis' {
+#infolink {
+    //border: 1px solid $infolink;
+    //padding: 5px;
+    //border-radius: 5px;
+    color: $okm-modal-btn;
+    font-weight: 400;
+    margin-left: 5px;
+    font-size: 12px;
+    //text-transform: uppercase;
+    //vertical-align: middle;
+    text-decoration: none;
+    border-bottom: 1px solid $okm-modal-btn;
+}
 
-    #subdiscipline_title {
-        padding-left: 20px;
-        font-size: 14px;
 
-        h4 {
-            font-size: 14px;
-        }
-    }
+
+#infolink:hover, #infolink:focus, #infolink:active {
+    border-bottom: 3px solid $okm-modal-btn;
+}
 }
