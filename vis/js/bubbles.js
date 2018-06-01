@@ -7,7 +7,6 @@ import { mediator } from 'mediator';
 import { papers} from 'papers';
 import { toBack, toFront, hideSibling, updateTags} from 'helpers';
 import { canvas } from 'canvas';
-import { io } from 'io';
 
 const bubbleTemplate = require('templates/map/bubble.handlebars');
 
@@ -351,20 +350,16 @@ BubblesFSM.prototype = {
                 .html(function (d) {
                     return bubbleTemplate(d);
                 });
-                
-        if(config.visual_distributions) {
-            this.updateVisualDistributions(config.scale_types[0]);
-        }
     },
     
-    updateVisualDistributions: function(attribute) {
+    updateVisualDistributions: function(attribute, context) {
         let bubble_frames = d3.selectAll("g.bubble_frame")
         let  bubble_data = bubble_frames.data();
         for(let i in bubble_data) {           
             let d = bubble_data[i];
             
-            let current_context = io.context.distributions_areas[d.area_uri][attribute];
-            let overall_context = io.context.distributions_all[attribute];
+            let current_context = context.distributions_areas[d.area_uri][attribute];
+            let overall_context = context.distributions_all[attribute];
             
             let area_visual_distributions = d3.select(bubble_frames[0][i]).select(".area_visual_distributions");
             updateTags(current_context, overall_context, area_visual_distributions, attribute);
