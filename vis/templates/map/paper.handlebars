@@ -9,7 +9,14 @@
     <p id="title" class="highlightable">
     {{{ d.title }}}<br /></p>
         <p id="details" class="highlightable">{{{ d.authors_string }}}</p>
-        <p id="in">in <span class="highlightable">{{{ d.published_in }}} <span class="pubyear">({{{ d.year }}})</span></span></p>
+    <p id="in">
+    {{#if d.published_in}}
+        in <span class="highlightable">{{{ d.published_in }}} 
+    {{/if}}
+    {{#if d.year}}
+        <span class="pubyear">({{{ d.year }}})</span></span>
+    {{/if}}
+    </p>
     </div>
     <div class="readers">
         <p id="readers"><span id="num-readers">{{{ d.num_readers }}}</span><span class="readers_entity"> {{{ base_unit }}}</span></p>
