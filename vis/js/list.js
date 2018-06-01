@@ -388,12 +388,12 @@ list.filterListByArea = function(area) {
         });
 };
 
-list.updateVisualDistributions = function(attribute) {
+list.updateVisualDistributions = function(attribute, context) {
     let nodes = d3.selectAll("#list_holder");
     nodes[0].forEach(function(elem) {
         let d = d3.select(elem).datum();
-        let current_context = io.context.distributions_papers[d.id][attribute];
-        let overall_context = io.context.distributions_all[attribute];
+        let overall_context = context.distributions_all[attribute];
+        let current_context = context.distributions_papers[d.id][attribute];
         let list_visual_distributions = d3.select(elem).select(".list_visual_dstributions");
         
         updateTags(current_context, overall_context, list_visual_distributions, attribute);
@@ -629,9 +629,6 @@ list.populateList = function() {
     });
 
     var paper_nodes = this.getPaperNodes(list_data);
-    if(config.visual_distributions) {
-        this.updateVisualDistributions(config.scale_types[0]);
-    }
     this.populateMetaData(paper_nodes);
     this.createAbstracts(paper_nodes);
     this.populateReaders(paper_nodes);

@@ -522,9 +522,12 @@ MyMediator.prototype = {
     },
     
     update_visual_distributions: function(type) {
-        mediator.manager.call('bubble', 'updateVisualDistributions', [type]);
-        mediator.manager.call('papers', 'updateVisualDistributions', type);
-        mediator.manager.call('list', 'updateVisualDistributions', [type]);
+        let context = io.context;
+        
+        mediator.manager.call('bubble', 'updateVisualDistributions', [type, context]);
+        mediator.manager.call('papers', 'updateVisualDistributions', [type, context]);
+        mediator.manager.call('list', 'updateVisualDistributions', [type, context]);
+        mediator.manager.call('scale', 'updateLegend', [type, context]);
     }
 };
 
