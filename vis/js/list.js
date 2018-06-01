@@ -231,10 +231,11 @@ list.fit_list_height = function() {
     } else {
         paper_list_avail_height = 
                 $("#subdiscipline_title").outerHeight(true) 
-                    + $("#headstart-chart").outerHeight(true) 
+                    + $("#headstart-chart").outerHeight(true)
+                    + $("#toolbar").outerHeight(true)
                     - $("#show_hide_button").outerHeight(true) 
                     - $("#explorer_options").outerHeight(true)
-                    - $("#scale_toolbar").outerHeight(true)
+                    - $(".scale-toolbar").outerHeight(true)
                     - PAPER_LIST_CORRECTION;
     }
     $("#papers_list").height(paper_list_avail_height);
