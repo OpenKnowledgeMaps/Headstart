@@ -367,7 +367,7 @@ BubblesFSM.prototype = {
             let overall_context = io.context.distributions_all[attribute];
             
             let area_visual_distributions = d3.select(bubble_frames[0][i]).select(".area_visual_distributions");
-            updateTags(current_context, overall_context, area_visual_distributions);
+            updateTags(current_context, overall_context, area_visual_distributions, attribute);
         }
     },
 
@@ -442,8 +442,15 @@ BubblesFSM.prototype = {
                 .on("mouseover", null)
                 .on("mouseout", null);
 
-
-        $("#subdiscipline_title h4").html('<span id="area-bold">'+config.localization[config.language].area + ":</span> " + '<span id="area-not-bold">' + d.title + "</span>" );
+        let subdiscipline_title_h4 = $("#subdiscipline_title h4")
+                                            .html('<span id="area-bold">'+config.localization[config.language].area + ":</span> " + '<span id="area-not-bold">' + d.title + "</span>" );
+        if (config.show_infolink_areas) {
+            let infolink_html = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink-areas"></a>';
+            subdiscipline_title_h4.append(infolink_html);
+            $("#infolink-areas").html('<span id="whatsthis">' + config.localization[config.language].intro_icon 
+                    + '</span> ' + config.localization[config.language].intro_label_areas)
+        }
+        
         $("#subdiscipline_title").dotdotdot();
         $("#context").css("visibility", "hidden");
 

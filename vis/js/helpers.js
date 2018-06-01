@@ -168,9 +168,10 @@ export function getRealHeight(element) {
     return height;
 }
 
-export function updateTags(current_context, overall_context, div) {
+export function updateTags(current_context, overall_context, div, attribute) {
     div.html("");
-
+    if(attribute === "none") return;
+    
     for(let element in current_context) {
         let statistic = current_context[element];
 
