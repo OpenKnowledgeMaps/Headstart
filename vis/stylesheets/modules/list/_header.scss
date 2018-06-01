@@ -97,7 +97,7 @@
         padding: 0px 0px;
         float: none !important;
     }
-    
+
     #sortby {
         font-size: 10px;
     }
@@ -108,8 +108,39 @@
         float: none;
         margin-top: 0px;
     }
-    
+
     #filter_container {
         float: none;
     }
+}
+
+@if $skin == 'cris_vis' {
+
+    #filter_container {
+        vertical-align: top;
+        float: left;
+        display: block;
+    }
+    #filter_parameter_container {
+        vertical-align: top;
+        float: right;
+        display: block;
+    }
+
+    #sort_container {
+        vertical-align: top;
+        float: right;
+        display: none;
+    }
+    @media screen and (max-width: 960px) {
+        #sort_container {
+            float: none;
+            margin-top: 0px;
+        }
+
+        #filter_container {
+            float: none;
+        }
+    }
+
 }
