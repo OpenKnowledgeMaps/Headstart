@@ -752,7 +752,7 @@ list.hideEntriesByParam = function (object, param) {
 list.hideEntriesByWord = function(object, search_words) {
     object
         .filter(function(d) {
-            let abstract = (config.list_sub_entries)?(d.abstract_search):(d.paper_abstract.toLowerCase());
+            let abstract = (config.list_sub_entries)?(d.abstract_search.toLowerCase()):(d.paper_abstract.toLowerCase());
             let title = d.title.toLowerCase();
             let authors = d.authors_string.toLowerCase();
             let journals = d.published_in.toLowerCase();
