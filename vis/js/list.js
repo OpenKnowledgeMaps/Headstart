@@ -822,7 +822,7 @@ list.createAbstractCris = function(d, cut_off) {
                 .text(elem.abstract)
         
         current_abstract.select(".list_subentry_readers")
-                .text(elem.readers)
+                .text(+elem.readers)
         
         current_abstract.select(".list_subentry_readers_entity")
                 .text(config.base_unit)
@@ -846,7 +846,7 @@ list.createAbstractCris = function(d, cut_off) {
                     .text(config.localization[config.language].distributions_label)
             
             show_statistics.select(".list_subentry_show_statistics_numbers")
-                    .text(elem.readers + " " + config.base_unit)
+                    .text(+elem.readers + " " + config.base_unit)
             
             show_statistics.select(".list_subentry_show_statistics_verb")
                     .text(config.localization[config.language].show_verb_label)
