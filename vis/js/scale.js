@@ -59,6 +59,37 @@ class Scale {
         mediator.publish("update_visual_distributions", type);
     }
   }
+  
+  updateLegend(type, context) {
+      let legend = d3.select(".legend")
+      
+      if(type === "none") {
+          legend.style("visibility", "hidden")
+          return;
+      }
+      
+      let overall_context = context.distributions_all[type];
+      
+      let id_fields = d3.select(".explanation-id-fields")
+                                .html("")
+     
+      overall_context.forEach(function(elem, index) {
+                  
+          id_fields.append("span")
+                        .attr("class", "explanation-id")
+                        .text(elem.id)
+          
+          id_fields.append("span")
+                        .attr("class", "explanation-name")
+                        .text(elem.name)
+          
+          if(index !== overall_context.length - 1) {
+              $(".explanation-id-fields").append(", ");
+          }
+      })
+      
+      legend.style("visibility", "visible");
+  }
 
 }
 
