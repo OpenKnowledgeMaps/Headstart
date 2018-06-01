@@ -9,14 +9,14 @@
     padding-left: 15px;
 }
 
-
 #oa {
     margin-bottom: 5px;
 }
 
 #open-access-logo_list {
-    background-color: $open-access;
-    color: white;
+    background-color: white;
+    color: $open-access;
+    border: 1px solid $open-access;
     padding: 2px 4px;
     border-radius: 5px;
     font-size: 10px;
@@ -56,7 +56,8 @@
         max-width: 82%;
         display: inline-block;
         color: $list_metadata_title_paper;
-        font-weight: $bold;
+        font-weight: 600;
+
 
         a {
             text-decoration: none;
@@ -85,18 +86,19 @@
         text-align: center;
         padding-top: 5px;
         padding-right: 10px;
-        
+
         .outlink_symbol {
-        vertical-align: baseline;
-    }
+            vertical-align: baseline;
+        }
     }
 
     .list_links a.oa-link {
-        color: $open-access;
+        color: white;
         border: 1px solid $open-access;
+        background-color: $open-access;
         &:hover {
-            background-color: $open-access;
-            color: white;
+            background-color: white;
+            color: $open-access;
         }
     }
 
@@ -109,7 +111,7 @@
         color: $list_show_hide_button;
         border: 1px solid $list_show_hide_button;
         &:hover {
-            background-color: $framed-item;
+            background-color: $medium-blue;
             color: white;
         }
     }
@@ -118,8 +120,8 @@
         color: $black;
         text-decoration: none;
         border-bottom: 1px solid $black;
-        
-        
+
+
         &:hover {
             border-bottom: 3px solid $framed-item;
         }
@@ -131,7 +133,7 @@
     }
 
     .list_details, .doi_outlink {
-        font: 12px 'Helvetica', sans-serif;
+        font: 12px 'Open Sans', Helvetica, sans-serif;
         font-size: 12px;
         line-height: 14px;
         color: $list_detail;
@@ -140,7 +142,7 @@
 
         .list_authors {
             color: $list_detail_authors;
-            font-weight: bold;
+            /*font-weight: bold;*/
         }
 
         .list_in {
@@ -166,8 +168,6 @@
     padding-right: 0;
     padding-left: 0px;
     color: $list_abstract;
-
-    //border-left: solid 2.5px $list_abstract_border_left;
 }
 
 #list_area, #list_keywords {
@@ -246,7 +246,7 @@
     margin-bottom: 10px;
     padding: 0;
     float: right;
-    color: black;
+    color: $black;
     font-weight: bold;
     padding-right: 10px;
 
@@ -319,5 +319,15 @@ img#preview_page {
         float: none;
         display: block;
         padding-right: 0px;
+    }
+}
+
+@if $skin == 'viper' {
+
+    .list_metadata {
+        .list_title {
+            font-size: 14px;
+            font-weight: 400;
+        }
     }
 }
