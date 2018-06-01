@@ -75,6 +75,7 @@ var config = {
     show_titlerow: true,
     show_list: false,
     show_context: false,
+    show_infolink_areas: false,
     
     create_title_from_context: false,
     is_title_clickable: true,
@@ -311,7 +312,9 @@ var config = {
             search_placeholder: "Suchwort eingeben",
             show_list: "Liste ausklappen",
             hide_list: "Liste einklappen",
-            intro_label: "",
+            intro_label: "mehr Informationen",
+            intro_label_areas: "Verteilung der Respondenten",
+            intro_areas_title: "Verteilung der Nennungen für das Themenfeld ",
             readers: "Nennungen",
             year: "Jahr",
             authors: "Autor",
