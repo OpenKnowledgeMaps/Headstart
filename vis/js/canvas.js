@@ -209,10 +209,14 @@ class Canvas {
                 let d = d3.select(mediator.current_zoom_node).datum();
                 $('#info-body').html("");
                 $('#info-title').text(config.localization[config.language].intro_areas_title + d.title);
-                config.scale_types.forEach(function(item) {
-                    d3.select('#info-body').append('img')
-                            .attr('class', 'image-area-statistics')
-                            .attr('src', './img/' + d.area_uri + '_' + item + '.svg')
+                config.scale_types.forEach(function(item, index) {
+                    if(item !== "none") {
+                        let info_body = d3.select('#info-body')
+                        info_body.append("h5").html(index + ". " + config.scale_label[item]);
+                        info_body.append('img')
+                                    .attr('class', 'image-area-statistics')
+                                    .attr('src', './img/' + d.area_uri + '_' + item + '.svg')
+                    }
                 })
             }
         });

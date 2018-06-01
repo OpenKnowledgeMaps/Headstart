@@ -996,13 +996,22 @@ list.setAdditionalImagesForListHolder = function(d) {
                 return (x.id === d.id);
             })
         
+        let list_images = current_item.select(".list_images")
+                            .append("h4")
+                            .html(config.localization[config.language].intro_areas_title + d.title)
         for (let item in config.list_images) {
             let image = config.list_images[item];
-            current_item.select(".list_images").append("img")
-                    .attr("class", "list_image")
-                    .attr("src", function(x) {
-                        return config.list_images_path + x.id + "_" + image + ".svg";
-                    })
+                    list_images.append("h5")
+                        .attr("class", "list_image_title")
+                        .html(function () {
+                            return (+item+1) + ". " + config.scale_label[image];
+                        })
+                        
+                    list_images.append("img")
+                        .attr("class", "list_image")
+                        .attr("src", function(x) {
+                            return config.list_images_path + x.id + "_" + image + ".svg";
+                        })
         }
 }
 
