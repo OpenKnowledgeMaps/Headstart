@@ -527,7 +527,10 @@ MyMediator.prototype = {
         mediator.manager.call('bubble', 'updateVisualDistributions', [type, context]);
         mediator.manager.call('papers', 'updateVisualDistributions', [type, context]);
         mediator.manager.call('list', 'updateVisualDistributions', [type, context]);
-        mediator.manager.call('scale', 'updateLegend', [type, context]);
+        
+        if(config.cris_legend) {
+            mediator.manager.call('scale', 'updateLegend', [type, context]);
+        }
     }
 };
 

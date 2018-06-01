@@ -68,6 +68,10 @@ text {
     font: 10px sans-serif;
 }
 
+.legend {
+    visibility: hidden;
+}
+
 .scale-toolbar {
     padding: 20px 0 15px 50px;
     background-color: $okm-clouds;
