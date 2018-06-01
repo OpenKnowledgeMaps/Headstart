@@ -29,7 +29,7 @@ var data_config = {
     list_images_path: "img/",
     
     is_force_areas: true,
-    area_force_alpha: 0.008,
+    area_force_alpha: 0.02,
     
     language: "ger_cris",
     
