@@ -13,6 +13,7 @@ var data_config = {
     show_list:true,
     is_force_papers:true,
     is_title_clickable: false,
+    show_infolink_areas: true,
 	
     show_context: true,
     create_title_from_context: false,

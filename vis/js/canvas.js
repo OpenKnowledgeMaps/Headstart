@@ -190,18 +190,29 @@ class Canvas {
 
         // Info Modal Event Listener
         $('#info_modal').on('show.bs.modal', function () {
-            var current_intro = config.intro;
-            var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
-            $('#info-title').text(intro.title);
-            $('#info-body').html(intro.body);
-            if (intro.dynamic) {
-                $.each(intro.params, function (paramName, value) {
-                    if (paramName.slice(0,4) === 'html') {
-                        $('.info-modal-'+paramName).html(value)
-                    } else {
-                        value = (value === "true")?("yes"):(value);
-                        $('.info-modal-'+paramName).text(value)
-                    }
+            if(!mediator.is_zoomed) {
+                var current_intro = config.intro;
+                var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
+                $('#info-title').text(intro.title);
+                $('#info-body').html(intro.body);
+                if (intro.dynamic) {
+                    $.each(intro.params, function (paramName, value) {
+                        if (paramName.slice(0,4) === 'html') {
+                            $('.info-modal-'+paramName).html(value)
+                        } else {
+                            value = (value === "true")?("yes"):(value);
+                            $('.info-modal-'+paramName).text(value)
+                        }
+                    })
+                }
+            } else {
+                let d = d3.select(mediator.current_zoom_node).datum();
+                $('#info-body').html("");
+                $('#info-title').text(config.localization[config.language].intro_areas_title + d.title);
+                config.scale_types.forEach(function(item) {
+                    d3.select('#info-body').append('img')
+                            .attr('class', 'image-area-statistics')
+                            .attr('src', './img/' + d.area_uri + '_' + item + '.svg')
                 })
             }
         });
@@ -276,7 +287,7 @@ class Canvas {
             if(config.infolink_style === "viper") {
                 $("#infolink").text(config.localization[config.language].intro_label)
             } else {
-                $("#infolink").html(config.localization[config.language].intro_label + ' <span id="whatsthis">&#xf05a;</span>');
+                $("#infolink").html('<span id="whatsthis">&#xf05a;</span> ' + config.localization[config.language].intro_label);
             }
         }
 

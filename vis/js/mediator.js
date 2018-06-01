@@ -513,7 +513,7 @@ MyMediator.prototype = {
     
     update_visual_distributions: function(type) {
         mediator.manager.call('bubble', 'updateVisualDistributions', [type]);
-        //mediator.manager.call('papers', 'updateVisualDistributions', type);
+        mediator.manager.call('papers', 'updateVisualDistributions', type);
         mediator.manager.call('list', 'updateVisualDistributions', [type]);
     }
 };
