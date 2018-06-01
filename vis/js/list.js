@@ -395,7 +395,7 @@ list.updateVisualDistributions = function(attribute) {
         let overall_context = io.context.distributions_all[attribute];
         let list_visual_distributions = d3.select(elem).select(".list_visual_dstributions");
         
-        updateTags(current_context, overall_context, list_visual_distributions);
+        updateTags(current_context, overall_context, list_visual_distributions, attribute);
         
     })
     
