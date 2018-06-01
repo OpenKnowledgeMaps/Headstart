@@ -39,7 +39,7 @@ circle {
         height: 100%;
         margin: 0;
         padding: 0;
-            position:static;
+        position:static;
         background-color: transparent;
     }
 
@@ -57,9 +57,9 @@ circle {
     vertical-align: middle;
 
     h2 {
-        font-family: 'Open Sans', sans-serif;
+        font-family: 'Open Sans', Helvetica, sans-serif;
         font-size: 14px;
-        font-weight: bold;
+        font-weight: 700;
         margin-top: 11px;
         margin-bottom: 11px;
         padding: 0;
