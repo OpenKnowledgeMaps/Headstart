@@ -13,6 +13,7 @@ var data_config = {
     show_list:true,
     is_force_papers:true,
     is_title_clickable: false,
+    show_infolink_areas: true,
 	
     show_context: true,
     create_title_from_context: false,
@@ -36,10 +37,12 @@ var data_config = {
     
     sort_menu_dropdown: true,
     visual_distributions: true,
+    cris_legend: true,
     
     rescale_map: false,
-    scale_types: ['Altersgruppe', 'Background', 'Bundesland', 'Geschlecht', 'Höchste Ausbildung', 'Land'],
+    scale_types: ['none', 'Altersgruppe', 'Background', 'Bundesland', 'Geschlecht', 'Höchste Ausbildung', 'Land'],
     scale_explanation: {
+        none: '',
         Altersgruppe: 'Die Verteilung für <strong>Altersgruppe</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
         Background: 'Die Verteilung für <strong>Background</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
         Bundesland: 'Die Verteilung für <strong>Bundesländer AT</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
@@ -48,6 +51,7 @@ var data_config = {
         Land: 'Die Verteilung für <strong>Land</strong> bezieht sich auf das Themenfeld. Anteile in absteigender Reihenfolge.',
     },
     scale_label: {
+        none: 'nichts ausgewählt',
         Altersgruppe: 'Altersgruppe',
         Background: 'Background',
         Bundesland: 'Bundesländer AT',

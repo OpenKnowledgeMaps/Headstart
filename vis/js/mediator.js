@@ -15,7 +15,9 @@ const iFrameTemplate = require("templates/modals/iframe_modal.handlebars");
 const imageTemplate = require("templates/modals/images_modal.handlebars");
 const viperEditTemplate = require("templates/modals/viper_edit_modal.handlebars");
 const embedTemplate = require("templates/modals/embed_modal.handlebars");
-const scaleToolbarTemplate = require("templates/toolbars/scale_toolbar.handlebars");
+const toolbarTemplate = require("templates/toolbar/toolbar.handlebars");
+const scaleToolbarTemplate = require("templates/toolbar/scale_toolbar.handlebars");
+const crisLegendTemplate = require("templates/toolbar/cris_legend.handlebars");
 
 class ModuleManager {
     constructor() {
@@ -309,8 +311,16 @@ MyMediator.prototype = {
         this.viz.append(viperEditTemplate());
         this.viz.append(embedTemplate());
         
+        this.viz.append(toolbarTemplate());
+       
+        let toolbar = $("#toolbar");
+        
+        if (config.cris_legend) {
+            toolbar.append(crisLegendTemplate());
+        }
+        
         if (config.scale_toolbar) {
-            this.viz.append(scaleToolbarTemplate({
+            toolbar.append(scaleToolbarTemplate({
                 scale_by_label: config.localization[config.language].scale_by_label,
                 credit: config.credit
             }));
@@ -513,7 +523,7 @@ MyMediator.prototype = {
     
     update_visual_distributions: function(type) {
         mediator.manager.call('bubble', 'updateVisualDistributions', [type]);
-        //mediator.manager.call('papers', 'updateVisualDistributions', type);
+        mediator.manager.call('papers', 'updateVisualDistributions', type);
         mediator.manager.call('list', 'updateVisualDistributions', [type]);
     }
 };

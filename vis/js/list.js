@@ -231,10 +231,11 @@ list.fit_list_height = function() {
     } else {
         paper_list_avail_height = 
                 $("#subdiscipline_title").outerHeight(true) 
-                    + $("#headstart-chart").outerHeight(true) 
+                    + $("#headstart-chart").outerHeight(true)
+                    + $("#toolbar").outerHeight(true)
                     - $("#show_hide_button").outerHeight(true) 
                     - $("#explorer_options").outerHeight(true)
-                    - $("#scale_toolbar").outerHeight(true)
+                    - $(".scale-toolbar").outerHeight(true)
                     - PAPER_LIST_CORRECTION;
     }
     $("#papers_list").height(paper_list_avail_height);
@@ -395,7 +396,7 @@ list.updateVisualDistributions = function(attribute) {
         let overall_context = io.context.distributions_all[attribute];
         let list_visual_distributions = d3.select(elem).select(".list_visual_dstributions");
         
-        updateTags(current_context, overall_context, list_visual_distributions);
+        updateTags(current_context, overall_context, list_visual_distributions, attribute);
         
     })
     

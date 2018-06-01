@@ -2,8 +2,8 @@
     margin: 0px;
     padding-top: 15px;
     padding-left: 50px;
-        //padding-bottom: 10px;
-    font-family: 'Open Sans', sans-serif;
+    //padding-bottom: 10px;
+    font-family: 'Open Sans', Helvetica, sans-serif;
     min-height: 50px;
 
     h4 {
@@ -13,7 +13,7 @@
         min-height: 24px;
     }
 
-    #area-not-bold, #area-bold {
+    #area-not-bold, #area-bold, #infolink-areas {
         position: relative;
         z-index: 3;
     }
@@ -48,6 +48,14 @@
     font-weight: 800;
 }
 
+#infolink {
+    color: $medium-blue;
+    font-weight: 400;
+    margin-left: 5px;
+    font-size: 12px;
+    text-decoration: none;
+}
+
 #whatsthis {
     font-family: 'FontAwesome';
     font-size: 18px;
@@ -55,6 +63,7 @@
 
 #infolink:hover, #infolink:focus, #infolink:active {
     text-decoration: none;
+    color: $black;
 }
 
 #timelineview {
@@ -77,45 +86,45 @@
 }
 
 @if $skin == 'viper' {
-#infolink {
-    //border: 1px solid $infolink;
-    //padding: 5px;
-    //border-radius: 5px;
-    color: $black;
-    font-weight: 400;
-    margin-left: 5px;
-    font-size: 12px;
-    //text-transform: uppercase;
-    //vertical-align: middle;
-    text-decoration: none;
-    border-bottom: 1px solid $black;
-}
+    #infolink {
+        //border: 1px solid $infolink;
+        //padding: 5px;
+        //border-radius: 5px;
+        color: $black;
+        font-weight: 400;
+        margin-left: 5px;
+        font-size: 12px;
+        //text-transform: uppercase;
+        //vertical-align: middle;
+        text-decoration: none;
+        border-bottom: 1px solid $black;
+    }
 
 
 
-#infolink:hover, #infolink:focus, #infolink:active {
-    border-bottom: 3px solid $framed-item;
-}
+    #infolink:hover, #infolink:focus, #infolink:active {
+        border-bottom: 3px solid $framed-item;
+    }
 }
 
 @if $skin == 'cris_vis' {
-#infolink {
-    //border: 1px solid $infolink;
-    //padding: 5px;
-    //border-radius: 5px;
-    color: $okm-modal-btn;
-    font-weight: 400;
-    margin-left: 5px;
-    font-size: 12px;
-    //text-transform: uppercase;
-    //vertical-align: middle;
-    text-decoration: none;
-    border-bottom: 1px solid $okm-modal-btn;
-}
+    #infolink {
+        //border: 1px solid $infolink;
+        //padding: 5px;
+        //border-radius: 5px;
+        color: $okm-modal-btn;
+        font-weight: 400;
+        margin-left: 5px;
+        font-size: 12px;
+        //text-transform: uppercase;
+        //vertical-align: middle;
+        text-decoration: none;
+        border-bottom: 1px solid $okm-modal-btn;
+    }
 
 
 
-#infolink:hover, #infolink:focus, #infolink:active {
-    border-bottom: 3px solid $okm-modal-btn;
-}
+    #infolink:hover, #infolink:focus, #infolink:active {
+        border-bottom: 3px solid $okm-modal-btn;
+    }
 }

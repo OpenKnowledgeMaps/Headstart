@@ -33,14 +33,14 @@ class Canvas {
     calcChartSize() {
         var parent_height = getRealHeight($("#" + config.tag));
         var subtitle_height = $("#subdiscipline_title").outerHeight(true);
-        var scale_toolbar_height = $(".scale-toolbar").outerHeight(true) || 0;
+        var toolbar_height = $("#toolbar").outerHeight(true) || 0;
         const CHART_HEIGHT_CORRECTION = 14;
 
         // Set available_height and available_width
         if (parent_height === 0) {
-            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_height - scale_toolbar_height;
+            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_height - toolbar_height;
         } else {
-            this.available_height = $("#" + config.tag).height() - subtitle_height - scale_toolbar_height;
+            this.available_height = $("#" + config.tag).height() - subtitle_height - toolbar_height;
         }
 
         this.available_height = this.available_height - CHART_HEIGHT_CORRECTION;
@@ -190,18 +190,29 @@ class Canvas {
 
         // Info Modal Event Listener
         $('#info_modal').on('show.bs.modal', function () {
-            var current_intro = config.intro;
-            var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
-            $('#info-title').text(intro.title);
-            $('#info-body').html(intro.body);
-            if (intro.dynamic) {
-                $.each(intro.params, function (paramName, value) {
-                    if (paramName.slice(0,4) === 'html') {
-                        $('.info-modal-'+paramName).html(value)
-                    } else {
-                        value = (value === "true")?("yes"):(value);
-                        $('.info-modal-'+paramName).text(value)
-                    }
+            if(!mediator.is_zoomed) {
+                var current_intro = config.intro;
+                var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
+                $('#info-title').text(intro.title);
+                $('#info-body').html(intro.body);
+                if (intro.dynamic) {
+                    $.each(intro.params, function (paramName, value) {
+                        if (paramName.slice(0,4) === 'html') {
+                            $('.info-modal-'+paramName).html(value)
+                        } else {
+                            value = (value === "true")?("yes"):(value);
+                            $('.info-modal-'+paramName).text(value)
+                        }
+                    })
+                }
+            } else {
+                let d = d3.select(mediator.current_zoom_node).datum();
+                $('#info-body').html("");
+                $('#info-title').text(config.localization[config.language].intro_areas_title + d.title);
+                config.scale_types.forEach(function(item) {
+                    d3.select('#info-body').append('img')
+                            .attr('class', 'image-area-statistics')
+                            .attr('src', './img/' + d.area_uri + '_' + item + '.svg')
                 })
             }
         });
@@ -273,11 +284,8 @@ class Canvas {
             let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
             subdiscipline_title_h4.append(infolink);
 
-            if(config.infolink_style === "viper") {
-                $("#infolink").text(config.localization[config.language].intro_label)
-            } else {
-                $("#infolink").html(config.localization[config.language].intro_label + ' <span id="whatsthis">&#xf05a;</span>');
-            }
+            $("#infolink").html('<span id="whatsthis">' + config.localization[config.language].intro_icon  
+                        +'</span> ' + config.localization[config.language].intro_label);
         }
 
         if (config.show_timeline) {
