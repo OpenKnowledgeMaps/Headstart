@@ -284,11 +284,8 @@ class Canvas {
             let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
             subdiscipline_title_h4.append(infolink);
 
-            if(config.infolink_style === "viper") {
-                $("#infolink").text(config.localization[config.language].intro_label)
-            } else {
-                $("#infolink").html('<span id="whatsthis">&#xf05a;</span> ' + config.localization[config.language].intro_label);
-            }
+            $("#infolink").html('<span id="whatsthis">' + config.localization[config.language].intro_icon  
+                        +'</span> ' + config.localization[config.language].intro_label);
         }
 
         if (config.show_timeline) {

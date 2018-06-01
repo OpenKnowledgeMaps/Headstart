@@ -447,7 +447,8 @@ BubblesFSM.prototype = {
         if (config.show_infolink_areas) {
             let infolink_html = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink-areas"></a>';
             subdiscipline_title_h4.append(infolink_html);
-            $("#infolink-areas").html('<span id="whatsthis">&#xf05a;</span> ' + config.localization[config.language].intro_label_areas)
+            $("#infolink-areas").html('<span id="whatsthis">' + config.localization[config.language].intro_icon 
+                    + '</span> ' + config.localization[config.language].intro_label_areas)
         }
         
         $("#subdiscipline_title").dotdotdot();
