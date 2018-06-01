@@ -18,17 +18,17 @@ $okm-clouds: #eff3f4;
 // Text colors
 $medium-blue: #4d7199;
 $dark-red: #A70805;
-$black: black;
+$black: #444444;
 $author-green: #216500;
 $abstract-gray: #333; //#5c6d7f; //old: #444444
-$journal-gray: #5c6d7f; // old:#666666
+$journal-gray: #4d7199; // old:#666666, 5c6d7f
 $list_metadata_title_paper: #4d7199;
-$list_show_hide_button: #5c6d7f;
+$list_show_hide_button: #4d7199; //#5c6d7f;
 
 // Additional colors for buttons etc.
 $okm-modal-btn: #4d7199;
 $infolink: #E55137;
-$framed-item: #f1c500;
+$framed-item: #4d7199;//gelb:#f1c500;
 $dataset: #2C3E52;
 
 @if $skin == 'viper' {

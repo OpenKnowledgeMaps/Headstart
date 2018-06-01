@@ -2,8 +2,8 @@
     margin: 0px;
     padding-top: 15px;
     padding-left: 50px;
-        //padding-bottom: 10px;
-    font-family: 'Open Sans', sans-serif;
+    //padding-bottom: 10px;
+    font-family: 'Open Sans', Helvetica, sans-serif;
     min-height: 50px;
 
     h4 {
@@ -49,17 +49,11 @@
 }
 
 #infolink {
-    //border: 1px solid $infolink;
-    //padding: 5px;
-    //border-radius: 5px;
-    color: $black;
+    color: $medium-blue;
     font-weight: 400;
     margin-left: 5px;
     font-size: 12px;
-    //text-transform: uppercase;
-    //vertical-align: middle;
     text-decoration: none;
-    border-bottom: 1px solid $black;
 }
 
 #whatsthis {
@@ -68,8 +62,7 @@
 }
 
 #infolink:hover, #infolink:focus, #infolink:active {
-    text-decoration: none;
-    border-bottom: 3px solid $framed-item;
+    color: $black;
 }
 
 #timelineview {
@@ -87,5 +80,25 @@
         h4 {
             font-size: 14px;
         }
+    }
+}
+
+@if $skin == 'viper' {
+    #infolink {
+        //border: 1px solid $infolink;
+        //padding: 5px;
+        //border-radius: 5px;
+        color: $black;
+        font-weight: 400;
+        margin-left: 5px;
+        font-size: 12px;
+        //text-transform: uppercase;
+        //vertical-align: middle;
+        text-decoration: none;
+        border-bottom: 1px solid $black;
+    }
+
+    #infolink:hover, #infolink:focus, #infolink:active {
+        border-bottom: 3px solid $framed-item;
     }
 }
