@@ -1,6 +1,9 @@
 var data_config = {
     tag: "visualization",
     mode: "local_files",
+    
+    bubble_min_scale: 1.3,
+    bubble_max_scale: 1.1,
 
     title: "Übersicht für <b>Forschungsfragen zum Thema psychische Gesundheit</b>",
     input_format: "json",
