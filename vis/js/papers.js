@@ -296,7 +296,7 @@ papers.updateVisualDistributions = function(attribute, context) {
         let overall_context = context.distributions_all[attribute];
         let current_context = context.distributions_papers[d.id][attribute];
 
-        let paper_visual_distributions = d3.select(articles[0][i]).select(".paper_visual_distributions");
+        let paper_visual_distributions = d3.select(articles[0][i]).select("#paper_visual_distributions");
         updateTags(current_context, overall_context, paper_visual_distributions, attribute);
     }
 };
