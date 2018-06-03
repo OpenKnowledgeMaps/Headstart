@@ -31,8 +31,11 @@ $infolink: #4d7199;
 $framed-item: #4d7199;//gelb:#f1c500;
 $dataset: #2C3E52;
 
+$lower_value_tag: #2C316E;
+$higher_value_tag: #DC2260;
+
 @if $skin == 'viper' {
-        // Map Bubble Colors
+    // Map Bubble Colors
     $white: white;
     $lightest-blue: #F1F6FA; //old: #F1F6FA
     $light-blue: #D2E4F0;
@@ -67,8 +70,13 @@ $dataset: #2C3E52;
     $dark-blue: #2C316E;
     $okm-blue: #2C316E;
     $medium-blue: #2C316E;
-    
+
     $okm-modal-btn: #7A77A5;
     $framed-item: #2C316E;
     $okm-clouds: #F4F4F6;
+
+    $list_show_hide_button: #7A77A5;
+
+    $lower_value_tag: #2C316E;
+    $higher_value_tag: #DC2260;
 }

@@ -25,6 +25,7 @@
     vertical-align: top;
     float: none;
     display: none;
+    font-family: $link-font-family;
 }
 
 .btn-default.active, .btn-default:active, .btn-default:focus, .btn-default.active:focus, .btn-default.active.focus, .btn-default.focus, .open > .dropdown-toggle.btn-default {
@@ -132,6 +133,7 @@
         float: right;
         display: none;
     }
+    
     @media screen and (max-width: 960px) {
         #sort_container {
             float: none;
@@ -142,5 +144,4 @@
             float: none;
         }
     }
-
 }
