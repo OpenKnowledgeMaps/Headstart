@@ -829,7 +829,7 @@ list.createAbstractCris = function(d, cut_off) {
         
         if(cut_off) {
             let showmore = current_abstract.select(".list_subentry_showmore")
-                                .style("display", "block")
+                                .style("display", "inline-block")
                         
             showmore.select(".list_subentry_showmore_text")
                     .text(config.localization[config.language].showmore_questions_label)
@@ -840,7 +840,7 @@ list.createAbstractCris = function(d, cut_off) {
                     .style("display", "none")
             
             let show_statistics = current_abstract.select(".list_subentry_show_statistics")
-                    .style("display", "block")
+                    .style("display", "inline-block")
             
             show_statistics.select(".list_subentry_show_statistics_text")
                     .text(config.localization[config.language].distributions_label)

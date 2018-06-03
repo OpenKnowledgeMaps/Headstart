@@ -161,3 +161,10 @@ text {
         margin-left: 50px;
     }
 }
+
+@if $skin == 'cris_vis' {
+.dropdown-menu, #scale-menu {
+    width: 240px;
+    font-size: 12px;
+}
+}

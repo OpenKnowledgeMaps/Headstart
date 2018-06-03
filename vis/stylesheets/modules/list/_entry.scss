@@ -176,7 +176,7 @@
 
 .list_subentry_showmore, .list_subentry_show_statistics {
     display: none;
-    text-decoration: underline;
+    text-decoration: none;
     cursor: pointer;
 }
 
@@ -277,22 +277,20 @@ img#preview_page {
     color: $okm-modal-btn;
 }
 
-.list_subentry_showmore_text {
+.list_subentry_showmore_text{
     color: $okm-modal-btn;
     border-bottom: 1px solid $okm-modal-btn;
-    
+    font-family: $link-font-family;
+
     &:hover, &:focus, &:active {
-       border-bottom: 3px solid $okm-modal-btn; 
+        border-bottom: 3px solid $okm-modal-btn; 
     }
 }
 
 .list_subentry_showmore {
     margin:10px 0px;
     text-decoration: none;
-    
 }
-
-
 
 @media screen and (max-width: 950px) {
     .list_metadata {
@@ -332,5 +330,59 @@ img#preview_page {
                 font-weight:$fontweight700;
             }
         }
+    }
+}
+
+@if $skin == 'cris_vis' {
+    .list_images h4  {
+        font-size: 16px;
+        line-height:120%;
+        margin-bottom: 10px;
+        max-width: 82%;
+        display: inline-block;
+        color: $list_metadata_title_paper;
+        font-weight: $fontweight600;   
+    }
+
+    .list_subentry_statistics {
+        margin:10px 0px 20px 10px;
+    }
+    .list_subentry {
+        margin: 10px 0px;
+    }
+    .list_subentry_statistic_title {
+        margin-top: 10px;
+    }
+
+    .list_subentry_show_statistics {
+        color: $okm-modal-btn;
+        border-bottom: 1px solid $okm-modal-btn;
+        font-family: $link-font-family;
+        margin:5px 0px 10px;
+        text-decoration: none;
+
+        &:hover, &:focus, &:active {
+            border-bottom: 3px solid $okm-modal-btn; 
+        }
+    }
+    
+    #list_abstract {
+        font-size: 14px;
+        font-family: $abstract-font-family;
+    }
+    
+    .list_metadata {
+
+    .list_title {
+        font-size: 16px;
+    }
+    }
+    
+    .list_image {
+        width:100%;
+    }
+    
+    .list_image_title {
+        text-transform: uppercase;
     }
 }

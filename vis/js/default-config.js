@@ -320,7 +320,7 @@ var config = {
             intro_label: "mehr Informationen",
             intro_icon: "&#xf129;",
             intro_label_areas: "Verteilung der Respondenten",
-            intro_areas_title: "Verteilung der Nennungen für das Themenfeld ",
+            intro_areas_title: "Verteilung der Respondenten für ",
             readers: "Nennungen",
             year: "Jahr",
             authors: "Autor",

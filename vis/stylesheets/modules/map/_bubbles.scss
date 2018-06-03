@@ -31,6 +31,7 @@ circle {
 
 #area_visual_distributions {
     display:none;
+    text-align: center;
 }
 
 #area_title_object {
@@ -46,6 +47,23 @@ circle {
     &.is_hidden {
         visibility: hidden;
     }
+}
+
+.lower_value {
+    background-color: $lower_value_tag;
+}
+
+.higher_value {
+    background-color: $higher_value_tag;
+}
+
+.higher_value, .lower_value {
+    border-radius: 3px;
+    color: white;
+    padding:3px;
+    font-size:10px;
+    margin: 0px 2px;
+    font-family: $special-font-family;
 }
 
 #area_title {
@@ -69,7 +87,7 @@ circle {
         background-color: transparent;
         cursor: default;
     }
-    
+
     @media screen and (max-width: 1600px) {
         #area_title {
             h2 {
