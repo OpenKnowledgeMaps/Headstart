@@ -18,7 +18,7 @@ include 'config.php';
         <script type="text/javascript" src="./lib/d3.min.js"></script>
         <script type="text/javascript" src="./lib/bootstrap-multiselect.js"></script>
         <script type="text/javascript" src="./lib/pagination.min.js"></script>
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="./lib/font-awesome.min.css" >
         <link type="text/css" rel="stylesheet" href="./css/options.css">
         <link type="text/css" rel="stylesheet" href="./css/spinner.css">

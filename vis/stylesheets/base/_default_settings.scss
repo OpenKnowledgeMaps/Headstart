@@ -2,10 +2,6 @@
 
 // Typography
 $text-color: $black;
-$base-font-size: 10px;
-$base-font-family: Helvetica, sans-serif;
-$link-font-family: 'Open Sans', Helvetica, sans-serif;
-$base-font-weight: normal;
 
 // Map
 $bubble-color: $white;
@@ -21,6 +17,7 @@ $circle-area: $white;
 
 $area-title-h2: $okm-blue;
 
+//List colors
 $list_metadata_title_paper: $medium-blue;
 $list_links: $okm-red;
 $list_links_hover: $okm-blue;
@@ -30,9 +27,10 @@ $list_detail_in: $journal-gray;
 $list_abstract: $abstract-gray;
 $list_show_hide_button_hover: $okm-blue;
 $list_explorer_header: $okm-clouds;
+$list_show_hide_button_border: $okm-clouds;
+$list_metadata_title_paper: $medium-blue;
 $list_metadata_border_color: $okm-light-gray; // unused
 $list_abstract_border_left: $okm-light-gray; // unused
-
 
 $timelineview: $medium-blue;
 
@@ -41,8 +39,4 @@ $papers_details: $black;
 $papers_holder_a: $okm-red;
 
 $iframe_modal_status: $okm-red;
-$list_show_hide_button_border: $okm-clouds;
 $open-access: $okm-red;
-$list_metadata_title_paper: $medium-blue;
-
-$infolink: $black;

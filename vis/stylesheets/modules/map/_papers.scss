@@ -2,19 +2,16 @@
     &.resulttype-dataset {
         #region {
             stroke: $dataset;
-            /*stroke-width: 2px;*/
-
-
         }
+
         #region.framed {
             stroke: $framed-item;
-            /*stroke-width: 3px;*/
         }
     }
 }
 
 #article_metadata {
-    font-family: Helvetica;
+    font-family: $special-font-family;
     line-height: 100%;
     overflow: hidden;
     cursor: zoom-in;
@@ -41,8 +38,9 @@
     p {
         margin: 0 0 5px;
     }
+
     .metadata {
-        font: 3px 'Helvetica', sans-serif;
+        font: 3px $base-font-family;
         line-height: 100%;
         overflow: hidden;
         text-align: left;
@@ -54,8 +52,6 @@
         padding-top: 2px;
         padding-left: 2px;
         font-size: 0px;
-
-
     }
 
     .large {
@@ -77,8 +73,6 @@
         vertical-align: top;
         margin-left:0px;
 
-
-
         &.large {
             display:inline-block;
             font-size: 12px;
@@ -89,15 +83,14 @@
         }
     }
 
-
     a {
-
         color: $journal-gray;
+    }
 
-    }
     #num-readers {
-        font-weight: bold;
+        font-weight: $fontweight700;
     }
+
     #readers {
         font-size: 9px;
         line-height: 8px;
@@ -105,9 +98,7 @@
         padding: 2px;
         text-align: left;
         vertical-align: text-bottom;
-        font-family: Helvetica;
-
-
+        font-family: $special-font-family;
 
         &.large {
             font-size: 12px;
@@ -119,13 +110,10 @@
             padding: 0px 10px;
         }
 
-
-
         span {
             color: black;
         }
     }
-
 }
 
 #dataset-icon {
@@ -147,7 +135,6 @@
         display: inline-block;
         margin: 0 0 0 5px;
     }
-
 }
 
 #open-access-logo {
@@ -177,11 +164,9 @@
     }
 }
 
-
 #title {
     color: $papers_title;
     margin-top: 0px;
-    //font-weight: bold;
 
     &.large {
         margin-top: 10px;
@@ -207,7 +192,7 @@
     }
 
     .pubyear {
-        font-weight: bold;
+        font-weight: $fontweight700;
         font-style: normal;
     }
 }
@@ -229,7 +214,7 @@
 
 .recommended {
     font-size: 10pt;
-    font-weight: bold;
+    font-weight: $fontweight700;
     color: black;
     border: 1px yellow solid;
     background-color: yellow;
@@ -243,7 +228,7 @@
 
 .tobookmark {
     font-size: 10pt;
-    font-weight: bold;
+    font-weight: $fontweight700;
     color: white;
     border: 1px green solid;
     background-color: green;

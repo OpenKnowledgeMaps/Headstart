@@ -31,11 +31,11 @@
     color: $journal-gray;
     background-color: $white;
     border-color: $journal-gray;
-    font-weight: bold;
+    font-weight: $fontweight700;
 }
 
 .btn-default {
-    font-family: 'Open Sans', Helvetica, sans-serif;
+    font-family: $link-font-family;
 }
 
 .btn:active, .btn.active {
@@ -55,7 +55,7 @@
     padding: 10px 0px;
     line-height: 250%;
     font-size: 12px;
-    font-family: 'Open Sans', Helvetica, sans-serif;
+    font-family: $link-font-family;
 }
 
 #filter_container input {

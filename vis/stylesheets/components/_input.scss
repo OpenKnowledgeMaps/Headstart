@@ -12,6 +12,6 @@
 .form-control::-moz-placeholder {
     color: #999;
     opacity: 1;
-    font-weight: lighter;
+    font-weight: $fontweight400;
     font-family: $link-font-family;
 }

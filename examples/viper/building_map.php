@@ -16,7 +16,7 @@ include 'config.php';
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <link type="text/css" rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
        
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,800' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,700' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="./lib/font-awesome.min.css">
         <link type="text/css" rel="stylesheet" href="./css/openaire.css">
     </head>
