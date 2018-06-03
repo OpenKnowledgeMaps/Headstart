@@ -21,7 +21,7 @@
     border-radius: 5px;
     font-size: 10px;
     vertical-align: top;
-    font-weight: normal;
+    font-weight: $fontweight400;
 }
 
 .dataset-tag {
@@ -37,17 +37,9 @@
 }
 
 .list_metadata {
-    /*border-top-width: 2px;
-    border-top-style: solid;
-    border-color: $list_metadata_border_color;*/
     padding-top: 10px;
     margin-bottom: 10px;
     font-family: $link-font-family;
-
-    /*.list_title.oa a {
-            color: $okm-red;
-            }*/
-
 
     .list_title {
         font-size: 14px;
@@ -56,8 +48,7 @@
         max-width: 82%;
         display: inline-block;
         color: $list_metadata_title_paper;
-        font-weight: 600;
-
+        font-weight: $fontweight600;
 
         a {
             text-decoration: none;
@@ -68,7 +59,6 @@
                 text-decoration: underline;
             }
         }
-
     }
 
     #outlink_list {
@@ -133,7 +123,7 @@
     }
 
     .list_details, .doi_outlink {
-        font: 12px 'Open Sans', Helvetica, sans-serif;
+        font: 12px $link-font-family;
         font-size: 12px;
         line-height: 14px;
         color: $list_detail;
@@ -142,7 +132,6 @@
 
         .list_authors {
             color: $list_detail_authors;
-            /*font-weight: bold;*/
         }
 
         .list_in {
@@ -155,7 +144,7 @@
         }
 
         .list_pubyear {
-            font-weight: bold;
+            font-weight: $fontweight700;
             color: $black;
         }
     }
@@ -181,7 +170,7 @@
     max-width: 82%;
 
     .area_tag, .keyword_tag {
-        font-weight: bold;
+        font-weight: $fontweight700;
     }
 }
 
@@ -203,17 +192,12 @@
     margin-bottom: 20px;
 }
 
-.link2 {
-    /*display: block;
-    margin-top: 10px;*/
-}
-
 .oa-link-hidden {
     display: none;
 }
 
 .bold-list {
-    font-weight:800;
+    font-weight:$fontweight700;
 }
 
 .lowercase {
@@ -221,7 +205,7 @@
 }
 
 #papers_list .list_metrics {
-    font: 11px 'Open Sans', Helvetica, sans-serif;
+    font: 11px $base-font-family;
     margin-bottom:5px;
     color: $black;
 }
@@ -229,11 +213,6 @@
 .list_metrics_citations, .list_metrics_tweets {
     margin-right:10px;
 }
-
-/*.scaled-metric {
-    color: $framed-item;
-    font-weight:800;
-}*/
 
 #curr-scale-explaination {
     font-size: 12px;
@@ -247,12 +226,12 @@
     padding: 0;
     float: right;
     color: $black;
-    font-weight: bold;
+    font-weight: $fontweight700;
     padding-right: 10px;
 
     .list_readers_entity {
         font: 11px 'Helvetica' sans-serif;
-        font-weight: normal;
+        font-weight: $fontweight400;
     }
 }
 
@@ -316,7 +295,6 @@ img#preview_page {
 
 
 @media screen and (max-width: 950px) {
-
     .list_metadata {
 
         .list_links {
@@ -343,11 +321,16 @@ img#preview_page {
 }
 
 @if $skin == 'viper' {
-
     .list_metadata {
         .list_title {
             font-size: 14px;
-            font-weight: 400;
+            font-weight: $fontweight400;
+        }
+
+        .list_details, .doi_outlink {
+            .list_authors {
+                font-weight:$fontweight700;
+            }
         }
     }
 }

@@ -5,14 +5,13 @@
 /* ################ Chart ############### */
 
 #headstart-chart {
-    /*position: absolute;*/
-
-    margin: 0 auto;
+    /*position: absolute;*/   
     //display: inline-block; /*table;*/
     /*margin-top: 6px;*/
+    //margin-left: 50px;
+    margin: 0 auto;
     position: relative;
     z-index: 0;
-    //margin-left: 50px;
 }
 
 #chart-svg {
@@ -20,7 +19,6 @@
 }
 
 #map-rect {
-
     &.zoomed_in {
         &:hover {
             cursor: zoom-out;
@@ -76,7 +74,7 @@ text {
     padding: 20px 0 15px 50px;
     background-color: $okm-clouds;
     display:block;
-    font-family: 'Open Sans', Helvetica, sans-serif;
+    font-family: $link-font-family;
 }
 
 .scale-toolbar .dropdown-menu > li > a, #explorer_options .dropdown-menu > li > a {
@@ -150,10 +148,8 @@ text {
 }
 
 #curr-scale-type {
-    font-weight: bold;
+    font-weight: $fontweight700;
 }
-
-
 
 .dropdown-menu > li > a:active {
     background-color: $okm-modal-btn;

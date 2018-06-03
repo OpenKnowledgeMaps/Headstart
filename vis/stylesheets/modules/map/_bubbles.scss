@@ -57,9 +57,9 @@ circle {
     vertical-align: middle;
 
     h2 {
-        font-family: 'Open Sans', Helvetica, sans-serif;
+        font-family: $base-font-family;
         font-size: 14px;
-        font-weight: 700;
+        font-weight: $fontweight700;
         margin-top: 11px;
         margin-bottom: 11px;
         padding: 0;
@@ -69,10 +69,9 @@ circle {
         background-color: transparent;
         cursor: default;
     }
+    
     @media screen and (max-width: 1600px) {
-
         #area_title {
-
             h2 {
                 font-size: 16px;
             }
@@ -80,9 +79,7 @@ circle {
     }
 
     @media screen and (max-height: 1600px) {
-
         #area_title {
-
             h2 {
                 font-size: 16px;
             }
@@ -90,9 +87,7 @@ circle {
     }
 
     @media screen and (max-width: 1200px) {
-
         #area_title {
-
             h2 {
                 font-size: 14px;
             }
@@ -100,9 +95,7 @@ circle {
     }
 
     @media screen and (max-height: 1200px) {
-
         #area_title {
-
             h2 {
                 font-size: 14px;
             }
@@ -110,9 +103,7 @@ circle {
     }
 
     @media screen and (max-width: 600px) {
-
         #area_title {
-
             h2 {
                 font-size: 12px;
             }
@@ -120,13 +111,10 @@ circle {
     }
 
     @media screen and (max-height: 600px) {
-
         #area_title {
-
             h2 {
                 font-size: 12px;
             }
         }
     }
-
 }
