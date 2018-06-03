@@ -10,7 +10,7 @@ html {
 body {
     color: #333;
     font-family: 'Open Sans', Helvetica;
-    font-weight: 300;
+    font-weight: 400;
     margin: 0px auto 0;
     width: 100%;
     font-size:16px;
@@ -36,8 +36,13 @@ body {
     margin-top: 0px;
 }
 
+p, div {
+    font-weight: 300;
+}
+
 a {
     color: #3696e0;
+    font-weight: 300;
 }
 
 a:hover {
@@ -110,6 +115,7 @@ a:hover {
 .mittig2 .text-field {
     height: 45px;
     padding-left: 5px;
+    font-weight:300;
     width: 80%;
 }
 
@@ -365,6 +371,7 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 .vipermenu li a {
     color: white;
     text-decoration: none;
+    font-weight: 300;
     border-bottom: 2px solid white;
 }
 

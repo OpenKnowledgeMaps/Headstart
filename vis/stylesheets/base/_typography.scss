@@ -1,10 +1,20 @@
-.h4, h4 {
+/*.h4, h4 {
     font-size: 18px;
     min-height: 50px;
-}
+}*/
 
-$bold: bold;
+/*fonts*/
+$base-font-size: 10px; //not in use
+$base-font-family: 'Open Sans', Helvetica, sans-serif;
+$link-font-family: 'Open Sans', Helvetica, sans-serif;
+$special-font-family: 'Open Sans', Helvetica, sans-serif;
+$abstract-font-family: Helvetica Neue, Helvetica, sans-serif;
 
-@if $skin == 'viper' {
-    $bold: normal;
-}
+/*light normal*/
+$fontweight300: 300;
+$fontweight400: 400;
+
+/*bold bolder*/
+$fontweight600: 600;
+$fontweight700: 700;
+$fontweight800: 800;

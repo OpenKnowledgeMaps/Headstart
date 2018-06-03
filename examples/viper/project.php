@@ -30,6 +30,7 @@ include 'config.php';
         ?>
         
         <link type="text/css" rel="stylesheet" href="./css/openaire.css"></link>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'></link>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     </head>
 
