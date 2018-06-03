@@ -1,7 +1,6 @@
 /* ########### Popups/Modals ########### */
 
 #iframe_modal {
-
     .modal-body {
         height: 80vh;
         width: 100%;
@@ -15,11 +14,9 @@
             color: $iframe_modal_status;
         }
     }
-
 }
 
 #images_modal {
-
     .modal-lg {
         max-width: 788px;
     }
@@ -39,7 +36,6 @@
 }
 
 #info_modal {
-
     .modal-dialog {
         width: 100%;
         max-width: 800px;
@@ -48,23 +44,19 @@
             padding: 40px;
 
             p {
-                font-weight: 300;
-                font-family: 'Open Sans', Helvetica, sans-serif;
+                font-family: $base-font-family;
                 font-size: 16px;
                 margin: 0 0 30px !important;
             }
-
         }
     }
-
-
 }
 
 #edit-button-text p {
     margin: 0 0 30px !important;
 }
-#viper_edit_modal {
 
+#viper_edit_modal {
     .modal-dialog {
         width: 100%;
         max-width: 800px;
@@ -74,8 +66,7 @@
             overflow: hidden;
 
             p {
-                font-weight: 300;
-                font-family: 'Open Sans', Helvetica, sans-serif;
+                font-family: $base-font-family;
                 font-size: 16px;
             }
 
@@ -86,14 +77,10 @@
                 box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
             }
         }
-
     }
-
-
 }
 
 #embed_modal {
-
     .modal-dialog {
         width: 100%;
         max-width: 800px;
@@ -105,20 +92,16 @@
                 width: 100%;
                 display: block;
                 padding: 10px;
-
             }
         }
 
         .modal-body {
             p {
-                font-weight: 300;
-                font-family: 'Open Sans', Helvetica, sans-serif;
+                font-family: $base-font-family;
                 font-size: 16px;
             }
         }
     }
-
-
 }
 
 .modal-body, .modal-header {
@@ -137,7 +120,7 @@
 .modal-title {
     color: $medium-blue;
     font-size: 20px;
-    font-weight: 700;
+    font-weight: $fontweight700;
     margin:0px !important;
     text-transform: uppercase;
 }
@@ -149,8 +132,9 @@
 h3 {
     margin: 0px;
 }
+
 #info-body h3  {
-    font-weight: 700;
+    font-weight: $fontweight700;
     text-transform: uppercase;
     font-size: 14px;
     margin: 20px 0px 10px;
@@ -159,8 +143,7 @@ h3 {
 
 .modal-content table {
     border: 3px solid $okm-clouds;
-    font-weight: 300;
-    font-family: 'Open Sans', Helvetica, sans-serif;
+    font-family: $base-font-family;
     font-size: 14px;
 }
 
@@ -233,7 +216,6 @@ h5 {
     cursor:         grabbing;
 }
 
-
 // draggable styles taken from jquery-ui
 .ui-draggable-handle {
     -ms-touch-action: none;
@@ -241,7 +223,6 @@ h5 {
 }
 
 .table > thead > tr > th, .table > thead > tr > td, .table > tbody > tr > th, .table > tbody > tr > td, .table > tfoot > tr > th, .table > tfoot > tr > td {
-
     border-top: 3px solid $okm-clouds;
 }
 
