@@ -362,7 +362,7 @@ BubblesFSM.prototype = {
             let overall_context = context.distributions_all[attribute];
             
             let area_visual_distributions = d3.select(bubble_frames[0][i]).select("#area_visual_distributions");
-            updateTags(current_context, overall_context, area_visual_distributions, attribute);
+            updateTags(current_context, overall_context, area_visual_distributions, attribute, true);
         }
     },
 

@@ -409,6 +409,7 @@ MyMediator.prototype = {
         $("#map-rect").removeClass("zoomed_out").addClass('zoomed_in');
         $("#region.unframed").addClass("zoomed_in");
         $(".paper_holder").addClass("zoomed_in");
+        d3.selectAll("#paper_visual_distributions").style("display", "block")
 
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'scrollTop', []);
@@ -431,6 +432,7 @@ MyMediator.prototype = {
         $("#map-rect").removeClass("zoomed_in").addClass('zoomed_out');
         $("#region.unframed").removeClass("zoomed_in");
         $(".paper_holder").removeClass("zoomed_in");
+        d3.selectAll("#paper_visual_distributions").style("display", "none")
     },
     
     zoomout_complete: function() {

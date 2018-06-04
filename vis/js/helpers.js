@@ -168,7 +168,7 @@ export function getRealHeight(element) {
     return height;
 }
 
-export function updateTags(current_context, overall_context, div, attribute) {
+export function updateTags(current_context, overall_context, div, attribute, display) {
     div.html("");
     if(attribute === "none") return;
        
@@ -180,7 +180,7 @@ export function updateTags(current_context, overall_context, div, attribute) {
         }
 
         div
-        .style("display", "block")
+        .style("display", function () { return ((display)?("block"):("none")) })
         .append("span")
             .html(statistic.id)
             .attr("class", function () {
