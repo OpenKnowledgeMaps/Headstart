@@ -833,6 +833,14 @@ list.createAbstractCris = function(d, cut_off) {
                         
             showmore.select(".list_subentry_showmore_text")
                     .text(config.localization[config.language].showmore_questions_label)
+            
+            showmore.select(".list_subentry_showmore_num")
+                    .text(function() { 
+                        return d.num_subentries;
+            })
+            
+            showmore.select(".list_subentry_showmore_verb")
+                    .text(config.localization[config.language].showmore_questions_verb)
                     
             break;
         } else {
@@ -1022,7 +1030,7 @@ list.attachClickHandlerAbstract = function(enlarged) {
     if(enlarged) {
         d3.selectAll(".list_subentry_show_statistics").on("click", function() {
             let click_div = d3.select(d3.event.target.parentElement)
-            let statistics_div = d3.select(d3.event.target.parentElement.nextElementSibling)
+            let statistics_div = d3.select(d3.event.target.parentElement.parentElement.nextElementSibling)
             if(statistics_div.style("display") === "none") {
                 statistics_div.style("display", "block")
                 click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "none");

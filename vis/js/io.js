@@ -222,10 +222,13 @@ IO.prototype = {
                 d.internal_readers = 1;
             }
             
+            d.num_subentries = 0;
+            
             if (config.list_sub_entries) {
                 d.abstract_search = "";
                 d.paper_abstract.forEach(function(obj) {
                     d.abstract_search += obj.abstract + " ";
+                    d.num_subentries++;
                 })
             }
             
