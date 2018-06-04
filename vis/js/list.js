@@ -1050,7 +1050,7 @@ list.attachClickHandlerAbstract = function(enlarged) {
         })
     } else {
         d3.selectAll(".list_subentry_showmore").on("click", function() {
-            let d = d3.select(d3.event.target.parentElement.parentElement.parentElement.parentElement.parentElement).datum()
+            let d = d3.select(d3.event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement).datum()
             mediator.publish("list_click_paper_list", d);
             mediator.publish("record_action", d.id, "click_paper_list", config.user_id, d.bookmarked + " " + d.recommended, null);
             d3.event.stopPropagation();
