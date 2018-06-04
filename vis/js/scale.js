@@ -61,10 +61,11 @@ class Scale {
   }
   
   updateLegend(type, context) {
-      let legend = d3.select(".legend")
+      
+      let legend = d3.select(".explanation-ids");
       
       if(type === "none") {
-          legend.style("visibility", "hidden")
+          legend.style("visibility", "hidden");
           return;
       }
       
