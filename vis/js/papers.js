@@ -297,7 +297,8 @@ papers.updateVisualDistributions = function(attribute, context) {
         let current_context = context.distributions_papers[d.id][attribute];
 
         let paper_visual_distributions = d3.select(articles[0][i]).select("#paper_visual_distributions");
-        updateTags(current_context, overall_context, paper_visual_distributions, attribute);
+        let visible_tags = (mediator.is_zoomed)?(true):(false);
+        updateTags(current_context, overall_context, paper_visual_distributions, attribute, visible_tags);
     }
 };
         
