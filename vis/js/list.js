@@ -814,9 +814,22 @@ list.createAbstractCris = function(d, cut_off) {
     let list_abstract = document.createElement("div");
     
     for (let elem of d.paper_abstract) {
+        let current_list_item = d3.selectAll("#list_holder").filter(function (x) {
+            return x.id === elem.id;
+        })
+        
         let current_abstract = d3.select(list_abstract)
                 .append("div")
-                .html(list_abstract_template);
+                    .attr('class', function(x) { 
+                        let new_class =  "level" + elem.level;
+                        let existing_class = d3.select(this).attr("class") 
+                        if (existing_class == null){
+                          return new_class;
+                        } else {
+                            return new_class + " " + existing_class;
+                        }
+                    })
+                    .html(list_abstract_template);
         
         current_abstract.select(".list_subentry_title")
                 .text(elem.abstract)
