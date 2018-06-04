@@ -32,6 +32,9 @@ circle {
 #area_visual_distributions {
     display:none;
     text-align: center;
+    line-height: 170%;
+    //word-break: keep-all;
+    //overflow-wrap: normal;
 }
 
 #area_title_object {
@@ -60,8 +63,8 @@ circle {
 .higher_value, .lower_value {
     border-radius: 3px;
     color: white;
-    padding:3px;
-    font-size:10px;
+    padding:2px 5px;
+    font-size:9px;
     margin: 0px 2px;
     font-family: $special-font-family;
 }
