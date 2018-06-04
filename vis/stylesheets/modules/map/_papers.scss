@@ -238,6 +238,7 @@
 
 #paper_visual_distributions {
     display:none;
+    white-space: nowrap;
 }
 
 @if $skin == 'cris_vis' {
