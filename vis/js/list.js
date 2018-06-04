@@ -997,7 +997,7 @@ list.setAdditionalImagesForListHolder = function(d) {
             })
         
         let list_images = current_item.select(".list_images")
-                            .append("h4")
+        list_images.append("h4")
                             .html(config.localization[config.language].intro_areas_title + d.title)
         for (let item in config.list_images) {
             let image = config.list_images[item];

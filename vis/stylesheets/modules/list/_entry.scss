@@ -2,6 +2,10 @@
     border-bottom: 2px solid $okm-clouds;
     padding: 10px 0px 10px 15px;
     border-left: 0px solid $okm-clouds;
+
+    .list_visual_dstributions {
+        margin-top:10px;
+    }
 }
 
 .list_entry_full {
@@ -40,6 +44,8 @@
     padding-top: 10px;
     margin-bottom: 10px;
     font-family: $link-font-family;
+
+
 
     .list_title {
         font-size: 14px;
@@ -292,6 +298,10 @@ img#preview_page {
     text-decoration: none;
 }
 
+.list_subentry_statistic_distribution_id {
+    font-weight: $fontweight700;
+}
+
 @media screen and (max-width: 950px) {
     .list_metadata {
 
@@ -334,14 +344,17 @@ img#preview_page {
 }
 
 @if $skin == 'cris_vis' {
-    .list_images h4  {
-        font-size: 16px;
-        line-height:120%;
-        margin-bottom: 10px;
-        max-width: 82%;
-        display: inline-block;
-        color: $list_metadata_title_paper;
-        font-weight: $fontweight600;   
+    .list_images  {
+        padding-left: 15px;
+        h4  {
+            font-size: 16px;
+            line-height:120%;
+            margin-bottom: 10px;
+            max-width: 82%;
+            display: inline-block;
+            color: $list_metadata_title_paper;
+            font-weight: $fontweight600;   
+        }
     }
 
     .list_subentry_statistics {
@@ -365,23 +378,26 @@ img#preview_page {
             border-bottom: 3px solid $okm-modal-btn; 
         }
     }
-    
+
     #list_abstract {
         font-size: 14px;
         font-family: $abstract-font-family;
     }
-    
+
     .list_metadata {
 
-    .list_title {
-        font-size: 16px;
+        .list_title {
+            font-size: 16px;
+        }
     }
-    }
-    
+
     .list_image {
         width:100%;
+        background-color: #F4F4F6;
+        padding: 5px;
+        border-radius: 3px;
     }
-    
+
     .list_image_title {
         text-transform: uppercase;
     }
