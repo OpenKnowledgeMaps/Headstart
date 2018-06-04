@@ -310,7 +310,8 @@ var config = {
             items: "items",
             sort_by_label: 'sort by:',
             scale_by_label: 'Scale map by:',
-            scale_by_infolink_label: 'notes on use of metrics'
+            scale_by_infolink_label: 'notes on use of metrics',
+            credit_alt: "VIPER was created by Open Knowledge Maps",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -354,6 +355,7 @@ var config = {
             items: "Themen",
             scale_by_infolink_label: '',
             scale_by_label: 'Verteilung für:',
+            credit_alt: "Created by Open Knowledge Maps",
         },
     },
 

@@ -41,6 +41,7 @@ var data_config = {
     sort_menu_dropdown: true,
     visual_distributions: true,
     cris_legend: true,
+    credit: true,
     
     rescale_map: false,
     scale_types: ['none', 'Altersgruppe', 'Background', 'Bundesland', 'Geschlecht', 'Höchste Ausbildung', 'Land'],
