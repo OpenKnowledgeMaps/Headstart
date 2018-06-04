@@ -351,12 +351,15 @@ img#preview_page {
     .list_images  {
         padding-left: 15px;
         padding-bottom: 15px;
+        text-align: right;
+        
         h4  {
+            text-align: left !important;
             font-size: 16px;
             line-height:120%;
             margin-bottom: 10px;
-            max-width: 82%;
-            display: inline-block;
+            max-width: 100%;
+            display: block;
             color: $list_metadata_title_paper;
             font-weight: $fontweight600;   
         }
@@ -397,11 +400,12 @@ img#preview_page {
 
         .list_title {
             font-size: 16px;
+            margin-bottom: 0px;
         }
     }
 
     .list_image {
-        width:100%;
+        max-width: 100%;
         background-color: #F4F4F6;
         padding: 5px;
         border-radius: 3px;
@@ -410,6 +414,7 @@ img#preview_page {
 
     .list_image_title {
         text-transform: uppercase;
+        text-align: left !important;
     }
 
     .list_readers {
@@ -423,5 +428,9 @@ img#preview_page {
             font-family: $link-font-family;
             font-weight: $fontweight400;
         }
+    }
+    
+    .list_entry {
+    padding: 0px 0px 0px 15px;
     }
 }
