@@ -864,13 +864,15 @@ list.createAbstractCris = function(d, cut_off) {
             let list_subentry_statistics = listSubEntryStatisticsTemplateCris();
             
             let current_context = io.context.distributions_abstracts[elem.id];
-    
+            
+            let index_elem = 1;
             for (let context_elem in current_context) {
                 if (current_context.hasOwnProperty(context_elem)) {
                     let subentry_statistics = statistics_div.append("div").html(list_subentry_statistics);
                     subentry_statistics.select(".list_subentry_statistic_title")
-                        .text(context_elem)
+                        .text(index_elem + ". " + context_elem)
                     this.createAbstractStatistics(subentry_statistics, current_context[context_elem])
+                    index_elem++;
                 }
             }
         }
