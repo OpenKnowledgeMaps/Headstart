@@ -213,7 +213,9 @@ class Canvas {
                     if(item !== "none") {
                         let info_body = d3.select('#info-body')
                         info_body.append("h5").html(index + ". " + config.scale_label[item]);
-                        info_body.append('img')
+                        info_body.append('div')
+                                    .attr('class', 'statistics-image')
+                                 .append('img')
                                     .attr('class', 'image-area-statistics')
                                     .attr('src', './img/' + d.area_uri + '_' + item + '.svg')
                     }

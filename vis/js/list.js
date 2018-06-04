@@ -1015,11 +1015,14 @@ list.setAdditionalImagesForListHolder = function(d) {
                             return (+item+1) + ". " + config.scale_label[image];
                         })
                         
-                    list_images.append("img")
-                        .attr("class", "list_image")
-                        .attr("src", function(x) {
-                            return config.list_images_path + x.id + "_" + image + ".svg";
-                        })
+                    list_images
+                        .append('div')
+                            .attr('class', 'statistics-image')
+                        .append("img")
+                            .attr("class", "list_image")
+                            .attr("src", function(x) {
+                                return config.list_images_path + x.id + "_" + image + ".svg";
+                            })
         }
 }
 
