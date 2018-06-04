@@ -23,6 +23,7 @@
     border: 1px solid $open-access;
     padding: 2px 4px;
     border-radius: 5px;
+    -moz-border-radius: 5px;
     font-size: 10px;
     vertical-align: top;
     font-weight: $fontweight400;
@@ -34,6 +35,7 @@
     background-color: white;
     padding: 2px 4px;
     border-radius: 5px;
+    -moz-border-radius: 5px;
 }
 
 .resulttype-dataset {
@@ -104,6 +106,7 @@
         cursor: pointer;
         padding: 5px;
         border-radius: 5px;
+        -moz-border-radius: 5px;
         color: $list_show_hide_button;
         border: 1px solid $list_show_hide_button;
         &:hover {
@@ -287,6 +290,7 @@ img#preview_page {
     color: $okm-modal-btn;
     border-bottom: 1px solid $okm-modal-btn;
     font-family: $link-font-family;
+    font-size: 12px;
 
     &:hover, &:focus, &:active {
         border-bottom: 3px solid $okm-modal-btn; 
@@ -346,6 +350,7 @@ img#preview_page {
 @if $skin == 'cris_vis' {
     .list_images  {
         padding-left: 15px;
+        padding-bottom: 15px;
         h4  {
             font-size: 16px;
             line-height:120%;
@@ -368,14 +373,18 @@ img#preview_page {
     }
 
     .list_subentry_show_statistics {
-        color: $okm-modal-btn;
-        border-bottom: 1px solid $okm-modal-btn;
-        font-family: $link-font-family;
         margin:5px 0px 10px;
-        text-decoration: none;
 
-        &:hover, &:focus, &:active {
-            border-bottom: 3px solid $okm-modal-btn; 
+        .list_subentry_show_statistics_link {
+            color: $okm-modal-btn;
+            border-bottom: 1px solid $okm-modal-btn;
+            font-family: $link-font-family;
+            font-size: 12px;
+            text-decoration: none;
+
+            &:hover, &:focus, &:active {
+                border-bottom: 3px solid $okm-modal-btn;
+            }
         }
     }
 
@@ -396,9 +405,23 @@ img#preview_page {
         background-color: #F4F4F6;
         padding: 5px;
         border-radius: 3px;
+        -moz-border-radius: 3px;
     }
 
     .list_image_title {
         text-transform: uppercase;
+    }
+
+    .list_readers {
+        font-size: 11px;
+        line-height: 200%;
+        margin-bottom: 0px;
+        padding-right: 5px;
+
+        .list_readers_entity {
+            font-size: 11px; 
+            font-family: $link-font-family;
+            font-weight: $fontweight400;
+        }
     }
 }
