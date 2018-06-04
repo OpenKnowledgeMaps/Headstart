@@ -229,3 +229,12 @@ h5 {
 #embed-modal-text, #viper-edit-screenshot {
     margin: 20px 0;
 }
+@if $skin == 'cris_vis' {
+    #info_modal .modal-dialog {
+        max-width: 760px;
+    }
+    .modal-body {
+        text-align: right;
+    }
+}
+

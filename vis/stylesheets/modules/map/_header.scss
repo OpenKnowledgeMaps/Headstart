@@ -72,9 +72,7 @@
     }
 }
 
-
 @media screen and (max-width: 640px) {
-
     #subdiscipline_title {
         padding-left: 20px;
         font-size: 14px;
@@ -89,8 +87,6 @@
     #infolink {
         border-bottom: 1px solid $infolink;
     }
-
-
 
     #infolink:hover, #infolink:focus, #infolink:active {
         border-bottom: 3px solid $framed-item;
@@ -112,9 +108,8 @@
         border-bottom: 1px solid $okm-modal-btn;
     }
 
-
-
     #infolink:hover, #infolink:focus, #infolink:active, #infolink-areas:hover, #infolink-areas:focus, #infolink-areas:active{
         border-bottom: 3px solid $okm-modal-btn;
+        color: $okm-modal-btn;
     }
 }

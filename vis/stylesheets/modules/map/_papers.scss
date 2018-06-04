@@ -120,6 +120,7 @@
     display: inline-block;
     border: 0px solid $black;
     border-radius: 3px;
+    -moz-border-radius: 3px;
     color: $black;
 
     &.large {
@@ -145,6 +146,7 @@
     padding: 4px;
     font-size: 6px;
     border-radius: 3px;
+    -moz-border-radius: 3px;
 
     &.large {
         margin: 0 0 0 5px;
@@ -247,10 +249,10 @@
         }
 
         .larger {
-            font-size: 14px;
+            font-size: 16px;
             padding: 5px 0px 0px 10px;
             line-height: 120%;
-            font-weight: $fontweight700;
+            //font-weight: $fontweight700;
         }
     }
 }
