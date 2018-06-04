@@ -32,7 +32,6 @@ circle {
 #area_visual_distributions {
     display:none;
     text-align: center;
-    line-height: 170%;
     width: inherit;
     -webkit-hyphens: none;
     -moz-hyphens:    none;
@@ -41,6 +40,10 @@ circle {
     //white-space: nowrap;
     //word-break: keep-all;
     //overflow-wrap: normal;
+    .lower_value, .higher_value {
+        display: inline-block;
+        margin-bottom: 3px;
+    }
 }
 
 #area_title_object {
