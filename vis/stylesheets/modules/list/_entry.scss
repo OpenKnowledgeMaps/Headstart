@@ -161,7 +161,7 @@
 
 #list_abstract {
     max-width: 82%;
-    font: 12px 'Helvetica', sans-serif;
+    font: 12px $base-font-family;
     line-height: 120%;
     padding-right: 0;
     padding-left: 0px;
@@ -239,7 +239,7 @@
     padding-right: 10px;
 
     .list_readers_entity {
-        font: 11px 'Helvetica' sans-serif;
+        font: 11px $base-font-family;
         font-weight: $fontweight400;
     }
 }
@@ -286,7 +286,7 @@ img#preview_page {
     color: $okm-modal-btn;
 }
 
-.list_subentry_showmore_text{
+.list_subentry_show_link{
     color: $okm-modal-btn;
     border-bottom: 1px solid $okm-modal-btn;
     font-family: $link-font-family;
@@ -353,7 +353,9 @@ img#preview_page {
         padding-bottom: 15px;
         text-align: right;
         
+        
         h4  {
+            margin-top: 30px;
             text-align: left !important;
             font-size: 16px;
             line-height:120%;
@@ -373,6 +375,7 @@ img#preview_page {
     }
     .list_subentry_statistic_title {
         margin-top: 10px;
+        text-transform: uppercase;
     }
 
     .list_subentry_show_statistics {
@@ -404,12 +407,15 @@ img#preview_page {
         }
     }
 
-    .list_image {
-        max-width: 100%;
+    .statistics-image {
         background-color: #F4F4F6;
         padding: 5px;
         border-radius: 3px;
         -moz-border-radius: 3px;
+    }
+    
+    .list_image {
+        max-width: 100%;
     }
 
     .list_image_title {

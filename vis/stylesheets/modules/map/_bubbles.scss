@@ -33,6 +33,12 @@ circle {
     display:none;
     text-align: center;
     line-height: 170%;
+    width: inherit;
+    -webkit-hyphens: none;
+    -moz-hyphens:    none;
+    -ms-hyphens:     none;
+    hyphens:         none;
+    //white-space: nowrap;
     //word-break: keep-all;
     //overflow-wrap: normal;
 }

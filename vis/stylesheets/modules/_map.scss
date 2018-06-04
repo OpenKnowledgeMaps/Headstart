@@ -63,10 +63,19 @@ line {
 }
 
 text {
-    font: 10px sans-serif;
+    font: 10px $base-font-family;
 }
 
 .legend {
+}
+
+.logoimg {
+    border-radius: 5px;
+    moz-border-radius: 5px;
+    padding: 5px;
+    width: 60px;
+    background-color:white;
+    border: 1px solid #eff3f4;
 }
 
 .scale-toolbar {
