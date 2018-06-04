@@ -814,10 +814,6 @@ list.createAbstractCris = function(d, cut_off) {
     let list_abstract = document.createElement("div");
     
     for (let elem of d.paper_abstract) {
-        let current_list_item = d3.selectAll("#list_holder").filter(function (x) {
-            return x.id === elem.id;
-        })
-        
         let current_abstract = d3.select(list_abstract)
                 .append("div")
                     .attr('class', function(x) { 
