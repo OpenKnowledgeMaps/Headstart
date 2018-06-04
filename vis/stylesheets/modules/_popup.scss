@@ -121,6 +121,7 @@
     color: $medium-blue;
     font-size: 20px;
     font-weight: $fontweight700;
+    font-family: $base-font-family;
     margin:0px !important;
     text-transform: uppercase;
 }
@@ -235,6 +236,21 @@ h5 {
     }
     .modal-body {
         text-align: right;
+    }
+
+    h5 {
+        text-align:left !important;
+        font-size: 14px;
+        font-family: $base-font-family;
+        text-transform: uppercase;
+    }
+
+    .modal-title {
+        color: $medium-blue;
+        font-size: 16px;
+        font-family: $base-font-family;
+        margin:0px !important;
+        text-transform: none;
     }
 }
 
