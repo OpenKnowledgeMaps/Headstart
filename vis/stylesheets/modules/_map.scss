@@ -210,4 +210,10 @@ text {
         padding: 0px 0px;
         font-size: 11px;
     }
+
+    @media screen and (max-width: 1250px) {
+        #headstart-chart {
+            margin-left: 0px;
+        }
+    }
 }
