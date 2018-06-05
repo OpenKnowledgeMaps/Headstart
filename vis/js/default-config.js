@@ -332,7 +332,7 @@ var config = {
             articles_label: 'Artikel',
             source_label: 'Quelle',
             documenttypes_label: 'Publikationsarten',
-            area: "Bereich",
+            area: "Themenfeld",
             keywords: "Keywords",
             no_title: "Kein Titel",
             default_area: "Kein Bereich",
