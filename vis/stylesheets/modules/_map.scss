@@ -76,6 +76,8 @@ text {
     width: 60px;
     background-color:white;
     border: 1px solid #eff3f4;
+    vertical-align: top;
+    margin-left: 5px;
 }
 
 .scale-toolbar {
@@ -199,13 +201,13 @@ text {
 }
 
 @if $skin == 'cris_vis' {
-.dropdown-menu, #scale-menu {
-    width: 240px;
-    font-size: 12px;
-}
+    .dropdown-menu, #scale-menu {
+        width: 240px;
+        font-size: 12px;
+    }
 
-#curr-scale-explanation {
-    padding: 0px 0px;
-    font-size: 11px;
-}
+    #curr-scale-explanation {
+        padding: 0px 0px;
+        font-size: 11px;
+    }
 }
