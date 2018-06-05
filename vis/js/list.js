@@ -1044,27 +1044,28 @@ list.attachClickHandlerAbstract = function(enlarged) {
     let list_holder = d3.selectAll("#list_holder");
     
     if(enlarged) {
-        list_holder.select(".list_subentry_show_statistics").on("click", function(d) {
+        list_holder[0].forEach(function (element) {
+            let current_list_holder = d3.select(element);
+            let d = current_list_holder.datum();
             
-            let parent_div = list_holder.filter(function (x) {
-                return x.id === d.id;
+            current_list_holder.selectAll(".list_subentry_show_statistics").on("click", function() {
+                let click_div = d3.select(d3.event.currentTarget);
+                let parent_div = d3.select(d3.event.currentTarget.parentElement);
+                let statistics_div = parent_div.select(".list_subentry_statistics")
+                if(statistics_div.style("display") === "none") {
+                    statistics_div.style("display", "block")
+                    click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "none");
+                    click_div.select(".list_subentry_show_statistics_arrow_up").style("display", "inline-block");
+                    click_div.select(".list_subentry_show_statistics_verb")
+                        .text(config.localization[config.language].hide_verb_label)
+                } else {
+                    statistics_div.style("display", "none")
+                    click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "inline-block");
+                    click_div.select(".list_subentry_show_statistics_arrow_up").style("display", "none");
+                    click_div.select(".list_subentry_show_statistics_verb")
+                        .text(config.localization[config.language].show_verb_label)
+                }
             })
-            
-            let click_div = parent_div.select(".list_subentry_show_statistics");
-            let statistics_div = parent_div.select(".list_subentry_statistics")
-            if(statistics_div.style("display") === "none") {
-                statistics_div.style("display", "block")
-                click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "none");
-                click_div.select(".list_subentry_show_statistics_arrow_up").style("display", "inline-block");
-                click_div.select(".list_subentry_show_statistics_verb")
-                    .text(config.localization[config.language].hide_verb_label)
-            } else {
-                statistics_div.style("display", "none")
-                click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "inline-block");
-                click_div.select(".list_subentry_show_statistics_arrow_up").style("display", "none");
-                click_div.select(".list_subentry_show_statistics_verb")
-                    .text(config.localization[config.language].show_verb_label)
-            }
         })
     } else {
                
