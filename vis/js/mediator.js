@@ -389,7 +389,7 @@ MyMediator.prototype = {
         if (mediator.current_enlarged_paper) {
             mediator.current_enlarged_paper.paper_selected = false
         }
-        mediator.current_enlarged_paper = null
+        mediator.current_enlarged_paper = null;
         mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
 
@@ -403,6 +403,7 @@ MyMediator.prototype = {
 
     bubble_click: function(d, bubble) {
         bubble.zoomin(d);
+        mediator.manager.call('papers', 'currentbubble_click', [d]);
     },
 
     bubble_zoomin: function(d) {
