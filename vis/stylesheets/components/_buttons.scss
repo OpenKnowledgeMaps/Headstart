@@ -61,3 +61,10 @@ img#close-button {
     border-color: $okm-modal-btn;
     color: $okm-modal-btn;
 }
+
+@if ($skin == "cris_vis") {
+    #searchclear {
+        right: 8px;
+        bottom: 0px;
+    }
+}
