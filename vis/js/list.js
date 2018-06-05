@@ -1046,7 +1046,6 @@ list.attachClickHandlerAbstract = function(enlarged) {
     if(enlarged) {
         list_holder[0].forEach(function (element) {
             let current_list_holder = d3.select(element);
-            let d = current_list_holder.datum();
             
             current_list_holder.selectAll(".list_subentry_show_statistics").on("click", function() {
                 let click_div = d3.select(d3.event.currentTarget);
