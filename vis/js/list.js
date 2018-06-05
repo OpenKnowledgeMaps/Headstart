@@ -30,6 +30,7 @@ const listMetricTemplate = require('templates/list/list_metrics.handlebars');
 const filterDropdownEntryTemplate = require("templates/list/filter_dropdown_entry.handlebars");
 const showHideLabel = require("templates/list/show_hide_label.handlebars")
 const sortDropdownEntryTemplate = require("templates/list/sort_dropdown_entry.handlebars");
+const legendTemplate = require("templates/toolbar/cris_legend.handlebars");
 
 export const list = StateMachine.create({
 
@@ -1034,6 +1035,8 @@ list.setAdditionalImagesForListHolder = function(d) {
                             .attr("src", function(x) {
                                 return config.list_images_path + x.id + "_" + image + ".svg";
                             })
+                    
+                    list_images.append("div").html(legendTemplate);
         }
 }
 

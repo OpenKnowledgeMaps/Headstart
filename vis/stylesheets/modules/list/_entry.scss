@@ -363,6 +363,12 @@ img#preview_page {
             color: $list_metadata_title_paper;
             font-weight: $fontweight600;   
         }
+        
+        .legend {
+            visibility: visible;
+            padding: 5px 10px 0px 0px;
+            width: 100%;
+        }
     }
 
     .list_subentry_statistics {

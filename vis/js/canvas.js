@@ -9,6 +9,7 @@ import dateFormat from 'dateformat';
 const editModalButton = require('templates/buttons/edit_button.handlebars')
 const embedModalButton = require('templates/buttons/embed_button.handlebars')
 const shareButton = require('templates/buttons/share_button.handlebars')
+const legendTemplate = require("templates/toolbar/cris_legend.handlebars");
 
 class Canvas {
     constructor() {
@@ -218,6 +219,7 @@ class Canvas {
                                  .append('img')
                                     .attr('class', 'image-area-statistics')
                                     .attr('src', './img/' + d.area_uri + '_' + item + '.svg')
+                        info_body.append('div').html(legendTemplate)
                     }
                 })
             }
