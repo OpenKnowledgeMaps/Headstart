@@ -233,6 +233,20 @@ h5 {
 @if $skin == 'cris_vis' {
     #info_modal .modal-dialog {
         max-width: 760px;
+        
+        img {
+            max-width: 100%;
+        }
+
+        .legend {
+            visibility: visible;
+            padding: 5px 10px 0px 0px;
+            width: 100%;
+            
+            .color-box {
+                margin: 0px !important;
+            }
+        }
     }
     .modal-body {
         text-align: right;
