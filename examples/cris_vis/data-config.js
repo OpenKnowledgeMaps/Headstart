@@ -9,6 +9,7 @@ var data_config = {
     input_format: "json",
     base_unit: "Nennungen",
     use_area_uri: true,
+    preview_type: "pdf",
     
     show_timeline: false,
     show_dropdown: false,

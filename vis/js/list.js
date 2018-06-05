@@ -1041,10 +1041,17 @@ list.attachClickHandlerAbstract = function(enlarged) {
     if(!config.list_sub_entries)
         return;
     
+    let list_holder = d3.selectAll("#list_holder");
+    
     if(enlarged) {
-        d3.selectAll(".list_subentry_show_statistics").on("click", function() {
-            let click_div = d3.select(d3.event.target.parentElement)
-            let statistics_div = d3.select(d3.event.target.parentElement.parentElement.nextElementSibling)
+        list_holder.select(".list_subentry_show_statistics").on("click", function(d) {
+            
+            let parent_div = list_holder.filter(function (x) {
+                return x.id === d.id;
+            })
+            
+            let click_div = parent_div.select(".list_subentry_show_statistics");
+            let statistics_div = parent_div.select(".list_subentry_statistics")
             if(statistics_div.style("display") === "none") {
                 statistics_div.style("display", "block")
                 click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "none");
@@ -1060,8 +1067,8 @@ list.attachClickHandlerAbstract = function(enlarged) {
             }
         })
     } else {
-        d3.selectAll(".list_subentry_showmore").on("click", function() {
-            let d = d3.select(d3.event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement).datum()
+               
+        list_holder.select(".list_subentry_showmore").on("click", function(d) {
             mediator.publish("list_click_paper_list", d);
             mediator.publish("record_action", d.id, "click_paper_list", config.user_id, d.bookmarked + " " + d.recommended, null);
             d3.event.stopPropagation();
