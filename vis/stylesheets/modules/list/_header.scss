@@ -133,25 +133,24 @@
         float: right;
         display: none;
     }
+
+    #filter_container input {
+        margin-bottom: 0px;
+        margin-right: 0px;
+    }
     
-    @media screen and (max-width: 960px) {
+    #explorer_options {
+        border-bottom: 2px solid #EAEAEE;
+    }
+
+    @media screen and (max-width: 1000px) {
         #sort_container {
             float: none;
-            margin-top: 0px;
+            margin-top: 10px;
         }
 
         #filter_container {
             float: none;
         }
     }
-}
-
-@if $skin == 'cris_vis' {
-    #filter_container input {
-    margin-bottom: 0px;
-    margin-right: 0px;
-}
-#explorer_options {
-    border-bottom: 2px solid #EAEAEE;
-}
 }
