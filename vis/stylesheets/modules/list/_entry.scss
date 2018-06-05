@@ -366,8 +366,12 @@ img#preview_page {
     }
 
     .list_subentry_statistics {
-        margin:10px 0px 20px 0px;
+        margin: 0;
+        background-color: $okm-clouds;
+        padding: 20px;
+        font-size: 12px !important;
     }
+
     .list_subentry {
         margin: 10px 0px;
     }
@@ -452,10 +456,6 @@ img#preview_page {
 
     .level2 .list_subentry_metadata,  .level3 .list_subentry_metadata {
         font-size: 14px !important;
-        color: #666666;
-    }
-
-    .level2 .list_subentry_statistics, .level3 .list_subentry_statistics {
         color: #666666;
     }
 
