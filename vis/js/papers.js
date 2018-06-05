@@ -680,7 +680,7 @@ papers.enlargePaper = function (d, holder_div) {
     d.resized = true;
 };
 
-papers.currentbubble_click = function (d) {
+papers.currentbubble_click = function (d) {   
     mediator.publish("paper_current_bubble_clicked", d);
 
     if (mediator.current_enlarged_paper !== null) {
