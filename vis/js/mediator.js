@@ -363,10 +363,10 @@ MyMediator.prototype = {
     paper_current_bubble_clicked: function(area) {
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'filterListByArea', [area]);
-        /*if (mediator.current_enlarged_paper) {
+        if (mediator.current_enlarged_paper) {
             mediator.current_enlarged_paper.paper_selected = false
         }
-        mediator.current_enlarged_paper = null*/
+        mediator.current_enlarged_paper = null;
         mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
 
