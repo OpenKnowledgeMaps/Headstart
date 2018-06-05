@@ -145,3 +145,13 @@
         }
     }
 }
+
+@if $skin == 'cris_vis' {
+    #filter_container input {
+    margin-bottom: 0px;
+    margin-right: 0px;
+}
+#explorer_options {
+    border-bottom: 2px solid #EAEAEE;
+}
+}
