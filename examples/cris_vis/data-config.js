@@ -37,7 +37,7 @@ var data_config = {
     
     language: "ger_cris",
     
-    sort_options: ["title", "readers"],
+    sort_options: ["title", "readers", "area"],
     
     sort_menu_dropdown: true,
     visual_distributions: true,
