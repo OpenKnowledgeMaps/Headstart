@@ -467,7 +467,7 @@ list.populateMetaData = function(nodes) {
         if (config.doi_outlink) {
             list_metadata.select(".doi_outlink")
             .html(function (d) {
-                var has_doi = !(d.doi === "")
+                var has_doi = !(typeof d.doi === "undefined" || d.doi === "")
                 return doiOutlinkTemplate({
                     has_doi,
                     link_label: config.localization[config.language].link,
