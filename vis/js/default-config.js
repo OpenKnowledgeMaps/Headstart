@@ -239,6 +239,10 @@ var config = {
             default_y: 1.,
             default_year: "",
             sort_by_label: 'sort by:',
+            filter_by_label: 'show: ',
+            all: "any",
+            open_access: "Open Access",
+            link: 'link',
         },
         eng_openaire: {
             loading: "Loading...",
