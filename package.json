@@ -36,7 +36,6 @@
     "dateformat": "^2.0.0",
     "mediator-js": "^0.9.9",
     "resolve-url-loader": "^1.6.0",
-    "stickybits": "*",
     "truncate": "*"
   },
   "devDependencies": {

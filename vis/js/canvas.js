@@ -5,7 +5,6 @@ import { papers } from 'papers';
 import { mediator } from 'mediator';
 import { intros } from 'intro';
 import dateFormat from 'dateformat';
-import stickybits from 'stickybits'
 
 const editModalButton = require('templates/buttons/edit_button.handlebars')
 const embedModalButton = require('templates/buttons/embed_button.handlebars')
@@ -328,6 +327,42 @@ class Canvas {
         }
         if (config.share_modal) {
             $('#modals').append(shareButton)
+            
+            let title =  document.title;
+            let url = window.location.href;
+            let description = $("meta[name='description']").attr("content");
+            
+            d3.select(".sharebutton_twitter")
+                    .attr("href", function () {
+                        return "https://twitter.com/intent/tweet?"
+                            + "url=" + encodeURI(url)
+                            + "&hashtags=" + encodeURI("okmaps,openscience,dataviz")
+                            + "&text=" + title;
+            });
+            
+            d3.select(".sharebutton_fb")
+                    .attr("href", function () {
+                        return "https://www.facebook.com/sharer/sharer.php?"
+                            + "u=" + encodeURI(url);
+            });
+            
+            d3.select(".sharebutton_mail")
+                    .attr("href", function () {
+                        return "mailto:?subject=" + title
+                            + "&body=" + description + " " + url
+            });
+            
+            $(".sharebutton")
+                .on('click', (event) => {
+                    event.preventDefault();
+                    
+                    $(".sharebuttons").toggle(0, function () {
+                        if ($(this).is(':visible')) {
+                            $(this).css('display','inline-block');
+                            $("#sharebutton").focus();
+                        }
+                    });
+                })
         }
         if (config.viper_edit_modal) {
             $('#modals').append(editModalButton)
@@ -342,8 +377,6 @@ class Canvas {
                 window.open(`https://www.openaire.eu/search/project?projectId=${context.params.obj_id}`);
             })
         }
-        
-        stickybits('#modals');
     }
 
     paramExists(param) {
