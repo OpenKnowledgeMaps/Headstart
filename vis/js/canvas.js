@@ -5,6 +5,7 @@ import { papers } from 'papers';
 import { mediator } from 'mediator';
 import { intros } from 'intro';
 import dateFormat from 'dateformat';
+import stickybits from 'stickybits'
 
 const editModalButton = require('templates/buttons/edit_button.handlebars')
 const embedModalButton = require('templates/buttons/embed_button.handlebars')
@@ -262,7 +263,7 @@ class Canvas {
             chart_title = config.localization[config.language].overview_label
                     + ' <span id="search-term-unique">' + query_clean + '</span>';
         }
-
+           
         var subdiscipline_title_h4 = $("#subdiscipline_title h4");
         subdiscipline_title_h4.html(chart_title);
 
@@ -341,6 +342,8 @@ class Canvas {
                 window.open(`https://www.openaire.eu/search/project?projectId=${context.params.obj_id}`);
             })
         }
+        
+        stickybits('#modals');
     }
 
     paramExists(param) {
