@@ -45,6 +45,10 @@ img#close-button {
     box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
 }
 
+#modals .sharebuttons {
+    display: none;
+}
+
 #modals .fa-pencil-square-o, #modals .fa-code, #modals .fa-share-alt {
     font-size:20px;
 }
