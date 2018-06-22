@@ -1,7 +1,7 @@
 @import "list-show-button";
 
 #explorer_options {
-    padding: 15px;
+    padding: 15px 5px 15px 15px;
     background-color: $list_explorer_header;
 }
 
@@ -25,6 +25,7 @@
     vertical-align: top;
     float: none;
     display: none;
+    font-family: $link-font-family;
 }
 
 .btn-default.active, .btn-default:active, .btn-default:focus, .btn-default.active:focus, .btn-default.active.focus, .btn-default.focus, .open > .dropdown-toggle.btn-default {
@@ -60,6 +61,7 @@
 
 #filter_container input {
     width: 260px;
+    height: 28px;
     margin-bottom: 10px;
     margin-right: 10px;
 }
@@ -78,12 +80,6 @@
 
 @media screen and (max-width: 1500px) {
     #filter_container input {
-        width: 200px;
-    }
-}
-
-@media screen and (max-width: 1460px) {
-    #filter_container input {
         width: 180px;
     }
 }
@@ -97,7 +93,7 @@
         padding: 0px 0px;
         float: none !important;
     }
-    
+
     #sortby {
         font-size: 10px;
     }
@@ -108,8 +104,23 @@
         float: none;
         margin-top: 0px;
     }
-    
+
     #filter_container {
         float: none;
+    }
+}
+
+@media screen and (max-width: 1130px) {
+    #filter_container {
+        display: block;
+        
+        input {
+            width: 230px;
+
+        }
+    }
+
+    #filter_params, #sort {
+        margin-bottom: 0px;
     }
 }

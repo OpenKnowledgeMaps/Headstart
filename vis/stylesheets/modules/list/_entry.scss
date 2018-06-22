@@ -10,7 +10,7 @@
 }
 
 #oa {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 #open-access-logo_list {
@@ -19,6 +19,7 @@
     border: 1px solid $open-access;
     padding: 2px 4px;
     border-radius: 5px;
+    -moz-border-radius: 5px;
     font-size: 10px;
     vertical-align: top;
     font-weight: $fontweight400;
@@ -30,6 +31,7 @@
     background-color: white;
     padding: 2px 4px;
     border-radius: 5px;
+    -moz-border-radius: 5px;
 }
 
 .resulttype-dataset {
@@ -98,6 +100,7 @@
         cursor: pointer;
         padding: 5px;
         border-radius: 5px;
+        -moz-border-radius: 5px;
         color: $list_show_hide_button;
         border: 1px solid $list_show_hide_button;
         &:hover {
@@ -106,11 +109,15 @@
         }
     }
 
-    .doi_outlink_link {
-        color: $black;
-        text-decoration: none;
-        border-bottom: 1px solid $black;
+    .doi_outlink {
+        margin-top: 5px;
+        font-weight: $fontweight400;
+    }
 
+    .doi_outlink_link {
+        color: $framed-item;
+        text-decoration: none;
+        border-bottom: 1px solid $framed-item;
 
         &:hover {
             border-bottom: 3px solid $framed-item;
@@ -123,15 +130,16 @@
     }
 
     .list_details, .doi_outlink {
-        font: 12px $link-font-family;
+        font-family: $link-font-family;
         font-size: 12px;
-        line-height: 14px;
+        line-height: 120%;
         color: $list_detail;
         padding: 0;
         max-width: 82%;
 
         .list_authors {
             color: $list_detail_authors;
+            font-weight: $fontweight400;
         }
 
         .list_in {
@@ -152,17 +160,19 @@
 
 #list_abstract {
     max-width: 82%;
-    font: 12px 'Helvetica', sans-serif;
+    font-size: 12px;
+    font-family: $abstract-font-family;
     line-height: 120%;
     padding-right: 0;
     padding-left: 0px;
     color: $list_abstract;
+    font-weight: $fontweight400;
 }
 
 #list_area, #list_keywords {
     font-family: $link-font-family;
     font-size: 11px;
-    line-height: 11px;
+    line-height: 120%;
     margin-bottom: 10px;
     padding: 0;
     text-align: left;
@@ -170,12 +180,8 @@
     max-width: 82%;
 
     .area_tag, .keyword_tag {
-        font-weight: $fontweight700;
+        font-weight: $fontweight600;
     }
-}
-
-#list_keywords {
-    margin-bottom: 20px;
 }
 
 .oa-link-hidden {
@@ -191,7 +197,8 @@
 }
 
 #papers_list .list_metrics {
-    font: 11px $base-font-family;
+    font-size: 11px;
+    font-family: $base-font-family;
     margin-bottom:5px;
     color: $black;
 }
@@ -206,7 +213,7 @@
 
 .list_readers {
     font-size: 11px;
-    line-height: 11px;
+    line-height: 120%;
     margin-top: 0px;
     margin-bottom: 10px;
     padding: 0;
@@ -216,8 +223,8 @@
     padding-right: 10px;
 
     .list_readers_entity {
-        font: 11px 'Helvetica' sans-serif;
-        font-weight: $fontweight400;
+        font-family: $link-font-family;
+        font-weight: $fontweight300;
     }
 }
 
@@ -260,8 +267,8 @@ img#preview_page {
     border: 1px solid;
 }
 
-@media screen and (max-width: 950px) {
-    .list_metadata {
+@media screen and (max-width: 1150px) {
+    /*.list_metadata {
 
         .list_links {
             float:none;
@@ -272,12 +279,15 @@ img#preview_page {
                 margin-right: 5px;
             }
         }
-    }
+    }*/
 
     .list_metadata .list_title {
         font-size: 12px;
+        max-width: 72%;
     }
+}
 
+@media screen and (max-width: 1150px) {
     .list_readers {
         margin-top: 0px;
         float: none;
@@ -295,8 +305,14 @@ img#preview_page {
 
         .list_details, .doi_outlink {
             .list_authors {
-                font-weight:$fontweight700;
+                font-weight:$fontweight400;
             }
         }
+        .doi_outlink_link {
+        color: $black;
+        text-decoration: none;
+        border-bottom: 1px solid $black;
+        }
+        
     }
 }
