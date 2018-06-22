@@ -228,7 +228,7 @@ list.fit_list_height = function() {
                     + $("#headstart-chart").outerHeight(true) 
                     - $("#show_hide_button").outerHeight(true) 
                     - $("#explorer_options").outerHeight(true)
-                    - $("#scale_toolbar").outerHeight(true)
+                    - $("#scale_toolbar").outerHeight(true) || 0
                     - PAPER_LIST_CORRECTION;
     }
     $("#papers_list").height(paper_list_avail_height);
