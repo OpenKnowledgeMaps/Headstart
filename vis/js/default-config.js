@@ -243,6 +243,8 @@ var config = {
             all: "any",
             open_access: "Open Access",
             link: 'link',
+            embed_button_text: 'Copy',
+            embed_title: 'embed map',
         },
         eng_openaire: {
             loading: "Loading...",
