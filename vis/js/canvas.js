@@ -226,6 +226,12 @@ class Canvas {
 
     initMouseClickListeners() {
         $("#" + config.tag + ",#chart-svg").bind('click', (event) => {
+            if(event.target.className !== "sharebuttons" 
+                    && event.target.className !== "btn btn-primary sharebutton" 
+                    && event.target.className !== "fa fa-share-alt fa-fw") {
+                $(".sharebuttons").css('display', 'none');
+            }
+            
             if (event.target.className === "container-headstart" ||
                     event.target.className === "vis-col" ||
                     event.target.id === "headstart-chart" ||
