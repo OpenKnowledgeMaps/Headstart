@@ -39,7 +39,7 @@ function utf8_converter($array)
 }
 
 function search($repository, $dirty_query, $post_params, $param_types, $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
-        , $retrieve_cached_map = true, $num_labels = 3, $id = "area_uri", $subjects = "subject") {
+        , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3, $id = "area_uri", $subjects = "subject") {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
     $query = strip_tags($dirty_query);
@@ -55,8 +55,10 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $settings = $ini_array["general"];
 
     $params_json = packParamsJSON($param_types, $post_params);
+    
+    $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
-    $unique_id = $persistence->createID(array($query, $params_json));
+    $unique_id = $persistence->createID(array($query, $params_for_id_creation));
 
     if($retrieve_cached_map) {
         $last_version = $persistence->getLastVersion($unique_id, false);
