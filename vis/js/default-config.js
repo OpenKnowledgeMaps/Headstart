@@ -243,6 +243,7 @@ var config = {
             all: "any",
             open_access: "Open Access",
             link: 'link',
+            items: "items",
             embed_button_text: 'Copy',
             embed_title: 'embed map',
         },
