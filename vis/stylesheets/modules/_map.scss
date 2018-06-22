@@ -63,7 +63,8 @@ line {
 }
 
 text {
-    font: 10px sans-serif;
+    font-size: 10px; 
+    font-family: $base-font-family;
 }
 
 .scale-toolbar {
@@ -105,11 +106,12 @@ text {
     color: $okm-modal-btn;
     background-color: $white;
     border-color: $okm-modal-btn;
+    padding: 6px 4px !important;
 }
 
 #filter_params {
-    margin-right:10px;
-    margin-bottom: 10px;
+    margin-right: 5px;
+    margin-bottom: 0px;
 }
 
 #filter_params:hover, #sort:hover {
@@ -127,8 +129,13 @@ text {
     padding: 0px 0;
 }
 
-#filter_params, #sort, #sort-menu-entries, #filter-menu-entries {
+#sort-menu-entries, #filter-menu-entries {
     width: 160px;
+    font-size: 12px;
+}
+
+#filter_params, #sort {
+    width: 140px;
     font-size: 12px;
 }
 
@@ -152,8 +159,18 @@ text {
     color: white;
 }
 
-@media screen and (max-width: 1250px) {
-    #headstart-chart {
-        margin-left: 50px;
+@media screen and (max-width: 1300px) {
+    #filter_params, #sort {
+        margin-right: 5px;
+        margin-bottom: 10px;
+        font-size: 9px;
+        width: 110px;
     }
 }
+
+@media screen and (max-width: 1250px) {
+    #headstart-chart {
+        margin-left: 20px;
+    }
+}
+
