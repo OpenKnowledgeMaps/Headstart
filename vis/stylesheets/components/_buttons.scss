@@ -27,10 +27,12 @@ img#close-button {
 
 #modals .btn {
     font-size: 20px;
+    height: 55px;
+    width: 55px;
     background-color: $okm-modal-btn;
     border-color: $okm-modal-btn;
     margin-bottom: 5px;
-    padding: 12px 12px;
+    padding: 0px;
     -moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
 }
@@ -39,8 +41,14 @@ img#close-button {
     background-color: white;
     border-color: $okm-modal-btn;
     color: $okm-modal-btn;
-    margin-bottom: 5px;
-    padding: 12px 12px;
+    -moz-box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
+    box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
+}
+
+#modals .btn:active {
+    background-color: white;
+    border-color: $okm-modal-btn;
+    color: $okm-modal-btn;
     -moz-box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
     box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
 }
@@ -49,19 +57,23 @@ img#close-button {
     display: none;
 }
 
-#modals .fa-pencil-square-o, #modals .fa-code, #modals .fa-share-alt {
-    font-size:20px;
-}
-
 .modal-content .btn-primary {
     color: #fff;
     background-color: $okm-modal-btn;
     border-color: $okm-modal-btn;
     font-family: $link-font-family;
 }
-    
+
 .modal-content .btn-primary:hover {
     background-color: white;
     border-color: $okm-modal-btn;
     color: $okm-modal-btn;
+}
+
+@media screen and (max-width: 1150px) {
+    #modals .btn {
+        font-size: 14px;
+        height: 40px;
+        width: 40px;
+    }
 }
