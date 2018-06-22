@@ -111,7 +111,11 @@
 
     .doi_outlink {
         margin-top: 5px;
+        height: 18px;
         font-weight: $fontweight400;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     .doi_outlink_link {
