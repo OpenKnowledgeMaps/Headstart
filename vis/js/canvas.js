@@ -315,22 +315,7 @@ class Canvas {
 
     drawModals(context) {
         $('#modals').empty()
-        if (config.embed_modal) {
-            $('#modals').append(embedModalButton)
-            $('#embed-title').html(config.localization[config.language].embed_title)
-            //$('#embed-modal-text').val(`<iframe width="1024" height="800" src="headstart.php?query=${context.query}&file=${context.id}&service=${context.service}"></iframe>`)
-            $('#embed-modal-text').val(`<iframe width="1600" height="900" src="${window.location}&embed=true"></iframe>`)
-
-            $('#embed-button').text(config.localization[config.language].embed_button_text)
-            .on('click', (event) => {
-                event.preventDefault();
-                let embedString = $('#embed-modal-text')[0];
-                embedString.focus();
-                embedString.setSelectionRange(0, embedString.value.length);
-                document.execCommand("copy");
-                return false;
-            })
-        }
+        
         if (config.share_modal) {
             $('#modals').append(shareButton)
             
@@ -370,6 +355,24 @@ class Canvas {
                     });
                 })
         }
+        
+        if (config.embed_modal) {
+            $('#modals').append(embedModalButton)
+            $('#embed-title').html(config.localization[config.language].embed_title)
+            //$('#embed-modal-text').val(`<iframe width="1024" height="800" src="headstart.php?query=${context.query}&file=${context.id}&service=${context.service}"></iframe>`)
+            $('#embed-modal-text').val(`<iframe width="1600" height="900" src="${window.location}&embed=true"></iframe>`)
+
+            $('#embed-button').text(config.localization[config.language].embed_button_text)
+            .on('click', (event) => {
+                event.preventDefault();
+                let embedString = $('#embed-modal-text')[0];
+                embedString.focus();
+                embedString.setSelectionRange(0, embedString.value.length);
+                document.execCommand("copy");
+                return false;
+            })
+        }
+        
         if (config.viper_edit_modal) {
             $('#modals').append(editModalButton)
             $('#viper-edit-screenshot').attr('src', require('images/viper-project-screenshot.png'))
