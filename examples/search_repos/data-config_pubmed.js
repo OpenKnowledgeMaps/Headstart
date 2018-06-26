@@ -17,6 +17,14 @@ var data_config = {
     show_list: true,
     content_based: false,
 	
-	show_context: true,
-	create_title_from_context: true
+    show_context: true,
+    create_title_from_context: true,
+    
+    embed_modal: true,
+    share_modal: true,
+
+    doi_outlink: true,
+    filter_menu_dropdown: true,
+    sort_menu_dropdown: true,
+    filter_options: ["all", "open_access"],
 };

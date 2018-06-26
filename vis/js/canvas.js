@@ -34,8 +34,9 @@ class Canvas {
     calcChartSize() {
         var parent_height = getRealHeight($("#" + config.tag));
         var subtitle_height = $("#subdiscipline_title").outerHeight(true);
+
         var toolbar_height = $("#toolbar").outerHeight(true) || 0;
-        const CHART_HEIGHT_CORRECTION = 14;
+        const CHART_HEIGHT_CORRECTION = 20;
 
         // Set available_height and available_width
         if (parent_height === 0) {
@@ -245,6 +246,12 @@ class Canvas {
 
     initMouseClickListeners() {
         $("#" + config.tag + ",#chart-svg").bind('click', (event) => {
+            if(event.target.className !== "sharebuttons" 
+                    && event.target.className !== "btn btn-primary sharebutton" 
+                    && event.target.className !== "fa fa-share-alt fa-fw") {
+                $(".sharebuttons").css('display', 'none');
+            }
+            
             if (event.target.className === "container-headstart" ||
                     event.target.className === "vis-col" ||
                     event.target.id === "headstart-chart" ||
@@ -281,7 +288,7 @@ class Canvas {
             chart_title = config.localization[config.language].overview_label
                     + ' <span id="search-term-unique">' + query_clean + '</span>';
         }
-
+           
         var subdiscipline_title_h4 = $("#subdiscipline_title h4");
         subdiscipline_title_h4.html(chart_title);
 
@@ -325,6 +332,47 @@ class Canvas {
 
     drawModals(context) {
         $('#modals').empty()
+        
+        if (config.share_modal) {
+            $('#modals').append(shareButton)
+            
+            let title =  document.title;
+            let url = window.location.href;
+            let description = $("meta[name='description']").attr("content");
+            
+            d3.select(".sharebutton_twitter")
+                    .attr("href", function () {
+                        return "https://twitter.com/intent/tweet?"
+                            + "url=" + encodeURI(url)
+                            + "&hashtags=" + encodeURI("okmaps,openscience,dataviz")
+                            + "&text=" + title;
+            });
+            
+            d3.select(".sharebutton_fb")
+                    .attr("href", function () {
+                        return "https://www.facebook.com/sharer/sharer.php?"
+                            + "u=" + encodeURI(url);
+            });
+            
+            d3.select(".sharebutton_mail")
+                    .attr("href", function () {
+                        return "mailto:?subject=" + title
+                            + "&body=" + description + " " + url
+            });
+            
+            $(".sharebutton")
+                .on('click', (event) => {
+                    event.preventDefault();
+                    
+                    $(".sharebuttons").toggle(0, function () {
+                        if ($(this).is(':visible')) {
+                            $(this).css('display','inline-block');
+                            $("#sharebutton").focus();
+                        }
+                    });
+                })
+        }
+        
         if (config.embed_modal) {
             $('#modals').append(embedModalButton)
             $('#embed-title').html(config.localization[config.language].embed_title)
@@ -341,9 +389,7 @@ class Canvas {
                 return false;
             })
         }
-        if (config.share_modal) {
-            $('#modals').append(shareButton)
-        }
+        
         if (config.viper_edit_modal) {
             $('#modals').append(editModalButton)
             $('#viper-edit-screenshot').attr('src', require('images/viper-project-screenshot.png'))

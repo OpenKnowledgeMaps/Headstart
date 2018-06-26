@@ -40,7 +40,9 @@
     }
 
     .metadata {
-        font: 3px $base-font-family;
+        font-size: 3px; 
+        font-family: $base-font-family;
+        font-weight: $fontweight400;
         line-height: 100%;
         overflow: hidden;
         text-align: left;
@@ -61,7 +63,7 @@
     }
 
     .larger {
-        font-size: 12px;
+        font-size: 14px;
         padding: 5px 0px 0px 10px;
         line-height: 120%;
     }
@@ -93,7 +95,7 @@
 
     #readers {
         font-size: 9px;
-        line-height: 8px;
+        line-height: 100%;
         margin-bottom: 3px;
         padding: 2px;
         text-align: left;

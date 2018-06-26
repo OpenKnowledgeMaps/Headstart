@@ -42,7 +42,6 @@ p, div {
 
 a {
     color: #3696e0;
-    font-weight: 300;
 }
 
 a:hover {
@@ -50,7 +49,6 @@ a:hover {
 }
 
 .search-box {
-
     background-image: linear-gradient(rgba(54, 150, 224, 1), rgba(45, 62, 82, 1)) /*rgba(80, 200, 173, 1)*/
         /*url(../img/start3.png)*/;
     background-color: #3696e0;/*#5497cb;*/
