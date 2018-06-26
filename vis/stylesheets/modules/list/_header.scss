@@ -27,6 +27,10 @@
     display: none;
     font-family: $link-font-family;
 }
+#filter_parameter_container .dropdown-menu, #sort_container .dropdown-menu {
+    width: 140px !important;
+    min-width:140px;
+}
 
 .btn-default.active, .btn-default:active, .btn-default:focus, .btn-default.active:focus, .btn-default.active.focus, .btn-default.focus, .open > .dropdown-toggle.btn-default {
     color: $journal-gray;
