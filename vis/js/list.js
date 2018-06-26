@@ -236,7 +236,7 @@ list.fit_list_height = function() {
                     + $("#toolbar").outerHeight(true)
                     - $("#show_hide_button").outerHeight(true) 
                     - $("#explorer_options").outerHeight(true)
-                    - $(".scale-toolbar").outerHeight(true)
+                    - $("#scale_toolbar").outerHeight(true) || 0
                     - PAPER_LIST_CORRECTION;
     }
     $("#papers_list").height(paper_list_avail_height);
@@ -504,7 +504,7 @@ list.populateMetaData = function(nodes) {
         if (config.doi_outlink) {
             list_metadata.select(".doi_outlink")
             .html(function (d) {
-                var has_doi = !(d.doi === "")
+                var has_doi = !(typeof d.doi === "undefined" || d.doi === "")
                 return doiOutlinkTemplate({
                     has_doi,
                     link_label: config.localization[config.language].link,
