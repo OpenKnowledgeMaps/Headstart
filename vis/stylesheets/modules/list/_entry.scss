@@ -359,11 +359,11 @@ img#preview_page {
             }
         }
         .doi_outlink_link {
-        color: $black;
-        text-decoration: none;
-        border-bottom: 1px solid $black;
+            color: $black;
+            text-decoration: none;
+            border-bottom: 1px solid $black;
         }
-        
+
     }
 }
 
@@ -385,11 +385,16 @@ img#preview_page {
             color: $list_metadata_title_paper;
             font-weight: $fontweight600;   
         }
-        
+
         .legend {
             visibility: visible;
             padding: 5px 10px 0px 0px;
             width: 100%;
+        }
+
+        .color-box {
+            width: 10px;
+            height: 10px;
         }
     }
 
@@ -427,6 +432,8 @@ img#preview_page {
     #list_abstract {
         font-size: 14px;
         font-family: $abstract-font-family;
+        max-width: 100%;
+        padding-right: 10px;
     }
 
     .list_metadata {
@@ -434,6 +441,7 @@ img#preview_page {
         .list_title {
             font-size: 16px;
             margin-bottom: 0px;
+            max-width: 100%;
         }
     }
 
@@ -455,8 +463,8 @@ img#preview_page {
 
     .list_readers {
         font-size: 11px;
-        line-height: 200%;
-        margin-bottom: 0px;
+        line-height: 120%;
+        margin-bottom: 5px;
         padding-right: 5px;
 
         .list_readers_entity {
@@ -471,18 +479,36 @@ img#preview_page {
     }
 
     .level2 .list_subentry {
-        margin-left: 20px;
+        margin-left: 15px;
+        border-left: 1px solid $list_show_hide_button; 
+        padding-left: 5px;
     }
 
     .level3 .list_subentry {
-        margin-left: 40px;
+        margin-left: 30px;
+        border-style: double;
+        border-color: $list_show_hide_button;
+        border-bottom: 0px;
+        border-top: 0px;
+        border-right: 0px;
+        padding-left: 5px;
+    }
+
+    .level4 .list_subentry {
+        margin-left: 45px;
+        border-style: double;
+        border-color: $list_show_hide_button;
+        border-bottom: 0px;
+        border-top: 0px;
+        border-right: 0px;
+        padding-left: 5px;
     }
 
     .level1 .list_subentry_metadata {
         font-size: 14px !important;
     }
 
-    .level2 .list_subentry_metadata,  .level3 .list_subentry_metadata {
+    .level2 .list_subentry_metadata,  .level3 .list_subentry_metadata, .level4 .list_subentry_metadata {
         font-size: 14px !important;
         color: #666666;
     }

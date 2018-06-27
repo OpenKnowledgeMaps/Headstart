@@ -111,6 +111,11 @@ text {
     border-color: $okm-modal-btn;
 }
 
+.context-scale-toolbar {
+    display: inline-block;
+    vertical-align:middle;
+}
+
 #scale-menu:hover {
     color: $okm-modal-btn;
     background-color: $white;
@@ -176,10 +181,13 @@ text {
 
 .legend {
     font-family: $base-font-family;
-    padding-left:50px;
     font-size: 11px;
     width: 260px;
     margin-bottom: 10px;
+}
+
+.toolbar .legend {
+    padding-left:50px;
 }
 
 .explanation-ids {
@@ -193,13 +201,21 @@ text {
 }
 
 .color-box {
-    width:10px;
-    height:10px;
+    width: 16px;
+    height: 16px;
     background-color: $higher_value_tag;
     border-radius: 3px;
     -moz-border-radius: 3px;
     display: inline-block;
     margin: 0px !important;
+    vertical-align: middle;
+}
+
+#credit {
+    position:absolute; 
+    right:50px; 
+    top: 0px; 
+    font-size:10px;
 }
 
 @media screen and (max-width: 1300px) {
@@ -217,15 +233,34 @@ text {
     }
 }
 
+@media screen and (max-width: 640px) {
+    .scale-toolbar {
+        padding: 20px 0 15px 20px;
+    }
+}
+
 @if $skin == 'cris_vis' {
+
+    .scale-toolbar {
+        min-width: 900px;
+    }
+
     .dropdown-menu, #scale-menu {
         width: 240px;
         font-size: 12px;
     }
+    
+    .scale-toolbar .dropdown {
+        display: inline-block;
+    }
 
     #curr-scale-explanation {
-        padding: 0px 0px;
         font-size: 11px;
+        padding: 0px;
+    }
+
+    #scale-menu {
+        margin-right: 10px;
     }
 
     @media screen and (max-width: 1250px) {
