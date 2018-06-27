@@ -89,7 +89,7 @@ circle {
 
     h2 {
         font-family: $base-font-family;
-        font-size: 14px;
+        font-size: 14px !important;
         font-weight: $fontweight700;
         margin-top: 11px;
         margin-bottom: 11px;
@@ -100,51 +100,27 @@ circle {
         background-color: transparent;
         cursor: default;
     }
+}
 
-    @media screen and (max-width: 1600px) {
-        #area_title {
-            h2 {
-                font-size: 16px;
-            }
+@media screen and (max-width: 600px) {
+    #area_title {
+        h2 {
+            font-size: 12px !important;
         }
     }
+}
 
-    @media screen and (max-height: 1600px) {
-        #area_title {
-            h2 {
-                font-size: 16px;
-            }
+@if $skin == 'cris_vis' {
+    #area_title {
+        h2 {
+            font-size: 16px !important;
         }
     }
 
     @media screen and (max-width: 1200px) {
         #area_title {
             h2 {
-                font-size: 14px;
-            }
-        }
-    }
-
-    @media screen and (max-height: 1200px) {
-        #area_title {
-            h2 {
-                font-size: 14px;
-            }
-        }
-    }
-
-    @media screen and (max-width: 600px) {
-        #area_title {
-            h2 {
-                font-size: 12px;
-            }
-        }
-    }
-
-    @media screen and (max-height: 600px) {
-        #area_title {
-            h2 {
-                font-size: 12px;
+                font-size: 14px !important;
             }
         }
     }

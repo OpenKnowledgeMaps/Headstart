@@ -15,8 +15,14 @@
 }
 
 @media screen and (max-width: 1100px) {
-    
-#papers_list {
+
+    #papers_list {
         font-size: 8px;
+    }
+}
+
+@if $skin == 'cris_vis' {
+    #papers_list {
+        padding-top: 10px;
     }
 }
