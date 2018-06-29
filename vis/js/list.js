@@ -731,7 +731,8 @@ list.populateOverlay = function(d) {
     $(".modal-header").mouseup(function() {
         $(".modal-header").removeClass("modal-header-active");
     });
-    
+
+
     if (config.preview_type == "image") {
         $("#spinner-images").show();
         $("#images_holder").hide();
@@ -760,7 +761,9 @@ list.populateOverlay = function(d) {
 
         $("#spinner-images").hide();
         $("#images_holder").show();
+
     } else if (config.preview_type == "pdf") {
+
         let filename = this_d.id + ".PDF";
         let pdf_url = filename.replace("/", "__");
         $("#status").hide();
@@ -771,6 +774,12 @@ list.populateOverlay = function(d) {
                 keyboard: true
             });
 
+            // fixing the firefox dragging bug
+            $("#iframe_modal").css("visibility", "visible");
+            $(".pull-right").click(() => {
+                $("#iframe_modal").css({"visibility":"hidden"});
+            });
+            
             //making the pdf modal draggable and resizable
             let currentModal = document.getElementById('pdf-modal');
             currentModal.style.left = '0px';

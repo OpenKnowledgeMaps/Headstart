@@ -1,6 +1,8 @@
 /* ########### Popups/Modals ########### */
 
 #iframe_modal {
+    display: block;
+    visibility: hidden;
 
     .modal-body {
         height: 80vh;
