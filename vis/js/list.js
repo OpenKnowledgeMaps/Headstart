@@ -207,7 +207,7 @@ list.count_visible_items_to_header = function() {
 
 list.fit_list_height = function() {
     var paper_list_avail_height = null;
-    const PAPER_LIST_CORRECTION = -2;
+    const PAPER_LIST_CORRECTION = -10;
     if (!config.render_bubbles) {
         var parent_height = getRealHeight($("#" + config.tag));
         var available_height = 0;
@@ -228,7 +228,7 @@ list.fit_list_height = function() {
                     + $("#headstart-chart").outerHeight(true) 
                     - $("#show_hide_button").outerHeight(true) 
                     - $("#explorer_options").outerHeight(true)
-                    - $("#scale_toolbar").outerHeight(true) || 0
+                    - ($("#scale_toolbar").outerHeight(true) || 0)
                     - PAPER_LIST_CORRECTION;
     }
     $("#papers_list").height(paper_list_avail_height);
