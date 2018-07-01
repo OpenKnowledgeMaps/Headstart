@@ -359,8 +359,7 @@ class Canvas {
         if (config.embed_modal) {
             $('#modals').append(embedModalButton)
             $('#embed-title').html(config.localization[config.language].embed_title)
-            //$('#embed-modal-text').val(`<iframe width="1024" height="800" src="headstart.php?query=${context.query}&file=${context.id}&service=${context.service}"></iframe>`)
-            $('#embed-modal-text').val(`<iframe width="1600" height="900" src="${window.location}&embed=true"></iframe>`)
+            $('#embed-modal-text').val(`<iframe width="1600" height="900" src="${window.location.toString().replace(/#.*/, "")}&embed=true"></iframe>`)
 
             $('#embed-button').text(config.localization[config.language].embed_button_text)
             .on('click', (event) => {
