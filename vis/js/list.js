@@ -124,8 +124,10 @@ list.drawList = function() {
         sort_by_label: config.localization[config.language].sort_by_label,
     });
     $("#list_explorer").append(list_explorer);
-
+    
     // Set localized values
+    let timer;
+    let delay = 300;
     $("#filter_input")
         .attr("placeholder", config.localization[config.language].search_placeholder)
         .on("input", (event) => {
@@ -134,7 +136,11 @@ list.drawList = function() {
             } else {
                 $("#searchclear").hide();
             }
-            debounce(this.filterList(event.target.value.split(" ")), config.debounce);
+            window.clearTimeout(timer);
+            timer = window.setTimeout(function() {
+                debounce(self.filterList(event.target.value.split(" ")), config.debounce);
+            }, delay);
+        
         });
 
     $("#searchclear").click(() => {
@@ -637,11 +643,16 @@ list.populateList = function() {
 list.filterList = function(search_words, filter_param) {
     if (search_words === undefined) {
         search_words = this.current_search_words
+    } else {
+        mediator.publish("record_action", search_words, "List", "search", config.user_id, "filter_list", null, "search_words=" + search_words);
     }
 
     if (filter_param === undefined) {
-        filter_param = this.current_filter_param
+        filter_param = this.current_filter_param     
+    } else {
+        mediator.publish("record_action", filter_param, "List", "filter", config.user_id, "filter_list", null, "filter_param=" + filter_param);
     }
+    
     this.current_search_words = search_words;
 
     search_words = search_words.map(function(e) {
@@ -708,9 +719,6 @@ list.filterList = function(search_words, filter_param) {
     all_list_items.each(function (d) {
         d.filtered_out = false
     })
-
-    // Record that we're about to do some filtering
-    mediator.publish("record_action", "search_words=" + search_words + "&filter_param="+filter_param, "List", "filter", config.user_id, "filter_list", null, "search_words=" + search_words + "&filter_param="+filter_param);
 
     // Now actually do the filtering (i.e. remove some object from list and map)
     this.hideEntriesByWord(all_list_items, search_words);
