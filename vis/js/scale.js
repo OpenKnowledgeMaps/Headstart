@@ -25,6 +25,7 @@ class Scale {
             .attr('tabindex', '-1')
             .text(config.scale_label[type])
             .on("click", function() {
+                mediator.publish("record_action", config.scale_label[type], "Toolbar", "select", config.user_id, "toolbar_select", null, null, null);
                 $('.scale_item').removeClass('active')
                 cur_item.classed('active', true)
                 self.doScale(type)
