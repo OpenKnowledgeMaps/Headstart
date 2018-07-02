@@ -36,7 +36,8 @@ class Canvas {
         var subtitle_height = $("#subdiscipline_title").outerHeight(true);
 
         var toolbar_height = $("#toolbar").outerHeight(true) || 0;
-        const CHART_HEIGHT_CORRECTION = 10; //was: 20
+        const CHART_HEIGHT_CORRECTION = 15;
+        const CHART_HEIGHT_CORRECTION_TOOLBAR = 10;
 
         // Set available_height and available_width
         if (parent_height === 0) {
@@ -45,7 +46,7 @@ class Canvas {
             this.available_height = $("#" + config.tag).height() - subtitle_height - toolbar_height;
         }
 
-        this.available_height = this.available_height - CHART_HEIGHT_CORRECTION;
+        this.available_height = this.available_height - ((toolbar_height > 0)?(CHART_HEIGHT_CORRECTION_TOOLBAR):(CHART_HEIGHT_CORRECTION));
 
         if (headstart.is("timeline")) {
             var timeline_height = $(".tl-title").outerHeight(true);
