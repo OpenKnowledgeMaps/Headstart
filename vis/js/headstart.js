@@ -37,7 +37,21 @@ HeadstartFSM.prototype = {
     if(!config.is_evaluation) {
       return;
     }
-
+    
+    switch(config.evaluation_service) {
+        case "log":
+            this.recordActionLog(id, action, user, type, timestamp, additional_params, post_data);
+            break;
+        case "matomo":
+            this.recordActionMatomo(id, action, user, type, timestamp, additional_params, post_data);
+            break;
+        case "ga":
+            this.recordActionGA(id, action, user, type, timestamp, additional_params, post_data);
+            break;
+    } 
+  },
+    
+  recordActionLog: function(id, category, action, user, type, timestamp, additional_params, post_data) {
     timestamp = (typeof timestamp !== 'undefined') ? (escape(timestamp)) : ("");
     additional_params = (typeof additional_params !== 'undefined') ? ('&' + additional_params) : ("");
     if(typeof post_data !== 'undefined') {
@@ -51,8 +65,9 @@ HeadstartFSM.prototype = {
     $.ajax({
         url: php_script +
         '?user=' + user +
+        '&category=' + category +
         '&action=' + action +
-        '&item=' + escape(id) +
+        '&item=' + encodeURI(id) +
         '&type=' + type +
         '&item_timestamp=' + timestamp + additional_params + '&jsoncallback=?',
         type: "POST",
@@ -61,8 +76,16 @@ HeadstartFSM.prototype = {
         success: function(output) {
             console.log(output);
         }
-      });
-    },
+    });
+  },
+  
+  recordActionMatomo: function(category, action, id) {
+    _paq.push(['trackEvent', category, action, id]);
+  },
+  
+  recordActionGA: function(category, action, id) {
+      ga('send', 'event', category, action, id);
+  },
   
   markProjectChanged: function (id) {
       
