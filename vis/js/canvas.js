@@ -36,7 +36,7 @@ class Canvas {
         var subtitle_height = $("#subdiscipline_title").outerHeight(true);
 
         var toolbar_height = $("#toolbar").outerHeight(true) || 0;
-        const CHART_HEIGHT_CORRECTION = 20;
+        const CHART_HEIGHT_CORRECTION = 10; //was: 20
 
         // Set available_height and available_width
         if (parent_height === 0) {
