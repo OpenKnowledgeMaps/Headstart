@@ -13,7 +13,7 @@ const common = {
 
     output: {
         path: path.resolve(__dirname, "dist"),
-		//dev: specify a full path including protocol, production: specify full path excluding protocol
+	//dev: specify a full path including protocol, production: specify full path excluding protocol
         publicPath: config.publicPath,
         filename: 'headstart.js',
         libraryTarget: 'var',
@@ -56,7 +56,8 @@ const common = {
     },
 
     sassLoader: {
-        includePaths: [path.resolve(__dirname, "vis/stylesheets")]
+        includePaths: [path.resolve(__dirname, "vis/stylesheets/")]
+        , data: '$skin: "' + config.skin + '";'
     },
 
     plugins: [

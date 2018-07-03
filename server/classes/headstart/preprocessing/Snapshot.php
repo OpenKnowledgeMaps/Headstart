@@ -16,7 +16,13 @@ class Snapshot
 
         $phantomjs = $ini_array["snapshot"]["phantomjs_path"];
         $getsvg = $ini_array["snapshot"]["getsvg_path"];
-        $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+        if (isset($_SERVER) and array_key_exists('SERVER_PROTOCOL', $_SERVER)) {
+          $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+        } elseif (array_key_exists('snapshot_local_protocol', $ini_array)) {
+          $protocol = $ini_array['snapshot_local_protocol'];
+        } else {
+          $protocol = 'http://';
+        }
         $host = $protocol . $ini_array["general"]["host"];
         $snap_php = $ini_array["snapshot"]["snapshot_php"];
         $storage = $ini_array["snapshot"]["storage_path"];

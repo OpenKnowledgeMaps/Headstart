@@ -5,17 +5,18 @@
 #papers_list {
     float: right;
     overflow-y: scroll;
-    padding-top: 10px;
+    padding-top: 0px;
     padding-left: 5px;
     padding-right: 5px;
     background-color: white;
     display: none;
-    font: 10px 'Helvetica', sans-serif;
+    font-size: 10px;
+    font-family: $special-font-family;
 }
 
 @media screen and (max-width: 1100px) {
     
 #papers_list {
-        font: 8px 'Helvetica', sans-serif;
+        font-size: 8px;
     }
 }
