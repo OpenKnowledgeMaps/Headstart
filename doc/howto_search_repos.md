@@ -28,7 +28,7 @@ Permissions are the number one issue why the search repos example does not work.
 
 Another issue could be that your web server cannot run the R scripts properly because of missing permissions, or because you didn't install the necessary packages for all users. Under Ubuntu, run the R script with the `www-data` user from the `other-scripts/test` folder like this:
 
-	sudo -H -u otheruser bash -c 'Rscript path/to/text_similarity.R "path/to/server/preprocessing/other-scripts/" "health" "pubmed" "params_pubmed.json"'
+	sudo -H -u www-data bash -c 'Rscript path/to/text_similarity.R "path/to/server/preprocessing/other-scripts/" "health" "pubmed" "params_pubmed.json"'
 
 Replace `path/to` with the actual full paths. This should give you an idea whether the R scripts are producing the results that they should.
 

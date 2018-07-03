@@ -2,8 +2,7 @@
     margin: 0px;
     padding-top: 15px;
     padding-left: 50px;
-        //padding-bottom: 10px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: $base-font-family;
     min-height: 50px;
 
     h4 {
@@ -11,12 +10,22 @@
         margin-top: 0px;
         font-size: 18px;
         min-height: 24px;
+        font-weight: $fontweight400;
     }
 
     #area-not-bold, #area-bold {
         position: relative;
         z-index: 3;
     }
+}
+
+.truncated-project-title, .project-id {
+    font-weight: $fontweight700;
+}
+
+#modals {
+    position: fixed;
+    z-index: 3;
 }
 
 #context {
@@ -32,30 +41,28 @@
 }
 
 #area-bold {
-    font-weight: 800;
+    font-weight: $fontweight700;
 }
 
 #search-term-unique {
-    font-weight: 800;
+    font-weight: $fontweight700;
 }
 
 #infolink {
     color: $infolink;
-    //border: 1px solid $infolink;
-    //padding: 5px;
-    //border-radius: 5px;
-    font-weight: normal;
-    //text-transform: uppercase;
-    //vertical-align: middle;
+    font-weight: $fontweight400;
+    margin-left: 5px;
+    font-size: 12px;
+    text-decoration: none;
 }
+
 #whatsthis {
     font-family: 'FontAwesome';
     font-size: 18px;
 }
 
 #infolink:hover, #infolink:focus, #infolink:active {
-    text-decoration: none;
-    color: $okm-blue;
+    color: $black;
 }
 
 #timelineview {
@@ -73,5 +80,15 @@
         h4 {
             font-size: 14px;
         }
+    }
+}
+
+@if $skin == 'viper' {
+    #infolink {
+        border-bottom: 1px solid $infolink;
+    }
+
+    #infolink:hover, #infolink:focus, #infolink:active {
+        border-bottom: 3px solid $framed-item;
     }
 }

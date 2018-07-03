@@ -87,8 +87,8 @@ BubblesFSM.prototype = {
 
       d3.selectAll("#headstart-chart circle")
         .attr("r", (d) => {
-          d.r_zoomed = canvas.circle_size(d.readers) * mediator.circle_zoom;
-          d.r = canvas.circle_size(d.readers);
+          d.r_zoomed = canvas.circle_size(d.num_readers) * mediator.circle_zoom;
+          d.r = canvas.circle_size(d.num_readers);
           if (mediator.is_zoomed === true) {
             return d.r_zoomed;
           } else {
@@ -481,6 +481,7 @@ BubblesFSM.prototype = {
                     }
 
                     mediator.zoom_finished = true;
+                    mediator.publish("zoomin_complete")
                 });
 
         mediator.current_bubble.createTransition(t, d.title);
@@ -546,6 +547,8 @@ BubblesFSM.prototype = {
 
                     mediator.current_zoom_node = null;
                     mediator.is_zoomed = false;
+                    
+                    mediator.publish("zoomout_complete")
                 });
 
         t.selectAll("g.bubble_frame")
@@ -560,12 +563,12 @@ BubblesFSM.prototype = {
 
         t.selectAll("#region")
                 .attr("d", function (d) {
-                    return papers.createPaperPath(0, 0, d.width, d.height);
+                    return papers.createPaperPath(0, 0, d.width, d.height, undefined, undefined, d.resulttype);
                 });
 
         t.selectAll("path.dogear")
                 .attr("d", function (d) {
-                    return papers.createDogearPath(d.width * (1 - config.dogear_width), 0, d.width, d.height);
+                    return papers.createDogearPath(d.width * (1 - config.dogear_width), 0, d.width, d.height, undefined, undefined, d.resulttype);
                 });
 
         //webkit bug
@@ -702,12 +705,17 @@ BubblesFSM.prototype = {
                 });
 
         var region = function (d) {
-            return papers.createPaperPath(0, 0, d.width * mediator.circle_zoom, d.height * mediator.circle_zoom);
+            return papers.createPaperPath(0, 0, d.width * mediator.circle_zoom, d.height * mediator.circle_zoom, undefined, undefined, d.resulttype);
         };
 
         var dogear = function (d) {
             return papers.createDogearPath(d.width * (1 - config.dogear_width) * mediator.circle_zoom,
-                    0, d.width * mediator.circle_zoom, d.height * mediator.circle_zoom);
+                                        0,
+                                        d.width * mediator.circle_zoom,
+                                        d.height * mediator.circle_zoom,
+                                        undefined,
+                                        undefined,
+                                        d.resulttype);
         };
 
         t.selectAll("#region")
@@ -869,7 +877,7 @@ StateMachine.create({
 
     events: [
         {name: "startup", from: "none", to: "x"},
-        {name: "start", from: ["x","zoomedout","hoversmall"] , to: "zoomedout"},
+        {name: "start", from: ["x","zoomedout","hoversmall", "hoverbig"] , to: "zoomedout"},
 
         {name: "mouseover", from: "zoomedout", to: "hoversmall"},
         {name: "mouseout", from: "hoversmall", to: "zoomedout"},

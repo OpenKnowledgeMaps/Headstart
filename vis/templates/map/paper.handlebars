@@ -3,9 +3,7 @@
     <div class="metadata" style="height:{{{ metadata_height }}}px; width:{{{ metadata_width }}}px;">
         <div id="icons">    
            <p id="open-access-logo">&#xf09c;</p>
-           <!--<p id="outlink" ><a href="{{{ d.oa_link }}}" target="_blank" class="outlink_symbol">&nbsp;&#xf019;</a></p>
-           <p id="outlink"><a href="{{{ d.outlink }}}" target="_blank"><span class="outlink_symbol">&nbsp;&#xf08e;</span></a></p>
--->
+            <p id="dataset-icon"><span id="dataset-icon_list" class="fa fa-database"></span></p> 
         </div>
     <p id="title" class="highlightable">
     {{{ d.title }}}<br /></p>
@@ -13,7 +11,7 @@
         <p id="in">in <span class="highlightable">{{{ d.published_in }}} <span class="pubyear">({{{ d.year }}})</span></span></p>
     </div>
     <div class="readers">
-        <p id="readers"><span id="num-readers">{{{ d.readers }}}</span><span class="readers_entity"> {{{ base_unit }}}</span></p>
+        <p id="readers"><span id="num-readers">{{{ d.num_readers }}}</span><span class="readers_entity"> {{{ base_unit }}}</span></p>
 
     </div>
 </div>

@@ -21,6 +21,10 @@
     width: 40%;
     vertical-align: top;
     float: right;
+    
+    .col-xs-12 {
+        padding: 0px;
+    }
 }
 
 @media screen and (max-width: 1000px) {

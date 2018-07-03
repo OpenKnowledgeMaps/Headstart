@@ -7,14 +7,14 @@ Head Start is a web-based knowledge mapping software intended to give researcher
 ## Getting Started
 
 ### Client
-In order to get started quickly, Make sure to have `npm` version 3.10.10 installed (it comes with Node.js 6.12.0, you can [download installers here](https://nodejs.org/dist/latest-v6.x/)) and run the following two commands to build the Headstart Client.
+To get started, clone this repository. Next, duplicate the file `config.example.js` in the root folder and rename it to `config.js`. 
+
+Make sure to have `npm` version 3.10.10 installed (it comes with Node.js 6.12.0, you can [download installers here](https://nodejs.org/dist/latest-v6.x/)) and run the following two commands to build the Headstart client:
 
     npm install
     npm run dev
 
 We are using [webpack](https://webpack.github.io/) to build our client-side application. `webpack` is started in *watch mode* which means that changes to files are tracked and the created `headstart.js` is automatically updated.
-
-Duplicate the file `config.example.js` in the root folder and rename it to `config.js`.
 
 Now you can run a local dev server:
 
@@ -87,4 +87,4 @@ Head Start is licensed under [MIT](LICENSE).
 ## Citation
 If you use Head Start in your research, please cite it as follows:
 
-Kraker, P., Enkhbayar, A., Chamberlain, S., Kittel, C., Schramm, M., Bachleitner, R., Weissensteiner, P. & Skaug, M. (2017). Headstart v3.5. Zenodo. http://doi.org/10.5281/zenodo.569062
+Peter Kraker, Maxi Schramm, Christopher Kittel, Asura Enkhbayar, Scott Chamberlain, Rainer Bachleitner, Yael Stein, Thomas Arrow, Philipp Weissensteiner, Mike Skaug & Open Knowledge Maps team and contributors (2018). Headstart 4. Zenodo. http://doi.org/10.5281/zenodo.1247320

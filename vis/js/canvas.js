@@ -6,6 +6,9 @@ import { mediator } from 'mediator';
 import { intros } from 'intro';
 import dateFormat from 'dateformat';
 
+const editModalButton = require('templates/buttons/edit_button.handlebars')
+const embedModalButton = require('templates/buttons/embed_button.handlebars')
+const shareButton = require('templates/buttons/share_button.handlebars')
 
 class Canvas {
     constructor() {
@@ -29,23 +32,25 @@ class Canvas {
     // Set this.available_height, this.available_width and this.current_vis_size
     calcChartSize() {
         var parent_height = getRealHeight($("#" + config.tag));
-        var subtitle_heigth = $("#subdiscipline_title").outerHeight(true);
+        var subtitle_height = $("#subdiscipline_title").outerHeight(true);
+        var scale_toolbar_height = $(".scale-toolbar").outerHeight(true) || 0;
+        const CHART_HEIGHT_CORRECTION = 20;
 
         // Set available_height and available_width
         if (parent_height === 0) {
-            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_heigth;
+            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_height - scale_toolbar_height;
         } else {
-            this.available_height = $("#" + config.tag).height() - subtitle_heigth;
+            this.available_height = $("#" + config.tag).height() - subtitle_height - scale_toolbar_height;
         }
 
-        this.available_height = this.available_height - 1;
+        this.available_height = this.available_height - CHART_HEIGHT_CORRECTION;
 
         if (headstart.is("timeline")) {
             var timeline_height = $(".tl-title").outerHeight(true);
             this.available_height = this.available_height - timeline_height;
             this.available_width = $("#" + config.tag).width();
         } else {
-            this.available_width = $("#" + config.tag).width() - $("#list_explorer").width();
+            this.available_width = $("#" + config.tag).width() - $("#list_explorer").width() - $("#modals").width();
         }
 
         // Set current_vis_size
@@ -160,6 +165,9 @@ class Canvas {
         d3.select("rect")
                 .attr("height", this.current_vis_size)
                 .attr("width", this.current_vis_size);
+        
+        d3.select("#headstart-chart")
+                .style("width", this.current_vis_size + "px");
     }
 
     calcTitleFontSize() {
@@ -186,6 +194,16 @@ class Canvas {
             var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
             $('#info-title').text(intro.title);
             $('#info-body').html(intro.body);
+            if (intro.dynamic) {
+                $.each(intro.params, function (paramName, value) {
+                    if (paramName.slice(0,4) === 'html') {
+                        $('.info-modal-'+paramName).html(value)
+                    } else {
+                        value = (value === "true")?("yes"):(value);
+                        $('.info-modal-'+paramName).text(value)
+                    }
+                })
+            }
         });
     }
 
@@ -208,6 +226,12 @@ class Canvas {
 
     initMouseClickListeners() {
         $("#" + config.tag + ",#chart-svg").bind('click', (event) => {
+            if(event.target.className !== "sharebuttons" 
+                    && event.target.className !== "btn btn-primary sharebutton" 
+                    && event.target.className !== "fa fa-share-alt fa-fw") {
+                $(".sharebuttons").css('display', 'none');
+            }
+            
             if (event.target.className === "container-headstart" ||
                     event.target.className === "vis-col" ||
                     event.target.id === "headstart-chart" ||
@@ -233,22 +257,33 @@ class Canvas {
         chart_title = config.localization[config.language].default_title;
         if (config.title) {
             chart_title = config.title;
+        } else if (config.create_title_from_context_style === 'viper') {
+            let maxTitleLength = 47 // This should probably make it's way to a more global config
+            let acronymtitle = ( (context.params.acronym !== "") ? (context.params.acronym + " - " + context.params.title) : (context.params.title) );
+            let compressedTitle = ( acronymtitle.length > maxTitleLength ) ? acronymtitle.slice(0, maxTitleLength - 3) + '...' : acronymtitle
+            chart_title = `Overview of <span class="truncated-project-title">${compressedTitle}</span>\
+                            <span class="project-id">(${context.params.project_id})</span>`
         } else if (config.create_title_from_context) {
             let query_clean = context.query.replace(/\\(.?)/g, "$1");
-
             chart_title = config.localization[config.language].overview_label
                     + ' <span id="search-term-unique">' + query_clean + '</span>';
         }
-
+           
         var subdiscipline_title_h4 = $("#subdiscipline_title h4");
         subdiscipline_title_h4.html(chart_title);
 
         this.drawContext(context);
+        this.drawModals(context)
 
         if (config.show_infolink) {
             let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
             subdiscipline_title_h4.append(infolink);
-            $("#infolink").html(config.localization[config.language].intro_label + ' <span id="whatsthis">&#xf05a;</span>');
+
+            if(config.infolink_style === "viper") {
+                $("#infolink").text(config.localization[config.language].intro_label)
+            } else {
+                $("#infolink").html(config.localization[config.language].intro_label + ' <span id="whatsthis">&#xf05a;</span>');
+            }
         }
 
         if (config.show_timeline) {
@@ -278,6 +313,80 @@ class Canvas {
         }
     }
 
+    drawModals(context) {
+        $('#modals').empty()
+        
+        if (config.share_modal) {
+            $('#modals').append(shareButton)
+            
+            let title =  document.title;
+            let url = window.location.href;
+            let description = $("meta[name='description']").attr("content");
+            
+            d3.select(".sharebutton_twitter")
+                    .attr("href", function () {
+                        return "https://twitter.com/intent/tweet?"
+                            + "url=" + encodeURI(url)
+                            + "&hashtags=" + encodeURI("okmaps,openscience,dataviz")
+                            + "&text=" + title;
+            });
+            
+            d3.select(".sharebutton_fb")
+                    .attr("href", function () {
+                        return "https://www.facebook.com/sharer/sharer.php?"
+                            + "u=" + encodeURI(url);
+            });
+            
+            d3.select(".sharebutton_mail")
+                    .attr("href", function () {
+                        return "mailto:?subject=" + title
+                            + "&body=" + description + " " + url
+            });
+            
+            $(".sharebutton")
+                .on('click', (event) => {
+                    event.preventDefault();
+                    
+                    $(".sharebuttons").toggle(0, function () {
+                        if ($(this).is(':visible')) {
+                            $(this).css('display','inline-block');
+                            $("#sharebutton").focus();
+                        }
+                    });
+                })
+        }
+        
+        if (config.embed_modal) {
+            $('#modals').append(embedModalButton)
+            $('#embed-title').html(config.localization[config.language].embed_title)
+            $('#embed-modal-text').val(`<iframe width="1600" height="900" src="${window.location.toString().replace(/#.*/, "")}&embed=true"></iframe>`)
+
+            $('#embed-button').text(config.localization[config.language].embed_button_text)
+            .on('click', (event) => {
+                event.preventDefault();
+                let embedString = $('#embed-modal-text')[0];
+                embedString.focus();
+                embedString.setSelectionRange(0, embedString.value.length);
+                document.execCommand("copy");
+                return false;
+            })
+        }
+        
+        if (config.viper_edit_modal) {
+            $('#modals').append(editModalButton)
+            $('#viper-edit-screenshot').attr('src', require('images/viper-project-screenshot.png'))
+            $('#edit-title').html(config.localization[config.language].viper_edit_title)
+            $('#edit-modal-text').html(config.localization[config.language].viper_edit_desc_label)
+            $('#edit-button-text').html(config.localization[config.language].viper_button_desc_label + " <b>" + ((context.params.acronym !== "")?(context.params.acronym + " - "):("")) + context.params.title + "</b>.")
+            $('#viper-edit-button').text(config.localization[config.language].viper_edit_button_text)
+            $('.viper-edit-link, viper-edit-screenshot').click(function (event) {
+                event.preventDefault();
+                mediator.publish("mark_project_changed", context.id);
+                window.open(`https://www.openaire.eu/search/project?projectId=${context.params.obj_id}`);
+            })
+        }
+    }
+
     paramExists(param) {
         return (typeof param !== "undefined" && param !== "null" && param !== null)
     }
@@ -296,10 +405,25 @@ class Canvas {
             $("#num_articles").html(context.num_documents + modifier
                     + " " + config.localization[config.language].articles_label
                     + " (" + context.share_oa + " open access)" );
-
+            
             $("#source").html(config.localization[config.language].source_label
-                    + ": " + config.service_names[context.service]);
+                           + ": " + config.service_names[context.service]);
 
+            if (config.create_title_from_context_style === 'viper') {
+                $("#context-dataset_count").text(
+                    `${context.num_datasets} ${config.localization[config.language].dataset_count_label}`
+                )
+                $("#context-paper_count").text(
+                    `${context.num_papers} ${config.localization[config.language].paper_count_label}`
+                )
+                $("#context-funder").text(
+                    `Funder: ${context.params.funder}`
+                )
+                $("#context-project_runtime").text(
+                    `${context.params.start_date.slice(0, 4)}–${context.params.end_date.slice(0, 4)}`
+                )
+            }
+            
             if (this.paramExists(context.params.from) && this.paramExists(context.params.to)) {
 
                 let time_macro_display = (config.service === "doaj")?("yyyy"):("d mmm yyyy");
@@ -345,6 +469,8 @@ class Canvas {
                             dateFormat(from, time_macro_display) + " - " + dateFormat(to, time_macro_display)
                     );
                 }
+            } else {
+                $("#timespan").hide()
             }
 
             if(this.paramExists(config.options)) {
@@ -382,6 +508,8 @@ class Canvas {
                         $("#document_types").html("Document type: " + document_types_string);
                     }
                 }
+            } else {
+                $("#document_types").hide()
             }
         } else {
             $("#num_articles").html(context.num_documents)
@@ -590,7 +718,7 @@ class Canvas {
 
     setAreaRadii(areas) {
         for (var area in areas) {
-            areas[area].r = this.circle_size(areas[area].readers);
+            areas[area].r = this.circle_size(areas[area].num_readers);
         }
     }
 

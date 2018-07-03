@@ -24,6 +24,12 @@ switch (data_config.service) {
         service_name = "BASE";
         options = options_base;
         break;
+    
+    case 'openaire':
+        service_url = data_config.server_url + "services/searchOpenAire.php"
+        service_name = "OpenAire";
+        options = options_base;
+        break;
 }
 
 $(window).bind("pageshow", function () {
@@ -57,27 +63,61 @@ $("#searchform").validate({
 
         var data = $("#searchform").serialize();
 
-        data += "&today=" + new Date().toLocaleDateString("en-US");
-
-        $.ajax({// make an AJAX request
-            type: "POST",
-            url: service_url,
-            data: data,
-            success: function (data) {
-                if (data.status === "success") {
-                    var file = data.id;
-
-                    window.location = "headstart.php?query=" + data.query + "&file=" + file +
-                      "&service=" + data_config.service + "&service_name=" + service_name;
-                    return false;
-                } else {
-                    $("#progress").html("Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again with a different query.");
-                    $(".btn").prop("disabled", false);
-                }
-            }
-        });
+        doSubmit(data)
     }
 });
+
+var doSubmit = function (data, newWindow, callback) {
+  data += "&today=" + new Date().toLocaleDateString("en-US");
+
+  var openInNewWindow= function(data) {
+    if (data.status === "success") {
+      var file = data.id;
+      window.open("headstart.php?query=" +
+        data.query +
+        "&file=" +
+        file +
+        "&service=" +
+        data_config.service +
+        "&service_name=" +
+        service_name, '_blank')
+      console.log('opening')
+      callback(true)
+      return false;
+    } else {
+        callback(false)
+    }
+  }
+
+  var openInThisWindow = function(data) {
+    if (data.status === "success") {
+      var file = data.id;
+      window.location =
+        "headstart.php?query=" +
+        data.query +
+        "&file=" +
+        file +
+        "&service=" +
+        data_config.service +
+        "&service_name=" +
+        service_name;
+      return false;
+    } else {
+      $("#progress").html(
+        "Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again with a different query."
+      );
+      $(".btn").prop("disabled", false);
+    }
+  }
+
+  $.ajax({
+    // make an AJAX request
+    type: "POST",
+    url: service_url,
+    data: data,
+    success: newWindow ? openInNewWindow : openInThisWindow
+  });
+};
 
 $(document).ready(function () {
     var search_options = SearchOptions;

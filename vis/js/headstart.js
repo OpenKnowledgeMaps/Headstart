@@ -63,6 +63,67 @@ HeadstartFSM.prototype = {
         }
       });
     },
+  
+  markProjectChanged: function (id) {
+      
+    let php_script = config.server_url + "services/markProjectChanged.php";
+
+    $.ajax({
+        url: php_script + '?vis_id=' + id,
+        type: "GET",
+        dataType: "json",
+        success: function(output) {
+            console.log(output);
+        }
+      });
+      
+  },
+  
+  dynamicForcePapers: function(num_items) {
+      if (num_items >= 150 && num_items < 200) {
+        config.papers_force_alpha = 0.2;
+      } else if (num_items >= 200 && num_items < 350) {
+          config.papers_force_alpha = 0.3;
+      } else if (num_items >= 350 && num_items < 500) {
+          config.papers_force_alpha = 0.4;
+      }else if (num_items >= 500) {
+          config.papers_force_alpha = 0.6;
+      }
+  },
+  
+  dynamicForceAreas: function(num_items) {
+      if (num_items >= 200) {
+          config.area_force_alpha = 0.02;
+      }
+  },
+  
+  dynamicSizing: function(num_items) {
+      if (num_items >= 150 && num_items < 200) {
+          this.adjustSizes(0.9, 1.1);
+      } else if (num_items >= 200 && num_items < 250) {
+          this.adjustSizes(0.8, 1.1);
+      } else if (num_items >= 250 && num_items < 300) {
+          this.adjustSizes(0.7, 1.1);
+      } else if (num_items >= 300 && num_items < 350) {
+          this.adjustSizes(0.7, 1.2);
+      } else if (num_items >= 350 && num_items < 400) {
+          this.adjustSizes(0.7, 1.2);
+      } else if (num_items >= 400 && num_items < 450) {
+          this.adjustSizes(0.7, 1.2);
+      } else if (num_items >= 450 && num_items < 500) {
+          this.adjustSizes(0.7, 1.2);
+      } else if (num_items >= 500) {
+          this.adjustSizes(0.6, 1.2);
+      }
+  },
+  
+  adjustSizes: function(resize_paper_factor, resize_bubble_factor) {
+      config.paper_min_scale *= resize_paper_factor;
+      config.paper_max_scale *= resize_paper_factor;
+          
+      config.bubble_min_scale *= resize_bubble_factor;
+      config.bubble_max_scale *= resize_bubble_factor;
+  },
 
   createRestUrl: function () {
       let url = config.server_url + "services/getBookmarks.php?user=" + config.user_id;

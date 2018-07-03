@@ -11,6 +11,8 @@ library(stringi)
 library(stringdist)
 registerDoParallel(3)
 
+
+
 debug = FALSE
 
 # Expects the following metadata fields:
@@ -19,6 +21,10 @@ debug = FALSE
 vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english",
                        add_stop_words=NULL, testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
 
+  tryCatch({
+   if(!isTRUE(testing)) source("utils.R")
+  }, error = function(err) print(err)
+  )
   #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
   if(list_size > -1) {
     output = deduplicate_titles(metadata, list_size)
@@ -139,6 +145,7 @@ create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
   return(list(tdm_matrix = tdm_matrix, metadata_full_subjects = metadata_full_subjects))
 }
 
+
 replace_keywords_if_empty <- function(corpus, metadata, stops) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
@@ -203,41 +210,66 @@ get_cut_off <- function(css_cluster, attempt=1){
   evthres = 0.9**attempt
   incthres = 1 - (0.9**attempt)
   print(paste("ev.thres:", evthres, "inc.thres:", incthres))
-  cut_off <- elbow.batch(css_cluster,
-                         ev.thres = evthres, inc.thres = incthres)
+  cut_off <- elbow(css_cluster, ev.thres = evthres, inc.thres = incthres)
   return (cut_off)
 }
 
 create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
   # Perform clustering, use elbow to determine a good number of clusters
   css_cluster <- css.hclust(distance_matrix, hclust.FUN.MoreArgs=list(method="ward.D"))
-  cut_off <- NULL
-  attempt <- 1
-  tryCatch({
+  num_clusters <- NA
+  num_clusters <-tryCatch({
     cut_off <- elbow.batch(css_cluster)
+    num_clusters <- cut_off$k
   }, error = function(err){
     print(err)
-  }, finally = {
-    while (is.null(cut_off)) {
-      tryCatch({
-        cut_off <- get_cut_off(css_cluster, attempt)
-      }, error = function(err){
-        print(err)
-      }, finally = {
-        attempt <- attempt+1
-      })
-    }
+    return (NA)
   })
-
-  num_clusters = cut_off$k
-
-  if(max_clusters > -1 && num_clusters > max_clusters) {
-    num_clusters = MAX_CLUSTERS
+  attempt <- 1
+  while(is.na(num_clusters)){
+    num_clusters <- tryCatch({
+      cut_off <- get_cut_off(css_cluster, attempt)
+      attempt <- attempt+1
+      cut_off$k
+    }, error = function(err){
+      print(err)
+      return (NA)
+      }
+    )
   }
+  
+  num_items = nrow(distance_matrix)
+
+  if(!is.null(num_clusters) && max_clusters > -1 && num_clusters > max_clusters) {
+    num_clusters = MAX_CLUSTERS
+    
+    if(num_items >= 150) {
+      print("High content number, increasing max_k.")
+      if(num_items >= 150 && num_items < 200) {
+        num_clusters = 16
+      } else if (num_items >= 200 && num_items < 300) {
+        num_clusters = 17
+      } else if (num_items >= 300 && num_items < 400) {
+        num_clusters = 18
+      } else if (num_items >= 400 && num_items < 500) {
+        num_clusters = 19
+      } else if (num_items >= 500) {
+        num_clusters = 20
+      }
+    }
+  }
+
+  if(num_items <= 30){
+    print("Low content number, lowering max_k.")
+    num_clusters = round(sqrt(nrow(distance_matrix))) + 1
+  }
+  
+  
 
   meta_cluster = attr(css_cluster,"meta")
   cluster = meta_cluster$hclust.obj
   labels = labels(distance_matrix)
+
   groups <- cutree(cluster, k=num_clusters)
 
   if(debug == TRUE) {
@@ -305,7 +337,6 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
   for (k in seq(1, clusters$num_clusters)) {
     group = c(names(clusters$groups[clusters$groups == k]))
     matches = which(metadata_full_subjects$id%in%group)
-
     titles =  metadata_full_subjects$title[c(matches)]
     subjects = metadata_full_subjects$subject[c(matches)]
 
@@ -405,8 +436,14 @@ create_output <- function(clusters, layout, metadata) {
   # Prepare the output
   result = cbind(x,y,groups,labels, cluster_labels)
   output = merge(metadata, result, by.x="id", by.y="labels", all=TRUE)
+
   names(output)[names(output)=="groups"] <- "area_uri"
   output["area"] = paste(output$cluster_labels, sep="")
+  missing_areatitles = which(lapply(output$area, function(x) {nchar(x)}) <= 1)
+  replacement_areatitles = output$subject[missing_areatitles]
+  replacement_areatitles = lapply(replacement_areatitles, function(x) {gsub(";", ", ", x)})
+  replacement_areatitles <- lapply(replacement_areatitles, function(x) {paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))})
+  output$area[missing_areatitles] = unlist(replacement_areatitles)
 
   output_json = toJSON(output)
 
@@ -429,10 +466,4 @@ create_output <- function(clusters, layout, metadata) {
 
   return(output_json)
 
-}
-
-levenshtein_ratio <- function(a, b) {
-  lv_dist = stringdist(a, b, method = "lv")
-  lv_ratio = lv_dist/(max(stri_length(a), stri_length(b)))
-  return(lv_ratio)
 }
