@@ -111,6 +111,9 @@ var config = {
     
     use_hypothesis: false,
     
+    credit_embed: false,
+    canonical_url: null,
+    
     service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE"},
 
     localization: {
