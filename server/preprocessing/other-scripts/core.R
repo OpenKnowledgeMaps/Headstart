@@ -6,30 +6,64 @@ library(rcoreoa)
 #
 # * query: search query
 # * params: parameters for the search in JSON format
-#    * from: publication date lower bound in the form YYYY-MM-DD
-#    * to: publication date upper bound in the form YYYY-MM-DD
-#    * article_types: in the form of an array of identifiers of article types
-#    * langs: in the form of an array of language identifiers (["all"] for all languages)
-#    * sorting: can be one of "most-relevant" and "most-recent"
+#   * "query" (character) query string, required
+#   * "page" (character) page number (default: 1)
+#   * "limit" (character) records to return (default: 10, minimum: 10)
+#   * "metadata" (logical) Whether to retrieve the full article metadata or only the ID. Default: `TRUE`
+#   * "fulltext" (logical) Whether to retrieve full text of the article. Default: `FALSE`
+#   * "citations" (logical) Whether to retrieve citations found in the article. Default: `FALSE`
+#   * "similar" (logical) Whether to retrieve a list of similar articles.  Default: `FALSE`. Because the similar articles are calculated on demand, setting this parameter to true might slightly slow down the response time
+#   * "duplicate" (logical) Whether to retrieve a list of CORE IDs of different versions of the article. Default: `FALSE`
+#   * "urls" (logical) Whether to retrieve a list of URLs from which the article can be downloaded. This can include links to PDFs as well as  HTML pages. Default: `FALSE`
+#   * "faithfulMetadata" (logical) Returns the records raw XML metadata  from the original repository. Default: `FALSE`
+#   * "key" A CORE API key. Get one at https://core.ac.uk/api-keys/register. Once you have the key, you can pass it into this parameter, or as a much better option, store your key as an environment variable with the name CORE_KEY or an R option as core_key.
+#   * "..." Curl options passed to crul::HttpClient
+#   * "parse" (logical) Whether to parse to list `FALSE` or data.frame (`TRUE`; default)
 # * limit: number of search results to return
-#
+# 
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
 #
 # "text" contains the text for similarity analysis; it is expected to have two columns "id" and "content"
 #
 # "metadata" contains all metadata; its columns are expected to be named as follows:
-# * "id": a unique ID, preferably the DOI
-# * "title": the title
-# * "authors": authors, preferably in the format "LASTNAME1, FIRSTNAME1;LASTNAME2, FIRSTNAME2"
-# * "paper_abstract": the abstract
-# * "published_in": name of the journal or venue
-# * "year": publication date
-# * "url": URL to the landing page
-# * "readers": an indicator of the paper's popularity, e.g. number of readers, views, downloads etc.
-# * "subject": keywords or classification, split by ;
-# * "oa_state": open access status of the item; has the following possible states: 0 for no, 1 for yes, 2 for unknown
-# * "link": link to the PDF; if this is not available, a list of candidate URLs that may contain a link to the PDF
-
-get_papers <- function(query, params, limit=100) {
-  
+# * id
+# * authors
+# * contributors
+# * datePublished
+# * description
+# * identifiers
+# * language
+# * publisher
+# * relations
+# * repositories
+# * subjects
+# * title
+# * topics
+# * types
+# * year
+# * fulltextIdentifier
+# * oai
+# * downloadUrl
+# * journals
+# * doi
+#
+# Examples:
+# x <- get_papers(query = "ecology", limit = 10)
+# head(x$metadata)
+# x$text$id
+# x$text$content
+# cat(x$text$content[1])
+get_papers <- function(query, params = list(), limit=100) {
+  params$limit <- limit
+  res <- core_articles_search(query = query, metadata = params$metadata, 
+    fulltext = TRUE, citations = params$citations, 
+    similar = params$similar, duplicate = params$duplicate, 
+    urls = params$urls, faithfulMetadata = params$faithfulMetadata, 
+    page = params$page, limit = params$limit, key = params$key)
+  text <- data.frame(id = res$data$id, content = res$data$fullText,
+    stringsAsFactors = FALSE)
+  df <- res$data
+  df$id <- NULL
+  df$fullText <- NULL
+  return(list(metadata = df, text = text))
 }
