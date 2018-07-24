@@ -65,5 +65,12 @@ get_papers <- function(query, params = list(), limit=100) {
   df <- res$data
   df$id <- NULL
   df$fullText <- NULL
+
+  # rename columns
+  names(df)[names(df) == "description"] <- "paper_abstract"
+  names(df)[names(df) == "subjects"] <- "subject"
+
+  # make subject a single character string, semicolon separated
+  df$subject <- vapply(df$subject, function(z) paste0(z, collapse = "; "), "")
   return(list(metadata = df, text = text))
 }
