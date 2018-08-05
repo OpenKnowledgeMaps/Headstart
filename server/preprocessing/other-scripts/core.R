@@ -20,7 +20,7 @@ library(rcoreoa)
 #   * "..." Curl options passed to crul::HttpClient
 #   * "parse" (logical) Whether to parse to list `FALSE` or data.frame (`TRUE`; default)
 # * limit: number of search results to return
-# 
+#
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
 #
 # "text" contains the text for similarity analysis; it is expected to have two columns "id" and "content"
@@ -55,15 +55,13 @@ library(rcoreoa)
 # cat(x$text$content[1])
 get_papers <- function(query, params = list(), limit=100) {
   params$limit <- limit
-  res <- core_articles_search(query = query, metadata = params$metadata, 
-    fulltext = TRUE, citations = params$citations, 
-    similar = params$similar, duplicate = params$duplicate, 
-    urls = params$urls, faithfulMetadata = params$faithfulMetadata, 
+  res <- core_articles_search(query = query, metadata = params$metadata,
+    fulltext = params$fulltext, citations = params$citations,
+    similar = params$similar, duplicate = params$duplicate,
+    urls = params$urls, faithfulMetadata = params$faithfulMetadata,
     page = params$page, limit = params$limit, key = params$key)
-  text <- data.frame(id = res$data$id, content = res$data$fullText,
-    stringsAsFactors = FALSE)
   df <- res$data
-  df$id <- NULL
+  #df$id <- NULL
   df$fullText <- NULL
 
   # rename columns
@@ -72,5 +70,13 @@ get_papers <- function(query, params = list(), limit=100) {
 
   # make subject a single character string, semicolon separated
   df$subject <- vapply(df$subject, function(z) paste0(z, collapse = "; "), "")
+  #text <- data.frame(id = res$data$id, content = res$data$fullText,
+  #  stringsAsFactors = FALSE)
+  text = data.frame(matrix(nrow=nrow(res$data)))
+  names(text) <- "id"
+  text$id = df$id # PROBLEM: can be NA
+  text$content = paste(df$title, df$paper_abstract,
+                       df$subject, df$publisher, df$authors,
+                       sep=" ")
   return(list(metadata = df, text = text))
 }
