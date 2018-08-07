@@ -39,45 +39,45 @@ Make sure to have `npm` version 3.10.10 installed (it comes with Node.js 6.14.x,
  
  1. Make sure to load the PT Sans font:
  
- `<link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'></link>`
+ 	`<link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'></link>`
  
  1. Use the following lines to setup and run the visualization. It will attach itself to the div, which can be used to move the visualization to the desired place on the page:
  
- ```
- <div id="visualization" class="headstart"></div>
-	
-<script type="text/javascript" src="data-config.js"></script>
-<script type="text/javascript" src="dist/headstart.js"></script>
-<link type="text/css" rel="stylesheet" href="dist/headstart.css"></link>
+	 ```
+	 <div id="visualization" class="headstart"></div>
 
-<script type="text/javascript">
-    headstart.start();
-</script>
-```
+	<script type="text/javascript" src="data-config.js"></script>
+	<script type="text/javascript" src="dist/headstart.js"></script>
+	<link type="text/css" rel="stylesheet" href="dist/headstart.css"></link>
+
+	<script type="text/javascript">
+	    headstart.start();
+	</script>
+	```
 1. The visualization will fit itself to the size of the div, if it is specified. The minimum width and height is 670px.
 For a responsive layout, you can use the following code snippet to adapt it to changing width and height. The snippet assumes that jQuery is loaded.
 
-```
-var calcDivHeight = function () {
-                    
-    let height = $(window).height();
-    let width = $(window).width();
+	```
+	var calcDivHeight = function () {
 
-    if(height <= 670 || width < 904 || (width >= 985 && width  < 1070)) {
-        return 670;    
-    } else if (width >= 904 && width <= 984) {
-        return 670 + (width - 904);
-    } else if (width >= 1070 && width < 1400) {
-        return 670 + (width - 1070)/2;
-    } else if (width > 1400 && width < 1600) {
-        let calc_width = 835 + (width - 1400)
-        return (calc_width > 897)?(897):(calc_width);
-    }  else {
-        return $(window).height();
-    }
-}
+	    let height = $(window).height();
+	    let width = $(window).width();
 
-let div_height = calcDivHeight();
+	    if(height <= 670 || width < 904 || (width >= 985 && width  < 1070)) {
+		return 670;    
+	    } else if (width >= 904 && width <= 984) {
+		return 670 + (width - 904);
+	    } else if (width >= 1070 && width < 1400) {
+		return 670 + (width - 1070)/2;
+	    } else if (width > 1400 && width < 1600) {
+		let calc_width = 835 + (width - 1400)
+		return (calc_width > 897)?(897):(calc_width);
+	    }  else {
+		return $(window).height();
+	    }
+	}
 
-$("#visualization").css("min-height", div_height + "px")
-```
+	let div_height = calcDivHeight();
+
+	$("#visualization").css("min-height", div_height + "px")
+	```
