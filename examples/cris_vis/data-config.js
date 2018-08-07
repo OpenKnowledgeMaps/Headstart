@@ -44,8 +44,8 @@ var data_config = {
     cris_legend: true,
     credit: true,
     
-    is_evaluation: true,
-    evaluation_service: "matomo",
+    is_evaluation: false,
+    evaluation_service: "ga",
     
     rescale_map: false,
     scale_types: ['none', 'Altersgruppe', 'Background', 'Bundesland', 'Geschlecht', 'Höchste Ausbildung', 'Land'],
