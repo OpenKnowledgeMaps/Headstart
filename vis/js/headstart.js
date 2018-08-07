@@ -40,13 +40,13 @@ HeadstartFSM.prototype = {
     
     switch(config.evaluation_service) {
         case "log":
-            this.recordActionLog(id, category, action, user, timestamp, additional_params, post_data);
+            this.recordActionLog(category, action, id, user, timestamp, additional_params, post_data);
             break;
         case "matomo":
-            this.recordActionMatomo(category, id, action, user, timestamp, additional_params, post_data);
+            this.recordActionMatomo(category, action, id, user, timestamp, additional_params, post_data);
             break;
         case "ga":
-            this.recordActionGA(category, id, action, user, timestamp, additional_params, post_data);
+            this.recordActionGA(category, action, id, user, timestamp, additional_params, post_data);
             break;
     } 
   },
