@@ -644,7 +644,7 @@ list.filterList = function(search_words, filter_param) {
     if (search_words === undefined) {
         search_words = this.current_search_words
     } else {
-        mediator.publish("record_action", search_words, "List", "search", config.user_id, "filter_list", null, "search_words=" + search_words);
+        mediator.publish("record_action", search_words.join(), "List", "search", config.user_id, "filter_list", null, "search_words=" + search_words);
     }
 
     if (filter_param === undefined) {
