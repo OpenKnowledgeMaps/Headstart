@@ -32,7 +32,7 @@ HeadstartFSM.prototype = {
     }
   },
 
-  recordAction: function(id, action, user, type, timestamp, additional_params, post_data) {
+  recordAction: function(id, category, action, user, timestamp, additional_params, post_data) {
 
     if(!config.is_evaluation) {
       return;
@@ -40,13 +40,13 @@ HeadstartFSM.prototype = {
     
     switch(config.evaluation_service) {
         case "log":
-            this.recordActionLog(id, action, user, type, timestamp, additional_params, post_data);
+            this.recordActionLog(id, category, action, user, timestamp, additional_params, post_data);
             break;
         case "matomo":
-            this.recordActionMatomo(id, action, user, type, timestamp, additional_params, post_data);
+            this.recordActionMatomo(category, id, action, user, timestamp, additional_params, post_data);
             break;
         case "ga":
-            this.recordActionGA(id, action, user, type, timestamp, additional_params, post_data);
+            this.recordActionGA(category, id, action, user, timestamp, additional_params, post_data);
             break;
     } 
   },
@@ -84,14 +84,16 @@ HeadstartFSM.prototype = {
   },
   
   recordActionGA: function(category, action, id) {
-      //analytics.js
+    //gtag.js
+    if(typeof gtag === "function") {
+        gtag('event', action, {
+          'event_category': category,
+          'event_label': id
+        });
+    //analytics.js
+    } else if (typeof ga === "function") {
       ga('send', 'event', category, action, id);
-      
-      //gtag.js
-      gtag('event', category, {
-        'event_category': action,
-        'event_label': id
-      });
+    }  
   },
   
   markProjectChanged: function (id) {
