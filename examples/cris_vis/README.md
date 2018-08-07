@@ -81,3 +81,5 @@ For a responsive layout, you can use the following code snippet to adapt it to c
 
 	$("#visualization").css("min-height", div_height + "px")
 	```
+ ## Google Analytics Event Tracking
+ To enable Google Analytics Event Tracking, open the file `data-config.js` on the web server and change the variable `is_evaluation` from `false`to `true`. Don't forget to add the GA tracking code. Both analytics.js and gtag.js are supported.
