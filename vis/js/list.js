@@ -102,10 +102,10 @@ export const list = StateMachine.create({
         onbeforetoggle: function() {
             if (this.current == "visible") {
                 this.hide();
-                mediator.publish("record_action", "none", "hide_list", config.user_id, "none", null);
+                mediator.publish("record_action", config.files[mediator.current_file_number].file, "List", "hide", config.user_id, "none", null);
             } else {
                 this.show();
-                mediator.publish("record_action", "none", "show_list", config.user_id, "none", null);
+                mediator.publish("record_action", config.files[mediator.current_file_number].file, "List", "show", config.user_id, "none", null);
             }
         }
     }
@@ -124,8 +124,10 @@ list.drawList = function() {
         sort_by_label: config.localization[config.language].sort_by_label,
     });
     $("#list_explorer").append(list_explorer);
-
+    
     // Set localized values
+    let timer;
+    let delay = 300;
     $("#filter_input")
         .attr("placeholder", config.localization[config.language].search_placeholder)
         .on("input", (event) => {
@@ -134,7 +136,11 @@ list.drawList = function() {
             } else {
                 $("#searchclear").hide();
             }
-            debounce(this.filterList(event.target.value.split(" ")), config.debounce);
+            window.clearTimeout(timer);
+            timer = window.setTimeout(function() {
+                debounce(self.filterList(event.target.value.split(" ")), config.debounce);
+            }, delay);
+        
         });
 
     $("#searchclear").click(() => {
@@ -255,7 +261,7 @@ let addSortOptionDropdownEntry = function(sort_option, first_item) {
     
     newEntry.on("click", () => {
         sortBy(sort_option)
-        mediator.publish("record_action", "none", "sortBy", config.user_id, "listsort", null, "sort_option=" + sort_option)
+        mediator.publish("record_action", config.localization[config.language][sort_option], "List", "sortBy", config.user_id, "listsort", null, "sort_option=" + sort_option)
         $('#curr-sort-type').text(config.localization[config.language][sort_option])
         $('.sort_entry').removeClass('active');
         newEntry.addClass("active")
@@ -287,7 +293,7 @@ let addSortOptionButton = function(parent, sort_option, selected) {
     // Event listeners
     $("#sort_" + sort_option).change(function() {
         sortBy(sort_option);
-        mediator.publish("record_action", "none", "sortBy",
+        mediator.publish("record_action", config.localization[config.language][sort_option], "List", "sortBy",
             config.user_id, "listsort", null, "sort_option=" + sort_option);
     });
 };
@@ -637,11 +643,16 @@ list.populateList = function() {
 list.filterList = function(search_words, filter_param) {
     if (search_words === undefined) {
         search_words = this.current_search_words
+    } else {
+        mediator.publish("record_action", search_words.join(), "List", "search", config.user_id, "filter_list", null, "search_words=" + search_words);
     }
 
     if (filter_param === undefined) {
-        filter_param = this.current_filter_param
+        filter_param = this.current_filter_param     
+    } else {
+        mediator.publish("record_action", filter_param, "List", "filter", config.user_id, "filter_list", null, "filter_param=" + filter_param);
     }
+    
     this.current_search_words = search_words;
 
     search_words = search_words.map(function(e) {
@@ -708,9 +719,6 @@ list.filterList = function(search_words, filter_param) {
     all_list_items.each(function (d) {
         d.filtered_out = false
     })
-
-    // Record that we're about to do some filtering
-    mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words + "filter_param="+filter_param);
 
     // Now actually do the filtering (i.e. remove some object from list and map)
     this.hideEntriesByWord(all_list_items, search_words);
@@ -911,7 +919,7 @@ list.addBookmark = function(d) {
     $.getJSON(this.headstart_server + "services/addBookmark.php?user_id=" + config.user_id + "&content_id=" + d.id, function(data) {
         console.log("Successfully added bookmark");
 
-        mediator.publish("record_action", d.id, "add_bookmark", config.user_id, d.bookmarked + " " + d.recommended, data);
+        mediator.publish("record_action", d.title, "Bookmark", "add", config.user_id, d.bookmarked + " " + d.recommended, data);
 
         d.bookmarked = true;
 
@@ -936,7 +944,7 @@ list.removeBookmark = function(d) {
     $.getJSON(this.headstart_server + "services/addBookmark.php?user_id=" + config.user_id + "&content_id=" + d.id, function(data) {
         console.log("Successfully removed bookmark");
 
-        mediator.publish("record_action", d.id, "remove_bookmark", config.user_id, d.bookmarked + " " + d.recommended, data);
+        mediator.publish("record_action", d.title, "Bookmark", "remove", config.user_id, d.bookmarked + " " + d.recommended, data);
 
         d.bookmarked = false;
 
@@ -961,7 +969,7 @@ list.removeBookmark = function(d) {
 
 list.makeTitleClickable = function(d) {
     mediator.publish("list_click_paper_list", d);
-    mediator.publish("record_action", d.id, "click_paper_list", config.user_id, d.bookmarked + " " + d.recommended, null);
+    mediator.publish("record_action", d.title, "List", "paper_click", config.user_id, d.bookmarked + " " + d.recommended, null);
     d3.event.stopPropagation();
 };
 
@@ -1054,12 +1062,14 @@ list.attachClickHandlerAbstract = function(enlarged) {
                 let parent_div = d3.select(d3.event.currentTarget.parentElement);
                 let statistics_div = parent_div.select(".list_subentry_statistics")
                 if(statistics_div.style("display") === "none") {
+                    mediator.publish("record_action", parent_div.select(".list_subentry_title").text(), "List", "show_statistics", config.user_id, "none", null);
                     statistics_div.style("display", "block")
                     click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "none");
                     click_div.select(".list_subentry_show_statistics_arrow_up").style("display", "inline-block");
                     click_div.select(".list_subentry_show_statistics_verb")
                         .text(config.localization[config.language].hide_verb_label)
                 } else {
+                    mediator.publish("record_action", parent_div.select(".list_subentry_title").text(), "List", "hide_statistics", config.user_id, "none", null);
                     statistics_div.style("display", "none")
                     click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "inline-block");
                     click_div.select(".list_subentry_show_statistics_arrow_up").style("display", "none");
@@ -1072,7 +1082,7 @@ list.attachClickHandlerAbstract = function(enlarged) {
                
         list_holder.select(".list_subentry_showmore").on("click", function(d) {
             mediator.publish("list_click_paper_list", d);
-            mediator.publish("record_action", d.id, "click_paper_list", config.user_id, d.bookmarked + " " + d.recommended, null);
+            mediator.publish("record_action", d.title, "List", "paper_click", config.user_id, d.bookmarked + " " + d.recommended, null);
             d3.event.stopPropagation();
         })
     }
@@ -1341,7 +1351,7 @@ list.title_click = function(d) {
         return;
     }
 
-    mediator.publish("record_action", d.id, "click_on_title", config.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
+    mediator.publish("record_action", d.title, "List", "open_outlink", config.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
 
     window.open(url, "_blank");
     d3.event.stopPropagation();

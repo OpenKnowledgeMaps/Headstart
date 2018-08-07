@@ -467,8 +467,8 @@ MyMediator.prototype = {
             .style("display", "none");
     },
 
-    record_action: function(id, action, user, type, timestamp, additional_params, post_data) {
-        headstart.recordAction(id, action, user, type, timestamp, additional_params, post_data);
+    record_action: function(id, category, action, user, type, timestamp, additional_params, post_data) {
+        headstart.recordAction(id, category, action, user, type, timestamp, additional_params, post_data);
     },
     
     mark_project_changed: function(id) {

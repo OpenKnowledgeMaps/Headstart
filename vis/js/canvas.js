@@ -185,15 +185,17 @@ class Canvas {
 
     initEventListeners() {
         d3.select(window).on("resize", () => {
+            mediator.publish("record_action", config.title, "Map", "resize", config.user_id, "resize_map", null, null, null);
             if (headstart.is("timeline")) {
                 return;
-            }
+            }   
             mediator.publish("window_resize");
         });
 
         // Info Modal Event Listener
         $('#info_modal').on('show.bs.modal', function () {
             if(!mediator.is_zoomed) {
+                mediator.publish("record_action", config.title, "Map", "open_info_modal", config.user_id, "open_info_modal", null, null, null);
                 var current_intro = config.intro;
                 var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
                 $('#info-title').text(intro.title);
@@ -210,6 +212,7 @@ class Canvas {
                 }
             } else {
                 let d = d3.select(mediator.current_zoom_node).datum();
+                mediator.publish("record_action", d.title, "Bubble", "open_info_modal", config.user_id, "open_info_modal", null, null, null);
                 $('#info-body').html("");
                 $('#info-title').text(config.localization[config.language].intro_areas_title + d.title);
                 config.scale_types.forEach(function(item, index) {
@@ -364,11 +367,13 @@ class Canvas {
             $(".sharebutton")
                 .on('click', (event) => {
                     event.preventDefault();
-                    
                     $(".sharebuttons").toggle(0, function () {
                         if ($(this).is(':visible')) {
+                            mediator.publish("record_action", config.title, "Map", "open_share_buttons", config.user_id, "open_share_buttons", null, null, null);
                             $(this).css('display','inline-block');
                             $("#sharebutton").focus();
+                        } else {
+                            mediator.publish("record_action", config.title, "Map", "close_share_buttons", config.user_id, "close_share_buttons", null, null, null);
                         }
                     });
                 })
@@ -382,6 +387,7 @@ class Canvas {
             $('#embed-button').text(config.localization[config.language].embed_button_text)
             .on('click', (event) => {
                 event.preventDefault();
+                mediator.publish("record_action", config.title, "Map", "open_embed_modal", config.user_id, "open_embed_modal", null, null, null);
                 let embedString = $('#embed-modal-text')[0];
                 embedString.focus();
                 embedString.setSelectionRange(0, embedString.value.length);
@@ -399,6 +405,7 @@ class Canvas {
             $('#viper-edit-button').text(config.localization[config.language].viper_edit_button_text)
             $('.viper-edit-link, viper-edit-screenshot').click(function (event) {
                 event.preventDefault();
+                mediator.publish("record_action", config.title, "EditModal", "click_outlink", config.user_id, "click_outlink", null, null, null);
                 mediator.publish("mark_project_changed", context.id);
                 window.open(`https://www.openaire.eu/search/project?projectId=${context.params.obj_id}`);
             })

@@ -102,8 +102,9 @@ var config = {
     service: "none",
     language: "eng",
 
-    // behaviour settings (mostly legacy)
+    // behaviour settings
     is_evaluation: false,
+    evaluation_service: "log",
     is_adaptive: false,
     conference_id: 0,
     user_id: 0,

@@ -609,7 +609,7 @@ papers.enlargePaper = function (d, holder_div) {
         return;
     }
 
-    mediator.publish("record_action", d.id, "enlarge_paper", config.user_id, d.bookmarked + " " + d.recommended, null);
+    mediator.publish("record_action", d.title, "Paper", "enlarge", config.user_id, d.bookmarked + " " + d.recommended, null);
 
     let resize_factor = 1.2;
 
@@ -654,7 +654,7 @@ papers.enlargePaper = function (d, holder_div) {
 
                     d.paper_selected = true;
                     mediator.current_enlarged_paper = d;
-                    mediator.publish("record_action", d.id, "click_on_paper", config.user_id, d.bookmarked + " " + d.recommended, null);
+                    mediator.publish("record_action", d.title, "Paper", "click", config.user_id, d.bookmarked + " " + d.recommended, null);
                     d3.event.stopPropagation();
                 }
             })
@@ -688,7 +688,7 @@ papers.currentbubble_click = function (d) {
     }
 
     mediator.current_enlarged_paper = null;
-    mediator.publish("record_action", d.id, "click_paper_list_enlarge", config.user_id, d.bookmarked + " " + d.recommended, null);
+    mediator.publish("record_action", d.title, "Paper", "click", config.user_id, d.bookmarked + " " + d.recommended, null);
 
     d3.event.stopPropagation();
 };
