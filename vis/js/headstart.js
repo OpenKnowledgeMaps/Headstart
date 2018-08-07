@@ -84,7 +84,14 @@ HeadstartFSM.prototype = {
   },
   
   recordActionGA: function(category, action, id) {
+      //analytics.js
       ga('send', 'event', category, action, id);
+      
+      //gtag.js
+      gtag('event', category, {
+        'event_category': action,
+        'event_label': id
+      });
   },
   
   markProjectChanged: function (id) {
