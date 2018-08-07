@@ -20,7 +20,8 @@ class FileLogger extends Logger {
     }
     
     public function writeToLog($log_data) {
-        $this->log->logInfo(json_encode($log_data));
+        $log_line = json_encode($log_data);
+        $this->log->logInfo($log_line);
     }
     
 }

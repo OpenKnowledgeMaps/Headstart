@@ -131,11 +131,11 @@ BubblesFSM.prototype = {
         d3.selectAll("#headstart-chart circle").on("mouseover", function (d) {
             if (!this_bubble_fsm.is("hoverbig")) {
                 mediator.publish("bubble_mouseover", d, this, this_bubble_fsm);
-                mediator.publish("record_action", d.id, "circle_mouseover", config.user_id, "none", null);
+                mediator.publish("record_action", d.title, "Bubble", "mouseover", config.user_id, "none", null);
             }
         }).on("mouseout", function (d) {
             mediator.publish("bubble_mouseout", d, this, this_bubble_fsm);
-            mediator.publish("record_action", d.id, "circle_mouseout", config.user_id, "none", null);
+            mediator.publish("record_action", d.title, "Bubble", "mouseout", config.user_id, "none", null);
         });
 
         if (mediator.is_in_normal_mode) {
@@ -507,7 +507,7 @@ BubblesFSM.prototype = {
 
         mediator.current_bubble.createTransition(t, d.title);
 
-        mediator.publish("record_action", d.id, "zoom_in", config.user_id, "none", null);
+        mediator.publish("record_action", d.title, "Bubble", "zoomin", config.user_id, "none", null);
 
         d3.event.stopPropagation();
 
@@ -537,9 +537,9 @@ BubblesFSM.prototype = {
             toFront(mediator.current_zoom_node.parentNode);
 
             var circle_data = d3.select(mediator.current_zoom_node).data();
-            mediator.publish("record_action", circle_data.id, "zoom_out", config.user_id, "none", null);
+            mediator.publish("record_action", circle_data.title, "Bubble", "zoomout", config.user_id, "none", null);
         } else {
-            mediator.publish("record_action", "none", "zoom_out", config.user_id, "none", null);
+            mediator.publish("record_action", "none", "Bubble", "zoomout", config.user_id, "none", null);
         }
 
         if (mediator.current_enlarged_paper !== null) {
@@ -782,7 +782,7 @@ BubblesFSM.prototype = {
             this.draw();
             this.initMouseListeners();
         }
-        mediator.publish("record_action", "none", "start", config.user_id, "start_bubble", null, null, recommendation_data);
+        mediator.publish("record_action", config.title, "Map", "start", config.user_id, "start_bubble", null, null, recommendation_data);
     },
 
     onbeforemouseover: function () {
