@@ -16,7 +16,7 @@ export var intros = {
         body: ViperInfoTemplate(),
         dynamic: true
     }, intro_cris: {
-        title: "VISUALISIERUNG DER FORSCHUNGSFRAGEN ZUM THEMA PSYCHISCHE GESUNDHEIT",
+        title: "Reden Sie mit! Welche Fragen zu psychischen Erkrankungen soll die Wissenschaft aufgreifen?",
         body: CRISInfoTemplate()
     }
 };

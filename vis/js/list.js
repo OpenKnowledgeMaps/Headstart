@@ -818,6 +818,8 @@ list.createAbstract = function(d, cut_off) {
 };
 
 list.createAbstractCris = function(d, cut_off) {
+    $("[data-toggle=popover]").popover({trigger: "hover"});
+    
     let list_abstract_template = listSubEntryTemplateCris();
     let list_abstract = document.createElement("div");
     
@@ -844,6 +846,10 @@ list.createAbstractCris = function(d, cut_off) {
         current_abstract.select(".list_subentry_readers_entity")
                 .text(config.base_unit)
         
+        if(elem.readers === "0" || elem.readers === "") {
+            current_abstract.select(".list_subentry_0_count").classed("list_subentry_0_count_visible", true)
+        }
+        
         if(cut_off) {
             let showmore = current_abstract.select(".list_subentry_showmore")
                                 .style("display", "inline-block")
@@ -864,32 +870,35 @@ list.createAbstractCris = function(d, cut_off) {
             current_abstract.select(".list_subentry_showmore")
                     .style("display", "none")
             
-            let show_statistics = current_abstract.select(".list_subentry_show_statistics")
-                    .style("display", "inline-block")
+            if(elem.readers !== "0" && elem.readers !== "") {
             
-            show_statistics.select(".list_subentry_show_statistics_text")
-                    .text(config.localization[config.language].distributions_label)
-            
-            show_statistics.select(".list_subentry_show_statistics_numbers")
-                    .text(+elem.readers + " " + config.base_unit)
-            
-            show_statistics.select(".list_subentry_show_statistics_verb")
-                    .text(config.localization[config.language].show_verb_label)
-            
-            let statistics_div = current_abstract.select(".list_subentry_statistics")
-            
-            let list_subentry_statistics = listSubEntryStatisticsTemplateCris();
-            
-            let current_context = io.context.distributions_abstracts[elem.id];
-            
-            let index_elem = 1;
-            for (let context_elem in current_context) {
-                if (current_context.hasOwnProperty(context_elem)) {
-                    let subentry_statistics = statistics_div.append("div").html(list_subentry_statistics);
-                    subentry_statistics.select(".list_subentry_statistic_title")
-                        .text(index_elem + ". " + context_elem)
-                    this.createAbstractStatistics(subentry_statistics, current_context[context_elem])
-                    index_elem++;
+                let show_statistics = current_abstract.select(".list_subentry_show_statistics")
+                        .style("display", "inline-block")
+
+                show_statistics.select(".list_subentry_show_statistics_text")
+                        .text(config.localization[config.language].distributions_label)
+
+                show_statistics.select(".list_subentry_show_statistics_numbers")
+                        .text(+elem.readers + " " + config.base_unit)
+
+                show_statistics.select(".list_subentry_show_statistics_verb")
+                        .text(config.localization[config.language].show_verb_label)
+
+                let statistics_div = current_abstract.select(".list_subentry_statistics")
+
+                let list_subentry_statistics = listSubEntryStatisticsTemplateCris();
+
+                let current_context = io.context.distributions_abstracts[elem.id];
+
+                let index_elem = 1;
+                for (let context_elem in current_context) {
+                    if (current_context.hasOwnProperty(context_elem)) {
+                        let subentry_statistics = statistics_div.append("div").html(list_subentry_statistics);
+                        subentry_statistics.select(".list_subentry_statistic_title")
+                            .text(index_elem + ". " + context_elem)
+                        this.createAbstractStatistics(subentry_statistics, current_context[context_elem])
+                        index_elem++;
+                    }
                 }
             }
         }
@@ -1050,6 +1059,8 @@ list.setAdditionalImagesForListHolder = function(d) {
 list.attachClickHandlerAbstract = function(enlarged) {
     if(!config.list_sub_entries)
         return;
+    
+    $("[data-toggle=popover]").popover({trigger: "hover"});
     
     let list_holder = d3.selectAll("#list_holder");
     
