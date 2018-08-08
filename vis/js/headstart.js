@@ -38,17 +38,21 @@ HeadstartFSM.prototype = {
       return;
     }
     
-    switch(config.evaluation_service) {
-        case "log":
-            this.recordActionLog(category, action, id, user, timestamp, additional_params, post_data);
-            break;
-        case "matomo":
-            this.recordActionMatomo(category, action, id, user, timestamp, additional_params, post_data);
-            break;
-        case "ga":
-            this.recordActionGA(category, action, id, user, timestamp, additional_params, post_data);
-            break;
-    } 
+    let services = config.evaluation_service;
+    
+    if(typeof services === "string") {
+        services = [services];
+    }
+  
+    if ("log" in services) {
+        this.recordActionLog(category, action, id, user, timestamp, additional_params, post_data);
+    }
+    if ("matomo" in services) {
+        this.recordActionMatomo(category, action, id, user, timestamp, additional_params, post_data);
+    }
+    if ("ga" in services) {
+        this.recordActionGA(category, action, id, user, timestamp, additional_params, post_data);
+    }
   },
     
   recordActionLog: function(id, category, action, user, type, timestamp, additional_params, post_data) {
