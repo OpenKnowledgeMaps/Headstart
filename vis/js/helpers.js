@@ -197,6 +197,7 @@ export function updateTags(current_context, overall_context, div, attribute, dis
                 }
 
             })
+            .attr("title", statistic.name)
     }
 
 }
