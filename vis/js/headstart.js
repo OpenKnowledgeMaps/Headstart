@@ -44,13 +44,13 @@ HeadstartFSM.prototype = {
         services = [services];
     }
   
-    if ("log" in services) {
+    if (services.includes("log")) {
         this.recordActionLog(category, action, id, user, timestamp, additional_params, post_data);
     }
-    if ("matomo" in services) {
+    if (services.includes("matomo")) {
         this.recordActionMatomo(category, action, id, user, timestamp, additional_params, post_data);
     }
-    if ("ga" in services) {
+    if (services.includes("ga")) {
         this.recordActionGA(category, action, id, user, timestamp, additional_params, post_data);
     }
   },
