@@ -317,6 +317,26 @@ img#preview_page {
     font-weight: $fontweight700;
 }
 
+.list_subentry_0_count {
+    display: none;
+    text-decoration: none;
+}
+
+.list_subentry_0_count_visible {
+    display: inline-block;
+}
+
+.explanation_0_count {
+    font-family: "FontAwesome";
+    color: $dark-blue;
+}
+
+.popover-content {
+    color: $black;
+    font-size: 12px;
+    font-family: $base-font-family;
+}
+
 @media screen and (max-width: 1150px) {
     /*.list_metadata {
 
