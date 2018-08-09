@@ -304,7 +304,10 @@ MyMediator.prototype = {
         // Build Headstart skeleton
         this.viz = $("#" + config.tag);
         this.viz.addClass("headstart");
-        this.viz.append(headstartTemplate());
+        this.viz.append(headstartTemplate({
+            credit_embed: config.credit_embed
+            , canonical_url: config.canonical_url
+        }));
         this.viz.append(infoTemplate());
         this.viz.append(iFrameTemplate());
         this.viz.append(imageTemplate());

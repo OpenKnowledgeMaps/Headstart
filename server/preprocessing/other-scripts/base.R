@@ -6,6 +6,10 @@ library(rbace)
 #
 # * query: search query
 # * params: parameters for the search in JSON format
+#    * from: publication date lower bound in the form YYYY-MM-DD
+#    * to: publication date upper bound in the form YYYY-MM-DD
+#    * article_types: in the form of an array of identifiers of article types
+#    * sorting: can be one of "most-relevant" and "most-recent"
 # * limit: number of search results to return
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
@@ -22,6 +26,8 @@ library(rbace)
 # * "url": URL to the landing page
 # * "readers": an indicator of the paper's popularity, e.g. number of readers, views, downloads etc.
 # * "subject": keywords or classification, split by ;
+# * "oa_state": open access status of the item; has the following possible states: 0 for no, 1 for yes, 2 for unknown
+# * "link": link to the PDF; if this is not available, a list of candidate URLs that may contain a link to the PDF
 
 get_papers <- function(query, params, limit=100, fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
 

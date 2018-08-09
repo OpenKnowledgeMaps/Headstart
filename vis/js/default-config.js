@@ -121,6 +121,9 @@ var config = {
     list_images_path: "images/",
     visual_distributions: false,
     
+    credit_embed: false,
+    canonical_url: null,
+    
     service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE"},
 
     localization: {
