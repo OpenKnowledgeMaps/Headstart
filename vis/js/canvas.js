@@ -382,7 +382,7 @@ class Canvas {
         if (config.embed_modal) {
             $('#modals').append(embedModalButton)
             $('#embed-title').html(config.localization[config.language].embed_title)
-            $('#embed-modal-text').val(`<iframe width="1600" height="900" src="${window.location.toString().replace(/#.*/, "")}&embed=true"></iframe>`)
+            $('#embed-modal-text').val(`<iframe width="1200" height="720" src="${window.location.toString().replace(/#.*/, "")}&embed=true"></iframe>`)
 
             $('#embed-button').text(config.localization[config.language].embed_button_text)
             .on('click', (event) => {

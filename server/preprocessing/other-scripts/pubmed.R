@@ -8,9 +8,10 @@ library("xml2")
 #
 # * query: search query
 # * params: parameters for the search in JSON format
-#    * mindate: in the form YYYY/MM/DD
-#    * maxdate: in the form YYYY/MM/DD
-#    * article_types: in the form "journal article" (that's the default as well)
+#    * from: publication date lower bound in the form YYYY-MM-DD
+#    * to: publication date upper bound in the form YYYY-MM-DD
+#    * article_types: in the form of an array of identifiers of article types
+#    * sorting: can be one of "most-relevant" and "most-recent"
 # * limit: number of search results to return
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
