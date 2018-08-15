@@ -107,7 +107,8 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
                             , "pubmed" => "PubMed"
                             , "doaj" => "DOAJ"
                             , "base" => "BASE"
-                            , "openaire" => "OpenAire");
+                            , "openaire" => "OpenAire"
+                            , "core" => "CORE");
 
     if(!isset($ini_array["snapshot"]["snapshot_enabled"]) || $ini_array["snapshot"]["snapshot_enabled"] > 0) {
         $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $repository, $repo_mapping[$repository]);

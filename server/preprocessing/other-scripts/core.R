@@ -1,0 +1,82 @@
+library(rcoreoa)
+
+# get_papers
+#
+# Params:
+#
+# * query: search query
+# * params: parameters for the search in JSON format
+#   * "query" (character) query string, required
+#   * "page" (character) page number (default: 1)
+#   * "limit" (character) records to return (default: 10, minimum: 10)
+#   * "metadata" (logical) Whether to retrieve the full article metadata or only the ID. Default: `TRUE`
+#   * "fulltext" (logical) Whether to retrieve full text of the article. Default: `FALSE`
+#   * "citations" (logical) Whether to retrieve citations found in the article. Default: `FALSE`
+#   * "similar" (logical) Whether to retrieve a list of similar articles.  Default: `FALSE`. Because the similar articles are calculated on demand, setting this parameter to true might slightly slow down the response time
+#   * "duplicate" (logical) Whether to retrieve a list of CORE IDs of different versions of the article. Default: `FALSE`
+#   * "urls" (logical) Whether to retrieve a list of URLs from which the article can be downloaded. This can include links to PDFs as well as  HTML pages. Default: `FALSE`
+#   * "faithfulMetadata" (logical) Returns the records raw XML metadata  from the original repository. Default: `FALSE`
+#   * "key" A CORE API key. Get one at https://core.ac.uk/api-keys/register. Once you have the key, you can pass it into this parameter, or as a much better option, store your key as an environment variable with the name CORE_KEY or an R option as core_key.
+#   * "..." Curl options passed to crul::HttpClient
+#   * "parse" (logical) Whether to parse to list `FALSE` or data.frame (`TRUE`; default)
+# * limit: number of search results to return
+#
+# It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
+#
+# "text" contains the text for similarity analysis; it is expected to have two columns "id" and "content"
+#
+# "metadata" contains all metadata; its columns are expected to be named as follows:
+# * id
+# * authors
+# * contributors
+# * datePublished
+# * description
+# * identifiers
+# * language
+# * publisher
+# * relations
+# * repositories
+# * subjects
+# * title
+# * topics
+# * types
+# * year
+# * fulltextIdentifier
+# * oai
+# * downloadUrl
+# * journals
+# * doi
+#
+# Examples:
+# x <- get_papers(query = "ecology", limit = 10)
+# head(x$metadata)
+# x$text$id
+# x$text$content
+# cat(x$text$content[1])
+get_papers <- function(query, params = list(), limit=100) {
+  params$limit <- limit
+  res <- core_articles_search(query = query, metadata = params$metadata,
+    fulltext = params$fulltext, citations = params$citations,
+    similar = params$similar, duplicate = params$duplicate,
+    urls = params$urls, faithfulMetadata = params$faithfulMetadata,
+    page = params$page, limit = params$limit, key = params$key)
+  df <- res$data
+  #df$id <- NULL
+  df$fullText <- NULL
+
+  # rename columns
+  names(df)[names(df) == "description"] <- "paper_abstract"
+  names(df)[names(df) == "subjects"] <- "subject"
+
+  # make subject a single character string, semicolon separated
+  df$subject <- vapply(df$subject, function(z) paste0(z, collapse = "; "), "")
+  #text <- data.frame(id = res$data$id, content = res$data$fullText,
+  #  stringsAsFactors = FALSE)
+  text = data.frame(matrix(nrow=nrow(res$data)))
+  names(text) <- "id"
+  text$id = df$id # PROBLEM: can be NA
+  text$content = paste(df$title, df$paper_abstract,
+                       df$subject, df$publisher, df$authors,
+                       sep=" ")
+  return(list(metadata = df, text = text))
+}

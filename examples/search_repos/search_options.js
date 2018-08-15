@@ -83,6 +83,34 @@ var options_plos = {
             ]}
     ]}
 
+var options_core = {
+    dropdowns: [
+        {id: "time_range", multiple: false, name: "Time Range", type: "dropdown"
+            , fields: [
+                {id: "any-time", text: "Any time"}
+                , {id: "last-month", text: "Last month"}
+                , {id: "last-year", text: "Last year"}
+                , {id: "user-defined", text: "Custom range", class: "user-defined",
+                    inputs: [
+                        {id: "from", label: "From: ", class: "time_input"}
+                        , {id: "to", label: "To: ", class: "time_input"}
+                    ]}
+            ]},
+        {id: "sorting", multiple: false, name: "Sorting", type: "dropdown"
+            , fields: [
+                {id: "most-relevant", text: "Most relevant"}
+                , {id: "most-recent", text: "Most recent"}
+            ]},
+        {id: "article_types", multiple: true, name: "Article types", type: "dropdown"
+            , fields: [
+                {id: "autobiography", text: "Autobiography", selected: true}
+            ]},
+        {id: "journals", multiple: true, name: "Journals", type: "dropdown"
+            , fields: [
+                {id: "classical article", text: "Classical Article", selected: true}
+            ]}
+    ]}
+
 var options_pubmed = {
     dropdowns: [
         {id: "time_range", multiple: false, name: "Time Range", type: "dropdown"
