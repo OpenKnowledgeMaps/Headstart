@@ -45,7 +45,11 @@ IO.prototype = {
     },
 
     convertToFirstNameLastName: function (authors_string) {
-        var authors = authors_string.split(";");
+        var authors;
+        if (typeof authors_string === "string")
+            authors = authors_string.split(";");
+        else
+            authors = authors_string;
         
         for(var i = authors.length - 1; i >= 0; i--) {
             if(authors[i] === "") {

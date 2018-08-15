@@ -18,7 +18,11 @@ switch (data_config.service) {
         service_name = "DOAJ";
         options = options_doaj;
         break;
-		
+    case 'core':
+        service_url = data_config.server_url + "services/searchCORE.php"
+        service_name = "Core";
+        options = options_core;
+        break;
     case 'base':
         service_url = data_config.server_url + "services/searchBASE.php"
         service_name = "BASE";

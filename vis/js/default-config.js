@@ -114,7 +114,7 @@ var config = {
     credit_embed: false,
     canonical_url: null,
     
-    service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE"},
+    service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE", core: "CORE"},
 
     localization: {
         eng: {
