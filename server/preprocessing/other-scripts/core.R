@@ -72,7 +72,7 @@ get_papers <- function(query, params = list(), limit=100) {
   df$url <- unlist(lapply(df$fulltextUrls, extract_url))
   df$oa_state <- 2
   df$link <- lapply(df$fulltextUrls, get_pdf_candidates)
-  text = data.frame(matrix(nrow=nrow(res$data)))
+  text = data.frame(matrix(nrow=nrow(df)))
   names(text) <- "id"
   text$id = df$id # PROBLEM: can be NA
   text$content = paste(df$title, df$paper_abstract,
