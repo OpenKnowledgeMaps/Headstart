@@ -54,12 +54,12 @@ library(rcoreoa)
 # x$text$content
 # cat(x$text$content[1])
 get_papers <- function(query, params = list(), limit=100) {
-  params$limit <- limit
-  res <- core_articles_search(query = query, metadata = params$metadata,
-    fulltext = params$fulltext, citations = params$citations,
-    similar = params$similar, duplicate = params$duplicate,
-    urls = params$urls, faithfulMetadata = params$faithfulMetadata,
-    page = params$page, limit = params$limit, key = params$key)
+  core_query <- build_query(query, params)
+  ids <- core_advanced_search(core_query, limit=100)$data$id
+  res <- core_articles(ids, metadata = TRUE, fulltext = FALSE,
+                       citations = FALSE, similar = FALSE, urls = TRUE,
+                       extractedUrls = FALSE, faithfulMetadata = FALSE,
+                       method = "POST", parse = TRUE)
   df <- res$data
   #df$id <- NULL
   df$fullText <- NULL
@@ -79,4 +79,10 @@ get_papers <- function(query, params = list(), limit=100) {
                        df$subject, df$publisher, df$authors,
                        sep=" ")
   return(list(metadata = df, text = text))
+}
+
+build_query <- function(query, params) {
+  core_query <- data.frame(params)
+  core_query$exact_phrase <- query
+  return(core_query)
 }
