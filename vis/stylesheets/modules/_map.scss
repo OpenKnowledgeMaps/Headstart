@@ -239,6 +239,15 @@ text {
     }
 }
 
+@if $skin == 'viper' {
+    .scale-toolbar .dropdown {
+        display: inline-block;
+    }
+    
+    #curr-scale-explanation {
+        padding: 0 0 0 10px;
+    }
+}
 @if $skin == 'cris_vis' {
 
     .scale-toolbar {

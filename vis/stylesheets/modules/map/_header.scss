@@ -56,6 +56,14 @@
     white-space: nowrap;
 }
 
+#infolink {
+    margin-left: 5px;
+}
+
+#context-scale-toolbar #infolink {
+    margin-left: 0px;
+}
+
 #subdiscipline_title h4 b {
     margin-right: 5px;
 }
@@ -115,4 +123,8 @@
         border-bottom: 3px solid $okm-modal-btn;
         color: $okm-modal-btn;
     }
+    
+    #infolink {
+    margin-left: 0px;
+}
 }
