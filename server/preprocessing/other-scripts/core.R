@@ -55,23 +55,23 @@ library(rcoreoa)
 # cat(x$text$content[1])
 get_papers <- function(query, params = list(), limit=100) {
   core_query <- build_query(query, params)
-  ids <- core_advanced_search(core_query, limit=100)$data$id
+  ids <- core_advanced_search(core_query, limit=110)$data$id
   res <- core_articles(ids, metadata = TRUE, fulltext = FALSE,
                        citations = FALSE, similar = FALSE, urls = TRUE,
                        extractedUrls = FALSE, faithfulMetadata = FALSE,
                        method = "POST", parse = TRUE)
   df <- res$data
-  #df$id <- NULL
-  df$fullText <- NULL
-
+  df <- df[which(df$id!="NA"),]
   # rename columns
   names(df)[names(df) == "description"] <- "paper_abstract"
   names(df)[names(df) == "subjects"] <- "subject"
 
   # make subject a single character string, semicolon separated
   df$subject <- vapply(df$subject, function(z) paste0(z, collapse = "; "), "")
-  #text <- data.frame(id = res$data$id, content = res$data$fullText,
-  #  stringsAsFactors = FALSE)
+  df$authors <- vapply(df$authors, function(z) paste0(z, collapse = ", "), "")
+  df$url <- unlist(lapply(df$fulltextUrls, extract_url))
+  df$oa_state <- 2
+  df$link <- lapply(df$fulltextUrls, get_pdf_candidates)
   text = data.frame(matrix(nrow=nrow(res$data)))
   names(text) <- "id"
   text$id = df$id # PROBLEM: can be NA
@@ -85,4 +85,26 @@ build_query <- function(query, params) {
   core_query <- data.frame(params)
   core_query$exact_phrase <- query
   return(core_query)
+}
+
+extract_url <- function(x){
+  x = x[which(unlist(lapply(x, function(x){!grepl('.pdf', x)})))]
+  if (length(x) <= 2) {
+    return(x[2])
+  } else if (grepl("http://creativecommons.org/licenses", x[2]) && length(x) >= 3) {
+    return(x[3])
+  } else if (!grepl("http://creativecommons.org/licenses", x[2]) && length(x) >= 2) {
+    return(x[2])
+  } else {
+    return(x[1])
+  }
+}
+
+get_pdf_candidates <- function(x){
+  x = x[which(unlist(lapply(x, function(x){grepl('.pdf', x)})))]
+  if (length(x) > 0) {
+    return(x)
+  } else (
+    return(list())
+  )
 }
