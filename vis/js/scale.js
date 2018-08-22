@@ -72,12 +72,12 @@ class Scale {
       let explanation = d3.select(".toolbar .legend");
       
       if(type === "none") {
-          explanation.style("visibility", "hidden")
-          legend.style("visibility", "hidden");
+          explanation.style("display", "none")
+          legend.style("display", "none");
           return;
       }
       
-      explanation.style("visibility", "visible")
+      explanation.style("display", "none")
       
       let overall_context = context.distributions_all[type];
       
