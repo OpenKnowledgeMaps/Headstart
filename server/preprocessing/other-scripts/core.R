@@ -73,6 +73,7 @@ get_papers <- function(query, params = list(), limit=100) {
   df$oa_state <- 2
   df$link <- lapply(df$fulltextUrls, get_pdf_candidates)
   df$year <- unlist(lapply(df$datePublished, function(x){substr(x, 1, 10)}))
+  df$published_in <- ""
   text = data.frame(matrix(nrow=nrow(df)))
   names(text) <- "id"
   text$id = df$id # PROBLEM: can be NA
