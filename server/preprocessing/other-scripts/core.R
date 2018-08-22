@@ -55,7 +55,7 @@ library(rcoreoa)
 # cat(x$text$content[1])
 get_papers <- function(query, params = list(), limit=100) {
   core_query <- build_query(query, params)
-  ids <- core_advanced_search(core_query, limit=110)$data$id
+  ids <- core_advanced_search(core_query, limit=100)$data$id
   res <- core_articles(ids, metadata = TRUE, fulltext = FALSE,
                        citations = FALSE, similar = FALSE, urls = TRUE,
                        extractedUrls = FALSE, faithfulMetadata = FALSE,
