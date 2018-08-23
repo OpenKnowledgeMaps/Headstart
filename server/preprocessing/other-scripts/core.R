@@ -86,6 +86,12 @@ get_papers <- function(query, params = list(), limit=100) {
 build_query <- function(query, params) {
   core_query <- data.frame(params)
   core_query$exact_phrase <- query
+  core_query$year_from <- substr(params["from"], 1, 4)
+  core_query$year_to <- substr(params["to"], 1, 4)
+  valid_params <- c("all_of_the_words", "exact_phrase", "at_least_one_of_the_words",
+                    "without_the_words", "find_those_words", "author", "publisher",
+                    "repository", "doi", "year_from", "year_to", "language")
+  core_query <- core_query[which(names(core_query) %in% valid_params)]
   return(core_query)
 }
 
