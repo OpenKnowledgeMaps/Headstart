@@ -33,7 +33,21 @@ library("xml2")
 # Examples:
 # get_papers(query = "ecology")
 # get_papers(query = "ecology", params = list(from = "2016/04/01", to = "2016/06/05"))
+
+
+if(exists("DEBUG") && DEBUG == TRUE) {
+  logLevel <- "DEBUG"
+} else {
+  logLevel <- "INFO"
+}
+
+getLogger()$addHandler(writeToFile, file=Sys.getenv("OKM_LOGFILE"), level=logLevel)
+plog <- getLogger('api.pubmed')
+
+
 get_papers <- function(query, params = NULL, limit = 100) {
+  plog$info(query)
+  start.time <- Sys.time()
 
   fields <- c('.//ArticleTitle', './/MedlineCitation/PMID', './/Title', './/Abstract')
   year = './/Article/Journal/JournalIssue/PubDate'
@@ -53,7 +67,8 @@ get_papers <- function(query, params = NULL, limit = 100) {
   #HOTFIX - article_types cause a 414 with PubMed
   #query <- paste0(query, article_types_string, exclude_articles_with_abstract)
   query <- paste0(query, exclude_articles_with_abstract)
-  x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit, 
+  plog$info(query)
+  x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit,
                               mindate = from, maxdate = to, sort=sortby, use_history=TRUE)
   res <- rentrez::entrez_fetch(db = "pubmed", web_history = x$web_history, retmax = limit, rettype = "xml")
   xml <- xml2::xml_children(xml2::read_xml(res))
@@ -73,7 +88,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
     xdate <- paste0(vapply(xml2::xml_children(xml2::xml_find_all(z, date)), function(a) {
       xtext(a)
     }, ""), collapse = "-")
-    
+
     year_fld <- switch(
       xml2::xml_name(z),
       PubmedArticle = year,
@@ -87,7 +102,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
         substr(xtext(xml2::xml_find_first(a, ".//MedlineDate")),0,4)
       }
     }, "")
-    
+
     xauthors <- paste0(vapply(xml2::xml_children(xml2::xml_find_all(z, authors)), function(a) {
       if(!is.na(xml2::xml_find_first(a, ".//CollectiveName"))) {
         xtext(xml2::xml_find_first(a, ".//CollectiveName"))
@@ -132,6 +147,10 @@ get_papers <- function(query, params = NULL, limit = 100) {
   }
 
   df$pmcid = pmc_ids
+
+  end.time <- Sys.time()
+  time.taken <- end.time - start.time
+  plog$info(paste("Time taken:", time.taken, sep=" "))
 
   return(list(metadata = df, text = df[,c('id', 'content')]))
 }

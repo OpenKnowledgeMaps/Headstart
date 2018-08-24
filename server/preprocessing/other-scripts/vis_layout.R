@@ -1,3 +1,4 @@
+library(logging)
 library(GMD)
 library(MASS)
 library(ecodist)
@@ -12,7 +13,14 @@ library(stringdist)
 registerDoParallel(3)
 
 
-debug = FALSE
+if(exists("DEBUG") && DEBUG == TRUE) {
+  logLevel <- "DEBUG"
+} else {
+  logLevel <- "INFO"
+}
+
+getLogger()$addHandler(writeToFile, file=Sys.getenv("OKM_LOGFILE"), level=logLevel)
+vlog <- getLogger('vis')
 
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
@@ -20,6 +28,7 @@ debug = FALSE
 vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english",
                        add_stop_words=NULL, testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
 
+  start.time <- Sys.time()
 
   tryCatch({
    if(!isTRUE(testing)) {
@@ -41,22 +50,25 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
 
   stops <- get_stopwords(lang, add_stop_words, testing)
 
-  print("calc matrix")
+  vlog$debug("calc matrix")
   res <- create_corpus(metadata, text, stops)
   corpus <- res$corpus
   corpus_unstemmed <- res$corpus_unstemmed
   metadata_full_subjects = replace_keywords_if_empty(corpus, metadata, stops)
   tdm_matrix <- create_tdm_matrix(corpus)
 
-  print("normalize matrix")
+  vlog$debug("normalize matrix")
   normalized_matrix <- normalize_matrix(tdm_matrix);
 
-  print("create clusters")
+  vlog$debug("create clusters")
   clusters <- create_clusters(normalized_matrix, max_clusters=max_clusters);
   named_clusters <- create_cluster_labels(clusters, metadata_full_subjects, weightingspec="ntn", top_n=3, stops=stops, taxonomy_separator)
   layout <- create_ordination(normalized_matrix, maxit=500, mindim=2, maxdim=2)
   output <- create_output(named_clusters, layout, metadata_full_subjects)
 
+  end.time <- Sys.time()
+  time.taken <- end.time - start.time
+  vlog$info(paste("Time taken:", time.taken, sep=" "))
   return(output)
 
 }

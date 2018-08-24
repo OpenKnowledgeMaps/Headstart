@@ -1,3 +1,4 @@
+vpplog <- getLogger('vis.postprocess')
 
 create_output <- function(clusters, layout, metadata) {
 
@@ -23,7 +24,7 @@ create_output <- function(clusters, layout, metadata) {
 
   output_json = toJSON(output)
 
-  if(debug == TRUE) {
+  if(exists("DEBUG") && DEBUG == TRUE) {
     # Write output to file
     file_handle = file("output_file.csv", open="w")
     write.csv(output, file=file_handle, row.names=FALSE)

@@ -1,3 +1,5 @@
+vplog <- getLogger('vis.preprocess')
+
 
 get_stopwords <- function(lang, add_stop_words, testing) {
   stops <- stopwords(lang)
@@ -62,13 +64,13 @@ deduplicate_titles <- function(metadata, list_size) {
   remove_ids <- which(apply(duplicates, 2, FUN=function(x){any(x)}))
   output = ids[remove_ids]
 
-  print(paste0("Number of max. duplicate entries: ", length(output)))
+  vplog$info(paste0("Number of max. duplicate entries: ", length(output)))
 
   if(max_replacements > -1) {
     output = head(output, max_replacements)
   }
 
-  print(paste0("Number of duplicate entries: ", length(output)))
+  vplog$info(paste0("Number of duplicate entries: ", length(output)))
 
   return(output)
 

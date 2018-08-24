@@ -1,4 +1,4 @@
-
+vslog <- getLogger('vis.summarize')
 
 SplitTokenizer <- function(x) {
   tokens = unlist(lapply(strsplit(words(x), split=";"), paste), use.names = FALSE)
