@@ -73,11 +73,11 @@ class Scale {
       
       if(type === "none") {
           explanation.style("display", "none")
-          legend.style("display", "none");
+          legend.style("visibility", "hidden");
           return;
       }
       
-      explanation.style("display", "none")
+      explanation.style("visibility", "visible")
       
       let overall_context = context.distributions_all[type];
       
