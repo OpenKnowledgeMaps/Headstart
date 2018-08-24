@@ -77,3 +77,10 @@ img#close-button {
         width: 40px;
     }
 }
+
+@if ($skin == "cris_vis") {
+    #searchclear {
+        right: 8px;
+        bottom: 0px;
+    }
+}

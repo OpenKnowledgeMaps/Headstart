@@ -27,6 +27,7 @@
     display: none;
     font-family: $link-font-family;
 }
+
 #filter_parameter_container .dropdown-menu, #sort_container .dropdown-menu {
     width: 140px !important;
     min-width:140px;
@@ -126,5 +127,45 @@
 
     #filter_params, #sort {
         margin-bottom: 0px;
+    }
+}
+
+@if $skin == 'cris_vis' {
+
+    #filter_container {
+        vertical-align: top;
+        float: left;
+        display: block;
+    }
+    #filter_parameter_container {
+        vertical-align: top;
+        float: right;
+        display: block;
+    }
+
+    #sort_container {
+        vertical-align: top;
+        float: right;
+        display: none;
+    }
+
+    #filter_container input {
+        margin-bottom: 0px;
+        margin-right: 0px;
+    }
+    
+    #explorer_options {
+        border-bottom: 2px solid #EAEAEE;
+    }
+
+    @media screen and (max-width: 1000px) {
+        #sort_container {
+            float: none;
+            margin-top: 10px;
+        }
+
+        #filter_container {
+            float: none;
+        }
     }
 }

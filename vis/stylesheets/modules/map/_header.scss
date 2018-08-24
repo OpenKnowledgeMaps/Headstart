@@ -13,7 +13,7 @@
         font-weight: $fontweight400;
     }
 
-    #area-not-bold, #area-bold {
+    #area-not-bold, #area-bold, #infolink-areas {
         position: relative;
         z-index: 3;
     }
@@ -48,12 +48,24 @@
     font-weight: $fontweight700;
 }
 
-#infolink {
+#infolink, #infolink-areas {
     color: $infolink;
     font-weight: $fontweight400;
-    margin-left: 5px;
     font-size: 12px;
     text-decoration: none;
+    white-space: nowrap;
+}
+
+#infolink {
+    margin-left: 5px;
+}
+
+#context-scale-toolbar #infolink {
+    margin-left: 0px;
+}
+
+#subdiscipline_title h4 b {
+    margin-right: 5px;
 }
 
 #whatsthis {
@@ -62,6 +74,7 @@
 }
 
 #infolink:hover, #infolink:focus, #infolink:active {
+    text-decoration: none;
     color: $black;
 }
 
@@ -72,7 +85,6 @@
 }
 
 @media screen and (max-width: 640px) {
-
     #subdiscipline_title {
         padding-left: 20px;
         font-size: 14px;
@@ -91,4 +103,28 @@
     #infolink:hover, #infolink:focus, #infolink:active {
         border-bottom: 3px solid $framed-item;
     }
+}
+
+@if $skin == 'cris_vis' {
+    #infolink, #infolink-areas {
+        //border: 1px solid $infolink;
+        //padding: 5px;
+        //border-radius: 5px;
+        color: $okm-modal-btn;
+        font-weight: 400;
+        font-size: 12px;
+        //text-transform: uppercase;
+        //vertical-align: middle;
+        text-decoration: none;
+        border-bottom: 1px solid $okm-modal-btn;
+    }
+
+    #infolink:hover, #infolink:focus, #infolink:active, #infolink-areas:hover, #infolink-areas:focus, #infolink-areas:active{
+        border-bottom: 3px solid $okm-modal-btn;
+        color: $okm-modal-btn;
+    }
+    
+    #infolink {
+    margin-left: 0px;
+}
 }

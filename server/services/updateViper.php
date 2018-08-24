@@ -147,9 +147,10 @@ function runUpdate($acronymtitle, $params) {
   $decoded_params = decodeParams($params);
   $post_params = $decoded_params[0];
   $param_types = $decoded_params[1];
+  $params_for_id = array("project_id", "funder");
   $result = search("openaire", $acronymtitle,
                                      $params, $param_types,
-                                     ";", null, false, false);
+                                     ";", null, false, false, $params_for_id);
   echo $result;
 }
 

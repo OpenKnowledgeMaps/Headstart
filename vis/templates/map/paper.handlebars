@@ -5,10 +5,18 @@
            <p id="open-access-logo">&#xf09c;</p>
             <p id="dataset-icon"><span id="dataset-icon_list" class="fa fa-database"></span></p> 
         </div>
+        <p id="paper_visual_distributions"></p>
     <p id="title" class="highlightable">
     {{{ d.title }}}<br /></p>
         <p id="details" class="highlightable">{{{ d.authors_string }}}</p>
-        <p id="in">in <span class="highlightable">{{{ d.published_in }}} <span class="pubyear">({{{ d.year }}})</span></span></p>
+    <p id="in">
+    {{#if d.published_in}}
+        in <span class="highlightable">{{{ d.published_in }}} 
+    {{/if}}
+    {{#if d.year}}
+        <span class="pubyear">({{{ d.year }}})</span></span>
+    {{/if}}
+    </p>
     </div>
     <div class="readers">
         <p id="readers"><span id="num-readers">{{{ d.num_readers }}}</span><span class="readers_entity"> {{{ base_unit }}}</span></p>

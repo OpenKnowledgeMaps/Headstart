@@ -9,6 +9,8 @@ import config from 'config';
 import { mediator } from 'mediator';
 import { toFront } from 'helpers';
 import { canvas } from 'canvas';
+import { updateTags } from 'helpers';
+import { io } from 'io';
 
 const paperTemplate = require("templates/map/paper.handlebars");
 
@@ -284,6 +286,22 @@ papers.prepareForeignObject = function (nodes) {
     $(".metadata #details").hyphenate("en");
     $(".metadata #in").hyphenate("en");
 };
+
+papers.updateVisualDistributions = function(attribute, context) {
+    let articles = d3.selectAll("#article_metadata")
+    let  article_data = articles.data();
+    for(let i in article_data) {           
+        let d = article_data[i];
+
+        let overall_context = context.distributions_all[attribute];
+        let current_context = context.distributions_papers[d.id][attribute];
+
+        let paper_visual_distributions = d3.select(articles[0][i]).select("#paper_visual_distributions");
+        let visible_tags = (mediator.is_zoomed)?(true):(false);
+        updateTags(current_context, overall_context, paper_visual_distributions, attribute, visible_tags);
+    }
+};
+        
 
 
 // create the path or "border" for papers
@@ -591,7 +609,7 @@ papers.enlargePaper = function (d, holder_div) {
         return;
     }
 
-    mediator.publish("record_action", d.id, "enlarge_paper", config.user_id, d.bookmarked + " " + d.recommended, null);
+    mediator.publish("record_action", d.title, "Paper", "enlarge", config.user_id, d.bookmarked + " " + d.recommended, null);
 
     let resize_factor = 1.2;
 
@@ -636,7 +654,7 @@ papers.enlargePaper = function (d, holder_div) {
 
                     d.paper_selected = true;
                     mediator.current_enlarged_paper = d;
-                    mediator.publish("record_action", d.id, "click_on_paper", config.user_id, d.bookmarked + " " + d.recommended, null);
+                    mediator.publish("record_action", d.title, "Paper", "click", config.user_id, d.bookmarked + " " + d.recommended, null);
                     d3.event.stopPropagation();
                 }
             })
@@ -670,7 +688,7 @@ papers.currentbubble_click = function (d) {
     }
 
     mediator.current_enlarged_paper = null;
-    mediator.publish("record_action", d.id, "click_paper_list_enlarge", config.user_id, d.bookmarked + " " + d.recommended, null);
+    mediator.publish("record_action", d.title, "Paper", "click", config.user_id, d.bookmarked + " " + d.recommended, null);
 
     d3.event.stopPropagation();
 };
