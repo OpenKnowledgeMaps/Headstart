@@ -13,6 +13,7 @@ service <- "pubmed"
 params <- NULL
 params_file <- "params_pubmed.json"
 
+source('../utils.R')
 source("../vis_layout.R")
 source('../pubmed.R')
 
