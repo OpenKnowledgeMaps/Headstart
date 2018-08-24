@@ -23,13 +23,11 @@ vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, max
 
   tryCatch({
    if(!isTRUE(testing)) {
-     source('utils.R')
      source('preprocess.R')
      source('cluster.R')
      source('summarize.R')
      source('postprocess.R')
    } else {
-     source('../utils.R')
      source('../preprocess.R')
      source('../cluster.R')
      source('../summarize.R')

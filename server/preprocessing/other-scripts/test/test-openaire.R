@@ -15,6 +15,7 @@ service <- "openaire"
 params <- NULL
 params_file <- "params_openaire.json"
 
+source('../utils.R')
 source("../vis_layout.R")
 source('../openaire.R')
 source('../altmetrics.R')
