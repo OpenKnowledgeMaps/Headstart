@@ -35,14 +35,14 @@ export function hideSibling(circle) {
 export function debounce(func, wait, immediate) {
     var timeout;
     return function () {
-        var context = this,
+        let context = this,
                 args = arguments;
-        var later = function () {
+        let later = function () {
             timeout = null;
             if (!immediate)
                 func.apply(context, args);
         };
-        var callNow = immediate && !timeout;
+        let callNow = immediate && !timeout;
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
         if (callNow)
@@ -166,6 +166,40 @@ export function getRealHeight(element) {
         element.html(html);
     }
     return height;
+}
+
+export function updateTags(current_context, overall_context, div, attribute, display) {
+    div.html("");
+    if(attribute === "none") return;
+       
+    for(let element in current_context) {
+        let statistic = current_context[element];
+
+        if(statistic.share <= 0) {
+            continue;
+        }
+
+        div
+        .style("display", function () { return ((display)?("block"):("none")) })
+        .append("span")
+            .html(statistic.id)
+            .attr("class", function () {
+                let overall_statistic = overall_context.filter(function (el) {
+                    return statistic.id === el.id;
+                });
+
+                let current_overall_statistic = overall_statistic[0];
+
+                if (statistic.share <= current_overall_statistic.share) {
+                    return "lower_value";
+                } else {
+                    return "higher_value"
+                }
+
+            })
+            .attr("title", statistic.name)
+    }
+
 }
 
 // functions which are not being called at the moment, but might

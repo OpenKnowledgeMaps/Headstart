@@ -14,6 +14,7 @@ var IO = function() {
     this.num_oa;
     this.num_papers;
     this.num_datasets;
+    this.data;
 };
 
 IO.prototype = {
@@ -42,6 +43,20 @@ IO.prototype = {
             d3[config.input_format](mediator.current_bubble.file, callback);
           }
         });
+    },
+    
+    get_data: function(csv) {
+        var self = this;
+        
+        if (config.show_context) {
+            if(typeof csv.data === "object") {
+                self.data = csv.data;
+            } else {
+                self.data = JSON.parse(csv.data);
+            }
+        } else {
+            self.data = csv;
+        }
     },
 
     convertToFirstNameLastName: function (authors_string) {
@@ -188,8 +203,19 @@ IO.prototype = {
                      return +d[metric];
                  }
             }
+            
+            var prepareSubMetric = function(d, metric) {
+                let num = 0;
+                d.paper_abstract.forEach(function (element) {
+                    num += +element.readers;
+                })
+                return num;
+            }
 
-            if (config.content_based === false && !(config.scale_by)) {
+            if (config.list_sub_entries) {
+                d.num_readers = prepareSubMetric(d, "readers");
+                d.internal_readers = d.num_readers + 1;
+            } else if (config.content_based === false && !(config.scale_by)) {
                 d.num_readers = prepareMetric(d, "readers");
                 d.internal_readers = prepareInternalMetric(d, "readers") + 1;
             } else if (config.scale_by) {
@@ -198,6 +224,16 @@ IO.prototype = {
             } else {
                 d.num_readers = 0;
                 d.internal_readers = 1;
+            }
+            
+            d.num_subentries = 0;
+            
+            if (config.list_sub_entries) {
+                d.abstract_search = "";
+                d.paper_abstract.forEach(function(obj) {
+                    d.abstract_search += obj.abstract + " ";
+                    d.num_subentries++;
+                })
             }
             
             if (typeof highlight_data != 'undefined' && highlight_data !== null) {

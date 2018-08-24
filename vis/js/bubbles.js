@@ -5,7 +5,7 @@ import StateMachine from 'javascript-state-machine';
 import config from 'config';
 import { mediator } from 'mediator';
 import { papers} from 'papers';
-import { toBack, toFront, hideSibling} from 'helpers';
+import { toBack, toFront, hideSibling, updateTags} from 'helpers';
 import { canvas } from 'canvas';
 
 const bubbleTemplate = require('templates/map/bubble.handlebars');
@@ -131,11 +131,11 @@ BubblesFSM.prototype = {
         d3.selectAll("#headstart-chart circle").on("mouseover", function (d) {
             if (!this_bubble_fsm.is("hoverbig")) {
                 mediator.publish("bubble_mouseover", d, this, this_bubble_fsm);
-                mediator.publish("record_action", d.id, "circle_mouseover", config.user_id, "none", null);
+                mediator.publish("record_action", d.title, "Bubble", "mouseover", config.user_id, "none", null);
             }
         }).on("mouseout", function (d) {
             mediator.publish("bubble_mouseout", d, this, this_bubble_fsm);
-            mediator.publish("record_action", d.id, "circle_mouseout", config.user_id, "none", null);
+            mediator.publish("record_action", d.title, "Bubble", "mouseout", config.user_id, "none", null);
         });
 
         if (mediator.is_in_normal_mode) {
@@ -351,6 +351,20 @@ BubblesFSM.prototype = {
                     return bubbleTemplate(d);
                 });
     },
+    
+    updateVisualDistributions: function(attribute, context) {
+        let bubble_frames = d3.selectAll("g.bubble_frame")
+        let  bubble_data = bubble_frames.data();
+        for(let i in bubble_data) {           
+            let d = bubble_data[i];
+            
+            let current_context = context.distributions_areas[d.area_uri][attribute];
+            let overall_context = context.distributions_all[attribute];
+            
+            let area_visual_distributions = d3.select(bubble_frames[0][i]).select("#area_visual_distributions");
+            updateTags(current_context, overall_context, area_visual_distributions, attribute, true);
+        }
+    },
 
     zoom: function (d) {
         var previous_zoom_node = mediator.current_zoom_node;
@@ -423,8 +437,15 @@ BubblesFSM.prototype = {
                 .on("mouseover", null)
                 .on("mouseout", null);
 
-
-        $("#subdiscipline_title h4").html('<span id="area-bold">'+config.localization[config.language].area + ":</span> " + '<span id="area-not-bold">' + d.title + "</span>" );
+        let subdiscipline_title_h4 = $("#subdiscipline_title h4")
+                                            .html('<span id="area-bold">'+config.localization[config.language].area + ":</span> " + '<span id="area-not-bold">' + d.title + "</span>" );
+        if (config.show_infolink_areas) {
+            let infolink_html = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink-areas"></a>';
+            subdiscipline_title_h4.append(infolink_html);
+            $("#infolink-areas").html('<span id="whatsthis">' + config.localization[config.language].intro_icon 
+                    + '</span> ' + config.localization[config.language].intro_label_areas)
+        }
+        
         $("#subdiscipline_title").dotdotdot();
         $("#context").css("visibility", "hidden");
 
@@ -486,7 +507,7 @@ BubblesFSM.prototype = {
 
         mediator.current_bubble.createTransition(t, d.title);
 
-        mediator.publish("record_action", d.id, "zoom_in", config.user_id, "none", null);
+        mediator.publish("record_action", d.title, "Bubble", "zoomin", config.user_id, "none", null);
 
         d3.event.stopPropagation();
 
@@ -516,9 +537,9 @@ BubblesFSM.prototype = {
             toFront(mediator.current_zoom_node.parentNode);
 
             var circle_data = d3.select(mediator.current_zoom_node).data();
-            mediator.publish("record_action", circle_data.id, "zoom_out", config.user_id, "none", null);
+            mediator.publish("record_action", circle_data.title, "Bubble", "zoomout", config.user_id, "none", null);
         } else {
-            mediator.publish("record_action", "none", "zoom_out", config.user_id, "none", null);
+            mediator.publish("record_action", "none", "Bubble", "zoomout", config.user_id, "none", null);
         }
 
         if (mediator.current_enlarged_paper !== null) {
@@ -761,7 +782,7 @@ BubblesFSM.prototype = {
             this.draw();
             this.initMouseListeners();
         }
-        mediator.publish("record_action", "none", "start", config.user_id, "start_bubble", null, null, recommendation_data);
+        mediator.publish("record_action", config.title, "Map", "start", config.user_id, "start_bubble", null, null, recommendation_data);
     },
 
     onbeforemouseover: function () {
