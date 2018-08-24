@@ -1,4 +1,34 @@
 
+get_stopwords <- function(lang, add_stop_words, testing) {
+  stops <- stopwords(lang)
+
+  if (!is.null(add_stop_words)){
+    if (isTRUE(testing)) {
+      add_stop_path <- paste0("../../resources/", add_stop_words, ".stop")
+    } else {
+      add_stop_path <- paste0("../resources/", add_stop_words, ".stop")
+    }
+    additional_stops <- scan(add_stop_path, what="", sep="\n")
+    stops = c(stops, additional_stops)
+  }
+  return(stops)
+}
+
+
+filter_duplicates <- function(metadata, text, list_size) {
+  #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
+  if(list_size > -1) {
+    output = deduplicate_titles(metadata, list_size)
+    text = subset(text, !(id %in% output))
+    metadata = subset(metadata, !(id %in% output))
+
+    text = head(text, list_size)
+    metadata = head(metadata, list_size)
+  }
+  return(list(metadata=metadata, text=text))
+}
+
+
 deduplicate_titles <- function(metadata, list_size) {
   output <- c()
 
@@ -44,7 +74,7 @@ deduplicate_titles <- function(metadata, list_size) {
 
 }
 
-create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
+create_corpus <- function(metadata, text, stops) {
   m <- list(content = "content", id = "id")
 
   myReader <- readTabular(mapping = m)
@@ -56,21 +86,21 @@ create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
   corpus <- tm_map(corpus, content_transformer(tolower))
   corpus <- tm_map(corpus, removeWords, stops)
   corpus <- tm_map(corpus, stripWhitespace)
-  metadata_full_subjects <- replace_keywords_if_empty(corpus, metadata, stops)
   corpus_unstemmed = corpus
 
   corpus <- tm_map(corpus, stemDocument)
-  tdm <- TermDocumentMatrix(corpus)
 
+  return(list(corpus = corpus, corpus_unstemmed = corpus_unstemmed))
+}
+
+create_tdm_matrix <- function(corpus, sparsity=1) {
+  tdm <- TermDocumentMatrix(corpus)
   if(sparsity < 1) {
     tdm <- removeSparseTerms(tdm, sparsity)
   }
-
   tdm_matrix = t(as.matrix(tdm))
-
-  return(list(tdm_matrix = tdm_matrix, metadata_full_subjects = metadata_full_subjects))
+  return(tdm_matrix)
 }
-
 
 replace_keywords_if_empty <- function(corpus, metadata, stops) {
 
