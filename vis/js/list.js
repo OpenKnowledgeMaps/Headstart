@@ -234,16 +234,18 @@ list.fit_list_height = function() {
         $(".container-headstart").css({
             "min-width": "300px"
         });
-        paper_list_avail_height = available_height - $("#explorer_header").height() - (($("#toolbar").height() > 0)?(0):(PAPER_LIST_CORRECTION));
+        paper_list_avail_height = available_height - $("#explorer_header").outerHeight(true);
     } else {
         paper_list_avail_height = 
-                $("#subdiscipline_title").outerHeight(true) 
+                $("#subdiscipline_title").outerHeight(true)
                     + $("#headstart-chart").outerHeight(true)
-                    - $("#show_hide_button").outerHeight(true) 
-                    - $("#explorer_options").outerHeight(true)
+                    - $("#explorer_header").outerHeight(true)
                     + ($(".legend").outerHeight(true) || 0)
-                    - (($("#toolbar").height() > 0)?(0):(PAPER_LIST_CORRECTION));
+                    - (($("#toolbar").height() > 0)?(0):(PAPER_LIST_CORRECTION))
+                    //TODO: Hack for VIPER
+                    + ((config.language === "eng_openaire")?(10):(0));
     }
+    console.log($("#context").css("padding-bottom"));
     $("#papers_list").height(paper_list_avail_height);
 };
 
