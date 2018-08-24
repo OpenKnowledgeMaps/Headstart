@@ -48,26 +48,18 @@ create_tdm_matrix <- function(metadata, text, stops, sparsity=1) {
   m <- list(content = "content", id = "id")
 
   myReader <- readTabular(mapping = m)
-
   (corpus <- Corpus(DataframeSource(text), readerControl = list(reader = myReader)))
 
   # Replace non-convertible bytes in with strings showing their hex codes, see http://tm.r-forge.r-project.org/faq.html
   corpus <- tm_map(corpus,  content_transformer(function(x) iconv(enc2utf8(x), sub = "byte")))
-
   corpus <- tm_map(corpus, removePunctuation)
-
   corpus <- tm_map(corpus, content_transformer(tolower))
-
   corpus <- tm_map(corpus, removeWords, stops)
-
   corpus <- tm_map(corpus, stripWhitespace)
-
   metadata_full_subjects <- replace_keywords_if_empty(corpus, metadata, stops)
-
   corpus_unstemmed = corpus
 
   corpus <- tm_map(corpus, stemDocument)
-
   tdm <- TermDocumentMatrix(corpus)
 
   if(sparsity < 1) {
