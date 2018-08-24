@@ -237,3 +237,25 @@
     border: 1px green solid;
     background-color: green;
 }
+
+#paper_visual_distributions {
+    display:none;
+    white-space: nowrap;
+}
+
+@if $skin == 'cris_vis' {
+    .paper_holder {
+        .large {
+            font-size: 12px;
+            padding: 5px 0px 0px 10px;
+            line-height: 120%;
+        }
+
+        .larger {
+            font-size: 16px;
+            padding: 5px 0px 0px 10px;
+            line-height: 120%;
+            //font-weight: $fontweight700;
+        }
+    }
+}

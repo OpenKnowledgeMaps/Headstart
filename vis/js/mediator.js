@@ -15,7 +15,9 @@ const iFrameTemplate = require("templates/modals/iframe_modal.handlebars");
 const imageTemplate = require("templates/modals/images_modal.handlebars");
 const viperEditTemplate = require("templates/modals/viper_edit_modal.handlebars");
 const embedTemplate = require("templates/modals/embed_modal.handlebars");
-const scaleToolbarTemplate = require("templates/toolbars/scale_toolbar.handlebars");
+const toolbarTemplate = require("templates/toolbar/toolbar.handlebars");
+const scaleToolbarTemplate = require("templates/toolbar/scale_toolbar.handlebars");
+const crisLegendTemplate = require("templates/toolbar/cris_legend.handlebars");
 
 class ModuleManager {
     constructor() {
@@ -119,6 +121,9 @@ MyMediator.prototype = {
         this.mediator.subscribe("set_area_radii", this.set_area_radii);
         this.mediator.subscribe("canvas_set_domain", this.canvas_set_domain);
         this.mediator.subscribe("update_canvas_data", this.update_canvas_data);
+        
+        //scale
+        this.mediator.subscribe("update_visual_distributions", this.update_visual_distributions);
     },
 
     init_state: function() {
@@ -226,7 +231,17 @@ MyMediator.prototype = {
     },
 
     init_start_visualization: function(highlight_data, csv) {
-        let data = (config.show_context)?(JSON.parse(csv.data)):csv;
+        let data = function () {
+            if (config.show_context) {
+                if(typeof csv.data === "string") {
+                    return JSON.parse(csv.data);
+                } else {
+                    return csv.data;
+                }
+            } else {
+                return csv;
+            }
+        }();
         let context = (config.show_context)?(csv.context):{};
         
         mediator.manager.registerModule(headstart, 'headstart');
@@ -299,8 +314,16 @@ MyMediator.prototype = {
         this.viz.append(viperEditTemplate());
         this.viz.append(embedTemplate());
         
+        this.viz.append(toolbarTemplate());
+       
+        let toolbar = $("#toolbar");
+        
+        if (config.cris_legend) {
+            toolbar.append(crisLegendTemplate());
+        }
+        
         if (config.scale_toolbar) {
-            this.viz.append(scaleToolbarTemplate({
+            toolbar.append(scaleToolbarTemplate({
                 scale_by_label: config.localization[config.language].scale_by_label,
                 credit: config.credit
             }));
@@ -390,6 +413,7 @@ MyMediator.prototype = {
         $("#map-rect").removeClass("zoomed_out").addClass('zoomed_in');
         $("#region.unframed").addClass("zoomed_in");
         $(".paper_holder").addClass("zoomed_in");
+        d3.selectAll("#paper_visual_distributions").style("display", "block")
 
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'scrollTop', []);
@@ -412,6 +436,7 @@ MyMediator.prototype = {
         $("#map-rect").removeClass("zoomed_in").addClass('zoomed_out');
         $("#region.unframed").removeClass("zoomed_in");
         $(".paper_holder").removeClass("zoomed_in");
+        d3.selectAll("#paper_visual_distributions").style("display", "none")
     },
     
     zoomout_complete: function() {
@@ -445,8 +470,8 @@ MyMediator.prototype = {
             .style("display", "none");
     },
 
-    record_action: function(id, action, user, type, timestamp, additional_params, post_data) {
-        headstart.recordAction(id, action, user, type, timestamp, additional_params, post_data);
+    record_action: function(id, category, action, user, type, timestamp, additional_params, post_data) {
+        headstart.recordAction(id, category, action, user, type, timestamp, additional_params, post_data);
     },
     
     mark_project_changed: function(id) {
@@ -460,6 +485,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'fit_list_height', []);
         mediator.manager.call('bubble', 'onWindowResize', []);
         mediator.manager.call('papers', 'onWindowResize', []);
+        mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
     },
 
     on_rect_mouseover: function() {
@@ -500,6 +526,19 @@ MyMediator.prototype = {
         mediator.current_enlarged_paper = d;
         mediator.manager.call('papers', 'framePaper', [d]);
         mediator.manager.call('list', 'count_visible_items_to_header')
+    },
+    
+    update_visual_distributions: function(type) {
+        let context = io.context;
+        
+        mediator.manager.call('bubble', 'updateVisualDistributions', [type, context]);
+        mediator.manager.call('papers', 'updateVisualDistributions', [type, context]);
+        mediator.manager.call('list', 'updateVisualDistributions', [type, context]);
+        
+        if(config.cris_legend) {
+            mediator.manager.call('scale', 'updateLegend', [type, context]);
+        }
+        mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
     }
 };
 

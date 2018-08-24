@@ -9,6 +9,7 @@ import dateFormat from 'dateformat';
 const editModalButton = require('templates/buttons/edit_button.handlebars')
 const embedModalButton = require('templates/buttons/embed_button.handlebars')
 const shareButton = require('templates/buttons/share_button.handlebars')
+const legendTemplate = require("templates/toolbar/cris_legend.handlebars");
 
 class Canvas {
     constructor() {
@@ -33,17 +34,19 @@ class Canvas {
     calcChartSize() {
         var parent_height = getRealHeight($("#" + config.tag));
         var subtitle_height = $("#subdiscipline_title").outerHeight(true);
-        var scale_toolbar_height = $(".scale-toolbar").outerHeight(true) || 0;
-        const CHART_HEIGHT_CORRECTION = 20;
+
+        var toolbar_height = $("#toolbar").outerHeight(true) || 0;
+        const CHART_HEIGHT_CORRECTION = 15;
+        const CHART_HEIGHT_CORRECTION_TOOLBAR = 10;
 
         // Set available_height and available_width
         if (parent_height === 0) {
-            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_height - scale_toolbar_height;
+            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_height - toolbar_height;
         } else {
-            this.available_height = $("#" + config.tag).height() - subtitle_height - scale_toolbar_height;
+            this.available_height = $("#" + config.tag).height() - subtitle_height - toolbar_height;
         }
 
-        this.available_height = this.available_height - CHART_HEIGHT_CORRECTION;
+        this.available_height = this.available_height - ((toolbar_height > 0)?(CHART_HEIGHT_CORRECTION_TOOLBAR):(CHART_HEIGHT_CORRECTION));
 
         if (headstart.is("timeline")) {
             var timeline_height = $(".tl-title").outerHeight(true);
@@ -182,25 +185,46 @@ class Canvas {
 
     initEventListeners() {
         d3.select(window).on("resize", () => {
+            mediator.publish("record_action", config.title, "Map", "resize", config.user_id, "resize_map", null, null, null);
             if (headstart.is("timeline")) {
                 return;
-            }
+            }   
             mediator.publish("window_resize");
         });
 
         // Info Modal Event Listener
         $('#info_modal').on('show.bs.modal', function () {
-            var current_intro = config.intro;
-            var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
-            $('#info-title').text(intro.title);
-            $('#info-body').html(intro.body);
-            if (intro.dynamic) {
-                $.each(intro.params, function (paramName, value) {
-                    if (paramName.slice(0,4) === 'html') {
-                        $('.info-modal-'+paramName).html(value)
-                    } else {
-                        value = (value === "true")?("yes"):(value);
-                        $('.info-modal-'+paramName).text(value)
+            if(!mediator.is_zoomed) {
+                mediator.publish("record_action", config.title, "Map", "open_info_modal", config.user_id, "open_info_modal", null, null, null);
+                var current_intro = config.intro;
+                var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
+                $('#info-title').text(intro.title);
+                $('#info-body').html(intro.body);
+                if (intro.dynamic) {
+                    $.each(intro.params, function (paramName, value) {
+                        if (paramName.slice(0,4) === 'html') {
+                            $('.info-modal-'+paramName).html(value)
+                        } else {
+                            value = (value === "true")?("yes"):(value);
+                            $('.info-modal-'+paramName).text(value)
+                        }
+                    })
+                }
+            } else {
+                let d = d3.select(mediator.current_zoom_node).datum();
+                mediator.publish("record_action", d.title, "Bubble", "open_info_modal", config.user_id, "open_info_modal", null, null, null);
+                $('#info-body').html("");
+                $('#info-title').text(config.localization[config.language].intro_areas_title + d.title);
+                config.scale_types.forEach(function(item, index) {
+                    if(item !== "none") {
+                        let info_body = d3.select('#info-body')
+                        info_body.append("h5").html(index + ". " + config.scale_label[item]);
+                        info_body.append('div')
+                                    .attr('class', 'statistics-image')
+                                 .append('img')
+                                    .attr('class', 'image-area-statistics')
+                                    .attr('src', './img/' + d.area_uri + '_' + item + '.svg')
+                        info_body.append('div').html(legendTemplate)
                     }
                 })
             }
@@ -279,11 +303,8 @@ class Canvas {
             let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
             subdiscipline_title_h4.append(infolink);
 
-            if(config.infolink_style === "viper") {
-                $("#infolink").text(config.localization[config.language].intro_label)
-            } else {
-                $("#infolink").html(config.localization[config.language].intro_label + ' <span id="whatsthis">&#xf05a;</span>');
-            }
+            $("#infolink").html('<span id="whatsthis">' + config.localization[config.language].intro_icon  
+                        +'</span> ' + config.localization[config.language].intro_label);
         }
 
         if (config.show_timeline) {
@@ -346,11 +367,13 @@ class Canvas {
             $(".sharebutton")
                 .on('click', (event) => {
                     event.preventDefault();
-                    
                     $(".sharebuttons").toggle(0, function () {
                         if ($(this).is(':visible')) {
+                            mediator.publish("record_action", config.title, "Map", "open_share_buttons", config.user_id, "open_share_buttons", null, null, null);
                             $(this).css('display','inline-block');
                             $("#sharebutton").focus();
+                        } else {
+                            mediator.publish("record_action", config.title, "Map", "close_share_buttons", config.user_id, "close_share_buttons", null, null, null);
                         }
                     });
                 })
@@ -364,6 +387,7 @@ class Canvas {
             $('#embed-button').text(config.localization[config.language].embed_button_text)
             .on('click', (event) => {
                 event.preventDefault();
+                mediator.publish("record_action", config.title, "Map", "open_embed_modal", config.user_id, "open_embed_modal", null, null, null);
                 let embedString = $('#embed-modal-text')[0];
                 embedString.focus();
                 embedString.setSelectionRange(0, embedString.value.length);
@@ -381,6 +405,7 @@ class Canvas {
             $('#viper-edit-button').text(config.localization[config.language].viper_edit_button_text)
             $('.viper-edit-link, viper-edit-screenshot').click(function (event) {
                 event.preventDefault();
+                mediator.publish("record_action", config.title, "EditModal", "click_outlink", config.user_id, "click_outlink", null, null, null);
                 mediator.publish("mark_project_changed", context.id);
                 window.open(`https://www.openaire.eu/search/project?projectId=${context.params.obj_id}`);
             })
@@ -393,6 +418,9 @@ class Canvas {
 
     drawContext(context) {
         if (config.show_context) {
+            if(!this.paramExists(context.params)) {
+                return;
+            }
             $("#context").css({"visibility": "visible", "display": "block"});
             let modifier = "";
             if (this.paramExists(context.params.sorting)) {
@@ -682,8 +710,9 @@ class Canvas {
 
   dotdotdotAreaTitles() {
     const check = config.hasOwnProperty('nodot');
-    if ((check && config.nodot === null) || !check)
+    if ((check && config.nodot === null) || !check) {
       $("#area_title_object>body").dotdotdot({wrap:"letter"});
+    }
   }
 
     updateCanvasDomains(data) {

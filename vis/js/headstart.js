@@ -32,12 +32,30 @@ HeadstartFSM.prototype = {
     }
   },
 
-  recordAction: function(id, action, user, type, timestamp, additional_params, post_data) {
+  recordAction: function(id, category, action, user, timestamp, additional_params, post_data) {
 
     if(!config.is_evaluation) {
       return;
     }
-
+    
+    let services = config.evaluation_service;
+    
+    if(typeof services === "string") {
+        services = [services];
+    }
+  
+    if (services.includes("log")) {
+        this.recordActionLog(category, action, id, user, timestamp, additional_params, post_data);
+    }
+    if (services.includes("matomo")) {
+        this.recordActionMatomo(category, action, id, user, timestamp, additional_params, post_data);
+    }
+    if (services.includes("ga")) {
+        this.recordActionGA(category, action, id, user, timestamp, additional_params, post_data);
+    }
+  },
+    
+  recordActionLog: function(id, category, action, user, type, timestamp, additional_params, post_data) {
     timestamp = (typeof timestamp !== 'undefined') ? (escape(timestamp)) : ("");
     additional_params = (typeof additional_params !== 'undefined') ? ('&' + additional_params) : ("");
     if(typeof post_data !== 'undefined') {
@@ -51,8 +69,9 @@ HeadstartFSM.prototype = {
     $.ajax({
         url: php_script +
         '?user=' + user +
+        '&category=' + category +
         '&action=' + action +
-        '&item=' + escape(id) +
+        '&item=' + encodeURI(id) +
         '&type=' + type +
         '&item_timestamp=' + timestamp + additional_params + '&jsoncallback=?',
         type: "POST",
@@ -61,8 +80,25 @@ HeadstartFSM.prototype = {
         success: function(output) {
             console.log(output);
         }
-      });
-    },
+    });
+  },
+  
+  recordActionMatomo: function(category, action, id) {
+    _paq.push(['trackEvent', category, action, id]);
+  },
+  
+  recordActionGA: function(category, action, id) {
+    //gtag.js
+    if(typeof gtag === "function") {
+        gtag('event', action, {
+          'event_category': category,
+          'event_label': id
+        });
+    //analytics.js
+    } else if (typeof ga === "function") {
+      ga('send', 'event', category, action, id);
+    }  
+  },
   
   markProjectChanged: function (id) {
       

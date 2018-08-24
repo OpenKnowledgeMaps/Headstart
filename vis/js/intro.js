@@ -1,4 +1,5 @@
 const ViperInfoTemplate = require("templates/modals/viper_info_modal.handlebars")
+const CRISInfoTemplate = require("templates/modals/cris_info_modal.handlebars")
 
 export var intros = { 
     intro_hs: {
@@ -14,5 +15,8 @@ export var intros = {
         title: "What's This?",
         body: ViperInfoTemplate(),
         dynamic: true
+    }, intro_cris: {
+        title: "Reden Sie mit! Welche Fragen zu psychischen Erkrankungen soll die Wissenschaft aufgreifen?",
+        body: CRISInfoTemplate()
     }
 };
