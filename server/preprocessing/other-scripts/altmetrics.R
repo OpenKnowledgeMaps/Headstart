@@ -1,11 +1,22 @@
 library('rAltmetric')
 library('rcrossref')
 
+if(exists("DEBUG") && DEBUG == TRUE) {
+  logLevel <- "DEBUG"
+} else {
+  logLevel <- "INFO"
+}
+
+getLogger()$addHandler(writeToFile, file=Sys.getenv("OKM_LOGFILE"), level=logLevel)
+alog <- getLogger('altmetrics')
+
 enrich_output_json <- function(output_json){
+  start.time <- Sys.time()
+
   output<- fromJSON(output_json)
-  
+
   results <- get_altmetrics(output$doi)
-  
+
   if (nrow(results) > 0){
     if (!("cited_by_tweeters_count" %in% names(results))) {
       results[["cited_by_tweeters_count"]]  = NA
@@ -21,15 +32,20 @@ enrich_output_json <- function(output_json){
     print("No altmetrics found for any paper in this dataset.")
   }
   output <- add_citations(output)
-  
+
   #Remove duplicate lines - TODO: check for root of this problem
   output = unique(output)
 
-  output$cited_by_tweeters_count[is.na(output$cited_by_tweeters_count)] <- "N/A"  
+  output$cited_by_tweeters_count[is.na(output$cited_by_tweeters_count)] <- "N/A"
   output$citation_count[is.na(output$citation_count)] <- "N/A"
   output$'readers.mendeley'[is.na(output$'readers.mendeley')] <- "N/A"
-  
+
   output_json <- toJSON(output)
+
+  end.time <- Sys.time()
+  time.taken <- end.time - start.time
+  alog$info(paste("Time taken:", time.taken, sep=" "))
+
   return (output_json)
 }
 
@@ -51,7 +67,7 @@ get_altmetrics <- function(dois){
 add_citations <- function(output){
   dois <- output$doi
   valid_dois <- which(dois!="")
-  
+
   # doc_parse_raw exception hotfix
   #cit_count = cr_citation_count(doi=dois[valid_dois], async=TRUE)
   cit_count = data.frame()

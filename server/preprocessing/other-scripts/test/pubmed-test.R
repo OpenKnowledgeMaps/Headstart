@@ -13,11 +13,11 @@ service <- "pubmed"
 params <- NULL
 params_file <- "params_pubmed.json"
 
+DEBUG = FALSE
+
 source('../utils.R')
 source("../vis_layout.R")
 source('../pubmed.R')
-
-debug = FALSE
 
 MAX_CLUSTERS = 15
 ADDITIONAL_STOP_WORDS = "english"

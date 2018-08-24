@@ -17,7 +17,7 @@ source('../utils.R')
 source("../vis_layout.R")
 source('../base.R')
 
-debug = FALSE
+DEBUG = FALSE
 
 MAX_CLUSTERS = 15
 ADDITIONAL_STOP_WORDS = "english"

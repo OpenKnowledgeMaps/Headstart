@@ -1,8 +1,10 @@
+vclog <- getLogger('vis.cluster')
+
 
 get_cut_off <- function(css_cluster, attempt=1){
   evthres = 0.9**attempt
   incthres = 1 - (0.9**attempt)
-  print(paste("ev.thres:", evthres, "inc.thres:", incthres))
+  vclog$debug(paste("ev.thres:", evthres, "inc.thres:", incthres))
   cut_off <- elbow(css_cluster, ev.thres = evthres, inc.thres = incthres)
   return (cut_off)
 }
@@ -15,7 +17,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
     cut_off <- elbow.batch(css_cluster)
     num_clusters <- cut_off$k
   }, error = function(err){
-    print(err)
+    vclog$warn(err)
     return (NA)
   })
   attempt <- 1
@@ -25,7 +27,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
       attempt <- attempt+1
       cut_off$k
     }, error = function(err){
-      print(err)
+      vclog$warn(err)
       return (NA)
       }
     )
@@ -37,7 +39,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
     num_clusters = MAX_CLUSTERS
 
     if(num_items >= 150) {
-      print("High content number, increasing max_k.")
+      vclog$warn("High content number, increasing max_k.")
       if(num_items >= 150 && num_items < 200) {
         num_clusters = 16
       } else if (num_items >= 200 && num_items < 300) {
@@ -53,7 +55,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
   }
 
   if(num_items <= 30){
-    print("Low content number, lowering max_k.")
+    vclog$warn("Low content number, lowering max_k.")
     num_clusters = round(sqrt(nrow(distance_matrix))) + 1
   }
 
@@ -65,7 +67,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 
   groups <- cutree(cluster, k=num_clusters)
 
-  if(debug == TRUE) {
+  if(exists("DEBUG") && DEBUG == TRUE) {
     # Plot result of clustering to PDF file
     pdf("clustering.pdf", width=19, height=12)
     plot(cluster, labels=metadata$title, cex=0.6)
@@ -85,7 +87,7 @@ create_ordination <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
   nm <<- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
   nm.nmin = nmds.min(nm)
 
-  if(debug == TRUE) {
+  if(exists("DEBUG") && DEBUG == TRUE) {
     # Plot results from multidimensional scaling, highlight clusters with symbols
     pdf("mds.pdf")
     plot(nm.nmin, pch=groups)
