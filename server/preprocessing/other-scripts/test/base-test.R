@@ -15,7 +15,6 @@ params_file <- "params_base.json"
 
 source("../vis_layout.R")
 source('../base.R')
-source('../utils.R')
 
 debug = FALSE
 
