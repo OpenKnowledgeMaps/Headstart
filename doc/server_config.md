@@ -13,6 +13,7 @@ Make sure you have the following packages installed:
   * fileinfo
   * xml
 * R 3.3+ (https://www.r-project.org/) with current updates, with the following libraries. **Make sure you install these packages for all users, so that Apache can load them.**
+  * logging
   * GMD
   * MASS
   * ecodist
@@ -37,6 +38,7 @@ Make sure you have the following packages installed:
   * rcrossref (for VIPER) with the async dev version: install with `remotes::install_github("ropensci/rcrossref@async")`
   * rAltmetric
   * plyr (for better data munging)
+  * arsenal (for tests)
 * phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
 
 ## Configuration
