@@ -6,13 +6,14 @@ library(arsenal)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
+Sys.setenv('OKM_LOGFILE'='test.log')
 
 setwd(wd) #Don't forget to set your working directory
 
 query <- "health education" #args[2]
 service <- "pubmed"
 params <- NULL
-params_file <- "snapshot_params_pubmed.json"
+params_file <- "params_pubmed_snapshot.json"
 
 source('../utils.R')
 source("../vis_layout.R")
@@ -42,3 +43,5 @@ output <- data.frame(fromJSON(output_json))
 expected <- fromJSON("snapshots/snapshot_pubmed.json")
 
 summary(compare(output, expected, by="id"))
+cmp <- compare(output, expected, by="id")
+diffs(cmp, by.var=TRUE)
