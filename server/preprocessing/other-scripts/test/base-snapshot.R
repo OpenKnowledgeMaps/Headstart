@@ -43,3 +43,5 @@ output <- data.frame(fromJSON(output_json))
 expected <- fromJSON("snapshots/snapshot_base.json")
 
 summary(compare(output, expected, by="id"))
+cmp <- compare(output, expected, by="id")
+diffs(cmp, by.var=TRUE)
