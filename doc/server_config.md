@@ -12,7 +12,9 @@ Make sure you have the following packages installed:
   * mbstring
   * fileinfo
   * xml
+  * also install Monolog: `$composer require monolog/monolog`
 * R 3.3+ (https://www.r-project.org/) with current updates, with the following libraries. **Make sure you install these packages for all users, so that Apache can load them.**
+  * logging
   * GMD
   * MASS
   * ecodist
