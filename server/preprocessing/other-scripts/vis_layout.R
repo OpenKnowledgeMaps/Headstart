@@ -69,7 +69,7 @@ vis_layout <- function(text, metadata,
 
   vlog$debug("get clusters")
   clusters <- create_clusters(as.dist(features), max_clusters=max_clusters)
-  layout <- create_ordination(as.dist(features), maxit=500, mindim=2, maxdim=2)
+  layout <- get_ndms(as.dist(features), maxit=500, mindim=2, maxdim=2)
 
   vlog$debug("get cluster summaries")
   metadata_full_subjects = replace_keywords_if_empty(corpus, metadata, stops)
