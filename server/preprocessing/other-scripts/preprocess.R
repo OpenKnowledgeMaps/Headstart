@@ -85,3 +85,10 @@ replace_keywords_if_empty <- function(corpus, metadata, stops) {
   return(metadata)
 
 }
+
+get_OHE_feature <-function(metadata, feature_name) {
+  ohe_encoder <- onehot(metadata[c('id', feature_name)], stringsAsFactors = TRUE)
+  ohe_feat <- data.frame(predict(ohe_encoder, metadata[c('id', 'lang_detected')]))
+  rownames(ohe_feat) <- metadata$id
+  return(ohe_feat)
+}
