@@ -3,6 +3,7 @@ library(GMD)
 library(MASS)
 library(ecodist)
 library(tm)
+library(textcat)
 library(proxy)
 library(SnowballC)
 library(jsonlite)
@@ -10,6 +11,8 @@ library(parfossil)
 library(doParallel)
 library(stringi)
 library(stringdist)
+library(plyr)
+library(onehot)
 registerDoParallel(3)
 
 
@@ -54,20 +57,25 @@ vis_layout <- function(text, metadata,
   filtered <- filter_duplicates(metadata, text, list_size)
   metadata <- filtered$metadata
   text <- filtered$text
+  metadata["lang_detected"] <- lapply(text, textcat)$content
   stops <- get_stopwords(lang, add_stop_words, testing)
   corpus <- create_corpus(metadata, text, stops)
 
   vlog$debug("get features")
   tdm_matrix <- create_tdm_matrix(corpus$stemmed)
-  normalized_matrix <- normalize_matrix(tdm_matrix);
+  distance_matrix <- get_distance_matrix(tdm_matrix)
+  lang_detected <- get_OHE_feature(metadata, "lang_detected")
+  features <- concatenate_features(distance_matrix, lang_detected)
 
   vlog$debug("get clusters")
-  clusters <- create_clusters(normalized_matrix, max_clusters=max_clusters);
-  layout <- create_ordination(normalized_matrix, maxit=500, mindim=2, maxdim=2)
+  clusters <- create_clusters(as.dist(features), max_clusters=max_clusters)
+  layout <- create_ordination(as.dist(features), maxit=500, mindim=2, maxdim=2)
 
   vlog$debug("get cluster summaries")
   metadata_full_subjects = replace_keywords_if_empty(corpus, metadata, stops)
-  named_clusters <- create_cluster_labels(clusters, metadata_full_subjects, weightingspec="ntn", top_n=3, stops=stops, taxonomy_separator)
+  named_clusters <- create_cluster_labels(clusters, metadata_full_subjects,
+                                          weightingspec="ntn", top_n=3,
+                                          stops=stops, taxonomy_separator)
 
   vlog$debug("create output")
   output <- create_output(named_clusters, layout, metadata_full_subjects)
