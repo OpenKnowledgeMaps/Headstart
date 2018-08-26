@@ -16,14 +16,10 @@ library(onehot)
 registerDoParallel(3)
 
 
-if(exists("DEBUG") && DEBUG == TRUE) {
-  logLevel <- "DEBUG"
-} else {
-  logLevel <- "INFO"
-}
-
-getLogger()$addHandler(writeToFile, file=Sys.getenv("OKM_LOGFILE"), level=logLevel)
+getLogger()$addHandler(writeToFile,
+                       file=Sys.getenv("OKM_LOGFILE"))
 vlog <- getLogger('vis')
+vlog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
@@ -78,13 +74,14 @@ vis_layout <- function(text, metadata,
   layout <- get_ndms(as.dist(features), maxit=500, mindim=2, maxdim=2)
 
   vlog$debug("get cluster summaries")
-  metadata_full_subjects = replace_keywords_if_empty(corpus, metadata, stops)
-  named_clusters <- create_cluster_labels(clusters, metadata_full_subjects,
+  metadata = replace_keywords_if_empty(corpus, metadata, stops)
+  named_clusters <- create_cluster_labels(clusters, metadata,
                                           weightingspec="ntn", top_n=3,
                                           stops=stops, taxonomy_separator)
 
+
   vlog$debug("create output")
-  output <- create_output(named_clusters, layout, metadata_full_subjects)
+  output <- create_output(named_clusters, layout, metadata)
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
