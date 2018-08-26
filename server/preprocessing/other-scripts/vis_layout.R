@@ -51,7 +51,7 @@ vis_layout <- function(text, metadata,
   metadata <- filtered$metadata
   text <- filtered$text
 
-  stops <- get_stopwords(lang, add_stop_words, testing)
+  stops <- get_stopwords(language, add_stop_words, testing)
 
   vlog$debug("calc matrix")
   res <- create_corpus(metadata, text, stops)
