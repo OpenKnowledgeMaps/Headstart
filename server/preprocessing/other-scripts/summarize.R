@@ -49,6 +49,7 @@ create_cluster_labels <- function(clusters, metadata, weightingspec,
     matches = which(clusters$labels%in%group)
     clusters$cluster_labels[c(matches)] = tfidf_top_names[k]
   }
+  clusters$cluster_labels <- fill_empty_areatitles(clusters$cluster_labels, metadata)
   return(clusters)
 }
 
@@ -108,6 +109,14 @@ fill_empty_clusters <- function(nn_tfidf, nn_corpus){
   return(replacement_tfidf_top)
 }
 
+fill_empty_areatitles <- function(cluster_labels, metadata) {
+  missing_areatitles = which(lapply(cluster_labels, function(x) {nchar(x)}) <= 1)
+  replacement_areatitles = metadata$subject[missing_areatitles]
+  replacement_areatitles = lapply(replacement_areatitles, function(x) {gsub(";", ", ", x)})
+  replacement_areatitles <- lapply(replacement_areatitles, function(x) {paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))})
+  cluster_labels[missing_areatitles] = unlist(replacement_areatitles)
+  return(cluster_labels)
+}
 
 get_title_ngrams <- function(titles, stops) {
   # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
