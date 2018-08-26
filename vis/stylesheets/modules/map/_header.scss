@@ -2,8 +2,7 @@
     margin: 0px;
     padding-top: 15px;
     padding-left: 50px;
-        //padding-bottom: 10px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: $base-font-family;
     min-height: 50px;
 
     h4 {
@@ -11,17 +10,27 @@
         margin-top: 0px;
         font-size: 18px;
         min-height: 24px;
+        font-weight: $fontweight400;
     }
 
-    #area-not-bold, #area-bold {
+    #area-not-bold, #area-bold, #infolink-areas {
         position: relative;
         z-index: 3;
     }
 }
 
+.truncated-project-title, .project-id {
+    font-weight: $fontweight700;
+}
+
+#modals {
+    position: fixed;
+    z-index: 3;
+}
+
 #context {
     font-size: 11px;
-    color: $okm-gray;
+    color: $black;
     span {
         margin-right: 1%;
     }
@@ -32,22 +41,33 @@
 }
 
 #area-bold {
-    font-weight: 800;
+    font-weight: $fontweight700;
 }
 
 #search-term-unique {
-    font-weight: 800;
+    font-weight: $fontweight700;
+}
+
+#infolink, #infolink-areas {
+    color: $infolink;
+    font-weight: $fontweight400;
+    font-size: 12px;
+    text-decoration: none;
+    white-space: nowrap;
 }
 
 #infolink {
-    color: $infolink;
-    //border: 1px solid $infolink;
-    //padding: 5px;
-    //border-radius: 5px;
-    font-weight: normal;
-    //text-transform: uppercase;
-    //vertical-align: middle;
+    margin-left: 5px;
 }
+
+#context-scale-toolbar #infolink {
+    margin-left: 0px;
+}
+
+#subdiscipline_title h4 b {
+    margin-right: 5px;
+}
+
 #whatsthis {
     font-family: 'FontAwesome';
     font-size: 18px;
@@ -55,7 +75,7 @@
 
 #infolink:hover, #infolink:focus, #infolink:active {
     text-decoration: none;
-    color: $okm-blue;
+    color: $black;
 }
 
 #timelineview {
@@ -65,7 +85,6 @@
 }
 
 @media screen and (max-width: 640px) {
-
     #subdiscipline_title {
         padding-left: 20px;
         font-size: 14px;
@@ -74,4 +93,38 @@
             font-size: 14px;
         }
     }
+}
+
+@if $skin == 'viper' {
+    #infolink {
+        border-bottom: 1px solid $infolink;
+    }
+
+    #infolink:hover, #infolink:focus, #infolink:active {
+        border-bottom: 3px solid $framed-item;
+    }
+}
+
+@if $skin == 'cris_vis' {
+    #infolink, #infolink-areas {
+        //border: 1px solid $infolink;
+        //padding: 5px;
+        //border-radius: 5px;
+        color: $okm-modal-btn;
+        font-weight: 400;
+        font-size: 12px;
+        //text-transform: uppercase;
+        //vertical-align: middle;
+        text-decoration: none;
+        border-bottom: 1px solid $okm-modal-btn;
+    }
+
+    #infolink:hover, #infolink:focus, #infolink:active, #infolink-areas:hover, #infolink-areas:focus, #infolink-areas:active{
+        border-bottom: 3px solid $okm-modal-btn;
+        color: $okm-modal-btn;
+    }
+    
+    #infolink {
+    margin-left: 0px;
+}
 }

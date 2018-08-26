@@ -29,19 +29,54 @@ circle {
     }
 }
 
+#area_visual_distributions {
+    display:none;
+    text-align: center;
+    width: inherit;
+    -webkit-hyphens: none;
+    -moz-hyphens:    none;
+    -ms-hyphens:     none;
+    hyphens:         none;
+    //white-space: nowrap;
+    //word-break: keep-all;
+    //overflow-wrap: normal;
+    .lower_value, .higher_value {
+        display: inline-block;
+        margin-bottom: 3px;
+    }
+}
+
 #area_title_object {
     body {
         width: 100%;
         height: 100%;
         margin: 0;
         padding: 0;
-            position:static;
+        position:static;
         background-color: transparent;
     }
 
     &.is_hidden {
         visibility: hidden;
     }
+}
+
+.lower_value {
+    background-color: $lower_value_tag;
+}
+
+.higher_value {
+    background-color: $higher_value_tag;
+}
+
+.higher_value, .lower_value {
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    color: white;
+    padding:2px 5px;
+    font-size:9px;
+    margin: 0px 2px;
+    font-family: $special-font-family;
 }
 
 #area_title {
@@ -53,9 +88,9 @@ circle {
     vertical-align: middle;
 
     h2 {
-        font-family: 'Helvetica', sans-serif;
-        font-size: 16px;
-        font-weight: bold;
+        font-family: $base-font-family;
+        font-size: 14px !important;
+        font-weight: $fontweight700;
         margin-top: 11px;
         margin-bottom: 11px;
         padding: 0;
@@ -65,64 +100,28 @@ circle {
         background-color: transparent;
         cursor: default;
     }
-    @media screen and (max-width: 1600px) {
+}
 
-        #area_title {
-
-            h2 {
-                font-size: 16px;
-            }
+@media screen and (max-width: 600px) {
+    #area_title {
+        h2 {
+            font-size: 12px !important;
         }
     }
+}
 
-    @media screen and (max-height: 1600px) {
-
-        #area_title {
-
-            h2 {
-                font-size: 16px;
-            }
+@if $skin == 'cris_vis' {
+    #area_title {
+        h2 {
+            font-size: 16px !important;
         }
     }
 
     @media screen and (max-width: 1200px) {
-
         #area_title {
-
             h2 {
-                font-size: 14px;
+                font-size: 14px !important;
             }
         }
     }
-
-    @media screen and (max-height: 1200px) {
-
-        #area_title {
-
-            h2 {
-                font-size: 14px;
-            }
-        }
-    }
-
-    @media screen and (max-width: 600px) {
-
-        #area_title {
-
-            h2 {
-                font-size: 12px;
-            }
-        }
-    }
-
-    @media screen and (max-height: 600px) {
-
-        #area_title {
-
-            h2 {
-                font-size: 12px;
-            }
-        }
-    }
-
 }

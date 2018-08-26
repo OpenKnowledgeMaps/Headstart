@@ -19,7 +19,7 @@ $service = library\CommUtils::getParameter($_GET, "service");
 $pdf_urls = library\CommUtils::getParameter($_GET, "pdf_urls");
 $images_path = $ini_array["general"]["images_path"];
 
-if ($service == "base") {
+if ($service == "base" || $service == "openaire") {
   $pdf_link = getPDFLinkforBASE($pdf_urls);
   if($pdf_link != false) {
       getPDFAndDownload($pdf_link, $images_path, $filename);
@@ -93,7 +93,7 @@ function getContentFromURL($link) {
     $response = curl_exec($ch);
     $redir = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
     curl_close($ch);
-    
+       
     return array($response, $redir);
 }
 
@@ -104,6 +104,10 @@ function getRedirectURL($link) {
 }
 
 function parsePDFLink($source, $url) {
+    if(substr($source, 0, 4) === "%PDF") {
+        return $url;
+    }
+    
     $has_match = preg_match_all('/meta[\s]+content=["\']+([^"\']+)["\']+[\s]+name[\s]*=[\s]*["\']+citation_pdf_url["\']+/i', $source, $matches);
     if(!$has_match) {
         $has_match = preg_match_all('/meta[\s]+name[\s]*=[\s]*["\']+citation_pdf_url["\']+[\s]+content=["\']+([^"\']+)["\']+/i', $source, $matches);

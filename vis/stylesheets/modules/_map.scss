@@ -5,21 +5,20 @@
 /* ################ Chart ############### */
 
 #headstart-chart {
-    /*position: absolute;*/
-    font-family: Helvetica;
-        margin: 0 auto;
-        display: table;
+    /*position: absolute;*/   
+    //display: inline-block; /*table;*/
     /*margin-top: 6px;*/
+    //margin-left: 50px;
+    margin: 0 auto;
     position: relative;
     z-index: 0;
 }
 
 #chart-svg {
-        overflow: visible;
+    overflow: visible;
 }
 
 #map-rect {
-
     &.zoomed_in {
         &:hover {
             cursor: zoom-out;
@@ -64,5 +63,218 @@ line {
 }
 
 text {
-    font: 10px sans-serif;
+    font-size: 10px; 
+    font-family: $base-font-family;
+}
+
+.legend {
+    visibility: hidden;
+}
+
+.logoimg {
+    border-radius: 5px;
+    moz-border-radius: 5px;
+    padding: 5px;
+    width: 60px;
+    background-color:white;
+    border: 1px solid #eff3f4;
+    vertical-align: top;
+    margin-left: 5px;
+}
+
+.scale-toolbar {
+    padding: 20px 0 15px 50px;
+    background-color: $okm-clouds;
+    display:block;
+    font-family: $link-font-family;
+}
+
+.scale-toolbar .dropdown-menu > li > a, #explorer_options .dropdown-menu > li > a {
+    padding: 10px;
+    border-bottom: 1px solid #e4e4e4;
+}
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    color: #fff;
+    text-decoration: none;
+    outline: 0;
+    background-color: $okm-modal-btn;
+}
+
+#curr-scale-explanation {
+    padding: 0px 10px;
+    font-size: 12px;
+}
+
+#scale-menu {
+    color: $white;
+    background-color: $okm-modal-btn;
+    border-color: $okm-modal-btn;
+}
+
+.context-scale-toolbar {
+    display: inline-block;
+    vertical-align:middle;
+}
+
+#scale-menu:hover {
+    color: $okm-modal-btn;
+    background-color: $white;
+    border-color: $okm-modal-btn;
+}
+
+#filter_params, #sort {
+    color: $okm-modal-btn;
+    background-color: $white;
+    border-color: $okm-modal-btn;
+    padding: 6px 4px !important;
+}
+
+#filter_params {
+    margin-right: 5px;
+    margin-bottom: 0px;
+}
+
+#filter_params:hover, #sort:hover {
+    color: $white;
+    background-color: $okm-modal-btn;
+    border-color: $okm-modal-btn;
+}
+
+.dropdown-menu, #scale-menu {
+    width: 190px;
+    font-size: 12px;
+}
+
+.dropdown-menu {
+    padding: 0px 0;
+}
+
+#sort-menu-entries, #filter-menu-entries {
+    width: 140px;
+    font-size: 12px;
+}
+
+#filter_params, #sort {
+    width: 140px;
+    font-size: 12px;
+}
+
+#filter-menu-entries {
+    margin-right: 5px;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+    text-decoration: none;
+    color: $black;
+    background-color: $okm-clouds;
+    cursor: pointer;
+}
+
+#curr-scale-type {
+    font-weight: $fontweight700;
+}
+
+.dropdown-menu > li > a:active {
+    background-color: $okm-modal-btn;
+    color: white;
+}
+
+.legend {
+    font-family: $base-font-family;
+    font-size: 11px;
+    width: 260px;
+    margin-bottom: 10px;
+}
+
+.toolbar .legend {
+    padding-left:50px;
+}
+
+.explanation-ids {
+    font-size: 11px;
+    display: none;
+}
+
+.explanation-id {
+    font-weight: $fontweight700;
+    margin-right: 3px;
+}
+
+.color-box {
+    width: 16px;
+    height: 16px;
+    background-color: $higher_value_tag;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    display: inline-block;
+    margin: 0px !important;
+    vertical-align: middle;
+}
+
+#credit {
+    position:absolute; 
+    right:50px; 
+    top: 0px; 
+    font-size:10px;
+}
+
+@media screen and (max-width: 1300px) {
+    #filter_params, #sort {
+        margin-right: 5px;
+        margin-bottom: 10px;
+        font-size: 9px;
+        width: 110px;
+    }
+}
+
+@media screen and (max-width: 1250px) {
+    #headstart-chart {
+        margin-left: 20px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .scale-toolbar {
+        padding: 20px 0 15px 20px;
+    }
+}
+
+@if $skin == 'viper' {
+    .scale-toolbar .dropdown {
+        display: inline-block;
+    }
+    
+    #curr-scale-explanation {
+        padding: 0 0 0 10px;
+    }
+}
+@if $skin == 'cris_vis' {
+
+    .scale-toolbar {
+        min-width: 900px;
+    }
+
+    .dropdown-menu, #scale-menu {
+        width: 240px;
+        font-size: 12px;
+    }
+    
+    .scale-toolbar .dropdown {
+        display: inline-block;
+    }
+
+    #curr-scale-explanation {
+        font-size: 11px;
+        padding: 0px;
+    }
+
+    #scale-menu {
+        margin-right: 10px;
+    }
+
+    @media screen and (max-width: 1250px) {
+        #headstart-chart {
+            margin-left: 0px;
+        }
+    }
 }

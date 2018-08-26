@@ -3,17 +3,22 @@
         <div id="subdiscipline_title">
 
             <h4></h4>
-            
-            <p id="context" style="display:none">
+
+            <p id="context">
                 <span id="num_articles"></span>
                 <span id="source"></span>
                 <span id="timespan"></span>
                 <span id="document_types"></span>
+                <span id="context-paper_count"></span>
+                <span id="context-dataset_count"></span>
+                <span id="context-funder"></span>
+                <span id="context-project_runtime"></span>
             </p>
 
-
         </div>
+<div id="modals"></div>
         <div id="headstart-chart">
+            
             <svg id="chart-svg"></svg>
         </div>
     </div>
@@ -22,3 +27,10 @@
         </div>
     </div>
 </div>
+
+{{#if credit_embed}}
+    <div id="credit_embed" style="position:absolute; left:0px; bottom:0px; font-size:10px; background-color:#eff3f4; padding:0px 0px 0px 5px; border-radius: 0px 50px 50px 0px;">
+<a href="{{ canonical_url }}" target="_blank">created by: <b>Open Knowledge Maps </b>
+<img src="./img/okmaps-logo-round.png" style="height:30px; padding:0px">
+</a></div>
+{{/if}}

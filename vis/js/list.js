@@ -13,12 +13,24 @@ import {
     highlight,
     clear_highlights,
     sortBy,
-    getRealHeight
+    getRealHeight,
+    updateTags
 } from 'helpers';
+import { io } from 'io';
 
 const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
 const listEntryTemplate = require("templates/list/list_entry.handlebars");
+const listEntryTemplateCris = require("templates/list/cris/list_entry_cris.handlebars");
+const listSubEntryTemplateCris = require("templates/list/cris/list_subentry_cris.handlebars");
+const listSubEntryStatisticsTemplateCris = require("templates/list/cris/list_subentry_statistics_cris.handlebars");
+const listSubEntryStatisticDistributionTemplateCris = require("templates/list/cris/list_subentry_statistic_distribution_cris.handlebars");
+const doiOutlinkTemplate = require("templates/list/doi_outlink.handlebars");
+const listMetricTemplate = require('templates/list/list_metrics.handlebars');
+const filterDropdownEntryTemplate = require("templates/list/filter_dropdown_entry.handlebars");
+const showHideLabel = require("templates/list/show_hide_label.handlebars")
+const sortDropdownEntryTemplate = require("templates/list/sort_dropdown_entry.handlebars");
+const legendTemplate = require("templates/toolbar/cris_legend.handlebars");
 
 export const list = StateMachine.create({
 
@@ -51,15 +63,27 @@ export const list = StateMachine.create({
             this.drawList();
             this.populateList();
             this.initListMouseListeners();
-            sortBy(config.sort_options[0]);
+            if(config.initial_sort === null) {
+              sortBy(config.sort_options[0]);
+            } else {
+              sortBy(config.initial_sort);
+            }
+            this.current_search_words = []
+            this.current_filter_param = ''
+            debounce(this.count_visible_items_to_header, config.debounce)()
         },
 
         onshow: function() {
-            d3.select("#sort_container").style("display", "block");
+            d3.select("#sort_container").style("display", "inline-block");
             d3.select("#papers_list").style("display", "block");
             d3.select("#left_arrow").text("\u25B2");
             d3.select("#right_arrow").text("\u25B2");
-            d3.select("#show_hide_label").text(config.localization[config.language].hide_list);
+            d3.select("#show_hide_label").html(showHideLabel({
+                show_or_hide_list: config.localization[config.language].hide_list,
+                items: config.localization[config.language].items,
+                item_count: this.list_item_count,
+            }));
+            list.count_visible_items_to_header();
         },
 
         onhide: function() {
@@ -67,29 +91,43 @@ export const list = StateMachine.create({
             d3.select("#papers_list").style("display", "none");
             d3.select("#left_arrow").text("\u25BC");
             d3.select("#right_arrow").text("\u25BC");
-            d3.select("#show_hide_label").text(config.localization[config.language].show_list);
+            d3.select("#show_hide_label").html(showHideLabel({
+                show_or_hide_list: config.localization[config.language].show_list,
+                items: config.localization[config.language].items,
+                item_count: this.list_item_count,
+            }));
+            list.count_visible_items_to_header();
         },
 
         onbeforetoggle: function() {
             if (this.current == "visible") {
                 this.hide();
-                mediator.publish("record_action", "none", "hide_list", config.user_id, "none", null);
+                mediator.publish("record_action", config.files[mediator.current_file_number].file, "List", "hide", config.user_id, "none", null);
             } else {
                 this.show();
-                mediator.publish("record_action", "none", "show_list", config.user_id, "none", null);
+                mediator.publish("record_action", config.files[mediator.current_file_number].file, "List", "show", config.user_id, "none", null);
             }
         }
     }
 });
 
 list.drawList = function() {
+    let self = this
+
     // Load list template
     let list_explorer = listTemplate({
-        show_list: config.localization[config.language].show_list
+        show_list: config.localization[config.language].show_list,
+        filter_dropdown: config.filter_menu_dropdown,
+        filter_by_label: config.localization[config.language].filter_by_label,
+        items: config.localization[config.language].items,
+        dropdown: config.sort_menu_dropdown,
+        sort_by_label: config.localization[config.language].sort_by_label,
     });
     $("#list_explorer").append(list_explorer);
-
+    
     // Set localized values
+    let timer;
+    let delay = 300;
     $("#filter_input")
         .attr("placeholder", config.localization[config.language].search_placeholder)
         .on("input", (event) => {
@@ -98,7 +136,11 @@ list.drawList = function() {
             } else {
                 $("#searchclear").hide();
             }
-            debounce(this.filterList(event.target.value.split(" ")), config.debounce);
+            window.clearTimeout(timer);
+            timer = window.setTimeout(function() {
+                debounce(self.filterList(event.target.value.split(" ")), config.debounce);
+            }, delay);
+        
         });
 
     $("#searchclear").click(() => {
@@ -107,16 +149,40 @@ list.drawList = function() {
         debounce(this.filterList([""]), config.debounce);
     });
 
-    // Add sort options
+    // Add sort button options
     var container = d3.select("#sort_container>ul");
-    var first_element = true;
     const numberOfOptions = config.sort_options.length;
-    for (var i = 0; i < numberOfOptions; i++) {
-        if (first_element) {
-            addSortOption(container, config.sort_options[i], true);
-            first_element = false;
-        } else {
-            addSortOption(container, config.sort_options[i], false);
+    if(!config.sort_menu_dropdown) {
+        var first_element = true;
+        for (var i = 0; i < numberOfOptions; i++) {
+            if (first_element) {
+                addSortOptionButton(container, config.sort_options[i], true);
+                first_element = false;
+            } else {
+                addSortOptionButton(container, config.sort_options[i], false);
+            }
+        }
+    } else {
+        let initial_sort_option = (config.initial_sort === null)?(config.sort_options[0]):(config.initial_sort)
+        $('#curr-sort-type').text(config.localization[config.language][initial_sort_option])
+        for(var i=0; i<numberOfOptions; i++) {
+            if(i === 0) {
+                addSortOptionDropdownEntry(config.sort_options[i], true)
+            } else {
+                addSortOptionDropdownEntry(config.sort_options[i], false)
+            }
+        }
+    }
+
+    // Add filter options
+    if(config.filter_menu_dropdown) {
+        $('#curr-filter-type').text(config.localization[config.language]['all'])
+        for (var i = 0; i < config.filter_options.length; i++) {
+            if (i === 0) {
+                self.addFilterOptionDropdownEntry(config.filter_options[i], true);
+            } else {
+                self.addFilterOptionDropdownEntry(config.filter_options[i], false);
+            }
         }
     }
 
@@ -128,9 +194,33 @@ list.drawList = function() {
     this.papers_list = d3.select("#papers_list");
 };
 
+list.count_visible_items_to_header = function() {
+    var count = 0
+    let current_circle = d3.select(mediator.current_zoom_node)
+    d3.selectAll("#list_holder").filter(function(d) {
+        if (mediator.is_zoomed === true) {
+            if (config.use_area_uri && mediator.current_enlarged_paper === null) {
+                return current_circle.data()[0].area_uri == d.area_uri;
+            } else if (config.use_area_uri && mediator.current_enlarged_paper !== null) {
+                return mediator.current_enlarged_paper.id == d.id;
+            } else {
+                return current_circle.data()[0].title == d.area;
+            }
+        } else {
+            return true;
+        }
+    }).each(function (d) {
+        if (!d.filtered_out) {
+            count++
+        }
+    })
+    $('#list_item_count').text(count)
+
+}
+
 list.fit_list_height = function() {
     var paper_list_avail_height = null;
-    const PAPER_LIST_CORRECTION = 10;
+    const PAPER_LIST_CORRECTION = -10;
     if (!config.render_bubbles) {
         var parent_height = getRealHeight($("#" + config.tag));
         var available_height = 0;
@@ -139,19 +229,48 @@ list.fit_list_height = function() {
         } else {
             available_height = $("#" + config.tag).height();
         }
-        available_height = available_height - 1;
+
         $(".list-col").width("100%");
         $(".container-headstart").css({
             "min-width": "300px"
         });
-        paper_list_avail_height = available_height - $("#explorer_header").height() - PAPER_LIST_CORRECTION;
+        paper_list_avail_height = available_height - $("#explorer_header").outerHeight(true);
     } else {
-        paper_list_avail_height = $("#subdiscipline_title").outerHeight(true) + $("#headstart-chart").outerHeight(true) - $("#explorer_header").height() - PAPER_LIST_CORRECTION;
+        paper_list_avail_height = 
+                $("#subdiscipline_title").outerHeight(true)
+                    + $("#headstart-chart").outerHeight(true)
+                    - $("#explorer_header").outerHeight(true)
+                    + ($(".legend").outerHeight(true) || 0)
+                    - (($("#toolbar").height() > 0)?(0):(PAPER_LIST_CORRECTION))
+                    //TODO: Hack for VIPER
+                    + ((config.language === "eng_openaire")?(10):(0));
     }
+    console.log($("#context").css("padding-bottom"));
     $("#papers_list").height(paper_list_avail_height);
 };
 
-let addSortOption = function(parent, sort_option, selected) {
+let addSortOptionDropdownEntry = function(sort_option, first_item) {
+    let entry = sortDropdownEntryTemplate({
+        sort_by_string: config.localization[config.language].sort_by_label,
+        sorter_label: config.localization[config.language][sort_option],
+    })
+    var newEntry = $(entry).appendTo('#sort-menu-entries')
+    if(first_item === true && config.initial_sort === null) {
+        newEntry.addClass('active')
+    } else if (config.initial_sort === sort_option) {
+        newEntry.addClass('active')
+    }
+    
+    newEntry.on("click", () => {
+        sortBy(sort_option)
+        mediator.publish("record_action", config.localization[config.language][sort_option], "List", "sortBy", config.user_id, "listsort", null, "sort_option=" + sort_option)
+        $('#curr-sort-type').text(config.localization[config.language][sort_option])
+        $('.sort_entry').removeClass('active');
+        newEntry.addClass("active")
+    })
+}
+
+let addSortOptionButton = function(parent, sort_option, selected) {
 
     let checked_val = "";
     let active_val = "";
@@ -176,10 +295,28 @@ let addSortOption = function(parent, sort_option, selected) {
     // Event listeners
     $("#sort_" + sort_option).change(function() {
         sortBy(sort_option);
-        mediator.publish("record_action", "none", "sortBy",
+        mediator.publish("record_action", config.localization[config.language][sort_option], "List", "sortBy",
             config.user_id, "listsort", null, "sort_option=" + sort_option);
     });
 };
+
+list.addFilterOptionDropdownEntry = function (filter_option, first_item) {
+    let entry = filterDropdownEntryTemplate({
+        filter_by_string: config.localization[config.language].filter_by_label,
+        filter_label: config.localization[config.language][filter_option]
+    })
+    var newEntry = $(entry).appendTo('#filter-menu-entries')
+    if(first_item === true) {
+        newEntry.addClass('active')
+    }
+    
+    newEntry.on("click", () => {
+        this.filterList(undefined, filter_option)
+        $('#curr-filter-type').text(config.localization[config.language][filter_option])
+        $('.filter_entry').removeClass('active');
+        newEntry.addClass("active")
+    })
+}
 
 list.initListMouseListeners = function() {
     $("#show_hide_button")
@@ -199,17 +336,39 @@ list.initListMouseListeners = function() {
 };
 
 list.getPaperNodes = function(list_data) {
-    let list_entry = listEntryTemplate();
+    if ((config.list_sub_entries)) {
+        let list_entry = listEntryTemplateCris();
 
-    return this.papers_list.selectAll("div")
-        .data(list_data)
-        .enter()
-        .append("div")
-        .attr("id", "list_holder")
-        .html(list_entry)
-        .sort(function(a, b) {
-            return b.readers - a.readers;
-        });
+        return this.papers_list.selectAll("div")
+            .data(list_data)
+            .enter()
+            .append("div")
+            .attr("id", "list_holder")
+            .html(list_entry)
+            .sort(function(a, b) {
+                return b.internal_readers - a.internal_readers;
+            });
+            
+    } else {
+        let list_entry = listEntryTemplate();
+
+        return this.papers_list.selectAll("div")
+            .data(list_data)
+            .enter()
+            .append("div")
+            .attr("id", "list_holder")
+            .attr("class", function (d) {
+                if (d.resulttype === "dataset") {
+                    return "resulttype-dataset";
+                } else {
+                    return "resulttype-paper";
+                }
+            })
+            .html(list_entry)
+            .sort(function(a, b) {
+                return b.internal_readers - a.internal_readers;
+            });
+        }
 };
 
 list.updateByFiltered = function() {
@@ -237,6 +396,20 @@ list.filterListByArea = function(area) {
         });
 };
 
+list.updateVisualDistributions = function(attribute, context) {
+    let nodes = d3.selectAll("#list_holder");
+    nodes[0].forEach(function(elem) {
+        let d = d3.select(elem).datum();
+        let overall_context = context.distributions_all[attribute];
+        let current_context = context.distributions_papers[d.id][attribute];
+        let list_visual_distributions = d3.select(elem).select(".list_visual_dstributions");
+        
+        updateTags(current_context, overall_context, list_visual_distributions, attribute, true);
+        
+    })
+    
+};
+
 list.populateMetaData = function(nodes) {
     nodes[0].forEach(function(elem) {
         var list_metadata = d3.select(elem).select(".list_metadata");
@@ -250,6 +423,26 @@ list.populateMetaData = function(nodes) {
                 }
             })
 
+        list_metadata.select("#file-icon_list")
+            .style("display", function (d) {
+                if (d.resulttype == "dataset") {
+                    return "none"
+                }
+                else {
+                    return "inline"
+                }
+            })
+
+        list_metadata.select("#dataset-icon_list")
+            .style("display", function (d) {
+                if (d.resulttype == "dataset") {
+                    return "inline"
+                }
+                else {
+                    return "none"
+                }
+            })
+
         list_metadata.select("#paper_list_title")
             .html(function(d) {
                 return d.title;
@@ -258,6 +451,12 @@ list.populateMetaData = function(nodes) {
         list_metadata.select(".outlink")
             .attr("href", function(d) {
                 return d.outlink;
+            })
+            .attr("class", function(d){
+                if(d.oa){
+                    return "oa-link oa-link-hidden"
+                }
+                return "outlink"
             })
             .on("click", function() {
                 d3.event.stopPropagation();
@@ -269,11 +468,11 @@ list.populateMetaData = function(nodes) {
                     return "none";
                 }
             });
-
+              
         var paper_link = list_metadata.select(".link2");
-
+        
         paper_link.style("display", function(d) {
-            if (d.oa === false) {
+            if (d.oa === false || d.resulttype == "dataset") {
                 return "none";
             }
         });
@@ -302,8 +501,25 @@ list.populateMetaData = function(nodes) {
             })
         list_metadata.select(".list_pubyear")
             .html(function(d) {
-                return " (" + d.year + ")";
+                if(d.year !== "") {
+                    return " (" + d.year + ")";
+                } else {
+                    return "";
+                }
             });
+
+        if (config.doi_outlink) {
+            list_metadata.select(".doi_outlink")
+            .html(function (d) {
+                var has_doi = !(typeof d.doi === "undefined" || d.doi === "")
+                return doiOutlinkTemplate({
+                    has_doi,
+                    link_label: config.localization[config.language].link,
+                    link: has_doi ? "https://dx.doi.org/"+d.doi : d.link,
+                    link_text: has_doi ? d.doi : d.link,
+                })
+            })
+        }
 
         // Following part should probably be moved to a separate function
         var paper_title = d3.select(elem).select("#list_title");
@@ -353,6 +569,7 @@ list.createAbstracts = function(nodes) {
     });
 
     this.createHighlights(this.current_search_words);
+    this.attachClickHandlerAbstract(false);
 };
 
 list.populateReaders = function(nodes) {
@@ -360,6 +577,7 @@ list.populateReaders = function(nodes) {
         var areas = d3.select(elem).select("#list_area");
         var readers = d3.select(elem).select(".list_readers");
         var keywords = d3.select(elem).select("#list_keywords");
+        var list_metrics = d3.select(elem).select(".list_metrics");
 
         keywords.style("display", "none");
 
@@ -381,16 +599,32 @@ list.populateReaders = function(nodes) {
             return d.area;
         });
 
-        if (!config.content_based && config.base_unit !== "") {
+        if (!config.content_based && config.base_unit !== "" && !config.metric_list) {
             readers.select(".num_readers")
                 .html(function(d) {
-                    return d.readers;
+                    return d.num_readers;
                 });
             readers.select(".list_readers_entity")
                 .html(config.base_unit);
 
         } else {
             readers.style("line-height", "0px");
+        }
+
+        if (config.metric_list) {
+            list_metrics.html(function (d) {
+                return listMetricTemplate({
+                    tweets_label: config.localization[config.language].tweets_count_label,
+                    tweets_count: d.cited_by_tweeters_count,
+                    readers_label: config.localization[config.language].readers_count_label,
+                    readers_count: d['readers.mendeley'],
+                    citations_label: config.localization[config.language].citations_count_label,
+                    citations_count: d.citation_count,
+                })
+            })
+            if(!config.content_based) {
+                $(".list_metrics_" + config.base_unit).addClass("scaled-metric")
+            }
         }
     });
 };
@@ -403,13 +637,24 @@ list.populateList = function() {
     });
 
     var paper_nodes = this.getPaperNodes(list_data);
-
     this.populateMetaData(paper_nodes);
     this.createAbstracts(paper_nodes);
     this.populateReaders(paper_nodes);
 };
 
-list.filterList = function(search_words) {
+list.filterList = function(search_words, filter_param) {
+    if (search_words === undefined) {
+        search_words = this.current_search_words
+    } else {
+        mediator.publish("record_action", search_words.join(), "List", "search", config.user_id, "filter_list", null, "search_words=" + search_words);
+    }
+
+    if (filter_param === undefined) {
+        filter_param = this.current_filter_param     
+    } else {
+        mediator.publish("record_action", filter_param, "List", "filter", config.user_id, "filter_list", null, "filter_param=" + filter_param);
+    }
+    
     this.current_search_words = search_words;
 
     search_words = search_words.map(function(e) {
@@ -425,7 +670,8 @@ list.filterList = function(search_words) {
     //TODO why not mediator.current_circle
     let current_circle = d3.select(mediator.current_zoom_node);
 
-    let filtered_list_items = all_list_items
+    // Find all the list items, that without any filtering should be in the view
+    let normally_visible_list_items = all_list_items
         .filter(function(d) {
             if (mediator.is_zoomed === true) {
                 if (config.use_area_uri && mediator.current_enlarged_paper === null) {
@@ -440,8 +686,8 @@ list.filterList = function(search_words) {
             }
         });
 
-    // Filter out items based on searchterm
-    let filtered_map_items = all_map_items
+    // Find items that, without any filtering, should be in the view
+    let normally_visible_map_items = all_map_items
         .filter(function(d) {
             if (mediator.is_zoomed === true) {
                 if (config.use_area_uri) {
@@ -454,67 +700,91 @@ list.filterList = function(search_words) {
             }
         });
 
-    // Deal with selected papers in list
-    let selected_list_items = filtered_list_items
+    //Find if any paper was selected previously
+    let selected_list_items = normally_visible_list_items
         .filter(function(d) {
             if (d.paper_selected === true) {
                 return true;
             }
         });
 
+    //If it wasn't then treat every normally visible paper as selected
     if (selected_list_items[0].length === 0) {
-        selected_list_items = filtered_list_items;
+        selected_list_items = normally_visible_list_items;
     }
 
-    if (search_words[0].length === 0) {
-        selected_list_items.style("display", "block");
-        filtered_map_items.style("display", "block");
-
-        mediator.current_bubble.data.forEach(function(d) {
-            d.filtered_out = false;
-        });
-
-        return;
-    }
-
+    //Even if the search box isn't empty make everything visible
     selected_list_items.style("display", "inline");
-    filtered_map_items.style("display", "inline");
+    normally_visible_map_items.style("display", "inline");
 
-    mediator.publish("record_action", "none", "filter", config.user_id, "filter_list", null, "search_words=" + search_words);
+    //set everything that should be visible to unfiltered
+    all_list_items.each(function (d) {
+        d.filtered_out = false
+    })
 
-    this.hideEntries(all_list_items, search_words);
-    this.hideEntries(all_map_items, search_words);
+    // Now actually do the filtering (i.e. remove some object from list and map)
+    this.hideEntriesByWord(all_list_items, search_words);
+    this.hideEntriesByWord(all_map_items, search_words);
 
+    this.hideEntriesByParam(all_list_items, filter_param);
+    this.hideEntriesByParam(all_map_items, filter_param);
+    
+    debounce(this.count_visible_items_to_header, config.debounce)()
 };
 
-list.hideEntries = function(object, search_words) {
+// Returns true if document has parameter or if no parameter is passed
+list.findEntriesWithParam = function (param, d) {
+    if (param === 'open_access') {
+        return d.oa
+    } else if (param === 'publication') {
+        return d.resulttype === 'publication'
+    } else if (param === 'dataset') {
+        return d.resulttype === 'dataset'
+    } else {
+        return true
+    }
+    
+}
+
+// These functions only hide items. They shouldn't unhide them.
+list.hideEntriesByParam = function (object, param) {
+    var self = this
+    object.filter(function (d) {
+        if (!self.findEntriesWithParam(param, d)) {
+            d.filtered_out = true
+            return true
+        }
+        return false
+    })
+    .style("display", "none")
+}
+
+list.hideEntriesByWord = function(object, search_words) {
     object
         .filter(function(d) {
-            let abstract = d.paper_abstract.toLowerCase();
+            let abstract = (config.list_sub_entries)?(d.abstract_search.toLowerCase()):(d.paper_abstract.toLowerCase());
             let title = d.title.toLowerCase();
             let authors = d.authors_string.toLowerCase();
             let journals = d.published_in.toLowerCase();
             let year = d.year;
             let word_found = true;
             let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toLowerCase()) : ("");
-            let count = 0;
-            if (typeof abstract !== 'undefined') {
-                while (word_found && count < search_words.length) {
-                    word_found = (abstract.indexOf(search_words[count]) !== -1 ||
-                        title.indexOf(search_words[count]) !== -1 ||
-                        authors.indexOf(search_words[count]) !== -1 ||
-                        journals.indexOf(search_words[count]) !== -1 ||
-                        year.indexOf(search_words[count]) !== -1 ||
-                        keywords.indexOf(search_words[count]) !== -1
-                    );
-                    count++;
-                }
-                d.filtered_out = word_found ? false : true;
-                return d.filtered_out;
-            } else {
-                d.filtered_out = true;
-                return false;
+            let i = 0;
+            while (word_found && i < search_words.length) {
+                word_found = (abstract.indexOf(search_words[i]) !== -1 ||
+                    title.indexOf(search_words[i]) !== -1 ||
+                    authors.indexOf(search_words[i]) !== -1 ||
+                    journals.indexOf(search_words[i]) !== -1 ||
+                    year.indexOf(search_words[i]) !== -1 ||
+                    keywords.indexOf(search_words[i]) !== -1
+                );
+                i++;
             }
+            if (word_found === false) {
+                d.filtered_out = true
+                return true
+            }
+            return false
         })
         .style("display", "none");
 };
@@ -525,29 +795,142 @@ list.createHighlights = function(search_words) {
     }
 
     clear_highlights();
-    search_words.forEach(function(str) {
-        highlight(str);
-    });
+    if( !(search_words === "") ) {
+        search_words.forEach(function(str) {
+            highlight(str);
+        });
+    }
 };
 
 // called quite often
 list.createAbstract = function(d, cut_off) {
-    if (typeof d.paper_abstract === "undefined")
-        return "";
+    if(config.list_sub_entries) {
+        return list.createAbstractCris(d, cut_off);
+    } else {
+        if (typeof d.paper_abstract === "undefined")
+            return "";
 
-    if (cut_off) {
-        if (d.paper_abstract.length > cut_off) {
-            return d.paper_abstract.substr(0, cut_off) + "...";
+        if (cut_off) {
+            if (d.paper_abstract.length > cut_off) {
+                return d.paper_abstract.substr(0, cut_off) + "...";
+            }
+        }
+        return d.paper_abstract;
+    }
+};
+
+list.createAbstractCris = function(d, cut_off) {
+    $("[data-toggle=popover]").popover({trigger: "hover"});
+    
+    let list_abstract_template = listSubEntryTemplateCris();
+    let list_abstract = document.createElement("div");
+    
+    for (let elem of d.paper_abstract) {
+        let current_abstract = d3.select(list_abstract)
+                .append("div")
+                    .attr('class', function(x) { 
+                        let new_class =  "level" + elem.level;
+                        let existing_class = d3.select(this).attr("class") 
+                        if (existing_class == null){
+                          return new_class;
+                        } else {
+                            return new_class + " " + existing_class;
+                        }
+                    })
+                    .html(list_abstract_template);
+        
+        current_abstract.select(".list_subentry_title")
+                .text(elem.abstract)
+        
+        current_abstract.select(".list_subentry_readers")
+                .text(+elem.readers)
+        
+        current_abstract.select(".list_subentry_readers_entity")
+                .text(config.base_unit)
+        
+        if(elem.readers === "0" || elem.readers === "") {
+            current_abstract.select(".list_subentry_0_count").classed("list_subentry_0_count_visible", true)
+        }
+        
+        if(cut_off) {
+            let showmore = current_abstract.select(".list_subentry_showmore")
+                                .style("display", "inline-block")
+                        
+            showmore.select(".list_subentry_showmore_text")
+                    .text(config.localization[config.language].showmore_questions_label)
+            
+            showmore.select(".list_subentry_showmore_num")
+                    .text(function() { 
+                        return d.num_subentries;
+            })
+            
+            showmore.select(".list_subentry_showmore_verb")
+                    .text(config.localization[config.language].showmore_questions_verb)
+                    
+            break;
+        } else {
+            current_abstract.select(".list_subentry_showmore")
+                    .style("display", "none")
+            
+            if(elem.readers !== "0" && elem.readers !== "") {
+            
+                let show_statistics = current_abstract.select(".list_subentry_show_statistics")
+                        .style("display", "inline-block")
+
+                show_statistics.select(".list_subentry_show_statistics_text")
+                        .text(config.localization[config.language].distributions_label)
+
+                show_statistics.select(".list_subentry_show_statistics_numbers")
+                        .text(+elem.readers + " " + config.base_unit)
+
+                show_statistics.select(".list_subentry_show_statistics_verb")
+                        .text(config.localization[config.language].show_verb_label)
+
+                let statistics_div = current_abstract.select(".list_subentry_statistics")
+
+                let list_subentry_statistics = listSubEntryStatisticsTemplateCris();
+
+                let current_context = io.context.distributions_abstracts[elem.id];
+
+                let index_elem = 1;
+                for (let context_elem in current_context) {
+                    if (current_context.hasOwnProperty(context_elem)) {
+                        let subentry_statistics = statistics_div.append("div").html(list_subentry_statistics);
+                        subentry_statistics.select(".list_subentry_statistic_title")
+                            .text(index_elem + ". " + context_elem)
+                        this.createAbstractStatistics(subentry_statistics, current_context[context_elem])
+                        index_elem++;
+                    }
+                }
+            }
         }
     }
-    return d.paper_abstract;
+    
+    return list_abstract.outerHTML;
+    
 };
+
+list.createAbstractStatistics = function(div, distributions) {
+    
+    let list_subentry_statistics_distribution = listSubEntryStatisticDistributionTemplateCris();
+    distributions.forEach(function(distribution) {
+        if(distribution.share > 0) {
+            let div_distribution = div.append("div")
+                .html(list_subentry_statistics_distribution);
+            
+            div_distribution.select(".list_subentry_statistic_distribution_id").text(distribution.id);
+            div_distribution.select(".list_subentry_statistic_distribution_title").text(distribution.name);
+            div_distribution.select(".list_subentry_statistic_distribution_number").text(distribution.share);
+        }
+    })
+
+}
 
 list.addBookmark = function(d) {
     $.getJSON(this.headstart_server + "services/addBookmark.php?user_id=" + config.user_id + "&content_id=" + d.id, function(data) {
         console.log("Successfully added bookmark");
 
-        mediator.publish("record_action", d.id, "add_bookmark", config.user_id, d.bookmarked + " " + d.recommended, data);
+        mediator.publish("record_action", d.title, "Bookmark", "add", config.user_id, d.bookmarked + " " + d.recommended, data);
 
         d.bookmarked = true;
 
@@ -572,7 +955,7 @@ list.removeBookmark = function(d) {
     $.getJSON(this.headstart_server + "services/addBookmark.php?user_id=" + config.user_id + "&content_id=" + d.id, function(data) {
         console.log("Successfully removed bookmark");
 
-        mediator.publish("record_action", d.id, "remove_bookmark", config.user_id, d.bookmarked + " " + d.recommended, data);
+        mediator.publish("record_action", d.title, "Bookmark", "remove", config.user_id, d.bookmarked + " " + d.recommended, data);
 
         d.bookmarked = false;
 
@@ -597,7 +980,7 @@ list.removeBookmark = function(d) {
 
 list.makeTitleClickable = function(d) {
     mediator.publish("list_click_paper_list", d);
-    mediator.publish("record_action", d.id, "click_paper_list", config.user_id, d.bookmarked + " " + d.recommended, null);
+    mediator.publish("record_action", d.title, "List", "paper_click", config.user_id, d.bookmarked + " " + d.recommended, null);
     d3.event.stopPropagation();
 };
 
@@ -620,17 +1003,103 @@ list.enlargeListItem = function(d) {
     this.setListHolderDisplay(d);
 
     this.papers_list.selectAll("#list_abstract")
+        .filter(function(x) {
+                    return (x.id === d.id);
+                })
         .html(this.createAbstract(d, config.abstract_large));
 
     this.createHighlights(this.current_search_words);
+    
+    this.attachClickHandlerAbstract(true);
 
     this.setImageForListHolder(d);
+    
+    this.setAdditionalImagesForListHolder(d);
+    
     if (config.show_keywords) {
-        d3.selectAll("#list_keywords").style("display", "block");
+        d3.selectAll("#list_keywords")
+            .filter(function(x) {
+                return (x.id === d.id);
+            })
+            .style("display", "block");
     }
 
     d.paper_selected = true;
+    this.count_visible_items_to_header()
 };
+
+list.setAdditionalImagesForListHolder = function(d) {
+    let current_item = d3.selectAll("#list_holder")
+            .filter(function(x) {
+                return (x.id === d.id);
+            })
+        
+        let list_images = current_item.select(".list_images")
+        list_images.append("h4")
+                            .html(config.localization[config.language].intro_areas_title + d.title)
+        for (let item in config.list_images) {
+            let image = config.list_images[item];
+                    list_images.append("h5")
+                        .attr("class", "list_image_title")
+                        .html(function () {
+                            return (+item+1) + ". " + config.scale_label[image];
+                        })
+                        
+                    list_images
+                        .append('div')
+                            .attr('class', 'statistics-image')
+                        .append("img")
+                            .attr("class", "list_image")
+                            .attr("src", function(x) {
+                                return config.list_images_path + x.id + "_" + image + ".svg";
+                            })
+                    
+                    list_images.append("div").html(legendTemplate);
+        }
+}
+
+list.attachClickHandlerAbstract = function(enlarged) {
+    if(!config.list_sub_entries)
+        return;
+    
+    $("[data-toggle=popover]").popover({trigger: "hover"});
+    
+    let list_holder = d3.selectAll("#list_holder");
+    
+    if(enlarged) {
+        list_holder[0].forEach(function (element) {
+            let current_list_holder = d3.select(element);
+            
+            current_list_holder.selectAll(".list_subentry_show_statistics").on("click", function() {
+                let click_div = d3.select(d3.event.currentTarget);
+                let parent_div = d3.select(d3.event.currentTarget.parentElement);
+                let statistics_div = parent_div.select(".list_subentry_statistics")
+                if(statistics_div.style("display") === "none") {
+                    mediator.publish("record_action", parent_div.select(".list_subentry_title").text(), "List", "show_statistics", config.user_id, "none", null);
+                    statistics_div.style("display", "block")
+                    click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "none");
+                    click_div.select(".list_subentry_show_statistics_arrow_up").style("display", "inline-block");
+                    click_div.select(".list_subentry_show_statistics_verb")
+                        .text(config.localization[config.language].hide_verb_label)
+                } else {
+                    mediator.publish("record_action", parent_div.select(".list_subentry_title").text(), "List", "hide_statistics", config.user_id, "none", null);
+                    statistics_div.style("display", "none")
+                    click_div.select(".list_subentry_show_statistics_arrow_down").style("display", "inline-block");
+                    click_div.select(".list_subentry_show_statistics_arrow_up").style("display", "none");
+                    click_div.select(".list_subentry_show_statistics_verb")
+                        .text(config.localization[config.language].show_verb_label)
+                }
+            })
+        })
+    } else {
+               
+        list_holder.select(".list_subentry_showmore").on("click", function(d) {
+            mediator.publish("list_click_paper_list", d);
+            mediator.publish("record_action", d.title, "List", "paper_click", config.user_id, d.bookmarked + " " + d.recommended, null);
+            d3.event.stopPropagation();
+        })
+    }
+}
 
 list.setListHolderDisplay = function(d) {
     this.papers_list.selectAll("#list_holder")
@@ -646,11 +1115,13 @@ list.setListHolderDisplay = function(d) {
         })
         .select(".list_entry").attr("class", "list_entry_full");
 
-    this.papers_list.selectAll("#list_holder")
-        .filter(function(x) {
-            return (x.id != d.id);
-        })
-        .style("display", "none");
+    if(!config.list_show_all_papers) {
+        this.papers_list.selectAll("#list_holder")
+            .filter(function(x) {
+                return (x.id != d.id);
+            })
+            .style("display", "none");
+    }
 };
 
 // recreates abstracts, if we zoom out from circle
@@ -660,11 +1131,13 @@ list.reset = function() {
         .html((d) => {
             return this.createAbstract(d, config.abstract_small);
         });
-
+      
     this.createHighlights(this.current_search_words);
+    this.attachClickHandlerAbstract(false);
 
     d3.selectAll(".list_entry_full").attr("class", "list_entry");
     d3.selectAll("#list_keywords").style("display", "none");
+    d3.selectAll(".list_images").html("");
 
     if (mediator.current_enlarged_paper !== null) {
         this.notSureifNeeded();
@@ -707,7 +1180,11 @@ list.writePopup = function(pdf_url) {
         $("#pdf_iframe")
             .attr("src", function() {
                 let viewer = config.server_url + "services/pdfjs-hypothesis/web/viewer.html";
-                return viewer + "?file=" + pdf_url; //#view=FitH
+                if(config.use_hypothesis) {
+                    return viewer + "?file=" + pdf_url; //#view=FitH
+                } else {
+                    return pdf_url;
+                }
             })
             .attr("scrolling", "no");
     }, 100);
@@ -758,7 +1235,8 @@ list.populateOverlay = function(d) {
         $("#images_holder").show();
     } else if (config.preview_type == "pdf") {
         let filename = this_d.id + ".PDF";
-        let pdf_url = filename.replace("/", "__");
+        let pdf_url = filename.replace(/\/|:/g, "__");
+        
         $("#status").hide();
 
         if (this.checkIfFileAvailable(config.server_url + "paper_preview/" + pdf_url)) {
@@ -784,13 +1262,15 @@ list.populateOverlay = function(d) {
             let possible_pdfs = "";
             if (config.service === "base") {
                 possible_pdfs = d.link + ";" + d.identifier + ";" + d.relation;
+            } else if (config.service === "openaire") {
+                possible_pdfs  = d.link + ";" + d.fulltext;
             }
 
             $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service + "&pdf_urls=" + possible_pdfs, (data) => {
 
                 var showError = function() {
-                    var link = (config.service === "base") ? (this_d.link) : (this_d.outlink);
-                    $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + this_d.outlink + "\" target=\"_blank\">this website</a>.");
+                    var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
+                    $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + pdf_location_link + "\" target=\"_blank\">this website</a>.");
                     $("#status").show();
                 }
 
@@ -848,7 +1328,7 @@ list.setImageForListHolder = function(d) {
                 });
         }
     } else {
-        if (d.oa === false) {
+        if (d.oa === false || d.resulttype === "dataset") {
             return;
         }
 
@@ -879,12 +1359,12 @@ list.setImageForListHolder = function(d) {
 list.title_click = function(d) {
 
     var url = d.outlink;
-    if (url === false) {
+    if (url === false || !config.is_title_clickable) {
         d3.event.stopPropagation();
         return;
     }
 
-    mediator.publish("record_action", d.id, "click_on_title", config.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
+    mediator.publish("record_action", d.title, "List", "open_outlink", config.user_id, d.bookmarked + " " + d.recommended, null, "url=" + d.url);
 
     window.open(url, "_blank");
     d3.event.stopPropagation();
