@@ -21,6 +21,12 @@ source('../pubmed.R')
 
 DEBUG = FALSE
 
+if(DEBUG==TRUE){
+  Sys.setenv('OKM_LOGLEVEL'='DEBUG')
+} else {
+  Sys.setenv('OKM_LOGLEVEL'='INFO')
+}
+
 MAX_CLUSTERS = 15
 ADDITIONAL_STOP_WORDS = "english"
 

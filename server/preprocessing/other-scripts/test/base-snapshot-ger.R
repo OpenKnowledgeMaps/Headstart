@@ -17,6 +17,12 @@ params_file <- "params_base_snapshot-ger.json"
 
 DEBUG = FALSE
 
+if(DEBUG==TRUE){
+  Sys.setenv('OKM_LOGLEVEL'='DEBUG')
+} else {
+  Sys.setenv('OKM_LOGLEVEL'='INFO')
+}
+
 source('../utils.R')
 source("../vis_layout.R")
 source('../base.R')
