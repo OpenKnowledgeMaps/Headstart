@@ -1,4 +1,6 @@
 vplog <- getLogger('vis.preprocess')
+vplog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
+
 
 filter_duplicates <- function(metadata, text, list_size) {
   #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
