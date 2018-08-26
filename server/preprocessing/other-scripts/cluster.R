@@ -1,5 +1,5 @@
 vclog <- getLogger('vis.cluster')
-
+vclog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 get_cut_off <- function(css_cluster, attempt=1){
   evthres = 0.9**attempt
@@ -65,13 +65,14 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 
   groups <- cutree(cluster, k=num_clusters)
 
-  if(exists("DEBUG") && DEBUG == TRUE) {
-    # Plot result of clustering to PDF file
-    pdf("clustering.pdf", width=19, height=12)
-    plot(cluster, labels=metadata$title, cex=0.6)
-    rect.hclust(cluster, k=num_clusters, border="red")
-    dev.off()
-  }
+  # NEEDS FIX
+  # if(exists("DEBUG") && DEBUG == TRUE) {
+  #   # Plot result of clustering to PDF file
+  #   pdf("clustering.pdf", width=19, height=12)
+  #   plot(cluster, labels=metadata$title, cex=0.6)
+  #   rect.hclust(cluster, k=num_clusters, border="red")
+  #   dev.off()
+  # }
 
   vclog$info(paste("Number of Clusters:", num_clusters, sep=" "))
   vclog$debug(paste("CutOff-Description:", attributes(cut_off)$description))
@@ -91,12 +92,13 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
   vclog$info(paste("NMDS-Stress:", min(nm$stress), sep=" "))
   vclog$info(paste("NMDS-R2:", min(nm$r2), sep=" "))
 
-  if(exists("DEBUG") && DEBUG == TRUE) {
-    # Plot results from multidimensional scaling, highlight clusters with symbols
-    pdf("mds.pdf")
-    plot(nm.nmin, pch=groups)
-    dev.off()
-  }
+  # NEEDS FIX
+  # if(exists("DEBUG") && DEBUG == TRUE) {
+  #   # Plot results from multidimensional scaling, highlight clusters with symbols
+  #   pdf("mds.pdf")
+  #   plot(nm.nmin, pch=groups)
+  #   dev.off()
+  # }
 
   return(nm.nmin)
 }
