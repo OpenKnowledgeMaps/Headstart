@@ -3,6 +3,7 @@ rm(list = ls())
 library(rstudioapi)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
+Sys.setenv('OKM_LOGFILE'='test.log')
 
 setwd(wd) #Don't forget to set your working directory
 
