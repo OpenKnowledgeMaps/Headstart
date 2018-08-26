@@ -13,6 +13,7 @@ service <- "base"
 params <- NULL
 params_file <- "params_base_ger.json"
 
+source("../utils.R")
 source("../vis_layout.R")
 source('../base.R')
 
