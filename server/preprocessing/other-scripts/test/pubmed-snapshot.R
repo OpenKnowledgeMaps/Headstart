@@ -23,13 +23,9 @@ DEBUG = FALSE
 MAX_CLUSTERS = 15
 ADDITIONAL_STOP_WORDS = "english"
 
-if(!is.null(params_file)) {
-  params <- fromJSON(params_file)
-}
-
 #start.time <- Sys.time()
 
-input_data = get_papers(query, params)
+input_data = fromJSON("snapshots/snapshot_pubmed_input.json")
 
 #end.time <- Sys.time()
 #time.taken <- end.time - start.time
@@ -39,6 +35,6 @@ output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
 
 output <- data.frame(fromJSON(output_json))
-expected <- fromJSON("snapshots/snapshot_pubmed.json")
+expected <- fromJSON("snapshots/snapshot_pubmed_expected.json")
 
 summary(compare(output, expected, by="id"))
