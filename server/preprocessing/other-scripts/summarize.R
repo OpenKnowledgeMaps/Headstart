@@ -34,7 +34,7 @@ filter_out <- function(ngrams, stops){
 
 create_cluster_labels <- function(clusters, metadata, weightingspec,
                                   top_n, stops, taxonomy_separator="/") {
-  nn_corpus <- get_clustered_corpus(clusters, metadata, stops, taxonomy_separator)
+  nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
   nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer,
                                                            weighting = function(x) weightSMART(x, spec="ntn"),
                                                            bounds = list(local = c(2, Inf))
@@ -53,7 +53,7 @@ create_cluster_labels <- function(clusters, metadata, weightingspec,
 }
 
 
-get_clustered_corpus <- function(clusters, metadata, stops, taxonomy_separator) {
+get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator) {
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
     group = c(names(clusters$groups[clusters$groups == k]))

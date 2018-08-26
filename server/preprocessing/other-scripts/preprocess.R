@@ -2,6 +2,17 @@ vplog <- getLogger('vis.preprocess')
 vplog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 
+detect_language <- function(text) {
+  valid <- getStemLanguages()
+  lang_detected <- lapply(text, textcat)
+  lang_detected <- unlist(lapply(lang_detected, function(x){
+                    if (x %in% valid) {
+                      x
+                    } else "english" }))
+  return(lang_detected)
+}
+
+
 filter_duplicates <- function(metadata, text, list_size) {
   #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
   if(list_size > -1) {
@@ -61,7 +72,7 @@ deduplicate_titles <- function(metadata, list_size) {
 
 }
 
-replace_keywords_if_empty <- function(corpus, metadata, stops) {
+replace_keywords_if_empty <- function(metadata, stops) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
   candidates = mapply(paste, metadata$title[missing_subjects], metadata$paper_abstract[missing_subjects])
