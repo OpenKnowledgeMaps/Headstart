@@ -1,4 +1,5 @@
 vpplog <- getLogger('vis.postprocess')
+vpplog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 create_output <- function(clusters, layout, metadata) {
 
@@ -24,12 +25,13 @@ create_output <- function(clusters, layout, metadata) {
 
   output_json = toJSON(output)
 
-  if(exists("DEBUG") && DEBUG == TRUE) {
-    # Write output to file
-    file_handle = file("output_file.csv", open="w")
-    write.csv(output, file=file_handle, row.names=FALSE)
-    close(file_handle)
-  }
+  # NEEDS FIX
+  # if(exists("DEBUG") && DEBUG == TRUE) {
+  #   # Write output to file
+  #   file_handle = file("output_file.csv", open="w")
+  #   write.csv(output, file=file_handle, row.names=FALSE)
+  #   close(file_handle)
+  # }
 
   return(output_json)
 
