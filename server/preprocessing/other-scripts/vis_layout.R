@@ -53,7 +53,7 @@ vis_layout <- function(text, metadata,
   filtered <- filter_duplicates(metadata, text, list_size)
   metadata <- filtered$metadata
   text <- filtered$text
-  metadata["lang_detected"] <- lapply(text, textcat)$content
+  metadata["lang_detected"] <- detect_language(text$content)
   stops <- get_stopwords(lang, add_stop_words, testing)
   corpus <- create_corpus(metadata, text, stops)
 
@@ -62,11 +62,8 @@ vis_layout <- function(text, metadata,
   distance_matrix <- get_distance_matrix(tdm_matrix)
   lang_detected <- get_OHE_feature(metadata, "lang_detected")
   vlog$info(paste("Languages:",
-                  paste(paste0(names(lang_detected),
-                               ":",
-                               apply(lang_detected, 2, sum)),
-                        collapse = " "),
-                   sep=" "))
+                  paste(paste0(names(lang_detected), ":", apply(lang_detected, 2, sum)),
+                        collapse = " "), sep=" "))
   features <- concatenate_features(distance_matrix, lang_detected)
 
   vlog$debug("get clusters")
@@ -74,7 +71,7 @@ vis_layout <- function(text, metadata,
   layout <- get_ndms(as.dist(features), maxit=500, mindim=2, maxdim=2)
 
   vlog$debug("get cluster summaries")
-  metadata = replace_keywords_if_empty(corpus, metadata, stops)
+  metadata = replace_keywords_if_empty(metadata, stops)
   named_clusters <- create_cluster_labels(clusters, metadata,
                                           weightingspec="ntn", top_n=3,
                                           stops=stops, taxonomy_separator)

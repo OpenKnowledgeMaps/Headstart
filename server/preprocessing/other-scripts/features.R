@@ -2,10 +2,12 @@ fplog <- getLogger('vis.features')
 fplog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 create_corpus <- function(metadata, text, stops) {
-  m <- list(content = "content", id = "id")
+  text["language"] <- metadata$lang_detected
+  mapping <- list(content = "content", id = "id", language = "language")
+  myReader <- readTabular(mapping = mapping)
 
-  myReader <- readTabular(mapping = m)
-  (corpus <- Corpus(DataframeSource(text), readerControl = list(reader = myReader)))
+  corpus <- Corpus(DataframeSource(text),
+                   readerControl = list(reader = myReader))
 
   # Replace non-convertible bytes in with strings showing their hex codes, see http://tm.r-forge.r-project.org/faq.html
   corpus <- tm_map(corpus,  content_transformer(function(x) iconv(enc2utf8(x), sub = "byte")))
@@ -13,11 +15,10 @@ create_corpus <- function(metadata, text, stops) {
   corpus <- tm_map(corpus, content_transformer(tolower))
   corpus <- tm_map(corpus, removeWords, stops)
   corpus <- tm_map(corpus, stripWhitespace)
-  corpus_unstemmed = corpus
+  unstemmed = corpus
+  stemmed <- tm_map(corpus, stemDocument)
 
-  corpus <- tm_map(corpus, stemDocument)
-
-  return(list(stemmed = corpus, unstemmed = corpus_unstemmed))
+  return(list(stemmed = stemmed, unstemmed = unstemmed))
 }
 
 create_tdm_matrix <- function(corpus, sparsity=1) {
