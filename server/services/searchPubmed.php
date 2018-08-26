@@ -11,7 +11,9 @@ $dirty_query = library\CommUtils::getParameter($_POST, "q");
 
 $post_params = $_POST;
 
-$result = search("pubmed", $dirty_query, $post_params, array("article_types", "from", "to", "sorting"), ";", null);
+#HOTFIX - article_types cause a 414 with PubMed
+#$result = search("pubmed", $dirty_query, $post_params, array("article_types", "from", "to", "sorting"), ";", null);
+$result = search("pubmed", $dirty_query, $post_params, array("from", "to", "sorting"), ";", null);
 
 echo $result
 

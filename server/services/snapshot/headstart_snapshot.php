@@ -19,7 +19,7 @@
             data_config.show_context = true;
             data_config.create_title_from_context= true;
 			data_config.is_phantomjs = true;
-			data_config.options = options_<?php $_GET['service'] ?>.dropdowns;
+			data_config.options = options_<?php echo $_GET['service']; ?>.dropdowns;
         </script>
         <script type="text/javascript" src="../../../dist/headstart.js"></script>
         <link type="text/css" rel="stylesheet" href="../../../dist/headstart.css"></link>

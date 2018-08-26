@@ -24,8 +24,8 @@ export function toFront(node) {
 /*
  * just a wrapper to avoid confusing function call
  */
-export function hideSibling( circle ) {
-  d3.select(circle.nextSibling).style("visibility", "hidden");
+export function hideSibling(circle) {
+    d3.select(circle.nextSibling).style("visibility", "hidden");
 }
 
 
@@ -34,17 +34,19 @@ export function hideSibling( circle ) {
  */
 export function debounce(func, wait, immediate) {
     var timeout;
-    return function() {
-        var context = this,
-            args = arguments;
-        var later = function() {
+    return function () {
+        let context = this,
+                args = arguments;
+        let later = function () {
             timeout = null;
-            if (!immediate) func.apply(context, args);
+            if (!immediate)
+                func.apply(context, args);
         };
-        var callNow = immediate && !timeout;
+        let callNow = immediate && !timeout;
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
+        if (callNow)
+            func.apply(context, args);
     };
 }
 
@@ -54,28 +56,68 @@ export function debounce(func, wait, immediate) {
 
 export function sortBy(field) {
     d3.selectAll("#list_holder")
-        .sort(function(a, b) {
-            if (field == "year") {
-                return stringCompare(b[field], a[field]);
-            } else {
-                return stringCompare(a[field], b[field]);
-            }
-        });
+            .sort(function (a, b) {
+                if (field === "year") {
+                    return stringCompare(a[field], b[field], "desc");
+                } else if (field === "citations" || field === "readers" || field === "tweets") {
+                    return stringCompare(a[field], b[field], "desc");
+                } else {
+                    return stringCompare(a[field], b[field], "asc");
+                }
+            });
 }
 
-function stringCompare(a, b) {
-  if(typeof a == 'undefined' || typeof b == 'undefined'){
-    return;
-  } else if(typeof a == 'string' && typeof b == 'string') {
-    a = a.toLowerCase();
-    b = b.toLowerCase();
-    return a > b ? 1 : a == b ? 0 : -1;
-  } else if(typeof a == 'number' && typeof b == 'number') {
-    return d3.descending(a, b);
-  }
-  else {
-    return d3.descending(a, b);
-  }
+function stringCompare(a, b, sort_order) {
+    if (typeof a == 'undefined' || typeof b == 'undefined') {
+        return;
+    } else if (typeof a == 'string' && typeof b == 'string') {
+        if (a === "" || a === null)
+            return 1;
+        if (b === "" || b === null)
+            return -1;
+        
+        
+        if (sort_order === "desc") {
+            let c = a;
+            a = b;
+            b = c;
+        }
+        
+        a = a.toLowerCase();
+        b = b.toLowerCase();
+        
+        if (a === b)
+            return 0;
+  
+        return a < b ? -1 : 1;
+    } else if ((typeof a === "string" && typeof b === "number") || (typeof a === "number" && typeof b === "string")) {
+        
+        if (a === "N/A" || a === "n/a" || typeof a !== "number")
+            return 1;
+        if (b === "N/A" || b === "n/a" || typeof b !== "number")
+            return -1;
+        if (a === b)
+            return 0;
+
+        if (sort_order === "desc") {
+            return d3.descending(a, b);
+        } else {
+            return d3.ascending(a, b);
+        }
+    
+    } else if (typeof a == 'number' && typeof b == 'number') {
+        if (sort_order === "desc") {
+            return d3.descending(a, b);
+        } else {
+            return d3.ascending(a, b);
+        }
+    } else {
+        if (sort_order === "desc") {
+            return d3.descending(a, b);
+        } else {
+            return d3.ascending(a, b);
+        }
+    }
 }
 
 export function highlight(str) {
@@ -89,7 +131,7 @@ export function highlight(str) {
     let value = new RegExp(new_str, "i");
 
     $('.highlightable, .large.highlightable, .list_details.highlightable').highlightRegex(value, {
-        attrs: { 'style': "background:yellow" }
+        attrs: {'style': "background:yellow"}
     });
 }
 
@@ -124,6 +166,40 @@ export function getRealHeight(element) {
         element.html(html);
     }
     return height;
+}
+
+export function updateTags(current_context, overall_context, div, attribute, display) {
+    div.html("");
+    if(attribute === "none") return;
+       
+    for(let element in current_context) {
+        let statistic = current_context[element];
+
+        if(statistic.share <= 0) {
+            continue;
+        }
+
+        div
+        .style("display", function () { return ((display)?("block"):("none")) })
+        .append("span")
+            .html(statistic.id)
+            .attr("class", function () {
+                let overall_statistic = overall_context.filter(function (el) {
+                    return statistic.id === el.id;
+                });
+
+                let current_overall_statistic = overall_statistic[0];
+
+                if (statistic.share <= current_overall_statistic.share) {
+                    return "lower_value";
+                } else {
+                    return "higher_value"
+                }
+
+            })
+            .attr("title", statistic.name)
+    }
+
 }
 
 // functions which are not being called at the moment, but might

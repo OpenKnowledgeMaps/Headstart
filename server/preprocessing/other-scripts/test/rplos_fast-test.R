@@ -12,20 +12,21 @@ params_file <- singleString <- paste(readLines("params.json"), collapse=" ")
 
 
 source("../vis_layout.R")
+source('../utils.R')
 
-switch(service, 
+switch(service,
        plos={
          source("../rplos_fast.R")
        },
        pubmed={
-         source('../pubmed.R')    
+         source('../pubmed.R')
        },
     {
       source("../rplos_fast.R")
     }
 )
 
-debug = FALSE
+DEBUG = FALSE
 
 MAX_CLUSTERS = 15
 ADDITIONAL_STOP_WORDS = "english"

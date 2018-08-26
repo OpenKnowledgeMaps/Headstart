@@ -6,6 +6,10 @@ library(rbace)
 #
 # * query: search query
 # * params: parameters for the search in JSON format
+#    * from: publication date lower bound in the form YYYY-MM-DD
+#    * to: publication date upper bound in the form YYYY-MM-DD
+#    * article_types: in the form of an array of identifiers of article types
+#    * sorting: can be one of "most-relevant" and "most-recent"
 # * limit: number of search results to return
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
@@ -22,54 +26,69 @@ library(rbace)
 # * "url": URL to the landing page
 # * "readers": an indicator of the paper's popularity, e.g. number of readers, views, downloads etc.
 # * "subject": keywords or classification, split by ;
+# * "oa_state": open access status of the item; has the following possible states: 0 for no, 1 for yes, 2 for unknown
+# * "link": link to the PDF; if this is not available, a list of candidate URLs that may contain a link to the PDF
+
+if(exists("DEBUG") && DEBUG == TRUE) {
+  logLevel <- "DEBUG"
+} else {
+  logLevel <- "INFO"
+}
+
+getLogger()$addHandler(writeToFile, file=Sys.getenv("OKM_LOGFILE"), level=logLevel)
+blog <- getLogger('api.base')
+
 
 get_papers <- function(query, params, limit=100,
                        fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
 
+  blog$info(paste("Search: ", query, sep=""))
+  start.time <- Sys.time()
+
   exact_query = "";
 
+  # check param validity
   if(startsWith(query, '"') && endsWith(query, '"')) {
     exact_query = paste("textus:", query, sep="")
   } else {
     exact_query = gsub("(?<!\\S)(?=\\S)", "textus:", query, perl=T)
   }
-
-  year_from = params$from
-  year_to = params$to
-  date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   if ('language' %in% names(params)){
       language <- params$language
     } else {
       language <- NULL
     }
 
+  year_from = params$from
+  year_to = params$to
+
+  # prepare query fields
+  date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
-  #Make sure that the abstract exists. NOT WORKING:
+  # language query field flag
+  if(!is.null(language) && language=='german'){
+    lang_query <- "dclang:ger"
+  } else {
+    lang_query <- ""
+  }
+  #Make sure that the abstract exists.
   abstract_exists = "dcdescription:?"
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
 
-
-  query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" ")
-  # language query field flag
-  if(!is.null(language) && language=='german'){
-    query <- paste(query, "dclang:ger", collapse=" ")
-  }
-
   # execute search
-  (res_raw <- bs_search(hits=limit,
-                        query = query,
-                        fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation",
-                        sortby = sortby_string))
+  (res_raw <- bs_search(hits=limit
+                        , query = paste(exact_query, lang_query, date_string, document_types, abstract_exists, collapse=" ")
+                        , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"
+                        , sortby = sortby_string))
   res <- res_raw$docs
 
-  print(paste(query, date_string, document_types, abstract_exists, sep=" "));
+  blog$info(paste("Query:", query, date_string, document_types, abstract_exists, sep=" "));
 
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
 
   metadata$id = res$dcdocid
   metadata$relation = check_metadata(res$dcrelation)
   metadata$identifier = check_metadata(res$dcidentifier)
-
   metadata$title = check_metadata(res$dctitle)
   metadata$paper_abstract = check_metadata(res$dcdescription)
   metadata$published_in = check_metadata(res$dcsource)
@@ -112,17 +131,16 @@ get_papers <- function(query, params, limit=100,
   text = data.frame(matrix(nrow=length(res$dcdocid)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(metadata$title, metadata$paper_abstract, subject_all, metadata$published_in, metadata$authors, sep=" ")
+  text$content = paste(metadata$title, metadata$paper_abstract,
+                       subject_all, metadata$published_in, metadata$authors,
+                       sep=" ")
 
   ret_val=list("metadata" = metadata, "text"=text)
+
+  end.time <- Sys.time()
+  time.taken <- end.time - start.time
+  blog$info(paste("Time taken:", time.taken, sep=" "))
+
   return(ret_val)
 
-}
-
-check_metadata <- function (field) {
-  if(!is.null(field)) {
-    return (ifelse(is.na(field), '', field))
-  } else {
-    return ('')
-  }
 }

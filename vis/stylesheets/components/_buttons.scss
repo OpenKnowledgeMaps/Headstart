@@ -2,9 +2,9 @@
 
 #searchclear {
     position: absolute;
-    right: 5px;
+    right: 15px;
     top: 0;
-    bottom: 0;
+    bottom: 10px;
     height: 14px;
     margin: auto;
     font-size: 14px;
@@ -17,4 +17,70 @@
 img#close-button {
     float: right;
     margin-right: 5px;
+}
+
+#modals {
+    vertical-align:top;
+    margin: 20px 20px 0 0;
+    font-family: $link-font-family;
+}
+
+#modals .btn {
+    font-size: 20px;
+    height: 55px;
+    width: 55px;
+    background-color: $okm-modal-btn;
+    border-color: $okm-modal-btn;
+    margin-bottom: 5px;
+    padding: 0px;
+    -moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+}
+
+#modals .btn:hover {
+    background-color: white;
+    border-color: $okm-modal-btn;
+    color: $okm-modal-btn;
+    -moz-box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
+    box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
+}
+
+#modals .btn:active {
+    background-color: white;
+    border-color: $okm-modal-btn;
+    color: $okm-modal-btn;
+    -moz-box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
+    box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
+}
+
+#modals .sharebuttons {
+    display: none;
+}
+
+.modal-content .btn-primary {
+    color: #fff;
+    background-color: $okm-modal-btn;
+    border-color: $okm-modal-btn;
+    font-family: $link-font-family;
+}
+
+.modal-content .btn-primary:hover {
+    background-color: white;
+    border-color: $okm-modal-btn;
+    color: $okm-modal-btn;
+}
+
+@media screen and (max-width: 1150px) {
+    #modals .btn {
+        font-size: 14px;
+        height: 40px;
+        width: 40px;
+    }
+}
+
+@if ($skin == "cris_vis") {
+    #searchclear {
+        right: 8px;
+        bottom: 0px;
+    }
 }

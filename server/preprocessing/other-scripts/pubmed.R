@@ -8,9 +8,10 @@ library("xml2")
 #
 # * query: search query
 # * params: parameters for the search in JSON format
-#    * mindate: in the form YYYY/MM/DD
-#    * maxdate: in the form YYYY/MM/DD
-#    * article_types: in the form "journal article" (that's the default as well)
+#    * from: publication date lower bound in the form YYYY-MM-DD
+#    * to: publication date upper bound in the form YYYY-MM-DD
+#    * article_types: in the form of an array of identifiers of article types
+#    * sorting: can be one of "most-relevant" and "most-recent"
 # * limit: number of search results to return
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
@@ -32,7 +33,21 @@ library("xml2")
 # Examples:
 # get_papers(query = "ecology")
 # get_papers(query = "ecology", params = list(from = "2016/04/01", to = "2016/06/05"))
+
+
+if(exists("DEBUG") && DEBUG == TRUE) {
+  logLevel <- "DEBUG"
+} else {
+  logLevel <- "INFO"
+}
+
+getLogger()$addHandler(writeToFile, file=Sys.getenv("OKM_LOGFILE"), level=logLevel)
+plog <- getLogger('api.pubmed')
+
+
 get_papers <- function(query, params = NULL, limit = 100) {
+  plog$info(query)
+  start.time <- Sys.time()
 
   fields <- c('.//ArticleTitle', './/MedlineCitation/PMID', './/Title', './/Abstract')
   year = './/Article/Journal/JournalIssue/PubDate'
@@ -49,7 +64,10 @@ get_papers <- function(query, params = NULL, limit = 100) {
   to = gsub("-", "/", params$to)
   article_types_string = paste0(" ((", '"', paste(params$article_types, sep='"', collapse='"[Publication Type] OR "'), '"[Publication Type]))')
   exclude_articles_with_abstract = " AND hasabstract"
-  query <- paste0(query, article_types_string, exclude_articles_with_abstract)
+  #HOTFIX - article_types cause a 414 with PubMed
+  #query <- paste0(query, article_types_string, exclude_articles_with_abstract)
+  query <- paste0(query, exclude_articles_with_abstract)
+  plog$info(query)
   x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit,
                               mindate = from, maxdate = to, sort=sortby, use_history=TRUE)
   res <- rentrez::entrez_fetch(db = "pubmed", web_history = x$web_history, retmax = limit, rettype = "xml")
@@ -129,6 +147,10 @@ get_papers <- function(query, params = NULL, limit = 100) {
   }
 
   df$pmcid = pmc_ids
+
+  end.time <- Sys.time()
+  time.taken <- end.time - start.time
+  plog$info(paste("Time taken:", time.taken, sep=" "))
 
   return(list(metadata = df, text = df[,c('id', 'content')]))
 }

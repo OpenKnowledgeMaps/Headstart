@@ -2,6 +2,7 @@
 // Filename: io.js
 import config from 'config';
 import { mediator } from 'mediator';
+import { intros } from 'intro';
 
 var IO = function() {
     this.test = 0;
@@ -11,6 +12,9 @@ var IO = function() {
     this.title = "default-title";
     this.context = {};
     this.num_oa;
+    this.num_papers;
+    this.num_datasets;
+    this.data;
 };
 
 IO.prototype = {
@@ -39,6 +43,20 @@ IO.prototype = {
             d3[config.input_format](mediator.current_bubble.file, callback);
           }
         });
+    },
+    
+    get_data: function(csv) {
+        var self = this;
+        
+        if (config.show_context) {
+            if(typeof csv.data === "object") {
+                self.data = csv.data;
+            } else {
+                self.data = JSON.parse(csv.data);
+            }
+        } else {
+            self.data = csv;
+        }
     },
 
     convertToFirstNameLastName: function (authors_string) {
@@ -94,6 +112,24 @@ IO.prototype = {
         }
         this.context.num_documents = num_documents;
         this.context.share_oa = this.num_oa;
+        this.context.num_datasets = this.num_datasets;
+        this.context.num_papers = this.num_papers;
+    },
+
+    setInfo: function(context) {
+        var current_intro = config.intro
+        var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
+        if (intro.dynamic) { 
+            intro.params = context.params
+            // if organisations build pretty url list
+            if (typeof intro.params.organisations != "undefined") {
+                intro.params.html_organisations = intro.params.organisations.map((org) => {
+                    return `<a href='${org.url}' target='_blank'>${org.name}</a>`
+                }).join(', ')
+                delete intro.params.organisations
+            }
+            intro.params.html_openaire_link = `<a href='https://www.openaire.eu/search/project?projectId=${intro.params.obj_id}' target='_blank'>Link</a>`
+        }
     },
 
     initializeMissingData: function(data) {
@@ -112,6 +148,9 @@ IO.prototype = {
             that.setDefaultIfNullOrUndefined(d, 'x', locale.default_x);
             that.setDefaultIfNullOrUndefined(d, 'y', locale.default_y);
             that.setDefaultIfNullOrUndefined(d, 'year', locale.default_year);
+            config.scale_types.forEach((type) => {
+                that.setDefaultIfNullOrUndefined(d, type, locale.default_readers);
+            })
         })
     },
 
@@ -124,6 +163,8 @@ IO.prototype = {
         var cur_data = fs;
         var has_keywords = false;
         var num_oa = 0;
+        var num_papers = 0;
+        var num_datasets = 0;
         cur_data.forEach(function (d) {
             d.x = parseFloat(d.x);
             d.y = parseFloat(d.y);
@@ -140,14 +181,57 @@ IO.prototype = {
             d.published_in = _this.setToStringIfNullOrUndefined(d.published_in, "");
             d.title = _this.setToStringIfNullOrUndefined(d.title,
                 config.localization[config.language]["no_title"]);
+                
+            var prepareMetric = function(d, metric) {
+                 if(d.hasOwnProperty(metric)) {
+                     if(d[metric] === "N/A") {
+                         return "n/a"
+                     } else {
+                         return +d[metric];
+                     }
+                 }
+            }
+            
+            var prepareInternalMetric = function(d, metric) {
+                if(d[metric] === "n/a" || d[metric] === "N/A") {
+                     return 0;
+                 } else {
+                     return +d[metric];
+                 }
+            }
+            
+            var prepareSubMetric = function(d, metric) {
+                let num = 0;
+                d.paper_abstract.forEach(function (element) {
+                    num += +element.readers;
+                })
+                return num;
+            }
 
-            if (config.content_based === false) {
-                d.readers = +d.readers;
-                d.internal_readers = +d.readers + 1;
+            if (config.list_sub_entries) {
+                d.num_readers = prepareSubMetric(d, "readers");
+                d.internal_readers = d.num_readers + 1;
+            } else if (config.content_based === false && !(config.scale_by)) {
+                d.num_readers = prepareMetric(d, "readers");
+                d.internal_readers = prepareInternalMetric(d, "readers") + 1;
+            } else if (config.scale_by) {
+                d.num_readers = prepareMetric(d, config.scale_by);
+                d.internal_readers = prepareInternalMetric(d, config.scale_by) + 1
             } else {
-                d.readers = 0;
+                d.num_readers = 0;
                 d.internal_readers = 1;
             }
+            
+            d.num_subentries = 0;
+            
+            if (config.list_sub_entries) {
+                d.abstract_search = "";
+                d.paper_abstract.forEach(function(obj) {
+                    d.abstract_search += obj.abstract + " ";
+                    d.num_subentries++;
+                })
+            }
+            
             if (typeof highlight_data != 'undefined' && highlight_data !== null) {
                 if (highlight_data.bookmarks_all !== null) {
                     highlight_data.bookmarks_all.forEach(function (x) {
@@ -159,6 +243,14 @@ IO.prototype = {
                         }
                     });
                 }
+            }
+            
+            if(config.metric_list) {
+                d.tweets = prepareMetric(d, "cited_by_tweeters_count")
+                d.citations = prepareMetric(d, "citation_count")
+                d.readers = prepareMetric(d, "readers.mendeley")
+            } else {
+                d.readers = d.num_readers;
             }
 
             d.paper_selected = false;
@@ -188,14 +280,19 @@ IO.prototype = {
             } else if(config.service === "base") {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
                 d.oa_link = d.link;
+            } else if(config.service = "openaire") {
+                d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
+                d.oa_link = d.link;
             } else {
-				d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
-			}
+                d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
+            }
 
             d.outlink = _this.createOutlink(d);
             
             num_oa += (d.oa)?(1):(0);
-            
+            num_papers += (d.resulttype === 'publication')?(1):(0);
+            num_datasets += (d.resulttype === 'dataset')?(1):(0);
+
             if(d.hasOwnProperty("subject_orig")) {
                 has_keywords = true;
             }
@@ -204,6 +301,8 @@ IO.prototype = {
         
         config.show_keywords = (has_keywords)?(true):(false);
         this.num_oa = num_oa;
+        this.num_papers = num_papers;
+        this.num_datasets = num_datasets;
 
         mediator.publish("update_canvas_domains", cur_data);
         mediator.publish("update_canvas_data", cur_data);
@@ -278,7 +377,7 @@ IO.prototype = {
                 return d.internal_readers;
             });
 
-            areas[area].readers = sum_readers;
+            areas[area].num_readers = sum_readers;
 
             var mean_x = d3.mean(papers, function (d) {
                 return d.x;
@@ -309,7 +408,7 @@ IO.prototype = {
             new_area.x_html = 0 - new_area.width_html / 2;
             new_area.y_html = 0 - new_area.height_html / 2;
             new_area.area_uri = area;
-            new_area.readers = areas[area].readers;
+            new_area.num_readers = areas[area].num_readers;
             new_area.papers = areas[area].papers;
             areas_array.push(new_area);
         }
@@ -329,6 +428,8 @@ IO.prototype = {
         var url = false;
         if (config.service == "base") {
           url = d.oa_link;
+        } else if (config.service == "openaire" && d.resulttype == "dataset") {
+            url = config.url_prefix_datasets + d.url;
         } else if(config.url_prefix !== null) {
             url = config.url_prefix + d.url;
         } else if (typeof d.url != 'undefined') {
