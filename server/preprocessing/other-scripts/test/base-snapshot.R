@@ -6,19 +6,20 @@ library(arsenal)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
+Sys.setenv('OKM_LOGFILE'='test.log')
 
 setwd(wd) #Don't forget to set your working directory
 
 query <- "digital education" #args[2]
 service <- "base"
 params <- NULL
-params_file <- "snapshot_params_base.json"
+params_file <- "params_base_snapshot.json"
+
+DEBUG = FALSE
 
 source('../utils.R')
 source("../vis_layout.R")
 source('../base.R')
-
-DEBUG = FALSE
 
 MAX_CLUSTERS = 15
 ADDITIONAL_STOP_WORDS = "english"
@@ -42,3 +43,5 @@ output <- data.frame(fromJSON(output_json))
 expected <- fromJSON("snapshots/snapshot_base.json")
 
 summary(compare(output, expected, by="id"))
+cmp <- compare(output, expected, by="id")
+diffs(cmp, by.var=TRUE)

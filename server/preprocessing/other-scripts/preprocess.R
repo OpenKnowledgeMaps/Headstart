@@ -1,22 +1,5 @@
 vplog <- getLogger('vis.preprocess')
 
-
-get_stopwords <- function(lang, add_stop_words, testing) {
-  stops <- stopwords(lang)
-
-  if (!is.null(add_stop_words)){
-    if (isTRUE(testing)) {
-      add_stop_path <- paste0("../../resources/", add_stop_words, ".stop")
-    } else {
-      add_stop_path <- paste0("../resources/", add_stop_words, ".stop")
-    }
-    additional_stops <- scan(add_stop_path, what="", sep="\n")
-    stops = c(stops, additional_stops)
-  }
-  return(stops)
-}
-
-
 filter_duplicates <- function(metadata, text, list_size) {
   #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
   if(list_size > -1) {
@@ -76,34 +59,6 @@ deduplicate_titles <- function(metadata, list_size) {
 
 }
 
-create_corpus <- function(metadata, text, stops) {
-  m <- list(content = "content", id = "id")
-
-  myReader <- readTabular(mapping = m)
-  (corpus <- Corpus(DataframeSource(text), readerControl = list(reader = myReader)))
-
-  # Replace non-convertible bytes in with strings showing their hex codes, see http://tm.r-forge.r-project.org/faq.html
-  corpus <- tm_map(corpus,  content_transformer(function(x) iconv(enc2utf8(x), sub = "byte")))
-  corpus <- tm_map(corpus, removePunctuation)
-  corpus <- tm_map(corpus, content_transformer(tolower))
-  corpus <- tm_map(corpus, removeWords, stops)
-  corpus <- tm_map(corpus, stripWhitespace)
-  corpus_unstemmed = corpus
-
-  corpus <- tm_map(corpus, stemDocument)
-
-  return(list(corpus = corpus, corpus_unstemmed = corpus_unstemmed))
-}
-
-create_tdm_matrix <- function(corpus, sparsity=1) {
-  tdm <- TermDocumentMatrix(corpus)
-  if(sparsity < 1) {
-    tdm <- removeSparseTerms(tdm, sparsity)
-  }
-  tdm_matrix = t(as.matrix(tdm))
-  return(tdm_matrix)
-}
-
 replace_keywords_if_empty <- function(corpus, metadata, stops) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
@@ -131,10 +86,9 @@ replace_keywords_if_empty <- function(corpus, metadata, stops) {
 
 }
 
-
-normalize_matrix <- function(tdm_matrix, method = "cosine") {
-  distance_matrix_2 <- as.matrix(proxy::dist(tdm_matrix, method))
-  distance_matrix = as.dist(distance_matrix_2)
-
-  return(distance_matrix)
+get_OHE_feature <-function(metadata, feature_name) {
+  ohe_encoder <- onehot(metadata[c('id', feature_name)], stringsAsFactors = TRUE)
+  ohe_feat <- data.frame(predict(ohe_encoder, metadata[c('id', 'lang_detected')]))
+  rownames(ohe_feat) <- metadata$id
+  return(ohe_feat)
 }
