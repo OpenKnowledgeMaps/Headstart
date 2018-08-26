@@ -65,6 +65,12 @@ vis_layout <- function(text, metadata,
   tdm_matrix <- create_tdm_matrix(corpus$stemmed)
   distance_matrix <- get_distance_matrix(tdm_matrix)
   lang_detected <- get_OHE_feature(metadata, "lang_detected")
+  vlog$info(paste("Languages:",
+                  paste(paste0(names(lang_detected),
+                               ":",
+                               apply(lang_detected, 2, sum)),
+                        collapse = " "),
+                   sep=" "))
   features <- concatenate_features(distance_matrix, lang_detected)
 
   vlog$debug("get clusters")
