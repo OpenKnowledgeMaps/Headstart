@@ -17,11 +17,6 @@ create_output <- function(clusters, layout, metadata) {
 
   names(output)[names(output)=="groups"] <- "area_uri"
   output["area"] = paste(output$cluster_labels, sep="")
-  missing_areatitles = which(lapply(output$area, function(x) {nchar(x)}) <= 1)
-  replacement_areatitles = output$subject[missing_areatitles]
-  replacement_areatitles = lapply(replacement_areatitles, function(x) {gsub(";", ", ", x)})
-  replacement_areatitles <- lapply(replacement_areatitles, function(x) {paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))})
-  output$area[missing_areatitles] = unlist(replacement_areatitles)
 
   output_json = toJSON(output)
 
