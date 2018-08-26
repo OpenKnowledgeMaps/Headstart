@@ -1,4 +1,5 @@
 vslog <- getLogger('vis.summarize')
+vslog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 SplitTokenizer <- function(x) {
   tokens = unlist(lapply(strsplit(words(x), split=";"), paste), use.names = FALSE)
@@ -31,27 +32,39 @@ filter_out <- function(ngrams, stops){
   return (tokens)
 }
 
-create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspec, top_n, stops, taxonomy_separator="/") {
+create_cluster_labels <- function(clusters, metadata, weightingspec,
+                                  top_n, stops, taxonomy_separator="/") {
+  nn_corpus <- get_clustered_corpus(clusters, metadata, stops, taxonomy_separator)
+  nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer,
+                                                           weighting = function(x) weightSMART(x, spec="ntn"),
+                                                           bounds = list(local = c(2, Inf))
+                                                           ))
+  tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
+  empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
+  tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(nn_tfidf, nn_corpus)[c(empty_tfidf)]
+  tfidf_top_names <- get_top_names(tfidf_top, top_n)
+  clusters$cluster_labels = ""
+  for (k in seq(1, clusters$num_clusters)) {
+    group = c(names(clusters$groups[clusters$groups == k]))
+    matches = which(clusters$labels%in%group)
+    clusters$cluster_labels[c(matches)] = tfidf_top_names[k]
+  }
+  return(clusters)
+}
+
+
+get_clustered_corpus <- function(clusters, metadata, stops, taxonomy_separator) {
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
     group = c(names(clusters$groups[clusters$groups == k]))
-    matches = which(metadata_full_subjects$id%in%group)
-    titles =  metadata_full_subjects$title[c(matches)]
-    subjects = metadata_full_subjects$subject[c(matches)]
+    matches = which(metadata$id%in%group)
+    titles =  metadata$title[c(matches)]
+    subjects = metadata$subject[c(matches)]
 
     titles = lapply(titles, function(x) {gsub("[^[:alpha:]]", " ", x)})
-    #titles = lapply(titles, function(x)paste(unlist(strsplit(x, split="  ")), collapse=" "))
     titles = lapply(titles, gsub, pattern="\\s+", replacement=" ")
     titles = lapply(titles, tolower)
-    # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
-    titles_bigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
-    titles_bigrams = filter_out(titles_bigrams, stops)
-    titles_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
-    titles_trigrams = filter_out(titles_trigrams, stops)
-    #titles_quadgrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 4), paste, collapse="_"))), paste, collapse=" ")
-    #titles_quadgrams = filter_out(titles_quadgrams, stops)
-    #titles_fivegrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 5), paste, collapse="_"))), paste, collapse=" ")
-    #titles_fivegrams = filter_out(titles_fivegrams, stops)
+    title_ngrams <- get_title_ngrams(titles, stops)
     titles = lapply(titles, function(x) {removeWords(x, stops)})
 
     subjects = mapply(gsub, subjects, pattern = "; ", replacement=";")
@@ -67,37 +80,48 @@ create_cluster_labels <- function(clusters, metadata_full_subjects, weightingspe
       subjects = lapply(subjects, function(x){paste(unlist(x), collapse=";")})
       subjects = mapply(paste, subjects, taxons, collapse=";")
     }
-
-    all_subjects = paste(subjects, titles_bigrams, titles_trigrams, collapse=" ")
+    all_subjects = paste(subjects, title_ngrams$bigrams, title_ngrams$trigrams, collapse=" ")
     all_subjects = gsub(",", ";", all_subjects)
     subjectlist = c(subjectlist, all_subjects)
   }
   nn_corpus <- Corpus(VectorSource(subjectlist))
-  nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer,
-                                                           weighting = function(x) weightSMART(x, spec="ntn"),
-                                                           bounds = list(local = c(2, Inf))
-                                                           ))
-  empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
-  replacement_nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer,
-                                                          weighting = function(x) weightSMART(x, spec="ntn"),
-                                                          bounds = list(local = c(1, Inf))
-                                                           ))
-  tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
-  replacement_tfidf_top <- apply(replacement_nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
-  tfidf_top[c(empty_tfidf)] <- replacement_tfidf_top[c(empty_tfidf)]
+  return(nn_corpus)
+}
+
+
+get_top_names <- function(tfidf_top, top_n) {
   tfidf_top_names <- lapply(tfidf_top, names)
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {x = gsub("_", " ", x); trim(x)})
   tfidf_top_names <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, top_n))
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))})
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {paste(unlist(trim(x)), collapse=", ")})
-  clusters$cluster_labels = ""
-  for (k in seq(1, clusters$num_clusters)) {
-    group = c(names(clusters$groups[clusters$groups == k]))
-    matches = which(clusters$labels%in%group)
-    clusters$cluster_labels[c(matches)] = tfidf_top_names[k]
-  }
-  return(clusters)
+  return(tfidf_top_names)
 }
+
+fill_empty_clusters <- function(nn_tfidf, nn_corpus){
+  replacement_nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer,
+                                                          weighting = function(x) weightSMART(x, spec="ntn"),
+                                                          bounds = list(local = c(1, Inf))
+                                                           ))
+
+  replacement_tfidf_top <- apply(replacement_nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
+  return(replacement_tfidf_top)
+}
+
+
+get_title_ngrams <- function(titles, stops) {
+  # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
+  titles_bigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
+  titles_bigrams = filter_out(titles_bigrams, stops)
+  titles_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
+  titles_trigrams = filter_out(titles_trigrams, stops)
+  #titles_quadgrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 4), paste, collapse="_"))), paste, collapse=" ")
+  #titles_quadgrams = filter_out(titles_quadgrams, stops)
+  #titles_fivegrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 5), paste, collapse="_"))), paste, collapse=" ")
+  #titles_fivegrams = filter_out(titles_fivegrams, stops)
+  return(list("bigrams" = titles_bigrams, "trigrams" = titles_trigrams))
+}
+
 
 filter_out_nested_ngrams <- function(top_ngrams, top_n) {
   top_names <- list()
