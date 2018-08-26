@@ -1,14 +1,9 @@
 library('rAltmetric')
 library('rcrossref')
 
-if(exists("DEBUG") && DEBUG == TRUE) {
-  logLevel <- "DEBUG"
-} else {
-  logLevel <- "INFO"
-}
-
-getLogger()$addHandler(writeToFile, file=Sys.getenv("OKM_LOGFILE"), level=logLevel)
+getLogger()$addHandler(writeToFile, file=Sys.getenv("OKM_LOGFILE"))
 alog <- getLogger('altmetrics')
+alog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 enrich_output_json <- function(output_json){
   start.time <- Sys.time()
