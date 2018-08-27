@@ -75,7 +75,7 @@ replace_keywords_if_empty <- function(metadata, stops) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
   candidates = mapply(paste, metadata$title[missing_subjects], metadata$paper_abstract[missing_subjects])
-  candidates = lapply(candidates, tolower)
+  candidates = mapply(conditional_lowercase, candidates, metadata$lang_detected[missing_subjects])
   candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
   candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
   candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
