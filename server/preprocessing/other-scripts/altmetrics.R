@@ -1,9 +1,9 @@
 library('rAltmetric')
 library('rcrossref')
 
-getLogger()$addHandler(writeToFile, file=Sys.getenv("OKM_LOGFILE"))
+
 alog <- getLogger('altmetrics')
-alog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
+
 
 enrich_output_json <- function(output_json){
   start.time <- Sys.time()

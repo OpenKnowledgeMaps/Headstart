@@ -1,5 +1,4 @@
 vclog <- getLogger('vis.cluster')
-vclog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 get_cut_off <- function(css_cluster, attempt=1){
   evthres = 0.9**attempt

@@ -1,5 +1,4 @@
 vflog <- getLogger('vis.features')
-vflog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 create_corpus <- function(metadata, text, stops) {
   valid <- getStemLanguages()
