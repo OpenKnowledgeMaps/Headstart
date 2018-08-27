@@ -36,3 +36,11 @@ get_stopwords <- function(lang) {
   }
   return(stops)
   }
+
+  conditional_lowercase <- function(text, lang) {
+    if (lang == 'german') {
+      return(text)
+    } else {
+      return(tolower(text))
+    }
+  }
