@@ -16,9 +16,9 @@ library(onehot)
 registerDoParallel(3)
 
 
-getLogger()$addHandler(writeToFile,
-                       file=Sys.getenv("OKM_LOGFILE"))
 vlog <- getLogger('vis')
+vlog$addHandler(writeToFile,
+                file=Sys.getenv("OKM_LOGFILE"))
 vlog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 # Expects the following metadata fields:
@@ -54,7 +54,7 @@ vis_layout <- function(text, metadata,
   metadata <- filtered$metadata
   text <- filtered$text
   metadata["lang_detected"] <- detect_language(text$content)
-  stops <- get_stopwords(lang, add_stop_words, testing)
+  stops <- get_stopwords(lang)
   corpus <- create_corpus(metadata, text, stops)
 
   vlog$debug("get features")
@@ -62,8 +62,11 @@ vis_layout <- function(text, metadata,
   distance_matrix <- get_distance_matrix(tdm_matrix)
   lang_detected <- get_OHE_feature(metadata, "lang_detected")
   vlog$info(paste("Languages:",
-                  paste(paste0(names(lang_detected), ":", apply(lang_detected, 2, sum)),
-                        collapse = " "), sep=" "))
+                  paste(paste0(names(lang_detected),
+                               ":",
+                               apply(lang_detected, 2, sum)),
+                        collapse = " "),
+                   sep=" "))
   features <- concatenate_features(distance_matrix, lang_detected)
 
   vlog$debug("get clusters")
