@@ -1,5 +1,4 @@
 vplog <- getLogger('vis.preprocess')
-vplog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 
 detect_language <- function(text) {

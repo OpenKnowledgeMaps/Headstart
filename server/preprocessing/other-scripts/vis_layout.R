@@ -16,10 +16,9 @@ library(onehot)
 registerDoParallel(3)
 
 
+basicConfig(level=Sys.getenv("OKM_LOGLEVEL"))
+addHandler(writeToFile, file=Sys.getenv("OKM_LOGFILE"))
 vlog <- getLogger('vis')
-vlog$addHandler(writeToFile,
-                file=Sys.getenv("OKM_LOGFILE"))
-vlog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
