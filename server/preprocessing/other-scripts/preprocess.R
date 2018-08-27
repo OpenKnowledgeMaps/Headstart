@@ -3,12 +3,12 @@ vplog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 
 detect_language <- function(text) {
-  valid <- getStemLanguages()
   lang_detected <- lapply(text, textcat)
-  lang_detected <- unlist(lapply(lang_detected, function(x){
-                    if (x %in% valid) {
-                      x
-                    } else "english" }))
+  # from russian-iso8859_5 only take russian
+  lang_detected <- unlist(lapply(lang_detected,
+                    function(x) {vapply(strsplit(x,"-"), `[`, 1, FUN.VALUE=character(1))}
+                  ))
+  lang_detected <-
   return(lang_detected)
 }
 

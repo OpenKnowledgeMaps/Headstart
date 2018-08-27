@@ -15,17 +15,24 @@ check_metadata <- function (field) {
 }
 
 
-get_stopwords <- function(lang, add_stop_words, testing) {
-  stops <- stopwords(lang)
+get_stopwords <- function(lang) {
+  stops <- tryCatch({
+    stops <- stopwords(lang)
+  }, error = function(err){
+    return(unlist(""))
+  })
 
-  if (!is.null(add_stop_words)){
-    if (isTRUE(testing)) {
-      add_stop_path <- paste0("../../resources/", add_stop_words, ".stop")
-    } else {
-      add_stop_path <- paste0("../resources/", add_stop_words, ".stop")
-    }
-    additional_stops <- scan(add_stop_path, what="", sep="\n")
-    stops = c(stops, additional_stops)
+  if (lang %in% c("english", "german")) {
+    stops <- tryCatch({
+      add_stop_path <- paste0("../../resources/", lang, ".stop")
+      additional_stops <- scan(add_stop_path, what="", sep="\n")
+      stops = c(stops, additional_stops)
+    }, error = function(err) {
+      add_stop_path <- paste0("../resources/", lang, ".stop")
+      additional_stops <- scan(add_stop_path, what="", sep="\n")
+      stops = c(stops, additional_stops)
+      return(stops)
+    })
   }
   return(stops)
-}
+  }

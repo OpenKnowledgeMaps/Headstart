@@ -1,19 +1,27 @@
-fplog <- getLogger('vis.features')
-fplog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
+vflog <- getLogger('vis.features')
+vflog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 create_corpus <- function(metadata, text, stops) {
-  text["language"] <- metadata$lang_detected
+  valid <- getStemLanguages()
+  text["language"] <- unlist(lapply(metadata$lang_detected,
+                    function(x) {
+                      if (x %in% valid) {
+                        x
+                      } else {
+                        "english"
+                      }}))
   mapping <- list(content = "content", id = "id", language = "language")
   myReader <- readTabular(mapping = mapping)
 
   corpus <- Corpus(DataframeSource(text),
                    readerControl = list(reader = myReader))
 
-  # Replace non-convertible bytes in with strings showing their hex codes, see http://tm.r-forge.r-project.org/faq.html
-  corpus <- tm_map(corpus,  content_transformer(function(x) iconv(enc2utf8(x), sub = "byte")))
+  # Replace non-convertible bytes in with strings showing their hex codes,
+  # see http://tm.r-forge.r-project.org/faq.html
+  corpus <- tm_map(corpus, content_transformer(function(x) iconv(enc2utf8(x), sub = "byte")))
   corpus <- tm_map(corpus, removePunctuation)
   corpus <- tm_map(corpus, content_transformer(tolower))
-  corpus <- tm_map(corpus, removeWords, stops)
+  corpus <- tm_map(corpus, remove_stop_words)
   corpus <- tm_map(corpus, stripWhitespace)
   unstemmed = corpus
   stemmed <- tm_map(corpus, stemDocument)
@@ -38,4 +46,22 @@ get_distance_matrix <- function(tdm_matrix, method = "cosine") {
 concatenate_features <- function(...) {
   # expects a list of feature matrices which can be extended horizontally
   return(cbind(...))
+}
+
+remove_stop_words <-
+function(x, language = "english")
+  UseMethod("remove_stop_words", x)
+remove_stop_words.character <-
+function(x, language = "english")
+{
+  y <- unlist(strsplit(x, " "))
+  stops <- get_stopwords(language)
+  stopword <- unlist(lapply(y, function(z) z %in% stops))
+  doc <- y[which(!stopword)]
+  doc <- paste(doc, collapse = " ")
+}
+remove_stop_words.PlainTextDocument <-
+function(x, language = meta(x, "language"))
+{
+  content_transformer(remove_stop_words.character)(x, language)
 }
