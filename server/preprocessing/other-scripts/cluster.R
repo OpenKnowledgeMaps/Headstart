@@ -86,11 +86,13 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
 
   # Perform non-metric multidimensional scaling
-  nm <- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
-  nm.nmin = nmds.min(nm)
+  # nm <- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
+  # nm.nmin = nmds.min(nm)
+  ord <- metaMDS(distance_matrix, k = 2)
+  points <- ord$points
 
-  vclog$info(paste("NMDS-Stress:", min(nm$stress), sep=" "))
-  vclog$info(paste("NMDS-R2:", min(nm$r2), sep=" "))
+  vclog$info(paste("NMDS-Stress:", min(ord$stress), sep=" "))
+  # vclog$info(paste("NMDS-R2:", min(nm$r2), sep=" "))
 
   # NEEDS FIX
   # if(exists("DEBUG") && DEBUG == TRUE) {
@@ -99,6 +101,6 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
   #   plot(nm.nmin, pch=groups)
   #   dev.off()
   # }
-
-  return(nm.nmin)
+  layout <- list(X1 = points[,1], X2 = points[,2])
+  return(layout)
 }
