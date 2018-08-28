@@ -14,10 +14,9 @@ $ini_array = library\Toolkit::loadIni($INI_DIR);
 $dirty_query = library\CommUtils::getParameter($_POST, "q");
 
 $post_params = $_POST;
-$post_params['key'] = $ini_array['naming']['api_key_core'];
 
 
-$result = search("core", $dirty_query, $post_params, array("article_types", "journals", "from", "to", "sorting", "key"), ";", "/");
+$result = search("core", $dirty_query, $post_params, array("from", "to"), ";", "/");
 
 echo $result
 
