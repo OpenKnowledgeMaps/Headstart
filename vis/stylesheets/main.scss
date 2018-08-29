@@ -1,27 +1,27 @@
 // Main style file
 
-// Don't use reset yet, because Vendors are currently loaded earlier
-// @import 'base/reset';
-
-// Load base settings
-/* Base */
-@import 'base/typography';
-@import "base/colors";
-@import "base/default_settings";
-
-
-/* Vendor Dependencies */
-// @import "vendors/bootstrap";
-@import "utils/mixins";
-
-@import "layout/grid";
-@import "layout/forms";
-
-@import "components/animations";
-@import "components/buttons";
-@import "components/input";
-
 .headstart {
+    // Don't use reset yet, because Vendors are currently loaded earlier
+    // @import 'base/reset';
+
+    // Load base settings
+    /* Base */
+    @import 'base/typography';
+    @import "base/colors";
+    @import "base/default_settings";
+
+
+    /* Vendor Dependencies */
+    // @import "vendors/bootstrap";
+    @import "utils/mixins";
+
+    @import "layout/grid";
+    @import "layout/forms";
+
+    @import "components/animations";
+    @import "components/buttons";
+    @import "components/input";
+
     @import "modules/map";
     @import "modules/list";
     @import "modules/timeline";
