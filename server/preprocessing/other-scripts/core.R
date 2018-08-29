@@ -55,7 +55,7 @@ library(rcoreoa)
 # cat(x$text$content[1])
 get_papers <- function(query, params = list(), limit=100) {
   core_query <- build_query(query, params)
-  ids <- core_advanced_search(core_query, limit=100)$data$id
+  ids <- core_advanced_search(core_query, limit=limit)$data$id
   res <- core_articles(ids, metadata = TRUE, fulltext = FALSE,
                        citations = FALSE, similar = FALSE, urls = TRUE,
                        extractedUrls = FALSE, faithfulMetadata = FALSE,
@@ -115,6 +115,9 @@ build_query <- function(query, params) {
   core_query$exact_phrase <- query
   core_query$year_from <- substr(params["from"], 1, 4)
   core_query$year_to <- substr(params["to"], 1, 4)
+  if (params$language != 'all') {
+    core_query$language <- map_language(params$language)
+  }
   valid_params <- c("all_of_the_words", "exact_phrase", "at_least_one_of_the_words",
                     "without_the_words", "find_those_words", "author", "publisher",
                     "repository", "doi", "year_from", "year_to", "language")
@@ -142,4 +145,62 @@ get_pdf_candidates <- function(x){
   } else (
     return(list())
   )
+}
+
+map_language <- function(lang_id) {
+  core_sup <- list(
+  "af"="Afrikaans",
+  "ar"="Arabic",
+  "bg"="Bulgarian",
+  "bn"="Bengali",
+  "cs"="Czech",
+  "da"="Danish",
+  "de"="German",
+  "el"="Greek",
+  "en"="English",
+  "es"="Spanish",
+  "et"="Estonian",
+  "fa"="Persian",
+  "fi"="Finnish",
+  "fr"="French",
+  "gu"="Gujarati",
+  "he"="Hebrew",
+  "hi"="Hindi",
+  "hr"="Croatian",
+  "hu"="Hungarian",
+  "id"="Indonesian",
+  "it"="Italian",
+  "ja"="Japanese",
+  "kn"="Kannada",
+  "ko"="Korean",
+  "lt"="Lithuanian",
+  "lv"="Latvian",
+  "mk"="Macedonian",
+  "ml"="Malayalam",
+  "mr"="Marathi",
+  "ne"="Nepali",
+  "nl"="Dutch",
+  "no"="Norwegian",
+  "pa"="Punjabi",
+  "pl"="Polish",
+  "pt"="Portuguese",
+  "ro"="Romanian",
+  "ru"="Russian",
+  "sk"="Slovak",
+  "sl"="Slovene",
+  "so"="Somali",
+  "sq"="Albanian",
+  "sv"="Swedish",
+  "sw"="Swahili",
+  "ta"="Tamil",
+  "te"="Telugu",
+  "th"="Thai",
+  "tl"="Tagalog",
+  "tr"="Turkish",
+  "uk"="Ukrainian",
+  "ur"="Urdu",
+  "vi"="Vietnamese",
+  "zh-cn"="Simplified Chinese",
+  "zh-tw"="Traditional Chinese")
+  return(unlist(unname(core_sup[lang_id])))
 }
