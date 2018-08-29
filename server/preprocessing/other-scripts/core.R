@@ -127,7 +127,7 @@ get_oa_state <- function(x){
 
 get_journal <- function(x){
   if (length(x) > 0) {
-    return(if (!is.na(x[1])) x[1] else paste(unlist(unname(x[2])), collapse=", "))
+    return(if (!is.na(x[1])) x[1] else "")
   } else {
     return("")
   }
