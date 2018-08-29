@@ -16,7 +16,7 @@ $dirty_query = library\CommUtils::getParameter($_POST, "q");
 $post_params = $_POST;
 
 
-$result = search("core", $dirty_query, $post_params, array("from", "to", "language"), ";", "/");
+$result = search("core", $dirty_query, $post_params, array("from", "to", "language_id"), ";", "/");
 
 echo $result
 

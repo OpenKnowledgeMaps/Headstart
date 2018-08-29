@@ -183,7 +183,7 @@ var options_core = {
       ]
     },
     {
-      id: 'language_name',
+      id: 'language_id',
       multiple: false,
       name: 'Languages',
       type: 'dropdown',

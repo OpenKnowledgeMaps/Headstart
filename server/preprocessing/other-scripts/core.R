@@ -115,8 +115,8 @@ build_query <- function(query, params) {
   core_query$exact_phrase <- query
   core_query$year_from <- substr(params["from"], 1, 4)
   core_query$year_to <- substr(params["to"], 1, 4)
-  if (params$language != 'all') {
-    core_query$language <- map_language(params$language)
+  if (params$language_id != 'all') {
+    core_query$language <- map_language(params$language_id)
   }
   valid_params <- c("all_of_the_words", "exact_phrase", "at_least_one_of_the_words",
                     "without_the_words", "find_those_words", "author", "publisher",
@@ -147,7 +147,7 @@ get_pdf_candidates <- function(x){
   )
 }
 
-map_language <- function(lang_id) {
+map_language <- function(language_id) {
   core_sup <- list(
   "af"="Afrikaans",
   "ar"="Arabic",
@@ -202,5 +202,5 @@ map_language <- function(lang_id) {
   "vi"="Vietnamese",
   "zh-cn"="Simplified Chinese",
   "zh-tw"="Traditional Chinese")
-  return(unlist(unname(core_sup[lang_id])))
+  return(unlist(unname(core_sup[language_id])))
 }
