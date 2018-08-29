@@ -25,6 +25,7 @@ Make sure to have `npm` version 3.10.10 installed (it comes with Node.js 6.14.x,
  ### Deployment
  1. To run Headstart on a production server (e.g. Apache), you need to set the publicPath in `config.js` to the URL of the `dist` directory. 
  Specify the full path excluding protocol, e.g. `//example.org/headstart/dist`
+ 1. Install all dependencies with `npm install`.
  1. Build the client again with `npm run prod`.
  1. Copy the contents of `Headstart/examples/cris_vis` to the desired location on your web server.
  1. In the file `index.html`, replace the following: 
@@ -78,8 +79,12 @@ For a responsive layout, you can use the following code snippet to adapt it to c
 	}
 
 	let div_height = calcDivHeight();
-
-	$("#visualization").css("min-height", div_height + "px")
+	$("#visualization").css("min-height", div_height + "px");
+	
+	$(window).resize(function() {
+		let div_height = calcDivHeight();
+		$("#visualization").css("min-height", div_height + "px");
+	});
 	```
  ## Google Analytics Event Tracking
  To enable Google Analytics Event Tracking, open the file `data-config.js` on the web server and change the variable `is_evaluation` from `false`to `true`. Don't forget to add the GA tracking code. Both analytics.js and gtag.js are supported.
