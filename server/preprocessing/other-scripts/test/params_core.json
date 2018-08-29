@@ -1,5 +1,4 @@
 {
-  "query":"ecology",
-  "fulltext": "FALSE",
-  "key":"CHANGE_TO_YOUR_KEY"
+  "from": "2016",
+  "to": "2017"
 }
