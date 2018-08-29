@@ -163,14 +163,14 @@ var options_plos = {
 var options_core = {
   dropdowns: [
     {
-      id: 'time_range',
+      id: 'year_range',
       multiple: false,
       name: 'Time Range',
       type: 'dropdown',
       fields: [
-        { id: 'any-time', text: 'Any time' },
-        { id: 'last-month', text: 'Last month' },
-        { id: 'last-year', text: 'Last year' },
+        { id: 'any-time-years', text: 'Any time' },
+        { id: 'this-year', text: 'This year' },
+        { id: 'last-year-years', text: 'Last year' },
         {
           id: 'user-defined',
           text: 'Custom range',
@@ -688,7 +688,7 @@ var SearchOptions = {
          .attr("class", "frontend-btn")
          .style("vertical-align", "middle")
          .text("Submit");
-         
+
          /*d3.select(tag).append("div")
          .attr("id", "stats")
          .attr("class", "divity")
