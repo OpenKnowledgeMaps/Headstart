@@ -70,10 +70,10 @@ get_papers <- function(query, params = list(), limit=100) {
   df$subject <- vapply(df$subject, function(z) paste0(z, collapse = "; "), "")
   df$authors <- vapply(df$authors, function(z) paste0(z, collapse = ", "), "")
   df$url <- unlist(lapply(df$fulltextUrls, extract_url))
-  df$oa_state <- 2
   df$link <- lapply(df$fulltextUrls, get_pdf_candidates)
+  df$oa_state <- unlist(lapply(df$link, get_oa_state))
   df$year <- unlist(lapply(df$datePublished, function(x){substr(x, 1, 10)}))
-  df$published_in <- ""
+  df$published_in <- unlist(lapply(df$journals, get_journal))
   df$article_type <- df$subject
 
   subject_all = check_metadata(df$topics)
@@ -103,7 +103,7 @@ get_papers <- function(query, params = list(), limit=100) {
 
   text = data.frame(matrix(nrow=nrow(df)))
   names(text) <- "id"
-  text$id = df$id # PROBLEM: can be NA
+  text$id = df$id
   text$content = paste(df$title, df$paper_abstract,
                        df$subject, df$publisher, df$authors,
                        sep=" ")
@@ -203,4 +203,19 @@ map_language <- function(lang_id) {
   "zh-cn"="Simplified Chinese",
   "zh-tw"="Traditional Chinese")
   return(unlist(unname(core_sup[lang_id])))
+
+get_oa_state <- function(x){
+  if (length(x) > 0) {
+    return(1)
+  } else {
+    return(2)
+  }
+}
+
+get_journal <- function(x){
+  if (length(x) > 0) {
+    return(if (!is.na(x[1])) x[1] else "")
+  } else {
+    return("")
+  }
 }
