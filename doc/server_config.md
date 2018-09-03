@@ -14,6 +14,7 @@ Make sure you have the following packages installed:
   * xml
 * R 3.3+ (https://www.r-project.org/) with current updates, with the following libraries. **Make sure you install these packages for all users, so that Apache can load them.**
   * arsenal (for snapshot tests)
+  * knitr (for test reports)
   * logging
   * GMD
   * MASS
