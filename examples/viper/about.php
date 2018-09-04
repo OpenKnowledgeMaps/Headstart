@@ -54,8 +54,8 @@ include 'config.php';
                     It enables funders, institutions and researchers to systematically explore a project’s output, and to understand its impact in different areas. 
                 </p>
 
-                <a href="https://openknowledgemaps.org/viper/project?id=3830ef0990652ae4adf20e5e545584c5" target="_blank">
-                    <img style="max-width:900px; margin: 30px auto; background-color: #eff3f4; padding:5px; border-radius: 5px; moz-border-radius: 5px; width:100%;" src="./img/overview-openaire.png">
+                <a href="https://openknowledgemaps.org/viper/project?id=3e6074108e7b648fb087e6e88106d0ee" target="_blank">
+                    <img style="max-width:900px; margin: 30px auto; background-color: #eff3f4; padding:5px; border-radius: 5px; moz-border-radius: 5px; width:100%;" src="./img/overview-openaire2020.png">
                 </a>
 
                 <p style="max-width: 650px; margin:0px auto;">In VIPER, each project is represented by an interactive knowledge map: a visualization showing a topical clustering of a project’s publications 
@@ -64,8 +64,8 @@ include 'config.php';
                     within the same interface.
                 </p>
 
-                <a href="https://openknowledgemaps.org/viper/project?id=3830ef0990652ae4adf20e5e545584c5" target="_blank">
-                    <img style="max-width:900px; margin: 30px auto; background-color: #eff3f4; padding:5px; border-radius: 5px; moz-border-radius: 5px; width:100%;" src="./img/detail-openaire.png"></p>
+                <a href="https://openknowledgemaps.org/viper/project?id=3e6074108e7b648fb087e6e88106d0ee" target="_blank">
+                    <img style="max-width:900px; margin: 30px auto; background-color: #eff3f4; padding:5px; border-radius: 5px; moz-border-radius: 5px; width:100%;" src="./img/detail-openaire2020.png"></p>
                 </a>
 
                 <p style="max-width: 650px; margin:0px auto;">
