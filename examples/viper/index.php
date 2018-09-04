@@ -74,7 +74,7 @@ include 'config.php';
                     </div>
                 </form>
                 <p class="error-building-map-button"><a class="newsletter2" 
-                href="https://openknowledgemaps.org/viper/project?id=3830ef0990652ae4adf20e5e545584c5" target="_blank">Try it out: Overview of OpenAIRE</a></p>
+                href="https://openknowledgemaps.org/viper/project?id=3e6074108e7b648fb087e6e88106d0ee" target="_blank">Try it out: Overview of OpenAIRE2020</a></p>
             </div>
             <!--<p style="text-align:center; margin-top: 30px;"><a class="newsletter2" href="">What is VIPER?</a><p>-->
         </div>
