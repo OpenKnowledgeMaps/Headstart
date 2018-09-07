@@ -20,7 +20,7 @@ source('../linkedcat.R')
 DEBUG = FALSE
 
 MAX_CLUSTERS = 15
-ADDITIONAL_STOP_WORDS = "german"
+ADDITIONAL_STOP_WORDS = "english"
 
 if(!is.null(params_file)) {
   params <- fromJSON(params_file)
