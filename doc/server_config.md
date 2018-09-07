@@ -13,6 +13,9 @@ Make sure you have the following packages installed:
   * fileinfo
   * xml
 * R 3.3+ (https://www.r-project.org/) with current updates, with the following libraries. **Make sure you install these packages for all users, so that Apache can load them.**
+  * arsenal (for snapshot tests)
+  * knitr (for test reports)
+  * logging
   * GMD
   * MASS
   * ecodist
@@ -64,3 +67,9 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 * snapshot->storage_path: Absolute path to the directory, where the snapshots are stored. **Make sure that your webserver has write permissions to this file and the containing directory.**
 * snapshot->snapshot_php: PHP File responsible for rendering the bubble in a way to be snapshotted. Relative path to general->host
 * snapshot->snapshot_width: Snapshot width
+
+## Logging configuration
+
+Please add following environment variables to your Renviron (in local mode) or Renviron.site (if called on a server):
+* `HEADSTART_LOGFILE`: Path to a logfile, e.g. `/path/to/logfile.log`. Please make sure that the folder structure exists, e.g. `/path/to/`.
+* `HEADSTART_LOGLEVEL`: One of the loglevels, e.g. `DEBUG`, `INFO`, `WARN`, `ERROR`

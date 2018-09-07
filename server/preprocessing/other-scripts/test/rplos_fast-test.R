@@ -26,7 +26,7 @@ switch(service,
     }
 )
 
-debug = FALSE
+DEBUG = FALSE
 
 MAX_CLUSTERS = 15
 ADDITIONAL_STOP_WORDS = "english"

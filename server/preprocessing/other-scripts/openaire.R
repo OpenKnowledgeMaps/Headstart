@@ -30,7 +30,19 @@ library(stringr)
 # * "oa_state": indicating the open access status of the item (0 = closed access, 1 = open access, 2 = unknown)
 # * "link": link to the open access PDF or a landing page linking to the PDF
 
+if(exists("DEBUG") && DEBUG == TRUE) {
+  logLevel <- "DEBUG"
+} else {
+  logLevel <- "INFO"
+}
+
+getLogger()$addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"), level=logLevel)
+olog <- getLogger('api.openaire')
+
 get_papers <- function(query, params, limit=NULL) {
+
+  olog$info(query)
+  start.time <- Sys.time()
   # parse params
   project_id <- params$project_id
   funder <- params$funder
@@ -43,7 +55,7 @@ get_papers <- function(query, params, limit=NULL) {
     pubs_metadata <- fill_dois(pubs_metadata)
   },
   error = function(err){
-    print(paste0("publications: ", err))
+    olog$warn(paste0("publications: ", err))
     pubs_metadata <- data.frame()
     return (data.frame())
   })
@@ -55,7 +67,7 @@ get_papers <- function(query, params, limit=NULL) {
     datasets_metadata <- parse_response(response)
   },
   error = function(err){
-    print(paste0("datasets: ", err))
+    olog$warn(paste0("datasets: ", err))
     datasets_metadata <-
     return (data.frame())
   })
@@ -63,7 +75,7 @@ get_papers <- function(query, params, limit=NULL) {
   all_artifacts <- tryCatch({
       all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
     }, error = function(err){
-      print(err)
+      olog$warn(err)
       if (nrow(pubs_metadata) > 0) {
         all_artifacts <- pubs_metadata
       } else if (nrow(datasets_metadata) > 0){
@@ -74,10 +86,15 @@ get_papers <- function(query, params, limit=NULL) {
       return (data.frame())
     })
 
+  end.time <- Sys.time()
+  time.taken <- end.time - start.time
+  olog$info(paste("Time taken:", time.taken, sep=" "))
+
   tryCatch({
     get_return_values(all_artifacts)
     }, error = function(err){
-      print(err)
+      olog$warn(err)
+      olog$warn((paste("Empty returns, most likely no results found for project_id", project_id)))
       stop(paste("Empty returns, most likely no results found for project_id", project_id))
     })
 }
@@ -160,6 +177,7 @@ parse_response <- function(response) {
     }))
     return (df)
   } else {
+    olog$warn("Length of results: ", length(tmp))
     stop("Length of results: ", length(tmp))
   }
 }
@@ -167,10 +185,10 @@ parse_response <- function(response) {
 fill_dois <- function(df) {
   missing_doi_indices <- which(is.na(df$doi))
   titles <- df[missing_doi_indices,]$title
-  if (debug) {
-    print(paste("Missing DOIs:", length(titles)))
-    print("Time for filling missing DOIs")
-    print(system.time(cr_works(query=queries(titles), async=TRUE)))
+  if (exists("DEBUG") && DEBUG) {
+    olog$debug(paste("Missing DOIs:", length(titles)))
+    olog$debug("Time for filling missing DOIs")
+    olog$debug(system.time(cr_works(query=queries(titles), async=TRUE)))
   }
   if (length(titles) > 1) {
     response <- cr_works(query=queries(titles), async=TRUE)

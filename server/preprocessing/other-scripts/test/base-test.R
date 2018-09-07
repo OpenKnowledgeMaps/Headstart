@@ -13,11 +13,11 @@ service <- "base"
 params <- NULL
 params_file <- "params_base.json"
 
+source('../utils.R')
 source("../vis_layout.R")
 source('../base.R')
-source('../utils.R')
 
-debug = FALSE
+DEBUG = FALSE
 
 MAX_CLUSTERS = 15
 ADDITIONAL_STOP_WORDS = "english"
