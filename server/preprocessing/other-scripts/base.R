@@ -66,6 +66,7 @@ get_papers <- function(query, params, limit=100,
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
   # language query field flag
+  # CHANGE TO MORE LANGUAGES!!! look up dclang specifications
   if(!is.null(language) && language=='german'){
     lang_query <- "dclang:ger"
   } else {
