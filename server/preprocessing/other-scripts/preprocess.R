@@ -1,5 +1,4 @@
 vplog <- getLogger('vis.preprocess')
-vplog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 
 filter_duplicates <- function(metadata, text, list_size) {

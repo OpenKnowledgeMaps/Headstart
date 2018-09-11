@@ -20,9 +20,9 @@ source('../base.R')
 debug = FALSE
 
 if(DEBUG==TRUE){
-  Sys.setenv('OKM_LOGLEVEL'='DEBUG')
+  Sys.setenv('HEADSTART_LOGLEVEL'='DEBUG')
 } else {
-  Sys.setenv('OKM_LOGLEVEL'='INFO')
+  Sys.setenv('HEADSTART_LOGLEVEL'='INFO')
 }
 
 MAX_CLUSTERS = 15

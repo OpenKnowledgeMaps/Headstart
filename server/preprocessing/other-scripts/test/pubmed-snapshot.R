@@ -6,7 +6,7 @@ library(arsenal)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
-Sys.setenv('OKM_LOGFILE'='test.log')
+Sys.setenv('HEADSTART_LOGFILE'='test.log')
 
 setwd(wd) #Don't forget to set your working directory
 
@@ -22,9 +22,9 @@ source('../pubmed.R')
 DEBUG = FALSE
 
 if(DEBUG==TRUE){
-  Sys.setenv('OKM_LOGLEVEL'='DEBUG')
+  Sys.setenv('HEADSTART_LOGLEVEL'='DEBUG')
 } else {
-  Sys.setenv('OKM_LOGLEVEL'='INFO')
+  Sys.setenv('HEADSTART_LOGLEVEL'='INFO')
 }
 
 MAX_CLUSTERS = 15
