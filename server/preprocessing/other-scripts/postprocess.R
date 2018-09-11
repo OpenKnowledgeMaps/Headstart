@@ -1,5 +1,4 @@
 vpplog <- getLogger('vis.postprocess')
-vpplog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 create_output <- function(clusters, layout, metadata) {
 

@@ -1,5 +1,4 @@
 fplog <- getLogger('vis.features')
-fplog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 create_corpus <- function(metadata, text, stops) {
   m <- list(content = "content", id = "id")

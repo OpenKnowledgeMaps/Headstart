@@ -1,5 +1,4 @@
 vslog <- getLogger('vis.summarize')
-vslog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 
 SplitTokenizer <- function(x) {
   tokens = unlist(lapply(strsplit(words(x), split=";"), paste), use.names = FALSE)
