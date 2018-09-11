@@ -1,7 +1,13 @@
 library('rAltmetric')
 library('rcrossref')
 
-getLogger()$addHandler(writeToFile, file=Sys.getenv("OKM_LOGFILE"))
+if(exists("DEBUG") && DEBUG == TRUE) {
+  logLevel <- "DEBUG"
+} else {
+  logLevel <- "INFO"
+}
+
+getLogger()$addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"), level=logLevel)
 alog <- getLogger('altmetrics')
 alog$setLevel(Sys.getenv("OKM_LOGLEVEL"))
 

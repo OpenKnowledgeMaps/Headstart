@@ -239,7 +239,8 @@ list.fit_list_height = function() {
         paper_list_avail_height = 
                 $("#subdiscipline_title").outerHeight(true)
                     + $("#headstart-chart").outerHeight(true)
-                    - $("#explorer_header").outerHeight(true)
+                    - $("#show_hide_button").outerHeight(true) 
+                    - $("#explorer_options").outerHeight(true)
                     + ($(".legend").outerHeight(true) || 0)
                     - (($("#toolbar").height() > 0)?(0):(PAPER_LIST_CORRECTION))
                     //TODO: Hack for VIPER
