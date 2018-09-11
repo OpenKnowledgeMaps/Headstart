@@ -5,8 +5,8 @@ library(rstudioapi)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
-
 setwd(wd) #Don't forget to set your working directory
+Sys.setenv("HEADSTART_LOGFILE" = "test.log")
 
 query <- "Kommissionsbericht" #args[2]
 service <- "linkedcat"
