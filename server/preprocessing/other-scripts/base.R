@@ -35,7 +35,7 @@ if(exists("DEBUG") && DEBUG == TRUE) {
   logLevel <- "INFO"
 }
 
-getLogger()$addHandler(writeToFile, file=Sys.getenv("OKM_LOGFILE"), level=logLevel)
+getLogger()$addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"), level=logLevel)
 blog <- getLogger('api.base')
 
 
