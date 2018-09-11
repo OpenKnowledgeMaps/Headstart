@@ -29,15 +29,9 @@ library(solrium)
 # * "oa_state": open access status of the item; has the following possible states: 0 for no, 1 for yes, 2 for unknown
 # * "link": link to the PDF; if this is not available, a list of candidate URLs that may contain a link to the PDF
 
-if(exists("DEBUG") && DEBUG == TRUE) {
-  logLevel <- "DEBUG"
-} else {
-  logLevel <- "INFO"
-}
 
-getLogger()$addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"), level=logLevel)
+getLogger()$addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"), level=Sys.getenv("HEADSTART_LOGLEVEL"))
 lclog <- getLogger('api.linkedcat')
-lclog$addHandler(writeToConsole)
 
 
 get_papers <- function(query, params, limit=100) {
@@ -46,7 +40,7 @@ get_papers <- function(query, params, limit=100) {
   lclog$info(paste("Search: ", query, sep=""))
   start.time <- Sys.time()
 
-  conn <- SolrClient$new(host="linkedcat.acdh-dev.oeaw.ac.at",
+  conn <- SolrClient$new(host=Sys.getenv("LINKEDCAT_SOLR"),
                          path="solr/linkedcat", port=NULL, scheme="https")
 
   q_params = build_query(query, params, limit)
