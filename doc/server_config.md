@@ -41,6 +41,7 @@ Make sure you have the following packages installed:
   * rAltmetric
   * plyr (for better data munging)
   * onehot (for feature engineering)
+  * textcat (for language recognition)
 * phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
 
 ## Configuration
