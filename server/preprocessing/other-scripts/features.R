@@ -47,20 +47,14 @@ concatenate_features <- function(...) {
   return(cbind(...))
 }
 
-remove_stop_words <-
-function(x, language = "english")
-  UseMethod("remove_stop_words", x)
-remove_stop_words.character <-
-function(x, language = "english")
-{
+remove_stop_words <- function(x, language = "english") UseMethod("remove_stop_words", x)
+remove_stop_words.character <- function(x, language = "english") {
   y <- unlist(strsplit(x, " "))
   stops <- get_stopwords(language)
   stopword <- unlist(lapply(y, function(z) z %in% stops))
   doc <- y[which(!stopword)]
   doc <- paste(doc, collapse = " ")
 }
-remove_stop_words.PlainTextDocument <-
-function(x, language = meta(x, "language"))
-{
+remove_stop_words.PlainTextDocument <- function(x, language = meta(x, "language")) {
   content_transformer(remove_stop_words.character)(x, language)
 }
