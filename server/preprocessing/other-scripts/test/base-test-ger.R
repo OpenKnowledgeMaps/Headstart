@@ -5,7 +5,7 @@ library(rstudioapi)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
-
+Sys.setenv('HEADSTART_LOGFILE'='test.log')
 setwd(wd) #Don't forget to set your working directory
 
 query <- "Öffentlichkeit" #args[2]
@@ -17,7 +17,7 @@ source("../utils.R")
 source("../vis_layout.R")
 source('../base.R')
 
-debug = FALSE
+DEBUG = FALSE
 
 if(DEBUG==TRUE){
   Sys.setenv('HEADSTART_LOGLEVEL'='DEBUG')
