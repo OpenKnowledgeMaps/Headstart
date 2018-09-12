@@ -14,7 +14,6 @@ check_metadata <- function (field) {
   }
 }
 
-
 get_stopwords <- function(lang) {
   stops <- tryCatch({
     stops <- stopwords(lang)
@@ -22,25 +21,30 @@ get_stopwords <- function(lang) {
     return(unlist(""))
   })
 
-  if (lang %in% c("english", "german")) {
-    stops <- tryCatch({
-      add_stop_path <- paste0("../../resources/", lang, ".stop")
-      additional_stops <- scan(add_stop_path, what="", sep="\n")
-      stops = c(stops, additional_stops)
-    }, error = function(err) {
-      add_stop_path <- paste0("../resources/", lang, ".stop")
-      additional_stops <- scan(add_stop_path, what="", sep="\n")
-      stops = c(stops, additional_stops)
-      return(stops)
-    })
-  }
+  stops <- tryCatch({
+      # trycatch switch when in test mode
+      tryCatch({
+          add_stop_path <- paste0("../resources/", lang, ".stop")
+          additional_stops <- scan(add_stop_path, what="", sep="\n")
+          stops = c(stops, additional_stops)
+        },
+        error = function(err) {
+          add_stop_path <- paste0("../../resources/", lang, ".stop")
+          additional_stops <- scan(add_stop_path, what="", sep="\n")
+          stops = c(stops, additional_stops)
+          return(stops)
+        }) # done with trycatch for test mode
+      },
+      error = function(err) {
+        return(stops)
+      })
   return(stops)
   }
 
-  conditional_lowercase <- function(text, lang) {
-    if (lang == 'german') {
-      return(text)
-    } else {
-      return(tolower(text))
-    }
+conditional_lowercase <- function(text, lang) {
+  if (lang == 'german') {
+    return(text)
+  } else {
+    return(tolower(text))
   }
+}
