@@ -13,9 +13,15 @@ service <- "pubmed"
 params <- NULL
 params_file <- "params_pubmed.json"
 
+source('../utils.R')
 DEBUG = FALSE
 
-source('../utils.R')
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
+} else {
+  setup_logging('INFO')
+}
+
 source("../vis_layout.R")
 source('../pubmed.R')
 
