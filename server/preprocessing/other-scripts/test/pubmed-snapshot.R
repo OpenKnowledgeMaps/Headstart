@@ -6,8 +6,6 @@ library(arsenal)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
-Sys.setenv('HEADSTART_LOGFILE'='test.log')
-
 setwd(wd) #Don't forget to set your working directory
 
 query <- "health education" #args[2]
@@ -16,16 +14,16 @@ params <- NULL
 params_file <- "params_pubmed_snapshot.json"
 
 source('../utils.R')
-source("../vis_layout.R")
-source('../pubmed.R')
-
 DEBUG = FALSE
 
-if(DEBUG==TRUE){
-  Sys.setenv('HEADSTART_LOGLEVEL'='DEBUG')
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
 } else {
-  Sys.setenv('HEADSTART_LOGLEVEL'='INFO')
+  setup_logging('INFO')
 }
+
+source("../vis_layout.R")
+source('../pubmed.R')
 
 MAX_CLUSTERS = 15
 ADDITIONAL_STOP_WORDS = "english"

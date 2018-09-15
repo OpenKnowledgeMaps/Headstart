@@ -35,7 +35,6 @@ library("xml2")
 # get_papers(query = "ecology", params = list(from = "2016/04/01", to = "2016/06/05"))
 
 
-getLogger()$addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"), level=Sys.getenv("HEADSTART_LOGLEVEL"))
 plog <- getLogger('api.pubmed')
 
 
