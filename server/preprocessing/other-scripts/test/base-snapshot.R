@@ -6,7 +6,6 @@ library(arsenal)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
-Sys.setenv('HEADSTART_LOGFILE'='test.log')
 
 setwd(wd) #Don't forget to set your working directory
 
