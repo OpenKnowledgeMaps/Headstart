@@ -6,7 +6,6 @@ options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(wd) #Don't forget to set your working directory
-Sys.setenv("HEADSTART_LOGFILE" = "test.log")
 
 query <- "Kommissionsbericht" #args[2]
 service <- "linkedcat"
@@ -14,10 +13,17 @@ params <- NULL
 params_file <- "params_linkedcat.json"
 
 source('../utils.R')
+DEBUG = FALSE
+
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
+} else {
+  setup_logging('INFO')
+}
+
 source("../vis_layout.R")
 source('../linkedcat.R')
 
-DEBUG = FALSE
 
 MAX_CLUSTERS = 15
 ADDITIONAL_STOP_WORDS = "english"
