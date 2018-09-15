@@ -75,6 +75,9 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
   #   rect.hclust(cluster, k=num_clusters, border="red")
   #   dev.off()
   # }
+  
+  vclog$info(paste("Number of Clusters:", num_clusters, sep=" "))
+  vclog$debug(paste("CutOff-Description:", attributes(cut_off)$description))
 
   clusters = list("labels"=labels, "cluster"=cluster, "groups"=groups, "num_clusters"=num_clusters)
   return(clusters)
