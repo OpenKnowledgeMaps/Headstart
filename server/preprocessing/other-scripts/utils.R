@@ -1,4 +1,5 @@
 library(stringdist)
+library(logging)
 
 levenshtein_ratio <- function(a, b) {
   lv_dist = stringdist(a, b, method = "lv")
@@ -13,6 +14,7 @@ check_metadata <- function (field) {
     return ('')
   }
 }
+
 
 get_stopwords <- function(lang) {
   stops <- tryCatch({
@@ -39,12 +41,26 @@ get_stopwords <- function(lang) {
         return(stops)
       })
   return(stops)
-  }
+}
 
 conditional_lowercase <- function(text, lang) {
   if (lang == 'german') {
     return(text)
   } else {
     return(tolower(text))
+  }
+}
+
+setup_logging <- function(loglevel) {
+  # checks if HEADSTART_LOGFILE is defined,
+  # if not logs to console only
+  if (Sys.getenv("HEADSTART_LOGFILE") == ""){
+    getLogger(loglevel)
+    removeHandler('basic.stdout')
+    addHandler(writeToConsole)
+  } else {
+    getLogger(loglevel)
+    removeHandler('basic.stdout')
+    addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"))
   }
 }

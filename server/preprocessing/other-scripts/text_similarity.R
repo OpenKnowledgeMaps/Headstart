@@ -13,9 +13,19 @@ print(params_file)
 
 setwd(wd) #Don't forget to set your working directory
 
+source('../other-scripts/utils.R')
+DEBUG = FALSE
+
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
+} else {
+  setup_logging('INFO')
+}
+
+tslog <- getLogger('ts')
+
 source(paste("../other-scripts/vis_layout.R", sep=""))
 source('../other-scripts/altmetrics.R')
-source('../other-scripts/utils.R')
 
 taxonomy_separator = NULL
 limit = 100
@@ -44,7 +54,6 @@ switch(service,
       }
 )
 
-debug = FALSE
 
 MAX_CLUSTERS = 15
 
@@ -68,13 +77,20 @@ if ('language' %in% names(params)){
 ADDITIONAL_STOP_WORDS = language
 print("reading stuff")
 print(params)
+tryCatch({
+  input_data = get_papers(query, params, limit=limit)
+}, error=function(err){
+  tslog$error(gsub("\n", " ", paste("Query failed:", query, params, err)))
+})
 
-input_data = get_papers(query, params, limit = limit)
 
 print("got the input")
-
+tryCatch({
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
                          taxonomy_separator=taxonomy_separator, list_size = list_size)
+}, error=function(err){
+ tslog$error(gsub("\n", " ", paste("Processing failed:", query, params, err)))
+})
 
 if (service=='openaire'){
   output_json = enrich_output_json(output_json)

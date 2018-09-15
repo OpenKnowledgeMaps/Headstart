@@ -29,13 +29,7 @@ library(rbace)
 # * "oa_state": open access status of the item; has the following possible states: 0 for no, 1 for yes, 2 for unknown
 # * "link": link to the PDF; if this is not available, a list of candidate URLs that may contain a link to the PDF
 
-if(exists("DEBUG") && DEBUG == TRUE) {
-  logLevel <- "DEBUG"
-} else {
-  logLevel <- "INFO"
-}
 
-getLogger()$addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"), level=logLevel)
 blog <- getLogger('api.base')
 
 

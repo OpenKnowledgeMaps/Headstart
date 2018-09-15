@@ -17,10 +17,17 @@ params <- NULL
 params_file <- "snapshot_params_base.json"
 
 source('../utils.R')
+DEBUG = FALSE
+
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
+} else {
+  setup_logging('INFO')
+}
+
 source("../vis_layout.R")
 source('../base.R')
 
-DEBUG = FALSE
 
 MAX_CLUSTERS = 15
 ADDITIONAL_STOP_WORDS = "english"
@@ -61,9 +68,15 @@ service <- "pubmed"
 params <- NULL
 params_file <- "snapshot_params_pubmed.json"
 
+source('../utils.R')
 DEBUG = FALSE
 
-source('../utils.R')
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
+} else {
+  setup_logging('INFO')
+}
+
 source("../vis_layout.R")
 source('../pubmed.R')
 
