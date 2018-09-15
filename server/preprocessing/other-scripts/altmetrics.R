@@ -1,7 +1,6 @@
 library('rAltmetric')
 library('rcrossref')
 
-
 alog <- getLogger('altmetrics')
 
 
