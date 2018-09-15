@@ -30,7 +30,6 @@ library(solrium)
 # * "link": link to the PDF; if this is not available, a list of candidate URLs that may contain a link to the PDF
 
 
-getLogger()$addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"), level=Sys.getenv("HEADSTART_LOGLEVEL"))
 lclog <- getLogger('api.linkedcat')
 
 
