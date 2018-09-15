@@ -1,4 +1,5 @@
 library(stringdist)
+library(logging)
 
 levenshtein_ratio <- function(a, b) {
   lv_dist = stringdist(a, b, method = "lv")
