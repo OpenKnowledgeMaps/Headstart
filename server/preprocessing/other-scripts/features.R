@@ -50,7 +50,7 @@ concatenate_features <- function(...) {
 remove_stop_words <- function(x, language = "english") UseMethod("remove_stop_words", x)
 remove_stop_words.character <- function(x, language = "english") {
   y <- unlist(strsplit(x, " "))
-  stops <- get_stopwords(language)
+  stops <- get_stopwords(language, TESTING)
   stopword <- unlist(lapply(y, function(z) z %in% stops))
   doc <- y[which(!stopword)]
   doc <- paste(doc, collapse = " ")
