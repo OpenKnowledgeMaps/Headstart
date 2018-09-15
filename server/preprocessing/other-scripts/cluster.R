@@ -67,13 +67,14 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 
   groups <- cutree(cluster, k=num_clusters)
 
-  if(exists("DEBUG") && DEBUG == TRUE) {
-    # Plot result of clustering to PDF file
-    pdf("clustering.pdf", width=19, height=12)
-    plot(cluster, labels=metadata$title, cex=0.6)
-    rect.hclust(cluster, k=num_clusters, border="red")
-    dev.off()
-  }
+  # NEEDS FIX
+  # if(exists("DEBUG") && DEBUG == TRUE) {
+  #   # Plot result of clustering to PDF file
+  #   pdf("clustering.pdf", width=19, height=12)
+  #   plot(cluster, labels=metadata$title, cex=0.6)
+  #   rect.hclust(cluster, k=num_clusters, border="red")
+  #   dev.off()
+  # }
 
   clusters = list("labels"=labels, "cluster"=cluster, "groups"=groups, "num_clusters"=num_clusters)
   return(clusters)
@@ -87,12 +88,15 @@ create_ordination <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
   nm <<- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
   nm.nmin = nmds.min(nm)
 
-  if(exists("DEBUG") && DEBUG == TRUE) {
-    # Plot results from multidimensional scaling, highlight clusters with symbols
-    pdf("mds.pdf")
-    plot(nm.nmin, pch=groups)
-    dev.off()
-  }
+  vclog$info(paste("NMDS-Stress:", min(nm$stress), sep=" "))
+  vclog$info(paste("NMDS-R2:", min(nm$r2), sep=" "))
+  # NEEDS FIX
+  # if(exists("DEBUG") && DEBUG == TRUE) {
+  #   # Plot results from multidimensional scaling, highlight clusters with symbols
+  #   pdf("mds.pdf")
+  #   plot(nm.nmin, pch=groups)
+  #   dev.off()
+  # }
 
   return(nm.nmin)
 }
