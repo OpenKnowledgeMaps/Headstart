@@ -11,7 +11,7 @@ setwd(wd) #Don't forget to set your working directory
 query <- "health education" #args[2]
 service <- "pubmed"
 params <- NULL
-params_file <- "params_pubmed_snapshot.json"
+params_file <- "snapshot_params_pubmed.json"
 
 source('../utils.R')
 DEBUG = FALSE
