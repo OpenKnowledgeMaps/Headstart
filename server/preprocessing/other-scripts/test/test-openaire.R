@@ -16,11 +16,17 @@ params <- NULL
 params_file <- "params_openaire.json"
 
 source('../utils.R')
+DEBUG = FALSE
+
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
+} else {
+  setup_logging('INFO')
+}
+
 source("../vis_layout.R")
 source('../openaire.R')
 source('../altmetrics.R')
-
-DEBUG = FALSE
 
 MAX_CLUSTERS = 15
 ADDITIONAL_STOP_WORDS = "english"

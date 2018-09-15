@@ -1,13 +1,6 @@
 library('rAltmetric')
 library('rcrossref')
 
-if(exists("DEBUG") && DEBUG == TRUE) {
-  logLevel <- "DEBUG"
-} else {
-  logLevel <- "INFO"
-}
-
-getLogger()$addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"), level=logLevel)
 alog <- getLogger('altmetrics')
 
 enrich_output_json <- function(output_json){
@@ -29,7 +22,7 @@ enrich_output_json <- function(output_json){
   } else {
     output$'cited_by_tweeters_count' <- NA
     output$'readers.mendeley' <- NA
-    print("No altmetrics found for any paper in this dataset.")
+    alog$info("No altmetrics found for any paper in this dataset.")
   }
   output <- add_citations(output)
 
@@ -58,7 +51,7 @@ get_altmetrics <- function(dois){
       metrics <- altmetric_data(altmetrics(doi=doi))
       results <- rbind.fill(results, metrics)
     }, error = function(err){
-      print(paste(err, doi))
+      alog$error(gsub("[\r\n]", "", paste(err, doi, sep=" ")))
     })
   }
   return (results)
@@ -75,7 +68,7 @@ add_citations <- function(output){
     cc <- tryCatch({
       cr_citation_count(doi=doi, async=TRUE)
       }, error = function(err){
-          print(paste(err, doi))
+          alog$error(gsub("[\r\n]", "", paste(err, doi, sep=" ")))
           return(list(doi=doi, count=NA))
       })
     cit_count <- rbind(cit_count, cc)
