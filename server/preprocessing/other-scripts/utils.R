@@ -16,7 +16,7 @@ check_metadata <- function (field) {
 }
 
 
-get_stopwords <- function(lang) {
+get_stopwords <- function(lang, testing) {
   stops <- tryCatch({
     stops <- stopwords(lang)
   }, error = function(err){
@@ -25,19 +25,16 @@ get_stopwords <- function(lang) {
 
   stops <- tryCatch({
       # trycatch switch when in test mode
-      tryCatch({
+      if (!isTRUE(testing)) {
           add_stop_path <- paste0("../resources/", lang, ".stop")
           additional_stops <- scan(add_stop_path, what="", sep="\n")
           stops = c(stops, additional_stops)
-        },
-        error = function(err) {
+        } else {
           add_stop_path <- paste0("../../resources/", lang, ".stop")
           additional_stops <- scan(add_stop_path, what="", sep="\n")
           stops = c(stops, additional_stops)
           return(stops)
-        }) # done with trycatch for test mode
-      },
-      error = function(err) {
+        }}, error = function(err) {
         return(stops)
       })
   return(stops)

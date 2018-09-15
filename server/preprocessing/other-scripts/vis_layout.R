@@ -26,7 +26,7 @@ vis_layout <- function(text, metadata,
                        mindim=2, maxdim=2,
                        lang="english", add_stop_words=NULL,
                        testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
-
+  TESTING <<- testing # makes testing param a global variable
   start.time <- Sys.time()
 
   tryCatch({
@@ -51,7 +51,7 @@ vis_layout <- function(text, metadata,
   metadata <- filtered$metadata
   text <- filtered$text
   metadata["lang_detected"] <- detect_language(text$content)
-  stops <- get_stopwords(lang)
+  stops <- get_stopwords(lang, testing)
   corpus <- create_corpus(metadata, text, stops)
 
   vlog$debug("get features")
