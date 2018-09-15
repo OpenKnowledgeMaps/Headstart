@@ -5,7 +5,6 @@ library(rstudioapi)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
-Sys.setenv('HEADSTART_LOGFILE'='test.log')
 setwd(wd) #Don't forget to set your working directory
 
 query <- "Öffentlichkeit" #args[2]
@@ -13,17 +12,17 @@ service <- "base"
 params <- NULL
 params_file <- "params_base_ger.json"
 
-source("../utils.R")
-source("../vis_layout.R")
-source('../base.R')
-
+source('../utils.R')
 DEBUG = FALSE
 
-if(DEBUG==TRUE){
-  Sys.setenv('HEADSTART_LOGLEVEL'='DEBUG')
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
 } else {
-  Sys.setenv('HEADSTART_LOGLEVEL'='INFO')
+  setup_logging('INFO')
 }
+
+source("../vis_layout.R")
+source('../base.R')
 
 MAX_CLUSTERS = 15
 

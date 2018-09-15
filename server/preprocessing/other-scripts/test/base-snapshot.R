@@ -6,7 +6,6 @@ library(arsenal)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
-Sys.setenv('HEADSTART_LOGFILE'='test.log')
 
 setwd(wd) #Don't forget to set your working directory
 
@@ -15,15 +14,15 @@ service <- "base"
 params <- NULL
 params_file <- "params_base_snapshot.json"
 
+source('../utils.R')
 DEBUG = FALSE
 
-if(DEBUG){
-  Sys.setenv('HEADSTART_LOGLEVEL'='DEBUG')
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
 } else {
-  Sys.setenv('HEADSTART_LOGLEVEL'='INFO')
+  setup_logging('INFO')
 }
 
-source('../utils.R')
 source("../vis_layout.R")
 source('../base.R')
 
