@@ -16,8 +16,6 @@ library(onehot)
 registerDoParallel(3)
 
 
-getLogger()$addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"),
-                       level=Sys.getenv("HEADSTART_LOGLEVEL"))
 vlog <- getLogger('vis')
 
 # Expects the following metadata fields:

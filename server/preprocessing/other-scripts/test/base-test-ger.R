@@ -13,17 +13,18 @@ service <- "base"
 params <- NULL
 params_file <- "params_base_ger.json"
 
-source("../utils.R")
+source('../utils.R')
+DEBUG = FALSE
+
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
+} else {
+  setup_logging('INFO')
+}
+
 source("../vis_layout.R")
 source('../base.R')
 
-debug = FALSE
-
-if(DEBUG==TRUE){
-  Sys.setenv('HEADSTART_LOGLEVEL'='DEBUG')
-} else {
-  Sys.setenv('HEADSTART_LOGLEVEL'='INFO')
-}
 
 MAX_CLUSTERS = 15
 
