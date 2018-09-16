@@ -35,13 +35,6 @@ library("xml2")
 # get_papers(query = "ecology", params = list(from = "2016/04/01", to = "2016/06/05"))
 
 
-if(exists("DEBUG") && DEBUG == TRUE) {
-  logLevel <- "DEBUG"
-} else {
-  logLevel <- "INFO"
-}
-
-getLogger()$addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"), level=logLevel)
 plog <- getLogger('api.pubmed')
 
 
