@@ -74,7 +74,7 @@ if ('language' %in% names(params)){
     LANGUAGE <- 'english'
   }
 
-ADDITIONAL_STOP_WORDS = language
+ADDITIONAL_STOP_WORDS = LANGUAGE
 print("reading stuff")
 print(params)
 tryCatch({
