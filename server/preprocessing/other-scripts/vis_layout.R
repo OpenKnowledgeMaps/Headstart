@@ -64,7 +64,7 @@ vis_layout <- function(text, metadata,
                                apply(lang_detected, 2, sum)),
                         collapse = " "),
                    sep=" "))
-  features <- concatenate_features(distance_matrix, lang_detected)
+  features <- concatenate_features(distance_matrix)
 
   vlog$debug("get clusters")
   clusters <- create_clusters(as.dist(features), max_clusters=max_clusters)
