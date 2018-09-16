@@ -26,6 +26,7 @@ source("../vis_layout.R")
 source('../pubmed.R')
 
 MAX_CLUSTERS = 15
+LANGUAGE = "english"
 ADDITIONAL_STOP_WORDS = "english"
 
 if(!is.null(params_file)) {
@@ -41,6 +42,7 @@ input_data = get_papers(query, params)
 #time.taken
 
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
+                         lang=LANGUAGE,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
 
 print(output_json)

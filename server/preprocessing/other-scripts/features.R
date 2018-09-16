@@ -1,14 +1,18 @@
 vflog <- getLogger('vis.features')
 
-create_corpus <- function(metadata, text, stops) {
+create_corpus <- function(metadata, text, lang=NULL) {
   valid <- getStemLanguages()
-  text["language"] <- unlist(lapply(metadata$lang_detected,
-                    function(x) {
-                      if (x %in% valid) {
-                        x
-                      } else {
-                        "english"
-                      }}))
+  if (is.null(lang)) {
+    text["language"] <- unlist(lapply(metadata$lang_detected,
+                      function(x) {
+                        if (x %in% valid) {
+                          x
+                        } else {
+                          "english"
+                        }}))
+    } else {
+      text["language"] <- lang
+    }
   mapping <- list(content = "content", id = "id", language = "language")
   myReader <- readTabular(mapping = mapping)
 
@@ -27,6 +31,7 @@ create_corpus <- function(metadata, text, stops) {
 
   return(list(stemmed = stemmed, unstemmed = unstemmed))
 }
+
 
 create_tdm_matrix <- function(corpus, sparsity=1) {
   tdm <- TermDocumentMatrix(corpus)

@@ -27,6 +27,7 @@ source("../vis_layout.R")
 source('../base.R')
 
 MAX_CLUSTERS = 15
+LANGUAGE = "english"
 ADDITIONAL_STOP_WORDS = "english"
 
 #start.time <- Sys.time()
