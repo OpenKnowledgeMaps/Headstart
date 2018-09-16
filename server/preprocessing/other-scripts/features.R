@@ -29,7 +29,7 @@ create_tdm_matrix <- function(corpus, sparsity=1) {
 }
 
 get_distance_matrix <- function(tdm_matrix, method = "cosine") {
-  distance_matrix <- as.matrix(proxy::dist(tdm_matrix, method))
+  distance_matrix <- as.matrix(dist(tdm_matrix, method))
   return(distance_matrix)
 }
 
