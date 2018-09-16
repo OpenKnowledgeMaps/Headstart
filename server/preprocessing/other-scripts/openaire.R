@@ -30,13 +30,7 @@ library(stringr)
 # * "oa_state": indicating the open access status of the item (0 = closed access, 1 = open access, 2 = unknown)
 # * "link": link to the open access PDF or a landing page linking to the PDF
 
-if(exists("DEBUG") && DEBUG == TRUE) {
-  logLevel <- "DEBUG"
-} else {
-  logLevel <- "INFO"
-}
 
-getLogger()$addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"), level=logLevel)
 olog <- getLogger('api.openaire')
 
 get_papers <- function(query, params, limit=NULL) {
