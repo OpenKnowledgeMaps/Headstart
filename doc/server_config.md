@@ -40,6 +40,7 @@ Make sure you have the following packages installed:
   * rcrossref (for VIPER) with the async dev version: install with `remotes::install_github("ropensci/rcrossref@async")`
   * rAltmetric
   * plyr (for better data munging)
+  * solrium (for interfacing with SOLR servers)
 * phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
 
 ## Configuration
@@ -70,6 +71,5 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 
 ## Logging configuration
 
-Please add following environment variables to your Renviron (in local mode) or Renviron.site (if called on a server):
+In the default setting, Headstart will log behavior only to the console. If you want to log to a file, please add following environment variable to your Renviron (in local mode) or Renviron.site (if called on a server). Headstart will then log events to a file on the `INFO` loglevel.
 * `HEADSTART_LOGFILE`: Path to a logfile, e.g. `/path/to/logfile.log`. Please make sure that the folder structure exists, e.g. `/path/to/`.
-* `HEADSTART_LOGLEVEL`: One of the loglevels, e.g. `DEBUG`, `INFO`, `WARN`, `ERROR`
