@@ -13,13 +13,6 @@ library(stringdist)
 registerDoParallel(3)
 
 
-if(exists("DEBUG") && DEBUG == TRUE) {
-  logLevel <- "DEBUG"
-} else {
-  logLevel <- "INFO"
-}
-
-getLogger()$addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"), level=logLevel)
 vlog <- getLogger('vis')
 
 # Expects the following metadata fields:
