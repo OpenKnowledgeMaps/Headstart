@@ -1,6 +1,5 @@
 vclog <- getLogger('vis.cluster')
 
-
 get_cut_off <- function(css_cluster, attempt=1){
   evthres = 0.9**attempt
   incthres = 1 - (0.9**attempt)
@@ -59,8 +58,6 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
     num_clusters = round(sqrt(nrow(distance_matrix))) + 1
   }
 
-
-
   meta_cluster = attr(css_cluster,"meta")
   cluster = meta_cluster$hclust.obj
   labels = labels(distance_matrix)
@@ -75,7 +72,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
   #   rect.hclust(cluster, k=num_clusters, border="red")
   #   dev.off()
   # }
-  
+
   vclog$info(paste("Number of Clusters:", num_clusters, sep=" "))
   vclog$debug(paste("CutOff-Description:", attributes(cut_off)$description))
 
@@ -85,10 +82,10 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 }
 
 
-create_ordination <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
+get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
 
   # Perform non-metric multidimensional scaling
-  nm <<- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
+  nm <- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
   nm.nmin = nmds.min(nm)
 
   vclog$info(paste("NMDS-Stress:", min(nm$stress), sep=" "))

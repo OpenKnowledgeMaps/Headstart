@@ -12,7 +12,7 @@ setwd(wd) #Don't forget to set your working directory
 query <- "digital education" #args[2]
 service <- "base"
 params <- NULL
-params_file <- "snapshot_params_base.json"
+params_file <- "params_base_snapshot.json"
 
 source('../utils.R')
 DEBUG = FALSE
@@ -27,6 +27,7 @@ source("../vis_layout.R")
 source('../base.R')
 
 MAX_CLUSTERS = 15
+LANGUAGE = "english"
 ADDITIONAL_STOP_WORDS = "english"
 
 #start.time <- Sys.time()
