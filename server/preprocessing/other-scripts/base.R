@@ -33,29 +33,46 @@ library(rbace)
 blog <- getLogger('api.base')
 
 
-get_papers <- function(query, params, limit=100, fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
+get_papers <- function(query, params, limit=100,
+                       fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
 
   blog$info(paste("Search: ", query, sep=""))
   start.time <- Sys.time()
 
   exact_query = "";
 
+  # check param validity
   if(startsWith(query, '"') && endsWith(query, '"')) {
     exact_query = paste("textus:", query, sep="")
   } else {
     exact_query = gsub("(?<!\\S)(?=\\S)", "textus:", query, perl=T)
   }
+  if ('language' %in% names(params)){
+      language <- params$language
+    } else {
+      language <- NULL
+    }
 
   year_from = params$from
   year_to = params$to
+
+  # prepare query fields
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
-
+  # language query field flag
+  # CHANGE TO MORE LANGUAGES!!! look up dclang specifications
+  if(!is.null(language) && language=='german'){
+    lang_query <- "dclang:ger"
+  } else {
+    lang_query <- ""
+  }
   #Make sure that the abstract exists.
   abstract_exists = "dcdescription:?"
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
+
+  # execute search
   (res_raw <- bs_search(hits=limit
-                        , query = paste(exact_query, date_string, document_types, abstract_exists, collapse=" ")
+                        , query = paste(exact_query, lang_query, date_string, document_types, abstract_exists, collapse=" ")
                         , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"
                         , sortby = sortby_string))
   res <- res_raw$docs
