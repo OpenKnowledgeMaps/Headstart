@@ -24,9 +24,9 @@ vlog <- getLogger('vis')
 vis_layout <- function(text, metadata,
                        max_clusters=15, maxit=500,
                        mindim=2, maxdim=2,
-                       lang="english", add_stop_words=NULL,
+                       lang=NULL, add_stop_words=NULL,
                        testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
-
+  TESTING <<- testing # makes testing param a global variable
   start.time <- Sys.time()
 
   tryCatch({
@@ -50,9 +50,9 @@ vis_layout <- function(text, metadata,
   filtered <- filter_duplicates(metadata, text, list_size)
   metadata <- filtered$metadata
   text <- filtered$text
-  metadata["lang_detected"] <- lapply(text, textcat)$content
-  stops <- get_stopwords(lang, add_stop_words, testing)
-  corpus <- create_corpus(metadata, text, stops)
+  metadata["lang_detected"] <- detect_language(text$content)
+  stops <- get_stopwords(lang, testing)
+  corpus <- create_corpus(metadata, text, lang)
 
   vlog$debug("get features")
   tdm_matrix <- create_tdm_matrix(corpus$stemmed)
@@ -71,8 +71,8 @@ vis_layout <- function(text, metadata,
   layout <- get_ndms(as.dist(features), maxit=500, mindim=2, maxdim=2)
 
   vlog$debug("get cluster summaries")
-  metadata = replace_keywords_if_empty(corpus, metadata, stops)
-  named_clusters <- create_cluster_labels(clusters, metadata,
+  metadata = replace_keywords_if_empty(metadata, stops)
+  named_clusters <- create_cluster_labels(clusters, metadata, lang,
                                           weightingspec="ntn", top_n=3,
                                           stops=stops, taxonomy_separator)
 

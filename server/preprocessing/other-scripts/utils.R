@@ -15,19 +15,37 @@ check_metadata <- function (field) {
   }
 }
 
-get_stopwords <- function(lang, add_stop_words, testing) {
-  stops <- stopwords(lang)
 
-  if (!is.null(add_stop_words)){
-    if (isTRUE(testing)) {
-      add_stop_path <- paste0("../../resources/", add_stop_words, ".stop")
-    } else {
-      add_stop_path <- paste0("../resources/", add_stop_words, ".stop")
-    }
-    additional_stops <- scan(add_stop_path, what="", sep="\n")
-    stops = c(stops, additional_stops)
-  }
+get_stopwords <- function(lang, testing) {
+  stops <- tryCatch({
+    stops <- stopwords(lang)
+  }, error = function(err){
+    return(unlist(""))
+  })
+
+  stops <- tryCatch({
+      # trycatch switch when in test mode
+      if (!isTRUE(testing)) {
+          add_stop_path <- paste0("../resources/", lang, ".stop")
+          additional_stops <- scan(add_stop_path, what="", sep="\n")
+          stops = c(stops, additional_stops)
+        } else {
+          add_stop_path <- paste0("../../resources/", lang, ".stop")
+          additional_stops <- scan(add_stop_path, what="", sep="\n")
+          stops = c(stops, additional_stops)
+          return(stops)
+        }}, error = function(err) {
+        return(stops)
+      })
   return(stops)
+}
+
+conditional_lowercase <- function(text, lang) {
+  if (lang == 'german') {
+    return(text)
+  } else {
+    return(tolower(text))
+  }
 }
 
 setup_logging <- function(loglevel) {

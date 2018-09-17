@@ -5,7 +5,6 @@ library(rstudioapi)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
-
 setwd(wd) #Don't forget to set your working directory
 
 query <- "Öffentlichkeit" #args[2]
@@ -25,25 +24,19 @@ if (DEBUG==TRUE){
 source("../vis_layout.R")
 source('../base.R')
 
-
 MAX_CLUSTERS = 15
+LANGUAGE = "german"
+ADDITIONAL_STOP_WORDS = "german"
 
 if(!is.null(params_file)) {
   params <- fromJSON(params_file)
 }
 
-if ('language' %in% names(params)){
-  language <- params$language
-  if (language == 'all'){
-    language <- 'english'
-  }
-} else {
-  language <- 'english'
-}
-
 #start.time <- Sys.time()
 
-ADDITIONAL_STOP_WORDS = language
+
+
+
 input_data = get_papers(query, params, limit=120)
 
 #end.time <- Sys.time()
@@ -52,7 +45,7 @@ input_data = get_papers(query, params, limit=120)
 
 output_json = vis_layout(input_data$text, input_data$metadata,
                          max_clusters = MAX_CLUSTERS,
-                         lang = language,
+                         lang = LANGUAGE,
                          add_stop_words = ADDITIONAL_STOP_WORDS,
                          testing=TRUE, list_size=100)
 

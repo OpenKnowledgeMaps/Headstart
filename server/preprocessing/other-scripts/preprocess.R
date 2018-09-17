@@ -1,6 +1,17 @@
 vplog <- getLogger('vis.preprocess')
 
 
+detect_language <- function(text) {
+  lang_detected <- lapply(text, textcat)
+  # from russian-iso8859_5 only take russian
+  lang_detected <- unlist(lapply(lang_detected,
+                    function(x) {vapply(strsplit(x,"-"), `[`, 1, FUN.VALUE=character(1))}
+                  ))
+  lang_detected <-
+  return(lang_detected)
+}
+
+
 filter_duplicates <- function(metadata, text, list_size) {
   #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
   if(list_size > -1) {
@@ -60,11 +71,11 @@ deduplicate_titles <- function(metadata, list_size) {
 
 }
 
-replace_keywords_if_empty <- function(corpus, metadata, stops) {
+replace_keywords_if_empty <- function(metadata, stops) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
   candidates = mapply(paste, metadata$title[missing_subjects], metadata$paper_abstract[missing_subjects])
-  candidates = lapply(candidates, tolower)
+  candidates = mapply(conditional_lowercase, candidates, metadata$lang_detected[missing_subjects])
   candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
   candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
   candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})

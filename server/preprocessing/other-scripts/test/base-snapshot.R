@@ -6,7 +6,6 @@ library(arsenal)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
-Sys.setenv('HEADSTART_LOGFILE'='test.log')
 
 setwd(wd) #Don't forget to set your working directory
 
@@ -28,6 +27,7 @@ source("../vis_layout.R")
 source('../base.R')
 
 MAX_CLUSTERS = 15
+LANGUAGE = "english"
 ADDITIONAL_STOP_WORDS = "english"
 
 #start.time <- Sys.time()
@@ -39,6 +39,7 @@ input_data = fromJSON("snapshots/snapshot_base_input.json")
 #time.taken
 
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
+                         lang=LANGUAGE,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
 
 output <- data.frame(fromJSON(output_json))

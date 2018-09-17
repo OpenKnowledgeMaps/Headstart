@@ -31,13 +31,16 @@ filter_out <- function(ngrams, stops){
   return (tokens)
 }
 
-create_cluster_labels <- function(clusters, metadata, weightingspec,
+create_cluster_labels <- function(clusters, metadata, weightingspec, lang,
                                   top_n, stops, taxonomy_separator="/") {
-  nn_corpus <- get_clustered_corpus(clusters, metadata, stops, taxonomy_separator)
-  nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer,
-                                                           weighting = function(x) weightSMART(x, spec="ntn"),
-                                                           bounds = list(local = c(2, Inf))
-                                                           ))
+  nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
+  tolower_flag <- if (lang == "german") FALSE else TRUE
+  nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
+                                      tokenize = SplitTokenizer,
+                                      weighting = function(x) weightSMART(x, spec="ntn"),
+                                      bounds = list(local = c(2, Inf)),
+                                      tolower = tolower_flag
+                                ))
   tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
   empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
   tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(nn_tfidf, nn_corpus)[c(empty_tfidf)]
@@ -53,17 +56,18 @@ create_cluster_labels <- function(clusters, metadata, weightingspec,
 }
 
 
-get_clustered_corpus <- function(clusters, metadata, stops, taxonomy_separator) {
+get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator) {
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
     group = c(names(clusters$groups[clusters$groups == k]))
-    matches = which(metadata$id%in%group)
-    titles =  metadata$title[c(matches)]
-    subjects = metadata$subject[c(matches)]
+    matches = which(metadata$id %in% group)
+    titles =  metadata$title[matches]
+    subjects = metadata$subject[matches]
+    langs = metadata$lang_detected[matches]
 
     titles = lapply(titles, function(x) {gsub("[^[:alpha:]]", " ", x)})
     titles = lapply(titles, gsub, pattern="\\s+", replacement=" ")
-    titles = lapply(titles, tolower)
+    titles = mapply(conditional_lowercase, titles, langs)
     title_ngrams <- get_title_ngrams(titles, stops)
     titles = lapply(titles, function(x) {removeWords(x, stops)})
 
