@@ -53,8 +53,15 @@ library(rcoreoa)
 # x$text$id
 # x$text$content
 # cat(x$text$content[1])
+
+
+clog <- getLogger('api.core')
+
 get_papers <- function(query, params = list(), limit=100) {
   core_query <- build_query(query, params)
+
+  clog$info(core_query)
+
   ids <- core_advanced_search(core_query, limit=limit)$data$id
   res <- core_articles(ids, metadata = TRUE, fulltext = FALSE,
                        citations = FALSE, similar = FALSE, urls = TRUE,
@@ -115,12 +122,14 @@ build_query <- function(query, params) {
   core_query$exact_phrase <- query
   core_query$year_from <- substr(params["from"], 1, 4)
   core_query$year_to <- substr(params["to"], 1, 4)
+  core_query$exists <- "description"
   if (params$language_id != 'all') {
     core_query$language <- map_language(params$language_id)
   }
   valid_params <- c("all_of_the_words", "exact_phrase", "at_least_one_of_the_words",
                     "without_the_words", "find_those_words", "author", "publisher",
-                    "repository", "doi", "year_from", "year_to", "language")
+                    "repository", "doi", "year_from", "year_to", "language",
+                    "exists")
   core_query <- core_query[which(names(core_query) %in% valid_params)]
   return(core_query)
 }
