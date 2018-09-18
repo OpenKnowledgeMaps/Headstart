@@ -13,6 +13,9 @@ Make sure you have the following packages installed:
   * fileinfo
   * xml
 * R 3.3+ (https://www.r-project.org/) with current updates, with the following libraries. **Make sure you install these packages for all users, so that Apache can load them.**
+  * arsenal (for snapshot tests)
+  * knitr (for test reports)
+  * logging
   * GMD
   * MASS
   * ecodist
@@ -37,6 +40,8 @@ Make sure you have the following packages installed:
   * rcrossref (for VIPER) with the async dev version: install with `remotes::install_github("ropensci/rcrossref@async")`
   * rAltmetric
   * plyr (for better data munging)
+  * onehot (for feature engineering)
+  * textcat (for language recognition)
 * phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
 
 ## Configuration
@@ -64,3 +69,8 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 * snapshot->storage_path: Absolute path to the directory, where the snapshots are stored. **Make sure that your webserver has write permissions to this file and the containing directory.**
 * snapshot->snapshot_php: PHP File responsible for rendering the bubble in a way to be snapshotted. Relative path to general->host
 * snapshot->snapshot_width: Snapshot width
+
+## Logging configuration
+
+In the default setting, Headstart will log behavior only to the console. If you want to log to a file, please add following environment variable to your Renviron (in local mode) or Renviron.site (if called on a server). Headstart will then log events to a file on the `INFO` loglevel.
+* `HEADSTART_LOGFILE`: Path to a logfile, e.g. `/path/to/logfile.log`. Please make sure that the folder structure exists, e.g. `/path/to/`.

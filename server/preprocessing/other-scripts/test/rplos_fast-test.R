@@ -10,9 +10,16 @@ query <- "frogs"
 service <- "plos"
 params_file <- singleString <- paste(readLines("params.json"), collapse=" ")
 
+source('../utils.R')
+DEBUG = FALSE
+
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
+} else {
+  setup_logging('INFO')
+}
 
 source("../vis_layout.R")
-source('../utils.R')
 
 switch(service,
        plos={
@@ -26,7 +33,7 @@ switch(service,
     }
 )
 
-debug = FALSE
+DEBUG = FALSE
 
 MAX_CLUSTERS = 15
 ADDITIONAL_STOP_WORDS = "english"
