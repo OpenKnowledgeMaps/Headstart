@@ -18,7 +18,7 @@ Make sure you have the following packages installed:
   * logging
   * GMD
   * MASS
-  * ecodist
+  * vegan
   * jsonlite
   * tm (Version 0.6 - **do not use 0.7**)
   * proxy
