@@ -39,6 +39,7 @@ input_data = fromJSON("snapshots/snapshot_base_input.json")
 #time.taken
 
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
+                         lang=LANGUAGE,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
 
 output <- data.frame(fromJSON(output_json))

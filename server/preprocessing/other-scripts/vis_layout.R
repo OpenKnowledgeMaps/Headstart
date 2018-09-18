@@ -1,7 +1,7 @@
 library(logging)
 library(GMD)
 library(MASS)
-library(ecodist)
+library(vegan)
 library(tm)
 library(textcat)
 library(proxy)
