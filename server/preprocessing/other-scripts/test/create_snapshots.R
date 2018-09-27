@@ -44,7 +44,7 @@ if(!is.null(params_file)) {
 tryCatch({
   input_data = get_papers(query, params, limit=120)
 }, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Query failed:", service, query, params, err, sep="||")))
+  tslog$error(gsub("\n", " ", paste("Query failed:", service, query, paste(params, collapse=" "), err, sep="||")))
 })
 write_json(input_data, "snapshots/snapshot_base_input.json")
 #end.time <- Sys.time()
@@ -55,7 +55,7 @@ output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_
                          lang=LANGUAGE,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
 }, error=function(err){
-tslog$error(gsub("\n", " ", paste("Processing failed:", query, params, err)))
+tslog$error(gsub("\n", " ", paste("Processing failed:", query, paste(params, collapse=" "), err)))
 })
 
 write_json(data.frame(fromJSON(output_json)), "snapshots/snapshot_base_expected.json")
@@ -104,7 +104,7 @@ if(!is.null(params_file)) {
 tryCatch({
   input_data = get_papers(query, params)
 }, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Query failed:", service, query, params, err, sep="||")))
+  tslog$error(gsub("\n", " ", paste("Query failed:", service, query, paste(params, collapse=" "), err, sep="||")))
 })
 write_json(input_data, "snapshots/snapshot_pubmed_input.json")
 #end.time <- Sys.time()
@@ -115,7 +115,7 @@ output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_
                          lang=LANGUAGE,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
 }, error=function(err){
-tslog$error(gsub("\n", " ", paste("Processing failed:", query, params, err)))
+tslog$error(gsub("\n", " ", paste("Processing failed:", query, paste(params, collapse=" "), err, sep="||")))
 })
 
 write_json(data.frame(fromJSON(output_json)), "snapshots/snapshot_pubmed_expected.json")
