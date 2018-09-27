@@ -80,7 +80,7 @@ print(params)
 tryCatch({
   input_data = get_papers(query, params, limit=limit)
 }, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Query failed:", query, params, err)))
+  tslog$error(gsub("\n", " ", paste("Query failed:", service, query, params, err, sep="||")))
 })
 
 
