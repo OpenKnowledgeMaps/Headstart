@@ -22,6 +22,8 @@ if (DEBUG==TRUE){
   setup_logging('INFO')
 }
 
+tslog <- getLogger('ts')
+
 source("../vis_layout.R")
 source('../pubmed.R')
 
@@ -37,10 +39,13 @@ input_data = fromJSON("snapshots/snapshot_pubmed_input.json")
 #end.time <- Sys.time()
 #time.taken <- end.time - start.time
 #time.taken
-
+tryCatch({
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
                          lang=LANGUAGE,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
+}, error=function(err){
+tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
+})
 
 output <- data.frame(fromJSON(output_json))
 expected <- fromJSON("snapshots/snapshot_pubmed_expected.json")

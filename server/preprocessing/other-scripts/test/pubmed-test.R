@@ -22,6 +22,8 @@ if (DEBUG==TRUE){
   setup_logging('INFO')
 }
 
+tslog <- getLogger('ts')
+
 source("../vis_layout.R")
 source('../pubmed.R')
 
@@ -35,14 +37,21 @@ if(!is.null(params_file)) {
 
 #start.time <- Sys.time()
 
-input_data = get_papers(query, params)
+tryCatch({
+  input_data = get_papers(query, params)
+}, error=function(err){
+  tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
+})
 
 #end.time <- Sys.time()
 #time.taken <- end.time - start.time
 #time.taken
-
+tryCatch({
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
                          lang=LANGUAGE,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
+}, error=function(err){
+tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
+})
 
 print(output_json)
