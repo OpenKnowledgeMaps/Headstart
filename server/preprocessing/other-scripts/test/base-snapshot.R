@@ -45,7 +45,7 @@ output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_
                          lang=LANGUAGE,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
 }, error=function(err){
-tslog$error(gsub("\n", " ", paste("Processing failed:", query, paste(params, collapse=" "), err, sep="||")))
+tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
 })
 
 output <- data.frame(fromJSON(output_json))
