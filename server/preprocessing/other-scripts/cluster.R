@@ -9,6 +9,9 @@ get_cut_off <- function(css_cluster, attempt=1){
 }
 
 create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
+  if(nrow(distance_matrix) <= 2){
+    stop("Not enough papers for clustering, N <= 2.")
+  }
   # Perform clustering, use elbow to determine a good number of clusters
   css_cluster <- css.hclust(distance_matrix, hclust.FUN.MoreArgs=list(method="ward.D"))
   num_clusters <- NA
