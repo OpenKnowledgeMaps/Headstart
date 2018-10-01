@@ -36,7 +36,7 @@ blog <- getLogger('api.base')
 get_papers <- function(query, params, limit=100,
                        fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
 
-  blog$info(paste("Search: ", query, sep=""))
+  blog$info(paste("Search:", query))
   start.time <- Sys.time()
 
   exact_query = "";
