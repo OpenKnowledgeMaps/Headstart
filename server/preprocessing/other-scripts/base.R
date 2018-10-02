@@ -57,12 +57,10 @@ get_papers <- function(query, params, limit=100,
   # language query field flag
   # CHANGE TO MORE LANGUAGES!!! look up dclang specifications
   lang_id <- params$language_id
-  if (lang_id != 'all'){
-    if (lang_id %in% names(valid_langs)) {
-      lang_query <- paste0("dclang:", lang_id)
+  if (lang_id %in% names(valid_langs)) {
+    lang_query <- paste0("dclang:", lang_id)
     } else {
     lang_query <- ""
-    }
   }
   #Make sure that the abstract exists.
   abstract_exists = "dcdescription:?"
