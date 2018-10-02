@@ -28,6 +28,10 @@ vis_layout <- function(text, metadata,
                        testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
   TESTING <<- testing # makes testing param a global variable
   start.time <- Sys.time()
+  
+  if(!exists('input_data')){
+    stop("No input data found.")
+  }
 
   tryCatch({
    if(!isTRUE(testing)) {
