@@ -39,7 +39,7 @@ plog <- getLogger('api.pubmed')
 
 
 get_papers <- function(query, params = NULL, limit = 100) {
-  plog$info(query)
+  plog$info(paste("Search:", query))
   start.time <- Sys.time()
 
   fields <- c('.//ArticleTitle', './/MedlineCitation/PMID', './/Title', './/Abstract')
@@ -60,7 +60,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
   #HOTFIX - article_types cause a 414 with PubMed
   #query <- paste0(query, article_types_string, exclude_articles_with_abstract)
   query <- paste0(query, exclude_articles_with_abstract)
-  plog$info(query)
+  plog$info(paste("Query:", query))
   x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit,
                               mindate = from, maxdate = to, sort=sortby, use_history=TRUE)
   res <- rentrez::entrez_fetch(db = "pubmed", web_history = x$web_history, retmax = limit, rettype = "xml")
