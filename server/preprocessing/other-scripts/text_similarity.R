@@ -59,7 +59,6 @@ switch(service,
 
 
 MAX_CLUSTERS = 15
-ADDITIONAL_STOP_WORDS = "english"
 
 print("inhere")
 
@@ -69,6 +68,16 @@ if(!is.null(params_file) && !is.na(params_file)) {
   params <- NULL
 }
 
+if ('language' %in% names(params)){
+    LANGUAGE <- params$language
+    if (LANGUAGE == 'all'){
+      LANGUAGE <- 'english'
+    }
+  } else {
+    LANGUAGE <- 'english'
+  }
+
+ADDITIONAL_STOP_WORDS = LANGUAGE
 print("reading stuff")
 print(params)
 tryCatch({
@@ -81,6 +90,7 @@ tryCatch({
 print("got the input")
 tryCatch({
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
+                         lang=LANGUAGE,
                          taxonomy_separator=taxonomy_separator, list_size = list_size)
 }, error=function(err){
  tslog$error(gsub("\n", " ", paste("Processing failed:", query, params, err)))

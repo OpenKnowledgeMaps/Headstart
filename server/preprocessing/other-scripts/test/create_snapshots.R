@@ -17,12 +17,20 @@ params <- NULL
 params_file <- "snapshot_params_base.json"
 
 source('../utils.R')
+DEBUG = FALSE
+
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
+} else {
+  setup_logging('INFO')
+}
+
 source("../vis_layout.R")
 source('../base.R')
 
-DEBUG = FALSE
 
 MAX_CLUSTERS = 15
+LANGUAGE = "english"
 ADDITIONAL_STOP_WORDS = "english"
 
 if(!is.null(params_file)) {
@@ -38,6 +46,7 @@ write_json(input_data, "snapshots/snapshot_base_input.json")
 #time.taken
 
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
+                         lang=LANGUAGE,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
 
 write_json(data.frame(fromJSON(output_json)), "snapshots/snapshot_base_expected.json")
@@ -61,13 +70,20 @@ service <- "pubmed"
 params <- NULL
 params_file <- "snapshot_params_pubmed.json"
 
+source('../utils.R')
 DEBUG = FALSE
 
-source('../utils.R')
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
+} else {
+  setup_logging('INFO')
+}
+
 source("../vis_layout.R")
 source('../pubmed.R')
 
 MAX_CLUSTERS = 15
+LANGUAGE = "english"
 ADDITIONAL_STOP_WORDS = "english"
 
 if(!is.null(params_file)) {
@@ -83,5 +99,6 @@ write_json(input_data, "snapshots/snapshot_pubmed_input.json")
 #time.taken
 
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
+                         lang=LANGUAGE,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
 write_json(data.frame(fromJSON(output_json)), "snapshots/snapshot_pubmed_expected.json")

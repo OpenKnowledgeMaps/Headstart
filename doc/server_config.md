@@ -18,7 +18,7 @@ Make sure you have the following packages installed:
   * logging
   * GMD
   * MASS
-  * ecodist
+  * vegan
   * jsonlite
   * tm (Version 0.6 - **do not use 0.7**)
   * proxy
@@ -40,7 +40,10 @@ Make sure you have the following packages installed:
   * rcrossref (for VIPER) with the async dev version: install with `remotes::install_github("ropensci/rcrossref@async")`
   * rAltmetric
   * plyr (for better data munging)
+  * onehot (for feature engineering)
+  * textcat (for language recognition)
   * solrium (for interfacing with SOLR servers)
+
 * phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
 
 ## Configuration
