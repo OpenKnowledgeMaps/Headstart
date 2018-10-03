@@ -24,25 +24,26 @@ library(rplos)
 # * "readers": an indicator of the paper's popularity, e.g. number of readers, views, downloads etc.
 # * "subject": keywords or classification, split by ;
 
-get_papers <- function(query, params, limit=100, fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
-  
+get_papers <- function(query, params, limit=100,
+                       fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
+
   date_string = paste("publication_date:[", params$from, "T00:00:00Z", " TO ", params$to, "T23:59:59Z]", sep="")
   article_types_string = paste("article_type:(", '"', paste(params$article_types, sep='"', collapse='" OR "'), '")', sep="")
   journals_string = paste("journal_key:(", '"', paste(params$journals, sep='"', collapse='" OR "'), '")', sep="")
   sortby_string = ifelse(params$sorting == "most-recent", "publication_date desc", "")
-  
+
   # Get data from PLOS API
-  
-  search_data <- searchplos(q=paste("everything_rev:", query, sep=""), 
+
+  search_data <- searchplos(q=paste("everything_rev:", query, sep=""),
                             fq=list(article_types_string, journals_string, date_string, "doc_type:full"),
                             fl=fields,
                             sort=sortby_string,
                             limit=limit)
-  
+
   metadata = search_data$data
   text = data.frame("id" = metadata$id)
   text$content = paste(metadata$title, metadata$abstract, metadata$journal, metadata$author, metadata$subject, sep=" ")
-  
+
   names(metadata)[names(metadata)=="counter_total_month"] <- "readers"
   names(metadata)[names(metadata)=="abstract"] <- "paper_abstract"
   names(metadata)[names(metadata)=="journal"] <- "published_in"
