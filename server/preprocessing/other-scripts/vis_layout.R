@@ -1,8 +1,9 @@
 library(logging)
 library(GMD)
 library(MASS)
-library(ecodist)
+library(vegan)
 library(tm)
+library(textcat)
 library(proxy)
 library(SnowballC)
 library(jsonlite)
@@ -10,6 +11,8 @@ library(parfossil)
 library(doParallel)
 library(stringi)
 library(stringdist)
+library(plyr)
+library(onehot)
 registerDoParallel(3)
 
 
@@ -18,46 +21,68 @@ vlog <- getLogger('vis')
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
 
-vis_layout <- function(text, metadata, max_clusters=15, maxit=500, mindim=2, maxdim=2, lang="english",
-                       add_stop_words=NULL, testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
-
+vis_layout <- function(text, metadata,
+                       max_clusters=15, maxit=500,
+                       mindim=2, maxdim=2,
+                       lang=NULL, add_stop_words=NULL,
+                       testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
+  TESTING <<- testing # makes testing param a global variable
   start.time <- Sys.time()
+  
+  if(!exists('input_data')){
+    stop("No input data found.")
+  }
 
   tryCatch({
    if(!isTRUE(testing)) {
      source('preprocess.R')
+     source('features.R')
      source('cluster.R')
      source('summarize.R')
      source('postprocess.R')
    } else {
      source('../preprocess.R')
+     source('../features.R')
      source('../cluster.R')
      source('../summarize.R')
      source('../postprocess.R')
    }
   }, error = function(err) print(err)
   )
+
+  vlog$debug("preprocess")
   filtered <- filter_duplicates(metadata, text, list_size)
   metadata <- filtered$metadata
   text <- filtered$text
+  metadata["lang_detected"] <- detect_language(text$content)
+  stops <- get_stopwords(lang, testing)
+  corpus <- create_corpus(metadata, text, lang)
 
-  stops <- get_stopwords(lang, add_stop_words, testing)
+  vlog$debug("get features")
+  tdm_matrix <- create_tdm_matrix(corpus$stemmed)
+  distance_matrix <- get_distance_matrix(tdm_matrix)
+  lang_detected <- get_OHE_feature(metadata, "lang_detected")
+  vlog$info(paste("Languages:",
+                  paste(paste0(names(lang_detected),
+                               ":",
+                               apply(lang_detected, 2, sum)),
+                        collapse = " "),
+                   sep=" "))
+  features <- concatenate_features(distance_matrix)
 
-  vlog$debug("calc matrix")
-  res <- create_corpus(metadata, text, stops)
-  corpus <- res$corpus
-  corpus_unstemmed <- res$corpus_unstemmed
-  metadata_full_subjects = replace_keywords_if_empty(corpus, metadata, stops)
-  tdm_matrix <- create_tdm_matrix(corpus)
+  vlog$debug("get clusters")
+  clusters <- create_clusters(as.dist(features), max_clusters=max_clusters)
+  layout <- get_ndms(as.dist(features), maxit=500, mindim=2, maxdim=2)
 
-  vlog$debug("normalize matrix")
-  normalized_matrix <- normalize_matrix(tdm_matrix);
+  vlog$debug("get cluster summaries")
+  metadata = replace_keywords_if_empty(metadata, stops)
+  named_clusters <- create_cluster_labels(clusters, metadata, lang,
+                                          weightingspec="ntn", top_n=3,
+                                          stops=stops, taxonomy_separator)
 
-  vlog$debug("create clusters")
-  clusters <- create_clusters(normalized_matrix, max_clusters=max_clusters);
-  named_clusters <- create_cluster_labels(clusters, metadata_full_subjects, weightingspec="ntn", top_n=3, stops=stops, taxonomy_separator)
-  layout <- create_ordination(normalized_matrix, maxit=500, mindim=2, maxdim=2)
-  output <- create_output(named_clusters, layout, metadata_full_subjects)
+
+  vlog$debug("create output")
+  output <- create_output(named_clusters, layout, metadata)
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time

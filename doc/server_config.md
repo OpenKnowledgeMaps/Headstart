@@ -18,7 +18,7 @@ Make sure you have the following packages installed:
   * logging
   * GMD
   * MASS
-  * ecodist
+  * vegan
   * jsonlite
   * tm (Version 0.6 - **do not use 0.7**)
   * proxy
@@ -41,6 +41,9 @@ Make sure you have the following packages installed:
   * rAltmetric
   * plyr (for better data munging)
   * solrium (for interfacing with SOLR servers)
+  * onehot (for feature engineering)
+  * textcat (for language recognition)
+
 * phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
 
 ## Configuration

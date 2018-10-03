@@ -1,19 +1,14 @@
 vplog <- getLogger('vis.preprocess')
 
 
-get_stopwords <- function(lang, add_stop_words, testing) {
-  stops <- stopwords(lang)
-
-  if (!is.null(add_stop_words)){
-    if (isTRUE(testing)) {
-      add_stop_path <- paste0("../../resources/", add_stop_words, ".stop")
-    } else {
-      add_stop_path <- paste0("../resources/", add_stop_words, ".stop")
-    }
-    additional_stops <- scan(add_stop_path, what="", sep="\n")
-    stops = c(stops, additional_stops)
-  }
-  return(stops)
+detect_language <- function(text) {
+  lang_detected <- lapply(text, textcat)
+  # from russian-iso8859_5 only take russian
+  lang_detected <- unlist(lapply(lang_detected,
+                    function(x) {vapply(strsplit(x,"-"), `[`, 1, FUN.VALUE=character(1))}
+                  ))
+  lang_detected <-
+  return(lang_detected)
 }
 
 
@@ -76,39 +71,11 @@ deduplicate_titles <- function(metadata, list_size) {
 
 }
 
-create_corpus <- function(metadata, text, stops) {
-  m <- list(content = "content", id = "id")
-
-  myReader <- readTabular(mapping = m)
-  (corpus <- Corpus(DataframeSource(text), readerControl = list(reader = myReader)))
-
-  # Replace non-convertible bytes in with strings showing their hex codes, see http://tm.r-forge.r-project.org/faq.html
-  corpus <- tm_map(corpus,  content_transformer(function(x) iconv(enc2utf8(x), sub = "byte")))
-  corpus <- tm_map(corpus, removePunctuation)
-  corpus <- tm_map(corpus, content_transformer(tolower))
-  corpus <- tm_map(corpus, removeWords, stops)
-  corpus <- tm_map(corpus, stripWhitespace)
-  corpus_unstemmed = corpus
-
-  corpus <- tm_map(corpus, stemDocument)
-
-  return(list(corpus = corpus, corpus_unstemmed = corpus_unstemmed))
-}
-
-create_tdm_matrix <- function(corpus, sparsity=1) {
-  tdm <- TermDocumentMatrix(corpus)
-  if(sparsity < 1) {
-    tdm <- removeSparseTerms(tdm, sparsity)
-  }
-  tdm_matrix = t(as.matrix(tdm))
-  return(tdm_matrix)
-}
-
-replace_keywords_if_empty <- function(corpus, metadata, stops) {
+replace_keywords_if_empty <- function(metadata, stops) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
   candidates = mapply(paste, metadata$title[missing_subjects], metadata$paper_abstract[missing_subjects])
-  candidates = lapply(candidates, tolower)
+  candidates = mapply(conditional_lowercase, candidates, metadata$lang_detected[missing_subjects])
   candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
   candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
   candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
@@ -131,10 +98,9 @@ replace_keywords_if_empty <- function(corpus, metadata, stops) {
 
 }
 
-
-normalize_matrix <- function(tdm_matrix, method = "cosine") {
-  distance_matrix_2 <- as.matrix(proxy::dist(tdm_matrix, method))
-  distance_matrix = as.dist(distance_matrix_2)
-
-  return(distance_matrix)
+get_OHE_feature <-function(metadata, feature_name) {
+  ohe_encoder <- onehot(metadata[feature_name], stringsAsFactors = TRUE, max_levels = 100)
+  ohe_feat <- data.frame(predict(ohe_encoder, metadata[feature_name]))
+  rownames(ohe_feat) <- metadata$id
+  return(ohe_feat)
 }
