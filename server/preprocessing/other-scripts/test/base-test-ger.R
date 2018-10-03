@@ -7,10 +7,10 @@ options(warn=1)
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(wd) #Don't forget to set your working directory
 
-query <- "edelstahl 1.4303" #args[2]
+query <- "Öffentlichkeit" #args[2]
 service <- "base"
 params <- NULL
-params_file <- "params_base.json"
+params_file <- "params_base_ger.json"
 
 source('../utils.R')
 DEBUG = FALSE
@@ -27,14 +27,17 @@ source("../vis_layout.R")
 source('../base.R')
 
 MAX_CLUSTERS = 15
-LANGUAGE = "english"
-ADDITIONAL_STOP_WORDS = "english"
+LANGUAGE = "german"
+ADDITIONAL_STOP_WORDS = "german"
 
 if(!is.null(params_file)) {
   params <- fromJSON(params_file)
 }
 
 #start.time <- Sys.time()
+
+
+
 
 tryCatch({
   input_data = get_papers(query, params, limit=120)
@@ -46,9 +49,11 @@ tryCatch({
 #time.taken <- end.time - start.time
 #time.taken
 tryCatch({
-output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
-                         lang=LANGUAGE,
-                         add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
+output_json = vis_layout(input_data$text, input_data$metadata,
+                         max_clusters = MAX_CLUSTERS,
+                         lang = LANGUAGE,
+                         add_stop_words = ADDITIONAL_STOP_WORDS,
+                         testing=TRUE, list_size=100)
 }, error=function(err){
 tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
 })
