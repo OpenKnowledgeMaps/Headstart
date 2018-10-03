@@ -3,6 +3,7 @@ library('rcrossref')
 
 alog <- getLogger('altmetrics')
 
+
 enrich_output_json <- function(output_json){
   start.time <- Sys.time()
 
