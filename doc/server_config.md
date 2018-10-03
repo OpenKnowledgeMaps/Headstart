@@ -42,6 +42,8 @@ Make sure you have the following packages installed:
   * plyr (for better data munging)
   * onehot (for feature engineering)
   * textcat (for language recognition)
+  * solrium (for interfacing with SOLR servers)
+
 * phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
 
 ## Configuration
