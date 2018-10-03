@@ -49,6 +49,9 @@ switch(service,
        openaire={
          source('../other-scripts/openaire.R')
        },
+       linkedcat={
+         source('../other-scripts/linkedcat.R')
+       },
       {
         source("../other-scripts/rplos_fast.R")
       }
