@@ -1,6 +1,5 @@
 vclog <- getLogger('vis.cluster')
 
-
 get_cut_off <- function(css_cluster, attempt=1){
   evthres = 0.9**attempt
   incthres = 1 - (0.9**attempt)
@@ -59,8 +58,6 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
     num_clusters = round(sqrt(nrow(distance_matrix))) + 1
   }
 
-
-
   meta_cluster = attr(css_cluster,"meta")
   cluster = meta_cluster$hclust.obj
   labels = labels(distance_matrix)
@@ -75,7 +72,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
   #   rect.hclust(cluster, k=num_clusters, border="red")
   #   dev.off()
   # }
-  
+
   vclog$info(paste("Number of Clusters:", num_clusters, sep=" "))
   vclog$debug(paste("CutOff-Description:", attributes(cut_off)$description))
 
@@ -85,14 +82,17 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 }
 
 
-create_ordination <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
+get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
 
   # Perform non-metric multidimensional scaling
-  nm <<- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
-  nm.nmin = nmds.min(nm)
+  # nm <- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
+  # nm.nmin = nmds.min(nm)
+  ord <- metaMDS(distance_matrix, k = 2, parallel = 3)
+  points <- ord$points
 
-  vclog$info(paste("NMDS-Stress:", min(nm$stress), sep=" "))
-  vclog$info(paste("NMDS-R2:", min(nm$r2), sep=" "))
+  vclog$info(paste("NMDS-Stress:", min(ord$stress), sep=" "))
+  # vclog$info(paste("NMDS-R2:", min(nm$r2), sep=" "))
+
   # NEEDS FIX
   # if(exists("DEBUG") && DEBUG == TRUE) {
   #   # Plot results from multidimensional scaling, highlight clusters with symbols
@@ -100,6 +100,6 @@ create_ordination <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
   #   plot(nm.nmin, pch=groups)
   #   dev.off()
   # }
-
-  return(nm.nmin)
+  layout <- list(X1 = points[,1], X2 = points[,2])
+  return(layout)
 }

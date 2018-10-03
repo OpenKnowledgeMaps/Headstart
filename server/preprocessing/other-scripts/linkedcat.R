@@ -47,11 +47,15 @@ get_papers <- function(query, params, limit=100) {
   lclog$info(paste("Query:", q_params, sep = " "));
   res <- solr_search(conn, "linkedcat", params = q_params)
 
+  if (nrow(res)==0){
+    stop(paste("No results retrieved."))
+  }
+
   # make results dataframe
   metadata <- data.frame(res)
   metadata[is.na(metadata)] <- ""
-  metadata$subject <- ""
-  metadata$paper_abstract <- metadata$ocrtext
+  metadata$subject <- metadata$keywords
+  metadata$paper_abstract <- "missing"
   metadata$authors <- metadata$author_str
   metadata$title <- metadata$maintitle_str
   metadata$year <- metadata$pubyear
@@ -80,6 +84,6 @@ get_papers <- function(query, params, limit=100) {
 }
 
 build_query <- function(query, params, limit){
-  q = "*:*"
+  q = paste0("maintitle:", query, " keywords:", query)
   return(list(q = q, rows = limit))
 }
