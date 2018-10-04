@@ -280,7 +280,7 @@ IO.prototype = {
             } else if(config.service === "base") {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
                 d.oa_link = d.link;
-            } else if(config.service = "openaire") {
+            } else if(config.service === "openaire") {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
                 d.oa_link = d.link;
             } else {
