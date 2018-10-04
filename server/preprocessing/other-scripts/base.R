@@ -76,6 +76,9 @@ get_papers <- function(query, params, limit=100,
                         , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"
                         , sortby = sortby_string))
   res <- res_raw$docs
+  if (nrow(res)==0){
+    stop(paste("No results retrieved."))
+  }
 
   blog$info(paste("Query:", query, date_string, document_types, abstract_exists, sep=" "));
 
