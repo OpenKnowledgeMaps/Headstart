@@ -1,4 +1,4 @@
-'='library(rbace)
+library(rbace)
 
 # get_papers
 #
@@ -139,17 +139,6 @@ get_papers <- function(query, params, limit=100,
 
   return(ret_val)
 
-}
-
-get_lang <- function(lang_id) {
-  if (lang_id == 'all'){
-    LANGUAGE <- 'english'
-    } else if (lang_id %in% names(valid_langs)){
-      LANGUAGE <- unlist(unname(valid_langs[lang_id]))
-    } else {
-      LANGUAGE <- 'english'
-    }
-  return (list(lang_id = lang_id, name = LANGUAGE))
 }
 
 valid_langs <- list(
