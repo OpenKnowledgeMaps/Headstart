@@ -65,16 +65,15 @@ if(!is.null(params_file) && !is.na(params_file)) {
   params <- NULL
 }
 
-if ('language' %in% names(params)){
-    LANGUAGE <- params$language
-    if (LANGUAGE == 'all'){
-      LANGUAGE <- 'english'
-    }
+if ('lang_id' %in% names(params)){
+    lang_id <- params$lang_id
   } else {
-    LANGUAGE <- 'english'
-  }
+    lang_id <- 'all'
+}
 
-ADDITIONAL_STOP_WORDS = LANGUAGE
+LANGUAGE <- get_api_lang(lang_id, valid_langs)
+ADDITIONAL_STOP_WORDS = LANGUAGE$name
+
 print("reading stuff")
 print(params)
 tryCatch({
@@ -87,7 +86,7 @@ tryCatch({
 print("got the input")
 tryCatch({
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
-                         lang=LANGUAGE,
+                         lang=LANGUAGE$name,
                          taxonomy_separator=taxonomy_separator, list_size = list_size)
 }, error=function(err){
  tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
