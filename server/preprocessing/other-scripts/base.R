@@ -1,4 +1,4 @@
-'='library(rbace)
+library(rbace)
 
 # get_papers
 #
@@ -56,7 +56,7 @@ get_papers <- function(query, params, limit=100,
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
   # language query field flag
   # CHANGE TO MORE LANGUAGES!!! look up dclang specifications
-  lang_id <- params$language_id
+  lang_id <- params$lang_id
   if (lang_id %in% names(valid_langs)) {
     lang_query <- paste0("dclang:", lang_id)
     } else {
@@ -78,7 +78,7 @@ get_papers <- function(query, params, limit=100,
     stop(paste("No results retrieved."))
   }
 
-  blog$info(paste("Query:", query, date_string, document_types, abstract_exists, sep=" "));
+  blog$info(paste("Query:", query, lang_query, date_string, document_types, abstract_exists, sep=" "));
 
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
 
@@ -139,17 +139,6 @@ get_papers <- function(query, params, limit=100,
 
   return(ret_val)
 
-}
-
-get_lang <- function(lang_id) {
-  if (lang_id == 'all'){
-    LANGUAGE <- 'english'
-    } else if (lang_id %in% names(valid_langs)){
-      LANGUAGE <- unlist(unname(valid_langs[lang_id]))
-    } else {
-      LANGUAGE <- 'english'
-    }
-  return (list(lang_id = lang_id, name = LANGUAGE))
 }
 
 valid_langs <- list(

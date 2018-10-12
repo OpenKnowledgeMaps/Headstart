@@ -28,18 +28,18 @@ source('../base.R')
 
 MAX_CLUSTERS = 15
 
-if ('language' %in% names(params)){
-    lang <- map_language(params$language_id)
-  } else {
-    lang <- 'all'
-  }
-
-LANGUAGE <- get_lang(lang)
-ADDITIONAL_STOP_WORDS = LANGUAGE$name
-
 if(!is.null(params_file)) {
   params <- fromJSON(params_file)
 }
+
+if ('lang_id' %in% names(params)){
+    lang_id <- params$lang_id
+  } else {
+    lang_id <- 'all'
+}
+
+LANGUAGE <- get_api_lang(lang_id, valid_langs)
+ADDITIONAL_STOP_WORDS = LANGUAGE$name
 
 #start.time <- Sys.time()
 
