@@ -30,12 +30,19 @@ source('../openaire.R')
 source('../altmetrics.R')
 
 MAX_CLUSTERS = 15
-LANGUAGE = "english"
-ADDITIONAL_STOP_WORDS = "english"
 
 if(!is.null(params_file)) {
   params <- fromJSON(params_file)
 }
+
+if ('lang_id' %in% names(params)){
+    lang_id <- params$lang_id
+  } else {
+    lang_id <- 'all'
+}
+
+LANGUAGE <- get_api_lang(lang_id, valid_langs)
+ADDITIONAL_STOP_WORDS = LANGUAGE$name
 
 
 tryCatch({
@@ -46,7 +53,7 @@ tryCatch({
 
 tryCatch({
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
-                         lang=LANGUAGE,
+                         lang=LANGUAGE$name,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=-1)
 }, error=function(err){
 tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
