@@ -539,6 +539,17 @@ class Canvas {
             } else {
                 $("#document_types").hide()
             }
+
+            if (this.paramExists(context.params.lang_id)) {
+                const lang = config.languages.find(
+                    lang => lang.code === context.params.lang_id
+                );
+                $('#search_lang').html(
+                    'Language: ' + lang.lang_in_lang + ' (' + lang.lang_in_eng + ') '
+                );
+            } else {
+                $('#search_lang').hide();
+            }
         } else {
             $("#num_articles").html(context.num_documents)
                               .attr("class", "");
