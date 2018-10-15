@@ -2,16 +2,14 @@ vflog <- getLogger('vis.features')
 
 create_corpus <- function(metadata, text, lang=NULL) {
   valid <- getStemLanguages()
+  # if lang not given use lang detection
   if (is.null(lang)) {
     text["language"] <- unlist(lapply(metadata$lang_detected,
-                      function(x) {
-                        if (x %in% valid) {
-                          x
-                        } else {
-                          "english"
-                        }}))
+                      function(x) { if (x %in% valid) x else "english"
+                                  }
+                              ))
     } else {
-      text["language"] <- lang
+      text["language"] <- if (lang %in% valid) lang else NA
     }
   mapping <- list(content = "content", id = "id", language = "language")
   myReader <- readTabular(mapping = mapping)
