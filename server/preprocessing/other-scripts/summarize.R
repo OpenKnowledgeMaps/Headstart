@@ -31,10 +31,12 @@ filter_out <- function(ngrams, stops){
   return (tokens)
 }
 
-create_cluster_labels <- function(clusters, metadata, weightingspec, lang,
+create_cluster_labels <- function(clusters, metadata, lang,
+                                  unlowered_corpus,
+                                  weightingspec,
                                   top_n, stops, taxonomy_separator="/") {
   nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
-  tolower_flag <- if (lang == "german") FALSE else TRUE
+  tolower_flag <- if (lang == "ger") FALSE else TRUE
   nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
                                       tokenize = SplitTokenizer,
                                       weighting = function(x) weightSMART(x, spec="ntn"),
@@ -52,7 +54,32 @@ create_cluster_labels <- function(clusters, metadata, weightingspec, lang,
     clusters$cluster_labels[c(matches)] = tfidf_top_names[k]
   }
   clusters$cluster_labels <- fill_empty_areatitles(clusters$cluster_labels, metadata)
+  clusters$cluster_labels <- unlist(clusters$cluster_labels)
+  type_counts <- get_type_counts(unlowered_corpus)
+  clusters$cluster_labels <- fix_cluster_labels(clusters$cluster_labels, type_counts)
   return(clusters)
+}
+
+
+fix_cluster_labels <- function(clusterlabels, type_counts){
+  unlist(lapply(clusterlabels, function(x) {
+    fix_keyword_casing(x, type_counts)
+    }))
+}
+
+fix_keyword_casing <- function(keyword, type_counts) {
+  kw = strsplit(keyword, ", ")
+  kw = lapply(kw, strsplit, " ")[[1]]
+  kw = lapply(kw, function(x){lapply(x, match_keyword_case, type_counts=type_counts)})
+  kw = lapply(kw, function(x) x[!is.na(x)])
+  kw = lapply(kw, paste, collapse = " ")
+  kw = lapply(kw, function(x) {paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))})
+  kw = paste(kw, collapse = ", ")
+  return(paste(kw, collapse = ", "))
+}
+
+match_keyword_case <- function(x, type_counts) {
+  names(type_counts[which(tolower(names(type_counts)) == gsub("-", "", tolower(x)))][1])
 }
 
 
@@ -156,4 +183,10 @@ filter_out_nested_ngrams <- function(top_ngrams, top_n) {
     }
   }
   return(head(unique(top_names), top_n))
+}
+
+
+get_type_counts <- function(corpus) {
+  type_counts = apply(TermDocumentMatrix(corpus, control=list(tokenize=SplitTokenizer, tolower = FALSE)), 1, sum)
+  return(type_counts)
 }
