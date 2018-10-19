@@ -131,11 +131,15 @@ BubblesFSM.prototype = {
         d3.selectAll("#headstart-chart circle").on("mouseover", function (d) {
             if (!this_bubble_fsm.is("hoverbig")) {
                 mediator.publish("bubble_mouseover", d, this, this_bubble_fsm);
-                mediator.publish("record_action", d.title, "Bubble", "mouseover", config.user_id, "none", null);
+                if (config.enable_mouseover_evaluation) {
+                    mediator.publish("record_action", d.title, "Bubble", "mouseover", config.user_id, "none", null);
+                }
             }
         }).on("mouseout", function (d) {
             mediator.publish("bubble_mouseout", d, this, this_bubble_fsm);
-            mediator.publish("record_action", d.title, "Bubble", "mouseout", config.user_id, "none", null);
+            if (config.enable_mouseover_evaluation) {
+                mediator.publish("record_action", d.title, "Bubble", "mouseout", config.user_id, "none", null);
+            }
         });
 
         if (mediator.is_in_normal_mode) {

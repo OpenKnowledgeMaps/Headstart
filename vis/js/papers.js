@@ -608,8 +608,10 @@ papers.enlargePaper = function (d, holder_div) {
     if (d.resized || !mediator.is_zoomed) {
         return;
     }
-
-    mediator.publish("record_action", d.title, "Paper", "enlarge", config.user_id, d.bookmarked + " " + d.recommended, null);
+    
+    if (config.enable_mouseover_evaluation) {
+        mediator.publish("record_action", d.title, "Paper", "enlarge", config.user_id, d.bookmarked + " " + d.recommended, null);
+    }
 
     let resize_factor = 1.2;
 

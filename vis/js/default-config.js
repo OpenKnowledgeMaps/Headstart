@@ -105,6 +105,7 @@ var config = {
     // behaviour settings
     is_evaluation: false,
     evaluation_service: "log",
+    enable_mouseover_evaluation: false,
     is_adaptive: false,
     conference_id: 0,
     user_id: 0,
