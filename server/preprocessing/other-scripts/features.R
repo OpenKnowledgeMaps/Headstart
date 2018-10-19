@@ -2,16 +2,14 @@ vflog <- getLogger('vis.features')
 
 create_corpus <- function(metadata, text, lang=NULL) {
   valid <- getStemLanguages()
+  # if lang not given use lang detection
   if (is.null(lang)) {
     text["language"] <- unlist(lapply(metadata$lang_detected,
-                      function(x) {
-                        if (x %in% valid) {
-                          x
-                        } else {
-                          "english"
-                        }}))
+                      function(x) { if (x %in% valid) x else "english"
+                                  }
+                              ))
     } else {
-      text["language"] <- lang
+      text["language"] <- if (lang %in% valid) lang else NA
     }
   mapping <- list(content = "content", id = "id", language = "language")
   myReader <- readTabular(mapping = mapping)
@@ -22,14 +20,15 @@ create_corpus <- function(metadata, text, lang=NULL) {
   # Replace non-convertible bytes in with strings showing their hex codes,
   # see http://tm.r-forge.r-project.org/faq.html
   corpus <- tm_map(corpus, content_transformer(function(x) iconv(enc2utf8(x), sub = "byte")))
+  unlowered <- corpus
   corpus <- tm_map(corpus, removePunctuation)
   corpus <- tm_map(corpus, content_transformer(tolower))
   corpus <- tm_map(corpus, remove_stop_words)
   corpus <- tm_map(corpus, stripWhitespace)
-  unstemmed = corpus
+  unstemmed <- corpus
   stemmed <- tm_map(corpus, stemDocument)
 
-  return(list(stemmed = stemmed, unstemmed = unstemmed))
+  return(list(unlowered = unlowered, stemmed = stemmed, unstemmed = unstemmed))
 }
 
 
