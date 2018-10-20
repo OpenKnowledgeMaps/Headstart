@@ -452,6 +452,11 @@ BubblesFSM.prototype = {
         
         $("#subdiscipline_title").dotdotdot();
         $("#context").css("visibility", "hidden");
+        $('<p class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
+        
+        $(".backlink").on("click", function () {
+            mediator.publish('chart_svg_click');
+        })
 
         d3.selectAll("div.paper_holder")
                 .on("mouseover", function (d) {
@@ -628,6 +633,8 @@ BubblesFSM.prototype = {
 
         d3.selectAll("span.readers_entity")
                 .style("font-size", "8px");
+        
+        $(".backlink").remove();
 
         mediator.publish("draw_title");
 
