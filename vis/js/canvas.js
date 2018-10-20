@@ -545,7 +545,9 @@ class Canvas {
                 $("#document_types").hide()
             }
 
-            if (this.paramExists(context.params.lang_id) && this.paramExists(config.options.languages)) {
+            if (this.paramExists(context.params.lang_id)
+            && this.paramExists(config.options)
+            && this.paramExists(config.options.languages)) {
                 const lang = config.options.languages.find(
                     lang => lang.code === context.params.lang_id
                 );
