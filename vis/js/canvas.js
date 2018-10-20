@@ -450,6 +450,11 @@ class Canvas {
                 $("#context-project_runtime").text(
                     `${context.params.start_date.slice(0, 4)}–${context.params.end_date.slice(0, 4)}`
                 )
+            } else {
+                $("#context-dataset_count").hide();
+                $("#context-paper_count").hide();
+                $("#context-funder").hide();
+                $("#context-project_runtime").hide();
             }
             
             if (this.paramExists(context.params.from) && this.paramExists(context.params.to)) {
@@ -540,13 +545,16 @@ class Canvas {
                 $("#document_types").hide()
             }
 
-            if (this.paramExists(context.params.lang_id)) {
-                const lang = config.languages.find(
+            if (this.paramExists(context.params.lang_id) && this.paramExists(config.options.languages)) {
+                const lang = config.options.languages.find(
                     lang => lang.code === context.params.lang_id
                 );
-                $('#search_lang').html(
-                    'Language: ' + lang.lang_in_lang + ' (' + lang.lang_in_eng + ') '
-                );
+
+                if (lang) {
+                    $('#search_lang').html(
+                        'Language: ' + lang.lang_in_lang + ' (' + lang.lang_in_eng + ') '
+                    );
+                }
             } else {
                 $('#search_lang').hide();
             }
