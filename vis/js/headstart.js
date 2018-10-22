@@ -84,7 +84,9 @@ HeadstartFSM.prototype = {
   },
   
   recordActionMatomo: function(category, action, id) {
-    _paq.push(['trackEvent', category, action, id]);
+    if(typeof _paq !== "undefined") {
+        _paq.push(['trackEvent', category, action, id]);
+    }
   },
   
   recordActionGA: function(category, action, id) {

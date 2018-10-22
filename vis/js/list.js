@@ -246,7 +246,6 @@ list.fit_list_height = function() {
                     //TODO: Hack for VIPER
                     + ((config.language === "eng_openaire")?(10):(0));
     }
-    console.log($("#context").css("padding-bottom"));
     $("#papers_list").height(paper_list_avail_height);
 };
 
