@@ -17,6 +17,13 @@
         position: relative;
         z-index: 3;
     }
+    
+    .backlink {
+        position: relative;
+        z-index: 3; 
+        font-size: 11px;
+        cursor: pointer;
+    }
 }
 
 .truncated-project-title, .project-id {

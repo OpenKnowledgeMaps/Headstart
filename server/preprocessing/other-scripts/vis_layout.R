@@ -29,6 +29,10 @@ vis_layout <- function(text, metadata,
   TESTING <<- testing # makes testing param a global variable
   start.time <- Sys.time()
 
+  if(!exists('input_data')){
+    stop("No input data found.")
+  }
+
   tryCatch({
    if(!isTRUE(testing)) {
      source('preprocess.R')
@@ -73,6 +77,7 @@ vis_layout <- function(text, metadata,
   vlog$debug("get cluster summaries")
   metadata = replace_keywords_if_empty(metadata, stops)
   named_clusters <- create_cluster_labels(clusters, metadata, lang,
+                                          corpus$unlowered,
                                           weightingspec="ntn", top_n=3,
                                           stops=stops, taxonomy_separator)
 

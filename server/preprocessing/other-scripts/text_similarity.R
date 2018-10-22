@@ -83,7 +83,7 @@ print(params)
 tryCatch({
   input_data = get_papers(query, params, limit=limit)
 }, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Query failed:", query, params, err)))
+  tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
 })
 
 
@@ -93,7 +93,7 @@ output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_
                          lang=LANGUAGE,
                          taxonomy_separator=taxonomy_separator, list_size = list_size)
 }, error=function(err){
- tslog$error(gsub("\n", " ", paste("Processing failed:", query, params, err)))
+ tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
 })
 
 if (service=='openaire'){
