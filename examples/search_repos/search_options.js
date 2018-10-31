@@ -248,7 +248,59 @@ var options_base = {
                 , {id: "183", text: "Thesis: doctoral and postdoctoral", selected: false}
                 , {id: "182", text: "Thesis: master", selected: false}
                 , {id: "52", text: "Video/moving image", selected: false}
-            ]}
+            ]},
+        {id: "lang_id", multiple: false, name: "Language", type: "dropdown"
+            , fields: [
+                {id: "all", text: "All languages"}
+                , {id: "eng", text: "English"}
+                , {"id": "fre", "text": "French (français)"},
+                {"id": "spa", "text": "Spanish (español)"},
+                {"id": "ger", "text": "German (Deutsch)"},
+                {"id": "por", "text": "Portuguese (português)"},
+                {"id": "pol", "text": "Polish (Jezyk polski)"},
+                {"id": "jpn", "text": "Japanese (???)"},
+                {"id": "ita", "text": "Italian (italiano)"},
+                {"id": "chi", "text": "Chinese (??)"},
+                {"id": "rus", "text": "Russian (??????? ????)"},
+                {"id": "ind", "text": "Indonesian (bahasa Indonesia)"},
+                {"id": "ukr", "text": "Ukrainian (?????????? ????)"},
+                {"id": "gre", "text": "Modern Greek (??a ????????)"},
+                {"id": "cze", "text": "Czech (ceština)"},
+                {"id": "fin", "text": "Finnish (suomen kieli)"},
+                {"id": "swe", "text": "Swedish (svenska)"},
+                {"id": "hun", "text": "Hungarian (magyar nyelv)"},
+                {"id": "tur", "text": "Turkish (Türkçe)"},
+                {"id": "hrv", "text": "Croatian (hrvatski)"},
+                {"id": "geo", "text": "Georgian (???????)"},
+                {"id": "grc", "text": "Ancient Greek (????????)"},
+                {"id": "kor", "text": "Korean (???)"},
+                {"id": "slv", "text": "Slovenian (slovenšcina)"},
+                {"id": "sux", "text": "Sumerian (????)"},
+                {"id": "nob", "text": "Norwegian Bokmal (bokmål)"},
+                {"id": "rum", "text": "Romanian (limba româna)"},
+                {"id": "ara", "text": "Arabic (????????????)"},
+                {"id": "tha", "text": "Thai (???????)"},
+                {"id": "nor", "text": "Norwegian (norsk)"},
+                {"id": "lat", "text": "Latin (Lingua latina)"},
+                {"id": "dut", "text": "Dutch (Nederlands)"},
+                {"id": "ice", "text": "Icelandic (íslenska)"},
+                {"id": "lit", "text": "Lithuanian (lietuviu kalba)"},
+                {"id": "srp", "text": "Serbian (??????)"},
+                {"id": "baq", "text": "Basque (euskara)"},
+                {"id": "gle", "text": "Irish (Gaeilge)"},
+                {"id": "afr", "text": "Afrikaans (Afrikaans)"},
+                {"id": "heb", "text": "Hebrew (?????)"},
+                {"id": "dan", "text": "Danish (dansk)"},
+                {"id": "akk", "text": "Akkadian (????????)"},
+                {"id": "slo", "text": "Slovak (slovencina)"},
+                {"id": "nau", "text": "Nauru (dorerin Naoero)"},
+                {"id": "est", "text": "Estonian (eesti keel)"},
+                {"id": "vie", "text": "Vietnamese (Ti?ng Vi?t)"},
+                {"id": "bel", "text": "Belarusian (?????????? ????)"},
+                {"id": "glg", "text": "Galician (galego)"},
+                {"id": "ota", "text": "Ottoman Turkish (???? ??????)"},
+                {"id": "per", "text": "Persian (?????)"}
+            ]},
     ]
 }
 
