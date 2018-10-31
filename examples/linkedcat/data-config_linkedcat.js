@@ -17,6 +17,7 @@ var data_config = {
     show_list: true,
     content_based: true,
     url_prefix: "https://www.base-search.net/Record/",
+    show_keywords: true,
 	
     show_context: true,
     create_title_from_context: true,

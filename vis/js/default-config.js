@@ -76,6 +76,7 @@ var config = {
     show_list: false,
     show_context: false,
     show_infolink_areas: false,
+    show_keywords: false,
     
     create_title_from_context: false,
     is_title_clickable: true,
@@ -125,7 +126,7 @@ var config = {
     credit_embed: false,
     canonical_url: null,
     
-    service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE"},
+    service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE", linkedcat: "LinkedCat+"},
 
     localization: {
         eng: {
@@ -183,7 +184,7 @@ var config = {
             area: "Bereich",
             items: "Dokumente",
             backlink: "← Zurück zur Übersicht",
-            keywords: "Artikel",
+            keywords: "Schlagwörter",
             no_title: "Kein Titel",
             default_area: "Kein Bereich",
             default_author: "",
