@@ -39,7 +39,7 @@ get_papers <- function(query, params, limit=100,
   blog$info(paste("Search:", query))
   start.time <- Sys.time()
 
-  exact_query = "";
+  exact_query <- ""
 
   # check param validity
   if(startsWith(query, '"') && endsWith(query, '"')) {
@@ -47,11 +47,6 @@ get_papers <- function(query, params, limit=100,
   } else {
     exact_query = gsub("(?<!\\S)(?=\\S)", "textus:", query, perl=T)
   }
-  if ('language' %in% names(params)){
-      language <- params$language
-    } else {
-      language <- NULL
-    }
 
   year_from = params$from
   year_to = params$to
@@ -61,18 +56,21 @@ get_papers <- function(query, params, limit=100,
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
   # language query field flag
   # CHANGE TO MORE LANGUAGES!!! look up dclang specifications
-  if(!is.null(language) && language=='german'){
-    lang_query <- "dclang:ger"
-  } else {
+  lang_id <- params$lang_id
+  if (lang_id %in% names(valid_langs)) {
+    lang_query <- paste0("dclang:", lang_id)
+    } else {
     lang_query <- ""
   }
   #Make sure that the abstract exists.
   abstract_exists = "dcdescription:?"
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
 
+  base_query <- paste(exact_query, lang_query, date_string, document_types, abstract_exists, collapse=" ")
+
   # execute search
   (res_raw <- bs_search(hits=limit
-                        , query = paste(exact_query, lang_query, date_string, document_types, abstract_exists, collapse=" ")
+                        , query = base_query
                         , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"
                         , sortby = sortby_string))
   res <- res_raw$docs
@@ -80,7 +78,7 @@ get_papers <- function(query, params, limit=100,
     stop(paste("No results retrieved."))
   }
 
-  blog$info(paste("Query:", query, date_string, document_types, abstract_exists, sep=" "));
+  blog$info(paste("Query:", query, lang_query, date_string, document_types, abstract_exists, sep=" "));
 
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
 
@@ -142,3 +140,54 @@ get_papers <- function(query, params, limit=100,
   return(ret_val)
 
 }
+
+valid_langs <- list(
+    'afr'='afrikaans',
+    'akk'='akkadian',
+    'ara'='arabic',
+    'baq'='basque',
+    'bel'='belarusian',
+    'chi'='chinese',
+    'cze'='czech',
+    'dan'='danish',
+    'dut'='dutch',
+    'eng'='english',
+    'est'='estonian',
+    'fin'='finnish',
+    'fre'='french',
+    'geo'='georgian',
+    'ger'='german',
+    'gle'='irish',
+    'glg'='galician',
+    'grc'='greek',
+    'gre'='greek',
+    'heb'='hebrew',
+    'hrv'='croatian',
+    'hun'='hungarian',
+    'ice'='icelandic',
+    'ind'='indonesian',
+    'ita'='italian',
+    'jpn'='japanese',
+    'kor'='korean',
+    'lat'='latin',
+    'lit'='lithuanian',
+    'nau'='nauru',
+    'nob'='norwegian',
+    'nor'='norwegian',
+    'ota'='turkish',
+    'per'='persian',
+    'pol'='polish',
+    'por'='portuguese',
+    'rum'='romanian',
+    'rus'='russian',
+    'slo'='slovak',
+    'slv'='slovenian',
+    'spa'='spanish',
+    'srp'='serbian',
+    'sux'='sumerian',
+    'swe'='swedish',
+    'tha'='thai',
+    'tur'='turkish',
+    'ukr'='ukrainian',
+    'vie'='vietnamese'
+)

@@ -5,7 +5,6 @@ library(rstudioapi)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
-
 setwd(wd) #Don't forget to set your working directory
 
 query <- "russian" #args[2]
@@ -28,12 +27,19 @@ source("../vis_layout.R")
 source('../pubmed.R')
 
 MAX_CLUSTERS = 15
-LANGUAGE = "english"
-ADDITIONAL_STOP_WORDS = "english"
 
 if(!is.null(params_file)) {
   params <- fromJSON(params_file)
 }
+
+if ('lang_id' %in% names(params)){
+    lang_id <- params$lang_id
+  } else {
+    lang_id <- 'all'
+}
+
+LANGUAGE <- get_api_lang(lang_id, valid_langs)
+ADDITIONAL_STOP_WORDS = LANGUAGE$name
 
 #start.time <- Sys.time()
 
@@ -48,7 +54,7 @@ tryCatch({
 #time.taken
 tryCatch({
 output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
-                         lang=LANGUAGE,
+                         lang=LANGUAGE$name,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
 }, error=function(err){
 tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
