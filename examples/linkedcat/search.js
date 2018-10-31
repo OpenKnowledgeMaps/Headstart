@@ -12,7 +12,7 @@ $("#searchform").validate({
         $("#progress").html("");
 
         d3.select("#progress").append("p")
-                .text("Please be patient, this can take a while...")
+                .text("Bitte haben Sie ein wenig Geduld, dieser Vorgang dauert etwa 20 Sekunden...")
                 .append("div")
                 .attr("id", "progressbar")
 
@@ -74,7 +74,7 @@ var doSubmit = function (data, newWindow, callback) {
       return false;
     } else {
       $("#progress").html(
-        "Sorry! Something went wrong. Most likely, we did not get enough results for your search. Please try again with a different query."
+        "Pardon! Es ist leider etwas schief gelaufen. Wahrscheinlich gibt es zu Ihrem Suchanfrage zu wenige Dokumente. Bitte versuchen Sie es mit einer anderen Anfrage."
       );
       $(".btn").prop("disabled", false);
     }

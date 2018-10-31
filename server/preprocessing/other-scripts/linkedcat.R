@@ -55,7 +55,7 @@ get_papers <- function(query, params, limit=100) {
   metadata <- data.frame(res)
   metadata[is.na(metadata)] <- ""
   metadata$subject <- metadata$keywords
-  metadata$paper_abstract <- "missing"
+  metadata$paper_abstract <- ""
   metadata$authors <- metadata$author_str
   metadata$title <- metadata$maintitle_str
   metadata$year <- metadata$pubyear

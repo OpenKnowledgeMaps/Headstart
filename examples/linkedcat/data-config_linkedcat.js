@@ -12,7 +12,7 @@ var data_config = {
     preview_type: "pdf",
     sort_options: ["relevance", "title", "authors", "year"],
     is_force_areas: true,
-    language: "eng_pubmed",
+    language: "ger",
     area_force_alpha: 0.015,
     show_list: true,
     content_based: true,
@@ -20,20 +20,12 @@ var data_config = {
 	
     show_context: true,
     create_title_from_context: true,
-        
-    embed_modal: true,
-    share_modal: true,
-
-    doi_outlink: true,
-    filter_menu_dropdown: true,
-    sort_menu_dropdown: true,
-    filter_options: ["all", "open_access"],
     
     embed_modal: true,
     share_modal: false,
 
-    doi_outlink: true,
-    filter_menu_dropdown: true,
+    doi_outlink: false,
+    filter_menu_dropdown: false,
     sort_menu_dropdown: true,
     filter_options: ["all", "open_access"],
 };
