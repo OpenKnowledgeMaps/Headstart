@@ -9,6 +9,9 @@ get_cut_off <- function(css_cluster, attempt=1){
 }
 
 create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
+  if(nrow(distance_matrix) < 2){
+    stop("Not enough papers for clustering, N < 2.")
+  }
   # Perform clustering, use elbow to determine a good number of clusters
   css_cluster <- css.hclust(distance_matrix, hclust.FUN.MoreArgs=list(method="ward.D"))
   num_clusters <- NA
@@ -87,10 +90,16 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
   # Perform non-metric multidimensional scaling
   # nm <- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
   # nm.nmin = nmds.min(nm)
-  ord <- metaMDS(distance_matrix, k = 2, parallel = 3)
-  points <- ord$points
+  print(nrow(distance_matrix))
+  print(distance_matrix)
+  if (nrow(distance_matrix) <= 2){
+    points <- cbind(runif(nrow(distance_matrix), min=-1), runif(nrow(distance_matrix)), min=-1)
+  } else {
+    ord <- metaMDS(distance_matrix, k = 2, parallel = 3)
+    points <- ord$points
+    vclog$info(paste("NMDS-Stress:", min(ord$stress), sep=" "))
+  }
 
-  vclog$info(paste("NMDS-Stress:", min(ord$stress), sep=" "))
   # vclog$info(paste("NMDS-R2:", min(nm$r2), sep=" "))
 
   # NEEDS FIX
