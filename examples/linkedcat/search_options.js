@@ -273,7 +273,7 @@ var SearchOptions = {
         div.append('a')
                 .attr("href", "#")
                 .attr("class", "frontend-btn")
-                .text("Options")
+                .text("Weitere Optionen")
 
         var filters = d3.select(tag).append('div')
                 .attr('id', 'filters')

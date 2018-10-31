@@ -161,6 +161,7 @@ var config = {
             default_y: 1.,
             default_year: "",
             sort_by_label: 'sort by:',
+            embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
         },
         ger: {
             loading: "Wird geladen...",
@@ -180,8 +181,9 @@ var config = {
             source_label: 'Quelle',
             documenttypes_label: 'Publikationsarten',
             area: "Bereich",
+            items: "Dokumente",
             backlink: "← Zurück zur Übersicht",
-            keywords: "Keywords",
+            keywords: "Artikel",
             no_title: "Kein Titel",
             default_area: "Kein Bereich",
             default_author: "",
@@ -193,7 +195,16 @@ var config = {
             default_url: "",
             default_x: 1.,
             default_y: 1.,
-            default_year: ""
+            default_year: "",
+            embed_title: 'Visualisierung einbetten',
+            sort_by_label: 'sortieren: ',
+            relevance: "Relevanz",
+            embed_button_text: 'Kopieren',
+            embed_body_text: 'Sie können diesen Code verwenden, um die Visualisierung auf anderen Seiten einzubetten.',
+
+        },
+        ger_linkedcat: {
+            
         },
         eng_plos: {
             loading: "Loading...",
@@ -227,6 +238,7 @@ var config = {
             default_y: 1.,
             default_year: "",
             sort_by_label: 'sort by:',
+            embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
         },
         eng_pubmed: {
             loading: "Loading...",
@@ -268,6 +280,7 @@ var config = {
             items: "items",
             embed_button_text: 'Copy',
             embed_title: 'embed map',
+            embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
         },
         eng_openaire: {
             loading: "Loading...",
@@ -315,6 +328,7 @@ var config = {
             viper_edit_button_text: 'continue to openaire',
             embed_button_text: 'Copy',
             embed_title: 'embed map',
+            embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
             link: 'link',
             tweets_count_label: " tweets",
             readers_count_label: " readers (Mendeley)",
