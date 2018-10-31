@@ -55,6 +55,7 @@ get_papers <- function(query, params, limit=100) {
   metadata <- data.frame(res)
   metadata[is.na(metadata)] <- ""
   metadata$subject <- metadata$keywords
+  metadata$subject_orig <- metadata$subject
   metadata$paper_abstract <- ""
   metadata$authors <- metadata$author_str
   metadata$title <- metadata$maintitle_str
@@ -63,7 +64,7 @@ get_papers <- function(query, params, limit=100) {
   metadata$url <- "" # needs fix
   metadata$link <- "" # needs fix
   metadata$published_in <- "" # needs fix
-  metadata$oa_state <- 2
+  metadata$oa_state <- 1
 
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
