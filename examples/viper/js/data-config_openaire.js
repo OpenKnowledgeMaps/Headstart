@@ -66,4 +66,9 @@ var data_config = {
         'readers.mendeley': 'readers'
     },
     
+    is_evaluation: true,
+    evaluation_service: ["ga", "matomo"],
+    
+    use_hypothesis: true,
+    
 };
