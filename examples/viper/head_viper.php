@@ -102,40 +102,82 @@
 <link rel="stylesheet" type="text/css" href="./lib/cookieconsent.min.css" />
 <script src="./lib/cookieconsent.min.js"></script>
 <script>
-    
-    <?php if ($BROWSER_LANG === "de") { ?>
-    let cookie_message = "Wir verwenden Cookies, um unsere Webseite für Sie möglichst benutzerfreundlich zu gestalten. Wenn Sie fortfahren, nehmen wir an, dass Sie mit der Verwendung von Cookies auf dieser Webseite einverstanden sind. Weitere Informationen entnehmen Sie bitte ";
-    let cookie_link = "unserer Datenschutzerklärung.";
-    let cookie_button = "Alles klar!";
-    <?php } else { ?>
-    let cookie_message = "We use cookies to improve your experience. By your continued use of this site you accept such use. For more information, please see ";
-    let cookie_link = "our privacy policy.";
-    let cookie_button = "Got it!";
-    <?php }; ?>
-    
-    window.addEventListener("load", function(){   
-    window.cookieconsent.initialise({
-      "palette": {
-        "popup": {
-          "background": "#eff3f4",
-          "text": "#2D3E52"
-        },
-        "button": {
-          "background": "#2D3E52",
-          "text": "#ffffff"
-        }
-      },
-      "position": "bottom",
-      "theme": "classic",
-      "content": {
-        "message": cookie_message,
-        "dismiss": cookie_button,
-        "link": cookie_link,
-        "href": "https://openknowledgemaps.org/privacy-policy"
+
+<?php if ($BROWSER_LANG === "de") { ?>
+        let cookie_message = '<strong>Wir haben unsere <a href="./datenschutz" target="_blank" class="underline">Datenschutzerklärung</a> aktualisiert</strong>, um die Einführung von Google Analytics und des Hypothes.is Annotations-Services zu berücksichtigen. Wir verwenden Cookies, um unsere Webseite für Sie möglichst benutzerfreundlich zu gestalten. Wenn Sie fortfahren, nehmen wir an, dass Sie mit der Verwendung von Cookies auf dieser Webseite einverstanden sind. Weitere Informationen entnehmen Sie bitte ';
+        let cookie_link = "unserer Datenschutzerklärung.";
+        let cookie_button = "Alles klar!";
+        let cookie_href = "https://openknowledgemaps.org/datenschutz";
+<?php } else { ?>
+        let cookie_message = '<strong>We have updated our <a href="./privacy" target="_blank" class="underline">privacy policy</a></strong> to reflect the introduction of Google Analytics and the Hypothes.is annotation service. We use cookies to improve your experience. By your continued use of this site you accept such use. For more information, please see ';
+        let cookie_link = "our privacy policy.";
+        let cookie_button = "Got it!";
+        let cookie_href = "https://openknowledgemaps.org/privacy";
+<?php }; ?>
+    function clearCookies (names) {
+      var i = 0, namesLength = names.length;
+      for (i; i < namesLength; i += 1) {
+        document.cookie = names[i] + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
       }
-    })});
+    }
+    clearCookies(["cookieconsent_status"]);
+    var cookie_domain = "<?php echo $COOKIE_DOMAIN ?>";
+    window.addEventListener("load", function () {
+        window.cookieconsent.initialise({
+            "palette": {
+                "popup": {
+                    "background": "#eff3f4",
+                    "text": "#2D3E52"
+                },
+                "button": {
+                    "background": "#2D3E52",
+                    "text": "#ffffff"
+                }
+            },
+            "position": "bottom",
+            "theme": "classic",
+            "content": {
+                "message": cookie_message,
+                "dismiss": cookie_button,
+                "link": cookie_link,
+                "href": cookie_href
+            },
+            "cookie": {
+              "name": "priv-update-2018-10",
+              "domain": cookie_domain
+            }
+        })
+    });
 
 </script>
+
+<script>
+    // Set to the same value as the web property used on the site
+    var gaProperty = '<?php echo $GA_CODE; ?>';
+    // Disable tracking if the opt-out cookie exists.
+    var disableStr = 'ga-disable-' + gaProperty;
+    if (document.cookie.indexOf(disableStr + '=true') > -1) {
+        window[disableStr] = true;
+    }
+    // Opt-out function
+    function gaOptout() {
+        document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+        window[disableStr] = true;
+        alert('Google Analytics opt-out successful');
+    }
+</script>
+
+<?php if ($GA_ENABLED): ?>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $GA_CODE; ?>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', '<?php echo $GA_CODE; ?>');
+    </script>
+<?php endif; ?>
 
 <?php if ($PIWIK_ENABLED) { ?>
     <!-- Piwik -->
