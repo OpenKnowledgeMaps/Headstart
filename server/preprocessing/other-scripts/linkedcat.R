@@ -56,7 +56,7 @@ get_papers <- function(query, params, limit=100) {
   metadata[is.na(metadata)] <- ""
   metadata$subject <- metadata$keywords
   metadata$subject_orig <- metadata$subject
-  metadata$paper_abstract <- ""
+  metadata$paper_abstract <- metadata$ocrtext
   metadata$authors <- metadata$author_str
   metadata$title <- metadata$maintitle_str
   metadata$year <- metadata$pubyear
@@ -85,6 +85,6 @@ get_papers <- function(query, params, limit=100) {
 }
 
 build_query <- function(query, params, limit){
-  q = paste0("maintitle:", query, " keywords:", query)
+  q = paste0("maintitle:", query, " keywords:", query, " ocrtext:", query)
   return(list(q = q, rows = limit))
 }
