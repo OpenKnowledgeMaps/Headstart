@@ -36,12 +36,11 @@ create_cluster_labels <- function(clusters, metadata, lang,
                                   weightingspec,
                                   top_n, stops, taxonomy_separator="/") {
   nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
-  tolower_flag <- if (lang == "ger") FALSE else TRUE
   nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
                                       tokenize = SplitTokenizer,
                                       weighting = function(x) weightSMART(x, spec="ntn"),
                                       bounds = list(local = c(2, Inf)),
-                                      tolower = tolower_flag
+                                      tolower = TRUE
                                 ))
   tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
   empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
