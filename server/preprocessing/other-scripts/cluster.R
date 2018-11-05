@@ -90,10 +90,15 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
   # Perform non-metric multidimensional scaling
   # nm <- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
   # nm.nmin = nmds.min(nm)
-  print(nrow(distance_matrix))
-  print(distance_matrix)
   if (nrow(distance_matrix) <= 2){
-    points <- cbind(runif(nrow(distance_matrix), min=-1), runif(nrow(distance_matrix)), min=-1)
+    points <- tryCatch({
+      ord <- metaMDS(distance_matrix, k = 2, parallel = 3)
+      points <- ord$points
+    }, error=function(err){
+      points <- rbind(runif(nrow(distance_matrix), min=-1, max=0),
+                      runif(nrow(distance_matrix), min=0, max=1))
+      return(points)
+    })
   } else {
     ord <- metaMDS(distance_matrix, k = 2, parallel = 3)
     points <- ord$points
