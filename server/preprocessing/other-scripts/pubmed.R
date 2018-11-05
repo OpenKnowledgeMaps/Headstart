@@ -149,3 +149,8 @@ get_papers <- function(query, params = NULL, limit = 100) {
 }
 
 xtext <- function(x) xml2::xml_text(x)
+
+
+valid_langs <- list(
+    'eng'='english'
+)
