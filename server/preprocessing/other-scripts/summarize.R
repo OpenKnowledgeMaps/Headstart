@@ -76,7 +76,6 @@ fix_keyword_casing <- function(keyword, type_counts) {
   kw = strsplit(keyword, ", ")
   kw = lapply(kw, strsplit, " ")[[1]]
   kw = lapply(kw, function(x){lapply(x, match_keyword_case, type_counts=type_counts)})
-  kw = lapply(kw, function(x) x[!is.na(x)])
   kw = lapply(kw, paste, collapse = " ")
   kw = lapply(kw, function(x) {paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))})
   kw = paste(kw, collapse = ", ")
@@ -84,7 +83,8 @@ fix_keyword_casing <- function(keyword, type_counts) {
 }
 
 match_keyword_case <- function(x, type_counts) {
-  names(type_counts[which(tolower(names(type_counts)) == gsub("-", "", tolower(x)))][1])
+  y <- names(type_counts[which(tolower(names(type_counts)) == gsub("-", "", tolower(x)))][1])
+  if (!is.na(y)) return(y) else return(x)
 }
 
 
