@@ -450,13 +450,17 @@ BubblesFSM.prototype = {
                     + '</span> ' + config.localization[config.language].intro_label_areas)
         }
         
-        $("#subdiscipline_title").dotdotdot();
-        $("#context").css("visibility", "hidden");
-        $('<p class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
+        $("#subdiscipline_title>h4").dotdotdot();
         
-        $(".backlink").on("click", function () {
-            mediator.publish('chart_svg_click');
-        })
+        if (previous_zoom_node === null) {
+            $("#context").css("visibility", "hidden");
+            
+            $('<p class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
+
+            $(".backlink").on("click", function () {
+                mediator.publish('chart_svg_click');
+            })
+        }
 
         d3.selectAll("div.paper_holder")
                 .on("mouseover", function (d) {
@@ -574,7 +578,7 @@ BubblesFSM.prototype = {
                                 return d3.select(this.previousSibling).attr("class") != "zoom_selected";
                             })
                             .style("visibility", "visible");
-
+                    
                     mediator.current_zoom_node = null;
                     mediator.is_zoomed = false;
                     
