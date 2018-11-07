@@ -5,10 +5,16 @@ SplitTokenizer <- function(x) {
   return(tokens)
 }
 
+TypeCountTokenizer <- function(x) {
+  tokens = unlist(lapply(strsplit(words(x), split=";"), paste), use.names = FALSE)
+  tokens = unlist(lapply(tokens, gsub, pattern='[[:punct:]]', replacement=""))
+  return(tokens)
+}
+
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
-filter_out <- function(ngrams, stops){
+prune_ngrams <- function(ngrams, stops){
   tokens = mapply(strsplit, ngrams, split=" |;")
   tokens = mapply(strsplit, tokens, split="_")
   tokens = lapply(tokens, function(y){
@@ -70,7 +76,6 @@ fix_keyword_casing <- function(keyword, type_counts) {
   kw = strsplit(keyword, ", ")
   kw = lapply(kw, strsplit, " ")[[1]]
   kw = lapply(kw, function(x){lapply(x, match_keyword_case, type_counts=type_counts)})
-  kw = lapply(kw, function(x) x[!is.na(x)])
   kw = lapply(kw, paste, collapse = " ")
   kw = lapply(kw, function(x) {paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))})
   kw = paste(kw, collapse = ", ")
@@ -78,7 +83,8 @@ fix_keyword_casing <- function(keyword, type_counts) {
 }
 
 match_keyword_case <- function(x, type_counts) {
-  names(type_counts[which(tolower(names(type_counts)) == gsub("-", "", tolower(x)))][1])
+  y <- names(type_counts[which(tolower(names(type_counts)) == gsub("-", "", tolower(x)))][1])
+  if (!is.na(y)) return(y) else return(x)
 }
 
 
@@ -149,14 +155,14 @@ fill_empty_areatitles <- function(cluster_labels, metadata) {
 
 get_title_ngrams <- function(titles, stops) {
   # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
-  titles_bigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
-  titles_bigrams = filter_out(titles_bigrams, stops)
-  titles_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
-  titles_trigrams = filter_out(titles_trigrams, stops)
+  titles_bigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), 2), paste, collapse  = "_"))), paste, collapse = " ")
+  titles_bigrams = prune_ngrams(titles_bigrams, stops)
+  titles_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), 3), paste, collapse = "_"))), paste, collapse = " ")
+  titles_trigrams = prune_ngrams(titles_trigrams, stops)
   #titles_quadgrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 4), paste, collapse="_"))), paste, collapse=" ")
-  #titles_quadgrams = filter_out(titles_quadgrams, stops)
+  #titles_quadgrams = prune_ngrams(titles_quadgrams, stops)
   #titles_fivegrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 5), paste, collapse="_"))), paste, collapse=" ")
-  #titles_fivegrams = filter_out(titles_fivegrams, stops)
+  #titles_fivegrams = prune_ngrams(titles_fivegrams, stops)
   return(list("bigrams" = titles_bigrams, "trigrams" = titles_trigrams))
 }
 
@@ -186,6 +192,6 @@ filter_out_nested_ngrams <- function(top_ngrams, top_n) {
 
 
 get_type_counts <- function(corpus) {
-  type_counts = apply(TermDocumentMatrix(corpus, control=list(tokenize=SplitTokenizer, tolower = FALSE)), 1, sum)
+  type_counts = apply(TermDocumentMatrix(corpus, control=list(tokenize=TypeCountTokenizer, tolower = FALSE)), 1, sum)
   return(type_counts)
 }
