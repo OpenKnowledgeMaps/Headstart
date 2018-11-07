@@ -89,3 +89,8 @@ build_query <- function(query, params, limit){
   q = paste0("maintitle:", query, " keywords:", query, " ocrtext:", query)
   return(list(q = q, rows = limit))
 }
+
+
+valid_langs <- list(
+    'ger'='german'
+)
