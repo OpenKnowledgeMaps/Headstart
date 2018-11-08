@@ -44,7 +44,7 @@ get_papers <- function(query, params, limit=100) {
 
   q_params = build_query(query, params, limit)
   # do search
-  lclog$info(paste("Query:", q_params, sep = " "));
+  lclog$info(paste("Query:", paste(q_params, collapse = " ")))
   res <- solr_search(conn, "linkedcat", params = q_params)
 
   if (nrow(res)==0){
