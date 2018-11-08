@@ -40,3 +40,7 @@ $papers_holder_a: $okm-red;
 
 $iframe_modal_status: $okm-red;
 $open-access: $okm-red;
+
+@if $skin == 'linkedcat' {
+    $open-access: #2856a3;
+}
