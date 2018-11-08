@@ -34,3 +34,10 @@ $fontweight800: 800;
     $fontweight700: 700;
     $fontweight800: 700;
 }
+
+@if $skin == 'linkedcat' {
+    $base-font-family: 'Lato', Helvetica, sans-serif;
+    $link-font-family: 'Lato', Helvetica, sans-serif;
+    $special-font-family: 'Lato', Helvetica, sans-serif;
+    $abstract-font-family: 'Lato', Helvetica Neue, Helvetica, sans-serif;
+}
