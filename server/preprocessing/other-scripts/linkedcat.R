@@ -87,7 +87,8 @@ get_papers <- function(query, params, limit=100) {
 
 build_query <- function(query, params, limit){
   q = paste0("maintitle:", query, " keywords:", query, " ocrtext:", query)
-  return(list(q = q, rows = limit))
+  pubyear = paste0("pubyear:", "[", params$from, " TO ", params$to, "]")
+  return(list(q = q, rows = limit, fq = pubyear))
 }
 
 
