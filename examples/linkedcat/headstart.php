@@ -19,7 +19,7 @@
         <script type="text/javascript">
             headstart.start();
         </script>
-         <div style="margin-top:20px">Built with <a href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a> and <a href="http://github.com/ropensci/rplos" target="_blank">rplos</a>. All content retrieved from <a href="https://www.plos.org/publications/journals/" target="_blank">Public Library of Science Journals</a> under <a href="http://journals.plos.org/plosone/s/content-license" target="_blank">CC-BY</a>.
+         <div style="margin-top:20px">Diese Suche wurde mit <a href="http://github.com/pkraker/Headstart" target="_blank ">Headstart</a> realisiert. Alle Daten stammen aus LinkedCat+.
         </div>
     </body>
 </html>

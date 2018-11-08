@@ -75,8 +75,14 @@ IO.prototype = {
             var last_name = names[0].trim();
             if (names.length > 1) {
                 var first_name = names[1].trim();
-                authors_string += first_name + " " + last_name;
-                authors_short_string += first_name.substr(0, 1) + ". " + last_name;
+                
+                if(config.convert_author_names === true) { 
+                    authors_string += first_name + " " + last_name;
+                    authors_short_string += first_name.substr(0, 1) + ". " + last_name;
+                } else {
+                    authors_string += last_name + ", " + first_name;
+                    authors_short_string += last_name + ", " + first_name.substr(0, 1) + ". ";
+                }
             } else {
                 authors_string += last_name;
                 authors_short_string += last_name;
@@ -260,7 +266,7 @@ IO.prototype = {
             var authors = _this.convertToFirstNameLastName(d.authors);
             d.authors_string = authors.string;
             d.authors_short_string = authors.short_string;
-			
+            
             d.oa = false;
 
             if (config.service === "doaj") {

@@ -9,6 +9,7 @@ var data_config = {
     use_area_uri: true,
     show_timeline: false,
     show_dropdown: false,
+    show_infolink: false,
     preview_type: "pdf",
     sort_options: ["relevance", "title", "authors", "year"],
     is_force_areas: true,
@@ -16,8 +17,9 @@ var data_config = {
     area_force_alpha: 0.015,
     show_list: true,
     content_based: true,
-    url_prefix: "https://www.base-search.net/Record/",
+    url_prefix: "",
     show_keywords: true,
+    convert_author_names: false,
 	
     show_context: true,
     create_title_from_context: true,
