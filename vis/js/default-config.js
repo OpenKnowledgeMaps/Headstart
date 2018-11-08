@@ -77,6 +77,7 @@ var config = {
     show_context: false,
     show_infolink_areas: false,
     show_keywords: false,
+    convert_author_names: true,
     
     create_title_from_context: false,
     is_title_clickable: true,
