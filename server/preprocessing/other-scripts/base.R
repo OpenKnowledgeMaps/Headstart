@@ -57,7 +57,7 @@ get_papers <- function(query, params, limit=100,
   # language query field flag
   # CHANGE TO MORE LANGUAGES!!! look up dclang specifications
   lang_id <- params$lang_id
-  if (lang_id %in% names(valid_langs)) {
+  if (!is.null(valid_langs$lang_id)) {
     lang_query <- paste0("dclang:", lang_id)
     } else {
     lang_query <- ""
