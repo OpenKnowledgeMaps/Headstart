@@ -68,7 +68,7 @@ if(!is.null(params_file) && !is.na(params_file)) {
   params <- NULL
 }
 
-if ('lang_id' %in% names(params)){
+if (!is.null(params$lang_id)) {
     lang_id <- params$lang_id
   } else {
     lang_id <- 'all'
