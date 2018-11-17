@@ -44,7 +44,7 @@ get_papers <- function(query, params, limit=100) {
 
   q_params = build_query(query, params, limit)
   # do search
-  lclog$info(paste("Query:", q_params, sep = " "));
+  lclog$info(paste("Query:", paste(q_params, collapse = " ")))
   res <- solr_search(conn, "linkedcat", params = q_params)
 
   if (nrow(res)==0){
@@ -56,7 +56,7 @@ get_papers <- function(query, params, limit=100) {
   metadata[is.na(metadata)] <- ""
   metadata$subject <- metadata$keywords
   metadata$subject_orig <- metadata$subject
-  metadata$paper_abstract <- metadata$ocrtext
+  metadata$paper_abstract <- if ("ocrtext" %in% names(metadata)) metadata$ocrtext else ""
   metadata$authors <- metadata$author_str
   metadata$title <- metadata$maintitle_str
   metadata$year <- metadata$pubyear
@@ -86,8 +86,10 @@ get_papers <- function(query, params, limit=100) {
 }
 
 build_query <- function(query, params, limit){
-  q = paste0("maintitle:", query, " keywords:", query, " ocrtext:", query)
-  return(list(q = q, rows = limit))
+  fields = c('maintitle', 'keywords', 'ocrtext', 'author', 'host', 'ddc')
+  q = paste(paste(fields, query, sep = ":"), collapse = " ")
+  pubyear = paste0("pubyear:", "[", params$from, " TO ", params$to, "]")
+  return(list(q = q, rows = limit, fq = pubyear))
 }
 
 
