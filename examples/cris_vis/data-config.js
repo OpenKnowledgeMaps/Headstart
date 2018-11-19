@@ -29,7 +29,7 @@ var data_config = {
     list_show_all_papers: false,
     list_additional_images: true,
     list_images: ["Altersgruppe", "Background", "Bundesland", "Geschlecht",
-                    "Höchste Ausbildung", "Land"],
+                    "Hoechste_Ausbildung", "Land"],
     list_images_path: "img/",
     
     is_force_areas: true,
@@ -48,14 +48,14 @@ var data_config = {
     evaluation_service: "ga",
     
     rescale_map: false,
-    scale_types: ['none', 'Altersgruppe', 'Background', 'Bundesland', 'Geschlecht', 'Höchste Ausbildung', 'Land'],
+    scale_types: ['none', 'Altersgruppe', 'Background', 'Bundesland', 'Geschlecht', 'Hoechste_Ausbildung', 'Land'],
     scale_explanation: {
         none: '',
         Altersgruppe: 'Die Verteilung für <strong>Altersgruppe</strong> bezieht sich auf das Themenfeld/Thema. Anteile in absteigender Reihenfolge.',
         Background: 'Die Verteilung für <strong>Background</strong> bezieht sich auf das Themenfeld/Thema. Anteile in absteigender Reihenfolge.',
         Bundesland: 'Die Verteilung für <strong>Bundesländer AT</strong> bezieht sich auf das Themenfeld/Thema. Anteile in absteigender Reihenfolge.',
         Geschlecht: 'Die Verteilung für <strong>Geschlecht</strong> bezieht sich auf das Themenfeld/Thema. Anteile in absteigender Reihenfolge.',
-        'Höchste Ausbildung': 'Die Verteilung für <strong>Höchste Ausbildung</strong> bezieht sich auf das Themenfeld/Thema. Anteile in absteigender Reihenfolge.',
+        Hoechste_Ausbildung: 'Die Verteilung für <strong>Höchste Ausbildung</strong> bezieht sich auf das Themenfeld/Thema. Anteile in absteigender Reihenfolge.',
         Land: 'Die Verteilung für <strong>Land</strong> bezieht sich auf das Themenfeld/Thema. Anteile in absteigender Reihenfolge.',
     },
     scale_label: {
@@ -64,7 +64,7 @@ var data_config = {
         Background: 'Background',
         Bundesland: 'Bundesländer AT',
         Geschlecht: 'Geschlecht',
-        'Höchste Ausbildung': 'Höchste Ausbildung',
+        Hoechste_Ausbildung: 'Höchste Ausbildung',
         Land: 'Land',
     },
 
