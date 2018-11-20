@@ -76,3 +76,13 @@ get_api_lang <- function(lang_id, valid_langs, api) {
     }
   return (list(lang_id = lang_id, name = LANGUAGE))
 }
+
+
+detect_error <- function(query, err) {
+  if (length(unlist(strsplit(query, " "))) >= 5) {
+    return(list(reason='query length'))
+  }
+  if (err$message == "Not enough papers for clustering, N < 2.") {
+    return(list(reason='query specificity'))
+  }
+}

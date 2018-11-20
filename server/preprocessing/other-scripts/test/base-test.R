@@ -5,9 +5,10 @@ library(rstudioapi)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
+Sys.unsetenv("HEADSTART_LOGFILE")
 setwd(wd) #Don't forget to set your working directory
 
-query <- "education" #args[2]
+query <- "latest research topics in parallel programming" #args[2]
 service <- "base"
 params <- NULL
 params_file <- "params_base.json"
@@ -57,7 +58,10 @@ output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_
                          lang=LANGUAGE$name,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
 }, error=function(err){
-tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
+  tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
+  output <- detect_error(query, err)
+  output$msg <- "query failed"
+  output_json <<- toJSON(output, auto_unbox = TRUE)
 })
 
 print(output_json)
