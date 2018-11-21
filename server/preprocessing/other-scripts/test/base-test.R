@@ -43,7 +43,7 @@ LANGUAGE <- get_api_lang(lang_id, valid_langs, service)
 ADDITIONAL_STOP_WORDS = LANGUAGE$name
 
 #start.time <- Sys.time()
-failed <- list()
+failed <- list(params=params)
 tryCatch({
   input_data = get_papers(query, params, limit=120)
 }, error=function(err){
