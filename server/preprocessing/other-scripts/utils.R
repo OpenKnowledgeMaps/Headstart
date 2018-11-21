@@ -80,12 +80,17 @@ get_api_lang <- function(lang_id, valid_langs, api) {
 
 detect_error <- function(failed) {
   output <- list()
-  if (length(unlist(strsplit(failed$query, " "))) >= 4) {
-    output$reason <- 'query length'
-  }
   if (length(unlist(strsplit(failed$query, " "))) < 4 &&
       failed$query_reason == "No results retrieved.") {
     output$reason <- 'probably typo'
+    output$message <- failed$query_reason
+  }
+  if (length(unlist(strsplit(failed$query, " "))) >= 4) {
+    output$reason <- 'query length'
+    output$message <- failed$query_reason
+  }
+  if (difftime(failed$params$to, failed$params$from) <= 30) {
+    output$reason <- 'probably timeframe too short'
     output$message <- failed$query_reason
   }
   return(toJSON(output, auto_unbox = TRUE))
