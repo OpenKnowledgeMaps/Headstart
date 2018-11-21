@@ -78,11 +78,15 @@ get_api_lang <- function(lang_id, valid_langs, api) {
 }
 
 
-detect_error <- function(query, err) {
-  if (length(unlist(strsplit(query, " "))) >= 5) {
-    return(list(reason='query length'))
+detect_error <- function(failed) {
+  output <- list()
+  if (length(unlist(strsplit(failed$query, " "))) >= 4) {
+    output$reason <- 'query length'
   }
-  if (err$message == "Not enough papers for clustering, N < 2.") {
-    return(list(reason='query specificity'))
+  if (length(unlist(strsplit(failed$query, " "))) < 4 &&
+      failed$query_reason == "No results retrieved.") {
+    output$reason <- 'probably typo'
+    output$message <- failed$query_reason
   }
+  return(toJSON(output, auto_unbox = TRUE))
 }
