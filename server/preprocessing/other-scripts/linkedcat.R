@@ -97,9 +97,14 @@ build_query <- function(query, params, limit){
     temp <- paste0("-content_type_a:", ct)
     fq <- c(fq, temp)
   }
-
+  if (length(params$include_content_type) > 0) {
+    temp <- paste0("content_type_a:(",
+                   paste0(params$include_content_type, collapse=" OR "),
+                   ")")
+    fq <- c(fq, temp)
+  }
   q_params$fq <- fq
-
+  # end adding filter params
   return(q_params)
 }
 
