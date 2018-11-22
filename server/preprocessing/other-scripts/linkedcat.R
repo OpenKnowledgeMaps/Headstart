@@ -85,9 +85,19 @@ get_papers <- function(query, params, limit=100) {
 }
 
 build_query <- function(query, params, limit){
+  # fields to query in
   q_fields <- c('maintitle', 'keywords', 'ocrtext', 'author', 'host', 'ddc')
+  # fields to return
+  r_fields <- c('id', 'idnr',
+                'content_type_a', 'content_type_2',
+                'main_title', 'subtitle', 'pub_year',
+                'host_label', 'host_maintitle', 'host_pubplace', 'host_pubyear',
+                'author100_a', 'author100_d', 'author100_0', 'author100_4',
+                'ddc_a', 'ddc_2', 'bkl_a',
+                'keyword_a', 'tags', 'category', 'bib', 'language_code',
+                'ocrtext_good', 'ocrtext')
   q <- paste(paste(q_fields, query, sep = ":"), collapse = " ")
-  q_params <- list(q = q, rows = limit)
+  q_params <- list(q = q, rows = limit, fl = r_fields)
 
   # additional filter params
   fq <- list()
@@ -99,7 +109,7 @@ build_query <- function(query, params, limit){
   }
   if (length(params$include_content_type) > 0) {
     temp <- paste0("content_type_a:(",
-                   paste0(params$include_content_type, collapse=" OR "),
+                   paste0(params$include_content_type, collapse = " OR "),
                    ")")
     fq <- c(fq, temp)
   }
