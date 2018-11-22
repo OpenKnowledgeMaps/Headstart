@@ -99,7 +99,6 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator) {
 
     titles = lapply(titles, function(x) {gsub("[^[:alpha:]]", " ", x)})
     titles = lapply(titles, gsub, pattern="\\s+", replacement=" ")
-    titles = mapply(conditional_lowercase, titles, langs)
     title_ngrams <- get_title_ngrams(titles, stops)
     titles = lapply(titles, function(x) {removeWords(x, stops)})
 
