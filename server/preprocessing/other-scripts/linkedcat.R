@@ -54,7 +54,7 @@ get_papers <- function(query, params, limit=100) {
   # make results dataframe
   metadata <- data.frame(res)
   metadata[is.na(metadata)] <- ""
-  metadata$subject <- metadata$keywords
+  metadata$subject <- metadata$tags
   metadata$subject_orig <- metadata$subject
   metadata$paper_abstract <- if ("ocrtext_good" %in% names(metadata)) metadata$ocrtext_good else ""
   metadata$authors <- metadata$author100_a
