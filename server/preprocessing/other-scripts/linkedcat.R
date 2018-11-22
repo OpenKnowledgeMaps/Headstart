@@ -85,10 +85,11 @@ get_papers <- function(query, params, limit=100) {
 }
 
 build_query <- function(query, params, limit){
-  fields = c('maintitle', 'keywords', 'ocrtext', 'author', 'host', 'ddc')
-  q = paste(paste(fields, query, sep = ":"), collapse = " ")
-  pubyear = paste0("pubyear:", "[", params$from, " TO ", params$to, "]")
-  return(list(q = q, rows = limit, fq = pubyear))
+  q_fields = c('maintitle', 'keywords', 'ocrtext', 'author', 'host', 'ddc')
+  q = paste(paste(q_fields, query, sep = ":"), collapse = " ")
+  pubyear = paste0("pub_year:", "[", params$from, " TO ", params$to, "]")
+  q_params <- list(q = q, rows = limit, fq = pubyear)
+  return(q_params)
 }
 
 
