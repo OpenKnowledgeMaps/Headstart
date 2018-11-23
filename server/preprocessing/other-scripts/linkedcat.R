@@ -54,9 +54,9 @@ get_papers <- function(query, params, limit=100) {
   # make results dataframe
   metadata <- data.frame(res)
   metadata[is.na(metadata)] <- ""
-  metadata$subject <- metadata$tags
+  metadata$subject <- if (!is.null(metadata$tags)) metadata$tags else ""
   metadata$subject_orig <- metadata$subject
-  metadata$paper_abstract <- if ("ocrtext_good" %in% names(metadata)) metadata$ocrtext_good else ""
+  metadata$paper_abstract <- if (!is.null(metadata$ocrtext_good)) metadata$ocrtext_good else ""
   metadata$authors <- metadata$author100_a
   metadata$title <- metadata$host_label
   metadata$year <- metadata$pubyear
@@ -69,8 +69,7 @@ get_papers <- function(query, params, limit=100) {
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(metadata$keywords, metadata$maintitle,
-                       metadata$paper_abstract,
+  text$content = paste(metadata$paper_abstract,
                        sep = " ")
 
 
