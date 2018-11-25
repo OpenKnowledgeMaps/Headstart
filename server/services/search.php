@@ -85,7 +85,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $result = json_decode($output_json, true);
 
     if ($result["status"] == "error") {
-        return json_encode($output_json);
+        return json_encode($result);
     }
 
     $input_json = json_encode(utf8_converter($result));
