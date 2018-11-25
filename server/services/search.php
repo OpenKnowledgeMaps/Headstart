@@ -82,6 +82,11 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $output_json = end($output);
     $output_json = mb_convert_encoding($output_json, "UTF-8");
 
+    if (!library\Toolkit::isJSON($output_json) || $output_json == "null" || $output_json == null) {
+        echo json_encode(array("status" => "error"));;
+        return;
+    }
+
     $result = json_decode($output_json, true);
 
     if ($result["status"] == "error") {
