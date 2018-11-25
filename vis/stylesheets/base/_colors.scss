@@ -80,3 +80,11 @@ $higher_value_tag: #DC2260;
     $lower_value_tag: #2C316E;
     $higher_value_tag: #DC2260;
 }
+
+@if $skin == 'linkedcat' {
+    $dark-blue: #444;
+    //$okm-blue: #2856a3;
+    $medium-blue: #2856a3;
+    
+    $okm-modal-btn: #2856a3;
+}
