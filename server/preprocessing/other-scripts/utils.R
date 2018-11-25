@@ -69,11 +69,11 @@ get_api_lang <- function(lang_id, valid_langs, api) {
     }
   if (lang_id == 'all'){
     LANGUAGE <- 'english'
-    } else if (lang_id %in% names(valid_langs)){
-      LANGUAGE <- unlist(unname(valid_langs[lang_id]))
-    } else {
-      LANGUAGE <- 'english'
-    }
+  } else if (!is.null(valid_langs$lang_id)){
+    LANGUAGE <- valid_langs$lang_id
+  } else {
+    LANGUAGE <- 'english'
+  }
   return (list(lang_id = lang_id, name = LANGUAGE))
 }
 
