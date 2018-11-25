@@ -82,11 +82,11 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $output_json = end($output);
     $output_json = mb_convert_encoding($output_json, "UTF-8");
 
-    if ($output_json["status"] == "error") {
+    $result = json_decode($output_json, true);
+
+    if ($result["status"] == "error") {
         return json_encode($output_json);
     }
-
-    $result = json_decode($output_json, true);
 
     $input_json = json_encode(utf8_converter($result));
     $input_json = preg_replace("/\<U\+(.*?)>/", "&#x$1;", $input_json);
