@@ -45,10 +45,13 @@ LANGUAGE <- get_api_lang(lang_id, valid_langs, service)
 ADDITIONAL_STOP_WORDS = LANGUAGE$name
 
 
+failed <- list(params=params)
 tryCatch({
   input_data = get_papers(query, params)
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
+  failed$query <<- query
+  failed$query_reason <<- err$message
 })
 
 tryCatch({
@@ -57,10 +60,16 @@ output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=-1)
 }, error=function(err){
 tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
+  failed$query <<- query
+  failed$processing_reason <<- err$message
 })
 
-if (service=='openaire'){
-  output_json_with_metrics = enrich_output_json(output_json)
+if (service=='openaire' && exists('output_json')) {
+  output_json = enrich_output_json(output_json)
 }
 
-print(output_json_with_metrics)
+if (!exists('output_json')) {
+  output_json <- detect_error(failed)
+}
+
+print(output_json)
