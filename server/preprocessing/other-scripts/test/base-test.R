@@ -5,10 +5,9 @@ library(rstudioapi)
 options(warn=1)
 
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
-Sys.unsetenv("HEADSTART_LOGFILE")
 setwd(wd) #Don't forget to set your working directory
 
-query <- "latest research topics in parallel programming" #args[2]
+query <- "education" #args[2]
 service <- "base"
 params <- NULL
 params_file <- "params_base.json"
