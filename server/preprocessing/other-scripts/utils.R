@@ -89,7 +89,9 @@ detect_error <- function(failed) {
     output$reason <- 'probably query length'
     output$message <- failed$query_reason
   }
-  if (difftime(failed$params$to, failed$params$from) <= 60) {
+  if (!is.null(failed$params$to) &&
+      !is.null(failed$params$from) &&
+      difftime(failed$params$to, failed$params$from) <= 60) {
     output$reason <- 'probably timeframe too short'
     output$message <- failed$query_reason
   }
