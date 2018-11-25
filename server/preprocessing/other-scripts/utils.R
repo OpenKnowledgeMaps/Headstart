@@ -86,12 +86,13 @@ detect_error <- function(failed) {
     output$message <- failed$query_reason
   }
   if (length(unlist(strsplit(failed$query, " "))) >= 4) {
-    output$reason <- 'query length'
+    output$reason <- 'probably query length'
     output$message <- failed$query_reason
   }
-  if (difftime(failed$params$to, failed$params$from) <= 30) {
+  if (difftime(failed$params$to, failed$params$from) <= 60) {
     output$reason <- 'probably timeframe too short'
     output$message <- failed$query_reason
   }
+  output$status <- 'error'
   return(toJSON(output, auto_unbox = TRUE))
 }

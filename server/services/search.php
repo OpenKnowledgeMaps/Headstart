@@ -55,7 +55,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $settings = $ini_array["general"];
 
     $params_json = packParamsJSON($param_types, $post_params);
-    
+
     $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
     $unique_id = $persistence->createID(array($query, $params_for_id_creation));
@@ -82,10 +82,8 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $output_json = end($output);
     $output_json = mb_convert_encoding($output_json, "UTF-8");
 
-    if (!library\Toolkit::isJSON($output_json) || $output_json == "null" || $output_json == null) {
-
-        echo json_encode(array("status" => "error"));;
-        return;
+    if ($output_json["status"] == "error") {
+        return json_encode($output_json);
     }
 
     $result = json_decode($output_json, true);
