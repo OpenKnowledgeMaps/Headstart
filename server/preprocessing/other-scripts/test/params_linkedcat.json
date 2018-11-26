@@ -2,5 +2,5 @@
   "from":"1847",
   "to":"1918",
   "exclude_content_type": ["Mitgliederverzeichnis", "Bibliografie"],
-  "include_content_type": []
+  "include_content_type": "all"
 }
