@@ -53,7 +53,6 @@ tryCatch({
                            lang = LANGUAGE,
                            add_stop_words = ADDITIONAL_STOP_WORDS,
                            testing=TRUE, list_size=-1)
-  
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
 })
