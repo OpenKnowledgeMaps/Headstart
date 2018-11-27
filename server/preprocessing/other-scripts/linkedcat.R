@@ -54,11 +54,11 @@ get_papers <- function(query, params, limit=100) {
   # make results dataframe
   metadata <- data.frame(res)
   metadata[is.na(metadata)] <- ""
-  metadata$subject <- metadata$keywords
+  metadata$subject <- if (!is.null(metadata$tags)) metadata$tags else ""
   metadata$subject_orig <- metadata$subject
-  metadata$paper_abstract <- if ("ocrtext" %in% names(metadata)) metadata$ocrtext else ""
-  metadata$authors <- metadata$author_str
-  metadata$title <- metadata$maintitle_str
+  metadata$paper_abstract <- if (!is.null(metadata$ocrtext_good)) metadata$ocrtext_good else ""
+  metadata$authors <- metadata$author100_a
+  metadata$title <- metadata$host_label
   metadata$year <- metadata$pubyear
   metadata$readers <- 0
   metadata$url <- "" # needs fix
@@ -69,9 +69,7 @@ get_papers <- function(query, params, limit=100) {
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(metadata$title_str, metadata$subtitle_str,
-                       metadata$keywords_str, metadata$maintitle_str,
-                       metadata$paper_abstract,
+  text$content = paste(metadata$paper_abstract,
                        sep = " ")
 
 
@@ -86,10 +84,37 @@ get_papers <- function(query, params, limit=100) {
 }
 
 build_query <- function(query, params, limit){
-  fields = c('maintitle', 'keywords', 'ocrtext', 'author', 'host', 'ddc')
-  q = paste(paste(fields, query, sep = ":"), collapse = " ")
-  pubyear = paste0("pubyear:", "[", params$from, " TO ", params$to, "]")
-  return(list(q = q, rows = limit, fq = pubyear))
+  # fields to query in
+  q_fields <- c('maintitle', 'keywords', 'ocrtext', 'author', 'host', 'ddc')
+  # fields to return
+  r_fields <- c('id', 'idnr',
+                'content_type_a', 'content_type_2',
+                'main_title', 'subtitle', 'pub_year',
+                'host_label', 'host_maintitle', 'host_pubplace', 'host_pubyear',
+                'author100_a', 'author100_d', 'author100_0', 'author100_4',
+                'ddc_a', 'ddc_2', 'bkl_a',
+                'keyword_a', 'tags', 'category', 'bib', 'language_code',
+                'ocrtext_good', 'ocrtext')
+  q <- paste(paste(q_fields, query, sep = ":"), collapse = " ")
+  q_params <- list(q = q, rows = limit, fl = r_fields)
+
+  # additional filter params
+  fq <- list()
+  pub_year <- paste0("pub_year:", "[", params$from, " TO ", params$to, "]")
+  fq <- c(fq, pub_year)
+  for (ct in params$exclude_content_type) {
+    temp <- paste0("-content_type_a:", ct)
+    fq <- c(fq, temp)
+  }
+  if (!params$include_content_type == 'all') {
+    temp <- paste0("content_type_a:(",
+                   paste0(params$include_content_type, collapse = " OR "),
+                   ")")
+    fq <- c(fq, temp)
+  }
+  q_params$fq <- fq
+  # end adding filter params
+  return(q_params)
 }
 
 
