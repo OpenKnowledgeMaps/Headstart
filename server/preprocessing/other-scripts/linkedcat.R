@@ -102,10 +102,6 @@ build_query <- function(query, params, limit){
   fq <- list()
   pub_year <- paste0("pub_year:", "[", params$from, " TO ", params$to, "]")
   fq <- c(fq, pub_year)
-  for (ct in params$exclude_content_type) {
-    temp <- paste0("-content_type_a:", ct)
-    fq <- c(fq, temp)
-  }
   if (!params$include_content_type == 'all') {
     temp <- paste0("content_type_a:(",
                    paste0(params$include_content_type, collapse = " OR "),
