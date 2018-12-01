@@ -53,23 +53,20 @@ get_papers <- function(query, params, limit=100) {
   }
 
   # get highlights
-  q_params <- q_params
-  q_params$hl.fl <- 'ocrtext_good'
-  q_params$hl.snippets <- 100
-  highlights <- solr_highlight(conn, "linkedcat", params = q_params)
-  highlights <- ddply(highlights, .(names), summarize, text=paste(ocrtext_good, collapse="\n"))
+  hl_params <- build_highlight_query(query, params, limit)
+  highlights <- solr_highlight(conn, "linkedcat", params = hl_params)
+  highlights <- ddply(highlights, .(names), summarize, text=paste(ocrtext, collapse="\n"))
   names(highlights) <- c('id', 'paper_abstract')
 
   # make results dataframe
   metadata <- data.frame(res)
   metadata[is.na(metadata)] <- ""
-  metadata$subject <- if (!is.null(metadata$tags)) metadata$tags else ""
-  metadata$subject_orig <- metadata$subject
-  # replace with snippets
-  metadata <- merge(x = metadata, y = highlights, by='id', all = TRUE)
+  metadata$subject <- if (!is.null(metadata$keyword_a)) metadata$keyword_a else ""
+  # merge with snippets
+  metadata <- merge(x = metadata, y = highlights, by='id', all.x = TRUE)
   metadata$authors <- metadata$author100_a
   metadata$author_date <- metadata$author100_d
-  metadata$title <- if (!is.null(metadata$maintitle)) metadata$maintitle else ""
+  metadata$title <- if (!is.null(metadata$main_title)) metadata$main_title else ""
   metadata$year <- metadata$pubyear
   metadata$readers <- 0
   metadata$url <- "" # needs fix
@@ -80,8 +77,7 @@ get_papers <- function(query, params, limit=100) {
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(metadata$maintitle, metadata$subtitle,
-                       metadata$ocrtext_good,
+  text$content = paste(metadata$ocrtext_good,
                        sep = " ")
 
 
@@ -97,7 +93,7 @@ get_papers <- function(query, params, limit=100) {
 
 build_query <- function(query, params, limit){
   # fields to query in
-  q_fields <- c('maintitle', 'ocrtext', 'author')
+  q_fields <- c('main_title', 'ocrtext', 'author')
   # fields to return
   r_fields <- c('id', 'idnr',
                 'content_type_a', 'content_type_2',
@@ -111,18 +107,33 @@ build_query <- function(query, params, limit){
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
   # additional filter params
-  fq <- list()
   pub_year <- paste0("pub_year:", "[", params$from, " TO ", params$to, "]")
-  fq <- c(fq, pub_year)
-  if (!params$include_content_type == 'all') {
-    temp <- paste0("content_type_a_str:(",
-                   paste0(params$include_content_type, collapse = " OR "),
-                   ")")
-    fq <- c(fq, temp)
+  params$include_content_type <- c('Bericht')
+  if (!params$include_content_type[1] == 'all') {
+      if (length(params$include_content_type) > 1) {
+        content_type <- paste0("content_type_a_str:(",
+                       paste0(params$include_content_type, collapse = " OR "),
+                       ")")
+        } else {
+          content_type <- paste0("content_type_a_str:", params$include_content_type, collapse="")
+      }
+    q_params$fq <- list(pub_year, content_type)
+  } else {
+    q_params$fq <- list(pub_year)
   }
-  q_params$fq <- fq
+  q_params$fq <- unlist(q_params$fq)
   # end adding filter params
   return(q_params)
+}
+
+build_highlight_query <- function(query, params, limit) {
+  # fields to query in
+  hl_fields <- c('main_title', 'ocrtext', 'author')
+  q <- paste(paste(hl_fields, query, sep = ":"), collapse = " ")
+  hl_params <- list(q = q, rows = limit*10)
+  hl_params$hl.fl <- paste(hl_fields, collapse=",")
+  hl_params$hl.snippets <- 100
+  return(hl_params)
 }
 
 valid_langs <- list(
