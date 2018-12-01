@@ -1,4 +1,5 @@
 library(solrium)
+library(plyr)
 
 # get_papers
 #
@@ -42,14 +43,21 @@ get_papers <- function(query, params, limit=100) {
   conn <- SolrClient$new(host=Sys.getenv("LINKEDCAT_SOLR"),
                          path="solr/linkedcat", port=NULL, scheme="https")
 
-  q_params = build_query(query, params, limit)
+  q_params <- build_query(query, params, limit)
   # do search
   lclog$info(paste("Query:", paste(q_params, collapse = " ")))
   res <- solr_search(conn, "linkedcat", params = q_params)
 
-  if (nrow(res)==0){
+  if (nrow(res) == 0){
     stop(paste("No results retrieved."))
   }
+
+  # get highlights
+  q_params <- q_params
+  q_params$hl.fl <- c('maintitle', 'ocrtext', 'author')
+  highlights <- solr_highlight(conn, "linkedcat", params = q_params)
+  highlights <- ddply(highlights, .(names), summarize, text=paste(ocrtext, collapse="\n"))
+  names(highlights) <- c('id', 'paper_abstract')
 
   # make results dataframe
   metadata <- data.frame(res)
@@ -57,7 +65,7 @@ get_papers <- function(query, params, limit=100) {
   metadata$subject <- if (!is.null(metadata$tags)) metadata$tags else ""
   metadata$subject_orig <- metadata$subject
   # replace with snippets
-  metadata$paper_abstract <- if (!is.null(metadata$ocrtext_good)) metadata$ocrtext_good else ""
+  metadata <- merge(x = metadata, y = highlights, by='id', all = TRUE)
   metadata$authors <- metadata$author100_a
   metadata$author_date <- metadata$author100_d
   metadata$title <- if (!is.null(metadata$maintitle)) metadata$maintitle else ""
