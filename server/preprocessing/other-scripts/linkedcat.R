@@ -56,10 +56,11 @@ get_papers <- function(query, params, limit=100) {
   metadata[is.na(metadata)] <- ""
   metadata$subject <- if (!is.null(metadata$tags)) metadata$tags else ""
   metadata$subject_orig <- metadata$subject
+  # replace with snippets
   metadata$paper_abstract <- if (!is.null(metadata$ocrtext_good)) metadata$ocrtext_good else ""
   metadata$authors <- metadata$author100_a
   metadata$author_date <- metadata$author100_d
-  metadata$title <- metadata$host_maintitle
+  metadata$title <- if (!is.null(metadata$maintitle)) metadata$maintitle else ""
   metadata$year <- metadata$pubyear
   metadata$readers <- 0
   metadata$url <- "" # needs fix
@@ -70,7 +71,8 @@ get_papers <- function(query, params, limit=100) {
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(metadata$paper_abstract,
+  text$content = paste(metadata$maintitle, metadata$subtitle,
+                       metadata$ocrtext_good,
                        sep = " ")
 
 
@@ -86,7 +88,7 @@ get_papers <- function(query, params, limit=100) {
 
 build_query <- function(query, params, limit){
   # fields to query in
-  q_fields <- c('host_maintitle', 'ocrtext', 'author')
+  q_fields <- c('maintitle', 'ocrtext', 'author')
   # fields to return
   r_fields <- c('id', 'idnr',
                 'content_type_a', 'content_type_2',
