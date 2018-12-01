@@ -54,9 +54,10 @@ get_papers <- function(query, params, limit=100) {
 
   # get highlights
   q_params <- q_params
-  q_params$hl.fl <- c('maintitle', 'ocrtext', 'author')
+  q_params$hl.fl <- 'ocrtext_good'
+  q_params$hl.snippets <- 100
   highlights <- solr_highlight(conn, "linkedcat", params = q_params)
-  highlights <- ddply(highlights, .(names), summarize, text=paste(ocrtext, collapse="\n"))
+  highlights <- ddply(highlights, .(names), summarize, text=paste(ocrtext_good, collapse="\n"))
   names(highlights) <- c('id', 'paper_abstract')
 
   # make results dataframe
@@ -123,7 +124,6 @@ build_query <- function(query, params, limit){
   # end adding filter params
   return(q_params)
 }
-
 
 valid_langs <- list(
     'ger'='german'
