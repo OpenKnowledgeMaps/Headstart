@@ -58,7 +58,8 @@ get_papers <- function(query, params, limit=100) {
   metadata$subject_orig <- metadata$subject
   metadata$paper_abstract <- if (!is.null(metadata$ocrtext_good)) metadata$ocrtext_good else ""
   metadata$authors <- metadata$author100_a
-  metadata$title <- metadata$host_label
+  metadata$author_date <- metadata$author100_d
+  metadata$title <- metadata$host_maintitle
   metadata$year <- metadata$pubyear
   metadata$readers <- 0
   metadata$url <- "" # needs fix
@@ -85,7 +86,7 @@ get_papers <- function(query, params, limit=100) {
 
 build_query <- function(query, params, limit){
   # fields to query in
-  q_fields <- c('maintitle', 'keywords', 'ocrtext', 'author', 'host', 'ddc')
+  q_fields <- c('host_maintitle', 'ocrtext', 'author')
   # fields to return
   r_fields <- c('id', 'idnr',
                 'content_type_a', 'content_type_2',
@@ -103,7 +104,7 @@ build_query <- function(query, params, limit){
   pub_year <- paste0("pub_year:", "[", params$from, " TO ", params$to, "]")
   fq <- c(fq, pub_year)
   if (!params$include_content_type == 'all') {
-    temp <- paste0("content_type_a:(",
+    temp <- paste0("content_type_a_str:(",
                    paste0(params$include_content_type, collapse = " OR "),
                    ")")
     fq <- c(fq, temp)
