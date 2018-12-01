@@ -46,24 +46,20 @@ get_papers <- function(query, params, limit=100) {
   q_params <- build_query(query, params, limit)
   # do search
   lclog$info(paste("Query:", paste(q_params, collapse = " ")))
-  res <- solr_search(conn, "linkedcat", params = q_params)
+  res <- solr_all(conn, "linkedcat", params = q_params)
 
-  if (nrow(res) == 0){
+  if (nrow(res$search) == 0){
     stop(paste("No results retrieved."))
   }
 
-  # get highlights
-  hl_params <- build_highlight_query(query, params, limit)
-  highlights <- solr_highlight(conn, "linkedcat", params = hl_params)
-  highlights <- ddply(highlights, .(names), summarize, text=paste(ocrtext, collapse="\n"))
-  names(highlights) <- c('id', 'paper_abstract')
-
   # make results dataframe
-  metadata <- data.frame(res)
+  metadata <- data.frame(res$search)
+  highlights <- data.frame(res$high)
+  highlights <- ddply(highlights, .(names), summarize, paper_abstract=paste(ocrtext, collapse="\n"))
+  metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='names')
+
   metadata[is.na(metadata)] <- ""
   metadata$subject <- if (!is.null(metadata$keyword_a)) metadata$keyword_a else ""
-  # merge with snippets
-  metadata <- merge(x = metadata, y = highlights, by='id', all.x = TRUE)
   metadata$authors <- metadata$author100_a
   metadata$author_date <- metadata$author100_d
   metadata$title <- if (!is.null(metadata$main_title)) metadata$main_title else ""
@@ -122,19 +118,14 @@ build_query <- function(query, params, limit){
     q_params$fq <- list(pub_year)
   }
   q_params$fq <- unlist(q_params$fq)
+  q_params$hl <- 'on'
+  # q_params$hl.fl <- paste(q_fields, collapse=",")
+  q_params$hl.fl <- 'ocrtext'
+  q_params$hl.snippets <- 100
   # end adding filter params
   return(q_params)
 }
 
-build_highlight_query <- function(query, params, limit) {
-  # fields to query in
-  hl_fields <- c('main_title', 'ocrtext', 'author')
-  q <- paste(paste(hl_fields, query, sep = ":"), collapse = " ")
-  hl_params <- list(q = q, rows = limit*10)
-  hl_params$hl.fl <- paste(hl_fields, collapse=",")
-  hl_params$hl.snippets <- 100
-  return(hl_params)
-}
 
 valid_langs <- list(
     'ger'='german'
