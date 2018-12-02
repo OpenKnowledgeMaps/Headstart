@@ -55,7 +55,7 @@ get_papers <- function(query, params, limit=100) {
   # make results dataframe
   metadata <- data.frame(res$search)
   highlights <- data.frame(res$high)
-  highlights <- ddply(highlights, .(names), summarize, paper_abstract=paste(ocrtext, collapse="\n"))
+  highlights <- ddply(highlights, .(names), summarize, snippets=paste(ocrtext, collapse="\n"))
   metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='names')
 
   metadata[is.na(metadata)] <- ""
@@ -63,7 +63,8 @@ get_papers <- function(query, params, limit=100) {
   metadata$authors <- metadata$author100_a
   metadata$author_date <- metadata$author100_d
   metadata$title <- if (!is.null(metadata$main_title)) metadata$main_title else ""
-  metadata$year <- metadata$pubyear
+  metadata$paper_abstract <- if (!is.null(metadata$ocrtext)) metadata$ocrtext else ""
+  metadata$year <- metadata$pub_year
   metadata$readers <- 0
   metadata$url <- "" # needs fix
   metadata$link <- "" # needs fix
@@ -111,7 +112,7 @@ build_query <- function(query, params, limit){
                        paste0(params$include_content_type, collapse = " OR "),
                        ")")
         } else {
-          content_type <- paste0("content_type_a_str:", params$include_content_type, collapse="")
+        content_type <- paste0("content_type_a_str:", params$include_content_type, collapse = "")
       }
     q_params$fq <- list(pub_year, content_type)
   } else {
