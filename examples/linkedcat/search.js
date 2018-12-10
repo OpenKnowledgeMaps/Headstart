@@ -110,6 +110,6 @@ $(document).ready(function () {
     if (valueExists("id", "time_range")) {
         search_options.addDatePickerFromTo("#from", "#to", "any-time");
     } else if (valueExists("id", "year_range")) {
-        search_options.setDateRangeFromPreset("#from", "#to", "any-time-years", "1809");
+        search_options.setDateRangeFromPreset("#from", "#to", "any-time-years", "1847");
     }
 });
