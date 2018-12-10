@@ -5,8 +5,8 @@ var options_linkedcat = {
                 {id: "any-time-years", text: "Jederzeit"}
                 , {id: "user-defined", text: "Zeitraum", class: "user-defined",
                     inputs: [
-                        {id: "from", label: "From: ", class: "time_input"}
-                        , {id: "to", label: "To: ", class: "time_input"}
+                        {id: "from", label: "Von: ", class: "time_input"}
+                        , {id: "to", label: "bis: ", class: "time_input"}
                     ]}
             ]},
     ]
