@@ -38,7 +38,7 @@ $("#searchform").validate({
 });
 
 var doSubmit = function (data, newWindow, callback) {
-  data += "&today=" + new Date().toLocaleDateString("en-US") + "&include_content_type=all";
+  data += "&today=" + new Date().toLocaleDateString("en-US");
 
   var openInNewWindow= function(data) {
     if (data.status === "success") {
