@@ -25,7 +25,7 @@ var options_linkedcat = {
                 , {id: "Rezension", text: "Rezension"}
                 , {id: "Statistik", text: "Statistik"}
                 , {id: "Verzeichnis", text: "Verzeichnis"}
-                , {id: "Wörterbuch", text: "Woerterbuch"}
+                , {id: "Woerterbuch", text: "Woerterbuch"}
             ]},
     ]
 }
