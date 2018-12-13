@@ -105,7 +105,6 @@ build_query <- function(query, params, limit){
 
   # additional filter params
   pub_year <- paste0("pub_year:", "[", params$from, " TO ", params$to, "]")
-  params$include_content_type <- c('Bericht')
   if (!params$include_content_type[1] == 'all') {
       if (length(params$include_content_type) > 1) {
         content_type <- paste0("content_type_a_str:(",
