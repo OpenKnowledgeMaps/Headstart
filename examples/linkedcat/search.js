@@ -38,7 +38,7 @@ $("#searchform").validate({
 });
 
 var doSubmit = function (data, newWindow, callback) {
-  data += "&today=" + new Date().toLocaleDateString("en-US") + "&include_content_type=all";
+  data += "&today=" + new Date().toLocaleDateString("en-US");
 
   var openInNewWindow= function(data) {
     if (data.status === "success") {
@@ -110,6 +110,6 @@ $(document).ready(function () {
     if (valueExists("id", "time_range")) {
         search_options.addDatePickerFromTo("#from", "#to", "any-time");
     } else if (valueExists("id", "year_range")) {
-        search_options.setDateRangeFromPreset("#from", "#to", "any-time-years", "1809");
+        search_options.setDateRangeFromPreset("#from", "#to", "any-time-years", "1847");
     }
 });
