@@ -5,9 +5,27 @@ var options_linkedcat = {
                 {id: "any-time-years", text: "Jederzeit"}
                 , {id: "user-defined", text: "Zeitraum", class: "user-defined",
                     inputs: [
-                        {id: "from", label: "From: ", class: "time_input"}
-                        , {id: "to", label: "To: ", class: "time_input"}
+                        {id: "from", label: "Von: ", class: "time_input"}
+                        , {id: "to", label: "bis: ", class: "time_input"}
                     ]}
+            ]},
+        {id: "include_content_type", multiple: true, name: "Dokumentarten", type: "dropdown"
+            , fields: [
+                {id: "anthologie", text: "Anthologie"}
+                , {id: "bericht", text: "Bericht", selected:true}
+                , {id: "bibliografie", text: "Bibliografie"}
+                , {id: "biografie", text: "Biografie"}
+                , {id: "briefsammlung", text: "Briefsammlung"}
+                , {id: "katalog", text: "Katalog"}
+                , {id: "kommentar", text: "Kommentar"}
+                , {id: "mehrsprachiges", text: "Mehrsprachiges Woerterbuch"}
+                , {id: "mitgliederverzeichnis", text: "Mitgliederverzeichnis"}
+                , {id: "quelle", text: "Quelle"}
+                , {id: "reisebericht", text: "Reisebericht"}
+                , {id: "rezension", text: "Rezension"}
+                , {id: "statistik", text: "Statistik"}
+                , {id: "verzeichnis", text: "Verzeichnis"}               
+                , {id: "wörterbuch", text: "Woerterbuch"}                       
             ]},
     ]
 }
