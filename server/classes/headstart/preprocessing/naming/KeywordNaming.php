@@ -119,6 +119,10 @@ class KeywordNaming extends Naming {
 
             $final_string = implode(", ", $important_terms);
             $result_array[$uri] = $final_string;
+            
+             if ($final_string == " ")
+                $final_string = implode ("n/a", $important_terms);
+            
         }
 
         foreach ($array as $uri => $entry) {
