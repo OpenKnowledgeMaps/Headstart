@@ -36,7 +36,7 @@ lclog <- getLogger('api.linkedcat')
 
 get_papers <- function(query, params, limit=100) {
 
-  hl_flag <- TRUE
+  hl_flag <- FALSE
 
   lclog$info(paste("Search: ", query, sep=""))
   start.time <- Sys.time()
@@ -81,6 +81,8 @@ get_papers <- function(query, params, limit=100) {
   metadata$link <- "" # needs fix
   metadata$published_in <- metadata$host_label
   metadata$oa_state <- 1
+  metadata$subject_orig = metadata$subject
+  metadata$relevance = c(nrow(metadata):1)
 
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
