@@ -178,6 +178,10 @@
     padding-left: 0px;
     color: $list_abstract;
     font-weight: $fontweight400;
+    
+    em {
+        font-weight: $fontweight700;
+    }
 }
 
 #list_area, #list_keywords, #list_basic_classification, #list_ddc {
