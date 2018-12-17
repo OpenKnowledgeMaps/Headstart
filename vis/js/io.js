@@ -171,6 +171,8 @@ IO.prototype = {
         var num_papers = 0;
         var num_datasets = 0;
         cur_data.forEach(function (d) {
+            
+            //convert special entities to characters
             for (let field in d) {
                 d[field] = $("<textarea/>").html(d[field]).val();
             }
@@ -181,6 +183,7 @@ IO.prototype = {
             d.authors_string = authors.string;
             d.authors_short_string = authors.short_string;
             
+            //replace "<" and ">" to avoid having HTML tags
             for (let field in d) {
                 d[field] = d[field].replace(/</g, "&lt;");
                 d[field] = d[field].replace(/>/g, "&gt;");
