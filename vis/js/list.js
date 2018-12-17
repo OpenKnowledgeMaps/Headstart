@@ -21,6 +21,7 @@ import { io } from 'io';
 const listTemplate = require('templates/list/list_explorer.handlebars');
 const selectButtonTemplate = require('templates/list/select_button.handlebars');
 const listEntryTemplate = require("templates/list/list_entry.handlebars");
+const listEntryTemplateLinkedCat = require("templates/list/linkedcat/list_entry_linkedcat.handlebars");
 const listEntryTemplateCris = require("templates/list/cris/list_entry_cris.handlebars");
 const listSubEntryTemplateCris = require("templates/list/cris/list_subentry_cris.handlebars");
 const listSubEntryStatisticsTemplateCris = require("templates/list/cris/list_subentry_statistics_cris.handlebars");
@@ -349,6 +350,18 @@ list.getPaperNodes = function(list_data) {
                 return b.internal_readers - a.internal_readers;
             });
             
+    } else if(config.service === "linkedcat") {
+        let list_entry = listEntryTemplateLinkedCat();
+
+        return this.papers_list.selectAll("div")
+            .data(list_data)
+            .enter()
+            .append("div")
+            .attr("id", "list_holder")
+            .html(list_entry)
+            .sort(function(a, b) {
+                return b.internal_readers - a.internal_readers;
+            });
     } else {
         let list_entry = listEntryTemplate();
 
@@ -519,6 +532,17 @@ list.populateMetaData = function(nodes) {
                     link_text: has_doi ? d.doi : d.link,
                 })
             })
+        } else if (config.url_outlink) {
+            list_metadata.select(".doi_outlink")
+            .html(function (d) {
+                let has_url = false;
+                return doiOutlinkTemplate({
+                    has_url,
+                    link_label: config.localization[config.language].link,
+                    link: d.outlink,
+                    link_text: d.outlink,
+                })
+            })
         }
 
         // Following part should probably be moved to a separate function
@@ -573,22 +597,26 @@ list.createAbstracts = function(nodes) {
 };
 
 list.populateReaders = function(nodes) {
+    let _this = this;
     nodes[0].forEach(function(elem) {
         var areas = d3.select(elem).select("#list_area");
         var readers = d3.select(elem).select(".list_readers");
         var keywords = d3.select(elem).select("#list_keywords");
         var list_metrics = d3.select(elem).select(".list_metrics");
 
-        keywords.style("display", "none");
+        if(config.hide_keywords_overview) {
+            keywords.style("display", "none");
+        }
 
         if (config.show_keywords) {
-            keywords.select(".keyword_tag").html(function() {
-                return config.localization[config.language].keywords + ":";
-            });
-
-            keywords.select(".keywords").html(function(d) {
-                return ((d.hasOwnProperty("subject_orig")) ? (d.subject_orig) : (""))
-            });
+            _this.fillKeywords(keywords, "keywords", "subject_orig");
+        }
+        
+        if (config.service === "linkedcat") {
+            let basic_classifications = d3.select(elem).select("#list_basic_classification");
+            let ddc = d3.select(elem).select("#list_ddc");
+            _this.fillKeywords(basic_classifications, "basic_classification", "bkl_a");
+            _this.fillKeywords(ddc, "ddc", "ddc_a");
         }
 
         areas.select(".area_tag").html(function() {
@@ -629,6 +657,15 @@ list.populateReaders = function(nodes) {
     });
 };
 
+list.fillKeywords = function(tag, keyword_type, metadata_field) {
+    tag.select(".keyword_tag").html(function() {
+                return config.localization[config.language][keyword_type] + ":";
+            });
+
+    tag.select(".keywords").html(function(d) {
+        return ((d.hasOwnProperty(metadata_field)) ? (d[metadata_field]) : (""))
+    });
+};
 
 list.populateList = function() {
     var list_data = mediator.current_bubble.data;
@@ -1136,7 +1173,9 @@ list.reset = function() {
     this.attachClickHandlerAbstract(false);
 
     d3.selectAll(".list_entry_full").attr("class", "list_entry");
-    d3.selectAll("#list_keywords").style("display", "none");
+    if(config.hide_keywords_overview) {
+        d3.selectAll("#list_keywords").style("display", "none");
+    }
     d3.selectAll(".list_images").html("");
 
     if (mediator.current_enlarged_paper !== null) {
