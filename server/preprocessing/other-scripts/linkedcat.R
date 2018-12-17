@@ -63,7 +63,6 @@ get_papers <- function(query, params, limit=100) {
   metadata <- data.frame(res$search)
   if (hl_flag) {
     highlights <- data.frame(res$high)
-    highlights <- ddply(highlights, .(names), summarize, snippets=paste(ocrtext, collapse=" ... "))
     metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='names')
   } else {
     metadata$snippets <- ""
@@ -135,6 +134,8 @@ build_query <- function(query, params, limit){
   # q_params$hl.fl <- paste(q_fields, collapse=",")
   q_params$hl.fl <- 'ocrtext'
   q_params$hl.snippets <- 100
+  q_params$hl.method <- 'unified'
+  q_params$hl.tag.ellipsis <- " ... "
   # end adding filter params
   return(q_params)
 }
