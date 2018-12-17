@@ -180,7 +180,7 @@
     font-weight: $fontweight400;
 }
 
-#list_area, #list_keywords {
+#list_area, #list_keywords, #list_basic_classification, #list_ddc {
     font-family: $link-font-family;
     font-size: 11px;
     line-height: 120%;
@@ -209,7 +209,7 @@
     display: none;
 }
 
-#list_keywords {
+#list_keywords, #list_basic_classification, #list_ddc {
     margin-bottom: 20px;
 }
 
@@ -536,5 +536,11 @@ img#preview_page {
 
     .list_subentry_readers {
         font-weight: $fontweight700;
+    }
+}
+
+@if $skin == "linkedcat" {
+    #list_keywords, #list_basic_classification, #list_ddc {
+        display: block;
     }
 }
