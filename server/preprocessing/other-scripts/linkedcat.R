@@ -63,7 +63,8 @@ get_papers <- function(query, params, limit=100) {
   metadata <- data.frame(res$search)
   if (hl_flag) {
     highlights <- data.frame(res$high)
-    metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='names')
+    names(highlights) <- c("id", "snippets")
+    metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='id')
   } else {
     metadata$snippets <- ""
   }
