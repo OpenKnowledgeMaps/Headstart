@@ -51,7 +51,7 @@ create_cluster_labels <- function(clusters, metadata, lang,
   tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
   empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
   tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(nn_tfidf, nn_corpus)[c(empty_tfidf)]
-  tfidf_top_names <- get_top_names(tfidf_top, top_n)
+  tfidf_top_names <- get_top_names(tfidf_top, top_n, stops)
   clusters$cluster_labels = ""
   for (k in seq(1, clusters$num_clusters)) {
     group = c(names(clusters$groups[clusters$groups == k]))
@@ -124,8 +124,9 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator) {
 }
 
 
-get_top_names <- function(tfidf_top, top_n) {
+get_top_names <- function(tfidf_top, top_n, stops) {
   tfidf_top_names <- lapply(tfidf_top, names)
+  tfidf_top_names <- lapply(tfidf_top_names, function(x) {another_prune_ngrams(x, stops)})
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {x = gsub("_", " ", x); trim(x)})
   tfidf_top_names <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, top_n))
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))})
@@ -133,12 +134,33 @@ get_top_names <- function(tfidf_top, top_n) {
   return(tfidf_top_names)
 }
 
+another_prune_ngrams <- function(ngrams, stops){
+  tokens <- unname(unlist(ngrams))
+  tokens = lapply(tokens, strsplit, split="_")
+  tokens = lapply(tokens, function(y){
+                          Filter(function(x){
+                                      !any(grepl(x[1], c(stops)))
+                                            }, y)})
+  tokens = lapply(tokens, function(y){
+                          Filter(function(x){
+                                      !any(grepl(tail(x,1), c(stops)))
+                                            }, y)})
+  tokens = lapply(tokens, function(y){
+                          Filter(function(x){
+                                      !(x[1]==tail(x,1))
+                                        }, y)})
+  tokens = lapply(tokens, function(y){Filter(function(x){length(x)>=1},y)})
+  empties = which(lapply(tokens, length)==0)
+  tokens[c(empties)] = list("")
+  tokens = lapply(tokens, function(x){mapply(paste, x, collapse="_")})
+  return(tokens)
+}
+
 fill_empty_clusters <- function(nn_tfidf, nn_corpus){
   replacement_nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer,
                                                           weighting = function(x) weightSMART(x, spec="ntn"),
                                                           bounds = list(local = c(1, Inf))
                                                            ))
-
   replacement_tfidf_top <- apply(replacement_nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
   return(replacement_tfidf_top)
 }
