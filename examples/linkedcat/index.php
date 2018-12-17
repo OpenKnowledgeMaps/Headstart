@@ -27,7 +27,7 @@
         <div class="bg-image-startpage">
 
             <div class="bg-tagline-startpage">
-                <h2>LinkedCat+<br>Explore half a century of knowledge<br><span style="color: #333">1847-1918</span></h2>
+                <h2>LinkedCat+<br>Explore half a century of knowledge production at the Academy<br><span style="color: #333">1847-1918</span></h2>
             </div>
 
             <div class="search">
