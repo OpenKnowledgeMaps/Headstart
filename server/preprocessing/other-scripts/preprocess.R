@@ -74,7 +74,7 @@ deduplicate_titles <- function(metadata, list_size) {
 replace_keywords_if_empty <- function(metadata, stops) {
 
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
-  candidates = mapply(paste, metadata$title[missing_subjects], metadata$paper_abstract[missing_subjects])
+  candidates = mapply(paste, metadata$title[missing_subjects])
   candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
   candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
   candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
