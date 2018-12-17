@@ -1,4 +1,5 @@
 library(solrium)
+library(plyr)
 
 # get_papers
 #
@@ -42,24 +43,28 @@ get_papers <- function(query, params, limit=100) {
   conn <- SolrClient$new(host=Sys.getenv("LINKEDCAT_SOLR"),
                          path="solr/linkedcat", port=NULL, scheme="https")
 
-  q_params = build_query(query, params, limit)
+  q_params <- build_query(query, params, limit)
   # do search
   lclog$info(paste("Query:", paste(q_params, collapse = " ")))
-  res <- solr_search(conn, "linkedcat", params = q_params)
+  res <- solr_all(conn, "linkedcat", params = q_params)
 
-  if (nrow(res)==0){
+  if (nrow(res$search) == 0){
     stop(paste("No results retrieved."))
   }
 
   # make results dataframe
-  metadata <- data.frame(res)
+  metadata <- data.frame(res$search)
+  highlights <- data.frame(res$high)
+  highlights <- ddply(highlights, .(names), summarize, snippets=paste(ocrtext, collapse="\n"))
+  metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='names')
+
   metadata[is.na(metadata)] <- ""
-  metadata$subject <- if (!is.null(metadata$tags)) metadata$tags else ""
-  metadata$subject_orig <- metadata$subject
-  metadata$paper_abstract <- if (!is.null(metadata$ocrtext_good)) metadata$ocrtext_good else ""
+  metadata$subject <- if (!is.null(metadata$keyword_a)) metadata$keyword_a else ""
   metadata$authors <- metadata$author100_a
-  metadata$title <- metadata$host_label
-  metadata$year <- metadata$pubyear
+  metadata$author_date <- metadata$author100_d
+  metadata$title <- if (!is.null(metadata$main_title)) metadata$main_title else ""
+  metadata$paper_abstract <- if (!is.null(metadata$ocrtext)) metadata$ocrtext else ""
+  metadata$year <- metadata$pub_year
   metadata$readers <- 0
   metadata$url <- "" # needs fix
   metadata$link <- "" # needs fix
@@ -69,7 +74,7 @@ get_papers <- function(query, params, limit=100) {
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(metadata$paper_abstract,
+  text$content = paste(metadata$ocrtext_good,
                        sep = " ")
 
 
@@ -85,7 +90,7 @@ get_papers <- function(query, params, limit=100) {
 
 build_query <- function(query, params, limit){
   # fields to query in
-  q_fields <- c('maintitle', 'keywords', 'ocrtext', 'author', 'host', 'ddc')
+  q_fields <- c('main_title', 'ocrtext', 'author')
   # fields to return
   r_fields <- c('id', 'idnr',
                 'content_type_a', 'content_type_2',
@@ -99,20 +104,24 @@ build_query <- function(query, params, limit){
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
   # additional filter params
-  fq <- list()
   pub_year <- paste0("pub_year:", "[", params$from, " TO ", params$to, "]")
-  fq <- c(fq, pub_year)
-  for (ct in params$exclude_content_type) {
-    temp <- paste0("-content_type_a:", ct)
-    fq <- c(fq, temp)
+  if (!params$include_content_type[1] == 'all') {
+      if (length(params$include_content_type) > 1) {
+        content_type <- paste0("content_type_a_str:(",
+                       paste0(params$include_content_type, collapse = " OR "),
+                       ")")
+        } else {
+        content_type <- paste0("content_type_a_str:", params$include_content_type, collapse = "")
+      }
+    q_params$fq <- list(pub_year, content_type)
+  } else {
+    q_params$fq <- list(pub_year)
   }
-  if (!params$include_content_type == 'all') {
-    temp <- paste0("content_type_a:(",
-                   paste0(params$include_content_type, collapse = " OR "),
-                   ")")
-    fq <- c(fq, temp)
-  }
-  q_params$fq <- fq
+  q_params$fq <- unlist(q_params$fq)
+  q_params$hl <- 'on'
+  # q_params$hl.fl <- paste(q_fields, collapse=",")
+  q_params$hl.fl <- 'ocrtext'
+  q_params$hl.snippets <- 100
   # end adding filter params
   return(q_params)
 }

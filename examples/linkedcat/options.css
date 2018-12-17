@@ -214,6 +214,22 @@ label {
     margin-right: 30px;
 }
 
+.ui-widget-header {
+    border: 1px solid #2856a3;
+    background-color: #2856a3; 
+}
+
+#progress p {
+    color: white;
+}
+
+label.error {
+    color: white;
+    background-color: red;
+    border-radius: 10px;
+    padding: 5px;
+}
+
 .submit-btn {
     display: inline-block;
     padding-top: 10px;
