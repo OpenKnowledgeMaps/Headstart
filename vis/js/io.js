@@ -167,11 +167,25 @@ IO.prototype = {
         var xy_array = [];
         // convert to numbers
         var cur_data = fs;
-        var has_keywords = false;
         var num_oa = 0;
         var num_papers = 0;
         var num_datasets = 0;
         cur_data.forEach(function (d) {
+            for (let field in d) {
+                d[field] = $("<textarea/>").html(d[field]).val();
+            }
+            
+            // convert authors to "[first name] [last name]"
+            // var authors = d.authors.split(";");
+            var authors = _this.convertToFirstNameLastName(d.authors);
+            d.authors_string = authors.string;
+            d.authors_short_string = authors.short_string;
+            
+            for (let field in d) {
+                d[field] = d[field].replace(/</g, "&lt;");
+                d[field] = d[field].replace(/>/g, "&gt;");
+            }
+            
             d.x = parseFloat(d.x);
             d.y = parseFloat(d.y);
             //if two items have the exact same location,
@@ -237,7 +251,7 @@ IO.prototype = {
                     d.num_subentries++;
                 })
             }
-            
+                      
             if (typeof highlight_data != 'undefined' && highlight_data !== null) {
                 if (highlight_data.bookmarks_all !== null) {
                     highlight_data.bookmarks_all.forEach(function (x) {
@@ -260,12 +274,6 @@ IO.prototype = {
             }
 
             d.paper_selected = false;
-
-            // convert authors to "[first name] [last name]"
-            // var authors = d.authors.split(";");
-            var authors = _this.convertToFirstNameLastName(d.authors);
-            d.authors_string = authors.string;
-            d.authors_short_string = authors.short_string;
             
             d.oa = false;
 
@@ -299,13 +307,8 @@ IO.prototype = {
             num_papers += (d.resulttype === 'publication')?(1):(0);
             num_datasets += (d.resulttype === 'dataset')?(1):(0);
 
-            if(d.hasOwnProperty("subject_orig")) {
-                has_keywords = true;
-            }
-
         });
         
-        config.show_keywords = (has_keywords)?(true):(false);
         this.num_oa = num_oa;
         this.num_papers = num_papers;
         this.num_datasets = num_datasets;
