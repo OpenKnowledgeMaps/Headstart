@@ -66,9 +66,9 @@ get_papers <- function(query, params, limit=100) {
   metadata$paper_abstract <- if (!is.null(metadata$ocrtext)) metadata$ocrtext else ""
   metadata$year <- metadata$pub_year
   metadata$readers <- 0
-  metadata$url <- "" # needs fix
+  metadata$url <- metadata$id
   metadata$link <- "" # needs fix
-  metadata$published_in <- "" # needs fix
+  metadata$published_in <- metadata$host_label
   metadata$oa_state <- 1
 
   text = data.frame(matrix(nrow=nrow(metadata)))
