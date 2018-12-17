@@ -36,7 +36,7 @@ lclog <- getLogger('api.linkedcat')
 
 get_papers <- function(query, params, limit=100) {
 
-  hl_flag <- FALSE
+  hl_flag <- TRUE
 
   lclog$info(paste("Search: ", query, sep=""))
   start.time <- Sys.time()

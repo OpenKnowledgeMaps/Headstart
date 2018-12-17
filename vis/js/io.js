@@ -189,6 +189,12 @@ IO.prototype = {
                 d[field] = d[field].replace(/>/g, "&gt;");
             }
             
+            if(d.hasOwnProperty("snippets") && d.snippets !== "") {
+                d.snippets = d.snippets.replace(/&lt;em&gt;/g, "<em>");
+                d.snippets = d.snippets.replace(/&lt;\/em&gt;/g, "</em>");
+                d.paper_abstract = d.snippets;
+            }
+            
             d.x = parseFloat(d.x);
             d.y = parseFloat(d.y);
             //if two items have the exact same location,
