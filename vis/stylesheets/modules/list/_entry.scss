@@ -181,6 +181,7 @@
     
     em {
         font-weight: $fontweight700;
+        font-style: normal;
     }
 }
 
@@ -546,5 +547,6 @@ img#preview_page {
 @if $skin == "linkedcat" {
     #list_keywords, #list_basic_classification, #list_ddc {
         display: block;
+        margin-bottom: 10px;
     }
 }
