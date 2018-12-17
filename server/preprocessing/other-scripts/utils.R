@@ -64,9 +64,6 @@ setup_logging <- function(loglevel) {
 
 
 get_api_lang <- function(lang_id, valid_langs, api) {
-  if (api == 'linkedcat') {
-      lang_id <- 'ger'
-    }
   if (lang_id == 'all'){
     LANGUAGE <- 'english'
   } else if (!is.null(valid_langs$lang_id)){
@@ -74,5 +71,9 @@ get_api_lang <- function(lang_id, valid_langs, api) {
   } else {
     LANGUAGE <- 'english'
   }
+  if (api == 'linkedcat') {
+      lang_id <- 'ger'
+      LANGUAGE <- 'german'
+    }
   return (list(lang_id = lang_id, name = LANGUAGE))
 }
