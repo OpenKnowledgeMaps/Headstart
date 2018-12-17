@@ -11,21 +11,21 @@ var options_linkedcat = {
             ]},
         {id: "include_content_type", multiple: true, name: "Dokumentarten", type: "dropdown"
             , fields: [
-                {id: "anthologie", text: "Anthologie"}
-                , {id: "bericht", text: "Bericht", selected:true}
-                , {id: "bibliografie", text: "Bibliografie"}
-                , {id: "biografie", text: "Biografie"}
-                , {id: "briefsammlung", text: "Briefsammlung"}
-                , {id: "katalog", text: "Katalog"}
-                , {id: "kommentar", text: "Kommentar"}
-                , {id: "mehrsprachiges", text: "Mehrsprachiges Woerterbuch"}
-                , {id: "mitgliederverzeichnis", text: "Mitgliederverzeichnis"}
-                , {id: "quelle", text: "Quelle"}
-                , {id: "reisebericht", text: "Reisebericht"}
-                , {id: "rezension", text: "Rezension"}
-                , {id: "statistik", text: "Statistik"}
-                , {id: "verzeichnis", text: "Verzeichnis"}               
-                , {id: "wörterbuch", text: "Woerterbuch"}                       
+                {id: "Anthologie", text: "Anthologie"}
+                , {id: "Bericht", text: "Bericht", selected:true}
+                , {id: "Bibliografie", text: "Bibliografie"}
+                , {id: "Biografie", text: "Biografie"}
+                , {id: "Briefsammlung", text: "Briefsammlung"}
+                , {id: "Katalog", text: "Katalog"}
+                , {id: "Kommentar", text: "Kommentar"}
+                , {id: "Mehrsprachiges Woerterbuch", text: "Mehrsprachiges Woerterbuch"}
+                , {id: "Mitgliederverzeichnis", text: "Mitgliederverzeichnis"}
+                , {id: "Quelle", text: "Quelle"}
+                , {id: "Reisebericht", text: "Reisebericht"}
+                , {id: "Rezension", text: "Rezension"}
+                , {id: "Statistik", text: "Statistik"}
+                , {id: "Verzeichnis", text: "Verzeichnis"}
+                , {id: "Woerterbuch", text: "Woerterbuch"}
             ]},
     ]
 }
@@ -131,7 +131,7 @@ var SearchOptions = {
          .attr("class", "frontend-btn")
          .style("vertical-align", "middle")
          .text("Submit");
-         
+
          /*d3.select(tag).append("div")
          .attr("id", "stats")
          .attr("class", "divity")
@@ -183,18 +183,18 @@ var SearchOptions = {
 
         })
     },
-    setDateRangeFromPreset: function (from, to, val, start_date) {	
+    setDateRangeFromPreset: function (from, to, val, start_date) {
 	var start = new Date();
         var end = new Date();
         end.setYear(1918)
-        
+
         switch (val) {
 
             case "user-defined":
                 self.user_defined_date = true;
                 d3.select("#input-container").style("display", "block");
                 break;
-            
+
             //full date
             case "any-time":
                 if(typeof start_date === "undefined") {
@@ -214,7 +214,7 @@ var SearchOptions = {
                 start.setFullYear(end.getFullYear() - 1);
                 this.setDateFields(from, to, start, end);
                 break;
-            
+
             //years only
             case "any-time-years":
                 if(typeof start_date === "undefined") {
