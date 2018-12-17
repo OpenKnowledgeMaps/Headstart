@@ -174,9 +174,12 @@ IO.prototype = {
             
             //convert special entities to characters
             for (let field in d) {
-                d[field] = $("<textarea/>").html(d[field]).val();
-            }
-            
+               if(config.number_fields.indexOf(field) !== -1) {
+                   continue;
+               }
+
+               d[field] = $("<textarea/>").html(d[field]).val();
+           }
             // convert authors to "[first name] [last name]"
             // var authors = d.authors.split(";");
             var authors = _this.convertToFirstNameLastName(d.authors);
@@ -185,6 +188,10 @@ IO.prototype = {
             
             //replace "<" and ">" to avoid having HTML tags
             for (let field in d) {
+                if(config.number_fields.indexOf(field) !== -1) {
+                   continue;
+                }
+               
                 d[field] = d[field].replace(/</g, "&lt;");
                 d[field] = d[field].replace(/>/g, "&gt;");
             }
@@ -195,8 +202,16 @@ IO.prototype = {
                 d.paper_abstract = d.snippets;
             }
             
-            d.x = parseFloat(d.x);
-            d.y = parseFloat(d.y);
+            let prepareCoordinates = function(coordinate) {
+                if (isNaN(parseFloat(coordinate))) {
+                    return 0;
+                }
+                
+                return parseFloat(coordinate);
+            }
+            
+            d.x = prepareCoordinates(d.x);
+            d.y = prepareCoordinates(d.y);
             //if two items have the exact same location,
             // that throws off the force-based layout
             var xy_string = d.x + d.y;
@@ -206,6 +221,7 @@ IO.prototype = {
             }
 
             xy_array[xy_string] = true;
+            
             d.paper_abstract = _this.setToStringIfNullOrUndefined(d.paper_abstract, "");
             d.published_in = _this.setToStringIfNullOrUndefined(d.published_in, "");
             d.title = _this.setToStringIfNullOrUndefined(d.title,
