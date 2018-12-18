@@ -174,10 +174,6 @@ IO.prototype = {
             
             //convert special entities to characters
             for (let field in d) {
-               if(config.number_fields.indexOf(field) !== -1) {
-                   continue;
-               }
-
                d[field] = $("<textarea/>").html(d[field]).val();
            }
             // convert authors to "[first name] [last name]"
@@ -188,10 +184,6 @@ IO.prototype = {
             
             //replace "<" and ">" to avoid having HTML tags
             for (let field in d) {
-                if(config.number_fields.indexOf(field) !== -1) {
-                   continue;
-                }
-               
                 d[field] = d[field].replace(/</g, "&lt;");
                 d[field] = d[field].replace(/>/g, "&gt;");
             }
@@ -207,7 +199,7 @@ IO.prototype = {
                     return 0;
                 }
                 
-                return parseFloat(coordinate);
+                return parseFloat(coordinate).toFixed(8);
             }
             
             d.x = prepareCoordinates(d.x);
@@ -216,7 +208,7 @@ IO.prototype = {
             // that throws off the force-based layout
             var xy_string = d.x + d.y;
             while (xy_array.hasOwnProperty(xy_string)) {
-                d.y += 0.00000001;
+                d.y = parseFloat(d.y) + Number(0.00000001);
                 xy_string = d.x + d.y;
             }
 

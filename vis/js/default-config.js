@@ -131,8 +131,6 @@ var config = {
     doi_outlink: false,
     url_outlink: false,
     
-    number_fields: ["x", "y", "readers", "cited_by_tweeters_count", "citation_count", "readers.mendeley"],
-    
     service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE", linkedcat: "LinkedCat+"},
 
     localization: {
