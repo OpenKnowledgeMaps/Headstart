@@ -16,11 +16,11 @@ Make sure you have the following packages installed:
   * arsenal (for snapshot tests)
   * knitr (for test reports)
   * logging
-  * GMD
+  * GMD (Version 0.3.3) Install with `install.packages("https://cran.r-project.org/src/contrib/Archive/GMD/GMD_0.3.3.tar.gz", repos=NULL, type="source")`
   * MASS
   * vegan
   * jsonlite
-  * tm (Version 0.6 - **do not use 0.7**)
+  * tm (Version 0.6 - **do not use 0.7**). Install with `devtools::install_version("tm", version="0.6-2")`
   * proxy
   * SnowballC
   * rplos
@@ -33,11 +33,13 @@ Make sure you have the following packages installed:
   * stringi
   * stringdist
   * xml2 **(Version 1.0 or higher)**
-  * jaod (Currently, a Github repository only: http://github.com/ropenscilabs/jaod. Install with  devtools.)
-  * rbace (Currently, a Github repository only: http://github.com/ropenscilabs/rbace. Install with devtools.)
-  * ropenaire (For VIPER. Currently, a Github repository only: https://github.com/sckott/ropenaire. Install with devtools.)
-  * readr (for ropenair/VIPER)
-  * rcrossref (for VIPER) with the async dev version: install with `remotes::install_github("ropensci/rcrossref@async")`
+  * jaod
+  * NLP
+  * slam
+  * rbace (Currently, a Github repository only). Install with `remotes::install_github("ropensci/rbace")`
+  * ropenaire (For VIPER. Currently, a Github repository only)  Install with `remotes::install_github("njahn82/ropenaire")`
+  * readr (for VIPER)
+  * rcrossref (for VIPER) With the async dev version: install with `remotes::install_github("ropensci/rcrossref@async")`
   * rAltmetric
   * plyr (for better data munging)
   * onehot (for feature engineering)
