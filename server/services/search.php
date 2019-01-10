@@ -55,7 +55,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $settings = $ini_array["general"];
 
     $params_json = packParamsJSON($param_types, $post_params);
-    
+
     $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
     $unique_id = $persistence->createID(array($query, $params_for_id_creation));
@@ -89,6 +89,10 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     }
 
     $result = json_decode($output_json, true);
+
+    if ($result["status"] == "error") {
+        return json_encode($result);
+    }
 
     $input_json = json_encode(utf8_converter($result));
     $input_json = preg_replace("/\<U\+(.*?)>/", "&#x$1;", $input_json);

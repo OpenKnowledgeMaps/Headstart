@@ -79,10 +79,13 @@ ADDITIONAL_STOP_WORDS = LANGUAGE$name
 
 print("reading stuff")
 print(params)
+failed <- list(params=params)
 tryCatch({
   input_data = get_papers(query, params, limit=limit)
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
+  failed$query <<- query
+  failed$query_reason <<- err$message
 })
 
 
@@ -93,10 +96,16 @@ output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_
                          taxonomy_separator=taxonomy_separator, list_size = list_size)
 }, error=function(err){
  tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
+ failed$query <<- query
+ failed$processing_reason <<- err$message
 })
 
-if (service=='openaire'){
+if (service=='openaire' && exists('output_json')) {
   output_json = enrich_output_json(output_json)
+}
+
+if (!exists('output_json')) {
+  output_json <- detect_error(failed)
 }
 
 print(output_json)
