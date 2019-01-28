@@ -537,15 +537,15 @@ class Canvas {
 
                     if (num_document_types > 1) {
                         $("#document_types").html(config.localization[config.language].documenttypes_label);
-
+                        
                         $("#document_types").attr({
                             "data-content": document_types_string
-                            , "title": "The following document types were taken into consideration in the creation of this map (not all of them may appear in the map):\n\n" + document_types_string
+                            , "title": config.localization[config.language].documenttypes_tooltip + "\n\n" + document_types_string
                             , "class": "context_moreinfo"
                         })
 
                     } else {
-                        $("#document_types").html("Document type: " + document_types_string);
+                        $("#document_types").html(config.localization[config.language].documenttypes_label + ": " + document_types_string);
                     }
                 }
             } else {
