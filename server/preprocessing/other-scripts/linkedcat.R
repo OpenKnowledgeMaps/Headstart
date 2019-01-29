@@ -126,7 +126,8 @@ build_query <- function(query, params, limit){
   q_params$hl <- 'on'
   # q_params$hl.fl <- paste(q_fields, collapse=",")
   q_params$hl.fl <- 'main_title,ocrtext'
-  q_params$hl.snippets <- 100
+  q_params$hl.snippets <- 1
+  q_params$hl.score.k1 <- 0.6
   q_params$hl.method <- 'unified'
   q_params$hl.tag.ellipsis <- " ... "
   q_params$hl.maxAnalyzedChars <- 251200
