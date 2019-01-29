@@ -60,7 +60,7 @@ get_papers <- function(query, params, limit=100) {
   metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='id')
 
   metadata[is.na(metadata)] <- ""
-  metadata$subject <- if (!is.null(metadata$keyword_a)) unlist(lapply(metadata$keyword_a, function(x) {if (nchar(x)>0) gsub(";;", ";", paste(unlist(strsplit(x, ",")), collapse=";")) else ""})) else ""
+  metadata$subject <- if (!is.null(metadata$keyword_a)) unlist(lapply(metadata$keyword_a, function(x) {if (nchar(x)>0) gsub("; ;", ";", paste(unlist(strsplit(x, ",")), collapse="; ")) else ""})) else ""
   metadata$authors <- metadata$author100_a
   metadata$author_date <- metadata$author100_d
   metadata$title <- if (!is.null(metadata$main_title)) metadata$main_title else ""
