@@ -53,7 +53,7 @@
             <div class="credits">
                 <p>
                     Diese Suche wurde mit
-                    <a class="whitelink" href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a>
+                    <a class="whitelink" href="http://github.com/OpenKnowledgeMaps/Headstart" target="_blank">Headstart</a>
                     realisiert. Alle Daten stammen aus LinkedCat+.
                 </p>
                 <p>
@@ -65,7 +65,15 @@
         
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script type ="text/javascript">
-                    data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
+            data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
+
+            jQuery.get(data_config.server_url + "services/getLinkedCatAuthors.php", 
+                function (data) {
+                    jQuery(".inputfield").autocomplete({
+                        source: data,
+                        minLength: 3
+                    });
+            });            
         </script>
         <script type="text/javascript" src="search_options.js "></script>
         <script type="text/javascript" src="search.js "></script>
