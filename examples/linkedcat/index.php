@@ -18,6 +18,8 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
         <link type="text/css" rel="stylesheet" href="options.css">
+        <link type="text/css" rel="stylesheet" href="lib/auto-complete.css">
+        <script type="text/javascript" src="lib/auto-complete.min.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:600" rel="stylesheet"> 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
@@ -69,9 +71,25 @@
 
             jQuery.get(data_config.server_url + "services/getLinkedCatAuthors.php", 
                 function (data) {
-                    jQuery(".inputfield").autocomplete({
-                        source: data,
-                        minLength: 3
+                    new autoComplete({
+                        selector: 'input[name="q"]',
+                        minChars: 1,
+                        source: function(term, suggest){
+                            term = term.toLowerCase();
+                            var choices = data;
+                            var matches = [];
+                            for (i=0; i<choices.length; i++) {
+                                if(typeof choices[i].toLowerCase === "undefined" 
+                                        || choices[i].toLowerCase().indexOf === "undefined") {
+                                    continue;
+                                }
+        
+                                if (~choices[i].toLowerCase().indexOf(term)) {
+                                    matches.push(choices[i]);
+                                }
+                            }
+                            suggest(matches);
+                        }
                     });
             });            
         </script>
