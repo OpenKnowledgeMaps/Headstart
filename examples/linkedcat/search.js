@@ -1,6 +1,7 @@
 var service_url = data_config.server_url + "services/searchLinkedCat.php";
 var service_name = "LinkedCat";
 var options = options_linkedcat;
+var visualization_type = "keywords"
 
 $(window).bind("pageshow", function () {
     $(".btn").attr("disabled", false);
@@ -89,9 +90,24 @@ var doSubmit = function (data, newWindow, callback) {
   });
 };
 
-$(document).ready(function () {
-    var search_options = SearchOptions;
+var search_options;
 
+var chooseOptions = function () {
+    search_options = SearchOptions;
+
+    switch (visualization_type) {
+        case "keywords":
+            options = options_linkedcat;
+            break;
+
+        case "authors":
+            options = options_linkedcat_authors;
+            break;
+
+        default:
+            config.options = options_linkedcat;
+    }
+    
     search_options.init("#filter-container", options);
 
     options.dropdowns.forEach(function (entry) {
@@ -112,4 +128,57 @@ $(document).ready(function () {
     } else if (valueExists("id", "year_range")) {
         search_options.setDateRangeFromPreset("#from", "#to", "any-time-years", "1847");
     }
+}
+ var autocomplete_function;
+ 
+var addAutoComplete = function() {
+    if(visualization_type === "authors") {
+        autocomplete_function = new autoComplete({
+            selector: 'input[name="q"]',
+            minChars: 0,
+            source: function(term, suggest){
+                term = term.toLowerCase();
+                var choices = autocomplete_data;
+                var matches = [];
+                for (i=0; i<choices.length; i++) {
+                    if(typeof choices[i].toLowerCase === "undefined" 
+                            || choices[i].toLowerCase().indexOf === "undefined") {
+                        continue;
+                    }
+
+                    if (~choices[i].toLowerCase().indexOf(term)) {
+                        matches.push(choices[i]);
+                    }
+                }
+                suggest(matches);
+            },
+            renderItem: function (item, search){
+                search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+                return '<div class="autocomplete-suggestion" data-author="'+item+'" data-val="'+search+'">'+item.replace(re, "<b>$1</b>")+'</div>';
+            },
+        });
+    }
+}
+
+$(document).ready(function () {
+    
+    var changeVisualization = function () {
+         visualization_type = $("input[name='optradio']:checked").val();
+
+        search_options.user_defined_date = false;
+        $("#filter-container").html("");
+        if (typeof autocomplete_function === "object" && autocomplete_function !== null) {
+            autocomplete_function.destroy();
+            autocomplete_function = null;
+        }
+
+        chooseOptions();
+        addAutoComplete();
+    };
+    
+    $("input[name='optradio']").change(changeVisualization);
+
+    chooseOptions();
+    addAutoComplete();
 });

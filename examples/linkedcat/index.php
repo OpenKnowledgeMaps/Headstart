@@ -35,6 +35,13 @@
             <div class="search">
 
                 <form id="searchform">
+                    <p class="library">
+                        <label class="radio-inline"><input type="radio" name="optradio" value="authors">
+                            <span class="bold">Autoren</span></label>
+                        <label class="radio-inline"><input type="radio" name="optradio" value="keywords" checked>
+                            <span class="bold">Stichwörter</span></label>
+                    </p>
+                    
                     <div id="filter-container"></div>
                     
                     <!--<label for="q">Suchbegriff:</label>-->
@@ -68,29 +75,12 @@
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script type ="text/javascript">
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
-
-            jQuery.get(data_config.server_url + "services/getLinkedCatAuthors.php", 
+            var autocomplete_data;
+            var has_loaded = false;
+            $.get(data_config.server_url + "services/getLinkedCatAuthors.php", 
                 function (data) {
-                    new autoComplete({
-                        selector: 'input[name="q"]',
-                        minChars: 1,
-                        source: function(term, suggest){
-                            term = term.toLowerCase();
-                            var choices = data;
-                            var matches = [];
-                            for (i=0; i<choices.length; i++) {
-                                if(typeof choices[i].toLowerCase === "undefined" 
-                                        || choices[i].toLowerCase().indexOf === "undefined") {
-                                    continue;
-                                }
-        
-                                if (~choices[i].toLowerCase().indexOf(term)) {
-                                    matches.push(choices[i]);
-                                }
-                            }
-                            suggest(matches);
-                        }
-                    });
+                    autocomplete_data = data;
+                    has_loaded = true;
             });            
         </script>
         <script type="text/javascript" src="search_options.js "></script>
