@@ -36,9 +36,9 @@
 
                 <form id="searchform">
                     <p class="library">
-                        <label class="radio-inline"><input type="radio" name="optradio" value="authors">
+                        <label class="radio-inline"><input type="radio" name="optradio" value="authors" checked>
                             <span class="bold">Autoren</span></label>
-                        <label class="radio-inline"><input type="radio" name="optradio" value="keywords" checked>
+                        <label class="radio-inline"><input type="radio" name="optradio" value="keywords">
                             <span class="bold">Stichwörter</span></label>
                     </p>
                     
