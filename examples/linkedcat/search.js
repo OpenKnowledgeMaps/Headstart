@@ -105,7 +105,7 @@ var chooseOptions = function () {
             break;
 
         default:
-            config.options = options_linkedcat;
+            options = options_linkedcat;
     }
     
     search_options.init("#filter-container", options);
@@ -129,7 +129,9 @@ var chooseOptions = function () {
         search_options.setDateRangeFromPreset("#from", "#to", "any-time-years", "1847");
     }
 }
- var autocomplete_function;
+
+var autocomplete_function;
+var autocomplete_interval;
  
 var addAutoComplete = function() {
     if(visualization_type === "authors") {
@@ -155,8 +157,11 @@ var addAutoComplete = function() {
             renderItem: function (item, search){
                 search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
                 var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
-                return '<div class="autocomplete-suggestion" data-author="'+item+'" data-val="'+search+'">'+item.replace(re, "<b>$1</b>")+'</div>';
+                return '<div class="autocomplete-suggestion" data-author="'+item+'">'+item.replace(re, "<b>$1</b>")+'</div>';
             },
+            onSelect: function(e, term, item){
+                $('input[name=q]').val(item.getAttribute('data-author'));
+            }
         });
     }
 }
@@ -168,6 +173,7 @@ $(document).ready(function () {
 
         search_options.user_defined_date = false;
         $("#filter-container").html("");
+        
         if (typeof autocomplete_function === "object" && autocomplete_function !== null) {
             autocomplete_function.destroy();
             autocomplete_function = null;
@@ -181,4 +187,6 @@ $(document).ready(function () {
 
     chooseOptions();
     addAutoComplete();
+    
+    changeVisualization();
 });
