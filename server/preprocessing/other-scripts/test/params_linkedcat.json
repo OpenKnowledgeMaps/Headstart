@@ -2,5 +2,5 @@
   "from":"1847",
   "to":"1918",
   "include_content_type": "Bericht",
-  "protocol":false
+  "protocol":"true"
 }
