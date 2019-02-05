@@ -2,6 +2,6 @@
   "from":"1847",
   "to":"1918",
   "include_content_type": "all",
-  "protocol":true,
+  "protocol":false,
   "bib":false
 }
