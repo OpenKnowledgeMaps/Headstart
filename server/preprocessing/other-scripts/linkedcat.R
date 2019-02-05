@@ -100,7 +100,7 @@ build_query <- function(query, params, limit){
                 'main_title', 'subtitle', 'pub_year',
                 'host_label', 'host_maintitle', 'host_pubplace', 'host_pubyear',
                 'author100_a', 'author100_d', 'author100_0', 'author100_4',
-                'ddc_a', 'ddc_2', 'bkl_a',
+                'bkl_caption', 'bkl_top_caption',
                 'keyword_a', 'tags', 'category', 'bib', 'language_code',
                 'ocrtext_good', 'ocrtext')
   q <- paste(paste(q_fields, query, sep = ":"), collapse = " ")
