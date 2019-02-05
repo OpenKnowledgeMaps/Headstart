@@ -38,7 +38,7 @@
                     <!--<label for="q">Suchbegriff:</label>-->
                     <input class="shadow inputfield" type="text" name="q" size="61" required placeholder="Suchbegriff eingeben...">
                     <button type="submit" class="search-btn shadow">
-                            <span class="awesome">&#xf002;</span> suchen
+                            <i class="fas fa-search"></i> suchen
                     </button>
                 </form>
 

@@ -466,16 +466,16 @@ class Canvas {
                 let from = new Date(context.params.from)
                 let to = new Date(context.params.to)
 
-				today.setTime(today.getTime() + today.getTimezoneOffset()*60*1000 );
-				from.setTime(from.getTime() + from.getTimezoneOffset()*60*1000 );
-				to.setTime(to.getTime() + to.getTimezoneOffset()*60*1000 );
+                today.setTime(today.getTime() + today.getTimezoneOffset()*60*1000 );
+                from.setTime(from.getTime() + from.getTimezoneOffset()*60*1000 );
+                to.setTime(to.getTime() + to.getTimezoneOffset()*60*1000 );
 
-				//TODO: quick fix for date issue in snapshots, needs to be fixed
-				if(this.paramExists(config.is_phantomjs)) {
-					if (config.is_phantomjs) {
-						return;
-					}
-				}
+                //TODO: quick fix for date issue in snapshots, needs to be fixed
+                if(this.paramExists(config.is_phantomjs)) {
+                        if (config.is_phantomjs) {
+                                return;
+                        }
+                }
 
                 let default_from_date = (function(service) {
                     switch(service) {
@@ -505,10 +505,17 @@ class Canvas {
             } else {
                 $("#timespan").hide()
             }
-
+            //Don't forget to set the config.options in the containing site to use the context values below
             if(this.paramExists(config.options)) {
 
-                let dtypes = (context.params.hasOwnProperty("document_types"))?("document_types"):("article_types");
+                let dtypes = (function() {
+                    if (context.params.hasOwnProperty("document_types"))
+                        return "document_types";
+                    else if (context.params.hasOwnProperty("include_content_type"))
+                        return "include_content_type"
+                    else
+                        return "article_types";
+                })()
 
                 let document_types_string = "";
 
@@ -530,15 +537,15 @@ class Canvas {
 
                     if (num_document_types > 1) {
                         $("#document_types").html(config.localization[config.language].documenttypes_label);
-
+                        
                         $("#document_types").attr({
                             "data-content": document_types_string
-                            , "title": "The following document types were taken into consideration in the creation of this map (not all of them may appear in the map):\n\n" + document_types_string
+                            , "title": config.localization[config.language].documenttypes_tooltip + "\n\n" + document_types_string
                             , "class": "context_moreinfo"
                         })
 
                     } else {
-                        $("#document_types").html("Document type: " + document_types_string);
+                        $("#document_types").html(config.localization[config.language].documenttypes_label + ": " + document_types_string);
                     }
                 }
             } else {
