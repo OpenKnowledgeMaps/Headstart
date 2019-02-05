@@ -38,8 +38,8 @@ get_papers <- function(query, params, limit=100) {
 
   lclog$info(paste("Search: ", query, sep=""))
   start.time <- Sys.time()
-
-  conn <- SolrClient$new(host=Sys.getenv("LINKEDCAT_SOLR"),
+  host=paste0(Sys.getenv("LINKEDCAT_USER"),":",Sys.getenv("LINKEDCAT_PWD"),"@",Sys.getenv("LINKEDCAT_SOLR"))
+  conn <- SolrClient$new(host=host,
                          path="solr/linkedcat", port=NULL, scheme="https")
 
   q_params <- build_query(query, params, limit)
