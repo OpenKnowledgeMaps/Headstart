@@ -25,9 +25,19 @@ curl_setopt_array($ch, array(
 
 $jsonData = curl_exec($ch);
 
-$array = json_decode($jsonData, true);
-print_r($array);
-$authors = array_values($array["facet_counts"]["facet_fields"]["author100_a_str"]);
+$resultarray = json_decode($jsonData, true);
+print_r($resultarray);
+$authors = array();
+$authors["name"] = array();
+$authors["count"] = array();
+print_r($authors);
+foreach ($resultarray["facet_counts"]["facet_fields"]["author100_a_str"] as $k => $v) {
+  if ($k % 2 == 0) {
+    $authors["name"] = $v;
+  } else {
+    $authors["count"] = $v;
+  }
+}
 echo json_encode($authors);
 
 $retVal = array_values();
