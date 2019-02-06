@@ -614,9 +614,7 @@ list.populateReaders = function(nodes) {
         
         if (config.service === "linkedcat") {
             let basic_classifications = d3.select(elem).select("#list_basic_classification");
-            let ddc = d3.select(elem).select("#list_ddc");
-            _this.fillKeywords(basic_classifications, "basic_classification", "bkl_a");
-            _this.fillKeywords(ddc, "ddc", "ddc_a");
+            _this.fillKeywords(basic_classifications, "basic_classification", "bkl_caption");
         }
 
         areas.select(".area_tag").html(function() {
