@@ -1,7 +1,5 @@
 {
   "from":"1847",
   "to":"1918",
-  "include_content_type": "all",
-  "protocol":false,
-  "bib":false
+  "include_content_type": "all"
 }

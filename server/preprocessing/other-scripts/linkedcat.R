@@ -120,10 +120,6 @@ build_query <- function(query, params, limit){
   } else {
     q_params$fq <- list(pub_year)
   }
-  # protocol filter defaults to false
-  protocol_filter <- paste0("protocol:", if(!is.null(params$protocol)) params$protocol else FALSE, collapse = "")
-  bib_filter <- paste0("bib:", if(!is.null(params$bib)) params$bib else FALSE, collapse = "")
-  q_params$fq <- c(q_params$fq, protocol_filter, bib_filter)
   q_params$fq <- unlist(q_params$fq)
   q_params$hl <- 'on'
   # q_params$hl.fl <- paste(q_fields, collapse=",")
