@@ -38,8 +38,8 @@ get_papers <- function(query, params, limit=100) {
 
   lclog$info(paste("Search: ", query, sep=""))
   start.time <- Sys.time()
-
-  conn <- SolrClient$new(host=Sys.getenv("LINKEDCAT_SOLR"),
+  host=paste0(Sys.getenv("LINKEDCAT_USER"),":",Sys.getenv("LINKEDCAT_PWD"),"@",Sys.getenv("LINKEDCAT_SOLR"))
+  conn <- SolrClient$new(host=host,
                          path="solr/linkedcat", port=NULL, scheme="https")
 
   q_params <- build_query(query, params, limit)
@@ -60,7 +60,7 @@ get_papers <- function(query, params, limit=100) {
   metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='id')
 
   metadata[is.na(metadata)] <- ""
-  metadata$subject <- if (!is.null(metadata$keyword_a)) metadata$keyword_a else ""
+  metadata$subject <- if (!is.null(metadata$keyword_a)) unlist(lapply(metadata$keyword_a, function(x) {if (nchar(x)>0) gsub(", ,", ",", paste(unlist(strsplit(x, ",")), collapse=", ")) else ""})) else ""
   metadata$authors <- metadata$author100_a
   metadata$author_date <- metadata$author100_d
   metadata$title <- if (!is.null(metadata$main_title)) metadata$main_title else ""
@@ -100,7 +100,7 @@ build_query <- function(query, params, limit){
                 'main_title', 'subtitle', 'pub_year',
                 'host_label', 'host_maintitle', 'host_pubplace', 'host_pubyear',
                 'author100_a', 'author100_d', 'author100_0', 'author100_4',
-                'ddc_a', 'ddc_2', 'bkl_a',
+                'bkl_caption', 'bkl_top_caption',
                 'keyword_a', 'tags', 'category', 'bib', 'language_code',
                 'ocrtext_good', 'ocrtext')
   q <- paste(paste(q_fields, query, sep = ":"), collapse = " ")
@@ -124,7 +124,8 @@ build_query <- function(query, params, limit){
   q_params$hl <- 'on'
   # q_params$hl.fl <- paste(q_fields, collapse=",")
   q_params$hl.fl <- 'main_title,ocrtext'
-  q_params$hl.snippets <- 100
+  q_params$hl.snippets <- 1
+  q_params$hl.score.k1 <- 0.6
   q_params$hl.method <- 'unified'
   q_params$hl.tag.ellipsis <- " ... "
   q_params$hl.maxAnalyzedChars <- 251200
