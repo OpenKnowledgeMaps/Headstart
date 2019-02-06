@@ -10,7 +10,7 @@ use headstart\library;
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 
-$url = $ini_array["connection"]["solr_linkedcat"] . 
+$url = $ini_array["connection"]["linkedcat_solr"] . 
         'select?facet.field=author100_a_str&facet=on&fl=author100_a_str&facet.limit=-1&q=*:*';
 
 $ch = curl_init();
