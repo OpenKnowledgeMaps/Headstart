@@ -26,20 +26,18 @@ curl_setopt_array($ch, array(
 $jsonData = curl_exec($ch);
 
 $resultarray = json_decode($jsonData, true);
-print_r($resultarray);
 $authors = array();
-$authors["name"] = array();
-$authors["count"] = array();
-print_r($authors);
+// [id, author100_a_str, doc_count, living_dates and possibly image_link]
 foreach ($resultarray["facet_counts"]["facet_fields"]["author100_a_str"] as $k => $v) {
   if ($k % 2 == 0) {
-    $authors["name"] = $v;
-  } else {
-    $authors["count"] = $v;
+    $author = array();
+    $author[] = $v;
+    $author[] = $resultarray["facet_counts"]["facet_fields"]["author100_a_str"][$k+1];
+    $authors[] = $author;
   }
 }
 echo json_encode($authors);
 
 $retVal = array_values();
 
-echo json_encode($retVal);
+echo json_encode($authors);
