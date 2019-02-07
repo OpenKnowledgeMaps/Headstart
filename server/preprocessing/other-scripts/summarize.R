@@ -145,10 +145,12 @@ another_prune_ngrams <- function(ngrams, stops){
                           Filter(function(x){
                                       !any(grepl(tail(x,1), c(stops)))
                                             }, y)})
-  tokens = lapply(tokens, function(y){
-                          Filter(function(x){
-                                      !(x[1]==tail(x,1))
-                                        }, y)})
+  if (length(tokens) > 1) {
+    tokens = lapply(tokens, function(y){
+                            Filter(function(x){
+                                        !(x[1]==tail(x,1))
+                                          }, y)})
+  }
   tokens = lapply(tokens, function(y){Filter(function(x){length(x)>=1},y)})
   empties = which(lapply(tokens, length)==0)
   tokens[c(empties)] = list("")
