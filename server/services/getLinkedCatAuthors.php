@@ -76,24 +76,53 @@ function getAuthorData($base_url, $author_data_query, $author_names) {
   return $cleaned;
 }
 
-$author_facet = getAuthorFacet($base_url, $author_facet_query);
-$author_names = array();
-$author_counts = array();
-foreach ($author_facet as $k => $v) {
-  if ($k % 2 == 0) {
-    $author_names[] = $v;
-  } else {
-    $author_counts[] = $v;
+function getAuthors() {
+  $author_facet = getAuthorFacet($GLOBALS['base_url'],
+                                 $GLOBALS['author_facet_query']);
+  $author_names = array();
+  $author_counts = array();
+  foreach ($author_facet as $k => $v) {
+    if ($k % 2 == 0) {
+      $author_names[] = $v;
+    } else {
+      $author_counts[] = $v;
+    }
   }
-}
-$authors = array();
-$author_data = getAuthorData($base_url, $author_data_query, $author_names);
+  $authors = array();
+  $author_data = getAuthorData($GLOBALS['base_url'],
+                               $GLOBALS['author_data_query'],
+                               $author_names);
 
-// [id, author100_a_str, doc_count, living_dates and possibly image_link]
-foreach ($author_names as $i => $name) {
-    $author_count = $author_counts[$i];
-    $author_id = $author_data[$i]["idnr"];
-    $author_date = $author_data[$i]["author100_d"];
-    $authors[] = array($author_id, $name, $author_count, $author_date);
+  // [id, author100_a_str, doc_count, living_dates and possibly image_link]
+  foreach ($author_names as $i => $name) {
+      $author_count = $author_counts[$i];
+      $author_id = $author_data[$i]["idnr"];
+      $author_date = $author_data[$i]["author100_d"];
+      $authors[] = array($author_id, $name, $author_count, $author_date);
+  }
+  return json_encode($authors);
 }
-echo json_encode($authors);
+
+function loadCache($fname) {
+  $json = file_get_contents($fname);
+  return $json;
+}
+
+function writeCache($fname, $output) {
+  $fp = fopen($fname, 'w');
+  fwrite($fp, $output);
+  fclose($fp);
+}
+
+function loadOrRefresh($lc_cache) {
+  if (file_exists($lc_cache) && (time() - filemtime($lc_cache) < 86400)) {
+    $authors = loadCache($lc_cache);
+  } else {
+    $authors = getAuthors();
+    writeCache($lc_cache, $authors);
+  }
+  return $authors;
+}
+
+$lc_cache = $ini_array["connection"]["linkedcat_suggest_cache"];
+echo loadOrRefresh($lc_cache);
