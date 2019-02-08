@@ -1,5 +1,9 @@
 <?php
 
+# currently returns a list of lists:
+# [["(DE-599)OBVAC15037962","Pfizmaier, August",186,"1808-1887"],
+#  ["(DE-599)OBVAC15037231","Hammer-Purgstall, Joseph <<von>>",83,"1774-1856"]]
+
 header('Content-type: application/json');
 
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
@@ -77,6 +81,8 @@ function getAuthorData($base_url, $author_data_query, $author_names) {
 }
 
 function getAuthors() {
+  # first get author facet and counts
+  # -> list of unique authors in SOLR and their document count
   $author_facet = getAuthorFacet($GLOBALS['base_url'],
                                  $GLOBALS['author_facet_query']);
   $author_names = array();
@@ -89,6 +95,8 @@ function getAuthors() {
     }
   }
   $authors = array();
+  # now iterate over author names and get their metadata
+  # from the first retrieved document
   $author_data = getAuthorData($GLOBALS['base_url'],
                                $GLOBALS['author_data_query'],
                                $author_names);
@@ -115,9 +123,12 @@ function writeCache($fname, $output) {
 }
 
 function loadOrRefresh($lc_cache) {
+  # checks if file exists AND if its fresher than 24h
+  # if true && true, load the cached file
   if (file_exists($lc_cache) && (time() - filemtime($lc_cache) < 86400)) {
     $authors = loadCache($lc_cache);
   } else {
+    # if one is false, create from SOLR and store in cache file
     $authors = getAuthors();
     writeCache($lc_cache, $authors);
   }
