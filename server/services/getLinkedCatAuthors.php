@@ -65,7 +65,15 @@ function getAuthorData($base_url, $author_data_query, $author_names) {
     curl_multi_remove_handle($mh, $ch);
   }
   curl_multi_close($mh);
-  return $res;
+  $cleaned = array();
+  foreach ($res as $i => $r) {
+    $j = json_decode($r, true);
+    $doc = $j["response"]["docs"][0];
+    $cleaned[$i] = array();
+    $cleaned[$i]["idnr"] = $doc["idnr"][0];
+    $cleaned[$i]["author100_d"] = $doc["author100_d"][0];
+  }
+  return $cleaned;
 }
 
 $author_facet = getAuthorFacet($base_url, $author_facet_query);
@@ -80,11 +88,12 @@ foreach ($author_facet as $k => $v) {
 }
 $authors = array();
 $author_data = getAuthorData($base_url, $author_data_query, $author_names);
+
 // [id, author100_a_str, doc_count, living_dates and possibly image_link]
 foreach ($author_names as $i => $name) {
     $author_count = $author_counts[$i];
-    $author_id = $author_data["idnr"][0];
-    $author_date = $author_data["author100_d"][0];
+    $author_id = $author_data[$i]["idnr"];
+    $author_date = $author_data[$i]["author100_d"];
     $authors[] = array($author_id, $name, $author_count, $author_date);
 }
 echo json_encode($authors);
