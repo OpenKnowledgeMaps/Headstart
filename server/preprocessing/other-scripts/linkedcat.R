@@ -73,6 +73,8 @@ get_papers <- function(query, params, limit=100) {
   metadata$oa_state <- 1
   metadata$subject_orig = metadata$subject
   metadata$relevance = c(nrow(metadata):1)
+  metadata$bkl_caption = unlist(lapply(metadata$bkl_caption, function(x) gsub(",", "; ", x)))
+  metadata$bkl_top_caption = if (!is.null(metadata$bkl_top_caption)) unlist(lapply(metadata$bkl_top_caption, function(x) gsub(",", "; ", x))) else ""
 
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
