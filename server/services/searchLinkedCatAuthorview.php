@@ -14,7 +14,7 @@ $post_params = $_POST;
 $result = search("linkedcat_authorview",
                  $dirty_query,
                  $post_params,
-                 array("id", "living_dates"),
+                 array("id", "doc_count", "living_dates", "image_link"),
                  ";"
                );
 
