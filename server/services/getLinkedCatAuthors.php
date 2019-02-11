@@ -106,7 +106,8 @@ function getAuthors() {
       $author_count = $author_counts[$i];
       $author_id = $author_data[$i]["idnr"];
       $author_date = $author_data[$i]["author100_d"];
-      $authors[] = array($author_id, $name, $author_count, $author_date);
+      # the following array contains a placeholder "" for a possible image link
+      $authors[] = array($author_id, $name, $author_count, $author_date, "");
   }
   return json_encode($authors);
 }
