@@ -24,7 +24,7 @@ if (DEBUG==TRUE){
 tslog <- getLogger('ts')
 
 source("../vis_layout.R")
-source('../linkedcat.R')
+source('../linkedcat_authorview.R')
 
 
 MAX_CLUSTERS = 15
