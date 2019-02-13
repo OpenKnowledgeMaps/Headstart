@@ -1,8 +1,8 @@
 <?php
 
 # currently returns a list of lists:
-# [["(DE-599)OBVAC15037962","Pfizmaier, August",186,"1808-1887"],
-#  ["(DE-599)OBVAC15037231","Hammer-Purgstall, Joseph <<von>>",83,"1774-1856"]]
+# [["(DE-588)11881835X","Pfizmaier, August",186,"1808-1887"],
+#  ["(DE-588)118545426","Hammer-Purgstall, Joseph <<von>>",83,"1774-1856"]]
 
 header('Content-type: application/json');
 
@@ -24,7 +24,7 @@ $author_facet_query = "select?facet.field=author100_a_str" .
                       "&facet=on&fl=author100_a_str" .
                       "&q=*:*&rows=0";
 
-$author_data_query = "select?fl=idnr,author100_d" .
+$author_data_query = "select?fl=author100_0,author100_d" .
                      "&rows=1" .
                      "&q=author100_a_str:";
 
@@ -74,7 +74,7 @@ function getAuthorData($base_url, $author_data_query, $author_names) {
     $j = json_decode($r, true);
     $doc = $j["response"]["docs"][0];
     $cleaned[$i] = array();
-    $cleaned[$i]["idnr"] = $doc["idnr"][0];
+    $cleaned[$i]["author100_0"] = $doc["author100_0"][0];
     $cleaned[$i]["author100_d"] = $doc["author100_d"][0];
   }
   return $cleaned;
@@ -104,7 +104,7 @@ function getAuthors() {
   // [id, author100_a_str, doc_count, living_dates and possibly image_link]
   foreach ($author_names as $i => $name) {
       $author_count = $author_counts[$i];
-      $author_id = $author_data[$i]["idnr"];
+      $author_id = $author_data[$i]["author100_0"];
       $author_date = $author_data[$i]["author100_d"];
       # the following array contains a placeholder "" for a possible image link
       $authors[] = array($author_id, $name, $author_count, $author_date, "");
