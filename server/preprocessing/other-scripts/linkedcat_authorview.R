@@ -97,7 +97,7 @@ build_query <- function(query, params, limit){
                 'bkl_caption', 'bkl_top_caption',
                 'keyword_a', 'tags', 'category', 'bib', 'language_code',
                 'ocrtext_good', 'ocrtext')
-  q <- paste0('author100_a_str:"', query, '"')
+  q <- paste0('author100_0:', query)
   q_params <- list(q = q, rows = limit, fl = r_fields)
   return(q_params)
 }
