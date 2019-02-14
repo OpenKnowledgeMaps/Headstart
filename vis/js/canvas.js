@@ -8,7 +8,8 @@ import dateFormat from 'dateformat';
 
 const editModalButton = require('templates/buttons/edit_button.handlebars')
 const embedModalButton = require('templates/buttons/embed_button.handlebars')
-const shareButton = require('templates/buttons/share_button.handlebars')
+const shareButton = require('templates/buttons/share_button.handlebars');
+const faqsButton = require('templates/buttons/faqs_button.handlebars');
 const legendTemplate = require("templates/toolbar/cris_legend.handlebars");
 
 class Canvas {
@@ -394,6 +395,10 @@ class Canvas {
                 document.execCommand("copy");
                 return false;
             })
+        }
+        
+        if(config.faqs_button) {
+            $('#modals').append(faqsButton);
         }
         
         if (config.viper_edit_modal) {
