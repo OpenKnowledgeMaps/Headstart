@@ -70,7 +70,7 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 * connection->linkedcat_solr: URL to the SOLR server, without protocol or additional paths
 * connection->linkedcat_user: user string of your provided authentification credentials
 * connection->linkedcat_pwd: password string of your provided authentification credentials
-* connection->linkedcat_suggest_cache: Absolute path to the cache file for the author suggest functionality, for example "/../server/storage/lc_cache.json". **Make sure that your webserver has write & execute permissions to the containing directory, as the file will be created and rewritten by the service.**
+* connection->linkedcat_suggest_cache: Absolute path to the cache file for the author suggest functionality, for example "/../server/storage/lc_cache.json". **Make sure that your webserver has write permissions to the containing directory, as the file will be created and rewritten by the service.**
 
 * snapshot->snapshot_enabled: Set to 1 to enable snapshot feature, 0 to disable
 * snapshot->phantomjs_path: Absolute path to phantomjs binary
