@@ -144,12 +144,12 @@ function loadOrRefresh($lc_cache) {
     }
     finally {
       # if no error occurred, update cache
-      if (!is_null($authors) && count($authors) > 0) {
-        writeCache($lc_cache, $authors);
+      if (empty($authors)) {
+        $authors = loadCache($lc_cache);
       }
       # if error occurred, skip cache refreshment at this stage and load instead
       else {
-        $authors = loadCache($lc_cache);
+        writeCache($lc_cache, $authors);
       }
     }
   }
