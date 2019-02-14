@@ -38,7 +38,7 @@ if(!is.null(params_file)) {
 #start.time <- Sys.time()
 
 tryCatch({
-  input_data = get_papers(query, params)
+  input_data = get_papers(query, params, limit=500)
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
 })
