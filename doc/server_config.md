@@ -67,6 +67,11 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 * general->services_path: Relative path to the client REST services. Needs to be in the public_html/www directory.
 * calculation->binary: Path to RScript binary
 * connection->sqlite_db: Full path to the sqlite datatabase file. For development purposes, duplicate headstart.sqlite in server/storage/ and rename it to a filename of your choice. Enter the path to this file here. **Make sure that your webserver has write & execute permissions to this file and the containing directory.**
+* connection->linkedcat_solr: URL to the SOLR server, without protocol or additional paths
+* connection->linkedcat_user: user string of your provided authentification credentials
+* connection->linkedcat_pwd: password string of your provided authentification credentials
+* connection->linkedcat_suggest_cache: Absolute path to the cache file for the author suggest functionality, for example "/../server/storage/lc_cache.json". **Make sure that your webserver has write & execute permissions to the containing directory, as it will be created and rewritten by the service.**
+
 * snapshot->snapshot_enabled: Set to 1 to enable snapshot feature, 0 to disable
 * snapshot->phantomjs_path: Absolute path to phantomjs binary
 * snapshot->getsvg_path: Absolute path to getChartSVG.js
