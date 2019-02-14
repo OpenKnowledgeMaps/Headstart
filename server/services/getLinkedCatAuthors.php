@@ -22,7 +22,7 @@ $base_url = "https://" .
 $author_facet_query = "select?facet.field=author100_a_str" .
                       "&facet.query=author100_a_str" .
                       "&facet=on&fl=author100_a_str" .
-                      "&q=*:*&rows=0";
+                      "&q=*:*&rows=0&facet.limit=-1&facet.sort=index";
 
 $author_data_query = "select?fl=author100_0,author100_d" .
                      "&rows=1" .
@@ -109,7 +109,7 @@ function getAuthors() {
       # the following array contains a placeholder "" for a possible image link
       $authors[] = array($author_id, $name, $author_count, $author_date, "");
   }
-  return json_encode($authors);
+  return json_encode($authors, JSON_UNESCAPED_UNICODE);
 }
 
 function loadCache($fname) {
