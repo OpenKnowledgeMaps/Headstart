@@ -27,8 +27,8 @@ img#close-button {
 
 #modals .btn {
     font-size: 20px;
-    height: 55px;
-    width: 55px;
+    height: 40px;
+    width: 40px;
     background-color: $okm-modal-btn;
     border-color: $okm-modal-btn;
     margin-bottom: 5px;
@@ -73,8 +73,6 @@ img#close-button {
 @media screen and (max-width: 1150px) {
     #modals .btn {
         font-size: 14px;
-        height: 40px;
-        width: 40px;
     }
 }
 
