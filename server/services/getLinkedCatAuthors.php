@@ -140,7 +140,7 @@ function loadOrRefresh($lc_cache) {
     }
     # if error in getting authors occurs, catch error and set authors null
     catch (exception $e) {
-      $authors = null
+      $authors = null;
     }
     finally {
       # if no error occurred, update cache
