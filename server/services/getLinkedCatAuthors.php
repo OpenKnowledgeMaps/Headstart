@@ -14,7 +14,7 @@ use headstart\library;
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 
-ini_set('max_execution_time', 0); 
+ini_set('max_execution_time', 0);
 
 $base_url = "https://" .
        $ini_array["connection"]["linkedcat_user"] . ":" .
@@ -65,7 +65,8 @@ function getAuthorData($base_url, $author_data_query, $author_names) {
   $index = null;
   do {
     curl_multi_exec($mh, $index);
-  } while($index > 0);
+  }
+  while($index > 0);
   foreach($multiCurl as $k => $ch) {
     $res[$k] = curl_multi_getcontent($ch);
     curl_multi_remove_handle($mh, $ch);
@@ -92,7 +93,8 @@ function getAuthors() {
   foreach ($author_facet as $k => $v) {
     if ($k % 2 == 0) {
       $author_names[] = $v;
-    } else {
+    }
+    else {
       $author_counts[] = $v;
     }
   }
@@ -130,10 +132,26 @@ function loadOrRefresh($lc_cache) {
   # if true && true, load the cached file
   if (file_exists($lc_cache) && (time() - filemtime($lc_cache) < 86400)) {
     $authors = loadCache($lc_cache);
-  } else {
+  }
+  else {
     # if one is false, create from SOLR and store in cache file
-    $authors = getAuthors();
-    writeCache($lc_cache, $authors);
+    try {
+      $authors = getAuthors();
+    }
+    # if error in getting authors occurs, catch error and set authors null
+    catch (exception $e) {
+      $authors = null
+    }
+    finally {
+      # if no error occurred, update cache
+      if ($authors != null) {
+        writeCache($lc_cache, $authors);
+      }
+      # if error occurred, skip cache refreshment at this stage and load instead
+      else {
+        $authors = loadCache($lc_cache);
+      }
+    }
   }
   return $authors;
 }
