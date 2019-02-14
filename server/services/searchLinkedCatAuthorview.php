@@ -16,6 +16,7 @@ $result = search("linkedcat_authorview",
                  $post_params,
                  array("author_name", "doc_count", "living_dates", "image_link"),
                  ";"
+                 ";",
                );
 
 echo $result
