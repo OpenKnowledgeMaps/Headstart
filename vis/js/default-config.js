@@ -97,6 +97,7 @@ var config = {
     embed_modal: false,
     share_modal: false,
     faqs_button: true,
+    faqs_url: "https://openknowledgemaps.org/faq",
 
     // transition
     transition_duration: 750,
