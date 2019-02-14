@@ -14,6 +14,8 @@ use headstart\library;
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 
+ini_set('max_execution_time', 0); 
+
 $base_url = "https://" .
        $ini_array["connection"]["linkedcat_user"] . ":" .
        $ini_array["connection"]["linkedcat_pwd"] . "@" .
