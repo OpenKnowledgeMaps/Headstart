@@ -135,20 +135,27 @@ get_top_names <- function(tfidf_top, top_n, stops) {
 }
 
 another_prune_ngrams <- function(ngrams, stops){
+  # filter out stopwords from start or stop of ngrams
   tokens <- unname(unlist(ngrams))
+  # split ngrams
   tokens = lapply(tokens, strsplit, split="_")
+  # check if first token of ngrams in stopword list
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
                                       !any(grepl(x[1], c(stops)))
                                             }, y)})
+  # check if last token of ngrams in stopword list
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
                                       !any(grepl(tail(x,1), c(stops)))
                                             }, y)})
+  # check that first token is not the same as the last token
   tokens = lapply(tokens, function(y){
+                    if(length(y) > 1) {
                           Filter(function(x){
                                       !(x[1]==tail(x,1))
-                                        }, y)})
+                          }, y)}
+                    else y})
   tokens = lapply(tokens, function(y){Filter(function(x){length(x)>=1},y)})
   empties = which(lapply(tokens, length)==0)
   tokens[c(empties)] = list("")
