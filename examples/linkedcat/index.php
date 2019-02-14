@@ -18,6 +18,8 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
         <link type="text/css" rel="stylesheet" href="options.css">
+        <link type="text/css" rel="stylesheet" href="lib/auto-complete.css">
+        <script type="text/javascript" src="lib/auto-complete.min.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:600" rel="stylesheet"> 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
@@ -33,6 +35,13 @@
             <div class="search">
 
                 <form id="searchform">
+                    <p class="library">
+                        <label class="radio-inline"><input type="radio" name="optradio" value="authors" checked>
+                            <span class="bold">Autoren</span></label>
+                        <label class="radio-inline"><input type="radio" name="optradio" value="keywords">
+                            <span class="bold">Stichwörter</span></label>
+                    </p>
+                    
                     <div id="filter-container"></div>
                     
                     <!--<label for="q">Suchbegriff:</label>-->
@@ -53,7 +62,7 @@
             <div class="credits">
                 <p>
                     Diese Suche wurde mit
-                    <a class="whitelink" href="http://github.com/pkraker/Headstart" target="_blank">Headstart</a>
+                    <a class="whitelink" href="http://github.com/OpenKnowledgeMaps/Headstart" target="_blank">Headstart</a>
                     realisiert. Alle Daten stammen aus LinkedCat+.
                 </p>
                 <p>
@@ -65,7 +74,14 @@
         
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script type ="text/javascript">
-                    data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
+            data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
+            var autocomplete_data;
+            var has_loaded = false;
+            $.get(data_config.server_url + "services/getLinkedCatAuthors.php", 
+                function (data) {
+                    autocomplete_data = data;
+                    has_loaded = true;
+            });            
         </script>
         <script type="text/javascript" src="search_options.js "></script>
         <script type="text/javascript" src="search.js "></script>

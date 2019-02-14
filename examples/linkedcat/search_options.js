@@ -30,6 +30,10 @@ var options_linkedcat = {
     ]
 }
 
+var options_linkedcat_authors = {
+    dropdowns: []
+}
+
 var SearchOptions = {
     user_defined_date: false,
     init: function (tag, data) {
