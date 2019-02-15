@@ -94,6 +94,10 @@ var config = {
     filter_menu_dropdown: false,
     
     scale_toolbar: false,
+    embed_modal: false,
+    share_modal: false,
+    faqs_button: false,
+    faqs_url: "",
 
     // transition
     transition_duration: 750,
