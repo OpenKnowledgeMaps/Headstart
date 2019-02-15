@@ -45,7 +45,7 @@ function getAuthorFacet($base_url, $author_facet_query) {
     $res = json_decode(execQuery($base_url, $author_facet_query), true);
   }
   catch (exception $e) {
-    throw new Exception("Failed at getting author facet, error in SOLR query, check config params");
+    error_log("Failed at getting author facet, error in SOLR query, check config params");
   }
   return $res["facet_counts"]["facet_fields"]["author100_a_str"];
 }
@@ -143,7 +143,7 @@ function loadOrRefresh($lc_cache) {
     }
     # if error in getting authors occurs, catch error and set authors null
     catch (exception $e) {
-      $authors = NULL;
+      $authors = arry();
       error_log($e);
       # if error occurred, skip cache refreshment at this stage and load instead
       if (file_exists($lc_cache)) {
@@ -151,12 +151,12 @@ function loadOrRefresh($lc_cache) {
       }
     }
     finally {
-      if (empty($authors)) {
-        error_log("Author suggestions could not be loaded or created.");
+      if (count($authors) > 0) {
+        # if no error occurred, update cache
+          writeCache($lc_cache, $authors);
       }
-      # if no error occurred, update cache
       else {
-        writeCache($lc_cache, $authors);
+        error_log("Author suggestions could not be loaded or created.");
       }
     }
   }
