@@ -139,11 +139,12 @@ function loadOrRefresh($lc_cache) {
     # if error in getting authors occurs, catch error and set authors null
     catch (exception $e) {
       $authors = NULL;
+      throw new Exception($e);
     }
     finally {
       # if error occurred, skip cache refreshment at this stage and load instead
-      if (empty($authors)) {
-        $authors = loadCache($lc_cache);
+      if (empty($authors) && file_exists($lc_cache)) {
+          $authors = loadCache($lc_cache);
       }
       # if no error occurred, update cache
       else {
