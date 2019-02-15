@@ -52,6 +52,10 @@ switch(service,
        linkedcat={
          source('../other-scripts/linkedcat.R')
        },
+       linkedcat_authorview={
+         source('../other-scripts/linkedcat_authorview.R')
+         limit = 500
+       },
       {
         source("../other-scripts/rplos_fast.R")
       }
