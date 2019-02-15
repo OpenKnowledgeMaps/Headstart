@@ -41,12 +41,7 @@ function execQuery($base_url, $query) {
 }
 
 function getAuthorFacet($base_url, $author_facet_query) {
-  try {
-    $res = json_decode(execQuery($base_url, $author_facet_query), true);
-  }
-  catch (exception $e) {
-    error_log("Failed at getting author facet, error in SOLR query, check config params");
-  }
+  $res = json_decode(execQuery($base_url, $author_facet_query), true);
   return $res["facet_counts"]["facet_fields"]["author100_a_str"];
 }
 
@@ -116,6 +111,9 @@ function getAuthors() {
       # the following array contains a placeholder "" for a possible image link
       $authors[] = array($author_id, $name, $author_count, $author_date, "");
   }
+  if(count($authors) == 0){
+    throw new Exception("Could not create author list, check SOLR config.");
+  }
   return json_encode($authors, JSON_UNESCAPED_UNICODE);
 }
 
@@ -140,23 +138,19 @@ function loadOrRefresh($lc_cache) {
     # if one is false, create from SOLR and store in cache file
     try {
       $authors = getAuthors();
+      # if no error occurred, update cache
+      writeCache($lc_cache, $authors);
     }
-    # if error in getting authors occurs, catch error and set authors null
+    # if error in getting authors occurs, catch error
     catch (exception $e) {
-      $authors = arry();
-      error_log($e);
+      $msg = "Author suggestions could not be loaded or created. Possible reason: " . $e->getMessage();
       # if error occurred, skip cache refreshment at this stage and load instead
       if (file_exists($lc_cache)) {
           $authors = loadCache($lc_cache);
-      }
-    }
-    finally {
-      if (count($authors) > 0) {
-        # if no error occurred, update cache
-          writeCache($lc_cache, $authors);
-      }
-      else {
-        error_log("Author suggestions could not be loaded or created.");
+      } else {
+        $authors = array();
+        $authors["error"] = $msg;
+        $authors = json_encode($authors);
       }
     }
   }
