@@ -399,9 +399,9 @@ class Canvas {
         
         if(config.faqs_button) {
             $('#modals').append(faqsButton)
-                    .on('click', event => {
-                        window.open(config.faqs_url, "_blank");
-                    })
+            $('#faqs_button').on('click', event => {
+                                    window.open(config.faqs_url, "_blank");
+                                })
         }
         
         if (config.viper_edit_modal) {
