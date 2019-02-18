@@ -1,5 +1,5 @@
 {
   "from":"1847",
   "to":"1918",
-  "include_content_type": "all"
+  "include_content_type": ["Anthologie","Biografie","Briefsammlung","Katalog","Kommentar","Mitgliederverzeichnis","Quelle","Reisebericht","Rezension","Statistik","Verzeichnis"]
 }
