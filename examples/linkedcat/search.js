@@ -39,7 +39,7 @@ $("#searchform").validate({
 });
 
 var doSubmit = function (data, newWindow, callback) {
-  data += "&today=" + new Date().toLocaleDateString("en-US");
+  data += "&today=" + new Date().toLocaleDateString("en-US") + "&author_id=Neuer&doc_count=10&living_dates=1810-1890&image_link=";
 
   var openInNewWindow= function(data) {
     if (data.status === "success") {
@@ -98,14 +98,17 @@ var chooseOptions = function () {
     switch (visualization_type) {
         case "keywords":
             options = options_linkedcat;
+            service_url = data_config.server_url + "services/searchLinkedCat.php";
             break;
 
         case "authors":
             options = options_linkedcat_authors;
+            service_url = data_config.server_url + "services/searchLinkedCatAuthorview.php";
             break;
 
         default:
             options = options_linkedcat;
+            service_url = data_config.server_url + "services/searchLinkedCat.php";
     }
     
     search_options.init("#filter-container", options);
@@ -169,7 +172,7 @@ var addAutoComplete = function() {
 $(document).ready(function () {
     
     var changeVisualization = function () {
-         visualization_type = $("input[name='optradio']:checked").val();
+        visualization_type = $("input[name='optradio']:checked").val();
 
         search_options.user_defined_date = false;
         $("#filter-container").html("");
