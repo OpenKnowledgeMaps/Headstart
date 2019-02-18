@@ -17,6 +17,7 @@ $result = search("linkedcat_authorview",
                  array("author_id", "doc_count", "living_dates", "image_link"),
                  ";",
                  null,
+                $transform_query_tolowercase = false
                );
 
 echo $result
