@@ -7,7 +7,7 @@ options(warn=1)
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(wd) #Don't forget to set your working directory
 
-query <- "Sitzung" #args[2]
+query <- "protokoll" #args[2]
 service <- "linkedcat"
 params <- NULL
 params_file <- "params_linkedcat.json"
