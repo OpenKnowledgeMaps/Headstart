@@ -143,13 +143,13 @@ var addAutoComplete = function() {
                 var choices = autocomplete_data;
                 var matches = [];
                 for (i=0; i<choices.length; i++) {
-                    if(typeof choices[i].toLowerCase === "undefined" 
-                            || choices[i].toLowerCase().indexOf === "undefined") {
+                    if(typeof choices[i][1].toLowerCase === "undefined" 
+                            || choices[i][1].toLowerCase().indexOf === "undefined") {
                         continue;
                     }
 
-                    if (~choices[i].toLowerCase().indexOf(term)) {
-                        matches.push(choices[i]);
+                    if (~choices[i][1].toLowerCase().indexOf(term)) {
+                        matches.push(choices[i][1]);
                     }
                 }
                 suggest(matches);
