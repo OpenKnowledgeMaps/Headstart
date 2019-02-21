@@ -19,14 +19,14 @@ $base_url = "https://" .
        $ini_array["connection"]["linkedcat_pwd"] . "@" .
        $ini_array["connection"]["linkedcat_solr"] . "/solr/linkedcat/";
 
-$author_facet_query = "select?facet.field=author100_a_str" .
-                      "&facet.query=author100_a_str" .
-                      "&facet=on&fl=author100_a_str" .
+$author_facet_query = "select?facet.field=author100_0_str" .
+                      "&facet.query=author100_0_str" .
+                      "&facet=on&fl=author100_0_str" .
                       "&q=*:*&rows=0&facet.limit=-1&facet.sort=index";
 
-$author_data_query = "select?fl=author100_0,author100_d" .
+$author_data_query = "select?fl=author100_a_str,author100_d" .
                      "&rows=1" .
-                     "&q=author100_a_str:";
+                     "&q=author100_0_str:";
 
 
 function execQuery($base_url, $query) {
@@ -42,16 +42,16 @@ function execQuery($base_url, $query) {
 
 function getAuthorFacet($base_url, $author_facet_query) {
   $res = json_decode(execQuery($base_url, $author_facet_query), true);
-  return $res["facet_counts"]["facet_fields"]["author100_a_str"];
+  return $res["facet_counts"]["facet_fields"]["author100_0_str"];
 }
 
-function getAuthorData($base_url, $author_data_query, $author_names) {
+function getAuthorData($base_url, $author_data_query, $author_ids) {
   $multiCurl = array();
   $res = array();
   $mh = curl_multi_init();
   $ch = curl_init();
-  foreach ($author_names as $i => $name) {
-    $target = curl_escape($ch, '"' . $name . '"');
+  foreach ($author_ids as $i => $id) {
+    $target = curl_escape($ch, '"' . $id . '"');
     $fetchURL = $base_url . $author_data_query . $target;
     $multiCurl[$i] = curl_init();
     curl_setopt($multiCurl[$i], CURLOPT_URL, $fetchURL);
@@ -75,7 +75,7 @@ function getAuthorData($base_url, $author_data_query, $author_names) {
     $j = json_decode($r, true);
     $doc = $j["response"]["docs"][0];
     $cleaned[$i] = array();
-    $cleaned[$i]["author100_0"] = $doc["author100_0"][0];
+    $cleaned[$i]["author100_a_str"] = $doc["author100_a_str"][0];
     $cleaned[$i]["author100_d"] = $doc["author100_d"][0];
   }
   return $cleaned;
@@ -86,11 +86,11 @@ function getAuthors() {
   # -> list of unique authors in SOLR and their document count
   $author_facet = getAuthorFacet($GLOBALS['base_url'],
                                  $GLOBALS['author_facet_query']);
-  $author_names = array();
+  $author_ids = array();
   $author_counts = array();
   foreach ($author_facet as $k => $v) {
     if ($k % 2 == 0) {
-      $author_names[] = $v;
+      $author_ids[] = $v;
     }
     else {
       $author_counts[] = $v;
@@ -101,15 +101,15 @@ function getAuthors() {
   # from the first retrieved document
   $author_data = getAuthorData($GLOBALS['base_url'],
                                $GLOBALS['author_data_query'],
-                               $author_names);
+                               $author_ids);
 
   // [id, author100_a_str, doc_count, living_dates and possibly image_link]
-  foreach ($author_names as $i => $name) {
+  foreach ($author_ids as $i => $author_id) {
       $author_count = $author_counts[$i];
-      $author_id = $author_data[$i]["author100_0"];
+      $author_name = $author_data[$i]["author100_a_str"];
       $author_date = $author_data[$i]["author100_d"];
       # the following array contains a placeholder "" for a possible image link
-      $authors[] = array($author_id, $name, $author_count, $author_date, "");
+      $authors[] = array($author_id, $author_name, $author_count, $author_date, "");
   }
   if(count($authors) == 0){
     throw new Exception("Could not create author list, check SOLR config.");
