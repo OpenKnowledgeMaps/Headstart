@@ -290,8 +290,13 @@ class Canvas {
                             <span class="project-id">(${context.params.project_id})</span>`
         } else if (config.create_title_from_context) {
             let query_clean = context.query.replace(/\\(.?)/g, "$1");
-            chart_title = config.localization[config.language].overview_label
-                    + ' <span id="search-term-unique">' + query_clean + '</span>';
+            let label = config.localization[config.language].overview_label;
+            
+            if(config.is_authorview) {  
+                label= config.localization[config.language].overview_authors_label;
+            }
+            
+            chart_title = label + ' <span id="search-term-unique">' + query_clean + '</span>';
         }
            
         var subdiscipline_title_h4 = $("#subdiscipline_title h4");
@@ -423,161 +428,179 @@ class Canvas {
     paramExists(param) {
         return (typeof param !== "undefined" && param !== "null" && param !== null)
     }
+    
+    drawContextAuthorview (context) {
+        if (this.paramExists(context.params.author_id)
+            && this.paramExists(context.params.living_dates)
+            && this.paramExists(context.params.image_link)) {
+        
+            let image_link = (context.params.image_link === "")
+                                ?(require("images/author_default.png"))
+                                :(context.params.image_link);
+            
+            $('#author_image').attr('src', image_link);
+            $('#author_living_dates').text(context.params.living_dates);
+            $('#author_bio_link').attr('href', 'https://d-nb.info/gnd/' + context.params.author_id.replace(/\([^)]*\)/, ''));
+            $('#author_bio_link').text(config.localization[config.language].bio_link)
+        }
+    }
 
     drawContext(context) {
-        if (config.show_context) {
-            if(!this.paramExists(context.params)) {
-                return;
-            }
-            $("#context").css({"visibility": "visible", "display": "block"});
-            let modifier = "";
-            if (this.paramExists(context.params.sorting)) {
-                if(context.params.sorting === "most-recent") {
-                    modifier = " " + config.localization[config.language].most_recent_label + " ";
-                } else {
-                    modifier = " "
-                }
-            }
-            $("#num_articles").html(context.num_documents + modifier
-                    + " " + config.localization[config.language].articles_label
-                    + " (" + context.share_oa + " open access)" );
-            
-            $("#source").html(config.localization[config.language].source_label
-                           + ": " + config.service_names[context.service]);
-
-            if (config.create_title_from_context_style === 'viper') {
-                $("#context-dataset_count").text(
-                    `${context.num_datasets} ${config.localization[config.language].dataset_count_label}`
-                )
-                $("#context-paper_count").text(
-                    `${context.num_papers} ${config.localization[config.language].paper_count_label}`
-                )
-                $("#context-funder").text(
-                    `Funder: ${context.params.funder}`
-                )
-                $("#context-project_runtime").text(
-                    `${context.params.start_date.slice(0, 4)}–${context.params.end_date.slice(0, 4)}`
-                )
-            } else {
-                $("#context-dataset_count").hide();
-                $("#context-paper_count").hide();
-                $("#context-funder").hide();
-                $("#context-project_runtime").hide();
-            }
-            
-            if (this.paramExists(context.params.from) && this.paramExists(context.params.to)) {
-
-                let time_macro_display = (config.service === "doaj")?("yyyy"):("d mmm yyyy");
-                let time_macro_internal = (config.service === "doaj")?("yyyy"):("yyyy-mm-dd");
-
-                let today = new Date();
-                let from = new Date(context.params.from)
-                let to = new Date(context.params.to)
-
-                today.setTime(today.getTime() + today.getTimezoneOffset()*60*1000 );
-                from.setTime(from.getTime() + from.getTimezoneOffset()*60*1000 );
-                to.setTime(to.getTime() + to.getTimezoneOffset()*60*1000 );
-
-                //TODO: quick fix for date issue in snapshots, needs to be fixed
-                if(this.paramExists(config.is_phantomjs)) {
-                        if (config.is_phantomjs) {
-                                return;
-                        }
-                }
-
-                let default_from_date = (function(service) {
-                    switch(service) {
-                      case 'doaj':
-                        return '1809';
-                      case 'pubmed':
-                        return '1809-01-01';
-                      case 'base':
-                          return '1665-01-01';
-                      default:
-                          return '1970-01-01';
-                    }
-                  })(config.service);
-
-                if (dateFormat(from, time_macro_internal) === default_from_date) {
-                    if(dateFormat(today, time_macro_internal) === dateFormat(to, time_macro_internal)) {
-                        $("#timespan").html("All time");
-                    } else {
-                        $("#timespan").html("Until " + dateFormat(to, time_macro_display));
-                    }
-                } else {
-
-                    $("#timespan").html(
-                            dateFormat(from, time_macro_display) + " - " + dateFormat(to, time_macro_display)
-                    );
-                }
-            } else {
-                $("#timespan").hide()
-            }
-            //Don't forget to set the config.options in the containing site to use the context values below
-            if(this.paramExists(config.options)) {
-
-                let dtypes = (function() {
-                    if (context.params.hasOwnProperty("document_types"))
-                        return "document_types";
-                    else if (context.params.hasOwnProperty("include_content_type"))
-                        return "include_content_type"
-                    else
-                        return "article_types";
-                })()
-
-                let document_types_string = "";
-
-                let document_types = config.options.filter(function(obj) {
-                    return obj.id == dtypes;
-                });
-
-                if(context.params.hasOwnProperty(dtypes)) {
-                    let num_document_types = context.params[dtypes].length;
-
-                    context.params[dtypes].forEach(function (type) {
-                        let type_obj = document_types[0].fields.filter(function(obj) {
-                            return obj.id == type;
-                        })
-                        document_types_string += type_obj[0].text + ", ";
-                    })
-
-                    document_types_string = document_types_string.substr(0, document_types_string.length - 2);
-
-                    if (num_document_types > 1) {
-                        $("#document_types").html(config.localization[config.language].documenttypes_label);
-                        
-                        $("#document_types").attr({
-                            "data-content": document_types_string
-                            , "title": config.localization[config.language].documenttypes_tooltip + "\n\n" + document_types_string
-                            , "class": "context_moreinfo"
-                        })
-
-                    } else {
-                        $("#document_types").html(config.localization[config.language].documenttypes_label + ": " + document_types_string);
-                    }
-                }
-            } else {
-                $("#document_types").hide()
-            }
-
-            if (this.paramExists(context.params.lang_id)
-            && this.paramExists(config.options)
-            && this.paramExists(config.options.languages)) {
-                const lang = config.options.languages.find(
-                    lang => lang.code === context.params.lang_id
-                );
-
-                if (lang) {
-                    $('#search_lang').html(
-                        'Language: ' + lang.lang_in_lang + ' (' + lang.lang_in_eng + ') '
-                    );
-                }
-            } else {
-                $('#search_lang').hide();
-            }
-        } else {
+        if (!config.show_context || !this.paramExists(context.params)) {
             $("#num_articles").html(context.num_documents)
                               .attr("class", "");
+            return;
+        }
+        
+        $("#context").css({"visibility": "visible", "display": "block"});
+        let modifier = "";
+        if (this.paramExists(context.params.sorting)) {
+            if(context.params.sorting === "most-recent") {
+                modifier = " " + config.localization[config.language].most_recent_label + " ";
+            } else {
+                modifier = " "
+            }
+        }
+        $("#num_articles").html(context.num_documents + modifier
+                + " " + config.localization[config.language].articles_label
+                + " (" + context.share_oa + " open access)" );
+
+        $("#source").html(config.localization[config.language].source_label
+                       + ": " + config.service_names[context.service]);
+
+        if (config.create_title_from_context_style === 'viper') {
+            $("#context-dataset_count").text(
+                `${context.num_datasets} ${config.localization[config.language].dataset_count_label}`
+            )
+            $("#context-paper_count").text(
+                `${context.num_papers} ${config.localization[config.language].paper_count_label}`
+            )
+            $("#context-funder").text(
+                `Funder: ${context.params.funder}`
+            )
+            $("#context-project_runtime").text(
+                `${context.params.start_date.slice(0, 4)}–${context.params.end_date.slice(0, 4)}`
+            )
+        } else {
+            $("#context-dataset_count").hide();
+            $("#context-paper_count").hide();
+            $("#context-funder").hide();
+            $("#context-project_runtime").hide();
+        }
+
+        if (this.paramExists(context.params.from) && this.paramExists(context.params.to)) {
+
+            let time_macro_display = (config.service === "doaj")?("yyyy"):("d mmm yyyy");
+            let time_macro_internal = (config.service === "doaj")?("yyyy"):("yyyy-mm-dd");
+
+            let today = new Date();
+            let from = new Date(context.params.from)
+            let to = new Date(context.params.to)
+
+            today.setTime(today.getTime() + today.getTimezoneOffset()*60*1000 );
+            from.setTime(from.getTime() + from.getTimezoneOffset()*60*1000 );
+            to.setTime(to.getTime() + to.getTimezoneOffset()*60*1000 );
+
+            //TODO: quick fix for date issue in snapshots, needs to be fixed
+            if(this.paramExists(config.is_phantomjs)) {
+                    if (config.is_phantomjs) {
+                            return;
+                    }
+            }
+
+            let default_from_date = (function(service) {
+                switch(service) {
+                  case 'doaj':
+                    return '1809';
+                  case 'pubmed':
+                    return '1809-01-01';
+                  case 'base':
+                      return '1665-01-01';
+                  default:
+                      return '1970-01-01';
+                }
+              })(config.service);
+
+            if (dateFormat(from, time_macro_internal) === default_from_date) {
+                if(dateFormat(today, time_macro_internal) === dateFormat(to, time_macro_internal)) {
+                    $("#timespan").html("All time");
+                } else {
+                    $("#timespan").html("Until " + dateFormat(to, time_macro_display));
+                }
+            } else {
+
+                $("#timespan").html(
+                        dateFormat(from, time_macro_display) + " - " + dateFormat(to, time_macro_display)
+                );
+            }
+        } else {
+            $("#timespan").hide()
+        }
+        //Don't forget to set the config.options in the containing site to use the context values below
+        if(this.paramExists(config.options)) {
+
+            let dtypes = (function() {
+                if (context.params.hasOwnProperty("document_types"))
+                    return "document_types";
+                else if (context.params.hasOwnProperty("include_content_type"))
+                    return "include_content_type"
+                else
+                    return "article_types";
+            })()
+
+            let document_types_string = "";
+
+            let document_types = config.options.filter(function(obj) {
+                return obj.id == dtypes;
+            });
+
+            if(context.params.hasOwnProperty(dtypes)) {
+                let num_document_types = context.params[dtypes].length;
+
+                context.params[dtypes].forEach(function (type) {
+                    let type_obj = document_types[0].fields.filter(function(obj) {
+                        return obj.id == type;
+                    })
+                    document_types_string += type_obj[0].text + ", ";
+                })
+
+                document_types_string = document_types_string.substr(0, document_types_string.length - 2);
+
+                if (num_document_types > 1) {
+                    $("#document_types").html(config.localization[config.language].documenttypes_label);
+
+                    $("#document_types").attr({
+                        "data-content": document_types_string
+                        , "title": config.localization[config.language].documenttypes_tooltip + "\n\n" + document_types_string
+                        , "class": "context_moreinfo"
+                    })
+
+                } else {
+                    $("#document_types").html(config.localization[config.language].documenttypes_label + ": " + document_types_string);
+                }
+            }
+        } else {
+            $("#document_types").hide()
+        }
+
+        if (this.paramExists(context.params.lang_id)
+        && this.paramExists(config.options)
+        && this.paramExists(config.options.languages)) {
+            const lang = config.options.languages.find(
+                lang => lang.code === context.params.lang_id
+            );
+
+            if (lang) {
+                $('#search_lang').html(
+                    'Language: ' + lang.lang_in_lang + ' (' + lang.lang_in_eng + ') '
+                );
+            }
+        } else {
+            $('#search_lang').hide();
+        }
+        
+        if(config.is_authorview) {
+            this.drawContextAuthorview(context);
         }
     }
 
