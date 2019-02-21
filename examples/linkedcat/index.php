@@ -45,7 +45,7 @@
                     <div id="filter-container"></div>
                     
                     <!--<label for="q">Suchbegriff:</label>-->
-                    <input class="shadow inputfield" type="text" name="q" size="61" required placeholder="Suchbegriff eingeben...">
+                    <input class="shadow inputfield" type="text" name="q" size="61" required>
                     <button type="submit" class="search-btn shadow">
                             <i class="fas fa-search"></i> suchen
                     </button>

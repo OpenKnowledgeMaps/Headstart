@@ -36,28 +36,36 @@ var options_linkedcat_authors = {
 
 var SearchOptions = {
     user_defined_date: false,
-    init: function (tag, data) {
+    init: function (tag, data, has_button) {
 
         var self = this;
 
-        self.drawOptions(tag, data);
+        self.drawOptions(tag, data, has_button);
 
     },
-    drawOptions: function (tag, data) {
+    drawOptions: function (tag, data, has_button) {
         var self = this;
 
-        var div = d3.select(tag).append('div')
-                .attr("id", "filter-btn")
-                .attr("class", "divity")
+        if(typeof has_button === "undefined" || has_button === true) {
+            var div = d3.select(tag).append('div')
+                    .attr("id", "filter-btn")
+                    .attr("class", "divity")
 
-        div.append('a')
-                .attr("href", "#")
-                .attr("class", "frontend-btn")
-                .text("Weitere Optionen")
+            div.append('a')
+                    .attr("href", "#")
+                    .attr("class", "frontend-btn")
+                    .text("Weitere Optionen")
+        }
 
         var filters = d3.select(tag).append('div')
                 .attr('id', 'filters')
-                .attr('class', 'divity frontend-hidden')
+                .attr('class', function () {
+                    if(typeof has_button === "undefined" || has_button === true) {
+                        return 'divity frontend-hidden';
+                    } else {
+                        return 'divity';
+                    } 
+                })
 
         d3.select(tag).append('div')
                 .attr('id', 'input-container')
