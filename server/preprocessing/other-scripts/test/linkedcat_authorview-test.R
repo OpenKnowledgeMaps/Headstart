@@ -7,7 +7,7 @@ options(warn=1)
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(wd) #Don't forget to set your working directory
 
-query <- "Pfizmaier, August" #args[2]
+query <- "(DE-588)11881835X" #args[2]
 service <- "linkedcat_authorview"
 params <- NULL
 params_file <- "params_linkedcat_authorview.json"
