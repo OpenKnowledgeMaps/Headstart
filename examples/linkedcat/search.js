@@ -64,14 +64,11 @@ var doSubmit = function (data, newWindow, callback) {
     if (data.status === "success") {
       var file = data.id;
       window.location =
-        "headstart.php?query=" +
-        data.query +
-        "&file=" +
-        file +
-        "&service=" +
-        data_config.service +
-        "&service_name=" +
-        service_name;
+        "headstart.php?query=" + data.query
+        + "&file=" + file
+        + "&service=" + data_config.service
+        + "&service_name=" + service_name
+        + "&visualization_type=" + visualization_type;
       return false;
     } else {
       $("#progress").html(
@@ -152,7 +149,7 @@ var addAutoComplete = function() {
                     }
 
                     if (~choices[i][1].toLowerCase().indexOf(term)) {
-                        matches.push(choices[i][1]);
+                        matches.push(choices[i]);
                     }
                 }
                 suggest(matches);
@@ -160,7 +157,10 @@ var addAutoComplete = function() {
             renderItem: function (item, search){
                 search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
                 var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
-                return '<div class="autocomplete-suggestion" data-author="'+item+'">'+item.replace(re, "<b>$1</b>")+'</div>';
+                return '<div class="autocomplete-suggestion" data-author="'
+                        +item[1]+'">'+item[1].replace(re, "<b>$1</b>")
+                        +((item[1] !== "")?(' (' +item[2] + ')'):(""))
+                        +'</div>';
             },
             onSelect: function(e, term, item){
                 $('input[name=q]').val(item.getAttribute('data-author'));
