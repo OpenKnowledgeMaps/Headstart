@@ -2,6 +2,11 @@ var service_url = data_config.server_url + "services/searchLinkedCat.php";
 var service_name = "LinkedCat";
 var options = options_linkedcat;
 var visualization_type = "keywords"
+var author_id = "";
+var author_name = "";
+var author_count = 0;
+var author_living_dates = "";
+var author_image_link = "";
 
 $(window).bind("pageshow", function () {
     $(".btn").attr("disabled", false);
@@ -39,7 +44,12 @@ $("#searchform").validate({
 });
 
 var doSubmit = function (data, newWindow, callback) {
-  data += "&today=" + new Date().toLocaleDateString("en-US") + "&author_id=Neuer&doc_count=10&living_dates=1810-1890&image_link=";
+  data += encodeURI("&today=" + new Date().toLocaleDateString("en-US") 
+          + "&author_id=" + author_id
+          + "&doc_count=" + author_count
+          + "&living_dates=" + author_living_dates
+          + "&image_link=" + author_image_link);
+  
 
   var openInNewWindow= function(data) {
     if (data.status === "success") {
@@ -159,13 +169,22 @@ var addAutoComplete = function() {
             renderItem: function (item, search){
                 search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
                 var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
-                return '<div class="autocomplete-suggestion" data-author="'
-                        +item[1]+'">'+item[1].replace(re, "<b>$1</b>")
+                return '<div class="autocomplete-suggestion" '
+                        +' data-id="' + item[0] + '"'
+                        +' data-author="'+item[1] +'"'
+                        +' data-count="' + item[2] + '"'
+                        +' data-living_dates="' + item[3] + '"'
+                        +' data-image_link="' + item[4] + '"'
+                        +'>'+item[1].replace(re, "<b>$1</b>")
                         +((item[1] !== "")?(' (' +item[2] + ')'):(""))
                         +'</div>';
             },
             onSelect: function(e, term, item){
                 $('input[name=q]').val(item.getAttribute('data-author'));
+                author_id = item.getAttribute('data-id');
+                author_count = item.getAttribute('data-count');
+                author_living_dates = item.getAttribute('data-living_dates');
+                //author_image_link = item.getAttribute('data-author_image_link');
             }
         });
     }
