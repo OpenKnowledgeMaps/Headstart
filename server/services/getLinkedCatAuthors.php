@@ -47,9 +47,10 @@ function getAuthorFacet($base_url, $author_facet_query) {
 
 function getAuthorData($base_url, $author_data_query, $author_ids) {
   $window = 50;
-  $multiCurl = array();
   $res = array();
+  $mh = curl_multi_init();
 
+  # setup initial window slice
   for ($i = 0; $i < $window; $i++) {
     $ch = curl_init();
     $target = curl_escape($ch, '"' . $author_ids[$i] . '"');
@@ -65,10 +66,12 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
     while(($execrun = curl_multi_exec($mh, $running)) == CURLM_CALL_MULTI_PERFORM);
     if($execrun != CURLM_OK)
       break;
-    while($done = curl_multi_info_read($mh)) {
+
+    while ($done = curl_multi_info_read($mh)) {
       $info = curl_getinfo($done['handle']);
       if ($info['http_code'] == 200) {
         $output = curl_multi_getcontent($done['handle']);
+        # process response
         $output = json_decode($output, true);
         $doc = $j["response"]["docs"][0];
         $temp_id = $doc["author100_0"][0];
@@ -78,15 +81,15 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
         # $res is now a k:v array with k = author_ids, v = k:v array of
         # keys author100_a_str and author100_d
 
+        # add new author to request stack
         $ch = curl_init();
         $target = curl_escape($ch, '"' . $author_ids[$i++] . '"');
         $fetchURL = $base_url . $author_data_query . $target;
-        $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $fetchURL);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_multi_add_handle($mh, $ch);
-
+        # remove finished one
         curl_multi_remove_handle($mh, $done['handle']);
       }
     }
