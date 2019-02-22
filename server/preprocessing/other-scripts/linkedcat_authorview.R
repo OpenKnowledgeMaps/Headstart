@@ -88,16 +88,19 @@ get_papers <- function(query, params, limit=100) {
 }
 
 build_query <- function(query, params, limit){
+  # fields to query in
+  q_fields <- c('author100_0_str', 'author700_0_str')
   # fields to return
   r_fields <- c('id', 'idnr',
                 'content_type_a', 'content_type_2',
                 'main_title', 'subtitle', 'pub_year',
                 'host_label', 'host_maintitle', 'host_pubplace', 'host_pubyear',
                 'author100_a', 'author100_d', 'author100_0', 'author100_4',
+                'author700_a', 'author700_d', 'author700_0',
                 'bkl_caption', 'bkl_top_caption',
                 'keyword_a', 'tags', 'category', 'bib', 'language_code',
                 'ocrtext_good', 'ocrtext')
-  q <- paste0('author100_a_str:"', query, '"')
+  q <- paste(paste0(q_fields, ':', '"', params$author_id, '"'), collapse = " ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
   return(q_params)
 }
