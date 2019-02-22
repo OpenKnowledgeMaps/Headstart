@@ -129,6 +129,12 @@ function getAuthors() {
       $author_count = $author_counts[$i];
       $author_name = $author_data[$author_id]["author100_a_str"];
       $author_date = $author_data[$author_id]["author100_d"];
+      if (is_null($author_name)) {
+        $author_name = "";
+      }
+      if (is_null($author_date)) {
+        $author_date = "";
+      }
       # the following array contains a placeholder "" for a possible image link
       $authors[] = array($author_id, $author_name, $author_count, $author_date, "");
   }
