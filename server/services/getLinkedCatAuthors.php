@@ -24,7 +24,7 @@ $author_facet_query = "select?facet.field=author100_0_str" .
                       "&facet=on&fl=author100_0_str" .
                       "&q=*:*&rows=0&facet.limit=-1&facet.sort=index";
 
-$author_data_query = "select?fl=author100_a_str,author100_d" .
+$author_data_query = "select?fl=author100_0,author100_a_str,author100_d" .
                      "&rows=1" .
                      "&q=author100_0_str:";
 
@@ -46,40 +46,53 @@ function getAuthorFacet($base_url, $author_facet_query) {
 }
 
 function getAuthorData($base_url, $author_data_query, $author_ids) {
+  $window = 50;
   $multiCurl = array();
   $res = array();
-  $mh = curl_multi_init();
-  curl_multi_setopt($mh, CURLMOPT_MAX_TOTAL_CONNECTIONS, 20);
-  $ch = curl_init();
-  foreach ($author_ids as $i => $id) {
-    $target = curl_escape($ch, '"' . $id . '"');
+
+  for ($i = 0; $i < $window; $i++) {
+    $ch = curl_init();
+    $target = curl_escape($ch, '"' . $author_ids[$i] . '"');
     $fetchURL = $base_url . $author_data_query . $target;
-    $multiCurl[$i] = curl_init();
-    curl_setopt($multiCurl[$i], CURLOPT_URL, $fetchURL);
-    curl_setopt($multiCurl[$i], CURLOPT_HEADER, 0);
-    curl_setopt($multiCurl[$i], CURLOPT_RETURNTRANSFER, 1);
-    curl_multi_add_handle($mh, $multiCurl[$i]);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $fetchURL);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_multi_add_handle($mh, $ch);
   }
-  curl_close($ch);
-  $index = null;
+
   do {
-    curl_multi_exec($mh, $index);
-  }
-  while($index > 0);
-  foreach($multiCurl as $k => $ch) {
-    $res[$k] = curl_multi_getcontent($ch);
-    curl_multi_remove_handle($mh, $ch);
-  }
+    while(($execrun = curl_multi_exec($mh, $running)) == CURLM_CALL_MULTI_PERFORM);
+    if($execrun != CURLM_OK)
+      break;
+    while($done = curl_multi_info_read($mh)) {
+      $info = curl_getinfo($done['handle']);
+      if ($info['http_code'] == 200) {
+        $output = curl_multi_getcontent($done['handle']);
+        $output = json_decode($output, true);
+        $doc = $j["response"]["docs"][0];
+        $temp_id = $doc["author100_0"][0];
+        $res[$temp_id] = array();
+        $res[$temp_id] = $doc["author100_a_str"][0];
+        $res[$temp_id] = $doc["author100_d"][0];
+        # $res is now a k:v array with k = author_ids, v = k:v array of
+        # keys author100_a_str and author100_d
+
+        $ch = curl_init();
+        $target = curl_escape($ch, '"' . $author_ids[$i++] . '"');
+        $fetchURL = $base_url . $author_data_query . $target;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $fetchURL);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_multi_add_handle($mh, $ch);
+
+        curl_multi_remove_handle($mh, $done['handle']);
+      }
+    }
+  } while ($running);
   curl_multi_close($mh);
-  $cleaned = array();
-  foreach ($res as $i => $r) {
-    $j = json_decode($r, true);
-    $doc = $j["response"]["docs"][0];
-    $cleaned[$i] = array();
-    $cleaned[$i]["author100_a_str"] = $doc["author100_a_str"][0];
-    $cleaned[$i]["author100_d"] = $doc["author100_d"][0];
-  }
-  return $cleaned;
+  return $res;
 }
 
 function getAuthors() {
@@ -107,8 +120,8 @@ function getAuthors() {
   // [id, author100_a_str, doc_count, living_dates and possibly image_link]
   foreach ($author_ids as $i => $author_id) {
       $author_count = $author_counts[$i];
-      $author_name = $author_data[$i]["author100_a_str"];
-      $author_date = $author_data[$i]["author100_d"];
+      $author_name = $author_data[$author_id]["author100_a_str"];
+      $author_date = $author_data[$author_id]["author100_d"];
       # the following array contains a placeholder "" for a possible image link
       $authors[] = array($author_id, $author_name, $author_count, $author_date, "");
   }
