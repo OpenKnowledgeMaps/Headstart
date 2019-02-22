@@ -46,14 +46,14 @@ function getAuthorFacet($base_url, $author_facet_query) {
 }
 
 function getAuthorData($base_url, $author_data_query, $author_ids) {
-  $window = 50;
+  $window = 5;
   $res = array();
   $mh = curl_multi_init();
 
   # setup initial window slice
   for ($i = 0; $i < $window; $i++) {
     $ch = curl_init();
-    $target = curl_escape($ch, '"' . $author_ids[$i] . '"');
+    $target = curl_escape($ch, '"' . array_pop($author_ids) . '"');
     $fetchURL = $base_url . $author_data_query . $target;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $fetchURL);
@@ -73,22 +73,25 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
         $output = curl_multi_getcontent($done['handle']);
         # process response
         $output = json_decode($output, true);
-        $doc = $j["response"]["docs"][0];
+        $doc = $output["response"]["docs"][0];
         $temp_id = $doc["author100_0"][0];
         $res[$temp_id] = array();
-        $res[$temp_id] = $doc["author100_a_str"][0];
-        $res[$temp_id] = $doc["author100_d"][0];
+        $res[$temp_id]["author100_a_str"] = $doc["author100_a_str"][0];
+        $res[$temp_id]["author100_d"] = $doc["author100_d"][0];
         # $res is now a k:v array with k = author_ids, v = k:v array of
         # keys author100_a_str and author100_d
 
         # add new author to request stack
-        $ch = curl_init();
-        $target = curl_escape($ch, '"' . $author_ids[$i++] . '"');
-        $fetchURL = $base_url . $author_data_query . $target;
-        curl_setopt($ch, CURLOPT_URL, $fetchURL);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_multi_add_handle($mh, $ch);
+        $next_author = array_pop($author_ids);
+        if (isset($next_author)) {
+          $ch = curl_init();
+          $target = curl_escape($ch, '"' . $next_author . '"');
+          $fetchURL = $base_url . $author_data_query . $target;
+          curl_setopt($ch, CURLOPT_URL, $fetchURL);
+          curl_setopt($ch, CURLOPT_HEADER, 0);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+          curl_multi_add_handle($mh, $ch);
+        }
         # remove finished one
         curl_multi_remove_handle($mh, $done['handle']);
       }
