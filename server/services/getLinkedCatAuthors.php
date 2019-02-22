@@ -135,7 +135,7 @@ function getAuthors() {
   if(count($authors) == 0){
     throw new Exception("Could not create author list, check SOLR config.");
   }
-  array_multisort(array_column($authors, 1), SORT_ASC, SORT_LOCALE_STRING, $authors);
+  array_multisort(array_column($authors, 1), SORT_ASC, $authors);
   return json_encode($authors, JSON_UNESCAPED_UNICODE);
 }
 
