@@ -62,44 +62,43 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
     curl_multi_add_handle($mh, $ch);
   }
   do {
-    while (($execrun = curl_multi_exec($mh, $running)) == CURLM_CALL_MULTI_PERFORM) {
-      ;
-    }
-    if ($execrun != CURLM_OK) {
-      break;
-    }
+    while (($mrc = curl_multi_exec($mh, $active)) == CURLM_CALL_MULTI_PERFORM)
+    if ($mrc != CURLM_OK) break;
     # do stuff with the completed request
     while ($done = curl_multi_info_read($mh)) {
       $info = curl_getinfo($done['handle']);
+      if ($info['http_code'] == 200) {
+        # process response
+        $output = curl_multi_getcontent($done['handle']);
+        $output = json_decode($output, true);
+        $doc = $output["response"]["docs"][0];
+        $temp_id = $doc["author100_0"][0];
+        $res[$temp_id] = array();
+        $res[$temp_id]["author100_a_str"] = $doc["author100_a_str"][0];
+        $res[$temp_id]["author100_d"] = $doc["author100_d"][0];
+        # $res is now a k:v array with k = author_ids, v = k:v array of
+        # keys author100_a_str and author100_d
 
-      # process response
-      $output = curl_multi_getcontent($done['handle']);
-      $output = json_decode($output, true);
-      $doc = $output["response"]["docs"][0];
-      $temp_id = $doc["author100_0"][0];
-      $res[$temp_id] = array();
-      $res[$temp_id]["author100_a_str"] = $doc["author100_a_str"][0];
-      $res[$temp_id]["author100_d"] = $doc["author100_d"][0];
-      # $res is now a k:v array with k = author_ids, v = k:v array of
-      # keys author100_a_str and author100_d
-
-      # add new author to request stack until author_ids is exhausted
-      $next_author = array_pop($author_ids);
-      # requests terminate prematurely in CURLM_OK check at invalid author query
-      # which comes from the author facet for ""
-      if (isset($next_author) && strlen($next_author)>0) {
-        $ch = curl_init();
-        $target = curl_escape($ch, '"' . $next_author . '"');
-        $fetchURL = $base_url . $author_data_query . $target;
-        curl_setopt($ch, CURLOPT_URL, $fetchURL);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_multi_add_handle($mh, $ch);
+        # add new author to request stack until author_ids is exhausted
+        $next_author = array_pop($author_ids);
+        # requests terminate prematurely in CURLM_OK check at invalid author query
+        # which comes from the author facet for ""
+        if (isset($next_author) && strlen($next_author)>0) {
+          $ch = curl_init();
+          $target = curl_escape($ch, '"' . $next_author . '"');
+          $fetchURL = $base_url . $author_data_query . $target;
+          curl_setopt($ch, CURLOPT_URL, $fetchURL);
+          curl_setopt($ch, CURLOPT_HEADER, 0);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+          curl_multi_add_handle($mh, $ch);
+        }
+        # remove finished one
+        curl_multi_remove_handle($mh, $done['handle']);
+      } else {
+        print_r($info);
       }
-      # remove finished one
-      curl_multi_remove_handle($mh, $done['handle']);
     }
-  } while ($running);
+  } while ($active);
   curl_multi_close($mh);
   return $res;
 }
