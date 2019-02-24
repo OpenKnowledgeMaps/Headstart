@@ -11,21 +11,21 @@ var options_linkedcat = {
             ]},
         {id: "include_content_type", multiple: true, name: "Dokumentarten", type: "dropdown"
             , fields: [
-                {id: "Anthologie", text: "Anthologie"}
-                , {id: "Bericht", text: "Bericht", selected:true}
-                , {id: "Bibliografie", text: "Bibliografie"}
-                , {id: "Biografie", text: "Biografie"}
-                , {id: "Briefsammlung", text: "Briefsammlung"}
-                , {id: "Katalog", text: "Katalog"}
-                , {id: "Kommentar", text: "Kommentar"}
-                , {id: "Mehrsprachiges Woerterbuch", text: "Mehrsprachiges Woerterbuch"}
-                , {id: "Mitgliederverzeichnis", text: "Mitgliederverzeichnis"}
-                , {id: "Quelle", text: "Quelle"}
-                , {id: "Reisebericht", text: "Reisebericht"}
-                , {id: "Rezension", text: "Rezension"}
-                , {id: "Statistik", text: "Statistik"}
-                , {id: "Verzeichnis", text: "Verzeichnis"}
-                , {id: "Woerterbuch", text: "Woerterbuch"}
+                {id: "Anthologie", text: "Anthologie", count:1, selected:true}
+                , {id: "Bibliografie", text: "Bibliografie", count: 212}
+                , {id: "Biografie", text: "Biografie", count:21, selected:true}
+                , {id: "Briefsammlung", text: "Briefsammlung", count:18, selected:true}
+                , {id: "Katalog", text: "Katalog", count:4, selected:true}
+                , {id: "Kommentar", text: "Kommentar", count:2, selected:true}
+                , {id: "Mehrsprachiges Wörterbuch", text: "Mehrsprachiges Wörterbuch", count:1, selected:true}
+                , {id: "Mitgliederverzeichnis", text: "Mitgliederverzeichnis", count:2, selected:true}
+                , {id: "Bericht", text: "Protokoll", count:1425}
+                , {id: "Quelle", text: "Quelle", count:88, selected:true}
+                , {id: "Reisebericht", text: "Reisebericht", count:10, selected:true}
+                , {id: "Rezension", text: "Rezension", count:39, selected:true}
+                , {id: "Statistik", text: "Statistik", count:2, selected:true}
+                , {id: "Verzeichnis", text: "Verzeichnis", count:58, selected:true}
+                , {id: "Wörterbuch", text: "Wörterbuch", count:15, selected:true}
             ]},
     ]
 }
@@ -36,28 +36,36 @@ var options_linkedcat_authors = {
 
 var SearchOptions = {
     user_defined_date: false,
-    init: function (tag, data) {
+    init: function (tag, data, has_button) {
 
         var self = this;
 
-        self.drawOptions(tag, data);
+        self.drawOptions(tag, data, has_button);
 
     },
-    drawOptions: function (tag, data) {
+    drawOptions: function (tag, data, has_button) {
         var self = this;
 
-        var div = d3.select(tag).append('div')
-                .attr("id", "filter-btn")
-                .attr("class", "divity")
+        if(typeof has_button === "undefined" || has_button === true) {
+            var div = d3.select(tag).append('div')
+                    .attr("id", "filter-btn")
+                    .attr("class", "divity")
 
-        div.append('a')
-                .attr("href", "#")
-                .attr("class", "frontend-btn")
-                .text("Weitere Optionen")
+            div.append('a')
+                    .attr("href", "#")
+                    .attr("class", "frontend-btn")
+                    .text("Weitere Optionen")
+        }
 
         var filters = d3.select(tag).append('div')
                 .attr('id', 'filters')
-                .attr('class', 'divity frontend-hidden')
+                .attr('class', function () {
+                    if(typeof has_button === "undefined" || has_button === true) {
+                        return 'divity frontend-hidden';
+                    } else {
+                        return 'divity';
+                    } 
+                })
 
         d3.select(tag).append('div')
                 .attr('id', 'input-container')
@@ -101,7 +109,9 @@ var SearchOptions = {
                     var current_option = new_select
                             .append('option')
                             .attr("value", option.id)
-                            .text(option.text);
+                            .text(option.text 
+                                    + ((typeof option.count !== "undefined")?(" (" + option.count + ")"):(""))
+                                );
 
                     if (option.selected) {
                         current_option.attr("selected", "");

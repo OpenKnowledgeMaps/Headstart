@@ -36,16 +36,16 @@
 
                 <form id="searchform">
                     <p class="library">
-                        <label class="radio-inline"><input type="radio" name="optradio" value="authors" checked>
+                        <label class="radio-inline"><input type="radio" name="optradio" value="authors">
                             <span class="bold">Autoren</span></label>
-                        <label class="radio-inline"><input type="radio" name="optradio" value="keywords">
+                        <label class="radio-inline"><input type="radio" name="optradio" value="keywords" checked>
                             <span class="bold">Stichwörter</span></label>
                     </p>
                     
                     <div id="filter-container"></div>
                     
                     <!--<label for="q">Suchbegriff:</label>-->
-                    <input class="shadow inputfield" type="text" name="q" size="61" required placeholder="Suchbegriff eingeben...">
+                    <input class="shadow inputfield" type="text" name="q" size="61" required>
                     <button type="submit" class="search-btn shadow">
                             <i class="fas fa-search"></i> suchen
                     </button>

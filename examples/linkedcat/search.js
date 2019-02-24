@@ -2,6 +2,11 @@ var service_url = data_config.server_url + "services/searchLinkedCat.php";
 var service_name = "LinkedCat";
 var options = options_linkedcat;
 var visualization_type = "keywords"
+var author_id = "";
+var author_name = "";
+var author_count = 0;
+var author_living_dates = "";
+var author_image_link = "";
 
 $(window).bind("pageshow", function () {
     $(".btn").attr("disabled", false);
@@ -39,7 +44,12 @@ $("#searchform").validate({
 });
 
 var doSubmit = function (data, newWindow, callback) {
-  data += "&today=" + new Date().toLocaleDateString("en-US");
+  data += encodeURI("&today=" + new Date().toLocaleDateString("en-US") 
+          + "&author_id=" + author_id
+          + "&doc_count=" + author_count
+          + "&living_dates=" + author_living_dates
+          + "&image_link=" + author_image_link);
+  
 
   var openInNewWindow= function(data) {
     if (data.status === "success") {
@@ -64,14 +74,11 @@ var doSubmit = function (data, newWindow, callback) {
     if (data.status === "success") {
       var file = data.id;
       window.location =
-        "headstart.php?query=" +
-        data.query +
-        "&file=" +
-        file +
-        "&service=" +
-        data_config.service +
-        "&service_name=" +
-        service_name;
+        "headstart.php?query=" + data.query
+        + "&file=" + file
+        + "&service=" + data_config.service
+        + "&service_name=" + service_name
+        + "&visualization_type=" + visualization_type;
       return false;
     } else {
       $("#progress").html(
@@ -98,17 +105,22 @@ var chooseOptions = function () {
     switch (visualization_type) {
         case "keywords":
             options = options_linkedcat;
+            service_url = data_config.server_url + "services/searchLinkedCat.php";
+            placeholder = "Suchbegriff eingeben...";
             break;
 
         case "authors":
             options = options_linkedcat_authors;
+            service_url = data_config.server_url + "services/searchLinkedCatAuthorview.php";
+            placeholder = "Autorennamen eingeben...";
             break;
 
         default:
             options = options_linkedcat;
+            service_url = data_config.server_url + "services/searchLinkedCat.php";
     }
     
-    search_options.init("#filter-container", options);
+    search_options.init("#filter-container", options, false);
 
     options.dropdowns.forEach(function (entry) {
         search_options.select_multi('.dropdown_multi_' + entry.id, entry.name)
@@ -143,12 +155,12 @@ var addAutoComplete = function() {
                 var choices = autocomplete_data;
                 var matches = [];
                 for (i=0; i<choices.length; i++) {
-                    if(typeof choices[i].toLowerCase === "undefined" 
-                            || choices[i].toLowerCase().indexOf === "undefined") {
+                    if(typeof choices[i][1].toLowerCase === "undefined" 
+                            || choices[i][1].toLowerCase().indexOf === "undefined") {
                         continue;
                     }
 
-                    if (~choices[i].toLowerCase().indexOf(term)) {
+                    if (~choices[i][1].toLowerCase().indexOf(term)) {
                         matches.push(choices[i]);
                     }
                 }
@@ -157,19 +169,37 @@ var addAutoComplete = function() {
             renderItem: function (item, search){
                 search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
                 var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
-                return '<div class="autocomplete-suggestion" data-author="'+item+'">'+item.replace(re, "<b>$1</b>")+'</div>';
+                return '<div class="autocomplete-suggestion" '
+                        +' data-id="' + item[0] + '"'
+                        +' data-author="'+item[1] +'"'
+                        +' data-count="' + item[2] + '"'
+                        +' data-living_dates="' + item[3] + '"'
+                        +' data-image_link="' + item[4] + '"'
+                        +'>'+item[1].replace(re, "<b>$1</b>")
+                        +((item[1] !== "")?(' (' +item[2] + ')'):(""))
+                        +'</div>';
             },
             onSelect: function(e, term, item){
                 $('input[name=q]').val(item.getAttribute('data-author'));
+                author_id = item.getAttribute('data-id');
+                author_count = item.getAttribute('data-count');
+                author_living_dates = item.getAttribute('data-living_dates');
+                //author_image_link = item.getAttribute('data-author_image_link');
             }
         });
     }
 }
 
+function adaptInterface() {
+    $('input[name=q]').attr("placeholder", placeholder);
+    $('input[name=optradio]:checked').addClass('checked');
+    $('input[name=optradio]:not(:checked)').removeClass('checked');
+}
+
 $(document).ready(function () {
     
     var changeVisualization = function () {
-         visualization_type = $("input[name='optradio']:checked").val();
+        visualization_type = $("input[name='optradio']:checked").val();
 
         search_options.user_defined_date = false;
         $("#filter-container").html("");
@@ -180,6 +210,7 @@ $(document).ready(function () {
         }
 
         chooseOptions();
+        adaptInterface();
         addAutoComplete();
     };
     

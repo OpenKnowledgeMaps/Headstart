@@ -7,10 +7,10 @@ options(warn=1)
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(wd) #Don't forget to set your working directory
 
-query <- "protokoll" #args[2]
-service <- "linkedcat"
+query <- "Pfizmaier, August" #args[2]
+service <- "linkedcat_authorview"
 params <- NULL
-params_file <- "params_linkedcat.json"
+params_file <- "params_linkedcat_authorview.json"
 
 source('../utils.R')
 DEBUG = FALSE
@@ -24,7 +24,7 @@ if (DEBUG==TRUE){
 tslog <- getLogger('ts')
 
 source("../vis_layout.R")
-source('../linkedcat.R')
+source('../linkedcat_authorview.R')
 
 
 MAX_CLUSTERS = 15
@@ -38,7 +38,7 @@ if(!is.null(params_file)) {
 #start.time <- Sys.time()
 
 tryCatch({
-  input_data = get_papers(query, params)
+  input_data = get_papers(query, params, limit=500)
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
 })

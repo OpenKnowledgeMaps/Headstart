@@ -1,10 +1,20 @@
 <div class="container-headstart">
     <div class="vis-col">
+        {{#if is_authorview}}
+            <div id="title_image">
+                <img id="author_image">
+            </div>
+        {{/if}}
+
         <div id="subdiscipline_title">
 
             <h4></h4>
 
             <p id="context">
+              {{#if is_authorview}}
+                    <span id="author_living_dates"></span>
+                    <span id="author_bio"><a id="author_bio_link" target="_blank"></a></span>
+                {{/if}}
                 <span id="num_articles"></span>
                 <span id="source"></span>
                 <span id="timespan"></span>
