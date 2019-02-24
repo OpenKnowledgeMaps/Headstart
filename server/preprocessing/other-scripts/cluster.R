@@ -105,15 +105,6 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
     vclog$info(paste("NMDS-Stress:", min(ord$stress), sep=" "))
   }
 
-  # vclog$info(paste("NMDS-R2:", min(nm$r2), sep=" "))
-
-  # NEEDS FIX
-  # if(exists("DEBUG") && DEBUG == TRUE) {
-  #   # Plot results from multidimensional scaling, highlight clusters with symbols
-  #   pdf("mds.pdf")
-  #   plot(nm.nmin, pch=groups)
-  #   dev.off()
-  # }
   layout <- list(X1 = points[,1], X2 = points[,2])
   return(layout)
 }
