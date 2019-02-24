@@ -92,7 +92,7 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
   # nm.nmin = nmds.min(nm)
   if (nrow(distance_matrix) <= 2){
     points <- tryCatch({
-      ord <- metaMDS(distance_matrix, k = 2, parallel = 3)
+      ord <- metaMDS(distance_matrix, k = 2, parallel = 3, trymax=40, engine="isoMDS", distance='horn', threshold = 0.29, nthreshold=60, autotransform = FALSE, center=FALSE, halfchange=TRUE)
       points <- ord$points
     }, error=function(err){
       points <- rbind(runif(nrow(distance_matrix), min=-1, max=0),
@@ -100,10 +100,11 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
       return(points)
     })
   } else {
-    ord <- metaMDS(distance_matrix, k = 2, parallel = 3)
+    ord <- metaMDS(distance_matrix, k = 2, parallel = 3, trymax=40, engine="isoMDS", distance='bray', threshold = 0.49, nthreshold=60, autotransform = FALSE, center=FALSE, halfchange=TRUE)
     points <- ord$points
     vclog$info(paste("NMDS-Stress:", min(ord$stress), sep=" "))
   }
+
 
   layout <- list(X1 = points[,1], X2 = points[,2])
   return(layout)
