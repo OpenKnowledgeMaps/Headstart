@@ -19,8 +19,7 @@ create_output <- function(clusters, layout, metadata) {
   if(exists("DEBUG") && DEBUG == TRUE) {
     library(ggplot2)
     # Plot results from multidimensional scaling, highlight clusters with symbols
-    g <- ggplot() +
-      geom_point(data = output, aes(x = x, y = y, colour = area_uri))
+    g <- ggplot(output, aes(x, y, colour = area_uri, shape = "x"))
     ggsave(file = "debug_nmds.svg", plot = g, width = 10, height = 10)
   }
 
