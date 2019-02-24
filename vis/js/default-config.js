@@ -94,7 +94,13 @@ var config = {
     filter_menu_dropdown: false,
     
     scale_toolbar: false,
-
+    embed_modal: false,
+    share_modal: false,
+    faqs_button: false,
+    faqs_url: "",
+    
+    is_authorview: false,
+    
     // transition
     transition_duration: 750,
     zoomout_transition: 750,
@@ -131,7 +137,14 @@ var config = {
     doi_outlink: false,
     url_outlink: false,
     
-    service_names: {plos: "PLOS", base: "BASE", pubmed: "PubMed", doaj: "DOAJ", openaire: "OpenAIRE", linkedcat: "LinkedCat+"},
+    service_names: {plos: "PLOS"
+                        , base: "BASE"
+                        , pubmed: "PubMed"
+                        , doaj: "DOAJ"
+                        , openaire: "OpenAIRE"
+                        , linkedcat: "LinkedCat+"
+                        , linkedcat_authorview: "LinkedCat+"
+                    },
 
     localization: {
         eng: {
@@ -225,11 +238,13 @@ var config = {
             title: "Titel",
             default_title: 'Überblick über <span id="num_articles"></span> Artikel',
             overview_label: 'Überblick über',
+            overview_authors_label: 'Übersicht über die Werke von',
             most_recent_label: 'neueste',
             articles_label: 'Artikel',
             source_label: 'Quelle',
             documenttypes_label: 'Publikationsarten',
             documenttypes_tooltip: 'Die folgenden Publikationsarten wurden bei der Erstellung dieser Visualisierung in Betracht gezogen (nicht alle davon scheinen notwendigerweise in dieser Visualisierung auch auf):',
+            bio_link: 'Link zur Biografie',
             area: "Bereich",
             items: "Dokumente",
             backlink: "← Zurück zur Übersicht",

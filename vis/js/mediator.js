@@ -307,6 +307,7 @@ MyMediator.prototype = {
         this.viz.append(headstartTemplate({
             credit_embed: config.credit_embed
             , canonical_url: config.canonical_url
+            , is_authorview: config.is_authorview
         }));
         this.viz.append(infoTemplate());
         this.viz.append(iFrameTemplate());

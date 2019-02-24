@@ -54,13 +54,9 @@ get_papers <- function(query, params, limit=100) {
 
   # make results dataframe
   metadata <- data.frame(res$search)
-  highlights <- data.frame(res$high)
-  highlights <- ddply(highlights, .(names), summarize, text=paste(main_title, ocrtext, collapse=" ... "))
-  names(highlights) <- c("id", "snippets")
-  metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='id')
 
   metadata[is.na(metadata)] <- ""
-  metadata$subject <- if (!is.null(metadata$keyword_a)) unlist(lapply(metadata$keyword_a, function(x) {if (nchar(x)>0) gsub("; ;", ";", paste(unlist(strsplit(x, ",")), collapse="; ")) else ""})) else ""
+  metadata$subject <- if (!is.null(metadata$keyword_a)) unlist(lapply(metadata$keyword_a, function(x) {if (nchar(x)>0) gsub(", ,", ",", paste(unlist(strsplit(x, ",")), collapse=", ")) else ""})) else ""
   metadata$authors <- metadata$author100_a
   metadata$author_date <- metadata$author100_d
   metadata$title <- if (!is.null(metadata$main_title)) metadata$main_title else ""
@@ -73,8 +69,6 @@ get_papers <- function(query, params, limit=100) {
   metadata$oa_state <- 1
   metadata$subject_orig = metadata$subject
   metadata$relevance = c(nrow(metadata):1)
-  metadata$bkl_caption = unlist(lapply(metadata$bkl_caption, function(x) gsub(",", "; ", x)))
-  metadata$bkl_top_caption = if (!is.null(metadata$bkl_top_caption)) unlist(lapply(metadata$bkl_top_caption, function(x) gsub(",", "; ", x))) else ""
 
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
@@ -95,43 +89,19 @@ get_papers <- function(query, params, limit=100) {
 
 build_query <- function(query, params, limit){
   # fields to query in
-  q_fields <- c('main_title', 'ocrtext', 'author')
+  q_fields <- c('author100_0_str', 'author700_0_str')
   # fields to return
   r_fields <- c('id', 'idnr',
                 'content_type_a', 'content_type_2',
                 'main_title', 'subtitle', 'pub_year',
                 'host_label', 'host_maintitle', 'host_pubplace', 'host_pubyear',
                 'author100_a', 'author100_d', 'author100_0', 'author100_4',
+                'author700_a', 'author700_d', 'author700_0',
                 'bkl_caption', 'bkl_top_caption',
                 'keyword_a', 'tags', 'category', 'bib', 'language_code',
                 'ocrtext_good', 'ocrtext')
-  q <- paste(paste(q_fields, query, sep = ":"), collapse = " ")
+  q <- paste(paste0(q_fields, ':', '"', params$author_id, '"'), collapse = " ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
-
-  # additional filter params
-  pub_year <- paste0("pub_year:", "[", params$from, " TO ", params$to, "]")
-  if (!params$include_content_type[1] == 'all') {
-      if (length(params$include_content_type) > 1) {
-        content_type <- paste0("content_type_a_str:(",
-                       paste0(params$include_content_type, collapse = " OR "),
-                       ")")
-        } else {
-        content_type <- paste0("content_type_a_str:", params$include_content_type, collapse = "")
-      }
-    q_params$fq <- list(pub_year, content_type)
-  } else {
-    q_params$fq <- list(pub_year)
-  }
-  q_params$fq <- unlist(q_params$fq)
-  q_params$hl <- 'on'
-  # q_params$hl.fl <- paste(q_fields, collapse=",")
-  q_params$hl.fl <- 'main_title,ocrtext'
-  q_params$hl.snippets <- 1
-  q_params$hl.score.k1 <- 0.6
-  q_params$hl.method <- 'unified'
-  q_params$hl.tag.ellipsis <- " ... "
-  q_params$hl.maxAnalyzedChars <- 251200
-  # end adding filter params
   return(q_params)
 }
 

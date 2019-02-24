@@ -19,6 +19,9 @@ include 'config.php';
         	}];
                 data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
                 data_config.options = options_<?php echo $_GET['service'] ?>.dropdowns;
+                if(<?php echo json_encode($_GET['visualization_type']) ?> === "authors") {
+                    data_config.is_authorview = true;
+                }
         </script>
         <script type="text/javascript" src="<?php echo $HEADSTART_PATH; ?>dist/headstart.js"></script>
         <link type="text/css" rel="stylesheet" href="<?php echo $HEADSTART_PATH; ?>dist/headstart.css"></link>
