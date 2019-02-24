@@ -16,14 +16,20 @@ create_output <- function(clusters, layout, metadata) {
 
   names(output)[names(output)=="groups"] <- "area_uri"
   output["area"] = paste(output$cluster_labels, sep="")
+
+  output_json = toJSON(output)
+
   if(exists("DEBUG") && DEBUG == TRUE) {
     library(ggplot2)
     # Plot results from multidimensional scaling, highlight clusters with symbols
-    g <- ggplot(output, aes(x, y, colour = area_uri, shape = "x"))
-    ggsave(file = "debug_nmds.svg", plot = g, width = 10, height = 10)
+    temp <- fromJSON(output_json)
+    temp$x <- as.numeric(temp$x)
+    temp$y <- as.numeric(temp$y)
+    g <- ggplot(temp, aes(x, y, label=title)) +
+          geom_point(aes(colour=area_uri)) +
+          geom_text(size=2)
+    ggsave(file = "debug_nmds.svg", plot = g, width = 15, height = 15)
   }
-
-  output_json = toJSON(output)
 
   # NEEDS FIX
   # if(exists("DEBUG") && DEBUG == TRUE) {
