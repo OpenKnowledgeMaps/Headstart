@@ -186,7 +186,7 @@ var addAutoComplete = function() {
                 author_id = item.getAttribute('data-id');
                 author_count = item.getAttribute('data-count');
                 author_living_dates = item.getAttribute('data-living_dates');
-                //author_image_link = item.getAttribute('data-author_image_link');
+                author_image_link = item.getAttribute('data-image_link');
             }
         });
     }
