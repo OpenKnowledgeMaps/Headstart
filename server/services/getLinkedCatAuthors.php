@@ -99,7 +99,6 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
         # remove finished one
         curl_multi_remove_handle($mh, $done['handle']);
       } else {
-        print_r($info);
         curl_multi_remove_handle($mh, $done['handle']);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $info["url"]);
