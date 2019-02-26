@@ -107,12 +107,14 @@ var chooseOptions = function () {
             options = options_linkedcat;
             service_url = data_config.server_url + "services/searchLinkedCat.php";
             placeholder = "Suchbegriff eingeben...";
+            $('.keyword-btn').addClass('btn-enabled');
             break;
 
         case "authors":
             options = options_linkedcat_authors;
             service_url = data_config.server_url + "services/searchLinkedCatAuthorview.php";
             placeholder = "Autorennamen eingeben...";
+            $('.author-btn').addClass('btn-enabled');
             break;
 
         default:
@@ -203,6 +205,8 @@ $(document).ready(function () {
 
         search_options.user_defined_date = false;
         $("#filter-container").html("");
+        $('.author-btn').removeClass('btn-enabled');
+        $('.keyword-btn').removeClass('btn-enabled');
         
         if (typeof autocomplete_function === "object" && autocomplete_function !== null) {
             autocomplete_function.destroy();
