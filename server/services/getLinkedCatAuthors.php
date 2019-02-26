@@ -49,14 +49,19 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
   $window = 100;
   $res = array();
   $mh = curl_multi_init();
+  $urls = array();
+  foreach ($author_ids as $i => $id) {
+    if (strlen($id)>0) {
+      $target = rawurlencode('"' . $id . '"');
+      $fetchURL = $base_url . $author_data_query . $target;
+      $urls[] = $fetchURL;
+    }
+  }
 
   # setup initial window slice
   for ($i = 0; $i < $window; $i++) {
     $ch = curl_init();
-    $target = curl_escape($ch, '"' . array_pop($author_ids) . '"');
-    $fetchURL = $base_url . $author_data_query . $target;
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $fetchURL);
+    curl_setopt($ch, CURLOPT_URL, array_shift($urls));
     curl_setopt($ch, CURLOPT_HEADER, 0);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_multi_add_handle($mh, $ch);
@@ -81,14 +86,12 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
         # keys author100_a_str and author100_d
 
         # add new author to request stack until author_ids is exhausted
-        $next_author = array_pop($author_ids);
+        $next_url = array_shift($urls);
         # requests terminate prematurely in CURLM_OK check at invalid author query
         # which comes from the author facet for ""
-        if (isset($next_author) && strlen($next_author)>0) {
+        if (isset($next_url)) {
           $ch = curl_init();
-          $target = curl_escape($ch, '"' . $next_author . '"');
-          $fetchURL = $base_url . $author_data_query . $target;
-          curl_setopt($ch, CURLOPT_URL, $fetchURL);
+          curl_setopt($ch, CURLOPT_URL, $next_url);
           curl_setopt($ch, CURLOPT_HEADER, 0);
           curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
           curl_multi_add_handle($mh, $ch);
