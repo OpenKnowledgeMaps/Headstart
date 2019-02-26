@@ -100,6 +100,12 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
         curl_multi_remove_handle($mh, $done['handle']);
       } else {
         print_r($info);
+        curl_multi_remove_handle($mh, $done['handle']);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $info["url"]);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_multi_add_handle($mh, $ch);
       }
     }
   } while ($active);
