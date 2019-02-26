@@ -25,6 +25,7 @@ create_output <- function(clusters, layout, metadata) {
     temp <- fromJSON(output_json)
     temp$x <- as.numeric(temp$x)
     temp$y <- as.numeric(temp$y)
+    temp$title <- unlist(lapply(temp$title, substr, start=0, stop=15))
     g <- ggplot(temp, aes(x, y, label=title)) +
           geom_point(aes(colour=area_uri)) +
           geom_text(size=2)
