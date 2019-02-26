@@ -24,7 +24,7 @@ $author_facet_query = "select?facet.field=author100_0_str" .
                       "&facet=on&fl=author100_0_str" .
                       "&q=*:*&rows=0&facet.limit=-1&facet.sort=index";
 
-$author_data_query = "select?fl=author100_0,author100_a_str,author100_d" .
+$author_data_query = "select?fl=author100_0,author100_a_str,author100_d,author100_wiki_img" .
                      "&rows=1" .
                      "&q=author100_0_str:";
 
@@ -76,6 +76,7 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
         $res[$temp_id] = array();
         $res[$temp_id]["author100_a_str"] = $doc["author100_a_str"][0];
         $res[$temp_id]["author100_d"] = $doc["author100_d"][0];
+        $res[$temp_id]["author100_wiki_img"] = $doc["author100_wiki_img"][0];
         # $res is now a k:v array with k = author_ids, v = k:v array of
         # keys author100_a_str and author100_d
 
@@ -129,14 +130,18 @@ function getAuthors() {
       $author_count = $author_counts[$i];
       $author_name = $author_data[$author_id]["author100_a_str"];
       $author_date = $author_data[$author_id]["author100_d"];
+      $author_image = $author_data[$author_id]["author100_wiki_img"];
       if (is_null($author_name)) {
         $author_name = "";
       }
       if (is_null($author_date)) {
         $author_date = "";
       }
+      if (is_null($author_image)) {
+        $author_image = "";
+      }
       # the following array contains a placeholder "" for a possible image link
-      $authors[] = array($author_id, $author_name, $author_count, $author_date, "");
+      $authors[] = array($author_id, $author_name, $author_count, $author_date, $author_image);
   }
   if(count($authors) == 0){
     throw new Exception("Could not create author list, check SOLR config.");
