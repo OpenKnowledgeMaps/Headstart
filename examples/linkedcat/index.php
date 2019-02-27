@@ -40,7 +40,7 @@ include 'config.php';
 
             <div class="search">
 
-                <form id="searchform">
+                <form id="searchform" action="#" method="POST" target="_blank">
                     <p class="library">
                         <label class="radio-inline author-btn"><input type="radio" name="optradio" value="authors" class="radio-inv">
                             <span class="bold"><i class="fas fa-search"></i> Autoren</span></label>
