@@ -34,4 +34,5 @@ var data_config = {
     filter_options: ["all", "open_access"],
     
     show_context_oa_number: false,
+    abstract_large: 1000,
 };
