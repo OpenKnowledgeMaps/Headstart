@@ -104,7 +104,11 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
       return(points)
     })
   } else {
-    ord <- metaMDS(distance_matrix, k = 2, parallel = 3, trymax=30, engine="isoMDS", distance='bray', threshold = 0.49, nthreshold=60, autotransform = FALSE, center=FALSE, halfchange=TRUE)
+    ord <- metaMDS(distance_matrix, k = 2, parallel = 3, trymax=30,
+                   engine="isoMDS", distance='horn',
+                   threshold = 0.79, nthreshold=30,
+                   autotransform = FALSE, center=TRUE,
+                   halfchange=TRUE)
     points <- ord$points
     vclog$info(paste("NMDS-Stress:", min(ord$stress), sep=" "))
   }
