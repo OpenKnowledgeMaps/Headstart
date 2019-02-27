@@ -51,7 +51,7 @@ $(window).bind("pageshow", function () {
       return false;
     } else {
       $("#progress").html(
-        "Pardon! Es ist leider etwas schief gelaufen. Wahrscheinlich gibt es zu Ihrem Suchanfrage zu wenige Dokumente. Bitte versuchen Sie es mit einer anderen Anfrage."
+        "Pardon! Es ist leider etwas schief gelaufen. Wahrscheinlich gibt es zu Ihrer Suchanfrage zu wenige Dokumente. Bitte versuchen Sie es mit einer anderen Anfrage."
       );
       $(".btn").prop("disabled", false);
     }
