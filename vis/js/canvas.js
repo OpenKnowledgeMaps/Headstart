@@ -463,7 +463,8 @@ class Canvas {
         }
         $("#num_articles").html(context.num_documents + modifier
                 + " " + config.localization[config.language].articles_label
-                + " (" + context.share_oa + " open access)" );
+                + ((config.show_context_oa_number)?(" (" + context.share_oa + " open access)"):("")) 
+        );
 
         $("#source").html(config.localization[config.language].source_label
                        + ": " + config.service_names[context.service]);
