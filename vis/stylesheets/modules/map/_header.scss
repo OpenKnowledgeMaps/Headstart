@@ -23,6 +23,16 @@
         z-index: 3; 
         font-size: 11px;
         cursor: pointer;
+        
+        a {
+            border-bottom: 1px solid $medium-blue;
+            color: $medium-blue;
+            text-decoration: none;
+            
+            &:hover {
+                border-bottom: 2px solid $medium-blue;
+            }
+        }
     }
 }
 
@@ -42,8 +52,13 @@
         margin-right: 1%;
     }
     .context_moreinfo {
-        text-decoration: underline;
+        border-bottom: 1px solid $medium-blue;
         cursor: help;
+        color: $medium-blue;
+        
+        &:hover {
+            border-bottom: 2px solid $medium-blue;
+        }
     }
 }
 
@@ -159,7 +174,7 @@
 }
 
 @if $skin == 'linkedcat' {
-    #subdiscipline_title {
+    #title_image + #subdiscipline_title {
         display: inline-block;
         width: 80%;
         vertical-align: middle; 

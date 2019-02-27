@@ -180,8 +180,9 @@
     font-weight: $fontweight400;
     
     em {
-        font-weight: $fontweight700;
+        font-weight: $fontweight400;
         font-style: normal;
+        background-color: $highlight-searchterm;
     }
 }
 
