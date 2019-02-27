@@ -32,4 +32,6 @@ var data_config = {
     filter_menu_dropdown: false,
     sort_menu_dropdown: true,
     filter_options: ["all", "open_access"],
+    
+    show_context_oa_number: false,
 };
