@@ -244,7 +244,7 @@ var config = {
             most_recent_label: 'neueste',
             articles_label: 'open access Dokumente',
             source_label: 'Quelle',
-            documenttypes_label: 'Publikationsarten',
+            documenttypes_label: 'Dokumentarten',
             documenttypes_tooltip: 'Die folgenden Publikationsarten wurden bei der Erstellung dieser Visualisierung in Betracht gezogen (nicht alle davon scheinen notwendigerweise in dieser Visualisierung auch auf):',
             bio_link: 'Link zur Biografie',
             area: "Bereich",
