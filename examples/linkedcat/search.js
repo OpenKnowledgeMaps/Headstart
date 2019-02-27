@@ -8,64 +8,6 @@ var author_count = 0;
 var author_living_dates = "";
 var author_image_link = "";
 
-$(window).bind("pageshow", function () {
-    $(".btn").attr("disabled", false);
-});
-
-/*var doSubmit = function (data, newWindow, callback) {
-  data += encodeURI("&today=" + new Date().toLocaleDateString("en-US") 
-          + "&author_id=" + author_id
-          + "&doc_count=" + author_count
-          + "&living_dates=" + author_living_dates
-          + "&image_link=" + author_image_link);
-  
-
-  var openInNewWindow= function(data) {
-    if (data.status === "success") {
-      var file = data.id;
-      window.open("headstart.php?query=" +
-        data.query +
-        "&file=" +
-        file +
-        "&service=" +
-        data_config.service +
-        "&service_name=" +
-        service_name, '_blank')
-      console.log('opening')
-      callback(true)
-      return false;
-    } else {
-        callback(false)
-    }
-  }
-
-  var openInThisWindow = function(data) {
-    if (data.status === "success") {
-      var file = data.id;
-      window.location =
-        "headstart.php?query=" + data.query
-        + "&file=" + file
-        + "&service=" + data_config.service
-        + "&service_name=" + service_name
-        + "&visualization_type=" + visualization_type;
-      return false;
-    } else {
-      $("#progress").html(
-        "Pardon! Es ist leider etwas schief gelaufen. Wahrscheinlich gibt es zu Ihrem Suchanfrage zu wenige Dokumente. Bitte versuchen Sie es mit einer anderen Anfrage."
-      );
-      $(".btn").prop("disabled", false);
-    }
-  }
-
-  $.ajax({
-    // make an AJAX request
-    type: "POST",
-    url: service_url,
-    data: data,
-    success: newWindow ? openInNewWindow : openInThisWindow
-  });
-};*/
-
 var search_options;
 
 var chooseOptions = function () {
@@ -195,6 +137,8 @@ $("#searchform").submit(function () {
     }
 
 })
+
+$("#searchform").validate({});
 
 $(document).ready(function () {
     
