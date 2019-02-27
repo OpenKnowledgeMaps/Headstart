@@ -2,36 +2,48 @@ var options_linkedcat = {
     dropdowns: [
         {id: "year_range", multiple: false, name: "Zeitraum", type: "dropdown"
             , fields: [
-                {id: "any-time-years", text: "Jederzeit"}
+                {id: "any-time-years", text: "1847-1918"}
                 , {id: "user-defined", text: "Zeitraum", class: "user-defined",
                     inputs: [
-                        {id: "from", label: "Von: ", class: "time_input"}
+                        {id: "from", label: "von: ", class: "time_input"}
                         , {id: "to", label: "bis: ", class: "time_input"}
                     ]}
             ]},
         {id: "include_content_type", multiple: true, name: "Dokumentarten", type: "dropdown"
             , fields: [
-                {id: "Anthologie", text: "Anthologie", count:1, selected:true}
+                {id: "Andere Abhandlungen", text: "Andere Abhandlungen", count:1345, selected:true}
+                , {id: "Anthologie", text: "Anthologie", count:1, selected:true}
+                , {id: "Bericht", text: "Bericht", count:1331}
                 , {id: "Bibliografie", text: "Bibliografie", count: 212}
                 , {id: "Biografie", text: "Biografie", count:21, selected:true}
-                , {id: "Briefsammlung", text: "Briefsammlung", count:18, selected:true}
-                , {id: "Katalog", text: "Katalog", count:4, selected:true}
-                , {id: "Kommentar", text: "Kommentar", count:2, selected:true}
+                , {id: "Briefsammlung", text: "Briefsammlung", count:17, selected:true}
+                , {id: "Katalog", text: "Katalog", count:5, selected:true}
+                , {id: "Kommentar", text: "Kommentar", count:0, selected:true}
                 , {id: "Mehrsprachiges Wörterbuch", text: "Mehrsprachiges Wörterbuch", count:1, selected:true}
                 , {id: "Mitgliederverzeichnis", text: "Mitgliederverzeichnis", count:2, selected:true}
-                , {id: "Bericht", text: "Protokoll", count:1425}
-                , {id: "Quelle", text: "Quelle", count:88, selected:true}
+                , {id: "Quelle", text: "Quelle", count:83, selected:true}
                 , {id: "Reisebericht", text: "Reisebericht", count:10, selected:true}
                 , {id: "Rezension", text: "Rezension", count:39, selected:true}
                 , {id: "Statistik", text: "Statistik", count:2, selected:true}
-                , {id: "Verzeichnis", text: "Verzeichnis", count:58, selected:true}
+                , {id: "Verzeichnis", text: "Verzeichnis", count:42, selected:true}
                 , {id: "Wörterbuch", text: "Wörterbuch", count:15, selected:true}
+            ]},
+        {id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
+            , fields: [
+                {id: "overview", text: "Überblick", selected:true}
+                , {id: "timeline", text: "Zeitstrahl"}
             ]},
     ]
 }
 
 var options_linkedcat_authors = {
-    dropdowns: []
+    dropdowns: [
+        {id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
+            , fields: [
+                {id: "overview", text: "Überblick", selected:true}
+                , {id: "timeline", text: "Zeitstrahl"}
+            ]},
+    ]
 }
 
 var SearchOptions = {
@@ -118,15 +130,16 @@ var SearchOptions = {
                     }
 
                     if (option.inputs != null) {
+                        $('#input-container').append('<p class="selectrange">Bitte wählen Sie einen Zeitraum zwischen 1847 und 1918.</p>')
                         option.inputs.forEach(function (input) {
-                            d3.select("#input-container")
-                                    .append("label")
+                            let input_container = d3.select("#input-container")
+                                    .append('div').attr('class','timefield')
+                                
+                                input_container.append("label")
                                     .attr("for", input.id)
                                     .text(input.label)
-                                    .style("margin-left", "8px")
-
-                            d3.select("#input-container")
-                                    .append("input")
+                                    
+                                input_container.append("input")
                                     .attr("id", input.id)
                                     .attr("name", input.id)
                                     .attr("class", input.class)
@@ -175,7 +188,6 @@ var SearchOptions = {
                 allSelectedText: "All " + entity
                 , nonSelectedText: "No " + entity
                 , nSelectedText: entity
-                , buttonWidth: '150px'
                 , numberDisplayed: 2
                 , maxHeight: 250
                 , includeSelectAllOption: true
@@ -237,6 +249,10 @@ var SearchOptions = {
                     $(from).val(start_date);
                 }
                 $(to).val(end.getFullYear());
+                $(from).attr("min", start_date)
+                $(from).attr("max", end.getFullYear())
+                $(to).attr("min", start_date)
+                $(to).attr("max", end.getFullYear())
                 break;
 
             case "this-year":

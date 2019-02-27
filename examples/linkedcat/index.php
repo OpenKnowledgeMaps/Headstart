@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php
-    include 'config.php';
+include 'config.php';
 ?>
 <html>
 
@@ -29,36 +29,45 @@
         <div class="bg-image-startpage">
 
             <div class="bg-tagline-startpage">
-                <h2>LinkedCat+<br>Explore half a century of knowledge production at the Academy<br><span style="color: #333">1847-1918</span></h2>
+                <h2>LinkedCat+<br>Entdecken Sie die Sitzungsberichte der ÖAW<br><span style="color: #333">1847-1918</span></h2>
+                <a href="" style="text-transform: none; font-family: 'Lato'; text-decoration: underline;"><i class="fas fa-info"></i> mehr Informationen</a>
             </div>
+
+            <div style="    padding: 20px;
+                 position: absolute;
+                 right: 0px;
+                 "><img src='./img/oeaw-logo.png'></div>
 
             <div class="search">
 
-                <form id="searchform">
+                <form id="searchform" action="#" method="POST" target="_blank">
                     <p class="library">
-                        <label class="radio-inline"><input type="radio" name="optradio" value="authors">
-                            <span class="bold">Autoren</span></label>
-                        <label class="radio-inline"><input type="radio" name="optradio" value="keywords" checked>
-                            <span class="bold">Stichwörter</span></label>
+                        <label class="radio-inline author-btn"><input type="radio" name="optradio" value="authors" class="radio-inv">
+                            <span class="bold"><i class="fas fa-search"></i> Autoren</span></label>
+                        <label class="radio-inline keyword-btn"><input type="radio" name="optradio" value="keywords" checked class="radio-inv">
+                            <span class="bold"><i class="fas fa-search"></i> Stichwörter</span></label>
                     </p>
-                    
-                    <div id="filter-container"></div>
-                    
-                    <!--<label for="q">Suchbegriff:</label>-->
-                    <input class="shadow inputfield" type="text" name="q" size="61" required>
-                    <button type="submit" class="search-btn shadow">
-                            <i class="fas fa-search"></i> suchen
-                    </button>
+                    <div style="background-color: white;">
+                        <div id="filter-container"></div>
+
+                        <!--<label for="q">Suchbegriff:</label>-->
+                        <div style="max-width:600px; padding: 0px 30px 50px; margin: 0px auto;">
+                            <input class="inputfield" type="text" name="q" size="61" required>
+                            <button type="submit" class="search-btn">
+                                <i class="fas fa-search"></i> suchen
+                            </button>
+                        </div>
+                    </div>
                 </form>
 
                 <div id="progress">
                     <div id="progressbar">
-                        
+
                     </div>
                 </div>
-                
+
             </div>
-            
+
             <div class="credits">
                 <p>
                     Diese Suche wurde mit
@@ -70,18 +79,24 @@
                 </p>
             </div>
 
+            <div style="">
+                <button class="search-btn shadow" style="position: absolute; bottom: 20px; right: 20px; max-width:300px;">
+                    <i class="fas fa-search"></i> Browse view
+                </button>
+            </div>
+
         </div>
-        
+
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script type ="text/javascript">
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
             var autocomplete_data;
             var has_loaded = false;
-            $.get(data_config.server_url + "services/getLinkedCatAuthors.php", 
-                function (data) {
-                    autocomplete_data = data;
-                    has_loaded = true;
-            });            
+            $.get(data_config.server_url + "services/getLinkedCatAuthors.php",
+                    function (data) {
+                        autocomplete_data = data;
+                        has_loaded = true;
+                    });
         </script>
         <script type="text/javascript" src="search_options.js "></script>
         <script type="text/javascript" src="search.js "></script>
