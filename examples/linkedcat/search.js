@@ -175,7 +175,9 @@ function configureSearch() {
                                                         + "&living_dates=" + author_living_dates
                                                         + "&image_link=" + author_image_link
                                                         + "&service_url=" + service_url
-                                                        + "&service=" + service_name
+                                                        + "&service_name=" + service_name
+                                                        + "&service=" + data_config.service
+                                                        + "&visualization_type=" + visualization_type
                                         )
                           );
 }
