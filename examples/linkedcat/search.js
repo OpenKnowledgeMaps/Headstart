@@ -154,7 +154,7 @@ $(document).ready(function () {
         $('.keyword-btn').removeClass('btn-enabled');
         
         if (typeof autocomplete_function === "object" && autocomplete_function !== null) {
-            autocomplete_function.destroy();
+            $('input[name="q"]').autoComplete('destroy');
             autocomplete_function = null;
         }
 
