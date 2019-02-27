@@ -12,38 +12,7 @@ $(window).bind("pageshow", function () {
     $(".btn").attr("disabled", false);
 });
 
-$("#searchform").validate({
-    submitHandler: function (form) {
-        $(".btn").attr("disabled", true);
-        $("#progress").html("");
-
-        d3.select("#progress").append("p")
-                .text("Bitte haben Sie ein wenig Geduld, dieser Vorgang dauert etwa 20 Sekunden...")
-                .append("div")
-                .attr("id", "progressbar")
-
-        $("#progressbar").progressbar();
-        var tick_interval = 2;
-        var tick_increment = 1;
-        var tick_function = function () {
-            var value = $("#progressbar").progressbar("option", "value");
-            value += tick_increment;
-            $("#progressbar").progressbar("option", "value", value);
-            if (value < 100) {
-                window.setTimeout(tick_function, tick_interval * 1000);
-            } else {
-                //alert("Done");
-            }
-        };
-        window.setTimeout(tick_function, tick_interval * 1000);
-
-        var data = $("#searchform").serialize();
-
-        doSubmit(data)
-    }
-});
-
-var doSubmit = function (data, newWindow, callback) {
+/*var doSubmit = function (data, newWindow, callback) {
   data += encodeURI("&today=" + new Date().toLocaleDateString("en-US") 
           + "&author_id=" + author_id
           + "&doc_count=" + author_count
@@ -95,7 +64,7 @@ var doSubmit = function (data, newWindow, callback) {
     data: data,
     success: newWindow ? openInNewWindow : openInThisWindow
   });
-};
+};*/
 
 var search_options;
 
@@ -198,6 +167,33 @@ function adaptInterface() {
     $('input[name=optradio]:not(:checked)').removeClass('checked');
 }
 
+function configureSearch() {
+    $("#searchform").attr("action", "building_map.php?" 
+                                        + encodeURI("&today=" + new Date().toLocaleDateString("en-US") 
+                                                        + "&author_id=" + author_id
+                                                        + "&doc_count=" + author_count
+                                                        + "&living_dates=" + author_living_dates
+                                                        + "&image_link=" + author_image_link
+                                                        + "&service_url=" + service_url
+                                                        + "&service=" + service_name
+                                        )
+                          );
+}
+
+$("#searchform").submit(function () {
+    configureSearch();
+    
+    var ua = window.navigator.userAgent;
+    var iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
+    var webkit = !!ua.match(/WebKit/i);
+    var iOSSafari = iOS && webkit && !ua.match(/CriOS/i);
+
+    if(iOSSafari) {
+        $("#searchform").attr("target", "");
+    }
+
+})
+
 $(document).ready(function () {
     
     var changeVisualization = function () {
@@ -215,12 +211,14 @@ $(document).ready(function () {
 
         chooseOptions();
         adaptInterface();
+        configureSearch();
         addAutoComplete();
     };
     
     $("input[name='optradio']").change(changeVisualization);
 
     chooseOptions();
+    configureSearch();
     addAutoComplete();
     
     changeVisualization();
