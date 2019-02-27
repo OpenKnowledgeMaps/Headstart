@@ -17,7 +17,7 @@
         position: relative;
         z-index: 3;
     }
-    
+
     .backlink {
         position: relative;
         z-index: 3; 
@@ -91,6 +91,28 @@
     }
 }
 
+.authorimage {
+    width: 100%;
+}
+
+.titleimage {
+    display: inline-block;
+    max-width: 60px;
+    vertical-align: middle;
+    margin-right: 20px;
+    /*margin-top: 15px;
+    margin-left: 50px;*/
+}
+
+#author_bio a {
+    border-bottom: 1px solid $timelineview;
+}
+
+#author_bio a:hover {
+    text-decoration: none;
+    border-bottom: 3px solid $timelineview;
+}
+
 @media screen and (max-width: 640px) {
     #subdiscipline_title {
         padding-left: 20px;
@@ -130,8 +152,17 @@
         border-bottom: 3px solid $okm-modal-btn;
         color: $okm-modal-btn;
     }
-    
+
     #infolink {
-    margin-left: 0px;
+        margin-left: 0px;
+    }
 }
+
+@if $skin == 'linkedcat' {
+    #subdiscipline_title {
+        display: inline-block;
+        width: 80%;
+        vertical-align: middle; 
+        padding-left: 0px;
+    }
 }

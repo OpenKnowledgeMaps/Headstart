@@ -24,7 +24,7 @@ $author_facet_query = "select?facet.field=author100_0_str" .
                       "&facet=on&fl=author100_0_str" .
                       "&q=*:*&rows=0&facet.limit=-1&facet.sort=index";
 
-$author_data_query = "select?fl=author100_0,author100_a_str,author100_d" .
+$author_data_query = "select?fl=author100_0,author100_a_str,author100_d,author100_wiki_img" .
                      "&rows=1" .
                      "&q=author100_0_str:";
 
@@ -49,14 +49,19 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
   $window = 100;
   $res = array();
   $mh = curl_multi_init();
+  $urls = array();
+  foreach ($author_ids as $i => $id) {
+    if (strlen($id)>0) {
+      $target = rawurlencode('"' . $id . '"');
+      $fetchURL = $base_url . $author_data_query . $target;
+      $urls[] = $fetchURL;
+    }
+  }
 
   # setup initial window slice
   for ($i = 0; $i < $window; $i++) {
     $ch = curl_init();
-    $target = curl_escape($ch, '"' . array_pop($author_ids) . '"');
-    $fetchURL = $base_url . $author_data_query . $target;
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $fetchURL);
+    curl_setopt($ch, CURLOPT_URL, array_shift($urls));
     curl_setopt($ch, CURLOPT_HEADER, 0);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_multi_add_handle($mh, $ch);
@@ -76,18 +81,17 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
         $res[$temp_id] = array();
         $res[$temp_id]["author100_a_str"] = $doc["author100_a_str"][0];
         $res[$temp_id]["author100_d"] = $doc["author100_d"][0];
+        $res[$temp_id]["author100_wiki_img"] = $doc["author100_wiki_img"][0];
         # $res is now a k:v array with k = author_ids, v = k:v array of
         # keys author100_a_str and author100_d
 
         # add new author to request stack until author_ids is exhausted
-        $next_author = array_pop($author_ids);
+        $next_url = array_shift($urls);
         # requests terminate prematurely in CURLM_OK check at invalid author query
         # which comes from the author facet for ""
-        if (isset($next_author) && strlen($next_author)>0) {
+        if (isset($next_url)) {
           $ch = curl_init();
-          $target = curl_escape($ch, '"' . $next_author . '"');
-          $fetchURL = $base_url . $author_data_query . $target;
-          curl_setopt($ch, CURLOPT_URL, $fetchURL);
+          curl_setopt($ch, CURLOPT_URL, $next_url);
           curl_setopt($ch, CURLOPT_HEADER, 0);
           curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
           curl_multi_add_handle($mh, $ch);
@@ -95,7 +99,12 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
         # remove finished one
         curl_multi_remove_handle($mh, $done['handle']);
       } else {
-        print_r($info);
+        curl_multi_remove_handle($mh, $done['handle']);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $info["url"]);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_multi_add_handle($mh, $ch);
       }
     }
   } while ($active);
@@ -129,14 +138,18 @@ function getAuthors() {
       $author_count = $author_counts[$i];
       $author_name = $author_data[$author_id]["author100_a_str"];
       $author_date = $author_data[$author_id]["author100_d"];
+      $author_image = $author_data[$author_id]["author100_wiki_img"];
       if (is_null($author_name)) {
         $author_name = "";
       }
       if (is_null($author_date)) {
         $author_date = "";
       }
+      if (is_null($author_image)) {
+        $author_image = "";
+      }
       # the following array contains a placeholder "" for a possible image link
-      $authors[] = array($author_id, $author_name, $author_count, $author_date, "");
+      $authors[] = array($author_id, $author_name, $author_count, $author_date, $author_image);
   }
   if(count($authors) == 0){
     throw new Exception("Could not create author list, check SOLR config.");
