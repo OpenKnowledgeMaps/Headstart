@@ -138,7 +138,9 @@ $("#searchform").submit(function () {
 
 })
 
-$("#searchform").validate({});
+$("#searchform").validate({
+    ignore: []
+});
 
 $(document).ready(function () {
     
