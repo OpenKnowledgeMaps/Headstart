@@ -60,9 +60,9 @@ var autocomplete_interval;
  
 var addAutoComplete = function() {
     if(visualization_type === "authors") {
-        autocomplete_function = new autoComplete({
-            selector: 'input[name="q"]',
+        autocomplete_function = $('input[name="q"]').autoComplete({
             minChars: 0,
+            cache: false,
             source: function(term, suggest){
                 term = term.toLowerCase();
                 var choices = autocomplete_data;
@@ -93,11 +93,11 @@ var addAutoComplete = function() {
                         +'</div>';
             },
             onSelect: function(e, term, item){
-                $('input[name=q]').val(item.getAttribute('data-author'));
-                author_id = item.getAttribute('data-id');
-                author_count = item.getAttribute('data-count');
-                author_living_dates = item.getAttribute('data-living_dates');
-                author_image_link = item.getAttribute('data-image_link');
+                $('input[name=q]').val(item.data('author'));
+                author_id = item.data('id');
+                author_count = item.data('count');
+                author_living_dates = item.data('living_dates');
+                author_image_link = item.data('image_link');
             }
         });
     }

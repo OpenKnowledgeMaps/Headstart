@@ -60,12 +60,6 @@ include 'config.php';
                     </div>
                 </form>
 
-                <div id="progress">
-                    <div id="progressbar">
-
-                    </div>
-                </div>
-
             </div>
 
             <div class="credits">
