@@ -98,6 +98,7 @@ var addAutoComplete = function() {
                 author_count = item.data('count');
                 author_living_dates = item.data('living_dates');
                 author_image_link = item.data('image_link');
+                $("#searchform").validate().element('input[name=q]');
             }
         });
     }
