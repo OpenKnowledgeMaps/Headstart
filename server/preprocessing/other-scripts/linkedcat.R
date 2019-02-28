@@ -46,7 +46,7 @@ get_papers <- function(query, params, limit=100) {
   # do search
   lclog$info(paste("Query:", paste(q_params, collapse = " ")))
 
-  res <- solr_all(conn, "linkedcat", params = q_params)
+  res <- solr_all(conn, "linkedcat", params = q_params, concat="; ")
 
   if (nrow(res$search) == 0){
     stop(paste("No results retrieved."))
@@ -60,8 +60,11 @@ get_papers <- function(query, params, limit=100) {
   metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='id')
 
   metadata[is.na(metadata)] <- ""
-  metadata$subject <- if (!is.null(metadata$keyword_a)) unlist(lapply(metadata$keyword_a, function(x) {if (nchar(x)>0) gsub("; ;", ";", paste(unlist(strsplit(x, ",")), collapse="; ")) else ""})) else ""
-  metadata$authors <- metadata$author100_a
+  metadata$subject <- if (!is.null(metadata$keyword_a)) unlist(lapply(metadata$keyword_a, function(x) {gsub("; $", "", x)})) else ""
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; ; ", "; ", x)}))
+  metadata$authors <- paste(metadata$author100_a, metadata$author700_a, sep="; ")
+  metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("; $|,$", "", x)}))
+  metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("^; ", "", x)}))
   metadata$author_date <- metadata$author100_d
   metadata$title <- if (!is.null(metadata$main_title)) metadata$main_title else ""
   metadata$paper_abstract <- if (!is.null(metadata$ocrtext)) metadata$ocrtext else ""
@@ -73,8 +76,8 @@ get_papers <- function(query, params, limit=100) {
   metadata$oa_state <- 1
   metadata$subject_orig = metadata$subject
   metadata$relevance = c(nrow(metadata):1)
-  metadata$bkl_caption = unlist(lapply(metadata$bkl_caption, function(x) gsub(",", "; ", x)))
-  metadata$bkl_top_caption = if (!is.null(metadata$bkl_top_caption)) unlist(lapply(metadata$bkl_top_caption, function(x) gsub(",", "; ", x))) else ""
+  metadata$bkl_caption = if (!is.null(metadata$bkl_caption)) metadata$bkl_caption else ""
+  metadata$bkl_top_caption = if (!is.null(metadata$bkl_top_caption)) metadata$bkl_caption else ""
 
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
@@ -102,6 +105,7 @@ build_query <- function(query, params, limit){
                 'main_title', 'subtitle', 'pub_year',
                 'host_label', 'host_maintitle', 'host_pubplace', 'host_pubyear',
                 'author100_a', 'author100_d', 'author100_0', 'author100_4',
+                'author700_a', 'author700_d', 'author700_0',
                 'bkl_caption', 'bkl_top_caption',
                 'keyword_a', 'tags', 'category', 'bib', 'language_code',
                 'ocrtext_good', 'ocrtext')
