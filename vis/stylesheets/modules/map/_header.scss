@@ -112,7 +112,7 @@
 
 .titleimage {
     display: inline-block;
-    max-width: 60px;
+    max-width: 80px;
     vertical-align: middle;
     margin-right: 20px;
     /*margin-top: 15px;
@@ -179,5 +179,6 @@
         width: 80%;
         vertical-align: middle; 
         padding-left: 0px;
+        padding-top: 0px !important;
     }
 }

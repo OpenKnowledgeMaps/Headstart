@@ -146,6 +146,7 @@ var SearchOptions = {
                                     .attr("class", input.class)
                                     .attr("type", "text")
                                     .attr("size", "18")
+                                    .property("required", true)
                         })
                     }
                 })
@@ -187,7 +188,7 @@ var SearchOptions = {
         $(function () {
             $(dropdown_class).multiselect({
                 allSelectedText: entity
-                , nonSelectedText: entity
+                , nonSelectedText: '0 ' + entity
                 , nSelectedText: entity
                 , numberDisplayed: 1
                 , maxHeight: 250
