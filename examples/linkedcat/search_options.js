@@ -187,7 +187,7 @@ var SearchOptions = {
         $(function () {
             $(dropdown_class).multiselect({
                 allSelectedText: entity
-                , nonSelectedText: entity
+                , nonSelectedText: '0 ' + entity
                 , nSelectedText: entity
                 , numberDisplayed: 1
                 , maxHeight: 250
