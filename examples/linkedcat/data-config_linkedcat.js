@@ -14,7 +14,7 @@ var data_config = {
     sort_options: ["relevance", "title", "authors", "year"],
     is_force_areas: true,
     language: "ger_linkedcat",
-    area_force_alpha: 0.015,
+    area_force_alpha: 0.025,
     show_list: true,
     content_based: true,
     url_prefix: "https://permalink.obvsg.at/",
