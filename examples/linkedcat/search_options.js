@@ -146,6 +146,7 @@ var SearchOptions = {
                                     .attr("class", input.class)
                                     .attr("type", "text")
                                     .attr("size", "18")
+                                    .property("required", true)
                         })
                     }
                 })
