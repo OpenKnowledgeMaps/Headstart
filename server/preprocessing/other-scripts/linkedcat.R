@@ -77,7 +77,7 @@ get_papers <- function(query, params, limit=100) {
   metadata$subject_orig = metadata$subject
   metadata$relevance = c(nrow(metadata):1)
   metadata$bkl_caption = if (!is.null(metadata$bkl_caption)) metadata$bkl_caption else ""
-  metadata$bkl_top_caption = if (!is.null(metadata$bkl_top_caption)) metadata$bkl_caption else ""
+  metadata$bkl_top_caption = if (!is.null(metadata$bkl_top_caption)) metadata$bkl_top_caption else ""
 
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
