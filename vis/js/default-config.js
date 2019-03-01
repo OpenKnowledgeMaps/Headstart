@@ -137,6 +137,8 @@ var config = {
     doi_outlink: false,
     url_outlink: false,
     
+    show_context_oa_number: true,
+    
     service_names: {plos: "PLOS"
                         , base: "BASE"
                         , pubmed: "PubMed"
@@ -240,9 +242,9 @@ var config = {
             overview_label: 'Überblick über',
             overview_authors_label: 'Übersicht über die Werke von',
             most_recent_label: 'neueste',
-            articles_label: 'Artikel',
+            articles_label: 'open access Dokumente',
             source_label: 'Quelle',
-            documenttypes_label: 'Publikationsarten',
+            documenttypes_label: 'Dokumentarten',
             documenttypes_tooltip: 'Die folgenden Publikationsarten wurden bei der Erstellung dieser Visualisierung in Betracht gezogen (nicht alle davon scheinen notwendigerweise in dieser Visualisierung auch auf):',
             bio_link: 'Link zur Biografie',
             area: "Bereich",

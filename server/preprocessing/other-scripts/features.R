@@ -43,6 +43,9 @@ create_tdm_matrix <- function(corpus, sparsity=1) {
 
 get_distance_matrix <- function(tdm_matrix, method = "cosine") {
   distance_matrix <- as.matrix(dist(tdm_matrix, method))
+  if (nrow(distance_matrix) == 0) {
+    colnames(distance_matrix) <- labels(tdm_matrix)$Docs
+  }
   return(distance_matrix)
 }
 

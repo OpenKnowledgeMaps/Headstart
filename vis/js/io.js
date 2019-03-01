@@ -194,16 +194,23 @@ IO.prototype = {
                 d.paper_abstract = d.snippets;
             }
             
-            let prepareCoordinates = function(coordinate) {
+            let prepareCoordinates = function(coordinate, digits) {
                 if (isNaN(parseFloat(coordinate))) {
-                    return 0;
+                    return parseFloat(0).toFixed(digits);
                 }
                 
-                return parseFloat(coordinate).toFixed(8);
+                let fixed_coordinate = parseFloat(coordinate).toFixed(digits);
+                
+                //convert -0 to 0 so that the same location detection still works
+                if (fixed_coordinate === "-" + parseFloat(0).toFixed(digits)) {
+                    return parseFloat(0).toFixed(digits);
+                }
+                
+                return fixed_coordinate
             }
             
-            d.x = prepareCoordinates(d.x);
-            d.y = prepareCoordinates(d.y);
+            d.x = prepareCoordinates(d.x, 8);
+            d.y = prepareCoordinates(d.y, 8);
             //if two items have the exact same location,
             // that throws off the force-based layout
             var xy_string = d.x + d.y;

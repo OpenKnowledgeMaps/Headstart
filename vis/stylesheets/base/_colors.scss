@@ -6,6 +6,7 @@ $white: white;
 $lightest-blue: #F1F6FA; //old: #F1F6FA
 $light-blue: #D2E4F0;
 $dark-blue: #2C3E52; // old: #1F77B4
+$paper-icon: #cacfd3;
 
 // OKMaps
 $okm-red: #E55137;
@@ -24,6 +25,7 @@ $abstract-gray: #333; //#5c6d7f; //old: #444444
 $journal-gray: #4d7199; // old:#666666, 5c6d7f
 $list_metadata_title_paper: #4d7199;
 $list_show_hide_button: #4d7199; //#5c6d7f;
+$highlight-searchterm: #eff3f4;
 
 // Additional colors for buttons etc.
 $okm-modal-btn: #4d7199;
@@ -58,6 +60,7 @@ $higher_value_tag: #DC2260;
     $journal-gray: #000000; // old:#666666
     $list_metadata_title_paper: #3696e0;
     $list_show_hide_button: #3696e0;
+    $highlight-searchterm: #F8F8F8;
 
     // Additional colors
     $okm-modal-btn: #3696e0;
@@ -70,21 +73,25 @@ $higher_value_tag: #DC2260;
     $dark-blue: #2C316E;
     $okm-blue: #2C316E;
     $medium-blue: #2C316E;
-
     $okm-modal-btn: #7A77A5;
     $framed-item: #2C316E;
     $okm-clouds: #F4F4F6;
-
     $list_show_hide_button: #7A77A5;
-
     $lower_value_tag: #2C316E;
     $higher_value_tag: #DC2260;
+    $highlight-searchterm: #F4F4F6;
 }
 
 @if $skin == 'linkedcat' {
-    $dark-blue: #444;
-    //$okm-blue: #2856a3;
+    $dark-blue: #333;
     $medium-blue: #2856a3;
-    
+    $okm-clouds: #f1f1f1;
     $okm-modal-btn: #2856a3;
+    $framed-item: #2856a3;
+    $journal-gray: #2856a3;
+    $list_metadata_title_paper: #2856a3;
+    $list_show_hide_button: #2856a3;
+    $okm-gray: #818181;
+    $paper-icon: #cbcbcb;
+    $highlight-searchterm: #dadada;
 }

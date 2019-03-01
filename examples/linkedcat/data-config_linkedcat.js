@@ -14,7 +14,7 @@ var data_config = {
     sort_options: ["relevance", "title", "authors", "year"],
     is_force_areas: true,
     language: "ger_linkedcat",
-    area_force_alpha: 0.015,
+    area_force_alpha: 0.025,
     show_list: true,
     content_based: true,
     url_prefix: "https://permalink.obvsg.at/",
@@ -32,4 +32,7 @@ var data_config = {
     filter_menu_dropdown: false,
     sort_menu_dropdown: true,
     filter_options: ["all", "open_access"],
+    
+    show_context_oa_number: false,
+    abstract_large: 1000,
 };
