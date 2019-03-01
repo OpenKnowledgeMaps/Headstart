@@ -111,6 +111,7 @@ var SearchOptions = {
                         .attr("class", "dropdown_multi_" + entry.id)
                         .style("vertical-align", "top")
                         .attr("name", entry.id)
+                        .property("required", true);
 
                 if (entry.multiple) {
                     new_select.attr("name", entry.id + "[]")
@@ -145,6 +146,7 @@ var SearchOptions = {
                                     .attr("class", input.class)
                                     .attr("type", "text")
                                     .attr("size", "18")
+                                    .property("required", true)
                         })
                     }
                 })
@@ -185,12 +187,13 @@ var SearchOptions = {
 
         $(function () {
             $(dropdown_class).multiselect({
-                allSelectedText: "All " + entity
-                , nonSelectedText: "No " + entity
+                allSelectedText: entity
+                , nonSelectedText: '0 ' + entity
                 , nSelectedText: entity
-                , numberDisplayed: 2
+                , numberDisplayed: 1
                 , maxHeight: 250
                 , includeSelectAllOption: true
+                , selectAllText: "Alle auswählen"
                 , onChange: function (element, checked) {
                     if (checked === true) {
 

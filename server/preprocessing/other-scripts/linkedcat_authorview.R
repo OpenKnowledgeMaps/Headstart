@@ -46,7 +46,7 @@ get_papers <- function(query, params, limit=100) {
   # do search
   lclog$info(paste("Query:", paste(q_params, collapse = " ")))
 
-  res <- solr_all(conn, "linkedcat", params = q_params)
+  res <- solr_all(conn, "linkedcat", params = q_params, concat="; ")
 
   if (nrow(res$search) == 0){
     stop(paste("No results retrieved."))
@@ -56,8 +56,11 @@ get_papers <- function(query, params, limit=100) {
   metadata <- data.frame(res$search)
 
   metadata[is.na(metadata)] <- ""
-  metadata$subject <- if (!is.null(metadata$keyword_a)) unlist(lapply(metadata$keyword_a, function(x) {if (nchar(x)>0) gsub(", ,", ",", paste(unlist(strsplit(x, ",")), collapse=", ")) else ""})) else ""
-  metadata$authors <- metadata$author100_a
+  metadata$subject <- if (!is.null(metadata$keyword_a)) unlist(lapply(metadata$keyword_a, function(x) {gsub("; $", "", x)})) else ""
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; ; ", "; ", x)}))
+  metadata$authors <- paste(metadata$author100_a, metadata$author700_a, sep="; ")
+  metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("; $|,$", "", x)}))
+  metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("^; ", "", x)}))
   metadata$author_date <- metadata$author100_d
   metadata$title <- if (!is.null(metadata$main_title)) metadata$main_title else ""
   metadata$paper_abstract <- if (!is.null(metadata$ocrtext)) metadata$ocrtext else ""
@@ -69,6 +72,8 @@ get_papers <- function(query, params, limit=100) {
   metadata$oa_state <- 1
   metadata$subject_orig = metadata$subject
   metadata$relevance = c(nrow(metadata):1)
+  metadata$bkl_caption = if (!is.null(metadata$bkl_caption)) metadata$bkl_caption else ""
+  metadata$bkl_top_caption = if (!is.null(metadata$bkl_top_caption)) metadata$bkl_top_caption else ""
 
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id

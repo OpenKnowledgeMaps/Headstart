@@ -8,64 +8,6 @@ var author_count = 0;
 var author_living_dates = "";
 var author_image_link = "";
 
-$(window).bind("pageshow", function () {
-    $(".btn").attr("disabled", false);
-});
-
-/*var doSubmit = function (data, newWindow, callback) {
-  data += encodeURI("&today=" + new Date().toLocaleDateString("en-US") 
-          + "&author_id=" + author_id
-          + "&doc_count=" + author_count
-          + "&living_dates=" + author_living_dates
-          + "&image_link=" + author_image_link);
-  
-
-  var openInNewWindow= function(data) {
-    if (data.status === "success") {
-      var file = data.id;
-      window.open("headstart.php?query=" +
-        data.query +
-        "&file=" +
-        file +
-        "&service=" +
-        data_config.service +
-        "&service_name=" +
-        service_name, '_blank')
-      console.log('opening')
-      callback(true)
-      return false;
-    } else {
-        callback(false)
-    }
-  }
-
-  var openInThisWindow = function(data) {
-    if (data.status === "success") {
-      var file = data.id;
-      window.location =
-        "headstart.php?query=" + data.query
-        + "&file=" + file
-        + "&service=" + data_config.service
-        + "&service_name=" + service_name
-        + "&visualization_type=" + visualization_type;
-      return false;
-    } else {
-      $("#progress").html(
-        "Pardon! Es ist leider etwas schief gelaufen. Wahrscheinlich gibt es zu Ihrem Suchanfrage zu wenige Dokumente. Bitte versuchen Sie es mit einer anderen Anfrage."
-      );
-      $(".btn").prop("disabled", false);
-    }
-  }
-
-  $.ajax({
-    // make an AJAX request
-    type: "POST",
-    url: service_url,
-    data: data,
-    success: newWindow ? openInNewWindow : openInThisWindow
-  });
-};*/
-
 var search_options;
 
 var chooseOptions = function () {
@@ -118,9 +60,9 @@ var autocomplete_interval;
  
 var addAutoComplete = function() {
     if(visualization_type === "authors") {
-        autocomplete_function = new autoComplete({
-            selector: 'input[name="q"]',
+        autocomplete_function = $('input[name="q"]').autoComplete({
             minChars: 0,
+            cache: false,
             source: function(term, suggest){
                 term = term.toLowerCase();
                 var choices = autocomplete_data;
@@ -151,11 +93,12 @@ var addAutoComplete = function() {
                         +'</div>';
             },
             onSelect: function(e, term, item){
-                $('input[name=q]').val(item.getAttribute('data-author'));
-                author_id = item.getAttribute('data-id');
-                author_count = item.getAttribute('data-count');
-                author_living_dates = item.getAttribute('data-living_dates');
-                author_image_link = item.getAttribute('data-image_link');
+                $('input[name=q]').val(item.data('author'));
+                author_id = item.data('id');
+                author_count = item.data('count');
+                author_living_dates = item.data('living_dates');
+                author_image_link = item.data('image_link');
+                $("#searchform").validate().element('input[name=q]');
             }
         });
     }
@@ -196,6 +139,10 @@ $("#searchform").submit(function () {
 
 })
 
+$("#searchform").validate({
+    ignore: []
+});
+
 $(document).ready(function () {
     
     var changeVisualization = function () {
@@ -207,7 +154,7 @@ $(document).ready(function () {
         $('.keyword-btn').removeClass('btn-enabled');
         
         if (typeof autocomplete_function === "object" && autocomplete_function !== null) {
-            autocomplete_function.destroy();
+            $('input[name="q"]').autoComplete('destroy');
             autocomplete_function = null;
         }
 

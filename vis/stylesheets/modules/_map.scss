@@ -42,7 +42,7 @@ rect {
 path {
     fill: white;
     fill-opacity: 1;
-    stroke: #cacfd3;
+    stroke: $paper-icon;
     stroke-width: 1px;
     cursor: zoom-in;
 
@@ -54,7 +54,7 @@ path {
 }
 
 .dogear {
-    fill: #cacfd3;
+    fill: $paper-icon;
 }
 
 line {
