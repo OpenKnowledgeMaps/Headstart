@@ -72,6 +72,8 @@ The visualization has been successfully tested with Chrome, Firefox, Safari and 
 
 More information can be found in the following papers:
 
+Kraker, P., Schramm, M., Kittel, C., Chamberlain, S., & Arrow, T. (2018). [VIPER: The Visual Project Explorer](https://zenodo.org/record/1248119). Zenodo. doi:10.5281/zenodo.2587129
+
 Kraker, P., Kittel, C., & Enkhbayar, A. (2016). [Open Knowledge Maps: Creating a Visual Interface to the World’s Scientific Knowledge Based on Natural Language Processing](http://0277.ch/ojs/index.php/cdrs_0277/article/view/157/355). 027.7 Journal for Library Culture, 4(2), 98–103. doi:10.12685/027.7-4-2-157
 
 Kraker, P., Schlögl, C. , Jack, K. & Lindstaedt, S. (2015). [Visualization of Co-Readership Patterns from an Online Reference Management System](http://arxiv.org/abs/1409.0348). Journal of Informetrics, 9(1), 169–182. doi:10.1016/j.joi.2014.12.003
@@ -88,4 +90,4 @@ Head Start is licensed under [MIT](LICENSE).
 ## Citation
 If you use Head Start in your research, please cite it as follows:
 
-Peter Kraker, Maxi Schramm, Christopher Kittel, Asura Enkhbayar, Scott Chamberlain, Rainer Bachleitner, Yael Stein, Thomas Arrow, Philipp Weissensteiner, Mike Skaug & Open Knowledge Maps team and contributors (2018). Headstart 4. Zenodo. http://doi.org/10.5281/zenodo.1247320
+Peter Kraker, Christopher Kittel, Maxi Schramm, Rainer Bachleitner, Thomas Arrow, Scott Chamberlain, Asura Enkhbayar, Yael Stein, Philipp Weissensteiner, Mike Skaug, Katrin Leinweber & Open Knowledge Maps team and contributors. (2019, March 7). Headstart 5 (Version v5). Zenodo. http://doi.org/10.5281/zenodo.2587129
