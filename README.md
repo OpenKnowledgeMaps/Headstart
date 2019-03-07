@@ -59,6 +59,7 @@ Authors: [Maxi Schramm](https://github.com/tanteuschi), [Christopher Kittel](htt
 
 * [Open Knowledge Maps](https://openknowledgemaps.org/): Creates a visualization on the fly based on a user's search in either BASE or PubMed.
 * [VIPER - The Visual Project Explorer](https://openknowledgemaps.org/viper/): Provides overviews of research projects indexed by OpenAIRE.
+* [CRIS Vis](https://ois.lbg.ac.at/en/cris-I-research-questions): Enables the exploration of crowd-sourced research questions related to mental health.
 * [Overview of Educational Technology](https://openknowledgemaps.org/educational-technology): A working prototype for the field of educational technology based on co-readership.
 * [OpenUP Dissemination Toolbox](https://www.openuphub.eu/tools): A prototype showcasing an overview of innovative dissemination case studies.
 * [Conference Navigator 3](http://halley.exp.sis.pitt.edu/cn3/visualization.php?conferenceID=131) [registration required]: An adaptation of Head Start for the conference scheduling system CN3. This version enables users to schedule papers directly from the visualization. Scheduled papers and recommended papers are highlighted.
