@@ -97,7 +97,13 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
   # nm.nmin = nmds.min(nm)
   if (nrow(distance_matrix) <= 2) {
     points <- tryCatch({
-      ord <- metaMDS(distance_matrix, k = 2, parallel = 3)
+      ord <- metaMDS(distance_matrix, k = 2, parallel = 3, trymax=30,
+                     engine="monoMDS", distance='cao',
+                     threshold = 0.19, nthreshold=10,
+                     model = "linear",
+                     pc = TRUE,
+                     autotransform = FALSE, center = TRUE,
+                     halfchange = TRUE)
       points <- ord$points
     }, error=function(err){
       points <- cbind(runif(nrow(distance_matrix), min=-1, max=0),
@@ -107,20 +113,18 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
   } else if (nrow(distance_matrix) == 1) {
     points <- cbind(0, 0)
   } else {
-    ord <- metaMDS(distance_matrix, k = 2, parallel = 3)
+    ord <- metaMDS(distance_matrix, k = 2, parallel = 3, trymax=30,
+                   engine="monoMDS", distance='cao',
+                   threshold = 0.19, nthreshold=10,
+                   model = "linear",
+                   pc = TRUE,
+                   autotransform = FALSE, center = TRUE,
+                   halfchange = TRUE)
     points <- ord$points
     vclog$info(paste("NMDS-Stress:", min(ord$stress), sep=" "))
   }
 
-  # vclog$info(paste("NMDS-R2:", min(nm$r2), sep=" "))
 
-  # NEEDS FIX
-  # if(exists("DEBUG") && DEBUG == TRUE) {
-  #   # Plot results from multidimensional scaling, highlight clusters with symbols
-  #   pdf("mds.pdf")
-  #   plot(nm.nmin, pch=groups)
-  #   dev.off()
-  # }
   layout <- list(X1 = points[,1], X2 = points[,2])
   return(layout)
 }
