@@ -19,11 +19,11 @@ prune_ngrams <- function(ngrams, stops){
   tokens = mapply(strsplit, tokens, split="_")
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
-                                      !any(grepl(x[1], c(stops)))
+                                  if (x[1] != "") !any(stri_detect_fixed(stops, x[1]))
                                             }, y)})
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
-                                      !any(grepl(tail(x,1), c(stops)))
+                                  if (tail(x,1) != "") !any(stri_detect_fixed(stops, tail(x,1)))
                                             }, y)})
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
@@ -142,12 +142,12 @@ another_prune_ngrams <- function(ngrams, stops){
   # check if first token of ngrams in stopword list
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
-                                      !any(grepl(x[1], c(stops)))
+                                  if (x[1] != "") !any(stri_detect_fixed(stops, x[1]))
                                             }, y)})
   # check if last token of ngrams in stopword list
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
-                                      !any(grepl(tail(x,1), c(stops)))
+                                  if (tail(x,1) != "") !any(stri_detect_fixed(stops, tail(x,1)))
                                             }, y)})
   # check that first token is not the same as the last token
   tokens = lapply(tokens, function(y){
