@@ -2,6 +2,7 @@ rm(list = ls())
 library(logging)
 library(jsonlite)
 library(dplyr)
+library(data.table)
 library(tidyr)
 
 args <- commandArgs(TRUE)
@@ -28,9 +29,9 @@ metadata <- fromJSON(tmp_json)
 sg_data = list()
 
 if (service == 'linkedcat' || service == 'linkedcat_authorview') {
-  sg_data$area <- metadata %>% group_by(year, area) %>% count
-  sg_data$subject <- metadata %>% separate_rows(subject, sep="; ") %>% group_by(year, subject) %>% count
-  sg_data$bkl_caption <- metadata %>% separate_rows(bkl_caption, sep="; ") %>% group_by(year, bkl_caption) %>% count
+  sg_data$area <- metadata %>% group_by(year, area) %>% summarize(count = uniqueN(id), ids = paste(id, collapse=", "))
+  sg_data$subject <- metadata %>% separate_rows(subject, sep="; ") %>% group_by(year, subject) %>% summarize(count = uniqueN(id), ids = paste(id, collapse=", "))
+  sg_data$bkl_caption <- metadata %>% separate_rows(bkl_caption, sep="; ") %>% group_by(year, bkl_caption) %>% summarize(count = uniqueN(id), ids = paste(id, collapse=", "))
 }
 
 end.time <- Sys.time()
