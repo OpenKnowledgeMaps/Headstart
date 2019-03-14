@@ -49,11 +49,10 @@ class RCalculation extends Calculation {
         return $output_r;
     }
 
-    public function performStreamgraphCalculation($service, $output_json) {
+    public function performStreamgraphCalculation($working_dir, $service, $output_json) {
         $ini = $this->ini_array["calculation"];
 
         $base_dir = $this->ini_array["general"]["preprocessing_dir"];
-        $working_dir = $this->$ini_array["general"]["preprocessing_dir"] . $this->$ini_array["output"]["output_dir"];
         $binary = $ini["binary"];
         $script = $base_dir . "other-scripts/streamgraph.R";
 
