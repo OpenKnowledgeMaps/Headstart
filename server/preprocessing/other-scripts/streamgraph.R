@@ -29,9 +29,9 @@ metadata <- fromJSON(tmp_json)
 sg_data = list()
 
 if (service == 'linkedcat' || service == 'linkedcat_authorview') {
-  sg_data$area <- metadata %>% group_by(year, area) %>% summarize(count = uniqueN(id), ids = paste(id, collapse=", "))
-  sg_data$subject <- metadata %>% separate_rows(subject, sep="; ") %>% group_by(year, subject) %>% summarize(count = uniqueN(id), ids = paste(id, collapse=", "))
-  sg_data$bkl_caption <- metadata %>% separate_rows(bkl_caption, sep="; ") %>% group_by(year, bkl_caption) %>% summarize(count = uniqueN(id), ids = paste(id, collapse=", "))
+  sg_data$area <- metadata %>% group_by(year, area) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
+  sg_data$subject <- metadata %>% separate_rows(subject, sep="; ") %>% group_by(year, subject) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
+  sg_data$bkl_caption <- metadata %>% separate_rows(bkl_caption, sep="; ") %>% group_by(year, bkl_caption) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
 }
 
 end.time <- Sys.time()
