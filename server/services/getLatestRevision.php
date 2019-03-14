@@ -28,7 +28,7 @@ if ($context === true) {
                         "data" => $data["rev_data"]);
    if ($streamgraph === true) {
      $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
-     $return_data["streamgraph"] = $calculation->performStreamgraphCalculation(json_encode($return_data["data"]));
+     $return_data["streamgraph"] = $calculation->performStreamgraphCalculation($return_data["context"]["service"], json_encode($return_data["data"]));
    }
    $jsonData = json_encode($return_data);
    library\CommUtils::echoOrCallback($jsonData, $_GET);
