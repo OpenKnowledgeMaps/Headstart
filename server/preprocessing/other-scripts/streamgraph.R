@@ -18,7 +18,7 @@ metadata <- fromJSON(tmp_json)
 
 sg_data = list()
 
-if (service == 'linkedcat_authorview') {
+if (service == 'linkedcat') {
   sg_data$area <- metadata %>% group_by(year, area) %>% count
   sg_data$subject <- metadata %>% separate_rows(subject, sep="; ") %>% group_by(year, subject) %>% count
   sg_data$bkl_caption <- metadata %>% separate_rows(bkl_caption, sep="; ") %>% group_by(year, bkl_caption) %>% count
@@ -26,5 +26,5 @@ if (service == 'linkedcat_authorview') {
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time
-sglog$info(paste("Time taken - streamgraph:", time.taken, sep=" "))
+sglog$info(paste("Time taken streamgraph:", time.taken, sep=" "))
 print(toJSON(sg_data))
