@@ -11,6 +11,15 @@ tmp_json <- args[3]
 
 setwd(wd) #Don't forget to set your working directory
 
+source('../other-scripts/utils.R')
+DEBUG = FALSE
+
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
+} else {
+  setup_logging('INFO')
+}
+
 sglog <- getLogger('sg')
 
 start.time <- Sys.time()
