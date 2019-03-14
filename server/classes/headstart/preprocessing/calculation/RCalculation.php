@@ -56,17 +56,16 @@ class RCalculation extends Calculation {
         $binary = $ini["binary"];
         $script = $base_dir . "other-scripts/streamgraph.R";
 
-        $tmp_json = tmpfile();
-        $tmp_meta = stream_get_meta_data($tmp_json);
+        $tmp_jsonfile = tmpfile();
+        $tmp_meta = stream_get_meta_data($tmp_jsonfile);
         $tmp_jsonname = $tmp_meta["uri"];
-        fwrite($tmp_json, $output_json);
+        fwrite($tmp_jsonfile, $output_json);
 
         $path = '"' . $binary . '" '
                 . $script
                 . ' "' . $working_dir . '" '
-                . '"' . $service . '"'
+                . '"' . $service . '" '
                 . '"' . $tmp_jsonname . '"';
-
         exec($path, $streamgraph_json);
 
         return $streamgraph_json;
