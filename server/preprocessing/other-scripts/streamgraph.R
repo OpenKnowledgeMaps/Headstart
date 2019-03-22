@@ -37,4 +37,4 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
 end.time <- Sys.time()
 time.taken <- end.time - start.time
 sglog$info(paste("Time taken streamgraph:", time.taken, sep=" "))
-print(toJSON(sg_data))
+print(toJSON(sg_data, auto_unbox = TRUE))
