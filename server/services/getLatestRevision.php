@@ -26,7 +26,6 @@ if ($context === true) {
    $return_data = array("context" => array("id" => $data["rev_vis"], "query" => $data["vis_query"], "service" => $data["vis_title"]
                             , "timestamp" => $data["rev_timestamp"], "params" => $data["vis_params"]),
                         "data" => $data["rev_data"]);
-   $streamgraph = true;
    if ($streamgraph === true) {
      $calculation = new headstart\preprocessing\calculation\RCalculation($ini_array);
      $working_dir = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
