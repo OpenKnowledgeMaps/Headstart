@@ -36,7 +36,7 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
   boundaries <- boundaries %>% separate_rows(year, sep=", ")
   metadata <- merge(x = metadata, y = boundaries, by.x='year', by.y='year')
   sg_data$area <- metadata %>% group_by(boundary_label, area) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
-  sg_data$subject <- metadata %>% separate_rows(subject, sep="; ") %>% group_by(boundary_label, subject) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
+  metadata %>% separate_rows(subject, sep="; ") %>% mutate(count=1) %>% complete(boundary_label, subject, fill=list(count=0)) %>% group_by(boundary_label, subject, .drop=FALSE) %>% summarize(count=sum(count), ids=list(unique(id)))
   sg_data$bkl_caption <- metadata %>% separate_rows(bkl_caption, sep="; ") %>% group_by(boundary_label, bkl_caption) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
 }
 
