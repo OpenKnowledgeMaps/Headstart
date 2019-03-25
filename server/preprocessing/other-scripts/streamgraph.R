@@ -35,9 +35,15 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
   boundaries$boundary_label <- apply(boundaries, 1, function(x) {paste(x[1], x[2], sep=" - ")})
   boundaries <- boundaries %>% separate_rows(year, sep=", ") %>% select(year, boundary_label)
   metadata <- merge(x = metadata, y = boundaries, by.x='year', by.y='year', all = TRUE)
-  sg_data$area <- metadata %>% group_by(boundary_label, area) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
-  sg_data$subject <- metadata %>% separate_rows(subject, sep="; ") %>% mutate(count=1) %>% complete(boundary_label, subject, fill=list(count=0)) %>% group_by(boundary_label, subject, .drop=FALSE) %>% summarise(count=sum(count), ids=paste(id, collapse=", "))
-  sg_data$bkl_caption <- metadata %>% separate_rows(bkl_caption, sep="; ") %>% group_by(boundary_label, bkl_caption) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
+  sg_data$subject <- (metadata 
+                      %>% separate_rows(subject, sep="; ") 
+                      %>% rename(stream_item=subject) 
+                      %>% mutate(count=1) 
+                      %>% complete(boundary_label, stream_item, fill=list(count=0))
+                      %>% group_by(boundary_label, stream_item, .drop=FALSE) 
+                      %>% summarise(count=sum(count), ids=paste(id, collapse=", ")))
+  #sg_data$area <- metadata %>% group_by(boundary_label, area) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
+  #sg_data$bkl_caption <- metadata %>% separate_rows(bkl_caption, sep="; ") %>% group_by(boundary_label, bkl_caption) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
 }
 
 end.time <- Sys.time()
