@@ -26,6 +26,28 @@ sglog <- getLogger('sg')
 start.time <- Sys.time()
 metadata <- fromJSON(tmp_json)
 
+
+post_process <- function(sg_data) {
+  data_json <- list()
+  for (item in unique(sg_data[!is.na(sg_data$stream_item),]$stream_item)) {
+    item_json <- list()
+    item_json$name <- item
+    tmp <- sg_data %>% subset(stream_item == item)
+    item_json$data <- tmp$count
+    item_json$ids_overall <- (tmp
+                              %>% ungroup()
+                              %>% separate_rows(ids, sep=", ")
+                              %>% distinct(ids) 
+                              %>% filter(ids != "NA")
+                              %>% select(ids) 
+                              %>% pull())
+    item_json$ids_timestep <- tmp$ids
+    data_json[[item]] <- item_json
+  }
+  return(data_json)
+}
+
+
 sg_data = list()
 
 if (service == 'linkedcat' || service == 'linkedcat_authorview') {
@@ -49,4 +71,6 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
 end.time <- Sys.time()
 time.taken <- end.time - start.time
 sglog$info(paste("Time taken streamgraph:", time.taken, sep=" "))
-print(toJSON(sg_data, auto_unbox = TRUE))
+output <- list()
+output$subject <- post_process(sg_data$subject)
+print(toJSON(output))
