@@ -55,13 +55,15 @@ tryCatch({
 #time.taken <- end.time - start.time
 #time.taken
 tryCatch({
-output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
-                         lang=LANGUAGE$name,
-                         add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
+  output_json = vis_layout(input_data$text, input_data$metadata,
+                           service,
+                           max_clusters=MAX_CLUSTERS,
+                           lang=LANGUAGE$name,
+                           add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
 }, error=function(err){
-tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
+  tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
   failed$query <<- query
-  failed$query_reason <<- err$message
+  failed$processing_reason <<- err$message
 })
 
 if (!exists('output_json')) {
