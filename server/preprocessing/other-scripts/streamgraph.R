@@ -41,10 +41,11 @@ post_process <- function(sg_data) {
                               %>% filter(ids != "NA")
                               %>% select(ids) 
                               %>% pull())
-    new_item$ids_timestep <- tmp$ids
+    new_item$ids_timestep <- lapply(tmp$ids, function(x) unlist(strsplit(x, split=", ")))
     df <- rbind(df, rbind(new_item))
   }
   rownames(df) <- 1:nrow(df)
+  df$name <- unlist(df$name)
   return(df)
 }
 
@@ -73,5 +74,5 @@ end.time <- Sys.time()
 time.taken <- end.time - start.time
 sglog$info(paste("Time taken streamgraph:", time.taken, sep=" "))
 output <- list()
-output$subject <- post_process(sg_data$subject)
-print(toJSON(output, auto_unbox = TRUE))
+output$subject <- post_process(sg_data)
+print(toJSON(output))
