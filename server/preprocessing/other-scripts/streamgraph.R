@@ -33,7 +33,7 @@ post_process <- function(sg_data) {
     new_item <- list()
     new_item$name <- item
     tmp <- sg_data %>% subset(stream_item == item)
-    new_item$data <- tmp$count
+    new_item$y <- tmp$count
     new_item$ids_overall <- (tmp
                               %>% ungroup()
                               %>% separate_rows(ids, sep=", ")
@@ -57,6 +57,7 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
                            max=c(1849, 1859, 1869, 1879, 1889, 1899, 1909, 1918))
   boundaries$year <- apply(boundaries, 1, function(x) {paste(x[1]:x[2], collapse=", ")})
   boundaries$boundary_label <- apply(boundaries, 1, function(x) {paste(x[1], x[2], sep=" - ")})
+  sg_data$x <- boundaries$boundary_label
   boundaries <- boundaries %>% separate_rows(year, sep=", ") %>% select(year, boundary_label)
   metadata <- merge(x = metadata, y = boundaries, by.x='year', by.y='year', all = TRUE)
   sg_data$subject <- (metadata 
@@ -75,4 +76,5 @@ time.taken <- end.time - start.time
 sglog$info(paste("Time taken streamgraph:", time.taken, sep=" "))
 output <- list()
 output$subject <- post_process(sg_data$subject)
+output$x <- sg_data$x
 print(toJSON(output))
