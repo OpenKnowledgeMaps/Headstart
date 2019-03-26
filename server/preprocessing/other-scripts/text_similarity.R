@@ -95,9 +95,11 @@ tryCatch({
 
 print("got the input")
 tryCatch({
-output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
-                         lang=LANGUAGE$name,
-                         taxonomy_separator=taxonomy_separator, list_size = list_size)
+  output_json = vis_layout(input_data$text, input_data$metadata,
+                           service,
+                           max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
+                           lang=LANGUAGE$name,
+                           taxonomy_separator=taxonomy_separator, list_size = list_size)
 }, error=function(err){
  tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
  failed$query <<- query
