@@ -28,23 +28,24 @@ metadata <- fromJSON(tmp_json)
 
 
 post_process <- function(sg_data) {
-  data_json <- list()
+  df <- data.frame(row.names = c('name', 'data', 'ids_overall', 'ids_timestep'))
   for (item in unique(sg_data[!is.na(sg_data$stream_item),]$stream_item)) {
-    item_json <- list()
-    item_json$name <- item
+    new_item <- list()
+    new_item$name <- item
     tmp <- sg_data %>% subset(stream_item == item)
-    item_json$data <- tmp$count
-    item_json$ids_overall <- (tmp
+    new_item$data <- tmp$count
+    new_item$ids_overall <- (tmp
                               %>% ungroup()
                               %>% separate_rows(ids, sep=", ")
                               %>% distinct(ids) 
                               %>% filter(ids != "NA")
                               %>% select(ids) 
                               %>% pull())
-    item_json$ids_timestep <- tmp$ids
-    data_json[[item]] <- item_json
+    new_item$ids_timestep <- tmp$ids
+    df <- rbind(df, rbind(new_item))
   }
-  return(data_json)
+  rownames(df) <- 1:nrow(df)
+  return(df)
 }
 
 
