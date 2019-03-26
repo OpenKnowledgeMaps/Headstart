@@ -74,5 +74,5 @@ end.time <- Sys.time()
 time.taken <- end.time - start.time
 sglog$info(paste("Time taken streamgraph:", time.taken, sep=" "))
 output <- list()
-output$subject <- post_process(sg_data)
+output$subject <- post_process(sg_data$subject)
 print(toJSON(output))
