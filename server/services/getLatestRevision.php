@@ -31,7 +31,7 @@ if ($context === true) {
      $working_dir = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
      $sg_output = $calculation->performStreamgraphCalculation($working_dir, $return_data["context"]["service"], $return_data["data"]);
      $sg_output_json = end($sg_output);
-     $sg_output_json = mb_convert_encoding($sg_output_json);
+     $sg_output_json = mb_convert_encoding($sg_output_json, "UTF-8");
      $return_data["streamgraph"] = $sg_output_json;
    }
    $jsonData = json_encode($return_data);
