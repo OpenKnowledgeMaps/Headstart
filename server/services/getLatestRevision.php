@@ -29,7 +29,10 @@ if ($context === true) {
    if ($streamgraph === true) {
      $calculation = new headstart\preprocessing\calculation\RCalculation($ini_array);
      $working_dir = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
-     $return_data["streamgraph"] = $calculation->performStreamgraphCalculation($working_dir, $return_data["context"]["service"], $return_data["data"])[0];
+     $sg_output = $calculation->performStreamgraphCalculation($working_dir, $return_data["context"]["service"], $return_data["data"]);
+     $sg_output_json = end($sg_output);
+     $sg_output_json = mb_convert_encoding($sg_output_json);
+     $return_data["streamgraph"] = $sg_output_json;
    }
    $jsonData = json_encode($return_data);
    library\CommUtils::echoOrCallback($jsonData, $_GET);
