@@ -32,6 +32,11 @@ if ($context === true) {
      $sg_output = $calculation->performStreamgraphCalculation($working_dir, $return_data["context"]["service"], $return_data["data"]);
      $sg_output_json = end($sg_output);
      $sg_output_json = mb_convert_encoding($sg_output_json, "UTF-8");
+
+     if (!library\Toolkit::isJSON($sg_output_json) || $sg_output_json == "null" || $sg_output_json == null) {
+
+         $sg_output_json = json_encode(array("status" => "error"));
+     }
      $return_data["streamgraph"] = $sg_output_json;
    }
    $jsonData = json_encode($return_data);
