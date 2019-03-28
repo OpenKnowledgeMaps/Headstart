@@ -67,14 +67,23 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
                       %>% complete(boundary_label, stream_item, fill=list(count=0))
                       %>% group_by(boundary_label, stream_item, .drop=FALSE) 
                       %>% summarise(count=sum(count), ids=paste(id, collapse=", ")))
-  #sg_data$area <- metadata %>% group_by(boundary_label, area) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
+  sg_data$area <- (metadata
+                   %>% rename(stream_item=area) 
+                   %>% mutate(count=1) 
+                   %>% complete(boundary_label, stream_item, fill=list(count=0))
+                   %>% group_by(boundary_label, stream_item, .drop=FALSE) 
+                   %>% summarise(count=sum(count), ids=paste(id, collapse=", ")))
   #sg_data$bkl_caption <- metadata %>% separate_rows(bkl_caption, sep="; ") %>% group_by(boundary_label, bkl_caption) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
+  output <- list()
+  output$x <- sg_data$x
+  output$subject <- post_process(sg_data$subject)
+  output$area <- post_process(sg_data$area)
 }
+
+
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time
 sglog$info(paste("Time taken streamgraph:", time.taken, sep=" "))
-output <- list()
-output$subject <- post_process(sg_data$subject)
-output$x <- sg_data$x
+
 print(toJSON(output))
