@@ -75,7 +75,9 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
             %>% head(20)
             %>% select(stream_item) 
             %>% pull())
-  sg_data$subject <- sg_data$subject %>% subset(stream_item %in% top_20)
+  sg_data$subject <- (sg_data$subject
+                      %>% subset(stream_item %in% top_20)
+                      %>% arrange(match(stream_item, top_20), boundary_label))
   sg_data$area <- (metadata
                    %>% rename(stream_item=area) 
                    %>% mutate(count=1) 
