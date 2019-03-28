@@ -7,7 +7,7 @@ SplitTokenizer <- function(x) {
 
 TypeCountTokenizer <- function(x) {
   tokens = unlist(lapply(strsplit(words(x), split=";"), paste), use.names = FALSE)
-  tokens = unlist(lapply(tokens, gsub, pattern='[[:punct:]]', replacement=""))
+  tokens = unlist(lapply(tokens, stri_replace_all, regex='[^[:alnum:]-]', replacement=""))
   return(tokens)
 }
 
@@ -19,14 +19,17 @@ prune_ngrams <- function(ngrams, stops){
   tokens = mapply(strsplit, tokens, split="_")
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
+                                  if (!purrr::is_empty(x))
                                   if (x[1] != "") !any(stri_detect_fixed(stops, x[1]))
                                             }, y)})
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
+                                  if (!purrr::is_empty(x))
                                   if (tail(x,1) != "") !any(stri_detect_fixed(stops, tail(x,1)))
                                             }, y)})
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
+                                  if (!purrr::is_empty(x))
                                       !(x[1]==tail(x,1))
                                         }, y)})
   tokens = lapply(tokens, function(y){Filter(function(x){length(x)>1},y)})
@@ -96,8 +99,7 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator) {
     titles =  metadata$title[matches]
     subjects = metadata$subject[matches]
     langs = metadata$lang_detected[matches]
-
-    titles = lapply(titles, function(x) {gsub("[^[:alpha:]]", " ", x)})
+    titles = lapply(titles, function(x) {gsub("[^[:alnum:]-]", " ", x)})
     titles = lapply(titles, gsub, pattern="\\s+", replacement=" ")
     title_ngrams <- get_title_ngrams(titles, stops)
     titles = lapply(titles, function(x) {removeWords(x, stops)})
@@ -142,11 +144,13 @@ another_prune_ngrams <- function(ngrams, stops){
   # check if first token of ngrams in stopword list
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
+                                  if (!purrr::is_empty(x))
                                   if (x[1] != "") !any(stri_detect_fixed(stops, x[1]))
                                             }, y)})
   # check if last token of ngrams in stopword list
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
+                                  if (!purrr::is_empty(x))
                                   if (tail(x,1) != "") !any(stri_detect_fixed(stops, tail(x,1)))
                                             }, y)})
   # check that first token is not the same as the last token
