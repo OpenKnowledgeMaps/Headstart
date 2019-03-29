@@ -122,8 +122,8 @@ get_cluster_corpus <- function(clusters, metadata, api, stops, taxonomy_separato
       all_subjects = paste(subjects, collapse=" ")
     } else {
       all_subjects = paste(subjects, title_ngrams$bigrams, title_ngrams$trigrams, collapse=" ")
+      all_subjects = gsub(",", ";", all_subjects)
     }
-    all_subjects = gsub(",", ";", all_subjects)
     subjectlist = c(subjectlist, all_subjects)
   }
   nn_corpus <- Corpus(VectorSource(subjectlist))
