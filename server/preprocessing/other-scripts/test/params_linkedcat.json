@@ -1,5 +1,19 @@
 {
   "from":"1847",
   "to":"1918",
-  "include_content_type": ["Anthologie","Biografie","Briefsammlung","Katalog","Kommentar","Mitgliederverzeichnis","Quelle","Reisebericht","Rezension","Statistik","Verzeichnis"]
+  "include_content_type": [
+    "Andere Abhandlungen",
+    "Anthologie",
+    "Biografie",
+    "Briefsammlung",
+    "Katalog",
+    "Kommentar",
+    "Mehrsprachiges Wörterbuch",
+    "Mitgliederverzeichnis",
+    "Quelle",
+    "Reisebericht",
+    "Rezension",
+    "Statistik",
+    "Verzeichnis",
+    "Wörterbuch"]
 }
