@@ -53,36 +53,38 @@ get_papers <- function(query, params, limit=100) {
   }
 
   # make results dataframe
-  metadata <- data.frame(res$search)
+  search_res = res$search
+  metadata <- data.frame(search_res$id)
+  names(metadata) <- c('id')
+
+  metadata$subject <- if (!is.null(search_res$keyword_a)) unlist(lapply(search_res$keyword_a, function(x) {gsub("; $", "", x)})) else ""
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; ; ", "; ", x)}))
+  metadata$authors <- paste(search_res$author100_a, search_res$author700_a, sep="; ")
+  metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("; $|,$", "", x)}))
+  metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("^; ", "", x)}))
+  metadata$author_date <- metadata$author100_d
+  metadata$title <- if (!is.null(search_res$main_title)) search_res$main_title else ""
+  metadata$paper_abstract <- if (!is.null(search_res$ocrtext)) unlist(lapply(search_res$ocrtext, substr, start=0, stop=1000)) else ""
+  metadata$year <- search_res$pub_year
+  metadata$readers <- 0
+  metadata$url <- search_res$id
+  metadata$link <- "" # needs fix
+  metadata$published_in <- search_res$host_label
+  metadata$oa_state <- 1
+  metadata$subject_orig = metadata$subject
+  metadata$relevance = c(nrow(metadata):1)
+  metadata$bkl_caption = if (!is.null(search_res$bkl_caption)) search_res$bkl_caption else ""
+  metadata$bkl_top_caption = if (!is.null(search_res$bkl_top_caption)) search_res$bkl_top_caption else ""
+
   highlights <- data.frame(res$high)
   highlights <- ddply(highlights, .(names), summarize, text=paste(main_title, ocrtext, collapse=" ... "))
   names(highlights) <- c("id", "snippets")
   metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='id')
 
-  metadata[is.na(metadata)] <- ""
-  metadata$subject <- if (!is.null(metadata$keyword_a)) unlist(lapply(metadata$keyword_a, function(x) {gsub("; $", "", x)})) else ""
-  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; ; ", "; ", x)}))
-  metadata$authors <- paste(metadata$author100_a, metadata$author700_a, sep="; ")
-  metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("; $|,$", "", x)}))
-  metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("^; ", "", x)}))
-  metadata$author_date <- metadata$author100_d
-  metadata$title <- if (!is.null(metadata$main_title)) metadata$main_title else ""
-  metadata$paper_abstract <- if (!is.null(metadata$ocrtext)) metadata$ocrtext else ""
-  metadata$year <- metadata$pub_year
-  metadata$readers <- 0
-  metadata$url <- metadata$id
-  metadata$link <- "" # needs fix
-  metadata$published_in <- metadata$host_label
-  metadata$oa_state <- 1
-  metadata$subject_orig = metadata$subject
-  metadata$relevance = c(nrow(metadata):1)
-  metadata$bkl_caption = if (!is.null(metadata$bkl_caption)) metadata$bkl_caption else ""
-  metadata$bkl_top_caption = if (!is.null(metadata$bkl_top_caption)) metadata$bkl_top_caption else ""
-
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(metadata$main_title, metadata$keyword_a,
+  text$content = paste(search_res$main_title, search_res$keyword_a,
                        sep = " ")
 
 
@@ -108,7 +110,7 @@ build_query <- function(query, params, limit){
                 'author700_a', 'author700_d', 'author700_0',
                 'bkl_caption', 'bkl_top_caption',
                 'keyword_a', 'tags', 'category', 'bib', 'language_code',
-                'ocrtext_good', 'ocrtext')
+                'ocrtext')
   q <- paste(paste(q_fields, query, sep = ":"), collapse = " ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
