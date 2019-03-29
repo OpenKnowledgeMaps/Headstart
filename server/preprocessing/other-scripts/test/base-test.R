@@ -55,7 +55,9 @@ tryCatch({
 #time.taken <- end.time - start.time
 #time.taken
 tryCatch({
-output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
+output_json = vis_layout(input_data$text, input_data$metadata,
+                         service,
+                         max_clusters=MAX_CLUSTERS,
                          lang=LANGUAGE$name,
                          add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
 }, error=function(err){

@@ -40,11 +40,12 @@ prune_ngrams <- function(ngrams, stops){
   return (tokens)
 }
 
-create_cluster_labels <- function(clusters, metadata, lang,
+create_cluster_labels <- function(clusters, metadata,
+                                  api, lang,
                                   unlowered_corpus,
                                   weightingspec,
                                   top_n, stops, taxonomy_separator="/") {
-  nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
+  nn_corpus <- get_cluster_corpus(clusters, metadata, api, stops, taxonomy_separator)
   nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
                                       tokenize = SplitTokenizer,
                                       weighting = function(x) weightSMART(x, spec="ntn"),
@@ -91,7 +92,7 @@ match_keyword_case <- function(x, type_counts) {
 }
 
 
-get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator) {
+get_cluster_corpus <- function(clusters, metadata, api, stops, taxonomy_separator) {
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
     group = c(names(clusters$groups[clusters$groups == k]))
@@ -117,8 +118,12 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator) {
       subjects = lapply(subjects, function(x){paste(unlist(x), collapse=";")})
       subjects = mapply(paste, subjects, taxons, collapse=";")
     }
-    all_subjects = paste(subjects, title_ngrams$bigrams, title_ngrams$trigrams, collapse=" ")
-    all_subjects = gsub(",", ";", all_subjects)
+    if (api == "linkedcat" || api == "linkedcat_authorview") {
+      all_subjects = paste(subjects, collapse=" ")
+    } else {
+      all_subjects = paste(subjects, title_ngrams$bigrams, title_ngrams$trigrams, collapse=" ")
+      all_subjects = gsub(",", ";", all_subjects)
+    }
     subjectlist = c(subjectlist, all_subjects)
   }
   nn_corpus <- Corpus(VectorSource(subjectlist))
