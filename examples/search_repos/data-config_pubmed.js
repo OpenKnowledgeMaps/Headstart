@@ -7,7 +7,7 @@ var data_config = {
     title: "",
     base_unit: "citations",
     use_area_uri: true,
-    show_timeline: false,
+    show_multiples: false,
     show_dropdown: false,
     preview_type: "pdf",
     sort_options: ["readers", "title", "authors", "year"],

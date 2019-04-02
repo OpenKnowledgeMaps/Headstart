@@ -49,9 +49,9 @@ class Canvas {
 
         this.available_height = this.available_height - ((toolbar_height > 0)?(CHART_HEIGHT_CORRECTION_TOOLBAR):(CHART_HEIGHT_CORRECTION));
 
-        if (headstart.is("timeline")) {
-            var timeline_height = $(".tl-title").outerHeight(true);
-            this.available_height = this.available_height - timeline_height;
+        if (headstart.is("multiples")) {
+            var multiples_height = $(".tl-title").outerHeight(true);
+            this.available_height = this.available_height - multiples_height;
             this.available_width = $("#" + config.tag).width();
         } else {
             this.available_width = $("#" + config.tag).width() - $("#list_explorer").width() - $("#modals").width();
@@ -149,7 +149,7 @@ class Canvas {
                 .attr("width", this.current_vis_size + "px");
     }
 
-    drawTimelineSvg() {
+    drawMultiplesSvg() {
         const svg = d3.select("#chart-svg");
         let s = this.current_vis_size * Object.keys(mediator.bubbles).length;
         svg.attr("width", s)
@@ -187,7 +187,7 @@ class Canvas {
     initEventListeners() {
         d3.select(window).on("resize", () => {
             mediator.publish("record_action", config.title, "Map", "resize", config.user_id, "resize_map", null, null, null);
-            if (headstart.is("timeline")) {
+            if (headstart.is("multiples")) {
                 return;
             }   
             mediator.publish("window_resize");
@@ -268,9 +268,9 @@ class Canvas {
     }
 
     initClickListenersForNav() {
-        $("#timelineview").on("click", () => {
-            if ($("#timelineview a").html() === "TimeLineView") {
-                mediator.publish("to_timeline");
+        $("#multiplesview").on("click", () => {
+            if ($("#multiplesview a").html() === "TimeLineView") {
+                mediator.publish("to_multiples");
             }
         });
     }
@@ -313,8 +313,8 @@ class Canvas {
                         +'</span> ' + config.localization[config.language].intro_label);
         }
 
-        if (config.show_timeline) {
-            let link = ' <span id="timelineview"><a href="#">TimeLineView</a></span>';
+        if (config.show_multiples) {
+            let link = ' <span id="multiplesview"><a href="#">TimeLineView</a></span>';
             subdiscipline_title_h4.append(link);
         }
 
@@ -616,7 +616,7 @@ class Canvas {
     }
 
     // Grid drawing methods
-    // draw x and y lines in svg canvas for timelineview
+    // draw x and y lines in svg canvas for multiplesview
     drawGrid() {
         this.drawXGrid();
         this.drawYGrid();
@@ -687,11 +687,11 @@ class Canvas {
 
     drawNormalViewLink() {
         // remove event handler
-        var id_timelineview = $("#timelineview");
-        id_timelineview.off("click");
+        var id_multiplesview = $("#multiplesview");
+        id_multiplesview.off("click");
         // refreshes page
         var link = ' <a href="" id="normal_link">Normal View</a>';
-        id_timelineview.html(link);
+        id_multiplesview.html(link);
     }
 
     setupCanvas() {
@@ -720,9 +720,9 @@ class Canvas {
         this.updateChartCanvas();
     }
 
-    setupTimelineCanvas() {
+    setupMultiplesCanvas() {
         this.viz.empty();
-        this.viz.append(timelineTemplate());
+        this.viz.append(multiplesTemplate());
 
         // change heading to give an option to get back to normal view
         this.force_areas.stop();
@@ -736,7 +736,7 @@ class Canvas {
         this.calcChartSize();
         this.initScales();
         this.setScaleRanges();
-        this.drawTimelineSvg();
+        this.drawMultiplesSvg();
         this.drawChartCanvas();
         this.drawNormalViewLink();
         this.drawGridTitles(true);

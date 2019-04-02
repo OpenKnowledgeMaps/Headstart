@@ -37,7 +37,7 @@ BubblesFSM.prototype = {
             this.addClassNamesToCircles(bubbleFrames);
         }
 
-        if (mediator.is_in_timeline_mode) {
+        if (mediator.is_in_multiples_mode) {
             this.positionBubbles2(bubbleFrames, this.id);
             this.addClassNamesToCirclesForGrouping(bubbleFrames);
         }
@@ -189,14 +189,14 @@ BubblesFSM.prototype = {
                             }
                         });
 
-                mediator.current_bubble.resetCircleDesignTimeLine(underlying_circle[0][0]);
+                mediator.current_bubble.resetCircleDesignMultiples(underlying_circle[0][0]);
                 mediator.current_bubble.highlightAllCirclesWithLike(underlying_circle[0][0]);
                 mediator.current_bubble.drawConnectionLines(underlying_circle[0][0]);
             }
         });
 
         d3.selectAll("#area_title").on("mouseout", function () {
-            if (mediator.is_in_timeline_mode) {
+            if (mediator.is_in_multiples_mode) {
 
                 //if mouse out to child element, abort
                 if(d3.event.target.parentElement == this) {
@@ -229,7 +229,7 @@ BubblesFSM.prototype = {
         circle.style("fill-opacity", 1);
     },
 
-    // used for timeline view, when user hovers over one circle in a
+    // used for multiples view, when user hovers over one circle in a
     // time period, we want to highlight the same circle for the time period
     highlightAllCirclesWithLike: function (circle) {
         var class_name = $(circle).attr("class").replace("area ", "");
@@ -319,7 +319,7 @@ BubblesFSM.prototype = {
         });
     },
 
-    // for the timelineview we simply translate the "other" bubbles by the
+    // for the multiples view we simply translate the "other" bubbles by the
     // current_vis_size
     positionBubbles2: function (bubbles, bubbles_id) {
         bubbles.attr("transform", function (d) {
@@ -667,7 +667,7 @@ BubblesFSM.prototype = {
         papers.initPaperClickHandler();
     },
 
-    resetCircleDesignTimeLine: function () {
+    resetCircleDesignMultiples: function () {
         d3.selectAll("#headstart-chart circle")
                 .style("fill", "rgb(210, 228, 240)")
                 .style("fill-opacity", "0.8");
@@ -793,7 +793,7 @@ BubblesFSM.prototype = {
 
     onstart: function (event, from, to, csv, recommendation_data) {
         mediator.publish('bubbles_update_data_and_areas', this);
-        if (mediator.is_in_timeline_mode) {
+        if (mediator.is_in_multiples_mode) {
             this.draw();
             this.initMouseListeners();
         }
@@ -809,8 +809,8 @@ BubblesFSM.prototype = {
     onmouseover: function (event, from, to, d, circle) {
 
         mediator.current_circle = d3.select(circle);
-        if (mediator.is_in_timeline_mode) {
-            this.resetCircleDesignTimeLine(circle);
+        if (mediator.is_in_multiples_mode) {
+            this.resetCircleDesignMultiples(circle);
             this.highlightAllCirclesWithLike(circle);
             this.drawConnectionLines(circle);
             //hideSibling(circle);
@@ -869,8 +869,8 @@ BubblesFSM.prototype = {
             }
         }
 
-        if (mediator.is_in_timeline_mode) {
-            this.resetCircleDesignTimeLine(circle);
+        if (mediator.is_in_multiples_mode) {
+            this.resetCircleDesignMultiples(circle);
             this.removeAllConnections();
         } else {
             this.resetCircleDesign();

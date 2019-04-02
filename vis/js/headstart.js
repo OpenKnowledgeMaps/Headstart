@@ -227,29 +227,29 @@ HeadstartFSM.prototype = {
       this.get_files[config.mode](hs, this.makeSetupVisualisation());
   },
 
-  // 'ontotimeline' transitions from Headstarts "normal" view to the timeline
+  // 'ontomultiples' transitions from Headstarts "normal" view to multiples
   // view. In a nutshell:
   // 1. it requires some cleanup
   //    - objects which re no longer needed
   //    - the canvas
   // 2. rendering of new elements, on a bigger
   //    chart
-  ontotimeline: function() {
-      mediator.publish("ontotimeline");
+  ontomultiples: function() {
+      mediator.publish("ontomultiples");
       // load bubbles in sync
       var that = this;
       $.each(mediator.bubbles, (index, elem) => {
-          var setupTimelineVisualization = (csv) => {
+          var setupMultiplesVisualization = (csv) => {
               mediator.publish("prepare_data", null, csv);
               mediator.publish("prepare_areas");
               elem.start(csv);
           };
-          that.get_timeline_files(elem.file, setupTimelineVisualization);
+          that.get_multiples_files(elem.file, setupMultiplesVisualization);
       });
-      mediator.publish("ontotimeline_finish");
+      mediator.publish("ontomultiples_finish");
   },
 
-  get_timeline_files: function(file, callback) {
+  get_multiples_files: function(file, callback) {
     var formats = {
       csv: function (file, callback) {
         d3.csv(file, callback);
@@ -281,8 +281,8 @@ export var headstart = StateMachine.create({
 
   events: [
     { name: "start",      from: "none",     to: "normal" },
-    { name: "totimeline", from: ["normal", "switchfiles"],   to: "timeline" },
-    { name: "tofile", from: ["normal", "switchfiles", "timeline"], to: "switchfiles"}
+    { name: "tomultiples", from: ["normal", "switchfiles"],   to: "multiples" },
+    { name: "tofile", from: ["normal", "switchfiles", "multiples"], to: "switchfiles"}
   ]
 
 });
