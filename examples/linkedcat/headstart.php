@@ -12,6 +12,7 @@ include 'config.php';
         <div id="visualization"></div>
         <script type="text/javascript" src="data-config_<?php echo $_GET['service'] ?>.js"></script>
         <script type="text/javascript" src="search_options.js"></script>
+        <script type="text/javascript" src="lib/Chart.Streamgraph.S.js"></script>
         <script>
         	data_config.files = [{
         		title: <?php echo json_encode($_GET['query']) ?>,
@@ -21,6 +22,9 @@ include 'config.php';
                 data_config.options = options_<?php echo $_GET['service'] ?>.dropdowns;
                 if(<?php echo json_encode($_GET['visualization_mode']) ?> === "authors") {
                     data_config.is_authorview = true;
+                }   
+                if(<?php echo json_encode($_GET['visualization_type']) ?> === "timeline") {
+                    data_config.is_streamgraph = true;
                 }
         </script>
         <script type="text/javascript" src="<?php echo $HEADSTART_PATH; ?>dist/headstart.js"></script>
