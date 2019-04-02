@@ -19,7 +19,7 @@ include 'config.php';
         	}];
                 data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
                 data_config.options = options_<?php echo $_GET['service'] ?>.dropdowns;
-                if(<?php echo json_encode($_GET['visualization_type']) ?> === "authors") {
+                if(<?php echo json_encode($_GET['visualization_mode']) ?> === "authors") {
                     data_config.is_authorview = true;
                 }
         </script>
