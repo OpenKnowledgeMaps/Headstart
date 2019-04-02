@@ -65,7 +65,7 @@ echo "var post_data = " . $post_data . ";\n";
                                 + "&file=" + file
                                 + "&service=" + params.get("service")
                                 + "&service_name=" + service_name
-                                + "&visualization_type=" + params.get("visualization_type"));
+                                + "&visualization_mode=" + params.get("visualization_mode"));
                         return false;
                     } else {
                         showErrorCreation();
