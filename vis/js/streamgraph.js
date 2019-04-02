@@ -17,21 +17,14 @@ export const streamgraph = StateMachine.create({
     callbacks: {
 
         onstart: function() {
-            d3.select('#headstart-chart')
-            .append('canvas')
-                .attr('width', '800')
-                .attr('height', '400')
-                .attr('id', 'streamgraph')
         }
     }
 });
 
 streamgraph.drawStreamgraph = function(streamgraph_data) {
     
-    let json_data = JSON.parse(streamgraph_data);
-    
+    let json_data = JSON.parse(streamgraph_data);    
     let x_labels = json_data.x;
-    
     let y_data = []; 
     
     json_data.subject.forEach(function (d) {

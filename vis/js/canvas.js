@@ -157,11 +157,13 @@ class Canvas {
         svg.attr("viewBox", "0 0 " + s + " " + this.current_vis_size);
     }
     
-    drawStreamgraphSvg() {
-       const svg = d3.select("#chart-svg");
-        svg.attr("width", this.available_width)
-                .attr("height", this.current_vis_size);
-        svg.attr("viewBox", "0 0 " + this.available_width + " " + this.current_vis_size);
+    drawStreamgraphChart() {
+        d3.select("#chart-svg").remove();
+        d3.select('#headstart-chart')
+             .append('canvas')
+                 .attr('width', this.available_width)
+                 .attr('height', this.current_vis_size)
+                 .attr('id', 'streamgraph') 
     }
 
     drawChartCanvas() {
@@ -735,7 +737,7 @@ class Canvas {
         this.initScales();
         this.setScaleRanges();
         
-        this.drawStreamgraphSvg();
+        this.drawStreamgraphChart();
     }
 
     setupMultiplesCanvas() {
