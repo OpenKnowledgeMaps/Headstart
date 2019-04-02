@@ -202,7 +202,7 @@ HeadstartFSM.prototype = {
 
       search_repos: function(that, setupVis) {
         let url = config.server_url + "services/getLatestRevision.php?vis_id=" + mediator.current_bubble.file 
-                + "&context=" + config.show_context;
+                + "&context=" + config.show_context + "&streamgraph=" + config.is_streamgraph;
         mediator.publish("get_data_from_files", url, 'json', setupVis);
       },
 

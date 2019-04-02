@@ -156,6 +156,13 @@ class Canvas {
                 .attr("height", this.current_vis_size);
         svg.attr("viewBox", "0 0 " + s + " " + this.current_vis_size);
     }
+    
+    drawStreamgraphSvg() {
+       const svg = d3.select("#chart-svg");
+        svg.attr("width", this.available_width)
+                .attr("height", this.current_vis_size);
+        svg.attr("viewBox", "0 0 " + this.available_width + " " + this.current_vis_size);
+    }
 
     drawChartCanvas() {
         const svg = d3.select("#chart-svg");
@@ -718,6 +725,17 @@ class Canvas {
         this.setScaleRanges();
         this.drawSvg();
         this.updateChartCanvas();
+    }
+    
+    setupStreamgraphCanvas() {
+        this.setOverflowToHiddenOrAuto("#main");
+        this.calcChartSize();
+        
+        //TODO: remove these two as they are not relevant for streamgraphs
+        this.initScales();
+        this.setScaleRanges();
+        
+        this.drawStreamgraphSvg();
     }
 
     setupMultiplesCanvas() {

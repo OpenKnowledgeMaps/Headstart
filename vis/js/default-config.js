@@ -101,6 +101,8 @@ var config = {
     
     is_authorview: false,
     
+    is_streamgraph: false,
+    
     // transition
     transition_duration: 750,
     zoomout_transition: 750,
