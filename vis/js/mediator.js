@@ -8,7 +8,7 @@ import { io } from 'io';
 import { canvas } from 'canvas';
 import { scale } from './scale';
 
-const timelineTemplate = require('templates/timeline.handlebars');
+const multiplesTemplate = require('templates/multiples.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
 const infoTemplate = require("templates/modals/info_modal.handlebars");
 const iFrameTemplate = require("templates/modals/iframe_modal.handlebars");
@@ -58,10 +58,10 @@ MyMediator.prototype = {
         this.mediator.subscribe("start", this.register_bubbles);
         this.mediator.subscribe("start", this.init_modules);
         this.mediator.subscribe("ontofile", this.init_ontofile);
-        this.mediator.subscribe("ontotimeline", this.init_ontotimeline);
-        this.mediator.subscribe("ontotimeline_finish", this.ontotimeline_finish);
+        this.mediator.subscribe("ontomultiples", this.init_ontomultiples);
+        this.mediator.subscribe("ontomultiples_finish", this.ontomultiples_finish);
         this.mediator.subscribe("register_bubbles", this.register_bubbles);
-        this.mediator.subscribe("to_timeline", this.to_timeline);
+        this.mediator.subscribe("to_multiples", this.to_multiples);
 
         // data transformation and calculation of bubble/paper sizes
         this.mediator.subscribe("prepare_data", this.io_prepare_data);
@@ -199,7 +199,7 @@ MyMediator.prototype = {
 
     init_ontofile: function (file) {
         mediator.is_in_normal_mode = true;
-        mediator.is_in_timeline_mode = false;
+        mediator.is_in_multiples_mode = false;
         mediator.current_file_number = file;
         mediator.current_bubble = mediator.bubbles[mediator.current_file_number];
         mediator.current_file = config.files[mediator.current_file_number];
@@ -209,23 +209,23 @@ MyMediator.prototype = {
         mediator.manager.call('canvas', 'setupToFileCanvas', []);
     },
 
-    init_ontotimeline: function() {
+    init_ontomultiples: function() {
         mediator.is_in_normal_mode = false;
-        mediator.is_in_timeline_mode = true;
+        mediator.is_in_multiples_mode = true;
         mediator.current_bubble.current = "x";
         papers.current = "none";
         list.current = "none";
         // clear the list list
         $("#list_explorer").empty();
-        mediator.manager.call('canvas', 'setupTimelineCanvas', []);
+        mediator.manager.call('canvas', 'setupMultiplesCanvas', []);
     },
 
     set_normal_mode: function() {
         mediator.is_in_normal_mode = true;
-        mediator.is_in_timeline_mode = false;
+        mediator.is_in_multiples_mode = false;
     },
 
-    ontotimeline_finish: function() {
+    ontomultiples_finish: function() {
         mediator.manager.call('canvas', 'drawGrid', []);
         mediator.manager.call('canvas', 'initMouseListeners', []);
     },
@@ -349,8 +349,8 @@ MyMediator.prototype = {
         bubbles.areas_array = io.areas_array;
     },
 
-    to_timeline: function() {
-        mediator.manager.call('headstart', 'totimeline', []);
+    to_multiples: function() {
+        mediator.manager.call('headstart', 'tomultiples', []);
     },
 
     list_toggle: function() {
