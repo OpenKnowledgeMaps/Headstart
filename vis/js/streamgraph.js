@@ -21,21 +21,23 @@ export const streamgraph = StateMachine.create({
     }
 });
 
+streamgraph.createStreamgraphData = function(json_data) {
+    let return_array = [];
+    
+    json_data.forEach(function (d) {
+        let new_json = {label: d.name, data: d.y}
+        return_array.push(new_json);
+    })
+    
+    return return_array;
+}
+
 streamgraph.drawStreamgraph = function(streamgraph_data) {
     
     let json_data = JSON.parse(streamgraph_data);    
     let x_labels = json_data.x;
-    let y_data = []; 
-    
-    json_data.subject.forEach(function (d) {
-        let new_json = {label: d.name, data: d.y}
-        y_data.push(new_json);
-    })
-    
-    let data = {
-        labels: x_labels,
-        datasets: y_data
-    };
+    let y_data_subject = this.createStreamgraphData(json_data.subject);
+    let y_data_area = this.createStreamgraphData(json_data.area);
     
     var options = {
         backgroundColor: '#fff',
@@ -61,7 +63,13 @@ streamgraph.drawStreamgraph = function(streamgraph_data) {
         multiTooltipTemplate: "Jahr: <%= xLabel %>" +
         " | Publikationen: <%= value %> | Summe aller Publikationen für diess Schlagwort: <%= sum %> | höchste jährliche Publikationsrate für dieses Schlagwort: <%= maxHeight %> | Schlagwort: <%= tooltipData %>",
     }
-
-    let ctx = document.getElementById('streamgraph').getContext('2d');
-    let newChart = new Chart(ctx).Streamgraph(data, options);
+    
+    
+    let drawChart = function(id, data, options) {
+        let ctx = document.getElementById(id).getContext('2d');
+        let newChart = new Chart(ctx).Streamgraph(data, options);
+    }
+    
+    drawChart('streamgraph_subject', {labels: x_labels, datasets: y_data_subject}, options);
+    drawChart('streamgraph_area', {labels: x_labels, datasets: y_data_area}, options);
 }
