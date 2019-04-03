@@ -158,12 +158,20 @@ class Canvas {
     }
     
     drawStreamgraphChart() {
+        var self = this;
+        
         d3.select("#chart-svg").remove();
-        d3.select('#headstart-chart')
-             .append('canvas')
-                 .attr('width', this.available_width)
-                 .attr('height', this.current_vis_size)
-                 .attr('id', 'streamgraph') 
+        
+        let createStreamgraphCanvas = function (self, id) {
+            d3.select('#headstart-chart')
+                .append('canvas')
+                    .attr('width', self.available_width)
+                    .attr('height', self.current_vis_size)
+                    .attr('id', id)
+        }
+        
+        createStreamgraphCanvas(self, 'streamgraph_subject');
+        createStreamgraphCanvas(self, 'streamgraph_area');           
     }
 
     drawChartCanvas() {
