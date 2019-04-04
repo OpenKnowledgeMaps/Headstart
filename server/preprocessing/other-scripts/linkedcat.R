@@ -122,15 +122,13 @@ build_query <- function(query, params, limit){
 
   # additional filter params
   pub_year <- paste0("pub_year:", "[", params$from, " TO ", params$to, "]")
-  if ("Bericht" %in% params$include_content_type) {
-    # false: neither Bericht nor Protokoll || only Bericht
-    if (!("Protokoll" %in% params$include_content_type) ||
-            (!("Protokoll" %in% params$include_content_type) && !("Bericht" %in% params$include_content_type) )) {
-      protocol_flag <- "protocol:false"
-    }
-    if ("Protokoll" %in% params$include_content_type) {
-      protocol_flag <- "protocol:true"
-    }
+  if (!("Protokoll" %in% params$include_content_type) ||
+          (!("Protokoll" %in% params$include_content_type) && !("Bericht" %in% params$include_content_type) )) {
+    protocol_flag <- "protocol:false"
+  }
+  if ("Protokoll" %in% params$include_content_type) {
+    protocol_flag <- "protocol:true"
+  }
   if (!params$include_content_type[1] == 'all') {
       if (length(params$include_content_type) > 1) {
         content_type <- paste0("content_type_a_str:(",
