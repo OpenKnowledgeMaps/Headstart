@@ -103,8 +103,8 @@ build_query <- function(query, params, limit){
   q_fields <- c('main_title', 'ocrtext',
                 'author100_a', 'author100_d', 'author100_0',
                 'author700_a', 'author700_d', 'author700_0',
-                'main_title', 'subtitle', 'pub_year',
-                'host_label', 'host_maintitle', 'host_pubplace', 'host_pubyear',
+                'main_title', 'subtitle',
+                'host_label', 'host_maintitle', 'host_pubplace',
                 'bkl_caption', 'bkl_top_caption',
                 'keyword_a', 'tags')
   # fields to return
