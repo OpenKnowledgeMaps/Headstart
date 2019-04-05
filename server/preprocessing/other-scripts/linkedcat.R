@@ -100,7 +100,13 @@ get_papers <- function(query, params, limit=100) {
 
 build_query <- function(query, params, limit){
   # fields to query in
-  q_fields <- c('main_title', 'ocrtext', 'author')
+  q_fields <- c('main_title', 'ocrtext',
+                'author100_a', 'author100_d', 'author100_0',
+                'author700_a', 'author700_d', 'author700_0',
+                'main_title', 'subtitle',
+                'host_label', 'host_maintitle', 'host_pubplace',
+                'bkl_caption', 'bkl_top_caption',
+                'keyword_a', 'tags')
   # fields to return
   r_fields <- c('id', 'idnr',
                 'content_type_a', 'content_type_2',
@@ -116,6 +122,13 @@ build_query <- function(query, params, limit){
 
   # additional filter params
   pub_year <- paste0("pub_year:", "[", params$from, " TO ", params$to, "]")
+  if (!("Protokoll" %in% params$include_content_type) ||
+          (!("Protokoll" %in% params$include_content_type) && !("Bericht" %in% params$include_content_type) )) {
+    protocol_flag <- "protocol:false"
+  }
+  if ("Protokoll" %in% params$include_content_type) {
+    protocol_flag <- "protocol:(true or false)"
+  }
   if (!params$include_content_type[1] == 'all') {
       if (length(params$include_content_type) > 1) {
         content_type <- paste0("content_type_a_str:(",
@@ -124,9 +137,9 @@ build_query <- function(query, params, limit){
         } else {
         content_type <- paste0("content_type_a_str:", params$include_content_type, collapse = "")
       }
-    q_params$fq <- list(pub_year, content_type)
+    q_params$fq <- list(pub_year, content_type, protocol_flag)
   } else {
-    q_params$fq <- list(pub_year)
+    q_params$fq <- list(pub_year, protocol_flag)
   }
   q_params$fq <- unlist(q_params$fq)
   q_params$hl <- 'on'

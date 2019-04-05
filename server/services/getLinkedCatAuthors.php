@@ -20,6 +20,7 @@ $base_url = "https://" .
        $ini_array["connection"]["linkedcat_solr"] . "/solr/linkedcat/";
 
 $author_facet_query = "select?facet.field=author100_0_str" .
+                      "&facet.field=author700_0_str" .
                       "&facet.query=author100_0_str" .
                       "&facet=on&fl=author100_0_str" .
                       "&q=*:*&rows=0&facet.limit=-1&facet.sort=index";
@@ -42,7 +43,7 @@ function execQuery($base_url, $query) {
 
 function getAuthorFacet($base_url, $author_facet_query) {
   $res = json_decode(execQuery($base_url, $author_facet_query), true);
-  return $res["facet_counts"]["facet_fields"]["author100_0_str"];
+  return $res["facet_counts"]["facet_fields"];
 }
 
 function getAuthorData($base_url, $author_data_query, $author_ids) {
@@ -119,9 +120,23 @@ function getAuthors() {
                                  $GLOBALS['author_facet_query']);
   $author_ids = array();
   $author_counts = array();
-  foreach ($author_facet as $k => $v) {
+  foreach ($author_facet["author100_0_str"] as $k => $v) {
     if ($k % 2 == 0) {
       $author_ids[] = $v;
+    }
+    else {
+      $author_counts[] = $v;
+    }
+  }
+  foreach ($author_facet["author700_0_str"] as $k => $v) {
+    if ($k % 2 == 0) {
+      $pos = array_search($v, $author_ids);
+      if ($pos != false) {
+        $author_counts[$pos] += $author_facet["author700_0_str"][$k + 1];
+      }
+      else {
+        $author_ids[] = $v;
+      }
     }
     else {
       $author_counts[] = $v;
