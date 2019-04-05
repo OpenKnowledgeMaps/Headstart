@@ -49,6 +49,7 @@ tryCatch({
 
 tryCatch({
   output_json = vis_layout(input_data$text, input_data$metadata,
+                           service,
                            max_clusters = MAX_CLUSTERS,
                            lang = LANGUAGE,
                            add_stop_words = ADDITIONAL_STOP_WORDS,
