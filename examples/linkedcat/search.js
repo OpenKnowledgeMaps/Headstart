@@ -1,7 +1,7 @@
 var service_url = data_config.server_url + "services/searchLinkedCat.php";
 var service_name = "LinkedCat";
 var options = options_linkedcat;
-var visualization_type = "keywords"
+var visualization_mode = "keywords"
 var author_id = "";
 var author_name = "";
 var author_count = 0;
@@ -13,7 +13,7 @@ var search_options;
 var chooseOptions = function () {
     search_options = SearchOptions;
 
-    switch (visualization_type) {
+    switch (visualization_mode) {
         case "keywords":
             options = options_linkedcat;
             service_url = data_config.server_url + "services/searchLinkedCat.php";
@@ -59,7 +59,7 @@ var autocomplete_function;
 var autocomplete_interval;
  
 var addAutoComplete = function() {
-    if(visualization_type === "authors") {
+    if(visualization_mode === "authors") {
         autocomplete_function = $('input[name="q"]').autoComplete({
             minChars: 0,
             cache: false,
@@ -120,7 +120,7 @@ function configureSearch() {
                                                         + "&service_url=" + service_url
                                                         + "&service_name=" + service_name
                                                         + "&service=" + data_config.service
-                                                        + "&visualization_type=" + visualization_type
+                                                        + "&visualization_mode=" + visualization_mode
                                         )
                           );
 }
@@ -146,7 +146,7 @@ $("#searchform").validate({
 $(document).ready(function () {
     
     var changeVisualization = function () {
-        visualization_type = $("input[name='optradio']:checked").val();
+        visualization_mode = $("input[name='optradio']:checked").val();
 
         search_options.user_defined_date = false;
         $("#filter-container").html("");

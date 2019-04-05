@@ -11,7 +11,7 @@ var data_config = {
     use_area_uri: true,
     preview_type: "pdf",
     
-    show_timeline: false,
+    show_multiples: false,
     show_dropdown: false,
     show_intro: false,
     show_list:true,
