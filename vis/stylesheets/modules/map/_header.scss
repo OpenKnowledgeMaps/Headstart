@@ -100,9 +100,9 @@
     color: $black;
 }
 
-#timelineview {
+#multiplesview {
     a {
-        color: $timelineview;
+        color: $multiplesview;
     }
 }
 
@@ -120,12 +120,12 @@
 }
 
 #author_bio a {
-    border-bottom: 1px solid $timelineview;
+    border-bottom: 1px solid $multiplesview;
 }
 
 #author_bio a:hover {
     text-decoration: none;
-    border-bottom: 3px solid $timelineview;
+    border-bottom: 3px solid $multiplesview;
 }
 
 @media screen and (max-width: 640px) {

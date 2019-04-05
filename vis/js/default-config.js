@@ -12,7 +12,7 @@ var config = {
     min_height: 600,
     min_width: 600,
     max_height: 1000,
-    timeline_size: 600,
+    multiples_size: 600,
 
     // map reference sizes
     reference_size: 650,
@@ -68,7 +68,7 @@ var config = {
     render_bubbles: true,
 
     // show
-    show_timeline: true,
+    show_multiples: true,
     show_dropdown: true,
     show_intro: false,
     show_infolink: true,
@@ -100,6 +100,8 @@ var config = {
     faqs_url: "",
     
     is_authorview: false,
+    
+    is_streamgraph: false,
     
     // transition
     transition_duration: 750,
