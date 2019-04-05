@@ -127,7 +127,7 @@ build_query <- function(query, params, limit){
     protocol_flag <- "protocol:false"
   }
   if ("Protokoll" %in% params$include_content_type) {
-    protocol_flag <- "protocol:true"
+    protocol_flag <- "protocol:(true or false)"
   }
   if (!params$include_content_type[1] == 'all') {
       if (length(params$include_content_type) > 1) {
