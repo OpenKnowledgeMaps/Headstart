@@ -11,21 +11,22 @@ var options_linkedcat = {
             ]},
         {id: "include_content_type", multiple: true, name: "Dokumentarten", type: "dropdown"
             , fields: [
-                {id: "Andere Abhandlungen", text: "Andere Abhandlungen", count:1345, selected:true}
+                {id: "Andere Abhandlungen", text: "Andere Abhandlungen", count:1460, selected:true}
                 , {id: "Anthologie", text: "Anthologie", count:1, selected:true}
-                , {id: "Bericht", text: "Bericht", count:1331}
-                , {id: "Bibliografie", text: "Bibliografie", count: 212}
-                , {id: "Biografie", text: "Biografie", count:21, selected:true}
+                , {id: "Bericht", text: "Bericht", count:76, selected:true}
+                , {id: "Bibliografie", text: "Bibliografie", count: 217}
+                , {id: "Biografie", text: "Biografie", count:23, selected:true}
                 , {id: "Briefsammlung", text: "Briefsammlung", count:17, selected:true}
                 , {id: "Katalog", text: "Katalog", count:5, selected:true}
                 , {id: "Kommentar", text: "Kommentar", count:0, selected:true}
                 , {id: "Mehrsprachiges Wörterbuch", text: "Mehrsprachiges Wörterbuch", count:1, selected:true}
                 , {id: "Mitgliederverzeichnis", text: "Mitgliederverzeichnis", count:2, selected:true}
-                , {id: "Quelle", text: "Quelle", count:83, selected:true}
-                , {id: "Reisebericht", text: "Reisebericht", count:10, selected:true}
-                , {id: "Rezension", text: "Rezension", count:39, selected:true}
+                , {id: "Protokoll", text: "Protokoll", count:1144, selected:false}
+                , {id: "Quelle", text: "Quelle", count:89, selected:true}
+                , {id: "Reisebericht", text: "Reisebericht", count:12, selected:true}
+                , {id: "Rezension", text: "Rezension", count:44, selected:true}
                 , {id: "Statistik", text: "Statistik", count:2, selected:true}
-                , {id: "Verzeichnis", text: "Verzeichnis", count:42, selected:true}
+                , {id: "Verzeichnis", text: "Verzeichnis", count:43, selected:true}
                 , {id: "Wörterbuch", text: "Wörterbuch", count:15, selected:true}
             ]},
         {id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
