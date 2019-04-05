@@ -12,7 +12,7 @@ var options_linkedcat = {
         {id: "include_content_type", multiple: true, name: "Dokumentarten", type: "dropdown"
             , fields: [
                 {id: "Andere Abhandlungen", text: "Andere Abhandlungen", count:1460, selected:true}
-                , {id: "Anthologie", text: "Anthologie", count:1, selected:true}
+                , {id: "Anthologie", text: "Anthologie", count:0, selected:true}
                 , {id: "Bericht", text: "Bericht", count:76, selected:true}
                 , {id: "Bibliografie", text: "Bibliografie", count: 217}
                 , {id: "Biografie", text: "Biografie", count:23, selected:true}
