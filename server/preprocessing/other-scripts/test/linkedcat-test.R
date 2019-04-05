@@ -7,7 +7,7 @@ options(warn=1)
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(wd) #Don't forget to set your working directory
 
-query <- "protokoll" #args[2]
+query <- "hund" #args[2]
 service <- "linkedcat"
 params <- NULL
 params_file <- "params_linkedcat.json"
@@ -49,6 +49,7 @@ tryCatch({
 
 tryCatch({
   output_json = vis_layout(input_data$text, input_data$metadata,
+                           service,
                            max_clusters = MAX_CLUSTERS,
                            lang = LANGUAGE,
                            add_stop_words = ADDITIONAL_STOP_WORDS,
