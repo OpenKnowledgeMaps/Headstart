@@ -50,15 +50,35 @@ post_process <- function(sg_data) {
   return(df)
 }
 
+get_new_levels <- function(levels_old, n_levels) {
+  levels_new <- vector("list")
+  for (i in 1:n_levels-1){
+    x <- gsub("\\[|\\)|\\]", "", levels_old[i])
+    x <- unlist(lapply(strsplit(x, ","), as.integer))
+    x[2] <- x[2] - 1
+    x <- paste(x, collapse=" - ")
+    levels_new[i] <- x
+  }
+  x <- gsub("\\[|\\)|\\]", "", levels_old[n_levels])
+  x <- unlist(lapply(strsplit(x, ","), as.integer))
+  x <- paste(x, collapse=" - ")
+  levels_new[n_levels] <- x
+  return (unlist(levels_new))
+}
 
+rename_xaxis <- function(boundary_label) {
+  n_levels = length(levels(metadata$boundary_label))
+  boundary_label <- get_new_levels(levels(boundary_label), n_levels)
+  return(boundary_label)
+}
 
 sg_data = list()
 
 if (service == 'linkedcat' || service == 'linkedcat_authorview') {
   stream_range = list(min=min(metadata$year), max=max(metadata$year), range=max(metadata$year)-min(metadata$year))
   n_breaks = min(stream_range$range, 10)
-  metadata <- mutate(metadata, boundary_label=cut(metadata$year, n_breaks))
-  metadata$boundary_label <- metadata$boundary_label %>% fct_relabel(function(x) {gsub(",", " - ", gsub("\\(|\\]", "", paste(x)))})
+  metadata <- mutate(metadata, boundary_label=cut(metadata$year, n_breaks, include.lowest = TRUE, right=FALSE))
+  levels(metadata$boundary_label) <- rename_xaxis(metadata$boundary_label)
   sg_data$x <- levels(metadata$boundary_label)
   sg_data$subject <- (metadata
                       %>% separate_rows(subject, sep="; ")
