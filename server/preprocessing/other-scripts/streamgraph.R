@@ -77,8 +77,12 @@ sg_data = list()
 if (service == 'linkedcat' || service == 'linkedcat_authorview') {
   stream_range = list(min=min(metadata$year), max=max(metadata$year), range=max(metadata$year)-min(metadata$year))
   n_breaks = min(stream_range$range, 10)
-  metadata <- mutate(metadata, boundary_label=cut(metadata$year, n_breaks, include.lowest = TRUE, right=FALSE))
-  levels(metadata$boundary_label) <- rename_xaxis(metadata$boundary_label)
+  if (n_breaks > 10) {
+    metadata <- mutate(metadata, boundary_label=cut(metadata$year, n_breaks, include.lowest = TRUE, right=FALSE))
+    levels(metadata$boundary_label) <- rename_xaxis(metadata$boundary_label)
+  } else {
+    metadata$boundary_label <- as.factor(metadata$year)
+  }
   sg_data$x <- levels(metadata$boundary_label)
   sg_data$subject <- (metadata
                       %>% separate_rows(subject, sep="; ")
