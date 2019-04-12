@@ -46,6 +46,7 @@ Make sure you have the following packages installed:
   * textcat (for language recognition)
   * solrium (for interfacing with SOLR servers, install with `devtools::install_github("chreman/solrium")`)
   * tidyr
+  * forcats
 
 * phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
 

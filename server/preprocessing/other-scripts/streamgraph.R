@@ -4,6 +4,7 @@ library(jsonlite)
 library(dplyr)
 library(data.table)
 library(tidyr)
+library(forcats)
 
 args <- commandArgs(TRUE)
 wd <- args[1]
@@ -37,9 +38,9 @@ post_process <- function(sg_data) {
     new_item$ids_overall <- (tmp
                               %>% ungroup()
                               %>% separate_rows(ids, sep=", ")
-                              %>% distinct(ids) 
+                              %>% distinct(ids)
                               %>% filter(ids != "NA")
-                              %>% select(ids) 
+                              %>% select(ids)
                               %>% pull())
     new_item$ids_timestep <- lapply(tmp$ids, function(x) unlist(strsplit(x, split=", ")))
     df <- rbind(df, rbind(new_item))
@@ -49,40 +50,63 @@ post_process <- function(sg_data) {
   return(df)
 }
 
+get_new_levels <- function(levels_old, n_levels) {
+  levels_new <- vector("list")
+  for (i in 1:n_levels-1){
+    x <- gsub("\\[|\\)|\\]", "", levels_old[i])
+    x <- unlist(lapply(strsplit(x, ","), as.integer))
+    x[2] <- x[2] - 1
+    x <- paste(x, collapse=" - ")
+    levels_new[i] <- x
+  }
+  x <- gsub("\\[|\\)|\\]", "", levels_old[n_levels])
+  x <- unlist(lapply(strsplit(x, ","), as.integer))
+  x <- paste(x, collapse=" - ")
+  levels_new[n_levels] <- x
+  return (unlist(levels_new))
+}
+
+rename_xaxis <- function(boundary_label) {
+  n_levels = length(levels(metadata$boundary_label))
+  boundary_label <- get_new_levels(levels(boundary_label), n_levels)
+  return(boundary_label)
+}
 
 sg_data = list()
 
 if (service == 'linkedcat' || service == 'linkedcat_authorview') {
-  boundaries <- data.frame(min=c(1847, 1850, 1860, 1870, 1880, 1890, 1900, 1910),
-                           max=c(1849, 1859, 1869, 1879, 1889, 1899, 1909, 1918))
-  boundaries$year <- apply(boundaries, 1, function(x) {paste(x[1]:x[2], collapse=", ")})
-  boundaries$boundary_label <- apply(boundaries, 1, function(x) {paste(x[1], x[2], sep=" - ")})
-  sg_data$x <- boundaries$boundary_label
-  boundaries <- boundaries %>% separate_rows(year, sep=", ") %>% select(year, boundary_label)
-  metadata <- merge(x = metadata, y = boundaries, by.x='year', by.y='year', all = TRUE)
-  sg_data$subject <- (metadata 
-                      %>% separate_rows(subject, sep="; ") 
-                      %>% rename(stream_item=subject) 
-                      %>% mutate(count=1) 
+  stream_range = list(min=min(metadata$year), max=max(metadata$year), range=max(metadata$year)-min(metadata$year))
+  n_breaks = min(stream_range$range, 11)
+  if (n_breaks > 10) {
+    metadata <- mutate(metadata, boundary_label=cut(metadata$year, n_breaks, include.lowest = TRUE, right=FALSE))
+    levels(metadata$boundary_label) <- rename_xaxis(metadata$boundary_label)
+  } else {
+    metadata$boundary_label <- as.factor(metadata$year)
+  }
+  sg_data$x <- levels(metadata$boundary_label)
+  sg_data$subject <- (metadata
+                      %>% separate_rows(subject, sep="; ")
+                      %>% rename(stream_item=subject)
+                      %>% mutate(count=1)
                       %>% complete(boundary_label, stream_item, fill=list(count=0))
-                      %>% group_by(boundary_label, stream_item, .drop=FALSE) 
+                      %>% group_by(boundary_label, stream_item, .drop=FALSE)
                       %>% summarise(count=sum(count), ids=paste(id, collapse=", ")))
   top_20 <-(sg_data$subject
-            %>% group_by(stream_item) 
+            %>% group_by(stream_item)
             %>% summarise(sum = sum(count))
             %>% arrange(desc(sum))
             %>% drop_na()
             %>% head(20)
-            %>% select(stream_item) 
+            %>% select(stream_item)
             %>% pull())
   sg_data$subject <- (sg_data$subject
                       %>% subset(stream_item %in% top_20)
                       %>% arrange(match(stream_item, top_20), boundary_label))
   sg_data$area <- (metadata
-                   %>% rename(stream_item=area) 
-                   %>% mutate(count=1) 
+                   %>% rename(stream_item=area)
+                   %>% mutate(count=1)
                    %>% complete(boundary_label, stream_item, fill=list(count=0))
-                   %>% group_by(boundary_label, stream_item, .drop=FALSE) 
+                   %>% group_by(boundary_label, stream_item, .drop=FALSE)
                    %>% summarise(count=sum(count), ids=paste(id, collapse=", ")))
   #sg_data$bkl_caption <- metadata %>% separate_rows(bkl_caption, sep="; ") %>% group_by(boundary_label, bkl_caption) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
   output <- list()
