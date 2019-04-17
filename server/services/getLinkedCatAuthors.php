@@ -17,17 +17,17 @@ $ini_array = library\Toolkit::loadIni($INI_DIR);
 $base_url = "https://" .
        $ini_array["connection"]["linkedcat_user"] . ":" .
        $ini_array["connection"]["linkedcat_pwd"] . "@" .
-       $ini_array["connection"]["linkedcat_solr"] . "/solr/linkedcat/";
+       $ini_array["connection"]["linkedcat_solr"] . "/solr/linkedcat2/";
 
-$author_facet_query = "select?facet.field=author100_0_str" .
-                      "&facet.field=author700_0_str" .
-                      "&facet.query=author100_0_str" .
-                      "&facet=on&fl=author100_0_str" .
+$author_facet_query = "select?facet.field=author100_0" .
+                      "&facet.field=author700_0" .
+                      "&facet.query=author100_0" .
+                      "&facet=on&fl=author100_0" .
                       "&q=*:*&rows=0&facet.limit=-1&facet.sort=index";
 
-$author_data_query = "select?fl=author100_0,author100_a_str,author100_d,author100_wiki_img" .
+$author_data_query = "select?fl=author100_0,author100_a,author100_d,author100_wiki_img" .
                      "&rows=1" .
-                     "&q=author100_0_str:";
+                     "&q=author100_0:";
 
 
 function execQuery($base_url, $query) {
@@ -80,11 +80,11 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
         $doc = $output["response"]["docs"][0];
         $temp_id = $doc["author100_0"][0];
         $res[$temp_id] = array();
-        $res[$temp_id]["author100_a_str"] = $doc["author100_a_str"][0];
+        $res[$temp_id]["author100_a"] = $doc["author100_a"][0];
         $res[$temp_id]["author100_d"] = $doc["author100_d"][0];
         $res[$temp_id]["author100_wiki_img"] = $doc["author100_wiki_img"][0];
         # $res is now a k:v array with k = author_ids, v = k:v array of
-        # keys author100_a_str and author100_d
+        # keys author100_a and author100_d
 
         # add new author to request stack until author_ids is exhausted
         $next_url = array_shift($urls);
@@ -120,7 +120,7 @@ function getAuthors() {
                                  $GLOBALS['author_facet_query']);
   $author_ids = array();
   $author_counts = array();
-  foreach ($author_facet["author100_0_str"] as $k => $v) {
+  foreach ($author_facet["author100_0"] as $k => $v) {
     if ($k % 2 == 0) {
       $author_ids[] = $v;
     }
@@ -128,11 +128,11 @@ function getAuthors() {
       $author_counts[] = $v;
     }
   }
-  foreach ($author_facet["author700_0_str"] as $k => $v) {
+  foreach ($author_facet["author700_0"] as $k => $v) {
     if ($k % 2 == 0) {
       $pos = array_search($v, $author_ids);
       if ($pos != false) {
-        $author_counts[$pos] += $author_facet["author700_0_str"][$k + 1];
+        $author_counts[$pos] += $author_facet["author700_0"][$k + 1];
       }
       else {
         $author_ids[] = $v;
@@ -148,10 +148,10 @@ function getAuthors() {
   $author_data = getAuthorData($GLOBALS['base_url'],
                                $GLOBALS['author_data_query'],
                                $author_ids);
-  // [id, author100_a_str, doc_count, living_dates and possibly image_link]
+  // [id, author100_a, doc_count, living_dates and possibly image_link]
   foreach ($author_ids as $i => $author_id) {
       $author_count = $author_counts[$i];
-      $author_name = $author_data[$author_id]["author100_a_str"];
+      $author_name = $author_data[$author_id]["author100_a"];
       $author_date = $author_data[$author_id]["author100_d"];
       $author_image = $author_data[$author_id]["author100_wiki_img"];
       if (is_null($author_name)) {
