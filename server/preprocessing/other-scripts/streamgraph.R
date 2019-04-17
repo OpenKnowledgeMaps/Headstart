@@ -82,6 +82,7 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
     levels(metadata$boundary_label) <- rename_xaxis(metadata$boundary_label)
   } else {
     metadata$boundary_label <- as.factor(metadata$year)
+    levels(metadata$boundary_label) <- levels(as.factor(stream_range$min:stream_range$max))
   }
   sg_data$x <- levels(metadata$boundary_label)
   sg_data$subject <- (metadata
