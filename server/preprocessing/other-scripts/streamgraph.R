@@ -29,11 +29,13 @@ metadata <- fromJSON(tmp_json)
 
 
 post_process <- function(sg_data) {
+  sg_data <- sg_data %>% ungroup() %>% mutate(year=as.factor(year))
   df <- data.frame(row.names = c('name', 'data', 'ids_overall', 'ids_timestep'))
   for (item in unique(sg_data[!is.na(sg_data$stream_item),]$stream_item)) {
     new_item <- list()
     new_item$name <- item
     tmp <- sg_data %>% subset(stream_item == item)
+    tmp <- merge(tmp, tmp %>% select(year) %>% expand(year), all=TRUE) %>% replace_na(list(stream_item=item, count=0, ids="NA"))
     new_item$y <- tmp$count
     new_item$ids_overall <- (tmp
                               %>% ungroup()
