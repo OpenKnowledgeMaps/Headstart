@@ -29,13 +29,15 @@ metadata <- fromJSON(tmp_json)
 
 
 post_process <- function(sg_data) {
-  sg_data <- sg_data %>% ungroup() %>% mutate(year=as.factor(year))
+  sg_data <- sg_data %>% ungroup()
   df <- data.frame(row.names = c('name', 'data', 'ids_overall', 'ids_timestep'))
   for (item in unique(sg_data[!is.na(sg_data$stream_item),]$stream_item)) {
     new_item <- list()
     new_item$name <- item
     tmp <- sg_data %>% subset(stream_item == item)
-    tmp <- merge(tmp, tmp %>% select(year) %>% expand(year), all=TRUE) %>% replace_na(list(stream_item=item, count=0, ids="NA"))
+    tmp <- (merge(tmp,
+                  data.frame(year=stream_range$min:stream_range$max), all=TRUE)
+            %>% replace_na(list(stream_item=item, count=0, ids="NA")))
     new_item$y <- tmp$count
     new_item$ids_overall <- (tmp
                               %>% ungroup()
@@ -87,17 +89,17 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
     levels(metadata$boundary_label) <- levels(as.factor(stream_range$min:stream_range$max))
   }
   sg_data$x <- levels(metadata$boundary_label)
-  sg_data$subject <- ((merge(metadata 
-                           %>% select(boundary_label, year, subject, id) 
+  sg_data$subject <- ((merge(metadata
+                           %>% select(boundary_label, year, subject, id)
                            %>% separate_rows(subject, sep="; ")
-                           %>% rename(stream_item=subject) 
+                           %>% rename(stream_item=subject)
                            %>% mutate(count=1),
-                           metadata 
-                           %>% select(boundary_label) 
-                           %>% expand(boundary_label) 
-                           %>% rename(year=boundary_label), 
+                           metadata
+                           %>% select(boundary_label)
+                           %>% expand(boundary_label)
+                           %>% rename(year=boundary_label),
                            all=TRUE))
-                    %>% group_by(year, stream_item, .drop=FALSE) 
+                    %>% group_by(year, stream_item, .drop=FALSE)
                     %>% summarise(count=sum(count), ids=paste(id, collapse=", ")))
   top_20 <-(sg_data$subject
             %>% group_by(stream_item)
