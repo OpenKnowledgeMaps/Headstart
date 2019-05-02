@@ -95,7 +95,8 @@ get_papers <- function(query, params, limit=100) {
 
 build_query <- function(query, params, limit){
   # fields to query in
-  q_fields <- c('author100_0', 'author700_0')
+  q_fields <- c('author100_a', 'author100_d', 'author100_0',
+                'author700_a', 'author700_d', 'author700_0')
   # fields to return
   r_fields <- c('id', 'idnr',
                 'content_type_a', 'content_type_2',
