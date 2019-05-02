@@ -78,7 +78,7 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
         $output = curl_multi_getcontent($done['handle']);
         $output = json_decode($output, true);
         $doc = $output["response"]["docs"][0];
-        $temp_id = $doc["author100_0"][0];
+        $temp_id = $doc["author100_0"];
         $res[$temp_id] = array();
         $res[$temp_id]["author100_a"] = $doc["author100_a"];
         $res[$temp_id]["author100_d"] = $doc["author100_d"];
