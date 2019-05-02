@@ -80,9 +80,9 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
         $doc = $output["response"]["docs"][0];
         $temp_id = $doc["author100_0"][0];
         $res[$temp_id] = array();
-        $res[$temp_id]["author100_a"] = $doc["author100_a"][0];
-        $res[$temp_id]["author100_d"] = $doc["author100_d"][0];
-        $res[$temp_id]["author100_wiki_img"] = $doc["author100_wiki_img"][0];
+        $res[$temp_id]["author100_a"] = $doc["author100_a"];
+        $res[$temp_id]["author100_d"] = $doc["author100_d"];
+        $res[$temp_id]["author100_wiki_img"] = $doc["author100_wiki_img"];
         # $res is now a k:v array with k = author_ids, v = k:v array of
         # keys author100_a and author100_d
 
