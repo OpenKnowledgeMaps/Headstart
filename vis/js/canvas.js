@@ -212,23 +212,7 @@ class Canvas {
 
         // Info Modal Event Listener
         $('#info_modal').on('show.bs.modal', function () {
-            if(!mediator.is_zoomed) {
-                mediator.publish("record_action", config.title, "Map", "open_info_modal", config.user_id, "open_info_modal", null, null, null);
-                var current_intro = config.intro;
-                var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
-                $('#info-title').text(intro.title);
-                $('#info-body').html(intro.body);
-                if (intro.dynamic) {
-                    $.each(intro.params, function (paramName, value) {
-                        if (paramName.slice(0,4) === 'html') {
-                            $('.info-modal-'+paramName).html(value)
-                        } else {
-                            value = (value === "true")?("yes"):(value);
-                            $('.info-modal-'+paramName).text(value)
-                        }
-                    })
-                }
-            } else {
+            if(config.show_infolink_areas && mediator.is_zoomed) {
                 let d = d3.select(mediator.current_zoom_node).datum();
                 mediator.publish("record_action", d.title, "Bubble", "open_info_modal", config.user_id, "open_info_modal", null, null, null);
                 $('#info-body').html("");
@@ -245,6 +229,22 @@ class Canvas {
                         info_body.append('div').html(legendTemplate)
                     }
                 })
+            } else {
+                mediator.publish("record_action", config.title, "Map", "open_info_modal", config.user_id, "open_info_modal", null, null, null);
+                var current_intro = config.intro;
+                var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
+                $('#info-title').text(intro.title);
+                $('#info-body').html(intro.body);
+                if (intro.dynamic) {
+                    $.each(intro.params, function (paramName, value) {
+                        if (paramName.slice(0,4) === 'html') {
+                            $('.info-modal-'+paramName).html(value)
+                        } else {
+                            value = (value === "true")?("yes"):(value);
+                            $('.info-modal-'+paramName).text(value)
+                        }
+                    })
+                }
             }
         });
     }
