@@ -50,7 +50,7 @@ streamgraph.drawStreamgraph = function(streamgraph_data) {
         sroke: true,
         strokeWidth: 4,
         strokeColor: "rgb(255,255,255, 0.4)",
-        scaleDivisions: 10,
+        //scaleDivisions: 10,
         scaleShowVerticalLines: true,
         scaleShowHorizontalLines: true,
         scaleGridLineWidth: 1,

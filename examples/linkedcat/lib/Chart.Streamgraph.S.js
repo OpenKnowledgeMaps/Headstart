@@ -3003,8 +3003,17 @@ var cssColorParser = function(){
 				calculateYRange : function(){
           var minMax = findMaxAndMin(self.layers);
           var value = Math.floor(Math.max(Math.abs(minMax.min), Math.abs(minMax.max))*1.5);
+          value = (value % 2 !== 0)?(value + 1):(value);
           minMax = {min: value, max: -value};
           var range = minMax.max-minMax.min;
+          let steps = 10;
+          let divider = 1;
+          while (divider !== 0) {
+            steps--;
+            divider = range % steps;
+          }
+          options.scaleDivisions = steps;
+          console.log(steps);
           helpers.extend(this, minMax);
           helpers.extend(this, {steps: options.scaleDivisions, stepValue: range/options.scaleDivisions});
         },
