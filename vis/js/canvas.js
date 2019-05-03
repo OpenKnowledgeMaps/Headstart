@@ -455,6 +455,7 @@ class Canvas {
                                 ?(require("images/author_default.png"))
                                 :(context.params.image_link);
             
+            $('#author_image_link').attr('href', image_link);
             $('#author_image').attr('src', image_link);
             $('#author_living_dates').text(context.params.living_dates);
             $('#author_bio_link').attr('href', 'https://d-nb.info/gnd/' + context.params.author_id.replace(/\([^)]*\)/, ''));
