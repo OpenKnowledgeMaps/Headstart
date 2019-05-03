@@ -29,11 +29,6 @@ var options_linkedcat = {
                 , {id: "Verzeichnis", text: "Verzeichnis", count:43, selected:true}
                 , {id: "Wörterbuch", text: "Wörterbuch", count:15, selected:true}
             ]},
-        {id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
-            , fields: [
-                {id: "overview", text: "Überblick", selected:true}
-                , {id: "timeline", text: "Zeitstrahl"}
-            ]},
     ]
 }
 
