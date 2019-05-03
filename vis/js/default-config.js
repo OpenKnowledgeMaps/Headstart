@@ -68,7 +68,7 @@ var config = {
     render_bubbles: true,
 
     // show
-    show_multiples: true,
+    show_multiples: false,
     show_dropdown: true,
     show_intro: false,
     show_infolink: true,
