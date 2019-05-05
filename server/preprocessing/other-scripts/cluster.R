@@ -113,14 +113,20 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
   } else if (nrow(distance_matrix) == 1) {
     points <- cbind(0, 0)
   } else {
-    ord <- metaMDS(distance_matrix, k = 2, parallel = 3, trymax=30,
-                   engine="monoMDS", distance='cao',
-                   threshold = 0.19, nthreshold=10,
-                   model = "linear",
-                   pc = TRUE,
-                   autotransform = FALSE, center = TRUE,
-                   halfchange = TRUE)
-    points <- ord$points
+    points <- tryCatch({
+      ord <- metaMDS(distance_matrix, k = 2, parallel = 3, trymax=30,
+                     engine="monoMDS", distance='cao',
+                     threshold = 0.19, nthreshold=10,
+                     model = "linear",
+                     pc = TRUE,
+                     autotransform = FALSE, center = TRUE,
+                     halfchange = TRUE)
+      points <- ord$points
+    }, error=function(err){
+      points <- cbind(runif(nrow(distance_matrix), min=-1, max=0),
+                      runif(nrow(distance_matrix), min=0, max=1))
+      return(points)
+    })
     vclog$info(paste("NMDS-Stress:", min(ord$stress), sep=" "))
   }
 
