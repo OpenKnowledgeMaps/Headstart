@@ -104,6 +104,7 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
                      pc = TRUE,
                      autotransform = FALSE, center = TRUE,
                      halfchange = TRUE)
+      vclog$info(paste("NMDS-Stress:", min(ord$stress), sep=" "))
       points <- ord$points
     }, error=function(err){
       points <- cbind(runif(nrow(distance_matrix), min=-1, max=0),
@@ -121,13 +122,13 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
                      pc = TRUE,
                      autotransform = FALSE, center = TRUE,
                      halfchange = TRUE)
+      vclog$info(paste("NMDS-Stress:", min(ord$stress), sep=" "))
       points <- ord$points
     }, error=function(err){
       points <- cbind(runif(nrow(distance_matrix), min=-1, max=0),
                       runif(nrow(distance_matrix), min=0, max=1))
       return(points)
     })
-    vclog$info(paste("NMDS-Stress:", min(ord$stress), sep=" "))
   }
 
 
