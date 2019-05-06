@@ -168,6 +168,7 @@ class Canvas {
                     .attr('width', self.available_width)
                     .attr('height', self.current_vis_size)
                     .attr('id', id)
+                    .classed('streamgraph-canvas', true)
         }
         
         createStreamgraphCanvas(self, 'streamgraph_subject');

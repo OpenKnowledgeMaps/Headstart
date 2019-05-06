@@ -91,17 +91,17 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
                       %>% complete(boundary_label, stream_item, fill=list(count=0))
                       %>% group_by(boundary_label, stream_item, .drop=FALSE)
                       %>% summarise(count=sum(count), ids=paste(id, collapse=", ")))
-  top_20 <-(sg_data$subject
+  top12 <-(sg_data$subject
             %>% group_by(stream_item)
             %>% summarise(sum = sum(count))
             %>% arrange(desc(sum))
             %>% drop_na()
-            %>% head(20)
+            %>% head(12)
             %>% select(stream_item)
             %>% pull())
   sg_data$subject <- (sg_data$subject
-                      %>% subset(stream_item %in% top_20)
-                      %>% arrange(match(stream_item, top_20), boundary_label))
+                      %>% subset(stream_item %in% top12)
+                      %>% arrange(match(stream_item, top12), boundary_label))
   sg_data$area <- (metadata
                    %>% rename(stream_item=area)
                    %>% mutate(count=1)
