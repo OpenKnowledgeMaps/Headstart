@@ -40,13 +40,13 @@ get_papers <- function(query, params, limit=100) {
   start.time <- Sys.time()
   host=paste0(Sys.getenv("LINKEDCAT_USER"),":",Sys.getenv("LINKEDCAT_PWD"),"@",Sys.getenv("LINKEDCAT_SOLR"))
   conn <- SolrClient$new(host=host,
-                         path="solr/linkedcat", port=NULL, scheme="https")
+                         path="solr/linkedcat2", port=NULL, scheme="https")
 
   q_params <- build_query(query, params, limit)
   # do search
   lclog$info(paste("Query:", paste(q_params, collapse = " ")))
 
-  res <- solr_all(conn, "linkedcat", params = q_params, concat="; ")
+  res <- solr_all(conn, "linkedcat2", params = q_params, concat="; ")
 
   if (nrow(res$search) == 0){
     stop(paste("No results retrieved."))
@@ -131,11 +131,11 @@ build_query <- function(query, params, limit){
   }
   if (!params$include_content_type[1] == 'all') {
       if (length(params$include_content_type) > 1) {
-        content_type <- paste0("content_type_a_str:(",
+        content_type <- paste0("content_type_a:(",
                        paste0(params$include_content_type, collapse = " OR "),
                        ")")
         } else {
-        content_type <- paste0("content_type_a_str:", params$include_content_type, collapse = "")
+        content_type <- paste0("content_type_a:", params$include_content_type, collapse = "")
       }
     q_params$fq <- list(pub_year, content_type, protocol_flag)
   } else {

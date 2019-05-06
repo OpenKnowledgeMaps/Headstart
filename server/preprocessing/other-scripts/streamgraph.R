@@ -29,11 +29,15 @@ metadata <- fromJSON(tmp_json)
 
 
 post_process <- function(sg_data) {
+  sg_data <- sg_data %>% ungroup()
   df <- data.frame(row.names = c('name', 'data', 'ids_overall', 'ids_timestep'))
   for (item in unique(sg_data[!is.na(sg_data$stream_item),]$stream_item)) {
     new_item <- list()
     new_item$name <- item
     tmp <- sg_data %>% subset(stream_item == item)
+    tmp <- (merge(tmp,
+                  data.frame(year=stream_range$min:stream_range$max), all=TRUE)
+            %>% replace_na(list(stream_item=item, count=0, ids="NA")))
     new_item$y <- tmp$count
     new_item$ids_overall <- (tmp
                               %>% ungroup()
@@ -82,15 +86,21 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
     levels(metadata$boundary_label) <- rename_xaxis(metadata$boundary_label)
   } else {
     metadata$boundary_label <- as.factor(metadata$year)
+    levels(metadata$boundary_label) <- levels(as.factor(stream_range$min:stream_range$max))
   }
   sg_data$x <- levels(metadata$boundary_label)
-  sg_data$subject <- (metadata
-                      %>% separate_rows(subject, sep="; ")
-                      %>% rename(stream_item=subject)
-                      %>% mutate(count=1)
-                      %>% complete(boundary_label, stream_item, fill=list(count=0))
-                      %>% group_by(boundary_label, stream_item, .drop=FALSE)
-                      %>% summarise(count=sum(count), ids=paste(id, collapse=", ")))
+  sg_data$subject <- ((merge(metadata
+                           %>% select(boundary_label, year, subject, id)
+                           %>% separate_rows(subject, sep="; ")
+                           %>% rename(stream_item=subject)
+                           %>% mutate(count=1),
+                           metadata
+                           %>% select(boundary_label)
+                           %>% expand(boundary_label)
+                           %>% rename(year=boundary_label),
+                           all=TRUE))
+                    %>% group_by(year, stream_item, .drop=FALSE)
+                    %>% summarise(count=sum(count), ids=paste(id, collapse=", ")))
   top_20 <-(sg_data$subject
             %>% group_by(stream_item)
             %>% summarise(sum = sum(count))
@@ -101,12 +111,17 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
             %>% pull())
   sg_data$subject <- (sg_data$subject
                       %>% subset(stream_item %in% top_20)
-                      %>% arrange(match(stream_item, top_20), boundary_label))
-  sg_data$area <- (metadata
-                   %>% rename(stream_item=area)
-                   %>% mutate(count=1)
-                   %>% complete(boundary_label, stream_item, fill=list(count=0))
-                   %>% group_by(boundary_label, stream_item, .drop=FALSE)
+                      %>% arrange(match(stream_item, top_20), year))
+  sg_data$area <- ((merge(metadata
+                     %>% select(boundary_label, year, area, id)
+                     %>% rename(stream_item=area)
+                     %>% mutate(count=1),
+                     metadata
+                     %>% select(boundary_label)
+                     %>% expand(boundary_label)
+                     %>% rename(year=boundary_label),
+                     all=TRUE))
+                   %>% group_by(year, stream_item, .drop=FALSE)
                    %>% summarise(count=sum(count), ids=paste(id, collapse=", ")))
   #sg_data$bkl_caption <- metadata %>% separate_rows(bkl_caption, sep="; ") %>% group_by(boundary_label, bkl_caption) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
   output <- list()
