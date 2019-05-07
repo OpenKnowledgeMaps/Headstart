@@ -106,7 +106,7 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
             %>% summarise(sum = sum(count))
             %>% arrange(desc(sum))
             %>% drop_na()
-            %>% head(20)
+            %>% head(12)
             %>% select(stream_item)
             %>% pull())
   sg_data$subject <- (sg_data$subject
