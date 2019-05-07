@@ -89,7 +89,7 @@ echo "var post_data = " . $post_data . ";\n";
                 clearTimeout(progessbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
-                $(".waiting-title").html('Bei der Erstellung Ihrer Visualisierung über <span>Suchbegriff</span> ist ein Fehler aufgetreten.');
+                $(".waiting-title").html('Bei der Erstellung Ihrer Visualisierung über <span>' + post_data.q + '</span> ist ein Fehler aufgetreten.');
                 $("#progress").html('Pardon! Es ist leider etwas schief gelaufen. Wahrscheinlich gibt es zu Ihrer Suchanfrage keine Dokumente. Bitte versuchen Sie es mit einer anderen Anfrage.');
             }
 
@@ -97,7 +97,7 @@ echo "var post_data = " . $post_data . ";\n";
                 clearTimeout(progessbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
-                $(".waiting-title").html('Bei der Erstellung Ihrer Visualisierung ist ein Fehler aufgetreten.');
+                $(".waiting-title").html('Bei der Erstellung Ihrer Visualisierung über <span>' + post_data.q + '</span> ist ein Fehler aufgetreten.');
                 $("#progress").html(
                         'Pardon! Es ist leider etwas schief gelaufen. Bitte <a href=\"index.php\">versuchen Sie es in ein paar Minuten noch einmal</a>.'
                         )
