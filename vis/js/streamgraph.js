@@ -52,7 +52,7 @@ streamgraph.drawStreamgraph = function(streamgraph_data) {
         //colors: ["#9E9EA2", "#9AC4B3", "#CAD93F", "#84D2F4", "#E4B031", "#58595B", "#569D79", "#569DD2", "#E57438", "#48B24F", "#50AED3", "#4770B3"],
         //colors: ['#E41A1C', '#007000', '#984EA3', '#DDDDDD', '#FF7F00','#FFFF33','#A65628', '#F781BF','#999999','#B71570','#377EB8','#60D360','#FF7F00'],
         //colors: ["#FFEF40", "#663A1A", "#33CCC7", "#FF4040", "#5BCC33", "#F1F1F1", "#2856A3", "#FF9E40", "#CC339C"],
-        colors: ["#33CC7F", "#FF4040", "#F9FF99", "#541A67", "#F1F1F1", "#A32929", "#FF99AA", "#28671A", "#99FFE6", "#2856A3", "#FFBD99", "#FF9E40"], 
+        colors: ["#33CCC9", "#FF4040", "#F9FF99", "#541A67", "#F1F1F1", "#A32929", "#FF99AA", "#28671A", "#99FFE6", "#2856A3", "#FFBD99", "#FF9E40"], 
         colorHighlight: true,
         responsive: true,
         colorInterpolation: "palette",
