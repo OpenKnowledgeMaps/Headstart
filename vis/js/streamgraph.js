@@ -82,5 +82,5 @@ streamgraph.drawStreamgraph = function(streamgraph_data) {
     }
     
     drawChart('streamgraph_subject', {labels: x_labels, datasets: y_data_subject}, options);
-    drawChart('streamgraph_area', {labels: x_labels, datasets: y_data_area}, options);
+    //drawChart('streamgraph_area', {labels: x_labels, datasets: y_data_area}, options);
 }

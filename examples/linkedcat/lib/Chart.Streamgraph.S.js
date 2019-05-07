@@ -2348,8 +2348,8 @@ var cssColorParser = function(){
     var max = -Infinity;
     for(var i = 0; i < layers.length; i++){
       for(var j = 0; j < layers[i].data.length; j++){
-        if (layers[i].data[j].y0 > max){ max = layers[i].data[j].y0; } 
-        if (layers[i].data[j].y1 < min){ min = layers[i].data[j].y1; } 
+        if (layers[i].data[j].y1 > max){ max = layers[i].data[j].y1; } 
+        if (layers[i].data[j].y0 < min){ min = layers[i].data[j].y0; } 
       }
     }
     return {min: min, max: max};
@@ -3042,7 +3042,7 @@ var cssColorParser = function(){
 				integersOnly : this.options.scaleIntegersOnly,
 				calculateYRange : function(){
           var minMax = findMaxAndMin(self.layers);
-          var value = Math.floor(Math.max(Math.abs(minMax.min), Math.abs(minMax.max))*1.5);
+          var value = Math.floor(Math.max(Math.abs(minMax.min), Math.abs(minMax.max))*1.1);
           value = (value % 2 !== 0)?(value + 1):(value);
           minMax = {min: value, max: -value};
           var range = minMax.max-minMax.min;
