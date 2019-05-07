@@ -39,6 +39,10 @@ post_process <- function(sg_data) {
       tmp <- (merge(tmp,
                     data.frame(year=stream_range$min:stream_range$max), all=TRUE)
               %>% replace_na(list(stream_item=item, count=0, ids="NA")))
+    } else {
+      tmp <- (merge(tmp,
+                    tmp %>% expand(boundary_label), all=TRUE)
+              %>% replace_na(list(stream_item=item, count=0, ids="NA")))
     }
     new_item$y <- tmp$count
     new_item$ids_overall <- (tmp
