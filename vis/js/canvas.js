@@ -172,7 +172,7 @@ class Canvas {
         }
         
         createStreamgraphCanvas(self, 'streamgraph_subject');
-        createStreamgraphCanvas(self, 'streamgraph_area');           
+        //createStreamgraphCanvas(self, 'streamgraph_area');           
     }
 
     drawChartCanvas() {
