@@ -70,7 +70,7 @@ get_papers <- function(query, params, limit=100) {
   metadata$url <- search_res$id
   metadata$link <- "" # needs fix
   metadata$published_in <- search_res$host_label
-  metadata$oa_state <- 1
+  metadata$oa_state <- unlist(lapply(metadata$copyright_until), function(x) {if (x=="") 1 else 0})
   metadata$subject_orig = metadata$subject
   metadata$relevance = c(nrow(metadata):1)
   metadata$bkl_caption = if (!is.null(search_res$bkl_caption)) search_res$bkl_caption else ""
@@ -100,7 +100,7 @@ build_query <- function(query, params, limit){
   # fields to return
   r_fields <- c('id', 'idnr',
                 'content_type_a', 'content_type_2',
-                'main_title', 'subtitle', 'pub_year',
+                'main_title', 'subtitle', 'pub_year', 'copyright_until',
                 'host_label', 'host_maintitle', 'host_pubplace', 'host_pubyear',
                 'author100_a', 'author100_d', 'author100_0', 'author100_4',
                 'author700_a', 'author700_d', 'author700_0',
