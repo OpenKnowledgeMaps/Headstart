@@ -75,6 +75,7 @@ get_papers <- function(query, params, limit=100) {
   metadata$url <- search_res$id
   metadata$link <- "" # needs fix
   metadata$published_in <- paste(search_res$main_title, search_res$host_pubplace, search_res$host_pubyear, sep=", ")
+  metadata$published_in <- unlist(lapply(metadata$published_in, function(x) {gsub(", $|, , ", "", x)}))
   metadata$oa_state <- unlist(lapply(search_res$copyright_until, function(x) {if (x=="") 1 else 0}))
   metadata$subject_orig = metadata$subject
   metadata$relevance = c(nrow(metadata):1)
