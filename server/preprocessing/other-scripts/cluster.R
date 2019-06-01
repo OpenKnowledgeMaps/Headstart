@@ -23,7 +23,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
     num_clusters <-tryCatch({
       cut_off <- elbow.batch(css_cluster)
       num_clusters <- cut_off$k
-    }, error = function(err$message){
+    }, error = function(err){
       vclog$warn(err$message)
       return (NA)
     })
@@ -33,7 +33,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
         cut_off <- get_cut_off(css_cluster, attempt)
         attempt <- attempt+1
         cut_off$k
-      }, error = function(err$message){
+      }, error = function(err){
         vclog$warn(err$message)
         return (NA)
         }
