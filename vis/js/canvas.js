@@ -164,7 +164,7 @@ class Canvas {
         
         let createStreamgraphCanvas = function (self, id) {
             d3.select('#headstart-chart')
-                .append('canvas')
+                .append('svg')
                     .attr('width', self.available_width)
                     .attr('height', self.current_vis_size)
                     .attr('id', id)
