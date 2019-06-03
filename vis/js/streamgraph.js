@@ -7,6 +7,7 @@ import {
     mediator
 } from 'mediator';
 import { io } from 'io';
+import { canvas } from 'canvas';
 
 export const streamgraph = StateMachine.create({
 
@@ -21,7 +22,7 @@ export const streamgraph = StateMachine.create({
     }
 });
 
-streamgraph.createStreamgraphData = function(json_data) {
+/*streamgraph.createStreamgraphData = function(json_data) {
     let return_array = [];
     
     json_data.forEach(function (d) {
@@ -30,11 +31,65 @@ streamgraph.createStreamgraphData = function(json_data) {
     })
     
     return return_array;
-}
+}*/
 
 streamgraph.drawStreamgraph = function(streamgraph_data) {
     
-    let json_data = JSON.parse(streamgraph_data);    
+    let stack = d3.layout.stack()
+        .offset("silhouette")
+        .values(function(d) { return d.values; })
+        .x(function(d) { return d.date; })
+        .y(function(d) { return d.value; });
+    
+    let nest = d3.nest()
+        .key(function(d) { return d.key; });
+    
+    let colors = ["#2856A3", "#671A54", "#d5c4d0", "#99e5e3", "#F1F1F1", "#dbe1ee", "#CC3380", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#FFE699"]
+    
+    let json_data = JSON.parse(streamgraph_data);
+    
+    let parsed_data = [];
+            
+    json_data.subject.forEach(function(element) {
+        let count = 0;
+        element.y.forEach(function (data_point) {
+            parsed_data.push({key: element.name, value: data_point, date: new Date(json_data.x[count])})
+            count++;
+        })
+    })
+    
+    console.log("Data converted");
+    
+    let area = d3.svg.area()
+        .interpolate("cardinal")
+        .x(function(d) { return x(d.date); })
+        .y0(function(d) { return y(d.y0); })
+        .y1(function(d) { return y(d.y0 + d.y); });
+    
+    let x = d3.time.scale()      
+                .range([0, canvas.available_width]);
+
+    var y = d3.scale.linear()
+                .range([canvas.current_vis_size-10, 0]);
+
+    var z = d3.scale.ordinal()
+                .range(colors);
+    
+    let streams = stack(nest.entries(parsed_data));
+    
+    x.domain(d3.extent(parsed_data, function(d) { return d.date; }));
+    y.domain([0, d3.max(parsed_data, function(d) { return d.y0 + d.y; })]);
+    
+    let streamgraph_subject = d3.select("#streamgraph_subject")
+    
+    streamgraph_subject.selectAll(".stream")
+        .data(streams)
+      .enter().append("path")
+        .attr("class", "stream")
+        .attr("d", function(d) { return area(d.values); })
+        .style("fill", function(d, i) { return z(i); });
+    
+    /*let json_data = JSON.parse(streamgraph_data);    
     let x_labels = json_data.x;
     let y_data_subject = this.createStreamgraphData(json_data.subject);
     let y_data_area = this.createStreamgraphData(json_data.area);
@@ -83,5 +138,5 @@ streamgraph.drawStreamgraph = function(streamgraph_data) {
     }
     
     drawChart('streamgraph_subject', {labels: x_labels, datasets: y_data_subject}, options);
-    //drawChart('streamgraph_area', {labels: x_labels, datasets: y_data_area}, options);
+    //drawChart('streamgraph_area', {labels: x_labels, datasets: y_data_area}, options);*/
 }
