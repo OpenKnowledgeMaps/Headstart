@@ -148,7 +148,7 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
         let bbox = label.getBBox();
         let ctm = label.getCTM();
         
-        let border_width = 0;
+        let border_width = 5;
         
         let rect = d3.select(series[0][i]).insert('rect','text')
             .attr('x', bbox.x - border_width)
