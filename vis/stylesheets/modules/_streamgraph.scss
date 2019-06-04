@@ -2,4 +2,38 @@
 
 .streamgraph-canvas {
     padding: 20px 15px 10px 20px;
+    margin-left: 20px;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #3a403d;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-size: .625em;
+}
+
+.tip {
+  background-color: hsla(0,0%,100%,.9);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 1em;
+  width: 180px;
+    
+  .year {
+    font-weight: 900;
+    font-size: 1.25em;
+    margin-bottom: 2px;
+  }
+  
+  .swatch {
+    width: 11px;
+    height: 11px;
+    float: left;
+    margin-top: 6px;
+    margin-right: 4px;
+  }
 }
