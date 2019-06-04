@@ -4,7 +4,7 @@ import 'lib/highlightRegex.min.js';
 // -------- General helpers ------------
 // -------------------------------------
 
-export const BrowserDetect = require("exports?BrowserDetect!../lib/browser_detect.js");
+export const BrowserDetect = require("exports-loader?BrowserDetect!../lib/browser_detect.js");
 
 /**
  * Move nodes backwards in DOM
