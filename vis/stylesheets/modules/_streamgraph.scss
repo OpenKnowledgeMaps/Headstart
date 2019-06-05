@@ -5,6 +5,19 @@
     margin-left: 20px;
 }
 
+.stream {
+    opacity: 1;
+}
+
+.lower-opacity {
+    opacity: 0.6;
+}
+
+.label-background {
+    fill: #fff;
+    fill-opacity: 1;
+}
+
 .axis path, .axis line {
   fill: none;
   stroke: #3a403d;
@@ -22,6 +35,9 @@
   border-radius: 5px;
   font-size: 1em;
   width: 180px;
+  position: absolute;
+  z-index: 20;
+  visibility: visible;
     
   .year {
     font-weight: 900;
@@ -36,4 +52,18 @@
     margin-top: 6px;
     margin-right: 4px;
   }
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.line_helper {
+    position: absolute;
+    z-index: 19;
+    width: 2px;
+    background: lightgray;
+    top: 10px;
+    bottom: 30px;
+    left: 0px;
 }
