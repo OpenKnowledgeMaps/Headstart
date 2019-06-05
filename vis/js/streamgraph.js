@@ -23,7 +23,11 @@ export const streamgraph = StateMachine.create({
 });
 
 streamgraph.drawStreamgraph = function (streamgraph_data) {
-
+    
+    let streamgraph_margin = {top: 20, right: 50, bottom: 50, left: 20},
+        streamgraph_width = canvas.available_width - streamgraph_margin.left - streamgraph_margin.right,
+        streamgraph_height = canvas.current_vis_size - streamgraph_margin.top - streamgraph_margin.bottom;
+    
     let stack = d3.layout.stack()
             .offset("silhouette")
             .values(function (d) {
@@ -76,10 +80,10 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
             });
 
     let x = d3.time.scale()
-            .range([0, canvas.available_width]);
+            .range([0, streamgraph_width]);
 
     var y = d3.scale.linear()
-            .range([canvas.current_vis_size - 10, 0]);
+            .range([streamgraph_height, 0]);
 
     var z = d3.scale.ordinal()
             .range(colors);
@@ -103,6 +107,10 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
         })]);
 
     let streamgraph_subject = d3.select("#streamgraph_subject")
+            .append("g")
+            .classed("streamgraph-chart", true)
+            .attr("transform", "translate(" + streamgraph_margin.left
+                                    + "," + streamgraph_margin.top + ")")
 
     let series = streamgraph_subject.selectAll(".stream")
             .data(streams)
@@ -118,26 +126,30 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
             .style("fill", function (d, i) {
                 return z(i);
             });
-
-    series.append("text")
-            .attr("dy", "10")
-            .classed("label", true)
-            .text(function (d) {
-                return d.key;
-            })
-            .attr("transform", function (d, i) {
-                let max_value = d3.max(d.values, function (x) { return x.y })
-                let text_width = this.clientWidth;
-                let text_height = this.getBBox().height;
-                let final_x, final_y;
-                d.values.forEach(function (element) {
-                    if(element.y === max_value) {
-                        final_x = x(element.date) - text_width;
-                        final_y = y(element.y  + element.y0) + ((y(element.y0) - y(element.y  + element.y0))/2) - text_height/2;
-                    }
+            
+    series[0].forEach(function (element) {
+        let d = element.__data__;
+        
+        d3.select(".streamgraph-chart").append('text')
+                .attr("dy", "10")
+                .classed("label", true)
+                .text(d.key)
+                .attr("transform", function () {
+                    let max_value = d3.max(d.values, function (x) { return x.y })
+                    let text_width = this.getBBox().width;
+                    let text_height = this.getBBox().height;
+                    let final_x, final_y;
+                    d.values.forEach(function (element) {
+                        if(element.y === max_value) {
+                            final_x = x(element.date) - text_width/2;
+                            final_y = y(element.y  + element.y0) 
+                                    + ((y(element.y0) - y(element.y  + element.y0))/2) 
+                                    - text_height/2;
+                        }
+                    })
+                    return "translate(" + final_x + ", " + final_y + ")";
                 })
-                return "translate(" + final_x + ", " + final_y + ")";
-            })
+    })
     
     let setTM = function(element, m) {
         element.transform.baseVal.initialize(element.ownerSVGElement.createSVGTransformFromMatrix(m))
@@ -150,9 +162,9 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
         
         let border_width = 5;
         
-        let rect = d3.select(series[0][i]).insert('rect','text')
-            .attr('x', bbox.x - border_width)
-            .attr('y', bbox.y - border_width)
+        let rect = d3.select('.streamgraph-chart').insert('rect','text')
+            .attr('x', bbox.x - streamgraph_margin.left - border_width)
+            .attr('y', bbox.y - streamgraph_margin.top - border_width)
             .attr('width', bbox.width + border_width*2)
             .attr('height', bbox.height + border_width*2)
             .attr('rx', '5')
@@ -166,13 +178,13 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
     
     streamgraph_subject.append("g")
             .attr("class", "x axis")
-            .attr("transform", "translate(0," + (canvas.current_vis_size - 50) + ")")
+            .attr("transform", "translate(0," + streamgraph_height + ")")
             .call(xAxis);
 
 
     streamgraph_subject.append("g")
             .attr("class", "y axis")
-            .attr("transform", "translate(20,0)")
+            //.attr("transform", "translate(20,0)")
             .call(yAxis.orient("left"));
 
     streamgraph_subject.selectAll(".stream")
@@ -225,7 +237,7 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
             .style("left", "0px")
             .style("background", "lightgray");
 
-    d3.select("#headstart-chart")
+    d3.select(".streamgraph-chart")
             .on("mousemove", function () {
                 line_helper.style("left", (d3.mouse(this)[0] + 5) + "px")
             })
