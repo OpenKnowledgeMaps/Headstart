@@ -7,8 +7,6 @@ import { mediator } from 'mediator';
 import { io } from 'io';
 import { canvas } from 'canvas';
 
-//import * as d3label from 'd3-area-label';
-
 export const streamgraph = StateMachine.create({
 
     events: [
@@ -22,10 +20,15 @@ export const streamgraph = StateMachine.create({
     }
 });
 
+const streamgraph_margin = {top: 20, right: 50, bottom: 50, left: 20};
+const stream_colors = ["#2856A3", "#671A54", "#d5c4d0", "#99e5e3", "#F1F1F1"
+        , "#dbe1ee", "#CC3380", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#FFE699"];
+const label_border_width = 5;
+const label_round_factor = 5;
+
 streamgraph.drawStreamgraph = function (streamgraph_data) {
     
-    let streamgraph_margin = {top: 20, right: 50, bottom: 50, left: 20},
-        streamgraph_width = canvas.available_width - streamgraph_margin.left - streamgraph_margin.right,
+    let streamgraph_width = canvas.available_width - streamgraph_margin.left - streamgraph_margin.right,
         streamgraph_height = canvas.current_vis_size - streamgraph_margin.top - streamgraph_margin.bottom;
     
     let stack = d3.layout.stack()
@@ -45,8 +48,6 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
                 return d.key;
             });
 
-    let colors = ["#2856A3", "#671A54", "#d5c4d0", "#99e5e3", "#F1F1F1", "#dbe1ee", "#CC3380", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#FFE699"]
-
     let json_data = JSON.parse(streamgraph_data);
 
     let parsed_data = [];
@@ -61,10 +62,7 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
     
     let tooltip = d3.select("#visualization")
             .append("div")
-            .attr("class", "tip")
-            .style("position", "absolute")
-            .style("z-index", "20")
-            .style("visibility", "hidden")
+            .attr("class", "tip hidden")
             .style("top", $('#headstart-chart').offset().top + "px");
 
     let area = d3.svg.area()
@@ -86,7 +84,7 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
             .range([streamgraph_height, 0]);
 
     var z = d3.scale.ordinal()
-            .range(colors);
+            .range(stream_colors);
 
     var xAxis = d3.svg.axis()
             .scale(x)
@@ -115,7 +113,7 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
     let series = streamgraph_subject.selectAll(".stream")
             .data(streams)
             .enter().append("g")
-            .attr("class", "area")
+            .attr("class", "streamgraph-area")
 
 
     series.append("path")
@@ -160,18 +158,13 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
         let bbox = label.getBBox();
         let ctm = label.getCTM();
         
-        let border_width = 5;
-        
         let rect = d3.select('.streamgraph-chart').insert('rect','text')
-            .attr('x', bbox.x - streamgraph_margin.left - border_width)
-            .attr('y', bbox.y - streamgraph_margin.top - border_width)
-            .attr('width', bbox.width + border_width*2)
-            .attr('height', bbox.height + border_width*2)
-            .attr('rx', '5')
-            .style("stroke-width", "10")
-            .style("stroke", "white")
-            .style("fill", "white")
-            .style("fill-opacity", "1")
+            .classed("label-background", true)
+            .attr('x', bbox.x - streamgraph_margin.left - label_border_width)
+            .attr('y', bbox.y - streamgraph_margin.top - label_border_width)
+            .attr('width', bbox.width + label_border_width*2)
+            .attr('height', bbox.height + label_border_width*2)
+            .attr('rx', label_round_factor)
     
         setTM(rect[0][0], ctm)
     })
@@ -184,29 +177,27 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
 
     streamgraph_subject.append("g")
             .attr("class", "y axis")
-            //.attr("transform", "translate(20,0)")
             .call(yAxis.orient("left"));
 
     streamgraph_subject.selectAll(".stream")
-            .attr("opacity", 1)
             .on("mouseover", function (d, i) {
                 streamgraph_subject.selectAll(".stream").transition()
                         .duration(100)
-                        .attr("opacity", function (d, j) {
-                            return j != i ? 0.6 : 1;
+                        .attr("class", function (d, j) {
+                            return j != i ? 'stream lower-opacity' : 'stream';
                         })
             })
             .on("mouseout", function (d, i) {
                 streamgraph_subject.selectAll(".stream").transition()
                         .duration(100)
-                        .attr("opacity", '1');
+                        .attr('class', 'stream')
 
-                tooltip.style("visibility", "hidden");
+                tooltip.classed("hidden", true);
 
             })
             .on("mousemove", function (d, i) {
 
-                var color = d3.select(this).style('fill'); // need to know the color in order to generate the swatch
+                var color = d3.select(this).style('fill');
 
                 let mouse = d3.mouse(this);
                 let mousex = mouse[0];
@@ -220,7 +211,7 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
                                 .style("left", mousex + "px")
                                 .style("top", mousey + "px")
                                 .html("<div class='year'>" + year + "</div><div class='key'><div style='background:" + color + "' class='swatch'>&nbsp;</div>" + f.key + "</div><div class='value'>" + f.value + "</div>")
-                                .style("visibility", "visible");
+                                .classed("hidden", false);
                     }
                 });
             })
@@ -228,20 +219,13 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
     let line_helper = d3.select("#headstart-chart")
             .append("div")
             .attr("class", "line_helper")
-            .style("position", "absolute")
-            .style("z-index", "19")
-            .style("width", "2px")
             .style("height", canvas.current_vis_size)
-            .style("top", "10px")
-            .style("bottom", "30px")
-            .style("left", "0px")
-            .style("background", "lightgray");
 
     d3.select(".streamgraph-chart")
             .on("mousemove", function () {
-                line_helper.style("left", (d3.mouse(this)[0] + 5) + "px")
+                line_helper.style("left", (d3.mouse(this)[0]) + "px")
             })
             .on("mouseover", function () {
-                line_helper.style("left", (d3.mouse(this)[0] + 5) + "px")
+                line_helper.style("left", (d3.mouse(this)[0]) + "px")
             });
 }
