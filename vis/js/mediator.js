@@ -265,7 +265,7 @@ MyMediator.prototype = {
             
             mediator.manager.registerModule(streamgraph, 'streamgraph')
             mediator.manager.call('streamgraph', 'start')
-            mediator.manager.call('streamgraph', 'drawStreamgraph', [streamgraph_data])
+            mediator.manager.call('streamgraph', 'setupStreamgraph', [streamgraph_data])
             
             //TODO: implement for streamgraph
             //mediator.manager.call('canvas', 'initEventsAndLayout', []);

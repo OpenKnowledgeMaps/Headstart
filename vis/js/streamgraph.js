@@ -26,7 +26,7 @@ const stream_colors = ["#2856A3", "#671A54", "#d5c4d0", "#99e5e3", "#F1F1F1"
 const label_border_width = 5;
 const label_round_factor = 5;
 
-streamgraph.drawStreamgraph = function (streamgraph_data) {
+streamgraph.setupStreamgraph = function (streamgraph_data) {
     
     let streamgraph_width = canvas.available_width - streamgraph_margin.left - streamgraph_margin.right,
         streamgraph_height = canvas.current_vis_size - streamgraph_margin.top - streamgraph_margin.bottom;
@@ -47,23 +47,6 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
             .key(function (d) {
                 return d.key;
             });
-
-    let json_data = JSON.parse(streamgraph_data);
-
-    let parsed_data = [];
-
-    json_data.subject.forEach(function (element) {
-        let count = 0;
-        element.y.forEach(function (data_point) {
-            parsed_data.push({key: element.name, value: data_point, date: new Date(json_data.x[count])})
-            count++;
-        })
-    })
-    
-    let tooltip = d3.select("#visualization")
-            .append("div")
-            .attr("class", "tip hidden")
-            .style("top", $('#headstart-chart').offset().top + "px");
 
     let area = d3.svg.area()
             .interpolate("cardinal")
@@ -93,6 +76,8 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
 
     var yAxis = d3.svg.axis()
             .scale(y);
+    
+    let parsed_data = this.transformData(JSON.parse(streamgraph_data));
 
     let nested_entries = nest.entries(parsed_data);
     let streams = stack(nested_entries);
@@ -103,7 +88,30 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
     y.domain([0, d3.max(parsed_data, function (d) {
             return d.y0 + d.y;
         })]);
+    
+    let streamgraph_subject = this.drawStreamgraph(streams, area, z);   
+    let series = streamgraph_subject.selectAll(".streamgraph-area");
+    this.drawLabels(series, x, y);
+    this.drawAxes(streamgraph_subject, xAxis, yAxis, streamgraph_width, streamgraph_height);
+    this.setupTooltip(streamgraph_subject, x);
+    this.setupLinehelper();
+}
 
+streamgraph.transformData = function(json_data) {
+    let parsed_data = [];
+
+    json_data.subject.forEach(function (element) {
+        let count = 0;
+        element.y.forEach(function (data_point) {
+            parsed_data.push({key: element.name, value: data_point, date: new Date(json_data.x[count])})
+            count++;
+        })
+    })
+    
+    return parsed_data;
+}
+
+streamgraph.drawStreamgraph = function (streams, area, z) {
     let streamgraph_subject = d3.select("#streamgraph_subject")
             .append("g")
             .classed("streamgraph-chart", true)
@@ -125,6 +133,10 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
                 return z(i);
             });
             
+    return streamgraph_subject;
+}
+
+streamgraph.drawLabels = function (series, x, y) {
     series[0].forEach(function (element) {
         let d = element.__data__;
         
@@ -168,6 +180,9 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
     
         setTM(rect[0][0], ctm)
     })
+}
+
+streamgraph.drawAxes = function(streamgraph_subject, xAxis, yAxis, streamgraph_width, streamgraph_height) {
     
     streamgraph_subject.append("g")
             .attr("class", "x axis")
@@ -178,7 +193,15 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
     streamgraph_subject.append("g")
             .attr("class", "y axis")
             .call(yAxis.orient("left"));
+}
 
+streamgraph.setupTooltip = function(streamgraph_subject, x) {
+    
+    let tooltip = d3.select("#visualization")
+            .append("div")
+            .attr("class", "tip hidden")
+            .style("top", $('#headstart-chart').offset().top + "px");
+    
     streamgraph_subject.selectAll(".stream")
             .on("mouseover", function (d, i) {
                 streamgraph_subject.selectAll(".stream").transition()
@@ -215,7 +238,9 @@ streamgraph.drawStreamgraph = function (streamgraph_data) {
                     }
                 });
             })
+}
 
+streamgraph.setupLinehelper = function() {
     let line_helper = d3.select("#headstart-chart")
             .append("div")
             .attr("class", "line_helper")

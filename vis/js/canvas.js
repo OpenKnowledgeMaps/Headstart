@@ -171,8 +171,7 @@ class Canvas {
                     .classed('streamgraph-canvas', true)
         }
         
-        createStreamgraphCanvas(self, 'streamgraph_subject');
-        //createStreamgraphCanvas(self, 'streamgraph_area');           
+        createStreamgraphCanvas(self, 'streamgraph_subject');           
     }
 
     drawChartCanvas() {
