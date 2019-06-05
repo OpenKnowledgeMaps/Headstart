@@ -78,7 +78,6 @@ streamgraph.setupStreamgraph = function (streamgraph_data) {
             .scale(y);
     
     let parsed_data = this.transformData(JSON.parse(streamgraph_data));
-
     let nested_entries = nest.entries(parsed_data);
     let streams = stack(nested_entries);
 

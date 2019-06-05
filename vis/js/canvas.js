@@ -158,20 +158,20 @@ class Canvas {
     }
     
     drawStreamgraphChart() {
-        var self = this;
+        d3.select("#chart-svg").remove();       
+        this.createStreamgraphCanvas();           
+    }
+    
+    createStreamgraphCanvas() {
         
-        d3.select("#chart-svg").remove();
+        let self = this;
         
-        let createStreamgraphCanvas = function (self, id) {
-            d3.select('#headstart-chart')
-                .append('svg')
-                    .attr('width', self.available_width)
-                    .attr('height', self.current_vis_size)
-                    .attr('id', id)
-                    .classed('streamgraph-canvas', true)
-        }
-        
-        createStreamgraphCanvas(self, 'streamgraph_subject');           
+        d3.select('#headstart-chart')
+            .append('svg')
+                .attr('width', self.available_width)
+                .attr('height', self.current_vis_size)
+                .attr('id', 'streamgraph_subject')
+                .classed('streamgraph-canvas', true)
     }
 
     drawChartCanvas() {
@@ -199,6 +199,12 @@ class Canvas {
         } else {
             return "16px";
         }
+    }
+    
+    initEventListenersStreamgraph() {
+        d3.select(window).on("resize", () => {
+            mediator.publish("window_resize");
+        });
     }
 
     initEventListeners() {
@@ -778,6 +784,10 @@ class Canvas {
         this.force_papers.stop();
         // clear the canvas & list
         $("#chart_canvas").remove();
+    }
+    
+    initEventsStreamgraph() {
+        this.initEventListenersStreamgraph();
     }
 
     initEventsAndLayout() {
