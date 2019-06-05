@@ -247,7 +247,7 @@ MyMediator.prototype = {
             }
         }();
         let context = (config.show_context)?(csv.context):{};
-        let streamgraph_data = (config.is_streamgraph)?(csv.streamgraph):{};
+        mediator.streamgraph_data = (config.is_streamgraph)?(csv.streamgraph):{};
         
         mediator.manager.registerModule(headstart, 'headstart');
         
@@ -265,10 +265,10 @@ MyMediator.prototype = {
             
             mediator.manager.registerModule(streamgraph, 'streamgraph')
             mediator.manager.call('streamgraph', 'start')
-            mediator.manager.call('streamgraph', 'setupStreamgraph', [streamgraph_data])
+            mediator.manager.call('streamgraph', 'setupStreamgraph', [mediator.streamgraph_data])
             
             //TODO: implement for streamgraph
-            //mediator.manager.call('canvas', 'initEventsAndLayout', []);
+            mediator.manager.call('canvas', 'initEventsStreamgraph', []);
             
             mediator.manager.call('list', 'start');
             if (config.show_list) mediator.manager.call('list', 'show');
@@ -515,13 +515,22 @@ MyMediator.prototype = {
     },
 
     window_resize: function() {
-        mediator.resized_scale_x = d3.scale.linear();
-        mediator.resized_scale_y = d3.scale.linear();
-        mediator.manager.call('canvas', 'setupResizedCanvas', []);
-        mediator.manager.call('list', 'fit_list_height', []);
-        mediator.manager.call('bubble', 'onWindowResize', []);
-        mediator.manager.call('papers', 'onWindowResize', []);
-        mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
+        if(config.is_streamgraph) {
+            $('.line_helper').remove();
+            $('#headstart-chart').empty();
+            mediator.manager.call('canvas', 'calcChartSize');
+            mediator.manager.call('canvas', 'createStreamgraphCanvas');
+            mediator.manager.call('streamgraph', 'setupStreamgraph', [mediator.streamgraph_data]);
+            mediator.manager.call('list', 'fit_list_height', []);
+        } else {
+            mediator.resized_scale_x = d3.scale.linear();
+            mediator.resized_scale_y = d3.scale.linear();
+            mediator.manager.call('canvas', 'setupResizedCanvas', []);
+            mediator.manager.call('list', 'fit_list_height', []);
+            mediator.manager.call('bubble', 'onWindowResize', []);
+            mediator.manager.call('papers', 'onWindowResize', []);
+            mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
+        }
     },
 
     on_rect_mouseover: function() {
