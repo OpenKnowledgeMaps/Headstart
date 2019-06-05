@@ -96,6 +96,40 @@ streamgraph.setupStreamgraph = function (streamgraph_data) {
     this.setupLinehelper();
 }
 
+streamgraph.initMouseListeners = function() {
+    d3.selectAll('.stream')
+            .on("click", function (d, i) {
+                mediator.publish("stream_clicked", d.key);
+            })
+            
+    d3.select('#' + config.tag)
+            .on("click", function (d) {
+                if (event.target.className.baseVal === "container-headstart" ||
+                    event.target.className.baseVal === "vis-col" ||
+                    event.target.id === "headstart-chart" ||
+                    event.target.className.baseVal === "streamgraph-canvas" ||
+                    event.target.className.baseVal === "streamgraph-chart") {   
+                    mediator.publish("streamgraph_chart_clicked");
+                }
+            })
+}
+
+streamgraph.markStream = function() {
+    if(mediator.stream_clicked === null) {
+        return;
+    }
+    d3.selectAll(".stream")
+        .attr("class", function (d) {
+            return d.key !== mediator.stream_clicked ? 'stream lower-opacity' : 'stream';
+        })    
+}
+
+streamgraph.reset = function () {
+     d3.selectAll(".stream").transition()
+        .duration(100)
+        .attr('class', 'stream')
+}
+
 streamgraph.transformData = function(json_data) {
     let parsed_data = [];
 
@@ -203,16 +237,21 @@ streamgraph.setupTooltip = function(streamgraph_subject, x) {
     
     streamgraph_subject.selectAll(".stream")
             .on("mouseover", function (d, i) {
+                if(mediator.stream_clicked !== null) {
+                    return;
+                }
                 streamgraph_subject.selectAll(".stream").transition()
                         .duration(100)
                         .attr("class", function (d, j) {
                             return j != i ? 'stream lower-opacity' : 'stream';
                         })
             })
-            .on("mouseout", function (d, i) {
-                streamgraph_subject.selectAll(".stream").transition()
+            .on("mouseout", function (d, i) {               
+                if(mediator.stream_clicked === null) {
+                    streamgraph_subject.selectAll(".stream").transition()
                         .duration(100)
                         .attr('class', 'stream')
+                }
 
                 tooltip.classed("hidden", true);
 

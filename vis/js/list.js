@@ -207,6 +207,8 @@ list.count_visible_items_to_header = function() {
             } else {
                 return current_circle.data()[0].title == d.area;
             }
+        } else if (config.is_streamgraph) {
+            return this.style.display !== "none";
         } else {
             return true;
         }
@@ -403,6 +405,20 @@ list.filterListByArea = function(area) {
     d3.selectAll("#list_holder")
         .filter(function(x) {
             return (config.use_area_uri) ? (x.area_uri == area.area_uri) : (x.area == area.title);
+        })
+        .style("display", function(d) {
+            return d.filtered_out ? "none" : "inline";
+        });
+};
+
+list.filterListByKeyword = function(keyword) {
+    d3.selectAll("#list_holder").style("display", "none");
+    
+    d3.selectAll("#list_holder")
+        .filter(function(x) {
+            let keywords = x.subject_orig.split("; ");
+            let contains_keyword = keywords.includes(keyword);
+            return contains_keyword
         })
         .style("display", function(d) {
             return d.filtered_out ? "none" : "inline";
