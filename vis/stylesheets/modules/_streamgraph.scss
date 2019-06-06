@@ -1,8 +1,8 @@
 /* ########### Streamgraph ########### */
 
 .streamgraph-canvas {
-    padding: 20px 15px 10px 20px;
-    margin-left: 20px;
+    padding: 20px 15px 10px 10px;
+    margin-left: 0px;
 }
 
 .stream {
@@ -28,6 +28,10 @@
 
 .axis text {
   font-size: .625em;
+}
+
+.axis-label {
+    font-size: 12px
 }
 
 .tip {
