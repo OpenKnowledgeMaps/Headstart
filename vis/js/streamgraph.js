@@ -7,9 +7,11 @@ import { mediator } from 'mediator';
 import { io } from 'io';
 import { canvas } from 'canvas';
 
-const streamgraph_margin = {top: 20, right: 50, bottom: 50, left: 20};
+const streamgraph_margin = {top: 20, right: 50, bottom: 70, left: 50};
 const stream_colors = ["#2856A3", "#671A54", "#d5c4d0", "#99e5e3", "#F1F1F1"
         , "#dbe1ee", "#CC3380", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#FFE699"];
+const axis_padding_left = -30;
+const axis_padding_bottom = 35;
 const label_border_width = 5;
 const label_round_factor = 5;
 const line_helper_margin = 20; //higher values mean that the line is closer to the cursor
@@ -225,10 +227,23 @@ streamgraph.drawAxes = function(streamgraph_subject, xAxis, yAxis, streamgraph_w
             .attr("transform", "translate(0," + streamgraph_height + ")")
             .call(xAxis);
 
-
     streamgraph_subject.append("g")
             .attr("class", "y axis")
             .call(yAxis.orient("left"));
+    
+    streamgraph_subject.append("text")
+            .attr("class", "axis-label x")
+            .attr("x", streamgraph_width/2)
+            .attr("y", streamgraph_height + axis_padding_bottom)
+            .attr("text-anchor", "middle")
+            .text("Jahr")
+    
+    streamgraph_subject.append("text")
+            .attr("class", "axis-label y")   
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate(" + axis_padding_left + "," 
+                                            + streamgraph_height/2 + ")rotate(-90)")
+            .text("Anzahl Dokumente")
 }
 
 streamgraph.setupTooltip = function(streamgraph_subject, x) {
