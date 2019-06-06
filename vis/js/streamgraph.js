@@ -7,6 +7,15 @@ import { mediator } from 'mediator';
 import { io } from 'io';
 import { canvas } from 'canvas';
 
+const streamgraph_margin = {top: 20, right: 50, bottom: 50, left: 20};
+const stream_colors = ["#2856A3", "#671A54", "#d5c4d0", "#99e5e3", "#F1F1F1"
+        , "#dbe1ee", "#CC3380", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#FFE699"];
+const label_border_width = 5;
+const label_round_factor = 5;
+const line_helper_margin = 20; //higher values mean that the line is closer to the cursor
+
+const tooltipTemplate = require('templates/streamgraph/tooltip.handlebars');
+
 export const streamgraph = StateMachine.create({
 
     events: [
@@ -19,12 +28,6 @@ export const streamgraph = StateMachine.create({
         }
     }
 });
-
-const streamgraph_margin = {top: 20, right: 50, bottom: 50, left: 20};
-const stream_colors = ["#2856A3", "#671A54", "#d5c4d0", "#99e5e3", "#F1F1F1"
-        , "#dbe1ee", "#CC3380", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#FFE699"];
-const label_border_width = 5;
-const label_round_factor = 5;
 
 streamgraph.setupStreamgraph = function (streamgraph_data) {
     
@@ -265,13 +268,16 @@ streamgraph.setupTooltip = function(streamgraph_subject, x) {
                 let mousey = mouse[1];
                 var invertedx = x.invert(mousex);
                 var xDate = invertedx.getFullYear();
+                var all_years = d3.sum(d.values, function(d) { return d.value });
                 d.values.forEach(function (f) {
                     var year = (f.date.toString()).split(' ')[3];
                     if (xDate == year) {
                         tooltip
-                                .style("left", mousex + "px")
+                                .style("left", (mousex + line_helper_margin) + "px")
                                 .style("top", mousey + "px")
-                                .html("<div class='year'>" + year + "</div><div class='key'><div style='background:" + color + "' class='swatch'>&nbsp;</div>" + f.key + "</div><div class='value'>" + f.value + "</div>")
+                                .html( function () {
+                                    return tooltipTemplate({year: year, color: color, keyword: f.key, current_year: f.value, all_years: all_years})
+                                })
                                 .classed("hidden", false);
                     }
                 });
@@ -283,12 +289,16 @@ streamgraph.setupLinehelper = function() {
             .append("div")
             .attr("class", "line_helper")
             .style("height", canvas.current_vis_size)
+    
+    let move_line = function(self) {
+        line_helper.style("left", (d3.mouse(self)[0] + line_helper_margin) + "px");
+    }
 
     d3.select(".streamgraph-chart")
             .on("mousemove", function () {
-                line_helper.style("left", (d3.mouse(this)[0]) + "px")
+                move_line(this);
             })
             .on("mouseover", function () {
-                line_helper.style("left", (d3.mouse(this)[0]) + "px")
+                move_line(this);
             });
 }
