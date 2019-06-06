@@ -207,6 +207,8 @@ list.count_visible_items_to_header = function() {
             } else {
                 return current_circle.data()[0].title == d.area;
             }
+        } else if (config.is_streamgraph) {
+            return this.style.display !== "none";
         } else {
             return true;
         }
@@ -249,6 +251,16 @@ list.fit_list_height = function() {
     }
     $("#papers_list").height(paper_list_avail_height);
 };
+
+list.changeHeaderColor = function(color) {
+    d3.select("#explorer_options")
+            .style("background-color", color)
+}
+
+list.resetHeaderColor = function() {
+    d3.select("#explorer_options")
+            .style("background-color", "")
+}
 
 let addSortOptionDropdownEntry = function(sort_option, first_item) {
     let entry = sortDropdownEntryTemplate({
@@ -403,6 +415,20 @@ list.filterListByArea = function(area) {
     d3.selectAll("#list_holder")
         .filter(function(x) {
             return (config.use_area_uri) ? (x.area_uri == area.area_uri) : (x.area == area.title);
+        })
+        .style("display", function(d) {
+            return d.filtered_out ? "none" : "inline";
+        });
+};
+
+list.filterListByKeyword = function(keyword) {
+    d3.selectAll("#list_holder").style("display", "none");
+    
+    d3.selectAll("#list_holder")
+        .filter(function(x) {
+            let keywords = x.subject_orig.split("; ");
+            let contains_keyword = keywords.includes(keyword);
+            return contains_keyword
         })
         .style("display", function(d) {
             return d.filtered_out ? "none" : "inline";

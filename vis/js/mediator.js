@@ -125,6 +125,10 @@ MyMediator.prototype = {
         
         //scale
         this.mediator.subscribe("update_visual_distributions", this.update_visual_distributions);
+        
+        //streamgraph
+        this.mediator.subscribe("stream_clicked", this.stream_clicked)
+        this.mediator.subscribe("streamgraph_chart_clicked", this.streamgraph_chart_clicked)
     },
 
     init_state: function() {
@@ -137,6 +141,7 @@ MyMediator.prototype = {
         MyMediator.prototype.is_zoomed = false;
         MyMediator.prototype.zoom_finished = false;
         MyMediator.prototype.is_in_normal_mode = true;
+        MyMediator.prototype.stream_clicked = null;
     },
 
     init_modules: function() {
@@ -247,7 +252,7 @@ MyMediator.prototype = {
             }
         }();
         let context = (config.show_context)?(csv.context):{};
-        let streamgraph_data = (config.is_streamgraph)?(csv.streamgraph):{};
+        mediator.streamgraph_data = (config.is_streamgraph)?(csv.streamgraph):{};
         
         mediator.manager.registerModule(headstart, 'headstart');
         
@@ -265,19 +270,15 @@ MyMediator.prototype = {
             
             mediator.manager.registerModule(streamgraph, 'streamgraph')
             mediator.manager.call('streamgraph', 'start')
-            mediator.manager.call('streamgraph', 'drawStreamgraph', [streamgraph_data])
-            
-            //TODO: implement for streamgraph
-            //mediator.manager.call('canvas', 'initEventsAndLayout', []);
+            mediator.manager.call('streamgraph', 'setupStreamgraph', [mediator.streamgraph_data])
+
+            mediator.manager.call('canvas', 'initEventsStreamgraph', []);
             
             mediator.manager.call('list', 'start');
             if (config.show_list) mediator.manager.call('list', 'show');
             mediator.manager.call('canvas', 'showInfoModal', []);
             
-            //TODO implement for streamgraph
-            //mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
-            //mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
-            //mediator.manager.call('bubble', 'initMouseListeners', []);
+            mediator.manager.call('streamgraph', 'initMouseListeners', []);
             
         } else {
             if(config.is_force_papers && config.dynamic_force_papers) mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
@@ -431,6 +432,26 @@ MyMediator.prototype = {
         mediator.current_enlarged_paper = null;
         mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
+    
+    stream_clicked: function(keyword, color) {
+        mediator.stream_clicked = keyword;
+        mediator.manager.call('list', 'reset', []);
+        mediator.manager.call('list', 'filterListByKeyword', [keyword]);
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
+        mediator.manager.call('streamgraph', 'markStream', [keyword]);
+        mediator.manager.call('list', 'changeHeaderColor', [color]);
+        mediator.current_enlarged_paper = null;
+    },
+    
+    streamgraph_chart_clicked: function() {
+        mediator.stream_clicked = null;
+        mediator.manager.call('list', 'reset', []);
+        mediator.manager.call('list', 'updateByFiltered', []);
+        mediator.manager.call('list', 'scrollTop', []);
+        mediator.manager.call('streamgraph', 'reset');
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
+        mediator.manager.call('list', 'resetHeaderColor');
+    },
 
     bubble_mouseout: function(d, circle, bubble_fsm) {
         bubble_fsm.mouseout(d, circle);
@@ -515,13 +536,26 @@ MyMediator.prototype = {
     },
 
     window_resize: function() {
-        mediator.resized_scale_x = d3.scale.linear();
-        mediator.resized_scale_y = d3.scale.linear();
-        mediator.manager.call('canvas', 'setupResizedCanvas', []);
-        mediator.manager.call('list', 'fit_list_height', []);
-        mediator.manager.call('bubble', 'onWindowResize', []);
-        mediator.manager.call('papers', 'onWindowResize', []);
-        mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
+        if(config.is_streamgraph) {
+            $('.line_helper').remove();
+            $('#headstart-chart').empty();
+            mediator.manager.call('canvas', 'calcChartSize');
+            mediator.manager.call('canvas', 'createStreamgraphCanvas');
+            mediator.manager.call('streamgraph', 'setupStreamgraph', [mediator.streamgraph_data]);
+            mediator.manager.call('streamgraph', 'initMouseListeners', []);
+            mediator.manager.call('streamgraph', 'markStream')
+            mediator.manager.call('list', 'fit_list_height', []);
+            
+            
+        } else {
+            mediator.resized_scale_x = d3.scale.linear();
+            mediator.resized_scale_y = d3.scale.linear();
+            mediator.manager.call('canvas', 'setupResizedCanvas', []);
+            mediator.manager.call('list', 'fit_list_height', []);
+            mediator.manager.call('bubble', 'onWindowResize', []);
+            mediator.manager.call('papers', 'onWindowResize', []);
+            mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
+        }
     },
 
     on_rect_mouseover: function() {
@@ -554,14 +588,20 @@ MyMediator.prototype = {
     },
 
     list_click_paper_list: function(d) {
-        mediator.manager.call('canvas', 'getCurrentCircle', [d]);
-        if(mediator.current_circle) mediator.manager.call('bubble', 'zoomin', [mediator.current_circle.data()[0]])
-        mediator.current_bubble.current = "hoverbig";
-        mediator.manager.call('papers', 'mouseoverpaper', []);
-        mediator.manager.call('list', 'enlargeListItem', [d]);
-        mediator.current_enlarged_paper = d;
-        mediator.manager.call('papers', 'framePaper', [d]);
-        mediator.manager.call('list', 'count_visible_items_to_header')
+        if(config.is_streamgraph) {
+            mediator.manager.call('list', 'enlargeListItem', [d]);
+            mediator.current_enlarged_paper = d;
+            mediator.manager.call('list', 'count_visible_items_to_header')
+        } else {
+            mediator.manager.call('canvas', 'getCurrentCircle', [d]);
+            if(mediator.current_circle) mediator.manager.call('bubble', 'zoomin', [mediator.current_circle.data()[0]])
+            mediator.current_bubble.current = "hoverbig";
+            mediator.manager.call('papers', 'mouseoverpaper', []);
+            mediator.manager.call('list', 'enlargeListItem', [d]);
+            mediator.current_enlarged_paper = d;
+            mediator.manager.call('papers', 'framePaper', [d]);
+            mediator.manager.call('list', 'count_visible_items_to_header')
+        }
     },
     
     update_visual_distributions: function(type) {
