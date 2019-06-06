@@ -1,5 +1,74 @@
 /* ########### Streamgraph ########### */
 
 .streamgraph-canvas {
-    padding: 20px 15px 10px 20px;
+    padding: 20px 15px 10px 10px;
+    margin-left: 0px;
+}
+
+.stream {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.lower-opacity {
+    opacity: 0.6;
+}
+
+.label-background {
+    fill: #fff;
+    fill-opacity: 1;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #3a403d;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-size: .625em;
+}
+
+.axis-label {
+    font-size: 12px
+}
+
+.tip {
+  background-color: hsla(0,0%,100%,.9);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 1em;
+  width: 180px;
+  position: absolute;
+  z-index: 20;
+  visibility: visible;
+    
+  .year {
+    font-weight: 900;
+    font-size: 1.25em;
+    margin-bottom: 2px;
+  }
+  
+  .swatch {
+    width: 11px;
+    height: 11px;
+    float: left;
+    margin-top: 6px;
+    margin-right: 4px;
+  }
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.line_helper {
+    position: absolute;
+    z-index: 19;
+    width: 2px;
+    background: lightgray;
+    top: 10px;
+    bottom: 30px;
+    left: 0px;
 }
