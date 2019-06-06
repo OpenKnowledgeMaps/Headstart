@@ -104,7 +104,7 @@ streamgraph.setupStreamgraph = function (streamgraph_data) {
 streamgraph.initMouseListeners = function() {
     d3.selectAll('.stream')
             .on("click", function (d, i) {
-                mediator.publish("stream_clicked", d.key);
+                mediator.publish("stream_clicked", d.key, d3.select(this).style('fill'));
             })
             
     d3.select('#' + config.tag)

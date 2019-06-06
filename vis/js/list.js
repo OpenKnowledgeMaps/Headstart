@@ -252,6 +252,16 @@ list.fit_list_height = function() {
     $("#papers_list").height(paper_list_avail_height);
 };
 
+list.changeHeaderColor = function(color) {
+    d3.select("#explorer_options")
+            .style("background-color", color)
+}
+
+list.resetHeaderColor = function() {
+    d3.select("#explorer_options")
+            .style("background-color", "")
+}
+
 let addSortOptionDropdownEntry = function(sort_option, first_item) {
     let entry = sortDropdownEntryTemplate({
         sort_by_string: config.localization[config.language].sort_by_label,
