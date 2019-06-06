@@ -21,7 +21,7 @@ vlog <- getLogger('vis')
 # Expects the following metadata fields:
 # id, content, title, readers, published_in, year, authors, paper_abstract, subject
 
-vis_layout <- function(text, metadata, api,
+vis_layout <- function(text, metadata, service,
                        max_clusters=15, maxit=500,
                        mindim=2, maxdim=2,
                        lang=NULL, add_stop_words=NULL,
@@ -75,9 +75,9 @@ vis_layout <- function(text, metadata, api,
   layout <- get_ndms(as.dist(features), maxit=500, mindim=2, maxdim=2)
 
   vlog$debug("get cluster summaries")
-  metadata = replace_keywords_if_empty(metadata, stops)
+  metadata = replace_keywords_if_empty(metadata, stops, service)
   named_clusters <- create_cluster_labels(clusters, metadata,
-                                          api, lang,
+                                          service, lang,
                                           corpus$unlowered,
                                           weightingspec="ntn", top_n=3,
                                           stops=stops, taxonomy_separator)
