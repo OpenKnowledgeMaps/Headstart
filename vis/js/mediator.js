@@ -433,12 +433,13 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
     
-    stream_clicked: function(keyword) {
+    stream_clicked: function(keyword, color) {
         mediator.stream_clicked = keyword;
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'filterListByKeyword', [keyword]);
         mediator.manager.call('list', 'count_visible_items_to_header', []);
         mediator.manager.call('streamgraph', 'markStream', [keyword]);
+        mediator.manager.call('list', 'changeHeaderColor', [color]);
     },
     
     streamgraph_chart_clicked: function() {
@@ -448,6 +449,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'scrollTop', []);
         mediator.manager.call('streamgraph', 'reset');
         mediator.manager.call('list', 'count_visible_items_to_header', []);
+        mediator.manager.call('list', 'resetHeaderColor');
     },
 
     bubble_mouseout: function(d, circle, bubble_fsm) {
