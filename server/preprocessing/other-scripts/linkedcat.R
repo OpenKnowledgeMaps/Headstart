@@ -112,8 +112,8 @@ build_query <- function(query, params, limit){
                 'main_title', 'subtitle',
                 'host_maintitle', 'host_pubplace',
                 'bkl_caption', 'bkl_top_caption',
-                'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t', 'keyword_p',
-                'keyword_c', 'keyword_x', 'keyword_z',
+                'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
+                'keyword_p', 'keyword_x', 'keyword_z',
                 'tags')
   # fields to return
   r_fields <- c('id', 'idnr',
@@ -124,8 +124,8 @@ build_query <- function(query, params, limit){
                 'author100_a', 'author100_d', 'author100_0', 'author100_4',
                 'author700_a', 'author700_d', 'author700_0',
                 'bkl_caption', 'bkl_top_caption',
-                'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t', 'keyword_p',
-                'keyword_c', 'keyword_x', 'keyword_z',
+                'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
+                'keyword_p', 'keyword_x', 'keyword_z',
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext')
   q <- paste(paste(q_fields, query, sep = ":"), collapse = " ")
