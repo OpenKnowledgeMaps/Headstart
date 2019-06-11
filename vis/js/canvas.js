@@ -171,8 +171,6 @@ class Canvas {
                 .attr('width', self.available_width)
                 .attr('height', self.current_vis_size)
                 .attr('id', 'streamgraph_subject')
-                //.attr('viewBox', '0 0 ' + self.available_width + ' ' + self.current_vis_size)
-                //.attr('preserveAspectRatio', "none")
                 .classed('streamgraph-canvas', true)
     }
 
