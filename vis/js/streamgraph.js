@@ -12,6 +12,7 @@ const stream_colors = ["#2856A3", "#671A54", "#d5c4d0", "#99e5e3", "#F1F1F1"
         , "#dbe1ee", "#CC3380", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#FFE699"];
 const axis_padding_left = -30;
 const axis_padding_bottom = 35;
+const max_ticks_x = 8;
 const label_border_width = 5;
 const label_round_factor = 5;
 const line_helper_margin = 20; //higher values mean that the line is closer to the cursor
@@ -34,7 +35,8 @@ export const streamgraph = StateMachine.create({
 streamgraph.setupStreamgraph = function (streamgraph_data) {
     
     let streamgraph_width = canvas.available_width - streamgraph_margin.left - streamgraph_margin.right,
-        streamgraph_height = canvas.current_vis_size - streamgraph_margin.top - streamgraph_margin.bottom;
+        streamgraph_height = canvas.current_vis_size - streamgraph_margin.top - streamgraph_margin.bottom,
+        parsed_data = JSON.parse(streamgraph_data);
     
     let stack = d3.layout.stack()
             .offset("silhouette")
@@ -73,25 +75,32 @@ streamgraph.setupStreamgraph = function (streamgraph_data) {
 
     var z = d3.scale.ordinal()
             .range(stream_colors);
+    
+    let transformed_data = this.transformData(parsed_data);
+    let nested_entries = nest.entries(transformed_data);
+    let streams = stack(nested_entries);
 
+    x.domain(d3.extent(transformed_data, function (d) {
+        return d.date;
+    }));
+    y.domain([0, d3.max(transformed_data, function (d) {
+            return d.y0 + d.y;
+        })]);
+    
     var xAxis = d3.svg.axis()
             .scale(x)
             .orient("bottom")
-            .ticks(d3.timeYears, 1);
+            .tickFormat(d3.time.format("%Y"))
+            .ticks(d3.time.year, Math.ceil(parsed_data.x.length/max_ticks_x));
 
     var yAxis = d3.svg.axis()
-            .scale(y);
+            .scale(y)
+            .tickFormat(d3.format("d"))
+            .tickSubdivide(0);
     
-    let parsed_data = this.transformData(JSON.parse(streamgraph_data));
-    let nested_entries = nest.entries(parsed_data);
-    let streams = stack(nested_entries);
-
-    x.domain(d3.extent(parsed_data, function (d) {
-        return d.date;
-    }));
-    y.domain([0, d3.max(parsed_data, function (d) {
-            return d.y0 + d.y;
-        })]);
+    if(y.domain()[1] <= 8) {
+        yAxis.ticks(y.domain()[1]);
+    }
     
     let streamgraph_subject = this.drawStreamgraph(streams, area, z);   
     let series = streamgraph_subject.selectAll(".streamgraph-area");
@@ -136,17 +145,17 @@ streamgraph.reset = function () {
 }
 
 streamgraph.transformData = function(json_data) {
-    let parsed_data = [];
+    let transformed_data = [];
 
     json_data.subject.forEach(function (element) {
         let count = 0;
         element.y.forEach(function (data_point) {
-            parsed_data.push({key: element.name, value: data_point, date: new Date(json_data.x[count])})
+            transformed_data.push({key: element.name, value: data_point, date: new Date(json_data.x[count])})
             count++;
         })
     })
     
-    return parsed_data;
+    return transformed_data;
 }
 
 streamgraph.drawStreamgraph = function (streams, area, z) {
