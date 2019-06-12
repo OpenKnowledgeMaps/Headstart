@@ -57,8 +57,13 @@ get_papers <- function(query, params, limit=100) {
   metadata <- data.frame(search_res$id)
   names(metadata) <- c('id')
 
-  metadata$subject <- if (!is.null(search_res$keyword_a)) unlist(lapply(search_res$keyword_a, function(x) {gsub("; $", "", x)})) else ""
+  metadata$subject <- paste(search_res$keyword_a, search_res$keyword_c,
+                            search_res$keyword_g, search_res$keyword_t,
+                            search_res$keyword_p, search_res$keyword_x,
+                            search_res$keyword_z)
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; $", "", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; ; ", "; ", x)}))
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("[ ]{2,}", "", x)}))
   metadata$authors <- paste(search_res$author100_a, search_res$author700_a, sep="; ")
   metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("; $|,$", "", x)}))
   metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("^; ", "", x)}))
@@ -69,8 +74,9 @@ get_papers <- function(query, params, limit=100) {
   metadata$readers <- 0
   metadata$url <- search_res$id
   metadata$link <- "" # needs fix
-  metadata$published_in <- search_res$host_label
-  metadata$oa_state <- 1
+  metadata$published_in <- paste(search_res$host_maintitle, search_res$host_pubyear, search_res$host_pubplace, sep=", ")
+  metadata$published_in <- unlist(lapply(metadata$published_in, function(x) {gsub(", $|, , ", "", x)}))
+  metadata$oa_state <- unlist(lapply(search_res$copyright_until, function(x) {if (x=="") 1 else 0}))
   metadata$subject_orig = metadata$subject
   metadata$relevance = c(nrow(metadata):1)
   metadata$bkl_caption = if (!is.null(search_res$bkl_caption)) search_res$bkl_caption else ""
@@ -100,12 +106,15 @@ build_query <- function(query, params, limit){
   # fields to return
   r_fields <- c('id', 'idnr',
                 'content_type_a', 'content_type_2',
-                'main_title', 'subtitle', 'pub_year',
-                'host_label', 'host_maintitle', 'host_pubplace', 'host_pubyear',
+                'main_title', 'subtitle', 'pub_year', 'copyright_until',
+                'host_maintitle', 'host_pubplace', 'host_pubyear',
+                'pub_place', 'pub_name', 'pub_date',
                 'author100_a', 'author100_d', 'author100_0', 'author100_4',
                 'author700_a', 'author700_d', 'author700_0',
                 'bkl_caption', 'bkl_top_caption',
-                'keyword_a', 'tags', 'category', 'bib', 'language_code',
+                'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
+                'keyword_p', 'keyword_x', 'keyword_z',
+                'tags', 'category', 'bib', 'language_code',
                 'ocrtext')
   q <- paste(paste0(q_fields, ':', '"', params$author_id, '"'), collapse = " ")
   q_params <- list(q = q, rows = limit, fl = r_fields)

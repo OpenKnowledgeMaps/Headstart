@@ -78,7 +78,7 @@ if (!is.null(params$lang_id)) {
     lang_id <- 'all'
 }
 
-LANGUAGE <- get_api_lang(lang_id, valid_langs, service)
+LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
 ADDITIONAL_STOP_WORDS = LANGUAGE$name
 
 print("reading stuff")
