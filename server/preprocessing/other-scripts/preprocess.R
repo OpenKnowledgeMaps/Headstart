@@ -71,30 +71,31 @@ deduplicate_titles <- function(metadata, list_size) {
 
 }
 
-replace_keywords_if_empty <- function(metadata, stops) {
-
+replace_keywords_if_empty <- function(metadata, stops, service) {
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
-  candidates = mapply(paste, metadata$title[missing_subjects])
-  candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
-  candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
-  candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
-  candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
-  #candidates_trigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
-  candidates = mapply(paste, candidates, candidates_bigrams)
-  #candidates = lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
+  if (service == "linkedcat" || service == "linkedcat_authorview") {
+    metadata$subject[missing_subjects] <- metadata$bkl_caption
+  } else {
+    candidates = mapply(paste, metadata$title[missing_subjects])
+    candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
+    candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
+    candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
+    candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
+    #candidates_trigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
+    candidates = mapply(paste, candidates, candidates_bigrams)
+    #candidates = lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
 
-  nn_corpus = Corpus(VectorSource(candidates))
-  nn_tfidf = TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
-  tfidf_top = apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
-  tfidf_top_names = lapply(tfidf_top, names)
-  replacement_keywords <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, 3))
-  replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse=";")})
-  replacement_keywords = gsub("_", " ", replacement_keywords)
+    nn_corpus = Corpus(VectorSource(candidates))
+    nn_tfidf = TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
+    tfidf_top = apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
+    tfidf_top_names = lapply(tfidf_top, names)
+    replacement_keywords <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, 3))
+    replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse=";")})
+    replacement_keywords = gsub("_", " ", replacement_keywords)
 
-  metadata$subject[missing_subjects] <- replacement_keywords
-
+    metadata$subject[missing_subjects] <- replacement_keywords
+  }
   return(metadata)
-
 }
 
 get_OHE_feature <-function(metadata, feature_name) {
