@@ -28,7 +28,13 @@ var options_linkedcat = {
                 , {id: "Statistik", text: "Statistik", count:2, selected:true}
                 , {id: "Verzeichnis", text: "Verzeichnis", count:43, selected:true}
                 , {id: "Wörterbuch", text: "Wörterbuch", count:15, selected:true}
-            ]},
+              ]},
+          {id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
+              , fields: [
+                  {id: "overview", text: "Überblick", selected:true}
+                  , {id: "timeline", text: "Zeitstrahl"}
+              ]},
+      ]
     ]
 }
 
@@ -72,7 +78,7 @@ var SearchOptions = {
                         return 'divity frontend-hidden';
                     } else {
                         return 'divity';
-                    } 
+                    }
                 })
 
         d3.select(tag).append('div')
@@ -118,7 +124,7 @@ var SearchOptions = {
                     var current_option = new_select
                             .append('option')
                             .attr("value", option.id)
-                            .text(option.text 
+                            .text(option.text
                                     + ((typeof option.count !== "undefined")?(" (" + option.count + ")"):(""))
                                 );
 
@@ -131,11 +137,11 @@ var SearchOptions = {
                         option.inputs.forEach(function (input) {
                             let input_container = d3.select("#input-container")
                                     .append('div').attr('class','timefield')
-                                
+
                                 input_container.append("label")
                                     .attr("for", input.id)
                                     .text(input.label)
-                                    
+
                                 input_container.append("input")
                                     .attr("id", input.id)
                                     .attr("name", input.id)
