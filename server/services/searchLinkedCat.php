@@ -11,7 +11,7 @@ $dirty_query = library\CommUtils::getParameter($_POST, "q");
 
 $post_params = $_POST;
 
-$result = search("linkedcat", $dirty_query, $post_params, array("from", "to", "include_content_type", "today", "streamgraph"), ";", null);
+$result = search("linkedcat", $dirty_query, $post_params, array("from", "to", "include_content_type", "today", "vis_type"), ";", null);
 
 echo $result
 
