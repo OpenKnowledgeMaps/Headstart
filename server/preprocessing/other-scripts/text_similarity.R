@@ -27,6 +27,19 @@ tslog <- getLogger('ts')
 source(paste("../other-scripts/vis_layout.R", sep=""))
 source('../other-scripts/altmetrics.R')
 
+
+if(!is.null(params_file) && !is.na(params_file)) {
+  params <- fromJSON(params_file)
+} else {
+  params <- NULL
+}
+
+if (!is.null(params$lang_id)) {
+    lang_id <- params$lang_id
+  } else {
+    lang_id <- 'all'
+}
+
 taxonomy_separator = NULL
 limit = 100
 list_size = -1
@@ -51,6 +64,7 @@ switch(service,
        },
        linkedcat={
          source('../other-scripts/linkedcat.R')
+         limit = ifelse(params$vis_type=='timeline', 9999, 100)
        },
        linkedcat_authorview={
          source('../other-scripts/linkedcat_authorview.R')
@@ -61,23 +75,9 @@ switch(service,
       }
 )
 
-
-MAX_CLUSTERS = 15
-
 print("inhere")
 
-if(!is.null(params_file) && !is.na(params_file)) {
-  params <- fromJSON(params_file)
-} else {
-  params <- NULL
-}
-
-if (!is.null(params$lang_id)) {
-    lang_id <- params$lang_id
-  } else {
-    lang_id <- 'all'
-}
-
+MAX_CLUSTERS = 15
 LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
 ADDITIONAL_STOP_WORDS = LANGUAGE$name
 
