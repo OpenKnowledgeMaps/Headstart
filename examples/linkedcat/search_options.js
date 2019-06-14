@@ -34,7 +34,6 @@ var options_linkedcat = {
                   {id: "overview", text: "Überblick", selected:true}
                   , {id: "timeline", text: "Zeitstrahl"}
               ]},
-      ]
     ]
 }
 
