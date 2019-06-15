@@ -64,14 +64,18 @@ for (query in test_cases$query) {
   })
 
   new_output <- data.frame(fromJSON(new_output_json))
+  new_output$x <- as.numeric(new_output$x)
+  new_output$y <- as.numeric(new_output$y)
   old_output <- fromJSON(paste("snapshots/snapshot_",
                                commit_id, "_",
                                service, "_",
                                query, "_",
                                "output.json"))
+  old_output$x <- as.numeric(old_output$x)
+  old_output$y <- as.numeric(old_output$y)
 
   cmp_in <- comparedf(old_input_data$metadata, input_data$metadata, by="id")
-  cmp_out <- comparedf(old_output, new_output, by="id", control=list(tol.num="percent", tol.num.val=0.1))
+  cmp_out <- comparedf(old_output, new_output, by="id", control=list(tol.num="absolute", tol.num.val=0.5))
   sum_in <- summary(cmp_in)
   sum_out <- summary(cmp_out)
   if (nrow(sum_in$diffs.table) > 0){
