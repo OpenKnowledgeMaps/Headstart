@@ -71,7 +71,7 @@ for (query in test_cases$query) {
                                "output.json"))
 
   cmp_in <- comparedf(old_input_data$metadata, input_data$metadata, by="id")
-  cmp_out <- comparedf(old_output, new_output, by="id")
+  cmp_out <- comparedf(old_output, new_output, by="id", control=list(tol.num="percent", tol.num.val=0.1))
   sum_in <- summary(cmp_in)
   sum_out <- summary(cmp_out)
   if (nrow(sum_in$diffs.table) > 0){
