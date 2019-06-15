@@ -69,7 +69,7 @@ for (query in test_cases$query) {
                                query, "_",
                                "output.json"))
 
-  cmp_in <- comparedf(old_input_data$metadata, input_data$metadata, by="id")
+  cmp_in <- comparedf(input_data$metadata, input_data$metadata, by="id")
   cmp_out <- comparedf(old_output, new_output, by="id")
   sum_in <- summary(cmp_in)
   sum_out <- summary(cmp_out)
