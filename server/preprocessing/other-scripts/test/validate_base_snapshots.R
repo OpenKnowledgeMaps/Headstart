@@ -34,8 +34,7 @@ LANGUAGE = "english"
 ADDITIONAL_STOP_WORDS = "english"
 
 test_cases <- head(read.csv("top_queries.csv"), 2)
-old_commit <- "334154e" # latest master commit considered stable; switch to release tag later
-new_commit <- "334154e"
+commit_id <- "334154e" # latest master commit considered stable; switch to release tag later
 
 
 diffcols <- c("var.x", "var.y", "id", "values.x", "values.y", "row.x", "row.y", "query", "service")
@@ -46,7 +45,7 @@ colnames(diffs_out) <- diffcols
 
 for (query in test_cases$query) {
   old_input_data <- fromJSON(paste("snapshots/snapshot_",
-                              old_commit, "_",
+                              commit_id, "_",
                               service, "_",
                               query, "_",
                               "input.json"))
@@ -65,7 +64,7 @@ for (query in test_cases$query) {
 
   new_output <- data.frame(fromJSON(new_output_json))
   old_output <- fromJSON(paste("snapshots/snapshot_",
-                               old_commit, "_",
+                               commit_id, "_",
                                service, "_",
                                query, "_",
                                "output.json"))
