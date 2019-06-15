@@ -32,7 +32,7 @@ LANGUAGE = "english"
 ADDITIONAL_STOP_WORDS = "english"
 
 
-test_cases <- head(read.csv("top_queries.csv"), 2)
+test_cases <- read.csv("top_queries.csv")
 commit_id <- "334154e" # latest master commit considered stable; switch to release tag later
 
 for (service in c("base", "pubmed")) {
