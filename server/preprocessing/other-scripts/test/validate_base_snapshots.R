@@ -2,6 +2,7 @@ rm(list = ls())
 
 library(rstudioapi)
 library(arsenal)
+library(tidyverse)
 
 options(warn=1)
 
@@ -69,7 +70,7 @@ for (query in test_cases$query) {
                                query, "_",
                                "output.json"))
 
-  cmp_in <- comparedf(input_data$metadata, input_data$metadata, by="id")
+  cmp_in <- comparedf(old_input_data$metadata, input_data$metadata, by="id")
   cmp_out <- comparedf(old_output, new_output, by="id")
   sum_in <- summary(cmp_in)
   sum_out <- summary(cmp_out)
@@ -84,3 +85,6 @@ for (query in test_cases$query) {
     diffs_out <- rbind(diffs_out, sum_out$diffs.table)
   }
 }
+
+diffs_out %>% subset(var.x == "area") %>% subset(values.x=="")
+diffs_out %>% subset(var.x == "subject") %>% subset(values.x=="")

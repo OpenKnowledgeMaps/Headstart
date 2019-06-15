@@ -2,6 +2,7 @@ rm(list = ls())
 
 library(rstudioapi)
 library(arsenal)
+library(tidyverse)
 
 options(warn=1)
 
@@ -85,3 +86,6 @@ for (query in test_cases$query) {
     diffs_out <- rbind(diffs_out, sum_out$diffs.table)
   }
 }
+
+diffs_out %>% subset(var.x == "area") %>% subset(values.x=="")
+diffs_out %>% subset(var.x == "subject") %>% subset(values.x=="")
