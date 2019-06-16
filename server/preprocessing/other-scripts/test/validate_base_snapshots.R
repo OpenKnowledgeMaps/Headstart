@@ -119,3 +119,4 @@ diffs_out %>% subset(var.x == "subject") %>% subset(values.x=="")
 #diffs_out %>% subset(var.x == "area") %>% view()
 #diffs_out %>% subset(var.x == "subject") %>% view()
 docs_not_shared
+diffs_process %>% arrange(id) %>% view()
