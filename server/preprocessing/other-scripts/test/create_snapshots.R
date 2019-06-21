@@ -34,6 +34,7 @@ ADDITIONAL_STOP_WORDS = "english"
 
 test_cases <- read.csv("top_queries.csv")
 commit_id <- "334154e" # latest master commit considered stable; switch to release tag later
+# check that you actually are on that commit when creating snapshots
 
 for (service in c("base", "pubmed")) {
   switch(service,
