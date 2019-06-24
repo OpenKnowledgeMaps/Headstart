@@ -34,7 +34,7 @@ MAX_CLUSTERS = 15
 LANGUAGE = "english"
 ADDITIONAL_STOP_WORDS = "english"
 
-test_cases <- read.csv("top_queries.csv")
+test_cases <- read.csv("queries.csv")
 commit_id <- "334154e" # latest master commit considered stable; switch to release tag later
 
 
