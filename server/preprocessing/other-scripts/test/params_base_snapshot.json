@@ -1,1 +1,8 @@
-{"document_types":["121"], "from":"1665-01-01","to":"2017-12-31","sorting":"most-recent"}
+{
+  "document_types": [
+    "121"
+  ],
+  "from": "2000-01-01",
+  "to": "2018-12-31",
+  "sorting": "most-recent"
+}
