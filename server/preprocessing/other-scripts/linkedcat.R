@@ -106,9 +106,10 @@ get_papers <- function(query, params, limit=100) {
 
 build_query <- function(query, params, limit){
   # fields to query in
+  a_fields <- c('author100_a', 'author700_a')
   q_fields <- c('main_title', 'ocrtext',
-                'author100_a', 'author100_d', 'author100_0',
-                'author700_a', 'author700_d', 'author700_0',
+                'author100_d', 'author100_0',
+                'author700_d', 'author700_0',
                 'main_title', 'subtitle',
                 'host_maintitle', 'host_pubplace',
                 'bkl_caption', 'bkl_top_caption',
@@ -128,7 +129,10 @@ build_query <- function(query, params, limit){
                 'keyword_p', 'keyword_x', 'keyword_z',
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext')
-  q <- paste(paste(q_fields, query, sep = ":"), collapse = " ")
+  q <- paste(
+          paste0(q_fields, ':', '"', query, '"'),
+          paste0(a_fields, ':', '"', gsub("[^a-zA-Z]+", "*", query), '"'),
+          collapse = " ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
   # additional filter params
