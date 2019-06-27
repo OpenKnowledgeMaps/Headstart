@@ -33,10 +33,13 @@ ADDITIONAL_STOP_WORDS = "english"
 
 
 test_cases <- read.csv("queries.csv")
-commit_id <- "334154e" # latest master commit considered stable; switch to release tag later
+commit_id <- "60bb5eb" # latest master commit considered stable; switch to release tag later
 # check that you actually are on that commit when creating snapshots
 
 for (service in c("base", "pubmed")) {
+  params <- NULL
+  params_file <- paste0("params_", service, "_snapshot.json")
+  params <- fromJSON(params_file)
   switch(service,
           base={
             source('../base.R')
@@ -49,9 +52,6 @@ for (service in c("base", "pubmed")) {
             list_size = -1
           }
          )
-  params <- NULL
-  params_file <- paste0("params_", service, "_snapshot.json")
-  params <- fromJSON(params_file)
 
   for (query in test_cases$query) {
     tryCatch({
