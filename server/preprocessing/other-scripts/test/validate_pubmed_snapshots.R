@@ -35,7 +35,7 @@ LANGUAGE = "english"
 ADDITIONAL_STOP_WORDS = "english"
 
 test_cases <- read.csv("queries.csv")
-commit_id <- "334154e" # latest master commit considered stable; switch to release tag later
+commit_id <- "60bb5eb" # latest master commit considered stable; switch to release tag later
 
 
 diffcols <- c("var.x", "var.y", "id", "values.x", "values.y", "row.x", "row.y", "query", "service")
