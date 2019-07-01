@@ -131,7 +131,7 @@ build_query <- function(query, params, limit){
                 'ocrtext')
   q <- paste(
           paste0(q_fields, ':', query),
-          paste0(a_fields, ':', gsub("[^a-zA-Z]+", "*", query), "*"),
+          paste0(a_fields, ':', gsub("[^a-zA-Z<>]+", "*", query)),
           collapse = " ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
