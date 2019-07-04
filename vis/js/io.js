@@ -174,7 +174,9 @@ IO.prototype = {
             
             //convert special entities to characters
             for (let field in d) {
-               d[field] = $("<textarea/>").html(d[field]).val();
+                if(typeof d[field] === "string") {
+                    d[field] = $("<textarea/>").html(d[field]).val();
+                }
            }
             // convert authors to "[first name] [last name]"
             // var authors = d.authors.split(";");
@@ -184,8 +186,10 @@ IO.prototype = {
             
             //replace "<" and ">" to avoid having HTML tags
             for (let field in d) {
-                d[field] = d[field].replace(/</g, "&lt;");
-                d[field] = d[field].replace(/>/g, "&gt;");
+                if(typeof d[field] === "string") {
+                    d[field] = d[field].replace(/</g, "&lt;");
+                    d[field] = d[field].replace(/>/g, "&gt;");
+                }
             }
             
             if(d.hasOwnProperty("snippets") && d.snippets !== "") {
