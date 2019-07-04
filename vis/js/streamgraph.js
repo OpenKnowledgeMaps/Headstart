@@ -6,16 +6,16 @@ import config from 'config';
 import { mediator } from 'mediator';
 import { io } from 'io';
 import { canvas } from 'canvas';
-
+//streamgraph vis: colors, margin, padding, max ticks on x-axis
 const streamgraph_margin = {top: 20, right: 50, bottom: 70, left: 50};
-const stream_colors = ["#2856A3", "#671A54", "#d5c4d0", "#99e5e3", "#F1F1F1"
+const stream_colors = ["#28a2a3", "#671A54", "#d5c4d0", "#99e5e3", "#F1F1F1"
         , "#dbe1ee", "#CC3380", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#FFE699"];
 const axis_padding_left = -30;
 const axis_padding_bottom = 35;
 const max_ticks_x = 8;
-const label_border_width = 5;
-const label_round_factor = 5;
-const line_helper_margin = 20; //higher values mean that the line is closer to the cursor
+const label_border_width = 5; //width labels
+const label_round_factor = 5; //border-radius labels
+const line_helper_margin = 40; //higher values mean that the line is closer to the cursor
 
 const tooltipTemplate = require('templates/streamgraph/tooltip.handlebars');
 
