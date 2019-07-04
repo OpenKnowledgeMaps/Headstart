@@ -76,7 +76,7 @@ replace_keywords_if_empty <- function(metadata, stops, service) {
   if (service == "linkedcat" || service == "linkedcat_authorview") {
     metadata$subject[missing_subjects] <- metadata$bkl_caption[missing_subjects]
   } else {
-    candidates = mapply(paste, metadata$title[missing_subjects])
+    candidates = mapply(paste, metadata$title)
     candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
     candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
     candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
@@ -93,7 +93,7 @@ replace_keywords_if_empty <- function(metadata, stops, service) {
     replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse=";")})
     replacement_keywords = gsub("_", " ", replacement_keywords)
 
-    metadata$subject[missing_subjects] <- replacement_keywords
+    metadata$subject[missing_subjects] <- replacement_keywords[missing_subjects]
   }
   return(metadata)
 }
