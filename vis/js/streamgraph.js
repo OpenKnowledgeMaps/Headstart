@@ -72,10 +72,10 @@ streamgraph.setupStreamgraph = function (streamgraph_data) {
     let x = d3.time.scale()
             .range([0, streamgraph_width]);
 
-    var y = d3.scale.linear()
+    let y = d3.scale.linear()
             .range([streamgraph_height, 0]);
 
-    var z = d3.scale.ordinal()
+    let z = d3.scale.ordinal()
             .range(stream_colors);
     
     let amended_data = this.amendData(parsed_data);

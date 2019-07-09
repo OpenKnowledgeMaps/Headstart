@@ -35,4 +35,6 @@ var data_config = {
     
     show_context_oa_number: false,
     abstract_large: 1000,
+    
+    streamgraph_zoom: false,
 };
