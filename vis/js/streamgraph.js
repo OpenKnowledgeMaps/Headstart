@@ -113,6 +113,10 @@ streamgraph.setupStreamgraph = function (streamgraph_data) {
     this.setupLinehelper();
 }
 
+streamgraph.zoomed = function() {
+  d3.select(".streamgraph-chart").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
+
 streamgraph.initMouseListeners = function() {
     d3.selectAll('.stream')
             .on("click", function (d, i) {
@@ -125,7 +129,8 @@ streamgraph.initMouseListeners = function() {
                     event.target.className.baseVal === "vis-col" ||
                     event.target.id === "headstart-chart" ||
                     event.target.className.baseVal === "streamgraph-canvas" ||
-                    event.target.className.baseVal === "streamgraph-chart") {   
+                    event.target.className.baseVal === "streamgraph-chart" ||
+                    event.target.className.baseVal === "zoom") {   
                     mediator.publish("streamgraph_chart_clicked");
                 }
             })
@@ -178,11 +183,30 @@ streamgraph.transformData = function(json_data) {
 }
 
 streamgraph.drawStreamgraph = function (streams, area, z) {
+    
+    let self = this;
+    
+    let zoom = d3.behavior.zoom()
+        .scaleExtent([1, 5])
+        .on("zoom", self.zoomed);
+    
     let streamgraph_subject = d3.select("#streamgraph_subject")
             .append("g")
             .classed("streamgraph-chart", true)
             .attr("transform", "translate(" + streamgraph_margin.left
-                                    + "," + streamgraph_margin.top + ")")
+                                    + "," + streamgraph_margin.top + ")")    
+            
+    if(config.streamgraph_zoom) {
+        streamgraph_subject.call(zoom);
+    }
+    
+    streamgraph_subject.append("rect")
+        .classed("zoom", true)
+        .attr("width", d3.select("#streamgraph_subject").attr("width"))
+        .attr("height", d3.select("#streamgraph_subject").attr("height"))
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        
 
     let series = streamgraph_subject.selectAll(".stream")
             .data(streams)

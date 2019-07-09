@@ -102,6 +102,7 @@ var config = {
     is_authorview: false,
     
     is_streamgraph: false,
+    streamgraph_zoom: false,
     
     // transition
     transition_duration: 750,
