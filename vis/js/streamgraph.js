@@ -15,7 +15,9 @@ const axis_padding_bottom = 35;
 const max_ticks_x = 8;
 const label_border_width = 5; //width labels
 const label_round_factor = 5; //border-radius labels
-const line_helper_margin = 40; //higher values mean that the line is closer to the cursor
+const line_helper_margin = -10; //relative to mouse position
+const tooltip_offset_top = -150; //relative to mouse position
+const tooltip_offset_left = -10; //relative to mouse position
 
 const tooltipTemplate = require('templates/streamgraph/tooltip.handlebars');
 
@@ -286,10 +288,13 @@ streamgraph.setupTooltip = function(streamgraph_subject, x) {
             .on("mousemove", function (d, i) {
 
                 var color = d3.select(this).style('fill');
+        
+                let current_event = d3.event;
+                let realx = current_event.clientX;
+                let realy = current_event.clientY;
 
                 let mouse = d3.mouse(this);
                 let mousex = mouse[0];
-                let mousey = mouse[1];
                 var invertedx = x.invert(mousex);
                 var xDate = invertedx.getFullYear();
                 var all_years = d3.sum(d.values, function(d) { return d.value });
@@ -297,8 +302,8 @@ streamgraph.setupTooltip = function(streamgraph_subject, x) {
                     var year = (f.date.toString()).split(' ')[3];
                     if (xDate == year) {
                         tooltip
-                                .style("left", (mousex + line_helper_margin) + "px")
-                                .style("top", mousey + "px")
+                                .style("left", (realx + tooltip_offset_left) + "px")
+                                .style("top", (realy + tooltip_offset_top) + "px")
                                 .html( function () {
                                     return tooltipTemplate({year: year, color: color, keyword: f.key, current_year: f.value, all_years: all_years})
                                 })
@@ -314,15 +319,15 @@ streamgraph.setupLinehelper = function() {
             .attr("class", "line_helper")
             .style("height", canvas.current_vis_size)
     
-    let move_line = function(self) {
-        line_helper.style("left", (d3.mouse(self)[0] + line_helper_margin) + "px");
+    let move_line = function(event) {
+        line_helper.style("left", (event.clientX + line_helper_margin) + "px");
     }
 
     d3.select(".streamgraph-chart")
             .on("mousemove", function () {
-                move_line(this);
+                move_line(d3.event);
             })
             .on("mouseover", function () {
-                move_line(this);
+                move_line(d3.event);
             });
 }
