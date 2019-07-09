@@ -78,7 +78,8 @@ streamgraph.setupStreamgraph = function (streamgraph_data) {
     var z = d3.scale.ordinal()
             .range(stream_colors);
     
-    let transformed_data = this.transformData(parsed_data);
+    let amended_data = this.amendData(parsed_data);
+    let transformed_data = this.transformData(amended_data);
     let nested_entries = nest.entries(transformed_data);
     let streams = stack(nested_entries);
 
@@ -144,6 +145,22 @@ streamgraph.reset = function () {
      d3.selectAll(".stream").transition()
         .duration(100)
         .attr('class', 'stream')
+}
+
+//Add an empty entry at the beginning and the end of each stream to improve display
+streamgraph.amendData = function(json_data) {
+    //Add entries to x axis
+    let x_array = json_data.x
+    x_array.unshift((parseInt(x_array[0]) - 1).toString());
+    x_array.push((parseInt(x_array[x_array.length -1]) + 1).toString());
+    
+    //Add entries to y axis
+    json_data.subject.forEach(function (element) {
+        element.y.unshift(0);
+        element.y.push(0);
+    });
+    
+    return json_data;
 }
 
 streamgraph.transformData = function(json_data) {
