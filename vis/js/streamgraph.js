@@ -106,9 +106,9 @@ streamgraph.setupStreamgraph = function (streamgraph_data) {
     }
     
     let streamgraph_subject = this.drawStreamgraph(streams, area, z);   
+    this.drawAxes(streamgraph_subject, xAxis, yAxis, streamgraph_width, streamgraph_height);
     let series = streamgraph_subject.selectAll(".streamgraph-area");
     this.drawLabels(series, x, y);
-    this.drawAxes(streamgraph_subject, xAxis, yAxis, streamgraph_width, streamgraph_height);
     this.setupTooltip(streamgraph_subject, x);
     this.setupLinehelper();
 }
@@ -229,7 +229,7 @@ streamgraph.drawStreamgraph = function (streams, area, z) {
 streamgraph.drawLabels = function (series, x, y) {
     let self = this;
     
-    let text = d3.select(".streamgraph-chart").selectAll("text")
+    let text = d3.select(".streamgraph-chart").selectAll("text.label")
             .data(series.data())
             .enter()
             .append("text")
@@ -284,7 +284,7 @@ streamgraph.drawLabels = function (series, x, y) {
         let bbox = label.getBBox();
         let ctm = label.getCTM();
         
-        let rect = d3.select('.streamgraph-chart').insert('rect','text')
+        let rect = d3.select('.streamgraph-chart').insert('rect','text.label')
             .classed("label-background", true)
             .attr('x', bbox.x - streamgraph_margin.left - label_border_width)
             .attr('y', bbox.y - streamgraph_margin.top - label_border_width)
