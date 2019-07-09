@@ -36,7 +36,7 @@ export const streamgraph = StateMachine.create({
 
 streamgraph.setupStreamgraph = function (streamgraph_data) {
     
-    let streamgraph_width = canvas.available_width - streamgraph_margin.left - streamgraph_margin.right,
+    let streamgraph_width = canvas.current_vis_width - streamgraph_margin.left - streamgraph_margin.right,
         streamgraph_height = canvas.current_vis_size - streamgraph_margin.top - streamgraph_margin.bottom,
         parsed_data = JSON.parse(streamgraph_data);
     
