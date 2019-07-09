@@ -16,7 +16,12 @@
     -webkit-filter: grayscale(60%);
 }
 
+.label {
+    cursor: pointer;
+}
+
 .label-background {
+    cursor: pointer;
     fill: #fff;
     fill-opacity: 1;
 }

@@ -203,28 +203,50 @@ streamgraph.drawStreamgraph = function (streams, area, z) {
 }
 
 streamgraph.drawLabels = function (series, x, y) {
-    series[0].forEach(function (element) {
-        let d = element.__data__;
-        
-        d3.select(".streamgraph-chart").append('text')
-                .attr("dy", "10")
-                .classed("label", true)
-                .text(d.key)
-                .attr("transform", function () {
-                    let max_value = d3.max(d.values, function (x) { return x.y })
-                    let text_width = this.getBBox().width;
-                    let text_height = this.getBBox().height;
-                    let final_x, final_y;
-                    d.values.forEach(function (element) {
-                        if(element.y === max_value) {
-                            final_x = x(element.date) - text_width/2;
-                            final_y = y(element.y  + element.y0) 
-                                    + ((y(element.y0) - y(element.y  + element.y0))/2) 
-                                    - text_height/2;
-                        }
-                    })
-                    return "translate(" + final_x + ", " + final_y + ")";
+    let self = this;
+    
+    let text = d3.select(".streamgraph-chart").selectAll("text")
+            .data(series.data())
+            .enter()
+            .append("text")
+            .attr("dy", "10")
+            .classed("label", true)
+            .text(function (d) { return d.key })
+            .attr("transform", function (d) {
+                let max_value = d3.max(d.values, function (x) { return x.y })
+                let text_width = this.getBBox().width;
+                let text_height = this.getBBox().height;
+                let final_x, final_y;
+                d.values.forEach(function (element) {
+                    if(element.y === max_value) {
+                        final_x = x(element.date) - text_width/2;
+                        final_y = y(element.y  + element.y0) 
+                                + ((y(element.y0) - y(element.y  + element.y0))/2) 
+                                - text_height/2;
+                    }
                 })
+                return "translate(" + final_x + ", " + final_y + ")";
+            })
+    
+    text.on("mouseover", function (d) {
+        self.stream_mouseover(d)
+    })
+
+    text.on("mouseout", function () {
+        self.stream_mouseout();
+    })
+
+    text.on("mousemove", function (d) {
+        self.stream_mousemove(d3.event, d, x)
+    })
+
+    text.on("click", function (d) {
+        let current_stream = d3.selectAll(".stream").filter(function (el) {
+            return el.key === d.key;
+        })
+
+        let color = current_stream.style('fill');
+        mediator.publish("stream_clicked", d.key, color);
     })
     
     let setTM = function(element, m) {
@@ -232,7 +254,9 @@ streamgraph.drawLabels = function (series, x, y) {
     }
     
     let labels = d3.selectAll(".label")
-    labels[0].forEach(function (label, i) {
+    labels[0].forEach(function (label) {
+        let cur_d = label.__data__;
+        
         let bbox = label.getBBox();
         let ctm = label.getCTM();
         
@@ -243,6 +267,27 @@ streamgraph.drawLabels = function (series, x, y) {
             .attr('width', bbox.width + label_border_width*2)
             .attr('height', bbox.height + label_border_width*2)
             .attr('rx', label_round_factor)
+        
+        rect.on("mouseover", function () {
+            self.stream_mouseover(cur_d)
+        })
+        
+        rect.on("mouseout", function () {
+            self.stream_mouseout();
+        })
+        
+        rect.on("mousemove", function (d, i) {
+            self.stream_mousemove(d3.event, cur_d, x)
+        })
+        
+        rect.on("click", function () {
+             let current_stream = d3.selectAll(".stream").filter(function (el) {
+                return el.key === cur_d.key;
+            })
+
+            let color = current_stream.style('fill');
+            mediator.publish("stream_clicked", cur_d.key, color);
+        })
     
         setTM(rect[0][0], ctm)
     })
@@ -276,58 +321,78 @@ streamgraph.drawAxes = function(streamgraph_subject, xAxis, yAxis, streamgraph_w
 
 streamgraph.setupTooltip = function(streamgraph_subject, x) {
     
-    let tooltip = d3.select("#visualization")
+    let self = this;
+    
+    d3.select("#visualization")
             .append("div")
+            .attr("id", "tooltip")
             .attr("class", "tip hidden")
             .style("top", $('#headstart-chart').offset().top + "px");
     
     streamgraph_subject.selectAll(".stream")
-            .on("mouseover", function (d, i) {
-                if(mediator.stream_clicked !== null) {
-                    return;
-                }
-                streamgraph_subject.selectAll(".stream").transition()
-                        .duration(100)
-                        .attr("class", function (d, j) {
-                            return j != i ? 'stream lower-opacity' : 'stream';
-                        })
+            .on("mouseover", function (d) {
+                self.stream_mouseover(d);
             })
-            .on("mouseout", function (d, i) {               
-                if(mediator.stream_clicked === null) {
-                    streamgraph_subject.selectAll(".stream").transition()
-                        .duration(100)
-                        .attr('class', 'stream')
-                }
-
-                tooltip.classed("hidden", true);
-
+            .on("mouseout", function () {               
+                self.stream_mouseout();
             })
             .on("mousemove", function (d, i) {
-
-                var color = d3.select(this).style('fill');
-        
-                let current_event = d3.event;
-                let realx = current_event.clientX;
-                let realy = current_event.clientY;
-
-                let mouse = d3.mouse(this);
-                let mousex = mouse[0];
-                var invertedx = x.invert(mousex);
-                var xDate = invertedx.getFullYear();
-                var all_years = d3.sum(d.values, function(d) { return d.value });
-                d.values.forEach(function (f) {
-                    var year = (f.date.toString()).split(' ')[3];
-                    if (xDate == year) {
-                        tooltip
-                                .style("left", (realx + tooltip_offset_left) + "px")
-                                .style("top", (realy + tooltip_offset_top) + "px")
-                                .html( function () {
-                                    return tooltipTemplate({year: year, color: color, keyword: f.key, current_year: f.value, all_years: all_years})
-                                })
-                                .classed("hidden", false);
-                    }
-                });
+                self.stream_mousemove(d3.event, d, x);
             })
+}
+
+streamgraph.stream_mouseover = function(el) {
+    if(mediator.stream_clicked !== null || typeof el === "undefined") {
+        return;
+    }
+    
+    d3.selectAll(".stream").transition()
+            .duration(100)
+            .attr("class", function (d, j) {
+                return d.key != el.key ? 'stream lower-opacity' : 'stream';
+            })
+    
+}
+
+streamgraph.stream_mouseout = function() {
+    if(mediator.stream_clicked === null) {
+        d3.selectAll(".stream").transition()
+            .duration(100)
+            .attr('class', 'stream')
+    }
+
+    d3.select('#tooltip').classed("hidden", true);
+}
+
+streamgraph.stream_mousemove = function (current_event, d, x) {
+    if(typeof d === "undefined") {
+        return;
+    }
+    
+    let realx = current_event.clientX;
+    let realy = current_event.clientY;
+    var invertedx = x.invert(realx);
+    var xDate = invertedx.getFullYear();
+    let current_stream = d3.selectAll(".stream").filter(function (el) {
+        return el.key === d.key;
+    })
+    
+    let color = current_stream.style('fill');
+    let cur_d = current_stream.data()[0];
+    
+    var all_years = d3.sum(d.values, function(cur_d) { return cur_d.value });
+    cur_d.values.forEach(function (f) {
+        var year = (f.date.toString()).split(' ')[3];
+        if (xDate == year) {
+            d3.select("#tooltip")
+                    .style("left", (realx + tooltip_offset_left) + "px")
+                    .style("top", (realy + tooltip_offset_top) + "px")
+                    .html( function () {
+                        return tooltipTemplate({year: year, color: color, keyword: f.key, current_year: f.value, all_years: all_years})
+                    })
+                    .classed("hidden", false);
+        }
+    });
 }
 
 streamgraph.setupLinehelper = function() {
