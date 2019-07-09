@@ -371,8 +371,8 @@ streamgraph.stream_mousemove = function (current_event, d, x) {
     
     let realx = current_event.clientX;
     let realy = current_event.clientY;
-    var invertedx = x.invert(realx);
-    var xDate = invertedx.getFullYear();
+    let invertedx = x.invert(realx - $('#streamgraph_subject').offset().left - streamgraph_margin.left);
+    let xDate = invertedx.getFullYear();
     let current_stream = d3.selectAll(".stream").filter(function (el) {
         return el.key === d.key;
     })
