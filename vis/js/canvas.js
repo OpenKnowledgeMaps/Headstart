@@ -462,7 +462,7 @@ class Canvas {
                                 :(context.params.image_link);
             
             $('#author_image_link').attr('href', image_link);
-            $('#author_image').attr('src', image_link);
+            $('#author_image').css('background-image', 'url('+image_link+')');
             $('#author_living_dates').text(context.params.living_dates);
             $('#author_bio_link').attr('href', 'https://d-nb.info/gnd/' + context.params.author_id.replace(/\([^)]*\)/, ''));
             $('#author_bio_link').text(config.localization[config.language].bio_link)
