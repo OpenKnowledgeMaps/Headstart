@@ -38,7 +38,8 @@ streamgraph.setupStreamgraph = function (streamgraph_data) {
     
     let streamgraph_width = canvas.current_vis_width - streamgraph_margin.left - streamgraph_margin.right,
         streamgraph_height = canvas.current_vis_size - streamgraph_margin.top - streamgraph_margin.bottom,
-        parsed_data = JSON.parse(streamgraph_data);
+        parsed_data = JSON.parse(streamgraph_data),
+        label_positions = [];
     
     let stack = d3.layout.stack()
             .offset("silhouette")
@@ -108,7 +109,7 @@ streamgraph.setupStreamgraph = function (streamgraph_data) {
     let streamgraph_subject = this.drawStreamgraph(streams, area, z);   
     this.drawAxes(streamgraph_subject, xAxis, yAxis, streamgraph_width, streamgraph_height);
     let series = streamgraph_subject.selectAll(".streamgraph-area");
-    this.drawLabels(series, x, y);
+    this.drawLabels(series, x, y, streamgraph_width, streamgraph_height, label_positions);
     this.setupTooltip(streamgraph_subject, x);
     this.setupLinehelper();
 }
@@ -226,7 +227,7 @@ streamgraph.drawStreamgraph = function (streams, area, z) {
     return streamgraph_subject;
 }
 
-streamgraph.drawLabels = function (series, x, y) {
+streamgraph.drawLabels = function (series, x, y, streamgraph_width, streamgraph_height, label_positions) {
     let self = this;
     
     let text = d3.select(".streamgraph-chart").selectAll("text.label")
@@ -237,19 +238,7 @@ streamgraph.drawLabels = function (series, x, y) {
             .classed("label", true)
             .text(function (d) { return d.key })
             .attr("transform", function (d) {
-                let max_value = d3.max(d.values, function (x) { return x.y })
-                let text_width = this.getBBox().width;
-                let text_height = this.getBBox().height;
-                let final_x, final_y;
-                d.values.forEach(function (element) {
-                    if(element.y === max_value) {
-                        final_x = x(element.date) - text_width/2;
-                        final_y = y(element.y  + element.y0) 
-                                + ((y(element.y0) - y(element.y  + element.y0))/2) 
-                                - text_height/2;
-                    }
-                })
-                return "translate(" + final_x + ", " + final_y + ")";
+                return self.initialPositionLabel(this, d, x, y, streamgraph_width, label_positions)
             })
     
     text.on("mouseover", function (d) {
@@ -272,6 +261,8 @@ streamgraph.drawLabels = function (series, x, y) {
         let color = current_stream.style('fill');
         mediator.publish("stream_clicked", d.key, color);
     })
+    
+    self.repositionOverlappingLabels(label_positions);
     
     let setTM = function(element, m) {
         element.transform.baseVal.initialize(element.ownerSVGElement.createSVGTransformFromMatrix(m))
@@ -315,6 +306,38 @@ streamgraph.drawLabels = function (series, x, y) {
     
         setTM(rect[0][0], ctm)
     })
+}
+
+streamgraph.initialPositionLabel = function(self, d, x, y, streamgraph_width, label_positions) {
+    let max_value = d3.max(d.values, function (x) { return x.y })
+    let text_width = self.getBBox().width;
+    let text_height = self.getBBox().height;
+    let final_x, final_y;
+    d.values.forEach(function (element) {
+        if(element.y === max_value) {
+            final_x = x(element.date) - text_width/2;
+            final_y = y(element.y  + element.y0) 
+                    + ((y(element.y0) - y(element.y  + element.y0))/2) 
+                    - text_height/2;
+        }
+        if(final_x < 0) {
+            final_x = 0;
+        } else if ((final_x + text_width) > streamgraph_width) {
+            final_x = streamgraph_width - text_width;
+        }
+    })
+    
+    label_positions.push({key: d.key, x: final_x, y: final_y, width: text_width, height: text_height});
+    
+    return "translate(" + final_x + ", " + final_y + ")";
+}
+
+streamgraph.repositionOverlappingLabels = function(label_positions) {
+
+}
+
+streamgraph.hasOverlap = function(rect1, rect2) {
+    
 }
 
 streamgraph.drawAxes = function(streamgraph_subject, xAxis, yAxis, streamgraph_width, streamgraph_height) {
