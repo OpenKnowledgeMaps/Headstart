@@ -59,48 +59,59 @@ var autocomplete_function;
 var autocomplete_interval;
  
 var addAutoComplete = function() {
-    if(visualization_mode === "authors") {
-        autocomplete_function = $('input[name="q"]').autoComplete({
-            minChars: 0,
-            cache: false,
-            source: function(term, suggest){
-                term = term.toLowerCase();
-                var choices = autocomplete_data;
-                var matches = [];
-                for (i=0; i<choices.length; i++) {
-                    if(typeof choices[i][1].toLowerCase === "undefined" 
-                            || choices[i][1].toLowerCase().indexOf === "undefined") {
-                        continue;
-                    }
+    if(visualization_mode !== "authors") {
+        $("#searchfield").show();
+        $("#authors-loading").hide(); 
+    } else {
+        if(autocomplete_data === null) {
+            $("#searchfield").hide();
+            $("#authors-loading").show();
+        } else {
+            $("#searchfield").show();
+            $("#authors-loading").hide(); 
+            
+            autocomplete_function = $('input[name="q"]').autoComplete({
+                minChars: 0,
+                cache: false,
+                source: function(term, suggest){
+                    term = term.toLowerCase();
+                    var choices = autocomplete_data;
+                    var matches = [];
+                    for (i=0; i<choices.length; i++) {
+                        if(typeof choices[i][1].toLowerCase === "undefined" 
+                                || choices[i][1].toLowerCase().indexOf === "undefined") {
+                            continue;
+                        }
 
-                    if (~choices[i][1].toLowerCase().indexOf(term)) {
-                        matches.push(choices[i]);
+                        if (~choices[i][1].toLowerCase().indexOf(term)) {
+                            matches.push(choices[i]);
+                        }
                     }
+                    suggest(matches);
+                },
+                renderItem: function (item, search){
+                    search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+                    return '<div class="autocomplete-suggestion" '
+                            +' data-id="' + item[0] + '"'
+                            +' data-author="'+item[1] +'"'
+                            +' data-count="' + item[2] + '"'
+                            +' data-living_dates="' + item[3] + '"'
+                            +' data-image_link="' + item[4] + '"'
+                            +'>'+item[1].replace(re, "<b>$1</b>")
+                            +((item[1] !== "")?(' (' +item[2] + ')'):(""))
+                            +'</div>';
+                },
+                onSelect: function(e, term, item){
+                    $('input[name=q]').val(item.data('author'));
+                    author_id = item.data('id');
+                    author_count = item.data('count');
+                    author_living_dates = item.data('living_dates');
+                    author_image_link = item.data('image_link');
+                    $("#searchform").validate().element('input[name=q]');
                 }
-                suggest(matches);
-            },
-            renderItem: function (item, search){
-                search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-                var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
-                return '<div class="autocomplete-suggestion" '
-                        +' data-id="' + item[0] + '"'
-                        +' data-author="'+item[1] +'"'
-                        +' data-count="' + item[2] + '"'
-                        +' data-living_dates="' + item[3] + '"'
-                        +' data-image_link="' + item[4] + '"'
-                        +'>'+item[1].replace(re, "<b>$1</b>")
-                        +((item[1] !== "")?(' (' +item[2] + ')'):(""))
-                        +'</div>';
-            },
-            onSelect: function(e, term, item){
-                $('input[name=q]').val(item.data('author'));
-                author_id = item.data('id');
-                author_count = item.data('count');
-                author_living_dates = item.data('living_dates');
-                author_image_link = item.data('image_link');
-                $("#searchform").validate().element('input[name=q]');
-            }
-        });
+            });
+        }
     }
 }
 
@@ -149,6 +160,7 @@ $(document).ready(function () {
         visualization_mode = $("input[name='optradio']:checked").val();
 
         search_options.user_defined_date = false;
+        $('input[name="q"]').val("");
         $("#filter-container").html("");
         $('.author-btn').removeClass('btn-enabled');
         $('.keyword-btn').removeClass('btn-enabled');

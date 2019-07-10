@@ -51,11 +51,14 @@ include 'config.php';
                         <div id="filter-container"></div>
 
                         <!--<label for="q">Suchbegriff:</label>-->
-                        <div style="max-width:600px; padding: 0px 30px 50px; margin: 0px auto;">
+                        <div id="searchfield" class="searchfield" style="max-width:600px; padding: 0px 30px 50px; margin: 0px auto;">
                             <input class="inputfield" type="text" name="q" size="61" required>
                             <button type="submit" class="search-btn">
                                 <i class="fas fa-search"></i> suchen
                             </button>
+                        </div>
+                        <div id="authors-loading" class="loading-indicator">
+                            <img class="loading" src="img/ajax-loader.gif">
                         </div>
                     </div>
                 </form>
@@ -84,12 +87,13 @@ include 'config.php';
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script type ="text/javascript">
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
-            var autocomplete_data;
+            var autocomplete_data = null;
             var has_loaded = false;
             $.get(data_config.server_url + "services/getLinkedCatAuthors.php",
                     function (data) {
                         autocomplete_data = data;
                         has_loaded = true;
+                        addAutoComplete();
                     });
         </script>
         <script type="text/javascript" src="search_options.js "></script>

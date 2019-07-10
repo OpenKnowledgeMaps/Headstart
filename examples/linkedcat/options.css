@@ -353,3 +353,7 @@ label.error, #input-container label.error {
 .btn-group.open .dropdown-toggle, .dropdown-toggle {
     overflow: hidden;
 }
+
+#authors-loading {
+    display: none;
+}
