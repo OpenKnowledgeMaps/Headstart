@@ -19,6 +19,7 @@ var chooseOptions = function () {
             service_url = data_config.server_url + "services/searchLinkedCat.php";
             placeholder = "Suchbegriff eingeben...";
             $('.keyword-btn').addClass('btn-enabled');
+            $('#additional-information').html(additional_information.keywords);
             break;
 
         case "authors":
@@ -26,6 +27,7 @@ var chooseOptions = function () {
             service_url = data_config.server_url + "services/searchLinkedCatAuthorview.php";
             placeholder = "Autorennamen eingeben...";
             $('.author-btn').addClass('btn-enabled');
+            $('#additional-information').html(additional_information.authors);
             break;
 
         default:
