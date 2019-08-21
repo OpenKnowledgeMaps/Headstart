@@ -404,9 +404,7 @@ streamgraph.sortAndGroupLabels = function(label_positions) {
             if(a.y > b.y) {
                 return 1;
             }
-        }
-        
-        if(a.x < b.x) {
+        } else if(a.center_x < b.center_x) {
             return -1;
         } else if (a.x > b.x) {
             return 1;
