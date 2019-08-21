@@ -347,10 +347,16 @@ streamgraph.repositionOverlappingLabels = function(label_positions) {
     let cloned_label_positions = label_positions.slice(0);
     
     let grouped_labels = this.sortAndGroupLabels(cloned_label_positions);
+    let current_group = 0;
     
     grouped_labels.forEach(function (element) {
         if(element.group === 0) {
             return;
+        }
+        
+        if(element.group !== current_group) {
+            current_group = element.group;
+            move_up = !move_up;
         }
         
         grouped_labels.forEach(function (element_left) {
@@ -362,8 +368,6 @@ streamgraph.repositionOverlappingLabels = function(label_positions) {
                     } else {
                         element.y = element.y + overlap;
                     }
-                    
-                    move_up = !move_up;
                 }
             }
         })
@@ -382,12 +386,12 @@ streamgraph.repositionOverlappingLabels = function(label_positions) {
 }
 
 streamgraph.hasOverlap = function(rect1, rect2) {
-    if (!(rect2.x > (rect1.x + rect1.width) ||
-            (rect2.x + rect2.width) < rect1.x ||
-            rect2.y > (rect2.y + rect2.height) ||
-            (rect2.y + rect2.height) < rect1.y)) {
-        
-        return 21;
+    
+    if (rect1.x <= (rect2.x + rect2.width) &&
+          rect2.x <= (rect1.x + rect1.width) &&
+          rect1.y <= (rect2.y + rect2.height) &&
+          rect2.y <= (rect1.y + rect1.height)) {
+      return rect2.height + label_border_width*2;
     }
         
     return 0;
