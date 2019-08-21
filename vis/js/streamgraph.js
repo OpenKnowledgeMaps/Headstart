@@ -262,7 +262,15 @@ streamgraph.drawLabels = function (series, x, y, streamgraph_width, streamgraph_
         mediator.publish("stream_clicked", d.key, color);
     })
     
-    self.repositionOverlappingLabels(label_positions);
+    let repositioned_labels = self.repositionOverlappingLabels(label_positions);
+    
+    d3.select(".streamgraph-chart").selectAll("text.label")
+            .attr("transform", function (d) {
+                var current_label = repositioned_labels.find(obj => {
+                    return obj.key === d.key;
+                })
+                return('translate(' + current_label.x + ',' + current_label.y + ')')
+            })
     
     let setTM = function(element, m) {
         element.transform.baseVal.initialize(element.ownerSVGElement.createSVGTransformFromMatrix(m))
@@ -327,17 +335,98 @@ streamgraph.initialPositionLabel = function(self, d, x, y, streamgraph_width, la
         }
     })
     
-    label_positions.push({key: d.key, x: final_x, y: final_y, width: text_width, height: text_height});
+    label_positions.push({key: d.key, x: final_x, y: final_y, width: text_width, height: text_height, center_x: (final_x + text_width/2)});
     
     return "translate(" + final_x + ", " + final_y + ")";
 }
 
 streamgraph.repositionOverlappingLabels = function(label_positions) {
-
+    
+    let self = this;
+    let move_up = true;
+    let cloned_label_positions = label_positions.slice(0);
+    
+    let grouped_labels = this.sortAndGroupLabels(cloned_label_positions);
+    
+    grouped_labels.forEach(function (element) {
+        if(element.group === 0) {
+            return;
+        }
+        
+        grouped_labels.forEach(function (element_left) {
+            if(element_left.group < element.group) {
+                let overlap = self.hasOverlap(element_left, element);
+                if(overlap > 0) {
+                    if(move_up) {
+                        element.y = element.y - overlap;
+                    } else {
+                        element.y = element.y + overlap;
+                    }
+                    
+                    move_up = !move_up;
+                }
+            }
+        })
+    })
+    
+    label_positions.map(function (label) {
+        grouped_labels.map(function (f) {
+              if (f.key === label.key) {
+                   label.y = f.y
+              }
+       })
+               return label;
+    })
+    
+    return label_positions;
 }
 
 streamgraph.hasOverlap = function(rect1, rect2) {
+    if (!(rect2.x > (rect1.x + rect1.width) ||
+            (rect2.x + rect2.width) < rect1.x ||
+            rect2.y > (rect2.y + rect2.height) ||
+            (rect2.y + rect2.height) < rect1.y)) {
+        
+        return 21;
+    }
+        
+    return 0;
+}
+
+streamgraph.sortAndGroupLabels = function(label_positions) {
     
+    //Sort and group labels first
+    let compare = function(a, b) {
+        if (a.center_x === b.center_x) {
+            if(a.y < b.y) {
+                return -1;
+            }
+            if(a.y > b.y) {
+                return 1;
+            }
+        }
+        
+        if(a.x < b.x) {
+            return -1;
+        } else if (a.x > b.x) {
+            return 1;
+        }
+        return 0;
+    }
+    
+    let sorted_labels = label_positions.sort(compare);
+    let previous_x = -1;
+    let current_group = 0;
+    sorted_labels.forEach(function (element, i) {
+        if(previous_x === element.center_x || i === 0) {
+            element.group = current_group;
+        } else {
+            element.group = current_group++ + 1;
+        }
+        previous_x = element.center_x;
+    })
+    
+    return sorted_labels;
 }
 
 streamgraph.drawAxes = function(streamgraph_subject, xAxis, yAxis, streamgraph_width, streamgraph_height) {
