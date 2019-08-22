@@ -129,6 +129,7 @@ build_query <- function(query, params, limit){
                 'keyword_p', 'keyword_x', 'keyword_z',
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext')
+  query <- gsub(" ?<<von>>", "", query)
   aq <- paste0(a_fields, ':', paste0("*", gsub("[^a-zA-Z<>]+", "*", query), "*"))
   qq <- paste0(q_fields, ':', query)
   q <- paste(c(aq, qq), collapse = " ")
