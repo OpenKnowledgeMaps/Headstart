@@ -23,12 +23,12 @@
         z-index: 3; 
         font-size: 11px;
         cursor: pointer;
-        
+
         a {
             border-bottom: 1px solid $medium-blue;
             color: $medium-blue;
             text-decoration: none;
-            
+
             &:hover {
                 border-bottom: 2px solid $medium-blue;
             }
@@ -55,7 +55,7 @@
         border-bottom: 1px solid $medium-blue;
         cursor: help;
         color: $medium-blue;
-        
+
         &:hover {
             border-bottom: 2px solid $medium-blue;
         }
@@ -107,16 +107,19 @@
 }
 
 .authorimage {
-    max-height: 100px;
+    width: 60px;
+    height:60px;
     border-radius: 50%;
-    margin: 5px 0px 0px 10px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    /*margin: 5px 0px 0px 10px;*/
 }
 
 .titleimage {
     display: inline-block;
-    max-width: 80px;
+    /*max-width: 80px;*/
     vertical-align: middle;
-    margin-right: 10px;
+    margin: 10px; /*former margin-right*/
     /*margin-top: 15px;
     margin-left: 50px;*/
 }
@@ -182,5 +185,13 @@
         vertical-align: middle; 
         padding-left: 0px;
         padding-top: 0px !important;
+    }
+
+    #subdiscipline_title {
+        min-height: 10px;
+    }
+
+    #context {
+        margin: 0px;
     }
 }

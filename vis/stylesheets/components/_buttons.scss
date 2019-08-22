@@ -1,5 +1,4 @@
 /* Clear button in input form */
-
 #searchclear {
     position: absolute;
     right: 15px;
@@ -10,7 +9,20 @@
     font-size: 14px;
     cursor: pointer;
     color: #ccc;
+    z-index: 100;
     display: none;
+}
+
+.searchfield-icon {
+    position: absolute;
+    left:7px;
+    top: 0;
+    bottom: 10px;
+    height: 14px;
+    margin: auto;
+    font-size: 14px;
+    cursor: pointer;
+    color: #ccc;
     z-index: 100;
 }
 
