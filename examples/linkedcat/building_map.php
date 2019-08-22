@@ -17,7 +17,7 @@
         <div class="waiting-page-img">
         <div class="waiting-box">
             <div>
-                <p class="waiting-title">Ihre Visualisierung über <span id="search_term"></span> wird gerade erstellt</p>
+                <p class="waiting-title"><span id="h-label"></span> über <span id="search_term"></span> wird gerade erstellt</p>
                 <p class="waiting-description">Bitte haben Sie ein wenig Geduld, dieser Vorgang dauert etwa 20 Sekunden...</p>
                 <p id="info-totals"></p>
             </div>
@@ -42,6 +42,9 @@ echo "var post_data = " . $post_data . ";\n";
                 let search_params = new URLSearchParams(window.location.search)
                 if (Array.from(search_params).length > 0) {
                     $("#search_term").text(post_data.q)
+                    $("#h-label").text(function () {
+                        return ((post_data.vis_type === "overview")?("Ihr Überblick"):("Ihr Zeitstrahl"))
+                    })
                     doSubmit(search_params, search_params.get("service_url"), search_params.get("service"));
                 } else {
                     showErrorCreation();

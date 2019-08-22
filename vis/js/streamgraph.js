@@ -38,7 +38,8 @@ streamgraph.setupStreamgraph = function (streamgraph_data) {
     
     let streamgraph_width = canvas.current_vis_width - streamgraph_margin.left - streamgraph_margin.right,
         streamgraph_height = canvas.current_vis_size - streamgraph_margin.top - streamgraph_margin.bottom,
-        parsed_data = JSON.parse(streamgraph_data);
+        parsed_data = JSON.parse(streamgraph_data),
+        label_positions = [];
     
     let stack = d3.layout.stack()
             .offset("silhouette")
@@ -106,9 +107,9 @@ streamgraph.setupStreamgraph = function (streamgraph_data) {
     }
     
     let streamgraph_subject = this.drawStreamgraph(streams, area, z);   
-    let series = streamgraph_subject.selectAll(".streamgraph-area");
-    this.drawLabels(series, x, y);
     this.drawAxes(streamgraph_subject, xAxis, yAxis, streamgraph_width, streamgraph_height);
+    let series = streamgraph_subject.selectAll(".streamgraph-area");
+    this.drawLabels(series, x, y, streamgraph_width, streamgraph_height, label_positions);
     this.setupTooltip(streamgraph_subject, x);
     this.setupLinehelper();
 }
@@ -226,10 +227,10 @@ streamgraph.drawStreamgraph = function (streams, area, z) {
     return streamgraph_subject;
 }
 
-streamgraph.drawLabels = function (series, x, y) {
+streamgraph.drawLabels = function (series, x, y, streamgraph_width, streamgraph_height, label_positions) {
     let self = this;
     
-    let text = d3.select(".streamgraph-chart").selectAll("text")
+    let text = d3.select(".streamgraph-chart").selectAll("text.label")
             .data(series.data())
             .enter()
             .append("text")
@@ -237,19 +238,7 @@ streamgraph.drawLabels = function (series, x, y) {
             .classed("label", true)
             .text(function (d) { return d.key })
             .attr("transform", function (d) {
-                let max_value = d3.max(d.values, function (x) { return x.y })
-                let text_width = this.getBBox().width;
-                let text_height = this.getBBox().height;
-                let final_x, final_y;
-                d.values.forEach(function (element) {
-                    if(element.y === max_value) {
-                        final_x = x(element.date) - text_width/2;
-                        final_y = y(element.y  + element.y0) 
-                                + ((y(element.y0) - y(element.y  + element.y0))/2) 
-                                - text_height/2;
-                    }
-                })
-                return "translate(" + final_x + ", " + final_y + ")";
+                return self.initialPositionLabel(this, d, x, y, streamgraph_width, label_positions)
             })
     
     text.on("mouseover", function (d) {
@@ -273,6 +262,16 @@ streamgraph.drawLabels = function (series, x, y) {
         mediator.publish("stream_clicked", d.key, color);
     })
     
+    let repositioned_labels = self.repositionOverlappingLabels(label_positions);
+    
+    d3.select(".streamgraph-chart").selectAll("text.label")
+            .attr("transform", function (d) {
+                var current_label = repositioned_labels.find(obj => {
+                    return obj.key === d.key;
+                })
+                return('translate(' + current_label.x + ',' + current_label.y + ')')
+            })
+    
     let setTM = function(element, m) {
         element.transform.baseVal.initialize(element.ownerSVGElement.createSVGTransformFromMatrix(m))
     }
@@ -284,7 +283,7 @@ streamgraph.drawLabels = function (series, x, y) {
         let bbox = label.getBBox();
         let ctm = label.getCTM();
         
-        let rect = d3.select('.streamgraph-chart').insert('rect','text')
+        let rect = d3.select('.streamgraph-chart').insert('rect','text.label')
             .classed("label-background", true)
             .attr('x', bbox.x - streamgraph_margin.left - label_border_width)
             .attr('y', bbox.y - streamgraph_margin.top - label_border_width)
@@ -315,6 +314,121 @@ streamgraph.drawLabels = function (series, x, y) {
     
         setTM(rect[0][0], ctm)
     })
+}
+
+streamgraph.initialPositionLabel = function(self, d, x, y, streamgraph_width, label_positions) {
+    let max_value = d3.max(d.values, function (x) { return x.y })
+    let text_width = self.getBBox().width;
+    let text_height = self.getBBox().height;
+    let final_x, final_y;
+    d.values.forEach(function (element) {
+        if(element.y === max_value) {
+            final_x = x(element.date) - text_width/2;
+            final_y = y(element.y  + element.y0) 
+                    + ((y(element.y0) - y(element.y  + element.y0))/2) 
+                    - text_height/2;
+        }
+        if(final_x < 0) {
+            final_x = 0;
+        } else if ((final_x + text_width) > streamgraph_width) {
+            final_x = streamgraph_width - text_width;
+        }
+    })
+    
+    label_positions.push({key: d.key, x: final_x, y: final_y, width: text_width, height: text_height, center_x: (final_x + text_width/2)});
+    
+    return "translate(" + final_x + ", " + final_y + ")";
+}
+
+streamgraph.repositionOverlappingLabels = function(label_positions) {
+    
+    let self = this;
+    let move_up = true;
+    let cloned_label_positions = label_positions.slice(0);
+    
+    let grouped_labels = this.sortAndGroupLabels(cloned_label_positions);
+    let current_group = 0;
+    
+    grouped_labels.forEach(function (element) {
+        if(element.group === 0) {
+            return;
+        }
+        
+        if(element.group !== current_group) {
+            current_group = element.group;
+            move_up = !move_up;
+        }
+        
+        grouped_labels.forEach(function (element_left) {
+            if(element_left.group < element.group) {
+                let overlap = self.hasOverlap(element_left, element);
+                if(overlap > 0) {
+                    if(move_up) {
+                        element.y = element.y - overlap;
+                    } else {
+                        element.y = element.y + overlap;
+                    }
+                }
+            }
+        })
+    })
+    
+    label_positions.map(function (label) {
+        grouped_labels.map(function (f) {
+              if (f.key === label.key) {
+                   label.y = f.y
+              }
+       })
+               return label;
+    })
+    
+    return label_positions;
+}
+
+streamgraph.hasOverlap = function(rect1, rect2) {
+    
+    if (rect1.x <= (rect2.x + rect2.width) &&
+          rect2.x <= (rect1.x + rect1.width) &&
+          rect1.y <= (rect2.y + rect2.height) &&
+          rect2.y <= (rect1.y + rect1.height)) {
+      return rect2.height + label_border_width*2;
+    }
+        
+    return 0;
+}
+
+streamgraph.sortAndGroupLabels = function(label_positions) {
+    
+    //Sort and group labels first
+    let compare = function(a, b) {
+        if (a.center_x === b.center_x) {
+            if(a.y < b.y) {
+                return -1;
+            }
+            if(a.y > b.y) {
+                return 1;
+            }
+        } else if(a.center_x < b.center_x) {
+            return -1;
+        } else if (a.x > b.x) {
+            return 1;
+        }
+        return 0;
+    }
+    
+    let sorted_labels = label_positions.sort(compare);
+    let previous_x = -1;
+    let current_group = 0;
+    sorted_labels.forEach(function (element, i) {
+        if(previous_x === element.center_x || i === 0) {
+            element.group = current_group;
+        } else {
+            element.group = current_group++ + 1;
+        }
+        previous_x = element.center_x;
+    })
+    
+    return sorted_labels;
 }
 
 streamgraph.drawAxes = function(streamgraph_subject, xAxis, yAxis, streamgraph_width, streamgraph_height) {
