@@ -129,10 +129,9 @@ build_query <- function(query, params, limit){
                 'keyword_p', 'keyword_x', 'keyword_z',
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext')
-  q <- paste(
-          paste0(q_fields, ':', query),
-          paste0(a_fields, ':', gsub("[^a-zA-Z<>]+", "*", query)),
-          collapse = " ")
+  aq <- paste0(a_fields, ':', paste0("*", gsub("[^a-zA-Z<>]+", "*", query), "*"))
+  qq <- paste0(q_fields, ':', query)
+  q <- paste(c(aq, qq), collapse = " ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
   # additional filter params
