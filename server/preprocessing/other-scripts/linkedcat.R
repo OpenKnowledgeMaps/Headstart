@@ -132,7 +132,7 @@ build_query <- function(query, params, limit){
   query <- gsub(" ?<<von>>", "", query)
   aq <- paste0(a_fields, ':', paste0("*", gsub("[^a-zA-Z<>]+", "*", query), "*"))
   qq <- paste0(q_fields, ':', query)
-  q <- paste(c(aq, qq), collapse = " ")
+  q <- paste(c(aq, qq), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
   # additional filter params
