@@ -55,7 +55,11 @@ IO.prototype = {
                 self.data = JSON.parse(csv.data);
             }
         } else {
-            self.data = csv;
+            if(typeof csv.data === "object") {
+                self.data = csv.data;
+            }else {
+                self.data = csv;
+            }
         }
     },
 
