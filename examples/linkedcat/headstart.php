@@ -14,6 +14,13 @@ include 'config.php';
         <script type="text/javascript" src="search_options.js"></script>
         <script type="text/javascript" src="lib/Chart.Streamgraph.S.js"></script>
         <script>
+                var intro = {
+                    title: "Was ist das?",
+                            body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
+                    <p class="wtp">Erklärungstext</p>'
+                }
+                data_config.intro = intro;
+            
         	data_config.files = [{
         		title: <?php echo json_encode($_GET['query']) ?>,
         		file: <?php echo json_encode($_GET['file']) ?>
