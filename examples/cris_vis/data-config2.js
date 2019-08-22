@@ -14,7 +14,7 @@ var data_config = {
     preview_type: "pdf",
     
     show_multiples: false,
-    show_dropdown: false,
+    show_dropdown: true,
     show_intro: false,
     show_list:true,
     is_force_papers:true,
@@ -51,7 +51,11 @@ var data_config = {
     evaluation_service: "ga",
 
     files: [{
-        title: "edu1",
+        title: "DE",
         file: "./data/final_output2_de.json"
+    },
+    {
+        title: "EN",
+        file: "./data/final_output2_en.json"
     }],
 };
