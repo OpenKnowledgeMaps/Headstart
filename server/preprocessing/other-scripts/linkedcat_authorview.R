@@ -116,7 +116,7 @@ build_query <- function(query, params, limit){
                 'keyword_p', 'keyword_x', 'keyword_z',
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext')
-  q <- paste(paste0(q_fields, ':', '"', params$author_id, '"'), collapse = " ")
+  q <- paste(paste0(q_fields, ':', '"', params$author_id, '"'), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
   return(q_params)
 }
