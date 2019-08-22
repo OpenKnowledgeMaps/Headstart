@@ -102,6 +102,7 @@ var config = {
     is_authorview: false,
     
     is_streamgraph: false,
+    streamgraph_zoom: false,
     
     // transition
     transition_duration: 750,
@@ -242,16 +243,16 @@ var config = {
             title: "Titel",
             default_title: 'Überblick über <span id="num_articles"></span> Artikel',
             overview_label: 'Überblick über',
-            overview_authors_label: 'Übersicht über die Werke von',
+            overview_authors_label: 'Zeitstrahl für die Werke von',
             most_recent_label: 'neueste',
             articles_label: 'open access Dokumente',
             source_label: 'Quelle',
             documenttypes_label: 'Dokumentarten',
             documenttypes_tooltip: 'Die folgenden Publikationsarten wurden bei der Erstellung dieser Visualisierung in Betracht gezogen (nicht alle davon scheinen notwendigerweise in dieser Visualisierung auch auf):',
-            bio_link: 'Link zur Biografie',
+            bio_link: 'Biografie',
             area: "Bereich",
             items: "Dokumente",
-            backlink: "← Zurück zur Übersicht",
+            backlink: "← Zurück zum Überblick",
             keywords: "Schlagwörter",
             basic_classification: "Basisklassifikation",
             ddc: "DDC",

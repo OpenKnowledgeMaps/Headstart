@@ -17,7 +17,7 @@ class Canvas {
         this.available_height = null;
         this.available_width = null;
         this.current_vis_size = null;
-
+        this.current_vis_width = null; //used in streamgraph
     }
 
     getCurrentCircle(d) {
@@ -31,7 +31,7 @@ class Canvas {
                 });
     }
 
-    // Set this.available_height, this.available_width and this.current_vis_size
+    // Set this.available_height, this.available_width, this.current_vis_size and this.current_vis_width (for streamgraph)
     calcChartSize() {
         var parent_height = getRealHeight($("#" + config.tag));
         var subtitle_height = $("#subdiscipline_title").outerHeight(true);
@@ -70,6 +70,13 @@ class Canvas {
 
         if (this.current_vis_size > config.max_height) {
             this.current_vis_size = config.max_height;
+        }
+        
+        //Set current_vis_width for streamgraph
+        if(this.available_width > config.min_width) {
+            this.current_vis_width = this.available_width;
+        } else {
+            this.current_vis_width = config.min_width;
         }
     }
 
@@ -168,7 +175,7 @@ class Canvas {
         
         d3.select('#headstart-chart')
             .append('svg')
-                .attr('width', self.available_width)
+                .attr('width', self.current_vis_width)
                 .attr('height', self.current_vis_size)
                 .attr('id', 'streamgraph_subject')
                 .classed('streamgraph-canvas', true)
@@ -462,7 +469,7 @@ class Canvas {
                                 :(context.params.image_link);
             
             $('#author_image_link').attr('href', image_link);
-            $('#author_image').attr('src', image_link);
+            $('#author_image').css('background-image', 'url('+image_link+')');
             $('#author_living_dates').text(context.params.living_dates);
             $('#author_bio_link').attr('href', 'https://d-nb.info/gnd/' + context.params.author_id.replace(/\([^)]*\)/, ''));
             $('#author_bio_link').text(config.localization[config.language].bio_link)

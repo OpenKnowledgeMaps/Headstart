@@ -73,6 +73,7 @@
     height: 28px;
     margin-bottom: 10px;
     margin-right: 10px;
+    padding-left: 22px;
 }
 
 @media screen and (max-width: 1650px) {
@@ -171,5 +172,11 @@
         #filter_container {
             float: none;
         }
+    }
+}
+
+@if $skin == 'linkedcat' {
+    #sort_container {
+        float: right;
     }
 }
