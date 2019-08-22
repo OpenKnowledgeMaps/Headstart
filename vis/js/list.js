@@ -254,12 +254,12 @@ list.fit_list_height = function() {
 
 list.changeHeaderColor = function(color) {
     d3.select("#explorer_options")
-            .style("background-color", color)
+            .style("border-bottom", "5px solid " + color)
 }
 
 list.resetHeaderColor = function() {
     d3.select("#explorer_options")
-            .style("background-color", "")
+            .style("border-bottom", "")
 }
 
 let addSortOptionDropdownEntry = function(sort_option, first_item) {

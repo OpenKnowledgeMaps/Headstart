@@ -11,52 +11,68 @@
 }
 
 .lower-opacity {
-    opacity: 0.6;
+    opacity: 0.3;
+    filter: grayscale(60%);
+    -webkit-filter: grayscale(60%);
+}
+
+.label {
+    cursor: pointer;
 }
 
 .label-background {
+    cursor: pointer;
     fill: #fff;
     fill-opacity: 1;
 }
 
+.label-background {
+    stroke: #f1f1f1;
+    stroke-width: 2;
+}
+
 .axis path, .axis line {
-  fill: none;
-  stroke: #3a403d;
-  stroke-width: 1px;
-  shape-rendering: crispEdges;
+    fill: none;
+    stroke: #3a403d;
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
 }
 
 .axis text {
-  font-size: .625em;
+    font-size: .625em;
 }
 
 .axis-label {
-    font-size: 12px
+    font-size: 12px;
+    stroke: #2856a3;
+    stroke-width:1;
+    color: #2856a3;
 }
 
 .tip {
-  background-color: hsla(0,0%,100%,.9);
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 1em;
-  width: 180px;
-  position: absolute;
-  z-index: 20;
-  visibility: visible;
-    
-  .year {
-    font-weight: 900;
-    font-size: 1.25em;
-    margin-bottom: 2px;
-  }
-  
-  .swatch {
-    width: 11px;
-    height: 11px;
-    float: left;
-    margin-top: 6px;
-    margin-right: 4px;
-  }
+    background-color: rgba(255,255,255,.9);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #cbcbcb;
+    font-size: 1em;
+    width: 180px;
+    position: absolute;
+    z-index: 20;
+    visibility: visible;
+
+    .year {
+        font-weight: 900;
+        font-size: 1.25em;
+        margin-bottom: 2px;
+    }
+
+    .swatch {
+        width: 11px;
+        height: 11px;
+        float: left;
+        margin-top: 6px;
+        margin-right: 4px;
+    }
 }
 
 .hidden {
