@@ -451,6 +451,7 @@ MyMediator.prototype = {
         mediator.manager.call('streamgraph', 'reset');
         mediator.manager.call('list', 'count_visible_items_to_header', []);
         mediator.manager.call('list', 'resetHeaderColor');
+        mediator.current_enlarged_paper = null;
     },
 
     bubble_mouseout: function(d, circle, bubble_fsm) {
