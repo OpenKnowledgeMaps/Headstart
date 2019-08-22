@@ -54,7 +54,8 @@ include 'config.php';
                             <!--<label for="q">Suchbegriff:</label>-->
                             <div class="searchfield" style="max-width:600px; padding: 0px 30px 50px; margin: 0px auto;">
                                 <p id="additional-information" class="additional-information"></p>
-                                <input class="inputfield" type="text" name="q" size="61" required>
+                                <input class="inputfield" type="text" name="q" size="61">
+                                <label id="q-error" class="q-error label-hide" for="q"></label>
                                 <button type="submit" class="search-btn">
                                     <i class="fas fa-search"></i> suchen
                                 </button>
@@ -93,6 +94,13 @@ include 'config.php';
                 authors: '<p>Additional information for author search'
                 , keywords: '<p>Additional information for keyword search'
             }
+            
+            var author_selected = false;
+            
+            $('input[name="q"]').on("input", function () {
+                author_selected = false;
+                removeInputError();
+            })
     
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
             var autocomplete_data = null;
