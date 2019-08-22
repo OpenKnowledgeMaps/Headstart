@@ -1,0 +1,5251 @@
+{
+  "data": [
+    {
+      "title": "Rehabilitation in old age",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What possibilities are there to use rehabilitation measures to better mobilize people who are in special-care homes due to the consequences of accidents, and what sort of organization would be needed to allow even elderly people to benefit from such measures, instead of considering many cases as hopeless from the beginning?",
+          "id": "f1070"
+        }
+      ],
+      "x": [
+        -0.8012
+      ],
+      "area_uri": "Alter",
+      "y": [
+        0.7597
+      ],
+      "id": 0,
+      "area": "Age"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between the age of the person involved and the severity of injuries?",
+          "id": "f1130"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does a person’s age affect the type of accidental injury they suffer?",
+          "id": "f344"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do falls suffered by the elderly affect hospital admissions and death rates, how can they be avoided, and what advice can be offered in accordance with this?",
+          "id": "f359"
+        }
+      ],
+      "x": [
+        -0.6787
+      ],
+      "area_uri": "Alter",
+      "y": [
+        0.5747
+      ],
+      "id": 1,
+      "area": "Impacts"
+    },
+    {
+      "title": "Team management ",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does the number of accidents at work play with regard to the retirement age?",
+          "id": "f290"
+        }
+      ],
+      "x": [
+        -0.6323
+      ],
+      "area_uri": "Alter",
+      "y": [
+        0.5239
+      ],
+      "id": 2,
+      "area": "Interdisciplinarity"
+    },
+    {
+      "title": "Stress",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does patient age affect wound healing?",
+          "id": "f312"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does age affect wound healing?",
+          "id": "f505"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How likely are people who regularly stretch to be injured in comparison to people who do not?",
+          "id": "f775"
+        }
+      ],
+      "x": [
+        -0.54
+      ],
+      "area_uri": "Alter",
+      "y": [
+        0.7513
+      ],
+      "id": 3,
+      "area": "Contextual factors"
+    },
+    {
+      "title": "Communication technology",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of age on accidental injuries?",
+          "id": "f348"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Why is the risk of dying from an accidental injury so high in the 15-24 year age group?",
+          "id": "f469"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do injuries and trauma differ depending on a person's age?",
+          "id": "f604"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does age play in the frequency of injuries?",
+          "id": "f653"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between age and frequency of accidents?",
+          "id": "f796"
+        }
+      ],
+      "x": [
+        -0.9689
+      ],
+      "area_uri": "Alter",
+      "y": [
+        0.8445
+      ],
+      "id": 4,
+      "area": "Contextual factors"
+    },
+    {
+      "title": "Psychosocial components",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "The average age of Germans is increasing. Particularly given the increasing elderly population group, how can we prevent an increase in the risk of being severely or even fatally injured in a domestic accident?",
+          "id": "f801"
+        }
+      ],
+      "x": [
+        -0.7346
+      ],
+      "area_uri": "Alter",
+      "y": [
+        0.5131
+      ],
+      "id": 5,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Influencing factor of age",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How frequently do accidental injuries occur at home?",
+          "id": "f1018"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How common are accidental burns injuries while cooking?",
+          "id": "f35"
+        }
+      ],
+      "x": [
+        -0.616
+      ],
+      "area_uri": "Arten von Unfallverletzungen",
+      "y": [
+        0.962
+      ],
+      "id": 6,
+      "area": "Age"
+    },
+    {
+      "title": "Healing process & age",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent do leisure accidents and private accidents differ from workplace accidents?",
+          "id": "f1024"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do accidents at home and accidents during leisure time differ from workplace accidents?",
+          "id": "f328"
+        }
+      ],
+      "x": [
+        -0.7952
+      ],
+      "area_uri": "Arten von Unfallverletzungen",
+      "y": [
+        0.8002
+      ],
+      "id": 7,
+      "area": "Age"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "1.Which injuries occur most frequently?\n2. Which injuries are most deadly?",
+          "id": "f1067"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most common accidental injuries and how can we contribute to reducing them?",
+          "id": "f565"
+        }
+      ],
+      "x": [
+        -0.2178
+      ],
+      "area_uri": "Arten von Unfallverletzungen",
+      "y": [
+        0.1519
+      ],
+      "id": 8,
+      "area": "Impacts"
+    },
+    {
+      "title": "Organizational structure",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How has the type and frequency of injuries in leisure sports changed in the last 10 years?",
+          "id": "f373"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "For accidents in leisure sports, is it still the case that most accidents occur due to inattention, and what type of injuries are most predominant in this field?",
+          "id": "f931"
+        }
+      ],
+      "x": [
+        -0.5111
+      ],
+      "area_uri": "Arten von Unfallverletzungen",
+      "y": [
+        0.4929
+      ],
+      "id": 9,
+      "area": "Hospital management"
+    },
+    {
+      "title": "Age groups",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does the reason (course of events) for an accident affect reimbursement by the employers' liability insurance association or health insurance fund?",
+          "id": "f485"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What counts as an \"accident\"?",
+          "id": "f792"
+        }
+      ],
+      "x": [
+        -0.6091
+      ],
+      "area_uri": "Arten von Unfallverletzungen",
+      "y": [
+        0.1425
+      ],
+      "id": 10,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Conditions in the workplace",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the most common injury that take place in the workplace?",
+          "id": "f578"
+        }
+      ],
+      "x": [
+        -0.5453
+      ],
+      "area_uri": "Arten von Unfallverletzungen",
+      "y": [
+        0.7421
+      ],
+      "id": 11,
+      "area": "Risk factors"
+    },
+    {
+      "title": "Conditions in the workplace",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Sepsis often occurs following failure of one or more organs. Sepsis can also be a trigger for multiple organ failure. How can the risk of sepsis be prevented quickly enough, and how can the chain reaction of organ failure be avoided in most cases?",
+          "id": "f1109"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does the administration of oral anticoagulants affect the mortality and/or complication rate for accidental injuries?",
+          "id": "f177"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does the increasing number of patients on oral anticoagulants affect the mortality and complication rate for accidental injuries?",
+          "id": "f178"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of superficial sedation on later outcomes in cases of severe brain trauma? What is the effect of increased cerebral pressure on brain tissue?",
+          "id": "f200"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What causes CRPS? Are there patient groups that have a predisposition to the disease and how can this best be treated?",
+          "id": "f224"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can long-term damage due to brain/head injuries be reduced?",
+          "id": "f266"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of broken bones on the rest of the body?",
+          "id": "f402"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does sitting for long periods affect muscle injuries?",
+          "id": "f420"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way doe anticoagulants influence the effects of head injuries on regeneration?",
+          "id": "f54"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What effect can muscular atrophy have on the body following a serious accident?",
+          "id": "f542"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the most effective prevention against long-term/permanent damage after accidental injuries?",
+          "id": "f595"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between trauma/injury recovery time in professional athletes and diminished endorphin production due to lack of exercise during recovery?",
+          "id": "f762"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent does regular exercise have a positive effect on the frequency and severity of thrombosis with internal bleeding as a result of an accident if the patient has a coagulation disorder in the form of an increased risk of thrombosis?",
+          "id": "f933"
+        }
+      ],
+      "x": [
+        -0.3986
+      ],
+      "area_uri": "Auswirkungen",
+      "y": [
+        0.4118
+      ],
+      "id": 12,
+      "area": "Risk factors"
+    },
+    {
+      "title": "Influencing factor of age",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the long-term consequences of head injuries?",
+          "id": "f1021"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of irradiated amnion on chondrogenesis in osteochondral defects in the talus or knee?",
+          "id": "f105"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does the height of a fall affect injury?",
+          "id": "f1075"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does shock affect the whole body?",
+          "id": "f1110"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between whiplash injuries and tinnitus?",
+          "id": "f112"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between a leg injury and the risk of thrombosis?",
+          "id": "f114"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what % of cases in which head injury occurs are patients able to return to 100% mental performance?",
+          "id": "f1170"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Do patients with intra-articular wrist fracture more commonly have arthrosis after at least 10 years than patients with an extra-articular wrist fracture?",
+          "id": "f189"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How many accident-related insufficiencies of the lig. (ligament) alaria lead to radiating upper cervical syndrome, such as tinnitus, dizziness or headache within 10 years?",
+          "id": "f208"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "From a neuroanatomical perspective, how long does an impairment to sensory adaptation persist after an accident?",
+          "id": "f267"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of shock on the central nervous system?",
+          "id": "f299"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between the central nervous system and shock?",
+          "id": "f397"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does a bone fracture affect the later bone status and the associated part of the body, as well as the person’s own perception of the fracture point?",
+          "id": "f429"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between severe bruising and infections?",
+          "id": "f457"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "After injuries, there are often major problems with lymphedema in the limbs and thus problems and consequential damage. How can this be minimized or even prevented?",
+          "id": "f545"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do airbags affect the eyes?",
+          "id": "f572"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can people suffer shock as a result of a domestic accident?",
+          "id": "f633"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent does an injury affect the overall health condition of the person affected?",
+          "id": "f636"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between accidents and prevention?",
+          "id": "f637"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does keeping extensive plating, with ten screws, of a complex shoulder fracture received in 2014 affect my future health and mobility?",
+          "id": "f672"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does sepsis play in accidental injuries?",
+          "id": "f723"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does shock affect the central nervous system?",
+          "id": "f765"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of head trauma on the brain?",
+          "id": "f786"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Trauma-Induced coagulopathy?",
+          "id": "f822"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do skin injuries affect the body?",
+          "id": "f907"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent do stab injuries and cut injuries differ with regard to the potential risk of blood poisoning?",
+          "id": "f915"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What proportion of people injured in accidents go on to develop complications directly related to the original injury?",
+          "id": "f920"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does shock affect the central nervous system?",
+          "id": "f927"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does a relieving posture due to injury affect the musculoskeletal system?",
+          "id": "f971"
+        }
+      ],
+      "x": [
+        -0.7504
+      ],
+      "area_uri": "Auswirkungen",
+      "y": [
+        0.7196
+      ],
+      "id": 13,
+      "area": "Age"
+    },
+    {
+      "title": "Influencing factor of age",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does insulin affect pain in sports injuries?",
+          "id": "f1022"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does insulin affect sports injuries?",
+          "id": "f419"
+        }
+      ],
+      "x": [
+        -0.1795
+      ],
+      "area_uri": "Auswirkungen",
+      "y": [
+        0.7604
+      ],
+      "id": 14,
+      "area": "Age"
+    },
+    {
+      "title": "Physical consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can the risk of injury be minimized during exercise?",
+          "id": "f1137"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the connection between warm-up exercises and the frequency of sports injuries?",
+          "id": "f358"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of real time movement monitoring/tracking on predicting injuries in professional athletes?",
+          "id": "f445"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do sport-specific training exercises and preventive measures affect the frequency, severity and duration of injuries?",
+          "id": "f650"
+        }
+      ],
+      "x": [
+        -0.1795
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.7604
+      ],
+      "id": 15,
+      "area": "Impacts"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the key factors in sports injuries?",
+          "id": "f129"
+        }
+      ],
+      "x": [
+        -0.1795
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.7604
+      ],
+      "id": 16,
+      "area": "Impacts"
+    },
+    {
+      "title": "Treatment planning",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How has the frequency and severity of accidents in leisure sports developed?",
+          "id": "f374"
+        }
+      ],
+      "x": [
+        -0.1795
+      ],
+      "area_uri": "Unfallursachen",
+      "y": [
+        0.7604
+      ],
+      "id": 17,
+      "area": "Hospital management"
+    },
+    {
+      "title": "Influencing factor of age",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What long-term psychological consequences occur following severe accidental injuries?",
+          "id": "f1034"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent does the severity of an accidental injury influence whether a patient subsequently develops post-traumatic stress disorder?",
+          "id": "f1038"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do burns to the face affect women mentally?",
+          "id": "f1043"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How often do severe accidental injuries lead to mental problems for the person involved?",
+          "id": "f1064"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way does a psychotropic drug influence the effects on the mind of experiencing an accident?",
+          "id": "f1084"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between injuries at work and post-traumatic disorders?",
+          "id": "f1092"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "I can imagine that trauma and other psychological aftereffects can occur at a later point in accidental injury patients. What is the connection between the accidental injury and the psychological disorder that cause these to occur? Could this be diagnosed early, and are there preventive measures?",
+          "id": "f1143"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does the death of a child impact his or her siblings?",
+          "id": "f245"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way does an accident influence the effects of behavior on everyday life?",
+          "id": "f269"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How often does occupational disability follow a domestic accident?",
+          "id": "f276"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does an accidental injury affect the victim's daily life?",
+          "id": "f330"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the connection between the physical and mental effects of an accident?",
+          "id": "f372"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do accidents affect mental health?",
+          "id": "f384"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent do accidental injuries make an impact on the victim’s social life?",
+          "id": "f424"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does an accidental injury affect the mind?",
+          "id": "f444"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does whiplash affect the mind?",
+          "id": "f471"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does an accidental trauma affect later behavior in the accident situation (everyday/sports)?",
+          "id": "f512"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does an accidental injury and its consequences affect the mind?",
+          "id": "f521"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of trauma-induced coagulopathy on the mind?",
+          "id": "f529"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between the severity of an injury and stress?",
+          "id": "f605"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In the case of accidental injuries, what can be done to help patients who have to completely change their lives?",
+          "id": "f613"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does an injury affect the mind?",
+          "id": "f621"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does the type of injury play on the mental wellbeing of a person after wound treatment?",
+          "id": "f646"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does a lasting accidental injury affect the patient’s mind?",
+          "id": "f695"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of shock on the mind?",
+          "id": "f737"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do accidents affect the mind?",
+          "id": "f739"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does shock affect the person involved?",
+          "id": "f754"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does a head injury affect the patient's social life?",
+          "id": "f756"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Do frequent, purely physical injuries have a demonstrable negative (or positive) effect on a person’s mind?",
+          "id": "f768"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Psychology: Long-term consequences of a moderate to severe accident, influence of accidents in childhood and their effect on future life (perpetrators and victims)",
+          "id": "f781"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the psychosocial repercussions of injuries suffered in car accidents (stress, anxiety, loss of productivity in terms of self-care, caring for family members, earnings, socialization and other individual needs)?",
+          "id": "f81"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does shock affect the mind?",
+          "id": "f815"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the psychosocial repercussions of injuries suffered in car accidents (stress, anxiety, loss of productivity in terms of self-care, caring for family members, earnings) and socialization and what are the interventions available to manage these problems?",
+          "id": "f82"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does an accident affect the mind?",
+          "id": "f829"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Psychologically speaking, how are sports accidents and workplace accidents different?",
+          "id": "f840"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can the mind/personality of a patient be changed by a head injury?",
+          "id": "f861"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do falls affect a person's spiritual life?",
+          "id": "f893"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent do accidental injuries have lasting mental effects, i.e. lasting psychological damage?",
+          "id": "f966"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does a sports accident affect the mind?",
+          "id": "f978"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way do the effects of accidental injuries influence the human mind?",
+          "id": "f994"
+        }
+      ],
+      "x": [
+        -0.4817
+      ],
+      "area_uri": "Auswirkungen",
+      "y": [
+        0.2041
+      ],
+      "id": 18,
+      "area": "Age"
+    },
+    {
+      "title": "Internal injuries",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does cold affect ankle joint injuries?",
+          "id": "f165"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How are the effects of acid on the face affected by the weather?",
+          "id": "f625"
+        }
+      ],
+      "x": [
+        -0.0743
+      ],
+      "area_uri": "Auswirkungen",
+      "y": [
+        0.1234
+      ],
+      "id": 19,
+      "area": "Diagnostics"
+    },
+    {
+      "title": "Rehabilitation approaches",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between days of illness due to accident and economic growth?",
+          "id": "f670"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do accidental injuries affect people who don't have insurance?",
+          "id": "f826"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of accidental injuries on the average expenses of the average American?",
+          "id": "f981"
+        }
+      ],
+      "x": [
+        -0.5644
+      ],
+      "area_uri": "Auswirkungen",
+      "y": [
+        0.0206
+      ],
+      "id": 20,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Therapy approaches",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does shock affect the mind?",
+          "id": "f759"
+        }
+      ],
+      "x": [
+        -0.0377
+      ],
+      "area_uri": "Auswirkungen",
+      "y": [
+        0.239
+      ],
+      "id": 21,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Weather as influencing factor",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can internal injuries be recognized more quickly?",
+          "id": "f1163"
+        }
+      ],
+      "x": [
+        -0.8015
+      ],
+      "area_uri": "Diagnostik",
+      "y": [
+        0.1671
+      ],
+      "id": 22,
+      "area": "Impacts"
+    },
+    {
+      "title": "Economic consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Does omitting x-ray in minor trauma have an influence on the rate of false negative diagnoses?",
+          "id": "f138"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can there be any improvement in x-ray imagery that would make it possible to diagnose injuries or illnesses earlier?",
+          "id": "f820"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does an early whole body MR after an injury affect the therapeutic strategy and the resulting outcome?",
+          "id": "f88"
+        }
+      ],
+      "x": [
+        -0.063
+      ],
+      "area_uri": "Diagnostik",
+      "y": [
+        0.8443
+      ],
+      "id": 23,
+      "area": "Impacts"
+    },
+    {
+      "title": "Lack of sleep",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can accidental injuries be distinguished from child abuse?",
+          "id": "f322"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Do traumatic slipped discs really exist?",
+          "id": "f97"
+        }
+      ],
+      "x": [
+        -0.6131
+      ],
+      "area_uri": "Diagnostik",
+      "y": [
+        0.2168
+      ],
+      "id": 24,
+      "area": "Contextual factors"
+    },
+    {
+      "title": "Age groups",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In the event of an accident, how can pain and injury be brought into context?",
+          "id": "f46"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between x-ray images and pain perception?",
+          "id": "f53"
+        }
+      ],
+      "x": [
+        -0.3794
+      ],
+      "area_uri": "Diagnostik",
+      "y": [
+        0.3492
+      ],
+      "id": 25,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Relief versus stress",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can we determine when neurological impairment has occurred with an accidental injury?",
+          "id": "f693"
+        }
+      ],
+      "x": [
+        -0.1643
+      ],
+      "area_uri": "Diagnostik",
+      "y": [
+        0.3722
+      ],
+      "id": 26,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Rehabilitation approaches",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can sepsis be recognized and treated more quickly? Again and again, we hear that is it recognized and treated too late and thus leads to serious consequences.",
+          "id": "f784"
+        }
+      ],
+      "x": [
+        -0.7341
+      ],
+      "area_uri": "Diagnostik",
+      "y": [
+        0.4934
+      ],
+      "id": 27,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Type & extent of injury",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What criteria decide whether injured persons or their relatives call an ambulance/go to hospital or treat wounds themselves?",
+          "id": "f1017"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is a physical injury paid more attention that a mental one?",
+          "id": "f1079"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do major accidental injuries and minor accidental injuries differ with respect to deciding to seek medical attention?",
+          "id": "f924"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can accidental injuries be classified by severity to guarantee the quickest possible treatment?",
+          "id": "f96"
+        }
+      ],
+      "x": [
+        -0.0533
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.5009
+      ],
+      "id": 28,
+      "area": "Age"
+    },
+    {
+      "title": "Sports accidents",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What influence does the clarification of first aid in Red Cross courses have on the consequences of domestic falls?",
+          "id": "f1046"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent do accidental injuries at the person’s own home and those in acquaintances’ homes differ in terms of wound treatment?",
+          "id": "f872"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can first aid for accidents be made clearer for the average person?",
+          "id": "f882"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can society's ability to provide first aid be improved?",
+          "id": "f898"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can be done if someone is involved in an accident?",
+          "id": "f941"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can people be better educated in first aid after an injury?",
+          "id": "f979"
+        }
+      ],
+      "x": [
+        -0.2381
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.5077
+      ],
+      "id": 29,
+      "area": "Types of injury due to accident "
+    },
+    {
+      "title": "Physical consequences of accidents",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important methods for avoiding brain hemorrhage after brain trauma?",
+          "id": "f1105"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What treatment should people who have suffered an injury on the streets or in school receive?",
+          "id": "f1140"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How must a patient be treated in the short term to prevent lasting impairment in the long term?",
+          "id": "f1150"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the best possible first aid for a serious accident?",
+          "id": "f535"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can be done to improve triage in cases of accidents and emergencies?",
+          "id": "f947"
+        }
+      ],
+      "x": [
+        -0.2437
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.1527
+      ],
+      "id": 30,
+      "area": "Impacts"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can help be provided as quickly and effectively as possible in cases of domestic poisoning?",
+          "id": "f1115"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Children often swallow cleaning products and other household liquids. This poisoning must be treated quickly. Would it be possible to develop a neutralization fluid against the most common symptoms of poisoning that every household with children could keep on hand in the medicine cabinet? It often takes minutes before the stomach can be pumped.",
+          "id": "f225"
+        }
+      ],
+      "x": [
+        -0.7162
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.409
+      ],
+      "id": 31,
+      "area": "Impacts"
+    },
+    {
+      "title": "Physical consequences of accidents",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Why should wounds be cared for immediately?",
+          "id": "f1128"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does first aid affect the healing process?",
+          "id": "f121"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does first aid play on the progression healing in cases of deep lacerations?",
+          "id": "f885"
+        }
+      ],
+      "x": [
+        -0.4551
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.0824
+      ],
+      "id": 32,
+      "area": "Impacts"
+    },
+    {
+      "title": "Physical consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does first aid reaction time affect rehabilitation?",
+          "id": "f1166"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can a reduction in waiting times for people who have been in non-life-threatening accidents in Austria have a positive impact on the healing process and significantly reduce complications during treatment?",
+          "id": "f139"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of time until treatment on time until recovery?",
+          "id": "f20"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can help be provided more quickly in case of injury?",
+          "id": "f434"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does the accident location/environment play in caring for injured people as successfully and quickly as possible?",
+          "id": "f456"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do delays in first aid affect the chances of healing?",
+          "id": "f548"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How quickly must an accidental injury be treated in order to minimize consequential damage as much as possible?",
+          "id": "f725"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between time delays in providing first aid for accidental injuries and psychological developmental disorders in young children?",
+          "id": "f904"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent does an accident victim’s chance of survival depend on:\n- Speed of contacting an emergency medical professional\n- Speed of emergency medical professional's arrival\n- Transfer to nearest (suitable) hospital\n- Speed of ambulance/helicopter",
+          "id": "f905"
+        }
+      ],
+      "x": [
+        -0.1075
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.4022
+      ],
+      "id": 33,
+      "area": "Impacts"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How should flexor tendons/extensor tendons be treated/sutured after being severed, so that they can quickly (1st day post-op) be actively loaded?",
+          "id": "f128"
+        }
+      ],
+      "x": [
+        -0.6795
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.4405
+      ],
+      "id": 34,
+      "area": "Impacts"
+    },
+    {
+      "title": "Response time for first aid",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What methods are suitable for giving patients (especially children) a feeling of safety from beginning with arrival for initial accident care, and reducing the general apprehension during the necessary waiting time in the waiting room?",
+          "id": "f228"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way does the empathy of an emergency doctor influence the effects of traumatic events/accidents on mentally ill relatives?",
+          "id": "f519"
+        }
+      ],
+      "x": [
+        -0.9938
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.0229
+      ],
+      "id": 35,
+      "area": "First aid"
+    },
+    {
+      "title": "Dental traumas",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what degree is protective hypothermia acceptable for neuroprotection, without this having an irreversible effect on hemostasis, and which intervening factors can also be determined?",
+          "id": "f235"
+        }
+      ],
+      "x": [
+        -0.4621
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.3536
+      ],
+      "id": 36,
+      "area": "First aid"
+    },
+    {
+      "title": "Biorhythm",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important tools for local hemostasis?",
+          "id": "f362"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can people undergoing anticoagulant therapy do in the event of an accident occurring in a remote area where help would take a long time to reach them?",
+          "id": "f55"
+        }
+      ],
+      "x": [
+        -0.8425
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.4375
+      ],
+      "id": 37,
+      "area": "Contextual factors"
+    },
+    {
+      "title": "Mechanisms of action",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can I ensure better, quicker first aid by qualified staff?",
+          "id": "f411"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does the presence of spectators affect the performances of accident rescuers?",
+          "id": "f431"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does time pressure affect the likeliness of emergency personnel of all types to experience an accident?",
+          "id": "f573"
+        }
+      ],
+      "x": [
+        -0.4424
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.9149
+      ],
+      "id": 38,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Sports as prevention",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Field of psychology: How can people involved in an accident (traffic accident) be helped to deal with what has happened more quickly and effectively?",
+          "id": "f413"
+        }
+      ],
+      "x": [
+        -0.2118
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.3545
+      ],
+      "id": 39,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Prevention in the workplace",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What should you do if you have cut off one of your fingers?",
+          "id": "f418"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can be done if a person lives alone and cannot call for help in the event of a fall or similar?",
+          "id": "f753"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "It is possible to optimize first aid after an accident. If I suffer an injury, how can I best help myself before the emergency doctor arrives?",
+          "id": "f857"
+        }
+      ],
+      "x": [
+        -0.7779
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.5413
+      ],
+      "id": 40,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Genetic risk factors",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What first aid measures should be used to treat accident patients with shock? How can it be facilitated that anyone present can carry out these measures?",
+          "id": "f437"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is it possible to reverse a person’s shock status?",
+          "id": "f675"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What effect does shock have on local hemostasis?",
+          "id": "f823"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can recovery from shock be accelerated using smells?",
+          "id": "f963"
+        }
+      ],
+      "x": [
+        -0.1298
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.187
+      ],
+      "id": 41,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Quality & process management",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important criteria that must be taken into account for an open wound that occurred due to an accident in a non-sterile environment?",
+          "id": "f509"
+        }
+      ],
+      "x": [
+        -0.3621
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.0385
+      ],
+      "id": 42,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Design of the built environment",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Would it be possible to introduce a free treatment method on site in urgent emergency cases?",
+          "id": "f515"
+        }
+      ],
+      "x": [
+        -0.9437
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.7321
+      ],
+      "id": 43,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Medical technology",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the first aid measures for children if they fall on their teeth?\n(to avoid dental trauma)",
+          "id": "f852"
+        }
+      ],
+      "x": [
+        -0.6104
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.4535
+      ],
+      "id": 44,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Wound healing in general",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important measures to take after giving first aid?",
+          "id": "f92"
+        }
+      ],
+      "x": [
+        -0.6474
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.4083
+      ],
+      "id": 45,
+      "area": "Wound healing"
+    },
+    {
+      "title": "Complications",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does good first aid affect the healing process in the long term?",
+          "id": "f938"
+        }
+      ],
+      "x": [
+        -0.2132
+      ],
+      "area_uri": "Erstversorgung",
+      "y": [
+        0.3536
+      ],
+      "id": 46,
+      "area": "Wound healing"
+    },
+    {
+      "title": "Types of injury in the home",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does psychology play in accidental injuries?",
+          "id": "f1037"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What influence does regular psychotherapy taking place as early as possible in the treatment of moderately severe accidental injuries have on the duration and the perceived difficulty of the healing process?",
+          "id": "f1192"
+        }
+      ],
+      "x": [
+        -0.7992
+      ],
+      "area_uri": "Interdisziplinarität",
+      "y": [
+        0.214
+      ],
+      "id": 47,
+      "area": "Types of injury due to accident "
+    },
+    {
+      "title": "Physical consequences of accidents",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In your opinion, how knowledgeable do you believe medics and nurses are on financial matters concerning accidental injuries?",
+          "id": "f1121"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What do trauma surgeons know about physiotherapy?",
+          "id": "f219"
+        }
+      ],
+      "x": [
+        -0.3459
+      ],
+      "area_uri": "Interdisziplinarität",
+      "y": [
+        0.4559
+      ],
+      "id": 48,
+      "area": "Impacts"
+    },
+    {
+      "title": "Neurological status",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important measures that can contribute to promoting information flow transparency in multi-professional teams in order to ensure optimal care and information for patients?",
+          "id": "f176"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does collaboration between various therapists, e.g. orthopedists and physiotherapists, affect treatment success?",
+          "id": "f618"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In the case of accidental injuries, are treatment and prognosis improved if an exchange between the various medical fields can take place without limitations (keyword “transparent patient”)?",
+          "id": "f700"
+        }
+      ],
+      "x": [
+        -0.7621
+      ],
+      "area_uri": "Interdisziplinarität",
+      "y": [
+        0.2581
+      ],
+      "id": 49,
+      "area": "Diagnostics"
+    },
+    {
+      "title": "First aid in case of shock",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can a multidisciplinary rehabilitative approach improve functional outcomes in geriatric clients with cognitive disorders?",
+          "id": "f211"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the role of multi-disciplinary rehabilitation in improving functional outcomes after accidental injuries?",
+          "id": "f25"
+        }
+      ],
+      "x": [
+        -0.5471
+      ],
+      "area_uri": "Interdisziplinarität",
+      "y": [
+        0.0119
+      ],
+      "id": 50,
+      "area": "First aid"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role do doctors’ social skills play in interacting with patients?",
+          "id": "f111"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What effects does a lack of credibility and compliance on the part of the attending physician have on patients (in the context of a lack of change of perspective)?",
+          "id": "f50"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do patients experience a lack of compliance in relation to the credibility of the attending physician (in the context of a lack of change of perspective)?",
+          "id": "f51"
+        }
+      ],
+      "x": [
+        -0.7616
+      ],
+      "area_uri": "Kommunikation & Beziehung",
+      "y": [
+        0.7121
+      ],
+      "id": 51,
+      "area": "Impacts"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What effect does the increased mental well-being/happiness during stationary treatment caused by professional and emphatic hospital staff have on the course of disease and the number of complications?",
+          "id": "f132"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does the social competence of medical staff play in the (emergency) admission of injured people?",
+          "id": "f779"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can we treat patients in an emergency room as people, rather than as numbers or case studies? How can we ensure that their experience is less traumatizing in a psychological sense, and how can we help them to better understand the processes and procedures they must go through?",
+          "id": "f859"
+        }
+      ],
+      "x": [
+        -0.5958
+      ],
+      "area_uri": "Kommunikation & Beziehung",
+      "y": [
+        0.6665
+      ],
+      "id": 52,
+      "area": "Impacts"
+    },
+    {
+      "title": "Imaging methods",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In contact with a patient, why is there a lack of transparent information?",
+          "id": "f18"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of professional medical discussions on the healing process for patients?",
+          "id": "f6"
+        }
+      ],
+      "x": [
+        -0.7081
+      ],
+      "area_uri": "Kommunikation & Beziehung",
+      "y": [
+        0.4181
+      ],
+      "id": 53,
+      "area": "Diagnostics"
+    },
+    {
+      "title": "Physical consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between injuries and stress?",
+          "id": "f1073"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does stress play in accidental injuries?",
+          "id": "f808"
+        }
+      ],
+      "x": [
+        -0.5073
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.1299
+      ],
+      "id": 54,
+      "area": "Impacts"
+    },
+    {
+      "title": "Physical consequences of accidents",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does increased caffeine use affect accidental injuries?",
+          "id": "f1095"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way does alcohol influence the effects of blood loss in cases of accidental injuries?",
+          "id": "f965"
+        }
+      ],
+      "x": [
+        -0.7291
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.6168
+      ],
+      "id": 55,
+      "area": "Impacts"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does television watching and Internet use play in accidents involving unsupervised (small) children?",
+          "id": "f1161"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the influence of social media on injuries caused by accidents at home, at work, or during leisure time?",
+          "id": "f800"
+        }
+      ],
+      "x": [
+        -0.6249
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.1622
+      ],
+      "id": 56,
+      "area": "Impacts"
+    },
+    {
+      "title": "Communication technology als Risikofaktor",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between risk taking behavior promoted on social media and accidental injury among young people?",
+          "id": "f588"
+        }
+      ],
+      "x": [
+        -0.6249
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.1622
+      ],
+      "id": 57,
+      "area": "Risk factors"
+    },
+    {
+      "title": "Physical consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does inattention affect the severity of the injury?",
+          "id": "f1176"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between satisfaction and the risk of accidents in sports?",
+          "id": "f892"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What affect does the mind have on healing injuries?",
+          "id": "f975"
+        }
+      ],
+      "x": [
+        -0.4915
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.7275
+      ],
+      "id": 58,
+      "area": "Impacts"
+    },
+    {
+      "title": "Economic consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role do living conditions/relationships/life upheavals play in the healing process?",
+          "id": "f16"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between domestic accidents and severe injuries?",
+          "id": "f528"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What similarities exist in the living conditions of people who have the most accidents at home?",
+          "id": "f731"
+        }
+      ],
+      "x": [
+        -0.2796
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.4164
+      ],
+      "id": 59,
+      "area": "Impacts"
+    },
+    {
+      "title": "Ability to empathize",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is there a correlation between the number of medications and the prevalence of falls? \nCan the incidence of recurring falls in people with polydrug use be quantitatively reduced through an interdisciplinary case review between carers, doctors and pharmacologists?",
+          "id": "f199"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does taking medication that decreases blood pressure affect the risk of accidents?",
+          "id": "f547"
+        }
+      ],
+      "x": [
+        -0.0804
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.8042
+      ],
+      "id": 60,
+      "area": "First aid"
+    },
+    {
+      "title": "Pre-existing conditions as contextual factor",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What drugs are suitable for treating accident-related trauma at an emotional level without having serious side effects?",
+          "id": "f36"
+        }
+      ],
+      "x": [
+        -0.0804
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.8042
+      ],
+      "id": 61,
+      "area": "Contextual factors"
+    },
+    {
+      "title": "Organizational structure",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between extreme lack of sleep and injuries in lab settings?",
+          "id": "f382"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does limited sleep have on accident frequency and severity?",
+          "id": "f610"
+        }
+      ],
+      "x": [
+        -0.6755
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.9859
+      ],
+      "id": 62,
+      "area": "Hospital management"
+    },
+    {
+      "title": "Age groups",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How are the effects of ligament laxity after an accidental injury influenced by genetical traits?",
+          "id": "f45"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent are genes involved in accidental injury frequency/susceptibility?",
+          "id": "f849"
+        }
+      ],
+      "x": [
+        -0.1136
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.839
+      ],
+      "id": 63,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Prevention in traffic",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Does gender affect whether accidental injuries are reported to medical professionals?",
+          "id": "f503"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does accident frequency and severity of accidents with sporting equipment differ depending on the gender of the athlete?",
+          "id": "f70"
+        }
+      ],
+      "x": [
+        -0.9368
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.6072
+      ],
+      "id": 64,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Conditions in the workplace",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Why is it the case with osteogenesis imperfecta (brittle bone disease) that in the event of an accident (car accident, electric wheelchair tips over) the bones break less frequently than in everyday situations such as simply moving incorrectly?",
+          "id": "f553"
+        }
+      ],
+      "x": [
+        -0.7794
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.024
+      ],
+      "id": 65,
+      "area": "Risk factors"
+    },
+    {
+      "title": "Organizational structure",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Are elderly individuals with a neurodegenerative disease at a higher risk of suffering a fall than elderly individuals without a neurodegenerative disease?",
+          "id": "f377"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Do people with a pre-existing condition react differently (physically) in response to an accidental injury?",
+          "id": "f606"
+        }
+      ],
+      "x": [
+        -0.7794
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.024
+      ],
+      "id": 66,
+      "area": "Hospital management"
+    },
+    {
+      "title": "Performance pressure",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between an anxiety disorder diagnosis and the likelihood of accidental injury?",
+          "id": "f593"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does MS affect nerves damaged by an accident?",
+          "id": "f914"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does depression affect the frequency of accidents?",
+          "id": "f916"
+        }
+      ],
+      "x": [
+        -0.2259
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.5834
+      ],
+      "id": 67,
+      "area": "Risk factors"
+    },
+    {
+      "title": "Rehabilitation approaches",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between accidental injuries and the environment in which they occur?",
+          "id": "f680"
+        }
+      ],
+      "x": [
+        -0.8019
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.2783
+      ],
+      "id": 68,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Psychosocial components",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way does the size of an accident clinic (town/federal state) influence how likely a patient is to heal from the effects of an accident?",
+          "id": "f750"
+        }
+      ],
+      "x": [
+        -0.0526
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.0711
+      ],
+      "id": 69,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Therapy approaches",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What influence does a patient’s level of fitness have on the patient’s healing process for sports injuries?",
+          "id": "f818"
+        }
+      ],
+      "x": [
+        -0.0636
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.295
+      ],
+      "id": 70,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Care",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between lack of physical fitness and accidental injury?",
+          "id": "f735"
+        }
+      ],
+      "x": [
+        -0.0636
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.295
+      ],
+      "id": 71,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Bones and ligaments",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "At what time is there an increased risk of accidents and is this an integral element of the human biorhythm?",
+          "id": "f925"
+        }
+      ],
+      "x": [
+        -0.0444
+      ],
+      "area_uri": "Kontextfaktoren",
+      "y": [
+        0.0955
+      ],
+      "id": 72,
+      "area": "Wound healing"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What do people who have been injured in an accident require immediately after surgery in the hospital with regard to first rehab measures?",
+          "id": "f1068"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Do standardized therapy plans in coordination with the patient contribute to quicker mobilization/recovery in rehab and physiotherapy following accidental injuries (conservative and surgical)?",
+          "id": "f159"
+        }
+      ],
+      "x": [
+        -0.6828
+      ],
+      "area_uri": "Krankenhausmanagement",
+      "y": [
+        0.9708
+      ],
+      "id": 73,
+      "area": "Impacts"
+    },
+    {
+      "title": "Physical consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does the architectural design of the hospital play on the time it takes an ambulance to arrive at the site of an accident?",
+          "id": "f1082"
+        }
+      ],
+      "x": [
+        -0.94
+      ],
+      "area_uri": "Krankenhausmanagement",
+      "y": [
+        0.8428
+      ],
+      "id": 74,
+      "area": "Impacts"
+    },
+    {
+      "title": "Physical consequences of accidents",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the best way to organize a hospital to reduce the waiting time for patients in severe pain after accidents?",
+          "id": "f115"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does nutrition affect the recovery of inpatient accident surgery patients?",
+          "id": "f396"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does hospital management affect occupational therapy/physiotherapy?",
+          "id": "f498"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does hospital management affect a patient’s recovery?",
+          "id": "f584"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How closely is time between injury and treatment linked to time to recovery for accidental injuries?",
+          "id": "f955"
+        }
+      ],
+      "x": [
+        -0.2374
+      ],
+      "area_uri": "Krankenhausmanagement",
+      "y": [
+        0.1038
+      ],
+      "id": 75,
+      "area": "Impacts"
+    },
+    {
+      "title": "Communication technology",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between the oft-cited nursing crisis and the chances of recovery after accidental injury?",
+          "id": "f315"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does psychosocial care (also in the sense of hospital management for resource generation) play in accidental injuries?",
+          "id": "f58"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does the individual treatment time by doctors and nurses immediately after arrival at the hospital play in coping with the illness over the long term?",
+          "id": "f597"
+        }
+      ],
+      "x": [
+        -0.4091
+      ],
+      "area_uri": "Krankenhausmanagement",
+      "y": [
+        0.3458
+      ],
+      "id": 76,
+      "area": "Contextual factors"
+    },
+    {
+      "title": "Sports injuries",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can it be ensured that incorrect treatment is not provided in the natural rush to treat an accident?",
+          "id": "f488"
+        }
+      ],
+      "x": [
+        -0.199
+      ],
+      "area_uri": "Krankenhausmanagement",
+      "y": [
+        0.1967
+      ],
+      "id": 77,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Body awareness",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does overcrowding in hospitals play in the treatment of accidents?",
+          "id": "f603"
+        }
+      ],
+      "x": [
+        -0.4973
+      ],
+      "area_uri": "Krankenhausmanagement",
+      "y": [
+        0.1815
+      ],
+      "id": 78,
+      "area": "Risk factors"
+    },
+    {
+      "title": "Therapy approaches",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does an organ donation card play in the treatment a patient receives? Do organ donors experience different treatment in comparison to those who have decided against organ donation?",
+          "id": "f643"
+        }
+      ],
+      "x": [
+        -0.1058
+      ],
+      "area_uri": "Krankenhausmanagement",
+      "y": [
+        0.2424
+      ],
+      "id": 79,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Pain management",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do digital solutions affect patience satisfaction and hospital efficiency and effectiveness?",
+          "id": "f66"
+        }
+      ],
+      "x": [
+        -0.4688
+      ],
+      "area_uri": "Krankenhausmanagement",
+      "y": [
+        0.1913
+      ],
+      "id": 80,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Therapy approaches",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How would an ER fee influence the time after an accident until a doctor is seen? How would it influence outcomes?",
+          "id": "f758"
+        }
+      ],
+      "x": [
+        -0.3421
+      ],
+      "area_uri": "Krankenhausmanagement",
+      "y": [
+        0.7366
+      ],
+      "id": 81,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Type & extent of injury",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can research results and their publication minimize the number of accidents that occur?",
+          "id": "f1"
+        }
+      ],
+      "x": [
+        -0.6879
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.7222
+      ],
+      "id": 82,
+      "area": "Age"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How specifically can research into cartilage regeneration be carried out so that an expedient, healing result is achieved?",
+          "id": "f1113"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between bone/tissue regeneration and cartilage/tendon regeneration?",
+          "id": "f654"
+        }
+      ],
+      "x": [
+        -0.6879
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.7222
+      ],
+      "id": 83,
+      "area": "Impacts"
+    },
+    {
+      "title": "Frequencies",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can accidental injuries be avoided?",
+          "id": "f1039"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can injuries simply be prevented?",
+          "id": "f1052"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What methods can be used to avoid most accidents?",
+          "id": "f1074"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What factors contribute to reducing risks at home, at work and during free time?",
+          "id": "f1149"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can the risk of injury be reduced?",
+          "id": "f1191"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How could we reduce the frequency of accidental injuries?",
+          "id": "f380"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What pre-existing means can we use to drastically reduce accidents at home, at work and during leisure activities? What changes to products and in dealing with objects, but also with general awareness, can we use to achieve a higher level of safety?",
+          "id": "f414"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What materials can be used and with what mechanisms to protect against accidents?",
+          "id": "f415"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can serious injuries be avoided?",
+          "id": "f489"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important preventions for preventing/avoiding accidental injuries as much as possible?",
+          "id": "f538"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can we reduce the risk of accidents at home, outdoors and at work? Would it be possible for single people to care for themselves in some cases?",
+          "id": "f617"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can accidents best be avoided?",
+          "id": "f619"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can the risk of accidents be minimized in daily routine?",
+          "id": "f620"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between accidents and prevention?",
+          "id": "f638"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is there any way to reduce the number of accidental injuries that occur?",
+          "id": "f773"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can be done to prevent common accidental injuries in the home, workplace, and during leisure time?",
+          "id": "f853"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can injuries be prevented, and how can healing be accelerated?",
+          "id": "f884"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important preventative measures in avoiding accidents?",
+          "id": "f939"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What will help reduce injuries in the future?",
+          "id": "f969"
+        }
+      ],
+      "x": [
+        -0.2137
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.0231
+      ],
+      "id": 84,
+      "area": "Types of injury due to accident "
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way do sports influence the effects of undesired collisions on specific parts of the body?",
+          "id": "f1066"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does regular athletic activity affect soft tissue susceptibility to injuries?",
+          "id": "f1180"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Do younger people's injuries heal faster?",
+          "id": "f616"
+        }
+      ],
+      "x": [
+        -0.6944
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.6064
+      ],
+      "id": 85,
+      "area": "Impacts"
+    },
+    {
+      "title": "Interdisciplinary training",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Do you think you could have avoided the injury if your general fitness/health was better?",
+          "id": "f278"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What impact does intense physical activity have on our body (bones, muscles, ligaments...), and does this place it at more or less risk of injuries?",
+          "id": "f649"
+        }
+      ],
+      "x": [
+        -0.6944
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.6064
+      ],
+      "id": 86,
+      "area": "Interdisciplinarity"
+    },
+    {
+      "title": "Physical consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Do fewer accidents occur with an absolute stopping restriction in a 500 m perimeter around schools?",
+          "id": "f1132"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can better seat belts be developed so that severe thoracic damage can be avoided in the future in collisions/side impacts?",
+          "id": "f537"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can be done so that there are no more accidents on the street in the future?",
+          "id": "f685"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How could infrastructure be improved to avoid injuries/help injured people more quickly?",
+          "id": "f710"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can be done preventively to reduce motorcycle accidents at the start of the season?",
+          "id": "f738"
+        }
+      ],
+      "x": [
+        -0.3358
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.3467
+      ],
+      "id": 87,
+      "area": "Impacts"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can significant changes in accident numbers be achieved by posting notices and giving suggestions beforehand, and what tools are of most benefit in this context?",
+          "id": "f1134"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way does the legal situation, the many recommended protective measures and other injury-prevention recommended measures influence the effects of the natural development that would protect against injury and the resulting dexterity of adolescents on people’s frequency of injury?",
+          "id": "f239"
+        }
+      ],
+      "x": [
+        -0.6829
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.2028
+      ],
+      "id": 88,
+      "area": "Impacts"
+    },
+    {
+      "title": "Diagnostics & pain",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What percentage of accidents at work on a construction site are caused by \"non-compliance\" with safety regulations and should therefore be easy to prevent?",
+          "id": "f174"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the role of safety on construction sites?",
+          "id": "f23"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What would be an effective way to prevent and reduce work-related accidental injuries?",
+          "id": "f251"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can be done to reduce accidental injuries and increase workplace safety?",
+          "id": "f388"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can asbestos be avoided/neutralized?",
+          "id": "f52"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Does better training/integration of employees affect the risk of injury with regard to warehouse activities?",
+          "id": "f594"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can injuries due to a lack of safety precautions at work be prevented?",
+          "id": "f683"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What causes lead to accidents at work/during leisure activities and how can these accidents be prevented?",
+          "id": "f922"
+        }
+      ],
+      "x": [
+        -0.6721
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.0312
+      ],
+      "id": 89,
+      "area": "Diagnostics"
+    },
+    {
+      "title": "First aid by laypersons",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does accidental injury prevention differ between different age groups such as children, youths, and the elderly?",
+          "id": "f268"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the key factors in preventing accidental injuries among children 6-12 years old in public schools?",
+          "id": "f271"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important possibilities for preventing knee injuries/damage in old age, even though the knees are subjected to an above-average burden?",
+          "id": "f376"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can accidental injuries be prevented among infants and toddlers?",
+          "id": "f452"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can the implementation of accident prevention classes in schools reduce the number of injuries that children experience at home?",
+          "id": "f559"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can children be prevented from burning themselves with hot water?",
+          "id": "f569"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can accidental injuries and their traumatic impacts on children and youth can be prevented?",
+          "id": "f65"
+        }
+      ],
+      "x": [
+        -0.0175
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.3903
+      ],
+      "id": 90,
+      "area": "First aid"
+    },
+    {
+      "title": "Gender",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can we better counteract accidents that occur due to health limitations (epilepsy, heart conditions, etc.)?",
+          "id": "f327"
+        }
+      ],
+      "x": [
+        -0.6283
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.2819
+      ],
+      "id": 91,
+      "area": "Contextual factors"
+    },
+    {
+      "title": "Medication",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can new Technologys be used to avoid accidents?",
+          "id": "f329"
+        }
+      ],
+      "x": [
+        -0.017
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.8724
+      ],
+      "id": 92,
+      "area": "Contextual factors"
+    },
+    {
+      "title": "Genetic predisposition",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can a person do to avoid accidents as effectively as possible?",
+          "id": "f356"
+        }
+      ],
+      "x": [
+        -0.9821
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.4013
+      ],
+      "id": 93,
+      "area": "Contextual factors"
+    },
+    {
+      "title": "Sports injuries",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can sports injuries (e.g. cruciate ligament injury) occur more frequently for genetic reasons?",
+          "id": "f410"
+        }
+      ],
+      "x": [
+        -0.099
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.3154
+      ],
+      "id": 94,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Impacts of protective measures",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between biology/genetics and accidental injuries?",
+          "id": "f409"
+        }
+      ],
+      "x": [
+        -0.099
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.3154
+      ],
+      "id": 95,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Mechanisms of action",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What specific precautions can be used to prevent domestic accidents, or at least reduce their effects?",
+          "id": "f438"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can accidents at home be minimized?",
+          "id": "f727"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can be done to prevent housework-related accidents at home?",
+          "id": "f835"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can domestic accidents be better avoided?",
+          "id": "f953"
+        }
+      ],
+      "x": [
+        -0.9054
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.0269
+      ],
+      "id": 96,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Prevention in the workplace",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can accidents be avoided by using prudence?",
+          "id": "f517"
+        }
+      ],
+      "x": [
+        -0.2767
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.2432
+      ],
+      "id": 97,
+      "area": "Prevention and health promotion"
+    },
+    {
+      "title": "Pain management",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can be done to avoid slipped discs?",
+          "id": "f666"
+        }
+      ],
+      "x": [
+        -0.9247
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.732
+      ],
+      "id": 98,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Psychosocial components",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can professional risk and error management be used to reduce the number of accidental injuries in daily preclinical routines?",
+          "id": "f83"
+        }
+      ],
+      "x": [
+        -0.6844
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.033
+      ],
+      "id": 99,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Technical developments",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can environments with limited risk of injury be created?",
+          "id": "f895"
+        }
+      ],
+      "x": [
+        -0.1824
+      ],
+      "area_uri": "Prävention und Gesundheitsförderung",
+      "y": [
+        0.2221
+      ],
+      "id": 100,
+      "area": "Causes of accident"
+    },
+    {
+      "title": "Influencing factor of age",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does stress at work affect the frequency of accidents?",
+          "id": "f1013"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How should a workplace accident be handled in cases in which the employee was overloaded, has done substantial overtime, and was clearly suffering from lack of sleep, causing them to have the accident? At the first glance, it seems as though the accident happened because the employee was not attentive, but stress caused by work caused the employee to be less attentive than normal.",
+          "id": "f1089"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between job type/profession and accidental injuries?",
+          "id": "f1189"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of sleep deprivation on workplace accidents?",
+          "id": "f294"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "During 10-hour shifts, do more accidents occur in the 9th and 10th hours than in the previous hours?",
+          "id": "f297"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way do night shifts influence the effects of tiredness on the risk of accidents?",
+          "id": "f345"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does weather play in nocturnal accidents and how can this risk be minimized?",
+          "id": "f425"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is there a relationship between the increase in weekly working hours and the frequency of injuries caused by accidents at home, at work or during leisure activities?",
+          "id": "f651"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does a person's employment affect the frequency and severity of accidental injuries?",
+          "id": "f659"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Do accidents happen because of a certain object or machine?",
+          "id": "f661"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does job satisfaction affect the frequency of accidents?",
+          "id": "f663"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What influence does stress at work have on the frequency of accidents?",
+          "id": "f794"
+        }
+      ],
+      "x": [
+        -0.7368
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.3035
+      ],
+      "id": 101,
+      "area": "Age"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is there a correlation between mental disorders and accidental injury rates?",
+          "id": "f1072"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does mental distress affect the risk of an accident?",
+          "id": "f334"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does a person's current state of mind affect their vulnerability to injury?",
+          "id": "f422"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of mental health on domestic accidents?",
+          "id": "f466"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Are patients with mental illnesses such as depression at greater risk of injury?",
+          "id": "f501"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is there a connection between mental health and a predisposition to accidents, and if so, what mental states more frequently lead to accidents?",
+          "id": "f555"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between depression and domestic accidents?",
+          "id": "f887"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does mental (in)stability affect the risk of accidents at work?",
+          "id": "f888"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of people's mental health on accidents?",
+          "id": "f926"
+        }
+      ],
+      "x": [
+        -0.0563
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.5298
+      ],
+      "id": 102,
+      "area": "Impacts"
+    },
+    {
+      "title": "Physical consequences of accidents",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does wearing headphones for entertainment purposes affect the frequency of car accidents for pedestrians?",
+          "id": "f1091"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does thrill-seeking play in car crashes? Specifically, how many people drive too quickly to experience a thrill, causing them to crash?",
+          "id": "f261"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between speeding and car accidents?",
+          "id": "f558"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does the consumption of cannabis at the wheel affect the risk of a car accident?",
+          "id": "f902"
+        }
+      ],
+      "x": [
+        -0.9073
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.5637
+      ],
+      "id": 103,
+      "area": "Impacts"
+    },
+    {
+      "title": "Economic consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between training and accident frequency?",
+          "id": "f1173"
+        }
+      ],
+      "x": [
+        -0.5444
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.8741
+      ],
+      "id": 104,
+      "area": "Impacts"
+    },
+    {
+      "title": "Specialist-patient relationship",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between OTC drug use and accidents in the home and workplace?",
+          "id": "f296"
+        }
+      ],
+      "x": [
+        -0.6198
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.2349
+      ],
+      "id": 105,
+      "area": "Communication & relationship"
+    },
+    {
+      "title": "Lack of sleep",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does black ice play in bone fractures?",
+          "id": "f335"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Why do most accidents at work occur on Monday? To what degree does alcohol play a role?",
+          "id": "f387"
+        }
+      ],
+      "x": [
+        -0.3785
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.9112
+      ],
+      "id": 106,
+      "area": "Contextual factors"
+    },
+    {
+      "title": "Gender",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the prevalence of accidental injury in children's sports?",
+          "id": "f341"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How frequently are leftover medicines consumed at home by children and is this affected by having a medical professional in the household?",
+          "id": "f86"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Accidental injuries in children: are children who exercise regularly at greater risk? Or does exercise protect them because it trains their movements?",
+          "id": "f917"
+        }
+      ],
+      "x": [
+        -0.5026
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.3759
+      ],
+      "id": 107,
+      "area": "Contextual factors"
+    },
+    {
+      "title": "Psyche as influencing factor",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between clumsiness and being accident-prone?",
+          "id": "f368"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between spatial perception and accidental injuries?",
+          "id": "f903"
+        }
+      ],
+      "x": [
+        -0.0539
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.1797
+      ],
+      "id": 108,
+      "area": "Contextual factors"
+    },
+    {
+      "title": "Treatment planning",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Does Multi-tasking increase the risk of accidental injuries?",
+          "id": "f371"
+        }
+      ],
+      "x": [
+        -0.4599
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.3339
+      ],
+      "id": 109,
+      "area": "Hospital management"
+    },
+    {
+      "title": "Mental well-being",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent does increasing digitalization (e.g. smartphone use) affect accidents?",
+          "id": "f527"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Did you have an electronic device (e.g. cell, radio, smartphone) in your hand during the accident, or were you using it manually during the accident?",
+          "id": "f550"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Influence of technical progress and connection with people’s increasing carelessness",
+          "id": "f583"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between general sensory overload and the risk of an accident?",
+          "id": "f585"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In the wake of digitalization and automation, is the accident rate increasing or decreasing?",
+          "id": "f867"
+        }
+      ],
+      "x": [
+        -0.4848
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.054
+      ],
+      "id": 110,
+      "area": "Risk factors"
+    },
+    {
+      "title": "Pain management",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between a person's balance and their likelihood of being injured?",
+          "id": "f634"
+        }
+      ],
+      "x": [
+        -0.8196
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.6099
+      ],
+      "id": 111,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Rehabilitation approaches",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Statistically speaking, in what room of the house do most accidents occur?",
+          "id": "f668"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "When looking at reported accidental injury statistics for a workplace, school, etc., is there one certain type of accident (i.e. slips and trips, clothing or limbs caught in machinery, cuts, stacked items falling) that accounts for the majority of the reported injuries in that particular facility?",
+          "id": "f743"
+        }
+      ],
+      "x": [
+        -0.1235
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.2911
+      ],
+      "id": 112,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Occupational therapy and physical therapy",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Do people who have experienced 1 (or more) accidental injuries have a higher risk or a lower risk of having another accidental injury?",
+          "id": "f78"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Do people who have had 1 (or more) accidental injuries have a higher chance of having another?",
+          "id": "f79"
+        }
+      ],
+      "x": [
+        -0.8407
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.2102
+      ],
+      "id": 113,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Rehabilitation approaches",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Does the increased consumption of social media contribute to an increase in accidental injuries?",
+          "id": "f789"
+        }
+      ],
+      "x": [
+        -0.9149
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.7129
+      ],
+      "id": 114,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Therapy approaches",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does constantly increasing pressure to perform (qualitative and quantitative) affect the frequency of accidents?",
+          "id": "f795"
+        }
+      ],
+      "x": [
+        -0.5457
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.4144
+      ],
+      "id": 115,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Built environment",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does physical fitness affect the risk of injury?",
+          "id": "f918"
+        }
+      ],
+      "x": [
+        -0.3254
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.8498
+      ],
+      "id": 116,
+      "area": "Causes of accident"
+    },
+    {
+      "title": "Wound healing in general",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of strain distribution on general bone strength?",
+          "id": "f98"
+        }
+      ],
+      "x": [
+        -0.5516
+      ],
+      "area_uri": "Risikofaktoren",
+      "y": [
+        0.2887
+      ],
+      "id": 117,
+      "area": "Wound healing"
+    },
+    {
+      "title": "Employment & age",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can chronic pain as a consequence of an injury to the wrist be reduced/avoided through therapeutic interventions in occupational therapy?",
+          "id": "f100"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What measures can be used to enable patients who have suffered an acromioclavicular joint dislocation (Tossy I to III) to have long-term freedom from pain? This includes the question of the necessity of surgery, but primarily relates to behavior (long) after the accident. Are there exercises or similar activities that provide as many patients as possible with a high level of freedom from pain? How can patients be assisted so that they can have a positive impact on their own recovery, including after the treatment itself?",
+          "id": "f117"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Why are a large number of joint-maintaining operations (pedicled scaphoid bone splint, ligament surgery, partial resection….) carried out on the wrist even though this does not result in pain-free outcomes for many patients?",
+          "id": "f150"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can chronically injured cartilage be regenerated, and how can freedom from pain and restored function be achieved for the patient?",
+          "id": "f17"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does strength training affect finger and wrist arthrosis?",
+          "id": "f171"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Does craniosacral therapy, in addition to hand therapy interventions, have a pain-reducing effect in patients with CRPS (complex regional pain syndrome) affecting the hand?",
+          "id": "f183"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In patients with conservatively treated CTS (Carpal Tunnel Syndrome), is there a difference with regard to nocturnal pain and paresthesia between those treated with a palmar splint versus those treated with a dorsopalmar splint?",
+          "id": "f184"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is the average healing process slowed down by immobilization and especially increased administration of pain medication?",
+          "id": "f195"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What influence do tactile stimuli, such as effleurage, brushing, lentil baths, etc. have on pain processing and edema reduction?",
+          "id": "f212"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does osteopathic treatment play in complex regional pain syndrome?",
+          "id": "f222"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can burns be treated as quickly and painlessly as possible?",
+          "id": "f689"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the long-term effect of optimal pain management on treatment success?",
+          "id": "f73"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can be done to remove chronic pain, or at least make it bearable?",
+          "id": "f80"
+        }
+      ],
+      "x": [
+        -0.8936
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.463
+      ],
+      "id": 118,
+      "area": "Age"
+    },
+    {
+      "title": "Healing process & age",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How is it possible to develop body part prostheses that function as naturally and completely as possible?",
+          "id": "f1020"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the areas of improvement and/or improved devices that could be introduced when responding to accidental injuries?",
+          "id": "f1059"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of laser therapy on brain injuries caused by head trauma?",
+          "id": "f107"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "With sensor-based prostheses, can the information gained at the residual limb be forwarded (e.g. via Bluetooth) and usefully processed in the corresponding area of the brain?",
+          "id": "f125"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Bone and skin grafts are particularly difficult in children, as they are still growing. How can a 3D print-out of the corresponding cells (skin and bone) be used expediently?",
+          "id": "f226"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is it possible to replace broken bones with something similar to bone?",
+          "id": "f308"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way can medical technology be used to enhance/speed up the efficiency and duration of healing accidental injuries?",
+          "id": "f32"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can innovative bone fracture treatment techniques be combined with modern imaging (3D, augmented reality, etc.) with the goal of standardization, evidence, minimization of complications and outcome, specifically in minimally invasive procedures, new repositioning techniques and new implants?",
+          "id": "f49"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "For many accidental injuries, metal is used during surgery. Would it be possible to instead use an artificial bone material that would leave no restrictions and integrate perfectly into human bones?",
+          "id": "f622"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is the introduction of additional biocompatible substances (e.g. bone cement) during the surgical treatment of bone fractures beneficial for healing?",
+          "id": "f67"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Are there possibilities for patients with paraplegia to participate in everyday life without a wheelchair or external help? Spinal support? Nerve repair?",
+          "id": "f763"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Alternative, modern prostheses for destroyed limbs that can be used as realistically as possible.",
+          "id": "f913"
+        }
+      ],
+      "x": [
+        -0.9606
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.1518
+      ],
+      "id": 119,
+      "area": "Age"
+    },
+    {
+      "title": "Accident prevention in old age",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is it possible for a patient to recover after an accident that caused a spinal cord injury to the extent that they are able to walk again?",
+          "id": "f1036"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the role of strengthening exercise in the healing process for rotator cuff injuries?",
+          "id": "f1165"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important follow-up steps after hand replantation?",
+          "id": "f151"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important therapeutic treatment techniques for the resolution of scarring?",
+          "id": "f152"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does hand-therapy assistance after amputation injuries to the hand affect the duration of sick leave?",
+          "id": "f155"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What effects do passive mobilization therapy and active therapy with medical muscle training and equipment-based training have on healing success/secondary accidents? Are 60-minute therapy units more promising than 30 minutes, and is there a connection here?",
+          "id": "f160"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Does work simulation during hand therapy facilitate the return to professional activities of patients with complex hand injuries?",
+          "id": "f182"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is there a difference with regard to active range of movement after finger fractures depending on whether dynamically progressive Quengel splinting or statically progressive Quengel splinting is used as a therapeutic intervention?",
+          "id": "f185"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "With surgically treated zone 5 extensor tendon injuries, is there a difference with regard to hand function between ICAM (immediate controlled active motion) and controlled passive early mobilization as per Evans?",
+          "id": "f186"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "With zone 2 flexor tendon injuries, is there a difference in hand function after active early functional follow-up versus the \"HILEI\" system?",
+          "id": "f187"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "After finger fractures, do patients who are treated with static progressive Quengel splinting with a continuous wearing period of at least 6 hours have a greater active degree of movement than those who wear the same splint in separate periods (3 x 2h)?",
+          "id": "f188"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "After complex hand injuries, do patients have better hand function if they also receive garden therapy in addition to hand therapy interventions, in comparison to patients who only receive hand therapy interventions?",
+          "id": "f190"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "After complex hand injuries, do patients have better hand function if they receive an occupation-based intervention in addition to hand therapy interventions?",
+          "id": "f191"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "After metacarpal fracture of the hand, do patients treated according to the spiral dynamic concept with a focus on the arch of the hand have better hand function than patients treated with conventional hand therapy interventions?",
+          "id": "f192"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can CMC (carpometacarpal) 1 arthrosis of the hand, stage 1 and 2 as per Eaton and Littler, be prevented from progressing with hand therapy interventions?",
+          "id": "f194"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does job-specific training and treatment during rehabilitation affect the return to professional life after an accident?",
+          "id": "f254"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way does setting rehabilitation measures in the direct environment influence the effects of the rehabilitation process on the outcome of rehabilitation?",
+          "id": "f26"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between successful healing and time to implementation of rehabilitation measures (physiotherapy, occupational therapy) in musculoskeletal injuries?",
+          "id": "f263"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How do I activate my innate regeneration of bone in the body and teeth?",
+          "id": "f277"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can I receive effective treatment after an injury and is a stay in a rehabilitation facility always appropriate, are there alternatives that would enable people to stay on site and at work?",
+          "id": "f459"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can the rehabilitation time after, for example, a cruciate ligament injury be reduced in order for patients to promptly fully or partially participate in their working lives/sporting activities, and what support can be offered for this?",
+          "id": "f475"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Shoulder trauma injuries from falls - Investigation into the optimal method(s) of rehabilitation for regaining strength and range of motion",
+          "id": "f567"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does physical activity affect bone and tissue regeneration?",
+          "id": "f629"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What influence do physiotherapy measures have on the duration of recovery from tendon injuries after trauma due to laceration?",
+          "id": "f876"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does continuing care from qualified professionals affect the chances of success for the healing process?",
+          "id": "f949"
+        }
+      ],
+      "x": [
+        -0.4344
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.58
+      ],
+      "id": 120,
+      "area": "Age"
+    },
+    {
+      "title": "Frequencies",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What processes can be used to make bone fractures heal more quickly?",
+          "id": "f1051"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How is a fractured patella replaced as an individual element without the knee joint?",
+          "id": "f1065"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What innovations are there with regard to the treatment of fractures?",
+          "id": "f1077"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important approaches for making paraplegia more treatable in the future, i.e. to make severed nerve fibers grow again?",
+          "id": "f1098"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What treatment options are there for multiple cruciate ligament tears?",
+          "id": "f1108"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is there a chance of regeneration/recovery of nerve function if this is immediately recognized or preventive measures are taken immediately after an accident in order to make the recovery of nerve function more likely?",
+          "id": "f1146"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can the need for operations be decreased to speed up the healing process?",
+          "id": "f119"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can nerve regeneration after peripheral nerve damage be accelerated (more than 1mm per day) with exteroceptive and/or proprioceptive stimulation?",
+          "id": "f126"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What evidence is available concerning the efficacy of edema-reducing measures (cold, elevation, massage, bandaging, movement, lymph tape...)?",
+          "id": "f127"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Are there differences in the effects of conventional mirror therapy and virtual mirror therapy in the reduction of post-amputation phantom pain?",
+          "id": "f143"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Has sensitivity improved after at least 10 years versus the status after 2 years in patients after a complete section of the median nerve that was treated according to the principles of sensory physiotherapy?",
+          "id": "f193"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What effect does shock wave therapy have on deep soft tissue injuries?",
+          "id": "f217"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What methods/approaches can be used to reduce the probability of physical delayed effects such as thrombosis and mental delayed effects such as post-traumatic stress for patients after an accidental injury?",
+          "id": "f229"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between wiring broken elbows and increased success of outcomes?",
+          "id": "f252"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can complex fractures be better healed?",
+          "id": "f321"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Why is it still a failure today that worn-out joints must be replaced by artificial ones, rather than having them regenerated?",
+          "id": "f323"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important methods for healing bone fractures?",
+          "id": "f336"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can joints be stabilized after injury/torn ligaments without the use of \"heavy\" splints?",
+          "id": "f386"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does psychotherapy affect shock?",
+          "id": "f390"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Physical and mental follow-up treatment of polytrauma patients",
+          "id": "f407"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can accident-related damage to the musculoskeletal system be contained?",
+          "id": "f458"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can comminuted fractures be treated most effectively?",
+          "id": "f462"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How effective is bone and ligament regeneration in treating accidental injuries involving the bones and ligaments?",
+          "id": "f477"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can loss of feeling in a limb be recovered?",
+          "id": "f534"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between food supplements and bone fractures healing more quickly?",
+          "id": "f536"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can accidental injuries be treated more quickly and effectively to accelerate recovery?",
+          "id": "f540"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How or with what medications can a damaged intervertebral disc be regenerated?",
+          "id": "f541"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can the exact occurrence of an accidental injury in the XY field be described in order to provide clarification for treating physicians and thus introduce a better healing process?",
+          "id": "f557"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can bone and tissue regeneration be accelerated?",
+          "id": "f575"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can we better recover from shoulder impingements and rotor cuff injuries in a reasonable amount of time?",
+          "id": "f589"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important treatment approaches in targeted treatment of a bone marrow edema?",
+          "id": "f59"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important procedures for repairing nerve injuries in cases of brachial plexus paresis?",
+          "id": "f658"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does naturopathy play in recovery from orthopedic injuries?",
+          "id": "f671"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can cartilage/tendons be regenerated following injury to prevent further injuries, joint replacement and the development of arthritis in joints in the future?",
+          "id": "f745"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Which of the existing treatments for a specific accidental injury are associated with the lowest loss of working hours?",
+          "id": "f772"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can burn injuries be \"healed,\" or how can burned skin be fully reconstructed?",
+          "id": "f780"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In injuries, vessels are often injured and severed. Blood vessels are generally well cared for, but I have the impression that lymph vessels are paid less attention, which can cause long-term damage.  How can lymph vessels be better cared for and repaired after injuries?",
+          "id": "f803"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What positive influences does biophoton light therapy have on the immediate effects of an accident (e.g. shock, hemostasis, sepsis, etc.) and the long-term effects of an accident (such as speed and extent of physical regeneration capacity) and their influence on other treatments?",
+          "id": "f866"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can nerve function be recovered as much as possible after an injury?",
+          "id": "f932"
+        }
+      ],
+      "x": [
+        -0.2758
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.9401
+      ],
+      "id": 121,
+      "area": "Types of injury due to accident "
+    },
+    {
+      "title": "Physical consequences of accidents",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does physical therapy affect tendon regeneration?",
+          "id": "f1060"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What contribution can occupational therapy make in healing the consequences of an accident?",
+          "id": "f364"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "With various accidental injuries, what potential is there potential to replace the prescription of drugs with alternative treatment methods (e.g. physiotherapy)?",
+          "id": "f400"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the most promising method of treatment (occupational therapy) after tendinosis?",
+          "id": "f426"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role do occupational therapy and physiotherapy play in the healing of accidental injuries?",
+          "id": "f943"
+        }
+      ],
+      "x": [
+        -0.4619
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.8003
+      ],
+      "id": 122,
+      "area": "Impacts"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Using the example of self-regenerating animals (such as the axolotl), what role will the genetic modification of human DNA play in the treatment of injuries in the future?",
+          "id": "f1117"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What materials will be relevant in the future in the field of bone regeneration implants?",
+          "id": "f1177"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can modern technology improve healing/rehabilitation after an accident with a severed limb?",
+          "id": "f1187"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How are bone and ligament regeneration and cartilage and tendon regeneration different with respect to materials research?",
+          "id": "f909"
+        }
+      ],
+      "x": [
+        -0.9201
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.5594
+      ],
+      "id": 123,
+      "area": "Impacts"
+    },
+    {
+      "title": "Physical consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "After shoulder dislocation without secondary damage, does wearing an orthosis, in the form of a Gilchrist support, improve later stability versus early functional care without wearing such an orthosis?",
+          "id": "f133"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way does the adaptation of exercises in the context of occupational therapy influence the effects of injury-related immobilization on joint movement and hand use in everyday life?",
+          "id": "f149"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Why are fractures to the finger joints always operated on? Do early movement exercises have a better outcome?",
+          "id": "f154"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Articular cartilage defects are commonly treated via MACI or microfracturing. The success of treatment highly depends on extended post-surgery physiotherapy and the patient's compliance with it. Graft failure is frequently linked to early loading.\nWhat can be done to reduce the timeframe during which loading poses a risk? Enabling earlier loading would make the treatment less prone to failure and allow the patient to return to a normal lifestyle sooner.",
+          "id": "f168"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent do cast immobilization and dynamic follow-up differ in regard to long-term results after extensor pollicis longus suture?",
+          "id": "f203"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does starting dynamic follow-up as early as possible (1 or 2 days after surgery) play in relation to adhesions following extensor tendon sutures in zones 4-6?",
+          "id": "f204"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "After tendon suturing (extensor tendons zone 4-6 or flexor tendons zone I-III), does it make sense to only start dynamic or controlled active assistive (for flexor tendon suturing dorsal splint in the intrinsic plus position) follow-up after 3 weeks of immobilization in a cast?",
+          "id": "f206"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the advantages and disadvantages of immobilization after osteosynthesis?",
+          "id": "f214"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Why is a load parameter of up to 10 kg often given for treated fractures, rather than more load being applied within the pain-free range?",
+          "id": "f56"
+        }
+      ],
+      "x": [
+        -0.4491
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.082
+      ],
+      "id": 124,
+      "area": "Impacts"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between direct measures in hand therapy and educational therapeutic discussions?",
+          "id": "f148"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Physical trauma always leads to mental trauma. To what extent can vegetotherapy, on the basis of polyvagal theory according to Porges, support processing this trauma?",
+          "id": "f157"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does the focus of rehabilitation after paraplegia and amputation play in achieving permanent inclusion/integration in professional and social life?",
+          "id": "f28"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important conditions for being able to live “normally” again after an accident?",
+          "id": "f301"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way does psychological reconditioning after severe accidents influence the effects of sports medicine rehabilitation measures on patient regeneration time?",
+          "id": "f389"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way does being cared for by relatives affect patient recovery?",
+          "id": "f4"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can patients who have suffered cosmetic damage due to an accident be treated medically and provided with psychological care?",
+          "id": "f441"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does the psyche measurably affect the recovery of a patient?",
+          "id": "f511"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does mental strain play in recovery after an accident?",
+          "id": "f546"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is there a connection between shock due to an accident and the later progression of recovery (type and duration)? Can the later progression be positively influenced by suitable psychological and pharmacological treatment methods?",
+          "id": "f596"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can the consequences of shock be reduced effectively?",
+          "id": "f612"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can the time it takes for the brain to understand that an injury is fully healed be reduced? Why does the mind keep telling the body that something is not quite right for a long time after an injury has healed?",
+          "id": "f62"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "At what point is it appropriate to provide the injured person with psychological help?",
+          "id": "f642"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "When a rehabilitation measure is used on trauma caused by a car accident, how does this affect later active vehicle use by the patient?",
+          "id": "f647"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the role of fear or PTSS (Post Traumatic Stress Syndrome) in decreasing pain and disability in patients recovering from accidental injuries?",
+          "id": "f74"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can the long-term consequences of an accident be treated psychologically?",
+          "id": "f858"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Would accompanying psychotherapeutic treatment improve regeneration/healing in case of accidental injury (speed, sustainability)?",
+          "id": "f901"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can shock be treated as quickly and gently as possible?",
+          "id": "f908"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent can psychological aftercare after a severe injury caused by an accident at home accelerate the victim's recovery?",
+          "id": "f921"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can the victim of an accident be helped to mentally process the accident and its consequences?",
+          "id": "f987"
+        }
+      ],
+      "x": [
+        -0.0465
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.4556
+      ],
+      "id": 125,
+      "area": "Impacts"
+    },
+    {
+      "title": "Costs of first aid",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How effective are assessments for hand ligament instability as an evaluation tool in therapy?",
+          "id": "f215"
+        }
+      ],
+      "x": [
+        -0.7838
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.9374
+      ],
+      "id": 126,
+      "area": "First aid"
+    },
+    {
+      "title": "First aid by laypersons",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "According to kinesthetic criteria, does care influence the duration of the hospital stay of accident victims?",
+          "id": "f244"
+        }
+      ],
+      "x": [
+        -0.0885
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.9594
+      ],
+      "id": 127,
+      "area": "First aid"
+    },
+    {
+      "title": "Team management ",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important factors in facilitating the reception of acquired knowledge in rehabilitation and making it available in situations as needed?",
+          "id": "f29"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can you create medication or home medicine solutions that would allow people to treat their own injuries?",
+          "id": "f549"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How could this accident have been prevented?",
+          "id": "f64"
+        }
+      ],
+      "x": [
+        -0.7374
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.4292
+      ],
+      "id": 128,
+      "area": "Interdisciplinarity"
+    },
+    {
+      "title": "Helping people help themselves",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is success in the treatment of (severe) accidental injuries? Which measures should be used to quantify the effects of treatments?",
+          "id": "f75"
+        }
+      ],
+      "x": [
+        -0.3914
+      ],
+      "area_uri": "Therapie & Rehabilitation",
+      "y": [
+        0.3464
+      ],
+      "id": 129,
+      "area": "Therapy & rehabilitation"
+    },
+    {
+      "title": "Type & extent of injury",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the essential element in the accident victim's situation that caused the accident? This does not refer to the external circumstances, but rather their relationship to the person’s mental/physical situation and vice versa, and how does this involvement change the external circumstances, causing an accident to occur?",
+          "id": "f101"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent does Murphy’s Law play affect the probability/frequency of accidents?",
+          "id": "f1085"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important causes of accidents?",
+          "id": "f1142"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How many accidental injuries are actually \"accidental?\"",
+          "id": "f1188"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Research should start at the beginning and statistically compile where and to what/how the most frequent injuries/accidents happen and how this can be prevented and how the time between accident/injury and first aid can be shortened.",
+          "id": "f423"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the most common cause of accidental injuries, and why?",
+          "id": "f846"
+        }
+      ],
+      "x": [
+        -0.8906
+      ],
+      "area_uri": "Unfallursachen",
+      "y": [
+        0.3225
+      ],
+      "id": 130,
+      "area": "Age"
+    },
+    {
+      "title": "Insurance & law",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does the injured party play in an accident?",
+          "id": "f1057"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does inattention play in accidents?",
+          "id": "f1106"
+        }
+      ],
+      "x": [
+        -0.1771
+      ],
+      "area_uri": "Unfallursachen",
+      "y": [
+        0.039
+      ],
+      "id": 131,
+      "area": "Types of injury due to accident "
+    },
+    {
+      "title": "Sports injuries",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most frequent causes of domestic accidents and how can these be avoided through physical and mental measures?",
+          "id": "f1124"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between accidental injuries and the work environment?",
+          "id": "f355"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Which domestic accidents occur most frequently?",
+          "id": "f480"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Why do most accidents occur at home?",
+          "id": "f526"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Given the increase in cases of poisoning from various causes, would it be beneficial to incorporate it into scientific research for accident injuries?",
+          "id": "f554"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the key elements that cause accidental injuries in different environments?",
+          "id": "f665"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Why do most accidents occur at home?",
+          "id": "f839"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the common causes of domestic injuries in children?",
+          "id": "f848"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most common causes of domestic accidents?",
+          "id": "f874"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between home appliances and accidental injuries?",
+          "id": "f883"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the causes of accidents that take place at home, at work or during leisure activities?",
+          "id": "f990"
+        }
+      ],
+      "x": [
+        -0.8158
+      ],
+      "area_uri": "Unfallursachen",
+      "y": [
+        0.7343
+      ],
+      "id": 132,
+      "area": "Impacts"
+    },
+    {
+      "title": "Physical consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How have accident figures changed over the last 10 years and how have technological developments influenced this?",
+          "id": "f1147"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Has the number of traffic accidents risen since the introduction of the iPhone? Which age groups are particularly at risk?",
+          "id": "f248"
+        }
+      ],
+      "x": [
+        -0.1959
+      ],
+      "area_uri": "Unfallursachen",
+      "y": [
+        0.5324
+      ],
+      "id": 133,
+      "area": "Impacts"
+    },
+    {
+      "title": "Healing process & age",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important factors for successful neuroregeneration?",
+          "id": "f1002"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does nature/examples from nature play in the optimization of wound healing?",
+          "id": "f1040"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does mental health affect wound healing?",
+          "id": "f1076"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Does exercise promote tissue healing?",
+          "id": "f310"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of shock on soft tissue and wound healing?",
+          "id": "f314"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Is it possible that cruciate ligament injuries never fully heal?",
+          "id": "f404"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What characteristics of the human mind support the healing process after an accidental injury?",
+          "id": "f563"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way does psychology influence the effects of neuroregeneration on wound healing?",
+          "id": "f586"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the effect of physical activity on scar tissue?",
+          "id": "f611"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can speed up the healing process for wounds?",
+          "id": "f615"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Can wound healing after an accident be influenced by the mind?",
+          "id": "f648"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What can biology contribute to the acceleration of wound healing and regeneration?",
+          "id": "f814"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What influence do pre-existing mental issues have on the healing process?",
+          "id": "f825"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Are there procedures for regeneration that don’t leave any scars?",
+          "id": "f838"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What makes accidents more likely?",
+          "id": "f842"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does the mental trauma of an accident affect recovery?",
+          "id": "f843"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent is wound healing accelerated by keeping open wounds moist with dressings or bandages?",
+          "id": "f889"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What are the most important factors that influence wound healing?",
+          "id": "f95"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does shock affect wound healing?",
+          "id": "f976"
+        }
+      ],
+      "x": [
+        -0.7397
+      ],
+      "area_uri": "Wundheilung",
+      "y": [
+        0.8579
+      ],
+      "id": 134,
+      "area": "Age"
+    },
+    {
+      "title": "Physical consequences of accidents",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does nutrition affect the formation of scars?",
+          "id": "f109"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does alcohol affect wound healing in cases of abdominal injuries?",
+          "id": "f383"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Influence of alcohol on internal wound healing in the abdomen",
+          "id": "f935"
+        }
+      ],
+      "x": [
+        -0.7687
+      ],
+      "area_uri": "Wundheilung",
+      "y": [
+        0.5362
+      ],
+      "id": 135,
+      "area": "Impacts"
+    },
+    {
+      "title": "Physical consequences of accidents",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In what way does suture type influence the effects of scar formation on the skin?",
+          "id": "f1107"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What influence do magnetic resonance scans have on newly inserted implants and wound healing for patients?",
+          "id": "f181"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does very early silicone oil treatment affect wound healing/scar formation in severely crusted wounds?",
+          "id": "f205"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Does albumin optimization with i.v. administration after severe reconstructive interventions (\"flap graft\") improve wound healing in comparison to standard hospital treatment?",
+          "id": "f241"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "To what extent do proven therapies, such as petroleum, and modern methods for wound healing differ in regard to the outcome of wound care?",
+          "id": "f27"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What wound material best promotes the healing of open wounds with regard to speed, risk of infection and patient satisfaction?",
+          "id": "f427"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "Burns leave scars, but according to a very old recipe, they do not scar if an egg is applied to the burn. Are such old remedies still interesting today?",
+          "id": "f533"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What possibilities do I have in my home environment to actively contribute to better wound healing?",
+          "id": "f655"
+        }
+      ],
+      "x": [
+        -0.1668
+      ],
+      "area_uri": "Wundheilung",
+      "y": [
+        0.1853
+      ],
+      "id": 136,
+      "area": "Impacts"
+    },
+    {
+      "title": "Psychosocial consequences",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What is the relationship between bone regeneration and wound healing?",
+          "id": "f1162"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How does physical activity affect bone and ligament regeneration?",
+          "id": "f15"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What role does the relief time play in cases of fractured tarsal bones in relation to a bone marrow edema?",
+          "id": "f57"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How can bones be helped to heal more quickly?",
+          "id": "f827"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "What substances/medicines best promote healing of torn ankle ligaments?",
+          "id": "f89"
+        }
+      ],
+      "x": [
+        -0.5153
+      ],
+      "area_uri": "Wundheilung",
+      "y": [
+        0.9462
+      ],
+      "id": 137,
+      "area": "Impacts"
+    },
+    {
+      "title": "Specialist-patient relationship",
+      "paper_abstract": [
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "In the case of pronounced wound healing impairment, what options are there if all first-line options have failed?",
+          "id": "f311"
+        },
+        {
+          "readers": "1",
+          "level": 1,
+          "abstract": "How quickly does blood poisoning occur with poorly treated wounds?",
+          "id": "f317"
+        }
+      ],
+      "x": [
+        -0.6673
+      ],
+      "area_uri": "Wundheilung",
+      "y": [
+        0.709
+      ],
+      "id": 138,
+      "area": "Communication & relationship"
+    }
+  ],
+  "context": {}
+}
