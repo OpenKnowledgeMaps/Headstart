@@ -111,6 +111,9 @@ var addAutoComplete = function() {
                     author_living_dates = item.data('living_dates');
                     author_image_link = item.data('image_link');
                     $("#searchform").validate().element('input[name=q]');
+                    
+                    author_selected = true;
+                    removeInputError();
                 }
             });
         }
@@ -138,7 +141,30 @@ function configureSearch() {
                           );
 }
 
-$("#searchform").submit(function () {
+function showInputError(error_message) {
+    $("#q-error").text(error_message);
+    $("#q-error").removeClass("label-hide");
+    $("#q-error").removeClass("label-show").addClass("label-show");
+}
+
+function removeInputError() {
+    if($("#q-error").hasClass("label-show")){
+        $("#q-error").removeClass("label-show");
+        $("#q-error").addClass("label-hide");
+    }
+}
+
+$("#searchform").submit(function (event) {
+    if($.trim($('input[name="q"]').val()) === "") {
+        showInputError("Bitte geben Sie einen Text ein");
+        event.preventDefault();
+    }
+    
+    if(visualization_mode === "authors" && !author_selected) {
+        showInputError("Bitte wählen Sie einen Autor aus der Liste aus");
+        event.preventDefault();
+    }
+    
     configureSearch();
     
     var ua = window.navigator.userAgent;

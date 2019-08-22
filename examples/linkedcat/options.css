@@ -266,7 +266,7 @@ label {
     color: white;
 }
 
-label.error, #input-container label.error {
+label.q-error, #input-container label.q-error {
     color: white;
     background-color: red;
     border-radius: 10px;
@@ -275,9 +275,17 @@ label.error, #input-container label.error {
     font-size: 12px;
 }
 
-#input-container label.error {
+#input-container label.q-error {
     color: red;
     background-color: white;
+}
+
+.label-hide {
+    display: none;
+}
+
+.label-show {
+    display: inline-block;
 }
 
 .timefield {
