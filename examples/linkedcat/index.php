@@ -48,14 +48,21 @@ include 'config.php';
                             <span class="bold"><i class="fas fa-search"></i> Stichwörter</span></label>
                     </p>
                     <div style="background-color: white;">
-                        <div id="filter-container"></div>
+                        <div id="searchfield">
+                            <div id="filter-container"></div>
 
-                        <!--<label for="q">Suchbegriff:</label>-->
-                        <div style="max-width:600px; padding: 0px 30px 50px; margin: 0px auto;">
-                            <input class="inputfield" type="text" name="q" size="61" required>
-                            <button type="submit" class="search-btn">
-                                <i class="fas fa-search"></i> suchen
-                            </button>
+                            <!--<label for="q">Suchbegriff:</label>-->
+                            <div class="searchfield" style="max-width:600px; padding: 0px 30px 50px; margin: 0px auto;">
+                                <p id="additional-information" class="additional-information"></p>
+                                <input class="inputfield" type="text" name="q" size="61">
+                                <label id="q-error" class="q-error label-hide" for="q"></label>
+                                <button type="submit" class="search-btn">
+                                    <i class="fas fa-search"></i> suchen
+                                </button>
+                            </div>
+                        </div>
+                        <div id="authors-loading" class="loading-indicator">
+                            <img class="loading" src="img/ajax-loader.gif">
                         </div>
                     </div>
                 </form>
@@ -83,13 +90,26 @@ include 'config.php';
 
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script type ="text/javascript">
+            var additional_information = {
+                authors: '<p>Additional information for author search'
+                , keywords: '<p>Additional information for keyword search'
+            }
+            
+            var author_selected = false;
+            
+            $('input[name="q"]').on("input", function () {
+                author_selected = false;
+                removeInputError();
+            })
+    
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
-            var autocomplete_data;
+            var autocomplete_data = null;
             var has_loaded = false;
             $.get(data_config.server_url + "services/getLinkedCatAuthors.php",
                     function (data) {
                         autocomplete_data = data;
                         has_loaded = true;
+                        addAutoComplete();
                     });
         </script>
         <script type="text/javascript" src="search_options.js "></script>

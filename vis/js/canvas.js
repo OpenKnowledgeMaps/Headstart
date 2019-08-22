@@ -320,10 +320,10 @@ class Canvas {
                             <span class="project-id">(${context.params.project_id})</span>`
         } else if (config.create_title_from_context) {
             let query_clean = context.query.replace(/\\(.?)/g, "$1");
-            let label = config.localization[config.language].overview_label;
+            let label = (config.is_streamgraph)?(config.localization[config.language].streamgraph_label):(config.localization[config.language].overview_label);
             
             if(config.is_authorview) {  
-                label= config.localization[config.language].overview_authors_label;
+                label= (config.is_streamgraph)?(config.localization[config.language].streamgraph_authors_label):(config.localization[config.language].overview_authors_label);
             }
             
             chart_title = label + ' <span id="search-term-unique">' + query_clean + '</span>';

@@ -9,7 +9,7 @@ var data_config = {
     use_area_uri: true,
     show_multiples: false,
     show_dropdown: false,
-    show_infolink: false,
+    show_infolink: true,
     preview_type: "pdf",
     sort_options: ["relevance", "title", "authors", "year"],
     is_force_areas: true,
