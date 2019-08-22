@@ -151,18 +151,9 @@ function getAuthors() {
   // [id, author100_a, doc_count, living_dates and possibly image_link]
   foreach ($author_ids as $i => $author_id) {
       $author_count = $author_counts[$i];
-      $author_name = $author_data[$author_id]["author100_a"];
-      $author_date = $author_data[$author_id]["author100_d"];
-      $author_image = $author_data[$author_id]["author100_wiki_img"];
-      if (is_null($author_name)) {
-        $author_name = "";
-      }
-      if (is_null($author_date)) {
-        $author_date = "";
-      }
-      if (is_null($author_image)) {
-        $author_image = "";
-      }
+      $author_name = isset($author_data[$author_id]["author100_a"]) ? $author_data[$author_id]["author100_a"] : "";
+      $author_date = isset($author_data[$author_id]["author100_d"]) ? $author_data[$author_id]["author100_d"] : "";
+      $author_image = isset($author_data[$author_id]["author100_wiki_img"]) ? $author_data[$author_id]["author100_wiki_img"] : "";
       # the following array contains a placeholder "" for a possible image link
       $authors[] = array($author_id, $author_name, $author_count, $author_date, $author_image);
   }
