@@ -147,10 +147,10 @@ build_query <- function(query, params, limit){
   if (!params$include_content_type[1] == 'all') {
       if (length(params$include_content_type) > 1) {
         content_type <- paste0("content_type_a:(",
-                       paste0(params$include_content_type, collapse = " OR "),
+                       paste0(paste0('"', params$include_content_type, '"'), collapse = " OR "),
                        ")")
         } else {
-        content_type <- paste0("content_type_a:", params$include_content_type, collapse = "")
+        content_type <- paste0("content_type_a:", paste0('"', params$include_content_type, '"'), collapse = "")
       }
     q_params$fq <- list(pub_year, content_type, protocol_flag)
   } else {
