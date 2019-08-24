@@ -21,7 +21,10 @@ $base_url = "https://" .
 
 #bkl_top_caption
 $bkl_top_query = "select?facet.field=bkl_top_caption" .
-                  "&q=*:*&rows=0&facet.limit=-1&facet.sort=index";
+                  "&q=*:*&rows=0" .
+                  "&facet=on" .
+                  "&facet.limit=-1" .
+                  "&facet.sort=index";
 
 $bkl_query = "select?facet.field=bkl_caption" .
              "&facet=on&q=*:*&rows=0" .
@@ -57,7 +60,6 @@ function getBklFacetData($base_url, $bkl_query, $bkls_top) {
       $urls[] = $fetchURL;
     }
   }
-
   # setup initial window slice
   for ($i = 0; $i < $window; $i++) {
     $ch = curl_init();
@@ -80,8 +82,8 @@ function getBklFacetData($base_url, $bkl_query, $bkls_top) {
           $bkl_top = explode(":", $content["responseHeader"]["params"]["fq"])[1];
           $res[$bkl_top] = array();
           $bkls = array();
-          $bkl_counts();
-          foreach ( $content["facet_counts"]["facet_fields"]["bkl_caption"] as $k => $v) {
+          $bkl_counts = array();
+          foreach ($content["facet_counts"]["facet_fields"]["bkl_caption"] as $k => $v) {
             if ($k % 2 == 0) {
               $bkls[] = $v;
             }
@@ -136,17 +138,18 @@ function getBrowseTree() {
     }
   }
   # build tree
-  print_r($bkls_top);
   $bkl_tree = array();
   # multicurl bkl_facet for top_bkls
   $bkl_facetdata = getBklFacetData($GLOBALS['base_url'],
-                             $GLOBALS['$bkl_query'],
-                             $bkls_top);
+                                   $GLOBALS['bkl_query'],
+                                   $bkls_top);
   foreach ($bkls_top as $i => $bkl_top) {
     $bkl_top_count = $bkls_top_counts[$i];
-    $bkl_facet = isset($bkl_facetdata[$bkl_top]) ? $bkl_facetdata[$bkl_top] : null;
+    $bkl_facet = isset($bkl_facetdata[$bkl_top]["bkl_facet"]) ? $bkl_facetdata[$bkl_top]["bkl_facet"] : null;
     $bkl_tree[] = array($bkl_top => $bkl_top_count) + array("bkl_facet" => $bkl_facet);
   }
+  print_r($bkl_tree);
+  array_multisort($bkls_top_counts, SORT_DESC, $bkl_tree);
   return json_encode($bkl_tree, JSON_UNESCAPED_UNICODE);
 }
 
@@ -173,7 +176,7 @@ function loadOrRefresh($lc_cache) {
     try {
       $bkl_tree = getBrowseTree();
       # if no error occurred, update cache
-      writeCache($lc_cache, $bkl_tree);
+      #writeCache($lc_cache, $bkl_tree);
     }
     # if error in getting bkls occurs, catch error
     catch (exception $e) {
