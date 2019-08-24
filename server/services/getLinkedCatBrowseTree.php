@@ -41,11 +41,11 @@ function execQuery($base_url, $query) {
 }
 
 function getBkltopFacet($base_url, $bkl_top_query) {
-  $res = json_decode(execQuery($base_url, $author_facet_query), true);
+  $res = json_decode(execQuery($base_url, $bkl_top_query), true);
   return $res["facet_counts"]["facet_fields"];
 }
 
-function getBklFacet($base_url, $bkl_query, $bkls_top) {
+function getBklFacetData($base_url, $bkl_query, $bkls_top) {
   $window = 100;
   $res = array();
   $mh = curl_multi_init();
@@ -94,10 +94,9 @@ function getBklFacet($base_url, $bkl_query, $bkls_top) {
             }
           }
 
-        # add new author to request stack until author_ids is exhausted
+        # add new bkls to request stack until bkls_top is exhausted
         $next_url = array_shift($urls);
-        # requests terminate prematurely in CURLM_OK check at invalid author query
-        # which comes from the author facet for ""
+        # requests terminate prematurely in CURLM_OK check at invalid query
         if (isset($next_url)) {
           $ch = curl_init();
           curl_setopt($ch, CURLOPT_URL, $next_url);
@@ -125,10 +124,10 @@ function getBrowseTree() {
   # first get facet counts of bkl_top_caption
   # -> list of top_basisklassen and their document count
   $bkls_top_facet = getBkltopFacet($GLOBALS['base_url'],
-                                 $GLOBALS['$bkl_top_query']);
+                                   $GLOBALS['bkl_top_query']);
   $bkls_top = array();
-  $bkls_top_counts();
-  foreach ( $bkls_top_facet["bkl_top_caption"] as $k => $v) {
+  $bkls_top_counts = array();
+  foreach ($bkls_top_facet["bkl_top_caption"] as $k => $v) {
     if ($k % 2 == 0) {
       $bkls_top[] = $v;
     }
@@ -137,14 +136,18 @@ function getBrowseTree() {
     }
   }
   # build tree
+  print_r($bkls_top);
   $bkl_tree = array();
   # multicurl bkl_facet for top_bkls
-  foreach ($bkls_top as $i => $bkl_top) {
-    $bkl_facet = getBklFacet($GLOBALS['base_url'],
+  $bkl_facetdata = getBklFacetData($GLOBALS['base_url'],
                              $GLOBALS['$bkl_query'],
                              $bkls_top);
+  foreach ($bkls_top as $i => $bkl_top) {
+    $bkl_top_count = $bkls_top_counts[$i];
+    $bkl_facet = isset($bkl_facetdata[$bkl_top]) ? $bkl_facetdata[$bkl_top] : null;
+    $bkl_tree[] = array($bkl_top => $bkl_top_count) + array("bkl_facet" => $bkl_facet);
   }
-  return json_encode($authors, JSON_UNESCAPED_UNICODE);
+  return json_encode($bkl_tree, JSON_UNESCAPED_UNICODE);
 }
 
 
@@ -172,7 +175,7 @@ function loadOrRefresh($lc_cache) {
       # if no error occurred, update cache
       writeCache($lc_cache, $bkl_tree);
     }
-    # if error in getting authors occurs, catch error
+    # if error in getting bkls occurs, catch error
     catch (exception $e) {
       $msg = "LinkedCat browse view tree could not be loaded or created. Possible reason: " . $e->getMessage();
       # if error occurred, skip cache refreshment at this stage and load instead
