@@ -51,6 +51,8 @@ function getBkltopFacet($base_url, $bkl_top_query) {
 function getBklFacetData($base_url, $bkl_query, $bkls_top) {
   $window = 100;
   $res = array();
+  $temp_res_bkl_top = array();
+  $temp_res_bkl_facets = array();
   $mh = curl_multi_init();
   $urls = array();
   foreach ($bkls_top as $i => $bkl_top) {
@@ -80,7 +82,6 @@ function getBklFacetData($base_url, $bkl_query, $bkls_top) {
         $content = json_decode($content, true);
         if (isset($content["facet_counts"]["facet_fields"]["bkl_caption"])) {
           $bkl_top = explode(":", $content["responseHeader"]["params"]["fq"])[1];
-          $res[$bkl_top] = array();
           $bkls = array();
           $bkl_counts = array();
           foreach ($content["facet_counts"]["facet_fields"]["bkl_caption"] as $k => $v) {
@@ -92,9 +93,13 @@ function getBklFacetData($base_url, $bkl_query, $bkls_top) {
             }
           }
           foreach ($bkls as $i => $bkl) {
-            $res[$bkl_top]["bkl_facet"][] = array("bkl_caption" => $bkl) + array("count" => $bkl_counts[$i]);
+            if ($bkl_counts[$i] > 0) {
+              $temp_res_bkl_facets[$bkl] = $bkl_counts[$i];
+              array_multisort($bkl_counts, SORT_DESC, $temp_res_bkl_facets);
+              $res[$bkl_top]["bkl_facet"] = $temp_res_bkl_facets;
             }
           }
+        }
 
         # add new bkls to request stack until bkls_top is exhausted
         $next_url = array_shift($urls);
@@ -143,12 +148,12 @@ function getBrowseTree() {
   $bkl_facetdata = getBklFacetData($GLOBALS['base_url'],
                                    $GLOBALS['bkl_query'],
                                    $bkls_top);
+  print_r($bkl_facetdata);
   foreach ($bkls_top as $i => $bkl_top) {
     $bkl_top_count = $bkls_top_counts[$i];
-    $bkl_facet = isset($bkl_facetdata[$bkl_top]["bkl_facet"]) ? $bkl_facetdata[$bkl_top]["bkl_facet"] : null;
+    $bkl_facet = $bkl_facetdata[$bkl_top]["bkl_facet"];
     $bkl_tree[] = array($bkl_top => $bkl_top_count) + array("bkl_facet" => $bkl_facet);
   }
-  print_r($bkl_tree);
   array_multisort($bkls_top_counts, SORT_DESC, $bkl_tree);
   return json_encode($bkl_tree, JSON_UNESCAPED_UNICODE);
 }
