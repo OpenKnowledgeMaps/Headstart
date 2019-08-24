@@ -179,7 +179,7 @@ function loadOrRefresh($lc_cache) {
     try {
       $bkl_tree = getBrowseTree();
       # if no error occurred, update cache
-      #writeCache($lc_cache, $bkl_tree);
+      writeCache($lc_cache, $bkl_tree);
     }
     # if error in getting bkls occurs, catch error
     catch (exception $e) {
