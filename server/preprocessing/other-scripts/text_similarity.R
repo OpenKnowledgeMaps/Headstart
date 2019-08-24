@@ -70,6 +70,10 @@ switch(service,
          source('../other-scripts/linkedcat_authorview.R')
          limit = 500
        },
+       linkedcat_browseview={
+         source('../other-scripts/linkedcat_browseview.R')
+         limit = 500
+       },
       {
         source("../other-scripts/rplos_fast.R")
       }
