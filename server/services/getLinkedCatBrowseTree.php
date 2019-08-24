@@ -80,7 +80,7 @@ function getBklFacetData($base_url, $bkl_query, $bkls_top) {
         $content = curl_multi_getcontent($done['handle']);
         $content = json_decode($content, true);
         if (isset($content["facet_counts"]["facet_fields"]["bkl_caption"])) {
-          $bkl_top = explode(":", $content["responseHeader"]["params"]["fq"])[1];
+          $bkl_top = str_replace('"', '', explode(":", $content["responseHeader"]["params"]["fq"])[1]);
           $bkls = array();
           $bkl_counts = array();
           foreach ($content["facet_counts"]["facet_fields"]["bkl_caption"] as $k => $v) {
@@ -95,7 +95,7 @@ function getBklFacetData($base_url, $bkl_query, $bkls_top) {
           $res[$bkl_top] = array();
           foreach ($bkls as $i => $bkl) {
             if ($bkl_counts[$i] > 0) {
-              $res[$bkl_top][] = array("bkl" => $bkl) + array("count" => $bkl_counts[$i]);
+              $res[$bkl_top][] = array("bkl_caption" => $bkl) + array("count" => $bkl_counts[$i]);
             }
           }
         }
@@ -146,13 +146,12 @@ function getBrowseTree() {
   $bkl_facetdata = getBklFacetData($GLOBALS['base_url'],
                                    $GLOBALS['bkl_query'],
                                    $bkls_top);
-  print_r($bkl_facetdata);
   # build tree
   $bkl_tree = array();
   foreach ($bkls_top as $i => $bkl_top) {
     $bkl_top_count = $bkls_top_counts[$i];
-    $bkl_facet = $bkl_facetdata[$bkl_top]["bkl_facet"];
-    $bkl_tree[] = array($bkl_top => $bkl_top_count) + array("bkl_facet" => $bkl_facet);
+    $bkl_facet = $bkl_facetdata[$bkl_top];
+    $bkl_tree[] = array("bkl_top_caption" => $bkl_top) + array("count" => $bkl_top_count) + array("bkl_facet" => $bkl_facet);
   }
   return json_encode($bkl_tree, JSON_UNESCAPED_UNICODE);
 }
