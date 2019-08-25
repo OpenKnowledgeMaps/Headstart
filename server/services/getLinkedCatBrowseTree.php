@@ -195,7 +195,7 @@ function getBrowseTree() {
       $bkl_tree[] = array("bkl_top_caption" => $bkl_top,
                           "count" => $bkl_top_count,
                           "bkl_facet" => $bkl_facet,
-                          "map_link" => $top_map_link);
+                          "map_link" => $rest_map_link);
     }
     if ($bkl_top_count >= 10 and $bkl_top_count <= 100) {
       $map_link = buildMaplink($GLOBALS['search_url'],
@@ -205,7 +205,7 @@ function getBrowseTree() {
       $bkl_tree[] = array("bkl_top_caption" => $bkl_top,
                           "count" => $bkl_top_count,
                           "bkl_facet" => $bkl_facet,
-                          "map_link" => $top_map_link);
+                          "map_link" => $map_link);
     }
     if ($bkl_top_count < 10) {
       $bkl_top_rest[] = $bkl_top;
