@@ -151,10 +151,10 @@ function getBrowseTree() {
   $bkls_top_counts = array();
   foreach ($bkls_top_facet["bkl_top_caption"] as $k => $v) {
     if ($k % 2 == 0) {
-      $bkls_top[] = $v;
-    }
-    else {
-      $bkls_top_counts[] = $v;
+      if (strlen($v) > 0) {
+        $bkls_top[] = $v;
+        $bkls_top_counts[] = $bkls_top_facet["bkl_top_caption"][$k+1];
+      }
     }
   }
   array_multisort($bkls_top_counts, SORT_DESC, $bkls_top);
