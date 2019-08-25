@@ -16,7 +16,8 @@ $result = search("linkedcat_browseview",
                  $post_params,
                  array("today", "bkl_level", "bkl_list", "doc_count"),
                  ";",
-                 null
+                 null,
+                 $transform_query_tolowercase = false
                );
 
 echo $result
