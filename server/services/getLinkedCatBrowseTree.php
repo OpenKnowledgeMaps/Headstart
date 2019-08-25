@@ -19,6 +19,8 @@ $base_url = "https://" .
        $ini_array["connection"]["linkedcat_pwd"] . "@" .
        $ini_array["connection"]["linkedcat_solr"] . "/solr/linkedcat2/";
 
+$search_url = "services/searchLinkedCatBrowseview.php";
+
 #bkl_top_caption
 $bkl_top_query = "select?facet.field=bkl_top_caption" .
                   "&q=*:*&rows=0" .
@@ -126,6 +128,18 @@ function getBklFacetData($base_url, $bkl_query, $bkls_top) {
   return $res;
 }
 
+function buildMaplink($search_url, $bkl_list, $bkl_level, $doc_count) {
+  # q = ; separated bkls
+  # post params: bkl_level: top/normal, bkl_list, doc_count
+  $post_fields = array('q' => urlencode(implode(';', $bkl_list)),
+                       'bkl_list' => urlencode($bkl_list),
+                       'bkl_level' => urlencode($bkl_level),
+                       'doc_count' => urlencode($doc_count));
+  $fields_string = http_build_query(post_fields);
+  return $post_url;
+}
+
+
 function getBrowseTree() {
   # first get facet counts of bkl_top_caption
   # -> list of top_basisklassen and their document count
@@ -150,8 +164,19 @@ function getBrowseTree() {
   $bkl_tree = array();
   foreach ($bkls_top as $i => $bkl_top) {
     $bkl_top_count = $bkls_top_counts[$i];
+    if ($bkl_top_count >= 10 and $bkl_top_count <= 100) {
+      $map_link = buildMaplink($GLOBALS['search_url'],
+                               array($bkl_top),
+                               "top",
+                               $bkl_top_count);
+    } else {
+      $map_link = "";
+    }
     $bkl_facet = $bkl_facetdata[$bkl_top];
-    $bkl_tree[] = array("bkl_top_caption" => $bkl_top) + array("count" => $bkl_top_count) + array("bkl_facet" => $bkl_facet);
+    $bkl_tree[] = array("bkl_top_caption" => $bkl_top,
+                        "count" => $bkl_top_count,
+                        "bkl_facet" => $bkl_facet
+                        "map_link" => $map_link);
   }
   return json_encode($bkl_tree, JSON_UNESCAPED_UNICODE);
 }
