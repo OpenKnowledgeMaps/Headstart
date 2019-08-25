@@ -175,7 +175,7 @@ function getBrowseTree() {
     $bkl_facet = $bkl_facetdata[$bkl_top];
     $bkl_tree[] = array("bkl_top_caption" => $bkl_top,
                         "count" => $bkl_top_count,
-                        "bkl_facet" => $bkl_facet
+                        "bkl_facet" => $bkl_facet,
                         "map_link" => $map_link);
   }
   return json_encode($bkl_tree, JSON_UNESCAPED_UNICODE);
