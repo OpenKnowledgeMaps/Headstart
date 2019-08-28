@@ -170,9 +170,7 @@ function getBrowseTree() {
     $bkl_facet = $bkl_facetdata[$bkl_top];
     $bkl_top_count = $bkls_top_counts[$i];
     $top_map_link = "";
-    $bkl_top_rest = array();
-    $bkl_top_rest_cumsum = 0;
-    if ($bkl_top_count >100) {
+    if ($bkl_top_count > 100) {
       $bkl_rest = array();
       $bkl_rest_cumsum = 0;
       foreach ($bkl_facet as $i => $bkl) {
@@ -181,7 +179,7 @@ function getBrowseTree() {
                                    array($bkl["bkl_caption"]),
                                    "bkl",
                                    $bkl["count"]);
-          $$bkl_facet[$i]["map_link"] = $map_link;
+          $bkl_facetdata[$bkl_top][$i]["map_link"] = $map_link ;
         } else {
           $bkl_rest[] = $bkl["bkl_caption"];
           $bkl_rest_cumsum += $bkl["count"];
@@ -197,7 +195,7 @@ function getBrowseTree() {
       $bkl_tree[] = array("bkl_top_caption" => $bkl_top,
                           "count" => $bkl_top_count,
                           "bkl_facet" => $bkl_facet,
-                          "map_link" => $rest_map_link);
+                          "map_link" => $map_link);
     }
     if ($bkl_top_count >= 10 and $bkl_top_count <= 100) {
       $map_link = buildMaplink($GLOBALS['search_url'],
