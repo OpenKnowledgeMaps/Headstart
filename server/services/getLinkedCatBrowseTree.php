@@ -95,7 +95,7 @@ function getBklFacetData($base_url, $bkl_query, $bkls_top) {
             if ($bkl_counts[$i] > 0) {
               $res[$bkl_top][] = array("bkl_caption" => $bkl,
                                        "count" => $bkl_counts[$i],
-                                       "map_params" => "");
+                                       "map_params" => array());
             }
           }
         }
