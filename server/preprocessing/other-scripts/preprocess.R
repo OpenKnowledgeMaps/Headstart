@@ -75,6 +75,7 @@ replace_keywords_if_empty <- function(metadata, stops, service) {
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
   if (service == "linkedcat" || service == "linkedcat_authorview") {
     metadata$subject[missing_subjects] <- metadata$bkl_caption[missing_subjects]
+    metadata$subject[is.na(metadata$subject)] <- ""
   } else {
     candidates = mapply(paste, metadata$title)
     candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
