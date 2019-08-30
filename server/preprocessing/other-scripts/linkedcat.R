@@ -106,9 +106,10 @@ get_papers <- function(query, params, limit=100) {
 
 build_query <- function(query, params, limit){
   # fields to query in
+  a_fields <- c('author100_a', 'author700_a')
   q_fields <- c('main_title', 'ocrtext',
-                'author100_a', 'author100_d', 'author100_0',
-                'author700_a', 'author700_d', 'author700_0',
+                'author100_d', 'author100_0',
+                'author700_d', 'author700_0',
                 'main_title', 'subtitle',
                 'host_maintitle', 'host_pubplace',
                 'bkl_caption', 'bkl_top_caption',
@@ -128,7 +129,10 @@ build_query <- function(query, params, limit){
                 'keyword_p', 'keyword_x', 'keyword_z',
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext')
-  q <- paste(paste(q_fields, query, sep = ":"), collapse = " ")
+  query <- gsub(" ?<<von>>", "", query)
+  aq <- paste0(a_fields, ':', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"))
+  qq <- paste0(q_fields, ':', query)
+  q <- paste(c(aq, qq), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
   # additional filter params
@@ -143,10 +147,10 @@ build_query <- function(query, params, limit){
   if (!params$include_content_type[1] == 'all') {
       if (length(params$include_content_type) > 1) {
         content_type <- paste0("content_type_a:(",
-                       paste0(params$include_content_type, collapse = " OR "),
+                       paste0(paste0('"', params$include_content_type, '"'), collapse = " OR "),
                        ")")
         } else {
-        content_type <- paste0("content_type_a:", params$include_content_type, collapse = "")
+        content_type <- paste0("content_type_a:", paste0('"', params$include_content_type, '"'), collapse = "")
       }
     q_params$fq <- list(pub_year, content_type, protocol_flag)
   } else {
