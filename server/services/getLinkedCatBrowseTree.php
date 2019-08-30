@@ -210,7 +210,7 @@ function getBrowseTree() {
                                $bkl_top_count);
       $bkl_tree[] = array("bkl_top_caption" => $bkl_top,
                           "count" => $bkl_top_count,
-                          "bkl_facet" => $bkl_facet,
+                          "bkl_facet" => array(),
                           "map_params" => $top_map_params);
     }
     if ($bkl_top_count < 10) {
