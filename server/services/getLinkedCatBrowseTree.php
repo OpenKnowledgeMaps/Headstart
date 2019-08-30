@@ -1,9 +1,5 @@
 <?php
 
-# currently returns a list of lists:
-# [["(DE-588)11881835X","Pfizmaier, August",186,"1808-1887"],
-#  ["(DE-588)118545426","Hammer-Purgstall, Joseph <<von>>",83,"1774-1856"]]
-
 header('Content-type: application/json');
 
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
@@ -224,7 +220,7 @@ function getBrowseTree() {
                       "bkl_facet" => array(),
                       "map_params" => $rest_maplink);
   $bkl_tree = array_filter($bkl_tree, function($bklt) {
-                           array($bklt["count"] >= 10);
+                           return(array($bklt["count"] >= 10));
                            });
   return json_encode($bkl_tree, JSON_UNESCAPED_UNICODE);
 }
