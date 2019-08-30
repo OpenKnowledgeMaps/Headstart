@@ -184,6 +184,10 @@ function getBrowseTree() {
           $bkl_rest_cumsum += $bkl["count"];
         }
       }
+      $top_map_params = buildMaplink($GLOBALS['search_url'],
+                               array($bkl_top),
+                               "top",
+                               $bkl_top_count);
       $rest_map_params = buildMaplink($GLOBALS['search_url'],
                                $bkl_rest,
                                "bkl",
@@ -197,17 +201,17 @@ function getBrowseTree() {
       $bkl_tree[] = array("bkl_top_caption" => $bkl_top,
                           "count" => $bkl_top_count,
                           "bkl_facet" => $cleaned_bkl,
-                          "map_params" => $map_params);
+                          "map_params" => $top_map_params);
     }
     if ($bkl_top_count >= 10 and $bkl_top_count <= 100) {
-      $map_params = buildMaplink($GLOBALS['search_url'],
+      $top_map_params = buildMaplink($GLOBALS['search_url'],
                                array($bkl_top),
                                "top",
                                $bkl_top_count);
       $bkl_tree[] = array("bkl_top_caption" => $bkl_top,
                           "count" => $bkl_top_count,
                           "bkl_facet" => $bkl_facet,
-                          "map_params" => $map_params);
+                          "map_params" => $top_map_params);
     }
     if ($bkl_top_count < 10) {
       $bkl_top_rest[] = $bkl_top;
