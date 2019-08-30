@@ -99,7 +99,7 @@ function getBklFacetData($base_url, $bkl_query, $bkls_top) {
             if ($bkl_counts[$i] > 0) {
               $res[$bkl_top][] = array("bkl_caption" => $bkl,
                                        "count" => $bkl_counts[$i],
-                                       "map_link" => "");
+                                       "map_params" => "");
             }
           }
         }
@@ -169,46 +169,46 @@ function getBrowseTree() {
   foreach ($bkls_top as $i => $bkl_top) {
     $bkl_facet = $bkl_facetdata[$bkl_top];
     $bkl_top_count = $bkls_top_counts[$i];
-    $top_map_link = "";
+    $top_map_params = "";
     if ($bkl_top_count > 100) {
       $bkl_rest = array();
       $bkl_rest_cumsum = 0;
       foreach ($bkl_facet as $i => $bkl) {
         if ($bkl["count"] >= 10) {
-          $map_link = buildMaplink($GLOBALS['search_url'],
+          $map_params = buildMaplink($GLOBALS['search_url'],
                                    array($bkl["bkl_caption"]),
                                    "bkl",
                                    $bkl["count"]);
-          $bkl_facetdata[$bkl_top][$i]["map_link"] = $map_link ;
+          $bkl_facetdata[$bkl_top][$i]["map_params"] = $map_params ;
         } else {
           $bkl_rest[] = $bkl["bkl_caption"];
           $bkl_rest_cumsum += $bkl["count"];
         }
       }
-      $rest_map_link = buildMaplink($GLOBALS['search_url'],
+      $rest_map_params = buildMaplink($GLOBALS['search_url'],
                                $bkl_rest,
                                "bkl",
                                $bkl_rest_cumsum);
       $bkl_facet[] = array("bkl_caption" => implode("; ", $bkl_rest),
                            "count" => $bkl_rest_cumsum,
-                           "map_link" => "");
+                           "map_params" => "");
       $bkl_facet = array_filter($bkl_facet, function ($bkl) {
                                 return ($bkl["count"] >= 10);
                               });
       $bkl_tree[] = array("bkl_top_caption" => $bkl_top,
                           "count" => $bkl_top_count,
                           "bkl_facet" => $bkl_facet,
-                          "map_link" => $map_link);
+                          "map_params" => $map_params);
     }
     if ($bkl_top_count >= 10 and $bkl_top_count <= 100) {
-      $map_link = buildMaplink($GLOBALS['search_url'],
+      $map_params = buildMaplink($GLOBALS['search_url'],
                                array($bkl_top),
                                "top",
                                $bkl_top_count);
       $bkl_tree[] = array("bkl_top_caption" => $bkl_top,
                           "count" => $bkl_top_count,
                           "bkl_facet" => $bkl_facet,
-                          "map_link" => $map_link);
+                          "map_params" => $map_params);
     }
     if ($bkl_top_count < 10) {
       $bkl_top_rest[] = $bkl_top;
@@ -222,7 +222,7 @@ function getBrowseTree() {
   $bkl_tree[] = array("bkl_top_caption" => implode("; ", $bkl_top_rest),
                       "count" => $bkl_top_rest_cumsum,
                       "bkl_facet" => array(),
-                      "map_link" => $rest_maplink);
+                      "map_params" => $rest_maplink);
   $bkl_tree = array_filter($bkl_tree, function($bklt) {
                            array($bklt["count"] >= 10);
                            });
