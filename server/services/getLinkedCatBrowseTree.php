@@ -160,12 +160,12 @@ function getBrowseTree() {
                                    $bkls_top);
   # build tree
   $bkl_tree = array();
+  $bkl_top_rest = array();
+  $bkl_top_rest_cumsum = 0;
   foreach ($bkls_top as $i => $bkl_top) {
     $bkl_facet = $bkl_facetdata[$bkl_top];
     $bkl_top_count = $bkls_top_counts[$i];
     $top_map_params = array();
-    $bkl_top_rest = array();
-    $bkl_top_rest_cumsum = 0;
     if ($bkl_top_count > 100) {
       $cleaned_bkl = array();
       $bkl_rest = array();
@@ -195,7 +195,7 @@ function getBrowseTree() {
       $cleaned_bkl[] = array("bkl_caption" => implode("; ", $bkl_rest),
                              "count" => $bkl_rest_cumsum,
                              "map_params" => $rest_map_params);
-      $bkl_facet = array_filter($bkl_facet, function ($bkl) {
+      $cleaned_bkl = array_filter($cleaned_bkl, function ($bkl) {
                                 return ($bkl["count"] >= 10);
                               });
       $bkl_tree[] = array("bkl_top_caption" => $bkl_top,
