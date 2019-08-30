@@ -137,9 +137,9 @@ function buildMaplink($search_url, $bkl_list, $bkl_level, $doc_count) {
                        'bkl_list' => $bkl_list,
                        'bkl_level' => $bkl_level,
                        'doc_count' => $doc_count);
-  $fields_string = http_build_query($post_fields);
-  $post_url = urlencode($search_url . "?" . $fields_string);
-  return $post_url;
+  // $fields_string = http_build_query($post_fields);
+  // $post_url = urlencode($search_url . "?" . $fields_string);
+  return $post_fields;
 }
 
 function getBrowseTree() {
