@@ -192,6 +192,9 @@ function getBrowseTree() {
       $bkl_facet[] = array("bkl_caption" => implode("; ", $bkl_rest),
                            "count" => $bkl_rest_cumsum,
                            "map_link" => "");
+      $bkl_facet = array_filter($bkl_facet, function ($bkl) {
+                                return ($bkl["count"] >= 10);
+                              });
       $bkl_tree[] = array("bkl_top_caption" => $bkl_top,
                           "count" => $bkl_top_count,
                           "bkl_facet" => $bkl_facet,
@@ -220,6 +223,9 @@ function getBrowseTree() {
                       "count" => $bkl_top_rest_cumsum,
                       "bkl_facet" => array(),
                       "map_link" => $rest_maplink);
+  $bkl_tree = array_filter($bkl_tree, function($bklt) {
+                           array($bklt["count"] >= 10);
+                           });
   return json_encode($bkl_tree, JSON_UNESCAPED_UNICODE);
 }
 
