@@ -167,6 +167,7 @@ function getBrowseTree() {
     $bkl_top_count = $bkls_top_counts[$i];
     $top_map_params = "";
     if ($bkl_top_count > 100) {
+      $cleaned_bkl = array();
       $bkl_rest = array();
       $bkl_rest_cumsum = 0;
       foreach ($bkl_facet as $i => $bkl) {
@@ -175,7 +176,9 @@ function getBrowseTree() {
                                    array($bkl["bkl_caption"]),
                                    "bkl",
                                    $bkl["count"]);
-          $bkl_facetdata[$bkl_top][$i]["map_params"] = $map_params ;
+          $cleaned_bkl[] = array("bkl_caption" => $bkl["bkl_caption"],
+                                 "count" => $bkl["count"],
+                                 "map_params" => $map_params);
         } else {
           $bkl_rest[] = $bkl["bkl_caption"];
           $bkl_rest_cumsum += $bkl["count"];
@@ -185,9 +188,9 @@ function getBrowseTree() {
                                $bkl_rest,
                                "bkl",
                                $bkl_rest_cumsum);
-      $bkl_facet[] = array("bkl_caption" => implode("; ", $bkl_rest),
-                           "count" => $bkl_rest_cumsum,
-                           "map_params" => "");
+      $cleaned_bkl[] = array("bkl_caption" => implode("; ", $bkl_rest),
+                             "count" => $bkl_rest_cumsum,
+                             "map_params" => $rest_map_params);
       $bkl_facet = array_filter($bkl_facet, function ($bkl) {
                                 return ($bkl["count"] >= 10);
                               });
