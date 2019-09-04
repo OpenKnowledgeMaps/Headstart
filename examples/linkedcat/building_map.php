@@ -28,17 +28,22 @@
         </div>
 
         <script>
+            var post_data;
 <?php
-$post_array = $_POST;
-$date = new DateTime();
-$post_array["today"] = $date->format('Y-m-d');
+if(!empty($_POST)) {
+    $post_array = $_POST;
+    $date = new DateTime();
+    $post_array["today"] = $date->format('Y-m-d');
 
-$post_data = json_encode($post_array);
+    $post_data = json_encode($post_array);
 
-echo "var post_data = " . $post_data . ";\n";
+    echo "post_data = " . $post_data . ";\n";
+}
 ?>
-
             $(document).ready(function () {
+                if (window.post_data) {
+                    post_data = window.post_data;
+                }
                 let search_params = new URLSearchParams(window.location.search)
                 if (Array.from(search_params).length > 0) {
                     $("#search_term").text(post_data.q)
