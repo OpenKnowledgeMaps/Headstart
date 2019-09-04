@@ -14,7 +14,9 @@ $date = new DateTime();
         <div class="container">
 
             <div id="browseview" class="list-group list-group-root well">
-
+                <div id="browseview-loading" class="loading-indicator">
+                    Der Browse View wird geladen und in wenigen Sekunden angezeigt <img class="loading" src="img/ajax-loader.gif">
+                </div>
             </div>
 
         </div>
@@ -53,6 +55,7 @@ $date = new DateTime();
                             }
                         }
                         appendClickHandlerExpand();
+                        $("#browseview-loading").hide();
                     }
                 )
             }
