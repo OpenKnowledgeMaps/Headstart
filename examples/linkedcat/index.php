@@ -81,9 +81,11 @@ include 'config.php';
             </div>
 
             <div style="">
-                <button class="search-btn shadow" style="position: absolute; bottom: 20px; right: 20px; max-width:300px;">
-                    <i class="fas fa-search"></i> Browse view
-                </button>
+                <a href="browse.php" target="_blank">
+                    <button class="search-btn shadow" style="position: absolute; bottom: 20px; right: 20px; max-width:300px;">
+                        <i class="fas fa-search"></i> Browse view
+                    </button>
+                </a>
             </div>
 
         </div>
