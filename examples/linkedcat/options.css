@@ -47,7 +47,10 @@ body {
     max-width:600px; 
     position: absolute;
     top: 30%;
-    right: 28%;
+    right: 0;
+    left:0;
+    margin-right: auto;
+    margin-left: auto;
     background-color: transparent; 
     padding: 20px;
 }
@@ -135,7 +138,7 @@ body {
     text-transform: none; 
     color: #f7f7f7; 
     position: absolute; 
-    right: 20px;
+    left: 20px;
     bottom: 20px; 
     font-size: 12px; 
     text-align: left;
@@ -269,10 +272,10 @@ label {
 }
 
 label.q-error, #input-container label.q-error {
-    color: white;
-    background-color: red;
-    border-radius: 10px;
-    padding: 5px;
+    color: red;
+    /*background-color: red;*/
+    /*border-radius: 10px;*/
+    /*padding: 5px;*/
     font-family: 'Lato', sans-serif;
     font-size: 12px;
 }
