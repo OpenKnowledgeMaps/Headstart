@@ -8,13 +8,13 @@ import { io } from 'io';
 import { canvas } from 'canvas';
 //streamgraph vis: colors, margin, padding, max ticks on x-axis
 const streamgraph_margin = {top: 20, right: 50, bottom: 70, left: 50};
-const stream_colors = ["#28a2a3", "#671A54", "#d5c4d0", "#99e5e3", "#F1F1F1"
-        , "#dbe1ee", "#CC3380", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#FFE699"];
+const stream_colors = ["#28a2a3", "#671A54", "#CC3380", "#7acca3", "#c999ff", "#ffe199"
+        , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#FFE699"];
 const axis_padding_left = -30;
 const axis_padding_bottom = 35;
 const max_ticks_x = 8;
 const label_border_width = 5; //width labels
-const label_round_factor = 5; //border-radius labels
+const label_round_factor = 4; //border-radius labels
 const line_helper_margin = -10; //relative to mouse position
 const tooltip_offset_top = -150; //relative to mouse position
 const tooltip_offset_left = -10; //relative to mouse position
