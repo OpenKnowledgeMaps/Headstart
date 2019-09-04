@@ -670,7 +670,7 @@ BubblesFSM.prototype = {
     resetCircleDesignMultiples: function () {
         d3.selectAll("#headstart-chart circle")
                 .style("fill", "rgb(210, 228, 240)")
-                .style("fill-opacity", "0.8");
+                .style("fill-opacity", "0.9");
 
         d3.selectAll("#area_title_object").style("visibility", "visible");
     },
@@ -679,7 +679,7 @@ BubblesFSM.prototype = {
         if (mediator.current_circle !== null) {
             d3.selectAll("#headstart-chart circle")
                     .attr("class", "area")
-                    .style("fill-opacity", "0.8");
+                    .style("fill-opacity", "0.9");
 
             var papers = d3.selectAll(".paper")
                     .filter(function (x) {
@@ -705,7 +705,7 @@ BubblesFSM.prototype = {
         }
 
         obj.selectAll("#headstart-chart circle")
-                .style("fill-opacity", "0.8")
+                .style("fill-opacity", "0.9")
                 .attr("r", function (d) {
                     return d.r;
                 })

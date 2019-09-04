@@ -28,15 +28,21 @@ include 'config.php';
     <body class="startpage">
         <div class="bg-image-startpage">
 
-            <div class="bg-tagline-startpage">
+            <!--<div class="bg-tagline-startpage">
                 <h2>LinkedCat+<br>Entdecken Sie die Sitzungsberichte der ÖAW<br><span style="color: #333">1847-1918</span></h2>
                 <a href="" style="text-transform: none; font-family: 'Lato'; text-decoration: underline;"><i class="fas fa-info"></i> mehr Informationen</a>
+            </div>-->
+            
+            <div class="bg-tagline-startpage" style="background-color: transparent; border-bottom: 0px; max-width: 400px;">
+                <div style="padding: 0px;"><img style="max-width: 120px;" src='./img/oeaw-logo.png'></div>
+                <h2 style="color: white; text-shadow:1px 1px 10px black; font-size:32px;">Entdecken Sie die Sitzungsberichte der ÖAW <span style="color: white">(1847-1918)</span></h2>
+                <a href="" style="text-transform: none; font-family: 'Lato'; text-decoration: underline; color:white; text-shadow:1px 1px 10px black;"><i class="fas fa-info"></i> mehr Informationen</a>
             </div>
 
-            <div style="    padding: 20px;
+            <!--<div style="    padding: 20px;
                  position: absolute;
                  right: 0px;
-                 "><img src='./img/oeaw-logo.png'></div>
+                 "><img src='./img/oeaw-logo.png'></div>-->
 
             <div class="search">
 
@@ -47,13 +53,14 @@ include 'config.php';
                         <label class="radio-inline keyword-btn"><input type="radio" name="optradio" value="keywords" checked class="radio-inv">
                             <span class="bold"><i class="fas fa-search"></i> Stichwörter</span></label>
                     </p>
-                    <div style="background-color: white;">
+                    <div style="background-color: white; border-radius: 0px 0px 5px 5px;">
                         <div id="searchfield">
+                            <p style="max-width:600px; padding: 30px 0px 0px 30px;" id="additional-information" class="additional-information"></p>
                             <div id="filter-container"></div>
 
                             <!--<label for="q">Suchbegriff:</label>-->
                             <div class="searchfield" style="max-width:600px; padding: 0px 30px 50px; margin: 0px auto;">
-                                <p id="additional-information" class="additional-information"></p>
+                                
                                 <input class="inputfield" type="text" name="q" size="61">
                                 <label id="q-error" class="q-error label-hide" for="q"></label>
                                 <button type="submit" class="search-btn">
@@ -70,7 +77,7 @@ include 'config.php';
             </div>
 
             <div class="credits">
-                <p>
+                <p style="display:none;">
                     Diese Suche wurde mit
                     <a class="whitelink" href="http://github.com/OpenKnowledgeMaps/Headstart" target="_blank">Headstart</a>
                     realisiert. Alle Daten stammen aus LinkedCat+.
@@ -80,19 +87,19 @@ include 'config.php';
                 </p>
             </div>
 
-            <div style="">
+            <!--<div style="">
                 <button class="search-btn shadow" style="position: absolute; bottom: 20px; right: 20px; max-width:300px;">
                     <i class="fas fa-search"></i> Browse view
                 </button>
-            </div>
+            </div>-->
 
         </div>
 
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script type ="text/javascript">
             var additional_information = {
-                authors: '<p>Additional information for author search'
-                , keywords: '<p>Additional information for keyword search'
+                authors: '<p>Erstellen Sie einen Überblick oder Zeitstrahl über die Sitzungsberichte eines Autors.'
+                , keywords: '<p>Erstellen Sie einen Überblick oder Zeitstrahl über Sitzungsberichte zu einem Thema.'
             }
             
             var author_selected = false;
