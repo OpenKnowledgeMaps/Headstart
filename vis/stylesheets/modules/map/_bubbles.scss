@@ -125,3 +125,12 @@ circle {
         }
     }
 }
+
+@if $skin == 'linkedcat' {
+    #area_title {
+        h2 {
+            font-weight: normal;
+        }
+    }
+
+}
