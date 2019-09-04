@@ -60,9 +60,9 @@ include 'config.php';
 
                             <!--<label for="q">Suchbegriff:</label>-->
                             <div class="searchfield" style="max-width:600px; padding: 0px 30px 50px; margin: 0px auto;">
-                                
-                                <input class="inputfield" type="text" name="q" size="61">
                                 <label id="q-error" class="q-error label-hide" for="q"></label>
+                                <input class="inputfield" type="text" name="q" size="61">
+                                
                                 <button type="submit" class="search-btn">
                                     <i class="fas fa-search"></i> suchen
                                 </button>
@@ -87,11 +87,11 @@ include 'config.php';
                 </p>
             </div>
 
-            <!--<div style="">
+            <div style="">
                 <button class="search-btn shadow" style="position: absolute; bottom: 20px; right: 20px; max-width:300px;">
                     <i class="fas fa-search"></i> Browse view
                 </button>
-            </div>-->
+            </div>
 
         </div>
 

@@ -156,12 +156,12 @@ function removeInputError() {
 
 $("#searchform").submit(function (event) {
     if($.trim($('input[name="q"]').val()) === "") {
-        showInputError("Bitte geben Sie einen Text ein");
+        showInputError("Bitte geben Sie ein Stichwort ein:");
         event.preventDefault();
     }
     
     if(visualization_mode === "authors" && !author_selected) {
-        showInputError("Bitte wählen Sie einen Autor aus der Liste aus");
+        showInputError("Bitte wählen Sie einen Autor aus der Liste aus:");
         event.preventDefault();
     }
     
