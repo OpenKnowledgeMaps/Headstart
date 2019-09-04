@@ -149,6 +149,7 @@ var config = {
                         , openaire: "OpenAIRE"
                         , linkedcat: "LinkedCat+"
                         , linkedcat_authorview: "LinkedCat+"
+                        , linkedcat_browseview: "LinkedCat+"
                     },
 
     localization: {
