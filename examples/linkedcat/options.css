@@ -18,7 +18,7 @@ body {
     height: 100%;
     text-transform: uppercase; 
     padding: 0px;
-    background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(0,0,0, 0.2)), url(./img/background-start-2.jpg); 
+    background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(0,0,0, 0.2)), url(./img/background-start-2.jpg); 
     background-repeat: no-repeat;
     background-position: 100% 86%;
 }
@@ -42,12 +42,14 @@ body {
 }
 
 .search {
-    position: relative; 
+    /*position: relative; margin: 20% auto 0;*/ 
     text-transform: none; 
     max-width:600px; 
-    margin: 20% auto 0; 
+    position: absolute;
+    top: 30%;
+    right: 28%;
     background-color: transparent; 
-    padding: 0px;
+    padding: 20px;
 }
 
 .shadow {
@@ -133,7 +135,7 @@ body {
     text-transform: none; 
     color: #f7f7f7; 
     position: absolute; 
-    left: 20px;
+    right: 20px;
     bottom: 20px; 
     font-size: 12px; 
     text-align: left;
@@ -164,7 +166,7 @@ label {
     border-radius: 17px; 
     color: #2856a3 !important; 
     text-decoration: none;
-    padding: 40px 30px 0;
+    padding: 10px 30px 0;
 }
 
 #filter-btn {
