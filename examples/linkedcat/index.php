@@ -66,7 +66,11 @@ include 'config.php';
                                 <button type="submit" class="search-btn">
                                     <i class="fas fa-search"></i> suchen
                                 </button>
+                                
+                                <!--<div style="text-align: center; margin-top: 2%;"><a style="border-bottom: 1px solid #2856a3; text-decoration: none;" href="browse.php" target="_blank">Oder browsen Sie ausgewählte Themen</a>
+                                </div>-->
                             </div>
+                            
                         </div>
                         <div id="authors-loading" class="loading-indicator">
                             <img class="loading" src="img/ajax-loader.gif">
@@ -89,8 +93,8 @@ include 'config.php';
 
             <div style="">
                 <a href="browse.php" target="_blank">
-                    <button class="search-btn shadow" style="position: absolute; bottom: 20px; right: 20px; max-width:300px;">
-                        <i class="fas fa-search"></i> Browse view
+                    <button class="search-btn shadow browse">
+                        <i class="fas fa-search"></i> Browse Themen
                     </button>
                 </a>
             </div>
