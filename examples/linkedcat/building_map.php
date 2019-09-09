@@ -97,17 +97,26 @@ if(!empty($_POST)) {
                 clearTimeout(progessbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
-                $(".waiting-title").html('Bei der Erstellung Ihrer Visualisierung über <span>' + post_data.q + '</span> ist ein Fehler aufgetreten.');
-                $("#progress").html('Pardon! Es ist leider etwas schief gelaufen. Wahrscheinlich gibt es zu Ihrer Suchanfrage keine Dokumente. Bitte versuchen Sie es mit einer anderen Anfrage.');
+                $(".waiting-title").html('Bei der Erstellung Ihres <span>' + ((post_data.vis_type === "overview")?("Überblick"):("Zeitstrahl")) + '</span>s über <span>' + post_data.q + '</span> ist ein Fehler aufgetreten.');
+                $("#progress").html('Pardon! Es ist leider etwas schief gelaufen. Wahrscheinlich gibt es zu Ihrer Suchanfrage keine Dokumente. Bitte versuchen Sie es mit einem anderen Stichwort erneut.'
+                       
+            
+                +'<a href="index.php">'
+                    +'<button class="search-btn shadow">'
+                        +'Neues Stichwort ausprobieren'
+                    +'</button></a>'
+            +'<div style="text-align: center; margin-top: 2%;">'
+                +'<a style="border-bottom: 1px solid #2856a3; text-decoration: none;" href="browse.php" target="_blank">Browse Knowledge Maps zu ausgewählten Themen</a>'
+                                +'</div>');
             }
 
             var showErrorBackend = function (error) {
                 clearTimeout(progessbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
-                $(".waiting-title").html('Bei der Erstellung Ihrer Visualisierung über <span>' + post_data.q + '</span> ist ein Fehler aufgetreten.');
+                $(".waiting-title").html('Bei der Erstellung Ihres <span>' + ((post_data.vis_type === "overview")?("Überblick"):("Zeitstrahl")) + '</span>s über <span>' + post_data.q + '</span> ist ein Fehler aufgetreten.');
                 $("#progress").html(
-                        'Pardon! Es ist leider etwas schief gelaufen. Bitte <a href=\"index.php\">versuchen Sie es in ein paar Minuten noch einmal</a>.'
+                        'Pardon! Es ist leider etwas schief gelaufen.<br><a href=\"index.php\">Bitte versuchen Sie es in ein paar Minuten noch einmal</a>.'
                         )
                 console.log(error)
             }
@@ -126,7 +135,7 @@ if(!empty($_POST)) {
                 progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
 
                 if (value >= 100) {
-                    $("#progress").html("Die Erstellung Ihrer Visualisierung benötigt mehr Zeit als angenommen. Bitte haben Sie noch ein wenig Geduld.")
+                    $("#progress").html("Die Erstellung Ihres <span>' + ((post_data.vis_type === "overview")?("Überblick"):("Zeitstrahl")) + '</span>s benötigt mehr Zeit als angenommen. Bitte haben Sie noch ein wenig Geduld.")
 
                     $("#progressbar").progressbar("value", 5);
 
