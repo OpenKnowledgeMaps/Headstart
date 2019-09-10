@@ -135,7 +135,7 @@ if(!empty($_POST)) {
                 progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
 
                 if (value >= 100) {
-                    $("#progress").html("Die Erstellung Ihres <span>' + ((post_data.vis_type === "overview")?("Überblick"):("Zeitstrahl")) + '</span>s benötigt mehr Zeit als angenommen. Bitte haben Sie noch ein wenig Geduld.")
+                    $("#progress").html('Die Erstellung Ihres <span>' + ((post_data.vis_type === "overview")?("Überblick"):("Zeitstrahl")) + '</span>s benötigt mehr Zeit als angenommen. Bitte haben Sie noch ein wenig Geduld.')
 
                     $("#progressbar").progressbar("value", 5);
 
