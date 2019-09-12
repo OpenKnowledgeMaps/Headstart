@@ -118,7 +118,7 @@ get_cluster_corpus <- function(clusters, metadata, service, stops, taxonomy_sepa
       subjects = lapply(subjects, function(x){paste(unlist(x), collapse=";")})
       subjects = mapply(paste, subjects, taxons, collapse=";")
     }
-    if (service == "linkedcat" || service == "linkedcat_authorview") {
+    if (service == "linkedcat" || service == "linkedcat_authorview" || service == "linkedcat_browseview") {
       all_subjects = paste(subjects, collapse=" ")
     } else {
       all_subjects = paste(subjects, title_ngrams$bigrams, title_ngrams$trigrams, collapse=" ")
