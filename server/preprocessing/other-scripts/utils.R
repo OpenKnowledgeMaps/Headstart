@@ -71,7 +71,7 @@ get_service_lang <- function(lang_id, valid_langs, service) {
   } else {
     LANGUAGE <- 'english'
   }
-  if (service == 'linkedcat' || service == 'linkedcat_authorview') {
+  if (service == 'linkedcat' || service == 'linkedcat_authorview' || service == "linkedcat_browseview") {
       lang_id <- 'ger'
       LANGUAGE <- 'german'
     }
