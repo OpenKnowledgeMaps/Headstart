@@ -1,6 +1,6 @@
  /* Load stylesheets and bootstrap */
 require('styles/main.scss');
-require('bootstrap-loader');
+// require('bootstrap-loader');
 require('font-awesome/scss/font-awesome.scss');
 
 /* Import headstart module to initiliase HeadstartFSM */
