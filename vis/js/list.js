@@ -570,6 +570,10 @@ list.populateMetaData = function(nodes) {
                 })
             })
         }
+        
+        if(!config.list_show_external_vis) {
+             list_metadata.select(".conceptgraph").css("display", "none")
+        }
 
         // Following part should probably be moved to a separate function
         var paper_title = d3.select(elem).select("#list_title");
@@ -1367,13 +1371,56 @@ list.setImageForListHolder = function(d) {
 
     let image_src = "paper_preview/" + d.id + "/page_1.png";
     let pdf_preview = require("images/preview_pdf.png");
-    if (config.preview_type == "image") {
-        if (this.checkIfFileAvailable(image_src)) {
+    let concept_graph = require("images/thumbnail-concept-graph.png");
+    if(config.list_show_external_vis) {
+        let image_div = current_item.append("div")
+                            .attr("id", "preview_image")
+                            .classed("preview_image")
+        
+        image_div.append("span")
+                .attr("id", "concept-graph-description")
+                .classed("concept-graph-description")
+                .text("Explore connections of this paper: ")
+        
+        image_div.append("img")
+                .attr("id", "thumbnail-concept-graph")
+                .classed("thumbnail-concept-graph")
+                .attr("src", concept_graph)
+    } else {
+    
+        if (config.preview_type == "image") {
+            if (this.checkIfFileAvailable(image_src)) {
+                current_item.append("div")
+                    .attr("id", "preview_image")
+                    .style("width", config.preview_image_width_list + "px")
+                    .style("height", config.preview_image_height_list + "px")
+                    .style("background", "url(" + image_src + ")")
+                    .style("background-size", config.preview_image_width_list + "px, " + config.preview_image_height_list + "px")
+                    .on("mouseover", function() {
+                        mediator.publish("preview_mouseover", current_item);
+                    })
+                    .on("mouseout", function() {
+                        mediator.publish("preview_mouseout", current_item);
+                    })
+                    .append("div")
+                    .attr("id", "transbox")
+                    .style("width", config.preview_image_width_list + "px")
+                    .style("height", config.preview_image_height_list + "px")
+                    .html("Click here to open preview")
+                    .on("click", function() {
+                        mediator.publish("list_show_popup", d);
+                    });
+            }
+        } else {
+            if (d.oa === false || d.resulttype === "dataset") {
+                return;
+            }
+
             current_item.append("div")
                 .attr("id", "preview_image")
                 .style("width", config.preview_image_width_list + "px")
                 .style("height", config.preview_image_height_list + "px")
-                .style("background", "url(" + image_src + ")")
+                .style("background", "url(" + pdf_preview + ")")
                 .style("background-size", config.preview_image_width_list + "px, " + config.preview_image_height_list + "px")
                 .on("mouseover", function() {
                     mediator.publish("preview_mouseover", current_item);
@@ -1390,31 +1437,6 @@ list.setImageForListHolder = function(d) {
                     mediator.publish("list_show_popup", d);
                 });
         }
-    } else {
-        if (d.oa === false || d.resulttype === "dataset") {
-            return;
-        }
-
-        current_item.append("div")
-            .attr("id", "preview_image")
-            .style("width", config.preview_image_width_list + "px")
-            .style("height", config.preview_image_height_list + "px")
-            .style("background", "url(" + pdf_preview + ")")
-            .style("background-size", config.preview_image_width_list + "px, " + config.preview_image_height_list + "px")
-            .on("mouseover", function() {
-                mediator.publish("preview_mouseover", current_item);
-            })
-            .on("mouseout", function() {
-                mediator.publish("preview_mouseout", current_item);
-            })
-            .append("div")
-            .attr("id", "transbox")
-            .style("width", config.preview_image_width_list + "px")
-            .style("height", config.preview_image_height_list + "px")
-            .html("Click here to open preview")
-            .on("click", function() {
-                mediator.publish("list_show_popup", d);
-            });
     }
 
 };
