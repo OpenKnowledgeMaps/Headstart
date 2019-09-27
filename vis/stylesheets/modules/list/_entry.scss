@@ -116,13 +116,23 @@
         }
     }
 
-    .doi_outlink {
+    .doi_outlink, .conceptgraph {
         margin-top: 5px;
         height: 18px;
         font-weight: $fontweight400;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+    }
+    
+    .conceptgraph a {
+        color: #f29e00;
+        text-decoration: none;
+        border-bottom: 1px solid #f29e00;
+
+        &:hover {
+            border-bottom: 3px solid #f29e00;
+        }
     }
 
     .doi_outlink_link {
@@ -140,7 +150,7 @@
         vertical-align: top;
     }
 
-    .list_details, .doi_outlink {
+    .list_details, .doi_outlink, .conceptgraph {
         font-family: $link-font-family;
         font-size: 12px;
         line-height: 120%;
