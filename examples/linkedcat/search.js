@@ -197,7 +197,8 @@ $(document).ready(function () {
             $('input[name="q"]').autoComplete('destroy');
             autocomplete_function = null;
         }
-
+        
+        removeInputError();
         chooseOptions();
         adaptInterface();
         configureSearch();
