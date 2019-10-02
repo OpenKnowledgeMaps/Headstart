@@ -79,6 +79,7 @@ var config = {
     show_keywords: false,
     hide_keywords_overview: true,
     convert_author_names: true,
+    show_area: true,
     
     create_title_from_context: false,
     is_title_clickable: true,
