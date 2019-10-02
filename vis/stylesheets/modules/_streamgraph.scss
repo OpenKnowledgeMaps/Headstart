@@ -8,12 +8,13 @@
 .stream {
     opacity: 1;
     cursor: pointer;
+    stroke-width: 0px;
 }
 
 .lower-opacity {
     opacity: 0.3;
-    filter: grayscale(60%);
-    -webkit-filter: grayscale(60%);
+    filter: grayscale(40%);
+    -webkit-filter: grayscale(40%);
 }
 
 .label {
@@ -27,8 +28,8 @@
 }
 
 .label-background {
-    stroke: #f1f1f1;
-    stroke-width: 2;
+    stroke: #dadada;
+    stroke-width: 1;
 }
 
 .axis path, .axis line {
@@ -44,16 +45,16 @@
 
 .axis-label {
     font-size: 12px;
-    stroke: #2856a3;
-    stroke-width:1;
-    color: #2856a3;
+    /*stroke: #2856a3;*/
+    /*stroke-width:1;*/
+    color: #333;
 }
 
 .tip {
-    background-color: rgba(255,255,255,.9);
+    background-color: rgba(255,255,255,1);
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #cbcbcb;
+    border: 1px solid #333;
     font-size: 1em;
     width: 180px;
     position: absolute;
@@ -82,8 +83,8 @@
 .line_helper {
     position: absolute;
     z-index: 19;
-    width: 2px;
-    background: lightgray;
+    width: 1px;
+    background: #333;
     top: 10px;
     bottom: 30px;
     left: 0px;

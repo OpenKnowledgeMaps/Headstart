@@ -18,7 +18,7 @@ body {
     height: 100%;
     text-transform: uppercase; 
     padding: 0px;
-    background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(0,0,0, 0.2)), url(./img/background-start-2.jpg); 
+    background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(0,0,0, 0.2)), url(./img/background-start-2.jpg); 
     background-repeat: no-repeat;
     background-position: 100% 86%;
 }
@@ -42,12 +42,17 @@ body {
 }
 
 .search {
-    position: relative; 
+    /*position: relative; margin: 20% auto 0;*/ 
     text-transform: none; 
     max-width:600px; 
-    margin: 20% auto 0; 
+    position: absolute;
+    top: 30%;
+    right: 0;
+    left:0;
+    margin-right: auto;
+    margin-left: auto;
     background-color: transparent; 
-    padding: 0px;
+    padding: 20px;
 }
 
 .shadow {
@@ -82,8 +87,10 @@ body {
     margin-left: 0px;
 }
 
-.search .search-btn:hover {
+.search .search-btn:hover, .shadow:hover {
     background-image: linear-gradient(rgba(28,59,112,1), rgba(28,59,112,1));
+    -webkit-box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 0px 0px rgba(0,0,0,0.12), 0 0px 0px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 0px 0px rgba(0,0,0,0.12), 0 0px 0px 0 rgba(0,0,0,0.2);
 }
 
 .author-btn, .keyword-btn {
@@ -135,7 +142,7 @@ body {
     position: absolute; 
     left: 20px;
     bottom: 20px; 
-    font-size: 12px; 
+    font-size: 9px; 
     text-align: left;
 }
 
@@ -164,7 +171,7 @@ label {
     border-radius: 17px; 
     color: #2856a3 !important; 
     text-decoration: none;
-    padding: 40px 30px 0;
+    padding: 10px 30px 0;
 }
 
 #filter-btn {
@@ -262,22 +269,34 @@ label {
     background-color: #2856a3; 
 }
 
+.ui-progressbar {
+    height: 1em;
+}
+
 #progress p {
     color: white;
 }
 
-label.error, #input-container label.error {
-    color: white;
-    background-color: red;
-    border-radius: 10px;
-    padding: 5px;
+label.q-error, #input-container label.q-error {
+    color: red;
+    /*background-color: red;*/
+    /*border-radius: 10px;*/
+    /*padding: 5px;*/
     font-family: 'Lato', sans-serif;
     font-size: 12px;
 }
 
-#input-container label.error {
+#input-container label.q-error {
     color: red;
     background-color: white;
+}
+
+.label-hide {
+    display: none;
+}
+
+.label-show {
+    display: inline-block;
 }
 
 .timefield {
@@ -329,16 +348,18 @@ label.error, #input-container label.error {
     width: 100%;
     height: 100%;
     padding: 0px;
-    background-image: linear-gradient(rgba(255,255,255, 0.7), rgba(255,255,255, 0.7)), url(./img/waiting-bg2.jpg); 
+    background-image: linear-gradient(rgba(255,255,255, 1), rgba(255,255,255, 0.7)), url(./img/waiting-bg2.jpg); 
     background-repeat: no-repeat;
     background-position: 100% 86%;
 }
 
-.waiting-box {
-    padding-top:25%;
-    max-width: 750px;
+ .waiting-box {
+    margin-top:15%;
+    max-width: 700px;
+    padding: 20px;
     text-align: center;
-    margin: 0px auto;
+    margin-left: auto;
+    margin-right: auto;
     font-size: 18px;
     font-family: 'Lato', sans-serif;
     color: #333;
@@ -348,8 +369,22 @@ label.error, #input-container label.error {
     color: #2856a3;
     font-family: 'Josefin Sans', sans-serif; 
     text-transform: uppercase;
-    font-size: 24px;
+    font-size: 18px;
 }
 .btn-group.open .dropdown-toggle, .dropdown-toggle {
     overflow: hidden;
+}
+
+#authors-loading {
+    display: none;
+}
+
+.browse {
+    position: absolute; 
+    bottom: 20px; 
+    right: 20px; 
+    max-width: 200px;
+    background-image: none;
+    background: transparent;
+    border: 2px solid white;
 }

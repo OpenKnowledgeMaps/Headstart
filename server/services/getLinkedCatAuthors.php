@@ -77,12 +77,14 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
         # process response
         $output = curl_multi_getcontent($done['handle']);
         $output = json_decode($output, true);
-        $doc = $output["response"]["docs"][0];
-        $temp_id = $doc["author100_0"];
-        $res[$temp_id] = array();
-        $res[$temp_id]["author100_a"] = $doc["author100_a"];
-        $res[$temp_id]["author100_d"] = $doc["author100_d"];
-        $res[$temp_id]["author100_wiki_img"] = $doc["author100_wiki_img"];
+        if (isset($output["response"]["docs"][0])) {
+          $doc = $output["response"]["docs"][0];
+          $temp_id = $doc["author100_0"];
+          $res[$temp_id] = array();
+          $res[$temp_id]["author100_a"] = $doc["author100_a"];
+          $res[$temp_id]["author100_d"] = $doc["author100_d"];
+          $res[$temp_id]["author100_wiki_img"] = $doc["author100_wiki_img"];
+        }
         # $res is now a k:v array with k = author_ids, v = k:v array of
         # keys author100_a and author100_d
 
@@ -151,18 +153,9 @@ function getAuthors() {
   // [id, author100_a, doc_count, living_dates and possibly image_link]
   foreach ($author_ids as $i => $author_id) {
       $author_count = $author_counts[$i];
-      $author_name = $author_data[$author_id]["author100_a"];
-      $author_date = $author_data[$author_id]["author100_d"];
-      $author_image = $author_data[$author_id]["author100_wiki_img"];
-      if (is_null($author_name)) {
-        $author_name = "";
-      }
-      if (is_null($author_date)) {
-        $author_date = "";
-      }
-      if (is_null($author_image)) {
-        $author_image = "";
-      }
+      $author_name = isset($author_data[$author_id]["author100_a"]) ? $author_data[$author_id]["author100_a"] : "";
+      $author_date = isset($author_data[$author_id]["author100_d"]) ? $author_data[$author_id]["author100_d"] : "";
+      $author_image = isset($author_data[$author_id]["author100_wiki_img"]) ? $author_data[$author_id]["author100_wiki_img"] : "";
       # the following array contains a placeholder "" for a possible image link
       $authors[] = array($author_id, $author_name, $author_count, $author_date, $author_image);
   }

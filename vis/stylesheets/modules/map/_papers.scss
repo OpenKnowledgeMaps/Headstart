@@ -259,3 +259,23 @@
         }
     }
 }
+
+@if $skin == 'linkedcat' {
+    #open-access-logo {
+        background-color: white;
+        color: $open-access;
+    }
+
+    .paper_holder {
+
+        .large {
+            font-size: 10px;
+            padding: 0px 0px 0px 5px;
+        }
+
+        .larger {
+            font-size: 14px;
+            padding: 0px 0px 0px 10px;
+        }
+    }
+}
