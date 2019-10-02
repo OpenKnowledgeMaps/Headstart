@@ -642,14 +642,16 @@ list.populateReaders = function(nodes) {
             let basic_classifications = d3.select(elem).select("#list_basic_classification");
             _this.fillKeywords(basic_classifications, "basic_classification", "bkl_caption");
         }
+        
+        if(config.show_area) {
+            areas.select(".area_tag").html(function() {
+                return config.localization[config.language].area + ":";
+            });
 
-        areas.select(".area_tag").html(function() {
-            return config.localization[config.language].area + ":";
-        });
-
-        areas.select(".area_name").html(function(d) {
-            return d.area;
-        });
+            areas.select(".area_name").html(function(d) {
+                return d.area;
+            });
+        }
 
         if (!config.content_based && config.base_unit !== "" && !config.metric_list) {
             readers.select(".num_readers")
