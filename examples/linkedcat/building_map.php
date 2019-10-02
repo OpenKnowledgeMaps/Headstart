@@ -17,7 +17,7 @@
         <div class="waiting-page-img">
         <div class="waiting-box">
             <div>
-                <p class="waiting-title">Ihre Visualisierung über <span id="search_term"></span> wird gerade erstellt</p>
+                <p class="waiting-title"><span id="h-label"></span> über <span id="search_term"></span> wird gerade erstellt</p>
                 <p class="waiting-description">Bitte haben Sie ein wenig Geduld, dieser Vorgang dauert etwa 20 Sekunden...</p>
                 <p id="info-totals"></p>
             </div>
@@ -28,20 +28,28 @@
         </div>
 
         <script>
+            var post_data;
 <?php
-$post_array = $_POST;
-$date = new DateTime();
-$post_array["today"] = $date->format('Y-m-d');
+if(!empty($_POST)) {
+    $post_array = $_POST;
+    $date = new DateTime();
+    $post_array["today"] = $date->format('Y-m-d');
 
-$post_data = json_encode($post_array);
+    $post_data = json_encode($post_array);
 
-echo "var post_data = " . $post_data . ";\n";
+    echo "post_data = " . $post_data . ";\n";
+}
 ?>
-
             $(document).ready(function () {
+                if (window.post_data) {
+                    post_data = window.post_data;
+                }
                 let search_params = new URLSearchParams(window.location.search)
                 if (Array.from(search_params).length > 0) {
                     $("#search_term").text(post_data.q)
+                    $("#h-label").text(function () {
+                        return ((post_data.vis_type === "overview")?("Ihr Überblick"):("Ihr Zeitstrahl"))
+                    })
                     doSubmit(search_params, search_params.get("service_url"), search_params.get("service"));
                 } else {
                     showErrorCreation();
@@ -89,17 +97,26 @@ echo "var post_data = " . $post_data . ";\n";
                 clearTimeout(progessbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
-                $(".waiting-title").html('Bei der Erstellung Ihrer Visualisierung über <span>' + post_data.q + '</span> ist ein Fehler aufgetreten.');
-                $("#progress").html('Pardon! Es ist leider etwas schief gelaufen. Wahrscheinlich gibt es zu Ihrer Suchanfrage keine Dokumente. Bitte versuchen Sie es mit einer anderen Anfrage.');
+                $(".waiting-title").html('Bei der Erstellung Ihres <span>' + ((post_data.vis_type === "overview")?("Überblick"):("Zeitstrahl")) + '</span>s über <span>' + post_data.q + '</span> ist ein Fehler aufgetreten.');
+                $("#progress").html('Pardon! Es ist leider etwas schief gelaufen. Wahrscheinlich gibt es zu Ihrer Suchanfrage keine Dokumente. Bitte versuchen Sie es mit einem anderen Stichwort erneut.'
+                       
+            
+                +'<a href="index.php">'
+                    +'<button class="search-btn shadow">'
+                        +'Neues Stichwort ausprobieren'
+                    +'</button></a>'
+            +'<div style="text-align: center; margin-top: 2%;">'
+                +'<a style="border-bottom: 1px solid #2856a3; text-decoration: none;" href="browse.php" target="_blank">Browse Knowledge Maps zu ausgewählten Themen</a>'
+                                +'</div>');
             }
 
             var showErrorBackend = function (error) {
                 clearTimeout(progessbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
-                $(".waiting-title").html('Bei der Erstellung Ihrer Visualisierung über <span>' + post_data.q + '</span> ist ein Fehler aufgetreten.');
+                $(".waiting-title").html('Bei der Erstellung Ihres <span>' + ((post_data.vis_type === "overview")?("Überblick"):("Zeitstrahl")) + '</span>s über <span>' + post_data.q + '</span> ist ein Fehler aufgetreten.');
                 $("#progress").html(
-                        'Pardon! Es ist leider etwas schief gelaufen. Bitte <a href=\"index.php\">versuchen Sie es in ein paar Minuten noch einmal</a>.'
+                        'Pardon! Es ist leider etwas schief gelaufen.<br><a href=\"index.php\">Bitte versuchen Sie es in ein paar Minuten noch einmal</a>.'
                         )
                 console.log(error)
             }
@@ -118,7 +135,7 @@ echo "var post_data = " . $post_data . ";\n";
                 progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
 
                 if (value >= 100) {
-                    $("#progress").html("Die Erstellung Ihrer Visualisierung benötigt mehr Zeit als angenommen. Bitte haben Sie noch ein wenig Geduld.")
+                    $("#progress").html('Die Erstellung Ihres <span>' + ((post_data.vis_type === "overview")?("Überblick"):("Zeitstrahl")) + '</span>s benötigt mehr Zeit als angenommen. Bitte haben Sie noch ein wenig Geduld.')
 
                     $("#progressbar").progressbar("value", 5);
 

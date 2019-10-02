@@ -149,6 +149,7 @@ var config = {
                         , openaire: "OpenAIRE"
                         , linkedcat: "LinkedCat+"
                         , linkedcat_authorview: "LinkedCat+"
+                        , linkedcat_browseview: "LinkedCat+"
                     },
 
     localization: {
@@ -165,6 +166,9 @@ var config = {
             title: "title",
             default_title: 'Overview of <span id="num_articles"></span> documents',
             overview_label: 'Overview of',
+            streamgraph_label: 'Streamgraph for',
+            overview_authors_label: 'Overview of the works of',
+            streamgraph_authors_label: 'Streamgraph for the works of',
             articles_label: 'documents',
             most_recent_label: 'most recent',
             source_label: 'Source',
@@ -201,6 +205,9 @@ var config = {
             title: "Titel",
             default_title: 'Überblick über <span id="num_articles"></span> Artikel',
             overview_label: 'Überblick über',
+            streamgraph_label: 'Zeitstrahl für',
+            overview_authors_label: 'Überblick über die Werke von',
+            streamgraph_authors_label: 'Zeitstrahl für die Werke von',
             most_recent_label: 'neueste',
             articles_label: 'Artikel',
             source_label: 'Quelle',
@@ -208,7 +215,7 @@ var config = {
             documenttypes_tooltip: 'Die folgenden Publikationsarten wurden bei der Erstellung dieser Visualisierung in Betracht gezogen (nicht alle davon scheinen notwendigerweise in dieser Visualisierung auch auf):',
             area: "Bereich",
             items: "Dokumente",
-            backlink: "← Zurück zur Übersicht",
+            backlink: "← Zurück zum Überblick",
             keywords: "Schlagwörter",
             no_title: "Kein Titel",
             default_area: "Kein Bereich",
@@ -243,7 +250,9 @@ var config = {
             title: "Titel",
             default_title: 'Überblick über <span id="num_articles"></span> Artikel',
             overview_label: 'Überblick über',
-            overview_authors_label: 'Zeitstrahl für die Werke von',
+            streamgraph_label: 'Zeitstrahl für',
+            overview_authors_label: 'Überblick über die Werke von',
+            streamgraph_authors_label: 'Zeitstrahl für die Werke von',
             most_recent_label: 'neueste',
             articles_label: 'open access Dokumente',
             source_label: 'Quelle',
@@ -327,6 +336,9 @@ var config = {
             keywords: "Keywords",
             no_title: "No title",
             overview_label: 'Overview of',
+            streamgraph_label: 'Streamgraph for',
+            overview_authors_label: 'Overview of the works of',
+            streamgraph_authors_label: 'Streamgraph for the works of',
             articles_label: 'documents',
             most_recent_label: 'most recent',
             source_label: 'Source',

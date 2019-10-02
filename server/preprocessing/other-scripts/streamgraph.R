@@ -57,7 +57,7 @@ post_process <- function(sg_data) {
 
 sg_data = list()
 
-if (service == 'linkedcat' || service == 'linkedcat_authorview') {
+if (service == 'linkedcat' || service == 'linkedcat_authorview' || service == "linkedcat_browseview") {
   stream_range <- list(min=min(metadata$year), max=max(metadata$year), range=max(metadata$year)-min(metadata$year))
   metadata$boundary_label <- as.factor(metadata$year)
   levels(metadata$boundary_label) <- levels(as.factor(stream_range$min:stream_range$max))

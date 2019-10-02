@@ -82,11 +82,6 @@ get_papers <- function(query, params, limit=100) {
   metadata$bkl_caption = if (!is.null(search_res$bkl_caption)) search_res$bkl_caption else ""
   metadata$bkl_top_caption = if (!is.null(search_res$bkl_top_caption)) search_res$bkl_top_caption else ""
 
-  highlights <- data.frame(res$high)
-  highlights <- ddply(highlights, .(names), summarize, text=paste(main_title, ocrtext, collapse=" ... "))
-  names(highlights) <- c("id", "snippets")
-  metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='id')
-
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
   # Add all keywords, including classification to text
@@ -106,16 +101,7 @@ get_papers <- function(query, params, limit=100) {
 
 build_query <- function(query, params, limit){
   # fields to query in
-  a_fields <- c('author100_a', 'author700_a')
-  q_fields <- c('main_title', 'ocrtext',
-                'author100_d', 'author100_0',
-                'author700_d', 'author700_0',
-                'main_title', 'subtitle',
-                'host_maintitle', 'host_pubplace',
-                'bkl_caption', 'bkl_top_caption',
-                'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
-                'keyword_p', 'keyword_x', 'keyword_z',
-                'tags')
+  q_field <- if (params$bkl_level == 'top') 'bkl_top_caption' else 'bkl_caption'
   # fields to return
   r_fields <- c('id', 'idnr',
                 'content_type_a', 'content_type_2',
@@ -129,43 +115,8 @@ build_query <- function(query, params, limit){
                 'keyword_p', 'keyword_x', 'keyword_z',
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext')
-  query <- gsub(" ?<<von>>", "", query)
-  aq <- paste0(a_fields, ':', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"))
-  qq <- paste0(q_fields, ':', query)
-  q <- paste(c(aq, qq), collapse = " OR ")
+  q <- paste(paste0(q_field, ':', '"', params$bkl_list, '"'), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
-
-  # additional filter params
-  pub_year <- paste0("pub_year:", "[", params$from, " TO ", params$to, "]")
-  if (!("Protokoll" %in% params$include_content_type) ||
-          (!("Protokoll" %in% params$include_content_type) && !("Bericht" %in% params$include_content_type) )) {
-    protocol_flag <- "protocol:false"
-  }
-  if ("Protokoll" %in% params$include_content_type) {
-    protocol_flag <- "protocol:(true or false)"
-  }
-  if (!params$include_content_type[1] == 'all') {
-      if (length(params$include_content_type) > 1) {
-        content_type <- paste0("content_type_a:(",
-                       paste0(paste0('"', params$include_content_type, '"'), collapse = " OR "),
-                       ")")
-        } else {
-        content_type <- paste0("content_type_a:", paste0('"', params$include_content_type, '"'), collapse = "")
-      }
-    q_params$fq <- list(pub_year, content_type, protocol_flag)
-  } else {
-    q_params$fq <- list(pub_year, protocol_flag)
-  }
-  q_params$fq <- unlist(q_params$fq)
-  q_params$hl <- 'on'
-  # q_params$hl.fl <- paste(q_fields, collapse=",")
-  q_params$hl.fl <- 'main_title,ocrtext'
-  q_params$hl.snippets <- 1
-  q_params$hl.score.k1 <- 0.6
-  q_params$hl.method <- 'unified'
-  q_params$hl.tag.ellipsis <- " ... "
-  q_params$hl.maxAnalyzedChars <- 251200
-  # end adding filter params
   return(q_params)
 }
 
