@@ -186,6 +186,11 @@ $(document).ready(function () {
     
     var changeVisualization = function () {
         visualization_mode = $("input[name='optradio']:checked").val();
+        
+        let url = new URL(window.location.href);
+        url.searchParams.delete("mode");
+        url.searchParams.append("mode", visualization_mode);
+        window.history.pushState({path:url.toString()}, '', url.toString());
 
         search_options.user_defined_date = false;
         $('input[name="q"]').val("");
