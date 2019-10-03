@@ -572,7 +572,7 @@ list.populateMetaData = function(nodes) {
         }
         
         if(!config.list_show_external_vis) {
-             list_metadata.select(".conceptgraph").css("display", "none")
+             list_metadata.select(".conceptgraph").style("display", "none")
         }
 
         // Following part should probably be moved to a separate function
@@ -1375,16 +1375,16 @@ list.setImageForListHolder = function(d) {
     if(config.list_show_external_vis) {
         let image_div = current_item.append("div")
                             .attr("id", "preview_image")
-                            .classed("preview_image")
+                            .classed("preview_image", true)
         
         image_div.append("span")
                 .attr("id", "concept-graph-description")
-                .classed("concept-graph-description")
+                .classed("concept-graph-description", true)
                 .text("Explore connections of this paper: ")
         
         image_div.append("img")
                 .attr("id", "thumbnail-concept-graph")
-                .classed("thumbnail-concept-graph")
+                .classed("thumbnail-concept-graph", true)
                 .attr("src", concept_graph)
     } else {
     
