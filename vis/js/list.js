@@ -570,15 +570,6 @@ list.populateMetaData = function(nodes) {
                 })
             })
         }
-        
-        if(!config.list_show_external_vis) {
-            list_metadata.select(".conceptgraph").style("display", "none")
-        } else {
-            list_metadata.select(".conceptgraph a")
-                    .attr("href", function (d) {
-                        return d.external_vis_link;
-                    })
-        }
 
         // Following part should probably be moved to a separate function
         var paper_title = d3.select(elem).select("#list_title");
@@ -690,6 +681,21 @@ list.populateReaders = function(nodes) {
     });
 };
 
+list.populateExternalVis = function(nodes) {
+    nodes[0].forEach(function(elem) {
+        let external_vis = d3.select(elem).select(".conceptgraph");
+        
+        if(!config.list_show_external_vis) {
+            external_vis.style("display", "none")
+        } else {
+            external_vis.select("a")
+                    .attr("href", function (d) {
+                        return d.external_vis_link;
+                    })
+        }
+    })
+};
+
 list.fillKeywords = function(tag, keyword_type, metadata_field) {
     tag.select(".keyword_tag").html(function() {
                 return config.localization[config.language][keyword_type] + ":";
@@ -710,6 +716,7 @@ list.populateList = function() {
     this.populateMetaData(paper_nodes);
     this.createAbstracts(paper_nodes);
     this.populateReaders(paper_nodes);
+    this.populateExternalVis(paper_nodes);
 };
 
 list.filterList = function(search_words, filter_param) {
