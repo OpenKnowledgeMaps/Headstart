@@ -1373,20 +1373,20 @@ list.setImageForListHolder = function(d) {
     let pdf_preview = require("images/preview_pdf.png");
     let concept_graph = require("images/thumbnail-concept-graph.png");
     if(config.list_show_external_vis) {
-        let preview_div = current_item.append("div")
-                            .attr("id", "preview_div")
-                            .classed("preview_div", true)
-                    
-        let image_div = preview_div.append("div")
+        let preview_image = current_item.append("div")
                             .attr("id", "preview_image")
                             .classed("preview_image", true)
+                    
+        let image_div = preview_image.append("div")
+                            .attr("id", "preview_thumbnail")
+                            .classed("preview_thumbnail", true)
         
         image_div.append("img")
                 .attr("id", "thumbnail-concept-graph")
                 .classed("thumbnail-concept-graph", true)
                 .attr("src", concept_graph)
         
-        let text_div = preview_div.append("div")
+        let text_div = preview_image.append("div")
                             .attr("id", "preview_text")
                             .classed("preview_text", true)
         
