@@ -116,23 +116,13 @@
         }
     }
 
-    .doi_outlink, .conceptgraph {
+    .doi_outlink {
         margin-top: 5px;
         height: 18px;
         font-weight: $fontweight400;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-    }
-    
-    .conceptgraph a {
-        color: #f29e00;
-        text-decoration: none;
-        border-bottom: 1px solid #f29e00;
-
-        &:hover {
-            border-bottom: 3px solid #f29e00;
-        }
     }
 
     .doi_outlink_link {
@@ -210,6 +200,26 @@
 
     .area_tag, .keyword_tag {
         font-weight: $fontweight600;
+    }
+}
+
+.conceptgraph {
+    margin-top: 5px;
+    height: 18px;
+    font-weight: $fontweight400;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 12px;
+    
+    a {
+        color: #f29e00;
+        text-decoration: none;
+        border-bottom: 1px solid #f29e00;
+
+        &:hover {
+            border-bottom: 3px solid #f29e00;
+        }
     }
 }
 
