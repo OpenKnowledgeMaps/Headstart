@@ -1088,6 +1088,10 @@ list.enlargeListItem = function(d) {
             })
             .style("display", "block");
     }
+    
+    if (config.list_show_external_vis) {
+        d3.selectAll('.conceptgraph').style('display', 'none');
+    }
 
     d.paper_selected = true;
     this.count_visible_items_to_header()
@@ -1205,6 +1209,10 @@ list.reset = function() {
         d3.selectAll("#list_keywords").style("display", "none");
     }
     d3.selectAll(".list_images").html("");
+    
+    if (config.list_show_external_vis) {
+        d3.selectAll('.conceptgraph').style('display', 'block');
+    }
 
     if (mediator.current_enlarged_paper !== null) {
         this.notSureifNeeded();
