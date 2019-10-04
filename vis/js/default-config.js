@@ -134,6 +134,7 @@ var config = {
     list_images_path: "images/",
     visual_distributions: false,
     list_show_external_vis: true,
+    external_vis_url: "http://localhost/project-website/graphVis",
     
     credit_embed: false,
     canonical_url: null,
