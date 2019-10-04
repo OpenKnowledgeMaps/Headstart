@@ -134,6 +134,8 @@ var config = {
     list_images: [],
     list_images_path: "images/",
     visual_distributions: false,
+    list_show_external_vis: false,
+    external_vis_url: "",
     
     credit_embed: false,
     canonical_url: null,
