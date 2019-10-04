@@ -1373,19 +1373,29 @@ list.setImageForListHolder = function(d) {
     let pdf_preview = require("images/preview_pdf.png");
     let concept_graph = require("images/thumbnail-concept-graph.png");
     if(config.list_show_external_vis) {
-        let image_div = current_item.append("div")
+        let preview_div = current_item.append("div")
+                            .attr("id", "preview_div")
+                            .classed("preview_div", true)
+                    
+        let image_div = preview_div.append("div")
                             .attr("id", "preview_image")
                             .classed("preview_image", true)
-        
-        image_div.append("span")
-                .attr("id", "concept-graph-description")
-                .classed("concept-graph-description", true)
-                .text("Explore connections of this paper: ")
         
         image_div.append("img")
                 .attr("id", "thumbnail-concept-graph")
                 .classed("thumbnail-concept-graph", true)
                 .attr("src", concept_graph)
+        
+        let text_div = preview_div.append("div")
+                            .attr("id", "preview_text")
+                            .classed("preview_text", true)
+        
+        text_div.append("div")
+                .attr("id", "concept-graph-description")
+                .classed("concept-graph-description", true)
+                .html('<p class="concept-graph-h">Try out concept graph for this paper</p><p>Concept graph is a novel visualization tool, which represents papers and related concepts (e.g. keywords, authors) in a graph.</p><p class="concept-graph-link"><a class="tryout-button" href="graphVis" target="_blank">Create a concept graph</a></p>')
+        
+        
     } else {
     
         if (config.preview_type == "image") {
