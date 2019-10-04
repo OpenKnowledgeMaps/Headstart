@@ -140,7 +140,7 @@
         vertical-align: top;
     }
 
-    .list_details, .doi_outlink {
+    .list_details, .doi_outlink, .conceptgraph {
         font-family: $link-font-family;
         font-size: 12px;
         line-height: 120%;
@@ -201,6 +201,75 @@
     .area_tag, .keyword_tag {
         font-weight: $fontweight600;
     }
+}
+
+.conceptgraph {
+    margin-top: 5px;
+    height: 20px;
+    font-weight: $fontweight400;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    
+    a {
+        color: #f29e00;
+        text-decoration: none;
+        border-bottom: 1px solid #f29e00;
+
+        &:hover {
+            border-bottom: 3px solid #f29e00;
+        }
+    }
+}
+
+.concept-graph-description {
+    font-size: 12px;
+}
+
+.preview_image {
+     max-width: 82%;
+     padding: 3%;
+     background-color: #eff3f4;
+}
+
+.preview_text, .preview_thumbnail {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.preview_text {
+    max-width: 60%;
+}
+
+.preview_thumbnail { 
+    max-width: 30%;
+    margin-right: 20px;
+}
+
+.tryout-button {
+    border: 2px solid #f29e00;
+    color: white; 
+    background-color: #f29e00;
+    padding:5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+   font-weight: 300;
+}
+
+.tryout-button:hover, .tryout-button:active, .tryout-button:focus {
+    color: #f29e00; 
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.concept-graph-link {
+    margin-top: 5%;
+}
+
+.concept-graph-h {
+    font-weight: 600;
+    font-size: 14px;
+    color: $okm-blue;
 }
 
 .list_subentry_showmore, .list_subentry_show_statistics {

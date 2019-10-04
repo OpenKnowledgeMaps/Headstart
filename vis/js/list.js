@@ -683,6 +683,21 @@ list.populateReaders = function(nodes) {
     });
 };
 
+list.populateExternalVis = function(nodes) {
+    nodes[0].forEach(function(elem) {
+        let external_vis = d3.select(elem).select(".conceptgraph");
+        
+        if(!config.list_show_external_vis) {
+            external_vis.style("display", "none")
+        } else {
+            external_vis.select("a")
+                    .attr("href", function (d) {
+                        return d.external_vis_link;
+                    })
+        }
+    })
+};
+
 list.fillKeywords = function(tag, keyword_type, metadata_field) {
     tag.select(".keyword_tag").html(function() {
                 return config.localization[config.language][keyword_type] + ":";
@@ -703,6 +718,7 @@ list.populateList = function() {
     this.populateMetaData(paper_nodes);
     this.createAbstracts(paper_nodes);
     this.populateReaders(paper_nodes);
+    this.populateExternalVis(paper_nodes);
 };
 
 list.filterList = function(search_words, filter_param) {
@@ -1086,6 +1102,10 @@ list.enlargeListItem = function(d) {
             })
             .style("display", "block");
     }
+    
+    if (config.list_show_external_vis) {
+        d3.selectAll('.conceptgraph').style('display', 'none');
+    }
 
     d.paper_selected = true;
     this.count_visible_items_to_header()
@@ -1203,6 +1223,10 @@ list.reset = function() {
         d3.selectAll("#list_keywords").style("display", "none");
     }
     d3.selectAll(".list_images").html("");
+    
+    if (config.list_show_external_vis) {
+        d3.selectAll('.conceptgraph').style('display', 'block');
+    }
 
     if (mediator.current_enlarged_paper !== null) {
         this.notSureifNeeded();
@@ -1369,13 +1393,75 @@ list.setImageForListHolder = function(d) {
 
     let image_src = "paper_preview/" + d.id + "/page_1.png";
     let pdf_preview = require("images/preview_pdf.png");
-    if (config.preview_type == "image") {
-        if (this.checkIfFileAvailable(image_src)) {
+    let concept_graph = require("images/thumbnail-concept-graph.png");
+    if(config.list_show_external_vis) {
+        let external_url = d.external_vis_link;
+        
+        let preview_image = current_item
+                            .append("a")
+                                .attr("href", external_url)
+                                .attr("target", "_blank")
+                            .append("div")
+                                .attr("id", "preview_image")
+                                .classed("preview_image", true)
+                    
+        let image_div = preview_image.append("div")
+                            .attr("id", "preview_thumbnail")
+                            .classed("preview_thumbnail", true)
+        
+        image_div.append("img")
+                .attr("id", "thumbnail-concept-graph")
+                .classed("thumbnail-concept-graph", true)
+                .attr("src", concept_graph)
+        
+        let text_div = preview_image.append("div")
+                            .attr("id", "preview_text")
+                            .classed("preview_text", true)
+        
+        text_div.append("div")
+                .attr("id", "concept-graph-description")
+                .classed("concept-graph-description", true)
+                .html('<p class="concept-graph-h">Try out concept graph for this paper</p>'
+                        +'<p>Concept graph is a novel visualization tool, which represents papers and related concepts (e.g. keywords, authors) in a graph.</p>'
+                        +'<p class="concept-graph-link"><a class="tryout-button" '
+                        +'href="' + external_url + '" target="_blank">Create a concept graph</a></p>')
+        
+        
+    } else {
+    
+        if (config.preview_type == "image") {
+            if (this.checkIfFileAvailable(image_src)) {
+                current_item.append("div")
+                    .attr("id", "preview_image")
+                    .style("width", config.preview_image_width_list + "px")
+                    .style("height", config.preview_image_height_list + "px")
+                    .style("background", "url(" + image_src + ")")
+                    .style("background-size", config.preview_image_width_list + "px, " + config.preview_image_height_list + "px")
+                    .on("mouseover", function() {
+                        mediator.publish("preview_mouseover", current_item);
+                    })
+                    .on("mouseout", function() {
+                        mediator.publish("preview_mouseout", current_item);
+                    })
+                    .append("div")
+                    .attr("id", "transbox")
+                    .style("width", config.preview_image_width_list + "px")
+                    .style("height", config.preview_image_height_list + "px")
+                    .html("Click here to open preview")
+                    .on("click", function() {
+                        mediator.publish("list_show_popup", d);
+                    });
+            }
+        } else {
+            if (d.oa === false || d.resulttype === "dataset") {
+                return;
+            }
+
             current_item.append("div")
                 .attr("id", "preview_image")
                 .style("width", config.preview_image_width_list + "px")
                 .style("height", config.preview_image_height_list + "px")
-                .style("background", "url(" + image_src + ")")
+                .style("background", "url(" + pdf_preview + ")")
                 .style("background-size", config.preview_image_width_list + "px, " + config.preview_image_height_list + "px")
                 .on("mouseover", function() {
                     mediator.publish("preview_mouseover", current_item);
@@ -1392,31 +1478,6 @@ list.setImageForListHolder = function(d) {
                     mediator.publish("list_show_popup", d);
                 });
         }
-    } else {
-        if (d.oa === false || d.resulttype === "dataset") {
-            return;
-        }
-
-        current_item.append("div")
-            .attr("id", "preview_image")
-            .style("width", config.preview_image_width_list + "px")
-            .style("height", config.preview_image_height_list + "px")
-            .style("background", "url(" + pdf_preview + ")")
-            .style("background-size", config.preview_image_width_list + "px, " + config.preview_image_height_list + "px")
-            .on("mouseover", function() {
-                mediator.publish("preview_mouseover", current_item);
-            })
-            .on("mouseout", function() {
-                mediator.publish("preview_mouseout", current_item);
-            })
-            .append("div")
-            .attr("id", "transbox")
-            .style("width", config.preview_image_width_list + "px")
-            .style("height", config.preview_image_height_list + "px")
-            .html("Click here to open preview")
-            .on("click", function() {
-                mediator.publish("list_show_popup", d);
-            });
     }
 
 };
