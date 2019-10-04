@@ -576,7 +576,7 @@ list.populateMetaData = function(nodes) {
         } else {
             list_metadata.select(".conceptgraph a")
                     .attr("href", function (d) {
-                        return mediator.external_vis_url + "&doc_id=" + d.id;
+                        return d.external_vis_link;
                     })
         }
 
@@ -1386,9 +1386,7 @@ list.setImageForListHolder = function(d) {
     let pdf_preview = require("images/preview_pdf.png");
     let concept_graph = require("images/thumbnail-concept-graph.png");
     if(config.list_show_external_vis) {
-        let external_url = config.external_vis_url 
-                                + "?vis_id=" + config.files[mediator.current_file_number].file 
-                                + "&doc_id=" + d.id;
+        let external_url = d.external_vis_link;
         
         let preview_image = current_item
                             .append("a")
