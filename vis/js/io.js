@@ -330,6 +330,12 @@ IO.prototype = {
             num_oa += (d.oa)?(1):(0);
             num_papers += (d.resulttype === 'publication')?(1):(0);
             num_datasets += (d.resulttype === 'dataset')?(1):(0);
+            
+            if(config.list_show_external_vis) {
+                d.external_vis_link = config.external_vis_url 
+                                + "?vis_id=" + config.files[mediator.current_file_number].file 
+                                + "&doc_id=" + d.id;
+            }
 
         });
         
