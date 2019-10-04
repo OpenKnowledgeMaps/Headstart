@@ -572,7 +572,12 @@ list.populateMetaData = function(nodes) {
         }
         
         if(!config.list_show_external_vis) {
-             list_metadata.select(".conceptgraph").style("display", "none")
+            list_metadata.select(".conceptgraph").style("display", "none")
+        } else {
+            list_metadata.select(".conceptgraph a")
+                    .attr("href", function (d) {
+                        return mediator.external_vis_url + "&doc_id=" + d.id;
+                    })
         }
 
         // Following part should probably be moved to a separate function
@@ -1381,9 +1386,17 @@ list.setImageForListHolder = function(d) {
     let pdf_preview = require("images/preview_pdf.png");
     let concept_graph = require("images/thumbnail-concept-graph.png");
     if(config.list_show_external_vis) {
-        let preview_image = current_item.append("div")
-                            .attr("id", "preview_image")
-                            .classed("preview_image", true)
+        let external_url = config.external_vis_url 
+                                + "?vis_id=" + config.files[mediator.current_file_number].file 
+                                + "&doc_id=" + d.id;
+        
+        let preview_image = current_item
+                            .append("a")
+                                .attr("href", external_url)
+                                .attr("target", "_blank")
+                            .append("div")
+                                .attr("id", "preview_image")
+                                .classed("preview_image", true)
                     
         let image_div = preview_image.append("div")
                             .attr("id", "preview_thumbnail")
@@ -1401,7 +1414,10 @@ list.setImageForListHolder = function(d) {
         text_div.append("div")
                 .attr("id", "concept-graph-description")
                 .classed("concept-graph-description", true)
-                .html('<p class="concept-graph-h">Try out concept graph for this paper</p><p>Concept graph is a novel visualization tool, which represents papers and related concepts (e.g. keywords, authors) in a graph.</p><p class="concept-graph-link"><a class="tryout-button" href="graphVis" target="_blank">Create a concept graph</a></p>')
+                .html('<p class="concept-graph-h">Try out concept graph for this paper</p>'
+                        +'<p>Concept graph is a novel visualization tool, which represents papers and related concepts (e.g. keywords, authors) in a graph.</p>'
+                        +'<p class="concept-graph-link"><a class="tryout-button" '
+                        +'href="' + external_url + '" target="_blank">Create a concept graph</a></p>')
         
         
     } else {
