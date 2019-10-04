@@ -217,26 +217,24 @@
     font-size: 12px;
 }
 
-.preview_div {
+.preview_image {
      max-width: 82%;
      padding: 3%;
      background-color: #eff3f4;
-     
 }
 
-.preview_text, .preview_image {
+.preview_text, .preview_thumbnail {
     display: inline-block;
-    
     vertical-align: top;
 }
 
 .preview_text {
-    margin-left: 20px;
-    max-width: 65%;
+    max-width: 60%;
 }
 
-.preview_image { 
-    max-width: 130px;
+.preview_thumbnail { 
+    max-width: 30%;
+    margin-right: 20px;
 }
 
 .tryout-button {
@@ -329,7 +327,7 @@
 
 // Preview image part
 div {
-    &#preview_div {
+    &#preview_image {
         display: block;
         margin-top: 20px;
         margin-left: 15px;
