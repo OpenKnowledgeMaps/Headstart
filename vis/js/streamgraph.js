@@ -480,14 +480,21 @@ streamgraph.setupTooltip = function(streamgraph_subject, x) {
 }
 
 streamgraph.stream_mouseover = function(el) {
-    if(mediator.stream_clicked !== null || typeof el === "undefined") {
+    if(typeof el === "undefined") {
         return;
     }
     
     d3.selectAll(".stream").transition()
             .duration(100)
             .attr("class", function (d, j) {
-                return d.key != el.key ? 'stream lower-opacity' : 'stream';
+                let stream_class = 'stream';
+                if(d.key !== el.key) {
+                    stream_class = 'stream lower-opacity';
+                }
+                if (typeof mediator.stream_clicked !== "undefined" && mediator.stream_clicked === d.key) {
+                    stream_class = 'stream';
+                }
+                return stream_class;
             })
     
 }
