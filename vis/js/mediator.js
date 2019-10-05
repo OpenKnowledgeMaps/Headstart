@@ -212,6 +212,7 @@ MyMediator.prototype = {
         mediator.current_file_number = file;
         mediator.current_bubble = mediator.bubbles[mediator.current_file_number];
         mediator.current_file = config.files[mediator.current_file_number];
+        mediator.external_vis_url = config.external_vis_url + "?vis_id=" + config.files[mediator.current_file_number].file
         papers.current = "none";
         list.current = "none";
         $("#list_explorer").empty();

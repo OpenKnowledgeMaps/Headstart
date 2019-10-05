@@ -50,7 +50,7 @@ include 'config.php';
                     <p class="library">
                         <label class="radio-inline author-btn"><input type="radio" name="optradio" value="authors" class="radio-inv">
                             <span class="bold"><i class="fas fa-search"></i> Autoren</span></label>
-                        <label class="radio-inline keyword-btn"><input type="radio" name="optradio" value="keywords" checked class="radio-inv">
+                        <label class="radio-inline keyword-btn"><input type="radio" name="optradio" value="keywords" class="radio-inv">
                             <span class="bold"><i class="fas fa-search"></i> Stichwörter</span></label>
                     </p>
                     <div style="background-color: white; border-radius: 0px 0px 5px 5px;">
@@ -103,6 +103,14 @@ include 'config.php';
 
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script type ="text/javascript">
+            
+            let url = new URL(window.location.href);
+            let mode = url.searchParams.get("mode");
+            if (mode === null) {
+                mode = "keywords";
+            }
+            $('input[name="optradio"][value="' + mode + '"').prop("checked", true);
+            
             var additional_information = {
                 authors: '<p>Erstellen Sie einen Überblick oder Zeitstrahl über die Sitzungsberichte eines Autors.'
                 , keywords: '<p>Erstellen Sie einen Überblick oder Zeitstrahl über Sitzungsberichte zu einem Thema.'

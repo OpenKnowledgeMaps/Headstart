@@ -208,6 +208,15 @@ var SearchOptions = {
                         }
 
                         self.setDateRangeFromPreset("#from", "#to", element.val());
+                        
+                        if($(element.parent()).attr("id") === "include_content_type") {
+                            $("#include_content_type-error").css("display", "none")
+                        }
+                    }
+                }
+                , onSelectAll: function (checked) {
+                    if(dropdown_class === ".dropdown_multi_include_content_type") {
+                        $("#include_content_type-error").css("display", "none")
                     }
                 }
             });

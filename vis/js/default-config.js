@@ -79,6 +79,7 @@ var config = {
     show_keywords: false,
     hide_keywords_overview: true,
     convert_author_names: true,
+    show_area: true,
     
     create_title_from_context: false,
     is_title_clickable: true,
@@ -133,6 +134,8 @@ var config = {
     list_images: [],
     list_images_path: "images/",
     visual_distributions: false,
+    list_show_external_vis: false,
+    external_vis_url: "",
     
     credit_embed: false,
     canonical_url: null,
