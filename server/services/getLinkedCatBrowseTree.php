@@ -89,7 +89,7 @@ function getBklFacetData($base_url, $bkl_query, $bkls_top) {
               $bkl_counts[] = $v;
             }
           }
-          array_multisort($bkl_counts, SORT_DESC, $bkls);
+          array_multisort($bkls, SORT_ASC, $bkls);
           $res[$bkl_top] = array();
           foreach ($bkls as $i => $bkl) {
             if ($bkl_counts[$i] > 0) {
@@ -153,7 +153,7 @@ function getBrowseTree() {
       }
     }
   }
-  array_multisort($bkls_top_counts, SORT_DESC, $bkls_top);
+  array_multisort($bkls_top, SORT_ASC, $bkls_top);
   # multicurl bkl_facet for top_bkls
   $bkl_facetdata = getBklFacetData($GLOBALS['base_url'],
                                    $GLOBALS['bkl_query'],
