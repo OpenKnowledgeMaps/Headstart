@@ -1,14 +1,14 @@
 vpplog <- getLogger('vis.postprocess')
 
-create_output <- function(clusters, layout, metadata) {
+create_output <- function(named_clusters, layout, metadata) {
 
   x = layout$X1
   y = layout$X2
-  labels = clusters$labels
-  groups = clusters$groups
-  cluster = clusters$cluster
-  num_clusters = clusters$num_clusters
-  cluster_labels = clusters$cluster_labels
+  labels = named_clusters$labels
+  groups = named_clusters$groups
+  cluster = named_clusters$cluster
+  num_clusters = named_clusters$num_clusters
+  cluster_labels = named_clusters$cluster_labels
 
   # Prepare the output
   result = cbind(x,y,groups,labels, cluster_labels)
