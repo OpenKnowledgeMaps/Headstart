@@ -25,7 +25,8 @@ vis_layout <- function(text, metadata, service,
                        max_clusters=15, maxit=500,
                        mindim=2, maxdim=2,
                        lang=NULL, add_stop_words=NULL,
-                       testing=FALSE, taxonomy_separator=NULL, list_size=-1) {
+                       testing=FALSE, taxonomy_separator=NULL, list_size=-1,
+                       vis_type='overview') {
   TESTING <<- testing # makes testing param a global variable
   start.time <- Sys.time()
 
@@ -54,37 +55,38 @@ vis_layout <- function(text, metadata, service,
   filtered <- filter_duplicates(metadata, text, list_size)
   metadata <- filtered$metadata
   text <- filtered$text
-  metadata["lang_detected"] <- detect_language(text$content)
-  stops <- get_stopwords(lang, testing)
-  corpus <- create_corpus(metadata, text, lang)
 
-  vlog$debug("get features")
-  tdm_matrix <- create_tdm_matrix(corpus$stemmed)
-  distance_matrix <- get_distance_matrix(tdm_matrix)
-  lang_detected <- get_OHE_feature(metadata, "lang_detected")
-  vlog$info(paste("Languages:",
-                  paste(paste0(names(lang_detected),
-                               ":",
-                               apply(lang_detected, 2, sum)),
-                        collapse = " "),
-                   sep=" "))
-  features <- concatenate_features(distance_matrix)
+  if(vis_type=='overview'){
+    metadata["lang_detected"] <- detect_language(text$content)
+    stops <- get_stopwords(lang, testing)
+    corpus <- create_corpus(metadata, text, lang)
 
-  vlog$debug("get clusters")
-  clusters <- create_clusters(as.dist(features), max_clusters=max_clusters)
-  layout <- get_ndms(as.dist(features), maxit=500, mindim=2, maxdim=2)
+    vlog$debug("get features")
+    tdm_matrix <- create_tdm_matrix(corpus$stemmed)
+    distance_matrix <- get_distance_matrix(tdm_matrix)
+    lang_detected <- get_OHE_feature(metadata, "lang_detected")
+    vlog$info(paste("Languages:",
+                    paste(paste0(names(lang_detected),
+                                 ":",
+                                 apply(lang_detected, 2, sum)),
+                          collapse = " "),
+                     sep=" "))
+    features <- concatenate_features(distance_matrix)
+    vlog$debug("get clusters")
+    clusters <- create_clusters(as.dist(features), max_clusters=max_clusters)
+    layout <- get_ndms(as.dist(features), maxit=500, mindim=2, maxdim=2)
 
-  vlog$debug("get cluster summaries")
-  metadata = replace_keywords_if_empty(metadata, stops, service)
-  named_clusters <- create_cluster_labels(clusters, metadata,
-                                          service, lang,
-                                          corpus$unlowered,
-                                          weightingspec="ntn", top_n=3,
-                                          stops=stops, taxonomy_separator)
-
-
-  vlog$debug("create output")
-  output <- create_output(named_clusters, layout, metadata)
+    vlog$debug("get cluster summaries")
+    metadata = replace_keywords_if_empty(metadata, stops, service)
+    named_clusters <- create_cluster_labels(clusters, metadata,
+                                            service, lang,
+                                            corpus$unlowered,
+                                            weightingspec="ntn", top_n=3,
+                                            stops=stops, taxonomy_separator)
+    output <- create_overview_output(named_clusters, layout, metadata)
+  } else {
+    output <- create_streamgraph_output(named_clusters, layout, metadata)
+  }
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time

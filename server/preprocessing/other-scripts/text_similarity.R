@@ -103,7 +103,8 @@ tryCatch({
                            service,
                            max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
                            lang=LANGUAGE$name,
-                           taxonomy_separator=taxonomy_separator, list_size = list_size)
+                           taxonomy_separator=taxonomy_separator, list_size = list_size,
+                           vis_type=params$vis_type)
 }, error=function(err){
  tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
  failed$query <<- query
