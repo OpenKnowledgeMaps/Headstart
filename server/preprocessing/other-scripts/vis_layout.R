@@ -85,7 +85,7 @@ vis_layout <- function(text, metadata, service,
                                             stops=stops, taxonomy_separator)
     output <- create_overview_output(named_clusters, layout, metadata)
   } else {
-    output <- create_streamgraph_output(named_clusters, layout, metadata)
+    output <- create_streamgraph_output(metadata)
   }
 
   end.time <- Sys.time()
