@@ -5,7 +5,6 @@ create_output <- function(named_clusters, layout, metadata) {
   x = layout$X1
   y = layout$X2
   labels = named_clusters$labels
-  groups = named_clusters$groups
   cluster = named_clusters$cluster
   num_clusters = named_clusters$num_clusters
   cluster_labels = named_clusters$cluster_labels
