@@ -11,7 +11,11 @@ create_output <- function(named_clusters, layout, metadata) {
   cluster_labels = named_clusters$cluster_labels
 
   # Prepare the output
-  result = cbind(x,y,groups,labels, cluster_labels)
+  unique_groups = data.frame(unique(result$cluster_labels))
+  colnames(unique_groups) <- "cluster_labels"
+  unique_groups$groups <- seq_along(unique_groups$cluster_labels)
+  result = data.frame(cbind(x, y, labels, cluster_labels))
+  result = merge(result, unique_groups, by='cluster_labels')
   output = merge(metadata, result, by.x="id", by.y="labels", all=TRUE)
 
   names(output)[names(output)=="groups"] <- "area_uri"
