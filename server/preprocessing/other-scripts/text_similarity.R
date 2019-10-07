@@ -40,10 +40,15 @@ if (!is.null(params$lang_id)) {
     lang_id <- 'all'
 }
 
+if (!is.null(params$vis_type)) {
+    vis_type <- params$vis_type
+  } else {
+    vis_type <- 'overview'
+}
+
 taxonomy_separator = NULL
 limit = 100
 list_size = -1
-vis_type = ifelse(params$vis_type=='timeline', 'timeline', 'overview')
 switch(service,
        plos={
          source("../other-scripts/rplos_fast.R")
