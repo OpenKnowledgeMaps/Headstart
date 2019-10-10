@@ -145,9 +145,8 @@ MyMediator.prototype = {
     },
 
     init_modules: function() {
-        mediator.manager.registerModule(io, 'io');
-
         if(config.render_list) mediator.manager.registerModule(list, 'list');
+        mediator.manager.registerModule(io, 'io');
         if(config.render_bubbles) {
             mediator.manager.registerModule(canvas, 'canvas');
             mediator.manager.registerModule(papers, 'papers');
@@ -249,10 +248,14 @@ MyMediator.prototype = {
                     return csv.data;
                 }
             } else {
-                return csv;
+                if(typeof csv.data === "object") {
+                    return csv.data;
+                } else {
+                    return csv;
+                }
             }
         }();
-        let context = (config.show_context)?(csv.context):{};
+        let context = (typeof csv.context !== 'object')?({}):(csv.context);
         mediator.streamgraph_data = (config.is_streamgraph)?(csv.streamgraph):{};
         
         mediator.manager.registerModule(headstart, 'headstart');
