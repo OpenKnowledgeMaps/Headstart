@@ -101,12 +101,7 @@ get_papers <- function(query, params, limit=100) {
 
 build_query <- function(query, params, limit){
   # fields to query in
-  if (params$bkl_level == 'top') {
-    q_field <- 'bkl_top_caption'
-  } else {
-    q_field <- 'bkl_caption'
-    q_params$fq <- paste0('bkl_top_caption:', params$bkl_top_caption)
-  }
+  q_field <- if (params$bkl_level == 'top') 'bkl_top_caption' else 'bkl_caption'
   # fields to return
   r_fields <- c('id', 'idnr',
                 'content_type_a', 'content_type_2',
@@ -122,6 +117,9 @@ build_query <- function(query, params, limit){
                 'ocrtext')
   q <- paste(paste0(q_field, ':', '"', params$bkl_list, '"'), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
+  if (params$bkl_level != 'top') {
+    q_params$fq <- paste0('bkl_top_caption:', params$bkl_top_caption)
+  }
   return(q_params)
 }
 
