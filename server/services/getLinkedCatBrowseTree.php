@@ -126,13 +126,14 @@ function getBklFacetData($base_url, $bkl_query, $bkls_top) {
   return $res;
 }
 
-function buildMaplink($search_url, $bkl_list, $bkl_level, $doc_count) {
+function buildMaplink($search_url, $bkl_list, $bkl_level, $doc_count, $bkl_top_caption) {
   # q = ; separated bkls
   # post params: bkl_level: top/normal, bkl_list, doc_count
   $post_fields = array('q' => implode('; ', $bkl_list),
                        'bkl_list' => $bkl_list,
                        'bkl_level' => $bkl_level,
-                       'doc_count' => $doc_count);
+                       'doc_count' => $doc_count,
+                       'bkl_top_caption' => $bkl_top_caption);
   // $fields_string = http_build_query($post_fields);
   // $post_url = urlencode($search_url . "?" . $fields_string);
   return $post_fields;
@@ -175,7 +176,8 @@ function getBrowseTree() {
           $map_params = buildMaplink($GLOBALS['search_url'],
                                    array($bkl["bkl_caption"]),
                                    "bkl",
-                                   $bkl["count"]);
+                                   $bkl["count"],
+                                   $bkl_top);
           $cleaned_bkl[] = array("bkl_caption" => $bkl["bkl_caption"],
                                  "count" => $bkl["count"],
                                  "map_params" => $map_params);
@@ -187,11 +189,13 @@ function getBrowseTree() {
       $top_map_params = buildMaplink($GLOBALS['search_url'],
                                array($bkl_top),
                                "top",
-                               $bkl_top_count);
+                               $bkl_top_count,
+                               $bkl_top);
       $rest_map_params = buildMaplink($GLOBALS['search_url'],
                                $bkl_rest,
                                "bkl",
-                               $bkl_rest_cumsum);
+                               $bkl_rest_cumsum,
+                               $bkl_top);
       $cleaned_bkl[] = array("bkl_caption" => implode("; ", $bkl_rest),
                              "count" => $bkl_rest_cumsum,
                              "map_params" => $rest_map_params);
@@ -207,7 +211,8 @@ function getBrowseTree() {
       $top_map_params = buildMaplink($GLOBALS['search_url'],
                                array($bkl_top),
                                "top",
-                               $bkl_top_count);
+                               $bkl_top_count,
+                               $bkl_top);
       $bkl_tree[] = array("bkl_top_caption" => $bkl_top,
                           "count" => $bkl_top_count,
                           "bkl_facet" => array(),
@@ -221,7 +226,8 @@ function getBrowseTree() {
   $rest_maplink = buildMaplink($GLOBALS['search_url'],
                                $bkl_top_rest,
                                "top",
-                               $bkl_top_rest_cumsum);
+                               $bkl_top_rest_cumsum,
+                               "");
   $bkl_tree[] = array("bkl_top_caption" => implode("; ", $bkl_top_rest),
                       "count" => $bkl_top_rest_cumsum,
                       "bkl_facet" => array(),
