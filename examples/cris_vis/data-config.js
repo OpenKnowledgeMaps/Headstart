@@ -19,13 +19,15 @@ var data_config = {
     is_title_clickable: false,
     show_infolink_areas: true,
 	
-    show_context: true,
+    show_context: false,
     create_title_from_context: false,
     
     scale_toolbar: true,
     
     content_based: false,
     list_sub_entries: true,
+    list_sub_entries_readers: true,
+    list_sub_entries_statistics: true,
     list_show_all_papers: false,
     list_additional_images: true,
     list_images: ["Altersgruppe", "Background", "Bundesland", "Geschlecht",
