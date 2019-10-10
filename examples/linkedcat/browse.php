@@ -20,34 +20,34 @@ $date = new DateTime();
             </div>
 
         </div>
-        
+
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script>
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
-            
+
             function displayTree() {
-                
+
                 $.getJSON(data_config.server_url + "services/getLinkedCatBrowseTree.php",
                     function(data) {
                         for (index_top in data) {
                             let current_item = data[index_top];
                             let title = wrapMisc(current_item, current_item.bkl_top_caption);
                             let has_children = (current_item.bkl_facet.length > 0)?(true):(false);
-                            
+
                             $("#browseview").append('<a id="click-' + index_top + '" href="#item-' + index_top + '" class="list-group-item" data-toggle="collapse">\n\
                                 '+ ((has_children)?('<i class="glyphicon glyphicon-chevron-right"></i>'):('')) + title + '\n\
                                 <span class="badge badge-primary badge-pill">' + current_item.count + ' Dokumente</span>');
-                            
+
                             if(has_children) {
                                 $("#browseview").append('<div class="list-group collapse" id="item-' + index_top + '"></div>')
                                 for (index_bottom in current_item.bkl_facet) {
                                     let current_sub_item = current_item.bkl_facet[index_bottom];
                                     let title = wrapMisc(current_sub_item, current_sub_item.bkl_caption);
-                                    
+
                                     $('<a id="click-' + index_top + '-' + index_bottom +'" href="#item-' + index_top + '-' + index_bottom +'" class="list-group-item" data-toggle="collapse">\n\
                                       '+ title + '\n\
                                       <span class="badge badge-primary badge-pill">' + current_sub_item.count + ' Dokumente</span>').appendTo("#item-" + index_top);
-                                    
+
                                     appendClickHandler("#click-" + index_top + "-" + index_bottom, current_sub_item.map_params);
                                 }
                             } else {

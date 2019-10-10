@@ -101,7 +101,12 @@ get_papers <- function(query, params, limit=100) {
 
 build_query <- function(query, params, limit){
   # fields to query in
-  q_field <- if (params$bkl_level == 'top') 'bkl_top_caption' else 'bkl_caption'
+  if (params$bkl_level == 'top') {
+    q_field <- 'bkl_top_caption'
+  } else {
+    q_field <- 'bkl_caption'
+    q_params$fq <- paste0('bkl_top_caption:', params$bkl_top_caption)
+  }
   # fields to return
   r_fields <- c('id', 'idnr',
                 'content_type_a', 'content_type_2',
