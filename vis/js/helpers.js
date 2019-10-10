@@ -59,7 +59,8 @@ export function sortBy(field) {
             .sort(function (a, b) {
                 if (field === "year") {
                     return stringCompare(a[field], b[field], "desc");
-                } else if (field === "citations" || field === "readers" || field === "tweets") {
+                } else if (field === "relevance" || field === "citations" 
+                        || field === "readers" || field === "tweets") {
                     return stringCompare(a[field], b[field], "desc");
                 } else {
                     return stringCompare(a[field], b[field], "asc");
