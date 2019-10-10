@@ -89,12 +89,13 @@ $date = new DateTime();
                       , bkl_level: map_params.bkl_level
                       , doc_count: map_params.doc_count
                       , bkl_list: map_params.bkl_list
+                      , bkl_top_caption: map_params.bkl_top_caption
                       , today: "<?php echo $date->format('Y-m-d') ?>"
                       , vis_type: "overview"
                     }
                 })
             }
-            
+
             function appendClickHandlerExpand() {
                 $('.list-group-item').on('click', function() {
                   $('.glyphicon', this)
