@@ -1,5 +1,3 @@
-### FOR BASE
-
 rm(list = ls())
 
 library(rstudioapi)
@@ -11,111 +9,78 @@ wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
 setwd(wd) #Don't forget to set your working directory
 
-query <- "digital education" #args[2]
-service <- "base"
-params <- NULL
-params_file <- "snapshot_params_base.json"
 
 source('../utils.R')
 DEBUG = FALSE
+TESTING = TRUE
 
 if (DEBUG==TRUE){
   setup_logging('DEBUG')
 } else {
   setup_logging('INFO')
 }
-
 tslog <- getLogger('ts')
 
+
+taxonomy_separator = NULL
+
 source("../vis_layout.R")
-source('../base.R')
 
 
 MAX_CLUSTERS = 15
 LANGUAGE = "english"
 ADDITIONAL_STOP_WORDS = "english"
 
-if(!is.null(params_file)) {
+
+test_cases <- read.csv("queries.csv")
+commit_id <- "60bb5eb" # latest master commit considered stable; switch to release tag later
+# check that you actually are on that commit when creating snapshots
+
+for (service in c("base", "pubmed")) {
+  params <- NULL
+  params_file <- paste0("params_", service, "_snapshot.json")
   params <- fromJSON(params_file)
+  switch(service,
+          base={
+            source('../base.R')
+            limit = 120
+            list_size = 100
+          },
+          pubmed={
+            source('../pubmed.R')
+            limit = 100
+            list_size = -1
+          }
+         )
+
+  for (query in test_cases$query) {
+    tryCatch({
+      input_data = get_papers(query, params, limit=limit)
+      write_json(input_data,
+                 paste("snapshots/snapshot_",
+                       commit_id, "_",
+                       service, "_",
+                       query, "_",
+                       "input.json"))
+    }, error=function(err){
+      tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
+    })
+    tryCatch({
+      output_json = vis_layout(input_data$text, input_data$metadata,
+                               service,
+                               max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
+                               lang=LANGUAGE,
+                               taxonomy_separator=taxonomy_separator, list_size = list_size,
+                               testing=TESTING)
+
+      write_json(data.frame(fromJSON(output_json)),
+                 paste("snapshots/snapshot_",
+                       commit_id, "_",
+                       service, "_",
+                       query, "_",
+                       "output.json"))
+    }, error=function(err){
+    tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err)))
+    })
+  }
 }
-
-#start.time <- Sys.time()
-
-tryCatch({
-  input_data = get_papers(query, params, limit=120)
-}, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
-})
-write_json(input_data, "snapshots/snapshot_base_input.json")
-#end.time <- Sys.time()
-#time.taken <- end.time - start.time
-#time.taken
-tryCatch({
-output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
-                         lang=LANGUAGE,
-                         add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
-}, error=function(err){
-tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err)))
-})
-
-write_json(data.frame(fromJSON(output_json)), "snapshots/snapshot_base_expected.json")
-
-
-### FOR PUBMED
-
-rm(list = ls())
-
-library(rstudioapi)
-library(jsonlite)
-
-options(warn=1)
-
-wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
-
-setwd(wd) #Don't forget to set your working directory
-
-query <- "health education" #args[2]
-service <- "pubmed"
-params <- NULL
-params_file <- "snapshot_params_pubmed.json"
-
-source('../utils.R')
-DEBUG = FALSE
-
-if (DEBUG==TRUE){
-  setup_logging('DEBUG')
-} else {
-  setup_logging('INFO')
-}
-
-source("../vis_layout.R")
-source('../pubmed.R')
-
-MAX_CLUSTERS = 15
-LANGUAGE = "english"
-ADDITIONAL_STOP_WORDS = "english"
-
-if(!is.null(params_file)) {
-  params <- fromJSON(params_file)
-}
-
-#start.time <- Sys.time()
-
-tryCatch({
-  input_data = get_papers(query, params)
-}, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
-})
-write_json(input_data, "snapshots/snapshot_pubmed_input.json")
-#end.time <- Sys.time()
-#time.taken <- end.time - start.time
-#time.taken
-tryCatch({
-output_json = vis_layout(input_data$text, input_data$metadata, max_clusters=MAX_CLUSTERS,
-                         lang=LANGUAGE,
-                         add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
-}, error=function(err){
-tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
-})
-
-write_json(data.frame(fromJSON(output_json)), "snapshots/snapshot_pubmed_expected.json")
