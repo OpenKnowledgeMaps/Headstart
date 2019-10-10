@@ -478,8 +478,6 @@ class Canvas {
 
     drawContext(context) {
         if (!config.show_context || !this.paramExists(context.params)) {
-            $("#num_articles").html(context.num_documents)
-                              .attr("class", "");
             return;
         }
         

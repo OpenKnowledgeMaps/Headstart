@@ -113,7 +113,7 @@ export const list = StateMachine.create({
 });
 
 list.drawList = function() {
-    let self = this
+    let self = this;
 
     // Load list template
     let list_explorer = listTemplate({
@@ -904,13 +904,13 @@ list.createAbstractCris = function(d, cut_off) {
     let list_abstract_template = listSubEntryTemplateCris();
     let list_abstract = document.createElement("div");
     
-    for (let elem of d.paper_abstract) {
+    for (let [i, elem] of d.paper_abstract.entries()) {
         let current_abstract = d3.select(list_abstract)
                 .append("div")
                     .attr('class', function(x) { 
                         let new_class =  "level" + elem.level;
                         let existing_class = d3.select(this).attr("class") 
-                        if (existing_class == null){
+                        if (existing_class === null){
                           return new_class;
                         } else {
                             return new_class + " " + existing_class;
@@ -918,20 +918,26 @@ list.createAbstractCris = function(d, cut_off) {
                     })
                     .html(list_abstract_template);
         
+        let subentry_title = (config.list_sub_entries_number)?((i+1) + '. ' + elem.abstract):(elem.abstract);
+        
         current_abstract.select(".list_subentry_title")
-                .text(elem.abstract)
+                .text(subentry_title)
         
-        current_abstract.select(".list_subentry_readers")
-                .text(+elem.readers)
-        
-        current_abstract.select(".list_subentry_readers_entity")
-                .text(config.base_unit)
-        
-        if(elem.readers === "0" || elem.readers === "") {
-            current_abstract.select(".list_subentry_0_count").classed("list_subentry_0_count_visible", true)
+        if(config.list_sub_entries_readers) {
+            current_abstract.select(".list_subentry_readers_count")
+                    .text(+elem.readers)
+
+            current_abstract.select(".list_subentry_readers_entity")
+                    .text(config.base_unit)
+
+            if(elem.readers === "0" || elem.readers === "") {
+                current_abstract.select(".list_subentry_0_count").classed("list_subentry_0_count_visible", true)
+            }
+        } else {
+            current_abstract.select(".list_subentry_readers").html("")
         }
         
-        if(cut_off) {
+        if(cut_off && d.paper_abstract.length > 1) {
             let showmore = current_abstract.select(".list_subentry_showmore")
                                 .style("display", "inline-block")
                         
@@ -951,7 +957,7 @@ list.createAbstractCris = function(d, cut_off) {
             current_abstract.select(".list_subentry_showmore")
                     .style("display", "none")
             
-            if(elem.readers !== "0" && elem.readers !== "") {
+            if(config.list_sub_entries_statistics && elem.readers !== "0" && elem.readers !== "") {
             
                 let show_statistics = current_abstract.select(".list_subentry_show_statistics")
                         .style("display", "inline-block")
@@ -1093,7 +1099,9 @@ list.enlargeListItem = function(d) {
 
     this.setImageForListHolder(d);
     
-    this.setAdditionalImagesForListHolder(d);
+    if (config.list_additional_images) {
+        this.setAdditionalImagesForListHolder(d);
+    }
     
     if (config.show_keywords) {
         d3.selectAll("#list_keywords")
