@@ -7,14 +7,14 @@ var data_config = {
     
     paper_min_scale: 0.8,
 
-    title: "Übersicht für <b>Forschungsfragen zum Thema Unfallverletzungen</b>",
+    title: "Overview of <b>research questions about accidental injuries</b>",
     input_format: "json",
-    base_unit: "Fragen",
+    base_unit: "questions",
     use_area_uri: true,
     preview_type: "pdf",
     
     show_multiples: false,
-    show_dropdown: true,
+    show_dropdown: false,
     show_intro: false,
     show_list:true,
     is_force_papers:true,
@@ -38,7 +38,7 @@ var data_config = {
     area_force_alpha: 0.02,
     papers_force_alpha: 0.2,
     
-    language: "ger_cris_2",
+    language: "eng_cris_2",
     
     sort_options: ["title", "readers", "area"],
     
@@ -51,11 +51,7 @@ var data_config = {
     evaluation_service: "ga",
 
     files: [{
-        title: "DE",
-        file: "./data/final_output2_de.json"
-    },
-    {
         title: "EN",
         file: "./data/final_output2_en.json"
-    }],
+    }]
 };
