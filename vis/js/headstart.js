@@ -240,7 +240,7 @@ HeadstartFSM.prototype = {
       var that = this;
       $.each(mediator.bubbles, (index, elem) => {
           var setupMultiplesVisualization = (csv) => {
-              mediator.publish("prepare_data", null, csv);
+              mediator.publish("prepare_data", null, csv, null);
               mediator.publish("prepare_areas");
               elem.start(csv);
           };
