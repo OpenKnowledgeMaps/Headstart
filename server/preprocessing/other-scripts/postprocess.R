@@ -1,6 +1,6 @@
 vpplog <- getLogger('vis.postprocess')
 
-create_output <- function(named_clusters, layout, metadata) {
+create_overview_output <- function(named_clusters, layout, metadata) {
 
   x = layout$X1
   y = layout$X2
@@ -45,4 +45,10 @@ create_output <- function(named_clusters, layout, metadata) {
 
   return(output_json)
 
+}
+
+create_streamgraph_output <- function(metadata) {
+  output <- metadata
+  output_json = toJSON(output)
+  return(output_json)
 }
