@@ -1,6 +1,6 @@
 vpplog <- getLogger('vis.postprocess')
 
-create_overview_output <- function(clusters, layout, metadata) {
+create_overview_output <- function(named_clusters, layout, metadata) {
 
   x = layout$X1
   y = layout$X2
