@@ -49,6 +49,8 @@ var data_config = {
     
     is_evaluation: false,
     evaluation_service: "ga",
+    
+    intro: "intro_cris2_en",
 
     files: [{
         title: "EN",
