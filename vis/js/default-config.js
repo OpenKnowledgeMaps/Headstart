@@ -568,7 +568,7 @@ var config = {
             distributions_label: "distributions ",
             show_verb_label: "expand",
             hide_verb_label: "collapse",
-            items: "Topics",
+            items: "topics",
             scale_by_infolink_label: '',
             scale_by_label: 'Distribution for:',
             credit_alt: "Created by Open Knowledge Maps",
