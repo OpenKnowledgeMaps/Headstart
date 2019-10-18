@@ -19,6 +19,7 @@ const embedTemplate = require("templates/modals/embed_modal.handlebars");
 const toolbarTemplate = require("templates/toolbar/toolbar.handlebars");
 const scaleToolbarTemplate = require("templates/toolbar/scale_toolbar.handlebars");
 const crisLegendTemplate = require("templates/toolbar/cris_legend.handlebars");
+const credit_logo = require("images/okmaps-logo-round.png");
 
 class ModuleManager {
     constructor() {
@@ -349,6 +350,10 @@ MyMediator.prototype = {
             , canonical_url: config.canonical_url
             , is_authorview: config.is_authorview
         }));
+        if(config.credit_embed) {
+            $("#credit_logo").attr("src", credit_logo);
+        }
+        
         this.viz.append(infoTemplate());
         this.viz.append(iFrameTemplate());
         this.viz.append(imageTemplate());

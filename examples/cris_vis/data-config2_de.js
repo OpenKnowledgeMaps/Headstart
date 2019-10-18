@@ -45,7 +45,8 @@ var data_config = {
     sort_menu_dropdown: true,
     visual_distributions: false,
     cris_legend: false,
-    credit: true,
+    credit_embed: true,
+    canonical_url: "https://openknowledgemaps.org",
     
     is_evaluation: false,
     evaluation_service: "ga",
