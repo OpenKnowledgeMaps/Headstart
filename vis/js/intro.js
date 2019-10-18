@@ -1,5 +1,7 @@
 const ViperInfoTemplate = require("templates/modals/viper_info_modal.handlebars")
-const CRISInfoTemplate = require("templates/modals/cris_info_modal.handlebars")
+const CRISInfoTemplate = require("templates/modals/cris/cris_info_modal.handlebars")
+const CRIS2InfoTemplateDE = require("templates/modals/cris/cris2_info_modal_de.handlebars")
+const CRIS2InfoTemplateEN = require("templates/modals/cris/cris2_info_modal_en.handlebars")
 
 export var intros = { 
     intro_hs: {
@@ -18,5 +20,11 @@ export var intros = {
     }, intro_cris: {
         title: "Reden Sie mit! Welche Fragen zu psychischen Erkrankungen soll die Wissenschaft aufgreifen?",
         body: CRISInfoTemplate()
+    }, intro_cris2_de: {
+        title: "Reden Sie mit! Welche Fragen zu Unfallverletzungen soll die Forschung aufgreifen?",
+        body: CRIS2InfoTemplateDE()
+    }, intro_cris2_en: {
+        title: "Tell us! What questions on accidental injuries does research need to address?",
+        body: CRIS2InfoTemplateEN()
     }
 };
