@@ -245,7 +245,7 @@ list.fit_list_height = function() {
                     - $("#show_hide_button").outerHeight(true) 
                     - $("#explorer_options").outerHeight(true)
                     + ($(".legend").outerHeight(true) || 0)
-                    - (($("#toolbar").height() > 0)?(0):(PAPER_LIST_CORRECTION))
+                    //- (($("#toolbar").height() > 0)?(0):(PAPER_LIST_CORRECTION))
                     //TODO: Hack for VIPER
                     + ((config.language === "eng_openaire")?(10):(0));
     }
