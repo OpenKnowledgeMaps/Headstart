@@ -164,7 +164,7 @@ IO.prototype = {
         })
     },
 
-    prepareData: function (highlight_data, fs) {
+    prepareData: function (highlight_data, fs, context) {
         this.areas = {};
         this.areas_array = [];
         var _this = this;
@@ -342,7 +342,8 @@ IO.prototype = {
             if(config.list_show_external_vis) {
                 d.external_vis_link = config.external_vis_url 
                                 + "?vis_id=" + config.files[mediator.current_file_number].file 
-                                + "&doc_id=" + d.id;
+                                + "&doc_id=" + d.id
+                                + "&search_term=" + context.query.replace(/\\(.?)/g, "$1");
             }
 
         });
