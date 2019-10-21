@@ -415,6 +415,23 @@ img#preview_page {
     font-family: $base-font-family;
 }
 
+.backlink-list {
+    margin-left: 15px;
+    margin-top: 15px;
+    font-size: 11px;
+    cursor: pointer;
+
+    a {
+        border-bottom: 1px solid $medium-blue;
+        color: $medium-blue;
+        text-decoration: none;
+
+        &:hover {
+            border-bottom: 2px solid $medium-blue;
+        }
+    }
+}
+
 @media screen and (max-width: 1150px) {
     /*.list_metadata {
 

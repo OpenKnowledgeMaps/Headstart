@@ -1115,10 +1115,30 @@ list.enlargeListItem = function(d) {
     if (config.list_show_external_vis) {
         d3.selectAll('.conceptgraph').style('display', 'none');
     }
+    
+    this.setBacklink(d);
 
     d.paper_selected = true;
     this.count_visible_items_to_header()
 };
+
+list.setBacklink = function(d) {
+    let current_list_holder = d3.selectAll("#list_holder")
+                                .filter(function(x) {
+                                        return (x.id === d.id);
+                                })
+    current_list_holder.append("div")
+                            .attr("id", "backlink_list")
+                            .attr("class", "backlink-list")
+                               .append("a")
+                                .attr("class", "underline")
+                                .text(config.localization[config.language].backlink_list)
+                                .on("click", function (d) {
+                                    mediator.publish('currentbubble_click', d);
+                                })
+         
+    
+}
 
 list.setAdditionalImagesForListHolder = function(d) {
     let current_item = d3.selectAll("#list_holder")
@@ -1522,6 +1542,11 @@ list.notSureifNeeded = function() {
     var image_node = list_holders_local.select("#preview_image").node();
     if (image_node !== null) {
         image_node.parentNode.removeChild(image_node);
+    }
+    
+    var backlink_node = list_holders_local.select("#backlink_list").node();
+    if (backlink_node !== null) {
+        backlink_node.parentNode.removeChild(backlink_node);
     }
 };
 
