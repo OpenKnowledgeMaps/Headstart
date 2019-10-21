@@ -676,7 +676,6 @@ papers.enlargePaper = function (d, holder_div) {
     mediator.current_circle
             .on("click", (d) => {
                 mediator.publish("currentbubble_click", d);
-                this.resetPaths();
             });
 
     d.resized = true;
@@ -688,6 +687,8 @@ papers.currentbubble_click = function (d) {
     if (mediator.current_enlarged_paper !== null) {
         mediator.current_enlarged_paper.paper_selected = false;
     }
+    
+    this.resetPaths();
 
     mediator.current_enlarged_paper = null;
     mediator.publish("record_action", d.title, "Paper", "click", config.user_id, d.bookmarked + " " + d.recommended, null);
