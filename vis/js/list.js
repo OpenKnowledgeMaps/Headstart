@@ -1132,7 +1132,13 @@ list.setBacklink = function(d) {
                             .attr("class", "backlink-list")
                                .append("a")
                                 .attr("class", "underline")
-                                .text(config.localization[config.language].backlink_list)
+                                .text(function() {
+                                    if(config.is_streamgraph) {
+                                        return config.localization[config.language].backlink_list_streamgraph;
+                                    } else {
+                                        return config.localization[config.language].backlink_list;
+                                    }
+                                })
                                 .on("click", function (d) {
                                     mediator.publish('currentbubble_click', d);
                                 })
