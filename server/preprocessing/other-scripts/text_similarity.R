@@ -40,6 +40,12 @@ if (!is.null(params$lang_id)) {
     lang_id <- 'all'
 }
 
+if (!is.null(params$vis_type)) {
+    vis_type <- params$vis_type
+  } else {
+    vis_type <- 'overview'
+}
+
 taxonomy_separator = NULL
 limit = 100
 list_size = -1
@@ -64,7 +70,7 @@ switch(service,
        },
        linkedcat={
          source('../other-scripts/linkedcat.R')
-         limit = ifelse(params$vis_type=='timeline', 9999, 100)
+         limit = ifelse(vis_type=='timeline', 9999, 100)
        },
        linkedcat_authorview={
          source('../other-scripts/linkedcat_authorview.R')
@@ -103,7 +109,8 @@ tryCatch({
                            service,
                            max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
                            lang=LANGUAGE$name,
-                           taxonomy_separator=taxonomy_separator, list_size = list_size)
+                           taxonomy_separator=taxonomy_separator, list_size = list_size,
+                           vis_type=vis_type)
 }, error=function(err){
  tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
  failed$query <<- query

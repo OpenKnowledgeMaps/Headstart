@@ -198,8 +198,8 @@ MyMediator.prototype = {
         mediator.manager.call('io', 'get_server_files', [callback]);
     },
 
-    io_prepare_data: function (highlight_data, cur_fil_num) {
-        mediator.manager.call('io', 'prepareData', [highlight_data, cur_fil_num]);
+    io_prepare_data: function (highlight_data, cur_fil_num, context) {
+        mediator.manager.call('io', 'prepareData', [highlight_data, cur_fil_num, context]);
     },
 
     io_prepare_areas: function () {
@@ -265,7 +265,7 @@ MyMediator.prototype = {
             mediator.manager.call('canvas', 'setupStreamgraphCanvas', []);
 
             mediator.manager.call('io', 'initializeMissingData', [data]);
-            mediator.manager.call('io', 'prepareData', [highlight_data, data]);
+            mediator.manager.call('io', 'prepareData', [highlight_data, data, context]);
             mediator.manager.call('io', 'prepareAreas', []);
 
             mediator.manager.call('io', 'setContext', [context, data.length]);
@@ -299,7 +299,7 @@ MyMediator.prototype = {
 
 
             mediator.manager.call('io', 'initializeMissingData', [data]);
-            mediator.manager.call('io', 'prepareData', [highlight_data, data]);
+            mediator.manager.call('io', 'prepareData', [highlight_data, data, context]);
             mediator.manager.call('io', 'prepareAreas', []);
 
             mediator.manager.call('io', 'setContext', [context, data.length]);
