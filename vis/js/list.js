@@ -1140,7 +1140,11 @@ list.setBacklink = function(d) {
                                     }
                                 })
                                 .on("click", function (d) {
-                                    mediator.publish('currentbubble_click', d);
+                                    if(config.is_streamgraph) {
+                                        mediator.publish('currentstream_click');
+                                    } else {
+                                        mediator.publish('currentbubble_click', d);
+                                    }
                                 })
          
     
