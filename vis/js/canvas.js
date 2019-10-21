@@ -633,6 +633,27 @@ class Canvas {
             this.drawContextAuthorview(context);
         }
     }
+    
+    showAreaStreamgraph(keyword) {
+        $("#subdiscipline_title h4")
+            .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
+        
+        $("#subdiscipline_title>h4").dotdotdot();
+        
+        $("#context").css("display", "none");
+
+        $('<p id="backlink" class="backlink backlink-streamgraph"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
+
+        $("#backlink").on("click", function () {
+            mediator.publish("streamgraph_chart_clicked");
+        })
+    }
+    
+    removeAreaStreamgraph() {
+        $("#backlink").remove();
+        $("#context").css("display", "block");
+        mediator.publish("draw_title");
+    }
 
     initForceAreas() {
         let padded = canvas.current_vis_size - headstart.padding;
