@@ -253,6 +253,9 @@ text {
     #credit_embed {
         a {
             color: $dark-blue;
+            &:hover {
+                text-decoration: none;
+            }
         }
     }
 
