@@ -483,17 +483,27 @@ class Canvas {
         
         $("#context").css({"visibility": "visible", "display": "block"});
         let modifier = "";
+        let is_most_relevant = false;
         if (this.paramExists(context.params.sorting)) {
             if(context.params.sorting === "most-recent") {
-                modifier = " " + config.localization[config.language].most_recent_label + " ";
+                modifier = config.localization[config.language].most_recent_label;
+            } else if (context.params.sorting === "most-relevant") {
+                modifier = config.localization[config.language].most_relevant_label;
+                is_most_relevant = true;
             } else {
-                modifier = " "
+                modifier = "";
             }
         }
-        $("#num_articles").html(context.num_documents + modifier
+        $("#num_articles").html(context.num_documents + ' <span id="modifier" class="modifier">' + modifier + '</span>'
                 + " " + config.localization[config.language].articles_label
                 + ((config.show_context_oa_number)?(" (" + context.share_oa + " open access)"):("")) 
         );
+        
+        if(is_most_relevant) {
+            $("#modifier")
+                    .addClass("context_moreinfo")
+                    .attr("title", config.localization[config.language].most_relevant_tooltip);
+        }
 
         $("#source").html(config.localization[config.language].source_label
                        + ": " + config.service_names[context.service]);
