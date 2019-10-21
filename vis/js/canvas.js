@@ -641,7 +641,8 @@ class Canvas {
         $("#subdiscipline_title>h4").dotdotdot();
         
         $("#context").css("display", "none");
-
+        
+        $("#backlink").remove();
         $('<p id="backlink" class="backlink backlink-streamgraph"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
 
         $("#backlink").on("click", function () {
