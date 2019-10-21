@@ -92,6 +92,25 @@ $date = new DateTime();
                       , bkl_top_caption: map_params.bkl_top_caption
                       , today: "<?php echo $date->format('Y-m-d') ?>"
                       , vis_type: "overview"
+                      , from: "1847-01-01"
+                      , to: "1918-01-01"
+                      , include_content_type: [
+                            "Andere Abhandlungen",
+                            "Anthologie",
+                            "Bibliografie",
+                            "Biografie",
+                            "Briefsammlung",
+                            "Katalog",
+                            "Kommentar",
+                            "Mehrsprachiges Wörterbuch",
+                            "Mitgliederverzeichnis",
+                            "Protokoll",
+                            "Quelle",
+                            "Reisebericht",
+                            "Rezension",
+                            "Statistik",
+                            "Verzeichnis",
+                            "Wörterbuch"]
                     }
                 })
             }
