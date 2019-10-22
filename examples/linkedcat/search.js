@@ -94,6 +94,10 @@ var addAutoComplete = function() {
                 renderItem: function (item, search){
                     search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
                     var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+                    if(search.length > 0) {
+                        item[1] = item[1].replace(/</g, "&lt;");
+                        item[1] = item[1].replace(/>/g, "&gt;");
+                    }
                     return '<div class="autocomplete-suggestion" '
                             +' data-id="' + item[0] + '"'
                             +' data-author="'+item[1] +'"'
