@@ -12,10 +12,11 @@ $date = new DateTime();
     </head>
     <body>
         <div class="container">
-
+            <h2>Browse Themenbereiche</h2>
+            <p>Entdecken Sie die Sitzungsberichte der ÖAW (von 1847 bis 1918). In der Liste finden Sie Knowledge Maps nach Basisklassen sortiert.</p>
             <div id="browseview" class="list-group list-group-root well">
                 <div id="browseview-loading" class="loading-indicator">
-                    Der Browse View wird geladen und in wenigen Sekunden angezeigt <img class="loading" src="img/ajax-loader.gif">
+                    Die Themenbereiche werden geladen und in wenigen Sekunden angezeigt <img class="loading" src="img/ajax-loader.gif">
                 </div>
             </div>
 
