@@ -94,7 +94,7 @@ include 'config.php';
             <div style="">
                 <a href="browse.php" target="_blank">
                     <button class="search-btn shadow browse">
-                        <i class="fas fa-search"></i> Browse Themen
+                        <i class="fas fa-search"></i> Browse Themenbereiche
                     </button>
                 </a>
             </div>
