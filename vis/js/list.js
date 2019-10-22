@@ -842,13 +842,13 @@ list.hideEntriesByParam = function (object, param) {
 list.hideEntriesByWord = function(object, search_words) {
     object
         .filter(function(d) {
-            let abstract = (config.list_sub_entries)?(d.abstract_search.toLowerCase()):(d.paper_abstract.toLowerCase());
-            let title = d.title.toLowerCase();
-            let authors = d.authors_string.toLowerCase();
-            let journals = d.published_in.toLowerCase();
-            let year = d.year;
+            let abstract = (config.list_sub_entries)?(d.abstract_search.toString().toLowerCase()):(d.paper_abstract.toString().toLowerCase());
+            let title = d.title.toString().toLowerCase();
+            let authors = d.authors_string.toString().toLowerCase();
+            let journals = d.published_in.toString().toLowerCase();
+            let year = d.year.toString();
             let word_found = true;
-            let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toLowerCase()) : ("");
+            let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toString().toLowerCase()) : ("");
             let i = 0;
             while (word_found && i < search_words.length) {
                 word_found = (abstract.indexOf(search_words[i]) !== -1 ||
