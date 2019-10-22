@@ -82,7 +82,7 @@ $date = new DateTime();
                                                         + "&service_url=" + data_config.server_url + "services/searchLinkedCatBrowseview.php"
                                                         + "&service_name=LinkedCat"
                                                         + "&service=" + data_config.service
-                                                        + "&visualization_mode=keywords")
+                                                        + "&visualization_mode=browse")
                                         )
                     win.post_data = {
                       q: map_params.q

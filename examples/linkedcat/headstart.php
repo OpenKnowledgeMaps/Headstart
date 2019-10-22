@@ -14,12 +14,38 @@ include 'config.php';
         <script type="text/javascript" src="search_options.js"></script>
         <script type="text/javascript" src="lib/Chart.Streamgraph.S.js"></script>
         <script>
-                var intro = {
+                let intro_authors_overview = {
                     title: "Was ist das?",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp">Erklärungstext</p>'
+                    <p class="wtp">Erklärungstext Autoren Knowledge Map</p>'
                 }
-                data_config.intro = intro;
+                
+                let intro_authors_timeline = {
+                    title: "Was ist das?",
+                            body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
+                    <p class="wtp">Erklärungstext Autoren Zeitstrahl</p>'
+                }
+                
+                let intro_keywords_overview = {
+                    title: "Was ist das?",
+                            body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
+                    <p class="wtp">Erklärungstext Schlagwörter Knowledge Map</p>'
+                }
+                
+                let intro_keywords_timeline = {
+                    title: "Was ist das?",
+                            body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
+                    <p class="wtp">Erklärungstext Schlagwörter Zeitstrahl</p>'
+                }
+                
+                let intro_browseview = {
+                    title: "Was ist das?",
+                            body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
+                    <p class="wtp">Erklärungstext Browseview</p>'
+                }
+                
+                
+                data_config.intro = intro_keywords_overview;
             
         	data_config.files = [{
         		title: <?php echo json_encode($_GET['query']) ?>,
@@ -34,6 +60,20 @@ include 'config.php';
                     data_config.is_streamgraph = true;
                     data_config.embed_modal = false;
                     data_config.show_area = false;
+                    
+                    if(<?php echo json_encode($_GET['visualization_mode']) ?> === "authors") {
+                        data_config.intro = intro_authors_timeline;
+                    } else {
+                        data_config.intro = intro_keywords_timeline;
+                    }
+                } else {
+                    if (<?php echo json_encode($_GET['visualization_type']) ?> === "authors") {
+                        data_config.intro = intro_authors_overview;
+                    } else if (<?php echo json_encode($_GET['visualization_mode']) ?> === "browse") {
+                        data_config.intro = intro_browseview;
+                    } else {
+                        data_config.intro = intro_keywords_overview;
+                    }
                 }
         </script>
         <script type="text/javascript" src="<?php echo $HEADSTART_PATH; ?>dist/headstart.js"></script>
