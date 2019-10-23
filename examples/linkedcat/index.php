@@ -112,8 +112,8 @@ include 'config.php';
             $('input[name="optradio"][value="' + mode + '"').prop("checked", true);
             
             var additional_information = {
-                authors: '<p>Erstellen Sie einen Überblick oder Zeitstrahl über die Sitzungsberichte eines Autors.'
-                , keywords: '<p>Erstellen Sie einen Überblick oder Zeitstrahl über Sitzungsberichte zu einem Thema.'
+                authors: '<p>Erstellen Sie eine Knowledge Map oder einen Zeitstrahl über die Sitzungsberichte eines Autors.'
+                , keywords: '<p>Erstellen Sie eine Knowledge Map oder einen Zeitstrahl über Sitzungsberichte zu einem Thema.'
             }
             
             var author_selected = false;
