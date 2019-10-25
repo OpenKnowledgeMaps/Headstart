@@ -415,7 +415,14 @@ list.filterListByAreaURIorArea = function(area) {
 list.filterListByArea = function(area) {
     d3.selectAll("#list_holder")
         .filter(function(x) {
-            return (config.use_area_uri) ? (x.area_uri == area.area_uri) : (x.area == area.title);
+            if (config.use_area_uri) {
+                //TODO: hotfix for issue with backlinks for older maps
+                let curr_area_uri = (Array.isArray(x.area_uri)) ? (x.area_uri[0]) : (x.area_uri);
+                let target_area_uri = (Array.isArray(area.area_uri)) ? (area.area_uri[0]) : (area.area_uri);
+                return curr_area_uri == target_area_uri;
+            } else {
+                return x.area == area.title;
+            }
         })
         .style("display", function(d) {
             return d.filtered_out ? "none" : "inline";
