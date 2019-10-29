@@ -11,8 +11,8 @@ import * as hs from 'headstart';
 var start = function(json_data) {
     if(data_config) Object.assign(config, data_config);
     window.namespace = "headstart";
-    hs.headstart = new hs.HeadstartFSM(json_data);
-    hs.headstart.start();
+    var headstartInstance = new hs.HeadstartFSM(json_data);
+    headstartInstance.start();
 }
 
 export {start};

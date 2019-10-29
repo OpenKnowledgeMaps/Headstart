@@ -1,10 +1,12 @@
 var config = require('./config.js');
 const path = require('path');
 const merge = require('webpack-merge');
+const webpack = require('webpack');
 
 const TARGET = process.env.npm_lifecycle_event;
 
 const common = {
+    mode: "development",
     devtool: 'eval-source-map',
     entry: './vis/app.js',
 
@@ -15,6 +17,15 @@ const common = {
         filename: 'headstart.js',
         libraryTarget: 'var',
         library: 'headstart'
+    },
+
+    devServer: {
+        contentBase: path.join(__dirname, 'examples', 'local_files'),
+        compress: true,
+        port: 9001,
+        disableHostCheck: true,
+        host: '0.0.0.0',
+        publicPath: '/dist/'
     },
 
     resolve: {
@@ -48,6 +59,13 @@ const common = {
     externals: {
         'chart': 'Chart'
     },
+    plugins: [
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            d3: "d3"
+        }),
+    ],
     module: {
         rules: [
             {
@@ -124,23 +142,4 @@ const common = {
     }
 };
 
-switch (TARGET) {
-    case 'dev':
-        module.exports = merge(common, {
-            debug: true,
-
-            module: {
-                loaders: [
-                    // Define development specific SASS setup
-                    {
-                        test: /\.scss$/,
-                        loaders: ["style", "css?sourceMap", "sass?sourceMap"]
-                    }
-                ]
-            }
-        });
-        break;
-
-    case 'prod':
-        module.exports = merge(common, {});
-}
+module.exports = common
