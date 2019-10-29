@@ -1,5 +1,5 @@
  /* Load stylesheets and bootstrap */
-require('styles/main.scss');
+import 'styles/main.scss';
 // require('bootstrap-loader');
 require('font-awesome/scss/font-awesome.scss');
 

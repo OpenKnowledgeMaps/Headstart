@@ -2,6 +2,7 @@ var config = require('./config.js');
 const path = require('path');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const TARGET = process.env.npm_lifecycle_event;
 
@@ -65,6 +66,13 @@ const common = {
             jQuery: "jquery",
             d3: "d3"
         }),
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // all options are optional
+            filename: 'headstart.css',
+            chunkFilename: '[id].css',
+            ignoreOrder: false, // Enable to remove warnings about conflicting order
+          }),
     ],
     module: {
         rules: [
@@ -123,13 +131,15 @@ const common = {
                     },
                 ]
             }, {
-                      test: /\.s[ac]ss$/,
+                      test: /\.(sa|sc|c)ss$/,
                       use: [
-                        // Creates `style` nodes from JS strings
-                        'style-loader',
-                        // Translates CSS into CommonJS
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {
+                              hmr: process.env.NODE_ENV === 'development',
+                            },
+                          },
                         'css-loader',
-                        // Compiles Sass to CSS
                         {
                             loader: 'sass-loader',
                             options: {
@@ -138,6 +148,7 @@ const common = {
                         },
                       ],
                     },
+
         ]
     }
 };
