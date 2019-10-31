@@ -27,7 +27,7 @@
     "bootstrap-sass": "^3.3.6",
     "d3": "^3.5.17",
     "font-awesome": "*",
-    "handlebars": "^4.0.5",
+    "handlebars": "^4.1.2",
     "hyphenation.en-us": "*",
     "hypher": "^0.2.4",
     "javascript-state-machine": "^2.3.5",
