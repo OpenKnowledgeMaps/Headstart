@@ -31,7 +31,7 @@
     "hyphenation.en-us": "*",
     "hypher": "^0.2.4",
     "javascript-state-machine": "^2.3.5",
-    "jquery": "^2.1.4",
+    "jquery": "^3.4.0",
     "jquery-dotdotdot": "^1.8.2",
     "dateformat": "^2.0.0",
     "mediator-js": "^0.9.9",
