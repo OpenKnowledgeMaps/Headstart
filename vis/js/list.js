@@ -1467,10 +1467,10 @@ list.setImageForListHolder = function(d) {
         text_div.append("div")
                 .attr("id", "concept-graph-description")
                 .classed("concept-graph-description", true)
-                .html('<p class="concept-graph-h">Try out concept graph for this paper</p>'
-                        +'<p>Concept graph is a novel visualization tool, which represents papers and related concepts (e.g. keywords, authors) in a graph.</p>'
+                .html('<p class="concept-graph-h">Explore connections of this document</p>'
+                        +'<p>Concept Graph is a novel visualization tool, which represents documents and related concepts (e.g. keywords, authors) in a graph.</p>'
                         +'<p class="concept-graph-link"><a class="tryout-button" '
-                        +'href="' + external_url + '" target="_blank">Create a concept graph</a></p>')
+                        +'href="' + external_url + '" target="_blank">Try out Concept Graph</a></p>')
         
         
     } else {
