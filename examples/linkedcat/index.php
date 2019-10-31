@@ -35,9 +35,18 @@ include 'config.php';
             
             <div class="bg-tagline-startpage" style="background-color: transparent; border-bottom: 0px; max-width: 400px;">
                 <div style="padding: 0px;"><img style="max-width: 120px;" src='./img/oeaw-logo.png'></div>
-                <h2 style="color: white; text-shadow:1px 1px 10px black; font-size:32px;">Entdecken Sie die Sitzungsberichte der ÖAW <span style="color: white">(1847-1918)</span></h2>
-                <a href="" style="text-transform: none; font-family: 'Lato'; text-decoration: underline; color:white; text-shadow:1px 1px 10px black;"><i class="fas fa-info"></i> mehr Informationen</a>
+                <h2 style="color: white; text-shadow:1px 1px 10px black; font-size:32px;">LINKEDCAT+ Entdecken Sie die Sitzungsberichte der ÖAW <span style="color: white">(1847-1918)</span></h2>
+                
+                <ul class="nav">
+                    <li><a href=""><!--<i class="fas fa-info"></i>--> mehr Informationen</a></li>
+                    <li><a href="browse.php" target="_blank"><!--<i class="fas fa-search"></i>--> Browse Themenbereiche</a></li>
+                    <li><a href=""><!--<i class="fas fa-search"></i>--> Autorensuche</a></li>
+                    <li><a href=""><!--<i class="fas fa-search"></i>--> Stichwortsuche</a></li>
+                
+            </ul>
             </div>
+            
+            
 
             <!--<div style="    padding: 20px;
                  position: absolute;
@@ -77,6 +86,14 @@ include 'config.php';
                         </div>
                     </div>
                 </form>
+                
+                <div style="">
+                <a href="browse.php" target="_blank">
+                    <button class="search-btn shadow browse">
+                        <i class="fas fa-search"></i> Browse Themenbereiche
+                    </button>
+                </a>
+            </div>
 
             </div>
 
@@ -91,13 +108,7 @@ include 'config.php';
                 </p>
             </div>
 
-            <div style="">
-                <a href="browse.php" target="_blank">
-                    <button class="search-btn shadow browse">
-                        <i class="fas fa-search"></i> Browse Themenbereiche
-                    </button>
-                </a>
-            </div>
+            
 
         </div>
 
