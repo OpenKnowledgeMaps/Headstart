@@ -37,13 +37,14 @@ include 'config.php';
                 <div style="padding: 0px;"><img style="max-width: 120px;" src='./img/oeaw-logo.png'></div>
                 <h2 style="color: white; text-shadow:1px 1px 10px black; font-size:32px;">LINKEDCAT+ Entdecken Sie die Sitzungsberichte der ÖAW <span style="color: white">(1847-1918)</span></h2>
                 
-                <ul class="nav">
-                    <li><a href=""><!--<i class="fas fa-info"></i>--> mehr Informationen</a></li>
-                    <li><a href="browse.php" target="_blank"><!--<i class="fas fa-search"></i>--> Browse Themenbereiche</a></li>
-                    <li><a href=""><!--<i class="fas fa-search"></i>--> Autorensuche</a></li>
-                    <li><a href=""><!--<i class="fas fa-search"></i>--> Stichwortsuche</a></li>
+            <!--<ul class="nav">
+                    <li><a href="">
+mehr Informationen</a></li>
+                    <li><a href="browse.php" target="_blank"> Browse Themenbereiche</a></li>
+                    <li><a href=""> Autorensuche</a></li>
+                    <li><a href=""> Stichwortsuche</a></li>
                 
-            </ul>
+            </ul>-->
             </div>
             
             
@@ -87,7 +88,7 @@ include 'config.php';
                     </div>
                 </form>
                 
-                <div style="">
+                <div style="text-align: center; margin-top: 50px;">
                 <a href="browse.php" target="_blank">
                     <button class="search-btn shadow browse">
                         <i class="fas fa-search"></i> Browse Themenbereiche
@@ -123,8 +124,8 @@ include 'config.php';
             $('input[name="optradio"][value="' + mode + '"').prop("checked", true);
             
             var additional_information = {
-                authors: '<p>Erstellen Sie eine Knowledge Map oder einen Zeitstrahl über die Sitzungsberichte eines Autors.'
-                , keywords: '<p>Erstellen Sie eine Knowledge Map oder einen Zeitstrahl über Sitzungsberichte zu einem Thema.'
+                authors: '<p>Erstellen Sie eine Knowledge Map (thematischer Überblick) oder einen Zeitstrahl über die Sitzungsberichte eines Autors.'
+                , keywords: '<p>Erstellen Sie eine Knowledge Map (thematischer Überblick) oder einen Zeitstrahl über Sitzungsberichte zu einem Thema.'
             }
             
             var author_selected = false;
