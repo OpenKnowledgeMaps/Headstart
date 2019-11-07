@@ -1439,7 +1439,7 @@ list.setImageForListHolder = function(d) {
 
     let image_src = "paper_preview/" + d.id + "/page_1.png";
     let pdf_preview = require("images/preview_pdf.png");
-    let concept_graph = require("images/thumbnail-concept-graph.png");
+    let concept_graph = require("images/thumbnail-concept-graph2.png");
     if(config.list_show_external_vis) {
         let external_url = d.external_vis_link;
         
@@ -1468,7 +1468,7 @@ list.setImageForListHolder = function(d) {
                 .attr("id", "concept-graph-description")
                 .classed("concept-graph-description", true)
                 .html('<p class="concept-graph-h">Explore connections of this document</p>'
-                        +'<p>Concept Graph is a novel visualization tool, which represents documents and related concepts (e.g. keywords, authors) in a graph.</p>'
+                        +'<p>Concept Graph is a novel visualization tool, which represents documents and related concepts (e.g. keywords, authors) in a graph. The tool was developed by Know-Center.</p>'
                         +'<p class="concept-graph-link"><a class="tryout-button" '
                         +'href="' + external_url + '" target="_blank">Try out Concept Graph</a></p>')
         

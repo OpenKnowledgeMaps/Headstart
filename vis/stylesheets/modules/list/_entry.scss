@@ -239,12 +239,14 @@
 }
 
 .preview_text {
-    max-width: 60%;
+    max-width: 100%;
+    display: block;
 }
 
 .preview_thumbnail { 
-    max-width: 30%;
-    margin-right: 20px;
+    max-width: 100%;
+    display: block;
+    margin-right: 0px;
 }
 
 .tryout-button {
@@ -255,6 +257,8 @@
     border-radius: 5px;
     -moz-border-radius: 5px;
    font-weight: 300;
+   display: block;
+   text-align: center;
 }
 
 .tryout-button:hover, .tryout-button:active, .tryout-button:focus {
@@ -264,13 +268,14 @@
 }
 
 .concept-graph-link {
-    margin-top: 5%;
+    margin-top: 10px;
 }
 
 .concept-graph-h {
     font-weight: 600;
     font-size: 14px;
     color: $okm-blue;
+    margin-TOP: 10px;
 }
 
 .list_subentry_showmore, .list_subentry_show_statistics {
