@@ -1439,7 +1439,7 @@ list.setImageForListHolder = function(d) {
 
     let image_src = "paper_preview/" + d.id + "/page_1.png";
     let pdf_preview = require("images/preview_pdf.png");
-    let concept_graph = require("images/thumbnail-concept-graph2.png");
+    let concept_graph = require("images/thumbnail-concept-graph.png");
     if(config.list_show_external_vis) {
         let external_url = d.external_vis_link;
         
