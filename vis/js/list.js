@@ -1469,7 +1469,7 @@ list.setImageForListHolder = function(d) {
                 .attr("id", "concept-graph-description")
                 .classed("concept-graph-description", true)
                 .html('<p class="concept-graph-h">Explore connections of this document</p>'
-                        +'<p>Concept Graph is a novel visualization tool, which represents documents and related concepts (e.g. keywords, authors) in a graph. The tool was developed by Know-Center.</p>'
+                        +'<p>Concept Graph by Know-Center is a novel visualization tool, which represents documents and related concepts (e.g. keywords, authors) in a graph.</p>'
                         +'<p class="concept-graph-link"><a class="tryout-button" '
                         +'href="' + external_url + '" target="_blank">Try out Concept Graph</a></p>')
         
