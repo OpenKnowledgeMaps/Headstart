@@ -1444,9 +1444,6 @@ list.setImageForListHolder = function(d) {
         let external_url = d.external_vis_link;
         
         let preview_image = current_item
-                            .append("a")
-                                .attr("href", external_url)
-                                .attr("target", "_blank")
                             .append("div")
                                 .attr("id", "preview_image")
                                 .classed("preview_image", true)
@@ -1455,7 +1452,11 @@ list.setImageForListHolder = function(d) {
                             .attr("id", "preview_thumbnail")
                             .classed("preview_thumbnail", true)
         
-        image_div.append("img")
+        image_div
+               .append("a")
+                .attr("href", external_url)
+                .attr("target", "_blank") 
+               .append("img")
                 .attr("id", "thumbnail-concept-graph")
                 .classed("thumbnail-concept-graph", true)
                 .attr("src", concept_graph)
