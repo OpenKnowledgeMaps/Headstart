@@ -22,7 +22,6 @@
         height: 100%;
         margin: 0;
         padding: 0;
-        word-break: break-word;
         background-color: transparent;
     }
 }
@@ -92,7 +91,7 @@
     #num-readers {
         font-weight: $fontweight700;
     }
-
+    
     #readers {
         font-size: 9px;
         line-height: 100%;
@@ -173,10 +172,10 @@
     margin-top: 0px;
 
     &.large {
-        margin-top: 10px;
+        margin-top: 15px;
     }
     &.larger {
-        margin-top: 10px;
+        margin-top: 15px;
     }
 }
 
@@ -256,6 +255,15 @@
             padding: 5px 0px 0px 10px;
             line-height: 120%;
             //font-weight: $fontweight700;
+        }
+    }
+    
+    #title {
+        &.large {
+            margin-top: 10px;
+        }
+        &.larger {
+            margin-top: 10px;
         }
     }
 }

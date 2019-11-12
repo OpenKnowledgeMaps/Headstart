@@ -149,9 +149,14 @@
     }
 
     #sort_container {
+        width: 150px;
         vertical-align: top;
         float: right;
         display: none;
+    }
+    
+    #sort {
+        width: 150px;
     }
 
     #filter_container input {
