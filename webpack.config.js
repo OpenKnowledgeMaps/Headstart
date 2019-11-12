@@ -21,9 +21,9 @@ const common = {
     },
 
     devServer: {
-        contentBase: path.join(__dirname, 'examples', 'local_files'),
+        contentBase: path.join( __dirname ),
         compress: true,
-        port: 9001,
+        port: 8080,
         disableHostCheck: true,
         host: '0.0.0.0',
         publicPath: '/dist/'
