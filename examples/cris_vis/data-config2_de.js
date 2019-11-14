@@ -35,7 +35,7 @@ var data_config = {
     list_additional_images: false,
     
     is_force_areas: true,
-    area_force_alpha: 0.02,
+    area_force_alpha: 0.03,
     papers_force_alpha: 0.2,
     
     language: "ger_cris_2",
