@@ -140,7 +140,7 @@
         vertical-align: top;
     }
 
-    .list_details, .doi_outlink {
+    .list_details, .doi_outlink, .conceptgraph {
         font-family: $link-font-family;
         font-size: 12px;
         line-height: 120%;
@@ -201,6 +201,85 @@
     .area_tag, .keyword_tag {
         font-weight: $fontweight600;
     }
+}
+
+.conceptgraph {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    height: 20px;
+    font-weight: $fontweight400;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    
+    a {
+        color: #f29e00;
+        text-decoration: none;
+        border-bottom: 1px solid #f29e00;
+
+        &:hover {
+            border-bottom: 3px solid #f29e00;
+        }
+    }
+}
+
+.concept-graph-description {
+    font-size: 12px;
+}
+
+.thumbnail-concept-graph {
+    max-width: 100%;
+}
+
+.preview_image {
+     max-width: 82%;
+     padding: 3%;
+     background-color: #eff3f4;
+}
+
+.preview_text, .preview_thumbnail {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.preview_text {
+    max-width: 100%;
+    display: block;
+}
+
+.preview_thumbnail { 
+    max-width: 100%;
+    display: block;
+    margin-right: 0px;
+}
+
+.tryout-button {
+    border: 2px solid #f29e00;
+    color: white; 
+    background-color: #f29e00;
+    padding:5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+   font-weight: 300;
+   display: block;
+   text-align: center;
+}
+
+.tryout-button:hover, .tryout-button:active, .tryout-button:focus {
+    color: #f29e00; 
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.concept-graph-link {
+    margin-top: 10px;
+}
+
+.concept-graph-h {
+    font-weight: 600;
+    font-size: 14px;
+    color: $okm-blue;
+    margin-TOP: 10px;
 }
 
 .list_subentry_showmore, .list_subentry_show_statistics {
@@ -344,6 +423,23 @@ img#preview_page {
     color: $black;
     font-size: 12px;
     font-family: $base-font-family;
+}
+
+.backlink-list {
+    margin-left: 15px;
+    margin-top: 15px;
+    font-size: 11px;
+    cursor: pointer;
+
+    a {
+        border-bottom: 1px solid $medium-blue;
+        color: $medium-blue;
+        text-decoration: none;
+
+        &:hover {
+            border-bottom: 2px solid $medium-blue;
+        }
+    }
 }
 
 @media screen and (max-width: 1150px) {
@@ -542,7 +638,7 @@ img#preview_page {
         color: #666666;
     }
 
-    .list_subentry_readers {
+    .list_subentry_readers_count {
         font-weight: $fontweight700;
     }
 }

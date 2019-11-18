@@ -19,6 +19,7 @@ const embedTemplate = require("templates/modals/embed_modal.handlebars");
 const toolbarTemplate = require("templates/toolbar/toolbar.handlebars");
 const scaleToolbarTemplate = require("templates/toolbar/scale_toolbar.handlebars");
 const crisLegendTemplate = require("templates/toolbar/cris_legend.handlebars");
+const credit_logo = require("images/okmaps-logo-round.png");
 
 class ModuleManager {
     constructor() {
@@ -128,6 +129,7 @@ MyMediator.prototype = {
         
         //streamgraph
         this.mediator.subscribe("stream_clicked", this.stream_clicked)
+        this.mediator.subscribe("currentstream_click", this.currentstream_click)
         this.mediator.subscribe("streamgraph_chart_clicked", this.streamgraph_chart_clicked)
     },
 
@@ -141,13 +143,12 @@ MyMediator.prototype = {
         MyMediator.prototype.is_zoomed = false;
         MyMediator.prototype.zoom_finished = false;
         MyMediator.prototype.is_in_normal_mode = true;
-        MyMediator.prototype.stream_clicked = null;
+        MyMediator.prototype.current_stream = null;
     },
 
     init_modules: function() {
-        mediator.manager.registerModule(io, 'io');
-
         if(config.render_list) mediator.manager.registerModule(list, 'list');
+        mediator.manager.registerModule(io, 'io');
         if(config.render_bubbles) {
             mediator.manager.registerModule(canvas, 'canvas');
             mediator.manager.registerModule(papers, 'papers');
@@ -198,8 +199,8 @@ MyMediator.prototype = {
         mediator.manager.call('io', 'get_server_files', [callback]);
     },
 
-    io_prepare_data: function (highlight_data, cur_fil_num) {
-        mediator.manager.call('io', 'prepareData', [highlight_data, cur_fil_num]);
+    io_prepare_data: function (highlight_data, cur_fil_num, context) {
+        mediator.manager.call('io', 'prepareData', [highlight_data, cur_fil_num, context]);
     },
 
     io_prepare_areas: function () {
@@ -212,6 +213,7 @@ MyMediator.prototype = {
         mediator.current_file_number = file;
         mediator.current_bubble = mediator.bubbles[mediator.current_file_number];
         mediator.current_file = config.files[mediator.current_file_number];
+        mediator.external_vis_url = config.external_vis_url + "?vis_id=" + config.files[mediator.current_file_number].file
         papers.current = "none";
         list.current = "none";
         $("#list_explorer").empty();
@@ -248,10 +250,14 @@ MyMediator.prototype = {
                     return csv.data;
                 }
             } else {
-                return csv;
+                if(typeof csv.data === "object") {
+                    return csv.data;
+                } else {
+                    return csv;
+                }
             }
         }();
-        let context = (config.show_context)?(csv.context):{};
+        let context = (typeof csv.context !== 'object')?({}):(csv.context);
         mediator.streamgraph_data = (config.is_streamgraph)?(csv.streamgraph):{};
         
         mediator.manager.registerModule(headstart, 'headstart');
@@ -260,7 +266,7 @@ MyMediator.prototype = {
             mediator.manager.call('canvas', 'setupStreamgraphCanvas', []);
 
             mediator.manager.call('io', 'initializeMissingData', [data]);
-            mediator.manager.call('io', 'prepareData', [highlight_data, data]);
+            mediator.manager.call('io', 'prepareData', [highlight_data, data, context]);
             mediator.manager.call('io', 'prepareAreas', []);
 
             mediator.manager.call('io', 'setContext', [context, data.length]);
@@ -294,7 +300,7 @@ MyMediator.prototype = {
 
 
             mediator.manager.call('io', 'initializeMissingData', [data]);
-            mediator.manager.call('io', 'prepareData', [highlight_data, data]);
+            mediator.manager.call('io', 'prepareData', [highlight_data, data, context]);
             mediator.manager.call('io', 'prepareAreas', []);
 
             mediator.manager.call('io', 'setContext', [context, data.length]);
@@ -345,6 +351,10 @@ MyMediator.prototype = {
             , canonical_url: config.canonical_url
             , is_authorview: config.is_authorview
         }));
+        if(config.credit_embed) {
+            $("#credit_logo").attr("src", credit_logo);
+        }
+        
         this.viz.append(infoTemplate());
         this.viz.append(iFrameTemplate());
         this.viz.append(imageTemplate());
@@ -434,23 +444,37 @@ MyMediator.prototype = {
     },
     
     stream_clicked: function(keyword, color) {
-        mediator.stream_clicked = keyword;
+        mediator.current_stream = keyword;
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'filterListByKeyword', [keyword]);
         mediator.manager.call('list', 'count_visible_items_to_header', []);
         mediator.manager.call('streamgraph', 'markStream', [keyword]);
         mediator.manager.call('list', 'changeHeaderColor', [color]);
+        mediator.manager.call('canvas', 'showAreaStreamgraph', [keyword])
+        mediator.current_enlarged_paper = null;
+    },
+    
+    currentstream_click: function() {
+        mediator.manager.call('list', 'reset', []);
+        if (mediator.current_stream !== null) {
+            mediator.manager.call('list', 'filterListByKeyword', [mediator.current_stream]);
+        } else {
+            mediator.manager.call('list', 'updateByFiltered', []);
+            mediator.manager.call('list', 'scrollTop', []);
+        }
+        mediator.manager.call('list', 'count_visible_items_to_header', []);
         mediator.current_enlarged_paper = null;
     },
     
     streamgraph_chart_clicked: function() {
-        mediator.stream_clicked = null;
+        mediator.current_stream = null;
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'updateByFiltered', []);
         mediator.manager.call('list', 'scrollTop', []);
         mediator.manager.call('streamgraph', 'reset');
         mediator.manager.call('list', 'count_visible_items_to_header', []);
         mediator.manager.call('list', 'resetHeaderColor');
+        mediator.manager.call('canvas', 'removeAreaStreamgraph');
         mediator.current_enlarged_paper = null;
     },
 

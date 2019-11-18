@@ -113,7 +113,7 @@ export const list = StateMachine.create({
 });
 
 list.drawList = function() {
-    let self = this
+    let self = this;
 
     // Load list template
     let list_explorer = listTemplate({
@@ -246,6 +246,7 @@ list.fit_list_height = function() {
                     - $("#explorer_options").outerHeight(true)
                     + ($(".legend").outerHeight(true) || 0)
                     - (($("#toolbar").height() > 0)?(0):(PAPER_LIST_CORRECTION))
+                    - (parseInt($("#papers_list").css("padding-top"), 10) || 0)
                     //TODO: Hack for VIPER
                     + ((config.language === "eng_openaire")?(10):(0));
     }
@@ -414,7 +415,14 @@ list.filterListByAreaURIorArea = function(area) {
 list.filterListByArea = function(area) {
     d3.selectAll("#list_holder")
         .filter(function(x) {
-            return (config.use_area_uri) ? (x.area_uri == area.area_uri) : (x.area == area.title);
+            if (config.use_area_uri) {
+                //TODO: hotfix for issue with backlinks for older maps
+                let curr_area_uri = (Array.isArray(x.area_uri)) ? (x.area_uri[0]) : (x.area_uri);
+                let target_area_uri = (Array.isArray(area.area_uri)) ? (area.area_uri[0]) : (area.area_uri);
+                return curr_area_uri == target_area_uri;
+            } else {
+                return x.area == area.title;
+            }
         })
         .style("display", function(d) {
             return d.filtered_out ? "none" : "inline";
@@ -642,14 +650,16 @@ list.populateReaders = function(nodes) {
             let basic_classifications = d3.select(elem).select("#list_basic_classification");
             _this.fillKeywords(basic_classifications, "basic_classification", "bkl_caption");
         }
+        
+        if(config.show_area) {
+            areas.select(".area_tag").html(function() {
+                return config.localization[config.language].area + ":";
+            });
 
-        areas.select(".area_tag").html(function() {
-            return config.localization[config.language].area + ":";
-        });
-
-        areas.select(".area_name").html(function(d) {
-            return d.area;
-        });
+            areas.select(".area_name").html(function(d) {
+                return d.area;
+            });
+        }
 
         if (!config.content_based && config.base_unit !== "" && !config.metric_list) {
             readers.select(".num_readers")
@@ -681,6 +691,21 @@ list.populateReaders = function(nodes) {
     });
 };
 
+list.populateExternalVis = function(nodes) {
+    nodes[0].forEach(function(elem) {
+        let external_vis = d3.select(elem).select(".conceptgraph");
+        
+        if(!config.list_show_external_vis) {
+            external_vis.style("display", "none")
+        } else {
+            external_vis.select("a")
+                    .attr("href", function (d) {
+                        return d.external_vis_link;
+                    })
+        }
+    })
+};
+
 list.fillKeywords = function(tag, keyword_type, metadata_field) {
     tag.select(".keyword_tag").html(function() {
                 return config.localization[config.language][keyword_type] + ":";
@@ -701,6 +726,7 @@ list.populateList = function() {
     this.populateMetaData(paper_nodes);
     this.createAbstracts(paper_nodes);
     this.populateReaders(paper_nodes);
+    this.populateExternalVis(paper_nodes);
 };
 
 list.filterList = function(search_words, filter_param) {
@@ -823,13 +849,13 @@ list.hideEntriesByParam = function (object, param) {
 list.hideEntriesByWord = function(object, search_words) {
     object
         .filter(function(d) {
-            let abstract = (config.list_sub_entries)?(d.abstract_search.toLowerCase()):(d.paper_abstract.toLowerCase());
-            let title = d.title.toLowerCase();
-            let authors = d.authors_string.toLowerCase();
-            let journals = d.published_in.toLowerCase();
-            let year = d.year;
+            let abstract = (config.list_sub_entries)?(d.abstract_search.toString().toLowerCase()):(d.paper_abstract.toString().toLowerCase());
+            let title = d.title.toString().toLowerCase();
+            let authors = d.authors_string.toString().toLowerCase();
+            let journals = d.published_in.toString().toLowerCase();
+            let year = d.year.toString();
             let word_found = true;
-            let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toLowerCase()) : ("");
+            let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toString().toLowerCase()) : ("");
             let i = 0;
             while (word_found && i < search_words.length) {
                 word_found = (abstract.indexOf(search_words[i]) !== -1 ||
@@ -886,13 +912,13 @@ list.createAbstractCris = function(d, cut_off) {
     let list_abstract_template = listSubEntryTemplateCris();
     let list_abstract = document.createElement("div");
     
-    for (let elem of d.paper_abstract) {
+    for (let [i, elem] of d.paper_abstract.entries()) {
         let current_abstract = d3.select(list_abstract)
                 .append("div")
                     .attr('class', function(x) { 
                         let new_class =  "level" + elem.level;
                         let existing_class = d3.select(this).attr("class") 
-                        if (existing_class == null){
+                        if (existing_class === null){
                           return new_class;
                         } else {
                             return new_class + " " + existing_class;
@@ -900,20 +926,26 @@ list.createAbstractCris = function(d, cut_off) {
                     })
                     .html(list_abstract_template);
         
+        let subentry_title = (config.list_sub_entries_number)?((i+1) + '. ' + elem.abstract):(elem.abstract);
+        
         current_abstract.select(".list_subentry_title")
-                .text(elem.abstract)
+                .text(subentry_title)
         
-        current_abstract.select(".list_subentry_readers")
-                .text(+elem.readers)
-        
-        current_abstract.select(".list_subentry_readers_entity")
-                .text(config.base_unit)
-        
-        if(elem.readers === "0" || elem.readers === "") {
-            current_abstract.select(".list_subentry_0_count").classed("list_subentry_0_count_visible", true)
+        if(config.list_sub_entries_readers) {
+            current_abstract.select(".list_subentry_readers_count")
+                    .text(+elem.readers)
+
+            current_abstract.select(".list_subentry_readers_entity")
+                    .text(config.base_unit)
+
+            if(elem.readers === "0" || elem.readers === "") {
+                current_abstract.select(".list_subentry_0_count").classed("list_subentry_0_count_visible", true)
+            }
+        } else {
+            current_abstract.select(".list_subentry_readers").html("")
         }
         
-        if(cut_off) {
+        if(cut_off && d.paper_abstract.length > 1) {
             let showmore = current_abstract.select(".list_subentry_showmore")
                                 .style("display", "inline-block")
                         
@@ -933,7 +965,7 @@ list.createAbstractCris = function(d, cut_off) {
             current_abstract.select(".list_subentry_showmore")
                     .style("display", "none")
             
-            if(elem.readers !== "0" && elem.readers !== "") {
+            if(config.list_sub_entries_statistics && elem.readers !== "0" && elem.readers !== "") {
             
                 let show_statistics = current_abstract.select(".list_subentry_show_statistics")
                         .style("display", "inline-block")
@@ -1075,7 +1107,9 @@ list.enlargeListItem = function(d) {
 
     this.setImageForListHolder(d);
     
-    this.setAdditionalImagesForListHolder(d);
+    if (config.list_additional_images) {
+        this.setAdditionalImagesForListHolder(d);
+    }
     
     if (config.show_keywords) {
         d3.selectAll("#list_keywords")
@@ -1084,10 +1118,44 @@ list.enlargeListItem = function(d) {
             })
             .style("display", "block");
     }
+    
+    if (config.list_show_external_vis) {
+        d3.selectAll('.conceptgraph').style('display', 'none');
+    }
+    
+    this.setBacklink(d);
 
     d.paper_selected = true;
     this.count_visible_items_to_header()
 };
+
+list.setBacklink = function(d) {
+    let current_list_holder = d3.selectAll("#list_holder")
+                                .filter(function(x) {
+                                        return (x.id === d.id);
+                                })
+    current_list_holder.append("div")
+                            .attr("id", "backlink_list")
+                            .attr("class", "backlink-list")
+                               .append("a")
+                                .attr("class", "underline")
+                                .text(function() {
+                                    if(config.is_streamgraph) {
+                                        return config.localization[config.language].backlink_list_streamgraph;
+                                    } else {
+                                        return config.localization[config.language].backlink_list;
+                                    }
+                                })
+                                .on("click", function (d) {
+                                    if(config.is_streamgraph) {
+                                        mediator.publish('currentstream_click');
+                                    } else {
+                                        mediator.publish('currentbubble_click', d);
+                                    }
+                                })
+         
+    
+}
 
 list.setAdditionalImagesForListHolder = function(d) {
     let current_item = d3.selectAll("#list_holder")
@@ -1201,6 +1269,10 @@ list.reset = function() {
         d3.selectAll("#list_keywords").style("display", "none");
     }
     d3.selectAll(".list_images").html("");
+    
+    if (config.list_show_external_vis) {
+        d3.selectAll('.conceptgraph').style('display', 'block');
+    }
 
     if (mediator.current_enlarged_paper !== null) {
         this.notSureifNeeded();
@@ -1367,13 +1439,76 @@ list.setImageForListHolder = function(d) {
 
     let image_src = "paper_preview/" + d.id + "/page_1.png";
     let pdf_preview = require("images/preview_pdf.png");
-    if (config.preview_type == "image") {
-        if (this.checkIfFileAvailable(image_src)) {
+    let concept_graph = require("images/thumbnail-concept-graph.png");
+    if(config.list_show_external_vis) {
+        let external_url = d.external_vis_link;
+        
+        let preview_image = current_item
+                            .append("div")
+                                .attr("id", "preview_image")
+                                .classed("preview_image", true)
+                    
+        let image_div = preview_image.append("div")
+                            .attr("id", "preview_thumbnail")
+                            .classed("preview_thumbnail", true)
+        
+        image_div
+               .append("a")
+                .attr("href", external_url)
+                .attr("target", "_blank") 
+               .append("img")
+                .attr("id", "thumbnail-concept-graph")
+                .classed("thumbnail-concept-graph", true)
+                .attr("src", concept_graph)
+        
+        let text_div = preview_image.append("div")
+                            .attr("id", "preview_text")
+                            .classed("preview_text", true)
+        
+        text_div.append("div")
+                .attr("id", "concept-graph-description")
+                .classed("concept-graph-description", true)
+                .html('<p class="concept-graph-h">Explore connections of this document</p>'
+                        +'<p>Concept Graph by Know-Center is a novel visualization tool, which represents documents and related concepts (e.g. keywords, authors) in a graph.</p>'
+                        +'<p class="concept-graph-link"><a class="tryout-button" '
+                        +'href="' + external_url + '" target="_blank">Try out Concept Graph</a></p>')
+        
+        
+    } else {
+    
+        if (config.preview_type == "image") {
+            if (this.checkIfFileAvailable(image_src)) {
+                current_item.append("div")
+                    .attr("id", "preview_image")
+                    .style("width", config.preview_image_width_list + "px")
+                    .style("height", config.preview_image_height_list + "px")
+                    .style("background", "url(" + image_src + ")")
+                    .style("background-size", config.preview_image_width_list + "px, " + config.preview_image_height_list + "px")
+                    .on("mouseover", function() {
+                        mediator.publish("preview_mouseover", current_item);
+                    })
+                    .on("mouseout", function() {
+                        mediator.publish("preview_mouseout", current_item);
+                    })
+                    .append("div")
+                    .attr("id", "transbox")
+                    .style("width", config.preview_image_width_list + "px")
+                    .style("height", config.preview_image_height_list + "px")
+                    .html("Click here to open preview")
+                    .on("click", function() {
+                        mediator.publish("list_show_popup", d);
+                    });
+            }
+        } else {
+            if (d.oa === false || d.resulttype === "dataset") {
+                return;
+            }
+
             current_item.append("div")
                 .attr("id", "preview_image")
                 .style("width", config.preview_image_width_list + "px")
                 .style("height", config.preview_image_height_list + "px")
-                .style("background", "url(" + image_src + ")")
+                .style("background", "url(" + pdf_preview + ")")
                 .style("background-size", config.preview_image_width_list + "px, " + config.preview_image_height_list + "px")
                 .on("mouseover", function() {
                     mediator.publish("preview_mouseover", current_item);
@@ -1390,31 +1525,6 @@ list.setImageForListHolder = function(d) {
                     mediator.publish("list_show_popup", d);
                 });
         }
-    } else {
-        if (d.oa === false || d.resulttype === "dataset") {
-            return;
-        }
-
-        current_item.append("div")
-            .attr("id", "preview_image")
-            .style("width", config.preview_image_width_list + "px")
-            .style("height", config.preview_image_height_list + "px")
-            .style("background", "url(" + pdf_preview + ")")
-            .style("background-size", config.preview_image_width_list + "px, " + config.preview_image_height_list + "px")
-            .on("mouseover", function() {
-                mediator.publish("preview_mouseover", current_item);
-            })
-            .on("mouseout", function() {
-                mediator.publish("preview_mouseout", current_item);
-            })
-            .append("div")
-            .attr("id", "transbox")
-            .style("width", config.preview_image_width_list + "px")
-            .style("height", config.preview_image_height_list + "px")
-            .html("Click here to open preview")
-            .on("click", function() {
-                mediator.publish("list_show_popup", d);
-            });
     }
 
 };
@@ -1450,6 +1560,11 @@ list.notSureifNeeded = function() {
     var image_node = list_holders_local.select("#preview_image").node();
     if (image_node !== null) {
         image_node.parentNode.removeChild(image_node);
+    }
+    
+    var backlink_node = list_holders_local.select("#backlink_list").node();
+    if (backlink_node !== null) {
+        backlink_node.parentNode.removeChild(backlink_node);
     }
 };
 

@@ -249,6 +249,15 @@ text {
     }
 }
 @if $skin == 'cris_vis' {
+    
+    #credit_embed {
+        a {
+            color: $dark-blue;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
 
     .scale-toolbar {
         min-width: 900px;

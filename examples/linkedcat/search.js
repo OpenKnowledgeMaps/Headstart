@@ -94,6 +94,10 @@ var addAutoComplete = function() {
                 renderItem: function (item, search){
                     search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
                     var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+                    if(search.length > 0) {
+                        item[1] = item[1].replace(/</g, "&lt;");
+                        item[1] = item[1].replace(/>/g, "&gt;");
+                    }
                     return '<div class="autocomplete-suggestion" '
                             +' data-id="' + item[0] + '"'
                             +' data-author="'+item[1] +'"'
@@ -186,6 +190,11 @@ $(document).ready(function () {
     
     var changeVisualization = function () {
         visualization_mode = $("input[name='optradio']:checked").val();
+        
+        let url = new URL(window.location.href);
+        url.searchParams.delete("mode");
+        url.searchParams.append("mode", visualization_mode);
+        window.history.pushState({path:url.toString()}, '', url.toString());
 
         search_options.user_defined_date = false;
         $('input[name="q"]').val("");
@@ -197,7 +206,8 @@ $(document).ready(function () {
             $('input[name="q"]').autoComplete('destroy');
             autocomplete_function = null;
         }
-
+        
+        removeInputError();
         chooseOptions();
         adaptInterface();
         configureSearch();

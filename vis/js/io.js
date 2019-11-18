@@ -55,7 +55,11 @@ IO.prototype = {
                 self.data = JSON.parse(csv.data);
             }
         } else {
-            self.data = csv;
+            if(typeof csv.data === "object") {
+                self.data = csv.data;
+            }else {
+                self.data = csv;
+            }
         }
     },
 
@@ -160,7 +164,7 @@ IO.prototype = {
         })
     },
 
-    prepareData: function (highlight_data, fs) {
+    prepareData: function (highlight_data, fs, context) {
         this.areas = {};
         this.areas_array = [];
         var _this = this;
@@ -174,7 +178,9 @@ IO.prototype = {
             
             //convert special entities to characters
             for (let field in d) {
-               d[field] = $("<textarea/>").html(d[field]).val();
+                if(typeof d[field] === "string") {
+                    d[field] = $("<textarea/>").html(d[field]).val();
+                }
            }
             // convert authors to "[first name] [last name]"
             // var authors = d.authors.split(";");
@@ -184,8 +190,10 @@ IO.prototype = {
             
             //replace "<" and ">" to avoid having HTML tags
             for (let field in d) {
-                d[field] = d[field].replace(/</g, "&lt;");
-                d[field] = d[field].replace(/>/g, "&gt;");
+                if(typeof d[field] === "string") {
+                    d[field] = d[field].replace(/</g, "&lt;");
+                    d[field] = d[field].replace(/>/g, "&gt;");
+                }
             }
             
             if(d.hasOwnProperty("snippets") && d.snippets !== "") {
@@ -330,6 +338,13 @@ IO.prototype = {
             num_oa += (d.oa)?(1):(0);
             num_papers += (d.resulttype === 'publication')?(1):(0);
             num_datasets += (d.resulttype === 'dataset')?(1):(0);
+            
+            if(config.list_show_external_vis) {
+                d.external_vis_link = config.external_vis_url 
+                                + "?vis_id=" + config.files[mediator.current_file_number].file 
+                                + "&doc_id=" + d.id
+                                + "&search_term=" + context.query.replace(/\\(.?)/g, "$1");
+            }
 
         });
         

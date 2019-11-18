@@ -1,20 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
+<?php
+include 'config.php';
+?>
 <html>
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>CRIS Vis</title>
+    <title>CRIS Vis II</title>
     <link rel="stylesheet" href="https://use.typekit.net/ift7wkn.css"></link>
     <link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'></link>
 </head>
 
-<body style="margin:0px; padding:0px">
+<body style="margin:0px; padding:0px; height:100%; position: relative;">
     <div id="visualization" class="headstart"></div>
-    <script type="text/javascript" src="data-config.js"></script>
-    <script type="text/javascript" src="../../dist/headstart.js"></script>
-    <link type="text/css" rel="stylesheet" href="../../dist/headstart.css"></link>
+    <script type="text/javascript" src="data-config2_en.js"></script>
+    <script type="text/javascript" src="<?php echo $HEADSTART_PATH ?>dist/headstart.js"></script>
+    <link type="text/css" rel="stylesheet" href="<?php echo $HEADSTART_PATH ?>dist/headstart.css"></link>
     <script type="text/javascript">
-        data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "../../server/";
         headstart.start();
     </script>
     

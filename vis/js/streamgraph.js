@@ -138,12 +138,12 @@ streamgraph.initMouseListeners = function() {
 }
 
 streamgraph.markStream = function() {
-    if(mediator.stream_clicked === null) {
+    if(mediator.current_stream === null) {
         return;
     }
     d3.selectAll(".stream")
         .attr("class", function (d) {
-            return d.key !== mediator.stream_clicked ? 'stream lower-opacity' : 'stream';
+            return d.key !== mediator.current_stream ? 'stream lower-opacity' : 'stream';
         })    
 }
 
@@ -480,20 +480,27 @@ streamgraph.setupTooltip = function(streamgraph_subject, x) {
 }
 
 streamgraph.stream_mouseover = function(el) {
-    if(mediator.stream_clicked !== null || typeof el === "undefined") {
+    if(typeof el === "undefined") {
         return;
     }
     
     d3.selectAll(".stream").transition()
             .duration(100)
             .attr("class", function (d, j) {
-                return d.key != el.key ? 'stream lower-opacity' : 'stream';
+                let stream_class = 'stream';
+                if(d.key !== el.key) {
+                    stream_class = 'stream lower-opacity';
+                }
+                if (typeof mediator.current_stream !== "undefined" && mediator.current_stream === d.key) {
+                    stream_class = 'stream';
+                }
+                return stream_class;
             })
     
 }
 
 streamgraph.stream_mouseout = function() {
-    if(mediator.stream_clicked === null) {
+    if(mediator.current_stream === null) {
         d3.selectAll(".stream").transition()
             .duration(100)
             .attr('class', 'stream')
