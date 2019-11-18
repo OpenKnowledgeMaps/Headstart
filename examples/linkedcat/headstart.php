@@ -33,6 +33,7 @@ include 'config.php';
                 if(<?php echo json_encode($_GET['visualization_type']) ?> === "timeline") {
                     data_config.is_streamgraph = true;
                     data_config.embed_modal = false;
+                    data_config.show_area = false;
                 }
         </script>
         <script type="text/javascript" src="<?php echo $HEADSTART_PATH; ?>dist/headstart.js"></script>

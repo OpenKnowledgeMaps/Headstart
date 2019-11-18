@@ -26,8 +26,8 @@ HeadstartFSM.prototype = {
     if (!(browser == "Firefox" || browser == "Safari" || browser == "Chrome")) {
             var alert_message = 'You are using an unsupported browser. ' +
                                 'This visualization was successfully tested ' +
-                                'with the latest versions of Chrome, Safari, ' +
-                                'Opera and Firefox.';
+                                'with the latest versions of Firefox, Chrome, Safari, ' +
+                                'Opera and Edge.';
             alert(alert_message);
     }
   },
@@ -240,7 +240,7 @@ HeadstartFSM.prototype = {
       var that = this;
       $.each(mediator.bubbles, (index, elem) => {
           var setupMultiplesVisualization = (csv) => {
-              mediator.publish("prepare_data", null, csv);
+              mediator.publish("prepare_data", null, csv, null);
               mediator.publish("prepare_areas");
               elem.start(csv);
           };

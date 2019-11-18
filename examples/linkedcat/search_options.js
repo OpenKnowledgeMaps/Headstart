@@ -2,7 +2,7 @@ var options_linkedcat = {
     dropdowns: [
         {id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
               , fields: [
-                  {id: "overview", text: "Überblick", selected:true}
+                  {id: "overview", text: "Knowledge Map", selected:true}
                   , {id: "timeline", text: "Zeitstrahl"}
               ]},
         {id: "year_range", multiple: false, name: "Zeitraum", type: "dropdown"
@@ -42,7 +42,7 @@ var options_linkedcat_authors = {
     dropdowns: [
         {id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
             , fields: [
-                {id: "overview", text: "Überblick", selected:true}
+                {id: "overview", text: "Knowledge Map", selected:true}
                 , {id: "timeline", text: "Zeitstrahl"}
             ]},
     ]
@@ -208,6 +208,15 @@ var SearchOptions = {
                         }
 
                         self.setDateRangeFromPreset("#from", "#to", element.val());
+                        
+                        if($(element.parent()).attr("id") === "include_content_type") {
+                            $("#include_content_type-error").css("display", "none")
+                        }
+                    }
+                }
+                , onSelectAll: function (checked) {
+                    if(dropdown_class === ".dropdown_multi_include_content_type") {
+                        $("#include_content_type-error").css("display", "none")
                     }
                 }
             });

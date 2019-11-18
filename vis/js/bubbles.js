@@ -455,9 +455,9 @@ BubblesFSM.prototype = {
         if (previous_zoom_node === null) {
             $("#context").css("visibility", "hidden");
             
-            $('<p class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
+            $('<p id="backlink" class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
 
-            $(".backlink").on("click", function () {
+            $("#backlink").on("click", function () {
                 mediator.publish('chart_svg_click');
             })
         }
@@ -638,7 +638,7 @@ BubblesFSM.prototype = {
         d3.selectAll("span.readers_entity")
                 .style("font-size", "8px");
         
-        $(".backlink").remove();
+        $("#backlink").remove();
 
         mediator.publish("draw_title");
 

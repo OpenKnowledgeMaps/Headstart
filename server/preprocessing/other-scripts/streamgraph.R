@@ -57,7 +57,7 @@ post_process <- function(sg_data) {
 
 sg_data = list()
 
-if (service == 'linkedcat' || service == 'linkedcat_authorview') {
+if (service == 'linkedcat' || service == 'linkedcat_authorview' || service == "linkedcat_browseview") {
   stream_range <- list(min=min(metadata$year), max=max(metadata$year), range=max(metadata$year)-min(metadata$year))
   metadata$boundary_label <- as.factor(metadata$year)
   levels(metadata$boundary_label) <- levels(as.factor(stream_range$min:stream_range$max))
@@ -84,32 +84,10 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview') {
   sg_data$subject <- (sg_data$subject
                       %>% subset(stream_item %in% top_12_subject)
                       %>% arrange(match(stream_item, top_12_subject), year))
-  sg_data$area <- (merge(metadata
-                         %>% select(boundary_label, year, area, id)
-                         %>% rename(stream_item=area)
-                         %>% mutate(count=1)
-                         %>% group_by(year, stream_item, .drop=FALSE)
-                         %>% summarise(count=sum(count), ids=paste(id, collapse=", ")),
-                         metadata
-                         %>% select(boundary_label, year)
-                         %>% distinct(),
-                         by.x = "year", by.y = "year"))
-  top_12_area <- (sg_data$area
-           %>% group_by(stream_item)
-           %>% summarise(sum = sum(count))
-           %>% arrange(desc(sum))
-           %>% drop_na()
-           %>% head(12)
-           %>% select(stream_item)
-           %>% pull())
-  sg_data$area <- (sg_data$area
-                      %>% subset(stream_item %in% top_12_area)
-                      %>% arrange(match(stream_item, top_12_area), year))
   #sg_data$bkl_caption <- metadata %>% separate_rows(bkl_caption, sep="; ") %>% group_by(boundary_label, bkl_caption) %>% summarize(count = uniqueN(id), ids = list(unique(id)))
   output <- list()
   output$x <- sg_data$x
   output$subject <- post_process(sg_data$subject)
-  output$area <- post_process(sg_data$area)
 }
 
 
