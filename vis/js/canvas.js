@@ -38,7 +38,7 @@ class Canvas {
 
         var toolbar_height = $("#toolbar").outerHeight(true) || 0;
         const CHART_HEIGHT_CORRECTION = 15;
-        const CHART_HEIGHT_CORRECTION_TOOLBAR = 10;
+        const CHART_HEIGHT_CORRECTION_TOOLBAR = 15;
 
         // Set available_height and available_width
         if (parent_height === 0) {
