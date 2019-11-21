@@ -247,8 +247,9 @@ list.fit_list_height = function() {
                     + ($(".legend").outerHeight(true) || 0)
                     - (($("#toolbar").height() > 0)?(0):(PAPER_LIST_CORRECTION))
                     - (parseInt($("#papers_list").css("padding-top"), 10) || 0)
-                    //TODO: Hack for VIPER
-                    + ((config.language === "eng_openaire")?(10):(0));
+                    //TODO: Hacks for VIPER and CRIS Vis
+                    + ((config.language === "eng_openaire")?(10):(0))
+                    + ((config.language === "ger_cris")?(7):(0));;
     }
     $("#papers_list").height(paper_list_avail_height);
 };
