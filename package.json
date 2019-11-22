@@ -32,7 +32,6 @@
     "hypher": "^0.2.4",
     "javascript-state-machine": "^2.3.5",
     "jquery": "^3.4.1",
-    "jquery-dotdotdot": "^1.8.2",
     "mediator-js": "^0.9.9",
     "resolve-url-loader": "^1.6.0",
     "truncate": "^2.1.0"

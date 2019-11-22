@@ -33,7 +33,7 @@ const common = {
         alias: {
             //
             'handlebars': 'handlebars/dist/handlebars.js',
-            'dotdotdot': 'jquery-dotdotdot/src/jquery.dotdotdot.min.js',
+            'dotdotdot': path.resolve(__dirname, 'vis/lib/jquery.dotdotdot.min.js'),
             'hypher': 'hypher/dist/jquery.hypher.js',
 
             // paths
@@ -77,7 +77,7 @@ const common = {
     module: {
         rules: [
             {
-                test: require.resolve("jquery-dotdotdot/src/jquery.dotdotdot.min.js"),
+                test: require.resolve(path.resolve(__dirname, 'vis/lib/jquery.dotdotdot.min.js')),
                 use: [
                     { loader: "imports-loader?$=jquery,jQuery=jquery" }
                 ]
