@@ -9,13 +9,13 @@ const TARGET = process.env.npm_lifecycle_event;
 const common = {
     mode: "development",
     devtool: 'eval-source-map',
-    entry: './vis/app.js',
+    entry: './vis/entrypoint.js',
 
     output: {
         path: path.resolve(__dirname, "dist"),
 	//dev: specify a full path including protocol, production: specify full path excluding protocol
         publicPath: config.publicPath,
-        filename: 'entrypoint.js',
+        filename: 'headstart.js',
         libraryTarget: 'var',
         library: 'headstart'
     },

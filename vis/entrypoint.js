@@ -1,2 +1,2 @@
-const myLibraryEntry = require('./headstart.js').default;
+const myLibraryEntry = require('./app.js');
 module.exports = myLibraryEntry;
