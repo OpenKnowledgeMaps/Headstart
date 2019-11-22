@@ -73,7 +73,7 @@ get_papers <- function(query, params, limit=100) {
   metadata$year <- search_res$pub_year
   metadata$readers <- 0
   metadata$url <- search_res$id
-  metadata$link <- "" # needs fix
+  metadata$link <- search_res$goobi_link
   metadata$published_in <- paste(search_res$host_maintitle, search_res$host_pubyear, search_res$host_pubplace, sep=", ")
   metadata$published_in <- unlist(lapply(metadata$published_in, function(x) {gsub(", $|, , ", "", x)}))
   metadata$oa_state <- unlist(lapply(search_res$copyright_until, function(x) {if (x=="") 1 else 0}))
@@ -128,7 +128,7 @@ build_query <- function(query, params, limit){
                 'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
                 'keyword_p', 'keyword_x', 'keyword_z',
                 'tags', 'category', 'bib', 'language_code',
-                'ocrtext')
+                'ocrtext', 'goobi_link')
   query <- gsub(" ?<<von>>", "", query)
   aq <- paste0(a_fields, ':', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"))
   qq <- paste0(q_fields, ':', query)
