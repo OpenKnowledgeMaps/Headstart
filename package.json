@@ -24,6 +24,7 @@
   "homepage": "https://github.com/pkraker/Headstart#readme",
   "dependencies": {
     "ajv": "^6.10.2",
+    "bootstrap": "^4.3.1",
     "d3": "^3.5.17",
     "dateformat": "^2.0.0",
     "font-awesome": "*",
@@ -33,6 +34,7 @@
     "javascript-state-machine": "^2.3.5",
     "jquery": "^3.4.1",
     "mediator-js": "^0.9.9",
+    "popper.js": "^1.16.0",
     "resolve-url-loader": "^1.6.0",
     "truncate": "^2.1.0"
   },
