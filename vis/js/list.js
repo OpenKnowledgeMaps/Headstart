@@ -84,6 +84,7 @@ export const list = StateMachine.create({
                 items: config.localization[config.language].items,
                 item_count: this.list_item_count,
             }));
+            this.fit_list_height();
             list.count_visible_items_to_header();
         },
 
@@ -187,7 +188,6 @@ list.drawList = function() {
         }
     }
 
-    this.fit_list_height();
     if (!config.render_bubbles) d3.select(window).on("resize", () => {
         this.fit_list_height();
     });
@@ -245,11 +245,8 @@ list.fit_list_height = function() {
                     - $("#show_hide_button").outerHeight(true) 
                     - $("#explorer_options").outerHeight(true)
                     + ($(".legend").outerHeight(true) || 0)
-                    - (($("#toolbar").height() > 0)?(0):(PAPER_LIST_CORRECTION))
+                    - PAPER_LIST_CORRECTION
                     - (parseInt($("#papers_list").css("padding-top"), 10) || 0)
-                    //TODO: Hacks for VIPER and CRIS Vis
-                    + ((config.language === "eng_openaire")?(10):(0))
-                    + ((config.language === "ger_cris")?(7):(0));;
     }
     $("#papers_list").height(paper_list_avail_height);
 };
