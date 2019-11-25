@@ -118,7 +118,7 @@ build_query <- function(query, params, limit){
   q <- paste(paste0(q_field, ':', '"', params$bkl_list, '"'), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
   if (params$bkl_level != 'top') {
-    q_params$fq <- paste0('bkl_top_caption:', params$bkl_top_caption)
+    q_params$fq <- paste0('bkl_top_caption:', paste0('"', params$bkl_top_caption, '"'))
   }
   return(q_params)
 }
