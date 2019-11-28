@@ -3,7 +3,7 @@ var data_config = {
     mode: "local_files",
     
     bubble_min_scale: 1.2,
-    bubble_max_scale: 1.1,
+    bubble_max_scale: 1.05,
     
     paper_min_scale: 0.8,
 
@@ -35,10 +35,11 @@ var data_config = {
     list_additional_images: false,
     
     is_force_areas: true,
-    area_force_alpha: 0.02,
+    area_force_alpha: 0.03,
     papers_force_alpha: 0.2,
     
     language: "ger_cris_2",
+    hyphenation_language: "de",
     
     sort_options: ["title", "readers", "area"],
     
