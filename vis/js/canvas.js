@@ -831,7 +831,7 @@ class Canvas {
     }
 
     hyphenateAreaTitles() {
-        $("#area_title>h2").hyphenate('en');
+        $("#area_title>h2").hyphenate(config.hyphenation_language);
     }
 
   dotdotdotAreaTitles() {
