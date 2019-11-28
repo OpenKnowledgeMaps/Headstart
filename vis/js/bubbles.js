@@ -771,14 +771,18 @@ BubblesFSM.prototype = {
 
         t.selectAll("div.metadata")
                 .style("height", function (d) {
-                    return (config.content_based) ? (d.height * mediator.circle_zoom + "px") : (d.height * mediator.circle_zoom - 20 + "px");
+                    return (config.content_based) 
+                                ? (d.height * mediator.circle_zoom + "px") 
+                                : (d.height * mediator.circle_zoom - config.paper_metadata_height_correction + "px");
                 })
                 .style("width", function (d) {
                     return d.width * mediator.circle_zoom * (1 - config.dogear_width) + "px";
                 });
 
         t.selectAll("div.readers")
-                .style("height", "15px")
+                .style("height", () => {
+                    config.paper_metadata_height_correction + "px"
+                })
                 .style("width", function (d) {
                     return d.width * mediator.circle_zoom + "px";
                 })
