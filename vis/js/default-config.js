@@ -29,6 +29,8 @@ var config = {
     dogear_height: 0.1,
     paper_width_factor: 1.2,
     paper_height_factor: 1.6,
+    paper_readers_height_factor: 0.2,
+    paper_metadata_height_correction: 25,
 
     // list
     min_list_size: 400,
@@ -114,6 +116,7 @@ var config = {
     debounce: 50,
     service: "none",
     language: "eng",
+    hyphenation_language: "en",
 
     // behaviour settings
     is_evaluation: false,
@@ -498,7 +501,7 @@ var config = {
             intro_icon: "&#xf129;",
             intro_label_areas: "Verteilung der Respondenten",
             intro_areas_title: "Verteilung der Respondenten für ",
-            readers: "Fragen",
+            readers: "Anzahl Fragen",
             year: "Jahr",
             authors: "Autor",
             title: "alphabetisch",
