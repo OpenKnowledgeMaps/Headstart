@@ -56,7 +56,7 @@ const common = {
             'streamgraph' : path.resolve(__dirname, 'vis/js/streamgraph.js')
         },
     },
-    
+
     externals: {
         'chart': 'Chart'
     },
@@ -143,7 +143,10 @@ const common = {
                         {
                             loader: 'sass-loader',
                             options: {
-                                prependData: '$skin: "' + config.skin + '";'
+                                prependData: '$skin: "' + config.skin + '";',
+                                sassOptions: {
+                                  includePaths: ["node_modules"]
+                                }
                             }
                         },
                       ],
