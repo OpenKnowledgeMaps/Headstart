@@ -24,7 +24,7 @@
   "homepage": "https://github.com/pkraker/Headstart#readme",
   "dependencies": {
     "ajv": "^6.10.2",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "3.3.7",
     "d3": "^3.5.17",
     "dateformat": "^2.0.0",
     "font-awesome": "*",
