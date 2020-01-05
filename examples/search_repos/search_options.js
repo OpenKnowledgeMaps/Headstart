@@ -119,8 +119,8 @@ var options_pubmed = {
                 , {id: "clinical trial, phase ii", text: "Clinical Trial, Phase II", selected: true}
                 , {id: "clinical trial, phase iii", text: "Clinical Trial, Phase III", selected: true}
                 , {id: "clinical trial, phase iv", text: "Clinical Trial, Phase IV", selected: true}
-                , {id: "collected works", text: "Collected Works", selected: true}
                 , {id: "clinical trial, veterinary", text: "Clinical Trial, Veterinary", selected: true}
+                , {id: "collected work", text: "Collected Work", selected: true}
                 , {id: "comment", text: "Comment", selected: true}
                 , {id: "comparative study", text: "Comparative Study", selected: true}
                 , {id: "congresses", text: "Congresses", selected: true}
@@ -136,19 +136,19 @@ var options_pubmed = {
                 , {id: "electronic supplementary materials", text: "Electronic Supplementary Materials", selected: true}
                 , {id: "english abstract", text: "English Abstract", selected: true}
                 , {id: "ephemera", text: "Ephemera", selected: true}
-                , {id: "evaluation studies", text: "Evaluation Studies", selected: true}
                 , {id: "equivalence trial", text: "Equivalence Trial", selected: true}
+                , {id: "evaluation study", text: "Evaluation Study", selected: true}
                 , {id: "expression of concern", text: "Expression of Concern", selected: true}
                 , {id: "festschrift", text: "Festschrift", selected: true}
-                , {id: "government publications", text: "Government Publications", selected: true}
+                , {id: "government publication", text: "Government Publication", selected: true}
                 , {id: "guideline", text: "Guideline", selected: true}
                 , {id: "historical article", text: "Historical Article", selected: true}
                 , {id: "interactive tutorial", text: "Interactive Tutorial", selected: true}
                 , {id: "interview", text: "Interview", selected: true}
                 , {id: "introductory journal article", text: "Introductory Journal Article", selected: true}
                 , {id: "journal article", text: "Journal Article", selected: true}
-                , {id: "lectures", text: "Lectures", selected: true}
-                , {id: "legal cases", text: "Legal Cases", selected: true}
+                , {id: "lecture", text: "Lecture", selected: true}
+                , {id: "legal case", text: "Legal Case", selected: true}
                 , {id: "legislation", text: "Legislation", selected: true}
                 , {id: "letter", text: "Letter", selected: true}
                 , {id: "meta analysis", text: "Meta Analysis", selected: true}
@@ -160,10 +160,10 @@ var options_pubmed = {
                 , {id: "overall", text: "Overall", selected: true}
                 , {id: "patient education handout", text: "Patient Education Handout", selected: true}
                 , {id: "periodical index", text: "Periodical Index", selected: true}
-                , {id: "personal narratives", text: "Personal Narratives", selected: true}
-                , {id: "pictorial works", text: "Pictorial Works", selected: true}
-                , {id: "popular works", text: "Popular Works", selected: true}
-                , {id: "portraits", text: "Portraits", selected: true}
+                , {id: "personal narrative", text: "Personal Narrative", selected: true}
+                , {id: "pictorial work", text: "Pictorial Work", selected: true}
+                , {id: "popular work", text: "Popular Work", selected: true}
+                , {id: "portrait", text: "Portrait", selected: true}
                 , {id: "practice guideline", text: "Practice Guideline", selected: true}
                 , {id: "pragmatic clinical trial", text: "Pragmatic Clinical Trial", selected: true}
                 , {id: "publication components", text: "Publication Components", selected: true}
@@ -188,7 +188,7 @@ var options_pubmed = {
                 , {id: "systematic review", text: "Systematic Review", selected: true}
                 , {id: "technical report", text: "Technical Report", selected: true}
                 , {id: "twin study", text: "Twin Study", selected: true}
-                , {id: "validation studies", text: "Validation Studies", selected: true}
+                , {id: "validation study", text: "Validation Study", selected: true}
                 , {id: "video audio media", text: "Video Audio Media", selected: true}
                 , {id: "webcasts", text: "Webcasts", selected: true}]}
     ]}
