@@ -10,7 +10,6 @@ const common = {
     mode: "development",
     devtool: 'eval-source-map',
     entry: './vis/entrypoint.js',
-    bootstrapVersion: 3,
 
     output: {
         path: path.resolve(__dirname, "dist"),
