@@ -7,6 +7,7 @@ require('font-awesome/scss/font-awesome.scss');
 import config from 'config';
 import * as hs from 'headstart';
 import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 var start = function(json_data) {
     if(data_config) Object.assign(config, data_config);
