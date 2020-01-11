@@ -1,6 +1,6 @@
 {
   "name": "headstart",
-  "version": "1.0.0",
+  "version": "6.0.0",
   "description": "Head Start presents you with the main areas in the field, and lets you zoom into the most important publications within each area. It is intended to give researchers that are new to a field a head start on their literature review (hence the name).",
   "main": "./vis/vis.js",
   "directories": {
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pkraker/Headstart.git"
+    "url": "git+https://github.com/OpenKnowledgeMaps/Headstart.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/pkraker/Headstart/issues"
+    "url": "https://github.com/OpenKnowledgeMaps/Headstart/issues"
   },
-  "homepage": "https://github.com/pkraker/Headstart#readme",
+  "homepage": "https://github.com/OpenKnowledgeMaps/Headstart#readme",
   "dependencies": {
     "ajv": "^6.10.2",
     "bootstrap": "3.3.7",
