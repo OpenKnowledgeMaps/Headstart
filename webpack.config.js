@@ -131,26 +131,27 @@ const common = {
                     },
                 ]
             }, {
-                      test: /\.(sa|sc|c)ss$/,
-                      use: [
-                        {
-                            loader: MiniCssExtractPlugin.loader,
-                            options: {
-                              hmr: process.env.NODE_ENV === 'development',
-                            },
-                          },
-                        'css-loader',
-                        {
-                            loader: 'sass-loader',
-                            options: {
-                                prependData: '$skin: "' + config.skin + '";',
-                                sassOptions: {
-                                  includePaths: ["node_modules"]
-                                }
-                            }
-                        },
-                      ],
+                test: /\.(sa|sc|c)ss$/,
+                use: [{
+                  loader: 'style-loader',
+                }, {
+                  loader: MiniCssExtractPlugin.loader,
+                  options: {
+                    hmr: process.env.NODE_ENV === 'development',
                     },
+                }, {
+                  loader: 'css-loader',
+                }, {
+                  loader: 'sass-loader',
+                  options: {
+                    prependData: '$skin: "' + config.skin + '";',
+                    sassOptions: {
+                      includePaths: ["node_modules"]
+                    }
+                  }
+                },
+              ],
+            },
 
         ]
     }
