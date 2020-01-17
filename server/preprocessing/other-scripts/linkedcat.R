@@ -174,8 +174,15 @@ valid_langs <- list(
 )
 
 boost_factors <- list(
-  'ocrtext'=0.1,
-  'main_title'=2
+  'ocrtext'=0.01,
+  'main_title'=5,
+  'keyword_a'=3,
+  'keyword_c'=3,
+  'keyword_g'=3,
+  'keyword_t'=3,
+  'keyword_p'=3,
+  'keyword_x'=3,
+  'keyword_z'=3
 )
 
 build_authorfield_query <- function(field) {
