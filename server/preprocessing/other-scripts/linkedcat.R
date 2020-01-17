@@ -130,8 +130,8 @@ build_query <- function(query, params, limit){
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext', 'goobi_link')
   query <- gsub(" ?<<von>>", "", query)
-  aq <- paste0(a_fields, ':', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"))
-  qq <- paste0(q_fields, ':', query)
+  aq <- paste0(lapply(q_fields, build_authorfield_query))
+  qq <- paste0(lapply(q_fields, build_queryfield_query))
   q <- paste(c(aq, qq), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
@@ -173,3 +173,20 @@ build_query <- function(query, params, limit){
 valid_langs <- list(
     'ger'='german'
 )
+
+boost_factors <- list(
+  'ocrtext'=0.2,
+  'main_title'=1.5
+)
+
+build_authorfield_query <- function(field) {
+  paste0(field, ':', '"', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"), '"', add_boost_factor(field))
+}
+
+build_queryfield_query <- function(field) {
+  paste0(field, ':', '"', query, '"', add_boost_factor(field))
+}
+
+add_boost_factor <- function(field) {
+  if (field %in% names(boost_factors)) paste0('^', boost_factors[field]) else ""
+}
