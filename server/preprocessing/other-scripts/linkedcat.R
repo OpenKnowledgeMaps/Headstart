@@ -107,10 +107,9 @@ get_papers <- function(query, params, limit=100) {
 build_query <- function(query, params, limit){
   # fields to query in
   a_fields <- c('author100_a', 'author700_a')
-  q_fields <- c('main_title', 'ocrtext',
+  q_fields <- c('main_title', 'subtitle', 'ocrtext',
                 'author100_d', 'author100_0',
                 'author700_d', 'author700_0',
-                'main_title', 'subtitle',
                 'host_maintitle', 'host_pubplace',
                 'bkl_caption', 'bkl_top_caption',
                 'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
@@ -175,8 +174,8 @@ valid_langs <- list(
 )
 
 boost_factors <- list(
-  'ocrtext'=0.2,
-  'main_title'=1.5
+  'ocrtext'=0.1,
+  'main_title'=2
 )
 
 build_authorfield_query <- function(field) {
