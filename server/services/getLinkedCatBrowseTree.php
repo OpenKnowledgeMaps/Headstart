@@ -28,7 +28,12 @@ $bkl_query = "select?facet.field=bkl_caption" .
              "&facet=on&q=*:*&rows=0" .
              "&fq=bkl_top_caption:";
 
-# &fq=bkl_top_caption:"Einzelne Sprachen und Literaturen"
+$force_refresh = FALSE;
+if (count($argv) == 2) {
+ if ($argv[1] == "--force-refresh") {
+   $force_refresh = TRUE;
+ }
+}
 
 function execQuery($base_url, $query) {
   $ch = curl_init();
@@ -253,7 +258,9 @@ function writeCache($fname, $output) {
 function loadOrRefresh($lc_cache) {
   # checks if file exists AND if its fresher than 24h
   # if true && true, load the cached file
-  if (file_exists($lc_cache) && (time() - filemtime($lc_cache) < 86400)) {
+  if (($GLOBALS['force_refresh'] == FALSE) &&
+       (file_exists($lc_cache) && (time() - filemtime($lc_cache) < 86400))
+     ) {
     $bkl_tree = loadCache($lc_cache);
   }
   else {
