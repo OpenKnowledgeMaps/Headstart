@@ -779,7 +779,7 @@ papers.onWindowResize = function() {
       $("#area_title>h2").css("font-size", canvas.calcTitleFontSize());
       $("#area_title>h2").hyphenate(config.hyphenation_language);
       area_title_objects.each(function(d) {
-        var maxHeight = Math.round(Math.sqrt(Math.pow(d.r,2)*2)) - 22;
+        var maxHeight = Math.round(Math.sqrt(Math.pow(d.r,2)*2)) - 12;
         shave('#area_title>h2', maxHeight);
       });
 
