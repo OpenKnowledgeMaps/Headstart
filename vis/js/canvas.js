@@ -638,9 +638,9 @@ class Canvas {
     showAreaStreamgraph(keyword) {
         $("#subdiscipline_title h4")
             .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
-        
-        $("#subdiscipline_title>h4").dotdotdot();
-        
+
+        shave("#subdiscipline_title>h4", 24);
+
         $("#context").css("display", "none");
         
         $("#backlink").remove();
