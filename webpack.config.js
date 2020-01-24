@@ -33,7 +33,6 @@ const common = {
         alias: {
             //
             'handlebars': 'handlebars/dist/handlebars.js',
-            'dotdotdot': path.resolve(__dirname, 'vis/lib/jquery.dotdotdot.min.js'),
             'hypher': 'hypher/dist/jquery.hypher.js',
 
             // paths
