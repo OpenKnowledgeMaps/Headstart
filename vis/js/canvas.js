@@ -5,6 +5,7 @@ import { papers } from 'papers';
 import { mediator } from 'mediator';
 import { intros } from 'intro';
 import dateFormat from 'dateformat';
+import shave from 'shave';
 
 const editModalButton = require('templates/buttons/edit_button.handlebars')
 const embedModalButton = require('templates/buttons/embed_button.handlebars')
@@ -837,7 +838,10 @@ class Canvas {
   dotdotdotAreaTitles() {
     const check = config.hasOwnProperty('nodot');
     if ((check && config.nodot === null) || !check) {
-      $("#area_title_object>body").dotdotdot({wrap:"letter"});
+      d3.selectAll("#area_title_object").each(function(d) {
+        var maxHeight = Math.round(Math.sqrt(Math.pow(d.r,2)*2));
+        shave('#area_title>h2', maxHeight);
+      });
     }
   }
 
