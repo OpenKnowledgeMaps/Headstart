@@ -36,6 +36,7 @@
     "mediator-js": "^0.9.9",
     "popper.js": "^1.16.0",
     "resolve-url-loader": "^3.1.1",
+    "shave": "^2.5.7",
     "truncate": "^2.1.0"
   },
   "devDependencies": {
