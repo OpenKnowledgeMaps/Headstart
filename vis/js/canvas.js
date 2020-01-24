@@ -839,7 +839,7 @@ class Canvas {
     const check = config.hasOwnProperty('nodot');
     if ((check && config.nodot === null) || !check) {
       d3.selectAll("#area_title_object").each(function(d) {
-        var maxHeight = Math.round(Math.sqrt(Math.pow(d.r,2)*2));
+        var maxHeight = Math.round(Math.sqrt(Math.pow(d.r,2)*2)) - 22;
         shave('#area_title>h2', maxHeight);
       });
     }
