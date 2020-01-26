@@ -28,10 +28,17 @@ $bkl_query = "select?facet.field=bkl_caption" .
              "&facet=on&q=*:*&rows=0" .
              "&fq=bkl_top_caption:";
 
+$lc_cache = $ini_array["connection"]["linkedcat_browseview_cache"];
+
 $force_refresh = FALSE;
-if (count($argv) == 2) {
- if ($argv[1] == "--force-refresh") {
-   $force_refresh = TRUE;
+if (file_exists($lc_cache) == FALSE) {
+  $force_refresh = TRUE;
+}
+if (isset($argv)) {
+  if (count($argv) == 2) {
+   if ($argv[1] == "--force-refresh") {
+     $force_refresh = TRUE;
+   }
  }
 }
 
@@ -286,5 +293,4 @@ function loadOrRefresh($lc_cache) {
   return $bkl_tree;
 }
 
-$lc_cache = $ini_array["connection"]["linkedcat_browseview_cache"];
 echo loadOrRefresh($lc_cache);
