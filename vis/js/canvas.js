@@ -838,9 +838,9 @@ class Canvas {
   dotdotdotAreaTitles() {
     const check = config.hasOwnProperty('nodot');
     if ((check && config.nodot === null) || !check) {
-      d3.selectAll("#area_title_object").each(function(d) {
-        var maxHeight = Math.round(Math.sqrt(Math.pow(d.r,2)*2)) - 12;
-        shave('#area_title>h2', maxHeight);
+      d3.selectAll("#area_title_object").each(function() {
+        var maxHeight = d3.select(this).attr("height") - 12;
+        shave(d3.select(this).select("#area_title>h2").node(), maxHeight);
       });
     }
   }

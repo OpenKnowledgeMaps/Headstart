@@ -778,9 +778,9 @@ papers.onWindowResize = function() {
 
       $("#area_title>h2").css("font-size", canvas.calcTitleFontSize());
       $("#area_title>h2").hyphenate(config.hyphenation_language);
-      area_title_objects.each(function(d) {
-        var maxHeight = Math.round(Math.sqrt(Math.pow(d.r,2)*2)) - 12;
-        shave('#area_title>h2', maxHeight);
+      area_title_objects.each(function() {
+        var maxHeight = d3.select(this).attr("height") - 12;
+        shave(d3.select(this).select("#area_title>h2").node(), maxHeight);
       });
 
       d3.selectAll("g.paper")
