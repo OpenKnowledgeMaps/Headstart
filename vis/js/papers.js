@@ -779,7 +779,9 @@ papers.onWindowResize = function() {
       $("#area_title>h2").css("font-size", canvas.calcTitleFontSize());
       $("#area_title>h2").hyphenate(config.hyphenation_language);
       area_title_objects.each(function() {
-        var maxHeight = d3.select(this).attr("height") - 12;
+        let margin_top = parseInt(d3.select(this).select("#area_title>h2").style("margin-top"), 10);
+        let margin_bottom = parseInt(d3.select(this).select("#area_title>h2").style("margin-bottom"), 10);
+        let maxHeight = d3.select(this).attr("height") - margin_top - margin_bottom;
         shave(d3.select(this).select("#area_title>h2").node(), maxHeight);
       });
 
