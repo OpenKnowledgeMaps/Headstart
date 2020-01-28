@@ -639,7 +639,7 @@ class Canvas {
         $("#subdiscipline_title h4")
             .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
 
-        shave("#subdiscipline_title>h4", 24);
+        shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
 
         $("#context").css("display", "none");
         
