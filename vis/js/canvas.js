@@ -839,7 +839,9 @@ class Canvas {
     const check = config.hasOwnProperty('nodot');
     if ((check && config.nodot === null) || !check) {
       d3.selectAll("#area_title_object").each(function() {
-        var maxHeight = d3.select(this).attr("height") - 12;
+        let margin_top = parseInt(d3.select(this).select("#area_title>h2").style("margin-top"), 10);
+        let margin_bottom = parseInt(d3.select(this).select("#area_title>h2").style("margin-bottom"), 10);
+        let maxHeight = d3.select(this).attr("height") - margin_top - margin_bottom;
         shave(d3.select(this).select("#area_title>h2").node(), maxHeight);
       });
     }
