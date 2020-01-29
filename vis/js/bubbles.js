@@ -579,6 +579,7 @@ BubblesFSM.prototype = {
                             })
                             .style("visibility", "visible");
                     
+                    canvas.dotdotdotAreaTitles();
                     mediator.current_zoom_node = null;
                     mediator.is_zoomed = false;
                     
