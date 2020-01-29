@@ -12,7 +12,7 @@ const bubbleTemplate = require('templates/map/bubble.handlebars');
 
 import 'hypher';
 import 'lib/en.js';
-import 'dotdotdot';
+import shave from 'shave';
 
 export var BubblesFSM = function () {
     this.id = 0;
@@ -449,9 +449,9 @@ BubblesFSM.prototype = {
             $("#infolink-areas").html('<span id="whatsthis">' + config.localization[config.language].intro_icon 
                     + '</span> ' + config.localization[config.language].intro_label_areas)
         }
-        
-        $("#subdiscipline_title>h4").dotdotdot();
-        
+
+        shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
+
         if (previous_zoom_node === null) {
             $("#context").css("visibility", "hidden");
             
