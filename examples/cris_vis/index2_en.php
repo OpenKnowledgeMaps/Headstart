@@ -19,7 +19,7 @@ include 'config.php';
     <script type="text/javascript">
         headstart.start();
     </script>
-    
+
     <!-- Piwik -->
     <script type="text/javascript">
       var _paq = _paq || [];

@@ -4,7 +4,7 @@ include 'config.php';
 ?>
 <html>
     <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet"> 
+            <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
     </head>
 
     <body style="margin:0px; padding:0px">
