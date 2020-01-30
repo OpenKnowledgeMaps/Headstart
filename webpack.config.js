@@ -1,15 +1,15 @@
+var config = require('./config.js');
 const path = require('path');
-const webpack = require('webpack');
 const merge = require('webpack-merge');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const config = require('./config.js');
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const TARGET = process.env.npm_lifecycle_event;
 
 const common = {
+    mode: "development",
     devtool: 'eval-source-map',
-    entry: './vis/app.js',
+    entry: './vis/entrypoint.js',
 
     output: {
         path: path.resolve(__dirname, "dist"),
@@ -20,65 +20,19 @@ const common = {
         library: 'headstart'
     },
 
-    module: {
-        loaders: [{
-            test: require.resolve("jquery-dotdotdot/src/jquery.dotdotdot.min.js"),
-            loader: "imports?$=jquery,jQuery=jquery"
-        }, {
-            test: require.resolve("hypher/dist/jquery.hypher.js"),
-            loader: "imports?$=jquery,jQuery=jquery"
-        }, {
-            test: /lib\/*.js/,
-            loader: "imports?$=jquery"
-        }, {
-            test: /.js?$/,
-            loader: 'babel-loader',
-            exclude: /node_modules/,
-            query: {
-                presets: ['es2015'],
-                plugins: ['transform-object-assign']
-            }
-        }, {
-            test: /\.handlebars$/,
-            loader: "handlebars-loader",
-            query: { inlineRequires: '\/images\/' }
-        }, {
-            test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            loader: 'url-loader?limit=10000&minetype=application/font-woff&name=/assets/[name].[ext]'
-        }, {
-            test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            loader: 'file?name=/assets/[name].[ext]'
-        }, {
-            test: /\.png$/,
-            loader: 'file?name=img/[name].[ext]',
-            exclude: /examples/
-        }, ]
+    devServer: {
+        contentBase: path.join( __dirname ),
+        compress: true,
+        port: 8080,
+        disableHostCheck: true,
+        host: '0.0.0.0',
+        publicPath: '/dist/'
     },
-
-    sassLoader: {
-        includePaths: [path.resolve(__dirname, "vis/stylesheets/")]
-        , data: '$skin: "' + config.skin + '";'
-    },
-
-    plugins: [
-        new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery",
-            d3: "d3"
-        }),
-        new CleanWebpackPlugin(['dist'], {
-            root: path.resolve(__dirname, ""),
-            verbose: true,
-            dry: false,
-            exclude: []
-        })
-    ],
 
     resolve: {
         alias: {
             //
             'handlebars': 'handlebars/dist/handlebars.js',
-            'dotdotdot': 'jquery-dotdotdot/src/jquery.dotdotdot.min.js',
             'hypher': 'hypher/dist/jquery.hypher.js',
 
             // paths
@@ -101,44 +55,100 @@ const common = {
             'streamgraph' : path.resolve(__dirname, 'vis/js/streamgraph.js')
         },
     },
-    
+
     externals: {
         'chart': 'Chart'
+    },
+    plugins: [
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            d3: "d3"
+        }),
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // all options are optional
+            filename: 'headstart.css',
+            chunkFilename: '[id].css',
+            ignoreOrder: false, // Enable to remove warnings about conflicting order
+          }),
+    ],
+    module: {
+        rules: [
+            {
+                test: require.resolve("hypher/dist/jquery.hypher.js"),
+                use: [
+                    { loader: "imports-loader?$=jquery,jQuery=jquery" }
+                ]
+            }, {
+                test: /lib\/*.js/,
+                use: [
+                    { loader: "imports-loader?$=jquery" }
+                ]
+            }, {
+                test: /.js?$/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: ['@babel/preset-env']
+                        }
+                    }
+                ]
+            }, {
+                test: /\.handlebars$/,
+                use: [
+                    {
+                        loader: "handlebars-loader",
+                        options: {
+                            query: { inlineRequires: '\/images\/' }
+                        }
+                    }
+                ]
+            }, {
+                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                use: [
+                    { loader: 'url-loader?limit=10000&minetype=application/font-woff&name=/assets/[name].[ext]' }
+                ]
+            }, {
+                test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                use: [
+                    { loader: 'file-loader?name=/assets/[name].[ext]' }
+                ]
+            }, {
+                test: /\.png$/,
+                use: [
+                    {
+                        loader: 'file-loader?name=img/[name].[ext]',
+                        options: { exclude: /examples/ }
+                    },
+                ]
+            }, {
+                test: /\.(sa|sc|c)ss$/,
+                use: [{
+                  loader: 'style-loader',
+                }, {
+                  loader: MiniCssExtractPlugin.loader,
+                  options: {
+                    hmr: process.env.NODE_ENV === 'development',
+                    },
+                }, {
+                  loader: 'css-loader',
+                }, {
+                  loader: 'sass-loader',
+                  options: {
+                    prependData: '$skin: "' + config.skin + '";',
+                    sassOptions: {
+                      includePaths: ["node_modules"]
+                    }
+                  }
+                },
+              ],
+            },
+
+        ]
     }
 };
 
-switch (TARGET) {
-    case 'dev':
-        module.exports = merge(common, {
-            debug: true,
-
-            module: {
-                loaders: [
-                    // Define development specific SASS setup
-                    {
-                        test: /\.scss$/,
-                        loaders: ["style", "css?sourceMap", "sass?sourceMap"]
-                    }
-                ]
-            }
-        });
-        break;
-
-    case 'prod':
-        module.exports = merge(common, {
-            module: {
-                loaders: [{
-                    test: /\.scss$/,
-                    loader: ExtractTextPlugin.extract('css!sass')
-                }]
-            },
-            plugins: [
-                new ExtractTextPlugin("headstart.css"),
-                new webpack.optimize.UglifyJsPlugin({
-                    compress: {
-                        warnings: false
-                    }
-                })
-            ]
-        });
-}
+module.exports = common

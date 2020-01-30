@@ -12,6 +12,8 @@ import { toFront } from 'helpers';
 import { canvas } from 'canvas';
 import { updateTags } from 'helpers';
 import { io } from 'io';
+import shave from 'shave';
+
 
 const paperTemplate = require("templates/map/paper.handlebars");
 
@@ -776,7 +778,6 @@ papers.onWindowResize = function() {
 
       $("#area_title>h2").css("font-size", canvas.calcTitleFontSize());
       $("#area_title>h2").hyphenate(config.hyphenation_language);
-      $("#area_title_object>body").dotdotdot({wrap:"letter"});
 
       d3.selectAll("g.paper")
         .attr("transform", (d) => {
