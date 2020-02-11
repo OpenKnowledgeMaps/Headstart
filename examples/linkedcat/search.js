@@ -94,14 +94,19 @@ var addAutoComplete = function() {
                 renderItem: function (item, search){
                     search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
                     var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+                    let name = "";
+                    if(search.length > 0) {
+                        name = item[1].replace(/</g, "&lt;");
+                        name = name.replace(/>/g, "&gt;");
+                    }
                     return '<div class="autocomplete-suggestion" '
                             +' data-id="' + item[0] + '"'
-                            +' data-author="'+item[1] +'"'
+                            +' data-author="'+name +'"'
                             +' data-count="' + item[2] + '"'
                             +' data-living_dates="' + item[3] + '"'
                             +' data-image_link="' + item[4] + '"'
-                            +'>'+item[1].replace(re, "<b>$1</b>")
-                            +((item[1] !== "")?(' (' +item[2] + ')'):(""))
+                            +'>'+name.replace(re, "<b>$1</b>")
+                            +((name !== "")?(' (' +item[2] + ')'):(""))
                             +'</div>';
                 },
                 onSelect: function(e, term, item){

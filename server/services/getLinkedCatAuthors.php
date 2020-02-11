@@ -29,6 +29,19 @@ $author_data_query = "select?fl=author100_0,author100_a,author100_d,author100_wi
                      "&rows=1" .
                      "&q=author100_0:";
 
+$lc_cache = $ini_array["connection"]["linkedcat_suggest_cache"];
+
+$force_refresh = FALSE;
+if (file_exists($lc_cache) == FALSE) {
+  $force_refresh = TRUE;
+}
+if (isset($argv)) {
+  if (count($argv) == 2) {
+    if ($argv[1] == "--force-refresh") {
+      $force_refresh = TRUE;
+    }
+  }
+}
 
 function execQuery($base_url, $query) {
   $ch = curl_init();
@@ -180,7 +193,9 @@ function writeCache($fname, $output) {
 function loadOrRefresh($lc_cache) {
   # checks if file exists AND if its fresher than 24h
   # if true && true, load the cached file
-  if (file_exists($lc_cache) && (time() - filemtime($lc_cache) < 86400)) {
+  if (($GLOBALS['force_refresh'] == FALSE) &&
+       (file_exists($lc_cache) && (time() - filemtime($lc_cache) < 86400))
+     ) {
     $authors = loadCache($lc_cache);
   }
   else {
@@ -206,5 +221,4 @@ function loadOrRefresh($lc_cache) {
   return $authors;
 }
 
-$lc_cache = $ini_array["connection"]["linkedcat_suggest_cache"];
 echo loadOrRefresh($lc_cache);

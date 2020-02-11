@@ -73,7 +73,7 @@ get_papers <- function(query, params, limit=100) {
   metadata$year <- search_res$pub_year
   metadata$readers <- 0
   metadata$url <- search_res$id
-  metadata$link <- "" # needs fix
+  metadata$link <- search_res$goobi_link
   metadata$published_in <- paste(search_res$host_maintitle, search_res$host_pubyear, search_res$host_pubplace, sep=", ")
   metadata$published_in <- unlist(lapply(metadata$published_in, function(x) {gsub(", $|, , ", "", x)}))
   metadata$oa_state <- unlist(lapply(search_res$copyright_until, function(x) {if (x=="") 1 else 0}))
@@ -107,10 +107,9 @@ get_papers <- function(query, params, limit=100) {
 build_query <- function(query, params, limit){
   # fields to query in
   a_fields <- c('author100_a', 'author700_a')
-  q_fields <- c('main_title', 'ocrtext',
+  q_fields <- c('main_title', 'subtitle', 'ocrtext',
                 'author100_d', 'author100_0',
                 'author700_d', 'author700_0',
-                'main_title', 'subtitle',
                 'host_maintitle', 'host_pubplace',
                 'bkl_caption', 'bkl_top_caption',
                 'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
@@ -128,10 +127,10 @@ build_query <- function(query, params, limit){
                 'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
                 'keyword_p', 'keyword_x', 'keyword_z',
                 'tags', 'category', 'bib', 'language_code',
-                'ocrtext')
+                'ocrtext', 'goobi_link')
   query <- gsub(" ?<<von>>", "", query)
-  aq <- paste0(a_fields, ':', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"))
-  qq <- paste0(q_fields, ':', query)
+  aq <- paste0(lapply(q_fields, build_authorfield_query))
+  qq <- paste0(lapply(q_fields, build_queryfield_query))
   q <- paste(c(aq, qq), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
@@ -173,3 +172,27 @@ build_query <- function(query, params, limit){
 valid_langs <- list(
     'ger'='german'
 )
+
+boost_factors <- list(
+  'ocrtext'=0.01,
+  'main_title'=5,
+  'keyword_a'=3,
+  'keyword_c'=3,
+  'keyword_g'=3,
+  'keyword_t'=3,
+  'keyword_p'=3,
+  'keyword_x'=3,
+  'keyword_z'=3
+)
+
+build_authorfield_query <- function(field) {
+  paste0(field, ':', '"', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"), '"', add_boost_factor(field))
+}
+
+build_queryfield_query <- function(field) {
+  paste0(field, ':', '"', query, '"', add_boost_factor(field))
+}
+
+add_boost_factor <- function(field) {
+  if (field %in% names(boost_factors)) paste0('^', boost_factors[field]) else ""
+}

@@ -140,7 +140,7 @@ body {
     text-transform: none; 
     color: #f7f7f7; 
     position: absolute; 
-    left: 20px;
+    right: 20px;
     bottom: 20px; 
     font-size: 9px; 
     text-align: left;
@@ -380,11 +380,25 @@ label.q-error, #input-container label.q-error {
 }
 
 .browse {
-    position: absolute; 
+    /*position: absolute; 
     bottom: 20px; 
-    right: 20px; 
-    max-width: 200px;
+    right: 20px; */
+    max-width: 300px;
     background-image: none;
-    background: transparent;
+    background: rgba(0, 0, 0, 0.3);
     border: 2px solid white;
+}
+
+.browse:hover {
+    border: 2px solid rgba(28,59,112,1);
+}
+
+.nav li a, .nav li {
+    text-transform: none; 
+    font-family: 'Josefin Sans', sans-serif; 
+    text-decoration: underline; 
+    color:white; 
+    text-shadow:1px 1px 10px black;
+    font-size: 18px;
+    padding: 10px 0px;
 }

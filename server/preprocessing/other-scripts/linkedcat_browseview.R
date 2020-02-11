@@ -73,7 +73,7 @@ get_papers <- function(query, params, limit=100) {
   metadata$year <- search_res$pub_year
   metadata$readers <- 0
   metadata$url <- search_res$id
-  metadata$link <- "" # needs fix
+  metadata$link <- search_res$goobi_link
   metadata$published_in <- paste(search_res$host_maintitle, search_res$host_pubyear, search_res$host_pubplace, sep=", ")
   metadata$published_in <- unlist(lapply(metadata$published_in, function(x) {gsub(", $|, , ", "", x)}))
   metadata$oa_state <- unlist(lapply(search_res$copyright_until, function(x) {if (x=="") 1 else 0}))
@@ -114,11 +114,11 @@ build_query <- function(query, params, limit){
                 'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
                 'keyword_p', 'keyword_x', 'keyword_z',
                 'tags', 'category', 'bib', 'language_code',
-                'ocrtext')
+                'ocrtext', 'goobi_link')
   q <- paste(paste0(q_field, ':', '"', params$bkl_list, '"'), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
   if (params$bkl_level != 'top') {
-    q_params$fq <- paste0('bkl_top_caption:', params$bkl_top_caption)
+    q_params$fq <- paste0('bkl_top_caption:', paste0('"', params$bkl_top_caption, '"'))
   }
   return(q_params)
 }

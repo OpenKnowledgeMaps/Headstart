@@ -5,6 +5,7 @@ import { papers } from 'papers';
 import { mediator } from 'mediator';
 import { intros } from 'intro';
 import dateFormat from 'dateformat';
+import shave from 'shave';
 
 const editModalButton = require('templates/buttons/edit_button.handlebars')
 const embedModalButton = require('templates/buttons/embed_button.handlebars')
@@ -38,7 +39,7 @@ class Canvas {
 
         var toolbar_height = $("#toolbar").outerHeight(true) || 0;
         const CHART_HEIGHT_CORRECTION = 15;
-        const CHART_HEIGHT_CORRECTION_TOOLBAR = 10;
+        const CHART_HEIGHT_CORRECTION_TOOLBAR = 15;
 
         // Set available_height and available_width
         if (parent_height === 0) {
@@ -643,6 +644,28 @@ class Canvas {
             this.drawContextAuthorview(context);
         }
     }
+    
+    showAreaStreamgraph(keyword) {
+        $("#subdiscipline_title h4")
+            .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
+
+        shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
+
+        $("#context").css("display", "none");
+        
+        $("#backlink").remove();
+        $('<p id="backlink" class="backlink backlink-streamgraph"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
+
+        $("#backlink").on("click", function () {
+            mediator.publish("streamgraph_chart_clicked");
+        })
+    }
+    
+    removeAreaStreamgraph() {
+        $("#backlink").remove();
+        $("#context").css("display", "block");
+        mediator.publish("draw_title");
+    }
 
     initForceAreas() {
         let padded = canvas.current_vis_size - headstart.padding;
@@ -819,13 +842,18 @@ class Canvas {
     }
 
     hyphenateAreaTitles() {
-        $("#area_title>h2").hyphenate('en');
+        $("#area_title>h2").hyphenate(config.hyphenation_language);
     }
 
   dotdotdotAreaTitles() {
     const check = config.hasOwnProperty('nodot');
     if ((check && config.nodot === null) || !check) {
-      $("#area_title_object>body").dotdotdot({wrap:"letter"});
+      d3.selectAll("#area_title_object").each(function() {
+        let margin_top = parseInt(d3.select(this).select("#area_title>h2").style("margin-top"), 10);
+        let margin_bottom = parseInt(d3.select(this).select("#area_title>h2").style("margin-bottom"), 10);
+        let maxHeight = d3.select(this).attr("height") - margin_top - margin_bottom;
+        shave(d3.select(this).select("#area_title>h2").node(), maxHeight);
+      });
     }
   }
 
