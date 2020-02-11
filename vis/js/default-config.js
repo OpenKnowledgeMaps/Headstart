@@ -126,6 +126,7 @@ var config = {
     conference_id: 0,
     user_id: 0,
     max_recommendations: 10,
+    max_documents: 100,
 
     //intro
     intro: "intro_cris",

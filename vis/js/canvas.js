@@ -488,7 +488,9 @@ class Canvas {
         if (this.paramExists(context.params.sorting)) {
             if(context.params.sorting === "most-recent") {
                 modifier = config.localization[config.language].most_recent_label;
-            } else if (context.params.sorting === "most-relevant" && this.paramExists(config.localization[config.language].most_relevant_label)) {
+            } else if (context.params.sorting === "most-relevant" 
+                            && this.paramExists(config.localization[config.language].most_relevant_label)
+                            && context.num_documents >= config.max_documents) {
                 modifier = config.localization[config.language].most_relevant_label;
                 is_most_relevant = true;
             } else {
