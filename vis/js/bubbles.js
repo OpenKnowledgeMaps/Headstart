@@ -826,9 +826,8 @@ BubblesFSM.prototype = {
             this.bringPapersToFront(d);
             hideSibling(circle);
 
-            if (papers.is("behindbubble") || papers.is("behindbigbubble")) {
-                papers.mouseover();
-            }
+            papers.mouseover();
+            
             d3.selectAll("#region").style("fill-opacity", 1);
         }
 
