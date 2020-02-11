@@ -363,7 +363,7 @@ var config = {
             articles_label: 'documents',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
-            most_relevant_tooltip: 'At the moment, we use the relevance ranking provided by the source API. Both PubMed and BASE mainly use text similarity between your query and the article metadata to determine the relevance. Please consult the FAQ for more information.',
+            most_relevant_tooltip: 'To determine the most relevant documents, we use the relevance ranking provided by the source - either BASE or PubMed. Both sources compute the text similarity between your query and the article metadata to establish the relevance ranking. Please consult the FAQ for more information.',
             source_label: 'Source',
             documenttypes_label: 'Document types',
             documenttypes_tooltip: 'The following document types were taken into consideration in the creation of this map (not all of them may appear in the map):',
