@@ -11,7 +11,6 @@ import { BrowserDetect, highlight } from "helpers";
 
 import 'hypher';
 import 'lib/en.js';
-import 'dotdotdot';
 
 export var HeadstartFSM = function(json_direct_data) {
   this.VERSION = 4.0;
@@ -26,8 +25,8 @@ HeadstartFSM.prototype = {
     if (!(browser == "Firefox" || browser == "Safari" || browser == "Chrome")) {
             var alert_message = 'You are using an unsupported browser. ' +
                                 'This visualization was successfully tested ' +
-                                'with the latest versions of Chrome, Safari, ' +
-                                'Opera and Firefox.';
+                                'with the latest versions of Firefox, Chrome, Safari, ' +
+                                'Opera and Edge.';
             alert(alert_message);
     }
   },

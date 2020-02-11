@@ -84,6 +84,7 @@ export const list = StateMachine.create({
                 items: config.localization[config.language].items,
                 item_count: this.list_item_count,
             }));
+            this.fit_list_height();
             list.count_visible_items_to_header();
         },
 
@@ -187,7 +188,6 @@ list.drawList = function() {
         }
     }
 
-    this.fit_list_height();
     if (!config.render_bubbles) d3.select(window).on("resize", () => {
         this.fit_list_height();
     });
@@ -245,10 +245,8 @@ list.fit_list_height = function() {
                     - $("#show_hide_button").outerHeight(true) 
                     - $("#explorer_options").outerHeight(true)
                     + ($(".legend").outerHeight(true) || 0)
-                    - (($("#toolbar").height() > 0)?(0):(PAPER_LIST_CORRECTION))
+                    - PAPER_LIST_CORRECTION
                     - (parseInt($("#papers_list").css("padding-top"), 10) || 0)
-                    //TODO: Hack for VIPER
-                    + ((config.language === "eng_openaire")?(10):(0));
     }
     $("#papers_list").height(paper_list_avail_height);
 };
@@ -415,7 +413,14 @@ list.filterListByAreaURIorArea = function(area) {
 list.filterListByArea = function(area) {
     d3.selectAll("#list_holder")
         .filter(function(x) {
-            return (config.use_area_uri) ? (x.area_uri == area.area_uri) : (x.area == area.title);
+            if (config.use_area_uri) {
+                //TODO: hotfix for issue with backlinks for older maps
+                let curr_area_uri = (Array.isArray(x.area_uri)) ? (x.area_uri[0]) : (x.area_uri);
+                let target_area_uri = (Array.isArray(area.area_uri)) ? (area.area_uri[0]) : (area.area_uri);
+                return curr_area_uri == target_area_uri;
+            } else {
+                return x.area == area.title;
+            }
         })
         .style("display", function(d) {
             return d.filtered_out ? "none" : "inline";
@@ -842,13 +847,13 @@ list.hideEntriesByParam = function (object, param) {
 list.hideEntriesByWord = function(object, search_words) {
     object
         .filter(function(d) {
-            let abstract = (config.list_sub_entries)?(d.abstract_search.toLowerCase()):(d.paper_abstract.toLowerCase());
-            let title = d.title.toLowerCase();
-            let authors = d.authors_string.toLowerCase();
-            let journals = d.published_in.toLowerCase();
-            let year = d.year;
+            let abstract = (config.list_sub_entries)?(d.abstract_search.toString().toLowerCase()):(d.paper_abstract.toString().toLowerCase());
+            let title = d.title.toString().toLowerCase();
+            let authors = d.authors_string.toString().toLowerCase();
+            let journals = d.published_in.toString().toLowerCase();
+            let year = d.year.toString();
             let word_found = true;
-            let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toLowerCase()) : ("");
+            let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toString().toLowerCase()) : ("");
             let i = 0;
             while (word_found && i < search_words.length) {
                 word_found = (abstract.indexOf(search_words[i]) !== -1 ||
@@ -1115,10 +1120,40 @@ list.enlargeListItem = function(d) {
     if (config.list_show_external_vis) {
         d3.selectAll('.conceptgraph').style('display', 'none');
     }
+    
+    this.setBacklink(d);
 
     d.paper_selected = true;
     this.count_visible_items_to_header()
 };
+
+list.setBacklink = function(d) {
+    let current_list_holder = d3.selectAll("#list_holder")
+                                .filter(function(x) {
+                                        return (x.id === d.id);
+                                })
+    current_list_holder.append("div")
+                            .attr("id", "backlink_list")
+                            .attr("class", "backlink-list")
+                               .append("a")
+                                .attr("class", "underline")
+                                .text(function() {
+                                    if(config.is_streamgraph) {
+                                        return config.localization[config.language].backlink_list_streamgraph;
+                                    } else {
+                                        return config.localization[config.language].backlink_list;
+                                    }
+                                })
+                                .on("click", function (d) {
+                                    if(config.is_streamgraph) {
+                                        mediator.publish('currentstream_click');
+                                    } else {
+                                        mediator.publish('currentbubble_click', d);
+                                    }
+                                })
+         
+    
+}
 
 list.setAdditionalImagesForListHolder = function(d) {
     let current_item = d3.selectAll("#list_holder")
@@ -1407,9 +1442,6 @@ list.setImageForListHolder = function(d) {
         let external_url = d.external_vis_link;
         
         let preview_image = current_item
-                            .append("a")
-                                .attr("href", external_url)
-                                .attr("target", "_blank")
                             .append("div")
                                 .attr("id", "preview_image")
                                 .classed("preview_image", true)
@@ -1418,7 +1450,11 @@ list.setImageForListHolder = function(d) {
                             .attr("id", "preview_thumbnail")
                             .classed("preview_thumbnail", true)
         
-        image_div.append("img")
+        image_div
+               .append("a")
+                .attr("href", external_url)
+                .attr("target", "_blank") 
+               .append("img")
                 .attr("id", "thumbnail-concept-graph")
                 .classed("thumbnail-concept-graph", true)
                 .attr("src", concept_graph)
@@ -1430,10 +1466,10 @@ list.setImageForListHolder = function(d) {
         text_div.append("div")
                 .attr("id", "concept-graph-description")
                 .classed("concept-graph-description", true)
-                .html('<p class="concept-graph-h">Try out concept graph for this paper</p>'
-                        +'<p>Concept graph is a novel visualization tool, which represents papers and related concepts (e.g. keywords, authors) in a graph.</p>'
+                .html('<p class="concept-graph-h">Explore connections of this document</p>'
+                        +'<p>Concept Graph by Know-Center is a novel visualization tool, which represents documents and related concepts (e.g. keywords, authors) in a graph.</p>'
                         +'<p class="concept-graph-link"><a class="tryout-button" '
-                        +'href="' + external_url + '" target="_blank">Create a concept graph</a></p>')
+                        +'href="' + external_url + '" target="_blank">Try out Concept Graph</a></p>')
         
         
     } else {
@@ -1522,6 +1558,11 @@ list.notSureifNeeded = function() {
     var image_node = list_holders_local.select("#preview_image").node();
     if (image_node !== null) {
         image_node.parentNode.removeChild(image_node);
+    }
+    
+    var backlink_node = list_holders_local.select("#backlink_list").node();
+    if (backlink_node !== null) {
+        backlink_node.parentNode.removeChild(backlink_node);
     }
 };
 

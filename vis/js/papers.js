@@ -4,6 +4,7 @@ import StateMachine from 'javascript-state-machine';
 
 import 'hypher';
 import 'lib/en.js';
+import 'lib/de.js'
 
 import config from 'config';
 import { mediator } from 'mediator';
@@ -11,6 +12,8 @@ import { toFront } from 'helpers';
 import { canvas } from 'canvas';
 import { updateTags } from 'helpers';
 import { io } from 'io';
+import shave from 'shave';
+
 
 const paperTemplate = require("templates/map/paper.handlebars");
 
@@ -232,7 +235,7 @@ papers.drawDogEarPath = function (nodes) {
 // if the user clicks on the paper inside of a bubble,
 // it should zoom in. (behave same way when, only the bubble is clicked)
 papers.initPaperClickHandler = function () {
-    d3.selectAll(".paper_holder").on("click", function (d) {
+    d3.selectAll(".paper_holder, #article_metadata").on("click", function (d) {
         mediator.publish("paper_click", d);
     });
 };
@@ -275,16 +278,16 @@ papers.prepareForeignObject = function (nodes) {
             }).append("xhtml:body")
             .html(function (d) {
                 return paperTemplate({
-                    'metadata_height': (config.content_based) ? (d.height) : (d.height * 0.75),
+                    'metadata_height': (config.content_based) ? (d.height) : (d.height * (1- config.paper_readers_height_factor)),
                     'metadata_width': d.width * 0.8,
                     'd': d,
                     'base_unit': config.base_unit
                 });
             });
 
-    $(".metadata #title").hyphenate("en");
-    $(".metadata #details").hyphenate("en");
-    $(".metadata #in").hyphenate("en");
+    $(".metadata #title").hyphenate(config.hyphenation_language);
+    $(".metadata #details").hyphenate(config.hyphenation_language);
+    $(".metadata #in").hyphenate(config.hyphenation_language);
 };
 
 papers.updateVisualDistributions = function(attribute, context) {
@@ -541,7 +544,9 @@ papers.shrinkPaper = function (d, holder) {
             .attr("class", "large highlightable");
     
     holder_div.selectAll(".readers")
-            .style("height", "15px")
+            .style("height", () => {
+                config.paper_metadata_height_correction + "px"
+            })
             .style("margin-top", "5px");
 
     d.resized = false;
@@ -588,7 +593,7 @@ papers.resizePaper = function (d, holder_div, resize_factor) {
     current_dogear.attr("d", dogear);
 
     let height = (config.content_based) ? (d.height * mediator.circle_zoom * resize_factor + "px") :
-            (d.height * mediator.circle_zoom * resize_factor - 20 + "px");
+            (d.height * mediator.circle_zoom * resize_factor - config.paper_metadata_height_correction + "px");
 
     holder_div.select("div.metadata")
             .attr("height", height)
@@ -621,7 +626,9 @@ papers.enlargePaper = function (d, holder_div) {
             .attr("class", "larger");
     
     holder_div.selectAll(".readers")
-            .style("height", "25px")
+            .style("height", () => {
+                return config.paper_metadata_height_correction + "px"
+            })
             .style("margin-top", "5px");
 
     let metadata = holder_div.select("div.metadata");
@@ -676,7 +683,6 @@ papers.enlargePaper = function (d, holder_div) {
     mediator.current_circle
             .on("click", (d) => {
                 mediator.publish("currentbubble_click", d);
-                this.resetPaths();
             });
 
     d.resized = true;
@@ -688,6 +694,8 @@ papers.currentbubble_click = function (d) {
     if (mediator.current_enlarged_paper !== null) {
         mediator.current_enlarged_paper.paper_selected = false;
     }
+    
+    this.resetPaths();
 
     mediator.current_enlarged_paper = null;
     mediator.publish("record_action", d.title, "Paper", "click", config.user_id, d.bookmarked + " " + d.recommended, null);
@@ -769,8 +777,7 @@ papers.onWindowResize = function() {
       });
 
       $("#area_title>h2").css("font-size", canvas.calcTitleFontSize());
-      $("#area_title>h2").hyphenate('en');
-      $("#area_title_object>body").dotdotdot({wrap:"letter"});
+      $("#area_title>h2").hyphenate(config.hyphenation_language);
 
       d3.selectAll("g.paper")
         .attr("transform", (d) => {
@@ -821,18 +828,18 @@ papers.onWindowResize = function() {
         })
         .style("height", (d) => {
           if(!mediator.is_zoomed) {
-            return (config.content_based)?(d.resize_height):(d.resize_height * 0.8 + "px");
+            return (config.content_based)?(d.resize_height):(d.resize_height * (1- config.paper_readers_height_factor) + "px");
           } else {
-            return (config.content_based)?(d.resize_height + "px"):(d.resize_height - 20 + "px");
+            return (config.content_based)?(d.resize_height + "px"):(d.resize_height - config.paper_metadata_height_correction + "px");
           }
         });
 
       d3.selectAll("div.readers")
         .style("height", (d) => {
           if (mediator.is_zoomed === false) {
-            return d.resize_height * 0.2 + "px";
+            return d.resize_height * config.paper_readers_height_factor + "px";
           } else {
-            return "15px";
+            return config.paper_metadata_height_correction + "px";
           }
         })
         .style("width", function(d) {

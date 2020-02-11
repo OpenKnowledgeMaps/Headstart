@@ -138,12 +138,12 @@ streamgraph.initMouseListeners = function() {
 }
 
 streamgraph.markStream = function() {
-    if(mediator.stream_clicked === null) {
+    if(mediator.current_stream === null) {
         return;
     }
     d3.selectAll(".stream")
         .attr("class", function (d) {
-            return d.key !== mediator.stream_clicked ? 'stream lower-opacity' : 'stream';
+            return d.key !== mediator.current_stream ? 'stream lower-opacity' : 'stream';
         })    
 }
 
@@ -229,14 +229,18 @@ streamgraph.drawStreamgraph = function (streams, area, z) {
 
 streamgraph.drawLabels = function (series, x, y, streamgraph_width, streamgraph_height, label_positions) {
     let self = this;
-    
     let text = d3.select(".streamgraph-chart").selectAll("text.label")
             .data(series.data())
             .enter()
             .append("text")
             .attr("dy", "10")
             .classed("label", true)
-            .text(function (d) { return d.key })
+            .text(function (d) {
+                if(d.key === "") {
+                    d.key = "NO_LABEL";
+                }
+                return d.key 
+            })
             .attr("transform", function (d) {
                 return self.initialPositionLabel(this, d, x, y, streamgraph_width, label_positions)
             })
@@ -268,7 +272,7 @@ streamgraph.drawLabels = function (series, x, y, streamgraph_width, streamgraph_
             .attr("transform", function (d) {
                 var current_label = repositioned_labels.find(obj => {
                     return obj.key === d.key;
-                })
+                })               
                 return('translate(' + current_label.x + ',' + current_label.y + ')')
             })
     
@@ -334,9 +338,9 @@ streamgraph.initialPositionLabel = function(self, d, x, y, streamgraph_width, la
             final_x = streamgraph_width - text_width;
         }
     })
-    
+
     label_positions.push({key: d.key, x: final_x, y: final_y, width: text_width, height: text_height, center_x: (final_x + text_width/2)});
-    
+
     return "translate(" + final_x + ", " + final_y + ")";
 }
 
@@ -491,7 +495,7 @@ streamgraph.stream_mouseover = function(el) {
                 if(d.key !== el.key) {
                     stream_class = 'stream lower-opacity';
                 }
-                if (typeof mediator.stream_clicked !== "undefined" && mediator.stream_clicked === d.key) {
+                if (typeof mediator.current_stream !== "undefined" && mediator.current_stream === d.key) {
                     stream_class = 'stream';
                 }
                 return stream_class;
@@ -500,10 +504,23 @@ streamgraph.stream_mouseover = function(el) {
 }
 
 streamgraph.stream_mouseout = function() {
-    if(mediator.stream_clicked === null) {
+    if(mediator.current_stream === null) {
         d3.selectAll(".stream").transition()
             .duration(100)
             .attr('class', 'stream')
+    } else {
+        d3.selectAll(".stream").transition()
+            .duration(100)
+            .attr("class", function (d, j) {
+                let stream_class = 'stream';
+                if(typeof mediator.current_stream !== "undefined" && d.key !== mediator.current_stream) {
+                    stream_class = 'stream lower-opacity';
+                }
+                if (typeof mediator.current_stream !== "undefined" && mediator.current_stream === d.key) {
+                    stream_class = 'stream';
+                }
+                return stream_class;
+            })
     }
 
     d3.select('#tooltip').classed("hidden", true);

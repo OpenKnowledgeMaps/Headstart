@@ -205,6 +205,7 @@
 
 .conceptgraph {
     margin-top: 5px;
+    margin-bottom: 10px;
     height: 20px;
     font-weight: $fontweight400;
     white-space: nowrap;
@@ -226,6 +227,10 @@
     font-size: 12px;
 }
 
+.thumbnail-concept-graph {
+    max-width: 100%;
+}
+
 .preview_image {
      max-width: 82%;
      padding: 3%;
@@ -238,12 +243,14 @@
 }
 
 .preview_text {
-    max-width: 60%;
+    max-width: 100%;
+    display: block;
 }
 
 .preview_thumbnail { 
-    max-width: 30%;
-    margin-right: 20px;
+    max-width: 100%;
+    display: block;
+    margin-right: 0px;
 }
 
 .tryout-button {
@@ -254,6 +261,8 @@
     border-radius: 5px;
     -moz-border-radius: 5px;
    font-weight: 300;
+   display: block;
+   text-align: center;
 }
 
 .tryout-button:hover, .tryout-button:active, .tryout-button:focus {
@@ -263,13 +272,14 @@
 }
 
 .concept-graph-link {
-    margin-top: 5%;
+    margin-top: 10px;
 }
 
 .concept-graph-h {
     font-weight: 600;
     font-size: 14px;
     color: $okm-blue;
+    margin-TOP: 10px;
 }
 
 .list_subentry_showmore, .list_subentry_show_statistics {
@@ -413,6 +423,23 @@ img#preview_page {
     color: $black;
     font-size: 12px;
     font-family: $base-font-family;
+}
+
+.backlink-list {
+    margin-left: 15px;
+    margin-top: 15px;
+    font-size: 11px;
+    cursor: pointer;
+
+    a {
+        border-bottom: 1px solid $medium-blue;
+        color: $medium-blue;
+        text-decoration: none;
+
+        &:hover {
+            border-bottom: 2px solid $medium-blue;
+        }
+    }
 }
 
 @media screen and (max-width: 1150px) {

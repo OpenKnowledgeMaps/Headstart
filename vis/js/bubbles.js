@@ -12,7 +12,7 @@ const bubbleTemplate = require('templates/map/bubble.handlebars');
 
 import 'hypher';
 import 'lib/en.js';
-import 'dotdotdot';
+import shave from 'shave';
 
 export var BubblesFSM = function () {
     this.id = 0;
@@ -449,15 +449,15 @@ BubblesFSM.prototype = {
             $("#infolink-areas").html('<span id="whatsthis">' + config.localization[config.language].intro_icon 
                     + '</span> ' + config.localization[config.language].intro_label_areas)
         }
-        
-        $("#subdiscipline_title>h4").dotdotdot();
-        
+
+        shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
+
         if (previous_zoom_node === null) {
             $("#context").css("visibility", "hidden");
             
-            $('<p class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
+            $('<p id="backlink" class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
 
-            $(".backlink").on("click", function () {
+            $("#backlink").on("click", function () {
                 mediator.publish('chart_svg_click');
             })
         }
@@ -579,6 +579,7 @@ BubblesFSM.prototype = {
                             })
                             .style("visibility", "visible");
                     
+                    canvas.dotdotdotAreaTitles();
                     mediator.current_zoom_node = null;
                     mediator.is_zoomed = false;
                     
@@ -638,7 +639,7 @@ BubblesFSM.prototype = {
         d3.selectAll("span.readers_entity")
                 .style("font-size", "8px");
         
-        $(".backlink").remove();
+        $("#backlink").remove();
 
         mediator.publish("draw_title");
 
@@ -771,14 +772,18 @@ BubblesFSM.prototype = {
 
         t.selectAll("div.metadata")
                 .style("height", function (d) {
-                    return (config.content_based) ? (d.height * mediator.circle_zoom + "px") : (d.height * mediator.circle_zoom - 20 + "px");
+                    return (config.content_based) 
+                                ? (d.height * mediator.circle_zoom + "px") 
+                                : (d.height * mediator.circle_zoom - config.paper_metadata_height_correction + "px");
                 })
                 .style("width", function (d) {
                     return d.width * mediator.circle_zoom * (1 - config.dogear_width) + "px";
                 });
 
         t.selectAll("div.readers")
-                .style("height", "15px")
+                .style("height", () => {
+                    config.paper_metadata_height_correction + "px"
+                })
                 .style("width", function (d) {
                     return d.width * mediator.circle_zoom + "px";
                 })
