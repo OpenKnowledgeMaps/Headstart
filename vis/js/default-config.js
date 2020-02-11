@@ -150,6 +150,7 @@ var config = {
     url_outlink: false,
     
     show_context_oa_number: true,
+    context_most_relevant_tooltip: false,
     
     service_names: {plos: "PLOS"
                         , base: "BASE"
