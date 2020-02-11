@@ -235,7 +235,7 @@ papers.drawDogEarPath = function (nodes) {
 // if the user clicks on the paper inside of a bubble,
 // it should zoom in. (behave same way when, only the bubble is clicked)
 papers.initPaperClickHandler = function () {
-    d3.selectAll(".paper_holder").on("click", function (d) {
+    d3.selectAll(".paper_holder, #article_metadata").on("click", function (d) {
         mediator.publish("paper_click", d);
     });
 };
