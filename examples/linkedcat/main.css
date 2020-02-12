@@ -7,6 +7,7 @@ body {
     padding: 0px;
     width:100%; 
     color: #333;
+    /*background-color: #515755;*/
 }
 
 .bg-image-startpage {
@@ -24,21 +25,20 @@ body {
 }
 
 .bg-tagline-startpage {
-    position: absolute;
-    top: 0%;
-    padding: 2% !important;
-    background-color: rgba(255, 255, 255, .85);
-    max-width: 300px;
-    border-bottom: 1px solid #ddd;
+    padding: 5% !important;
+    background-color: transparent;
+    border-bottom: 0px solid #ddd;
+    text-align: center;
 }
 
-.startpage h2 {
+.project-description {
     font-family: 'Josefin Sans', sans-serif;
-    color: #2856a3; 
-    font-size:28px; 
+    color: white; 
+    text-shadow:1px 1px 10px black; 
+    font-size: 42px; 
+    margin-top: 100px;
     line-height: 120%;
-    font-weight: 700; 
-    text-align: left;
+    font-weight: 700;
 }
 
 .search {
@@ -91,6 +91,7 @@ body {
     background-image: linear-gradient(rgba(28,59,112,1), rgba(28,59,112,1));
     -webkit-box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 0px 0px rgba(0,0,0,0.12), 0 0px 0px 0 rgba(0,0,0,0.2);
     box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 0px 0px rgba(0,0,0,0.12), 0 0px 0px 0 rgba(0,0,0,0.2);
+     -moz-box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 0px 0px rgba(0,0,0,0.12), 0 0px 0px 0 rgba(0,0,0,0.2);
 }
 
 .author-btn, .keyword-btn {
@@ -277,13 +278,29 @@ label {
     color: white;
 }
 
-label.q-error, #input-container label.q-error {
+label.q-error, #input-container label.q-error, .timefield .error {
     color: red;
     /*background-color: red;*/
     /*border-radius: 10px;*/
     /*padding: 5px;*/
     font-family: 'Lato', sans-serif;
     font-size: 12px;
+}
+
+.timefield #from-error {
+    padding-left: 10px;
+    color: red;
+}
+
+#include_content_type-error {
+    background-color: red;
+    color: white;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    position: absolute;
+    top: 200px;
+    border-radius: 5px;
+    margin: 0px 20px;
 }
 
 #input-container label.q-error {
@@ -353,7 +370,7 @@ label.q-error, #input-container label.q-error {
     background-position: 100% 86%;
 }
 
- .waiting-box {
+.waiting-box {
     margin-top:15%;
     max-width: 700px;
     padding: 20px;
@@ -393,12 +410,207 @@ label.q-error, #input-container label.q-error {
     border: 2px solid rgba(28,59,112,1);
 }
 
-.nav li a, .nav li {
-    text-transform: none; 
-    font-family: 'Josefin Sans', sans-serif; 
-    text-decoration: underline; 
-    color:white; 
-    text-shadow:1px 1px 10px black;
+/*MENU*/
+header {
+    padding: 20px 0px 15px;
+    position: fixed;
+    width: 100%;
+    /*max-width:1600px;*/
+    background-color: white;
+    text-align: left;
+    z-index: 10;
+    -webkit-box-shadow: 0px 0px 4px 0px #cacfd3;
+    -moz-box-shadow: 0px 0px 4px 0px #cacfd3;
+    box-shadow: 0px 0px 4px 0px #cacfd3;
+    color: #2856a3;
+}
+
+header a {
+    color: #333;
+    text-decoration: none;
+}
+
+header #logo a:hover {
+    text-decoration: none;
+}
+
+.nav_top {
+    display: inline-block;
+    text-align: left;
+    color:white;
+    background-color: transparent;
+    font-size: 16px;
+    line-height: 80%;
+    margin: 0px 0px 10px 50px !important;
+    vertical-align: bottom;
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.imglogo {
+    display: inline-block; 
+    vertical-align: bottom;
+    margin-bottom: 10px; 
+    padding: 0px 10px;
+}
+
+.imglogo img {
+    max-height: 42px;
+    width: auto;
+}
+
+.description a {
+    color: #2856a3;
+}
+
+.description {
+    text-transform: none;
+    font-size: 32px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 700;
+    color: #2856a3;
+    vertical-align: bottom;
+    display: inline-block;
+    margin-bottom: 0px;
+}
+
+.nav_top li:last-child {
+    display: inline;
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.nav_top li {
+    display: inline-block;
+    margin-right: 30px;
+    vertical-align: bottom;
+}
+
+.nav_top li {
+    transition: all .5s ease-in-out;
+    border-bottom: 2px solid transparent;
+}
+
+.nav_top a:hover, .nav_top a:active, .nav_top a:focus  {
+    border-bottom: 2px solid #2856a3;
+    text-decoration: none;
+}
+/*TOGGLE MENU CSS*/
+.menu {
+    top: 0;
+    display:none;
+    background-color: white;
+    left: -285px;  /* start off behind the scenes */
+    height: 100%;
+    position: fixed;
+    width: 285px;
+}
+
+.menu ul {
+    border-top: 1px solid #cacfd3;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+
+.menu li {
+    border-bottom: 1px solid #cacfd3;
+    font-family: 'Josefin Sans', sans-serif;
+    line-height: 200%;
+    padding-bottom: 3px;
+    padding-left: 20px;
+    padding-top: 3px;
+}
+
+.menu a {
     font-size: 18px;
-    padding: 10px 0px;
+    text-decoration: none;
+    text-transform: none;
+    display: block;
+}
+
+.icon-close {
+    cursor: pointer;
+    padding: 5px 0px 5px 20px;
+    background-color: #2856a3;
+    color: white;
+    font-size: 28px;
+}
+
+.icon-menu {
+    display:none;
+    cursor: pointer;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 18px;
+    margin: 10px 0px 10px 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: 2px solid #2856a3;
+    padding: 5px 10px;
+    vertical-align: middle;
+    text-align:left;
+    background-color: none;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    color: #2856a3;
+}
+
+/*SEARCH BOX*/
+.additional-information p {
+    max-width:600px; 
+    padding: 30px 30px 0px;
+}
+
+/*BROWSE PAGE*/
+/*.browse-page .bg-image-startpage {
+    position: relative;
+    background-repeat: repeat-y;
+    background-position: top;
+    background-size: auto;
+}*/
+
+.browse-description {
+    max-width: 750px; 
+    margin: 0px auto; 
+    padding: 2% 0;
+    background-color: #2856a3;
+    opacity: 0.8;
+}
+
+.browse-description p {
+    text-align: center; 
+    font-size: 20px;
+    color: white; 
+    padding: 0px 20px;
+    text-transform: none;
+}
+
+.browse-description h3 {
+    font-family: 'Josefin Sans', sans-serif;
+    color: white;
+    /*text-shadow:1px 1px 10px black;*/
+    text-align: center;
+}
+
+@media screen and (max-width: 1030px) {
+
+    .menu {
+        display: block;
+    }
+
+    .icon-menu {
+        display: inline-block;
+    }
+
+    .nav_top {
+        display:none;
+    }
+    
+    header {
+        padding: 12px 0px;
+    }
+
 }
