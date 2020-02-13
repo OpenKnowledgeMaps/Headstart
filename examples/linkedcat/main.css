@@ -298,9 +298,10 @@ label.q-error, #input-container label.q-error, .timefield .error {
     font-family: 'Lato', sans-serif;
     font-size: 12px;
     position: absolute;
-    top: 200px;
+    top: 145px;
     border-radius: 5px;
     margin: 0px 20px;
+    padding: 3px;
 }
 
 #input-container label.q-error {
@@ -425,7 +426,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
 }*/
 
 .browse-page .bg-image-startpage, .ueber-page .bg-image-startpage {
-    background-image: linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255)), url(./img/background-start-2.jpg);
+    background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)), url(./img/background-start-2.jpg);
 }
 
 .browse-description {

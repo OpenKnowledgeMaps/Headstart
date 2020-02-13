@@ -37,7 +37,7 @@ $date = new DateTime();
                     Bilder einfügen...
                 </p>
 
-                <p style="padding: 10px 40px;">Das Projekt „Linked Cat+“ wurde von der Österreichischen Akademie der Wissenschaften (ÖAW) im Rahmen des Innovationsfonds gefördert und erstreckte sich über einen Zeitraum von April 2018 bis März 2020. Linked Cat+ ist eine Kooperation zwischen BAS:IS, ACDH und Open Knowledge Maps.
+                <p style="padding: 10px 40px;">Das Projekt „Linked Cat+“ wurde von der Österreichischen Akademie der Wissenschaften (ÖAW) im Rahmen des Innovationsfonds gefördert und erstreckte sich über einen Zeitraum von April 2018 bis März 2020. Linked Cat+ ist eine Kooperation zwischen BAS:IS, ACDH und <a href="https://openknowledgemaps.org/">Open Knowledge Maps</a>.
                 </p>
                 <span class="anchor" id="faqs"></span>
                 <h3>FAQs</h3>
@@ -53,10 +53,10 @@ $date = new DateTime();
                     Text ...
                 </p>
                 
-                
+                <h4>Was ist unter relevanteste Dokumente zu verstehen?</h4>
                 <p style="padding: 10px 40px;">
                     
-                    Text ...
+                    In diesem Projekt verwenden wir das Relevanz-Ranking von SOLR. Diese basiert auf der Ähnlichkeit des Suchbegriffs zu den Metadaten im dokument
                 </p>
 
             </div>
