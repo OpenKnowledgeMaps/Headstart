@@ -5,6 +5,7 @@ import { papers } from 'papers';
 import { mediator } from 'mediator';
 import { intros } from 'intro';
 import dateFormat from 'dateformat';
+import shave from 'shave';
 
 const editModalButton = require('templates/buttons/edit_button.handlebars')
 const embedModalButton = require('templates/buttons/embed_button.handlebars')
@@ -637,9 +638,9 @@ class Canvas {
     showAreaStreamgraph(keyword) {
         $("#subdiscipline_title h4")
             .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
-        
-        $("#subdiscipline_title>h4").dotdotdot();
-        
+
+        shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
+
         $("#context").css("display", "none");
         
         $("#backlink").remove();
@@ -837,7 +838,12 @@ class Canvas {
   dotdotdotAreaTitles() {
     const check = config.hasOwnProperty('nodot');
     if ((check && config.nodot === null) || !check) {
-      $("#area_title_object>body").dotdotdot({wrap:"letter"});
+      d3.selectAll("#area_title_object").each(function() {
+        let margin_top = parseInt(d3.select(this).select("#area_title>h2").style("margin-top"), 10);
+        let margin_bottom = parseInt(d3.select(this).select("#area_title>h2").style("margin-bottom"), 10);
+        let maxHeight = d3.select(this).attr("height") - margin_top - margin_bottom;
+        shave(d3.select(this).select("#area_title>h2").node(), maxHeight);
+      });
     }
   }
 
