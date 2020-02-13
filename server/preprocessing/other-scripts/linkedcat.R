@@ -87,7 +87,7 @@ get_papers <- function(query, params, limit=100) {
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(search_res$main_title, search_res$keyword_a,
+  text$content = paste(search_res$main_title, search_res$keyword_label,
                        sep = " ")
 
 
