@@ -100,3 +100,10 @@ img#close-button {
         bottom: 0px;
     }
 }
+
+@if ($skin == "linkedcat") {
+    
+    .searchfield-icon {
+        z-index: 9;
+    }
+}

@@ -17,10 +17,12 @@ include 'config.php';
         <script type="text/javascript" src="search_options.js"></script>
         <script type="text/javascript" src="lib/Chart.Streamgraph.S.js"></script>
         <script>
+            
+            let common_text = "mmdfmdsfmn"
                 let intro_authors_overview = {
                     title: "Was ist das?",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp">Erklärungstext Autoren Knowledge Map</p>'
+                    <p class="wtp">Erklärungstext Autoren Knowledge Map' + common_text + '</p>'
                 }
                 
                 let intro_authors_timeline = {
