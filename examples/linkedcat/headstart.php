@@ -3,12 +3,15 @@
 include 'config.php';
 ?>
 <html>
-    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+    <head>
+                <?php include('head_headstart.php') ?>
     </head>
 
     <body style="margin:0px; padding:0px">
-        
+        <header>
+                <?php include('menu.php'); ?>
+            </header>
+        <div class="topheader"></div>
         <div id="visualization"></div>
         <script type="text/javascript" src="data-config_<?php echo $_GET['service'] ?>.js"></script>
         <script type="text/javascript" src="search_options.js"></script>
@@ -43,5 +46,4 @@ include 'config.php';
         </script>
          <div class="createdby" style="margin: 10px; font-size: 12px;">Diese Suche wurde mit <a href="http://github.com/pkraker/Headstart" target="_blank ">Headstart</a> realisiert. Alle Daten stammen aus LinkedCat+.
         </div>
-    </body>
-</html>
+    <?php include('footer.php') ?>

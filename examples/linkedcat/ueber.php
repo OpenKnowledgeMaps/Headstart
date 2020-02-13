@@ -22,7 +22,9 @@ $date = new DateTime();
                 <p>Linked Cat+ erweckt das erste halbe Jahrhundert dieses einzigartigen Wissensforums zu neuem digitalen Leben, indem das Material auf Artikelebene zugänglich, auffindbar und weiterverwendbar gemacht wird.</p>
             </div>
             
-            <div style="max-width:750px; background-color: white; text-transform: none;margin: 0px auto; font-size: 16px;">
+            <div style="max-width:750px; background-color: white; text-transform: none;margin: 0px auto; font-size: 16px; -webkit-box-shadow: 0px 0px 4px 0px #cacfd3;
+    -moz-box-shadow: 0px 0px 4px 0px #cacfd3;
+    box-shadow: 0px 0px 4px 0px #cacfd3;">
 
                 <p style="padding: 20px 40px;">Die Österreichische Akademie der Wissenschaften (ÖAW) wurde 1847 als Gelehrtengesellschaft gegründet. Als solche ist die ÖAW seit über 150 Jahren ein wichtiges Forum für die Produktion und Kommunikation von Wissen. Die Sitzungen der beiden Klassen der Akademie, der philosophisch- historischen und der mathematisch-naturwissenschaftlichen, sind in den Sitzungsberichten dokumentiert, die bis ins Jahr 1848 zurückreichen. Linked Cat+ erweckt das erste halbe Jahrhundert dieses einzigartigen Wissensforums zu neuem digitalen Leben, indem das Material auf Artikelebene zugänglich, auffindbar und weiterverwendbar gemacht wird. Open, Linked und Visual sind die drei Veröffentlichungsprinzipien bei diesem Projekt.
                 </p>
