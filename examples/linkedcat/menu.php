@@ -1,4 +1,4 @@
-<div class="menu">
+<div><div class="menu">
     <!-- Menu icon -->
     <div class="icon-close">
         <i class="fa fa-times" aria-hidden="true"></i>
@@ -31,7 +31,7 @@
     <li><a href="ueber">Über das Projekt</a></li>
     <li><a href="ueber#faqs">FAQs</a></li>
 </ul>
-
+</div>
 <script type="text/javascript">
     $(document).ready(function () {
         $(".nav_top > li > a").each(function (key, item) {
