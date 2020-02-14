@@ -484,17 +484,32 @@ class Canvas {
         
         $("#context").css({"visibility": "visible", "display": "block"});
         let modifier = "";
+        let is_most_relevant = false;
         if (this.paramExists(context.params.sorting)) {
             if(context.params.sorting === "most-recent") {
-                modifier = " " + config.localization[config.language].most_recent_label + " ";
+                modifier = config.localization[config.language].most_recent_label;
+            } else if (context.params.sorting === "most-relevant" 
+                            && this.paramExists(config.localization[config.language].most_relevant_label)
+                            && context.num_documents >= config.max_documents) {
+                modifier = config.localization[config.language].most_relevant_label;
+                is_most_relevant = true;
             } else {
-                modifier = " "
+                modifier = "";
             }
         }
-        $("#num_articles").html(context.num_documents + modifier
+        $("#num_articles").html(context.num_documents + ' <span id="modifier" class="modifier">' + modifier + '</span>'
                 + " " + config.localization[config.language].articles_label
                 + ((config.show_context_oa_number)?(" (" + context.share_oa + " open access)"):("")) 
         );
+        
+        if(is_most_relevant && config.context_most_relevant_tooltip) {
+            $("#modifier")
+                    .addClass("context_moreinfo")
+                    .attr("data-toggle", "popover")
+                    .attr("data-trigger", "hover")
+                    .attr("data-content", config.localization[config.language].most_relevant_tooltip)
+                    .popover();
+        }
 
         $("#source").html(config.localization[config.language].source_label
                        + ": " + config.service_names[context.service]);
@@ -601,10 +616,14 @@ class Canvas {
                     $("#document_types").html(config.localization[config.language].documenttypes_label);
 
                     $("#document_types").attr({
-                        "data-content": document_types_string
-                        , "title": config.localization[config.language].documenttypes_tooltip + "\n\n" + document_types_string
+                        "data-content": config.localization[config.language].documenttypes_tooltip + "<br><br>" + document_types_string
+                        //, "title": config.localization[config.language].documenttypes_tooltip + "\n\n" + document_types_string
+                        ,"data-toggle": "popover"
+                        ,"data-trigger": "hover"
+                        ,"data-html": true
                         , "class": "context_moreinfo"
                     })
+                    .popover();
 
                 } else {
                     $("#document_types").html(config.localization[config.language].documenttypes_label + ": " + document_types_string);
