@@ -77,6 +77,7 @@ if (service == 'linkedcat' || service == 'linkedcat_authorview' || service == "l
             %>% group_by(stream_item)
             %>% summarise(sum = sum(count))
             %>% arrange(desc(sum))
+            %>% mutate_if(is.character, list(~na_if(., "")))
             %>% drop_na()
             %>% head(12)
             %>% select(stream_item)
