@@ -1,4 +1,4 @@
-<div><div class="menu">
+<div <?php if(isset($IS_HEADSTART) && ($IS_HEADSTART === true)) {echo 'class="menu-headstart-page"';} ?> ><div class="menu">
     <!-- Menu icon -->
     <div class="icon-close">
         <i class="fa fa-times" aria-hidden="true"></i>

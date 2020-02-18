@@ -9,7 +9,11 @@ include 'config.php';
 
     <body style="margin:0px; padding:0px">
         <header>
-                <?php include('menu.php'); ?>
+                <?php 
+                    $IS_HEADSTART = true;
+                    
+                    include('menu.php'); 
+                ?>
             </header>
         <div class="topheader"></div>
         <div id="visualization"></div>
