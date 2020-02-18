@@ -82,7 +82,7 @@ header #logo a:hover {
     border-bottom: 2px solid transparent;
 }
 
-.nav_top a:hover, .nav_top a:active, .nav_top a:focus  {
+.nav_top a:hover, .nav_top a:active, .nav_top a:focus, .underline-menu  {
     border-bottom: 2px solid #2856a3;
     text-decoration: none;
 }
