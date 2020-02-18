@@ -10,8 +10,13 @@
         <div style="background-color: white; border-radius: 0px 0px 5px 5px;">
             <div id="searchfield">
                 <div id="additional-information" class="additional-information"></div>
-                <label class="radio-button"><input type="radio" name="vis_type" value="overview" checked="checked"> <span>Knowledge Map</span></label>
-                <label class="radio-button"><input type="radio" name="vis_type" value="timeline"> <span>Timeline</span></label>
+                <label class="radio-button"><input type="radio" name="vis_type" value="overview" checked="checked"> 
+                    <span data-toggle="popover" data-trigger="hover" data-content='Eine Knowledge Map (zu deutsch "Wissenslandkarte") 
+                          gibt einen thematischen Überblick über ein Stichwort/einen Autor. 
+                             Mehr Infos dazu finden Sie in den FAQs.'>Knowledge Map</span></label>
+                <label class="radio-button"><input type="radio" name="vis_type" value="timeline"> 
+                    <span data-toggle="popover" data-trigger="hover" data-content="Ein Streamgraph gibt die zeitliche Entwicklung der 
+                          häufigsten Schlagworte zu einem Stichwort/Autor wider. Mehr Infos dazu finden Sie in den FAQs.">Timeline</span></label>
                 <div id="filter-container"></div>
                  
                 <!--<label for="q">Suchbegriff:</label>-->

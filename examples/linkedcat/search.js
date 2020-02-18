@@ -225,4 +225,6 @@ $(document).ready(function () {
     addAutoComplete();
     
     changeVisualization();
+    
+     $('[data-toggle="popover"]').popover();
 });
