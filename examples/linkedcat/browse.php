@@ -140,4 +140,5 @@ $date = new DateTime();
 
             });
         </script>
-        <?php include('footer.php') ?>
+    </body>
+</html>

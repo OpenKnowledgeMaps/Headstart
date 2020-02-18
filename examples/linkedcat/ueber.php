@@ -67,4 +67,5 @@ $date = new DateTime();
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script>
 
-            <?php include('footer.php') ?>
+    </body>
+</html>
