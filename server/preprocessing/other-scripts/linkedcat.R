@@ -109,8 +109,7 @@ build_query <- function(query, params, limit){
                 'author700_d', 'author700_0',
                 'host_maintitle', 'host_pubplace',
                 'bkl_caption', 'bkl_top_caption',
-                'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
-                'keyword_p', 'keyword_x', 'keyword_z',
+                'keyword_label',
                 'tags')
   # fields to return
   r_fields <- c('id', 'idnr',
@@ -170,15 +169,9 @@ valid_langs <- list(
 )
 
 boost_factors <- list(
-  'ocrtext'=0.01,
-  'main_title'=5,
-  'keyword_a'=3,
-  'keyword_c'=3,
-  'keyword_g'=3,
-  'keyword_t'=3,
-  'keyword_p'=3,
-  'keyword_x'=3,
-  'keyword_z'=3
+  'ocrtext'=0.0001,
+  'main_title'=50,
+  'keyword_label'=30
 )
 
 build_authorfield_query <- function(field) {
