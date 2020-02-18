@@ -45,7 +45,7 @@ $date = new DateTime();
                                 let title = wrapMisc(current_item, current_item.bkl_top_caption);
                                 let has_children = (current_item.bkl_facet.length > 0) ? (true) : (false);
 
-                                $("#browseview").append('<a id="click-' + index_top + '" href="#item-' + index_top + '" class="list-group-item" data-toggle="collapse">\n\
+                                $("#browseview").append('<a id="click-' + index_top + '" href="#item-' + index_top + '" class="list-group-item" data-toggle="collapse" title="' + title + '">\n\
                                 ' + ((has_children) ? ('<i class="glyphicon glyphicon-chevron-right"></i>') : ('')) + title + '\n\
                                 <span class="badge badge-primary badge-pill">' + current_item.count + ' Dokumente</span>');
 
@@ -55,7 +55,7 @@ $date = new DateTime();
                                         let current_sub_item = current_item.bkl_facet[index_bottom];
                                         let title = wrapMisc(current_sub_item, current_sub_item.bkl_caption);
 
-                                        $('<a id="click-' + index_top + '-' + index_bottom + '" href="#item-' + index_top + '-' + index_bottom + '" class="list-group-item" data-toggle="collapse">\n\
+                                        $('<a id="click-' + index_top + '-' + index_bottom + '" href="#item-' + index_top + '-' + index_bottom + '" class="list-group-item text-truncate" data-toggle="collapse" title="' + title + '">\n\
                                       ' + title + '\n\
                                       <span class="badge badge-primary badge-pill">' + current_sub_item.count + ' Dokumente</span>').appendTo("#item-" + index_top);
 

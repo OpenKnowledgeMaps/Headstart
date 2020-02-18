@@ -62,4 +62,10 @@
     font-weight: normal;
     background-color: #f1f1f1;
     border: 1px solid #e5e5e5;
-} 
+}
+
+.list-group-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
