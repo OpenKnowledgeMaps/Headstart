@@ -508,6 +508,19 @@ streamgraph.stream_mouseout = function() {
         d3.selectAll(".stream").transition()
             .duration(100)
             .attr('class', 'stream')
+    } else {
+        d3.selectAll(".stream").transition()
+            .duration(100)
+            .attr("class", function (d, j) {
+                let stream_class = 'stream';
+                if(typeof mediator.current_stream !== "undefined" && d.key !== mediator.current_stream) {
+                    stream_class = 'stream lower-opacity';
+                }
+                if (typeof mediator.current_stream !== "undefined" && mediator.current_stream === d.key) {
+                    stream_class = 'stream';
+                }
+                return stream_class;
+            })
     }
 
     d3.select('#tooltip').classed("hidden", true);
