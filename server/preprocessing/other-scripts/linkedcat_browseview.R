@@ -58,6 +58,7 @@ get_papers <- function(query, params, limit=100) {
   names(metadata) <- c('id')
 
   metadata$subject <- search_res$keyword_label
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub(";", "; ", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; $", "", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; ; ", "; ", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("[ ]{2,}", "", x)}))
