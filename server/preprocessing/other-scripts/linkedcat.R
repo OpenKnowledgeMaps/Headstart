@@ -57,10 +57,8 @@ get_papers <- function(query, params, limit=100) {
   metadata <- data.frame(search_res$id)
   names(metadata) <- c('id')
 
-  metadata$subject <- paste(search_res$keyword_a, search_res$keyword_c,
-                            search_res$keyword_g, search_res$keyword_t,
-                            search_res$keyword_p, search_res$keyword_x,
-                            search_res$keyword_z)
+  metadata$subject <- search_res$keyword_label
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub(";", "; ", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; $", "", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; ; ", "; ", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("[ ]{2,}", "", x)}))
@@ -68,7 +66,7 @@ get_papers <- function(query, params, limit=100) {
   metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("; $|,$", "", x)}))
   metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("^; ", "", x)}))
   metadata$author_date <- metadata$author100_d
-  metadata$title <- if (!is.null(search_res$main_title)) search_res$main_title else ""
+  metadata$title <- search_res$main_title
   metadata$paper_abstract <- if (!is.null(search_res$ocrtext)) unlist(lapply(search_res$ocrtext, substr, start=0, stop=1000)) else ""
   metadata$year <- search_res$pub_year
   metadata$readers <- 0
@@ -90,7 +88,7 @@ get_papers <- function(query, params, limit=100) {
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(search_res$main_title, search_res$keyword_a,
+  text$content = paste(search_res$main_title, search_res$keyword_label,
                        sep = " ")
 
 
@@ -107,14 +105,12 @@ get_papers <- function(query, params, limit=100) {
 build_query <- function(query, params, limit){
   # fields to query in
   a_fields <- c('author100_a', 'author700_a')
-  q_fields <- c('main_title', 'ocrtext',
+  q_fields <- c('main_title', 'subtitle', 'ocrtext',
                 'author100_d', 'author100_0',
                 'author700_d', 'author700_0',
-                'main_title', 'subtitle',
                 'host_maintitle', 'host_pubplace',
                 'bkl_caption', 'bkl_top_caption',
-                'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
-                'keyword_p', 'keyword_x', 'keyword_z',
+                'keyword_label',
                 'tags')
   # fields to return
   r_fields <- c('id', 'idnr',
@@ -125,13 +121,12 @@ build_query <- function(query, params, limit){
                 'author100_a', 'author100_d', 'author100_0', 'author100_4',
                 'author700_a', 'author700_d', 'author700_0',
                 'bkl_caption', 'bkl_top_caption',
-                'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
-                'keyword_p', 'keyword_x', 'keyword_z',
+                'keyword_label',
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext', 'goobi_link')
   query <- gsub(" ?<<von>>", "", query)
-  aq <- paste0(a_fields, ':', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"))
-  qq <- paste0(q_fields, ':', query)
+  aq <- paste0(lapply(q_fields, build_authorfield_query))
+  qq <- paste0(lapply(q_fields, build_queryfield_query))
   q <- paste(c(aq, qq), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
@@ -173,3 +168,21 @@ build_query <- function(query, params, limit){
 valid_langs <- list(
     'ger'='german'
 )
+
+boost_factors <- list(
+  'ocrtext'=0.0001,
+  'main_title'=50,
+  'keyword_label'=30
+)
+
+build_authorfield_query <- function(field) {
+  paste0(field, ':', '"', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"), '"', add_boost_factor(field))
+}
+
+build_queryfield_query <- function(field) {
+  paste0(field, ':', '"', query, '"', add_boost_factor(field))
+}
+
+add_boost_factor <- function(field) {
+  if (field %in% names(boost_factors)) paste0('^', boost_factors[field]) else ""
+}

@@ -5,6 +5,7 @@ import { papers } from 'papers';
 import { mediator } from 'mediator';
 import { intros } from 'intro';
 import dateFormat from 'dateformat';
+import shave from 'shave';
 
 const editModalButton = require('templates/buttons/edit_button.handlebars')
 const embedModalButton = require('templates/buttons/embed_button.handlebars')
@@ -483,17 +484,32 @@ class Canvas {
         
         $("#context").css({"visibility": "visible", "display": "block"});
         let modifier = "";
+        let is_most_relevant = false;
         if (this.paramExists(context.params.sorting)) {
             if(context.params.sorting === "most-recent") {
-                modifier = " " + config.localization[config.language].most_recent_label + " ";
+                modifier = config.localization[config.language].most_recent_label;
+            } else if (context.params.sorting === "most-relevant" 
+                            && this.paramExists(config.localization[config.language].most_relevant_label)
+                            && context.num_documents >= config.max_documents) {
+                modifier = config.localization[config.language].most_relevant_label;
+                is_most_relevant = true;
             } else {
-                modifier = " "
+                modifier = "";
             }
         }
-        $("#num_articles").html(context.num_documents + modifier
+        $("#num_articles").html(context.num_documents + ' <span id="modifier" class="modifier">' + modifier + '</span>'
                 + " " + config.localization[config.language].articles_label
                 + ((config.show_context_oa_number)?(" (" + context.share_oa + " open access)"):("")) 
         );
+        
+        if(is_most_relevant && config.context_most_relevant_tooltip) {
+            $("#modifier")
+                    .addClass("context_moreinfo")
+                    .attr("data-toggle", "popover")
+                    .attr("data-trigger", "hover")
+                    .attr("data-content", config.localization[config.language].most_relevant_tooltip)
+                    .popover();
+        }
 
         $("#source").html(config.localization[config.language].source_label
                        + ": " + config.service_names[context.service]);
@@ -600,10 +616,14 @@ class Canvas {
                     $("#document_types").html(config.localization[config.language].documenttypes_label);
 
                     $("#document_types").attr({
-                        "data-content": document_types_string
-                        , "title": config.localization[config.language].documenttypes_tooltip + "\n\n" + document_types_string
+                        "data-content": config.localization[config.language].documenttypes_tooltip + "<br><br>" + document_types_string
+                        //, "title": config.localization[config.language].documenttypes_tooltip + "\n\n" + document_types_string
+                        ,"data-toggle": "popover"
+                        ,"data-trigger": "hover"
+                        ,"data-html": true
                         , "class": "context_moreinfo"
                     })
+                    .popover();
 
                 } else {
                     $("#document_types").html(config.localization[config.language].documenttypes_label + ": " + document_types_string);
@@ -637,9 +657,9 @@ class Canvas {
     showAreaStreamgraph(keyword) {
         $("#subdiscipline_title h4")
             .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
-        
-        $("#subdiscipline_title>h4").dotdotdot();
-        
+
+        shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
+
         $("#context").css("display", "none");
         
         $("#backlink").remove();
@@ -837,7 +857,12 @@ class Canvas {
   dotdotdotAreaTitles() {
     const check = config.hasOwnProperty('nodot');
     if ((check && config.nodot === null) || !check) {
-      $("#area_title_object>body").dotdotdot({wrap:"letter"});
+      d3.selectAll("#area_title_object").each(function() {
+        let margin_top = parseInt(d3.select(this).select("#area_title>h2").style("margin-top"), 10);
+        let margin_bottom = parseInt(d3.select(this).select("#area_title>h2").style("margin-bottom"), 10);
+        let maxHeight = d3.select(this).attr("height") - margin_top - margin_bottom;
+        shave(d3.select(this).select("#area_title>h2").node(), maxHeight);
+      });
     }
   }
 

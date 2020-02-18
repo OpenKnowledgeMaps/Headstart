@@ -6,13 +6,13 @@ If you want to do more than just displaying static CSV files, you need to config
 
 Make sure you have the following packages installed:
 
-* PHP 5.3+ with the following extensions:
+* PHP 7.2 with the following extensions:
   * curl
   * pdo_sqlite
   * mbstring
   * fileinfo
   * xml
-* R 3.3+ (https://www.r-project.org/) with current updates, with the following libraries. **Make sure you install these packages for all users, so that Apache can load them.**
+* R 3.5 (https://www.r-project.org/) with current updates, with the following libraries. **Make sure you install these packages for all users, so that Apache can load them.**
   * arsenal (for snapshot tests)
   * knitr (for test reports)
   * logging
