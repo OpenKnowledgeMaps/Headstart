@@ -20,7 +20,7 @@ include 'config.php';
         data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "../../server/";
         headstart.start();
     </script>
-    
+
     <!-- Piwik -->
     <script type="text/javascript">
       var _paq = _paq || [];

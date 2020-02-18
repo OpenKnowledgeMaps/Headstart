@@ -7,6 +7,7 @@ body {
     padding: 0px;
     width:100%; 
     color: #333;
+    /*background-color: #515755;*/
 }
 
 .bg-image-startpage {
@@ -24,21 +25,20 @@ body {
 }
 
 .bg-tagline-startpage {
-    position: absolute;
-    top: 0%;
-    padding: 2% !important;
-    background-color: rgba(255, 255, 255, .85);
-    max-width: 300px;
-    border-bottom: 1px solid #ddd;
+    padding: 5% !important;
+    background-color: transparent;
+    border-bottom: 0px solid #ddd;
+    text-align: center;
 }
 
-.startpage h2 {
+.project-description {
     font-family: 'Josefin Sans', sans-serif;
-    color: #2856a3; 
-    font-size:28px; 
+    color: white; 
+    text-shadow:1px 1px 10px black; 
+    font-size: 42px; 
+    margin-top: 100px;
     line-height: 120%;
-    font-weight: 700; 
-    text-align: left;
+    font-weight: 700;
 }
 
 .search {
@@ -91,6 +91,7 @@ body {
     background-image: linear-gradient(rgba(28,59,112,1), rgba(28,59,112,1));
     -webkit-box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 0px 0px rgba(0,0,0,0.12), 0 0px 0px 0 rgba(0,0,0,0.2);
     box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 0px 0px rgba(0,0,0,0.12), 0 0px 0px 0 rgba(0,0,0,0.2);
+     -moz-box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 0px 0px rgba(0,0,0,0.12), 0 0px 0px 0 rgba(0,0,0,0.2);
 }
 
 .author-btn, .keyword-btn {
@@ -277,13 +278,29 @@ label {
     color: white;
 }
 
-label.q-error, #input-container label.q-error {
+label.q-error, #input-container label.q-error, .timefield .error {
     color: red;
     /*background-color: red;*/
     /*border-radius: 10px;*/
     /*padding: 5px;*/
     font-family: 'Lato', sans-serif;
     font-size: 12px;
+}
+
+.timefield #from-error {
+    padding-left: 10px;
+    color: red;
+}
+
+#include_content_type-error {
+    background-color: red;
+    color: white;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    position: absolute;
+    top: 200px;
+    border-radius: 5px;
+    margin: 0px 20px;
 }
 
 #input-container label.q-error {
@@ -353,7 +370,7 @@ label.q-error, #input-container label.q-error {
     background-position: 100% 86%;
 }
 
- .waiting-box {
+.waiting-box {
     margin-top:15%;
     max-width: 700px;
     padding: 20px;
@@ -393,12 +410,43 @@ label.q-error, #input-container label.q-error {
     border: 2px solid rgba(28,59,112,1);
 }
 
-.nav li a, .nav li {
-    text-transform: none; 
-    font-family: 'Josefin Sans', sans-serif; 
-    text-decoration: underline; 
-    color:white; 
-    text-shadow:1px 1px 10px black;
-    font-size: 18px;
-    padding: 10px 0px;
+/*SEARCH BOX*/
+.additional-information p {
+    max-width:600px; 
+    padding: 30px 30px 0px;
+}
+
+/*BROWSE PAGE*/
+/*.browse-page .bg-image-startpage {
+    position: relative;
+    background-repeat: repeat-y;
+    background-position: top;
+    background-size: auto;
+}*/
+
+.browse-page .bg-image-startpage, .ueber-page .bg-image-startpage {
+    background-image: linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255)), url(./img/background-start-2.jpg);
+}
+
+.browse-description {
+    max-width: 750px; 
+    margin: 0px auto; 
+    padding: 2% 0;
+    background-color: #2856a3;
+    opacity: 0.8;
+}
+
+.browse-description p {
+    text-align: center; 
+    font-size: 20px;
+    color: white; 
+    padding: 0px 20px;
+    text-transform: none;
+}
+
+.browse-description h3 {
+    font-family: 'Josefin Sans', sans-serif;
+    color: white;
+    /*text-shadow:1px 1px 10px black;*/
+    text-align: center;
 }
