@@ -10,8 +10,10 @@
         <div style="background-color: white; border-radius: 0px 0px 5px 5px;">
             <div id="searchfield">
                 <div id="additional-information" class="additional-information"></div>
+                <label class="radio-button"><input type="radio" name="vis_type" value="overview" checked="checked"> <span>Knowledge Map</span></label>
+                <label class="radio-button"><input type="radio" name="vis_type" value="timeline"> <span>Timeline</span></label>
                 <div id="filter-container"></div>
-
+                 
                 <!--<label for="q">Suchbegriff:</label>-->
                 <div class="searchfield" style="max-width:600px; padding: 0px 30px 50px; margin: 0px auto;">
                     <label id="q-error" class="q-error label-hide" for="q"></label>
