@@ -78,6 +78,14 @@ $date = new DateTime();
                     return title;
                 }
             }
+            
+            function build_q (map_params) {
+                if(map_params.bkl_level === "top") {
+                    return map_params.q;
+                } else {
+                    return map_params.bkl_top_caption + " -> " + map_params.q;
+                }
+            }
 
             function appendClickHandler(id, map_params) {
                 $(id).addClass("underline");
@@ -96,7 +104,7 @@ $date = new DateTime();
                                     + "&visualization_mode=keywords")
                             )
                     win.post_data = {
-                        q: map_params.q
+                        q: build_q(map_params)
                         , bkl_level: map_params.bkl_level
                         , doc_count: map_params.doc_count
                         , bkl_list: map_params.bkl_list

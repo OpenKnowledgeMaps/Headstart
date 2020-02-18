@@ -25,6 +25,7 @@ var data_config = {
 	
     show_context: true,
     create_title_from_context: true,
+    create_title_from_context_style: "linkedcat",
     
     embed_modal: true,
     share_modal: false,
