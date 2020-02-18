@@ -34,10 +34,21 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
+        let hash_compare = null;
+        let path_compare = null;
         $(".nav_top > li > a").each(function (key, item) {
-            if (item.href.substr(item.href.lastIndexOf('/') + 1) === location.pathname.substr(location.pathname.lastIndexOf('/') + 1)) {
-                $(this).addClass("underline-menu");
+            let hash1 = item.href.substr(item.href.lastIndexOf('#') + 1);
+            let hash2 = location.hash.substr(location.hash.lastIndexOf('#') + 1);
+            if (hash1 === hash2) {
+                hash_compare = $(this);
+            } else if (item.href.substr(item.href.lastIndexOf('/') + 1) === location.pathname.substr(location.pathname.lastIndexOf('/') + 1)) {
+                path_compare = $(this);
             }
         });
+        if(hash_compare !== null) {
+            hash_compare.addClass("underline-menu");
+        } else if (path_compare !== null) {
+            path_compare.addClass("underline-menu");
+        }
     });
 </script>
