@@ -58,14 +58,11 @@ get_papers <- function(query, params, limit=100) {
   names(metadata) <- c('id')
 
   metadata$subject <- search_res$keyword_label
-  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; $", "", x)}))
-  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; ; ", "; ", x)}))
-  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("[ ]{2,}", "", x)}))
   metadata$authors <- paste(search_res$author100_a, search_res$author700_a, sep="; ")
   metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("; $|,$", "", x)}))
   metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("^; ", "", x)}))
   metadata$author_date <- metadata$author100_d
-  metadata$title <- if (!is.null(search_res$main_title)) search_res$main_title else ""
+  metadata$title <- search_res$main_title
   metadata$paper_abstract <- if (!is.null(search_res$ocrtext)) unlist(lapply(search_res$ocrtext, substr, start=0, stop=1000)) else ""
   metadata$year <- search_res$pub_year
   metadata$readers <- 0
@@ -82,7 +79,7 @@ get_papers <- function(query, params, limit=100) {
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(search_res$main_title, search_res$keyword_a,
+  text$content = paste(search_res$main_title, search_res$keyword_label,
                        sep = " ")
 
 

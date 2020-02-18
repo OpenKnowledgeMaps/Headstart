@@ -122,7 +122,6 @@ get_cluster_corpus <- function(clusters, metadata, service, stops, taxonomy_sepa
       all_subjects = paste(subjects, collapse=" ")
     } else {
       all_subjects = paste(subjects, title_ngrams$bigrams, title_ngrams$trigrams, collapse=" ")
-      all_subjects = gsub(",", ";", all_subjects)
     }
     subjectlist = c(subjectlist, all_subjects)
   }
