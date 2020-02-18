@@ -91,7 +91,7 @@ replace_keywords_if_empty <- function(metadata, stops, service) {
     tfidf_top = apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
     tfidf_top_names = lapply(tfidf_top, names)
     replacement_keywords <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, 3))
-    replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse=";")})
+    replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse="; ")})
     replacement_keywords = gsub("_", " ", replacement_keywords)
 
     metadata$subject[missing_subjects] <- replacement_keywords[missing_subjects]
