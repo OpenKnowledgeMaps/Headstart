@@ -16,7 +16,7 @@
                              Mehr Infos dazu finden Sie in den FAQs.'>Knowledge Map</span></label>
                 <label class="radio-button"><input type="radio" name="vis_type" value="timeline"> 
                     <span data-toggle="popover" data-trigger="hover" data-content="Ein Streamgraph gibt die zeitliche Entwicklung der 
-                          häufigsten Schlagworte zu einem Stichwort/Autor wider. Mehr Infos dazu finden Sie in den FAQs.">Timeline</span></label>
+                          häufigsten Schlagworte zu einem Stichwort/Autor wider. Mehr Infos dazu finden Sie in den FAQs.">Streamgraph</span></label>
                 <div id="filter-container"></div>
                  
                 <!--<label for="q">Suchbegriff:</label>-->
