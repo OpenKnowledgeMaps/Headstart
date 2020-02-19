@@ -61,7 +61,7 @@ get_papers <- function(query, params, limit=100) {
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub(";", "; ", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; $", "", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; ; ", "; ", x)}))
-  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("[ ]{2,}", "", x)}))
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("[ ]{2,}", " ", x)}))
   metadata$authors <- paste(search_res$author100_a, search_res$author700_a, sep="; ")
   metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("; $|,$", "", x)}))
   metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("^; ", "", x)}))
