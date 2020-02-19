@@ -57,7 +57,7 @@ get_papers <- function(query, params, limit=100) {
   metadata <- data.frame(search_res$id)
   names(metadata) <- c('id')
 
-  metadata$subject <- search_res$keyword_label
+  metadata$subject <- unlist(lapply(search_res$keyword_label, function(x) {if (is.na(x)) "" else x}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub(";", "; ", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; $", "", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; ; ", "; ", x)}))
@@ -88,7 +88,8 @@ get_papers <- function(query, params, limit=100) {
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(search_res$main_title, search_res$keyword_label,
+  text$content = paste(metadata$title,
+                       metadata$subject,
                        sep = " ")
 
 
