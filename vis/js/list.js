@@ -432,6 +432,9 @@ list.filterListByKeyword = function(keyword) {
     
     d3.selectAll("#list_holder")
         .filter(function(x) {
+            if (typeof x.subject_orig === "undefined") {
+                x.subject_orig = "";
+            }
             let keywords = x.subject_orig.split("; ");
             let contains_keyword = keywords.includes(keyword);
             return contains_keyword
