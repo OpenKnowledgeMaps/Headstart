@@ -1,10 +1,10 @@
 var options_linkedcat = {
     dropdowns: [
-        {id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
+        /*{id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
               , fields: [
                   {id: "overview", text: "Knowledge Map", selected:true}
                   , {id: "timeline", text: "Zeitstrahl"}
-              ]},
+              ]},*/
         {id: "year_range", multiple: false, name: "Zeitraum", type: "dropdown"
             , fields: [
                 {id: "any-time-years", text: "1847-1918"}
@@ -40,11 +40,11 @@ var options_linkedcat = {
 
 var options_linkedcat_authors = {
     dropdowns: [
-        {id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
+        /*{id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
             , fields: [
                 {id: "overview", text: "Knowledge Map", selected:true}
                 , {id: "timeline", text: "Zeitstrahl"}
-            ]},
+            ]},*/
     ]
 }
 

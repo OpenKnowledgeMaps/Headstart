@@ -55,4 +55,5 @@ include 'config.php';
         <script type="text/javascript" src="search_options.js "></script>
         <script type="text/javascript" src="search.js "></script>
         
-        <?php include('footer.php') ?>
+    </body>
+</html>

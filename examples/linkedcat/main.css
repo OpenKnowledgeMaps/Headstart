@@ -82,6 +82,11 @@ body {
     color: white; width:100%; padding: 10px 3px;
 }
 
+.radio-button {
+    margin-left: 30px;
+    display: block;
+}
+
 .checkbox-inline + .checkbox-inline, .radio-inline + .radio-inline {
     margin-top: 0;
     margin-left: 0px;

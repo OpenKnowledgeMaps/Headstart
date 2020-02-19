@@ -9,7 +9,11 @@ include 'config.php';
 
     <body style="margin:0px; padding:0px">
         <header>
-                <?php include('menu.php'); ?>
+                <?php 
+                    $IS_HEADSTART = true;
+                    
+                    include('menu.php'); 
+                ?>
             </header>
         <div class="topheader"></div>
         <div id="visualization"></div>
@@ -86,4 +90,5 @@ include 'config.php';
         </script>
          <div class="createdby" style="margin: 10px; font-size: 12px;">Diese Suche wurde mit <a href="http://github.com/pkraker/Headstart" target="_blank ">Headstart</a> realisiert. Alle Daten stammen aus LinkedCat+.
         </div>
-    <?php include('footer.php') ?>
+    </body>
+</html>
