@@ -27,9 +27,10 @@ class Snapshot
         $snap_php = $ini_array["snapshot"]["snapshot_php"];
         $storage = $ini_array["snapshot"]["storage_path"];
         $width = $ini_array["snapshot"]["snapshot_width"];
+        $nodemodules = $ini_array["snapshot"]["nodemodules_path"];
 
         $url = "{$host}{$snap_php}?{$url_postfix}";
-        $this->cmd = "{$phantomjs} {$getsvg} \"{$url}\" {$storage}{$post_data['file']}.png {$width}";
+        $this->cmd = "{$phantomjs} {$getsvg} \"{$url}\" {$storage}{$post_data['file']}.png {$width} {$nodemodules}";
     }
 
     public function takeSnapshot() {
