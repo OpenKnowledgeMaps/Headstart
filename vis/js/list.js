@@ -239,8 +239,11 @@ list.fit_list_height = function() {
         });
         paper_list_avail_height = available_height - $("#explorer_header").outerHeight(true);
     } else {
+        let title_height = $("#subdiscipline_title").outerHeight(true);
+        let title_image_height = $("#title_image").outerHeight(true) || 0;
+        
         paper_list_avail_height = 
-                $("#subdiscipline_title").outerHeight(true)
+                Math.max(title_height, title_image_height)
                     + $("#headstart-chart").outerHeight(true)
                     - $("#show_hide_button").outerHeight(true) 
                     - $("#explorer_options").outerHeight(true)

@@ -8,14 +8,16 @@ include 'config.php';
     </head>
 
     <body style="margin:0px; padding:0px">
-        <header>
-                <?php 
-                    $IS_HEADSTART = true;
-                    
-                    include('menu.php'); 
-                ?>
+        <?php if (!isset($_GET['embed']) || !$_GET['embed'] === 'true'): ?>
+            <header>
+                    <?php
+                        $IS_HEADSTART = true;
+                        include('menu.php');
+                    ?>
             </header>
-        <div class="topheader"></div>
+        
+            <div class="topheader"></div>
+        <?php endif; ?>
         <div id="visualization"></div>
         <script type="text/javascript" src="data-config_<?php echo $_GET['service'] ?>.js"></script>
         <script type="text/javascript" src="search_options.js"></script>
@@ -67,7 +69,7 @@ include 'config.php';
                 }   
                 if(<?php echo json_encode($_GET['visualization_type']) ?> === "timeline") {
                     data_config.is_streamgraph = true;
-                    data_config.embed_modal = false;
+                    //data_config.embed_modal = false;
                     data_config.show_area = false;
                     
                     if(<?php echo json_encode($_GET['visualization_mode']) ?> === "authors") {
@@ -84,13 +86,20 @@ include 'config.php';
                         data_config.intro = intro_keywords_overview;
                     }
                 }
+                <?php if (isset($_GET['embed']) && $_GET['embed'] === 'true'): ?>
+                    data_config.credit_embed = true;
+                    data_config.embed_modal = false;
+                <?php endif; ?>
         </script>
         <script type="text/javascript" src="<?php echo $HEADSTART_PATH; ?>dist/headstart.js"></script>
         <link type="text/css" rel="stylesheet" href="<?php echo $HEADSTART_PATH; ?>dist/headstart.css"></link>
         <script type="text/javascript">
             headstart.start();
         </script>
-         <div class="createdby" style="margin: 10px; font-size: 12px;">Diese Suche wurde mit <a href="http://github.com/pkraker/Headstart" target="_blank ">Headstart</a> realisiert. Alle Daten stammen aus LinkedCat+.
+        
+        <?php if (!isset($_GET['embed']) || !$_GET['embed'] === 'true'): ?>
+            <div class="createdby" style="margin: 10px; font-size: 12px;">Diese Suche wurde mit <a href="http://github.com/pkraker/Headstart" target="_blank ">Headstart</a> realisiert. Alle Daten stammen aus LinkedCat+.
+        <?php endif; ?>
         </div>
     </body>
 </html>
