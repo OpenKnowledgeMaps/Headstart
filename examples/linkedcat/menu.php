@@ -9,7 +9,7 @@
         <li><a href="index"><i class="fas fa-search"></i> Suche</a></li>
         <li><a href="browse">Disziplinen / Themen</a></li>
         <li><a href="ueber">Über das Projekt</a></li>
-        <li><a href="ueber#faqs">FAQs</a></li>
+        <li><a href="faqs">FAQs</a></li>
     </ul>
 </div>
 
@@ -29,7 +29,7 @@
     <li><a href="index"><i class="fas fa-search"></i> Suche</a></li>
     <li><a href="browse">Disziplinen / Themen</a></li>
     <li><a href="ueber">Über das Projekt</a></li>
-    <li><a href="ueber#faqs">FAQs</a></li>
+    <li><a href="faqs">FAQs</a></li>
 </ul>
 </div>
 <script type="text/javascript">
