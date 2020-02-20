@@ -38,14 +38,15 @@ class Canvas {
         var subtitle_height = $("#subdiscipline_title").outerHeight(true);
 
         var toolbar_height = $("#toolbar").outerHeight(true) || 0;
+        var title_image_height = $("#title_image").outerHeight(true) || 0;
         const CHART_HEIGHT_CORRECTION = 15;
         const CHART_HEIGHT_CORRECTION_TOOLBAR = 15;
 
         // Set available_height and available_width
         if (parent_height === 0) {
-            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_height - toolbar_height;
+            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - Math.max(subtitle_height, title_image_height) - toolbar_height;
         } else {
-            this.available_height = $("#" + config.tag).height() - subtitle_height - toolbar_height;
+            this.available_height = $("#" + config.tag).height() - Math.max(subtitle_height, title_image_height) - toolbar_height;
         }
 
         this.available_height = this.available_height - ((toolbar_height > 0)?(CHART_HEIGHT_CORRECTION_TOOLBAR):(CHART_HEIGHT_CORRECTION));
