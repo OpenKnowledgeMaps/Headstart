@@ -553,13 +553,6 @@ class Canvas {
             from.setTime(from.getTime() + from.getTimezoneOffset()*60*1000 );
             to.setTime(to.getTime() + to.getTimezoneOffset()*60*1000 );
 
-            //TODO: quick fix for date issue in snapshots, needs to be fixed
-            /*if(this.paramExists(config.is_phantomjs)) {
-                    if (config.is_phantomjs) {
-                            return;
-                    }
-            }*/
-
             let default_from_date = (function(service) {
                 switch(service) {
                   case 'doaj':
