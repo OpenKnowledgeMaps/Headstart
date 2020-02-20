@@ -1,3 +1,4 @@
+module.paths.push(process.argv[5]);
 const puppeteer = require('puppeteer');
 
 function timeout(ms) {
