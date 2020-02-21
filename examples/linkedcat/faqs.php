@@ -25,6 +25,7 @@ $date = new DateTime();
             <div style="max-width:750px; background-color: white; text-transform: none;margin: 0px auto; font-size: 16px;">
 
                 <h4 style="padding: 20px 40px 0; margin: 0px;">Was ist eine Knowledge Map?</h4>
+                <span class="anchor" id="knowledgemap"></span>
                 <p style="padding: 10px 40px;">
                     Eine Knowledge Map (zu deutsch "Wissenslandkarte") gibt einen thematischen Überblick über ein Stichwort/einen Autor. 
                     Unterthemen werden als Blasen dargestellt. Jedem Unterthema sind relevante Dokumente zugeordnet, die mit einem
@@ -36,7 +37,8 @@ $date = new DateTime();
                     Knowledge Maps eignen sich besonders dazu, einen Überblick über ein Thema zu bekommen und relevante Konzepte und Dokumente zu entdecken.
                 </p>
 
-                <h4>Was ist ein Stream Graph?</h4>
+                <h4>Was ist ein Streamgraph?</h4>
+                <span class="anchor" id="streamgraph"></span>
                 <p style="padding: 10px 40px;">
                     Ein Streamgraph zeigt die zeitliche Entwicklung der häufigsten Schlagworte zu einem Stichwort/Autor. 
                     Die Schlagworte werden als farbige Ströme (englisch "streams") dargestellt.  Jedem Strom sind relevante Dokumente zugeordnet, die mit einem
