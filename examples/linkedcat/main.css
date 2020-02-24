@@ -1,5 +1,6 @@
 * {
     box-sizing: content-box;
+    transition: 0.3s ease-in;
 }
 
 body {
@@ -7,6 +8,7 @@ body {
     padding: 0px;
     width:100%; 
     color: #333;
+    font-size: 16px;
     /*background-color: #515755;*/
 }
 
@@ -17,7 +19,7 @@ body {
     right: 0px;
     width: 100%;
     height: 100%;
-    text-transform: uppercase; 
+    /*text-transform: uppercase;*/ 
     padding: 0px;
     background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(0,0,0, 0.2)), url(./img/background-start-2.jpg); 
     background-repeat: no-repeat;
@@ -576,6 +578,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
 .browse-description h3 {
     font-family: 'Josefin Sans', sans-serif;
     color: white;
+    text-transform: uppercase;
     /*text-shadow:1px 1px 10px black;*/
     text-align: center;
 }
@@ -591,4 +594,22 @@ label.q-error, #input-container label.q-error, .timefield .error {
 
 .paragraph-style li {
     margin-left: 20px;
+}
+
+/*About Page*/
+.headline4 {
+    text-transform: uppercase;
+    color: #2856a3;
+}
+
+.circle {
+    border: 2px solid #2856a3;
+    border-radius: 100px;
+    width: 200px;
+    height: 200px;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20px;
+    color: #2856a3;
 }
