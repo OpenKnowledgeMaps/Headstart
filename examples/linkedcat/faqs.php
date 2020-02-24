@@ -42,9 +42,9 @@ $date = new DateTime();
                 <p class="paragraph-style">
                     Ein Streamgraph zeigt die zeitliche Entwicklung der häufigsten Schlagworte zu einem Stichwort/Autor. 
                     Die Schlagworte werden als farbige Ströme (englisch "streams") dargestellt.  Jedem Strom sind relevante Dokumente zugeordnet, die mit einem
-                    Klick auf die Blase angezeigt werden können.
+                    Klick auf einen Stream angezeigt werden können.
                     <br><br>
-                    Die Höhe eines Stroms entspricht der Anzahl der zugeordneten Dokumente zu einem bestimmten Zeitpunkt. 
+                    Die Höhe eines Streams entspricht der Anzahl der zugeordneten Dokumente zu einem bestimmten Zeitpunkt. 
                     Dabei ist zu beachten, dass die Anzahl der relativen, nicht der absoluten Höhe entspricht.
                     Zwischen den Zeitpunkten wird der Strom interpoliert.
                     <br><br>
