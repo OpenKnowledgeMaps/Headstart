@@ -15,15 +15,12 @@ $date = new DateTime();
                 <?php include('menu.php'); ?>
             </header>
 
-            <?php include('project-short-description.php') ?>
-
-            <div class="browse-description">
-                <h3>FAQs</h3>
-                <p>Hier finden Sie Antworten zu den am häufigsten gestellten Fragen.</p>
+            <div class="bg-tagline-startpage">
+                <h2 class="project-description">FAQs</h2>
+                <!--<div style="padding: 0px;"><img style="max-width: 120px;" src='./img/oeaw-logo.png'></div>-->
             </div>
 
             <div style="max-width:750px; background-color: white; text-transform: none;margin: 0px auto; font-size: 16px; margin-bottom: 40px;">
-
                 <h4 class="question">Was ist eine Knowledge Map?</h4>
                 <span class="anchor" id="knowledgemap"></span>
                 <p class="paragraph-style">
