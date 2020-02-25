@@ -34,7 +34,7 @@ include 'config.php';
                 let intro_authors_timeline = {
                     title: "Was ist das?",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp">Erklärungstext Autoren Zeitstrahl</p>'
+                    <p class="wtp">Erklärungstext Autoren Streamgraph</p>'
                 }
                 
                 let intro_keywords_overview = {
@@ -46,7 +46,7 @@ include 'config.php';
                 let intro_keywords_timeline = {
                     title: "Was ist das?",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp">Erklärungstext Schlagwörter Zeitstrahl</p>'
+                    <p class="wtp">Erklärungstext Schlagwörter Streamgraph</p>'
                 }
                 
                 let intro_browseview = {
