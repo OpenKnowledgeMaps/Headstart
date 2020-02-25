@@ -9,35 +9,52 @@ $date = new DateTime();
         <?php include('head_standard.php') ?>
         <link type="text/css" rel="stylesheet" href="browse.css">
     </head>
-    <body class="ueber-page">
-        <div class="bg-image-startpage">
+    <body>
+        <div>
             <header>
                 <?php include('menu.php'); ?>
             </header>
+            <div  class="page">
+            
+            
+            
 
-            <div class="bg-tagline-startpage">
-                <h2 class="project-description">Über das Projekt</h2>
-                <!--<div style="padding: 0px;"><img style="max-width: 120px;" src='./img/oeaw-logo.png'></div>-->
-            </div>
-
-            <div style="max-width:750px; background-color: white; margin: 0px auto; font-size: 16px; padding-top: 50px;">
+            <div style="max-width:750px; margin: 0px auto 40px; font-size: 16px;">
+                <h2 class="page-headline">Über das Projekt</h2>
+                <p class="paragraph-style" style="font-size: 34px; margin-top:40px;">LinkedCat+ erweckt die Sitzungsberichte der Österreichischen Akademie der Wissenschaften von 1847-1918 zu neuem digitalen Leben.</p>
                 
-                <p class="paragraph-style" style="margin-left: -70px;
-margin-bottom: 50px; font-size: 34px;">LinkedCat+ erweckt die Sitzungsberichte der Österreichischen Akademie der Wissenschaften von 1847-1918 zu neuem digitalen Leben.</p>
-                <p class="paragraph-style">Die Österreichische Akademie der Wissenschaften (ÖAW) wurde 1847 als Gelehrtengesellschaft gegründet. Als solche ist die ÖAW seit über 150 Jahren ein wichtiges Forum für die Produktion und Kommunikation von Wissen. Die Sitzungen der beiden Klassen der Akademie, der philosophisch- historischen und der mathematisch-naturwissenschaftlichen, sind in den Sitzungsberichten dokumentiert, die bis ins Jahr 1848 zurückreichen. LinkedCat+ erweckt das erste halbe Jahrhundert dieses einzigartigen Wissensforums zu neuem digitalen Leben, indem das Material auf Artikelebene zugänglich, auffindbar und weiterverwendbar gemacht wird. Open, Linked und Visual sind die drei Veröffentlichungsprinzipien bei diesem Projekt.
-                </p>
             </div>
              <div style="max-width:1200px; margin: 0px auto; padding: 20px;">   
-            <div style="display: inline-block; width:49%;"><img src="./img/math-nat-klasse.jpg"></div>
-                <div style="display: inline-block; width:49%;"><img src="./img/phil-hist-klasse.jpg"></div>
+            <div style="display: inline-block; width:49%; font-size: 12px;"><img src="./img/math-nat-klasse.jpg">Mitglieder der mathematisch-naturwissenschaftlichen Klasse</div>
+                <div style="display: inline-block; width:49%; font-size: 12px;"><img src="./img/phil-hist-klasse.jpg">Mitglieder der philosophisch- historischen Klasse</div>
              </div>
+            
+            <div style="max-width:750px; background-color: white; margin: 0px auto; font-size: 16px; padding-top: 50px;">
+               
+                <p class="paragraph-style">
+                </p>
+            </div>
                 
-<div style="max-width:750px; background-color: white; margin: 0px auto; font-size: 16px; padding-top: 50px;">
+<!--<div style="max-width:750px; background-color: white; margin: 0px auto; font-size: 16px; padding-top: 50px;">
                 <p class="paragraph-style">Die Sitzungsberichte von 1848 bis 1918 wurden in insgesamt 492 Bänden veröffentlicht. Für das Projekt wurden bisher ca. 9000 Titel katalogisiert (5500 von der phil.-hist.-Klasse, 3640 von der math.-nat.-Klasse). 
                     Insgesamt wurden an die 366.000 Seiten digitalisiert, davon ca. 125.000 Seiten und ca. 350 Bildtafeln in der phil.-hist.-Klasse und ca. 241.000 Seiten in der math.-nat.-Klasse (Stand: Jänner 2020).
                 </p>
+            </div>-->
+           
+           <div style="max-width:1200px; margin: 0px auto; padding: 20px;">
+                <div style="display: inline-block; width: 50%; vertical-align: middle;">
+                    <img style="max-width: 500px;" src="./img/sitzung-und-bericht.png">
+                </div>
+                <div style="display: inline-block; width:40%; vertical-align: middle;">
+                    <p  style="margin-bottom: 40px;">Die Österreichische Akademie der Wissenschaften (ÖAW) wurde 1847 als Gelehrtengesellschaft gegründet. Als solche ist die ÖAW seit über 150 Jahren ein wichtiges Forum für die Produktion und Kommunikation von Wissen. Die Sitzungen der beiden Klassen der Akademie, der philosophisch- historischen und der mathematisch-naturwissenschaftlichen, sind in den Sitzungsberichten dokumentiert, die bis ins Jahr 1848 zurückreichen. LinkedCat+ erweckt das erste halbe Jahrhundert dieses einzigartigen Wissensforums zu neuem digitalen Leben, indem das Material auf Artikelebene zugänglich, auffindbar und weiterverwendbar gemacht wird. Open, Linked und Visual sind die drei Veröffentlichungsprinzipien bei diesem Projekt.</p>
+                    <p>
+                        Die Sitzungsberichte von 1848 bis 1918 wurden in insgesamt 492 Bänden veröffentlicht. Für das Projekt wurden bisher ca. 9000 Titel katalogisiert (5500 von der phil.-hist.-Klasse, 3640 von der math.-nat.-Klasse). 
+                    Insgesamt wurden an die 366.000 Seiten digitalisiert, davon ca. 125.000 Seiten und ca. 350 Bildtafeln in der phil.-hist.-Klasse und ca. 241.000 Seiten in der math.-nat.-Klasse (Stand: Jänner 2020).</p>
+                </div>
+               
             </div>
-
+             
+            
             <div style="margin: 0px auto; padding: 20px; background-color: white; text-align: center;">
                 <div style="display: inline-block; text-align:center; padding: 0px 40px;"><p class="circle">492 Bände</p></div>
                 <div style="display: inline-block; text-align:center; padding: 0px 40px;"><p class="circle">9000 Titel katalogisiert</p></div>
@@ -57,10 +74,10 @@ margin-bottom: 50px; font-size: 34px;">LinkedCat+ erweckt die Sitzungsberichte d
                 <div style="display: inline-block; width:40%; vertical-align: middle;">
 
                     <h4 class="headline4">Knowledge Map</h4>
-                    <p style="margin-bottom: 20px;">
+                    <p style="margin-bottom: 40px;">
                         (zu deutsch "Wissenslandkarten“) geben einen thematischen Überblick über ein Stichwort oder einen Autor. Unterthemen werden als Blasen dargestellt. </p>
                     <h4 class="headline4">Streamgraph</h4>
-                    <p>zeigen die zeitliche Entwicklung der häufigsten Schlagworte zu einem Stichwort/Autor. Die Schlagworte werden als farbige Ströme (englisch "streams") dargestellt. 
+                    <p style="margin-bottom: 40px;">zeigen die zeitliche Entwicklung der häufigsten Schlagworte zu einem Stichwort/Autor. Die Schlagworte werden als farbige Ströme (englisch "streams") dargestellt. 
                     </p>
                     <p>Weitere Infos zu den Visualisierungen <a href="faqs">finden Sie in den FAQs</a>. Die Software wurde von Open Knowledge Maps entwickelt und ist open source.</p>
                 </div>
@@ -72,6 +89,7 @@ margin-bottom: 50px; font-size: 34px;">LinkedCat+ erweckt die Sitzungsberichte d
                 </p>
             </div>
         </div>
+            </div>
 
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script>
