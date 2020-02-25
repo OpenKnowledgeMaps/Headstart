@@ -3,17 +3,8 @@ var options_linkedcat = {
         /*{id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
               , fields: [
                   {id: "overview", text: "Knowledge Map", selected:true}
-                  , {id: "timeline", text: "Zeitstrahl"}
+                  , {id: "timeline", text: "Streamgraph"}
               ]},*/
-        {id: "year_range", multiple: false, name: "Zeitraum", type: "dropdown"
-            , fields: [
-                {id: "any-time-years", text: "1847-1918"}
-                , {id: "user-defined", text: "Zeitraum", class: "user-defined",
-                    inputs: [
-                        {id: "from", label: "von: ", class: "time_input"}
-                        , {id: "to", label: "bis: ", class: "time_input"}
-                    ]}
-            ]},
         {id: "include_content_type", multiple: true, name: "Dokumentarten", type: "dropdown"
             , fields: [
                 {id: "Andere Abhandlungen", text: "Andere Abhandlungen", count:1460, selected:true}
@@ -34,6 +25,15 @@ var options_linkedcat = {
                 , {id: "Verzeichnis", text: "Verzeichnis", count:43, selected:true}
                 , {id: "Wörterbuch", text: "Wörterbuch", count:15, selected:true}
               ]},
+          {id: "year_range", multiple: false, name: "Zeitraum", type: "dropdown"
+            , fields: [
+                {id: "any-time-years", text: "1847 - 1918"}
+                , {id: "user-defined", text: "Zeitraum eingrenzen", class: "user-defined",
+                    inputs: [
+                        {id: "from", label: "von: ", class: "time_input"}
+                        , {id: "to", label: "bis: ", class: "time_input"}
+                    ]}
+            ]},
           
     ]
 }
@@ -43,7 +43,7 @@ var options_linkedcat_authors = {
         /*{id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
             , fields: [
                 {id: "overview", text: "Knowledge Map", selected:true}
-                , {id: "timeline", text: "Zeitstrahl"}
+                , {id: "timeline", text: "Streamgraph"}
             ]},*/
     ]
 }

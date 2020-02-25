@@ -85,6 +85,7 @@ header #logo a:hover {
 .nav_top a:hover, .nav_top a:active, .nav_top a:focus, .underline-menu  {
     border-bottom: 2px solid #2856a3;
     text-decoration: none;
+    color: #2856a3;
 }
 /*TOGGLE MENU CSS*/
 .menu {

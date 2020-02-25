@@ -31,8 +31,8 @@ include 'config.php';
             $('input[name="optradio"][value="' + mode + '"').prop("checked", true);
 
             var additional_information = {
-                authors: '<p>Erstellen Sie einen thematischen Überblick (Knowledge Map) oder eine zeitliche Entwicklung (Streamgraph) über die Sitzungsberichte eines Autors.'
-                , keywords: '<p>Erstellen Sie einen thematischen Überblick (Knowledge Map) oder eine zeitliche Entwicklung (Streamgraph) über Sitzungsberichte zu einem Thema.'
+                authors: '<p>Bitte wählen Sie eine Visualisierung:'
+                , keywords: '<p>Bitte wählen Sie eine Visualisierung:'
             }
 
             var author_selected = false;
