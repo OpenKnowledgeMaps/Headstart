@@ -3,7 +3,7 @@ var options_linkedcat = {
         /*{id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
               , fields: [
                   {id: "overview", text: "Knowledge Map", selected:true}
-                  , {id: "timeline", text: "Zeitstrahl"}
+                  , {id: "timeline", text: "Streamgraph"}
               ]},*/
         {id: "include_content_type", multiple: true, name: "Dokumentarten", type: "dropdown"
             , fields: [
@@ -43,7 +43,7 @@ var options_linkedcat_authors = {
         /*{id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
             , fields: [
                 {id: "overview", text: "Knowledge Map", selected:true}
-                , {id: "timeline", text: "Zeitstrahl"}
+                , {id: "timeline", text: "Streamgraph"}
             ]},*/
     ]
 }
