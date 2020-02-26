@@ -12,6 +12,11 @@ body {
     /*background-color: #515755;*/
 }
 
+a {
+    color: #0047bb;
+    text-decoration: underline;
+}
+
 .page img {
     width: 100%;
 }
@@ -54,8 +59,11 @@ body {
     max-width:600px; 
     margin-right: auto;
     margin-left: auto;
+    margin-bottom: 40px;
     background-color: transparent; 
     padding: 0px;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
 }
 
 .shadow, .shadow2 {
@@ -81,7 +89,7 @@ body {
     padding: 20px 0;
     border-radius: 17px; 
     font-size: 14px;
-    background-image: linear-gradient(rgba(40,86,163,1), rgba(40,86,163,1)); 
+    background-image: linear-gradient(rgba(0,71,187,1), rgba(0,71,187,1)); 
     color: white; width:100%; padding: 10px 3px;
 }
 
@@ -108,7 +116,7 @@ body {
 }
 
 .btn-enabled {
-    color: #2856a3;
+    color: #0047bb;
     background-color: white;
     opacity: 1;
 }
@@ -123,12 +131,12 @@ body {
     -webkit-border-radius: 17px;
     -moz-border-radius: 17px;
     border-radius: 17px;
-    color: #2856a3;
+    color: #0047bb;
     font-size: 12px;
     background: #ffffff;
     padding: 10px;
     text-decoration: none;
-    border: 1px solid #2856a3;
+    border: 1px solid #0047bb;
     width: 140px;
 }
 
@@ -160,7 +168,17 @@ body {
     text-transform: none; 
     color: #f7f7f7; 
     position: absolute; 
-    right: 20px;
+    right: 0px;
+    bottom: 20px; 
+    font-size: 9px; 
+    text-align: right;
+}
+
+.credits2 {
+    text-transform: none; 
+    color: #f7f7f7; 
+    position: absolute; 
+    left: 20px;
     bottom: 20px; 
     font-size: 9px; 
     text-align: left;
@@ -189,7 +207,7 @@ label {
     font-family: 'Josefin Sans', sans-serif; 
     text-transform: uppercase; 
     border-radius: 17px; 
-    color: #2856a3 !important; 
+    color: #0047bb !important; 
     text-decoration: none;
     padding: 10px 30px 0;
 }
@@ -223,7 +241,7 @@ label {
 }
 
 .frontend-btn:hover, .frontend-btn:active, .frontend-btn:focus {
-    background: #2856a3;
+    background: #0047bb;
     color: white;
     text-decoration: none;
 }
@@ -312,7 +330,7 @@ label {
 
 /* When the radio button is checked, add a blue background */
 .radio-button input:checked ~ .checkmark {
-    background-color: #2856a3;
+    background-color: #0047bb;
 }
 
 /* Create the indicator (the dot/circle - hidden when not checked) */
@@ -362,11 +380,12 @@ label {
 
 .info-btn2 {
     cursor: help;
+    color: #0047bb;
     text-decoration: underline;
 }
 
 .dropdown-menu > .active > a, .dropdown-menu > .active > a:focus, .dropdown-menu > .active > a:hover {
-    background-color: #2856a3;
+    background-color: #0047bb;
 }
 
 .dropdown-menu {
@@ -386,8 +405,8 @@ label {
 }
 
 .ui-widget-header {
-    border: 1px solid #2856a3;
-    background-color: #2856a3; 
+    border: 1px solid #0047bb;
+    background-color: #0047bb; 
 }
 
 .ui-progressbar {
@@ -504,7 +523,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
 }
 
 .waiting-title {
-    color: #2856a3;
+    color: #0047bb;
     font-family: 'Josefin Sans', sans-serif; 
     text-transform: uppercase;
     font-size: 18px;
@@ -517,23 +536,9 @@ label.q-error, #input-container label.q-error, .timefield .error {
     display: none;
 }
 
-.browse {
-    /*position: absolute; 
-    bottom: 20px; 
-    right: 20px; */
-    max-width: 300px;
-    background-image: none;
-    background: rgba(0, 0, 0, 0.3);
-    border: 2px solid white;
-}
-
-.browse:hover {
-    border: 2px solid rgba(28,59,112,1);
-}
-
 /*ICONS*/
 .fa-info-circle {
-    font-size: 18px;
+    font-size: 12px;
     color: #818181;
 }
 
@@ -560,7 +565,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
     max-width: 750px; 
     margin: 0px auto; 
     padding: 2% 0;
-    background-color: #2856a3;
+    background-color: #0047bb;
     opacity: 0.8;
 }
 
@@ -578,6 +583,11 @@ label.q-error, #input-container label.q-error, .timefield .error {
     text-transform: uppercase;
     /*text-shadow:1px 1px 10px black;*/
     text-align: center;
+}
+
+.page-description {
+    background-color: white;
+    padding: 40px;
 }
 
 /*FAQs page*/
@@ -602,11 +612,11 @@ label.q-error, #input-container label.q-error, .timefield .error {
 /*About Page*/
 .headline4 {
     text-transform: uppercase;
-    color: #2856a3;
+    color: #0047bb;
 }
 
 .circle {
-    border: 1px solid #2856a3;
+    border: 1px solid #0047bb;
     border-radius: 90px;
     width: 180px;
     height: 180px;
@@ -614,7 +624,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
     text-align: center;
     vertical-align: middle;
     font-size: 20px;
-    color: #2856a3;
+    color: #0047bb;
     font-family: 'Josefin Sans';
 }
 
@@ -645,3 +655,58 @@ label.q-error, #input-container label.q-error, .timefield .error {
     margin-bottom: 10px;
 }
 
+.partner-logo {
+    max-width:150px;
+    padding-right: 40px;
+}
+
+.browse {
+    display: block;
+    width: 200px;
+    background: white;
+    border: 2px solid #0047bb;
+    color: #0047bb;
+    text-align: center;
+    margin: 20px 0 0 0;
+    text-decoration: none;
+}
+
+.browse:hover,  .browse:active, .browse:focus {
+    background-color: #0047bb;
+    color: white;
+    text-decoration: none;
+}
+
+.stats {
+    margin: 0px auto; 
+    padding: 20px; 
+    text-align: center;
+}
+
+.stats div {
+    display: inline-block; 
+    text-align:center; 
+    padding: 0px 40px;
+}
+
+.img1 {
+    display: inline-block; 
+    width:49%; 
+    vertical-align:top;
+}
+
+.img2 {
+    display: inline-block; 
+    width: 50%; 
+    vertical-align: middle;
+}
+
+.img2 img {
+    max-width: 500px;
+}
+
+.img3 {
+    display: inline-block; 
+    width:40%; 
+    vertical-align: middle;
+}
