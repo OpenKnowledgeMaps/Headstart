@@ -15,19 +15,18 @@ $date = new DateTime();
                 <?php include('menu.php'); ?>
             </header>
             <div  class="page">
-            
-            
-            
-
-            <div style="max-width:750px; margin: 0px auto 40px; font-size: 16px;">
+                
+            <div class="page-section" style="max-width:750px; margin: 0px auto 40px; font-size: 16px;">
                 <h2 class="page-headline">Über das Projekt</h2>
-                <p class="paragraph-style" style="font-size: 34px; margin-top:40px;">LinkedCat+ erweckt die Sitzungsberichte der Österreichischen Akademie der Wissenschaften von 1847-1918 zu neuem digitalen Leben.</p>
+                <p class="paragraph-style" style="font-size: 30px; margin-top:40px;">LinkedCat+ erweckt die Sitzungsberichte der Österreichischen Akademie der Wissenschaften von 1847-1918 zu neuem digitalen Leben.</p>
                 
             </div>
-             <div style="max-width:1200px; margin: 0px auto; padding: 20px;">   
-            <div style="display: inline-block; width:49%; font-size: 12px;"><img src="./img/math-nat-klasse.jpg">Mitglieder der mathematisch-naturwissenschaftlichen Klasse</div>
-                <div style="display: inline-block; width:49%; font-size: 12px;"><img src="./img/phil-hist-klasse.jpg">Mitglieder der philosophisch- historischen Klasse</div>
-             </div>
+                
+            <div style="display: inline-block; width:49%; font-size: 12px;"><img src="./img/math-nat-klasse.jpg">Mitglieder der mathematisch-naturwissenschaftl. Klasse der kais. Akademie der Wissenschaften zu Wien
+            </div>
+            <div style="display: inline-block; width:49%; font-size: 12px;"><img src="./img/phil-hist-klasse.jpg">Mitglieder der philosophisch-histor. Klasse der kais. Akademie der Wissenschaften zu Wien
+            </div>
+             
             
             <div style="max-width:750px; background-color: white; margin: 0px auto; font-size: 16px; padding-top: 50px;">
                
@@ -35,12 +34,6 @@ $date = new DateTime();
                 </p>
             </div>
                 
-<!--<div style="max-width:750px; background-color: white; margin: 0px auto; font-size: 16px; padding-top: 50px;">
-                <p class="paragraph-style">Die Sitzungsberichte von 1848 bis 1918 wurden in insgesamt 492 Bänden veröffentlicht. Für das Projekt wurden bisher ca. 9000 Titel katalogisiert (5500 von der phil.-hist.-Klasse, 3640 von der math.-nat.-Klasse). 
-                    Insgesamt wurden an die 366.000 Seiten digitalisiert, davon ca. 125.000 Seiten und ca. 350 Bildtafeln in der phil.-hist.-Klasse und ca. 241.000 Seiten in der math.-nat.-Klasse (Stand: Jänner 2020).
-                </p>
-            </div>-->
-           
            <div style="max-width:1200px; margin: 0px auto; padding: 20px;">
                 <div style="display: inline-block; width: 50%; vertical-align: middle;">
                     <img style="max-width: 500px;" src="./img/sitzung-und-bericht.png">

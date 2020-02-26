@@ -19,10 +19,13 @@ $date = new DateTime();
 
             <div class="browse-description">
                 <h3>Disziplinen / Themen</h3>
-                <p>In der Liste finden Sie Links zu Knowledge Maps für die Hauptklassen der Basisklassifikation (BK). BK ist ein hierarchisches Klassifikationssystem, das speziell für wissenschaftliche Arbeiten entwickelt wurde.</p>
             </div>
 
             <div id="browseview" class="list-group list-group-root well" style="padding-bottom: 50px;">
+                <p style="padding: 20px;">In der Liste finden Sie Links zu <span class="info-btn2" data-toggle="popover" data-trigger="hover" data-content='Eine Knowledge Map (zu deutsch "Wissenslandkarte") 
+                              gibt einen thematischen Überblick über ein Stichwort/einen Autor. 
+                              Mehr Infos dazu finden Sie in den FAQs.'>Knowledge Maps</span> für die Hauptklassen der Basisklassifikation (BK). BK ist ein hierarchisches Klassifikationssystem, das speziell für wissenschaftliche Arbeiten entwickelt wurde. In diesen Knowledge Maps werden nur Dokumente angezeigt die von Bibliothekar*innen der jeweiligen Hauptklasse zugeordnet wurden. 
+               </p>
                 <div id="browseview-loading" class="loading-indicator">
                     Die Themenbereiche werden geladen und in wenigen Sekunden angezeigt 
                     <img class="loading" src="img/ajax-loader.gif">
@@ -145,6 +148,7 @@ $date = new DateTime();
             $(function () {
 
                 displayTree();
+                $('[data-toggle="popover"]').popover();
 
             });
         </script>
