@@ -150,7 +150,14 @@ header #logo a:hover {
 }
 
 .topheader {
-    padding-top: 90px;
+    padding-top: 76px;
+}
+
+/*Headstart Menu*/
+
+.menu-headstart-page header {
+    background-color: #0047bb;
+    color: wite;
 }
 
 @media screen and (max-width: 1030px) {
