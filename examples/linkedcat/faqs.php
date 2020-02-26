@@ -18,13 +18,13 @@ $date = new DateTime();
 
                 <div class="page-section">
 
-                    <h2 class="page-headline">FAQs</h2>
+                    <h1 class="page-headline">FAQs</h1>
 
                     <h4 class="question">Was ist eine Knowledge Map?</h4>
                     <span class="anchor" id="knowledgemap"></span>
                     <p class="example">
                         <img class="shadow2 abstand" src="./img/km-example.png" alt="Knowledge Map für die Werke des Autors Hammer-Purgstall">
-                        <span>Abbildung: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)</span>
+                        <span>Screenshot: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)</span>
                     </p>
                     <p class="paragraph-style">
                         Eine Knowledge Map (zu deutsch "Wissenslandkarte") gibt einen thematischen Überblick über ein Stichwort/einen Autor. 
@@ -43,7 +43,7 @@ $date = new DateTime();
                     <span class="anchor" id="streamgraph"></span>
                     <p class="example">
                         <img class="shadow2 abstand" src="./img/sg-example.png">
-                        <span>Abbildung: Streamgraph für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)</span>
+                        <span>Screenshot: Streamgraph für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)</span>
                     </p>
                     <p class="paragraph-style">
                         Ein Streamgraph zeigt die zeitliche Entwicklung der häufigsten Schlagworte zu einem Stichwort/Autor. 

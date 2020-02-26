@@ -10,7 +10,7 @@ header {
     -webkit-box-shadow: 0px 0px 4px 0px #cacfd3;
     -moz-box-shadow: 0px 0px 4px 0px #cacfd3;
     box-shadow: 0px 0px 4px 0px #cacfd3;
-    color: #2856a3;
+    color: #0047bb;
 }
 
 header a {
@@ -50,18 +50,19 @@ header #logo a:hover {
 }
 
 .description a {
-    color: #2856a3;
+    color: #0047bb;
 }
 
 .description {
-    text-transform: none;
-    font-size: 32px;
+    text-transform: uppercase;
+    font-size: 28px;
     font-family: 'Josefin Sans', sans-serif;
     font-weight: 700;
-    color: #2856a3;
+    color: #0047bb;
     vertical-align: bottom;
     display: inline-block;
     margin-bottom: 0px;
+    margin-left: 20px;
 }
 
 .nav_top li:last-child {
@@ -83,9 +84,9 @@ header #logo a:hover {
 }
 
 .nav_top a:hover, .nav_top a:active, .nav_top a:focus, .underline-menu  {
-    border-bottom: 2px solid #2856a3;
+    border-bottom: 2px solid #0047bb;
     text-decoration: none;
-    color: #2856a3;
+    color: #0047bb;
 }
 /*TOGGLE MENU CSS*/
 .menu {
@@ -125,7 +126,7 @@ header #logo a:hover {
 .icon-close {
     cursor: pointer;
     padding: 5px 0px 5px 20px;
-    background-color: #2856a3;
+    background-color: #0047bb;
     color: white;
     font-size: 28px;
 }
@@ -138,14 +139,14 @@ header #logo a:hover {
     margin: 10px 0px 10px 20px;
     text-decoration: none;
     text-transform: uppercase;
-    border: 2px solid #2856a3;
+    border: 1px solid #0047bb;
     padding: 5px 10px;
     vertical-align: middle;
     text-align:left;
     background-color: none;
     border-radius: 5px;
     -moz-border-radius: 5px;
-    color: #2856a3;
+    color: #0047bb;
 }
 
 .topheader {
