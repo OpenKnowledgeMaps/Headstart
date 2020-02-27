@@ -14,7 +14,7 @@
 </div>
 
 <div class="icon-menu">
-    <span class="awesome">&#xf0c9;</span>
+    <span class="awesome"><i class="fas fa-bars"></i></span>
 </div>
 
 <!--<div class="imglogo">
