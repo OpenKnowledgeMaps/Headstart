@@ -177,6 +177,11 @@ header #logo a:hover {
     color: white;
 }
 
+.vis-page .icon-menu {
+    color: white;
+    border: 1px solid white;
+}
+
 @media screen and (max-width: 1030px) {
 
     .menu {
