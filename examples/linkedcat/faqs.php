@@ -60,7 +60,7 @@ $date = new DateTime();
 
                     <h4 class="question">Was ist unter relevanteste Dokumente zu verstehen?</h4>
                     <p class="paragraph-style">
-                        In diesem Projekt verwenden wir das Relevanz-Ranking von Solr. Solr verwendet hauptsächlich die Textähnlichkeit zwischen dem Suchbegriff und den Dokument-Metadaten, um die Relevanz zu bestimmen. Mehr Informationen dazu <a target="_blank" href="http://lucene.apache.org/core/6_4_2/core/org/apache/lucene/search/package-summary.html#scoring">finden sie auf dieser Seite</a>.
+                        In diesem Projekt verwenden wir das Relevanz-Ranking der Suchmaschinen-Software "Solr". Solr verwendet hauptsächlich die Textähnlichkeit zwischen dem Suchbegriff und den Dokument-Metadaten, um die Relevanz zu bestimmen. Mehr Informationen dazu <a target="_blank" href="http://lucene.apache.org/core/6_4_2/core/org/apache/lucene/search/package-summary.html#scoring">finden sie auf dieser Seite</a>.
                     </p>
 
                     <h4 class="question">Warum werden in einer Knowledge Map zur Stichwortsuche nur die 100 relevantesten Dokumente angezeigt?</h4>
