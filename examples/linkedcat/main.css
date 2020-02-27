@@ -218,6 +218,15 @@ label {
     margin-top: 5px;
 }
 
+.refine-search {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
 .time_input {
     max-width: 100px;
 }

@@ -66,9 +66,10 @@ var SearchOptions = {
                     .attr("class", "divity")
 
             div.append('a')
-                    .attr("href", "#")
-                    .attr("class", "frontend-btn")
-                    .text("Weitere Optionen")
+                .attr("class", "pointer refine-search")
+                .text("Weitere Optionen ")
+                .append('span')
+                .attr("class", "fas fa-angle-down underline")
         }
 
         var filters = d3.select(tag).append('div')
@@ -154,23 +155,9 @@ var SearchOptions = {
                 })
             }
         })
-        /*filters.append("div")
-         .attr("class", "submit-btn")
-         .append("a")
-         .attr("id", "submit-btn")
-         .attr("href", "#")
-         .attr("class", "frontend-btn")
-         .style("vertical-align", "middle")
-         .text("Submit");
-
-         /*d3.select(tag).append("div")
-         .attr("id", "stats")
-         .attr("class", "divity")
-         .html("<p>Loading...</p>")*/
 
         $("#filter-btn").click(function () {
             $("#filters").toggleClass("frontend-hidden");
-            //$("#stats").toggleClass("frontend-hidden");
 
             var closed = $("#filters").css("display") == "none";
 
