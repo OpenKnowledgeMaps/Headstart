@@ -10,7 +10,6 @@ header {
     -webkit-box-shadow: 0px 0px 4px 0px #cacfd3;
     -moz-box-shadow: 0px 0px 4px 0px #cacfd3;
     box-shadow: 0px 0px 4px 0px #cacfd3;
-    color: #0047bb;
 }
 
 header a {
@@ -150,14 +149,32 @@ header #logo a:hover {
 }
 
 .topheader {
-    padding-top: 76px;
+    padding-top: 65px;
 }
 
 /*Headstart Menu*/
 
-.menu-headstart-page header {
-    background-color: #0047bb;
-    color: wite;
+.vis-page .description a {
+    color: white;
+    font-size: 20px;
+}
+
+.vis-page header a {
+    color: white;
+}
+
+.vis-page .nav_top {
+    font-size: 13px;
+}
+
+.vis-page header {
+    background-color: #00122f;
+}
+
+.vis-page .nav_top a:hover, .vis-page .nav_top a:active, .vis-page .nav_top a:focus, .vis-page .underline-menu  {
+    border-bottom: 2px solid white;
+    text-decoration: none;
+    color: white;
 }
 
 @media screen and (max-width: 1030px) {

@@ -22,12 +22,12 @@ a {
 }
 
 .bg-image-startpage {
-    position: absolute;
+    /*position: absolute;*/
     background-size: cover;
     bottom: 0px;
     right: 0px;
-    width: 100%;
-    height: 100%;
+    height: 100vh;
+  max-width: 100%;
     /*text-transform: uppercase;*/ 
     padding: 0px;
     background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(0,0,0, 0.2)), url(./img/background-start-2.jpg); 
@@ -59,7 +59,7 @@ a {
     max-width:600px; 
     margin-right: auto;
     margin-left: auto;
-    margin-bottom: 40px;
+    margin-bottom: 0px;
     background-color: transparent; 
     padding: 0px;
     -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
@@ -293,6 +293,13 @@ label {
     height: 18px;
 }
 
+.createdby {
+    font-family: 'Lato', sans-serif;
+    margin: 10px; 
+    font-size: 12px; 
+    padding-left: 20px;
+}
+
 /*radio Button transformed*/
 /* The container */
 .radio-button {
@@ -306,10 +313,11 @@ label {
     -ms-user-select: none;
     user-select: none;
     color: #333;
-    sfont-size: 16px;
+    font-size: 16px;
 
     width: 220px;
-    background-color: #eee;
+    background-color: white;
+    border: 1px solid #ccc;
     padding: 10px;
     border-radius: 17px;
 }
@@ -328,7 +336,7 @@ label {
     left: 16px;
     height: 22px;
     width: 22px;
-    background-color: white;
+    background-color: #eee;
     border-radius: 50%;
 }
 

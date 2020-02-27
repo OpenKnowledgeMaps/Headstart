@@ -93,12 +93,12 @@ $date = new DateTime();
 
                 <div class="page-section" style="padding-bottom: 50px;">
                     <h4 class="question">Projektpartner</h4>
-                    <p class="paragraph-style">Das Projekt „LinkedCat+“ wurde von der Österreichischen Akademie der Wissenschaften (<a href="https://www.oeaw.ac.at">ÖAW</a>) im Rahmen des Innovationsfonds gefördert und erstreckte sich über einen Zeitraum von April 2018 bis März 2020. LinkedCat+ ist eine Kooperation zwischen Bibliothek, Archiv und Sammlungen (<a href="https://www.oeaw.ac.at/basis/">BASI:IS</a>), Austrian Centre for Digital Humanities and Cultural Heritage (<a href="https://www.oeaw.ac.at/acdh/">ACDH</a>) und Open Knowledge Maps - Verein zur Förderung der Sichtbarkeit wissenschaftlichen Wissens (<a href="https://openknowledgemaps.org/">OKMaps</a>).
+                    <p class="paragraph-style">Das Projekt „LinkedCat+“ wurde von der Österreichischen Akademie der Wissenschaften (<a target="_blank" href="https://www.oeaw.ac.at">ÖAW</a>) im Rahmen des Innovationsfonds gefördert und erstreckte sich über einen Zeitraum von April 2018 bis März 2020. LinkedCat+ ist eine Kooperation zwischen Bibliothek, Archiv und Sammlungen (<a target="_blank" href="https://www.oeaw.ac.at/basis/">BASI:IS</a>), Austrian Centre for Digital Humanities and Cultural Heritage (<a target="_blank" href="https://www.oeaw.ac.at/acdh/">ACDH</a>) und Open Knowledge Maps - Verein zur Förderung der Sichtbarkeit wissenschaftlichen Wissens (<a target="_blank" href="https://openknowledgemaps.org/">OKMaps</a>).
                     </p>
                     <p>
-                        <a href="https://www.oeaw.ac.at"><img class="partner-logo" src="./img/oeaw-logo-blau.png"></a>
-                        <a href="https://www.oeaw.ac.at/acdh/"><img class="partner-logo" src="./img/acdh-logo.png"></a>
-                        <a href="https://openknowledgemaps.org/"><img class="partner-logo" src="./img/okmaps-logo-invers.png"></a>
+                        <a target="_blank" href="https://www.oeaw.ac.at"><img class="partner-logo" src="./img/oeaw-logo-blau.png"></a>
+                        <a target="_blank" href="https://www.oeaw.ac.at/acdh/"><img class="partner-logo" src="./img/acdh-logo.png"></a>
+                        <a target="_blank" href="https://openknowledgemaps.org/"><img class="partner-logo" src="./img/okmaps-logo-web-grau.png"></a>
                     </p>
                 </div>
             </div>
