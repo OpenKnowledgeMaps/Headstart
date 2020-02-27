@@ -17,7 +17,7 @@ var chooseOptions = function () {
         case "keywords":
             options = options_linkedcat;
             service_url = data_config.server_url + "services/searchLinkedCat.php";
-            placeholder = "Bitte geben Sie ein Stichwort ein...";
+            placeholder = " Bitte geben Sie ein Stichwort ein...";
             $('.keyword-btn').addClass('btn-enabled');
             $('#additional-information').html(additional_information.keywords);
             has_options_link = true;
@@ -26,7 +26,7 @@ var chooseOptions = function () {
         case "authors":
             options = options_linkedcat_authors;
             service_url = data_config.server_url + "services/searchLinkedCatAuthorview.php";
-            placeholder = "Bitte wählen Sie einen Autor aus der Liste...";
+            placeholder = " Bitte wählen Sie einen Autor aus der Liste...";
             $('.author-btn').addClass('btn-enabled');
             $('#additional-information').html(additional_information.authors);
             has_options_link = false;
