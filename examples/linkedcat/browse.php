@@ -19,17 +19,16 @@ $date = new DateTime();
 
             <div class="browse-description">
                 <h3>Disziplinen / Themen</h3>
-                <p>In der Liste finden Sie Links zu Knowledge Maps für die Hauptklassen der Basisklassifikation (BK). BK ist ein hierarchisches Klassifikationssystem, das speziell für wissenschaftliche Arbeiten entwickelt wurde.</p>
             </div>
 
-            <div id="browseview" class="list-group list-group-root well" style="padding-bottom: 50px;">
+            <div id="browseview" class="list-group list-group-root well">
+                <p class="page-description">In der Liste finden Sie Links zu <span class="info-btn2" data-toggle="popover" data-trigger="hover" data-content='Eine Knowledge Map (zu deutsch "Wissenslandkarte") gibt einen thematischen Überblick über ein Stichwort/einen Autor. Mehr Infos dazu finden Sie in den FAQs.'>Knowledge Maps<i class="fas fa-info-circle"></i></span> für die Hauptklassen der <span class="info-btn2" data-toggle="popover" data-trigger="hover" data-content='BK ist ein hierarchisches Klassifikationssystem, das speziell für wissenschaftliche Arbeiten entwickelt wurde.'>Basisklassifikation<i class="fas fa-info-circle"></i></span>. In diesen Knowledge Maps werden jene Dokumente angezeigt die von Bibliothekar*innen der jeweiligen Hauptklasse zugeordnet wurden. 
+                </p>
                 <div id="browseview-loading" class="loading-indicator">
                     Die Themenbereiche werden geladen und in wenigen Sekunden angezeigt 
                     <img class="loading" src="img/ajax-loader.gif">
                 </div>
             </div>
-
-            <?php include('credits.php') ?>
         </div>
 
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
@@ -78,9 +77,9 @@ $date = new DateTime();
                     return title;
                 }
             }
-            
-            function build_q (map_params) {
-                if(map_params.bkl_level === "top") {
+
+            function build_q(map_params) {
+                if (map_params.bkl_level === "top") {
                     return map_params.q;
                 } else {
                     return map_params.bkl_top_caption + " -> " + map_params.q;
@@ -145,6 +144,7 @@ $date = new DateTime();
             $(function () {
 
                 displayTree();
+                $('[data-toggle="popover"]').popover();
 
             });
         </script>
