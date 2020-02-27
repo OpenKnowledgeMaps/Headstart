@@ -1145,7 +1145,11 @@ list.setBacklink = function(d) {
                                 .attr("class", "underline")
                                 .text(function() {
                                     if(config.is_streamgraph) {
-                                        return config.localization[config.language].backlink_list_streamgraph;
+                                        if(mediator.current_stream === null) {
+                                            return config.localization[config.language].backlink_list_streamgraph;
+                                        } else {
+                                            return config.localization[config.language].backlink_list_streamgraph_stream_selected;
+                                        }
                                     } else {
                                         return config.localization[config.language].backlink_list;
                                     }
