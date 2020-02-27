@@ -21,9 +21,6 @@ var data_config = {
     show_context: true,
     create_title_from_context: true,
     context_most_relevant_tooltip: true,
-        
-    embed_modal: true,
-    share_modal: true,
 
     doi_outlink: true,
     filter_menu_dropdown: true,
@@ -32,9 +29,4 @@ var data_config = {
     
     embed_modal: true,
     share_modal: false,
-
-    doi_outlink: true,
-    filter_menu_dropdown: true,
-    sort_menu_dropdown: true,
-    filter_options: ["all", "open_access"],
 };
