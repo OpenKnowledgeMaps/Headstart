@@ -17,9 +17,9 @@
     <span class="awesome">&#xf0c9;</span>
 </div>
 
-<div class="imglogo">
+<!--<div class="imglogo">
     <a href="index"><img src="https://www.oeaw.ac.at/typo3conf/ext/oeaw_redesign/Resources/Public/Icons/logo-kurz.png"></a>
-</div>
+</div>-->
 
 <p class="description">
     <a href="index">LinkedCat+</a>

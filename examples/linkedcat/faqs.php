@@ -15,45 +15,57 @@ $date = new DateTime();
                 <?php include('menu.php'); ?>
             </header>
             <div class="page">
-                
 
-                <div style="max-width:750px; margin: 0px auto 40px; font-size: 16px;">
-                    <h2 class="page-headline">FAQs</h2>
+                <div class="page-section">
+
+                    <h1 class="page-headline">FAQs</h1>
+
                     <h4 class="question">Was ist eine Knowledge Map?</h4>
                     <span class="anchor" id="knowledgemap"></span>
+                    <p class="example">
+                        <img class="shadow2 abstand" src="./img/km-example.png" alt="Knowledge Map für die Werke des Autors Hammer-Purgstall">
+                        <span>Screenshot: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)</span>
+                    </p>
                     <p class="paragraph-style">
                         Eine Knowledge Map (zu deutsch "Wissenslandkarte") gibt einen thematischen Überblick über ein Stichwort/einen Autor. 
                         Unterthemen werden als Blasen dargestellt. Jedem Unterthema sind relevante Dokumente zugeordnet, die mit einem
                         Klick auf die Blase angezeigt werden können.
-                        <br><br>
+                    </p>
+                    <p class="paragraph-style">
                         Die Größe der Blasen ist relativ zur Anzahl der zugeordneten Dokumente. Blasen, die sich thematisch ähnlich sind, werden näher zueinander dargestellt als
                         Blasen, die sich thematisch weniger ähnlich sind.
-                        <br><br>
+                    </p>
+                    <p class="paragraph-style">
                         Knowledge Maps eignen sich besonders dazu, einen Überblick über ein Thema zu bekommen und relevante Konzepte und Dokumente zu entdecken.
                     </p>
 
                     <h4 class="question">Was ist ein Streamgraph?</h4>
                     <span class="anchor" id="streamgraph"></span>
+                    <p class="example">
+                        <img class="shadow2 abstand" src="./img/sg-example.png">
+                        <span>Screenshot: Streamgraph für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)</span>
+                    </p>
                     <p class="paragraph-style">
                         Ein Streamgraph zeigt die zeitliche Entwicklung der häufigsten Schlagworte zu einem Stichwort/Autor. 
-                        Die Schlagworte werden als farbige Ströme (englisch "streams") dargestellt.  Jedem Strom sind relevante Dokumente zugeordnet, die mit einem
-                        Klick auf einen Stream angezeigt werden können.
-                        <br><br>
+                        Die Schlagworte werden als farbige Ströme (englisch "streams") dargestellt.  Jedem Strom sind relevante Dokumente zugeordnet, die mit einem Klick auf einen Stream angezeigt werden können.
+                    </p>
+                    <p class="paragraph-style">
                         Die Höhe eines Streams entspricht der Anzahl der zugeordneten Dokumente zu einem bestimmten Zeitpunkt. 
                         Dabei ist zu beachten, dass die Anzahl der relativen, nicht der absoluten Höhe entspricht.
                         Zwischen den Zeitpunkten wird der Strom interpoliert.
-                        <br><br>
+                    </p>
+                    <p class="paragraph-style">
                         Streamgraphs eignen sich besonders dazu, die Entwicklung von Schlagwörtern über die Zeit zu analysieren und Trends zu erkennen.
                     </p>
 
                     <h4 class="question">Was ist unter relevanteste Dokumente zu verstehen?</h4>
                     <p class="paragraph-style">
-                        In diesem Projekt verwenden wir das Relevanz-Ranking von Solr. Solr verwendet hauptsächlich die Textähnlichkeit zwischen dem Suchbegriff und den Dokument-Metadaten, um die Relevanz zu bestimmen. Mehr Informationen dazu <a target="_blank" href="http://lucene.apache.org/core/6_4_2/core/org/apache/lucene/search/package-summary.html#scoring">finden sie auf dieser Seite</a>.
+                        In diesem Projekt verwenden wir das Relevanz-Ranking der Suchmaschinen-Software "Solr". Solr verwendet hauptsächlich die Textähnlichkeit zwischen dem Suchbegriff und den Dokument-Metadaten, um die Relevanz zu bestimmen. Mehr Informationen dazu <a target="_blank" href="http://lucene.apache.org/core/6_4_2/core/org/apache/lucene/search/package-summary.html#scoring">finden sie auf dieser Seite</a>.
                     </p>
 
                     <h4 class="question">Warum werden in einer Knowledge Map zur Stichwortsuche nur die 100 relevantesten Dokumente angezeigt?</h4>
                     <p class="paragraph-style">
-                        Wir wollen die Anzahl der Dokumente überschaubar halten. 100 Dokumente sind bereits die 10-fache Menge die auf einer Standard-Suchergebnis Seite angezeigt werden. Um tiefer in ein Thema einzutauchen, können Sie eine spezifischere Suchanfrage stellen. Sollten sie alle Dokumente zu einem Stichwort anzeigen wollen, verwenden Sie bitte den Streamgraph.
+                        Wir wollen die Anzahl der Dokumente überschaubar halten. 100 Dokumente sind bereits die 10-fache Menge die auf einer Standard-Suchergebnis-Seite angezeigt werden. Um tiefer in ein Thema einzutauchen, können Sie eine spezifischere Suchanfrage stellen. Sollten sie alle Dokumente zu einem Stichwort anzeigen wollen, verwenden Sie bitte den Streamgraph.
                     </p>
 
                     <h4 class="question">Wie werden die Dokumente in Bereiche aufgeteilt?
@@ -63,7 +75,6 @@ $date = new DateTime();
                     </p>
 
                     <h4 class="question">Hat die Lage der Bereiche (Blasen) und Dokumente innerhalb eines Bereichs (Blase) eine spezielle Bedeutung?</h4>
-
                     <ul class="paragraph-style">
                         <li style="margin-bottom: 20px;">Die Nähe von Bereichen impliziert thematische Ähnlichkeit. Je näher zwei Bereiche auf der Knowledge Map platziert sind, desto ähnlicher sind sie sich thematisch. Überlappen zwei Bereiche bedeutet dies nicht, dass diese Bereiche dieselben Dokumente enthalten. Dokumente werden immer nur einem Bereich zugeordnet.
                         </li>
