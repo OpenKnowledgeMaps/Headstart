@@ -7,7 +7,7 @@ include 'config.php';
                 <?php include('head_headstart.php') ?>
     </head>
 
-    <body style="margin:0px; padding:0px">
+    <body style="margin:0px; padding:0px" class="vis-page">
         <?php if (!isset($_GET['embed']) || !$_GET['embed'] === 'true'): ?>
             <header>
                     <?php

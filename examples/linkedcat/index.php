@@ -19,7 +19,9 @@ include 'config.php';
             <?php include('search-box.php') ?>
             <?php include('credits.php') ?>
         </div>
+        <!-- PLease add any footer elements here:-->
 
+        <!-- end of footer-->
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script type ="text/javascript">
 
@@ -54,6 +56,6 @@ include 'config.php';
         </script>
         <script type="text/javascript" src="search_options.js "></script>
         <script type="text/javascript" src="search.js "></script>
-        
+
     </body>
 </html>
