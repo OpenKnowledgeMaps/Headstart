@@ -33,7 +33,7 @@ var data_config = {
     url_outlink: true,
     filter_menu_dropdown: false,
     sort_menu_dropdown: true,
-    filter_options: ["all", "open_access"],
+    //filter_options: ["all", "open_access"],
     
     show_context_oa_number: false,
     abstract_large: 1000,
