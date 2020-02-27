@@ -27,7 +27,7 @@ a {
     bottom: 0px;
     right: 0px;
     height: 100vh;
-  max-width: 100%;
+    max-width: 100%;
     /*text-transform: uppercase;*/ 
     padding: 0px;
     background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(0,0,0, 0.2)), url(./img/background-start-2.jpg); 
@@ -533,9 +533,10 @@ label.q-error, #input-container label.q-error, .timefield .error {
 }
 
 .waiting-box {
-    margin-top:15%;
-    max-width: 700px;
-    padding: 20px;
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    top: 40%;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -546,8 +547,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
 
 .waiting-title {
     color: #0047bb;
-    font-family: 'Josefin Sans', sans-serif; 
-    text-transform: uppercase;
+    font-family: 'Lato', sans-serif; 
     font-size: 18px;
 }
 .btn-group.open .dropdown-toggle, .dropdown-toggle {
@@ -741,7 +741,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
 .btn-group.open .dropdown-toggle, .open > .dropdown-toggle.btn-default:hover, .open > .dropdown-toggle.btn-default:focus, .open > .dropdown-toggle.btn-default:active, .search .btn:hover {
     -webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,.125);
     box-shadow: inset 0 0px 0px 
-    rgba(0,0,0,.125);
+        rgba(0,0,0,.125);
     background-color: #0047bb;
     color: white;
     text-decoration: none;
