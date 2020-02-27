@@ -39,10 +39,7 @@
                     </div>
                 </div>
                 
-                
-                <div id="filter-container">
-                    <p>Weitere Optionen:</p>
-                </div>
+                <div id="filter-container"></div>
 
                 <!--<label for="q">Suchbegriff:</label>-->
                 <div class="searchfield" style="max-width:600px; padding: 0px 30px 50px; margin: 0px auto;">
