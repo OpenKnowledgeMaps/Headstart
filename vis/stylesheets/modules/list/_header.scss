@@ -123,10 +123,9 @@
 @media screen and (max-width: 1130px) {
     #filter_container {
         display: block;
-        
+
         input {
             width: 230px;
-
         }
     }
 
@@ -154,7 +153,7 @@
         float: right;
         display: none;
     }
-    
+
     #sort {
         width: 150px;
     }
@@ -163,7 +162,7 @@
         margin-bottom: 0px;
         margin-right: 0px;
     }
-    
+
     #explorer_options {
         border-bottom: 2px solid #EAEAEE;
     }
@@ -182,10 +181,50 @@
 
 @if $skin == 'linkedcat' {
     #sort_container {
-        float: right;
+
     }
-    
+
     #sort {
         border-radius: 17px;
+        width: 200px;
+    }
+
+    #filter_container input {
+        width: 360px;
+    }
+
+    @media screen and (max-width: 1650px) {
+        #filter_container input {
+            width: 360px;
+        }
+    }
+
+    @media screen and (max-width: 1600px) {
+        #filter_container input {
+            width: 360px;
+        }
+    }
+
+    @media screen and (max-width: 1500px) {
+        #filter_container input {
+            width: 260px;
+        }
+    }
+
+    @media screen and (max-width: 1260px) {
+        #sort {
+            border-radius: 17px;
+            width: 160px;
+        }
+    }
+
+    @media screen and (max-width: 1130px) {
+        #filter_container {
+            display: block;
+
+            input {
+                width: 260px;
+            }
+        }
     }
 }

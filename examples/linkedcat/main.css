@@ -24,12 +24,10 @@ a {
 .bg-image-startpage {
     /*position: absolute;*/
     background-size: cover;
-    bottom: 0px;
-    right: 0px;
-    height: 100vh;
-    max-width: 100%;
+    background-attachment: fixed;
+    /*height: 100vh;*/
     /*text-transform: uppercase;*/ 
-    padding: 0px;
+    padding: 0 0 40px;
     background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(0,0,0, 0.2)), url(./img/background-start-2.jpg); 
     background-repeat: no-repeat;
     background-position: 100% 86%;
@@ -62,8 +60,6 @@ a {
     margin-bottom: 0px;
     background-color: transparent; 
     padding: 0px;
-    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
 }
 
 .shadow, .shadow2 {
@@ -167,22 +163,29 @@ a {
 
 .credits {
     text-transform: none; 
-    color: #f7f7f7; 
-    position: absolute; 
+    color: #f7f7f7;
+    display: inline-block;
+    /*position: absolute; 
     right: 0px;
-    bottom: 20px; 
+    bottom: 20px;*/
     font-size: 9px; 
     text-align: right;
+    float: right;
+    vertical-align: middle;
+
 }
 
 .credits2 {
     text-transform: none; 
     color: #f7f7f7; 
-    position: absolute; 
+    display: inline-block;
+    /*position: absolute; 
     left: 20px;
-    bottom: 20px; 
+    bottom: 20px;*/ 
     font-size: 9px; 
     text-align: left;
+    padding-left: 20px;
+    vertical-align: middle;
 }
 
 .divity {
@@ -520,26 +523,26 @@ label.q-error, #input-container label.q-error, .timefield .error {
 }
 
 .waiting-page-img {
-    position: absolute;
+    /*position: absolute;*/
     background-size: cover;
-    bottom: 0px;
+    background-attachment: fixed;
+    /*bottom: 0px;
     right: 0px;
     width: 100%;
-    height: 100%;
+    height: 100%;*/
     padding: 0px;
     background-image: linear-gradient(rgba(255,255,255, 1), rgba(255,255,255, 0.7)), url(./img/waiting-bg2.jpg); 
     background-repeat: no-repeat;
-    background-position: 100% 86%;
+    background-position: center center;
 }
 
 .waiting-box {
     position: absolute;
     left: 20%;
     right: 20%;
-    top: 40%;
+    top: 30%;
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
+    vertical-align: middle;
     font-size: 18px;
     font-family: 'Lato', sans-serif;
     color: #333;
@@ -548,7 +551,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
 .waiting-title {
     color: #0047bb;
     font-family: 'Lato', sans-serif; 
-    font-size: 18px;
+    font-size: 24px;
 }
 .btn-group.open .dropdown-toggle, .dropdown-toggle {
     overflow: hidden;
@@ -578,10 +581,6 @@ label.q-error, #input-container label.q-error, .timefield .error {
 }
 
 /*BROWSE PAGE*/
-
-.browse-page .bg-image-startpage {
-    background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)), url(./img/background-start-2.jpg);
-}
 
 .browse-description {
     max-width: 750px; 
