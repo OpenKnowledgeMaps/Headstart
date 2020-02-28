@@ -7,7 +7,7 @@ var author_name = "";
 var author_count = 0;
 var author_living_dates = "";
 var author_image_link = "";
-
+var has_options_link = false;
 var search_options;
 
 var chooseOptions = function () {
@@ -17,17 +17,19 @@ var chooseOptions = function () {
         case "keywords":
             options = options_linkedcat;
             service_url = data_config.server_url + "services/searchLinkedCat.php";
-            placeholder = "Stichwort eingeben...";
+            placeholder = " Bitte geben Sie ein Stichwort ein...";
             $('.keyword-btn').addClass('btn-enabled');
             $('#additional-information').html(additional_information.keywords);
+            has_options_link = true;
             break;
 
         case "authors":
             options = options_linkedcat_authors;
             service_url = data_config.server_url + "services/searchLinkedCatAuthorview.php";
-            placeholder = "Autor auswählen...";
+            placeholder = " Bitte wählen Sie einen Autor aus der Liste...";
             $('.author-btn').addClass('btn-enabled');
             $('#additional-information').html(additional_information.authors);
+            has_options_link = false;
             break;
 
         default:
@@ -35,7 +37,7 @@ var chooseOptions = function () {
             service_url = data_config.server_url + "services/searchLinkedCat.php";
     }
     
-    search_options.init("#filter-container", options, false);
+    search_options.init("#filter-container", options, has_options_link);
 
     options.dropdowns.forEach(function (entry) {
         search_options.select_multi('.dropdown_multi_' + entry.id, entry.name)

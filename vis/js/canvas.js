@@ -38,14 +38,15 @@ class Canvas {
         var subtitle_height = $("#subdiscipline_title").outerHeight(true);
 
         var toolbar_height = $("#toolbar").outerHeight(true) || 0;
+        var title_image_height = $("#title_image").outerHeight(true) || 0;
         const CHART_HEIGHT_CORRECTION = 15;
         const CHART_HEIGHT_CORRECTION_TOOLBAR = 15;
 
         // Set available_height and available_width
         if (parent_height === 0) {
-            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_height - toolbar_height;
+            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - Math.max(subtitle_height, title_image_height) - toolbar_height;
         } else {
-            this.available_height = $("#" + config.tag).height() - subtitle_height - toolbar_height;
+            this.available_height = $("#" + config.tag).height() - Math.max(subtitle_height, title_image_height) - toolbar_height;
         }
 
         this.available_height = this.available_height - ((toolbar_height > 0)?(CHART_HEIGHT_CORRECTION_TOOLBAR):(CHART_HEIGHT_CORRECTION));
@@ -327,7 +328,7 @@ class Canvas {
                 label= (config.is_streamgraph)?(config.localization[config.language].streamgraph_authors_label):(config.localization[config.language].overview_authors_label);
             }
             if (config.create_title_from_context_style === 'linkedcat') {
-                let maxTitleLength = 47 // This should probably make it's way to a more global config
+                let maxTitleLength = 115 // This should probably make it's way to a more global config
                 let compressedTitle = query_clean.length > maxTitleLength ? query_clean.slice(0, maxTitleLength - 3) + '...' : query_clean;
                 chart_title = label + ' <span id="search-term-unique" title="' + query_clean + '">' + compressedTitle + '</span>';
             } else {
@@ -552,13 +553,6 @@ class Canvas {
             today.setTime(today.getTime() + today.getTimezoneOffset()*60*1000 );
             from.setTime(from.getTime() + from.getTimezoneOffset()*60*1000 );
             to.setTime(to.getTime() + to.getTimezoneOffset()*60*1000 );
-
-            //TODO: quick fix for date issue in snapshots, needs to be fixed
-            if(this.paramExists(config.is_phantomjs)) {
-                    if (config.is_phantomjs) {
-                            return;
-                    }
-            }
 
             let default_from_date = (function(service) {
                 switch(service) {
@@ -862,7 +856,7 @@ class Canvas {
 
   dotdotdotAreaTitles() {
     const check = config.hasOwnProperty('nodot');
-    if ((check && config.nodot === null) || !check) {
+    if ((check && config.nodot === false) || !check) {
       d3.selectAll("#area_title_object").each(function() {
         let margin_top = parseInt(d3.select(this).select("#area_title>h2").style("margin-top"), 10);
         let margin_bottom = parseInt(d3.select(this).select("#area_title>h2").style("margin-bottom"), 10);

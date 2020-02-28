@@ -3,17 +3,8 @@ var options_linkedcat = {
         /*{id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
               , fields: [
                   {id: "overview", text: "Knowledge Map", selected:true}
-                  , {id: "timeline", text: "Zeitstrahl"}
+                  , {id: "timeline", text: "Streamgraph"}
               ]},*/
-        {id: "year_range", multiple: false, name: "Zeitraum", type: "dropdown"
-            , fields: [
-                {id: "any-time-years", text: "1847-1918"}
-                , {id: "user-defined", text: "Zeitraum", class: "user-defined",
-                    inputs: [
-                        {id: "from", label: "von: ", class: "time_input"}
-                        , {id: "to", label: "bis: ", class: "time_input"}
-                    ]}
-            ]},
         {id: "include_content_type", multiple: true, name: "Dokumentarten", type: "dropdown"
             , fields: [
                 {id: "Andere Abhandlungen", text: "Andere Abhandlungen", count:1460, selected:true}
@@ -34,6 +25,15 @@ var options_linkedcat = {
                 , {id: "Verzeichnis", text: "Verzeichnis", count:43, selected:true}
                 , {id: "Wörterbuch", text: "Wörterbuch", count:15, selected:true}
               ]},
+          {id: "year_range", multiple: false, name: "Zeitraum", type: "dropdown"
+            , fields: [
+                {id: "any-time-years", text: "1847 - 1918"}
+                , {id: "user-defined", text: "Zeitraum eingrenzen", class: "user-defined",
+                    inputs: [
+                        {id: "from", label: "von: ", class: "time_input"}
+                        , {id: "to", label: "bis: ", class: "time_input"}
+                    ]}
+            ]},
           
     ]
 }
@@ -43,7 +43,7 @@ var options_linkedcat_authors = {
         /*{id: "vis_type", multiple: false, name: "Visualisierungstypen", type: "dropdown"
             , fields: [
                 {id: "overview", text: "Knowledge Map", selected:true}
-                , {id: "timeline", text: "Zeitstrahl"}
+                , {id: "timeline", text: "Streamgraph"}
             ]},*/
     ]
 }
@@ -66,9 +66,10 @@ var SearchOptions = {
                     .attr("class", "divity")
 
             div.append('a')
-                    .attr("href", "#")
-                    .attr("class", "frontend-btn")
-                    .text("Weitere Optionen")
+                .attr("class", "pointer refine-search")
+                .text("Weitere Optionen ")
+                .append('span')
+                .attr("class", "fas fa-angle-down underline")
         }
 
         var filters = d3.select(tag).append('div')
@@ -154,23 +155,9 @@ var SearchOptions = {
                 })
             }
         })
-        /*filters.append("div")
-         .attr("class", "submit-btn")
-         .append("a")
-         .attr("id", "submit-btn")
-         .attr("href", "#")
-         .attr("class", "frontend-btn")
-         .style("vertical-align", "middle")
-         .text("Submit");
-
-         /*d3.select(tag).append("div")
-         .attr("id", "stats")
-         .attr("class", "divity")
-         .html("<p>Loading...</p>")*/
 
         $("#filter-btn").click(function () {
             $("#filters").toggleClass("frontend-hidden");
-            //$("#stats").toggleClass("frontend-hidden");
 
             var closed = $("#filters").css("display") == "none";
 

@@ -239,8 +239,11 @@ list.fit_list_height = function() {
         });
         paper_list_avail_height = available_height - $("#explorer_header").outerHeight(true);
     } else {
+        let title_height = $("#subdiscipline_title").outerHeight(true);
+        let title_image_height = $("#title_image").outerHeight(true) || 0;
+        
         paper_list_avail_height = 
-                $("#subdiscipline_title").outerHeight(true)
+                Math.max(title_height, title_image_height)
                     + $("#headstart-chart").outerHeight(true)
                     - $("#show_hide_button").outerHeight(true) 
                     - $("#explorer_options").outerHeight(true)
@@ -432,6 +435,9 @@ list.filterListByKeyword = function(keyword) {
     
     d3.selectAll("#list_holder")
         .filter(function(x) {
+            if (typeof x.subject_orig === "undefined") {
+                x.subject_orig = "";
+            }
             let keywords = x.subject_orig.split("; ");
             let contains_keyword = keywords.includes(keyword);
             return contains_keyword
@@ -1139,7 +1145,11 @@ list.setBacklink = function(d) {
                                 .attr("class", "underline")
                                 .text(function() {
                                     if(config.is_streamgraph) {
-                                        return config.localization[config.language].backlink_list_streamgraph;
+                                        if(mediator.current_stream === null) {
+                                            return config.localization[config.language].backlink_list_streamgraph;
+                                        } else {
+                                            return config.localization[config.language].backlink_list_streamgraph_stream_selected;
+                                        }
                                     } else {
                                         return config.localization[config.language].backlink_list;
                                     }

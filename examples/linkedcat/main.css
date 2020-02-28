@@ -1,5 +1,6 @@
 * {
     box-sizing: content-box;
+    transition: 0.03s ease-in;
 }
 
 body {
@@ -7,17 +8,27 @@ body {
     padding: 0px;
     width:100%; 
     color: #333;
+    font-size: 16px;
     /*background-color: #515755;*/
 }
 
+a {
+    color: #0047bb;
+    text-decoration: underline;
+}
+
+.page img {
+    width: 100%;
+}
+
 .bg-image-startpage {
-    position: absolute;
+    /*position: absolute;*/
     background-size: cover;
     bottom: 0px;
     right: 0px;
-    width: 100%;
-    height: 100%;
-    text-transform: uppercase; 
+    height: 100vh;
+    max-width: 100%;
+    /*text-transform: uppercase;*/ 
     padding: 0px;
     background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(0,0,0, 0.2)), url(./img/background-start-2.jpg); 
     background-repeat: no-repeat;
@@ -35,27 +46,27 @@ body {
     font-family: 'Josefin Sans', sans-serif;
     color: white; 
     text-shadow:1px 1px 10px black; 
-    font-size: 42px; 
-    margin-top: 100px;
+    font-size: 42px;
     line-height: 120%;
     font-weight: 700;
+    max-width: 1100px;
+    margin: 100px auto 0;
 }
 
 .search {
     /*position: relative; margin: 20% auto 0;*/ 
     text-transform: none; 
     max-width:600px; 
-    position: absolute;
-    top: 30%;
-    right: 0;
-    left:0;
     margin-right: auto;
     margin-left: auto;
+    margin-bottom: 0px;
     background-color: transparent; 
-    padding: 20px;
+    padding: 0px;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
 }
 
-.shadow {
+.shadow, .shadow2 {
     -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
 }
@@ -78,13 +89,8 @@ body {
     padding: 20px 0;
     border-radius: 17px; 
     font-size: 14px;
-    background-image: linear-gradient(rgba(40,86,163,1), rgba(40,86,163,1)); 
+    background-image: linear-gradient(rgba(0,71,187,1), rgba(0,71,187,1)); 
     color: white; width:100%; padding: 10px 3px;
-}
-
-.radio-button {
-    margin-left: 30px;
-    display: block;
 }
 
 .checkbox-inline + .checkbox-inline, .radio-inline + .radio-inline {
@@ -96,7 +102,7 @@ body {
     background-image: linear-gradient(rgba(28,59,112,1), rgba(28,59,112,1));
     -webkit-box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 0px 0px rgba(0,0,0,0.12), 0 0px 0px 0 rgba(0,0,0,0.2);
     box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 0px 0px rgba(0,0,0,0.12), 0 0px 0px 0 rgba(0,0,0,0.2);
-     -moz-box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 0px 0px rgba(0,0,0,0.12), 0 0px 0px 0 rgba(0,0,0,0.2);
+    -moz-box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 0px 0px rgba(0,0,0,0.12), 0 0px 0px 0 rgba(0,0,0,0.2);
 }
 
 .author-btn, .keyword-btn {
@@ -110,7 +116,7 @@ body {
 }
 
 .btn-enabled {
-    color: #2856a3;
+    color: #0047bb;
     background-color: white;
     opacity: 1;
 }
@@ -125,28 +131,55 @@ body {
     -webkit-border-radius: 17px;
     -moz-border-radius: 17px;
     border-radius: 17px;
-    color: #2856a3;
-    font-size: 10px;
+    color: #0047bb;
+    font-size: 12px;
     background: #ffffff;
     padding: 10px;
     text-decoration: none;
-    border: 1px solid #2856a3;
+    border: 1px solid #0047bb;
     width: 140px;
 }
 
+.btn-group > .btn {
+    position: relative;
+    float: none;
+}
+
+.btn-group {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.search .btn {
+    width: 240px;
+    padding: 10px 0px;
+    font-family: 'Lato', sans-serif;
+}
+
 .search .inputfield {
-    height: 32px;  
+    height: 37px;  
     width: 100%;
-    font-size: 12px;
+    font-size: 14px;
     color: #333;
     margin-top: 10px;
+    border: 1px solid #333;
 }
 
 .credits {
     text-transform: none; 
     color: #f7f7f7; 
     position: absolute; 
-    right: 20px;
+    right: 0px;
+    bottom: 20px; 
+    font-size: 9px; 
+    text-align: right;
+}
+
+.credits2 {
+    text-transform: none; 
+    color: #f7f7f7; 
+    position: absolute; 
+    left: 20px;
     bottom: 20px; 
     font-size: 9px; 
     text-align: left;
@@ -175,7 +208,7 @@ label {
     font-family: 'Josefin Sans', sans-serif; 
     text-transform: uppercase; 
     border-radius: 17px; 
-    color: #2856a3 !important; 
+    color: #0047bb !important; 
     text-decoration: none;
     padding: 10px 30px 0;
 }
@@ -186,8 +219,17 @@ label {
     margin-top: 5px;
 }
 
+.refine-search {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
 .time_input {
-    max-width: 100px;
+    max-width: 240px;
 }
 
 #filters {
@@ -209,7 +251,7 @@ label {
 }
 
 .frontend-btn:hover, .frontend-btn:active, .frontend-btn:focus {
-    background: #2856a3;
+    background: #0047bb;
     color: white;
     text-decoration: none;
 }
@@ -243,36 +285,146 @@ label {
 }
 
 .caret {
-    border-left: 1px solid #AAA;
     border-radius: 0px 4px 4px 0px;
     background: #CCC linear-gradient(to top, #CCC 0%, #EEE 60%) repeat scroll 0% 0%;
 }
 
 .multiselect {
     background-color: #fff;
-    /*background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eee), color-stop(0.5, #fff));
-    background-image: -webkit-linear-gradient(center bottom, #eee 0%, #fff 50%);
-    background-image: -moz-linear-gradient(center bottom, #eee 0%, #fff 50%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#ffffff', endColorstr = '#eeeeee', GradientType = 0);
-    background-image: linear-gradient(to top, #eee 0%, #fff 50%);*/
     height: 18px;
+}
+
+.createdby {
+    font-family: 'Lato', sans-serif;
+    margin: 10px; 
+    font-size: 12px; 
+    padding-left: 20px;
+}
+
+/*radio Button transformed*/
+/* The container */
+.radio-button {
+    display: inline-block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #333;
+    font-size: 16px;
+    width: 160px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 17px;
+}
+
+/* Hide the browser's default radio button */
+.radio-button input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+    position: absolute;
+    top: 10px;
+    left: 16px;
+    height: 22px;
+    width: 22px;
+    background-color: #eee;
+    border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio-button:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio-button input:checked ~ .checkmark {
+    background-color: #0047bb;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio-button input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio-button .checkmark:after {
+    top: 7px;
+    left: 7px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
 }
 
 .radio {
     text-transform: none;
 }
 
-.dropdown-menu > .active > a, .dropdown-menu > .active > a:focus, .dropdown-menu > .active > a:hover {
-    background-color: #2856a3;
+.checkbox, .radio {
+    font-family: 'Lato', sans-serif;
 }
 
+.popover-selection {
+    color: #333;
+    font-family: 'Lato', sans-serif;
+    text-transform: none;
+    margin-left: 42px;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.info-btn {
+    cursor: help;
+    margin-left: 10px;
+    font-size: 11px;
+    text-decoration: underline;
+}
+
+.info-btn2 {
+    cursor: help;
+    color: #0047bb;
+    text-decoration: underline;
+}
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:focus, .dropdown-menu > .active > a:hover {
+    background-color: #0047bb;
+}
+
+.dropdown-menu {
+    min-width: 240px;
+}
+
+.multiselect-container > li > a > label { 
+    line-height: 30px;
+}
+
+.radio input[type="radio"], .checkbox input[type="checkbox"] {
+    position: inherit;
+    margin-right: 10px;
+}
 .btn-group {
     margin-right: 10px;
 }
 
 .ui-widget-header {
-    border: 1px solid #2856a3;
-    background-color: #2856a3; 
+    border: 1px solid #0047bb;
+    background-color: #0047bb; 
 }
 
 .ui-progressbar {
@@ -298,14 +450,15 @@ label.q-error, #input-container label.q-error, .timefield .error {
 }
 
 #include_content_type-error {
-    background-color: red;
-    color: white;
+    /*background-color: transparent;*/
+    color: red;
     font-family: 'Lato', sans-serif;
     font-size: 12px;
     position: absolute;
-    top: 200px;
-    border-radius: 5px;
+    top: 215px;
+    border-radius: 0px;
     margin: 0px 20px;
+    padding: 3px;
 }
 
 #input-container label.q-error {
@@ -331,8 +484,12 @@ label.q-error, #input-container label.q-error, .timefield .error {
     font-family: 'Lato', sans-serif;
 }
 
-.timefield #from, .timefield #to {
+.timefield #from {
     margin-left: 8px;
+}
+
+.timefield #to {
+    margin-left: 13px;
 }
 
 .selectrange {
@@ -376,9 +533,10 @@ label.q-error, #input-container label.q-error, .timefield .error {
 }
 
 .waiting-box {
-    margin-top:15%;
-    max-width: 700px;
-    padding: 20px;
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    top: 40%;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -388,9 +546,8 @@ label.q-error, #input-container label.q-error, .timefield .error {
 }
 
 .waiting-title {
-    color: #2856a3;
-    font-family: 'Josefin Sans', sans-serif; 
-    text-transform: uppercase;
+    color: #0047bb;
+    font-family: 'Lato', sans-serif; 
     font-size: 18px;
 }
 .btn-group.open .dropdown-toggle, .dropdown-toggle {
@@ -401,43 +558,36 @@ label.q-error, #input-container label.q-error, .timefield .error {
     display: none;
 }
 
-.browse {
-    /*position: absolute; 
-    bottom: 20px; 
-    right: 20px; */
-    max-width: 300px;
-    background-image: none;
-    background: rgba(0, 0, 0, 0.3);
-    border: 2px solid white;
-}
-
-.browse:hover {
-    border: 2px solid rgba(28,59,112,1);
+/*ICONS*/
+.fa-info-circle {
+    font-size: 12px;
+    color: #818181;
 }
 
 /*SEARCH BOX*/
 .additional-information p {
     max-width:600px; 
-    padding: 30px 30px 0px;
+    padding: 36px 30px 10px;
+    font-size: 16px;
+}
+
+.autocomplete-suggestion {
+    line-height: 40px !important;
+    font-size: 14px !important;
+    padding-left: 20px !important;
 }
 
 /*BROWSE PAGE*/
-/*.browse-page .bg-image-startpage {
-    position: relative;
-    background-repeat: repeat-y;
-    background-position: top;
-    background-size: auto;
-}*/
 
-.browse-page .bg-image-startpage, .ueber-page .bg-image-startpage {
-    background-image: linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255)), url(./img/background-start-2.jpg);
+.browse-page .bg-image-startpage {
+    background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)), url(./img/background-start-2.jpg);
 }
 
 .browse-description {
     max-width: 750px; 
     margin: 0px auto; 
     padding: 2% 0;
-    background-color: #2856a3;
+    background-color: #0047bb;
     opacity: 0.8;
 }
 
@@ -452,6 +602,148 @@ label.q-error, #input-container label.q-error, .timefield .error {
 .browse-description h3 {
     font-family: 'Josefin Sans', sans-serif;
     color: white;
+    text-transform: uppercase;
     /*text-shadow:1px 1px 10px black;*/
     text-align: center;
+}
+
+.page-description {
+    background-color: white;
+    padding: 40px;
+}
+
+/*FAQs page*/
+.question {
+    padding: 40px 0px 20px; 
+    margin: 0px;
+    /*font-family: 'Josefin Sans', sans-serif;*/
+    font-size: 24px;
+    line-height: 150%;;
+}
+
+.paragraph-style li {
+    margin-left: 40px;
+}
+
+.page-section {
+    max-width:750px; 
+    margin: 0px auto 40px; 
+    font-size: 16px;
+}
+
+/*About Page*/
+.headline4 {
+    text-transform: uppercase;
+    color: #0047bb;
+}
+
+.circle {
+    border: 1px solid #0047bb;
+    border-radius: 90px;
+    width: 180px;
+    height: 180px;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20px;
+    color: #0047bb;
+    font-family: 'Josefin Sans';
+}
+
+.page-headline {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 42px;
+    margin-top: 50px;
+}
+
+.page {
+    max-width: 1200px;
+    margin: 0px auto;
+    padding-top: 90px;
+}
+
+.paragraph-style {
+    padding: 0px 0 20px;
+    margin: 0;
+    font-size: 16px;
+}
+
+.example {
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+.abstand {
+    margin-bottom: 10px;
+}
+
+.partner-logo {
+    max-width:150px;
+    padding-right: 40px;
+}
+
+.browse {
+    display: block;
+    width: 200px;
+    background: white;
+    border: 1px solid #0047bb;
+    color: #0047bb;
+    text-align: center;
+    margin: 20px 0 0 0;
+    text-decoration: none;
+}
+
+.browse:hover,  .browse:active, .browse:focus {
+    background-color: #0047bb;
+    color: white;
+    text-decoration: none;
+}
+
+.stats {
+    margin: 0px auto; 
+    padding: 20px; 
+    text-align: center;
+}
+
+.stats div {
+    display: inline-block; 
+    text-align:center; 
+    padding: 0px 40px;
+}
+
+.img1 {
+    display: inline-block; 
+    width:49%; 
+    vertical-align:top;
+}
+
+.img2 {
+    display: inline-block; 
+    width: 50%; 
+    vertical-align: middle;
+}
+
+.img2 img {
+    max-width: 500px;
+}
+
+.img3 {
+    display: inline-block; 
+    width:40%; 
+    vertical-align: middle;
+}
+
+.refine-search {
+    text-transform: none;
+    font-family: 'Lato', sans-serif;
+}
+
+.btn-group.open .dropdown-toggle, .open > .dropdown-toggle.btn-default:hover, .open > .dropdown-toggle.btn-default:focus, .open > .dropdown-toggle.btn-default:active, .search .btn:hover {
+    -webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,.125);
+    box-shadow: inset 0 0px 0px 
+        rgba(0,0,0,.125);
+    background-color: #0047bb;
+    color: white;
+    text-decoration: none;
+    border-color: #0047bb;
 }
