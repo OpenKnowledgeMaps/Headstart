@@ -58,7 +58,7 @@ header #logo a:hover {
     font-family: 'Josefin Sans', sans-serif;
     font-weight: 700;
     color: #0047bb;
-    vertical-align: bottom;
+    vertical-align: middle;
     display: inline-block;
     margin-bottom: 0px;
     margin-left: 20px;
@@ -149,7 +149,7 @@ header #logo a:hover {
 }
 
 .fa-bars {
-    padding: 3px 6px 8px;
+    padding: 6px 8px 8px;
     font-size: 18px;
     border: 1px solid #00122f;
     border-radius: 5px;

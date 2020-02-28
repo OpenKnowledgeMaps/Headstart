@@ -24,13 +24,13 @@ $date = new DateTime();
                 <div class="img1">
                     <img class="abstand" src="./img/math-nat-klasse.jpg">
                     <span class="example">
-                        Radierung: Mitglieder der math.-nat.-Klasse der kais. Akademie der Wissenschaften zu Wien, 1853
+                        Radierung: Mitglieder der math.-nat.-Klasse, 1853
                     </span>
                 </div>
                 <div class="img1">
                     <img class="abstand" src="./img/phil-hist-klasse.jpg">
                     <span class="example">
-                        Radierung: Mitglieder der phil.-histor.-Klasse der kais. Akademie der Wissenschaften zu Wien, 1853
+                        Radierung: Mitglieder der phil.-histor.-Klasse, 1853
                     </span>
                 </div>
 
@@ -79,12 +79,12 @@ $date = new DateTime();
 
                 <div class="page-section">
                     <h4 class="question">Entdecken Sie die Sitzungsberichte der ÖAW aus den Jahren 1847-1918</h4>
-                    <p style="margin-bottom: 40px;">Sie können Visualisierungen in der Stichwort / Autorensuche erstellen. In der Stichwortsuche werden Ihnen die 100 <span class="info-btn2" data-toggle="popover" data-trigger="hover" data-content='In diesem Projekt verwenden wir das Relevanz-Ranking von Solr. Solr verwendet hauptsächlich die Textähnlichkeit zwischen dem Suchbegriff und den Dokument-Metadaten, um die Relevanz zu bestimmen. . Mehr Infos dazu finden Sie in den FAQs.'>relevantesten Dokumente<i class="fas fa-info-circle"></i></span> passend zu ihrem Stichwort in einer Knowledge Map angezeigt. Alternativ können Sie alle Dokumente zu einem Stichwort in einem Streamgraph durchsuchen.<br>
+                    <p style="margin-bottom: 40px;">Sie können Visualisierungen in der Stichwort / Autorensuche erstellen. In der Stichwortsuche werden Ihnen die 100 <span class="info-btn2" data-toggle="popover" data-trigger="hover" data-content='In diesem Projekt verwenden wir das Relevanz-Ranking von Solr. Solr verwendet hauptsächlich die Textähnlichkeit zwischen dem Suchbegriff und den Dokument-Metadaten, um die Relevanz zu bestimmen. Mehr Infos dazu finden Sie in den FAQs.'>relevantesten Dokumente<i class="fas fa-info-circle"></i></span> passend zu ihrem Stichwort in einer Knowledge Map angezeigt. Alternativ können Sie alle Dokumente zu einem Stichwort in einem Streamgraph durchsuchen.<br>
                         <a class="browse search-btn" href="index">
                             <i class="fas fa-search"></i> Suche
                         </a>
                     </p>
-                    <p style="margin-bottom: 40px;">Außerdem können Sie Knowledge Maps zu Disziplinen und Themen entdecken. Dabei handelt es sich um Knowledge Maps für die Hauptklassen der Basisklassifikation (BK). BK ist ein hierarchisches Klassifikationssystem, das speziell für wissenschaftliche Arbeiten entwickelt wurde. In diesen Knowledge Maps werden alle Dokumente angezeigt die von Bibliothekar*innen der jeweiligen Hauptklasse zugeordnet wurden.<br>
+                    <p style="margin-bottom: 40px;">Außerdem können Sie Knowledge Maps zu Disziplinen und Themen entdecken. Dabei handelt es sich um Knowledge Maps für die Hauptklassen der Basisklassifikation (BK). BK ist ein hierarchisches Klassifikationssystem, das speziell für wissenschaftliche Arbeiten entwickelt wurde. In diesen Knowledge Maps werden jene Dokumente angezeigt, die von Bibliothekar*innen der jeweiligen Hauptklasse zugeordnet wurden.<br>
                         <a class="browse search-btn" href="browse">
                             Disziplinen / Themen
                         </a>
@@ -96,9 +96,9 @@ $date = new DateTime();
                     <p class="paragraph-style">Das Projekt „LinkedCat+“ wurde von der Österreichischen Akademie der Wissenschaften (<a target="_blank" href="https://www.oeaw.ac.at">ÖAW</a>) im Rahmen des Innovationsfonds gefördert und erstreckte sich über einen Zeitraum von April 2018 bis März 2020. LinkedCat+ ist eine Kooperation zwischen Bibliothek, Archiv und Sammlungen (<a target="_blank" href="https://www.oeaw.ac.at/basis/">BASI:IS</a>), Austrian Centre for Digital Humanities and Cultural Heritage (<a target="_blank" href="https://www.oeaw.ac.at/acdh/">ACDH</a>) und Open Knowledge Maps - Verein zur Förderung der Sichtbarkeit wissenschaftlichen Wissens (<a target="_blank" href="https://openknowledgemaps.org/">OKMaps</a>).
                     </p>
                     <p>
-                        <a target="_blank" href="https://www.oeaw.ac.at"><img class="partner-logo" src="./img/oeaw-logo-blau.png"></a>
+                        <a target="_blank" href="https://www.oeaw.ac.at"><img class="partner-logo" src="./img/oeaw-logo.png"></a>
                         <a target="_blank" href="https://www.oeaw.ac.at/acdh/"><img class="partner-logo" src="./img/acdh-logo.png"></a>
-                        <a target="_blank" href="https://openknowledgemaps.org/"><img class="partner-logo" src="./img/okmaps-logo-web-grau.png"></a>
+                        <a target="_blank" href="https://openknowledgemaps.org/"><img class="partner-logo" src="./img/okmaps-logo-web.png"></a>
                     </p>
                 </div>
             </div>
