@@ -9,8 +9,8 @@ $date = new DateTime();
         <?php include('head_standard.php') ?>
         <link type="text/css" rel="stylesheet" href="browse.css">
     </head>
-    <body class="browse-page">
-        <div class="bg-image-startpage">
+    <body class="browse-page bg-image-startpage">
+        <div>
             <header>
                 <?php include('menu.php'); ?>
             </header>
@@ -82,7 +82,7 @@ $date = new DateTime();
                 if (map_params.bkl_level === "top") {
                     return map_params.q;
                 } else {
-                    return map_params.bkl_top_caption + " -> " + map_params.q;
+                    return map_params.bkl_top_caption + " &#10145; " + map_params.q;
                 }
             }
 
