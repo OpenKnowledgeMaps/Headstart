@@ -137,17 +137,23 @@ header #logo a:hover {
     cursor: pointer;
     font-family: 'Josefin Sans', sans-serif;
     font-size: 18px;
-    margin: 10px 0px 10px 20px;
+    margin: 0px 0px 0px 20px;
     text-decoration: none;
     text-transform: uppercase;
-    border: 1px solid #00122f;
-    padding: 5px 10px;
     vertical-align: middle;
     text-align:left;
     background-color: none;
+    color: #00122f;
     border-radius: 5px;
     -moz-border-radius: 5px;
-    color: #00122f;
+}
+
+.fa-bars {
+    padding: 3px 6px 8px;
+    font-size: 18px;
+    border: 1px solid #00122f;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
 }
 
 .topheader {
@@ -202,7 +208,7 @@ header #logo a:hover {
     .nav_top {
         display:none;
     }
-    
+
     header {
         padding: 12px 0px;
     }

@@ -5,8 +5,8 @@
         <?php include('head_standard.php') ?>
     </head>
 
-    <body class="waiting-page">
-        <div class="waiting-page-img">
+    <body class="waiting-page waiting-page-img">
+        <div>
         <div class="waiting-box">
             <div>
                 <p class="waiting-title"><span id="h-label"></span> über <span id="search_term"></span> wird gerade erstellt</p>
