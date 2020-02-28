@@ -243,13 +243,13 @@ text {
     .scale-toolbar .dropdown {
         display: inline-block;
     }
-    
+
     #curr-scale-explanation {
         padding: 0 0 0 10px;
     }
 }
 @if $skin == 'cris_vis' {
-    
+
     #credit_embed {
         a {
             color: $dark-blue;
@@ -267,7 +267,7 @@ text {
         width: 240px;
         font-size: 12px;
     }
-    
+
     .scale-toolbar .dropdown {
         display: inline-block;
     }
@@ -284,6 +284,14 @@ text {
     @media screen and (max-width: 1250px) {
         #headstart-chart {
             margin-left: 0px;
+        }
+    }
+}
+
+@if $skin == 'linkedcat' {
+    @media screen and (max-width: 1300px) {
+        #filter_params, #sort {
+            font-size: 12px;
         }
     }
 }
