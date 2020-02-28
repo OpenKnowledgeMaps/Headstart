@@ -9,17 +9,17 @@
         <li><a href="index"><i class="fas fa-search"></i> Suche</a></li>
         <li><a href="browse">Disziplinen / Themen</a></li>
         <li><a href="ueber">Über das Projekt</a></li>
-        <li><a href="ueber#faqs">FAQs</a></li>
+        <li><a href="faqs">FAQs</a></li>
     </ul>
 </div>
 
 <div class="icon-menu">
-    <span class="awesome">&#xf0c9;</span>
+    <span class="awesome"><i class="fas fa-bars"></i></span>
 </div>
 
-<div class="imglogo">
+<!--<div class="imglogo">
     <a href="index"><img src="https://www.oeaw.ac.at/typo3conf/ext/oeaw_redesign/Resources/Public/Icons/logo-kurz.png"></a>
-</div>
+</div>-->
 
 <p class="description">
     <a href="index">LinkedCat+</a>
@@ -29,7 +29,7 @@
     <li><a href="index"><i class="fas fa-search"></i> Suche</a></li>
     <li><a href="browse">Disziplinen / Themen</a></li>
     <li><a href="ueber">Über das Projekt</a></li>
-    <li><a href="ueber#faqs">FAQs</a></li>
+    <li><a href="faqs">FAQs</a></li>
 </ul>
 </div>
 <script type="text/javascript">

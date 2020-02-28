@@ -7,30 +7,34 @@ include 'config.php';
                 <?php include('head_headstart.php') ?>
     </head>
 
-    <body style="margin:0px; padding:0px">
-        <header>
-                <?php 
-                    $IS_HEADSTART = true;
-                    
-                    include('menu.php'); 
-                ?>
+    <body style="margin:0px; padding:0px" class="vis-page">
+        <?php if (!isset($_GET['embed']) || !$_GET['embed'] === 'true'): ?>
+            <header>
+                    <?php
+                        $IS_HEADSTART = true;
+                        include('menu.php');
+                    ?>
             </header>
-        <div class="topheader"></div>
+        
+            <div class="topheader"></div>
+        <?php endif; ?>
         <div id="visualization"></div>
         <script type="text/javascript" src="data-config_<?php echo $_GET['service'] ?>.js"></script>
         <script type="text/javascript" src="search_options.js"></script>
         <script type="text/javascript" src="lib/Chart.Streamgraph.S.js"></script>
         <script>
+            
+            let common_text = "mmdfmdsfmn"
                 let intro_authors_overview = {
                     title: "Was ist das?",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp">Erklärungstext Autoren Knowledge Map</p>'
+                    <p class="wtp">Erklärungstext Autoren Knowledge Map' + common_text + '</p>'
                 }
                 
                 let intro_authors_timeline = {
                     title: "Was ist das?",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp">Erklärungstext Autoren Zeitstrahl</p>'
+                    <p class="wtp">Erklärungstext Autoren Streamgraph</p>'
                 }
                 
                 let intro_keywords_overview = {
@@ -42,7 +46,7 @@ include 'config.php';
                 let intro_keywords_timeline = {
                     title: "Was ist das?",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp">Erklärungstext Schlagwörter Zeitstrahl</p>'
+                    <p class="wtp">Erklärungstext Schlagwörter Streamgraph</p>'
                 }
                 
                 let intro_browseview = {
@@ -65,7 +69,7 @@ include 'config.php';
                 }   
                 if(<?php echo json_encode($_GET['visualization_type']) ?> === "timeline") {
                     data_config.is_streamgraph = true;
-                    data_config.embed_modal = false;
+                    //data_config.embed_modal = false;
                     data_config.show_area = false;
                     
                     if(<?php echo json_encode($_GET['visualization_mode']) ?> === "authors") {
@@ -82,13 +86,20 @@ include 'config.php';
                         data_config.intro = intro_keywords_overview;
                     }
                 }
+                <?php if (isset($_GET['embed']) && $_GET['embed'] === 'true'): ?>
+                    data_config.credit_embed = true;
+                    data_config.embed_modal = false;
+                <?php endif; ?>
         </script>
         <script type="text/javascript" src="<?php echo $HEADSTART_PATH; ?>dist/headstart.js"></script>
         <link type="text/css" rel="stylesheet" href="<?php echo $HEADSTART_PATH; ?>dist/headstart.css"></link>
         <script type="text/javascript">
             headstart.start();
         </script>
-         <div class="createdby" style="margin: 10px; font-size: 12px;">Diese Suche wurde mit <a href="http://github.com/pkraker/Headstart" target="_blank ">Headstart</a> realisiert. Alle Daten stammen aus LinkedCat+.
+        
+        <?php if (!isset($_GET['embed']) || !$_GET['embed'] === 'true'): ?>
+        <div class="createdby" style="margin: 10px; font-size: 12px;">Diese Visualisierung wurde mit der Open Source Software <a href="http://github.com/pkraker/Headstart" target="_blank ">Head Start</a> von <a href="https://openknowledgemaps.org" target="_blank">Open Knowledge Maps</a> realisiert. Alle Daten stammen aus LinkedCat+.
+        <?php endif; ?>
         </div>
     </body>
 </html>

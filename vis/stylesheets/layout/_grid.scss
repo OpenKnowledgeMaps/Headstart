@@ -36,3 +36,9 @@
         width: 29%;
     }
 }
+
+@if $skin == 'linkedcat' {
+    .vis-col {
+        padding-top: 10px;
+    }
+}

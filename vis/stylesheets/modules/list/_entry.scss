@@ -178,7 +178,7 @@
     padding-left: 0px;
     color: $list_abstract;
     font-weight: $fontweight400;
-    
+
     em {
         font-weight: $fontweight400;
         font-style: normal;
@@ -211,7 +211,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 12px;
-    
+
     a {
         color: #f29e00;
         text-decoration: none;
@@ -232,9 +232,9 @@
 }
 
 .preview_image {
-     max-width: 82%;
-     padding: 3%;
-     background-color: #eff3f4;
+    max-width: 82%;
+    padding: 3%;
+    background-color: #eff3f4;
 }
 
 .preview_text, .preview_thumbnail {
@@ -260,9 +260,9 @@
     padding:5px;
     border-radius: 5px;
     -moz-border-radius: 5px;
-   font-weight: 300;
-   display: block;
-   text-align: center;
+    font-weight: 300;
+    display: block;
+    text-align: center;
 }
 
 .tryout-button:hover, .tryout-button:active, .tryout-button:focus {
@@ -498,7 +498,6 @@ img#preview_page {
         padding-bottom: 15px;
         text-align: right;
 
-
         h4  {
             margin-top: 30px;
             text-align: left !important;
@@ -648,4 +647,55 @@ img#preview_page {
         display: block;
         margin-bottom: 10px;
     }
+
+    .list_metadata {
+
+        .list_title {
+            font-weight: normal;
+            font-size: 16px;
+        }
+
+        .list_details, .doi_outlink {
+            font-size: 14px;
+        }
+
+        .list_links a.oa-link {
+            border-radius: 17px;
+            padding: 5px 7px;
+        }
+    }
+
+    div#preview_image {
+        display: none;
+    }
+
+    #list_area, #list_keywords, #list_basic_classification, #list_ddc, #list_abstract {
+        font-size: 14px;
+    }
+
+    .backlink-list {
+        margin-left: 15px;
+        margin-top: 15px;
+        font-size: 12px;
+        cursor: pointer;
+
+        a {
+            /*border-bottom: 1px solid $medium-blue;*/
+            color: $medium-blue;
+            display: block;
+            width: 250px;
+            border: 1px solid $medium-blue;
+            color: $medium-blue;
+            text-align: center;
+            margin: 20px 0 0 0;
+            text-decoration: none;
+            border-radius: 17px;
+            padding: 5px 3px;
+
+            &:hover {
+                border: 1px solid $medium-blue;
+            }
+        }
+    }
+
 }

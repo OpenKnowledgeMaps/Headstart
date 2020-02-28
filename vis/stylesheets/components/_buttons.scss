@@ -100,3 +100,16 @@ img#close-button {
         bottom: 0px;
     }
 }
+
+@if ($skin == "linkedcat") {
+    
+    .searchfield-icon {
+        z-index: 9;
+    }
+     
+    #modals .btn {
+        font-size: 13px;
+        width: 38px;
+        height: 38px;
+    }
+}
