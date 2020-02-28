@@ -308,7 +308,8 @@ var config = {
             relevance: "Relevanz",
             link: "Link",
             embed_button_text: 'Kopieren',
-            embed_body_text: 'Sie können diesen Code verwenden, um die Visualisierung auf anderen Seiten einzubetten.',    
+            embed_body_text: 'Sie können diesen Code verwenden, um die Visualisierung auf anderen Seiten einzubetten.',
+            pdf_load_text: "Dieser Vorgang kann meherere Minuten dauern, da die gescannten Texte sehr umfangreich sein können. Bitte haben Sie etwas Geduld.",
         },
         eng_plos: {
             loading: "Loading...",
