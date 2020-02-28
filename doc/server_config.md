@@ -49,6 +49,9 @@ Make sure you have the following packages installed:
   * forcats
 
 * Node.js 10.17+ with module puppeteer installed, if you want to use the snapshot feature
+  * Depending on the operating system, manual installation of additional dependencies for the chromium renderer are required. Known dependencies under Ubuntu 18.04 are `libasound2 libatk1.0 libatk-bridge2.0 libgtk-3-dev`
+  * Under Ubuntu 18.04 the installation of major language character sets for chromium is recommended with `apt-get install -y fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf --no-install-recommends`
+  * depending on the environment a separate node-installation with puppeteer is required, that has execution rights for the webserver/www-data user
 
 ## Configuration
 
