@@ -80,8 +80,9 @@ get_papers <- function(query, params, limit=100) {
   metadata$bkl_caption = if (!is.null(search_res$bkl_caption)) search_res$bkl_caption else ""
   metadata$bkl_top_caption = if (!is.null(search_res$bkl_top_caption)) search_res$bkl_top_caption else ""
 
+  res <- clean_highlights(query, res)
   highlights <- data.frame(res$high)
-  highlights <- ddply(highlights, .(names), summarize, text=paste(main_title, ocrtext, collapse=" ... "))
+  highlights <- ddply(highlights, .(names), text=paste(main_title, ocrtext, collapse=" ... "))
   names(highlights) <- c("id", "snippets")
   metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='id')
 
@@ -100,6 +101,14 @@ get_papers <- function(query, params, limit=100) {
 
   return(ret_val)
 
+}
+
+clean_highlights <- function(query, res) {
+  res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
+    s <- strsplit(x, " \\.\\.\\. ")
+    unlist(lapply(s, function(x) x[grepl(query, x, ignore.case=TRUE)]))[1]
+  }))
+  return(res)
 }
 
 build_query <- function(query, params, limit){
@@ -153,13 +162,12 @@ build_query <- function(query, params, limit){
   }
   q_params$fq <- unlist(q_params$fq)
   q_params$hl <- 'on'
-  # q_params$hl.fl <- paste(q_fields, collapse=",")
   q_params$hl.fl <- 'main_title,ocrtext'
-  q_params$hl.snippets <- 1
-  q_params$hl.score.k1 <- 0.6
+  q_params$hl.snippets <- 10
   q_params$hl.method <- 'unified'
   q_params$hl.tag.ellipsis <- " ... "
   q_params$hl.maxAnalyzedChars <- 251200
+  q_params$hl.preserveMulti <- "true"
   # end adding filter params
   return(q_params)
 }
