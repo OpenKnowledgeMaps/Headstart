@@ -30,6 +30,7 @@ $date = new DateTime();
                 </div>
             </div>
         </div>
+        <?php include('credits.php') ?>
 
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script>
@@ -82,7 +83,7 @@ $date = new DateTime();
                 if (map_params.bkl_level === "top") {
                     return map_params.q;
                 } else {
-                    return map_params.bkl_top_caption + " &#10145; " + map_params.q;
+                    return map_params.bkl_top_caption + " 🡪 " + map_params.q;
                 }
             }
 
