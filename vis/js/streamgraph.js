@@ -465,7 +465,7 @@ streamgraph.setupTooltip = function(streamgraph_subject, x) {
     
     let self = this;
     
-    d3.select("#visualization")
+    d3.select("#" + config.tag)
             .append("div")
             .attr("id", "tooltip")
             .attr("class", "tip hidden")
