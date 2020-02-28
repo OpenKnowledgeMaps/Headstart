@@ -554,13 +554,6 @@ class Canvas {
             from.setTime(from.getTime() + from.getTimezoneOffset()*60*1000 );
             to.setTime(to.getTime() + to.getTimezoneOffset()*60*1000 );
 
-            //TODO: quick fix for date issue in snapshots, needs to be fixed
-            if(this.paramExists(config.is_phantomjs)) {
-                    if (config.is_phantomjs) {
-                            return;
-                    }
-            }
-
             let default_from_date = (function(service) {
                 switch(service) {
                   case 'doaj':
@@ -863,7 +856,7 @@ class Canvas {
 
   dotdotdotAreaTitles() {
     const check = config.hasOwnProperty('nodot');
-    if ((check && config.nodot === null) || !check) {
+    if ((check && config.nodot === false) || !check) {
       d3.selectAll("#area_title_object").each(function() {
         let margin_top = parseInt(d3.select(this).select("#area_title>h2").style("margin-top"), 10);
         let margin_bottom = parseInt(d3.select(this).select("#area_title>h2").style("margin-bottom"), 10);
