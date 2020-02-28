@@ -48,7 +48,10 @@ Make sure you have the following packages installed:
   * tidyr
   * forcats
 
-* phantomjs 2.1+ (http://phantomjs.org/), if you want to use the snapshot feature
+* Node.js 10.17+ with module puppeteer installed, if you want to use the snapshot feature
+  * Depending on the operating system, manual installation of additional dependencies for the chromium renderer are required. Known dependencies under Ubuntu 18.04 are `libasound2 libatk1.0 libatk-bridge2.0 libgtk-3-dev`
+  * Under Ubuntu 18.04 the installation of major language character sets for chromium is recommended with `apt-get install -y fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf --no-install-recommends`
+  * depending on the environment a separate node-installation with puppeteer is required, that has execution rights for the webserver/www-data user
 
 ## Configuration
 
@@ -75,11 +78,11 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 * connection->linkedcat_suggest_cache: Absolute path to the cache file for the author suggest functionality, for example "/../server/storage/lc_cache.json". **Make sure that your webserver has write permissions to the containing directory, as the file will be created and rewritten by the service.**
 
 * snapshot->snapshot_enabled: Set to 1 to enable snapshot feature, 0 to disable
-* snapshot->phantomjs_path: Absolute path to phantomjs binary
+* snapshot->node_path: Absolute path to node binary
+* snapshot->nodemodules_path: Absolute paths to node_modules folder, where puppeteer is installed
 * snapshot->getsvg_path: Absolute path to getChartSVG.js
 * snapshot->storage_path: Absolute path to the directory, where the snapshots are stored. **Make sure that your webserver has write permissions to this file and the containing directory.**
 * snapshot->snapshot_php: PHP File responsible for rendering the bubble in a way to be snapshotted. Relative path to general->host
-* snapshot->snapshot_width: Snapshot width
 
 ## Logging configuration
 
