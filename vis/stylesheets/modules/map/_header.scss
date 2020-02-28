@@ -34,7 +34,7 @@
             }
         }
     }
-    
+
     .backlink-streamgraph {
         margin-bottom: 0;
     }
@@ -225,7 +225,7 @@
             min-height: 20px;
         }
     }
-    
+
     .backlink {
         position: relative;
         z-index: 3; 
@@ -246,8 +246,13 @@
 
             &:hover {
                 border: 1px solid $medium-blue;
-                
+
             }
         }
+    }
+    
+    #modals .btn {
+        width: 34px;
+        height: 34px;
     }
 }

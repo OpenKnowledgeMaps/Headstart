@@ -109,23 +109,25 @@ header #logo a:hover {
 .menu li {
     border-bottom: 1px solid #cacfd3;
     font-family: 'Josefin Sans', sans-serif;
-    line-height: 200%;
+    line-height: 230%;
     padding-bottom: 3px;
     padding-left: 20px;
     padding-top: 3px;
 }
 
 .menu a {
-    font-size: 18px;
+    font-size: 16px;
     text-decoration: none;
     text-transform: none;
     display: block;
+    color: #00122f;
+    text-transform: uppercase;
 }
 
 .icon-close {
     cursor: pointer;
     padding: 5px 0px 5px 20px;
-    background-color: #0047bb;
+    background-color: #00122f;
     color: white;
     font-size: 28px;
 }
@@ -135,17 +137,23 @@ header #logo a:hover {
     cursor: pointer;
     font-family: 'Josefin Sans', sans-serif;
     font-size: 18px;
-    margin: 10px 0px 10px 20px;
+    margin: 0px 0px 0px 20px;
     text-decoration: none;
     text-transform: uppercase;
-    border: 1px solid #0047bb;
-    padding: 5px 10px;
     vertical-align: middle;
     text-align:left;
     background-color: none;
+    color: #00122f;
     border-radius: 5px;
     -moz-border-radius: 5px;
-    color: #0047bb;
+}
+
+.fa-bars {
+    padding: 3px 6px 8px;
+    font-size: 18px;
+    border: 1px solid #00122f;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
 }
 
 .topheader {
@@ -161,6 +169,11 @@ header #logo a:hover {
 
 .vis-page header a {
     color: white;
+}
+
+.vis-page header .menu a {
+    color: #00122f;
+    text-transform: uppercase;
 }
 
 .vis-page .nav_top {
@@ -195,7 +208,7 @@ header #logo a:hover {
     .nav_top {
         display:none;
     }
-    
+
     header {
         padding: 12px 0px;
     }
