@@ -107,7 +107,7 @@ get_papers <- function(query, params, limit=100) {
 clean_highlights <- function(query, res) {
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
     s <- strsplit(x, " \\.\\.\\. ")
-    unlist(lapply(s, function(x) x[grepl(query, x, ignore.case=TRUE)]))[1]
+    unlist(lapply(s, function(x) x[grepl(paste0("<em>", query, "</em>"), x, ignore.case=TRUE)]))[1]
   }))
   return(res)
 }
@@ -164,11 +164,13 @@ build_query <- function(query, params, limit){
   q_params$fq <- unlist(q_params$fq)
   q_params$hl <- 'on'
   q_params$hl.fl <- 'ocrtext'
-  q_params$hl.snippets <- 10
+  q_params$hl.snippets <- 20
   q_params$hl.method <- 'unified'
+  q_params$hl.score.k1 <- 0.6
   q_params$hl.tag.ellipsis <- " ... "
-  q_params$hl.maxAnalyzedChars <- 251200
+  q_params$hl.maxAnalyzedChars <- 351200
   q_params$hl.preserveMulti <- "true"
+  q_params$hl.fragsize <- 200
   # end adding filter params
   return(q_params)
 }
