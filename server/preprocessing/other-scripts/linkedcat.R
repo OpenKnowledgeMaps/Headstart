@@ -163,7 +163,7 @@ build_query <- function(query, params, limit){
   }
   q_params$fq <- unlist(q_params$fq)
   q_params$hl <- 'on'
-  q_params$hl.fl <- 'main_title,ocrtext'
+  q_params$hl.fl <- 'ocrtext'
   q_params$hl.snippets <- 10
   q_params$hl.method <- 'unified'
   q_params$hl.tag.ellipsis <- " ... "
