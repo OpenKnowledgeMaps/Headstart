@@ -82,7 +82,6 @@ get_papers <- function(query, params, limit=100) {
 
   res <- clean_highlights(query, res)
   highlights <- data.frame(res$high)
-  highlights <- ddply(highlights, .(names), text=paste(main_title, ocrtext, collapse=" ... "))
   names(highlights) <- c("id", "snippets")
   metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='id')
 
