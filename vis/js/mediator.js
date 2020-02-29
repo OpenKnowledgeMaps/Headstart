@@ -356,7 +356,9 @@ MyMediator.prototype = {
         }
         
         this.viz.append(infoTemplate());
-        this.viz.append(iFrameTemplate());
+        this.viz.append(iFrameTemplate({
+            spinner_text: config.localization[config.language].pdf_load_text
+        }));
         this.viz.append(imageTemplate());
         this.viz.append(viperEditTemplate());
         this.viz.append(embedTemplate());

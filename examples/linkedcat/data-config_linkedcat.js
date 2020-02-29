@@ -39,4 +39,5 @@ var data_config = {
     abstract_large: 1000,
     
     streamgraph_zoom: false,
+    canonical_url: "https://openknowledgemaps.org"
 };

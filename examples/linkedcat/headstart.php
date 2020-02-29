@@ -90,6 +90,36 @@ include 'config.php';
                     data_config.credit_embed = true;
                     data_config.embed_modal = false;
                 <?php endif; ?>
+                    
+                var calcDivHeight = function () {
+                    
+                    let height = $(window).height();
+                    let width = $(window).width();
+                    let calculated_height = 0;
+                    
+                    if(height <= 670 || width < 904 || (width >= 985 && width  < 1070)) {
+                        calculated_height = 670;
+                    }  else {
+                        calculated_height = $(window).height() - $("header").outerHeight();
+                    }
+                    
+                    console.log(calculated_height);
+                    
+                    return calculated_height;
+                }
+
+                <?php if (!isset($_GET['embed']) || $_GET['embed'] === 'false'): ?>
+                    
+                    $(document).ready( function () {
+                        $(window).on("resize", function () {
+                            let div_height = calcDivHeight();
+                            $(".overflow-vis").css("height", div_height + "px")
+                            $("#visualization").css("height", div_height + "px")
+                        });
+                        $(window).trigger('resize');
+                    });
+                
+                <?php endif ?>
         </script>
         <script type="text/javascript" src="<?php echo $HEADSTART_PATH; ?>dist/headstart.js"></script>
         <link type="text/css" rel="stylesheet" href="<?php echo $HEADSTART_PATH; ?>dist/headstart.css"></link>
@@ -98,7 +128,7 @@ include 'config.php';
         </script>
         
         <?php if (!isset($_GET['embed']) || !$_GET['embed'] === 'true'): ?>
-        <div class="createdby" style="margin: 10px; font-size: 12px;">Diese Visualisierung wurde mit der Open Source Software <a href="http://github.com/pkraker/Headstart" target="_blank ">Head Start</a> von <a href="https://openknowledgemaps.org" target="_blank">Open Knowledge Maps</a> realisiert. Alle Daten stammen aus LinkedCat+.
+        <div class="createdby" style="margin: 10px; font-size: 12px;"><!--Diese Visualisierung wurde mit der Open Source Software <a href="http://github.com/pkraker/Headstart" target="_blank ">Head Start</a> von <a href="https://openknowledgemaps.org" target="_blank">Open Knowledge Maps</a> realisiert. Alle Daten stammen aus LinkedCat+.-->
         <?php endif; ?>
         </div>
     </body>
