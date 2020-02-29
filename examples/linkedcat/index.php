@@ -8,20 +8,23 @@ include 'config.php';
         <?php include('head_standard.php') ?>
     </head>
 
-    <body class="startpage">
+    <body class="startpage bg-image-startpage">
 
-        <div class="bg-image-startpage">
+        <div class="vertical-align:middle; ">
             <header>
                 <?php include('menu.php'); ?>
             </header>
-
+            
             <?php include('project-short-description.php') ?>
             <?php include('search-box.php') ?>
             <?php include('credits.php') ?>
+            
+            <!-- PLease add any footer elements here:-->
+            
+            <!-- end of footer-->
+            
         </div>
-        <!-- PLease add any footer elements here:-->
-
-        <!-- end of footer-->
+        
         <script type="text/javascript" src="data-config_linkedcat.js"></script>
         <script type ="text/javascript">
 

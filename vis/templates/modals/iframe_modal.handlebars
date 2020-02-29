@@ -8,7 +8,10 @@
         <button type="button" class="btn btn-default pull-right" data-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body text-center">
-        <span id="spinner-iframe" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+        <div id="spinner-iframe">
+            <p>{{{ spinner_text }}}
+            <p><span id="spinner-iframe" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+        </div>
         <iframe id="pdf_iframe" class="block" src="" frameborder="0"></iframe>
         <div id="status"></div>
       </div>

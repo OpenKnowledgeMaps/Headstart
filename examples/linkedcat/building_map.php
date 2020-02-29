@@ -5,8 +5,8 @@
         <?php include('head_standard.php') ?>
     </head>
 
-    <body class="waiting-page">
-        <div class="waiting-page-img">
+    <body class="waiting-page waiting-page-img">
+        <div>
         <div class="waiting-box">
             <div>
                 <p class="waiting-title"><span id="h-label"></span> über <span id="search_term"></span> wird gerade erstellt</p>
@@ -103,7 +103,7 @@ if(!empty($_POST)) {
                         +'Neues Stichwort ausprobieren'
                     +'</button></a>'
             +'<div style="text-align: center; margin-top: 2%;">'
-                +'<a style="border-bottom: 1px solid #2856a3; text-decoration: none;" href="browse.php" target="_blank">Browse Knowledge Maps zu ausgewählten Themen</a>'
+                +'<a style="border-bottom: 1px solid #2856a3; text-decoration: none;" href="browse.php">Entdecken Sie Knowledge Maps zu Disziplinen/Themen</a>'
                                 +'</div>');
             }
 
