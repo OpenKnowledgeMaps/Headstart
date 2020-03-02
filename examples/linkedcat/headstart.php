@@ -24,35 +24,37 @@ include 'config.php';
         <script type="text/javascript" src="lib/Chart.Streamgraph.S.js"></script>
         <script>
             
-            let common_text = "mmdfmdsfmn"
+            let credit_text = "<p class='wtp'><a href='faqs'>Weitere Informationen finden Sie in den FAQs</a>.</p><p>Diese Visualisierung wurde mit der Open Source Software Head Start von <a href='https://openknowledgemaps.org/'>Open Knowledge Maps</a> realisiert. Alle Daten stammen aus LinkedCat+.</p>"
+            let km_text = "<h3>Was ist eine Knowledge Map?</h3><p class='wtp'>Eine Knowledge Map (zu deutsch Wissenslandkarte) gibt einen thematischen Überblick über ein Stichwort/einen Autor. Unterthemen werden als Blasen dargestellt. Jedem Unterthema sind relevante Dokumente zugeordnet, die mit einem Klick auf die Blase angezeigt werden können.</p><p class='wtp'>Die Größe der Blasen ist relativ zur Anzahl der zugeordneten Dokumente. Blasen, die sich thematisch ähnlich sind, werden näher zueinander dargestellt als Blasen, die sich thematisch weniger ähnlich sind.</p><p class='wtp'>Knowledge Maps eignen sich besonders dazu, einen Überblick über ein Thema zu bekommen und relevante Konzepte und Dokumente zu entdecken.</p>"
+            let sg_text = "<h3>Was ist ein Streamgraph?</h3><p class='wtp'>Ein Streamgraph zeigt die zeitliche Entwicklung der häufigsten Schlagworte zu einem Stichwort/Autor. Die Schlagworte werden als farbige Ströme (Englisch: streams) dargestellt. Jedem Strom sind relevante Dokumente zugeordnet, die mit einem Klick auf einen Stream angezeigt werden können.</p><p class='wtp'>Die Höhe eines Streams entspricht der Anzahl der zugeordneten Dokumente zu einem bestimmten Zeitpunkt. Dabei ist zu beachten, dass die Anzahl der relativen, nicht der absoluten Höhe entspricht. Zwischen den Zeitpunkten wird der Strom interpoliert.</p><p class='wtp'>Streamgraphs eignen sich besonders dazu, die Entwicklung von Schlagwörtern über die Zeit zu analysieren und Trends zu erkennen.</p>"
                 let intro_authors_overview = {
-                    title: "Was ist das?",
+                    title: "Knowlege Map Autor",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp">Erklärungstext Autoren Knowledge Map' + common_text + '</p>'
+                    <p class="wtp">Diese Knowledge Map basiert auf allen Dokumenten aus Linkedcat+ von Autor <b><?php echo json_encode($_GET['query']) ?></b>.</p>' + km_text + credit_text
                 }
                 
                 let intro_authors_timeline = {
-                    title: "Was ist das?",
+                    title: "Streamgraph Autor",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp">Erklärungstext Autoren Streamgraph</p>'
+                    <p class="wtp">Dieser Streamgraph basiert auf allen Dokumenten aus Linkedcat+ von Autor <b><?php echo json_encode($_GET['query']) ?></b>.</p>' + sg_text + credit_text
                 }
                 
                 let intro_keywords_overview = {
-                    title: "Was ist das?",
+                    title: "Knowlege Map Stichwort",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp">Erklärungstext Schlagwörter Knowledge Map</p>'
+                    <p class="wtp">Diese Knowledge Map basiert auf den 100 relevantesten Dokumenten aus Linkedcat+ über Stichwort <b><?php echo json_encode($_GET['query']) ?></b>.</p><h3>Was ist unter relevanteste Dokumente zu verstehen?</h3><p class="wtp">In diesem Projekt verwenden wir das Relevanz-Ranking der Suchmaschinen-Software "Solr". Solr verwendet hauptsächlich die Textähnlichkeit zwischen dem Suchbegriff und den Dokument-Metadaten, um die Relevanz zu bestimmen.</p>' + km_text + credit_text
                 }
                 
                 let intro_keywords_timeline = {
-                    title: "Was ist das?",
+                    title: "Streamgraph Stichwort",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp">Erklärungstext Schlagwörter Streamgraph</p>'
+                    <p class="wtp"> Dieser Streamgraph basiert auf allen Dokumenten aus Linkedcat+ über Stichwort <b><?php echo json_encode($_GET['query']) ?></b>.</p>' + sg_text + credit_text
                 }
                 
                 let intro_browseview = {
-                    title: "Was ist das?",
+                    title: "Knowledge Map Basisklassifikation",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp">Erklärungstext Browseview</p>'
+                    <p class="wtp">Diese Knowledge Map basiert auf allen Dokumenten aus Linkedcat+ die zur Hauptklasse der Basisklassifikation <b><?php echo json_encode($_GET['query']) ?></b> gehören.</p>'  + km_text + credit_text
                 }
                 
                 
