@@ -42,13 +42,13 @@ include 'config.php';
                 let intro_keywords_overview = {
                     title: "Knowlege Map Stichwort",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp">Diese Knowledge Map basiert auf den 100 relevantesten Dokumenten aus Linkedcat+ über Stichwort <b><?php echo json_encode($_GET['query']) ?></b>.</p><h3>Was ist unter relevanteste Dokumente zu verstehen?</h3><p class="wtp">In diesem Projekt verwenden wir das Relevanz-Ranking der Suchmaschinen-Software "Solr". Solr verwendet hauptsächlich die Textähnlichkeit zwischen dem Suchbegriff und den Dokument-Metadaten, um die Relevanz zu bestimmen.</p>' + km_text + credit_text
+                    <p class="wtp">Diese Knowledge Map basiert auf den 100 relevantesten Dokumenten aus Linkedcat+ über Stichwort <b><?php echo json_encode($_GET['query']) ?></b> aus dem gewählten Zeitraum.</p><h3>Was ist unter relevanteste Dokumente zu verstehen?</h3><p class="wtp">In diesem Projekt verwenden wir das Relevanz-Ranking der Suchmaschinen-Software "Solr". Solr verwendet hauptsächlich die Textähnlichkeit zwischen dem Suchbegriff und den Dokument-Metadaten, um die Relevanz zu bestimmen.</p>' + km_text + credit_text
                 }
                 
                 let intro_keywords_timeline = {
                     title: "Streamgraph Stichwort",
                             body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
-                    <p class="wtp"> Dieser Streamgraph basiert auf allen Dokumenten aus Linkedcat+ über Stichwort <b><?php echo json_encode($_GET['query']) ?></b>.</p>' + sg_text + credit_text
+                    <p class="wtp"> Dieser Streamgraph basiert auf allen gewählten Dokumentarten aus Linkedcat+ über Stichwort <b><?php echo json_encode($_GET['query']) ?></b> aus dem gewählten Zeitraum.</p>' + sg_text + credit_text
                 }
                 
                 let intro_browseview = {

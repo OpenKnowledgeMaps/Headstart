@@ -90,6 +90,11 @@ $date = new DateTime();
                     <p class="paragraph-style">
                         Beide Visualisierungen (Knowledge Map und Streamgraph) sind abhängig von den Ergebnissen die zu einer Suche gefunden werden. Wenn es z.B. nur wenige Dokumente zu einem Suchbegriff gibt oder wenn zu einem Dokument nur wenige Metadaten vorhanden sind, dann hat dies auch einen Einfluss auf die Qualität der Visualisierung. Die Metadaten werden kontinuierlich von den Bibliothekar*innen der BAS:IS aktualisiert und verbessert. Sollten Sie Fehler finden, schreiben Sie bitte eine E-Mail an: REPLACE with EMAIL.
                     </p>
+                    
+                    <h4 class="question">Warum sind manche Textauszüge fehlerhaft?</h4>
+                    <p class="paragraph-style">
+                        Die Scans der Sitzungsberichte wurden automatisch in editierbare Textformate umgewandelt, damit Sie diese bspw. in einer PDF durchsuchen können oder damit sie Abschnitte aus den PDFs kopieren können. Leider kann es bei diesem Verfahren zu Fehlern in der Texterkennung kommen. 
+                    </p>
 
                 </div>
             </div>
