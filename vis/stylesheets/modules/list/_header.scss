@@ -180,8 +180,9 @@
 }
 
 @if $skin == 'linkedcat' {
-    #sort_container {
-
+    #sort_container .dropdown-menu {
+        width: 200px !important;
+        min-width:140px;
     }
 
     #sort {
@@ -215,6 +216,9 @@
         #sort {
             border-radius: 17px;
             width: 160px;
+        }
+        #sort_container .dropdown-menu {
+            width: 160px !important;
         }
     }
 
