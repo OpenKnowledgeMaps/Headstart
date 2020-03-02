@@ -214,6 +214,8 @@ class Canvas {
         d3.select(window).on("resize", () => {
             mediator.publish("window_resize");
         });
+        
+        this.initInfoModal();
     }
 
     initEventListeners() {
@@ -224,7 +226,11 @@ class Canvas {
             }   
             mediator.publish("window_resize");
         });
-
+        
+        this.initInfoModal();
+    }
+    
+    initInfoModal() {
         // Info Modal Event Listener
         $('#info_modal').on('show.bs.modal', function () {
             if(config.show_infolink_areas && mediator.is_zoomed) {
