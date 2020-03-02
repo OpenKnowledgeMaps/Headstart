@@ -698,4 +698,18 @@ img#preview_page {
         }
     }
 
+    @media screen and (max-width: 1000px) {
+
+        .list_metadata {
+            .list_title, .list_details, .doi_outlink {
+            font-size: 12px;
+        }
+        }
+        
+        #list_basic_classification, #list_keywords, #list_abstract, #list_area {
+            font-size: 12px;
+            max-width:100%;
+        }
+    }
+
 }
