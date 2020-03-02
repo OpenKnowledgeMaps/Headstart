@@ -23,7 +23,7 @@ $date = new DateTime();
                     <h4 class="question">Was ist eine Knowledge Map?</h4>
                     <span class="anchor" id="knowledgemap"></span>
                     <p class="example">
-                        <img class="shadow2 abstand" src="./img/km-example.png" alt="Knowledge Map für die Werke des Autors Hammer-Purgstall">
+                        <img class="shadow2 abstand" src="./img/km-example.png" alt="Knowledge Map für die Werke des Autors Hammer-Purgstall" alt="Screenshot: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)">
                         <span>Screenshot: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)</span>
                     </p>
                     <p class="paragraph-style">
@@ -42,12 +42,12 @@ $date = new DateTime();
                     <h4 class="question">Was ist ein Streamgraph?</h4>
                     <span class="anchor" id="streamgraph"></span>
                     <p class="example">
-                        <img class="shadow2 abstand" src="./img/sg-example.png">
+                        <img class="shadow2 abstand" src="./img/sg-example.png" alt="Screenshot: Streamgraph für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)">
                         <span>Screenshot: Streamgraph für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)</span>
                     </p>
                     <p class="paragraph-style">
                         Ein Streamgraph zeigt die zeitliche Entwicklung der häufigsten Schlagworte zu einem Stichwort/Autor. 
-                        Die Schlagworte werden als farbige Ströme (englisch "streams") dargestellt.  Jedem Strom sind relevante Dokumente zugeordnet, die mit einem Klick auf einen Stream angezeigt werden können.
+                        Die Schlagworte werden als farbige Ströme (Englisch "streams") dargestellt.  Jedem Strom sind relevante Dokumente zugeordnet, die mit einem Klick auf einen Stream angezeigt werden können.
                     </p>
                     <p class="paragraph-style">
                         Die Höhe eines Streams entspricht der Anzahl der zugeordneten Dokumente zu einem bestimmten Zeitpunkt. 

@@ -22,13 +22,13 @@ $date = new DateTime();
                 </div>
 
                 <div class="img1">
-                    <img class="abstand" src="./img/math-nat-klasse.jpg">
+                    <img class="abstand" src="./img/math-nat-klasse.jpg" alt="Radierung: Mitglieder der math.-nat.-Klasse, 1853">
                     <span class="example">
                         Radierung: Mitglieder der math.-nat.-Klasse, 1853
                     </span>
                 </div>
                 <div class="img1">
-                    <img class="abstand" src="./img/phil-hist-klasse.jpg">
+                    <img class="abstand" src="./img/phil-hist-klasse.jpg" alt="Radierung: Mitglieder der phil.-histor.-Klasse, 1853">
                     <span class="example">
                         Radierung: Mitglieder der phil.-histor.-Klasse, 1853
                     </span>
@@ -36,7 +36,7 @@ $date = new DateTime();
 
                 <div style="padding: 50px 20px 20px;">
                     <div class="img2">
-                        <img src="./img/sitzung-und-bericht.png"><br>
+                        <img src="./img/sitzung-und-bericht.png" alt="Zeichnung: Akademie-Sitzung von Prager, 1912"><br>
                         <span class="example">Zeichnung: Akademie-Sitzung von Prager, 1912</span>
                     </div>
                     <div class="img3">
@@ -63,7 +63,7 @@ $date = new DateTime();
                 </div>
                 <div>
                     <div class="img2">
-                        <img src="./img/vis-examples.png">
+                        <img src="./img/vis-examples.png" alt="Visualisierungen: Knowledge Map und Streamgraph">
                     </div>
                     <div class="img3">
 
@@ -96,9 +96,9 @@ $date = new DateTime();
                     <p class="paragraph-style">Das Projekt „LinkedCat+“ wurde von der Österreichischen Akademie der Wissenschaften (<a target="_blank" href="https://www.oeaw.ac.at">ÖAW</a>) im Rahmen des Innovationsfonds gefördert und erstreckte sich über einen Zeitraum von April 2018 bis März 2020. LinkedCat+ ist eine Kooperation zwischen Bibliothek, Archiv und Sammlungen (<a target="_blank" href="https://www.oeaw.ac.at/basis/">BASI:IS</a>), Austrian Centre for Digital Humanities and Cultural Heritage (<a target="_blank" href="https://www.oeaw.ac.at/acdh/">ACDH</a>) und Open Knowledge Maps - Verein zur Förderung der Sichtbarkeit wissenschaftlichen Wissens (<a target="_blank" href="https://openknowledgemaps.org/">OKMaps</a>).
                     </p>
                     <p>
-                        <a target="_blank" href="https://www.oeaw.ac.at"><img class="partner-logo" src="./img/oeaw-logo.png"></a>
-                        <a target="_blank" href="https://www.oeaw.ac.at/acdh/"><img class="partner-logo" src="./img/acdh-logo.png"></a>
-                        <a target="_blank" href="https://openknowledgemaps.org/"><img class="partner-logo" src="./img/okmaps-logo-web.png"></a>
+                        <a target="_blank" href="https://www.oeaw.ac.at"><img class="partner-logo" src="./img/oeaw-logo.png" alt="OEAW Logo"></a>
+                        <a target="_blank" href="https://www.oeaw.ac.at/acdh/"><img class="partner-logo" src="./img/acdh-logo.png" alt="ACDH Logo"></a>
+                        <a target="_blank" href="https://openknowledgemaps.org/"><img class="partner-logo" src="./img/okmaps-logo-web.png" alt="Open Knowlege Maps Logo"></a>
                     </p>
                 </div>
             </div>
