@@ -203,6 +203,13 @@ h5 {
     padding-top: 10px;
 }
 
+.wait-message {
+    max-width: 650px;
+    margin: 0px auto;
+    font-size: 16px;
+    font-family: $base-font-family;
+}
+
 //draggable functionality
 .modal-header {
     cursor: move; /* fallback: no `url()` support or images disabled */
@@ -233,7 +240,7 @@ h5 {
 @if $skin == 'cris_vis' {
     #info_modal .modal-dialog {
         max-width: 760px;
-        
+
         img {
             max-width: 100%;
         }
@@ -242,7 +249,7 @@ h5 {
             visibility: visible;
             padding: 5px 10px 0px 0px;
             width: 100%;
-            
+
             .color-box {
                 margin: 0px !important;
             }
@@ -250,7 +257,7 @@ h5 {
     }
     .modal-body {
         text-align: right;
-        
+
         p {
             text-align: left !important;
         }

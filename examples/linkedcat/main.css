@@ -27,7 +27,7 @@ a {
     background-attachment: fixed;
     /*height: 100vh;*/
     /*text-transform: uppercase;*/ 
-    padding: 0 0 40px;
+    padding: 0 0 0px;
     background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(0,0,0, 0.2)), url(./img/background-start-2.jpg); 
     background-repeat: no-repeat;
     background-position: 100% 86%;
@@ -57,7 +57,7 @@ a {
     max-width:600px; 
     margin-right: auto;
     margin-left: auto;
-    margin-bottom: 0px;
+    margin-bottom: 40px;
     background-color: transparent; 
     padding: 0px;
 }
