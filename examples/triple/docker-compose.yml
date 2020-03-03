@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+
+  redis:
+    image: 'redis:4.0-alpine'
+    restart: always
+    command: redis-server
+    volumes:
+       - 'redis:/var/lib/redis/data'
+    ports:
+      - '6379:6379'
+
+  backend:
+    build:
+      context: ../server
+      dockerfile: headstart_backend.docker
+      env_file:
+        - workers/backend/backend.env
+      restart: always
+      ports:
+        - '8019:8019'
+      volumes:
+        - type: bind
+          source: /renv/cache
+          target: /var/cache/renv/cache
+
+volumes:
+  redis:
