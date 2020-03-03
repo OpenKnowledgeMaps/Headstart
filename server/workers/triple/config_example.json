@@ -1,8 +1,7 @@
 {
   "user": "string",
   "pass": "string",
-  "protocol": "https",
-  "url": "url",
+  "host": "string",
   "port": "int",
   "index": "string"
 }
