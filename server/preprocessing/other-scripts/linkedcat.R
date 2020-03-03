@@ -108,6 +108,9 @@ clean_highlights <- function(query, res) {
     s <- strsplit(x, " \\.\\.\\. ")
     unlist(lapply(s, function(x) x[grepl(paste0("<em>", query, "</em>"), x, ignore.case=TRUE)]))[1]
   }))
+  res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
+    gsub(paste0("<em>((?!", query, ").)<\\/em>"), "\\1", x, ignore.case=TRUE, perl=TRUE)
+  }))
   return(res)
 }
 
