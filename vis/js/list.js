@@ -140,7 +140,7 @@ list.drawList = function() {
             }
             window.clearTimeout(timer);
             timer = window.setTimeout(function() {
-                debounce(self.filterList(event.target.value.split(" ")), config.debounce);
+                debounce(self.filterList(event.target.value.split(" "), this.current_filter_param), config.debounce);
             }, delay);
         
         });
@@ -148,7 +148,7 @@ list.drawList = function() {
     $("#searchclear").click(() => {
         $("#filter_input").val('');
         $("#searchclear").hide();
-        debounce(this.filterList([""]), config.debounce);
+        debounce(this.filterList([""], this.current_filter_param), config.debounce);
     });
 
     // Add sort button options
@@ -326,6 +326,7 @@ list.addFilterOptionDropdownEntry = function (filter_option, first_item) {
     }
     
     newEntry.on("click", () => {
+        this.current_filter_param = filter_option;
         this.filterList(undefined, filter_option)
         $('#curr-filter-type').text(config.localization[config.language][filter_option])
         $('.filter_entry').removeClass('active');
@@ -741,7 +742,7 @@ list.filterList = function(search_words, filter_param) {
     }
 
     if (filter_param === undefined) {
-        filter_param = this.current_filter_param     
+        filter_param = this.current_filter_param;     
     } else {
         mediator.publish("record_action", filter_param, "List", "filter", config.user_id, "filter_list", null, "filter_param=" + filter_param);
     }
