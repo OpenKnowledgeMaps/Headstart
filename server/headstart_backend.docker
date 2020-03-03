@@ -2,10 +2,11 @@ FROM rocker/r-ver:3.5.1
 
 MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
 RUN apt-get update
-RUN apt-get -y install libssl-dev
-RUN apt-get -y install libxml2-dev
+RUN apt-get -y install libssl-dev libcurl4-openssl-dev
+RUN apt-get -y install libxml2-dev libz-dev libpoppler-cpp-dev
 
 RUN R -e 'install.packages("remotes", repos = c(CRAN = "https://cran.rstudio.com"))'
+RUN R -e 'install.packages("renv", repos = c(CRAN = "https://cran.rstudio.com"))'
 
 WORKDIR /headstart
 COPY workers/backend/renv.lock ./
