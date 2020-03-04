@@ -12,3 +12,6 @@ WORKDIR /headstart
 COPY workers/backend/renv.lock ./
 RUN R -e 'options(repos="https://cran.wu.ac.at"); renv::restore()'
 COPY preprocessing/other-scripts ./backend
+
+ENTRYPOINT python
+CMD headstart.py
