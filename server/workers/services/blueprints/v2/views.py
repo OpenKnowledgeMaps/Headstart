@@ -21,4 +21,4 @@ def example_data():
     data = {"test": "document string"}
     return make_response(data,
                          200,
-                         headers=headers)
+                         headers)

@@ -5,3 +5,5 @@ MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
 WORKDIR /headstart
 COPY workers/services/ ./
 RUN pip install --no-cache-dir -r requirements.txt
+
+CMD gunicorn -b 0.0.0.0:5001 'app:new_services_app()'
