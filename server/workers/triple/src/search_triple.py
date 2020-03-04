@@ -20,3 +20,11 @@ class TripleClient(object):
             send_get_body_as='POST',
             http_compress=True
         )
+
+    def build_query(self, raw_query):
+        query = {}
+        return query
+
+    def run(self):
+        while True:
+            q = redis_store.blpop("search_triple")

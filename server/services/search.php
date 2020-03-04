@@ -38,8 +38,9 @@ function utf8_converter($array)
     return $array;
 }
 
-function search($repository, $dirty_query, $post_params, $param_types, $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
-        , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3, $id = "area_uri", $subjects = "subject") {
+function search($repository, $dirty_query, $post_params, $param_types, $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true,
+                $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3, $id = "area_uri", $subjects = "subject",
+                $backend = null) {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
     $query = strip_tags($dirty_query);
@@ -76,11 +77,13 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
 
     $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
 
-    $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
-    $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, $repository);
+    if ($backend == null) {
+      $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
+      $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, $repository);
 
-    $output_json = end($output);
-    $output_json = mb_convert_encoding($output_json, "UTF-8");
+      $output_json = end($output);
+      $output_json = mb_convert_encoding($output_json, "UTF-8");
+    }
 
     if (!library\Toolkit::isJSON($output_json) || $output_json == "null" || $output_json == null) {
 

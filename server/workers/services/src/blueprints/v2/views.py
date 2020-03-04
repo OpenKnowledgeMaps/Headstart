@@ -1,7 +1,8 @@
 import os
 import redis
+import asyncio
 
-from flask import Blueprint, make_response
+from flask import Blueprint, request, make_response, jsonify
 
 
 redis_store = redis.StrictRedis(host="localhost", port=6379, db=0)
@@ -12,7 +13,9 @@ app = Blueprint('v2', __name__)
 def search_triple():
     """
     """
-
+    if request.method == "POST":
+        redis_store.rpush("search_triple")
+        result = await redis_store.get(k)
 
 
 @app.route('/api/v2/example_data', methods=['GET', 'POST'])
