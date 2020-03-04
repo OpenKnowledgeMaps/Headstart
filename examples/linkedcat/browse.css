@@ -75,3 +75,23 @@
     text-align: center;
     padding: 20px;
 }
+
+@media screen and (max-width: 400px) {
+
+    .list-group-item {
+        padding: 10px;
+    }
+
+    .badge {
+        font-size: 10px;
+    }
+
+    .list-group.list-group-root > .list-group > .list-group-item {
+        padding-left: 37px;
+    }
+
+    .browse-page .list-group {
+        font-size: 12px;
+    }
+
+}
