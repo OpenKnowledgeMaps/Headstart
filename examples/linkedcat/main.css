@@ -59,7 +59,7 @@ a {
     margin-left: auto;
     margin-bottom: 40px;
     background-color: transparent; 
-    padding: 0px;
+    padding: 0px 10px;
 }
 
 .shadow, .shadow2 {
@@ -658,7 +658,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
 .page {
     max-width: 1200px;
     margin: 0px auto;
-    padding-top: 90px;
+    padding: 90px 20px 0;
 }
 
 .paragraph-style {
@@ -678,7 +678,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
 
 .partner-logo {
     max-width:150px;
-    padding-right: 40px;
+    padding: 20px 40px 0px 0;
 }
 
 .browse {
@@ -719,7 +719,8 @@ label.q-error, #input-container label.q-error, .timefield .error {
 .img2 {
     display: inline-block; 
     width: 50%; 
-    vertical-align: middle;
+    vertical-align: top;
+    padding-right: 20px;
 }
 
 .img2 img {
@@ -729,7 +730,11 @@ label.q-error, #input-container label.q-error, .timefield .error {
 .img3 {
     display: inline-block; 
     width:40%; 
-    vertical-align: middle;
+    vertical-align: top;
+}
+
+.mobile-image {
+    display: none;
 }
 
 .refine-search {
@@ -745,4 +750,170 @@ label.q-error, #input-container label.q-error, .timefield .error {
     color: white;
     text-decoration: none;
     border-color: #0047bb;
+}
+
+.sec-katalog {
+    padding: 50px 20px 20px;
+}
+
+.description2 {
+    font-size: 30px; 
+    margin-top:40px;
+}
+
+@media screen and (max-width: 900px) {
+
+    .project-description {
+        font-size: 32px;
+    }
+
+    .stats div {
+        padding: 0px 20px;
+    }
+
+    .circle {
+        font-size: 16px;
+        width: 140px;
+        height: 140px;
+    }
+
+    .stats {
+        padding: 0px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+
+    .project-description {
+        font-size: 32px;
+    }
+
+    .author-btn, .keyword-btn {
+        width: 95px;
+        font-size: 14px;
+    }
+
+    .additional-information p {
+        font-size: 14px;
+    }
+
+    .search .inputfield {
+        font-size: 12px;
+    }
+
+    .page-description {
+        padding: 20px;
+        font-size: 14px;
+    }
+
+    .h3, h3 {
+        font-size: 18px;
+    }
+
+    .page-section, .paragraph-style, body {
+        font-size: 14px;
+    }
+
+    .img1, .img3, .mobile-image {
+        display: block;
+        width: 100%;
+    }
+
+    .img2 {
+        display: none;
+    }
+
+    .question {
+        padding: 20px 0px 10px;
+    }
+
+    .stats {
+        margin: 0px;
+        text-align: left;
+    }
+
+    .circle {
+        border: 1px solid #0047bb;
+        border-radius: 27px;
+        width: 90%;
+        height: auto;
+        text-align: center;
+        font-size: 18px;
+        padding: 20px;
+    }
+
+    .stats div {
+        padding: 0px;
+    }
+
+    .sec-katalog {
+        padding: 50px 0px 20px;
+    }
+
+    .paragraph-style li {
+        margin-left: 20px;
+    }
+
+    .mobile-image {
+        padding-bottom: 20px;
+    }
+
+    .description2 {
+        font-size: 24px; 
+    }
+
+    .page-headline {
+        font-size: 30px;
+        margin-top: 20px;
+    }
+
+    .waiting-box {
+        top: 5%;
+        left: 5%;
+right: 5%;
+        font-size: 14px;
+    }
+    
+    .waiting-title {
+        font-size: 18px;
+    }
+
+}
+
+@media screen and (max-width: 400px) {
+
+    .project-description {
+        font-size: 24px;
+    }
+
+    .checkmark {
+        top: 14px;
+        left: 16px;
+        height: 18px;
+        width: 18px;
+    }
+
+    .radio-button {        
+        width: 85%;
+        display: block;
+        margin-bottom: 5px;
+        margin-top: 10px;
+    }
+
+    .radio-button .checkmark::after {
+        top: 6px;
+        left: 6px;
+        width: 6px;
+        height: 6px;
+    }
+
+    .info-btn {
+        margin-left: 0px;
+        font-size: 14px;
+    }
+
+    .timefield #from-error {
+        padding-left: 0px;
+    }
+
 }

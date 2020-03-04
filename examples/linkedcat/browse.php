@@ -16,7 +16,7 @@ $date = new DateTime();
             </header>
 
             <?php include('project-short-description.php') ?>
-
+            <div style="padding: 0 20px;">
             <div class="browse-description">
                 <h3>Disziplinen / Themen</h3>
             </div>
@@ -28,6 +28,7 @@ $date = new DateTime();
                     Die Themenbereiche werden geladen und in wenigen Sekunden angezeigt 
                     <img class="loading" src="img/ajax-loader.gif">
                 </div>
+            </div>
             </div>
         </div>
         <?php include('credits.php') ?>
