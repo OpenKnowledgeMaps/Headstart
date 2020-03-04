@@ -23,6 +23,7 @@ class Backend(object):
             input_data = redis_store.blpop('input_data')
             self.create_map(input_data)
 
+
 if __name__ == '__main__':
     hsb = Backend()
     hsb.run()
