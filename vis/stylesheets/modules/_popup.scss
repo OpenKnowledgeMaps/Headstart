@@ -137,7 +137,8 @@ h3 {
 #info-body h3  {
     font-weight: $fontweight700;
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: 16px;
+    font-family: $base-font-family;
     margin: 20px 0px 10px;
     color: $medium-blue;
 }
@@ -208,6 +209,17 @@ h5 {
     margin: 0px auto;
     font-size: 16px;
     font-family: $base-font-family;
+    padding-bottom: 20px;
+}
+
+a {
+    color: $medium-blue;
+    text-decoration: underline;
+}
+
+a:hover {
+    text-decoration: none;
+    color: $medium-blue;
 }
 
 //draggable functionality
@@ -275,5 +287,13 @@ h5 {
         font-family: $base-font-family;
         margin:0px !important;
     }
+}
+
+@if $skin == 'linkedcat' {
+
+    #info-body h3  {
+        font-weight: normal;
+        font-size: 18px;
+    } 
 }
 

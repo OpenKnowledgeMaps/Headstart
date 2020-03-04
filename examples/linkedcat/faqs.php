@@ -29,14 +29,14 @@ $date = new DateTime();
                     <p class="paragraph-style">
                         Eine Knowledge Map (zu deutsch "Wissenslandkarte") gibt einen thematischen Überblick über ein Stichwort/einen Autor. 
                         Unterthemen werden als Blasen dargestellt. Jedem Unterthema sind relevante Dokumente zugeordnet, die mit einem
-                        Klick auf die Blase angezeigt werden können.
+                        Klick auf die Blase angezeigt werden können. Ein Dokument wird in einer Knowledge Map nur einer Blase zugeordnet.
                     </p>
                     <p class="paragraph-style">
                         Die Größe der Blasen ist relativ zur Anzahl der zugeordneten Dokumente. Blasen, die sich thematisch ähnlich sind, werden näher zueinander dargestellt als
-                        Blasen, die sich thematisch weniger ähnlich sind.
+                        Blasen, die sich thematisch weniger ähnlich sind. 
                     </p>
                     <p class="paragraph-style">
-                        Knowledge Maps eignen sich besonders dazu, einen Überblick über ein Thema zu bekommen und relevante Konzepte und Dokumente zu entdecken.
+                        Knowledge Maps eignen sich besonders dazu, einen Überblick über ein Thema zu bekommen und relevante Konzepte und Dokumente zu entdecken. 
                     </p>
 
                     <h4 class="question">Was ist ein Streamgraph?</h4>
@@ -47,7 +47,7 @@ $date = new DateTime();
                     </p>
                     <p class="paragraph-style">
                         Ein Streamgraph zeigt die zeitliche Entwicklung der häufigsten Schlagworte zu einem Stichwort/Autor. 
-                        Die Schlagworte werden als farbige Ströme (Englisch "streams") dargestellt.  Jedem Strom sind relevante Dokumente zugeordnet, die mit einem Klick auf einen Stream angezeigt werden können.
+                        Die Schlagworte werden als farbige Ströme (Englisch "streams") dargestellt. Jedem Strom sind relevante Dokumente zugeordnet, die mit einem Klick auf einen Stream angezeigt werden können. Ein Dokument wird in einem Streamgraph mehreren Strömen zugeordnet.
                     </p>
                     <p class="paragraph-style">
                         Die Höhe eines Streams entspricht der Anzahl der zugeordneten Dokumente zu einem bestimmten Zeitpunkt. 
@@ -89,6 +89,11 @@ $date = new DateTime();
                     <h4 class="question">Warum sind manche Visualisierungen besser als andere?</h4>
                     <p class="paragraph-style">
                         Beide Visualisierungen (Knowledge Map und Streamgraph) sind abhängig von den Ergebnissen die zu einer Suche gefunden werden. Wenn es z.B. nur wenige Dokumente zu einem Suchbegriff gibt oder wenn zu einem Dokument nur wenige Metadaten vorhanden sind, dann hat dies auch einen Einfluss auf die Qualität der Visualisierung. Die Metadaten werden kontinuierlich von den Bibliothekar*innen der BAS:IS aktualisiert und verbessert. Sollten Sie Fehler finden, schreiben Sie bitte eine E-Mail an: REPLACE with EMAIL.
+                    </p>
+                    
+                    <h4 class="question">Warum sind manche Textauszüge fehlerhaft?</h4>
+                    <p class="paragraph-style">
+                        Die Scans der Sitzungsberichte wurden automatisch in editierbare Textformate umgewandelt, damit Sie diese bspw. in einer PDF durchsuchen können oder damit sie Abschnitte aus den PDFs kopieren können. Leider kann es bei diesem Verfahren zu Fehlern in der Texterkennung kommen. 
                     </p>
 
                 </div>
