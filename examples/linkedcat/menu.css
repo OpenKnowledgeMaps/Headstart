@@ -27,12 +27,12 @@ header #logo a:hover {
     color:white;
     background-color: transparent;
     font-size: 16px;
-    line-height: 80%;
-    margin: 0px 0px 10px 50px !important;
+    /*line-height: 80%;*/
+    margin: 0px 0px 0px 50px !important;
     vertical-align: bottom;
     position: absolute;
     right: 50px;
-    top: 50%;
+    top: 40%;
     font-family: 'Josefin Sans', sans-serif;
 }
 
@@ -52,9 +52,13 @@ header #logo a:hover {
     color: #0047bb;
 }
 
+.description a:hover, .description a:focus, .description a:active {
+    text-decoration: none;
+}
+
 .description {
     text-transform: uppercase;
-    font-size: 28px;
+    font-size: 34px;
     font-family: 'Josefin Sans', sans-serif;
     font-weight: 700;
     color: #0047bb;
@@ -195,7 +199,7 @@ header #logo a:hover {
     border: 1px solid white;
 }
 
-@media screen and (max-width: 1030px) {
+@media screen and (max-width: 900px) {
 
     .menu {
         display: block;
@@ -211,6 +215,12 @@ header #logo a:hover {
 
     header {
         padding: 12px 0px;
+    }
+    
+    .description {
+        font-size: 24px;
+        padding-top: 10px;
+        margin-left: 30px;
     }
 
 }
