@@ -102,7 +102,7 @@ if(!empty($_POST)) {
                     +'<button class="search-btn shadow">'
                         +'Neues Stichwort ausprobieren'
                     +'</button></a>'
-            +'<div style="text-align: center; margin-top: 2%;">'
+            +'<div style="text-align: center; margin-top: 5%;">'
                 +'<a style="border-bottom: 1px solid #2856a3; text-decoration: none;" href="browse.php">Entdecken Sie Knowledge Maps zu Disziplinen/Themen</a>'
                                 +'</div>');
             }

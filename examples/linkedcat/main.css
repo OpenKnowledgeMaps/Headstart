@@ -867,6 +867,17 @@ label.q-error, #input-container label.q-error, .timefield .error {
         margin-top: 20px;
     }
 
+    .waiting-box {
+        top: 5%;
+        left: 5%;
+right: 5%;
+        font-size: 14px;
+    }
+    
+    .waiting-title {
+        font-size: 18px;
+    }
+
 }
 
 @media screen and (max-width: 400px) {
