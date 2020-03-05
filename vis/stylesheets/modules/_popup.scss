@@ -212,12 +212,12 @@ h5 {
     padding-bottom: 20px;
 }
 
-a {
+.link-popup {
     color: $medium-blue;
     text-decoration: underline;
 }
 
-a:hover {
+.link-popup:hover {
     text-decoration: none;
     color: $medium-blue;
 }

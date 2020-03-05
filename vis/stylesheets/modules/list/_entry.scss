@@ -442,6 +442,14 @@ img#preview_page {
     }
 }
 
+#author_bio_link {
+    color: $medium-blue;
+}
+
+#author_bio_link:active, #author_bio_link:focus {
+    text-decoration: none;
+}
+
 @media screen and (max-width: 1150px) {
     /*.list_metadata {
 
@@ -648,6 +656,10 @@ img#preview_page {
         margin-bottom: 10px;
     }
 
+    .doi_outlink {
+        min-height: 20px;
+    }
+
     .list_metadata {
 
         .list_title {
@@ -702,10 +714,10 @@ img#preview_page {
 
         .list_metadata {
             .list_title, .list_details, .doi_outlink {
-            font-size: 12px;
+                font-size: 12px;
+            }
         }
-        }
-        
+
         #list_basic_classification, #list_keywords, #list_abstract, #list_area {
             font-size: 12px;
             max-width:100%;
