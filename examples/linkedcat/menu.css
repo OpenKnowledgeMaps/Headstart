@@ -68,12 +68,6 @@ header #logo a:hover {
     margin-left: 20px;
 }
 
-.nav_top li:last-child {
-    display: inline;
-    margin-right: 0px;
-    margin-left: 0px;
-}
-
 .nav_top li {
     display: inline-block;
     margin-right: 30px;
