@@ -117,6 +117,8 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
     background-size: 100%;
     background-repeat: no-repeat;
     /*margin: 5px 0px 0px 10px;*/
@@ -242,6 +244,8 @@
             margin: 6px 0 0 0;
             text-decoration: none;
             border-radius: 17px;
+            -webkit-border-radius: 17px;
+            -moz-border-radius: 17px;
             padding: 5px 3px;
 
             &:hover {

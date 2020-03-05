@@ -187,6 +187,8 @@
 
     #sort {
         border-radius: 17px;
+        -webkit-border-radius: 17px;
+        -moz-border-radius: 17px;
         width: 200px;
     }
 
@@ -215,6 +217,8 @@
     @media screen and (max-width: 1260px) {
         #sort {
             border-radius: 17px;
+            -webkit-border-radius: 17px;
+            -moz-border-radius: 17px;
             width: 160px;
         }
         #sort_container .dropdown-menu {
