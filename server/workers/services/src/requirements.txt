@@ -1,3 +1,5 @@
 flask
 gunicorn
 redis
+hiredis
+aioredis

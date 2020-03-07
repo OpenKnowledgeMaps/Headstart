@@ -77,7 +77,19 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
 
     $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
 
-    if ($backend == null) {
+    if ($repository == "triple") {
+      $url = "http://localhost/api/v2/search_" . $repository;
+      $payload = json_encode($post_params);
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      $output_json = curl_exec($ch);
+      var_dump($output_json);
+      $output_json = NULL;
+    } else {
       $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
       $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, $repository);
 
@@ -115,7 +127,8 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
                             , "doaj" => "DOAJ"
                             , "base" => "BASE"
                             , "openaire" => "OpenAire"
-                            , "linkedcat" => "LinkedCat");
+                            , "linkedcat" => "LinkedCat"
+                            , "triple" => "TRIPLE");
 
     if(!isset($ini_array["snapshot"]["snapshot_enabled"]) || $ini_array["snapshot"]["snapshot_enabled"] > 0) {
         $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $repository, $repo_mapping[$repository]);
