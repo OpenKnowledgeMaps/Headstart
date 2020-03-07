@@ -9,7 +9,7 @@ RUN R -e 'install.packages("remotes", repos = c(CRAN = "https://cran.rstudio.com
 RUN R -e 'install.packages("renv", repos = c(CRAN = "https://cran.rstudio.com"))'
 
 WORKDIR /headstart
-COPY workers/backend/renv.lock ./
+COPY workers/backend/src/renv.lock ./
 RUN R -e 'options(repos="https://cran.wu.ac.at"); renv::restore()'
 COPY preprocessing/other-scripts ./backend
 

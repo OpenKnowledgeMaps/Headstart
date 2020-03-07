@@ -2,8 +2,11 @@ FROM python:3.6.10-alpine3.10
 
 MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
 
+RUN apk update
+RUN apk add build-base gcc
+
 WORKDIR /headstart
-COPY workers/services/ ./
+COPY workers/services/src/ ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 CMD gunicorn -b 0.0.0.0:5001 'app:new_services_app()'

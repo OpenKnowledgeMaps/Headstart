@@ -11,3 +11,8 @@ def new_services_app(settings_override=None):
     app.register_blueprint(v2)
 
     return app
+
+
+if __name__ == '__main__':
+    app = new_services_app()
+    app.run(port=5001, debug=True)

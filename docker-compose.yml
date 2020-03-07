@@ -36,7 +36,7 @@ services:
       context: server
       dockerfile: headstart_backend.docker
     env_file:
-      - server/workers/backend/backend.env
+      - server/workers/backend/src/backend.env
     restart: always
     network_mode: "host"
 

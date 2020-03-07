@@ -3,5 +3,5 @@ FROM python:3.6.10-alpine3.10
 MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
 
 WORKDIR /headstart
-COPY workers/triple/ ./
+COPY workers/triple/src/ ./
 RUN pip install --no-cache-dir -r requirements.txt
