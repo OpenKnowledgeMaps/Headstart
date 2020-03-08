@@ -78,7 +78,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
 
     if ($repository == "triple") {
-      $url = "http://localhost/api/v2/search_" . $repository;
+      $url = "http://localhost/api/v2/" . $repository . "/search";
       $payload = json_encode($post_params);
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_URL, $url);

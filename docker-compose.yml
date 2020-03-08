@@ -2,16 +2,16 @@ version: '3.7'
 
 services:
 
-  api:
-   build:
-     context: server
-     dockerfile: services.docker
-   restart: always
-   ports:
-    - '5001:5001'
-   depends_on:
-    - redis
-   network_mode: "host"
+  # api:
+  #  build:
+  #    context: server
+  #    dockerfile: services.docker
+  #  restart: always
+  #  ports:
+  #   - '5001:5001'
+  #  depends_on:
+  #   - redis
+  #  network_mode: "host"
 
   redis:
     image: 'redis:4.0-alpine'
@@ -30,15 +30,15 @@ services:
       dockerfile: search_triple.docker
     restart: always
     network_mode: "host"
-
-  backend:
-    build:
-      context: server
-      dockerfile: headstart_backend.docker
-    env_file:
-      - server/workers/backend/src/backend.env
-    restart: always
-    network_mode: "host"
+  #
+  # backend:
+  #   build:
+  #     context: server
+  #     dockerfile: headstart_backend.docker
+  #   env_file:
+  #     - server/workers/backend/src/backend.env
+  #   restart: always
+  #   network_mode: "host"
 
 volumes:
   redis:
