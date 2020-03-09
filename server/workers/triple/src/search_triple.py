@@ -36,10 +36,6 @@ class TripleClient(object):
 
     def build_date_field(self, _from, _to):
         date = {}
-        if len(_from) == 4:
-            _from += "-01-01"
-        if len(_to) == 4:
-            _to += "-12-31"
         date["gte"] = _from
         date["lte"] = _to
         return date
@@ -80,11 +76,41 @@ class TripleClient(object):
             return self.process_result(res)
 
     def process_result(self, result):
+        """
+        # * "id": a unique ID, preferably the DOI
+        # * "title": the title
+        # * "authors": authors, preferably in the format "LASTNAME1, FIRSTNAME1;LASTNAME2, FIRSTNAME2"
+        # * "paper_abstract": the abstract
+        # * "published_in": name of the journal or venue
+        # * "year": publication date
+        # * "url": URL to the landing page
+        # * "readers": an indicator of the paper's popularity, e.g. number of readers, views, downloads etc.
+        # * "subject": keywords or classification, split by ;
+        # * "oa_state": open access status of the item; has the following possible states: 0 for no, 1 for yes, 2 for unknown
+        # * "link": link to the PDF; if this is not available, a list of candidate URLs that may contain a link to the PDF
+        """
         df = pd.DataFrame(result.get('hits').get('hits'))
         df = pd.concat([df.drop(["_source"], axis=1),
                         df["_source"].apply(pd.Series)],
                        axis=1)
-        return df.to_json()
+        metadata = pd.DataFrame()
+        metadata["id"] = df.identifier.map(lambda x: x[0] if x else "")
+        metadata["title"] = df.title.map(lambda x: x[0] if x else "")
+        metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if x else "")
+        metadata["abstract"] = df.abstract.map(lambda x: x[0] if x else "")
+        metadata["published_in"] = df.publisher.map(lambda x: x[0].get('name') if x else "")
+        metadata["year"] = df.datestamp.map(lambda x: x if x else "")
+        metadata["url"] = df.url.map(lambda x: x[0] if x else "")
+        metadata["readers"] = 0
+        metadata["subject"] = df.keyword.map(lambda x: "; ".join(x) if x else "")
+        input_data = {}
+        input_data["metadata"] = metadata
+        input_data["text"] = metadata.apply(lambda x: ". ".join(x[["title", "abstract"]]), axis=1)
+        return input_data.to_json()
+
+    @staticmethod
+    def get_authors(authorlist):
+        return "; ".join([", ".join([a.get('lastname')[0], a.get('firstname')[0]]) for a in authorlist if a])
 
     def run(self):
         while True:
