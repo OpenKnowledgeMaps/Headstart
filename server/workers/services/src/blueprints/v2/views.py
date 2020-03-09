@@ -6,7 +6,7 @@ import redis
 import asyncio
 import aioredis
 
-from flask import Blueprint, request, make_response, jsonify
+from flask import Blueprint, request, make_response, jsonify, abort
 
 
 redis_store = redis.StrictRedis(host="localhost", port=6379, db=0)
@@ -30,9 +30,8 @@ def triple_search():
     """
     """
     data = request.get_json()
-    print(data)
     k = str(uuid.uuid4())
-    d = {"id": k, "data": data, "endpoint": "search"}
+    d = {"id": k, "params": data, "endpoint": "search"}
     redis_store.rpush("triple", json.dumps(d))
     result = get_key(redis_store, k)
 
@@ -48,7 +47,7 @@ def triple_mappings():
     """
     data = {"index": request.args.get('index')}
     k = str(uuid.uuid4())
-    d = {"id": k, "data": data, "endpoint": "mappings"}
+    d = {"id": k, "params": data, "endpoint": "mappings"}
     redis_store.rpush("triple", json.dumps(d))
     result = get_key(redis_store, k)
 
