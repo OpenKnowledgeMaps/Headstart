@@ -84,7 +84,7 @@ class TripleClient(object):
         df = pd.concat([df.drop(["_source"], axis=1),
                         df["_source"].apply(pd.Series)],
                        axis=1)
-        return df
+        return df.to_json()
 
     def run(self):
         while True:

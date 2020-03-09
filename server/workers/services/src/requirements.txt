@@ -1,4 +1,5 @@
 flask
+flask-restx
 gunicorn
 redis
 hiredis
