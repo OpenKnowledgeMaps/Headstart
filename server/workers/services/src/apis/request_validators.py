@@ -1,4 +1,5 @@
-from marshmallow import Schema, fields, pre_load
+from datetime import datetime
+from marshmallow import Schema, fields, pre_load, validates, ValidationError
 
 
 class SearchParamSchema(Schema):
@@ -16,4 +17,8 @@ class SearchParamSchema(Schema):
         if len(in_data.get('to')) == 4:
             in_data["to"] = in_data["to"]+"-12-31"
         return in_data
-    #@validates('from_')
+
+    @validates('from_')
+    def is_not_in_future(self, date):
+        if date > datetime.today():
+            raise ValidationError("Starting date can't be in the future.")

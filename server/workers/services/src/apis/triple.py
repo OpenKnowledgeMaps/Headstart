@@ -17,12 +17,13 @@ search_param_schema = SearchParamSchema()
 
 def get_key(store, key):
     while True:
-        res = redis_store.get(key)
+        res = redis_store.get(key+"_output")
         if res is None:
             time.sleep(0.5)
         else:
             result = json.loads(res.decode('utf-8'))
             redis_store.delete(key)
+            redis_store.delete(key+"_output")
             break
     return result
 
