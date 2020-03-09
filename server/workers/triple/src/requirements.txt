@@ -1,3 +1,4 @@
 elasticsearch
 redis
 certifi
+pandas
