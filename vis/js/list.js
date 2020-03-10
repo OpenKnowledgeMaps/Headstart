@@ -1323,7 +1323,7 @@ list.writePopup = function(pdf_url) {
     setTimeout(function() {
         $("#pdf_iframe")
             .attr("src", function() {
-                let viewer = config.server_url + "services/pdfjs-hypothesis/web/viewer.html";
+                let viewer = config.server_url + "services/displayPDF.php";
                 if(config.use_hypothesis) {
                     return viewer + "?file=" + pdf_url; //#view=FitH
                 } else {
