@@ -99,15 +99,20 @@ class TripleClient(object):
         metadata["id"] = df.identifier.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["title"] = df.title.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if isinstance(x, list) else "")
-        metadata["abstract"] = df.abstract.map(lambda x: x[0] if isinstance(x, list) else "")
+        metadata["paper_abstract"] = df.abstract.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["published_in"] = df.publisher.map(lambda x: x[0].get('name') if isinstance(x, list) else "")
         metadata["year"] = df.datestamp.map(lambda x: x if isinstance(x, str) else "")
         metadata["url"] = df.url.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["readers"] = 0
         metadata["subject"] = df.keyword.map(lambda x: "; ".join(x) if isinstance(x, list) else "")
+        metadata["oa_state"] = 2
+        metadata["link"] = ""
+        text = pd.DataFrame()
+        text["id"] = metadata["id"]
+        text["content"] = metadata.apply(lambda x: ". ".join(x[["title", "paper_abstract"]]), axis=1).to_json()
         input_data = {}
         input_data["metadata"] = metadata.to_json()
-        input_data["text"] = metadata.apply(lambda x: ". ".join(x[["title", "abstract"]]), axis=1).to_json()
+        input_data["text"] = text.to_json()
         return input_data
 
     @staticmethod
@@ -130,6 +135,7 @@ class TripleClient(object):
                 redis_store.set(k+"_output", json.dumps(res))
             if endpoint == "search":
                 res = {}
+                res["id"] = k
                 res["input_data"] = self.search(params)
                 res["params"] = params
                 redis_store.rpush("input_data", json.dumps(res))

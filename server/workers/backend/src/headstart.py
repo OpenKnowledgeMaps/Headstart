@@ -12,9 +12,9 @@ class Backend(object):
 
     def __init__(self):
         # path should be to where in the docker container the Rscript are
-        self.wd = "headstart/backend"
+        self.wd = "./"
         self.command = 'Rscript'
-        self.hs = os.path.join(self.wd, "run_vis_layout.R")
+        self.hs = os.path.abspath(os.path.join(self.wd, "run_vis_layout.R"))
         self.default_params = {}
         self.default_params["MAX_CLUSTERS"] = 15
         self.default_params["language"] = "english"
