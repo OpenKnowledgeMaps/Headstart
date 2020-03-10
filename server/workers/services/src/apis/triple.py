@@ -60,7 +60,8 @@ class Search(Resource):
         if errors:
             abort(400, str(errors))
         k = str(uuid.uuid4())
-        d = {"id": k, "params": data, "endpoint": "search"}
+        d = {"id": k, "params": data,
+             "endpoint": "search"}
         redis_store.rpush("triple", json.dumps(d))
         result = get_key(redis_store, k)
 

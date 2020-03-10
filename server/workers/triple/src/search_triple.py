@@ -28,6 +28,7 @@ class TripleClient(object):
         msg = json.loads(msg)
         k = msg.get('id')
         params = msg.get('params')
+        params["service"] = "triple"
         endpoint = msg.get('endpoint')
         return k, params, endpoint
 
@@ -65,11 +66,12 @@ class TripleClient(object):
                         ]
                     }
                 }}
+        sort = self.build_sort_order(parameters)
         res = self.es.search(
             index=index,
             body=body,
             size=100,
-            sort=self.build_sort_order(parameters))
+            sort=sort)
         if parameters.get('raw'):
             return res
         else:
@@ -94,33 +96,43 @@ class TripleClient(object):
                         df["_source"].apply(pd.Series)],
                        axis=1)
         metadata = pd.DataFrame()
-        metadata["id"] = df.identifier.map(lambda x: x[0] if x else "")
-        metadata["title"] = df.title.map(lambda x: x[0] if x else "")
-        metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if x else "")
-        metadata["abstract"] = df.abstract.map(lambda x: x[0] if x else "")
-        metadata["published_in"] = df.publisher.map(lambda x: x[0].get('name') if x else "")
-        metadata["year"] = df.datestamp.map(lambda x: x if x else "")
-        metadata["url"] = df.url.map(lambda x: x[0] if x else "")
+        metadata["id"] = df.identifier.map(lambda x: x[0] if isinstance(x, list) else "")
+        metadata["title"] = df.title.map(lambda x: x[0] if isinstance(x, list) else "")
+        metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if isinstance(x, list) else "")
+        metadata["abstract"] = df.abstract.map(lambda x: x[0] if isinstance(x, list) else "")
+        metadata["published_in"] = df.publisher.map(lambda x: x[0].get('name') if isinstance(x, list) else "")
+        metadata["year"] = df.datestamp.map(lambda x: x if isinstance(x, str) else "")
+        metadata["url"] = df.url.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["readers"] = 0
-        metadata["subject"] = df.keyword.map(lambda x: "; ".join(x) if x else "")
+        metadata["subject"] = df.keyword.map(lambda x: "; ".join(x) if isinstance(x, list) else "")
         input_data = {}
-        input_data["metadata"] = metadata
-        input_data["text"] = metadata.apply(lambda x: ". ".join(x[["title", "abstract"]]), axis=1)
-        return input_data.to_json()
+        input_data["metadata"] = metadata.to_json()
+        input_data["text"] = metadata.apply(lambda x: ". ".join(x[["title", "abstract"]]), axis=1).to_json()
+        return input_data
 
     @staticmethod
     def get_authors(authorlist):
-        return "; ".join([", ".join([a.get('lastname')[0], a.get('firstname')[0]]) for a in authorlist if a])
+        authors = []
+        for a in authorlist:
+            if a:
+                author = []
+                for n in ['lastname', 'firstname']:
+                    if a.get(n, [None])[0]:
+                        author.append(a.get(n)[0])
+                authors.append(", ".join(author))
+        return "; ".join(authors)
 
     def run(self):
         while True:
             k, params, endpoint = self.next_item()
             if endpoint == "mappings":
                 res = self.get_mappings(params.get('index'))
-                redis_store.set(k, json.dumps(res))
+                redis_store.set(k+"_output", json.dumps(res))
             if endpoint == "search":
-                res = self.search(params)
-                redis_store.set(k, json.dumps(res))
+                res = {}
+                res["input_data"] = self.search(params)
+                res["params"] = params
+                redis_store.rpush("input_data", json.dumps(res))
 
 
 if __name__ == '__main__':
