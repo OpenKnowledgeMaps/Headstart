@@ -47,7 +47,8 @@ class Search(Resource):
              params={"q": "string, query term",
                      "sorting": "string, most-relevant or most-recent",
                      "from": "yyyy-MM-dd",
-                     "to": "yyyy-MM-dd"})
+                     "to": "yyyy-MM-dd",
+                     "vis_type": "string, overview or streamgraph"})
     # @api.marshal_with(search_fields)
     def post(self):
         """

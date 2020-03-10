@@ -40,9 +40,7 @@ services:
     restart: always
     network_mode: "host"
     volumes:
-      - type: bind
-        source: /var/opt/renv
-        target: /root/.local/share/renv
+        - "/var/opt/renv:/root/.local/share/renv"
 
 volumes:
   redis:
