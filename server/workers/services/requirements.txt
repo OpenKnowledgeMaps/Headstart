@@ -1,5 +1,7 @@
 flask
 flask-restx
+Werkzeug==0.16.1
+marshmallow
 gunicorn
 redis
 hiredis

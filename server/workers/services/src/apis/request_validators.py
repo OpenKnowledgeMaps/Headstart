@@ -20,5 +20,5 @@ class SearchParamSchema(Schema):
 
     @validates('from_')
     def is_not_in_future(self, date):
-        if date > datetime.today():
+        if date > datetime.today().date():
             raise ValidationError("Starting date can't be in the future.")

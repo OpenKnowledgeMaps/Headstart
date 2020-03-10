@@ -4,14 +4,22 @@ MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
 RUN apt-get update
 RUN apt-get -y install libssl-dev libcurl4-openssl-dev
 RUN apt-get -y install libxml2-dev libz-dev libpoppler-cpp-dev
+RUN apt-get -y install python3 python3-pip
 
+RUN R -e 'options(repos="https://cran.wu.ac.at")'
 RUN R -e 'install.packages("remotes", repos = c(CRAN = "https://cran.rstudio.com"))'
 RUN R -e 'install.packages("renv", repos = c(CRAN = "https://cran.rstudio.com"))'
 
 WORKDIR /headstart
-COPY workers/backend/src/renv.lock ./
-RUN R -e 'options(repos="https://cran.wu.ac.at"); renv::restore()'
-COPY preprocessing/other-scripts ./backend
+COPY workers/backend/requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
 
-ENTRYPOINT python
-CMD headstart.py
+COPY workers/backend/renv.lock .
+RUN R -e 'renv::consent(provided = TRUE)'
+RUN R -e 'renv::restore()'
+
+COPY workers/backend/src/ ./
+COPY preprocessing/resources .
+COPY preprocessing/other-scripts .
+
+ENTRYPOINT python3 headstart.py
