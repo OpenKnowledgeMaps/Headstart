@@ -153,7 +153,7 @@ RUN R -e 'renv::consent(provided = TRUE)' && \
  R -e 'renv::restore()'
 
 COPY workers/backend/src/ ./
-COPY preprocessing/resources .
+COPY preprocessing/resources ./resources
 COPY preprocessing/other-scripts .
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
 

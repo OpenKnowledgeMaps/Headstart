@@ -29,6 +29,10 @@ get_stopwords <- function(lang, testing) {
           add_stop_path <- paste0("../resources/", lang, ".stop")
           additional_stops <- scan(add_stop_path, what="", sep="\n")
           stops = c(stops, additional_stops)
+        } else if (dir.exists("./resources")) {
+          add_stop_path <- paste0("./resources/", lang, ".stop")
+          additional_stops <- scan(add_stop_path, what="", sep="\n")
+          stops = c(stops, additional_stops)
         } else {
           add_stop_path <- paste0("../../resources/", lang, ".stop")
           additional_stops <- scan(add_stop_path, what="", sep="\n")

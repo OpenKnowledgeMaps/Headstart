@@ -2,6 +2,7 @@ import os
 import copy
 import json
 import subprocess
+import asyncio
 from tempfile import NamedTemporaryFile
 import redis
 
@@ -44,16 +45,14 @@ class Backend(object):
                 cmd = [self.command, self.hs, self.wd,
                        params.get('q'), params.get('service'),
                        param_file.name, input_file.name]
-                print(cmd)
                 output = subprocess.check_output(cmd)
         output = [o for o in output.decode('utf-8').split('\n') if len(o) > 0]
-        return output[-1]
+        return json.loads(output[-1])
 
     def run(self):
-        while True:
-            k, params, input_data = self.next_item()
-            output = self.create_map(params, input_data)
-            redis_store.set(k+"_output", output)
+        k, params, input_data = self.next_item()
+        result = self.create_map(params, input_data)
+        redis_store.set(k+"_output", json.dumps(result))
 
 
 if __name__ == '__main__':
