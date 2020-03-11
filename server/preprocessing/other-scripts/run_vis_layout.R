@@ -16,7 +16,6 @@ library(tibble)
 library(tidyr)
 source('utils.R')
 source("vis_layout.R")
-registerDoParallel(5)
 DEBUG = FALSE
 
 params <- fromJSON(params_file)
