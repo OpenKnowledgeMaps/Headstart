@@ -87,8 +87,6 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
       curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       $output_json = curl_exec($ch);
-      var_dump($output_json);
-      $output_json = NULL;
     } else {
       $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
       $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, $repository);
