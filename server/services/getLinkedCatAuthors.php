@@ -17,7 +17,7 @@ $ini_array = library\Toolkit::loadIni($INI_DIR);
 $base_url = "https://" .
        $ini_array["connection"]["linkedcat_user"] . ":" .
        $ini_array["connection"]["linkedcat_pwd"] . "@" .
-       $ini_array["connection"]["linkedcat_solr"] . "/solr/linkedcat2/";
+       $ini_array["connection"]["linkedcat_solr"];
 
 $author_facet_query = "select?facet.field=author100_0" .
                       "&facet.field=author700_0" .
