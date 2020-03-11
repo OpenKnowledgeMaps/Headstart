@@ -56,6 +56,9 @@ setup_logging <- function(loglevel) {
     removeHandler('basic.stdout')
     addHandler(writeToConsole)
   } else {
+    if (!file.exists(Sys.getenv("HEADSTART_LOGFILE"))) {
+      file.create(Sys.getenv("HEADSTART_LOGFILE"))
+    }
     getLogger(loglevel)
     removeHandler('basic.stdout')
     addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"))
