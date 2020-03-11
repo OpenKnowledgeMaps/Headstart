@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import redis
 from elasticsearch import Elasticsearch
@@ -104,7 +105,7 @@ class TripleClient(object):
         metadata["year"] = df.datestamp.map(lambda x: x if isinstance(x, str) else "")
         metadata["url"] = df.url.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["readers"] = 0
-        metadata["subject"] = df.keyword.map(lambda x: "; ".join(x) if isinstance(x, list) else "")
+        metadata["subject"] = df.keyword.map(lambda x: "; ".join([self.clean_subject(s) for s in x]) if isinstance(x, list) else "")
         metadata["oa_state"] = 2
         metadata["link"] = ""
         text = pd.DataFrame()
@@ -114,6 +115,28 @@ class TripleClient(object):
         input_data["metadata"] = metadata.to_json()
         input_data["text"] = text.to_json()
         return input_data
+
+    @staticmethod
+    def clean_subject(subject):
+        subject_cleaned = re.sub(r"DOAJ:[^;]*(;|$)?", "", subject) # remove DOAJ classification
+        subject_cleaned = re.sub(r"/dk/atira[^;]*(;|$)?", "", subject_cleaned) # remove atira classification
+        subject_cleaned = re.sub(r"ddc:[0-9]+(;|$)?", "", subject_cleaned) # remove Dewey Decimal Classification
+        subject_cleaned = re.sub(r"([\w\/\:-])*?\/ddc\/([\/0-9\.])*", "", subject_cleaned) # remove Dewey Decimal Classification in URI form
+        subject_cleaned = re.sub(r"[A-Z,0-9]{2,}-[A-Z,0-9\.]{2,}(;|$)?", "", subject_cleaned) #remove LOC classification
+        subject_cleaned = re.sub(r"[^\(;]+\(General\)(;|$)?", "", subject_cleaned) # remove general subjects
+        subject_cleaned = re.sub(r"[^\(;]+\(all\)(;|$)?", "", subject_cleaned) # remove general subjects
+        subject_cleaned = re.sub(r"[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
+        subject_cleaned = re.sub(r"[^\[;]+\[[A-Z,0-9]+\](;|$)?", "", subject_cleaned) # remove WHO classification
+        subject_cleaned = re.sub(r"</keyword><keyword>", "", subject_cleaned) # remove </keyword><keyword>
+        subject_cleaned = re.sub(r"\[[^\[]+\][^\;]+(;|$)?", "", subject_cleaned) # remove classification
+        subject_cleaned = re.sub(r"[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
+        subject_cleaned = re.sub(r" -- ", "; ", subject_cleaned) #replace inconsistent keyword separation
+        subject_cleaned = re.sub(r" \(  ", "; ", subject_cleaned) #replace inconsistent keyword separation
+        subject_cleaned = re.sub(r"(\w* \w*(\.)( \w* \w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
+        subject_cleaned = re.sub(r"\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
+        subject_cleaned = re.sub(r" ?\d[:?-?]?(\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
+        subject_cleaned = re.sub(r"\w+:\w+-(\w+\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
+        return subject
 
     @staticmethod
     def get_authors(authorlist):
