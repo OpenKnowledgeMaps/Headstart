@@ -32,8 +32,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
       num_clusters <- tryCatch({
         cut_off <- get_cut_off(css_cluster, attempt)
         attempt <- attempt+1
-        cut_off$k
-        if (attempt > 50) break
+        if (attempt > 200) cut_off$k else NA
       }, error = function(err){
         vclog$warn(err$message)
         return (NA)
@@ -91,7 +90,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 }
 
 
-get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
+get_ndms <- function(distance_matrix, mindim=2, maxdim=2) {
 
   # Perform non-metric multidimensional scaling
   # nm <- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
