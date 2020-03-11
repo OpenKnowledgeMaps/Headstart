@@ -13,7 +13,7 @@ library(stringi)
 library(stringdist)
 library(plyr)
 library(onehot)
-registerDoParallel(3)
+registerDoParallel(7)
 
 
 vlog <- getLogger('vis')
