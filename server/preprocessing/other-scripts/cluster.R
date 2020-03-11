@@ -33,6 +33,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
         cut_off <- get_cut_off(css_cluster, attempt)
         attempt <- attempt+1
         cut_off$k
+        if (attempt > 50) break
       }, error = function(err){
         vclog$warn(err$message)
         return (NA)
