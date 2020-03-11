@@ -36,11 +36,16 @@ services:
       context: server
       dockerfile: headstart_backend.docker
     env_file:
-      - server/workers/backend/src/backend.env
+      - server/workers/backend/backend.env
     restart: always
     network_mode: "host"
     volumes:
-        - "/var/opt/renv:/root/.local/share/renv"
+      - type: bind
+        source: /var/opt/renv
+        target: /root/.local/share/renv
+      - type: bind
+        source: /var/log/headstart
+        target: /var/log/headstart
 
 volumes:
   redis:

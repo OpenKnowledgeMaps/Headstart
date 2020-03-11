@@ -131,6 +131,7 @@ RUN apt-get update \
 RUN apt update && apt full-upgrade -y && \
   apt install -y links curl vim libcurl4-openssl-dev \
                  libxml2-dev libz-dev libpoppler-cpp-dev \
+                 libopenmpi-dev libzmq3-dev \
                  libssl1.1 libssl-dev && \
   apt clean && \
   rm -f /etc/localtime && \
@@ -154,5 +155,6 @@ RUN R -e 'renv::consent(provided = TRUE)' && \
 COPY workers/backend/src/ ./
 COPY preprocessing/resources .
 COPY preprocessing/other-scripts .
+RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
 
 ENTRYPOINT python3 headstart.py
