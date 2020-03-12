@@ -153,6 +153,8 @@ var config = {
     show_context_oa_number: true,
     context_most_relevant_tooltip: false,
     
+    hashtags_twitter_card: "okmaps,openscience,dataviz",
+    
     service_names: {plos: "PLOS"
                         , base: "BASE"
                         , pubmed: "PubMed"
