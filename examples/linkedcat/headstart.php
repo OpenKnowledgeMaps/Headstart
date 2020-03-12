@@ -112,8 +112,6 @@ include 'config.php';
                         calculated_height = $(window).height() - $("header").outerHeight();
                     }
                     
-                    console.log(calculated_height);
-                    
                     return calculated_height;
                 }
 
