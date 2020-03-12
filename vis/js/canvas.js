@@ -388,7 +388,8 @@ class Canvas {
         $('#modals').empty()
         
         if (config.share_modal) {
-            $('#modals').append(shareButton)
+            $('#modals').append(shareButton);
+            $("#sharebutton").attr("title", config.localization[config.language].share_button_title);
             
             let title =  document.title;
             let url = window.location.href;
@@ -431,6 +432,7 @@ class Canvas {
         
         if (config.embed_modal) {
             $('#modals').append(embedModalButton)
+            $("#embedlink").attr("title", config.localization[config.language].embed_button_title);
             $('#embed-title').html(config.localization[config.language].embed_title)
             $('#embed-modal-text').val(`<iframe width="1200" height="720" src="${window.location.toString().replace(/#.*/, "")}&embed=true"></iframe>`)
             $('#embed-body-text').html(config.localization[config.language].embed_body_text)
