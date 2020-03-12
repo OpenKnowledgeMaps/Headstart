@@ -53,7 +53,7 @@ if(!empty($_POST)) {
             });
             
             var getSearchTermShort = function () {
-                return post_data.q.length > 50 ? post_data.q.substr(0, 50) + "..." : post_data.q;
+                return post_data.q.length > 115 ? post_data.q.substr(0, 115) + "..." : post_data.q;
             }
 
             var doSubmit = function (params, service_url, service_name) {
