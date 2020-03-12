@@ -108,6 +108,7 @@ class TripleClient(object):
         metadata["subject"] = df.keyword.map(lambda x: "; ".join([self.clean_subject(s) for s in x]) if isinstance(x, list) else "")
         metadata["oa_state"] = 2
         metadata["link"] = ""
+        metadata["relevance"] = df.index
         text = pd.DataFrame()
         text["id"] = metadata["id"]
         text["content"] = metadata.apply(lambda x: ". ".join(x[["title", "paper_abstract"]]), axis=1)
@@ -136,7 +137,8 @@ class TripleClient(object):
         subject_cleaned = re.sub(r"\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
         subject_cleaned = re.sub(r" ?\d[:?-?]?(\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
         subject_cleaned = re.sub(r"\w+:\w+-(\w+\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
-        return subject
+        subject_cleaned = re.sub(r"\[\w+\.?\w+\]", "", subject_cleaned) # replace residuals like [shs.hisphilso]
+        return subject_cleaned
 
     @staticmethod
     def get_authors(authorlist):
