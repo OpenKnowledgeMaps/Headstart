@@ -28,18 +28,6 @@ def get_key(store, key):
     return result
 
 
-search_fields = api.model('Search', {
-    "q": fields.String,
-    "sorting": fields.String,
-    "from": fields.DateTime,
-    "to": fields.DateTime,
-})
-
-mappings = api.model('Mappings', {
-    "index": fields.String
-})
-
-
 @api.route('/search')
 class Search(Resource):
     @api.doc(responses={200: 'OK',
@@ -48,15 +36,13 @@ class Search(Resource):
                      "sorting": "string, most-relevant or most-recent",
                      "from": "yyyy-MM-dd",
                      "to": "yyyy-MM-dd",
-                     "vis_type": "string, overview or streamgraph"})
+                     "vis_type": "string, overview or streamgraph",
+                     "raw": "boolean"})
     # @api.marshal_with(search_fields)
     def post(self):
         """
         """
         data = request.get_json()
-        data = {k: data.get(k)
-                for k
-                in ["q", "sorting", "from", "to"]}
         errors = search_param_schema.validate(data, partial=True)
         if errors:
             abort(400, str(errors))

@@ -1,22 +1,29 @@
 rm(list = ls())
 
-args <- commandArgs(TRUE)
-wd <- args[1]
-query <- args[2]
-service <- args[3]
-params_file <- args[4]
-input_file <- args[5]
+library(rstudioapi)
 
-setwd(wd) #Don't forget to set your working directory
+options(warn=1)
 
-renv::activate()
-renv::restore(lockfile = './renv.lock')
+wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
+setwd(wd)
 
-library(tibble)
-library(tidyr)
-source('utils.R')
-source("vis_layout.R")
-DEBUG = FALSE
+input_file <- "triple_test_input_data.json"
+params_file <- "params_triple.json"
+query <- "machine learning"
+service <- "triple"
+
+source('../utils.R')
+
+DEBUG <- TRUE
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
+} else {
+  setup_logging('INFO')
+}
+
+source("../vis_layout.R")
+
+tslog <- getLogger('ts')
 
 params <- fromJSON(params_file)
 input_data <- fromJSON(input_file)
@@ -35,11 +42,6 @@ if (!is.null(params$vis_type)) {
   vis_type <- 'overview'
 }
 
-if (DEBUG==TRUE){
-  setup_logging('DEBUG')
-} else {
-  setup_logging('INFO')
-}
 
 valid_langs <- list(
   'afr'='afrikaans',
@@ -104,6 +106,7 @@ tryCatch({
                            service,
                            max_clusters = MAX_CLUSTERS,
                            add_stop_words = ADDITIONAL_STOP_WORDS,
+                           testing=TRUE,
                            lang = LANGUAGE$name,
                            taxonomy_separator = params$taxonomy_separator,
                            list_size = params$list_size,
@@ -113,9 +116,3 @@ tryCatch({
  failed$query <<- query
  failed$processing_reason <<- err$message
 })
-
-if (!exists('output_json')) {
-  output_json <- detect_error(failed)
-}
-
-print(output_json)
