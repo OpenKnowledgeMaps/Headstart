@@ -110,10 +110,10 @@ class TripleClient(object):
         metadata["link"] = ""
         text = pd.DataFrame()
         text["id"] = metadata["id"]
-        text["content"] = metadata.apply(lambda x: ". ".join(x[["title", "paper_abstract"]]), axis=1).to_json()
+        text["content"] = metadata.apply(lambda x: ". ".join(x[["title", "paper_abstract"]]), axis=1)
         input_data = {}
-        input_data["metadata"] = metadata.to_json()
-        input_data["text"] = text.to_json()
+        input_data["metadata"] = metadata.to_json(orient='records')
+        input_data["text"] = text.to_json(orient='records')
         return input_data
 
     @staticmethod
@@ -161,7 +161,10 @@ class TripleClient(object):
                 res["id"] = k
                 res["input_data"] = self.search(params)
                 res["params"] = params
-                redis_store.rpush("input_data", json.dumps(res))
+                if params.get('raw') is True:
+                    redis_store.set(k+"_output", json.dumps(res))
+                else:
+                    redis_store.rpush("input_data", json.dumps(res))
 
 
 if __name__ == '__main__':

@@ -32,7 +32,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
       num_clusters <- tryCatch({
         cut_off <- get_cut_off(css_cluster, attempt)
         attempt <- attempt+1
-        if (attempt > 200) cut_off$k else NA
+        if (attempt > 500) cut_off$k else NA
       }, error = function(err){
         vclog$warn(err$message)
         return (NA)

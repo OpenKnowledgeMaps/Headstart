@@ -17,8 +17,8 @@
         	}];
                 data_config.options = options_<?php echo $_GET['service'] ?>.dropdowns;
         </script>
-        <script type="text/javascript" src="dist/headstart.js"></script>
-        <link type="text/css" rel="stylesheet" href="dist/headstart.css"></link>
+        <script type="text/javascript" src="headstart/dist/headstart.js"></script>
+        <link type="text/css" rel="stylesheet" href="headstart/dist/headstart.css"></link>
         <script type="text/javascript">
             headstart.start();
         </script>

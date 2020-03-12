@@ -5,6 +5,7 @@ import subprocess
 import asyncio
 from tempfile import NamedTemporaryFile
 import redis
+import pandas as pd
 
 redis_store = redis.StrictRedis(host="localhost", port=6379, db=0)
 
@@ -47,7 +48,7 @@ class Backend(object):
                        param_file.name, input_file.name]
                 output = subprocess.check_output(cmd)
         output = [o for o in output.decode('utf-8').split('\n') if len(o) > 0]
-        return json.loads(output[-1])
+        return pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
 
     def run(self):
         k, params, input_data = self.next_item()

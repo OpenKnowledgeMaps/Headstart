@@ -9,6 +9,10 @@ class SearchParamSchema(Schema):
                         format="%Y-%m-%d")
     to = fields.Date(required=True,
                      format="%Y-%m-%d")
+    vis_type = fields.Str(require=True)
+    year_range = fields.Str()
+    today = fields.Str()
+    raw = fields.Boolean()
 
     @pre_load
     def fix_years(self, in_data, **kwargs):
