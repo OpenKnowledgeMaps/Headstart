@@ -64,6 +64,7 @@ function getBklFacetData($base_url, $bkl_query, $bkls_top) {
   $temp_res_bkl_top = array();
   $mh = curl_multi_init();
   curl_multi_setopt($mh, CURLMOPT_MAX_TOTAL_CONNECTIONS, 10);
+  curl_multi_setopt($mh, CURLMOPT_MAX_HOST_CONNECTIONS, 10);
   $urls = array();
   foreach ($bkls_top as $i => $bkl_top) {
     if (strlen($bkl_top) > 0) {
