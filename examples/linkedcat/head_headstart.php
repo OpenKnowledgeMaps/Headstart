@@ -1,3 +1,31 @@
+<?php
+    $meta_title = "";
+    if($vis_type === "overview") {
+        if($mode === "keywords") {
+            $meta_title = "Knowledge Map für";
+        } else if ($mode === "authors") {
+            $meta_title = "Knowledge Map über die Werke von";
+        }
+    } else if($vis_type === "timeline") {
+        if($mode === "keywords") {
+            $meta_title = "Streamgraph für";
+        } else if ($mode === "authors") {
+            $meta_title = "Streamgraph über die Werke von";
+        }
+    }
+
+    $override_labels = array(
+            "tweet-text" => $meta_title ." $query - LinkedCat+"
+            , "title" => $meta_title ." $query - LinkedCat+"
+            , "app-name" => "LinkedCat+"
+            , "twitter-type" => "summary_large_image"
+            , "twitter-image" => "$SNAPSHOT_PATH$id.png"
+            , "fb-image" => "$SNAPSHOT_PATH$id.png"
+        );
+
+    include_once 'head_meta.php'; 
+?>
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">

@@ -4,7 +4,13 @@ include 'config.php';
 ?>
 <html>
     <head>
-                <?php include('head_headstart.php') ?>
+                <?php 
+                    $id = $_GET["file"];
+                    $query = $_GET["query"];
+                    $vis_type = $_GET["visualization_type"];
+                    $mode = $_GET["visualization_mode"];
+                    include('head_headstart.php') 
+                ?>
     </head>
 
     <body style="margin:0px; padding:0px" class="vis-page">
