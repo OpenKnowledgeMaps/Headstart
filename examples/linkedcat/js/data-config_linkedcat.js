@@ -28,7 +28,7 @@ var data_config = {
     create_title_from_context_style: "linkedcat",
     
     embed_modal: true,
-    share_modal: false,
+    share_modal: true,
 
     url_outlink: true,
     filter_menu_dropdown: false,
@@ -39,5 +39,7 @@ var data_config = {
     abstract_large: 1000,
     
     streamgraph_zoom: false,
-    canonical_url: "https://openknowledgemaps.org"
+    canonical_url: "https://openknowledgemaps.org",
+    
+    hashtags_twitter_card: "",
 };

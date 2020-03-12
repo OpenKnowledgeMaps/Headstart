@@ -398,7 +398,7 @@ class Canvas {
                     .attr("href", function () {
                         return "https://twitter.com/intent/tweet?"
                             + "url=" + encodeURI(url)
-                            + "&hashtags=" + encodeURI("okmaps,openscience,dataviz")
+                            + "&hashtags=" + encodeURI(config.hashtags_twitter_card)
                             + "&text=" + title;
             });
             
