@@ -7,7 +7,7 @@ $date = new DateTime();
     <head>
         <title>LinkedCat+ Visuelle Suche</title>
         <?php include('head_standard.php') ?>
-        <link type="text/css" rel="stylesheet" href="browse.css">
+        <link type="text/css" rel="stylesheet" href="./css/browse.css">
     </head>
     <body class="browse-page bg-image-startpage">
         <div>

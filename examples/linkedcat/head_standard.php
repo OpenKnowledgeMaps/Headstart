@@ -9,8 +9,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-<link type="text/css" rel="stylesheet" href="main.css">
-<link type="text/css" rel="stylesheet" href="menu.css">
+<link type="text/css" rel="stylesheet" href="./css/main.css">
+<link type="text/css" rel="stylesheet" href="./css/menu.css">
 <link type="text/css" rel="stylesheet" href="lib/auto-complete.css">
 <script type="text/javascript" src="lib/auto-complete.min.js"></script>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
