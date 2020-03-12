@@ -19,9 +19,8 @@ include 'config.php';
             <div class="topheader"></div>
         <?php endif; ?>
         <div id="visualization"></div>
-        <script type="text/javascript" src="data-config_<?php echo $_GET['service'] ?>.js"></script>
-        <script type="text/javascript" src="search_options.js"></script>
-        <script type="text/javascript" src="lib/Chart.Streamgraph.S.js"></script>
+        <script type="text/javascript" src="./js/data-config_<?php echo $_GET['service'] ?>.js"></script>
+        <script type="text/javascript" src="./js/search_options.js"></script>
         <script>
             
             let credit_text = "<p class='wtp'><a class='link-popup' href='faqs'>Weitere Informationen finden Sie in den FAQs</a>.</p><p>Diese Visualisierung wurde mit der <a class='link-popup' href='http://github.com/pkraker/Headstart'>Open Source Software Head Start</a> von <a class='link-popup' href='https://openknowledgemaps.org/'>Open Knowledge Maps</a> realisiert. Alle Daten stammen aus LinkedCat+.</p>"

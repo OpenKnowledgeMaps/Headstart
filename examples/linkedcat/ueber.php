@@ -112,7 +112,7 @@ $date = new DateTime();
             </div>
         </div>
 
-        <script type="text/javascript" src="data-config_linkedcat.js"></script>
+        <script type="text/javascript" src="./js/data-config_linkedcat.js"></script>
         <script>$(function () {
                 $('[data-toggle="popover"]').popover();
             });

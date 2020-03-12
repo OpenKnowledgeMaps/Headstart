@@ -25,7 +25,7 @@ include 'config.php';
             
         </div>
         
-        <script type="text/javascript" src="data-config_linkedcat.js"></script>
+        <script type="text/javascript" src="./js/data-config_linkedcat.js"></script>
         <script type ="text/javascript">
 
             let url = new URL(window.location.href);
@@ -57,8 +57,8 @@ include 'config.php';
                         addAutoComplete();
                     });
         </script>
-        <script type="text/javascript" src="search_options.js "></script>
-        <script type="text/javascript" src="search.js "></script>
+        <script type="text/javascript" src="./js/search_options.js "></script>
+        <script type="text/javascript" src="./js/search.js "></script>
 
     </body>
 </html>
