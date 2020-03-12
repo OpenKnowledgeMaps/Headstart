@@ -64,6 +64,7 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
   $res = array();
   $mh = curl_multi_init();
   curl_multi_setopt($mh, CURLMOPT_MAX_TOTAL_CONNECTIONS, 10);
+  curl_multi_setopt($mh, CURLMOPT_MAX_HOST_CONNECTIONS, 10);
   $urls = array();
   foreach ($author_ids as $i => $id) {
     if (strlen($id)>0) {
