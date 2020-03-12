@@ -85,12 +85,14 @@ include 'config.php';
                         data_config.intro = intro_keywords_timeline;
                     }
                 } else {
-                    if (<?php echo json_encode($_GET['visualization_type']) ?> === "authors") {
-                        data_config.intro = intro_authors_overview;
-                    } else if (<?php echo json_encode($_GET['visualization_mode']) ?> === "browse") {
-                        data_config.intro = intro_browseview;
-                    } else {
-                        data_config.intro = intro_keywords_overview;
+                    if (<?php echo json_encode($_GET['visualization_type']) ?> === "overview") {
+                        if(<?php echo json_encode($_GET['visualization_mode']) ?> === "authors") {
+                            data_config.intro = intro_authors_overview;
+                        } else if (<?php echo json_encode($_GET['visualization_mode']) ?> === "browse") {
+                            data_config.intro = intro_browseview;
+                        } else {
+                            data_config.intro = intro_keywords_overview;
+                        }
                     }
                 }
                 <?php if (isset($_GET['embed']) && $_GET['embed'] === 'true'): ?>
