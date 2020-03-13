@@ -42,7 +42,7 @@ get_papers <- function(query, params, limit=100,
   exact_query <- ""
 
   # add textus: to each word/phrase to enable verbatim search
-  exact_query = exact_query = gsub("(\"(.*?)\")|(?!or\\b)(?!and\\b)(?<!\\S)(?=\\S)", "textus:\\1", query, perl=T)
+  exact_query = gsub("(\"(.*?)\")|(?!or|and\\b)(?<!\\S)(?=\\S)", "textus:\\1", query, perl=T)
   
   blog$info(paste("BASE query:", exact_query))
 
