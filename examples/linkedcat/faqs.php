@@ -32,11 +32,11 @@ $date = new DateTime();
                         Klick auf die Blase angezeigt werden können. Ein Dokument wird in einer Knowledge Map nur einer Blase zugeordnet.
                     </p>
                     <p class="paragraph-style">
-                        Die Größe der Blasen ist relativ zur Anzahl der zugeordneten Dokumente. Blasen, die sich thematisch ähnlich sind, werden näher zueinander dargestellt als
+                        Knowledge Maps eignen sich besonders dazu, einen Überblick über ein Thema zu bekommen und relevante Konzepte und Dokumente zu entdecken. Die Größe der Blasen ist relativ zur Anzahl der zugeordneten Dokumente. Blasen, die sich thematisch ähnlich sind, werden näher zueinander dargestellt als
                         Blasen, die sich thematisch weniger ähnlich sind. 
                     </p>
                     <p class="paragraph-style">
-                        Knowledge Maps eignen sich besonders dazu, einen Überblick über ein Thema zu bekommen und relevante Konzepte und Dokumente zu entdecken. 
+                        Knowledge Maps haben ihren Ursprung bereits in den 1970er-Jahren. Weitere Informationen zu dem hier verwendeten Knowledge Map-Typ finden Sie in <a href="https://doi.org/10.31263/voebm.v72i2.3202" target="_blank">diesem Artikel</a>; einen allgemeinen Überblick über bei Knowledge Maps verwendeten Verfahren finden Sie bspw. in <a href="https://cns.iu.edu/docs/publications/2003-borner-arist.pdf" target="_blank">diesem Artikel</a>.
                     </p>
 
                     <h4 class="question">Was ist ein Streamgraph?</h4>
@@ -50,12 +50,15 @@ $date = new DateTime();
                         Die Schlagworte werden als farbige Ströme (Englisch "streams") dargestellt. Jedem Strom sind relevante Dokumente zugeordnet, die mit einem Klick auf einen Stream angezeigt werden können. Ein Dokument wird in einem Streamgraph mehreren Strömen zugeordnet.
                     </p>
                     <p class="paragraph-style">
-                        Die Höhe eines Streams entspricht der Anzahl der zugeordneten Dokumente zu einem bestimmten Zeitpunkt. 
+                        Streamgraphen eignen sich besonders dazu, die Entwicklung von Schlagwörtern über die Zeit zu analysieren und Trends zu erkennen. Die Höhe eines Stroms entspricht der Anzahl der zugeordneten Dokumente zu einem bestimmten Zeitpunkt. 
                         Dabei ist zu beachten, dass die Anzahl der relativen, nicht der absoluten Höhe entspricht.
-                        Zwischen den Zeitpunkten wird der Strom interpoliert.
+                        Zwischen den Zeitpunkten wird der Strom interpoliert. 
                     </p>
                     <p class="paragraph-style">
-                        Streamgraphs eignen sich besonders dazu, die Entwicklung von Schlagwörtern über die Zeit zu analysieren und Trends zu erkennen.
+                        Da das für die Interpolation verwendete Verfahren noch nicht perfekt ist, kann es dadurch vereinzelt auch zu grafischen Artefakten kommen; das bedeutet, dass Ströme an Stellen kleine Ausschläge aufweisen, obwohl zu diesem Zeitpunkt keine Dokumente für das Stichwort vorhanden sind. Im Zweifelsfall können Sie dies überprüfen, indem Sie mit der Maus über den Strom fahren und sich die Anzahl der Dokumente anzeigen lassen.
+                    </p>
+                    <p class="paragraph-style">
+                        Streamgraphen wurden im Jahr 2008 von Byron und Wattenberg ursprünglich für die New York Times entwickelt. Weitere Informationen finden Sie in <a href="https://leebyron.com/streamgraph/" target="_blank">diesem Artikel</a>.
                     </p>
 
                     <h4 class="question">Was ist unter relevanteste Dokumente zu verstehen?</h4>
@@ -88,12 +91,12 @@ $date = new DateTime();
 
                     <h4 class="question">Warum sind manche Visualisierungen besser als andere?</h4>
                     <p class="paragraph-style">
-                        Beide Visualisierungen (Knowledge Map und Streamgraph) sind abhängig von den Ergebnissen die zu einer Suche gefunden werden. Wenn es z.B. nur wenige Dokumente zu einem Suchbegriff gibt oder wenn zu einem Dokument nur wenige Metadaten vorhanden sind, dann hat dies auch einen Einfluss auf die Qualität der Visualisierung. Die Metadaten werden kontinuierlich von den Bibliothekar*innen der BAS:IS aktualisiert und verbessert. Sollten Sie Fehler finden, schreiben Sie bitte eine E-Mail an: REPLACE with EMAIL.
+                        Beide Visualisierungen (Knowledge Map und Streamgraph) sind abhängig von den Ergebnissen, die zu einer Suche gefunden werden. Wenn es z.B. nur wenige Dokumente zu einem Suchbegriff gibt oder wenn zu einem Dokument nur wenige Metadaten vorhanden sind, dann hat dies auch einen Einfluss auf die Qualität der Visualisierung. Die Metadaten werden kontinuierlich von den Bibliothekar*innen der BAS:IS aktualisiert und verbessert. Sollten Sie Fehler finden, schreiben Sie bitte eine E-Mail an: REPLACE with EMAIL.
                     </p>
                     
                     <h4 class="question">Warum sind manche Textauszüge fehlerhaft?</h4>
                     <p class="paragraph-style">
-                        Die Scans der Sitzungsberichte wurden automatisch in editierbare Textformate umgewandelt, damit Sie diese bspw. in einer PDF durchsuchen können oder damit sie Abschnitte aus den PDFs kopieren können. Leider kann es bei diesem Verfahren zu Fehlern in der Texterkennung kommen. 
+                        Die Scans der Sitzungsberichte wurden mittels automatisierter Texterkennung (Optical Character Recognition - OCR) in maschinenlesbare Texte umgewandelt. Damit sind diese Texte durchsuchbar und Sie können bspw. Abschnitte aus den PDFs kopieren. Leider kann es bei diesem Verfahren aber zu Fehlern in der Texterkennung kommen. 
                     </p>
 
                 </div>
