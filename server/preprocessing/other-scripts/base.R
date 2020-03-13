@@ -42,7 +42,7 @@ get_papers <- function(query, params, limit=100,
   exact_query <- ""
 
   # add textus: to each word/phrase to enable verbatim search
-  exact_query = gsub("(\"(.*?)\")|(?<!\\S)(?=\\S)", "textus:\\1", query, perl=T)
+  exact_query = exact_query = gsub("(\"(.*?)\")|(?!or\\b)(?!and\\b)(?<!\\S)(?=\\S)", "textus:\\1", query, perl=T)
   
   blog$info(paste("BASE query:", exact_query))
 
@@ -64,9 +64,10 @@ get_papers <- function(query, params, limit=100,
   abstract_exists = "dcdescription:?"
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
 
-  base_query <- paste(exact_query, lang_query, date_string, document_types, abstract_exists, collapse=" ")
+  base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, abstract_exists, collapse=" ")
   
   blog$info(paste("Exact query:", base_query))
+  blog$info(paste("Sort by:", sortby_string))
   # execute search
   (res_raw <- bs_search(hits=limit
                         , query = base_query
