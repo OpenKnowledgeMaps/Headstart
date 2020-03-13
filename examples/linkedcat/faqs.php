@@ -8,6 +8,8 @@ $date = new DateTime();
         <title>LinkedCat+ Visuelle Suche</title>
         <?php include('head_standard.php') ?>
         <link type="text/css" rel="stylesheet" href="./css/browse.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js" integrity="sha256-Y1rRlwTzT5K5hhCBfAFWABD4cU13QGuRN6P5apfWzVs=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" integrity="sha256-HAaDW5o2+LelybUhfuk0Zh2Vdk8Y2W2UeKmbaXhalfA=" crossorigin="anonymous" />
     </head>
     <body>
         <div>
@@ -23,7 +25,9 @@ $date = new DateTime();
                     <h4 class="question">Was ist eine Knowledge Map?</h4>
                     <span class="anchor" id="knowledgemap"></span>
                     <p class="example">
-                        <img class="shadow2 abstand" src="./img/km-example.png" alt="Knowledge Map für die Werke des Autors Hammer-Purgstall" alt="Screenshot: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)">
+                        <a href="./img/km-example.png" data-toggle="lightbox">
+                            <img class="shadow2 abstand" src="./img/km-example.png" alt="Knowledge Map für die Werke des Autors Hammer-Purgstall" alt="Screenshot: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)">
+                        </a>
                         <span>Screenshot: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)</span>
                     </p>
                     <p class="paragraph-style">
@@ -42,7 +46,9 @@ $date = new DateTime();
                     <h4 class="question">Was ist ein Streamgraph?</h4>
                     <span class="anchor" id="streamgraph"></span>
                     <p class="example">
-                        <img class="shadow2 abstand" src="./img/sg-example.png" alt="Screenshot: Streamgraph für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)">
+                        <a href="./img/sg-example.png" data-toggle="lightbox">
+                            <img class="shadow2 abstand" src="./img/sg-example.png" alt="Screenshot: Streamgraph für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)">
+                        </a>
                         <span>Screenshot: Streamgraph für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)</span>
                     </p>
                     <p class="paragraph-style">
@@ -104,6 +110,13 @@ $date = new DateTime();
         </div>
         <script type="text/javascript" src="./js/data-config_linkedcat.js"></script>
         <script>
+            $(document).ready(function() {
+                $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+                    event.preventDefault();
+                    $(this).ekkoLightbox();
+                });
+            })
+        </script>
 
 </body>
 </html>
