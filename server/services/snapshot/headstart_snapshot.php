@@ -20,11 +20,30 @@
             if (<?php echo json_encode($_GET['service']) ?> === "linkedcat" ||
                 <?php echo json_encode($_GET['service']) ?> === "linkedcat_authorview" ||
                 <?php echo json_encode($_GET['service']) ?> === "linkedcat_browseview") {
-              if(<?php echo json_encode($_GET['vis_type']) ?> === "timeline") {
-                  data_config.is_streamgraph = true;
-                  //data_config.embed_modal = false;
-                  data_config.show_area = false;
-              }
+                if(<?php echo json_encode($_GET['vis_mode']) ?> === "authors") {
+                    data_config.is_authorview = true;
+                }
+                if(<?php echo json_encode($_GET['vis_type']) ?> === "timeline") {
+                    data_config.is_streamgraph = true;
+                    //data_config.embed_modal = false;
+                    data_config.show_area = false;
+
+                    if(<?php echo json_encode($_GET['vis_mode']) ?> === "authors") {
+                        data_config.intro = intro_authors_timeline;
+                    } else {
+                        data_config.intro = intro_keywords_timeline;
+                    }
+                } else {
+                    if (<?php echo json_encode($_GET['vis_type']) ?> === "overview") {
+                        if(<?php echo json_encode($_GET['vis_mode']) ?> === "authors") {
+                            data_config.intro = intro_authors_overview;
+                        } else if (<?php echo json_encode($_GET['vis_mode']) ?> === "browse") {
+                            data_config.intro = intro_browseview;
+                        } else {
+                            data_config.intro = intro_keywords_overview;
+                        }
+                    }
+                }
             }
         </script>
         <script type="text/javascript" src="../../../dist/headstart.js"></script>

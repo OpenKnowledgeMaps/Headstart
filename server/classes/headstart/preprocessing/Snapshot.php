@@ -15,6 +15,12 @@ class Snapshot
         if ($service_name == "LinkedCat") {
           $post_data["vis_type"] = $vis_type;
           }
+        if ($service == "linkedcat_authorview") {
+          $post_data["vis_mode"] = "authors";
+        }
+        if ($service == "linkedcat_browseview") {
+          $post_data["vis_mode"] = "browse";
+        }
         $url_postfix = http_build_query($post_data);
 
         $node_path = $ini_array["snapshot"]["node_path"];
