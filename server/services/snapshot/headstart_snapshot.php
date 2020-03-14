@@ -29,18 +29,18 @@
                     data_config.show_area = false;
 
                     if(<?php echo json_encode($_GET['vis_mode']) ?> === "authors") {
-                        data_config.intro = intro_authors_timeline;
+                        data_config.intro = "";
                     } else {
-                        data_config.intro = intro_keywords_timeline;
+                        data_config.intro = "";
                     }
                 } else {
                     if (<?php echo json_encode($_GET['vis_type']) ?> === "overview") {
                         if(<?php echo json_encode($_GET['vis_mode']) ?> === "authors") {
-                            data_config.intro = intro_authors_overview;
+                            data_config.intro = "";
                         } else if (<?php echo json_encode($_GET['vis_mode']) ?> === "browse") {
-                            data_config.intro = intro_browseview;
+                            data_config.intro = "";
                         } else {
-                            data_config.intro = intro_keywords_overview;
+                            data_config.intro = "";
                         }
                     }
                 }
