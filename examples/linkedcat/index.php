@@ -29,7 +29,7 @@ include 'config.php';
         <script type ="text/javascript">
 
             let url = new URL(window.location.href);
-            let mode = url.searchParams.get("mode");
+            let mode = url.searchParams.get("vis_mode");
             if (mode === null) {
                 mode = "keywords";
             }
