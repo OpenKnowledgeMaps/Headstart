@@ -17,7 +17,9 @@
             data_config.show_context = true;
             data_config.create_title_from_context= true;
             data_config.options = options_<?php echo $_GET['service']; ?>.dropdowns;
-            if (<?php echo json_encode($_GET['service']) ?>.some(["linkedcat", "linkedcat_authorview", "linkedcat_browseview"])) {
+            if (<?php echo json_encode($_GET['service']) ?> === "linkedcat" ||
+                <?php echo json_encode($_GET['service']) ?> === "linkedcat_authorview" ||
+                <?php echo json_encode($_GET['service']) ?> === "linkedcat_browseview") {
               if(<?php echo json_encode($_GET['vis_type']) ?> === "timeline") {
                   data_config.is_streamgraph = true;
                   //data_config.embed_modal = false;
