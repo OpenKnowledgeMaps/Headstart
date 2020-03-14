@@ -7,8 +7,8 @@ include 'config.php';
                 <?php 
                     $id = $_GET["file"];
                     $query = $_GET["query"];
-                    $vis_type = $_GET["visualization_type"];
-                    $mode = $_GET["visualization_mode"];
+                    $vis_type = $_GET["vis_type"];
+                    $vis_mode = $_GET["vis_mode"];
                     include('head_headstart.php') 
                 ?>
     </head>
@@ -71,24 +71,24 @@ include 'config.php';
         	}];
                 data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
                 data_config.options = options_<?php echo $_GET['service'] ?>.dropdowns;
-                if(<?php echo json_encode($_GET['visualization_mode']) ?> === "authors") {
+                if(<?php echo json_encode($_GET['vis_mode']) ?> === "authors") {
                     data_config.is_authorview = true;
                 }   
-                if(<?php echo json_encode($_GET['visualization_type']) ?> === "timeline") {
+                if(<?php echo json_encode($_GET['vis_type']) ?> === "timeline") {
                     data_config.is_streamgraph = true;
                     //data_config.embed_modal = false;
                     data_config.show_area = false;
                     
-                    if(<?php echo json_encode($_GET['visualization_mode']) ?> === "authors") {
+                    if(<?php echo json_encode($_GET['vis_mode']) ?> === "authors") {
                         data_config.intro = intro_authors_timeline;
                     } else {
                         data_config.intro = intro_keywords_timeline;
                     }
                 } else {
-                    if (<?php echo json_encode($_GET['visualization_type']) ?> === "overview") {
-                        if(<?php echo json_encode($_GET['visualization_mode']) ?> === "authors") {
+                    if (<?php echo json_encode($_GET['vis_type']) ?> === "overview") {
+                        if(<?php echo json_encode($_GET['vis_mode']) ?> === "authors") {
                             data_config.intro = intro_authors_overview;
-                        } else if (<?php echo json_encode($_GET['visualization_mode']) ?> === "browse") {
+                        } else if (<?php echo json_encode($_GET['vis_mode']) ?> === "browse") {
                             data_config.intro = intro_browseview;
                         } else {
                             data_config.intro = intro_keywords_overview;
