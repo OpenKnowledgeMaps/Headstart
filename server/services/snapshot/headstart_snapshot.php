@@ -4,7 +4,7 @@
     </head>
 
     <body style="margin:0px; padding:0px">
-        
+
         <div id="visualization"></div>
         <script type="text/javascript" src="data-config_<?php echo $_GET['service'] ?>.js"></script>
 		<script src="../../../../js/search_options.js"></script>
@@ -17,7 +17,7 @@
             data_config.show_context = true;
             data_config.create_title_from_context= true;
             data_config.options = options_<?php echo $_GET['service']; ?>.dropdowns;
-            if(<?php echo json_encode($_GET['visualization_type']) ?> === "timeline") {
+            if(<?php echo json_encode($_GET['vis_type']) ?> === "timeline") {
                 data_config.is_streamgraph = true;
                 //data_config.embed_modal = false;
                 data_config.show_area = false;
