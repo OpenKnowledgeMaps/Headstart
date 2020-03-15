@@ -28,6 +28,22 @@ def get_key(store, key):
     return result
 
 
+@api.model(fields={"q": fields.String,
+                   "sorting": fields.String,
+                   "from_": fields.String,
+                   "to": fields.String,
+                   "vis_type": fields.String,
+                   "raw": fields.Boolean})
+class SearchQuery(fields.Raw):
+    def format(self, value):
+        return {"q": value.q,
+                "sorting": value.sorting,
+                "from": getattr(value, "from"),
+                "to": value.to,
+                "vis_type": value.vis_type,
+                "raw": value.raw}
+
+
 @api.route('/search')
 class Search(Resource):
     @api.doc(responses={200: 'OK',
@@ -38,7 +54,6 @@ class Search(Resource):
                      "to": "yyyy-MM-dd",
                      "vis_type": "string, overview or streamgraph",
                      "raw": "boolean"})
-    # @api.marshal_with(search_fields)
     def post(self):
         """
         """
