@@ -398,21 +398,21 @@ class Canvas {
             d3.select(".sharebutton_twitter")
                     .attr("href", function () {
                         return "https://twitter.com/intent/tweet?"
-                            + "url=" + encodeURI(url)
-                            + "&hashtags=" + encodeURI(config.hashtags_twitter_card)
+                            + "url=" + encodeURIComponent(url)
+                            + "&hashtags=" + encodeURIComponent(config.hashtags_twitter_card)
                             + "&text=" + title;
             });
             
             d3.select(".sharebutton_fb")
                     .attr("href", function () {
                         return "https://www.facebook.com/sharer/sharer.php?"
-                            + "u=" + encodeURI(url);
+                            + "u=" + encodeURIComponent(url);
             });
             
             d3.select(".sharebutton_mail")
                     .attr("href", function () {
                         return "mailto:?subject=" + title
-                            + "&body=" + description + " " + encodeURI(url)
+                            + "&body=" + description + " " + encodeURIComponent(url)
             });
             
             $(".sharebutton")
