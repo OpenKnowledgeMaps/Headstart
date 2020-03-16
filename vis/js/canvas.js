@@ -412,7 +412,7 @@ class Canvas {
             d3.select(".sharebutton_mail")
                     .attr("href", function () {
                         return "mailto:?subject=" + title
-                            + "&body=" + description + " " + url
+                            + "&body=" + description + " " + encodeURI(url)
             });
             
             $(".sharebutton")
