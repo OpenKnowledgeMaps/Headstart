@@ -17,11 +17,11 @@
             data_config.show_context = true;
             data_config.create_title_from_context= true;
             data_config.options = options_<?php echo $_GET['service']; ?>.dropdowns;
-            var service = <?php echo (isset($_GET['service']) ? json_encode($_GET['service']) : json_encode("")) ?>;
-            var vis_type = <?php echo (isset($_GET['vis_type']) ? json_encode($_GET['vis_type']) : json_encode("")) ?>;
-            var vis_mode = <?php echo (isset($_GET['vis_mode']) ? json_encode($_GET['vis_mode']) : json_encode("")) ?>;
+            var service = <?php echo $_GET['service']; ?>;
             var special_services = ["linkedcat", "linkedcat_authorview", "linkedcat_browseview"];
             if ( special_services.includes(service) ) {
+                var vis_type = <?php echo (isset($_GET['vis_type']) ? json_encode($_GET['vis_type']) : json_encode("")); ?>;
+                var vis_mode = <?php echo (isset($_GET['vis_mode']) ? json_encode($_GET['vis_mode']) : json_encode("")); ?>;
                 if( vis_mode === "authors") {
                     data_config.is_authorview = true;
                 }
