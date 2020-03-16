@@ -20,7 +20,7 @@
             var service = <?php echo isset($_GET['service']) ? json_encode($_GET['service']) : NULL ?>;
             var vis_type = <?php echo isset($_GET['vis_type']) ? json_encode($_GET['vis_type']) : NULL ?>;
             var vis_mode = <?php echo isset($_GET['vis_mode']) ? json_encode($_GET['vis_mode']) : NULL ?>;
-            if ( ["linkedcat", "linkedcat_authorview", "linkedcat_browseview"].some(service) ) {
+            if ( ["linkedcat", "linkedcat_authorview", "linkedcat_browseview"].includes(service) ) {
                 if( vis_mode === "authors") {
                     data_config.is_authorview = true;
                 }
