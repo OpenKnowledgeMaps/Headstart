@@ -17,27 +17,28 @@
             data_config.show_context = true;
             data_config.create_title_from_context= true;
             data_config.options = options_<?php echo $_GET['service']; ?>.dropdowns;
-            if (<?php echo json_encode($_GET['service']) ?> === "linkedcat" ||
-                <?php echo json_encode($_GET['service']) ?> === "linkedcat_authorview" ||
-                <?php echo json_encode($_GET['service']) ?> === "linkedcat_browseview") {
-                if(<?php echo json_encode(isset($_GET['vis_mode']) && $_GET['vis_mode']) ?> === "authors") {
+            var service = <?php echo isset($_GET['service']) ? json_encode($_GET['service']) : NULL ?>;
+            var vis_type = <?php echo isset($_GET['vis_type']) ? json_encode($_GET['vis_type']) : NULL ?>;
+            var vis_mode = <?php echo isset($_GET['vis_mode']) ? json_encode($_GET['vis_mode']) : NULL ?>;
+            if ( ["linkedcat", "linkedcat_authorview", "linkedcat_browseview"].some(service) ) {
+                if( vis_mode === "authors") {
                     data_config.is_authorview = true;
                 }
-                if(<?php echo json_encode($_GET['vis_type']) ?> === "timeline") {
+                if( vis_type === "timeline") {
                     data_config.is_streamgraph = true;
                     //data_config.embed_modal = false;
                     data_config.show_area = false;
 
-                    if(<?php echo json_encode(isset($_GET['vis_mode']) && $_GET['vis_mode']) ?> === "authors") {
+                    if( vis_mode === "authors") {
                         data_config.intro = "";
                     } else {
                         data_config.intro = "";
                     }
                 } else {
-                    if (<?php echo json_encode($_GET['vis_type']) ?> === "overview") {
-                        if(<?php echo json_encode(isset($_GET['vis_mode']) && $_GET['vis_mode']) ?> === "authors") {
+                    if (vis_type === "overview") {
+                        if(vis_mode === "authors") {
                             data_config.intro = "";
-                        } else if (<?php echo json_encode(isset($_GET['vis_mode']) && $_GET['vis_mode']) ?> === "browse") {
+                        } else if (vis_mode === "browse") {
                             data_config.intro = "";
                         } else {
                             data_config.intro = "";
