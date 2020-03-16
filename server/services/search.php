@@ -117,15 +117,10 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
                             , "linkedcat_browseview" => "LinkedCat");
 
     if(!isset($ini_array["snapshot"]["snapshot_enabled"]) || $ini_array["snapshot"]["snapshot_enabled"] > 0) {
-        if ($repository == "linkedcat" || $repository == "linkedcat_authorview" || $repository == "linkedcat_browseview") {
-          if ($post_params["vis_type"] == "timeline") {
-            $vis_type = "timeline";
-          } else {
-            $vis_type = "overview";
-          }
-        }
-        else {
-          $vis_type = NULL;
+        if (isset($post_params["vis_type"]) && $post_params["vis_type"] == "timeline") {
+          $vis_type = "timeline";
+        } else {
+          $vis_type = "overview";
         }
         $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $repository, $repo_mapping[$repository], $vis_type);
         $snapshot->takeSnapshot();
