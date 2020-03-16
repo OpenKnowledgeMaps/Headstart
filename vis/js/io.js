@@ -400,6 +400,24 @@ IO.prototype = {
 
         this.data = cur_data;
     },
+    
+    //Get all terms in a query minus operators
+    getQueryTerms: function () {
+        let full_query = context.query;
+        
+        let query_wt_exclusions = full_query.replace(/(^|\s)-[^\s]*/g, " ");
+        query_wt_exclusions = query_wt_exclusions.replace(/(^|\s)-\"(.*?)\"/g, " ");
+        query_wt_exclusions = query_wt_exclusions.replace(/(^|\s)-\((.*?)\)/g, " ");
+        XRegExp.matchRecursive(str, '\\(', '\\)', 'g');
+        
+        //Get all phrases and remove inverted commas from results
+        let term_array = full_query.match(/\"(.*?)\"/g)
+                .map(function(x){return x.replace(/\"/g, '');});
+        
+        //Remove phrases, and, or, +,(, ) from query string
+        let query_wt = full_query.replace(/\"(.*?)\"|\s-(.*?)\s|\sand\s|\sor\s|[\s\+]|\(|\)/g, " ");
+        
+    },
 
     // prepare the areas for the bubbles
     prepareAreas: function () {
