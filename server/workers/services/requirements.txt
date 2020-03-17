@@ -6,3 +6,4 @@ gunicorn
 redis
 hiredis
 aioredis
+pandas

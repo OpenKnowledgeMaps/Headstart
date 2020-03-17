@@ -12,7 +12,7 @@ class SearchParamSchema(Schema):
     vis_type = fields.Str(require=True)
     year_range = fields.Str()
     today = fields.Str()
-    raw = fields.Boolean()
+    result_type = fields.Str()
 
     @pre_load
     def fix_years(self, in_data, **kwargs):
@@ -26,3 +26,8 @@ class SearchParamSchema(Schema):
     def is_not_in_future(self, date):
         if date > datetime.today().date():
             raise ValidationError("Starting date can't be in the future.")
+
+    @validates('result_type')
+    def validate_result_type(self, result_type):
+        if result_type not in ["json", "csv", "raw"]:
+            raise ValidationError("Result type must be one of ['json', 'csv', 'raw'].")

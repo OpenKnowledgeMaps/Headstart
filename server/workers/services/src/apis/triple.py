@@ -5,13 +5,16 @@ import time
 import redis
 import asyncio
 import aioredis
+import pandas as pd
 
 from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
 
 redis_store = redis.StrictRedis(host="localhost", port=6379, db=0)
-api = Namespace("triple", description="TRIPLE API")
+triple_ns = Namespace("triple", description="TRIPLE API operations")
+
+
 search_param_schema = SearchParamSchema()
 
 
@@ -28,32 +31,28 @@ def get_key(store, key):
     return result
 
 
-@api.model(fields={"q": fields.String,
-                   "sorting": fields.String,
-                   "from_": fields.String,
-                   "to": fields.String,
-                   "vis_type": fields.String,
-                   "raw": fields.Boolean})
-class SearchQuery(fields.Raw):
-    def format(self, value):
-        return {"q": value.q,
-                "sorting": value.sorting,
-                "from": getattr(value, "from"),
-                "to": value.to,
-                "vis_type": value.vis_type,
-                "raw": value.raw}
+search_query = triple_ns.model("Search Query",
+                               {"q": fields.String(required=True),
+                                "sorting": fields.String(required=True),
+                                "from": fields.String(required=True),
+                                "to": fields.String(required=True),
+                                "vis_type": fields.String(required=True),
+                                "result_type": fields.String(required=True)})
+# class SearchQuery(fields.Raw):
+#     def format(self, value):
+#         return {"q": value.q,
+#                 "sorting": value.sorting,
+#                 "from": getattr(value, "from"),
+#                 "to": value.to,
+#                 "vis_type": value.vis_type,
+#                 "raw": value.raw}
 
 
-@api.route('/search')
+@triple_ns.route('/search')
 class Search(Resource):
-    @api.doc(responses={200: 'OK',
-                        400: 'Invalid search parameters'},
-             params={"q": "string, query term",
-                     "sorting": "string, most-relevant or most-recent",
-                     "from": "yyyy-MM-dd",
-                     "to": "yyyy-MM-dd",
-                     "vis_type": "string, overview or streamgraph",
-                     "raw": "boolean"})
+    @triple_ns.doc(responses={200: 'OK',
+                              400: 'Invalid search parameters'})
+    @triple_ns.expect(search_query)
     def post(self):
         """
         """
@@ -67,28 +66,59 @@ class Search(Resource):
         redis_store.rpush("triple", json.dumps(d))
         result = get_key(redis_store, k)
 
-        headers = {"Content-Type": "application/json"}
+        headers = {}
+        if data.get("result_type") == "json":
+            headers["Content-Type"] = "application/json"
+        if data.get("result_type") == "csv":
+            result = pd.read_json(result).to_csv()
+            headers["Content-Type"] = "text/csv"
+            headers["Content-disposition"] = "attachment; filename={0}.csv".format(k)
+        if data.get("result_type") == "raw":
+            headers["Content-Type"] = "application/json"
         return make_response(result,
                              200,
                              headers)
 
 
-@api.route('/example_data')
+@triple_ns.route('/example_data')
 class ExampleData(Resource):
+    @triple_ns.doc(description="Returns example map data for the following parameters:\n"
+                               "q=feminicide, sorting=most-relevant, from=2019-01-01, "
+                               "to=2019-12-31, result_type=csv",
+                   responses={200: 'OK'})
     def get(self):
-        headers = {"Content-Type": "application/json"}
-        data = {"test": "document string"}
-        return make_response(data,
+        k = str(uuid.uuid4())
+        data = {"q": "feminicide",
+                "sorting": "most-relevant",
+                "from": "2019-01-01",
+                "to": "2019-12-31",
+                "vis_type": "overview",
+                "result_type": "csv"}
+        d = {"id": k, "params": data,
+             "endpoint": "search"}
+        redis_store.rpush("triple", json.dumps(d))
+        result = get_key(redis_store, k)
+
+        headers = {}
+        if data.get("result_type") == "json":
+            headers["Content-Type"] = "application/json"
+        if data.get("result_type") == "csv":
+            result = pd.read_json(result).to_csv()
+            headers["Content-Type"] = "text/csv"
+            headers["Content-disposition"] = "attachment; filename={0}.csv".format(k)
+        if data.get("result_type") == "raw":
+            headers["Content-Type"] = "application/json"
+        return make_response(result,
                              200,
                              headers)
 
 
-@api.route('/mappings')
+@triple_ns.route('/mappings')
 class Mappings(Resource):
-    @api.doc(responses={200: 'OK',
-                        400: 'Invalid search parameters'},
-             params={"index": "Specify the ElasticSearch index to get the mapping of."})
-    # @api.marshal_with(mappings)
+    @triple_ns.doc(responses={200: 'OK',
+                              400: 'Invalid search parameters'},
+                   params={"index": "Specify the ElasticSearch index to get the mapping of, currently either 'isidore-sources-triple' or 'isidore-documents-triple'"})
+    # @triple_ns.marshal_with(mappings)
     def get(self):
         """
         """
