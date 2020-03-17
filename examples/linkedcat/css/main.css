@@ -908,5 +908,13 @@ label.q-error, #input-container label.q-error, .timefield .error {
     .timefield #from-error {
         padding-left: 0px;
     }
+    
+}
 
+@media screen and (max-width: 360px) {
+    
+    .info-btn {
+        display: none;
+    }
+    
 }
