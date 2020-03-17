@@ -22,22 +22,24 @@ var data_config = {
     show_keywords: true,
     hide_keywords_overview: false,
     convert_author_names: false,
-	
+
     show_context: true,
     create_title_from_context: true,
     create_title_from_context_style: "linkedcat",
-    
+
     embed_modal: true,
-    share_modal: false,
+    share_modal: true,
 
     url_outlink: true,
     filter_menu_dropdown: false,
     sort_menu_dropdown: true,
     //filter_options: ["all", "open_access"],
-    
+
     show_context_oa_number: false,
     abstract_large: 1000,
-    
+
     streamgraph_zoom: false,
-    canonical_url: "https://openknowledgemaps.org"
+    canonical_url: "https://openknowledgemaps.org",
+
+    hashtags_twitter_card: "",
 };

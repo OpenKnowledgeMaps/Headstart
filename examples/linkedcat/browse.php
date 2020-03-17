@@ -7,7 +7,7 @@ $date = new DateTime();
     <head>
         <title>LinkedCat+ Visuelle Suche</title>
         <?php include('head_standard.php') ?>
-        <link type="text/css" rel="stylesheet" href="browse.css">
+        <link type="text/css" rel="stylesheet" href="./css/browse.css">
     </head>
     <body class="browse-page bg-image-startpage">
         <div>
@@ -33,7 +33,7 @@ $date = new DateTime();
         </div>
         <?php include('credits.php') ?>
 
-        <script type="text/javascript" src="data-config_linkedcat.js"></script>
+        <script type="text/javascript" src="./js/data-config_linkedcat.js"></script>
         <script>
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
 
@@ -102,7 +102,7 @@ $date = new DateTime();
                                     + "&service_url=" + data_config.server_url + "services/searchLinkedCatBrowseview.php"
                                     + "&service_name=LinkedCat"
                                     + "&service=" + data_config.service
-                                    + "&visualization_mode=keywords")
+                                    + "&vis_mode=browse")
                             )
                     win.post_data = {
                         q: build_q(map_params)

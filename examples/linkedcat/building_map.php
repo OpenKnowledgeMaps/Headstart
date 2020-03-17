@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<?php
+    include 'config.php';
+?>
 <html>
 
     <head>
@@ -50,7 +53,7 @@ if(!empty($_POST)) {
             });
             
             var getSearchTermShort = function () {
-                return post_data.q.length > 50 ? post_data.q.substr(0, 50) + "..." : post_data.q;
+                return post_data.q.length > 115 ? post_data.q.substr(0, 115) + "..." : post_data.q;
             }
 
             var doSubmit = function (params, service_url, service_name) {
@@ -70,8 +73,8 @@ if(!empty($_POST)) {
                                 + "&file=" + file
                                 + "&service=" + params.get("service")
                                 + "&service_name=" + service_name
-                                + "&visualization_mode=" + params.get("visualization_mode")
-                                + "&visualization_type=" + post_data.vis_type)
+                                + "&vis_mode=" + params.get("vis_mode")
+                                + "&vis_type=" + post_data.vis_type)
                         return false;
                     } else {
                         showErrorCreation();

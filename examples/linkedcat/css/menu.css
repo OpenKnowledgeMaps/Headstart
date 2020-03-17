@@ -3,7 +3,6 @@ header {
     padding: 20px 0px 15px;
     position: fixed;
     width: 100%;
-    /*max-width:1600px;*/
     background-color: white;
     text-align: left;
     z-index: 10;
@@ -27,7 +26,6 @@ header #logo a:hover {
     color:white;
     background-color: transparent;
     font-size: 16px;
-    /*line-height: 80%;*/
     margin: 0px 0px 0px 50px !important;
     vertical-align: bottom;
     position: absolute;
@@ -90,7 +88,7 @@ header #logo a:hover {
     top: 0;
     display:none;
     background-color: white;
-    left: -285px;  /* start off behind the scenes */
+    left: -285px;
     height: 100%;
     position: fixed;
     width: 285px;
