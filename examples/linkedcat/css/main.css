@@ -22,11 +22,8 @@ a {
 }
 
 .bg-image-startpage {
-    /*position: absolute;*/
     background-size: cover;
     background-attachment: fixed;
-    /*height: 100vh;*/
-    /*text-transform: uppercase;*/ 
     padding: 0 0 0px;
     background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(0,0,0, 0.2)), url(./../img/background-start-2.jpg); 
     background-repeat: no-repeat;
@@ -51,8 +48,7 @@ a {
     margin: 100px auto 0;
 }
 
-.search {
-    /*position: relative; margin: 20% auto 0;*/ 
+.search { 
     text-transform: none; 
     max-width:600px; 
     margin-right: auto;
@@ -68,7 +64,6 @@ a {
 }
 
 .search #progress {
-    /*max-width:600px;*/ 
     margin: 0px auto;
 }
 
@@ -167,9 +162,6 @@ a {
     text-transform: none; 
     color: #f7f7f7;
     display: inline-block;
-    /*position: absolute; 
-    right: 0px;
-    bottom: 20px;*/
     font-size: 9px; 
     text-align: right;
     float: right;
@@ -181,9 +173,6 @@ a {
     text-transform: none; 
     color: #f7f7f7; 
     display: inline-block;
-    /*position: absolute; 
-    left: 20px;
-    bottom: 20px;*/ 
     font-size: 9px; 
     text-align: left;
     padding-left: 20px;
@@ -456,8 +445,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
     font-size: 12px;
 }
 
-.timefield #from-error {
-    padding-left: 10px;
+.timefield #from-error, .timefield #to-error {
     color: red;
 }
 
@@ -465,12 +453,10 @@ label.q-error, #input-container label.q-error, .timefield .error {
     color: red;
     font-family: 'Lato', sans-serif;
     font-size: 12px;
-    position: absolute;
-    top: 215px;
     border-radius: 0px;
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
-    margin: 0px 20px;
+    margin: 0px;
     padding: 3px;
 }
 
@@ -493,12 +479,12 @@ label.q-error, #input-container label.q-error, .timefield .error {
 
 .timefield label {
     display: inline-block;
-
     font-family: 'Lato', sans-serif;
 }
 
-.timefield #from {
+.timefield #from, .timefield #to {
     margin-left: 8px;
+    margin-right: 10px;
 }
 
 .timefield #to {
@@ -533,13 +519,8 @@ label.q-error, #input-container label.q-error, .timefield .error {
 }
 
 .waiting-page-img {
-    /*position: absolute;*/
     background-size: cover;
     background-attachment: fixed;
-    /*bottom: 0px;
-    right: 0px;
-    width: 100%;
-    height: 100%;*/
     padding: 0px;
     background-image: linear-gradient(rgba(255,255,255, 1), rgba(255,255,255, 0.7)), url(./../img/waiting-bg2.jpg); 
     background-repeat: no-repeat;
@@ -612,7 +593,6 @@ label.q-error, #input-container label.q-error, .timefield .error {
     font-family: 'Josefin Sans', sans-serif;
     color: white;
     text-transform: uppercase;
-    /*text-shadow:1px 1px 10px black;*/
     text-align: center;
 }
 
@@ -625,7 +605,6 @@ label.q-error, #input-container label.q-error, .timefield .error {
 .question {
     padding: 40px 0px 20px; 
     margin: 0px;
-    /*font-family: 'Josefin Sans', sans-serif;*/
     font-size: 24px;
     line-height: 150%;;
 }
@@ -884,7 +863,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
     .waiting-box {
         top: 5%;
         left: 5%;
-right: 5%;
+        right: 5%;
         font-size: 14px;
     }
     
