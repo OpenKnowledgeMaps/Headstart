@@ -82,6 +82,9 @@ MyMediator.prototype = {
         this.mediator.subscribe("preview_mouseover", this.preview_mouseover);
         this.mediator.subscribe("preview_mouseout", this.preview_mouseout);
         this.mediator.subscribe("list_click_paper_list", this.list_click_paper_list);
+        this.mediator.subscribe("list_click_area", this.list_click_area);
+        this.mediator.subscribe("list_area_mouseover", this.list_area_mouseover);
+        this.mediator.subscribe("list_area_mouseout", this.list_area_mouseout);
         // list --> bookmarks
         this.mediator.subscribe("bookmark_added", this.bookmark_added);
         this.mediator.subscribe("bookmark_removed", this.bookmark_removed);
@@ -445,7 +448,10 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
     
-    stream_clicked: function(keyword, color) {
+    stream_clicked: function(d) {
+        let keyword = d.key;
+        let color = d.color;
+        
         mediator.current_stream = keyword;
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'filterListByKeyword', [keyword]);
@@ -631,6 +637,25 @@ MyMediator.prototype = {
             mediator.manager.call('list', 'enlargeListItem', [d]);
             mediator.current_enlarged_paper = d;
             mediator.manager.call('papers', 'framePaper', [d]);
+            mediator.manager.call('list', 'count_visible_items_to_header')
+        }
+    },
+    
+    list_area_mouseover: function(d) {
+        mediator.manager.call('bubble', 'highlightBubble', [d]);
+    },
+    
+    list_area_mouseout: function(d) {
+        mediator.manager.call('bubble', 'removeHighlightBubble', [d]);
+    },
+    
+    list_click_area: function(d) {
+        if(config.is_streamgraph) {
+            return; //Not implemented yet
+        } else {
+            mediator.manager.call('canvas', 'getCurrentCircle', [d]);
+            if(mediator.current_circle) mediator.manager.call('bubble', 'zoomin', [mediator.current_circle.data()[0]])
+            mediator.current_bubble.current = "hoverbig";
             mediator.manager.call('list', 'count_visible_items_to_header')
         }
     },

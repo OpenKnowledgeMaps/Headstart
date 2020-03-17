@@ -664,6 +664,18 @@ list.populateReaders = function(nodes) {
             areas.select(".area_name").html(function(d) {
                 return d.area;
             });
+            
+            areas.on("mouseover", function (d) {
+                mediator.publish("list_area_mouseover", d);
+            })
+            
+            areas.on("mouseout", function (d) {
+                mediator.publish("list_area_mouseout", d);
+            })
+            
+            areas.on("click", function (d) {
+                mediator.publish("list_click_area", d);
+            })
         }
 
         if (!config.content_based && config.base_unit !== "" && !config.metric_list) {
