@@ -139,8 +139,8 @@ build_query <- function(query, params, limit){
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext', 'goobi_link')
   query <- gsub(" ?<<von>>", "", query)
-  aq <- paste0(lapply(q_fields, build_authorfield_query))
-  qq <- paste0(lapply(q_fields, build_queryfield_query))
+  aq <- paste0(lapply(q_fields, build_authorfield_query, query=query))
+  qq <- paste0(lapply(q_fields, build_queryfield_query, query=query))
   q <- paste(c(aq, qq), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
@@ -190,12 +190,17 @@ boost_factors <- list(
   'keyword_label'=30
 )
 
-build_authorfield_query <- function(field) {
+build_authorfield_query <- function(field, query) {
   paste0(field, ':', '"', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"), '"', add_boost_factor(field))
 }
 
-build_queryfield_query <- function(field) {
-  paste0(field, ':', '"', query, '"', add_boost_factor(field))
+build_queryfield_query <- function(field, query) {
+  if (length(unlist(strsplit(query, " "))) > 1) {
+    query <- paste0(unlist(strsplit(query, " ")), collapse = '" AND "')
+    query <- paste0(field, ':', '("', query, '")', add_boost_factor(field))
+  } else {
+    query <- paste0(field, ':', '"', query, '"', add_boost_factor(field))
+  }
 }
 
 add_boost_factor <- function(field) {
