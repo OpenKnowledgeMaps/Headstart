@@ -1414,7 +1414,9 @@ list.populateOverlay = function(d) {
 
                 var showError = function() {
                     var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
-                    $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + pdf_location_link + "\" target=\"_blank\">this website</a>.");
+                    $("#status").html(config.localization[config.language].pdf_not_loaded 
+                            + " <a href=\"" + pdf_location_link + "\" target=\"_blank\">" 
+                            + config.localization[config.language].pdf_not_loaded_linktext + "</a>.");
                     $("#status").show();
                 }
 

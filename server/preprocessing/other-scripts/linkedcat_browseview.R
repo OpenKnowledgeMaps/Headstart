@@ -40,7 +40,9 @@ get_papers <- function(query, params, limit=100) {
   start.time <- Sys.time()
   host=paste0(Sys.getenv("LINKEDCAT_USER"),":",Sys.getenv("LINKEDCAT_PWD"),"@",Sys.getenv("LINKEDCAT_SOLR"))
   conn <- SolrClient$new(host=host,
-                         path="solr/linkedcat2", port=NULL, scheme="https")
+                         path=Sys.getenv("LINKEDCAT_SOLR_PATH"),
+                         port=if (Sys.getenv("LINKEDCAT_SOLR_PORT")=="NULL") NULL else Sys.getenv("LINKEDCAT_SOLR_PORT"),
+                         scheme=Sys.getenv("LINKEDCAT_SOLR_SCHEME"))
 
   q_params <- build_query(query, params, limit)
   # do search

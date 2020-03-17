@@ -7,7 +7,7 @@ $date = new DateTime();
     <head>
         <title>LinkedCat+ Visuelle Suche</title>
         <?php include('head_standard.php') ?>
-        <link type="text/css" rel="stylesheet" href="browse.css">
+        <link type="text/css" rel="stylesheet" href="./css/browse.css">
     </head>
     <body>
         <div>
@@ -81,7 +81,7 @@ $date = new DateTime();
                         <p style="margin-bottom: 40px;">Streamgraphen zeigen die zeitliche Entwicklung der häufigsten Schlagworte zu einem Stichwort/Autor. Die Schlagworte werden als farbige Ströme (englisch "streams") dargestellt. 
                         </p>
 
-                        <p>Weitere Infos zu den Visualisierungen <a href="faqs">finden Sie in den FAQs</a>. Die Software wurde von Open Knowledge Maps entwickelt und ist open source.</p>
+                        <p>Weitere Infos zu den Visualisierungen <a href="faqs">finden Sie in den FAQs</a>. Die Software wurde von <a target="_blank" href="https://openknowledgemaps.org/">Open Knowledge Maps</a> entwickelt und ist open source.</p>
                     </div>
                 </div>
 
@@ -112,7 +112,7 @@ $date = new DateTime();
             </div>
         </div>
 
-        <script type="text/javascript" src="data-config_linkedcat.js"></script>
+        <script type="text/javascript" src="./js/data-config_linkedcat.js"></script>
         <script>$(function () {
                 $('[data-toggle="popover"]').popover();
             });
