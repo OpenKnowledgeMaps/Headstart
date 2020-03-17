@@ -106,12 +106,13 @@ get_papers <- function(query, params, limit=100) {
 }
 
 clean_highlights <- function(query, res) {
+  query <- gsub('"', '', query)
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
     s <- strsplit(x, " \\.\\.\\. ")
-    unlist(lapply(s, function(x) x[grepl(paste0("<em>", query, "</em>"), x, ignore.case=TRUE)]))[1]
+    unlist(lapply(s, function(x) x[grepl(paste0("<em>", gsub(" ", "|", query), "</em>"), x, ignore.case=TRUE)]))[1]
   }))
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
-    gsub(paste0("<em>((?!", query, ").)<\\/em>"), "\\1", x, ignore.case=TRUE, perl=TRUE)
+    gsub(paste0("<em>((?!", gsub(" ", "|", query), ").)<\\/em>"), "\\1", x, ignore.case=TRUE, perl=TRUE)
   }))
   return(res)
 }
@@ -139,7 +140,7 @@ build_query <- function(query, params, limit){
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext', 'goobi_link')
   query <- gsub(" ?<<von>>", "", query)
-  aq <- paste0(lapply(q_fields, build_authorfield_query, query=query))
+  aq <- paste0(lapply(a_fields, build_authorfield_query, query=query))
   qq <- paste0(lapply(q_fields, build_queryfield_query, query=query))
   q <- paste(c(aq, qq), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
@@ -195,13 +196,19 @@ build_authorfield_query <- function(field, query) {
 }
 
 build_queryfield_query <- function(field, query) {
-  if (length(unlist(strsplit(query, " "))) > 1) {
-    query <- paste0(unlist(strsplit(query, " ")), collapse = '" AND "')
-    query <- paste0(field, ':', '("', query, '")', add_boost_factor(field))
+  l_q <- length(unlist(strsplit(query, " ")))
+  if (l_q > 1) {
+    query <- gsub(" ", " AND ", query, perl=TRUE)
+    for (i in 1:l_q) {
+      query <- gsub('("[\\w+ ]+) AND ([\\w \\.]+")', "\\1 \\2", query, perl=TRUE)
+    }
+    query <- paste0(field, ':', '(', query, ')', add_boost_factor(field))
   } else {
     query <- paste0(field, ':', '"', query, '"', add_boost_factor(field))
   }
 }
+
+
 
 add_boost_factor <- function(field) {
   if (field %in% names(boost_factors)) paste0('^', boost_factors[field]) else ""
