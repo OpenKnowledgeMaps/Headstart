@@ -27,15 +27,16 @@ query = c('2019-ncov and sars-cov-2'
             ,'cats --- dogs'
             ,'cats +++ dogs'
             ,'\'\'test\'\''
-            ,'a+b')
+            ,'a+b'
+            ,'+++++++++++++++science')
 
 # remove pluses between terms, remove spaces after minuses
-query_wt_plus = gsub("(^|\\s)[\\+]+[\\s]+", " ", query, perl=T)
-query_cleaned = gsub("((^|\\s)[-]+)[\\s]+", " \\1", query_wt_plus, perl=T)
+query_wt_plus = gsub("((^|\\s))[\\+]+[\\s]*", "\\1", query, perl=T)
+query_cleaned = gsub("((^|\\s))[\\-]+[\\s]*", "\\1-", query_wt_plus, perl=T)
 
 # add "textus:" to each word/phrase to enable verbatim search
 # make sure it is added after any opening parentheses to enable queries such as "(a and b) or (a and c)"
-exact_query = gsub('([\"\']+(.*?)[\"\']+)|(?<=\\(\\b|\\+|-\\"\\b)|(?!or\\b|and\\b|[-]+[\\"\\(]*\\b)(?<!\\S)(?=\\S)(?!\\(|\\+)'
+exact_query = gsub('([\"\']+(.*?)[\"\']+)|(?<=\\(\\b|\\+|-\\"\\b|\\s-\\b|^-\\b)|(?!or\\b|and\\b|[-]+[\\"\\(]*\\b)(?<!\\S)(?=\\S)(?!\\(|\\+)'
                    , "textus:\\1", query_cleaned, perl=T)
 
 exact_query
