@@ -191,7 +191,7 @@ boost_factors <- list(
   'keyword_label'=30
 )
 
-build_authorfield_query <- function(field) {
+build_authorfield_query <- function(field, query) {
   paste0(field, ':', '"', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"), '"', add_boost_factor(field))
 }
 
