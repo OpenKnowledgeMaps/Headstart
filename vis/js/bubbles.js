@@ -240,6 +240,25 @@ BubblesFSM.prototype = {
             toFront(circles[i].parentNode);
         }
     },
+    
+    highlightBubble: function(d) {
+        d3.selectAll("circle.area,.zoom_selected").filter(
+                function(x) {
+                    if(config.use_area_uri) {
+                        return d.area_uri == x.area_uri
+                    } else {
+                        return d.area == x.area
+                    }
+                })
+                .classed("highlight-bubble", true)
+        
+    },
+    
+    removeHighlightBubble: function(d) {
+        d3.selectAll("circle.area,.zoom_selected")
+                .classed("highlight-bubble", false)
+        
+    },
 
     // drawConnection between the circles:
     // the problem is jquery $(circles) returns the circles "unsorted".
