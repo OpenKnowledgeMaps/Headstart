@@ -33,7 +33,7 @@ include 'config.php';
             if (mode === null) {
                 mode = "keywords";
             }
-            $('input[name="optradio"][value="' + mode + '"').prop("checked", true);
+            $('input[name="optradio"][value="' + mode + '"]').prop("checked", true);
 
             var author_selected = false;
 
