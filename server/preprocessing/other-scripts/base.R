@@ -39,7 +39,7 @@ get_papers <- function(query, params, limit=100,
   blog$info(paste("Search:", query))
   start.time <- Sys.time()
   
-  # remove pluses between terms, remove spaces after minuses
+  # remove unnecessary pluses and minuses
   query_wt_plus = gsub("((^|\\s))[\\+]+[\\s]*", "\\1", query, perl=T)
   query_cleaned = gsub("((^|\\s))[\\-]+[\\s]*", "\\1-", query_wt_plus, perl=T)
   
