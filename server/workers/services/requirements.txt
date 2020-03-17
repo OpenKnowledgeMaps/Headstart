@@ -1,5 +1,6 @@
 flask
 flask-restx
+flask-cors
 Werkzeug==0.16.1
 marshmallow
 gunicorn

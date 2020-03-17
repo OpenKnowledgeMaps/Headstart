@@ -10,4 +10,4 @@ COPY workers/services/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY workers/services/src/ ./
 
-CMD gunicorn -b 0.0.0.0:5001 'app:new_services_app()'
+CMD gunicorn -b 0.0.0.0:5001 'app:app'

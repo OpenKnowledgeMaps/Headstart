@@ -73,7 +73,7 @@ class TripleClient(object):
             body=body,
             size=100,
             sort=sort)
-        if parameters.get('result_type') == 'raw':
+        if parameters.get('raw') is True:
             return res
         else:
             return self.process_result(res)
@@ -163,7 +163,7 @@ class TripleClient(object):
                 res["id"] = k
                 res["input_data"] = self.search(params)
                 res["params"] = params
-                if params.get('result_type') == 'raw':
+                if params.get('raw') is True:
                     redis_store.set(k+"_output", json.dumps(res))
                 else:
                     redis_store.rpush("input_data", json.dumps(res))
