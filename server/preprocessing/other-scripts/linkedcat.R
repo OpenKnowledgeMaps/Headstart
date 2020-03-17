@@ -196,8 +196,8 @@ build_authorfield_query <- function(field, query) {
 
 build_queryfield_query <- function(field, query) {
   if (length(unlist(strsplit(query, " "))) > 1) {
-    query <- paste0(unlist(strsplit(query, " ")), collapse = " AND ")
-    query <- paste0(field, ':', '(', query, ')', add_boost_factor(field))
+    query <- paste0(unlist(strsplit(query, " ")), collapse = '" AND "')
+    query <- paste0(field, ':', '("', query, '")', add_boost_factor(field))
   } else {
     query <- paste0(field, ':', '"', query, '"', add_boost_factor(field))
   }
