@@ -53,6 +53,8 @@ Make sure you have the following packages installed:
   * Under Ubuntu 18.04 the installation of major language character sets for chromium is recommended with `apt-get install -y fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf --no-install-recommends`
   * depending on the environment a separate node-installation with puppeteer is required, that has execution rights for the webserver/www-data user
 
+If you want to use the Hypothes.is annotation tool, make sure to correctly check out submodules; otherwise the PDF modal will result in a 404 error. You can do so by running `git submodule update --init --recursive`
+
 ## Configuration
 
 Set the following variables in php.ini:
