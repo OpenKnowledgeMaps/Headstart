@@ -35,11 +35,6 @@ include 'config.php';
             }
             $('input[name="optradio"][value="' + mode + '"').prop("checked", true);
 
-            var additional_information = {
-                authors: '<p>Bitte wählen Sie eine Visualisierung:'
-                , keywords: '<p>Bitte wählen Sie eine Visualisierung:'
-            }
-
             var author_selected = false;
 
             $('input[name="q"]').on("input", function () {
