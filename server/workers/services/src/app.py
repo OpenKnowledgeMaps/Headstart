@@ -1,17 +1,17 @@
 from flask import Flask
-from apis import api
+from flask_restx import Api
+from apis.triple import triple_ns
 
+app = Flask('v1', instance_relative_config=True)
+app.config.from_object('config.settings')
+app.config.from_pyfile('settings.py', silent=True)
 
-def new_services_app(settings_override=None):
-    flask_app = Flask('v2', instance_relative_config=True)
-
-    flask_app.config.from_object('config.settings')
-    flask_app.config.from_pyfile('settings.py', silent=True)
-
-    api.init_app(flask_app)
-    return flask_app
+api = Api(app=app, title="Head Start API", version="0.1",
+          description="Head Start API demo",
+          endpoint='/api',
+          doc='/api/docs')
+api.add_namespace(triple_ns, path='/triple')
 
 
 if __name__ == '__main__':
-    app = new_services_app()
     app.run(port=5001, debug=True)
