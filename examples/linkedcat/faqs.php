@@ -53,7 +53,7 @@ $date = new DateTime();
                     </p>
                     <p class="paragraph-style">
                         Ein Streamgraph zeigt die zeitliche Entwicklung der häufigsten Schlagworte zu einem Stichwort/Autor. 
-                        Die Schlagworte werden als farbige Ströme (Englisch "streams") dargestellt. Jedem Strom sind relevante Dokumente zugeordnet, die mit einem Klick auf einen Stream angezeigt werden können. Ein Dokument kann in einem Streamgraph mehreren Strömen zugeordnet.
+                        Die Schlagworte werden als farbige Ströme (Englisch "streams") dargestellt. Jedem Strom sind relevante Dokumente zugeordnet, die mit einem Klick auf einen Stream angezeigt werden können. Ein Dokument kann in einem Streamgraph mehreren Strömen zugeordnet sein. Es kann aber auch vorkommen, dass ein Dokument keinem Strom zugeordnet ist - und zwar dann, wenn das Dokument nicht mit einem der häufigsten Schlagworte annotiert ist.
                     </p>
                     <p class="paragraph-style">
                         Streamgraphen eignen sich besonders dazu, die Entwicklung von Schlagwörtern über die Zeit zu analysieren und Trends zu erkennen. Die Höhe eines Stroms entspricht der Anzahl der zugeordneten Dokumente zu einem bestimmten Zeitpunkt. 
