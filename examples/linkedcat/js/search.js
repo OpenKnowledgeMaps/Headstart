@@ -9,10 +9,6 @@ var author_living_dates = "";
 var author_image_link = "";
 var has_options_link = false;
 var search_options;
-var additional_information = {
-    authors: '<p>Bitte wählen Sie eine Visualisierung:'
-    , keywords: '<p>Bitte wählen Sie eine Visualisierung:'
-}
 
 var chooseOptions = function () {
     search_options = SearchOptions;
