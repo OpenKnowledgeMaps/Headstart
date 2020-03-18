@@ -5,8 +5,12 @@ $date = new DateTime();
 ?>
 <html>
     <head>
-        <title>LinkedCat+ Visuelle Suche</title>
-        <?php include('head_standard.php') ?>
+        <?php 
+            $override_labels = array(
+                "title" => "Über das Projekt - LinkedCat+"
+            );
+            include('head_standard.php') 
+        ?>
         <link type="text/css" rel="stylesheet" href="./css/browse.css">
     </head>
     <body>
