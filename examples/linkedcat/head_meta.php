@@ -43,3 +43,5 @@
 <meta property="og:image" content="<?php echo getLabel("fb-image") ?>"/>
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="<?php echo getLabel("app-name") ?>"/>
+
+<title><?php echo getLabel("title") ?></title>

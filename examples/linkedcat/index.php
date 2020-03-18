@@ -4,7 +4,6 @@ include 'config.php';
 ?>
 <html>
     <head>
-        <title>LinkedCat+ Visuelle Suche</title>
         <?php include('head_standard.php') ?>
     </head>
 
