@@ -107,6 +107,7 @@ get_papers <- function(query, params, limit=100) {
 
 clean_highlights <- function(query, res) {
   query <- gsub('"', '', query)
+  query <- gsub("[ ]+\\+[ ]+", " ", query)
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
     s <- strsplit(x, " \\.\\.\\. ")
     unlist(lapply(s, function(x) x[grepl(paste0("<em>", gsub(" |-", "|", query), "</em>"), x, ignore.case=TRUE)]))[1]
@@ -142,6 +143,7 @@ build_query <- function(query, params, limit){
   query <- gsub(" ?<<von>>", "", query)
   query <- trimws(query, "both")
   query <- gsub("-[ ]+", "-", query)
+  query <- gsub("[ ]+\\+[ ]+", " ", query)
   aq <- paste0(lapply(a_fields, build_authorfield_query, query=query))
   qq <- paste0(lapply(q_fields, build_queryfield_query, query=query))
   q <- paste(c(aq, qq), collapse = " OR ")
