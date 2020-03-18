@@ -42,6 +42,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
         , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3, $id = "area_uri", $subjects = "subject") {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
+    $query = trim($query);
     $query = strip_tags($dirty_query);
 
     if ($transform_query_tolowercase) {
