@@ -140,6 +140,7 @@ build_query <- function(query, params, limit){
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext', 'goobi_link')
   query <- gsub(" ?<<von>>", "", query)
+  query <- trimws(query, "both")
   aq <- paste0(lapply(a_fields, build_authorfield_query, query=query))
   qq <- paste0(lapply(q_fields, build_queryfield_query, query=query))
   q <- paste(c(aq, qq), collapse = " OR ")
