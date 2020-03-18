@@ -200,7 +200,7 @@ build_queryfield_query <- function(field, query) {
   if (l_q > 1) {
     query <- gsub(" ", " AND ", query, perl=TRUE)
     for (i in 1:l_q) {
-      query <- gsub('("[\\w+ ]+) AND ([\\w \\.]+")', "\\1 \\2", query, perl=TRUE)
+      query <- gsub('("[\\w+ äöü]+) AND ([äöü\\w \\.]+")', "\\1 \\2", query, perl=TRUE)
     }
     query <- paste0(field, ':', '(', query, ')', add_boost_factor(field))
   } else {
