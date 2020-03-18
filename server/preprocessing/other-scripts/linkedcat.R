@@ -107,7 +107,7 @@ get_papers <- function(query, params, limit=100) {
 
 clean_highlights <- function(query, res) {
   query <- gsub('"', '', query)
-  query <- gsub("\\+|-", "", query, perl=TRUE)
+  query <- gsub("[\\+ ]+|-", " ", query, perl=TRUE)
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
     s <- strsplit(x, " \\.\\.\\. ")
     unlist(lapply(s, function(x) x[grepl(paste0("<em>", gsub(" +", "|", query), "</em>"), x, ignore.case=TRUE)]))[1]
