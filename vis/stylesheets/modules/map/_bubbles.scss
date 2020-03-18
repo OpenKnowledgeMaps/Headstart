@@ -5,27 +5,27 @@ circle {
     stroke-width: 1px;
     cursor: zoom-in;
 
-    &.zoom_unselected {
-        fill: $circle-zoom-unselected-fill;
-        fill-opacity: .1;
-        stroke-width: 0;
-        cursor: zoom-in;
-    }
-
-    &.zoomed_out {
-        cursor: zoom-in;
-    }
-
-    &.zoom_selected {
-        fill-opacity: 1;
-        fill: $circle-zoom-selected-fill;
-        stroke-width: 2px;
-        cursor: auto;
-    }
-
     &.area {
         fill: $circle-area;
         fill-opacity: .9;
+        
+        &.zoom_unselected {
+            fill: $circle-zoom-unselected-fill;
+            fill-opacity: .1;
+            stroke-width: 0;
+            cursor: zoom-in;
+        }
+
+        &.zoomed_out {
+            cursor: zoom-in;
+        }
+
+        &.zoom_selected {
+            fill-opacity: 1;
+            fill: $circle-zoom-selected-fill;
+            stroke-width: 2px;
+            cursor: auto;
+        }
     }
 }
 
