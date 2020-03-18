@@ -203,9 +203,10 @@ build_queryfield_query <- function(field, query) {
   l_q <- length(unlist(strsplit(query, " ")))
   if (l_q > 1) {
     query <- gsub(" ", " AND ", query, perl=TRUE)
-    for (i in 1:l_q) {
-      query <- gsub('("[\\w+ äöü]+) AND ([äöü\\w \\.]+")', "\\1 \\2", query, perl=TRUE)
+    for (i in 1:l_q*l_q) {
+      query <- gsub('(\\-?"[\\w+ äöü]+) AND ([äöü\\w \\.]+")', "\\1 \\2", query, perl=TRUE)
     }
+    query <- gsub(' AND -', ' -', query)
     query <- paste0(field, ':', '(', query, ')', add_boost_factor(field))
   } else {
     query <- paste0(field, ':', '"', query, '"', add_boost_factor(field))
