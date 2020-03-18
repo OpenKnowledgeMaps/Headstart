@@ -192,6 +192,10 @@ boost_factors <- list(
   'keyword_label'=30
 )
 
+proximity_factors <- list(
+  'ocrtext'=7
+)
+
 build_authorfield_query <- function(field, query) {
   paste0(field, ':', '"', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"), '"', add_boost_factor(field))
 }
@@ -203,13 +207,15 @@ build_queryfield_query <- function(field, query) {
     for (i in 1:l_q) {
       query <- gsub('("[\\w+ äöü]+) AND ([äöü\\w \\.]+")', "\\1 \\2", query, perl=TRUE)
     }
-    query <- paste0(field, ':', '(', query, ')', add_boost_factor(field))
+    query <- paste0(field, ':', '(', query, ')', add_boost_factor(field), add_prox_factor(field))
   } else {
-    query <- paste0(field, ':', '"', query, '"', add_boost_factor(field))
+    query <- paste0(field, ':', '"', query, '"', add_boost_factor(field), add_prox_factor(field))
   }
 }
 
-
+add_prox_factor <- function(field) {
+  if (field %in% names(proximity_factors)) paste0('~', proximity_factors[field]) else ""
+}
 
 add_boost_factor <- function(field) {
   if (field %in% names(boost_factors)) paste0('^', boost_factors[field]) else ""
