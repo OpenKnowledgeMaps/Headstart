@@ -44,6 +44,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $ini_array = library\Toolkit::loadIni($INI_DIR);
     $query = strip_tags($dirty_query);
     $query = trim($query);
+    $query = preg_replace('!\s+!', ' ', $query);
 
     if ($transform_query_tolowercase) {
         $query = strtolower($query);
