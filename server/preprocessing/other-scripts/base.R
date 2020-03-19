@@ -39,9 +39,14 @@ get_papers <- function(query, params, limit=100,
   blog$info(paste("Search:", query))
   start.time <- Sys.time()
   
-  # remove unnecessary pluses and minuses
-  query_wt_plus = gsub("((^|\\s))[\\+]+[\\s]*", "\\1", query, perl=T)
-  query_cleaned = gsub("((^|\\s))[\\-]+[\\s]*", "\\1-", query_wt_plus, perl=T)
+  # remove pluses between terms
+  query_wt_plus = gsub("(?!\\B\"[^\"]*)[\\+]+(?![^\"]*\"\\B)", " ", query, perl=T)
+  # remove multiple minuses and spaces after minuses
+  query_wt_multi_minus = gsub("(?!\\B\"[^\"]*)((^|\\s))[\\-]+[\\s]*(?![^\"]*\"\\B)", "\\1-", query_wt_plus, perl=T)
+  # remove multiple spaces inside the query
+  query_wt_multi_spaces = gsub("(?!\\B\"[^\"]*)[\\s]{2,}(?![^\"]*\"\\B)", " ", query_wt_multi_minus, perl=T)
+  # trim query, if needed
+  query_cleaned = gsub("^\\s+|\\s+$", "", query_wt_multi_spaces, perl=T)
   
   # add "textus:" to each word/phrase to enable verbatim search
   # make sure it is added after any opening parentheses to enable queries such as "(a and b) or (a and c)"
