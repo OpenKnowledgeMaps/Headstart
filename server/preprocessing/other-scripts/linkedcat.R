@@ -142,6 +142,7 @@ build_query <- function(query, params, limit){
                 'ocrtext', 'goobi_link')
   query <- gsub(" ?<<von>>", "", query)
   query <- trimws(query, "both")
+  query <- gsub("\\s+", " ", query)
   query <- gsub("-[ ]+", "-", query)
   query <- gsub("[ ]+\\+[ ]*", " ", query)
   aq <- paste0(lapply(a_fields, build_authorfield_query, query=query))
