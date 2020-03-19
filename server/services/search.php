@@ -43,6 +43,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
     $query = strip_tags($dirty_query);
+    $query = trim($query);
 
     if ($transform_query_tolowercase) {
         $query = strtolower($query);
