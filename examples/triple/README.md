@@ -43,7 +43,6 @@ Setting up configs:
 
 * ElasticSearch core service: In `server/workers/services/triple/` copy `config_example.json` to `config.json` and fill in the fields.
 
-
 Following commands have to be executed from the root folder of the repository, where `docker-compose.yml` is located.
 
 * build images
@@ -60,3 +59,9 @@ docker-compose up -d
 ```
 docker-compose down
 ```
+
+### Deploying the example:
+
+Use a deployment script, or manually perform following actions:
+
+* use a script.
