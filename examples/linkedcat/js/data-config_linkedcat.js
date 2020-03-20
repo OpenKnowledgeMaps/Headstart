@@ -36,7 +36,7 @@ var data_config = {
     //filter_options: ["all", "open_access"],
     
     show_context_oa_number: false,
-    abstract_large: 1000,
+    abstract_large: 3000,
     
     streamgraph_zoom: false,
     canonical_url: "https://openknowledgemaps.org",
