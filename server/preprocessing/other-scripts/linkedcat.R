@@ -106,9 +106,12 @@ get_papers <- function(query, params, limit=100) {
 }
 
 clean_highlights <- function(query, res) {
+  query <- gsub("- ?", "-", query, perl=TRUE)
   query <- gsub("-[\\w+]+ ", " ", query, perl=TRUE)
-  query <- gsub(' ?- ?"[\\w ]+" | ?- ?"[\\w ]+"$', " ", query, perl=TRUE)
+  query <- gsub(' ?- ?"[\\w ]+" | ?- ?"[\\w ]+"$|-\\w+$', " ", query, perl=TRUE)
   query <- gsub('"', '', query)
+  query <- gsub(' +', ' ', query, perl=TRUE)
+  query <- trimws(query, "both")
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
     s <- strsplit(x, " \\.\\.\\. ")
     unlist(lapply(s, function(x)  {
@@ -118,7 +121,9 @@ clean_highlights <- function(query, res) {
     }))
   }))
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
-    gsub(paste0("<em>((?!", gsub(" ", "|", query), ").)<\\/em>"), "\\1", x, ignore.case=TRUE, perl=TRUE)
+    x <- gsub("<em>|<\\/em>", "", x)
+    x <- gsub(paste0("(", gsub(" ", "|", query), ")"), "<em>\\1<\\/em>", x, ignore.case=TRUE, perl=TRUE)
+    return (x)
   }))
   return(res)
 }
