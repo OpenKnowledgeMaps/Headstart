@@ -47,6 +47,8 @@ function cleanQuery($dirty_query, $transform_query_tolowercase) {
     }
     
     $query = addslashes($query);
+    
+    return $query;
 }
 
 function search($repository, $dirty_query, $post_params, $param_types, $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
