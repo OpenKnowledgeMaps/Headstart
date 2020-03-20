@@ -74,10 +74,17 @@ class Search(Resource):
         if request.headers["Accept"] == "application/json":
             headers["Content-Type"] = "application/json"
         if request.headers["Accept"] == "text/csv":
-            result = pd.read_json(result).to_csv()
+            if data.get("raw") is True:
+                df = pd.DataFrame(result.get('input_data').get('hits').get('hits'))
+                df = pd.concat([df.drop(["_source"], axis=1),
+                                df["_source"].apply(pd.Series)],
+                               axis=1)
+                result = df.to_csv()
+            else:
+                result = pd.read_json(result).to_csv()
             headers["Content-Type"] = "text/csv"
             headers["Content-Disposition"] = "attachment; filename={0}.csv".format(k)
-        if data.get("result_type") == "raw":
+        if data.get("raw") is True:
             headers["Content-Type"] = "application/json"
         return make_response(result,
                              200,

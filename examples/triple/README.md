@@ -14,7 +14,7 @@ Please follow the install instructions for docker-compose for your OS: https://d
 
 ### Setting up the Apache2 reverse proxy
 
-Following Apache2 mods have to be installted and enabled:
+Following Apache2 mods have to be installed and enabled:
 
 * ssl
 * proxy
@@ -38,6 +38,11 @@ The following lines have to be added to the appropriate sites-available config o
 After that, restart the Apache2 service.
 
 ### Starting the backend service with docker-compose
+
+Setting up configs:
+
+* ElasticSearch core service: In `server/workers/services/triple/` copy `config_example.json` to `config.json` and fill in the fields.
+
 
 Following commands have to be executed from the root folder of the repository, where `docker-compose.yml` is located.
 
