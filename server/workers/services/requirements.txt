@@ -1,7 +1,6 @@
 flask
-flask-restx
 flask-cors
-Werkzeug==0.16.1
+Werkzeug
 marshmallow
 gunicorn
 redis
