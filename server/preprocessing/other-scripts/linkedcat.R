@@ -117,7 +117,8 @@ clean_highlights <- function(query, res) {
     unlist(lapply(s, function(x)  {
         x <- x[grepl(paste0("<em>", gsub(" +", "|", query), "</em>"), x, ignore.case=TRUE)][1:5]
         x <- x[!is.na(x)]
-        paste0(x, collapse = " ... ")
+        x <- paste0("<span>", paste0(x, collapse = "</span><span>"), "</span>")
+        return (x)
     }))
   }))
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
@@ -190,7 +191,7 @@ build_query <- function(query, params, limit){
   q_params$hl.tag.ellipsis <- " ... "
   q_params$hl.maxAnalyzedChars <- 351200
   q_params$hl.preserveMulti <- "true"
-  q_params$hl.fragsize <- 200
+  q_params$hl.fragsize <- 300
   # end adding filter params
   return(q_params)
 }
