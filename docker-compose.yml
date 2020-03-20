@@ -13,7 +13,7 @@ services:
     - redis
    network_mode: "host"
    volumes:
-     - workers/services/src/config/redis.conf:/redis.conf
+     - redis:var/lib/redis
 
   redis:
     image: 'redis:4.0-alpine'
