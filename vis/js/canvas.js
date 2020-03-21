@@ -301,6 +301,7 @@ class Canvas {
                     event.target.id === "chart-svg" ||
                     event.target.id === "map-rect") {
                 mediator.publish('chart_svg_click');
+                event.preventDefault();
             }
         });
     }
