@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restx import Api
 from flask_cors import CORS
 from apis.triple import triple_ns
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 
 app = Flask('v1', instance_relative_config=True)
@@ -11,9 +12,9 @@ CORS(app, expose_headers=["Content-Disposition"])
 
 api = Api(app=app, title="Head Start API", version="0.1",
           description="Head Start API demo",
-          prefix='/api',
-          doc='/api/docs')
+          prefix='/api', doc='/api/docs')
 api.add_namespace(triple_ns, path='/triple')
+api = ProxyFix(api, x_proto=1, x_host=1)
 
 
 if __name__ == '__main__':
