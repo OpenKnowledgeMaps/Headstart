@@ -885,7 +885,7 @@ BubblesFSM.prototype = {
         }
     },
 
-    onzoomout: function (event) {
+    onzoomout: function () {
         if(papers.is("infrontofbubble")) {
             return;
         }
