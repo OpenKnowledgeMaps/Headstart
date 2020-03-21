@@ -518,10 +518,6 @@ MyMediator.prototype = {
     bubble_zoomout: function() {
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'updateByFiltered', []);
-        if(mediator.current_enlarged_paper === null)
-            mediator.manager.call('list', 'scrollTop', []);
-        else
-            mediator.manager.call('list', 'scrollToEntry', [mediator.current_enlarged_paper.safe_id]);
 
         $("#map-rect").removeClass("zoomed_in").addClass('zoomed_out');
         $("#region.unframed").removeClass("zoomed_in");
@@ -529,6 +525,11 @@ MyMediator.prototype = {
         if (config.visual_distributions) {
             d3.selectAll("#paper_visual_distributions").style("display", "none")
         }
+        
+        if(mediator.current_enlarged_paper === null)
+            mediator.manager.call('list', 'scrollTop', []);
+        else
+            mediator.manager.call('list', 'scrollToEntry', [mediator.current_enlarged_paper.safe_id]);
     },
     
     zoomout_complete: function() {
