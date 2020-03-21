@@ -8,7 +8,8 @@ RUN apk add build-base gcc
 WORKDIR /headstart
 COPY workers/services/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN https://github.com/python-restx/flask-restx
+RUN apk add git
+RUN pip install git+https://github.com/python-restx/flask-restx
 COPY workers/services/src/ ./
 
 CMD gunicorn -b 0.0.0.0:5001 'app:app'
