@@ -12,8 +12,6 @@ services:
    depends_on:
     - redis
    network_mode: "host"
-   volumes:
-     - redis:/var/lib/redis
 
   redis:
     image: 'redis:4.0-alpine'
