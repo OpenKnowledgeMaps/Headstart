@@ -18,4 +18,4 @@ api.app.wsgi_app = ProxyFix(api.app.wsgi_app, x_host=1, x_for=1, x_proto=1)
 
 
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    app.run(host="localhost", port=5001, debug=True)
