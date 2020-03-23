@@ -1,8 +1,11 @@
+import os
+import json
+import yaml
+import logging
 from flask import url_for
-from flask_restx import Api, apidoc
+from flask_restx import apidoc
 from flask_restx.swagger import Swagger
 from werkzeug.utils import cached_property
-import logging
 
 log = logging.getLogger(__name__)
 
@@ -13,18 +16,26 @@ class ReverseProxied(object):
     this to a URL other than / and to an HTTP scheme that is
     different than what is used locally.
 
+    location /myprefix {
+        proxy_pass http://192.168.0.1:5001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Scheme $scheme;
+        proxy_set_header X-Script-Name /myprefix;
+        }
+
     :param app: the WSGI application
     '''
-
     def __init__(self, app):
         self.app = app
 
-    def __call__(self, settings, environ, start_response):
-        PREFIX = settings.PROXY_PREFIX
-        environ['SCRIPT_NAME'] = PREFIX
-        path_info = environ['PATH_INFO']
-        if path_info.startswith(PREFIX):
-            environ['PATH_INFO'] = path_info[len(PREFIX):]
+    def __call__(self, environ, start_response):
+        script_name = environ.get('HTTP_X_SCRIPT_NAME', '')
+        if script_name:
+            environ['SCRIPT_NAME'] = script_name
+            path_info = environ['PATH_INFO']
+            if path_info.startswith(script_name):
+                environ['PATH_INFO'] = path_info[len(script_name):]
 
         scheme = environ.get('HTTP_X_SCHEME', '')
         if scheme:
@@ -32,6 +43,7 @@ class ReverseProxied(object):
         return self.app(environ, start_response)
 
 
+# from https://github.com/noirbizarre/flask-restplus/issues/517
 def _register_apidoc(self, app):
     conf = app.extensions.setdefault('restx', {})
     custom_apidoc = apidoc.Apidoc('restx_doc', 'flask_restx.apidoc',
@@ -83,21 +95,41 @@ def specs_url(self):
         external = False
     else:
         external = True
-    return url_for(self.endpoint('specs'), _external=external)
+    url = url_for(self.endpoint('specs'), _external=external)
+    # from https://github.com/noirbizarre/flask-restplus/pull/226/files
+    if self.app.config.get('SWAGGER_BASEPATH', ''):
+        prefix = url.split('/swagger.json')[0]
+        url = prefix + self.app.config.get('SWAGGER_BASEPATH', '') + '/swagger.json'
+        return url
+    return url
 
 
-def api_patches(app, settings):
-    Api._register_apidoc = _register_apidoc
-    Api.__schema__ = __schema__
-    Api.specs_url = specs_url
+def inject_flasgger(app):
+    from flasgger import Swagger
+    with open("config/swagger.json") as infile:
+        specs = json.load(infile)
+        swagger = yaml.load(json.dumps(specs))
+    swagger["host"] = os.getenv("HOST_IP", "localhost:5001")
+    if swagger["host"] == "localhost:5001":
+        swagger["schemes"] = ["http"]
+    Swagger(app, template=swagger, config=getSwaggerConfig())
+    return app
 
-    api_fixed = Api(
-        app,
-        title="Head Start API",
-        description="Head Start API demo",
-        version="0.1",
-        prefix='/api',
-        doc="/api/docs")
-    if settings.BEHIND_PROXY:
-        api_fixed.behind_proxy = True
-    return api_fixed
+
+def getSwaggerConfig():
+    return {
+        "headers": [
+        ],
+        "specs": [
+            {
+                "endpoint": 'apispec',
+                "route": '/apispec.json',
+                "rule_filter": lambda rule: True,  # all in
+                "model_filter": lambda tag: True,  # all in
+            }
+        ],
+        "static_url_path": "/flasgger_static",
+        # "static_folder": "static",  # must be set by user
+        "swagger_ui": True,
+        "specs_route": "/api/"
+    }
