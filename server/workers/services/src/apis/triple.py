@@ -52,6 +52,8 @@ search_query = triple_ns.model("SearchQuery",
                                 "vis_type": fields.String(example='overview',
                                                           description='overview or timeline',
                                                           required=True),
+                                "limit": fields.Integer(example=100,
+                                                        description='max. number of results'),
                                 "raw": fields.Boolean(example="false",
                                                       description='raw results from ElasticSearch')})
 

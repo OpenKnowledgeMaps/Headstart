@@ -25,7 +25,7 @@ class Backend(object):
         self.default_params["MAX_CLUSTERS"] = 15
         self.default_params["language"] = "english"
         self.default_params["taxonomy_separator"] = ";"
-        self.default_params["list_size"] = 100
+        self.default_params["list_size"] = -1
 
     def add_default_params(self, params):
         default_params = copy.deepcopy(self.default_params)
