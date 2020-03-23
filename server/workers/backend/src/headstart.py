@@ -7,7 +7,11 @@ from tempfile import NamedTemporaryFile
 import redis
 import pandas as pd
 
-redis_store = redis.StrictRedis(host="localhost", port=6379, db=0)
+
+with open("redis_config.json") as infile:
+    redis_config = json.load(infile)
+
+redis_store = redis.StrictRedis(**redis_config)
 
 
 class Backend(object):
