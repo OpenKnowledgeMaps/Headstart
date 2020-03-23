@@ -10,5 +10,6 @@ COPY workers/triple/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY workers/triple/src/ ./
 COPY workers/triple/config.json .
+COPY workers/redis_config.json .
 
 ENTRYPOINT python search_triple.py

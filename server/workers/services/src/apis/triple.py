@@ -11,7 +11,12 @@ from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
 
-redis_store = redis.StrictRedis(host="localhost", port=6379, db=0)
+
+with open("redis_config.json") as infile:
+    redis_config = json.load(infile)
+
+redis_store = redis.StrictRedis(**redis_config)
+
 triple_ns = Namespace("triple", description="TRIPLE API operations")
 
 

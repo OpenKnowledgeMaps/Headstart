@@ -42,6 +42,7 @@ After that, restart the Apache2 service.
 Setting up configs:
 
 * ElasticSearch core service: In `server/workers/services/triple/` copy `config_example.json` to `config.json` and fill in the fields.
+* Secure Redis: In `server/workers` copy `redis_config_example.json` to `redis_config.json`  and `redis_example.conf` to `redis_example.conf` and in both files replace "long_secure_password" with a long, secure password (Line 507 in redis.conf, parameter `requirepass`).
 
 Following commands have to be executed from the root folder of the repository, where `docker-compose.yml` is located.
 
