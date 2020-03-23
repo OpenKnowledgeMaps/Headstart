@@ -52,8 +52,7 @@ class TripleClient(object):
             sort.append("date:desc")
         return sort
 
-    def search(self, parameters):
-        index = "isidore-documents-triple"
+    def build_body(self, parameters):
         body = {"query": {
                     "bool": {
                         "must": [
@@ -69,12 +68,15 @@ class TripleClient(object):
                         ]
                     }
                 }}
-        sort = self.build_sort_order(parameters)
+        return body
+
+    def search(self, parameters):
+        index = "isidore-documents-triple"
         res = self.es.search(
             index=index,
-            body=body,
-            size=100,
-            sort=sort)
+            body=self.build_body(parameters),
+            size=parameters.get('limit', 100),
+            sort=self.build_sort_order(parameters))
         if parameters.get('raw') is True:
             return res
         else:
