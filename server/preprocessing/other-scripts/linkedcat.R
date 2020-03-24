@@ -106,7 +106,7 @@ get_papers <- function(query, params, limit=100) {
 }
 
 clean_highlights <- function(query, res) {
-  query <- gsub("- ?", "-", query, perl=TRUE)
+  query <- gsub("- *", "-", query, perl=TRUE)
   query <- gsub("-[\\w+]+ ", " ", query, perl=TRUE)
   query <- gsub(' ?- ?"[\\w ]+" | ?- ?"[\\w ]+"$|-\\w+$', " ", query, perl=TRUE)
   query <- gsub('"', '', query)
@@ -184,6 +184,7 @@ build_query <- function(query, params, limit){
   }
   q_params$fq <- unlist(q_params$fq)
   q_params$hl <- 'on'
+  q_params$hl.q <- gsub('"', '', query)
   q_params$hl.fl <- 'ocrtext'
   q_params$hl.snippets <- 30
   q_params$hl.method <- 'unified'
