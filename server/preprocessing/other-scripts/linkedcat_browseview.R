@@ -40,7 +40,9 @@ get_papers <- function(query, params, limit=100) {
   start.time <- Sys.time()
   host=paste0(Sys.getenv("LINKEDCAT_USER"),":",Sys.getenv("LINKEDCAT_PWD"),"@",Sys.getenv("LINKEDCAT_SOLR"))
   conn <- SolrClient$new(host=host,
-                         path="solr/linkedcat2", port=NULL, scheme="https")
+                         path=Sys.getenv("LINKEDCAT_SOLR_PATH"),
+                         port=if (Sys.getenv("LINKEDCAT_SOLR_PORT")=="NULL") NULL else Sys.getenv("LINKEDCAT_SOLR_PORT"),
+                         scheme=Sys.getenv("LINKEDCAT_SOLR_SCHEME"))
 
   q_params <- build_query(query, params, limit)
   # do search
@@ -57,18 +59,16 @@ get_papers <- function(query, params, limit=100) {
   metadata <- data.frame(search_res$id)
   names(metadata) <- c('id')
 
-  metadata$subject <- paste(search_res$keyword_a, search_res$keyword_c,
-                            search_res$keyword_g, search_res$keyword_t,
-                            search_res$keyword_p, search_res$keyword_x,
-                            search_res$keyword_z)
+  metadata$subject <- unlist(lapply(search_res$keyword_label, function(x) {if (is.na(x)) "" else x}))
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub(";", "; ", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; $", "", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; ; ", "; ", x)}))
-  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("[ ]{2,}", "", x)}))
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("[ ]{2,}", " ", x)}))
   metadata$authors <- paste(search_res$author100_a, search_res$author700_a, sep="; ")
   metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("; $|,$", "", x)}))
   metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("^; ", "", x)}))
   metadata$author_date <- metadata$author100_d
-  metadata$title <- if (!is.null(search_res$main_title)) search_res$main_title else ""
+  metadata$title <- search_res$main_title
   metadata$paper_abstract <- if (!is.null(search_res$ocrtext)) unlist(lapply(search_res$ocrtext, substr, start=0, stop=1000)) else ""
   metadata$year <- search_res$pub_year
   metadata$readers <- 0
@@ -85,7 +85,8 @@ get_papers <- function(query, params, limit=100) {
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(search_res$main_title, search_res$keyword_a,
+  text$content = paste(metadata$title,
+                       metadata$subject,
                        sep = " ")
 
 
@@ -111,8 +112,7 @@ build_query <- function(query, params, limit){
                 'author100_a', 'author100_d', 'author100_0', 'author100_4',
                 'author700_a', 'author700_d', 'author700_0',
                 'bkl_caption', 'bkl_top_caption',
-                'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
-                'keyword_p', 'keyword_x', 'keyword_z',
+                'keyword_label',
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext', 'goobi_link')
   q <- paste(paste0(q_field, ':', '"', params$bkl_list, '"'), collapse = " OR ")

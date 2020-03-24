@@ -14,10 +14,16 @@ use headstart\library;
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 
-$base_url = "https://" .
+if (isset($ini_array["connection"]["linkedcat_protocol"])) {
+  $lc_protocol = $ini_array["connection"]["linkedcat_protocol"];
+} else {
+  $lc_protocol = "https";
+}
+
+$base_url = $lc_protocol . "://" .
        $ini_array["connection"]["linkedcat_user"] . ":" .
        $ini_array["connection"]["linkedcat_pwd"] . "@" .
-       $ini_array["connection"]["linkedcat_solr"] . "/solr/linkedcat2/";
+       $ini_array["connection"]["linkedcat_solr"];
 
 $author_facet_query = "select?facet.field=author100_0" .
                       "&facet.field=author700_0" .
@@ -29,6 +35,19 @@ $author_data_query = "select?fl=author100_0,author100_a,author100_d,author100_wi
                      "&rows=1" .
                      "&q=author100_0:";
 
+$lc_cache = $ini_array["connection"]["linkedcat_suggest_cache"];
+
+$force_refresh = FALSE;
+if (file_exists($lc_cache) == FALSE) {
+  $force_refresh = TRUE;
+}
+if (isset($argv)) {
+  if (count($argv) == 2) {
+    if ($argv[1] == "--force-refresh") {
+      $force_refresh = TRUE;
+    }
+  }
+}
 
 function execQuery($base_url, $query) {
   $ch = curl_init();
@@ -50,6 +69,8 @@ function getAuthorData($base_url, $author_data_query, $author_ids) {
   $window = 100;
   $res = array();
   $mh = curl_multi_init();
+  curl_multi_setopt($mh, CURLMOPT_MAX_TOTAL_CONNECTIONS, 10);
+  curl_multi_setopt($mh, CURLMOPT_MAX_HOST_CONNECTIONS, 10);
   $urls = array();
   foreach ($author_ids as $i => $id) {
     if (strlen($id)>0) {
@@ -180,7 +201,9 @@ function writeCache($fname, $output) {
 function loadOrRefresh($lc_cache) {
   # checks if file exists AND if its fresher than 24h
   # if true && true, load the cached file
-  if (file_exists($lc_cache) && (time() - filemtime($lc_cache) < 86400)) {
+  if (($GLOBALS['force_refresh'] == FALSE) &&
+       (file_exists($lc_cache) && (time() - filemtime($lc_cache) < 172800))
+     ) {
     $authors = loadCache($lc_cache);
   }
   else {
@@ -206,5 +229,4 @@ function loadOrRefresh($lc_cache) {
   return $authors;
 }
 
-$lc_cache = $ini_array["connection"]["linkedcat_suggest_cache"];
 echo loadOrRefresh($lc_cache);

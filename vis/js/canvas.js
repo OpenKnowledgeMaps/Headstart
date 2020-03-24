@@ -5,6 +5,7 @@ import { papers } from 'papers';
 import { mediator } from 'mediator';
 import { intros } from 'intro';
 import dateFormat from 'dateformat';
+import shave from 'shave';
 
 const editModalButton = require('templates/buttons/edit_button.handlebars')
 const embedModalButton = require('templates/buttons/embed_button.handlebars')
@@ -37,14 +38,15 @@ class Canvas {
         var subtitle_height = $("#subdiscipline_title").outerHeight(true);
 
         var toolbar_height = $("#toolbar").outerHeight(true) || 0;
+        var title_image_height = $("#title_image").outerHeight(true) || 0;
         const CHART_HEIGHT_CORRECTION = 15;
         const CHART_HEIGHT_CORRECTION_TOOLBAR = 15;
 
         // Set available_height and available_width
         if (parent_height === 0) {
-            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - subtitle_height - toolbar_height;
+            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - Math.max(subtitle_height, title_image_height) - toolbar_height;
         } else {
-            this.available_height = $("#" + config.tag).height() - subtitle_height - toolbar_height;
+            this.available_height = $("#" + config.tag).height() - Math.max(subtitle_height, title_image_height) - toolbar_height;
         }
 
         this.available_height = this.available_height - ((toolbar_height > 0)?(CHART_HEIGHT_CORRECTION_TOOLBAR):(CHART_HEIGHT_CORRECTION));
@@ -212,6 +214,8 @@ class Canvas {
         d3.select(window).on("resize", () => {
             mediator.publish("window_resize");
         });
+        
+        this.initInfoModal();
     }
 
     initEventListeners() {
@@ -222,7 +226,11 @@ class Canvas {
             }   
             mediator.publish("window_resize");
         });
-
+        
+        this.initInfoModal();
+    }
+    
+    initInfoModal() {
         // Info Modal Event Listener
         $('#info_modal').on('show.bs.modal', function () {
             if(config.show_infolink_areas && mediator.is_zoomed) {
@@ -316,7 +324,7 @@ class Canvas {
             let maxTitleLength = 47 // This should probably make it's way to a more global config
             let acronymtitle = ( (context.params.acronym !== "") ? (context.params.acronym + " - " + context.params.title) : (context.params.title) );
             let compressedTitle = ( acronymtitle.length > maxTitleLength ) ? acronymtitle.slice(0, maxTitleLength - 3) + '...' : acronymtitle
-            chart_title = `Overview of <span class="truncated-project-title">${compressedTitle}</span>\
+            chart_title = `Overview of <span class="truncated-project-title" title="` + acronymtitle + `">${compressedTitle}</span>\
                             <span class="project-id">(${context.params.project_id})</span>`
         } else if (config.create_title_from_context) {
             let query_clean = context.query.replace(/\\(.?)/g, "$1");
@@ -325,8 +333,14 @@ class Canvas {
             if(config.is_authorview) {  
                 label= (config.is_streamgraph)?(config.localization[config.language].streamgraph_authors_label):(config.localization[config.language].overview_authors_label);
             }
+            if (config.create_title_from_context_style === 'linkedcat') {
+                let maxTitleLength = 115 // This should probably make it's way to a more global config
+                let compressedTitle = query_clean.length > maxTitleLength ? query_clean.slice(0, maxTitleLength - 3) + '...' : query_clean;
+                chart_title = label + ' <span id="search-term-unique" title="' + query_clean + '">' + compressedTitle + '</span>';
+            } else {
+                chart_title = label + ' <span id="search-term-unique" title="' + query_clean + '">' + query_clean + '</span>';
+            }
             
-            chart_title = label + ' <span id="search-term-unique">' + query_clean + '</span>';
         }
            
         var subdiscipline_title_h4 = $("#subdiscipline_title h4");
@@ -374,7 +388,8 @@ class Canvas {
         $('#modals').empty()
         
         if (config.share_modal) {
-            $('#modals').append(shareButton)
+            $('#modals').append(shareButton);
+            $("#sharebutton").attr("title", config.localization[config.language].share_button_title);
             
             let title =  document.title;
             let url = window.location.href;
@@ -383,21 +398,21 @@ class Canvas {
             d3.select(".sharebutton_twitter")
                     .attr("href", function () {
                         return "https://twitter.com/intent/tweet?"
-                            + "url=" + encodeURI(url)
-                            + "&hashtags=" + encodeURI("okmaps,openscience,dataviz")
+                            + "url=" + encodeURIComponent(url)
+                            + "&hashtags=" + encodeURIComponent(config.hashtags_twitter_card)
                             + "&text=" + title;
             });
             
             d3.select(".sharebutton_fb")
                     .attr("href", function () {
                         return "https://www.facebook.com/sharer/sharer.php?"
-                            + "u=" + encodeURI(url);
+                            + "u=" + encodeURIComponent(url);
             });
             
             d3.select(".sharebutton_mail")
                     .attr("href", function () {
                         return "mailto:?subject=" + title
-                            + "&body=" + description + " " + url
+                            + "&body=" + description + " " + encodeURIComponent(url)
             });
             
             $(".sharebutton")
@@ -417,6 +432,7 @@ class Canvas {
         
         if (config.embed_modal) {
             $('#modals').append(embedModalButton)
+            $("#embedlink").attr("title", config.localization[config.language].embed_button_title);
             $('#embed-title').html(config.localization[config.language].embed_title)
             $('#embed-modal-text').val(`<iframe width="1200" height="720" src="${window.location.toString().replace(/#.*/, "")}&embed=true"></iframe>`)
             $('#embed-body-text').html(config.localization[config.language].embed_body_text)
@@ -483,17 +499,32 @@ class Canvas {
         
         $("#context").css({"visibility": "visible", "display": "block"});
         let modifier = "";
+        let is_most_relevant = false;
         if (this.paramExists(context.params.sorting)) {
             if(context.params.sorting === "most-recent") {
-                modifier = " " + config.localization[config.language].most_recent_label + " ";
+                modifier = config.localization[config.language].most_recent_label;
+            } else if (context.params.sorting === "most-relevant" 
+                            && this.paramExists(config.localization[config.language].most_relevant_label)
+                            && context.num_documents >= config.max_documents) {
+                modifier = config.localization[config.language].most_relevant_label;
+                is_most_relevant = true;
             } else {
-                modifier = " "
+                modifier = "";
             }
         }
-        $("#num_articles").html(context.num_documents + modifier
+        $("#num_articles").html(context.num_documents + ' <span id="modifier" class="modifier">' + modifier + '</span>'
                 + " " + config.localization[config.language].articles_label
                 + ((config.show_context_oa_number)?(" (" + context.share_oa + " open access)"):("")) 
         );
+        
+        if(is_most_relevant && config.context_most_relevant_tooltip) {
+            $("#modifier")
+                    .addClass("context_moreinfo")
+                    .attr("data-toggle", "popover")
+                    .attr("data-trigger", "hover")
+                    .attr("data-content", config.localization[config.language].most_relevant_tooltip)
+                    .popover();
+        }
 
         $("#source").html(config.localization[config.language].source_label
                        + ": " + config.service_names[context.service]);
@@ -530,13 +561,6 @@ class Canvas {
             today.setTime(today.getTime() + today.getTimezoneOffset()*60*1000 );
             from.setTime(from.getTime() + from.getTimezoneOffset()*60*1000 );
             to.setTime(to.getTime() + to.getTimezoneOffset()*60*1000 );
-
-            //TODO: quick fix for date issue in snapshots, needs to be fixed
-            if(this.paramExists(config.is_phantomjs)) {
-                    if (config.is_phantomjs) {
-                            return;
-                    }
-            }
 
             let default_from_date = (function(service) {
                 switch(service) {
@@ -600,10 +624,14 @@ class Canvas {
                     $("#document_types").html(config.localization[config.language].documenttypes_label);
 
                     $("#document_types").attr({
-                        "data-content": document_types_string
-                        , "title": config.localization[config.language].documenttypes_tooltip + "\n\n" + document_types_string
+                        "data-content": config.localization[config.language].documenttypes_tooltip + "<br><br>" + document_types_string
+                        //, "title": config.localization[config.language].documenttypes_tooltip + "\n\n" + document_types_string
+                        ,"data-toggle": "popover"
+                        ,"data-trigger": "hover"
+                        ,"data-html": true
                         , "class": "context_moreinfo"
                     })
+                    .popover();
 
                 } else {
                     $("#document_types").html(config.localization[config.language].documenttypes_label + ": " + document_types_string);
@@ -637,9 +665,9 @@ class Canvas {
     showAreaStreamgraph(keyword) {
         $("#subdiscipline_title h4")
             .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
-        
-        $("#subdiscipline_title>h4").dotdotdot();
-        
+
+        shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
+
         $("#context").css("display", "none");
         
         $("#backlink").remove();
@@ -836,8 +864,13 @@ class Canvas {
 
   dotdotdotAreaTitles() {
     const check = config.hasOwnProperty('nodot');
-    if ((check && config.nodot === null) || !check) {
-      $("#area_title_object>body").dotdotdot({wrap:"letter"});
+    if ((check && config.nodot === false) || !check) {
+      d3.selectAll("#area_title_object").each(function() {
+        let margin_top = parseInt(d3.select(this).select("#area_title>h2").style("margin-top"), 10);
+        let margin_bottom = parseInt(d3.select(this).select("#area_title>h2").style("margin-bottom"), 10);
+        let maxHeight = d3.select(this).attr("height") - margin_top - margin_bottom;
+        shave(d3.select(this).select("#area_title>h2").node(), maxHeight);
+      });
     }
   }
 
