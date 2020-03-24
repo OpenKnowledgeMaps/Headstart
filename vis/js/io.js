@@ -199,6 +199,8 @@ IO.prototype = {
             if(d.hasOwnProperty("snippets") && d.snippets !== "") {
                 d.snippets = d.snippets.replace(/&lt;em&gt;/g, "<em>");
                 d.snippets = d.snippets.replace(/&lt;\/em&gt;/g, "</em>");
+                d.snippets = d.snippets.replace(/&lt;span&gt;/g, "<span>");
+                d.snippets = d.snippets.replace(/&lt;\/span&gt;/g, "</span>");
                 d.paper_abstract = d.snippets;
             }
             
