@@ -10,6 +10,7 @@ class SearchParamSchema(Schema):
     to = fields.Date(required=True,
                      format="%Y-%m-%d")
     vis_type = fields.Str(require=True)
+    limit = fields.Int()
     year_range = fields.Str()
     today = fields.Str()
     raw = fields.Boolean()
