@@ -1,18 +1,19 @@
  /* Load stylesheets and bootstrap */
-require('styles/main.scss');
-require('bootstrap-loader');
+import 'styles/main.scss';
 require('font-awesome/scss/font-awesome.scss');
 
 /* Import headstart module to initiliase HeadstartFSM */
 /* Notice 'import * as hs' -> hs.headstart is not read-only */
 import config from 'config';
 import * as hs from 'headstart';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 var start = function(json_data) {
     if(data_config) Object.assign(config, data_config);
     window.namespace = "headstart";
-    hs.headstart = new hs.HeadstartFSM(json_data);
-    hs.headstart.start();
+    var headstartInstance = new hs.HeadstartFSM(json_data);
+    headstartInstance.start();
 }
 
 export {start};

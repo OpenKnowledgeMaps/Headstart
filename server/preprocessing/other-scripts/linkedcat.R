@@ -40,7 +40,9 @@ get_papers <- function(query, params, limit=100) {
   start.time <- Sys.time()
   host=paste0(Sys.getenv("LINKEDCAT_USER"),":",Sys.getenv("LINKEDCAT_PWD"),"@",Sys.getenv("LINKEDCAT_SOLR"))
   conn <- SolrClient$new(host=host,
-                         path="solr/linkedcat2", port=NULL, scheme="https")
+                         path=Sys.getenv("LINKEDCAT_SOLR_PATH"),
+                         port=if (Sys.getenv("LINKEDCAT_SOLR_PORT")=="NULL") NULL else Sys.getenv("LINKEDCAT_SOLR_PORT"),
+                         scheme=Sys.getenv("LINKEDCAT_SOLR_SCHEME"))
 
   q_params <- build_query(query, params, limit)
   # do search
@@ -57,18 +59,16 @@ get_papers <- function(query, params, limit=100) {
   metadata <- data.frame(search_res$id)
   names(metadata) <- c('id')
 
-  metadata$subject <- paste(search_res$keyword_a, search_res$keyword_c,
-                            search_res$keyword_g, search_res$keyword_t,
-                            search_res$keyword_p, search_res$keyword_x,
-                            search_res$keyword_z)
+  metadata$subject <- unlist(lapply(search_res$keyword_label, function(x) {if (is.na(x)) "" else x}))
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub(";", "; ", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; $", "", x)}))
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("; ; ", "; ", x)}))
-  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("[ ]{2,}", "", x)}))
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub("[ ]{2,}", " ", x)}))
   metadata$authors <- paste(search_res$author100_a, search_res$author700_a, sep="; ")
   metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("; $|,$", "", x)}))
   metadata$authors <- unlist(lapply(metadata$authors, function(x) {gsub("^; ", "", x)}))
   metadata$author_date <- metadata$author100_d
-  metadata$title <- if (!is.null(search_res$main_title)) search_res$main_title else ""
+  metadata$title <- search_res$main_title
   metadata$paper_abstract <- if (!is.null(search_res$ocrtext)) unlist(lapply(search_res$ocrtext, substr, start=0, stop=1000)) else ""
   metadata$year <- search_res$pub_year
   metadata$readers <- 0
@@ -82,15 +82,16 @@ get_papers <- function(query, params, limit=100) {
   metadata$bkl_caption = if (!is.null(search_res$bkl_caption)) search_res$bkl_caption else ""
   metadata$bkl_top_caption = if (!is.null(search_res$bkl_top_caption)) search_res$bkl_top_caption else ""
 
+  res <- clean_highlights(query, res)
   highlights <- data.frame(res$high)
-  highlights <- ddply(highlights, .(names), summarize, text=paste(main_title, ocrtext, collapse=" ... "))
   names(highlights) <- c("id", "snippets")
   metadata <- merge(x = metadata, y = highlights, by.x='id', by.y='id')
 
   text = data.frame(matrix(nrow=nrow(metadata)))
   text$id = metadata$id
   # Add all keywords, including classification to text
-  text$content = paste(search_res$main_title, search_res$keyword_a,
+  text$content = paste(metadata$title,
+                       metadata$subject,
                        sep = " ")
 
 
@@ -104,17 +105,28 @@ get_papers <- function(query, params, limit=100) {
 
 }
 
+clean_highlights <- function(query, res) {
+  query <- gsub('"', '', query)
+  query <- gsub("[\\+ ]+|-", " ", query, perl=TRUE)
+  res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
+    s <- strsplit(x, " \\.\\.\\. ")
+    unlist(lapply(s, function(x) x[grepl(paste0("<em>", gsub(" +", "|", query), "</em>"), x, ignore.case=TRUE)]))[1]
+  }))
+  res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
+    gsub(paste0("<em>((?!", gsub(" ", "|", query), ").)<\\/em>"), "\\1", x, ignore.case=TRUE, perl=TRUE)
+  }))
+  return(res)
+}
+
 build_query <- function(query, params, limit){
   # fields to query in
   a_fields <- c('author100_a', 'author700_a')
-  q_fields <- c('main_title', 'ocrtext',
+  q_fields <- c('main_title', 'subtitle', 'ocrtext',
                 'author100_d', 'author100_0',
                 'author700_d', 'author700_0',
-                'main_title', 'subtitle',
                 'host_maintitle', 'host_pubplace',
                 'bkl_caption', 'bkl_top_caption',
-                'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
-                'keyword_p', 'keyword_x', 'keyword_z',
+                'keyword_label',
                 'tags')
   # fields to return
   r_fields <- c('id', 'idnr',
@@ -125,13 +137,16 @@ build_query <- function(query, params, limit){
                 'author100_a', 'author100_d', 'author100_0', 'author100_4',
                 'author700_a', 'author700_d', 'author700_0',
                 'bkl_caption', 'bkl_top_caption',
-                'keyword_a', 'keyword_c', 'keyword_g', 'keyword_t',
-                'keyword_p', 'keyword_x', 'keyword_z',
+                'keyword_label',
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext', 'goobi_link')
   query <- gsub(" ?<<von>>", "", query)
-  aq <- paste0(a_fields, ':', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"))
-  qq <- paste0(q_fields, ':', query)
+  query <- trimws(query, "both")
+  query <- gsub("\\s+", " ", query)
+  query <- gsub("-[ ]+", "-", query)
+  query <- gsub("[ ]+\\+[ ]*", " ", query)
+  aq <- paste0(lapply(a_fields, build_authorfield_query, query=query))
+  qq <- paste0(lapply(q_fields, build_queryfield_query, query=query))
   q <- paste(c(aq, qq), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
@@ -158,13 +173,14 @@ build_query <- function(query, params, limit){
   }
   q_params$fq <- unlist(q_params$fq)
   q_params$hl <- 'on'
-  # q_params$hl.fl <- paste(q_fields, collapse=",")
-  q_params$hl.fl <- 'main_title,ocrtext'
-  q_params$hl.snippets <- 1
-  q_params$hl.score.k1 <- 0.6
+  q_params$hl.fl <- 'ocrtext'
+  q_params$hl.snippets <- 20
   q_params$hl.method <- 'unified'
+  q_params$hl.score.k1 <- 0.6
   q_params$hl.tag.ellipsis <- " ... "
-  q_params$hl.maxAnalyzedChars <- 251200
+  q_params$hl.maxAnalyzedChars <- 351200
+  q_params$hl.preserveMulti <- "true"
+  q_params$hl.fragsize <- 200
   # end adding filter params
   return(q_params)
 }
@@ -173,3 +189,31 @@ build_query <- function(query, params, limit){
 valid_langs <- list(
     'ger'='german'
 )
+
+boost_factors <- list(
+  'ocrtext'=0.0001,
+  'main_title'=50,
+  'keyword_label'=30
+)
+
+build_authorfield_query <- function(field, query) {
+  paste0(field, ':', '"', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"), '"', add_boost_factor(field))
+}
+
+build_queryfield_query <- function(field, query) {
+  l_q <- length(unlist(strsplit(query, " ")))
+  if (l_q > 1) {
+    query <- gsub(" ", " AND ", query, perl=TRUE)
+    for (i in 1:l_q*l_q) {
+      query <- gsub('(\\-?"[\\w+ äöü]+) AND ([äöü\\w \\.]+")', "\\1 \\2", query, perl=TRUE)
+    }
+    query <- gsub(' AND -', ' -', query)
+    query <- paste0(field, ':', '(', query, ')', add_boost_factor(field))
+  } else {
+    query <- paste0(field, ':', '"', query, '"', add_boost_factor(field))
+  }
+}
+
+add_boost_factor <- function(field) {
+  if (field %in% names(boost_factors)) paste0('^', boost_factors[field]) else ""
+}

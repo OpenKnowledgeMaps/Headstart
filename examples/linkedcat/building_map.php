@@ -1,20 +1,15 @@
 <!DOCTYPE html>
+<?php
+    include 'config.php';
+?>
 <html>
 
     <head>
-        <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <link type="text/css" rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-
-        <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:600" rel="stylesheet"> 
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-        <link type="text/css" rel="stylesheet" href="options.css">
+        <?php include('head_standard.php') ?>
     </head>
 
-    <body class="waiting-page">
-        <div class="waiting-page-img">
+    <body class="waiting-page waiting-page-img">
+        <div>
         <div class="waiting-box">
             <div>
                 <p class="waiting-title"><span id="h-label"></span> über <span id="search_term"></span> wird gerade erstellt</p>
@@ -46,15 +41,20 @@ if(!empty($_POST)) {
                 }
                 let search_params = new URLSearchParams(window.location.search)
                 if (Array.from(search_params).length > 0) {
-                    $("#search_term").text(post_data.q)
+                    $("#search_term").text(getSearchTermShort())
+                    $("#search_term").attr("title", post_data.q);
                     $("#h-label").text(function () {
-                        return ((post_data.vis_type === "overview")?("Ihre Knowledge Map"):("Ihr Zeitstrahl"))
+                        return ((post_data.vis_type === "overview")?("Ihre Knowledge Map"):("Ihr Streamgraph"))
                     })
                     doSubmit(search_params, search_params.get("service_url"), search_params.get("service"));
                 } else {
                     showErrorCreation();
                 }
-            })
+            });
+            
+            var getSearchTermShort = function () {
+                return post_data.q.length > 115 ? post_data.q.substr(0, 115) + "..." : post_data.q;
+            }
 
             var doSubmit = function (params, service_url, service_name) {
                 post_data.author_id = params.get("author_id");
@@ -73,8 +73,8 @@ if(!empty($_POST)) {
                                 + "&file=" + file
                                 + "&service=" + params.get("service")
                                 + "&service_name=" + service_name
-                                + "&visualization_mode=" + params.get("visualization_mode")
-                                + "&visualization_type=" + post_data.vis_type)
+                                + "&vis_mode=" + params.get("vis_mode")
+                                + "&vis_type=" + post_data.vis_type)
                         return false;
                     } else {
                         showErrorCreation();
@@ -97,7 +97,7 @@ if(!empty($_POST)) {
                 clearTimeout(progessbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
-                $(".waiting-title").html('Bei der Erstellung <span>' + ((post_data.vis_type === "overview")?("Ihrer Knowledge Map"):("Ihres Zeitstrahls")) + '</span> über <span>' + post_data.q + '</span> ist ein Fehler aufgetreten.');
+                $(".waiting-title").html('Bei der Erstellung <span>' + ((post_data.vis_type === "overview")?("Ihrer Knowledge Map"):("Ihres Streamgraphs")) + '</span> über <span title="' + post_data.q + '">' + getSearchTermShort() + '</span> ist ein Fehler aufgetreten.');
                 $("#progress").html('Pardon! Es ist leider etwas schief gelaufen. Wahrscheinlich gibt es zu Ihrer Suchanfrage keine Dokumente. Bitte versuchen Sie es mit einem anderen Stichwort erneut.'
                        
             
@@ -105,8 +105,8 @@ if(!empty($_POST)) {
                     +'<button class="search-btn shadow">'
                         +'Neues Stichwort ausprobieren'
                     +'</button></a>'
-            +'<div style="text-align: center; margin-top: 2%;">'
-                +'<a style="border-bottom: 1px solid #2856a3; text-decoration: none;" href="browse.php" target="_blank">Browse Knowledge Maps zu ausgewählten Themen</a>'
+            +'<div style="text-align: center; margin-top: 5%;">'
+                +'<a style="border-bottom: 1px solid #2856a3; text-decoration: none;" href="browse.php">Entdecken Sie Knowledge Maps zu Disziplinen/Themen</a>'
                                 +'</div>');
             }
 
@@ -114,7 +114,7 @@ if(!empty($_POST)) {
                 clearTimeout(progessbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
-                $(".waiting-title").html('Bei der Erstellung <span>' + ((post_data.vis_type === "overview")?("Ihrer Knowledge Map"):("Ihres Zeitstrahls")) + '</span> über <span>' + post_data.q + '</span> ist ein Fehler aufgetreten.');
+                $(".waiting-title").html('Bei der Erstellung <span>' + ((post_data.vis_type === "overview")?("Ihrer Knowledge Map"):("Ihres Streamgraphs")) + '</span> über <span title="' + post_data.q + '">' + getSearchTermShort() + '</span> ist ein Fehler aufgetreten.');
                 $("#progress").html(
                         'Pardon! Es ist leider etwas schief gelaufen.<br><a href=\"index.php\">Bitte versuchen Sie es in ein paar Minuten noch einmal</a>.'
                         )
@@ -135,7 +135,7 @@ if(!empty($_POST)) {
                 progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
 
                 if (value >= 100) {
-                    $("#progress").html('Die Erstellung <span>' + ((post_data.vis_type === "overview")?("Ihrer Knowledge Map"):("Ihres Zeitstrahls")) + '</span> benötigt mehr Zeit als angenommen. Bitte haben Sie noch ein wenig Geduld.')
+                    $("#progress").html('Die Erstellung <span>' + ((post_data.vis_type === "overview")?("Ihrer Knowledge Map"):("Ihres Streamgraphs")) + '</span> benötigt mehr Zeit als angenommen. Bitte haben Sie noch ein wenig Geduld.')
 
                     $("#progressbar").progressbar("value", 5);
 

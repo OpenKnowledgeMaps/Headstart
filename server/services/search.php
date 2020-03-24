@@ -43,6 +43,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
     $query = strip_tags($dirty_query);
+    $query = trim($query);
 
     if ($transform_query_tolowercase) {
         $query = strtolower($query);
@@ -112,10 +113,17 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
                             , "doaj" => "DOAJ"
                             , "base" => "BASE"
                             , "openaire" => "OpenAire"
-                            , "linkedcat" => "LinkedCat");
+                            , "linkedcat" => "LinkedCat"
+                            , "linkedcat_authorview" => "LinkedCat"
+                            , "linkedcat_browseview" => "LinkedCat");
 
     if(!isset($ini_array["snapshot"]["snapshot_enabled"]) || $ini_array["snapshot"]["snapshot_enabled"] > 0) {
-        $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $repository, $repo_mapping[$repository]);
+        if (isset($post_params["vis_type"]) && $post_params["vis_type"] == "timeline") {
+          $vis_type = "timeline";
+        } else {
+          $vis_type = "overview";
+        }
+        $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $repository, $repo_mapping[$repository], $vis_type);
         $snapshot->takeSnapshot();
     }
 

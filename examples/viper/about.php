@@ -89,7 +89,7 @@ include 'config.php';
                 </p>
 
                 <p style="margin-top:40px; text-align: center;">
-                    <a class="create-map" href="index">Create a map with VIPER</a>
+                    <a class="create-map" href="index">Create a knowledge map with VIPER</a>
                 </p>
             </div>
         </div>

@@ -9,7 +9,7 @@ import { canvas } from 'canvas';
 //streamgraph vis: colors, margin, padding, max ticks on x-axis
 const streamgraph_margin = {top: 20, right: 50, bottom: 70, left: 50};
 const stream_colors = ["#28a2a3", "#671A54", "#CC3380", "#7acca3", "#c999ff", "#ffe199"
-        , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#FFE699"];
+        , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#2856A3"];
 const axis_padding_left = -30;
 const axis_padding_bottom = 35;
 const max_ticks_x = 8;
@@ -229,14 +229,18 @@ streamgraph.drawStreamgraph = function (streams, area, z) {
 
 streamgraph.drawLabels = function (series, x, y, streamgraph_width, streamgraph_height, label_positions) {
     let self = this;
-    
     let text = d3.select(".streamgraph-chart").selectAll("text.label")
             .data(series.data())
             .enter()
             .append("text")
             .attr("dy", "10")
             .classed("label", true)
-            .text(function (d) { return d.key })
+            .text(function (d) {
+                if(d.key === "") {
+                    d.key = "NO_LABEL";
+                }
+                return d.key 
+            })
             .attr("transform", function (d) {
                 return self.initialPositionLabel(this, d, x, y, streamgraph_width, label_positions)
             })
@@ -268,7 +272,7 @@ streamgraph.drawLabels = function (series, x, y, streamgraph_width, streamgraph_
             .attr("transform", function (d) {
                 var current_label = repositioned_labels.find(obj => {
                     return obj.key === d.key;
-                })
+                })               
                 return('translate(' + current_label.x + ',' + current_label.y + ')')
             })
     
@@ -334,9 +338,9 @@ streamgraph.initialPositionLabel = function(self, d, x, y, streamgraph_width, la
             final_x = streamgraph_width - text_width;
         }
     })
-    
+
     label_positions.push({key: d.key, x: final_x, y: final_y, width: text_width, height: text_height, center_x: (final_x + text_width/2)});
-    
+
     return "translate(" + final_x + ", " + final_y + ")";
 }
 
@@ -461,7 +465,7 @@ streamgraph.setupTooltip = function(streamgraph_subject, x) {
     
     let self = this;
     
-    d3.select("#visualization")
+    d3.select("#" + config.tag)
             .append("div")
             .attr("id", "tooltip")
             .attr("class", "tip hidden")
@@ -504,6 +508,19 @@ streamgraph.stream_mouseout = function() {
         d3.selectAll(".stream").transition()
             .duration(100)
             .attr('class', 'stream')
+    } else {
+        d3.selectAll(".stream").transition()
+            .duration(100)
+            .attr("class", function (d, j) {
+                let stream_class = 'stream';
+                if(typeof mediator.current_stream !== "undefined" && d.key !== mediator.current_stream) {
+                    stream_class = 'stream lower-opacity';
+                }
+                if (typeof mediator.current_stream !== "undefined" && mediator.current_stream === d.key) {
+                    stream_class = 'stream';
+                }
+                return stream_class;
+            })
     }
 
     d3.select('#tooltip').classed("hidden", true);
