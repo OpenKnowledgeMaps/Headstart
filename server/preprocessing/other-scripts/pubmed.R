@@ -106,8 +106,9 @@ get_papers <- function(query, params = NULL, limit = 100) {
       }
     }, ""), collapse = ";")
     xkeywords <- paste0(xtext(xml2::xml_find_all(z, keywords)), collapse = ";")
+    xpubtype <- paste0(xtext(xml2::xml_find_all(z, ".//PublicationType")), collapse = "; ")
     xdoi <- xtext(xml2::xml_find_all(z, doi))
-    lst <- c(tmp, date = xdate, year = xyear, id = xdoi, authors = list(xauthors), subject = list(xkeywords))
+    lst <- c(tmp, date = xdate, year = xyear, id = xdoi, authors = list(xauthors), subject = list(xkeywords), publication_type = list(xpubtype))
     lst[vapply(lst, length, 1) != 1] <- NA
     return(lst)
   })
