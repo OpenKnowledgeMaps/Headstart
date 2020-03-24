@@ -179,7 +179,7 @@ var options_pubmed = {
                 , {id: "research support, u s gov't, non p h s", text: "Research Support, U.S. Gov't, Non P.H.S", selected: true}
                 , {id: "research support, u s gov't, p h s", text: "Research Support, U.S. Gov't, P.H.S", selected: true}
                 , {id: "research support, u s government", text: "Research Support, U.S. Government", selected: true}
-                , {id: "retracted publication", text: "Retracted Publication", selected: true}
+                , {id: "retracted publication", text: "Retracted Publication", selected: false}
                 , {id: "retraction of publication", text: "Retraction of Publication", selected: true}
                 , {id: "review", text: "Review", selected: true}
                 , {id: "scientific integrity review", text: "Scientific Integrity Review", selected: true}
