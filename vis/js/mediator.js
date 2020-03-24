@@ -450,6 +450,7 @@ MyMediator.prototype = {
         mediator.current_stream = keyword;
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'filterListByKeyword', [keyword]);
+        mediator.manager.call('list', 'scrollTop', []);
         mediator.manager.call('list', 'count_visible_items_to_header', []);
         mediator.manager.call('streamgraph', 'markStream', [keyword]);
         mediator.manager.call('list', 'changeHeaderColor', [color]);
@@ -473,7 +474,10 @@ MyMediator.prototype = {
         mediator.current_stream = null;
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'updateByFiltered', []);
-        mediator.manager.call('list', 'scrollTop', []);
+        if(mediator.current_enlarged_paper === null)
+            mediator.manager.call('list', 'scrollTop', []);
+        else
+            mediator.manager.call('list', 'scrollToEntry', [mediator.current_enlarged_paper.safe_id]);
         mediator.manager.call('streamgraph', 'reset');
         mediator.manager.call('list', 'count_visible_items_to_header', []);
         mediator.manager.call('list', 'resetHeaderColor');
@@ -626,6 +630,7 @@ MyMediator.prototype = {
     list_click_paper_list: function(d) {
         if(config.is_streamgraph) {
             mediator.manager.call('list', 'enlargeListItem', [d]);
+            mediator.manager.call('list', 'scrollTop', []);
             mediator.current_enlarged_paper = d;
             mediator.manager.call('list', 'count_visible_items_to_header')
         } else {
