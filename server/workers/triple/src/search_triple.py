@@ -6,14 +6,6 @@ from elasticsearch import Elasticsearch
 import pandas as pd
 
 
-with open("config.json") as infile:
-    config = json.load(infile)
-with open("redis_config.json") as infile:
-    redis_config = json.load(infile)
-
-redis_store = redis.StrictRedis(**redis_config)
-
-
 class TripleClient(object):
 
     def __init__(self, config):
@@ -174,5 +166,11 @@ class TripleClient(object):
 
 
 if __name__ == '__main__':
+    with open("config.json") as infile:
+        config = json.load(infile)
+    with open("redis_config.json") as infile:
+        redis_config = json.load(infile)
+
+    redis_store = redis.StrictRedis(**redis_config)
     tc = TripleClient(config)
     tc.run()
