@@ -210,6 +210,10 @@
 
 #list_area {
     cursor: pointer;
+    
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 .conceptgraph {
