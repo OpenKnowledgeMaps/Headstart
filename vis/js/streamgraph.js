@@ -9,7 +9,7 @@ import { canvas } from 'canvas';
 //streamgraph vis: colors, margin, padding, max ticks on x-axis
 const streamgraph_margin = {top: 20, right: 50, bottom: 70, left: 50};
 const stream_colors = ["#28a2a3", "#671A54", "#CC3380", "#7acca3", "#c999ff", "#ffe199"
-        , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#FFE699"];
+        , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#2856A3"];
 const axis_padding_left = -30;
 const axis_padding_bottom = 35;
 const max_ticks_x = 8;

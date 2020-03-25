@@ -5,8 +5,12 @@ $date = new DateTime();
 ?>
 <html>
     <head>
-        <title>LinkedCat+ Visuelle Suche</title>
-        <?php include('head_standard.php') ?>
+        <?php 
+            $override_labels = array(
+                "title" => "FAQs - LinkedCat+"
+            );
+            include('head_standard.php') 
+        ?>
         <link type="text/css" rel="stylesheet" href="./css/browse.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js" integrity="sha256-Y1rRlwTzT5K5hhCBfAFWABD4cU13QGuRN6P5apfWzVs=" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" integrity="sha256-HAaDW5o2+LelybUhfuk0Zh2Vdk8Y2W2UeKmbaXhalfA=" crossorigin="anonymous" />
