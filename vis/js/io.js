@@ -196,6 +196,8 @@ IO.prototype = {
                 }
             }
             
+            d.safe_id = _this.convertToSafeID(d.id);
+            
             if(d.hasOwnProperty("snippets") && d.snippets !== "") {
                 d.snippets = d.snippets.replace(/&lt;em&gt;/g, "<em>");
                 d.snippets = d.snippets.replace(/&lt;\/em&gt;/g, "</em>");
@@ -401,6 +403,14 @@ IO.prototype = {
         }
 
         this.data = cur_data;
+    },
+    
+    convertToSafeID: function (id) {
+        return id.replace(/[^a-zA-Z0-9]/g, function(s) {
+            var c = s.charCodeAt(0);
+            if (c === 32) return '-';
+            return '__' + ('000' + c.toString(16)).slice(-4);
+        });
     },
 
     // prepare the areas for the bubbles
