@@ -3,6 +3,7 @@ import re
 import json
 import redis
 from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
 import pandas as pd
 
 
@@ -44,6 +45,19 @@ class TripleClient(object):
             sort.append("date:desc")
         return sort
 
+    @staticmethod
+    def parse_query(querystring):
+        parsed_query = {}
+        pos_phrases = []
+        neg_phrases = []
+        pos_keywords = []
+        neg_keywords = []
+        parsed_query["pos_phrases"] = pos_phrases
+        parsed_query["neg_phrases"] = neg_phrases
+        parsed_query["pos_keywords"] = pos_keywords
+        parsed_query["neg_keywords"] = neg_keywords
+        return parsed_query
+
     def build_body(self, parameters):
         body = {"query": {
                     "bool": {
@@ -63,10 +77,32 @@ class TripleClient(object):
         return body
 
     def search(self, parameters):
+        s = Search(using=self.es)
+        parsed_query = self.parse_query(parameters.get('q'))
+        for q in parsed_query.get('pos_phrases'):
+            if q:
+                s = s.query("multi_match", query=q, fields=['title', 'body'])
+        for q in parsed_query.get('pos_keywords'):
+            if q:
+                s = s.query("multi_match", query=q, fields=['title', 'body'])
+        for q in parsed_query.get('neg_phrases'):
+            if q:
+                s = s.exclude("multi_match", query=q, fields=['title', 'body'])
+        for q in parsed_query.get('neg_keywords'):
+            if q:
+                s = s.exclude("multi_match", query=q, fields=['title', 'body'])
+        s = s.query("range", date=self.build_date_field(
+                    parameters.get('from'),
+                    parameters.get('to')))
         index = "isidore-documents-triple"
+        # res = self.es.search(
+        #     index=index,
+        #     body=self.build_body(parameters),
+        #     size=parameters.get('limit', 100),
+        #     sort=self.build_sort_order(parameters))
         res = self.es.search(
             index=index,
-            body=self.build_body(parameters),
+            body=s.to_dict(),
             size=parameters.get('limit', 100),
             sort=self.build_sort_order(parameters))
         if parameters.get('raw') is True:
