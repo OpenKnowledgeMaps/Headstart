@@ -140,7 +140,7 @@ list.drawList = function() {
             }
             window.clearTimeout(timer);
             timer = window.setTimeout(function() {
-                debounce(self.filterList(event.target.value.split(" ")), config.debounce);
+                debounce(self.filterList(event.target.value.split(" "), this.current_filter_param), config.debounce);
             }, delay);
         
         });
@@ -148,7 +148,7 @@ list.drawList = function() {
     $("#searchclear").click(() => {
         $("#filter_input").val('');
         $("#searchclear").hide();
-        debounce(this.filterList([""]), config.debounce);
+        debounce(this.filterList([""], this.current_filter_param), config.debounce);
     });
 
     // Add sort button options
@@ -326,6 +326,7 @@ list.addFilterOptionDropdownEntry = function (filter_option, first_item) {
     }
     
     newEntry.on("click", () => {
+        this.current_filter_param = filter_option;
         this.filterList(undefined, filter_option)
         $('#curr-filter-type').text(config.localization[config.language][filter_option])
         $('.filter_entry').removeClass('active');
@@ -464,6 +465,11 @@ list.updateVisualDistributions = function(attribute, context) {
 list.populateMetaData = function(nodes) {
     nodes[0].forEach(function(elem) {
         var list_metadata = d3.select(elem).select(".list_metadata");
+        
+        d3.select(elem).select(".list_anchor")
+            .attr("id", function(d) {
+                return d.safe_id;
+            })
 
         list_metadata.select(".list_title")
             .attr("class", function(d) {
@@ -733,6 +739,12 @@ list.populateList = function() {
     this.populateExternalVis(paper_nodes);
 };
 
+list.scrollToEntry = function(safe_id) {
+    $("#papers_list").animate({
+        scrollTop: $('#' + safe_id).offset().top - $('#papers_list').offset().top
+    }, 0);
+}
+
 list.filterList = function(search_words, filter_param) {
     if (search_words === undefined) {
         search_words = this.current_search_words
@@ -741,7 +753,7 @@ list.filterList = function(search_words, filter_param) {
     }
 
     if (filter_param === undefined) {
-        filter_param = this.current_filter_param     
+        filter_param = this.current_filter_param;     
     } else {
         mediator.publish("record_action", filter_param, "List", "filter", config.user_id, "filter_list", null, "filter_param=" + filter_param);
     }
@@ -758,39 +770,59 @@ list.filterList = function(search_words, filter_param) {
     // Full list of items in the map/list
     let all_list_items = d3.selectAll("#list_holder");
     let all_map_items = d3.selectAll(".paper");
-    //TODO why not mediator.current_circle
-    let current_circle = d3.select(mediator.current_zoom_node);
-
-    // Find all the list items, that without any filtering should be in the view
-    let normally_visible_list_items = all_list_items
-        .filter(function(d) {
-            if (mediator.is_zoomed === true) {
-                if (config.use_area_uri && mediator.current_enlarged_paper === null) {
-                    return current_circle.data()[0].area_uri == d.area_uri;
-                } else if (config.use_area_uri && mediator.current_enlarged_paper !== null) {
-                    return mediator.current_enlarged_paper.id == d.id;
-                } else {
-                    return current_circle.data()[0].title == d.area;
-                }
-            } else {
-                return true;
-            }
-        });
-
-    // Find items that, without any filtering, should be in the view
-    let normally_visible_map_items = all_map_items
-        .filter(function(d) {
-            if (mediator.is_zoomed === true) {
+    
+    let normally_visible_list_items = all_list_items;
+    let normally_visible_map_items = all_map_items;
+    
+    if (!config.is_streamgraph && mediator.is_zoomed) {
+        //TODO why not mediator.current_circle
+        let current_circle = d3.select(mediator.current_zoom_node);
+        
+        // Find all the list items, that without any filtering should be in the view
+        normally_visible_list_items = 
+            all_list_items
+                .filter(function(d) {
+                    if (config.use_area_uri && mediator.current_enlarged_paper === null) {
+                        return current_circle.data()[0].area_uri == d.area_uri;
+                    } else if (config.use_area_uri && mediator.current_enlarged_paper !== null) {
+                        return mediator.current_enlarged_paper.id == d.id;
+                    } else {
+                        return current_circle.data()[0].title == d.area;
+                    }
+                });
+                
+        // Find items that, without any filtering, should be in the view
+        normally_visible_map_items = all_map_items
+            .filter(function(d) {
                 if (config.use_area_uri) {
                     return current_circle.data()[0].area_uri == d.area_uri;
                 } else {
                     return current_circle.data()[0].title == d.area;
                 }
-            } else {
-                return true;
-            }
-        });
-
+            });
+    } else if (config.is_streamgraph && mediator.current_stream !== null) {
+        
+        // Find all the list items, that without any filtering should be in the view
+        normally_visible_list_items = 
+            all_list_items
+                .filter(function(d) {
+                    if (mediator.current_enlarged_paper !== null) {
+                        return mediator.current_enlarged_paper.id == d.id;
+                    } else {
+                        return d.subject_orig.split("; ").includes(mediator.current_stream);
+                    }
+                });
+                
+        normally_visible_map_items = all_map_items
+            .filter(function(d) {
+                if (mediator.current_enlarged_paper !== null) {
+                    return mediator.current_enlarged_paper.id == d.id;
+                } else {
+                    return d.subject_orig.split("; ").includes(mediator.current_stream);
+                }
+            });
+    }
+    
     //Find if any paper was selected previously
     let selected_list_items = normally_visible_list_items
         .filter(function(d) {
@@ -1322,7 +1354,7 @@ list.writePopup = function(pdf_url) {
     setTimeout(function() {
         $("#pdf_iframe")
             .attr("src", function() {
-                let viewer = config.server_url + "services/pdfjs-hypothesis/web/viewer.html";
+                let viewer = config.server_url + "services/displayPDF.php";
                 if(config.use_hypothesis) {
                     return viewer + "?file=" + pdf_url; //#view=FitH
                 } else {
@@ -1413,7 +1445,9 @@ list.populateOverlay = function(d) {
 
                 var showError = function() {
                     var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
-                    $("#status").html("Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from <a href=\"" + pdf_location_link + "\" target=\"_blank\">this website</a>.");
+                    $("#status").html(config.localization[config.language].pdf_not_loaded 
+                            + " <a href=\"" + pdf_location_link + "\" target=\"_blank\">" 
+                            + config.localization[config.language].pdf_not_loaded_linktext + "</a>.");
                     $("#status").show();
                 }
 

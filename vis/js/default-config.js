@@ -153,6 +153,8 @@ var config = {
     show_context_oa_number: true,
     context_most_relevant_tooltip: false,
     
+    hashtags_twitter_card: "okmaps,openscience,dataviz",
+    
     service_names: {plos: "PLOS"
                         , base: "BASE"
                         , pubmed: "PubMed"
@@ -207,6 +209,10 @@ var config = {
             default_y: 1.,
             default_year: "",
             sort_by_label: 'sort by:',
+            pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
+            pdf_not_loaded_linktext: "this website",
+            share_button_title: "share this map",
+            embed_button_title: "Embed this knowledge map on other websites",
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
         },
         ger: {
@@ -254,9 +260,12 @@ var config = {
             sort_by_label: 'sortieren: ',
             relevance: "Relevanz",
             link: "Link",
+            share_button_title: "Visualisierung teilen",
+            embed_button_title: "Visualisierung auf einer anderen Seite einbetten",
             embed_button_text: 'Kopieren',
             embed_body_text: 'Sie können diesen Code verwenden, um die Visualisierung auf anderen Seiten einzubetten.',
-
+            pdf_not_loaded: "Leider konnten wir das PDF nicht abrufen. Mehr Informationen finden Sie auf",
+            pdf_not_loaded_linktext: "dieser Seite",
         },
         ger_linkedcat: {
            loading: "Wird geladen...",
@@ -307,9 +316,13 @@ var config = {
             sort_by_label: 'sortieren: ',
             relevance: "Relevanz",
             link: "Link",
+            share_button_title: "Visualisierung teilen",
+            embed_button_title: "Visualisierung auf einer anderen Seite einbetten",
             embed_button_text: 'Kopieren',
             embed_body_text: 'Sie können diesen Code verwenden, um die Visualisierung auf anderen Seiten einzubetten.',
             pdf_load_text: "Dieser Vorgang kann mehrere Minuten dauern, da die gescannten Texte sehr umfangreich sein können. Bitte haben Sie etwas Geduld.",
+            pdf_not_loaded: "Leider konnten wir das PDF nicht abrufen. Mehr Informationen finden Sie auf",
+            pdf_not_loaded_linktext: "dieser Seite",
         },
         eng_plos: {
             loading: "Loading...",
@@ -347,6 +360,10 @@ var config = {
             default_y: 1.,
             default_year: "",
             sort_by_label: 'sort by:',
+            pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
+            pdf_not_loaded_linktext: "this website",
+            share_button_title: "share this map",
+            embed_button_title: "Embed this knowledge map on other websites",
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
         },
         eng_pubmed: {
@@ -396,6 +413,10 @@ var config = {
             open_access: "Open Access",
             link: 'link',
             items: "items",
+            pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
+            pdf_not_loaded_linktext: "this website",
+            share_button_title: "share this map",
+            embed_button_title: "Embed this knowledge map on other websites",
             embed_button_text: 'Copy',
             embed_title: 'embed map',
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
@@ -447,6 +468,8 @@ var config = {
             viper_button_desc_label: `<p>By clicking on the button below, you are redirected to the\
                 OpenAIRE page for`,
             viper_edit_button_text: 'continue to openaire',
+            share_button_title: "share this map",
+            embed_button_title: "Embed this knowledge map on other websites",
             embed_button_text: 'Copy',
             embed_title: 'embed map',
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
@@ -463,6 +486,8 @@ var config = {
             sort_by_label: 'sort by:',
             scale_by_label: 'Scale map by:',
             scale_by_infolink_label: 'notes on use of metrics',
+            pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
+            pdf_not_loaded_linktext: "this website",
             credit_alt: "VIPER was created by Open Knowledge Maps",
         },
          ger_cris: {

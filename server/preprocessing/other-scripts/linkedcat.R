@@ -40,7 +40,9 @@ get_papers <- function(query, params, limit=100) {
   start.time <- Sys.time()
   host=paste0(Sys.getenv("LINKEDCAT_USER"),":",Sys.getenv("LINKEDCAT_PWD"),"@",Sys.getenv("LINKEDCAT_SOLR"))
   conn <- SolrClient$new(host=host,
-                         path="solr/linkedcat2", port=NULL, scheme="https")
+                         path=Sys.getenv("LINKEDCAT_SOLR_PATH"),
+                         port=if (Sys.getenv("LINKEDCAT_SOLR_PORT")=="NULL") NULL else Sys.getenv("LINKEDCAT_SOLR_PORT"),
+                         scheme=Sys.getenv("LINKEDCAT_SOLR_SCHEME"))
 
   q_params <- build_query(query, params, limit)
   # do search
@@ -104,9 +106,25 @@ get_papers <- function(query, params, limit=100) {
 }
 
 clean_highlights <- function(query, res) {
+  query <- gsub("- *", "-", query, perl=TRUE)
+  query <- gsub("-[\\w+]+ ", " ", query, perl=TRUE)
+  query <- gsub(' ?- ?"[\\w ]+" | ?- ?"[\\w ]+"$|-\\w+$', " ", query, perl=TRUE)
+  query <- gsub('"', '', query)
+  query <- gsub(' +', ' ', query, perl=TRUE)
+  query <- trimws(query, "both")
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
     s <- strsplit(x, " \\.\\.\\. ")
-    unlist(lapply(s, function(x) x[grepl(paste0("<em>", query, "</em>"), x, ignore.case=TRUE)]))[1]
+    unlist(lapply(s, function(x)  {
+        x <- x[grepl(paste0("<em>", gsub(" +", "|", query), "</em>"), x, ignore.case=TRUE)][1:5]
+        x <- x[!is.na(x)]
+        x <- paste0("<span>", paste0(x, collapse = "</span><span>"), "</span>")
+        return (x)
+    }))
+  }))
+  res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
+    x <- gsub("<em>|<\\/em>", "", x)
+    x <- gsub(paste0("(", gsub(" ", "|", query), ")"), "<em>\\1<\\/em>", x, ignore.case=TRUE, perl=TRUE)
+    return (x)
   }))
   return(res)
 }
@@ -134,8 +152,12 @@ build_query <- function(query, params, limit){
                 'tags', 'category', 'bib', 'language_code',
                 'ocrtext', 'goobi_link')
   query <- gsub(" ?<<von>>", "", query)
-  aq <- paste0(lapply(q_fields, build_authorfield_query))
-  qq <- paste0(lapply(q_fields, build_queryfield_query))
+  query <- trimws(query, "both")
+  query <- gsub("\\s+", " ", query)
+  query <- gsub("-[ ]+", "-", query)
+  query <- gsub("[ ]+\\+[ ]*", " ", query)
+  aq <- paste0(lapply(a_fields, build_authorfield_query, query=query))
+  qq <- paste0(lapply(q_fields, build_queryfield_query, query=query))
   q <- paste(c(aq, qq), collapse = " OR ")
   q_params <- list(q = q, rows = limit, fl = r_fields)
 
@@ -163,13 +185,13 @@ build_query <- function(query, params, limit){
   q_params$fq <- unlist(q_params$fq)
   q_params$hl <- 'on'
   q_params$hl.fl <- 'ocrtext'
-  q_params$hl.snippets <- 20
+  q_params$hl.snippets <- 30
   q_params$hl.method <- 'unified'
   q_params$hl.score.k1 <- 0.6
   q_params$hl.tag.ellipsis <- " ... "
   q_params$hl.maxAnalyzedChars <- 351200
   q_params$hl.preserveMulti <- "true"
-  q_params$hl.fragsize <- 200
+  q_params$hl.fragsize <- 300
   # end adding filter params
   return(q_params)
 }
@@ -185,12 +207,22 @@ boost_factors <- list(
   'keyword_label'=30
 )
 
-build_authorfield_query <- function(field) {
+build_authorfield_query <- function(field, query) {
   paste0(field, ':', '"', paste0(gsub("[^a-zA-Z<>]+", "*", query), "*"), '"', add_boost_factor(field))
 }
 
-build_queryfield_query <- function(field) {
-  paste0(field, ':', '"', query, '"', add_boost_factor(field))
+build_queryfield_query <- function(field, query) {
+  l_q <- length(unlist(strsplit(query, " ")))
+  if (l_q > 1) {
+    query <- gsub(" ", " AND ", query, perl=TRUE)
+    for (i in 1:l_q*l_q) {
+      query <- gsub('(\\-?"[\\w+ äöü]+) AND ([äöü\\w \\.]+")', "\\1 \\2", query, perl=TRUE)
+    }
+    query <- gsub(' AND -', ' -', query)
+    query <- paste0(field, ':', '(', query, ')', add_boost_factor(field))
+  } else {
+    query <- paste0(field, ':', '"', query, '"', add_boost_factor(field))
+  }
 }
 
 add_boost_factor <- function(field) {

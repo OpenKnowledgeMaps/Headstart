@@ -180,12 +180,15 @@
 }
 
 @if $skin == 'linkedcat' {
-    #sort_container {
-
+    #sort_container .dropdown-menu {
+        width: 200px !important;
+        min-width:140px;
     }
 
     #sort {
         border-radius: 17px;
+        -webkit-border-radius: 17px;
+        -moz-border-radius: 17px;
         width: 200px;
     }
 
@@ -214,7 +217,12 @@
     @media screen and (max-width: 1260px) {
         #sort {
             border-radius: 17px;
+            -webkit-border-radius: 17px;
+            -moz-border-radius: 17px;
             width: 160px;
+        }
+        #sort_container .dropdown-menu {
+            width: 160px !important;
         }
     }
 
@@ -223,7 +231,7 @@
             display: block;
 
             input {
-                width: 260px;
+                width: 240px;
             }
         }
     }
