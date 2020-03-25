@@ -405,17 +405,21 @@ IO.prototype = {
     getQueryTerms: function () {
         let full_query = context.query;
         
-        let query_wt_exclusions = full_query.replace(/(^|\s)-[^\s]*/g, " ");
-        query_wt_exclusions = query_wt_exclusions.replace(/(^|\s)-\"(.*?)\"/g, " ");
-        query_wt_exclusions = query_wt_exclusions.replace(/(^|\s)-\((.*?)\)/g, " ");
-        XRegExp.matchRecursive(str, '\\(', '\\)', 'g');
-        
+        //let query_wt_exclusions = full_query.replace(/(^|\s)-[^\s]*/g, " ");
+        //query_wt_exclusions = query_wt_exclusions.replace(/(^|\s)-\"(.*?)\"/g, " ");
+        //query_wt_exclusions = query_wt_exclusions.replace(/(^|\s)-\((.*?)\)/g, " ");
+        //XRegExp.matchRecursive(str, '\\(', '\\)', 'g');
+       
         //Get all phrases and remove inverted commas from results
-        let term_array = full_query.match(/\"(.*?)\"/g)
+        let match_query = /\"(.*?)\"/g;
+        let term_array = full_query.match(match_query)
                 .map(function(x){return x.replace(/\"/g, '');});
         
-        //Remove phrases, and, or, +,(, ) from query string
-        let query_wt = full_query.replace(/\"(.*?)\"|\s-(.*?)\s|\sand\s|\sor\s|[\s\+]|\(|\)/g, " ");
+        //Remove phrases, and, or, +, -, (, ) from query string 
+        let query_wt_phrases = full_query.replace(match_query, " ");
+        let query_wt_rest = query_wt_phrases.replace(/(^|\s)and\s/g, " ").replace(/(^|\s)or\s/g, " ").replace(/(^|\s)-/g, " ").replace(/\+|\(|\)/g, " ")
+
+        term_array = term_array.concat(query_wt_rest.trim().replace(/\s+/g, " ").split(" "));
         
     },
 
