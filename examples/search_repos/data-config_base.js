@@ -29,4 +29,6 @@ var data_config = {
     
     embed_modal: true,
     share_modal: false,
+    
+    show_keywords: true,
 };

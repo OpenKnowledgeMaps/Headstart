@@ -5,8 +5,12 @@ $date = new DateTime();
 ?>
 <html>
     <head>
-        <title>LinkedCat+ Visuelle Suche</title>
-        <?php include('head_standard.php') ?>
+        <?php 
+            $override_labels = array(
+                "title" => "FAQs - LinkedCat+"
+            );
+            include('head_standard.php') 
+        ?>
         <link type="text/css" rel="stylesheet" href="./css/browse.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js" integrity="sha256-Y1rRlwTzT5K5hhCBfAFWABD4cU13QGuRN6P5apfWzVs=" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" integrity="sha256-HAaDW5o2+LelybUhfuk0Zh2Vdk8Y2W2UeKmbaXhalfA=" crossorigin="anonymous" />
@@ -53,7 +57,7 @@ $date = new DateTime();
                     </p>
                     <p class="paragraph-style">
                         Ein Streamgraph zeigt die zeitliche Entwicklung der häufigsten Schlagworte zu einem Stichwort/Autor. 
-                        Die Schlagworte werden als farbige Ströme (Englisch "streams") dargestellt. Jedem Strom sind relevante Dokumente zugeordnet, die mit einem Klick auf einen Stream angezeigt werden können. Ein Dokument kann in einem Streamgraph mehreren Strömen zugeordnet.
+                        Die Schlagworte werden als farbige Ströme (Englisch "streams") dargestellt. Jedem Strom sind relevante Dokumente zugeordnet, die mit einem Klick auf einen Stream angezeigt werden können. Ein Dokument kann in einem Streamgraph mehreren Strömen zugeordnet sein. Es kann aber auch vorkommen, dass ein Dokument keinem Strom zugeordnet ist - und zwar dann, wenn das Dokument nicht mit einem der häufigsten Schlagworte annotiert ist.
                     </p>
                     <p class="paragraph-style">
                         Streamgraphen eignen sich besonders dazu, die Entwicklung von Schlagwörtern über die Zeit zu analysieren und Trends zu erkennen. Die Höhe eines Stroms entspricht der Anzahl der zugeordneten Dokumente zu einem bestimmten Zeitpunkt. 
@@ -113,7 +117,9 @@ $date = new DateTime();
             $(document).ready(function() {
                 $(document).on('click', '[data-toggle="lightbox"]', function(event) {
                     event.preventDefault();
-                    $(this).ekkoLightbox();
+                    $(this).ekkoLightbox({
+                        alwaysShowClose: true,
+                    });
                 });
             })
         </script>

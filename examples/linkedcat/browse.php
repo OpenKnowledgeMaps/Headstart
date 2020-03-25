@@ -5,8 +5,12 @@ $date = new DateTime();
 ?>
 <html>
     <head>
-        <title>LinkedCat+ Visuelle Suche</title>
-        <?php include('head_standard.php') ?>
+        <?php 
+            $override_labels = array(
+                "title" => "Disziplinen / Themen - LinkedCat+"
+            );
+            include('head_standard.php') 
+        ?>
         <link type="text/css" rel="stylesheet" href="./css/browse.css">
     </head>
     <body class="browse-page bg-image-startpage">
@@ -102,7 +106,7 @@ $date = new DateTime();
                                     + "&service_url=" + data_config.server_url + "services/searchLinkedCatBrowseview.php"
                                     + "&service_name=LinkedCat"
                                     + "&service=" + data_config.service
-                                    + "&visualization_mode=browse")
+                                    + "&vis_mode=browse")
                             )
                     win.post_data = {
                         q: build_q(map_params)
