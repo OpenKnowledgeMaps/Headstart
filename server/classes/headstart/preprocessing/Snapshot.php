@@ -5,13 +5,27 @@ namespace headstart\preprocessing;
 class Snapshot
 {
     protected $cmd;
-    public function __construct($ini_array, $query, $id, $service, $service_name) {
+    public function __construct($ini_array, $query, $id, $service, $service_name, $vis_type) {
         $post_data = array(
             "query" => $query,
             "file" => $id,
             "service_name" => $service_name,
             "service" => $service
         );
+        if ($service_name == "LinkedCat") {
+          $post_data["vis_type"] = $vis_type;
+          $post_data["service_name"] = "linkedcat";
+          }
+        if ($service == "linkedcat_authorview") {
+          $post_data["vis_mode"] = "authors";
+          $post_data["service"] = "linkedcat";
+          $post_data["service_name"] = "linkedcat";
+        }
+        if ($service == "linkedcat_browseview") {
+          $post_data["vis_mode"] = "browse";
+          $post_data["service"] = "linkedcat";
+          $post_data["service_name"] = "linkedcat";
+        }
         $url_postfix = http_build_query($post_data);
 
         $node_path = $ini_array["snapshot"]["node_path"];

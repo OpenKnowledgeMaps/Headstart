@@ -73,8 +73,8 @@ if(!empty($_POST)) {
                                 + "&file=" + file
                                 + "&service=" + params.get("service")
                                 + "&service_name=" + service_name
-                                + "&visualization_mode=" + params.get("visualization_mode")
-                                + "&visualization_type=" + post_data.vis_type)
+                                + "&vis_mode=" + params.get("vis_mode")
+                                + "&vis_type=" + post_data.vis_type)
                         return false;
                     } else {
                         showErrorCreation();
