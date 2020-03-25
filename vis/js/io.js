@@ -202,6 +202,9 @@ IO.prototype = {
                 d.paper_abstract = d.snippets;
             }
             
+            let query_terms = _this.getQueryTerms(context);
+            d.title = _this.highlightTerms(d.title, query_terms);
+            
             let prepareCoordinates = function(coordinate, digits) {
                 if (isNaN(parseFloat(coordinate))) {
                     return parseFloat(0).toFixed(digits);
@@ -401,8 +404,17 @@ IO.prototype = {
         this.data = cur_data;
     },
     
+    highlightTerms: function(full_string, term_array) {
+        let result_string = full_string;
+        for (let term of term_array) {
+            let re = new RegExp("\\s(" + term + ")\\s" ,"gi");
+            result_string = result_string.replace(re, " <em>$1</em> ");
+        }
+        return result_string;
+    },
+    
     //Get all terms in a query minus operators
-    getQueryTerms: function () {
+    getQueryTerms: function (context) {
         let full_query = context.query;
         
         //let query_wt_exclusions = full_query.replace(/(^|\s)-[^\s]*/g, " ");
@@ -412,14 +424,19 @@ IO.prototype = {
        
         //Get all phrases and remove inverted commas from results
         let match_query = /\"(.*?)\"/g;
-        let term_array = full_query.match(match_query)
-                .map(function(x){return x.replace(/\"/g, '');});
+        let term_array = full_query.match(match_query);
+        if(term_array !== null)
+            term_array.map(function(x){return x.replace(/\"/g, '');});
+        else
+            term_array = [];
         
         //Remove phrases, and, or, +, -, (, ) from query string 
         let query_wt_phrases = full_query.replace(match_query, " ");
         let query_wt_rest = query_wt_phrases.replace(/(^|\s)and\s/g, " ").replace(/(^|\s)or\s/g, " ").replace(/(^|\s)-/g, " ").replace(/\+|\(|\)/g, " ")
 
         term_array = term_array.concat(query_wt_rest.trim().replace(/\s+/g, " ").split(" "));
+        
+        return term_array;
         
     },
 
