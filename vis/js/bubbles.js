@@ -530,13 +530,15 @@ BubblesFSM.prototype = {
 
     zoomOut: function () {
 
-        if (!mediator.is_zoomed) {
+        if (!mediator.is_zoomed || mediator.is_zooming_out) {
             return;
         }
 
         if (papers.is("loading")) {
             return;
         }
+        
+        mediator.is_zooming_out = true;
 
         d3.select("rect")
                 .attr("width", canvas.current_vis_size)
@@ -582,6 +584,7 @@ BubblesFSM.prototype = {
                     canvas.dotdotdotAreaTitles();
                     mediator.current_zoom_node = null;
                     mediator.is_zoomed = false;
+                    mediator.is_zooming_out = false;
                     
                     mediator.publish("zoomout_complete")
                 });

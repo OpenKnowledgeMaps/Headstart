@@ -5,9 +5,13 @@ $date = new DateTime();
 ?>
 <html>
     <head>
-        <title>LinkedCat+ Visuelle Suche</title>
-        <?php include('head_standard.php') ?>
-        <link type="text/css" rel="stylesheet" href="browse.css">
+        <?php 
+            $override_labels = array(
+                "title" => "Disziplinen / Themen - LinkedCat+"
+            );
+            include('head_standard.php') 
+        ?>
+        <link type="text/css" rel="stylesheet" href="./css/browse.css">
     </head>
     <body class="browse-page bg-image-startpage">
         <div>
@@ -16,7 +20,7 @@ $date = new DateTime();
             </header>
 
             <?php include('project-short-description.php') ?>
-
+            <div style="padding: 0 20px;">
             <div class="browse-description">
                 <h3>Disziplinen / Themen</h3>
             </div>
@@ -29,10 +33,11 @@ $date = new DateTime();
                     <img class="loading" src="img/ajax-loader.gif">
                 </div>
             </div>
+            </div>
         </div>
         <?php include('credits.php') ?>
 
-        <script type="text/javascript" src="data-config_linkedcat.js"></script>
+        <script type="text/javascript" src="./js/data-config_linkedcat.js"></script>
         <script>
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
 
@@ -101,7 +106,7 @@ $date = new DateTime();
                                     + "&service_url=" + data_config.server_url + "services/searchLinkedCatBrowseview.php"
                                     + "&service_name=LinkedCat"
                                     + "&service=" + data_config.service
-                                    + "&visualization_mode=keywords")
+                                    + "&vis_mode=browse")
                             )
                     win.post_data = {
                         q: build_q(map_params)

@@ -38,11 +38,20 @@ get_papers <- function(query, params, limit=100,
 
   blog$info(paste("Search:", query))
   start.time <- Sys.time()
-
-  exact_query <- ""
-
-  # add textus: to each word/phrase to enable verbatim search
-  exact_query = gsub("(\"(.*?)\")|(?<!\\S)(?=\\S)", "textus:\\1", query, perl=T)
+  
+  # remove pluses between terms
+  query_wt_plus = gsub("(?!\\B\"[^\"]*)[\\+]+(?![^\"]*\"\\B)", " ", query, perl=T)
+  # remove multiple minuses and spaces after minuses
+  query_wt_multi_minus = gsub("(?!\\B\"[^\"]*)((^|\\s))[\\-]+[\\s]*(?![^\"]*\"\\B)", "\\1-", query_wt_plus, perl=T)
+  # remove multiple spaces inside the query
+  query_wt_multi_spaces = gsub("(?!\\B\"[^\"]*)[\\s]{2,}(?![^\"]*\"\\B)", " ", query_wt_multi_minus, perl=T)
+  # trim query, if needed
+  query_cleaned = gsub("^\\s+|\\s+$", "", query_wt_multi_spaces, perl=T)
+  
+  # add "textus:" to each word/phrase to enable verbatim search
+  # make sure it is added after any opening parentheses to enable queries such as "(a and b) or (a and c)"
+  exact_query = gsub('([\"]+(.*?)[\"]+)|(?<=\\(\\b|\\+|-\\"\\b|\\s-\\b|^-\\b)|(?!or\\b|and\\b|[-]+[\\"\\(]*\\b)(?<!\\S)(?=\\S)(?!\\(|\\+)'
+                     , "textus:\\1", query_cleaned, perl=T)
   
   blog$info(paste("BASE query:", exact_query))
 
@@ -64,9 +73,10 @@ get_papers <- function(query, params, limit=100,
   abstract_exists = "dcdescription:?"
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
 
-  base_query <- paste(exact_query, lang_query, date_string, document_types, abstract_exists, collapse=" ")
+  base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, abstract_exists, collapse=" ")
   
   blog$info(paste("Exact query:", base_query))
+  blog$info(paste("Sort by:", sortby_string))
   # execute search
   (res_raw <- bs_search(hits=limit
                         , query = base_query
