@@ -24,34 +24,31 @@
         </div>
 
         <script>
-            var post_data;
+            var post_data, dirty_query, unique_id;
             var server_url = "<?php echo $WEBSITE_PATH . $HEADSTART_PATH; ?>server/";
             var search_params = new URLSearchParams(window.location.search);
             var search_aborted = false;
-<?php if(!empty($_POST)): ?>
-<?php
+<?php 
+if(!empty($_POST)) {
     $post_array = $_POST;
     $date = new DateTime();
     $post_array["today"] = $date->format('Y-m-d');
     
-    $dirty_query = $post_array["q"];
-    $post_array["q"] = addslashes(trim(strtolower(strip_tags($dirty_query))));
-
     $post_data = json_encode($post_array);
 
     echo "post_data = " . $post_data . ";\n";
-    echo 'var dirty_query = "' . $dirty_query . '";';
+    echo 'dirty_query = "' . $post_array["q"] . '";';
+}
 ?>
-<?php else: ?>
-       var dirty_query = post_data.q;
-<?php endif; ?>
-        var unique_id = md5(JSON.stringify(post_data));
-        post_data.unique_id = unique_id;
-        
         $(document).ready(function () {
                 if (window.post_data) {
                     post_data = window.post_data;
+                    dirty_query = post_data.q;
                 }
+                
+                unique_id = md5(JSON.stringify(post_data));
+                post_data.unique_id = unique_id;
+        
                 if (Array.from(search_params).length > 0) {
                     $("#search_term").text(getSearchTermShort())
                     $("#search_term").attr("title", dirty_query);
