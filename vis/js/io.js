@@ -15,6 +15,7 @@ var IO = function() {
     this.num_papers;
     this.num_datasets;
     this.data;
+    this.query_terms;
 };
 
 IO.prototype = {
@@ -202,9 +203,6 @@ IO.prototype = {
                 d.paper_abstract = d.snippets;
             }
             
-            let query_terms = _this.getQueryTerms(context);
-            d.title = _this.highlightTerms(d.title, query_terms);
-            
             let prepareCoordinates = function(coordinate, digits) {
                 if (isNaN(parseFloat(coordinate))) {
                     return parseFloat(0).toFixed(digits);
@@ -351,6 +349,12 @@ IO.prototype = {
                                 + "&doc_id=" + d.id
                                 + "&search_term=" + context.query.replace(/\\(.?)/g, "$1");
             }
+            
+            //TODO: Make sure this gets executed in mediator!!
+            _this.query_terms = _this.getQueryTerms(context);
+            for (let field of config.highlight_query_fields) {
+                d[field] = _this.highlightTerms(d[field], _this.query_terms);
+            }
 
         });
         
@@ -407,8 +411,8 @@ IO.prototype = {
     highlightTerms: function(full_string, term_array) {
         let result_string = full_string;
         for (let term of term_array) {
-            let re = new RegExp("\\s(" + term + ")\\s" ,"gi");
-            result_string = result_string.replace(re, " <em>$1</em> ");
+            let re = new RegExp("(^|\\s)(" + term + ")(\\s|$)" ,"gi");
+            result_string = result_string.replace(re, " <span class=\"query_term_highlight\">$2</span> ");
         }
         return result_string;
     },
@@ -445,6 +449,8 @@ IO.prototype = {
 
         var areas = this.areas;
         var areas_array = this.areas_array;
+        
+        let _this = this;
 
         var readers = [];
 
@@ -488,7 +494,7 @@ IO.prototype = {
 
         for (area in areas) {
             var new_area = [];
-            new_area.title = areas[area].title;
+            new_area.title = _this.highlightTerms(areas[area].title, _this.query_terms);
             mediator.publish("set_new_area_coords", new_area, areas[area]);
             new_area.orig_x = areas[area].x;
             new_area.orig_y = areas[area].y;

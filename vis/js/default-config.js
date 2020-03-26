@@ -91,6 +91,14 @@ var config = {
     sort_menu_dropdown: false,
     initial_sort: null,
     list_show_all_papers: false,
+    
+    highlight_query_fields: ["title"
+                                , "authors_string"
+                                , "authors_string"
+                                , "paper_abstract"
+                                , "year"
+                                , "published_in"
+                                , "subject_orig"],
 
     content_based: false,
 

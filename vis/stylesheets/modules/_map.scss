@@ -220,6 +220,18 @@ text {
     font-size:10px;
 }
 
+.search_term_highlight {
+    background-color: yellow;
+}
+
+.query_term_highlight {
+    background-color: #e4e4e4;
+    
+    &.not-highlighted {
+        background-color: inherit;
+    }
+}
+
 @media screen and (max-width: 1300px) {
     #filter_params, #sort {
         margin-right: 5px;

@@ -901,16 +901,23 @@ list.hideEntriesByWord = function(object, search_words) {
         .style("display", "none");
 };
 
-list.createHighlights = function(search_words) {
+list.createHighlights = function(search_words) {    
     if (typeof search_words === "undefined") {
         return;
     }
 
     clear_highlights();
-    if( !(search_words === "") ) {
+    if( !(search_words.length === 0 || (search_words.length === 1 && search_words[0] === "")) ) {
+        if(!$(".query_term_highlight").hasClass("not-highlighted")){
+            $(".query_term_highlight").addClass("not-highlighted");
+        }
         search_words.forEach(function(str) {
             highlight(str);
         });
+    } else {
+        if($(".query_term_highlight").hasClass("not-highlighted")){
+            $(".query_term_highlight").removeClass("not-highlighted");
+        }
     }
 };
 
