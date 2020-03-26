@@ -1,4 +1,5 @@
 elasticsearch
+elasticsearch_dsl
 redis
 certifi
 pandas

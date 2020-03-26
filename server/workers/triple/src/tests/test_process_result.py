@@ -1,14 +1,13 @@
-from ..search_triple import TripleClient
+from search_triple import TripleClient
 import json
 import pytest
-import unittest
 from pandas.testing import assert_frame_equal
 import pandas as pd
 
 
 @pytest.fixture
 def raw_data():
-    with open("testdata/raw_data.json") as infile:
+    with open("src/tests/testdata/raw_data.json") as infile:
         return json.load(infile)
 
 

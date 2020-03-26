@@ -3,7 +3,7 @@ import re
 import json
 import redis
 from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Search
+from elasticsearch_dsl import Search, Q
 import pandas as pd
 
 
@@ -46,17 +46,33 @@ class TripleClient(object):
         return sort
 
     @staticmethod
-    def parse_query(querystring):
-        parsed_query = {}
-        pos_phrases = []
-        neg_phrases = []
-        pos_keywords = []
-        neg_keywords = []
-        parsed_query["pos_phrases"] = pos_phrases
-        parsed_query["neg_phrases"] = neg_phrases
-        parsed_query["pos_keywords"] = pos_keywords
-        parsed_query["neg_keywords"] = neg_keywords
-        return parsed_query
+    def parse_query(query, fields):
+        qq = {}
+        # must_groups = list(re.finditer('([\w\-"]* +(?:and|&&|\+) *[\w\-"]*)+', query, re.MULTILINE))
+        must_groups = [m.string for m in (re.finditer('([\w\-"]* +(?:and|&&|\+) *[\w\-"]*)+', query, re.I))]
+        must = []
+        for g in must_groups:
+            terms = [t.strip() for t in re.split(r' and|&&|\+ +', g) if t.strip()]
+            for term in terms:
+                if term:
+                    must.append(Q('multi_match', query=term, fields=fields))
+        query = re.sub(r'([\w\-"]* +(?:and|&&|\+) *[\w\-"]*)+', '', query, re.M, re.I)
+        should_groups = [m.string for m in re.finditer('([\w\-"]+ +(?:or|\|+) *[\w\-"]*)+', query, re.I)]
+        query = re.sub(r'([\w\-"]+ +(?:or|\|+) *[\w\-"]*)+', '', query, re.I)
+        should_terms = re.split(" +", query)
+        should = []
+        for g in should_groups + should_terms:
+            terms = [t.strip() for t in re.split(r' or|\|+', g) if t.strip()]
+            for term in terms:
+                if term:
+                    should.append(Q('multi_match', query=term, fields=fields))
+        exclude = []
+        if must:
+            qq["must"] = must
+        if should:
+            qq["should"] = should
+        q = Q('bool', **qq)
+        return q
 
     def build_body(self, parameters):
         body = {"query": {
@@ -78,23 +94,15 @@ class TripleClient(object):
 
     def search(self, parameters):
         s = Search(using=self.es)
-        parsed_query = self.parse_query(parameters.get('q'))
-        for q in parsed_query.get('pos_phrases'):
-            if q:
-                s = s.query("multi_match", query=q, fields=['title', 'body'])
-        for q in parsed_query.get('pos_keywords'):
-            if q:
-                s = s.query("multi_match", query=q, fields=['title', 'body'])
-        for q in parsed_query.get('neg_phrases'):
-            if q:
-                s = s.exclude("multi_match", query=q, fields=['title', 'body'])
-        for q in parsed_query.get('neg_keywords'):
-            if q:
-                s = s.exclude("multi_match", query=q, fields=['title', 'body'])
+        # TODO: replace from parameters
+        fields = ["title", "abstract"]
+        q = self.parse_query(parameters.get('q'), fields)
+        s = s.query(q)
         s = s.query("range", date=self.build_date_field(
                     parameters.get('from'),
                     parameters.get('to')))
         index = "isidore-documents-triple"
+        sorting = self.build_sort_order(parameters)
         # res = self.es.search(
         #     index=index,
         #     body=self.build_body(parameters),
@@ -104,7 +112,7 @@ class TripleClient(object):
             index=index,
             body=s.to_dict(),
             size=parameters.get('limit', 100),
-            sort=self.build_sort_order(parameters))
+            sort=sorting)
         if parameters.get('raw') is True:
             return res
         else:

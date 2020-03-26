@@ -66,6 +66,4 @@ docker-compose down
 
 ### Deploying the example:
 
-Use a deployment script, or manually perform following actions:
-
-* use a script.
+Use a deployment script, or manually deploy an example as described in [HOWTO: search repos](../../doc/howto_search_repos.md):
