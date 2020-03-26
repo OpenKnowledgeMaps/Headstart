@@ -24,7 +24,7 @@
         </div>
 
         <script>
-            var post_data, dirty_query, unique_id;
+            var post_data, unique_id;
             var server_url = "<?php echo $WEBSITE_PATH . $HEADSTART_PATH; ?>server/";
             var search_params = new URLSearchParams(window.location.search);
             var search_aborted = false;
@@ -37,13 +37,11 @@ if(!empty($_POST)) {
     $post_data = json_encode($post_array);
 
     echo "post_data = " . $post_data . ";\n";
-    echo "dirty_query = '" . addslashes($post_array["q"]) . "';\n";
 }
 ?>
         $(document).ready(function () {
                 if (window.post_data) {
                     post_data = window.post_data;
-                    dirty_query = post_data.q;
                 }
                 
                 unique_id = md5(JSON.stringify(post_data));
@@ -51,7 +49,7 @@ if(!empty($_POST)) {
         
                 if (Array.from(search_params).length > 0) {
                     $("#search_term").text(getSearchTermShort())
-                    $("#search_term").attr("title", dirty_query);
+                    $("#search_term").attr("title", post_data.q);
                     $("#h-label").text(function () {
                         return ((post_data.vis_type === "overview")?("Ihre Knowledge Map"):("Ihr Streamgraph"))
                     })
@@ -62,7 +60,7 @@ if(!empty($_POST)) {
             });
             
             var getSearchTermShort = function () {
-                return dirty_query.length > 115 ? dirty_query.substr(0, 115) + "..." : dirty_query;
+                return post_data.q.length > 115 ? post_data.q.substr(0, 115) + "..." : post_data.q;
             }
 
             var doSubmit = function () {
@@ -98,7 +96,7 @@ if(!empty($_POST)) {
                 window.clearTimeout(progessbar_timeout);
 
                 var file = unique_id;
-                window.location.replace("headstart.php?query=" + dirty_query
+                window.location.replace("headstart.php?query=" + post_data.q
                         + "&file=" + file
                         + "&service=" + search_params.get("service")
                         + "&service_name=" + search_params.get("service")
@@ -129,7 +127,7 @@ if(!empty($_POST)) {
                 clearTimeout(progessbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
-                $(".waiting-title").html('Bei der Erstellung <span>' + ((post_data.vis_type === "overview")?("Ihrer Knowledge Map"):("Ihres Streamgraphs")) + '</span> über <span title="' + dirty_query + '">' + getSearchTermShort() + '</span> ist ein Fehler aufgetreten.');
+                $(".waiting-title").html('Bei der Erstellung <span>' + ((post_data.vis_type === "overview")?("Ihrer Knowledge Map"):("Ihres Streamgraphs")) + '</span> über <span title="' + post_data.q + '">' + getSearchTermShort() + '</span> ist ein Fehler aufgetreten.');
                 $("#progress").html('Pardon! Es ist leider etwas schief gelaufen. Wahrscheinlich gibt es zu Ihrer Suchanfrage keine Dokumente. Bitte versuchen Sie es mit einem anderen Stichwort erneut.'
                        
             
@@ -152,7 +150,7 @@ if(!empty($_POST)) {
                 clearTimeout(progessbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
-                $(".waiting-title").html('Bei der Erstellung <span>' + ((post_data.vis_type === "overview")?("Ihrer Knowledge Map"):("Ihres Streamgraphs")) + '</span> über <span title="' + dirty_query + '">' + getSearchTermShort() + '</span> ist ein Fehler aufgetreten.');
+                $(".waiting-title").html('Bei der Erstellung <span>' + ((post_data.vis_type === "overview")?("Ihrer Knowledge Map"):("Ihres Streamgraphs")) + '</span> über <span title="' + post_data.q + '">' + getSearchTermShort() + '</span> ist ein Fehler aufgetreten.');
                 if(error.status === 0) {
                     $("#progress")
                             .html('Die Verbindung zum Internet wurde unterbrochen oder die Verbindung wurde zurückgesetzt. Sie können es noch einmal versuchen, indem Sie <a class="underline" style="cursor:pointer" onClick="window.location.reload();">die Seite neu laden</a>.');
