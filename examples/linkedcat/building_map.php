@@ -37,7 +37,7 @@ if(!empty($_POST)) {
     $post_data = json_encode($post_array);
 
     echo "post_data = " . $post_data . ";\n";
-    echo 'dirty_query = "' . $post_array["q"] . '";';
+    echo "dirty_query = '" . addslashes($post_array["q"]) . "';\n";
 }
 ?>
         $(document).ready(function () {
