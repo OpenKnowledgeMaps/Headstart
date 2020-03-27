@@ -7,7 +7,7 @@ import pandas as pd
 
 @pytest.fixture
 def raw_data():
-    with open("src/tests/testdata/raw_data.json") as infile:
+    with open("tests/testdata/raw_data.json") as infile:
         return json.load(infile)
 
 
