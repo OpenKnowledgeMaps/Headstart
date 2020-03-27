@@ -192,7 +192,7 @@
         padding: 2px;
     }
     
-    span:not(:empty) {
+    span:not(:empty):not(.highlight) {
         display: block;
         margin-top: 5px;
         
