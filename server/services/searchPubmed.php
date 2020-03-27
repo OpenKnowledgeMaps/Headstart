@@ -9,13 +9,15 @@ use headstart\library;
 
 $dirty_query = library\CommUtils::getParameter($_POST, "q");
 $precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
+$query_params = array("from", "to", "sorting");
+if(isset($_POST["article_types"])) {
+    $query_params[] = "article_types";
+}
 
 $post_params = $_POST;
 
-#HOTFIX - article_types cause a 414 with PubMed
-#$result = search("pubmed", $dirty_query, $post_params, array("article_types", "from", "to", "sorting"), ";", null);
 $result = search("pubmed", $dirty_query
-                    , $post_params, array("article_types", "from", "to", "sorting")
+                    , $post_params, $query_params
                     , ";", null, true, true, null, 3
                     , "area_uri", "subject", $precomputed_id, false);
 
