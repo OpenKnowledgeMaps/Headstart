@@ -8,6 +8,7 @@ require 'search.php';
 use headstart\library;
 
 $dirty_query = library\CommUtils::getParameter($_POST, "q");
+$precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
 $post_params = $_POST;
 
@@ -17,7 +18,8 @@ $result = search("linkedcat_authorview",
                  array("today", "author_id", "doc_count", "living_dates", "image_link", "vis_type"),
                  ";",
                  null,
-                $transform_query_tolowercase = false
+                $transform_query_tolowercase = false, true, null, 3,
+                 "area_uri", "subject", $precomputed_id, true
                );
 
 echo $result
