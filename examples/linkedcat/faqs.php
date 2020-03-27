@@ -101,7 +101,7 @@ $date = new DateTime();
 
                     <h4 class="question">Warum sind manche Visualisierungen besser als andere?</h4>
                     <p class="paragraph-style">
-                        Beide Visualisierungen (Knowledge Map und Streamgraph) sind abhängig von den Ergebnissen, die zu einer Suche gefunden werden. Wenn es z.B. nur wenige Dokumente zu einem Suchbegriff gibt oder wenn zu einem Dokument nur wenige Metadaten vorhanden sind, dann hat dies auch einen Einfluss auf die Qualität der Visualisierung. Die Metadaten werden kontinuierlich von den Bibliothekar*innen der BAS:IS aktualisiert und verbessert. Sollten Sie Fehler finden, schreiben Sie bitte eine E-Mail an: REPLACE with EMAIL.
+                        Beide Visualisierungen (Knowledge Map und Streamgraph) sind abhängig von den Ergebnissen, die zu einer Suche gefunden werden. Wenn es z.B. nur wenige Dokumente zu einem Suchbegriff gibt oder wenn zu einem Dokument nur wenige Metadaten vorhanden sind, dann hat dies auch einen Einfluss auf die Qualität der Visualisierung. Die Metadaten werden kontinuierlich von den Bibliothekar*innen der BAS:IS aktualisiert und verbessert. Sollten Sie Fehler finden, schreiben Sie bitte eine E-Mail an: <a href="mailto:linkedcat@oeaw.ac.at">linkedcat@oeaw.ac.at</a>.
                     </p>
                     
                     <h4 class="question">Warum sind manche Textauszüge fehlerhaft?</h4>
