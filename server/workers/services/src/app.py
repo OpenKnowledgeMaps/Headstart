@@ -40,14 +40,14 @@ def create_app():
     app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_port=1, x_for=1, x_host=1, x_prefix=1)
     app.wsgi_app = ReverseProxied(app.wsgi_app)
     CORS(app, expose_headers=["Content-Disposition"])
+
+    api = api_patches(app, settings)
+    api.add_namespace(triple_ns, path='/triple')
+    api.add_namespace(gsheets_ns, path='/gsheets')
     return app
 
 
 if __name__ == '__main__':
     app = create_app()
-
-    api = api_patches(app, settings)
-    api.add_namespace(triple_ns, path='/triple')
-    api.add_namespace(gsheets_ns, path='/gsheets')
 
     app.run(host="localhost", port=5001, debug=True)

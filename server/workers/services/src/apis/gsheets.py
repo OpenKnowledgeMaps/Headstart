@@ -99,6 +99,7 @@ def validate_data(df):
 
 
 def preprocess_data(df):
+    df = df[df["Include in map?"] == "yes"]
     metadata = pd.DataFrame()
     metadata["id"] = df.ID
     metadata["title"] = df.Title
@@ -141,13 +142,8 @@ search_query = gsheets_ns.model("SearchQuery",
                                                          required=True)})
 
 
-@app.route('/api/gsheets/search')
-# class Search(Resource):
-#     @gsheets_ns.doc(responses={200: 'OK',
-#                                400: 'Invalid search parameters'})
-#     @gsheets_ns.expect(search_query)
-#     # @gsheets_ns.produces(["application/json"])
-def search():
+@app.route('/api/gsheets/raw')
+def raw_exampe():
     """
     """
     params = request.args.to_dict()
@@ -161,27 +157,47 @@ def search():
     raw = pd.DataFrame(sheet_content.get('values'))
     df_clean, errors, df_errors = validate_data(raw)
     input_data = preprocess_data(df_clean)
-
-    # k = str(uuid.uuid4())
-    # res = {}
-    # res["id"] = k
-    # res["input_data"] = input_data
-    # res["params"] = params
-    # redis_store.rpush("input_data", json.dumps(res))
-    # result = get_key(redis_store, k)
-
-    # headers = {}
-    # headers["Content-Type"] = "application/json"
-    # return make_response(result,
-    #                      200,
-    #                      headers)
-    # pd.DataFrame(json.loads(input_data["metadata"])).to_html(header=True)
     return render_template("tables.html",
                            df_clean=df_clean.to_html(header=True),
                            errors="<br/>".join([str(e)
-                                             for e in errors]),
+                                                for e in errors]),
                            df_errors=df_errors.to_html(header=True)
                            )
+
+
+@gsheets_ns.route('/search')
+class Search(Resource):
+    @gsheets_ns.doc(responses={200: 'OK',
+                               400: 'Invalid search parameters'})
+    @gsheets_ns.expect(search_query)
+    @gsheets_ns.produces(["application/json"])
+    def search():
+        """
+        """
+        params = request.get_json()
+        # fill default params
+        params["q"] = params["vis_id"]
+        params["vis_type"] = "overview"
+        sheet_id = get_sheet_id(params.get('vis_id'))
+        covid19_range = "Resources!A1:N200"
+        sheet_content = get_sheet_content(sheet_id, covid19_range)
+        raw = pd.DataFrame(sheet_content.get('values'))
+        df_clean, errors, df_errors = validate_data(raw)
+        input_data = preprocess_data(df_clean)
+
+        k = str(uuid.uuid4())
+        res = {}
+        res["id"] = k
+        res["input_data"] = input_data
+        res["params"] = params
+        redis_store.rpush("input_data", json.dumps(res))
+        result = get_key(redis_store, k)
+
+        headers = {}
+        headers["Content-Type"] = "application/json"
+        return make_response(result,
+                             200,
+                             headers)
 
 
 def writeRevision(vis_id, data, rev_id=None):
