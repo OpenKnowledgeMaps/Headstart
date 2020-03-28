@@ -48,5 +48,13 @@ services:
         source: /var/log/headstart
         target: /var/log/headstart
 
+  hsdb:
+    image: postgres
+    volumes:
+    - db:/var/lib/postgresql/data
+    ports:
+    - 5432:5432
+
 volumes:
   redis:
+  db:
