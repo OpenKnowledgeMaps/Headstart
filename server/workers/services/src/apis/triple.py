@@ -10,6 +10,7 @@ import pandas as pd
 from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
+from utils import get_key
 
 
 with open("redis_config.json") as infile:
@@ -21,19 +22,6 @@ triple_ns = Namespace("triple", description="TRIPLE API operations")
 
 
 search_param_schema = SearchParamSchema()
-
-
-def get_key(store, key):
-    while True:
-        res = redis_store.get(key+"_output")
-        if res is None:
-            time.sleep(0.5)
-        else:
-            result = json.loads(res.decode('utf-8'))
-            redis_store.delete(key)
-            redis_store.delete(key+"_output")
-            break
-    return result
 
 
 search_query = triple_ns.model("SearchQuery",

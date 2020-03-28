@@ -1,7 +1,9 @@
 from flask import Flask
 from flask_restx import Api
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 from apis.triple import triple_ns
+from apis.triple import gsheets_ns
 from werkzeug.middleware.proxy_fix import ProxyFix
 from config import settings
 from utils.monkeypatches import ReverseProxied, __schema__, specs_url, _register_apidoc, inject_flasgger
@@ -26,6 +28,7 @@ def api_patches(app, settings):
 
 app = Flask('v1', instance_relative_config=True)
 app = inject_flasgger(app)
+db = SQLAlchemy(app)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_port=1, x_for=1, x_host=1, x_prefix=1)
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 app.config.from_object('config.settings')
@@ -34,6 +37,7 @@ CORS(app, expose_headers=["Content-Disposition"])
 
 api = api_patches(app, settings)
 api.add_namespace(triple_ns, path='/triple')
+api.add_namespace(gsheets_ns, path='/gsheets')
 
 
 if __name__ == '__main__':
