@@ -16,14 +16,10 @@ from models import Revisions, Visualizations
 from database import db
 import pandas as pd
 from pandas_schema import Column, Schema
-from pandas_schema.validation import (LeadingWhitespaceValidation,
-                                      TrailingWhitespaceValidation,
-                                      CanConvertValidation,
-                                      MatchesPatternValidation,
-                                      InRangeValidation,
+from pandas_schema.validation import (MatchesPatternValidation,
                                       InListValidation,
                                       DateFormatValidation,
-                                      CustomSeriesValidation)
+                                      CustomElementValidation)
 
 
 with open("redis_config.json") as infile:
@@ -75,7 +71,7 @@ def validate_data(df):
         Column('ID', []),
         Column('Title', []),
         Column('Authors', []),
-        Column('Abstract', [CustomSeriesValidation(lambda s: ~s.str.len() < 10, 'Abstract not long enough')]),
+        Column('Abstract', [CustomElementValidation(lambda s: len(s) > 5, 'Abstract not long enough')]),
         Column('Publication Venue', []),
         Column('Publication Date', [DateFormatValidation("%Y-%m-%d")]),
         Column('Link to PDF', []),
