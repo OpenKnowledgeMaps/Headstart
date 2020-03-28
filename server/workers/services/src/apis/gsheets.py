@@ -9,12 +9,22 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-from flask import Blueprint, request, make_response, jsonify, abort
+from flask import Blueprint, request, make_response, jsonify, abort, render_template
 from flask_restx import Namespace, Resource, fields
-from utils import get_key
+from apis.utils import get_key
 from models import Revisions, Visualizations
-from app import db
+from database import db
 import pandas as pd
+from pandas_schema import Column, Schema
+from pandas_schema.validation import (LeadingWhitespaceValidation,
+                                      TrailingWhitespaceValidation,
+                                      CanConvertValidation,
+                                      MatchesPatternValidation,
+                                      InRangeValidation,
+                                      InListValidation,
+                                      DateFormatValidation,
+                                      CustomSeriesValidation)
+
 
 with open("redis_config.json") as infile:
     redis_config = json.load(infile)
@@ -22,7 +32,7 @@ with open("redis_config.json") as infile:
 redis_store = redis.StrictRedis(**redis_config)
 
 gsheets_ns = Namespace("google_sheets", description="Google Sheets API operations")
-
+app = Blueprint('googlesheets', __name__)
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 
@@ -61,10 +71,31 @@ def get_sheet_content(sheet_id, sheet_range):
 
 
 def validate_data(df):
+    schema = Schema([
+        Column('ID', []),
+        Column('Title', []),
+        Column('Authors', []),
+        Column('Abstract', [CustomSeriesValidation(lambda s: ~s.str.len() < 10, 'Abstract not long enough')]),
+        Column('Publication Venue', []),
+        Column('Publication Date', [DateFormatValidation("%Y-%m-%d")]),
+        Column('Link to PDF', []),
+        Column('Keywords', []),
+        Column('Open access', [InListValidation(["yes", "no", "unknown"], case_sensitive=False)]),
+        Column('Comments', []),
+        Column('Tags', []),
+        Column('Include in map?', [InListValidation(["yes", "no"])]),
+        Column('Type', []),
+        Column('Area', [])
+    ])
     df.columns = df.iloc[0]
     df.drop([0, 1], inplace=True)
+    df.reset_index(drop=True, inplace=True)
     # add column: Valid Bool
-    return df
+    errors = schema.validate(df)
+    errors_index_rows = [e.row for e in errors]
+    df_clean = df.drop(index=errors_index_rows)
+    df_errors = df.iloc[errors_index_rows]
+    return df_clean, errors, df_errors
 
 
 def preprocess_data(df):
@@ -78,11 +109,12 @@ def preprocess_data(df):
     metadata["url"] = df["Link to PDF"]
     metadata["readers"] = 0
     metadata["subject"] = df.Keywords
-    metadata["oa_state"] = df["Open Access"]
+    metadata["oa_state"] = df["Open access"]
     metadata["link"] = df["Link to PDF"]
     metadata["relevance"] = df.index
-    metadata["comments"] = df.index
+    metadata["comments"] = df.Comments
     metadata["tags"] = df.Tags
+    metadata["type"] = df.Type
     text = pd.DataFrame()
     text["id"] = metadata["id"]
     text["content"] = metadata.apply(lambda x: ". ".join(x[["title",
@@ -109,39 +141,47 @@ search_query = gsheets_ns.model("SearchQuery",
                                                          required=True)})
 
 
-@gsheets_ns.route('/search')
-class Search(Resource):
-    @gsheets_ns.doc(responses={200: 'OK',
-                               400: 'Invalid search parameters'})
-    @gsheets_ns.expect(search_query)
-    @gsheets_ns.produces(["application/json"])
-    def post(self):
-        """
-        """
-        params = request.get_json()
-        # fill default params
-        params["q"] = params["vis_id"]
-        params["vis_type"] = "overview"
-        sheet_id = get_sheet_id(params.get('vis_id'))
-        covid19_range = "Resources!A1:N200"
-        sheet_content = get_sheet_content(sheet_id, covid19_range)
-        raw = pd.DataFrame(sheet_content.get('values'))
-        input_data = preprocess_data(raw)
+@app.route('/api/gsheets/search')
+# class Search(Resource):
+#     @gsheets_ns.doc(responses={200: 'OK',
+#                                400: 'Invalid search parameters'})
+#     @gsheets_ns.expect(search_query)
+#     # @gsheets_ns.produces(["application/json"])
+def search():
+    """
+    """
+    params = request.args.to_dict()
+    # params = request.get_json()
+    # fill default params
+    params["q"] = params["vis_id"]
+    params["vis_type"] = "overview"
+    sheet_id = get_sheet_id(params.get('vis_id'))
+    covid19_range = "Resources!A1:N200"
+    sheet_content = get_sheet_content(sheet_id, covid19_range)
+    raw = pd.DataFrame(sheet_content.get('values'))
+    df_clean, errors, df_errors = validate_data(raw)
+    input_data = preprocess_data(df_clean)
 
-        k = str(uuid.uuid4())
-        res = {}
-        res["id"] = k
-        res["input_data"] = input_data
-        res["params"] = params
-        redis_store.rpush("input_data", json.dumps(res))
-        result = get_key(redis_store, k)
+    # k = str(uuid.uuid4())
+    # res = {}
+    # res["id"] = k
+    # res["input_data"] = input_data
+    # res["params"] = params
+    # redis_store.rpush("input_data", json.dumps(res))
+    # result = get_key(redis_store, k)
 
-        # headers = {}
-        # headers["Content-Type"] = "application/json"
-        # return make_response(result,
-        #                      200,
-        #                      headers)
-        return pd.DataFrame.
+    # headers = {}
+    # headers["Content-Type"] = "application/json"
+    # return make_response(result,
+    #                      200,
+    #                      headers)
+    # pd.DataFrame(json.loads(input_data["metadata"])).to_html(header=True)
+    return render_template("tables.html",
+                           df_clean=df_clean.to_html(header=True),
+                           errors="<br/>".join([str(e)
+                                             for e in errors]),
+                           df_errors=df_errors.to_html(header=True)
+                           )
 
 
 def writeRevision(vis_id, data, rev_id=None):
