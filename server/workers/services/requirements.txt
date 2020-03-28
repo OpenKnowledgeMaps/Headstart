@@ -1,5 +1,6 @@
 flask
 flask-cors
+flask_sqlalchemy
 Werkzeug
 marshmallow
 gunicorn
@@ -13,3 +14,4 @@ flasgger
 google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
+psycopg2
