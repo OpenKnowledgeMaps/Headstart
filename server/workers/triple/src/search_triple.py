@@ -80,7 +80,9 @@ class TripleClient(object):
                         "must": [
                              {"multi_match": {
                                 "query": parameters.get('q'),
-                                "fields": ["title", "abstract"]
+                                "fields": ["title", "abstract"],
+                                "type": "cross_fields",
+                                "operator": "and",
                              }},
                              {"range": {
                                 "date": self.build_date_field(
@@ -103,16 +105,16 @@ class TripleClient(object):
                     parameters.get('to')))
         index = "isidore-documents-triple"
         sorting = self.build_sort_order(parameters)
-        # res = self.es.search(
-        #     index=index,
-        #     body=self.build_body(parameters),
-        #     size=parameters.get('limit', 100),
-        #     sort=self.build_sort_order(parameters))
         res = self.es.search(
             index=index,
-            body=s.to_dict(),
+            body=self.build_body(parameters),
             size=parameters.get('limit', 100),
             sort=sorting)
+        # res = self.es.search(
+        #     index=index,
+        #     body=s.to_dict(),
+        #     size=parameters.get('limit', 100),
+        #     sort=sorting)
         if parameters.get('raw') is True:
             return res
         else:
