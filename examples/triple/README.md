@@ -59,6 +59,11 @@ docker-compose build
 docker-compose up -d
 ```
 
+* all in one:
+```
+docker-compose up -d --build
+```
+
 * shut service down
 ```
 docker-compose down
