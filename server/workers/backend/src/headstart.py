@@ -8,17 +8,11 @@ import redis
 import pandas as pd
 
 
-with open("redis_config.json") as infile:
-    redis_config = json.load(infile)
-
-redis_store = redis.StrictRedis(**redis_config)
-
-
 class Backend(object):
 
-    def __init__(self):
+    def __init__(self, wd="./"):
         # path should be to where in the docker container the Rscript are
-        self.wd = "./"
+        self.wd = wd
         self.command = 'Rscript'
         self.hs = os.path.abspath(os.path.join(self.wd, "run_vis_layout.R"))
         self.default_params = {}
@@ -61,5 +55,9 @@ class Backend(object):
 
 
 if __name__ == '__main__':
+    with open("redis_config.json") as infile:
+        redis_config = json.load(infile)
+
+    redis_store = redis.StrictRedis(**redis_config)
     hsb = Backend()
     hsb.run()
