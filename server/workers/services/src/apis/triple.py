@@ -68,12 +68,15 @@ class Search(Resource):
         """
         """
         data = request.get_json()
+        triple_ns.logger.debug(data)
         errors = search_param_schema.validate(data, partial=True)
+        triple_ns.logger.debug(errors)
         if errors:
             abort(400, str(errors))
         k = str(uuid.uuid4())
         d = {"id": k, "params": data,
              "endpoint": "search"}
+        triple_ns.logger.debug(d)
         redis_store.rpush("triple", json.dumps(d))
         result = get_key(redis_store, k)
 
