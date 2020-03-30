@@ -39,7 +39,7 @@ $date = new DateTime();
                     
                     <h4 class="question">Was wird katalogisiert?</h4> 
                     <p class="paragraph-style">
-Titel, die in Inhaltsverzeichnissen bzw. in Kopfzeilen stehen. Ca. 366.000 digitalisierte Seiten werden nach ihrem Eintrag in Inhaltsverzeichnissen bzw. Kopfzeilen geordnet. So sind auch Absätze, die üblicherweise nicht katalogisiert werden, erfasst worden. Diese ungewöhnliche Vorgangsweise führt zu einer sehr hohen Anzahl von Katalogisaten.
+Titel, die in Inhaltsverzeichnissen bzw. in Kopfzeilen stehen. Ca. 366.000 digitalisierte Seiten werden nach ihrem Eintrag in Inhaltsverzeichnissen bzw. Kopfzeilen geordnet. So sind auch Absätze, die üblicherweise nicht katalogisiert werden, erfasst worden. Diese ungewöhnliche Vorgangsweise führt zu einer sehr hohen Anzahl von Katalogisaten. Die Katalogisierung des Datensatzes ist noch nicht abgeschlossen, neue Katalogisate werden laufend hinzugefügt. Der Abschluss der Katalogisierung wird mit MONAT JAHR erwartet.
                     </p>
 
                     <h4 class="question">Was ist eine Knowledge Map?</h4>
