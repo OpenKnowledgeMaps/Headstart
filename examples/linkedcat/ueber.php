@@ -5,11 +5,11 @@ $date = new DateTime();
 ?>
 <html>
     <head>
-        <?php 
-            $override_labels = array(
-                "title" => "Über das Projekt - LinkedCat+"
-            );
-            include('head_standard.php') 
+        <?php
+        $override_labels = array(
+            "title" => "Über das Projekt - LinkedCat+"
+        );
+        include('head_standard.php')
         ?>
         <link type="text/css" rel="stylesheet" href="./css/browse.css">
     </head>
@@ -115,6 +115,10 @@ $date = new DateTime();
                 </div>
             </div>
         </div>
+
+        <!-- beginnning of footer / Please add your footer Datenschutz/Impressum links here! -->
+
+        <!-- end of footer -->
 
         <script type="text/javascript" src="./js/data-config_linkedcat.js"></script>
         <script>$(function () {
