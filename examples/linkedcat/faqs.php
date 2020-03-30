@@ -25,12 +25,28 @@ $date = new DateTime();
                 <div class="page-section">
 
                     <h1 class="page-headline">FAQs</h1>
+                    
+                    <h4 class="question">Wie wurden die Daten erfasst?</h4>
+                    <p class="example">
+                        <a href="./img/data-example.png" data-toggle="lightbox">
+                            <img class="shadow2 abstand" src="./img/data-example.png" alt="">
+                        </a>
+                        <span>Screenshot: Datensatz</span>
+                    </p>
+                    <p class="paragraph-style">
+                        Wir verwenden die Metadaten, die ursprünglich für die Suchmaschine des Österreichischen Bibliothekenverbundes erfasst wurden  - also Katalogdaten. Die Katalogisate werden nach dem Katalogisierungsregelwerk RDA (Resource Description and Access) im bibliografischen Datenformat MARC 21 aufgenommen, mit der Basisklassifikation versehen, inhaltlich erschlossen, und die Verfasser bzw. die beteiligten Personen sind möglichst mit der GND verknüpft.
+                    </p>
+                    
+                    <h4 class="question">Was wird katalogisiert?</h4> 
+                    <p class="paragraph-style">
+Titel, die in Inhaltsverzeichnissen bzw. in Kopfzeilen stehen. Ca. 366.000 digitalisierte Seiten werden nach ihrem Eintrag in Inhaltsverzeichnissen bzw. Kopfzeilen geordnet. So sind auch Absätze, die üblicherweise nicht katalogisiert werden, erfasst worden. Diese ungewöhnliche Vorgangsweise führt zu einer sehr hohen Anzahl von Katalogisaten.
+                    </p>
 
                     <h4 class="question">Was ist eine Knowledge Map?</h4>
                     <span class="anchor" id="knowledgemap"></span>
                     <p class="example">
                         <a href="./img/km-example.png" data-toggle="lightbox">
-                            <img class="shadow2 abstand" src="./img/km-example.png" alt="Knowledge Map für die Werke des Autors Hammer-Purgstall" alt="Screenshot: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)">
+                            <img class="shadow2 abstand" src="./img/km-example.png" alt="Screenshot: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)">
                         </a>
                         <span>Screenshot: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)</span>
                     </p>
@@ -112,6 +128,11 @@ $date = new DateTime();
                 </div>
             </div>
         </div>
+        
+        <!-- beginnning of footer / Please add your footer Datenschutz/Impressum links here! -->
+
+        <!-- end of footer -->
+        
         <script type="text/javascript" src="./js/data-config_linkedcat.js"></script>
         <script>
             $(document).ready(function() {
