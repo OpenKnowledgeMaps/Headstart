@@ -110,7 +110,9 @@ clean_highlights <- function(query, res) {
   query <- gsub("-[\\w+]+ ", " ", query, perl=TRUE)
   query <- gsub(' ?- ?"[\\w ]+" | ?- ?"[\\w ]+"$|-\\w+$', " ", query, perl=TRUE)
   query <- gsub('"', '', query)
+  query <- gsub('\\+', '', query, perl=TRUE)
   query <- gsub(' +', ' ', query, perl=TRUE)
+  query <- gsub("-", " ", query)
   query <- trimws(query, "both")
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
     s <- strsplit(x, " \\.\\.\\. ")
