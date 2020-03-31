@@ -25,12 +25,28 @@ $date = new DateTime();
                 <div class="page-section">
 
                     <h1 class="page-headline">FAQs</h1>
+                    
+                    <h4 class="question">Wie wurden die Daten erfasst?</h4>
+                    <p class="example">
+                        <a href="./img/data-example.png" data-toggle="lightbox">
+                            <img class="shadow2 abstand" src="./img/data-example.png" alt="">
+                        </a>
+                        <span>Screenshot: Datensatz</span>
+                    </p>
+                    <p class="paragraph-style">
+                        Wir verwenden die Metadaten, die ursprünglich für die Suchmaschine des Österreichischen Bibliothekenverbundes erfasst wurden  - also Katalogdaten. Die Katalogisate werden nach dem Katalogisierungsregelwerk RDA (Resource Description and Access) im bibliografischen Datenformat MARC 21 aufgenommen, mit der Basisklassifikation versehen, inhaltlich erschlossen, und die Verfasser bzw. die beteiligten Personen sind möglichst mit der GND verknüpft.
+                    </p>
+                    
+                    <h4 class="question">Was wird katalogisiert?</h4> 
+                    <p class="paragraph-style">
+Titel, die in Inhaltsverzeichnissen bzw. in Kopfzeilen stehen. Ca. 366.000 digitalisierte Seiten werden nach ihrem Eintrag in Inhaltsverzeichnissen bzw. Kopfzeilen geordnet. So sind auch Absätze, die üblicherweise nicht katalogisiert werden, erfasst worden. Diese ungewöhnliche Vorgangsweise führt zu einer sehr hohen Anzahl von Katalogisaten. Die Katalogisierung des Datensatzes ist noch nicht abgeschlossen, neue Katalogisate werden laufend hinzugefügt.
+                    </p>
 
                     <h4 class="question">Was ist eine Knowledge Map?</h4>
                     <span class="anchor" id="knowledgemap"></span>
                     <p class="example">
                         <a href="./img/km-example.png" data-toggle="lightbox">
-                            <img class="shadow2 abstand" src="./img/km-example.png" alt="Knowledge Map für die Werke des Autors Hammer-Purgstall" alt="Screenshot: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)">
+                            <img class="shadow2 abstand" src="./img/km-example.png" alt="Screenshot: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)">
                         </a>
                         <span>Screenshot: Knowledge Map für die Werke des Autors Hammer-Purgstall (Quelle: Linkedcat+)</span>
                     </p>
@@ -101,7 +117,7 @@ $date = new DateTime();
 
                     <h4 class="question">Warum sind manche Visualisierungen besser als andere?</h4>
                     <p class="paragraph-style">
-                        Beide Visualisierungen (Knowledge Map und Streamgraph) sind abhängig von den Ergebnissen, die zu einer Suche gefunden werden. Wenn es z.B. nur wenige Dokumente zu einem Suchbegriff gibt oder wenn zu einem Dokument nur wenige Metadaten vorhanden sind, dann hat dies auch einen Einfluss auf die Qualität der Visualisierung. Die Metadaten werden kontinuierlich von den Bibliothekar*innen der BAS:IS aktualisiert und verbessert. Sollten Sie Fehler finden, schreiben Sie bitte eine E-Mail an: REPLACE with EMAIL.
+                        Beide Visualisierungen (Knowledge Map und Streamgraph) sind abhängig von den Ergebnissen, die zu einer Suche gefunden werden. Wenn es z.B. nur wenige Dokumente zu einem Suchbegriff gibt oder wenn zu einem Dokument nur wenige Metadaten vorhanden sind, dann hat dies auch einen Einfluss auf die Qualität der Visualisierung. Die Metadaten werden kontinuierlich von den Bibliothekar*innen der BAS:IS aktualisiert und verbessert. Sollten Sie Fehler finden, schreiben Sie bitte eine E-Mail an: <a href="mailto:linkedcat@oeaw.ac.at">linkedcat@oeaw.ac.at</a>.
                     </p>
                     
                     <h4 class="question">Warum sind manche Textauszüge fehlerhaft?</h4>
@@ -112,6 +128,11 @@ $date = new DateTime();
                 </div>
             </div>
         </div>
+        
+        <!-- beginnning of footer / Please add your footer Datenschutz/Impressum links here! -->
+
+        <!-- end of footer -->
+        
         <script type="text/javascript" src="./js/data-config_linkedcat.js"></script>
         <script>
             $(document).ready(function() {
