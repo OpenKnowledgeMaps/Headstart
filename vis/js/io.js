@@ -411,8 +411,8 @@ IO.prototype = {
     highlightTerms: function(full_string, term_array) {
         let result_string = full_string;
         for (let term of term_array) {
-            let re = new RegExp("(^|\\s)(" + term + ")(\\s|$)" ,"gi");
-            result_string = result_string.replace(re, " <span class=\"query_term_highlight\">$2</span> ");
+            let re = new RegExp("\\b(" + term + ")\\b" ,"gi");
+            result_string = result_string.replace(re, " <span class=\"query_term_highlight\">$1</span>");
         }
         return result_string;
     },
@@ -436,8 +436,8 @@ IO.prototype = {
         
         //Remove phrases, and, or, +, -, (, ) from query string 
         let query_wt_phrases = full_query.replace(match_query, " ");
-        let query_wt_rest = query_wt_phrases.replace(/(^|\s)and\s/g, " ").replace(/(^|\s)or\s/g, " ").replace(/(^|\s)-/g, " ").replace(/\+|\(|\)/g, " ")
-
+        let query_wt_rest = query_wt_phrases.replace(/\band\b|\bor\b|\(|\)/g, "").replace(/(^|\s)-|\+/g, " ");
+        
         term_array = term_array.concat(query_wt_rest.trim().replace(/\s+/g, " ").split(" "));
         
         return term_array;
