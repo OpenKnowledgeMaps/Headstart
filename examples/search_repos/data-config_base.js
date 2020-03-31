@@ -31,4 +31,5 @@ var data_config = {
     share_modal: false,
     
     show_keywords: true,
+    highlight_query_terms: true,
 };

@@ -352,8 +352,10 @@ IO.prototype = {
                                 + "&search_term=" + context.query.replace(/\\(.?)/g, "$1");
             }
             
-            for (let field of config.highlight_query_fields) {
-                d[field] = _this.highlightTerms(d[field], _this.query_terms);
+            if(config.highlight_query_terms) {
+                for (let field of config.highlight_query_fields) {
+                    d[field] = _this.highlightTerms(d[field], _this.query_terms);
+                }
             }
 
         });
@@ -419,6 +421,10 @@ IO.prototype = {
     
     //Get all terms in a query minus operators
     getQueryTerms: function (context) {
+        if(!context.hasOwnProperty("query")) {
+            return;
+        }
+        
         let full_query = context.query;
         
         //let query_wt_exclusions = full_query.replace(/(^|\s)-[^\s]*/g, " ");
@@ -494,7 +500,9 @@ IO.prototype = {
 
         for (area in areas) {
             var new_area = [];
-            new_area.title = _this.highlightTerms(areas[area].title, _this.query_terms);
+            if(config.highlight_query_terms) {
+                new_area.title = _this.highlightTerms(areas[area].title, _this.query_terms);
+            }
             mediator.publish("set_new_area_coords", new_area, areas[area]);
             new_area.orig_x = areas[area].x;
             new_area.orig_y = areas[area].y;
