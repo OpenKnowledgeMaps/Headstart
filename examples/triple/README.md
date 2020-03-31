@@ -28,12 +28,12 @@ The following lines have to be added to the appropriate sites-available config o
     #
     # other config
 
-    <Location "/api">
-      ProxyPass http://127.0.0.1:5001/api
-    </Location>
-    <Location "/swaggerui">
-      ProxyPass http://127.0.0.1:5001/swaggerui/
-    </Location>
+    # Proxy server settings for Head Start API
+  	ProxyPass /api http://localhost:5001/api connectiontimeout=120 timeout=120
+  	ProxyPassReverse /api http://localhost:5001/api
+  	ProxyPass /swaggerui http://localhost:5001/swaggerui
+  	ProxyPassReverse /swaggerui http://localhost:5001/swaggerui
+
 
 </VirtualHost>
 ```
