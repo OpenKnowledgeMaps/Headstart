@@ -3,6 +3,12 @@
     transition: 0.03s ease-in;
 }
 
+html {
+    height: 100%;
+    margin: 0;
+    display: table;
+    width:100%; 
+}
 body {
     font-family: 'Lato', sans-serif; 
     padding: 0px;
@@ -10,6 +16,9 @@ body {
     color: #333;
     font-size: 16px;
     background-color: #f7f7f7;
+    height: 100%;
+    margin: 0;
+    display: table;
 }
 
 a {
@@ -28,6 +37,7 @@ a {
     background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(0,0,0, 0.2)), url(./../img/background-start-2.jpg); 
     background-repeat: no-repeat;
     background-position: 100% 86%;
+    /*padding-bottom: 100px;*/
 }
 
 .bg-tagline-startpage {
@@ -159,14 +169,9 @@ a {
 }
 
 .credits {
-    text-transform: none; 
-    color: #f7f7f7;
-    display: inline-block;
-    font-size: 9px; 
+    padding-left: 20px; 
+    padding-bottom: 20px; 
     text-align: right;
-    float: right;
-    vertical-align: middle;
-
 }
 
 .credits2 {
@@ -176,7 +181,6 @@ a {
     font-size: 9px; 
     text-align: left;
     padding-left: 20px;
-    vertical-align: middle;
 }
 
 .divity {
@@ -672,6 +676,11 @@ label.q-error, #input-container label.q-error, .timefield .error {
     padding: 20px 40px 0px 0;
 }
 
+.partner-logo2 {
+    max-height: 40px;
+    margin-right: 10px;
+}
+
 .browse {
     display: block;
     width: 200px;
@@ -827,7 +836,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
         border: 1px solid #0047bb;
         border-radius: 27px;
         -webkit-border-radius: 27px;
-    -moz-border-radius: 27px;
+        -moz-border-radius: 27px;
         width: 90%;
         height: auto;
         text-align: center;
@@ -866,7 +875,7 @@ label.q-error, #input-container label.q-error, .timefield .error {
         right: 5%;
         font-size: 14px;
     }
-    
+
     .waiting-title {
         font-size: 18px;
     }
@@ -908,13 +917,13 @@ label.q-error, #input-container label.q-error, .timefield .error {
     .timefield #from-error {
         padding-left: 0px;
     }
-    
+
 }
 
 @media screen and (max-width: 360px) {
-    
+
     .info-btn {
         display: none;
     }
-    
+
 }
