@@ -502,7 +502,10 @@ IO.prototype = {
             var new_area = [];
             if(config.highlight_query_terms) {
                 new_area.title = _this.highlightTerms(areas[area].title, _this.query_terms);
+            } else {
+                new_area.title = areas[area].title;
             }
+            new_area.title_tooltip = areas[area].title;
             mediator.publish("set_new_area_coords", new_area, areas[area]);
             new_area.orig_x = areas[area].x;
             new_area.orig_y = areas[area].y;
