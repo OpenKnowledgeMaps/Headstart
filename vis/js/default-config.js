@@ -92,6 +92,7 @@ var config = {
     initial_sort: null,
     list_show_all_papers: false,
     
+    highlight_query_terms: false,
     highlight_query_fields: ["title"
                                 , "authors_string"
                                 , "authors_string"
