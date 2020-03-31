@@ -116,7 +116,7 @@ $date = new DateTime();
                 <div class="page-section" style="padding-bottom: 50px;">
                     <h4 class="question">Kontakt</h4>
                     <p class="paragraph-style">
-                Für Fragen, Kommentare und alle sonstigen Anfragen wenden Sie sich bitte per E-Mail an: <a href="mailto:linkedcat@oeaw.ac.at">linkedcat@oeaw.ac.at</a>
+                Bitte richten Sie Fragen, Kommentare und alle sonstigen Anfragen per E-Mail an: <a href="mailto:linkedcat@oeaw.ac.at">linkedcat@oeaw.ac.at</a>
                     </p>
                 </div>
             </div>
