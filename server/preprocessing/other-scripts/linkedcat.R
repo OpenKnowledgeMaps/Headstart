@@ -106,18 +106,19 @@ get_papers <- function(query, params, limit=100) {
 }
 
 clean_highlights <- function(query, res) {
-  query <- gsub("- *", "-", query, perl=TRUE)
-  query <- gsub("-[\\w+]+ ", " ", query, perl=TRUE)
-  query <- gsub(' ?- ?"[\\w ]+" | ?- ?"[\\w ]+"$|-\\w+$', " ", query, perl=TRUE)
-  query <- gsub('"', '', query)
-  query <- gsub('\\+', '', query, perl=TRUE)
-  query <- gsub(' +', ' ', query, perl=TRUE)
-  query <- gsub("-", " ", query)
-  query <- trimws(query, "both")
+  hl_query <- gsub("- *", "-", query, perl=TRUE)
+  hl_query <- gsub("-[\\w+]+ ", " ", hl_query, perl=TRUE)
+  hl_query <- gsub('-\\"[\\w ]+"', " ", hl_query, perl=TRUE)
+  hl_query <- gsub("(\\w+)-(\\w+)", "\\1 \\2", hl_query, perl=TRUE)
+  hl_query <- gsub(' ?- ?"[\\w ]+" | ?- ?"[\\w ]+"$|-\\w+$', " ", hl_query, perl=TRUE)
+  hl_query <- gsub('\\+', '', hl_query, perl=TRUE)
+  hl_query <- gsub(' +', ' ', hl_query, perl=TRUE)
+  hl_query <- gsub("-", " ", hl_query)
+  hl_query <- trimws(hl_query, "both")
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
     s <- strsplit(x, " \\.\\.\\. ")
     unlist(lapply(s, function(x)  {
-        x <- x[grepl(paste0("<em>", gsub(" +", "|", query), "</em>"), x, ignore.case=TRUE)][1:5]
+        x <- x[grepl(paste0("<em>", gsub(" ?", "|", hl_query), "</em>"), x, ignore.case=TRUE)][1:5]
         x <- x[!is.na(x)]
         x <- paste0("<span>", paste0(x, collapse = "</span><span>"), "</span>")
         return (x)
@@ -125,7 +126,14 @@ clean_highlights <- function(query, res) {
   }))
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
     x <- gsub("<em>|<\\/em>", "", x)
-    x <- gsub(paste0("(", gsub(" ", "|", query), ")"), "<em>\\1<\\/em>", x, ignore.case=TRUE, perl=TRUE)
+    phrases_hl <- paste(regmatches(hl_query, gregexpr('\\"[\\w äöü]+\\"', hl_query, perl = TRUE))[[1]], collapse="|")
+    remaining <- gsub('\\"[\\w äöü]+\\"', '', hl_query, perl = TRUE)
+    remaining <- trimws(remaining)
+    remaining <- gsub(" ", "|", remaining)
+    hl_query <- paste(phrases_hl, remaining, sep="|")
+    hl_query <- gsub("^\\||\\|$", "", hl_query)
+    hl_query <- gsub('\\"', '', hl_query)
+    x <- gsub(paste0("(?<!\\w)(", hl_query, ")([\\W ])"), "<em>\\1<\\/em>\\2", x, ignore.case=TRUE, perl=TRUE)
     return (x)
   }))
   return(res)
