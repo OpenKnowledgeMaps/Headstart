@@ -168,6 +168,8 @@ IO.prototype = {
     prepareData: function (highlight_data, fs, context) {
         this.areas = {};
         this.areas_array = [];
+        this.query_terms = this.getQueryTerms(context);
+        
         var _this = this;
         var xy_array = [];
         // convert to numbers
@@ -350,8 +352,6 @@ IO.prototype = {
                                 + "&search_term=" + context.query.replace(/\\(.?)/g, "$1");
             }
             
-            //TODO: Make sure this gets executed in mediator!!
-            _this.query_terms = _this.getQueryTerms(context);
             for (let field of config.highlight_query_fields) {
                 d[field] = _this.highlightTerms(d[field], _this.query_terms);
             }
@@ -412,7 +412,7 @@ IO.prototype = {
         let result_string = full_string;
         for (let term of term_array) {
             let re = new RegExp("\\b(" + term + ")\\b" ,"gi");
-            result_string = result_string.replace(re, " <span class=\"query_term_highlight\">$1</span>");
+            result_string = result_string.replace(re, "<span class=\"query_term_highlight\">$1</span>");
         }
         return result_string;
     },
