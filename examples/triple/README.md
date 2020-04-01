@@ -10,6 +10,15 @@ Please follow the install instructions for your OS:
 
 Please follow the install instructions for docker-compose for your OS: https://docs.docker.com/compose/install/
 
+### Windows
+
+It is recommended to install the latest version of [Docker for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows)
+Additionally, following settings may need to be activated:
+
+* [Volume Sharing](https://docs.microsoft.com/en-us/visualstudio/containers/troubleshooting-docker-errors?view=vs-2019)
+
+(In case Docker for Windows does not seem to start, it may be already running in the background and hiding in the task bar menu in the lower right corner.)
+
 ## Usage
 
 ### Setting up the Apache2 reverse proxy
@@ -44,14 +53,19 @@ After that, restart the Apache2 service.
 
 Setting up configs:
 
-* ElasticSearch core service: In `server/workers/services/triple/` copy `config_example.json` to `config.json` and fill in the fields.
-* Secure Redis: In `server/workers` copy `redis_config_example.json` to `redis_config.json`  and `redis_example.conf` to `redis_example.conf` and in both files replace "long_secure_password" with a long, secure password (Line 507 in redis.conf, parameter `requirepass`).
+* ElasticSearch core service: In `server/workers/services/triple/` copy `example_config.json` to `config.json` and fill in the fields.
+* Secure Redis: In `server/workers` copy `example_redis_config.json` to `redis_config.json`  and `example_redis.conf` to `redis.conf` and in both files replace "long_secure_password" with a long, secure password (Line 507 in redis.conf, parameter `requirepass`).
 
 Following commands have to be executed from the root folder of the repository, where `docker-compose.yml` is located.
 
 * build images
 ```
 docker-compose build
+```
+
+* on Windows:
+```
+docker-compose -f docker-compose-win.yml build
 ```
 
 * start services and send them to the docker daemon
