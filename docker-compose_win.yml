@@ -8,10 +8,9 @@ services:
       dockerfile: services.docker
     restart: always
     ports:
-      - '5001:5001'
+      - '127.0.0.1:5001:5001'
     depends_on:
       - redis
-    network_mode: "host"
 
   redis:
     image: 'redis:4.0-alpine'
@@ -21,8 +20,7 @@ services:
       - ./server/workers/redis.conf:/etc/redis/redis.conf
     restart: always
     ports:
-      - '6379:6379'
-    network_mode: "host"
+      - '127.0.0.1:6379:6379'
 
   search_triple:
     build:
@@ -31,7 +29,6 @@ services:
     env_file:
       - server/workers/triple/triple.env
     restart: always
-    network_mode: "host"
 
   dataprocessing:
     build:
@@ -40,7 +37,6 @@ services:
     env_file:
       - server/workers/dataprocessing/dataprocessing.env
     restart: always
-    network_mode: "host"
 
 volumes:
   redis:
