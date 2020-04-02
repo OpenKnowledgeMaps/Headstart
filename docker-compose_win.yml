@@ -14,32 +14,32 @@ services:
    network_mode: "host"
 
   redis:
-    image: 'redis:4.0-alpine'
-    restart: always
-    command: ["redis-server", "/etc/redis/redis.conf", "--appendonly", "yes"]
-       - ./server/workers/redis.conf:/etc/redis/redis.conf
-    restart: always
-    ports:
-      - '6379:6379'
-    network_mode: "host"
+   image: 'redis:4.0-alpine'
+   restart: always
+   command: ["redis-server", "/etc/redis/redis.conf", "--appendonly", "yes"]
+    - ./server/workers/redis.conf:/etc/redis/redis.conf
+   restart: always
+   ports:
+    - '6379:6379'
+   network_mode: "host"
 
   search_triple:
-    build:
-      context: server
-      dockerfile: search_triple.docker
-    env_file:
-      - server/workers/triple/triple.env
-    restart: always
-    network_mode: "host"
+   build:
+    context: server
+    dockerfile: search_triple.docker
+   env_file:
+    - server/workers/triple/triple.env
+   restart: always
+   network_mode: "host"
 
   dataprocessing:
-    build:
-      context: server
-      dockerfile: dataprocessing.docker
-    env_file:
-      - server/workers/dataprocessing/dataprocessing.env
-    restart: always
-    network_mode: "host"
+   build:
+    context: server
+    dockerfile: dataprocessing.docker
+   env_file:
+    - server/workers/dataprocessing/dataprocessing.env
+   restart: always
+   network_mode: "host"
 
 volumes:
   redis:
