@@ -65,7 +65,7 @@ Dataprocessing:
 * In `server/workers/dataprocessing` copy `example_dataprocessing.env` to `dataprocessing.env` and set the desired loglevel.
 
 Services:
-* In `server/workers/services/config` copy `example_settings.py` to `settings.py` and change the values for `ENV` (`development` or `production`) and `DEBUG` (`TRUE` or `FALSE`).
+* In `server/workers/services/src/config` copy `example_settings.py` to `settings.py` and change the values for `ENV` (`development` or `production`) and `DEBUG` (`TRUE` or `FALSE`).
 
 
 TRIPLE ElasticSearch core service:
