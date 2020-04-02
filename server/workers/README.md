@@ -88,7 +88,7 @@ docker-compose build
 
 * on Windows:
 ```
-docker-compose -f docker-compose-win.yml build
+docker-compose -f docker-compose_win.yml build
 ```
 
 **Start services and send them to the docker daemon**
@@ -98,7 +98,7 @@ docker-compose up -d
 
 * on Windows:
 ```
-docker-compose -f docker-compose-win.yml up -d
+docker-compose -f docker-compose_win.yml up -d
 ```
 
 **All in one:**
@@ -113,7 +113,7 @@ docker-compose down
 
 * on Windows:
 ```
-docker-compose -f docker-compose-win.yml down
+docker-compose -f docker-compose_win.yml down
 ```
 
 ### Deploying the example:
