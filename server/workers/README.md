@@ -57,7 +57,7 @@ The following lines have to be added to the appropriate sites-available config o
 
 After that, restart the Apache2 service.
 
-## Usage
+## Configuration
 
 Setting up configurations for each backend service:
 
@@ -80,7 +80,7 @@ Secure Redis:
 
 Following commands have to be executed from the root folder of the repository, where `docker-compose.yml` is located.
 
-* build images
+**Build images**
 ```
 docker-compose build
 ```
@@ -90,7 +90,7 @@ docker-compose build
 docker-compose -f docker-compose-win.yml build
 ```
 
-* start services and send them to the docker daemon
+**Start services and send them to the docker daemon**
 ```
 docker-compose up -d
 ```
@@ -100,7 +100,7 @@ docker-compose up -d
 docker-compose -f docker-compose-win.yml up -d
 ```
 
-* all in one:
+**All in one:**
 ```
 docker-compose up -d --build
 ```
