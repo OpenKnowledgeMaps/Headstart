@@ -10,7 +10,7 @@ import pandas as pd
 import logging
 
 
-class Backend(object):
+class Dataprocessing(object):
 
     def __init__(self, wd="./"):
         # path should be to where in the docker container the Rscript are
@@ -67,5 +67,5 @@ if __name__ == '__main__':
         redis_config = json.load(infile)
 
     redis_store = redis.StrictRedis(**redis_config)
-    hsb = Backend()
+    hsb = Dataprocessing()
     hsb.run()
