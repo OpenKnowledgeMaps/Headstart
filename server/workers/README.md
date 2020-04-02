@@ -38,6 +38,9 @@ Following Apache2 mods have to be installed and enabled:
 * proxy_balancer
 * proxy_http
 
+Possibly also following modules need to be installed and enabled:
+* mod_slotmem_shm
+
 The following lines have to be added to the appropriate sites-available config of Apache2 webserver:
 
 ```
