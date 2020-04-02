@@ -82,6 +82,8 @@ Secure Redis:
 Following commands have to be executed from the root folder of the repository, where `docker-compose.yml` is located.
 
 **Build images**
+
+* on Linux:
 ```
 docker-compose build
 ```
@@ -92,6 +94,8 @@ docker-compose -f docker-compose_win.yml build
 ```
 
 **Start services and send them to the docker daemon**
+
+* on Linux:
 ```
 docker-compose up -d
 ```
@@ -102,11 +106,15 @@ docker-compose -f docker-compose_win.yml up -d
 ```
 
 **All in one:**
+
+* on Linux:
 ```
 docker-compose up -d --build
 ```
 
 * shut service down
+
+* on Linux:
 ```
 docker-compose down
 ```
