@@ -145,14 +145,14 @@ RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
  R -e 'install.packages("renv", repos = c(CRAN = "https://cran.rstudio.com"))'
 
 WORKDIR /headstart
-COPY workers/backend/requirements.txt .
+COPY workers/dataprocessing/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY workers/backend/renv.lock .
+COPY workers/dataprocessing/renv.lock .
 RUN R -e 'renv::consent(provided = TRUE)' && \
  R -e 'renv::restore()'
 
-COPY workers/backend/src/ ./
+COPY workers/dataprocessing/src/ ./
 COPY preprocessing/resources ./resources
 COPY preprocessing/other-scripts .
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
