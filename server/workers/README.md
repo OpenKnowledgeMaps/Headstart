@@ -70,7 +70,7 @@ Services:
 
 TRIPLE ElasticSearch core service:
 * In `server/workers/services/triple/` copy `example_es_config.json` to `es_config.json` and fill in the fields.
-* In `server/workers/services/triple/` copy `example_triple.env` to `triple.env` and fill in the fields.
+* In `server/workers/services/triple/` copy `example_triple.env` to `triple.env` and change the values if necessary.
 
 
 Secure Redis:
