@@ -1,6 +1,6 @@
 import json
 import pytest
-from src.headstart import Backend
+from src.headstart import Dataprocessing
 import pandas as pd
 import pandas.api.types as ptypes
 
@@ -18,8 +18,8 @@ def input_data():
 
 
 @pytest.fixture
-def backend():
-    return Backend("../../../preprocessing/other-scripts")
+def dataprocessing():
+    return Dataprocessing("../../../preprocessing/other-scripts")
 
 
 @pytest.fixture
@@ -27,9 +27,9 @@ def params():
     return {"service": "triple", "q": "femicide"}
 
 
-def test_map_data_dtypes(backend, input_data, params):
-    params = backend.add_default_params(params)
-    map_data = json.loads(backend.create_map(params, input_data))
+def test_map_data_dtypes(dataprocessing, input_data, params):
+    params = dataprocessing.add_default_params(params)
+    map_data = json.loads(dataprocessing.create_map(params, input_data))
     assert isinstance(map_data, list)
     df = pd.DataFrame.from_records(map_data)
     for col in df.columns:

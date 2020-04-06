@@ -3,23 +3,22 @@ version: '3.7'
 services:
 
   api:
-   build:
-     context: server
-     dockerfile: services.docker
-   restart: always
-   ports:
-    - '5001:5001'
-   depends_on:
-    - redis
-   network_mode: "host"
+    build:
+      context: server
+      dockerfile: services.docker
+    restart: always
+    ports:
+      - '5001:5001'
+    depends_on:
+      - redis
+    network_mode: "host"
 
   redis:
     image: 'redis:4.0-alpine'
     restart: always
     command: ["redis-server", "/etc/redis/redis.conf", "--appendonly", "yes"]
     volumes:
-       - 'redis:/var/lib/redis/data'
-       - ./server/workers/redis.conf:/etc/redis/redis.conf
+      - ./server/workers/redis.conf:/etc/redis/redis.conf
     restart: always
     ports:
       - '6379:6379'
@@ -42,24 +41,6 @@ services:
       - server/workers/dataprocessing/dataprocessing.env
     restart: always
     network_mode: "host"
-    volumes:
-      - type: bind
-        source: /var/opt/renv
-        target: /root/.local/share/renv
-      - type: bind
-        source: /var/log/headstart
-        target: /var/log/headstart
-
-  hsdb:
-    image: postgres:11
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: "password"
-    volumes:
-    - db:/var/lib/postgresql/data
-    ports:
-    - 54321:5432
 
 volumes:
   redis:
-  db:
