@@ -231,6 +231,7 @@ build_queryfield_query <- function(field, query) {
     query <- gsub(' AND -', ' -', query)
     query <- paste0(field, ':', '(', query, ')', add_boost_factor(field))
   } else {
+    query <- gsub('"', '', query)
     query <- paste0(field, ':', '"', query, '"', add_boost_factor(field))
   }
 }
