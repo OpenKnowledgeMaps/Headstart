@@ -192,7 +192,7 @@ class Search(Resource):
             res["params"] = params
             redis_store.rpush("input_data", json.dumps(res))
             result = get_key(redis_store, k)
-            result_df = post_process(clean_df, pd.DataFrame(result))
+            result_df = post_process(clean_df, pd.read_json(json.loads(result)))
             # result_df.index = result_df.index.astype(int)
             # result_df.sort_index(inplace=True)
             headers = {}

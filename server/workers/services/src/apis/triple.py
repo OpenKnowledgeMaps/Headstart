@@ -79,7 +79,7 @@ class Search(Resource):
                                    axis=1)
                     result = df.to_csv()
                 else:
-                    result = pd.DataFrame.from_records(result).to_csv()
+                    result = pd.read_json(json.loads(result)).to_csv()
                 headers["Content-Type"] = "text/csv"
                 headers["Content-Disposition"] = "attachment; filename={0}.csv".format(k)
             if data.get("raw") is True:
