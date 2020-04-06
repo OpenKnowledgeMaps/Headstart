@@ -79,7 +79,7 @@ def validate_data(df):
         Column('Open access', [InListValidation(["yes", "no", "unknown"], case_sensitive=False)]),
         Column('Comments', []),
         Column('Tags', []),
-        Column('Include in map?', [InListValidation(["yes", "no"])]),
+        Column('Ready for inclusion in map?', [InListValidation(["yes", "no"])]),
         Column('Type', []),
         Column('Area', [])
     ])
@@ -89,13 +89,17 @@ def validate_data(df):
     # add column: Valid Bool
     errors = schema.validate(df)
     errors_index_rows = [e.row for e in errors]
-    df_clean = df.drop(index=errors_index_rows)
-    df_errors = df.iloc[errors_index_rows]
+    if errors_index_rows != [-1]:
+        df_clean = df.drop(index=errors_index_rows)
+        df_errors = df.iloc[errors_index_rows]
+    else:
+        df_clean = df
+        df_errors = pd.DataFrame()
     return df_clean, errors, df_errors
 
 
 def preprocess_data(df):
-    df = df[df["Include in map?"] == "yes"]
+    df = df[df["Ready for inclusion in map?"] == "yes"]
     metadata = pd.DataFrame()
     metadata["id"] = df.ID
     metadata["title"] = df.Title
@@ -106,7 +110,7 @@ def preprocess_data(df):
     metadata["url"] = df["Link to PDF"]
     metadata["readers"] = 0
     metadata["subject"] = df.Keywords
-    metadata["oa_state"] = df["Open access"]
+    metadata["oa_state"] = df.Access
     metadata["link"] = df["Link to PDF"]
     metadata["relevance"] = df.index
     metadata["comments"] = df.Comments
@@ -167,33 +171,41 @@ class Search(Resource):
                                400: 'Invalid search parameters'})
     @gsheets_ns.expect(search_query)
     @gsheets_ns.produces(["application/json"])
-    def search():
+    def post(self):
         """
         """
         params = request.get_json()
         # fill default params
         params["q"] = params["vis_id"]
         params["vis_type"] = "overview"
+        gsheets_ns.logger.debug(params)
         sheet_id = get_sheet_id(params.get('vis_id'))
         covid19_range = "Resources!A1:N200"
-        sheet_content = get_sheet_content(sheet_id, covid19_range)
-        raw = pd.DataFrame(sheet_content.get('values'))
-        df_clean, errors, df_errors = validate_data(raw)
-        input_data = preprocess_data(df_clean)
+        try:
+            sheet_content = get_sheet_content(sheet_id, covid19_range)
+            raw = pd.DataFrame(sheet_content.get('values'))
+            df_clean, errors, df_errors = validate_data(raw)
+            input_data = preprocess_data(df_clean)
+        except Exception as e:
+            gsheets_ns.logger.error(e)
+            abort(500, "Problem encountered during data collection, sorry")
 
-        k = str(uuid.uuid4())
-        res = {}
-        res["id"] = k
-        res["input_data"] = input_data
-        res["params"] = params
-        redis_store.rpush("input_data", json.dumps(res))
-        result = get_key(redis_store, k)
-
-        headers = {}
-        headers["Content-Type"] = "application/json"
-        return make_response(result,
-                             200,
-                             headers)
+        try:
+            k = str(uuid.uuid4())
+            res = {}
+            res["id"] = k
+            res["input_data"] = input_data
+            res["params"] = params
+            redis_store.rpush("input_data", json.dumps(res))
+            result = get_key(redis_store, k)
+            headers = {}
+            headers["Content-Type"] = "application/json"
+            return make_response(result,
+                                 200,
+                                 headers)
+        except Exception as e:
+            gsheets_ns.logger.error(e)
+            abort(500, "Problem encountered during processing, sorry.")
 
 
 def writeRevision(vis_id, data, rev_id=None):
