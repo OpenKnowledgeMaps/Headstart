@@ -200,9 +200,14 @@ class Search(Resource):
             res["params"] = params
             redis_store.rpush("input_data", json.dumps(res))
             result = get_key(redis_store, k)
+            result_df = pd.DataFrame.from_records(json.loads(result))
+            result_df.sort_index(inplace=True)
+            result_df["area"] = df_clean["Area"]
+            uris = {a: i for i, a in enumerate(result_df.area.unique())}
+            result_df["area_uri"] = result_df.area.map(lambda x: uris.get(x))
             headers = {}
             headers["Content-Type"] = "application/json"
-            return make_response(result,
+            return make_response(result_df.to_dict(),
                                  200,
                                  headers)
         except Exception as e:
