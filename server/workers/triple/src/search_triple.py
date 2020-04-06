@@ -166,8 +166,8 @@ class TripleClient(object):
         text["id"] = metadata["id"]
         text["content"] = metadata.apply(lambda x: ". ".join(x[["title", "paper_abstract"]]), axis=1)
         input_data = {}
-        input_data["metadata"] = metadata.to_dict(orient='records')
-        input_data["text"] = text.to_dict(orient='records')
+        input_data["metadata"] = metadata.to_json(orient='records')
+        input_data["text"] = text.to_json(orient='records')
         return input_data
 
     @staticmethod
