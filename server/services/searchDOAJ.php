@@ -15,7 +15,8 @@ $post_params = $_POST;
 $result = search("doaj", $dirty_query, $post_params
                     , array("from", "to", "today", "sorting")
                     , ";", null, true, true, null, 3
-                    , "area_uri", "subject", $precomputed_id, false);
+                    , "area_uri", "subject", $precomputed_id, false
+                    , "legacy");
 
 echo $result
 
