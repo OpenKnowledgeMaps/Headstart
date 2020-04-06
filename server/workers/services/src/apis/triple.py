@@ -56,34 +56,40 @@ class Search(Resource):
         """
         """
         data = request.get_json()
+        triple_ns.logger.debug(data)
         errors = search_param_schema.validate(data, partial=True)
+        triple_ns.logger.debug(errors)
         if errors:
             abort(400, str(errors))
         k = str(uuid.uuid4())
         d = {"id": k, "params": data,
              "endpoint": "search"}
+        triple_ns.logger.debug(d)
         redis_store.rpush("triple", json.dumps(d))
         result = get_key(redis_store, k)
-
-        headers = {}
-        if request.headers["Accept"] == "application/json":
-            headers["Content-Type"] = "application/json"
-        if request.headers["Accept"] == "text/csv":
+        try:
+            headers = {}
+            if request.headers["Accept"] == "application/json":
+                headers["Content-Type"] = "application/json"
+            if request.headers["Accept"] == "text/csv":
+                if data.get("raw") is True:
+                    df = pd.DataFrame(result.get('input_data').get('hits').get('hits'))
+                    df = pd.concat([df.drop(["_source"], axis=1),
+                                    df["_source"].apply(pd.Series)],
+                                   axis=1)
+                    result = df.to_csv()
+                else:
+                    result = pd.read_json(result).to_csv()
+                headers["Content-Type"] = "text/csv"
+                headers["Content-Disposition"] = "attachment; filename={0}.csv".format(k)
             if data.get("raw") is True:
-                df = pd.DataFrame(result.get('input_data').get('hits').get('hits'))
-                df = pd.concat([df.drop(["_source"], axis=1),
-                                df["_source"].apply(pd.Series)],
-                               axis=1)
-                result = df.to_csv()
-            else:
-                result = pd.read_json(result).to_csv()
-            headers["Content-Type"] = "text/csv"
-            headers["Content-Disposition"] = "attachment; filename={0}.csv".format(k)
-        if data.get("raw") is True:
-            headers["Content-Type"] = "application/json"
-        return make_response(result,
-                             200,
-                             headers)
+                headers["Content-Type"] = "application/json"
+            return make_response(result,
+                                 200,
+                                 headers)
+        except Exception as e:
+            triple_ns.logger.error(e)
+            abort(500, "Problem encountered, check logs.")
 
 
 @triple_ns.route('/mappings')

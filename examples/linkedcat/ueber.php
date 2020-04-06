@@ -5,11 +5,11 @@ $date = new DateTime();
 ?>
 <html>
     <head>
-        <?php 
-            $override_labels = array(
-                "title" => "Über das Projekt - LinkedCat+"
-            );
-            include('head_standard.php') 
+        <?php
+        $override_labels = array(
+            "title" => "Über das Projekt - LinkedCat+"
+        );
+        include('head_standard.php')
         ?>
         <link type="text/css" rel="stylesheet" href="./css/browse.css">
     </head>
@@ -103,7 +103,7 @@ $date = new DateTime();
                     </p>
                 </div>
 
-                <div class="page-section" style="padding-bottom: 50px;">
+                <div class="page-section">
                     <h4 class="question">Projektpartner</h4>
                     <p class="paragraph-style">Das Projekt „LinkedCat+“ wurde von der Österreichischen Akademie der Wissenschaften (<a target="_blank" href="https://www.oeaw.ac.at">ÖAW</a>) im Rahmen des Innovationsfonds gefördert und erstreckte sich über einen Zeitraum von April 2018 bis März 2020. LinkedCat+ ist eine Kooperation zwischen Bibliothek, Archiv und Sammlungen (<a target="_blank" href="https://www.oeaw.ac.at/basis/">BASI:IS</a>), Austrian Centre for Digital Humanities and Cultural Heritage (<a target="_blank" href="https://www.oeaw.ac.at/acdh/">ACDH</a>) und Open Knowledge Maps - Verein zur Förderung der Sichtbarkeit wissenschaftlichen Wissens (<a target="_blank" href="https://openknowledgemaps.org/">OKMaps</a>).
                     </p>
@@ -113,8 +113,18 @@ $date = new DateTime();
                         <a target="_blank" href="https://openknowledgemaps.org/"><img class="partner-logo" src="./img/okmaps-logo-web.png" alt="Open Knowlege Maps Logo"></a>
                     </p>
                 </div>
+                <div class="page-section" style="padding-bottom: 50px;">
+                    <h4 class="question">Kontakt</h4>
+                    <p class="paragraph-style">
+                Bitte richten Sie Fragen, Kommentare und alle sonstigen Anfragen per E-Mail an: <a href="mailto:linkedcat@oeaw.ac.at">linkedcat@oeaw.ac.at</a>
+                    </p>
+                </div>
             </div>
         </div>
+
+        <!-- beginnning of footer / Please add your footer Datenschutz/Impressum links here! -->
+
+        <!-- end of footer -->
 
         <script type="text/javascript" src="./js/data-config_linkedcat.js"></script>
         <script>$(function () {

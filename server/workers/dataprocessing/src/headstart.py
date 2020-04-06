@@ -1,4 +1,5 @@
 import os
+import sys
 import copy
 import json
 import subprocess
@@ -6,9 +7,10 @@ import asyncio
 from tempfile import NamedTemporaryFile
 import redis
 import pandas as pd
+import logging
 
 
-class Backend(object):
+class Dataprocessing(object):
 
     def __init__(self, wd="./"):
         # path should be to where in the docker container the Rscript are
@@ -20,6 +22,11 @@ class Backend(object):
         self.default_params["language"] = "english"
         self.default_params["taxonomy_separator"] = ";"
         self.default_params["list_size"] = -1
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(os.environ["HEADSTART_LOGLEVEL"])
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setLevel(os.environ["HEADSTART_LOGLEVEL"])
+        self.logger.addHandler(handler)
 
     def add_default_params(self, params):
         default_params = copy.deepcopy(self.default_params)
@@ -50,6 +57,7 @@ class Backend(object):
 
     def run(self):
         k, params, input_data = self.next_item()
+        self.logger.debug(params)
         result = self.create_map(params, input_data)
         redis_store.set(k+"_output", json.dumps(result))
 
@@ -59,5 +67,5 @@ if __name__ == '__main__':
         redis_config = json.load(infile)
 
     redis_store = redis.StrictRedis(**redis_config)
-    hsb = Backend()
+    hsb = Dataprocessing()
     hsb.run()

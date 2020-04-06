@@ -13,4 +13,4 @@ RUN pip install git+https://github.com/python-restx/flask-restx
 COPY workers/services/src/ ./
 COPY workers/redis_config.json .
 
-CMD gunicorn -b 127.0.0.1:5001 'app:create_app()'
+CMD gunicorn -b 127.0.0.1:5001 'app:app' --timeout 120

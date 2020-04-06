@@ -1,10 +1,12 @@
 import os
+import sys
 import re
 import json
 import redis
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search, Q
 import pandas as pd
+import logging
 
 
 class TripleClient(object):
@@ -18,6 +20,11 @@ class TripleClient(object):
             send_get_body_as='POST',
             http_compress=True
         )
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(os.environ["TRIPLE_LOGLEVEL"])
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setLevel(os.environ["TRIPLE_LOGLEVEL"])
+        self.logger.addHandler(handler)
 
     def next_item(self):
         queue, msg = redis_store.blpop("triple")
@@ -105,9 +112,13 @@ class TripleClient(object):
                     parameters.get('to')))
         index = "isidore-documents-triple"
         sorting = self.build_sort_order(parameters)
+        body = self.build_body(parameters)
+        self.logger.debug(index)
+        self.logger.debug(sorting)
+        self.logger.debug(body)
         res = self.es.search(
             index=index,
-            body=self.build_body(parameters),
+            body=body,
             size=parameters.get('limit', 100),
             sort=sorting)
         # res = self.es.search(
@@ -197,26 +208,31 @@ class TripleClient(object):
     def run(self):
         while True:
             k, params, endpoint = self.next_item()
+            self.logger.debug(params)
             if endpoint == "mappings":
                 res = self.get_mappings(params.get('index'))
                 redis_store.set(k+"_output", json.dumps(res))
             if endpoint == "search":
-                res = {}
-                res["id"] = k
-                res["input_data"] = self.search(params)
-                res["params"] = params
-                if params.get('raw') is True:
-                    redis_store.set(k+"_output", json.dumps(res))
-                else:
-                    redis_store.rpush("input_data", json.dumps(res))
+                try:
+                    res = {}
+                    res["id"] = k
+                    res["input_data"] = self.search(params)
+                    res["params"] = params
+                    if params.get('raw') is True:
+                        redis_store.set(k+"_output", json.dumps(res))
+                    else:
+                        redis_store.rpush("input_data", json.dumps(res))
+                except Exception as e:
+                    self.logger.error(e)
+                    self.logger.error(params)
 
 
 if __name__ == '__main__':
-    with open("config.json") as infile:
-        config = json.load(infile)
+    with open("es_config.json") as infile:
+        es_config = json.load(infile)
     with open("redis_config.json") as infile:
         redis_config = json.load(infile)
 
     redis_store = redis.StrictRedis(**redis_config)
-    tc = TripleClient(config)
+    tc = TripleClient(es_config)
     tc.run()

@@ -38,10 +38,7 @@ function utf8_converter($array)
     return $array;
 }
 
-function search($repository, $dirty_query, $post_params, $param_types, $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true,
-                $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3, $id = "area_uri", $subjects = "subject") {
-    $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
-    $ini_array = library\Toolkit::loadIni($INI_DIR);
+function cleanQuery($dirty_query, $transform_query_tolowercase) {
     $query = strip_tags($dirty_query);
     $query = trim($query);
 
@@ -51,6 +48,18 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
 
     $query = addslashes($query);
 
+    return $query;
+}
+
+function search($repository, $dirty_query, $post_params, $param_types, $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
+        , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3, $id = "area_uri", $subjects = "subject", $precomputed_id = null, $do_clean_query = true) {
+    $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
+    $ini_array = library\Toolkit::loadIni($INI_DIR);
+
+    $query = ($do_clean_query === true)
+                ?(cleanQuery($dirty_query, $transform_query_tolowercase))
+                :($dirty_query);
+
     $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
     $settings = $ini_array["general"];
@@ -59,7 +68,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
 
     $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
-    $unique_id = $persistence->createID(array($query, $params_for_id_creation));
+    $unique_id = ($precomputed_id === null)?($persistence->createID(array($query, $params_for_id_creation))):($precomputed_id);
 
     if($retrieve_cached_map) {
         $last_version = $persistence->getLastVersion($unique_id, false);
@@ -78,7 +87,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
 
     if ($repository == "triple") {
-      $url = "http://localhost/api/" . $repository . "/search";
+      $url = "http://127.0.0.1/api/" . $repository . "/search";
       $payload = json_encode($post_params);
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_URL, $url);
