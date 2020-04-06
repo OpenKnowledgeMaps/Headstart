@@ -90,12 +90,16 @@ def validate_data(df):
     df = df[df["Ready for inclusion in map?"] == "yes"]
     errors = schema.validate(df)
     errors_index_rows = [e.row for e in errors]
+    for e in errors:
+        e.row += 1
+    error_messages = [str(e) for e in errors]
     if errors_index_rows == [-1]:
         clean_df = df
         errors_df = pd.DataFrame()
     else:
         clean_df = df.drop(index=errors_index_rows)
         errors_df = df.loc[errors_index_rows]
+        errors_df["reason"] = error_messages
     return clean_df, errors, errors_df
 
 
@@ -193,7 +197,15 @@ class Search(Resource):
             # result_df.sort_index(inplace=True)
             headers = {}
             headers["Content-Type"] = "application/json"
-            return make_response(result_df.to_dict(),
+            result = {}
+            result["data"] = result_df.to_dict(orient="records")
+            result["context"] = {"id": "covid19",
+                                 "query": "covid19",
+                                 "service": "gsheets",
+                                 "timestamp": datetime.utcnow(),
+                                 "params": params}
+            result["errors"] = errors_df.to_dict(orient="records")
+            return make_response(result,
                                  200,
                                  headers)
         except Exception as e:
