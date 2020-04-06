@@ -17,7 +17,8 @@ $result = search("linkedcat",
                  array("from", "to", "include_content_type", "today", "vis_type"),
                  ";", null,
                  $transform_query_tolowercase=false, true, null, 3,
-                 "area_uri", "subject", $precomputed_id, true);
+                 "area_uri", "subject", $precomputed_id, true,
+                 "legacy");
 
 echo $result
 
