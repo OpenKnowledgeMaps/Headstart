@@ -11,7 +11,11 @@ $dirty_query = library\CommUtils::getParameter($_POST, "q");
 
 $post_params = $_POST;
 
-$result = search("triple", $dirty_query, $post_params, array("from", "to", "sorting"), ";", null);
+$result = search("triple", $dirty_query
+                , $post_params, array("from", "to", "sorting")
+                , ";", null, true, true, null, 3
+                , "area_uri", "subject", $precomputed_id, false
+                , "api");
 
 echo $result
 
