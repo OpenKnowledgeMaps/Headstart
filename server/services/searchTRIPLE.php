@@ -8,6 +8,7 @@ require 'search.php';
 use headstart\library;
 
 $dirty_query = library\CommUtils::getParameter($_POST, "q");
+$precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
 $post_params = $_POST;
 
