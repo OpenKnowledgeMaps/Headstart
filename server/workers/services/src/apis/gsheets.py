@@ -151,6 +151,7 @@ def raw_exampe():
     # fill default params
     params["q"] = params["vis_id"]
     params["vis_type"] = "overview"
+    params["service"] = "gsheets"
     sheet_id = get_sheet_id(params.get('vis_id'))
     covid19_range = "Resources!A1:N200"
     sheet_content = get_sheet_content(sheet_id, covid19_range)
@@ -178,6 +179,7 @@ class Search(Resource):
         # fill default params
         params["q"] = params["vis_id"]
         params["vis_type"] = "overview"
+        params["service"] = "gsheets"
         gsheets_ns.logger.debug(params)
         sheet_id = get_sheet_id(params.get('vis_id'))
         covid19_range = "Resources!A1:N200"
