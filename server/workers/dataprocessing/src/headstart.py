@@ -53,7 +53,7 @@ class Dataprocessing(object):
                        param_file.name, input_file.name]
                 output = subprocess.check_output(cmd)
         output = [o for o in output.decode('utf-8').split('\n') if len(o) > 0]
-        return pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
+        return pd.DataFrame(json.loads(output[-1])).to_dict(orient="records")
 
     def run(self):
         k, params, input_data = self.next_item()
