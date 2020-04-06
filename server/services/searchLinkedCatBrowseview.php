@@ -19,7 +19,8 @@ $result = search("linkedcat_browseview",
                  ";",
                  null,
                  $transform_query_tolowercase = false, true, null, 3,
-                 "area_uri", "subject", $precomputed_id, true
+                 "area_uri", "subject", $precomputed_id, true,
+                 "legacy"
                );
 
 echo $result
