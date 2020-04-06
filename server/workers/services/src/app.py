@@ -3,14 +3,11 @@ import sys
 from flask import Flask
 from flask_restx import Api
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from apis.triple import triple_ns
 from apis.gsheets import gsheets_ns
-from apis.gsheets import app as gsheets_bp
 
-from database import db
 from config import settings
 from utils.monkeypatches import ReverseProxied, __schema__, specs_url, _register_apidoc, inject_flasgger
 import logging
@@ -46,7 +43,8 @@ api = api_patches(app, settings)
 api.add_namespace(triple_ns, path='/triple')
 api.add_namespace(gsheets_ns, path='/gsheets')
 app.logger.debug(app.config)
+app.logger.debug(app.url_map)
 
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=5001, debug=True)
+    app.run(host="127.0.0.1", port=5001, debug=True)
