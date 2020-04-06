@@ -63,7 +63,8 @@ sheet = gsheets_service.spreadsheets()
 def get_sheet_content(sheet_id, sheet_range):
     res = sheet.values().get(spreadsheetId=sheet_id,
                              range=sheet_range).execute()
-    return res
+    raw = pd.DataFrame(res.get('values'))
+    return raw
 
 
 def validate_data(df):
@@ -71,12 +72,12 @@ def validate_data(df):
         Column('ID', []),
         Column('Title', []),
         Column('Authors', []),
-        Column('Abstract', [CustomElementValidation(lambda s: len(s) > 5, 'Abstract not long enough')]),
+        Column('Abstract', []),
         Column('Publication Venue', []),
         Column('Publication Date', [DateFormatValidation("%Y-%m-%d")]),
         Column('Link to PDF', []),
         Column('Keywords', []),
-        Column('Open access', [InListValidation(["yes", "no", "unknown"], case_sensitive=False)]),
+        Column('Access', [InListValidation(["open", "closed", "unknown", "free"], case_sensitive=False)]),
         Column('Comments', []),
         Column('Tags', []),
         Column('Ready for inclusion in map?', [InListValidation(["yes", "no"])]),
@@ -85,21 +86,20 @@ def validate_data(df):
     ])
     df.columns = df.iloc[0]
     df.drop([0, 1], inplace=True)
-    df.reset_index(drop=True, inplace=True)
     # add column: Valid Bool
+    df = df[df["Ready for inclusion in map?"] == "yes"]
     errors = schema.validate(df)
     errors_index_rows = [e.row for e in errors]
-    if errors_index_rows != [-1]:
-        df_clean = df.drop(index=errors_index_rows)
-        df_errors = df.iloc[errors_index_rows]
+    if errors_index_rows == [-1]:
+        clean_df = df
+        errors_df = pd.DataFrame()
     else:
-        df_clean = df
-        df_errors = pd.DataFrame()
-    return df_clean, errors, df_errors
+        clean_df = df.drop(index=errors_index_rows)
+        errors_df = df.loc[errors_index_rows]
+    return clean_df, errors, errors_df
 
 
-def preprocess_data(df):
-    df = df[df["Ready for inclusion in map?"] == "yes"]
+def create_input_data(df):
     metadata = pd.DataFrame()
     metadata["id"] = df.ID
     metadata["title"] = df.Title
@@ -128,6 +128,19 @@ def preprocess_data(df):
     return input_data
 
 
+def post_process(clean_df, result_df):
+    sorter = clean_df["ID"]
+    sorterIndex = dict(zip(sorter, range(len(sorter))))
+    result_df["orig_order"] = result_df["id"].map(sorterIndex)
+    result_df.sort_values(["orig_order"], ascending=[True], inplace=True)
+    result_df.drop("orig_order", axis=1, inplace=True)
+    result_df.index = clean_df.index
+    result_df["area"] = clean_df.Area
+    uris = {a: i for i, a in enumerate(result_df.area.unique())}
+    result_df["area_uri"] = result_df.area.map(lambda x: uris.get(x))
+    return result_df
+
+
 def get_sheet_id(vis_id):
     # mock functionality
     mock_db = {"covid19": "1csxG23x99DcxoEud782Bji76C7mGxKkAVMBz8gdf_0A"}
@@ -140,30 +153,6 @@ search_query = gsheets_ns.model("SearchQuery",
                                 {"vis_id": fields.String(example='covid19',
                                                          description='hardcoded vis_id',
                                                          required=True)})
-
-
-@app.route('/api/gsheets/raw')
-def raw_exampe():
-    """
-    """
-    params = request.args.to_dict()
-    # params = request.get_json()
-    # fill default params
-    params["q"] = params["vis_id"]
-    params["vis_type"] = "overview"
-    params["service"] = "gsheets"
-    sheet_id = get_sheet_id(params.get('vis_id'))
-    covid19_range = "Resources!A1:N200"
-    sheet_content = get_sheet_content(sheet_id, covid19_range)
-    raw = pd.DataFrame(sheet_content.get('values'))
-    df_clean, errors, df_errors = validate_data(raw)
-    input_data = preprocess_data(df_clean)
-    return render_template("tables.html",
-                           df_clean=df_clean.to_html(header=True),
-                           errors="<br/>".join([str(e)
-                                                for e in errors]),
-                           df_errors=df_errors.to_html(header=True)
-                           )
 
 
 @gsheets_ns.route('/search')
@@ -184,10 +173,9 @@ class Search(Resource):
         sheet_id = get_sheet_id(params.get('vis_id'))
         covid19_range = "Resources!A1:N200"
         try:
-            sheet_content = get_sheet_content(sheet_id, covid19_range)
-            raw = pd.DataFrame(sheet_content.get('values'))
-            df_clean, errors, df_errors = validate_data(raw)
-            input_data = preprocess_data(df_clean)
+            raw = get_sheet_content(sheet_id, covid19_range)
+            clean_df, errors, errors_df = validate_data(raw)
+            input_data = create_input_data(clean_df)
         except Exception as e:
             gsheets_ns.logger.error(e)
             abort(500, "Problem encountered during data collection, sorry")
@@ -200,11 +188,9 @@ class Search(Resource):
             res["params"] = params
             redis_store.rpush("input_data", json.dumps(res))
             result = get_key(redis_store, k)
-            result_df = pd.DataFrame.from_records(json.loads(result))
-            result_df.sort_index(inplace=True)
-            result_df["area"] = df_clean["Area"]
-            uris = {a: i for i, a in enumerate(result_df.area.unique())}
-            result_df["area_uri"] = result_df.area.map(lambda x: uris.get(x))
+            result_df = post_process(clean_df, pd.DataFrame(result))
+            # result_df.index = result_df.index.astype(int)
+            # result_df.sort_index(inplace=True)
             headers = {}
             headers["Content-Type"] = "application/json"
             return make_response(result_df.to_dict(),
@@ -260,4 +246,26 @@ class existsVisualization(Resource):
                       200)
 
 
+@app.route('/api/gsheets/raw')
+def raw_exampe():
+    """
+    """
+    params = request.args.to_dict()
+    # params = request.get_json()
+    # fill default params
+    params["q"] = params["vis_id"]
+    params["vis_type"] = "overview"
+    params["service"] = "gsheets"
+    sheet_id = get_sheet_id(params.get('vis_id'))
+    covid19_range = "Resources!A1:N200"
+    sheet_content = get_sheet_content(sheet_id, covid19_range)
+    raw = pd.DataFrame(sheet_content.get('values'))
+    clean_df, errors, errors_df = validate_data(raw)
+    input_data = create_input_data(clean_df)
+    return render_template("tables.html",
+                           clean_df=clean_df.to_html(header=True),
+                           errors="<br/>".join([str(e)
+                                                for e in errors]),
+                           errors_df=errors_df.to_html(header=True)
+                           )
 # @gsheets_ns.route('/get')
