@@ -499,7 +499,19 @@ list.populateMetaData = function(nodes) {
                     return "none"
                 }
             })
-
+        
+        if(config.show_tags) {    
+            list_metadata.select("#list_tags")
+                    .html(function (d) {
+                        let return_tags = "";
+                        let tags = d.tags.split(/, |,/g);
+                        for (let tag of tags) {
+                            return_tags += '<div class="tag">' + tag + '</div>'
+                        }
+                        return return_tags;
+                    });
+        }
+        
         list_metadata.select("#paper_list_title")
             .html(function(d) {
                 return d.title;
@@ -900,6 +912,7 @@ list.hideEntriesByWord = function(object, search_words) {
             let year = d.year.toString();
             let word_found = true;
             let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toString().toLowerCase()) : ("");
+            let tags = (d.hasOwnProperty("tags")) ? (d.tags.toString().toLowerCase()) : ("");
             let i = 0;
             while (word_found && i < search_words.length) {
                 word_found = (abstract.indexOf(search_words[i]) !== -1 ||
@@ -907,7 +920,8 @@ list.hideEntriesByWord = function(object, search_words) {
                     authors.indexOf(search_words[i]) !== -1 ||
                     journals.indexOf(search_words[i]) !== -1 ||
                     year.indexOf(search_words[i]) !== -1 ||
-                    keywords.indexOf(search_words[i]) !== -1
+                    keywords.indexOf(search_words[i]) !== -1 ||
+                    tags.indexOf(search_words[i]) !== -1
                 );
                 i++;
             }

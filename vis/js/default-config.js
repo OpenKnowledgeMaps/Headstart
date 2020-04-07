@@ -79,6 +79,7 @@ var config = {
     show_context: false,
     show_infolink_areas: false,
     show_keywords: false,
+    show_tags: false,
     hide_keywords_overview: true,
     convert_author_names: true,
     show_area: true,
