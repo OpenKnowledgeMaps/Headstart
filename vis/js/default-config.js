@@ -156,6 +156,7 @@ var config = {
     
     show_context_oa_number: true,
     context_most_relevant_tooltip: false,
+    show_context_timestamp: false,
     
     hashtags_twitter_card: "okmaps,openscience,dataviz",
     
