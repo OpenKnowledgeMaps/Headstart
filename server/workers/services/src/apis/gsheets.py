@@ -12,8 +12,6 @@ from google.auth.transport.requests import Request
 from flask import Blueprint, request, make_response, jsonify, abort, render_template
 from flask_restx import Namespace, Resource, fields
 from apis.utils import get_key
-from models import Revisions, Visualizations
-from database import db
 import pandas as pd
 from pandas_schema import Column, Schema
 from pandas_schema.validation import (MatchesPatternValidation,
@@ -204,85 +202,13 @@ class Search(Resource):
             headers["Content-Type"] = "application/json"
             result = {}
             result["data"] = result_df.to_dict(orient="records")
-            result["context"] = {"id": "covid19",
-                                 "query": "covid19",
-                                 "service": "gsheets",
-                                 "timestamp": datetime.utcnow(),
-                                 "params": params}
             result["errors"] = errors_df.to_dict(orient="records")
+            result["sheet_id"] = sheet_id
+            # TODO: get last_update from spreadsheet
+            result["last_update"] = datetime.utcnow()
             return make_response(result,
                                  200,
                                  headers)
         except Exception as e:
             gsheets_ns.logger.error(e)
             abort(500, "Problem encountered during processing, sorry.")
-
-
-def writeRevision(vis_id, data, rev_id=None):
-
-    vis = Visualizations.query.filter_by(vis_id=vis_id).first()
-
-    rev = rev_id
-    if rev is None:
-        r_id = vis.vis_latest
-        rev = r_id + 1
-
-    query = vis.vis_clean_query
-
-    new_rev = Revisions({
-                "rev_id": rev,
-                "rev_vis": vis_id,
-                "rev_user": "System",
-                "rev_timestamp": datetime.utcnow(),
-                "rev_comment": "Visualization created",
-                "rev_data": data,
-                "vis_query": query
-    })
-    db.session.add(new_rev)
-    db.session.commit()
-
-
-@gsheets_ns.route('/createVisualization')
-class createVisualization(Resource):
-    def post(self, vis_id):
-        # param: map_id
-        # get map context for map ID
-        # get latest revision data via sheets ID from context
-        # if not assert equal
-        # add revision number to map context
-        # get latest revision
-        pass
-
-
-@gsheets_ns.route('/existsVisualization')
-class existsVisualization(Resource):
-    def get(self, vis_id):
-        map = Visualizations.query.filter_by(vis_id=vis_id).first()
-        exists = True if map else False
-        make_response(exists,
-                      200)
-
-
-@app.route('/api/gsheets/raw')
-def raw_exampe():
-    """
-    """
-    params = request.args.to_dict()
-    # params = request.get_json()
-    # fill default params
-    params["q"] = params["vis_id"]
-    params["vis_type"] = "overview"
-    params["service"] = "gsheets"
-    sheet_id = get_sheet_id(params.get('vis_id'))
-    covid19_range = "Resources!A1:N200"
-    sheet_content = get_sheet_content(sheet_id, covid19_range)
-    raw = pd.DataFrame(sheet_content.get('values'))
-    clean_df, errors, errors_df = validate_data(raw)
-    input_data = create_input_data(clean_df)
-    return render_template("tables.html",
-                           clean_df=clean_df.to_html(header=True),
-                           errors="<br/>".join([str(e)
-                                                for e in errors]),
-                           errors_df=errors_df.to_html(header=True)
-                           )
-# @gsheets_ns.route('/get')
