@@ -240,6 +240,8 @@ IO.prototype = {
             d.title = _this.setToStringIfNullOrUndefined(d.title,
                 config.localization[config.language]["no_title"]);
                 
+            d.subject_orig = _this.setToStringIfNullOrUndefined(d.subject, "");
+                
             var prepareMetric = function(d, metric) {
                  if(d.hasOwnProperty(metric)) {
                      if(d[metric] === "N/A") {
@@ -340,6 +342,7 @@ IO.prototype = {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
             } else {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
+                d.oa_link = d.link;
             }
 
             d.outlink = _this.createOutlink(d);
