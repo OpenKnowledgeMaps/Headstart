@@ -70,7 +70,7 @@ export const list = StateMachine.create({
               sortBy(config.initial_sort);
             }
             this.current_search_words = []
-            this.current_filter_param = ''
+            this.current_filter_param = config.filter_options[0];
             debounce(this.count_visible_items_to_header, config.debounce)()
         },
 
@@ -637,8 +637,23 @@ list.populateMetaData = function(nodes) {
                 mediator.publish("bookmark_removed", d);
                 d3.event.stopPropagation();
             });
+        
+        if(config.show_resulttype) {
+            d3.select(elem).select("#list_resulttype")
+                    .classed("nodisplay", false)
+                    .text(function(d) { return d.resulttype } )
+        }
+        
     });
 };
+
+list.createComments = function(nodes) {
+    nodes[0].forEach((elem) => {
+        d3.select(elem).select("#list_comments")
+                .classed("nodisplay", false)
+                .text((d) => { return d.comments })
+    })
+}
 
 list.createAbstracts = function(nodes) {
     nodes[0].forEach((elem) => {
@@ -747,6 +762,9 @@ list.populateList = function() {
     var paper_nodes = this.getPaperNodes(list_data);
     this.populateMetaData(paper_nodes);
     this.createAbstracts(paper_nodes);
+    if(config.show_comments) {
+        this.createComments(paper_nodes);
+    }
     this.populateReaders(paper_nodes);
     this.populateExternalVis(paper_nodes);
 };
@@ -913,6 +931,7 @@ list.hideEntriesByWord = function(object, search_words) {
             let word_found = true;
             let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toString().toLowerCase()) : ("");
             let tags = (d.hasOwnProperty("tags")) ? (d.tags.toString().toLowerCase()) : ("");
+            let comments = (d.hasOwnProperty("comments")) ? (d.comments.toString().toLowerCase()) : ("");
             let i = 0;
             while (word_found && i < search_words.length) {
                 word_found = (abstract.indexOf(search_words[i]) !== -1 ||
@@ -921,7 +940,8 @@ list.hideEntriesByWord = function(object, search_words) {
                     journals.indexOf(search_words[i]) !== -1 ||
                     year.indexOf(search_words[i]) !== -1 ||
                     keywords.indexOf(search_words[i]) !== -1 ||
-                    tags.indexOf(search_words[i]) !== -1
+                    tags.indexOf(search_words[i]) !== -1 ||
+                    comments.indexOf(search_words[i]) !== -1
                 );
                 i++;
             }
