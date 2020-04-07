@@ -38,6 +38,9 @@ Following Apache2 mods have to be installed and enabled:
 * proxy_balancer
 * proxy_http
 
+Possibly also following modules need to be installed and enabled:
+* mod_slotmem_shm
+
 The following lines have to be added to the appropriate sites-available config of Apache2 webserver:
 
 ```
@@ -65,12 +68,12 @@ Dataprocessing:
 * In `server/workers/dataprocessing` copy `example_dataprocessing.env` to `dataprocessing.env` and set the desired loglevel.
 
 Services:
-* In `server/workers/services/config` copy `example_settings.py` to `settings.py` and change the values for `ENV` (`development` or `production`) and `DEBUG` (`TRUE` or `FALSE`).
+* In `server/workers/services/src/config` copy `example_settings.py` to `settings.py` and change the values for `ENV` (`development` or `production`) and `DEBUG` (`TRUE` or `FALSE`).
 
 
 TRIPLE ElasticSearch core service:
 * In `server/workers/services/triple/` copy `example_es_config.json` to `es_config.json` and fill in the fields.
-* In `server/workers/services/triple/` copy `example_triple.env` to `triple.env` and fill in the fields.
+* In `server/workers/services/triple/` copy `example_triple.env` to `triple.env` and change the values if necessary.
 
 
 Secure Redis:
@@ -82,6 +85,8 @@ Secure Redis:
 Following commands have to be executed from the root folder of the repository, where `docker-compose.yml` is located.
 
 **Build images**
+
+* on Linux:
 ```
 docker-compose build
 ```
@@ -92,6 +97,8 @@ docker-compose -f docker-compose_win.yml build
 ```
 
 **Start services and send them to the docker daemon**
+
+* on Linux:
 ```
 docker-compose up -d
 ```
@@ -102,11 +109,15 @@ docker-compose -f docker-compose_win.yml up -d
 ```
 
 **All in one:**
+
+* on Linux:
 ```
 docker-compose up -d --build
 ```
 
 * shut service down
+
+* on Linux:
 ```
 docker-compose down
 ```
