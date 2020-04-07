@@ -316,6 +316,7 @@ IO.prototype = {
             d.paper_selected = false;
             
             d.oa = false;
+            d.free_access = false;
 
             if (config.service === "doaj") {
                 d.oa = true;
@@ -343,6 +344,7 @@ IO.prototype = {
             } else {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
                 d.oa_link = d.link;
+                d.free_access = (d.oa_state === 3 || d.oa_state === "3")?(true):(false);
             }
 
             d.outlink = _this.createOutlink(d);
