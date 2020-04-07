@@ -88,6 +88,7 @@ var config = {
 
     sort_options: ["readers", "title", "authors", "year"],
     filter_options: ["all", "open_access", "publication", "dataset"],
+    filter_field: null,
     sort_menu_dropdown: false,
     initial_sort: null,
     list_show_all_papers: false,

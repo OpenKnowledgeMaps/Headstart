@@ -857,14 +857,22 @@ list.filterList = function(search_words, filter_param) {
 
 // Returns true if document has parameter or if no parameter is passed
 list.findEntriesWithParam = function (param, d) {
-    if (param === 'open_access') {
-        return d.oa
-    } else if (param === 'publication') {
-        return d.resulttype === 'publication'
-    } else if (param === 'dataset') {
-        return d.resulttype === 'dataset'
+    if(typeof config.filter_field === "undefined" || config.filter_field === null) {
+        if (param === 'open_access') {
+            return d.oa
+        } else if (param === 'publication') {
+            return d.resulttype === 'publication'
+        } else if (param === 'dataset') {
+            return d.resulttype === 'dataset'
+        } else {
+            return true
+        }
     } else {
-        return true
+       if (param === "all") {
+           return true;
+       } else {
+           return d[config.filter_field] === param;
+       }
     }
     
 }
