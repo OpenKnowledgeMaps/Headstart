@@ -118,7 +118,9 @@ IO.prototype = {
     setContext: function(context, num_documents) {
         this.context = context;
         if(context.hasOwnProperty("params")) {
-            context.params = JSON.parse(context.params);
+            context.params = (typeof context.params === "object")
+                                ?(context.params)
+                                :(JSON.parse(context.params));
         }
         this.context.num_documents = num_documents;
         this.context.share_oa = this.num_oa;
@@ -238,6 +240,8 @@ IO.prototype = {
             d.title = _this.setToStringIfNullOrUndefined(d.title,
                 config.localization[config.language]["no_title"]);
                 
+            d.subject_orig = _this.setToStringIfNullOrUndefined(d.subject, "");
+                
             var prepareMetric = function(d, metric) {
                  if(d.hasOwnProperty(metric)) {
                      if(d[metric] === "N/A") {
@@ -312,6 +316,7 @@ IO.prototype = {
             d.paper_selected = false;
             
             d.oa = false;
+            d.free_access = false;
 
             if (config.service === "doaj") {
                 d.oa = true;
@@ -338,6 +343,8 @@ IO.prototype = {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
             } else {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
+                d.oa_link = d.link;
+                d.free_access = (d.oa_state === 3 || d.oa_state === "3")?(true):(false);
             }
 
             d.outlink = _this.createOutlink(d);
