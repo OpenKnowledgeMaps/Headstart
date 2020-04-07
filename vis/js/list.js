@@ -537,6 +537,13 @@ list.populateMetaData = function(nodes) {
                     return "none";
                 }
             });
+        
+        list_metadata.select("#free-access-logo_list")
+            .style("display", function(d) {
+                if (d.free_access === false) {
+                    return "none";
+                }
+            });
               
         var paper_link = list_metadata.select(".link2");
         
