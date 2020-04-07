@@ -65,9 +65,9 @@ export const list = StateMachine.create({
             this.populateList();
             this.initListMouseListeners();
             if(config.initial_sort === null) {
-              sortBy(config.sort_options[0]);
+              list.sortBy(config.sort_options[0]);
             } else {
-              sortBy(config.initial_sort);
+              list.sortBy(config.initial_sort);
             }
             this.current_search_words = []
             this.current_filter_param = config.filter_options[0];
@@ -112,6 +112,10 @@ export const list = StateMachine.create({
         }
     }
 });
+
+list.sortBy = function(field) {
+    sortBy(field);
+}
 
 list.drawList = function() {
     let self = this;
@@ -277,7 +281,7 @@ let addSortOptionDropdownEntry = function(sort_option, first_item) {
     }
     
     newEntry.on("click", () => {
-        sortBy(sort_option)
+        list.sortBy(sort_option)
         mediator.publish("record_action", config.localization[config.language][sort_option], "List", "sortBy", config.user_id, "listsort", null, "sort_option=" + sort_option)
         $('#curr-sort-type').text(config.localization[config.language][sort_option])
         $('.sort_entry').removeClass('active');
@@ -309,7 +313,7 @@ let addSortOptionButton = function(parent, sort_option, selected) {
 
     // Event listeners
     $("#sort_" + sort_option).change(function() {
-        sortBy(sort_option);
+        list.sortBy(sort_option);
         mediator.publish("record_action", config.localization[config.language][sort_option], "List", "sortBy",
             config.user_id, "listsort", null, "sort_option=" + sort_option);
     });
