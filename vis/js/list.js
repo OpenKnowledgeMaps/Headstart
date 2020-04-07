@@ -65,12 +65,12 @@ export const list = StateMachine.create({
             this.populateList();
             this.initListMouseListeners();
             if(config.initial_sort === null) {
-              sortBy(config.sort_options[0]);
+              list.sortBy(config.sort_options[0]);
             } else {
-              sortBy(config.initial_sort);
+              list.sortBy(config.initial_sort);
             }
             this.current_search_words = []
-            this.current_filter_param = ''
+            this.current_filter_param = config.filter_options[0];
             debounce(this.count_visible_items_to_header, config.debounce)()
         },
 
@@ -112,6 +112,10 @@ export const list = StateMachine.create({
         }
     }
 });
+
+list.sortBy = function(field) {
+    sortBy(field);
+}
 
 list.drawList = function() {
     let self = this;
@@ -277,7 +281,7 @@ let addSortOptionDropdownEntry = function(sort_option, first_item) {
     }
     
     newEntry.on("click", () => {
-        sortBy(sort_option)
+        list.sortBy(sort_option)
         mediator.publish("record_action", config.localization[config.language][sort_option], "List", "sortBy", config.user_id, "listsort", null, "sort_option=" + sort_option)
         $('#curr-sort-type').text(config.localization[config.language][sort_option])
         $('.sort_entry').removeClass('active');
@@ -309,7 +313,7 @@ let addSortOptionButton = function(parent, sort_option, selected) {
 
     // Event listeners
     $("#sort_" + sort_option).change(function() {
-        sortBy(sort_option);
+        list.sortBy(sort_option);
         mediator.publish("record_action", config.localization[config.language][sort_option], "List", "sortBy",
             config.user_id, "listsort", null, "sort_option=" + sort_option);
     });
@@ -499,7 +503,19 @@ list.populateMetaData = function(nodes) {
                     return "none"
                 }
             })
-
+        
+        if(config.show_tags) {    
+            list_metadata.select("#list_tags")
+                    .html(function (d) {
+                        let return_tags = "";
+                        let tags = d.tags.split(/, |,/g);
+                        for (let tag of tags) {
+                            return_tags += '<div class="tag">' + tag + '</div>'
+                        }
+                        return return_tags;
+                    });
+        }
+        
         list_metadata.select("#paper_list_title")
             .html(function(d) {
                 return d.title;
@@ -522,6 +538,13 @@ list.populateMetaData = function(nodes) {
         list_metadata.select("#open-access-logo_list")
             .style("display", function(d) {
                 if (d.oa === false) {
+                    return "none";
+                }
+            });
+        
+        list_metadata.select("#free-access-logo_list")
+            .style("display", function(d) {
+                if (d.free_access === false) {
                     return "none";
                 }
             });
@@ -625,8 +648,23 @@ list.populateMetaData = function(nodes) {
                 mediator.publish("bookmark_removed", d);
                 d3.event.stopPropagation();
             });
+        
+        if(config.show_resulttype) {
+            d3.select(elem).select("#list_resulttype")
+                    .classed("nodisplay", false)
+                    .text(function(d) { return d.resulttype } )
+        }
+        
     });
 };
+
+list.createComments = function(nodes) {
+    nodes[0].forEach((elem) => {
+        d3.select(elem).select("#list_comments")
+                .classed("nodisplay", false)
+                .text((d) => { return d.comments })
+    })
+}
 
 list.createAbstracts = function(nodes) {
     nodes[0].forEach((elem) => {
@@ -735,6 +773,9 @@ list.populateList = function() {
     var paper_nodes = this.getPaperNodes(list_data);
     this.populateMetaData(paper_nodes);
     this.createAbstracts(paper_nodes);
+    if(config.show_comments) {
+        this.createComments(paper_nodes);
+    }
     this.populateReaders(paper_nodes);
     this.populateExternalVis(paper_nodes);
 };
@@ -857,14 +898,22 @@ list.filterList = function(search_words, filter_param) {
 
 // Returns true if document has parameter or if no parameter is passed
 list.findEntriesWithParam = function (param, d) {
-    if (param === 'open_access') {
-        return d.oa
-    } else if (param === 'publication') {
-        return d.resulttype === 'publication'
-    } else if (param === 'dataset') {
-        return d.resulttype === 'dataset'
+    if(typeof config.filter_field === "undefined" || config.filter_field === null) {
+        if (param === 'open_access') {
+            return d.oa
+        } else if (param === 'publication') {
+            return d.resulttype === 'publication'
+        } else if (param === 'dataset') {
+            return d.resulttype === 'dataset'
+        } else {
+            return true
+        }
     } else {
-        return true
+       if (param === "all") {
+           return true;
+       } else {
+           return d[config.filter_field] === param;
+       }
     }
     
 }
@@ -892,6 +941,8 @@ list.hideEntriesByWord = function(object, search_words) {
             let year = d.year.toString();
             let word_found = true;
             let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toString().toLowerCase()) : ("");
+            let tags = (d.hasOwnProperty("tags")) ? (d.tags.toString().toLowerCase()) : ("");
+            let comments = (d.hasOwnProperty("comments")) ? (d.comments.toString().toLowerCase()) : ("");
             let i = 0;
             while (word_found && i < search_words.length) {
                 word_found = (abstract.indexOf(search_words[i]) !== -1 ||
@@ -899,7 +950,9 @@ list.hideEntriesByWord = function(object, search_words) {
                     authors.indexOf(search_words[i]) !== -1 ||
                     journals.indexOf(search_words[i]) !== -1 ||
                     year.indexOf(search_words[i]) !== -1 ||
-                    keywords.indexOf(search_words[i]) !== -1
+                    keywords.indexOf(search_words[i]) !== -1 ||
+                    tags.indexOf(search_words[i]) !== -1 ||
+                    comments.indexOf(search_words[i]) !== -1
                 );
                 i++;
             }
