@@ -119,7 +119,7 @@ def create_input_data(df):
     metadata["relevance"] = df.index
     metadata["comments"] = df.Comments
     metadata["tags"] = df.Tags
-    metadata["type"] = df.Type
+    metadata["resulttype"] = df.Type
     text = pd.DataFrame()
     text["id"] = metadata["id"]
     text["content"] = metadata.apply(lambda x: ". ".join(x[["title",
@@ -142,6 +142,11 @@ def post_process(clean_df, result_df):
     result_df["area"] = clean_df.Area
     uris = {a: i for i, a in enumerate(result_df.area.unique())}
     result_df["area_uri"] = result_df.area.map(lambda x: uris.get(x))
+    oa_mapper = {"closed": 0,
+                 "open": 1,
+                 "unknown": 2,
+                 "free": 3}
+    result_df["oa_state"] = result_df["oa_state"].map(lambda x: oa_mapper.get(x))
     return result_df
 
 
