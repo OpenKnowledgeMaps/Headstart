@@ -7,11 +7,7 @@ require 'search.php';
 
 use headstart\library;
 
-$dirty_query = library\CommUtils::getParameter($_POST, "q");
-
-$post_params = $_POST;
-
-$result = search("gsheets", $dirty_query, $post_params
+$result = search("gsheets", "covid19", array("vis_id" => "covid19")
                     , array("vis_id")
                     , ";", null, true, false, null, 3
                     , "area_uri", "subject", "covid19", false
