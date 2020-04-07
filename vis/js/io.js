@@ -118,7 +118,9 @@ IO.prototype = {
     setContext: function(context, num_documents) {
         this.context = context;
         if(context.hasOwnProperty("params")) {
-            context.params = JSON.parse(context.params);
+            context.params = (typeof context.params === "object")
+                                ?(context.params)
+                                :(JSON.parse(context.params));
         }
         this.context.num_documents = num_documents;
         this.context.share_oa = this.num_oa;
