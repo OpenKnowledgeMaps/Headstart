@@ -226,6 +226,17 @@ s.resulttype {
     }
 }
 
+.resulttype_tag {
+    font-weight: $fontweight800;
+}
+
+.resulttype {
+    font-size: 12px;
+    line-height: 120%;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
 .conceptgraph {
     margin-top: 5px;
     margin-bottom: 10px;
@@ -455,17 +466,23 @@ img#preview_page {
 
 .backlink-list {
     margin-left: 15px;
-    margin-top: 15px;
+    margin-top: 20px;
     font-size: 11px;
     cursor: pointer;
+    margin-bottom: 20px;
 
     a {
-        border-bottom: 1px solid $medium-blue;
+        border: 1px solid $medium-blue;
         color: $medium-blue;
+        padding: 5px;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius:5px;
         text-decoration: none;
 
         &:hover {
-            border-bottom: 2px solid $medium-blue;
+            background-color: $medium-blue;
+            color: white;
         }
     }
 }
@@ -816,14 +833,21 @@ img#preview_page {
         font-size: 14px;
     }
 
-    .comments {
+    .comments .comment-text {
         font-size: 12px;
         max-width: 82%;
         background-color: #f1f1f1;
         padding: 5px;
         border-radius: 5px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius:5px;
         display: inline-block;
         vertical-align: middle;
+    }
+
+    .comments {
+        margin-bottom: 5px;
+        margin-top: 10px;
     }
 
     .fa.fa-comment {
@@ -835,4 +859,29 @@ img#preview_page {
     #list_keywords {
         margin-bottom: 5px;
     }
+
+    .tags, #free-access-logo_list, #open-access-logo_list {
+        display:inline;
+        margin-right: 3px;
+    }
+
+    #list_keywords {
+
+        .keyword_tag {
+            font-weight: $fontweight800;
+        }
+    }
+
+    #list_area {
+
+        margin-top: 0px;
+
+        .area_tag {
+            font-weight: $fontweight800;
+        }
+    }
+    #list_keywords, #list_area {
+        font-size: 12px;
+    }
+
 }
