@@ -510,7 +510,9 @@ list.populateMetaData = function(nodes) {
                         let return_tags = "";
                         let tags = d.tags.split(/, |,/g);
                         for (let tag of tags) {
-                            return_tags += '<div class="tag">' + tag + '</div>'
+                            if(tag !== "") {
+                                return_tags += '<div class="tag">' + tag + '</div>';
+                            }
                         }
                         return return_tags;
                     });
@@ -663,9 +665,11 @@ list.populateMetaData = function(nodes) {
 
 list.createComments = function(nodes) {
     nodes[0].forEach((elem) => {
-        d3.select(elem).select("#list_comments")
-                .classed("nodisplay", false)
-                .text((d) => { return d.comments })
+        let current_comment = 
+                d3.select(elem).select("#list_comments")
+                    .classed("nodisplay", (d) => { return d.comments === ""; } )
+        
+        current_comment.select("#comment").text((d) => { return d.comments })
     })
 }
 
