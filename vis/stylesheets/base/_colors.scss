@@ -95,3 +95,18 @@ $higher_value_tag: #DC2260;
     $paper-icon: #cbcbcb;
     $highlight-searchterm: #dadada;
 }
+
+@if $skin == 'covis' {
+    $dark-blue: #333;
+    $medium-blue: #1e6662;
+    $okm-clouds: #f1f1f1;
+    $okm-modal-btn: #1e6662;
+    $framed-item: #1e6662;
+    $journal-gray: #1e6662;
+    $list_metadata_title_paper: #1e6662;
+    $list_show_hide_button: #1e6662;
+    $okm-gray: #818181;
+    $paper-icon: #cbcbcb;
+    $highlight-searchterm: #dadada;
+    $okm-red: #2cb583;
+}
