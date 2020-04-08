@@ -329,7 +329,7 @@ s.resulttype {
 }
 
 .nodisplay {
-    display: none;
+    display: none !important;
 }
 
 .bold-list {
