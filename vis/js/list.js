@@ -505,7 +505,7 @@ list.populateMetaData = function(nodes) {
             })
         
         if(config.show_tags) {    
-            list_metadata.select("#list_tags")
+            d3.select(elem).select("#list_tags")
                     .html(function (d) {
                         let return_tags = "";
                         let tags = d.tags.split(/, |,/g);
