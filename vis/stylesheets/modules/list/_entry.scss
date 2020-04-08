@@ -42,6 +42,11 @@
     -moz-border-radius: 5px;
     font-size: 10px;
     font-weight: $fontweight400;
+    margin-right: 3px;
+}
+
+.tags {
+    display: inline;
 }
 
 .dataset-tag {
@@ -860,8 +865,8 @@ img#preview_page {
         margin-bottom: 5px;
     }
 
-    .tags, #free-access-logo_list, #open-access-logo_list {
-        display:inline;
+    #free-access-logo_list, #open-access-logo_list {
+        display: inline;
         margin-right: 3px;
     }
 
