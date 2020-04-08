@@ -650,9 +650,12 @@ list.populateMetaData = function(nodes) {
             });
         
         if(config.show_resulttype) {
-            d3.select(elem).select("#list_resulttype")
-                    .classed("nodisplay", false)
-                    .text(function(d) { return d.resulttype } )
+            let resulttype_div = 
+                    d3.select(elem).select("#list_resulttype")
+                        .classed("nodisplay", false)
+            
+            resulttype_div.select("#resulttype_tag").text(config.localization[config.language].resulttype_label + ":");
+            resulttype_div.select("#resulttype_text").text(function(d) { return d.resulttype; } )
         }
         
     });
