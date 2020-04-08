@@ -130,3 +130,13 @@ docker-compose -f docker-compose_win.yml down
 ### Deploying the example:
 
 Use a deployment script, or manually deploy an example (currently only TRIPLE is integrated in this way) as described in [HOWTO: search repos](../../doc/howto_search_repos.md):
+
+Additionally, the `config_local.ini` now requires an additional parameter under `[general]`:
+
+```
+# URL to OKMaps API
+api_url = ""
+
+```
+
+where `api_url` is the full URL to the API endpoint.
