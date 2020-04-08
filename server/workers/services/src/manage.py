@@ -1,11 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
-from app import create_app
+from app import app
 from models import Visualizations, Revisions
-
-
-app = create_app()
-db = SQLAlchemy(app)
+from database import db
 
 
 if __name__ == '__main__':
-    db.create_all()
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
