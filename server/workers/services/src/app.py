@@ -7,6 +7,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 from apis.triple import triple_ns
 from apis.gsheets import gsheets_ns
+from database import db
 
 from config import settings
 from utils.monkeypatches import ReverseProxied, __schema__, specs_url, _register_apidoc, inject_flasgger
@@ -35,9 +36,10 @@ app.config.from_object('config.settings')
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(app.logger.level)
 app = inject_flasgger(app)
+db.init_app(app)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_port=1, x_for=1, x_host=1, x_prefix=1)
 app.wsgi_app = ReverseProxied(app.wsgi_app)
-CORS(app, expose_headers=["Content-Disposition"])
+CORS(app, expose_headers=["Content-Disposition", "Access-Control-Allow-Origin"])
 
 api = api_patches(app, settings)
 api.add_namespace(triple_ns, path='/triple')
