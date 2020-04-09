@@ -1,0 +1,16 @@
+flask
+flask-cors
+flask_sqlalchemy
+Werkzeug
+marshmallow
+gunicorn
+redis
+hiredis
+aioredis
+pandas
+pandas_schema
+pyyaml
+flasgger
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib

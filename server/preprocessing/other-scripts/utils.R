@@ -29,6 +29,10 @@ get_stopwords <- function(lang, testing) {
           add_stop_path <- paste0("../resources/", lang, ".stop")
           additional_stops <- scan(add_stop_path, what="", sep="\n")
           stops = c(stops, additional_stops)
+        } else if (dir.exists("./resources")) {
+          add_stop_path <- paste0("./resources/", lang, ".stop")
+          additional_stops <- scan(add_stop_path, what="", sep="\n")
+          stops = c(stops, additional_stops)
         } else {
           add_stop_path <- paste0("../../resources/", lang, ".stop")
           additional_stops <- scan(add_stop_path, what="", sep="\n")
@@ -56,6 +60,9 @@ setup_logging <- function(loglevel) {
     removeHandler('basic.stdout')
     addHandler(writeToConsole)
   } else {
+    if (!file.exists(Sys.getenv("HEADSTART_LOGFILE"))) {
+      file.create(Sys.getenv("HEADSTART_LOGFILE"))
+    }
     getLogger(loglevel)
     removeHandler('basic.stdout')
     addHandler(writeToFile, file=Sys.getenv("HEADSTART_LOGFILE"))

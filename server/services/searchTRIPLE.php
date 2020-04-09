@@ -12,11 +12,11 @@ $precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
 $post_params = $_POST;
 
-$result = search("doaj", $dirty_query, $post_params
-                    , array("from", "to", "today", "sorting")
-                    , ";", null, true, true, null, 3
-                    , "area_uri", "subject", $precomputed_id, false
-                    , "legacy");
+$result = search("triple", $dirty_query
+                , $post_params, array("from", "to", "sorting")
+                , ";", null, true, true, null, 3
+                , "area_uri", "subject", $precomputed_id, false
+                , "api");
 
 echo $result
 

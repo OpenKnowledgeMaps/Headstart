@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+
+  api:
+    build:
+      context: server
+      dockerfile: services.docker
+    restart: always
+    ports:
+      - '127.0.0.1:5001:5001'
+    depends_on:
+      - redis
+
+  redis:
+    image: 'redis:4.0-alpine'
+    restart: always
+    command: ["redis-server", "/etc/redis/redis.conf", "--appendonly", "yes"]
+    volumes:
+      - ./server/workers/redis.conf:/etc/redis/redis.conf
+    restart: always
+    ports:
+      - '127.0.0.1:6379:6379'
+
+  search_triple:
+    build:
+      context: server
+      dockerfile: search_triple.docker
+    env_file:
+      - server/workers/triple/triple.env
+    restart: always
+
+  dataprocessing:
+    build:
+      context: server
+      dockerfile: dataprocessing.docker
+    env_file:
+      - server/workers/dataprocessing/dataprocessing.env
+    restart: always
+
+volumes:
+  redis:

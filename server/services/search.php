@@ -41,21 +41,22 @@ function utf8_converter($array)
 function cleanQuery($dirty_query, $transform_query_tolowercase) {
     $query = strip_tags($dirty_query);
     $query = trim($query);
-    
+
     if ($transform_query_tolowercase) {
         $query = strtolower($query);
     }
-    
+
     $query = addslashes($query);
-    
+
     return $query;
 }
 
 function search($repository, $dirty_query, $post_params, $param_types, $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
-        , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3, $id = "area_uri", $subjects = "subject", $precomputed_id = null, $do_clean_query = true) {
+        , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3, $id = "area_uri", $subjects = "subject", $precomputed_id = null, $do_clean_query = true
+        , $backend = "legacy") {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
-     
+
     $query = ($do_clean_query === true)
                 ?(cleanQuery($dirty_query, $transform_query_tolowercase))
                 :($dirty_query);
@@ -86,11 +87,27 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
 
     $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
 
-    $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
-    $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, $repository);
+    if ($backend === "api") {
+      $url = $ini_array["general"]["api_url"] . $repository . "/search";
+      $payload = json_encode($post_params);
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      $output_json = curl_exec($ch);
+      $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+      if ($httpcode != 200) {
+        $output_json = NULL;
+      }
+    } else {
+      $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
+      $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, $repository);
 
-    $output_json = end($output);
-    $output_json = mb_convert_encoding($output_json, "UTF-8");
+      $output_json = end($output);
+      $output_json = mb_convert_encoding($output_json, "UTF-8");
+    }
 
     if (!library\Toolkit::isJSON($output_json) || $output_json == "null" || $output_json == null) {
 
@@ -124,7 +141,8 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
                             , "openaire" => "OpenAire"
                             , "linkedcat" => "LinkedCat"
                             , "linkedcat_authorview" => "LinkedCat"
-                            , "linkedcat_browseview" => "LinkedCat");
+                            , "linkedcat_browseview" => "LinkedCat"
+                            , "triple" => "TRIPLE");
 
     if(!isset($ini_array["snapshot"]["snapshot_enabled"]) || $ini_array["snapshot"]["snapshot_enabled"] > 0) {
         if (isset($post_params["vis_type"]) && $post_params["vis_type"] == "timeline") {
