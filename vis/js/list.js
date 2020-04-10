@@ -465,6 +465,11 @@ list.updateVisualDistributions = function(attribute, context) {
 list.populateMetaData = function(nodes) {
     nodes[0].forEach(function(elem) {
         var list_metadata = d3.select(elem).select(".list_metadata");
+        
+        d3.select(elem).select(".list_anchor")
+            .attr("id", function(d) {
+                return d.safe_id;
+            })
 
         list_metadata.select(".list_title")
             .attr("class", function(d) {
@@ -733,6 +738,12 @@ list.populateList = function() {
     this.populateReaders(paper_nodes);
     this.populateExternalVis(paper_nodes);
 };
+
+list.scrollToEntry = function(safe_id) {
+    $("#papers_list").animate({
+        scrollTop: $('#' + safe_id).offset().top - $('#papers_list').offset().top
+    }, 0);
+}
 
 list.filterList = function(search_words, filter_param) {
     if (search_words === undefined) {

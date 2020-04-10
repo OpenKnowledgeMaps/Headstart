@@ -106,14 +106,25 @@ get_papers <- function(query, params, limit=100) {
 }
 
 clean_highlights <- function(query, res) {
+  query <- gsub("- *", "-", query, perl=TRUE)
+  query <- gsub("-[\\w+]+ ", " ", query, perl=TRUE)
+  query <- gsub(' ?- ?"[\\w ]+" | ?- ?"[\\w ]+"$|-\\w+$', " ", query, perl=TRUE)
   query <- gsub('"', '', query)
-  query <- gsub("[\\+ ]+|-", " ", query, perl=TRUE)
+  query <- gsub(' +', ' ', query, perl=TRUE)
+  query <- trimws(query, "both")
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
     s <- strsplit(x, " \\.\\.\\. ")
-    unlist(lapply(s, function(x) x[grepl(paste0("<em>", gsub(" +", "|", query), "</em>"), x, ignore.case=TRUE)]))[1]
+    unlist(lapply(s, function(x)  {
+        x <- x[grepl(paste0("<em>", gsub(" +", "|", query), "</em>"), x, ignore.case=TRUE)][1:5]
+        x <- x[!is.na(x)]
+        x <- paste0("<span>", paste0(x, collapse = "</span><span>"), "</span>")
+        return (x)
+    }))
   }))
   res$high$ocrtext <- unlist(lapply(res$high$ocrtext, function(x) {
-    gsub(paste0("<em>((?!", gsub(" ", "|", query), ").)<\\/em>"), "\\1", x, ignore.case=TRUE, perl=TRUE)
+    x <- gsub("<em>|<\\/em>", "", x)
+    x <- gsub(paste0("(", gsub(" ", "|", query), ")"), "<em>\\1<\\/em>", x, ignore.case=TRUE, perl=TRUE)
+    return (x)
   }))
   return(res)
 }
@@ -174,13 +185,13 @@ build_query <- function(query, params, limit){
   q_params$fq <- unlist(q_params$fq)
   q_params$hl <- 'on'
   q_params$hl.fl <- 'ocrtext'
-  q_params$hl.snippets <- 20
+  q_params$hl.snippets <- 30
   q_params$hl.method <- 'unified'
   q_params$hl.score.k1 <- 0.6
   q_params$hl.tag.ellipsis <- " ... "
   q_params$hl.maxAnalyzedChars <- 351200
   q_params$hl.preserveMulti <- "true"
-  q_params$hl.fragsize <- 200
+  q_params$hl.fragsize <- 300
   # end adding filter params
   return(q_params)
 }

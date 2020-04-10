@@ -191,6 +191,15 @@
         -webkit-border-radius: 4px;
         padding: 2px;
     }
+    
+    span:not(:empty) {
+        display: block;
+        margin-top: 5px;
+        
+        &::before, &::after {
+            content: "[...] "
+        }
+    }
 }
 
 #list_area, #list_keywords, #list_basic_classification, #list_ddc {
