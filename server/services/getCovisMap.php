@@ -36,5 +36,5 @@ if ($backend == "api") {
                        "data" => $rev_data["data"],
                        "errors" => $rev_data["errors"]);
   $jsonData = json_encode($return_data);
-  library\CommUtils::echoOrCallback($jsonData[0], $_GET);
+  library\CommUtils::echoOrCallback($jsonData, $_GET);
 }
