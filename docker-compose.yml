@@ -34,6 +34,15 @@ services:
     restart: always
     network_mode: "host"
 
+  search_gsheets:
+    build:
+      context: server
+      dockerfile: search_gsheets.docker
+    env_file:
+      - server/workers/gsheets/gsheets.env
+    restart: always
+    network_mode: "host"
+
   dataprocessing:
     build:
       context: server
