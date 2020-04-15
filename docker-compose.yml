@@ -50,16 +50,5 @@ services:
         source: /var/log/headstart
         target: /var/log/headstart
 
-  hsdb:
-    image: postgres:11
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: "password"
-    volumes:
-    - db:/var/lib/postgresql/data
-    ports:
-    - 54321:5432
-
 volumes:
   redis:
-  db:

@@ -413,7 +413,9 @@ IO.prototype = {
     },
     
     convertToSafeID: function (id) {
-        return id.replace(/[^a-zA-Z0-9]/g, function(s) {
+        let id_string = id.toString();
+        
+        return id_string.replace(/[^a-zA-Z0-9]/g, function(s) {
             var c = s.charCodeAt(0);
             if (c === 32) return '-';
             return '__' + ('000' + c.toString(16)).slice(-4);
