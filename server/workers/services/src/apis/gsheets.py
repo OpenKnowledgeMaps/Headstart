@@ -9,7 +9,7 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-from flask import Blueprint, request, make_response, jsonify, abort, render_template
+from flask import request, make_response, jsonify, abort, render_template
 from flask_restx import Namespace, Resource, fields
 from apis.utils import get_key
 import pandas as pd
@@ -26,9 +26,9 @@ with open("redis_config.json") as infile:
 redis_store = redis.StrictRedis(**redis_config)
 
 gsheets_ns = Namespace("google_sheets", description="Google Sheets API operations")
-app = Blueprint('googlesheets', __name__)
 # If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly',
+          'https://www.googleapis.com/auth/drive.metadata.readonly']
 
 
 # search_param_schema = SearchParamSchema()
@@ -52,7 +52,16 @@ def authenticate():
 
 
 gsheets_service = build('sheets', 'v4', credentials=authenticate())
+drive_service = build('drive', 'v3', credentials=authenticate())
 sheet = gsheets_service.spreadsheets()
+files = drive_service.files()
+
+
+# Call the Drive API
+
+def get_last_modified(file_id):
+    res = files.get(fileId=file_id, fields="modifiedTime").execute()
+    return res.get('modifiedTime')
 
 
 # Call the Sheets API
