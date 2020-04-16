@@ -17,14 +17,6 @@ redis_store = redis.StrictRedis(**redis_config)
 gsheets_ns = Namespace("google_sheets", description="Google Sheets API operations")
 
 
-def get_sheet_id(vis_id):
-    # mock functionality
-    mock_db = {"covid19": "1csxG23x99DcxoEud782Bji76C7mGxKkAVMBz8gdf_0A"}
-    # replace with e.g.
-    # sheet_id = Visualizations.query.filter_by(vis_id=vis_id).first().???
-    return mock_db.get(vis_id)
-
-
 search_query = gsheets_ns.model("SearchQuery",
                                 {"sheet_id": fields.String(example='1csx2x9DxoEd8Bi67mGxKkAVMB8d_A',
                                                            description='sheet ID to update',
@@ -32,7 +24,7 @@ search_query = gsheets_ns.model("SearchQuery",
                                  "sheet_range": fields.String(example="Resources!A1:N200",
                                                               description="Sheet name and data range to retrieve from",
                                                               required=True),
-                                 "vis_query": fields.String(example='covid19',
+                                 "q": fields.String(example='covid19',
                                                             description='hardcoded vis name')})
 
 
@@ -56,6 +48,7 @@ class Search(Resource):
         gsheets_ns.logger.debug(d)
         redis_store.rpush("gsheets", json.dumps(d))
         result = get_key(redis_store, k)
+        gsheets_ns.logger.debug(result)
         try:
             # result_df.index = result_df.index.astype(int)
             # result_df.sort_index(inplace=True)
