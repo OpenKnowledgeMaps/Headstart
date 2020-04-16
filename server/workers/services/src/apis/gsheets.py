@@ -47,7 +47,6 @@ class Search(Resource):
         """
         params = request.get_json()
         # fill default params
-        params["q"] = params["vis_id"]
         params["vis_type"] = "overview"
         params["service"] = "gsheets"
         gsheets_ns.logger.debug(params)
