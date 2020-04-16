@@ -209,7 +209,6 @@ class GSheetsClient(object):
             self.logger.debug(params)
             try:
                 res = self.update(params)
-                self.logger.debug(res)
                 redis_store.set(k+"_output", json.dumps(res))
             except Exception as e:
                 self.logger.error(e)
