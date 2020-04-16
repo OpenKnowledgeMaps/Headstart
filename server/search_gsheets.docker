@@ -9,6 +9,7 @@ WORKDIR /headstart
 COPY workers/gsheets/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY workers/gsheets/src/ ./
+COPY workers/gsheets/token.pickle ./
 COPY workers/redis_config.json .
 
 ENTRYPOINT python search_gsheets.py

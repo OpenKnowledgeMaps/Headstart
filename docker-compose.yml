@@ -52,12 +52,8 @@ services:
     restart: always
     network_mode: "host"
     volumes:
-      - type: bind
-        source: /var/opt/renv
-        target: /root/.local/share/renv
-      - type: bind
-        source: /var/log/headstart
-        target: /var/log/headstart
+      - /var/opt/renv:/renv/cache
+      - /var/log/headstart:/var/log/headstart
 
 volumes:
   redis:
