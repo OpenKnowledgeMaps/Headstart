@@ -105,14 +105,16 @@ class GSheetsClient(object):
             Column('Access', [InListValidation(["open", "closed", "unknown", "free"], case_sensitive=False)]),
             Column('Comments', []),
             Column('Tags', []),
-            Column('Ready for inclusion in map?', [InListValidation(["yes", "no"])]),
+            Column('Included in map', [InListValidation(["yes", "no"])]),
+            Column('Ready for publication?', [InListValidation(["yes", "no"])]),
             Column('Type', []),
             Column('Area', [])
         ])
         df.columns = df.iloc[0]
         df.drop([0, 1], inplace=True)
         # add column: Valid Bool
-        df = df[df["Ready for inclusion in map?"] == "yes"]
+        df = df[(df["Ready for publication?"] == "yes") &
+                (df["Included in map"] == "yes")]
         errors = schema.validate(df)
         errors_index_rows = [e.row for e in errors]
         for e in errors:
