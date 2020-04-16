@@ -48,7 +48,6 @@ class Search(Resource):
         gsheets_ns.logger.debug(d)
         redis_store.rpush("gsheets", json.dumps(d))
         result = get_key(redis_store, k)
-        gsheets_ns.logger.debug(result)
         try:
             # result_df.index = result_df.index.astype(int)
             # result_df.sort_index(inplace=True)

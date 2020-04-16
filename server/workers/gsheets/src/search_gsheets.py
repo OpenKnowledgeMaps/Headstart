@@ -193,7 +193,11 @@ class GSheetsClient(object):
             redis_store.rpush("input_data", json.dumps(map_input))
             result = get_key(redis_store, map_k)
             result_df = self.post_process(clean_df, pd.DataFrame.from_records(json.loads(result)))
-            res = result_df.to_json(orient="records")
+            res = {}
+            res["data"] = result_df.to_json(orient="records")
+            res["errors"] = errors_df.to_dict(orient="records")
+            res["sheet_id"] = sheet_id
+            res["last_update"] = last_modified
         else:
             res = {"status": "No update required"}
         return res
