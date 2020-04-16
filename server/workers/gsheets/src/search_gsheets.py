@@ -201,9 +201,11 @@ class GSheetsClient(object):
     def run(self):
         while True:
             k, params, endpoint = self.next_item()
+            self.logger.debug(k)
             self.logger.debug(params)
             try:
                 res = self.update(params)
+                self.logger.debug(res)
                 redis_store.set(k+"_output", json.dumps(res))
             except Exception as e:
                 self.logger.error(e)
