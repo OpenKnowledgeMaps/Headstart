@@ -14,10 +14,6 @@ $ini_array = library\Toolkit::loadIni($INI_DIR);
 
 $dirty_query = library\CommUtils::getParameter($_GET, "q");
 $sheet_id = library\CommUtils::getParameter($_GET, "sheet_id");
-$context = filter_input(INPUT_GET, "context", FILTER_VALIDATE_BOOLEAN,
-    array("flags" => FILTER_NULL_ON_FAILURE));
-$streamgraph = filter_input(INPUT_GET, "streamgraph", FILTER_VALIDATE_BOOLEAN,
-    array("flags" => FILTER_NULL_ON_FAILURE));
 $backend = isset($_GET["backend"]) ? library\CommUtils::getParameter($_GET, "backend") : "legacy";
 
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
@@ -26,7 +22,7 @@ if ($backend == "api") {
 } else {
   $result = json_decode(search("gsheets", $dirty_query, array("q" => $dirty_query, "sheet_id" => $sheet_id, "sheet_range" => "Resources!A1:O200")
                       , array("sheet_id")
-                      , ";", null, true, false, null, 3
+                      , ";", null, false, false, null, 3
                       , "area_uri", "subject", null, false
                       , "api"), true);
   $vis_id = $result["id"];
