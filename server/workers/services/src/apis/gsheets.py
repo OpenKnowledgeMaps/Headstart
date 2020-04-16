@@ -49,8 +49,6 @@ class Search(Resource):
         redis_store.rpush("gsheets", json.dumps(d))
         result = get_key(redis_store, k)
         try:
-            # result_df.index = result_df.index.astype(int)
-            # result_df.sort_index(inplace=True)
             headers = {}
             headers["Content-Type"] = "application/json"
             return make_response(result,
