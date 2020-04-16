@@ -24,7 +24,7 @@ $persistence = new headstart\persistence\SQLitePersistence($ini_array["connectio
 
 if ($backend == "api") {
 } else {
-  $result = json_decode(search("gsheets", $dirty_query, array("q" => $dirty_query, "sheet_id" => $sheet_id, "sheet_range" => "Resources!A1:N200")
+  $result = json_decode(search("gsheets", $dirty_query, array("q" => $dirty_query, "sheet_id" => $sheet_id, "sheet_range" => "Resources!A1:O200")
                       , array("sheet_id")
                       , ";", null, true, false, null, 3
                       , "area_uri", "subject", null, false
