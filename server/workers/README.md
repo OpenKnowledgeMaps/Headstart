@@ -75,6 +75,10 @@ TRIPLE ElasticSearch core service:
 * In `server/workers/services/triple/` copy `example_es_config.json` to `es_config.json` and fill in the fields.
 * In `server/workers/services/triple/` copy `example_triple.env` to `triple.env` and change the values if necessary.
 
+GSheets Google API client authentication credentials::
+* In `server/workers/services/gsheets/` copy `example_gsheets.env` to `gsheets.env` and change the values if necessary.
+* In `server/workers/services/gsheets/` add a `credentials.json` for Google app authentication (ask your system admin if unsure).
+
 
 Secure Redis:
 * In `server/workers` copy `example_redis_config.json` to `redis_config.json`  and `example_redis.conf` to `redis.conf` and in both files replace "long_secure_password" with a long, secure password (Line 507 in redis.conf, parameter `requirepass`).
