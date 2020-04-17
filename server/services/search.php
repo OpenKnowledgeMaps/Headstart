@@ -120,6 +120,9 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     if (isset($result["status"]) && $result["status"] === "error") {
         return json_encode($result);
     }
+    if (isset($result["status"]) && $result["status"] === "No update required") {
+      return json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
+    }
 
     $input_json = json_encode(utf8_converter($result));
     $input_json = preg_replace("/\<U\+(.*?)>/", "&#x$1;", $input_json);

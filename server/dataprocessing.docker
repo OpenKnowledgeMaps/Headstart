@@ -148,9 +148,10 @@ WORKDIR /headstart
 COPY workers/dataprocessing/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY workers/dataprocessing/renv.lock .
+COPY workers/dataprocessing/renv/renv.lock .
+COPY workers/dataprocessing/renv/activate.R ./renv/activate.R
 RUN R -e 'renv::consent(provided = TRUE)' && \
- R -e 'renv::restore()'
+    R -e 'renv::restore()'
 
 COPY workers/dataprocessing/src/ ./
 COPY preprocessing/resources ./resources

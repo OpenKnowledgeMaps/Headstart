@@ -58,6 +58,7 @@ class Dataprocessing(object):
 
     def run(self):
         k, params, input_data = self.next_item()
+        self.logger.debug(k)
         self.logger.debug(params)
         result = self.create_map(params, input_data)
         redis_store.set(k+"_output", json.dumps(result))
