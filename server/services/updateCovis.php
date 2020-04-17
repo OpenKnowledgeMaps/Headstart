@@ -7,10 +7,13 @@ require 'search.php';
 
 use headstart\library;
 
-$result = search("gsheets", "covid19", array("vis_id" => "covid19")
-                    , array("vis_id")
-                    , ";", null, true, false, null, 3
-                    , "area_uri", "subject", "covid19", false
+$dirty_query = "covid19";
+$sheet_id = "1csxG23x99DcxoEud782Bji76C7mGxKkAVMBz8gdf_0A";
+
+$result = search("gsheets", $dirty_query, array("q" => $dirty_query, "sheet_id" => $sheet_id, "sheet_range" => "Resources!A1:O200")
+                    , array("sheet_id")
+                    , ";", null, false, false, null, 3
+                    , "area_uri", "subject", null, false
                     , "api");
 
 echo $result
