@@ -207,7 +207,8 @@ HeadstartFSM.prototype = {
       
       gsheets: function(that, setupVis) {
             let url = config.server_url + "services/getGSheetsMap.php?sheet_id=" + mediator.current_bubble.file 
-                + "&q=CoVis&context=" + config.show_context + "&streamgraph=" + config.is_streamgraph;
+                + "&q=" +mediator.current_bubble.title  
+                + "&context=" + config.show_context + "&streamgraph=" + config.is_streamgraph;
             mediator.publish("get_data_from_files", url, 'json', setupVis);
       },
 

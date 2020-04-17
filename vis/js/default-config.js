@@ -85,6 +85,7 @@ var config = {
     show_area: true,
     show_resulttype: false,
     show_comments: false,
+    show_loading_screen: false,
     
     create_title_from_context: false,
     is_title_clickable: true,
