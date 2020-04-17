@@ -24,17 +24,30 @@ $persistence = new headstart\persistence\SQLitePersistence($ini_array["connectio
 
 if ($backend == "api") {
 } else {
-  $data = $persistence->getLastVersion($vis_id, $details = false, $context = true)[0];
-  $rev_data = json_decode($data["rev_data"], true);
-  $return_data = array("context" => array("id" => $data["rev_vis"],
-                                          "query" => $data["vis_query"],
-                                          "service" => $data["vis_title"],
-                                          "timestamp" => $data["rev_timestamp"],
-                                          "params" => $data["vis_params"],
-                                          "sheet_id" => $rev_data["sheet_id"],
-                                          "last_update" => $rev_data["last_update"]),
-                       "data" => $rev_data["data"],
-                       "errors" => $rev_data["errors"]);
-  $jsonData = json_encode($return_data);
-  library\CommUtils::echoOrCallback($jsonData, $_GET);
+    $protocol = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https:' : 'http:';
+    $url = $protocol . "//" . $ini_array["general"]["host"] . $ini_array["general"]["services_path"] . "updateCovis.php";
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $output_json = curl_exec($ch);
+    
+    $result = json_decode($output_json);
+  
+    if ($result->status === "success") {
+        $data = $persistence->getLastVersion($vis_id, $details = false, $context = true)[0];
+        $rev_data = json_decode($data["rev_data"], true);
+        $return_data = array("context" => array("id" => $data["rev_vis"],
+                                                "query" => $data["vis_query"],
+                                                "service" => $data["vis_title"],
+                                                "timestamp" => $data["rev_timestamp"],
+                                                "params" => $data["vis_params"],
+                                                "sheet_id" => $rev_data["sheet_id"],
+                                                "last_update" => $rev_data["last_update"]),
+                             "data" => $rev_data["data"],
+                             "errors" => $rev_data["errors"]);
+        $jsonData = json_encode($return_data);
+        library\CommUtils::echoOrCallback($jsonData, $_GET);
+    }
 }

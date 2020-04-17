@@ -204,6 +204,12 @@ HeadstartFSM.prototype = {
                 + "&context=" + config.show_context + "&streamgraph=" + config.is_streamgraph;
         mediator.publish("get_data_from_files", url, 'json', setupVis);
       },
+      
+      covis: function(that, setupVis) {
+            let url = config.server_url + "services/getCovisMap.php?vis_id=" + mediator.current_bubble.file 
+                + "&context=" + config.show_context + "&streamgraph=" + config.is_streamgraph;
+            mediator.publish("get_data_from_files", url, 'json', setupVis);
+      },
 
       server_files: function(that, setupVis) {
         mediator.publish("get_server_files", setupVis);
