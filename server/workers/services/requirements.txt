@@ -1,6 +1,7 @@
 flask
 flask-cors
 flask_sqlalchemy
+flask_restx
 Werkzeug
 marshmallow
 gunicorn
@@ -8,9 +9,5 @@ redis
 hiredis
 aioredis
 pandas
-pandas_schema
 pyyaml
 flasgger
-google-api-python-client
-google-auth-httplib2
-google-auth-oauthlib

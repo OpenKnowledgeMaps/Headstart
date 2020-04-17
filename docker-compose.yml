@@ -12,6 +12,8 @@ services:
    depends_on:
     - redis
    network_mode: "host"
+   depends_on:
+     - redis
 
   redis:
     image: 'redis:4.0-alpine'
@@ -33,6 +35,19 @@ services:
       - server/workers/triple/triple.env
     restart: always
     network_mode: "host"
+    depends_on:
+      - redis
+
+  search_gsheets:
+    build:
+      context: server
+      dockerfile: search_gsheets.docker
+    env_file:
+      - server/workers/gsheets/gsheets.env
+    restart: always
+    network_mode: "host"
+    depends_on:
+      - redis
 
   dataprocessing:
     build:
@@ -43,12 +58,10 @@ services:
     restart: always
     network_mode: "host"
     volumes:
-      - type: bind
-        source: /var/opt/renv
-        target: /root/.local/share/renv
-      - type: bind
-        source: /var/log/headstart
-        target: /var/log/headstart
+      - /var/opt/renv:/renv/cache
+      - /var/log/headstart:/var/log/headstart
+    depends_on:
+      - redis
 
 volumes:
   redis:
