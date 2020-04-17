@@ -1,6 +1,6 @@
 .list_entry {
     border-bottom: 2px solid $okm-clouds;
-    padding: 10px 0px 10px 15px;
+    padding: 0px 0px 20px 15px;
     border-left: 0px solid $okm-clouds;
 
     .list_visual_dstributions {
@@ -46,20 +46,20 @@
 }
 
 .list_metadata {
-    padding-top: 10px;
+    padding-top: 20px;
     margin-bottom: 10px;
     font-family: $link-font-family;
 
 
 
     .list_title {
-        font-size: 14px;
+        font-size: 16px;
         line-height:120%;
         margin-bottom: 10px;
         max-width: 82%;
         display: inline-block;
         color: $list_metadata_title_paper;
-        font-weight: $fontweight600;
+        font-weight: $fontweight400;
 
         a {
             text-decoration: none;
@@ -174,9 +174,9 @@
 
 #list_abstract {
     max-width: 82%;
-    font-size: 12px;
+    font-size: 14px;
     font-family: $abstract-font-family;
-    line-height: 120%;
+    line-height: 130%;
     padding-right: 0;
     padding-left: 0px;
     color: $list_abstract;
@@ -195,7 +195,7 @@
 
 #list_area, #list_keywords, #list_basic_classification, #list_ddc {
     font-family: $link-font-family;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 120%;
     margin-bottom: 5px;
     padding: 0;
@@ -204,15 +204,25 @@
     max-width: 82%;
 
     .area_tag, .keyword_tag {
-        font-weight: $fontweight600;
+        font-weight: $fontweight700;
     }
 }
 
 #list_area {
+    color: $medium-blue;
     cursor: pointer;
+    text-decoration: none;
+    border-bottom: 1px solid $medium-blue;
+    font-weight: $fontweight400;
+    line-height: 120%;
+    height: 18px;
+    white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
     
     &:hover {
-        text-decoration: underline;
+        text-decoration: none;
+        border-bottom: 2px solid $medium-blue;
     }
 }
 
@@ -293,7 +303,7 @@
     font-weight: 600;
     font-size: 14px;
     color: $okm-blue;
-    margin-TOP: 10px;
+    margin-top: 10px;
 }
 
 .list_subentry_showmore, .list_subentry_show_statistics {
@@ -374,7 +384,7 @@ div {
     }
 
     &#preview_page_index {
-        font-size: 11px;
+        font-size: 12px;
         height: 20px;
         margin-top: 15px;
         padding: 5px;
@@ -442,7 +452,7 @@ img#preview_page {
 .backlink-list {
     margin-left: 15px;
     margin-top: 15px;
-    font-size: 11px;
+    font-size: 12px;
     cursor: pointer;
 
     a {

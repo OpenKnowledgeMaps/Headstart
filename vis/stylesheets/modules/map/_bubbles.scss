@@ -10,7 +10,8 @@ circle {
         fill-opacity: .9;
         
         &.highlight-bubble {
-            stroke: $okm-red;
+            stroke: $okm-blue;
+            stroke-width: 3;
         }
         
         &.zoom_unselected {
@@ -95,7 +96,7 @@ circle {
     h2 {
         font-family: $base-font-family;
         font-size: 14px !important;
-        font-weight: $fontweight700;
+        font-weight: $fontweight600;
         margin-top: 6px;
         margin-bottom: 6px;
         padding: 0;
