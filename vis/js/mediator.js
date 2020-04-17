@@ -243,6 +243,8 @@ MyMediator.prototype = {
     },
 
     init_start_visualization: function(highlight_data, csv) {
+        $("#map-loading-screen").hide();
+        
         let data = function () {
             if (config.show_context) {
                 if(typeof csv.data === "string") {
@@ -354,6 +356,11 @@ MyMediator.prototype = {
         }));
         if(config.credit_embed) {
             $("#credit_logo").attr("src", credit_logo);
+        }
+        
+        if(config.show_loading_screen) {
+            $("#map-loading-screen").show();
+            $("#loading-text").text(config.localization[config.language].loading);
         }
         
         this.viz.append(infoTemplate());

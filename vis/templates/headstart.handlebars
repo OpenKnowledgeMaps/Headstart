@@ -1,4 +1,10 @@
 <div class="container-headstart">
+    <div id="map-loading-screen" class="loading-screen">
+        <div id="loading-text" class="loading-text"></div>
+        <div id="loading-spinner" class="loading-spinner">
+            <span id="spinner-map-icon" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+        </div>
+    </div>
     <div class="vis-col">
         {{#if is_authorview}}
             <div id="title_image" class="titleimage">
@@ -32,10 +38,6 @@
         </div>
 <div id="modals"></div>
         <div id="headstart-chart">
-            <div id="map-loading-screen" class="loading-screen">
-                <div id="loading-text" class="loading-text"></div>
-                <div id="loading-spinner" class="loading-spinner"></div>
-            </div>
             <svg id="chart-svg"></svg>
         </div>
     </div>
