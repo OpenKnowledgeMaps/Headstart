@@ -102,7 +102,7 @@ class GSheetsClient(object):
             Column('Publication Date', [DateFormatValidation("%Y-%m-%d")]),
             Column('Link to PDF', []),
             Column('Keywords', []),
-            Column('Access', [InListValidation(["open", "closed", "unknown", "free"], case_sensitive=False)]),
+            Column('Access', []),
             Column('Comments', []),
             Column('Tags', []),
             Column('Included in map', [InListValidation(["yes", "no"])]),
@@ -144,7 +144,7 @@ class GSheetsClient(object):
                      "open": 1,
                      "unknown": 2,
                      "free": 3}
-        result_df["oa_state"] = result_df["oa_state"].map(lambda x: oa_mapper.get(x))
+        result_df["oa_state"] = result_df["oa_state"].map(lambda x: oa_mapper.get(x, 2))
         return result_df
 
     @staticmethod
@@ -160,7 +160,7 @@ class GSheetsClient(object):
         metadata["readers"] = 0
         metadata["subject"] = df.Keywords
         metadata["oa_state"] = df.Access
-        metadata["link"] = df["Link to PDF"]
+        metadata["link"] = df.apply(lambda x: x["Link to PDF"] if x["Link to PDF"] else x["ID"])
         metadata["relevance"] = df.index
         metadata["comments"] = df.Comments
         metadata["tags"] = df.Tags
