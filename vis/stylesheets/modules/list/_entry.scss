@@ -53,13 +53,13 @@
 
 
     .list_title {
-        font-size: 16px;
+        font-size: 14px;
         line-height:120%;
         margin-bottom: 10px;
         max-width: 82%;
         display: inline-block;
         color: $list_metadata_title_paper;
-        font-weight: $fontweight400;
+        font-weight: $fontweight600;
 
         a {
             text-decoration: none;
@@ -217,9 +217,9 @@
     line-height: 120%;
     height: 18px;
     white-space: nowrap;
-text-overflow: ellipsis;
-overflow: hidden;
-    
+    text-overflow: ellipsis;
+    overflow: hidden;
+
     &:hover {
         text-decoration: none;
         border-bottom: 2px solid $medium-blue;
@@ -492,6 +492,10 @@ img#preview_page {
         font-size: 12px;
         max-width: 72%;
     }
+
+    #list_abstract {
+        font-size: 12px;
+    }
 }
 
 @media screen and (max-width: 1150px) {
@@ -520,7 +524,6 @@ img#preview_page {
             text-decoration: none;
             border-bottom: 1px solid $black;
         }
-
     }
 }
 
