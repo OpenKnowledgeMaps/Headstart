@@ -160,7 +160,7 @@ class GSheetsClient(object):
         metadata["readers"] = 0
         metadata["subject"] = df.Keywords
         metadata["oa_state"] = df.Access
-        metadata["link"] = df.apply(lambda x: x["Link to PDF"] if x["Link to PDF"] else x["ID"], axis=1)
+        metadata["link"] = df.apply(lambda x: x["Link to PDF"] if x["Link to PDF"] != "N/A" else x["ID"], axis=1)
         metadata["relevance"] = df.index
         metadata["comments"] = df.Comments
         metadata["tags"] = df.Tags
