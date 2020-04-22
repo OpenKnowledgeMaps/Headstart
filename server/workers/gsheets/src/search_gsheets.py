@@ -79,11 +79,13 @@ class GSheetsClient(object):
         return res.get('modifiedTime')
 
     def update_required(self, last_modified, sheet_id):
-        res = self.drive_service.changes().list(pageToken=self.startPageToken,
+        pageToken = self.last_updated[sheet_id] if sheet_id in self.last_updated else self.startPageToken
+        res = self.drive_service.changes().list(pageToken=pageToken,
                                                 spaces='drive').execute()
         if res is not None:
             updated_files = [c.get('fileID') for c in res.get('changes')]
             if sheet_id in updated_files:
+                self.last_updated[sheet_id] = res.get('newStartPageToken')
                 return True
         else:
             return False
@@ -196,7 +198,6 @@ class GSheetsClient(object):
             raw = self.get_sheet_content(sheet_id, sheet_range)
             clean_df, errors, errors_df = self.validate_data(raw)
             input_data = self.create_input_data(clean_df)
-            self.last_updated[sheet_id] = last_modified
             map_k = str(uuid.uuid4())
             map_input = {}
             map_input["id"] = map_k
