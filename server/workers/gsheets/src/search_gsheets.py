@@ -73,20 +73,16 @@ class GSheetsClient(object):
         res = self.drive_service.changes().getStartPageToken().execute()
         self.startPageToken = res.get('startPageToken')
 
-    # Call the Drive API
-    def get_last_modified(self, sheet_id):
-        res = self.files.get(fileId=sheet_id, fields="modifiedTime").execute()
-        return res.get('modifiedTime')
-
-    def update_required(self, last_modified, sheet_id):
+    def update_required(self, sheet_id):
         pageToken = self.last_updated[sheet_id] if sheet_id in self.last_updated else self.startPageToken
         res = self.drive_service.changes().list(pageToken=pageToken,
                                                 spaces='drive').execute()
         if res is not None:
-            updated_files = [c.get('fileID') for c in res.get('changes')]
-            if sheet_id in updated_files:
+            filtered_changes = [c for c in res.get('changes') if c.get('fileId')==sheet_id]
+            if len(filtered_changes) != 0:
+                last_change = filtered_changes[-1]
                 self.last_updated[sheet_id] = res.get('newStartPageToken')
-                return True
+                return last_change.get('time')
         else:
             return False
 
@@ -193,8 +189,8 @@ class GSheetsClient(object):
     def update(self, params):
         sheet_id = params.get('sheet_id')
         sheet_range = params.get('sheet_range')
-        last_modified = self.get_last_modified(sheet_id)
-        if self.update_required(last_modified, sheet_id):
+        last_update = self.update_required(sheet_id)
+        if last_update is not False:
             raw = self.get_sheet_content(sheet_id, sheet_range)
             clean_df, errors, errors_df = self.validate_data(raw)
             input_data = self.create_input_data(clean_df)
@@ -210,7 +206,7 @@ class GSheetsClient(object):
             res["data"] = result_df.to_json(orient="records")
             res["errors"] = errors_df.to_dict(orient="records")
             res["sheet_id"] = sheet_id
-            res["last_update"] = last_modified
+            res["last_update"] = last_update
         else:
             res = {"status": "No update required"}
         return res
