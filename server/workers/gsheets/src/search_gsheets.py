@@ -37,16 +37,14 @@ class GSheetsClient(object):
         # If modifying these scopes, delete the file token.pickle.
         self.SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly',
                        'https://www.googleapis.com/auth/drive.metadata.readonly']
-        self.gsheets_service = build('sheets', 'v4', credentials=self.authenticate())
-        self.drive_service = build('drive', 'v3', credentials=self.authenticate())
-        self.sheet = self.gsheets_service.spreadsheets()
-        self.files = self.drive_service.files()
+        self.register_services()
         self.last_updated = {}
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(os.environ["GSHEETS_LOGLEVEL"])
         handler = logging.StreamHandler(sys.stdout)
         handler.setLevel(os.environ["GSHEETS_LOGLEVEL"])
         self.logger.addHandler(handler)
+        self.get_startPageToken()
 
     def authenticate(self):
         creds = None
@@ -65,16 +63,30 @@ class GSheetsClient(object):
                 pickle.dump(creds, token)
         return creds
 
+    def register_services(self):
+        self.gsheets_service = build('sheets', 'v4', credentials=self.authenticate())
+        self.drive_service = build('drive', 'v3', credentials=self.authenticate())
+        self.sheet = self.gsheets_service.spreadsheets()
+        self.files = self.drive_service.files()
+
+    def get_startPageToken(self):
+        res = self.drive_service.changes().getStartPageToken().execute()
+        self.startPageToken = res.get('startPageToken')
+
     # Call the Drive API
     def get_last_modified(self, sheet_id):
         res = self.files.get(fileId=sheet_id, fields="modifiedTime").execute()
         return res.get('modifiedTime')
 
     def update_required(self, last_modified, sheet_id):
-        if last_modified == self.last_updated.get(sheet_id, ""):
-            return False
+        res = self.drive_service.changes().list(pageToken=self.startPageToken,
+                                                spaces='drive').execute()
+        if res is not None:
+            updated_files = [c.get('fileID') for c in res.get('changes')]
+            if sheet_id in updated_files:
+                return True
         else:
-            return True
+            return False
 
     def next_item(self):
         queue, msg = redis_store.blpop("gsheets")
