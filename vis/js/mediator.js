@@ -260,6 +260,12 @@ MyMediator.prototype = {
                 }
             }
         }();
+        
+        //Dispatch an event that the data has been loaded for reuse outside of Headstart
+        let elem = document.getElementById(config.tag);
+        var event = new CustomEvent('headstart.data.loaded', {detail: {data: csv}});
+        elem.dispatchEvent(event);
+        
         let context = (typeof csv.context !== 'object')?({}):(csv.context);
         mediator.streamgraph_data = (config.is_streamgraph)?(csv.streamgraph):{};
         
