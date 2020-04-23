@@ -334,9 +334,15 @@ class Canvas {
                 label= (config.is_streamgraph)?(config.localization[config.language].streamgraph_authors_label):(config.localization[config.language].overview_authors_label);
             }
             if (config.create_title_from_context_style === 'linkedcat') {
-                let maxTitleLength = 115 // This should probably make it's way to a more global config
+                let maxTitleLength = 115 // This should probably make its way to a more global config
                 let compressedTitle = query_clean.length > maxTitleLength ? query_clean.slice(0, maxTitleLength - 3) + '...' : query_clean;
                 chart_title = label + ' <span id="search-term-unique" title="' + query_clean + '">' + compressedTitle + '</span>';
+            } else if (config.create_title_from_context_style === 'custom' && typeof config.custom_title !== 'undefined' && config.custom_title !== null) {
+                let maxTitleLength = 100 // This should probably make its way to a more global config
+                let compressedTitle = config.custom_title > maxTitleLength ? config.custom_title.slice(0, maxTitleLength - 3) + '...' : config.custom_title;
+                chart_title = label + ' <span id="search-term-unique" title="' 
+                        + config.localization[config.language].custom_title_explanation  + ' ' + query_clean + '">' 
+                        + compressedTitle + '</span>';
             } else {
                 chart_title = label + ' <span id="search-term-unique" title="' + query_clean + '">' + query_clean + '</span>';
             }
