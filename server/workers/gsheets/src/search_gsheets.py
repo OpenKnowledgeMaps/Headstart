@@ -31,6 +31,25 @@ def get_key(store, key):
     return result
 
 
+schema = Schema([
+    Column('ID', []),
+    Column('Title', []),
+    Column('Authors', []),
+    Column('Abstract', []),
+    Column('Publication Venue', []),
+    Column('Publication Date', [DateFormatValidation("%Y-%m-%d")]),
+    Column('Link to PDF', []),
+    Column('Keywords', []),
+    Column('Access', []),
+    Column('Comments', []),
+    Column('Tags', []),
+    Column('Included in map', [InListValidation(["yes", "no"])]),
+    Column('Ready for publication?', [InListValidation(["yes", "no"])]),
+    Column('Type', []),
+    Column('Area', [])
+])
+
+
 class GSheetsClient(object):
 
     def __init__(self):
@@ -103,23 +122,16 @@ class GSheetsClient(object):
 
     @staticmethod
     def validate_data(df):
-        schema = Schema([
-            Column('ID', []),
-            Column('Title', []),
-            Column('Authors', []),
-            Column('Abstract', []),
-            Column('Publication Venue', []),
-            Column('Publication Date', [DateFormatValidation("%Y-%m-%d")]),
-            Column('Link to PDF', []),
-            Column('Keywords', []),
-            Column('Access', []),
-            Column('Comments', []),
-            Column('Tags', []),
-            Column('Included in map', [InListValidation(["yes", "no"])]),
-            Column('Ready for publication?', [InListValidation(["yes", "no"])]),
-            Column('Type', []),
-            Column('Area', [])
-        ])
+        """
+        errors: [
+            {
+                row: 31,
+                column: "Publication date",
+                reason: "\"2020-04-0\" does not match the date format string \"%Y-%m-%d\"",
+                data: {Abstract: "Now testing changes API, looks good, does it register two changes?" ...}
+            },
+        ]
+        """
         df.columns = df.iloc[0]
         df.drop([0, 1], inplace=True)
         # add column: Valid Bool
@@ -127,16 +139,19 @@ class GSheetsClient(object):
                 (df["Included in map"] == "yes")]
         errors = schema.validate(df)
         errors_index_rows = [e.row for e in errors]
-        for e in errors:
-            e.row += 1
-        error_messages = [str(e) for e in errors]
+        error_columns = [e.column for e in errors]
+        error_reasons = [" ".join([e.value, e.message]) for e in errors]
         if errors_index_rows == [-1]:
             clean_df = df
-            errors_df = pd.DataFrame()
+            errors_df = pd.DataFrame(columns=["row", "column", "reason", "data"])
         else:
             clean_df = df.drop(index=errors_index_rows)
-            errors_df = df.loc[errors_index_rows]
-            errors_df["reason"] = error_messages
+            errors_df = pd.DataFrame(columns=["row", "column", "reason", "data"])
+            errors_df["row"] = errors_index_rows
+            errors_df["row"] += 1  # to align with google sheet rows
+            errors_df["column"] = error_columns
+            errors_df["reason"] = error_reasons
+            errors_df["data"] = df.loc[errors_index_rows].to_dict(orient="records")
         return clean_df, errors, errors_df
 
     @staticmethod
