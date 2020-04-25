@@ -133,8 +133,7 @@ class GSheetsClient(object):
         ]
         """
         df.columns = df.iloc[0]
-        df.drop([0, 1], inplace=True)
-        # add column: Valid Bool
+        df.drop([0, 1, 2], inplace=True)
         df = df[(df["Ready for publication?"] == "yes") &
                 (df["Included in map"] == "yes")]
         errors = schema.validate(df)
