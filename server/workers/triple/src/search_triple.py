@@ -110,6 +110,7 @@ class TripleClient(object):
         s = s.query("range", date=self.build_date_field(
                     parameters.get('from'),
                     parameters.get('to')))
+        s = s[parameters.get('pagination_from'):parameters.get('pagination_to')]
         index = "isidore-documents-triple"
         sorting = self.build_sort_order(parameters)
         body = self.build_body(parameters)
@@ -121,11 +122,11 @@ class TripleClient(object):
             body=body,
             size=parameters.get('limit', 100),
             sort=sorting)
-        # res = self.es.search(
-        #     index=index,
-        #     body=s.to_dict(),
-        #     size=parameters.get('limit', 100),
-        #     sort=sorting)
+        res = self.es.search(
+            index=index,
+            body=s.to_dict(),
+            sort=sorting)
+        res = s.execute()
         if parameters.get('raw') is True:
             return res
         else:
