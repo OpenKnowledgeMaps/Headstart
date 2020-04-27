@@ -102,6 +102,8 @@ class GSheetsClient(object):
                 last_change = filtered_changes[-1]
                 self.last_updated[sheet_id] = res.get('newStartPageToken')
                 return last_change.get('time')
+            else:
+                return False
         else:
             return False
 
