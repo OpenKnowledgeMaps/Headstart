@@ -312,6 +312,22 @@ class Canvas {
             }
         });
     }
+    
+    escapeHTML(string) {
+        let entityMap = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '/': '&#x2F;',
+            '`': '&#x60;',
+            '=': '&#x3D;'
+        };
+        return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+            return entityMap[s];
+        });
+    }
 
     // Draws the header for this
     drawTitle(context) {
@@ -327,7 +343,7 @@ class Canvas {
             chart_title = `Overview of <span class="truncated-project-title" title="` + acronymtitle + `">${compressedTitle}</span>\
                             <span class="project-id">(${context.params.project_id})</span>`
         } else if (config.create_title_from_context) {
-            let query_clean = context.query.replace(/\\(.?)/g, "$1");
+            let query_clean = this.escapeHTML(context.query.replace(/\\(.?)/g, "$1"));
             let label = (config.is_streamgraph)?(config.localization[config.language].streamgraph_label):(config.localization[config.language].overview_label);
             
             if(config.is_authorview) {  
@@ -348,7 +364,7 @@ class Canvas {
             }
             
         }
-           
+        
         var subdiscipline_title_h4 = $("#subdiscipline_title h4");
         subdiscipline_title_h4.html(chart_title);
 
