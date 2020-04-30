@@ -26,7 +26,6 @@ Make sure you have the following packages installed:
   * rplos
   * parfossil
   * doParallel
-  * rentrez
   * curl
   * tibble
   * data.table
@@ -36,6 +35,7 @@ Make sure you have the following packages installed:
   * jaod
   * NLP
   * slam
+  * rentrez (install with `remotes::install_github("sckott/rentrez@http-post")`)
   * rbace (Currently, a Github repository only). Install with `remotes::install_github("ropensci/rbace")`
   * ropenaire (For VIPER. Currently, a Github repository only)  Install with `remotes::install_github("njahn82/ropenaire")`
   * readr (for VIPER)
