@@ -103,7 +103,9 @@ var options_pubmed = {
             ]},
         {id: "article_types", multiple: true, name: "Article types", type: "dropdown"
             , fields: [
-                {id: "autobiography", text: "Autobiography", selected: true}
+                {id: "adaptive clinical trial", text: "Adaptive Clinical Trial", selected: true}
+                , {id: "address", text: "Address", selected: true}
+                , {id: "autobiography", text: "Autobiography", selected: true}
                 , {id: "bibliography", text: "Bibliography", selected: true}
                 , {id: "biography", text: "Biography", selected: true}
                 , {id: "book illustrations", text: "Book Illustrations", selected: true}
@@ -112,11 +114,13 @@ var options_pubmed = {
                 , {id: "clinical conference", text: "Clinical Conference", selected: true}
                 , {id: "clinical study", text: "Clinical Study", selected: true}
                 , {id: "clinical trial", text: "Clinical Trial", selected: true}
+                , {id: "clinical trial protocol", text: "Clinical Trial Protocol", selected: true}
                 , {id: "clinical trial, phase i", text: "Clinical Trial, Phase I", selected: true}
                 , {id: "clinical trial, phase ii", text: "Clinical Trial, Phase II", selected: true}
                 , {id: "clinical trial, phase iii", text: "Clinical Trial, Phase III", selected: true}
                 , {id: "clinical trial, phase iv", text: "Clinical Trial, Phase IV", selected: true}
-                , {id: "collected works", text: "Collected Works", selected: true}
+                , {id: "clinical trial, veterinary", text: "Clinical Trial, Veterinary", selected: true}
+                , {id: "collected work", text: "Collected Work", selected: true}
                 , {id: "comment", text: "Comment", selected: true}
                 , {id: "comparative study", text: "Comparative Study", selected: true}
                 , {id: "congresses", text: "Congresses", selected: true}
@@ -132,17 +136,19 @@ var options_pubmed = {
                 , {id: "electronic supplementary materials", text: "Electronic Supplementary Materials", selected: true}
                 , {id: "english abstract", text: "English Abstract", selected: true}
                 , {id: "ephemera", text: "Ephemera", selected: true}
-                , {id: "evaluation studies", text: "Evaluation Studies", selected: true}
+                , {id: "equivalence trial", text: "Equivalence Trial", selected: true}
+                , {id: "evaluation study", text: "Evaluation Study", selected: true}
+                , {id: "expression of concern", text: "Expression of Concern", selected: true}
                 , {id: "festschrift", text: "Festschrift", selected: true}
-                , {id: "government publications", text: "Government Publications", selected: true}
+                , {id: "government publication", text: "Government Publication", selected: true}
                 , {id: "guideline", text: "Guideline", selected: true}
                 , {id: "historical article", text: "Historical Article", selected: true}
                 , {id: "interactive tutorial", text: "Interactive Tutorial", selected: true}
                 , {id: "interview", text: "Interview", selected: true}
                 , {id: "introductory journal article", text: "Introductory Journal Article", selected: true}
                 , {id: "journal article", text: "Journal Article", selected: true}
-                , {id: "lectures", text: "Lectures", selected: true}
-                , {id: "legal cases", text: "Legal Cases", selected: true}
+                , {id: "lecture", text: "Lecture", selected: true}
+                , {id: "legal case", text: "Legal Case", selected: true}
                 , {id: "legislation", text: "Legislation", selected: true}
                 , {id: "letter", text: "Letter", selected: true}
                 , {id: "meta analysis", text: "Meta Analysis", selected: true}
@@ -150,13 +156,14 @@ var options_pubmed = {
                 , {id: "news", text: "News", selected: true}
                 , {id: "newspaper article", text: "Newspaper Article", selected: true}
                 , {id: "observational study", text: "Observational Study", selected: true}
+                , {id: "observational study, veterinary", text: "Observational Study, Veterinary", selected: true}
                 , {id: "overall", text: "Overall", selected: true}
                 , {id: "patient education handout", text: "Patient Education Handout", selected: true}
                 , {id: "periodical index", text: "Periodical Index", selected: true}
-                , {id: "personal narratives", text: "Personal Narratives", selected: true}
-                , {id: "pictorial works", text: "Pictorial Works", selected: true}
-                , {id: "popular works", text: "Popular Works", selected: true}
-                , {id: "portraits", text: "Portraits", selected: true}
+                , {id: "personal narrative", text: "Personal Narrative", selected: true}
+                , {id: "pictorial work", text: "Pictorial Work", selected: true}
+                , {id: "popular work", text: "Popular Work", selected: true}
+                , {id: "portrait", text: "Portrait", selected: true}
                 , {id: "practice guideline", text: "Practice Guideline", selected: true}
                 , {id: "pragmatic clinical trial", text: "Pragmatic Clinical Trial", selected: true}
                 , {id: "publication components", text: "Publication Components", selected: true}
@@ -164,6 +171,7 @@ var options_pubmed = {
                 , {id: "publication type category", text: "Publication Type Category", selected: true}
                 , {id: "published erratum", text: "Published Erratum", selected: true}
                 , {id: "randomized controlled trial", text: "Randomized Controlled Trial", selected: true}
+                , {id: "randomized controlled trial, veterinary", text: "Randomized Controlled Trial, Veterinary", selected: true}
                 , {id: "research support, american recovery and reinvestment act", text: "Research Support, American Recovery and Reinvestment Act", selected: true}
                 , {id: "research support, n i h, extramural", text: "Research Support, NIH Extramural", selected: true}
                 , {id: "research support, n i h, intramural", text: "Research Support, NIH Intramural", selected: true}
@@ -171,15 +179,16 @@ var options_pubmed = {
                 , {id: "research support, u s gov't, non p h s", text: "Research Support, U.S. Gov't, Non P.H.S", selected: true}
                 , {id: "research support, u s gov't, p h s", text: "Research Support, U.S. Gov't, P.H.S", selected: true}
                 , {id: "research support, u s government", text: "Research Support, U.S. Government", selected: true}
-                , {id: "retracted publication", text: "Retracted Publication", selected: true}
+                , {id: "retracted publication", text: "Retracted Publication", selected: false}
                 , {id: "retraction of publication", text: "Retraction of Publication", selected: true}
                 , {id: "review", text: "Review", selected: true}
                 , {id: "scientific integrity review", text: "Scientific Integrity Review", selected: true}
                 , {id: "study characteristics", text: "Study Characteristics", selected: true}
                 , {id: "support of research", text: "Support of Research", selected: true}
+                , {id: "systematic review", text: "Systematic Review", selected: true}
                 , {id: "technical report", text: "Technical Report", selected: true}
                 , {id: "twin study", text: "Twin Study", selected: true}
-                , {id: "validation studies", text: "Validation Studies", selected: true}
+                , {id: "validation study", text: "Validation Study", selected: true}
                 , {id: "video audio media", text: "Video Audio Media", selected: true}
                 , {id: "webcasts", text: "Webcasts", selected: true}]}
     ]}
