@@ -714,6 +714,18 @@ list.populateReaders = function(nodes) {
             areas.select(".area_name").html(function(d) {
                 return d.area;
             });
+            
+            areas.on("mouseover", function (d) {
+                mediator.publish("list_area_mouseover", d);
+            })
+            
+            areas.on("mouseout", function (d) {
+                mediator.publish("list_area_mouseout", d);
+            })
+            
+            areas.on("click", function (d) {
+                mediator.publish("list_click_area", d);
+            })
         }
 
         if (!config.content_based && config.base_unit !== "" && !config.metric_list) {
@@ -1219,7 +1231,8 @@ list.enlargeListItem = function(d) {
         d3.selectAll('.conceptgraph').style('display', 'none');
     }
     
-    this.setBacklink(d);
+    if(config.is_streamgraph || config.set_list_backlink)
+        this.setBacklink(d);
 
     d.paper_selected = true;
     this.count_visible_items_to_header()
