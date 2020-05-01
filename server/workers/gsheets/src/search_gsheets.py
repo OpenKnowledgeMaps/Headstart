@@ -179,7 +179,7 @@ class GSheetsClient(object):
         metadata["id"] = df.ID
         metadata["title"] = df.Title
         metadata["authors"] = df.Authors
-        metadata["paper_abstract"] = df.Abstract.map(lambda x: x.replace("N/A", "") if is instance(x, str) else "")
+        metadata["paper_abstract"] = df.Abstract.map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["published_in"] = df["Publication Venue"]
         metadata["year"] = df["Publication Date"]
         metadata["url"] = df.ID
@@ -189,7 +189,7 @@ class GSheetsClient(object):
         metadata["link"] = df["Link to PDF"]
         metadata["relevance"] = df.index
         metadata["comments"] = df.Comments
-        metadata["tags"] = df.Tags.map(lambda x: x.replace("N/A", "") if is instance(x, str) else "")
+        metadata["tags"] = df.Tags.map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["resulttype"] = df.Type
         text = pd.DataFrame()
         text["id"] = metadata["id"]
