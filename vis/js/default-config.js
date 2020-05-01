@@ -143,6 +143,7 @@ var config = {
     visual_distributions: false,
     list_show_external_vis: false,
     external_vis_url: "",
+    list_set_backlink: false,
     
     credit_embed: false,
     canonical_url: null,

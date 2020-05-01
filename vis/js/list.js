@@ -1160,7 +1160,8 @@ list.enlargeListItem = function(d) {
         d3.selectAll('.conceptgraph').style('display', 'none');
     }
     
-    this.setBacklink(d);
+    if(config.is_streamgraph || config.set_list_backlink)
+        this.setBacklink(d);
 
     d.paper_selected = true;
     this.count_visible_items_to_header()

@@ -654,7 +654,14 @@ MyMediator.prototype = {
             return; //Not implemented yet
         } else {
             mediator.manager.call('canvas', 'getCurrentCircle', [d]);
-            if(mediator.current_circle) mediator.manager.call('bubble', 'zoomin', [mediator.current_circle.data()[0]])
+            if(mediator.current_circle) {
+                if(mediator.is_zoomed) {
+                    mediator.currentbubble_click(d);
+                } else {
+                    mediator.manager.call('bubble', 'zoomin', [mediator.current_circle.data()[0]])
+                }
+                
+            }
             mediator.current_bubble.current = "hoverbig";
             mediator.manager.call('list', 'count_visible_items_to_header')
         }
