@@ -223,9 +223,14 @@ BubblesFSM.prototype = {
 
     // highlight a cirlce
     highlightCircle: function (circle) {
-        circle.attr("class", "zoom_selected");
-        if (!mediator.is_zoomed)
-            circle.attr("class", "zoomed_out");
+        if (!mediator.is_zoomed) {
+            circle
+                .classed("zoom_selected", false)
+                .classed("zoom_unselected", false)
+                .classed("zoomed_out", true);
+        } else {
+            circle.classed("zoom_selected", true);
+        }
         circle.style("fill-opacity", 1);
     },
 
@@ -239,6 +244,25 @@ BubblesFSM.prototype = {
         for (var i = 0; i < circles.length; i++) {
             toFront(circles[i].parentNode);
         }
+    },
+    
+    highlightBubble: function(d) {
+        d3.selectAll("circle.area,.zoom_selected").filter(
+                function(x) {
+                    if(config.use_area_uri) {
+                        return d.area_uri == x.area_uri
+                    } else {
+                        return d.area == x.area
+                    }
+                })
+                .classed("highlight-bubble", true)
+        
+    },
+    
+    removeHighlightBubble: function(d) {
+        d3.selectAll("circle.area,.zoom_selected")
+                .classed("highlight-bubble", false)
+        
     },
 
     // drawConnection between the circles:
@@ -425,7 +449,16 @@ BubblesFSM.prototype = {
                 .on("mouseout", null);
 
         canvas.chart.selectAll("#headstart-chart circle")
-                .attr("class", "zoom_selected")
+                .filter(function (x) {
+                    if (d !== null) {
+                        return (x.title == d.title);
+                    } else {
+                        return null;
+                    }
+                })
+                .classed("zoomed_out", false)
+                .classed("zoomed_unselected", false)
+                .classed("zoom_selected", true)
                 .style("fill-opacity", "1");
 
         canvas.chart.selectAll("#headstart-chart circle")
@@ -436,7 +469,9 @@ BubblesFSM.prototype = {
                         return null;
                     }
                 })
-                .attr("class", "zoom_unselected")
+                .classed("zoomed_out", false)
+                .classed("zoom_selected", false)
+                .classed("zoom_unselected", true)
                 .style("fill-opacity", 0.1)
                 .on("mouseover", null)
                 .on("mouseout", null);
@@ -577,9 +612,14 @@ BubblesFSM.prototype = {
                     canvas.chart.selectAll("#area_title_object")
                             .style("display", "block")
                             .filter(function () {
-                                return d3.select(this.previousSibling).attr("class") != "zoom_selected";
+                                return !d3.select(this.previousSibling).attr("class").includes("zoom_selected");
                             })
                             .style("visibility", "visible");
+                    
+                    d3.selectAll("circle.area")
+                        .classed("zoom_selected", false)
+                        .classed("zoom_unselected", false)
+                        .classed("zoomed_out", true);
                     
                     canvas.dotdotdotAreaTitles();
                     mediator.current_zoom_node = null;
