@@ -174,7 +174,7 @@
 
 #list_abstract {
     max-width: 82%;
-    font-size: 14px;
+    font-size: 13px;
     font-family: $abstract-font-family;
     line-height: 130%;
     padding-right: 0;
@@ -479,26 +479,15 @@ img#preview_page {
 }
 
 @media screen and (max-width: 1150px) {
-    /*.list_metadata {
-
-        .list_links {
-            float:none;
-            margin-bottom: 15px;
-
-            a {
-                display: inline;
-                margin-right: 5px;
-            }
-        }
-    }*/
 
     .list_metadata .list_title {
-        font-size: 12px;
+        font-size: 13px;
         max-width: 72%;
     }
 
     #list_abstract {
         font-size: 12px;
+        line-height: 120%;
     }
 }
 
