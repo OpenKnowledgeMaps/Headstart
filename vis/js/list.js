@@ -474,6 +474,8 @@ list.populateMetaData = function(nodes) {
             .attr("id", function(d) {
                 return d.safe_id;
             })
+            
+        list.setIconsAndTags(list_metadata);
 
         list_metadata.select(".list_title")
             .attr("class", function(d) {
@@ -483,40 +485,6 @@ list.populateMetaData = function(nodes) {
                     return "list_title"
                 }
             })
-
-        list_metadata.select("#file-icon_list")
-            .style("display", function (d) {
-                if (d.resulttype == "dataset") {
-                    return "none"
-                }
-                else {
-                    return "inline"
-                }
-            })
-
-        list_metadata.select("#dataset-icon_list")
-            .style("display", function (d) {
-                if (d.resulttype == "dataset") {
-                    return "inline"
-                }
-                else {
-                    return "none"
-                }
-            })
-        
-        if(config.show_tags) {    
-            d3.select(elem).select("#list_tags")
-                    .html(function (d) {
-                        let return_tags = "";
-                        let tags = d.tags.split(/, |,/g);
-                        for (let tag of tags) {
-                            if(tag !== "") {
-                                return_tags += '<div class="tag">' + tag + '</div>';
-                            }
-                        }
-                        return return_tags;
-                    });
-        }
         
         list_metadata.select("#paper_list_title")
             .html(function(d) {
@@ -536,20 +504,6 @@ list.populateMetaData = function(nodes) {
             .on("click", function() {
                 d3.event.stopPropagation();
             });
-
-        list_metadata.select("#open-access-logo_list")
-            .style("display", function(d) {
-                if (d.oa === false) {
-                    return "none";
-                }
-            });
-        
-        list_metadata.select("#free-access-logo_list")
-            .style("display", function(d) {
-                if (d.free_access === false) {
-                    return "none";
-                }
-            });
               
         var paper_link = list_metadata.select(".link2");
         
@@ -562,9 +516,6 @@ list.populateMetaData = function(nodes) {
         paper_link.on("click", function(d) {
             mediator.publish("list_show_popup", d);
         });
-        /*paper_link.attr("href", function (d) {
-            return "#";
-        });*/
 
         list_metadata.select(".list_authors")
             .html(function(d) {
@@ -661,6 +612,77 @@ list.populateMetaData = function(nodes) {
         }
         
     });
+};
+
+list.setIconsAndTags = function (list_metadata) {
+    list_metadata.select("#file-icon_list")
+            .style("display", function (d) {
+                if (d.resulttype == "dataset") {
+                    return "none"
+                }
+                else {
+                    return "inline"
+                }
+            })
+
+    list_metadata.select("#dataset-icon_list")
+        .style("display", function (d) {
+            if (d.resulttype == "dataset") {
+                return "inline"
+            }
+            else {
+                return "none"
+            }
+        })
+    
+    list_metadata.select("#open-access-logo_list")
+        .style("display", function(d) {
+            if (d.oa === false) {
+                return "none";
+            }
+        });
+
+    list_metadata.select("#free-access-logo_list")
+        .style("display", function(d) {
+            if (d.free_access === false) {
+                return "none";
+            }
+        });
+    
+    if(config.show_tags) {
+        
+        let has_visible_tags = false;
+        
+        list_metadata.select("#list_tags")
+                .html(function (d) {
+                    let return_tags = "";
+                    let tags = d.tags.split(/, |,/g);
+                    for (let tag of tags) {
+                        if(tag !== "") {
+                            return_tags += '<div class="tag">' + tag + '</div>';
+                            has_visible_tags = true;
+                        }
+                    }
+                    return return_tags;
+                });
+                
+        if(has_visible_tags) {
+            list_metadata.select("#list_tags").style("display", "inline-block")
+        }
+    }
+    
+    //Detect if there are any visible icons and tags; if not, hide #oa
+    //Note: this depends on the styles of the elements written directly
+    //rather than controlled with classes such as .nodisplay
+    let current_oa = list_metadata.select("#oa");
+    let visible_icons_tags = 
+            $(current_oa[0]).children().filter(function() {
+                return this.style.display !== 'none'
+            })
+            
+    if (visible_icons_tags.length === 0) {
+        current_oa.classed("nodisplay", true)
+    }
 };
 
 list.createComments = function(nodes) {
