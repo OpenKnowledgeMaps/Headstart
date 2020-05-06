@@ -97,9 +97,14 @@ class GSheetsClient(object):
         res = self.drive_service.changes().getStartPageToken().execute()
         self.startPageToken = res.get('startPageToken')
 
+    def get_currentPageToken(self, sheet_id):
+        pageToken = self.last_updated[sheet_id] if sheet_id in self.last_updated else self.startPageToken
+        return pageToken if pageToken is not None else self.startPageToken
+
     def update_required(self, sheet_id):
         self.logger.debug(self.last_updated)
-        pageToken = self.last_updated[sheet_id] if sheet_id in self.last_updated else self.startPageToken
+        pageToken = self.get_currentPageToken(sheet_id)
+        self.logger.debug(pageToken)
         res = self.drive_service.changes().list(pageToken=pageToken,
                                                 spaces='drive').execute()
         self.logger.debug(res)
