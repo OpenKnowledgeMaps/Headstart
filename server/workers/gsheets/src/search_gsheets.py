@@ -195,7 +195,7 @@ class GSheetsClient(object):
         metadata["readers"] = 0
         metadata["subject"] = df.Keywords
         metadata["oa_state"] = df.Access
-        metadata["link"] = df["Link to PDF"]
+        metadata["link"] = df["Link to PDF"].map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["relevance"] = df.index
         metadata["comments"] = df.Comments
         metadata["tags"] = df.Tags.map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
