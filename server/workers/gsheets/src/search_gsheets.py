@@ -18,6 +18,10 @@ from pandas_schema.validation import (InListValidation,
                                       DateFormatValidation)
 
 
+formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
+                              datefmt='%Y-%m-%d %H:%M:%S')
+
+
 def get_key(store, key):
     while True:
         res = store.get(key+"_output")
@@ -61,6 +65,7 @@ class GSheetsClient(object):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(os.environ["GSHEETS_LOGLEVEL"])
         handler = logging.StreamHandler(sys.stdout)
+        handler.setFormatter(formatter)
         handler.setLevel(os.environ["GSHEETS_LOGLEVEL"])
         self.logger.addHandler(handler)
         self.get_startPageToken()
@@ -93,14 +98,18 @@ class GSheetsClient(object):
         self.startPageToken = res.get('startPageToken')
 
     def update_required(self, sheet_id):
+        self.logger.debug(self.last_updated)
         pageToken = self.last_updated[sheet_id] if sheet_id in self.last_updated else self.startPageToken
         res = self.drive_service.changes().list(pageToken=pageToken,
                                                 spaces='drive').execute()
+        self.logger.debug(res)
         if res is not None:
             filtered_changes = [c for c in res.get('changes') if c.get('fileId')==sheet_id]
             if len(filtered_changes) != 0:
+                self.logger.debug(filtered_changes)
                 last_change = filtered_changes[-1]
                 self.last_updated[sheet_id] = res.get('newStartPageToken')
+                self.logger.debug(self.last_updated)
                 return last_change.get('time')
             else:
                 return False
