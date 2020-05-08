@@ -5,6 +5,7 @@ import time
 import pickle
 import uuid
 import logging
+from dateutil.parser import parse
 
 import redis
 
@@ -236,7 +237,8 @@ class GSheetsClient(object):
             res["data"] = result_df.to_json(orient="records")
             res["errors"] = errors_df.to_dict(orient="records")
             res["sheet_id"] = sheet_id
-            res["last_update"] = last_update
+            d = parse(last_update)
+            res["last_update"] = d.strftime("%Y-%m-%d %H:%M:%S %Z")
         else:
             res = {"status": "No update required"}
         return res
