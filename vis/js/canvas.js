@@ -515,8 +515,8 @@ class Canvas {
     }
     
     drawContextTimestamp(context) {
-        if(this.paramExists(context.timestamp)) {
-            $('#timestamp').text(config.localization[config.language].timestamp_label + ": " + context.timestamp)
+        if(this.paramExists(context.last_update)) {
+            $('#timestamp').text(config.localization[config.language].timestamp_label + ": " + context.last_update)
         }
     }
 
