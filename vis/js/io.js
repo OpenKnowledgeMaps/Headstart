@@ -434,7 +434,7 @@ IO.prototype = {
     highlightTerms: function(full_string, term_array) {
         let result_string = full_string;
         for (let term of term_array) {
-            let re = new RegExp("\\b(" + term + ")\\b" ,"gi");
+            let re = new RegExp("\\b(" + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ")\\b" ,"gi");
             result_string = result_string.replace(re, "<span class=\"query_term_highlight\">$1</span>");
         }
         return result_string;
