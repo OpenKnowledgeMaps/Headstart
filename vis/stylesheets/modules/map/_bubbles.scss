@@ -5,27 +5,32 @@ circle {
     stroke-width: 1px;
     cursor: zoom-in;
 
-    &.zoom_unselected {
-        fill: $circle-zoom-unselected-fill;
-        fill-opacity: .1;
-        stroke-width: 0;
-        cursor: zoom-in;
-    }
-
-    &.zoomed_out {
-        cursor: zoom-in;
-    }
-
-    &.zoom_selected {
-        fill-opacity: 1;
-        fill: $circle-zoom-selected-fill;
-        stroke-width: 2px;
-        cursor: auto;
-    }
-
     &.area {
         fill: $circle-area;
         fill-opacity: .9;
+        
+        &.highlight-bubble {
+            stroke: $okm-blue;
+            stroke-width: 3;
+        }
+        
+        &.zoom_unselected {
+            fill: $circle-zoom-unselected-fill;
+            fill-opacity: .1;
+            stroke-width: 0;
+            cursor: zoom-in;
+        }
+
+        &.zoomed_out {
+            cursor: zoom-in;
+        }
+
+        &.zoom_selected {
+            fill-opacity: 1;
+            fill: $circle-zoom-selected-fill;
+            stroke-width: 2px;
+            cursor: auto;
+        }
     }
 }
 
@@ -91,7 +96,7 @@ circle {
     h2 {
         font-family: $base-font-family;
         font-size: 14px !important;
-        font-weight: $fontweight700;
+        font-weight: $fontweight600;
         margin-top: 6px;
         margin-bottom: 6px;
         padding: 0;
