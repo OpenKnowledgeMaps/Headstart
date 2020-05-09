@@ -10,13 +10,9 @@ The search repos example lets you perform a search in either PLOS or Pubmed and 
 + Get the [minimum working example](../README.md#getting-started) up and running.
 + Follow the instructions in [Installing and configuring the server](server_config.md).
 
-### Setup the example
-
-Duplicate the `search_repos` folder in the examples and rename it to a folder name of your choice. Open the `webpack.config.json` file and set the `publicPath` to the URL of the `dist` folder on your web server.
-
 ### Test your setup
 
-Direct your browser to either `search_plos.html` for PLOS, `search_pubmed.html` for Pubmed and so on. Enter a search term, e.g. "health" and click on `Submit`. If everything is setup correctly, you should see a visualization after 15-30 seconds.
+Direct your browser to one of the search interfaces in the `examples\search_repos` folder, e.g. `search_base.html` for BASE, `search_pubmed.html` for Pubmed and so on. Enter a search term, e.g. "health" and click on `Submit`. If everything is setup correctly, you should see a visualization after 15-30 seconds.
 
 ## Troubleshooting
 

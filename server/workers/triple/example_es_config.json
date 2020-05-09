@@ -1,0 +1,7 @@
+{
+  "user": "string",
+  "pass": "string",
+  "host": "string",
+  "port": 9200,
+  "indices": {"string":"string"}
+}

@@ -182,6 +182,13 @@ papers.drawPapers = function () {
                 return "none"
             }
         });
+        
+    article_metadata.select("#free-access-logo")
+            .style("display", function (d) {
+                if(d.free_access === false) {
+                    return "none";
+                }
+            });
     
     article_metadata.select("#outlink")
             .style("display", function (d) {

@@ -1,0 +1,127 @@
+* {
+    box-sizing: content-box;
+}
+
+.divity {
+    display: inline-block;
+}
+
+.frontend-hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+label {
+    display: inline;
+    font-weight: normal;
+}
+
+#filter-container {
+    margin-top: 15px;
+}
+
+#filter-btn {
+    margin-bottom: 23px;
+    margin-right: 20px;
+    margin-top: 5px;
+}
+
+#filters {
+    margin-bottom: 10px;
+}
+
+#stats {
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.dropdown {
+    padding: 5px;
+}
+
+.frontend-btn {
+  -webkit-border-radius: 5;
+  -moz-border-radius: 5;
+  border-radius: 5px;
+  color: #636363;
+  font-size: 12px;
+  background: #ffffff;
+  padding: 8px 10px 8px 10px;
+  text-decoration: none;
+  border: solid #636363 1px;
+}
+
+.frontend-btn:hover {
+  background: #f5f2f5;
+  /*background-image: -webkit-linear-gradient(top, #f5f2f5, #c9c9c9);
+  background-image: -moz-linear-gradient(top, #f5f2f5, #c9c9c9);
+  background-image: -ms-linear-gradient(top, #f5f2f5, #c9c9c9);
+  background-image: -o-linear-gradient(top, #f5f2f5, #c9c9c9);
+  background-image: linear-gradient(to bottom, #f5f2f5, #c9c9c9);*/
+  text-decoration: none;
+}
+
+.div {
+    display: block; 
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+#input-container {
+    margin-bottom: 30px;
+}
+
+.submit-btn {
+    padding: 3px 12px;
+}
+
+.caret {
+    border-left: 1px solid #AAA;
+    border-radius: 0px 4px 4px 0px;
+    background: #CCC linear-gradient(to top, #CCC 0%, #EEE 60%) repeat scroll 0% 0%;
+}
+
+.multiselect {
+    background-color: #fff;
+    /*background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eee), color-stop(0.5, #fff));
+    background-image: -webkit-linear-gradient(center bottom, #eee 0%, #fff 50%);
+    background-image: -moz-linear-gradient(center bottom, #eee 0%, #fff 50%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#ffffff', endColorstr = '#eeeeee', GradientType = 0);
+    background-image: linear-gradient(to top, #eee 0%, #fff 50%);*/
+    
+    height: 18px
+}
+
+.btn-group {
+    margin-right: 30px;
+}
+
+.submit-btn {
+    display: inline-block;
+    padding-top: 10px;
+    margin-left: 20px;
+}
+
+#download {
+   margin-top: 510px;
+   margin-left: 30px;
+}
+
+.input_items {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.btn {
+    margin-left: 10px;
+    width: 100px;
+}

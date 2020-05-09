@@ -35,8 +35,14 @@ $date = new DateTime();
             </div>
             </div>
         </div>
+        
         <?php include('credits.php') ?>
+        
+        <!-- IMPORTANT: Please add your footer Datenschutz/Impressum links here! -->
 
+        
+        <!-- end of footer -->
+        
         <script type="text/javascript" src="./js/data-config_linkedcat.js"></script>
         <script>
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
