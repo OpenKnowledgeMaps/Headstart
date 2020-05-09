@@ -121,7 +121,7 @@ streamgraph.zoomed = function() {
 streamgraph.initMouseListeners = function() {
     d3.selectAll('.stream')
             .on("click", function (d, i) {
-                mediator.publish("stream_clicked", d.key, d3.select(this).style('fill'));
+                mediator.publish("stream_clicked", d);
             })
             
     d3.select('#' + config.tag)
@@ -221,6 +221,7 @@ streamgraph.drawStreamgraph = function (streams, area, z) {
                 return area(d.values);
             })
             .style("fill", function (d, i) {
+                d.color = z(i);
                 return z(i);
             });
             
@@ -263,7 +264,7 @@ streamgraph.drawLabels = function (series, x, y, streamgraph_width, streamgraph_
         })
 
         let color = current_stream.style('fill');
-        mediator.publish("stream_clicked", d.key, color);
+        mediator.publish("stream_clicked", d);
     })
     
     let repositioned_labels = self.repositionOverlappingLabels(label_positions);
@@ -313,7 +314,7 @@ streamgraph.drawLabels = function (series, x, y, streamgraph_width, streamgraph_
             })
 
             let color = current_stream.style('fill');
-            mediator.publish("stream_clicked", cur_d.key, color);
+            mediator.publish("stream_clicked", cur_d);
         })
     
         setTM(rect[0][0], ctm)

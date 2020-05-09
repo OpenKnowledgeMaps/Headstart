@@ -88,6 +88,8 @@ var config = {
     show_loading_screen: false,
     
     create_title_from_context: false,
+    create_title_from_context_style: '',
+    custom_title: null,
     is_title_clickable: true,
 
     sort_options: ["readers", "title", "authors", "year"],
@@ -157,6 +159,7 @@ var config = {
     visual_distributions: false,
     list_show_external_vis: false,
     external_vis_url: "",
+    list_set_backlink: false,
     
     credit_embed: false,
     canonical_url: null,
@@ -197,6 +200,7 @@ var config = {
             streamgraph_label: 'Streamgraph for',
             overview_authors_label: 'Overview of the works of',
             streamgraph_authors_label: 'Streamgraph for the works of',
+            custom_title_explanation: 'This is a custom title. Please see the info button for more information. Original query:',
             articles_label: 'documents',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
@@ -247,6 +251,7 @@ var config = {
             streamgraph_label: 'Streamgraph für',
             overview_authors_label: 'Überblick über die Werke von',
             streamgraph_authors_label: 'Streamgraph für die Werke von',
+            custom_title_explanation: 'Dieser Titel wurde manuell geändert. Die Original-Suche lautet:',
             most_recent_label: 'neueste',
             most_relevant_label: 'relevanteste',
             articles_label: 'Artikel',
@@ -360,6 +365,7 @@ var config = {
             keywords: "Keywords",
             no_title: "No title",
             overview_label: 'Overview of',
+            custom_title_explanation: 'This is a custom title. Please see the info button for more information. Original query:',
             articles_label: 'documents',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
@@ -408,6 +414,7 @@ var config = {
             streamgraph_label: 'Streamgraph for',
             overview_authors_label: 'Overview of the works of',
             streamgraph_authors_label: 'Streamgraph for the works of',
+            custom_title_explanation: 'This is a custom title. Please see the info button for more information. Original query:',
             articles_label: 'documents',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',

@@ -312,6 +312,22 @@ class Canvas {
             }
         });
     }
+    
+    escapeHTML(string) {
+        let entityMap = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '/': '&#x2F;',
+            '`': '&#x60;',
+            '=': '&#x3D;'
+        };
+        return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+            return entityMap[s];
+        });
+    }
 
     // Draws the header for this
     drawTitle(context) {
@@ -327,22 +343,28 @@ class Canvas {
             chart_title = `Overview of <span class="truncated-project-title" title="` + acronymtitle + `">${compressedTitle}</span>\
                             <span class="project-id">(${context.params.project_id})</span>`
         } else if (config.create_title_from_context) {
-            let query_clean = context.query.replace(/\\(.?)/g, "$1");
+            let query_clean = this.escapeHTML(context.query.replace(/\\(.?)/g, "$1"));
             let label = (config.is_streamgraph)?(config.localization[config.language].streamgraph_label):(config.localization[config.language].overview_label);
             
             if(config.is_authorview) {  
                 label= (config.is_streamgraph)?(config.localization[config.language].streamgraph_authors_label):(config.localization[config.language].overview_authors_label);
             }
             if (config.create_title_from_context_style === 'linkedcat') {
-                let maxTitleLength = 115 // This should probably make it's way to a more global config
+                let maxTitleLength = 115 // This should probably make its way to a more global config
                 let compressedTitle = query_clean.length > maxTitleLength ? query_clean.slice(0, maxTitleLength - 3) + '...' : query_clean;
                 chart_title = label + ' <span id="search-term-unique" title="' + query_clean + '">' + compressedTitle + '</span>';
+            } else if (config.create_title_from_context_style === 'custom' && typeof config.custom_title !== 'undefined' && config.custom_title !== null) {
+                let maxTitleLength = 100 // This should probably make its way to a more global config
+                let compressedTitle = config.custom_title > maxTitleLength ? config.custom_title.slice(0, maxTitleLength - 3) + '...' : config.custom_title;
+                chart_title = label + ' <span id="search-term-unique" title="' 
+                        + config.localization[config.language].custom_title_explanation  + ' ' + query_clean + '">' 
+                        + compressedTitle + '</span>';
             } else {
                 chart_title = label + ' <span id="search-term-unique" title="' + query_clean + '">' + query_clean + '</span>';
             }
             
         }
-           
+        
         var subdiscipline_title_h4 = $("#subdiscipline_title h4");
         subdiscipline_title_h4.html(chart_title);
 
@@ -493,8 +515,8 @@ class Canvas {
     }
     
     drawContextTimestamp(context) {
-        if(this.paramExists(context.timestamp)) {
-            $('#timestamp').text(config.localization[config.language].timestamp_label + ": " + context.timestamp)
+        if(this.paramExists(context.last_update)) {
+            $('#timestamp').text(config.localization[config.language].timestamp_label + ": " + context.last_update)
         }
     }
 
