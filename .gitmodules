@@ -1,3 +1,6 @@
 [submodule "server/services/pdf.js-hypothes.is"]
 	path = server/services/pdf.js-hypothes.is
 	url = https://github.com/hypothesis/pdf.js-hypothes.is.git
+[submodule "examples/covis"]
+	path = examples/covis
+	url = https://github.com/OpenKnowledgeMaps/CoVis

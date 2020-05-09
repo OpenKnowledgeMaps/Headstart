@@ -41,3 +41,10 @@ $fontweight800: 800;
     $special-font-family: 'Lato', Helvetica, sans-serif;
     $abstract-font-family: 'Lato', Helvetica Neue, Helvetica, sans-serif;
 }
+
+@if $skin == 'covis' {
+    $base-font-family: 'Lato', Helvetica, sans-serif;
+    $link-font-family: 'Lato', Helvetica, sans-serif;
+    $special-font-family: 'Lato', Helvetica, sans-serif;
+    $abstract-font-family: 'Lato', Helvetica Neue, Helvetica, sans-serif;
+}

@@ -491,6 +491,12 @@ class Canvas {
             $('#author_bio_link').text(config.localization[config.language].bio_link)
         }
     }
+    
+    drawContextTimestamp(context) {
+        if(this.paramExists(context.timestamp)) {
+            $('#timestamp').text(config.localization[config.language].timestamp_label + ": " + context.timestamp)
+        }
+    }
 
     drawContext(context) {
         if (!config.show_context || !this.paramExists(context.params)) {
@@ -525,9 +531,13 @@ class Canvas {
                     .attr("data-content", config.localization[config.language].most_relevant_tooltip)
                     .popover();
         }
+        
+        let service_name = (typeof config.service_name !== 'undefined')
+                            ? (config.service_name)
+                            : (config.service_names[context.service])
 
         $("#source").html(config.localization[config.language].source_label
-                       + ": " + config.service_names[context.service]);
+                       + ": " + service_name);
 
         if (config.create_title_from_context_style === 'viper') {
             $("#context-dataset_count").text(
@@ -659,6 +669,12 @@ class Canvas {
         
         if(config.is_authorview) {
             this.drawContextAuthorview(context);
+        }
+        
+        if(config.show_context_timestamp) {
+            this.drawContextTimestamp(context);
+        } else {
+            $("#timestamp").hide();
         }
     }
     

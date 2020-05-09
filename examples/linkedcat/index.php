@@ -9,20 +9,20 @@ include 'config.php';
 
     <body class="startpage bg-image-startpage">
 
-        <div class="vertical-align:middle; ">
+        <div>
             <header>
                 <?php include('menu.php'); ?>
             </header>
             
             <?php include('project-short-description.php') ?>
             <?php include('search-box.php') ?>
-            <?php include('credits.php') ?>
-            
-            <!-- PLease add any footer elements here:-->
-            
-            <!-- end of footer-->
-            
         </div>
+        
+        <?php include('credits.php') ?>
+        
+        <!-- IMPORTANT: Please add your footer Datenschutz/Impressum links here! -->
+        
+        <!-- end of footer -->
         
         <script type="text/javascript" src="./js/data-config_linkedcat.js"></script>
         <script type ="text/javascript">

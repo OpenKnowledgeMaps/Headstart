@@ -18,7 +18,7 @@
     margin-bottom: 10px;
 }
 
-#open-access-logo_list {
+#open-access-logo_list, #free-access-logo_list {
     background-color: white;
     color: $open-access;
     border: 1px solid $open-access;
@@ -29,6 +29,24 @@
     font-size: 10px;
     vertical-align: top;
     font-weight: $fontweight400;
+}
+
+.tag {
+    background-color: white;
+    display: inline;
+    color: $medium-blue;
+    border: 1px solid $medium-blue;
+    padding: 2px 4px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    font-size: 10px;
+    font-weight: $fontweight400;
+    margin-right: 3px;
+}
+
+.tags {
+    display: inline;
 }
 
 .dataset-tag {
@@ -193,6 +211,11 @@
     }
 }
 
+s.resulttype {
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
 #list_area, #list_keywords, #list_basic_classification, #list_ddc {
     font-family: $link-font-family;
     font-size: 11px;
@@ -206,6 +229,17 @@
     .area_tag, .keyword_tag {
         font-weight: $fontweight600;
     }
+}
+
+.resulttype_tag {
+    font-weight: $fontweight800;
+}
+
+.resulttype {
+    font-size: 12px;
+    line-height: 120%;
+    margin-bottom: 10px;
+    margin-top: 5px;
 }
 
 .conceptgraph {
@@ -308,6 +342,10 @@
 
 .oa-link-hidden {
     display: none;
+}
+
+.nodisplay {
+    display: none !important;
 }
 
 .bold-list {
@@ -433,17 +471,23 @@ img#preview_page {
 
 .backlink-list {
     margin-left: 15px;
-    margin-top: 15px;
+    margin-top: 20px;
     font-size: 11px;
     cursor: pointer;
+    margin-bottom: 20px;
 
     a {
-        border-bottom: 1px solid $medium-blue;
+        border: 1px solid $medium-blue;
         color: $medium-blue;
+        padding: 5px;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius:5px;
         text-decoration: none;
 
         &:hover {
-            border-bottom: 2px solid $medium-blue;
+            background-color: $medium-blue;
+            color: white;
         }
     }
 }
@@ -692,6 +736,18 @@ img#preview_page {
         }
     }
 
+    #list_abstract {
+
+        span:not(:empty):not(.highlight) {
+            display: block;
+            margin-top: 5px;
+
+            &::before, &::after {
+                content: "[...] "
+            }
+        }
+    }
+
     div#preview_image {
         display: none;
     }
@@ -739,6 +795,98 @@ img#preview_page {
             font-size: 12px;
             max-width:100%;
         }
+    }
+
+}
+
+@if $skin == "covis" {
+
+    #open-access-logo_list {
+        background-color: $open-access;
+        color: white;
+        border: 1px solid $open-access;
+        padding: 2px 4px;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        font-size: 10px;
+        vertical-align: top;
+        font-weight: $fontweight400;
+    }
+
+    .list_metadata {
+        padding-top: 10px;
+        margin-bottom: 0px;
+
+        .list_title {
+            font-size: 16px;
+            line-height:120%;
+            margin-bottom: 5px;
+        }
+    }
+
+    .doi_outlink, .list_metrics {
+        display: none;
+    }
+
+    #list_area {
+        display: block;
+        margin-top: 5px;
+    }
+
+    #list_abstract {
+        font-size: 14px;
+    }
+
+    .comments .comment-text {
+        font-size: 12px;
+        max-width: 82%;
+        background-color: #f1f1f1;
+        padding: 5px;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius:5px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .comments {
+        margin-bottom: 5px;
+        margin-top: 10px;
+    }
+
+    .fa.fa-comment {
+        vertical-align: middle;
+        margin-right: 5px;
+        font-size: 14px;
+        color: $medium-blue;
+    }
+    #list_keywords {
+        margin-bottom: 5px;
+    }
+
+    #free-access-logo_list, #open-access-logo_list {
+        display: inline;
+        margin-right: 3px;
+    }
+
+    #list_keywords {
+
+        .keyword_tag {
+            font-weight: $fontweight800;
+        }
+    }
+
+    #list_area {
+
+        margin-top: 0px;
+
+        .area_tag {
+            font-weight: $fontweight800;
+        }
+    }
+    #list_keywords, #list_area {
+        font-size: 12px;
     }
 
 }

@@ -32,7 +32,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
       num_clusters <- tryCatch({
         cut_off <- get_cut_off(css_cluster, attempt)
         attempt <- attempt+1
-        cut_off$k
+        if (attempt > 500) cut_off$k else NA
       }, error = function(err){
         vclog$warn(err$message)
         return (NA)
@@ -90,14 +90,14 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 }
 
 
-get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
+get_ndms <- function(distance_matrix, mindim=2, maxdim=2) {
 
   # Perform non-metric multidimensional scaling
   # nm <- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
   # nm.nmin = nmds.min(nm)
   if (nrow(distance_matrix) <= 2) {
     points <- tryCatch({
-      ord <- metaMDS(distance_matrix, k = 2, parallel = 3, trymax=30,
+      ord <- metaMDS(distance_matrix, k = 2, parallel = 7, trymax=30,
                      engine="monoMDS", distance='cao',
                      threshold = 0.19, nthreshold=10,
                      model = "linear",
@@ -115,7 +115,7 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2, maxit=500) {
     points <- cbind(0, 0)
   } else {
     points <- tryCatch({
-      ord <- metaMDS(distance_matrix, k = 2, parallel = 3, trymax=30,
+      ord <- metaMDS(distance_matrix, k = 2, parallel = 7, trymax=30,
                      engine="monoMDS", distance='cao',
                      threshold = 0.19, nthreshold=10,
                      model = "linear",

@@ -12,3 +12,9 @@ vis/stylesheets/*.css
 dist/
 .idea/
 config.js
+*__pycache__*
+.pytest_cache
+.cache
+.Rhistory
+.ipynb_checkpoints
+.Rprofile

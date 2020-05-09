@@ -119,7 +119,9 @@ IO.prototype = {
     setContext: function(context, num_documents) {
         this.context = context;
         if(context.hasOwnProperty("params")) {
-            context.params = JSON.parse(context.params);
+            context.params = (typeof context.params === "object")
+                                ?(context.params)
+                                :(JSON.parse(context.params));
         }
         this.context.num_documents = num_documents;
         this.context.share_oa = this.num_oa;
@@ -199,9 +201,13 @@ IO.prototype = {
                 }
             }
             
+            d.safe_id = _this.convertToSafeID(d.id);
+            
             if(d.hasOwnProperty("snippets") && d.snippets !== "") {
                 d.snippets = d.snippets.replace(/&lt;em&gt;/g, "<em>");
                 d.snippets = d.snippets.replace(/&lt;\/em&gt;/g, "</em>");
+                d.snippets = d.snippets.replace(/&lt;span&gt;/g, "<span>");
+                d.snippets = d.snippets.replace(/&lt;\/span&gt;/g, "</span>");
                 d.paper_abstract = d.snippets;
             }
             
@@ -236,6 +242,8 @@ IO.prototype = {
             d.published_in = _this.setToStringIfNullOrUndefined(d.published_in, "");
             d.title = _this.setToStringIfNullOrUndefined(d.title,
                 config.localization[config.language]["no_title"]);
+                
+            d.subject_orig = _this.setToStringIfNullOrUndefined(d.subject, "");
                 
             var prepareMetric = function(d, metric) {
                  if(d.hasOwnProperty(metric)) {
@@ -311,6 +319,7 @@ IO.prototype = {
             d.paper_selected = false;
             
             d.oa = false;
+            d.free_access = false;
 
             if (config.service === "doaj") {
                 d.oa = true;
@@ -337,6 +346,8 @@ IO.prototype = {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
             } else {
                 d.oa = (d.oa_state === 1 || d.oa_state === "1")?(true):(false);
+                d.oa_link = d.link;
+                d.free_access = (d.oa_state === 3 || d.oa_state === "3")?(true):(false);
             }
 
             d.outlink = _this.createOutlink(d);
@@ -408,6 +419,16 @@ IO.prototype = {
         }
 
         this.data = cur_data;
+    },
+    
+    convertToSafeID: function (id) {
+        let id_string = id.toString();
+        
+        return id_string.replace(/[^a-zA-Z0-9]/g, function(s) {
+            var c = s.charCodeAt(0);
+            if (c === 32) return '-';
+            return '__' + ('000' + c.toString(16)).slice(-4);
+        });
     },
     
     highlightTerms: function(full_string, term_array) {

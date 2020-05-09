@@ -4,6 +4,16 @@
 
 /* ################ Chart ############### */
 
+#map-loading-screen {
+    margin-top: 20px;
+    display: none;
+    text-align: center;
+    
+    #loading-spinner {
+        margin-top: 5px;
+    }
+}
+
 #headstart-chart {
     /*position: absolute;*/   
     //display: inline-block; /*table;*/

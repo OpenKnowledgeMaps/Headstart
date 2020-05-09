@@ -74,7 +74,7 @@ vis_layout <- function(text, metadata, service,
     features <- concatenate_features(distance_matrix)
     vlog$debug("get clusters")
     clusters <- create_clusters(as.dist(features), max_clusters=max_clusters)
-    layout <- get_ndms(as.dist(features), maxit=500, mindim=2, maxdim=2)
+    layout <- get_ndms(as.dist(features), mindim=2, maxdim=2)
 
     vlog$debug("get cluster summaries")
     metadata = replace_keywords_if_empty(metadata, stops, service)
