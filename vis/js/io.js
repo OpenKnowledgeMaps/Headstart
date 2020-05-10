@@ -470,6 +470,8 @@ IO.prototype = {
         
         term_array = term_array.concat(query_wt_rest.trim().replace(/\s+/g, " ").split(" "));
         
+        term_array = [...new Set(term_array)];
+        
         return term_array;
         
     },
