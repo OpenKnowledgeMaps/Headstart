@@ -460,7 +460,7 @@ IO.prototype = {
         let match_query = /\"(.*?)\"/g;
         let term_array = full_query.match(match_query);
         if(term_array !== null)
-            term_array.map(function(x){return x.replace(/\"/g, '');});
+            term_array = term_array.map(function(x){return x.replace(/\\"|\"/g, '');});
         else
             term_array = [];
         
