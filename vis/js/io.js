@@ -446,7 +446,10 @@ IO.prototype = {
             return;
         }
         
-        let full_query = context.query;
+        let original_query = context.query;
+        
+        //Replace terms within square brackets, as they denote fields in PubMed
+        let full_query = original_query.replace(/\[(.*?)\]/g, '');
         
         //let query_wt_exclusions = full_query.replace(/(^|\s)-[^\s]*/g, " ");
         //query_wt_exclusions = query_wt_exclusions.replace(/(^|\s)-\"(.*?)\"/g, " ");
