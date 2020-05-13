@@ -23,7 +23,7 @@
     font-size: 14px;
     cursor: pointer;
     color: #ccc;
-    z-index: 100;
+    z-index: 9; /*it was at 100 previously but that means it'll stick on top of the header of the website'*/
 }
 
 img#close-button {
@@ -111,5 +111,12 @@ img#close-button {
         font-size: 13px;
         width: 38px;
         height: 38px;
+    }
+}
+
+@if ($skin == "covis") {
+    
+    .searchfield-icon {
+        z-index: 9;
     }
 }
