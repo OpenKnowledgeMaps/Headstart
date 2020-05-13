@@ -3,11 +3,12 @@ import sys
 import copy
 import json
 import subprocess
-import asyncio
 from tempfile import NamedTemporaryFile
 import redis
 import pandas as pd
 import logging
+
+from streamgraph import get_streamgraph_data
 
 
 class Dataprocessing(object):
@@ -61,6 +62,8 @@ class Dataprocessing(object):
         self.logger.debug(k)
         self.logger.debug(params)
         result = self.create_map(params, input_data)
+        if params.get('vis_type') == "timeline":
+            result = get_streamgraph_data(result, params.get('top_n', 12))
         redis_store.set(k+"_output", json.dumps(result))
 
 
