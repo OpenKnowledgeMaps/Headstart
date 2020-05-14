@@ -496,7 +496,7 @@ list.populateMetaData = function(nodes) {
                 return d.outlink;
             })
             .attr("class", function(d){
-                if(d.oa){
+                if(d.oa && d.link !== ""){
                     return "oa-link oa-link-hidden"
                 }
                 return "outlink"
@@ -508,7 +508,7 @@ list.populateMetaData = function(nodes) {
         var paper_link = list_metadata.select(".link2");
         
         paper_link.style("display", function(d) {
-            if (d.oa === false || d.resulttype == "dataset") {
+            if (d.oa === false || d.resulttype == "dataset" || d.link === "") {
                 return "none";
             }
         });
@@ -1528,23 +1528,32 @@ list.populateOverlay = function(d) {
                 keyboard: true
             });
 
-            let article_url = d.oa_link;
+            let article_url = encodeURIComponent(d.oa_link);
             let possible_pdfs = "";
             if (config.service === "base") {
-                possible_pdfs = d.link + ";" + d.identifier + ";" + d.relation;
+                let encodeRelation = function (relation) {
+                    let relation_array = relation.split("; ");
+                    let encoded_array = relation_array.map(function (x) { return encodeURIComponent(x) });
+                    return encoded_array.join("; ")
+                }
+                
+                possible_pdfs = encodeURIComponent(d.link) + ";" 
+                                    + encodeURIComponent(d.identifier) + ";" 
+                                    + encodeRelation(d.relation);
             } else if (config.service === "openaire") {
-                possible_pdfs  = d.link + ";" + d.fulltext;
+                possible_pdfs  = encodeURIComponent(d.link) + ";" 
+                                    + d.fulltext;
+            }
+            
+            var showError = function() {
+                var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
+                $("#status").html(config.localization[config.language].pdf_not_loaded 
+                        + " <a href=\"" + pdf_location_link + "\" target=\"_blank\">" 
+                        + config.localization[config.language].pdf_not_loaded_linktext + "</a>.");
+                $("#status").show();
             }
 
             $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service + "&pdf_urls=" + possible_pdfs, (data) => {
-
-                var showError = function() {
-                    var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
-                    $("#status").html(config.localization[config.language].pdf_not_loaded 
-                            + " <a href=\"" + pdf_location_link + "\" target=\"_blank\">" 
-                            + config.localization[config.language].pdf_not_loaded_linktext + "</a>.");
-                    $("#status").show();
-                }
 
                 if (data.status === "success") {
                     this.writePopup(config.server_url + "paper_preview/" + pdf_url);
