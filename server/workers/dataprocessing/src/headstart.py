@@ -62,9 +62,12 @@ class Dataprocessing(object):
         self.logger.debug(k)
         self.logger.debug(params)
         if params.get('vis_type') == "timeline":
-            metadata = json.loads(self.create_map(params, input_data))
-            sg_data = get_streamgraph_data(metadata, params.get('top_n', 12))
-            
+            metadata = self.create_map(params, input_data)
+            sg_data = get_streamgraph_data(json.loads(metadata), params.get('top_n', 12))
+            result = {}
+            result["data"] = metadata
+            result["streamgraph"] = sg_data
+            redis_store.set(k+"_output", json.dumps(result))
         else:
             result = self.create_map(params, input_data)
             redis_store.set(k+"_output", json.dumps(result))
