@@ -1,3 +1,7 @@
+.highlighted {
+    background: yellow;
+}
+
 .list_entry {
     border-bottom: 2px solid $okm-clouds;
     padding: 0px 0px 20px 15px;
@@ -826,6 +830,10 @@ img#preview_page {
         font-size: 10px;
         vertical-align: top;
         font-weight: $fontweight400;
+        
+        .highlighted {
+            color: $open-access;
+        }
     }
 
     .list_metadata {

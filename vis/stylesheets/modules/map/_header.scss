@@ -254,9 +254,31 @@
             }
         }
     }
-    
+
     #modals .btn {
         width: 34px;
         height: 34px;
+    }
+}
+
+@if $skin == 'covis' {
+    #infolink:hover, #infolink:focus, #infolink:active {
+        text-decoration: none;
+        color: $infolink;
+    }
+
+    #infolink {
+        text-decoration: underline;
+        margin-left: 0px;
+        font-size: 18px;
+    }
+    #subdiscipline_title h4 b {
+        margin-right: 0px;
+    }
+
+    @media screen and (max-width: 640px) {
+        #infolink {
+            font-size: 14px;
+        }
     }
 }
