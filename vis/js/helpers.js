@@ -1,4 +1,4 @@
-import 'lib/highlightRegex.min.js';
+import 'markjs';
 
 // -------------------------------------
 // -------- General helpers ------------
@@ -130,14 +130,15 @@ export function highlight(str) {
     }
 
     let value = new RegExp(new_str, "i");
-
-    $('.highlightable, .large.highlightable, .list_details.highlightable').highlightRegex(value, {
-        attrs: {'style': "background:yellow"}
-    });
+      
+    $(".highlightable, .large.highlightable, .list_details.highlightable").markRegExp(value, {
+        element: "span",
+        className: "highlighted"
+    })
 }
 
 export function clear_highlights() {
-    $('.highlightable').highlightRegex();
+    $(".highlightable, .large.highlightable, .list_details.highlightable").unmark();
 }
 
 // const Hypher = require('hypher').default;
