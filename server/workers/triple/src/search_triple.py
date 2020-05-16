@@ -52,6 +52,12 @@ class TripleClient(object):
             sort.append("date:desc")
         return sort
 
+    def get_limit(self, parameters):
+        limit = parameters.get('limit', 100)
+        if parameters.get('vis_type') == "timeline":
+            limit = 1000
+        return limit
+
     @staticmethod
     def parse_query(query, fields):
         qq = {}
@@ -119,7 +125,7 @@ class TripleClient(object):
         res = self.es.search(
             index=index,
             body=body,
-            size=parameters.get('limit', 100),
+            size=self.get_limit(parameters),
             sort=sorting)
         # res = self.es.search(
         #     index=index,
