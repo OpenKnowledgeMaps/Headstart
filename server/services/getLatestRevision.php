@@ -25,13 +25,11 @@ $persistence = new headstart\persistence\SQLitePersistence($ini_array["connectio
 if ($backend == "api") {
   if ($context === true) {
       $data = $persistence->getLastVersion($vis_id, $details = false, $context = true)[0];
-      $rev_data = json_decode($data["rev_data"], true);
-      $data = $rev_data["data"];
-      $sg_data = $rev_data["sg_data"];
+      $packed_data = json_decode($data["rev_data"], true);
       $return_data = array("context" => array("id" => $data["rev_vis"], "query" => $data["vis_query"], "service" => $data["vis_title"]
                               , "timestamp" => $data["rev_timestamp"], "params" => $data["vis_params"]),
-                          "data" => $data,
-                          "streamgraph" => $sg_data);
+                          "data" => $packed_data["data"],
+                          "streamgraph" => $packed_data["streamgraph"]);
       $jsonData = json_encode($return_data);
       library\CommUtils::echoOrCallback($jsonData, $_GET);
       } else {
