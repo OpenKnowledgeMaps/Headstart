@@ -9,13 +9,13 @@ def get_streamgraph_data(metadata, n=12):
     df.subject = df.subject.map(lambda x: x.split("; "))
     df["boundary_label"] = df.year
     df = df.explode('subject')
+    df = df[df.subject != ""]
     counts = get_counts(df)
     boundaries = get_boundaries(df)
     daterange = get_daterange(boundaries)
     data = pd.merge(counts, boundaries, on='year')
     top_n = get_top_n(data, n)
     data = data[data.subject.map(lambda x: x in top_n)].sort_values("year").reset_index(drop=True)
-    data = data[data.subject != ""]
     x = get_x_axis(daterange)
     sg_data = {}
     sg_data["x"] = x
@@ -71,10 +71,11 @@ def postprocess(daterange, data):
     x = pd.DataFrame(daterange, columns=["year"])
     temp = []
     for item in pd.unique(data.subject):
-        tmp = (pd.merge(data[data.subject == item].drop("year", axis=1), x,
-                        left_on="boundary_label", right_on="year",
+        tmp = (pd.merge(data[data.subject == item], x,
+                        left_on="year", right_on="year",
                         how="right")
-                 .fillna({"counts": 0, "subject": item, "id": "NA"}))
+                 .fillna({"counts": 0, "subject": item, "id": "NA"})
+                 .sort_values("year"))
         y = tmp.counts.astype(int).to_list()
         ids_overall = pd.unique(tmp[tmp.id != "NA"].id.map(lambda x: x.split(", ")).explode()).tolist()
         ids_timestep = tmp.id.map(lambda x: x.split(", ")).tolist()
