@@ -66,7 +66,7 @@ class Dataprocessing(object):
             sg_data = get_streamgraph_data(json.loads(metadata), params.get('top_n', 12))
             result = {}
             result["data"] = metadata
-            result["streamgraph"] = sg_data
+            result["streamgraph"] = json.dumps(sg_data)
             redis_store.set(k+"_output", json.dumps(result))
         else:
             result = self.create_map(params, input_data)
