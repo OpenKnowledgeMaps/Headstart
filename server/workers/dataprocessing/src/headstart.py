@@ -61,10 +61,13 @@ class Dataprocessing(object):
         k, params, input_data = self.next_item()
         self.logger.debug(k)
         self.logger.debug(params)
-        result = self.create_map(params, input_data)
         if params.get('vis_type') == "timeline":
-            result = get_streamgraph_data(json.loads(result), params.get('top_n', 12))
-        redis_store.set(k+"_output", json.dumps(result))
+            metadata = json.loads(self.create_map(params, input_data))
+            sg_data = get_streamgraph_data(metadata, params.get('top_n', 12))
+            
+        else:
+            result = self.create_map(params, input_data)
+            redis_store.set(k+"_output", json.dumps(result))
 
 
 if __name__ == '__main__':
