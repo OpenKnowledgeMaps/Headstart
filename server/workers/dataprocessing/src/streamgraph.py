@@ -24,7 +24,7 @@ def get_streamgraph_data(metadata, n=12):
 
 
 def get_x_axis(daterange):
-    return [x.year for x in daterange]
+    return [str(x.year) for x in daterange]
 
 
 def get_daterange(boundaries):
