@@ -18,7 +18,7 @@ var options_triple = {
             ]},
         {id: "vis_type", multiple: false, name: "Visualization Type", type: "dropdown"
             , fields: [
-                {id: "streamgraph", text: "Timeline"},
+                {id: "timeline", text: "Timeline"},
                 {id: "overview", text: "Knowledge Map"}
             ]}
     ]}
