@@ -5,29 +5,36 @@ def get_streamgraph_data(metadata, n=12):
     df = pd.DataFrame.from_records(metadata)
     df.year = pd.to_datetime(df.year)
     df.year = df.year.map(lambda x: x.year)
+    df.year = df.year.map(lambda x: pd.to_datetime(x, format="%Y"))
     df.subject = df.subject.map(lambda x: x.split("; "))
-    df["boundary_label"] = df.year.astype(int)
+    df["boundary_label"] = df.year
     df = df.explode('subject')
     counts = get_counts(df)
     boundaries = get_boundaries(df)
+    daterange = get_daterange(boundaries)
     data = pd.merge(counts, boundaries, on='year')
     top_n = get_top_n(data, n)
     data = data[data.subject.map(lambda x: x in top_n)].sort_values("year").reset_index(drop=True)
     data = data[data.subject != ""]
+    x = get_x_axis(daterange)
     sg_data = {}
-    sg_data["x"] = get_daterange(boundaries)
-    sg_data["subject"] = postprocess(boundaries, data)
-    return data
+    sg_data["x"] = x
+    sg_data["subject"] = postprocess(daterange, data)
+    return sg_data
+
+
+def get_x_axis(daterange):
+    return [x.year for x in daterange]
 
 
 def get_daterange(boundaries):
-    daterange = pd.date_range(start=min(boundaries.year),
-                              end=max(boundaries.year),
-                              freq='A')
+    daterange = pd.date_range(start=min(boundaries.year).to_datetime64(),
+                              end=max(boundaries.year).to_datetime64(),
+                              freq='AS')
     if len(daterange) > 0:
-        return sorted(daterange.to_list())
+        return sorted(daterange)
     else:
-        return sorted(pd.unique(boundaries.year).tolist())
+        return sorted(pd.unique(boundaries.year))
 
 
 def get_stream_range(df):
@@ -60,8 +67,7 @@ def get_top_n(data, n):
     return top_n
 
 
-def postprocess(boundaries, data):
-    daterange = list(range(min(boundaries.year), max(boundaries.year)))
+def postprocess(daterange, data):
     x = pd.DataFrame(daterange, columns=["year"])
     temp = []
     for item in pd.unique(data.subject):
