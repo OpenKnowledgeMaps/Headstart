@@ -496,7 +496,7 @@ list.populateMetaData = function(nodes) {
                 return d.outlink;
             })
             .attr("class", function(d){
-                if(d.oa){
+                if(d.oa && d.link !== ""){
                     return "oa-link oa-link-hidden"
                 }
                 return "outlink"
@@ -508,7 +508,7 @@ list.populateMetaData = function(nodes) {
         var paper_link = list_metadata.select(".link2");
         
         paper_link.style("display", function(d) {
-            if (d.oa === false || d.resulttype == "dataset") {
+            if (d.oa === false || d.resulttype == "dataset" || d.link === "") {
                 return "none";
             }
         });
@@ -984,6 +984,10 @@ list.hideEntriesByWord = function(object, search_words) {
             let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toString().toLowerCase()) : ("");
             let tags = (d.hasOwnProperty("tags")) ? (d.tags.toString().toLowerCase()) : ("");
             let comments = (d.hasOwnProperty("comments")) ? (d.comments.toString().toLowerCase()) : ("");
+            let resulttype = (d.hasOwnProperty("resulttype")) ? (d.resulttype.toString().toLowerCase()) : ("");
+            //TODO: make these two properties language-aware
+            let open_access = (d.hasOwnProperty("oa") && d.oa === true) ? ("open access") : ("");
+            let free_access = (d.hasOwnProperty("free_access") && d.free_access === true) ? ("free access") : ("");
             let i = 0;
             while (word_found && i < search_words.length) {
                 word_found = (abstract.indexOf(search_words[i]) !== -1 ||
@@ -993,7 +997,10 @@ list.hideEntriesByWord = function(object, search_words) {
                     year.indexOf(search_words[i]) !== -1 ||
                     keywords.indexOf(search_words[i]) !== -1 ||
                     tags.indexOf(search_words[i]) !== -1 ||
-                    comments.indexOf(search_words[i]) !== -1
+                    comments.indexOf(search_words[i]) !== -1 ||
+                    resulttype.indexOf(search_words[i]) !== -1 ||
+                    open_access.indexOf(search_words[i]) !== -1 ||
+                    free_access.indexOf(search_words[i]) !== -1
                 );
                 i++;
             }
@@ -1528,23 +1535,32 @@ list.populateOverlay = function(d) {
                 keyboard: true
             });
 
-            let article_url = d.oa_link;
+            let article_url = encodeURIComponent(d.oa_link);
             let possible_pdfs = "";
             if (config.service === "base") {
-                possible_pdfs = d.link + ";" + d.identifier + ";" + d.relation;
+                let encodeRelation = function (relation) {
+                    let relation_array = relation.split("; ");
+                    let encoded_array = relation_array.map(function (x) { return encodeURIComponent(x) });
+                    return encoded_array.join("; ")
+                }
+                
+                possible_pdfs = encodeURIComponent(d.link) + ";" 
+                                    + encodeURIComponent(d.identifier) + ";" 
+                                    + encodeRelation(d.relation);
             } else if (config.service === "openaire") {
-                possible_pdfs  = d.link + ";" + d.fulltext;
+                possible_pdfs  = encodeURIComponent(d.link) + ";" 
+                                    + d.fulltext;
+            }
+            
+            var showError = function() {
+                var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
+                $("#status").html(config.localization[config.language].pdf_not_loaded 
+                        + " <a href=\"" + pdf_location_link + "\" target=\"_blank\">" 
+                        + config.localization[config.language].pdf_not_loaded_linktext + "</a>.");
+                $("#status").show();
             }
 
             $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service + "&pdf_urls=" + possible_pdfs, (data) => {
-
-                var showError = function() {
-                    var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
-                    $("#status").html(config.localization[config.language].pdf_not_loaded 
-                            + " <a href=\"" + pdf_location_link + "\" target=\"_blank\">" 
-                            + config.localization[config.language].pdf_not_loaded_linktext + "</a>.");
-                    $("#status").show();
-                }
 
                 if (data.status === "success") {
                     this.writePopup(config.server_url + "paper_preview/" + pdf_url);

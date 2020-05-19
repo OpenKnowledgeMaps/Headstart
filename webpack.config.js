@@ -34,6 +34,7 @@ const common = {
             //
             'handlebars': 'handlebars/dist/handlebars.js',
             'hypher': 'hypher/dist/jquery.hypher.js',
+            'markjs': 'mark.js/dist/jquery.mark.js',
 
             // paths
             'templates': path.resolve(__dirname, 'vis/templates'),

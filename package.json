@@ -33,6 +33,7 @@
     "hypher": "^0.2.4",
     "javascript-state-machine": "^2.3.5",
     "jquery": "^3.4.1",
+    "mark.js": "^8.11.1",
     "mediator-js": "^0.9.9",
     "popper.js": "^1.16.0",
     "resolve-url-loader": "^3.1.1",
