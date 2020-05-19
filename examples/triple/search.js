@@ -106,7 +106,9 @@ var doSubmit = function (data, newWindow, callback) {
         "&service=" +
         data_config.service +
         "&service_name=" +
-        service_name;
+        service_name +
+        "&vis_type=" +
+        data.vis_type;
       return false;
     } else {
       $("#progress").html(
