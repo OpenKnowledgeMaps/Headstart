@@ -5,6 +5,7 @@ import time
 import pickle
 import uuid
 import logging
+from dateutil.parser import parse
 
 import redis
 
@@ -16,6 +17,10 @@ import pandas as pd
 from pandas_schema import Column, Schema
 from pandas_schema.validation import (InListValidation,
                                       DateFormatValidation)
+
+
+formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
+                              datefmt='%Y-%m-%d %H:%M:%S')
 
 
 def get_key(store, key):
@@ -31,22 +36,40 @@ def get_key(store, key):
     return result
 
 
+schema = Schema([
+    Column('ID', []),
+    Column('Title', []),
+    Column('Authors', []),
+    Column('Abstract', []),
+    Column('Publication Venue', []),
+    Column('Publication Date', [DateFormatValidation("%Y-%m-%d")]),
+    Column('Link to PDF', []),
+    Column('Keywords', []),
+    Column('Access', []),
+    Column('Comments', []),
+    Column('Tags', []),
+    Column('Included in map', [InListValidation(["yes", "no"])]),
+    Column('Ready for publication?', [InListValidation(["yes", "no"])]),
+    Column('Type', []),
+    Column('Area', [])
+])
+
+
 class GSheetsClient(object):
 
     def __init__(self):
         # If modifying these scopes, delete the file token.pickle.
         self.SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly',
                        'https://www.googleapis.com/auth/drive.metadata.readonly']
-        self.gsheets_service = build('sheets', 'v4', credentials=self.authenticate())
-        self.drive_service = build('drive', 'v3', credentials=self.authenticate())
-        self.sheet = self.gsheets_service.spreadsheets()
-        self.files = self.drive_service.files()
+        self.register_services()
         self.last_updated = {}
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(os.environ["GSHEETS_LOGLEVEL"])
         handler = logging.StreamHandler(sys.stdout)
+        handler.setFormatter(formatter)
         handler.setLevel(os.environ["GSHEETS_LOGLEVEL"])
         self.logger.addHandler(handler)
+        self.get_startPageToken()
 
     def authenticate(self):
         creds = None
@@ -65,16 +88,46 @@ class GSheetsClient(object):
                 pickle.dump(creds, token)
         return creds
 
-    # Call the Drive API
-    def get_last_modified(self, sheet_id):
-        res = self.files.get(fileId=sheet_id, fields="modifiedTime").execute()
-        return res.get('modifiedTime')
+    def register_services(self):
+        self.gsheets_service = build('sheets', 'v4', credentials=self.authenticate())
+        self.drive_service = build('drive', 'v3', credentials=self.authenticate())
+        self.sheet = self.gsheets_service.spreadsheets()
+        self.files = self.drive_service.files()
 
-    def update_required(self, last_modified, sheet_id):
-        if last_modified == self.last_updated.get(sheet_id, ""):
-            return False
+    def get_startPageToken(self):
+        res = self.drive_service.changes().getStartPageToken().execute()
+        self.startPageToken = res.get('startPageToken')
+
+    def get_currentPageToken(self, sheet_id):
+        pageToken = self.last_updated[sheet_id] if sheet_id in self.last_updated else self.startPageToken
+        return pageToken if pageToken is not None else self.startPageToken
+
+    def get_changes(self, pageToken):
+        res = self.drive_service.changes().list(pageToken=pageToken,
+                                                spaces='drive').execute()
+        return res
+
+    def update_required(self, sheet_id):
+        self.logger.debug(self.last_updated)
+        pageToken = self.get_currentPageToken(sheet_id)
+        self.logger.debug(pageToken)
+        res = self.get_changes(pageToken)
+        if res is not None:
+            changes = res.get('changes')
+            while "nextPageToken" in res:
+                res = self.get_changes(res.get('nextPageToken'))
+                changes.extend(res.get('changes'))
+            filtered_changes = [c for c in changes if c.get('fileId') == sheet_id]
+            if len(filtered_changes) != 0:
+                self.logger.debug(filtered_changes)
+                last_change = filtered_changes[-1]
+                self.last_updated[sheet_id] = res.get('newStartPageToken')
+                self.logger.debug(self.last_updated)
+                return last_change.get('time')
+            else:
+                return False
         else:
-            return True
+            return False
 
     def next_item(self):
         queue, msg = redis_store.blpop("gsheets")
@@ -93,40 +146,35 @@ class GSheetsClient(object):
 
     @staticmethod
     def validate_data(df):
-        schema = Schema([
-            Column('ID', []),
-            Column('Title', []),
-            Column('Authors', []),
-            Column('Abstract', []),
-            Column('Publication Venue', []),
-            Column('Publication Date', [DateFormatValidation("%Y-%m-%d")]),
-            Column('Link to PDF', []),
-            Column('Keywords', []),
-            Column('Access', [InListValidation(["open", "closed", "unknown", "free"], case_sensitive=False)]),
-            Column('Comments', []),
-            Column('Tags', []),
-            Column('Included in map', [InListValidation(["yes", "no"])]),
-            Column('Ready for publication?', [InListValidation(["yes", "no"])]),
-            Column('Type', []),
-            Column('Area', [])
-        ])
+        """
+        errors: [
+            {
+                row: 31,
+                column: "Publication date",
+                reason: "\"2020-04-0\" does not match the date format string \"%Y-%m-%d\"",
+                data: {Abstract: "Now testing changes API, looks good, does it register two changes?" ...}
+            },
+        ]
+        """
         df.columns = df.iloc[0]
-        df.drop([0, 1], inplace=True)
-        # add column: Valid Bool
+        df.drop([0, 1, 2], inplace=True)
         df = df[(df["Ready for publication?"] == "yes") &
                 (df["Included in map"] == "yes")]
         errors = schema.validate(df)
         errors_index_rows = [e.row for e in errors]
-        for e in errors:
-            e.row += 1
-        error_messages = [str(e) for e in errors]
+        error_columns = [e.column for e in errors]
+        error_reasons = [" ".join([e.value, e.message]) for e in errors]
         if errors_index_rows == [-1]:
             clean_df = df
-            errors_df = pd.DataFrame()
+            errors_df = pd.DataFrame(columns=["row", "column", "reason", "data"])
         else:
             clean_df = df.drop(index=errors_index_rows)
-            errors_df = df.loc[errors_index_rows]
-            errors_df["reason"] = error_messages
+            errors_df = pd.DataFrame(columns=["row", "column", "reason", "data"])
+            errors_df["row"] = errors_index_rows
+            errors_df["row"] += 1  # to align with google sheet rows
+            errors_df["column"] = error_columns
+            errors_df["reason"] = error_reasons
+            errors_df["data"] = df.loc[errors_index_rows].to_dict(orient="records")
         return clean_df, errors, errors_df
 
     @staticmethod
@@ -144,7 +192,7 @@ class GSheetsClient(object):
                      "open": 1,
                      "unknown": 2,
                      "free": 3}
-        result_df["oa_state"] = result_df["oa_state"].map(lambda x: oa_mapper.get(x))
+        result_df["oa_state"] = result_df["oa_state"].map(lambda x: oa_mapper.get(x, 2))
         return result_df
 
     @staticmethod
@@ -153,17 +201,17 @@ class GSheetsClient(object):
         metadata["id"] = df.ID
         metadata["title"] = df.Title
         metadata["authors"] = df.Authors
-        metadata["paper_abstract"] = df.Abstract
+        metadata["paper_abstract"] = df.Abstract.map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["published_in"] = df["Publication Venue"]
         metadata["year"] = df["Publication Date"]
-        metadata["url"] = df["Link to PDF"]
+        metadata["url"] = df.ID
         metadata["readers"] = 0
         metadata["subject"] = df.Keywords
         metadata["oa_state"] = df.Access
-        metadata["link"] = df["Link to PDF"]
+        metadata["link"] = df["Link to PDF"].map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["relevance"] = df.index
         metadata["comments"] = df.Comments
-        metadata["tags"] = df.Tags
+        metadata["tags"] = df.Tags.map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["resulttype"] = df.Type
         text = pd.DataFrame()
         text["id"] = metadata["id"]
@@ -179,12 +227,11 @@ class GSheetsClient(object):
     def update(self, params):
         sheet_id = params.get('sheet_id')
         sheet_range = params.get('sheet_range')
-        last_modified = self.get_last_modified(sheet_id)
-        if self.update_required(last_modified, sheet_id):
+        last_update = self.update_required(sheet_id)
+        if last_update is not False:
             raw = self.get_sheet_content(sheet_id, sheet_range)
             clean_df, errors, errors_df = self.validate_data(raw)
             input_data = self.create_input_data(clean_df)
-            self.last_updated[sheet_id] = last_modified
             map_k = str(uuid.uuid4())
             map_input = {}
             map_input["id"] = map_k
@@ -197,7 +244,8 @@ class GSheetsClient(object):
             res["data"] = result_df.to_json(orient="records")
             res["errors"] = errors_df.to_dict(orient="records")
             res["sheet_id"] = sheet_id
-            res["last_update"] = last_modified
+            d = parse(last_update)
+            res["last_update"] = d.strftime("%Y-%m-%d %H:%M:%S %Z")
         else:
             res = {"status": "No update required"}
         return res

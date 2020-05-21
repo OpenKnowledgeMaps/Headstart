@@ -11,6 +11,10 @@ import logging
 from streamgraph import get_streamgraph_data
 
 
+formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
+                              datefmt='%Y-%m-%d %H:%M:%S')
+
+
 class Dataprocessing(object):
 
     def __init__(self, wd="./"):
@@ -26,6 +30,7 @@ class Dataprocessing(object):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(os.environ["HEADSTART_LOGLEVEL"])
         handler = logging.StreamHandler(sys.stdout)
+        handler.setFormatter(formatter)
         handler.setLevel(os.environ["HEADSTART_LOGLEVEL"])
         self.logger.addHandler(handler)
 
