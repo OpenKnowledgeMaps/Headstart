@@ -15,11 +15,6 @@ var options_triple = {
             , fields: [
                 {id: "most-relevant", text: "Most relevant"}
                 , {id: "most-recent", text: "Most recent"}
-            ]},
-        {id: "vis_type", multiple: false, name: "Visualization Type", type: "dropdown"
-            , fields: [
-                {id: "timeline", text: "Timeline"},
-                {id: "overview", text: "Knowledge Map"}
             ]}
     ]}
 

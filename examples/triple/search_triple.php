@@ -33,6 +33,20 @@ include 'config.php';
             <input type="text" name="q" size="61" required>
             <button type="submit" class="btn">Submit</button>
             <div id="filter-container"></div>
+            <label class="radio-button">
+                <input type="radio" name="vis_type" value="overview" checked="checked">
+                <span class="checkmark"></span>
+                <span class="popover-selection">Knowledge Map
+                </span>
+            </label>
+            </div>
+            <div>
+            <label class="radio-button">
+                <input type="radio" name="vis_type" value="timeline">
+                <span class="checkmark"></span>
+                <span class=popover-selection>Streamgraph
+                </span>
+            </label>
         </form>
     </div>
     <div id="progress">
