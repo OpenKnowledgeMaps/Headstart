@@ -7,8 +7,16 @@ require 'search.php';
 
 use headstart\library;
 
-$dirty_query = "covid19";
-$sheet_id = "1csxG23x99DcxoEud782Bji76C7mGxKkAVMBz8gdf_0A";
+$shortopts = "";
+$longopts = array(
+  "q:",
+  "sheet_id:"
+);
+
+# parse options
+$options = getopt($shortopts, $longopts);
+$dirty_query = $options["q"];
+$sheet_id = $options["sheet_id"];
 
 $result = search("gsheets", $dirty_query, array("q" => $dirty_query, "sheet_id" => $sheet_id, "sheet_range" => "Resources!A1:O200")
                     , array("sheet_id")
@@ -16,6 +24,6 @@ $result = search("gsheets", $dirty_query, array("q" => $dirty_query, "sheet_id" 
                     , "area_uri", "subject", null, false
                     , "api");
 
-echo $result
+echo $result;
 
 ?>
