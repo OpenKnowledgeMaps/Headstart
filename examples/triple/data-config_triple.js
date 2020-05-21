@@ -14,6 +14,7 @@ var data_config = {
     is_force_areas: true,
     language: "eng_pubmed",
     area_force_alpha: 0.015,
+    show_keywords: true,
     show_list: true,
     content_based: true,
     url_prefix: "",
