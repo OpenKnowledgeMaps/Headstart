@@ -17,6 +17,9 @@ $backend = isset($_GET["backend"]) ? library\CommUtils::getParameter($_GET, "bac
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
 if ($backend == "api") {
+  $return_data = array("status" => "error", "reason" => "Not implemented.");
+  $jsonData = json_encode($return_data);
+  library\CommUtils::echoOrCallback($jsonData, $_GET);
 } else {
   $data = $persistence->getLastVersion($vis_id, $details = false, $context = true)[0];
   $rev_data = json_decode($data["rev_data"], true);
