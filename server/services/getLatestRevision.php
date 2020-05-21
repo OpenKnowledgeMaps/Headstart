@@ -25,13 +25,21 @@ $persistence = new headstart\persistence\SQLitePersistence($ini_array["connectio
 if ($backend == "api") {
   if ($context === true) {
       $data = $persistence->getLastVersion($vis_id, $details = false, $context = true)[0];
-      $packed_data = json_decode($data["rev_data"], true);
-      $return_data = array("context" => array("id" => $data["rev_vis"], "query" => $data["vis_query"], "service" => $data["vis_title"]
-                              , "timestamp" => $data["rev_timestamp"], "params" => $data["vis_params"]),
-                          "data" => $packed_data["data"],
-                          "streamgraph" => $packed_data["streamgraph"]);
-      $jsonData = json_encode($return_data);
-      library\CommUtils::echoOrCallback($jsonData, $_GET);
+      if ($streamgraph === true) {
+        $packed_data = json_decode($data["rev_data"], true);
+        $return_data = array("context" => array("id" => $data["rev_vis"], "query" => $data["vis_query"], "service" => $data["vis_title"]
+                                , "timestamp" => $data["rev_timestamp"], "params" => $data["vis_params"]),
+                            "data" => $packed_data["data"],
+                            "streamgraph" => $packed_data["streamgraph"]);
+        $jsonData = json_encode($return_data);
+        library\CommUtils::echoOrCallback($jsonData, $_GET);
+        } else {
+        $return_data = array("context" => array("id" => $data["rev_vis"], "query" => $data["vis_query"], "service" => $data["vis_title"]
+                                 , "timestamp" => $data["rev_timestamp"], "params" => $data["vis_params"]),
+                             "data" => $data["rev_data"]);
+         $jsonData = json_encode($return_data);
+         library\CommUtils::echoOrCallback($jsonData, $_GET);
+      }
       } else {
           $jsonData = $persistence->getLastVersion($vis_id);
           library\CommUtils::echoOrCallback($jsonData[0], $_GET);
