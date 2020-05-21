@@ -3,11 +3,14 @@ import sys
 import copy
 import json
 import subprocess
-import asyncio
 from tempfile import NamedTemporaryFile
 import redis
 import pandas as pd
 import logging
+
+
+formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
+                              datefmt='%Y-%m-%d %H:%M:%S')
 
 
 class Dataprocessing(object):
@@ -25,6 +28,7 @@ class Dataprocessing(object):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(os.environ["HEADSTART_LOGLEVEL"])
         handler = logging.StreamHandler(sys.stdout)
+        handler.setFormatter(formatter)
         handler.setLevel(os.environ["HEADSTART_LOGLEVEL"])
         self.logger.addHandler(handler)
 
@@ -57,11 +61,12 @@ class Dataprocessing(object):
         return pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
 
     def run(self):
-        k, params, input_data = self.next_item()
-        self.logger.debug(k)
-        self.logger.debug(params)
-        result = self.create_map(params, input_data)
-        redis_store.set(k+"_output", json.dumps(result))
+        while True:
+            k, params, input_data = self.next_item()
+            self.logger.debug(k)
+            self.logger.debug(params)
+            result = self.create_map(params, input_data)
+            redis_store.set(k+"_output", json.dumps(result))
 
 
 if __name__ == '__main__':
