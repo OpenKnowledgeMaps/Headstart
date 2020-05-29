@@ -8,6 +8,8 @@ import redis
 import pandas as pd
 import logging
 
+from streamgraph import get_streamgraph_data
+
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
@@ -61,10 +63,17 @@ class Dataprocessing(object):
         return pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
 
     def run(self):
-        while True:
-            k, params, input_data = self.next_item()
-            self.logger.debug(k)
-            self.logger.debug(params)
+        k, params, input_data = self.next_item()
+        self.logger.debug(k)
+        self.logger.debug(params)
+        if params.get('vis_type') == "timeline":
+            metadata = self.create_map(params, input_data)
+            sg_data = get_streamgraph_data(json.loads(metadata), params.get('top_n', 12))
+            result = {}
+            result["data"] = metadata
+            result["streamgraph"] = json.dumps(sg_data)
+            redis_store.set(k+"_output", json.dumps(result))
+        else:
             result = self.create_map(params, input_data)
             redis_store.set(k+"_output", json.dumps(result))
 

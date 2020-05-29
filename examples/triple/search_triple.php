@@ -4,6 +4,9 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
+<?php
+include 'config.php';
+?>
 <html>
 
 <head>
@@ -30,6 +33,20 @@ and open the template in the editor.
             <input type="text" name="q" size="61" required>
             <button type="submit" class="btn">Submit</button>
             <div id="filter-container"></div>
+            <label class="radio-button">
+                <input type="radio" name="vis_type" value="overview" checked="checked">
+                <span class="checkmark"></span>
+                <span class="popover-selection">Knowledge Map
+                </span>
+            </label>
+            </div>
+            <div>
+            <label class="radio-button">
+                <input type="radio" name="vis_type" value="timeline">
+                <span class="checkmark"></span>
+                <span class=popover-selection>Streamgraph
+                </span>
+            </label>
         </form>
     </div>
     <div id="progress">
@@ -38,8 +55,10 @@ and open the template in the editor.
     <div style="margin-top:20px ">Built with <a href="https://github.com/OpenKnowledgeMaps/Headstart" target="_blank ">Head Start</a>. All content retrieved from <a href="https://www.gotriple.eu/" target="_blank ">TRIPLE</a>.
     </div>
     <script type="text/javascript" src="data-config_triple.js"></script>
-    <script type="text/javascript" src="data-config_server.js"></script>
     <script type="text/javascript " src="search_options.js "></script>
+    <script type="text/javascript">
+      data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
+    </script>
     <script type="text/javascript " src="search.js "></script>
 </body>
 
