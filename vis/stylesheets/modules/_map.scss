@@ -236,7 +236,7 @@ text {
 
 .query_term_highlight {
     /*font-weight: $fontweight700;*/
-    background-color: #eff3f4;
+    background-color: $highlight;
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
