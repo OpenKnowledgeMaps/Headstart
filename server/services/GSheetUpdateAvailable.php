@@ -10,7 +10,7 @@ $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 
-$vis_id = library\CommUtils::getParameter($_GET, "sheet_id");
+$vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 $gsheet_last_updated = library\CommUtils::getParameter($_GET, "gsheet_last_updated");
 $backend = isset($_GET["backend"]) ? library\CommUtils::getParameter($_GET, "backend") : "legacy";
 
