@@ -4,6 +4,7 @@ header('Content-type: application/json');
 
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
+require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
 use headstart\library;
 
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
