@@ -39,6 +39,10 @@ plog <- getLogger('api.pubmed')
 
 
 get_papers <- function(query, params = NULL, limit = 100) {
+  # remove slashes in query that are added on php side to make it
+  # safe to add queries to the database
+  query <- gsub("\\\\", "", query)
+
   plog$info(paste("Search:", query))
   start.time <- Sys.time()
 
