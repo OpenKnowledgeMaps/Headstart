@@ -31,5 +31,8 @@ var data_config = {
     embed_modal: true,
     share_modal: false,
 
-    backend: "api"
+    backend: "api",
+    
+    streamgraph_colors: ["#215A66", "#66214A", "#5D40FB", "#CB40FB", "#40C0FB", "#FB4068"
+        , "#FBB240", "#40FBC8", "#fee4bc", "#bcfeec", "#c6bcfe", "#febcca"],
 };
