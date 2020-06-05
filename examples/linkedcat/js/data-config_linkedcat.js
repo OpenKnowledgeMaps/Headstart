@@ -41,4 +41,7 @@ var data_config = {
     canonical_url: "https://openknowledgemaps.org",
     
     hashtags_twitter_card: "",
+    
+    streamgraph_colors: ["#28a2a3", "#671A54", "#CC3380", "#7acca3", "#c999ff", "#ffe199"
+        , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#2856A3"],
 };
