@@ -46,22 +46,35 @@ schema = Schema([
     Column('Link to PDF', []),
     Column('Keywords', []),
     Column('Access', []),
-    Column('Comments', []),
     Column('Tags', []),
     Column('Included in map', [InListValidation(["yes", "no"])]),
     Column('Ready for publication?', [InListValidation(["yes", "no"])]),
     Column('Type', []),
     Column('Area', []),
     Column('Validation', []),
-    Column('Comment1', []),
-    Column('Comment2', []),
-    Column('Comment3', []),
-    Column('Comment4', []),
-    Column('Comment5', []),
-    Column('Comment6', []),
-    Column('Comment7', []),
-    Column('Comment8', [])
+    Column('Comment 1', []),
+    Column('Author Comment 1', []),
+    Column('Comment 2', []),
+    Column('Author Comment 2', []),
+    Column('Comment 3', []),
+    Column('Author Comment 3', []),
+    Column('Comment 4', []),
+    Column('Author Comment 4', [])
 ])
+
+
+def process_comments(row):
+    row = row.tolist()
+    comments = []
+    for i in range(len(row/2)):
+        com = row[i]
+        aut = row[i+1]
+        if com is not None:
+            if aut is None:
+                aut = ""
+            comments.append({"comment": com,
+                             "author": aut})
+    return comments
 
 
 class GSheetsClient(object):
@@ -219,7 +232,7 @@ class GSheetsClient(object):
         metadata["oa_state"] = df.Access
         metadata["link"] = df["Link to PDF"].map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["relevance"] = df.index
-        metadata["comments"] = df.iloc[:, 16:].apply(lambda x: [c for c in x.tolist() if c], axis=1)
+        metadata["comments"] = df.iloc[:, 15:22].apply(lambda x: process_comments(x), axis=1)
         metadata["tags"] = df.Tags.map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["resulttype"] = df.Type
         text = pd.DataFrame()
