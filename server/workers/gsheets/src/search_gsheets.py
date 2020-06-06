@@ -66,7 +66,7 @@ schema = Schema([
 def process_comments(row):
     row = row.tolist()
     comments = []
-    for i in range(len(row/2)):
+    for i in range(len(row)//2):
         com = row[i]
         aut = row[i+1]
         if com is not None:
@@ -232,7 +232,7 @@ class GSheetsClient(object):
         metadata["oa_state"] = df.Access
         metadata["link"] = df["Link to PDF"].map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["relevance"] = df.index
-        metadata["comments"] = df.iloc[:, 15:22].apply(lambda x: process_comments(x), axis=1)
+        metadata["comments"] = df.iloc[:, 15:24].apply(lambda x: process_comments(x), axis=1)
         metadata["tags"] = df.Tags.map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["resulttype"] = df.Type
         text = pd.DataFrame()
