@@ -16,11 +16,11 @@ var options_triple = {
                 {id: "most-relevant", text: "Most relevant"}
                 , {id: "most-recent", text: "Most recent"}
             ]},
-        {id: "language", multiple: false, name: "Language/Sprache", type: "dropdown"
+        {id: "language", multiple: false, name: "Language", type: "dropdown"
             , fields: [
                 {id: "en", text: "English"},
                 {id: "fr", text: "Français"},
-                {id: "de", text: "Deutsch"}
+                {id: "es", text: "Español"}
             ]},
         {id: "limit", multiple: false, name: "Limit", type: "dropdown"
             , fields: [
