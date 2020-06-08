@@ -59,8 +59,8 @@ class TripleClient(object):
 
     def get_limit(self, parameters):
         limit = parameters.get('limit', 100)
-        if parameters.get('vis_type') == "timeline":
-            limit = 100
+        if isinstance(limit, str):
+            limit = int(limit)
         return limit
 
     @staticmethod
