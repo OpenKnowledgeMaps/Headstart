@@ -21,6 +21,11 @@ var options_triple = {
                 {id: "en", text: "English"},
                 {id: "fr", text: "Français"},
                 {id: "de", text: "Deutsch"}
+            ]},
+        {id: "limit", multiple: false, name: "Limit", type: "dropdown"
+            , fields: [
+                {id: "100", text: "100"},
+                {id: "1000", text: "1000"}
             ]}
     ]}
 
