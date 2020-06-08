@@ -18,6 +18,7 @@ var options_triple = {
             ]},
         {id: "language", multiple: false, name: "Language", type: "dropdown"
             , fields: [
+                {id: "all", text: "All"},
                 {id: "en", text: "English"},
                 {id: "fr", text: "Français"},
                 {id: "es", text: "Español"}
