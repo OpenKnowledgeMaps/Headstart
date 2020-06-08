@@ -110,6 +110,8 @@ class TripleClient(object):
                         ]
                     }
                 }}
+        if parameters.get('language') != "all":
+            body["query"]["bool"]["must"].append({"term": {"language": parameters.get('language')}})
         return body
 
     def search(self, parameters):
