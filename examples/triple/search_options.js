@@ -15,6 +15,12 @@ var options_triple = {
             , fields: [
                 {id: "most-relevant", text: "Most relevant"}
                 , {id: "most-recent", text: "Most recent"}
+            ]},
+        {id: "language", multiple: false, name: "Language/Sprache", type: "dropdown"
+            , fields: [
+                {id: "en", text: "English"},
+                {id: "fr", text: "Français"},
+                {id: "de", text: "Deutsch"}
             ]}
     ]}
 
