@@ -17,6 +17,7 @@ valid_langs = {
     'es': 'Spanish'
 }
 
+
 class TripleClient(object):
 
     def __init__(self, config):
@@ -105,20 +106,15 @@ class TripleClient(object):
         # TODO: replace from parameters
         q = self.parse_query(parameters.get('q'), fields)
         s = s.query(q)
-        s = s.filter("match", language__label=self.get_lang(parameters))
+        if parameters.get('language') is not None:
+            s = s.filter("match", language__label=self.get_lang(parameters))
         s = s.query("range", date=self.build_date_field(
                     parameters.get('from'),
                     parameters.get('to')))
-
-        s = s.query(q)
-        s = s.filter("match", language__label="Spanish")
-        s = s.query("range", date=self.build_date_field(
-            parameters.get('from'),
-            parameters.get('to')))
         #s = s[parameters.get('pagination_from'):parameters.get('pagination_to')]
         s = s[0:self.get_limit(parameters)]
         if parameters.get('sorting') == "most-relevant":
-            s = s.sort() # default value
+            s = s.sort() #  default value
         if parameters.get('sorting') == "most-recent":
             s = s.sort("-date")
         self.logger.debug(s.to_dict())
