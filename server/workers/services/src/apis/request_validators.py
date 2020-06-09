@@ -13,6 +13,7 @@ class SearchParamSchema(Schema):
     limit = fields.Int()
     year_range = fields.Str()
     today = fields.Str()
+    language = fields.Str()
     raw = fields.Boolean()
 
     @pre_load
