@@ -11,7 +11,11 @@ import logging
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
-
+valid_langs = {
+    'en': 'English',
+    'fr': 'French',
+    'es': 'Spanish'
+}
 
 class TripleClient(object):
 
@@ -63,33 +67,13 @@ class TripleClient(object):
             limit = int(limit)
         return limit
 
+    def get_lang(self, parameters):
+        lang = valid_langs.get(parameters.get('language', 'all'))
+        return lang
+
     @staticmethod
     def parse_query(query, fields):
-        qq = {}
-        # must_groups = list(re.finditer('([\w\-"]* +(?:and|&&|\+) *[\w\-"]*)+', query, re.MULTILINE))
-        must_groups = [m.string for m in (re.finditer('([\w\-"]* +(?:and|&&|\+) *[\w\-"]*)+', query, re.I))]
-        must = []
-        for g in must_groups:
-            terms = [t.strip() for t in re.split(r' and|&&|\+ +', g) if t.strip()]
-            for term in terms:
-                if term:
-                    must.append(Q('multi_match', query=term, fields=fields))
-        query = re.sub(r'([\w\-"]* +(?:and|&&|\+) *[\w\-"]*)+', '', query, re.M, re.I)
-        should_groups = [m.string for m in re.finditer('([\w\-"]+ +(?:or|\|+) *[\w\-"]*)+', query, re.I)]
-        query = re.sub(r'([\w\-"]+ +(?:or|\|+) *[\w\-"]*)+', '', query, re.I)
-        should_terms = re.split(" +", query)
-        should = []
-        for g in should_groups + should_terms:
-            terms = [t.strip() for t in re.split(r' or|\|+', g) if t.strip()]
-            for term in terms:
-                if term:
-                    should.append(Q('multi_match', query=term, fields=fields))
-        exclude = []
-        if must:
-            qq["must"] = must
-        if should:
-            qq["should"] = should
-        q = Q('bool', **qq)
+        q = Q("multi_match", query=query, fields=fields)
         return q
 
     def build_body(self, parameters):
@@ -115,32 +99,32 @@ class TripleClient(object):
         return body
 
     def search(self, parameters):
-        s = Search(using=self.es)
-        # TODO: replace from parameters
+        index = "isidore-documents-triple"
         fields = ["title", "abstract"]
+        s = Search(using=self.es, index=index)
+        # TODO: replace from parameters
         q = self.parse_query(parameters.get('q'), fields)
         s = s.query(q)
+        s = s.filter("match", language__label=self.get_lang(parameters))
         s = s.query("range", date=self.build_date_field(
                     parameters.get('from'),
                     parameters.get('to')))
-        index = "isidore-documents-triple"
-        sorting = self.build_sort_order(parameters)
-        body = self.build_body(parameters)
-        self.logger.debug(index)
-        self.logger.debug(sorting)
-        self.logger.debug(body)
-        res = self.es.search(
-            index=index,
-            body=body,
-            size=self.get_limit(parameters),
-            sort=sorting)
-        # res = self.es.search(
-        #     index=index,
-        #     body=s.to_dict(),
-        #     size=parameters.get('limit', 100),
-        #     sort=sorting)
+
+        s = s.query(q)
+        s = s.filter("match", language__label="Spanish")
+        s = s.query("range", date=self.build_date_field(
+            parameters.get('from'),
+            parameters.get('to')))
+        #s = s[parameters.get('pagination_from'):parameters.get('pagination_to')]
+        s = s[0:parameters.get('limit')]
+        if parameters.get('sorting') == "most-relevant":
+            s = s.sort() # default value
+        if parameters.get('sorting') == "most-recent":
+            s = s.sort("-date")
+        self.logger.debug(s.to_dict())
+        res = s.execute()
         if parameters.get('raw') is True:
-            return res
+            return res.to_dict()
         else:
             return self.process_result(res)
 
@@ -158,10 +142,7 @@ class TripleClient(object):
         # * "oa_state": open access status of the item; has the following possible states: 0 for no, 1 for yes, 2 for unknown
         # * "link": link to the PDF; if this is not available, a list of candidate URLs that may contain a link to the PDF
         """
-        df = pd.DataFrame(result.get('hits').get('hits'))
-        df = pd.concat([df.drop(["_source"], axis=1),
-                        df["_source"].apply(pd.Series)],
-                       axis=1)
+        df = pd.DataFrame((d.to_dict() for d in result))
         metadata = pd.DataFrame()
         metadata["id"] = df.identifier.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["title"] = df.title.map(lambda x: x[0] if isinstance(x, list) else "")
