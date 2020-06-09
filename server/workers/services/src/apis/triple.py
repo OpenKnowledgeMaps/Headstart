@@ -42,6 +42,9 @@ search_query = triple_ns.model("SearchQuery",
                                                           required=True),
                                 "limit": fields.Integer(example=100,
                                                         description='max. number of results'),
+                                "language": fields.String(example='en',
+                                                          description='language code, optional',
+                                                          required=False),
                                 "raw": fields.Boolean(example="false",
                                                       description='raw results from ElasticSearch')})
 
@@ -56,9 +59,9 @@ class Search(Resource):
         """
         """
         params = request.get_json()
-        params["list_size"] = params.get('limit', 100)
         triple_ns.logger.debug(params)
         errors = search_param_schema.validate(params, partial=True)
+        params["list_size"] = params.get('limit', 100)
         triple_ns.logger.debug(errors)
         if errors:
             abort(400, str(errors))
