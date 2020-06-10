@@ -181,6 +181,7 @@ class TripleClient(object):
         subject_cleaned = re.sub(r" ?\d[:?-?]?(\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
         subject_cleaned = re.sub(r"\w+:\w+-(\w+\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
         subject_cleaned = re.sub(r"\[\w+\.?\w+\]", "", subject_cleaned) # replace residuals like [shs.hisphilso]
+        subject_cleaned = re.sub(r"; ?$", "", subject_cleaned) # remove trailing '; '
         return subject_cleaned
 
     @staticmethod

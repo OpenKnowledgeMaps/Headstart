@@ -1,13 +1,27 @@
 import pandas as pd
+import logging
+import sys
+import os
+
+formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
+                              datefmt='%Y-%m-%d %H:%M:%S')
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(os.environ["HEADSTART_LOGLEVEL"])
+handler = logging.StreamHandler(sys.stdout)
+handler.setFormatter(formatter)
+handler.setLevel(os.environ["HEADSTART_LOGLEVEL"])
+logger.addHandler(handler)
 
 
 def get_streamgraph_data(metadata, n=12):
     df = pd.DataFrame.from_records(metadata)
-    df = df[df.subject is not None]
     df.year = pd.to_datetime(df.year)
     df.year = df.year.map(lambda x: x.year)
     df.year = df.year.map(lambda x: pd.to_datetime(x, format="%Y"))
-    df.subject = df.subject.map(lambda x: x.split("; "))
+    logger.debug(df.subject)
+    df.subject = df.subject.map(lambda x: x.split("; ") if x else [""])
     df["boundary_label"] = df.year
     df = df.explode('subject')
     df = df[df.subject != ""]
