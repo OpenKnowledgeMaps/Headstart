@@ -85,8 +85,6 @@ vis_layout <- function(text, metadata, service,
                                             stops=stops, taxonomy_separator)
     output <- create_overview_output(named_clusters, layout, metadata)
   } else {
-    stops <- get_stopwords(lang, testing)
-    metadata = replace_keywords_if_empty(metadata, stops, service)
     output <- create_streamgraph_output(metadata)
   }
 
