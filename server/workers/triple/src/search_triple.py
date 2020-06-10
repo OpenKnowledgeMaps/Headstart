@@ -145,7 +145,7 @@ class TripleClient(object):
         metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if isinstance(x, list) else "")
         metadata["paper_abstract"] = df.abstract.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["published_in"] = df.publisher.map(lambda x: x[0].get('name') if isinstance(x, list) else "")
-        metadata["year"] = df.datestamp.map(lambda x: x if isinstance(x, str) else "")
+        metadata["year"] = df.date.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["url"] = df.url.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["readers"] = 0
         metadata["subject"] = df.keyword.map(lambda x: "; ".join([self.clean_subject(s) for s in x]) if isinstance(x, list) else "")
