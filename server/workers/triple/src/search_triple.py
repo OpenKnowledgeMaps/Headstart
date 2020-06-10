@@ -106,7 +106,7 @@ class TripleClient(object):
         # TODO: replace from parameters
         q = self.parse_query(parameters.get('q'), fields)
         s = s.query(q)
-        if parameters.get('language') is not None:
+        if parameters.get('language') != 'all':
             s = s.filter("match", language__label=self.get_lang(parameters))
         s = s.query("range", date=self.build_date_field(
                     parameters.get('from'),
