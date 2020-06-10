@@ -22,23 +22,6 @@ if (Sys.getenv("HEADSTART_LOGLEVEL") == "DEBUG") {
   DEBUG <- TRUE
 }
 
-params <- fromJSON(params_file)
-input_data <- fromJSON(input_file)
-text <- fromJSON(input_data$text)
-metadata <- fromJSON(input_data$metadata)
-
-if (!is.null(params$lang_id)) {
-  lang_id <- params$lang_id
-} else {
-  lang_id <- 'all'
-}
-
-if (!is.null(params$vis_type)) {
-  vis_type <- params$vis_type
-} else {
-  vis_type <- 'overview'
-}
-
 if (DEBUG==TRUE){
   setup_logging('DEBUG')
 } else {
@@ -96,11 +79,32 @@ valid_langs <- list(
   'vie'='vietnamese'
 )
 
+tslog <- getLogger('ts')
+
+params <- fromJSON(params_file)
+
+if (!is.null(params$lang_id)) {
+  lang_id <- params$lang_id
+} else {
+  lang_id <- 'all'
+}
+
+if (!is.null(params$vis_type)) {
+  vis_type <- params$vis_type
+} else {
+  vis_type <- 'overview'
+}
+
+input_data <- fromJSON(input_file)
+tslog$debug(input_data)
+text <- fromJSON(input_data$text)
+tslog$debug(text)
+metadata <- fromJSON(input_data$metadata)
+tslog$debug(metadata)
+
 MAX_CLUSTERS = params$MAX_CLUSTERS
 LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
 ADDITIONAL_STOP_WORDS = LANGUAGE$name
-
-tslog <- getLogger('ts')
 
 failed <- list(params=params)
 tryCatch({
