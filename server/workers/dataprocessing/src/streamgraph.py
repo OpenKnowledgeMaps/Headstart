@@ -3,6 +3,7 @@ import pandas as pd
 
 def get_streamgraph_data(metadata, n=12):
     df = pd.DataFrame.from_records(metadata)
+    df = df[df.subject is not None]
     df.year = pd.to_datetime(df.year)
     df.year = df.year.map(lambda x: x.year)
     df.year = df.year.map(lambda x: pd.to_datetime(x, format="%Y"))
