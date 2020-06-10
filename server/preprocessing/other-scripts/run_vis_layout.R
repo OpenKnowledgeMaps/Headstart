@@ -16,7 +16,11 @@ library(tibble)
 library(tidyr)
 source('utils.R')
 source("vis_layout.R")
-DEBUG = FALSE
+if (Sys.getenv("HEADSTART_LOGLEVEL") == "DEBUG") {
+  DEBUG <- FALSE
+} else {
+  DEBUG <- TRUE
+}
 
 params <- fromJSON(params_file)
 input_data <- fromJSON(input_file)

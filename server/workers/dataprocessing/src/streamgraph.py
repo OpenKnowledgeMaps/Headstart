@@ -21,7 +21,9 @@ def get_streamgraph_data(metadata, n=12):
     df.year = df.year.map(lambda x: x.year)
     df.year = df.year.map(lambda x: pd.to_datetime(x, format="%Y"))
     logger.debug(df.subject)
-    df.subject = df.subject.map(lambda x: x.split("; ") if x else [""])
+    df = df[df.subject.map(lambda x: x is not None)]
+    df.subject = df.subject.map(lambda x: [s for s in x.split("; ") if s])
+    df = df[df.subject.map(lambda x: x != [])]
     df["boundary_label"] = df.year
     df = df.explode('subject')
     df = df[df.subject != ""]
