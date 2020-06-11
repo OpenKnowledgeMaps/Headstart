@@ -112,7 +112,7 @@ class TripleClient(object):
                     parameters.get('from'),
                     parameters.get('to')))
         #s = s[parameters.get('pagination_from'):parameters.get('pagination_to')]
-        s = s[0:self.get_limit(parameters)]
+        s = s[0:self.get_limit(parameters)*2]
         if parameters.get('sorting') == "most-relevant":
             s = s.sort() #  default value
         if parameters.get('sorting') == "most-recent":
