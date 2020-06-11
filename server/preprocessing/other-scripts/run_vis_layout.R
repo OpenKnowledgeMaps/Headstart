@@ -4,8 +4,6 @@ args <- commandArgs(TRUE)
 wd <- args[1]
 query <- args[2]
 service <- args[3]
-params_file <- args[4]
-input_file <- args[5]
 
 setwd(wd) #Don't forget to set your working directory
 
@@ -81,7 +79,10 @@ valid_langs <- list(
 
 tslog <- getLogger('ts')
 
-params <- fromJSON(params_file)
+f <- file("stdin")
+open(f)
+data = fromJSON(readLines(f))
+params <- data$params
 
 if (!is.null(params$lang_id)) {
   lang_id <- params$lang_id
@@ -95,7 +96,8 @@ if (!is.null(params$vis_type)) {
   vis_type <- 'overview'
 }
 
-input_data <- fromJSON(input_file)
+
+input_data <- data$input_data
 text <- fromJSON(input_data$text)
 metadata <- fromJSON(input_data$metadata)
 

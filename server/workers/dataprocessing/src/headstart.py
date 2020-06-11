@@ -50,14 +50,16 @@ class Dataprocessing(object):
     def create_map(self, params, input_data):
         q = params.get('q')
         service = params.get('service')
-        input_data = json.dumps(input_data)
-        params = json.dumps(input_data)
-        self.logger.debug(input_data)
+        data = {}
+        data["input_data"] = input_data
+        data["params"] = params
         cmd = [self.command, self.hs, self.wd,
-               q, service,
-               params, input_data]
-        output = subprocess.check_output(cmd)
-        output = [o for o in output.decode('utf-8').split('\n') if len(o) > 0]
+               q, service]
+        proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                encoding="utf-8")
+        stdout, stderr = proc.communicate(json.dumps(data))
+        output = [o for o in stdout.split('\n') if len(o) > 0]
+        error = [o for o in stderr.split('\n') if len(o) > 0]
         return pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
 
     def run(self):
