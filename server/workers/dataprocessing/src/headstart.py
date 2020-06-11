@@ -48,17 +48,15 @@ class Dataprocessing(object):
         return k, params, input_data
 
     def create_map(self, params, input_data):
-        with NamedTemporaryFile(mode='w+', suffix='.json') as param_file:
-            with NamedTemporaryFile(mode='w+', suffix='.json') as input_file:
-                json.dump(params, param_file)
-                param_file.flush()
-                json.dump(input_data, input_file)
-                input_file.flush()
-                cmd = [self.command, self.hs, self.wd,
-                       params.get('q'), params.get('service'),
-                       param_file.name, input_file.name]
-                self.logger.debug(cmd)
-                output = subprocess.check_output(cmd)
+        q = params.get('q')
+        service = params.get('service')
+        input_data = json.dumps(input_data)
+        params = json.dumps(input_data)
+        self.logger.debug(input_data)
+        cmd = [self.command, self.hs, self.wd,
+               q, service,
+               params, input_data]
+        output = subprocess.check_output(cmd)
         output = [o for o in output.decode('utf-8').split('\n') if len(o) > 0]
         return pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
 

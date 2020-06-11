@@ -96,11 +96,8 @@ if (!is.null(params$vis_type)) {
 }
 
 input_data <- fromJSON(input_file)
-tslog$debug(input_data)
 text <- fromJSON(input_data$text)
-tslog$debug(text)
 metadata <- fromJSON(input_data$metadata)
-tslog$debug(metadata)
 
 MAX_CLUSTERS = params$MAX_CLUSTERS
 LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
