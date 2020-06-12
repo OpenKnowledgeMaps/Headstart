@@ -1,6 +1,7 @@
 var data_config = {
     tag: "visualization",
     mode: "search_repos",
+    backend: "api",
 
     service: "triple",
 
@@ -30,6 +31,4 @@ var data_config = {
 
     embed_modal: true,
     share_modal: false,
-
-    backend: "api"
 };
