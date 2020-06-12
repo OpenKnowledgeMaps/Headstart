@@ -40,17 +40,17 @@ schema = Schema([
     Column('ID', []),
     Column('Title', []),
     Column('Authors', []),
-    Column('Abstract', []),
     Column('Publication Venue', []),
     Column('Publication Date', [DateFormatValidation("%Y-%m-%d")]),
+    Column('Abstract', []),
     Column('Link to PDF', []),
+    Column('Type', []),
     Column('Keywords', []),
-    Column('Access', []),
     Column('Tags', []),
+    Column('Access', []),
+    Column('Area', []),
     Column('Included in map', [InListValidation(["yes", "no"])]),
     Column('Ready for publication?', [InListValidation(["yes", "no"])]),
-    Column('Type', []),
-    Column('Area', []),
     Column('Validation', []),
     Column('Comment 1', []),
     Column('Author Comment 1', []),
@@ -185,7 +185,7 @@ class GSheetsClient(object):
         errors = schema.validate(df)
         errors_index_rows = [e.row for e in errors]
         error_columns = [e.column for e in errors]
-        error_reasons = [" ".join([e.value, e.message]) for e in errors]
+        error_reasons = [" ".join([str(e.value), str(e.message)]) for e in errors]
         if errors_index_rows == [-1]:
             clean_df = df
             errors_df = pd.DataFrame(columns=["row", "column", "reason", "data"])
