@@ -26,7 +26,7 @@ const listEntryTemplateCris = require("templates/list/cris/list_entry_cris.handl
 const listSubEntryTemplateCris = require("templates/list/cris/list_subentry_cris.handlebars");
 const listSubEntryStatisticsTemplateCris = require("templates/list/cris/list_subentry_statistics_cris.handlebars");
 const listSubEntryStatisticDistributionTemplateCris = require("templates/list/cris/list_subentry_statistic_distribution_cris.handlebars");
-const doiOutlinkTemplate = require("templates/list/doi_outlink.handlebars");
+const listComment = require("templates/list/comment.handlebars");
 const listMetricTemplate = require('templates/list/list_metrics.handlebars');
 const filterDropdownEntryTemplate = require("templates/list/filter_dropdown_entry.handlebars");
 const showHideLabel = require("templates/list/show_hide_label.handlebars")
@@ -687,11 +687,19 @@ list.setIconsAndTags = function (list_metadata) {
 
 list.createComments = function(nodes) {
     nodes[0].forEach((elem) => {
-        let current_comment = 
+        let list_comments = 
                 d3.select(elem).select("#list_comments")
-                    .classed("nodisplay", (d) => { return d.comments === ""; } )
+                    .classed("nodisplay", (d) => { return d.comments.length === 0; } )
         
-        current_comment.select("#comment").text((d) => { return d.comments })
+        for (comment of d.comments) {
+            list_comments.appendHTML(function() {
+                            return listComment({
+                                comment: comment.comment
+                                , by: config.localization[config.language].comment_by_label
+                                , author: comment.author
+                            })  
+                    })
+        }
     })
 }
 
