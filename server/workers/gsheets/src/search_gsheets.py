@@ -239,8 +239,7 @@ class GSheetsClient(object):
         text["id"] = metadata["id"]
         text["content"] = metadata.apply(lambda x: ". ".join(x[["title",
                                                                 "paper_abstract",
-                                                                "subject",
-                                                                "comments"]]), axis=1)
+                                                                "subject"]]), axis=1)
         input_data = {}
         input_data["metadata"] = metadata.to_json(orient='records')
         input_data["text"] = text.to_json(orient='records')
