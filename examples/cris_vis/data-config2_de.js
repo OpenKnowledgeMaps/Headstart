@@ -2,8 +2,6 @@ var data_config = {
     tag: "visualization",
     mode: "local_files",
     
-    backend: "legacy",
-
     bubble_min_scale: 1.2,
     bubble_max_scale: 1.05,
     
