@@ -114,6 +114,10 @@ var config = {
     is_streamgraph: false,
     streamgraph_zoom: false,
     
+
+    // API / backend integration settings
+    backend: "legacy",
+
     // transition
     transition_duration: 750,
     zoomout_transition: 750,
