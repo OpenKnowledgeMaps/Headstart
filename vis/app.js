@@ -12,8 +12,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 var start = function(json_data) {
     if(data_config) Object.assign(config, data_config);
     window.namespace = "headstart";
-    var headstartInstance = new hs.HeadstartFSM(json_data);
-    headstartInstance.start();
+    window.headstartInstance = new hs.HeadstartFSM(json_data);
+    window.headstartInstance.start();
 }
 
 export {start};
