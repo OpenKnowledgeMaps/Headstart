@@ -66,7 +66,7 @@ schema = Schema([
 def process_comments(row):
     row = row.tolist()
     comments = []
-    for i in range(len(row)//2):
+    for i in range(0, len(row), 2):
         com = row[i]
         aut = row[i+1]
         if com is not None:
