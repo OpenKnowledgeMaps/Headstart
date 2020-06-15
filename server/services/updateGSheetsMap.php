@@ -26,7 +26,7 @@ if(php_sapi_name() == 'cli') {
 }
 
 
-$result = search("gsheets", $dirty_query, array("q" => $dirty_query, "sheet_id" => $sheet_id, "sheet_range" => "Resources!A1:O200")
+$result = search("gsheets", $dirty_query, array("q" => $dirty_query, "sheet_id" => $sheet_id, "sheet_range" => "Resources!A1:AG200")
                     , array("sheet_id")
                     , ";", null, false, false, null, 3
                     , "area_uri", "subject", $sheet_id, false

@@ -40,19 +40,41 @@ schema = Schema([
     Column('ID', []),
     Column('Title', []),
     Column('Authors', []),
-    Column('Abstract', []),
     Column('Publication Venue', []),
     Column('Publication Date', [DateFormatValidation("%Y-%m-%d")]),
+    Column('Abstract', []),
     Column('Link to PDF', []),
+    Column('Type', []),
     Column('Keywords', []),
-    Column('Access', []),
-    Column('Comments', []),
     Column('Tags', []),
+    Column('Access', []),
+    Column('Area', []),
     Column('Included in map', [InListValidation(["yes", "no"])]),
     Column('Ready for publication?', [InListValidation(["yes", "no"])]),
-    Column('Type', []),
-    Column('Area', [])
+    Column('Validation', []),
+    Column('Comment 1', []),
+    Column('Author Comment 1', []),
+    Column('Comment 2', []),
+    Column('Author Comment 2', []),
+    Column('Comment 3', []),
+    Column('Author Comment 3', []),
+    Column('Comment 4', []),
+    Column('Author Comment 4', [])
 ])
+
+
+def process_comments(row):
+    row = row.tolist()
+    comments = []
+    for i in range(0, len(row)-1, 2):
+        com = row[i]
+        aut = row[i+1]
+        if com is not None:
+            if aut is None:
+                aut = ""
+            comments.append({"comment": com,
+                             "author": aut})
+    return comments
 
 
 class GSheetsClient(object):
@@ -163,7 +185,7 @@ class GSheetsClient(object):
         errors = schema.validate(df)
         errors_index_rows = [e.row for e in errors]
         error_columns = [e.column for e in errors]
-        error_reasons = [" ".join([e.value, e.message]) for e in errors]
+        error_reasons = [" ".join([str(e.value), str(e.message)]) for e in errors]
         if errors_index_rows == [-1]:
             clean_df = df
             errors_df = pd.DataFrame(columns=["row", "column", "reason", "data"])
@@ -210,15 +232,14 @@ class GSheetsClient(object):
         metadata["oa_state"] = df.Access
         metadata["link"] = df["Link to PDF"].map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["relevance"] = df.index
-        metadata["comments"] = df.Comments
+        metadata["comments"] = df.iloc[:, 15:24].apply(lambda x: process_comments(x), axis=1)
         metadata["tags"] = df.Tags.map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["resulttype"] = df.Type
         text = pd.DataFrame()
         text["id"] = metadata["id"]
         text["content"] = metadata.apply(lambda x: ". ".join(x[["title",
                                                                 "paper_abstract",
-                                                                "subject",
-                                                                "comments"]]), axis=1)
+                                                                "subject"]]), axis=1)
         input_data = {}
         input_data["metadata"] = metadata.to_json(orient='records')
         input_data["text"] = text.to_json(orient='records')
