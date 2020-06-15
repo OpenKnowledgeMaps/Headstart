@@ -160,6 +160,7 @@ IO.prototype = {
             that.setDefaultIfNullOrUndefined(d, 'x', locale.default_x);
             that.setDefaultIfNullOrUndefined(d, 'y', locale.default_y);
             that.setDefaultIfNullOrUndefined(d, 'year', locale.default_year);
+            that.setDefaultIfNullOrUndefined(d, 'comments', {});
             config.scale_types.forEach((type) => {
                 that.setDefaultIfNullOrUndefined(d, type, locale.default_readers);
             })
@@ -359,6 +360,8 @@ IO.prototype = {
                                 + "&doc_id=" + d.id
                                 + "&search_term=" + context.query.replace(/\\(.?)/g, "$1");
             }
+            
+            d.comments_for_filtering = _this.createCommentStringForFiltering(d.comments);
 
         });
         
@@ -410,6 +413,16 @@ IO.prototype = {
         }
 
         this.data = cur_data;
+    },
+    
+    createCommentStringForFiltering: function(comments) {
+        let return_string = "";
+        
+        for(let comment of comments) {
+            return_string += comment.comment + " " + comment.author;
+        }
+        
+        return return_string;
     },
     
     convertToSafeID: function (id) {

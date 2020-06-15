@@ -996,7 +996,7 @@ list.hideEntriesByWord = function(object, search_words) {
             let word_found = true;
             let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toString().toLowerCase()) : ("");
             let tags = (d.hasOwnProperty("tags")) ? (d.tags.toString().toLowerCase()) : ("");
-            let comments = (d.hasOwnProperty("comments")) ? (d.comments.toString().toLowerCase()) : ("");
+            let comments = (d.hasOwnProperty("comments_for_filtering")) ? (d.comments_for_filtering.toString().toLowerCase()) : ("");
             let resulttype = (d.hasOwnProperty("resulttype")) ? (d.resulttype.toString().toLowerCase()) : ("");
             //TODO: make these two properties language-aware
             let open_access = (d.hasOwnProperty("oa") && d.oa === true) ? ("open access") : ("");
