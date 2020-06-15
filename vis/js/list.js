@@ -686,21 +686,24 @@ list.setIconsAndTags = function (list_metadata) {
 };
 
 list.createComments = function(nodes) {
+       
     nodes[0].forEach((elem) => {
         let current_d = d3.select(elem).select("#list_comments").data()[0];
         
         let list_comments = 
                 d3.select(elem).select("#list_comments")
                     .classed("nodisplay", (d) => { return d.comments.length === 0; } )
+            
         
         for (let comment of current_d.comments) {
-            list_comments.appendHTML(function() {
-                            return listComment({
+            let comment_html = listComment({
                                 comment: comment.comment
+                                , has_author: () => { return comment.author !== "" }
                                 , by: config.localization[config.language].comment_by_label
                                 , author: comment.author
-                            })  
-                    })
+                            });
+        
+            list_comments.appendHTML(comment_html)
         }
     })
 }

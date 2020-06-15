@@ -203,14 +203,13 @@ export function updateTags(current_context, overall_context, div, attribute, dis
     }
 
 }
-
 d3.selection.prototype.appendHTML =
     d3.selection.enter.prototype.appendHTML = function(HTMLString) {
         return this.select(function() {
             return this.appendChild(document.importNode(new DOMParser().parseFromString(HTMLString, 'text/html').body.childNodes[0], true));
         });
     };
-
+    
 // functions which are not being called at the moment, but might
 // mausrad -> zoomen
 // export function redraw() {
