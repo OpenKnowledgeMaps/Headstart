@@ -26,6 +26,7 @@ const listEntryTemplateCris = require("templates/list/cris/list_entry_cris.handl
 const listSubEntryTemplateCris = require("templates/list/cris/list_subentry_cris.handlebars");
 const listSubEntryStatisticsTemplateCris = require("templates/list/cris/list_subentry_statistics_cris.handlebars");
 const listSubEntryStatisticDistributionTemplateCris = require("templates/list/cris/list_subentry_statistic_distribution_cris.handlebars");
+const doiOutlinkTemplate = require("templates/list/doi_outlink.handlebars");
 const listComment = require("templates/list/comment.handlebars");
 const listMetricTemplate = require('templates/list/list_metrics.handlebars');
 const filterDropdownEntryTemplate = require("templates/list/filter_dropdown_entry.handlebars");
