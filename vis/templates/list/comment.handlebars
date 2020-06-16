@@ -1,8 +1,10 @@
 <div id="list_comment" class="comments">
     <span><i class="fa fa-comment"></i></span>
-    <span id="comment" class="comment-text highlightable">"{{comment}}"</span>
-    {{#if has_author}}
-        <span id="comment-by-label" class="comment-text no-bg no-pd-right">by</span>
-        <span id="comment-author" class="comment-text highlightable no-bg no-pd-left no-pd-right">{{author}}</span>
-    {{/if}}
+    <div class="comment-text">
+        <span id="comment" class="highlightable">"{{comment}}"</span>
+        {{#if has_author}}
+            <span id="comment-by-label">by</span>
+            <span id="comment-author" class="highlightable comment-author">{{author}}</span>
+        {{/if}}
+    </div>
 </div>
