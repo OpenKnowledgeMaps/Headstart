@@ -40,17 +40,17 @@ schema = Schema([
     Column('ID', []),
     Column('Title', []),
     Column('Authors', []),
-    Column('Abstract', []),
     Column('Publication Venue', []),
     Column('Publication Date', [DateFormatValidation("%Y-%m-%d")]),
+    Column('Abstract', []),
     Column('Link to PDF', []),
+    Column('Type', []),
     Column('Keywords', []),
-    Column('Access', []),
     Column('Tags', []),
+    Column('Access', []),
+    Column('Area', []),
     Column('Included in map', [InListValidation(["yes", "no"])]),
     Column('Ready for publication?', [InListValidation(["yes", "no"])]),
-    Column('Type', []),
-    Column('Area', []),
     Column('Validation', []),
     Column('Comment 1', []),
     Column('Author Comment 1', []),
@@ -66,7 +66,7 @@ schema = Schema([
 def process_comments(row):
     row = row.tolist()
     comments = []
-    for i in range(len(row)//2):
+    for i in range(0, len(row)-1, 2):
         com = row[i]
         aut = row[i+1]
         if com is not None:
@@ -185,7 +185,7 @@ class GSheetsClient(object):
         errors = schema.validate(df)
         errors_index_rows = [e.row for e in errors]
         error_columns = [e.column for e in errors]
-        error_reasons = [" ".join([e.value, e.message]) for e in errors]
+        error_reasons = [" ".join([str(e.value), str(e.message)]) for e in errors]
         if errors_index_rows == [-1]:
             clean_df = df
             errors_df = pd.DataFrame(columns=["row", "column", "reason", "data"])
@@ -239,8 +239,7 @@ class GSheetsClient(object):
         text["id"] = metadata["id"]
         text["content"] = metadata.apply(lambda x: ". ".join(x[["title",
                                                                 "paper_abstract",
-                                                                "subject",
-                                                                "comments"]]), axis=1)
+                                                                "subject"]]), axis=1)
         input_data = {}
         input_data["metadata"] = metadata.to_json(orient='records')
         input_data["text"] = text.to_json(orient='records')

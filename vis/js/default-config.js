@@ -113,7 +113,13 @@ var config = {
     
     is_streamgraph: false,
     streamgraph_zoom: false,
+    streamgraph_colors: ["#28a2a3", "#671A54", "#CC3380", "#7acca3", "#c999ff", "#ffe199"
+        , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#2856A3"],
     
+
+    // API / backend integration settings
+    backend: "legacy",
+
     // transition
     transition_duration: 750,
     zoomout_transition: 750,
@@ -220,6 +226,7 @@ var config = {
             default_y: 1.,
             default_year: "",
             sort_by_label: 'sort by:',
+            comment_by_label: "by",
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
             pdf_not_loaded_linktext: "this website",
             share_button_title: "share this map",
@@ -273,6 +280,7 @@ var config = {
             sort_by_label: 'sortieren: ',
             relevance: "Relevanz",
             link: "Link",
+            comment_by_label: "von",
             share_button_title: "Visualisierung teilen",
             embed_button_title: "Visualisierung auf einer anderen Seite einbetten",
             embed_button_text: 'Kopieren',
@@ -330,6 +338,7 @@ var config = {
             sort_by_label: 'sortieren: ',
             relevance: "Relevanz",
             link: "Link",
+            comment_by_label: "von",
             share_button_title: "Visualisierung teilen",
             embed_button_title: "Visualisierung auf einer anderen Seite einbetten",
             embed_button_text: 'Kopieren',
@@ -376,6 +385,7 @@ var config = {
             default_y: 1.,
             default_year: "",
             sort_by_label: 'sort by:',
+            comment_by_label: "by",
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
             pdf_not_loaded_linktext: "this website",
             share_button_title: "share this map",
@@ -431,6 +441,7 @@ var config = {
             open_access: "Open Access",
             link: 'link',
             items: "items",
+            comment_by_label: "by",
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
             pdf_not_loaded_linktext: "this website",
             share_button_title: "share this map",
@@ -503,6 +514,7 @@ var config = {
             dataset: "datasets",
             items: "items",
             sort_by_label: 'sort by:',
+            comment_by_label: "by",
             scale_by_label: 'Scale map by:',
             scale_by_infolink_label: 'notes on use of metrics',
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
@@ -553,6 +565,7 @@ var config = {
             hide_verb_label: "einklappen",
             sort_by_label: 'sortieren: ',
             items: "Themen",
+            comment_by_label: "von",
             scale_by_infolink_label: '',
             scale_by_label: 'Verteilung für:',
             credit_alt: "Created by Open Knowledge Maps",
@@ -601,6 +614,7 @@ var config = {
             hide_verb_label: "einklappen",
             sort_by_label: 'sortieren: ',
             items: "Themen",
+            comment_by_label: "von",
             scale_by_infolink_label: '',
             scale_by_label: 'Verteilung für:',
             credit_alt: "Created by Open Knowledge Maps",
@@ -643,6 +657,7 @@ var config = {
             default_y: 1.,
             default_year: "",
             sort_by_label: 'sort by:',
+            comment_by_label: "by",
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
             showmore_questions_label: "Show all",
             showmore_questions_verb: "questions",
