@@ -27,6 +27,7 @@ const listSubEntryTemplateCris = require("templates/list/cris/list_subentry_cris
 const listSubEntryStatisticsTemplateCris = require("templates/list/cris/list_subentry_statistics_cris.handlebars");
 const listSubEntryStatisticDistributionTemplateCris = require("templates/list/cris/list_subentry_statistic_distribution_cris.handlebars");
 const doiOutlinkTemplate = require("templates/list/doi_outlink.handlebars");
+const listComment = require("templates/list/comment.handlebars");
 const listMetricTemplate = require('templates/list/list_metrics.handlebars');
 const filterDropdownEntryTemplate = require("templates/list/filter_dropdown_entry.handlebars");
 const showHideLabel = require("templates/list/show_hide_label.handlebars")
@@ -686,12 +687,25 @@ list.setIconsAndTags = function (list_metadata) {
 };
 
 list.createComments = function(nodes) {
+       
     nodes[0].forEach((elem) => {
-        let current_comment = 
-                d3.select(elem).select("#list_comments")
-                    .classed("nodisplay", (d) => { return d.comments === ""; } )
+        let current_d = d3.select(elem).select("#list_comments").data()[0];
         
-        current_comment.select("#comment").text((d) => { return d.comments })
+        let list_comments = 
+                d3.select(elem).select("#list_comments")
+                    .classed("nodisplay", (d) => { return d.comments.length === 0; } )
+            
+        
+        for (let comment of current_d.comments) {
+            let comment_html = listComment({
+                                comment: comment.comment
+                                , has_author: () => { return comment.author !== "" }
+                                , by: config.localization[config.language].comment_by_label
+                                , author: comment.author
+                            });
+        
+            list_comments.appendHTML(comment_html)
+        }
     })
 }
 
@@ -983,7 +997,7 @@ list.hideEntriesByWord = function(object, search_words) {
             let word_found = true;
             let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toString().toLowerCase()) : ("");
             let tags = (d.hasOwnProperty("tags")) ? (d.tags.toString().toLowerCase()) : ("");
-            let comments = (d.hasOwnProperty("comments")) ? (d.comments.toString().toLowerCase()) : ("");
+            let comments = (d.hasOwnProperty("comments_for_filtering")) ? (d.comments_for_filtering.toString().toLowerCase()) : ("");
             let resulttype = (d.hasOwnProperty("resulttype")) ? (d.resulttype.toString().toLowerCase()) : ("");
             //TODO: make these two properties language-aware
             let open_access = (d.hasOwnProperty("oa") && d.oa === true) ? ("open access") : ("");

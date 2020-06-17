@@ -526,6 +526,10 @@ img#preview_page {
     text-decoration: none;
 }
 
+.comment-author {
+    font-style: italic;
+}
+
 @media screen and (max-width: 1150px) {
 
     .list_metadata .list_title {
@@ -869,6 +873,18 @@ img#preview_page {
         -webkit-border-radius:5px;
         display: inline-block;
         vertical-align: middle;
+        
+        &.no-bg {
+            background-color: transparent;
+        }
+        
+        &.no-pd-left {
+            padding-left: 0;
+        }
+        
+        &.no-pd-right {
+            padding-right: 0;
+        }
     }
 
     .comments {

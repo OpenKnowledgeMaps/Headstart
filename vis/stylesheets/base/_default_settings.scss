@@ -44,3 +44,7 @@ $open-access: $okm-red;
 @if $skin == 'linkedcat' {
     $open-access: #0047bb;
 }
+
+@if $skin == 'covis' {
+    $open-access: #1e6662;
+}
