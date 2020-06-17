@@ -1,4 +1,3 @@
-import { headstart } from 'headstart';
 import Mediator from 'mediator-js';
 import config from 'config';
 import { papers } from 'papers';
@@ -195,7 +194,7 @@ MyMediator.prototype = {
     io_async_get_data: function (url, input_format, callback) {
         // WORKAROUND, if I try to add headstart earlier it doesn't work
         // TODO find reason
-        mediator.modules.headstart = headstart;
+        mediator.modules.headstart = window.headstartInstance;
         mediator.manager.call('io', 'async_get_data', [url, input_format, callback]);
     },
 
@@ -221,6 +220,7 @@ MyMediator.prototype = {
         papers.current = "none";
         list.current = "none";
         $("#list_explorer").empty();
+        $("#backlink").remove();
         mediator.manager.call('canvas', 'setupToFileCanvas', []);
     },
 
@@ -272,7 +272,7 @@ MyMediator.prototype = {
         let context = (typeof csv.context !== 'object')?({}):(csv.context);
         mediator.streamgraph_data = (config.is_streamgraph)?(csv.streamgraph):{};
         
-        mediator.manager.registerModule(headstart, 'headstart');
+        mediator.manager.registerModule(window.headstartInstance, 'headstart');
         
         if(config.is_streamgraph) {         
             mediator.manager.call('canvas', 'setupStreamgraphCanvas', []);
@@ -587,11 +587,11 @@ MyMediator.prototype = {
     },
 
     record_action: function(id, category, action, user, type, timestamp, additional_params, post_data) {
-        headstart.recordAction(id, category, action, user, type, timestamp, additional_params, post_data);
+        window.headstartInstance.recordAction(id, category, action, user, type, timestamp, additional_params, post_data);
     },
     
     mark_project_changed: function(id) {
-        headstart.markProjectChanged(id);
+        window.headstartInstance.markProjectChanged(id);
     },
 
     window_resize: function() {
