@@ -1,7 +1,5 @@
 import config from 'config';
 import { mediator } from 'mediator';
-import { canvas } from 'canvas'
-import { headstart } from 'headstart'
 
 class Scale {
   constructor (scaleTypes) {
@@ -60,7 +58,7 @@ class Scale {
             config.content_based = false;
             config.initial_sort = config.scale_base_unit[type];
         }
-        headstart.tofile(mediator.current_file_number)
+        window.headstartInstance.tofile(mediator.current_file_number)
     } else {
         mediator.publish("update_visual_distributions", type);
     }
