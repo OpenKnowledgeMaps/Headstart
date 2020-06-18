@@ -488,7 +488,7 @@ BubblesFSM.prototype = {
         shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
 
         if (previous_zoom_node === null) {
-            $("#context").css("visibility", "hidden");
+            $("#context").css("display", "none");
             
             $('<p id="backlink" class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
 
