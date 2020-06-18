@@ -17,6 +17,7 @@ valid_langs = {
     'es': 'Spanish'
 }
 
+
 class TripleClient(object):
 
     def __init__(self, config):
@@ -105,20 +106,15 @@ class TripleClient(object):
         # TODO: replace from parameters
         q = self.parse_query(parameters.get('q'), fields)
         s = s.query(q)
-        s = s.filter("match", language__label=self.get_lang(parameters))
+        if parameters.get('language') != 'all':
+            s = s.filter("match", language__label=self.get_lang(parameters))
         s = s.query("range", date=self.build_date_field(
                     parameters.get('from'),
                     parameters.get('to')))
-
-        s = s.query(q)
-        s = s.filter("match", language__label="Spanish")
-        s = s.query("range", date=self.build_date_field(
-            parameters.get('from'),
-            parameters.get('to')))
         #s = s[parameters.get('pagination_from'):parameters.get('pagination_to')]
-        s = s[0:self.get_limit(parameters)]
+        s = s[0:self.get_limit(parameters)*2]
         if parameters.get('sorting') == "most-relevant":
-            s = s.sort() # default value
+            s = s.sort() #  default value
         if parameters.get('sorting') == "most-recent":
             s = s.sort("-date")
         self.logger.debug(s.to_dict())
@@ -149,7 +145,7 @@ class TripleClient(object):
         metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if isinstance(x, list) else "")
         metadata["paper_abstract"] = df.abstract.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["published_in"] = df.publisher.map(lambda x: x[0].get('name') if isinstance(x, list) else "")
-        metadata["year"] = df.datestamp.map(lambda x: x if isinstance(x, str) else "")
+        metadata["year"] = df.date.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["url"] = df.url.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["readers"] = 0
         metadata["subject"] = df.keyword.map(lambda x: "; ".join([self.clean_subject(s) for s in x]) if isinstance(x, list) else "")
@@ -186,6 +182,7 @@ class TripleClient(object):
         subject_cleaned = re.sub(r" ?\d[:?-?]?(\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
         subject_cleaned = re.sub(r"\w+:\w+-(\w+\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
         subject_cleaned = re.sub(r"\[\w+\.?\w+\]", "", subject_cleaned) # replace residuals like [shs.hisphilso]
+        subject_cleaned = re.sub(r"; ?$", "", subject_cleaned) # remove trailing '; '
         return subject_cleaned
 
     @staticmethod
