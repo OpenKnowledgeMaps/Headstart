@@ -381,7 +381,7 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
 
 .logoimg {
     border-radius: 5px;
-    moz-border-radius: 5px;
+    -moz-border-radius: 5px;
     padding: 5px;
     width: 60px;
     background-color:white;
