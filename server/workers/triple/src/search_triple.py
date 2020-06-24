@@ -169,7 +169,8 @@ class TripleClient(object):
         metadata["year"] = df.datestamp.map(lambda x: x if isinstance(x, str) else "")
         metadata["url"] = df.url.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["readers"] = 0
-        metadata["subject"] = df.keyword.map(lambda x: "; ".join([self.clean_subject(s) for s in x]) if isinstance(x, list) else "")
+        metadata["subject_orig"] = df.keyword.map(lambda x: "; ".join([self.clean_subject(s) for s in x]) if isinstance(x, list) else "")
+        metadata["subject"] = metadata["subject_orig"]
         metadata["oa_state"] = 2
         metadata["link"] = ""
         metadata["relevance"] = df.index
