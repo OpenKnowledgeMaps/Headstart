@@ -220,6 +220,7 @@ MyMediator.prototype = {
         papers.current = "none";
         list.current = "none";
         $("#list_explorer").empty();
+        $("#backlink").remove();
         mediator.manager.call('canvas', 'setupToFileCanvas', []);
     },
 
