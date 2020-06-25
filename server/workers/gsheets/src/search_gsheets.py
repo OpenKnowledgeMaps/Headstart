@@ -228,7 +228,8 @@ class GSheetsClient(object):
         metadata["year"] = df["Publication Date"]
         metadata["url"] = df.ID
         metadata["readers"] = 0
-        metadata["subject"] = df.Keywords
+        metadata["subject_orig"] = df.Keywords
+        metadata["subject"] = metadata["subject_orig"]
         metadata["oa_state"] = df.Access
         metadata["link"] = df["Link to PDF"].map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["relevance"] = df.index
