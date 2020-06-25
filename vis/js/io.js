@@ -160,6 +160,8 @@ IO.prototype = {
             that.setDefaultIfNullOrUndefined(d, 'x', locale.default_x);
             that.setDefaultIfNullOrUndefined(d, 'y', locale.default_y);
             that.setDefaultIfNullOrUndefined(d, 'year', locale.default_year);
+            that.setDefaultIfNullOrUndefined(d, 'comments', []);
+            that.setDefaultIfNullOrUndefined(d, 'subject_orig', "");
             config.scale_types.forEach((type) => {
                 that.setDefaultIfNullOrUndefined(d, type, locale.default_readers);
             })
@@ -239,8 +241,6 @@ IO.prototype = {
             d.published_in = _this.setToStringIfNullOrUndefined(d.published_in, "");
             d.title = _this.setToStringIfNullOrUndefined(d.title,
                 config.localization[config.language]["no_title"]);
-                
-            d.subject_orig = _this.setToStringIfNullOrUndefined(d.subject, "");
                 
             var prepareMetric = function(d, metric) {
                  if(d.hasOwnProperty(metric)) {
