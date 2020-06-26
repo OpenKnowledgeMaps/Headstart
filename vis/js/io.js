@@ -359,6 +359,8 @@ IO.prototype = {
                                 + "&doc_id=" + d.id
                                 + "&search_term=" + context.query.replace(/\\(.?)/g, "$1");
             }
+            
+            d.comments_for_filtering = _this.createCommentStringForFiltering(d.comments);
 
         });
         
@@ -410,6 +412,16 @@ IO.prototype = {
         }
 
         this.data = cur_data;
+    },
+    
+    createCommentStringForFiltering: function(comments) {
+        let return_string = "";
+        
+        for(let comment of comments) {
+            return_string += comment.comment + " " + comment.author;
+        }
+        
+        return return_string;
     },
     
     convertToSafeID: function (id) {

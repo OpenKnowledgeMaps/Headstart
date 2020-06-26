@@ -151,6 +151,7 @@
 
 </script>
 
+<?php if ($GA_ENABLED): ?>
 <script>
     // Set to the same value as the web property used on the site
     var gaProperty = '<?php echo $GA_CODE; ?>';
@@ -167,7 +168,6 @@
     }
 </script>
 
-<?php if ($GA_ENABLED): ?>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $GA_CODE; ?>"></script>
     <script>
