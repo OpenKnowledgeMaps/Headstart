@@ -114,6 +114,7 @@ get_return_values <- function(all_artifacts){
 }
 
 preprocess_data <- function(all_artifacts){
+  all_artifacts$subject_orig <- all_artifacts$subject
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\[[A-Za-z \\.-]+\\]", "", x)})) # removes [ INFO.INFO-MA ] Computer Science [cs]/Multiagent Systems [cs.MA]
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub(" ?/", ";", x)}))
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\:.*\\:\\:", "", x)})) # keeps only last part after :: ":Enginyeria de la telecomunicació::Processament del senyal::Reconeixement de formes [Àrees temàtiques de la UPC]"
