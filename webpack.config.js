@@ -73,6 +73,9 @@ const common = {
             chunkFilename: '[id].css',
             ignoreOrder: false, // Enable to remove warnings about conflicting order
           }),
+          new webpack.EnvironmentPlugin({
+            MODERN_FRONTEND: false
+          })
     ],
     module: {
         rules: [
