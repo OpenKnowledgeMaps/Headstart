@@ -688,7 +688,7 @@ var config = {
     },
 
     // modern_frontend feature flag
-    modern_frontend_enabled: false
+    modern_frontend_enabled: process.env.MODERN_FRONTEND
 };
 
 if (config.content_based) {
