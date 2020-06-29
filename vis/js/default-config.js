@@ -1,117 +1,171 @@
 var config = {
+    
+/*** basic visualization modes ***/
+    //show list
+    render_list: true,
+    //show map (should be renamed to reflect that)
+    render_bubbles: true,
+    //show toolbar at the bottom
+    scale_toolbar: false,
+    //show streamgraph instead of map
+    is_streamgraph: false,
+    
+/*** basic map dimensions for the canvas (in pixels) ***/  
+    //minimum height
+    min_height: 600,
+    //minimum width
+    min_width: 600,
+    //maximum height
+    max_height: 1000,
+    //[deprecated] size of multiples
+    multiples_size: 600,
+    //padding for map range of articles (currently set inline) 
+    padding_articles: 0,
+    //padding for map range of bubbles (currently set dynamically inline)
+    circle_padding: 0,
+    
+/*** reference sizes for the map, bubbles and papers (in pixels) ***/    
+    // map reference size
+    reference_size: 650,
+    //max paper size
+    max_diameter_size: 50,
+    //min paper size
+    min_diameter_size: 30,
+    //max bubble size
+    max_area_size: 110,
+    //min bubble size
+    min_area_size: 50,
+    
+/*** adapt min and max sizes for bubbles and papers (1 = reference size) ***/    
     bubble_min_scale: 1,
     bubble_max_scale: 1,
     paper_min_scale: 1,
     paper_max_scale: 1,
-    zoom_factor: 0.9,
-    padding_articles: 0,
-    circle_padding: 0,
+    //enables a mode for dynamic sizing based on the number of papers (for n > 150)
     dynamic_sizing: false,
-
-    // map
-    min_height: 600,
-    min_width: 600,
-    max_height: 1000,
-    multiples_size: 600,
-
-    // map reference sizes
-    reference_size: 650,
-    max_diameter_size: 50,
-    min_diameter_size: 30,
-    max_area_size: 110,
-    min_area_size: 50,
-
-    // bubbles
-    area_title_max_size: 50,
-
-    // papers
+    
+/*** paper ratios ***/    
+    // dogear height and width in relationship to paper height and widht
     dogear_width: 0.1,
     dogear_height: 0.1,
+    //paper width and height ratios (currently at the golden cut)
     paper_width_factor: 1.2,
     paper_height_factor: 1.6,
+    //height of the metrics section of the paper (ratio)
     paper_readers_height_factor: 0.2,
+    //magic number related to the height of the metrics section of the paper
     paper_metadata_height_correction: 25,
-
-    // list
-    min_list_size: 400,
-    max_list_size: 500,
-    list_height: 51,
-    list_height_correction: 29,
-
-    // preview
-    preview_image_width_list: 230,
-    preview_image_height_list: 298,
-    preview_page_height: 400,
-    preview_top_height: 30,
-    preview_image_width: 738,
-    preview_image_height: 984,
-    abstract_small: 250,
-    abstract_large: null,
-
-    // data specific settings
-    subdiscipline_title: "",
-    use_area_uri: false,
-    url_prefix: null,
-    url_prefix_datasets: null,
-    input_format: "csv",
-    base_unit: "readers",
-    preview_type: "image",
-
+    
+/*** basic list sizes (in pixels) ***/
+    //currently set inline - should be moved to config
+    
+/*** force-directed layout settings ***/
+    //enable force-directed layout for bubbles
     is_force_areas: false,
+    //alpha for force-directed layout for bubbles
     area_force_alpha: 0.02,
-
+    
+    //enable force-directed layout for papers
     is_force_papers: true,
+    //alpha for force-directed layout for papers
     papers_force_alpha: 0.1,
     
+    //enables a mode for dynamic alpha setting for force-directed layouts
     dynamic_force_area: false,
     dynamic_force_papers: false,
-
-    render_list: true,
-    render_bubbles: true,
-
-    // show
-    show_multiples: false,
-    show_dropdown: true,
-    show_intro: false,
-    show_infolink: true,
-    show_titlerow: true,
-    show_list: false,
-    show_context: false,
-    show_infolink_areas: false,
-    show_keywords: false,
-    show_tags: false,
-    hide_keywords_overview: true,
-    convert_author_names: true,
-    show_area: true,
-    show_resulttype: false,
-    show_comments: false,
-    show_loading_screen: false,
     
+/*** preview image & pdf sizes (list and overlay) ***/
+    //list sizes
+    preview_image_width_list: 230,
+    preview_image_height_list: 298,
+    //overlay sizes
+    preview_image_width: 738,
+    preview_image_height: 984,
+    
+ /*** zoom settings ***/    
+    //correction factor for zoomed in bubble size
+    zoom_factor: 0.9,
+    // transition durations
+    transition_duration: 750,
+    zoomout_transition: 750,
+
+/*** Settings for title and context line ***/
+    //set map title directly (should be renamed)
+    subdiscipline_title: "",
+    //[deprecated] show link to load multiples view
+    show_multiples: false,
+    //show link to display intro
+    show_infolink: true,
+    //show list onload (can be shown on click)
+    show_list: false,
+    //show dropdown to load different map datasets
+    show_dropdown: true,
+    //show context line
+    show_context: false,
+    //[deprecated] show link to display intro to area
+    show_infolink_areas: false,
     create_title_from_context: false,
     create_title_from_context_style: '',
     custom_title: null,
+    show_context_oa_number: true,
+    context_most_relevant_tooltip: false,
+    show_context_timestamp: false,
+    
+/*** list behaviour ***/
+    show_keywords: false,
+    show_tags: false,
+    hide_keywords_overview: true,
+    show_area: true,
+    show_resulttype: false,
+    show_comments: false,
     is_title_clickable: true,
-
+    //abstract length in characters when items are not expanded
+    abstract_small: 250,
+    //abstract length expanded (null = no character limit)
+    abstract_large: null,
+    list_set_backlink: false,
     sort_options: ["readers", "title", "authors", "year"],
     filter_options: ["all", "open_access", "publication", "dataset"],
     filter_field: null,
     sort_menu_dropdown: false,
     initial_sort: null,
     list_show_all_papers: false,
-
-    content_based: false,
-
     filter_menu_dropdown: false,
+    //[deprecated] list subentry settings
+    list_sub_entries: false,
+    list_sub_entries_readers: false,
+    list_sub_entries_number: false,
+    list_sub_entries_statistics: false,
+    //[deprecated] list additional images settings
+    list_additional_images: false,
+    list_images: [],
+    list_images_path: "images/",
+    visual_distributions: false,
+    //[deprecated] list link to an external visualization settings
+    list_show_external_vis: false,
+    external_vis_url: "",
     
-    scale_toolbar: false,
+    // data specific settings
+    content_based: false,
+    is_authorview: false,
+    use_area_uri: false,
+    url_prefix: null,
+    url_prefix_datasets: null,
+    input_format: "csv",
+    base_unit: "readers",
+    preview_type: "image",
+    convert_author_names: true,
+    // show
+    show_intro: false,
+    show_loading_screen: false,
+    
+
     embed_modal: false,
     share_modal: false,
     faqs_button: false,
     faqs_url: "",
-    
-    is_authorview: false,
-    
-    is_streamgraph: false,
+
+/*** streamgraph settings ***/
     streamgraph_zoom: false,
     streamgraph_colors: ["#28a2a3", "#671A54", "#CC3380", "#7acca3", "#c999ff", "#ffe199"
         , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#2856A3"],
@@ -119,10 +173,6 @@ var config = {
 
     // API / backend integration settings
     backend: "legacy",
-
-    // transition
-    transition_duration: 750,
-    zoomout_transition: 750,
 
     // misc
     debug: false,
@@ -146,27 +196,11 @@ var config = {
     
     use_hypothesis: false,
     
-    list_sub_entries: false,
-    list_sub_entries_readers: false,
-    list_sub_entries_number: false,
-    list_sub_entries_statistics: false,
-    list_additional_images: false,
-    list_images: [],
-    list_images_path: "images/",
-    visual_distributions: false,
-    list_show_external_vis: false,
-    external_vis_url: "",
-    list_set_backlink: false,
-    
     credit_embed: false,
     canonical_url: null,
     
     doi_outlink: false,
     url_outlink: false,
-    
-    show_context_oa_number: true,
-    context_most_relevant_tooltip: false,
-    show_context_timestamp: false,
     
     hashtags_twitter_card: "okmaps,openscience,dataviz",
     

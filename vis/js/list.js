@@ -228,6 +228,7 @@ list.count_visible_items_to_header = function() {
 
 list.fit_list_height = function() {
     var paper_list_avail_height = null;
+    //Magic number - should be moved to config
     const PAPER_LIST_CORRECTION = -10;
     if (!config.render_bubbles) {
         var parent_height = getRealHeight($("#" + config.tag));
@@ -240,6 +241,7 @@ list.fit_list_height = function() {
 
         $(".list-col").width("100%");
         $(".container-headstart").css({
+            //Should be moved to config
             "min-width": "300px"
         });
         paper_list_avail_height = available_height - $("#explorer_header").outerHeight(true);
