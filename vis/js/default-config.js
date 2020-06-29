@@ -7,8 +7,47 @@ var config = {
     render_bubbles: true,
     //show toolbar at the bottom
     scale_toolbar: false,
+    //show author-based view
+    is_authorview: false,
+    //scale map using metrics when set to true
+    content_based: false,
     //show streamgraph instead of map
     is_streamgraph: false,
+    
+/*** basic data-related settings ***/
+    //bubbles have area uris in the data (if set to false, bubble titles are used)
+    use_area_uri: false,
+    //add a prefix to paper urls
+    url_prefix: null,
+    url_prefix_datasets: null,
+    //data input format
+    input_format: "csv",
+    //base unit for metrics
+    base_unit: "readers",
+    //preview type
+    preview_type: "image",
+    //convert author names from "[last name], [first name]" to "[first name] [last name]"
+    convert_author_names: true,
+    // API / backend integration settings
+    backend: "legacy",
+    // misc
+    debug: false,
+    debounce: 50,
+    service: "none",
+    language: "eng",
+    hyphenation_language: "en",
+    use_hypothesis: false,
+    credit_embed: false,
+    canonical_url: null,
+    //intro
+    intro: "intro_cris",
+    show_intro: false,
+    show_loading_screen: false,
+    // behaviour settings
+    is_evaluation: false,
+    evaluation_service: "log",
+    enable_mouseover_evaluation: false,
+    is_adaptive: false,
     
 /*** basic map dimensions for the canvas (in pixels) ***/  
     //minimum height
@@ -89,7 +128,7 @@ var config = {
     transition_duration: 750,
     zoomout_transition: 750,
 
-/*** Settings for title and context line ***/
+/*** settings for title and context line ***/
     //set map title directly (should be renamed)
     subdiscipline_title: "",
     //[deprecated] show link to load multiples view
@@ -112,6 +151,8 @@ var config = {
     show_context_timestamp: false,
     
 /*** list behaviour ***/
+    doi_outlink: false,
+    url_outlink: false,
     show_keywords: false,
     show_tags: false,
     hide_keywords_overview: true,
@@ -145,23 +186,10 @@ var config = {
     list_show_external_vis: false,
     external_vis_url: "",
     
-    // data specific settings
-    content_based: false,
-    is_authorview: false,
-    use_area_uri: false,
-    url_prefix: null,
-    url_prefix_datasets: null,
-    input_format: "csv",
-    base_unit: "readers",
-    preview_type: "image",
-    convert_author_names: true,
-    // show
-    show_intro: false,
-    show_loading_screen: false,
-    
-
+/*** button settings ***/
     embed_modal: false,
     share_modal: false,
+    hashtags_twitter_card: "okmaps,openscience,dataviz",
     faqs_button: false,
     faqs_url: "",
 
@@ -170,39 +198,11 @@ var config = {
     streamgraph_colors: ["#28a2a3", "#671A54", "#CC3380", "#7acca3", "#c999ff", "#ffe199"
         , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#2856A3"],
     
-
-    // API / backend integration settings
-    backend: "legacy",
-
-    // misc
-    debug: false,
-    debounce: 50,
-    service: "none",
-    language: "eng",
-    hyphenation_language: "en",
-
-    // behaviour settings
-    is_evaluation: false,
-    evaluation_service: "log",
-    enable_mouseover_evaluation: false,
-    is_adaptive: false,
+/*** [deprecated] settings related to conference navigator integration ***/
     conference_id: 0,
     user_id: 0,
     max_recommendations: 10,
     max_documents: 100,
-
-    //intro
-    intro: "intro_cris",
-    
-    use_hypothesis: false,
-    
-    credit_embed: false,
-    canonical_url: null,
-    
-    doi_outlink: false,
-    url_outlink: false,
-    
-    hashtags_twitter_card: "okmaps,openscience,dataviz",
     
     service_names: {plos: "PLOS"
                         , base: "BASE"
