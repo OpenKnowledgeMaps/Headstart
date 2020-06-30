@@ -128,8 +128,10 @@ var config = {
     show_loading_screen: false,
     // behaviour settings
     is_evaluation: false,
+    //MISSING: evaluation services
     evaluation_service: "log",
     enable_mouseover_evaluation: false,
+    //[deprecated??]
     is_adaptive: false,
 
 /*** settings for title and context line ***/
@@ -139,8 +141,6 @@ var config = {
     show_multiples: false,
     //show link to display intro
     show_infolink: true,
-    //show list onload (can be shown on click)
-    show_list: false,
     //show dropdown to load different map datasets
     show_dropdown: true,
     //show context line
@@ -155,6 +155,8 @@ var config = {
     show_context_timestamp: false,
     
 /*** list behaviour ***/
+    //show list onload (can be shown on click)
+    show_list: false,
     doi_outlink: false,
     url_outlink: false,
     show_keywords: false,
