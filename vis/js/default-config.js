@@ -13,42 +13,9 @@ var config = {
     content_based: false,
     //show streamgraph instead of map
     is_streamgraph: false,
-    
-/*** basic data-related settings ***/
-    //bubbles have area uris in the data (if set to false, bubble titles are used)
-    use_area_uri: false,
-    //add a prefix to paper urls
-    url_prefix: null,
-    url_prefix_datasets: null,
-    //data input format
-    input_format: "csv",
-    //base unit for metrics
-    base_unit: "readers",
-    //preview type
-    preview_type: "image",
-    //convert author names from "[last name], [first name]" to "[first name] [last name]"
-    convert_author_names: true,
-    // API / backend integration settings
-    backend: "legacy",
-    // misc
-    debug: false,
-    debounce: 50,
-    service: "none",
-    language: "eng",
-    hyphenation_language: "en",
-    use_hypothesis: false,
-    credit_embed: false,
-    canonical_url: null,
-    //intro
-    intro: "intro_cris",
-    show_intro: false,
-    show_loading_screen: false,
-    // behaviour settings
-    is_evaluation: false,
-    evaluation_service: "log",
-    enable_mouseover_evaluation: false,
-    is_adaptive: false,
-    
+    //tag that headstart is appended to 
+    tag: "visualization",
+       
 /*** basic map dimensions for the canvas (in pixels) ***/  
     //minimum height
     min_height: 600,
@@ -127,6 +94,43 @@ var config = {
     // transition durations
     transition_duration: 750,
     zoomout_transition: 750,
+    
+/*** basic data-related settings ***/
+    //mode for retrieving data
+    mode: "local_files",
+    //bubbles have area uris in the data (if set to false, bubble titles are used)
+    use_area_uri: false,
+    //add a prefix to paper urls
+    url_prefix: null,
+    url_prefix_datasets: null,
+    //data input format
+    input_format: "csv",
+    //base unit for metrics
+    base_unit: "readers",
+    //preview type
+    preview_type: "image",
+    //convert author names from "[last name], [first name]" to "[first name] [last name]"
+    convert_author_names: true,
+    // API / backend integration settings
+    backend: "legacy",
+    // misc
+    debug: false,
+    debounce: 50,
+    service: "none",
+    language: "eng",
+    hyphenation_language: "en",
+    use_hypothesis: false,
+    credit_embed: false,
+    canonical_url: null,
+    //intro
+    intro: "intro_cris",
+    show_intro: false,
+    show_loading_screen: false,
+    // behaviour settings
+    is_evaluation: false,
+    evaluation_service: "log",
+    enable_mouseover_evaluation: false,
+    is_adaptive: false,
 
 /*** settings for title and context line ***/
     //set map title directly (should be renamed)
