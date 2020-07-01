@@ -45,8 +45,8 @@ var MyMediator = function() {
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
     this.modern_frontend_enabled = config.modern_frontend_enabled
-    this.context_id = 'modern_frontend_context'
-    this.modern_frontend_intermediate = new Intermediate(this.modern_frontend_enabled, this.context_id)
+    this.example_element_id = 'modern_frontend_context'
+    this.modern_frontend_intermediate = new Intermediate(this.modern_frontend_enabled, this.example_element_id)
     this.init();
     this.init_state();
 };
@@ -370,8 +370,8 @@ MyMediator.prototype = {
             credit_embed: config.credit_embed
             , canonical_url: config.canonical_url
             , is_authorview: config.is_authorview
-            , modern_frontend: mediator.modern_frontend_enabled
-            , context_id: mediator.context_id
+            , modern_frontend_enabled: mediator.modern_frontend_enabled
+            , example_element_id: mediator.example_element_id
         }));
         if(config.credit_embed) {
             $("#credit_logo").attr("src", credit_logo);

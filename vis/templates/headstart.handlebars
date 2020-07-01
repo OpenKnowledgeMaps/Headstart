@@ -14,10 +14,9 @@
             </div>
         {{/if}}
 
-        {{#if modern_frontend}}
-        <div id="{{context_id}}"></div>
+        {{#if modern_frontend_enabled}}
+        <div id="{{example_element_id}}"></div>
         {{/if}}
-        {{#unless modern_frontend}}
         <div id="subdiscipline_title">
 
             <h4></h4>
@@ -40,7 +39,6 @@
             </p>
 
         </div>
-        {{/unless}}
 <div id="modals"></div>
         <div id="headstart-chart">
             <svg id="chart-svg"></svg>
