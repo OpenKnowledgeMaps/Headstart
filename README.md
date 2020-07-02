@@ -39,6 +39,10 @@ To enable testing  features that have been ported to the modern frontend set the
 e.g. to use it in hot reloading development server mode:
 
     MODERN_FRONTEND="true" npm start
+    
+The variable can also be set at build time:
+
+    MODERN_FRONTEND="true" npm run prod
 
 ### Server
 
