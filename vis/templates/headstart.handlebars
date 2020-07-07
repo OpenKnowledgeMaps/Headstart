@@ -6,6 +6,10 @@
         </div>
     </div>
     <div class="vis-col">
+        {{#if modern_frontend_enabled}}
+        <div id="{{example_element_id}}"></div>
+        {{/if}}
+
         {{#if is_authorview}}
             <div id="title_image" class="titleimage">
                 <a id="author_image_link" target="_blank">
@@ -14,9 +18,6 @@
             </div>
         {{/if}}
 
-        {{#if modern_frontend_enabled}}
-        <div id="{{example_element_id}}"></div>
-        {{/if}}
         <div id="subdiscipline_title">
 
             <h4></h4>
