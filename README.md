@@ -34,6 +34,16 @@ See [client configuration](doc/README.md) for details on adapting the client.
 
  Also see visualization [options](doc/README.md#visualisation-settings).
 
+### Modern Frontend
+To enable testing  features that have been ported to the modern frontend set the `MODERN_FRONTEND` environment variable to `true`.
+e.g. to use it in hot reloading development server mode:
+
+    MODERN_FRONTEND="true" npm start
+    
+The variable can also be set at build time:
+
+    MODERN_FRONTEND="true" npm run prod
+
 ### Server
 
 See [Installing and configuring the server](doc/server_config.md) for instructions on how to install and configure the server. Also, see [HOWTO: Get the search repos example to work](doc/howto_search_repos.md).
