@@ -73,6 +73,9 @@ const common = {
             chunkFilename: '[id].css',
             ignoreOrder: false, // Enable to remove warnings about conflicting order
           }),
+          new webpack.EnvironmentPlugin({
+            MODERN_FRONTEND: false
+          })
     ],
     module: {
         rules: [
@@ -93,7 +96,7 @@ const common = {
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: ['@babel/preset-env']
+                            presets: ['@babel/preset-env', '@babel/preset-react']
                         }
                     }
                 ]
