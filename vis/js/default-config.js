@@ -95,10 +95,39 @@ var config = {
     transition_duration: 750,
     zoomout_transition: 750,
     
-/*** basic data-related settings ***/
+/*** basic data- and third-party-service related settings ***/
     //mode for retrieving data
     mode: "local_files",
+    //which backend to use for data retrieval (api or legacy)
+    backend: "legacy",
+    //language specification to use (see localization object)
+    language: "eng",
+    //language used for hyphenation
+    hyphenation_language: "en",
+    //if set to true, Hypothes.is reader will be used for PDF viewing (make sure the related submodule is checked out)
+    //if set to false, the default pdf viewer of the browser will be used
+    use_hypothesis: false,
     //bubbles have area uris in the data (if set to false, bubble titles are used)
+    //service providing the data
+    service: "none",
+    //canonical url for the map
+    canonical_url: null,
+    //which intro to use for the modal (see intro.js)
+    intro: "intro_cris",
+    //show intro (true/false)
+    show_intro: false,
+    //show loading screen before map is loaded (true/false)
+    show_loading_screen: false,
+    //evaluation mode/events logging
+    is_evaluation: false,
+    //which evaluation service to use. can also be an array. currently possible: "log", "matomo" and "ga"
+    evaluation_service: "log",
+    //enable logging of mouseover events (use only temporarily as it creates A LOT of logging events
+    enable_mouseover_evaluation: false,
+    //[deprecated] enables bookmarking and recommenders for CN3
+    is_adaptive: false,
+    //whether to embed the okmaps credit
+    credit_embed: false,
     use_area_uri: false,
     //add a prefix to paper urls
     url_prefix: null,
@@ -111,28 +140,10 @@ var config = {
     preview_type: "image",
     //convert author names from "[last name], [first name]" to "[first name] [last name]"
     convert_author_names: true,
-    // API / backend integration settings
-    backend: "legacy",
-    // misc
+    //adds some (currently very limited) debug output to the browser console
     debug: false,
+    //debounce value
     debounce: 50,
-    service: "none",
-    language: "eng",
-    hyphenation_language: "en",
-    use_hypothesis: false,
-    credit_embed: false,
-    canonical_url: null,
-    //intro
-    intro: "intro_cris",
-    show_intro: false,
-    show_loading_screen: false,
-    // behaviour settings
-    is_evaluation: false,
-    //MISSING: evaluation services
-    evaluation_service: "log",
-    enable_mouseover_evaluation: false,
-    //[deprecated??]
-    is_adaptive: false,
 
 /*** settings for title and context line ***/
     //set map title directly (should be renamed)
@@ -147,36 +158,59 @@ var config = {
     show_context: false,
     //[deprecated] show link to display intro to area
     show_infolink_areas: false,
+    //create title from context
     create_title_from_context: false,
+    //create title from context style
     create_title_from_context_style: '',
+    //set a custom title
     custom_title: null,
+    //show number of open access documents in context
     show_context_oa_number: true,
+    //create a tooltip for the label "most relevant" in the context line
     context_most_relevant_tooltip: false,
+    //show timestamp in the context line
     show_context_timestamp: false,
     
 /*** list behaviour ***/
     //show list onload (can be shown on click)
     show_list: false,
+    //show doi outlinks in list entry (requires presence of doi attribute in data)
     doi_outlink: false,
+    //show url outlink in list entry
     url_outlink: false,
+    //show keywords in list entry
     show_keywords: false,
+    //show tags in list entry
     show_tags: false,
+    //hide keywords when paper is not selected
     hide_keywords_overview: true,
+    //show area in list entry
     show_area: true,
+    //show result type (document type) in list entry
     show_resulttype: false,
+    //show comments (requires presence of comments in data)
     show_comments: false,
+    //whether the title of a list entry can be clicked after it has been selected
     is_title_clickable: true,
     //abstract length in characters when items are not expanded
     abstract_small: 250,
     //abstract length expanded (null = no character limit)
     abstract_large: null,
+    //show a backlink to all papers in bubble at the bottom of a list entry when a paper is selected
     list_set_backlink: false,
+    //sort options for sort dropdown
     sort_options: ["readers", "title", "authors", "year"],
+    //filter options for filter dropdown
     filter_options: ["all", "open_access", "publication", "dataset"],
+    //custom data property to filter for. if null, defaults are used with above filter options
     filter_field: null,
+    //display sort menu dropdown
     sort_menu_dropdown: false,
+    //initial field used for sorting
     initial_sort: null,
+    //whether to show other papers in the list view when a paper is selected
     list_show_all_papers: false,
+    //display filter menu dropdown
     filter_menu_dropdown: false,
     //[deprecated] list subentry settings
     list_sub_entries: false,
@@ -192,15 +226,22 @@ var config = {
     list_show_external_vis: false,
     external_vis_url: "",
     
-/*** button settings ***/
+/*** button/modal settings ***/
+    //show embed modal button
     embed_modal: false,
+    //show share modal button
     share_modal: false,
+    //hashtags for twitter cards (share modal)
     hashtags_twitter_card: "okmaps,openscience,dataviz",
+    //show button with link to faqs
     faqs_button: false,
+    //url for link to faqs
     faqs_url: "",
 
 /*** streamgraph settings ***/
+    //[experimental] zoomable streamgraph
     streamgraph_zoom: false,
+    //streamgraph color definition
     streamgraph_colors: ["#28a2a3", "#671A54", "#CC3380", "#7acca3", "#c999ff", "#ffe199"
         , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#2856A3"],
     
