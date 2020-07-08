@@ -9,7 +9,7 @@ var config = {
     scale_toolbar: false,
     //show author-based view
     is_authorview: false,
-    //scale map using metrics when set to true
+    //when set to true, scale map using metrics
     content_based: false,
     //show streamgraph instead of map
     is_streamgraph: false,
@@ -122,7 +122,7 @@ var config = {
     is_evaluation: false,
     //which evaluation service to use. can also be an array. currently possible: "log", "matomo" and "ga"
     evaluation_service: "log",
-    //enable logging of mouseover events (use only temporarily as it creates A LOT of logging events
+    //enable logging of mouseover events (use only temporarily as it creates A LOT of logging events)
     enable_mouseover_evaluation: false,
     //[deprecated] enables bookmarking and recommenders for CN3
     is_adaptive: false,
