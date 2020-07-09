@@ -63,5 +63,19 @@ services:
     depends_on:
       - redis
 
+  base:
+    build:
+      context: server
+      dockerfile: base.docker
+    env_file:
+      - server/workers/base/base.env
+    restart: always
+    network_mode: "host"
+    volumes:
+      - /var/opt/renv:/renv/cache
+      - /var/log/headstart:/var/log/headstart
+    depends_on:
+      - redis
+
 volumes:
   redis:
