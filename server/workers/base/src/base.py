@@ -19,12 +19,9 @@ class BaseClient(object):
         # path should be to where in the docker container the Rscript are
         self.wd = wd
         self.command = 'Rscript'
-        self.hs = os.path.abspath(os.path.join(self.wd, "run_vis_layout.R"))
+        self.hs = os.path.abspath(os.path.join(self.wd, "run_base.R"))
         self.default_params = {}
-        self.default_params["MAX_CLUSTERS"] = 15
         self.default_params["language"] = "english"
-        self.default_params["taxonomy_separator"] = ";"
-        self.default_params["list_size"] = -1
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(os.environ["BASE_LOGLEVEL"])
         handler = logging.StreamHandler(sys.stdout)
@@ -46,35 +43,35 @@ class BaseClient(object):
         endpoint = msg.get('endpoint')
         return k, params, endpoint
 
-    def create_map(self, params, input_data):
-        with NamedTemporaryFile(mode='w+', suffix='.json') as param_file:
-            with NamedTemporaryFile(mode='w+', suffix='.json') as input_file:
-                json.dump(params, param_file)
-                param_file.flush()
-                json.dump(input_data, input_file)
-                input_file.flush()
-                cmd = [self.command, self.hs, self.wd,
-                       params.get('q'), params.get('service'),
-                       param_file.name, input_file.name]
-                self.logger.debug(cmd)
-                output = subprocess.check_output(cmd)
-        output = [o for o in output.decode('utf-8').split('\n') if len(o) > 0]
+    def search(self, params):
+        q = params.get('q')
+        service = params.get('service')
+        data = {}
+        data["params"] = params
+        cmd = [self.command, self.hs, self.wd,
+               q, service]
+        proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                encoding="utf-8")
+        stdout, stderr = proc.communicate(json.dumps(data))
+        output = [o for o in stdout.split('\n') if len(o) > 0]
+        error = [o for o in stderr.split('\n') if len(o) > 0]
         return pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
 
     def run(self):
-        k, params, input_data = self.next_item()
-        self.logger.debug(k)
-        self.logger.debug(params)
-        if params.get('vis_type') == "timeline":
-            metadata = self.create_map(params, input_data)
-            sg_data = get_streamgraph_data(json.loads(metadata), params.get('top_n', 12))
-            result = {}
-            result["data"] = metadata
-            result["streamgraph"] = json.dumps(sg_data)
-            redis_store.set(k+"_output", json.dumps(result))
-        else:
-            result = self.create_map(params, input_data)
-            redis_store.set(k+"_output", json.dumps(result))
+        while True:
+            k, params, input_data = self.next_item()
+            self.logger.debug(k)
+            self.logger.debug(params)
+            if endpoint == "search":
+                try:
+                    res = {}
+                    res["id"] = k
+                    res["input_data"] = self.search(params)
+                    res["params"] = params
+                    if params.get('raw') is True:
+                        redis_store.set(k+"_output", json.dumps(res))
+                    else:
+                        redis_store.rpush("input_data", json.dumps(res))
 
 
 if __name__ == '__main__':
@@ -82,5 +79,5 @@ if __name__ == '__main__':
         redis_config = json.load(infile)
 
     redis_store = redis.StrictRedis(**redis_config)
-    hsb = Dataprocessing()
-    hsb.run()
+    base = BaseClient()
+    base.run()
