@@ -7,6 +7,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 from apis.triple import triple_ns
 from apis.gsheets import gsheets_ns
+from apis.base import base_ns
 from database import db
 
 from config import settings
@@ -44,6 +45,7 @@ CORS(app, expose_headers=["Content-Disposition", "Access-Control-Allow-Origin"])
 api = api_patches(app, settings)
 api.add_namespace(triple_ns, path='/triple')
 api.add_namespace(gsheets_ns, path='/gsheets')
+api.add_namespace(base_ns, path='/base')
 app.logger.debug(app.config)
 app.logger.debug(app.url_map)
 
