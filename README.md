@@ -44,6 +44,8 @@ The variable can also be set at build time:
 
     MODERN_FRONTEND="true" npm run prod
 
+The modern frontend code can be linted (e.g. the code style etc. checked) using `npm run lint`
+
 ### Server
 
 See [Installing and configuring the server](doc/server_config.md) for instructions on how to install and configure the server. Also, see [HOWTO: Get the search repos example to work](doc/howto_search_repos.md).
