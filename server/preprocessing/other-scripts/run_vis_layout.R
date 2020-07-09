@@ -4,8 +4,6 @@ args <- commandArgs(TRUE)
 wd <- args[1]
 query <- args[2]
 service <- args[3]
-params_file <- args[4]
-input_file <- args[5]
 
 setwd(wd) #Don't forget to set your working directory
 
@@ -16,23 +14,10 @@ library(tibble)
 library(tidyr)
 source('utils.R')
 source("vis_layout.R")
-DEBUG = FALSE
-
-params <- fromJSON(params_file)
-input_data <- fromJSON(input_file)
-text <- fromJSON(input_data$text)
-metadata <- fromJSON(input_data$metadata)
-
-if (!is.null(params$lang_id)) {
-  lang_id <- params$lang_id
+if (Sys.getenv("HEADSTART_LOGLEVEL") == "DEBUG") {
+  DEBUG <- FALSE
 } else {
-  lang_id <- 'all'
-}
-
-if (!is.null(params$vis_type)) {
-  vis_type <- params$vis_type
-} else {
-  vis_type <- 'overview'
+  DEBUG <- TRUE
 }
 
 if (DEBUG==TRUE){
@@ -92,11 +77,33 @@ valid_langs <- list(
   'vie'='vietnamese'
 )
 
+tslog <- getLogger('ts')
+
+f <- file("stdin")
+open(f)
+data = fromJSON(readLines(f))
+params <- data$params
+
+if (!is.null(params$lang_id)) {
+  lang_id <- params$lang_id
+} else {
+  lang_id <- 'all'
+}
+
+if (!is.null(params$vis_type)) {
+  vis_type <- params$vis_type
+} else {
+  vis_type <- 'overview'
+}
+
+
+input_data <- data$input_data
+text <- fromJSON(input_data$text)
+metadata <- fromJSON(input_data$metadata)
+
 MAX_CLUSTERS = params$MAX_CLUSTERS
 LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
 ADDITIONAL_STOP_WORDS = LANGUAGE$name
-
-tslog <- getLogger('ts')
 
 failed <- list(params=params)
 tryCatch({
