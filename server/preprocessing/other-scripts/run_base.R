@@ -4,34 +4,32 @@ args <- commandArgs(TRUE)
 wd <- args[1]
 query <- args[2]
 service <- args[3]
-params_file <- args[4]
 
 setwd(wd) #Don't forget to set your working directory
-
-renv::activate()
-renv::restore(lockfile = './renv.lock')
 
 library(jsonlite)
 library(logging)
 source('utils.R')
-DEBUG = FALSE
+if (Sys.getenv("BASE_LOGLEVEL") == "DEBUG") {
+  DEBUG <- FALSE
+} else {
+  DEBUG <- TRUE
+}
 
-params <- fromJSON(params_file)
+
+tslog <- getLogger('ts')
+
+f <- file("stdin")
+open(f)
+data = fromJSON(readLines(f))
+params <- data$params
+
 
 if (!is.null(params$lang_id)) {
   lang_id <- params$lang_id
 } else {
   lang_id <- 'all'
 }
-
-if (DEBUG==TRUE){
-  setup_logging('DEBUG')
-} else {
-  setup_logging('INFO')
-}
-
-
-tslog <- getLogger('ts')
 source('../other-scripts/altmetrics.R')
 source('../other-scripts/base.R')
 limit = 120
