@@ -14,6 +14,10 @@ class SearchParamSchema(Schema):
     year_range = fields.Str()
     today = fields.Str()
     language = fields.Str()
+    lang_id = fields.Str()
+    time_range = fields.Str()
+    document_types = fields.List(fields.Str())
+    unique_id = fields.Str()
     raw = fields.Boolean()
 
     @pre_load

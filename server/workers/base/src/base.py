@@ -19,7 +19,7 @@ class BaseClient(object):
         # path should be to where in the docker container the Rscript are
         self.wd = wd
         self.command = 'Rscript'
-        self.hs = os.path.abspath(os.path.join(self.wd, "run_base.R"))
+        self.base = os.path.abspath(os.path.join(self.wd, "run_base.R"))
         self.default_params = {}
         self.default_params["language"] = "english"
         self.logger = logging.getLogger(__name__)
@@ -48,18 +48,23 @@ class BaseClient(object):
         service = params.get('service')
         data = {}
         data["params"] = params
-        cmd = [self.command, self.hs, self.wd,
+        cmd = [self.command, self.base, self.wd,
                q, service]
-        proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                encoding="utf-8")
-        stdout, stderr = proc.communicate(json.dumps(data))
-        output = [o for o in stdout.split('\n') if len(o) > 0]
-        error = [o for o in stderr.split('\n') if len(o) > 0]
-        return pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
+        try:
+            proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                    encoding='utf-8')
+            stdout, stderr = proc.communicate(json.dumps(data))
+            output = [o for o in stdout.split('\n') if len(o) > 0]
+            error = [o for o in stderr.split('\n') if len(o) > 0]
+            res = pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
+        except Exception as e:
+            self.logger.error(e)
+            self.logger.error(error)
+        return res
 
     def run(self):
         while True:
-            k, params, input_data = self.next_item()
+            k, params, endpoint = self.next_item()
             self.logger.debug(k)
             self.logger.debug(params)
             if endpoint == "search":
@@ -72,6 +77,9 @@ class BaseClient(object):
                         redis_store.set(k+"_output", json.dumps(res))
                     else:
                         redis_store.rpush("input_data", json.dumps(res))
+                except Exception as e:
+                    self.logger.error(e)
+                    self.logger.error(params)
 
 
 if __name__ == '__main__':
