@@ -63,19 +63,20 @@ class Dataprocessing(object):
         return pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
 
     def run(self):
-        k, params, input_data = self.next_item()
-        self.logger.debug(k)
-        self.logger.debug(params)
-        if params.get('vis_type') == "timeline":
-            metadata = self.create_map(params, input_data)
-            sg_data = get_streamgraph_data(json.loads(metadata), params.get('top_n', 12))
-            result = {}
-            result["data"] = metadata
-            result["streamgraph"] = json.dumps(sg_data)
-            redis_store.set(k+"_output", json.dumps(result))
-        else:
-            result = self.create_map(params, input_data)
-            redis_store.set(k+"_output", json.dumps(result))
+        while True:
+            k, params, input_data = self.next_item()
+            self.logger.debug(k)
+            self.logger.debug(params)
+            if params.get('vis_type') == "timeline":
+                metadata = self.create_map(params, input_data)
+                sg_data = get_streamgraph_data(json.loads(metadata), params.get('top_n', 12))
+                result = {}
+                result["data"] = metadata
+                result["streamgraph"] = json.dumps(sg_data)
+                redis_store.set(k+"_output", json.dumps(result))
+            else:
+                result = self.create_map(params, input_data)
+                redis_store.set(k+"_output", json.dumps(result))
 
 
 if __name__ == '__main__':
