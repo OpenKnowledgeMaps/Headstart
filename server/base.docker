@@ -143,8 +143,8 @@ WORKDIR /headstart
 COPY workers/base/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY workers/base/renv/renv.lock .
-COPY workers/base/renv/activate.R ./renv/activate.R
+COPY workers/base/renv.lock .
+COPY workers/base/activate.R .
 RUN R -e 'renv::consent(provided = TRUE)' && \
     R -e 'renv::restore()'
 
