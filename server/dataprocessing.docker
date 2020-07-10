@@ -9,7 +9,7 @@ ARG BUILD_DATE
 ARG CRAN
 ## Setting a BUILD_DATE will set CRAN to the matching MRAN date
 ## No BUILD_DATE means that CRAN will default to latest
-ENV R_VERSION=${R_VERSION:-3.5.1} \
+ENV R_VERSION=${R_VERSION:-3.6.3} \
     CRAN=${CRAN:-https://cran.rstudio.com} \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
@@ -61,11 +61,6 @@ RUN apt-get update \
     perl \
     tcl8.6-dev \
     tk8.6-dev \
-    texinfo \
-    texlive-extra-utils \
-    texlive-fonts-recommended \
-    texlive-fonts-extra \
-    texlive-latex-recommended \
     x11proto-core-dev \
     xauth \
     xfonts-base \
@@ -142,15 +137,15 @@ RUN apt update && apt full-upgrade -y && \
 RUN apt-get -y install python3 python3-pip
 
 RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
- R -e 'install.packages("remotes", repos = c(CRAN = "https://cran.rstudio.com"))' && \
- R -e 'install.packages("renv", repos = c(CRAN = "https://cran.rstudio.com"))'
+ R -e 'install.packages("remotes")' && \
+ R -e 'install.packages("renv")'
 
 WORKDIR /headstart
 COPY workers/dataprocessing/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY workers/dataprocessing/renv/renv.lock .
-COPY workers/dataprocessing/renv/activate.R ./renv/activate.R
+COPY workers/dataprocessing/renv.lock .
+COPY workers/dataprocessing/activate.R .
 RUN R -e 'renv::consent(provided = TRUE)' && \
     R -e 'renv::restore()'
 
