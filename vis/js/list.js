@@ -817,7 +817,11 @@ list.fillKeywords = function(tag, keyword_type, metadata_field) {
             });
 
     tag.select(".keywords").html(function(d) {
-        return ((d.hasOwnProperty(metadata_field)) ? (d[metadata_field]) : (""))
+        if(!d.hasOwnProperty(metadata_field) || d[metadata_field] === "") {
+            return config.localization[config.language].no_keywords;
+        } else {
+            return d[metadata_field];
+        }
     });
 };
 
