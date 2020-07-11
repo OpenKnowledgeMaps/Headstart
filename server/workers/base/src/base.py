@@ -56,8 +56,12 @@ class BaseClient(object):
             stdout, stderr = proc.communicate(json.dumps(data))
             output = [o for o in stdout.split('\n') if len(o) > 0]
             error = [o for o in stderr.split('\n') if len(o) > 0]
-            res = pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
-            return res
+            metadata = pd.DataFrame(json.loads(output[-2]))
+            text = pd.DataFrame(json.loads(output[-1]))
+            input_data = {}
+            input_data["metadata"] = metadata.to_json(orient='records')
+            input_data["text"] = text.to_json(orient='records')
+            return input_data
         except Exception as e:
             self.logger.error(e)
             self.logger.error(error)
@@ -77,7 +81,7 @@ class BaseClient(object):
                     if params.get('raw') is True:
                         redis_store.set(k+"_output", json.dumps(res))
                     else:
-                        redis_store.rpush("input_data", json.dumps(res))
+                        redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
                 except Exception as e:
                     self.logger.error(e)
                     self.logger.error(params)

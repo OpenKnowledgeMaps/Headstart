@@ -47,4 +47,5 @@ tryCatch({
   failed$query_reason <<- err$message
 })
 
-print(toJSON(input_data))
+print(toJSON(input_data$metadata))
+print(toJSON(input_data$text))
