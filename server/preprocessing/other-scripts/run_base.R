@@ -33,8 +33,8 @@ if (!is.null(params$lang_id)) {
 } else {
   lang_id <- 'all'
 }
-source('../other-scripts/altmetrics.R')
-source('../other-scripts/base.R')
+source('altmetrics.R')
+source('base.R')
 limit = 120
 list_size = 100
 

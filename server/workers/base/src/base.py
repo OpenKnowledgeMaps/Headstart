@@ -57,10 +57,11 @@ class BaseClient(object):
             output = [o for o in stdout.split('\n') if len(o) > 0]
             error = [o for o in stderr.split('\n') if len(o) > 0]
             res = pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
+            return res
         except Exception as e:
             self.logger.error(e)
             self.logger.error(error)
-        return res
+            raise
 
     def run(self):
         while True:
