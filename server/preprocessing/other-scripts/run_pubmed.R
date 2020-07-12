@@ -8,7 +8,7 @@ service <- args[3]
 setwd(wd) #Don't forget to set your working directory
 
 renv::activate()
-renv::restore(lockfile = './renv.lock')
+renv::restore(lockfile = '../renv.lock')
 
 library(jsonlite)
 library(logging)
@@ -35,12 +35,11 @@ if (!is.null(params$lang_id)) {
 }
 source('altmetrics.R')
 source('pubmed.R')
-limit = 120
-list_size = 100
+limit = params$limit
 
 failed <- list(params=params)
 tryCatch({
-  input_data = get_papers(query, params)
+  input_data = get_papers(query, params, limit=limit)
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
   failed$query <<- query
