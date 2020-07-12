@@ -62,8 +62,8 @@ class Search(Resource):
         pubmed_ns.logger.debug(params)
         del params["optradio"]
         errors = search_param_schema.validate(params, partial=True)
-        params["limit"] = 120
-        params["list_size"] = 100
+        params["limit"] = 100
+        params["list_size"] = -1
         pubmed_ns.logger.debug(errors)
         if errors:
             abort(400, str(errors))

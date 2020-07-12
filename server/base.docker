@@ -148,11 +148,13 @@ COPY workers/base/activate.R .
 RUN R -e 'renv::consent(provided = TRUE)' && \
     R -e 'renv::restore()'
 
-COPY workers/base/src/ ./
+COPY workers/common ./common
+COPY workers/base ./base
 COPY preprocessing/resources ./resources
-COPY preprocessing/other-scripts .
+COPY preprocessing/other-scripts ./other-scripts
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
 
 COPY workers/redis_config.json .
 
-ENTRYPOINT python3 base.py
+COPY workers/*.py ./
+ENTRYPOINT python3 run_base.py
