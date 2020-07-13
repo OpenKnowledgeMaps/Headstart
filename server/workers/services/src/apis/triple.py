@@ -42,6 +42,9 @@ search_query = triple_ns.model("SearchQuery",
                                                           required=True),
                                 "limit": fields.Integer(example=100,
                                                         description='max. number of results'),
+                                "language": fields.String(example='en',
+                                                          description='language code, optional',
+                                                          required=False),
                                 "raw": fields.Boolean(example="false",
                                                       description='raw results from ElasticSearch')})
 
@@ -55,14 +58,15 @@ class Search(Resource):
     def post(self):
         """
         """
-        data = request.get_json()
-        triple_ns.logger.debug(data)
-        errors = search_param_schema.validate(data, partial=True)
+        params = request.get_json()
+        triple_ns.logger.debug(params)
+        errors = search_param_schema.validate(params, partial=True)
+        params["list_size"] = params.get('limit', 100)
         triple_ns.logger.debug(errors)
         if errors:
             abort(400, str(errors))
         k = str(uuid.uuid4())
-        d = {"id": k, "params": data,
+        d = {"id": k, "params": params,
              "endpoint": "search"}
         triple_ns.logger.debug(d)
         redis_store.rpush("triple", json.dumps(d))
@@ -72,7 +76,7 @@ class Search(Resource):
             if request.headers["Accept"] == "application/json":
                 headers["Content-Type"] = "application/json"
             if request.headers["Accept"] == "text/csv":
-                if data.get("raw") is True:
+                if params.get("raw") is True:
                     df = pd.DataFrame(result.get('input_data').get('hits').get('hits'))
                     df = pd.concat([df.drop(["_source"], axis=1),
                                     df["_source"].apply(pd.Series)],
@@ -82,7 +86,7 @@ class Search(Resource):
                     result = pd.read_json(json.loads(result)).to_csv()
                 headers["Content-Type"] = "text/csv"
                 headers["Content-Disposition"] = "attachment; filename={0}.csv".format(k)
-            if data.get("raw") is True:
+            if params.get("raw") is True:
                 headers["Content-Type"] = "application/json"
             return make_response(result,
                                  200,
