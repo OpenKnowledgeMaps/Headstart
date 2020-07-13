@@ -72,6 +72,12 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 
     groups <- cutree(cluster, k=num_clusters)
 
+    # hotfix for clustering fail
+    if (num_items >= 30 && length(unique(unname(groups))) == 1) {
+      num_clusters <- 15
+      groups <- cutree(cluster, k=num_clusters)
+    }
+
     # NEEDS FIX
     # if(exists("DEBUG") && DEBUG == TRUE) {
     #   # Plot result of clustering to PDF file
