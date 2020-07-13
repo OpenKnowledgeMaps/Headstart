@@ -55,3 +55,7 @@ $fontweight800: 800;
     $special-font-family: 'Lato', Helvetica, sans-serif;
     $abstract-font-family: 'Lato', Helvetica Neue, Helvetica, sans-serif;
 }
+
+body {
+    font-family: $base-font-family !important;
+}
