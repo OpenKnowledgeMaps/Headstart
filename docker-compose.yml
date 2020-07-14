@@ -58,7 +58,7 @@ services:
     restart: always
     network_mode: "host"
     volumes:
-      - /var/opt/renv:/root/.local/share/renv
+      - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
@@ -72,7 +72,7 @@ services:
     restart: always
     network_mode: "host"
     volumes:
-      - /var/opt/renv:/root/.local/share/renv
+      - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
@@ -86,7 +86,7 @@ services:
     restart: always
     network_mode: "host"
     volumes:
-      - /var/opt/renv:/root/.local/share/renv
+      - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
@@ -100,7 +100,7 @@ services:
     restart: always
     network_mode: "host"
     volumes:
-      - /var/opt/renv:/root/.local/share/renv
+      - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
