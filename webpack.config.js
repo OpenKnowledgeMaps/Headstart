@@ -90,7 +90,8 @@ const common = {
                     { loader: "imports-loader?$=jquery" }
                 ]
             }, {
-                test: /.js?$/,
+                test: /.jsx?$/,
+                resolve: { extensions: [".js", ".jsx"] },
                 exclude: /node_modules/,
                 use: [
                     {
