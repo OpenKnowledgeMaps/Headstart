@@ -677,14 +677,16 @@ list.setIconsAndTags = function (list_metadata) {
     //Detect if there are any visible icons and tags; if not, hide #oa
     //Note: this depends on the styles of the elements written directly
     //rather than controlled with classes such as .nodisplay
-    let current_oa = list_metadata.select("#oa");
-    let visible_icons_tags = 
-            $(current_oa[0]).children().filter(function() {
-                return this.style.display !== 'none'
-            })
-            
-    if (visible_icons_tags.length === 0) {
-        current_oa.classed("nodisplay", true)
+    if($("#oa").length) {
+        let current_oa = list_metadata.select("#oa");
+        let visible_icons_tags = 
+                $(current_oa[0]).children().filter(function() {
+                    return this.style.display !== 'none'
+                })
+
+        if (visible_icons_tags.length === 0) {
+            current_oa.classed("nodisplay", true)
+        }
     }
 };
 
@@ -817,7 +819,11 @@ list.fillKeywords = function(tag, keyword_type, metadata_field) {
             });
 
     tag.select(".keywords").html(function(d) {
-        return ((d.hasOwnProperty(metadata_field)) ? (d[metadata_field]) : (""))
+        if(!d.hasOwnProperty(metadata_field) || d[metadata_field] === "") {
+            return config.localization[config.language].no_keywords;
+        } else {
+            return d[metadata_field];
+        }
     });
 };
 
