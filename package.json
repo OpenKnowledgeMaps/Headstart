@@ -28,11 +28,11 @@
     "d3": "^3.5.17",
     "dateformat": "^2.0.0",
     "font-awesome": "*",
-    "handlebars": "^4.5.3",
+    "handlebars": "^4.7.6",
     "hyphenation.en-us": "*",
     "hypher": "^0.2.4",
     "javascript-state-machine": "^2.3.5",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.1",
     "mark.js": "^8.11.1",
     "mediator-js": "^0.9.9",
     "popper.js": "^1.16.0",
@@ -65,7 +65,7 @@
     "html-webpack-plugin": "*",
     "imports-loader": "^0.6.5",
     "mini-css-extract-plugin": "^0.8.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.14.1",
     "php-loader": "^0.2.0",
     "postcss-loader": "^3.0.0",
     "resolve": "^1.7.1",
@@ -75,7 +75,7 @@
     "url-loader": "^2.3.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0",
+    "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2"
   }
 }
