@@ -179,8 +179,14 @@
     </script>
 <?php endif; ?>
 
-<?php if ($PIWIK_ENABLED) { ?>
-    <!-- Piwik -->
+<?php if ($PIWIK_ENABLED) {
+
+          $piwik_site_id =
+            (isset($PIWIK_SITE_ID) && $PIWIK_SITE_ID !== null)
+            ? ($PIWIK_SITE_ID)
+            : ("1"); ?>
+
+    <!-- Matomo -->
     <script type="text/javascript">
       var _paq = _paq || [];
       // tracker methods like "setCustomDimension" should be called before "trackPageView"
@@ -189,10 +195,15 @@
       (function() {
         var u="<?php echo $SITE_URL . $PIWIK_PATH; ?>";
         _paq.push(['setTrackerUrl', u+'piwik.php']);
-        _paq.push(['setSiteId', '1']);
+        _paq.push(['setSiteId', '<?php echo $piwik_site_id ?>']);
         var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+        g.type='text/javascript';
+        g.async=true;
+        g.defer=true;
+        g.src=u+'piwik.js';
+        s.parentNode.insertBefore(g,s);
       })();
     </script>
-    <!-- End Piwik Code -->
+    <noscript><p><img src="//openknowledgemaps.org/piwik_stats/piwik.php?idsite=1&rec=1" style="border:0;" alt="" /></p></noscript>
+    <!-- End Matomo Code -->
 <?php }; ?>
