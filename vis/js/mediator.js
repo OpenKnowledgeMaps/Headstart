@@ -7,6 +7,7 @@ import { io } from 'io';
 import { canvas } from 'canvas';
 import { scale } from './scale';
 import { streamgraph } from 'streamgraph';
+import Intermediate from './intermediate';
 
 const multiplesTemplate = require('templates/multiples.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
@@ -43,7 +44,9 @@ var MyMediator = function() {
     this.fileData = [];
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
-
+    this.modern_frontend_enabled = config.modern_frontend_enabled
+    this.example_element_id = 'modern_frontend_context'
+    this.modern_frontend_intermediate = new Intermediate(this.modern_frontend_enabled, this.example_element_id)
     this.init();
     this.init_state();
 };
@@ -147,6 +150,7 @@ MyMediator.prototype = {
         MyMediator.prototype.is_zooming_out = false;
         MyMediator.prototype.is_in_normal_mode = true;
         MyMediator.prototype.current_stream = null;
+        MyMediator.prototype.modern_frontend = false;
     },
 
     init_modules: function() {
@@ -162,6 +166,10 @@ MyMediator.prototype = {
         if(config.is_streamgraph) {
             mediator.manager.registerModule(streamgraph, 'streamgraph')
         }
+    },
+
+    init_modern_frontend_intermediate: function() {
+        mediator.modern_frontend_intermediate.init()
     },
 
     register_bubbles: function() {
@@ -362,6 +370,8 @@ MyMediator.prototype = {
             credit_embed: config.credit_embed
             , canonical_url: config.canonical_url
             , is_authorview: config.is_authorview
+            , modern_frontend_enabled: mediator.modern_frontend_enabled
+            , example_element_id: mediator.example_element_id
         }));
         if(config.credit_embed) {
             $("#credit_logo").attr("src", credit_logo);
@@ -406,6 +416,7 @@ MyMediator.prototype = {
         if (!config.render_list) {
             $(".list-col").remove();
         }
+        mediator.init_modern_frontend_intermediate()
     },
 
     bubbles_update_data_and_areas: function(bubbles) {
