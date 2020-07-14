@@ -58,7 +58,7 @@ services:
     restart: always
     network_mode: "host"
     volumes:
-      - ./server/workers/dataprocessing/renv:/renv/cache
+      - /var/opt/renv:/root/.local/share/renv
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
@@ -72,7 +72,7 @@ services:
     restart: always
     network_mode: "host"
     volumes:
-      - ./server/workers/base/renv:/renv/cache
+      - /var/opt/renv:/root/.local/share/renv
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
@@ -86,7 +86,21 @@ services:
     restart: always
     network_mode: "host"
     volumes:
-      - ./server/workers/pubmed/renv:/renv/cache
+      - /var/opt/renv:/root/.local/share/renv
+      - /var/log/headstart:/var/log/headstart
+    depends_on:
+      - redis
+
+  search_openaire:
+    build:
+      context: server
+      dockerfile: openaire.docker
+    env_file:
+      - server/workers/openaire/openaire.env
+    restart: always
+    network_mode: "host"
+    volumes:
+      - /var/opt/renv:/root/.local/share/renv
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
