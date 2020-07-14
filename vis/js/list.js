@@ -228,6 +228,7 @@ list.count_visible_items_to_header = function() {
 
 list.fit_list_height = function() {
     var paper_list_avail_height = null;
+    //Magic number - should be moved to config
     const PAPER_LIST_CORRECTION = -10;
     if (!config.render_bubbles) {
         var parent_height = getRealHeight($("#" + config.tag));
@@ -240,6 +241,7 @@ list.fit_list_height = function() {
 
         $(".list-col").width("100%");
         $(".container-headstart").css({
+            //Should be moved to config
             "min-width": "300px"
         });
         paper_list_avail_height = available_height - $("#explorer_header").outerHeight(true);
@@ -675,14 +677,16 @@ list.setIconsAndTags = function (list_metadata) {
     //Detect if there are any visible icons and tags; if not, hide #oa
     //Note: this depends on the styles of the elements written directly
     //rather than controlled with classes such as .nodisplay
-    let current_oa = list_metadata.select("#oa");
-    let visible_icons_tags = 
-            $(current_oa[0]).children().filter(function() {
-                return this.style.display !== 'none'
-            })
-            
-    if (visible_icons_tags.length === 0) {
-        current_oa.classed("nodisplay", true)
+    if($("#oa").length) {
+        let current_oa = list_metadata.select("#oa");
+        let visible_icons_tags = 
+                $(current_oa[0]).children().filter(function() {
+                    return this.style.display !== 'none'
+                })
+
+        if (visible_icons_tags.length === 0) {
+            current_oa.classed("nodisplay", true)
+        }
     }
 };
 
@@ -815,7 +819,11 @@ list.fillKeywords = function(tag, keyword_type, metadata_field) {
             });
 
     tag.select(".keywords").html(function(d) {
-        return ((d.hasOwnProperty(metadata_field)) ? (d[metadata_field]) : (""))
+        if(!d.hasOwnProperty(metadata_field) || d[metadata_field] === "") {
+            return config.localization[config.language].no_keywords;
+        } else {
+            return d[metadata_field];
+        }
     });
 };
 
