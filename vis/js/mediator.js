@@ -8,6 +8,7 @@ import { canvas } from 'canvas';
 import { scale } from './scale';
 import { streamgraph } from 'streamgraph';
 import Intermediate from './intermediate';
+import { showBacklink, hideBacklink } from "./actions";
 
 const multiplesTemplate = require('templates/multiples.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
@@ -45,8 +46,7 @@ var MyMediator = function() {
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
     this.modern_frontend_enabled = config.modern_frontend_enabled
-    this.example_element_id = 'modern_frontend_context'
-    this.modern_frontend_intermediate = new Intermediate(this.modern_frontend_enabled, this.example_element_id)
+    this.modern_frontend_intermediate = new Intermediate(this.modern_frontend_enabled)
     this.init();
     this.init_state();
 };
@@ -136,6 +136,10 @@ MyMediator.prototype = {
         this.mediator.subscribe("stream_clicked", this.stream_clicked)
         this.mediator.subscribe("currentstream_click", this.currentstream_click)
         this.mediator.subscribe("streamgraph_chart_clicked", this.streamgraph_chart_clicked)
+
+        // refactor
+        this.mediator.subscribe("show_backlink", this.show_backlink);
+        this.mediator.subscribe("hide_backlink", this.hide_backlink);
     },
 
     init_state: function() {
@@ -228,7 +232,7 @@ MyMediator.prototype = {
         papers.current = "none";
         list.current = "none";
         $("#list_explorer").empty();
-        $("#backlink").remove();
+        this.hide_backlink();
         mediator.manager.call('canvas', 'setupToFileCanvas', []);
     },
 
@@ -371,7 +375,6 @@ MyMediator.prototype = {
             , canonical_url: config.canonical_url
             , is_authorview: config.is_authorview
             , modern_frontend_enabled: mediator.modern_frontend_enabled
-            , example_element_id: mediator.example_element_id
         }));
         if(config.credit_embed) {
             $("#credit_logo").attr("src", credit_logo);
@@ -712,6 +715,25 @@ MyMediator.prototype = {
             mediator.manager.call('scale', 'updateLegend', [type, context]);
         }
         mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
+    },
+
+    show_backlink: function(onClick) {
+        if (mediator.modern_frontend_enabled) {
+            let store = mediator.modern_frontend_intermediate.store;
+            store.dispatch(showBacklink(onClick));
+        } else {
+            $('<p id="backlink" class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
+            $("#backlink").on("click", onClick);
+        }
+    },
+
+    hide_backlink: function() {
+        if (mediator.modern_frontend_enabled) {
+            let store = mediator.modern_frontend_intermediate.store;
+            store.dispatch(hideBacklink());
+        } else {
+            $("#backlink").remove();
+        }
     }
 };
 
