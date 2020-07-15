@@ -9,10 +9,17 @@ const Backlink = ({ hidden, onClick }) => {
     return null;
   }
 
+  const handleOnClick = () => {
+    console.warn("*** React component 'Backlink' clicked ***");
+    if (onClick && typeof onClick === "function") {
+      onClick();
+    }
+  };
+
   return (
     <BacklinkTemplate
       label={config.localization[config.language].backlink}
-      onClick={onClick}
+      onClick={handleOnClick}
     />
   );
 };
