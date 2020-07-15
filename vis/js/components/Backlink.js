@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import BacklinkTemplate from "../templates/Backlink";
 
-const Backlink = ({ hidden, onClick }) => {
+export const Backlink = ({ hidden, onClick }) => {
   if (hidden) {
     return null;
   }
