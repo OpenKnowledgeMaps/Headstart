@@ -17,6 +17,7 @@ class SearchParamSchema(Schema):
     lang_id = fields.Str()
     time_range = fields.Str()
     document_types = fields.List(fields.Str())
+    article_types = fields.List(fields.Str())
     unique_id = fields.Str()
     raw = fields.Boolean()
 
