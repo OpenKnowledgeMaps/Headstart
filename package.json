@@ -85,5 +85,10 @@
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^config$": "<rootDir>/vis/js/default-config.js"
+    }
   }
 }
