@@ -6,6 +6,7 @@ import React from "react";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./reducers";
+import { showBacklink, hideBacklink } from "./actions";
 
 import Backlink from "./components/Backlink";
 
@@ -29,6 +30,14 @@ class Intermediate {
         document.getElementById("backlink_container")
       );
     }
+  }
+
+  showBacklink(onClick) {
+    this.store.dispatch(showBacklink(onClick));
+  }
+
+  hideBacklink() {
+    this.store.dispatch(hideBacklink());
   }
 }
 
