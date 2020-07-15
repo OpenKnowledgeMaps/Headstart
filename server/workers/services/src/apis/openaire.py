@@ -60,13 +60,12 @@ class Search(Resource):
         """
         params = request.get_json()
         openaire_ns.logger.debug(params)
-        del params["optradio"]
-        errors = search_param_schema.validate(params, partial=True)
+        #errors = search_param_schema.validate(params, partial=True)
         params["limit"] = 100
         params["list_size"] = -1
-        openaire_ns.logger.debug(errors)
-        if errors:
-            abort(400, str(errors))
+        # openaire_ns.logger.debug(errors)
+        # if errors:
+        #     abort(400, str(errors))
         k = str(uuid.uuid4())
         d = {"id": k, "params": params,
              "endpoint": "search"}
