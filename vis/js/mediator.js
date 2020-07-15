@@ -720,6 +720,7 @@ MyMediator.prototype = {
         if (mediator.modern_frontend_enabled) {
             mediator.modern_frontend_intermediate.showBacklink(onClick);
         } else {
+            $("#backlink").remove();
             $('<p id="backlink" class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
             $("#backlink").on("click", onClick);
         }
