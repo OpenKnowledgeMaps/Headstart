@@ -8,7 +8,6 @@ import { canvas } from 'canvas';
 import { scale } from './scale';
 import { streamgraph } from 'streamgraph';
 import Intermediate from './intermediate';
-import { showBacklink, hideBacklink } from "./actions";
 
 const multiplesTemplate = require('templates/multiples.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
@@ -719,8 +718,7 @@ MyMediator.prototype = {
 
     show_backlink: function(onClick) {
         if (mediator.modern_frontend_enabled) {
-            let store = mediator.modern_frontend_intermediate.store;
-            store.dispatch(showBacklink(onClick));
+            mediator.modern_frontend_intermediate.showBacklink(onClick);
         } else {
             $('<p id="backlink" class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
             $("#backlink").on("click", onClick);
@@ -729,8 +727,7 @@ MyMediator.prototype = {
 
     hide_backlink: function() {
         if (mediator.modern_frontend_enabled) {
-            let store = mediator.modern_frontend_intermediate.store;
-            store.dispatch(hideBacklink());
+            mediator.modern_frontend_intermediate.hideBacklink();
         } else {
             $("#backlink").remove();
         }
