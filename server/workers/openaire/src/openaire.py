@@ -20,7 +20,7 @@ class OpenAIREClient(RWrapper):
         return k, params, endpoint
 
     def execute_r(self, params):
-        q = params.get('q')
+        q = params.get('acronym')
         service = params.get('service')
         data = {}
         data["params"] = params
