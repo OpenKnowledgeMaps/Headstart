@@ -509,8 +509,12 @@
     "rentrez": {
       "Package": "rentrez",
       "Version": "1.2.2",
-      "Source": "CRAN",
-      "Hash": "2dd2187a1718e2d89a28471542b137be"
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "rentrez",
+      "RemoteUsername": "sckott",
+      "RemoteRef": "http-post"
     },
     "reshape2": {
       "Package": "reshape2",
