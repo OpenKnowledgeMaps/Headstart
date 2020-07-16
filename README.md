@@ -44,6 +44,10 @@ The variable can also be set at build time:
 
     MODERN_FRONTEND="true" npm run prod
 
+The tests can be run with:
+
+    npm test
+
 ### Server
 
 See [Installing and configuring the server](doc/server_config.md) for instructions on how to install and configure the server. Also, see [HOWTO: Get the search repos example to work](doc/howto_search_repos.md).
