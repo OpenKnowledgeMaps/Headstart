@@ -20,6 +20,7 @@ class SearchParamSchema(Schema):
     article_types = fields.List(fields.Str())
     unique_id = fields.Str()
     raw = fields.Boolean()
+    sg_method = fields.Str()
 
     @pre_load
     def fix_years(self, in_data, **kwargs):
