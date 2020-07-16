@@ -69,7 +69,7 @@ class Dataprocessing(object):
             self.logger.debug(params)
             if params.get('vis_type') == "timeline":
                 metadata = self.create_map(params, input_data)
-                sg_data = get_streamgraph_data(json.loads(metadata), params.get('top_n', 12))
+                sg_data = get_streamgraph_data(json.loads(metadata), params.get('top_n', 12), params.get('sg_method'))
                 result = {}
                 result["data"] = metadata
                 result["streamgraph"] = json.dumps(sg_data)

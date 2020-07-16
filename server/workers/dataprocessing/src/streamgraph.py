@@ -3,6 +3,8 @@ import logging
 import sys
 import os
 
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
 
@@ -15,7 +17,7 @@ handler.setLevel(os.environ["HEADSTART_LOGLEVEL"])
 logger.addHandler(handler)
 
 
-def get_streamgraph_data(metadata, n=12):
+def get_streamgraph_data(metadata, n=12, method="tfidf"):
     df = pd.DataFrame.from_records(metadata)
     df.year = pd.to_datetime(df.year)
     df.year = df.year.map(lambda x: x.year)
@@ -30,7 +32,7 @@ def get_streamgraph_data(metadata, n=12):
     boundaries = get_boundaries(df)
     daterange = get_daterange(boundaries)
     data = pd.merge(counts, boundaries, on='year')
-    top_n = get_top_n(data, n)
+    top_n = get_top_n(data, n, method)
     data = data[data.subject.map(lambda x: x in top_n)].sort_values("year").reset_index(drop=True)
     x = get_x_axis(daterange)
     sg_data = {}
@@ -75,11 +77,21 @@ def get_boundaries(df):
     return boundaries
 
 
-def get_top_n(data, n):
-    top_n = (data.groupby('subject')
-                 .agg({"counts": "sum"})
-                 .sort_values("counts", ascending=False)
-                 .head(n).index.to_list())
+def get_top_n(data, n, method):
+    if method != "tfidf":
+        top_n = (data.groupby('subject')
+                     .agg({"counts": "sum"})
+                     .sort_values("counts", ascending=False)
+                     .head(n).index.to_list())
+    else:
+        data = data[data.subject!=""]
+        corpus = data.subject.tolist()
+        vectorizer = TfidfVectorizer(tokenizer=lambda x: x.split("; "))
+        X = vectorizer.fit_transform(corpus)
+        df = pd.DataFrame(X.toarray(), columns = vectorizer.get_feature_names())
+        candidates = df.sum().sort_values(ascending=False).index.tolist()
+        candidates = [c for c in candidates if len(c) > 0]
+        top_n = candidates[:n]
     return top_n
 
 
