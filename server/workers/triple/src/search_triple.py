@@ -20,7 +20,8 @@ valid_langs = {
 
 class TripleClient(object):
 
-    def __init__(self, config):
+    def __init__(self, config, redis_store,
+                 loglevel="INFO"):
         self.es = Elasticsearch(
             [config.get('host')],
             http_auth=(config.get('user'), config.get('pass')),
@@ -29,15 +30,16 @@ class TripleClient(object):
             send_get_body_as='POST',
             http_compress=True
         )
+        self.redis_store = redis_store
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(os.environ["TRIPLE_LOGLEVEL"])
+        self.logger.setLevel(loglevel)
         handler = logging.StreamHandler(sys.stdout)
         handler.setFormatter(formatter)
-        handler.setLevel(os.environ["TRIPLE_LOGLEVEL"])
+        handler.setLevel(loglevel)
         self.logger.addHandler(handler)
 
     def next_item(self):
-        queue, msg = redis_store.blpop("triple")
+        queue, msg = self.redis_store.blpop("triple")
         msg = json.loads(msg)
         k = msg.get('id')
         params = msg.get('params')
@@ -203,7 +205,7 @@ class TripleClient(object):
             self.logger.debug(params)
             if endpoint == "mappings":
                 res = self.get_mappings(params.get('index'))
-                redis_store.set(k+"_output", json.dumps(res))
+                self.redis_store.set(k+"_output", json.dumps(res))
             if endpoint == "search":
                 try:
                     res = {}
@@ -211,20 +213,9 @@ class TripleClient(object):
                     res["input_data"] = self.search(params)
                     res["params"] = params
                     if params.get('raw') is True:
-                        redis_store.set(k+"_output", json.dumps(res))
+                        self.redis_store.set(k+"_output", json.dumps(res))
                     else:
-                        redis_store.rpush("input_data", json.dumps(res))
+                        self.redis_store.rpush("input_data", json.dumps(res))
                 except Exception as e:
                     self.logger.error(e)
                     self.logger.error(params)
-
-
-if __name__ == '__main__':
-    with open("es_config.json") as infile:
-        es_config = json.load(infile)
-    with open("redis_config.json") as infile:
-        redis_config = json.load(infile)
-
-    redis_store = redis.StrictRedis(**redis_config)
-    tc = TripleClient(es_config)
-    tc.run()
