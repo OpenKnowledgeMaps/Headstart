@@ -149,9 +149,11 @@ class TripleClient(object):
         metadata["year"] = df.date.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["url"] = df.url.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["readers"] = 0
-        metadata["subject_orig"] = df.keyword.map(lambda x: "; ".join([self.clean_subject(s) for s in x]) if isinstance(x, list) else "")
+        metadata["subject_orig"] = df.keyword.map(lambda x: "; ".join(x) if isinstance(x, list) else "")
+        metadata["subject_cleaned"] = df.keyword.map(lambda x: "; ".join([self.clean_subject(s) for s in x]) if isinstance(x, list) else "")
         metadata["subject_enriched"] = df.subject.map(lambda x: self.get_subjects(x) if isinstance(x, list) else "")
-        metadata["subject"] = metadata.apply(lambda x: ". ".join(x[["subject_orig", "subject_enriched"]]), axis=1)
+        metadata["subject_orig"] = metadata.apply(lambda x: "; ".join(x[["subject_orig", "subject_enriched"]]), axis=1)
+        metadata["subject"] = metadata.apply(lambda x: "; ".join(x[["subject_cleaned", "subject_enriched"]]), axis=1)
         metadata["oa_state"] = 2
         metadata["link"] = ""
         metadata["relevance"] = df.index
