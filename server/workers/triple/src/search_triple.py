@@ -1,8 +1,7 @@
-import os
 import sys
 import re
 import json
-import redis
+from itertools import chain
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search, Q
 import pandas as pd
@@ -151,7 +150,8 @@ class TripleClient(object):
         metadata["url"] = df.url.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["readers"] = 0
         metadata["subject_orig"] = df.keyword.map(lambda x: "; ".join([self.clean_subject(s) for s in x]) if isinstance(x, list) else "")
-        metadata["subject"] = metadata["subject_orig"]
+        metadata["subject_enriched"] = df.subject.map(lambda x: self.get_subjects(x) if isinstance(x, list) else "")
+        metadata["subject"] = metadata.apply(lambda x: ". ".join(x[["subject_orig", "subject_enriched"]]), axis=1)
         metadata["oa_state"] = 2
         metadata["link"] = ""
         metadata["relevance"] = df.index
@@ -186,6 +186,10 @@ class TripleClient(object):
         subject_cleaned = re.sub(r"\[\w+\.?\w+\]", "", subject_cleaned) # replace residuals like [shs.hisphilso]
         subject_cleaned = re.sub(r"; ?$", "", subject_cleaned) # remove trailing '; '
         return subject_cleaned
+
+    @staticmethod
+    def get_subjects(subjectlist):
+        return "; ".join(chain.from_iterable([s.get('label', []) for s in subjectlist]))
 
     @staticmethod
     def get_authors(authorlist):
