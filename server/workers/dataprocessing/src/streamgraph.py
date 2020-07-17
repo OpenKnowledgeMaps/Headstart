@@ -2,7 +2,9 @@ import pandas as pd
 import logging
 import sys
 import os
+import numpy as np
 
+from itertools import chain
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.decomposition import NMF, LatentDirichletAllocation
 
@@ -16,6 +18,8 @@ handler = logging.StreamHandler(sys.stdout)
 handler.setFormatter(formatter)
 handler.setLevel(os.environ["HEADSTART_LOGLEVEL"])
 logger.addHandler(handler)
+
+np.random.seed(42)
 
 
 def get_streamgraph_data(metadata, n=12, method="tfidf"):
@@ -80,7 +84,6 @@ def get_boundaries(df):
 
 def get_top_n(metadata, data, n, method):
     df = pd.DataFrame.from_records(metadata)
-    df["subject"] = df["subject"].map(lambda x: x.replace("; ;", "; "))
     df = df[df.subject.map(lambda x: len(x) > 2)]
     corpus = df.subject.tolist()
     if method == "count":
@@ -98,25 +101,24 @@ def get_top_n(metadata, data, n, method):
         candidates = weights.sum().sort_values(ascending=False).index.tolist()
         candidates = [c for c in candidates if len(c) > 0]
         top_n = candidates[:n]
-    if method == "lda":
+    if method == "nmf":
         tfidf_vectorizer = TfidfVectorizer(max_df=0.95, min_df=2, tokenizer=lambda x: x.split("; "), lowercase=False)
         tfidf = tfidf_vectorizer.fit_transform(corpus)
-        nmf = NMF(n_components=n, random_state=1, alpha=.1, l1_ratio=.5, init='nndsvd').fit(tfidf)
-        candidates = weights.sum().sort_values(ascending=False).index.tolist()
-        candidates = [c for c in candidates if len(c) > 0]
-        top_n = candidates[:n]
-    if method == "mmf":
+        nmf = NMF(n_components=n, random_state=42, alpha=.1, l1_ratio=.5, init='nndsvd').fit(tfidf)
+        top_n = list(chain.from_iterable([get_top_words(t, tfidf_vectorizer.get_feature_names(), 1) for t in nmf.components_]))
+    if method == "lda":
         tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2, tokenizer=lambda x: x.split("; "), lowercase=False)
         tf = tf_vectorizer.fit_transform(corpus)
-        lda = LatentDirichletAllocation(n_components=n, max_iter=5, learning_method='online', learning_offset=50.,random_state=0).fit(tf)
-        candidates = weights.sum().sort_values(ascending=False).index.tolist()
-        candidates = [c for c in candidates if len(c) > 0]
-        top_n = candidates[:n]
+        lda = LatentDirichletAllocation(n_components=n, max_iter=20, learning_method='batch', learning_offset=50.,random_state=42).fit(tf)
+        top_n = list(chain.from_iterable([get_top_words(t, tf_vectorizer.get_feature_names(), 1) for t in lda.components_]))
     return top_n
 
 
 def get_top_words(topic, feature_names, n):
-    return [feature_names[i] for i in topic.argsort()[:-n - 1:-1]]
+    indices = topic.argsort()[::-1]
+    words = [feature_names[i] for i in indices]
+    words = [w for w in words if len(w) > 2]
+    return words[:n]
 
 
 def postprocess(daterange, data):
