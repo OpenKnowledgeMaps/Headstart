@@ -3,7 +3,6 @@ import sys
 import copy
 import json
 import subprocess
-from tempfile import NamedTemporaryFile
 import redis
 import pandas as pd
 import logging

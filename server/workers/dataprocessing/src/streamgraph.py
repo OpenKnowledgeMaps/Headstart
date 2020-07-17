@@ -3,7 +3,8 @@ import logging
 import sys
 import os
 
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.decomposition import NMF, LatentDirichletAllocation
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
@@ -32,7 +33,7 @@ def get_streamgraph_data(metadata, n=12, method="tfidf"):
     boundaries = get_boundaries(df)
     daterange = get_daterange(boundaries)
     data = pd.merge(counts, boundaries, on='year')
-    top_n = get_top_n(data, n, method)
+    top_n = get_top_n(metadata, data, n, method)
     data = data[data.subject.map(lambda x: x in top_n)].sort_values("year").reset_index(drop=True)
     x = get_x_axis(daterange)
     sg_data = {}
@@ -77,22 +78,45 @@ def get_boundaries(df):
     return boundaries
 
 
-def get_top_n(data, n, method):
-    if method != "tfidf":
-        top_n = (data.groupby('subject')
-                     .agg({"counts": "sum"})
-                     .sort_values("counts", ascending=False)
-                     .head(n).index.to_list())
-    else:
-        data = data[data.subject!=""]
-        corpus = data.subject.tolist()
-        vectorizer = TfidfVectorizer(tokenizer=lambda x: x.split("; "))
-        X = vectorizer.fit_transform(corpus)
-        df = pd.DataFrame(X.toarray(), columns = vectorizer.get_feature_names())
-        candidates = df.sum().sort_values(ascending=False).index.tolist()
+def get_top_n(metadata, data, n, method):
+    df = pd.DataFrame.from_records(metadata)
+    df["subject"] = df["subject"].map(lambda x: x.replace("; ;", "; "))
+    df = df[df.subject.map(lambda x: len(x) > 2)]
+    corpus = df.subject.tolist()
+    if method == "count":
+        # set stopwords , stop_words='english'
+        tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2, tokenizer=lambda x: x.split("; "), lowercase=False)
+        tf = tf_vectorizer.fit_transform(corpus)
+        counts = pd.DataFrame(tf.toarray(), columns=tf_vectorizer.get_feature_names())
+        candidates = counts.sum().sort_values(ascending=False).index.tolist()
+        candidates = [c for c in candidates if len(c) > 0]
+        top_n = candidates[:n]
+    if method == "tfidf":
+        tfidf_vectorizer = TfidfVectorizer(max_df=0.95, min_df=2, tokenizer=lambda x: x.split("; "), lowercase=False)
+        tfidf = tfidf_vectorizer.fit_transform(corpus)
+        weights = pd.DataFrame(tfidf.toarray(), columns=tfidf_vectorizer.get_feature_names())
+        candidates = weights.sum().sort_values(ascending=False).index.tolist()
+        candidates = [c for c in candidates if len(c) > 0]
+        top_n = candidates[:n]
+    if method == "lda":
+        tfidf_vectorizer = TfidfVectorizer(max_df=0.95, min_df=2, tokenizer=lambda x: x.split("; "), lowercase=False)
+        tfidf = tfidf_vectorizer.fit_transform(corpus)
+        nmf = NMF(n_components=n, random_state=1, alpha=.1, l1_ratio=.5, init='nndsvd').fit(tfidf)
+        candidates = weights.sum().sort_values(ascending=False).index.tolist()
+        candidates = [c for c in candidates if len(c) > 0]
+        top_n = candidates[:n]
+    if method == "mmf":
+        tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2, tokenizer=lambda x: x.split("; "), lowercase=False)
+        tf = tf_vectorizer.fit_transform(corpus)
+        lda = LatentDirichletAllocation(n_components=n, max_iter=5, learning_method='online', learning_offset=50.,random_state=0).fit(tf)
+        candidates = weights.sum().sort_values(ascending=False).index.tolist()
         candidates = [c for c in candidates if len(c) > 0]
         top_n = candidates[:n]
     return top_n
+
+
+def get_top_words(topic, feature_names, n):
+    return [feature_names[i] for i in topic.argsort()[:-n - 1:-1]]
 
 
 def postprocess(daterange, data):
