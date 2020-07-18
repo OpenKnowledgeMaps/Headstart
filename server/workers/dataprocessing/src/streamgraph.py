@@ -38,11 +38,11 @@ class Streamgraph(object):
         boundaries = self.get_boundaries(df)
         daterange = self.get_daterange(boundaries)
         data = pd.merge(counts, boundaries, on='year')
-        top_n = self.get_top_n(metadata, data, n, method)
+        top_n = self.get_top_n(metadata, query, n, method)
         data = (data[data.subject.map(lambda x: x in top_n)]
                 .sort_values("year")
                 .reset_index(drop=True))
-        x = self.self.get_x_axis(daterange)
+        x = self.get_x_axis(daterange)
         sg_data = {}
         sg_data["x"] = x
         sg_data["subject"] = self.postprocess(daterange, data)
@@ -84,7 +84,7 @@ class Streamgraph(object):
         boundaries = df[["boundary_label", "year"]].drop_duplicates()
         return boundaries
 
-    def get_top_n(self, metadata, data, n, method):
+    def get_top_n(self, metadata, query, n, method):
         df = pd.DataFrame.from_records(metadata)
         df = df[df.subject.map(lambda x: len(x) > 2)]
         corpus = df.subject.tolist()
@@ -92,10 +92,12 @@ class Streamgraph(object):
         tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
                                         tokenizer=lambda x: x.split("; "),
                                         lowercase=False,
+                                        stop_words=[query]
                                         )
         tfidf_vectorizer = TfidfVectorizer(max_df=0.95, min_df=2,
                                            tokenizer=lambda x: x.split("; "),
                                            lowercase=False,
+                                           stop_words=[query]
                                            )
         if method == "count":
             tf = tf_vectorizer.fit_transform(corpus)
