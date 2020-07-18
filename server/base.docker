@@ -10,11 +10,18 @@ ARG CRAN
 ## Setting a BUILD_DATE will set CRAN to the matching MRAN date
 ## No BUILD_DATE means that CRAN will default to latest
 ENV R_VERSION=${R_VERSION:-3.6.3} \
-    CRAN=${CRAN:-https://cran.rstudio.com} \
-    LC_ALL=en_US.UTF-8 \
-    LANG=en_US.UTF-8 \
-    TERM=xterm
+    CRAN=${CRAN:-https://cran.rstudio.com}
 
+
+RUN echo "en_US.UTF-8" >> /etc/locale.gen \
+    locale-gen en_US.UTF-8 \
+    update-locale LANG=en_US.UTF-8 \
+    update-locale LC_ALL=en_US.UTF-8 \
+    export LANGUAGE=en_US.UTF-8 \
+    export LANG=en_US.UTF-8 \
+    export LC_ALL=en_US.UTF-8 \
+    locale-gen en_US.UTF-8 \
+    dpkg-reconfigure locales
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -36,14 +43,10 @@ RUN apt-get update \
     libreadline7 \
     libtiff5 \
     liblzma5 \
-    locales \
     make \
     unzip \
     zip \
     zlib1g \
-  && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
-  && locale-gen en_US.utf8 \
-  && /usr/sbin/update-locale LANG=en_US.UTF-8 \
   && BUILDDEPS="curl \
     default-jdk \
     libbz2-dev \

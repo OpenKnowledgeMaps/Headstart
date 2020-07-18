@@ -14,7 +14,7 @@ Sys.setlocale(category="LC_ALL", locale = "en_US.UTF-8")
 library(jsonlite)
 library(logging)
 source('utils.R')
-if (Sys.getenv("BASE_LOGLEVEL") == "DEBUG") {
+if (Sys.getenv("OPENAIRE_LOGLEVEL") == "DEBUG") {
   DEBUG <- FALSE
 } else {
   DEBUG <- TRUE
@@ -35,9 +35,8 @@ if (!is.null(params$lang_id)) {
   lang_id <- 'all'
 }
 source('altmetrics.R')
-source('base.R')
-limit = 120
-list_size = 100
+source('openaire.R')
+limit = params$limit
 
 failed <- list(params=params)
 tryCatch({
