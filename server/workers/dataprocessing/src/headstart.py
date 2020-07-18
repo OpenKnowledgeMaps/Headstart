@@ -6,12 +6,12 @@ import subprocess
 import redis
 import pandas as pd
 import logging
-
-from streamgraph import get_streamgraph_data
+from streamgraph import Streamgraph
 
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
+sg = Streamgraph()
 
 
 class Dataprocessing(object):
@@ -68,7 +68,10 @@ class Dataprocessing(object):
             self.logger.debug(params)
             if params.get('vis_type') == "timeline":
                 metadata = self.create_map(params, input_data)
-                sg_data = get_streamgraph_data(json.loads(metadata), params.get('top_n', 12), params.get('sg_method'))
+                sg_data = sg.get_streamgraph_data(json.loads(metadata),
+                                                  params.get('q'),
+                                                  params.get('top_n', 12),
+                                                  params.get('sg_method'))
                 result = {}
                 result["data"] = metadata
                 result["streamgraph"] = json.dumps(sg_data)
