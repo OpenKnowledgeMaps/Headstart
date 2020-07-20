@@ -154,11 +154,13 @@ COPY workers/dataprocessing/activate.R .
 RUN R -e 'renv::consent(provided = TRUE)' && \
     R -e 'renv::restore()'
 
-COPY workers/dataprocessing/src/ ./
+COPY workers/common ./common
+COPY workers/dataprocessing ./dataprocessing
 COPY preprocessing/resources ./resources
-COPY preprocessing/other-scripts .
+COPY preprocessing/other-scripts ./other-scripts
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
 
 COPY workers/redis_config.json .
 
-ENTRYPOINT python3 headstart.py
+COPY workers/*.py ./
+ENTRYPOINT python3 run_dataprocessing.py

@@ -3,10 +3,9 @@ import sys
 import copy
 import json
 import subprocess
-import redis
 import pandas as pd
 import logging
-from streamgraph import Streamgraph
+from .streamgraph import Streamgraph
 
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
@@ -16,21 +15,24 @@ sg = Streamgraph()
 
 class Dataprocessing(object):
 
-    def __init__(self, wd="./"):
+    def __init__(self, wd="./", script="", redis_store=None,
+                 language=None,
+                 loglevel="INFO"):
         # path should be to where in the docker container the Rscript are
         self.wd = wd
         self.command = 'Rscript'
-        self.hs = os.path.abspath(os.path.join(self.wd, "run_vis_layout.R"))
+        self.hs = os.path.abspath(os.path.join(self.wd, script))
+        self.redis_store = redis_store
         self.default_params = {}
         self.default_params["MAX_CLUSTERS"] = 15
         self.default_params["language"] = "english"
         self.default_params["taxonomy_separator"] = ";"
         self.default_params["list_size"] = -1
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(os.environ["HEADSTART_LOGLEVEL"])
+        self.logger.setLevel(loglevel)
         handler = logging.StreamHandler(sys.stdout)
         handler.setFormatter(formatter)
-        handler.setLevel(os.environ["HEADSTART_LOGLEVEL"])
+        handler.setLevel(loglevel)
         self.logger.addHandler(handler)
 
     def add_default_params(self, params):
@@ -39,7 +41,7 @@ class Dataprocessing(object):
         return default_params
 
     def next_item(self):
-        queue, msg = redis_store.blpop("input_data")
+        queue, msg = self.redis_store.blpop("input_data")
         msg = json.loads(msg.decode('utf-8'))
         k = msg.get('id')
         params = self.add_default_params(msg.get('params'))
@@ -75,16 +77,7 @@ class Dataprocessing(object):
                 result = {}
                 result["data"] = metadata
                 result["streamgraph"] = json.dumps(sg_data)
-                redis_store.set(k+"_output", json.dumps(result))
+                self.redis_store.set(k+"_output", json.dumps(result))
             else:
                 result = self.create_map(params, input_data)
-                redis_store.set(k+"_output", json.dumps(result))
-
-
-if __name__ == '__main__':
-    with open("redis_config.json") as infile:
-        redis_config = json.load(infile)
-
-    redis_store = redis.StrictRedis(**redis_config)
-    hsb = Dataprocessing()
-    hsb.run()
+                self.redis_store.set(k+"_output", json.dumps(result))
