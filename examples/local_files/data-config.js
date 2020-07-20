@@ -10,7 +10,7 @@ var data_config = {
     url_prefix: "http://mendeley.com/catalog/",
 
     show_multiples: false,
-    show_dropdown: false,
+    show_dropdown: true,
     show_intro: false,
     show_list:true,
     is_force_papers:true,
