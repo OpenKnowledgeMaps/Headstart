@@ -23,7 +23,7 @@ Now you can run a local dev server:
 To run Headstart on a different server (e.g. Apache), you need to set the publicPath in `config.js` to the URL of the `dist` directory:
 * Dev: specify the full path including protocol, e.g. `http://localhost/headstart/dist`
 * Production: specify the full path excluding protocol, e.g. `//example.org/headstart/dist`
-    
+
 Point your browser to the following address:
 
 	http://localhost:8080/examples/local_files/index.html
@@ -39,7 +39,7 @@ To enable testing  features that have been ported to the modern frontend set the
 e.g. to use it in hot reloading development server mode:
 
     MODERN_FRONTEND="true" npm start
-    
+
 The variable can also be set at build time:
 
     MODERN_FRONTEND="true" npm run prod
@@ -47,6 +47,8 @@ The variable can also be set at build time:
 The tests can be run with:
 
     npm test
+
+The modern frontend code can be linted (e.g. the code style etc. checked) using `npm run lint`
 
 ### Server
 
