@@ -707,13 +707,20 @@ class Canvas {
 
         $("#context").css("display", "none");
         
-        mediator.publish("show_backlink", function () {
-            mediator.publish("streamgraph_chart_clicked");
-        });
+        if(!mediator.modern_frontend_enabled) {
+            $("#backlink").remove();
+            $('<p id="backlink" class="backlink backlink-streamgraph"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
+
+            $("#backlink").on("click", function () {
+                mediator.publish("streamgraph_chart_clicked");
+            })
+        }
     }
     
     removeAreaStreamgraph() {
-        mediator.publish("hide_backlink");
+        if(!mediator.modern_frontend_enabled) {
+            $("#backlink").remove();
+        }
         $("#context").css("display", "block");
         mediator.publish("draw_title");
     }

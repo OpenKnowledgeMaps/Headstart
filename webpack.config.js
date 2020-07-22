@@ -23,7 +23,6 @@ const common = {
     devServer: {
         contentBase: path.join( __dirname ),
         compress: true,
-        port: 8080,
         disableHostCheck: true,
         host: '0.0.0.0',
         publicPath: '/dist/'
