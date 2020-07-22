@@ -20,6 +20,12 @@ if (Sys.getenv("BASE_LOGLEVEL") == "DEBUG") {
   DEBUG <- TRUE
 }
 
+if (DEBUG==TRUE){
+  setup_logging('DEBUG')
+} else {
+  setup_logging('INFO')
+}
+
 
 tslog <- getLogger('ts')
 
