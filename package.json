@@ -96,6 +96,10 @@
     "webpack-merge": "^4.2.2"
   },
   "jest": {
-    "collectCoverage": true
+    "moduleNameMapper": {
+      "^config$": "<rootDir>/vis/js/default-config.js"
+    },
+    "collectCoverage": true,
+    "coveragePathIgnorePatterns": ["/node_modules/", "<rootDir>/vis/js/default-config.js"]
   }
 }
