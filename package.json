@@ -102,6 +102,9 @@
       "^config$": "<rootDir>/vis/js/default-config.js"
     },
     "collectCoverage": true,
-    "coveragePathIgnorePatterns": ["/node_modules/", "<rootDir>/vis/js/default-config.js"]
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/vis/js/default-config.js"
+    ]
   }
 }
