@@ -1,32 +1,26 @@
 import React from "react";
 import config from "config";
 import { connect } from "react-redux";
+import { zoomOut } from "../actions"
 
 import BacklinkTemplate from "../templates/Backlink";
 
-export const Backlink = ({ hidden, onClick }) => {
+export const Backlink = ({ hidden, dispatch }) => {
   if (hidden) {
     return null;
   }
 
-  const handleOnClick = () => {
-    console.warn("*** React component 'Backlink' clicked ***");
-    if (onClick && typeof onClick === "function") {
-      onClick();
-    }
-  };
-
   return (
     <BacklinkTemplate
       label={config.localization[config.language].backlink}
-      onClick={handleOnClick}
+      onClick={() => dispatch( zoomOut() )}
     />
   );
 };
 
 const mapStateToProps = (state) => ({
-  hidden: !state.backlink,
-  onClick: state.backlink ? state.backlink.onClick : undefined,
+  hidden: !state.zoom,
+  streamgraph: state.chartType === 'streamgraph'
 });
 
 export default connect(mapStateToProps)(Backlink);
