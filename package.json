@@ -105,6 +105,7 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "<rootDir>/vis/js/default-config.js"
-    ]
+    ],
+    "setupFilesAfterEnv": ["<rootDir>/vis/test/setupTests.js"]
   }
 }
