@@ -8,7 +8,7 @@ service <- args[3]
 setwd(wd) #Don't forget to set your working directory
 
 renv::activate()
-renv::restore(lockfile = './renv.lock')
+renv::restore(lockfile = '../renv.lock')
 Sys.setlocale(category="LC_ALL", locale = "en_US.UTF-8")
 
 library(tibble)
