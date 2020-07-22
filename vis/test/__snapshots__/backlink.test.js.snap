@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Backlink component renders as snapshot 1`] = `
+<p
+  className="backlink"
+  id="backlink"
+>
+  <a
+    className="underline"
+    onClick={[Function]}
+  >
+    ← Back to overview
+  </a>
+</p>
+`;
