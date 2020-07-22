@@ -45,7 +45,7 @@ var MyMediator = function() {
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
     this.modern_frontend_enabled = config.modern_frontend_enabled
-    this.modern_frontend_intermediate = new Intermediate(this.modern_frontend_enabled)
+    this.modern_frontend_intermediate = new Intermediate(this.modern_frontend_enabled, this.chart_svg_click, this.streamgraph_chart_clicked)
     this.init();
     this.init_state();
 };
@@ -137,7 +137,7 @@ MyMediator.prototype = {
         this.mediator.subscribe("streamgraph_chart_clicked", this.streamgraph_chart_clicked)
 
         // refactor
-        this.mediator.subscribe("show_backlink", this.show_backlink);
+        this.mediator.subscribe("register_zoomout_callback", this.register_zoomout_callback)
         this.mediator.subscribe("hide_backlink", this.hide_backlink);
     },
 
@@ -308,8 +308,10 @@ MyMediator.prototype = {
             mediator.manager.call('canvas', 'showInfoModal', []);
             
             mediator.manager.call('streamgraph', 'initMouseListeners', []);
+            mediator.modern_frontend_intermediate.setStreamgraph();
             
         } else {
+            mediator.modern_frontend_intermediate.setNormalChart();
             if(config.is_force_papers && config.dynamic_force_papers) mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
             if(config.is_force_area && config.dynamic_force_area) mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
             if(config.dynamic_sizing) mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
@@ -488,6 +490,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'changeHeaderColor', [color]);
         mediator.manager.call('canvas', 'showAreaStreamgraph', [keyword])
         mediator.current_enlarged_paper = null;
+        mediator.modern_frontend_intermediate.zoomIn();
     },
     
     currentstream_click: function() {
@@ -550,6 +553,7 @@ MyMediator.prototype = {
             }
         }
         mediator.manager.call('list', 'count_visible_items_to_header', []);
+        mediator.modern_frontend_intermediate.zoomIn();
     },
     bubble_zoomout: function() {
         mediator.manager.call('list', 'reset', []);
@@ -566,6 +570,7 @@ MyMediator.prototype = {
             mediator.manager.call('list', 'scrollTop', []);
         else
             mediator.manager.call('list', 'scrollToEntry', [mediator.current_enlarged_paper.safe_id]);
+        mediator.modern_frontend_intermediate.zoomOut();
     },
     
     zoomout_complete: function() {
@@ -716,23 +721,6 @@ MyMediator.prototype = {
         mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
     },
 
-    show_backlink: function(onClick) {
-        if (mediator.modern_frontend_enabled) {
-            mediator.modern_frontend_intermediate.showBacklink(onClick);
-        } else {
-            $("#backlink").remove();
-            $('<p id="backlink" class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
-            $("#backlink").on("click", onClick);
-        }
-    },
-
-    hide_backlink: function() {
-        if (mediator.modern_frontend_enabled) {
-            mediator.modern_frontend_intermediate.hideBacklink();
-        } else {
-            $("#backlink").remove();
-        }
-    }
 };
 
 export const mediator = new MyMediator();

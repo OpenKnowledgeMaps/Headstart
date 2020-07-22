@@ -489,10 +489,14 @@ BubblesFSM.prototype = {
 
         if (previous_zoom_node === null) {
             $("#context").css("display", "none");
+            
+            if(!mediator.modern_frontend_enabled) {
+                $('<p id="backlink" class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
 
-            mediator.publish('show_backlink', function () {
-                mediator.publish('chart_svg_click');
-            });
+                $("#backlink").on("click", function () {
+                    mediator.publish('chart_svg_click');
+                })
+            }
         }
 
         d3.selectAll("div.paper_holder")
@@ -679,8 +683,10 @@ BubblesFSM.prototype = {
 
         d3.selectAll("span.readers_entity")
                 .style("font-size", "8px");
-
-        mediator.publish("hide_backlink");
+        
+        if(!mediator.modern_frontend_enabled) {
+            $("#backlink").remove();
+        }
 
         mediator.publish("draw_title");
 
