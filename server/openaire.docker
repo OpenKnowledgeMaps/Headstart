@@ -148,7 +148,7 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 COPY workers/openaire/renv.lock .
 COPY workers/openaire/activate.R .
 RUN R -e 'renv::consent(provided = TRUE)' && \
-    R -e 'renv::restore()'
+    R -e 'setwd("./other-scripts"); renv::activate(); renv::restore(lockfile = "../renv.lock")'
 
 COPY workers/common ./common
 COPY workers/openaire ./openaire
