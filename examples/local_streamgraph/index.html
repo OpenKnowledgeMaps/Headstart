@@ -1,0 +1,214 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+
+    <meta name="description"
+        content="LinkedCat+ erweckt die Sitzungsberichte der Österreichischen Akademie der Wissenschaften von 1847-1918 zu neuem digitalen Leben.">
+
+    <!-- TWITTER CARD -->
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@oeaw" />
+    <meta name="twitter:title" content="Streamgraph über die Werke von Hammer-Purgstall, Joseph - LinkedCat+" />
+    <meta name="twitter:description"
+        content="LinkedCat+ erweckt die Sitzungsberichte der Österreichischen Akademie der Wissenschaften von 1847-1918 zu neuem digitalen Leben." />
+    <meta name="twitter:image"
+        content="http://localhost/refactoring-01-mvp_lc/server/storage/6d42b6d93313afaea1e709a49a9c4658.png" />
+
+    <!-- OPEN GRAPH OG -->
+    <meta property="og:title" content="Streamgraph über die Werke von Hammer-Purgstall, Joseph - LinkedCat+" />
+    <meta property="og:description"
+        content="LinkedCat+ erweckt die Sitzungsberichte der Österreichischen Akademie der Wissenschaften von 1847-1918 zu neuem digitalen Leben." />
+    <meta property="og:url"
+        content="http://localhost/refactoring-01-mvp_lc/headstart.php?file=6d42b6d93313afaea1e709a49a9c4658&vis_type=timeline&vis_mode=authors&service=linkedcat&query=Hammer-Purgstall,%20Joseph&service_name=linkedcat" />
+    <meta property="og:image"
+        content="http://localhost/refactoring-01-mvp_lc/server/storage/6d42b6d93313afaea1e709a49a9c4658.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="LinkedCat+" />
+
+    <title>Streamgraph über die Werke von Hammer-Purgstall, Joseph - LinkedCat+</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <link type="text/css" rel="stylesheet" href="./menu/menu.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:600" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <script type="text/javascript" src="./menu/menu.js "></script>
+</head>
+
+<body style="margin:0px; padding:0px" class="vis-page">
+    <header>
+        <div class="menu-headstart-page">
+            <div class="menu">
+                <!-- Menu icon -->
+                <div class="icon-close">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </div>
+
+                <!-- Mobile Menu -->
+                <ul>
+                    <li><a href="index"><i class="fas fa-search"></i> Suche</a></li>
+                    <li><a href="browse">Disziplinen / Themen</a></li>
+                    <li><a href="ueber">Über das Projekt</a></li>
+                    <li><a href="faqs">FAQs</a></li>
+                </ul>
+            </div>
+
+            <div class="icon-menu">
+                <span class="awesome"><i class="fas fa-bars"></i></span>
+            </div>
+
+            <!--<div class="imglogo">
+    <a href="index"><img src="https://www.oeaw.ac.at/typo3conf/ext/oeaw_redesign/Resources/Public/Icons/logo-kurz.png"></a>
+</div>-->
+
+            <p class="description">
+                <a href="index">LinkedCat+</a>
+            </p>
+
+            <ul class="nav_top">
+                <li><a href="index"><i class="fas fa-search"></i> Suche</a></li>
+                <li><a href="browse">Disziplinen / Themen</a></li>
+                <li><a href="ueber">Über das Projekt</a></li>
+                <li><a href="faqs">FAQs</a></li>
+            </ul>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                let hash_compare = null;
+                let path_compare = null;
+                $(".nav_top > li > a").each(function (key, item) {
+                    let hash1 = item.href.substr(item.href.lastIndexOf('#') + 1);
+                    let hash2 = location.hash.substr(location.hash.lastIndexOf('#') + 1);
+                    if (hash1 === hash2) {
+                        hash_compare = $(this);
+                    } else if (item.href.substr(item.href.lastIndexOf('/') + 1) === location.pathname.substr(location.pathname.lastIndexOf('/') + 1)) {
+                        path_compare = $(this);
+                    }
+                });
+                if (hash_compare !== null) {
+                    hash_compare.addClass("underline-menu");
+                } else if (path_compare !== null) {
+                    path_compare.addClass("underline-menu");
+                }
+            });
+        </script>
+    </header>
+
+    <div class="topheader"></div>
+    <div id="visualization"></div>
+    <script type="text/javascript" src="data-config.js"></script>
+    <script>
+
+        let credit_text = "<p class='wtp'>Weitere Informationen zu den Visualisierungen <a class='link-popup' href='faqs'>finden Sie in den FAQs</a>. Informationen über das Projekt <a class='link-popup' href='ueber'>finden Sie hier</a>.</p><h3>Datenquelle und Software</h3><p>Diese Visualisierung wurde mit der <a class='link-popup' target='_blank' href='http://github.com/pkraker/Headstart'>Open Source Software Head Start</a> von <a target='_blank' class='link-popup' href='https://openknowledgemaps.org/'>Open Knowledge Maps</a> realisiert. Alle Daten stammen aus LinkedCat+. Die Katalogisierung des Datensatzes ist noch nicht abgeschlossen, neue Katalogisate werden laufend hinzugefügt.</p><p class='wtp'><a target='_blank' href='https://www.oeaw.ac.at'><img style='width: 100px;' src='./img/oeaw-logo.png' alt'OEAW Logo'></a><a target='_blank' href='https://www.oeaw.ac.at/acdh/'><img style='width: 100px;' src='./img/acdh-logo-white-bg.png' alt='ACDH Logo'></a><a target='_blank' href='https://openknowledgemaps.org/'><img style='width: 100px;' src='./img/Logo-Open-Knowledge-Maps-BGwhite.png' alt='Open Knowlege Maps Logo'></a></p>"
+        let km_text = "<h3>Was ist eine Knowledge Map?</h3><p class='wtp'>Eine Knowledge Map (zu deutsch Wissenslandkarte) gibt einen thematischen Überblick über ein Stichwort/einen Autor. Unterthemen werden als Blasen dargestellt. Jedem Unterthema sind relevante Dokumente zugeordnet, die mit einem Klick auf die Blase angezeigt werden können. Ein Dokument wird in einer Knowledge Map nur einer Blase zugeordnet.</p><p class='wtp'>Knowledge Maps eignen sich besonders dazu, einen Überblick über ein Thema zu bekommen und relevante Konzepte und Dokumente zu entdecken.</p>"
+        let sg_text = "<h3>Was ist ein Streamgraph?</h3><p class='wtp'>Ein Streamgraph zeigt die zeitliche Entwicklung der häufigsten Schlagworte zu einem Stichwort/Autor. Die Schlagworte werden als farbige Ströme (Englisch: streams) dargestellt. Jedem Strom sind relevante Dokumente zugeordnet, die mit einem Klick auf einen Stream angezeigt werden können. Ein Dokument kann in einem Streamgraph mehreren Strömen zugeordnet sein. Es kann aber auch vorkommen, dass ein Dokument keinem Strom zugeordnet ist - und zwar dann, wenn das Dokument nicht mit einem der häufigsten Schlagworte annotiert ist.</p><p class='wtp'>Die Höhe eines Streams entspricht der Anzahl der zugeordneten Dokumente zu einem bestimmten Zeitpunkt. Dabei ist zu beachten, dass die Anzahl der relativen, nicht der absoluten Höhe entspricht. Zwischen den Zeitpunkten wird der Strom interpoliert.</p><p class='wtp'>Streamgraphs eignen sich besonders dazu, die Entwicklung von Schlagwörtern über die Zeit zu analysieren und Trends zu erkennen.</p>"
+        let intro_authors_overview = {
+            title: "Über diese Knowlege Map",
+            body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
+                    <p class="wtp">Diese Knowledge Map basiert auf allen Dokumenten aus Linkedcat+ des Autors <b>"Hammer-Purgstall, Joseph"</b>.</p>' + km_text + credit_text
+        }
+
+        let intro_authors_timeline = {
+            title: "Über diesen Streamgraph",
+            body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
+                    <p class="wtp">Dieser Streamgraph basiert auf allen Dokumenten aus Linkedcat+ des Autors <b>"Hammer-Purgstall, Joseph"</b>.</p>' + sg_text + credit_text
+        }
+
+        let intro_keywords_overview = {
+            title: "Über diese Knowlege Map",
+            body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
+                    <p class="wtp">Diese Knowledge Map basiert auf den 100 relevantesten Dokumenten aus Linkedcat+ für das Stichwort/die Stichwörter <b>"Hammer-Purgstall, Joseph"</b> aus dem gewählten Zeitraum.</p>' + km_text + '<h3>Was ist unter relevanteste Dokumente zu verstehen?</h3><p class="wtp">In diesem Projekt verwenden wir das Relevanz-Ranking der Suchmaschinen-Software "Solr". Solr verwendet hauptsächlich die Textähnlichkeit zwischen dem Suchbegriff und den Dokument-Metadaten, um die Relevanz zu bestimmen.</p>' + credit_text
+        }
+
+        let intro_keywords_timeline = {
+            title: "Über diesen Streamgraph",
+            body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
+                    <p class="wtp"> Dieser Streamgraph basiert auf allen Dokumenten der ausgewählten Dokumentarten aus Linkedcat+ für das Stichwort/die Stichwörter <b>"Hammer-Purgstall, Joseph"</b> aus dem ausgewählten Zeitraum.</p>' + sg_text + credit_text
+        }
+
+        let intro_browseview = {
+            title: "Über diese Knowlege Map",
+            body: '<div style="max-width: 1000px; width: 100%;"><div id="whatsthis-page">            \n\
+                    <p class="wtp">Diese Knowledge Map basiert auf allen Dokumenten aus Linkedcat+ die zur Hauptklasse der Basisklassifikation <b>"Hammer-Purgstall, Joseph"</b> gehören.</p>'  + km_text + credit_text
+        }
+
+
+        data_config.intro = intro_keywords_overview;
+
+        data_config.files = [{
+            title: "Hammer-Purgstall.json",
+            file: "./data/Hammer-Purgstall.json"
+        }];
+        data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "./headstart/server/";
+        //data_config.options = options_linkedcat.dropdowns;
+        if ("authors" === "authors") {
+            data_config.is_authorview = true;
+        }
+        if ("timeline" === "timeline") {
+            data_config.is_streamgraph = true;
+            //data_config.embed_modal = false;
+            data_config.show_area = false;
+
+            if ("authors" === "authors") {
+                data_config.intro = intro_authors_timeline;
+            } else {
+                data_config.intro = intro_keywords_timeline;
+            }
+        } else {
+            if ("timeline" === "overview") {
+                if ("authors" === "authors") {
+                    data_config.intro = intro_authors_overview;
+                } else if ("authors" === "browse") {
+                    data_config.intro = intro_browseview;
+                } else {
+                    data_config.intro = intro_keywords_overview;
+                }
+            }
+        }
+
+        var calcDivHeight = function () {
+
+            let height = $(window).height();
+            let width = $(window).width();
+            let calculated_height = 0;
+
+            if (height <= 670 || width < 904 || (width >= 985 && width < 1070)) {
+                calculated_height = 670;
+            } else {
+                calculated_height = $(window).height() - $("header").outerHeight();
+            }
+
+            return calculated_height;
+        }
+
+
+        $(document).ready(function () {
+            $(window).on("resize", function () {
+                let div_height = calcDivHeight();
+                $(".overflow-vis").css("height", div_height + "px")
+                $("#visualization").css("height", div_height + "px")
+            });
+            $(window).trigger('resize');
+        });
+
+    </script>
+    <script type="text/javascript" src="../../dist/headstart.js"></script>
+    <link type="text/css" rel="stylesheet" href="../../dist/headstart.css">
+    </link>
+    <script type="text/javascript">
+        headstart.start();
+    </script>
+
+    <!--<div class="createdby" style="margin: 10px; font-size: 12px;">Diese Visualisierung wurde mit der Open Source Software <a href="http://github.com/pkraker/Headstart" target="_blank ">Head Start</a> von <a href="https://openknowledgemaps.org" target="_blank">Open Knowledge Maps</a> realisiert. Alle Daten stammen aus LinkedCat+.
+        </div>-->
+</body>
+
+</html>
