@@ -14,3 +14,7 @@ Then the process is the same as with the local files example: start the dev serv
 `http://localhost:8080/examples/local_streamgraph/index.html`
 
 In future, it might be nice to come up with a solution that doesn't involve config file, but uses for example a system variable or a specific npm run command.
+
+### Known issue
+
+* Currently, PDF preview is not working because the PDFs are not provided together with the example data, and remote access is currently not possible.
