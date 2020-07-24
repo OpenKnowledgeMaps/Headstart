@@ -51,5 +51,5 @@ for r in df.iterrows():
     res_json = res.json()
     input_data = res_json["input_data"]
     params = res_json["params"]
-    with open("testcase_%d.json" %case["case id"], "w") as outfile:
+    with open("testdata/testcase_%d.json" %case["case id"], "w") as outfile:
         json.dump(res_json, outfile)
