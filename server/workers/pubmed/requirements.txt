@@ -1,3 +1,2 @@
 redis
 pandas
-scikit-learn
