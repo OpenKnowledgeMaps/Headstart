@@ -42,14 +42,10 @@ RUN apt-get update \
     libreadline7 \
     libtiff5 \
     liblzma5 \
-    locales \
     make \
     unzip \
     zip \
     zlib1g \
-  && echo "en_US.UTF-8" >> /etc/locale.gen \
-  && locale-gen en_US.UTF-8 \
-  && /usr/sbin/update-locale LANG=en_US.UTF-8 \
   && BUILDDEPS="curl \
     default-jdk \
     libbz2-dev \
@@ -146,14 +142,14 @@ RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
  R -e 'install.packages("renv", version="0.11.0-5")'
 
 WORKDIR /headstart
-COPY workers/dataprocessing/requirements.txt .
+COPY workers/pubmed/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY workers/dataprocessing/renv.lock .
-COPY workers/dataprocessing/activate.R .
+COPY workers/pubmed/renv.lock .
+COPY workers/pubmed/activate.R .
 
 COPY workers/common ./common
-COPY workers/dataprocessing ./dataprocessing
+COPY workers/pubmed ./pubmed
 COPY preprocessing/resources ./resources
 COPY preprocessing/other-scripts ./other-scripts
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
@@ -164,4 +160,4 @@ RUN R -e 'renv::consent(provided = TRUE)' && \
 COPY workers/redis_config.json .
 
 COPY workers/*.py ./
-ENTRYPOINT python3 run_dataprocessing.py
+ENTRYPOINT python3 run_pubmed.py

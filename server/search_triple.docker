@@ -8,8 +8,9 @@ RUN apk add build-base gcc
 WORKDIR /headstart
 COPY workers/triple/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY workers/triple/src/ ./
+COPY workers/triple/src/ ./triple/src
+COPY workers/run_triple.py .
 COPY workers/triple/es_config.json .
 COPY workers/redis_config.json .
 
-ENTRYPOINT python search_triple.py
+ENTRYPOINT python run_triple.py
