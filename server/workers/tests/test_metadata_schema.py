@@ -1,6 +1,7 @@
 import os
 import json
 import pandas as pd
+import pytest
 import numpy as np
 from pandas_schema import Column, Schema
 from pandas_schema.validation import (InListValidation,
@@ -48,23 +49,37 @@ pubmed_schema = Schema([
                     lambda x: isinstance(x, str), "Not a string.")]),
     Column('url', [CustomElementValidation(
                     lambda x: isinstance(x, str), "Not a string.")]),
-    Column('doi', [CustomElementValidation(
-                    lambda x: isinstance(x, str), "Not a string.")]),
+    # Column('doi', [CustomElementValidation(
+    #                 lambda x: isinstance(x, str), "Not a string.")]),
     Column('pmid', [CustomElementValidation(
                     lambda x: isinstance(x, str), "Not a string.")]),
 ])
 
+casefiles = [f for f in os.listdir("tests/testdata") if f.endswith(".json")]
+cases = []
+for casefile in casefiles:
+    with open(os.path.join("tests/testdata", casefile)) as infile:
+        testcase_ = json.load(infile)
+    cases.append(testcase_)
 
-def test_metadata_schema():
-    for casefile in os.listdir("tests/testdata"):
-        with open(os.path.join("tests/testdata", casefile)) as infile:
-            casedata = json.load(infile)
-        service = casedata["params"]["service"]
-        metadata = pd.DataFrame.from_records(json.loads(casedata["input_data"]["metadata"]))
-        core_errors = core_schema.validate(metadata, columns=core_schema.get_column_names())
-        if service == "base":
-            service_errors = base_schema.validate(metadata, columns = base_schema.get_column_names())
-        if service == "pubmed":
-            service_errors = pubmed_schema.validate(metadata, columns = pubmed_schema.get_column_names())
-        assert len(core_errors) == 0
-        assert len(service_errors) == 0
+
+@pytest.mark.parametrize("testcase_", cases)
+def test_metadata_schema(testcase_):
+    service = testcase_["params"]["service"]
+    metadata = pd.DataFrame.from_records(json.loads(testcase_["input_data"]["metadata"]))
+    core_errors = core_schema.validate(
+                            metadata, columns=core_schema.get_column_names())
+    if service == "base":
+        service_errors = base_schema.validate(
+                            metadata, columns=base_schema.get_column_names())
+    if service == "pubmed":
+        service_errors = pubmed_schema.validate(
+                            metadata, columns=pubmed_schema.get_column_names())
+    assert len(core_errors) == 0, "\n".join([report_validation_error(e)
+                                             for e in core_errors])
+    assert len(service_errors) == 0, "\n".join([report_validation_error(e)
+                                                for e in service_errors])
+
+
+def report_validation_error(error):
+    return "%s %s" % (error.column, error.message)
