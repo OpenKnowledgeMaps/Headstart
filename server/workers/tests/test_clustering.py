@@ -1,16 +1,13 @@
-import os
-import json
-import uuid
 import pytest
-
-from .test_helpers import get_cases
-
-import pandas as pd
-import numpy as np
-
-from ..services.src.apis.utils import get_key
+from .test_helpers import CASES, RESULTS
 
 
-cases = get_cases()
+@pytest.mark.parametrize("result_", CASES)
+def test_clustering_2_items(result_):
+    pass
 
-#@pytest.mark.parametrize("testcase_", cases)
+
+@pytest.mark.parametrize("result_", RESULTS)
+def test_max_n_cluster(result_):
+    if len(result_) <= 100:
+        assert result_.area.nunique() <= 15
