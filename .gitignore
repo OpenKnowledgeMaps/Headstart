@@ -18,3 +18,4 @@ config.js
 .Rhistory
 .ipynb_checkpoints
 .Rprofile
+coverage/
