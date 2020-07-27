@@ -11,5 +11,5 @@ if __name__ == '__main__':
     redis_store = redis.StrictRedis(**redis_config)
     wrapper = PubMedClient("./other-scripts", "run_pubmed.R", redis_store,
                            "english",
-                           os.environ["PUBMED_LOGLEVEL"])
+                           os.environ.get("PUBMED_LOGLEVEL", "INFO"))
     wrapper.run()
