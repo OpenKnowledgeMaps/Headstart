@@ -3,6 +3,9 @@ import json
 import pandas as pd
 import pytest
 import numpy as np
+
+from .test_helpers import get_cases
+
 from pandas_schema import Column, Schema
 from pandas_schema.validation import (InListValidation,
                                       DateFormatValidation,
@@ -55,13 +58,8 @@ pubmed_schema = Schema([
                     lambda x: isinstance(x, str), "Not a string.")]),
 ])
 
-casefiles = [f for f in os.listdir("tests/testdata") if f.endswith(".json")]
-casefiles.sort()
-cases = []
-for casefile in casefiles:
-    with open(os.path.join("tests/testdata", casefile)) as infile:
-        testcase_ = json.load(infile)
-    cases.append(testcase_)
+
+cases = get_cases()
 
 
 @pytest.mark.parametrize("testcase_", cases)
