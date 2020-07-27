@@ -7,7 +7,7 @@ from pandas_schema.validation import (InListValidation,
                                       CustomElementValidation)
 
 
-schema = Schema([
+core_schema = Schema([
     Column('id', [CustomElementValidation(
                     lambda x: isinstance(x, str), "Not a string.")]),
     Column('authors', [CustomElementValidation(
@@ -18,10 +18,36 @@ schema = Schema([
                     lambda x: isinstance(x, str), "Not a string.")]),
     Column('year', [CustomElementValidation(
                     lambda x: isinstance(x, str), "Not a string.")]),
-    Column('oa_state', [CustomElementValidation(
-                    lambda x: isinstance(x, str), "Not a string.")]),
     Column('subject_orig', [CustomElementValidation(
                     lambda x: isinstance(x, str), "Not a string.")]),
+])
+
+
+base_schema = Schema([
+    Column('link', [CustomElementValidation(
+                    lambda x: isinstance(x, str), "Not a string.")]),
+    Column('oa_state', [CustomElementValidation(
+                    lambda x: isinstance(x, str), "Not a string.")]),
+    Column('published_in', [CustomElementValidation(
+                    lambda x: isinstance(x, str), "Not a string.")]),
+    Column('subject', [CustomElementValidation(
+                    lambda x: isinstance(x, str), "Not a string.")]),
+    Column('url', [CustomElementValidation(
+                    lambda x: isinstance(x, str), "Not a string.")]),
+    Column('relation', [CustomElementValidation(
+                    lambda x: isinstance(x, str), "Not a string.")]),
     Column('relevance', [CustomElementValidation(
-                    lambda x: isinstance(x, int), "Not a string.")])
+                    lambda x: isinstance(x, int), "Not an integer.")])
+])
+
+
+pubmed_schema = Schema([
+    Column('subject', [CustomElementValidation(
+                    lambda x: isinstance(x, str), "Not a string.")]),
+    Column('url', [CustomElementValidation(
+                    lambda x: isinstance(x, str), "Not a string.")]),
+    Column('doi', [CustomElementValidation(
+                    lambda x: isinstance(x, str), "Not a string.")]),
+    Column('pmid', [CustomElementValidation(
+                    lambda x: isinstance(x, str), "Not a string.")]),
 ])
