@@ -11,5 +11,5 @@ if __name__ == '__main__':
     redis_store = redis.StrictRedis(**redis_config)
     wrapper = OpenAIREClient("./other-scripts", "run_openaire.R", redis_store,
                            "english",
-                           os.environ["OPENAIRE_LOGLEVEL"])
+                           os.environ("OPENAIRE_LOGLEVEL", "INFO"))
     wrapper.run()
