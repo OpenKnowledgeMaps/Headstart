@@ -57,6 +57,14 @@ pubmed_schema = Schema([
 ])
 
 
+knowledgemap_schema = Schema([
+])
+
+
+def report_validation_error(error):
+    return "%s %s" % (error.column, error.message)
+
+
 @pytest.mark.parametrize("testcase_", CASES)
 def test_metadata_schema(testcase_):
     service = testcase_["params"]["service"]
@@ -75,5 +83,6 @@ def test_metadata_schema(testcase_):
                                                 for e in service_errors])
 
 
-def report_validation_error(error):
-    return "%s %s" % (error.column, error.message)
+@pytest.mark.parametrize("testcase_", CASES)
+def test_knowledgemap_schema(testcase_):
+    pass
