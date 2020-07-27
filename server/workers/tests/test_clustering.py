@@ -2,12 +2,12 @@ import pytest
 from .test_helpers import CASES, RESULTS
 
 
-@pytest.mark.parametrize("result_", CASES)
-def test_clustering_2_items(result_):
+@pytest.mark.parametrize("testcase_", CASES)
+def test_clustering_2_items(testcase_):
     pass
 
 
-@pytest.mark.parametrize("result_", RESULTS)
-def test_max_n_cluster(result_):
-    if len(result_) <= 100:
-        assert result_.area.nunique() <= 15
+@pytest.mark.parametrize("testcase_", RESULTS)
+def test_max_n_cluster(testcase_):
+    if len(testcase_) <= 100:
+        assert testcase_.area.nunique() <= 15
