@@ -49,13 +49,14 @@ pubmed_schema = Schema([
                     lambda x: isinstance(x, str), "Not a string.")]),
     Column('url', [CustomElementValidation(
                     lambda x: isinstance(x, str), "Not a string.")]),
-    # Column('doi', [CustomElementValidation(
-    #                 lambda x: isinstance(x, str), "Not a string.")]),
+    Column('doi', [CustomElementValidation(
+                    lambda x: isinstance(x, str), "Not a string.")]),
     Column('pmid', [CustomElementValidation(
                     lambda x: isinstance(x, str), "Not a string.")]),
 ])
 
 casefiles = [f for f in os.listdir("tests/testdata") if f.endswith(".json")]
+casefiles.sort()
 cases = []
 for casefile in casefiles:
     with open(os.path.join("tests/testdata", casefile)) as infile:
