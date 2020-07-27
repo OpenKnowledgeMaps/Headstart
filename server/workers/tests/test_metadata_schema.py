@@ -1,10 +1,8 @@
-import os
 import json
 import pandas as pd
 import pytest
-import numpy as np
 
-from .test_helpers import get_cases
+from .test_helpers import CASES, RESULTS
 
 from pandas_schema import Column, Schema
 from pandas_schema.validation import (InListValidation,
@@ -59,10 +57,7 @@ pubmed_schema = Schema([
 ])
 
 
-cases = get_cases()
-
-
-@pytest.mark.parametrize("testcase_", cases)
+@pytest.mark.parametrize("testcase_", CASES)
 def test_metadata_schema(testcase_):
     service = testcase_["params"]["service"]
     metadata = pd.DataFrame.from_records(json.loads(testcase_["input_data"]["metadata"]))

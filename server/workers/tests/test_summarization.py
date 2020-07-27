@@ -1,13 +1,7 @@
-import workers
-from workers.dataprocessing.src.headstart import Dataprocessing
 import pytest
-import pandas as pd
+from .test_helpers import CASES, RESULTS
 
 
-# @pytest.fixture
-# def input_data():
-#     pass
-#
-#
-# def test_bubble_titles_empty_keywords():
-#     pass
+@pytest.mark.parametrize("testcase_", RESULTS)
+def test_empty_area_titles(testcase_):
+    assert testcase_.area.map(lambda x: len(x)==0).sum() == 0
