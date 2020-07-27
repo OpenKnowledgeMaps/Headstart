@@ -11,7 +11,7 @@ def build_search(case):
     search = {}
     search["service"] = case.get("data integration", "").lower()
     search["q"] = case.get("search query", "")
-    search["from"] =case.get("from", "")
+    search["from"] = case.get("from", "")
     search["to"] = case.get("to", "")
     search["sorting"] = case.get("sorting", "")
     search["article_types"] = str(case.get("article types", "")).split(",")

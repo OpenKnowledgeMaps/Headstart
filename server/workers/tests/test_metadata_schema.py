@@ -1,3 +1,5 @@
+import os
+import json
 import pandas as pd
 import numpy as np
 from pandas_schema import Column, Schema
@@ -51,3 +53,18 @@ pubmed_schema = Schema([
     Column('pmid', [CustomElementValidation(
                     lambda x: isinstance(x, str), "Not a string.")]),
 ])
+
+
+def test_metadata_schema():
+    for casefile in os.listdir("tests/testdata"):
+        with open(os.path.join("tests/testdata", casefile)) as infile:
+            casedata = json.load(infile)
+        service = casedata["params"]["service"]
+        metadata = pd.DataFrame.from_records(json.loads(casedata["input_data"]["metadata"]))
+        core_errors = core_schema.validate(metadata, columns=core_schema.get_column_names())
+        if service == "base":
+            service_errors = base_schema.validate(metadata, columns = base_schema.get_column_names())
+        if service == "pubmed":
+            service_errors = pubmed_schema.validate(metadata, columns = pubmed_schema.get_column_names())
+        assert len(core_errors) == 0
+        assert len(service_errors) == 0
