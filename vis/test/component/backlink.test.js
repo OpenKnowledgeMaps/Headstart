@@ -3,7 +3,7 @@ import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
 import { shallow } from "enzyme";
 
-import { Backlink } from "../js/components/Backlink";
+import { Backlink } from "../../js/components/Backlink";
 
 const setup = (overrideProps) => {
   const props = Object.assign(
