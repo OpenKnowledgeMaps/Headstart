@@ -15,12 +15,12 @@ np.random.seed(42)
 
 class Streamgraph(object):
 
-    def __init__(self):
+    def __init__(self, loglevel="INFO"):
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(os.environ["HEADSTART_LOGLEVEL"])
+        self.logger.setLevel(loglevel)
         handler = logging.StreamHandler(sys.stdout)
         handler.setFormatter(formatter)
-        handler.setLevel(os.environ["HEADSTART_LOGLEVEL"])
+        handler.setLevel(loglevel)
         self.logger.addHandler(handler)
 
     def get_streamgraph_data(self, metadata, query, n=12, method="tfidf"):

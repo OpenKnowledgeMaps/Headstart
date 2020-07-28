@@ -60,7 +60,8 @@ class Search(Resource):
         """
         params = request.get_json()
         base_ns.logger.debug(params)
-        del params["optradio"]
+        if "optradio" in params:
+            del params["optradio"]
         errors = search_param_schema.validate(params, partial=True)
         params["limit"] = 120
         params["list_size"] = 100

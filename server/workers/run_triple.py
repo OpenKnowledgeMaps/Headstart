@@ -11,5 +11,5 @@ if __name__ == '__main__':
         redis_config = json.load(infile)
 
     redis_store = redis.StrictRedis(**redis_config)
-    tc = TripleClient(es_config, redis_store, os.environ["TRIPLE_LOGLEVEL"])
+    tc = TripleClient(es_config, redis_store, os.environ.get("TRIPLE_LOGLEVEL", "INFO"))
     tc.run()
