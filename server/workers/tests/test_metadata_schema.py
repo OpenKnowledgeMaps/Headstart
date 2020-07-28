@@ -2,7 +2,7 @@ import json
 import pandas as pd
 import pytest
 
-from .test_helpers import CASES, INPUT_DATA, RESULTS
+from .test_helpers import CASES, CASENAMES, INPUT_DATA, RESULTS
 
 from pandas_schema import Column, Schema
 from pandas_schema.validation import (InListValidation,
@@ -105,10 +105,11 @@ def report_validation_error(error):
     return "%s %s" % (error.column, error.message)
 
 
-@pytest.mark.parametrize("testcase_", INPUT_DATA)
-def test_metadata_schema(testcase_):
-    service = testcase_["params"]["service"]
-    metadata = pd.DataFrame.from_records(json.loads(testcase_["input_data"]["metadata"]))
+@pytest.mark.parametrize("testcase", CASENAMES)
+def test_metadata_schema(testcase):
+    testcase = INPUT_DATA[testcase]
+    service = testcase["params"]["service"]
+    metadata = pd.DataFrame.from_records(json.loads(testcase["input_data"]["metadata"]))
     core_errors = core_schema.validate(
                             metadata, columns=core_schema.get_column_names())
     if service == "base":
@@ -123,9 +124,10 @@ def test_metadata_schema(testcase_):
                                                 for e in service_errors])
 
 
-@pytest.mark.parametrize("testcase_", RESULTS)
-def test_knowledgemap_schema(testcase_):
+@pytest.mark.parametrize("testcase", CASENAMES)
+def test_knowledgemap_schema(testcase):
+    testcase = RESULTS[testcase]
     errors = knowledgemap_schema.validate(
-                        testcase_, columns=knowledgemap_schema.get_column_names())
+                        testcase, columns=knowledgemap_schema.get_column_names())
     assert len(errors) == 0, "\n".join([report_validation_error(e)
                                              for e in errors])

@@ -1,17 +1,19 @@
 import pytest
-from .test_helpers import CASES, RESULTS, get_stopwords
+from .test_helpers import CASES, CASENAMES, RESULTS, get_stopwords
 
 LANGS = ["english", "german"]
 
-@pytest.mark.parametrize("testcase_", RESULTS)
-def test_empty_area_titles(testcase_):
-    assert testcase_.area.map(lambda x: len(x)==0).sum() == 0
+@pytest.mark.parametrize("testcase", CASENAMES)
+def test_empty_area_titles(testcase):
+    testcase = RESULTS[testcase]
+    assert testcase.area.map(lambda x: len(x)==0).sum() == 0
 
-@pytest.mark.parametrize("testcase_", RESULTS)
-@pytest.mark.parametrize("lang_", LANGS)
-def test_stopwords_not_start_end_keywords_areatitles(testcase_, lang_):
-    stops = get_stopwords(lang_)
-    areatitles = testcase_.area.unique()
+@pytest.mark.parametrize("testcase", CASENAMES)
+@pytest.mark.parametrize("lang", LANGS)
+def test_stopwords_not_start_end_keywords_areatitles(testcase, lang):
+    testcase = RESULTS[testcase]
+    stops = get_stopwords(lang)
+    areatitles = testcase.area.unique()
     for at in areatitles:
         keywords = at.split(", ")
         for kw in keywords:
