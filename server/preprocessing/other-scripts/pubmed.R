@@ -127,6 +127,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
   df$paper_abstract <- gsub("^\\s+|\\s+$", "", gsub("[\r\n]", "", df$paper_abstract))
   df$content <- paste(df$title, df$paper_abstract, df$authors, df$subject, df$published_in, sep= " ")
   df$doi = df$id
+  df$doi[is.na(df$doi)] <- ""
   df$id = df$pmid
   df$subject_orig = df$subject
 

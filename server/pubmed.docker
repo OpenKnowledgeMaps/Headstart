@@ -12,16 +12,6 @@ ARG CRAN
 ENV R_VERSION=${R_VERSION:-3.6.3} \
     CRAN=${CRAN:-https://cran.rstudio.com}
 
-RUN echo "en_US.UTF-8" >> /etc/locale.gen \
-    locale-gen en_US.UTF-8 \
-    update-locale LANG=en_US.UTF-8 \
-    update-locale LC_ALL=en_US.UTF-8 \
-    export LANGUAGE=en_US.UTF-8 \
-    export LANG=en_US.UTF-8 \
-    export LC_ALL=en_US.UTF-8 \
-    locale-gen en_US.UTF-8 \
-    dpkg-reconfigure locales
-
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     bash-completion \
@@ -42,6 +32,7 @@ RUN apt-get update \
     libreadline7 \
     libtiff5 \
     liblzma5 \
+    locales \
     make \
     unzip \
     zip \
@@ -125,6 +116,14 @@ RUN apt-get update \
   && apt-get autoclean -y \
   && rm -rf /var/lib/apt/lists/*
 
+RUN locale-gen en_US.UTF-8 && \
+  update-locale LANG=en_US.UTF-8  && \
+  update-locale LC_ALL=en_US.UTF-8  && \
+  export LANGUAGE=en_US.UTF-8  && \
+  export LANG=en_US.UTF-8  && \
+  export LC_ALL=en_US.UTF-8  && \
+  dpkg-reconfigure locales
+
 RUN apt update && apt full-upgrade -y && \
   apt install -y links curl vim libcurl4-openssl-dev \
                  libxml2-dev libz-dev libpoppler-cpp-dev \
@@ -148,14 +147,14 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 COPY workers/pubmed/renv.lock .
 COPY workers/pubmed/activate.R .
 
+RUN R -e 'renv::consent(provided = TRUE)' && \
+    R -e 'setwd("./"); renv::activate(); renv::restore(lockfile = "./renv.lock")'
+
 COPY workers/common ./common
 COPY workers/pubmed ./pubmed
 COPY preprocessing/resources ./resources
 COPY preprocessing/other-scripts ./other-scripts
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
-
-RUN R -e 'renv::consent(provided = TRUE)' && \
-    R -e 'setwd("./other-scripts"); renv::activate(); renv::restore(lockfile = "../renv.lock")'
 
 COPY workers/redis_config.json .
 
