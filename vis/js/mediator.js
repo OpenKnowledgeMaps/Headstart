@@ -518,6 +518,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'resetHeaderColor');
         mediator.manager.call('canvas', 'removeAreaStreamgraph');
         mediator.current_enlarged_paper = null;
+        mediator.modern_frontend_intermediate.zoomOut();
     },
 
     bubble_mouseout: function(d, circle, bubble_fsm) {
