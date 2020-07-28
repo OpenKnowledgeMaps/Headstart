@@ -3,7 +3,9 @@
  */
 import { combineReducers } from "redux";
 import zoom from "./zoom";
+import chartType from "./chartType";
 
 export default combineReducers({
   zoom,
+  chartType,
 });
