@@ -16,7 +16,7 @@ exports[`Backlink component snapshot normal matches as snapshot 1`] = `
 
 exports[`Backlink component snapshot streamgraph matches as snapshot 1`] = `
 <p
-  className="backlink"
+  className="backlink backlink-streamgraph"
   id="backlink"
 >
   <a
