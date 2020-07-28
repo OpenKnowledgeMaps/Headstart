@@ -25,13 +25,14 @@ def get_stopwords(lang):
 
 def get_cases():
     testdatadir = os.path.join(pathlib.Path(__file__).parent, "testdata")
-    casefiles = [f for f in os.listdir(testdatadir) if f.endswith(".json")]
+    casefiles = [f for f in os.listdir(testdatadir) if f.startswith("testcase")]
     casefiles.sort()
-    cases = []
+    cases = {}
     for casefile in casefiles:
         with open(os.path.join(testdatadir, casefile)) as infile:
             testcase_ = json.load(infile)
-        cases.append(testcase_)
+        casename, _ = os.path.splitext(casefile)
+        cases[casename] = testcase_
     return cases
 
 
@@ -58,6 +59,7 @@ def retrieve_results(testcase_):
     return result
 
 CASES = get_cases()
+CASENAMES = list(CASES.keys())
 # INPUT_DATA = [retrieve_results(c) for c in CASES]
 INPUT_DATA = CASES
-RESULTS = [get_dataprocessing_result(c) for c in INPUT_DATA]
+RESULTS = {casename:get_dataprocessing_result(casedata) for casename, casedata in INPUT_DATA.items()}
