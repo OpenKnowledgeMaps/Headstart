@@ -2,14 +2,22 @@
  * This is where all actions are stored.
  */
 
-export const showBacklink = (onClick) => ({
-  type: "SET_BACKLINK",
-  data: {
-    onClick,
-  },
+export const zoomInFromMediator = () => ({
+  type: "ZOOM_IN"
 });
 
-export const hideBacklink = () => ({
-  type: "SET_BACKLINK",
-  data: null,
+export const zoomOutFromMediator = () => ({
+  type: "ZOOM_OUT"
+});
+
+export const zoomOut = (callback) => {
+  return {type: "ZOOM_OUT", not_from_mediator: true};
+};
+
+export const setNormalChart = () => ({
+  type: "SET_NORMAL"
+});
+
+export const setStreamgraph = () => ({
+  type: "SET_STREAMGRAPH"
 });

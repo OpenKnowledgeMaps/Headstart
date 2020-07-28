@@ -1,7 +1,6 @@
 import React from "react";
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
-import renderer from "react-test-renderer";
 import { shallow } from "enzyme";
 
 import { Backlink } from "../js/components/Backlink";
@@ -39,15 +38,6 @@ describe("Backlink component", () => {
   });
 
   /**
-   * Basic snapshot test
-   *   using react-test-renderer for a deep rendering (with children)
-   */
-  it("renders as snapshot", () => {
-    const tree = renderer.create(<Backlink onClick={jest.fn()} />).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
-  /**
    * Component render tests
    *   using Enzyme again, so just shallow rendering
    */
@@ -66,7 +56,7 @@ describe("Backlink component", () => {
   /**
    * Component event tests
    *   using react-dom, because we need full DOM for that
-   * 
+   *
    * More component integration tests can be added here too.
    */
   describe("onclick", () => {
