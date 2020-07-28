@@ -138,7 +138,6 @@ MyMediator.prototype = {
 
         // refactor
         this.mediator.subscribe("register_zoomout_callback", this.register_zoomout_callback)
-        this.mediator.subscribe("hide_backlink", this.hide_backlink);
     },
 
     init_state: function() {
@@ -231,7 +230,11 @@ MyMediator.prototype = {
         papers.current = "none";
         list.current = "none";
         $("#list_explorer").empty();
-        this.hide_backlink();
+        if (mediator.modern_frontend_enabled) {
+            mediator.modern_frontend_intermediate.zoomOut();
+        } else {
+            $("#backlink").remove();
+        }
         mediator.manager.call('canvas', 'setupToFileCanvas', []);
     },
 
