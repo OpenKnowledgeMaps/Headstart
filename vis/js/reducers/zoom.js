@@ -1,4 +1,4 @@
-const zoom = (state = null, action) => {
+const zoom = (state = false, action) => {
   switch (action.type) {
     case "ZOOM_IN":
       return true;

@@ -1,4 +1,4 @@
-const chartType = (state = null, action) => {
+const chartType = (state = "normal", action) => {
   switch (action.type) {
     case "SET_NORMAL":
       return "normal";
