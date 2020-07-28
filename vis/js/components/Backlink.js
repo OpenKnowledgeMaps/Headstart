@@ -5,7 +5,7 @@ import { zoomOut } from "../actions";
 
 import BacklinkTemplate from "../templates/Backlink";
 
-export const Backlink = ({ hidden, streamgraph, dispatch }) => {
+export const Backlink = ({ hidden, streamgraph, onClick }) => {
   if (hidden) {
     return null;
   }
@@ -13,7 +13,7 @@ export const Backlink = ({ hidden, streamgraph, dispatch }) => {
   return (
     <BacklinkTemplate
       label={config.localization[config.language].backlink}
-      onClick={() => dispatch(zoomOut())}
+      onClick={onClick}
       className={streamgraph ? "backlink backlink-streamgraph" : "backlink"}
     />
   );
@@ -24,4 +24,8 @@ const mapStateToProps = (state) => ({
   streamgraph: state.chartType === "streamgraph",
 });
 
-export default connect(mapStateToProps)(Backlink);
+const mapDispatchToProps = (dispatch) => ({
+  onClick: () => dispatch(zoomOut()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Backlink);
