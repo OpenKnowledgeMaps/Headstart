@@ -37,5 +37,15 @@ def get_dataprocessing_result(testcase_):
     return pd.DataFrame.from_records(json.loads(result))
 
 
+def retrieve_results(testcase_):
+    k = str(uuid.uuid4())
+    service = testcase_["params"]["service"]
+    d = {"id": k, "params": testcase_["params"],
+         "endpoint": "search"}
+    redis_store.rpush(service, json.dumps(d))
+    result = get_key(redis_store, k)
+    return result
+
 CASES = get_cases()
-RESULTS = [get_dataprocessing_result(c) for c in CASES]
+INPUT_DATA = [retrieve_results(c) for c in CASES]
+RESULTS = [get_dataprocessing_result(c) for c in INPUT_DATA]
