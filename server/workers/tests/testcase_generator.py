@@ -1,6 +1,9 @@
+import json
 import numpy as np
 import datetime
 from numpy.random import choice, randint
+from hashlib import md5
+from collections import OrderedDict
 
 np.random.seed(42)
 
@@ -279,3 +282,19 @@ class PubmedParamSpace(ParamSpace):
         params["list_size"] = -1
         params["language"] = "english"
         return params
+
+
+def create_mapid(params):
+    if params["service"] == "base":
+        params_array = ["from", "to", "document_types", "sorting"]
+    if params["service"] == "pubmed":
+        params_array = ["from", "to", "sorting", "article_types"]
+    ordered_params = OrderedDict()
+    for k in params_array:
+        ordered_params[k] = params[k]
+    string_to_hash = json.dumps(ordered_params, separators=(',',':'))
+    string_to_hash = " ".join([params["q"], string_to_hash])
+    mapid = md5(string_to_hash.encode('utf-8')).hexdigest()
+    return mapid
+
+base_paramgen = BaseParamSpace()
