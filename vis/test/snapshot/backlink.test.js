@@ -8,10 +8,10 @@ import Backlink from "../../js/components/Backlink";
 const mockStore = configureStore([]);
 
 describe("Backlink component snapshot", () => {
-  it("normal matches as snapshot", () => {
+  it("matches as knowledgeMap snapshot", () => {
     const store = mockStore({
       zoom: true,
-      chartType: "normal",
+      chartType: "knowledgeMap",
     });
     const tree = renderer
       .create(
@@ -23,7 +23,7 @@ describe("Backlink component snapshot", () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it("streamgraph matches as snapshot", () => {
+  it("matches as streamgraph snapshot", () => {
     const store = mockStore({
       zoom: true,
       chartType: "streamgraph",

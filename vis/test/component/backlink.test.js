@@ -119,7 +119,7 @@ describe("Backlink component", () => {
       it("should zoom out when clicked", () => {
         const store = mockStore({
           zoom: true,
-          chartType: "normal",
+          chartType: "knowledgeMap",
         });
 
         act(() => {

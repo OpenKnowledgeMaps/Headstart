@@ -314,7 +314,7 @@ MyMediator.prototype = {
             mediator.modern_frontend_intermediate.setStreamgraph();
             
         } else {
-            mediator.modern_frontend_intermediate.setNormalChart();
+            mediator.modern_frontend_intermediate.setKnowledgeMap();
             if(config.is_force_papers && config.dynamic_force_papers) mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
             if(config.is_force_area && config.dynamic_force_area) mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
             if(config.dynamic_sizing) mediator.manager.call('headstart', 'dynamicSizing', [data.length]);

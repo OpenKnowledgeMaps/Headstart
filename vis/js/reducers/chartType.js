@@ -1,7 +1,7 @@
-const chartType = (state = "normal", action) => {
+const chartType = (state = "knowledgeMap", action) => {
   switch (action.type) {
-    case "SET_NORMAL":
-      return "normal";
+    case "SET_KNOWLEDGE_MAP":
+      return "knowledgeMap";
     case "SET_STREAMGRAPH":
       return "streamgraph";
     default:
