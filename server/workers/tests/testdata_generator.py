@@ -7,7 +7,7 @@ api_url = "http://127.0.0.1/api"
 df = pd.read_csv("Backend regression test cases.csv")
 
 
-def build_search(case):
+def extract_params(case):
     search = {}
     search["service"] = case.get("data integration", "").lower()
     search["q"] = case.get("search query", "")
@@ -44,7 +44,7 @@ for r in df.iterrows():
     print(case)
     if pd.np.isnan(case["case id"]):
         continue
-    s = build_search(case)
+    s = extract_params(case)
     res = get_input_data(s, raw=True)
     if res is None:
         continue
