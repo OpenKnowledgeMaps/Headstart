@@ -45,8 +45,7 @@ var MyMediator = function() {
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
     this.modern_frontend_enabled = config.modern_frontend_enabled
-    this.example_element_id = 'modern_frontend_context'
-    this.modern_frontend_intermediate = new Intermediate(this.modern_frontend_enabled, this.example_element_id)
+    this.modern_frontend_intermediate = new Intermediate(this.modern_frontend_enabled, this.chart_svg_click, this.streamgraph_chart_clicked)
     this.init();
     this.init_state();
 };
@@ -136,6 +135,9 @@ MyMediator.prototype = {
         this.mediator.subscribe("stream_clicked", this.stream_clicked)
         this.mediator.subscribe("currentstream_click", this.currentstream_click)
         this.mediator.subscribe("streamgraph_chart_clicked", this.streamgraph_chart_clicked)
+
+        // refactor
+        this.mediator.subscribe("register_zoomout_callback", this.register_zoomout_callback)
     },
 
     init_state: function() {
@@ -228,7 +230,11 @@ MyMediator.prototype = {
         papers.current = "none";
         list.current = "none";
         $("#list_explorer").empty();
-        $("#backlink").remove();
+        if (mediator.modern_frontend_enabled) {
+            mediator.modern_frontend_intermediate.zoomOut();
+        } else {
+            $("#backlink").remove();
+        }
         mediator.manager.call('canvas', 'setupToFileCanvas', []);
     },
 
@@ -305,8 +311,10 @@ MyMediator.prototype = {
             mediator.manager.call('canvas', 'showInfoModal', []);
             
             mediator.manager.call('streamgraph', 'initMouseListeners', []);
+            mediator.modern_frontend_intermediate.setStreamgraph();
             
         } else {
+            mediator.modern_frontend_intermediate.setKnowledgeMap();
             if(config.is_force_papers && config.dynamic_force_papers) mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
             if(config.is_force_area && config.dynamic_force_area) mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
             if(config.dynamic_sizing) mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
@@ -371,7 +379,6 @@ MyMediator.prototype = {
             , canonical_url: config.canonical_url
             , is_authorview: config.is_authorview
             , modern_frontend_enabled: mediator.modern_frontend_enabled
-            , example_element_id: mediator.example_element_id
         }));
         if(config.credit_embed) {
             $("#credit_logo").attr("src", credit_logo);
@@ -486,6 +493,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'changeHeaderColor', [color]);
         mediator.manager.call('canvas', 'showAreaStreamgraph', [keyword])
         mediator.current_enlarged_paper = null;
+        mediator.modern_frontend_intermediate.zoomIn();
     },
     
     currentstream_click: function() {
@@ -513,6 +521,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'resetHeaderColor');
         mediator.manager.call('canvas', 'removeAreaStreamgraph');
         mediator.current_enlarged_paper = null;
+        mediator.modern_frontend_intermediate.zoomOut();
     },
 
     bubble_mouseout: function(d, circle, bubble_fsm) {
@@ -548,6 +557,7 @@ MyMediator.prototype = {
             }
         }
         mediator.manager.call('list', 'count_visible_items_to_header', []);
+        mediator.modern_frontend_intermediate.zoomIn();
     },
     bubble_zoomout: function() {
         mediator.manager.call('list', 'reset', []);
@@ -564,6 +574,7 @@ MyMediator.prototype = {
             mediator.manager.call('list', 'scrollTop', []);
         else
             mediator.manager.call('list', 'scrollToEntry', [mediator.current_enlarged_paper.safe_id]);
+        mediator.modern_frontend_intermediate.zoomOut();
     },
     
     zoomout_complete: function() {
@@ -712,7 +723,8 @@ MyMediator.prototype = {
             mediator.manager.call('scale', 'updateLegend', [type, context]);
         }
         mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
-    }
+    },
+
 };
 
 export const mediator = new MyMediator();
