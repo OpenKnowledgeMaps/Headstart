@@ -5,7 +5,7 @@ import React from "react";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./reducers";
-import { zoomInFromMediator, zoomOutFromMediator, setNormalChart, setStreamgraph } from "./actions";
+import { zoomInFromMediator, zoomOutFromMediator, setKnowledgeMap, setStreamgraph } from "./actions";
 
 import Backlink from "./components/Backlink";
 
@@ -18,12 +18,12 @@ import Backlink from "./components/Backlink";
 class Intermediate {
   constructor(
     modern_frontend_enabled,
-    normalZoomOutCallback,
+    knowledgeMapZoomOutCallback,
     streamgraphZoomOutCallback
     ) {
     this.modern_frontend_enabled = modern_frontend_enabled;
     this.store = createStore(rootReducer, applyMiddleware(createZoomOutMiddleware(
-      normalZoomOutCallback,
+      knowledgeMapZoomOutCallback,
       streamgraphZoomOutCallback
       )));
   }
@@ -46,8 +46,8 @@ class Intermediate {
     this.store.dispatch(zoomOutFromMediator())
   }
 
-  setNormalChart() {
-    this.store.dispatch(setNormalChart())
+  setKnowledgeMap() {
+    this.store.dispatch(setKnowledgeMap())
   }
 
   setStreamgraph() {
@@ -55,7 +55,7 @@ class Intermediate {
   }
 }
 
-function createZoomOutMiddleware(normalZoomOutCallback, streamgraphZoomOutCallback) {
+function createZoomOutMiddleware(knowledgeMapZoomOutCallback, streamgraphZoomOutCallback) {
   return function ({getState}) {
     const self = this;
     return next => action => {
@@ -63,7 +63,7 @@ function createZoomOutMiddleware(normalZoomOutCallback, streamgraphZoomOutCallba
         if (getState().chartType === 'streamgraph') {
           streamgraphZoomOutCallback()
         } else {
-          normalZoomOutCallback()
+          knowledgeMapZoomOutCallback()
         }
       }
       const returnValue = next(action)
