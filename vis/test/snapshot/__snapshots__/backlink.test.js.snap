@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Backlink component snapshot matches as knowledgeMap snapshot 1`] = `
+<p
+  className="backlink"
+  id="backlink"
+>
+  <a
+    className="underline"
+    onClick={[Function]}
+  >
+    ← Back to overview
+  </a>
+</p>
+`;
+
+exports[`Backlink component snapshot matches as streamgraph snapshot 1`] = `
+<p
+  className="backlink backlink-streamgraph"
+  id="backlink"
+>
+  <a
+    className="underline"
+    onClick={[Function]}
+  >
+    ← Back to overview
+  </a>
+</p>
+`;

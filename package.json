@@ -39,6 +39,8 @@
     "popper.js": "^1.16.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
     "resolve-url-loader": "^3.1.1",
     "shave": "^2.5.7",
     "truncate": "^2.1.0"
@@ -61,6 +63,8 @@
     "copy-webpack-plugin": "^3.0.1",
     "css-loader": "3.3.0",
     "dsv-loader": "*",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.8.0",
     "eslint-config-react-app": "^5.2.1",
     "eslint-plugin-flowtype": "^4.7.0",
@@ -68,8 +72,6 @@
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^2.5.1",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
     "exports-loader": "^0.6.3",
     "expose-loader": "0.7.3",
     "external-loader": "*",
@@ -85,6 +87,7 @@
     "php-loader": "^0.2.0",
     "postcss-loader": "^3.0.0",
     "react-test-renderer": "^16.13.1",
+    "redux-mock-store": "^1.5.4",
     "resolve": "^1.7.1",
     "sass": "^1.23.7",
     "sass-loader": "^8.0.0",
@@ -100,6 +103,12 @@
       "^config$": "<rootDir>/vis/js/default-config.js"
     },
     "collectCoverage": true,
-    "coveragePathIgnorePatterns": ["/node_modules/", "<rootDir>/vis/js/default-config.js"]
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/vis/js/default-config.js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/vis/test/setupTests.js"
+    ]
   }
 }
