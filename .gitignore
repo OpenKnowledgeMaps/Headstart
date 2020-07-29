@@ -19,3 +19,17 @@ config.js
 .ipynb_checkpoints
 .Rprofile
 coverage/
+
+# local deployment files
+deploy.sh
+config.ini
+config_covis.js
+config_linkedcat.js
+config_triple.js
+config_viper.js
+covis.sqlite
+example_config.ini
+example_config.js
+lc_browseview_cache.json
+lc_cache.json
+linkedcat.sqlite
