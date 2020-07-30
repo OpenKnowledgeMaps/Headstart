@@ -328,41 +328,87 @@ class Canvas {
         });
     }
 
-    // Draws the header for this
-    drawTitle(context) {
-        let chart_title = "";
+    /**
+     * Refactored helper function for shortening text that's too long.
+     * @param {String} text 
+     * @param {Number} maxLength 
+     */
+    sliceText(text, maxLength) {
+        if (text.length <= maxLength) {
+            return text;
+        }
 
-        chart_title = config.localization[config.language].default_title;
+        return text.slice(0, maxLength - 3) + '...';
+    }
+
+    /**
+     * Refactored helper function for getting the heading label.
+     */
+    getHeadingLabel() {
+        if (config.is_authorview && config.is_streamgraph) {
+            return config.localization[config.language].streamgraph_authors_label;
+        }
+
+        if (config.is_authorview && !config.is_streamgraph) {
+            return config.localization[config.language].overview_authors_label;
+        }
+
+        if (config.is_streamgraph) {
+            return config.localization[config.language].streamgraph_label;
+        }
+
+        return config.localization[config.language].overview_label;
+    }
+
+    /**
+     * Refactored helper function to understand how the drawTitle main if works.
+     */
+    getChartTitle(context) {
+        // This should probably make its way to a more global config
+        const MAX_LENGTH_VIPER = 47;
+        const MAX_LENGTH_LINKEDCAT = 115;
+        const MAX_LENGTH_CUSTOM = 100;
+
         if (config.title) {
-            chart_title = config.title;
-        } else if (config.create_title_from_context_style === 'viper') {
-            let maxTitleLength = 47 // This should probably make it's way to a more global config
-            let acronymtitle = ( (context.params.acronym !== "") ? (context.params.acronym + " - " + context.params.title) : (context.params.title) );
-            let compressedTitle = ( acronymtitle.length > maxTitleLength ) ? acronymtitle.slice(0, maxTitleLength - 3) + '...' : acronymtitle
-            chart_title = `Overview of <span class="truncated-project-title" title="` + acronymtitle + `">${compressedTitle}</span>\
-                            <span class="project-id">(${context.params.project_id})</span>`
-        } else if (config.create_title_from_context) {
+            return config.title;
+        }
+
+        if (config.create_title_from_context_style === 'viper') {
+            let acronymtitle = context.params.acronym !== "" 
+                ? context.params.acronym + " - " + context.params.title 
+                : context.params.title;
+            let compressedTitle = this.sliceText(acronymtitle, MAX_LENGTH_VIPER);
+
+            return `Overview of <span class="truncated-project-title" title="${acronymtitle}">\
+                ${compressedTitle}</span>\
+                <span class="project-id">(${context.params.project_id})</span>`;
+        }
+
+        if (config.create_title_from_context) {
             let query_clean = this.escapeHTML(context.query.replace(/\\(.?)/g, "$1"));
-            let label = (config.is_streamgraph)?(config.localization[config.language].streamgraph_label):(config.localization[config.language].overview_label);
-            
-            if(config.is_authorview) {  
-                label= (config.is_streamgraph)?(config.localization[config.language].streamgraph_authors_label):(config.localization[config.language].overview_authors_label);
-            }
+            let label = this.getHeadingLabel();
+
             if (config.create_title_from_context_style === 'linkedcat') {
-                let maxTitleLength = 115 // This should probably make its way to a more global config
-                let compressedTitle = query_clean.length > maxTitleLength ? query_clean.slice(0, maxTitleLength - 3) + '...' : query_clean;
-                chart_title = label + ' <span id="search-term-unique" title="' + query_clean + '">' + compressedTitle + '</span>';
-            } else if (config.create_title_from_context_style === 'custom' && typeof config.custom_title !== 'undefined' && config.custom_title !== null) {
-                let maxTitleLength = 100 // This should probably make its way to a more global config
-                let compressedTitle = config.custom_title > maxTitleLength ? config.custom_title.slice(0, maxTitleLength - 3) + '...' : config.custom_title;
-                chart_title = label + ' <span id="search-term-unique" title="' 
+                let compressedTitle = this.sliceText(query_clean, MAX_LENGTH_LINKEDCAT);
+                return label + ' <span id="search-term-unique" title="' + query_clean + '">' + compressedTitle + '</span>';
+            }
+
+            if (config.create_title_from_context_style === 'custom' && typeof config.custom_title !== 'undefined' && config.custom_title !== null) {
+                let compressedTitle =  this.sliceText(config.custom_title, MAX_LENGTH_CUSTOM);
+                return label + ' <span id="search-term-unique" title="' 
                         + config.localization[config.language].custom_title_explanation  + ' ' + query_clean + '">' 
                         + compressedTitle + '</span>';
-            } else {
-                chart_title = label + ' <span id="search-term-unique" title="' + query_clean + '">' + query_clean + '</span>';
             }
-            
+
+            return label + ' <span id="search-term-unique" title="' + query_clean + '">' + query_clean + '</span>';
         }
+
+        return config.localization[config.language].default_title;
+    }
+
+    // Draws the header for this
+    drawTitle(context) {
+        let chart_title = this.getChartTitle(context);
         
         var subdiscipline_title_h4 = $("#subdiscipline_title h4");
         subdiscipline_title_h4.html(chart_title);
