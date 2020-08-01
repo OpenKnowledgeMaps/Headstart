@@ -298,3 +298,14 @@ def create_mapid(params):
     return mapid
 
 base_paramgen = BaseParamSpace()
+testcases = {}
+for i in range(10):
+    testparams = base_paramgen.generate_params()
+    testid = create_mapid(testparams)
+    testcases[testid] = testparams
+
+for caseid, params in testcases.items():
+    res = {}
+    res["params"] = params
+    with open("testdata/%s.json" % caseid, "w") as outfile:
+        json.dump(res, outfile)
