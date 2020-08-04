@@ -5,7 +5,7 @@ import React from "react";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./reducers";
-import { zoomInFromMediator, zoomOutFromMediator, setKnowledgeMap, setStreamgraph } from "./actions";
+import { zoomInFromMediator, zoomOutFromMediator, setKnowledgeMap, setStreamgraph, initializeStore } from "./actions";
 
 import Backlink from "./components/Backlink";
 
@@ -28,7 +28,9 @@ class Intermediate {
       )));
   }
 
-  init() {
+  init(config, context) {
+    this.store.dispatch(initializeStore(config, context));
+
     if (this.modern_frontend_enabled) {
       console.warn("*** MODERN FRONTEND ENABLED - some React elements rendered ***");
       ReactDOM.render(
