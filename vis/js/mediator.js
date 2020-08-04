@@ -171,7 +171,7 @@ MyMediator.prototype = {
     },
 
     init_modern_frontend_intermediate: function() {
-        mediator.modern_frontend_intermediate.init()
+        mediator.modern_frontend_intermediate.init(config, io.context);
     },
 
     register_bubbles: function() {

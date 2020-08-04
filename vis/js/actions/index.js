@@ -21,3 +21,14 @@ export const setKnowledgeMap = () => ({
 export const setStreamgraph = () => ({
   type: "SET_STREAMGRAPH"
 });
+
+/**
+ * Action for initializing the data that aren't known in advance.
+ * @param {Object} configObject the default_config.json + data_config.json
+ * @param {Object} contextObject the app context
+ */
+export const initializeStore = (configObject, contextObject) => ({
+  type: "INITIALIZE",
+  configObject,
+  contextObject
+});
