@@ -180,7 +180,7 @@ const escapeHTML = (string) => {
     "`": "&#x60;",
     "=": "&#x3D;",
   };
-  return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+  return String(string).replace(/[&<>"'`=/]/g, function (s) {
     return entityMap[s];
   });
 };
