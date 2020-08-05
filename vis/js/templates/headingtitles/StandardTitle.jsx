@@ -7,7 +7,7 @@ const StandardTitle = ({ label, title }) => {
       {label}{" "}
       <span id="search-term-unique" title={title}>
         {title}
-      </span>
+      </span>{" "}
     </>
     // html template ends here
   );
