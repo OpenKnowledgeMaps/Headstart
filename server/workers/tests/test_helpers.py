@@ -35,13 +35,24 @@ def get_cases(folder):
     testdatadir = os.path.join(loc, folder)
     casefiles = [f for f in os.listdir(testdatadir) if f.startswith("testcase")]
     casefiles.sort()
-    cases = {}
+    cases = []
     for casefile in casefiles:
         with open(os.path.join(testdatadir, casefile)) as infile:
             testcase_ = json.load(infile)
         casename, _ = os.path.splitext(casefile)
-        cases[casename] = testcase_
+        cases.append({"caseid": casename, "casedata": testcase_})
     return cases
+
+
+def retrieve_results(casedata):
+    k = str(uuid.uuid4())
+    casedata["params"]["raw"] = True
+    service = casedata["params"]["service"]
+    d = {"id": k, "params": casedata["params"],
+         "endpoint": "search"}
+    redis_store.rpush(service, json.dumps(d))
+    result = get_key(redis_store, k)
+    return result
 
 
 def get_dataprocessing_result(testcase_):
@@ -56,20 +67,18 @@ def get_dataprocessing_result(testcase_):
     result = get_key(redis_store, k)
     return pd.DataFrame.from_records(json.loads(result))
 
-
-def retrieve_results(testcase_):
-    k = str(uuid.uuid4())
-    service = testcase_["params"]["service"]
-    d = {"id": k, "params": testcase_["params"],
-         "endpoint": "search"}
-    redis_store.rpush(service, json.dumps(d))
-    result = get_key(redis_store, k)
-    return result
-
 KNOWNCASES = get_cases("knowncases")
 RANDOMCASES = get_cases("randomcases")
-CASENAMES = list(KNOWNCASES.keys())
 KNOWNINPUT_DATA = KNOWNCASES
-RANDOMINPUT_DATA = {c:retrieve_results(params) for c,params in RANDOMCASES.items()}
-INPUT_DATA = KNOWNINPUT_DATA + RANDOMINPUT_DATA
-RESULTS = {casename:get_dataprocessing_result(casedata) for casename, casedata in INPUT_DATA.items()}
+RANDOMINPUT_DATA = [{"caseid": c["caseid"],
+                     "casedata": {
+                        "input_data": retrieve_results(c["casedata"])["input_data"],
+                        "params": c["casedata"]["params"]}
+                     } for c in RANDOMCASES]
+CASENAMES = []
+CASE_DATA = {}
+for c in KNOWNINPUT_DATA + RANDOMINPUT_DATA:
+    CASENAMES.append(c["caseid"])
+    CASE_DATA[c["caseid"]]= c["casedata"]
+CASENAMES.sort()
+RESULTS = {casename:get_dataprocessing_result(casedata) for casename, casedata in CASE_DATA.items()}
