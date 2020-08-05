@@ -308,7 +308,6 @@ MyMediator.prototype = {
             
             mediator.manager.call('list', 'start');
             if (config.show_list) mediator.manager.call('list', 'show');
-            mediator.manager.call('canvas', 'showInfoModal', []);
             
             mediator.manager.call('streamgraph', 'initMouseListeners', []);
             mediator.modern_frontend_intermediate.setStreamgraph();
@@ -343,13 +342,14 @@ MyMediator.prototype = {
             mediator.manager.call('list', 'start');
             if (!config.render_bubbles && config.show_list) mediator.manager.call('list', 'show');
             mediator.manager.call('canvas', 'checkForcePapers', []);
-            mediator.manager.call('canvas', 'showInfoModal', []);
             mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
             mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
             mediator.manager.call('bubble', 'initMouseListeners', []);
         }
 
         mediator.init_modern_frontend_intermediate();
+
+        mediator.manager.call('canvas', 'showInfoModal', []);
     },
 
     update_canvas_domains: function(data) {
