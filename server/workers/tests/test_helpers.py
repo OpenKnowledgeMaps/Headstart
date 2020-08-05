@@ -21,7 +21,7 @@ def get_stopwords(lang):
     except NameError:
         loc = pathlib.Path.cwd().parent.parent
     assert lang in ["english", "german"]
-    resourcedir = os.path.join(pathlib.Path(loc).parent.parent.parent, "preprocessing", "resources")
+    resourcedir = os.path.join(loc, "preprocessing", "resources")
     stops = set(stopwords.words('english'))
     with open(os.path.join(resourcedir, "%s.stop" % lang), "r") as infile:
         add_stops = set(infile.read().splitlines())
@@ -32,7 +32,7 @@ def get_cases(folder):
         loc = pathlib.Path(__path__).parent
     except NameError:
         loc = pathlib.Path.cwd()
-    testdatadir = os.path.join(loc, folder)
+    testdatadir = os.path.join(loc, "tests", folder)
     casefiles = [f for f in os.listdir(testdatadir) if f.startswith("testcase")]
     casefiles.sort()
     cases = []
