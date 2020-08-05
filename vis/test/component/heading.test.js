@@ -26,6 +26,7 @@ const setup = (overrideStore = {}) => {
       },
       localization: {
         area: "Area",
+        area_streamgraph: "Schlagwort",
         intro_icon: "++intro icon++",
         intro_label: "Some intro label",
         default_title: "Sample title",
@@ -95,6 +96,23 @@ describe("Heading component", () => {
     it("renders with correct title", () => {
       const TITLE = "Special Test Title";
       const { store } = setup({ zoom: true, selectedBubble: { title: TITLE } });
+
+      act(() => {
+        render(<Heading store={store} />, container);
+      });
+
+      expect(container.querySelector("#area-not-bold").textContent).toEqual(
+        TITLE
+      );
+    });
+
+    it("renders as streamgraph with correct title", () => {
+      const TITLE = "Special Test Title";
+      const { store } = setup({
+        chartType: "streamgraph",
+        zoom: true,
+        selectedBubble: { title: TITLE },
+      });
 
       act(() => {
         render(<Heading store={store} />, container);
