@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import ZoomedInHeadingTemplate from "../templates/ZoomedInHeading";
 import ZoomedOutHeadingTemplate from "../templates/ZoomedOutHeading";
 
+import { changeFile } from "../actions/index";
+
 import {
   BasicTitle,
   ViperTitle,
@@ -18,15 +20,13 @@ const Heading = ({
   query,
   bubbleTitle,
   headingParams,
-  files
+  files,
+  onFileChange,
 }) => {
   // IMPORTANT: the show_infolink_areas functionality is not implemented here
   if (zoomed) {
     return (
-      <ZoomedInHeadingTemplate
-        label={localization.area}
-        title={bubbleTitle}
-      />
+      <ZoomedInHeadingTemplate label={localization.area} title={bubbleTitle} />
     );
   }
 
@@ -34,7 +34,11 @@ const Heading = ({
     <ZoomedOutHeadingTemplate
       introIcon={localization.intro_icon}
       introLabel={localization.intro_label}
-      additionalFeatures={renderAdditionalFeatures(headingParams, files)}
+      additionalFeatures={renderAdditionalFeatures(
+        headingParams,
+        files,
+        onFileChange
+      )}
     >
       {renderTitle(localization, query, headingParams)}
     </ZoomedOutHeadingTemplate>
@@ -50,7 +54,11 @@ const mapStateToProps = (state) => ({
   files: state.files,
 });
 
-export default connect(mapStateToProps)(Heading);
+const mapDispatchToProps = (dispatch) => ({
+  onFileChange: (fileIndex) => dispatch(changeFile(fileIndex)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Heading);
 
 // This should probably make its way to a more global config
 const MAX_LENGTH_VIPER = 47;
@@ -69,7 +77,11 @@ const renderTitle = (localization, query, headingParams) => {
 
   if (headingParams.titleStyle) {
     if (headingParams.titleStyle === "viper") {
-      return renderViperTitle(headingParams.title, headingParams.acronym, headingParams.projectId);
+      return renderViperTitle(
+        headingParams.title,
+        headingParams.acronym,
+        headingParams.projectId
+      );
     }
 
     let cleanQuery = escapeHTML(query.replace(/\\(.?)/g, "$1"));
@@ -83,15 +95,18 @@ const renderTitle = (localization, query, headingParams) => {
       typeof headingParams.customTitle !== "undefined" &&
       headingParams.customTitle !== null
     ) {
-      return renderCustomTitle(headingParams.customTitle, label, cleanQuery, localization);
+      return renderCustomTitle(
+        headingParams.customTitle,
+        label,
+        cleanQuery,
+        localization
+      );
     }
 
     return <StandardTitle label={label} title={cleanQuery} />;
   }
 
-  return (
-    <BasicTitle title={localization.default_title} />
-  );
+  return <BasicTitle title={localization.default_title} />;
 };
 
 const renderViperTitle = (title, acronym, projectId) => {
@@ -128,9 +143,7 @@ const renderCustomTitle = (title, label, cleanQuery, localization) => {
       label={label}
       title={shortTitle}
       query={cleanQuery}
-      explanation={
-        localization.custom_title_explanation
-      }
+      explanation={localization.custom_title_explanation}
     />
   );
 };
@@ -182,29 +195,22 @@ const escapeHTML = (string) => {
   });
 };
 
-const renderAdditionalFeatures = ({showDropdown}, files) => {
+const renderAdditionalFeatures = ({ showDropdown }, files, onFileChange) => {
   // IMPORTANT: the show_multiples functionality is not implemented here
 
-  if (showDropdown) {
-    // TODO
-    /*
-      $("#datasets").val(mediator.current_bubble.file);
-
-      $("#datasets").change(function () {
-          let selected_file_number = this.selectedIndex;
-          if (selected_file_number !== mediator.current_file_number) {
-              window.headstartInstance.tofile(selected_file_number);
-          }
-      });
-      */
+  if (showDropdown && files.list.length > 0) {
+    const handleChange = (e) => {
+      console.warn("*** React component 'Heading' dropdown changed ***");
+      onFileChange(parseInt(e.target.value));
+    }
 
     return (
       <>
         {" "}
         Select dataset:{" "}
-        <select id="datasets">
-          {files.list.map((entry) => (
-            <option key={entry.file} value={entry.file}>
+        <select id="datasets" value={files.current} onChange={handleChange}>
+          {files.list.map((entry, index) => (
+            <option key={entry.file} value={index}>
               {entry.title}
             </option>
           ))}
