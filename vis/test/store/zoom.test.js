@@ -79,17 +79,14 @@ describe("zoom state", () => {
         expect(result).toEqual(expectedResult);
       });
 
-      // TODO
-      /*
       it("should handle the zoom in", () => {
         const initialState = null;
-        const expectedResult = {}; // TODO
+        const expectedResult = {title: "new title"};
 
-        const result = selectedBubbleReducer(initialState, zoomInFromMediator());
+        const result = selectedBubbleReducer(initialState, zoomInFromMediator(expectedResult));
 
         expect(result).toEqual(expectedResult);
       });
-      */
 
       it("should handle the zoom out", () => {
         const initialState = {someValue: "sample text"};

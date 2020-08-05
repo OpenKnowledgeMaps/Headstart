@@ -2,8 +2,9 @@
  * This is where all actions are stored.
  */
 
-export const zoomInFromMediator = () => ({
-  type: "ZOOM_IN"
+export const zoomInFromMediator = (selectedAreaData) => ({
+  type: "ZOOM_IN",
+  selectedAreaData
 });
 
 export const zoomOutFromMediator = () => ({
