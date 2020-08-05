@@ -476,16 +476,20 @@ BubblesFSM.prototype = {
                 .on("mouseover", null)
                 .on("mouseout", null);
 
-        let subdiscipline_title_h4 = $("#subdiscipline_title h4")
-                                            .html('<span id="area-bold">'+config.localization[config.language].area + ":</span> " + '<span id="area-not-bold">' + d.title + "</span>" );
-        if (config.show_infolink_areas) {
-            let infolink_html = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink-areas"></a>';
-            subdiscipline_title_h4.append(infolink_html);
-            $("#infolink-areas").html('<span id="whatsthis">' + config.localization[config.language].intro_icon 
-                    + '</span> ' + config.localization[config.language].intro_label_areas)
-        }
+        if(!mediator.modern_frontend_enabled) {
+            let subdiscipline_title_h4 = $("#subdiscipline_title h4")
+                .html('<span id="area-bold">'+config.localization[config.language].area + ":</span> " + '<span id="area-not-bold">' + d.title + "</span>" );
+            
+            // deprecated??
+            if (config.show_infolink_areas) {
+                let infolink_html = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink-areas"></a>';
+                subdiscipline_title_h4.append(infolink_html);
+                $("#infolink-areas").html('<span id="whatsthis">' + config.localization[config.language].intro_icon 
+                        + '</span> ' + config.localization[config.language].intro_label_areas)
+            }
 
-        shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
+            shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
+        }
 
         if (previous_zoom_node === null) {
             $("#context").css("display", "none");
