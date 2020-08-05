@@ -4,14 +4,16 @@
 import { combineReducers } from "redux";
 import zoom from "./zoom";
 import chartType from "./chartType";
-import config from "./config";
-import context from "./context";
+import localization from "./localization";
+import heading from "./heading";
 import selectedBubble from "./selectedBubble";
+import query from "./query";
 
 export default combineReducers({
   zoom,
+  query,
   chartType,
-  config,
-  context,
-  selectedBubble
+  selectedBubble,
+  heading,
+  localization,
 });
