@@ -13,19 +13,17 @@ import {
 } from "../templates/headingtitles";
 
 const Heading = ({
-  config,
+  localization,
   zoomed,
-  bubbleTitle,
-  mainTitle,
-  acronym,
-  projectId,
   query,
+  bubbleTitle,
+  headingParams
 }) => {
   // IMPORTANT: the show_infolink_areas functionality is not implemented here
   if (zoomed) {
     return (
       <ZoomedInHeadingTemplate
-        label={config.localization[config.language].area}
+        label={localization.area}
         title={bubbleTitle}
       />
     );
@@ -33,23 +31,21 @@ const Heading = ({
 
   return (
     <ZoomedOutHeadingTemplate
-      introIcon={config.localization[config.language].intro_icon}
-      introLabel={config.localization[config.language].intro_label}
-      additionalFeatures={renderAdditionalFeatures(config)}
+      introIcon={localization.intro_icon}
+      introLabel={localization.intro_label}
+      additionalFeatures={renderAdditionalFeatures(headingParams)}
     >
-      {renderTitle(config, mainTitle, acronym, projectId, query)}
+      {renderTitle(localization, query, headingParams)}
     </ZoomedOutHeadingTemplate>
   );
 };
 
 const mapStateToProps = (state) => ({
-  config: state.config,
+  localization: state.localization,
   zoomed: state.zoom,
+  query: state.query,
   bubbleTitle: state.selectedBubble ? state.selectedBubble.title : null,
-  mainTitle: state.context ? state.context.params.title : null,
-  acronym: state.context ? state.context.params.acronym : null,
-  projectId: state.context ? state.context.params.project_id : null,
-  query: state.context ? state.context.query : null,
+  headingParams: state.heading,
 });
 
 export default connect(mapStateToProps)(Heading);
@@ -62,37 +58,37 @@ const MAX_LENGTH_CUSTOM = 100;
 /**
  * Renders the title for the correct setup.
  */
-const renderTitle = (config, title, acronym, projectId, query) => {
-  if (config.title) {
-    return <BasicTitle title={config.title} />;
+const renderTitle = (localization, query, headingParams) => {
+  if (headingParams.presetTitle) {
+    return <BasicTitle title={headingParams.presetTitle} />;
   }
 
-  let label = getHeadingLabel(config);
+  let label = getHeadingLabel(headingParams.titleLabelType, localization);
 
-  if (config.create_title_from_context_style === "viper") {
-    return renderViperTitle(title, acronym, projectId);
-  }
+  if (headingParams.titleStyle) {
+    if (headingParams.titleStyle === "viper") {
+      return renderViperTitle(headingParams.title, headingParams.acronym, headingParams.projectId);
+    }
 
-  if (config.create_title_from_context) {
     let cleanQuery = escapeHTML(query.replace(/\\(.?)/g, "$1"));
 
-    if (config.create_title_from_context_style === "linkedcat") {
+    if (headingParams.titleStyle === "linkedcat") {
       return renderLinkedCatTitle(label, cleanQuery);
     }
 
     if (
-      config.create_title_from_context_style === "custom" &&
-      typeof config.custom_title !== "undefined" &&
-      config.custom_title !== null
+      headingParams.titleStyle === "custom" &&
+      typeof headingParams.customTitle !== "undefined" &&
+      headingParams.customTitle !== null
     ) {
-      return renderCustomTitle(config, label, cleanQuery);
+      return renderCustomTitle(headingParams.customTitle, label, cleanQuery, localization);
     }
 
     return <StandardTitle label={label} title={cleanQuery} />;
   }
 
   return (
-    <BasicTitle title={config.localization[config.language].default_title} />
+    <BasicTitle title={localization.default_title} />
   );
 };
 
@@ -123,15 +119,15 @@ const renderLinkedCatTitle = (label, cleanQuery) => {
   );
 };
 
-const renderCustomTitle = (config, label, cleanQuery) => {
-  let shortTitle = sliceText(config.custom_title, MAX_LENGTH_CUSTOM);
+const renderCustomTitle = (title, label, cleanQuery, localization) => {
+  let shortTitle = sliceText(title, MAX_LENGTH_CUSTOM);
   return (
     <CustomTitle
       label={label}
       title={shortTitle}
       query={cleanQuery}
       explanation={
-        config.localization[config.language].custom_title_explanation
+        localization.custom_title_explanation
       }
     />
   );
@@ -153,20 +149,19 @@ const sliceText = (text, maxLength) => {
 /**
  * Refactored helper function for getting the heading label.
  */
-const getHeadingLabel = (config) => {
-  if (config.is_authorview && config.is_streamgraph) {
-    return config.localization[config.language].streamgraph_authors_label;
+export const getHeadingLabel = (labelType, localization) => {
+  switch (labelType) {
+    case "authorview-streamgraph":
+      return localization.streamgraph_authors_label;
+    case "authorview-knowledgemap":
+      return localization.overview_authors_label;
+    case "keywordview-streamgraph":
+      return localization.streamgraph_label;
+    case "keywordview-knowledgemap":
+      return localization.overview_label;
+    default:
+      throw new Error(`Label of type '${labelType}' not supported.`);
   }
-
-  if (config.is_authorview && !config.is_streamgraph) {
-    return config.localization[config.language].overview_authors_label;
-  }
-
-  if (config.is_streamgraph) {
-    return config.localization[config.language].streamgraph_label;
-  }
-
-  return config.localization[config.language].overview_label;
 };
 
 const escapeHTML = (string) => {
@@ -185,10 +180,10 @@ const escapeHTML = (string) => {
   });
 };
 
-const renderAdditionalFeatures = (config) => {
+const renderAdditionalFeatures = ({files, showDropdown}) => {
   // IMPORTANT: the show_multiples functionality is not implemented here
 
-  if (config.show_dropdown) {
+  if (showDropdown) {
     // TODO
     /*
       $("#datasets").val(mediator.current_bubble.file);
@@ -206,7 +201,7 @@ const renderAdditionalFeatures = (config) => {
         {" "}
         Select dataset:{" "}
         <select id="datasets">
-          {config.files.map((entry) => (
+          {files.map((entry) => (
             <option key={entry.file} value={entry.file}>
               {entry.title}
             </option>
