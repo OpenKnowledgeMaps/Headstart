@@ -16,15 +16,23 @@ redis_store = redis.StrictRedis(**redis_config)
 
 
 def get_stopwords(lang):
+    try:
+        loc = pathlib.Path(__path__).parent.parent.parent
+    except NameError:
+        loc = pathlib.Path.cwd().parent.parent
     assert lang in ["english", "german"]
-    resourcedir = os.path.join(pathlib.Path(__file__).parent.parent.parent, "preprocessing", "resources")
+    resourcedir = os.path.join(pathlib.Path(loc).parent.parent.parent, "preprocessing", "resources")
     stops = set(stopwords.words('english'))
     with open(os.path.join(resourcedir, "%s.stop" % lang), "r") as infile:
         add_stops = set(infile.read().splitlines())
     return stops.union(add_stops)
 
-def get_cases():
-    testdatadir = os.path.join(pathlib.Path(__file__).parent, "testdata")
+def get_cases(folder):
+    try:
+        loc = pathlib.Path(__path__).parent
+    except NameError:
+        loc = pathlib.Path.cwd()
+    testdatadir = os.path.join(loc, folder)
     casefiles = [f for f in os.listdir(testdatadir) if f.startswith("testcase")]
     casefiles.sort()
     cases = {}
@@ -58,8 +66,10 @@ def retrieve_results(testcase_):
     result = get_key(redis_store, k)
     return result
 
-CASES = get_cases()
-CASENAMES = list(CASES.keys())
-# INPUT_DATA = [retrieve_results(c) for c in CASES]
-INPUT_DATA = CASES
+KNOWNCASES = get_cases("knowncases")
+RANDOMCASES = get_cases("randomcases")
+CASENAMES = list(KNOWNCASES.keys())
+KNOWNINPUT_DATA = KNOWNCASES
+RANDOMINPUT_DATA = {c:retrieve_results(params) for c,params in RANDOMCASES.items()}
+INPUT_DATA = KNOWNINPUT_DATA + RANDOMINPUT_DATA
 RESULTS = {casename:get_dataprocessing_result(casedata) for casename, casedata in INPUT_DATA.items()}
