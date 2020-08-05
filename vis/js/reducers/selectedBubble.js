@@ -3,9 +3,8 @@ const selectedBubble = (state = null, action) => {
     case "ZOOM_OUT":
       return null;
     case "ZOOM_IN":
-      // TODO
       return {
-        title: "TODO add real area title"
+        title: action.selectedAreaData.title
       };
     default:
       return state;
