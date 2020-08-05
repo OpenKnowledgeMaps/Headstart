@@ -32,3 +32,12 @@ export const initializeStore = (configObject, contextObject) => ({
   configObject,
   contextObject
 });
+
+/**
+ * Action for changing the local file.
+ * @param {Number} fileIndex 
+ */
+export const changeFile = (fileIndex) => ({
+  type: "FILE_CLICKED",
+  fileIndex
+});

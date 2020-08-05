@@ -16,7 +16,6 @@ const context = (state = {}, action) => {
         titleLabelType: getTitleLabelType(action.configObject),
         customTitle: action.configObject.custom_title,
         showDropdown: action.configObject.show_dropdown,
-        files: action.configObject.files,
       };
     default:
       return state;

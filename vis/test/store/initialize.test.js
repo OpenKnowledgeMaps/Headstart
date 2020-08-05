@@ -3,6 +3,7 @@ import { initializeStore } from "../../js/actions";
 import headingReducer from "../../js/reducers/heading";
 import localizationReducer from "../../js/reducers/localization";
 import queryReducer from "../../js/reducers/query";
+import filesReducer from "../../js/reducers/files";
 
 const setup = (overrideConfig, overrideContext) => {
   const configObject = Object.assign(
@@ -14,7 +15,16 @@ const setup = (overrideConfig, overrideContext) => {
       is_streamgraph: false,
       custom_title: "customTitle",
       show_dropdown: false,
-      files: ["some", "files"],
+      files: [
+        {
+          title: "edu1",
+          file: "./data/edu1.csv",
+        },
+        {
+          title: "edu2",
+          file: "./data/edu2.csv",
+        },
+      ],
 
       language: "eng",
       localization: {
@@ -86,7 +96,6 @@ describe("config and context state", () => {
           titleLabelType: "keywordview-knowledgemap",
           customTitle: "customTitle",
           showDropdown: false,
-          files: ["some", "files"],
         };
 
         const { configObject, contextObject } = setup();
@@ -110,7 +119,6 @@ describe("config and context state", () => {
           titleLabelType: "keywordview-knowledgemap",
           customTitle: "customTitle",
           showDropdown: false,
-          files: ["some", "files"],
         };
 
         const { configObject, contextObject } = setup(
@@ -139,7 +147,6 @@ describe("config and context state", () => {
           titleLabelType: "keywordview-knowledgemap",
           customTitle: "customTitle",
           showDropdown: false,
-          files: ["some", "files"],
         };
 
         const { configObject, contextObject } = setup({
@@ -166,7 +173,6 @@ describe("config and context state", () => {
         titleLabelType: "keywordview-knowledgemap",
         customTitle: "customTitle",
         showDropdown: false,
-        files: ["some", "files"],
       };
 
       const { configObject, contextObject } = setup({
@@ -193,7 +199,6 @@ describe("config and context state", () => {
         titleLabelType: "authorview-streamgraph",
         customTitle: "customTitle",
         showDropdown: false,
-        files: ["some", "files"],
       };
 
       const { configObject, contextObject } = setup({
@@ -220,7 +225,6 @@ describe("config and context state", () => {
         titleLabelType: "authorview-knowledgemap",
         customTitle: "customTitle",
         showDropdown: false,
-        files: ["some", "files"],
       };
 
       const { configObject, contextObject } = setup({
@@ -247,7 +251,6 @@ describe("config and context state", () => {
         titleLabelType: "keywordview-streamgraph",
         customTitle: "customTitle",
         showDropdown: false,
-        files: ["some", "files"],
       };
 
       const { configObject, contextObject } = setup({
@@ -327,6 +330,32 @@ describe("config and context state", () => {
       const expectedResult = null;
 
       const result = queryReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual(expectedResult);
+    });
+  });
+
+  describe("files reducer", () => {
+    it("should return the initial state", () => {
+      const expectedResult = { current: 0, list: [] };
+
+      const result = filesReducer(undefined, {});
+
+      expect(result).toEqual(expectedResult);
+    });
+
+    it("should handle the initialization", () => {
+      const initialState = { current: 0, list: [] };
+      const { configObject, contextObject } = setup();
+      const expectedResult = {
+        current: 0,
+        list: configObject.files,
+      };
+
+      const result = filesReducer(
         initialState,
         initializeStore(configObject, contextObject)
       );
