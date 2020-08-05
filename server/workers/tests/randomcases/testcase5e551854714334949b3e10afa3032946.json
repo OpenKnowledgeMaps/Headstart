@@ -1,0 +1,15 @@
+{
+    "params": {
+        "document_types": [
+            "121"
+        ],
+        "from": "2018-08-10",
+        "language": "english",
+        "limit": 120,
+        "list_size": 100,
+        "q": "supply chain management",
+        "service": "base",
+        "sorting": "most-relevant",
+        "to": "2020-08-05"
+    }
+}
