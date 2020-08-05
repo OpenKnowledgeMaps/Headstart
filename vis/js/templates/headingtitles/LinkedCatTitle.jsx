@@ -7,7 +7,7 @@ const LinkedCatTitle = ({ label, fullTitle, shortTitle }) => {
       {label}{" "}
       <span id="search-term-unique" title={fullTitle}>
         {shortTitle}
-      </span>
+      </span>{" "}
     </>
     // html template ends here
   );
