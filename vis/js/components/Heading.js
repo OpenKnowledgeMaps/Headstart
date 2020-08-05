@@ -22,11 +22,14 @@ const Heading = ({
   headingParams,
   files,
   onFileChange,
+  streamgraph
 }) => {
   // IMPORTANT: the show_infolink_areas functionality is not implemented here
   if (zoomed) {
+    let label = streamgraph ? localization.area_streamgraph : localization.area;
+
     return (
-      <ZoomedInHeadingTemplate label={localization.area} title={bubbleTitle} />
+      <ZoomedInHeadingTemplate label={label} title={bubbleTitle} />
     );
   }
 
@@ -52,6 +55,7 @@ const mapStateToProps = (state) => ({
   bubbleTitle: state.selectedBubble ? state.selectedBubble.title : null,
   headingParams: state.heading,
   files: state.files,
+  streamgraph: state.chartType === "streamgraph",
 });
 
 const mapDispatchToProps = (dispatch) => ({
