@@ -17,7 +17,8 @@ const Heading = ({
   zoomed,
   query,
   bubbleTitle,
-  headingParams
+  headingParams,
+  files
 }) => {
   // IMPORTANT: the show_infolink_areas functionality is not implemented here
   if (zoomed) {
@@ -33,7 +34,7 @@ const Heading = ({
     <ZoomedOutHeadingTemplate
       introIcon={localization.intro_icon}
       introLabel={localization.intro_label}
-      additionalFeatures={renderAdditionalFeatures(headingParams)}
+      additionalFeatures={renderAdditionalFeatures(headingParams, files)}
     >
       {renderTitle(localization, query, headingParams)}
     </ZoomedOutHeadingTemplate>
@@ -46,6 +47,7 @@ const mapStateToProps = (state) => ({
   query: state.query,
   bubbleTitle: state.selectedBubble ? state.selectedBubble.title : null,
   headingParams: state.heading,
+  files: state.files,
 });
 
 export default connect(mapStateToProps)(Heading);
@@ -180,7 +182,7 @@ const escapeHTML = (string) => {
   });
 };
 
-const renderAdditionalFeatures = ({files, showDropdown}) => {
+const renderAdditionalFeatures = ({showDropdown}, files) => {
   // IMPORTANT: the show_multiples functionality is not implemented here
 
   if (showDropdown) {
@@ -201,7 +203,7 @@ const renderAdditionalFeatures = ({files, showDropdown}) => {
         {" "}
         Select dataset:{" "}
         <select id="datasets">
-          {files.map((entry) => (
+          {files.list.map((entry) => (
             <option key={entry.file} value={entry.file}>
               {entry.title}
             </option>

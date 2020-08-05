@@ -8,6 +8,7 @@ import localization from "./localization";
 import heading from "./heading";
 import selectedBubble from "./selectedBubble";
 import query from "./query";
+import files from "./files";
 
 export default combineReducers({
   zoom,
@@ -16,4 +17,5 @@ export default combineReducers({
   selectedBubble,
   heading,
   localization,
+  files
 });

@@ -603,7 +603,10 @@ describe("Backlink component", () => {
 
         const { storeObject } = setupFeatures();
         storeObject.heading.showDropdown = true;
-        storeObject.heading.files = FILES;
+        storeObject.files = {
+          current: 0,
+          list: FILES
+        };
 
         const store = mockStore(storeObject);
 
