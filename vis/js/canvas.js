@@ -362,6 +362,8 @@ class Canvas {
 
     /**
      * Refactored helper function to understand how the drawTitle main if works.
+     * 
+     * ONLY CALL FROM LEGACY CODE, NEVER WITH modern_frontend_enabled!!!
      */
     getChartTitle(context) {
         // This should probably make its way to a more global config
@@ -408,47 +410,50 @@ class Canvas {
 
     // Draws the header for this
     drawTitle(context) {
-        let chart_title = this.getChartTitle(context);
+        if(!mediator.modern_frontend_enabled) {
+            let chart_title = this.getChartTitle(context);
         
-        var subdiscipline_title_h4 = $("#subdiscipline_title h4");
-        subdiscipline_title_h4.html(chart_title);
+            var subdiscipline_title_h4 = $("#subdiscipline_title h4");
+            subdiscipline_title_h4.html(chart_title);
+
+            if (config.show_infolink) {
+                let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
+                subdiscipline_title_h4.append(infolink);
+    
+                $("#infolink").html('<span id="whatsthis">' + config.localization[config.language].intro_icon  
+                            +'</span> ' + config.localization[config.language].intro_label);
+            }
+    
+            // deprecated??
+            if (config.show_multiples) {
+                let link = ' <span id="multiplesview"><a href="#">TimeLineView</a></span>';
+                subdiscipline_title_h4.append(link);
+            }
+    
+            if (config.show_dropdown) {
+                let dropdown = '<select id="datasets"></select>';
+    
+                subdiscipline_title_h4.append(" Select dataset: ");
+                subdiscipline_title_h4.append(dropdown);
+    
+                $.each(config.files, (index, entry) => {
+                    let current_item = '<option value="' + entry.file + '">' + entry.title + '</option>';
+                    $("#datasets").append(current_item);
+                });
+    
+                $("#datasets").val(mediator.current_bubble.file);
+    
+                $("#datasets").change(function () {
+                    let selected_file_number = this.selectedIndex;
+                    if (selected_file_number !== mediator.current_file_number) {
+                        window.headstartInstance.tofile(selected_file_number);
+                    }
+                });
+            }
+        }
 
         this.drawContext(context);
-        this.drawModals(context)
-
-        if (config.show_infolink) {
-            let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
-            subdiscipline_title_h4.append(infolink);
-
-            $("#infolink").html('<span id="whatsthis">' + config.localization[config.language].intro_icon  
-                        +'</span> ' + config.localization[config.language].intro_label);
-        }
-
-        if (config.show_multiples) {
-            let link = ' <span id="multiplesview"><a href="#">TimeLineView</a></span>';
-            subdiscipline_title_h4.append(link);
-        }
-
-        if (config.show_dropdown) {
-            let dropdown = '<select id="datasets"></select>';
-
-            subdiscipline_title_h4.append(" Select dataset: ");
-            subdiscipline_title_h4.append(dropdown);
-
-            $.each(config.files, (index, entry) => {
-                let current_item = '<option value="' + entry.file + '">' + entry.title + '</option>';
-                $("#datasets").append(current_item);
-            });
-
-            $("#datasets").val(mediator.current_bubble.file);
-
-            $("#datasets").change(function () {
-                let selected_file_number = this.selectedIndex;
-                if (selected_file_number !== mediator.current_file_number) {
-                    window.headstartInstance.tofile(selected_file_number);
-                }
-            });
-        }
+        this.drawModals(context);
     }
 
     drawModals(context) {
@@ -746,14 +751,14 @@ class Canvas {
     }
     
     showAreaStreamgraph(keyword) {
-        $("#subdiscipline_title h4")
-            .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
-
-        shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
-
         $("#context").css("display", "none");
         
         if(!mediator.modern_frontend_enabled) {
+            $("#subdiscipline_title h4")
+                .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
+
+            shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
+
             $("#backlink").remove();
             $('<p id="backlink" class="backlink backlink-streamgraph"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
 

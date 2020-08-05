@@ -5,6 +5,7 @@ import { act } from "react-dom/test-utils";
 import configureStore from "redux-mock-store";
 
 import Heading, { getHeadingLabel } from "../../js/components/Heading";
+import { changeFile } from "../../js/actions";
 
 const mockStore = configureStore([]);
 const setup = (overrideStore = {}) => {
@@ -21,7 +22,7 @@ const setup = (overrideStore = {}) => {
         titleLabelType: "keywordview-knowledgemap", // config.is_authorview + config.is_streamgraph
         customTitle: null, // config.custom_title
         showDropdown: false, // config.show_dropdown
-        files: null // config.files
+        files: null, // config.files
       },
       localization: {
         area: "Area",
@@ -33,7 +34,7 @@ const setup = (overrideStore = {}) => {
         overview_authors_label: "Sample knowledgemap authors label",
         streamgraph_label: "Sample streamgraph keywords label",
         custom_title_explanation: "Sample explanation",
-      }
+      },
     },
     overrideStore
   );
@@ -175,7 +176,7 @@ describe("Backlink component", () => {
     describe("viper", () => {
       const setupViper = () => {
         const { storeObject } = setup();
-        storeObject.heading.titleStyle = "viper"
+        storeObject.heading.titleStyle = "viper";
 
         const store = mockStore(storeObject);
 
@@ -589,23 +590,23 @@ describe("Backlink component", () => {
         return { store, storeObject };
       };
 
-      it("renders with a dropdown", () => {
-        const FILES = [
-          {
-            title: "edu1",
-            file: "./data/edu1.csv",
-          },
-          {
-            title: "edu2",
-            file: "./data/edu2.csv",
-          },
-        ];
+      const FILES = [
+        {
+          title: "edu1",
+          file: "./data/edu1.csv",
+        },
+        {
+          title: "edu2",
+          file: "./data/edu2.csv",
+        },
+      ];
 
+      it("renders with a dropdown", () => {
         const { storeObject } = setupFeatures();
         storeObject.heading.showDropdown = true;
         storeObject.files = {
           current: 0,
-          list: FILES
+          list: FILES,
         };
 
         const store = mockStore(storeObject);
@@ -628,7 +629,7 @@ describe("Backlink component", () => {
             .querySelector("#datasets")
             .querySelectorAll("option")[0]
             .getAttribute("value")
-        ).toEqual("./data/edu1.csv");
+        ).toEqual("0");
 
         expect(
           container.querySelector("#datasets").querySelectorAll("option")[1]
@@ -640,16 +641,50 @@ describe("Backlink component", () => {
             .querySelector("#datasets")
             .querySelectorAll("option")[1]
             .getAttribute("value")
-        ).toEqual("./data/edu2.csv");
+        ).toEqual("1");
       });
 
-      // TODO test reactions to dropdown change
+      it("triggers a correct redux action when dropdown changes", () => {
+        global.console = {
+          log: jest.fn(),
+          warn: jest.fn(),
+          error: console.error,
+          info: console.info,
+          debug: console.debug,
+        };
+
+        const { storeObject } = setupFeatures();
+        storeObject.heading.showDropdown = true;
+        storeObject.files = {
+          current: 0,
+          list: FILES,
+        };
+
+        const store = mockStore(storeObject);
+
+        act(() => {
+          render(<Heading store={store} />, container);
+        });
+
+        const select = document.querySelector("#datasets");
+        act(() => {
+          const event = new Event("change", { bubbles: true });
+          select.dispatchEvent(event);
+        });
+
+        const actions = store.getActions();
+        const expectedPayload = changeFile(0);
+
+        expect(actions).toEqual([expectedPayload]);
+      });
 
       it("throws error on unknown label type", () => {
         const { storeObject } = setup();
         const LABEL = "label-that-does-not-exist";
 
-        expect(() => getHeadingLabel(LABEL, storeObject.localization)).toThrow(Error);
+        expect(() => getHeadingLabel(LABEL, storeObject.localization)).toThrow(
+          Error
+        );
       });
     });
   });

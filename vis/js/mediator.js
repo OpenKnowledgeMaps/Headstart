@@ -347,7 +347,9 @@ MyMediator.prototype = {
             mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
             mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
             mediator.manager.call('bubble', 'initMouseListeners', []);
-            }
+        }
+
+        mediator.init_modern_frontend_intermediate();
     },
 
     update_canvas_domains: function(data) {
@@ -423,7 +425,6 @@ MyMediator.prototype = {
         if (!config.render_list) {
             $(".list-col").remove();
         }
-        mediator.init_modern_frontend_intermediate()
     },
 
     bubbles_update_data_and_areas: function(bubbles) {
@@ -493,7 +494,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'changeHeaderColor', [color]);
         mediator.manager.call('canvas', 'showAreaStreamgraph', [keyword])
         mediator.current_enlarged_paper = null;
-        mediator.modern_frontend_intermediate.zoomIn();
+        mediator.modern_frontend_intermediate.zoomIn({title: keyword});
     },
     
     currentstream_click: function() {
@@ -557,7 +558,7 @@ MyMediator.prototype = {
             }
         }
         mediator.manager.call('list', 'count_visible_items_to_header', []);
-        mediator.modern_frontend_intermediate.zoomIn();
+        mediator.modern_frontend_intermediate.zoomIn({title: d.title});
     },
     bubble_zoomout: function() {
         mediator.manager.call('list', 'reset', []);
