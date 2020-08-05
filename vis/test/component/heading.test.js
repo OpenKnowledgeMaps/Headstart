@@ -44,10 +44,7 @@ const setup = (overrideStore = {}) => {
   return { store, storeObject };
 };
 
-/**
- * All the tests for the Backlink component, including its template, can be found here.
- */
-describe("Backlink component", () => {
+describe("Heading component", () => {
   let container = null;
   beforeEach(() => {
     container = document.createElement("div");
