@@ -11,7 +11,7 @@ const ZoomedOutHeading = ({
     <h4>
       {title}
       <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink">
-        <span id="whatsthis">{introIcon}</span> {introLabel}
+        <span id="whatsthis" dangerouslySetInnerHTML={{ __html: introIcon }}></span> {introLabel}
       </a>
       {additionalFeatures}
     </h4>
