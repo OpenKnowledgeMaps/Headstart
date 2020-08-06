@@ -297,15 +297,17 @@ def create_mapid(params):
     mapid = md5(string_to_hash.encode('utf-8')).hexdigest()
     return mapid
 
-base_paramgen = BaseParamSpace()
-testcases = {}
-for i in range(10):
-    testparams = base_paramgen.generate_params()
-    testid = create_mapid(testparams)
-    testcases[testid] = testparams
 
-for caseid, params in testcases.items():
-    res = {}
-    res["params"] = params
-    with open("testdata/%s.json" % caseid, "w") as outfile:
-        json.dump(res, outfile)
+if __name__ == '__main__':
+    base_paramgen = BaseParamSpace()
+    testcases = {}
+    for i in range(100):
+        testparams = base_paramgen.generate_params()
+        testid = create_mapid(testparams)
+        testcases[testid] = testparams
+
+    for caseid, params in testcases.items():
+        res = {}
+        res["params"] = params
+        with open("randomcases/testcase%s.json" % caseid, "w") as outfile:
+            json.dump(res, outfile, indent=4, separators=(',', ': '), sort_keys=True)

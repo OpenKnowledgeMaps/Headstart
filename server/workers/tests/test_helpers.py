@@ -16,24 +16,43 @@ redis_store = redis.StrictRedis(**redis_config)
 
 
 def get_stopwords(lang):
+    try:
+        loc = pathlib.Path(__path__).parent.parent.parent
+    except NameError:
+        loc = pathlib.Path.cwd().parent.parent
     assert lang in ["english", "german"]
-    resourcedir = os.path.join(pathlib.Path(__file__).parent.parent.parent, "preprocessing", "resources")
+    resourcedir = os.path.join(loc, "preprocessing", "resources")
     stops = set(stopwords.words('english'))
     with open(os.path.join(resourcedir, "%s.stop" % lang), "r") as infile:
         add_stops = set(infile.read().splitlines())
     return stops.union(add_stops)
 
-def get_cases():
-    testdatadir = os.path.join(pathlib.Path(__file__).parent, "testdata")
+def get_cases(folder):
+    try:
+        loc = pathlib.Path(__path__).parent
+    except NameError:
+        loc = pathlib.Path.cwd()
+    testdatadir = os.path.join(loc, "tests", folder)
     casefiles = [f for f in os.listdir(testdatadir) if f.startswith("testcase")]
     casefiles.sort()
-    cases = {}
+    cases = []
     for casefile in casefiles:
         with open(os.path.join(testdatadir, casefile)) as infile:
             testcase_ = json.load(infile)
         casename, _ = os.path.splitext(casefile)
-        cases[casename] = testcase_
+        cases.append({"caseid": casename, "casedata": testcase_})
     return cases
+
+
+def retrieve_results(casedata):
+    k = str(uuid.uuid4())
+    casedata["params"]["raw"] = True
+    service = casedata["params"]["service"]
+    d = {"id": k, "params": casedata["params"],
+         "endpoint": "search"}
+    redis_store.rpush(service, json.dumps(d))
+    result = get_key(redis_store, k)
+    return result
 
 
 def get_dataprocessing_result(testcase_):
@@ -48,18 +67,18 @@ def get_dataprocessing_result(testcase_):
     result = get_key(redis_store, k)
     return pd.DataFrame.from_records(json.loads(result))
 
-
-def retrieve_results(testcase_):
-    k = str(uuid.uuid4())
-    service = testcase_["params"]["service"]
-    d = {"id": k, "params": testcase_["params"],
-         "endpoint": "search"}
-    redis_store.rpush(service, json.dumps(d))
-    result = get_key(redis_store, k)
-    return result
-
-CASES = get_cases()
-CASENAMES = list(CASES.keys())
-# INPUT_DATA = [retrieve_results(c) for c in CASES]
-INPUT_DATA = CASES
-RESULTS = {casename:get_dataprocessing_result(casedata) for casename, casedata in INPUT_DATA.items()}
+KNOWNCASES = get_cases("knowncases")
+RANDOMCASES = get_cases("randomcases")
+KNOWNINPUT_DATA = KNOWNCASES
+RANDOMINPUT_DATA = [{"caseid": c["caseid"],
+                     "casedata": {
+                        "input_data": retrieve_results(c["casedata"])["input_data"],
+                        "params": c["casedata"]["params"]}
+                     } for c in RANDOMCASES]
+CASENAMES = []
+CASE_DATA = {}
+for c in KNOWNINPUT_DATA + RANDOMINPUT_DATA:
+    CASENAMES.append(c["caseid"])
+    CASE_DATA[c["caseid"]]= c["casedata"]
+CASENAMES.sort()
+RESULTS = {casename:get_dataprocessing_result(casedata) for casename, casedata in CASE_DATA.items()}
