@@ -133,7 +133,7 @@ class GSheetsClient(object):
                                                 spaces='drive').execute()
         return res
 
-    def update_required(self, sheet_id):
+    def sheet_has_changed(self, sheet_id):
         self.logger.debug(self.last_updated)
         pageToken = self.get_currentPageToken(sheet_id)
         self.logger.debug(pageToken)
@@ -149,7 +149,10 @@ class GSheetsClient(object):
                 last_change = filtered_changes[-1]
                 self.last_updated[sheet_id]["pageToken"] = res.get('newStartPageToken')
                 self.logger.debug(self.last_updated)
-                return last_change.get('time')
+                d = parse(last_change.get('time'))
+                last_update_timestamp_utc = d.strftime("%Y-%m-%d %H:%M:%S %Z")
+                self.last_updated[sheet_id]["timestamp_utc"] = last_update_timestamp_utc
+                return True
             else:
                 return False
         else:
