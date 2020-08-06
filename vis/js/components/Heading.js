@@ -22,15 +22,13 @@ const Heading = ({
   headingParams,
   files,
   onFileChange,
-  streamgraph
+  streamgraph,
 }) => {
   // IMPORTANT: the show_infolink_areas functionality is not implemented here
   if (zoomed) {
     let label = streamgraph ? localization.area_streamgraph : localization.area;
 
-    return (
-      <ZoomedInHeadingTemplate label={label} title={bubbleTitle} />
-    );
+    return <ZoomedInHeadingTemplate label={label} title={bubbleTitle} />;
   }
 
   return (
@@ -206,7 +204,7 @@ const renderAdditionalFeatures = ({ showDropdown }, files, onFileChange) => {
     const handleChange = (e) => {
       console.warn("*** React component 'Heading' dropdown changed ***");
       onFileChange(parseInt(e.target.value));
-    }
+    };
 
     return (
       <>

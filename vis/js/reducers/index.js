@@ -17,5 +17,5 @@ export default combineReducers({
   selectedBubble,
   heading,
   localization,
-  files
+  files,
 });
