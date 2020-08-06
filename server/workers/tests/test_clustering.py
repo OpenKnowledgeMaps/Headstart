@@ -1,7 +1,7 @@
 import json
 import pytest
 import pandas as pd
-from .test_helpers import CASES, CASENAMES, CASE_DATA, RESULTS, get_dataprocessing_result
+from .test_helpers import CASENAMES, CASE_DATA, RESULTS, get_dataprocessing_result
 
 
 @pytest.mark.parametrize("testcase", CASENAMES)

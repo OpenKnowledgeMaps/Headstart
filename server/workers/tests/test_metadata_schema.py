@@ -2,7 +2,7 @@ import json
 import pandas as pd
 import pytest
 
-from .test_helpers import CASES, CASENAMES, CASE_DATA, RESULTS
+from .test_helpers import CASENAMES, CASE_DATA, RESULTS
 
 from pandas_schema import Column, Schema
 from pandas_schema.validation import (InListValidation,

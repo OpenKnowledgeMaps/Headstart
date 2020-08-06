@@ -8,7 +8,7 @@ from collections import OrderedDict
 np.random.seed(42)
 
 search_terms = [
-    '"summary writing"',
+     '"summary writing"',
      'accounting',
      'ai',
      'animals',
