@@ -4,7 +4,7 @@ const selectedBubble = (state = null, action) => {
       return null;
     case "ZOOM_IN":
       return {
-        title: action.selectedAreaData.title
+        title: action.selectedAreaData.title,
       };
     default:
       return state;

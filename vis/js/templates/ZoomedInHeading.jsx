@@ -6,7 +6,10 @@ const ZoomedInHeading = ({ label, title }) => {
     // html template starts here
     <h4>
       <span id="area-bold">{label}:</span>{" "}
-      <span id="area-not-bold" dangerouslySetInnerHTML={{ __html: title }}></span>
+      <span
+        id="area-not-bold"
+        dangerouslySetInnerHTML={{ __html: title }}
+      ></span>
     </h4>
     // html template ends here
   );
