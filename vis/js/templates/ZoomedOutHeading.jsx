@@ -9,7 +9,7 @@ const ZoomedOutHeading = ({
   return (
     // html template starts here
     <h4>
-      {title}
+      {title}{" "}
       <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink">
         <span
           id="whatsthis"
