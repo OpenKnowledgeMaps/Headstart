@@ -7,6 +7,9 @@ from elasticsearch_dsl import Search, Q
 import pandas as pd
 import logging
 
+import spacy
+from spacy_cld import LanguageDetector
+
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
@@ -30,6 +33,9 @@ class TripleClient(object):
             http_compress=True
         )
         self.redis_store = redis_store
+        self.nlp = spacy.load("xx_ent_wiki_sm")
+        language_detector = LanguageDetector()
+        self.nlp.add_pipe(language_detector)
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(loglevel)
         handler = logging.StreamHandler(sys.stdout)
@@ -123,9 +129,9 @@ class TripleClient(object):
         if parameters.get('raw') is True:
             return res.to_dict()
         else:
-            return self.process_result(res)
+            return self.process_result(res, parameters)
 
-    def process_result(self, result):
+    def process_result(self, result, parameters):
         """
         # * "id": a unique ID, preferably the DOI
         # * "title": the title
@@ -143,8 +149,12 @@ class TripleClient(object):
         metadata = pd.DataFrame()
         metadata["id"] = df.identifier.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["title"] = df.title.map(lambda x: x[0] if isinstance(x, list) else "")
+        metadata["title_enriched"] = df.title.map(lambda x: [{"content":d.text, "lang":d._.languages} for d in self.nlp.pipe([self.clean_string(doc) for doc in x])] if isinstance(x, list) else {})
+        metadata["title"] = metadata.title_enriched.map(lambda x: self.filter_lang(x, parameters))
         metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if isinstance(x, list) else "")
         metadata["paper_abstract"] = df.abstract.map(lambda x: x[0] if isinstance(x, list) else "")
+        metadata["paper_abstract_enriched"] = df.abstract.map(lambda x: [{"content":d.text, "lang":d._.languages} for d in self.nlp.pipe([self.clean_string(doc) for doc in x])] if isinstance(x, list) else {})
+        metadata["paper_abstract"] = metadata.paper_abstract_enriched.map(lambda x: self.filter_lang(x, parameters))
         metadata["published_in"] = df.publisher.map(lambda x: x[0].get('name') if isinstance(x, list) else "")
         metadata["year"] = df.date.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["url"] = df.url.map(lambda x: x[0] if isinstance(x, list) else "")
@@ -164,6 +174,26 @@ class TripleClient(object):
         input_data["metadata"] = metadata.to_json(orient='records')
         input_data["text"] = text.to_json(orient='records')
         return input_data
+
+    @staticmethod
+    def clean_string(string):
+        return ''.join(x for x in string if x.isprintable())
+
+    @staticmethod
+    def filter_lang(field, params):
+        lang = params.get('language')
+        if lang == 'all':
+            lang = 'en'
+        filtered = [d.get('content')
+                    for d in field
+                    if (d.get('lang') and d.get('lang')[0] == lang)]
+        try:
+            if filtered == []:
+                filtered.append(field[0].get('content'))
+        except Exception:
+            filtered = [""]
+        filtered = sorted(filtered, key=len)
+        return filtered[-1]
 
     @staticmethod
     def clean_subject(subject):
