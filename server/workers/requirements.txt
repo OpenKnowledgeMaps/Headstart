@@ -20,3 +20,5 @@ elasticsearch
 elasticsearch_dsl
 pyyaml
 pytest
+spacy
+spacy_cld
