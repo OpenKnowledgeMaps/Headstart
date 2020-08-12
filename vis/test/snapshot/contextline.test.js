@@ -41,12 +41,12 @@ const setup = (
         most_relevant_label: "most relevant",
         most_relevant_tooltip: "Sample most relevant tooltip",
         articles_label: "documents",
-        bio_link: "Sample author bio link",
+        bio_link: "Biografie",
         documenttypes_label: "Document types",
         documenttypes_tooltip: "Sample document types tooltip",
         source_label: "Source",
-        paper_count_label: "Sample paper count label",
-        dataset_count_label: "Sample dataset count label",
+        paper_count_label: "papers",
+        dataset_count_label: "datasets",
         timestamp_label: "Last updated",
         ...overrideLocalization,
       },
@@ -58,7 +58,7 @@ const setup = (
 };
 
 describe("Context line component snapshot", () => {
-  it("matches as project website snapshot", () => {
+  it("matches a project website snapshot", () => {
     const store = mockStore(
       setup({
         modifier: "most-relevant",
@@ -80,17 +80,90 @@ describe("Context line component snapshot", () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it("matches as covis snapshot", () => {
+  it("matches a covis snapshot", () => {
     const store = mockStore(
       setup({
         articlesCount: 76,
         openAccessCount: 34,
-        // TODO needs HTML with a link
-        dataSource: "CoVis database",
+        dataSource: '<span class="backlink"><a href="data" class="underline" target="_blank" >CoVis database</a></span>',
         timestamp: "2020-08-12 02:40:04 UTC"
       }, {
         articles_label: "resources and collections",
         source_label: "Data source"
+      })
+    );
+
+    const tree = renderer
+      .create(
+        <Provider store={store}>
+          <ContextLine />
+        </Provider>
+      )
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it("matches a viper snapshot", () => {
+    const store = mockStore(
+      setup({
+        articlesCount: 36,
+        openAccessCount: 10,
+        dataSource: 'OpenAIRE',
+        paperCount: 36,
+        datasetCount: 0,
+        funder: "EC",
+        projectRuntime: "2011-2016"
+      })
+    );
+
+    const tree = renderer
+      .create(
+        <Provider store={store}>
+          <ContextLine />
+        </Provider>
+      )
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it("matches a linkedcat authorview snapshot", () => {
+    const store = mockStore(
+      setup({
+        showAuthor: true,
+        author: {
+          id: "100016642",
+          livingDates: "1791-1863",
+        },
+        articlesCount: 45,
+        dataSource: "LinkedCat+",
+      }, {
+        articles_label: "open access Dokumente",
+        source_label: "Quelle",
+      })
+    );
+
+    const tree = renderer
+      .create(
+        <Provider store={store}>
+          <ContextLine />
+        </Provider>
+      )
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it("matches a linkedcat keywordview snapshot", () => {
+    const store = mockStore(
+      setup({
+        articlesCount: 295,
+        dataSource: "LinkedCat+",
+        timespan: "1 Jan 1847 - 1 Jan 1918",
+        documentTypes: ["Anthologie", "Bericht", "Biografie", "Briefsammlung"]
+      }, {
+        articles_label: "open access Dokumente",
+        source_label: "Quelle",
+        documenttypes_tooltip: "Die folgenden Publikationsarten wurden bei der Erstellung dieser Visualisierung in Betracht gezogen (nicht alle davon scheinen notwendigerweise in dieser Visualisierung auch auf)",
+        documenttypes_label: "Dokumentarten"
       })
     );
 
