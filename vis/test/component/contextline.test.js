@@ -120,6 +120,20 @@ describe("Context line component", () => {
       expect(container.querySelector("#source").textContent).toContain(DATA_SOURCE);
     });
 
+    it("contains a correct data source with HTML", () => {
+      const DATA_SOURCE = '<span class="backlink"><a href="data" class="underline" target="_blank" >CoVis database</a></span>';
+      const storeObject = setup();
+      storeObject.contextLine.dataSource = DATA_SOURCE;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(<ContextLine store={store} />, container);
+      });
+
+      expect(container.querySelector("#source").querySelector("a.underline").textContent).toContain("CoVis database");
+    });
+
     it("doesn't contain the timespan", () => {
       const TIMESPAN = undefined;
       const storeObject = setup();
