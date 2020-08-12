@@ -161,6 +161,8 @@ IO.prototype = {
             that.setDefaultIfNullOrUndefined(d, 'x', locale.default_x);
             that.setDefaultIfNullOrUndefined(d, 'y', locale.default_y);
             that.setDefaultIfNullOrUndefined(d, 'year', locale.default_year);
+            that.setDefaultIfNullOrUndefined(d, 'comments', []);
+            that.setDefaultIfNullOrUndefined(d, 'subject_orig', "");
             config.scale_types.forEach((type) => {
                 that.setDefaultIfNullOrUndefined(d, type, locale.default_readers);
             })
@@ -242,8 +244,6 @@ IO.prototype = {
             d.published_in = _this.setToStringIfNullOrUndefined(d.published_in, "");
             d.title = _this.setToStringIfNullOrUndefined(d.title,
                 config.localization[config.language]["no_title"]);
-                
-            d.subject_orig = _this.setToStringIfNullOrUndefined(d.subject, "");
                 
             var prepareMetric = function(d, metric) {
                  if(d.hasOwnProperty(metric)) {
@@ -363,6 +363,8 @@ IO.prototype = {
                                 + "&search_term=" + context.query.replace(/\\(.?)/g, "$1");
             }
             
+            d.comments_for_filtering = _this.createCommentStringForFiltering(d.comments);
+            
             if(config.highlight_query_terms) {
                 for (let field of config.highlight_query_fields) {
                     d[field] = _this.highlightTerms(d[field], _this.query_terms);
@@ -419,6 +421,16 @@ IO.prototype = {
         }
 
         this.data = cur_data;
+    },
+    
+    createCommentStringForFiltering: function(comments) {
+        let return_string = "";
+        
+        for(let comment of comments) {
+            return_string += comment.comment + " " + comment.author;
+        }
+        
+        return return_string;
     },
     
     convertToSafeID: function (id) {

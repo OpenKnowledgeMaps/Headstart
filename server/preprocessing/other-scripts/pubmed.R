@@ -39,6 +39,10 @@ plog <- getLogger('api.pubmed')
 
 
 get_papers <- function(query, params = NULL, limit = 100) {
+  # remove slashes in query that are added on php side to make it
+  # safe to add queries to the database
+  query <- gsub("\\\\", "", query)
+
   plog$info(paste("Search:", query))
   start.time <- Sys.time()
 
@@ -109,7 +113,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
         )
       }
     }, ""), collapse = ";")
-    xkeywords <- paste0(xtext(xml2::xml_find_all(z, keywords)), collapse = ";")
+    xkeywords <- paste0(xtext(xml2::xml_find_all(z, keywords)), collapse = "; ")
     xpubtype <- paste0(xtext(xml2::xml_find_all(z, ".//PublicationType")), collapse = "; ")
     xdoi <- xtext(xml2::xml_find_all(z, doi))
     lst <- c(tmp, date = xdate, year = xyear, id = xdoi, authors = list(xauthors), subject = list(xkeywords), publication_type = list(xpubtype))
@@ -123,6 +127,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
   df$paper_abstract <- gsub("^\\s+|\\s+$", "", gsub("[\r\n]", "", df$paper_abstract))
   df$content <- paste(df$title, df$paper_abstract, df$authors, df$subject, df$published_in, sep= " ")
   df$doi = df$id
+  df$doi[is.na(df$doi)] <- ""
   df$id = df$pmid
   df$subject_orig = df$subject
 

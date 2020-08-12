@@ -12,20 +12,16 @@ $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 
-$dirty_query = library\CommUtils::getParameter($_GET, "q");
-$sheet_id = library\CommUtils::getParameter($_GET, "sheet_id");
+$vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 $backend = isset($_GET["backend"]) ? library\CommUtils::getParameter($_GET, "backend") : "legacy";
 
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
 if ($backend == "api") {
+  $return_data = array("status" => "error", "reason" => "Not implemented.");
+  $jsonData = json_encode($return_data);
+  library\CommUtils::echoOrCallback($jsonData, $_GET);
 } else {
-  $result = json_decode(search("gsheets", $dirty_query, array("q" => $dirty_query, "sheet_id" => $sheet_id, "sheet_range" => "Resources!A1:O200")
-                      , array("sheet_id")
-                      , ";", null, false, false, null, 3
-                      , "area_uri", "subject", null, false
-                      , "api"), true);
-  $vis_id = $result["id"];
   $data = $persistence->getLastVersion($vis_id, $details = false, $context = true)[0];
   $rev_data = json_decode($data["rev_data"], true);
   $return_data = array("context" => array("id" => $data["rev_vis"],

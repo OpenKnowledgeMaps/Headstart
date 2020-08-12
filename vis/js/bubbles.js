@@ -488,13 +488,15 @@ BubblesFSM.prototype = {
         shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
 
         if (previous_zoom_node === null) {
-            $("#context").css("visibility", "hidden");
+            $("#context").css("display", "none");
             
-            $('<p id="backlink" class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
+            if(!mediator.modern_frontend_enabled) {
+                $('<p id="backlink" class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
 
-            $("#backlink").on("click", function () {
-                mediator.publish('chart_svg_click');
-            })
+                $("#backlink").on("click", function () {
+                    mediator.publish('chart_svg_click');
+                })
+            }
         }
 
         d3.selectAll("div.paper_holder")
@@ -682,7 +684,9 @@ BubblesFSM.prototype = {
         d3.selectAll("span.readers_entity")
                 .style("font-size", "8px");
         
-        $("#backlink").remove();
+        if(!mediator.modern_frontend_enabled) {
+            $("#backlink").remove();
+        }
 
         mediator.publish("draw_title");
 
