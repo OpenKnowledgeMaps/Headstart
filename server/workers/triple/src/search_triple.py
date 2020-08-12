@@ -1,17 +1,29 @@
-import os
 import sys
 import re
 import json
-import redis
+from itertools import chain
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search, Q
 import pandas as pd
 import logging
 
+import spacy
+from spacy_cld import LanguageDetector
+
+
+formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
+                              datefmt='%Y-%m-%d %H:%M:%S')
+valid_langs = {
+    'en': 'English',
+    'fr': 'French',
+    'es': 'Spanish'
+}
+
 
 class TripleClient(object):
 
-    def __init__(self, config):
+    def __init__(self, config, redis_store,
+                 loglevel="INFO"):
         self.es = Elasticsearch(
             [config.get('host')],
             http_auth=(config.get('user'), config.get('pass')),
@@ -20,14 +32,19 @@ class TripleClient(object):
             send_get_body_as='POST',
             http_compress=True
         )
+        self.redis_store = redis_store
+        self.nlp = spacy.load("xx_ent_wiki_sm")
+        language_detector = LanguageDetector()
+        self.nlp.add_pipe(language_detector)
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(os.environ["TRIPLE_LOGLEVEL"])
+        self.logger.setLevel(loglevel)
         handler = logging.StreamHandler(sys.stdout)
-        handler.setLevel(os.environ["TRIPLE_LOGLEVEL"])
+        handler.setFormatter(formatter)
+        handler.setLevel(loglevel)
         self.logger.addHandler(handler)
 
     def next_item(self):
-        queue, msg = redis_store.blpop("triple")
+        queue, msg = self.redis_store.blpop("triple")
         msg = json.loads(msg)
         k = msg.get('id')
         params = msg.get('params')
@@ -52,33 +69,19 @@ class TripleClient(object):
             sort.append("date:desc")
         return sort
 
+    def get_limit(self, parameters):
+        limit = parameters.get('limit', 100)
+        if isinstance(limit, str):
+            limit = int(limit)
+        return limit
+
+    def get_lang(self, parameters):
+        lang = valid_langs.get(parameters.get('language', 'all'))
+        return lang
+
     @staticmethod
     def parse_query(query, fields):
-        qq = {}
-        # must_groups = list(re.finditer('([\w\-"]* +(?:and|&&|\+) *[\w\-"]*)+', query, re.MULTILINE))
-        must_groups = [m.string for m in (re.finditer('([\w\-"]* +(?:and|&&|\+) *[\w\-"]*)+', query, re.I))]
-        must = []
-        for g in must_groups:
-            terms = [t.strip() for t in re.split(r' and|&&|\+ +', g) if t.strip()]
-            for term in terms:
-                if term:
-                    must.append(Q('multi_match', query=term, fields=fields))
-        query = re.sub(r'([\w\-"]* +(?:and|&&|\+) *[\w\-"]*)+', '', query, re.M, re.I)
-        should_groups = [m.string for m in re.finditer('([\w\-"]+ +(?:or|\|+) *[\w\-"]*)+', query, re.I)]
-        query = re.sub(r'([\w\-"]+ +(?:or|\|+) *[\w\-"]*)+', '', query, re.I)
-        should_terms = re.split(" +", query)
-        should = []
-        for g in should_groups + should_terms:
-            terms = [t.strip() for t in re.split(r' or|\|+', g) if t.strip()]
-            for term in terms:
-                if term:
-                    should.append(Q('multi_match', query=term, fields=fields))
-        exclude = []
-        if must:
-            qq["must"] = must
-        if should:
-            qq["should"] = should
-        q = Q('bool', **qq)
+        q = Q("multi_match", query=query, fields=fields)
         return q
 
     def build_body(self, parameters):
@@ -99,39 +102,36 @@ class TripleClient(object):
                         ]
                     }
                 }}
+        if parameters.get('language') != "all":
+            body["query"]["bool"]["must"].append({"term": {"language": parameters.get('language')}})
         return body
 
     def search(self, parameters):
-        s = Search(using=self.es)
-        # TODO: replace from parameters
+        index = "isidore-documents-triple"
         fields = ["title", "abstract"]
+        s = Search(using=self.es, index=index)
+        # TODO: replace from parameters
         q = self.parse_query(parameters.get('q'), fields)
         s = s.query(q)
+        if parameters.get('language') != 'all':
+            s = s.filter("match", language__label=self.get_lang(parameters))
         s = s.query("range", date=self.build_date_field(
                     parameters.get('from'),
                     parameters.get('to')))
-        index = "isidore-documents-triple"
-        sorting = self.build_sort_order(parameters)
-        body = self.build_body(parameters)
-        self.logger.debug(index)
-        self.logger.debug(sorting)
-        self.logger.debug(body)
-        res = self.es.search(
-            index=index,
-            body=body,
-            size=parameters.get('limit', 100),
-            sort=sorting)
-        # res = self.es.search(
-        #     index=index,
-        #     body=s.to_dict(),
-        #     size=parameters.get('limit', 100),
-        #     sort=sorting)
+        #s = s[parameters.get('pagination_from'):parameters.get('pagination_to')]
+        s = s[0:self.get_limit(parameters)*2]
+        if parameters.get('sorting') == "most-relevant":
+            s = s.sort() #  default value
+        if parameters.get('sorting') == "most-recent":
+            s = s.sort("-date")
+        self.logger.debug(s.to_dict())
+        res = s.execute()
         if parameters.get('raw') is True:
-            return res
+            return res.to_dict()
         else:
-            return self.process_result(res)
+            return self.process_result(res, parameters)
 
-    def process_result(self, result):
+    def process_result(self, result, parameters):
         """
         # * "id": a unique ID, preferably the DOI
         # * "title": the title
@@ -145,20 +145,25 @@ class TripleClient(object):
         # * "oa_state": open access status of the item; has the following possible states: 0 for no, 1 for yes, 2 for unknown
         # * "link": link to the PDF; if this is not available, a list of candidate URLs that may contain a link to the PDF
         """
-        df = pd.DataFrame(result.get('hits').get('hits'))
-        df = pd.concat([df.drop(["_source"], axis=1),
-                        df["_source"].apply(pd.Series)],
-                       axis=1)
+        df = pd.DataFrame((d.to_dict() for d in result))
         metadata = pd.DataFrame()
         metadata["id"] = df.identifier.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["title"] = df.title.map(lambda x: x[0] if isinstance(x, list) else "")
+        metadata["title_enriched"] = df.title.map(lambda x: [{"content":d.text, "lang":d._.languages} for d in self.nlp.pipe([self.clean_string(doc) for doc in x])] if isinstance(x, list) else {})
+        metadata["title"] = metadata.title_enriched.map(lambda x: self.filter_lang(x, parameters))
         metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if isinstance(x, list) else "")
         metadata["paper_abstract"] = df.abstract.map(lambda x: x[0] if isinstance(x, list) else "")
+        metadata["paper_abstract_enriched"] = df.abstract.map(lambda x: [{"content":d.text, "lang":d._.languages} for d in self.nlp.pipe([self.clean_string(doc) for doc in x])] if isinstance(x, list) else {})
+        metadata["paper_abstract"] = metadata.paper_abstract_enriched.map(lambda x: self.filter_lang(x, parameters))
         metadata["published_in"] = df.publisher.map(lambda x: x[0].get('name') if isinstance(x, list) else "")
-        metadata["year"] = df.datestamp.map(lambda x: x if isinstance(x, str) else "")
+        metadata["year"] = df.date.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["url"] = df.url.map(lambda x: x[0] if isinstance(x, list) else "")
         metadata["readers"] = 0
-        metadata["subject"] = df.keyword.map(lambda x: "; ".join([self.clean_subject(s) for s in x]) if isinstance(x, list) else "")
+        metadata["subject_orig"] = df.keyword.map(lambda x: "; ".join(x) if isinstance(x, list) else "")
+        metadata["subject_cleaned"] = df.keyword.map(lambda x: "; ".join([self.clean_subject(s) for s in x]) if isinstance(x, list) else "")
+        metadata["subject_enriched"] = df.subject.map(lambda x: self.get_subjects(x) if isinstance(x, list) else "")
+        metadata["subject_orig"] = metadata.apply(lambda x: "; ".join(x[["subject_orig", "subject_enriched"]]), axis=1)
+        metadata["subject"] = metadata.apply(lambda x: "; ".join(x[["subject_cleaned", "subject_enriched"]]), axis=1)
         metadata["oa_state"] = 2
         metadata["link"] = ""
         metadata["relevance"] = df.index
@@ -169,6 +174,26 @@ class TripleClient(object):
         input_data["metadata"] = metadata.to_json(orient='records')
         input_data["text"] = text.to_json(orient='records')
         return input_data
+
+    @staticmethod
+    def clean_string(string):
+        return ''.join(x for x in string if x.isprintable())
+
+    @staticmethod
+    def filter_lang(field, params):
+        lang = params.get('language')
+        if lang == 'all':
+            lang = 'en'
+        filtered = [d.get('content')
+                    for d in field
+                    if (d.get('lang') and d.get('lang')[0] == lang)]
+        try:
+            if filtered == []:
+                filtered.append(field[0].get('content'))
+        except Exception:
+            filtered = [""]
+        filtered = sorted(filtered, key=len)
+        return filtered[-1]
 
     @staticmethod
     def clean_subject(subject):
@@ -191,7 +216,12 @@ class TripleClient(object):
         subject_cleaned = re.sub(r" ?\d[:?-?]?(\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
         subject_cleaned = re.sub(r"\w+:\w+-(\w+\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
         subject_cleaned = re.sub(r"\[\w+\.?\w+\]", "", subject_cleaned) # replace residuals like [shs.hisphilso]
+        subject_cleaned = re.sub(r"; ?$", "", subject_cleaned) # remove trailing '; '
         return subject_cleaned
+
+    @staticmethod
+    def get_subjects(subjectlist):
+        return "; ".join(chain.from_iterable([s.get('label', []) for s in subjectlist]))
 
     @staticmethod
     def get_authors(authorlist):
@@ -211,7 +241,7 @@ class TripleClient(object):
             self.logger.debug(params)
             if endpoint == "mappings":
                 res = self.get_mappings(params.get('index'))
-                redis_store.set(k+"_output", json.dumps(res))
+                self.redis_store.set(k+"_output", json.dumps(res))
             if endpoint == "search":
                 try:
                     res = {}
@@ -219,20 +249,9 @@ class TripleClient(object):
                     res["input_data"] = self.search(params)
                     res["params"] = params
                     if params.get('raw') is True:
-                        redis_store.set(k+"_output", json.dumps(res))
+                        self.redis_store.set(k+"_output", json.dumps(res))
                     else:
-                        redis_store.rpush("input_data", json.dumps(res))
+                        self.redis_store.rpush("input_data", json.dumps(res))
                 except Exception as e:
                     self.logger.error(e)
                     self.logger.error(params)
-
-
-if __name__ == '__main__':
-    with open("es_config.json") as infile:
-        es_config = json.load(infile)
-    with open("redis_config.json") as infile:
-        redis_config = json.load(infile)
-
-    redis_store = redis.StrictRedis(**redis_config)
-    tc = TripleClient(es_config)
-    tc.run()

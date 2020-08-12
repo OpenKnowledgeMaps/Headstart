@@ -27,6 +27,7 @@ const listSubEntryTemplateCris = require("templates/list/cris/list_subentry_cris
 const listSubEntryStatisticsTemplateCris = require("templates/list/cris/list_subentry_statistics_cris.handlebars");
 const listSubEntryStatisticDistributionTemplateCris = require("templates/list/cris/list_subentry_statistic_distribution_cris.handlebars");
 const doiOutlinkTemplate = require("templates/list/doi_outlink.handlebars");
+const listComment = require("templates/list/comment.handlebars");
 const listMetricTemplate = require('templates/list/list_metrics.handlebars');
 const filterDropdownEntryTemplate = require("templates/list/filter_dropdown_entry.handlebars");
 const showHideLabel = require("templates/list/show_hide_label.handlebars")
@@ -227,6 +228,7 @@ list.count_visible_items_to_header = function() {
 
 list.fit_list_height = function() {
     var paper_list_avail_height = null;
+    //Magic number - should be moved to config
     const PAPER_LIST_CORRECTION = -10;
     if (!config.render_bubbles) {
         var parent_height = getRealHeight($("#" + config.tag));
@@ -239,6 +241,7 @@ list.fit_list_height = function() {
 
         $(".list-col").width("100%");
         $(".container-headstart").css({
+            //Should be moved to config
             "min-width": "300px"
         });
         paper_list_avail_height = available_height - $("#explorer_header").outerHeight(true);
@@ -496,7 +499,7 @@ list.populateMetaData = function(nodes) {
                 return d.outlink;
             })
             .attr("class", function(d){
-                if(d.oa){
+                if(d.oa && d.link !== ""){
                     return "oa-link oa-link-hidden"
                 }
                 return "outlink"
@@ -508,7 +511,7 @@ list.populateMetaData = function(nodes) {
         var paper_link = list_metadata.select(".link2");
         
         paper_link.style("display", function(d) {
-            if (d.oa === false || d.resulttype == "dataset") {
+            if (d.oa === false || d.resulttype == "dataset" || d.link === "") {
                 return "none";
             }
         });
@@ -674,24 +677,39 @@ list.setIconsAndTags = function (list_metadata) {
     //Detect if there are any visible icons and tags; if not, hide #oa
     //Note: this depends on the styles of the elements written directly
     //rather than controlled with classes such as .nodisplay
-    let current_oa = list_metadata.select("#oa");
-    let visible_icons_tags = 
-            $(current_oa[0]).children().filter(function() {
-                return this.style.display !== 'none'
-            })
-            
-    if (visible_icons_tags.length === 0) {
-        current_oa.classed("nodisplay", true)
+    if($("#oa").length) {
+        let current_oa = list_metadata.select("#oa");
+        let visible_icons_tags = 
+                $(current_oa[0]).children().filter(function() {
+                    return this.style.display !== 'none'
+                })
+
+        if (visible_icons_tags.length === 0) {
+            current_oa.classed("nodisplay", true)
+        }
     }
 };
 
 list.createComments = function(nodes) {
+       
     nodes[0].forEach((elem) => {
-        let current_comment = 
-                d3.select(elem).select("#list_comments")
-                    .classed("nodisplay", (d) => { return d.comments === ""; } )
+        let current_d = d3.select(elem).select("#list_comments").data()[0];
         
-        current_comment.select("#comment").text((d) => { return d.comments })
+        let list_comments = 
+                d3.select(elem).select("#list_comments")
+                    .classed("nodisplay", (d) => { return d.comments.length === 0; } )
+            
+        
+        for (let comment of current_d.comments) {
+            let comment_html = listComment({
+                                comment: comment.comment
+                                , has_author: () => { return comment.author !== "" }
+                                , by: config.localization[config.language].comment_by_label
+                                , author: comment.author
+                            });
+        
+            list_comments.appendHTML(comment_html)
+        }
     })
 }
 
@@ -801,7 +819,11 @@ list.fillKeywords = function(tag, keyword_type, metadata_field) {
             });
 
     tag.select(".keywords").html(function(d) {
-        return ((d.hasOwnProperty(metadata_field)) ? (d[metadata_field]) : (""))
+        if(!d.hasOwnProperty(metadata_field) || d[metadata_field] === "") {
+            return config.localization[config.language].no_keywords;
+        } else {
+            return d[metadata_field];
+        }
     });
 };
 
@@ -983,7 +1005,11 @@ list.hideEntriesByWord = function(object, search_words) {
             let word_found = true;
             let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toString().toLowerCase()) : ("");
             let tags = (d.hasOwnProperty("tags")) ? (d.tags.toString().toLowerCase()) : ("");
-            let comments = (d.hasOwnProperty("comments")) ? (d.comments.toString().toLowerCase()) : ("");
+            let comments = (d.hasOwnProperty("comments_for_filtering")) ? (d.comments_for_filtering.toString().toLowerCase()) : ("");
+            let resulttype = (d.hasOwnProperty("resulttype")) ? (d.resulttype.toString().toLowerCase()) : ("");
+            //TODO: make these two properties language-aware
+            let open_access = (d.hasOwnProperty("oa") && d.oa === true) ? ("open access") : ("");
+            let free_access = (d.hasOwnProperty("free_access") && d.free_access === true) ? ("free access") : ("");
             let i = 0;
             while (word_found && i < search_words.length) {
                 word_found = (abstract.indexOf(search_words[i]) !== -1 ||
@@ -993,7 +1019,10 @@ list.hideEntriesByWord = function(object, search_words) {
                     year.indexOf(search_words[i]) !== -1 ||
                     keywords.indexOf(search_words[i]) !== -1 ||
                     tags.indexOf(search_words[i]) !== -1 ||
-                    comments.indexOf(search_words[i]) !== -1
+                    comments.indexOf(search_words[i]) !== -1 ||
+                    resulttype.indexOf(search_words[i]) !== -1 ||
+                    open_access.indexOf(search_words[i]) !== -1 ||
+                    free_access.indexOf(search_words[i]) !== -1
                 );
                 i++;
             }
@@ -1535,23 +1564,32 @@ list.populateOverlay = function(d) {
                 keyboard: true
             });
 
-            let article_url = d.oa_link;
+            let article_url = encodeURIComponent(d.oa_link);
             let possible_pdfs = "";
             if (config.service === "base") {
-                possible_pdfs = d.link + ";" + d.identifier + ";" + d.relation;
+                let encodeRelation = function (relation) {
+                    let relation_array = relation.split("; ");
+                    let encoded_array = relation_array.map(function (x) { return encodeURIComponent(x) });
+                    return encoded_array.join("; ")
+                }
+                
+                possible_pdfs = encodeURIComponent(d.link) + ";" 
+                                    + encodeURIComponent(d.identifier) + ";" 
+                                    + encodeRelation(d.relation);
             } else if (config.service === "openaire") {
-                possible_pdfs  = d.link + ";" + d.fulltext;
+                possible_pdfs  = encodeURIComponent(d.link) + ";" 
+                                    + d.fulltext;
+            }
+            
+            var showError = function() {
+                var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
+                $("#status").html(config.localization[config.language].pdf_not_loaded 
+                        + " <a href=\"" + pdf_location_link + "\" target=\"_blank\">" 
+                        + config.localization[config.language].pdf_not_loaded_linktext + "</a>.");
+                $("#status").show();
             }
 
             $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service + "&pdf_urls=" + possible_pdfs, (data) => {
-
-                var showError = function() {
-                    var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
-                    $("#status").html(config.localization[config.language].pdf_not_loaded 
-                            + " <a href=\"" + pdf_location_link + "\" target=\"_blank\">" 
-                            + config.localization[config.language].pdf_not_loaded_linktext + "</a>.");
-                    $("#status").show();
-                }
 
                 if (data.status === "success") {
                     this.writePopup(config.server_url + "paper_preview/" + pdf_url);

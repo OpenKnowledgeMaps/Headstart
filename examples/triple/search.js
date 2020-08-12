@@ -1,6 +1,7 @@
 var service_url;
 var service_name;
 var options;
+var vis_type;
 
 switch (data_config.service) {
     case 'plos':
@@ -44,6 +45,7 @@ $(window).bind("pageshow", function () {
 
 $("#searchform").validate({
     submitHandler: function (form) {
+        console.log(form);
         $(".btn").attr("disabled", true);
         $("#progress").html("");
 
@@ -75,6 +77,11 @@ $("#searchform").validate({
 
 var doSubmit = function (data, newWindow, callback) {
   data += "&today=" + new Date().toLocaleDateString("en-US");
+  var params = $("#searchform").serializeArray().reduce(function(obj, item) {
+    obj[item.name] = item.value;
+    return obj;
+  }, {});
+  vis_type = params["vis_type"];
 
   var openInNewWindow= function(data) {
     if (data.status === "success") {
@@ -106,7 +113,9 @@ var doSubmit = function (data, newWindow, callback) {
         "&service=" +
         data_config.service +
         "&service_name=" +
-        service_name;
+        service_name +
+        "&vis_type=" +
+        vis_type;
       return false;
     } else {
       $("#progress").html(

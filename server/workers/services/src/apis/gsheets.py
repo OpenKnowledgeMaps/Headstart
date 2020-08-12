@@ -25,7 +25,9 @@ search_query = gsheets_ns.model("SearchQuery",
                                                               description="Sheet name and data range to retrieve from",
                                                               required=True),
                                  "q": fields.String(example='covid19',
-                                                            description='hardcoded vis name')})
+                                                            description='hardcoded vis name'),
+                                 "last_update": fields.String(example='2020-07-20 11:47:50 UTC',
+                                                              description='timestamp of last known GSheets edit')})
 
 
 @gsheets_ns.route('/search')

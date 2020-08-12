@@ -1,6 +1,5 @@
 import { getRealHeight } from "helpers";
 import config from 'config';
-import { headstart } from 'headstart';
 import { papers } from 'papers';
 import { mediator } from 'mediator';
 import { intros } from 'intro';
@@ -51,7 +50,7 @@ class Canvas {
 
         this.available_height = this.available_height - ((toolbar_height > 0)?(CHART_HEIGHT_CORRECTION_TOOLBAR):(CHART_HEIGHT_CORRECTION));
 
-        if (headstart.is("multiples")) {
+        if (window.headstartInstance.is("multiples")) {
             var multiples_height = $(".tl-title").outerHeight(true);
             this.available_height = this.available_height - multiples_height;
             this.available_width = $("#" + config.tag).width();
@@ -221,7 +220,7 @@ class Canvas {
     initEventListeners() {
         d3.select(window).on("resize", () => {
             mediator.publish("record_action", config.title, "Map", "resize", config.user_id, "resize_map", null, null, null);
-            if (headstart.is("multiples")) {
+            if (window.headstartInstance.is("multiples")) {
                 return;
             }   
             mediator.publish("window_resize");
@@ -400,7 +399,7 @@ class Canvas {
             $("#datasets").change(function () {
                 let selected_file_number = this.selectedIndex;
                 if (selected_file_number !== mediator.current_file_number) {
-                    headstart.tofile(selected_file_number);
+                    window.headstartInstance.tofile(selected_file_number);
                 }
             });
         }
@@ -708,27 +707,31 @@ class Canvas {
 
         $("#context").css("display", "none");
         
-        $("#backlink").remove();
-        $('<p id="backlink" class="backlink backlink-streamgraph"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
+        if(!mediator.modern_frontend_enabled) {
+            $("#backlink").remove();
+            $('<p id="backlink" class="backlink backlink-streamgraph"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
 
-        $("#backlink").on("click", function () {
-            mediator.publish("streamgraph_chart_clicked");
-        })
+            $("#backlink").on("click", function () {
+                mediator.publish("streamgraph_chart_clicked");
+            })
+        }
     }
     
     removeAreaStreamgraph() {
-        $("#backlink").remove();
+        if(!mediator.modern_frontend_enabled) {
+            $("#backlink").remove();
+        }
         $("#context").css("display", "block");
         mediator.publish("draw_title");
     }
 
     initForceAreas() {
-        let padded = canvas.current_vis_size - headstart.padding;
+        let padded = canvas.current_vis_size - window.headstartInstance.padding;
         this.force_areas = d3.layout.force().links([]).size([padded, padded]);
     }
 
     initForcePapers() {
-        let padded = canvas.current_vis_size - headstart.padding;
+        let padded = canvas.current_vis_size - window.headstartInstance.padding;
         this.force_papers = d3.layout.force().nodes([]).links([]).size([padded, padded]);
     }
 

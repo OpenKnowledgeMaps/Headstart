@@ -1,4 +1,4 @@
-import 'lib/highlightRegex.min.js';
+import 'markjs';
 
 // -------------------------------------
 // -------- General helpers ------------
@@ -130,14 +130,15 @@ export function highlight(str) {
     }
 
     let value = new RegExp(new_str, "i");
-
-    $('.highlightable, .large.highlightable, .list_details.highlightable').highlightRegex(value, {
-        attrs: {'style': "background:yellow"}
-    });
+      
+    $(".highlightable, .large.highlightable, .list_details.highlightable").markRegExp(value, {
+        element: "span",
+        className: "highlighted"
+    })
 }
 
 export function clear_highlights() {
-    $('.highlightable').highlightRegex();
+    $(".highlightable, .large.highlightable, .list_details.highlightable").unmark();
 }
 
 // const Hypher = require('hypher').default;
@@ -202,7 +203,13 @@ export function updateTags(current_context, overall_context, div, attribute, dis
     }
 
 }
-
+d3.selection.prototype.appendHTML =
+    d3.selection.enter.prototype.appendHTML = function(HTMLString) {
+        return this.select(function() {
+            return this.appendChild(document.importNode(new DOMParser().parseFromString(HTMLString, 'text/html').body.childNodes[0], true));
+        });
+    };
+    
 // functions which are not being called at the moment, but might
 // mausrad -> zoomen
 // export function redraw() {
