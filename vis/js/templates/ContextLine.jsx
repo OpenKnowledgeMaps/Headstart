@@ -7,7 +7,7 @@ const ContextLine = ({
   dataSource = null, // config.service_name || config.service_names[context.service]
   dataSourceLabel, // config.localization[config.language].source_label
   timespan = null, // string composed from config data
-  docTypes = null, // React component
+  docTypes, // React component
   paperCount = null, // context.num_papers
   paperCountLabel, // config.localization[config.language].paper_count_label
   datasetCount = null, // context.num_datasets
@@ -17,8 +17,8 @@ const ContextLine = ({
   searchLang = null, // string composed from multiple params in config.options.languages
   timestamp = null, // context.last_update
   timestampLabel, // config.localization[config.language].timestamp_label
-  modifier = null, // React component
-  author = null, // React component
+  modifier, // React component
+  author, // React component
 }) => {
   return (
     // html template starts here
@@ -56,35 +56,3 @@ const ContextLine = ({
 };
 
 export default ContextLine;
-
-export const DocumentTypes = ({ label, popoverLabel, text, popover }) => {
-  if (popover) {
-    return (
-      <span
-        id="document_types"
-        data-content={
-          <>
-            {popoverLabel}
-            <br />
-            <br />
-            {text}
-          </>
-        }
-        data-toggle="popover"
-        data-trigger="hover"
-        data-html="true"
-        className="context_moreinfo"
-        data-original-title=""
-        title=""
-      >
-        {label}
-      </span>
-    );
-  }
-
-  return (
-    <span id="document_types">
-      {label}: {text}
-    </span>
-  );
-};
