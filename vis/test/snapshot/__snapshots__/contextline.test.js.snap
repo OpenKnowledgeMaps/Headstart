@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Context line component snapshot matches as covis snapshot 1`] = `
+<p
+  id="context"
+>
+  <span
+    id="num_articles"
+  >
+    76
+     
+    <span
+      className="modifier"
+      id="modifier"
+    >
+      
+    </span>
+    resources and collections
+     
+    (
+    34
+     open access)
+  </span>
+  <span
+    id="source"
+  >
+    Data source
+    : 
+    CoVis database
+  </span>
+  <span
+    id="timestamp"
+  >
+    Last updated
+    : 
+    2020-08-12 02:40:04 UTC
+  </span>
+</p>
+`;
+
+exports[`Context line component snapshot matches as project website snapshot 1`] = `
+<p
+  id="context"
+>
+  <span
+    id="num_articles"
+  >
+    100
+     
+    <span
+      className="modifier context_moreinfo"
+      data-content="Sample most relevant tooltip"
+      data-original-title=""
+      data-toggle="popover"
+      data-trigger="hover"
+      id="modifier"
+      title=""
+    >
+      most relevant
+       
+    </span>
+    documents
+     
+    (
+    52
+     open access)
+  </span>
+  <span
+    id="source"
+  >
+    Source
+    : 
+    BASE
+  </span>
+  <span
+    id="timespan"
+  >
+    All time
+  </span>
+  <span
+    id="document_types"
+  >
+    Document types
+    : 
+    Journal/newspaper article
+  </span>
+</p>
+`;
