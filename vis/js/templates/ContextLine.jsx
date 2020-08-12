@@ -31,7 +31,14 @@ const ContextLine = ({
           <>({openAccessArticlesCount} open access)</>
         )}
       </span>
-      {dataSource !== null && <span id="source">{dataSourceLabel}: {dataSource}</span>}
+      {dataSource !== null && (
+        <span
+          id="source"
+          dangerouslySetInnerHTML={{
+            __html: `${dataSourceLabel}: ${dataSource}`,
+          }}
+        ></span>
+      )}
       {timespan !== null && <span id="timespan">{timespan}</span>}
       {docTypes}
       {paperCount !== null && (
@@ -49,7 +56,11 @@ const ContextLine = ({
         <span id="context-project_runtime">{projectRuntime}</span>
       )}
       {searchLang !== null && <span id="search_lang">{searchLang}</span>}
-      {timestamp !== null && <span id="timestamp">{timestampLabel}: {timestamp}</span>}
+      {timestamp !== null && (
+        <span id="timestamp">
+          {timestampLabel}: {timestamp}
+        </span>
+      )}
     </p>
     // html template ends here
   );

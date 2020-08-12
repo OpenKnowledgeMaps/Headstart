@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Context line component snapshot matches as covis snapshot 1`] = `
+exports[`Context line component snapshot matches a covis snapshot 1`] = `
 <p
   id="context"
 >
@@ -22,12 +22,13 @@ exports[`Context line component snapshot matches as covis snapshot 1`] = `
      open access)
   </span>
   <span
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Data source: <span class=\\"backlink\\"><a href=\\"data\\" class=\\"underline\\" target=\\"_blank\\" >CoVis database</a></span>",
+      }
+    }
     id="source"
-  >
-    Data source
-    : 
-    CoVis database
-  </span>
+  />
   <span
     id="timestamp"
   >
@@ -38,7 +39,98 @@ exports[`Context line component snapshot matches as covis snapshot 1`] = `
 </p>
 `;
 
-exports[`Context line component snapshot matches as project website snapshot 1`] = `
+exports[`Context line component snapshot matches a linkedcat authorview snapshot 1`] = `
+<p
+  id="context"
+>
+  <span
+    id="author_living_dates"
+  >
+    1791-1863
+  </span>
+  <span
+    id="author_bio"
+  >
+    <a
+      href="https://d-nb.info/gnd/100016642"
+      id="author_bio_link"
+      target="_blank"
+    >
+      Biografie
+    </a>
+  </span>
+  <span
+    id="num_articles"
+  >
+    45
+     
+    <span
+      className="modifier"
+      id="modifier"
+    >
+      
+    </span>
+    open access Dokumente
+     
+  </span>
+  <span
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Quelle: LinkedCat+",
+      }
+    }
+    id="source"
+  />
+</p>
+`;
+
+exports[`Context line component snapshot matches a linkedcat keywordview snapshot 1`] = `
+<p
+  id="context"
+>
+  <span
+    id="num_articles"
+  >
+    295
+     
+    <span
+      className="modifier"
+      id="modifier"
+    >
+      
+    </span>
+    open access Dokumente
+     
+  </span>
+  <span
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Quelle: LinkedCat+",
+      }
+    }
+    id="source"
+  />
+  <span
+    id="timespan"
+  >
+    1 Jan 1847 - 1 Jan 1918
+  </span>
+  <span
+    className="context_moreinfo"
+    data-content="Die folgenden Publikationsarten wurden bei der Erstellung dieser Visualisierung in Betracht gezogen (nicht alle davon scheinen notwendigerweise in dieser Visualisierung auch auf)<br /><br /> Anthologie, Bericht, Biografie, Briefsammlung"
+    data-html="true"
+    data-original-title=""
+    data-toggle="popover"
+    data-trigger="hover"
+    id="document_types"
+    title=""
+  >
+    Dokumentarten
+  </span>
+</p>
+`;
+
+exports[`Context line component snapshot matches a project website snapshot 1`] = `
 <p
   id="context"
 >
@@ -66,12 +158,13 @@ exports[`Context line component snapshot matches as project website snapshot 1`]
      open access)
   </span>
   <span
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Source: BASE",
+      }
+    }
     id="source"
-  >
-    Source
-    : 
-    BASE
-  </span>
+  />
   <span
     id="timespan"
   >
@@ -83,6 +176,63 @@ exports[`Context line component snapshot matches as project website snapshot 1`]
     Document types
     : 
     Journal/newspaper article
+  </span>
+</p>
+`;
+
+exports[`Context line component snapshot matches a viper snapshot 1`] = `
+<p
+  id="context"
+>
+  <span
+    id="num_articles"
+  >
+    36
+     
+    <span
+      className="modifier"
+      id="modifier"
+    >
+      
+    </span>
+    documents
+     
+    (
+    10
+     open access)
+  </span>
+  <span
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Source: OpenAIRE",
+      }
+    }
+    id="source"
+  />
+  <span
+    id="context-paper_count"
+  >
+    36
+     
+    papers
+  </span>
+  <span
+    id="context-dataset_count"
+  >
+    0
+     
+    datasets
+  </span>
+  <span
+    id="context-funder"
+  >
+    Funder: 
+    EC
+  </span>
+  <span
+    id="context-project_runtime"
+  >
+    2011-2016
   </span>
 </p>
 `;
