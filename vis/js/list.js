@@ -14,7 +14,8 @@ import {
     clear_highlights,
     sortBy,
     getRealHeight,
-    updateTags
+    updateTags,
+    substrHTML
 } from 'helpers';
 import { io } from 'io';
 
@@ -1064,9 +1065,7 @@ list.createAbstract = function(d, cut_off) {
             return "";
 
         if (cut_off) {
-            if (d.paper_abstract.length > cut_off) {
-                return d.paper_abstract.substr(0, cut_off) + "...";
-            }
+            return substrHTML(d.paper_abstract, cut_off, true);
         }
         return d.paper_abstract;
     }

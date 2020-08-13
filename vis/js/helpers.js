@@ -210,6 +210,47 @@ d3.selection.prototype.appendHTML =
         });
     };
     
+export function substrHTML(str, len, add_ellipsis) {
+    const html = new DOMParser().parseFromString(str, "text/html");
+    let cur_len = 0;
+    let ret_string = "";
+    let str_longer_than_cutoff = false;
+    let child_nodes = html.getElementsByTagName("body")[0].childNodes;
+
+    for(let element_nr in child_nodes) {
+        
+        let element = child_nodes.item(element_nr);
+        let orig_element = element;
+        
+        do {
+            let cur_string = element.textContent;
+            let temp_string = cur_string.substr(0, len - cur_len);
+            cur_len += temp_string.length;
+            element.textContent = temp_string;
+            
+            if(cur_len === len) {
+                if(cur_string.length > temp_string.length
+                        || element_nr + 1 < child_nodes.length) {
+                    str_longer_than_cutoff = true;
+                }
+                break; //breaks the iteration
+            } else if(element.hasChildNodes()) {
+                element = element.firstChild;
+            }
+        } while(element.hasChildNodes())
+        
+        ret_string += (typeof orig_element.outerHTML !== "undefined") 
+                            ? (orig_element.outerHTML)
+                            : (orig_element.textContent);      
+    }
+    
+    if(str_longer_than_cutoff) {
+        ret_string += "...";
+    }
+    
+    return ret_string;
+}
+    
 // functions which are not being called at the moment, but might
 // mausrad -> zoomen
 // export function redraw() {
