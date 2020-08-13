@@ -558,9 +558,11 @@ class Canvas {
             
             $('#author_image_link').attr('href', image_link);
             $('#author_image').css('background-image', 'url('+image_link+')');
-            $('#author_living_dates').text(context.params.living_dates);
-            $('#author_bio_link').attr('href', 'https://d-nb.info/gnd/' + context.params.author_id.replace(/\([^)]*\)/, ''));
-            $('#author_bio_link').text(config.localization[config.language].bio_link)
+            if (!mediator.modern_frontend_enabled) {
+                $('#author_living_dates').text(context.params.living_dates);
+                $('#author_bio_link').attr('href', 'https://d-nb.info/gnd/' + context.params.author_id.replace(/\([^)]*\)/, ''));
+                $('#author_bio_link').text(config.localization[config.language].bio_link)
+            }
         }
     }
     
@@ -574,186 +576,189 @@ class Canvas {
         if (!config.show_context || !this.paramExists(context.params)) {
             return;
         }
+
+        if (!mediator.modern_frontend_enabled) {
         
-        $("#context").css({"visibility": "visible", "display": "block"});
-        let modifier = "";
-        let is_most_relevant = false;
-        if (this.paramExists(context.params.sorting)) {
-            if(context.params.sorting === "most-recent") {
-                modifier = config.localization[config.language].most_recent_label;
-            } else if (context.params.sorting === "most-relevant" 
-                            && this.paramExists(config.localization[config.language].most_relevant_label)
-                            && context.num_documents >= config.max_documents) {
-                modifier = config.localization[config.language].most_relevant_label;
-                is_most_relevant = true;
-            } else {
-                modifier = "";
-            }
-        }
-        $("#num_articles").html(context.num_documents + ' <span id="modifier" class="modifier">' + modifier + '</span>'
-                + " " + config.localization[config.language].articles_label
-                + ((config.show_context_oa_number)?(" (" + context.share_oa + " open access)"):("")) 
-        );
-        
-        if(is_most_relevant && config.context_most_relevant_tooltip) {
-            $("#modifier")
-                    .addClass("context_moreinfo")
-                    .attr("data-toggle", "popover")
-                    .attr("data-trigger", "hover")
-                    .attr("data-content", config.localization[config.language].most_relevant_tooltip)
-                    .popover();
-        }
-        
-        let service_name = (typeof config.service_name !== 'undefined')
-                            ? (config.service_name)
-                            : (config.service_names[context.service])
-
-        $("#source").html(config.localization[config.language].source_label
-                       + ": " + service_name);
-
-        if (config.create_title_from_context_style === 'viper') {
-            $("#context-dataset_count").text(
-                `${context.num_datasets} ${config.localization[config.language].dataset_count_label}`
-            )
-            $("#context-paper_count").text(
-                `${context.num_papers} ${config.localization[config.language].paper_count_label}`
-            )
-            $("#context-funder").text(
-                `Funder: ${context.params.funder}`
-            )
-            $("#context-project_runtime").text(
-                `${context.params.start_date.slice(0, 4)}–${context.params.end_date.slice(0, 4)}`
-            )
-        } else {
-            $("#context-dataset_count").hide();
-            $("#context-paper_count").hide();
-            $("#context-funder").hide();
-            $("#context-project_runtime").hide();
-        }
-
-        if (this.paramExists(context.params.from) && this.paramExists(context.params.to)) {
-
-            let time_macro_display = (config.service === "doaj")?("yyyy"):("d mmm yyyy");
-            let time_macro_internal = (config.service === "doaj")?("yyyy"):("yyyy-mm-dd");
-
-            let today = new Date();
-            let from = new Date(context.params.from)
-            let to = new Date(context.params.to)
-
-            today.setTime(today.getTime() + today.getTimezoneOffset()*60*1000 );
-            from.setTime(from.getTime() + from.getTimezoneOffset()*60*1000 );
-            to.setTime(to.getTime() + to.getTimezoneOffset()*60*1000 );
-
-            let default_from_date = (function(service) {
-                switch(service) {
-                  case 'doaj':
-                    return '1809';
-                  case 'pubmed':
-                    return '1809-01-01';
-                  case 'base':
-                      return '1665-01-01';
-                  default:
-                      return '1970-01-01';
-                }
-              })(config.service);
-
-            if (dateFormat(from, time_macro_internal) === default_from_date) {
-                if(dateFormat(today, time_macro_internal) === dateFormat(to, time_macro_internal)) {
-                    $("#timespan").html("All time");
+            $("#context").css({"visibility": "visible", "display": "block"});
+            let modifier = "";
+            let is_most_relevant = false;
+            if (this.paramExists(context.params.sorting)) {
+                if(context.params.sorting === "most-recent") {
+                    modifier = config.localization[config.language].most_recent_label;
+                } else if (context.params.sorting === "most-relevant" 
+                                && this.paramExists(config.localization[config.language].most_relevant_label)
+                                && context.num_documents >= config.max_documents) {
+                    modifier = config.localization[config.language].most_relevant_label;
+                    is_most_relevant = true;
                 } else {
-                    $("#timespan").html("Until " + dateFormat(to, time_macro_display));
-                }
-            } else {
-
-                $("#timespan").html(
-                        dateFormat(from, time_macro_display) + " - " + dateFormat(to, time_macro_display)
-                );
-            }
-        } else {
-            $("#timespan").hide()
-        }
-        //Don't forget to set the config.options in the containing site to use the context values below
-        if(this.paramExists(config.options)) {
-
-            let dtypes = (function() {
-                if (context.params.hasOwnProperty("document_types"))
-                    return "document_types";
-                else if (context.params.hasOwnProperty("include_content_type"))
-                    return "include_content_type"
-                else
-                    return "article_types";
-            })()
-
-            let document_types_string = "";
-
-            let document_types = config.options.filter(function(obj) {
-                return obj.id == dtypes;
-            });
-
-            if(context.params.hasOwnProperty(dtypes)) {
-                let num_document_types = context.params[dtypes].length;
-
-                context.params[dtypes].forEach(function (type) {
-                    let type_obj = document_types[0].fields.filter(function(obj) {
-                        return obj.id == type;
-                    })
-                    document_types_string += type_obj[0].text + ", ";
-                })
-
-                document_types_string = document_types_string.substr(0, document_types_string.length - 2);
-
-                if (num_document_types > 1) {
-                    $("#document_types").html(config.localization[config.language].documenttypes_label);
-
-                    $("#document_types").attr({
-                        "data-content": config.localization[config.language].documenttypes_tooltip + "<br><br>" + document_types_string
-                        //, "title": config.localization[config.language].documenttypes_tooltip + "\n\n" + document_types_string
-                        ,"data-toggle": "popover"
-                        ,"data-trigger": "hover"
-                        ,"data-html": true
-                        , "class": "context_moreinfo"
-                    })
-                    .popover();
-
-                } else {
-                    $("#document_types").html(config.localization[config.language].documenttypes_label + ": " + document_types_string);
+                    modifier = "";
                 }
             }
-        } else {
-            $("#document_types").hide()
-        }
-
-        if (this.paramExists(context.params.lang_id)
-        && this.paramExists(config.options)
-        && this.paramExists(config.options.languages)) {
-            const lang = config.options.languages.find(
-                lang => lang.code === context.params.lang_id
+            $("#num_articles").html(context.num_documents + ' <span id="modifier" class="modifier">' + modifier + '</span>'
+                    + " " + config.localization[config.language].articles_label
+                    + ((config.show_context_oa_number)?(" (" + context.share_oa + " open access)"):("")) 
             );
-
-            if (lang) {
-                $('#search_lang').html(
-                    'Language: ' + lang.lang_in_lang + ' (' + lang.lang_in_eng + ') '
-                );
+            
+            if(is_most_relevant && config.context_most_relevant_tooltip) {
+                $("#modifier")
+                        .addClass("context_moreinfo")
+                        .attr("data-toggle", "popover")
+                        .attr("data-trigger", "hover")
+                        .attr("data-content", config.localization[config.language].most_relevant_tooltip)
+                        .popover();
             }
-        } else {
-            $('#search_lang').hide();
+            
+            let service_name = (typeof config.service_name !== 'undefined')
+                                ? (config.service_name)
+                                : (config.service_names[context.service])
+
+            $("#source").html(config.localization[config.language].source_label
+                        + ": " + service_name);
+
+            if (config.create_title_from_context_style === 'viper') {
+                $("#context-dataset_count").text(
+                    `${context.num_datasets} ${config.localization[config.language].dataset_count_label}`
+                )
+                $("#context-paper_count").text(
+                    `${context.num_papers} ${config.localization[config.language].paper_count_label}`
+                )
+                $("#context-funder").text(
+                    `Funder: ${context.params.funder}`
+                )
+                $("#context-project_runtime").text(
+                    `${context.params.start_date.slice(0, 4)}–${context.params.end_date.slice(0, 4)}`
+                )
+            } else {
+                $("#context-dataset_count").hide();
+                $("#context-paper_count").hide();
+                $("#context-funder").hide();
+                $("#context-project_runtime").hide();
+            }
+
+            if (this.paramExists(context.params.from) && this.paramExists(context.params.to)) {
+
+                let time_macro_display = (config.service === "doaj")?("yyyy"):("d mmm yyyy");
+                let time_macro_internal = (config.service === "doaj")?("yyyy"):("yyyy-mm-dd");
+
+                let today = new Date();
+                let from = new Date(context.params.from)
+                let to = new Date(context.params.to)
+
+                today.setTime(today.getTime() + today.getTimezoneOffset()*60*1000 );
+                from.setTime(from.getTime() + from.getTimezoneOffset()*60*1000 );
+                to.setTime(to.getTime() + to.getTimezoneOffset()*60*1000 );
+
+                let default_from_date = (function(service) {
+                    switch(service) {
+                    case 'doaj':
+                        return '1809';
+                    case 'pubmed':
+                        return '1809-01-01';
+                    case 'base':
+                        return '1665-01-01';
+                    default:
+                        return '1970-01-01';
+                    }
+                })(config.service);
+
+                if (dateFormat(from, time_macro_internal) === default_from_date) {
+                    if(dateFormat(today, time_macro_internal) === dateFormat(to, time_macro_internal)) {
+                        $("#timespan").html("All time");
+                    } else {
+                        $("#timespan").html("Until " + dateFormat(to, time_macro_display));
+                    }
+                } else {
+
+                    $("#timespan").html(
+                            dateFormat(from, time_macro_display) + " - " + dateFormat(to, time_macro_display)
+                    );
+                }
+            } else {
+                $("#timespan").hide()
+            }
+            //Don't forget to set the config.options in the containing site to use the context values below
+            if(this.paramExists(config.options)) {
+
+                let dtypes = (function() {
+                    if (context.params.hasOwnProperty("document_types"))
+                        return "document_types";
+                    else if (context.params.hasOwnProperty("include_content_type"))
+                        return "include_content_type"
+                    else
+                        return "article_types";
+                })()
+
+                let document_types_string = "";
+
+                let document_types = config.options.filter(function(obj) {
+                    return obj.id == dtypes;
+                });
+
+                if(context.params.hasOwnProperty(dtypes)) {
+                    let num_document_types = context.params[dtypes].length;
+
+                    context.params[dtypes].forEach(function (type) {
+                        let type_obj = document_types[0].fields.filter(function(obj) {
+                            return obj.id == type;
+                        })
+                        document_types_string += type_obj[0].text + ", ";
+                    })
+
+                    document_types_string = document_types_string.substr(0, document_types_string.length - 2);
+
+                    if (num_document_types > 1) {
+                        $("#document_types").html(config.localization[config.language].documenttypes_label);
+
+                        $("#document_types").attr({
+                            "data-content": config.localization[config.language].documenttypes_tooltip + "<br><br>" + document_types_string
+                            //, "title": config.localization[config.language].documenttypes_tooltip + "\n\n" + document_types_string
+                            ,"data-toggle": "popover"
+                            ,"data-trigger": "hover"
+                            ,"data-html": true
+                            , "class": "context_moreinfo"
+                        })
+                        .popover();
+
+                    } else {
+                        $("#document_types").html(config.localization[config.language].documenttypes_label + ": " + document_types_string);
+                    }
+                }
+            } else {
+                $("#document_types").hide()
+            }
+
+            if (this.paramExists(context.params.lang_id)
+            && this.paramExists(config.options)
+            && this.paramExists(config.options.languages)) {
+                const lang = config.options.languages.find(
+                    lang => lang.code === context.params.lang_id
+                );
+
+                if (lang) {
+                    $('#search_lang').html(
+                        'Language: ' + lang.lang_in_lang + ' (' + lang.lang_in_eng + ') '
+                    );
+                }
+            } else {
+                $('#search_lang').hide();
+            }
+            
+            if(config.show_context_timestamp) {
+                this.drawContextTimestamp(context);
+            } else {
+                $("#timestamp").hide();
+            }
         }
-        
-        if(config.is_authorview) {
+
+        if (config.is_authorview) {
             this.drawContextAuthorview(context);
-        }
-        
-        if(config.show_context_timestamp) {
-            this.drawContextTimestamp(context);
-        } else {
-            $("#timestamp").hide();
         }
     }
     
     showAreaStreamgraph(keyword) {
-        $("#context").css("display", "none");
-        
         if(!mediator.modern_frontend_enabled) {
+            $("#context").css("display", "none");
+
             $("#subdiscipline_title h4")
                 .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
 
@@ -771,8 +776,8 @@ class Canvas {
     removeAreaStreamgraph() {
         if(!mediator.modern_frontend_enabled) {
             $("#backlink").remove();
+            $("#context").css("display", "block");
         }
-        $("#context").css("display", "block");
         mediator.publish("draw_title");
     }
 
