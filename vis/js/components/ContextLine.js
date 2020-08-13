@@ -38,7 +38,7 @@ export const ContextLine = ({ hidden, contextLineParams, localization }) => {
 };
 
 const mapStateToProps = (state) => ({
-  hidden: state.zoom,
+  hidden: state.zoom || !state.contextLine.show,
   contextLineParams: state.contextLine,
   localization: state.localization,
 });
