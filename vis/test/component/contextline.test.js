@@ -12,6 +12,7 @@ const setup = (overrideStoreObject = {}) => {
     {
       zoom: false,
       contextLine: {
+        show: true, // config.show_context && context.params
         articlesCount: 100, // context.num_documents
         modifier: null, // context.params.sorting => most-recent || most-relevant
         showModifierPopover: false, // context.params.sorting === "most-relevant" && config.context_most_relevant_tooltip
@@ -82,8 +83,21 @@ describe("Context line component", () => {
     expect(container.childNodes.length).toBe(1);
   });
 
-  it("is hidden", () => {
+  it("is hidden (zoomed-in)", () => {
     const store = mockStore(setup({ zoom: true }));
+    act(() => {
+      render(<ContextLine store={store} />, container);
+    });
+
+    expect(container.childNodes.length).toBe(0);
+  });
+
+  it("is hidden (not shown)", () => {
+    const storeObject = setup();
+    storeObject.contextLine.show = false;
+
+    const store = mockStore(storeObject);
+
     act(() => {
       render(<ContextLine store={store} />, container);
     });
@@ -117,11 +131,14 @@ describe("Context line component", () => {
         render(<ContextLine store={store} />, container);
       });
 
-      expect(container.querySelector("#source").textContent).toContain(DATA_SOURCE);
+      expect(container.querySelector("#source").textContent).toContain(
+        DATA_SOURCE
+      );
     });
 
     it("contains a correct data source with HTML", () => {
-      const DATA_SOURCE = '<span class="backlink"><a href="data" class="underline" target="_blank" >CoVis database</a></span>';
+      const DATA_SOURCE =
+        '<span class="backlink"><a href="data" class="underline" target="_blank" >CoVis database</a></span>';
       const storeObject = setup();
       storeObject.contextLine.dataSource = DATA_SOURCE;
 
@@ -131,7 +148,10 @@ describe("Context line component", () => {
         render(<ContextLine store={store} />, container);
       });
 
-      expect(container.querySelector("#source").querySelector("a.underline").textContent).toContain("CoVis database");
+      expect(
+        container.querySelector("#source").querySelector("a.underline")
+          .textContent
+      ).toContain("CoVis database");
     });
 
     it("doesn't contain the timespan", () => {
@@ -159,7 +179,9 @@ describe("Context line component", () => {
         render(<ContextLine store={store} />, container);
       });
 
-      expect(container.querySelector("#timespan").textContent).toEqual(TIMESPAN);
+      expect(container.querySelector("#timespan").textContent).toEqual(
+        TIMESPAN
+      );
     });
 
     it("doesn't contain the paper count", () => {
@@ -187,7 +209,9 @@ describe("Context line component", () => {
         render(<ContextLine store={store} />, container);
       });
 
-      expect(container.querySelector("#context-paper_count").textContent).toContain(PAPER_COUNT.toString());
+      expect(
+        container.querySelector("#context-paper_count").textContent
+      ).toContain(PAPER_COUNT.toString());
     });
 
     it("doesn't contain the dataset count", () => {
@@ -215,7 +239,9 @@ describe("Context line component", () => {
         render(<ContextLine store={store} />, container);
       });
 
-      expect(container.querySelector("#context-dataset_count").textContent).toContain(DATASET_COUNT.toString());
+      expect(
+        container.querySelector("#context-dataset_count").textContent
+      ).toContain(DATASET_COUNT.toString());
     });
 
     it("doesn't contain a funder", () => {
@@ -243,7 +269,9 @@ describe("Context line component", () => {
         render(<ContextLine store={store} />, container);
       });
 
-      expect(container.querySelector("#context-funder").textContent).toContain(FUNDER);
+      expect(container.querySelector("#context-funder").textContent).toContain(
+        FUNDER
+      );
     });
 
     it("doesn't contain a project runtime", () => {
@@ -271,7 +299,9 @@ describe("Context line component", () => {
         render(<ContextLine store={store} />, container);
       });
 
-      expect(container.querySelector("#context-project_runtime").textContent).toEqual(PROJ_RUNTIME);
+      expect(
+        container.querySelector("#context-project_runtime").textContent
+      ).toEqual(PROJ_RUNTIME);
     });
 
     it("doesn't contain a search language", () => {
@@ -299,7 +329,9 @@ describe("Context line component", () => {
         render(<ContextLine store={store} />, container);
       });
 
-      expect(container.querySelector("#search_lang").textContent).toEqual(SEARCH_LANG);
+      expect(container.querySelector("#search_lang").textContent).toEqual(
+        SEARCH_LANG
+      );
     });
 
     it("doesn't contain a timestamp", () => {
@@ -327,7 +359,9 @@ describe("Context line component", () => {
         render(<ContextLine store={store} />, container);
       });
 
-      expect(container.querySelector("#timestamp").textContent).toContain(TIMESTAMP);
+      expect(container.querySelector("#timestamp").textContent).toContain(
+        TIMESTAMP
+      );
     });
   });
 
@@ -555,17 +589,17 @@ describe("Context line component", () => {
         storeObject.localization.documenttypes_label
       );
 
-      expect(container.querySelector("#document_types").getAttribute("data-content")).toContain(
-        storeObject.localization.documenttypes_tooltip
-      );
+      expect(
+        container.querySelector("#document_types").getAttribute("data-content")
+      ).toContain(storeObject.localization.documenttypes_tooltip);
 
-      expect(container.querySelector("#document_types").getAttribute("data-content")).toContain(
-        DOC_TYPES[0]
-      );
+      expect(
+        container.querySelector("#document_types").getAttribute("data-content")
+      ).toContain(DOC_TYPES[0]);
 
-      expect(container.querySelector("#document_types").getAttribute("data-content")).toContain(
-        DOC_TYPES[1]
-      );
+      expect(
+        container.querySelector("#document_types").getAttribute("data-content")
+      ).toContain(DOC_TYPES[1]);
     });
   });
 });
