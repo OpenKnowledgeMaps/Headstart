@@ -38,7 +38,7 @@ const contextLine = (state = {}, action) => {
         funder:
           config.create_title_from_context_style && context.params
             ? context.params.funder
-            : context.params,
+            : null,
         projectRuntime: getProjectRuntime(config, context),
         searchLanguage: getSearchLanguage(config, context),
         timestamp: getTimestamp(config, context),

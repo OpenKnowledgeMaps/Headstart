@@ -13,8 +13,7 @@ import {
   initializeStore,
 } from "./actions";
 
-import Heading from "./components/Heading";
-import Backlink from "./components/Backlink";
+import SubdisciplineTitle from "./components/SubdisciplineTitle";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -50,16 +49,9 @@ class Intermediate {
       );
       ReactDOM.render(
         <Provider store={this.store}>
-          <Heading />
+          <SubdisciplineTitle />
         </Provider>,
-        document.getElementById("heading_container")
-      );
-
-      ReactDOM.render(
-        <Provider store={this.store}>
-          <Backlink />
-        </Provider>,
-        document.getElementById("backlink_container")
+        document.getElementById("subdiscipline_title")
       );
     }
   }
