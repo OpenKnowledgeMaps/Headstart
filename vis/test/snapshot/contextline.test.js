@@ -16,6 +16,7 @@ const setup = (
     {
       zoom: false,
       contextLine: {
+        show: true,
         articlesCount: 100, // context.num_documents
         modifier: null, // context.params.sorting => most-recent || most-relevant
         showModifierPopover: false, // context.params.sorting === "most-relevant" && config.context_most_relevant_tooltip
