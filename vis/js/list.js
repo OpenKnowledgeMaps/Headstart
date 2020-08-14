@@ -1043,9 +1043,8 @@ list.createHighlights = function(search_words) {
 
     clear_highlights();
     if( !(search_words.length === 0 || (search_words.length === 1 && search_words[0] === "")) ) {
-        if(!$(".query_term_highlight").hasClass("not-highlighted")){
-            $(".query_term_highlight").addClass("not-highlighted");
-        }
+        $(".query_term_highlight").addClass("not-highlighted");
+        
         search_words.forEach(function(str) {
             highlight(str);
         });
@@ -1267,7 +1266,7 @@ list.enlargeListItem = function(d) {
         .html(this.createAbstract(d, config.abstract_large));
 
     this.createHighlights(this.current_search_words);
-    
+       
     this.attachClickHandlerAbstract(true);
 
     this.setImageForListHolder(d);
