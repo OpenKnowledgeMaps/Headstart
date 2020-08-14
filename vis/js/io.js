@@ -462,11 +462,6 @@ IO.prototype = {
         
         //Replace terms within square brackets, as they denote fields in PubMed
         let full_query = original_query.replace(/\[(.*?)\]/g, '');
-        
-        //let query_wt_exclusions = full_query.replace(/(^|\s)-[^\s]*/g, " ");
-        //query_wt_exclusions = query_wt_exclusions.replace(/(^|\s)-\"(.*?)\"/g, " ");
-        //query_wt_exclusions = query_wt_exclusions.replace(/(^|\s)-\((.*?)\)/g, " ");
-        //XRegExp.matchRecursive(str, '\\(', '\\)', 'g');
        
         //Get all phrases and remove inverted commas from results
         let match_query = /\"(.*?)\"/g;
