@@ -217,9 +217,8 @@ export function substrHTML(str, len, add_ellipsis) {
     let str_longer_than_cutoff = false;
     let child_nodes = html.getElementsByTagName("body")[0].childNodes;
 
-    for(let element_nr in child_nodes) {
-        
-        let element = child_nodes.item(element_nr);
+    child_nodes.forEach(function(element, element_nr) {
+
         let orig_element = element;
         
         do {
@@ -242,7 +241,7 @@ export function substrHTML(str, len, add_ellipsis) {
         ret_string += (typeof orig_element.outerHTML !== "undefined") 
                             ? (orig_element.outerHTML)
                             : (orig_element.textContent);      
-    }
+    });
     
     if(str_longer_than_cutoff) {
         ret_string += "...";
