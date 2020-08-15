@@ -3,6 +3,7 @@
 require dirname(__FILE__) . '/../classes/headstart/preprocessing/calculation/RCalculation.php';
 require dirname(__FILE__) . '/../classes/headstart/preprocessing/naming/KeywordNaming.php';
 require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
+require_once dirname(__FILE__) . '/../classes/headstart/preprocessing/spellchecking/QuerySpellchecking.php';
 require_once dirname(__FILE__) . '/../classes/headstart/preprocessing/Snapshot.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
@@ -60,7 +61,13 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $query = ($do_clean_query === true)
                 ?(cleanQuery($dirty_query, $transform_query_tolowercase))
                 :($dirty_query);
-
+    
+    //TODO: Move this to the error section below
+    if($ini_array["spellchecking"]["check_spelling"]) {
+        $spellchecking = new \headstart\preprocessing\spellchecking\QuerySpellchecking($ini_array);    
+        $misspelled_words = $spellchecking->performSpellchecking($query);
+    }
+    
     $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
     $settings = $ini_array["general"];
