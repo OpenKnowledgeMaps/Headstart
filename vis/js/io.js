@@ -15,6 +15,7 @@ var IO = function() {
     this.num_papers;
     this.num_datasets;
     this.data;
+    this.query_terms;
 };
 
 IO.prototype = {
@@ -171,6 +172,8 @@ IO.prototype = {
     prepareData: function (highlight_data, fs, context) {
         this.areas = {};
         this.areas_array = [];
+        this.query_terms = this.getQueryTerms(context);
+        
         var _this = this;
         var xy_array = [];
         // convert to numbers
@@ -361,6 +364,12 @@ IO.prototype = {
             }
             
             d.comments_for_filtering = _this.createCommentStringForFiltering(d.comments);
+            
+            if(config.highlight_query_terms) {
+                for (let field of config.highlight_query_fields) {
+                    d[field] = _this.highlightTerms(d[field], _this.query_terms);
+                }
+            }
 
         });
         
@@ -433,12 +442,54 @@ IO.prototype = {
             return '__' + ('000' + c.toString(16)).slice(-4);
         });
     },
+    
+    highlightTerms: function(full_string, term_array) {
+        let result_string = full_string;
+        for (let term of term_array) {
+            let re = new RegExp("\\b(" + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ")\\b" ,"gi");
+            result_string = result_string.replace(re, "<span class=\"query_term_highlight\">$1</span>");
+        }
+        return result_string;
+    },
+    
+    //Get all terms in a query minus operators
+    getQueryTerms: function (context) {
+        if(!context.hasOwnProperty("query")) {
+            return;
+        }
+        
+        let original_query = context.query;
+        
+        //Replace terms within square brackets, as they denote fields in PubMed
+        let full_query = original_query.replace(/\[(.*?)\]/g, '');
+       
+        //Get all phrases and remove inverted commas from results
+        let match_query = /\"(.*?)\"/g;
+        let term_array = full_query.match(match_query);
+        if(term_array !== null)
+            term_array = term_array.map(function(x){return x.replace(/\\"|\"/g, '');});
+        else
+            term_array = [];
+        
+        //Remove phrases, and, or, +, -, (, ) from query string 
+        let query_wt_phrases = full_query.replace(match_query, " ");
+        let query_wt_rest = query_wt_phrases.replace(/\band\b|\bor\b|\(|\)/g, "").replace(/(^|\s)-|\+/g, " ");
+        
+        term_array = term_array.concat(query_wt_rest.trim().replace(/\s+/g, " ").split(" "));
+        
+        term_array = [...new Set(term_array)];
+        
+        return term_array;
+        
+    },
 
     // prepare the areas for the bubbles
     prepareAreas: function () {
 
         var areas = this.areas;
         var areas_array = this.areas_array;
+        
+        let _this = this;
 
         var readers = [];
 
@@ -482,7 +533,12 @@ IO.prototype = {
 
         for (area in areas) {
             var new_area = [];
-            new_area.title = areas[area].title;
+            if(config.highlight_query_terms) {
+                new_area.title = _this.highlightTerms(areas[area].title, _this.query_terms);
+            } else {
+                new_area.title = areas[area].title;
+            }
+            new_area.title_tooltip = areas[area].title;
             mediator.publish("set_new_area_coords", new_area, areas[area]);
             new_area.orig_x = areas[area].x;
             new_area.orig_y = areas[area].y;
