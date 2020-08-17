@@ -17,6 +17,12 @@
         position: relative;
         z-index: 3;
     }
+    
+    #area-not-bold {
+        .query_term_highlight {
+            background-color: transparent;
+        }
+    }
 
     .backlink {
         position: relative;
