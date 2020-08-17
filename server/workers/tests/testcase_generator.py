@@ -8,7 +8,7 @@ from collections import OrderedDict
 np.random.seed(42)
 
 search_terms = [
-    '"summary writing"',
+     '"summary writing"',
      'accounting',
      'ai',
      'animals',
@@ -220,7 +220,7 @@ class BaseParamSpace(ParamSpace):
         latest = datetime.date.today()
         #days_difference = (latest - earliest).days
         #random_n_days = randint(1, days_difference)
-        random_n_days = randint(1, 1095)
+        random_n_days = randint(30, 1095)  # min 30 days, max 3 years
         random_startdate = latest - datetime.timedelta(days=random_n_days)
         return str(random_startdate), str(latest)
 
@@ -259,7 +259,7 @@ class PubmedParamSpace(ParamSpace):
         latest = datetime.date.today()
         #days_difference = (latest - earliest).days
         #random_n_days = randint(1, days_difference)
-        random_n_days = randint(1, 1095)
+        random_n_days = randint(30, 1095)  # min 30 days, max 3 years
         random_startdate = latest - datetime.timedelta(days=random_n_days)
         return str(random_startdate), str(latest)
 

@@ -1,12 +1,14 @@
 import pytest
-from .test_helpers import CASES, CASENAMES, RESULTS, get_stopwords
+from .test_helpers import CASENAMES, RESULTS, get_stopwords
 
 LANGS = ["english", "german"]
+
 
 @pytest.mark.parametrize("testcase", CASENAMES)
 def test_empty_area_titles(testcase):
     testcase = RESULTS[testcase]
     assert testcase.area.map(lambda x: len(x)==0).sum() == 0
+
 
 @pytest.mark.parametrize("testcase", CASENAMES)
 @pytest.mark.parametrize("lang", LANGS)
