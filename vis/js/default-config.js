@@ -210,6 +210,18 @@ var config = {
     initial_sort: null,
     //whether to show other papers in the list view when a paper is selected
     list_show_all_papers: false,
+    
+    highlight_query_terms: false,
+    highlight_query_fields: ["title"
+                                , "authors_string"
+                                , "authors_string"
+                                , "paper_abstract"
+                                , "year"
+                                , "published_in"
+                                , "subject_orig"],
+
+    content_based: false,
+
     //display filter menu dropdown
     filter_menu_dropdown: false,
     //[deprecated] list subentry settings

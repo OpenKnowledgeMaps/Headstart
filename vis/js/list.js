@@ -14,7 +14,8 @@ import {
     clear_highlights,
     sortBy,
     getRealHeight,
-    updateTags
+    updateTags,
+    substrHTML
 } from 'helpers';
 import { io } from 'io';
 
@@ -1035,16 +1036,22 @@ list.hideEntriesByWord = function(object, search_words) {
         .style("display", "none");
 };
 
-list.createHighlights = function(search_words) {
+list.createHighlights = function(search_words) {    
     if (typeof search_words === "undefined") {
         return;
     }
 
     clear_highlights();
-    if( !(search_words === "") ) {
+    if( !(search_words.length === 0 || (search_words.length === 1 && search_words[0] === "")) ) {
+        $(".query_term_highlight").addClass("not-highlighted");
+        
         search_words.forEach(function(str) {
             highlight(str);
         });
+    } else {
+        if($(".query_term_highlight").hasClass("not-highlighted")){
+            $(".query_term_highlight").removeClass("not-highlighted");
+        }
     }
 };
 
@@ -1057,9 +1064,7 @@ list.createAbstract = function(d, cut_off) {
             return "";
 
         if (cut_off) {
-            if (d.paper_abstract.length > cut_off) {
-                return d.paper_abstract.substr(0, cut_off) + "...";
-            }
+            return substrHTML(d.paper_abstract, cut_off, true);
         }
         return d.paper_abstract;
     }
@@ -1261,7 +1266,7 @@ list.enlargeListItem = function(d) {
         .html(this.createAbstract(d, config.abstract_large));
 
     this.createHighlights(this.current_search_words);
-    
+       
     this.attachClickHandlerAbstract(true);
 
     this.setImageForListHolder(d);
