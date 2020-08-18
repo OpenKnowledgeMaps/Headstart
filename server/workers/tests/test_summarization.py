@@ -1,7 +1,7 @@
 import pytest
 from .test_helpers import CASENAMES, RESULTS, get_stopwords
 
-LANGS = ["english", "german"]
+LANGS = ["english"]
 
 
 @pytest.mark.parametrize("testcase", CASENAMES)
