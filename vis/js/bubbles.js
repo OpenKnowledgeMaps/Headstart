@@ -57,7 +57,7 @@ BubblesFSM.prototype = {
         bubbleFrames.append("circle")
                 .attr("class", "area")
                 .append("svg:title").text(function (d) {
-            return d.title;
+            return d.title_tooltip;
         });
     },
 

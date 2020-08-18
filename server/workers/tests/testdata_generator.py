@@ -29,7 +29,11 @@ def get_input_data(search, raw=False):
         params["limit"] = 100
     if service == "base":
         params["limit"] = 120
-        params["document_types"] = [a for a in params["article_types"]]
+        doctypes = eval(params["article_types"])
+        if isinstance(doctypes, list):
+            params["document_types"] = [a for a in doctypes]
+        else:
+            params["document_types"] = [121]
         params.pop("article_types", [])
     if raw:
         params["raw"] = True
