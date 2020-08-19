@@ -57,4 +57,4 @@ for r in df.iterrows():
     input_data = res_json["input_data"]
     params = res_json["params"]
     with open("knowncases/testcase%d.json" %case["case id"], "w") as outfile:
-        json.dump(res_json, outfile)
+        json.dump(res_json, outfile, indent=4, separators=(',', ': '), sort_keys=True)
