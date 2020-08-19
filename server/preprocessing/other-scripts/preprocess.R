@@ -72,6 +72,7 @@ deduplicate_titles <- function(metadata, list_size) {
 }
 
 replace_keywords_if_empty <- function(metadata, stops, service) {
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub(" +", " ", x)}))
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
   if (service == "linkedcat" || service == "linkedcat_authorview" || service == "linkedcat_browseview") {
     metadata$subject[missing_subjects] <- metadata$bkl_caption[missing_subjects]
