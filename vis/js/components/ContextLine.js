@@ -2,40 +2,48 @@ import React from "react";
 import { connect } from "react-redux";
 
 import ContextLineTemplate from "../templates/ContextLine";
-import Popover from "../templates/contextfeatures/Popover";
+import ModifierPopover from "../templates/contextfeatures/ModifierPopover";
 import Author from "../templates/contextfeatures/Author";
 
 import DocumentTypesSimple from "../templates/contextfeatures/DocumentTypesSimple";
 import DocumentTypesPopover from "../templates/contextfeatures/DocumentTypesPopover";
+import NumArticles from "../templates/contextfeatures/NumArticles";
 
-export const ContextLine = ({ hidden, contextLineParams, localization }) => {
-  if (hidden) {
-    return null;
+class ContextLine extends React.Component {
+  render() {
+    const { hidden, contextLineParams, localization } = this.props;
+
+    if (hidden) {
+      return null;
+    }
+
+    return (
+      <p id="context" style={{ position: "relative" }}>
+        <ContextLineTemplate
+          numArticles={renderNumArticles(
+            contextLineParams,
+            this,
+            localization
+          )}
+          author={renderAuthor(contextLineParams, localization)}
+          docTypes={renderDocTypes(contextLineParams, localization)}
+          dataSource={contextLineParams.dataSource}
+          dataSourceLabel={localization.source_label}
+          timespan={contextLineParams.timespan}
+          paperCount={contextLineParams.paperCount}
+          paperCountLabel={localization.paper_count_label}
+          datasetCount={contextLineParams.datasetCount}
+          datasetCountLabel={localization.dataset_count_label}
+          funder={contextLineParams.funder}
+          projectRuntime={contextLineParams.projectRuntime}
+          searchLang={contextLineParams.searchLanguage}
+          timestamp={contextLineParams.timestamp}
+          timestampLabel={localization.timestamp_label}
+        />
+      </p>
+    );
   }
-
-  return (
-    <ContextLineTemplate
-      articlesCount={contextLineParams.articlesCount}
-      articlesCountLabel={localization.articles_label}
-      modifier={renderModifier(contextLineParams, localization)}
-      openAccessArticlesCount={contextLineParams.openAccessCount}
-      author={renderAuthor(contextLineParams, localization)}
-      docTypes={renderDocTypes(contextLineParams, localization)}
-      dataSource={contextLineParams.dataSource}
-      dataSourceLabel={localization.source_label}
-      timespan={contextLineParams.timespan}
-      paperCount={contextLineParams.paperCount}
-      paperCountLabel={localization.paper_count_label}
-      datasetCount={contextLineParams.datasetCount}
-      datasetCountLabel={localization.dataset_count_label}
-      funder={contextLineParams.funder}
-      projectRuntime={contextLineParams.projectRuntime}
-      searchLang={contextLineParams.searchLanguage}
-      timestamp={contextLineParams.timestamp}
-      timestampLabel={localization.timestamp_label}
-    />
-  );
-};
+}
 
 const mapStateToProps = (state) => ({
   hidden: state.zoom || !state.contextLine.show,
@@ -43,7 +51,24 @@ const mapStateToProps = (state) => ({
   localization: state.localization,
 });
 
-const renderModifier = ({ modifier, showModifierPopover }, localization) => {
+const renderNumArticles = (contextLineParams, popupContainer, localization) => {
+  const { articlesCount, openAccessCount } = contextLineParams;
+
+  return (
+    <NumArticles
+      articlesCount={articlesCount}
+      openAccessArticlesCount={openAccessCount}
+      articlesCountLabel={localization.articles_label}
+      modifier={getModifier(contextLineParams, popupContainer, localization)}
+    />
+  );
+};
+
+const getModifier = (
+  { modifier, showModifierPopover },
+  popupContainer,
+  localization
+) => {
   let label = "";
 
   if (modifier === "most-recent") {
@@ -55,7 +80,13 @@ const renderModifier = ({ modifier, showModifierPopover }, localization) => {
   }
 
   if (showModifierPopover) {
-    return <Popover label={label} text={localization.most_relevant_tooltip} />;
+    return (
+      <ModifierPopover
+        container={popupContainer}
+        label={label}
+        text={localization.most_relevant_tooltip}
+      />
+    );
   }
 
   return (
@@ -79,7 +110,7 @@ const renderAuthor = ({ showAuthor, author }, localization) => {
   );
 };
 
-const renderDocTypes = ({documentTypes}, localization) => {
+const renderDocTypes = ({ documentTypes }, localization) => {
   if (!documentTypes || documentTypes.length === 0) {
     return null;
   }
@@ -87,10 +118,21 @@ const renderDocTypes = ({documentTypes}, localization) => {
   const text = documentTypes.join(", ");
 
   if (documentTypes.length === 1) {
-    return <DocumentTypesSimple label={localization.documenttypes_label} text={text} />
+    return (
+      <DocumentTypesSimple
+        label={localization.documenttypes_label}
+        text={text}
+      />
+    );
   }
 
-  return <DocumentTypesPopover label={localization.documenttypes_label} popoverLabel={localization.documenttypes_tooltip} text={text} />
+  return (
+    <DocumentTypesPopover
+      label={localization.documenttypes_label}
+      popoverLabel={localization.documenttypes_tooltip}
+      text={text}
+    />
+  );
 };
 
 export default connect(mapStateToProps)(ContextLine);
