@@ -1,13 +1,12 @@
 import React from "react";
 
 const ContextLine = ({
-  articlesCount, // context.num_documents
-  articlesCountLabel, // config.localization[config.language].articles_label
-  openAccessArticlesCount = null, // context.share_oa if config.show_context_oa_number
+  author, // React component: contextfeatures/Author.jsx
+  numArticles, // React component: contextfeatures/NumArticles.jsx
   dataSource = null, // config.service_name || config.service_names[context.service]
   dataSourceLabel, // config.localization[config.language].source_label
   timespan = null, // string composed from config data
-  docTypes, // React component
+  docTypes, // React component: contextfeatures/DocumentTypes*.jsx
   paperCount = null, // context.num_papers
   paperCountLabel, // config.localization[config.language].paper_count_label
   datasetCount = null, // context.num_datasets
@@ -17,20 +16,12 @@ const ContextLine = ({
   searchLang = null, // string composed from multiple params in config.options.languages
   timestamp = null, // context.last_update
   timestampLabel, // config.localization[config.language].timestamp_label
-  modifier, // React component
-  author, // React component
 }) => {
   return (
     // html template starts here
-    <p id="context">
+    <>
       {author}
-      <span id="num_articles">
-        {articlesCount} {modifier}
-        {articlesCountLabel}{" "}
-        {openAccessArticlesCount !== null && (
-          <>({openAccessArticlesCount} open access)</>
-        )}
-      </span>
+      {numArticles}
       {dataSource !== null && (
         <span
           id="source"
@@ -61,7 +52,7 @@ const ContextLine = ({
           {timestampLabel}: {timestamp}
         </span>
       )}
-    </p>
+    </>
     // html template ends here
   );
 };

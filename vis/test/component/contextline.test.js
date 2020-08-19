@@ -487,27 +487,6 @@ describe("Context line component", () => {
       );
     });
 
-    it("contains a correct modifier popover content (most relevant)", () => {
-      const MODIFIER = "most-relevant";
-      const SHOW_POPOVER = true;
-      const storeObject = setup();
-      storeObject.contextLine.modifier = MODIFIER;
-      storeObject.contextLine.showModifierPopover = SHOW_POPOVER;
-
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(<ContextLine store={store} />, container);
-      });
-
-      expect(container.querySelector("#modifier").classList).toContain(
-        "context_moreinfo"
-      );
-      expect(
-        container.querySelector("#modifier").getAttribute("data-content")
-      ).toEqual(storeObject.localization.most_relevant_tooltip);
-    });
-
     it("contains a number of open access articles", () => {
       const OPEN_ACCESS_COUNT = 12;
       const storeObject = setup();
