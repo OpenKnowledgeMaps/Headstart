@@ -14,7 +14,7 @@ def extract_params(case):
     search["from"] = case.get("from", "")
     search["to"] = case.get("to", "")
     search["sorting"] = case.get("sorting", "")
-    search["article_types"] = str(case.get("article types", "")).split(",")
+    search["article_types"] = case.get("article types", "[]")
     return search
 
 
@@ -56,5 +56,5 @@ for r in df.iterrows():
     res_json.pop("id")
     input_data = res_json["input_data"]
     params = res_json["params"]
-    with open("testdata/testcase%d.json" %case["case id"], "w") as outfile:
+    with open("knowncases/testcase%d.json" %case["case id"], "w") as outfile:
         json.dump(res_json, outfile)
