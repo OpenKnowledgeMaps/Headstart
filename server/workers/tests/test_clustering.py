@@ -38,7 +38,16 @@ def test_max_n_cluster(testcase):
 
 @pytest.mark.parametrize("testcase", CASENAMES)
 def test_n_cluster_lower_bound(testcase):
-    testcase = RESULTS[testcase]
-    n_items = len(testcase)
+    testcase = CASE_DATA[testcase]
+    metadata = pd.DataFrame.from_records(json.loads(testcase["input_data"]["metadata"]))
+    text = pd.DataFrame.from_records(json.loads(testcase["input_data"]["text"]))
+    rand_n = np.random.randint(2, 30)
+    n = min(len(metadata), rand_n)
+    metadata_sample = metadata.sample(n=n, random_state=42)
+    text_sample = text.sample(n=n, random_state=42)
+    testcase["input_data"]["metadata"] = metadata_sample.to_json(orient='records')
+    testcase["input_data"]["text"] = text_sample.to_json(orient='records')
+    test_result = get_dataprocessing_result(testcase)
+    n_items = len(test_result)
     if n_items <= 30:
-        assert testcase.area.nunique() == round(np.sqrt(n_items)) + 1
+        assert test_result.area.nunique() == round(np.sqrt(n_items)) + 1
