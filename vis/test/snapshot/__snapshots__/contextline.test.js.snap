@@ -3,6 +3,11 @@
 exports[`Context line component snapshot matches a covis snapshot 1`] = `
 <p
   id="context"
+  style={
+    Object {
+      "position": "relative",
+    }
+  }
 >
   <span
     id="num_articles"
@@ -42,6 +47,11 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
 exports[`Context line component snapshot matches a linkedcat authorview snapshot 1`] = `
 <p
   id="context"
+  style={
+    Object {
+      "position": "relative",
+    }
+  }
 >
   <span
     id="author_living_dates"
@@ -87,6 +97,11 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
 exports[`Context line component snapshot matches a linkedcat keywordview snapshot 1`] = `
 <p
   id="context"
+  style={
+    Object {
+      "position": "relative",
+    }
+  }
 >
   <span
     id="num_articles"
@@ -133,6 +148,11 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
 exports[`Context line component snapshot matches a project website snapshot 1`] = `
 <p
   id="context"
+  style={
+    Object {
+      "position": "relative",
+    }
+  }
 >
   <span
     id="num_articles"
@@ -141,16 +161,16 @@ exports[`Context line component snapshot matches a project website snapshot 1`] 
      
     <span
       className="modifier context_moreinfo"
-      data-content="Sample most relevant tooltip"
-      data-original-title=""
-      data-toggle="popover"
-      data-trigger="hover"
       id="modifier"
-      title=""
+      onBlur={[Function]}
+      onClick={null}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
     >
       most relevant
-       
     </span>
+     
     documents
      
     (
@@ -183,6 +203,11 @@ exports[`Context line component snapshot matches a project website snapshot 1`] 
 exports[`Context line component snapshot matches a viper snapshot 1`] = `
 <p
   id="context"
+  style={
+    Object {
+      "position": "relative",
+    }
+  }
 >
   <span
     id="num_articles"

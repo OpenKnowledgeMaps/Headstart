@@ -1038,7 +1038,7 @@ describe("config and context state", () => {
     it("should initialize a correct timespan 'All time' (pubmed)", () => {
       const SERVICE_NAME = "pubmed";
       const FROM = "1809-01-01T13:30:22.112Z";
-      const TO = "2020-08-13T13:30:22.112Z";
+      const TO = new Date().toJSON();
 
       const initialState = {};
       const { configObject, contextObject } = setup(
