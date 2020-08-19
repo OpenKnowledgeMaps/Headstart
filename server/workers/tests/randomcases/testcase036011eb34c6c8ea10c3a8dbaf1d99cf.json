@@ -1,0 +1,15 @@
+{
+    "params": {
+        "document_types": [
+            "121"
+        ],
+        "from": "2017-12-22",
+        "language": "english",
+        "limit": 120,
+        "list_size": 100,
+        "q": "jurnal",
+        "service": "base",
+        "sorting": "most-relevant",
+        "to": "2020-08-06"
+    }
+}
