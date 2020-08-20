@@ -4,7 +4,7 @@ import Heading from "./Heading";
 import Backlink from "./Backlink";
 import ContextLine from "./ContextLine";
 
-export const SubdisciplineTitle = ({}) => {
+export const SubdisciplineTitle = () => {
   return (
     // TODO add div id="subdiscipline_title" later
     <>

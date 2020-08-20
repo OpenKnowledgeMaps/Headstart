@@ -569,15 +569,47 @@ describe("Context line component", () => {
       );
 
       expect(
-        container.querySelector("#document_types").getAttribute("data-content")
+        container.querySelector("#document_types").getAttribute("class")
+      ).toContain("context_moreinfo");
+    });
+
+    it("shows a popover if hovered on more document types", () => {
+      // TODO suppressed the error saying <div> cannot be a descendant of <p>
+      global.console = {
+        log: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+        info: console.info,
+        debug: console.debug,
+      };
+
+      const DOC_TYPES = ["custom document type", "another document type"];
+
+      const storeObject = setup();
+      storeObject.contextLine.documentTypes = DOC_TYPES;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(<ContextLine store={store} />, container);
+      });
+
+      const select = document.querySelector("#document_types");
+      act(() => {
+        const event = new Event("mouseover", { bubbles: true });
+        select.dispatchEvent(event);
+      });
+
+      expect(
+        container.querySelector("#doctypes-popover").textContent
       ).toContain(storeObject.localization.documenttypes_tooltip);
 
       expect(
-        container.querySelector("#document_types").getAttribute("data-content")
+        container.querySelector("#doctypes-popover").textContent
       ).toContain(DOC_TYPES[0]);
 
       expect(
-        container.querySelector("#document_types").getAttribute("data-content")
+        container.querySelector("#doctypes-popover").textContent
       ).toContain(DOC_TYPES[1]);
     });
   });
