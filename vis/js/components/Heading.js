@@ -86,7 +86,7 @@ const renderTitle = (localization, query, headingParams) => {
       );
     }
 
-    let cleanQuery = escapeHTML(query.replace(/\\(.?)/g, "$1"));
+    let cleanQuery = query.replace(/\\(.?)/g, "$1");
 
     if (headingParams.titleStyle === "linkedcat") {
       return renderLinkedCatTitle(label, cleanQuery);
@@ -140,6 +140,8 @@ const renderLinkedCatTitle = (label, cleanQuery) => {
 
 const renderCustomTitle = (title, label, cleanQuery, localization) => {
   let shortTitle = sliceText(title, MAX_LENGTH_CUSTOM);
+  // this is necessary, because the custom title is already escaped
+  shortTitle = unescapeHTML(shortTitle);
   return (
     <CustomTitle
       label={label}
@@ -181,18 +183,20 @@ export const getHeadingLabel = (labelType, localization) => {
   }
 };
 
-const escapeHTML = (string) => {
+const unescapeHTML = (string) => {
   let entityMap = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-    "/": "&#x2F;",
-    "`": "&#x60;",
-    "=": "&#x3D;",
+    "&amp;": "&",
+    "&lt;": "<",
+    "&gt;": ">",
+    "&quot;": '"',
+    "&#34;": '"',
+    "&#39;": "'",
+    "&#x2F;": "/",
+    "&#x60;": "`",
+    "&#x3D;": "=",
   };
-  return String(string).replace(/[&<>"'`=/]/g, function (s) {
+  
+  return String(string).replace(/(&amp;|&lt;|&gt;|&quot;|&#34;|&#39;|&#x2F;|&#x60;|&#x3D;)/g, function (s) {
     return entityMap[s];
   });
 };
