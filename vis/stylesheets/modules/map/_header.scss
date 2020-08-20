@@ -59,7 +59,11 @@
     font-size: 11px;
     color: $black;
     span {
-        margin-right: 1%;
+        @if $modern_frontend_enabled {
+            margin-right: 1.3%;
+        } @else {
+            margin-right: 1%;
+        }
     }
     .context_moreinfo {
         border-bottom: 1px solid $medium-blue;
