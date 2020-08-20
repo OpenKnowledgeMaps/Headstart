@@ -533,6 +533,25 @@ describe("Heading component", () => {
           container.querySelector("#search-term-unique").getAttribute("title")
         ).toContain(QUERY);
       });
+
+      // we might add other escaped characters to the test in future
+      it("renders with title that contains &quot;", () => {
+        const TITLE = "Special &quot;Test&quot; Title";
+        const ESCAPED_TITLE = 'Special "Test" Title';
+
+        const { storeObject } = setupCustom();
+        storeObject.heading.customTitle = TITLE;
+
+        const store = mockStore(storeObject);
+
+        act(() => {
+          render(<Heading store={store} />, container);
+        });
+
+        expect(
+          container.querySelector("#search-term-unique").textContent
+        ).toEqual(ESCAPED_TITLE);
+      });
     });
 
     describe("standard title", () => {
@@ -571,26 +590,6 @@ describe("Heading component", () => {
         expect(
           container.querySelector("#search-term-unique").getAttribute("title")
         ).toEqual(QUERY);
-      });
-
-      it("renders with escaped query that contains & < > \" ' / ` =", () => {
-        const QUERY = "Special Test Query & < > \" ' / ` =";
-        const ESCAPED_QUERY =
-          "Special Test Query &amp; &lt; &gt; &quot; &#39; &#x2F; &#x60; &#x3D;";
-
-        const { store } = setupStandard({ query: QUERY });
-
-        act(() => {
-          render(<Heading store={store} />, container);
-        });
-
-        expect(
-          container.querySelector("#search-term-unique").textContent
-        ).toEqual(ESCAPED_QUERY);
-
-        expect(
-          container.querySelector("#search-term-unique").getAttribute("title")
-        ).toEqual(ESCAPED_QUERY);
       });
     });
 

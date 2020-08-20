@@ -332,6 +332,8 @@ class Canvas {
      * Refactored helper function for shortening text that's too long.
      * @param {String} text 
      * @param {Number} maxLength 
+     * 
+     * @returns {String} String with maximum maxLength characters
      */
     sliceText(text, maxLength) {
         if (text.length <= maxLength) {
@@ -343,6 +345,8 @@ class Canvas {
 
     /**
      * Refactored helper function for getting the heading label.
+     * 
+     * @returns {String} Heading label depending on the config settings
      */
     getHeadingLabel() {
         if (config.is_authorview && config.is_streamgraph) {
@@ -362,10 +366,17 @@ class Canvas {
 
     /**
      * Refactored helper function to understand how the drawTitle main if works.
+     * It returns the title's HTML.
      * 
-     * ONLY CALL FROM LEGACY CODE, NEVER WITH modern_frontend_enabled!!!
+     * @param {Object} context
+     * 
+     * @returns {String} the title HTML code
      */
     getChartTitle(context) {
+        if(mediator.modern_frontend_enabled) {
+            throw new Error("Do not call this function with MODERN_FRONTEND=true.");
+        }
+        
         // This should probably make its way to a more global config
         const MAX_LENGTH_VIPER = 47;
         const MAX_LENGTH_LINKEDCAT = 115;
