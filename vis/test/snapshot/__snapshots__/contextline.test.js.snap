@@ -132,16 +132,17 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
   </span>
   <span
     className="context_moreinfo"
-    data-content="Die folgenden Publikationsarten wurden bei der Erstellung dieser Visualisierung in Betracht gezogen (nicht alle davon scheinen notwendigerweise in dieser Visualisierung auch auf)<br /><br /> Anthologie, Bericht, Biografie, Briefsammlung"
-    data-html="true"
-    data-original-title=""
-    data-toggle="popover"
-    data-trigger="hover"
     id="document_types"
-    title=""
+    label="Dokumentarten"
+    onBlur={[Function]}
+    onClick={null}
+    onFocus={[Function]}
+    onMouseOut={[Function]}
+    onMouseOver={[Function]}
   >
     Dokumentarten
   </span>
+   
 </p>
 `;
 

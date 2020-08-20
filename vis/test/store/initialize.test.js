@@ -1144,7 +1144,7 @@ describe("config and context state", () => {
       const initialState = {};
       const { configObject, contextObject } = setup(
         {
-          create_title_from_context_style: true,
+          create_title_from_context_style: "viper",
         },
         {
           num_papers: COUNT,
@@ -1166,7 +1166,7 @@ describe("config and context state", () => {
       const initialState = {};
       const { configObject, contextObject } = setup(
         {
-          create_title_from_context_style: false,
+          create_title_from_context_style: "linkedcat",
         },
         {
           num_papers: COUNT,
@@ -1186,7 +1186,7 @@ describe("config and context state", () => {
       const initialState = {};
       const { configObject, contextObject } = setup(
         {
-          create_title_from_context_style: true,
+          create_title_from_context_style: "viper",
         },
         {
           num_datasets: COUNT,
@@ -1208,7 +1208,7 @@ describe("config and context state", () => {
       const initialState = {};
       const { configObject, contextObject } = setup(
         {
-          create_title_from_context_style: false,
+          create_title_from_context_style: "linkedcat",
         },
         {
           num_datasets: COUNT,
@@ -1230,7 +1230,7 @@ describe("config and context state", () => {
       const initialState = {};
       const { configObject, contextObject } = setup(
         {
-          create_title_from_context_style: true,
+          create_title_from_context_style: "viper",
         },
         {
           params: {
@@ -1255,7 +1255,32 @@ describe("config and context state", () => {
       const initialState = {};
       const { configObject, contextObject } = setup(
         {
-          create_title_from_context_style: true,
+          create_title_from_context_style: "viper",
+        },
+        {
+          params: {
+            start_date: START_DATE,
+            end_date: END_DATE,
+          },
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("projectRuntime", null);
+    });
+
+    it("should initialize null project runtime if not viper", () => {
+      const START_DATE = "2009-01-01T13:30:22.112Z";
+      const END_DATE = "2012-31-12T13:30:22.112Z";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          create_title_from_context_style: "linkedcat",
         },
         {
           params: {
