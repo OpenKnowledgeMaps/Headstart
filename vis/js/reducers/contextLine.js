@@ -18,7 +18,9 @@ const contextLine = (state = {}, action) => {
           ? context.share_oa
           : null,
         showAuthor:
-          !!config.is_authorview && !!context.params && !!context.params.author_id,
+          !!config.is_authorview &&
+          !!context.params &&
+          !!context.params.author_id,
         author: {
           id: context.params ? context.params.author_id : null,
           livingDates: context.params ? context.params.living_dates : null,
@@ -29,14 +31,16 @@ const contextLine = (state = {}, action) => {
             ? config.service_name
             : config.service_names[context.service],
         timespan: getTimespan(config, context),
-        paperCount: config.create_title_from_context_style
-          ? context.num_papers
-          : null,
-        datasetCount: config.create_title_from_context_style
-          ? context.num_datasets
-          : null,
+        paperCount:
+          config.create_title_from_context_style === "viper"
+            ? context.num_papers
+            : null,
+        datasetCount:
+          config.create_title_from_context_style === "viper"
+            ? context.num_datasets
+            : null,
         funder:
-          config.create_title_from_context_style && context.params
+          config.create_title_from_context_style === "viper" && context.params
             ? context.params.funder
             : null,
         projectRuntime: getProjectRuntime(config, context),
@@ -125,7 +129,7 @@ const getTimespan = (config, context) => {
 
 const getProjectRuntime = (config, context) => {
   if (
-    !config.create_title_from_context_style ||
+    config.create_title_from_context_style !== "viper" ||
     !context.params ||
     !context.params.start_date ||
     !context.params.end_date
