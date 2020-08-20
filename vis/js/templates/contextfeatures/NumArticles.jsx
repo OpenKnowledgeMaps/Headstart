@@ -4,11 +4,11 @@ const NumArticles = ({
   articlesCount,
   articlesCountLabel,
   openAccessArticlesCount = null,
-  modifier,
+  children,
 }) => (
   // html template starts here
   <span id="num_articles">
-    {articlesCount} {modifier}
+    {articlesCount} {children}
     {articlesCountLabel}{" "}
     {openAccessArticlesCount !== null && (
       <>({openAccessArticlesCount} open access)</>
