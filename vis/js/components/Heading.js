@@ -13,6 +13,8 @@ import {
   StandardTitle,
 } from "../templates/headingtitles";
 
+import { STREAMGRAPH_MODE } from "../reducers/chartType";
+
 const Heading = ({
   localization,
   zoomed,
@@ -51,7 +53,7 @@ const mapStateToProps = (state) => ({
   bubbleTitle: state.selectedBubble ? state.selectedBubble.title : null,
   headingParams: state.heading,
   files: state.files,
-  streamgraph: state.chartType === "streamgraph",
+  streamgraph: state.chartType === STREAMGRAPH_MODE,
 });
 
 const mapDispatchToProps = (dispatch) => ({

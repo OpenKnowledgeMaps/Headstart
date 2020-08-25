@@ -1,50 +1,34 @@
-import {
-  setKnowledgeMap,
-  setStreamgraph
-} from "../../js/actions";
+import { initializeStore } from "../../js/actions";
 
-import reducer from "../../js/reducers/chartType";
+import reducer, {
+  STREAMGRAPH_MODE,
+  KNOWLEDGEMAP_MODE,
+} from "../../js/reducers/chartType";
 
 describe("chartType state", () => {
-  describe("actions", () => {
-    it("should create a knowledgeMap chart action", () => {
-      const expectedAction = {
-        type: "SET_KNOWLEDGE_MAP",
-      };
-      expect(setKnowledgeMap()).toEqual(expectedAction);
-    });
-
-    it("should create a streamgraph chart action", () => {
-      const expectedAction = {
-        type: "SET_STREAMGRAPH",
-      };
-      expect(setStreamgraph()).toEqual(expectedAction);
-    });
-  });
-
   describe("reducers", () => {
     it("should return the initial state", () => {
-      const expectedResult = "knowledgeMap";
+      const expectedResult = KNOWLEDGEMAP_MODE;
 
       const result = reducer(undefined, {});
 
       expect(result).toEqual(expectedResult);
     });
 
-    it("should handle the knowledgeMap chart setter", () => {
-      const initialState = "knowledgeMap";
-      const expectedResult = "knowledgeMap";
+    it("should initialize the knowledgemap", () => {
+      const initialState = KNOWLEDGEMAP_MODE;
+      const expectedResult = KNOWLEDGEMAP_MODE;
 
-      const result = reducer(initialState, setKnowledgeMap());
+      const result = reducer(initialState, initializeStore({ is_streamgraph: false }));
 
       expect(result).toEqual(expectedResult);
     });
 
-    it("should handle the streamgraph chart setter", () => {
-      const initialState = "knowledgeMap";
-      const expectedResult = "streamgraph";
+    it("should initialize the streamgraph", () => {
+      const initialState = KNOWLEDGEMAP_MODE;
+      const expectedResult = STREAMGRAPH_MODE;
 
-      const result = reducer(initialState, setStreamgraph());
+      const result = reducer(initialState, initializeStore({ is_streamgraph: true }));
 
       expect(result).toEqual(expectedResult);
     });
