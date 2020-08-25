@@ -9,7 +9,6 @@ import { changeFile } from "../actions/index";
 import {
   BasicTitle,
   ViperTitle,
-  LinkedCatTitle,
   CustomTitle,
   StandardTitle,
 } from "../templates/headingtitles";
@@ -130,9 +129,9 @@ const renderViperTitle = (title, acronym, projectId) => {
 const renderLinkedCatTitle = (label, cleanQuery) => {
   let shortTitle = sliceText(cleanQuery, MAX_LENGTH_LINKEDCAT);
   return (
-    <LinkedCatTitle
+    <StandardTitle
       label={label}
-      fullTitle={cleanQuery}
+      title={cleanQuery}
       shortTitle={shortTitle}
     />
   );
