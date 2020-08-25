@@ -10,6 +10,7 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
   }
 >
   <span
+    className="context_item"
     id="num_articles"
   >
     76
@@ -27,6 +28,7 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
      open access)
   </span>
   <span
+    className="context_item"
     dangerouslySetInnerHTML={
       Object {
         "__html": "Data source: <span class=\\"backlink\\"><a href=\\"data\\" class=\\"underline\\" target=\\"_blank\\" >CoVis database</a></span>",
@@ -35,6 +37,7 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
     id="source"
   />
   <span
+    className="context_item"
     id="timestamp"
   >
     Last updated
@@ -54,11 +57,13 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
   }
 >
   <span
+    className="context_item"
     id="author_living_dates"
   >
     1791-1863
   </span>
   <span
+    className="context_item"
     id="author_bio"
   >
     <a
@@ -70,6 +75,7 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
     </a>
   </span>
   <span
+    className="context_item"
     id="num_articles"
   >
     45
@@ -84,6 +90,7 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
      
   </span>
   <span
+    className="context_item"
     dangerouslySetInnerHTML={
       Object {
         "__html": "Quelle: LinkedCat+",
@@ -104,6 +111,7 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
   }
 >
   <span
+    className="context_item"
     id="num_articles"
   >
     295
@@ -118,6 +126,7 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
      
   </span>
   <span
+    className="context_item"
     dangerouslySetInnerHTML={
       Object {
         "__html": "Quelle: LinkedCat+",
@@ -126,12 +135,13 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
     id="source"
   />
   <span
+    className="context_item"
     id="timespan"
   >
     1 Jan 1847 - 1 Jan 1918
   </span>
   <span
-    className="context_moreinfo"
+    className="context_moreinfo context_item"
     id="document_types"
     label="Dokumentarten"
     onBlur={[Function]}
@@ -156,6 +166,7 @@ exports[`Context line component snapshot matches a project website snapshot 1`] 
   }
 >
   <span
+    className="context_item"
     id="num_articles"
   >
     100
@@ -179,6 +190,7 @@ exports[`Context line component snapshot matches a project website snapshot 1`] 
      open access)
   </span>
   <span
+    className="context_item"
     dangerouslySetInnerHTML={
       Object {
         "__html": "Source: BASE",
@@ -187,11 +199,13 @@ exports[`Context line component snapshot matches a project website snapshot 1`] 
     id="source"
   />
   <span
+    className="context_item"
     id="timespan"
   >
     All time
   </span>
   <span
+    className="context_item"
     id="document_types"
   >
     Document types
@@ -211,6 +225,7 @@ exports[`Context line component snapshot matches a viper snapshot 1`] = `
   }
 >
   <span
+    className="context_item"
     id="num_articles"
   >
     36
@@ -228,6 +243,7 @@ exports[`Context line component snapshot matches a viper snapshot 1`] = `
      open access)
   </span>
   <span
+    className="context_item"
     dangerouslySetInnerHTML={
       Object {
         "__html": "Source: OpenAIRE",
@@ -236,6 +252,7 @@ exports[`Context line component snapshot matches a viper snapshot 1`] = `
     id="source"
   />
   <span
+    className="context_item"
     id="context-paper_count"
   >
     36
@@ -243,6 +260,7 @@ exports[`Context line component snapshot matches a viper snapshot 1`] = `
     papers
   </span>
   <span
+    className="context_item"
     id="context-dataset_count"
   >
     0
@@ -250,12 +268,14 @@ exports[`Context line component snapshot matches a viper snapshot 1`] = `
     datasets
   </span>
   <span
+    className="context_item"
     id="context-funder"
   >
     Funder: 
     EC
   </span>
   <span
+    className="context_item"
     id="context-project_runtime"
   >
     2011-2016

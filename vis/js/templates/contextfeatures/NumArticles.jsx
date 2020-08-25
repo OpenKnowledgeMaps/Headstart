@@ -7,7 +7,7 @@ const NumArticles = ({
   children,
 }) => (
   // html template starts here
-  <span id="num_articles">
+  <span id="num_articles" className="context_item">
     {articlesCount} {children}
     {articlesCountLabel}{" "}
     {openAccessArticlesCount !== null && (
