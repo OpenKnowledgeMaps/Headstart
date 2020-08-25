@@ -5,6 +5,7 @@ const DataSource = ({ label, value }) => {
     // html template starts here
     <span
       id="source"
+      className="context_item"
       dangerouslySetInnerHTML={{
         __html: `${label}: ${value}`,
       }}
