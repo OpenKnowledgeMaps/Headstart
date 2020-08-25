@@ -12,6 +12,9 @@ describe("Backlink component snapshot", () => {
     const store = mockStore({
       zoom: true,
       chartType: "knowledgeMap",
+      localization: {
+        backlink: "← Back to overview",
+      },
     });
     const tree = renderer
       .create(
@@ -27,6 +30,9 @@ describe("Backlink component snapshot", () => {
     const store = mockStore({
       zoom: true,
       chartType: "streamgraph",
+      localization: {
+        backlink: "← Back to overview",
+      },
     });
     const tree = renderer
       .create(

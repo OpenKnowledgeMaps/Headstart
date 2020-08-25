@@ -1,11 +1,15 @@
 import React from "react";
-import config from "config";
 import { connect } from "react-redux";
 import { zoomOut } from "../actions";
 
 import BacklinkTemplate from "../templates/Backlink";
 
-export const Backlink = ({ hidden, streamgraph, onClick }) => {
+export const Backlink = ({
+  hidden = false,
+  streamgraph = false,
+  onClick,
+  localization = {},
+}) => {
   if (hidden) {
     return null;
   }
@@ -19,7 +23,7 @@ export const Backlink = ({ hidden, streamgraph, onClick }) => {
 
   return (
     <BacklinkTemplate
-      label={config.localization[config.language].backlink}
+      label={localization.backlink}
       onClick={handleOnClick}
       className={streamgraph ? "backlink backlink-streamgraph" : "backlink"}
     />
@@ -27,6 +31,7 @@ export const Backlink = ({ hidden, streamgraph, onClick }) => {
 };
 
 const mapStateToProps = (state) => ({
+  localization: state.localization,
   hidden: !state.zoom,
   streamgraph: state.chartType === "streamgraph",
 });
