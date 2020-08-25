@@ -58,13 +58,6 @@
 #context {
     font-size: 11px;
     color: $black;
-    span {
-        @if $modern_frontend_enabled {
-            margin-right: 1.3%;
-        } @else {
-            margin-right: 1%;
-        }
-    }
     .context_moreinfo {
         border-bottom: 1px solid $medium-blue;
         cursor: help;
@@ -291,4 +284,9 @@
             font-size: 14px;
         }
     }
+}
+
+.context_item {
+    display: inline-block;
+    margin-right: 1%;
 }
