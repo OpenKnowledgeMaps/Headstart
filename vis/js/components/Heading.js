@@ -23,7 +23,6 @@ const Heading = ({
   onFileChange,
   streamgraph,
 }) => {
-  // IMPORTANT: the show_infolink_areas functionality is not implemented here
   if (zoomed) {
     let label = streamgraph ? localization.area_streamgraph : localization.area;
 
@@ -201,8 +200,6 @@ const unescapeHTML = (string) => {
 };
 
 const renderAdditionalFeatures = ({ showDropdown }, files, onFileChange) => {
-  // IMPORTANT: the show_multiples functionality is not implemented here
-
   if (showDropdown && files.list.length > 0) {
     const handleChange = (e) => {
       console.warn("*** React component 'Heading' dropdown changed ***");
