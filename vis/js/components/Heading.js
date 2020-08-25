@@ -8,7 +8,7 @@ import { changeFile } from "../actions/index";
 
 import {
   BasicTitle,
-  ViperTitle,
+  ProjectTitle,
   CustomTitle,
   StandardTitle,
 } from "../templates/headingtitles";
@@ -118,7 +118,7 @@ const renderViperTitle = (title, acronym, projectId) => {
   let shortTitleText = sliceText(titleText, MAX_LENGTH_VIPER);
 
   return (
-    <ViperTitle
+    <ProjectTitle
       fullTitle={titleText}
       shortTitle={shortTitleText}
       projectId={projectId}
