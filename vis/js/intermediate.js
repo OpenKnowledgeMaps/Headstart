@@ -5,15 +5,9 @@ import React from "react";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./reducers";
-import {
-  zoomInFromMediator,
-  zoomOutFromMediator,
-  setKnowledgeMap,
-  setStreamgraph,
-  initializeStore,
-} from "./actions";
+import { zoomInFromMediator, zoomOutFromMediator, setKnowledgeMap, setStreamgraph } from "./actions";
 
-import SubdisciplineTitle from "./components/SubdisciplineTitle";
+import Backlink from "./components/Backlink";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -26,86 +20,56 @@ class Intermediate {
     modern_frontend_enabled,
     knowledgeMapZoomOutCallback,
     streamgraphZoomOutCallback
-  ) {
+    ) {
     this.modern_frontend_enabled = modern_frontend_enabled;
-    this.store = createStore(
-      rootReducer,
-      applyMiddleware(
-        createZoomOutMiddleware(
-          knowledgeMapZoomOutCallback,
-          streamgraphZoomOutCallback
-        ),
-        createFileChangeMiddleware()
-      )
-    );
+    this.store = createStore(rootReducer, applyMiddleware(createZoomOutMiddleware(
+      knowledgeMapZoomOutCallback,
+      streamgraphZoomOutCallback
+      )));
   }
 
-  init(config, context) {
-    this.store.dispatch(initializeStore(config, context));
-
+  init() {
     if (this.modern_frontend_enabled) {
-      console.warn(
-        "*** MODERN FRONTEND ENABLED - some React elements rendered ***"
-      );
+      console.warn("*** MODERN FRONTEND ENABLED - some React elements rendered ***");
       ReactDOM.render(
-        <Provider store={this.store}>
-          <SubdisciplineTitle />
-        </Provider>,
-        document.getElementById("subdiscipline_title")
+        <Provider store={this.store}><Backlink /></Provider>,
+        document.getElementById("backlink_container")
       );
     }
   }
 
-  zoomIn(selectedAreaData) {
-    this.store.dispatch(zoomInFromMediator(selectedAreaData));
+  zoomIn() {
+    this.store.dispatch(zoomInFromMediator())
   }
 
   zoomOut() {
-    this.store.dispatch(zoomOutFromMediator());
+    this.store.dispatch(zoomOutFromMediator())
   }
 
   setKnowledgeMap() {
-    this.store.dispatch(setKnowledgeMap());
+    this.store.dispatch(setKnowledgeMap())
   }
 
   setStreamgraph() {
-    this.store.dispatch(setStreamgraph());
+    this.store.dispatch(setStreamgraph())
   }
 }
 
-function createZoomOutMiddleware(
-  knowledgeMapZoomOutCallback,
-  streamgraphZoomOutCallback
-) {
-  return function ({ getState }) {
+function createZoomOutMiddleware(knowledgeMapZoomOutCallback, streamgraphZoomOutCallback) {
+  return function ({getState}) {
     const self = this;
-    return (next) => (action) => {
-      if (action.type == "ZOOM_OUT" && action.not_from_mediator) {
-        if (getState().chartType === "streamgraph") {
-          streamgraphZoomOutCallback();
+    return next => action => {
+      if(action.type == "ZOOM_OUT" && action.not_from_mediator ) {
+        if (getState().chartType === 'streamgraph') {
+          streamgraphZoomOutCallback()
         } else {
-          knowledgeMapZoomOutCallback();
+          knowledgeMapZoomOutCallback()
         }
       }
-      const returnValue = next(action);
-      returnValue;
-    };
-  };
-}
-
-function createFileChangeMiddleware() {
-  return function ({ getState }) {
-    const self = this;
-    return (next) => (action) => {
-      if (action.type == "FILE_CLICKED") {
-        if (getState().files.current !== action.fileIndex) {
-          window.headstartInstance.tofile(action.fileIndex);
-        }
-      }
-      const returnValue = next(action);
-      returnValue;
-    };
-  };
+      const returnValue = next(action)
+      returnValue
+    }
+  }
 }
 
 export default Intermediate;
