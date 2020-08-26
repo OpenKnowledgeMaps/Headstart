@@ -171,7 +171,7 @@ MyMediator.prototype = {
     },
 
     init_modern_frontend_intermediate: function() {
-        mediator.modern_frontend_intermediate.init(config, io.context);
+        mediator.modern_frontend_intermediate.init()
     },
 
     register_bubbles: function() {
@@ -308,6 +308,7 @@ MyMediator.prototype = {
             
             mediator.manager.call('list', 'start');
             if (config.show_list) mediator.manager.call('list', 'show');
+            mediator.manager.call('canvas', 'showInfoModal', []);
             
             mediator.manager.call('streamgraph', 'initMouseListeners', []);
             mediator.modern_frontend_intermediate.setStreamgraph();
@@ -342,14 +343,11 @@ MyMediator.prototype = {
             mediator.manager.call('list', 'start');
             if (!config.render_bubbles && config.show_list) mediator.manager.call('list', 'show');
             mediator.manager.call('canvas', 'checkForcePapers', []);
+            mediator.manager.call('canvas', 'showInfoModal', []);
             mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
             mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
             mediator.manager.call('bubble', 'initMouseListeners', []);
-        }
-
-        mediator.init_modern_frontend_intermediate();
-
-        mediator.manager.call('canvas', 'showInfoModal', []);
+            }
     },
 
     update_canvas_domains: function(data) {
@@ -425,6 +423,7 @@ MyMediator.prototype = {
         if (!config.render_list) {
             $(".list-col").remove();
         }
+        mediator.init_modern_frontend_intermediate()
     },
 
     bubbles_update_data_and_areas: function(bubbles) {
@@ -494,7 +493,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'changeHeaderColor', [color]);
         mediator.manager.call('canvas', 'showAreaStreamgraph', [keyword])
         mediator.current_enlarged_paper = null;
-        mediator.modern_frontend_intermediate.zoomIn({title: keyword});
+        mediator.modern_frontend_intermediate.zoomIn();
     },
     
     currentstream_click: function() {
@@ -558,7 +557,7 @@ MyMediator.prototype = {
             }
         }
         mediator.manager.call('list', 'count_visible_items_to_header', []);
-        mediator.modern_frontend_intermediate.zoomIn({title: d.title});
+        mediator.modern_frontend_intermediate.zoomIn();
     },
     bubble_zoomout: function() {
         mediator.manager.call('list', 'reset', []);
