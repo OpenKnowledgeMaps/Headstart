@@ -4,8 +4,7 @@ import {
   zoomOut,
 } from "../../js/actions";
 
-import zoomReducer from "../../js/reducers/zoom";
-import selectedBubbleReducer from "../../js/reducers/selectedBubble";
+import reducer from "../../js/reducers/zoom";
 
 describe("zoom state", () => {
   describe("actions", () => {
@@ -33,84 +32,39 @@ describe("zoom state", () => {
   });
 
   describe("reducers", () => {
-    describe("zoom reducer", () => {
-      it("should return the initial state", () => {
-        const expectedResult = false;
+    it("should return the initial state", () => {
+      const expectedResult = false;
 
-        const result = zoomReducer(undefined, {});
+      const result = reducer(undefined, {});
 
-        expect(result).toEqual(expectedResult);
-      });
-
-      it("should handle the zoom in", () => {
-        const initialState = false;
-        const expectedResult = true;
-
-        const result = zoomReducer(initialState, zoomInFromMediator());
-
-        expect(result).toEqual(expectedResult);
-      });
-
-      it("should handle the zoom out", () => {
-        const initialState = true;
-        const expectedResult = false;
-
-        const result = zoomReducer(initialState, zoomOutFromMediator());
-
-        expect(result).toEqual(expectedResult);
-      });
-
-      it("should handle the internal zoom out", () => {
-        const initialState = true;
-        const expectedResult = false;
-
-        const result = zoomReducer(initialState, zoomOut());
-
-        expect(result).toEqual(expectedResult);
-      });
+      expect(result).toEqual(expectedResult);
     });
 
-    describe("selectedBubble reducer", () => {
-      it("should return the initial state", () => {
-        const expectedResult = null;
+    it("should handle the zoom in", () => {
+      const initialState = false;
+      const expectedResult = true;
 
-        const result = selectedBubbleReducer(undefined, {});
+      const result = reducer(initialState, zoomInFromMediator());
 
-        expect(result).toEqual(expectedResult);
-      });
+      expect(result).toEqual(expectedResult);
+    });
 
-      it("should handle the zoom in", () => {
-        const initialState = null;
-        const expectedResult = { title: "new title" };
+    it("should handle the zoom out", () => {
+      const initialState = true;
+      const expectedResult = false;
 
-        const result = selectedBubbleReducer(
-          initialState,
-          zoomInFromMediator(expectedResult)
-        );
+      const result = reducer(initialState, zoomOutFromMediator());
 
-        expect(result).toEqual(expectedResult);
-      });
+      expect(result).toEqual(expectedResult);
+    });
 
-      it("should handle the zoom out", () => {
-        const initialState = { someValue: "sample text" };
-        const expectedResult = null;
+    it("should handle the internal zoom out", () => {
+      const initialState = true;
+      const expectedResult = false;
 
-        const result = selectedBubbleReducer(
-          initialState,
-          zoomOutFromMediator()
-        );
+      const result = reducer(initialState, zoomOut());
 
-        expect(result).toEqual(expectedResult);
-      });
-
-      it("should handle the internal zoom out", () => {
-        const initialState = { someValue: "sample text" };
-        const expectedResult = null;
-
-        const result = selectedBubbleReducer(initialState, zoomOut());
-
-        expect(result).toEqual(expectedResult);
-      });
+      expect(result).toEqual(expectedResult);
     });
   });
 });
