@@ -16,14 +16,11 @@
 
         <div id="subdiscipline_title">
 
+            {{#unless modern_frontend_enabled}}
             <h4></h4>
 
-            {{#if modern_frontend_enabled}}
-            <div id="backlink_container"></div>
-            {{/if}}
-
             <p id="context">
-              {{#if is_authorview}}
+                {{#if is_authorview}}
                     <span id="author_living_dates"></span>
                     <span id="author_bio"><a id="author_bio_link" target="_blank"></a></span>
                 {{/if}}
@@ -38,6 +35,7 @@
                 <span id="search_lang"></span>
                 <span id="timestamp"></span>
             </p>
+            {{/unless}}
 
         </div>
 <div id="modals"></div>
