@@ -22,7 +22,10 @@ const contextLine = (state = {}, action) => {
           !!context.params &&
           !!context.params.author_id,
         author: {
-          id: context.params ? context.params.author_id : null,
+          id:
+            context.params && context.params.author_id
+              ? context.params.author_id.replace(/\([^)]*\)/, "")
+              : null,
           livingDates: context.params ? context.params.living_dates : null,
         },
         documentTypes: getDocumentTypes(config, context),
