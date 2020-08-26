@@ -328,81 +328,143 @@ class Canvas {
         });
     }
 
-    // Draws the header for this
-    drawTitle(context) {
-        let chart_title = "";
+    /**
+     * Refactored helper function for shortening text that's too long.
+     * @param {String} text 
+     * @param {Number} maxLength 
+     * 
+     * @returns {String} String with maximum maxLength characters
+     */
+    sliceText(text, maxLength) {
+        if (text.length <= maxLength) {
+            return text;
+        }
 
-        chart_title = config.localization[config.language].default_title;
-        if (config.title) {
-            chart_title = config.title;
-        } else if (config.create_title_from_context_style === 'viper') {
-            let maxTitleLength = 47 // This should probably make it's way to a more global config
-            let acronymtitle = ( (context.params.acronym !== "") ? (context.params.acronym + " - " + context.params.title) : (context.params.title) );
-            let compressedTitle = ( acronymtitle.length > maxTitleLength ) ? acronymtitle.slice(0, maxTitleLength - 3) + '...' : acronymtitle
-            chart_title = `Overview of <span class="truncated-project-title" title="` + acronymtitle + `">${compressedTitle}</span>\
-                            <span class="project-id">(${context.params.project_id})</span>`
-        } else if (config.create_title_from_context) {
-            let query_clean = this.escapeHTML(context.query.replace(/\\(.?)/g, "$1"));
-            let label = (config.is_streamgraph)?(config.localization[config.language].streamgraph_label):(config.localization[config.language].overview_label);
-            
-            if(config.is_authorview) {  
-                label= (config.is_streamgraph)?(config.localization[config.language].streamgraph_authors_label):(config.localization[config.language].overview_authors_label);
-            }
-            if (config.create_title_from_context_style === 'linkedcat') {
-                let maxTitleLength = 115 // This should probably make its way to a more global config
-                let compressedTitle = query_clean.length > maxTitleLength ? query_clean.slice(0, maxTitleLength - 3) + '...' : query_clean;
-                chart_title = label + ' <span id="search-term-unique" title="' + query_clean + '">' + compressedTitle + '</span>';
-            } else if (config.create_title_from_context_style === 'custom' && typeof config.custom_title !== 'undefined' && config.custom_title !== null) {
-                let maxTitleLength = 100 // This should probably make its way to a more global config
-                let compressedTitle = config.custom_title > maxTitleLength ? config.custom_title.slice(0, maxTitleLength - 3) + '...' : config.custom_title;
-                chart_title = label + ' <span id="search-term-unique" title="' 
-                        + config.localization[config.language].custom_title_explanation  + ' ' + query_clean + '">' 
-                        + compressedTitle + '</span>';
-            } else {
-                chart_title = label + ' <span id="search-term-unique" title="' + query_clean + '">' + query_clean + '</span>';
-            }
-            
+        return text.slice(0, maxLength - 3) + '...';
+    }
+
+    /**
+     * Refactored helper function for getting the heading label.
+     * 
+     * @returns {String} Heading label depending on the config settings
+     */
+    getHeadingLabel() {
+        if (config.is_authorview && config.is_streamgraph) {
+            return config.localization[config.language].streamgraph_authors_label;
+        }
+
+        if (config.is_authorview && !config.is_streamgraph) {
+            return config.localization[config.language].overview_authors_label;
+        }
+
+        if (config.is_streamgraph) {
+            return config.localization[config.language].streamgraph_label;
+        }
+
+        return config.localization[config.language].overview_label;
+    }
+
+    /**
+     * Refactored helper function to understand how the drawTitle main if works.
+     * It returns the title's HTML.
+     * 
+     * @param {Object} context
+     * 
+     * @returns {String} the title HTML code
+     */
+    getChartTitle(context) {
+        if(mediator.modern_frontend_enabled) {
+            throw new Error("Do not call this function with MODERN_FRONTEND=true.");
         }
         
-        var subdiscipline_title_h4 = $("#subdiscipline_title h4");
-        subdiscipline_title_h4.html(chart_title);
+        // This should probably make its way to a more global config
+        const MAX_LENGTH_VIPER = 47;
+        const MAX_LENGTH_LINKEDCAT = 115;
+        const MAX_LENGTH_CUSTOM = 100;
+
+        if (config.title) {
+            return config.title;
+        }
+
+        if (config.create_title_from_context_style === 'viper') {
+            let acronymtitle = context.params.acronym !== "" 
+                ? context.params.acronym + " - " + context.params.title 
+                : context.params.title;
+            let compressedTitle = this.sliceText(acronymtitle, MAX_LENGTH_VIPER);
+
+            return `Overview of <span class="truncated-project-title" title="${acronymtitle}">\
+                ${compressedTitle}</span>\
+                <span class="project-id">(${context.params.project_id})</span>`;
+        }
+
+        if (config.create_title_from_context) {
+            let query_clean = this.escapeHTML(context.query.replace(/\\(.?)/g, "$1"));
+            let label = this.getHeadingLabel();
+
+            if (config.create_title_from_context_style === 'linkedcat') {
+                let compressedTitle = this.sliceText(query_clean, MAX_LENGTH_LINKEDCAT);
+                return label + ' <span id="search-term-unique" title="' + query_clean + '">' + compressedTitle + '</span>';
+            }
+
+            if (config.create_title_from_context_style === 'custom' && typeof config.custom_title !== 'undefined' && config.custom_title !== null) {
+                let compressedTitle =  this.sliceText(config.custom_title, MAX_LENGTH_CUSTOM);
+                return label + ' <span id="search-term-unique" title="' 
+                        + config.localization[config.language].custom_title_explanation  + ' ' + query_clean + '">' 
+                        + compressedTitle + '</span>';
+            }
+
+            return label + ' <span id="search-term-unique" title="' + query_clean + '">' + query_clean + '</span>';
+        }
+
+        return config.localization[config.language].default_title;
+    }
+
+    // Draws the header for this
+    drawTitle(context) {
+        if(!mediator.modern_frontend_enabled) {
+            let chart_title = this.getChartTitle(context);
+        
+            var subdiscipline_title_h4 = $("#subdiscipline_title h4");
+            subdiscipline_title_h4.html(chart_title);
+
+            if (config.show_infolink) {
+                let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
+                subdiscipline_title_h4.append(infolink);
+    
+                $("#infolink").html('<span id="whatsthis">' + config.localization[config.language].intro_icon  
+                            +'</span> ' + config.localization[config.language].intro_label);
+            }
+    
+            // deprecated??
+            if (config.show_multiples) {
+                let link = ' <span id="multiplesview"><a href="#">TimeLineView</a></span>';
+                subdiscipline_title_h4.append(link);
+            }
+    
+            if (config.show_dropdown) {
+                let dropdown = '<select id="datasets"></select>';
+    
+                subdiscipline_title_h4.append(" Select dataset: ");
+                subdiscipline_title_h4.append(dropdown);
+    
+                $.each(config.files, (index, entry) => {
+                    let current_item = '<option value="' + entry.file + '">' + entry.title + '</option>';
+                    $("#datasets").append(current_item);
+                });
+    
+                $("#datasets").val(mediator.current_bubble.file);
+    
+                $("#datasets").change(function () {
+                    let selected_file_number = this.selectedIndex;
+                    if (selected_file_number !== mediator.current_file_number) {
+                        window.headstartInstance.tofile(selected_file_number);
+                    }
+                });
+            }
+        }
 
         this.drawContext(context);
-        this.drawModals(context)
-
-        if (config.show_infolink) {
-            let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
-            subdiscipline_title_h4.append(infolink);
-
-            $("#infolink").html('<span id="whatsthis">' + config.localization[config.language].intro_icon  
-                        +'</span> ' + config.localization[config.language].intro_label);
-        }
-
-        if (config.show_multiples) {
-            let link = ' <span id="multiplesview"><a href="#">TimeLineView</a></span>';
-            subdiscipline_title_h4.append(link);
-        }
-
-        if (config.show_dropdown) {
-            let dropdown = '<select id="datasets"></select>';
-
-            subdiscipline_title_h4.append(" Select dataset: ");
-            subdiscipline_title_h4.append(dropdown);
-
-            $.each(config.files, (index, entry) => {
-                let current_item = '<option value="' + entry.file + '">' + entry.title + '</option>';
-                $("#datasets").append(current_item);
-            });
-
-            $("#datasets").val(mediator.current_bubble.file);
-
-            $("#datasets").change(function () {
-                let selected_file_number = this.selectedIndex;
-                if (selected_file_number !== mediator.current_file_number) {
-                    window.headstartInstance.tofile(selected_file_number);
-                }
-            });
-        }
+        this.drawModals(context);
     }
 
     drawModals(context) {
@@ -700,14 +762,14 @@ class Canvas {
     }
     
     showAreaStreamgraph(keyword) {
-        $("#subdiscipline_title h4")
-            .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
-
-        shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
-
         $("#context").css("display", "none");
         
         if(!mediator.modern_frontend_enabled) {
+            $("#subdiscipline_title h4")
+                .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
+
+            shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
+
             $("#backlink").remove();
             $('<p id="backlink" class="backlink backlink-streamgraph"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
 

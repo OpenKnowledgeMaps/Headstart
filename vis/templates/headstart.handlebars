@@ -16,7 +16,11 @@
 
         <div id="subdiscipline_title">
 
+            {{#if modern_frontend_enabled}}
+            <div id="heading_container"></div>
+            {{else}}
             <h4></h4>
+            {{/if}}
 
             {{#if modern_frontend_enabled}}
             <div id="backlink_container"></div>
