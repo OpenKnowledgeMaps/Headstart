@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import ContextLineTemplate from "../templates/ContextLine";
-import CustomPopover from "./CustomPopover";
+import HoverPopover from "./HoverPopover";
 import Author from "../templates/contextfeatures/Author";
 
 import DocumentTypesSimple from "../templates/contextfeatures/DocumentTypesSimple";
@@ -108,7 +108,7 @@ class ContextLine extends React.Component {
     if (showModifierPopover) {
       return (
         <>
-          <CustomPopover
+          <HoverPopover
             id="modifier-popover"
             container={this}
             content={localization.most_relevant_tooltip}
@@ -116,7 +116,7 @@ class ContextLine extends React.Component {
             <span id="modifier" className="modifier context_moreinfo">
               {label}
             </span>
-          </CustomPopover>{" "}
+          </HoverPopover>{" "}
         </>
       );
     }
@@ -151,7 +151,7 @@ class ContextLine extends React.Component {
 
     return (
       <>
-        <CustomPopover
+        <HoverPopover
           id="doctypes-popover"
           container={this}
           content={
@@ -164,7 +164,7 @@ class ContextLine extends React.Component {
           }
         >
           <DocumentTypesPopover label={localization.documenttypes_label} />
-        </CustomPopover>{" "}
+        </HoverPopover>{" "}
       </>
     );
   }
