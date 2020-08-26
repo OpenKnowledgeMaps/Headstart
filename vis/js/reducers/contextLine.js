@@ -1,5 +1,7 @@
 import dateFormat from "dateformat";
 
+const exists = (param) => typeof param !== "undefined" && param !== "null" && param !== null;
+
 const contextLine = (state = {}, action) => {
   const config = action.configObject;
   const context = action.contextObject;
@@ -20,13 +22,16 @@ const contextLine = (state = {}, action) => {
         showAuthor:
           !!config.is_authorview &&
           !!context.params &&
-          !!context.params.author_id,
+          exists(context.params.author_id) &&
+          exists(context.params.living_dates) &&
+          exists(context.params.image_link),
         author: {
           id:
             context.params && context.params.author_id
-              ? context.params.author_id.replace(/\([^)]*\)/, "")
+              ? String(context.params.author_id).replace(/\([^)]*\)/, "")
               : null,
           livingDates: context.params ? context.params.living_dates : null,
+          imageLink: context.params ? context.params.image_link : null,
         },
         documentTypes: getDocumentTypes(config, context),
         dataSource:
