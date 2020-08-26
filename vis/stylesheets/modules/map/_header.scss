@@ -58,6 +58,11 @@
 #context {
     font-size: 11px;
     color: $black;
+    span {
+        @if not $modern_frontend_enabled {
+            margin-right: 1%;
+        }
+    }
     .context_moreinfo {
         border-bottom: 1px solid $medium-blue;
         cursor: help;
