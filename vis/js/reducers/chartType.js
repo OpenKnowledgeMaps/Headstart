@@ -1,9 +1,12 @@
-const chartType = (state = "knowledgeMap", action) => {
+export const STREAMGRAPH_MODE = "streamgraph";
+export const KNOWLEDGEMAP_MODE = "knowledgeMap";
+
+const chartType = (state = KNOWLEDGEMAP_MODE, action) => {
   switch (action.type) {
-    case "SET_KNOWLEDGE_MAP":
-      return "knowledgeMap";
-    case "SET_STREAMGRAPH":
-      return "streamgraph";
+    case "INITIALIZE":
+      return action.configObject.is_streamgraph
+        ? STREAMGRAPH_MODE
+        : KNOWLEDGEMAP_MODE;
     default:
       return state;
   }

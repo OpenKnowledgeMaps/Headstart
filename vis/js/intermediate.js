@@ -8,10 +8,10 @@ import rootReducer from "./reducers";
 import {
   zoomInFromMediator,
   zoomOutFromMediator,
-  setKnowledgeMap,
-  setStreamgraph,
   initializeStore,
 } from "./actions";
+
+import { STREAMGRAPH_MODE } from "./reducers/chartType";
 
 import SubdisciplineTitle from "./components/SubdisciplineTitle";
 
@@ -44,9 +44,7 @@ class Intermediate {
     this.store.dispatch(initializeStore(config, context));
 
     if (this.modern_frontend_enabled) {
-      console.warn(
-        "*** MODERN FRONTEND ENABLED - some React elements rendered ***"
-      );
+      console.warn("*** MODERN FRONTEND ENABLED - React elements rendered ***");
       ReactDOM.render(
         <Provider store={this.store}>
           <SubdisciplineTitle />
@@ -63,14 +61,6 @@ class Intermediate {
   zoomOut() {
     this.store.dispatch(zoomOutFromMediator());
   }
-
-  setKnowledgeMap() {
-    this.store.dispatch(setKnowledgeMap());
-  }
-
-  setStreamgraph() {
-    this.store.dispatch(setStreamgraph());
-  }
 }
 
 function createZoomOutMiddleware(
@@ -81,7 +71,7 @@ function createZoomOutMiddleware(
     const self = this;
     return (next) => (action) => {
       if (action.type == "ZOOM_OUT" && action.not_from_mediator) {
-        if (getState().chartType === "streamgraph") {
+        if (getState().chartType === STREAMGRAPH_MODE) {
           streamgraphZoomOutCallback();
         } else {
           knowledgeMapZoomOutCallback();

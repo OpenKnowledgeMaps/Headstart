@@ -2,7 +2,7 @@ import React from "react";
 
 import { OverlayTrigger, Popover } from "react-bootstrap";
 
-const CustomPopover = ({
+const HoverPopover = ({
   id,
   content,
   children,
@@ -23,4 +23,4 @@ const CustomPopover = ({
   );
 };
 
-export default CustomPopover;
+export default HoverPopover;
