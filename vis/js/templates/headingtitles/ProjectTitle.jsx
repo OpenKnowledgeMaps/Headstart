@@ -1,6 +1,6 @@
 import React from "react";
 
-const ViperTitle = ({ fullTitle, shortTitle, projectId }) => {
+const ProjectTitle = ({ fullTitle, shortTitle, projectId }) => {
   return (
     // html template starts here
     <>
@@ -14,4 +14,4 @@ const ViperTitle = ({ fullTitle, shortTitle, projectId }) => {
   );
 };
 
-export default ViperTitle;
+export default ProjectTitle;
