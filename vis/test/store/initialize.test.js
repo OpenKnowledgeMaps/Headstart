@@ -644,7 +644,6 @@ describe("config and context state", () => {
 
     it("should show author", () => {
       const IS_AUTHORVIEW = true;
-      const AUTHOR_ID = 111;
       const EXPECTED_VALUE = true;
 
       const initialState = {};
@@ -654,7 +653,9 @@ describe("config and context state", () => {
         },
         {
           params: {
-            author_id: AUTHOR_ID,
+            author_id: 111,
+            living_dates: "1620-1699",
+            image_link: "http://link.com/1234"
           },
         }
       );
@@ -720,9 +721,11 @@ describe("config and context state", () => {
     it("should load correct author data", () => {
       const AUTHOR_ID = 123;
       const LIVING_DATES = "1856-1918";
+      const IMAGE_LINK = "http://example.com/1234";
       const EXPECTED_VALUE = {
-        id: AUTHOR_ID,
+        id: String(AUTHOR_ID),
         livingDates: LIVING_DATES,
+        imageLink: IMAGE_LINK,
       };
 
       const initialState = {};
@@ -732,6 +735,7 @@ describe("config and context state", () => {
           params: {
             author_id: AUTHOR_ID,
             living_dates: LIVING_DATES,
+            image_link: IMAGE_LINK,
           },
         }
       );
@@ -748,6 +752,7 @@ describe("config and context state", () => {
       const EXPECTED_VALUE = {
         id: null,
         livingDates: null,
+        imageLink: null,
       };
 
       const initialState = {};
