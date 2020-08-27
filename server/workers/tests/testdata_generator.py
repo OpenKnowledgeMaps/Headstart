@@ -7,7 +7,7 @@ api_url = "http://127.0.0.1/api"
 df = pd.read_csv("Backend regression test cases.csv")
 
 
-def build_search(case):
+def extract_params(case):
     search = {}
     search["service"] = case.get("data integration", "").lower()
     search["q"] = case.get("search query", "")
@@ -29,7 +29,11 @@ def get_input_data(search, raw=False):
         params["limit"] = 100
     if service == "base":
         params["limit"] = 120
-        params["document_types"] = [a for a in params["article_types"]]
+        doctypes = eval(params["article_types"])
+        if isinstance(doctypes, list):
+            params["document_types"] = [a for a in doctypes]
+        else:
+            params["document_types"] = [121]
         params.pop("article_types", [])
     if raw:
         params["raw"] = True
@@ -44,7 +48,7 @@ for r in df.iterrows():
     print(case)
     if pd.np.isnan(case["case id"]):
         continue
-    s = build_search(case)
+    s = extract_params(case)
     res = get_input_data(s, raw=True)
     if res is None:
         continue
@@ -52,5 +56,5 @@ for r in df.iterrows():
     res_json.pop("id")
     input_data = res_json["input_data"]
     params = res_json["params"]
-    with open("testdata/testcase_%d.json" %case["case id"], "w") as outfile:
+    with open("testdata/testcase%d.json" %case["case id"], "w") as outfile:
         json.dump(res_json, outfile)
