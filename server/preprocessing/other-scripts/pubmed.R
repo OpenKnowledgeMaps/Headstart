@@ -43,7 +43,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
   # safe to add queries to the database
   query <- gsub("\\\\", "", query)
 
-  plog$info(paste("Search:", query))
+  plog$info(paste("map_id:", MAP_ID, "Search:", query))
   start.time <- Sys.time()
 
   fields <- c('.//ArticleTitle', './/MedlineCitation/PMID', './/Title', './/Abstract')
@@ -66,7 +66,8 @@ get_papers <- function(query, params = NULL, limit = 100) {
   } else {
     query <- paste0(query, exclude_articles_with_abstract)
   }
-  plog$info(paste("Query:", query))
+  plog$info(paste("map_id:", MAP_ID, "Query:", query))
+  plog$info(paste("map_id:", MAP_ID, "Sort by:", sortby))
   x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit,
                               mindate = from, maxdate = to, sort=sortby, use_history=TRUE, http_post = TRUE)
   res <- rentrez::entrez_fetch(db = "pubmed", web_history = x$web_history, retmax = limit, rettype = "xml")
@@ -151,7 +152,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
-  plog$info(paste("Time taken:", time.taken, sep=" "))
+  plog$info(paste("map_id:", MAP_ID, "Time taken:", time.taken, sep=" "))
 
   return(list(metadata = df, text = df[,c('id', 'content')]))
 }

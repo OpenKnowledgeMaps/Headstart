@@ -35,7 +35,7 @@ olog <- getLogger('api.openaire')
 
 get_papers <- function(query, params, limit=NULL) {
 
-  olog$info(query)
+  olog$info(paste("map_id:", MAP_ID, query))
   start.time <- Sys.time()
   # parse params
   project_id <- params$project_id
@@ -49,7 +49,7 @@ get_papers <- function(query, params, limit=NULL) {
     pubs_metadata <- fill_dois(pubs_metadata)
   },
   error = function(err){
-    olog$warn(paste0("publications: ", err))
+    olog$warn(paste0("map_id:", MAP_ID, "publications: ", err))
     pubs_metadata <- data.frame()
     return (data.frame())
   })
@@ -61,7 +61,7 @@ get_papers <- function(query, params, limit=NULL) {
     datasets_metadata <- parse_response(response)
   },
   error = function(err){
-    olog$warn(paste0("datasets: ", err))
+    olog$warn(paste0("map_id:", MAP_ID, "datasets: ", err))
     datasets_metadata <-
     return (data.frame())
   })
@@ -82,7 +82,7 @@ get_papers <- function(query, params, limit=NULL) {
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
-  olog$info(paste("Time taken:", time.taken, sep=" "))
+  olog$info(paste("map_id:", MAP_ID, "Time taken:", time.taken, sep=" "))
 
   tryCatch({
     get_return_values(all_artifacts)
