@@ -71,20 +71,24 @@ def get_dataprocessing_result(testcase_):
 #@pytest.fixture
 
 KNOWNCASES = get_cases("knowncases")
-RANDOMCASES = get_cases("randomcases")
 KNOWNINPUT_DATA = KNOWNCASES
-RANDOMINPUT_DATA = [{"caseid": c["caseid"],
-                     "casedata": {
-                        "input_data": retrieve_results(c["casedata"])["input_data"],
-                        "params": c["casedata"]["params"]}
-                     } for c in RANDOMCASES]
 CASENAMES = []
 CASE_DATA = {}
 for c in KNOWNINPUT_DATA:
     CASENAMES.append(c["caseid"])
     CASE_DATA[c["caseid"]] = c["casedata"]
-for c in RANDOMINPUT_DATA:
-    CASENAMES.append(pytest.param(c["caseid"], marks=pytest.mark.apitest))
-    CASE_DATA[c["caseid"]] = c["casedata"]
+
+
+# RANDOMCASES = get_cases("randomcases")
+# RANDOMINPUT_DATA = [{"caseid": c["caseid"],
+#                      "casedata": {
+#                         "input_data": retrieve_results(c["casedata"])["input_data"],
+#                         "params": c["casedata"]["params"]}
+#                      } for c in RANDOMCASES]
+# for c in RANDOMINPUT_DATA:
+#     CASENAMES.append(c["caseid"])
+#     CASE_DATA[c["caseid"]] = c["casedata"]
+
+
 CASENAMES.sort()
 RESULTS = {casename: get_dataprocessing_result(casedata) for casename, casedata in CASE_DATA.items()}
