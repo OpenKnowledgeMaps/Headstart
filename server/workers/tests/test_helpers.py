@@ -80,7 +80,7 @@ def data_generation(KNOWNCASES, RANDOMCASES):
         print("collecting random test cases")
         for c in tqdm(RANDOMCASES):
             CASENAMES.append(c["caseid"])
-            CASEDATA["caseid"] = {
+            CASEDATA[c] = {
                         "input_data": retrieve_results(c["casedata"])["input_data"],
                         "params": c["casedata"]["params"]}
     return CASENAMES, CASEDATA
