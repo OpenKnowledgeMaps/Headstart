@@ -90,6 +90,7 @@ print("inhere")
 MAX_CLUSTERS = 15
 LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
 ADDITIONAL_STOP_WORDS = LANGUAGE$name
+MAP_ID <- params$map_id
 
 print("reading stuff")
 print(params)
