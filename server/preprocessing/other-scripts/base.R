@@ -36,9 +36,9 @@ blog <- getLogger('api.base')
 get_papers <- function(query, params, limit=100,
                        fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
 
-  blog$info(paste("Search:", query))
+  blog$info(paste("map_id:", MAP_ID, "Search:", query))
   start.time <- Sys.time()
-  
+
   # remove pluses between terms
   query_wt_plus = gsub("(?!\\B\"[^\"]*)[\\+]+(?![^\"]*\"\\B)", " ", query, perl=T)
   # remove multiple minuses and spaces after minuses
@@ -47,13 +47,13 @@ get_papers <- function(query, params, limit=100,
   query_wt_multi_spaces = gsub("(?!\\B\"[^\"]*)[\\s]{2,}(?![^\"]*\"\\B)", " ", query_wt_multi_minus, perl=T)
   # trim query, if needed
   query_cleaned = gsub("^\\s+|\\s+$", "", query_wt_multi_spaces, perl=T)
-  
+
   # add "textus:" to each word/phrase to enable verbatim search
   # make sure it is added after any opening parentheses to enable queries such as "(a and b) or (a and c)"
   exact_query = gsub('([\"]+(.*?)[\"]+)|(?<=\\(\\b|\\+|-\\"\\b|\\s-\\b|^-\\b)|(?!or\\b|and\\b|[-]+[\\"\\(]*\\b)(?<!\\S)(?=\\S)(?!\\(|\\+)'
                      , "textus:\\1", query_cleaned, perl=T)
-  
-  blog$info(paste("BASE query:", exact_query))
+
+  blog$info(paste("map_id:", MAP_ID, "exact query:", exact_query))
 
   year_from = params$from
   year_to = params$to
@@ -74,9 +74,9 @@ get_papers <- function(query, params, limit=100,
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
 
   base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, abstract_exists, collapse=" ")
-  
-  blog$info(paste("Exact query:", base_query))
-  blog$info(paste("Sort by:", sortby_string))
+
+  blog$info(paste("map_id:", MAP_ID, "BASE query:", base_query))
+  blog$info(paste("map_id:", MAP_ID, "Sort by:", sortby_string))
   # execute search
   (res_raw <- bs_search(hits=limit
                         , query = base_query
@@ -86,8 +86,6 @@ get_papers <- function(query, params, limit=100,
   if (nrow(res)==0){
     stop(paste("No results retrieved."))
   }
-
-  blog$info(paste("Query:", query, lang_query, date_string, document_types, abstract_exists, sep=" "));
 
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
 
@@ -144,7 +142,7 @@ get_papers <- function(query, params, limit=100,
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
-  blog$info(paste("Time taken:", time.taken, sep=" "))
+  blog$info(paste("map_id:", MAP_ID, "Time taken:", time.taken, sep=" "))
 
   return(ret_val)
 
