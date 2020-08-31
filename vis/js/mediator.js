@@ -288,18 +288,35 @@ MyMediator.prototype = {
         
         mediator.manager.registerModule(window.headstartInstance, 'headstart');
         
-        if(config.is_streamgraph) {         
+        if (config.is_streamgraph) {         
             mediator.manager.call('canvas', 'setupStreamgraphCanvas', []);
+        } else {
+            if (config.is_force_papers && config.dynamic_force_papers) 
+                mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
+            if (config.is_force_area && config.dynamic_force_area) 
+                mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
+            if (config.dynamic_sizing) 
+                mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
+            if (config.render_bubbles) 
+                mediator.manager.registerModule(mediator.current_bubble, 'bubble');
 
-            mediator.manager.call('io', 'initializeMissingData', [data]);
-            mediator.manager.call('io', 'prepareData', [highlight_data, data, context]);
-            mediator.manager.call('io', 'prepareAreas', []);
+            mediator.manager.call('canvas', 'setupCanvas', []);
+            if (config.scale_toolbar) {
+                mediator.manager.registerModule(scale, 'scale');
+                mediator.manager.call('scale', 'drawScaleTypes', []);
+            }
+        }
 
-            mediator.manager.call('io', 'setContext', [context, data.length]);
-            mediator.manager.call('io', 'setInfo', [context]);
-            mediator.manager.call('canvas', 'drawTitle', [context]);
-            mediator.bubbles_update_data_and_areas(mediator.current_bubble);
-            
+        mediator.manager.call('io', 'initializeMissingData', [data]);
+        mediator.manager.call('io', 'prepareData', [highlight_data, data, context]);
+        mediator.manager.call('io', 'prepareAreas', []);
+        mediator.manager.call('io', 'setContext', [context, data.length]);
+        mediator.manager.call('io', 'setInfo', [context]);
+        
+        mediator.manager.call('canvas', 'drawTitle', [context]);
+        mediator.bubbles_update_data_and_areas(mediator.current_bubble);
+
+        if (config.is_streamgraph) {
             mediator.manager.registerModule(streamgraph, 'streamgraph')
             mediator.manager.call('streamgraph', 'start')
             mediator.manager.call('streamgraph', 'setupStreamgraph', [mediator.streamgraph_data])
@@ -312,33 +329,14 @@ MyMediator.prototype = {
             mediator.manager.call('streamgraph', 'initMouseListeners', []);
             
         } else {
-            if(config.is_force_papers && config.dynamic_force_papers) mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
-            if(config.is_force_area && config.dynamic_force_area) mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
-            if(config.dynamic_sizing) mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
-            if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
-
-            mediator.manager.call('canvas', 'setupCanvas', []);
-            if(config.scale_toolbar) {
-                mediator.manager.registerModule(scale, 'scale')
-                mediator.manager.call('scale', 'drawScaleTypes', [])
-            }
-
-
-            mediator.manager.call('io', 'initializeMissingData', [data]);
-            mediator.manager.call('io', 'prepareData', [highlight_data, data, context]);
-            mediator.manager.call('io', 'prepareAreas', []);
-
-            mediator.manager.call('io', 'setContext', [context, data.length]);
-            mediator.manager.call('io', 'setInfo', [context]);
-            mediator.manager.call('canvas', 'drawTitle', [context]);
-
-            mediator.bubbles_update_data_and_areas(mediator.current_bubble);
             mediator.manager.call('bubble', 'start', [data, highlight_data]);
             mediator.manager.call('canvas', 'initEventsAndLayout', []);
             mediator.manager.call('papers', 'start', [ mediator.current_bubble ]);
             mediator.manager.call('bubble', 'draw', []);
+
             mediator.manager.call('list', 'start');
             if (!config.render_bubbles && config.show_list) mediator.manager.call('list', 'show');
+
             mediator.manager.call('canvas', 'checkForcePapers', []);
             mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
             mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
