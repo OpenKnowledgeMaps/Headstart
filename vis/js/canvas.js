@@ -18,6 +18,8 @@ class Canvas {
         this.available_width = null;
         this.current_vis_size = null;
         this.current_vis_width = null; //used in streamgraph
+
+        this.initScales();
     }
 
     getCurrentCircle(d) {
@@ -893,7 +895,6 @@ class Canvas {
     setupCanvas() {
         this.setOverflowToHiddenOrAuto("#main");
         this.calcChartSize();
-        this.initScales();
         this.setScaleRanges();
         this.drawSvg();
         this.drawChartCanvas();
@@ -920,8 +921,7 @@ class Canvas {
         this.setOverflowToHiddenOrAuto("#main");
         this.calcChartSize();
         
-        //TODO: remove these two as they are not relevant for streamgraphs
-        this.initScales();
+        //TODO: remove this as it is not relevant for streamgraphs
         this.setScaleRanges();
         
         this.drawStreamgraphChart();
@@ -941,7 +941,6 @@ class Canvas {
         this.setOverflowToHiddenOrAuto("#main");
         this.drawTitle();
         this.calcChartSize();
-        this.initScales();
         this.setScaleRanges();
         this.drawMultiplesSvg();
         this.drawChartCanvas();
