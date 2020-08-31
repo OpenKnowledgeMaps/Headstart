@@ -1,13 +1,12 @@
 import json
 import pytest
 import pandas as pd
-import numpy as np
-from .test_helpers import CASENAMES, CASE_DATA, RESULTS, get_dataprocessing_result
+from .test_helpers import CASENAMES, CASEDATA, RESULTS, get_dataprocessing_result
 
 
 @pytest.mark.parametrize("testcase", CASENAMES)
 def test_clustering_2_items(testcase):
-    testcase = CASE_DATA[testcase]
+    testcase = CASEDATA[testcase]
     metadata = pd.DataFrame.from_records(json.loads(testcase["input_data"]["metadata"]))
     text = pd.DataFrame.from_records(json.loads(testcase["input_data"]["text"]))
     metadata_sample = metadata.sample(n=2, random_state=42)
