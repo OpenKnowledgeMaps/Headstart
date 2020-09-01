@@ -43,11 +43,6 @@ class Canvas {
         const CHART_HEIGHT_CORRECTION = 15;
         const CHART_HEIGHT_CORRECTION_TOOLBAR = 15;
 
-        // TODO remove this when the sequence of initialization steps is refactored properly
-        if (mediator.modern_frontend_enabled && config.is_authorview) {
-            title_image_height = 70;
-        }
-
         // Set available_height and available_width
         if (parent_height === 0) {
             this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - Math.max(subtitle_height, title_image_height) - toolbar_height;
