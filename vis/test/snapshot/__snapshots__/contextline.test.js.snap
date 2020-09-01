@@ -21,6 +21,7 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
     >
       
     </span>
+     
     resources and collections
      
     (
@@ -86,6 +87,7 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
     >
       
     </span>
+     
     open access Dokumente
      
   </span>
@@ -122,6 +124,7 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
     >
       
     </span>
+     
     open access Dokumente
      
   </span>
@@ -236,6 +239,7 @@ exports[`Context line component snapshot matches a viper snapshot 1`] = `
     >
       
     </span>
+     
     documents
      
     (
