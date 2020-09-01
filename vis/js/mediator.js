@@ -287,6 +287,13 @@ MyMediator.prototype = {
         mediator.streamgraph_data = (config.is_streamgraph)?(csv.streamgraph):{};
         
         mediator.manager.registerModule(window.headstartInstance, 'headstart');
+
+        mediator.manager.call('io', 'initializeMissingData', [data]);
+        mediator.manager.call('io', 'prepareData', [highlight_data, data, context]);
+        mediator.manager.call('io', 'setContext', [context, data.length]);
+        mediator.manager.call('io', 'setInfo', [context]);
+
+        mediator.init_modern_frontend_intermediate();
         
         if (config.is_streamgraph) {         
             mediator.manager.call('canvas', 'setupStreamgraphCanvas', []);
@@ -307,11 +314,8 @@ MyMediator.prototype = {
             }
         }
 
-        mediator.manager.call('io', 'initializeMissingData', [data]);
-        mediator.manager.call('io', 'prepareData', [highlight_data, data, context]);
         mediator.manager.call('io', 'prepareAreas', []);
-        mediator.manager.call('io', 'setContext', [context, data.length]);
-        mediator.manager.call('io', 'setInfo', [context]);
+        mediator.manager.call('io', 'updateVis', []);
         
         mediator.manager.call('canvas', 'drawTitle', [context]);
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
@@ -342,8 +346,6 @@ MyMediator.prototype = {
             mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
             mediator.manager.call('bubble', 'initMouseListeners', []);
         }
-
-        mediator.init_modern_frontend_intermediate();
 
         mediator.manager.call('canvas', 'showInfoModal', []);
     },
