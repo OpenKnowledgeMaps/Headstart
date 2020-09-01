@@ -2,7 +2,7 @@ import json
 import pandas as pd
 import pytest
 
-from .test_helpers import CASENAMES, CASE_DATA, RESULTS
+from .test_helpers import CASENAMES, CASEDATA, RESULTS
 
 from pandas_schema import Column, Schema
 from pandas_schema.validation import (InListValidation,
@@ -107,7 +107,7 @@ def report_validation_error(error):
 
 @pytest.mark.parametrize("testcase", CASENAMES)
 def test_metadata_schema(testcase):
-    testcase = CASE_DATA[testcase]
+    testcase = CASEDATA[testcase]
     service = testcase["params"]["service"]
     metadata = pd.DataFrame.from_records(json.loads(testcase["input_data"]["metadata"]))
     core_errors = core_schema.validate(
