@@ -122,9 +122,11 @@ class ContextLine extends React.Component {
     }
 
     return (
-      <span id="modifier" className="modifier">
-        {label}
-      </span>
+      <>
+        <span id="modifier" className="modifier">
+          {label}
+        </span>{" "}
+      </>
     );
   }
 
