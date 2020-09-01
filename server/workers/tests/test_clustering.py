@@ -1,6 +1,7 @@
 import json
 import pytest
 import pandas as pd
+import numpy as np
 from .test_helpers import CASENAMES, CASEDATA, RESULTS, get_dataprocessing_result
 
 
