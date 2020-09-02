@@ -505,11 +505,14 @@ describe("config and context state", () => {
 
       const initialState = {};
       const { configObject, contextObject } = setup(
-        {},
+        {
+          max_documents: 100,
+        },
         {
           params: {
             sorting: MODIFIER,
           },
+          num_documents: 101,
         }
       );
 
@@ -519,6 +522,55 @@ describe("config and context state", () => {
       );
 
       expect(result).toHaveProperty("modifier", MODIFIER);
+    });
+
+    it("should initialize correct modifier type if number of docs is equal to max", () => {
+      const MODIFIER = "most-relevant";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          max_documents: 100,
+        },
+        {
+          params: {
+            sorting: MODIFIER,
+          },
+          num_documents: 100,
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("modifier", MODIFIER);
+    });
+
+    it("should initialize null modifier if less documents than max", () => {
+      const MODIFIER = "most-recent";
+      const EXPECTED_MODIFIER = null;
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          max_documents: 100,
+        },
+        {
+          params: {
+            sorting: MODIFIER,
+          },
+          num_documents: 99,
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("modifier", EXPECTED_MODIFIER);
     });
 
     it("should initialize showModifierPopover to true", () => {

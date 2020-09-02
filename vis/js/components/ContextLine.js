@@ -105,7 +105,7 @@ class ContextLine extends React.Component {
       label = localization.most_relevant_label;
     }
 
-    if (showModifierPopover) {
+    if (showModifierPopover && label !== "") {
       return (
         <>
           <HoverPopover
