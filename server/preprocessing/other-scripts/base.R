@@ -34,6 +34,7 @@ blog <- getLogger('api.base')
 
 
 get_papers <- function(query, params, limit=100,
+                       min_descsize=200,
   fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type,descsize",
   filter=NULL) {
 
@@ -74,7 +75,7 @@ get_papers <- function(query, params, limit=100,
 
   base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, collapse=" ")
 
-  filter <- I('descsize:[100%20TO%20100000]')
+  filter <- I(paste0('descsize:[', min_descsize, '%20TO%20*]'))
   blog$info(paste("map_id:", MAP_ID, "BASE query:", base_query))
   blog$info(paste("map_id:", MAP_ID, "Sort by:", sortby_string))
   # execute search
