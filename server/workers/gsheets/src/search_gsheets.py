@@ -53,6 +53,7 @@ schema = Schema([
     Column('Included in map', [InListValidation(["yes", "no"])]),
     Column('Ready for publication?', [InListValidation(["yes", "no"])]),
     Column('Validation', []),
+    Column('Curator notes', []),
     Column('Comment 1', []),
     Column('Author Comment 1', []),
     Column('Comment 2', []),
