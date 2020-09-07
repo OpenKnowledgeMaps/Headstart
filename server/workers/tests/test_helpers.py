@@ -4,9 +4,10 @@ import uuid
 import pathlib
 import redis
 import pandas as pd
-import pytest
 from nltk.corpus import stopwords
+from tqdm import tqdm
 
+from .conftest import RANDOM
 from ..services.src.apis.utils import get_key
 
 with open("redis_config.json") as infile:
@@ -68,23 +69,30 @@ def get_dataprocessing_result(testcase_):
     return pd.DataFrame.from_records(json.loads(result))
 
 
-#@pytest.fixture
+def data_generation(KNOWNCASES, RANDOMCASES):
+    CASENAMES = []
+    CASEDATA = {}
+    print("collecting known test cases")
+    for c in tqdm(KNOWNCASES):
+        CASENAMES.append(c["caseid"])
+        CASEDATA[c["caseid"]] = c["casedata"]
+    if RANDOM:
+        print("collecting random test cases")
+        for c in tqdm(RANDOMCASES):
+            CASENAMES.append(c["caseid"])
+            CASEDATA[c["caseid"]] = {
+                        "input_data": retrieve_results(c["casedata"])["input_data"],
+                        "params": c["casedata"]["params"]}
+    return CASENAMES, CASEDATA
+
 
 KNOWNCASES = get_cases("knowncases")
 RANDOMCASES = get_cases("randomcases")
-KNOWNINPUT_DATA = KNOWNCASES
-RANDOMINPUT_DATA = [{"caseid": c["caseid"],
-                     "casedata": {
-                        "input_data": retrieve_results(c["casedata"])["input_data"],
-                        "params": c["casedata"]["params"]}
-                     } for c in RANDOMCASES]
-CASENAMES = []
-CASE_DATA = {}
-for c in KNOWNINPUT_DATA:
-    CASENAMES.append(c["caseid"])
-    CASE_DATA[c["caseid"]] = c["casedata"]
-for c in RANDOMINPUT_DATA:
-    CASENAMES.append(pytest.param(c["caseid"], marks=pytest.mark.apitest))
-    CASE_DATA[c["caseid"]] = c["casedata"]
+
+CASENAMES, CASEDATA = data_generation(KNOWNCASES, RANDOMCASES)
 CASENAMES.sort()
-RESULTS = {casename: get_dataprocessing_result(casedata) for casename, casedata in CASE_DATA.items()}
+
+RESULTS = {}
+print("collecting dataprocessing results")
+for c in tqdm(CASEDATA):
+    RESULTS[c] = get_dataprocessing_result(CASEDATA[c])
