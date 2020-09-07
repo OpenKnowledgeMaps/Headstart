@@ -1,6 +1,7 @@
 import json
 import pytest
 import pandas as pd
+import numpy as np
 from .test_helpers import CASENAMES, CASEDATA, RESULTS, get_dataprocessing_result
 
 
@@ -37,7 +38,7 @@ def test_max_n_cluster(testcase):
 
 @pytest.mark.parametrize("testcase", CASENAMES)
 def test_n_cluster_lower_bound(testcase):
-    testcase = CASE_DATA[testcase]
+    testcase = CASEDATA[testcase]
     metadata = pd.DataFrame.from_records(json.loads(testcase["input_data"]["metadata"]))
     text = pd.DataFrame.from_records(json.loads(testcase["input_data"]["text"]))
     rand_n = np.random.randint(2, 30)
