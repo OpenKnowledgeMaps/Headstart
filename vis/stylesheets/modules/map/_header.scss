@@ -1,14 +1,9 @@
-$title_height: 54px;
-@if $modern_frontend_enabled {
-    $title_height: $title_height + 2px;
-}
-
 #subdiscipline_title {
     margin: 0px;
     padding-top: 15px;
     padding-left: 50px;
     font-family: $base-font-family;
-    min-height: $title_height;
+    min-height: 54px;
 
     h4 {
         margin-bottom: 0px;
@@ -299,5 +294,5 @@ $title_height: 54px;
 .context_item {
     display: inline-block;
     margin-right: 1%;
-    height: 17px;
+    height: 15px;
 }
