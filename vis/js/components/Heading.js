@@ -8,11 +8,12 @@ import { changeFile } from "../actions/index";
 
 import {
   BasicTitle,
-  ViperTitle,
-  LinkedCatTitle,
+  ProjectTitle,
   CustomTitle,
   StandardTitle,
 } from "../templates/headingtitles";
+
+import { STREAMGRAPH_MODE } from "../reducers/chartType";
 
 const Heading = ({
   localization,
@@ -24,7 +25,6 @@ const Heading = ({
   onFileChange,
   streamgraph,
 }) => {
-  // IMPORTANT: the show_infolink_areas functionality is not implemented here
   if (zoomed) {
     let label = streamgraph ? localization.area_streamgraph : localization.area;
 
@@ -53,7 +53,7 @@ const mapStateToProps = (state) => ({
   bubbleTitle: state.selectedBubble ? state.selectedBubble.title : null,
   headingParams: state.heading,
   files: state.files,
-  streamgraph: state.chartType === "streamgraph",
+  streamgraph: state.chartType === STREAMGRAPH_MODE,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -119,7 +119,7 @@ const renderViperTitle = (title, acronym, projectId) => {
   let shortTitleText = sliceText(titleText, MAX_LENGTH_VIPER);
 
   return (
-    <ViperTitle
+    <ProjectTitle
       fullTitle={titleText}
       shortTitle={shortTitleText}
       projectId={projectId}
@@ -130,9 +130,9 @@ const renderViperTitle = (title, acronym, projectId) => {
 const renderLinkedCatTitle = (label, cleanQuery) => {
   let shortTitle = sliceText(cleanQuery, MAX_LENGTH_LINKEDCAT);
   return (
-    <LinkedCatTitle
+    <StandardTitle
       label={label}
-      fullTitle={cleanQuery}
+      title={cleanQuery}
       shortTitle={shortTitle}
     />
   );
@@ -202,8 +202,6 @@ const unescapeHTML = (string) => {
 };
 
 const renderAdditionalFeatures = ({ showDropdown }, files, onFileChange) => {
-  // IMPORTANT: the show_multiples functionality is not implemented here
-
   if (showDropdown && files.list.length > 0) {
     const handleChange = (e) => {
       console.warn("*** React component 'Heading' dropdown changed ***");
