@@ -1,6 +1,7 @@
 import dateFormat from "dateformat";
 
-const exists = (param) => typeof param !== "undefined" && param !== "null" && param !== null;
+const exists = (param) =>
+  typeof param !== "undefined" && param !== "null" && param !== null;
 
 const contextLine = (state = {}, action) => {
   const config = action.configObject;
@@ -11,7 +12,7 @@ const contextLine = (state = {}, action) => {
       return {
         show: !!config.show_context && !!context.params,
         articlesCount: context.num_documents,
-        modifier: context.params ? context.params.sorting : null,
+        modifier: getModifier(config, context),
         showModifierPopover:
           !!context.params &&
           context.params.sorting === "most-relevant" &&
@@ -58,6 +59,18 @@ const contextLine = (state = {}, action) => {
     default:
       return state;
   }
+};
+
+const getModifier = (config, context) => {
+  if (
+    !context.params ||
+    !exists(context.params.sorting) ||
+    context.num_documents < config.max_documents
+  ) {
+    return null;
+  }
+
+  return context.params.sorting;
 };
 
 const getDocumentTypes = (config, context) => {

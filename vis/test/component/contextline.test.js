@@ -570,6 +570,10 @@ describe("Context line component", () => {
 
       expect(
         container.querySelector("#document_types").getAttribute("class")
+      ).toContain("context_item");
+
+      expect(
+        container.querySelector("#document_types>span").getAttribute("class")
       ).toContain("context_moreinfo");
     });
 
@@ -594,7 +598,7 @@ describe("Context line component", () => {
         render(<ContextLine store={store} />, container);
       });
 
-      const select = document.querySelector("#document_types");
+      const select = document.querySelector("#document_types>span");
       act(() => {
         const event = new Event("mouseover", { bubbles: true });
         select.dispatchEvent(event);
