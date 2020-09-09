@@ -14,6 +14,7 @@ import {
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
 
 import SubdisciplineTitle from "./components/SubdisciplineTitle";
+import AuthorImage from "./components/AuthorImage";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -45,6 +46,16 @@ class Intermediate {
 
     if (this.modern_frontend_enabled) {
       console.warn("*** MODERN FRONTEND ENABLED - React elements rendered ***");
+
+      if (config.is_authorview) {
+        ReactDOM.render(
+          <Provider store={this.store}>
+            <AuthorImage />
+          </Provider>,
+          document.getElementById("title_image")
+        );
+      }
+
       ReactDOM.render(
         <Provider store={this.store}>
           <SubdisciplineTitle />

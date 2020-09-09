@@ -7,11 +7,13 @@
     </div>
     <div class="vis-col">
         {{#if is_authorview}}
-            <div id="title_image" class="titleimage">
-                <a id="author_image_link" target="_blank">
-                    <div id="author_image" class="authorimage"></div>
-                </a>
-            </div>
+        <div id="title_image" class="titleimage">
+            {{#unless modern_frontend_enabled}}
+            <a id="author_image_link" target="_blank">
+                <div id="author_image" class="authorimage"></div>
+            </a>
+            {{/unless}}
+        </div>
         {{/if}}
 
         <div id="subdiscipline_title">

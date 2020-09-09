@@ -21,6 +21,7 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
     >
       
     </span>
+     
     resources and collections
      
     (
@@ -86,6 +87,7 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
     >
       
     </span>
+     
     open access Dokumente
      
   </span>
@@ -122,6 +124,7 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
     >
       
     </span>
+     
     open access Dokumente
      
   </span>
@@ -141,16 +144,20 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
     1 Jan 1847 - 1 Jan 1918
   </span>
   <span
-    className="context_moreinfo context_item"
+    className="context_item"
     id="document_types"
-    label="Dokumentarten"
-    onBlur={[Function]}
-    onClick={null}
-    onFocus={[Function]}
-    onMouseOut={[Function]}
-    onMouseOver={[Function]}
   >
-    Dokumentarten
+    <span
+      className="context_moreinfo"
+      label="Dokumentarten"
+      onBlur={[Function]}
+      onClick={null}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+    >
+      Dokumentarten
+    </span>
   </span>
    
 </p>
@@ -236,6 +243,7 @@ exports[`Context line component snapshot matches a viper snapshot 1`] = `
     >
       
     </span>
+     
     documents
      
     (
