@@ -142,7 +142,10 @@ const common = {
                 }, {
                   loader: 'sass-loader',
                   options: {
-                    prependData: '$skin: "' + config.skin + '";',
+                    prependData: `
+                        $skin: "${config.skin}";
+                        $modern_frontend_enabled: ${process.env.MODERN_FRONTEND ? "true" : "false"};
+                    `,
                     sassOptions: {
                       includePaths: ["node_modules"]
                     }

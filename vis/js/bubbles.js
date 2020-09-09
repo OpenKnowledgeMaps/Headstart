@@ -492,9 +492,8 @@ BubblesFSM.prototype = {
         }
 
         if (previous_zoom_node === null) {
-            $("#context").css("display", "none");
-            
             if(!mediator.modern_frontend_enabled) {
+                $("#context").css("display", "none");
                 $('<p id="backlink" class="backlink"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
 
                 $("#backlink").on("click", function () {
