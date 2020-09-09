@@ -105,7 +105,7 @@ class ContextLine extends React.Component {
       label = localization.most_relevant_label;
     }
 
-    if (showModifierPopover) {
+    if (showModifierPopover && label !== "") {
       return (
         <>
           <HoverPopover
@@ -122,9 +122,11 @@ class ContextLine extends React.Component {
     }
 
     return (
-      <span id="modifier" className="modifier">
-        {label}
-      </span>
+      <>
+        <span id="modifier" className="modifier">
+          {label}
+        </span>{" "}
+      </>
     );
   }
 
@@ -151,20 +153,22 @@ class ContextLine extends React.Component {
 
     return (
       <>
-        <HoverPopover
-          id="doctypes-popover"
-          container={this}
-          content={
-            <>
-              {localization.documenttypes_tooltip}
-              <br />
-              <br />
-              {text}
-            </>
-          }
-        >
-          <DocumentTypesPopover label={localization.documenttypes_label} />
-        </HoverPopover>{" "}
+        <span id="document_types" className="context_item">
+          <HoverPopover
+            id="doctypes-popover"
+            container={this}
+            content={
+              <>
+                {localization.documenttypes_tooltip}
+                <br />
+                <br />
+                {text}
+              </>
+            }
+          >
+            <DocumentTypesPopover label={localization.documenttypes_label} />
+          </HoverPopover>
+        </span>{" "}
       </>
     );
   }

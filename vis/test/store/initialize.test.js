@@ -505,11 +505,14 @@ describe("config and context state", () => {
 
       const initialState = {};
       const { configObject, contextObject } = setup(
-        {},
+        {
+          max_documents: 100,
+        },
         {
           params: {
             sorting: MODIFIER,
           },
+          num_documents: 101,
         }
       );
 
@@ -519,6 +522,55 @@ describe("config and context state", () => {
       );
 
       expect(result).toHaveProperty("modifier", MODIFIER);
+    });
+
+    it("should initialize correct modifier type if number of docs is equal to max", () => {
+      const MODIFIER = "most-relevant";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          max_documents: 100,
+        },
+        {
+          params: {
+            sorting: MODIFIER,
+          },
+          num_documents: 100,
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("modifier", MODIFIER);
+    });
+
+    it("should initialize null modifier if less documents than max", () => {
+      const MODIFIER = "most-recent";
+      const EXPECTED_MODIFIER = null;
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          max_documents: 100,
+        },
+        {
+          params: {
+            sorting: MODIFIER,
+          },
+          num_documents: 99,
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("modifier", EXPECTED_MODIFIER);
     });
 
     it("should initialize showModifierPopover to true", () => {
@@ -644,7 +696,6 @@ describe("config and context state", () => {
 
     it("should show author", () => {
       const IS_AUTHORVIEW = true;
-      const AUTHOR_ID = 111;
       const EXPECTED_VALUE = true;
 
       const initialState = {};
@@ -654,7 +705,9 @@ describe("config and context state", () => {
         },
         {
           params: {
-            author_id: AUTHOR_ID,
+            author_id: 111,
+            living_dates: "1620-1699",
+            image_link: "http://link.com/1234"
           },
         }
       );
@@ -720,9 +773,11 @@ describe("config and context state", () => {
     it("should load correct author data", () => {
       const AUTHOR_ID = 123;
       const LIVING_DATES = "1856-1918";
+      const IMAGE_LINK = "http://example.com/1234";
       const EXPECTED_VALUE = {
-        id: AUTHOR_ID,
+        id: String(AUTHOR_ID),
         livingDates: LIVING_DATES,
+        imageLink: IMAGE_LINK,
       };
 
       const initialState = {};
@@ -732,6 +787,7 @@ describe("config and context state", () => {
           params: {
             author_id: AUTHOR_ID,
             living_dates: LIVING_DATES,
+            image_link: IMAGE_LINK,
           },
         }
       );
@@ -748,6 +804,7 @@ describe("config and context state", () => {
       const EXPECTED_VALUE = {
         id: null,
         livingDates: null,
+        imageLink: null,
       };
 
       const initialState = {};

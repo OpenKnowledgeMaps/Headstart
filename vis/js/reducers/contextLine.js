@@ -1,5 +1,8 @@
 import dateFormat from "dateformat";
 
+const exists = (param) =>
+  typeof param !== "undefined" && param !== "null" && param !== null;
+
 const contextLine = (state = {}, action) => {
   const config = action.configObject;
   const context = action.contextObject;
@@ -9,7 +12,7 @@ const contextLine = (state = {}, action) => {
       return {
         show: !!config.show_context && !!context.params,
         articlesCount: context.num_documents,
-        modifier: context.params ? context.params.sorting : null,
+        modifier: getModifier(config, context),
         showModifierPopover:
           !!context.params &&
           context.params.sorting === "most-relevant" &&
@@ -20,10 +23,16 @@ const contextLine = (state = {}, action) => {
         showAuthor:
           !!config.is_authorview &&
           !!context.params &&
-          !!context.params.author_id,
+          exists(context.params.author_id) &&
+          exists(context.params.living_dates) &&
+          exists(context.params.image_link),
         author: {
-          id: context.params ? context.params.author_id : null,
+          id:
+            context.params && context.params.author_id
+              ? String(context.params.author_id).replace(/\([^)]*\)/, "")
+              : null,
           livingDates: context.params ? context.params.living_dates : null,
+          imageLink: context.params ? context.params.image_link : null,
         },
         documentTypes: getDocumentTypes(config, context),
         dataSource:
@@ -50,6 +59,18 @@ const contextLine = (state = {}, action) => {
     default:
       return state;
   }
+};
+
+const getModifier = (config, context) => {
+  if (
+    !context.params ||
+    !exists(context.params.sorting) ||
+    context.num_documents < config.max_documents
+  ) {
+    return null;
+  }
+
+  return context.params.sorting;
 };
 
 const getDocumentTypes = (config, context) => {
