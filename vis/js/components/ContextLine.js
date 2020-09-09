@@ -153,20 +153,22 @@ class ContextLine extends React.Component {
 
     return (
       <>
-        <HoverPopover
-          id="doctypes-popover"
-          container={this}
-          content={
-            <>
-              {localization.documenttypes_tooltip}
-              <br />
-              <br />
-              {text}
-            </>
-          }
-        >
-          <DocumentTypesPopover label={localization.documenttypes_label} />
-        </HoverPopover>{" "}
+        <span id="document_types" className="context_item">
+          <HoverPopover
+            id="doctypes-popover"
+            container={this}
+            content={
+              <>
+                {localization.documenttypes_tooltip}
+                <br />
+                <br />
+                {text}
+              </>
+            }
+          >
+            <DocumentTypesPopover label={localization.documenttypes_label} />
+          </HoverPopover>
+        </span>{" "}
       </>
     );
   }
