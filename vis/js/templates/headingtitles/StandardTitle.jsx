@@ -1,12 +1,12 @@
 import React from "react";
 
-const StandardTitle = ({ label, title }) => {
+const StandardTitle = ({ label, title, shortTitle = title }) => {
   return (
     // html template starts here
     <>
       {label}{" "}
       <span id="search-term-unique" title={title}>
-        {title}
+        {shortTitle}
       </span>
     </>
     // html template ends here

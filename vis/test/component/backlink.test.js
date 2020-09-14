@@ -16,6 +16,9 @@ const setup = (overrideProps) => {
     {
       hidden: false,
       onClick: jest.fn(),
+      localization: {
+        backlink: "Sample backlink label",
+      },
     },
     overrideProps
   );
@@ -120,6 +123,9 @@ describe("Backlink component", () => {
         const store = mockStore({
           zoom: true,
           chartType: "knowledgeMap",
+          localization: {
+            backlink: "Sample backlink label",
+          },
         });
 
         act(() => {
