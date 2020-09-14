@@ -1,6 +1,8 @@
 import json
 import pandas as pd
+import numpy as np
 import requests
+from tqdm import tqdm
 
 
 api_url = "http://127.0.0.1/api"
@@ -14,12 +16,11 @@ def extract_params(case):
     search["from"] = case.get("from", "")
     search["to"] = case.get("to", "")
     search["sorting"] = case.get("sorting", "")
-    search["article_types"] = str(case.get("article types", "")).split(",")
+    search["article_types"] = case.get("article types", "[]")
     return search
 
 
 def get_input_data(search, raw=False):
-    print(search)
     params = search
     service = params.pop('service')
     if service not in ["base", "pubmed"]:
@@ -38,15 +39,13 @@ def get_input_data(search, raw=False):
     if raw:
         params["raw"] = True
     url = "/".join([api_url, service, "search"])
-    print(params)
     res = requests.post(url, json=params)
     return res
 
 
-for r in df.iterrows():
+for r in tqdm(df.iterrows()):
     case = dict(r[1])
-    print(case)
-    if pd.np.isnan(case["case id"]):
+    if np.isnan(case["case id"]):
         continue
     s = extract_params(case)
     res = get_input_data(s, raw=True)
@@ -56,5 +55,5 @@ for r in df.iterrows():
     res_json.pop("id")
     input_data = res_json["input_data"]
     params = res_json["params"]
-    with open("testdata/testcase%d.json" %case["case id"], "w") as outfile:
-        json.dump(res_json, outfile)
+    with open("knowncases/testcase%d.json" % case["case id"], "w") as outfile:
+        json.dump(res_json, outfile, indent=4, separators=(',', ': '), sort_keys=True)

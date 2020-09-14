@@ -7,6 +7,8 @@ import configureStore from "redux-mock-store";
 import Heading, { getHeadingLabel } from "../../js/components/Heading";
 import { changeFile } from "../../js/actions";
 
+import { STREAMGRAPH_MODE } from "../../js/reducers/chartType";
+
 const mockStore = configureStore([]);
 const setup = (overrideStore = {}) => {
   const storeObject = Object.assign(
@@ -109,7 +111,7 @@ describe("Heading component", () => {
     it("renders as streamgraph with correct title", () => {
       const TITLE = "Special Test Title";
       const { store } = setup({
-        chartType: "streamgraph",
+        chartType: STREAMGRAPH_MODE,
         zoom: true,
         selectedBubble: { title: TITLE },
       });
