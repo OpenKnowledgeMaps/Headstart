@@ -47,20 +47,14 @@ class Intermediate {
     if (this.modern_frontend_enabled) {
       console.warn("*** MODERN FRONTEND ENABLED - React elements rendered ***");
 
-      if (config.is_authorview) {
-        ReactDOM.render(
-          <Provider store={this.store}>
-            <AuthorImage />
-          </Provider>,
-          document.getElementById("title_image")
-        );
-      }
-
+      // TODO replace the config.is_authorview with store variable
+      // after components are wrapped
       ReactDOM.render(
         <Provider store={this.store}>
+          {config.is_authorview && <AuthorImage />}
           <SubdisciplineTitle />
         </Provider>,
-        document.getElementById("subdiscipline_title")
+        document.getElementById("mvp_container")
       );
     }
   }
