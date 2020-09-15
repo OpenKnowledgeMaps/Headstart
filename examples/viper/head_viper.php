@@ -36,13 +36,13 @@
         , "twitter-image" => $WEBSITE_PATH . "twitter-card.png"
         , "fb-image" => $WEBSITE_PATH . "facebook-card.png"
     );
-    
+
     function getLabel($tag) {
         global $default_labels, $override_labels, $title;
-        
+
         if(isset($override_labels) && isset($override_labels[$tag])) {
             return $override_labels[$tag];
-        } else if (isset($title)) { 
+        } else if (isset($title)) {
             return $title;
         } else {
             if(isset($default_labels[$tag]))
@@ -51,7 +51,7 @@
                 return "Not set";
         }
     }
-    
+
 ?>
 
 <title>
@@ -143,7 +143,7 @@
                 "href": cookie_href
             },
             "cookie": {
-              "name": "cookie-msg-2020-06",
+              "name": "cookie-msg-2020-09",
               "domain": cookie_domain,
               "sameSite": "Lax"
             }
