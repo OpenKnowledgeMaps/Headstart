@@ -120,7 +120,7 @@
         document.cookie = names[i] + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
       }
     }
-    clearCookies(["cookieconsent_status"]);
+    clearCookies(["cookieconsent_status", "priv-update-2018-10"]);
     var cookie_domain = "<?php echo $COOKIE_DOMAIN ?>";
     window.addEventListener("load", function () {
         window.cookieconsent.initialise({
@@ -143,8 +143,9 @@
                 "href": cookie_href
             },
             "cookie": {
-              "name": "priv-update-2018-10",
-              "domain": cookie_domain
+              "name": "cookie-msg-2020-06",
+              "domain": cookie_domain,
+              "sameSite": "Lax"
             }
         })
     });
