@@ -104,12 +104,12 @@
 <script>
 
 <?php if ($BROWSER_LANG === "de") { ?>
-        let cookie_message = '<strong>Wir haben unsere <a href="./datenschutz" target="_blank" class="underline">Datenschutzerklärung</a> aktualisiert</strong>, um die Einführung von Google Analytics und des Hypothes.is Annotations-Services zu berücksichtigen. Wir verwenden Cookies, um unsere Webseite für Sie möglichst benutzerfreundlich zu gestalten. Wenn Sie fortfahren, nehmen wir an, dass Sie mit der Verwendung von Cookies auf dieser Webseite einverstanden sind. Weitere Informationen entnehmen Sie bitte ';
+        let cookie_message = '<strong>Wir verwenden Cookies, die für den Betrieb dieser Webseite essentiell sind.</strong> Wenn Sie fortfahren, akzeptieren Sie die Verwendung von essentiellen Cookies auf dieser Webseite. Weitere Informationen entnehmen Sie bitte ';
         let cookie_link = "unserer Datenschutzerklärung.";
         let cookie_button = "Alles klar!";
         let cookie_href = "https://openknowledgemaps.org/datenschutz";
 <?php } else { ?>
-        let cookie_message = '<strong>We have updated our <a href="./privacy" target="_blank" class="underline">privacy policy</a></strong> to reflect the introduction of Google Analytics and the Hypothes.is annotation service. We use cookies to improve your experience. By your continued use of this site you accept such use. For more information, please see ';
+        let cookie_message = '<strong>We use cookies that are essential for the operation this website.</strong> By your continued use of this website, you accept the use of essential cookies. For more information, please see ';
         let cookie_link = "our privacy policy.";
         let cookie_button = "Got it!";
         let cookie_href = "https://openknowledgemaps.org/privacy";
