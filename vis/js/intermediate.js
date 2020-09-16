@@ -8,13 +8,13 @@ import rootReducer from "./reducers";
 import {
   zoomInFromMediator,
   zoomOutFromMediator,
-  setKnowledgeMap,
-  setStreamgraph,
   initializeStore,
 } from "./actions";
 
-import Heading from "./components/Heading";
-import Backlink from "./components/Backlink";
+import { STREAMGRAPH_MODE } from "./reducers/chartType";
+
+import SubdisciplineTitle from "./components/SubdisciplineTitle";
+import AuthorImage from "./components/AuthorImage";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -45,21 +45,22 @@ class Intermediate {
     this.store.dispatch(initializeStore(config, context));
 
     if (this.modern_frontend_enabled) {
-      console.warn(
-        "*** MODERN FRONTEND ENABLED - some React elements rendered ***"
-      );
-      ReactDOM.render(
-        <Provider store={this.store}>
-          <Heading />
-        </Provider>,
-        document.getElementById("heading_container")
-      );
+      console.warn("*** MODERN FRONTEND ENABLED - React elements rendered ***");
+
+      if (config.is_authorview) {
+        ReactDOM.render(
+          <Provider store={this.store}>
+            <AuthorImage />
+          </Provider>,
+          document.getElementById("title_image")
+        );
+      }
 
       ReactDOM.render(
         <Provider store={this.store}>
-          <Backlink />
+          <SubdisciplineTitle />
         </Provider>,
-        document.getElementById("backlink_container")
+        document.getElementById("subdiscipline_title")
       );
     }
   }
@@ -71,14 +72,6 @@ class Intermediate {
   zoomOut() {
     this.store.dispatch(zoomOutFromMediator());
   }
-
-  setKnowledgeMap() {
-    this.store.dispatch(setKnowledgeMap());
-  }
-
-  setStreamgraph() {
-    this.store.dispatch(setStreamgraph());
-  }
 }
 
 function createZoomOutMiddleware(
@@ -89,7 +82,7 @@ function createZoomOutMiddleware(
     const self = this;
     return (next) => (action) => {
       if (action.type == "ZOOM_OUT" && action.not_from_mediator) {
-        if (getState().chartType === "streamgraph") {
+        if (getState().chartType === STREAMGRAPH_MODE) {
           streamgraphZoomOutCallback();
         } else {
           knowledgeMapZoomOutCallback();
