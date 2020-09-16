@@ -3,11 +3,6 @@
 exports[`Context line component snapshot matches a covis snapshot 1`] = `
 <p
   id="context"
-  style={
-    Object {
-      "position": "relative",
-    }
-  }
 >
   <span
     className="context_item"
@@ -51,11 +46,6 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
 exports[`Context line component snapshot matches a linkedcat authorview snapshot 1`] = `
 <p
   id="context"
-  style={
-    Object {
-      "position": "relative",
-    }
-  }
 >
   <span
     className="context_item"
@@ -106,11 +96,6 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
 exports[`Context line component snapshot matches a linkedcat keywordview snapshot 1`] = `
 <p
   id="context"
-  style={
-    Object {
-      "position": "relative",
-    }
-  }
 >
   <span
     className="context_item"
@@ -166,11 +151,6 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
 exports[`Context line component snapshot matches a project website snapshot 1`] = `
 <p
   id="context"
-  style={
-    Object {
-      "position": "relative",
-    }
-  }
 >
   <span
     className="context_item"
@@ -225,11 +205,6 @@ exports[`Context line component snapshot matches a project website snapshot 1`] 
 exports[`Context line component snapshot matches a viper snapshot 1`] = `
 <p
   id="context"
-  style={
-    Object {
-      "position": "relative",
-    }
-  }
 >
   <span
     className="context_item"
