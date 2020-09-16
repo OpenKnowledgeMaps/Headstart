@@ -74,7 +74,8 @@ get_papers <- function(query, params, limit=100,
 
   base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, collapse=" ")
 
-  filter <- I(paste0('descsize:[', params$min_descsize, '%20TO%20*]'))
+  min_descsize <- if (is.null(params$min_descsize)) 300 else params$min_descsize
+  filter <- I(paste0('descsize:[', min_descsize, '%20TO%20*]'))
   blog$info(paste("map_id:", MAP_ID, "BASE query:", base_query))
   blog$info(paste("map_id:", MAP_ID, "Sort by:", sortby_string))
   # execute search
