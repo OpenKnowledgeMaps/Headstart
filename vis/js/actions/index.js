@@ -15,14 +15,6 @@ export const zoomOut = (callback) => {
   return { type: "ZOOM_OUT", not_from_mediator: true };
 };
 
-export const setKnowledgeMap = () => ({
-  type: "SET_KNOWLEDGE_MAP",
-});
-
-export const setStreamgraph = () => ({
-  type: "SET_STREAMGRAPH",
-});
-
 /**
  * Action for initializing the data that aren't known in advance.
  * @param {Object} configObject the default_config.json + data_config.json
