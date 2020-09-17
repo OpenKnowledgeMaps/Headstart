@@ -7,7 +7,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TARGET = process.env.npm_lifecycle_event;
 
 const common = {
-    mode: "development",
     devtool: 'eval-source-map',
     entry: './vis/entrypoint.js',
 
