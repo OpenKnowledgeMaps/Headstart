@@ -73,7 +73,7 @@ const common = {
             ignoreOrder: false, // Enable to remove warnings about conflicting order
           }),
           new webpack.EnvironmentPlugin({
-            MODERN_FRONTEND: false
+            MODERN_FRONTEND: typeof config.modernFrontendEnabled === "boolean" ? config.modernFrontendEnabled : false
           })
     ],
     module: {
