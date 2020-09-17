@@ -35,57 +35,55 @@ class ContextLine extends React.Component {
     return (
       // TODO this <p> can be moved into the template when whole MVP is refactored
       // then a different container for the popovers can be chosen
-      <p id="context" style={{ position: "relative" }}>
-        <ContextLineTemplate>
-          {params.showAuthor && (
-            <Author
-              bioLabel={localization.bio_link}
-              livingDates={params.author.livingDates}
-              link={"https://d-nb.info/gnd/" + params.author.id}
-            />
-          )}
-          <NumArticles
-            articlesCount={params.articlesCount}
-            openAccessArticlesCount={params.openAccessCount}
-            articlesCountLabel={localization.articles_label}
-          >
-            {this.renderModifier()}
-          </NumArticles>
-          {defined(params.dataSource) && (
-            <DataSource
-              value={params.dataSource}
-              label={localization.source_label}
-            />
-          )}
-          {defined(params.timespan) && <Timespan>{params.timespan}</Timespan>}
-          {this.renderDocTypes()}
-          {defined(params.paperCount) && (
-            <PaperCount
-              value={params.paperCount}
-              label={localization.paper_count_label}
-            />
-          )}
-          {defined(params.datasetCount) && (
-            <DatasetCount
-              value={params.datasetCount}
-              label={localization.dataset_count_label}
-            />
-          )}
-          {defined(params.funder) && <Funder>{params.funder}</Funder>}
-          {defined(params.projectRuntime) && (
-            <ProjectRuntime>{params.projectRuntime}</ProjectRuntime>
-          )}
-          {defined(params.searchLanguage) && (
-            <SearchLang>{params.searchLanguage}</SearchLang>
-          )}
-          {defined(params.timestamp) && (
-            <Timestamp
-              value={params.timestamp}
-              label={localization.timestamp_label}
-            />
-          )}
-        </ContextLineTemplate>
-      </p>
+      <ContextLineTemplate>
+        {params.showAuthor && (
+          <Author
+            bioLabel={localization.bio_link}
+            livingDates={params.author.livingDates}
+            link={"https://d-nb.info/gnd/" + params.author.id}
+          />
+        )}
+        <NumArticles
+          articlesCount={params.articlesCount}
+          openAccessArticlesCount={params.openAccessCount}
+          articlesCountLabel={localization.articles_label}
+        >
+          {this.renderModifier()}
+        </NumArticles>
+        {defined(params.dataSource) && (
+          <DataSource
+            value={params.dataSource}
+            label={localization.source_label}
+          />
+        )}
+        {defined(params.timespan) && <Timespan>{params.timespan}</Timespan>}
+        {this.renderDocTypes()}
+        {defined(params.paperCount) && (
+          <PaperCount
+            value={params.paperCount}
+            label={localization.paper_count_label}
+          />
+        )}
+        {defined(params.datasetCount) && (
+          <DatasetCount
+            value={params.datasetCount}
+            label={localization.dataset_count_label}
+          />
+        )}
+        {defined(params.funder) && <Funder>{params.funder}</Funder>}
+        {defined(params.projectRuntime) && (
+          <ProjectRuntime>{params.projectRuntime}</ProjectRuntime>
+        )}
+        {defined(params.searchLanguage) && (
+          <SearchLang>{params.searchLanguage}</SearchLang>
+        )}
+        {defined(params.timestamp) && (
+          <Timestamp
+            value={params.timestamp}
+            label={localization.timestamp_label}
+          />
+        )}
+      </ContextLineTemplate>
     );
   }
 
@@ -93,6 +91,7 @@ class ContextLine extends React.Component {
     const {
       params: { modifier, showModifierPopover },
       localization,
+      popoverContainer,
     } = this.props;
 
     let label = "";
@@ -110,7 +109,7 @@ class ContextLine extends React.Component {
         <>
           <HoverPopover
             id="modifier-popover"
-            container={this}
+            container={popoverContainer}
             content={localization.most_relevant_tooltip}
           >
             <span id="modifier" className="modifier context_moreinfo">
@@ -134,6 +133,7 @@ class ContextLine extends React.Component {
     const {
       params: { documentTypes },
       localization,
+      popoverContainer,
     } = this.props;
 
     if (!documentTypes || documentTypes.length === 0) {
@@ -156,7 +156,7 @@ class ContextLine extends React.Component {
         <span id="document_types" className="context_item">
           <HoverPopover
             id="doctypes-popover"
-            container={this}
+            container={popoverContainer}
             content={
               <>
                 {localization.documenttypes_tooltip}
