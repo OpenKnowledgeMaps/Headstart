@@ -58,7 +58,49 @@ services:
     restart: always
     network_mode: "host"
     volumes:
-      - /var/opt/renv:/renv/cache
+      - /opt/local/renv/cache:/renv/cache
+      - /var/log/headstart:/var/log/headstart
+    depends_on:
+      - redis
+
+  search_base:
+    build:
+      context: server
+      dockerfile: base.docker
+    env_file:
+      - server/workers/base/base.env
+    restart: always
+    network_mode: "host"
+    volumes:
+      - /opt/local/renv/cache:/renv/cache
+      - /var/log/headstart:/var/log/headstart
+    depends_on:
+      - redis
+
+  search_pubmed:
+    build:
+      context: server
+      dockerfile: pubmed.docker
+    env_file:
+      - server/workers/pubmed/pubmed.env
+    restart: always
+    network_mode: "host"
+    volumes:
+      - /opt/local/renv/cache:/renv/cache
+      - /var/log/headstart:/var/log/headstart
+    depends_on:
+      - redis
+
+  search_openaire:
+    build:
+      context: server
+      dockerfile: openaire.docker
+    env_file:
+      - server/workers/openaire/openaire.env
+    restart: always
+    network_mode: "host"
+    volumes:
+      - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis

@@ -1,6 +1,5 @@
 import { getRealHeight } from "helpers";
 import config from 'config';
-import { headstart } from 'headstart';
 import { papers } from 'papers';
 import { mediator } from 'mediator';
 import { intros } from 'intro';
@@ -42,6 +41,11 @@ class Canvas {
         const CHART_HEIGHT_CORRECTION = 15;
         const CHART_HEIGHT_CORRECTION_TOOLBAR = 15;
 
+        // TODO remove this when the sequence of initialization steps is refactored properly
+        if (mediator.modern_frontend_enabled && config.is_authorview) {
+            title_image_height = 70;
+        }
+
         // Set available_height and available_width
         if (parent_height === 0) {
             this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - Math.max(subtitle_height, title_image_height) - toolbar_height;
@@ -51,7 +55,7 @@ class Canvas {
 
         this.available_height = this.available_height - ((toolbar_height > 0)?(CHART_HEIGHT_CORRECTION_TOOLBAR):(CHART_HEIGHT_CORRECTION));
 
-        if (headstart.is("multiples")) {
+        if (window.headstartInstance.is("multiples")) {
             var multiples_height = $(".tl-title").outerHeight(true);
             this.available_height = this.available_height - multiples_height;
             this.available_width = $("#" + config.tag).width();
@@ -221,7 +225,7 @@ class Canvas {
     initEventListeners() {
         d3.select(window).on("resize", () => {
             mediator.publish("record_action", config.title, "Map", "resize", config.user_id, "resize_map", null, null, null);
-            if (headstart.is("multiples")) {
+            if (window.headstartInstance.is("multiples")) {
                 return;
             }   
             mediator.publish("window_resize");
@@ -312,76 +316,161 @@ class Canvas {
             }
         });
     }
+    
+    escapeHTML(string) {
+        let entityMap = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '/': '&#x2F;',
+            '`': '&#x60;',
+            '=': '&#x3D;'
+        };
+        return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+            return entityMap[s];
+        });
+    }
+
+    /**
+     * Refactored helper function for shortening text that's too long.
+     * @param {String} text 
+     * @param {Number} maxLength 
+     * 
+     * @returns {String} String with maximum maxLength characters
+     */
+    sliceText(text, maxLength) {
+        if (text.length <= maxLength) {
+            return text;
+        }
+
+        return text.slice(0, maxLength - 3) + '...';
+    }
+
+    /**
+     * Refactored helper function for getting the heading label.
+     * 
+     * @returns {String} Heading label depending on the config settings
+     */
+    getHeadingLabel() {
+        if (config.is_authorview && config.is_streamgraph) {
+            return config.localization[config.language].streamgraph_authors_label;
+        }
+
+        if (config.is_authorview && !config.is_streamgraph) {
+            return config.localization[config.language].overview_authors_label;
+        }
+
+        if (config.is_streamgraph) {
+            return config.localization[config.language].streamgraph_label;
+        }
+
+        return config.localization[config.language].overview_label;
+    }
+
+    /**
+     * Refactored helper function to understand how the drawTitle main if works.
+     * It returns the title's HTML.
+     * 
+     * @param {Object} context
+     * 
+     * @returns {String} the title HTML code
+     */
+    getChartTitle(context) {
+        if(mediator.modern_frontend_enabled) {
+            throw new Error("Do not call this function with MODERN_FRONTEND=true.");
+        }
+        
+        // This should probably make its way to a more global config
+        const MAX_LENGTH_VIPER = 47;
+        const MAX_LENGTH_LINKEDCAT = 115;
+        const MAX_LENGTH_CUSTOM = 100;
+
+        if (config.title) {
+            return config.title;
+        }
+
+        if (config.create_title_from_context_style === 'viper') {
+            let acronymtitle = context.params.acronym !== "" 
+                ? context.params.acronym + " - " + context.params.title 
+                : context.params.title;
+            let compressedTitle = this.sliceText(acronymtitle, MAX_LENGTH_VIPER);
+
+            return `Overview of <span class="truncated-project-title" title="${acronymtitle}">\
+                ${compressedTitle}</span>\
+                <span class="project-id">(${context.params.project_id})</span>`;
+        }
+
+        if (config.create_title_from_context) {
+            let query_clean = this.escapeHTML(context.query.replace(/\\(.?)/g, "$1"));
+            let label = this.getHeadingLabel();
+
+            if (config.create_title_from_context_style === 'linkedcat') {
+                let compressedTitle = this.sliceText(query_clean, MAX_LENGTH_LINKEDCAT);
+                return label + ' <span id="search-term-unique" title="' + query_clean + '">' + compressedTitle + '</span>';
+            }
+
+            if (config.create_title_from_context_style === 'custom' && typeof config.custom_title !== 'undefined' && config.custom_title !== null) {
+                let compressedTitle =  this.sliceText(config.custom_title, MAX_LENGTH_CUSTOM);
+                return label + ' <span id="search-term-unique" title="' 
+                        + config.localization[config.language].custom_title_explanation  + ' ' + query_clean + '">' 
+                        + compressedTitle + '</span>';
+            }
+
+            return label + ' <span id="search-term-unique" title="' + query_clean + '">' + query_clean + '</span>';
+        }
+
+        return config.localization[config.language].default_title;
+    }
 
     // Draws the header for this
     drawTitle(context) {
-        let chart_title = "";
+        if(!mediator.modern_frontend_enabled) {
+            let chart_title = this.getChartTitle(context);
+        
+            var subdiscipline_title_h4 = $("#subdiscipline_title h4");
+            subdiscipline_title_h4.html(chart_title);
 
-        chart_title = config.localization[config.language].default_title;
-        if (config.title) {
-            chart_title = config.title;
-        } else if (config.create_title_from_context_style === 'viper') {
-            let maxTitleLength = 47 // This should probably make it's way to a more global config
-            let acronymtitle = ( (context.params.acronym !== "") ? (context.params.acronym + " - " + context.params.title) : (context.params.title) );
-            let compressedTitle = ( acronymtitle.length > maxTitleLength ) ? acronymtitle.slice(0, maxTitleLength - 3) + '...' : acronymtitle
-            chart_title = `Overview of <span class="truncated-project-title" title="` + acronymtitle + `">${compressedTitle}</span>\
-                            <span class="project-id">(${context.params.project_id})</span>`
-        } else if (config.create_title_from_context) {
-            let query_clean = context.query.replace(/\\(.?)/g, "$1");
-            let label = (config.is_streamgraph)?(config.localization[config.language].streamgraph_label):(config.localization[config.language].overview_label);
-            
-            if(config.is_authorview) {  
-                label= (config.is_streamgraph)?(config.localization[config.language].streamgraph_authors_label):(config.localization[config.language].overview_authors_label);
+            if (config.show_infolink) {
+                let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
+                subdiscipline_title_h4.append(infolink);
+    
+                $("#infolink").html('<span id="whatsthis">' + config.localization[config.language].intro_icon  
+                            +'</span> ' + config.localization[config.language].intro_label);
             }
-            if (config.create_title_from_context_style === 'linkedcat') {
-                let maxTitleLength = 115 // This should probably make it's way to a more global config
-                let compressedTitle = query_clean.length > maxTitleLength ? query_clean.slice(0, maxTitleLength - 3) + '...' : query_clean;
-                chart_title = label + ' <span id="search-term-unique" title="' + query_clean + '">' + compressedTitle + '</span>';
-            } else {
-                chart_title = label + ' <span id="search-term-unique" title="' + query_clean + '">' + query_clean + '</span>';
+    
+            // deprecated??
+            if (config.show_multiples) {
+                let link = ' <span id="multiplesview"><a href="#">TimeLineView</a></span>';
+                subdiscipline_title_h4.append(link);
             }
-            
+    
+            if (config.show_dropdown) {
+                let dropdown = '<select id="datasets"></select>';
+    
+                subdiscipline_title_h4.append(" Select dataset: ");
+                subdiscipline_title_h4.append(dropdown);
+    
+                $.each(config.files, (index, entry) => {
+                    let current_item = '<option value="' + entry.file + '">' + entry.title + '</option>';
+                    $("#datasets").append(current_item);
+                });
+    
+                $("#datasets").val(mediator.current_bubble.file);
+    
+                $("#datasets").change(function () {
+                    let selected_file_number = this.selectedIndex;
+                    if (selected_file_number !== mediator.current_file_number) {
+                        window.headstartInstance.tofile(selected_file_number);
+                    }
+                });
+            }
+
+            this.drawContext(context);
         }
-           
-        var subdiscipline_title_h4 = $("#subdiscipline_title h4");
-        subdiscipline_title_h4.html(chart_title);
 
-        this.drawContext(context);
-        this.drawModals(context)
-
-        if (config.show_infolink) {
-            let infolink = ' <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink"></a>';
-            subdiscipline_title_h4.append(infolink);
-
-            $("#infolink").html('<span id="whatsthis">' + config.localization[config.language].intro_icon  
-                        +'</span> ' + config.localization[config.language].intro_label);
-        }
-
-        if (config.show_multiples) {
-            let link = ' <span id="multiplesview"><a href="#">TimeLineView</a></span>';
-            subdiscipline_title_h4.append(link);
-        }
-
-        if (config.show_dropdown) {
-            let dropdown = '<select id="datasets"></select>';
-
-            subdiscipline_title_h4.append(" Select dataset: ");
-            subdiscipline_title_h4.append(dropdown);
-
-            $.each(config.files, (index, entry) => {
-                let current_item = '<option value="' + entry.file + '">' + entry.title + '</option>';
-                $("#datasets").append(current_item);
-            });
-
-            $("#datasets").val(mediator.current_bubble.file);
-
-            $("#datasets").change(function () {
-                let selected_file_number = this.selectedIndex;
-                if (selected_file_number !== mediator.current_file_number) {
-                    headstart.tofile(selected_file_number);
-                }
-            });
-        }
+        this.drawModals(context);
     }
 
     drawModals(context) {
@@ -476,6 +565,10 @@ class Canvas {
     }
     
     drawContextAuthorview (context) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("Do not call this function with MODERN_FRONTEND=true.");
+        }
+
         if (this.paramExists(context.params.author_id)
             && this.paramExists(context.params.living_dates)
             && this.paramExists(context.params.image_link)) {
@@ -488,17 +581,21 @@ class Canvas {
             $('#author_image').css('background-image', 'url('+image_link+')');
             $('#author_living_dates').text(context.params.living_dates);
             $('#author_bio_link').attr('href', 'https://d-nb.info/gnd/' + context.params.author_id.replace(/\([^)]*\)/, ''));
-            $('#author_bio_link').text(config.localization[config.language].bio_link)
+            $('#author_bio_link').text(config.localization[config.language].bio_link);
         }
     }
     
     drawContextTimestamp(context) {
-        if(this.paramExists(context.timestamp)) {
-            $('#timestamp').text(config.localization[config.language].timestamp_label + ": " + context.timestamp)
+        if(this.paramExists(context.last_update)) {
+            $('#timestamp').text(config.localization[config.language].timestamp_label + ": " + context.last_update)
         }
     }
 
     drawContext(context) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("Do not call this function with MODERN_FRONTEND=true.");
+        }
+
         if (!config.show_context || !this.paramExists(context.params)) {
             return;
         }
@@ -537,7 +634,7 @@ class Canvas {
                             : (config.service_names[context.service])
 
         $("#source").html(config.localization[config.language].source_label
-                       + ": " + service_name);
+                    + ": " + service_name);
 
         if (config.create_title_from_context_style === 'viper') {
             $("#context-dataset_count").text(
@@ -574,16 +671,16 @@ class Canvas {
 
             let default_from_date = (function(service) {
                 switch(service) {
-                  case 'doaj':
+                case 'doaj':
                     return '1809';
-                  case 'pubmed':
+                case 'pubmed':
                     return '1809-01-01';
-                  case 'base':
-                      return '1665-01-01';
-                  default:
-                      return '1970-01-01';
+                case 'base':
+                    return '1665-01-01';
+                default:
+                    return '1970-01-01';
                 }
-              })(config.service);
+            })(config.service);
 
             if (dateFormat(from, time_macro_internal) === default_from_date) {
                 if(dateFormat(today, time_macro_internal) === dateFormat(to, time_macro_internal)) {
@@ -667,46 +764,50 @@ class Canvas {
             $('#search_lang').hide();
         }
         
-        if(config.is_authorview) {
-            this.drawContextAuthorview(context);
-        }
-        
         if(config.show_context_timestamp) {
             this.drawContextTimestamp(context);
         } else {
             $("#timestamp").hide();
         }
+
+        if (config.is_authorview) {
+            this.drawContextAuthorview(context);
+        }
     }
     
     showAreaStreamgraph(keyword) {
-        $("#subdiscipline_title h4")
-            .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
+        if(!mediator.modern_frontend_enabled) {
+            $("#context").css("display", "none");
 
-        shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
+            $("#subdiscipline_title h4")
+                .html('<span id="area-bold">'+config.localization[config.language].area_streamgraph + ":</span> " + '<span id="area-not-bold">' + keyword + "</span>" );
 
-        $("#context").css("display", "none");
-        
-        $("#backlink").remove();
-        $('<p id="backlink" class="backlink backlink-streamgraph"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
+            shave("#subdiscipline_title>h4", d3.select("#subdiscipline_title>h4").node().getBoundingClientRect().height);
 
-        $("#backlink").on("click", function () {
-            mediator.publish("streamgraph_chart_clicked");
-        })
+            $("#backlink").remove();
+            $('<p id="backlink" class="backlink backlink-streamgraph"><a class="underline">' + config.localization[config.language].backlink + '</a></p>').insertBefore("#context");
+
+            $("#backlink").on("click", function () {
+                mediator.publish("streamgraph_chart_clicked");
+            })
+        }
     }
     
     removeAreaStreamgraph() {
-        $("#backlink").remove();
-        $("#context").css("display", "block");
+        if(!mediator.modern_frontend_enabled) {
+            $("#backlink").remove();
+            $("#context").css("display", "block");
+        }
         mediator.publish("draw_title");
     }
 
     initForceAreas() {
-        let padded = canvas.current_vis_size - headstart.padding;
+        let padded = canvas.current_vis_size - window.headstartInstance.padding;
         this.force_areas = d3.layout.force().links([]).size([padded, padded]);
     }
 
     initForcePapers() {
-        let padded = canvas.current_vis_size - headstart.padding;
+        let padded = canvas.current_vis_size - window.headstartInstance.padding;
         this.force_papers = d3.layout.force().nodes([]).links([]).size([padded, padded]);
     }
 

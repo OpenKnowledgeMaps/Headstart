@@ -23,7 +23,6 @@ const common = {
     devServer: {
         contentBase: path.join( __dirname ),
         compress: true,
-        port: 8080,
         disableHostCheck: true,
         host: '0.0.0.0',
         publicPath: '/dist/'
@@ -34,6 +33,7 @@ const common = {
             //
             'handlebars': 'handlebars/dist/handlebars.js',
             'hypher': 'hypher/dist/jquery.hypher.js',
+            'markjs': 'mark.js/dist/jquery.mark.js',
 
             // paths
             'templates': path.resolve(__dirname, 'vis/templates'),
@@ -72,6 +72,9 @@ const common = {
             chunkFilename: '[id].css',
             ignoreOrder: false, // Enable to remove warnings about conflicting order
           }),
+          new webpack.EnvironmentPlugin({
+            MODERN_FRONTEND: false
+          })
     ],
     module: {
         rules: [
@@ -86,13 +89,14 @@ const common = {
                     { loader: "imports-loader?$=jquery" }
                 ]
             }, {
-                test: /.js?$/,
+                test: /.jsx?$/,
+                resolve: { extensions: [".js", ".jsx"] },
                 exclude: /node_modules/,
                 use: [
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: ['@babel/preset-env']
+                            presets: ['@babel/preset-env', '@babel/preset-react']
                         }
                     }
                 ]
@@ -138,7 +142,10 @@ const common = {
                 }, {
                   loader: 'sass-loader',
                   options: {
-                    prependData: '$skin: "' + config.skin + '";',
+                    prependData: `
+                        $skin: "${config.skin}";
+                        $modern_frontend_enabled: ${process.env.MODERN_FRONTEND ? "true" : "false"};
+                    `,
                     sassOptions: {
                       includePaths: ["node_modules"]
                     }

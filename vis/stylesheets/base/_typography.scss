@@ -8,7 +8,7 @@ $base-font-size: 10px; //not in use
 $base-font-family: 'Open Sans', Helvetica, sans-serif;
 $link-font-family: 'Open Sans', Helvetica, sans-serif;
 $special-font-family: 'Open Sans', Helvetica, sans-serif;
-$abstract-font-family: Helvetica Neue, Helvetica, sans-serif;
+$abstract-font-family: 'Open Sans', Helvetica Neue, Helvetica, sans-serif;
 
 /*light normal*/
 $fontweight300: 300;
@@ -47,4 +47,15 @@ $fontweight800: 800;
     $link-font-family: 'Lato', Helvetica, sans-serif;
     $special-font-family: 'Lato', Helvetica, sans-serif;
     $abstract-font-family: 'Lato', Helvetica Neue, Helvetica, sans-serif;
+}
+
+@if $skin == 'triple' {
+    $base-font-family: 'Lato', Helvetica, sans-serif;
+    $link-font-family: 'Lato', Helvetica, sans-serif;
+    $special-font-family: 'Lato', Helvetica, sans-serif;
+    $abstract-font-family: 'Lato', Helvetica Neue, Helvetica, sans-serif;
+}
+
+body {
+    font-family: $base-font-family !important;
 }

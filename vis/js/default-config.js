@@ -1,165 +1,267 @@
 var config = {
+    
+/*** basic visualization modes ***/
+    //show list
+    render_list: true,
+    //show map (should be renamed to reflect that)
+    render_bubbles: true,
+    //show toolbar at the bottom
+    scale_toolbar: false,
+    //show author-based view
+    is_authorview: false,
+    //when set to true, scale map using metrics
+    content_based: false,
+    //show streamgraph instead of map
+    is_streamgraph: false,
+    //tag that headstart is appended to 
+    tag: "visualization",
+       
+/*** basic map dimensions for the canvas (in pixels) ***/  
+    //minimum height
+    min_height: 600,
+    //minimum width
+    min_width: 600,
+    //maximum height
+    max_height: 1000,
+    //[deprecated] size of multiples
+    multiples_size: 600,
+    //padding for map range of articles (currently set inline) 
+    padding_articles: 0,
+    //padding for map range of bubbles (currently set dynamically inline)
+    circle_padding: 0,
+    
+/*** reference sizes for the map, bubbles and papers (in pixels) ***/    
+    // map reference size
+    reference_size: 650,
+    //max paper size
+    max_diameter_size: 50,
+    //min paper size
+    min_diameter_size: 30,
+    //max bubble size
+    max_area_size: 110,
+    //min bubble size
+    min_area_size: 50,
+    
+/*** adapt min and max sizes for bubbles and papers (1 = reference size) ***/    
     bubble_min_scale: 1,
     bubble_max_scale: 1,
     paper_min_scale: 1,
     paper_max_scale: 1,
-    zoom_factor: 0.9,
-    padding_articles: 0,
-    circle_padding: 0,
+    //enables a mode for dynamic sizing based on the number of papers (for n > 150)
     dynamic_sizing: false,
-
-    // map
-    min_height: 600,
-    min_width: 600,
-    max_height: 1000,
-    multiples_size: 600,
-
-    // map reference sizes
-    reference_size: 650,
-    max_diameter_size: 50,
-    min_diameter_size: 30,
-    max_area_size: 110,
-    min_area_size: 50,
-
-    // bubbles
-    area_title_max_size: 50,
-
-    // papers
+    
+/*** paper ratios ***/    
+    // dogear height and width in relationship to paper height and widht
     dogear_width: 0.1,
     dogear_height: 0.1,
+    //paper width and height ratios (currently at the golden cut)
     paper_width_factor: 1.2,
     paper_height_factor: 1.6,
+    //height of the metrics section of the paper (ratio)
     paper_readers_height_factor: 0.2,
+    //magic number related to the height of the metrics section of the paper
     paper_metadata_height_correction: 25,
-
-    // list
-    min_list_size: 400,
-    max_list_size: 500,
-    list_height: 51,
-    list_height_correction: 29,
-
-    // preview
-    preview_image_width_list: 230,
-    preview_image_height_list: 298,
-    preview_page_height: 400,
-    preview_top_height: 30,
-    preview_image_width: 738,
-    preview_image_height: 984,
-    abstract_small: 250,
-    abstract_large: null,
-
-    // data specific settings
-    subdiscipline_title: "",
-    use_area_uri: false,
-    url_prefix: null,
-    url_prefix_datasets: null,
-    input_format: "csv",
-    base_unit: "readers",
-    preview_type: "image",
-
+    
+/*** basic list sizes (in pixels) ***/
+    //currently set inline - should be moved to config
+    
+/*** force-directed layout settings ***/
+    //enable force-directed layout for bubbles
     is_force_areas: false,
+    //alpha for force-directed layout for bubbles
     area_force_alpha: 0.02,
-
+    
+    //enable force-directed layout for papers
     is_force_papers: true,
+    //alpha for force-directed layout for papers
     papers_force_alpha: 0.1,
     
+    //enables a mode for dynamic alpha setting for force-directed layouts
     dynamic_force_area: false,
     dynamic_force_papers: false,
-
-    render_list: true,
-    render_bubbles: true,
-
-    // show
-    show_multiples: false,
-    show_dropdown: true,
-    show_intro: false,
-    show_infolink: true,
-    show_titlerow: true,
-    show_list: false,
-    show_context: false,
-    show_infolink_areas: false,
-    show_keywords: false,
-    show_tags: false,
-    hide_keywords_overview: true,
-    convert_author_names: true,
-    show_area: true,
-    show_resulttype: false,
-    show_comments: false,
-    show_loading_screen: false,
     
-    create_title_from_context: false,
-    is_title_clickable: true,
+/*** preview image & pdf sizes (list and overlay) ***/
+    //list sizes
+    preview_image_width_list: 230,
+    preview_image_height_list: 298,
+    //overlay sizes
+    preview_image_width: 738,
+    preview_image_height: 984,
+    
+ /*** zoom settings ***/    
+    //correction factor for zoomed in bubble size
+    zoom_factor: 0.9,
+    // transition durations
+    transition_duration: 750,
+    zoomout_transition: 750,
+    
+/*** basic data- and third-party-service related settings ***/
+    //mode for retrieving data
+    mode: "local_files",
+    //which backend to use for data retrieval (api or legacy)
+    backend: "legacy",
+    //language specification to use (see localization object)
+    language: "eng",
+    //language used for hyphenation
+    hyphenation_language: "en",
+    //if set to true, Hypothes.is reader will be used for PDF viewing (make sure the related submodule is checked out)
+    //if set to false, the default pdf viewer of the browser will be used
+    use_hypothesis: false,
+    //bubbles have area uris in the data (if set to false, bubble titles are used)
+    //service providing the data
+    service: "none",
+    //canonical url for the map
+    canonical_url: null,
+    //which intro to use for the modal (see intro.js)
+    intro: "intro_cris",
+    //show intro (true/false)
+    show_intro: false,
+    //show loading screen before map is loaded (true/false)
+    show_loading_screen: false,
+    //evaluation mode/events logging
+    is_evaluation: false,
+    //which evaluation service to use. can also be an array. currently possible: "log", "matomo" and "ga"
+    evaluation_service: "log",
+    //enable logging of mouseover events (use only temporarily as it creates A LOT of logging events)
+    enable_mouseover_evaluation: false,
+    //[deprecated] enables bookmarking and recommenders for CN3
+    is_adaptive: false,
+    //whether to embed the okmaps credit
+    credit_embed: false,
+    use_area_uri: false,
+    //add a prefix to paper urls
+    url_prefix: null,
+    url_prefix_datasets: null,
+    //data input format
+    input_format: "csv",
+    //base unit for metrics
+    base_unit: "readers",
+    //preview type
+    preview_type: "image",
+    //convert author names from "[last name], [first name]" to "[first name] [last name]"
+    convert_author_names: true,
+    //adds some (currently very limited) debug output to the browser console
+    debug: false,
+    //debounce value
+    debounce: 50,
 
+/*** settings for title and context line ***/
+    //set map title directly (should be renamed)
+    subdiscipline_title: "",
+    //[deprecated] show link to load multiples view
+    show_multiples: false,
+    //show link to display intro
+    show_infolink: true,
+    //show dropdown to load different map datasets
+    show_dropdown: true,
+    //show context line
+    show_context: false,
+    //[deprecated] show link to display intro to area
+    show_infolink_areas: false,
+    //create title from context
+    create_title_from_context: false,
+    //create title from context style
+    create_title_from_context_style: '',
+    //set a custom title
+    custom_title: null,
+    //show number of open access documents in context
+    show_context_oa_number: true,
+    //create a tooltip for the label "most relevant" in the context line
+    context_most_relevant_tooltip: false,
+    //show timestamp in the context line
+    show_context_timestamp: false,
+    
+/*** list behaviour ***/
+    //show list onload (can be shown on click)
+    show_list: false,
+    //show doi outlinks in list entry (requires presence of doi attribute in data)
+    doi_outlink: false,
+    //show url outlink in list entry
+    url_outlink: false,
+    //show keywords in list entry
+    show_keywords: false,
+    //show tags in list entry
+    show_tags: false,
+    //hide keywords when paper is not selected
+    hide_keywords_overview: true,
+    //show area in list entry
+    show_area: true,
+    //show result type (document type) in list entry
+    show_resulttype: false,
+    //show comments (requires presence of comments in data)
+    show_comments: false,
+    //whether the title of a list entry can be clicked after it has been selected
+    is_title_clickable: true,
+    //abstract length in characters when items are not expanded
+    abstract_small: 250,
+    //abstract length expanded (null = no character limit)
+    abstract_large: null,
+    //show a backlink to all papers in bubble at the bottom of a list entry when a paper is selected
+    list_set_backlink: false,
+    //sort options for sort dropdown
     sort_options: ["readers", "title", "authors", "year"],
+    //filter options for filter dropdown
     filter_options: ["all", "open_access", "publication", "dataset"],
+    //custom data property to filter for. if null, defaults are used with above filter options
     filter_field: null,
+    //display sort menu dropdown
     sort_menu_dropdown: false,
+    //initial field used for sorting
     initial_sort: null,
+    //whether to show other papers in the list view when a paper is selected
     list_show_all_papers: false,
+    
+    highlight_query_terms: false,
+    highlight_query_fields: ["title"
+                                , "authors_string"
+                                , "authors_string"
+                                , "paper_abstract"
+                                , "year"
+                                , "published_in"
+                                , "subject_orig"],
 
     content_based: false,
 
+    //display filter menu dropdown
     filter_menu_dropdown: false,
-    
-    scale_toolbar: false,
-    embed_modal: false,
-    share_modal: false,
-    faqs_button: false,
-    faqs_url: "",
-    
-    is_authorview: false,
-    
-    is_streamgraph: false,
-    streamgraph_zoom: false,
-    
-    // transition
-    transition_duration: 750,
-    zoomout_transition: 750,
-
-    // misc
-    debug: false,
-    debounce: 50,
-    service: "none",
-    language: "eng",
-    hyphenation_language: "en",
-
-    // behaviour settings
-    is_evaluation: false,
-    evaluation_service: "log",
-    enable_mouseover_evaluation: false,
-    is_adaptive: false,
-    conference_id: 0,
-    user_id: 0,
-    max_recommendations: 10,
-    max_documents: 100,
-
-    //intro
-    intro: "intro_cris",
-    
-    use_hypothesis: false,
-    
+    //[deprecated] list subentry settings
     list_sub_entries: false,
     list_sub_entries_readers: false,
     list_sub_entries_number: false,
     list_sub_entries_statistics: false,
+    //[deprecated] list additional images settings
     list_additional_images: false,
     list_images: [],
     list_images_path: "images/",
     visual_distributions: false,
+    //[deprecated] list link to an external visualization settings
     list_show_external_vis: false,
     external_vis_url: "",
     
-    credit_embed: false,
-    canonical_url: null,
-    
-    doi_outlink: false,
-    url_outlink: false,
-    
-    show_context_oa_number: true,
-    context_most_relevant_tooltip: false,
-    show_context_timestamp: false,
-    
+/*** button/modal settings ***/
+    //show embed modal button
+    embed_modal: false,
+    //show share modal button
+    share_modal: false,
+    //hashtags for twitter cards (share modal)
     hashtags_twitter_card: "okmaps,openscience,dataviz",
+    //show button with link to faqs
+    faqs_button: false,
+    //url for link to faqs
+    faqs_url: "",
+
+/*** streamgraph settings ***/
+    //[experimental] zoomable streamgraph
+    streamgraph_zoom: false,
+    //streamgraph color definition
+    streamgraph_colors: ["#28a2a3", "#671A54", "#CC3380", "#7acca3", "#c999ff", "#ffe199"
+        , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#2856A3"],
+    
+/*** [deprecated] settings related to conference navigator integration ***/
+    conference_id: 0,
+    user_id: 0,
+    max_recommendations: 10,
+    max_documents: 100,
     
     service_names: {plos: "PLOS"
                         , base: "BASE"
@@ -188,6 +290,7 @@ var config = {
             streamgraph_label: 'Streamgraph for',
             overview_authors_label: 'Overview of the works of',
             streamgraph_authors_label: 'Streamgraph for the works of',
+            custom_title_explanation: 'This is a custom title. Please see the info button for more information. Original query:',
             articles_label: 'documents',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
@@ -203,6 +306,7 @@ var config = {
             backlink_list_streamgraph: "← Show all documents",
             backlink_list_streamgraph_stream_selected: "← Show all documents in stream",
             keywords: "Keywords",
+            no_keywords: "n/a",
             no_title: "No title",
             default_area: "No area",
             default_author: "",
@@ -216,6 +320,7 @@ var config = {
             default_y: 1.,
             default_year: "",
             sort_by_label: 'sort by:',
+            comment_by_label: "by",
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
             pdf_not_loaded_linktext: "this website",
             share_button_title: "share this map",
@@ -238,6 +343,7 @@ var config = {
             streamgraph_label: 'Streamgraph für',
             overview_authors_label: 'Überblick über die Werke von',
             streamgraph_authors_label: 'Streamgraph für die Werke von',
+            custom_title_explanation: 'Dieser Titel wurde manuell geändert. Die Original-Suche lautet:',
             most_recent_label: 'neueste',
             most_relevant_label: 'relevanteste',
             articles_label: 'Artikel',
@@ -253,6 +359,7 @@ var config = {
             backlink_list_streamgraph_stream_selected: "← Zeige alle Dokumente des Streams an",
             keywords: "Schlagwörter",
             no_title: "Kein Titel",
+            no_keywords: "nicht vorhanden",
             default_area: "Kein Bereich",
             default_author: "",
             default_id: "defaultid",
@@ -268,6 +375,7 @@ var config = {
             sort_by_label: 'sortieren: ',
             relevance: "Relevanz",
             link: "Link",
+            comment_by_label: "von",
             share_button_title: "Visualisierung teilen",
             embed_button_title: "Visualisierung auf einer anderen Seite einbetten",
             embed_button_text: 'Kopieren',
@@ -309,6 +417,7 @@ var config = {
             keywords: "Schlagwörter",
             basic_classification: "Basisklassifikation",
             ddc: "DDC",
+            no_keywords: "nicht vorhanden",
             no_title: "Kein Titel",
             default_area: "Kein Bereich",
             default_author: "",
@@ -325,6 +434,7 @@ var config = {
             sort_by_label: 'sortieren: ',
             relevance: "Relevanz",
             link: "Link",
+            comment_by_label: "von",
             share_button_title: "Visualisierung teilen",
             embed_button_title: "Visualisierung auf einer anderen Seite einbetten",
             embed_button_text: 'Kopieren',
@@ -349,8 +459,10 @@ var config = {
             backlink: "← Back to overview",
             backlink_list: "← Show all documents in area",
             keywords: "Keywords",
+            no_keywords: "n/a",
             no_title: "No title",
             overview_label: 'Overview of',
+            custom_title_explanation: 'This is a custom title. Please see the info button for more information. Original query:',
             articles_label: 'documents',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
@@ -370,6 +482,7 @@ var config = {
             default_y: 1.,
             default_year: "",
             sort_by_label: 'sort by:',
+            comment_by_label: "by",
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
             pdf_not_loaded_linktext: "this website",
             share_button_title: "share this map",
@@ -394,11 +507,13 @@ var config = {
             backlink_list_streamgraph: "← Show all documents",
             backlink_list_streamgraph_stream_selected: "← Show all documents in stream",
             keywords: "Keywords",
+            no_keywords: "n/a",
             no_title: "No title",
             overview_label: 'Overview of',
             streamgraph_label: 'Streamgraph for',
             overview_authors_label: 'Overview of the works of',
             streamgraph_authors_label: 'Streamgraph for the works of',
+            custom_title_explanation: 'This is a custom title. Please see the info button for more information. Original query:',
             articles_label: 'documents',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
@@ -424,6 +539,7 @@ var config = {
             open_access: "Open Access",
             link: 'link',
             items: "items",
+            comment_by_label: "by",
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
             pdf_not_loaded_linktext: "this website",
             share_button_title: "share this map",
@@ -450,6 +566,7 @@ var config = {
             backlink: "← Back to overview",
             backlink_list: "← Show all documents in area",
             keywords: "Keywords",
+            no_keywords: "n/a",
             no_title: "No title",
             overview_label: 'Overview of',
             articles_label: 'documents',
@@ -496,6 +613,7 @@ var config = {
             dataset: "datasets",
             items: "items",
             sort_by_label: 'sort by:',
+            comment_by_label: "by",
             scale_by_label: 'Scale map by:',
             scale_by_infolink_label: 'notes on use of metrics',
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
@@ -527,6 +645,7 @@ var config = {
             backlink: "← Zurück zur Übersicht",
             backlink_list: "← Zeige alle Themen im Themenfeld",
             keywords: "Keywords",
+            no_keywords: "nicht vorhanden",
             no_title: "Kein Titel",
             default_area: "Kein Bereich",
             default_author: "",
@@ -546,6 +665,7 @@ var config = {
             hide_verb_label: "einklappen",
             sort_by_label: 'sortieren: ',
             items: "Themen",
+            comment_by_label: "von",
             scale_by_infolink_label: '',
             scale_by_label: 'Verteilung für:',
             credit_alt: "Created by Open Knowledge Maps",
@@ -575,6 +695,7 @@ var config = {
             backlink: "← Zurück zur Übersicht",
             backlink_list: "← Zeige alle Themen im Themenfeld",
             keywords: "Keywords",
+            no_keywords: "nicht vorhanden",
             no_title: "Kein Titel",
             default_area: "Kein Bereich",
             default_author: "",
@@ -594,6 +715,7 @@ var config = {
             hide_verb_label: "einklappen",
             sort_by_label: 'sortieren: ',
             items: "Themen",
+            comment_by_label: "von",
             scale_by_infolink_label: '',
             scale_by_label: 'Verteilung für:',
             credit_alt: "Created by Open Knowledge Maps",
@@ -623,6 +745,7 @@ var config = {
             backlink: "← Back to overview",
             backlink_list: "← Show all topics in area",
             keywords: "Keywords",
+            no_keywords: "n/a",
             no_title: "No title",
             default_area: "No area",
             default_author: "",
@@ -636,6 +759,7 @@ var config = {
             default_y: 1.,
             default_year: "",
             sort_by_label: 'sort by:',
+            comment_by_label: "by",
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
             showmore_questions_label: "Show all",
             showmore_questions_verb: "questions",
@@ -663,7 +787,10 @@ var config = {
         "plos genetics": "plosgenetics",
         "plos pathogens": "plospathogens",
         "plos clinical trials": "plosclinicaltrials"
-    }
+    },
+
+    // modern_frontend feature flag
+    modern_frontend_enabled: process.env.MODERN_FRONTEND
 };
 
 if (config.content_based) {

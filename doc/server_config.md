@@ -26,7 +26,6 @@ Make sure you have the following packages installed:
   * rplos
   * parfossil
   * doParallel
-  * rentrez
   * curl
   * tibble
   * data.table
@@ -36,6 +35,7 @@ Make sure you have the following packages installed:
   * jaod
   * NLP
   * slam
+  * rentrez (install with `remotes::install_github("sckott/rentrez@http-post")`)
   * rbace (Currently, a Github repository only). Install with `remotes::install_github("ropensci/rbace")`
   * ropenaire (For VIPER. Currently, a Github repository only)  Install with `remotes::install_github("njahn82/ropenaire")`
   * readr (for VIPER)
@@ -72,6 +72,7 @@ Duplicate config.ini in server/preprocessing/conf/ and rename it to config_local
 * general->path: Relative path to the client visualization. Needs to be in the public_html/www directory.
 * general->images_path: Full path to the images directory for the client. Needs to be in the public_html/www directory. **Make sure that your webserver has write access to this directory.**
 * general->services_path: Relative path to the client REST services. Needs to be in the public_html/www directory.
+* general->api_url: URL to backend API as provided, or default localhost, e.g. `http://127.0.0.1/api/`
 * calculation->binary: Path to RScript binary
 * connection->sqlite_db: Full path to the sqlite datatabase file. For development purposes, duplicate headstart.sqlite in server/storage/ and rename it to a filename of your choice. Enter the path to this file here. **Make sure that your webserver has write & execute permissions to this file and the containing directory.**
 * connection->linkedcat_solr: URL to the SOLR server, without protocol or additional paths

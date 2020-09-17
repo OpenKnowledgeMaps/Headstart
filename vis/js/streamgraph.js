@@ -8,8 +8,6 @@ import { io } from 'io';
 import { canvas } from 'canvas';
 //streamgraph vis: colors, margin, padding, max ticks on x-axis
 const streamgraph_margin = {top: 20, right: 50, bottom: 70, left: 50};
-const stream_colors = ["#28a2a3", "#671A54", "#CC3380", "#7acca3", "#c999ff", "#ffe199"
-        , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#2856A3"];
 const axis_padding_left = -30;
 const axis_padding_bottom = 35;
 const max_ticks_x = 8;
@@ -77,7 +75,7 @@ streamgraph.setupStreamgraph = function (streamgraph_data) {
             .range([streamgraph_height, 0]);
 
     let z = d3.scale.ordinal()
-            .range(stream_colors);
+            .range(config.streamgraph_colors);
     
     let amended_data = this.amendData(parsed_data);
     let transformed_data = this.transformData(amended_data);
@@ -121,7 +119,7 @@ streamgraph.zoomed = function() {
 streamgraph.initMouseListeners = function() {
     d3.selectAll('.stream')
             .on("click", function (d, i) {
-                mediator.publish("stream_clicked", d.key, d3.select(this).style('fill'));
+                mediator.publish("stream_clicked", d);
             })
             
     d3.select('#' + config.tag)
@@ -221,6 +219,7 @@ streamgraph.drawStreamgraph = function (streams, area, z) {
                 return area(d.values);
             })
             .style("fill", function (d, i) {
+                d.color = z(i);
                 return z(i);
             });
             
@@ -263,7 +262,7 @@ streamgraph.drawLabels = function (series, x, y, streamgraph_width, streamgraph_
         })
 
         let color = current_stream.style('fill');
-        mediator.publish("stream_clicked", d.key, color);
+        mediator.publish("stream_clicked", d);
     })
     
     let repositioned_labels = self.repositionOverlappingLabels(label_positions);
@@ -313,7 +312,7 @@ streamgraph.drawLabels = function (series, x, y, streamgraph_width, streamgraph_
             })
 
             let color = current_stream.style('fill');
-            mediator.publish("stream_clicked", cur_d.key, color);
+            mediator.publish("stream_clicked", cur_d);
         })
     
         setTM(rect[0][0], ctm)

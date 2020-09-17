@@ -1,4 +1,3 @@
-import { headstart } from 'headstart';
 import Mediator from 'mediator-js';
 import config from 'config';
 import { papers } from 'papers';
@@ -8,6 +7,7 @@ import { io } from 'io';
 import { canvas } from 'canvas';
 import { scale } from './scale';
 import { streamgraph } from 'streamgraph';
+import Intermediate from './intermediate';
 
 const multiplesTemplate = require('templates/multiples.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
@@ -44,7 +44,8 @@ var MyMediator = function() {
     this.fileData = [];
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
-
+    this.modern_frontend_enabled = config.modern_frontend_enabled
+    this.modern_frontend_intermediate = new Intermediate(this.modern_frontend_enabled, this.chart_svg_click, this.streamgraph_chart_clicked)
     this.init();
     this.init_state();
 };
@@ -82,6 +83,9 @@ MyMediator.prototype = {
         this.mediator.subscribe("preview_mouseover", this.preview_mouseover);
         this.mediator.subscribe("preview_mouseout", this.preview_mouseout);
         this.mediator.subscribe("list_click_paper_list", this.list_click_paper_list);
+        this.mediator.subscribe("list_click_area", this.list_click_area);
+        this.mediator.subscribe("list_area_mouseover", this.list_area_mouseover);
+        this.mediator.subscribe("list_area_mouseout", this.list_area_mouseout);
         // list --> bookmarks
         this.mediator.subscribe("bookmark_added", this.bookmark_added);
         this.mediator.subscribe("bookmark_removed", this.bookmark_removed);
@@ -131,6 +135,9 @@ MyMediator.prototype = {
         this.mediator.subscribe("stream_clicked", this.stream_clicked)
         this.mediator.subscribe("currentstream_click", this.currentstream_click)
         this.mediator.subscribe("streamgraph_chart_clicked", this.streamgraph_chart_clicked)
+
+        // refactor
+        this.mediator.subscribe("register_zoomout_callback", this.register_zoomout_callback)
     },
 
     init_state: function() {
@@ -145,6 +152,7 @@ MyMediator.prototype = {
         MyMediator.prototype.is_zooming_out = false;
         MyMediator.prototype.is_in_normal_mode = true;
         MyMediator.prototype.current_stream = null;
+        MyMediator.prototype.modern_frontend = false;
     },
 
     init_modules: function() {
@@ -160,6 +168,10 @@ MyMediator.prototype = {
         if(config.is_streamgraph) {
             mediator.manager.registerModule(streamgraph, 'streamgraph')
         }
+    },
+
+    init_modern_frontend_intermediate: function() {
+        mediator.modern_frontend_intermediate.init(config, io.context);
     },
 
     register_bubbles: function() {
@@ -192,7 +204,7 @@ MyMediator.prototype = {
     io_async_get_data: function (url, input_format, callback) {
         // WORKAROUND, if I try to add headstart earlier it doesn't work
         // TODO find reason
-        mediator.modules.headstart = headstart;
+        mediator.modules.headstart = window.headstartInstance;
         mediator.manager.call('io', 'async_get_data', [url, input_format, callback]);
     },
 
@@ -218,6 +230,11 @@ MyMediator.prototype = {
         papers.current = "none";
         list.current = "none";
         $("#list_explorer").empty();
+        if (mediator.modern_frontend_enabled) {
+            mediator.modern_frontend_intermediate.zoomOut();
+        } else {
+            $("#backlink").remove();
+        }
         mediator.manager.call('canvas', 'setupToFileCanvas', []);
     },
 
@@ -260,10 +277,16 @@ MyMediator.prototype = {
                 }
             }
         }();
+        
+        //Dispatch an event that the data has been loaded for reuse outside of Headstart
+        let elem = document.getElementById(config.tag);
+        var event = new CustomEvent('headstart.data.loaded', {detail: {data: csv}});
+        elem.dispatchEvent(event);
+        
         let context = (typeof csv.context !== 'object')?({}):(csv.context);
         mediator.streamgraph_data = (config.is_streamgraph)?(csv.streamgraph):{};
         
-        mediator.manager.registerModule(headstart, 'headstart');
+        mediator.manager.registerModule(window.headstartInstance, 'headstart');
         
         if(config.is_streamgraph) {         
             mediator.manager.call('canvas', 'setupStreamgraphCanvas', []);
@@ -285,7 +308,6 @@ MyMediator.prototype = {
             
             mediator.manager.call('list', 'start');
             if (config.show_list) mediator.manager.call('list', 'show');
-            mediator.manager.call('canvas', 'showInfoModal', []);
             
             mediator.manager.call('streamgraph', 'initMouseListeners', []);
             
@@ -318,11 +340,14 @@ MyMediator.prototype = {
             mediator.manager.call('list', 'start');
             if (!config.render_bubbles && config.show_list) mediator.manager.call('list', 'show');
             mediator.manager.call('canvas', 'checkForcePapers', []);
-            mediator.manager.call('canvas', 'showInfoModal', []);
             mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
             mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
             mediator.manager.call('bubble', 'initMouseListeners', []);
-            }
+        }
+
+        mediator.init_modern_frontend_intermediate();
+
+        mediator.manager.call('canvas', 'showInfoModal', []);
     },
 
     update_canvas_domains: function(data) {
@@ -353,6 +378,7 @@ MyMediator.prototype = {
             credit_embed: config.credit_embed
             , canonical_url: config.canonical_url
             , is_authorview: config.is_authorview
+            , modern_frontend_enabled: mediator.modern_frontend_enabled
         }));
         if(config.credit_embed) {
             $("#credit_logo").attr("src", credit_logo);
@@ -453,7 +479,10 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
     
-    stream_clicked: function(keyword, color) {
+    stream_clicked: function(d) {
+        let keyword = d.key;
+        let color = d.color;
+        
         mediator.current_stream = keyword;
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'filterListByKeyword', [keyword]);
@@ -463,6 +492,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'changeHeaderColor', [color]);
         mediator.manager.call('canvas', 'showAreaStreamgraph', [keyword])
         mediator.current_enlarged_paper = null;
+        mediator.modern_frontend_intermediate.zoomIn({title: keyword});
     },
     
     currentstream_click: function() {
@@ -490,6 +520,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'resetHeaderColor');
         mediator.manager.call('canvas', 'removeAreaStreamgraph');
         mediator.current_enlarged_paper = null;
+        mediator.modern_frontend_intermediate.zoomOut();
     },
 
     bubble_mouseout: function(d, circle, bubble_fsm) {
@@ -525,6 +556,7 @@ MyMediator.prototype = {
             }
         }
         mediator.manager.call('list', 'count_visible_items_to_header', []);
+        mediator.modern_frontend_intermediate.zoomIn({title: d.title});
     },
     bubble_zoomout: function() {
         mediator.manager.call('list', 'reset', []);
@@ -541,6 +573,7 @@ MyMediator.prototype = {
             mediator.manager.call('list', 'scrollTop', []);
         else
             mediator.manager.call('list', 'scrollToEntry', [mediator.current_enlarged_paper.safe_id]);
+        mediator.modern_frontend_intermediate.zoomOut();
     },
     
     zoomout_complete: function() {
@@ -575,11 +608,11 @@ MyMediator.prototype = {
     },
 
     record_action: function(id, category, action, user, type, timestamp, additional_params, post_data) {
-        headstart.recordAction(id, category, action, user, type, timestamp, additional_params, post_data);
+        window.headstartInstance.recordAction(id, category, action, user, type, timestamp, additional_params, post_data);
     },
     
     mark_project_changed: function(id) {
-        headstart.markProjectChanged(id);
+        window.headstartInstance.markProjectChanged(id);
     },
 
     window_resize: function() {
@@ -652,6 +685,32 @@ MyMediator.prototype = {
         }
     },
     
+    list_area_mouseover: function(d) {
+        mediator.manager.call('bubble', 'highlightBubble', [d]);
+    },
+    
+    list_area_mouseout: function(d) {
+        mediator.manager.call('bubble', 'removeHighlightBubble', [d]);
+    },
+    
+    list_click_area: function(d) {
+        if(config.is_streamgraph) {
+            return; //Not implemented yet
+        } else {
+            mediator.manager.call('canvas', 'getCurrentCircle', [d]);
+            if(mediator.current_circle) {
+                if(mediator.is_zoomed) {
+                    mediator.currentbubble_click(d);
+                } else {
+                    mediator.manager.call('bubble', 'zoomin', [mediator.current_circle.data()[0]])
+                }
+                
+            }
+            mediator.current_bubble.current = "hoverbig";
+            mediator.manager.call('list', 'count_visible_items_to_header')
+        }
+    },
+    
     update_visual_distributions: function(type) {
         let context = io.context;
         
@@ -663,7 +722,8 @@ MyMediator.prototype = {
             mediator.manager.call('scale', 'updateLegend', [type, context]);
         }
         mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
-    }
+    },
+
 };
 
 export const mediator = new MyMediator();

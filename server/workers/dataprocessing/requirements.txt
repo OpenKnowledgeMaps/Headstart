@@ -1,2 +1,3 @@
 redis
 pandas
+scikit-learn

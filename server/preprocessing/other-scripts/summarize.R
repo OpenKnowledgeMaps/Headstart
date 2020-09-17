@@ -60,10 +60,23 @@ create_cluster_labels <- function(clusters, metadata,
   for (k in seq(1, clusters$num_clusters)) {
     group = c(names(clusters$groups[clusters$groups == k]))
     matches = which(clusters$labels%in%group)
-    clusters$cluster_labels[c(matches)] = tfidf_top_names[k]
+    summary = tfidf_top_names[[k]]
+    if (summary == "") {
+      candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
+      candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
+      candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
+      candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
+      candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
+      candidates_trigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
+      candidates = mapply(paste, candidates, candidates_bigrams, candidates_trigrams)
+      nn_count = sort(table(strsplit(paste(candidates, collapse=" "), " ")), decreasing = T)
+      summary <- filter_out_nested_ngrams(names(nn_count), 3)
+      summary = lapply(summary, FUN = function(x) {paste(unlist(x), collapse="; ")})
+      summary = gsub("_", " ", summary)
+      summary = paste(summary, collapse="; ")
+    }
+    clusters$cluster_labels[c(matches)] = summary
   }
-  clusters$cluster_labels <- fill_empty_areatitles(clusters$cluster_labels, metadata)
-  clusters$cluster_labels <- unlist(clusters$cluster_labels)
   type_counts <- get_type_counts(unlowered_corpus)
   clusters$cluster_labels <- fix_cluster_labels(clusters$cluster_labels, type_counts)
   return(clusters)
@@ -178,15 +191,6 @@ fill_empty_clusters <- function(nn_tfidf, nn_corpus){
                                                            ))
   replacement_tfidf_top <- apply(replacement_nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
   return(replacement_tfidf_top)
-}
-
-fill_empty_areatitles <- function(cluster_labels, metadata) {
-  missing_areatitles = which(lapply(cluster_labels, function(x) {nchar(x)}) <= 1)
-  replacement_areatitles = metadata$subject[missing_areatitles]
-  replacement_areatitles = lapply(replacement_areatitles, function(x) {gsub(";", ", ", x)})
-  replacement_areatitles <- lapply(replacement_areatitles, function(x) {paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))})
-  cluster_labels[missing_areatitles] = unlist(replacement_areatitles)
-  return(cluster_labels)
 }
 
 get_title_ngrams <- function(titles, stops) {
