@@ -1,6 +1,7 @@
 var data_config = {
     tag: "visualization",
     mode: "search_repos",
+    backend: "legacy",
 
     service: "base",
 
@@ -31,4 +32,5 @@ var data_config = {
     share_modal: false,
     
     show_keywords: true,
+    highlight_query_terms: true,
 };

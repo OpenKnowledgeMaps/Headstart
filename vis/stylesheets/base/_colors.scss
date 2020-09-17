@@ -35,6 +35,7 @@ $dataset: #2C3E52;
 
 $lower_value_tag: #2C316E;
 $higher_value_tag: #DC2260;
+$highlight: #e1e5e5;
 
 @if $skin == 'viper' {
     // Map Bubble Colors
@@ -108,5 +109,22 @@ $higher_value_tag: #DC2260;
     $okm-gray: #818181;
     $paper-icon: #cbcbcb;
     $highlight-searchterm: #dadada;
-    $okm-red: #2cb583;
+    $okm-red: #1e6662;
+    $infolink: #1e6662;
+}
+
+@if $skin == 'triple' {
+    $dark-blue: #666666;
+    $medium-blue: #622166;
+    $okm-clouds: #f1f1f1;
+    $okm-modal-btn: #622166;
+    $framed-item: #622166;
+    $journal-gray: #622166;
+    $list_metadata_title_paper: #622166;
+    $list_show_hide_button: #622166;
+    $okm-gray: #818181;
+    $paper-icon: #cbcbcb;
+    $highlight-searchterm: #EAEAEA;
+    $okm-red: #ed1c24;
+    $infolink: #622166;
 }

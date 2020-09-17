@@ -3,7 +3,7 @@
     padding-top: 15px;
     padding-left: 50px;
     font-family: $base-font-family;
-    min-height: 50px;
+    min-height: 54px;
 
     h4 {
         margin-bottom: 0px;
@@ -16,6 +16,12 @@
     #area-not-bold, #area-bold, #infolink-areas {
         position: relative;
         z-index: 3;
+    }
+    
+    #area-not-bold {
+        .query_term_highlight {
+            background-color: transparent;
+        }
     }
 
     .backlink {
@@ -53,7 +59,9 @@
     font-size: 11px;
     color: $black;
     span {
-        margin-right: 1%;
+        @if not $modern_frontend_enabled {
+            margin-right: 1%;
+        }
     }
     .context_moreinfo {
         border-bottom: 1px solid $medium-blue;
@@ -197,7 +205,7 @@
     }
 
     #subdiscipline_title {
-        min-height: 10px;
+        min-height: 37px;
     }
 
     #context {
@@ -254,9 +262,37 @@
             }
         }
     }
-    
+
     #modals .btn {
         width: 34px;
         height: 34px;
     }
+}
+
+@if $skin == 'covis' {
+    #infolink:hover, #infolink:focus, #infolink:active {
+        text-decoration: none;
+        color: $infolink;
+    }
+
+    #infolink {
+        text-decoration: underline;
+        margin-left: 0px;
+        font-size: 18px;
+    }
+    #subdiscipline_title h4 b {
+        margin-right: 0px;
+    }
+
+    @media screen and (max-width: 640px) {
+        #infolink {
+            font-size: 14px;
+        }
+    }
+}
+
+.context_item {
+    display: inline-block;
+    margin-right: 1%;
+    height: 15px;
 }

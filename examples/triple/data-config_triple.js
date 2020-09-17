@@ -14,6 +14,7 @@ var data_config = {
     is_force_areas: true,
     language: "eng_pubmed",
     area_force_alpha: 0.015,
+    show_keywords: true,
     show_list: true,
     content_based: true,
     url_prefix: "",
@@ -29,4 +30,9 @@ var data_config = {
 
     embed_modal: true,
     share_modal: false,
+
+    backend: "api",
+    
+    streamgraph_colors: ["#215A66", "#66214A", "#5D40FB", "#CB40FB", "#40C0FB", "#FB4068"
+        , "#FBB240", "#40FBC8", "#fee4bc", "#bcfeec", "#c6bcfe", "#febcca"],
 };
