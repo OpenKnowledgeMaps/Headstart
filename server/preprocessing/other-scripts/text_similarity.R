@@ -46,7 +46,7 @@ if (!is.null(params$vis_type)) {
     vis_type <- 'overview'
 }
 
-MAP_ID <- params$map_id
+MAP_ID <<- params$map_id
 taxonomy_separator = NULL
 limit = 100
 list_size = -1
