@@ -44,7 +44,7 @@ source('altmetrics.R')
 source('base.R')
 limit = 120
 list_size = 100
-MAP_ID <- params$map_id
+.GlobalEnv$MAP_ID <- params$map_id
 
 failed <- list(params=params)
 tryCatch({

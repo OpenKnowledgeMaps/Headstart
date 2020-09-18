@@ -38,7 +38,7 @@ enrich_output_json <- function(output_json){
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
-  alog$info(paste("map_id:", MAP_ID, "Time taken:", time.taken, sep=" "))
+  alog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Time taken:", time.taken, sep=" "))
 
   return (output_json)
 }
