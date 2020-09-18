@@ -40,7 +40,7 @@ if ('lang_id' %in% names(params)){
 
 LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
 ADDITIONAL_STOP_WORDS = LANGUAGE$name
-MAP_ID <- params$map_id
+.GlobalEnv$MAP_ID <- params$map_id
 
 #start.time <- Sys.time()
 failed <- list(params=params)
