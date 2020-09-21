@@ -102,27 +102,26 @@ tryCatch({
   failed$query_reason <<- err$message
 })
 
-
-print("got the input")
-tryCatch({
-  output_json = vis_layout(input_data$text, input_data$metadata,
-                           service,
-                           max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
-                           lang=LANGUAGE$name,
-                           taxonomy_separator=taxonomy_separator, list_size = list_size,
-                           vis_type=vis_type)
-}, error=function(err){
- tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
- failed$query <<- query
- failed$processing_reason <<- err$message
-})
-
-if (service=='openaire' && exists('output_json')) {
-  output_json = enrich_output_json(output_json)
+if(exists('input_data')) {
+  print("got the input")
+  tryCatch({
+    output_json = vis_layout(input_data$text, input_data$metadata,
+                             service,
+                             max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
+                             lang=LANGUAGE$name,
+                             taxonomy_separator=taxonomy_separator, list_size = list_size,
+                             vis_type=vis_type)
+  }, error=function(err){
+   tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
+   failed$query <<- query
+   failed$processing_reason <<- err$message
+  })
 }
 
 if (!exists('output_json')) {
   output_json <- detect_error(failed, service)
+} else if (service=='openaire' && exists('output_json')) {
+  output_json <- enrich_output_json(output_json)
 }
 
 print(output_json)
