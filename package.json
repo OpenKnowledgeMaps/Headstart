@@ -8,9 +8,9 @@
   },
   "scripts": {
     "test": "jest",
-    "dev": "webpack --progress --colors --watch",
-    "prod": "webpack --progress --colors",
-    "start": "webpack-dev-server -d --progress",
+    "dev": "webpack --progress --colors --watch --mode=development",
+    "prod": "webpack --progress --colors --mode=production",
+    "start": "webpack-dev-server -d --progress --mode=development",
     "lint": "eslint ./vis/js/components/*.js"
   },
   "repository": {
