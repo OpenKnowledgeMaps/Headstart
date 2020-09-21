@@ -122,7 +122,7 @@ if (service=='openaire' && exists('output_json')) {
 }
 
 if (!exists('output_json')) {
-  output_json <- detect_error(failed)
+  output_json <- detect_error(failed, service)
 }
 
 print(output_json)
