@@ -67,7 +67,7 @@ output_json = vis_layout(input_data$text, input_data$metadata,
 })
 
 if (!exists('output_json')) {
-  output_json <- detect_error(failed)
+  output_json <- detect_error(failed, service)
 }
 
 print(output_json)

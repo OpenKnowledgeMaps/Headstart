@@ -86,22 +86,43 @@ get_service_lang <- function(lang_id, valid_langs, service) {
 }
 
 
-detect_error <- function(failed) {
+detect_error <- function(failed, service) {
   output <- list()
   reason <- list()
-  # first identify criteria
-  if (length(unlist(strsplit(failed$query, " "))) < 4) {
-    reason <- c(reason, 'typo', 'too specific')
-  } else {
-    reason <- c(reason, 'query length', 'too specific')
+  # branch off between API errors and our backend errors
+  if (!is.null(failed$query_reason)) {
+    # map response to individual error codes/messages
+    # then return them as json list
+    if (startsWith(failed$query_reason, "HTTP failure: 502, bad gateway")){
+        reason <- c(reason, 'API error: requested metadata size')
+      }
+    output$reason <- reason
+    output$status <- 'error'
+    return(toJSON(output, auto_unbox = TRUE))
   }
-  if (!is.null(failed$params$to) &&
-      !is.null(failed$params$from) &&
-      difftime(failed$params$to, failed$params$from) <= 60) {
-    reason <- c(reason, 'timeframe too short')
+  if (!is.null(failed$processing_reason)) {
+    if (failed$processing_reason == "No input data found.") {
+      # first identify criteria
+      if (length(unlist(strsplit(failed$query, " "))) < 4) {
+        reason <- c(reason, 'typo', 'too specific')
+      } else {
+        reason <- c(reason, 'query length', 'too specific')
+      }
+      if (!is.null(failed$params$to) &&
+          !is.null(failed$params$from) &&
+          difftime(failed$params$to, failed$params$from) <= 60) {
+        reason <- c(reason, 'timeframe too short')
+      }
+      # then return them as json list
+      output$reason <- reason
+      output$status <- 'error'
+      return(toJSON(output, auto_unbox = TRUE))
+    } else {
+      reason <- c(reason, 'unexpected data processing error')
+      # then return them as json list
+      output$reason <- reason
+      output$status <- 'error'
+      return(toJSON(output, auto_unbox = TRUE))
+    }
   }
-  # then return them as json list
-  output$reason <- reason
-  output$status <- 'error'
-  return(toJSON(output, auto_unbox = TRUE))
 }
