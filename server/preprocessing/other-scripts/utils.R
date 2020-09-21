@@ -95,34 +95,26 @@ detect_error <- function(failed, service) {
     # then return them as json list
     if (startsWith(failed$query_reason, "HTTP failure: 502, bad gateway")){
         reason <- c(reason, 'API error: requested metadata size')
-      }
-    output$reason <- reason
-    output$status <- 'error'
-    return(toJSON(output, auto_unbox = TRUE))
-  }
-  if (!is.null(failed$processing_reason)) {
-    if (failed$processing_reason == "No input data found.") {
-      # first identify criteria
-      if (length(unlist(strsplit(failed$query, " "))) < 4) {
-        reason <- c(reason, 'typo', 'too specific')
       } else {
-        reason <- c(reason, 'query length', 'too specific')
+        # if not one of the known data source API errors:
+        # apply query error detection heuristics
+        if (length(unlist(strsplit(failed$query, " "))) < 4) {
+          reason <- c(reason, 'typo', 'too specific')
+        } else {
+          reason <- c(reason, 'query length', 'too specific')
+        }
+        if (!is.null(failed$params$to) &&
+            !is.null(failed$params$from) &&
+            difftime(failed$params$to, failed$params$from) <= 60) {
+          reason <- c(reason, 'timeframe too short')
       }
-      if (!is.null(failed$params$to) &&
-          !is.null(failed$params$from) &&
-          difftime(failed$params$to, failed$params$from) <= 60) {
-        reason <- c(reason, 'timeframe too short')
-      }
-      # then return them as json list
-      output$reason <- reason
-      output$status <- 'error'
-      return(toJSON(output, auto_unbox = TRUE))
-    } else {
-      reason <- c(reason, 'unexpected data processing error')
-      # then return them as json list
-      output$reason <- reason
-      output$status <- 'error'
-      return(toJSON(output, auto_unbox = TRUE))
     }
   }
+  if (length(reason) == 0) {
+      reason <- c(reason, 'unexpected data processing error')
+  }
+  # then return them as json list
+  output$reason <- reason
+  output$status <- 'error'
+  return(toJSON(output, auto_unbox = TRUE))
 }

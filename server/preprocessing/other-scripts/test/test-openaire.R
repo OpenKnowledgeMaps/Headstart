@@ -54,24 +54,24 @@ tryCatch({
   failed$query_reason <<- err$message
 })
 
-tryCatch({
-output_json = vis_layout(input_data$text, input_data$metadata,
-                         service,
-                         max_clusters=MAX_CLUSTERS,
-                         lang=LANGUAGE$name,
-                         add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=-1)
-}, error=function(err){
-tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
-  failed$query <<- query
-  failed$processing_reason <<- err$message
-})
-
-if (service=='openaire' && exists('output_json')) {
-  output_json = enrich_output_json(output_json)
+if(exists('input_data')) {
+  tryCatch({
+  output_json = vis_layout(input_data$text, input_data$metadata,
+                           service,
+                           max_clusters=MAX_CLUSTERS,
+                           lang=LANGUAGE$name,
+                           add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=-1)
+  }, error=function(err){
+  tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
+    failed$query <<- query
+    failed$processing_reason <<- err$message
+  })
 }
 
 if (!exists('output_json')) {
   output_json <- detect_error(failed, service)
+} else if (service=='openaire' && exists('output_json')) {
+  output_json <- enrich_output_json(output_json)
 }
 
 print(output_json)
