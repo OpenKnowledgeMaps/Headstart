@@ -93,7 +93,7 @@ detect_error <- function(failed, service) {
   if (!is.null(failed$query_reason)) {
     # map response to individual error codes/messages
     # then return them as json list
-    if (startsWith(failed$query_reason, "HTTP failure: 502, bad gateway")){
+    if (service == 'pubmed' && startsWith(failed$query_reason, "HTTP failure: 502, bad gateway")){
         reason <- c(reason, 'API error: requested metadata size')
       } else {
         # if not one of the known data source API errors:
