@@ -71,7 +71,7 @@ get_papers <- function(query, params = NULL, limit = 100) {
                               mindate = from, maxdate = to, sort=sortby, use_history=TRUE, http_post = TRUE)
   res <- rentrez::entrez_fetch(db = "pubmed", web_history = x$web_history, retmax = limit, rettype = "xml")
   xml <- xml2::xml_children(xml2::read_xml(res))
-  if (xml2::xml_text(xml) == "Empty result - nothing to do") {
+  if (length(xml) == 1 && xml2::xml_text(xml) == "Empty result - nothing to do") {
     stop(paste("No results retrieved."))
   }
 
