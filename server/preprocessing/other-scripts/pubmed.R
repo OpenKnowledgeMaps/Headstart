@@ -142,13 +142,21 @@ get_papers <- function(query, params = NULL, limit = 100) {
   pmc_ids = c()
   idlist = extract_from_esummary(summary, "articleids")
 
-  for(i in 1:nrow(df)) {
-    current_ids = idlist[,i]
-    current_pmcid = current_ids$value[current_ids$idtype=="pmc"]
+  if (nrow(df) > 1) {
+    for(i in 1:nrow(df)) {
+      current_ids = idlist[,i]
+      current_pmcid = current_ids$value[current_ids$idtype=="pmc"]
+      if(identical(current_pmcid, character(0))) {
+        current_pmcid = "";
+      }
+      pmc_ids[i] = current_pmcid
+    }
+  } else {
+    current_pmcid = idlist[idlist$idtype=="pmc",]$value
     if(identical(current_pmcid, character(0))) {
       current_pmcid = "";
     }
-    pmc_ids[i] = current_pmcid
+    pmc_ids <- c(pmc_ids, current_pmcid)
   }
 
   df$pmcid = pmc_ids
