@@ -89,6 +89,7 @@ get_service_lang <- function(lang_id, valid_langs, service) {
 detect_error <- function(failed, service) {
   output <- list()
   reason <- list()
+  phrasepattern <- '"(.*?)"'
   # branch off between API errors and our backend errors
   if (!is.null(failed$query_reason)) {
     # map response to individual error codes/messages
@@ -96,9 +97,13 @@ detect_error <- function(failed, service) {
     if (service == 'pubmed' && startsWith(failed$query_reason, "HTTP failure: 502, bad gateway")){
         reason <- c(reason, 'API error: requested metadata size')
       } else {
+        result <- regmatches(failed$query, regexec(phrasepattern, failed$query))
         # if not one of the known data source API errors:
         # apply query error detection heuristics
-        if (length(unlist(strsplit(failed$query, " "))) < 4) {
+        if (!identical(result[[1]], character(0)) &&
+            length(unlist(strsplit(result[[1]][2], " "))) > 4) {
+          reason <- c(reason, 'phrase too long')
+        } else if (length(unlist(strsplit(failed$query, " "))) < 4) {
           reason <- c(reason, 'typo', 'too specific')
         } else {
           reason <- c(reason, 'query length', 'too specific')
