@@ -50,7 +50,7 @@ The tests can be run with:
 
 The modern frontend code can be linted (e.g. the code style etc. checked) using `npm run lint`
 
-Additionally, it is possible to set the flag for the modern frontend in the `config.js` file, for example as `modernFrontendEnabled: true` as demonstrated in `config.examples.js`.
+Additionally, it is possible to set the flag for the modern frontend in the `config.js` file, for example as `modernFrontendEnabled: true` as demonstrated in `config.examples.js`. Please note that any setting in the config.js will be overriden by command-line arguments.
 
 ### Server
 
