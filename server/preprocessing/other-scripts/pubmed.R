@@ -76,6 +76,10 @@ get_papers <- function(query, params = NULL, limit = 100, retry_opts = rentrez::
   res <- rentrez::entrez_fetch(db = "pubmed", web_history = x$web_history, retmax = limit, rettype = "xml",
                                retry = retry_opts)
   xml <- xml2::xml_children(xml2::read_xml(res))
+  if (length(xml) == 1 && xml2::xml_text(xml) == "Empty result - nothing to do") {
+    stop(paste("No results retrieved."))
+  }
+
   out <- lapply(xml, function(z) {
     flds <- switch(
       xml2::xml_name(z),
@@ -144,13 +148,21 @@ get_papers <- function(query, params = NULL, limit = 100, retry_opts = rentrez::
   pmc_ids = c()
   idlist = extract_from_esummary(summary, "articleids")
 
-  for(i in 1:nrow(df)) {
-    current_ids = idlist[,i]
-    current_pmcid = current_ids$value[current_ids$idtype=="pmc"]
+  if (nrow(df) > 1) {
+    for(i in 1:nrow(df)) {
+      current_ids = idlist[,i]
+      current_pmcid = current_ids$value[current_ids$idtype=="pmc"]
+      if(identical(current_pmcid, character(0))) {
+        current_pmcid = "";
+      }
+      pmc_ids[i] = current_pmcid
+    }
+  } else {
+    current_pmcid = idlist[idlist$idtype=="pmc",]$value
     if(identical(current_pmcid, character(0))) {
       current_pmcid = "";
     }
-    pmc_ids[i] = current_pmcid
+    pmc_ids <- c(pmc_ids, current_pmcid)
   }
 
   df$pmcid = pmc_ids
