@@ -13,6 +13,9 @@ library("xml2")
 #    * article_types: in the form of an array of identifiers of article types
 #    * sorting: can be one of "most-relevant" and "most-recent"
 # * limit: number of search results to return
+# * retry_opts: Pubmed retry options, see `?rentrez::entrez_retry_options` for documentation. 
+#  `?httr::RETRY` has more detailed explanation of the options. default values are used if
+#   none are supplied.
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
 #
@@ -38,7 +41,7 @@ library("xml2")
 plog <- getLogger('api.pubmed')
 
 
-get_papers <- function(query, params = NULL, limit = 100) {
+get_papers <- function(query, params = NULL, limit = 100, retry_opts = rentrez::entrez_retry_options()) {
   # remove slashes in query that are added on php side to make it
   # safe to add queries to the database
   query <- gsub("\\\\", "", query)
@@ -68,8 +71,10 @@ get_papers <- function(query, params = NULL, limit = 100) {
   }
   plog$info(paste("Query:", query))
   x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit,
-                              mindate = from, maxdate = to, sort=sortby, use_history=TRUE, http_post = TRUE)
-  res <- rentrez::entrez_fetch(db = "pubmed", web_history = x$web_history, retmax = limit, rettype = "xml")
+                              mindate = from, maxdate = to, sort=sortby, use_history=TRUE, http_post = TRUE,
+                              retry = retry_opts)
+  res <- rentrez::entrez_fetch(db = "pubmed", web_history = x$web_history, retmax = limit, rettype = "xml",
+                               retry = retry_opts)
   xml <- xml2::xml_children(xml2::read_xml(res))
   out <- lapply(xml, function(z) {
     flds <- switch(
@@ -131,7 +136,8 @@ get_papers <- function(query, params = NULL, limit = 100) {
   df$id = df$pmid
   df$subject_orig = df$subject
 
-  summary <- rentrez::entrez_summary(db="pubmed", web_history = x$web_history, retmax = limit)
+  summary <- rentrez::entrez_summary(db="pubmed", web_history = x$web_history, retmax = limit,
+                                     retry = retry_opts)
   df$readers <- extract_from_esummary(summary, "pmcrefcount")
   df$readers <- replace(df$readers, df$readers=="", 0)
 
