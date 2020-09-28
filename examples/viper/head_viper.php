@@ -117,7 +117,7 @@
     function clearCookies (names) {
       var i = 0, namesLength = names.length;
       for (i; i < namesLength; i += 1) {
-        document.cookie = names[i] + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
+        document.cookie = names[i] + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/; SameSite=Lax';
       }
     }
     clearCookies(["cookieconsent_status", "priv-update-2018-10"]);
