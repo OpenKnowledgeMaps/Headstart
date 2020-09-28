@@ -271,6 +271,7 @@ var config = {
                         , linkedcat: "LinkedCat+"
                         , linkedcat_authorview: "LinkedCat+"
                         , linkedcat_browseview: "LinkedCat+"
+                        , triple: "TRIPLE"
                     },
 
     localization: {

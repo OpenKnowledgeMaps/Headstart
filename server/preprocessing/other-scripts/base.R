@@ -11,6 +11,9 @@ library(rbace)
 #    * article_types: in the form of an array of identifiers of article types
 #    * sorting: can be one of "most-relevant" and "most-recent"
 # * limit: number of search results to return
+# * retry_opts: BASE retry options, see `?rbace::bs_retry_options` for documentation.
+#  `?httr::RETRY` has more detailed explanation of the options. default values are used if
+#   none are supplied.
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
 #
@@ -34,7 +37,8 @@ blog <- getLogger('api.base')
 
 
 get_papers <- function(query, params, limit=100,
-                       fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type") {
+                       fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type",
+                       retry_opts=rbace::bs_retry_options()) {
 
   blog$info(paste("Search:", query))
   start.time <- Sys.time()
@@ -81,7 +85,8 @@ get_papers <- function(query, params, limit=100,
   (res_raw <- bs_search(hits=limit
                         , query = base_query
                         , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"
-                        , sortby = sortby_string))
+                        , sortby = sortby_string
+                        , retry = retry_opts))
   res <- res_raw$docs
   if (nrow(res)==0){
     stop(paste("No results retrieved."))
