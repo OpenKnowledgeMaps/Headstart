@@ -53,6 +53,7 @@ schema = Schema([
     Column('Included in map', [InListValidation(["yes", "no"])]),
     Column('Ready for publication?', [InListValidation(["yes", "no"])]),
     Column('Validation', []),
+    Column('Curator notes', []),
     Column('Comment 1', []),
     Column('Author Comment 1', []),
     Column('Comment 2', []),
@@ -240,7 +241,7 @@ class GSheetsClient(object):
         metadata["oa_state"] = df.Access
         metadata["link"] = df["Link to PDF"].map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["relevance"] = df.index
-        metadata["comments"] = df.iloc[:, 15:24].apply(lambda x: process_comments(x), axis=1)
+        metadata["comments"] = df.iloc[:, 16:25].apply(lambda x: process_comments(x), axis=1)
         metadata["tags"] = df.Tags.map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["resulttype"] = df.Type
         text = pd.DataFrame()

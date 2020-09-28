@@ -38,7 +38,7 @@ include 'config.php';
         <script type="text/javascript">
             headstart.start();
         </script>
-         <div style="margin-top:20px">Built with <a href="http://github.com/OpenKnowledgeMaps/Headstart" target="_blank">Headstart</a> and <a href="http://github.com/ropensci/rplos" target="_blank">rplos</a>. All content retrieved from <a href="https://www.gotriple.eu/" target="_blank ">TRIPLE</a>.
+         <div style="margin-top:20px ">Built with <a href="https://github.com/OpenKnowledgeMaps/Headstart" target="_blank ">Head Start</a>. All content retrieved from <a href="https://www.gotriple.eu/" target="_blank ">TRIPLE</a>.
         </div>
     </body>
 </html>
