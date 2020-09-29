@@ -69,7 +69,21 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
 
     $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
-    $unique_id = ($precomputed_id === null)?($persistence->createID(array($query, $params_for_id_creation))):($precomputed_id);
+    if ($backend === "api") {
+      $url = $ini_array["general"]["api_url"] . $repository . "/createID";
+      $payload = json_encode(array("params" => $post_params,
+                                   "param_types" => $param_types));
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      $output_json = curl_exec($ch);
+      $unique_id = $output_json["unique_id"];
+    } else {
+      $unique_id = ($precomputed_id === null)?($persistence->createID(array($query, $params_for_id_creation))):($precomputed_id);
+    }
 
     if($retrieve_cached_map) {
         $last_version = $persistence->getLastVersion($unique_id, false);
