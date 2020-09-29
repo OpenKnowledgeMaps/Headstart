@@ -6,12 +6,11 @@ import ContextLine from "./ContextLine";
 
 export const SubdisciplineTitle = () => {
   return (
-    // TODO add div id="subdiscipline_title" later
-    <>
+    <div id="subdiscipline_title">
       <Heading />
       <Backlink />
       <ContextLine />
-    </>
+    </div>
   );
 };
 
