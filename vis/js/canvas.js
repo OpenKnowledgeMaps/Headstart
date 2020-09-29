@@ -18,6 +18,8 @@ class Canvas {
         this.available_width = null;
         this.current_vis_size = null;
         this.current_vis_width = null; //used in streamgraph
+
+        this.initScales();
     }
 
     getCurrentCircle(d) {
@@ -40,11 +42,6 @@ class Canvas {
         var title_image_height = $("#title_image").outerHeight(true) || 0;
         const CHART_HEIGHT_CORRECTION = 15;
         const CHART_HEIGHT_CORRECTION_TOOLBAR = 15;
-
-        // TODO remove this when the sequence of initialization steps is refactored properly
-        if (mediator.modern_frontend_enabled && config.is_authorview) {
-            title_image_height = 70;
-        }
 
         // Set available_height and available_width
         if (parent_height === 0) {
@@ -893,7 +890,6 @@ class Canvas {
     setupCanvas() {
         this.setOverflowToHiddenOrAuto("#main");
         this.calcChartSize();
-        this.initScales();
         this.setScaleRanges();
         this.drawSvg();
         this.drawChartCanvas();
@@ -920,8 +916,7 @@ class Canvas {
         this.setOverflowToHiddenOrAuto("#main");
         this.calcChartSize();
         
-        //TODO: remove these two as they are not relevant for streamgraphs
-        this.initScales();
+        //TODO: remove this as it is not relevant for streamgraphs
         this.setScaleRanges();
         
         this.drawStreamgraphChart();
@@ -941,7 +936,6 @@ class Canvas {
         this.setOverflowToHiddenOrAuto("#main");
         this.drawTitle();
         this.calcChartSize();
-        this.initScales();
         this.setScaleRanges();
         this.drawMultiplesSvg();
         this.drawChartCanvas();
