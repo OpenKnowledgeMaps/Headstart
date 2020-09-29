@@ -1,3 +1,7 @@
+.highlighted {
+    background: yellow;
+}
+
 .list_entry {
     border-bottom: 2px solid $okm-clouds;
     padding: 0px 0px 20px 15px;
@@ -522,6 +526,10 @@ img#preview_page {
     text-decoration: none;
 }
 
+.comment-author {
+    font-style: italic;
+}
+
 @media screen and (max-width: 1150px) {
 
     .list_metadata .list_title {
@@ -826,10 +834,13 @@ img#preview_page {
         font-size: 10px;
         vertical-align: top;
         font-weight: $fontweight400;
+        
+        .highlighted {
+            color: $open-access;
+        }
     }
 
     .list_metadata {
-        padding-top: 10px;
         margin-bottom: 0px;
 
         .list_title {
@@ -862,6 +873,18 @@ img#preview_page {
         -webkit-border-radius:5px;
         display: inline-block;
         vertical-align: middle;
+        
+        &.no-bg {
+            background-color: transparent;
+        }
+        
+        &.no-pd-left {
+            padding-left: 0;
+        }
+        
+        &.no-pd-right {
+            padding-right: 0;
+        }
     }
 
     .comments {
