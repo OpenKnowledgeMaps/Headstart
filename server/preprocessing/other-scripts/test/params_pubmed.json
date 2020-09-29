@@ -91,4 +91,8 @@
   "validation study",
   "video audio media",
   "webcast"
-  ],"from":"1809-01-01","to":"2020-09-21","sorting":"most-relevant"}
+  ],
+  "from":"1809-01-01",
+  "to":"2020-09-04",
+  "sorting":"most-recent",
+  "map_id": "TEST_ID"}
