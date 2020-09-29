@@ -25,8 +25,8 @@ var options_triple = {
             ]},
         {id: "limit", multiple: false, name: "Limit", type: "dropdown"
             , fields: [
-                {id: "100", text: "100"},
-                {id: "1000", text: "1000"}
+                {id: "100", text: "100 documents"},
+                {id: "1000", text: "1000 documents"}
             ]},
         {id: "sg_method", multiple: false, name: "Streamgraph method", type: "dropdown"
             , fields: [
