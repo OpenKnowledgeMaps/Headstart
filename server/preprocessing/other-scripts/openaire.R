@@ -114,6 +114,7 @@ get_return_values <- function(all_artifacts){
 }
 
 preprocess_data <- function(all_artifacts){
+  all_artifacts$subject_orig <- all_artifacts$subject
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\[[A-Za-z \\.-]+\\]", "", x)})) # removes [ INFO.INFO-MA ] Computer Science [cs]/Multiagent Systems [cs.MA]
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub(" ?/", ";", x)}))
   all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("\\:.*\\:\\:", "", x)})) # keeps only last part after :: ":Enginyeria de la telecomunicació::Processament del senyal::Reconeixement de formes [Àrees temàtiques de la UPC]"
@@ -189,7 +190,7 @@ fill_dois <- function(df) {
     candidates <- lapply(response, get_doi_candidates)
     dois <- mapply(check_distance, titles, candidates, USE.NAMES=FALSE)
   } else if (length(titles) == 1) {
-    response <- cr_works(flq=c('query.title'=titles))$data
+    response <- cr_works(flq=c('query.bibliographic'=titles))$data
     candidate_response = response[1,]
     dois <- check_distance(titles, candidate_response)
   } else {
@@ -221,7 +222,7 @@ check_distance <- function(title, candidate) {
 queries <- function(titles){
   queries <- c()
   for (title in titles){
-    nq <- list('query.title'=title)
+    nq <- list('query.bibliographic'=title)
     queries <- c(queries, nq)
   }
   return (queries)

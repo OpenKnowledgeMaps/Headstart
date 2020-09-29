@@ -72,6 +72,7 @@ deduplicate_titles <- function(metadata, list_size) {
 }
 
 replace_keywords_if_empty <- function(metadata, stops, service) {
+  metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub(" +", " ", x)}))
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
   if (service == "linkedcat" || service == "linkedcat_authorview" || service == "linkedcat_browseview") {
     metadata$subject[missing_subjects] <- metadata$bkl_caption[missing_subjects]
@@ -95,6 +96,24 @@ replace_keywords_if_empty <- function(metadata, stops, service) {
     replacement_keywords = gsub("_", " ", replacement_keywords)
 
     metadata$subject[missing_subjects] <- replacement_keywords[missing_subjects]
+  }
+  missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
+  if (length(missing_subjects) > 0) {
+    for (i in missing_subjects) {
+      candidates = mapply(paste, metadata$title[i], metadata$paper_abstract[i])
+      candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
+      candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
+      candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
+      candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
+      #candidates_trigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
+      candidates = mapply(paste, candidates, candidates_bigrams)
+      #candidates = lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
+      nn_count = sort(table(strsplit(candidates, " ")), decreasing = T)
+      replacement_keywords <- filter_out_nested_ngrams(names(nn_count), 3)
+      replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse="; ")})
+      replacement_keywords = gsub("_", " ", replacement_keywords)
+      metadata$subject[i] <- paste(replacement_keywords, collapse="; ")
+    }
   }
   return(metadata)
 }

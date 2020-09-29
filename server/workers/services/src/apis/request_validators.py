@@ -13,7 +13,14 @@ class SearchParamSchema(Schema):
     limit = fields.Int()
     year_range = fields.Str()
     today = fields.Str()
+    language = fields.Str()
+    lang_id = fields.Str()
+    time_range = fields.Str()
+    document_types = fields.List(fields.Str())
+    article_types = fields.List(fields.Str())
+    unique_id = fields.Str()
     raw = fields.Boolean()
+    sg_method = fields.Str()
 
     @pre_load
     def fix_years(self, in_data, **kwargs):
@@ -23,7 +30,20 @@ class SearchParamSchema(Schema):
             in_data["to"] = in_data["to"]+"-12-31"
         return in_data
 
+    @pre_load
+    def fix_limit(self, in_data, **kwargs):
+        try:
+            in_data["limit"] = int(in_data["limit"])
+            return in_data
+        except Exception:
+            return in_data
+
     @validates('from_')
     def is_not_in_future(self, date):
         if date > datetime.today().date():
             raise ValidationError("Starting date can't be in the future.")
+
+    @validates('limit')
+    def limit_is_int(self, limit):
+        if not isinstance(limit, int):
+            raise ValidationError("Limit must be an integer.")

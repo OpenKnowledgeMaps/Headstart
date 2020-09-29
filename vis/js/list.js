@@ -14,7 +14,8 @@ import {
     clear_highlights,
     sortBy,
     getRealHeight,
-    updateTags
+    updateTags,
+    substrHTML
 } from 'helpers';
 import { io } from 'io';
 
@@ -27,6 +28,7 @@ const listSubEntryTemplateCris = require("templates/list/cris/list_subentry_cris
 const listSubEntryStatisticsTemplateCris = require("templates/list/cris/list_subentry_statistics_cris.handlebars");
 const listSubEntryStatisticDistributionTemplateCris = require("templates/list/cris/list_subentry_statistic_distribution_cris.handlebars");
 const doiOutlinkTemplate = require("templates/list/doi_outlink.handlebars");
+const listComment = require("templates/list/comment.handlebars");
 const listMetricTemplate = require('templates/list/list_metrics.handlebars');
 const filterDropdownEntryTemplate = require("templates/list/filter_dropdown_entry.handlebars");
 const showHideLabel = require("templates/list/show_hide_label.handlebars")
@@ -227,6 +229,7 @@ list.count_visible_items_to_header = function() {
 
 list.fit_list_height = function() {
     var paper_list_avail_height = null;
+    //Magic number - should be moved to config
     const PAPER_LIST_CORRECTION = -10;
     if (!config.render_bubbles) {
         var parent_height = getRealHeight($("#" + config.tag));
@@ -239,12 +242,19 @@ list.fit_list_height = function() {
 
         $(".list-col").width("100%");
         $(".container-headstart").css({
+            //Should be moved to config
             "min-width": "300px"
         });
         paper_list_avail_height = available_height - $("#explorer_header").outerHeight(true);
     } else {
         let title_height = $("#subdiscipline_title").outerHeight(true);
         let title_image_height = $("#title_image").outerHeight(true) || 0;
+
+        // TODO refactor this properly in one place (mediator??)
+        // now the same calculations are done both in canvas and in list
+        if (mediator.modern_frontend_enabled && config.is_authorview) {
+            title_image_height = 70;
+        }
         
         paper_list_avail_height = 
                 Math.max(title_height, title_image_height)
@@ -474,6 +484,8 @@ list.populateMetaData = function(nodes) {
             .attr("id", function(d) {
                 return d.safe_id;
             })
+            
+        list.setIconsAndTags(list_metadata);
 
         list_metadata.select(".list_title")
             .attr("class", function(d) {
@@ -483,40 +495,6 @@ list.populateMetaData = function(nodes) {
                     return "list_title"
                 }
             })
-
-        list_metadata.select("#file-icon_list")
-            .style("display", function (d) {
-                if (d.resulttype == "dataset") {
-                    return "none"
-                }
-                else {
-                    return "inline"
-                }
-            })
-
-        list_metadata.select("#dataset-icon_list")
-            .style("display", function (d) {
-                if (d.resulttype == "dataset") {
-                    return "inline"
-                }
-                else {
-                    return "none"
-                }
-            })
-        
-        if(config.show_tags) {    
-            d3.select(elem).select("#list_tags")
-                    .html(function (d) {
-                        let return_tags = "";
-                        let tags = d.tags.split(/, |,/g);
-                        for (let tag of tags) {
-                            if(tag !== "") {
-                                return_tags += '<div class="tag">' + tag + '</div>';
-                            }
-                        }
-                        return return_tags;
-                    });
-        }
         
         list_metadata.select("#paper_list_title")
             .html(function(d) {
@@ -528,7 +506,7 @@ list.populateMetaData = function(nodes) {
                 return d.outlink;
             })
             .attr("class", function(d){
-                if(d.oa){
+                if(d.oa && d.link !== ""){
                     return "oa-link oa-link-hidden"
                 }
                 return "outlink"
@@ -536,25 +514,11 @@ list.populateMetaData = function(nodes) {
             .on("click", function() {
                 d3.event.stopPropagation();
             });
-
-        list_metadata.select("#open-access-logo_list")
-            .style("display", function(d) {
-                if (d.oa === false) {
-                    return "none";
-                }
-            });
-        
-        list_metadata.select("#free-access-logo_list")
-            .style("display", function(d) {
-                if (d.free_access === false) {
-                    return "none";
-                }
-            });
               
         var paper_link = list_metadata.select(".link2");
         
         paper_link.style("display", function(d) {
-            if (d.oa === false || d.resulttype == "dataset") {
+            if (d.oa === false || d.resulttype == "dataset" || d.link === "") {
                 return "none";
             }
         });
@@ -562,9 +526,6 @@ list.populateMetaData = function(nodes) {
         paper_link.on("click", function(d) {
             mediator.publish("list_show_popup", d);
         });
-        /*paper_link.attr("href", function (d) {
-            return "#";
-        });*/
 
         list_metadata.select(".list_authors")
             .html(function(d) {
@@ -663,13 +624,99 @@ list.populateMetaData = function(nodes) {
     });
 };
 
-list.createComments = function(nodes) {
-    nodes[0].forEach((elem) => {
-        let current_comment = 
-                d3.select(elem).select("#list_comments")
-                    .classed("nodisplay", (d) => { return d.comments === ""; } )
+list.setIconsAndTags = function (list_metadata) {
+    list_metadata.select("#file-icon_list")
+            .style("display", function (d) {
+                if (d.resulttype == "dataset") {
+                    return "none"
+                }
+                else {
+                    return "inline"
+                }
+            })
+
+    list_metadata.select("#dataset-icon_list")
+        .style("display", function (d) {
+            if (d.resulttype == "dataset") {
+                return "inline"
+            }
+            else {
+                return "none"
+            }
+        })
+    
+    list_metadata.select("#open-access-logo_list")
+        .style("display", function(d) {
+            if (d.oa === false) {
+                return "none";
+            }
+        });
+
+    list_metadata.select("#free-access-logo_list")
+        .style("display", function(d) {
+            if (d.free_access === false) {
+                return "none";
+            }
+        });
+    
+    if(config.show_tags) {
         
-        current_comment.select("#comment").text((d) => { return d.comments })
+        let has_visible_tags = false;
+        
+        list_metadata.select("#list_tags")
+                .html(function (d) {
+                    let return_tags = "";
+                    let tags = d.tags.split(/, |,/g);
+                    for (let tag of tags) {
+                        if(tag !== "") {
+                            return_tags += '<div class="tag">' + tag + '</div>';
+                            has_visible_tags = true;
+                        }
+                    }
+                    return return_tags;
+                });
+                
+        if(has_visible_tags) {
+            list_metadata.select("#list_tags").style("display", "inline-block")
+        }
+    }
+    
+    //Detect if there are any visible icons and tags; if not, hide #oa
+    //Note: this depends on the styles of the elements written directly
+    //rather than controlled with classes such as .nodisplay
+    if($("#oa").length) {
+        let current_oa = list_metadata.select("#oa");
+        let visible_icons_tags = 
+                $(current_oa[0]).children().filter(function() {
+                    return this.style.display !== 'none'
+                })
+
+        if (visible_icons_tags.length === 0) {
+            current_oa.classed("nodisplay", true)
+        }
+    }
+};
+
+list.createComments = function(nodes) {
+       
+    nodes[0].forEach((elem) => {
+        let current_d = d3.select(elem).select("#list_comments").data()[0];
+        
+        let list_comments = 
+                d3.select(elem).select("#list_comments")
+                    .classed("nodisplay", (d) => { return d.comments.length === 0; } )
+            
+        
+        for (let comment of current_d.comments) {
+            let comment_html = listComment({
+                                comment: comment.comment
+                                , has_author: () => { return comment.author !== "" }
+                                , by: config.localization[config.language].comment_by_label
+                                , author: comment.author
+                            });
+        
+            list_comments.appendHTML(comment_html)
+        }
     })
 }
 
@@ -779,7 +826,11 @@ list.fillKeywords = function(tag, keyword_type, metadata_field) {
             });
 
     tag.select(".keywords").html(function(d) {
-        return ((d.hasOwnProperty(metadata_field)) ? (d[metadata_field]) : (""))
+        if(!d.hasOwnProperty(metadata_field) || d[metadata_field] === "") {
+            return config.localization[config.language].no_keywords;
+        } else {
+            return d[metadata_field];
+        }
     });
 };
 
@@ -961,7 +1012,11 @@ list.hideEntriesByWord = function(object, search_words) {
             let word_found = true;
             let keywords = (d.hasOwnProperty("subject_orig")) ? (d.subject_orig.toString().toLowerCase()) : ("");
             let tags = (d.hasOwnProperty("tags")) ? (d.tags.toString().toLowerCase()) : ("");
-            let comments = (d.hasOwnProperty("comments")) ? (d.comments.toString().toLowerCase()) : ("");
+            let comments = (d.hasOwnProperty("comments_for_filtering")) ? (d.comments_for_filtering.toString().toLowerCase()) : ("");
+            let resulttype = (d.hasOwnProperty("resulttype")) ? (d.resulttype.toString().toLowerCase()) : ("");
+            //TODO: make these two properties language-aware
+            let open_access = (d.hasOwnProperty("oa") && d.oa === true) ? ("open access") : ("");
+            let free_access = (d.hasOwnProperty("free_access") && d.free_access === true) ? ("free access") : ("");
             let i = 0;
             while (word_found && i < search_words.length) {
                 word_found = (abstract.indexOf(search_words[i]) !== -1 ||
@@ -971,7 +1026,10 @@ list.hideEntriesByWord = function(object, search_words) {
                     year.indexOf(search_words[i]) !== -1 ||
                     keywords.indexOf(search_words[i]) !== -1 ||
                     tags.indexOf(search_words[i]) !== -1 ||
-                    comments.indexOf(search_words[i]) !== -1
+                    comments.indexOf(search_words[i]) !== -1 ||
+                    resulttype.indexOf(search_words[i]) !== -1 ||
+                    open_access.indexOf(search_words[i]) !== -1 ||
+                    free_access.indexOf(search_words[i]) !== -1
                 );
                 i++;
             }
@@ -984,16 +1042,22 @@ list.hideEntriesByWord = function(object, search_words) {
         .style("display", "none");
 };
 
-list.createHighlights = function(search_words) {
+list.createHighlights = function(search_words) {    
     if (typeof search_words === "undefined") {
         return;
     }
 
     clear_highlights();
-    if( !(search_words === "") ) {
+    if( !(search_words.length === 0 || (search_words.length === 1 && search_words[0] === "")) ) {
+        $(".query_term_highlight").addClass("not-highlighted");
+        
         search_words.forEach(function(str) {
             highlight(str);
         });
+    } else {
+        if($(".query_term_highlight").hasClass("not-highlighted")){
+            $(".query_term_highlight").removeClass("not-highlighted");
+        }
     }
 };
 
@@ -1006,9 +1070,7 @@ list.createAbstract = function(d, cut_off) {
             return "";
 
         if (cut_off) {
-            if (d.paper_abstract.length > cut_off) {
-                return d.paper_abstract.substr(0, cut_off) + "...";
-            }
+            return substrHTML(d.paper_abstract, cut_off, true);
         }
         return d.paper_abstract;
     }
@@ -1210,7 +1272,7 @@ list.enlargeListItem = function(d) {
         .html(this.createAbstract(d, config.abstract_large));
 
     this.createHighlights(this.current_search_words);
-    
+       
     this.attachClickHandlerAbstract(true);
 
     this.setImageForListHolder(d);
@@ -1506,23 +1568,32 @@ list.populateOverlay = function(d) {
                 keyboard: true
             });
 
-            let article_url = d.oa_link;
+            let article_url = encodeURIComponent(d.oa_link);
             let possible_pdfs = "";
             if (config.service === "base") {
-                possible_pdfs = d.link + ";" + d.identifier + ";" + d.relation;
+                let encodeRelation = function (relation) {
+                    let relation_array = relation.split("; ");
+                    let encoded_array = relation_array.map(function (x) { return encodeURIComponent(x) });
+                    return encoded_array.join("; ")
+                }
+                
+                possible_pdfs = encodeURIComponent(d.link) + ";" 
+                                    + encodeURIComponent(d.identifier) + ";" 
+                                    + encodeRelation(d.relation);
             } else if (config.service === "openaire") {
-                possible_pdfs  = d.link + ";" + d.fulltext;
+                possible_pdfs  = encodeURIComponent(d.link) + ";" 
+                                    + d.fulltext;
+            }
+            
+            var showError = function() {
+                var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
+                $("#status").html(config.localization[config.language].pdf_not_loaded 
+                        + " <a href=\"" + pdf_location_link + "\" target=\"_blank\">" 
+                        + config.localization[config.language].pdf_not_loaded_linktext + "</a>.");
+                $("#status").show();
             }
 
             $.getJSON(config.server_url + "services/getPDF.php?url=" + article_url + "&filename=" + pdf_url + "&service=" + config.service + "&pdf_urls=" + possible_pdfs, (data) => {
-
-                var showError = function() {
-                    var pdf_location_link = (config.service === "openaire") ? (this_d.link) : (this_d.outlink);
-                    $("#status").html(config.localization[config.language].pdf_not_loaded 
-                            + " <a href=\"" + pdf_location_link + "\" target=\"_blank\">" 
-                            + config.localization[config.language].pdf_not_loaded_linktext + "</a>.");
-                    $("#status").show();
-                }
 
                 if (data.status === "success") {
                     this.writePopup(config.server_url + "paper_preview/" + pdf_url);
