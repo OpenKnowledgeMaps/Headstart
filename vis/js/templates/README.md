@@ -44,9 +44,9 @@ let someNumber = 2;
 
 return (
   <div id={someText}>
-    <input type="number" min={someNumber + 1}>
+    <input type="number" min={someNumber + 1} />
     <span title={"the title of this span is this string concatenated with " + someText}>sample span</span>
-    <input type="checkbox" checked={someNumber > 1}>
+    <input type="checkbox" checked={someNumber > 1} />
   </div>
 );
 ```
@@ -55,9 +55,9 @@ renders this HTML:
 
 ```HTML
 <div id="abcd">
-  <input type="number" min="3">
+  <input type="number" min="3" />
   <span title="the title of this span is this string concatenated with abcd">sample span</span>
-  <input type="checkbox" checked>
+  <input type="checkbox" checked />
 </div>
 ```
 
@@ -76,4 +76,43 @@ renders this HTML:
 
 ```HTML
 <span style="background-color: red;"> ... </span>
+```
+
+### Closing tags
+
+Jsx has XML-like syntax, which means all tags must have closing tags, or must be self closing. This is not a rule for HTML, so
+all the tags such as `<br>`, `<input>`, and `<img>` must be written as `<br />`, `<input />`, and `<img />` with the slash at the end.
+
+### Single element rule
+
+Each jsx function must always return only one root element (so returning e.g. `<div /><div />` is forbidden). This might get hard sometimes, 
+so the jsx introduces `React.Fragment`. It works like this:
+
+This jsx code:
+
+```JSX
+return (
+  <React.Fragment>
+    <div>first div</div> 
+    <div>second div</div> 
+  </React.Fragment>
+);
+```
+
+renders this HTML:
+
+```HTML
+<div>first div</div> 
+<div>second div</div> 
+```
+
+`<></>` is a shortcut for `React.Fragment`, so the above code can be also written like this:
+
+```JSX
+return (
+  <>
+    <div>first div</div> 
+    <div>second div</div> 
+  </>
+);
 ```
