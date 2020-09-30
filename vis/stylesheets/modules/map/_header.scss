@@ -292,3 +292,13 @@
     margin-right: 1%;
     height: 15px;
 }
+
+.context_metadata_high {
+    color: $okm-green !important;
+    border-bottom-color: $okm-green !important;
+}
+
+.context_metadata_low {
+    color: $okm-red !important;
+    border-bottom-color: $okm-red !important;
+}

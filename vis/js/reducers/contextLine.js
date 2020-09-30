@@ -55,6 +55,7 @@ const contextLine = (state = {}, action) => {
         projectRuntime: getProjectRuntime(config, context),
         searchLanguage: getSearchLanguage(config, context),
         timestamp: getTimestamp(config, context),
+        metadataQuality: getMetadataQuality(config, context),
       };
     default:
       return state;
@@ -191,6 +192,32 @@ const getTimestamp = (config, context) => {
   }
 
   return context.last_update;
+};
+
+const getMetadataQuality = (config, context) => {
+  if (!context.params || isNaN(context.params.min_descsize)) {
+    return null;
+  }
+
+  let minDescSize = parseInt(context.params.min_descsize);
+  
+  if (context.service === "base") {
+    if (minDescSize < 300) {
+      return "low";
+    }
+
+    return "high";
+  }
+
+  if (context.service === "pubmed") {
+    if (minDescSize === 0) {
+      return "low";
+    }
+
+    return "high";
+  }
+
+  return null;
 };
 
 export default contextLine;

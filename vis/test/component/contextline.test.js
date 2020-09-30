@@ -46,6 +46,14 @@ const setup = (overrideStoreObject = {}) => {
         paper_count_label: "Sample paper count label",
         dataset_count_label: "Sample dataset count label",
         timestamp_label: "Sample timestamp label",
+        high_metadata_quality: "high metadata quality",
+        high_metadata_quality_desc_base: "Sample BASE high quality description",
+        high_metadata_quality_desc_pubmed:
+          "Sample PubMed high quality description",
+        low_metadata_quality: "low metadata quality",
+        low_metadata_quality_desc_base: "Sample BASE low quality description",
+        low_metadata_quality_desc_pubmed:
+          "Sample PubMed low quality description",
       },
     },
     overrideStoreObject
@@ -613,6 +621,190 @@ describe("Context line component", () => {
       expect(
         container.querySelector("#doctypes-popover").textContent
       ).toContain(DOC_TYPES[1]);
+    });
+  });
+
+  describe("metadata quality part", () => {
+    it("doesn't contain metadata quality", () => {
+      const QUALITY = undefined;
+      const storeObject = setup();
+      storeObject.contextLine.metadataQuality = QUALITY;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(<ContextLine store={store} />, container);
+      });
+
+      expect(container.querySelector("#metadata_quality")).toBe(null);
+    });
+
+    it("contains incorrect metadata quality", () => {
+      const QUALITY = "random";
+      const storeObject = setup();
+      storeObject.contextLine.metadataQuality = QUALITY;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(<ContextLine store={store} />, container);
+      });
+
+      expect(container.querySelector("#metadata_quality")).toBe(null);
+    });
+
+    it("contains correct metadata quality label (low)", () => {
+      const QUALITY = "low";
+      const SERVICE = "base";
+      const storeObject = setup({ service: SERVICE });
+      storeObject.contextLine.metadataQuality = QUALITY;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(<ContextLine store={store} />, container);
+      });
+
+      expect(container.querySelector("#metadata_quality").textContent).toEqual(
+        storeObject.localization[`${QUALITY}_metadata_quality`]
+      );
+    });
+
+    it("contains correct metadata quality label (high)", () => {
+      const QUALITY = "high";
+      const SERVICE = "base";
+      const storeObject = setup({ service: SERVICE });
+      storeObject.contextLine.metadataQuality = QUALITY;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(<ContextLine store={store} />, container);
+      });
+
+      expect(container.querySelector("#metadata_quality").textContent).toEqual(
+        storeObject.localization[`${QUALITY}_metadata_quality`]
+      );
+    });
+
+    it("shows a correct popover (low base)", () => {
+      const QUALITY = "low";
+      const SERVICE = "base";
+      const storeObject = setup({ service: SERVICE });
+      storeObject.contextLine.metadataQuality = QUALITY;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <MockContextLineContainer />
+          </Provider>,
+          container
+        );
+      });
+
+      const select = document.querySelector("#metadata_quality>span");
+      act(() => {
+        const event = new Event("mouseover", { bubbles: true });
+        select.dispatchEvent(event);
+      });
+
+      expect(
+        container.querySelector("#metadata-quality-popover").textContent
+      ).toEqual(
+        storeObject.localization[`${QUALITY}_metadata_quality_desc_${SERVICE}`]
+      );
+    });
+
+    it("shows a correct popover (low pubmed)", () => {
+      const QUALITY = "low";
+      const SERVICE = "pubmed";
+      const storeObject = setup({ service: SERVICE });
+      storeObject.contextLine.metadataQuality = QUALITY;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <MockContextLineContainer />
+          </Provider>,
+          container
+        );
+      });
+
+      const select = document.querySelector("#metadata_quality>span");
+      act(() => {
+        const event = new Event("mouseover", { bubbles: true });
+        select.dispatchEvent(event);
+      });
+
+      expect(
+        container.querySelector("#metadata-quality-popover").textContent
+      ).toEqual(
+        storeObject.localization[`${QUALITY}_metadata_quality_desc_${SERVICE}`]
+      );
+    });
+
+    it("shows a correct popover (high base)", () => {
+      const QUALITY = "high";
+      const SERVICE = "base";
+      const storeObject = setup({ service: SERVICE });
+      storeObject.contextLine.metadataQuality = QUALITY;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <MockContextLineContainer />
+          </Provider>,
+          container
+        );
+      });
+
+      const select = document.querySelector("#metadata_quality>span");
+      act(() => {
+        const event = new Event("mouseover", { bubbles: true });
+        select.dispatchEvent(event);
+      });
+
+      expect(
+        container.querySelector("#metadata-quality-popover").textContent
+      ).toEqual(
+        storeObject.localization[`${QUALITY}_metadata_quality_desc_${SERVICE}`]
+      );
+    });
+
+    it("shows a correct popover (high pubmed)", () => {
+      const QUALITY = "high";
+      const SERVICE = "pubmed";
+      const storeObject = setup({ service: SERVICE });
+      storeObject.contextLine.metadataQuality = QUALITY;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <MockContextLineContainer />
+          </Provider>,
+          container
+        );
+      });
+
+      const select = document.querySelector("#metadata_quality>span");
+      act(() => {
+        const event = new Event("mouseover", { bubbles: true });
+        select.dispatchEvent(event);
+      });
+
+      expect(
+        container.querySelector("#metadata-quality-popover").textContent
+      ).toEqual(
+        storeObject.localization[`${QUALITY}_metadata_quality_desc_${SERVICE}`]
+      );
     });
   });
 });

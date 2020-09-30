@@ -16,6 +16,7 @@ import Funder from "../templates/contextfeatures/Funder";
 import ProjectRuntime from "../templates/contextfeatures/ProjectRuntime";
 import SearchLang from "../templates/contextfeatures/SearchLang";
 import Timestamp from "../templates/contextfeatures/Timestamp";
+import MetadataQuality from "../templates/contextfeatures/MetadataQuality";
 
 const defined = (param) => param !== undefined && param !== null;
 
@@ -83,6 +84,7 @@ class ContextLine extends React.Component {
             label={localization.timestamp_label}
           />
         )}
+        {this.renderMetadataQuality()}
       </ContextLineTemplate>
     );
   }
@@ -172,11 +174,45 @@ class ContextLine extends React.Component {
       </>
     );
   }
+
+  renderMetadataQuality() {
+    const {
+      params: { metadataQuality },
+      localization,
+      popoverContainer,
+      service,
+    } = this.props;
+
+    if (
+      !metadataQuality ||
+      (metadataQuality !== "low" && metadataQuality !== "high")
+    ) {
+      return null;
+    }
+
+    return (
+      <span className="context_item" id="metadata_quality">
+        <HoverPopover
+          id="metadata-quality-popover"
+          container={popoverContainer}
+          content={
+            localization[metadataQuality + "_metadata_quality_desc_" + service]
+          }
+        >
+          <MetadataQuality
+            quality={metadataQuality}
+            label={localization[[metadataQuality + "_metadata_quality"]]}
+          />
+        </HoverPopover>
+      </span>
+    );
+  }
 }
 
 const mapStateToProps = (state) => ({
   hidden: state.zoom || !state.contextLine.show,
   params: state.contextLine,
+  service: state.service,
   localization: state.localization,
 });
 
