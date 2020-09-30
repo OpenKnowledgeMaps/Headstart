@@ -5,8 +5,7 @@ import ContextLineTemplate from "../templates/ContextLine";
 import HoverPopover from "./HoverPopover";
 import Author from "../templates/contextfeatures/Author";
 
-import DocumentTypesSimple from "../templates/contextfeatures/DocumentTypesSimple";
-import DocumentTypesPopover from "../templates/contextfeatures/DocumentTypesPopover";
+import DocumentTypes from "../templates/contextfeatures/DocumentTypes";
 import NumArticles from "../templates/contextfeatures/NumArticles";
 import DataSource from "../templates/contextfeatures/DataSource";
 import Timespan from "../templates/contextfeatures/Timespan";
@@ -144,15 +143,6 @@ class ContextLine extends React.Component {
 
     const text = documentTypes.join(", ");
 
-    if (documentTypes.length === 1) {
-      return (
-        <DocumentTypesSimple
-          label={localization.documenttypes_label}
-          text={text}
-        />
-      );
-    }
-
     return (
       <>
         <span id="document_types" className="context_item">
@@ -168,7 +158,7 @@ class ContextLine extends React.Component {
               </>
             }
           >
-            <DocumentTypesPopover label={localization.documenttypes_label} />
+            <DocumentTypes label={localization.documenttypes_label} />
           </HoverPopover>
         </span>{" "}
       </>

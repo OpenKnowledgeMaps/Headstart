@@ -195,10 +195,19 @@ exports[`Context line component snapshot matches a project website (base low qua
     className="context_item"
     id="document_types"
   >
-    Document types
-    : 
-    Journal/newspaper article
+    <span
+      className="context_moreinfo"
+      label="Document types"
+      onBlur={[Function]}
+      onClick={null}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+    >
+      Document types
+    </span>
   </span>
+   
   <span
     className="context_item"
     id="metadata_quality"
@@ -266,10 +275,19 @@ exports[`Context line component snapshot matches a project website (pubmed high 
     className="context_item"
     id="document_types"
   >
-    Document types
-    : 
-    Journal/newspaper article
+    <span
+      className="context_moreinfo"
+      label="Document types"
+      onBlur={[Function]}
+      onClick={null}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+    >
+      Document types
+    </span>
   </span>
+   
   <span
     className="context_item"
     id="metadata_quality"

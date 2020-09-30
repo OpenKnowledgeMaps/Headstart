@@ -545,24 +545,7 @@ describe("Context line component", () => {
       expect(container.querySelector("#document_types")).toBe(null);
     });
 
-    it("has one document type", () => {
-      const DOC_TYPES = ["custom document type"];
-
-      const storeObject = setup();
-      storeObject.contextLine.documentTypes = DOC_TYPES;
-
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(<ContextLine store={store} />, container);
-      });
-
-      expect(container.querySelector("#document_types").textContent).toEqual(
-        `${storeObject.localization.documenttypes_label}: ${DOC_TYPES[0]}`
-      );
-    });
-
-    it("has more document types", () => {
+    it("has document types", () => {
       const DOC_TYPES = ["custom document type", "another document type"];
 
       const storeObject = setup();
