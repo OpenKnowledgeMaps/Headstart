@@ -5,8 +5,7 @@ import ContextLineTemplate from "../templates/ContextLine";
 import HoverPopover from "./HoverPopover";
 import Author from "../templates/contextfeatures/Author";
 
-import DocumentTypesSimple from "../templates/contextfeatures/DocumentTypesSimple";
-import DocumentTypesPopover from "../templates/contextfeatures/DocumentTypesPopover";
+import DocumentTypes from "../templates/contextfeatures/DocumentTypes";
 import NumArticles from "../templates/contextfeatures/NumArticles";
 import DataSource from "../templates/contextfeatures/DataSource";
 import Timespan from "../templates/contextfeatures/Timespan";
@@ -16,6 +15,7 @@ import Funder from "../templates/contextfeatures/Funder";
 import ProjectRuntime from "../templates/contextfeatures/ProjectRuntime";
 import SearchLang from "../templates/contextfeatures/SearchLang";
 import Timestamp from "../templates/contextfeatures/Timestamp";
+import MetadataQuality from "../templates/contextfeatures/MetadataQuality";
 
 const defined = (param) => param !== undefined && param !== null;
 
@@ -83,6 +83,7 @@ class ContextLine extends React.Component {
             label={localization.timestamp_label}
           />
         )}
+        {this.renderMetadataQuality()}
       </ContextLineTemplate>
     );
   }
@@ -142,15 +143,6 @@ class ContextLine extends React.Component {
 
     const text = documentTypes.join(", ");
 
-    if (documentTypes.length === 1) {
-      return (
-        <DocumentTypesSimple
-          label={localization.documenttypes_label}
-          text={text}
-        />
-      );
-    }
-
     return (
       <>
         <span id="document_types" className="context_item">
@@ -166,10 +158,43 @@ class ContextLine extends React.Component {
               </>
             }
           >
-            <DocumentTypesPopover label={localization.documenttypes_label} />
+            <DocumentTypes label={localization.documenttypes_label} />
           </HoverPopover>
         </span>{" "}
       </>
+    );
+  }
+
+  renderMetadataQuality() {
+    const {
+      params: { metadataQuality },
+      localization,
+      popoverContainer,
+      service,
+    } = this.props;
+
+    if (
+      !metadataQuality ||
+      (metadataQuality !== "low" && metadataQuality !== "high")
+    ) {
+      return null;
+    }
+
+    return (
+      <span className="context_item" id="metadata_quality">
+        <HoverPopover
+          id="metadata-quality-popover"
+          container={popoverContainer}
+          content={
+            localization[metadataQuality + "_metadata_quality_desc_" + service]
+          }
+        >
+          <MetadataQuality
+            quality={metadataQuality}
+            label={localization[[metadataQuality + "_metadata_quality"]]}
+          />
+        </HoverPopover>
+      </span>
     );
   }
 }
@@ -177,6 +202,7 @@ class ContextLine extends React.Component {
 const mapStateToProps = (state) => ({
   hidden: state.zoom || !state.contextLine.show,
   params: state.contextLine,
+  service: state.service,
   localization: state.localization,
 });
 
