@@ -466,15 +466,15 @@
     },
     "rbace": {
       "Package": "rbace",
-      "Version": "0.0.6.9510",
+      "Version": "0.2.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "rbace",
       "RemoteUsername": "ropensci",
       "RemoteRef": "master",
-      "RemoteSha": "f3f565fd102a359f34e16aec9b60ea9e108a4547",
-      "Hash": "8bc1241abc9cbb314f5ec2387cebe529"
+      "RemoteSha": "23b5a0a8e904f8f435032f6fcac2744532bc7b06",
+      "Hash": "967c7c73e168ba2677de0fba07ff2157"
     },
     "RColorBrewer": {
       "Package": "RColorBrewer",

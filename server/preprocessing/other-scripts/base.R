@@ -38,11 +38,12 @@ blog <- getLogger('api.base')
 
 get_papers <- function(query, params, limit=100,
                        fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type",
+                       filter=NULL,
                        retry_opts=rbace::bs_retry_options()) {
 
-  blog$info(paste("Search:", query))
+  blog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Search:", query))
   start.time <- Sys.time()
-  
+
   # remove pluses between terms
   query_wt_plus = gsub("(?!\\B\"[^\"]*)[\\+]+(?![^\"]*\"\\B)", " ", query, perl=T)
   # remove multiple minuses and spaces after minuses
@@ -51,13 +52,13 @@ get_papers <- function(query, params, limit=100,
   query_wt_multi_spaces = gsub("(?!\\B\"[^\"]*)[\\s]{2,}(?![^\"]*\"\\B)", " ", query_wt_multi_minus, perl=T)
   # trim query, if needed
   query_cleaned = gsub("^\\s+|\\s+$", "", query_wt_multi_spaces, perl=T)
-  
+
   # add "textus:" to each word/phrase to enable verbatim search
   # make sure it is added after any opening parentheses to enable queries such as "(a and b) or (a and c)"
   exact_query = gsub('([\"]+(.*?)[\"]+)|(?<=\\(\\b|\\+|-\\"\\b|\\s-\\b|^-\\b)|(?!or\\b|and\\b|[-]+[\\"\\(]*\\b)(?<!\\S)(?=\\S)(?!\\(|\\+)'
                      , "textus:\\1", query_cleaned, perl=T)
-  
-  blog$info(paste("BASE query:", exact_query))
+
+  blog$info(paste("map_id:", .GlobalEnv$MAP_ID, "exact query:", exact_query))
 
   year_from = params$from
   year_to = params$to
@@ -73,26 +74,26 @@ get_papers <- function(query, params, limit=100,
     } else {
     lang_query <- ""
   }
-  #Make sure that the abstract exists.
-  abstract_exists = "dcdescription:?"
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
 
-  base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, abstract_exists, collapse=" ")
-  
-  blog$info(paste("Exact query:", base_query))
-  blog$info(paste("Sort by:", sortby_string))
+  base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, collapse=" ")
+
+  min_descsize <- if (is.null(params$min_descsize)) 300 else params$min_descsize
+  filter <- I(paste0('descsize:[', min_descsize, '%20TO%20*]'))
+  blog$info(paste("map_id:", .GlobalEnv$MAP_ID, "BASE query:", base_query))
+  blog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Sort by:", sortby_string))
+  blog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Min descsize:", min_descsize))
   # execute search
   (res_raw <- bs_search(hits=limit
                         , query = base_query
                         , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"
                         , sortby = sortby_string
+                        , filter = filter
                         , retry = retry_opts))
   res <- res_raw$docs
   if (nrow(res)==0){
     stop(paste("No results retrieved."))
   }
-
-  blog$info(paste("Query:", query, lang_query, date_string, document_types, abstract_exists, sep=" "));
 
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
 
@@ -120,6 +121,7 @@ get_papers <- function(query, params, limit=100,
   subject_cleaned = gsub("[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
   subject_cleaned = gsub("[^\\[;]+\\[[A-Z,0-9]+\\](;|$)?", "", subject_cleaned) # remove WHO classification
   subject_cleaned = gsub("</keyword><keyword>", "", subject_cleaned) # remove </keyword><keyword>
+  subject_cleaned = gsub("\\[No keyword\\]", "", subject_cleaned)
   subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification
   subject_cleaned = gsub("[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
   subject_cleaned = gsub(" -- ", "; ", subject_cleaned) #replace inconsistent keyword separation
@@ -128,6 +130,7 @@ get_papers <- function(query, params, limit=100,
   subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
   subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
   subject_cleaned = gsub("\\w+:\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
+  subject_cleaned = gsub("^; $", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
 
   metadata$subject = subject_cleaned
 
@@ -149,7 +152,7 @@ get_papers <- function(query, params, limit=100,
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
-  blog$info(paste("Time taken:", time.taken, sep=" "))
+  blog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Time taken:", time.taken, sep=" "))
 
   return(ret_val)
 

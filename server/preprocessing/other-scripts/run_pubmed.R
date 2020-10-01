@@ -33,7 +33,7 @@ f <- file("stdin")
 open(f)
 data = fromJSON(readLines(f))
 params <- data$params
-
+.GlobalEnv$MAP_ID <- params$map_id
 
 if (!is.null(params$lang_id)) {
   lang_id <- params$lang_id
