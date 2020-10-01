@@ -58,11 +58,6 @@
 #context {
     font-size: 11px;
     color: $black;
-    span {
-        @if not $modern_frontend_enabled {
-            margin-right: 1%;
-        }
-    }
     .context_moreinfo {
         border-bottom: 1px solid $medium-blue;
         cursor: help;
@@ -139,6 +134,7 @@
     margin: 10px 4px 10px 10px; /*former margin-right*/
     /*margin-top: 15px;
     margin-left: 50px;*/
+    padding-right: 3px;
 }
 
 #author_bio a {
@@ -295,4 +291,14 @@
     display: inline-block;
     margin-right: 1%;
     height: 15px;
+}
+
+//.context_metadata_high {
+    //color: $okm-green !important;
+    //border-bottom-color: $okm-green !important;
+//}
+
+.context_metadata_low {
+    color: $okm-red !important;
+    border-bottom-color: $okm-red !important;
 }

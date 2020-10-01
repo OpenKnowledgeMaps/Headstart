@@ -1,6 +1,6 @@
 import React from "react";
 
-const DocumentTypesPopover = (props) => {
+const DocumentTypes = (props) => {
   return (
     // html template starts here
     <span className="context_moreinfo" {...props}>
@@ -10,4 +10,4 @@ const DocumentTypesPopover = (props) => {
   );
 };
 
-export default DocumentTypesPopover;
+export default DocumentTypes;

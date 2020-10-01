@@ -5,6 +5,7 @@ import localizationReducer from "../../js/reducers/localization";
 import queryReducer from "../../js/reducers/query";
 import filesReducer from "../../js/reducers/files";
 import contextLineReducer from "../../js/reducers/contextLine";
+import serviceReducer from "../../js/reducers/service";
 
 const setup = (overrideConfig, overrideContext) => {
   const configObject = Object.assign(
@@ -57,6 +58,7 @@ const setup = (overrideConfig, overrideContext) => {
           custom_title_explanation: "Sample explanation",
         },
       },
+      service: undefined,
     },
     overrideConfig
   );
@@ -1441,6 +1443,199 @@ describe("config and context state", () => {
       );
 
       expect(result).toHaveProperty("timestamp", LAST_UPDATED);
+    });
+
+    it("should initialize null metadata quality (undefined min_descsize)", () => {
+      const SERVICE = "base";
+      const MIN_DESCSIZE = undefined;
+      const EXPECTED_QUALITY = null;
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+          params: {
+            min_descsize: MIN_DESCSIZE,
+          }
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
+    });
+
+    it("should initialize null metadata quality (unsupported service)", () => {
+      const SERVICE = "doaj";
+      const MIN_DESCSIZE = "300";
+      const EXPECTED_QUALITY = null;
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+          params: {
+            min_descsize: MIN_DESCSIZE,
+          }
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
+    });
+
+    it("should initialize correct (low) metadata quality (base, min_descsize = 0)", () => {
+      const SERVICE = "base";
+      const MIN_DESCSIZE = "0";
+      const EXPECTED_QUALITY = "low";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+          params: {
+            min_descsize: MIN_DESCSIZE,
+          }
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
+    });
+
+    it("should initialize correct (high) metadata quality (base, min_descsize = 300)", () => {
+      const SERVICE = "base";
+      const MIN_DESCSIZE = "300";
+      const EXPECTED_QUALITY = "high";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+          params: {
+            min_descsize: MIN_DESCSIZE,
+          }
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
+    });
+
+    it("should initialize correct (low) metadata quality (pubmed, min_descsize = 0)", () => {
+      const SERVICE = "pubmed";
+      const MIN_DESCSIZE = "0";
+      const EXPECTED_QUALITY = "low";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+          params: {
+            min_descsize: MIN_DESCSIZE,
+          }
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
+    });
+
+    it("should initialize correct (high) metadata quality (pubmed, min_descsize = 300)", () => {
+      const SERVICE = "pubmed";
+      const MIN_DESCSIZE = "1";
+      const EXPECTED_QUALITY = "high";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+          params: {
+            min_descsize: MIN_DESCSIZE,
+          }
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
+    });
+  });
+
+  describe("service reducer", () => {
+    it("should return the initial state", () => {
+      const expectedResult = null;
+
+      const result = serviceReducer(undefined, {});
+
+      expect(result).toEqual(expectedResult);
+    });
+
+    it("should initialize null service", () => {
+      const SERVICE = undefined;
+      const EXPECTED_SERVICE = null;
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+        }
+      );
+
+      const result = serviceReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual(EXPECTED_SERVICE);
+    });
+
+    it("should initialize correct service", () => {
+      const SERVICE = "base";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+        }
+      );
+
+      const result = serviceReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual(SERVICE);
     });
   });
 });

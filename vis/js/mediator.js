@@ -118,7 +118,7 @@ MyMediator.prototype = {
         this.mediator.subscribe("on_rect_mouseover", this.on_rect_mouseover);
         this.mediator.subscribe("on_rect_mouseout", this.on_rect_mouseout);
         this.mediator.subscribe("chart_svg_click", this.chart_svg_click);
-        this.mediator.subscribe("draw_title", this.draw_title);
+        this.mediator.subscribe("draw_modals", this.draw_modals);
 
         // needed in io.js = prepareData and prepareAreas to
         // delegate some things to the canvas class
@@ -230,11 +230,7 @@ MyMediator.prototype = {
         papers.current = "none";
         list.current = "none";
         $("#list_explorer").empty();
-        if (mediator.modern_frontend_enabled) {
-            mediator.modern_frontend_intermediate.zoomOut();
-        } else {
-            $("#backlink").remove();
-        }
+        mediator.modern_frontend_intermediate.zoomOut();
         mediator.manager.call('canvas', 'setupToFileCanvas', []);
     },
 
@@ -287,19 +283,40 @@ MyMediator.prototype = {
         mediator.streamgraph_data = (config.is_streamgraph)?(csv.streamgraph):{};
         
         mediator.manager.registerModule(window.headstartInstance, 'headstart');
+
+        mediator.manager.call('io', 'initializeMissingData', [data]);
+        mediator.manager.call('io', 'prepareData', [highlight_data, data, context]);
+        mediator.manager.call('io', 'setContext', [context, data.length]);
+        mediator.manager.call('io', 'setInfo', [context]);
+
+        mediator.init_modern_frontend_intermediate();
         
-        if(config.is_streamgraph) {         
+        if (config.is_streamgraph) {         
             mediator.manager.call('canvas', 'setupStreamgraphCanvas', []);
+        } else {
+            if (config.is_force_papers && config.dynamic_force_papers) 
+                mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
+            if (config.is_force_area && config.dynamic_force_area) 
+                mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
+            if (config.dynamic_sizing) 
+                mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
+            if (config.render_bubbles) 
+                mediator.manager.registerModule(mediator.current_bubble, 'bubble');
 
-            mediator.manager.call('io', 'initializeMissingData', [data]);
-            mediator.manager.call('io', 'prepareData', [highlight_data, data, context]);
-            mediator.manager.call('io', 'prepareAreas', []);
+            mediator.manager.call('canvas', 'setupCanvas', []);
+            if (config.scale_toolbar) {
+                mediator.manager.registerModule(scale, 'scale');
+                mediator.manager.call('scale', 'drawScaleTypes', []);
+            }
+        }
 
-            mediator.manager.call('io', 'setContext', [context, data.length]);
-            mediator.manager.call('io', 'setInfo', [context]);
-            mediator.manager.call('canvas', 'drawTitle', [context]);
-            mediator.bubbles_update_data_and_areas(mediator.current_bubble);
-            
+        mediator.manager.call('io', 'prepareAreas', []);
+        mediator.manager.call('io', 'updateVis', []);
+        
+        mediator.manager.call('canvas', 'drawModals', [context]);
+        mediator.bubbles_update_data_and_areas(mediator.current_bubble);
+
+        if (config.is_streamgraph) {
             mediator.manager.registerModule(streamgraph, 'streamgraph')
             mediator.manager.call('streamgraph', 'start')
             mediator.manager.call('streamgraph', 'setupStreamgraph', [mediator.streamgraph_data])
@@ -312,40 +329,19 @@ MyMediator.prototype = {
             mediator.manager.call('streamgraph', 'initMouseListeners', []);
             
         } else {
-            if(config.is_force_papers && config.dynamic_force_papers) mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
-            if(config.is_force_area && config.dynamic_force_area) mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
-            if(config.dynamic_sizing) mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
-            if (config.render_bubbles) mediator.manager.registerModule(mediator.current_bubble, 'bubble');
-
-            mediator.manager.call('canvas', 'setupCanvas', []);
-            if(config.scale_toolbar) {
-                mediator.manager.registerModule(scale, 'scale')
-                mediator.manager.call('scale', 'drawScaleTypes', [])
-            }
-
-
-            mediator.manager.call('io', 'initializeMissingData', [data]);
-            mediator.manager.call('io', 'prepareData', [highlight_data, data, context]);
-            mediator.manager.call('io', 'prepareAreas', []);
-
-            mediator.manager.call('io', 'setContext', [context, data.length]);
-            mediator.manager.call('io', 'setInfo', [context]);
-            mediator.manager.call('canvas', 'drawTitle', [context]);
-
-            mediator.bubbles_update_data_and_areas(mediator.current_bubble);
             mediator.manager.call('bubble', 'start', [data, highlight_data]);
             mediator.manager.call('canvas', 'initEventsAndLayout', []);
             mediator.manager.call('papers', 'start', [ mediator.current_bubble ]);
             mediator.manager.call('bubble', 'draw', []);
+
             mediator.manager.call('list', 'start');
             if (!config.render_bubbles && config.show_list) mediator.manager.call('list', 'show');
+
             mediator.manager.call('canvas', 'checkForcePapers', []);
             mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
             mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
             mediator.manager.call('bubble', 'initMouseListeners', []);
         }
-
-        mediator.init_modern_frontend_intermediate();
 
         mediator.manager.call('canvas', 'showInfoModal', []);
     },
@@ -490,7 +486,6 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'count_visible_items_to_header', []);
         mediator.manager.call('streamgraph', 'markStream', [keyword]);
         mediator.manager.call('list', 'changeHeaderColor', [color]);
-        mediator.manager.call('canvas', 'showAreaStreamgraph', [keyword])
         mediator.current_enlarged_paper = null;
         mediator.modern_frontend_intermediate.zoomIn({title: keyword});
     },
@@ -518,7 +513,7 @@ MyMediator.prototype = {
         mediator.manager.call('streamgraph', 'reset');
         mediator.manager.call('list', 'count_visible_items_to_header', []);
         mediator.manager.call('list', 'resetHeaderColor');
-        mediator.manager.call('canvas', 'removeAreaStreamgraph');
+        mediator.draw_modals();
         mediator.current_enlarged_paper = null;
         mediator.modern_frontend_intermediate.zoomOut();
     },
@@ -662,9 +657,10 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'count_visible_items_to_header')
     },
     
-    draw_title: function () {
+    // TODO is this even needed?
+    draw_modals: function () {
         let context = io.context;
-        mediator.manager.call('canvas', 'drawTitle', [context]);
+        mediator.manager.call('canvas', 'drawModals', [context]);
     },
 
     list_click_paper_list: function(d) {
