@@ -38,7 +38,7 @@ enrich_output_json <- function(output_json){
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
-  alog$info(paste("Time taken:", time.taken, sep=" "))
+  alog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Time taken:", time.taken, sep=" "))
 
   return (output_json)
 }
@@ -52,7 +52,7 @@ get_altmetrics <- function(dois){
       metrics <- altmetric_data(altmetrics(doi=doi))
       results <- rbind.fill(results, metrics)
     }, error = function(err){
-      alog$warn(gsub("[\r\n]", "", paste(err, doi, sep=" ")))
+      alog$debug(gsub("[\r\n]", "", paste(err, doi, sep=" ")))
     })
   }
   return (results)
@@ -69,7 +69,7 @@ add_citations <- function(output){
     cc <- tryCatch({
       cr_citation_count(doi=doi, async=TRUE)
       }, error = function(err){
-          alog$warn(gsub("[\r\n]", "", paste(err, doi, sep=" ")))
+          alog$debug(gsub("[\r\n]", "", paste(err, doi, sep=" ")))
           return(list(doi=doi, count=NA))
       })
     cit_count <- rbind(cit_count, cc)
