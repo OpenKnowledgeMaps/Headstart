@@ -48,14 +48,31 @@ def exists_visualization(vis_id):
 
 @persistence_ns.route('/createVisualization')
 class createVisualization(Resource):
-    # (vis_id, vis_title, data)
+
+    def post(self):
+        payload = request.get_json()
+        vis_id = payload.get('vis_id')
+        data = payload.get('data')
+        rev_id = payload.get('rev_id')
+
+
+
+@persistence_ns.route('/getLastVersion')
+class getLastVersion(Resource):
     pass
 
 
 @persistence_ns.route('/getRevision')
 class getRevision(Resource):
-    # (vis_id, rev_id)
-    pass
+
+    @persistence_ns.produces(["application/json"])
+    def post(self):
+
+        # create response
+        headers = {}
+        result = {}
+        headers["Content-Type"] = "application/json"
+        return make_response(result, 200, headers)
 
 
 @persistence_ns.route('/writeRevision')
