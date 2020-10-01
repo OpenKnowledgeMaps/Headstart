@@ -16,7 +16,6 @@ export const Backlink = ({
   }
 
   const handleOnClick = () => {
-    console.warn("*** React component 'Backlink' clicked ***");
     if (onClick && typeof onClick === "function") {
       onClick();
     }

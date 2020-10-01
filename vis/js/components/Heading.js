@@ -204,7 +204,6 @@ const unescapeHTML = (string) => {
 const renderAdditionalFeatures = ({ showDropdown }, files, onFileChange) => {
   if (showDropdown && files.list.length > 0) {
     const handleChange = (e) => {
-      console.warn("*** React component 'Heading' dropdown changed ***");
       onFileChange(parseInt(e.target.value));
     };
 

@@ -7,7 +7,7 @@ const HoverPopover = ({
   content,
   children,
   container, // = null
-  placement = "bottom",
+  placement = "right",
 }) => {
   const popover = <Popover id={id}>{content}</Popover>;
 
