@@ -49,6 +49,17 @@ const setup = (
         paper_count_label: "papers",
         dataset_count_label: "datasets",
         timestamp_label: "Last updated",
+        high_metadata_quality: "high metadata quality",
+        high_metadata_quality_desc_base:
+          "This knowledge map only includes documents with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your knowledge map.",
+        high_metadata_quality_desc_pubmed:
+          "This knowledge map only includes documents with an abstract. High metadata quality significantly improves the quality of your knowledge map.",
+        low_metadata_quality: "low metadata quality",
+        low_metadata_quality_desc_base:
+          "This knowledge map includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your knowledge map. ",
+        low_metadata_quality_desc_pubmed:
+          "This knowledge map includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your knowledge map. ",
+
         ...overrideLocalization,
       },
     },
@@ -59,16 +70,52 @@ const setup = (
 };
 
 describe("Context line component snapshot", () => {
-  it("matches a project website snapshot", () => {
+  it("matches a project website (base low quality) snapshot", () => {
     const store = mockStore(
-      setup({
-        modifier: "most-relevant",
-        showModifierPopover: true,
-        openAccessCount: 52,
-        documentTypes: ["Journal/newspaper article"],
-        dataSource: "BASE",
-        timespan: "All time",
-      })
+      setup(
+        {
+          modifier: "most-relevant",
+          showModifierPopover: true,
+          openAccessCount: 52,
+          documentTypes: ["Journal/newspaper article"],
+          dataSource: "BASE",
+          timespan: "All time",
+          metadataQuality: "low",
+        },
+        {},
+        {
+          service: "base",
+        }
+      )
+    );
+
+    const tree = renderer
+      .create(
+        <Provider store={store}>
+          <ContextLine />
+        </Provider>
+      )
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it("matches a project website (pubmed high quality) snapshot", () => {
+    const store = mockStore(
+      setup(
+        {
+          modifier: "most-relevant",
+          showModifierPopover: true,
+          openAccessCount: 52,
+          documentTypes: ["Journal/newspaper article"],
+          dataSource: "PubMed",
+          timespan: "All time",
+          metadataQuality: "high",
+        },
+        {},
+        {
+          service: "pubmed",
+        }
+      )
     );
 
     const tree = renderer
@@ -83,15 +130,19 @@ describe("Context line component snapshot", () => {
 
   it("matches a covis snapshot", () => {
     const store = mockStore(
-      setup({
-        articlesCount: 76,
-        openAccessCount: 34,
-        dataSource: '<span class="backlink"><a href="data" class="underline" target="_blank" >CoVis database</a></span>',
-        timestamp: "2020-08-12 02:40:04 UTC"
-      }, {
-        articles_label: "resources and collections",
-        source_label: "Data source"
-      })
+      setup(
+        {
+          articlesCount: 76,
+          openAccessCount: 34,
+          dataSource:
+            '<span class="backlink"><a href="data" class="underline" target="_blank" >CoVis database</a></span>',
+          timestamp: "2020-08-12 02:40:04 UTC",
+        },
+        {
+          articles_label: "resources and collections",
+          source_label: "Data source",
+        }
+      )
     );
 
     const tree = renderer
@@ -109,11 +160,11 @@ describe("Context line component snapshot", () => {
       setup({
         articlesCount: 36,
         openAccessCount: 10,
-        dataSource: 'OpenAIRE',
+        dataSource: "OpenAIRE",
         paperCount: 36,
         datasetCount: 0,
         funder: "EC",
-        projectRuntime: "2011-2016"
+        projectRuntime: "2011-2016",
       })
     );
 
@@ -129,18 +180,21 @@ describe("Context line component snapshot", () => {
 
   it("matches a linkedcat authorview snapshot", () => {
     const store = mockStore(
-      setup({
-        showAuthor: true,
-        author: {
-          id: "100016642",
-          livingDates: "1791-1863",
+      setup(
+        {
+          showAuthor: true,
+          author: {
+            id: "100016642",
+            livingDates: "1791-1863",
+          },
+          articlesCount: 45,
+          dataSource: "LinkedCat+",
         },
-        articlesCount: 45,
-        dataSource: "LinkedCat+",
-      }, {
-        articles_label: "open access Dokumente",
-        source_label: "Quelle",
-      })
+        {
+          articles_label: "open access Dokumente",
+          source_label: "Quelle",
+        }
+      )
     );
 
     const tree = renderer
@@ -155,17 +209,26 @@ describe("Context line component snapshot", () => {
 
   it("matches a linkedcat keywordview snapshot", () => {
     const store = mockStore(
-      setup({
-        articlesCount: 295,
-        dataSource: "LinkedCat+",
-        timespan: "1 Jan 1847 - 1 Jan 1918",
-        documentTypes: ["Anthologie", "Bericht", "Biografie", "Briefsammlung"]
-      }, {
-        articles_label: "open access Dokumente",
-        source_label: "Quelle",
-        documenttypes_tooltip: "Die folgenden Publikationsarten wurden bei der Erstellung dieser Visualisierung in Betracht gezogen (nicht alle davon scheinen notwendigerweise in dieser Visualisierung auch auf)",
-        documenttypes_label: "Dokumentarten"
-      })
+      setup(
+        {
+          articlesCount: 295,
+          dataSource: "LinkedCat+",
+          timespan: "1 Jan 1847 - 1 Jan 1918",
+          documentTypes: [
+            "Anthologie",
+            "Bericht",
+            "Biografie",
+            "Briefsammlung",
+          ],
+        },
+        {
+          articles_label: "open access Dokumente",
+          source_label: "Quelle",
+          documenttypes_tooltip:
+            "Die folgenden Publikationsarten wurden bei der Erstellung dieser Visualisierung in Betracht gezogen (nicht alle davon scheinen notwendigerweise in dieser Visualisierung auch auf)",
+          documenttypes_label: "Dokumentarten",
+        }
+      )
     );
 
     const tree = renderer

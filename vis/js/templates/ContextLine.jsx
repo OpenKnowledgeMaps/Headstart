@@ -5,8 +5,7 @@ import React from "react";
 const ContextLine = ({ children }) => {
   return (
     // html template starts here
-    // TODO <p id="context"> will move to here after the whole MVP is finished
-    <>{children}</>
+    <p id="context">{children}</p>
     // html template ends here
   );
 };

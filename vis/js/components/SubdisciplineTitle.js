@@ -4,15 +4,16 @@ import Heading from "./Heading";
 import Backlink from "./Backlink";
 import ContextLine from "./ContextLine";
 
-export const SubdisciplineTitle = () => {
-  return (
-    // TODO add div id="subdiscipline_title" later
-    <>
-      <Heading />
-      <Backlink />
-      <ContextLine />
-    </>
-  );
-};
+class SubdisciplineTitle extends React.Component {
+  render() {
+    return (
+      <div id="subdiscipline_title" style={{position: "relative"}}>
+        <Heading />
+        <Backlink />
+        <ContextLine popoverContainer={this} />
+      </div>
+    );
+  }
+}
 
 export default SubdisciplineTitle;

@@ -84,6 +84,8 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     } else {
       $unique_id = ($precomputed_id === null)?($persistence->createID(array($query, $params_for_id_creation))):($precomputed_id);
     }
+    $post_params["map_id"] = $unique_id;
+    $params_json = packParamsJSON($param_types, $post_params);
 
     if($retrieve_cached_map) {
         $last_version = $persistence->getLastVersion($unique_id, false);
