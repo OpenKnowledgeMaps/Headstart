@@ -249,12 +249,6 @@ list.fit_list_height = function() {
     } else {
         let title_height = $("#subdiscipline_title").outerHeight(true);
         let title_image_height = $("#title_image").outerHeight(true) || 0;
-
-        // TODO refactor this properly in one place (mediator??)
-        // now the same calculations are done both in canvas and in list
-        if (mediator.modern_frontend_enabled && config.is_authorview) {
-            title_image_height = 70;
-        }
         
         paper_list_avail_height = 
                 Math.max(title_height, title_image_height)
