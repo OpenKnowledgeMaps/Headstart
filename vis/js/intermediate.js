@@ -44,19 +44,19 @@ class Intermediate {
   init(config, context) {
     this.store.dispatch(initializeStore(config, context));
 
-    if (this.modern_frontend_enabled) {
-      console.warn("*** MODERN FRONTEND ENABLED - React elements rendered ***");
+    // TODO replace the config.is_authorview with store variable
+    // after components are wrapped
+    ReactDOM.render(
+      <Provider store={this.store}>
+        {config.is_authorview && <AuthorImage />}
+        <SubdisciplineTitle />
+      </Provider>,
+      document.getElementById("mvp_container")
+    );
 
-      // TODO replace the config.is_authorview with store variable
-      // after components are wrapped
-      ReactDOM.render(
-        <Provider store={this.store}>
-          {config.is_authorview && <AuthorImage />}
-          <SubdisciplineTitle />
-        </Provider>,
-        document.getElementById("mvp_container")
-      );
-    }
+    //if (this.modern_frontend_enabled) {
+    //  console.warn("*** FRONTEND FLAG ENABLED - new React elements rendered ***");
+    //}
   }
 
   zoomIn(selectedAreaData) {

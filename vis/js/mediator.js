@@ -118,7 +118,7 @@ MyMediator.prototype = {
         this.mediator.subscribe("on_rect_mouseover", this.on_rect_mouseover);
         this.mediator.subscribe("on_rect_mouseout", this.on_rect_mouseout);
         this.mediator.subscribe("chart_svg_click", this.chart_svg_click);
-        this.mediator.subscribe("draw_title", this.draw_title);
+        this.mediator.subscribe("draw_modals", this.draw_modals);
 
         // needed in io.js = prepareData and prepareAreas to
         // delegate some things to the canvas class
@@ -230,11 +230,7 @@ MyMediator.prototype = {
         papers.current = "none";
         list.current = "none";
         $("#list_explorer").empty();
-        if (mediator.modern_frontend_enabled) {
-            mediator.modern_frontend_intermediate.zoomOut();
-        } else {
-            $("#backlink").remove();
-        }
+        mediator.modern_frontend_intermediate.zoomOut();
         mediator.manager.call('canvas', 'setupToFileCanvas', []);
     },
 
@@ -317,7 +313,7 @@ MyMediator.prototype = {
         mediator.manager.call('io', 'prepareAreas', []);
         mediator.manager.call('io', 'updateVis', []);
         
-        mediator.manager.call('canvas', 'drawTitle', [context]);
+        mediator.manager.call('canvas', 'drawModals', [context]);
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
 
         if (config.is_streamgraph) {
@@ -490,7 +486,6 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'count_visible_items_to_header', []);
         mediator.manager.call('streamgraph', 'markStream', [keyword]);
         mediator.manager.call('list', 'changeHeaderColor', [color]);
-        mediator.manager.call('canvas', 'showAreaStreamgraph', [keyword])
         mediator.current_enlarged_paper = null;
         mediator.modern_frontend_intermediate.zoomIn({title: keyword});
     },
@@ -518,7 +513,7 @@ MyMediator.prototype = {
         mediator.manager.call('streamgraph', 'reset');
         mediator.manager.call('list', 'count_visible_items_to_header', []);
         mediator.manager.call('list', 'resetHeaderColor');
-        mediator.manager.call('canvas', 'removeAreaStreamgraph');
+        mediator.draw_modals();
         mediator.current_enlarged_paper = null;
         mediator.modern_frontend_intermediate.zoomOut();
     },
@@ -662,9 +657,10 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'count_visible_items_to_header')
     },
     
-    draw_title: function () {
+    // TODO is this even needed?
+    draw_modals: function () {
         let context = io.context;
-        mediator.manager.call('canvas', 'drawTitle', [context]);
+        mediator.manager.call('canvas', 'drawModals', [context]);
     },
 
     list_click_paper_list: function(d) {

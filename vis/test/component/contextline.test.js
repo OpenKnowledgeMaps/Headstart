@@ -4,6 +4,8 @@ import { act } from "react-dom/test-utils";
 
 import configureStore from "redux-mock-store";
 
+import { Provider } from "react-redux";
+
 import ContextLine from "../../js/components/ContextLine";
 
 const mockStore = configureStore([]);
@@ -578,15 +580,6 @@ describe("Context line component", () => {
     });
 
     it("shows a popover if hovered on more document types", () => {
-      // TODO suppressed the error saying <div> cannot be a descendant of <p>
-      global.console = {
-        log: jest.fn(),
-        warn: jest.fn(),
-        error: jest.fn(),
-        info: console.info,
-        debug: console.debug,
-      };
-
       const DOC_TYPES = ["custom document type", "another document type"];
 
       const storeObject = setup();
@@ -595,7 +588,12 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <MockContextLineContainer />
+          </Provider>,
+          container
+        );
       });
 
       const select = document.querySelector("#document_types>span");
@@ -618,3 +616,13 @@ describe("Context line component", () => {
     });
   });
 });
+
+class MockContextLineContainer extends React.Component {
+  render() {
+    return (
+      <div id="subdiscipline_title" style={{ position: "relative" }}>
+        <ContextLine popoverContainer={this} />
+      </div>
+    );
+  }
+}
