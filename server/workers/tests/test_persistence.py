@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 import requests
 
+from .test_helpers import CASENAMES, CASEDATA, RESULTS, get_dataprocessing_result
+
 
 @pytest.mark.persistence
 def test_map_id_creation():
@@ -418,7 +420,16 @@ def test_map_id_creation():
 
 
 @pytest.mark.persistence
-def test_add_map_to_database():
+def test_get_last_version():
+    # vis_id, details, context
+    pass
+
+
+@pytest.mark.persistence
+@pytest.mark.parametrize("testcase", CASENAMES)
+def test_add_map_to_database(testcase):
+    testcase = RESULTS[testcase]
+    map_data = {}
     pass
 
 

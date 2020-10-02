@@ -11,6 +11,17 @@ from models import Revisions, Visualizations
 persistence_ns = Namespace("persistence", description="OKMAps persistence operations")
 
 
+def create_map_id(params, param_types):
+    # create map id
+    ordered_params = OrderedDict()
+    for k in param_types:
+        ordered_params[k] = params[k]
+    string_to_hash = json.dumps(ordered_params, separators=(',', ':'))
+    string_to_hash = " ".join([params["q"], string_to_hash])
+    mapid = md5(string_to_hash.encode('utf-8')).hexdigest()
+    return mapid
+
+
 def write_revision(vis_id, data, rev_id=None):
 
     vis = Visualizations.query.filter_by(vis_id=vis_id).first()
@@ -46,6 +57,28 @@ def exists_visualization(vis_id):
     return exists
 
 
+def get_last_version(vis_id, details=False, context=False):
+    return get_revision(vis_id, None, details=False, context=False)
+
+
+def get_revision(vis_id, rev_id, details=False, context=False):
+    pass
+
+
+@persistence_ns.route('/existsVisualization')
+class existsVisualization(Resource):
+
+    def post(self):
+        payload = request.get_json()
+        vis_id = payload.get("vis_id")
+        exists = exists_visualization(vis_id)
+        # create response
+        headers = {}
+        result = {"exists": exists}
+        headers["Content-Type"] = "application/json"
+        return make_response(result, 200, headers)
+
+
 @persistence_ns.route('/createVisualization')
 class createVisualization(Resource):
 
@@ -56,9 +89,14 @@ class createVisualization(Resource):
         rev_id = payload.get('rev_id')
 
 
-
 @persistence_ns.route('/getLastVersion')
 class getLastVersion(Resource):
+    """
+    Is actually a call to getRevision but taking the latest one
+
+    params: vis_id, details(false), context(false)
+
+    """
     pass
 
 
@@ -89,13 +127,7 @@ class createID(Resource):
         payload = request.get_json()
         params = payload.get("params")
         param_types = payload.get("param_types")
-        # create map id
-        ordered_params = OrderedDict()
-        for k in param_types:
-            ordered_params[k] = params[k]
-        string_to_hash = json.dumps(ordered_params, separators=(',', ':'))
-        string_to_hash = " ".join([params["q"], string_to_hash])
-        mapid = md5(string_to_hash.encode('utf-8')).hexdigest()
+        mapid = create_map_id(params, param_types)
         # create response
         headers = {}
         result = {"unique_id": mapid}

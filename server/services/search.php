@@ -145,7 +145,24 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
 
     $vis_title = $repository;
 
-    $exists = $persistence->existsVisualization($unique_id);
+    if ($backend === "api") {
+      $url = $ini_array["general"]["api_url"] . "/persistence" . "/existsVisualization";
+      $payload = json_encode(array("vis_id" => $unique_id));
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      $output_json = curl_exec($ch);
+      $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+      if ($httpcode != 200) {
+        $output_json = NULL;
+      }
+      $exists = $output_json["exists"];
+    } else {
+      $exists = $persistence->existsVisualization($unique_id);
+    }
 
     if (!$exists) {
         $persistence->createVisualization($unique_id, $vis_title, $input_json, $query, $dirty_query, $params_json);
