@@ -51,6 +51,18 @@ function cleanQuery($dirty_query, $transform_query_tolowercase) {
     return $query;
 }
 
+function call_api($route, $payload) {
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $route);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+  curl_setopt($ch, CURLOPT_POST, true);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  $result = curl_exec($ch);
+  $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  return array("result" => $result, "httpcode" => $httpcode);
+}
+
 function search($repository, $dirty_query, $post_params, $param_types, $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
         , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3, $id = "area_uri", $subjects = "subject", $precomputed_id = null, $do_clean_query = true
         , $backend = "legacy") {
@@ -70,17 +82,15 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
     if ($backend === "api") {
-      $url = $ini_array["general"]["api_url"] . $repository . "/createID";
+      $route = $ini_array["general"]["api_url"] . $repository . "/createID";
       $payload = json_encode(array("params" => $post_params,
                                    "param_types" => $param_types));
-      $ch = curl_init();
-      curl_setopt($ch, CURLOPT_URL, $url);
-      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-      curl_setopt($ch, CURLOPT_POST, true);
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-      $output_json = curl_exec($ch);
-      $unique_id = $output_json["unique_id"];
+      $res = call_api($route, $payload);
+      if ($res["httpcode"] != 200) {
+        return $res;
+      } else {
+        $unique_id = $res["result"]["unique_id"];
+      }
     } else {
       $unique_id = ($precomputed_id === null)?($persistence->createID(array($query, $params_for_id_creation))):($precomputed_id);
     }
@@ -104,18 +114,13 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
 
     if ($backend === "api") {
-      $url = $ini_array["general"]["api_url"] . $repository . "/search";
+      $route = $ini_array["general"]["api_url"] . $repository . "/search";
       $payload = json_encode($post_params);
-      $ch = curl_init();
-      curl_setopt($ch, CURLOPT_URL, $url);
-      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-      curl_setopt($ch, CURLOPT_POST, true);
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-      $output_json = curl_exec($ch);
-      $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-      if ($httpcode != 200) {
-        $output_json = NULL;
+      $res = call_api($route, $payload);
+      if ($res["httpcode"] != 200) {
+        return $res;
+      } else {
+        $output_json = $res["result"];
       }
     } else {
       $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
@@ -146,49 +151,46 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $vis_title = $repository;
 
     if ($backend === "api") {
-      $url = $ini_array["general"]["api_url"] . "/persistence" . "/existsVisualization";
+      $route = $ini_array["general"]["api_url"] . "/persistence" . "/existsVisualization";
       $payload = json_encode(array("vis_id" => $unique_id));
-      $ch = curl_init();
-      curl_setopt($ch, CURLOPT_URL, $url);
-      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-      curl_setopt($ch, CURLOPT_POST, true);
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-      $res = curl_exec($ch);
-      $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-      if ($httpcode != 200) {
-        return res;
+      $res = call_api($route, $payload);
+      if ($res["httpcode"] != 200) {
+        return $res;
+      } else {
+        $exists = $res["result"]["exists"];
       }
-      $exists = $res["exists"];
     } else {
       $exists = $persistence->existsVisualization($unique_id);
     }
 
     if (!$exists) {
-      if ($backend === "api"){
-        $url = $ini_array["general"]["api_url"] . "/persistence" . "/createVisualization";
+      if ($backend === "api") {
+        $route = $ini_array["general"]["api_url"] . "/persistence" . "/createVisualization";
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "vis_title" => $vis_title,
                                      "data" => $input_json,
                                      "vis_clean_query" => $query,
                                      "vis_query" => $dirty_query,
                                      "vis_params" => $params_json));
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $res = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        if ($httpcode != 200) {
-          return res;
+        $res = call_api($route, $payload);
+        if ($res["httpcode"] != 200) {
+         return $res;
         }
       } else {
         $persistence->createVisualization($unique_id, $vis_title, $input_json, $query, $dirty_query, $params_json);
       }
     } else {
+      if ($backend === "api") {
+        $route = $ini_array["general"]["api_url"] . "/persistence" . "/createVisualization";
+        $payload = json_encode(array("vis_id" => $unique_id,
+                                     "data" => $input_json));
+        $res = call_api($route, $payload);
+        if ($res["httpcode"] != 200) {
+        return $res;
+        }
+      } else {
         $persistence->writeRevision($unique_id, $input_json);
+      }
     }
 
     $repo_mapping = array("plos" => "PLOS"
