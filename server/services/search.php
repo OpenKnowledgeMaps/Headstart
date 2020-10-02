@@ -65,7 +65,7 @@ function call_api($route, $payload) {
 
 function search($repository, $dirty_query, $post_params, $param_types, $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
         , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3, $id = "area_uri", $subjects = "subject", $precomputed_id = null, $do_clean_query = true
-        , $backend = "legacy") {
+        , $backend = "legacy", $persistence_backend = "legacy") {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
 
@@ -150,7 +150,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
 
     $vis_title = $repository;
 
-    if ($backend === "api") {
+    if ($persistence_backend === "api") {
       $route = $ini_array["general"]["api_url"] . "/persistence" . "/existsVisualization";
       $payload = json_encode(array("vis_id" => $unique_id));
       $res = call_api($route, $payload);
@@ -164,7 +164,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     }
 
     if (!$exists) {
-      if ($backend === "api") {
+      if ($persistence_backend === "api") {
         $route = $ini_array["general"]["api_url"] . "/persistence" . "/createVisualization";
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "vis_title" => $vis_title,
@@ -180,7 +180,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
         $persistence->createVisualization($unique_id, $vis_title, $input_json, $query, $dirty_query, $params_json);
       }
     } else {
-      if ($backend === "api") {
+      if ($persistence_backend === "api") {
         $route = $ini_array["general"]["api_url"] . "/persistence" . "/createVisualization";
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "data" => $input_json));
