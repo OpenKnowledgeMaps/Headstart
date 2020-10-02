@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import requests
 
-from .test_helpers import CASENAMES, CASEDATA, RESULTS, get_dataprocessing_result
+from .test_helpers import KNOWNCASES, CASENAMES, CASEDATA, RESULTS, get_dataprocessing_result
 
 
 @pytest.mark.persistence
@@ -426,11 +426,31 @@ def test_get_last_version():
 
 
 @pytest.mark.persistence
-@pytest.mark.parametrize("testcase", CASENAMES)
-def test_add_map_to_database(testcase):
-    testcase = RESULTS[testcase]
-    map_data = {}
-    pass
+@pytest.mark.parametrize("testcase", KNOWNCASES)
+def test_create_visualization(testcase):
+    caseid = testcase["caseid"]
+    payload = {}
+    payload["vis_id"] = caseid
+    payload["vis_title"] = caseid
+    payload["data"] = RESULTS[caseid].to_json(orient='records')
+    payload["vis_clean_query"] = caseid
+    payload["vis_query"] = caseid
+    payload["vis_params"] = json.dumps(testcase["casedata"]["params"])
+    res = requests.post("http://localhost/api/persistence/createVisualization",
+                        json=payload)
+    assert res.status_code == 200, res.json().get('reason')
+
+
+@pytest.mark.persistence
+@pytest.mark.parametrize("testcase", KNOWNCASES)
+def test_write_revision(testcase):
+    caseid = testcase["caseid"]
+    payload = {}
+    payload["vis_id"] = caseid
+    payload["data"] = RESULTS[caseid].to_json(orient='records')
+    res = requests.post("http://localhost/api/persistence/writeRevision",
+                        json=payload)
+    assert res.status_code == 200, res.json().get('reason')
 
 
 @pytest.mark.persistence
