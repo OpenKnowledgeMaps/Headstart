@@ -115,8 +115,13 @@ class getRevision(Resource):
 
 @persistence_ns.route('/writeRevision')
 class writeRevision(Resource):
-    # (vis_id, data)
-    pass
+
+    @persistence_ns.produces(["application/json"])
+    def post(self):
+        payload = request.get_json()
+        mapid = payload.get("mapid")
+        data = payload.get("data")
+        write_revision(vis_id, data, None)
 
 
 @persistence_ns.route('/createID')
