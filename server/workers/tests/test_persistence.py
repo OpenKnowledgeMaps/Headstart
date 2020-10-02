@@ -451,8 +451,3 @@ def test_write_revision(testcase):
     res = requests.post("http://localhost/api/persistence/writeRevision",
                         json=payload)
     assert res.status_code == 200, res.json().get('reason')
-
-
-@pytest.mark.persistence
-def test_add_revision_to_database():
-    pass

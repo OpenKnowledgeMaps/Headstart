@@ -154,18 +154,39 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
       curl_setopt($ch, CURLOPT_POST, true);
       curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-      $output_json = curl_exec($ch);
+      $res = curl_exec($ch);
       $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
       if ($httpcode != 200) {
-        $output_json = NULL;
+        return res;
       }
-      $exists = $output_json["exists"];
+      $exists = $res["exists"];
     } else {
       $exists = $persistence->existsVisualization($unique_id);
     }
 
     if (!$exists) {
+      if ($backend === "api"){
+        $url = $ini_array["general"]["api_url"] . "/persistence" . "/createVisualization";
+        $payload = json_encode(array("vis_id" => $unique_id,
+                                     "vis_title" => $vis_title,
+                                     "data" => $input_json,
+                                     "vis_clean_query" => $query,
+                                     "vis_query" => $dirty_query,
+                                     "vis_params" => $params_json));
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $res = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if ($httpcode != 200) {
+          return res;
+        }
+      } else {
         $persistence->createVisualization($unique_id, $vis_title, $input_json, $query, $dirty_query, $params_json);
+      }
     } else {
         $persistence->writeRevision($unique_id, $input_json);
     }
