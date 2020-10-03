@@ -51,20 +51,21 @@ def write_revision(vis_id, data, rev_id=None):
 def create_visualization(vis_id, vis_title, data,
                          vis_clean_query=None, vis_query=None,
                          vis_params=None):
-    new_vis = Visualizations(
-                vis_id=vis_id,
-                vis_clean_query=vis_clean_query,
-                vis_query=vis_query,
-                vis_title=vis_title,
-                vis_params=vis_params)
-    db.session.add(new_vis)
-    db.session.commit()
-    write_revision(vis_id, data, 1)
+    if not exists_visualization(vis_id):
+        new_vis = Visualizations(
+                    vis_id=vis_id,
+                    vis_clean_query=vis_clean_query,
+                    vis_query=vis_query,
+                    vis_title=vis_title,
+                    vis_params=vis_params)
+        db.session.add(new_vis)
+        db.session.commit()
+        write_revision(vis_id, data, 1)
 
 
 def exists_visualization(vis_id):
-    map = Visualizations.query.filter_by(vis_id=vis_id).first()
-    exists = True if map else False
+    vis = db.session.query(Visualizations).filter_by(vis_id=vis_id).first()
+    exists = True if vis else False
     return exists
 
 
@@ -73,7 +74,14 @@ def get_last_version(vis_id, details=False, context=False):
 
 
 def get_revision(vis_id, rev_id, details=False, context=False):
-    pass
+    result = (db.session.query(Visualizations, Revisions)
+                        .select_from(Visualizations, Revisions)
+                        .filter(Visualizations.vis_id == vis_id)
+                        .filter(Revisions.rev_vis == vis_id)
+                        .filter(Revisions.rev_id == Visualizations.vis_latest)
+              ).first()
+    res = {"id"}
+    return res
 
 
 @persistence_ns.route('/existsVisualization')

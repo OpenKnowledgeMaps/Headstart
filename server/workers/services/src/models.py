@@ -1,9 +1,10 @@
 from database import db
+from sqlalchemy import ForeignKey, Table
 from sqlalchemy.orm import relationship
 
 
 class Visualizations(db.Model):
-    vis_id = db.Column(db.Text, nullable=False, unique=False,
+    vis_id = db.Column(db.Text, nullable=False, unique=True,
                        primary_key=True)
     vis_query = db.Column(db.Text)
     vis_clean_query = db.Column(db.Text)
@@ -17,7 +18,7 @@ class Revisions(db.Model):
                        nullable=False,
                        primary_key=True)
     rev_vis = db.Column(db.Text,
-                        nullable=False,
+                        nullable=False, unique=False,
                         primary_key=True)
     vis_query = db.Column(db.Text)
     rev_user = db.Column(db.Text)
