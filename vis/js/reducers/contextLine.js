@@ -96,7 +96,9 @@ const getDocumentTypes = (config, context) => {
 
   context.params[propName].forEach((type) => {
     let typeObj = documentTypeObj.fields.find((obj) => obj.id == type);
-    documentTypesArray.push(typeObj.text);
+    if (typeof typeObj !== "undefined") {
+      documentTypesArray.push(typeObj.text);
+    }
   });
 
   return documentTypesArray;
