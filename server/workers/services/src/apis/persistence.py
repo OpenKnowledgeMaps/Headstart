@@ -81,12 +81,21 @@ def get_revision(vis_id, rev_id, details=False, context=False):
                   .filter(Revisions.rev_vis == vis_id)
                   .filter(Revisions.rev_id == Visualizations.vis_latest)
                 ).first()
-    res = {"rev_data": rev.rev_data}
     if context is True:
-        res["context"] = {
-                ""
+        res = {
+            "rev_vis": rev.rev_vis,
+            "vis_query": rev.vis_query,
+            "vis_title": vis.vis_title,
+            "rev_timestamp": rev.rev_timestamp,
+            "vis_params": vis.vis_params,
+            "rev_data": rev.rev_data
         }
-    return res
+        return res
+    else:
+        if details is True:
+            return rev.as_dict()
+        else:
+            return rev.rev_data
 
 
 @persistence_ns.route('/existsVisualization')
@@ -138,7 +147,24 @@ class getLastVersion(Resource):
     params: vis_id, details(false), context(false)
 
     """
-    pass
+
+    def post(self):
+        try:
+            payload = request.get_json()
+            vis_id = payload.get('vis_id')
+            details = payload.get('details')
+            context = payload.get('context')
+            result = get_last_version(vis_id, details, context)
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result),
+                                 200,
+                                 headers)
+        except Exception as e:
+            result = {'success': False, 'reason': e}
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result),
+                                 500,
+                                 headers)
 
 
 @persistence_ns.route('/getRevision')

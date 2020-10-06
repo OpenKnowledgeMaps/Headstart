@@ -12,6 +12,9 @@ class Visualizations(db.Model):
     vis_latest = db.Column(db.Integer)
     vis_params = db.Column(db.Text)
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 class Revisions(db.Model):
     rev_id = db.Column(db.Integer,
@@ -25,3 +28,6 @@ class Revisions(db.Model):
     rev_timestamp = db.Column(db.DateTime)
     rev_comment = db.Column(db.Text)
     rev_data = db.Column(db.Text)
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
