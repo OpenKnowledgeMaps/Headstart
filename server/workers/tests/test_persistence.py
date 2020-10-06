@@ -8,7 +8,7 @@ from .test_helpers import KNOWNCASES, CASENAMES, CASEDATA, RESULTS, get_dataproc
 
 
 @pytest.mark.persistence
-def test_map_id_creation():
+def test_vis_id_creation():
     testcases = [
         # {"params": {"q": "air quality management", "from": "1665-01-01", "to": "2017-09-08", "sorting": "most-relevant", "document_types": [121]},
         #  "param_types": ["from", "to", "document_types", "sorting"],

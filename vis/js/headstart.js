@@ -36,13 +36,13 @@ HeadstartFSM.prototype = {
     if(!config.is_evaluation) {
       return;
     }
-    
+
     let services = config.evaluation_service;
-    
+
     if(typeof services === "string") {
         services = [services];
     }
-  
+
     if (services.includes("log")) {
         this.recordActionLog(category, action, id, user, timestamp, additional_params, post_data);
     }
@@ -53,7 +53,7 @@ HeadstartFSM.prototype = {
         this.recordActionGA(category, action, id, user, timestamp, additional_params, post_data);
     }
   },
-    
+
   recordActionLog: function(id, category, action, user, type, timestamp, additional_params, post_data) {
     timestamp = (typeof timestamp !== 'undefined') ? (escape(timestamp)) : ("");
     additional_params = (typeof additional_params !== 'undefined') ? ('&' + additional_params) : ("");
@@ -81,13 +81,13 @@ HeadstartFSM.prototype = {
         }
     });
   },
-  
+
   recordActionMatomo: function(category, action, id) {
     if(typeof _paq !== "undefined") {
         _paq.push(['trackEvent', category, action, id]);
     }
   },
-  
+
   recordActionGA: function(category, action, id) {
     //gtag.js
     if(typeof gtag === "function") {
@@ -98,11 +98,11 @@ HeadstartFSM.prototype = {
     //analytics.js
     } else if (typeof ga === "function") {
       ga('send', 'event', category, action, id);
-    }  
+    }
   },
-  
+
   markProjectChanged: function (id) {
-      
+
     let php_script = config.server_url + "services/markProjectChanged.php";
 
     $.ajax({
@@ -113,9 +113,9 @@ HeadstartFSM.prototype = {
             console.log(output);
         }
       });
-      
+
   },
-  
+
   dynamicForcePapers: function(num_items) {
       if (num_items >= 150 && num_items < 200) {
         config.papers_force_alpha = 0.2;
@@ -127,13 +127,13 @@ HeadstartFSM.prototype = {
           config.papers_force_alpha = 0.6;
       }
   },
-  
+
   dynamicForceAreas: function(num_items) {
       if (num_items >= 200) {
           config.area_force_alpha = 0.02;
       }
   },
-  
+
   dynamicSizing: function(num_items) {
       if (num_items >= 150 && num_items < 200) {
           this.adjustSizes(0.9, 1.1);
@@ -153,11 +153,11 @@ HeadstartFSM.prototype = {
           this.adjustSizes(0.6, 1.2);
       }
   },
-  
+
   adjustSizes: function(resize_paper_factor, resize_bubble_factor) {
       config.paper_min_scale *= resize_paper_factor;
       config.paper_max_scale *= resize_paper_factor;
-          
+
       config.bubble_min_scale *= resize_bubble_factor;
       config.bubble_max_scale *= resize_bubble_factor;
   },
@@ -202,10 +202,10 @@ HeadstartFSM.prototype = {
       search_repos: function(that, setupVis) {
         let url = config.server_url + "services/getLatestRevision.php?vis_id=" + mediator.current_bubble.file
                 + "&context=" + config.show_context + "&streamgraph=" + config.is_streamgraph
-                + "&backend=" + config.backend;
+                + "&backend=" + config.backend + "&persistence_backend=" + config.persistence_backend;
         mediator.publish("get_data_from_files", url, 'json', setupVis);
       },
-      
+
       gsheets: function(that, setupVis) {
             let url = config.server_url + "services/getGSheetsMap.php?vis_id=" + mediator.current_bubble.file
                 + "&q=" +mediator.current_bubble.title
