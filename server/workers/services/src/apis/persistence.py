@@ -70,17 +70,26 @@ def exists_visualization(vis_id):
 
 
 def get_last_version(vis_id, details=False, context=False):
-    return get_revision(vis_id, None, details=False, context=False)
+    return get_revision(vis_id, None, details, context)
 
 
 def get_revision(vis_id, rev_id, details=False, context=False):
-    vis, rev = (db.session
-                  .query(Visualizations, Revisions)
-                  .select_from(Visualizations, Revisions)
-                  .filter(Visualizations.vis_id == vis_id)
-                  .filter(Revisions.rev_vis == vis_id)
-                  .filter(Revisions.rev_id == Visualizations.vis_latest)
-                ).first()
+    if rev_id is None:
+        vis, rev = (db.session
+                      .query(Visualizations, Revisions)
+                      .select_from(Visualizations, Revisions)
+                      .filter(Visualizations.vis_id == vis_id)
+                      .filter(Revisions.rev_vis == vis_id)
+                      .filter(Revisions.rev_id == Visualizations.vis_latest)
+                    ).first()
+    else:
+        vis, rev = (db.session
+                      .query(Visualizations, Revisions)
+                      .select_from(Visualizations, Revisions)
+                      .filter(Visualizations.vis_id == vis_id)
+                      .filter(Revisions.rev_vis == vis_id)
+                      .filter(Revisions.rev_id == rev_id)
+                    ).first()
     if context is True:
         res = {
             "rev_vis": rev.rev_vis,
@@ -118,12 +127,18 @@ class createVisualization(Resource):
     def post(self):
         try:
             payload = request.get_json()
+            persistence_ns.logger.debug(payload.keys())
             vis_id = payload.get('vis_id')
             vis_title = payload.get('vis_title')
             data = payload.get('data')
             vis_clean_query = payload.get('vis_clean_query')
             vis_query = payload.get('vis_query')
             vis_params = payload.get('vis_params')
+            persistence_ns.logger.debug(vis_id)
+            persistence_ns.logger.debug(vis_title)
+            persistence_ns.logger.debug(vis_clean_query)
+            persistence_ns.logger.debug(vis_query)
+            persistence_ns.logger.debug(vis_params)
             create_visualization(vis_id, vis_title, data,
                                  vis_clean_query, vis_query, vis_params)
             result = {'success': True}
@@ -151,6 +166,7 @@ class getLastVersion(Resource):
     def post(self):
         try:
             payload = request.get_json()
+            persistence_ns.logger.debug(payload)
             vis_id = payload.get('vis_id')
             details = payload.get('details')
             context = payload.get('context')
@@ -189,6 +205,7 @@ class writeRevision(Resource):
             payload = request.get_json()
             vis_id = payload.get("vis_id")
             data = payload.get("data")
+            persistence_ns.logger.debug(data)
             write_revision(vis_id, data, None)
             result = {'success': True}
             headers = {'ContentType': 'application/json'}

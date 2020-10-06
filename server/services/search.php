@@ -71,14 +71,15 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
     if ($persistence_backend === "api") {
-      $route = $ini_array["general"]["api_url"] . $repository . "/createID";
+      $route = $ini_array["general"]["api_url"] . "/persistence" . "/createID";
       $payload = json_encode(array("params" => $post_params,
                                    "param_types" => $param_types));
       $res = library\CommUtils::call_api($route, $payload);
       if ($res["httpcode"] != 200) {
         echo json_encode($res);
       } else {
-        $unique_id = $res["result"]["unique_id"];
+        $result = json_decode($res["result"], true);
+        $unique_id = $result["unique_id"];
       }
     } else {
       $unique_id = ($precomputed_id === null)?($persistence->createID(array($query, $params_for_id_creation))):($precomputed_id);
@@ -146,7 +147,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
       if ($res["httpcode"] != 200) {
         return $res;
       } else {
-        $exists = $res["result"]["exists"];
+        $exists = $result["exists"];
       }
     } else {
       $exists = $persistence->existsVisualization($unique_id);

@@ -35,7 +35,7 @@ if ($backend == "api") {
         if ($res["httpcode"] != 200) {
           library\CommUtils::echoOrCallback($res, $_GET);
         } else {
-          $data = $res;
+          $data = json_decode($res["result"], true);
         }
       } else {
         # get data + context from legacy
