@@ -86,7 +86,7 @@ vis_layout <- function(text, metadata, service,
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
-  vlog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Time taken:", time.taken, sep=" "))
+  vlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
   return(output)
 
 }

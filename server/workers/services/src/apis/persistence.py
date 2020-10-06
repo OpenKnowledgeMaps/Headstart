@@ -12,7 +12,7 @@ from database import db
 persistence_ns = Namespace("persistence", description="OKMAps persistence operations")
 
 
-def create_map_id(params, param_types):
+def create_vis_id(params, param_types):
     # create map id
     ordered_params = OrderedDict()
     for k in param_types:
@@ -208,7 +208,7 @@ class createID(Resource):
             payload = request.get_json()
             params = payload.get("params")
             param_types = payload.get("param_types")
-            mapid = create_map_id(params, param_types)
+            mapid = create_vis_id(params, param_types)
             # create response
             headers = {}
             result = {"unique_id": mapid}
