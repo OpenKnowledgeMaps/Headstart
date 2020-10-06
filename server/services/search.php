@@ -51,17 +51,6 @@ function cleanQuery($dirty_query, $transform_query_tolowercase) {
     return $query;
 }
 
-function call_api($route, $payload) {
-  $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, $route);
-  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-  curl_setopt($ch, CURLOPT_POST, true);
-  curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  $result = curl_exec($ch);
-  $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-  return array("result" => $result, "httpcode" => $httpcode);
-}
 
 function search($repository, $dirty_query, $post_params, $param_types, $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
         , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3, $id = "area_uri", $subjects = "subject", $precomputed_id = null, $do_clean_query = true
@@ -81,11 +70,11 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
 
     $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
-    if ($backend === "api") {
+    if ($persistence_backend === "api") {
       $route = $ini_array["general"]["api_url"] . $repository . "/createID";
       $payload = json_encode(array("params" => $post_params,
                                    "param_types" => $param_types));
-      $res = call_api($route, $payload);
+      $res = library\CommUtils::call_api($route, $payload);
       if ($res["httpcode"] != 200) {
         return $res;
       } else {
@@ -116,7 +105,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     if ($backend === "api") {
       $route = $ini_array["general"]["api_url"] . $repository . "/search";
       $payload = json_encode($post_params);
-      $res = call_api($route, $payload);
+      $res = library\CommUtils::call_api($route, $payload);
       if ($res["httpcode"] != 200) {
         return $res;
       } else {
@@ -153,7 +142,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     if ($persistence_backend === "api") {
       $route = $ini_array["general"]["api_url"] . "/persistence" . "/existsVisualization";
       $payload = json_encode(array("vis_id" => $unique_id));
-      $res = call_api($route, $payload);
+      $res = library\CommUtils::call_api($route, $payload);
       if ($res["httpcode"] != 200) {
         return $res;
       } else {
@@ -172,7 +161,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
                                      "vis_clean_query" => $query,
                                      "vis_query" => $dirty_query,
                                      "vis_params" => $params_json));
-        $res = call_api($route, $payload);
+        $res = library\CommUtils::call_api($route, $payload);
         if ($res["httpcode"] != 200) {
          return $res;
         }
@@ -184,7 +173,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
         $route = $ini_array["general"]["api_url"] . "/persistence" . "/createVisualization";
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "data" => $input_json));
-        $res = call_api($route, $payload);
+        $res = library\CommUtils::call_api($route, $payload);
         if ($res["httpcode"] != 200) {
         return $res;
         }
