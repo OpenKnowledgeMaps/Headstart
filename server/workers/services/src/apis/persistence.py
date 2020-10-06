@@ -74,13 +74,18 @@ def get_last_version(vis_id, details=False, context=False):
 
 
 def get_revision(vis_id, rev_id, details=False, context=False):
-    result = (db.session.query(Visualizations, Revisions)
-                        .select_from(Visualizations, Revisions)
-                        .filter(Visualizations.vis_id == vis_id)
-                        .filter(Revisions.rev_vis == vis_id)
-                        .filter(Revisions.rev_id == Visualizations.vis_latest)
-              ).first()
-    res = {"id"}
+    vis, rev = (db.session
+                  .query(Visualizations, Revisions)
+                  .select_from(Visualizations, Revisions)
+                  .filter(Visualizations.vis_id == vis_id)
+                  .filter(Revisions.rev_vis == vis_id)
+                  .filter(Revisions.rev_id == Visualizations.vis_latest)
+                ).first()
+    res = {"rev_data": rev.rev_data}
+    if context is True:
+        res["context"] = {
+                ""
+        }
     return res
 
 
