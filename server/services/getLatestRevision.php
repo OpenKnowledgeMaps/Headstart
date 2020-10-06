@@ -19,12 +19,17 @@ $context = filter_input(INPUT_GET, "context", FILTER_VALIDATE_BOOLEAN,
 $streamgraph = filter_input(INPUT_GET, "streamgraph", FILTER_VALIDATE_BOOLEAN,
     array("flags" => FILTER_NULL_ON_FAILURE));
 $backend = isset($_GET["backend"]) ? library\CommUtils::getParameter($_GET, "backend") : "legacy";
+$persistence_backend = isset($_GET["persistence_backend"]) ? library\CommUtils::getParameter($_GET, "persistence_backend") : "legacy";
 
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
 if ($backend == "api") {
   if ($context === true) {
-      $data = $persistence->getLastVersion($vis_id, $details = false, $context = true)[0];
+      if ($persistence_backend === "api") {
+
+      } else {
+        $data = $persistence->getLastVersion($vis_id, $details = false, $context = true)[0];
+      }
       if ($streamgraph === true) {
         $packed_data = json_decode($data["rev_data"], true);
         $return_data = array("context" => array("id" => $data["rev_vis"], "query" => $data["vis_query"], "service" => $data["vis_title"]
@@ -41,8 +46,12 @@ if ($backend == "api") {
          library\CommUtils::echoOrCallback($jsonData, $_GET);
       }
       } else {
-          $jsonData = $persistence->getLastVersion($vis_id);
-          library\CommUtils::echoOrCallback($jsonData[0], $_GET);
+          if ($persistence_backend === "api") {
+
+          } else {
+            $jsonData = $persistence->getLastVersion($vis_id);
+            library\CommUtils::echoOrCallback($jsonData[0], $_GET);
+          }
       }
 } else {
   if ($context === true) {

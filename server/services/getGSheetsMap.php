@@ -13,11 +13,11 @@ $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
-$backend = isset($_GET["backend"]) ? library\CommUtils::getParameter($_GET, "backend") : "legacy";
+$persistence_backend = isset($_GET["persistence_backend"]) ? library\CommUtils::getParameter($_GET, "persistence_backend") : "legacy";
 
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
-if ($backend == "api") {
+if ($persistence_backend == "api") {
   $return_data = array("status" => "error", "reason" => "Not implemented.");
   $jsonData = json_encode($return_data);
   library\CommUtils::echoOrCallback($jsonData, $_GET);
