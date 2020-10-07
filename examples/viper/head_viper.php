@@ -109,7 +109,7 @@
         let cookie_button = "Alles klar!";
         let cookie_href = "https://openknowledgemaps.org/datenschutz";
 <?php } else { ?>
-        let cookie_message = '<strong>We use cookies that are essential for the operation this website.</strong> By your continued use of this website, you accept the use of essential cookies. For more information, please see ';
+        let cookie_message = '<strong>We use cookies that are essential for the operation of this website.</strong> By your continued use of this website, you accept the use of essential cookies. For more information, please see ';
         let cookie_link = "our privacy policy.";
         let cookie_button = "Got it!";
         let cookie_href = "https://openknowledgemaps.org/privacy";
