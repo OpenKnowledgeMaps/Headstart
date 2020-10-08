@@ -147,6 +147,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
       if ($res["httpcode"] != 200) {
         return $res;
       } else {
+        $result = json_decode($res, true);
         $exists = $result["exists"];
       }
     } else {
