@@ -176,7 +176,7 @@ class getLastVersion(Resource):
                                  200,
                                  headers)
         except Exception as e:
-            result = {'success': False, 'reason': e}
+            result = {'success': False, 'reason': str(e)}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  500,
