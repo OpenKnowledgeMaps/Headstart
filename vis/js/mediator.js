@@ -45,7 +45,7 @@ var MyMediator = function() {
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
     this.modern_frontend_enabled = config.modern_frontend_enabled
-    this.modern_frontend_intermediate = new Intermediate(this.modern_frontend_enabled, this.chart_svg_click, this.streamgraph_chart_clicked)
+    this.modern_frontend_intermediate = new Intermediate(this.modern_frontend_enabled, this.chart_svg_click, this.streamgraph_chart_clicked, this.list_toggle)
     this.init();
     this.init_state();
 };
@@ -89,6 +89,7 @@ MyMediator.prototype = {
         // list --> bookmarks
         this.mediator.subscribe("bookmark_added", this.bookmark_added);
         this.mediator.subscribe("bookmark_removed", this.bookmark_removed);
+        this.mediator.subscribe("list_item_count_change", this.list_item_count_change);
 
         // papers events
         this.mediator.subscribe("paper_click", this.paper_click);
@@ -172,6 +173,10 @@ MyMediator.prototype = {
 
     init_modern_frontend_intermediate: function() {
         mediator.modern_frontend_intermediate.init(config, io.context);
+    },
+
+    render_modern_frontend_list: function() {
+        mediator.modern_frontend_intermediate.renderList();
     },
 
     register_bubbles: function() {
@@ -342,6 +347,8 @@ MyMediator.prototype = {
             mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
             mediator.manager.call('bubble', 'initMouseListeners', []);
         }
+
+        mediator.render_modern_frontend_list();
 
         mediator.manager.call('canvas', 'showInfoModal', []);
     },
@@ -720,6 +727,13 @@ MyMediator.prototype = {
         mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
     },
 
+    list_item_count_change: function(count) {
+        if (!mediator.modern_frontend_enabled) {
+            $('#list_item_count').text(count);
+        } else {
+            mediator.modern_frontend_intermediate.changeItemsCount(count);
+        }
+    },
 };
 
 export const mediator = new MyMediator();
