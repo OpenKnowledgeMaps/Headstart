@@ -81,11 +81,13 @@ export const list = StateMachine.create({
             d3.select("#papers_list").style("display", "block");
             d3.select("#left_arrow").text("\u25B2");
             d3.select("#right_arrow").text("\u25B2");
-            d3.select("#show_hide_label").html(showHideLabel({
-                show_or_hide_list: config.localization[config.language].hide_list,
-                items: config.localization[config.language].items,
-                item_count: this.list_item_count,
-            }));
+            if (!mediator.modern_frontend_enabled) {
+                d3.select("#show_hide_label").html(showHideLabel({
+                    show_or_hide_list: config.localization[config.language].hide_list,
+                    items: config.localization[config.language].items,
+                    item_count: this.list_item_count,
+                }));
+            }
             this.fit_list_height();
             list.count_visible_items_to_header();
         },
@@ -95,11 +97,13 @@ export const list = StateMachine.create({
             d3.select("#papers_list").style("display", "none");
             d3.select("#left_arrow").text("\u25BC");
             d3.select("#right_arrow").text("\u25BC");
-            d3.select("#show_hide_label").html(showHideLabel({
-                show_or_hide_list: config.localization[config.language].show_list,
-                items: config.localization[config.language].items,
-                item_count: this.list_item_count,
-            }));
+            if (!mediator.modern_frontend_enabled) {
+                d3.select("#show_hide_label").html(showHideLabel({
+                    show_or_hide_list: config.localization[config.language].show_list,
+                    items: config.localization[config.language].items,
+                    item_count: this.list_item_count,
+                }));
+            }
             list.count_visible_items_to_header();
         },
 
@@ -138,6 +142,7 @@ list.drawList = function() {
         items: config.localization[config.language].items,
         dropdown: config.sort_menu_dropdown,
         sort_by_label: config.localization[config.language].sort_by_label,
+        modern_frontend_enabled: mediator.modern_frontend_enabled,
     });
     $("#list_explorer").append(list_explorer);
     
@@ -231,8 +236,7 @@ list.count_visible_items_to_header = function() {
             count++
         }
     })
-    $('#list_item_count').text(count)
-
+    mediator.publish("list_item_count_change", count);
 }
 
 list.fit_list_height = function() {
@@ -351,16 +355,18 @@ list.addFilterOptionDropdownEntry = function (filter_option, first_item) {
 }
 
 list.initListMouseListeners = function() {
-    $("#show_hide_button")
-        .on("mouseover", function() {
-            $("#show_hide_button").addClass("hover");
-        })
-        .on("mouseout", function() {
-            $("#show_hide_button").removeClass("hover");
-        })
-        .on("click", function() {
-            mediator.publish("list_toggle");
-        });
+    if (!mediator.modern_frontend_enabled) {
+        $("#show_hide_button")
+            .on("mouseover", function() {
+                $("#show_hide_button").addClass("hover");
+            })
+            .on("mouseout", function() {
+                $("#show_hide_button").removeClass("hover");
+            })
+            .on("click", function() {
+                mediator.publish("list_toggle");
+            });
+    }
 
     d3.selectAll("#paper_list_title").on("click", function(d) {
         mediator.publish("list_title_clickable", d);

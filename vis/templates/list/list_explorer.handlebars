@@ -1,11 +1,13 @@
 <div class="">
     <div class="col-xs-12" id="explorer_header">
         <div id="show_hide_button" class="row">
+            {{#unless modern_frontend_enabled}}
             <div class="col-xs-2" >▼</div>
             <div class="col-xs-8" id="show_hide_button_label">
                 <span id="show_hide_label"></span>
             </div>
             <div class="col-xs-2 text-right">▼</div>
+            {{/unless}}
         </div>
 
         <div id="explorer_options" class="row">
