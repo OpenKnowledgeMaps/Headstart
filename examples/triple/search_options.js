@@ -18,7 +18,7 @@ var options_triple = {
             ]},
         {id: "language", multiple: false, name: "Language", type: "dropdown"
             , fields: [
-                {id: "all", text: "All"},
+                {id: "all", text: "All languages"},
                 {id: "en", text: "English"},
                 {id: "fr", text: "Français"},
                 {id: "es", text: "Español"}
@@ -366,7 +366,7 @@ var SearchOptions = {
 
         var filters = d3.select(tag).append('div')
                 .attr('id', 'filters')
-                .attr('class', 'divity frontend-hidden')
+                .attr('class', 'divity')
 
         d3.select(tag).append('div')
                 .attr('id', 'input-container')
