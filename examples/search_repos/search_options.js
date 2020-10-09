@@ -238,79 +238,274 @@ var options_base = {
                 , {id: "111", text: "Book part", selected: false}
                 , {id: "13", text: "Conference object", selected: false}
                 , {id: "16", text: "Course material", selected: false}
-                , {id: "7", text: "Dataset", selected: false}                
-                , {id: "5", text: "Image/video", selected: false}                
+                , {id: "7", text: "Dataset", selected: false}
+                , {id: "5", text: "Image/video", selected: false}
                 , {id: "121", text: "Journal/newspaper article", selected: true}
                 , {id: "122", text: "Journal/newspaper other content", selected: false}
                 , {id: "17", text: "Lecture", selected: false}
                 , {id: "19", text: "Manuscript", selected: false}
                 , {id: "3", text: "Map", selected: false}
-                , {id: "2", text: "Musical notation", selected: false}   
-                , {id: "F", text: "Other/Unknown material", selected: false}                
+                , {id: "2", text: "Musical notation", selected: false}
+                , {id: "F", text: "Other/Unknown material", selected: false}
                 , {id: "1A", text: "Patent", selected: false}
                 , {id: "14", text: "Report", selected: false}
                 , {id: "15", text: "Review", selected: false}
-                , {id: "6", text: "Software", selected: false}                
+                , {id: "6", text: "Software", selected: false}
                 , {id: "51", text: "Still image", selected: false}
-                , {id: "1", text: "Text", selected: false}       
+                , {id: "1", text: "Text", selected: false}
                 , {id: "181", text: "Thesis: bachelor", selected: false}
                 , {id: "183", text: "Thesis: doctoral and postdoctoral", selected: false}
                 , {id: "182", text: "Thesis: master", selected: false}
                 , {id: "52", text: "Video/moving image", selected: false}
             ]},
-        {id: "lang_id", multiple: false, name: "Language", type: "dropdown"
+        {id: "min_descsize", multiple: false, name: "Abstract", type: "dropdown", width: "145px"
             , fields: [
-                {id: "all", text: "All languages"}
-                , {id: "eng", text: "English"}
-                , {"id": "fre", "text": "French (français)"},
-                {"id": "spa", "text": "Spanish (español)"},
-                {"id": "ger", "text": "German (Deutsch)"},
-                {"id": "por", "text": "Portuguese (português)"},
-                {"id": "pol", "text": "Polish (Jezyk polski)"},
-                {"id": "jpn", "text": "Japanese (???)"},
-                {"id": "ita", "text": "Italian (italiano)"},
-                {"id": "chi", "text": "Chinese (??)"},
-                {"id": "rus", "text": "Russian (??????? ????)"},
-                {"id": "ind", "text": "Indonesian (bahasa Indonesia)"},
-                {"id": "ukr", "text": "Ukrainian (?????????? ????)"},
-                {"id": "gre", "text": "Modern Greek (??a ????????)"},
-                {"id": "cze", "text": "Czech (ceština)"},
-                {"id": "fin", "text": "Finnish (suomen kieli)"},
-                {"id": "swe", "text": "Swedish (svenska)"},
-                {"id": "hun", "text": "Hungarian (magyar nyelv)"},
-                {"id": "tur", "text": "Turkish (Türkçe)"},
-                {"id": "hrv", "text": "Croatian (hrvatski)"},
-                {"id": "geo", "text": "Georgian (???????)"},
-                {"id": "grc", "text": "Ancient Greek (????????)"},
-                {"id": "kor", "text": "Korean (???)"},
-                {"id": "slv", "text": "Slovenian (slovenšcina)"},
-                {"id": "sux", "text": "Sumerian (????)"},
-                {"id": "nob", "text": "Norwegian Bokmal (bokmål)"},
-                {"id": "rum", "text": "Romanian (limba româna)"},
-                {"id": "ara", "text": "Arabic (????????????)"},
-                {"id": "tha", "text": "Thai (???????)"},
-                {"id": "nor", "text": "Norwegian (norsk)"},
-                {"id": "lat", "text": "Latin (Lingua latina)"},
-                {"id": "dut", "text": "Dutch (Nederlands)"},
-                {"id": "ice", "text": "Icelandic (íslenska)"},
-                {"id": "lit", "text": "Lithuanian (lietuviu kalba)"},
-                {"id": "srp", "text": "Serbian (??????)"},
-                {"id": "baq", "text": "Basque (euskara)"},
-                {"id": "gle", "text": "Irish (Gaeilge)"},
-                {"id": "afr", "text": "Afrikaans (Afrikaans)"},
-                {"id": "heb", "text": "Hebrew (?????)"},
-                {"id": "dan", "text": "Danish (dansk)"},
-                {"id": "akk", "text": "Akkadian (????????)"},
-                {"id": "slo", "text": "Slovak (slovencina)"},
-                {"id": "nau", "text": "Nauru (dorerin Naoero)"},
-                {"id": "est", "text": "Estonian (eesti keel)"},
-                {"id": "vie", "text": "Vietnamese (Ti?ng Vi?t)"},
-                {"id": "bel", "text": "Belarusian (?????????? ????)"},
-                {"id": "glg", "text": "Galician (galego)"},
-                {"id": "ota", "text": "Ottoman Turkish (???? ??????)"},
-                {"id": "per", "text": "Persian (?????)"}
+                {id: "300", text: "High metadata quality (abstract required, minimum length: 300 characters)"}
+                , {id: "0", text: "Low metadata quality (no abstract required, which may significantly reduce map quality)"}
             ]},
-    ]
+    ],
+    languages: [
+        {
+          "code": "eng",
+          "lang_in_eng": "English",
+          "lang_in_lang": "English"
+        },
+        {
+          "code": "fre",
+          "lang_in_eng": "French",
+          "lang_in_lang": "français"
+        },
+        {
+          "code": "spa",
+          "lang_in_eng": "Spanish",
+          "lang_in_lang": "español"
+        },
+        {
+          "code": "ger",
+          "lang_in_eng": "German",
+          "lang_in_lang": "Deutsch"
+        },
+        {
+          "code": "por",
+          "lang_in_eng": "Portuguese",
+          "lang_in_lang": "português"
+        },
+        {
+          "code": "pol",
+          "lang_in_eng": "Polish",
+          "lang_in_lang": "Język polski"
+        },
+        {
+          "code": "jpn",
+          "lang_in_eng": "Japanese",
+          "lang_in_lang": "日本語"
+        },
+        {
+          "code": "ita",
+          "lang_in_eng": "Italian",
+          "lang_in_lang": "italiano"
+        },
+        {
+          "code": "chi",
+          "lang_in_eng": "Chinese",
+          "lang_in_lang": "中文"
+        },
+        {
+          "code": "rus",
+          "lang_in_eng": "Russian",
+          "lang_in_lang": "русский язык"
+        },
+        {
+          "code": "ind",
+          "lang_in_eng": "Indonesian",
+          "lang_in_lang": "bahasa Indonesia"
+        },
+        {
+          "code": "ukr",
+          "lang_in_eng": "Ukrainian",
+          "lang_in_lang": "українська мова"
+        },
+        {
+          "code": "gre",
+          "lang_in_eng": "Modern Greek",
+          "lang_in_lang": "Νέα Ελληνικά"
+        },
+        {
+          "code": "cze",
+          "lang_in_eng": "Czech",
+          "lang_in_lang": "čeština"
+        },
+        {
+          "code": "fin",
+          "lang_in_eng": "Finnish",
+          "lang_in_lang": "suomen kieli"
+        },
+        {
+          "code": "swe",
+          "lang_in_eng": "Swedish",
+          "lang_in_lang": "svenska"
+        },
+        {
+          "code": "hun",
+          "lang_in_eng": "Hungarian",
+          "lang_in_lang": "magyar nyelv"
+        },
+        {
+          "code": "tur",
+          "lang_in_eng": "Turkish",
+          "lang_in_lang": "Türkçe"
+        },
+        {
+          "code": "hrv",
+          "lang_in_eng": "Croatian",
+          "lang_in_lang": "hrvatski"
+        },
+        {
+          "code": "geo",
+          "lang_in_eng": "Georgian",
+          "lang_in_lang": "ქართული"
+        },
+        {
+          "code": "grc",
+          "lang_in_eng": "Ancient Greek",
+          "lang_in_lang": "Ἑλληνική"
+        },
+        {
+          "code": "kor",
+          "lang_in_eng": "Korean",
+          "lang_in_lang": "한국어"
+        },
+        {
+          "code": "slv",
+          "lang_in_eng": "Slovenian",
+          "lang_in_lang": "slovenščina"
+        },
+        {
+          "code": "sux",
+          "lang_in_eng": "Sumerian",
+          "lang_in_lang": "𒅴𒂠"
+        },
+        {
+          "code": "nob",
+          "lang_in_eng": "Norwegian Bokmal",
+          "lang_in_lang": "bokmål"
+        },
+        {
+          "code": "rum",
+          "lang_in_eng": "Romanian",
+          "lang_in_lang": "limba română"
+        },
+        {
+          "code": "ara",
+          "lang_in_eng": "Arabic",
+          "lang_in_lang": "العَرَبِيَّة"
+        },
+        {
+          "code": "tha",
+          "lang_in_eng": "Thai",
+          "lang_in_lang": "ภาษาไทย"
+        },
+        {
+          "code": "nor",
+          "lang_in_eng": "Norwegian",
+          "lang_in_lang": "norsk"
+        },
+        {
+          "code": "lat",
+          "lang_in_eng": "Latin",
+          "lang_in_lang": "Lingua latīna"
+        },
+        {
+          "code": "dut",
+          "lang_in_eng": "Dutch",
+          "lang_in_lang": "Nederlands"
+        },
+        {
+          "code": "ice",
+          "lang_in_eng": "Icelandic",
+          "lang_in_lang": "íslenska"
+        },
+        {
+          "code": "lit",
+          "lang_in_eng": "Lithuanian",
+          "lang_in_lang": "lietuvių kalba"
+        },
+        {
+          "code": "srp",
+          "lang_in_eng": "Serbian",
+          "lang_in_lang": "српски"
+        },
+        {
+          "code": "baq",
+          "lang_in_eng": "Basque",
+          "lang_in_lang": "euskara"
+        },
+        {
+          "code": "gle",
+          "lang_in_eng": "Irish",
+          "lang_in_lang": "Gaeilge"
+        },
+        {
+          "code": "afr",
+          "lang_in_eng": "Afrikaans",
+          "lang_in_lang": "Afrikaans"
+        },
+        {
+          "code": "heb",
+          "lang_in_eng": "Hebrew",
+          "lang_in_lang": "עברית"
+        },
+        {
+          "code": "dan",
+          "lang_in_eng": "Danish",
+          "lang_in_lang": "dansk"
+        },
+        {
+          "code": "akk",
+          "lang_in_eng": "Akkadian",
+          "lang_in_lang": "𒀝𒅗𒁺𒌑"
+        },
+        {
+          "code": "slo",
+          "lang_in_eng": "Slovak",
+          "lang_in_lang": "slovenčina"
+        },
+        {
+          "code": "nau",
+          "lang_in_eng": "Nauru",
+          "lang_in_lang": "dorerin Naoero"
+        },
+        {
+          "code": "est",
+          "lang_in_eng": "Estonian",
+          "lang_in_lang": "eesti keel"
+        },
+        {
+          "code": "vie",
+          "lang_in_eng": "Vietnamese",
+          "lang_in_lang": "Tiếng Việt"
+        },
+        {
+          "code": "bel",
+          "lang_in_eng": "Belarusian",
+          "lang_in_lang": "Беларуская мова"
+        },
+        {
+          "code": "glg",
+          "lang_in_eng": "Galician",
+          "lang_in_lang": "galego"
+        },
+        {
+          "code": "ota",
+          "lang_in_eng": "Ottoman Turkish",
+          "lang_in_lang": "لسان عثمانى"
+        },
+        {
+          "code": "per",
+          "lang_in_eng": "Persian",
+          "lang_in_lang": "فارسی"
+        }
+      ]
 }
 
 var SearchOptions = {
@@ -414,7 +609,7 @@ var SearchOptions = {
          .attr("class", "frontend-btn")
          .style("vertical-align", "middle")
          .text("Submit");
-         
+
          /*d3.select(tag).append("div")
          .attr("id", "stats")
          .attr("class", "divity")
@@ -469,18 +664,18 @@ var SearchOptions = {
     setDateRangeFromPreset: function (from, to, val, start_date) {
         var current_date = new Date();
         var current_year = current_date.getFullYear();
-		
+
 		var start = new Date();
         var end = new Date();
         end.setHours(start.getHours() + (start.getTimezoneOffset() / 60) * -1);
-        
+
         switch (val) {
 
             case "user-defined":
                 self.user_defined_date = true;
                 d3.select("#input-container").style("display", "block");
                 break;
-            
+
             //full date
             case "any-time":
                 if(typeof start_date === "undefined") {
@@ -500,7 +695,7 @@ var SearchOptions = {
                 start.setFullYear(end.getFullYear() - 1);
                 this.setDateFields(from, to, start, end);
                 break;
-            
+
             //years only
             case "any-time-years":
                 if(typeof start_date === "undefined") {
