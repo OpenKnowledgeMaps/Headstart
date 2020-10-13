@@ -177,7 +177,7 @@ function search($repository, $dirty_query
       }
     } else {
       if ($persistence_backend === "api") {
-        $route = $ini_array["general"]["api_url"] . "/persistence" . "/createVisualization";
+        $route = $ini_array["general"]["api_url"] . "/persistence" . "/writeRevision";
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "data" => $input_json));
         $res = library\CommUtils::call_api($route, $payload);

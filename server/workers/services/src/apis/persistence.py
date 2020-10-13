@@ -154,6 +154,26 @@ class createVisualization(Resource):
                                  headers)
 
 
+@persistence_ns.route('/writeRevision')
+class writeRevision(Resource):
+
+    @persistence_ns.produces(["application/json"])
+    def post(self):
+        try:
+            payload = request.get_json()
+            vis_id = payload.get("vis_id")
+            data = payload.get("data")
+            persistence_ns.logger.debug(data)
+            write_revision(vis_id, data, None)
+            result = {'success': True}
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result), 200, headers)
+        except Exception as e:
+            result = {'success': False, 'reason': e}
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result), 500, headers)
+
+
 @persistence_ns.route('/getLastVersion')
 class getLastVersion(Resource):
     """
@@ -194,26 +214,6 @@ class getRevision(Resource):
         result = {}
         headers["Content-Type"] = "application/json"
         return make_response(result, 200, headers)
-
-
-@persistence_ns.route('/writeRevision')
-class writeRevision(Resource):
-
-    @persistence_ns.produces(["application/json"])
-    def post(self):
-        try:
-            payload = request.get_json()
-            vis_id = payload.get("vis_id")
-            data = payload.get("data")
-            persistence_ns.logger.debug(data)
-            write_revision(vis_id, data, None)
-            result = {'success': True}
-            headers = {'ContentType': 'application/json'}
-            return make_response(jsonify(result), 200, headers)
-        except Exception as e:
-            result = {'success': False, 'reason': e}
-            headers = {'ContentType': 'application/json'}
-            return make_response(jsonify(result), 500, headers)
 
 
 @persistence_ns.route('/createID')
