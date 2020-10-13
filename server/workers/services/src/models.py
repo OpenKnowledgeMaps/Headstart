@@ -11,6 +11,8 @@ class Visualizations(db.Model):
     vis_title = db.Column(db.Text)
     vis_latest = db.Column(db.Integer)
     vis_params = db.Column(db.Text)
+    vis_changed = db.Column(db.Boolean)
+    vis_changed_timestamp = db.Column(db.Time)
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
