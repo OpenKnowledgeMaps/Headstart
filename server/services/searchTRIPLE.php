@@ -14,8 +14,10 @@ $post_params = $_POST;
 
 $result = search("triple", $dirty_query
                 , $post_params, array("from", "to", "sorting", "vis_type", "language", "limit", "sg_method")
-                , ";", null, true, true, null, 3
-                , "area_uri", "subject", $precomputed_id, false
+                , ";", null, true
+                , true, null, 3
+                , "area_uri", "subject"
+                , $precomputed_id, false
                 , "api", "api");
 
 echo $result
