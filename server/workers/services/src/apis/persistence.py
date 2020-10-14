@@ -112,6 +112,7 @@ class existsVisualization(Resource):
 
     def post(self):
         payload = request.get_json()
+        persistence_ns.logger.debug("existsVisualization")
         vis_id = payload.get("vis_id")
         exists = exists_visualization(vis_id)
         # create response
@@ -127,6 +128,7 @@ class createVisualization(Resource):
     def post(self):
         try:
             payload = request.get_json()
+            persistence_ns.logger.debug("createVisualization")
             persistence_ns.logger.debug(payload.keys())
             vis_id = payload.get('vis_id')
             vis_title = payload.get('vis_title')
@@ -161,6 +163,7 @@ class writeRevision(Resource):
     def post(self):
         try:
             payload = request.get_json()
+            persistence_ns.logger.debug("writeRevision")
             vis_id = payload.get("vis_id")
             data = payload.get("data")
             persistence_ns.logger.debug(data)
@@ -186,6 +189,7 @@ class getLastVersion(Resource):
     def post(self):
         try:
             payload = request.get_json()
+            persistence_ns.logger.debug("getLastVersion")
             persistence_ns.logger.debug(payload)
             vis_id = payload.get('vis_id')
             details = payload.get('details')
@@ -222,6 +226,7 @@ class createID(Resource):
     @persistence_ns.produces(["application/json"])
     def post(self):
         try:
+            persistence_ns.logger.debug("createID")
             payload = request.get_json()
             params = payload.get("params")
             param_types = payload.get("param_types")
