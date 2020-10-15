@@ -152,7 +152,7 @@ function search($repository, $dirty_query
       if ($res["httpcode"] != 200) {
         return $res;
       } else {
-        $result = json_decode($res, true);
+        $result = json_decode($res["result"], true);
         $exists = $result["exists"];
       }
     } else {
