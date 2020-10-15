@@ -10,21 +10,18 @@ from .test_helpers import KNOWNCASES, CASENAMES, CASEDATA, RESULTS, get_dataproc
 @pytest.mark.persistence
 def test_vis_id_creation():
     testcases = [
-        # {"params": {"q": "air quality management", "from": "1665-01-01", "to": "2017-09-08", "sorting": "most-relevant", "document_types": [121]},
-        #  "param_types": ["from", "to", "document_types", "sorting"],
-        #  "expected result": "2074f8b9eee26f53936abd16f6187ed8"},
-        # {"params": {"q": "trump", "from": "1665-01-01", "to": "2017-10-27", "sorting": "most-relevant", "document_types": [121]},
-        #  "param_types": ["from", "to", "document_types", "sorting"],
-        #  "expected result": "d9c930deef17b3f22e3030a9bd020f9f"},
-        # {"params": {"q": "solar eclipse", "from": "1665-01-01", "to": "2017-09-08", "sorting": "most-relevant", "document_types": [121]},
-        #  "param_types": ["from", "to", "document_types", "sorting"],
-        #  "expected result": "f9f0d52aaf3a91d0040c2acdacf00620"},
-        # {"params": {"q": "pop music", "from": "1665-01-01", "to": "2017-09-08", "sorting": "most-relevant", "document_types": [121]},
-        #  "param_types": ["from", "to", "document_types", "sorting"],
-        #  "expected result": "32df883cd04d85a710b6c4057f01dfd8"},
-        # {"params": {"q": "fear-of-missing-out", "from": "1665-01-01", "to": "2017-09-08", "sorting": "most-relevant", "document_types": [121]},
-        #  "param_types": ["from", "to", "document_types", "sorting"],
-        #  "expected result": "81baaafd6f0ddba4a7ce4e7237210fe7"},
+        {"params": {"q": "air quality management", "from": "1665-01-01", "to": "2017-09-08", "sorting": "most-relevant", "document_types": [121], "min_descsize": 300},
+         "param_types": ["from", "to", "document_types", "sorting", "min_descsize"],
+         "expected result": "9810f6b4aefa7d0b8151e030c07c9514"},
+        {"params": {"q": "solar eclipse", "from": "1665-01-01", "to": "2017-09-08", "sorting": "most-relevant", "document_types": [121], "min_descsize": 300},
+         "param_types": ["from", "to", "document_types", "sorting", "min_descsize"],
+         "expected result": "d76de62667fe956bd65862ebbf3c5448"},
+        {"params": {"q": "lisbon treaty", "from": "1665-01-01", "to": "2018-10-04", "sorting": "most-relevant", "document_types": [121], "min_descsize": 300},
+         "param_types": ["from", "to", "document_types", "sorting", "min_descsize"],
+         "expected result": "a2005cba90de92b6b8f13cdcb890dbfa "},
+        {"params": {"q": "fear-of-missing-out", "from": "1665-01-01", "to": "2017-09-08", "sorting": "most-relevant", "document_types": [121], "min_descsize": 300},
+         "param_types": ["from", "to", "document_types", "sorting", "min_descsize"],
+         "expected result": "f82bf0235217431d56a5afac8ef2c1d4 "},
         {"params": {"q": "sustainable development goals", 'from': '1809-01-01',
                      'to': '2017-09-08',
                      'sorting': 'most-relevant',
@@ -451,3 +448,28 @@ def test_write_revision(testcase):
     res = requests.post("http://localhost/api/persistence/writeRevision",
                         json=payload)
     assert res.status_code == 200, res.json().get('reason')
+
+
+@pytest.mark.persistence
+@pytest.mark.parametrize("testcase", KNOWNCASES)
+def test_map_exists(testcase):
+    caseid = testcase["caseid"]
+    payload = {}
+    payload["vis_id"] = caseid
+    res = requests.post("http://localhost/api/persistence/existsVisualization",
+                        json=payload)
+    result = res.json()
+    assert result["exists"] is True
+
+
+@pytest.mark.persistence
+@pytest.mark.parametrize("testcase", KNOWNCASES)
+def test_map_exists_not(testcase):
+    caseid = testcase["caseid"]
+    invalid_id = caseid[2:]
+    payload = {}
+    payload["vis_id"] = invalid_id
+    res = requests.post("http://localhost/api/persistence/existsVisualization",
+                        json=payload)
+    result = res.json()
+    assert result["exists"] is False
