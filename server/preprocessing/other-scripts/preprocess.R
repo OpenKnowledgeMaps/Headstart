@@ -1,6 +1,20 @@
 vplog <- getLogger('vis.preprocess')
 
 
+sanitize <- function(metadata) {
+  metadata$paper_abstract <- unlist(lapply(metadata$paper_abstract,
+                              function(x) {
+                                if (nchar(x) > 17000) {
+                                  x <- substr(x, 0, 17000)
+                                  x <- paste(x, "[...]")
+                                } else {
+                                  x
+                                }
+                              }))
+  return(metadata)
+}
+
+
 detect_language <- function(text) {
   lang_detected <- lapply(text, textcat)
   # from russian-iso8859_5 only take russian
