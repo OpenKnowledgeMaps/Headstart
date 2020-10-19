@@ -115,8 +115,16 @@ export const list = StateMachine.create({
     }
 });
 
-list.sortBy = function(field) {
-    sortBy(field);
+list.sortBy = function(field) { 
+    let sort_field = field;
+    
+    //if field (potentially) includes highlight spans, sort by original text
+    if(config.highlight_query_terms 
+            && config.highlight_query_fields.includes(field)) {
+        sort_field = field + config.sort_field_exentsion;
+    }
+
+    sortBy(sort_field);
 }
 
 list.drawList = function() {

@@ -36,13 +36,13 @@
         , "twitter-image" => $WEBSITE_PATH . "twitter-card.png"
         , "fb-image" => $WEBSITE_PATH . "facebook-card.png"
     );
-    
+
     function getLabel($tag) {
         global $default_labels, $override_labels, $title;
-        
+
         if(isset($override_labels) && isset($override_labels[$tag])) {
             return $override_labels[$tag];
-        } else if (isset($title)) { 
+        } else if (isset($title)) {
             return $title;
         } else {
             if(isset($default_labels[$tag]))
@@ -51,7 +51,7 @@
                 return "Not set";
         }
     }
-    
+
 ?>
 
 <title>
@@ -104,12 +104,12 @@
 <script>
 
 <?php if ($BROWSER_LANG === "de") { ?>
-        let cookie_message = '<strong>Wir haben unsere <a href="./datenschutz" target="_blank" class="underline">Datenschutzerklärung</a> aktualisiert</strong>, um die Einführung von Google Analytics und des Hypothes.is Annotations-Services zu berücksichtigen. Wir verwenden Cookies, um unsere Webseite für Sie möglichst benutzerfreundlich zu gestalten. Wenn Sie fortfahren, nehmen wir an, dass Sie mit der Verwendung von Cookies auf dieser Webseite einverstanden sind. Weitere Informationen entnehmen Sie bitte ';
+        let cookie_message = '<strong>Wir verwenden Cookies, die für den Betrieb dieser Webseite essentiell sind.</strong> Wenn Sie fortfahren, akzeptieren Sie die Verwendung von essentiellen Cookies auf dieser Webseite. Weitere Informationen entnehmen Sie bitte ';
         let cookie_link = "unserer Datenschutzerklärung.";
         let cookie_button = "Alles klar!";
         let cookie_href = "https://openknowledgemaps.org/datenschutz";
 <?php } else { ?>
-        let cookie_message = '<strong>We have updated our <a href="./privacy" target="_blank" class="underline">privacy policy</a></strong> to reflect the introduction of Google Analytics and the Hypothes.is annotation service. We use cookies to improve your experience. By your continued use of this site you accept such use. For more information, please see ';
+        let cookie_message = '<strong>We use cookies that are essential for the operation of this website.</strong> By your continued use of this website, you accept the use of essential cookies. For more information, please see ';
         let cookie_link = "our privacy policy.";
         let cookie_button = "Got it!";
         let cookie_href = "https://openknowledgemaps.org/privacy";
@@ -117,10 +117,10 @@
     function clearCookies (names) {
       var i = 0, namesLength = names.length;
       for (i; i < namesLength; i += 1) {
-        document.cookie = names[i] + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
+        document.cookie = names[i] + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/; SameSite=Lax';
       }
     }
-    clearCookies(["cookieconsent_status"]);
+    clearCookies(["cookieconsent_status", "priv-update-2018-10"]);
     var cookie_domain = "<?php echo $COOKIE_DOMAIN ?>";
     window.addEventListener("load", function () {
         window.cookieconsent.initialise({
@@ -143,8 +143,9 @@
                 "href": cookie_href
             },
             "cookie": {
-              "name": "priv-update-2018-10",
-              "domain": cookie_domain
+              "name": "cookie-msg-2020-09",
+              "domain": cookie_domain,
+              "sameSite": "Lax"
             }
         })
     });
