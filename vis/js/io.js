@@ -367,6 +367,7 @@ IO.prototype = {
             
             if(config.highlight_query_terms) {
                 for (let field of config.highlight_query_fields) {
+                    d[field + config.sort_field_exentsion] = d[field];
                     d[field] = _this.highlightTerms(d[field], _this.query_terms);
                 }
             }

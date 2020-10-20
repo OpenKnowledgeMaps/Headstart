@@ -216,13 +216,14 @@ var config = {
     highlight_query_terms: false,
     highlight_query_fields: ["title"
                                 , "authors_string"
-                                , "authors_string"
                                 , "paper_abstract"
                                 , "year"
                                 , "published_in"
                                 , "subject_orig"],
-
-    content_based: false,
+    
+    //extension for fields that are highlighted that contain the original text,
+    //not the text including the spans
+    sort_field_exentsion: "_sort",
 
     //display filter menu dropdown
     filter_menu_dropdown: false,
