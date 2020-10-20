@@ -3,7 +3,8 @@ const list = (state = { show: true, docsNumber: 0 }, action) => {
     case "INITIALIZE":
       return {
         ...state,
-        // TODO init data (shown list, number of all documents)
+        show: !!action.configObject.show_list,
+        // TODO init number of all documents
       };
     case "TOGGLE_LIST":
       return {

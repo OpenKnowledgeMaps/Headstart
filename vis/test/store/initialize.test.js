@@ -710,7 +710,7 @@ describe("config and context state", () => {
           params: {
             author_id: 111,
             living_dates: "1620-1699",
-            image_link: "http://link.com/1234"
+            image_link: "http://link.com/1234",
           },
         }
       );
@@ -1035,7 +1035,7 @@ describe("config and context state", () => {
       const initialState = {};
       const { configObject, contextObject } = setup(
         {
-          options: JSON.parse(REAL_CONFIG_OPTIONS)
+          options: JSON.parse(REAL_CONFIG_OPTIONS),
         },
         {
           params: {
@@ -1485,7 +1485,7 @@ describe("config and context state", () => {
           service: SERVICE,
           params: {
             min_descsize: MIN_DESCSIZE,
-          }
+          },
         }
       );
 
@@ -1509,7 +1509,7 @@ describe("config and context state", () => {
           service: SERVICE,
           params: {
             min_descsize: MIN_DESCSIZE,
-          }
+          },
         }
       );
 
@@ -1533,7 +1533,7 @@ describe("config and context state", () => {
           service: SERVICE,
           params: {
             min_descsize: MIN_DESCSIZE,
-          }
+          },
         }
       );
 
@@ -1557,7 +1557,7 @@ describe("config and context state", () => {
           service: SERVICE,
           params: {
             min_descsize: MIN_DESCSIZE,
-          }
+          },
         }
       );
 
@@ -1581,7 +1581,7 @@ describe("config and context state", () => {
           service: SERVICE,
           params: {
             min_descsize: MIN_DESCSIZE,
-          }
+          },
         }
       );
 
@@ -1605,7 +1605,7 @@ describe("config and context state", () => {
           service: SERVICE,
           params: {
             min_descsize: MIN_DESCSIZE,
-          }
+          },
         }
       );
 
@@ -1672,15 +1672,14 @@ describe("config and context state", () => {
 
     it("should not change the state with initialization", () => {
       const INITIAL_STATE = { show: true, docsNumber: 0 };
-      const EXPECTED_STATE = INITIAL_STATE;
+      const SHOW_LIST = false;
+      const EXPECTED_STATE = { ...INITIAL_STATE, show: SHOW_LIST };
 
       const { configObject, contextObject } = setup(
         {
-          whatever: "whatever",
+          show_list: SHOW_LIST,
         },
-        {
-          whatever: "whatever",
-        }
+        {}
       );
 
       const result = listReducer(
