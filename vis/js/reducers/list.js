@@ -10,6 +10,11 @@ const list = (state = { show: true, docsNumber: 0 }, action) => {
         ...state,
         show: !state.show,
       };
+    case "SHOW_LIST":
+      return {
+        ...state,
+        show: true,
+      };
     case "SET_ITEMS_COUNT":
       return {
         ...state,

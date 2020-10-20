@@ -329,7 +329,7 @@ MyMediator.prototype = {
             mediator.manager.call('canvas', 'initEventsStreamgraph', []);
             
             mediator.manager.call('list', 'start');
-            if (config.show_list) mediator.manager.call('list', 'show');
+            if (config.show_list) mediator.list_show();
             
             mediator.manager.call('streamgraph', 'initMouseListeners', []);
             
@@ -340,7 +340,7 @@ MyMediator.prototype = {
             mediator.manager.call('bubble', 'draw', []);
 
             mediator.manager.call('list', 'start');
-            if (!config.render_bubbles && config.show_list) mediator.manager.call('list', 'show');
+            if (!config.render_bubbles && config.show_list) mediator.list_show();
 
             mediator.manager.call('canvas', 'checkForcePapers', []);
             mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
@@ -442,6 +442,13 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'toggle', []);
     },
 
+    list_show: function() {
+        if (mediator.modern_frontend_enabled) {
+            mediator.modern_frontend_intermediate.showList();
+        }
+        mediator.manager.call('list', 'show', []);
+    },
+
     list_show_popup: function(d) {
         mediator.manager.call('list', 'populateOverlay', [d]);
     },
@@ -466,7 +473,7 @@ MyMediator.prototype = {
     paper_holder_clicked: function(holder) {
         mediator.manager.call('list', 'enlargeListItem', [holder]);
         if (mediator.modules.list.current == "hidden") {
-            mediator.manager.call('list', 'show', []);
+            mediator.list_show();
         }
         mediator.current_enlarged_paper = holder;
         mediator.manager.call('list', 'count_visible_items_to_header', []);
@@ -659,7 +666,7 @@ MyMediator.prototype = {
 
     check_force_papers: function() {
         if (config.show_list) {
-            mediator.manager.call('list', 'show', []);
+            mediator.list_show();
         }
         mediator.manager.call('list', 'count_visible_items_to_header')
     },

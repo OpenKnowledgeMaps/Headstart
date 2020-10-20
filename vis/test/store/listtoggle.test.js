@@ -1,4 +1,4 @@
-import { toggleList, setItemsCount } from "../../js/actions";
+import { toggleList, showList, setItemsCount } from "../../js/actions";
 
 import listReducer from "../../js/reducers/list";
 
@@ -9,6 +9,13 @@ describe("list toggle state", () => {
         type: "TOGGLE_LIST",
       };
       expect(toggleList()).toEqual(expectedAction);
+    });
+
+    it("should create a list show action", () => {
+      const expectedAction = {
+        type: "SHOW_LIST",
+      };
+      expect(showList()).toEqual(expectedAction);
     });
 
     it("should create a change of items count action", () => {
@@ -35,6 +42,15 @@ describe("list toggle state", () => {
       const EXPECTED_STATE = { ...INITIAL_STATE, show: false };
 
       const result = listReducer(INITIAL_STATE, toggleList());
+
+      expect(result).toEqual(EXPECTED_STATE);
+    });
+
+    it("should set show to 'true'", () => {
+      const INITIAL_STATE = { show: false, docsNumber: 0 };
+      const EXPECTED_STATE = { ...INITIAL_STATE, show: true };
+
+      const result = listReducer(INITIAL_STATE, showList());
 
       expect(result).toEqual(EXPECTED_STATE);
     });
