@@ -48,6 +48,7 @@ vis_layout <- function(text, metadata, service,
   )
 
   vlog$debug("preprocess")
+  metadata <- sanitize(metadata)
   filtered <- filter_duplicates(metadata, text, list_size)
   metadata <- filtered$metadata
   text <- filtered$text
