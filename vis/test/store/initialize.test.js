@@ -6,6 +6,7 @@ import queryReducer from "../../js/reducers/query";
 import filesReducer from "../../js/reducers/files";
 import contextLineReducer from "../../js/reducers/contextLine";
 import serviceReducer from "../../js/reducers/service";
+import listReducer from "../../js/reducers/list";
 
 const setup = (overrideConfig, overrideContext) => {
   const configObject = Object.assign(
@@ -1663,6 +1664,31 @@ describe("config and context state", () => {
       );
 
       expect(result).toEqual(SERVICE);
+    });
+  });
+
+  describe("list reducer", () => {
+    // initial state tested in listtoggle.test.js
+
+    it("should not change the state with initialization", () => {
+      const INITIAL_STATE = { show: true, docsNumber: 0 };
+      const EXPECTED_STATE = INITIAL_STATE;
+
+      const { configObject, contextObject } = setup(
+        {
+          whatever: "whatever",
+        },
+        {
+          whatever: "whatever",
+        }
+      );
+
+      const result = listReducer(
+        INITIAL_STATE,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual(EXPECTED_STATE);
     });
   });
 });
