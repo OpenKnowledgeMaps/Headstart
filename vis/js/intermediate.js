@@ -10,6 +10,7 @@ import {
   zoomOutFromMediator,
   initializeStore,
   setItemsCount,
+  showList,
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
@@ -88,6 +89,10 @@ class Intermediate {
   changeItemsCount(count) {
     // TODO refactor when possible to a non-setter action (or no action at all)
     this.store.dispatch(setItemsCount(count));
+  }
+
+  showList() {
+    this.store.dispatch(showList());
   }
 }
 
