@@ -15,7 +15,7 @@ import {
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
 
-import SubdisciplineTitle from "./components/SubdisciplineTitle";
+import SubdisciplineTitle from "./templates/SubdisciplineTitle";
 import AuthorImage from "./components/AuthorImage";
 import ListToggle from "./components/ListToggle";
 
