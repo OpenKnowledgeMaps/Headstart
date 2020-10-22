@@ -17,7 +17,7 @@ $result = search("triple", $dirty_query
                 , ";", null, true
                 , true, null, 3
                 , "area_uri", "subject"
-                , $precomputed_id, false
+                , $precomputed_id, true
                 , "api", "api");
 
 echo $result
