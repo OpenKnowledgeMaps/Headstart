@@ -48,3 +48,18 @@ export const setItemsCount = (count) => ({
   type: "SET_ITEMS_COUNT",
   count,
 });
+
+export const search = (text) => ({
+  type: "SEARCH",
+  text,
+});
+
+export const filter = (id) => ({
+  type: "FILTER",
+  id,
+});
+
+export const sort = (id) => ({
+  type: "SORT",
+  id,
+});

@@ -18,6 +18,7 @@ import { STREAMGRAPH_MODE } from "./reducers/chartType";
 import SubdisciplineTitle from "./templates/SubdisciplineTitle";
 import AuthorImage from "./components/AuthorImage";
 import ListToggle from "./components/ListToggle";
+import FilterSort from "./components/FilterSort";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -31,6 +32,9 @@ class Intermediate {
     knowledgeMapZoomOutCallback,
     streamgraphZoomOutCallback,
     listToggleCallback,
+    searchCallback,
+    sortCallback,
+    filterCallback
   ) {
     this.modern_frontend_enabled = modern_frontend_enabled;
     this.store = createStore(
@@ -41,7 +45,10 @@ class Intermediate {
           streamgraphZoomOutCallback
         ),
         createFileChangeMiddleware(),
-        createListToggleMiddleware(listToggleCallback)
+        createListToggleMiddleware(listToggleCallback),
+        createSearchMiddleware(searchCallback),
+        createSortMiddleware(sortCallback),
+        createFilterMiddleware(filterCallback)
       )
     );
   }
@@ -69,11 +76,19 @@ class Intermediate {
       console.warn(
         "*** FRONTEND FLAG ENABLED - new React elements rendered ***"
       );
+
       ReactDOM.render(
         <Provider store={this.store}>
           <ListToggle />
         </Provider>,
         document.getElementById("show_hide_button")
+      );
+
+      ReactDOM.render(
+        <Provider store={this.store}>
+          <FilterSort />
+        </Provider>,
+        document.getElementById("explorer_options")
       );
     }
   }
@@ -94,6 +109,39 @@ class Intermediate {
   showList() {
     this.store.dispatch(showList());
   }
+}
+
+function createSearchMiddleware(searchCallback) {
+  return function () {
+    return (next) => (action) => {
+      if (action.type == "SEARCH") {
+        searchCallback(action.text);
+      }
+      return next(action);
+    };
+  };
+}
+
+function createSortMiddleware(sortCallback) {
+  return function () {
+    return (next) => (action) => {
+      if (action.type == "SORT") {
+        sortCallback(action.id);
+      }
+      return next(action);
+    };
+  };
+}
+
+function createFilterMiddleware(filterCallback) {
+  return function () {
+    return (next) => (action) => {
+      if (action.type == "FILTER") {
+        filterCallback(action.id);
+      }
+      return next(action);
+    };
+  };
 }
 
 function createListToggleMiddleware(listToggleCallback) {
