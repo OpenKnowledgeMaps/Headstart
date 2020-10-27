@@ -8,7 +8,14 @@ const SortDropdown = ({ label, value, valueLabel, options, handleChange }) => {
       id="sort_container"
       style={{ display: "inline-block" }}
     >
-      <DropdownButton title={`${label} ${valueLabel}`} id="sort">
+      <DropdownButton
+        title={
+          <>
+            {label} <span id="curr-filter-type">{valueLabel}</span>
+          </>
+        }
+        id="sort"
+      >
         {options.map((o) => (
           <MenuItem
             id={"sort_option_" + o.id}

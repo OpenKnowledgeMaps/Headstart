@@ -10,7 +10,14 @@ const FilterDropdown = ({
 }) => {
   return (
     <div className="dropdown" id="filter_parameter_container">
-      <DropdownButton title={`${label} ${valueLabel}`} id="filter_params">
+      <DropdownButton
+        title={
+          <>
+            {label} <span id="curr-filter-type">{valueLabel}</span>
+          </>
+        }
+        id="filter_params"
+      >
         {options.map((o) => (
           <MenuItem
             id={"filter_option_" + o.id}
