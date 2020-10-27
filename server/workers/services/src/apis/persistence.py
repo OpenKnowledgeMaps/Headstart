@@ -166,7 +166,7 @@ class writeRevision(Resource):
             persistence_ns.logger.debug("writeRevision")
             vis_id = payload.get("vis_id")
             data = payload.get("data")
-            persistence_ns.logger.debug(data)
+            persistence_ns.logger.debug(data.keys())
             write_revision(vis_id, data)
             result = {'success': True}
             headers = {'ContentType': 'application/json'}
