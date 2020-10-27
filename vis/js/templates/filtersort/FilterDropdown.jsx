@@ -9,10 +9,11 @@ const FilterDropdown = ({
   handleChange,
 }) => {
   return (
-    <div class="dropdown" id="filter_parameter_container">
+    <div className="dropdown" id="filter_parameter_container">
       <DropdownButton title={`${label} ${valueLabel}`} id="filter_params">
         {options.map((o) => (
           <MenuItem
+            id={"filter_option_" + o.id}
             key={o.id}
             eventKey={o.id}
             onSelect={handleChange}

@@ -2,7 +2,7 @@ import React from "react";
 import SearchBox from "../../components/SearchBox";
 import SortDropdown from "../../components/SortDropdown";
 
-const BasicFilterSort = ({ displaySort = true }) => {
+const BasicFilterSort = ({ displaySort }) => {
   return (
     // html template starts here
     // TODO move div back ASAP

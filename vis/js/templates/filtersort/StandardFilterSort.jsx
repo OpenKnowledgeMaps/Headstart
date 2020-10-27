@@ -3,7 +3,7 @@ import FilterDropdown from "../../components/FilterDropdown";
 import SearchBox from "../../components/SearchBox";
 import SortDropdown from "../../components/SortDropdown";
 
-const StandardFilterSort = ({ displaySort = true }) => {
+const StandardFilterSort = ({ displaySort }) => {
   return (
     // html template starts here
     // TODO move div back ASAP

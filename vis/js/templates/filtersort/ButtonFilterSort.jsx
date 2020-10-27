@@ -2,7 +2,7 @@ import React from "react";
 import SearchBox from "../../components/SearchBox";
 import SortButtons from "../../components/SortButtons";
 
-const ButtonFilterSort = ({ displaySort = true }) => {
+const ButtonFilterSort = ({ displaySort }) => {
   return (
     // html template starts here
     // TODO move div back ASAP
