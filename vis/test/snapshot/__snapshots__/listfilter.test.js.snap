@@ -44,7 +44,13 @@ Array [
         role="button"
         type="button"
       >
-        Filter by:  All
+        Filter by: 
+         
+        <span
+          id="curr-filter-type"
+        >
+          All
+        </span>
          
         <span
           className="caret"
@@ -111,7 +117,13 @@ Array [
         role="button"
         type="button"
       >
-        Sort by:  Relevance
+        Sort by: 
+         
+        <span
+          id="curr-filter-type"
+        >
+          Relevance
+        </span>
          
         <span
           className="caret"
