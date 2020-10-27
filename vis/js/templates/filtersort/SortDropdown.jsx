@@ -11,6 +11,7 @@ const SortDropdown = ({ label, value, valueLabel, options, handleChange }) => {
       <DropdownButton title={`${label} ${valueLabel}`} id="sort">
         {options.map((o) => (
           <MenuItem
+            id={"sort_option_" + o.id}
             key={o.id}
             eventKey={o.id}
             onSelect={handleChange}
