@@ -1,7 +1,7 @@
 import React from "react";
-import FilterDropdown from "../../components/FilterDropdown";
-import SearchBox from "../../components/SearchBox";
-import SortDropdown from "../../components/SortDropdown";
+import FilterDropdown from "../../components/filtersort/FilterDropdown";
+import SearchBox from "../../components/filtersort/SearchBox";
+import SortDropdown from "../../components/filtersort/SortDropdown";
 
 const StandardFilterSort = ({ displaySort }) => {
   return (

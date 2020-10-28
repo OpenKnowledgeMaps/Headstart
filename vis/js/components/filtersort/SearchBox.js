@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 
-import SearchBoxTemplate from "../templates/filtersort/SearchBox";
-import { search } from "../actions";
+import SearchBoxTemplate from "../../templates/filtersort/SearchBox";
+import { search } from "../../actions";
 
 const mapStateToProps = (state) => ({
   value: state.list.searchValue,
