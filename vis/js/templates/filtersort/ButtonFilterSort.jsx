@@ -1,6 +1,6 @@
 import React from "react";
-import SearchBox from "../../components/SearchBox";
-import SortButtons from "../../components/SortButtons";
+import SearchBox from "../../components/filtersort/SearchBox";
+import SortButtons from "../../components/filtersort/SortButtons";
 
 const ButtonFilterSort = ({ displaySort }) => {
   return (

@@ -1,9 +1,9 @@
 import { connect } from "react-redux";
 
-import { capitalize } from "../utils/string";
+import { capitalize } from "../../utils/string";
 
-import FilterDropdownTemplate from "../templates/filtersort/FilterDropdown";
-import { filter } from "../actions";
+import FilterDropdownTemplate from "../../templates/filtersort/FilterDropdown";
+import { filter } from "../../actions";
 
 const mapStateToProps = (state) => ({
   value: state.list.filterValue,
