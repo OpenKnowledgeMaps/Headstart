@@ -1,6 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { render, unmountComponentAtNode } from "react-dom";
+import ReactTestUtils from 'react-dom/test-utils';
 import { act } from "react-dom/test-utils";
 
 import configureStore from "redux-mock-store";
@@ -133,8 +134,7 @@ describe("List filter component", () => {
 
       const searchBox = document.getElementById("filter_input");
       act(() => {
-        const event = new Event("change", { bubbles: true });
-        searchBox.dispatchEvent(event);
+        ReactTestUtils.Simulate.change(searchBox);
       });
 
       const actions = store.getActions();
