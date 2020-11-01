@@ -33,11 +33,13 @@ if(isset($last_update)) {
     $params["last_update"] = $last_update;
 }
 
-$result = search("gsheets", $dirty_query, $params
-                    , array("sheet_id")
-                    , ";", null, false, false, null, 3
-                    , "area_uri", "subject", $sheet_id, false
-                    , "api");
+$result = search("gsheets", $dirty_query
+                    , $params, array("sheet_id")
+                    , ";", null, false
+                    , false, null, 3
+                    , "area_uri", "subject"
+                    , $sheet_id, false
+                    , "api", "api");
 
 echo $result;
 
