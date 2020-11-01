@@ -2,6 +2,26 @@ version: '3.7'
 
 services:
 
+  pgsql:
+    image: 'postgres:12.2-alpine'
+    restart: always
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    ports:
+       - '127.0.0.1:54322:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: 'dpage/pgadmin4'
+    ports:
+      - '127.0.0.1:54323:80'
+    env_file:
+      - .env
+    volumes:
+      - /home/chris/data/OKMaps:/pgadmin4/data
+
   api:
    build:
      context: server
@@ -107,3 +127,5 @@ services:
 
 volumes:
   redis:
+  db-data:
+    driver: local
