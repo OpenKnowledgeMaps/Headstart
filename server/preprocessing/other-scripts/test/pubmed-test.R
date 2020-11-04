@@ -7,7 +7,7 @@ options(warn=1)
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(wd) #Don't forget to set your working directory
 
-query <- "russian" #args[2]
+query <- "sustainable development goals" #args[2]
 service <- "pubmed"
 params <- NULL
 params_file <- "params_pubmed.json"
@@ -40,6 +40,7 @@ if ('lang_id' %in% names(params)){
 
 LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
 ADDITIONAL_STOP_WORDS = LANGUAGE$name
+.GlobalEnv$MAP_ID <- params$map_id
 
 #start.time <- Sys.time()
 failed <- list(params=params)
@@ -54,20 +55,22 @@ tryCatch({
 #end.time <- Sys.time()
 #time.taken <- end.time - start.time
 #time.taken
-tryCatch({
-  output_json = vis_layout(input_data$text, input_data$metadata,
-                           service,
-                           max_clusters=MAX_CLUSTERS,
-                           lang=LANGUAGE$name,
-                           add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
-}, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
-  failed$query <<- query
-  failed$processing_reason <<- err$message
-})
+if(exists('input_data')) {
+  tryCatch({
+    output_json = vis_layout(input_data$text, input_data$metadata,
+                             service,
+                             max_clusters=MAX_CLUSTERS,
+                             lang=LANGUAGE$name,
+                             add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
+  }, error=function(err){
+    tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
+    failed$query <<- query
+    failed$processing_reason <<- err$message
+  })
+}
 
 if (!exists('output_json')) {
-  output_json <- detect_error(failed)
+  output_json <- detect_error(failed, service)
 }
 
 print(output_json)

@@ -13,6 +13,9 @@ library("xml2")
 #    * article_types: in the form of an array of identifiers of article types
 #    * sorting: can be one of "most-relevant" and "most-recent"
 # * limit: number of search results to return
+# * retry_opts: Pubmed retry options, see `?rentrez::entrez_retry_options` for documentation. 
+#  `?httr::RETRY` has more detailed explanation of the options. default values are used if
+#   none are supplied.
 #
 # It is expected that get_papers returns a list containing two data frames named "text" and "metadata"
 #
@@ -38,12 +41,12 @@ library("xml2")
 plog <- getLogger('api.pubmed')
 
 
-get_papers <- function(query, params = NULL, limit = 100) {
+get_papers <- function(query, params = NULL, limit = 100, retry_opts = rentrez::entrez_retry_options()) {
   # remove slashes in query that are added on php side to make it
   # safe to add queries to the database
   query <- gsub("\\\\", "", query)
 
-  plog$info(paste("Search:", query))
+  plog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Search:", query))
   start.time <- Sys.time()
 
   fields <- c('.//ArticleTitle', './/MedlineCitation/PMID', './/Title', './/Abstract')
@@ -66,11 +69,18 @@ get_papers <- function(query, params = NULL, limit = 100) {
   } else {
     query <- paste0(query, exclude_articles_with_abstract)
   }
-  plog$info(paste("Query:", query))
+  plog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Query:", query))
+  plog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Sort by:", sortby))
   x <- rentrez::entrez_search(db = "pubmed", term = query, retmax = limit,
-                              mindate = from, maxdate = to, sort=sortby, use_history=TRUE, http_post = TRUE)
-  res <- rentrez::entrez_fetch(db = "pubmed", web_history = x$web_history, retmax = limit, rettype = "xml")
+                              mindate = from, maxdate = to, sort=sortby, use_history=TRUE, http_post = TRUE,
+                              retry = retry_opts)
+  res <- rentrez::entrez_fetch(db = "pubmed", web_history = x$web_history, retmax = limit, rettype = "xml",
+                               retry = retry_opts)
   xml <- xml2::xml_children(xml2::read_xml(res))
+  if (length(xml) == 1 && xml2::xml_text(xml) == "Empty result - nothing to do") {
+    stop(paste("No results retrieved."))
+  }
+
   out <- lapply(xml, function(z) {
     flds <- switch(
       xml2::xml_name(z),
@@ -131,27 +141,36 @@ get_papers <- function(query, params = NULL, limit = 100) {
   df$id = df$pmid
   df$subject_orig = df$subject
 
-  summary <- rentrez::entrez_summary(db="pubmed", web_history = x$web_history, retmax = limit)
+  summary <- rentrez::entrez_summary(db="pubmed", web_history = x$web_history, retmax = limit,
+                                     retry = retry_opts)
   df$readers <- extract_from_esummary(summary, "pmcrefcount")
   df$readers <- replace(df$readers, df$readers=="", 0)
 
   pmc_ids = c()
   idlist = extract_from_esummary(summary, "articleids")
 
-  for(i in 1:nrow(df)) {
-    current_ids = idlist[,i]
-    current_pmcid = current_ids$value[current_ids$idtype=="pmc"]
+  if (nrow(df) > 1) {
+    for(i in 1:nrow(df)) {
+      current_ids = idlist[,i]
+      current_pmcid = current_ids$value[current_ids$idtype=="pmc"]
+      if(identical(current_pmcid, character(0))) {
+        current_pmcid = "";
+      }
+      pmc_ids[i] = current_pmcid
+    }
+  } else {
+    current_pmcid = idlist[idlist$idtype=="pmc",]$value
     if(identical(current_pmcid, character(0))) {
       current_pmcid = "";
     }
-    pmc_ids[i] = current_pmcid
+    pmc_ids <- c(pmc_ids, current_pmcid)
   }
 
   df$pmcid = pmc_ids
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
-  plog$info(paste("Time taken:", time.taken, sep=" "))
+  plog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Time taken:", time.taken, sep=" "))
 
   return(list(metadata = df, text = df[,c('id', 'content')]))
 }

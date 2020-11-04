@@ -81,7 +81,10 @@ class TripleClient(object):
 
     @staticmethod
     def parse_query(query, fields):
-        q = Q("multi_match", query=query, fields=fields)
+        if '"' in query:
+            q = Q("multi_match", query=query, fields=fields, type="phrase")
+        else:
+            q = Q("multi_match", query=query, fields=fields)
         return q
 
     def build_body(self, parameters):

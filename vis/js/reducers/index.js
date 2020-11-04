@@ -10,6 +10,8 @@ import selectedBubble from "./selectedBubble";
 import query from "./query";
 import files from "./files";
 import contextLine from "./contextLine";
+import service from "./service";
+import list from "./list";
 
 export default combineReducers({
   zoom,
@@ -20,4 +22,6 @@ export default combineReducers({
   localization,
   files,
   contextLine,
+  service,
+  list,
 });

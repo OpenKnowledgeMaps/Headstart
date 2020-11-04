@@ -5,6 +5,8 @@ import localizationReducer from "../../js/reducers/localization";
 import queryReducer from "../../js/reducers/query";
 import filesReducer from "../../js/reducers/files";
 import contextLineReducer from "../../js/reducers/contextLine";
+import serviceReducer from "../../js/reducers/service";
+import listReducer from "../../js/reducers/list";
 
 const setup = (overrideConfig, overrideContext) => {
   const configObject = Object.assign(
@@ -57,6 +59,7 @@ const setup = (overrideConfig, overrideContext) => {
           custom_title_explanation: "Sample explanation",
         },
       },
+      service: undefined,
     },
     overrideConfig
   );
@@ -707,7 +710,7 @@ describe("config and context state", () => {
           params: {
             author_id: 111,
             living_dates: "1620-1699",
-            image_link: "http://link.com/1234"
+            image_link: "http://link.com/1234",
           },
         }
       );
@@ -1011,6 +1014,33 @@ describe("config and context state", () => {
         },
         {
           params: {},
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("documentTypes", EXPECTED_VALUE);
+    });
+
+    // added for old PubMed maps: pubmed sometimes changes their source document ids
+    it("should not initialize certain document type if not supported anymore", () => {
+      const REAL_CONFIG_OPTIONS = `[{"id":"time_range","multiple":false,"name":"Time Range","type":"dropdown","fields":[{"id":"any-time","text":"Any time"},{"id":"last-month","text":"Last month"},{"id":"last-year","text":"Last year"},{"id":"user-defined","text":"Custom range","class":"user-defined","inputs":[{"id":"from","label":"From: ","class":"time_input"},{"id":"to","label":"To: ","class":"time_input"}]}]},{"id":"sorting","multiple":false,"name":"Sorting","type":"dropdown","fields":[{"id":"most-relevant","text":"Most relevant"},{"id":"most-recent","text":"Most recent"}]},{"id":"article_types","multiple":true,"width":"140px","name":"Article types","type":"dropdown","fields":[{"id":"adaptive clinical trial","text":"Adaptive Clinical Trial","selected":true},{"id":"address","text":"Address","selected":true},{"id":"autobiography","text":"Autobiography","selected":true},{"id":"bibliography","text":"Bibliography","selected":true},{"id":"biography","text":"Biography","selected":true},{"id":"book illustrations","text":"Book Illustrations","selected":true},{"id":"case reports","text":"Case Reports","selected":true},{"id":"classical article","text":"Classical Article","selected":true},{"id":"clinical conference","text":"Clinical Conference","selected":true},{"id":"clinical study","text":"Clinical Study","selected":true},{"id":"clinical trial","text":"Clinical Trial","selected":true},{"id":"clinical trial protocol","text":"Clinical Trial Protocol","selected":true},{"id":"clinical trial, phase i","text":"Clinical Trial, Phase I","selected":true},{"id":"clinical trial, phase ii","text":"Clinical Trial, Phase II","selected":true},{"id":"clinical trial, phase iii","text":"Clinical Trial, Phase III","selected":true},{"id":"clinical trial, phase iv","text":"Clinical Trial, Phase IV","selected":true},{"id":"clinical trial, veterinary","text":"Clinical Trial, Veterinary","selected":true},{"id":"collected work","text":"Collected Work","selected":true},{"id":"collected works","text":"Collected Works","selected":true},{"id":"comment","text":"Comment","selected":true},{"id":"comparative study","text":"Comparative Study","selected":true},{"id":"congress","text":"Congress","selected":true},{"id":"consensus development conference","text":"Consensus Development Conference","selected":true},{"id":"consensus development conference, nih","text":"Consensus Development Conference, NIH","selected":true},{"id":"controlled clinical trial","text":"Controlled Clinical Trial","selected":true},{"id":"corrected and republished article","text":"Corrected and Republished Article","selected":true},{"id":"dataset","text":"Dataset","selected":true},{"id":"dictionary","text":"Dictionary","selected":true},{"id":"directory","text":"Directory","selected":true},{"id":"duplicate publication","text":"Duplicate publication","selected":true},{"id":"editorial","text":"Editorial","selected":true},{"id":"electronic supplementary materials","text":"Electronic Supplementary Materials","selected":true},{"id":"english abstract","text":"English Abstract","selected":true},{"id":"ephemera","text":"Ephemera","selected":true},{"id":"equivalence trial","text":"Equivalence Trial","selected":true},{"id":"evaluation studies","text":"Evaluation Studies","selected":true},{"id":"evaluation study","text":"Evaluation Study","selected":true},{"id":"expression of concern","text":"Expression of Concern","selected":true},{"id":"festschrift","text":"Festschrift","selected":true},{"id":"government publication","text":"Government Publication","selected":true},{"id":"guideline","text":"Guideline","selected":true},{"id":"historical article","text":"Historical Article","selected":true},{"id":"interactive tutorial","text":"Interactive Tutorial","selected":true},{"id":"interview","text":"Interview","selected":true},{"id":"introductory journal article","text":"Introductory Journal Article","selected":true},{"id":"journal article","text":"Journal Article","selected":true},{"id":"lecture","text":"Lecture","selected":true},{"id":"legal case","text":"Legal Case","selected":true},{"id":"legislation","text":"Legislation","selected":true},{"id":"letter","text":"Letter","selected":true},{"id":"manuscript","text":"Manuscript","selected":true},{"id":"meta analysis","text":"Meta Analysis","selected":true},{"id":"multicenter study","text":"Multicenter Study","selected":true},{"id":"news","text":"News","selected":true},{"id":"newspaper article","text":"Newspaper Article","selected":true},{"id":"observational study","text":"Observational Study","selected":true},{"id":"observational study, veterinary","text":"Observational Study, Veterinary","selected":true},{"id":"overall","text":"Overall","selected":true},{"id":"patient education handout","text":"Patient Education Handout","selected":true},{"id":"periodical index","text":"Periodical Index","selected":true},{"id":"personal narrative","text":"Personal Narrative","selected":true},{"id":"pictorial work","text":"Pictorial Work","selected":true},{"id":"popular work","text":"Popular Work","selected":true},{"id":"portrait","text":"Portrait","selected":true},{"id":"practice guideline","text":"Practice Guideline","selected":true},{"id":"pragmatic clinical trial","text":"Pragmatic Clinical Trial","selected":true},{"id":"preprint","text":"Preprint","selected":true},{"id":"publication components","text":"Publication Components","selected":true},{"id":"publication formats","text":"Publication Formats","selected":true},{"id":"publication type category","text":"Publication Type Category","selected":true},{"id":"published erratum","text":"Published Erratum","selected":true},{"id":"randomized controlled trial","text":"Randomized Controlled Trial","selected":true},{"id":"randomized controlled trial, veterinary","text":"Randomized Controlled Trial, Veterinary","selected":true},{"id":"research support, american recovery and reinvestment act","text":"Research Support, American Recovery and Reinvestment Act","selected":true},{"id":"research support, n i h, extramural","text":"Research Support, NIH Extramural","selected":true},{"id":"research support, n i h, intramural","text":"Research Support, NIH Intramural","selected":true},{"id":"research support, non u s gov't","text":"Research Support, U.S. Gov't","selected":true},{"id":"research support, u s gov't, non p h s","text":"Research Support, U.S. Gov't, Non P.H.S","selected":true},{"id":"research support, u s gov't, p h s","text":"Research Support, U.S. Gov't, P.H.S","selected":true},{"id":"research support, u s government","text":"Research Support, U.S. Government","selected":true},{"id":"retracted publication","text":"Retracted Publication","selected":false},{"id":"retraction of publication","text":"Retraction of Publication","selected":true},{"id":"review","text":"Review","selected":true},{"id":"scientific integrity review","text":"Scientific Integrity Review","selected":true},{"id":"study characteristics","text":"Study Characteristics","selected":true},{"id":"support of research","text":"Support of Research","selected":true},{"id":"systematic review","text":"Systematic Review","selected":true},{"id":"technical report","text":"Technical Report","selected":true},{"id":"twin study","text":"Twin Study","selected":true},{"id":"validation study","text":"Validation Study","selected":true},{"id":"video audio media","text":"Video Audio Media","selected":true},{"id":"webcasts","text":"Webcasts","selected":true}]}]`;
+      // "addresses" not present in config options
+      const REAL_CONTEXT_ARTICLE_TYPES = `["addresses","autobiography","bibliography","biography"]`;
+      const EXPECTED_VALUE = ["Autobiography", "Bibliography", "Biography"];
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          options: JSON.parse(REAL_CONFIG_OPTIONS),
+        },
+        {
+          params: {
+            article_types: JSON.parse(REAL_CONTEXT_ARTICLE_TYPES),
+          },
         }
       );
 
@@ -1441,6 +1471,223 @@ describe("config and context state", () => {
       );
 
       expect(result).toHaveProperty("timestamp", LAST_UPDATED);
+    });
+
+    it("should initialize null metadata quality (undefined min_descsize)", () => {
+      const SERVICE = "base";
+      const MIN_DESCSIZE = undefined;
+      const EXPECTED_QUALITY = null;
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+          params: {
+            min_descsize: MIN_DESCSIZE,
+          },
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
+    });
+
+    it("should initialize null metadata quality (unsupported service)", () => {
+      const SERVICE = "doaj";
+      const MIN_DESCSIZE = "300";
+      const EXPECTED_QUALITY = null;
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+          params: {
+            min_descsize: MIN_DESCSIZE,
+          },
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
+    });
+
+    it("should initialize correct (low) metadata quality (base, min_descsize = 0)", () => {
+      const SERVICE = "base";
+      const MIN_DESCSIZE = "0";
+      const EXPECTED_QUALITY = "low";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+          params: {
+            min_descsize: MIN_DESCSIZE,
+          },
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
+    });
+
+    it("should initialize correct (high) metadata quality (base, min_descsize = 300)", () => {
+      const SERVICE = "base";
+      const MIN_DESCSIZE = "300";
+      const EXPECTED_QUALITY = "high";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+          params: {
+            min_descsize: MIN_DESCSIZE,
+          },
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
+    });
+
+    it("should initialize correct (low) metadata quality (pubmed, min_descsize = 0)", () => {
+      const SERVICE = "pubmed";
+      const MIN_DESCSIZE = "0";
+      const EXPECTED_QUALITY = "low";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+          params: {
+            min_descsize: MIN_DESCSIZE,
+          },
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
+    });
+
+    it("should initialize correct (high) metadata quality (pubmed, min_descsize = 300)", () => {
+      const SERVICE = "pubmed";
+      const MIN_DESCSIZE = "1";
+      const EXPECTED_QUALITY = "high";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+          params: {
+            min_descsize: MIN_DESCSIZE,
+          },
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
+    });
+  });
+
+  describe("service reducer", () => {
+    it("should return the initial state", () => {
+      const expectedResult = null;
+
+      const result = serviceReducer(undefined, {});
+
+      expect(result).toEqual(expectedResult);
+    });
+
+    it("should initialize null service", () => {
+      const SERVICE = undefined;
+      const EXPECTED_SERVICE = null;
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+        }
+      );
+
+      const result = serviceReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual(EXPECTED_SERVICE);
+    });
+
+    it("should initialize correct service", () => {
+      const SERVICE = "base";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+        }
+      );
+
+      const result = serviceReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual(SERVICE);
+    });
+  });
+
+  describe("list reducer", () => {
+    // initial state tested in listtoggle.test.js
+
+    it("should not change the state with initialization", () => {
+      const INITIAL_STATE = { show: true, docsNumber: 0 };
+      const SHOW_LIST = false;
+      const EXPECTED_STATE = { ...INITIAL_STATE, show: SHOW_LIST };
+
+      const { configObject, contextObject } = setup(
+        {
+          show_list: SHOW_LIST,
+        },
+        {}
+      );
+
+      const result = listReducer(
+        INITIAL_STATE,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual(EXPECTED_STATE);
     });
   });
 });

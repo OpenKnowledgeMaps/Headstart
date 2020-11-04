@@ -18,15 +18,15 @@ var options_triple = {
             ]},
         {id: "language", multiple: false, name: "Language", type: "dropdown"
             , fields: [
-                {id: "all", text: "All"},
+                {id: "all", text: "All languages"},
                 {id: "en", text: "English"},
                 {id: "fr", text: "Français"},
                 {id: "es", text: "Español"}
             ]},
         {id: "limit", multiple: false, name: "Limit", type: "dropdown"
             , fields: [
-                {id: "100", text: "100"},
-                {id: "1000", text: "1000"}
+                {id: "100", text: "100 documents"},
+                {id: "1000", text: "1000 documents"}
             ]},
         {id: "sg_method", multiple: false, name: "Streamgraph method", type: "dropdown"
             , fields: [
@@ -366,7 +366,7 @@ var SearchOptions = {
 
         var filters = d3.select(tag).append('div')
                 .attr('id', 'filters')
-                .attr('class', 'divity frontend-hidden')
+                .attr('class', 'divity')
 
         d3.select(tag).append('div')
                 .attr('id', 'input-container')

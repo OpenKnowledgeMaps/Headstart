@@ -367,6 +367,7 @@ IO.prototype = {
             
             if(config.highlight_query_terms) {
                 for (let field of config.highlight_query_fields) {
+                    d[field + config.sort_field_exentsion] = d[field];
                     d[field] = _this.highlightTerms(d[field], _this.query_terms);
                 }
             }
@@ -376,9 +377,6 @@ IO.prototype = {
         this.num_oa = num_oa;
         this.num_papers = num_papers;
         this.num_datasets = num_datasets;
-
-        mediator.publish("update_canvas_domains", cur_data);
-        mediator.publish("update_canvas_data", cur_data);
         
         var areas = this.areas;
         cur_data.forEach(function (d) {
@@ -421,6 +419,12 @@ IO.prototype = {
         }
 
         this.data = cur_data;
+    },
+
+    updateVis: function() {
+        // from prepareData:
+        mediator.publish("update_canvas_domains", this.data);
+        mediator.publish("update_canvas_data", this.data);
     },
     
     createCommentStringForFiltering: function(comments) {
