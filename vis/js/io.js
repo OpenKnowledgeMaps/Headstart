@@ -368,7 +368,9 @@ IO.prototype = {
             if(config.highlight_query_terms) {
                 for (let field of config.highlight_query_fields) {
                     d[field + config.sort_field_exentsion] = d[field];
-                    d[field] = _this.highlightTerms(d[field], _this.query_terms);
+                    if (!mediator.modern_frontend_enabled) {
+                        d[field] = _this.highlightTerms(d[field], _this.query_terms);
+                    }
                 }
             }
 
@@ -538,7 +540,12 @@ IO.prototype = {
         for (area in areas) {
             var new_area = [];
             if(config.highlight_query_terms) {
-                new_area.title = _this.highlightTerms(areas[area].title, _this.query_terms);
+                if (!mediator.modern_frontend_enabled) {
+                    new_area.title = _this.highlightTerms(areas[area].title, _this.query_terms);
+                } else {
+                    new_area.title = areas[area].title;
+                }
+                
             } else {
                 new_area.title = areas[area].title;
             }
