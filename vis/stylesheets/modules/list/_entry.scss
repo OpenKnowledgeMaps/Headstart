@@ -429,6 +429,12 @@ div {
         background-color: rgba(255, 255, 255, 0.6);
     }
 
+    @if $modern_frontend_enabled {
+        &#preview_image:hover > #transbox {
+            display: block;
+        }
+    }
+
     &#preview_page_index {
         font-size: 12px;
         height: 20px;
@@ -771,7 +777,9 @@ img#preview_page {
     }
 
     div#preview_image {
-        display: none;
+        @if not $modern_frontend_enabled {
+            display: none;
+        }
     }
 
     #list_area, #list_keywords, #list_basic_classification, #list_ddc, #list_abstract {

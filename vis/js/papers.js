@@ -669,7 +669,7 @@ papers.enlargePaper = function (d, holder_div) {
                     }
 
                     d.paper_selected = true;
-                    mediator.current_enlarged_paper = d;
+                    mediator.paper_selected(d);
                     mediator.publish("record_action", d.title, "Paper", "click", config.user_id, d.bookmarked + " " + d.recommended, null);
                     d3.event.stopPropagation();
                 }
@@ -697,14 +697,10 @@ papers.enlargePaper = function (d, holder_div) {
 
 papers.currentbubble_click = function (d) {   
     mediator.publish("paper_current_bubble_clicked", d);
-
-    if (mediator.current_enlarged_paper !== null) {
-        mediator.current_enlarged_paper.paper_selected = false;
-    }
     
     this.resetPaths();
 
-    mediator.current_enlarged_paper = null;
+    mediator.paper_deselected();
     mediator.publish("record_action", d.title, "Paper", "click", config.user_id, d.bookmarked + " " + d.recommended, null);
 
     d3.event.stopPropagation();

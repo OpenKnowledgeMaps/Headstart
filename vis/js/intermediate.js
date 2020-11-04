@@ -9,8 +9,9 @@ import {
   zoomInFromMediator,
   zoomOutFromMediator,
   initializeStore,
-  setItemsCount,
   showList,
+  selectPaperFromMediator,
+  deselectPaper,
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
@@ -19,6 +20,7 @@ import SubdisciplineTitle from "./templates/SubdisciplineTitle";
 import AuthorImage from "./components/AuthorImage";
 import ListToggle from "./components/ListToggle";
 import FilterSort from "./components/FilterSort";
+import ListEntries from "./components/ListEntries";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -34,7 +36,12 @@ class Intermediate {
     listToggleCallback,
     searchCallback,
     sortCallback,
-    filterCallback
+    filterCallback,
+    areaClickCallback,
+    areaMouseoverCallback,
+    areaMouseoutCallback,
+    previewPopoverCallback,
+    titleClickCallback
   ) {
     this.modern_frontend_enabled = modern_frontend_enabled;
     this.store = createStore(
@@ -48,13 +55,18 @@ class Intermediate {
         createListToggleMiddleware(listToggleCallback),
         createSearchMiddleware(searchCallback),
         createSortMiddleware(sortCallback),
-        createFilterMiddleware(filterCallback)
+        createFilterMiddleware(filterCallback),
+        createAreaClickMiddleware(areaClickCallback),
+        createAreaMouseoverMiddleware(areaMouseoverCallback),
+        createAreaMouseoutMiddleware(areaMouseoutCallback),
+        createPreviewPopoverMiddleware(previewPopoverCallback),
+        createTitleClickMiddleware(titleClickCallback)
       )
     );
   }
 
-  init(config, context) {
-    this.store.dispatch(initializeStore(config, context));
+  init(config, context, data) {
+    this.store.dispatch(initializeStore(config, context, data));
 
     // TODO replace the config.is_authorview with store variable
     // after components are wrapped
@@ -90,6 +102,13 @@ class Intermediate {
         </Provider>,
         document.getElementById("explorer_options")
       );
+
+      ReactDOM.render(
+        <Provider store={this.store}>
+          <ListEntries />
+        </Provider>,
+        document.getElementById("papers_list")
+      );
     }
   }
 
@@ -101,14 +120,28 @@ class Intermediate {
     this.store.dispatch(zoomOutFromMediator());
   }
 
-  changeItemsCount(count) {
-    // TODO refactor when possible to a non-setter action (or no action at all)
-    this.store.dispatch(setItemsCount(count));
-  }
-
   showList() {
     this.store.dispatch(showList());
   }
+
+  selectPaper(safeId) {
+    this.store.dispatch(selectPaperFromMediator(safeId));
+  }
+
+  deselectPaper() {
+    this.store.dispatch(deselectPaper());
+  }
+}
+
+function createTitleClickMiddleware(titleClickCallback) {
+  return function () {
+    return (next) => (action) => {
+      if (action.type == "SELECT_PAPER" && action.not_from_mediator) {
+        titleClickCallback(action.paper);
+      }
+      return next(action);
+    };
+  };
 }
 
 function createSearchMiddleware(searchCallback) {
@@ -183,6 +216,57 @@ function createFileChangeMiddleware() {
         if (getState().files.current !== action.fileIndex) {
           window.headstartInstance.tofile(action.fileIndex);
         }
+      }
+      const returnValue = next(action);
+      returnValue;
+    };
+  };
+}
+
+function createAreaClickMiddleware(areaClickCallback) {
+  return function () {
+    return (next) => (action) => {
+      if (action.type == "ZOOM_IN" && action.source === "list-area") {
+        let d = Object.assign({}, action.selectedAreaData);
+        d.area_uri = d.uri;
+        d.area = d.title;
+        areaClickCallback(d);
+      }
+      const returnValue = next(action);
+      returnValue;
+    };
+  };
+}
+
+function createAreaMouseoverMiddleware(areaMouseoverCallback) {
+  return function () {
+    return (next) => (action) => {
+      if (action.type == "HOVER_AREA" && action.paper !== null) {
+        areaMouseoverCallback(action.paper);
+      }
+      const returnValue = next(action);
+      returnValue;
+    };
+  };
+}
+
+function createAreaMouseoutMiddleware(areaMouseoutCallback) {
+  return function () {
+    return (next) => (action) => {
+      if (action.type == "HOVER_AREA" && action.paper === null) {
+        areaMouseoutCallback({});
+      }
+      const returnValue = next(action);
+      returnValue;
+    };
+  };
+}
+
+function createPreviewPopoverMiddleware(previewPopoverCallback) {
+  return function () {
+    return (next) => (action) => {
+      if (action.type == "SHOW_PREVIEW") {
+        previewPopoverCallback(action.paper);
       }
       const returnValue = next(action);
       returnValue;
