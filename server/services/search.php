@@ -70,7 +70,7 @@ function search($repository, $dirty_query, $post_params, $param_types, $keyword_
     $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
     $unique_id = ($precomputed_id === null)?($persistence->createID(array($query, $params_for_id_creation))):($precomputed_id);
-    $post_params["map_id"] = $unique_id;
+    $post_params["vis_id"] = $unique_id;
     $params_json = packParamsJSON($param_types, $post_params);
 
     if($retrieve_cached_map) {
