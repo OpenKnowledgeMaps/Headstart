@@ -9,12 +9,12 @@ const SortDropdown = ({ label, value, valueLabel, options, handleChange }) => {
       style={{ display: "inline-block" }}
     >
       <DropdownButton
+        id="sort"
         title={
           <>
-            {label} <span id="curr-filter-type">{valueLabel}</span>
+            {label} <span id="curr-sort-type">{valueLabel}</span>
           </>
         }
-        id="sort"
       >
         {options.map((o) => (
           <MenuItem
