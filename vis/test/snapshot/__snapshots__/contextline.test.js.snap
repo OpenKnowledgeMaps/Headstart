@@ -3,11 +3,6 @@
 exports[`Context line component snapshot matches a covis snapshot 1`] = `
 <p
   id="context"
-  style={
-    Object {
-      "position": "relative",
-    }
-  }
 >
   <span
     className="context_item"
@@ -51,11 +46,6 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
 exports[`Context line component snapshot matches a linkedcat authorview snapshot 1`] = `
 <p
   id="context"
-  style={
-    Object {
-      "position": "relative",
-    }
-  }
 >
   <span
     className="context_item"
@@ -106,11 +96,6 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
 exports[`Context line component snapshot matches a linkedcat keywordview snapshot 1`] = `
 <p
   id="context"
-  style={
-    Object {
-      "position": "relative",
-    }
-  }
 >
   <span
     className="context_item"
@@ -163,14 +148,9 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
 </p>
 `;
 
-exports[`Context line component snapshot matches a project website snapshot 1`] = `
+exports[`Context line component snapshot matches a project website (base low quality) snapshot 1`] = `
 <p
   id="context"
-  style={
-    Object {
-      "position": "relative",
-    }
-  }
 >
   <span
     className="context_item"
@@ -215,9 +195,115 @@ exports[`Context line component snapshot matches a project website snapshot 1`] 
     className="context_item"
     id="document_types"
   >
-    Document types
-    : 
-    Journal/newspaper article
+    <span
+      className="context_moreinfo"
+      label="Document types"
+      onBlur={[Function]}
+      onClick={null}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+    >
+      Document types
+    </span>
+  </span>
+   
+  <span
+    className="context_item"
+    id="metadata_quality"
+  >
+    <span
+      className="context_moreinfo context_metadata_low"
+      label="low metadata quality"
+      onBlur={[Function]}
+      onClick={null}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+      quality="low"
+    >
+      low metadata quality
+    </span>
+  </span>
+</p>
+`;
+
+exports[`Context line component snapshot matches a project website (pubmed high quality) snapshot 1`] = `
+<p
+  id="context"
+>
+  <span
+    className="context_item"
+    id="num_articles"
+  >
+    100
+     
+    <span
+      className="modifier context_moreinfo"
+      id="modifier"
+      onBlur={[Function]}
+      onClick={null}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+    >
+      most relevant
+    </span>
+     
+    documents
+     
+    (
+    52
+     open access)
+  </span>
+  <span
+    className="context_item"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Source: PubMed",
+      }
+    }
+    id="source"
+  />
+  <span
+    className="context_item"
+    id="timespan"
+  >
+    All time
+  </span>
+  <span
+    className="context_item"
+    id="document_types"
+  >
+    <span
+      className="context_moreinfo"
+      label="Document types"
+      onBlur={[Function]}
+      onClick={null}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+    >
+      Document types
+    </span>
+  </span>
+   
+  <span
+    className="context_item"
+    id="metadata_quality"
+  >
+    <span
+      className="context_moreinfo context_metadata_high"
+      label="high metadata quality"
+      onBlur={[Function]}
+      onClick={null}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+      quality="high"
+    >
+      high metadata quality
+    </span>
   </span>
 </p>
 `;
@@ -225,11 +311,6 @@ exports[`Context line component snapshot matches a project website snapshot 1`] 
 exports[`Context line component snapshot matches a viper snapshot 1`] = `
 <p
   id="context"
-  style={
-    Object {
-      "position": "relative",
-    }
-  }
 >
   <span
     className="context_item"

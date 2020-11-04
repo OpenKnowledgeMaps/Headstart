@@ -40,11 +40,12 @@ if ('lang_id' %in% names(params)){
 
 LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
 ADDITIONAL_STOP_WORDS = LANGUAGE$name
+.GlobalEnv$MAP_ID <- params$map_id
 
 #start.time <- Sys.time()
 failed <- list(params=params)
 tryCatch({
-  input_data = get_papers(query, params, limit=120)
+  input_data = get_papers(query, params, limit=120, filter=I('descsize:[50%20TO%20100]'))
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
   failed$query <<- query
@@ -54,20 +55,22 @@ tryCatch({
 #end.time <- Sys.time()
 #time.taken <- end.time - start.time
 #time.taken
-tryCatch({
-output_json = vis_layout(input_data$text, input_data$metadata,
-                         service,
-                         max_clusters=MAX_CLUSTERS,
-                         lang=LANGUAGE$name,
-                         add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
-}, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
-  failed$query <<- query
-  failed$processing_reason <<- err$message
-})
+if(exists('input_data')) {
+  tryCatch({
+  output_json = vis_layout(input_data$text, input_data$metadata,
+                           service,
+                           max_clusters=MAX_CLUSTERS,
+                           lang=LANGUAGE$name,
+                           add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
+  }, error=function(err){
+    tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
+    failed$query <<- query
+    failed$processing_reason <<- err$message
+  })
+}
 
 if (!exists('output_json')) {
-  output_json <- detect_error(failed)
+  output_json <- detect_error(failed, service)
 }
 
 print(output_json)

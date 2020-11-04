@@ -30,10 +30,6 @@ vis_layout <- function(text, metadata, service,
   TESTING <<- testing # makes testing param a global variable
   start.time <- Sys.time()
 
-  if(!exists('input_data')){
-    stop("No input data found.")
-  }
-
   tryCatch({
    if(!isTRUE(testing)) {
      source('preprocess.R')
@@ -52,6 +48,7 @@ vis_layout <- function(text, metadata, service,
   )
 
   vlog$debug("preprocess")
+  metadata <- sanitize(metadata)
   filtered <- filter_duplicates(metadata, text, list_size)
   metadata <- filtered$metadata
   text <- filtered$text
@@ -90,7 +87,7 @@ vis_layout <- function(text, metadata, service,
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
-  vlog$info(paste("Time taken:", time.taken, sep=" "))
+  vlog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Time taken:", time.taken, sep=" "))
   return(output)
 
 }

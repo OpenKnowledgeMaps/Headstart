@@ -214,13 +214,14 @@ var config = {
     highlight_query_terms: false,
     highlight_query_fields: ["title"
                                 , "authors_string"
-                                , "authors_string"
                                 , "paper_abstract"
                                 , "year"
                                 , "published_in"
                                 , "subject_orig"],
-
-    content_based: false,
+    
+    //extension for fields that are highlighted that contain the original text,
+    //not the text including the spans
+    sort_field_exentsion: "_sort",
 
     //display filter menu dropdown
     filter_menu_dropdown: false,
@@ -271,6 +272,7 @@ var config = {
                         , linkedcat: "LinkedCat+"
                         , linkedcat_authorview: "LinkedCat+"
                         , linkedcat_browseview: "LinkedCat+"
+                        , triple: "TRIPLE"
                     },
 
     localization: {
@@ -547,6 +549,12 @@ var config = {
             embed_button_text: 'Copy',
             embed_title: 'embed map',
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
+            high_metadata_quality: "High metadata quality",
+            high_metadata_quality_desc_base: "This knowledge map only includes documents with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your knowledge map.",
+            high_metadata_quality_desc_pubmed: "This knowledge map only includes documents with an abstract. High metadata quality significantly improves the quality of your knowledge map.", 
+            low_metadata_quality: "Low metadata quality",
+            low_metadata_quality_desc_base: "This knowledge map includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your knowledge map. ",
+            low_metadata_quality_desc_pubmed: "This knowledge map includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your knowledge map. ",
         },
         eng_openaire: {
             loading: "Loading...",

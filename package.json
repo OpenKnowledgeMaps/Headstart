@@ -8,9 +8,9 @@
   },
   "scripts": {
     "test": "jest",
-    "dev": "webpack --progress --colors --watch",
+    "dev": "webpack --progress --colors --watch --mode=development",
     "prod": "webpack --progress --colors",
-    "start": "webpack-dev-server -d --progress",
+    "start": "webpack-dev-server -d --progress --mode=development",
     "lint": "eslint ./vis/js/components/*.js"
   },
   "repository": {
@@ -25,7 +25,7 @@
   "homepage": "https://github.com/OpenKnowledgeMaps/Headstart#readme",
   "dependencies": {
     "ajv": "^6.10.2",
-    "bootstrap": "3.3.7",
+    "bootstrap": "3.4.1",
     "d3": "^3.5.17",
     "dateformat": "^2.0.0",
     "font-awesome": "*",
