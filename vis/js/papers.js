@@ -284,10 +284,20 @@ papers.prepareForeignObject = function (nodes) {
                 }
             }).append("xhtml:body")
             .html(function (d) {
+                // moved code from io.js to here so the highlight works in papers too
+                let dCopy = Object.assign({}, d);
+                if (mediator.modern_frontend_enabled) {
+                    if(config.highlight_query_terms) {
+                        for (let field of config.highlight_query_fields) {
+                            dCopy[field] = mediator.modules.io.highlightTerms(dCopy[field], mediator.modules.io.query_terms);
+                        }
+                    }
+                }
+
                 return paperTemplate({
                     'metadata_height': (config.content_based) ? (d.height) : (d.height * (1- config.paper_readers_height_factor)),
                     'metadata_width': d.width * 0.8,
-                    'd': d,
+                    'd': dCopy,
                     'base_unit': config.base_unit
                 });
             });

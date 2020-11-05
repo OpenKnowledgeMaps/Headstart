@@ -956,9 +956,7 @@ list.filterList = function(search_words, filter_param) {
         return e;
     });
 
-    if (!mediator.modern_frontend_enabled) {
-        this.createHighlights(search_words);
-    }
+    this.createHighlights(search_words);
 
     // Full list of items in the map/list
     let all_list_items = d3.selectAll("#list_holder");
@@ -1143,10 +1141,6 @@ list.hideEntriesByWord = function(object, search_words) {
 };
 
 list.createHighlights = function(search_words) {
-    if (mediator.modern_frontend_enabled) {
-        return;
-    }
-
     if (typeof search_words === "undefined") {
         return;
     }

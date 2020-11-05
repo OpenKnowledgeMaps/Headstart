@@ -1,6 +1,7 @@
 import React from "react";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
+import Highlight from "../../components/Highlight";
 
 const DocumentType = ({ type }) => {
   const localization = useLocalizationContext();
@@ -11,8 +12,8 @@ const DocumentType = ({ type }) => {
       <span id="resulttype_tag" className="resulttype_tag">
         {localization.resulttype_label}
       </span>
-      <span id="resulttype_text" className="highlightable">
-        {type}
+      <span id="resulttype_text">
+        <Highlight>{type}</Highlight>
       </span>
     </div>
     // html template ends here
