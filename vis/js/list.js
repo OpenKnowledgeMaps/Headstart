@@ -922,12 +922,18 @@ list.populateList = function() {
 };
 
 list.scrollToEntry = function(safe_id) {
+    // couldn't think of a better solution now: the scroll must happen after the list is rerendered
     if (mediator.modern_frontend_enabled) {
-        return;
+        setTimeout(() => {
+            $("#papers_list").animate({
+                scrollTop: $('#' + safe_id).offset().top - $('#papers_list').offset().top
+            }, 0);
+        }, 80);
+    } else {
+        $("#papers_list").animate({
+            scrollTop: $('#' + safe_id).offset().top - $('#papers_list').offset().top
+        }, 0);
     }
-    $("#papers_list").animate({
-        scrollTop: $('#' + safe_id).offset().top - $('#papers_list').offset().top
-    }, 0);
 }
 
 list.filterList = function(search_words, filter_param) {
