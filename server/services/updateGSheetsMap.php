@@ -39,7 +39,7 @@ $result = search("gsheets", $dirty_query
                     , false, null, 3
                     , "area_uri", "subject"
                     , $sheet_id, false
-                    , "api", "api");
+                    , "api", "legacy");
 
 echo $result;
 
