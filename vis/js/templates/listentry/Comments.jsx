@@ -1,6 +1,7 @@
 import React from "react";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
+import Highlight from "../../components/Highlight";
 
 const Comments = ({ items }) => {
   const localization = useLocalizationContext();
@@ -14,19 +15,16 @@ const Comments = ({ items }) => {
             <i className="fa fa-comment"></i>
           </span>
           <div className="comment-text">
-            <span id="comment" className="highlightable">
-              "{comment.comment}"
+            <span id="comment">
+              <Highlight>"{comment.comment}"</Highlight>
             </span>
             {!!comment.author && (
               <>
                 <span id="comment-by-label">
                   {localization.comment_by_label}
                 </span>
-                <span
-                  id="comment-author"
-                  className="highlightable comment-author"
-                >
-                  {comment.author}
+                <span id="comment-author" className="comment-author">
+                  <Highlight>{comment.author}</Highlight>
                 </span>
               </>
             )}

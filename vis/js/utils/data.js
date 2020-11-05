@@ -26,14 +26,25 @@ export const filterData = (data, searchSettings, filterSettings) => {
 
   data = data.filter(getParamFilterFunction(filterValue, filterField));
 
-  // TODO same algo for highlight
-  let searchWords = searchSettings.value
-    .split(" ")
-    .map((word) => word.trim().toLowerCase());
-
-  data = data.filter(getWordFilterFunction(searchWords));
+  let searchWords = parseSearchText(searchSettings.value);
+  if(searchWords.length > 0) {
+    data = data.filter(getWordFilterFunction(searchWords));
+  }
 
   return data;
+};
+
+/**
+ * Returns the search text keywords.
+ * @param {String} searchText plaintext
+ *
+ * @returns {Array} keywords array
+ */
+export const parseSearchText = (searchText) => {
+  return searchText
+    .split(" ")
+    .map((word) => word.trim().toLowerCase())
+    .filter((word) => word !== "");
 };
 
 const getParamFilterFunction = (param, field) => {
