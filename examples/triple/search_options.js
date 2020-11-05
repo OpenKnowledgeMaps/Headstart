@@ -30,8 +30,8 @@ var options_triple = {
             ]},
         {id: "sg_method", multiple: false, name: "Streamgraph method", type: "dropdown"
             , fields: [
-                {id: "tfidf", text: "TF-IDF"},
                 {id: "count", text: "Count"},
+                {id: "tfidf", text: "TF-IDF"},
                 {id: "nmf", text: "NMF"},
                 {id: "lda", text: "LDA"}
             ]}
