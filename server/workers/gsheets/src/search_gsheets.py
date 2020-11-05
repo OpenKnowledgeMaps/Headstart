@@ -262,9 +262,12 @@ class GSheetsClient(object):
         return input_data
 
     def get_additional_context_data(self, df):
-        df.columns = df.iloc[0]
-        df.drop([0], inplace=True)
-        return df[additional_context_fields].iloc[0].to_dict()
+        if all(field in df.columns for field in additional_context_fields):
+            df.columns = df.iloc[0]
+            df.drop([0], inplace=True)
+            return df[additional_context_fields].iloc[0].to_dict()
+        else:
+            return None
 
     def get_new_mapdata(self, sheet_id, sheet_range, params):
         raw = self.get_sheet_content(sheet_id, sheet_range)
@@ -281,7 +284,9 @@ class GSheetsClient(object):
         res = {}
         res["data"] = result_df.to_json(orient="records")
         res["errors"] = errors_df.to_dict(orient="records")
-        res["additional_context"] = self.get_additional_context_data(raw.copy())
+        additional_context = self.get_additional_context_data(raw.copy())
+        if additional_context:
+            res["additional_context"] = additional_context
         res["sheet_id"] = sheet_id
         res["last_update"] = self.last_updated[sheet_id]["timestamp_utc"]
         return res
