@@ -37,6 +37,12 @@ def get_key(store, key):
     return result
 
 
+additional_context_fields = [
+    "Project name", "Project website", "Topic",
+    "Main curator name", "Main curator e-mail"
+]
+
+
 schema = Schema([
     Column('ID', []),
     Column('Title', []),
@@ -255,9 +261,14 @@ class GSheetsClient(object):
         input_data["text"] = text.to_json(orient='records')
         return input_data
 
+    def get_additional_context_data(self, df):
+        df.columns = df.iloc[0]
+        df.drop([0], inplace=True)
+        return df[additional_context_fields].iloc[0].to_dict()
+
     def get_new_mapdata(self, sheet_id, sheet_range, params):
         raw = self.get_sheet_content(sheet_id, sheet_range)
-        clean_df, errors, errors_df = self.validate_data(raw)
+        clean_df, errors, errors_df = self.validate_data(raw.copy())
         input_data = self.create_input_data(clean_df)
         map_k = str(uuid.uuid4())
         map_input = {}
@@ -270,6 +281,7 @@ class GSheetsClient(object):
         res = {}
         res["data"] = result_df.to_json(orient="records")
         res["errors"] = errors_df.to_dict(orient="records")
+        res["additional_context"] = self.get_additional_context_data(raw.copy())
         res["sheet_id"] = sheet_id
         res["last_update"] = self.last_updated[sheet_id]["timestamp_utc"]
         return res
