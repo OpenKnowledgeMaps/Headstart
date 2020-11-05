@@ -50,10 +50,6 @@ schema = Schema([
     Column('Tags', []),
     Column('Access', []),
     Column('Area', []),
-    Column('Included in map', [InListValidation(["yes", "no"])]),
-    Column('Ready for publication?', [InListValidation(["yes", "no"])]),
-    Column('Validation', []),
-    Column('Curator notes', []),
     Column('Comment 1', []),
     Column('Author Comment 1', []),
     Column('Comment 2', []),
@@ -195,7 +191,7 @@ class GSheetsClient(object):
         df.drop([0, 1, 2], inplace=True)
         df = df[(df["Ready for publication?"] == "yes") &
                 (df["Included in map"] == "yes")]
-        errors = schema.validate(df)
+        errors = schema.validate(df, columns=schema.get_column_names())
         errors_index_rows = [e.row for e in errors]
         error_columns = [e.column for e in errors]
         error_reasons = [" ".join([str(e.value), str(e.message)]) for e in errors]
@@ -351,7 +347,6 @@ class GSheetsClient(object):
                 body=new_fileorganizer_permission,
                 supportsAllDrives=True
         ).execute()
-
 
     def run(self):
         while True:
