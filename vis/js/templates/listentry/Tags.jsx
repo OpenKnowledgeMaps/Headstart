@@ -5,9 +5,9 @@ import Highlight from "../../components/Highlight";
 const Tags = ({ values }) => {
   return (
     // html template starts here
-    <div id="list_tags" class="tags">
+    <div id="list_tags" className="tags" style={{ display: "inline-block" }}>
       {values.map((tag) => (
-        <div class="tag" key={tag}>
+        <div className="tag" key={tag}>
           <Highlight>{tag}</Highlight>
         </div>
       ))}

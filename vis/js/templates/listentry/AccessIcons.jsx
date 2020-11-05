@@ -2,7 +2,7 @@ import React from "react";
 
 import Highlight from "../../components/Highlight";
 
-const AccessIcons = ({ isOpenAccess, isFreeAccess, isDataset }) => {
+const AccessIcons = ({ isOpenAccess, isFreeAccess, isDataset, tags }) => {
   return (
     // html template starts here
     <div id="oa">
@@ -24,6 +24,7 @@ const AccessIcons = ({ isOpenAccess, isFreeAccess, isDataset }) => {
           <span className="fa fa-database"></span>
         </span>
       )}
+      {tags}
     </div>
     // html template ends here
   );
