@@ -262,9 +262,9 @@ class GSheetsClient(object):
         return input_data
 
     def get_additional_context_data(self, df):
+        df.columns = df.iloc[0]
+        df.drop([0], inplace=True)
         if all(field in df.columns for field in additional_context_fields):
-            df.columns = df.iloc[0]
-            df.drop([0], inplace=True)
             return df[additional_context_fields].iloc[0].to_dict()
         else:
             return None
@@ -288,7 +288,7 @@ class GSheetsClient(object):
         if additional_context:
             res["additional_context"] = additional_context
         res["sheet_id"] = sheet_id
-        res["last_update"] = self.last_updated[sheet_id]["timestamp_utc"]
+        res["last_update"] = self.last_updated.get(sheet_id, {}).get("timestamp_utc")
         return res
 
     def update(self, params):
