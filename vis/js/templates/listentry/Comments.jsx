@@ -16,7 +16,7 @@ const Comments = ({ items }) => {
           </span>
           <div className="comment-text">
             <span id="comment">
-              <Highlight>"{comment.comment}"</Highlight>
+              <Highlight>{`"${comment.comment}"`}</Highlight>
             </span>
             {!!comment.author && (
               <>

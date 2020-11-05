@@ -10,7 +10,7 @@ const DocumentType = ({ type }) => {
     // html template starts here
     <div id="list_resulttype" className="resulttype">
       <span id="resulttype_tag" className="resulttype_tag">
-        {localization.resulttype_label}
+        {localization.resulttype_label}:{" "}
       </span>
       <span id="resulttype_text">
         <Highlight>{type}</Highlight>
