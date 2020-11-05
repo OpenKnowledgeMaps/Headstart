@@ -298,7 +298,9 @@ class GSheetsClient(object):
         last_known_update = params.get('last_update')
         if sheet_id not in self.last_updated:
             self.last_updated[sheet_id] = {}
-            last_change = self.files.get(fileId=sheet_id, fields='modifiedTime').execute().get('modifiedTime')
+            last_change = self.files.get(fileId=sheet_id,
+                                         fields='modifiedTime',
+                                         supportsAllDrives=True).execute().get('modifiedTime')
             d = parse(last_change)
             last_update_timestamp_utc = d.strftime("%Y-%m-%d %H:%M:%S %Z")
             self.last_updated[sheet_id]["timestamp_utc"] = last_update_timestamp_utc
