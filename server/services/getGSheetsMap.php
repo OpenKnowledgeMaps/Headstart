@@ -33,7 +33,7 @@ if ($persistence_backend === "api") {
                                    "params" => $data["vis_params"],
                                    "sheet_id" => $rev_data["sheet_id"],
                                    "last_update" => $rev_data["last_update"]);
-    if (isset($rev_data["additional_context"])) {
+    if (array_key_exists("additional_context", $rev_data)) {
       $context = array_merge($context, $rev_data["additional_context"]);
     }
     $return_data = array("context" => $context,
@@ -52,7 +52,7 @@ if ($persistence_backend === "api") {
                                  "params" => $data["vis_params"],
                                  "sheet_id" => $rev_data["sheet_id"],
                                  "last_update" => $rev_data["last_update"]);
-  if (isset($rev_data["additional_context"])) {
+  if (array_key_exists("additional_context", $rev_data)) {
     $context = array_merge($context, $rev_data["additional_context"]);
   }
   $return_data = array("context" => $context,
