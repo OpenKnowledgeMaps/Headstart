@@ -5,7 +5,7 @@
     background-color: white;
     color: $black;
 
-    &.hover {
+    &:hover {
         background-color: $list_show_hide_button;
         color: white;
     }

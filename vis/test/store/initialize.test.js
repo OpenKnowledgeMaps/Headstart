@@ -6,6 +6,7 @@ import queryReducer from "../../js/reducers/query";
 import filesReducer from "../../js/reducers/files";
 import contextLineReducer from "../../js/reducers/contextLine";
 import serviceReducer from "../../js/reducers/service";
+import listReducer from "../../js/reducers/list";
 
 const setup = (overrideConfig, overrideContext) => {
   const configObject = Object.assign(
@@ -709,7 +710,7 @@ describe("config and context state", () => {
           params: {
             author_id: 111,
             living_dates: "1620-1699",
-            image_link: "http://link.com/1234"
+            image_link: "http://link.com/1234",
           },
         }
       );
@@ -1034,7 +1035,7 @@ describe("config and context state", () => {
       const initialState = {};
       const { configObject, contextObject } = setup(
         {
-          options: JSON.parse(REAL_CONFIG_OPTIONS)
+          options: JSON.parse(REAL_CONFIG_OPTIONS),
         },
         {
           params: {
@@ -1484,7 +1485,7 @@ describe("config and context state", () => {
           service: SERVICE,
           params: {
             min_descsize: MIN_DESCSIZE,
-          }
+          },
         }
       );
 
@@ -1508,7 +1509,7 @@ describe("config and context state", () => {
           service: SERVICE,
           params: {
             min_descsize: MIN_DESCSIZE,
-          }
+          },
         }
       );
 
@@ -1532,7 +1533,7 @@ describe("config and context state", () => {
           service: SERVICE,
           params: {
             min_descsize: MIN_DESCSIZE,
-          }
+          },
         }
       );
 
@@ -1556,7 +1557,7 @@ describe("config and context state", () => {
           service: SERVICE,
           params: {
             min_descsize: MIN_DESCSIZE,
-          }
+          },
         }
       );
 
@@ -1580,7 +1581,7 @@ describe("config and context state", () => {
           service: SERVICE,
           params: {
             min_descsize: MIN_DESCSIZE,
-          }
+          },
         }
       );
 
@@ -1604,7 +1605,7 @@ describe("config and context state", () => {
           service: SERVICE,
           params: {
             min_descsize: MIN_DESCSIZE,
-          }
+          },
         }
       );
 
@@ -1663,6 +1664,30 @@ describe("config and context state", () => {
       );
 
       expect(result).toEqual(SERVICE);
+    });
+  });
+
+  describe("list reducer", () => {
+    // initial state tested in listtoggle.test.js
+
+    it("should not change the state with initialization", () => {
+      const INITIAL_STATE = { show: true, docsNumber: 0 };
+      const SHOW_LIST = false;
+      const EXPECTED_STATE = { ...INITIAL_STATE, show: SHOW_LIST };
+
+      const { configObject, contextObject } = setup(
+        {
+          show_list: SHOW_LIST,
+        },
+        {}
+      );
+
+      const result = listReducer(
+        INITIAL_STATE,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual(EXPECTED_STATE);
     });
   });
 });
