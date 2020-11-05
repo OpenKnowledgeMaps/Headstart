@@ -767,20 +767,19 @@ MyMediator.prototype = {
     },
 
     paper_selected: function(paper) {
-        if (!mediator.modern_frontend_enabled) {
-            mediator.current_enlarged_paper = paper;
-        } else {
+        mediator.current_enlarged_paper = paper;
+        if (mediator.modern_frontend_enabled) {
             mediator.modern_frontend_intermediate.selectPaper(paper.safe_id);
         }
     },
 
     paper_deselected: function() {
-        if (!mediator.modern_frontend_enabled) {
-            if (mediator.current_enlarged_paper) {
-                mediator.current_enlarged_paper.paper_selected = false
-            }
-            mediator.current_enlarged_paper = null;
-        } else {
+        if (mediator.current_enlarged_paper) {
+            mediator.current_enlarged_paper.paper_selected = false
+        }
+        mediator.current_enlarged_paper = null;
+
+        if (mediator.modern_frontend_enabled) {
             mediator.modern_frontend_intermediate.deselectPaper();
         }
     }
