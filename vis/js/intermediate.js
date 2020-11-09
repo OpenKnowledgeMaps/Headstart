@@ -9,12 +9,15 @@ import {
   zoomInFromMediator,
   zoomOutFromMediator,
   initializeStore,
+  setItemsCount,
+  showList,
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
 
 import SubdisciplineTitle from "./components/SubdisciplineTitle";
 import AuthorImage from "./components/AuthorImage";
+import ListToggle from "./components/ListToggle";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -26,7 +29,8 @@ class Intermediate {
   constructor(
     modern_frontend_enabled,
     knowledgeMapZoomOutCallback,
-    streamgraphZoomOutCallback
+    streamgraphZoomOutCallback,
+    listToggleCallback,
   ) {
     this.modern_frontend_enabled = modern_frontend_enabled;
     this.store = createStore(
@@ -36,7 +40,8 @@ class Intermediate {
           knowledgeMapZoomOutCallback,
           streamgraphZoomOutCallback
         ),
-        createFileChangeMiddleware()
+        createFileChangeMiddleware(),
+        createListToggleMiddleware(listToggleCallback)
       )
     );
   }
@@ -53,10 +58,24 @@ class Intermediate {
       </Provider>,
       document.getElementById("mvp_container")
     );
+  }
 
-    //if (this.modern_frontend_enabled) {
-    //  console.warn("*** FRONTEND FLAG ENABLED - new React elements rendered ***");
-    //}
+  /**
+   * List cannot be rendered with the initial components (heading etc.),
+   * so it has its own separate function.
+   */
+  renderList() {
+    if (this.modern_frontend_enabled) {
+      console.warn(
+        "*** FRONTEND FLAG ENABLED - new React elements rendered ***"
+      );
+      ReactDOM.render(
+        <Provider store={this.store}>
+          <ListToggle />
+        </Provider>,
+        document.getElementById("show_hide_button")
+      );
+    }
   }
 
   zoomIn(selectedAreaData) {
@@ -66,6 +85,26 @@ class Intermediate {
   zoomOut() {
     this.store.dispatch(zoomOutFromMediator());
   }
+
+  changeItemsCount(count) {
+    // TODO refactor when possible to a non-setter action (or no action at all)
+    this.store.dispatch(setItemsCount(count));
+  }
+
+  showList() {
+    this.store.dispatch(showList());
+  }
+}
+
+function createListToggleMiddleware(listToggleCallback) {
+  return function () {
+    return (next) => (action) => {
+      if (action.type == "TOGGLE_LIST") {
+        listToggleCallback();
+      }
+      return next(action);
+    };
+  };
 }
 
 function createZoomOutMiddleware(

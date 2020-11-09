@@ -10,6 +10,7 @@ from apis.gsheets import gsheets_ns
 from apis.base import base_ns
 from apis.pubmed import pubmed_ns
 from apis.openaire import openaire_ns
+from apis.persistence import persistence_ns
 from database import db
 
 from config import settings
@@ -50,6 +51,7 @@ api.add_namespace(gsheets_ns, path='/gsheets')
 api.add_namespace(base_ns, path='/base')
 api.add_namespace(pubmed_ns, path='/pubmed')
 api.add_namespace(openaire_ns, path='/openaire')
+api.add_namespace(persistence_ns, path='/persistence')
 app.logger.debug(app.config)
 app.logger.debug(app.url_map)
 

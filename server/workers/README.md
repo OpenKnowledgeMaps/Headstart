@@ -84,6 +84,14 @@ Secure Redis:
 * In `server/workers` copy `example_redis_config.json` to `redis_config.json`  and `example_redis.conf` to `redis.conf` and in both files replace "long_secure_password" with a long, secure password (Line 507 in redis.conf, parameter `requirepass`).
 
 
+PostgreSQL service:
+* In root folder create `.env` from the `example.env` and fill in the environment variables with the correct login data.
+* Manual database creation:
+
+Enter container: `docker exec -it VARYINGNAME_pgsql_1 psql -U headstart`
+
+Execute command: `CREATE DATABASE databasename;`
+
 ### Starting the backend services with docker-compose
 
 Following commands have to be executed from the root folder of the repository, where `docker-compose.yml` is located.
