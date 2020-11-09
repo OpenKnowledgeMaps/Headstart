@@ -34,3 +34,17 @@ export const changeFile = (fileIndex) => ({
   type: "FILE_CLICKED",
   fileIndex,
 });
+
+export const toggleList = () => ({
+  type: "TOGGLE_LIST",
+});
+
+export const showList = () => ({
+  type: "SHOW_LIST",
+});
+
+// TODO refactor when possible to a non-setter action (or no action at all)
+export const setItemsCount = (count) => ({
+  type: "SET_ITEMS_COUNT",
+  count,
+});

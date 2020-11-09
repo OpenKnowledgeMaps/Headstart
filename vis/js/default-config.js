@@ -98,8 +98,10 @@ var config = {
 /*** basic data- and third-party-service related settings ***/
     //mode for retrieving data
     mode: "local_files",
-    //which backend to use for data retrieval (api or legacy)
+    //which backend to use for data processing (api or legacy)
     backend: "legacy",
+    //which backend to use for data persistence (api or legacy)
+    persistence_backend: "legacy",
     //language specification to use (see localization object)
     language: "eng",
     //language used for hyphenation

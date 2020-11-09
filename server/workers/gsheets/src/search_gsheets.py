@@ -37,6 +37,12 @@ def get_key(store, key):
     return result
 
 
+additional_context_fields = [
+    "Project name", "Project website", "Topic",
+    "Main curator name", "Main curator e-mail"
+]
+
+
 schema = Schema([
     Column('ID', []),
     Column('Title', []),
@@ -50,10 +56,6 @@ schema = Schema([
     Column('Tags', []),
     Column('Access', []),
     Column('Area', []),
-    Column('Included in map', [InListValidation(["yes", "no"])]),
-    Column('Ready for publication?', [InListValidation(["yes", "no"])]),
-    Column('Validation', []),
-    Column('Curator notes', []),
     Column('Comment 1', []),
     Column('Author Comment 1', []),
     Column('Comment 2', []),
@@ -84,7 +86,8 @@ class GSheetsClient(object):
     def __init__(self, redis_store, loglevel="INFO"):
         # If modifying these scopes, delete the file token.pickle.
         self.SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly',
-                       'https://www.googleapis.com/auth/drive.metadata.readonly']
+                       'https://www.googleapis.com/auth/drive.metadata.readonly',
+                       'https://www.googleapis.com/auth/drive']
         self.redis_store = redis_store
         self.register_services()
         self.last_updated = {}
@@ -98,8 +101,12 @@ class GSheetsClient(object):
 
     def authenticate(self):
         creds = None
-        tokenpath = os.path.join(pathlib.Path(__file__).parent.parent, "token.pickle")
-        credentialspath = os.path.join(pathlib.Path(__file__).parent.parent, "credentials.json")
+        try:
+            tokenpath = os.path.join(pathlib.Path(__file__).parent.parent, "token.pickle")
+            credentialspath = os.path.join(pathlib.Path(__file__).parent.parent, "credentials.json")
+        except NameError:
+            tokenpath = os.path.join(os.getcwd(), "token.pickle")
+            credentialspath = os.path.join(os.getcwd(), "credentials.json")
         if os.path.exists(tokenpath):
             with open(tokenpath, 'rb') as token:
                 creds = pickle.load(token)
@@ -190,7 +197,7 @@ class GSheetsClient(object):
         df.drop([0, 1, 2], inplace=True)
         df = df[(df["Ready for publication?"] == "yes") &
                 (df["Included in map"] == "yes")]
-        errors = schema.validate(df)
+        errors = schema.validate(df, columns=schema.get_column_names())
         errors_index_rows = [e.row for e in errors]
         error_columns = [e.column for e in errors]
         error_reasons = [" ".join([str(e.value), str(e.message)]) for e in errors]
@@ -254,9 +261,20 @@ class GSheetsClient(object):
         input_data["text"] = text.to_json(orient='records')
         return input_data
 
+    def get_additional_context_data(self, df):
+        df.columns = df.iloc[0]
+        df.drop([0], inplace=True)
+        if all(field in df.columns for field in additional_context_fields):
+            additional_context = df[additional_context_fields].iloc[0].to_dict()
+            for k in additional_context_fields:
+                additional_context[k.lower().replace(" ", "_")] = additional_context.pop(k)
+            return additional_context
+        else:
+            return None
+
     def get_new_mapdata(self, sheet_id, sheet_range, params):
         raw = self.get_sheet_content(sheet_id, sheet_range)
-        clean_df, errors, errors_df = self.validate_data(raw)
+        clean_df, errors, errors_df = self.validate_data(raw.copy())
         input_data = self.create_input_data(clean_df)
         map_k = str(uuid.uuid4())
         map_input = {}
@@ -269,8 +287,11 @@ class GSheetsClient(object):
         res = {}
         res["data"] = result_df.to_json(orient="records")
         res["errors"] = errors_df.to_dict(orient="records")
+        additional_context = self.get_additional_context_data(raw.copy())
+        if additional_context:
+            res["additional_context"] = additional_context
         res["sheet_id"] = sheet_id
-        res["last_update"] = self.last_updated[sheet_id]["timestamp_utc"]
+        res["last_update"] = self.last_updated.get(sheet_id, {}).get("timestamp_utc")
         return res
 
     def update(self, params):
@@ -278,28 +299,93 @@ class GSheetsClient(object):
         sheet_id = params.get('sheet_id')
         sheet_range = params.get('sheet_range')
         last_known_update = params.get('last_update')
-        if not sheet_id in self.last_updated:
+        if sheet_id not in self.last_updated:
             self.last_updated[sheet_id] = {}
-            last_change = self.files.get(fileId=sheet_id, fields='modifiedTime').execute().get('modifiedTime')
+            last_change = self.files.get(fileId=sheet_id,
+                                         fields='modifiedTime',
+                                         supportsAllDrives=True).execute().get('modifiedTime')
             d = parse(last_change)
             last_update_timestamp_utc = d.strftime("%Y-%m-%d %H:%M:%S %Z")
             self.last_updated[sheet_id]["timestamp_utc"] = last_update_timestamp_utc
         sheet_has_changed = self.sheet_has_changed(sheet_id)
-        if (last_known_update is not None and
-            last_known_update != self.last_updated[sheet_id]["timestamp_utc"]):
+        if (last_known_update is not None
+           and last_known_update != self.last_updated[sheet_id]["timestamp_utc"]):
             res = self.get_new_mapdata(sheet_id, sheet_range, params)
         if sheet_has_changed is True:
             res = self.get_new_mapdata(sheet_id, sheet_range, params)
         return res
+
+    def create_knowledgebase(self, params):
+        try:
+            sheet_name = params.get('sheet_name')
+            project_name = params.get('project_name')
+            main_curator_email = params.get('main_curator_email')
+            knowledge_base_template_id = params.get('knowledge_base_template_id')
+            new_drive = self.create_new_drive(project_name)
+            new_drive_id = new_drive.get('id')
+            new_kb = self.duplicate_knowledgebase(
+                            knowledge_base_template_id, sheet_name,
+                            new_drive_id)
+            self.set_new_kb_permissions(new_drive, new_kb, main_curator_email)
+            res = {"status": "success"}
+        except Exception as e:
+            res = {"status": "error", "msg": str(e)}
+        return res
+
+    def create_new_drive(self, project_name):
+        drive_metadata = {'name': project_name}
+        request_id = str(uuid.uuid4())
+        new_drive = self.drive_service.drives().create(body=drive_metadata,
+                                                       requestId=request_id,
+                                                       fields='id').execute()
+        return new_drive
+
+    def duplicate_knowledgebase(self, knowledge_base_template_id, sheet_name,
+                                target_folder_id):
+        file_metadata = {'name': sheet_name, 'parents': [target_folder_id]}
+        new_kb = self.files.copy(fileId=knowledge_base_template_id,
+                                 body=file_metadata,
+                                 supportsAllDrives=True).execute()
+        return new_kb
+
+    def set_new_kb_permissions(self, new_drive, new_kb, main_curator_email):
+        new_organizer_permission = {
+            'type': 'user',
+            'role': 'organizer',
+            'emailAddress': main_curator_email
+        }
+        permission = self.drive_service.permissions().create(
+                fileId=new_drive.get('id'),
+                body=new_organizer_permission,
+                supportsAllDrives=True
+        ).execute()
+        new_fileorganizer_permission = {
+            'type': 'user',
+            'role': 'writer',
+            'emailAddress': main_curator_email
+        }
+        permission = self.drive_service.permissions().create(
+                fileId=new_kb.get('id'),
+                body=new_fileorganizer_permission,
+                supportsAllDrives=True
+        ).execute()
 
     def run(self):
         while True:
             k, params, endpoint = self.next_item()
             self.logger.debug(k)
             self.logger.debug(params)
-            try:
-                res = self.update(params)
-                self.redis_store.set(k+"_output", json.dumps(res))
-            except Exception as e:
-                self.logger.error(e)
-                self.logger.error(params)
+            if endpoint == "search":
+                try:
+                    res = self.update(params)
+                    self.redis_store.set(k+"_output", json.dumps(res))
+                except Exception as e:
+                    self.logger.error(e)
+                    self.logger.error(params)
+            if endpoint == "create_kb":
+                try:
+                    res = self.create_knowledgebase(params)
+                    self.redis_store.set(k+"_output", json.dumps(res))
+                except Exception as e:
+                    self.logger.error(e)
+                    self.logger.error(params)
