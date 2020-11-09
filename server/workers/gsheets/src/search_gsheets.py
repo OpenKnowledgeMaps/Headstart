@@ -267,7 +267,7 @@ class GSheetsClient(object):
         if all(field in df.columns for field in additional_context_fields):
             additional_context = df[additional_context_fields].iloc[0].to_dict()
             for k in additional_context_fields:
-                additional_context[k.lower().replace(" ", "_")] = additional_context.pop(k)
+                additional_context[k.lower().replace(" ", "_").replace("-", "")] = additional_context.pop(k)
             return additional_context
         else:
             return None
