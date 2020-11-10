@@ -15,7 +15,7 @@ import Title from "./Title";
  */
 const BasicListEntry = ({
   id,
-  access = {}, // TODO remove the default values
+  access = {},
   title,
   preview = {},
   details = {},

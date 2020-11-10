@@ -26,7 +26,6 @@ const list = (
       return {
         ...state,
         show: !!action.configObject.show_list,
-        // TODO init number of all documents
         showFilter: action.configObject.filter_menu_dropdown,
         filterField: action.configObject.filter_field,
         filterValue: action.configObject.filter_options
