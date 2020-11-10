@@ -268,11 +268,20 @@ list.fit_list_height = function() {
         let title_height = $("#subdiscipline_title").outerHeight(true);
         let title_image_height = $("#title_image").outerHeight(true) || 0;
         
+        // the real height after the react elements are rendered
+        let showHideBtnHeight = 34;
+        let filterSortHeight = 68.4;
+
+        if (!mediator.modern_frontend_enabled) {
+            showHideBtnHeight = $("#show_hide_button").outerHeight(true);
+            filterSortHeight = $("#explorer_options").outerHeight(true);
+        }
+
         paper_list_avail_height = 
                 Math.max(title_height, title_image_height)
                     + $("#headstart-chart").outerHeight(true)
-                    - $("#show_hide_button").outerHeight(true) 
-                    - $("#explorer_options").outerHeight(true)
+                    - showHideBtnHeight 
+                    - filterSortHeight
                     + ($(".legend").outerHeight(true) || 0)
                     - PAPER_LIST_CORRECTION
                     - (parseInt($("#papers_list").css("padding-top"), 10) || 0)
