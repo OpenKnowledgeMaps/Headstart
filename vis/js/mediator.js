@@ -8,6 +8,7 @@ import { canvas } from 'canvas';
 import { scale } from './scale';
 import { streamgraph } from 'streamgraph';
 import Intermediate from './intermediate';
+import { debounce } from "./helpers";
 
 const multiplesTemplate = require('templates/multiples.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
@@ -45,7 +46,15 @@ var MyMediator = function() {
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
     this.modern_frontend_enabled = config.modern_frontend_enabled
-    this.modern_frontend_intermediate = new Intermediate(this.modern_frontend_enabled, this.chart_svg_click, this.streamgraph_chart_clicked, this.list_toggle)
+    this.modern_frontend_intermediate = new Intermediate(
+        this.modern_frontend_enabled, 
+        this.chart_svg_click, 
+        this.streamgraph_chart_clicked, 
+        this.list_toggle, 
+        debounce(this.list_search_change, 300),
+        this.list_sort_change,
+        this.list_filter_change,
+    );
     this.init();
     this.init_state();
 };
@@ -740,6 +749,21 @@ MyMediator.prototype = {
         } else {
             mediator.modern_frontend_intermediate.changeItemsCount(count);
         }
+    },
+
+    list_search_change: function(text) {
+        mediator.modules.list.filterList(text.split(" "), mediator.modules.list.current_filter_param);
+    },
+
+    list_sort_change: function(sort_option) {
+        mediator.modules.list.sortBy(sort_option);
+        mediator.publish("record_action", config.localization[config.language][sort_option], "List", "sortBy",
+            config.user_id, "listsort", null, "sort_option=" + sort_option);
+    },
+
+    list_filter_change: function(filter_option) {
+        mediator.modules.list.current_filter_param = filter_option;
+        mediator.modules.list.filterList(undefined, filter_option);
     },
 };
 
