@@ -8,11 +8,8 @@ services:
     environment:
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-    ports:
-       - '127.0.0.1:54322:5432'
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./server/workers/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
 
   pgadmin:
     image: 'dpage/pgadmin4'
