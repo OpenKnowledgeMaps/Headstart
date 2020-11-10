@@ -17,7 +17,7 @@ import Title from "./Title";
  */
 const ClassificationListEntry = ({
   id,
-  access = {}, // TODO remove the default values
+  access = {},
   title,
   preview = {},
   details = {},

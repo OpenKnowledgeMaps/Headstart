@@ -33,8 +33,6 @@ class ContextLine extends React.Component {
     }
 
     return (
-      // TODO this <p> can be moved into the template when whole MVP is refactored
-      // then a different container for the popovers can be chosen
       <ContextLineTemplate>
         {params.showAuthor && (
           <Author

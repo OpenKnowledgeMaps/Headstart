@@ -21,7 +21,7 @@ import Title from "./Title";
  */
 const StandardListEntry = ({
   id,
-  access = {}, // TODO remove the default values
+  access = {},
   tags,
   title,
   preview = {},
