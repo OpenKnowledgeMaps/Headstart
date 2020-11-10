@@ -768,6 +768,9 @@ MyMediator.prototype = {
     },
 
     paper_selected: function(paper) {
+        if (mediator.current_enlarged_paper) {
+            mediator.current_enlarged_paper.paper_selected = false;
+        }
         mediator.current_enlarged_paper = paper;
         if (mediator.modern_frontend_enabled) {
             mediator.modern_frontend_intermediate.selectPaper(paper.safe_id);
@@ -776,7 +779,7 @@ MyMediator.prototype = {
 
     paper_deselected: function() {
         if (mediator.current_enlarged_paper) {
-            mediator.current_enlarged_paper.paper_selected = false
+            mediator.current_enlarged_paper.paper_selected = false;
         }
         mediator.current_enlarged_paper = null;
 
