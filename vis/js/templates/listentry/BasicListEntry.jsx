@@ -44,6 +44,12 @@ const BasicListEntry = ({
         />
       </div>
       <Abstract text={abstract} />
+      {!!preview.showPreviewImage && !!preview.onClickPDF && (
+        <PreviewImage
+          imageURL={preview.previewImage}
+          onClick={preview.onClickPDF}
+        />
+      )}
       <Area
         onClick={handleZoomIn}
         onMouseOver={area.onMouseOver}
@@ -52,12 +58,6 @@ const BasicListEntry = ({
         {area.text}
       </Area>
       <Readers number={readers} label={baseUnit} />
-      {!!preview.showPreviewImage && !!preview.onClickPDF && (
-        <PreviewImage
-          imageURL={preview.previewImage}
-          onClick={preview.onClickPDF}
-        />
-      )}
     </ListEntry>
     // html template ends here
   );

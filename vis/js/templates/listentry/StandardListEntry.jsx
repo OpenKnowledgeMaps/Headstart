@@ -60,6 +60,9 @@ const StandardListEntry = ({
       {!!documentType && <DocumentType type={documentType} />}
       <Abstract text={abstract} />
       {!!comments && <Comments items={comments} />}
+      {!!preview.showPreviewImage && !!preview.onClickPDF && (
+        <PreviewImage onClick={preview.onClickPDF} />
+      )}
       {!!keywords && <Keywords>{keywords}</Keywords>}
       {!!metrics && (
         <Metrics
@@ -77,9 +80,6 @@ const StandardListEntry = ({
       </Area>
       {(!!citations || parseInt(citations) === 0) && (
         <Citations number={citations} label={baseUnit} />
-      )}
-      {!!preview.showPreviewImage && !!preview.onClickPDF && (
-        <PreviewImage onClick={preview.onClickPDF} />
       )}
     </ListEntry>
     // html template ends here
