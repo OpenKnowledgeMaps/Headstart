@@ -339,7 +339,7 @@ describe("config and context state", () => {
 
   describe("query reducer", () => {
     it("should return the initial state", () => {
-      const expectedResult = null;
+      const expectedResult = { text: "", parsedTerms: [] };
 
       const result = queryReducer(undefined, {});
 
@@ -356,7 +356,7 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toEqual(expectedResult);
+      expect(result.text).toEqual(expectedResult);
     });
 
     it("should handle the initialization even without the query", () => {
@@ -370,7 +370,7 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toEqual(expectedResult);
+      expect(result.text).toEqual(expectedResult);
     });
   });
 
