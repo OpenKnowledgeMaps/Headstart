@@ -20,7 +20,7 @@ def create_vis_id(params, param_types):
         v = [str(e) for e in v] if isinstance(v, list) else str(v)
         ordered_params[k] = v
     string_to_hash = json.dumps(ordered_params, separators=(',', ':'))
-    string_to_hash = " ".join([params["q"], string_to_hash])
+    string_to_hash = " ".join([params["q"].replace('"', '\\"'), string_to_hash])
     vis_id = md5(string_to_hash.encode('utf-8')).hexdigest()
     return vis_id
 
