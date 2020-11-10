@@ -12,6 +12,7 @@ services:
        - '127.0.0.1:54322:5432'
     volumes:
       - db-data:/var/lib/postgresql/data
+      - ./server/workers/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
 
   pgadmin:
     image: 'dpage/pgadmin4'
@@ -20,7 +21,7 @@ services:
     env_file:
       - .env
     volumes:
-      - /home/chris/data/OKMaps:/pgadmin4/data
+      - ${PGADMIN_VOLUME}:/pgadmin4/data
 
   api:
    build:
