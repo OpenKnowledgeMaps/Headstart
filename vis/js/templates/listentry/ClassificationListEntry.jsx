@@ -4,6 +4,7 @@ import AccessIcons from "./AccessIcons";
 import Area from "./Area";
 import Classification from "./Classification";
 import Details from "./Details";
+import EntryBacklink from "./EntryBacklink";
 import Keywords from "./Keywords";
 import Link from "./Link";
 import ListEntry from "./ListEntry";
@@ -27,6 +28,7 @@ const ClassificationListEntry = ({
   area,
   handleTitleClick,
   handleZoomIn,
+  backlink = {},
 }) => {
   return (
     // html template starts here
@@ -54,7 +56,12 @@ const ClassificationListEntry = ({
           {area.text}
         </Area>
       )}
-      {!!preview.showPreviewImage && <PreviewImage onClick={preview.onClick} />}
+      {!!backlink.show && (
+        <EntryBacklink
+          onClick={backlink.onClick}
+          isInStream={backlink.isInStream}
+        />
+      )}
     </ListEntry>
     // html template ends here
   );

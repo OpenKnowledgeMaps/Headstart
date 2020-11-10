@@ -99,3 +99,7 @@ export const showPreview = (paper) => ({
 export const hidePreview = () => ({
   type: "HIDE_PREVIEW",
 });
+
+export const deselectPaperBacklink = () => ({
+  type: "DESELECT_PAPER_BACKLINK",
+});
