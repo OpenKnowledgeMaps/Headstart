@@ -419,6 +419,9 @@ div {
     &#preview_image {
         display: block;
         margin-top: 20px;
+        @if $modern_frontend_enabled {
+            margin-bottom: 20px;
+        }
         margin-left: 15px;
     }
 
