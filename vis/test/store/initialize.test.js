@@ -8,7 +8,7 @@ import contextLineReducer from "../../js/reducers/contextLine";
 import serviceReducer from "../../js/reducers/service";
 import listReducer from "../../js/reducers/list";
 
-const setup = (overrideConfig, overrideContext) => {
+const setup = (overrideConfig = {}, overrideContext = {}) => {
   const configObject = Object.assign(
     {
       title: "presetTitle",
@@ -1670,24 +1670,81 @@ describe("config and context state", () => {
   describe("list reducer", () => {
     // initial state tested in listtoggle.test.js
 
-    it("should not change the state with initialization", () => {
-      const INITIAL_STATE = { show: true, docsNumber: 0 };
+    it("should initialize correct list visibility", () => {
       const SHOW_LIST = false;
-      const EXPECTED_STATE = { ...INITIAL_STATE, show: SHOW_LIST };
 
-      const { configObject, contextObject } = setup(
-        {
-          show_list: SHOW_LIST,
-        },
-        {}
-      );
+      const { configObject, contextObject } = setup({
+        show_list: SHOW_LIST,
+      });
 
       const result = listReducer(
-        INITIAL_STATE,
+        {},
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toEqual(EXPECTED_STATE);
+      expect(result).toHaveProperty("show", SHOW_LIST);
+    });
+
+    it("should initialize correct filter visibility", () => {
+      const SHOW_FILTER = false;
+
+      const { configObject, contextObject } = setup({
+        filter_menu_dropdown: SHOW_FILTER,
+      });
+
+      const result = listReducer(
+        {},
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("showFilter", SHOW_FILTER);
+    });
+
+    it("should initialize correct filter options and initial value", () => {
+      const FILTER_OPTIONS = ["all", "open_access"];
+
+      const { configObject, contextObject } = setup({
+        filter_options: FILTER_OPTIONS,
+      });
+
+      const result = listReducer(
+        {},
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("filterOptions", FILTER_OPTIONS);
+      expect(result).toHaveProperty("filterValue", FILTER_OPTIONS[0]);
+    });
+
+    it("should initialize correct sort visibility", () => {
+      const SHOW_SORT = false;
+
+      const { configObject, contextObject } = setup({
+        sort_menu_dropdown: SHOW_SORT,
+      });
+
+      const result = listReducer(
+        {},
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("showDropdownSort", SHOW_SORT);
+    });
+
+    it("should initialize correct sort options and initial value", () => {
+      const SORT_OPTIONS = ["relevance", "readers", "year"];
+
+      const { configObject, contextObject } = setup({
+        sort_options: SORT_OPTIONS,
+      });
+
+      const result = listReducer(
+        {},
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("sortOptions", SORT_OPTIONS);
+      expect(result).toHaveProperty("sortValue", SORT_OPTIONS[0]);
     });
   });
 });
