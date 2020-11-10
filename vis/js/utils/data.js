@@ -16,9 +16,20 @@ export const filterData = (data, searchSettings, filterSettings) => {
   }
 
   if (filterSettings.zoomed) {
-    data = data.filter(
-      (e) => e.area_uri.toString() === filterSettings.area.toString()
-    );
+    if (filterSettings.isStreamgraph) {
+      data = data.filter(
+        (e) => {
+          let keywords = !!e.subject_orig ? e.subject_orig : "";
+          let array = keywords.split("; ");
+
+          return array.includes(filterSettings.title);
+        }
+      );
+    } else {
+      data = data.filter(
+        (e) => e.area_uri.toString() === filterSettings.area.toString()
+      );
+    }
   }
 
   let filterValue = filterSettings.value;

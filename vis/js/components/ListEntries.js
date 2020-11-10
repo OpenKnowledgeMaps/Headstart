@@ -4,7 +4,13 @@ import { connect } from "react-redux";
 import BasicListEntry from "../templates/listentry/BasicListEntry";
 import ClassificationListEntry from "../templates/listentry/ClassificationListEntry";
 import StandardListEntry from "../templates/listentry/StandardListEntry";
-import { zoomIn, hoverArea, showPreview, selectPaper } from "../actions";
+import {
+  zoomIn,
+  hoverArea,
+  showPreview,
+  selectPaper,
+  deselectPaperBacklink,
+} from "../actions";
 
 import { filterData, sortData } from "../utils/data";
 import { shorten } from "../utils/string";
@@ -36,6 +42,9 @@ const ListEntries = ({
   localization,
   handleTitleClick,
   showKeywords,
+  showBacklink,
+  isInStreamBacklink,
+  handleBacklinkClick,
 }) => {
   if (!show) {
     return null;
@@ -143,6 +152,11 @@ const ListEntries = ({
             }
             handleZoomIn={() => handleZoomIn(entry)}
             handleTitleClick={() => handleTitleClick(entry)}
+            backlink={{
+              show: showBacklink,
+              isInStream: isInStreamBacklink,
+              onClick: () => handleBacklinkClick(),
+            }}
           />
         ))}
       </LocalizationProvider>
@@ -303,6 +317,8 @@ const mapStateToProps = (state) => ({
     zoomed: state.zoom,
     area: state.selectedBubble ? state.selectedBubble.uri : null,
     paper: state.selectedPaper ? state.selectedPaper.safeId : null,
+    isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+    title: state.selectedBubble ? state.selectedBubble.title : null,
   },
   sortSettings: {
     value: state.list.sortValue,
@@ -321,6 +337,8 @@ const mapStateToProps = (state) => ({
   showKeywords:
     state.list.showKeywords &&
     (!!state.selectedPaper || !state.list.hideUnselectedKeywords),
+  showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
+  isInStreamBacklink: !!state.selectedBubble,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -358,6 +376,13 @@ const mapDispatchToProps = (dispatch) => ({
       "*** Title click event triggered from React element 'List entry' ***"
     );
     dispatch(selectPaper(paper));
+  },
+  handleBacklinkClick: () => {
+    // TODO remove warn
+    console.warn(
+      "*** Backlink click event triggered from React element 'List entry' ***"
+    );
+    dispatch(deselectPaperBacklink());
   },
 });
 

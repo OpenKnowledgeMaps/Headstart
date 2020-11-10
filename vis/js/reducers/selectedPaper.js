@@ -4,6 +4,8 @@ const selectedPaper = (state = null, action) => {
       return null;
     case "DESELECT_PAPER":
       return null;
+    case "DESELECT_PAPER_BACKLINK":
+      return null;
     case "SELECT_PAPER":
       return {
         safeId: action.safeId,

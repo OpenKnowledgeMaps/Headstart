@@ -59,6 +59,7 @@ var MyMediator = function() {
         this.list_area_mouseout,
         this.list_show_popup,
         this.list_click_paper_list,
+        this.currentstream_click,
     );
     this.init();
     this.init_state();

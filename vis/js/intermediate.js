@@ -41,7 +41,8 @@ class Intermediate {
     areaMouseoverCallback,
     areaMouseoutCallback,
     previewPopoverCallback,
-    titleClickCallback
+    titleClickCallback,
+    entryBacklinkClickCallback
   ) {
     this.modern_frontend_enabled = modern_frontend_enabled;
     this.store = createStore(
@@ -60,7 +61,8 @@ class Intermediate {
         createAreaMouseoverMiddleware(areaMouseoverCallback),
         createAreaMouseoutMiddleware(areaMouseoutCallback),
         createPreviewPopoverMiddleware(previewPopoverCallback),
-        createTitleClickMiddleware(titleClickCallback)
+        createTitleClickMiddleware(titleClickCallback),
+        createEntryBacklinkClickMiddleware(entryBacklinkClickCallback)
       )
     );
   }
@@ -131,6 +133,17 @@ class Intermediate {
   deselectPaper() {
     this.store.dispatch(deselectPaper());
   }
+}
+
+function createEntryBacklinkClickMiddleware(entryBacklinkClickCallback) {
+  return function () {
+    return (next) => (action) => {
+      if (action.type == "DESELECT_PAPER_BACKLINK") {
+        entryBacklinkClickCallback();
+      }
+      return next(action);
+    };
+  };
 }
 
 function createTitleClickMiddleware(titleClickCallback) {

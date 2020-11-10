@@ -5,6 +5,8 @@ import { toggleList } from "../actions";
 
 import { filterData } from "../utils/data";
 
+import { STREAMGRAPH_MODE } from "../reducers/chartType";
+
 // no logic required
 
 const mapStateToProps = (state) => {
@@ -20,6 +22,8 @@ const mapStateToProps = (state) => {
       zoomed: state.zoom,
       area: state.selectedBubble ? state.selectedBubble.uri : null,
       paper: state.selectedPaper ? state.selectedPaper.safeId : null,
+      isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+      title: state.selectedBubble ? state.selectedBubble.title : null,
     }
   );
 
