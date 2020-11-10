@@ -23,7 +23,7 @@ const query = (state = { text: "", parsedTerms: [] }, action) => {
  * @returns {Array} array of terms (string)
  */
 const getQueryTerms = (context) => {
-  if (!context.hasOwnProperty("query")) {
+  if (typeof context.query !== "string") {
     return [];
   }
 

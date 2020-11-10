@@ -1,11 +1,4 @@
-import {
-  toggleList,
-  showList,
-  setItemsCount,
-  search,
-  filter,
-  sort,
-} from "../../js/actions";
+import { toggleList, showList, search, filter, sort } from "../../js/actions";
 
 import listReducer from "../../js/reducers/list";
 
@@ -23,15 +16,6 @@ describe("list state", () => {
         type: "SHOW_LIST",
       };
       expect(showList()).toEqual(EXPECTED_ACTION);
-    });
-
-    it("should create a change of items count action", () => {
-      const COUNT = 11;
-      const EXPECTED_ACTION = {
-        type: "SET_ITEMS_COUNT",
-        count: COUNT,
-      };
-      expect(setItemsCount(COUNT)).toEqual(EXPECTED_ACTION);
     });
 
     it("should create a list search action", () => {
@@ -66,14 +50,23 @@ describe("list state", () => {
     it("should return the initial state", () => {
       const EXPECTED_STATE = {
         show: true,
-        docsNumber: 0,
         searchValue: "",
         showFilter: false,
+        filterField: null,
         filterValue: null,
         filterOptions: [],
         showDropdownSort: true,
         sortValue: null,
         sortOptions: [],
+        abstractSize: 250,
+        linkType: null,
+        showDocumentType: false,
+        showMetrics: false,
+        isContentBased: false,
+        baseUnit: null,
+        showRealPreviewImage: false,
+        showKeywords: false,
+        hideUnselectedKeywords: true,
       };
 
       const result = listReducer(undefined, {});
@@ -95,15 +88,6 @@ describe("list state", () => {
       const EXPECTED_STATE = { ...INITIAL_STATE, show: true };
 
       const result = listReducer(INITIAL_STATE, showList());
-
-      expect(result).toEqual(EXPECTED_STATE);
-    });
-
-    it("should set the number of documents", () => {
-      const INITIAL_STATE = { show: true, docsNumber: 0 };
-      const EXPECTED_STATE = { ...INITIAL_STATE, docsNumber: 42 };
-
-      const result = listReducer(INITIAL_STATE, setItemsCount(42));
 
       expect(result).toEqual(EXPECTED_STATE);
     });
