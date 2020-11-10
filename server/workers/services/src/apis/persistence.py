@@ -16,11 +16,13 @@ def create_vis_id(params, param_types):
     # create map id
     ordered_params = OrderedDict()
     for k in param_types:
-        ordered_params[k] = params[k]
+        v = params[k]
+        v = [str(e) for e in v] if isinstance(v, list) else str(v)
+        ordered_params[k] = v
     string_to_hash = json.dumps(ordered_params, separators=(',', ':'))
     string_to_hash = " ".join([params["q"], string_to_hash])
-    mapid = md5(string_to_hash.encode('utf-8')).hexdigest()
-    return mapid
+    vis_id = md5(string_to_hash.encode('utf-8')).hexdigest()
+    return vis_id
 
 
 def write_revision(vis_id, data, rev_id=None):
@@ -230,10 +232,10 @@ class createID(Resource):
             payload = request.get_json()
             params = payload.get("params")
             param_types = payload.get("param_types")
-            mapid = create_vis_id(params, param_types)
+            vis_id = create_vis_id(params, param_types)
             # create response
             headers = {}
-            result = {"unique_id": mapid}
+            result = {"unique_id": vis_id}
             headers["Content-Type"] = "application/json"
             return make_response(jsonify(result), 200, headers)
         except Exception as e:
