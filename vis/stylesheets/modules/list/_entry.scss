@@ -861,8 +861,14 @@ img#preview_page {
         }
     }
 
-    .doi_outlink, .list_metrics {
+    .list_metrics {
         display: none;
+    }
+
+    .doi_outlink {
+        @if not $modern_frontend_enabled {
+            display: none;
+        }
     }
 
     #list_area {

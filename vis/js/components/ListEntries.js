@@ -274,6 +274,14 @@ const getClassificationFromEntry = (d, localization) => {
 };
 
 const getTextLinkFromEntry = (d, linkType) => {
+  if (linkType === "covis") {
+    let address = d.url;
+    if (typeof address !== "string" || address === "") {
+      address = "n/a";
+    }
+    return { address, isDoi: false };
+  }
+
   if (linkType === "url") {
     return { address: d.outlink, isDoi: false };
   }
