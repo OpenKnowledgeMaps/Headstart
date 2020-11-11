@@ -75,7 +75,7 @@ const StandardListEntries = ({
               ? {
                   tweets: entry.cited_by_tweeters_count,
                   readers: entry["readers.mendeley"],
-                  citations: citation_count,
+                  citations: entry.citation_count,
                   baseUnit: !isContentBased ? baseUnit : null,
                 }
               : null
