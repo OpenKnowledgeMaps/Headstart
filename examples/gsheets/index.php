@@ -13,10 +13,24 @@ function curl_get_contents($url) {
     return $data;
 }
 
+function checkReturn($object, $field, $default = "") {
+    if(isset($object[$field])) {
+        return $object[$field];
+    } else {
+        return $default;
+    }
+}
+
 $protocol = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https:' : 'http:';
 $headstart_url = $protocol . $SITE_URL . $HEADSTART_PATH;
 $context_json = curl_get_contents($headstart_url . "server/services/getContext.php?vis_id=$SHEET_ID");
 $context = json_decode($context_json, true);
+
+$topic = checkReturn($context, "topic");
+$main_curator_name = checkReturn($context, "main_curator_name");
+$main_curator_email = checkReturn($context, "main_curator_email");
+$project_name = checkReturn($context, "project_name");
+$project_website = checkReturn($context, "project_website", null);
 ?>
 <html>
 
@@ -26,7 +40,7 @@ $context = json_decode($context_json, true);
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     
-    <title>Knowledge Map of <?php echo $context["topic"] ?></title>
+    <title>Knowledge Map of <?php echo $topic ?></title>
 </head>
 
 <body class="knowledge-map" style="margin:0px; padding:0px; height:100%;">
@@ -122,7 +136,7 @@ $context = json_decode($context_json, true);
             check_update = window.setInterval(updateCheck, 6000, e.detail.data.context);
             
         });
-            
+                   
     </script>
     <script type="text/javascript" src="data-config.js"></script>
     <script type="text/javascript" src="<?php echo $headstart_url ?>dist/headstart.js"></script>
@@ -135,12 +149,12 @@ $context = json_decode($context_json, true);
                 , file: "<?php echo $SHEET_ID; ?>"
             }]
             
-            data_config.title = "Knowledge map of <b><?php echo $context["topic"] ?></b>";
+            data_config.title = "Knowledge map of <b><?php echo $topic ?></b>";
             data_config.service_name= '<span class="backlink"><a href="https://docs.google.com/spreadsheets/d/<?php echo $SHEET_ID ?>/edit#gid=0" class="underline" target="_blank" >Spreadsheet</a></span>';
             
             data_config.intro = {
                 title: "About this knowledge map"
-                , body: "<p>Knowledge maps provide an instant overview of a topic by showing the main areas at a glance and resources related to each area. This makes it possible to easily identify useful, pertinent information.</p><p>Research areas are displayed as bubbles. By clicking on one of the bubbles, you can inspect the resources assigned to it. The size of the bubbles is relative to the number of resources assigned to it. Closeness of bubbles implies subject similarity. The closer two bubbles, the closer they are subject-wise. Centrality of bubbles implies subject similarity with the rest of the map, not importance. The closer a bubble is to the center, the closer it is subject-wise to all the other bubbles in the map. </p><h3>Content</h3><p>The content of this knowledge map is curated by <a class='link-popup' href='mailto:<?php echo $context["main_curator_email"] ?>'><?php $context["main_curator_name"] ?></a> as part of <?php if ($context["project_website"] !== null) { echo "<a href='." . $context["project_website"] . "' target='_blank' class='link-popup'>" . $context["project_name"] . "</a>"; } else { echo $context["project_name"]; } ?>. Resources are collected and annotated in <a href='https://docs.google.com/spreadsheets/d/<?php echo $SHEET_ID ?>/edit#gid=0' class='link-popup' target='_blank'>a spreadsheet</a>, which is then transformed into the knowledge map.</p><h3>Software</h3><p>The knowledge map is based on the award-winning software developed by Open Knowledge Maps. For more information and the ability to create knowledge maps based on 250+ million documents, please see <a target='_blank' class='link-popup' href='https://openknowledgemaps.org/'>openknowledgemaps.org</a>. To get in touch, please e-mail us at <a target='_blank' class='link-popup' href='mailto:info@openknowledgemaps.org'>info@openknowledgemaps.org</a></p><h3>Rights</h3><p>The curator(s) are solely responsible for the content of the knowledge map. Unless otherwise noted, all content is licensed under a <a class='link-popup' href='http://creativecommons.org/licenses/by/4.0/' target='_blank'>Creative Commons Attribution 4.0 International License</a>. The spreadsheet is made available under <a target='_blank' class='link-popup' href='https://creativecommons.org/share-your-work/public-domain/cc0/'>CC0 (Public Domain Dedication)</a>. The knowledge mapping software is open source and hosted on <a class='link-popup' href='https://github.com/OpenKnowledgeMaps/Headstart' target='_blank'>Github</a>.</p>"
+                , body: "<p>Knowledge maps provide an instant overview of a topic by showing the main areas at a glance and resources related to each area. This makes it possible to easily identify useful, pertinent information.</p><p>Research areas are displayed as bubbles. By clicking on one of the bubbles, you can inspect the resources assigned to it. The size of the bubbles is relative to the number of resources assigned to it. Closeness of bubbles implies subject similarity. The closer two bubbles, the closer they are subject-wise. Centrality of bubbles implies subject similarity with the rest of the map, not importance. The closer a bubble is to the center, the closer it is subject-wise to all the other bubbles in the map. </p><h3>Content</h3><p>The content of this knowledge map is curated by <a class='link-popup' href='mailto:<?php echo $main_curator_email ?>'><?php echo $main_curator_name ?></a> as part of <?php if ($project_website !== null) { echo "<a href='." . $project_website . "' target='_blank' class='link-popup'>" . $project_name . "</a>"; } else { echo $project_name; } ?>. Resources are collected and annotated in <a href='https://docs.google.com/spreadsheets/d/<?php echo $SHEET_ID ?>/edit#gid=0' class='link-popup' target='_blank'>a spreadsheet</a>, which is then transformed into the knowledge map.</p><h3>Software</h3><p>The knowledge map is based on the award-winning software developed by Open Knowledge Maps. For more information and the ability to create knowledge maps based on 250+ million documents, please see <a target='_blank' class='link-popup' href='https://openknowledgemaps.org/'>openknowledgemaps.org</a>. To get in touch, please e-mail us at <a target='_blank' class='link-popup' href='mailto:info@openknowledgemaps.org'>info@openknowledgemaps.org</a></p><h3>Rights</h3><p>The curator(s) are solely responsible for the content of the knowledge map. Unless otherwise noted, all content is licensed under a <a class='link-popup' href='http://creativecommons.org/licenses/by/4.0/' target='_blank'>Creative Commons Attribution 4.0 International License</a>. The spreadsheet is made available under <a target='_blank' class='link-popup' href='https://creativecommons.org/share-your-work/public-domain/cc0/'>CC0 (Public Domain Dedication)</a>. The knowledge mapping software is open source and hosted on <a class='link-popup' href='https://github.com/OpenKnowledgeMaps/Headstart' target='_blank'>Github</a>.</p>"
     };
             
             $(document).ready(function () {
