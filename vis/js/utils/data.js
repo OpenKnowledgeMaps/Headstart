@@ -270,15 +270,18 @@ export const getPaperTextLink = (paper, linkType) => {
   }
 
   if (linkType === "doi") {
-    if (
-      typeof paper.doi === "undefined" ||
-      paper.doi === null ||
-      paper.doi === ""
-    ) {
+    if (paper.doi) {
+      return { address: paper.doi, isDoi: true };
+    }
+
+    if (paper.link) {
       return { address: paper.link, isDoi: false };
     }
 
-    return { address: paper.doi, isDoi: true };
+    // fallback for PubMed
+    if (paper.url) {
+      return { address: paper.url, isDoi: false };
+    }
   }
 
   return {};
