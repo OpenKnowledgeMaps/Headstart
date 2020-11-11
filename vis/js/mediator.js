@@ -590,10 +590,13 @@ MyMediator.prototype = {
             d3.selectAll("#paper_visual_distributions").style("display", "none")
         }
         
-        if(mediator.current_enlarged_paper === null)
+        if (mediator.current_enlarged_paper === null) {
             mediator.manager.call('list', 'scrollTop', []);
-        else
+        } else {
             mediator.manager.call('list', 'scrollToEntry', [mediator.current_enlarged_paper.safe_id]);
+            mediator.paper_deselected();
+        }
+            
         mediator.modern_frontend_intermediate.zoomOut();
     },
     
