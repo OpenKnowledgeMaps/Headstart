@@ -10,6 +10,9 @@ services:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
       - db-data:/var/lib/postgresql/data
+      - ./server/workers/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+    ports:
+      - '127.0.0.1:5432:5432'
 
   pgadmin:
     image: 'dpage/pgadmin4'
