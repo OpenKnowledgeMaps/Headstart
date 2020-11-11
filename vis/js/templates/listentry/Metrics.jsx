@@ -15,9 +15,8 @@ const Metrics = ({ citations, tweets, readers, baseUnit }) => {
         {isDefined(citations) && (
           <span
             className={
-              "list_metrics_citations" + baseUnit === "citations"
-                ? " scaled-metric"
-                : ""
+              "list_metrics_citations" +
+              (baseUnit === "citations" ? " scaled-metric" : "")
             }
           >
             <span className="bold-list lowercase">{citations}</span>{" "}
@@ -27,9 +26,8 @@ const Metrics = ({ citations, tweets, readers, baseUnit }) => {
         {isDefined(tweets) && (
           <span
             className={
-              "list_metrics_tweets" + baseUnit === "tweets"
-                ? " scaled-metric"
-                : ""
+              "list_metrics_tweets" +
+              (baseUnit === "tweets" ? " scaled-metric" : "")
             }
           >
             <span className="bold-list lowercase">{tweets}</span>{" "}
@@ -39,9 +37,8 @@ const Metrics = ({ citations, tweets, readers, baseUnit }) => {
         {isDefined(readers) && (
           <span
             className={
-              "list_metrics_readers" + baseUnit === "readers"
-                ? " scaled-metric"
-                : ""
+              "list_metrics_readers" +
+              (baseUnit === "readers" ? " scaled-metric" : "")
             }
           >
             <span className="bold-list lowercase">{readers}</span>{" "}

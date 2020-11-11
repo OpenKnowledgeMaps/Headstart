@@ -21,31 +21,29 @@ const list = (
   },
   action
 ) => {
+  const { configObject: config, contextObject: context } = action;
+
   switch (action.type) {
     case "INITIALIZE":
       return {
         ...state,
-        show: !!action.configObject.show_list,
-        showFilter: action.configObject.filter_menu_dropdown,
-        filterField: action.configObject.filter_field,
-        filterValue: action.configObject.filter_options
-          ? action.configObject.filter_options[0]
-          : null,
-        filterOptions: action.configObject.filter_options,
-        showDropdownSort: action.configObject.sort_menu_dropdown,
-        sortValue: action.configObject.sort_options
-          ? action.configObject.sort_options[0]
-          : null,
-        sortOptions: action.configObject.sort_options,
-        abstractSize: action.configObject.abstract_small,
-        linkType: getLinkType(action.configObject, action.contextObject),
-        showDocumentType: action.configObject.show_resulttype,
-        showMetrics: action.configObject.metric_list,
-        isContentBased: action.configObject.content_based,
-        baseUnit: action.configObject.base_unit,
-        showRealPreviewImage: action.configObject.preview_type == "image",
-        showKeywords: action.configObject.show_keywords,
-        hideUnselectedKeywords: action.configObject.hide_keywords_overview,
+        show: !!config.show_list,
+        showFilter: config.filter_menu_dropdown,
+        filterField: config.filter_field,
+        filterValue: config.filter_options ? config.filter_options[0] : null,
+        filterOptions: config.filter_options,
+        showDropdownSort: config.sort_menu_dropdown,
+        sortValue: getSortValue(config, context),
+        sortOptions: config.sort_options,
+        abstractSize: config.abstract_small,
+        linkType: getLinkType(config, context),
+        showDocumentType: config.show_resulttype,
+        showMetrics: config.metric_list,
+        isContentBased: config.content_based,
+        baseUnit: config.base_unit,
+        showRealPreviewImage: config.preview_type == "image",
+        showKeywords: config.show_keywords,
+        hideUnselectedKeywords: config.hide_keywords_overview,
       };
     case "TOGGLE_LIST":
       return {
@@ -93,4 +91,19 @@ const getLinkType = (config, context) => {
   }
 
   return null;
+};
+
+const getSortValue = (config, context) => {
+  if (!config.sort_options || config.sort_options.length === 0) {
+    return null;
+  }
+
+  if (
+    config.initial_sort &&
+    config.sort_options.includes(config.initial_sort)
+  ) {
+    return config.initial_sort;
+  }
+
+  return config.sort_options[0];
 };
