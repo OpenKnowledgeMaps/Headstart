@@ -176,8 +176,8 @@ class GSheetsClient(object):
         return k, params, endpoint
 
     def get_sheet_content(self, sheet_id, sheet_range):
-        res = res = self.sheet.values().get(spreadsheetId=sheet_id,
-                                            range=sheet_range).execute()
+        res = self.sheet.values().get(spreadsheetId=sheet_id,
+                                      range=sheet_range).execute()
         raw = pd.DataFrame(res.get('values'))
         return raw
 
@@ -267,7 +267,7 @@ class GSheetsClient(object):
         if all(field in df.columns for field in additional_context_fields):
             additional_context = df[additional_context_fields].iloc[0].to_dict()
             for k in additional_context_fields:
-                additional_context[k.lower().replace(" ", "_")] = additional_context.pop(k)
+                additional_context[k.lower().replace(" ", "_").replace("-", "")] = additional_context.pop(k)
             return additional_context
         else:
             return None
@@ -327,6 +327,7 @@ class GSheetsClient(object):
                             knowledge_base_template_id, sheet_name,
                             new_drive_id)
             self.set_new_kb_permissions(new_drive, new_kb, main_curator_email)
+            self.prefill_additional_context(new_kb, params)
             res = {"status": "success"}
         except Exception as e:
             res = {"status": "error", "msg": str(e)}
@@ -347,6 +348,23 @@ class GSheetsClient(object):
                                  body=file_metadata,
                                  supportsAllDrives=True).execute()
         return new_kb
+
+    def prefill_additional_context(self, new_kb, params):
+        context_range = 'Resources!Y2:AC2'
+        value_input_option = 'RAW' # USER_ENTERED
+        values = [
+            [params.get('project_name', ''),
+             params.get('project_website', ''),
+             params.get('topic', ''),
+             params.get('main_curator_name', ''),
+             params.get('main_curator_email', '')]
+        ]
+        body = {'values': values}
+        result = self.sheet.values().update(
+                      spreadsheetId=new_kb.get('id'), range=context_range,
+                      valueInputOption=value_input_option, body=body).execute()
+
+
 
     def set_new_kb_permissions(self, new_drive, new_kb, main_curator_email):
         new_organizer_permission = {
