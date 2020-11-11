@@ -769,12 +769,23 @@ img#preview_page {
 
     #list_abstract {
 
-        span:not(:empty):not(.highlight) {
-            display: block;
-            margin-top: 5px;
-
-            &::before, &::after {
-                content: "[...] "
+        @if $modern_frontend_enabled {
+            span:not(:empty).highlighted {
+                display: block;
+                margin-top: 5px;
+    
+                &::before, &::after {
+                    content: "[...] "
+                }
+            }
+        } @else {
+            span:not(:empty):not(.highlight) {
+                display: block;
+                margin-top: 5px;
+    
+                &::before, &::after {
+                    content: "[...] "
+                }
             }
         }
     }

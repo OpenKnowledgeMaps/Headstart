@@ -64,8 +64,7 @@ const StandardListEntries = ({
           documentType={showDocumentType ? entry.resulttype : null}
           abstract={
             abstractSize
-              ? // probably just a temporary solution (highlight in shortened text)
-                shorten(entry.paper_abstract, abstractSize)
+              ? shorten(entry.paper_abstract, abstractSize)
               : entry.paper_abstract
           }
           comments={getPaperComments(entry)}
