@@ -17,14 +17,12 @@ export const filterData = (data, searchSettings, filterSettings) => {
 
   if (filterSettings.zoomed) {
     if (filterSettings.isStreamgraph) {
-      data = data.filter(
-        (e) => {
-          let keywords = !!e.subject_orig ? e.subject_orig : "";
-          let array = keywords.split("; ");
+      data = data.filter((e) => {
+        let keywords = !!e.subject_orig ? e.subject_orig : "";
+        let array = keywords.split("; ");
 
-          return array.includes(filterSettings.title);
-        }
-      );
+        return array.includes(filterSettings.title);
+      });
     } else {
       data = data.filter(
         (e) => e.area_uri.toString() === filterSettings.area.toString()
@@ -38,7 +36,7 @@ export const filterData = (data, searchSettings, filterSettings) => {
   data = data.filter(getParamFilterFunction(filterValue, filterField));
 
   let searchWords = parseSearchText(searchSettings.value);
-  if(searchWords.length > 0) {
+  if (searchWords.length > 0) {
     data = data.filter(getWordFilterFunction(searchWords));
   }
 
@@ -176,4 +174,146 @@ export const isFileAvailable = (url) => {
   http.send();
 
   return http.status !== 404;
+};
+
+/**
+ * Returns the paper's preview image.
+ * @param {Object} paper
+ * 
+ * @returns {String} the preview image url
+ */
+export const getPaperPreviewImage = (paper) => {
+  return "paper_preview/" + paper.id + "/page_1.png";
+};
+
+/**
+ * Returns the paper's preview link.
+ * @param {Object} paper
+ * 
+ * @returns {String} the preview link url
+ */
+export const getPaperPreviewLink = (paper) => {
+  if (paper.oa && paper.link !== "") {
+    return null;
+  }
+
+  return paper.outlink;
+};
+
+/**
+ * Returns the paper's pdf click handler.
+ * @param {Object} paper
+ * @param {Function} handlePDFClick
+ * 
+ * @returns {Function} function that opens the pdf preview
+ */
+export const getPaperPDFClickHandler = (paper, handlePDFClick) => {
+  if (
+    paper.oa === false ||
+    paper.resulttype == "dataset" ||
+    paper.link === ""
+  ) {
+    return null;
+  }
+
+  return () => handlePDFClick(paper);
+};
+
+/**
+ * Returns the paper's keywords.
+ * @param {Object} paper
+ * @param {Object} localization
+ * 
+ * @returns {String} the keywords or a fallback string in current language
+ */
+export const getPaperKeywords = (paper, localization) => {
+  if (!paper.hasOwnProperty("subject_orig") || paper.subject_orig === "") {
+    return localization.no_keywords;
+  }
+
+  return paper.subject_orig;
+};
+
+/**
+ * Returns the paper's classification.
+ * @param {Object} paper
+ * @param {Object} localization
+ * 
+ * @returns {String} the classification or a fallback string in current language
+ */
+export const getPaperClassification = (paper, localization) => {
+  if (!paper.hasOwnProperty("bkl_caption") || paper.bkl_caption === "") {
+    return localization.no_keywords;
+  }
+
+  return paper.bkl_caption;
+};
+
+/**
+ * Returns the paper's text link.
+ * @param {Object} paper 
+ * @param {String} linkType covis/url/doi/<null>
+ * 
+ * @returns {Object} link object with properties 'address' and 'isDoi'
+ */
+export const getPaperTextLink = (paper, linkType) => {
+  if (linkType === "covis") {
+    let address = paper.url;
+    if (typeof address !== "string" || address === "") {
+      address = "n/a";
+    }
+    return { address, isDoi: false };
+  }
+
+  if (linkType === "url") {
+    return { address: paper.outlink, isDoi: false };
+  }
+
+  if (linkType === "doi") {
+    if (
+      typeof paper.doi === "undefined" ||
+      paper.doi === null ||
+      paper.doi === ""
+    ) {
+      return { address: paper.link, isDoi: false };
+    }
+
+    return { address: paper.doi, isDoi: true };
+  }
+
+  return {};
+};
+
+/**
+ * Returns the paper's comments.
+ * @param {Object} paper 
+ * 
+ * @returns {Array} comments array or null
+ */
+export const getPaperComments = (paper) => {
+  let comments = paper.comments;
+  if (!comments || comments.length === 0) {
+    return null;
+  }
+
+  return comments;
+};
+
+/**
+ * Returns the paper's tags.
+ * @param {Object} paper 
+ * 
+ * @returns {Array} tags array or null
+ */
+export const getPaperTags = (paper) => {
+  if (!paper.tags) {
+    return null;
+  }
+
+  let tags = paper.tags.split(/, |,/g).filter((tag) => !!tag);
+  if (tags.length > 0) {
+    return tags;
+  }
+
+  return null;
 };
