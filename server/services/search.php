@@ -197,7 +197,8 @@ function search($repository, $dirty_query
                             , "linkedcat" => "LinkedCat"
                             , "linkedcat_authorview" => "LinkedCat"
                             , "linkedcat_browseview" => "LinkedCat"
-                            , "triple" => "TRIPLE");
+                            , "triple" => "TRIPLE"
+                            , "gsheets" => "GSheets");
 
     if(!isset($ini_array["snapshot"]["snapshot_enabled"]) || $ini_array["snapshot"]["snapshot_enabled"] > 0) {
         if (isset($post_params["vis_type"]) && $post_params["vis_type"] == "timeline") {
