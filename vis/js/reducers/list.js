@@ -80,6 +80,10 @@ const list = (
 export default list;
 
 const getLinkType = (config, context) => {
+  if (context.service === "gsheets") {
+    return "covis";
+  }
+
   if (config.doi_outlink) {
     return "doi";
   }
