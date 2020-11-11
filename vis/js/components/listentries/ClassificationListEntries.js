@@ -63,8 +63,7 @@ const ClassificationListEntries = ({
           classification={getPaperClassification(entry, localization)}
           abstract={
             abstractSize
-              ? // probably just a temporary solution (highlight in shortened text)
-                shorten(entry.paper_abstract, abstractSize)
+              ? shorten(entry.paper_abstract, abstractSize)
               : entry.paper_abstract
           }
           keywords={showKeywords ? getPaperKeywords(entry, localization) : null}
@@ -104,4 +103,7 @@ const mapStateToProps = (state) => ({
   isInStreamBacklink: !!state.selectedBubble,
 });
 
-export default connect(mapStateToProps, mapDispatchToListEntriesProps)(ClassificationListEntries);
+export default connect(
+  mapStateToProps,
+  mapDispatchToListEntriesProps
+)(ClassificationListEntries);
