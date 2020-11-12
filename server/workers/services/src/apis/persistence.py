@@ -109,6 +109,24 @@ def get_revision(vis_id, rev_id, details=False, context=False):
             return rev.rev_data
 
 
+def get_context(vis_id):
+    vis, rev = (db.session
+                  .query(Visualizations, Revisions)
+                  .select_from(Visualizations, Revisions)
+                  .filter(Visualizations.vis_id == vis_id)
+                  .filter(Revisions.rev_vis == vis_id)
+                  .filter(Revisions.rev_id == Visualizations.vis_latest)
+                ).first()
+    res = {
+        "rev_vis": rev.rev_vis,
+        "vis_query": rev.vis_query,
+        "vis_title": vis.vis_title,
+        "rev_timestamp": rev.rev_timestamp,
+        "vis_params": vis.vis_params
+    }
+    return res
+
+
 @persistence_ns.route('/existsVisualization')
 class existsVisualization(Resource):
 
@@ -220,6 +238,29 @@ class getRevision(Resource):
         result = {}
         headers["Content-Type"] = "application/json"
         return make_response(result, 200, headers)
+
+
+@persistence_ns.route('/getContext')
+class getContext(Resource):
+
+    @persistence_ns.produces(["application/json"])
+    def post(self):
+        try:
+            payload = request.get_json()
+            persistence_ns.logger.debug("getLastVersion")
+            persistence_ns.logger.debug(payload)
+            vis_id = payload.get('vis_id')
+            result = get_context(vis_id)
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result),
+                                 200,
+                                 headers)
+        except Exception as e:
+            result = {'success': False, 'reason': str(e)}
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result),
+                                 500,
+                                 headers)
 
 
 @persistence_ns.route('/createID')
