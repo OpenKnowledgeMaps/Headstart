@@ -1,9 +1,13 @@
 # React Component Templates
-We're storing all the HTML separate from the components to make it easier for the design team to work with them.
 
-Templates with absolutely minimal logic should be placed here.
+Each component should be stored in a separate file.
 
-One notable exception to this is where dangerouslySetInnerHTML is called because we need to use raw html from messages.
+Each component should have the same name as the file it is contained in.
+
+All components in this directory should be **presentational components**: that means
+that they should not use Redux. See: https://redux.js.org/basics/usage-with-react#presentational-and-container-components
+
+Container components are stored in the `components/` directory.
 
 ## Technical notes
 
