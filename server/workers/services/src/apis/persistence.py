@@ -109,7 +109,7 @@ def get_revision(vis_id, rev_id, details=False, context=False):
             return rev.rev_data
 
 
-def get_context(vis_id):
+def get_context(vis_id, revision_context=False):
     vis, rev = (db.session
                   .query(Visualizations, Revisions)
                   .select_from(Visualizations, Revisions)
@@ -124,6 +124,9 @@ def get_context(vis_id):
         "rev_timestamp": rev.rev_timestamp,
         "vis_params": vis.vis_params
     }
+    if revision_context == 'true':
+        data = json.loads(rev.rev_data)
+        res["additional_context"] = data.get("additional_context", {})
     return res
 
 
@@ -247,10 +250,12 @@ class getContext(Resource):
     def post(self):
         try:
             payload = request.get_json()
-            persistence_ns.logger.debug("getLastVersion")
+            persistence_ns.logger.debug("getContext")
             persistence_ns.logger.debug(payload)
             vis_id = payload.get('vis_id')
-            result = get_context(vis_id)
+            revision_context = payload.get('revision_context', False)
+            result = get_context(vis_id, revision_context)
+            persistence_ns.logger.debug(result)
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  200,
