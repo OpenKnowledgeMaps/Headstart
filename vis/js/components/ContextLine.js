@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import ContextLineTemplate from "../templates/ContextLine";
-import HoverPopover from "./HoverPopover";
+import HoverPopover from "../templates/HoverPopover";
 import Author from "../templates/contextfeatures/Author";
 
 import DocumentTypes from "../templates/contextfeatures/DocumentTypes";
