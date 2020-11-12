@@ -23,7 +23,7 @@ function checkReturn($object, $field, $default = "") {
 
 $protocol = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https:' : 'http:';
 $headstart_url = $protocol . $SITE_URL . $HEADSTART_PATH;
-$context_json = curl_get_contents($headstart_url . "server/services/getContext.php?vis_id=$SHEET_ID");
+$context_json = curl_get_contents($headstart_url . "server/services/getContext.php?vis_id=$SHEET_ID" . "&persistence_backend=$PERSISTENCE_BACKEND" . "&revision_context=true");
 $context = json_decode($context_json, true);
 
 $topic = checkReturn($context, "topic");
