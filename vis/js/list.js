@@ -77,11 +77,9 @@ export const list = StateMachine.create({
         },
 
         onshow: function() {
-            d3.select("#sort_container").style("display", "inline-block");
             d3.select("#papers_list").style("display", "block");
-            d3.select("#left_arrow").text("\u25B2");
-            d3.select("#right_arrow").text("\u25B2");
             if (!mediator.modern_frontend_enabled) {
+                d3.select("#sort_container").style("display", "inline-block");
                 d3.select("#show_hide_label").html(showHideLabel({
                     show_or_hide_list: config.localization[config.language].hide_list,
                     items: config.localization[config.language].items,
@@ -93,11 +91,9 @@ export const list = StateMachine.create({
         },
 
         onhide: function() {
-            d3.select("#sort_container").style("display", "none");
             d3.select("#papers_list").style("display", "none");
-            d3.select("#left_arrow").text("\u25BC");
-            d3.select("#right_arrow").text("\u25BC");
             if (!mediator.modern_frontend_enabled) {
+                d3.select("#sort_container").style("display", "none");
                 d3.select("#show_hide_label").html(showHideLabel({
                     show_or_hide_list: config.localization[config.language].show_list,
                     items: config.localization[config.language].items,
@@ -146,63 +142,69 @@ list.drawList = function() {
     });
     $("#list_explorer").append(list_explorer);
     
-    // Set localized values
-    let timer;
-    let delay = 300;
-    $("#filter_input")
-        .attr("placeholder", config.localization[config.language].search_placeholder)
-        .on("input", (event) => {
-            if ($("#filter_input").val() !== "") {
-                $("#searchclear").show();
-            } else {
-                $("#searchclear").hide();
-            }
-            window.clearTimeout(timer);
-            timer = window.setTimeout(function() {
-                debounce(self.filterList(event.target.value.split(" "), this.current_filter_param), config.debounce);
-            }, delay);
-        
+    if (!mediator.modern_frontend_enabled) {
+        // Set localized values
+        let timer;
+        let delay = 300;
+        $("#filter_input")
+            .attr("placeholder", config.localization[config.language].search_placeholder)
+            .on("input", (event) => {
+                if ($("#filter_input").val() !== "") {
+                    $("#searchclear").show();
+                } else {
+                    $("#searchclear").hide();
+                }
+                window.clearTimeout(timer);
+                timer = window.setTimeout(function() {
+                    debounce(self.filterList(event.target.value.split(" "), this.current_filter_param), config.debounce);
+                }, delay);
+            
+            });
+
+        $("#searchclear").click(() => {
+            $("#filter_input").val('');
+            $("#searchclear").hide();
+            debounce(this.filterList([""], this.current_filter_param), config.debounce);
         });
+    }
 
-    $("#searchclear").click(() => {
-        $("#filter_input").val('');
-        $("#searchclear").hide();
-        debounce(this.filterList([""], this.current_filter_param), config.debounce);
-    });
-
-    // Add sort button options
-    var container = d3.select("#sort_container>ul");
-    const numberOfOptions = config.sort_options.length;
-    if(!config.sort_menu_dropdown) {
-        var first_element = true;
-        for (var i = 0; i < numberOfOptions; i++) {
-            if (first_element) {
-                addSortOptionButton(container, config.sort_options[i], true);
-                first_element = false;
-            } else {
-                addSortOptionButton(container, config.sort_options[i], false);
+    if (!mediator.modern_frontend_enabled) {
+        // Add sort button options
+        var container = d3.select("#sort_container>ul");
+        const numberOfOptions = config.sort_options.length;
+        if(!config.sort_menu_dropdown) {
+            var first_element = true;
+            for (var i = 0; i < numberOfOptions; i++) {
+                if (first_element) {
+                    addSortOptionButton(container, config.sort_options[i], true);
+                    first_element = false;
+                } else {
+                    addSortOptionButton(container, config.sort_options[i], false);
+                }
             }
-        }
-    } else {
-        let initial_sort_option = (config.initial_sort === null)?(config.sort_options[0]):(config.initial_sort)
-        $('#curr-sort-type').text(config.localization[config.language][initial_sort_option])
-        for(var i=0; i<numberOfOptions; i++) {
-            if(i === 0) {
-                addSortOptionDropdownEntry(config.sort_options[i], true)
-            } else {
-                addSortOptionDropdownEntry(config.sort_options[i], false)
+        } else {
+            let initial_sort_option = (config.initial_sort === null)?(config.sort_options[0]):(config.initial_sort)
+            $('#curr-sort-type').text(config.localization[config.language][initial_sort_option])
+            for(var i=0; i<numberOfOptions; i++) {
+                if(i === 0) {
+                    addSortOptionDropdownEntry(config.sort_options[i], true)
+                } else {
+                    addSortOptionDropdownEntry(config.sort_options[i], false)
+                }
             }
         }
     }
-
-    // Add filter options
-    if(config.filter_menu_dropdown) {
-        $('#curr-filter-type').text(config.localization[config.language]['all'])
-        for (var i = 0; i < config.filter_options.length; i++) {
-            if (i === 0) {
-                self.addFilterOptionDropdownEntry(config.filter_options[i], true);
-            } else {
-                self.addFilterOptionDropdownEntry(config.filter_options[i], false);
+    
+    if (!mediator.modern_frontend_enabled) {
+        // Add filter options
+        if(config.filter_menu_dropdown) {
+            $('#curr-filter-type').text(config.localization[config.language]['all'])
+            for (var i = 0; i < config.filter_options.length; i++) {
+                if (i === 0) {
+                    self.addFilterOptionDropdownEntry(config.filter_options[i], true);
+                } else {
+                    self.addFilterOptionDropdownEntry(config.filter_options[i], false);
+                }
             }
         }
     }
@@ -285,6 +287,10 @@ list.resetHeaderColor = function() {
 }
 
 let addSortOptionDropdownEntry = function(sort_option, first_item) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     let entry = sortDropdownEntryTemplate({
         sort_by_string: config.localization[config.language].sort_by_label,
         sorter_label: config.localization[config.language][sort_option],
@@ -306,6 +312,9 @@ let addSortOptionDropdownEntry = function(sort_option, first_item) {
 }
 
 let addSortOptionButton = function(parent, sort_option, selected) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
 
     let checked_val = "";
     let active_val = "";
@@ -336,6 +345,10 @@ let addSortOptionButton = function(parent, sort_option, selected) {
 };
 
 list.addFilterOptionDropdownEntry = function (filter_option, first_item) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+    
     let entry = filterDropdownEntryTemplate({
         filter_by_string: config.localization[config.language].filter_by_label,
         filter_label: config.localization[config.language][filter_option]
