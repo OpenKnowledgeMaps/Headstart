@@ -15,7 +15,15 @@ import { initializeStore } from "../../js/actions";
 
 import ListEntries from "../../js/components/ListEntries";
 
-import { selectPaper, zoomIn, hoverArea, showPreview } from "../../js/actions";
+import {
+  selectPaper,
+  zoomIn,
+  hoverArea,
+  showPreview,
+  search,
+  filter,
+  sort,
+} from "../../js/actions";
 import reducer from "../../js/reducers";
 
 const setup = () => {
@@ -222,6 +230,153 @@ describe("List entries component - special BASE tests", () => {
       const EXPECTED_PAYLOAD = showPreview(firstPaper);
 
       expect(actions).toEqual([EXPECTED_PAYLOAD]);
+    });
+  });
+
+  describe("search, filter and sort", () => {
+    global.console = {
+      log: console.log,
+      warn: jest.fn(),
+      error: console.error,
+      info: console.info,
+      debug: console.debug,
+    };
+
+    it("searches the list for 'sustainability education'", () => {
+      const store = setup();
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <ListEntries />
+          </Provider>,
+          container
+        );
+      });
+
+      act(() => {
+        store.dispatch(search("sustainability education"));
+      });
+
+      const papers = container.querySelectorAll(".list_entry");
+
+      expect(papers.length).toEqual(2);
+    });
+
+    it("filters the list for open access papers only", () => {
+      const store = setup();
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <ListEntries />
+          </Provider>,
+          container
+        );
+      });
+
+      act(() => {
+        store.dispatch(filter("open_access"));
+      });
+
+      const papers = container.querySelectorAll(".list_entry");
+
+      expect(papers.length).toEqual(10);
+    });
+
+    it("sorts the list by year", () => {
+      const store = setup();
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <ListEntries />
+          </Provider>,
+          container
+        );
+      });
+
+      act(() => {
+        store.dispatch(sort("year"));
+      });
+
+      const papers = container.querySelectorAll(".list_entry");
+
+      const regexp = /\((?<year>\d{4})/;
+
+      let years = [...papers]
+        .map((e) => e.querySelector(".list_pubyear").textContent)
+        .map((y) => {
+          const found = y.match(regexp);
+          return parseInt(found.groups.year);
+        });
+
+      expect(years).toEqual([
+        2020,
+        2019,
+        2019,
+        2019,
+        2019,
+        2019,
+        2018,
+        2018,
+        2018,
+        2017,
+        2016,
+        2014,
+        2014,
+        2014,
+        2013,
+        2012,
+        2011,
+        2010,
+        2008,
+        2007,
+      ]);
+    });
+
+    it("searches, filters and sorts at the same time", () => {
+      const store = setup();
+
+      const SEARCH_TEXT = "Online Education";
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <ListEntries />
+          </Provider>,
+          container
+        );
+      });
+
+      act(() => {
+        store.dispatch(search(SEARCH_TEXT));
+      });
+
+      let papers = container.querySelectorAll(".list_entry");
+      expect(papers.length).toEqual(3);
+
+      act(() => {
+        store.dispatch(filter("open_access"));
+      });
+
+      papers = container.querySelectorAll(".list_entry");
+      expect(papers.length).toEqual(2);
+
+      act(() => {
+        store.dispatch(sort("title"));
+      });
+
+      papers = container.querySelectorAll(".list_entry");
+
+      let titles = [...papers].map(
+        (e) => e.querySelector(".list_title").textContent
+      );
+
+      expect(titles).toEqual([
+        '<span class="query_term_highlight">Digital</span> <span class="query_term_highlight">Education</span> And Learning: The Growing Trend In Academic And Business Spaces—An International Overview',
+        'Integrating <span class="query_term_highlight">Digital</span> Libraries into Distance <span class="query_term_highlight">Education</span>: A Review of Models, Roles, And Strategies',
+      ]);
     });
   });
 });
