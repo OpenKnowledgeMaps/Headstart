@@ -1,4 +1,11 @@
-import { toggleList, showList, search, filter, sort } from "../../js/actions";
+import {
+  toggleList,
+  showList,
+  search,
+  filter,
+  sort,
+  hoverArea,
+} from "../../js/actions";
 
 import listReducer from "../../js/reducers/list";
 
@@ -43,6 +50,19 @@ describe("list state", () => {
         id: SORT_ID,
       };
       expect(sort(SORT_ID)).toEqual(EXPECTED_ACTION);
+    });
+
+    it("should create a hover area action", () => {
+      const PAPER = {
+        id: "some-id",
+        safe_id: "some-safe-id",
+        title: "some title",
+      }
+      const EXPECTED_ACTION = {
+        type: "HOVER_AREA",
+        paper: PAPER,
+      };
+      expect(hoverArea(PAPER)).toEqual(EXPECTED_ACTION);
     });
   });
 
