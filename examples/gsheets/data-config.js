@@ -22,7 +22,7 @@ var data_config = {
     show_infolink_areas: false,
 	
     show_context: true,
-    create_title_from_context: false,
+    create_title_from_context: true,
     show_context_timestamp: true,
     show_loading_screen: true,
     
@@ -52,4 +52,5 @@ var data_config = {
     
     embed_modal: true,
     share_modal: false,
+    persistence_backend: "api"
 };
