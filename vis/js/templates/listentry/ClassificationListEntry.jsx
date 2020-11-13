@@ -17,18 +17,18 @@ import Title from "./Title";
  */
 const ClassificationListEntry = ({
   id,
-  access = {},
+  access,
   title,
-  preview = {},
-  details = {},
-  link = {},
+  preview,
+  details,
+  link,
   classification,
   abstract,
   keywords,
   area,
   handleTitleClick,
   handleZoomIn,
-  backlink = {},
+  backlink,
 }) => {
   return (
     // html template starts here

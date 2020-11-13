@@ -21,18 +21,18 @@ import Title from "./Title";
  */
 const StandardListEntry = ({
   id,
-  access = {},
+  access,
   tags,
   title,
-  preview = {},
-  details = {},
-  link = {},
+  preview,
+  details,
+  link,
   documentType,
   abstract,
   comments,
   keywords,
-  metrics = {},
-  area = {},
+  metrics,
+  area,
   citations,
   baseUnit,
   handleTitleClick,
@@ -69,6 +69,7 @@ const StandardListEntry = ({
           citations={metrics.citations}
           tweets={metrics.tweets}
           readers={metrics.readers}
+          baseUnit={metrics.baseUnit}
         />
       )}
       <Area

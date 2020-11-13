@@ -6,7 +6,6 @@ import StandardListEntry from "../../templates/listentry/StandardListEntry";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 
 import {
-  getPaperPreviewImage,
   getPaperPreviewLink,
   getPaperPDFClickHandler,
   getPaperKeywords,
@@ -25,7 +24,6 @@ const StandardListEntries = ({
   isContentBased,
   baseUnit,
   showPreviewImage,
-  showRealPreviewImage,
   localization,
   showKeywords,
   handleZoomIn,
@@ -51,9 +49,6 @@ const StandardListEntries = ({
             link: getPaperPreviewLink(entry),
             onClickPDF: getPaperPDFClickHandler(entry, handlePDFClick),
             showPreviewImage,
-            previewImage: showRealPreviewImage
-              ? getPaperPreviewImage(entry)
-              : null,
           }}
           details={{
             authors: entry.authors_string,
@@ -106,7 +101,6 @@ const mapStateToProps = (state) => ({
   isContentBased: state.list.isContentBased,
   baseUnit: state.list.baseUnit,
   showPreviewImage: !!state.selectedPaper,
-  showRealPreviewImage: state.list.showRealPreviewImage,
   localization: state.localization,
   showKeywords:
     state.list.showKeywords &&

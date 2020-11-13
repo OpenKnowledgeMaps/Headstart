@@ -15,12 +15,12 @@ import Title from "./Title";
  */
 const BasicListEntry = ({
   id,
-  access = {},
+  access,
   title,
-  preview = {},
-  details = {},
+  preview,
+  details,
   abstract,
-  area = {},
+  area,
   handleZoomIn,
   readers,
   baseUnit,

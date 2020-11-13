@@ -6,7 +6,7 @@ const previewModal = (state = { show: false, paper: null }, action) => {
         paper: action.paper,
       };
     case "HIDE_PREVIEW":
-      return null;
+      return { show: false, paper: null };
     default:
       return state;
   }

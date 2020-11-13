@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import ClassificationListEntry from "../../templates/listentry/ClassificationListEntry";
 
 import {
-  getPaperPreviewImage,
   getPaperPreviewLink,
   getPaperPDFClickHandler,
   getPaperKeywords,
@@ -21,10 +20,7 @@ const ClassificationListEntries = ({
   abstractSize,
   linkType,
   isStreamgraph,
-  showPreviewImage,
-  showRealPreviewImage,
   localization,
-  showKeywords,
   showBacklink,
   isInStreamBacklink,
   handleZoomIn,
@@ -49,10 +45,6 @@ const ClassificationListEntries = ({
           preview={{
             link: getPaperPreviewLink(entry),
             onClickPDF: getPaperPDFClickHandler(entry, handlePDFClick),
-            showPreviewImage,
-            previewImage: showRealPreviewImage
-              ? getPaperPreviewImage(entry)
-              : null,
           }}
           details={{
             authors: entry.authors_string,
@@ -66,7 +58,7 @@ const ClassificationListEntries = ({
               ? shorten(entry.paper_abstract, abstractSize)
               : entry.paper_abstract
           }
-          keywords={showKeywords ? getPaperKeywords(entry, localization) : null}
+          keywords={getPaperKeywords(entry, localization)}
           area={
             isStreamgraph
               ? null
@@ -93,12 +85,7 @@ const mapStateToProps = (state) => ({
   abstractSize: state.selectedPaper ? null : state.list.abstractSize,
   linkType: state.list.linkType,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
-  showPreviewImage: !!state.selectedPaper,
-  showRealPreviewImage: state.list.showRealPreviewImage,
   localization: state.localization,
-  showKeywords:
-    state.list.showKeywords &&
-    (!!state.selectedPaper || !state.list.hideUnselectedKeywords),
   showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
   isInStreamBacklink: !!state.selectedBubble,
 });
