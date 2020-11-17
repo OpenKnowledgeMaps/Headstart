@@ -8,7 +8,6 @@ import { canvas } from 'canvas';
 import { scale } from './scale';
 import { streamgraph } from 'streamgraph';
 import Intermediate from './intermediate';
-import { debounce } from "./helpers";
 
 const multiplesTemplate = require('templates/multiples.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
@@ -51,7 +50,7 @@ var MyMediator = function() {
         this.chart_svg_click, 
         this.streamgraph_chart_clicked, 
         this.list_toggle, 
-        debounce(this.list_search_change, 300),
+        this.list_search_change,
         this.list_sort_change,
         this.list_filter_change,
         this.list_click_area,
