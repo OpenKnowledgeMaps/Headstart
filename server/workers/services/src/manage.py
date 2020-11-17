@@ -1,11 +1,15 @@
 from flask_sqlalchemy import SQLAlchemy
 from app import app
-from models import Visualizations, Revisions, TripleRevisions, TripleVisualizations
-from database import db
+from models import Visualizations, Revisions
+from database import db, sessions
 
 
 if __name__ == '__main__':
     db.init_app(app)
     with app.app_context():
-        db.create_all(bind=None)
-        db.create_all(bind=['triple', 'gsheets', 'openaire'])
+        for database, Session in sessions.items():
+            session = Session()
+            engine = session.get_bind()
+            for name, table in Visualizations.metadata.tables.items():
+                if not engine.dialect.has_table(engine, name):
+                    table.create(engine)

@@ -18,8 +18,9 @@ services:
     image: 'dpage/pgadmin4'
     ports:
       - '127.0.0.1:54323:80'
-    env_file:
-      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL}"
+      PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD}"
     volumes:
       - ${PGADMIN_VOLUME}:/pgadmin4/data
 

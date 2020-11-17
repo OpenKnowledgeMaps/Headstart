@@ -504,7 +504,7 @@ def test_create_visualization(testcase):
     payload["vis_clean_query"] = caseid
     payload["vis_query"] = caseid
     payload["vis_params"] = json.dumps(testcase["casedata"]["params"])
-    res = requests.post("http://localhost/api/persistence/createVisualization",
+    res = requests.post("http://localhost/api/persistence/createVisualization/test",
                         json=payload)
     assert res.status_code == 200, res.json().get('reason')
 
@@ -516,7 +516,7 @@ def test_write_revision(testcase):
     payload = {}
     payload["vis_id"] = caseid
     payload["data"] = RESULTS[caseid].to_json(orient='records')
-    res = requests.post("http://localhost/api/persistence/writeRevision",
+    res = requests.post("http://localhost/api/persistence/writeRevision/test",
                         json=payload)
     assert res.status_code == 200, res.json().get('reason')
 
@@ -527,7 +527,7 @@ def test_map_exists(testcase):
     caseid = testcase["caseid"]
     payload = {}
     payload["vis_id"] = caseid
-    res = requests.post("http://localhost/api/persistence/existsVisualization",
+    res = requests.post("http://localhost/api/persistence/existsVisualization/test",
                         json=payload)
     result = res.json()
     assert result["exists"] is True
@@ -540,7 +540,7 @@ def test_map_exists_not(testcase):
     invalid_id = caseid[2:]
     payload = {}
     payload["vis_id"] = invalid_id
-    res = requests.post("http://localhost/api/persistence/existsVisualization",
+    res = requests.post("http://localhost/api/persistence/existsVisualization/test",
                         json=payload)
     result = res.json()
     assert result["exists"] is False

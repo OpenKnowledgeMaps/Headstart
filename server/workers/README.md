@@ -69,6 +69,7 @@ Dataprocessing:
 
 Services:
 * In `server/workers/services/src/config` copy `example_settings.py` to `settings.py` and change the values for `ENV` (`development` or `production`) and `DEBUG` (`TRUE` or `FALSE`).
+* In `settings.py` you can also configure databases.
 
 
 TRIPLE ElasticSearch core service:
@@ -92,6 +93,7 @@ Enter container: `docker exec -it VARYINGNAME_pgsql_1 psql -U headstart`
 
 Execute command: `CREATE DATABASE databasename;`
 
+* In `preprocessing/conf/config_local.ini` change "databasename" to the dev/production database name for the specific integration. This should be in line with the database names provided in `settings.py`
 
 Secure Postgres:
 * In `server/workers` duplicate `example_pg_hba.conf` to `pg_hba.conf` and review the settings. The default values should be ok for a default deployment (host connections are only allowed for user "headstart" with an md5-hashed password), but you may want to change access rights.
