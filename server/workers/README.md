@@ -92,6 +92,10 @@ Enter container: `docker exec -it VARYINGNAME_pgsql_1 psql -U headstart`
 
 Execute command: `CREATE DATABASE databasename;`
 
+
+Secure Postgres:
+* In `server/workers` duplicate `example_pg_hba.conf` to `pg_hba.conf` and review the settings. The default values should be ok for a default deployment (host connections are only allowed for user "headstart" with an md5-hashed password), but you may want to change access rights.
+
 ### Starting the backend services with docker-compose
 
 Following commands have to be executed from the root folder of the repository, where `docker-compose.yml` is located.
