@@ -181,14 +181,21 @@ IO.prototype = {
         var num_oa = 0;
         var num_papers = 0;
         var num_datasets = 0;
+
+        const protectedAttrs = new Set();
+        if (mediator.modern_frontend_enabled) {
+            protectedAttrs.add("paper_abstract");
+            protectedAttrs.add("authors_string");
+        }
+
         cur_data.forEach(function (d) {
-            
             //convert special entities to characters
             for (let field in d) {
                 if(typeof d[field] === "string") {
                     d[field] = $("<textarea/>").html(d[field]).val();
                 }
-           }
+            }
+
             // convert authors to "[first name] [last name]"
             // var authors = d.authors.split(";");
             var authors = _this.convertToFirstNameLastName(d.authors);
@@ -197,7 +204,7 @@ IO.prototype = {
             
             //replace "<" and ">" to avoid having HTML tags
             for (let field in d) {
-                if(typeof d[field] === "string") {
+                if(typeof d[field] === "string" && !protectedAttrs.has(field)) {
                     d[field] = d[field].replace(/</g, "&lt;");
                     d[field] = d[field].replace(/>/g, "&gt;");
                 }

@@ -292,6 +292,8 @@ papers.prepareForeignObject = function (nodes) {
                             dCopy[field] = mediator.modules.io.highlightTerms(dCopy[field], mediator.modules.io.query_terms);
                         }
                     }
+                    dCopy["authors_string"] = dCopy["authors_string"].replace(/</g, "&lt;");
+                    dCopy["authors_string"] = dCopy["authors_string"].replace(/>/g, "&gt;");
                 }
 
                 return paperTemplate({
