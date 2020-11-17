@@ -3,13 +3,11 @@ import React from "react";
 import Highlight from "../../components/Highlight";
 
 const Details = ({ authors, source, year }) => {
-  let sanitizedAuthors = $("<textarea />").html(authors).text();
-
   return (
     // html template starts here
     <div className="list_details">
       <span className="list_authors">
-        <Highlight queryHighlight>{sanitizedAuthors}</Highlight>
+        <Highlight queryHighlight>{authors}</Highlight>
       </span>
       {!!source && (
         <>
