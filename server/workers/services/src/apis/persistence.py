@@ -6,10 +6,19 @@ from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 
 from models import Revisions, Visualizations
-from database import sessions
+from database import db, sessions
 
 
 persistence_ns = Namespace("persistence", description="OKMAps persistence operations")
+
+
+def select_session(Session=None):
+    """Select session according to database,
+        else select session for default database."""
+    if Session is not None:
+        return Session()
+    else:
+        return db.session
 
 
 def create_vis_id(params, param_types):
@@ -26,8 +35,7 @@ def create_vis_id(params, param_types):
 
 
 def write_revision(database, vis_id, data, rev_id=None):
-    Session = sessions.get(database)
-    session = Session()
+    session = select_session(sessions.get(database))
     vis = session.query(Visualizations).filter_by(vis_id=vis_id).first()
 
     if rev_id is None:
@@ -56,8 +64,7 @@ def create_visualization(database,
                          vis_clean_query=None, vis_query=None,
                          vis_params=None):
     if not exists_visualization(database, vis_id):
-        Session = sessions.get(database)
-        session = Session()
+        session = select_session(sessions.get(database))
         new_vis = Visualizations(
                     vis_id=vis_id,
                     vis_clean_query=vis_clean_query,
@@ -70,8 +77,7 @@ def create_visualization(database,
 
 
 def exists_visualization(database, vis_id):
-    Session = sessions.get(database)
-    session = Session()
+    session = select_session(sessions.get(database))
     vis = session.query(Visualizations).filter_by(vis_id=vis_id).first()
     exists = True if vis else False
     return exists
@@ -82,8 +88,7 @@ def get_last_version(database, vis_id, details=False, context=False):
 
 
 def get_revision(database, vis_id, rev_id, details=False, context=False):
-    Session = sessions.get(database)
-    session = Session()
+    session = select_session(sessions.get(database))
     if rev_id is None:
         vis, rev = (session
                     .query(Visualizations, Revisions)
