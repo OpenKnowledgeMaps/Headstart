@@ -152,7 +152,7 @@ MyMediator.prototype = {
         this.mediator.subscribe("streamgraph_chart_clicked", this.streamgraph_chart_clicked)
 
         // refactor
-        this.mediator.subscribe("register_zoomout_callback", this.register_zoomout_callback)
+        this.mediator.subscribe("list_height_change", this.list_height_change)
     },
 
     init_state: function() {
@@ -248,7 +248,9 @@ MyMediator.prototype = {
         mediator.external_vis_url = config.external_vis_url + "?vis_id=" + config.files[mediator.current_file_number].file
         papers.current = "none";
         list.current = "none";
-        $("#list_explorer").empty();
+        if(!mediator.modern_frontend_enabled) {
+            $("#list_explorer").empty();
+        }
         mediator.modern_frontend_intermediate.zoomOut();
         mediator.manager.call('canvas', 'setupToFileCanvas', []);
     },
@@ -259,8 +261,9 @@ MyMediator.prototype = {
         mediator.current_bubble.current = "x";
         papers.current = "none";
         list.current = "none";
-        // clear the list list
-        $("#list_explorer").empty();
+        if(!mediator.modern_frontend_enabled) {
+            $("#list_explorer").empty();
+        }
         mediator.manager.call('canvas', 'setupMultiplesCanvas', []);
     },
 
@@ -788,6 +791,10 @@ MyMediator.prototype = {
         if (mediator.modern_frontend_enabled) {
             mediator.modern_frontend_intermediate.deselectPaper();
         }
+    },
+
+    list_height_change: function(newHeight) {
+        mediator.modern_frontend_intermediate.setListHeight(newHeight);
     }
 };
 
