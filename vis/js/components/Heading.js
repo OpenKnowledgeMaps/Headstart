@@ -49,7 +49,7 @@ const Heading = ({
 const mapStateToProps = (state) => ({
   localization: state.localization,
   zoomed: state.zoom,
-  query: state.query,
+  query: state.query.text,
   bubbleTitle: state.selectedBubble ? state.selectedBubble.title : null,
   headingParams: state.heading,
   files: state.files,

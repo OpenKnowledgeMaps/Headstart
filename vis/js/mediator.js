@@ -8,7 +8,6 @@ import { canvas } from 'canvas';
 import { scale } from './scale';
 import { streamgraph } from 'streamgraph';
 import Intermediate from './intermediate';
-import { debounce } from "./helpers";
 
 const multiplesTemplate = require('templates/multiples.handlebars');
 const headstartTemplate = require("templates/headstart.handlebars");
@@ -51,9 +50,15 @@ var MyMediator = function() {
         this.chart_svg_click, 
         this.streamgraph_chart_clicked, 
         this.list_toggle, 
-        debounce(this.list_search_change, 300),
+        this.list_search_change,
         this.list_sort_change,
         this.list_filter_change,
+        this.list_click_area,
+        this.list_area_mouseover,
+        this.list_area_mouseout,
+        this.list_show_popup,
+        this.list_click_paper_list,
+        this.currentstream_click,
     );
     this.init();
     this.init_state();
@@ -181,7 +186,7 @@ MyMediator.prototype = {
     },
 
     init_modern_frontend_intermediate: function() {
-        mediator.modern_frontend_intermediate.init(config, io.context);
+        mediator.modern_frontend_intermediate.init(config, io.context, io.data);
     },
 
     render_modern_frontend_list: function() {
@@ -484,17 +489,14 @@ MyMediator.prototype = {
         if (mediator.modules.list.current == "hidden") {
             mediator.list_show();
         }
-        mediator.current_enlarged_paper = holder;
+        mediator.paper_selected(holder);
         mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
 
     paper_current_bubble_clicked: function(area) {
         mediator.manager.call('list', 'reset', []);
         mediator.manager.call('list', 'filterListByArea', [area]);
-        if (mediator.current_enlarged_paper) {
-            mediator.current_enlarged_paper.paper_selected = false
-        }
-        mediator.current_enlarged_paper = null;
+        mediator.paper_deselected();
         mediator.manager.call('list', 'count_visible_items_to_header', []);
     },
     
@@ -509,7 +511,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'count_visible_items_to_header', []);
         mediator.manager.call('streamgraph', 'markStream', [keyword]);
         mediator.manager.call('list', 'changeHeaderColor', [color]);
-        mediator.current_enlarged_paper = null;
+        mediator.paper_deselected();
         mediator.modern_frontend_intermediate.zoomIn({title: keyword});
     },
     
@@ -522,7 +524,7 @@ MyMediator.prototype = {
             mediator.manager.call('list', 'scrollTop', []);
         }
         mediator.manager.call('list', 'count_visible_items_to_header', []);
-        mediator.current_enlarged_paper = null;
+        mediator.paper_deselected()
     },
     
     streamgraph_chart_clicked: function() {
@@ -537,7 +539,7 @@ MyMediator.prototype = {
         mediator.manager.call('list', 'count_visible_items_to_header', []);
         mediator.manager.call('list', 'resetHeaderColor');
         mediator.draw_modals();
-        mediator.current_enlarged_paper = null;
+        mediator.paper_deselected();
         mediator.modern_frontend_intermediate.zoomOut();
     },
 
@@ -574,7 +576,7 @@ MyMediator.prototype = {
             }
         }
         mediator.manager.call('list', 'count_visible_items_to_header', []);
-        mediator.modern_frontend_intermediate.zoomIn({title: d.title});
+        mediator.modern_frontend_intermediate.zoomIn({title: d.title, uri: d.area_uri});
     },
     bubble_zoomout: function() {
         mediator.manager.call('list', 'reset', []);
@@ -587,10 +589,13 @@ MyMediator.prototype = {
             d3.selectAll("#paper_visual_distributions").style("display", "none")
         }
         
-        if(mediator.current_enlarged_paper === null)
+        if (mediator.current_enlarged_paper === null) {
             mediator.manager.call('list', 'scrollTop', []);
-        else
+        } else {
             mediator.manager.call('list', 'scrollToEntry', [mediator.current_enlarged_paper.safe_id]);
+            mediator.paper_deselected();
+        }
+            
         mediator.modern_frontend_intermediate.zoomOut();
     },
     
@@ -690,7 +695,7 @@ MyMediator.prototype = {
         if(config.is_streamgraph) {
             mediator.manager.call('list', 'enlargeListItem', [d]);
             mediator.manager.call('list', 'scrollTop', []);
-            mediator.current_enlarged_paper = d;
+            mediator.paper_selected(d);
             mediator.manager.call('list', 'count_visible_items_to_header')
         } else {
             mediator.manager.call('canvas', 'getCurrentCircle', [d]);
@@ -698,7 +703,7 @@ MyMediator.prototype = {
             mediator.current_bubble.current = "hoverbig";
             mediator.manager.call('papers', 'mouseoverpaper', []);
             mediator.manager.call('list', 'enlargeListItem', [d]);
-            mediator.current_enlarged_paper = d;
+            mediator.paper_selected(d);
             mediator.manager.call('papers', 'framePaper', [d]);
             mediator.manager.call('list', 'count_visible_items_to_header')
         }
@@ -746,8 +751,6 @@ MyMediator.prototype = {
     list_item_count_change: function(count) {
         if (!mediator.modern_frontend_enabled) {
             $('#list_item_count').text(count);
-        } else {
-            mediator.modern_frontend_intermediate.changeItemsCount(count);
         }
     },
 
@@ -765,6 +768,27 @@ MyMediator.prototype = {
         mediator.modules.list.current_filter_param = filter_option;
         mediator.modules.list.filterList(undefined, filter_option);
     },
+
+    paper_selected: function(paper) {
+        if (mediator.current_enlarged_paper) {
+            mediator.current_enlarged_paper.paper_selected = false;
+        }
+        mediator.current_enlarged_paper = paper;
+        if (mediator.modern_frontend_enabled) {
+            mediator.modern_frontend_intermediate.selectPaper(paper.safe_id);
+        }
+    },
+
+    paper_deselected: function() {
+        if (mediator.current_enlarged_paper) {
+            mediator.current_enlarged_paper.paper_selected = false;
+        }
+        mediator.current_enlarged_paper = null;
+
+        if (mediator.modern_frontend_enabled) {
+            mediator.modern_frontend_intermediate.deselectPaper();
+        }
+    }
 };
 
 export const mediator = new MyMediator();
