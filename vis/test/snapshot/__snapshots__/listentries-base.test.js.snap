@@ -21,9 +21,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
         <span
           id="open-access-logo_list"
         >
-          open access 
+          open access
           <span
-            className="outlink_symbol"
+            className="access_icon outlink_symbol"
           >
             
           </span>
@@ -735,9 +735,9 @@ Array [
           <span
             id="open-access-logo_list"
           >
-            open access 
+            open access
             <span
-              className="outlink_symbol"
+              className="access_icon outlink_symbol"
             >
               
             </span>
@@ -1677,9 +1677,9 @@ Array [
           <span
             id="open-access-logo_list"
           >
-            open access 
+            open access
             <span
-              className="outlink_symbol"
+              className="access_icon outlink_symbol"
             >
               
             </span>
@@ -1845,9 +1845,9 @@ Array [
           <span
             id="open-access-logo_list"
           >
-            open access 
+            open access
             <span
-              className="outlink_symbol"
+              className="access_icon outlink_symbol"
             >
               
             </span>
@@ -2051,9 +2051,9 @@ Array [
           <span
             id="open-access-logo_list"
           >
-            open access 
+            open access
             <span
-              className="outlink_symbol"
+              className="access_icon outlink_symbol"
             >
               
             </span>
@@ -2268,9 +2268,9 @@ Array [
           <span
             id="open-access-logo_list"
           >
-            open access 
+            open access
             <span
-              className="outlink_symbol"
+              className="access_icon outlink_symbol"
             >
               
             </span>
@@ -2676,9 +2676,9 @@ Array [
           <span
             id="open-access-logo_list"
           >
-            open access 
+            open access
             <span
-              className="outlink_symbol"
+              className="access_icon outlink_symbol"
             >
               
             </span>
@@ -3165,9 +3165,9 @@ Array [
           <span
             id="open-access-logo_list"
           >
-            open access 
+            open access
             <span
-              className="outlink_symbol"
+              className="access_icon outlink_symbol"
             >
               
             </span>
@@ -3534,9 +3534,9 @@ Array [
           <span
             id="open-access-logo_list"
           >
-            open access 
+            open access
             <span
-              className="outlink_symbol"
+              className="access_icon outlink_symbol"
             >
               
             </span>
@@ -3702,9 +3702,9 @@ Array [
           <span
             id="open-access-logo_list"
           >
-            open access 
+            open access
             <span
-              className="outlink_symbol"
+              className="access_icon outlink_symbol"
             >
               
             </span>
@@ -4050,9 +4050,9 @@ Array [
           <span
             id="open-access-logo_list"
           >
-            open access 
+            open access
             <span
-              className="outlink_symbol"
+              className="access_icon outlink_symbol"
             >
               
             </span>
