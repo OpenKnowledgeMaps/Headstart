@@ -5,12 +5,10 @@ import SortDropdown from "../../components/filtersort/SortDropdown";
 const BasicFilterSort = ({ displaySort }) => {
   return (
     // html template starts here
-    // TODO move div back ASAP
-    // <div id="explorer_options" class="row">
-    <>
+    <div id="explorer_options" className="row">
       <SearchBox />
       {!!displaySort && <SortDropdown />}
-    </>
+    </div>
     // html template ends here
   );
 };

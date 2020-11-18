@@ -5,7 +5,7 @@ import StandardFilterSort from "../templates/filtersort/StandardFilterSort";
 import BasicFilterSort from "../templates/filtersort/BasicFilterSort";
 import ButtonFilterSort from "../templates/filtersort/ButtonFilterSort";
 
-export const FilterSort = ({ showList, showFilter, showDropdownSort }) => {
+const FilterSort = ({ showList, showFilter, showDropdownSort }) => {
   if (showFilter) {
     return <StandardFilterSort displaySort={showList} />;
   }

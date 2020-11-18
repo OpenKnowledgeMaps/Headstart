@@ -12,15 +12,14 @@ import {
   showList,
   selectPaperFromMediator,
   deselectPaper,
+  setListHeight
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
 
 import SubdisciplineTitle from "./templates/SubdisciplineTitle";
 import AuthorImage from "./components/AuthorImage";
-import ListToggle from "./components/ListToggle";
-import FilterSort from "./components/FilterSort";
-import ListEntries from "./components/ListEntries";
+import List from "./components/List";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -93,23 +92,9 @@ class Intermediate {
 
       ReactDOM.render(
         <Provider store={this.store}>
-          <ListToggle />
+          <List />
         </Provider>,
-        document.getElementById("show_hide_button")
-      );
-
-      ReactDOM.render(
-        <Provider store={this.store}>
-          <FilterSort />
-        </Provider>,
-        document.getElementById("explorer_options")
-      );
-
-      ReactDOM.render(
-        <Provider store={this.store}>
-          <ListEntries />
-        </Provider>,
-        document.getElementById("papers_list")
+        document.getElementById("list-col")
       );
     }
   }
@@ -132,6 +117,10 @@ class Intermediate {
 
   deselectPaper() {
     this.store.dispatch(deselectPaper());
+  }
+
+  setListHeight(newHeight) {
+    this.store.dispatch(setListHeight(newHeight));
   }
 }
 

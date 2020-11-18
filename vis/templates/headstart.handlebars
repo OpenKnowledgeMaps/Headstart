@@ -13,9 +13,10 @@
             <svg id="chart-svg"></svg>
         </div>
     </div>
-    <div class="list-col">
-        <div id="list_explorer">
-        </div>
+    <div id="list-col" class="list-col">
+        {{#unless modern_frontend_enabled}}
+        <div id="list_explorer"></div>
+        {{/unless}}
     </div>
 </div>
 

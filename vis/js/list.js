@@ -135,19 +135,20 @@ list.sortBy = function(field) {
 
 list.drawList = function() {
     let self = this;
-    // Load list template
-    let list_explorer = listTemplate({
-        show_list: config.localization[config.language].show_list,
-        filter_dropdown: config.filter_menu_dropdown,
-        filter_by_label: config.localization[config.language].filter_by_label,
-        items: config.localization[config.language].items,
-        dropdown: config.sort_menu_dropdown,
-        sort_by_label: config.localization[config.language].sort_by_label,
-        modern_frontend_enabled: mediator.modern_frontend_enabled,
-    });
-    $("#list_explorer").append(list_explorer);
 
     if (!mediator.modern_frontend_enabled) {
+        // Load list template
+        let list_explorer = listTemplate({
+            show_list: config.localization[config.language].show_list,
+            filter_dropdown: config.filter_menu_dropdown,
+            filter_by_label: config.localization[config.language].filter_by_label,
+            items: config.localization[config.language].items,
+            dropdown: config.sort_menu_dropdown,
+            sort_by_label: config.localization[config.language].sort_by_label,
+            modern_frontend_enabled: mediator.modern_frontend_enabled,
+        });
+        $("#list_explorer").append(list_explorer);
+
         // Set localized values
         let timer;
         let delay = 300;
@@ -286,7 +287,11 @@ list.fit_list_height = function() {
                     - PAPER_LIST_CORRECTION
                     - (parseInt($("#papers_list").css("padding-top"), 10) || 0)
     }
-    $("#papers_list").height(paper_list_avail_height);
+    if (mediator.modern_frontend_enabled) {
+        mediator.publish("list_height_change", paper_list_avail_height);
+    } else {
+        $("#papers_list").height(paper_list_avail_height);
+    }
 };
 
 list.changeHeaderColor = function(color) {

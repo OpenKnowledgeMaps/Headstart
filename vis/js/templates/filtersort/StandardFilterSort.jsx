@@ -7,12 +7,11 @@ const StandardFilterSort = ({ displaySort }) => {
   return (
     // html template starts here
     // TODO move div back ASAP
-    // <div id="explorer_options" class="row">
-    <>
+    <div id="explorer_options" className="row">
       <SearchBox />
       <FilterDropdown />
       {!!displaySort && <SortDropdown />}
-    </>
+    </div>
     // html template ends here
   );
 };
