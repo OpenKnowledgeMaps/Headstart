@@ -110,6 +110,8 @@ describe("List filter component", () => {
     });
 
     it("triggers a correct redux action when search box value changes", () => {
+      jest.useFakeTimers();
+
       global.console = {
         log: console.log,
         warn: jest.fn(),
@@ -136,6 +138,17 @@ describe("List filter component", () => {
       act(() => {
         ReactTestUtils.Simulate.change(searchBox);
       });
+
+      jest.advanceTimersByTime(150);
+
+      // testing multiple changes (debounced)
+      act(() => {
+        ReactTestUtils.Simulate.change(searchBox);
+      });
+
+      jest.advanceTimersByTime(300);
+
+      jest.runAllTimers();
 
       const actions = store.getActions();
 
