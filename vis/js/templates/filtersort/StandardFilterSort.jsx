@@ -3,14 +3,10 @@ import FilterDropdown from "../../components/filtersort/FilterDropdown";
 import SearchBox from "../../components/filtersort/SearchBox";
 import SortDropdown from "../../components/filtersort/SortDropdown";
 
-const StandardFilterSort = ({ displaySort, color }) => {
+const StandardFilterSort = ({ displaySort }) => {
   return (
     // html template starts here
-    <div
-      id="explorer_options"
-      className="row"
-      style={{ borderBottom: color ? "5px solid " + color : "" }}
-    >
+    <div id="explorer_options" className="row">
       <SearchBox />
       <FilterDropdown />
       {!!displaySort && <SortDropdown />}
