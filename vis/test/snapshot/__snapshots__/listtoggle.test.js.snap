@@ -1,17 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`List toggle component snapshot matches a snapshot 1`] = `
-Array [
+<div
+  className="row"
+  id="show_hide_button"
+  onClick={[Function]}
+>
   <div
     className="col-xs-2"
-    onClick={[Function]}
   >
     ▼
-  </div>,
+  </div>
   <div
     className="col-xs-8"
     id="show_hide_button_label"
-    onClick={[Function]}
   >
     <span
       id="show_hide_label"
@@ -26,7 +28,7 @@ Array [
           <span
             id="list_item_count"
           >
-            0
+            13
           </span>
            
           Dokumente
@@ -34,12 +36,11 @@ Array [
         </span>
       </span>
     </span>
-  </div>,
+  </div>
   <div
     className="col-xs-2 text-right"
-    onClick={[Function]}
   >
     ▼
-  </div>,
-]
+  </div>
+</div>
 `;

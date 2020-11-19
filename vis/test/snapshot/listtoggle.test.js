@@ -27,7 +27,7 @@ describe("List toggle component snapshot", () => {
     const tree = renderer
       .create(
         <Provider store={store}>
-          <ListToggle />
+          <ListToggle docsNumber={13} />
         </Provider>
       )
       .toJSON();

@@ -69,15 +69,16 @@ describe("List toggle component", () => {
   });
 
   it("renders with correct document number", () => {
-    // TODO test some different data
+    const DOCS_NUMBER = 42;
+
     const storeObject = setup();
     const store = mockStore(storeObject);
 
     act(() => {
-      render(<ListToggle store={store} />, container);
+      render(<ListToggle docsNumber={DOCS_NUMBER} store={store} />, container);
     });
 
-    expect(container.querySelector("#list_item_count").textContent).toEqual(storeObject.data.length.toString());
+    expect(container.querySelector("#list_item_count").textContent).toEqual(DOCS_NUMBER.toString());
   });
 
   it("triggers a correct redux action when clicked", () => {
