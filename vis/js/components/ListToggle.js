@@ -5,14 +5,9 @@ import { toggleList } from "../actions";
 
 // no logic required
 
-const mapStateToProps = (state) => {
-  return {
-    toggleLabel: state.list.show
-      ? state.localization.hide_list
-      : state.localization.show_list,
-    docsNumberLabel: state.localization.items,
-  };
-};
+const mapStateToProps = (state) => ({
+  show: state.list.show,
+});
 
 const mapDispatchToProps = (dispatch) => ({
   onClick: () => {
