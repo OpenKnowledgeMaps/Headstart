@@ -119,7 +119,12 @@ describe("List entries component", () => {
 
   it("renders with covis data", () => {
     const storeObject = setup(
-      { show: true, filterField: "resulttype", filterValue: "all" },
+      {
+        show: true,
+        showFilter: true,
+        filterField: "resulttype",
+        filterValue: "all",
+      },
       { data: covisData }
     );
     const store = mockStore(storeObject);
@@ -138,7 +143,13 @@ describe("List entries component", () => {
 
   it("renders with covis data and height", () => {
     const storeObject = setup(
-      { show: true, filterField: "resulttype", filterValue: "all", height: 800 },
+      {
+        show: true,
+        showFilter: true,
+        filterField: "resulttype",
+        filterValue: "all",
+        height: 800,
+      },
       { data: covisData }
     );
     const store = mockStore(storeObject);
@@ -152,18 +163,22 @@ describe("List entries component", () => {
       );
     });
 
-    expect(container.querySelector("#papers_list").getAttribute("style")).toContain("height");
+    expect(
+      container.querySelector("#papers_list").getAttribute("style")
+    ).toContain("height");
   });
 
   it("renders with covis data and zoomed", () => {
     const storeObject = setup(
-      { show: true },
+      { show: true, showFilter: true },
       {
         data: covisData,
         zoom: true,
         selectedBubble: {
           title: "Host biology and clinical findings",
           uri: 2,
+          // color can only happen in triple streamgraph, not in covis
+          color: "green",
         },
       }
     );
@@ -183,7 +198,7 @@ describe("List entries component", () => {
 
   it("renders with covis data and a selected paper", () => {
     const storeObject = setup(
-      { show: true },
+      { show: true, showFilter: true },
       {
         data: covisData,
         zoom: true,
@@ -213,7 +228,7 @@ describe("List entries component", () => {
 
   it("renders with covis data and a selected paper (open access)", () => {
     const storeObject = setup(
-      { show: true },
+      { show: true, showFilter: true },
       {
         data: covisData,
         zoom: true,
@@ -245,6 +260,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         filterField: "resulttype",
         filterValue: "all",
         sortValue: "title",
@@ -267,7 +283,7 @@ describe("List entries component", () => {
 
   it("renders with viper data", () => {
     const storeObject = setup(
-      { show: true, linkType: "url", showMetrics: true },
+      { show: true, showFilter: true, linkType: "url", showMetrics: true },
       { data: viperData }
     );
     const store = mockStore(storeObject);
@@ -288,6 +304,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "url",
         showMetrics: true,
         baseUnit: "citations",
@@ -313,6 +330,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "url",
         showMetrics: true,
         baseUnit: "tweets",
@@ -338,6 +356,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "url",
         showMetrics: true,
         baseUnit: "readers",
@@ -363,6 +382,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
@@ -390,6 +410,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
@@ -418,6 +439,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
@@ -446,6 +468,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
@@ -505,7 +528,9 @@ describe("List entries component", () => {
       );
     });
 
-    expect(container.querySelector("#papers_list").getAttribute("style")).toContain("height");
+    expect(
+      container.querySelector("#papers_list").getAttribute("style")
+    ).toContain("height");
   });
 
   it("renders with local data sorted by year", () => {
@@ -619,7 +644,9 @@ describe("List entries component", () => {
       );
     });
 
-    expect(container.querySelector("#papers_list").getAttribute("style")).toContain("height");
+    expect(
+      container.querySelector("#papers_list").getAttribute("style")
+    ).toContain("height");
   });
 
   it("renders with linkedcat streamgraph data, zoomed", () => {

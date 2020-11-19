@@ -4,6 +4,11 @@ exports[`List filter component snapshot matches a snapshot 1`] = `
 <div
   className="row"
   id="explorer_options"
+  style={
+    Object {
+      "borderBottom": "",
+    }
+  }
 >
   <div
     id="filter_container"
