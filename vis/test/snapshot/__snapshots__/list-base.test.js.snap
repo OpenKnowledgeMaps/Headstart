@@ -1,0 +1,4756 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, paper selected) 1`] = `
+<div
+  id="list_explorer"
+>
+  <div>
+    <div
+      className="col-xs-12"
+      id="explorer_header"
+    >
+      <div
+        className="row"
+        id="show_hide_button"
+        onClick={[Function]}
+      >
+        <div
+          className="col-xs-2"
+        >
+          ▼
+        </div>
+        <div
+          className="col-xs-8"
+          id="show_hide_button_label"
+        >
+          <span
+            id="show_hide_label"
+          >
+            <span>
+              Hide list
+               
+              <span
+                id="list_item_banner"
+              >
+                (
+                <span
+                  id="list_item_count"
+                >
+                  1
+                </span>
+                 
+                items
+                )
+              </span>
+            </span>
+          </span>
+        </div>
+        <div
+          className="col-xs-2 text-right"
+        >
+          ▼
+        </div>
+      </div>
+      <div
+        className="row"
+        id="explorer_options"
+      >
+        <div
+          id="filter_container"
+        >
+          <div
+            className="input-group input-group-sm"
+          >
+            <i
+              className="fa fa-search searchfield-icon"
+            />
+            <input
+              className="form-control"
+              id="filter_input"
+              onChange={[Function]}
+              placeholder="Search within map..."
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          className="dropdown"
+          id="filter_parameter_container"
+        >
+          <div
+            className="dropdown btn-group"
+          >
+            <button
+              aria-expanded={false}
+              aria-haspopup={true}
+              className="dropdown-toggle btn btn-default"
+              disabled={false}
+              id="filter_params"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              type="button"
+            >
+              show: 
+               
+              <span
+                id="curr-filter-type"
+              >
+                Any
+              </span>
+               
+              <span
+                className="caret"
+              />
+            </button>
+            <ul
+              aria-labelledby="filter_params"
+              className="dropdown-menu"
+              role="menu"
+            >
+              <li
+                className="active"
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  id="filter_option_all"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  Any
+                </a>
+              </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  id="filter_option_open_access"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  Open Access
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          className="dropdown"
+          id="sort_container"
+          style={
+            Object {
+              "display": "inline-block",
+            }
+          }
+        >
+          <div
+            className="dropdown btn-group"
+          >
+            <button
+              aria-expanded={false}
+              aria-haspopup={true}
+              className="dropdown-toggle btn btn-default"
+              disabled={false}
+              id="sort"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              type="button"
+            >
+              sort by:
+               
+              <span
+                id="curr-sort-type"
+              >
+                Relevance
+              </span>
+               
+              <span
+                className="caret"
+              />
+            </button>
+            <ul
+              aria-labelledby="sort"
+              className="dropdown-menu"
+              role="menu"
+            >
+              <li
+                className="active"
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  id="sort_option_relevance"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  Relevance
+                </a>
+              </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  id="sort_option_title"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  Title
+                </a>
+              </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  id="sort_option_authors"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  Authors
+                </a>
+              </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  id="sort_option_year"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  Year
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div
+        className="col-xs-12"
+        id="papers_list"
+        style={
+          Object {
+            "display": "block",
+            "height": undefined,
+          }
+        }
+      >
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="008ea92dafd41bdb55abf7cb8b4f43deb52ac003a2b15a8c5eb8743ae021533d"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              >
+                <span
+                  id="open-access-logo_list"
+                >
+                  open access
+                  <span
+                    className="access_icon outlink_symbol"
+                  >
+                    
+                  </span>
+                </span>
+              </div>
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; And Learning: The Growing Trend In Academic And Business Spaces—An International Overview
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="link2 oa-link"
+                  onClick={[Function]}
+                >
+                  PDF 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      P. K. Paul, P. S. Aithal
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2018)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="https://doi.org/10.5281/zenodo.1292855"
+                    target="_blank"
+                  >
+                    https://doi.org/10.5281/zenodo.1292855
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  Abstract ; The world becomes &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; day by day and thus activities, features and sectors and different spaces are highly associated with &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; Tools, Techniques and Technologies. &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; domain becomes highly technology enabled in recent past and this strategy is rising out and as a result, various concepts, areas, and domains have been created viz. &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; Technology, E-Learning, Online &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt;, Blended Learning and as a whole this concept and this area may be called as a &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt;/ &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; Learning. Internationally many universities have started 
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  education
+                </span>
+                <span
+                  className=""
+                >
+                  al programs leading to Bachelors and Masters Degree in respect of &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; and its subfields (mentioned above). The awards are offered in different subjects and are tagged with concentration and major in this area. The &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; becomes an important area of research as well due to its importance, many universities have started research program leading to PhD and other professional doctorate degrees. This study is concentrated on Masters degrees in the field of &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; and &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; Learning which are available internationally, based on selected research methodologies. This paper emphasizes the role, growth and values of &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; and Learning including future growth and stakeholders in this field.
+                </span>
+              </span>
+            </p>
+            <div
+              id="preview_image"
+              onClick={[Function]}
+              style={
+                Object {
+                  "background": "url(test-file-stub) 0% 0% / 230px,  0% 0% / 298px",
+                  "height": 298,
+                  "width": 230,
+                }
+              }
+            >
+              <div
+                id="transbox"
+                style={
+                  Object {
+                    "height": 298,
+                    "width": 230,
+                  }
+                }
+              >
+                Click here to open preview
+              </div>
+            </div>
+            <div
+              id="list_keywords"
+              style={
+                Object {
+                  "display": "block",
+                }
+              }
+            >
+              <span
+                className="keyword_tag"
+              >
+                Keywords
+                : 
+              </span>
+              <span
+                className="keywords"
+              >
+                <span>
+                  <span
+                    className=""
+                  >
+                    &lt;span class="query_term_highlight"&gt;
+                  </span>
+                  <span
+                    className="query_term_highlight "
+                    style={Object {}}
+                  >
+                    Digital
+                  </span>
+                  <span
+                    className=""
+                  >
+                    &lt;/span&gt; &lt;span class="query_term_highlight"&gt;
+                  </span>
+                  <span
+                    className="query_term_highlight "
+                    style={Object {}}
+                  >
+                    Education
+                  </span>
+                  <span
+                    className=""
+                  >
+                    &lt;/span&gt;; E-Learning; Higher &lt;span class="query_term_highlight"&gt;
+                  </span>
+                  <span
+                    className="query_term_highlight "
+                    style={Object {}}
+                  >
+                    Education
+                  </span>
+                  <span
+                    className=""
+                  >
+                    &lt;/span&gt;; 
+                  </span>
+                  <span
+                    className="query_term_highlight "
+                    style={Object {}}
+                  >
+                    Digital
+                  </span>
+                  <span
+                    className=""
+                  >
+                    ization; MSc (&lt;span class="query_term_highlight"&gt;
+                  </span>
+                  <span
+                    className="query_term_highlight "
+                    style={Object {}}
+                  >
+                    Digital
+                  </span>
+                  <span
+                    className=""
+                  >
+                    &lt;/span&gt; &lt;span class="query_term_highlight"&gt;
+                  </span>
+                  <span
+                    className="query_term_highlight "
+                    style={Object {}}
+                  >
+                    Education
+                  </span>
+                  <span
+                    className=""
+                  >
+                    &lt;/span&gt;); International Universities; Professional Degrees
+                  </span>
+                </span>
+              </span>
+            </div>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Digital citizenship, Digital education revolution, Digital literacies
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 1`] = `
+<div
+  id="list_explorer"
+>
+  <div>
+    <div
+      className="col-xs-12"
+      id="explorer_header"
+    >
+      <div
+        className="row"
+        id="show_hide_button"
+        onClick={[Function]}
+      >
+        <div
+          className="col-xs-2"
+        >
+          ▼
+        </div>
+        <div
+          className="col-xs-8"
+          id="show_hide_button_label"
+        >
+          <span
+            id="show_hide_label"
+          >
+            <span>
+              Hide list
+               
+              <span
+                id="list_item_banner"
+              >
+                (
+                <span
+                  id="list_item_count"
+                >
+                  20
+                </span>
+                 
+                items
+                )
+              </span>
+            </span>
+          </span>
+        </div>
+        <div
+          className="col-xs-2 text-right"
+        >
+          ▼
+        </div>
+      </div>
+      <div
+        className="row"
+        id="explorer_options"
+      >
+        <div
+          id="filter_container"
+        >
+          <div
+            className="input-group input-group-sm"
+          >
+            <i
+              className="fa fa-search searchfield-icon"
+            />
+            <input
+              className="form-control"
+              id="filter_input"
+              onChange={[Function]}
+              placeholder="Search within map..."
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          className="dropdown"
+          id="filter_parameter_container"
+        >
+          <div
+            className="dropdown btn-group"
+          >
+            <button
+              aria-expanded={false}
+              aria-haspopup={true}
+              className="dropdown-toggle btn btn-default"
+              disabled={false}
+              id="filter_params"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              type="button"
+            >
+              show: 
+               
+              <span
+                id="curr-filter-type"
+              >
+                Any
+              </span>
+               
+              <span
+                className="caret"
+              />
+            </button>
+            <ul
+              aria-labelledby="filter_params"
+              className="dropdown-menu"
+              role="menu"
+            >
+              <li
+                className="active"
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  id="filter_option_all"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  Any
+                </a>
+              </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  id="filter_option_open_access"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  Open Access
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          className="dropdown"
+          id="sort_container"
+          style={
+            Object {
+              "display": "inline-block",
+            }
+          }
+        >
+          <div
+            className="dropdown btn-group"
+          >
+            <button
+              aria-expanded={false}
+              aria-haspopup={true}
+              className="dropdown-toggle btn btn-default"
+              disabled={false}
+              id="sort"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              type="button"
+            >
+              sort by:
+               
+              <span
+                id="curr-sort-type"
+              >
+                Relevance
+              </span>
+               
+              <span
+                className="caret"
+              />
+            </button>
+            <ul
+              aria-labelledby="sort"
+              className="dropdown-menu"
+              role="menu"
+            >
+              <li
+                className="active"
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  id="sort_option_relevance"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  Relevance
+                </a>
+              </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  id="sort_option_title"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  Title
+                </a>
+              </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  id="sort_option_authors"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  Authors
+                </a>
+              </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  id="sort_option_year"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  Year
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div
+        className="col-xs-12"
+        id="papers_list"
+        style={
+          Object {
+            "display": "block",
+            "height": undefined,
+          }
+        }
+      >
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="15e63fc6c5dfa228a39433f46c271946c8cf45f566bb63036ed89f66ce66a5e7"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              />
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Conceptualizing &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; literacies and &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; ethics for sustainability &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="outlink"
+                  href="https://www.research.manchester.ac.uk/portal/en/publications/conceptualizing-digital-literacies-and-digital-ethics-for-sustainability-education(d99555d3-f49c-4ca4-87ae-ee4a1e8abcad).html"
+                  target="_blank"
+                >
+                  LINK 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      S Brown
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_in"
+                >
+                   in 
+                </span>
+                <span
+                  className="list_published_in"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Brown , S 2014 , ' Conceptualizing &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; literacies and &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; ethics for sustainability &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; ' International Journal of Sustainability in Higher &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; , vol 15 , no. 3 , pp. 280-290 . DOI:10.1108/IJSHE-08-2012-0078
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2014-08-14)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="https://www.research.manchester.ac.uk/portal/en/publications/conceptualizing-digital-literacies-and-digital-ethics-for-sustainability-education(d99555d3-f49c-4ca4-87ae-ee4a1e8abcad).html"
+                    target="_blank"
+                  >
+                    https://www.research.manchester.ac.uk/portal/en/publications/conceptualizing-digital-literacies-and-digital-ethics-for-sustainability-education(d99555d3-f49c-4ca4-87ae-ee4a1e8abcad).html
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  Purpose – The purpose of this paper is to discuss the need for integrating a focus on &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; literacies and &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; ethics into sustainability &lt;span class="query_...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Digital citizenship, Digital education revolution, Digital literacies
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="008ea92dafd41bdb55abf7cb8b4f43deb52ac003a2b15a8c5eb8743ae021533d"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              >
+                <span
+                  id="open-access-logo_list"
+                >
+                  open access
+                  <span
+                    className="access_icon outlink_symbol"
+                  >
+                    
+                  </span>
+                </span>
+              </div>
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; And Learning: The Growing Trend In Academic And Business Spaces—An International Overview
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="link2 oa-link"
+                  onClick={[Function]}
+                >
+                  PDF 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      P. K. Paul, P. S. Aithal
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2018)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="https://doi.org/10.5281/zenodo.1292855"
+                    target="_blank"
+                  >
+                    https://doi.org/10.5281/zenodo.1292855
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  Abstract ; The world becomes &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; day by day and thus activities, features and sectors and different spaces are highly associated with &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; Tools, Techniques...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Digital citizenship, Digital education revolution, Digital literacies
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="177e10315a766b466983744e51501b8106cea5bad68d8f907628f237f5d9ef65"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              />
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Paradox, promise and public pedagogy: implications of the federal government's &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; Revolution
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="outlink"
+                  href="http://hdl.handle.net/1959.13/934096"
+                  target="_blank"
+                >
+                  LINK 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Rachel Buchanan
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2011)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="http://hdl.handle.net/1959.13/934096"
+                    target="_blank"
+                  >
+                    http://hdl.handle.net/1959.13/934096
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  The use of &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; technology in the classroom is a significant issue for teachers as they are under increasing pressure to teach in technologically mediated ways. This ‘&lt;span class="query_term_highlight"&gt;...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Digital citizenship, Digital education revolution, Digital literacies
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="1ceeb14a8284a438b441c9145cb93ee7c7144a28b63a4ffdd039a9a02377c346"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              />
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Developing The Vision: Preparing Teachers To Deliver A &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; World-Class &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; System
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="outlink"
+                  href="https://ro.ecu.edu.au/ajte/vol37/iss4/5"
+                  target="_blank"
+                >
+                  LINK 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Jenny M Lane
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_in"
+                >
+                   in 
+                </span>
+                <span
+                  className="list_published_in"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Australian Journal of Teacher &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2012-04-01T07:00:00Z)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="https://ro.ecu.edu.au/ajte/vol37/iss4/5"
+                    target="_blank"
+                  >
+                    https://ro.ecu.edu.au/ajte/vol37/iss4/5
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  In 2008 Australians were promised a ‘&lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; Revolution’ by the government to dramatically change classroom &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Decision support, Digital food education, Education revolution
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="0526533f14f3af97c71d809791195c453141782efc037245ec56295d92dec108"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              />
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; agility and &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; decision-making: conceptualising &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; inclusion in the context of disabled learners in higher &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="outlink"
+                  href="https://eprints.soton.ac.uk/71809/"
+                  target="_blank"
+                >
+                  LINK 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Jane Seale, E.A. Draffan, Mike Wald
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2010)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="https://eprints.soton.ac.uk/71809/"
+                    target="_blank"
+                  >
+                    https://eprints.soton.ac.uk/71809/
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; inclusion in higher &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; has tended to be understood solely in terms of accessibility, which does little to further our understanding of the role tech...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Higher education institutions, Digital inclusion, Higher education students
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="08e8c980f24fd49ebdd2cb56ef6b7ffb0263d207901fdaac787e2c65a52aba34"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              />
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; “Tsunami” in Higher &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;: Democratisation Movement Towards Open And Free &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="outlink"
+                  href="https://dergipark.org.tr/tr/pub/tojde/issue/16897/176081"
+                  target="_blank"
+                >
+                  LINK 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Jean D. COMEAU, Tung Lai CHENG
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_in"
+                >
+                   in 
+                </span>
+                <span
+                  className="list_published_in"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Volume: 14, Issue: 3 198-224 ; 1302-6488 ; Turkish Online Journal of Distance &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2013-09-01T00:00:00Z)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="https://dergipark.org.tr/tr/pub/tojde/issue/16897/176081"
+                    target="_blank"
+                  >
+                    https://dergipark.org.tr/tr/pub/tojde/issue/16897/176081
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  The result of the &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; “Tsunami” changes in &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; in the 21st has been huge. Recall that in the year 2000 there was no such thing as internet broadband, Fac...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Decision support, Digital food education, Education revolution
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="0857d58c8cd0cc73f7f8567270bbd44fdee9a9cfb1ba4c0affc6287ad54e884d"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              >
+                <span
+                  id="open-access-logo_list"
+                >
+                  open access
+                  <span
+                    className="access_icon outlink_symbol"
+                  >
+                    
+                  </span>
+                </span>
+              </div>
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Confirmatory factor analysis of the essential &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; competencies for undergraduate students in thai higher &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; institutions
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="link2 oa-link"
+                  onClick={[Function]}
+                >
+                  PDF 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Thamasan Suwanroj, Punnee Leekitchwatana, Paitoon Pimdee
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2019-09)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="http://hdl.handle.net/2117/172239"
+                    target="_blank"
+                  >
+                    http://hdl.handle.net/2117/172239
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  The purpose of this descriptive study was to apply 2nd order confirmatory factor analysis (CFA) and structural relationship models to identify the &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; competency components essential to undergraduate s...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Higher education institutions, Digital inclusion, Higher education students
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="0fb1d2a7cb6e4628035c8f3923a24151a4791f2982ee905f5ebfb9775ebf6222"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              >
+                <span
+                  id="open-access-logo_list"
+                >
+                  open access
+                  <span
+                    className="access_icon outlink_symbol"
+                  >
+                    
+                  </span>
+                </span>
+              </div>
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Integrating &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; Libraries into Distance &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;: A Review of Models, Roles, And Strategies
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="link2 oa-link"
+                  onClick={[Function]}
+                >
+                  PDF 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Christopher M. OWUSU-ANSAH, Antonio da Silva RODRIGUES, Thomas B. van der WALT
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_in"
+                >
+                   in 
+                </span>
+                <span
+                  className="list_published_in"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      The Turkish Online Journal of Distance &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;, Vol 20, Iss 2, Pp 89-104 (2019)
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2019-04-01T00:00:00Z)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="https://doi.org/10.17718/tojde.557742"
+                    target="_blank"
+                  >
+                    https://doi.org/10.17718/tojde.557742
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  This study examines ongoing efforts by academic libraries to integrate &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; resources into distance &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; courses. The study adopts a conceptual approach an...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Digital libraries, European debate, Information science education
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="1423fdc724803ca0bfdd54355e0ab989e193bad7ec039e7f6ffc1121728a0a0c"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              >
+                <span
+                  id="open-access-logo_list"
+                >
+                  open access
+                  <span
+                    className="access_icon outlink_symbol"
+                  >
+                    
+                  </span>
+                </span>
+              </div>
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Presentation of the monograph: Technologies, &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; and &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; Divide ; Presentación del Monográfico: Tecnologías, Educación y Brecha &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="link2 oa-link"
+                  onClick={[Function]}
+                >
+                  PDF 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Melchor Gómez
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_in"
+                >
+                   in 
+                </span>
+                <span
+                  className="list_published_in"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Tendencias Pedagógicas; Vol. 29 (2017): Tecnologías, educación y brecha &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;; 7-8 ; 1989-8614 ; 1133-2654 ; 10.15366/tp2017.29
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2017-01-17)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="https://revistas.uam.es/tendenciaspedagogicas/article/view/7082"
+                    target="_blank"
+                  >
+                    https://revistas.uam.es/tendenciaspedagogicas/article/view/7082
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  Presentation of the monograph of Tendencias Pedagógicas devoted to "Technologies, &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; and &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  Digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; Divide". ; Presentación del Monográfico de Tendencias Pedag...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Digital age, Academic dishonesty, Brecha digital
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="255431ea0964dee1eea14564e2820060498851ec19acdde3694a2035cb29a1d8"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              >
+                <span
+                  id="open-access-logo_list"
+                >
+                  open access
+                  <span
+                    className="access_icon outlink_symbol"
+                  >
+                    
+                  </span>
+                </span>
+              </div>
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      DIGITAL
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; COMPETENCE IN THE CONTEXT OF LEARNING CONCEPTUAL ASPECTS IN HIGHER &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      EDUCATION
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; INSTITUTIONS
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="link2 oa-link"
+                  onClick={[Function]}
+                >
+                  PDF 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Olga Vindača
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_in"
+                >
+                   in 
+                </span>
+                <span
+                  className="list_published_in"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; Reform: &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; Content Research and Implementation Problems; Vol 1 (2019): &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; Reform: &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; Content Research and Implementation Problems; 67-78 ; 2661-5266 ; 2661-5258
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2019-05-23)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="http://journals.ru.lv/index.php/ER/article/view/4213"
+                    target="_blank"
+                  >
+                    http://journals.ru.lv/index.php/ER/article/view/4213
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  Media and new technologies integration into the learning process of higher 
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  education
+                </span>
+                <span
+                  className=""
+                >
+                  al institutions stimulates the necessity for the development of &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; competence. However, the evaluation of &lt;span clas...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Higher education institutions, Digital inclusion, Higher education students
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="1282221387e8cc15773fab0a2bf58882228f09abfd955f40659d2773644d0a66"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              />
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; Literacies or &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; Competence : Conceptualizations in Nordic Curricula
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="outlink"
+                  href="http://hdl.handle.net/2043/28731"
+                  target="_blank"
+                >
+                  LINK 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Anna-Lena Godhe
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2019)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="http://hdl.handle.net/2043/28731"
+                    target="_blank"
+                  >
+                    http://hdl.handle.net/2043/28731
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  This article examines how the concepts of &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; literacies and &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; competence are conceptualized in curricula for compulsory &lt;span class="query_term_highligh...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Digital competence, Teacher education, Competencia digital
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="0e4903694d6461dd14bfefac784d77590f12f662675bacef6d7178ea2899264f"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              >
+                <span
+                  id="open-access-logo_list"
+                >
+                  open access
+                  <span
+                    className="access_icon outlink_symbol"
+                  >
+                    
+                  </span>
+                </span>
+              </div>
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Capturing &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; (in)equity in teaching and learning: a sociocritical approach
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="link2 oa-link"
+                  onClick={[Function]}
+                >
+                  PDF 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Simon Collin, Périne Brotcorne
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_in"
+                >
+                   in 
+                </span>
+                <span
+                  className="list_published_in"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      The International Journal of Information and Learning Technology, Vol. 36, no.2, p. 169-18 (2019)
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2019)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="http://hdl.handle.net/2078.1/215221"
+                    target="_blank"
+                  >
+                    http://hdl.handle.net/2078.1/215221
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  This article proposes a theoretical contribution to the study of &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; (in)equity in teaching and learning with &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; technologies. We present a sociocritical ...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Digital citizenship, Digital education revolution, Digital literacies
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="10469b0c287c6bfef2985960c3867e9f748a84e4ecd9d3d72a964fa15082eda6"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              />
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Inspired by &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="outlink"
+                  href="http://nectar.northampton.ac.uk/7284/"
+                  target="_blank"
+                >
+                  LINK 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Jean Edwards
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2014-09)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="http://nectar.northampton.ac.uk/7284/"
+                    target="_blank"
+                  >
+                    http://nectar.northampton.ac.uk/7284/
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  A reflection on a year of Northampton Inspire Network meetings exploring the relationship between physical art and &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; technology with university lecturers, students, teachers and pupils.
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Higher education institutions, Digital inclusion, Higher education students
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="001a8aa44f55f1d133d4ed2b0e7b4a1e4125901c84d5086b9648dded9251ed1c"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              />
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Computer says no: an analysis of three &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; food &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; resources
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="outlink"
+                  href="https://espace.library.uq.edu.au/view/UQ:403365"
+                  target="_blank"
+                >
+                  LINK 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Michael Gard, Eimear Enright
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2016-08-26)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="https://espace.library.uq.edu.au/view/UQ:403365"
+                    target="_blank"
+                  >
+                    https://espace.library.uq.edu.au/view/UQ:403365
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  What kind of thing will food &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; become in digitisedclassrooms? Drawn from a broader research project concernedwith the‘e turn’in school health and physical &lt;span class="query_term_highlight"&gt;educati...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Decision support, Digital food education, Education revolution
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="23f1739d2f39a41b3aebb4e7d3dbf751ba9741d5c2957bf88dd59684c8236bb4"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              >
+                <span
+                  id="open-access-logo_list"
+                >
+                  open access
+                  <span
+                    className="access_icon outlink_symbol"
+                  >
+                    
+                  </span>
+                </span>
+              </div>
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Teacher &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; students engaging with &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; identity narratives
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="link2 oa-link"
+                  onClick={[Function]}
+                >
+                  PDF 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Leila Kajee
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_in"
+                >
+                   in 
+                </span>
+                <span
+                  className="list_published_in"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      South African Journal of &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;; Vol 38, No 2 (2018); 1-9 ; 2076-3433 ; 0256-0100
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2018-06-14)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="https://www.ajol.info/index.php/saje/article/view/173120"
+                    target="_blank"
+                  >
+                    https://www.ajol.info/index.php/saje/article/view/173120
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  Teaching English with &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; technology has exacerbated the process of teaching and learning. In youth leisure, computers are more than information devices: they convey stories, images, identities, and fa...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Digital citizenship, Digital education revolution, Digital literacies
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="0f3c25225e3ed591344a82ea16d78ae1e74533687a13b2eb50502aecc849749a"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              />
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Motivating and Retaining CS2 Students with a Competative Game Programming Project
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="outlink"
+                  href="http://digital.library.unt.edu/ark:/67531/metadc30842/"
+                  target="_blank"
+                >
+                  LINK 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Ryan Garlick, Robert G. Akl
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_in"
+                >
+                   in 
+                </span>
+                <span
+                  className="list_published_in"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      International Network for Engineering &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; and Research (iNEER) Special Volume: Innovations 2007 - World Innovations in Engineering &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; and Research, 2007, Arlington: International Network for Engineering &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; and Research, pp. 1-9
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2007)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="http://digital.library.unt.edu/ark:/67531/metadc30842/"
+                    target="_blank"
+                  >
+                    http://digital.library.unt.edu/ark:/67531/metadc30842/
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  This article discusses motivating and retaining computer science students with a competitive game programming project.
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Information commons, Metadata education, Public education
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="1bc3a3358f7da6edb767ad1c91ac28f38573160ffca7c66594a7234db03258a9"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              >
+                <span
+                  id="open-access-logo_list"
+                >
+                  open access
+                  <span
+                    className="access_icon outlink_symbol"
+                  >
+                    
+                  </span>
+                </span>
+              </div>
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Using &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; storytelling to prepare new teachers for multicultural and &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; natives' classrooms.
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="link2 oa-link"
+                  onClick={[Function]}
+                >
+                  PDF 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Agnes Chigona
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2014)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="http://hdl.handle.net/11189/3465"
+                    target="_blank"
+                  >
+                    http://hdl.handle.net/11189/3465
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  The 21 Century learners are said to be &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; natives. They have increased exposure to new technologies such that are more skilled than their teachers in the use of &lt;span class="query_term_highlight"&gt;digi...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Digital storytelling, Citizenship education, Distance education
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="119812ba34b725795691e22d5339e00d46277121067311fb77af48de801b5dfb"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              >
+                <span
+                  id="open-access-logo_list"
+                >
+                  open access
+                  <span
+                    className="access_icon outlink_symbol"
+                  >
+                    
+                  </span>
+                </span>
+              </div>
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Desarrollo de la competencia &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; en la formación inicial del profesorado de Educación Infantil ; Development of &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; Competence in the initial teacher &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; of early childhood &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="link2 oa-link"
+                  onClick={[Function]}
+                >
+                  PDF 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Pilar Aristizabal Llorente, Esther Cruz Iglesias
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2018-01-12T14:18:08Z)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="https://idus.us.es/xmlui/handle/11441/68940"
+                    target="_blank"
+                  >
+                    https://idus.us.es/xmlui/handle/11441/68940
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  La competencia &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; es considerada clave para alcanzar la ciudadanía &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt;. Este trabajo muestra como se trabaja dicha competencia en la formación inicial del...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Digital competence, Teacher education, Competencia digital
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="2781155d5ca7cfc418817dcd81659c4eae936a5dc8165fa136f46c8d02330dce"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              />
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      The Unplugged Office Space and the Role of Sustainable Design in Higher &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt;
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="outlink"
+                  href="http://hdl.handle.net/10342/1956"
+                  target="_blank"
+                >
+                  LINK 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Alicia Stewart, Krista Radspinner
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2008)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="http://hdl.handle.net/10342/1956"
+                    target="_blank"
+                  >
+                    http://hdl.handle.net/10342/1956
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  This article looks at sustainability in higher &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; and office environments, specifically proposing a green redesign of the Greenville, NC V.O.A. site.
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Information commons, Metadata education, Public education
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="resulttype-paper"
+          id="list_holder"
+        >
+          <div
+            className="list_entry"
+          >
+            <a
+              className="list_anchor"
+              id="067299f6a55cadb2570e1aebf53448d4759e76cac8c3e8c51768213ffcde5a30"
+            />
+            <div
+              className="list_metadata"
+            >
+              <div
+                id="oa"
+              >
+                <span
+                  id="open-access-logo_list"
+                >
+                  open access
+                  <span
+                    className="access_icon outlink_symbol"
+                  >
+                    
+                  </span>
+                </span>
+              </div>
+              <div
+                className="list_title"
+                onClick={[Function]}
+              >
+                <a
+                  id="paper_list_title"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Polish philology &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; in the &lt;span class="query_term_highlight"&gt;
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      digital
+                    </span>
+                    <span
+                      className=""
+                    >
+                      &lt;/span&gt; age. Is it still present at Polish schools and universities?
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_links"
+              >
+                <a
+                  className="link2 oa-link"
+                  onClick={[Function]}
+                >
+                  PDF 
+                  <span
+                    className="outlink_symbol"
+                  >
+                    
+                  </span>
+                </a>
+              </div>
+              <div
+                className="list_details"
+              >
+                <span
+                  className="list_authors"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Agnieszka Wierzbicka
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_in"
+                >
+                   in 
+                </span>
+                <span
+                  className="list_published_in"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Acta Universitatis Lodziensis. Folia Litteraria Polonica, Vol 56, Iss 1, Pp 127-141 (2020)
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className="list_pubyear"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                       (2020-03-01T00:00:00Z)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="doi_outlink"
+              >
+                <span>
+                  [
+                  link
+                  ]:
+                   
+                  <a
+                    className="doi_outlink_link"
+                    href="https://doi.org/10.18778/1505-9057.56.08"
+                    target="_blank"
+                  >
+                    https://doi.org/10.18778/1505-9057.56.08
+                  </a>
+                </span>
+              </div>
+            </div>
+            <p
+              id="list_abstract"
+            >
+              <span>
+                <span
+                  className=""
+                >
+                  This article is an analysis of the use of &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  digital
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt; in Polish philological &lt;span class="query_term_highlight"&gt;
+                </span>
+                <span
+                  className="query_term_highlight "
+                  style={Object {}}
+                >
+                  education
+                </span>
+                <span
+                  className=""
+                >
+                  &lt;/span&gt;, both at schools and at publ...
+                </span>
+              </span>
+            </p>
+            <div
+              id="list_area"
+              onClick={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+            >
+              <span
+                className="area_tag"
+              >
+                Area
+                :
+              </span>
+               
+              <span
+                className="area_name"
+              >
+                Decision support, Digital food education, Education revolution
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

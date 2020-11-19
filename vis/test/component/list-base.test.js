@@ -13,7 +13,7 @@ import data, {
 } from "../data/base";
 import { initializeStore } from "../../js/actions";
 
-import ListEntries from "../../js/components/ListEntries";
+import List from "../../js/components/List";
 
 import {
   selectPaper,
@@ -59,7 +59,7 @@ describe("List entries component - special BASE tests", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -84,7 +84,7 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -116,7 +116,7 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -151,7 +151,7 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -183,7 +183,7 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -207,7 +207,7 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -248,7 +248,7 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -269,7 +269,7 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -290,7 +290,7 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -343,7 +343,7 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );

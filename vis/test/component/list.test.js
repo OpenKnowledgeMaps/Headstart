@@ -27,7 +27,7 @@ import localData from "../data/local-files";
 import pubmedData from "../data/pubmed";
 import viperData from "../data/viper";
 
-import ListEntries from "../../js/components/ListEntries";
+import List from "../../js/components/List";
 
 const mockStore = configureStore([]);
 const setup = (overrideListObject = {}, overrideStoreObject = {}) => {
@@ -38,9 +38,13 @@ const setup = (overrideListObject = {}, overrideStoreObject = {}) => {
       list: {
         show: true,
         searchValue: "",
+        showFilter: false,
         filterValue: "",
         filterField: undefined,
+        filterOptions: ["all", "open_access"],
+        showDropdownSort: true,
         sortValue: "relevance",
+        sortOptions: ["relevance", "year"],
         abstractSize: 250,
         isContentBased: true,
         baseUnit: "questions",
@@ -88,7 +92,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -104,7 +108,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -123,13 +127,32 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
     });
 
     expect(container.querySelector(".list_metadata")).not.toBe(null);
+  });
+
+  it("renders with covis data and height", () => {
+    const storeObject = setup(
+      { show: true, filterField: "resulttype", filterValue: "all", height: 800 },
+      { data: covisData }
+    );
+    const store = mockStore(storeObject);
+
+    act(() => {
+      render(
+        <Provider store={store}>
+          <List />
+        </Provider>,
+        container
+      );
+    });
+
+    expect(container.querySelector("#papers_list").getAttribute("style")).toContain("height");
   });
 
   it("renders with covis data and zoomed", () => {
@@ -149,7 +172,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -179,7 +202,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -209,7 +232,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -233,7 +256,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -252,7 +275,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -277,7 +300,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -302,7 +325,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -327,7 +350,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -354,7 +377,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -382,7 +405,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -410,7 +433,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -438,7 +461,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -457,13 +480,32 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
     });
 
     expect(container.querySelector(".list_metadata")).not.toBe(null);
+  });
+
+  it("renders with local data and set height", () => {
+    const storeObject = setup(
+      { show: true, height: 800 },
+      { data: localData, service: null }
+    );
+    const store = mockStore(storeObject);
+
+    act(() => {
+      render(
+        <Provider store={store}>
+          <List />
+        </Provider>,
+        container
+      );
+    });
+
+    expect(container.querySelector("#papers_list").getAttribute("style")).toContain("height");
   });
 
   it("renders with local data sorted by year", () => {
@@ -476,7 +518,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -495,7 +537,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -523,7 +565,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -547,13 +589,37 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
     });
 
     expect(container.querySelector(".list_metadata")).not.toBe(null);
+  });
+
+  it("renders with linkedcat streamgraph data and set height", () => {
+    const storeObject = setup(
+      { show: true, height: 800 },
+      {
+        data: linkedcatData,
+        service: "linkedcat_streamgraph",
+        chartType: STREAMGRAPH_MODE,
+        localization: defaultConfig.localization.ger_linkedcat,
+      }
+    );
+    const store = mockStore(storeObject);
+
+    act(() => {
+      render(
+        <Provider store={store}>
+          <List />
+        </Provider>,
+        container
+      );
+    });
+
+    expect(container.querySelector("#papers_list").getAttribute("style")).toContain("height");
   });
 
   it("renders with linkedcat streamgraph data, zoomed", () => {
@@ -575,7 +641,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -606,7 +672,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -633,7 +699,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -657,7 +723,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -686,7 +752,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -716,7 +782,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -743,7 +809,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -770,7 +836,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -802,7 +868,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -836,7 +902,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -867,7 +933,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -898,7 +964,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -938,7 +1004,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -978,7 +1044,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
