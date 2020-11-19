@@ -7,7 +7,7 @@ import ButtonFilterSort from "../templates/filtersort/ButtonFilterSort";
 
 const FilterSort = ({ showList, showFilter, showDropdownSort, color }) => {
   if (showFilter) {
-    return <StandardFilterSort displaySort={showList} />;
+    return <StandardFilterSort displaySort={showList} color={color} />;
   }
 
   if (showDropdownSort) {
