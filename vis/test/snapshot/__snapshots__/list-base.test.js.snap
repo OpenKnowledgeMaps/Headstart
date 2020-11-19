@@ -54,11 +54,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
       <div
         className="row"
         id="explorer_options"
-        style={
-          Object {
-            "borderBottom": "",
-          }
-        }
       >
         <div
           id="filter_container"
@@ -791,11 +786,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
       <div
         className="row"
         id="explorer_options"
-        style={
-          Object {
-            "borderBottom": "",
-          }
-        }
       >
         <div
           id="filter_container"

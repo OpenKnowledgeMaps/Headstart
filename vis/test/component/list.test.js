@@ -633,6 +633,7 @@ describe("List entries component", () => {
         zoom: true,
         selectedBubble: {
           title: "Orient",
+          color: "red",
         },
       }
     );

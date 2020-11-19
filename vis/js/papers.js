@@ -712,7 +712,9 @@ papers.currentbubble_click = function (d) {
     mediator.paper_deselected();
     mediator.publish("record_action", d.title, "Paper", "click", config.user_id, d.bookmarked + " " + d.recommended, null);
 
-    d3.event.stopPropagation();
+    if (d3.event) {
+        d3.event.stopPropagation();
+    }
 };
 
 papers.calcResizeFactor = function (metadata) {

@@ -7,14 +7,14 @@ import ButtonFilterSort from "../templates/filtersort/ButtonFilterSort";
 
 const FilterSort = ({ showList, showFilter, showDropdownSort, color }) => {
   if (showFilter) {
-    return <StandardFilterSort displaySort={showList} color={color} />;
+    return <StandardFilterSort displaySort={showList} />;
   }
 
   if (showDropdownSort) {
     return <BasicFilterSort displaySort={showList} color={color} />;
   }
 
-  return <ButtonFilterSort displaySort={showList} color={color} />;
+  return <ButtonFilterSort displaySort={showList} />;
 };
 
 const mapStateToProps = (state) => ({
