@@ -9,11 +9,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  handleChange: (text) => {
-    // TODO remove warn
-    console.warn("*** React element 'List' search event triggered ***");
-    dispatch(search(text));
-  },
+  handleChange: (text) => dispatch(search(text)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBoxTemplate);

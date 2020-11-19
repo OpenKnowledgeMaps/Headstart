@@ -69,14 +69,6 @@ describe("List entries component - special BASE tests", () => {
   });
 
   describe("events", () => {
-    global.console = {
-      log: console.log,
-      warn: jest.fn(),
-      error: console.error,
-      info: console.info,
-      debug: console.debug,
-    };
-
     it("triggers a correct title click action", () => {
       const realStore = setup();
       const store = mockStore(realStore.getState());
@@ -234,14 +226,6 @@ describe("List entries component - special BASE tests", () => {
   });
 
   describe("search, filter and sort", () => {
-    global.console = {
-      log: console.log,
-      warn: jest.fn(),
-      error: console.error,
-      info: console.info,
-      debug: console.debug,
-    };
-
     it("searches the list for 'sustainability education'", () => {
       const store = setup();
 

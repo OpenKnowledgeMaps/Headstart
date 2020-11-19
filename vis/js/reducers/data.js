@@ -28,7 +28,6 @@ const ATTRS_TO_CHECK = [
 
 const MANDATORY_ATTRS = {
   area_uri: {
-    // TODO maybe some escaping will be required
     derive: (entry) => entry.area,
   },
 };

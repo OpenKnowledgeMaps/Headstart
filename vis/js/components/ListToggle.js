@@ -10,11 +10,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onClick: () => {
-    // TODO remove warn
-    console.warn("*** React element 'List' click event triggered ***");
-    dispatch(toggleList());
-  },
+  onClick: () => dispatch(toggleList()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListToggleTemplate);

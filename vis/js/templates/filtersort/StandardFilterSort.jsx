@@ -6,7 +6,6 @@ import SortDropdown from "../../components/filtersort/SortDropdown";
 const StandardFilterSort = ({ displaySort }) => {
   return (
     // html template starts here
-    // TODO move div back ASAP
     <div id="explorer_options" className="row">
       <SearchBox />
       <FilterDropdown />
