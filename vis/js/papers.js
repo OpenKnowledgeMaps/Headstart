@@ -286,15 +286,14 @@ papers.prepareForeignObject = function (nodes) {
             .html(function (d) {
                 // moved code from io.js to here so the highlight works in papers too
                 let dCopy = Object.assign({}, d);
-                if (mediator.modern_frontend_enabled) {
-                    if(config.highlight_query_terms) {
-                        for (let field of config.highlight_query_fields) {
-                            dCopy[field] = mediator.modules.io.highlightTerms(dCopy[field], mediator.modules.io.query_terms);
-                        }
+                if(config.highlight_query_terms) {
+                    for (let field of config.highlight_query_fields) {
+                        dCopy[field] = mediator.modules.io.highlightTerms(dCopy[field], mediator.modules.io.query_terms);
                     }
-                    dCopy["authors_string"] = dCopy["authors_string"].replace(/</g, "&lt;");
-                    dCopy["authors_string"] = dCopy["authors_string"].replace(/>/g, "&gt;");
                 }
+                // moved code from io.js to here so the texts are properly escaped
+                dCopy["authors_string"] = dCopy["authors_string"].replace(/</g, "&lt;");
+                dCopy["authors_string"] = dCopy["authors_string"].replace(/>/g, "&gt;");
 
                 return paperTemplate({
                     'metadata_height': (config.content_based) ? (d.height) : (d.height * (1- config.paper_readers_height_factor)),
@@ -676,8 +675,6 @@ papers.enlargePaper = function (d, holder_div) {
                                 });
 
                         current_paper.attr("class", "framed");
-                    } else {
-                        //mediator.publish("list_title_click", d);
                     }
 
                     d.paper_selected = true;

@@ -34,7 +34,6 @@ class Intermediate {
     streamgraphZoomOutCallback,
     listToggleCallback,
     searchCallback,
-    sortCallback,
     filterCallback,
     areaClickCallback,
     areaMouseoverCallback,
@@ -54,7 +53,6 @@ class Intermediate {
         createFileChangeMiddleware(),
         createListToggleMiddleware(listToggleCallback),
         createSearchMiddleware(searchCallback),
-        createSortMiddleware(sortCallback),
         createFilterMiddleware(filterCallback),
         createAreaClickMiddleware(areaClickCallback),
         createAreaMouseoverMiddleware(areaMouseoverCallback),
@@ -85,18 +83,12 @@ class Intermediate {
    * so it has its own separate function.
    */
   renderList() {
-    if (this.modern_frontend_enabled) {
-      console.warn(
-        "*** FRONTEND FLAG ENABLED - new React elements rendered ***"
-      );
-
-      ReactDOM.render(
-        <Provider store={this.store}>
-          <List />
-        </Provider>,
-        document.getElementById("list-col")
-      );
-    }
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <List />
+      </Provider>,
+      document.getElementById("list-col")
+    );
   }
 
   zoomIn(selectedAreaData) {
@@ -151,17 +143,6 @@ function createSearchMiddleware(searchCallback) {
     return (next) => (action) => {
       if (action.type == "SEARCH") {
         searchCallback(action.text);
-      }
-      return next(action);
-    };
-  };
-}
-
-function createSortMiddleware(sortCallback) {
-  return function () {
-    return (next) => (action) => {
-      if (action.type == "SORT") {
-        sortCallback(action.id);
       }
       return next(action);
     };
