@@ -733,14 +733,6 @@ describe("List entries component", () => {
   });
 
   describe("events", () => {
-    global.console = {
-      log: console.log,
-      warn: jest.fn(),
-      error: console.error,
-      info: console.info,
-      debug: console.debug,
-    };
-
     it("triggers a correct title click action in local files", () => {
       const EXPECTED_PAYLOAD = selectPaper(initialTestData[0]);
       const storeObject = setup(

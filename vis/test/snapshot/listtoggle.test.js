@@ -1,5 +1,4 @@
 import React from "react";
-import { Provider } from "react-redux";
 import renderer from "react-test-renderer";
 import configureStore from "redux-mock-store";
 
@@ -12,8 +11,6 @@ describe("List toggle component snapshot", () => {
   it("matches a snapshot", () => {
     const store = mockStore({
       zoom: false,
-      // TODO test some real data
-      data: [],
       list: {
         show: true,
         searchValue: "",

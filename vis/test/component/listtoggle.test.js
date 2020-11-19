@@ -106,15 +106,6 @@ describe("List toggle component", () => {
   it("triggers a correct redux action when clicked", () => {
     const EXPECTED_PAYLOAD = toggleList();
 
-    // TODO remove this when warn is removed
-    global.console = {
-      log: console.log,
-      warn: jest.fn(),
-      error: console.error,
-      info: console.info,
-      debug: console.debug,
-    };
-
     const storeObject = setup();
     const store = mockStore(storeObject);
 
@@ -127,8 +118,7 @@ describe("List toggle component", () => {
       );
     });
 
-    // TODO change this for the #show_hide_button
-    const toggle = document.querySelector("#show_hide_button_label");
+    const toggle = document.querySelector("#show_hide_button");
     act(() => {
       const event = new Event("click", { bubbles: true });
       toggle.dispatchEvent(event);

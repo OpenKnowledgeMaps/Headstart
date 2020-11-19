@@ -661,14 +661,6 @@ describe("Heading component", () => {
       });
 
       it("triggers a correct redux action when dropdown changes", () => {
-        global.console = {
-          log: jest.fn(),
-          warn: jest.fn(),
-          error: console.error,
-          info: console.info,
-          debug: console.debug,
-        };
-
         const { storeObject } = setupFeatures();
         storeObject.heading.showDropdown = true;
         storeObject.files = {
