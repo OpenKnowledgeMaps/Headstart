@@ -10,9 +10,6 @@
     cursor: pointer;
     color: #ccc;
     z-index: 100;
-    @if not $modern_frontend_enabled {
-        display: none;
-    }
 }
 
 .searchfield-icon {

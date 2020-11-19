@@ -9,9 +9,6 @@
     padding-left: 5px;
     padding-right: 5px;
     background-color: white;
-    @if not $modern_frontend_enabled {
-        display: none;
-    }
     font-size: 10px;
     font-family: $special-font-family;
 }
