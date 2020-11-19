@@ -481,9 +481,8 @@ MyMediator.prototype = {
         mediator.current_stream = keyword;
         mediator.manager.call('list', 'scrollTop', []);
         mediator.manager.call('streamgraph', 'markStream', [keyword]);
-        mediator.manager.call('list', 'changeHeaderColor', [color]);
         mediator.paper_deselected();
-        mediator.modern_frontend_intermediate.zoomIn({title: keyword});
+        mediator.modern_frontend_intermediate.zoomIn({title: keyword, color});
     },
     
     currentstream_click: function() {
@@ -500,7 +499,6 @@ MyMediator.prototype = {
         else
             mediator.manager.call('list', 'scrollToEntry', [mediator.current_enlarged_paper.safe_id]);
         mediator.manager.call('streamgraph', 'reset');
-        mediator.manager.call('list', 'resetHeaderColor');
         mediator.draw_modals();
         mediator.paper_deselected();
         mediator.modern_frontend_intermediate.zoomOut();

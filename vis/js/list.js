@@ -104,16 +104,6 @@ list.fit_list_height = function() {
     mediator.publish("list_height_change", paper_list_avail_height);
 };
 
-list.changeHeaderColor = function(color) {
-    d3.select("#explorer_options")
-            .style("border-bottom", "5px solid " + color)
-}
-
-list.resetHeaderColor = function() {
-    d3.select("#explorer_options")
-            .style("border-bottom", "")
-}
-
 list.scrollToEntry = function(safe_id) {
     // couldn't think of a better solution now: the scroll must happen after the list is rerendered
     setTimeout(() => {
