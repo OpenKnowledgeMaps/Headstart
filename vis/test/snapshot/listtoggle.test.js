@@ -4,6 +4,7 @@ import renderer from "react-test-renderer";
 import configureStore from "redux-mock-store";
 
 import ListToggle from "../../js/components/ListToggle";
+import LocalizationProvider from "../../js/components/LocalizationProvider";
 
 const mockStore = configureStore([]);
 
@@ -26,9 +27,9 @@ describe("List toggle component snapshot", () => {
     });
     const tree = renderer
       .create(
-        <Provider store={store}>
-          <ListToggle docsNumber={13} />
-        </Provider>
+        <LocalizationProvider localization={store.getState().localization}>
+          <ListToggle store={store} docsNumber={13} />
+        </LocalizationProvider>
       )
       .toJSON();
     expect(tree).toMatchSnapshot();

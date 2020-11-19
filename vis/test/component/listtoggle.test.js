@@ -7,6 +7,7 @@ import configureStore from "redux-mock-store";
 import { toggleList } from "../../js/actions";
 
 import ListToggle from "../../js/components/ListToggle";
+import LocalizationProvider from "../../js/components/LocalizationProvider";
 
 const mockStore = configureStore([]);
 const setup = (overrideListObject = {}, overrideStoreObject = {}) => {
@@ -19,7 +20,7 @@ const setup = (overrideListObject = {}, overrideStoreObject = {}) => {
         searchValue: "",
         filterValue: "",
         filterField: "",
-        ...overrideListObject
+        ...overrideListObject,
       },
       localization: {
         show_list: "show list",
@@ -32,6 +33,8 @@ const setup = (overrideListObject = {}, overrideStoreObject = {}) => {
 
   return storeObject;
 };
+
+const DOCS_NUMBER = 42;
 
 describe("List toggle component", () => {
   let container = null;
@@ -47,38 +50,57 @@ describe("List toggle component", () => {
   });
 
   it("renders shown", () => {
-    const storeObject = setup({show: true});
+    const storeObject = setup({ show: true });
     const store = mockStore(storeObject);
 
     act(() => {
-      render(<ListToggle store={store} />, container);
+      render(
+        <LocalizationProvider localization={storeObject.localization}>
+          <ListToggle store={store} docsNumber={DOCS_NUMBER} />
+        </LocalizationProvider>,
+        container
+      );
     });
 
-    expect(container.querySelector("#show_hide_label").textContent).toContain(storeObject.localization.hide_list);
+    expect(container.querySelector("#show_hide_label").textContent).toContain(
+      storeObject.localization.hide_list
+    );
   });
 
   it("renders hidden", () => {
-    const storeObject = setup({show: false});
+    const storeObject = setup({ show: false });
     const store = mockStore(storeObject);
 
     act(() => {
-      render(<ListToggle store={store} />, container);
+      render(
+        <LocalizationProvider localization={storeObject.localization}>
+          <ListToggle store={store} docsNumber={DOCS_NUMBER} />
+        </LocalizationProvider>,
+        container
+      );
     });
 
-    expect(container.querySelector("#show_hide_label").textContent).toContain(storeObject.localization.show_list);
+    expect(container.querySelector("#show_hide_label").textContent).toContain(
+      storeObject.localization.show_list
+    );
   });
 
   it("renders with correct document number", () => {
-    const DOCS_NUMBER = 42;
-
     const storeObject = setup();
     const store = mockStore(storeObject);
 
     act(() => {
-      render(<ListToggle docsNumber={DOCS_NUMBER} store={store} />, container);
+      render(
+        <LocalizationProvider localization={storeObject.localization}>
+          <ListToggle store={store} docsNumber={DOCS_NUMBER} />
+        </LocalizationProvider>,
+        container
+      );
     });
 
-    expect(container.querySelector("#list_item_count").textContent).toEqual(DOCS_NUMBER.toString());
+    expect(container.querySelector("#list_item_count").textContent).toEqual(
+      DOCS_NUMBER.toString()
+    );
   });
 
   it("triggers a correct redux action when clicked", () => {
@@ -97,7 +119,12 @@ describe("List toggle component", () => {
     const store = mockStore(storeObject);
 
     act(() => {
-      render(<ListToggle store={store} />, container);
+      render(
+        <LocalizationProvider localization={storeObject.localization}>
+          <ListToggle store={store} docsNumber={DOCS_NUMBER} />
+        </LocalizationProvider>,
+        container
+      );
     });
 
     // TODO change this for the #show_hide_button
