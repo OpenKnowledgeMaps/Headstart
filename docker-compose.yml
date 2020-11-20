@@ -8,10 +8,11 @@ services:
     environment:
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-    ports:
-       - '127.0.0.1:54322:5432'
     volumes:
       - db-data:/var/lib/postgresql/data
+      - ./server/workers/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+    ports:
+      - '127.0.0.1:5432:5432'
 
   pgadmin:
     image: 'dpage/pgadmin4'
@@ -20,7 +21,7 @@ services:
     env_file:
       - .env
     volumes:
-      - /home/chris/data/OKMaps:/pgadmin4/data
+      - ${PGADMIN_VOLUME}:/pgadmin4/data
 
   api:
    build:
