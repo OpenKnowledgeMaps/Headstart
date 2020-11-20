@@ -536,7 +536,9 @@ BubblesFSM.prototype = {
 
         mediator.publish("record_action", d.title, "Bubble", "zoomin", config.user_id, "none", null);
 
-        d3.event.stopPropagation();
+        if (d3.event) {
+            d3.event.stopPropagation();
+        }
 
         mediator.is_zoomed = true;
         mediator.zoom_finished = false;
@@ -571,11 +573,12 @@ BubblesFSM.prototype = {
             mediator.publish("record_action", "none", "Bubble", "zoomout", config.user_id, "none", null);
         }
 
-        if (mediator.current_enlarged_paper !== null) {
-            mediator.current_enlarged_paper.paper_selected = false;
-            mediator.current_enlarged_paper = null;
+        if (!mediator.modern_frontend_enabled) {
+            if (mediator.current_enlarged_paper !== null) {
+                mediator.current_enlarged_paper.paper_selected = false;
+                mediator.current_enlarged_paper = null;
+            }
         }
-
 
         var n = 0;
         var t = canvas.chart.transition()

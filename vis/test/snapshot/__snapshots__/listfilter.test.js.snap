@@ -120,7 +120,7 @@ Array [
         Sort by: 
          
         <span
-          id="curr-filter-type"
+          id="curr-sort-type"
         >
           Relevance
         </span>
