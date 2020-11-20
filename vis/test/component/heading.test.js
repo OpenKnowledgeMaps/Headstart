@@ -14,7 +14,7 @@ const setup = (overrideStore = {}) => {
   const storeObject = Object.assign(
     {
       zoom: false,
-      query: null, // context.query
+      query: { text: "", parsedTerms: [] }, // context.query
       heading: {
         title: "Sample title", // context.params.title
         acronym: "Sample acronym", // context.params.acronym
@@ -322,7 +322,7 @@ describe("Heading component", () => {
       const setupLinkedcat = (overrideStore) => {
         const { storeObject } = setup();
         storeObject.heading.titleStyle = "linkedcat";
-        storeObject.query = "Some query";
+        storeObject.query.text = "Some query";
 
         Object.assign(storeObject, overrideStore);
 
@@ -398,7 +398,7 @@ describe("Heading component", () => {
       it("renders with correct query", () => {
         const QUERY = "Special Test Query";
 
-        const { store } = setupLinkedcat({ query: QUERY });
+        const { store } = setupLinkedcat({ query: { text: QUERY } });
 
         act(() => {
           render(<Heading store={store} />, container);
@@ -412,7 +412,7 @@ describe("Heading component", () => {
       it("renders with correct title attribute", () => {
         const QUERY = "Special Test Query";
 
-        const { store } = setupLinkedcat({ query: QUERY });
+        const { store } = setupLinkedcat({ query: { text: QUERY } });
 
         act(() => {
           render(<Heading store={store} />, container);
@@ -426,7 +426,7 @@ describe("Heading component", () => {
       it("renders with correct but long title", () => {
         const QUERY = "Special Test Query".repeat(100);
 
-        const { store } = setupLinkedcat({ query: QUERY });
+        const { store } = setupLinkedcat({ query: { text: QUERY } });
 
         act(() => {
           render(<Heading store={store} />, container);
@@ -440,7 +440,7 @@ describe("Heading component", () => {
       it("renders with correct but long title attribute", () => {
         const QUERY = "Special Test Query".repeat(100);
 
-        const { store } = setupLinkedcat({ query: QUERY });
+        const { store } = setupLinkedcat({ query: { text: QUERY } });
 
         act(() => {
           render(<Heading store={store} />, container);
@@ -458,7 +458,7 @@ describe("Heading component", () => {
         storeObject.heading.titleStyle = "custom";
         storeObject.heading.customTitle = "Some title";
         storeObject.localization.custom_title_explanation = "Some explanation";
-        storeObject.query = "Some query";
+        storeObject.query.text = "Some query";
 
         Object.assign(storeObject, overrideStore);
 
@@ -525,7 +525,7 @@ describe("Heading component", () => {
       it("renders with correct query", () => {
         const QUERY = "Special Test Query".repeat(100);
 
-        const { store } = setupCustom({ query: QUERY });
+        const { store } = setupCustom({ query: { text: QUERY } });
 
         act(() => {
           render(<Heading store={store} />, container);
@@ -569,7 +569,7 @@ describe("Heading component", () => {
       it("renders with query as the title", () => {
         const QUERY = "Special Test Query".repeat(100);
 
-        const { store } = setupStandard({ query: QUERY });
+        const { store } = setupStandard({ query: { text: QUERY } });
 
         act(() => {
           render(<Heading store={store} />, container);
@@ -583,7 +583,7 @@ describe("Heading component", () => {
       it("renders with query as the title's title attribute", () => {
         const QUERY = "Special Test Query".repeat(100);
 
-        const { store } = setupStandard({ query: QUERY });
+        const { store } = setupStandard({ query: { text: QUERY } });
 
         act(() => {
           render(<Heading store={store} />, container);
@@ -599,7 +599,7 @@ describe("Heading component", () => {
       const setupFeatures = () => {
         const { storeObject } = setup();
         storeObject.heading.titleStyle = "standard";
-        storeObject.query = "Some query";
+        storeObject.query.text = "Some query";
 
         const store = mockStore(storeObject);
 

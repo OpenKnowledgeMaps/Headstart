@@ -6,10 +6,19 @@ from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 
 from models import Revisions, Visualizations
-from database import db
+from database import db, sessions
 
 
 persistence_ns = Namespace("persistence", description="OKMAps persistence operations")
+
+
+def select_session(Session=None):
+    """Select session according to database,
+        else select session for default database."""
+    if Session is not None:
+        return Session()
+    else:
+        return db.session
 
 
 def create_vis_id(params, param_types):
@@ -25,9 +34,9 @@ def create_vis_id(params, param_types):
     return vis_id
 
 
-def write_revision(vis_id, data, rev_id=None):
-
-    vis = db.session.query(Visualizations).filter_by(vis_id=vis_id).first()
+def write_revision(database, vis_id, data, rev_id=None):
+    session = select_session(sessions.get(database))
+    vis = session.query(Visualizations).filter_by(vis_id=vis_id).first()
 
     if rev_id is None:
         if vis.vis_latest is None:
@@ -45,52 +54,56 @@ def write_revision(vis_id, data, rev_id=None):
                 rev_comment="Visualization created",
                 rev_data=data,
                 vis_query=query)
-    db.session.add(new_rev)
+    session.add(new_rev)
     vis.vis_latest = rev_id
-    db.session.commit()
+    session.commit()
 
 
-def create_visualization(vis_id, vis_title, data,
+def create_visualization(database,
+                         vis_id, vis_title, data,
                          vis_clean_query=None, vis_query=None,
                          vis_params=None):
-    if not exists_visualization(vis_id):
+    if not exists_visualization(database, vis_id):
+        session = select_session(sessions.get(database))
         new_vis = Visualizations(
                     vis_id=vis_id,
                     vis_clean_query=vis_clean_query,
                     vis_query=vis_query,
                     vis_title=vis_title,
                     vis_params=vis_params)
-        db.session.add(new_vis)
-        db.session.commit()
-        write_revision(vis_id, data, 1)
+        session.add(new_vis)
+        session.commit()
+        write_revision(database, vis_id, data, 1)
 
 
-def exists_visualization(vis_id):
-    vis = db.session.query(Visualizations).filter_by(vis_id=vis_id).first()
+def exists_visualization(database, vis_id):
+    session = select_session(sessions.get(database))
+    vis = session.query(Visualizations).filter_by(vis_id=vis_id).first()
     exists = True if vis else False
     return exists
 
 
-def get_last_version(vis_id, details=False, context=False):
-    return get_revision(vis_id, None, details, context)
+def get_last_version(database, vis_id, details=False, context=False):
+    return get_revision(database, vis_id, None, details, context)
 
 
-def get_revision(vis_id, rev_id, details=False, context=False):
+def get_revision(database, vis_id, rev_id, details=False, context=False):
+    session = select_session(sessions.get(database))
     if rev_id is None:
-        vis, rev = (db.session
-                      .query(Visualizations, Revisions)
-                      .select_from(Visualizations, Revisions)
-                      .filter(Visualizations.vis_id == vis_id)
-                      .filter(Revisions.rev_vis == vis_id)
-                      .filter(Revisions.rev_id == Visualizations.vis_latest)
+        vis, rev = (session
+                    .query(Visualizations, Revisions)
+                    .select_from(Visualizations, Revisions)
+                    .filter(Visualizations.vis_id == vis_id)
+                    .filter(Revisions.rev_vis == vis_id)
+                    .filter(Revisions.rev_id == Visualizations.vis_latest)
                     ).first()
     else:
-        vis, rev = (db.session
-                      .query(Visualizations, Revisions)
-                      .select_from(Visualizations, Revisions)
-                      .filter(Visualizations.vis_id == vis_id)
-                      .filter(Revisions.rev_vis == vis_id)
-                      .filter(Revisions.rev_id == rev_id)
+        vis, rev = (session
+                    .query(Visualizations, Revisions)
+                    .select_from(Visualizations, Revisions)
+                    .filter(Visualizations.vis_id == vis_id)
+                    .filter(Revisions.rev_vis == vis_id)
+                    .filter(Revisions.rev_id == rev_id)
                     ).first()
     if context is True:
         res = {
@@ -109,13 +122,14 @@ def get_revision(vis_id, rev_id, details=False, context=False):
             return rev.rev_data
 
 
-def get_context(vis_id, revision_context=False):
-    vis, rev = (db.session
-                  .query(Visualizations, Revisions)
-                  .select_from(Visualizations, Revisions)
-                  .filter(Visualizations.vis_id == vis_id)
-                  .filter(Revisions.rev_vis == vis_id)
-                  .filter(Revisions.rev_id == Visualizations.vis_latest)
+def get_context(database, vis_id, revision_context=False):
+    session = select_session(sessions.get(database))
+    vis, rev = (session
+                .query(Visualizations, Revisions)
+                .select_from(Visualizations, Revisions)
+                .filter(Visualizations.vis_id == vis_id)
+                .filter(Revisions.rev_vis == vis_id)
+                .filter(Revisions.rev_id == Visualizations.vis_latest)
                 ).first()
     res = {
         "rev_vis": rev.rev_vis,
@@ -130,14 +144,14 @@ def get_context(vis_id, revision_context=False):
     return res
 
 
-@persistence_ns.route('/existsVisualization')
+@persistence_ns.route('/existsVisualization/<database>')
 class existsVisualization(Resource):
 
-    def post(self):
+    def post(self, database):
         payload = request.get_json()
         persistence_ns.logger.debug("existsVisualization")
         vis_id = payload.get("vis_id")
-        exists = exists_visualization(vis_id)
+        exists = exists_visualization(database, vis_id)
         # create response
         headers = {}
         result = {"exists": exists}
@@ -145,10 +159,10 @@ class existsVisualization(Resource):
         return make_response(result, 200, headers)
 
 
-@persistence_ns.route('/createVisualization')
+@persistence_ns.route('/createVisualization/<database>')
 class createVisualization(Resource):
 
-    def post(self):
+    def post(self, database):
         try:
             payload = request.get_json()
             persistence_ns.logger.debug("createVisualization")
@@ -164,7 +178,8 @@ class createVisualization(Resource):
             persistence_ns.logger.debug(vis_clean_query)
             persistence_ns.logger.debug(vis_query)
             persistence_ns.logger.debug(vis_params)
-            create_visualization(vis_id, vis_title, data,
+            create_visualization(database,
+                                 vis_id, vis_title, data,
                                  vis_clean_query, vis_query, vis_params)
             result = {'success': True}
             headers = {'ContentType': 'application/json'}
@@ -179,18 +194,18 @@ class createVisualization(Resource):
                                  headers)
 
 
-@persistence_ns.route('/writeRevision')
+@persistence_ns.route('/writeRevision/<database>')
 class writeRevision(Resource):
 
     @persistence_ns.produces(["application/json"])
-    def post(self):
+    def post(self, database):
         try:
             payload = request.get_json()
             persistence_ns.logger.debug("writeRevision")
             vis_id = payload.get("vis_id")
             data = payload.get("data")
             # persistence_ns.logger.debug(data)
-            write_revision(vis_id, data)
+            write_revision(database, vis_id, data)
             result = {'success': True}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 200, headers)
@@ -200,7 +215,7 @@ class writeRevision(Resource):
             return make_response(jsonify(result), 500, headers)
 
 
-@persistence_ns.route('/getLastVersion')
+@persistence_ns.route('/getLastVersion/<database>')
 class getLastVersion(Resource):
     """
     Is actually a call to getRevision but taking the latest one
@@ -209,7 +224,7 @@ class getLastVersion(Resource):
 
     """
 
-    def post(self):
+    def post(self, database):
         try:
             payload = request.get_json()
             persistence_ns.logger.debug("getLastVersion")
@@ -217,7 +232,7 @@ class getLastVersion(Resource):
             vis_id = payload.get('vis_id')
             details = payload.get('details')
             context = payload.get('context')
-            result = get_last_version(vis_id, details, context)
+            result = get_last_version(database, vis_id, details, context)
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  200,
@@ -230,11 +245,11 @@ class getLastVersion(Resource):
                                  headers)
 
 
-@persistence_ns.route('/getRevision')
+@persistence_ns.route('/getRevision/<database>')
 class getRevision(Resource):
 
     @persistence_ns.produces(["application/json"])
-    def post(self):
+    def post(self, database):
 
         # create response
         headers = {}
@@ -243,18 +258,18 @@ class getRevision(Resource):
         return make_response(result, 200, headers)
 
 
-@persistence_ns.route('/getContext')
+@persistence_ns.route('/getContext/<database>')
 class getContext(Resource):
 
     @persistence_ns.produces(["application/json"])
-    def post(self):
+    def post(self, database):
         try:
             payload = request.get_json()
             persistence_ns.logger.debug("getContext")
             persistence_ns.logger.debug(payload)
             vis_id = payload.get('vis_id')
             revision_context = payload.get('revision_context', False)
-            result = get_context(vis_id, revision_context)
+            result = get_context(database, vis_id, revision_context)
             persistence_ns.logger.debug(result)
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
