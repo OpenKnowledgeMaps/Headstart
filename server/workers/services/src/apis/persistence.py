@@ -16,11 +16,13 @@ def create_vis_id(params, param_types):
     # create map id
     ordered_params = OrderedDict()
     for k in param_types:
-        ordered_params[k] = params[k]
+        v = params[k]
+        v = [str(e) for e in v] if isinstance(v, list) else str(v)
+        ordered_params[k] = v
     string_to_hash = json.dumps(ordered_params, separators=(',', ':'))
-    string_to_hash = " ".join([params["q"], string_to_hash])
-    mapid = md5(string_to_hash.encode('utf-8')).hexdigest()
-    return mapid
+    string_to_hash = " ".join([params["q"].replace('"', '\\"'), string_to_hash])
+    vis_id = md5(string_to_hash.encode('utf-8')).hexdigest()
+    return vis_id
 
 
 def write_revision(vis_id, data, rev_id=None):
@@ -105,6 +107,27 @@ def get_revision(vis_id, rev_id, details=False, context=False):
             return rev.as_dict()
         else:
             return rev.rev_data
+
+
+def get_context(vis_id, revision_context=False):
+    vis, rev = (db.session
+                  .query(Visualizations, Revisions)
+                  .select_from(Visualizations, Revisions)
+                  .filter(Visualizations.vis_id == vis_id)
+                  .filter(Revisions.rev_vis == vis_id)
+                  .filter(Revisions.rev_id == Visualizations.vis_latest)
+                ).first()
+    res = {
+        "rev_vis": rev.rev_vis,
+        "vis_query": rev.vis_query,
+        "vis_title": vis.vis_title,
+        "rev_timestamp": rev.rev_timestamp,
+        "vis_params": vis.vis_params
+    }
+    if revision_context == 'true':
+        data = json.loads(rev.rev_data)
+        res["additional_context"] = data.get("additional_context", {})
+    return res
 
 
 @persistence_ns.route('/existsVisualization')
@@ -220,6 +243,31 @@ class getRevision(Resource):
         return make_response(result, 200, headers)
 
 
+@persistence_ns.route('/getContext')
+class getContext(Resource):
+
+    @persistence_ns.produces(["application/json"])
+    def post(self):
+        try:
+            payload = request.get_json()
+            persistence_ns.logger.debug("getContext")
+            persistence_ns.logger.debug(payload)
+            vis_id = payload.get('vis_id')
+            revision_context = payload.get('revision_context', False)
+            result = get_context(vis_id, revision_context)
+            persistence_ns.logger.debug(result)
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result),
+                                 200,
+                                 headers)
+        except Exception as e:
+            result = {'success': False, 'reason': str(e)}
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result),
+                                 500,
+                                 headers)
+
+
 @persistence_ns.route('/createID')
 class createID(Resource):
 
@@ -230,10 +278,10 @@ class createID(Resource):
             payload = request.get_json()
             params = payload.get("params")
             param_types = payload.get("param_types")
-            mapid = create_vis_id(params, param_types)
+            vis_id = create_vis_id(params, param_types)
             # create response
             headers = {}
-            result = {"unique_id": mapid}
+            result = {"unique_id": vis_id}
             headers["Content-Type"] = "application/json"
             return make_response(jsonify(result), 200, headers)
         except Exception as e:
