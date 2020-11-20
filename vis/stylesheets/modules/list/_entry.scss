@@ -419,6 +419,9 @@ div {
     &#preview_image {
         display: block;
         margin-top: 20px;
+        @if $modern_frontend_enabled {
+            margin-bottom: 20px;
+        }
         margin-left: 15px;
     }
 
@@ -427,6 +430,12 @@ div {
         cursor: pointer;
         opacity: .9;
         background-color: rgba(255, 255, 255, 0.6);
+    }
+
+    @if $modern_frontend_enabled {
+        &#preview_image:hover > #transbox {
+            display: block;
+        }
     }
 
     &#preview_page_index {
@@ -760,18 +769,31 @@ img#preview_page {
 
     #list_abstract {
 
-        span:not(:empty):not(.highlight) {
-            display: block;
-            margin-top: 5px;
-
-            &::before, &::after {
-                content: "[...] "
+        @if $modern_frontend_enabled {
+            span:not(:empty).highlighted {
+                display: block;
+                margin-top: 5px;
+    
+                &::before, &::after {
+                    content: "[...] "
+                }
+            }
+        } @else {
+            span:not(:empty):not(.highlight) {
+                display: block;
+                margin-top: 5px;
+    
+                &::before, &::after {
+                    content: "[...] "
+                }
             }
         }
     }
 
     div#preview_image {
-        display: none;
+        @if not $modern_frontend_enabled {
+            display: none;
+        }
     }
 
     #list_area, #list_keywords, #list_basic_classification, #list_ddc, #list_abstract {
@@ -850,8 +872,14 @@ img#preview_page {
         }
     }
 
-    .doi_outlink, .list_metrics {
+    .list_metrics {
         display: none;
+    }
+
+    .doi_outlink {
+        @if not $modern_frontend_enabled {
+            display: none;
+        }
     }
 
     #list_area {
