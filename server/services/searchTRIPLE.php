@@ -9,7 +9,7 @@ use headstart\library;
 
 $dirty_query = library\CommUtils::getParameter($_POST, "q");
 $precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
-$persistence_backend = (isset($_POST["persistence_backend"]))?($_POST["persistence_backend"]):("legacy");
+$persistence_backend = (isset($_POST["persistence_backend"]))?($_POST["persistence_backend"]):("api");
 
 $post_params = $_POST;
 unset($post_params["persistence_backend"]);
