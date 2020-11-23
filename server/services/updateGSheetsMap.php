@@ -15,7 +15,7 @@ if(php_sapi_name() == 'cli') {
     $longopts = array(
       "q:",
       "sheet_id:",
-      "last_update"
+      "last_update:"
     );
     $options = getopt($shortopts, $longopts);
     $dirty_query = $options["q"];
@@ -39,7 +39,7 @@ $result = search("gsheets", $dirty_query
                     , false, null, 3
                     , "area_uri", "subject"
                     , $sheet_id, false
-                    , "api", "legacy");
+                    , "api", "api");
 
 echo $result;
 

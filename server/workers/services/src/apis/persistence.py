@@ -122,6 +122,28 @@ def get_revision(database, vis_id, rev_id, details=False, context=False):
             return rev.rev_data
 
 
+def get_context(database, vis_id, revision_context=False):
+    session = select_session(sessions.get(database))
+    vis, rev = (session
+                .query(Visualizations, Revisions)
+                .select_from(Visualizations, Revisions)
+                .filter(Visualizations.vis_id == vis_id)
+                .filter(Revisions.rev_vis == vis_id)
+                .filter(Revisions.rev_id == Visualizations.vis_latest)
+                ).first()
+    res = {
+        "rev_vis": rev.rev_vis,
+        "vis_query": rev.vis_query,
+        "vis_title": vis.vis_title,
+        "rev_timestamp": rev.rev_timestamp,
+        "vis_params": vis.vis_params
+    }
+    if revision_context == 'true':
+        data = json.loads(rev.rev_data)
+        res["additional_context"] = data.get("additional_context", {})
+    return res
+
+
 @persistence_ns.route('/existsVisualization/<database>')
 class existsVisualization(Resource):
 
@@ -234,6 +256,31 @@ class getRevision(Resource):
         result = {}
         headers["Content-Type"] = "application/json"
         return make_response(result, 200, headers)
+
+
+@persistence_ns.route('/getContext/<database>')
+class getContext(Resource):
+
+    @persistence_ns.produces(["application/json"])
+    def post(self, database):
+        try:
+            payload = request.get_json()
+            persistence_ns.logger.debug("getContext")
+            persistence_ns.logger.debug(payload)
+            vis_id = payload.get('vis_id')
+            revision_context = payload.get('revision_context', False)
+            result = get_context(database, vis_id, revision_context)
+            persistence_ns.logger.debug(result)
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result),
+                                 200,
+                                 headers)
+        except Exception as e:
+            result = {'success': False, 'reason': str(e)}
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result),
+                                 500,
+                                 headers)
 
 
 @persistence_ns.route('/createID')
