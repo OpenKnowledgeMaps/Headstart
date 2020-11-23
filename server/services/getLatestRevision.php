@@ -62,7 +62,7 @@ if ($backend == "api") {
       } else {
           if ($persistence_backend === "api") {
             # return data without context from api
-            $route = $ini_array["general"]["api_url"] . "/persistence" . "/getLastVersion";
+            $route = $ini_array["general"]["api_url"] . "/persistence" . "/getLastVersion" . "/" . $database;
             $payload = json_encode(array("vis_id" => $vis_id, "details" => false, "context" => false));
             $res = library\CommUtils::call_api($route, $payload);
             if ($res["httpcode"] != 200) {
@@ -82,7 +82,7 @@ if ($backend == "api") {
   if ($context === true) {
      if ($persistence_backend === "api") {
        # get data + context from api
-       $route = $ini_array["general"]["api_url"] . "/persistence" . "/getLastVersion";
+       $route = $ini_array["general"]["api_url"] . "/persistence" . "/getLastVersion" . "/" . $database;
        $payload = json_encode(array("vis_id" => $vis_id, "details" => false, "context" => true));
        $res = library\CommUtils::call_api($route, $payload);
        if ($res["httpcode"] != 200) {
@@ -115,7 +115,7 @@ if ($backend == "api") {
   } else {
       if ($persistence_backend === "api") {
         # get data without context from api
-        $route = $ini_array["general"]["api_url"] . "/persistence" . "/getLastVersion";
+        $route = $ini_array["general"]["api_url"] . "/persistence" . "/getLastVersion" . "/" . $database;
         $payload = json_encode(array("vis_id" => $vis_id, "details" => false, "context" => false));
         $res = library\CommUtils::call_api($route, $payload);
         if ($res["httpcode"] != 200) {
