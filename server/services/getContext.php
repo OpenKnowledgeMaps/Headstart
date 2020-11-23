@@ -20,7 +20,7 @@ $persistence = new headstart\persistence\SQLitePersistence($ini_array["connectio
 $database = $ini_array["connection"]["database"];
 
 if ($persistence_backend === "api") {
-  $route = $ini_array["general"]["api_url"] . "/persistence" . "/getContext" . "/" . $database;
+  $route = $ini_array["general"]["api_url"] . "persistence/" . "getContext/" . $database;
   $payload = json_encode(array("vis_id" => $vis_id, "revision_context" => $revision_context));
   $res = library\CommUtils::call_api($route, $payload);
   if ($res["httpcode"] != 200) {
