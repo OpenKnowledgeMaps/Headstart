@@ -8,8 +8,11 @@ if __name__ == '__main__':
     db.init_app(app)
     with app.app_context():
         for database, Session in sessions.items():
-            session = Session()
-            engine = session.get_bind()
-            for name, table in Visualizations.metadata.tables.items():
-                if not engine.dialect.has_table(engine, name):
-                    table.create(engine)
+            try:
+                session = Session()
+                engine = session.get_bind()
+                for name, table in Visualizations.metadata.tables.items():
+                    if not engine.dialect.has_table(engine, name):
+                        table.create(engine)
+            except Exception as e:
+                print(database, e)
