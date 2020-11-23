@@ -1,5 +1,6 @@
 <?php
-
+// This route is used for the fallback mechanism that checks if
+// connection was interrupted during waiting, and a vis already created
 header('Content-type: application/json');
 
 require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';

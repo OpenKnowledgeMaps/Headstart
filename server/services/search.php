@@ -76,7 +76,7 @@ function search($repository, $dirty_query
     $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
     if ($persistence_backend === "api") {
-      $route = $ini_array["general"]["api_url"] . "/persistence" . "/createID";
+      $route = $ini_array["general"]["api_url"] . "persistence/" . "createID";
       $payload = json_encode(array("params" => $post_params,
                                    "param_types" => $param_types));
       $res = library\CommUtils::call_api($route, $payload);
@@ -94,12 +94,24 @@ function search($repository, $dirty_query
     $params_json = packParamsJSON($param_types, $post_params);
 
     if($retrieve_cached_map) {
-        $last_version = $persistence->getLastVersion($unique_id, false);
-
-        if ($last_version != null && $last_version != "null" && $last_version != false) {
-            echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
-            return;
+      if ($persistence_backend === "api") {
+        $route = $ini_array["general"]["api_url"] . "persistence/" . "getLastVersion/" . $database;
+        $payload = json_encode(array("vis_id" => $unique_id,
+                                     "details" => false,
+                                     "context" => false));
+        $res = library\CommUtils::call_api($route, $payload);
+        if ($res["httpcode"] != 200) {
+          echo json_encode($res);
+        } else {
+          $last_version = json_decode($res["result"], true);
         }
+      } else {
+        $last_version = $persistence->getLastVersion($unique_id, false);
+      }
+      if ($last_version != null && $last_version != "null" && $last_version != false) {
+          echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
+          return;
+      }
     }
 
     $params_file = tmpfile();
@@ -147,7 +159,7 @@ function search($repository, $dirty_query
     $vis_title = $repository;
 
     if ($persistence_backend === "api") {
-      $route = $ini_array["general"]["api_url"] . "/persistence" . "/existsVisualization" . "/" . $database;
+      $route = $ini_array["general"]["api_url"] . "persistence/" . "existsVisualization/" . $database;
       $payload = json_encode(array("vis_id" => $unique_id));
       $res = library\CommUtils::call_api($route, $payload);
       if ($res["httpcode"] != 200) {
@@ -162,7 +174,7 @@ function search($repository, $dirty_query
 
     if (!$exists) {
       if ($persistence_backend === "api") {
-        $route = $ini_array["general"]["api_url"] . "/persistence" . "/createVisualization" . "/" . $database;
+        $route = $ini_array["general"]["api_url"] . "persistence/" . "createVisualization/" . $database;
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "vis_title" => $vis_title,
                                      "data" => $input_json,
@@ -178,7 +190,7 @@ function search($repository, $dirty_query
       }
     } else {
       if ($persistence_backend === "api") {
-        $route = $ini_array["general"]["api_url"] . "/persistence" . "/writeRevision" . "/" . $database;
+        $route = $ini_array["general"]["api_url"] . "persistence/" . "writeRevision/" . $database;
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "data" => $input_json));
         $res = library\CommUtils::call_api($route, $payload);
