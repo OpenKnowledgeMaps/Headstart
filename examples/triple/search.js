@@ -77,7 +77,7 @@ $("#searchform").validate({
 
 var doSubmit = function (data, newWindow, callback) {
   data += "&today=" + new Date().toLocaleDateString("en-US");
-  data += "&persistence_backend=" + data_config["persistence_backend"];
+  data += "&persistence_backend=" + data_config.persistence_backend;
   var params = $("#searchform").serializeArray().reduce(function(obj, item) {
     obj[item.name] = item.value;
     return obj;
