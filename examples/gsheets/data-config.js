@@ -31,7 +31,7 @@ var data_config = {
 
     content_based: true,
     is_evaluation: true,
-    evaluation_service: ["ga", "matomo"],
+    evaluation_service: ["matomo"],
 
     is_force_areas: true,
     area_force_alpha: 0.03,
@@ -52,6 +52,5 @@ var data_config = {
     filter_menu_dropdown: true,
 
     embed_modal: true,
-    share_modal: false,
-    persistence_backend: "api"
+    share_modal: false
 };
