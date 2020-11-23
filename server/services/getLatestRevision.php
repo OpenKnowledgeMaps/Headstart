@@ -20,6 +20,7 @@ $streamgraph = filter_input(INPUT_GET, "streamgraph", FILTER_VALIDATE_BOOLEAN,
     array("flags" => FILTER_NULL_ON_FAILURE));
 $backend = isset($_GET["backend"]) ? library\CommUtils::getParameter($_GET, "backend") : "legacy";
 $persistence_backend = isset($_GET["persistence_backend"]) ? library\CommUtils::getParameter($_GET, "persistence_backend") : "legacy";
+$database = $ini_array["connection"]["database"];
 
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
@@ -29,7 +30,7 @@ if ($backend == "api") {
       # context data true start
       if ($persistence_backend === "api") {
         # get data + context from api
-        $route = $ini_array["general"]["api_url"] . "/persistence" . "/getLastVersion";
+        $route = $ini_array["general"]["api_url"] . "/persistence" . "/getLastVersion" . "/" . $database;
         $payload = json_encode(array("vis_id" => $vis_id, "details" => false, "context" => true));
         $res = library\CommUtils::call_api($route, $payload);
         if ($res["httpcode"] != 200) {

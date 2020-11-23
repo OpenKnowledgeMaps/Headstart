@@ -17,9 +17,10 @@ $persistence_backend = isset($_GET["persistence_backend"]) ? library\CommUtils::
 $revision_context =  isset($_GET["revision_context"]) ? library\CommUtils::getParameter($_GET, "revision_context") : false;
 
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
+$database = $ini_array["connection"]["database"];
 
 if ($persistence_backend === "api") {
-  $route = $ini_array["general"]["api_url"] . "/persistence" . "/getContext";
+  $route = $ini_array["general"]["api_url"] . "/persistence" . "/getContext" . "/" . $database;
   $payload = json_encode(array("vis_id" => $vis_id, "revision_context" => $revision_context));
   $res = library\CommUtils::call_api($route, $payload);
   if ($res["httpcode"] != 200) {
