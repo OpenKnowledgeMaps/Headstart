@@ -14,11 +14,12 @@ $ini_array = library\Toolkit::loadIni($INI_DIR);
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 $gsheet_last_updated = library\CommUtils::getParameter($_GET, "gsheet_last_updated");
 $persistence_backend = isset($_GET["persistence_backend"]) ? library\CommUtils::getParameter($_GET, "persistence_backend") : "legacy";
+$database = $ini_array["connection"]["database"];
 
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
 if ($persistence_backend == "api") {
-  $route = $ini_array["general"]["api_url"] . "/persistence" . "/getLastVersion";
+  $route = $ini_array["general"]["api_url"] . "/persistence" . "/getLastVersion" . "/" . $backend;
   $payload = json_encode(array("vis_id" => $vis_id, "details" => false, "context" => true));
   $res = library\CommUtils::call_api($route, $payload);
   if ($res["httpcode"] != 200) {

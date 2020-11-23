@@ -67,6 +67,7 @@ function search($repository, $dirty_query
                 :($dirty_query);
 
     $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
+    $database = $ini_array["connection"]["database"];
 
     $settings = $ini_array["general"];
 
@@ -146,7 +147,7 @@ function search($repository, $dirty_query
     $vis_title = $repository;
 
     if ($persistence_backend === "api") {
-      $route = $ini_array["general"]["api_url"] . "/persistence" . "/existsVisualization";
+      $route = $ini_array["general"]["api_url"] . "/persistence" . "/existsVisualization" . "/" . $database;
       $payload = json_encode(array("vis_id" => $unique_id));
       $res = library\CommUtils::call_api($route, $payload);
       if ($res["httpcode"] != 200) {
@@ -161,7 +162,7 @@ function search($repository, $dirty_query
 
     if (!$exists) {
       if ($persistence_backend === "api") {
-        $route = $ini_array["general"]["api_url"] . "/persistence" . "/createVisualization";
+        $route = $ini_array["general"]["api_url"] . "/persistence" . "/createVisualization" . "/" . $database;
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "vis_title" => $vis_title,
                                      "data" => $input_json,
@@ -177,7 +178,7 @@ function search($repository, $dirty_query
       }
     } else {
       if ($persistence_backend === "api") {
-        $route = $ini_array["general"]["api_url"] . "/persistence" . "/writeRevision";
+        $route = $ini_array["general"]["api_url"] . "/persistence" . "/writeRevision" . "/" . $database;
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "data" => $input_json));
         $res = library\CommUtils::call_api($route, $payload);
