@@ -89,37 +89,41 @@ def get_last_version(database, vis_id, details=False, context=False):
 
 def get_revision(database, vis_id, rev_id, details=False, context=False):
     session = select_session(sessions.get(database))
-    if rev_id is None:
-        vis, rev = (session
-                    .query(Visualizations, Revisions)
-                    .select_from(Visualizations, Revisions)
-                    .filter(Visualizations.vis_id == vis_id)
-                    .filter(Revisions.rev_vis == vis_id)
-                    .filter(Revisions.rev_id == Visualizations.vis_latest)
-                    ).first()
-    else:
-        vis, rev = (session
-                    .query(Visualizations, Revisions)
-                    .select_from(Visualizations, Revisions)
-                    .filter(Visualizations.vis_id == vis_id)
-                    .filter(Revisions.rev_vis == vis_id)
-                    .filter(Revisions.rev_id == rev_id)
-                    ).first()
-    if context is True:
-        res = {
-            "rev_vis": rev.rev_vis,
-            "vis_query": rev.vis_query,
-            "vis_title": vis.vis_title,
-            "rev_timestamp": rev.rev_timestamp,
-            "vis_params": vis.vis_params,
-            "rev_data": rev.rev_data
-        }
-        return res
-    else:
-        if details is True:
-            return rev.as_dict()
+    try:
+        if rev_id is None:
+            vis, rev = (session
+                        .query(Visualizations, Revisions)
+                        .select_from(Visualizations, Revisions)
+                        .filter(Visualizations.vis_id == vis_id)
+                        .filter(Revisions.rev_vis == vis_id)
+                        .filter(Revisions.rev_id == Visualizations.vis_latest)
+                        ).first()
         else:
-            return rev.rev_data
+            vis, rev = (session
+                        .query(Visualizations, Revisions)
+                        .select_from(Visualizations, Revisions)
+                        .filter(Visualizations.vis_id == vis_id)
+                        .filter(Revisions.rev_vis == vis_id)
+                        .filter(Revisions.rev_id == rev_id)
+                        ).first()
+        if context is True:
+            res = {
+                "rev_vis": rev.rev_vis,
+                "vis_query": rev.vis_query,
+                "vis_title": vis.vis_title,
+                "rev_timestamp": rev.rev_timestamp,
+                "vis_params": vis.vis_params,
+                "rev_data": rev.rev_data
+            }
+            return res
+        else:
+            if details is True:
+                return rev.as_dict()
+            else:
+                return rev.rev_data
+    except TypeError:
+        persistence_ns.logger.info("Vis ID not found: %s in database %s" % (vis_id, database))
+        return None
 
 
 def get_context(database, vis_id, revision_context=False):
