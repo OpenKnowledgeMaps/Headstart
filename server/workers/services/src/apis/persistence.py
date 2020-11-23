@@ -149,8 +149,8 @@ class existsVisualization(Resource):
 
     def post(self, database):
         payload = request.get_json()
-        persistence_ns.logger.debug("existsVisualization")
         vis_id = payload.get("vis_id")
+        persistence_ns.logger.debug("existsVisualization: %s" % vis_id)
         exists = exists_visualization(database, vis_id)
         # create response
         headers = {}
@@ -294,6 +294,9 @@ class createID(Resource):
             params = payload.get("params")
             param_types = payload.get("param_types")
             vis_id = create_vis_id(params, param_types)
+            persistence_ns.logger.debug(params)
+            persistence_ns.logger.debug(param_types)
+            persistence_ns.logger.debug(vis_id)
             # create response
             headers = {}
             result = {"unique_id": vis_id}
