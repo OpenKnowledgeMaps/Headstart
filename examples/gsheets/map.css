@@ -1,0 +1,89 @@
+.errors-container {
+    margin: 20px 10px;
+    display: none;
+    padding-left: 50px;
+}
+
+.show-errors {
+    display: block;
+}
+
+.topheader {
+    padding-top: 59px;
+}
+
+.error-row-top, .error-row-entry {
+    padding: 5px;
+}
+
+.errors-info {
+    line-height: 110% !important;
+    z-index: 99;
+    font-family: 'Lato', sans-serif !important;
+    position: relative;
+}
+
+.errors-info, .expand-icon {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.errors-table-hidden {
+    display: none;
+}
+
+.reload-button {
+    color: white;
+    background-color: #cc3b6b;
+    position: fixed;
+    top: 192px;
+    left: 0%;
+    transform: translate(0%, 0);
+    z-index: 99;
+    cursor: pointer;
+    display: block;
+    padding: 12px 15px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    max-width: 200px;
+    font-family: 'Lato', sans-serif;
+    display: none;
+    -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.reload-button.mobile {
+    top: 298px;
+}
+
+.dismiss-reload {
+    color: white;
+    text-decoration: underline;
+}
+
+.dismiss-reload:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.show-reload-button {
+    display: block;
+}
+
+.hide-reload-text {
+    display: none;
+}
+
+@media screen and (max-width: 1150px) {
+    .reload-button {
+    padding: 10px 12px;
+    max-width: 180px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .errors-container {
+        padding-left: 0px;
+    }
+}

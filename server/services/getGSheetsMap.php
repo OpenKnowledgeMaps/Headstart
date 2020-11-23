@@ -27,13 +27,17 @@ if ($persistence_backend === "api") {
   } else {
     $data = json_decode($res["result"], true);
     $rev_data = json_decode($data["rev_data"], true);
-    $return_data = array("context" => array("id" => $data["rev_vis"],
-                                            "query" => $data["vis_query"],
-                                            "service" => $data["vis_title"],
-                                            "timestamp" => $data["rev_timestamp"],
-                                            "params" => $data["vis_params"],
-                                            "sheet_id" => $rev_data["sheet_id"],
-                                            "last_update" => $rev_data["last_update"]),
+    $context = array("id" => $data["rev_vis"],
+                                   "query" => $data["vis_query"],
+                                   "service" => $data["vis_title"],
+                                   "timestamp" => $data["rev_timestamp"],
+                                   "params" => $data["vis_params"],
+                                   "sheet_id" => $rev_data["sheet_id"],
+                                   "last_update" => $rev_data["last_update"]);
+    if (array_key_exists("additional_context", $rev_data)) {
+      $context = array_merge($context, $rev_data["additional_context"]);
+    }
+    $return_data = array("context" => $context,
                          "data" => $rev_data["data"],
                          "errors" => $rev_data["errors"]);
     $jsonData = json_encode($return_data);
@@ -42,13 +46,17 @@ if ($persistence_backend === "api") {
 } else {
   $data = $persistence->getLastVersion($vis_id, $details = false, $context = true)[0];
   $rev_data = json_decode($data["rev_data"], true);
-  $return_data = array("context" => array("id" => $data["rev_vis"],
-                                          "query" => $data["vis_query"],
-                                          "service" => $data["vis_title"],
-                                          "timestamp" => $data["rev_timestamp"],
-                                          "params" => $data["vis_params"],
-                                          "sheet_id" => $rev_data["sheet_id"],
-                                          "last_update" => $rev_data["last_update"]),
+  $context = array("id" => $data["rev_vis"],
+                                 "query" => $data["vis_query"],
+                                 "service" => $data["vis_title"],
+                                 "timestamp" => $data["rev_timestamp"],
+                                 "params" => $data["vis_params"],
+                                 "sheet_id" => $rev_data["sheet_id"],
+                                 "last_update" => $rev_data["last_update"]);
+  if (array_key_exists("additional_context", $rev_data)) {
+    $context = array_merge($context, $rev_data["additional_context"]);
+  }
+  $return_data = array("context" => $context,
                        "data" => $rev_data["data"],
                        "errors" => $rev_data["errors"]);
   $jsonData = json_encode($return_data);
