@@ -7,8 +7,11 @@ import filesReducer from "../../js/reducers/files";
 import contextLineReducer from "../../js/reducers/contextLine";
 import serviceReducer from "../../js/reducers/service";
 import listReducer from "../../js/reducers/list";
+import dataReducer from "../../js/reducers/data";
 
-const setup = (overrideConfig, overrideContext) => {
+import localData from "../data/local-files";
+
+const setup = (overrideConfig = {}, overrideContext = {}) => {
   const configObject = Object.assign(
     {
       title: "presetTitle",
@@ -114,16 +117,16 @@ describe("config and context state", () => {
   describe("reducers", () => {
     describe("heading reducer", () => {
       it("should return the initial state", () => {
-        const expectedResult = {};
+        const EXPECTED_RESULT = {};
 
         const result = headingReducer(undefined, {});
 
-        expect(result).toEqual(expectedResult);
+        expect(result).toEqual(EXPECTED_RESULT);
       });
 
       it("should handle the initialization", () => {
         const initialState = {};
-        const expectedResult = {
+        const EXPECTED_RESULT = {
           title: "title",
           acronym: "acronym",
           projectId: "projectId",
@@ -141,12 +144,12 @@ describe("config and context state", () => {
           initializeStore(configObject, contextObject)
         );
 
-        expect(result).toEqual(expectedResult);
+        expect(result).toEqual(EXPECTED_RESULT);
       });
 
       it("should handle the initialization even without context params", () => {
         const initialState = {};
-        const expectedResult = {
+        const EXPECTED_RESULT = {
           title: undefined,
           acronym: undefined,
           projectId: undefined,
@@ -169,12 +172,12 @@ describe("config and context state", () => {
           initializeStore(configObject, contextObject)
         );
 
-        expect(result).toEqual(expectedResult);
+        expect(result).toEqual(EXPECTED_RESULT);
       });
 
       it("should initialize a standard titleStyle", () => {
         const initialState = {};
-        const expectedResult = {
+        const EXPECTED_RESULT = {
           title: "title",
           acronym: "acronym",
           projectId: "projectId",
@@ -194,13 +197,13 @@ describe("config and context state", () => {
           initializeStore(configObject, contextObject)
         );
 
-        expect(result).toEqual(expectedResult);
+        expect(result).toEqual(EXPECTED_RESULT);
       });
     });
 
     it("should initialize a null titleStyle", () => {
       const initialState = {};
-      const expectedResult = {
+      const EXPECTED_RESULT = {
         title: "title",
         acronym: "acronym",
         projectId: "projectId",
@@ -221,12 +224,12 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(EXPECTED_RESULT);
     });
 
     it("should initialize an authorview streamgraph titleLabelType", () => {
       const initialState = {};
-      const expectedResult = {
+      const EXPECTED_RESULT = {
         title: "title",
         acronym: "acronym",
         projectId: "projectId",
@@ -247,12 +250,12 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(EXPECTED_RESULT);
     });
 
     it("should initialize an authorview knowledgemap titleLabelType", () => {
       const initialState = {};
-      const expectedResult = {
+      const EXPECTED_RESULT = {
         title: "title",
         acronym: "acronym",
         projectId: "projectId",
@@ -273,12 +276,12 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(EXPECTED_RESULT);
     });
 
     it("should initialize an keywordview streamgraph titleLabelType", () => {
       const initialState = {};
-      const expectedResult = {
+      const EXPECTED_RESULT = {
         title: "title",
         acronym: "acronym",
         projectId: "projectId",
@@ -299,22 +302,22 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(EXPECTED_RESULT);
     });
   });
 
   describe("localization reducer", () => {
     it("should return the initial state", () => {
-      const expectedResult = {};
+      const EXPECTED_RESULT = {};
 
       const result = localizationReducer(undefined, {});
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(EXPECTED_RESULT);
     });
 
     it("should handle the initialization", () => {
       const initialState = {};
-      const expectedResult = {
+      const EXPECTED_RESULT = {
         area: "Area",
         intro_icon: "++intro icon++",
         intro_label: "Some intro label",
@@ -333,60 +336,79 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(EXPECTED_RESULT);
     });
   });
 
   describe("query reducer", () => {
     it("should return the initial state", () => {
-      const expectedResult = null;
+      const EXPECTED_RESULT = { text: "", parsedTerms: [] };
 
       const result = queryReducer(undefined, {});
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(EXPECTED_RESULT);
     });
 
     it("should handle the initialization", () => {
       const initialState = null;
       const { configObject, contextObject } = setup();
-      const expectedResult = contextObject.query;
+      const EXPECTED_RESULT = contextObject.query;
 
       const result = queryReducer(
         initialState,
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toEqual(expectedResult);
+      expect(result.text).toEqual(EXPECTED_RESULT);
     });
 
     it("should handle the initialization even without the query", () => {
       const initialState = null;
       const { configObject, contextObject } = setup();
       contextObject.query = undefined;
-      const expectedResult = null;
+      const EXPECTED_RESULT = null;
 
       const result = queryReducer(
         initialState,
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toEqual(expectedResult);
+      expect(result.text).toEqual(EXPECTED_RESULT);
+    });
+
+    it("should parse the query phrases correctly", () => {
+      const initialState = null;
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          query: `"some phrase" cool`,
+        }
+      );
+
+      const EXPECTED_RESULT = ["some phrase", "cool"];
+
+      const result = queryReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result.parsedTerms).toEqual(EXPECTED_RESULT);
     });
   });
 
   describe("files reducer", () => {
     it("should return the initial state", () => {
-      const expectedResult = { current: 0, list: [] };
+      const EXPECTED_RESULT = { current: 0, list: [] };
 
       const result = filesReducer(undefined, {});
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(EXPECTED_RESULT);
     });
 
     it("should handle the initialization", () => {
       const initialState = { current: 0, list: [] };
       const { configObject, contextObject } = setup();
-      const expectedResult = {
+      const EXPECTED_RESULT = {
         current: 0,
         list: configObject.files,
       };
@@ -396,17 +418,17 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(EXPECTED_RESULT);
     });
   });
 
   describe("context line reducer", () => {
     it("should return the initial state", () => {
-      const expectedResult = {};
+      const EXPECTED_RESULT = {};
 
       const result = contextLineReducer(undefined, {});
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(EXPECTED_RESULT);
     });
 
     it("should initialize show to true", () => {
@@ -1620,11 +1642,11 @@ describe("config and context state", () => {
 
   describe("service reducer", () => {
     it("should return the initial state", () => {
-      const expectedResult = null;
+      const EXPECTED_RESULT = null;
 
       const result = serviceReducer(undefined, {});
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(EXPECTED_RESULT);
     });
 
     it("should initialize null service", () => {
@@ -1670,24 +1692,221 @@ describe("config and context state", () => {
   describe("list reducer", () => {
     // initial state tested in listtoggle.test.js
 
-    it("should not change the state with initialization", () => {
-      const INITIAL_STATE = { show: true, docsNumber: 0 };
+    it("should initialize correct list visibility", () => {
       const SHOW_LIST = false;
-      const EXPECTED_STATE = { ...INITIAL_STATE, show: SHOW_LIST };
 
-      const { configObject, contextObject } = setup(
-        {
-          show_list: SHOW_LIST,
-        },
-        {}
-      );
+      const { configObject, contextObject } = setup({
+        show_list: SHOW_LIST,
+      });
 
       const result = listReducer(
-        INITIAL_STATE,
+        {},
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toEqual(EXPECTED_STATE);
+      expect(result).toHaveProperty("show", SHOW_LIST);
+    });
+
+    it("should initialize correct filter visibility", () => {
+      const SHOW_FILTER = false;
+
+      const { configObject, contextObject } = setup({
+        filter_menu_dropdown: SHOW_FILTER,
+      });
+
+      const result = listReducer(
+        {},
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("showFilter", SHOW_FILTER);
+    });
+
+    it("should initialize correct filter options and initial value", () => {
+      const FILTER_OPTIONS = ["all", "open_access"];
+
+      const { configObject, contextObject } = setup({
+        filter_options: FILTER_OPTIONS,
+      });
+
+      const result = listReducer(
+        {},
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("filterOptions", FILTER_OPTIONS);
+      expect(result).toHaveProperty("filterValue", FILTER_OPTIONS[0]);
+    });
+
+    it("should initialize correct sort visibility", () => {
+      const SHOW_SORT = false;
+
+      const { configObject, contextObject } = setup({
+        sort_menu_dropdown: SHOW_SORT,
+      });
+
+      const result = listReducer(
+        {},
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("showDropdownSort", SHOW_SORT);
+    });
+
+    it("should initialize correct sort options and initial value", () => {
+      const SORT_OPTIONS = ["relevance", "readers", "year"];
+
+      const { configObject, contextObject } = setup({
+        sort_options: SORT_OPTIONS,
+      });
+
+      const result = listReducer(
+        {},
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("sortOptions", SORT_OPTIONS);
+      expect(result).toHaveProperty("sortValue", SORT_OPTIONS[0]);
+    });
+
+    it("should initialize correct initial value if pre-specified", () => {
+      const SORT_OPTIONS = ["relevance", "readers", "year"];
+      const INITIAL_SORT = "readers";
+
+      const { configObject, contextObject } = setup({
+        sort_options: SORT_OPTIONS,
+        initial_sort: INITIAL_SORT,
+      });
+
+      const result = listReducer(
+        {},
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("sortValue", INITIAL_SORT);
+    });
+
+    it("should initialize covis link type", () => {
+      const SERVICE = "gsheets";
+      const EXPECTED_LINK_TYPE = "covis";
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          service: SERVICE,
+        }
+      );
+
+      const result = listReducer(
+        {},
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("linkType", EXPECTED_LINK_TYPE);
+    });
+
+    it("should initialize doi link type", () => {
+      const DOI_OUTLINK = true;
+      const EXPECTED_LINK_TYPE = "doi";
+      const { configObject, contextObject } = setup({
+        doi_outlink: DOI_OUTLINK,
+      });
+
+      const result = listReducer(
+        {},
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("linkType", EXPECTED_LINK_TYPE);
+    });
+
+    it("should initialize doi link type", () => {
+      const URL_OUTLINK = true;
+      const EXPECTED_LINK_TYPE = "url";
+      const { configObject, contextObject } = setup({
+        url_outlink: URL_OUTLINK,
+      });
+
+      const result = listReducer(
+        {},
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("linkType", EXPECTED_LINK_TYPE);
+    });
+
+    it("should initialize null link type", () => {
+      const SERVICE = "base";
+      const DOI_OUTLINK = false;
+      const URL_OUTLINK = false;
+      const EXPECTED_LINK_TYPE = null;
+      const { configObject, contextObject } = setup(
+        {
+          doi_outlink: DOI_OUTLINK,
+          url_outlink: URL_OUTLINK,
+        },
+        {
+          service: SERVICE,
+        }
+      );
+
+      const result = listReducer(
+        {},
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("linkType", EXPECTED_LINK_TYPE);
+    });
+  });
+
+  describe("data reducer", () => {
+    it("should initialize correct data with the input data property missing", () => {
+      const mockWarn = jest.fn();
+
+      global.console = {
+        log: console.log,
+        warn: mockWarn,
+        error: console.error,
+        info: console.info,
+        debug: console.debug,
+      };
+
+      const { configObject, contextObject } = setup();
+
+      const result = dataReducer(
+        {},
+        initializeStore(configObject, contextObject, localData)
+      );
+
+      expect(result).toHaveProperty("length", localData.length);
+      expect(mockWarn).toHaveBeenCalled();
+    });
+
+    it("should initialize correct data with the input data property missing in all but one entry", () => {
+      const mockWarn = jest.fn();
+
+      const entry1 = Object.assign({}, localData[0]);
+      entry1.area_uri = "some-uri";
+      const entry2 = Object.assign({}, localData[1]);
+      delete entry2.area_uri;
+      const mockLocalData = [entry1, entry2];
+
+      global.console = {
+        log: console.log,
+        warn: mockWarn,
+        error: console.error,
+        info: console.info,
+        debug: console.debug,
+      };
+
+      const { configObject, contextObject } = setup();
+
+      const result = dataReducer(
+        {},
+        initializeStore(configObject, contextObject, mockLocalData)
+      );
+
+      expect(result).toHaveProperty("length", mockLocalData.length);
+      expect(mockWarn).toHaveBeenCalled();
     });
   });
 });

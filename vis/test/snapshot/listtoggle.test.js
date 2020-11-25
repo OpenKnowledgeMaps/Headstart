@@ -10,9 +10,14 @@ const mockStore = configureStore([]);
 describe("List toggle component snapshot", () => {
   it("matches a snapshot", () => {
     const store = mockStore({
+      zoom: false,
+      // TODO test some real data
+      data: [],
       list: {
         show: true,
-        docsNumber: 42,
+        searchValue: "",
+        filterValue: "",
+        filterField: "",
       },
       localization: {
         hide_list: "Liste einklappen",

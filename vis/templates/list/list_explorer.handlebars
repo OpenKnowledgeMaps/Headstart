@@ -11,6 +11,7 @@
         </div>
 
         <div id="explorer_options" class="row">
+        {{#unless modern_frontend_enabled}}
             <div class="" id="filter_container">
                 <div class="input-group input-group-sm">
                     <i class="fa fa-search searchfield-icon"></i>
@@ -47,6 +48,6 @@
                     {{/if}}
                 </div>
             </div>
-        
+        {{/unless}}
         </div>
         <div class="col-xs-12" id="papers_list"></div>

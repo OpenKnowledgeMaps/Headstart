@@ -79,7 +79,7 @@ deduplicate_titles <- function(metadata, list_size) {
     output = head(output, max_replacements)
   }
 
-  vplog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Number of duplicate entries:", length(output)))
+  vplog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Number of duplicate entries:", length(output)))
 
   return(output)
 
@@ -88,7 +88,7 @@ deduplicate_titles <- function(metadata, list_size) {
 replace_keywords_if_empty <- function(metadata, stops, service) {
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub(" +", " ", x)}))
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
-  vplog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Documents without subjects:", length(missing_subjects)))
+  vplog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Documents without subjects:", length(missing_subjects)))
   if (service == "linkedcat" || service == "linkedcat_authorview" || service == "linkedcat_browseview") {
     metadata$subject[missing_subjects] <- metadata$bkl_caption[missing_subjects]
     metadata$subject[is.na(metadata$subject)] <- ""
