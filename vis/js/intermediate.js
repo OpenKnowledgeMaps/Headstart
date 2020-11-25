@@ -12,15 +12,14 @@ import {
   showList,
   selectPaperFromMediator,
   deselectPaper,
+  setListHeight
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
 
 import SubdisciplineTitle from "./templates/SubdisciplineTitle";
 import AuthorImage from "./components/AuthorImage";
-import ListToggle from "./components/ListToggle";
-import FilterSort from "./components/FilterSort";
-import ListEntries from "./components/ListEntries";
+import List from "./components/List";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -35,7 +34,6 @@ class Intermediate {
     streamgraphZoomOutCallback,
     listToggleCallback,
     searchCallback,
-    sortCallback,
     filterCallback,
     areaClickCallback,
     areaMouseoverCallback,
@@ -55,7 +53,6 @@ class Intermediate {
         createFileChangeMiddleware(),
         createListToggleMiddleware(listToggleCallback),
         createSearchMiddleware(searchCallback),
-        createSortMiddleware(sortCallback),
         createFilterMiddleware(filterCallback),
         createAreaClickMiddleware(areaClickCallback),
         createAreaMouseoverMiddleware(areaMouseoverCallback),
@@ -86,32 +83,12 @@ class Intermediate {
    * so it has its own separate function.
    */
   renderList() {
-    if (this.modern_frontend_enabled) {
-      console.warn(
-        "*** FRONTEND FLAG ENABLED - new React elements rendered ***"
-      );
-
-      ReactDOM.render(
-        <Provider store={this.store}>
-          <ListToggle />
-        </Provider>,
-        document.getElementById("show_hide_button")
-      );
-
-      ReactDOM.render(
-        <Provider store={this.store}>
-          <FilterSort />
-        </Provider>,
-        document.getElementById("explorer_options")
-      );
-
-      ReactDOM.render(
-        <Provider store={this.store}>
-          <ListEntries />
-        </Provider>,
-        document.getElementById("papers_list")
-      );
-    }
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <List />
+      </Provider>,
+      document.getElementById("list-col")
+    );
   }
 
   zoomIn(selectedAreaData) {
@@ -132,6 +109,10 @@ class Intermediate {
 
   deselectPaper() {
     this.store.dispatch(deselectPaper());
+  }
+
+  setListHeight(newHeight) {
+    this.store.dispatch(setListHeight(newHeight));
   }
 }
 
@@ -162,17 +143,6 @@ function createSearchMiddleware(searchCallback) {
     return (next) => (action) => {
       if (action.type == "SEARCH") {
         searchCallback(action.text);
-      }
-      return next(action);
-    };
-  };
-}
-
-function createSortMiddleware(sortCallback) {
-  return function () {
-    return (next) => (action) => {
-      if (action.type == "SORT") {
-        sortCallback(action.id);
       }
       return next(action);
     };

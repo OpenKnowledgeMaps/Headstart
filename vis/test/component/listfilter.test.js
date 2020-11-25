@@ -68,8 +68,7 @@ describe("List filter component", () => {
       );
     });
 
-    // TODO check id="explorer_options"
-    expect(container.querySelector("#filter_container")).not.toBe(null);
+    expect(container.querySelector("#explorer_options")).not.toBe(null);
   });
 
   describe("search box", () => {
@@ -112,14 +111,6 @@ describe("List filter component", () => {
     it("triggers a correct redux action when search box value changes", () => {
       jest.useFakeTimers();
 
-      global.console = {
-        log: console.log,
-        warn: jest.fn(),
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
-
       const SEARCH_TEXT = "some text";
       const EXPECTED_PAYLOAD = search(SEARCH_TEXT);
       const storeObject = setup({ searchValue: SEARCH_TEXT });
@@ -156,14 +147,6 @@ describe("List filter component", () => {
     });
 
     it("triggers a correct redux action when clear button clicked", () => {
-      global.console = {
-        log: console.log,
-        warn: jest.fn(),
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
-
       const EXPECTED_PAYLOAD = search("");
       const SEARCH_TEXT = "some text";
       const storeObject = setup({ searchValue: SEARCH_TEXT });
@@ -211,14 +194,6 @@ describe("List filter component", () => {
     });
 
     it("triggers a correct redux action when option is clicked", () => {
-      global.console = {
-        log: console.log,
-        warn: jest.fn(),
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
-
       const EXPECTED_ID = "all";
       const EXPECTED_PAYLOAD = filter(EXPECTED_ID);
       const FILTER_ID = "open_access";
@@ -271,14 +246,6 @@ describe("List filter component", () => {
     });
 
     it("triggers a correct redux action when option is clicked", () => {
-      global.console = {
-        log: console.log,
-        warn: jest.fn(),
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
-
       const EXPECTED_ID = "year";
       const EXPECTED_PAYLOAD = sort(EXPECTED_ID);
       const SORT_ID = "relevance";
@@ -335,14 +302,6 @@ describe("List filter component", () => {
     });
 
     it("triggers a correct redux action when button is clicked", () => {
-      global.console = {
-        log: console.log,
-        warn: jest.fn(),
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
-
       const EXPECTED_PAYLOAD = sort("year");
       const SORT_ID = "relevance";
       const storeObject = setup({
