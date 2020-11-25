@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import ContextLineTemplate from "../templates/ContextLine";
-import HoverPopover from "./HoverPopover";
+import HoverPopover from "../templates/HoverPopover";
 import Author from "../templates/contextfeatures/Author";
 
 import DocumentTypes from "../templates/contextfeatures/DocumentTypes";
@@ -33,8 +33,6 @@ class ContextLine extends React.Component {
     }
 
     return (
-      // TODO this <p> can be moved into the template when whole MVP is refactored
-      // then a different container for the popovers can be chosen
       <ContextLineTemplate>
         {params.showAuthor && (
           <Author

@@ -64,12 +64,14 @@ export const list = StateMachine.create({
             this.width = config.list_width;
             this.papers_list = null;
             this.drawList();
-            this.populateList();
-            this.initListMouseListeners();
+            if (!mediator.modern_frontend_enabled) {
+                this.populateList();
+                this.initListMouseListeners();
+            }
             if(config.initial_sort === null) {
-              list.sortBy(config.sort_options[0]);
+                list.sortBy(config.sort_options[0]);
             } else {
-              list.sortBy(config.initial_sort);
+                list.sortBy(config.initial_sort);
             }
             this.current_search_words = []
             this.current_filter_param = config.filter_options[0];
@@ -77,11 +79,9 @@ export const list = StateMachine.create({
         },
 
         onshow: function() {
-            d3.select("#sort_container").style("display", "inline-block");
-            d3.select("#papers_list").style("display", "block");
-            d3.select("#left_arrow").text("\u25B2");
-            d3.select("#right_arrow").text("\u25B2");
             if (!mediator.modern_frontend_enabled) {
+                d3.select("#papers_list").style("display", "block");
+                d3.select("#sort_container").style("display", "inline-block");
                 d3.select("#show_hide_label").html(showHideLabel({
                     show_or_hide_list: config.localization[config.language].hide_list,
                     items: config.localization[config.language].items,
@@ -93,11 +93,9 @@ export const list = StateMachine.create({
         },
 
         onhide: function() {
-            d3.select("#sort_container").style("display", "none");
-            d3.select("#papers_list").style("display", "none");
-            d3.select("#left_arrow").text("\u25BC");
-            d3.select("#right_arrow").text("\u25BC");
             if (!mediator.modern_frontend_enabled) {
+                d3.select("#papers_list").style("display", "none");
+                d3.select("#sort_container").style("display", "none");
                 d3.select("#show_hide_label").html(showHideLabel({
                     show_or_hide_list: config.localization[config.language].show_list,
                     items: config.localization[config.language].items,
@@ -120,6 +118,10 @@ export const list = StateMachine.create({
 });
 
 list.sortBy = function(field) { 
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
+
     let sort_field = field;
     
     //if field (potentially) includes highlight spans, sort by original text
@@ -133,7 +135,6 @@ list.sortBy = function(field) {
 
 list.drawList = function() {
     let self = this;
-
     // Load list template
     let list_explorer = listTemplate({
         show_list: config.localization[config.language].show_list,
@@ -145,64 +146,66 @@ list.drawList = function() {
         modern_frontend_enabled: mediator.modern_frontend_enabled,
     });
     $("#list_explorer").append(list_explorer);
-    
-    // Set localized values
-    let timer;
-    let delay = 300;
-    $("#filter_input")
-        .attr("placeholder", config.localization[config.language].search_placeholder)
-        .on("input", (event) => {
-            if ($("#filter_input").val() !== "") {
-                $("#searchclear").show();
-            } else {
-                $("#searchclear").hide();
-            }
-            window.clearTimeout(timer);
-            timer = window.setTimeout(function() {
-                debounce(self.filterList(event.target.value.split(" "), this.current_filter_param), config.debounce);
-            }, delay);
-        
+
+    if (!mediator.modern_frontend_enabled) {
+        // Set localized values
+        let timer;
+        let delay = 300;
+        $("#filter_input")
+            .attr("placeholder", config.localization[config.language].search_placeholder)
+            .on("input", (event) => {
+                if ($("#filter_input").val() !== "") {
+                    $("#searchclear").show();
+                } else {
+                    $("#searchclear").hide();
+                }
+                window.clearTimeout(timer);
+                timer = window.setTimeout(function() {
+                    debounce(self.filterList(event.target.value.split(" "), this.current_filter_param), config.debounce);
+                }, delay);
+            
+            });
+
+        $("#searchclear").click(() => {
+            $("#filter_input").val('');
+            $("#searchclear").hide();
+            debounce(this.filterList([""], this.current_filter_param), config.debounce);
         });
 
-    $("#searchclear").click(() => {
-        $("#filter_input").val('');
-        $("#searchclear").hide();
-        debounce(this.filterList([""], this.current_filter_param), config.debounce);
-    });
-
-    // Add sort button options
-    var container = d3.select("#sort_container>ul");
-    const numberOfOptions = config.sort_options.length;
-    if(!config.sort_menu_dropdown) {
-        var first_element = true;
-        for (var i = 0; i < numberOfOptions; i++) {
-            if (first_element) {
-                addSortOptionButton(container, config.sort_options[i], true);
-                first_element = false;
-            } else {
-                addSortOptionButton(container, config.sort_options[i], false);
+        // Add sort button options
+        var container = d3.select("#sort_container>ul");
+        const numberOfOptions = config.sort_options.length;
+        if(!config.sort_menu_dropdown) {
+            var first_element = true;
+            for (var i = 0; i < numberOfOptions; i++) {
+                if (first_element) {
+                    addSortOptionButton(container, config.sort_options[i], true);
+                    first_element = false;
+                } else {
+                    addSortOptionButton(container, config.sort_options[i], false);
+                }
+            }
+        } else {
+            let initial_sort_option = (config.initial_sort === null)?(config.sort_options[0]):(config.initial_sort)
+            $('#curr-sort-type').text(config.localization[config.language][initial_sort_option])
+            for(var i=0; i<numberOfOptions; i++) {
+                if(i === 0) {
+                    addSortOptionDropdownEntry(config.sort_options[i], true)
+                } else {
+                    addSortOptionDropdownEntry(config.sort_options[i], false)
+                }
             }
         }
-    } else {
-        let initial_sort_option = (config.initial_sort === null)?(config.sort_options[0]):(config.initial_sort)
-        $('#curr-sort-type').text(config.localization[config.language][initial_sort_option])
-        for(var i=0; i<numberOfOptions; i++) {
-            if(i === 0) {
-                addSortOptionDropdownEntry(config.sort_options[i], true)
-            } else {
-                addSortOptionDropdownEntry(config.sort_options[i], false)
-            }
-        }
-    }
 
-    // Add filter options
-    if(config.filter_menu_dropdown) {
-        $('#curr-filter-type').text(config.localization[config.language]['all'])
-        for (var i = 0; i < config.filter_options.length; i++) {
-            if (i === 0) {
-                self.addFilterOptionDropdownEntry(config.filter_options[i], true);
-            } else {
-                self.addFilterOptionDropdownEntry(config.filter_options[i], false);
+        // Add filter options
+        if(config.filter_menu_dropdown) {
+            $('#curr-filter-type').text(config.localization[config.language]['all'])
+            for (var i = 0; i < config.filter_options.length; i++) {
+                if (i === 0) {
+                    self.addFilterOptionDropdownEntry(config.filter_options[i], true);
+                } else {
+                    self.addFilterOptionDropdownEntry(config.filter_options[i], false);
+                }
             }
         }
     }
@@ -215,6 +218,9 @@ list.drawList = function() {
 };
 
 list.count_visible_items_to_header = function() {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
     var count = 0
     let current_circle = d3.select(mediator.current_zoom_node)
     d3.selectAll("#list_holder").filter(function(d) {
@@ -262,11 +268,20 @@ list.fit_list_height = function() {
         let title_height = $("#subdiscipline_title").outerHeight(true);
         let title_image_height = $("#title_image").outerHeight(true) || 0;
         
+        // the real height after the react elements are rendered
+        let showHideBtnHeight = 34;
+        let filterSortHeight = 68.4;
+
+        if (!mediator.modern_frontend_enabled) {
+            showHideBtnHeight = $("#show_hide_button").outerHeight(true);
+            filterSortHeight = $("#explorer_options").outerHeight(true);
+        }
+
         paper_list_avail_height = 
                 Math.max(title_height, title_image_height)
                     + $("#headstart-chart").outerHeight(true)
-                    - $("#show_hide_button").outerHeight(true) 
-                    - $("#explorer_options").outerHeight(true)
+                    - showHideBtnHeight 
+                    - filterSortHeight
                     + ($(".legend").outerHeight(true) || 0)
                     - PAPER_LIST_CORRECTION
                     - (parseInt($("#papers_list").css("padding-top"), 10) || 0)
@@ -285,6 +300,10 @@ list.resetHeaderColor = function() {
 }
 
 let addSortOptionDropdownEntry = function(sort_option, first_item) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     let entry = sortDropdownEntryTemplate({
         sort_by_string: config.localization[config.language].sort_by_label,
         sorter_label: config.localization[config.language][sort_option],
@@ -306,6 +325,9 @@ let addSortOptionDropdownEntry = function(sort_option, first_item) {
 }
 
 let addSortOptionButton = function(parent, sort_option, selected) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
 
     let checked_val = "";
     let active_val = "";
@@ -336,6 +358,10 @@ let addSortOptionButton = function(parent, sort_option, selected) {
 };
 
 list.addFilterOptionDropdownEntry = function (filter_option, first_item) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+    
     let entry = filterDropdownEntryTemplate({
         filter_by_string: config.localization[config.language].filter_by_label,
         filter_label: config.localization[config.language][filter_option]
@@ -355,18 +381,20 @@ list.addFilterOptionDropdownEntry = function (filter_option, first_item) {
 }
 
 list.initListMouseListeners = function() {
-    if (!mediator.modern_frontend_enabled) {
-        $("#show_hide_button")
-            .on("mouseover", function() {
-                $("#show_hide_button").addClass("hover");
-            })
-            .on("mouseout", function() {
-                $("#show_hide_button").removeClass("hover");
-            })
-            .on("click", function() {
-                mediator.publish("list_toggle");
-            });
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
     }
+
+    $("#show_hide_button")
+        .on("mouseover", function() {
+            $("#show_hide_button").addClass("hover");
+        })
+        .on("mouseout", function() {
+            $("#show_hide_button").removeClass("hover");
+        })
+        .on("click", function() {
+            mediator.publish("list_toggle");
+        });
 
     d3.selectAll("#paper_list_title").on("click", function(d) {
         mediator.publish("list_title_clickable", d);
@@ -374,6 +402,10 @@ list.initListMouseListeners = function() {
 };
 
 list.getPaperNodes = function(list_data) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     if ((config.list_sub_entries)) {
         let list_entry = listEntryTemplateCris();
 
@@ -422,69 +454,82 @@ list.getPaperNodes = function(list_data) {
 };
 
 list.updateByFiltered = function() {
-    list.papers_list.selectAll("#list_holder")
-        .style("display", function(d) {
-            return d.filtered_out ? "none" : "inline";
-        });
+    if (!mediator.modern_frontend_enabled) {
+        list.papers_list.selectAll("#list_holder")
+            .style("display", function(d) {
+                return d.filtered_out ? "none" : "inline";
+            });
+    }
 };
 
 list.filterListByAreaURIorArea = function(area) {
-    list.papers_list.selectAll("#list_holder")
-        .filter(function(x) {
-            return (config.use_area_uri) ? (x.area_uri != area.area_uri) : (x.area != area.title);
-        })
-        .style("display", "none");
+    if (!mediator.modern_frontend_enabled) {
+        list.papers_list.selectAll("#list_holder")
+            .filter(function(x) {
+                return (config.use_area_uri) ? (x.area_uri != area.area_uri) : (x.area != area.title);
+            })
+            .style("display", "none");
+    }
 };
 
 list.filterListByArea = function(area) {
-    d3.selectAll("#list_holder")
-        .filter(function(x) {
-            if (config.use_area_uri) {
-                //TODO: hotfix for issue with backlinks for older maps
-                let curr_area_uri = (Array.isArray(x.area_uri)) ? (x.area_uri[0]) : (x.area_uri);
-                let target_area_uri = (Array.isArray(area.area_uri)) ? (area.area_uri[0]) : (area.area_uri);
-                return curr_area_uri == target_area_uri;
-            } else {
-                return x.area == area.title;
-            }
-        })
-        .style("display", function(d) {
-            return d.filtered_out ? "none" : "inline";
-        });
+    if (!mediator.modern_frontend_enabled) {
+        d3.selectAll("#list_holder")
+            .filter(function(x) {
+                if (config.use_area_uri) {
+                    //TODO: hotfix for issue with backlinks for older maps
+                    let curr_area_uri = (Array.isArray(x.area_uri)) ? (x.area_uri[0]) : (x.area_uri);
+                    let target_area_uri = (Array.isArray(area.area_uri)) ? (area.area_uri[0]) : (area.area_uri);
+                    return curr_area_uri == target_area_uri;
+                } else {
+                    return x.area == area.title;
+                }
+            })
+            .style("display", function(d) {
+                return d.filtered_out ? "none" : "inline";
+            });
+    }
 };
 
 list.filterListByKeyword = function(keyword) {
-    d3.selectAll("#list_holder").style("display", "none");
-    
-    d3.selectAll("#list_holder")
-        .filter(function(x) {
-            if (typeof x.subject_orig === "undefined") {
-                x.subject_orig = "";
-            }
-            let keywords = x.subject_orig.split("; ");
-            let contains_keyword = keywords.includes(keyword);
-            return contains_keyword
-        })
-        .style("display", function(d) {
-            return d.filtered_out ? "none" : "inline";
-        });
+    if (!mediator.modern_frontend_enabled) {
+        d3.selectAll("#list_holder").style("display", "none");
+        
+        d3.selectAll("#list_holder")
+            .filter(function(x) {
+                if (typeof x.subject_orig === "undefined") {
+                    x.subject_orig = "";
+                }
+                let keywords = x.subject_orig.split("; ");
+                let contains_keyword = keywords.includes(keyword);
+                return contains_keyword
+            })
+            .style("display", function(d) {
+                return d.filtered_out ? "none" : "inline";
+            });
+    }
 };
 
 list.updateVisualDistributions = function(attribute, context) {
-    let nodes = d3.selectAll("#list_holder");
-    nodes[0].forEach(function(elem) {
-        let d = d3.select(elem).datum();
-        let overall_context = context.distributions_all[attribute];
-        let current_context = context.distributions_papers[d.id][attribute];
-        let list_visual_distributions = d3.select(elem).select(".list_visual_dstributions");
-        
-        updateTags(current_context, overall_context, list_visual_distributions, attribute, true);
-        
-    })
-    
+    if (!mediator.modern_frontend_enabled) {
+        let nodes = d3.selectAll("#list_holder");
+        nodes[0].forEach(function(elem) {
+            let d = d3.select(elem).datum();
+            let overall_context = context.distributions_all[attribute];
+            let current_context = context.distributions_papers[d.id][attribute];
+            let list_visual_distributions = d3.select(elem).select(".list_visual_dstributions");
+            
+            updateTags(current_context, overall_context, list_visual_distributions, attribute, true);
+            
+        })
+    }
 };
 
 list.populateMetaData = function(nodes) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     nodes[0].forEach(function(elem) {
         var list_metadata = d3.select(elem).select(".list_metadata");
         
@@ -633,6 +678,10 @@ list.populateMetaData = function(nodes) {
 };
 
 list.setIconsAndTags = function (list_metadata) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     list_metadata.select("#file-icon_list")
             .style("display", function (d) {
                 if (d.resulttype == "dataset") {
@@ -706,6 +755,9 @@ list.setIconsAndTags = function (list_metadata) {
 };
 
 list.createComments = function(nodes) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
        
     nodes[0].forEach((elem) => {
         let current_d = d3.select(elem).select("#list_comments").data()[0];
@@ -729,6 +781,10 @@ list.createComments = function(nodes) {
 }
 
 list.createAbstracts = function(nodes) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     nodes[0].forEach((elem) => {
         d3.select(elem).select("#list_abstract")
             .html((d) => {
@@ -741,6 +797,10 @@ list.createAbstracts = function(nodes) {
 };
 
 list.populateReaders = function(nodes) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     let _this = this;
     nodes[0].forEach(function(elem) {
         var areas = d3.select(elem).select("#list_area");
@@ -814,6 +874,10 @@ list.populateReaders = function(nodes) {
 };
 
 list.populateExternalVis = function(nodes) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     nodes[0].forEach(function(elem) {
         let external_vis = d3.select(elem).select(".conceptgraph");
         
@@ -829,6 +893,10 @@ list.populateExternalVis = function(nodes) {
 };
 
 list.fillKeywords = function(tag, keyword_type, metadata_field) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     tag.select(".keyword_tag").html(function() {
                 return config.localization[config.language][keyword_type] + ":";
             });
@@ -843,6 +911,10 @@ list.fillKeywords = function(tag, keyword_type, metadata_field) {
 };
 
 list.populateList = function() {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     var list_data = mediator.current_bubble.data;
     list_data.filter(function(el) {
         return el !== null;
@@ -859,9 +931,18 @@ list.populateList = function() {
 };
 
 list.scrollToEntry = function(safe_id) {
-    $("#papers_list").animate({
-        scrollTop: $('#' + safe_id).offset().top - $('#papers_list').offset().top
-    }, 0);
+    // couldn't think of a better solution now: the scroll must happen after the list is rerendered
+    if (mediator.modern_frontend_enabled) {
+        setTimeout(() => {
+            $("#papers_list").animate({
+                scrollTop: $('#' + safe_id).offset().top - $('#papers_list').offset().top
+            }, 0);
+        }, 80);
+    } else {
+        $("#papers_list").animate({
+            scrollTop: $('#' + safe_id).offset().top - $('#papers_list').offset().top
+        }, 0);
+    }
 }
 
 list.filterList = function(search_words, filter_param) {
@@ -897,18 +978,20 @@ list.filterList = function(search_words, filter_param) {
         //TODO why not mediator.current_circle
         let current_circle = d3.select(mediator.current_zoom_node);
         
-        // Find all the list items, that without any filtering should be in the view
-        normally_visible_list_items = 
-            all_list_items
-                .filter(function(d) {
-                    if (config.use_area_uri && mediator.current_enlarged_paper === null) {
-                        return current_circle.data()[0].area_uri == d.area_uri;
-                    } else if (config.use_area_uri && mediator.current_enlarged_paper !== null) {
-                        return mediator.current_enlarged_paper.id == d.id;
-                    } else {
-                        return current_circle.data()[0].title == d.area;
-                    }
-                });
+        if (!mediator.modern_frontend_enabled) {
+            // Find all the list items, that without any filtering should be in the view
+            normally_visible_list_items = 
+                all_list_items
+                    .filter(function(d) {
+                        if (config.use_area_uri && mediator.current_enlarged_paper === null) {
+                            return current_circle.data()[0].area_uri == d.area_uri;
+                        } else if (config.use_area_uri && mediator.current_enlarged_paper !== null) {
+                            return mediator.current_enlarged_paper.id == d.id;
+                        } else {
+                            return current_circle.data()[0].title == d.area;
+                        }
+                    });
+        }
                 
         // Find items that, without any filtering, should be in the view
         normally_visible_map_items = all_map_items
@@ -921,16 +1004,18 @@ list.filterList = function(search_words, filter_param) {
             });
     } else if (config.is_streamgraph && mediator.current_stream !== null) {
         
-        // Find all the list items, that without any filtering should be in the view
-        normally_visible_list_items = 
-            all_list_items
-                .filter(function(d) {
-                    if (mediator.current_enlarged_paper !== null) {
-                        return mediator.current_enlarged_paper.id == d.id;
-                    } else {
-                        return d.subject_orig.split("; ").includes(mediator.current_stream);
-                    }
-                });
+        if (!mediator.modern_frontend_enabled) {
+            // Find all the list items, that without any filtering should be in the view
+            normally_visible_list_items = 
+                all_list_items
+                    .filter(function(d) {
+                        if (mediator.current_enlarged_paper !== null) {
+                            return mediator.current_enlarged_paper.id == d.id;
+                        } else {
+                            return d.subject_orig.split("; ").includes(mediator.current_stream);
+                        }
+                    });
+        }
                 
         normally_visible_map_items = all_map_items
             .filter(function(d) {
@@ -942,33 +1027,45 @@ list.filterList = function(search_words, filter_param) {
             });
     }
     
-    //Find if any paper was selected previously
-    let selected_list_items = normally_visible_list_items
+    if (!mediator.modern_frontend_enabled) {
+        //Find if any paper was selected previously
+        let selected_list_items = normally_visible_list_items
         .filter(function(d) {
             if (d.paper_selected === true) {
                 return true;
             }
         });
 
-    //If it wasn't then treat every normally visible paper as selected
-    if (selected_list_items[0].length === 0) {
-        selected_list_items = normally_visible_list_items;
-    }
+        //If it wasn't then treat every normally visible paper as selected
+        if (selected_list_items[0].length === 0) {
+            selected_list_items = normally_visible_list_items;
+        }
 
-    //Even if the search box isn't empty make everything visible
-    selected_list_items.style("display", "inline");
+        //Even if the search box isn't empty make everything visible
+        selected_list_items.style("display", "inline");
+    }
     normally_visible_map_items.style("display", "inline");
 
-    //set everything that should be visible to unfiltered
-    all_list_items.each(function (d) {
+    if (!mediator.modern_frontend_enabled) {
+        //set everything that should be visible to unfiltered
+        all_list_items.each(function (d) {
+            d.filtered_out = false
+        })
+    }
+
+    all_map_items.each(function (d) {
         d.filtered_out = false
     })
 
     // Now actually do the filtering (i.e. remove some object from list and map)
-    this.hideEntriesByWord(all_list_items, search_words);
+    if (!mediator.modern_frontend_enabled) {
+        this.hideEntriesByWord(all_list_items, search_words);
+    }
     this.hideEntriesByWord(all_map_items, search_words);
 
-    this.hideEntriesByParam(all_list_items, filter_param);
+    if (!mediator.modern_frontend_enabled) {
+        this.hideEntriesByParam(all_list_items, filter_param);
+    }
     this.hideEntriesByParam(all_map_items, filter_param);
     
     debounce(this.count_visible_items_to_header, config.debounce)()
@@ -997,6 +1094,7 @@ list.findEntriesWithParam = function (param, d) {
 }
 
 // These functions only hide items. They shouldn't unhide them.
+// WARNING: do not use this for hiding react elements ('object' parameter)
 list.hideEntriesByParam = function (object, param) {
     var self = this
     object.filter(function (d) {
@@ -1009,6 +1107,7 @@ list.hideEntriesByParam = function (object, param) {
     .style("display", "none")
 }
 
+// WARNING: do not use this for hiding react elements ('object' parameter)
 list.hideEntriesByWord = function(object, search_words) {
     object
         .filter(function(d) {
@@ -1050,7 +1149,7 @@ list.hideEntriesByWord = function(object, search_words) {
         .style("display", "none");
 };
 
-list.createHighlights = function(search_words) {    
+list.createHighlights = function(search_words) {
     if (typeof search_words === "undefined") {
         return;
     }
@@ -1071,6 +1170,10 @@ list.createHighlights = function(search_words) {
 
 // called quite often
 list.createAbstract = function(d, cut_off) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     if(config.list_sub_entries) {
         return list.createAbstractCris(d, cut_off);
     } else {
@@ -1085,6 +1188,10 @@ list.createAbstract = function(d, cut_off) {
 };
 
 list.createAbstractCris = function(d, cut_off) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     $("[data-toggle=popover]").popover({trigger: "hover"});
     
     let list_abstract_template = listSubEntryTemplateCris();
@@ -1182,6 +1289,9 @@ list.createAbstractCris = function(d, cut_off) {
 };
 
 list.createAbstractStatistics = function(div, distributions) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
     
     let list_subentry_statistics_distribution = listSubEntryStatisticDistributionTemplateCris();
     distributions.forEach(function(distribution) {
@@ -1198,6 +1308,11 @@ list.createAbstractStatistics = function(div, distributions) {
 }
 
 list.addBookmark = function(d) {
+    // TODO delete the whole function (deprecated with config param 'isAdaptive')
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     $.getJSON(this.headstart_server + "services/addBookmark.php?user_id=" + config.user_id + "&content_id=" + d.id, function(data) {
         console.log("Successfully added bookmark");
 
@@ -1223,6 +1338,11 @@ list.addBookmark = function(d) {
 };
 
 list.removeBookmark = function(d) {
+    // TODO delete the whole function (deprecated with config param 'isAdaptive')
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     $.getJSON(this.headstart_server + "services/addBookmark.php?user_id=" + config.user_id + "&content_id=" + d.id, function(data) {
         console.log("Successfully removed bookmark");
 
@@ -1250,14 +1370,20 @@ list.removeBookmark = function(d) {
 };
 
 list.makeTitleClickable = function(d) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
+
     mediator.publish("list_click_paper_list", d);
     mediator.publish("record_action", d.title, "List", "paper_click", config.user_id, d.bookmarked + " " + d.recommended, null);
     d3.event.stopPropagation();
 };
 
-
-
 list.enlargeListItem = function(d) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
+
     if (mediator.current_enlarged_paper !== null) {
         if (mediator.current_enlarged_paper.id == d.id) {
             return;
@@ -1309,6 +1435,10 @@ list.enlargeListItem = function(d) {
 };
 
 list.setBacklink = function(d) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
+
     let current_list_holder = d3.selectAll("#list_holder")
                                 .filter(function(x) {
                                         return (x.id === d.id);
@@ -1341,6 +1471,11 @@ list.setBacklink = function(d) {
 }
 
 list.setAdditionalImagesForListHolder = function(d) {
+    // TODO delete the whole function (deprecated)
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     let current_item = d3.selectAll("#list_holder")
             .filter(function(x) {
                 return (x.id === d.id);
@@ -1371,6 +1506,10 @@ list.setAdditionalImagesForListHolder = function(d) {
 }
 
 list.attachClickHandlerAbstract = function(enlarged) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+    
     if(!config.list_sub_entries)
         return;
     
@@ -1414,6 +1553,10 @@ list.attachClickHandlerAbstract = function(enlarged) {
 }
 
 list.setListHolderDisplay = function(d) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     this.papers_list.selectAll("#list_holder")
         .filter(function(x) {
             if (config.use_area_uri) {
@@ -1438,6 +1581,9 @@ list.setListHolderDisplay = function(d) {
 
 // recreates abstracts, if we zoom out from circle
 list.reset = function() {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
 
     d3.selectAll("#list_abstract")
         .html((d) => {
@@ -1620,6 +1766,9 @@ list.populateOverlay = function(d) {
 };
 
 list.setImageForListHolder = function(d) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
 
     var current_item = this.papers_list.selectAll("#list_holder")
         .filter(function(x) {
@@ -1634,6 +1783,7 @@ list.setImageForListHolder = function(d) {
     let image_src = "paper_preview/" + d.id + "/page_1.png";
     let pdf_preview = require("images/preview_pdf.png");
     let concept_graph = require("images/thumbnail-concept-graph.png");
+    // deprecated
     if(config.list_show_external_vis) {
         let external_url = d.external_vis_link;
         
@@ -1739,6 +1889,10 @@ list.title_click = function(d) {
 
 // Yes it is currently needed. :D
 list.notSureifNeeded = function() {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called with the new React code.");
+    }
+
     var list_holders_local =
         this.papers_list.selectAll("#list_holder")
         .filter(function(d) {

@@ -40,14 +40,14 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
       )
     }
     
-    vclog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Attempts to find k:", attempt))
+    vclog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Attempts to find k:", attempt))
     num_items = nrow(distance_matrix)
 
     if(!is.null(num_clusters) && max_clusters > -1 && num_clusters > max_clusters) {
       num_clusters = MAX_CLUSTERS
 
       if(num_items >= 150) {
-        vclog$warn(paste("map_id:", .GlobalEnv$MAP_ID, "High content number, increasing max_k."))
+        vclog$warn(paste("vis_id:", .GlobalEnv$VIS_ID, "High content number, increasing max_k."))
         if(num_items >= 150 && num_items < 200) {
           num_clusters = 16
         } else if (num_items >= 200 && num_items < 300) {
@@ -63,7 +63,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
     }
 
     if(num_items <= 30){
-      vclog$warn(paste("map_id:", .GlobalEnv$MAP_ID, "Low content number, lowering max_k."))
+      vclog$warn(paste("vis_id:", .GlobalEnv$VIS_ID, "Low content number, lowering max_k."))
       num_clusters = round(sqrt(nrow(distance_matrix))) + 1
     }
 
@@ -88,7 +88,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
     #   dev.off()
     # }
 
-    vclog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Number of Clusters:", num_clusters, sep=" "))
+    vclog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Number of Clusters:", num_clusters, sep=" "))
     vclog$debug(paste("CutOff-Description:", attributes(cut_off)$description))
   }
   clusters = list("labels"=labels, "cluster"=cluster, "groups"=groups, "num_clusters"=num_clusters)
@@ -111,7 +111,7 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2) {
                      pc = TRUE,
                      autotransform = FALSE, center = TRUE,
                      halfchange = TRUE)
-      vclog$info(paste("map_id:", .GlobalEnv$MAP_ID, "NMDS-Stress:", min(ord$stress), sep=" "))
+      vclog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "NMDS-Stress:", min(ord$stress), sep=" "))
       points <- ord$points
     }, error=function(err){
       points <- cbind(runif(nrow(distance_matrix), min=-1, max=0),
@@ -129,7 +129,7 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2) {
                      pc = TRUE,
                      autotransform = FALSE, center = TRUE,
                      halfchange = TRUE)
-      vclog$info(paste("map_id:", .GlobalEnv$MAP_ID, "NMDS-Stress:", min(ord$stress), sep=" "))
+      vclog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "NMDS-Stress:", min(ord$stress), sep=" "))
       points <- ord$points
     }, error=function(err){
       points <- cbind(runif(nrow(distance_matrix), min=-1, max=0),

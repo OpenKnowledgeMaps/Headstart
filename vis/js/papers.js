@@ -284,10 +284,22 @@ papers.prepareForeignObject = function (nodes) {
                 }
             }).append("xhtml:body")
             .html(function (d) {
+                // moved code from io.js to here so the highlight works in papers too
+                let dCopy = Object.assign({}, d);
+                if (mediator.modern_frontend_enabled) {
+                    if(config.highlight_query_terms) {
+                        for (let field of config.highlight_query_fields) {
+                            dCopy[field] = mediator.modules.io.highlightTerms(dCopy[field], mediator.modules.io.query_terms);
+                        }
+                    }
+                    dCopy["authors_string"] = dCopy["authors_string"].replace(/</g, "&lt;");
+                    dCopy["authors_string"] = dCopy["authors_string"].replace(/>/g, "&gt;");
+                }
+
                 return paperTemplate({
                     'metadata_height': (config.content_based) ? (d.height) : (d.height * (1- config.paper_readers_height_factor)),
                     'metadata_width': d.width * 0.8,
-                    'd': d,
+                    'd': dCopy,
                     'base_unit': config.base_unit
                 });
             });
@@ -669,7 +681,7 @@ papers.enlargePaper = function (d, holder_div) {
                     }
 
                     d.paper_selected = true;
-                    mediator.current_enlarged_paper = d;
+                    mediator.paper_selected(d);
                     mediator.publish("record_action", d.title, "Paper", "click", config.user_id, d.bookmarked + " " + d.recommended, null);
                     d3.event.stopPropagation();
                 }
@@ -697,14 +709,10 @@ papers.enlargePaper = function (d, holder_div) {
 
 papers.currentbubble_click = function (d) {   
     mediator.publish("paper_current_bubble_clicked", d);
-
-    if (mediator.current_enlarged_paper !== null) {
-        mediator.current_enlarged_paper.paper_selected = false;
-    }
     
     this.resetPaths();
 
-    mediator.current_enlarged_paper = null;
+    mediator.paper_deselected();
     mediator.publish("record_action", d.title, "Paper", "click", config.user_id, d.bookmarked + " " + d.recommended, null);
 
     d3.event.stopPropagation();

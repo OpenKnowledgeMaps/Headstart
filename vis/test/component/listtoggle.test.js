@@ -12,9 +12,13 @@ const mockStore = configureStore([]);
 const setup = (overrideListObject = {}, overrideStoreObject = {}) => {
   const storeObject = Object.assign(
     {
+      zoom: false,
+      data: [],
       list: {
         show: false,
-        docsNumber: 100,
+        searchValue: "",
+        filterValue: "",
+        filterField: "",
         ...overrideListObject
       },
       localization: {
@@ -65,15 +69,15 @@ describe("List toggle component", () => {
   });
 
   it("renders with correct document number", () => {
-    const DOCS_NUMBER = 42;
-    const storeObject = setup({docsNumber: DOCS_NUMBER});
+    // TODO test some different data
+    const storeObject = setup();
     const store = mockStore(storeObject);
 
     act(() => {
       render(<ListToggle store={store} />, container);
     });
 
-    expect(container.querySelector("#list_item_count").textContent).toEqual(DOCS_NUMBER.toString());
+    expect(container.querySelector("#list_item_count").textContent).toEqual(storeObject.data.length.toString());
   });
 
   it("triggers a correct redux action when clicked", () => {

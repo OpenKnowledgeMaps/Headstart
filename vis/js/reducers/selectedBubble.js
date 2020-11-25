@@ -5,6 +5,7 @@ const selectedBubble = (state = null, action) => {
     case "ZOOM_IN":
       return {
         title: action.selectedAreaData.title,
+        uri: action.selectedAreaData.uri,
       };
     default:
       return state;
