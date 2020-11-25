@@ -419,9 +419,7 @@ div {
     &#preview_image {
         display: block;
         margin-top: 20px;
-        @if $modern_frontend_enabled {
-            margin-bottom: 20px;
-        }
+        margin-bottom: 20px;
         margin-left: 15px;
     }
 
@@ -432,10 +430,8 @@ div {
         background-color: rgba(255, 255, 255, 0.6);
     }
 
-    @if $modern_frontend_enabled {
-        &#preview_image:hover > #transbox {
-            display: block;
-        }
+    &#preview_image:hover > #transbox {
+        display: block;
     }
 
     &#preview_page_index {
@@ -768,31 +764,13 @@ img#preview_page {
     }
 
     #list_abstract {
+        span:not(:empty).highlighted {
+            display: block;
+            margin-top: 5px;
 
-        @if $modern_frontend_enabled {
-            span:not(:empty).highlighted {
-                display: block;
-                margin-top: 5px;
-    
-                &::before, &::after {
-                    content: "[...] "
-                }
+            &::before, &::after {
+                content: "[...] "
             }
-        } @else {
-            span:not(:empty):not(.highlight) {
-                display: block;
-                margin-top: 5px;
-    
-                &::before, &::after {
-                    content: "[...] "
-                }
-            }
-        }
-    }
-
-    div#preview_image {
-        @if not $modern_frontend_enabled {
-            display: none;
         }
     }
 
@@ -874,12 +852,6 @@ img#preview_page {
 
     .list_metrics {
         display: none;
-    }
-
-    .doi_outlink {
-        @if not $modern_frontend_enabled {
-            display: none;
-        }
     }
 
     #list_area {
