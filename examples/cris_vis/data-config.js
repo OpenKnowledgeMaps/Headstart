@@ -47,8 +47,8 @@ var data_config = {
     credit: true,
     
     is_evaluation: false,
-    evaluation_service: "ga",
-    
+    evaluation_service: "",
+
     rescale_map: false,
     scale_types: ['none', 'Altersgruppe', 'Background', 'Bundesland', 'Geschlecht', 'Höchste Ausbildung', 'Land'],
     scale_explanation: {
