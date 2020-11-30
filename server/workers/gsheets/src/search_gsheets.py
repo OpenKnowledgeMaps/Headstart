@@ -272,6 +272,10 @@ class GSheetsClient(object):
         else:
             return None
 
+    def get_spreadsheet_title(self, sheet_id):
+        res = self.sheet.get(spreadsheetId=sheet_id, fields='properties/title').execute()
+        return res.get('properties').get('title')
+
     def get_new_mapdata(self, sheet_id, sheet_range, params):
         raw = self.get_sheet_content(sheet_id, sheet_range)
         clean_df, errors, errors_df = self.validate_data(raw.copy())
@@ -290,6 +294,9 @@ class GSheetsClient(object):
         additional_context = self.get_additional_context_data(raw.copy())
         if additional_context:
             res["additional_context"] = additional_context
+        else:
+            # inject CoVis multi-map title from sheet title
+            res["additional_context"]["query"] = self.get_spreadsheet_title(sheet_id)
         res["sheet_id"] = sheet_id
         res["last_update"] = self.last_updated.get(sheet_id, {}).get("timestamp_utc")
         return res
