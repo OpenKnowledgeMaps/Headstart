@@ -1,8 +1,47 @@
-const data = (state = [], action) => {
+import { getDiameterScale, getResizedScale } from "../utils/scale";
+
+const data = (state = { list: [], options: {}, size: null }, action) => {
   switch (action.type) {
     case "INITIALIZE":
       // TODO move the whole io.js dataprocessing somewhere here
-      return sanitizeData(action.dataArray);
+      let data = sanitizeData(action.dataArray);
+      let options = {
+        maxAreaSize: action.configObject.max_area_size,
+        referenceSize: action.configObject.reference_size,
+        bubbleMinScale: action.configObject.bubble_min_scale,
+        bubbleMaxScale: action.configObject.bubble_max_scale,
+        minDiameterSize: action.configObject.min_diameter_size,
+        maxDiameterSize: action.configObject.max_diameter_size,
+        paperMinScale: action.configObject.paper_min_scale,
+        paperMaxScale: action.configObject.paper_max_scale,
+        paperWidthFactor: action.configObject.paper_width_factor,
+        paperHeightFactor: action.configObject.paper_height_factor,
+      };
+
+      return {
+        list: rescalePapers(data, action.chartSize, options),
+        options,
+        size: action.chartSize,
+      };
+    case "RESIZE":
+      if (state.list.length === 0) {
+        return state;
+      }
+      return {
+        ...state,
+        list: resizePapers(
+          state.list,
+          state.size,
+          action.chartSize,
+          state.options
+        ),
+        size: action.chartSize,
+      };
+    case "APPLY_FORCE_PAPERS":
+      return {
+        ...state,
+        list: action.dataArray,
+      };
     default:
       return state;
   }
@@ -59,4 +98,60 @@ const sanitizeData = (data) => {
   });
 
   return data;
+};
+
+const rescalePapers = (papers, size, options) => {
+  let rescaledPapers = papers.slice(0);
+
+  let xs = rescaledPapers.map((e) => e.x);
+  let xScale = getInitialCoordsScale(d3.extent(xs), size, options);
+
+  let ys = rescaledPapers.map((e) => e.y);
+  let yScale = getInitialCoordsScale(d3.extent(ys), size, options);
+
+  let diameters = rescaledPapers.map((e) => e.internal_readers);
+  let dScale = getDiameterScale(d3.extent(diameters), size, options);
+
+  rescaledPapers.forEach((paper) => {
+    paper.x = xScale(paper.x);
+    paper.y = yScale(paper.y);
+    paper.diameter = dScale(paper.internal_readers);
+    paper.width =
+      options.paperWidthFactor * Math.sqrt(Math.pow(paper.diameter, 2) / 2.6);
+    paper.height =
+      options.paperHeightFactor * Math.sqrt(Math.pow(paper.diameter, 2) / 2.6);
+  });
+
+  return rescaledPapers;
+};
+
+const getInitialCoordsScale = (extent, size) => {
+  // TODO move the 5 to a const
+  const scale = d3.scale
+    .linear()
+    .range([5, size - 5])
+    .domain(extent);
+
+  return (value) => scale(value);
+};
+
+const resizePapers = (papers, currentSize, newSize, options) => {
+  const resizedPapers = papers.slice(0);
+
+  let coordsScale = getResizedScale(currentSize, newSize);
+
+  let diameters = resizedPapers.map((e) => e.internal_readers);
+  let dScale = getDiameterScale(d3.extent(diameters), newSize, options);
+
+  resizedPapers.forEach((paper) => {
+    paper.x = coordsScale(paper.x);
+    paper.y = coordsScale(paper.y);
+    paper.diameter = dScale(paper.internal_readers);
+    paper.width =
+      options.paperWidthFactor * Math.sqrt(Math.pow(paper.diameter, 2) / 2.6);
+    paper.height =
+      options.paperHeightFactor * Math.sqrt(Math.pow(paper.diameter, 2) / 2.6);
+  });
+
+  return resizedPapers;
 };

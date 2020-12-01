@@ -121,6 +121,10 @@ list.scrollTop = function() {
 
 // Still used for the map filtering (the name is misleading)
 list.filterList = function(search_words, filter_param) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
+
     if (search_words === undefined) {
         search_words = this.current_search_words
     } else {
