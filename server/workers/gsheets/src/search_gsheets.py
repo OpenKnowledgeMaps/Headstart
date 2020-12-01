@@ -375,6 +375,18 @@ class GSheetsClient(object):
 
 
     def set_new_kb_permissions(self, new_drive, new_kb, main_curator_email):
+        # set folder rights for okmaps
+        new_domain_permission = {
+            'type': 'domain',
+            'role': 'organizer',
+            'domain': 'openknowledgemaps.org'
+        }
+        permission = self.drive_service.permissions().create(
+                fileId=new_drive.get('id'),
+                body=new_domain_permission,
+                supportsAllDrives=True
+        ).execute()
+        # set folder rights for main curator
         new_organizer_permission = {
             'type': 'user',
             'role': 'organizer',
@@ -385,10 +397,22 @@ class GSheetsClient(object):
                 body=new_organizer_permission,
                 supportsAllDrives=True
         ).execute()
+        # set file rights for main curator
         new_fileorganizer_permission = {
             'type': 'user',
             'role': 'writer',
             'emailAddress': main_curator_email
+        }
+        permission = self.drive_service.permissions().create(
+                fileId=new_kb.get('id'),
+                body=new_fileorganizer_permission,
+                supportsAllDrives=True
+        ).execute()
+        # set file rights for info okmaps
+        new_fileorganizer_permission = {
+            'type': 'user',
+            'role': 'writer',
+            'emailAddress': 'info@openknowledgemaps.org'
         }
         permission = self.drive_service.permissions().create(
                 fileId=new_kb.get('id'),
