@@ -296,6 +296,7 @@ class GSheetsClient(object):
             res["additional_context"] = additional_context
         else:
             # inject CoVis multi-map title from sheet title
+            res["additional_context"] = {}
             res["additional_context"]["query"] = self.get_spreadsheet_title(sheet_id)
         res["sheet_id"] = sheet_id
         res["last_update"] = self.last_updated.get(sheet_id, {}).get("timestamp_utc")
