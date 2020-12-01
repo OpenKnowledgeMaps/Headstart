@@ -12,7 +12,10 @@ import {
   showList,
   selectPaperFromMediator,
   deselectPaper,
-  setListHeight
+  setListHeight,
+  updateDimensions,
+  applyForceAreas,
+  applyForcePapers,
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
@@ -20,6 +23,9 @@ import { STREAMGRAPH_MODE } from "./reducers/chartType";
 import SubdisciplineTitle from "./templates/SubdisciplineTitle";
 import AuthorImage from "./components/AuthorImage";
 import List from "./components/List";
+import KnowledgeMap from "./components/KnowledgeMap";
+
+import { applyForce } from "./utils/force";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -43,9 +49,20 @@ class Intermediate {
     entryBacklinkClickCallback
   ) {
     this.modern_frontend_enabled = modern_frontend_enabled;
-    this.store = createStore(
-      rootReducer,
-      applyMiddleware(
+
+    let middleware = undefined;
+    if (modern_frontend_enabled) {
+      middleware = applyMiddleware(
+        createZoomOutMiddleware(
+          knowledgeMapZoomOutCallback,
+          streamgraphZoomOutCallback
+        ),
+        createFileChangeMiddleware(),
+        createPreviewPopoverMiddleware(previewPopoverCallback),
+        createEntryBacklinkClickMiddleware(entryBacklinkClickCallback)
+      );
+    } else {
+      middleware = applyMiddleware(
         createZoomOutMiddleware(
           knowledgeMapZoomOutCallback,
           streamgraphZoomOutCallback
@@ -60,12 +77,14 @@ class Intermediate {
         createPreviewPopoverMiddleware(previewPopoverCallback),
         createTitleClickMiddleware(titleClickCallback),
         createEntryBacklinkClickMiddleware(entryBacklinkClickCallback)
-      )
-    );
+      );
+    }
+
+    this.store = createStore(rootReducer, middleware);
   }
 
-  init(config, context, data) {
-    this.store.dispatch(initializeStore(config, context, data));
+  init(config, context, data, size) {
+    this.store.dispatch(initializeStore(config, context, data, size));
 
     // TODO replace the config.is_authorview with store variable
     // after components are wrapped
@@ -91,6 +110,34 @@ class Intermediate {
     );
   }
 
+  renderKnowledgeMap(config) {
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <KnowledgeMap />
+      </Provider>,
+      document.getElementById("headstart-chart")
+    );
+
+    const state = this.store.getState();
+
+    // TODO move this to the KnowledgeMap componentDidMount or constructor
+    applyForce(
+      state.areas.list,
+      state.data.list,
+      state.chart.width,
+      (newAreas) =>
+        this.store.dispatch(applyForceAreas(newAreas, state.chart.height)),
+      (newPapers) =>
+        this.store.dispatch(applyForcePapers(newPapers, state.chart.height)),
+      {
+        areasAlpha: config.area_force_alpha,
+        isForceAreas: config.is_force_areas,
+        papersAlpha: config.papers_force_alpha,
+        isForcePapers: config.is_force_papers,
+      }
+    );
+  }
+
   zoomIn(selectedAreaData) {
     this.store.dispatch(zoomInFromMediator(selectedAreaData));
   }
@@ -113,6 +160,10 @@ class Intermediate {
 
   setListHeight(newHeight) {
     this.store.dispatch(setListHeight(newHeight));
+  }
+
+  updateDimensions(chart, list) {
+    this.store.dispatch(updateDimensions(chart, list));
   }
 }
 

@@ -31,11 +31,17 @@ export const zoomOut = (callback) => ({
  * @param {Object} contextObject the app context
  * @param {Array}  dataArray the papers data
  */
-export const initializeStore = (configObject, contextObject, dataArray) => ({
+export const initializeStore = (
+  configObject,
+  contextObject,
+  dataArray,
+  chartSize
+) => ({
   type: "INITIALIZE",
   configObject,
   contextObject,
   dataArray,
+  chartSize,
 });
 
 /**
@@ -106,5 +112,23 @@ export const deselectPaperBacklink = () => ({
 
 export const setListHeight = (listHeight) => ({
   type: "RESIZE",
-  listHeight
+  listHeight,
+});
+
+export const updateDimensions = (chart, list) => ({
+  type: "RESIZE",
+  listHeight: list.height,
+  chartSize: chart.size,
+});
+
+export const applyForceAreas = (areasArray, chartSize) => ({
+  type: "APPLY_FORCE_AREAS",
+  areasArray,
+  chartSize,
+});
+
+export const applyForcePapers = (dataArray, chartSize) => ({
+  type: "APPLY_FORCE_PAPERS",
+  dataArray,
+  chartSize,
 });
