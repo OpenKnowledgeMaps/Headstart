@@ -108,7 +108,7 @@ var doSubmit = function (data, newWindow, callback) {
       var file = data.id;
       window.location =
         "headstart.php"
-        + "?query=" + data.query
+        + "?query=" + encodeURIComponent(data.query)
         + ((params.hasOwnProperty("language"))?("&lang=" + params.language):(""))
         + ((params.hasOwnProperty("sg_method"))?("&algo=" + params.sg_method):(""))
         + "&file=" + file

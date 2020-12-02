@@ -6,6 +6,7 @@ const selectedBubble = (state = null, action) => {
       return {
         title: action.selectedAreaData.title,
         uri: action.selectedAreaData.uri,
+        color: action.selectedAreaData.color,
       };
     default:
       return state;

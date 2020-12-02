@@ -23,6 +23,7 @@ const ClassificationListEntries = ({
   localization,
   showBacklink,
   isInStreamBacklink,
+  height,
   handleZoomIn,
   handlePDFClick,
   handleAreaMouseover,
@@ -31,7 +32,11 @@ const ClassificationListEntries = ({
   handleBacklinkClick,
 }) => {
   return (
-    <>
+    <div
+      className="col-xs-12"
+      id="papers_list"
+      style={{ display: "block", height: !!height ? height : undefined }}
+    >
       {displayedData.map((entry) => (
         <ClassificationListEntry
           key={entry.safe_id}
@@ -77,7 +82,7 @@ const ClassificationListEntries = ({
           }}
         />
       ))}
-    </>
+    </div>
   );
 };
 
@@ -88,6 +93,7 @@ const mapStateToProps = (state) => ({
   localization: state.localization,
   showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
   isInStreamBacklink: !!state.selectedBubble,
+  height: state.list.height,
 });
 
 export default connect(

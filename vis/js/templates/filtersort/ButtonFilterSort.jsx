@@ -5,12 +5,10 @@ import SortButtons from "../../components/filtersort/SortButtons";
 const ButtonFilterSort = ({ displaySort }) => {
   return (
     // html template starts here
-    // TODO move div back ASAP
-    // <div id="explorer_options" class="row">
-    <>
+    <div id="explorer_options" className="row">
       <SearchBox />
       {!!displaySort && <SortButtons />}
-    </>
+    </div>
     // html template ends here
   );
 };

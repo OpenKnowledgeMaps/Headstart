@@ -103,3 +103,8 @@ export const hidePreview = () => ({
 export const deselectPaperBacklink = () => ({
   type: "DESELECT_PAPER_BACKLINK",
 });
+
+export const setListHeight = (listHeight) => ({
+  type: "RESIZE",
+  listHeight
+});
