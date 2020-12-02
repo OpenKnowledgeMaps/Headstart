@@ -182,11 +182,7 @@ IO.prototype = {
         var num_papers = 0;
         var num_datasets = 0;
 
-        const protectedAttrs = new Set();
-        if (mediator.modern_frontend_enabled) {
-            protectedAttrs.add("paper_abstract");
-            protectedAttrs.add("authors_string");
-        }
+        const protectedAttrs = new Set(["paper_abstract", "authors_string"]);
 
         cur_data.forEach(function (d) {
             //convert special entities to characters
@@ -375,9 +371,6 @@ IO.prototype = {
             if(config.highlight_query_terms) {
                 for (let field of config.highlight_query_fields) {
                     d[field + config.sort_field_exentsion] = d[field];
-                    if (!mediator.modern_frontend_enabled) {
-                        d[field] = _this.highlightTerms(d[field], _this.query_terms);
-                    }
                 }
             }
 
@@ -546,16 +539,7 @@ IO.prototype = {
 
         for (area in areas) {
             var new_area = [];
-            if(config.highlight_query_terms) {
-                if (!mediator.modern_frontend_enabled) {
-                    new_area.title = _this.highlightTerms(areas[area].title, _this.query_terms);
-                } else {
-                    new_area.title = areas[area].title;
-                }
-                
-            } else {
-                new_area.title = areas[area].title;
-            }
+            new_area.title = areas[area].title;
             new_area.title_tooltip = areas[area].title;
             mediator.publish("set_new_area_coords", new_area, areas[area]);
             new_area.orig_x = areas[area].x;

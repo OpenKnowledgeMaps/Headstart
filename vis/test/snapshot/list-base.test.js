@@ -9,7 +9,7 @@ import data, {
 } from "../data/base";
 import { initializeStore, selectPaper } from "../../js/actions";
 
-import ListEntries from "../../js/components/ListEntries";
+import List from "../../js/components/List";
 
 import reducer from "../../js/reducers";
 
@@ -33,7 +33,7 @@ describe("List entries component snapshot (BASE)", () => {
     const tree = renderer
       .create(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>
       )
       .toJSON();
@@ -52,7 +52,7 @@ describe("List entries component snapshot (BASE)", () => {
     const tree = renderer
       .create(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>
       )
       .toJSON();

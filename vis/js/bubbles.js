@@ -529,7 +529,6 @@ BubblesFSM.prototype = {
                     }
 
                     mediator.zoom_finished = true;
-                    mediator.publish("zoomin_complete")
                 });
 
         mediator.current_bubble.createTransition(t, d.title);
@@ -573,13 +572,6 @@ BubblesFSM.prototype = {
             mediator.publish("record_action", "none", "Bubble", "zoomout", config.user_id, "none", null);
         }
 
-        if (!mediator.modern_frontend_enabled) {
-            if (mediator.current_enlarged_paper !== null) {
-                mediator.current_enlarged_paper.paper_selected = false;
-                mediator.current_enlarged_paper = null;
-            }
-        }
-
         var n = 0;
         var t = canvas.chart.transition()
                 .duration(config.zoomout_transition)
@@ -607,8 +599,6 @@ BubblesFSM.prototype = {
                     mediator.current_zoom_node = null;
                     mediator.is_zoomed = false;
                     mediator.is_zooming_out = false;
-                    
-                    mediator.publish("zoomout_complete")
                 });
 
         t.selectAll("g.bubble_frame")
