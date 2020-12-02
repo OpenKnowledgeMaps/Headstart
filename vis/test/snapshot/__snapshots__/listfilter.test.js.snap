@@ -1,7 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`List filter component snapshot matches a snapshot 1`] = `
-Array [
+<div
+  className="row"
+  id="explorer_options"
+  style={
+    Object {
+      "borderBottom": "",
+    }
+  }
+>
   <div
     id="filter_container"
   >
@@ -25,7 +33,7 @@ Array [
         onClick={[Function]}
       />
     </div>
-  </div>,
+  </div>
   <div
     className="dropdown"
     id="filter_parameter_container"
@@ -93,7 +101,7 @@ Array [
         </li>
       </ul>
     </div>
-  </div>,
+  </div>
   <div
     className="dropdown"
     id="sort_container"
@@ -166,6 +174,6 @@ Array [
         </li>
       </ul>
     </div>
-  </div>,
-]
+  </div>
+</div>
 `;

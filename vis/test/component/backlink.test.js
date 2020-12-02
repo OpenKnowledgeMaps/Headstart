@@ -58,15 +58,6 @@ describe("Backlink component", () => {
   });
 
   describe("dom tests", () => {
-    // suppressing the info warns in the backlink onClick handler
-    global.console = {
-      log: jest.fn(),
-      warn: jest.fn(),
-      error: console.error,
-      info: console.info,
-      debug: console.debug,
-    };
-
     let container = null;
     beforeEach(() => {
       container = document.createElement("div");

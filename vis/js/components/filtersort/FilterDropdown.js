@@ -16,11 +16,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  handleChange: (id) => {
-    // TODO remove warn
-    console.warn("*** React element 'List' filter event triggered ***");
-    dispatch(filter(id));
-  },
+  handleChange: (id) => dispatch(filter(id)),
 });
 
 export default connect(

@@ -22,9 +22,14 @@ const BasicListEntries = ({
   showPreviewImage,
   showRealPreviewImage,
   handleTitleClick,
+  height,
 }) => {
   return (
-    <>
+    <div
+      className="col-xs-12"
+      id="papers_list"
+      style={{ display: "block", height: !!height ? height : undefined }}
+    >
       {displayedData.map((entry) => (
         <BasicListEntryTemplate
           key={entry.safe_id}
@@ -64,7 +69,7 @@ const BasicListEntries = ({
           handleTitleClick={() => handleTitleClick(entry)}
         />
       ))}
-    </>
+    </div>
   );
 };
 
@@ -73,6 +78,7 @@ const mapStateToProps = (state) => ({
   baseUnit: state.list.baseUnit,
   showPreviewImage: !!state.selectedPaper,
   showRealPreviewImage: state.list.showRealPreviewImage,
+  height: state.list.height,
 });
 
 export default connect(
