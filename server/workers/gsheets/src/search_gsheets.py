@@ -294,6 +294,7 @@ class GSheetsClient(object):
         additional_context = self.get_additional_context_data(raw.copy())
         if additional_context:
             res["additional_context"] = additional_context
+            res["additional_context"]["query"] = additional_context["topic"]
         else:
             # inject CoVis multi-map title from sheet title
             res["additional_context"] = {}
