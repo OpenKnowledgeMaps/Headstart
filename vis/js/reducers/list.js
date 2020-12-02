@@ -18,6 +18,7 @@ const list = (
     showRealPreviewImage: false,
     showKeywords: false,
     hideUnselectedKeywords: true,
+    height: null,
   },
   action
 ) => {
@@ -69,6 +70,11 @@ const list = (
       return {
         ...state,
         sortValue: action.id,
+      };
+    case "RESIZE":
+      return {
+        ...state,
+        height: action.listHeight,
       };
     default:
       return state;

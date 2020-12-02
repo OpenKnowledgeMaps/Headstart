@@ -27,7 +27,7 @@ import localData from "../data/local-files";
 import pubmedData from "../data/pubmed";
 import viperData from "../data/viper";
 
-import ListEntries from "../../js/components/ListEntries";
+import List from "../../js/components/List";
 
 const mockStore = configureStore([]);
 const setup = (overrideListObject = {}, overrideStoreObject = {}) => {
@@ -38,9 +38,13 @@ const setup = (overrideListObject = {}, overrideStoreObject = {}) => {
       list: {
         show: true,
         searchValue: "",
+        showFilter: false,
         filterValue: "",
         filterField: undefined,
+        filterOptions: ["all", "open_access"],
+        showDropdownSort: true,
         sortValue: "relevance",
+        sortOptions: ["relevance", "year"],
         abstractSize: 250,
         isContentBased: true,
         baseUnit: "questions",
@@ -88,7 +92,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -104,7 +108,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -115,7 +119,12 @@ describe("List entries component", () => {
 
   it("renders with covis data", () => {
     const storeObject = setup(
-      { show: true, filterField: "resulttype", filterValue: "all" },
+      {
+        show: true,
+        showFilter: true,
+        filterField: "resulttype",
+        filterValue: "all",
+      },
       { data: covisData }
     );
     const store = mockStore(storeObject);
@@ -123,7 +132,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -132,15 +141,44 @@ describe("List entries component", () => {
     expect(container.querySelector(".list_metadata")).not.toBe(null);
   });
 
+  it("renders with covis data and height", () => {
+    const storeObject = setup(
+      {
+        show: true,
+        showFilter: true,
+        filterField: "resulttype",
+        filterValue: "all",
+        height: 800,
+      },
+      { data: covisData }
+    );
+    const store = mockStore(storeObject);
+
+    act(() => {
+      render(
+        <Provider store={store}>
+          <List />
+        </Provider>,
+        container
+      );
+    });
+
+    expect(
+      container.querySelector("#papers_list").getAttribute("style")
+    ).toContain("height");
+  });
+
   it("renders with covis data and zoomed", () => {
     const storeObject = setup(
-      { show: true },
+      { show: true, showFilter: true },
       {
         data: covisData,
         zoom: true,
         selectedBubble: {
           title: "Host biology and clinical findings",
           uri: 2,
+          // color can only happen in triple streamgraph, not in covis
+          color: "green",
         },
       }
     );
@@ -149,7 +187,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -160,7 +198,7 @@ describe("List entries component", () => {
 
   it("renders with covis data and a selected paper", () => {
     const storeObject = setup(
-      { show: true },
+      { show: true, showFilter: true },
       {
         data: covisData,
         zoom: true,
@@ -179,7 +217,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -190,7 +228,7 @@ describe("List entries component", () => {
 
   it("renders with covis data and a selected paper (open access)", () => {
     const storeObject = setup(
-      { show: true },
+      { show: true, showFilter: true },
       {
         data: covisData,
         zoom: true,
@@ -209,7 +247,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -222,6 +260,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         filterField: "resulttype",
         filterValue: "all",
         sortValue: "title",
@@ -233,7 +272,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -244,7 +283,7 @@ describe("List entries component", () => {
 
   it("renders with viper data", () => {
     const storeObject = setup(
-      { show: true, linkType: "url", showMetrics: true },
+      { show: true, showFilter: true, linkType: "url", showMetrics: true },
       { data: viperData }
     );
     const store = mockStore(storeObject);
@@ -252,7 +291,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -265,6 +304,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "url",
         showMetrics: true,
         baseUnit: "citations",
@@ -277,7 +317,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -290,6 +330,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "url",
         showMetrics: true,
         baseUnit: "tweets",
@@ -302,7 +343,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -315,6 +356,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "url",
         showMetrics: true,
         baseUnit: "readers",
@@ -327,7 +369,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -340,6 +382,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
@@ -354,7 +397,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -367,6 +410,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
@@ -382,7 +426,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -395,6 +439,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
@@ -410,7 +455,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -423,6 +468,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       {
         show: true,
+        showFilter: true,
         linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
@@ -438,7 +484,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -457,13 +503,34 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
     });
 
     expect(container.querySelector(".list_metadata")).not.toBe(null);
+  });
+
+  it("renders with local data and set height", () => {
+    const storeObject = setup(
+      { show: true, height: 800 },
+      { data: localData, service: null }
+    );
+    const store = mockStore(storeObject);
+
+    act(() => {
+      render(
+        <Provider store={store}>
+          <List />
+        </Provider>,
+        container
+      );
+    });
+
+    expect(
+      container.querySelector("#papers_list").getAttribute("style")
+    ).toContain("height");
   });
 
   it("renders with local data sorted by year", () => {
@@ -476,7 +543,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -495,7 +562,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -523,7 +590,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -547,13 +614,39 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
     });
 
     expect(container.querySelector(".list_metadata")).not.toBe(null);
+  });
+
+  it("renders with linkedcat streamgraph data and set height", () => {
+    const storeObject = setup(
+      { show: true, height: 800 },
+      {
+        data: linkedcatData,
+        service: "linkedcat_streamgraph",
+        chartType: STREAMGRAPH_MODE,
+        localization: defaultConfig.localization.ger_linkedcat,
+      }
+    );
+    const store = mockStore(storeObject);
+
+    act(() => {
+      render(
+        <Provider store={store}>
+          <List />
+        </Provider>,
+        container
+      );
+    });
+
+    expect(
+      container.querySelector("#papers_list").getAttribute("style")
+    ).toContain("height");
   });
 
   it("renders with linkedcat streamgraph data, zoomed", () => {
@@ -567,6 +660,7 @@ describe("List entries component", () => {
         zoom: true,
         selectedBubble: {
           title: "Orient",
+          color: "red",
         },
       }
     );
@@ -575,7 +669,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -606,7 +700,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -633,7 +727,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -657,7 +751,7 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <ListEntries />
+          <List />
         </Provider>,
         container
       );
@@ -667,14 +761,6 @@ describe("List entries component", () => {
   });
 
   describe("events", () => {
-    global.console = {
-      log: console.log,
-      warn: jest.fn(),
-      error: console.error,
-      info: console.info,
-      debug: console.debug,
-    };
-
     it("triggers a correct title click action in local files", () => {
       const EXPECTED_PAYLOAD = selectPaper(initialTestData[0]);
       const storeObject = setup(
@@ -686,7 +772,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -716,7 +802,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -743,7 +829,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -770,7 +856,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -802,7 +888,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -836,7 +922,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -867,7 +953,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -898,7 +984,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -938,7 +1024,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );
@@ -978,7 +1064,7 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <ListEntries />
+            <List />
           </Provider>,
           container
         );

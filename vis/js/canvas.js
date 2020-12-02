@@ -57,7 +57,7 @@ class Canvas {
             this.available_height = this.available_height - multiples_height;
             this.available_width = $("#" + config.tag).width();
         } else {
-            this.available_width = $("#" + config.tag).width() - $("#list_explorer").width() - $("#modals").width();
+            this.available_width = $("#" + config.tag).width() - $("#list-col").width() - $("#modals").width();
         }
 
         // Set current_vis_size

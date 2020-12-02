@@ -13,11 +13,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  handleChange: (id) => {
-    // TODO remove warn
-    console.warn("*** React element 'List' sort event triggered ***");
-    dispatch(sort(id));
-  },
+  handleChange: (id) => dispatch(sort(id)),
 });
 
 export default connect(
