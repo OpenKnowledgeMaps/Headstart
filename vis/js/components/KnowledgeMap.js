@@ -48,6 +48,23 @@ const KnowledgeMap = ({
     changeBubbleOrder(area.area_uri);
   };
 
+  const handleOtherAreaZoomIn = (bubble) => {
+    handleZoomIn(bubble);
+    handleDeselectPaper();
+  };
+
+  const getBubbleZoomClickHandler = (bubble) => {
+    if (zoomedBubbleUri === bubble.area_uri) {
+      return handleDeselectPaper;
+    }
+
+    if (zoom) {
+      return () => handleOtherAreaZoomIn(bubble);
+    }
+
+    return () => handleZoomIn(bubble);
+  };
+
   const sortedAreas = sortAreasByIds(areas, bubbleOrder);
 
   return (
@@ -57,7 +74,7 @@ const KnowledgeMap = ({
         height={height}
         eventHandlers={{
           onMouseOver: zoom ? undefined : () => setHoveredBubble(null),
-          onClick: !zoom ? undefined : () => handleZoomOut(),
+          onClick: !zoom ? undefined : handleZoomOut,
         }}
         zoom={zoom}
       >
@@ -67,10 +84,9 @@ const KnowledgeMap = ({
             data={bubble}
             eventHandlers={{
               onMouseOver: zoom ? undefined : () => handleAreaMouseOver(bubble),
-              onClick:
-                zoomedBubbleUri === bubble.area_uri
-                  ? () => handleDeselectPaper()
-                  : () => handleZoomIn(bubble),
+              onClick: getBubbleZoomClickHandler(bubble),
+              onDoubleClick:
+                zoomedBubbleUri !== bubble.area_uri ? undefined : handleZoomOut,
             }}
             papers={filterData(bubble.papers, searchSettings, filterSettings)}
             hovered={hoveredBubble === bubble.area_uri}
