@@ -110,7 +110,6 @@ const ZOOMED_PADDING_SIZE = 60;
 export const getZoomScale = (coordinateValue, radius, size) => {
   const padding = radius * PADDING_RATIO;
 
-  // TODO move the 60 into a constant
   const scale = d3.scale
     .linear()
     .domain([
