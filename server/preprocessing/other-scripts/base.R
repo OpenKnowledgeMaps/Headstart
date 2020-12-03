@@ -41,7 +41,7 @@ get_papers <- function(query, params, limit=100,
                        filter=NULL,
                        retry_opts=rbace::bs_retry_options()) {
 
-  blog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Search:", query))
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Search:", query))
   start.time <- Sys.time()
 
   # remove pluses between terms
@@ -58,7 +58,7 @@ get_papers <- function(query, params, limit=100,
   exact_query = gsub('([\"]+(.*?)[\"]+)|(?<=\\(\\b|\\+|-\\"\\b|\\s-\\b|^-\\b)|(?!or\\b|and\\b|[-]+[\\"\\(]*\\b)(?<!\\S)(?=\\S)(?!\\(|\\+)'
                      , "textus:\\1", query_cleaned, perl=T)
 
-  blog$info(paste("map_id:", .GlobalEnv$MAP_ID, "exact query:", exact_query))
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "exact query:", exact_query))
 
   year_from = params$from
   year_to = params$to
@@ -80,9 +80,9 @@ get_papers <- function(query, params, limit=100,
 
   min_descsize <- if (is.null(params$min_descsize)) 300 else params$min_descsize
   filter <- I(paste0('descsize:[', min_descsize, '%20TO%20*]'))
-  blog$info(paste("map_id:", .GlobalEnv$MAP_ID, "BASE query:", base_query))
-  blog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Sort by:", sortby_string))
-  blog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Min descsize:", min_descsize))
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE query:", base_query))
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Sort by:", sortby_string))
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Min descsize:", min_descsize))
   # execute search
   (res_raw <- bs_search(hits=limit
                         , query = base_query
@@ -152,7 +152,7 @@ get_papers <- function(query, params, limit=100,
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
-  blog$info(paste("map_id:", .GlobalEnv$MAP_ID, "Time taken:", time.taken, sep=" "))
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
 
   return(ret_val)
 

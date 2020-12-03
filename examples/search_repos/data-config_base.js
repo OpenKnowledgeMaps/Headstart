@@ -2,6 +2,7 @@ var data_config = {
     tag: "visualization",
     mode: "search_repos",
     backend: "legacy",
+    persistence_backend: "legacy",
 
     service: "base",
 
@@ -18,7 +19,7 @@ var data_config = {
     show_list: true,
     content_based: true,
     url_prefix: "https://www.base-search.net/Record/",
-	
+
     show_context: true,
     create_title_from_context: true,
     context_most_relevant_tooltip: true,
@@ -27,10 +28,10 @@ var data_config = {
     filter_menu_dropdown: true,
     sort_menu_dropdown: true,
     filter_options: ["all", "open_access"],
-    
+
     embed_modal: true,
     share_modal: false,
-    
+
     show_keywords: true,
     highlight_query_terms: true,
 };

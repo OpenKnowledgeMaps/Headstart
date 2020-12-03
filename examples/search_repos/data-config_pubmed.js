@@ -2,6 +2,7 @@ var data_config = {
     tag: "visualization",
     mode: "search_repos",
     backend: "legacy",
+    persistence_backend: "legacy",
 
     service: "pubmed",
 
@@ -18,10 +19,10 @@ var data_config = {
     show_list: true,
     content_based: false,
     show_keywords: true,
-	
+
     show_context: true,
     create_title_from_context: true,
-    
+
     embed_modal: true,
     share_modal: true,
 
