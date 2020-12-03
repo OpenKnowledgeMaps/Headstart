@@ -21,6 +21,7 @@ class SearchParamSchema(Schema):
     unique_id = fields.Str()
     raw = fields.Boolean()
     sg_method = fields.Str()
+    vis_id = fields.Str(default=None)
 
     @pre_load
     def fix_years(self, in_data, **kwargs):
