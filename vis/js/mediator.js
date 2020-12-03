@@ -545,9 +545,9 @@ MyMediator.prototype = {
             }
     
             mediator.manager.call('list', 'scrollTop', []);
+
+            mediator.modern_frontend_intermediate.zoomIn({title: d.title, uri: d.area_uri});
         }
-        
-        mediator.modern_frontend_intermediate.zoomIn({title: d.title, uri: d.area_uri});
     },
     bubble_zoomout: function() {
         if (!mediator.modern_frontend_enabled) {

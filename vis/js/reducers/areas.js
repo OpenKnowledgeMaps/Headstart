@@ -1,4 +1,9 @@
-import { getCoordsScale, getRadiusScale, getResizedScale } from "../utils/scale";
+import {
+  getCoordsScale,
+  getRadiusScale,
+  getResizedScale,
+  getZoomScale,
+} from "../utils/scale";
 
 const areas = (state = { list: [], size: null, options: {} }, action) => {
   switch (action.type) {
@@ -9,6 +14,7 @@ const areas = (state = { list: [], size: null, options: {} }, action) => {
         referenceSize: action.configObject.reference_size,
         bubbleMinScale: action.configObject.bubble_min_scale,
         bubbleMaxScale: action.configObject.bubble_max_scale,
+        zoomFactor: action.configObject.zoom_factor,
       };
       return {
         list: getAreas(action.dataArray, action.chartSize, options),
@@ -19,7 +25,22 @@ const areas = (state = { list: [], size: null, options: {} }, action) => {
       return {
         ...state,
         size: action.chartSize,
-        list: resizeAreas(state.list, state.size, action.chartSize, state.options),
+        list: resizeAreas(
+          state.list,
+          state.size,
+          action.chartSize,
+          state.options
+        ),
+      };
+    case "ZOOM_IN":
+      return {
+        ...state,
+        list: zoomAreas(
+          action.selectedAreaData.uri,
+          state.list,
+          state.size,
+          state.options
+        ),
       };
     case "APPLY_FORCE_AREAS":
       return {
@@ -89,6 +110,11 @@ const rescaleAreas = (areas, size, options) => {
     area.x = xScale(area.origX);
     area.y = yScale(area.origY);
     area.r = rScale(area.origR);
+
+    // some fallback values
+    area.zoomedX = area.x;
+    area.zoomedY = area.y;
+    area.zoomedR = area.r;
   });
 
   return rescaledAreas;
@@ -96,7 +122,7 @@ const rescaleAreas = (areas, size, options) => {
 
 const resizeAreas = (areas, currentSize, newSize, options) => {
   const resizedAreas = areas.slice(0);
-  
+
   let coordsScale = getResizedScale(currentSize, newSize);
 
   let rs = resizedAreas.map((e) => e.origR);
@@ -106,9 +132,39 @@ const resizeAreas = (areas, currentSize, newSize, options) => {
     area.x = coordsScale(area.x);
     area.y = coordsScale(area.y);
     area.r = rScale(area.origR);
+
+    area.zoomedX = coordsScale(area.zoomedX);
+    area.zoomedY = coordsScale(area.zoomedY);
+    area.zoomedR = area.zoomedR * newSize / currentSize;
   });
 
   return resizedAreas;
+};
+
+const zoomAreas = (zoomedAreaUri, areas, size, options) => {
+  const zoomedAreas = areas.slice(0);
+  const zoomedArea = zoomedAreas.find((a) => a.area_uri === zoomedAreaUri);
+
+  const xScale = getZoomScale(zoomedArea.x, zoomedArea.r, size);
+  const yScale = getZoomScale(zoomedArea.y, zoomedArea.r, size);
+
+  const sizeCoefficient = (size / 2.0 / zoomedArea.r) * options.zoomFactor;
+
+  zoomedAreas.forEach((area) => {
+    area.zoomedX = xScale(area.x);
+    area.zoomedY = yScale(area.y);
+    area.zoomedR = area.r * sizeCoefficient;
+
+    area.papers.forEach((paper) => {
+      paper.zoomedX = xScale(paper.x);
+      paper.zoomedY = yScale(paper.y);
+
+      paper.zoomedWidth = paper.width * sizeCoefficient;
+      paper.zoomedHeight = paper.height * sizeCoefficient;
+    });
+  });
+
+  return zoomedAreas;
 };
 
 export default areas;

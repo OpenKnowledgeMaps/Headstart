@@ -100,6 +100,8 @@ const sanitizeData = (data) => {
   return data;
 };
 
+const GOLDEN_RATIO = 2.6;
+
 const rescalePapers = (papers, size, options) => {
   let rescaledPapers = papers.slice(0);
 
@@ -117,19 +119,26 @@ const rescalePapers = (papers, size, options) => {
     paper.y = yScale(paper.y);
     paper.diameter = dScale(paper.internal_readers);
     paper.width =
-      options.paperWidthFactor * Math.sqrt(Math.pow(paper.diameter, 2) / 2.6);
+      options.paperWidthFactor * Math.sqrt(Math.pow(paper.diameter, 2) / GOLDEN_RATIO);
     paper.height =
-      options.paperHeightFactor * Math.sqrt(Math.pow(paper.diameter, 2) / 2.6);
+      options.paperHeightFactor * Math.sqrt(Math.pow(paper.diameter, 2) / GOLDEN_RATIO);
+
+    // some fallback values
+    paper.zoomedX = paper.x;
+    paper.zoomedY = paper.y;
+    paper.zoomedWidth = paper.width;
+    paper.zoomedHeight = paper.height;
   });
 
   return rescaledPapers;
 };
 
+const COORDS_PADDING = 5;
+
 const getInitialCoordsScale = (extent, size) => {
-  // TODO move the 5 to a const
   const scale = d3.scale
     .linear()
-    .range([5, size - 5])
+    .range([COORDS_PADDING, size - COORDS_PADDING])
     .domain(extent);
 
   return (value) => scale(value);
@@ -151,6 +160,11 @@ const resizePapers = (papers, currentSize, newSize, options) => {
       options.paperWidthFactor * Math.sqrt(Math.pow(paper.diameter, 2) / 2.6);
     paper.height =
       options.paperHeightFactor * Math.sqrt(Math.pow(paper.diameter, 2) / 2.6);
+
+    paper.zoomedX = coordsScale(paper.zoomedX);
+    paper.zoomedY = coordsScale(paper.zoomedY);
+    paper.zoomedWidth = paper.zoomedWidth * newSize / currentSize;
+    paper.zoomedHeight = paper.zoomedHeight * newSize / currentSize;
   });
 
   return resizedPapers;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 import LocalizationProvider from "./LocalizationProvider";
@@ -6,9 +6,12 @@ import LocalizationProvider from "./LocalizationProvider";
 import { filterData } from "../utils/data";
 import Bubble from "../templates/Bubble";
 import Canvas from "../templates/Canvas";
-import Paper from "../templates/Paper";
+
+import { mapDispatchToMapEntriesProps } from "../utils/eventhandlers";
 
 const KnowledgeMap = ({
+  zoom,
+  zoomedBubbleUri,
   data,
   areas,
   searchSettings,
@@ -16,35 +19,64 @@ const KnowledgeMap = ({
   localization,
   width,
   height,
+  baseUnit,
+  handleZoomIn,
+  handleZoomOut,
+  handleDeselectPaper,
 }) => {
-  let displayedData = filterData(data, searchSettings, filterSettings);
+  const [hoveredBubble, setHoveredBubble] = useState(null);
+  const [bubbleOrder, setBubbleOrder] = useState([]);
+  const changeBubbleOrder = (areaUri) => {
+    const newBubbleOrder = bubbleOrder.filter((uri) => uri !== areaUri);
+    newBubbleOrder.push(areaUri);
+    setBubbleOrder(newBubbleOrder);
+  };
+
+  useEffect(() => {
+    setHoveredBubble(zoomedBubbleUri);
+    if (zoomedBubbleUri) {
+      changeBubbleOrder(zoomedBubbleUri);
+    }
+  }, [zoomedBubbleUri]);
+
+  const handleAreaMouseOver = (area) => {
+    if (hoveredBubble === area.area_uri) {
+      return;
+    }
+
+    setHoveredBubble(area.area_uri);
+    changeBubbleOrder(area.area_uri);
+  };
+
+  const sortedAreas = sortAreasByIds(areas, bubbleOrder);
+
   return (
     <LocalizationProvider localization={localization}>
-      <Canvas width={width} height={height}>
-        {displayedData.map((paper) => (
-          <Paper
-            key={paper.safe_id}
-            title={paper.title}
-            authors={paper.authors_string}
-            year={paper.year}
-            readers={"TODO readers"}
-            readersLabel={"TODO readers label"}
-            x={paper.x}
-            y={paper.y}
-            width={paper.width}
-            height={paper.height}
-            paperPath={getPaperPath(paper)}
-            dogearPath={getPaperDogEar(paper)}
-          />
-        ))}
-        {areas.map((bubble) => (
+      <Canvas
+        width={width}
+        height={height}
+        eventHandlers={{
+          onMouseOver: zoom ? undefined : () => setHoveredBubble(null),
+          onClick: !zoom ? undefined : () => handleZoomOut(),
+        }}
+        zoom={zoom}
+      >
+        {sortedAreas.map((bubble) => (
           <Bubble
             key={bubble.area_uri}
-            x={bubble.x}
-            y={bubble.y}
-            r={bubble.r}
-            title={bubble.title}
-            eventHandlers={{}}
+            data={bubble}
+            eventHandlers={{
+              onMouseOver: zoom ? undefined : () => handleAreaMouseOver(bubble),
+              onClick:
+                zoomedBubbleUri === bubble.area_uri
+                  ? () => handleDeselectPaper()
+                  : () => handleZoomIn(bubble),
+            }}
+            papers={filterData(bubble.papers, searchSettings, filterSettings)}
+            hovered={hoveredBubble === bubble.area_uri}
+            zoom={zoom}
+            zoomed={zoomedBubbleUri === bubble.area_uri}
+            baseUnit={baseUnit}
           />
         ))}
       </Canvas>
@@ -53,6 +85,8 @@ const KnowledgeMap = ({
 };
 
 const mapStateToProps = (state) => ({
+  zoom: state.zoom,
+  zoomedBubbleUri: state.selectedBubble ? state.selectedBubble.uri : null,
   data: state.data.list,
   areas: state.areas.list,
   searchSettings: {
@@ -70,32 +104,21 @@ const mapStateToProps = (state) => ({
   localization: state.localization,
   width: state.chart.width,
   height: state.chart.height,
+  baseUnit: state.list.baseUnit,
 });
 
-export default connect(mapStateToProps)(KnowledgeMap);
+export default connect(
+  mapStateToProps,
+  mapDispatchToMapEntriesProps
+)(KnowledgeMap);
 
-const getPaperDogEar = ({ x, y, width: w, height: h }) => {
-  return "M " + (x + 0.9 * w) + " " + y + " v " + 0.1 * h + " h " + 0.1 * w;
-};
+const sortAreasByIds = (areas, ids) => {
+  const newArray = [...areas];
+  ids.forEach((id) => {
+    const index = newArray.findIndex((e) => e.area_uri === id);
+    newArray.push(newArray[index]);
+    newArray.splice(index, 1);
+  });
 
-const getPaperPath = ({ x, y, width: w, height: h }) => {
-  const pathD =
-    "M " +
-    x +
-    " " +
-    y +
-    " h " +
-    0.9 * w +
-    " l " +
-    0.1 * w +
-    " " +
-    0.1 * h +
-    " v " +
-    0.9 * h +
-    " h " +
-    -w +
-    " v " +
-    -h;
-
-  return pathD;
+  return newArray;
 };
