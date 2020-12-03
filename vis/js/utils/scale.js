@@ -1,3 +1,5 @@
+const CIRCLE_PADDING_SIZE = 45;
+
 /**
  * Returns a scaling function that scales the x or y coordinates according to
  * some data and config properties.
@@ -17,7 +19,7 @@ export const getCoordsScale = (extent, size, options) => {
     options.referenceSize
   );
 
-  const circlePadding = circleMax / 2 + 45;
+  const circlePadding = circleMax / 2 + CIRCLE_PADDING_SIZE;
   const scale = d3.scale
     .linear()
     .range([circlePadding, size - circlePadding])
@@ -59,12 +61,12 @@ export const getRadiusScale = (extent, size, options) => {
 /**
  * Returns a scaling function that scales the paper diameter according to
  * some data and config properties.
- * 
+ *
  * @param {Array} extent min and max value of the chosen size metric
  * @param {Number} size chart size in px
  * @param {Object} options object with additional parameters:
  *  { referenceSize, minDiameterSize, maxDiameterSize, paperMinScale, paperMaxScale }
- * 
+ *
  * @returns {Function} that takes diameter as an argument and returns its scaled value
  */
 export const getDiameterScale = (extent, size, options) => {
@@ -82,14 +84,40 @@ export const getDiameterScale = (extent, size, options) => {
 /**
  * Returns a scaling function that scales any coordinates from the previous chart size
  * to the new one.
- * 
+ *
  * @param {Number} currentSize previous chart size
  * @param {Number} newSize new chart size
- * 
+ *
  * @returns {Function} that takes coordinate as an argument and returns its scaled value
  */
 export const getResizedScale = (currentSize, newSize) => {
   const scale = d3.scale.linear().domain([0, currentSize]).range([0, newSize]);
+
+  return (value) => scale(value);
+};
+
+const PADDING_RATIO = 0.08;
+const ZOOMED_PADDING_SIZE = 60;
+
+/**
+ * Returns a scaling function that zooms a coordinate (either x or y) based on the current
+ * size, and the zoomed area coordinate (either x or y) and its radius.
+ *
+ * @param {Number} coordinateValue x or y coordinate of the zoomed area
+ * @param {Number} radius the zoomed area radius
+ * @param {Number} size current chart size in px
+ */
+export const getZoomScale = (coordinateValue, radius, size) => {
+  const padding = radius * PADDING_RATIO;
+
+  // TODO move the 60 into a constant
+  const scale = d3.scale
+    .linear()
+    .domain([
+      coordinateValue - radius + padding,
+      coordinateValue + radius - padding,
+    ])
+    .range([ZOOMED_PADDING_SIZE, size - ZOOMED_PADDING_SIZE]);
 
   return (value) => scale(value);
 };

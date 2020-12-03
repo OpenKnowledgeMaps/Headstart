@@ -233,7 +233,7 @@ function createZoomOutMiddleware(
         if (getState().chartType === STREAMGRAPH_MODE) {
           streamgraphZoomOutCallback();
         } else {
-          knowledgeMapZoomOutCallback();
+          //knowledgeMapZoomOutCallback();
         }
       }
       const returnValue = next(action);
