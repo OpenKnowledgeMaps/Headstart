@@ -2,6 +2,20 @@
  * Applies force layout on the knowledge map bubbles and papers.
  * Doesn't return anything, it directly modifies the store after it's finished.
  * 
+ * It doesn't depend on anything in DOM - the whole calculation doesn't render
+ * anything and it doesn't use any rendered properties either. The only parameters
+ * it uses are the data coordinates and dimensions and the chart size.
+ * 
+ * The algorithm is simple. It works iteratively in two parts.
+ * 
+ * Bubbles part (repeated iteratively):
+ *  - moves bubbles into the chart (if they're overflowing)
+ *  - pushes bubbles apart from each other if there's a collision
+ * 
+ * Papers part (repeated iteratively):
+ *  - moves papers into the bubbles
+ *  - pushes papers apart from each other if there's a collision
+ * 
  * @param {Array} areas bubbles array
  * @param {Array} papers papers array (data)
  * @param {Number} size headstart chart initial size

@@ -34,5 +34,6 @@ export const mapDispatchToMapEntriesProps = (dispatch) => ({
     dispatch(zoomIn({ title: area.title, uri: area.area_uri })),
   handleZoomOut: () => dispatch(zoomOut()),
   handleDeselectPaper: () => dispatch(deselectPaper()),
+  handleSelectPaper: (paper) => dispatch(selectPaper(paper)),
   // TODO
 });
