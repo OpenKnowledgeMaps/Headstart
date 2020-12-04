@@ -15,6 +15,8 @@ import service from "./service";
 import list from "./list";
 import data from "./data";
 import previewModal from "./previewModal";
+import areas from "./areas";
+import chart from "./chart";
 
 export default combineReducers({
   zoom,
@@ -30,4 +32,6 @@ export default combineReducers({
   list,
   data,
   previewModal,
+  areas,
+  chart,
 });
