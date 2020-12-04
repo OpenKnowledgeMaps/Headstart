@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState, useRef } from "react";
 import Highlight from "../components/Highlight";
 
 const Paper = ({
@@ -9,9 +9,15 @@ const Paper = ({
   onClick,
   onMouseOver,
 }) => {
-  const { title, authors, year, num_readers: readers } = data;
+  const { title, authors_string: authors, year } = data;
+  const { num_readers: readers, published_in: publisher } = data;
   const { oa: isOpenAccess, free_access: isFreeAccess, resulttype } = data;
-  const { x, y, width: baseWidth, height: baseHeight } = getCoordinatesAndDimensions(data, zoom);
+  const {
+    x,
+    y,
+    width: baseWidth,
+    height: baseHeight,
+  } = getCoordinatesAndDimensions(data, zoom);
 
   const [hovered, setHovered] = useState(false);
   const handleMouseOver = () => {
@@ -25,14 +31,19 @@ const Paper = ({
 
   const handleMouseOut = () => {
     setHovered(false);
-  }
+  };
+
+  const metadataRef = useRef(null);
 
   let width = baseWidth;
   let height = baseHeight;
   if (hovered) {
-    // TODO
-    width *= 2;
-    height *= 2;
+    const enlargeFactor = getEnlargeFactor(
+      metadataRef.current.offsetWidth,
+      metadataRef.current.scrollHeight
+    );
+    width *= enlargeFactor;
+    height *= enlargeFactor;
   }
 
   const paperPath = getPath({ x, y, width, height });
@@ -74,11 +85,15 @@ const Paper = ({
         width={width}
         height={height}
       >
-        <div>
+        <div style={{ width, height }}>
           <div className={paperClass}>
             <div
               className="metadata"
-              style={{ height: 0.75 * height, width: 0.9 * width }}
+              style={{
+                height: height - 22,
+                width: (1 - DOGEAR_WIDTH) * width,
+              }}
+              ref={metadataRef}
             >
               <div id="icons">
                 {isOpenAccess && (
@@ -111,8 +126,14 @@ const Paper = ({
                 <Highlight>{authors}</Highlight>
               </p>
               <p id="in" className={sizeModifierClass}>
+                {publisher && (
+                  <>
+                    in <Highlight>{publisher}</Highlight>
+                  </>
+                )}
                 <span className="pubyear">
-                  <Highlight>{year}</Highlight>
+                  {" "}
+                  (<Highlight>{year}</Highlight>)
                 </span>
               </p>
             </div>
@@ -134,14 +155,21 @@ const Paper = ({
 
 export default Paper;
 
+// config.dogear_width
+const DOGEAR_WIDTH = 0.1;
+// config.dogear_height
+const DOGEAR_HEIGHT = 0.1;
+
 const getDogEar = ({ x, y, width: w, height: h }) => {
-  return `M ${x + 0.9 * w} ${y} v ${0.1 * h} h ${0.1 * w}`;
+  return `M ${x + (1 - DOGEAR_WIDTH) * w} ${y} v ${DOGEAR_HEIGHT * h} h ${
+    DOGEAR_WIDTH * w
+  }`;
 };
 
 const getPath = ({ x, y, width: w, height: h }) => {
-  return `M ${x} ${y} h ${0.9 * w} l ${0.1 * w} ${0.1 * h} v ${
-    0.9 * h
-  } h ${-w} v ${-h}`;
+  return `M ${x} ${y} h ${(1 - DOGEAR_WIDTH) * w} l ${DOGEAR_HEIGHT * w} ${
+    DOGEAR_WIDTH * h
+  } v ${(1 - DOGEAR_HEIGHT) * h} h ${-w} v ${-h}`;
 };
 
 const getCoordinatesAndDimensions = (data, zoom) => {
@@ -160,4 +188,22 @@ const getCoordinatesAndDimensions = (data, zoom) => {
   }
 
   return { x, y, width, height };
+};
+
+const getEnlargeFactor = (offsetWidth, scrollHeight) => {
+  // config.paper_width_factor
+  const PAPER_WIDTH_FACTOR = 1.2;
+  // config.paper_height_factor
+  const PAPER_HEIGHT_FACTOR = 1.6;
+  const oldRatio = PAPER_WIDTH_FACTOR / PAPER_HEIGHT_FACTOR;
+  let newWidth = offsetWidth;
+  let newRatio = scrollHeight / newWidth;
+
+  while (newRatio.toFixed(1) > oldRatio.toFixed(1)) {
+    scrollHeight -= Math.pow(PAPER_HEIGHT_FACTOR, 3);
+    newWidth += Math.pow(PAPER_WIDTH_FACTOR, 3);
+    newRatio = scrollHeight / newWidth;
+  }
+
+  return (newWidth / offsetWidth) * (1.0 / (1 - DOGEAR_WIDTH));
 };
