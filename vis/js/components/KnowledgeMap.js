@@ -12,6 +12,7 @@ import { mapDispatchToMapEntriesProps } from "../utils/eventhandlers";
 const KnowledgeMap = ({
   zoom,
   zoomedBubbleUri,
+  selectedPaperId,
   data,
   areas,
   searchSettings,
@@ -23,6 +24,7 @@ const KnowledgeMap = ({
   handleZoomIn,
   handleZoomOut,
   handleDeselectPaper,
+  handleSelectPaper,
 }) => {
   const [hoveredBubble, setHoveredBubble] = useState(null);
   const [bubbleOrder, setBubbleOrder] = useState([]);
@@ -93,6 +95,8 @@ const KnowledgeMap = ({
             zoom={zoom}
             zoomed={zoomedBubbleUri === bubble.area_uri}
             baseUnit={baseUnit}
+            selectedPaperId={selectedPaperId}
+            handleSelectPaper={handleSelectPaper}
           />
         ))}
       </Canvas>
@@ -103,6 +107,7 @@ const KnowledgeMap = ({
 const mapStateToProps = (state) => ({
   zoom: state.zoom,
   zoomedBubbleUri: state.selectedBubble ? state.selectedBubble.uri : null,
+  selectedPaperId: state.selectedPaper ? state.selectedPaper.safeId : null,
   data: state.data.list,
   areas: state.areas.list,
   searchSettings: {
@@ -113,7 +118,6 @@ const mapStateToProps = (state) => ({
     field: state.list.filterField,
     zoomed: state.zoom,
     area: state.selectedBubble ? state.selectedBubble.uri : null,
-    paper: state.selectedPaper ? state.selectedPaper.safeId : null,
     isStreamgraph: false,
     title: state.selectedBubble ? state.selectedBubble.title : null,
   },

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Highlight from "../components/Highlight";
 
 import Paper from "./Paper";
@@ -11,7 +11,18 @@ const Bubble = ({
   zoomed,
   zoom,
   baseUnit,
+  selectedPaperId,
+  handleSelectPaper,
 }) => {
+  const [paperOrder, setPaperOrder] = useState([]);
+  const changePaperOrder = (paperId) => {
+    const newPaperOrder = paperOrder.filter((id) => id !== paperId);
+    newPaperOrder.push(paperId);
+    setPaperOrder(newPaperOrder);
+  };
+
+  const sortedPapers = sortPapersByIds(papers, paperOrder);
+
   const sqrtOfTwo = Math.sqrt(2);
 
   const { title } = data;
@@ -50,14 +61,28 @@ const Bubble = ({
     circleClass = " zoom_unselected";
   }
 
-  const renderPaper = (paper) => (
-    <Paper
+  const renderPaper = (paper) => {
+    const handlePaperClick = (event) => {
+      // this is necessary so the paper is not deselected immediately with the
+      // bubble click event
+      event.stopPropagation();
+      handleSelectPaper(paper);
+    };
+
+    const handlePaperMouseOver = () => {
+      changePaperOrder(paper.safe_id);
+    };
+
+    return <Paper
       key={paper.safe_id}
       data={paper}
       readersLabel={baseUnit}
       zoom={zoom}
+      selected={selectedPaperId === paper.safe_id}
+      onClick={handlePaperClick}
+      onMouseOver={handlePaperMouseOver}
     />
-  );
+  };
 
   return (
     // html template starts here
@@ -92,7 +117,7 @@ const Bubble = ({
           )}
         </div>
       </foreignObject>
-      {(hovered || zoomed) && papers.map(renderPaper)}
+      {(hovered || zoomed) && sortedPapers.map(renderPaper)}
     </g>
     // html template ends here
   );
@@ -107,4 +132,15 @@ const getCoordinates = (data, zoom) => {
   }
 
   return { x, y, r };
+};
+
+const sortPapersByIds = (papers, ids) => {
+  const newArray = [...papers];
+  ids.forEach((id) => {
+    const index = newArray.findIndex((e) => e.safe_id === id);
+    newArray.push(newArray[index]);
+    newArray.splice(index, 1);
+  });
+
+  return newArray;
 };

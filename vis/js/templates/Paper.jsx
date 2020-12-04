@@ -1,21 +1,69 @@
-import React from "react";
+import React, {useState} from "react";
 import Highlight from "../components/Highlight";
 
-const Paper = ({ data, readersLabel, zoom }) => {
+const Paper = ({
+  data,
+  readersLabel,
+  zoom,
+  selected,
+  onClick,
+  onMouseOver,
+}) => {
   const { title, authors, year, num_readers: readers } = data;
   const { oa: isOpenAccess, free_access: isFreeAccess, resulttype } = data;
-  const { x, y, width, height } = getCoordinatesAndDimensions(data, zoom);
+  const { x, y, width: baseWidth, height: baseHeight } = getCoordinatesAndDimensions(data, zoom);
+
+  const [hovered, setHovered] = useState(false);
+  const handleMouseOver = () => {
+    if (!zoom) {
+      return;
+    }
+
+    onMouseOver();
+    setHovered(true);
+  };
+
+  const handleMouseOut = () => {
+    setHovered(false);
+  }
+
+  let width = baseWidth;
+  let height = baseHeight;
+  if (hovered) {
+    // TODO
+    width *= 2;
+    height *= 2;
+  }
 
   const paperPath = getPath({ x, y, width, height });
   const dogearPath = getDogEar({ x, y, width, height });
 
+  let pathClass = selected ? "framed" : "unframed";
+  let paperClass = "paper_holder";
+  let sizeModifierClass = "";
+  if (zoom) {
+    pathClass += " zoomed_in";
+    paperClass += " zoomed_in";
+    sizeModifierClass = "large";
+  }
+  if (hovered) {
+    sizeModifierClass = "larger";
+  }
+
+  // TODO move everything into styles
+
   return (
     // html template starts here
-    <g className="paper">
+    <g
+      className="paper"
+      onClick={!zoom || selected ? undefined : onClick}
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
+    >
       <path
         id="region"
         d={paperPath}
-        className={"unframed" + (zoom ? " zoomed_in" : "")}
+        className={pathClass}
         style={{ fillOpacity: 1 }}
       ></path>
       <path className="dogear" d={dogearPath}></path>
@@ -27,31 +75,42 @@ const Paper = ({ data, readersLabel, zoom }) => {
         height={height}
       >
         <div>
-          <div className={"paper_holder" + (zoom ? " zoomed_in" : "")}>
+          <div className={paperClass}>
             <div
               className="metadata"
               style={{ height: 0.75 * height, width: 0.9 * width }}
             >
               <div id="icons">
-                {isOpenAccess && <p id="open-access-logo">&#61596;</p>}
+                {isOpenAccess && (
+                  <p id="open-access-logo" className={sizeModifierClass}>
+                    &#61596;
+                  </p>
+                )}
                 {resulttype === "dataset" && (
-                  <p id="dataset-icon">
+                  <p id="dataset-icon" className={sizeModifierClass}>
                     <span
                       id="dataset-icon_list"
                       className="fa fa-database"
                     ></span>
                   </p>
                 )}
-                {isFreeAccess && <p id="free-access-logo">&#61596;</p>}
+                {isFreeAccess && (
+                  <p id="free-access-logo" className={sizeModifierClass}>
+                    &#61596;
+                  </p>
+                )}
               </div>
-              <p id="paper_visual_distributions"></p>
-              <p id="title">
+              <p
+                id="paper_visual_distributions"
+                className={sizeModifierClass}
+              ></p>
+              <p id="title" className={sizeModifierClass}>
                 <Highlight>{title}</Highlight>
               </p>
-              <p id="details">
+              <p id="details" className={sizeModifierClass}>
                 <Highlight>{authors}</Highlight>
               </p>
-              <p id="in">
+              <p id="in" className={sizeModifierClass}>
                 <span className="pubyear">
                   <Highlight>{year}</Highlight>
                 </span>
@@ -59,7 +118,7 @@ const Paper = ({ data, readersLabel, zoom }) => {
             </div>
             {typeof readers !== "undefined" && readers !== null && (
               <div className="readers">
-                <p id="readers">
+                <p id="readers" className={sizeModifierClass}>
                   <span id="num-readers">{readers} </span>
                   <span className="readers_entity">{readersLabel}</span>
                 </p>
