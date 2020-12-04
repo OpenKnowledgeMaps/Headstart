@@ -10,7 +10,9 @@
 
         <div id="modals"></div>
         <div id="headstart-chart">
+            {{#unless modern_frontend_enabled}}
             <svg id="chart-svg"></svg>
+            {{/unless}}
         </div>
     </div>
     <div id="list-col" class="list-col">
