@@ -17,6 +17,7 @@ import data from "./data";
 import previewModal from "./previewModal";
 import areas from "./areas";
 import chart from "./chart";
+import animation from "./animation";
 
 export default combineReducers({
   zoom,
@@ -34,4 +35,5 @@ export default combineReducers({
   previewModal,
   areas,
   chart,
+  animation,
 });

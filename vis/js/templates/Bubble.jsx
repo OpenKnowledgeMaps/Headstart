@@ -1,35 +1,57 @@
 import React from "react";
 import Highlight from "../components/Highlight";
 
+import { select } from "d3-selection";
+
 import Paper from "./Paper";
 
 const SQRT_2 = Math.sqrt(2);
 class Bubble extends React.Component {
   constructor(props) {
     super(props);
+    // TODO rewrite this using https://www.npmjs.com/package/core-decorators#autobind ?
     this.getCoordinates = this.getCoordinates.bind(this);
     this.changePaperOrder = this.changePaperOrder.bind(this);
     this.getSortedPapers = this.getSortedPapers.bind(this);
     this.renderPaper = this.renderPaper.bind(this);
+    this.isAnimated = this.isAnimated.bind(this);
+    this.isInMotion = this.isInMotion.bind(this);
 
     const { x, y, r } = this.getCoordinates();
     this.state = { x, y, r, paperOrder: [] };
     this.circleRef = React.createRef();
+
+    this.isAnimatedOnMount = this.isAnimated();
+  }
+
+  componentDidMount() {
+    if (this.isAnimatedOnMount) {
+      this.animate();
+    }
   }
 
   componentDidUpdate() {
     const { x, y, r } = this.state;
     const { x: newX, y: newY, r: newR } = this.getCoordinates();
-    if (x === newX && y === newY && r === newR ) {
+    if (x === newX && y === newY && r === newR) {
       return;
     }
 
-    this.setState({
-      ...this.state,
-      x: newX,
-      y: newY,
-      r: newR,
-    });
+    if (this.isAnimated()) {
+      this.animate();
+    } else {
+      this.setState({
+        ...this.state,
+        x: newX,
+        y: newY,
+        r: newR,
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    const el = select(this.circleRef.current);
+    el.interrupt();
   }
 
   render() {
@@ -64,6 +86,9 @@ class Bubble extends React.Component {
       circleStyle.fillOpacity = 0.1;
       circleClass = " zoom_unselected";
     }
+    if (hovered || zoom || this.isInMotion()) {
+      areaTitleStyle.display = "none";
+    }
 
     return (
       // html template starts here
@@ -75,6 +100,7 @@ class Bubble extends React.Component {
           cx={x}
           cy={y}
           style={circleStyle}
+          ref={this.circleRef}
         >
           <title>{title}</title>
         </circle>
@@ -88,20 +114,46 @@ class Bubble extends React.Component {
           style={{ cursor: !zoomed ? "zoom-in" : undefined }}
         >
           <div>
-            {!hovered && !zoom && (
-              <div id="area_title" style={areaTitleStyle}>
-                <p id="area_visual_distributions"></p>
-                <h2 style={{ fontSize: 14 }}>
-                  <Highlight>{title}</Highlight>
-                </h2>
-              </div>
-            )}
+            <div id="area_title" style={areaTitleStyle}>
+              <p id="area_visual_distributions"></p>
+              <h2 style={{ fontSize: 14 }}>
+                <Highlight>{title}</Highlight>
+              </h2>
+            </div>
           </div>
         </foreignObject>
         {(hovered || zoomed) && sortedPapers.map(this.renderPaper)}
       </g>
       // html template ends here
     );
+  }
+
+  isAnimated() {
+    return this.props.animation !== null;
+  }
+
+  isInMotion() {
+    const { x, y, r } = this.state;
+    const { x: realX, y: realY, r: realR } = this.getCoordinates();
+    return x !== realX || y !== realY || r !== realR;
+  }
+
+  animate() {
+    const el = select(this.circleRef.current);
+    const { x, y, r } = this.getCoordinates();
+
+    el.transition(this.props.animation.transition)
+      .attr("cx", x)
+      .attr("cy", y)
+      .attr("r", r)
+      .on("end", () => {
+        this.setState({
+          ...this.state,
+          x,
+          y,
+          r,
+        });
+      });
   }
 
   getCoordinates() {
@@ -131,7 +183,8 @@ class Bubble extends React.Component {
   }
 
   renderPaper(paper) {
-    const { zoom, selectedPaperId, baseUnit, handleSelectPaper } = this.props;
+    const { zoom, selectedPaperId, baseUnit, animation } = this.props;
+    const { handleSelectPaper } = this.props;
 
     const handlePaperClick = (event) => {
       // this is necessary so the paper is not deselected immediately with the
@@ -151,8 +204,9 @@ class Bubble extends React.Component {
         readersLabel={baseUnit}
         zoom={zoom}
         selected={selectedPaperId === paper.safe_id}
-        onClick={handlePaperClick}
-        onMouseOver={handlePaperMouseOver}
+        onClick={this.isAnimated() ? undefined : handlePaperClick}
+        onMouseOver={this.isAnimated() ? undefined : handlePaperMouseOver}
+        animation={animation}
       />
     );
   }
