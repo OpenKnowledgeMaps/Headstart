@@ -25,6 +25,7 @@ const KnowledgeMap = ({
   handleZoomOut,
   handleDeselectPaper,
   handleSelectPaper,
+  animation,
 }) => {
   const [hoveredBubble, setHoveredBubble] = useState(null);
   const [bubbleOrder, setBubbleOrder] = useState([]);
@@ -69,27 +70,53 @@ const KnowledgeMap = ({
 
   const sortedAreas = sortAreasByIds(areas, bubbleOrder);
 
+  const getCanvasEventHandlers = () => {
+    if (animation) {
+      return {};
+    }
+
+    let onClick = undefined;
+    let onMouseOver = undefined;
+    if (zoom) {
+      onClick = handleZoomOut;
+    } else {
+      onMouseOver = () => setHoveredBubble(null);
+    }
+
+    return { onClick, onMouseOver };
+  };
+
+  const getBubbleEventHandlers = (bubble) => {
+    if (animation) {
+      return {};
+    }
+
+    let onClick = getBubbleZoomClickHandler(bubble);
+    let onMouseOver = undefined;
+    if (!zoom) {
+      onMouseOver = () => handleAreaMouseOver(bubble);
+    }
+    let onDoubleClick = undefined;
+    if (zoomedBubbleUri === bubble.area_uri) {
+      onDoubleClick = handleZoomOut;
+    }
+
+    return { onClick, onMouseOver, onDoubleClick };
+  };
+
   return (
     <LocalizationProvider localization={localization}>
       <Canvas
         width={width}
         height={height}
-        eventHandlers={{
-          onMouseOver: zoom ? undefined : () => setHoveredBubble(null),
-          onClick: !zoom ? undefined : handleZoomOut,
-        }}
+        eventHandlers={getCanvasEventHandlers()}
         zoom={zoom}
       >
         {sortedAreas.map((bubble) => (
           <Bubble
             key={bubble.area_uri}
             data={bubble}
-            eventHandlers={{
-              onMouseOver: zoom ? undefined : () => handleAreaMouseOver(bubble),
-              onClick: getBubbleZoomClickHandler(bubble),
-              onDoubleClick:
-                zoomedBubbleUri !== bubble.area_uri ? undefined : handleZoomOut,
-            }}
+            eventHandlers={getBubbleEventHandlers(bubble)}
             papers={filterData(bubble.papers, searchSettings, filterSettings)}
             hovered={hoveredBubble === bubble.area_uri}
             zoom={zoom}
@@ -97,6 +124,7 @@ const KnowledgeMap = ({
             baseUnit={baseUnit}
             selectedPaperId={selectedPaperId}
             handleSelectPaper={handleSelectPaper}
+            animation={animation}
           />
         ))}
       </Canvas>
@@ -125,6 +153,7 @@ const mapStateToProps = (state) => ({
   width: state.chart.width,
   height: state.chart.height,
   baseUnit: state.list.baseUnit,
+  animation: state.animation,
 });
 
 export default connect(

@@ -2,12 +2,13 @@
  * This is where all actions are stored.
  */
 
-export const zoomIn = (selectedAreaData, source = null) => ({
+export const zoomIn = (selectedAreaData, source = null, callback) => ({
   type: "ZOOM_IN",
   selectedAreaData,
   // TODO remove this when whole app is refactored
   not_from_mediator: true,
   source,
+  callback,
 });
 
 export const zoomInFromMediator = (selectedAreaData) => ({
@@ -23,6 +24,7 @@ export const zoomOut = (callback) => ({
   type: "ZOOM_OUT",
   // TODO remove this when whole app is refactored
   not_from_mediator: true,
+  callback,
 });
 
 /**
@@ -131,4 +133,8 @@ export const applyForcePapers = (dataArray, chartSize) => ({
   type: "APPLY_FORCE_PAPERS",
   dataArray,
   chartSize,
+});
+
+export const stopAnimation = () => ({
+  type: "STOP_ANIMATION",
 });
