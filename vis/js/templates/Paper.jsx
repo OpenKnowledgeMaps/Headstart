@@ -300,8 +300,18 @@ class Paper extends React.Component {
   }
 
   getCoordinatesAndDimensions(previous = false) {
-    // TODO previous on another zoom in
-    const { data, zoom } = this.props;
+    const { data, zoom, animation } = this.props;
+    if (previous && animation.alreadyZoomed) {
+      const {
+        prevZoomedX: x,
+        prevZoomedY: y,
+        prevZoomedWidth: width,
+        prevZoomedHeight: height,
+      } = data;
+
+      return { x, y, width, height };
+    }
+
     let returnZoomedCoords = zoom;
     if (previous) {
       returnZoomedCoords = this.isZoomingOut();
