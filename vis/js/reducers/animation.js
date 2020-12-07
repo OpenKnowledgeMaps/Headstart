@@ -7,6 +7,7 @@ const animation = (state = null, action) => {
         ...state,
         transition: createTransition(action.callback),
         type: "ZOOM_IN",
+        alreadyZoomed: action.alreadyZoomed,
       };
     case "ZOOM_OUT":
       return {

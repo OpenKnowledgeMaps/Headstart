@@ -156,6 +156,12 @@ const zoomAreas = (zoomedAreaUri, areas, size, options) => {
     area.zoomedR = area.r * sizeCoefficient;
 
     area.papers.forEach((paper) => {
+      // this is needed for zoom from zoom
+      paper.prevZoomedX = paper.zoomedX;
+      paper.prevZoomedY = paper.zoomedY;
+      paper.prevZoomedWidth = paper.zoomedWidth;
+      paper.prevZoomedHeight = paper.zoomedHeight;
+      
       paper.zoomedX = xScale(paper.x);
       paper.zoomedY = yScale(paper.y);
 

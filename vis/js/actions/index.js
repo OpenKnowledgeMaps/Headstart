@@ -2,13 +2,14 @@
  * This is where all actions are stored.
  */
 
-export const zoomIn = (selectedAreaData, source = null, callback) => ({
+export const zoomIn = (selectedAreaData, source = null, callback, alreadyZoomed = false) => ({
   type: "ZOOM_IN",
   selectedAreaData,
   // TODO remove this when whole app is refactored
   not_from_mediator: true,
   source,
   callback,
+  alreadyZoomed,
 });
 
 export const zoomInFromMediator = (selectedAreaData) => ({

@@ -43,12 +43,13 @@ export const mapDispatchToListEntriesProps = (dispatch) => ({
  * @param {Function} dispatch
  */
 export const mapDispatchToMapEntriesProps = (dispatch) => ({
-  handleZoomIn: (area) =>
+  handleZoomIn: (area, alreadyZoomed = false) =>
     dispatch(
       zoomIn(
         { title: area.title, uri: area.area_uri },
         null,
-        createAnimationCallback(dispatch)
+        createAnimationCallback(dispatch),
+        alreadyZoomed,
       )
     ),
   handleZoomOut: () => dispatch(zoomOut(createAnimationCallback(dispatch))),

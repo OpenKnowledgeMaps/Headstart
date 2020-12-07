@@ -52,7 +52,7 @@ const KnowledgeMap = ({
   };
 
   const handleOtherAreaZoomIn = (bubble) => {
-    handleZoomIn(bubble);
+    handleZoomIn(bubble, true);
     handleDeselectPaper();
   };
 
