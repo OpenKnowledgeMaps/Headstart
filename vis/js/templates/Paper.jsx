@@ -180,7 +180,7 @@ class Paper extends React.Component {
               <div
                 className="metadata"
                 style={{
-                  height: realHeight - 22,
+                  height: realHeight - (!!readersLabel ? 22 : 0),
                   width: (1 - DOGEAR_WIDTH) * realWidth,
                 }}
                 ref={this.metadataRef}
@@ -210,31 +210,33 @@ class Paper extends React.Component {
                   className={sizeModifierClass}
                 ></p>
                 <p id="title" className={sizeModifierClass}>
-                  <Highlight>{title}</Highlight>
+                  <Highlight queryHighlight>{title}</Highlight>
                 </p>
                 <p id="details" className={sizeModifierClass}>
-                  <Highlight>{authors}</Highlight>
+                  <Highlight queryHighlight>{authors}</Highlight>
                 </p>
                 <p id="in" className={sizeModifierClass}>
                   {publisher && (
                     <>
-                      in <Highlight>{publisher}</Highlight>
+                      in <Highlight queryHighlight>{publisher}</Highlight>
                     </>
                   )}
                   <span className="pubyear">
                     {" "}
-                    (<Highlight>{year}</Highlight>)
+                    (<Highlight queryHighlight>{year}</Highlight>)
                   </span>
                 </p>
               </div>
-              {typeof readers !== "undefined" && readers !== null && (
-                <div className="readers">
-                  <p id="readers" className={sizeModifierClass}>
-                    <span id="num-readers">{readers} </span>
-                    <span className="readers_entity">{readersLabel}</span>
-                  </p>
-                </div>
-              )}
+              {!!readersLabel &&
+                typeof readers !== "undefined" &&
+                readers !== null && (
+                  <div className="readers">
+                    <p id="readers" className={sizeModifierClass}>
+                      <span id="num-readers">{readers} </span>
+                      <span className="readers_entity">{readersLabel}</span>
+                    </p>
+                  </div>
+                )}
             </div>
           </div>
         </foreignObject>

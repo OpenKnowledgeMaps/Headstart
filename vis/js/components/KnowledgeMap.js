@@ -152,7 +152,7 @@ const mapStateToProps = (state) => ({
   localization: state.localization,
   width: state.chart.width,
   height: state.chart.height,
-  baseUnit: state.list.baseUnit,
+  baseUnit: state.list.isContentBased ? undefined : state.list.baseUnit,
   animation: state.animation,
 });
 
