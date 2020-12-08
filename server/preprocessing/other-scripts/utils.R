@@ -96,6 +96,9 @@ detect_error <- function(failed, service) {
     # then return them as json list
     if (service == 'pubmed' && startsWith(failed$query_reason, "HTTP failure: 502, bad gateway")){
         reason <- c(reason, 'API error: requested metadata size')
+    }
+    if (service == 'pubmed' && startsWith(failed$query_reason, "HTTP failure: 500")){
+        reason <- c(reason, 'API error: PubMed not reachable')
       } else {
         result <- regmatches(failed$query, regexec(phrasepattern, failed$query))
         # if not one of the known data source API errors:
