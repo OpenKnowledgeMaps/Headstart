@@ -4,7 +4,7 @@ vplog <- getLogger('vis.preprocess')
 sanitize <- function(metadata) {
   metadata$paper_abstract <- unlist(lapply(metadata$paper_abstract,
                               function(x) {
-                                if (nchar(x) > 17000) {
+                                if (!is.na(x) && nchar(x) > 17000) {
                                   x <- substr(x, 0, 17000)
                                   x <- paste(x, "[...]")
                                 } else {
