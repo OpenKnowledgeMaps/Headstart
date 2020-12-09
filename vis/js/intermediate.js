@@ -49,6 +49,7 @@ class Intermediate {
     entryBacklinkClickCallback
   ) {
     this.modern_frontend_enabled = modern_frontend_enabled;
+    this.actionQueue = [];
 
     let middleware = undefined;
     if (modern_frontend_enabled) {
@@ -59,7 +60,8 @@ class Intermediate {
         ),
         createFileChangeMiddleware(),
         createPreviewPopoverMiddleware(previewPopoverCallback),
-        createEntryBacklinkClickMiddleware(entryBacklinkClickCallback)
+        createEntryBacklinkClickMiddleware(entryBacklinkClickCallback),
+        createActionQueueMiddleware(this)
       );
     } else {
       middleware = applyMiddleware(
@@ -165,6 +167,43 @@ class Intermediate {
   updateDimensions(chart, list) {
     this.store.dispatch(updateDimensions(chart, list));
   }
+}
+
+/**
+ * Creates an action-queuing middleware.
+ *
+ * When the chart is animated, some actions must not be triggered. This middleware
+ * cancels them and saves them in a queue. They are fired again after the animation
+ * finishes.
+ *
+ * @param {Object} intermediate the intermediate instance (this)
+ */
+function createActionQueueMiddleware(intermediate) {
+  return ({ getState }) => {
+    return (next) => (action) => {
+      const actionQueue = intermediate.actionQueue;
+      const dispatch = intermediate.store.dispatch;
+
+      if (getState().animation !== null) {
+        if (action.type === "HOVER_AREA") {
+          actionQueue.push({ ...action });
+          action.canceled = true;
+          return next(action);
+        }
+      }
+
+      const returnValue = next(action);
+
+      if (action.type === "STOP_ANIMATION") {
+        while (actionQueue.length > 0) {
+          const queuedAction = actionQueue.pop();
+          dispatch(queuedAction);
+        }
+      }
+
+      return returnValue;
+    };
+  };
 }
 
 function createEntryBacklinkClickMiddleware(entryBacklinkClickCallback) {

@@ -12,6 +12,7 @@ import { mapDispatchToMapEntriesProps } from "../utils/eventhandlers";
 const KnowledgeMap = ({
   zoom,
   zoomedBubbleUri,
+  highlightedBubbleUri,
   selectedPaperId,
   data,
   areas,
@@ -125,6 +126,7 @@ const KnowledgeMap = ({
             selectedPaperId={selectedPaperId}
             handleSelectPaper={handleSelectPaper}
             animation={animation}
+            highlighted={highlightedBubbleUri === bubble.area_uri}
           />
         ))}
       </Canvas>
@@ -135,6 +137,7 @@ const KnowledgeMap = ({
 const mapStateToProps = (state) => ({
   zoom: state.zoom,
   zoomedBubbleUri: state.selectedBubble ? state.selectedBubble.uri : null,
+  highlightedBubbleUri: state.hoveredBubble,
   selectedPaperId: state.selectedPaper ? state.selectedPaper.safeId : null,
   data: state.data.list,
   areas: state.areas.list,

@@ -97,6 +97,8 @@ export const deselectPaper = () => ({
 
 export const hoverArea = (paper) => ({
   type: "HOVER_AREA",
+  uri: paper ? paper.area_uri : null,
+  // TODO won't be needed after map refactoring
   paper,
 });
 
