@@ -55,7 +55,8 @@ class Bubble extends React.Component {
   }
 
   render() {
-    const { eventHandlers, papers, hovered, zoomed, zoom } = this.props;
+    const { eventHandlers, papers, zoom } = this.props;
+    const { hovered, zoomed, highlighted } = this.props;
 
     const sortedPapers = this.getSortedPapers();
 
@@ -88,6 +89,9 @@ class Bubble extends React.Component {
     }
     if (hovered || zoom || this.isInMotion()) {
       areaTitleStyle.display = "none";
+    }
+    if (highlighted) {
+      circleClass += " highlight-bubble";
     }
 
     return (

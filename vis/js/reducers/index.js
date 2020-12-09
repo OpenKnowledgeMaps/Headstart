@@ -18,6 +18,7 @@ import previewModal from "./previewModal";
 import areas from "./areas";
 import chart from "./chart";
 import animation from "./animation";
+import hoveredBubble from "./hoveredBubble";
 
 export default combineReducers({
   zoom,
@@ -36,4 +37,5 @@ export default combineReducers({
   areas,
   chart,
   animation,
+  hoveredBubble,
 });
