@@ -42,7 +42,7 @@ def test_vis_id_creation_base():
          "expected_result": "d605fe2d66d651830f19ab0e980ad321"},
     ]
     for tc in testcases:
-        res = requests.post("http://localhost/api/persistence/createID", json=tc)
+        res = requests.post("http://127.0.0.1/api/persistence/createID", json=tc)
         result = res.json()
         assert result["unique_id"] == tc["expected_result"]
 
@@ -460,7 +460,7 @@ def test_vis_id_creation_pubmed():
            "expected_result": "6a0503da37397cd535807f420f2ad7e2"}
     ]
     for tc in testcases:
-        res = requests.post("http://localhost/api/persistence/createID", json=tc)
+        res = requests.post("http://127.0.0.1/api/persistence/createID", json=tc)
         result = res.json()
         assert result["unique_id"] == tc["expected_result"]
 
@@ -482,7 +482,7 @@ def test_vis_id_creation_triple():
          "expected_result": "1ed301e7afc3f820b7ef83abf0a004de"}
     ]
     for tc in testcases:
-        res = requests.post("http://localhost/api/persistence/createID", json=tc)
+        res = requests.post("http://127.0.0.1/api/persistence/createID", json=tc)
         result = res.json()
         assert result["unique_id"] == tc["expected_result"]
 
@@ -504,7 +504,7 @@ def test_create_visualization(testcase):
     payload["vis_clean_query"] = caseid
     payload["vis_query"] = caseid
     payload["vis_params"] = json.dumps(testcase["casedata"]["params"])
-    res = requests.post("http://localhost/api/persistence/createVisualization/test",
+    res = requests.post("http://127.0.0.1/api/persistence/createVisualization/test",
                         json=payload)
     assert res.status_code == 200, res.json().get('reason')
 
@@ -516,7 +516,7 @@ def test_write_revision(testcase):
     payload = {}
     payload["vis_id"] = caseid
     payload["data"] = RESULTS[caseid].to_json(orient='records')
-    res = requests.post("http://localhost/api/persistence/writeRevision/test",
+    res = requests.post("http://127.0.0.1/api/persistence/writeRevision/test",
                         json=payload)
     assert res.status_code == 200, res.json().get('reason')
 
@@ -527,7 +527,7 @@ def test_map_exists(testcase):
     caseid = testcase["caseid"]
     payload = {}
     payload["vis_id"] = caseid
-    res = requests.post("http://localhost/api/persistence/existsVisualization/test",
+    res = requests.post("http://127.0.0.1/api/persistence/existsVisualization/test",
                         json=payload)
     result = res.json()
     assert result["exists"] is True
@@ -540,7 +540,7 @@ def test_map_exists_not(testcase):
     invalid_id = caseid[2:]
     payload = {}
     payload["vis_id"] = invalid_id
-    res = requests.post("http://localhost/api/persistence/existsVisualization/test",
+    res = requests.post("http://127.0.0.1/api/persistence/existsVisualization/test",
                         json=payload)
     result = res.json()
     assert result["exists"] is False
