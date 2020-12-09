@@ -1,3 +1,4 @@
+library(stringr)
 vslog <- getLogger('vis.summarize')
 
 SplitTokenizer <- function(x) {
@@ -104,8 +105,8 @@ match_keyword_case <- function(x, type_counts) {
   if (!is.na(y)) return(y) else return(x)
 }
 
-
-get_cluster_corpus <- function(clusters, metadata, service, stops, taxonomy_separator) {
+get_cluster_corpus <- function(clusters, metadata, service, stops, taxonomy_separator,
+                               add_title_ngrams = T) {
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
     group = c(names(clusters$groups[clusters$groups == k]))
@@ -131,11 +132,14 @@ get_cluster_corpus <- function(clusters, metadata, service, stops, taxonomy_sepa
       subjects = lapply(subjects, function(x){paste(unlist(x), collapse=";")})
       subjects = mapply(paste, subjects, taxons, collapse=";")
     }
-    if (service == "linkedcat" || service == "linkedcat_authorview" || service == "linkedcat_browseview") {
-      all_subjects = paste(subjects, collapse=" ")
-    } else {
+    if (add_title_ngrams == T) {
       all_subjects = paste(subjects, title_ngrams$bigrams, title_ngrams$trigrams, collapse=" ")
+    } else {
+      all_subjects = paste(subjects, collapse=" ")
     }
+    all_subjects <- str_replace_all(all_subjects, "\\?+_\\?+|\\?+|\\?+ ", "")
+    all_subjects <- str_replace_all(all_subjects, ";+", ";")
+    all_subjects <- str_replace_all(all_subjects, " ?; ?", ";")
     subjectlist = c(subjectlist, all_subjects)
   }
   nn_corpus <- Corpus(VectorSource(subjectlist))
