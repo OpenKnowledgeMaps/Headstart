@@ -99,6 +99,7 @@ detect_error <- function(failed, service) {
     }
     if (service == 'pubmed' && startsWith(failed$query_reason, "HTTP failure: 500")){
         reason <- c(reason, 'API error: PubMed not reachable')
+    }
     if (service == 'pubmed' && startsWith(failed$query_reason, "HTTP failure")){
         reason <- c(reason, 'unexpected PubMed API error')
       } else {
