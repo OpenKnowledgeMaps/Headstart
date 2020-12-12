@@ -79,6 +79,7 @@ def create_visualization(database,
 def exists_visualization(database, vis_id):
     session = select_session(sessions.get(database))
     vis = session.query(Visualizations).filter_by(vis_id=vis_id).first()
+    session.commit()
     exists = True if vis else False
     return exists
 
@@ -106,6 +107,7 @@ def get_revision(database, vis_id, rev_id, details=False, context=False):
                         .filter(Revisions.rev_vis == vis_id)
                         .filter(Revisions.rev_id == rev_id)
                         ).first()
+        session.commit()
         if context is True:
             res = {
                 "rev_vis": rev.rev_vis,
@@ -135,6 +137,7 @@ def get_context(database, vis_id, revision_context=False):
                 .filter(Revisions.rev_vis == vis_id)
                 .filter(Revisions.rev_id == Visualizations.vis_latest)
                 ).first()
+    session.commit()
     res = {
         "rev_vis": rev.rev_vis,
         "vis_query": rev.vis_query,
