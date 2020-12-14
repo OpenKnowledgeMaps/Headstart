@@ -5,7 +5,7 @@ import LocalizationProvider from "./LocalizationProvider";
 
 import { filterData } from "../utils/data";
 import Bubble from "../templates/Bubble";
-import Canvas from "../templates/Canvas";
+import Chart from "../templates/Chart";
 import Paper from "../templates/Paper";
 
 import { mapDispatchToMapEntriesProps } from "../utils/eventhandlers";
@@ -73,7 +73,7 @@ const KnowledgeMap = ({
 
   const sortedAreas = sortAreasByIds(areas, bubbleOrder);
 
-  const getCanvasEventHandlers = () => {
+  const getChartEventHandlers = () => {
     if (animation) {
       return {};
     }
@@ -175,10 +175,10 @@ const KnowledgeMap = ({
 
   return (
     <LocalizationProvider localization={localization}>
-      <Canvas
+      <Chart
         width={width}
         height={height}
-        eventHandlers={getCanvasEventHandlers()}
+        eventHandlers={getChartEventHandlers()}
         zoom={zoom}
       >
         {!zoom && inactivePapers.map((paper) => renderPaper(paper))}
@@ -199,7 +199,7 @@ const KnowledgeMap = ({
           />
         ))}
         {activePapers.map((paper) => renderPaper(paper))}
-      </Canvas>
+      </Chart>
     </LocalizationProvider>
   );
 };
