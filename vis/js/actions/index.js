@@ -1,8 +1,22 @@
 /**
- * This is where all actions are stored.
+ * All actions in this array are not delayed when the map is animated.
+ *
+ * add all actions that don't change anything in the map to here
  */
+export const ALLOWED_IN_ANIMATION = [
+  "TOGGLE_LIST",
+  "SHOW_LIST",
+  "SHOW_PREVIEW",
+  "HIDE_PREVIEW",
+  "STOP_ANIMATION",
+];
 
-export const zoomIn = (selectedAreaData, source = null, callback, alreadyZoomed = false) => ({
+export const zoomIn = (
+  selectedAreaData,
+  source = null,
+  callback,
+  alreadyZoomed = false
+) => ({
   type: "ZOOM_IN",
   selectedAreaData,
   // TODO remove this when whole app is refactored
@@ -95,8 +109,8 @@ export const deselectPaper = () => ({
   type: "DESELECT_PAPER",
 });
 
-export const hoverArea = (paper) => ({
-  type: "HOVER_AREA",
+export const highlightArea = (paper) => ({
+  type: "HIGHLIGHT_AREA",
   uri: paper ? paper.area_uri : null,
   // TODO won't be needed after map refactoring
   paper,
@@ -140,4 +154,15 @@ export const applyForcePapers = (dataArray, chartSize) => ({
 
 export const stopAnimation = () => ({
   type: "STOP_ANIMATION",
+});
+
+export const hoverBubble = (uri) => ({
+  type: "HOVER_BUBBLE",
+  uri,
+});
+
+export const hoverPaper = (safeId, enlargeFactor) => ({
+  type: "HOVER_PAPER",
+  safeId,
+  enlargeFactor,
 });

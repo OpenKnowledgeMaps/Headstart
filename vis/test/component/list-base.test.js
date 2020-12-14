@@ -18,7 +18,7 @@ import List from "../../js/components/List";
 import {
   selectPaper,
   zoomIn,
-  hoverArea,
+  highlightArea,
   showPreview,
   search,
   filter,
@@ -164,7 +164,7 @@ describe("List entries component - special BASE tests", () => {
             "15e63fc6c5dfa228a39433f46c271946c8cf45f566bb63036ed89f66ce66a5e7"
         );
 
-      const EXPECTED_PAYLOAD = hoverArea(firstPaper);
+      const EXPECTED_PAYLOAD = highlightArea(firstPaper);
       expect(actions).toEqual([EXPECTED_PAYLOAD]);
     });
 
@@ -188,7 +188,7 @@ describe("List entries component - special BASE tests", () => {
 
       const actions = store.getActions();
 
-      const EXPECTED_PAYLOAD = hoverArea(null);
+      const EXPECTED_PAYLOAD = highlightArea(null);
       expect(actions).toEqual([EXPECTED_PAYLOAD]);
     });
 

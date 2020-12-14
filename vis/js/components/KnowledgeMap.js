@@ -28,29 +28,20 @@ const KnowledgeMap = ({
   handleDeselectPaper,
   handleSelectPaper,
   animation,
+  hoveredBubble,
+  bubbleOrder,
+  changeBubbleOrder,
+  hoveredPaper,
+  paperOrder,
+  changePaperOrder,
+  enlargeFactor,
 }) => {
   // bubble section
-  const [hoveredBubble, setHoveredBubble] = useState(null);
-  const [bubbleOrder, setBubbleOrder] = useState([]);
-  const changeBubbleOrder = (areaUri) => {
-    const newBubbleOrder = bubbleOrder.filter((uri) => uri !== areaUri);
-    newBubbleOrder.push(areaUri);
-    setBubbleOrder(newBubbleOrder);
-  };
-
-  useEffect(() => {
-    setHoveredBubble(zoomedBubbleUri);
-    if (zoomedBubbleUri) {
-      changeBubbleOrder(zoomedBubbleUri);
-    }
-  }, [zoomedBubbleUri]);
-
   const handleAreaMouseOver = (area) => {
     if (hoveredBubble === area.area_uri) {
       return;
     }
 
-    setHoveredBubble(area.area_uri);
     changeBubbleOrder(area.area_uri);
   };
 
@@ -74,26 +65,17 @@ const KnowledgeMap = ({
   const sortedAreas = sortAreasByIds(areas, bubbleOrder);
 
   const getChartEventHandlers = () => {
-    if (animation) {
-      return {};
-    }
-
     let onClick = undefined;
-    let onMouseOver = undefined;
+    let onMouseOver = () => changeBubbleOrder(null);
     if (zoom) {
       onClick = handleZoomOut;
-    } else {
-      onMouseOver = () => setHoveredBubble(null);
+      onMouseOver = undefined;
     }
 
     return { onClick, onMouseOver };
   };
 
   const getBubbleEventHandlers = (bubble) => {
-    if (animation) {
-      return {};
-    }
-
     let onClick = getBubbleZoomClickHandler(bubble);
     let onMouseOver = undefined;
     if (!zoom) {
@@ -108,13 +90,6 @@ const KnowledgeMap = ({
   };
 
   // paper section
-  const [paperOrder, setPaperOrder] = useState([]);
-  const changePaperOrder = (paperId) => {
-    const newPaperOrder = paperOrder.filter((id) => id !== paperId);
-    newPaperOrder.push(paperId);
-    setPaperOrder(newPaperOrder);
-  };
-
   const renderPaper = (paper) => {
     const selected = selectedPaperId === paper.safe_id;
     const handlePaperClick = (event) => {
@@ -135,9 +110,13 @@ const KnowledgeMap = ({
       handleSelectPaper(paper);
     };
 
-    const handlePaperMouseOver = () => {
-      changePaperOrder(paper.safe_id);
+    const handlePaperMouseOver = (newEnlargeFactor) => {
+      changePaperOrder(paper.safe_id, newEnlargeFactor);
     };
+
+    const handlePaperMouseOut = () => {
+      changePaperOrder(null);
+    }
 
     return (
       <Paper
@@ -146,9 +125,12 @@ const KnowledgeMap = ({
         readersLabel={baseUnit}
         zoom={zoom}
         selected={selected}
-        onClick={animation !== null ? undefined : handlePaperClick}
-        onMouseOver={animation !== null ? undefined : handlePaperMouseOver}
+        hovered={hoveredPaper === paper.safe_id}
+        onClick={handlePaperClick}
+        onMouseOver={handlePaperMouseOver}
+        onMouseOut={handlePaperMouseOut}
         animation={animation}
+        enlargeFactor={enlargeFactor}
       />
     );
   };
@@ -227,6 +209,11 @@ const mapStateToProps = (state) => ({
   height: state.chart.height,
   baseUnit: state.list.isContentBased ? undefined : state.list.baseUnit,
   animation: state.animation,
+  hoveredBubble: state.bubbleOrder.hoveredBubble,
+  bubbleOrder: state.bubbleOrder.order,
+  hoveredPaper: state.paperOrder.hoveredPaper,
+  paperOrder: state.paperOrder.order,
+  enlargeFactor: state.paperOrder.enlargeFactor,
 });
 
 export default connect(
