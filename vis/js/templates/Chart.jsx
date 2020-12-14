@@ -1,6 +1,6 @@
 import React from "react";
 
-const Canvas = ({ width, height, children, eventHandlers = {}, zoom }) => {
+const Chart = ({ width, height, children, eventHandlers = {}, zoom }) => {
   return (
     // html template starts here
     // TODO move the div back here
@@ -24,4 +24,4 @@ const Canvas = ({ width, height, children, eventHandlers = {}, zoom }) => {
   );
 };
 
-export default Canvas;
+export default Chart;
