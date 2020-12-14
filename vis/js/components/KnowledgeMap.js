@@ -6,6 +6,7 @@ import LocalizationProvider from "./LocalizationProvider";
 import { filterData } from "../utils/data";
 import Bubble from "../templates/Bubble";
 import Canvas from "../templates/Canvas";
+import Paper from "../templates/Paper";
 
 import { mapDispatchToMapEntriesProps } from "../utils/eventhandlers";
 
@@ -28,6 +29,7 @@ const KnowledgeMap = ({
   handleSelectPaper,
   animation,
 }) => {
+  // bubble section
   const [hoveredBubble, setHoveredBubble] = useState(null);
   const [bubbleOrder, setBubbleOrder] = useState([]);
   const changeBubbleOrder = (areaUri) => {
@@ -105,6 +107,72 @@ const KnowledgeMap = ({
     return { onClick, onMouseOver, onDoubleClick };
   };
 
+  // paper section
+  const [paperOrder, setPaperOrder] = useState([]);
+  const changePaperOrder = (paperId) => {
+    const newPaperOrder = paperOrder.filter((id) => id !== paperId);
+    newPaperOrder.push(paperId);
+    setPaperOrder(newPaperOrder);
+  };
+
+  const renderPaper = (paper) => {
+    const selected = selectedPaperId === paper.safe_id;
+    const handlePaperClick = (event) => {
+      if (!zoom) {
+        handleZoomIn(
+          areas.find((bubble) => bubble.area_uri === paper.area_uri)
+        );
+        return;
+      }
+
+      if (selected) {
+        return;
+      }
+
+      // this is necessary so the paper is not deselected immediately with the
+      // bubble click event
+      event.stopPropagation();
+      handleSelectPaper(paper);
+    };
+
+    const handlePaperMouseOver = () => {
+      changePaperOrder(paper.safe_id);
+    };
+
+    return (
+      <Paper
+        key={paper.safe_id}
+        data={paper}
+        readersLabel={baseUnit}
+        zoom={zoom}
+        selected={selected}
+        onClick={animation !== null ? undefined : handlePaperClick}
+        onMouseOver={animation !== null ? undefined : handlePaperMouseOver}
+        animation={animation}
+      />
+    );
+  };
+
+  const getSortedPapers = (papers) => {
+    const newArray = [...papers];
+    paperOrder.forEach((id) => {
+      const index = newArray.findIndex((e) => e.safe_id === id);
+      newArray.push(newArray[index]);
+      newArray.splice(index, 1);
+    });
+
+    return newArray;
+  };
+
+  const inactivePapers = data.filter(
+    (p) => p.area_uri !== hoveredBubble && p.area_uri !== zoomedBubbleUri
+  );
+  const activePapers = getSortedPapers(
+    data.filter(
+      (p) => p.area_uri === hoveredBubble || p.area_uri === zoomedBubbleUri
+    )
+  );
+
   return (
     <LocalizationProvider localization={localization}>
       <Canvas
@@ -113,6 +181,7 @@ const KnowledgeMap = ({
         eventHandlers={getCanvasEventHandlers()}
         zoom={zoom}
       >
+        {!zoom && inactivePapers.map((paper) => renderPaper(paper))}
         {sortedAreas.map((bubble) => (
           <Bubble
             key={bubble.area_uri}
@@ -129,6 +198,7 @@ const KnowledgeMap = ({
             highlighted={highlightedBubbleUri === bubble.area_uri}
           />
         ))}
+        {activePapers.map((paper) => renderPaper(paper))}
       </Canvas>
     </LocalizationProvider>
   );
