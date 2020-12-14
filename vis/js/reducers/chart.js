@@ -5,6 +5,10 @@ const chart = (
   },
   action
 ) => {
+  if (action.canceled) {
+    return state;
+  }
+  
   switch (action.type) {
     case "RESIZE":
       return {

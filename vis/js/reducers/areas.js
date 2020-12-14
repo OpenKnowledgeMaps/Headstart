@@ -6,6 +6,9 @@ import {
 } from "../utils/scale";
 
 const areas = (state = { list: [], size: null, options: {} }, action) => {
+  if (action.canceled) {
+    return state;
+  }
   switch (action.type) {
     case "INITIALIZE":
       const options = {

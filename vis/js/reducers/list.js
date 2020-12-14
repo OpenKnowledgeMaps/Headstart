@@ -22,6 +22,10 @@ const list = (
   },
   action
 ) => {
+  if (action.canceled) {
+    return state;
+  }
+  
   const { configObject: config, contextObject: context } = action;
 
   switch (action.type) {

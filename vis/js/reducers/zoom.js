@@ -1,4 +1,8 @@
 const zoom = (state = false, action) => {
+  if (action.canceled) {
+    return state;
+  }
+
   switch (action.type) {
     case "ZOOM_IN":
       return true;

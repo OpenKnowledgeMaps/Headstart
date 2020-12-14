@@ -1,6 +1,10 @@
 import { getDiameterScale, getResizedScale } from "../utils/scale";
 
 const data = (state = { list: [], options: {}, size: null }, action) => {
+  if (action.canceled) {
+    return state;
+  }
+  
   switch (action.type) {
     case "INITIALIZE":
       // TODO move the whole io.js dataprocessing somewhere here

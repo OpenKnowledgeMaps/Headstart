@@ -1,6 +1,9 @@
 import { createTransition } from "../utils/transition";
 
 const animation = (state = null, action) => {
+  if (action.canceled) {
+    return state;
+  }
   switch (action.type) {
     case "ZOOM_IN":
       return {
@@ -16,7 +19,6 @@ const animation = (state = null, action) => {
         type: "ZOOM_OUT",
       };
     case "STOP_ANIMATION":
-      // TODO maybe interrupt the transition?
       return null;
     default:
       return state;

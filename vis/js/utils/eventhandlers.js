@@ -1,12 +1,14 @@
 import {
   zoomIn,
   zoomOut,
-  hoverArea,
+  highlightArea,
   showPreview,
   selectPaper,
   deselectPaper,
   deselectPaperBacklink,
   stopAnimation,
+  hoverBubble,
+  hoverPaper,
 } from "../actions";
 
 /**
@@ -23,8 +25,8 @@ export const mapDispatchToListEntriesProps = (dispatch) => ({
       )
     ),
   handlePDFClick: (paper) => dispatch(showPreview(paper)),
-  handleAreaMouseover: (paper) => dispatch(hoverArea(paper)),
-  handleAreaMouseout: () => dispatch(hoverArea(null)),
+  handleAreaMouseover: (paper) => dispatch(highlightArea(paper)),
+  handleAreaMouseout: () => dispatch(highlightArea(null)),
   handleTitleClick: (paper) => {
     dispatch(selectPaper(paper));
     dispatch(
@@ -49,18 +51,19 @@ export const mapDispatchToMapEntriesProps = (dispatch) => ({
         { title: area.title, uri: area.area_uri },
         null,
         createAnimationCallback(dispatch),
-        alreadyZoomed,
+        alreadyZoomed
       )
     ),
   handleZoomOut: () => dispatch(zoomOut(createAnimationCallback(dispatch))),
   handleDeselectPaper: () => dispatch(deselectPaper()),
   handleSelectPaper: (paper) => dispatch(selectPaper(paper)),
-  // TODO
+  changeBubbleOrder: (uri) => dispatch(hoverBubble(uri)),
+  changePaperOrder: (safeId, enlargeFactor) => dispatch(hoverPaper(safeId, enlargeFactor)),
 });
 
 /**
  * Returns a callback function for the zoom transition finish.
- * @param {Function} dispatch 
+ * @param {Function} dispatch
  */
 export const createAnimationCallback = (dispatch) => {
   return () => {

@@ -25,7 +25,7 @@ class Paper extends React.Component {
     );
     const path = getPath({ x, y, width, height });
     const dogEar = getDogEar({ x, y, width, height });
-    this.state = { x, y, width, height, path, dogEar, hovered: false };
+    this.state = { x, y, width, height, path, dogEar };
 
     this.pathRef = React.createRef();
     this.dogearRef = React.createRef();
@@ -79,8 +79,9 @@ class Paper extends React.Component {
   }
 
   render() {
-    const { data, readersLabel, zoom, selected } = this.props;
-    const { onClick, onMouseOver } = this.props;
+    const { data, readersLabel, zoom, selected, hovered } = this.props;
+    const { enlargeFactor } = this.props;
+    const { onClick, onMouseOver, onMouseOut } = this.props;
 
     const { title, authors_string: authors, year } = data;
     const { num_readers: readers, published_in: publisher } = data;
@@ -93,28 +94,19 @@ class Paper extends React.Component {
       height: realHeight,
     } = this.getCoordinatesAndDimensions();
 
-    const setHovered = (hovered) => {
-      let enlargeFactor = this.state.enlargeFactor || 1;
-      if (!this.state.hovered && hovered) {
-        enlargeFactor = getEnlargeFactor(
+    const handleMouseOver = () => {
+      let newEnlargeFactor = null;
+      if (!hovered) {
+        newEnlargeFactor = getEnlargeFactor(
           this.metadataRef.current.offsetWidth,
           this.metadataRef.current.scrollHeight
         );
       }
-      this.setState({ ...this.state, hovered, enlargeFactor });
-    };
-
-    const handleMouseOver = () => {
-      if (!zoom) {
-        return;
-      }
-
-      onMouseOver();
-      setHovered(true);
+      onMouseOver(newEnlargeFactor);
     };
 
     const handleMouseOut = () => {
-      setHovered(false);
+      onMouseOut();
     };
 
     // TODO move helper functions inside the class
@@ -123,9 +115,9 @@ class Paper extends React.Component {
     let height = baseHeight;
     let path = basePath;
     let dogEar = baseDogEar;
-    if (this.state.hovered) {
-      width *= this.state.enlargeFactor;
-      height *= this.state.enlargeFactor;
+    if (hovered) {
+      width *= enlargeFactor;
+      height *= enlargeFactor;
 
       path = getPath({ x, y, width, height });
       dogEar = getDogEar({ x, y, width, height });
@@ -141,19 +133,16 @@ class Paper extends React.Component {
       paperClass += " zoomed_in";
       sizeModifierClass = "large";
     }
-    if (this.state.hovered) {
+    if (hovered) {
       sizeModifierClass = "larger";
     }
 
     // TODO move everything into styles
 
-    const eventHandlers = {};
-    if (!this.isAnimated()) {
-      eventHandlers.onClick = onClick;
-      if (zoom) {
-        eventHandlers.onMouseOver = handleMouseOver;
-        eventHandlers.onMouseOut = handleMouseOut;
-      }
+    const eventHandlers = { onClick: onClick };
+    if (zoom) {
+      eventHandlers.onMouseOver = handleMouseOver;
+      eventHandlers.onMouseOut = handleMouseOut;
     }
 
     return (

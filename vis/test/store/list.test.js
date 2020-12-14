@@ -4,7 +4,7 @@ import {
   search,
   filter,
   sort,
-  hoverArea,
+  highlightArea,
   setListHeight,
 } from "../../js/actions";
 
@@ -60,10 +60,10 @@ describe("list state", () => {
         title: "some title",
       }
       const EXPECTED_ACTION = {
-        type: "HOVER_AREA",
+        type: "HIGHLIGHT_AREA",
         paper: PAPER,
       };
-      expect(hoverArea(PAPER)).toEqual(EXPECTED_ACTION);
+      expect(highlightArea(PAPER)).toEqual(EXPECTED_ACTION);
     });
 
     it("should create a list resize action", () => {

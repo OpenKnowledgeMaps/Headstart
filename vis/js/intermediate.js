@@ -6,6 +6,7 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./reducers";
 import {
+  ALLOWED_IN_ANIMATION,
   zoomInFromMediator,
   zoomOutFromMediator,
   initializeStore,
@@ -172,9 +173,11 @@ class Intermediate {
 /**
  * Creates an action-queuing middleware.
  *
- * When the chart is animated, some actions must not be triggered. This middleware
+ * When the chart is animated, most actions must not be triggered. This middleware
  * cancels them and saves them in a queue. They are fired again after the animation
  * finishes.
+ * 
+ * It queues all actions but those in ALLOWED_IN_ANIMATION.
  *
  * @param {Object} intermediate the intermediate instance (this)
  */
@@ -185,7 +188,7 @@ function createActionQueueMiddleware(intermediate) {
       const dispatch = intermediate.store.dispatch;
 
       if (getState().animation !== null) {
-        if (action.type === "HOVER_AREA") {
+        if (!ALLOWED_IN_ANIMATION.includes(action.type)) {
           actionQueue.push({ ...action });
           action.canceled = true;
           return next(action);
@@ -196,7 +199,7 @@ function createActionQueueMiddleware(intermediate) {
 
       if (action.type === "STOP_ANIMATION") {
         while (actionQueue.length > 0) {
-          const queuedAction = actionQueue.pop();
+          const queuedAction = actionQueue.shift();
           dispatch(queuedAction);
         }
       }
@@ -314,7 +317,7 @@ function createAreaClickMiddleware(areaClickCallback) {
 function createAreaMouseoverMiddleware(areaMouseoverCallback) {
   return function () {
     return (next) => (action) => {
-      if (action.type == "HOVER_AREA" && action.paper !== null) {
+      if (action.type == "HIGHLIGHT_AREA" && action.paper !== null) {
         areaMouseoverCallback(action.paper);
       }
       const returnValue = next(action);
@@ -326,7 +329,7 @@ function createAreaMouseoverMiddleware(areaMouseoverCallback) {
 function createAreaMouseoutMiddleware(areaMouseoutCallback) {
   return function () {
     return (next) => (action) => {
-      if (action.type == "HOVER_AREA" && action.paper === null) {
+      if (action.type == "HIGHLIGHT_AREA" && action.paper === null) {
         areaMouseoutCallback({});
       }
       const returnValue = next(action);
