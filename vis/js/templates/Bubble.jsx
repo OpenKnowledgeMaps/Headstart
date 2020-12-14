@@ -11,9 +11,6 @@ class Bubble extends React.Component {
     super(props);
     // TODO rewrite this using https://www.npmjs.com/package/core-decorators#autobind ?
     this.getCoordinates = this.getCoordinates.bind(this);
-    this.changePaperOrder = this.changePaperOrder.bind(this);
-    this.getSortedPapers = this.getSortedPapers.bind(this);
-    this.renderPaper = this.renderPaper.bind(this);
     this.isAnimated = this.isAnimated.bind(this);
     this.isInMotion = this.isInMotion.bind(this);
 
@@ -55,10 +52,8 @@ class Bubble extends React.Component {
   }
 
   render() {
-    const { eventHandlers, papers, zoom } = this.props;
+    const { eventHandlers, zoom } = this.props;
     const { hovered, zoomed, highlighted } = this.props;
-
-    const sortedPapers = this.getSortedPapers();
 
     const { title } = this.props.data;
     const { x, y, r } = this.state;
@@ -97,7 +92,6 @@ class Bubble extends React.Component {
     return (
       // html template starts here
       <g className="bubble_frame" {...eventHandlers}>
-        {!hovered && !zoomed && papers.map(this.renderPaper)}
         <circle
           className={"area" + circleClass}
           r={r}
@@ -126,7 +120,6 @@ class Bubble extends React.Component {
             </div>
           </div>
         </foreignObject>
-        {(hovered || zoomed) && sortedPapers.map(this.renderPaper)}
       </g>
       // html template ends here
     );
@@ -167,52 +160,6 @@ class Bubble extends React.Component {
     }
 
     return { x, y, r };
-  }
-
-  changePaperOrder(paperId) {
-    const newPaperOrder = this.state.paperOrder.filter((id) => id !== paperId);
-    newPaperOrder.push(paperId);
-    this.setState({ ...this.state, paperOrder: newPaperOrder });
-  }
-
-  getSortedPapers() {
-    const newArray = [...this.props.papers];
-    this.state.paperOrder.forEach((id) => {
-      const index = newArray.findIndex((e) => e.safe_id === id);
-      newArray.push(newArray[index]);
-      newArray.splice(index, 1);
-    });
-
-    return newArray;
-  }
-
-  renderPaper(paper) {
-    const { zoom, selectedPaperId, baseUnit, animation } = this.props;
-    const { handleSelectPaper } = this.props;
-
-    const handlePaperClick = (event) => {
-      // this is necessary so the paper is not deselected immediately with the
-      // bubble click event
-      event.stopPropagation();
-      handleSelectPaper(paper);
-    };
-
-    const handlePaperMouseOver = () => {
-      this.changePaperOrder(paper.safe_id);
-    };
-
-    return (
-      <Paper
-        key={paper.safe_id}
-        data={paper}
-        readersLabel={baseUnit}
-        zoom={zoom}
-        selected={selectedPaperId === paper.safe_id}
-        onClick={this.isAnimated() ? undefined : handlePaperClick}
-        onMouseOver={this.isAnimated() ? undefined : handlePaperMouseOver}
-        animation={animation}
-      />
-    );
   }
 }
 

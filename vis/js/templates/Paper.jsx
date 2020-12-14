@@ -147,13 +147,13 @@ class Paper extends React.Component {
 
     // TODO move everything into styles
 
-    let eventHandlers = {};
-    if (zoom && !this.isAnimated()) {
-      eventHandlers = {
-        onClick: !zoom || selected ? undefined : onClick,
-        onMouseOver: handleMouseOver,
-        onMouseOut: handleMouseOut,
-      };
+    const eventHandlers = {};
+    if (!this.isAnimated()) {
+      eventHandlers.onClick = onClick;
+      if (zoom) {
+        eventHandlers.onMouseOver = handleMouseOver;
+        eventHandlers.onMouseOut = handleMouseOut;
+      }
     }
 
     return (
