@@ -62,7 +62,8 @@ class Intermediate {
         createFileChangeMiddleware(),
         createPreviewPopoverMiddleware(previewPopoverCallback),
         createEntryBacklinkClickMiddleware(entryBacklinkClickCallback),
-        createActionQueueMiddleware(this)
+        createActionQueueMiddleware(this),
+        createScrollMiddleware()
       );
     } else {
       middleware = applyMiddleware(
@@ -176,7 +177,7 @@ class Intermediate {
  * When the chart is animated, most actions must not be triggered. This middleware
  * cancels them and saves them in a queue. They are fired again after the animation
  * finishes.
- * 
+ *
  * It queues all actions but those in ALLOWED_IN_ANIMATION.
  *
  * @param {Object} intermediate the intermediate instance (this)
@@ -202,6 +203,33 @@ function createActionQueueMiddleware(intermediate) {
           const queuedAction = actionQueue.shift();
           dispatch(queuedAction);
         }
+      }
+
+      return returnValue;
+    };
+  };
+}
+
+/**
+ * Creates a middleware that scrolls to a previously selected paper
+ * after a zoom out.
+ */
+function createScrollMiddleware() {
+  return ({ getState }) => {
+    return (next) => (action) => {
+      const selectedPaper = getState().selectedPaper;
+      const returnValue = next(action);
+      if (action.type === "ZOOM_OUT" && selectedPaper !== null) {
+        setTimeout(() => {
+          $("#papers_list").animate(
+            {
+              scrollTop:
+                $("#" + selectedPaper.safeId).offset().top -
+                $("#papers_list").offset().top,
+            },
+            0
+          );
+        }, 80);
       }
 
       return returnValue;
