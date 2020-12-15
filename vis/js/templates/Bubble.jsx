@@ -1,9 +1,8 @@
 import React from "react";
 import Highlight from "../components/Highlight";
+import Shorten from "../components/Shorten";
 
 import { select } from "d3-selection";
-
-import Paper from "./Paper";
 
 const SQRT_2 = Math.sqrt(2);
 class Bubble extends React.Component {
@@ -82,8 +81,9 @@ class Bubble extends React.Component {
       circleStyle.fillOpacity = 0.1;
       circleClass = " zoom_unselected";
     }
+    let displayArea = true;
     if (hovered || zoom || this.isInMotion()) {
-      areaTitleStyle.display = "none";
+      displayArea = false;
     }
     if (highlighted) {
       circleClass += " highlight-bubble";
@@ -105,19 +105,21 @@ class Bubble extends React.Component {
         <foreignObject
           id="area_title_object"
           className="headstart"
-          x={x - r / SQRT_2}
-          y={y - r / SQRT_2}
+          x={x - width / 2}
+          y={y - height / 2}
           width={width}
           height={height}
           style={{ cursor: !zoomed ? "zoom-in" : undefined }}
         >
           <div>
-            <div id="area_title" style={areaTitleStyle}>
+            {!!displayArea && <div id="area_title" style={areaTitleStyle}>
               <p id="area_visual_distributions"></p>
-              <h2 style={{ fontSize: 14 }}>
-                <Highlight>{title}</Highlight>
-              </h2>
-            </div>
+              <Shorten height={height}>
+                <h2 style={{ fontSize: 14 }}>
+                  <Highlight>{title}</Highlight>
+                </h2>
+              </Shorten>
+            </div>}
           </div>
         </foreignObject>
       </g>
