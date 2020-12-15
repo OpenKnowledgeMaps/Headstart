@@ -10,6 +10,12 @@ const chart = (
   }
   
   switch (action.type) {
+    case "INITIALIZE":
+      return {
+        ...state,
+        width: action.chartSize,
+        height: action.chartSize,
+      };
     case "RESIZE":
       return {
         ...state,

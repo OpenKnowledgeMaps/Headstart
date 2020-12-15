@@ -63,7 +63,8 @@ class Intermediate {
         createPreviewPopoverMiddleware(previewPopoverCallback),
         createEntryBacklinkClickMiddleware(entryBacklinkClickCallback),
         createActionQueueMiddleware(this),
-        createScrollMiddleware()
+        createScrollMiddleware(),
+        createRepeatedInitializeMiddleware(this)
       );
     } else {
       middleware = applyMiddleware(
@@ -122,24 +123,14 @@ class Intermediate {
       document.getElementById("headstart-chart")
     );
 
-    const state = this.store.getState();
+    this.forceLayoutParams = {
+      areasAlpha: config.area_force_alpha,
+      isForceAreas: config.is_force_areas,
+      papersAlpha: config.papers_force_alpha,
+      isForcePapers: config.is_force_papers,
+    };
 
-    // TODO move this to the KnowledgeMap componentDidMount or constructor
-    applyForce(
-      state.areas.list,
-      state.data.list,
-      state.chart.width,
-      (newAreas) =>
-        this.store.dispatch(applyForceAreas(newAreas, state.chart.height)),
-      (newPapers) =>
-        this.store.dispatch(applyForcePapers(newPapers, state.chart.height)),
-      {
-        areasAlpha: config.area_force_alpha,
-        isForceAreas: config.is_force_areas,
-        papersAlpha: config.papers_force_alpha,
-        isForcePapers: config.is_force_papers,
-      }
-    );
+    this.applyForceLayout();
   }
 
   zoomIn(selectedAreaData) {
@@ -168,6 +159,20 @@ class Intermediate {
 
   updateDimensions(chart, list) {
     this.store.dispatch(updateDimensions(chart, list));
+  }
+
+  applyForceLayout() {
+    const state = this.store.getState();
+    applyForce(
+      state.areas.list,
+      state.data.list,
+      state.chart.width,
+      (newAreas) =>
+        this.store.dispatch(applyForceAreas(newAreas, state.chart.height)),
+      (newPapers) =>
+        this.store.dispatch(applyForcePapers(newPapers, state.chart.height)),
+      this.forceLayoutParams
+    );
   }
 }
 
@@ -230,6 +235,28 @@ function createScrollMiddleware() {
             0
           );
         }, 80);
+      }
+
+      return returnValue;
+    };
+  };
+}
+
+/**
+ * Creates a middleware that reapplies the force layout after
+ * each additional initialization.
+ * 
+ * Used in Viper rescaling
+ * 
+ * @param {Object} intermediate the intermediate instance (this)
+ */
+function createRepeatedInitializeMiddleware(intermediate) {
+  return ({ getState }) => {
+    return (next) => (action) => {
+      const data = getState().data.list;
+      const returnValue = next(action);
+      if (action.type === "INITIALIZE" && data.length > 0) {
+        intermediate.applyForceLayout();
       }
 
       return returnValue;

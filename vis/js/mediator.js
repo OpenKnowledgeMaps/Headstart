@@ -247,7 +247,9 @@ MyMediator.prototype = {
         mediator.external_vis_url = config.external_vis_url + "?vis_id=" + config.files[mediator.current_file_number].file
         papers.current = "none";
         list.current = "none";
-        mediator.modern_frontend_intermediate.zoomOut();
+        if (!mediator.modern_frontend_enabled) {
+            mediator.modern_frontend_intermediate.zoomOut();
+        }
         mediator.manager.call('canvas', 'setupToFileCanvas', []);
     },
 
@@ -565,8 +567,10 @@ MyMediator.prototype = {
             mediator.manager.call('list', 'scrollToEntry', [mediator.current_enlarged_paper.safe_id]);
             mediator.paper_deselected();
         }
-            
-        mediator.modern_frontend_intermediate.zoomOut();
+        
+        if (!mediator.modern_frontend_enabled) {
+            mediator.modern_frontend_intermediate.zoomOut();
+        }
     },
 
     currentbubble_click: function(d) {
