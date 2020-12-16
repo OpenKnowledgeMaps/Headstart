@@ -1,5 +1,6 @@
 import React from "react";
 import Highlight from "../components/Highlight";
+import Hyphenate from "../components/Hyphenate";
 
 import { select } from "d3-selection";
 
@@ -199,15 +200,28 @@ class Paper extends React.Component {
                   className={sizeModifierClass}
                 ></p>
                 <p id="title" className={sizeModifierClass}>
-                  <Highlight queryHighlight>{title}</Highlight>
+                  <Hyphenate>
+                    <Highlight hyphenated queryHighlight>
+                      {title}
+                    </Highlight>
+                  </Hyphenate>
                 </p>
                 <p id="details" className={sizeModifierClass}>
-                  <Highlight queryHighlight>{authors}</Highlight>
+                  <Hyphenate>
+                    <Highlight hyphenated queryHighlight>
+                      {authors}
+                    </Highlight>
+                  </Hyphenate>
                 </p>
                 <p id="in" className={sizeModifierClass}>
                   {publisher && (
                     <>
-                      in <Highlight queryHighlight>{publisher}</Highlight>
+                      in{" "}
+                      <Hyphenate>
+                        <Highlight hyphenated queryHighlight>
+                          {publisher}
+                        </Highlight>
+                      </Hyphenate>
                     </>
                   )}
                   <span className="pubyear">
