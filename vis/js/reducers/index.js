@@ -21,6 +21,7 @@ import animation from "./animation";
 import highlightedBubble from "./highlightedBubble";
 import bubbleOrder from "./bubbleOrder";
 import paperOrder from "./paperOrder";
+import hyphenationLang from "./hyphenationLang";
 
 export default combineReducers({
   zoom,
@@ -42,4 +43,5 @@ export default combineReducers({
   highlightedBubble,
   bubbleOrder,
   paperOrder,
+  hyphenationLang,
 });
