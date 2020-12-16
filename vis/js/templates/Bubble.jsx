@@ -1,6 +1,6 @@
 import React from "react";
 import Highlight from "../components/Highlight";
-import Shorten from "../components/Shorten";
+import Hyphenate from "../components/Hyphenate";
 
 import { select } from "d3-selection";
 
@@ -112,14 +112,16 @@ class Bubble extends React.Component {
           style={{ cursor: !zoomed ? "zoom-in" : undefined }}
         >
           <div>
-            {!!displayArea && <div id="area_title" style={areaTitleStyle}>
-              <p id="area_visual_distributions"></p>
-              <Shorten height={height}>
+            {!!displayArea && (
+              <div id="area_title" style={areaTitleStyle}>
+                <p id="area_visual_distributions"></p>
                 <h2 style={{ fontSize: 14 }}>
-                  <Highlight>{title}</Highlight>
+                  <Hyphenate>
+                    <Highlight hyphenated>{title}</Highlight>
+                  </Hyphenate>
                 </h2>
-              </Shorten>
-            </div>}
+              </div>
+            )}
           </div>
         </foreignObject>
       </g>
