@@ -146,11 +146,13 @@ const KnowledgeMap = ({
     return newArray;
   };
 
-  const inactivePapers = data.filter(
+  const papers = filterData(data, searchSettings, filterSettings);
+
+  const inactivePapers = papers.filter(
     (p) => p.area_uri !== hoveredBubble && p.area_uri !== zoomedBubbleUri
   );
   const activePapers = getSortedPapers(
-    data.filter(
+    papers.filter(
       (p) => p.area_uri === hoveredBubble || p.area_uri === zoomedBubbleUri
     )
   );
@@ -169,13 +171,10 @@ const KnowledgeMap = ({
             key={bubble.area_uri}
             data={bubble}
             eventHandlers={getBubbleEventHandlers(bubble)}
-            papers={filterData(bubble.papers, searchSettings, filterSettings)}
             hovered={hoveredBubble === bubble.area_uri}
             zoom={zoom}
             zoomed={zoomedBubbleUri === bubble.area_uri}
             baseUnit={baseUnit}
-            selectedPaperId={selectedPaperId}
-            handleSelectPaper={handleSelectPaper}
             animation={animation}
             highlighted={highlightedBubbleUri === bubble.area_uri}
           />
