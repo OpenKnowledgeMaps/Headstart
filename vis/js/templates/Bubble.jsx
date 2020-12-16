@@ -1,6 +1,5 @@
 import React from "react";
-import Highlight from "../components/Highlight";
-import Hyphenate from "../components/Hyphenate";
+import BubbleTitle from "./BubbleTitle";
 
 import { select } from "d3-selection";
 
@@ -115,11 +114,7 @@ class Bubble extends React.Component {
             {!!displayArea && (
               <div id="area_title" style={areaTitleStyle}>
                 <p id="area_visual_distributions"></p>
-                <h2 style={{ fontSize: 14 }}>
-                  <Hyphenate>
-                    <Highlight hyphenated>{title}</Highlight>
-                  </Hyphenate>
-                </h2>
+                <BubbleTitle height={height}>{title}</BubbleTitle>
               </div>
             )}
           </div>
