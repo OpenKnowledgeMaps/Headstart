@@ -266,9 +266,7 @@ class Paper extends React.Component {
 
     el.transition(this.props.animation.transition)
       .attr("d", path)
-      .on("end", () => {
-        this.setState({ ...this.state, path: path });
-      });
+      .on("end", () => this.setState({ ...this.state, path: path }));
   }
 
   animateDogEar() {
@@ -285,7 +283,7 @@ class Paper extends React.Component {
   }
 
   animatePaper() {
-    const { x, y, width, height } = this.getCoordinatesAndDimensions();
+    let { x, y, width, height } = this.getCoordinatesAndDimensions();
     const el = select(this.paperRef.current);
 
     el.transition(this.props.animation.transition)
@@ -293,15 +291,21 @@ class Paper extends React.Component {
       .attr("y", y)
       .attr("width", width)
       .attr("height", height)
-      .on("end", () =>
+      .on("end", () => {
+        const { hovered, enlargeFactor } = this.props;
+        if (hovered) {
+          width *= enlargeFactor;
+          height *= enlargeFactor;
+        }
+
         this.setState({
           ...this.state,
           x,
           y,
           width,
           height,
-        })
-      );
+        });
+      });
   }
 
   getCoordinatesAndDimensions(previous = false) {
