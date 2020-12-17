@@ -333,8 +333,10 @@ MyMediator.prototype = {
         mediator.manager.call('canvas', 'drawModals', [context]);
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
 
-        // TODO call this just once (chart size must be known before the map is rendered)
-        mediator.dimensions_update();
+        if (mediator.modern_frontend_enabled) {
+            // TODO call this just once (chart size must be known before the map is rendered)
+            mediator.dimensions_update();
+        }
 
         if (config.is_streamgraph) {
             mediator.manager.registerModule(streamgraph, 'streamgraph')
@@ -368,10 +370,13 @@ MyMediator.prototype = {
         }
 
         mediator.render_modern_frontend_list();
-        mediator.dimensions_update();
-        d3.select(window).on("resize", () => {
+        
+        if (mediator.modern_frontend_enabled) {
             mediator.dimensions_update();
-        });
+            d3.select(window).on("resize", () => {
+                mediator.dimensions_update();
+            });
+        }
 
         mediator.manager.call('canvas', 'showInfoModal', []);
     },

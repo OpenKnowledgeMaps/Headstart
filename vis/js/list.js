@@ -63,8 +63,11 @@ export const list = StateMachine.create({
     }
 });
 
-// Still used for the list resize (triggers a mediator function that changes the list height in the redux store)
 list.fit_list_height = function() {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
+
     var paper_list_avail_height = null;
     //Magic number - should be moved to config
     const PAPER_LIST_CORRECTION = -10;
@@ -105,6 +108,9 @@ list.fit_list_height = function() {
 };
 
 list.scrollToEntry = function(safe_id) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
     // couldn't think of a better solution now: the scroll must happen after the list is rerendered
     setTimeout(() => {
         $("#papers_list").animate({
@@ -114,6 +120,9 @@ list.scrollToEntry = function(safe_id) {
 }
 
 list.scrollTop = function() {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
     $("#papers_list").animate({
         scrollTop: 0
     }, 0);
@@ -190,6 +199,9 @@ list.filterList = function(search_words, filter_param) {
 // Returns true if document has parameter or if no parameter is passed
 // Still used for the map filtering
 list.findEntriesWithParam = function (param, d) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
     if(typeof config.filter_field === "undefined" || config.filter_field === null) {
         if (param === 'open_access') {
             return d.oa
@@ -213,6 +225,9 @@ list.findEntriesWithParam = function (param, d) {
 // Still used for the map filtering
 // WARNING: do not use this for hiding react elements ('object' parameter)
 list.hideEntriesByParam = function (object, param) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
     var self = this
     object.filter(function (d) {
         if (!self.findEntriesWithParam(param, d)) {
@@ -227,6 +242,9 @@ list.hideEntriesByParam = function (object, param) {
 // Still used for the map filtering
 // WARNING: do not use this for hiding react elements ('object' parameter)
 list.hideEntriesByWord = function(object, search_words) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
     object
         .filter(function(d) {
             let abstract = (config.list_sub_entries)?(d.abstract_search.toString().toLowerCase()):(d.paper_abstract.toString().toLowerCase());
@@ -269,6 +287,9 @@ list.hideEntriesByWord = function(object, search_words) {
 
 // Still used for the map highlighting
 list.createHighlights = function(search_words) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
     if (typeof search_words === "undefined") {
         return;
     }

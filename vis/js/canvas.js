@@ -600,12 +600,14 @@ class Canvas {
     }
 
     setupCanvas() {
+        if (!mediator.modern_frontend_enabled) {
+            this.setOverflowToHiddenOrAuto("#main");
+        }
         this.calcChartSize();
         this.setScaleRanges();
         if (mediator.modern_frontend_enabled) {
             return;
         }
-        this.setOverflowToHiddenOrAuto("#main");
         this.drawSvg();
         this.drawChartCanvas();
     }
