@@ -140,6 +140,7 @@ get_papers <- function(query, params, limit=100,
   metadata$url = metadata$id
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
+  metadata$doi = unlist(lapply(metadata$link, find_dois))
 
   text = data.frame(matrix(nrow=length(res$dcdocid)))
   text$id = metadata$id
@@ -156,6 +157,20 @@ get_papers <- function(query, params, limit=100,
 
   return(ret_val)
 }
+
+
+find_dois <- function(link) {
+  if ((startsWith(link, "http://doi.org"))
+      || (startsWith(link, "https://doi.org"))
+      || (startsWith(link, "http://dx.doi.org"))
+      || (startsWith(link, "https://dx.doi.org"))) {
+    doi <- link
+  } else {
+    doi <- ""
+  }
+  return(doi)
+}
+
 
 decode_dctypenorm <- function(dctypestring) {
   typecodes <- strsplit(dctypestring, "; ")
