@@ -188,7 +188,7 @@ const KnowledgeMap = ({
 const mapStateToProps = (state) => ({
   zoom: state.zoom,
   zoomedBubbleUri: state.selectedBubble ? state.selectedBubble.uri : null,
-  highlightedBubbleUri: state.hoveredBubble,
+  highlightedBubbleUri: state.highlightedBubble,
   selectedPaperId: state.selectedPaper ? state.selectedPaper.safeId : null,
   data: state.data.list,
   areas: state.areas.list,

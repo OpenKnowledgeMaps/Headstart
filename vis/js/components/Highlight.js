@@ -24,8 +24,18 @@ const Highlight = ({
   let queryWords = queryTerms;
   if (hyphenated) {
     autoEscape = false;
-    searchWords = searchTerms.map((term) => term.split("").join("[\\u00AD]*"));
-    queryWords = queryTerms.map((term) => term.split("").join("[\\u00AD]*"));
+    searchWords = searchTerms.map((term) =>
+      term
+        .split("")
+        .map((char) => escapeRegExp(char))
+        .join("[\\u00AD]*")
+    );
+    queryWords = queryTerms.map((term) =>
+      term
+        .split("")
+        .map((char) => escapeRegExp(char))
+        .join("[\\u00AD]*")
+    );
   }
 
   if (searchTerms.length > 0) {
@@ -62,3 +72,8 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(Highlight);
+
+// https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+const escapeRegExp = (string) => {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
