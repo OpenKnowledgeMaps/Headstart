@@ -25,12 +25,19 @@ const ClassificationListEntries = ({
   isInStreamBacklink,
   height,
   handleZoomIn,
+  handleSelectPaper,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
-  handleTitleClick,
   handleBacklinkClick,
 }) => {
+  const handleTitleClick = (paper) => {
+    handleSelectPaper(paper);
+    if (!isStreamgraph) {
+      handleZoomIn(paper);
+    }
+  }
+
   return (
     <div
       className="col-xs-12"

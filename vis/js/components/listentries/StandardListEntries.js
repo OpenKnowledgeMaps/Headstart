@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import StandardListEntry from "../../templates/listentry/StandardListEntry";
 
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
+import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 
 import {
   getPaperPreviewLink,
@@ -27,12 +28,20 @@ const StandardListEntries = ({
   localization,
   showKeywords,
   height,
+  isStreamgraph,
   handleZoomIn,
+  handleSelectPaper,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
-  handleTitleClick,
 }) => {
+  const handleTitleClick = (paper) => {
+    handleSelectPaper(paper);
+    if (!isStreamgraph) {
+      handleZoomIn(paper);
+    }
+  }
+
   return (
     <div
       className="col-xs-12"
@@ -111,6 +120,7 @@ const mapStateToProps = (state) => ({
     state.list.showKeywords &&
     (!!state.selectedPaper || !state.list.hideUnselectedKeywords),
   height: state.list.height,
+  isStreamgraph: state.chartType === STREAMGRAPH_MODE,
 });
 
 export default connect(

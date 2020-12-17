@@ -1,5 +1,5 @@
 const bubbleOrder = (state = { hoveredBubble: null, order: [] }, action) => {
-  if (action.canceled) {
+  if (action.canceled || action.isStreamgraph) {
     return state;
   }
   switch (action.type) {

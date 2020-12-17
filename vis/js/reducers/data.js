@@ -4,7 +4,9 @@ const data = (state = { list: [], options: {}, size: null }, action) => {
   if (action.canceled) {
     return state;
   }
-  
+
+  let list = null;
+
   switch (action.type) {
     case "INITIALIZE":
       // TODO move the whole io.js dataprocessing somewhere here
@@ -20,32 +22,33 @@ const data = (state = { list: [], options: {}, size: null }, action) => {
         paperMaxScale: action.configObject.paper_max_scale,
         paperWidthFactor: action.configObject.paper_width_factor,
         paperHeightFactor: action.configObject.paper_height_factor,
+        isStreamgraph: action.configObject.is_streamgraph,
       };
 
-      return {
-        list: rescalePapers(data, action.chartSize, options),
-        options,
-        size: action.chartSize,
-      };
+      list = data;
+      if (!options.isStreamgraph) {
+        list = rescalePapers(data, action.chartSize, options);
+      }
+
+      return { list, options, size: action.chartSize };
     case "RESIZE":
       if (state.list.length === 0) {
         return state;
       }
-      return {
-        ...state,
-        list: resizePapers(
+
+      list = state.list;
+      if (!state.options.isStreamgraph) {
+        list = resizePapers(
           state.list,
           state.size,
           action.chartSize,
           state.options
-        ),
-        size: action.chartSize,
-      };
+        );
+      }
+
+      return { ...state, list, size: action.chartSize };
     case "APPLY_FORCE_PAPERS":
-      return {
-        ...state,
-        list: action.dataArray,
-      };
+      return { ...state, list: action.dataArray };
     default:
       return state;
   }
@@ -123,9 +126,11 @@ const rescalePapers = (papers, size, options) => {
     paper.y = yScale(paper.y);
     paper.diameter = dScale(paper.internal_readers);
     paper.width =
-      options.paperWidthFactor * Math.sqrt(Math.pow(paper.diameter, 2) / GOLDEN_RATIO);
+      options.paperWidthFactor *
+      Math.sqrt(Math.pow(paper.diameter, 2) / GOLDEN_RATIO);
     paper.height =
-      options.paperHeightFactor * Math.sqrt(Math.pow(paper.diameter, 2) / GOLDEN_RATIO);
+      options.paperHeightFactor *
+      Math.sqrt(Math.pow(paper.diameter, 2) / GOLDEN_RATIO);
 
     // some fallback values
     paper.zoomedX = paper.x;
@@ -167,8 +172,8 @@ const resizePapers = (papers, currentSize, newSize, options) => {
 
     paper.zoomedX = coordsScale(paper.zoomedX);
     paper.zoomedY = coordsScale(paper.zoomedY);
-    paper.zoomedWidth = paper.zoomedWidth * newSize / currentSize;
-    paper.zoomedHeight = paper.zoomedHeight * newSize / currentSize;
+    paper.zoomedWidth = (paper.zoomedWidth * newSize) / currentSize;
+    paper.zoomedHeight = (paper.zoomedHeight * newSize) / currentSize;
   });
 
   return resizedPapers;

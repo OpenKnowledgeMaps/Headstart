@@ -740,9 +740,10 @@ MyMediator.prototype = {
         const chart = getChartSize(config, io.context);
         const list = getListSize(config, io.context, chart.height);
         mediator.modern_frontend_intermediate.updateDimensions(chart, list);
-        // TODO width if it's streamgraph
-        d3.select("#headstart-chart")
-            .style("width", chart.size + "px");
+        if(!config.is_streamgraph) {
+            d3.select("#headstart-chart")
+                .style("width", chart.size + "px");
+        }
     },
 };
 

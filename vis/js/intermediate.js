@@ -64,7 +64,8 @@ class Intermediate {
         createEntryBacklinkClickMiddleware(entryBacklinkClickCallback),
         createActionQueueMiddleware(this),
         createScrollMiddleware(),
-        createRepeatedInitializeMiddleware(this)
+        createRepeatedInitializeMiddleware(this),
+        createChartTypeMiddleware()
       );
     } else {
       middleware = applyMiddleware(
@@ -245,9 +246,9 @@ function createScrollMiddleware() {
 /**
  * Creates a middleware that reapplies the force layout after
  * each additional initialization.
- * 
+ *
  * Used in Viper rescaling
- * 
+ *
  * @param {Object} intermediate the intermediate instance (this)
  */
 function createRepeatedInitializeMiddleware(intermediate) {
@@ -260,6 +261,15 @@ function createRepeatedInitializeMiddleware(intermediate) {
       }
 
       return returnValue;
+    };
+  };
+}
+
+function createChartTypeMiddleware() {
+  return ({ getState }) => {
+    return (next) => (action) => {
+      action.isStreamgraph = getState().chartType === STREAMGRAPH_MODE;
+      return next(action);
     };
   };
 }
