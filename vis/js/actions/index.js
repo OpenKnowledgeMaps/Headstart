@@ -129,8 +129,9 @@ export const deselectPaperBacklink = () => ({
   type: "DESELECT_PAPER_BACKLINK",
 });
 
+// TODO delete this - resize done differently (mediator.modern_frontend_enabled)
 export const setListHeight = (listHeight) => ({
-  type: "RESIZE",
+  type: "RESIZE_LIST",
   listHeight,
 });
 

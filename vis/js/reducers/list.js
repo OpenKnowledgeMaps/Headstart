@@ -25,7 +25,7 @@ const list = (
   if (action.canceled) {
     return state;
   }
-  
+
   const { configObject: config, contextObject: context } = action;
 
   switch (action.type) {
@@ -76,6 +76,11 @@ const list = (
         sortValue: action.id,
       };
     case "RESIZE":
+      return {
+        ...state,
+        height: action.listHeight,
+      };
+    case "RESIZE_LIST":
       return {
         ...state,
         height: action.listHeight,
