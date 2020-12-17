@@ -68,7 +68,7 @@ const BasicListEntries = ({
             onMouseOver: () => handleAreaMouseover(entry),
             onMouseOut: () => handleAreaMouseout(),
           }}
-          handleZoomIn={() => handleZoomIn(entry)}
+          handleZoomIn={() => handleZoomIn(entry, "list-area")}
           readers={entry.num_readers}
           baseUnit={baseUnit}
           handleTitleClick={() => handleTitleClick(entry)}

@@ -130,6 +130,7 @@ const KnowledgeMap = ({
         onMouseOver={handlePaperMouseOver}
         onMouseOut={handlePaperMouseOut}
         animation={animation}
+        maxSize={height / 2.0}
         enlargeFactor={enlargeFactor}
       />
     );

@@ -93,7 +93,7 @@ const StandardListEntries = ({
             onMouseOver: () => handleAreaMouseover(entry),
             onMouseOut: () => handleAreaMouseout(),
           }}
-          handleZoomIn={() => handleZoomIn(entry)}
+          handleZoomIn={() => handleZoomIn(entry, "list-area")}
           citations={
             !isContentBased && !!baseUnit && !showMetrics
               ? entry.num_readers
