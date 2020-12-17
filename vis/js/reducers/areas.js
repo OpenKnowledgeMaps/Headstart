@@ -5,8 +5,11 @@ import {
   getZoomScale,
 } from "../utils/scale";
 
-const areas = (state = { list: [], size: null, options: {} }, action) => {
-  if (action.canceled) {
+const areas = (
+  state = { list: [], size: null, options: {} },
+  action
+) => {
+  if (action.canceled || action.isStreamgraph) {
     return state;
   }
   switch (action.type) {
@@ -138,7 +141,7 @@ const resizeAreas = (areas, currentSize, newSize, options) => {
 
     area.zoomedX = coordsScale(area.zoomedX);
     area.zoomedY = coordsScale(area.zoomedY);
-    area.zoomedR = area.zoomedR * newSize / currentSize;
+    area.zoomedR = (area.zoomedR * newSize) / currentSize;
   });
 
   return resizedAreas;
@@ -164,7 +167,7 @@ const zoomAreas = (zoomedAreaUri, areas, size, options) => {
       paper.prevZoomedY = paper.zoomedY;
       paper.prevZoomedWidth = paper.zoomedWidth;
       paper.prevZoomedHeight = paper.zoomedHeight;
-      
+
       paper.zoomedX = xScale(paper.x);
       paper.zoomedY = yScale(paper.y);
 

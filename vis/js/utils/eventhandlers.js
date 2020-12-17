@@ -27,16 +27,7 @@ export const mapDispatchToListEntriesProps = (dispatch) => ({
   handlePDFClick: (paper) => dispatch(showPreview(paper)),
   handleAreaMouseover: (paper) => dispatch(highlightArea(paper)),
   handleAreaMouseout: () => dispatch(highlightArea(null)),
-  handleTitleClick: (paper) => {
-    dispatch(selectPaper(paper));
-    dispatch(
-      zoomIn(
-        { title: paper.area, uri: paper.area_uri },
-        "list-area",
-        createAnimationCallback(dispatch)
-      )
-    );
-  },
+  handleSelectPaper: (paper) => dispatch(selectPaper(paper)),
   handleBacklinkClick: () => dispatch(deselectPaperBacklink()),
 });
 

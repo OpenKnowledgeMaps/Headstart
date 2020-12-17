@@ -14,6 +14,7 @@ import { shorten } from "../../utils/string";
 const BasicListEntries = ({
   displayedData,
   handleZoomIn,
+  handleSelectPaper,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
@@ -21,9 +22,13 @@ const BasicListEntries = ({
   baseUnit,
   showPreviewImage,
   showRealPreviewImage,
-  handleTitleClick,
   height,
 }) => {
+  const handleTitleClick = (paper) => {
+    handleSelectPaper(paper);
+    handleZoomIn(paper);
+  }
+
   return (
     <div
       className="col-xs-12"

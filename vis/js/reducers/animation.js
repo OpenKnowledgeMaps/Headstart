@@ -1,7 +1,7 @@
 import { createTransition } from "../utils/transition";
 
 const animation = (state = null, action) => {
-  if (action.canceled) {
+  if (action.canceled || action.isStreamgraph) {
     return state;
   }
   switch (action.type) {
