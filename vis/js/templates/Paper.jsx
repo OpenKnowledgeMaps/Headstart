@@ -81,7 +81,7 @@ class Paper extends React.Component {
 
   render() {
     const { data, readersLabel, zoom, selected, hovered } = this.props;
-    const { enlargeFactor } = this.props;
+    const { maxSize, enlargeFactor } = this.props;
     const { onClick, onMouseOver, onMouseOut } = this.props;
 
     const { title, authors_string: authors, year } = data;
@@ -117,8 +117,13 @@ class Paper extends React.Component {
     let path = basePath;
     let dogEar = baseDogEar;
     if (hovered) {
-      width *= enlargeFactor;
-      height *= enlargeFactor;
+      let realEnlargeFactor = enlargeFactor;
+      if (height * realEnlargeFactor > maxSize) {
+        realEnlargeFactor = maxSize / height;
+      }
+
+      width *= realEnlargeFactor;
+      height *= realEnlargeFactor;
 
       path = getPath({ x, y, width, height });
       dogEar = getDogEar({ x, y, width, height });
@@ -292,10 +297,15 @@ class Paper extends React.Component {
       .attr("width", width)
       .attr("height", height)
       .on("end", () => {
-        const { hovered, enlargeFactor } = this.props;
+        const { hovered, enlargeFactor, maxSize } = this.props;
         if (hovered) {
-          width *= enlargeFactor;
-          height *= enlargeFactor;
+          let realEnlargeFactor = enlargeFactor;
+          if (height * realEnlargeFactor > maxSize) {
+            realEnlargeFactor = maxSize / height;
+          }
+
+          width *= realEnlargeFactor;
+          height *= realEnlargeFactor;
         }
 
         this.setState({

@@ -149,7 +149,7 @@ const resizeAreas = (areas, currentSize, newSize, options) => {
 
 const zoomAreas = (zoomedAreaUri, areas, size, options) => {
   const zoomedAreas = areas.slice(0);
-  const zoomedArea = zoomedAreas.find((a) => a.area_uri === zoomedAreaUri);
+  const zoomedArea = zoomedAreas.find((a) => a.area_uri == zoomedAreaUri);
 
   const xScale = getZoomScale(zoomedArea.x, zoomedArea.r, size);
   const yScale = getZoomScale(zoomedArea.y, zoomedArea.r, size);

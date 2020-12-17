@@ -80,7 +80,7 @@ const ClassificationListEntries = ({
                   onMouseOut: () => handleAreaMouseout(),
                 }
           }
-          handleZoomIn={() => handleZoomIn(entry)}
+          handleZoomIn={() => handleZoomIn(entry, "list-area")}
           handleTitleClick={() => handleTitleClick(entry)}
           backlink={{
             show: showBacklink,
