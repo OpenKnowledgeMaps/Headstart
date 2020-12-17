@@ -229,6 +229,10 @@
     .pubyear {
         font-weight: $fontweight700;
         font-style: normal;
+
+        span {
+            font-style: normal;
+        }
     }
 }
 
