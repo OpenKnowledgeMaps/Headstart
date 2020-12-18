@@ -56,7 +56,7 @@ class Intermediate {
     if (modern_frontend_enabled) {
       middleware = applyMiddleware(
         createZoomOutMiddleware(
-          knowledgeMapZoomOutCallback,
+          null,
           streamgraphZoomOutCallback
         ),
         createFileChangeMiddleware(),
@@ -68,6 +68,7 @@ class Intermediate {
         createChartTypeMiddleware()
       );
     } else {
+      // TODO remove all unused middlewares after map refactoring
       middleware = applyMiddleware(
         createZoomOutMiddleware(
           knowledgeMapZoomOutCallback,
@@ -82,7 +83,8 @@ class Intermediate {
         createAreaMouseoutMiddleware(areaMouseoutCallback),
         createPreviewPopoverMiddleware(previewPopoverCallback),
         createTitleClickMiddleware(titleClickCallback),
-        createEntryBacklinkClickMiddleware(entryBacklinkClickCallback)
+        createEntryBacklinkClickMiddleware(entryBacklinkClickCallback),
+        createChartTypeMiddleware()
       );
     }
 
@@ -348,13 +350,15 @@ function createZoomOutMiddleware(
   streamgraphZoomOutCallback
 ) {
   return function ({ getState }) {
-    const self = this;
     return (next) => (action) => {
       if (action.type == "ZOOM_OUT" && action.not_from_mediator) {
         if (getState().chartType === STREAMGRAPH_MODE) {
           streamgraphZoomOutCallback();
         } else {
-          //knowledgeMapZoomOutCallback();
+          // TODO remove this after map refactoring
+          if (knowledgeMapZoomOutCallback) {
+            knowledgeMapZoomOutCallback();
+          }
         }
       }
       const returnValue = next(action);

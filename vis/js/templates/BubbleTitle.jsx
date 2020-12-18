@@ -45,9 +45,13 @@ class BubbleTitle extends React.Component {
     const { children: title } = this.props;
 
     return (
-      <h2 style={{ fontSize: 14 }} ref={(el) => (this.titleRef = el)}>
-        {title}
-      </h2>
+      <h2
+        style={{ fontSize: 14 }}
+        ref={(el) => (this.titleRef = el)}
+        dangerouslySetInnerHTML={{
+          __html: title,
+        }}
+      ></h2>
     );
   }
 
