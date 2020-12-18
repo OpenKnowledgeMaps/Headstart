@@ -18,13 +18,14 @@ class Paper extends React.Component {
     this.animatePaper = this.animatePaper.bind(this);
     this.isZoomingIn = this.isZoomingIn.bind(this);
     this.isZoomingOut = this.isZoomingOut.bind(this);
+    this.isDataset = this.isDataset.bind(this);
 
     this.isAnimatedOnMount = this.isAnimated();
 
     const { x, y, width, height } = this.getCoordinatesAndDimensions(
       this.isAnimatedOnMount
     );
-    const path = getPath({ x, y, width, height });
+    const path = getPath({ x, y, width, height }, this.isDataset());
     const dogEar = getDogEar({ x, y, width, height });
     this.state = { x, y, width, height, path, dogEar };
 
@@ -66,7 +67,7 @@ class Paper extends React.Component {
         width: newWidth,
         height: newHeight,
       };
-      const path = getPath(newCoords);
+      const path = getPath(newCoords, this.isDataset());
       const dogEar = getDogEar(newCoords);
 
       this.setState({ ...this.state, ...newCoords, path, dogEar });
@@ -75,7 +76,9 @@ class Paper extends React.Component {
 
   componentWillUnmount() {
     select(this.pathRef.current).interrupt();
-    select(this.dogearRef.current).interrupt();
+    if (!this.isDataset()) {
+      select(this.dogearRef.current).interrupt();
+    }
     select(this.paperRef.current).interrupt();
   }
 
@@ -86,7 +89,7 @@ class Paper extends React.Component {
 
     const { title, authors_string: authors, year } = data;
     const { num_readers: readers, published_in: publisher } = data;
-    const { oa: isOpenAccess, free_access: isFreeAccess, resulttype } = data;
+    const { oa: isOpenAccess, free_access: isFreeAccess } = data;
     const { x, y, width: baseWidth, height: baseHeight } = this.state;
     const { path: basePath, dogEar: baseDogEar } = this.state;
 
@@ -125,12 +128,13 @@ class Paper extends React.Component {
       width *= realEnlargeFactor;
       height *= realEnlargeFactor;
 
-      path = getPath({ x, y, width, height });
+      path = getPath({ x, y, width, height }, this.isDataset());
       dogEar = getDogEar({ x, y, width, height });
       realWidth = width;
       realHeight = height;
     }
 
+    let gClass = "paper";
     let pathClass = selected ? "framed" : "unframed";
     let paperClass = "paper_holder";
     let sizeModifierClass = "";
@@ -141,6 +145,9 @@ class Paper extends React.Component {
     }
     if (hovered) {
       sizeModifierClass = "larger";
+    }
+    if (this.isDataset()) {
+      gClass += " resulttype-dataset";
     }
 
     // TODO move everything into styles
@@ -153,7 +160,7 @@ class Paper extends React.Component {
 
     return (
       // html template starts here
-      <g className="paper" {...eventHandlers}>
+      <g className={gClass} {...eventHandlers}>
         <path
           id="region"
           d={path}
@@ -161,7 +168,9 @@ class Paper extends React.Component {
           style={{ fillOpacity: 1 }}
           ref={this.pathRef}
         ></path>
-        <path className="dogear" d={dogEar} ref={this.dogearRef}></path>
+        {!this.isDataset() && (
+          <path className="dogear" d={dogEar} ref={this.dogearRef}></path>
+        )}
         <foreignObject
           id="article_metadata"
           x={x}
@@ -186,7 +195,7 @@ class Paper extends React.Component {
                       &#61596;
                     </p>
                   )}
-                  {resulttype === "dataset" && (
+                  {this.isDataset() && (
                     <p id="dataset-icon" className={sizeModifierClass}>
                       <span
                         id="dataset-icon_list"
@@ -259,7 +268,9 @@ class Paper extends React.Component {
 
   animate() {
     this.animatePath();
-    this.animateDogEar();
+    if (!this.isDataset()) {
+      this.animateDogEar();
+    }
     this.animatePaper();
   }
 
@@ -267,7 +278,7 @@ class Paper extends React.Component {
     const { x, y, width, height } = this.getCoordinatesAndDimensions();
     const el = select(this.pathRef.current);
 
-    const path = getPath({ x, y, width, height });
+    const path = getPath({ x, y, width, height }, this.isDataset());
 
     el.transition(this.props.animation.transition)
       .attr("d", path)
@@ -360,6 +371,11 @@ class Paper extends React.Component {
     const { animation } = this.props;
     return !!animation && animation.type === "ZOOM_OUT";
   }
+
+  isDataset() {
+    const { resulttype } = this.props.data;
+    return resulttype === "dataset";
+  }
 }
 
 export default Paper;
@@ -375,10 +391,29 @@ const getDogEar = ({ x, y, width: w, height: h }) => {
   }`;
 };
 
-const getPath = ({ x, y, width: w, height: h }) => {
+const getPath = ({ x, y, width: w, height: h }, isDataset) => {
+  if (isDataset) {
+    return getDatasetPath({ x, y, width: w, height: h });
+  }
   return `M ${x} ${y} h ${(1 - DOGEAR_WIDTH) * w} l ${DOGEAR_HEIGHT * w} ${
     DOGEAR_WIDTH * h
   } v ${(1 - DOGEAR_HEIGHT) * h} h ${-w} v ${-h}`;
+};
+
+const getDatasetPath = ({ x, y, width, height }) => {
+  const r = 10;
+  const lineWidth = width - 2 * r;
+  const lineHeight = height - 2 * r;
+
+  return `M ${x} ${y + r} \
+  v ${lineHeight} \
+  a ${r} ${r} 0 0 0 ${r} ${r} \
+  h ${lineWidth} \
+  a ${r} ${r} 1 0 0 ${r} ${-r} \
+  v ${-lineHeight} \
+  a ${r} ${r} 0 0 0 ${-r} ${-r} \
+  h ${-lineWidth} \
+  a ${r} ${r} 0 0 0 ${-r} ${r} Z`;
 };
 
 const getEnlargeFactor = (offsetWidth, scrollHeight) => {
