@@ -27,13 +27,12 @@ include 'config.php';
 </head>
 
 <body style="padding-left:10px; padding-right:10px;">
-    <div>
-        <h2>Search TRIPLE and turn it into a visualization</h2>
-        <?php include('search-flow/inc/search-form.php') ?>
+        <?php include('search-flow/inc/waiting_page.php') ?>
     <div style="margin-top:20px ">Built with <a href="https://github.com/OpenKnowledgeMaps/Headstart" target="_blank ">Head Start</a>. All content retrieved from <a href="https://www.gotriple.eu/" target="_blank ">TRIPLE</a>.
     </div>
-    <script type="text/javascript " src="search_options_triple.js "></script>
-    <script type="text/javascript " src="search-flow/js/search_form.js "></script>
+    <script type="text/javascript " src="search_options.js"></script>
+    <script type="text/javascript " src="waiting_page_options_triple.js"></script>
+    <script type="text/javascript " src="search-flow/js/search.js "></script>
 </body>
 
 </html>
