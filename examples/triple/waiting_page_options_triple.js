@@ -77,6 +77,6 @@ const add_not_enough_results_links = true;
 const vis_page_cool_uri = false;
 
 //Parameters for the vis page
-const vis_page_additional_params = [];
+const vis_page_additional_params = ["sg_method", "limit", "lagnuage", "vis_type", "query"];
 
 
