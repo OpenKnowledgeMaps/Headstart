@@ -1,5 +1,8 @@
 const waiting_page_texts = {
-    'longer than expected': 'Creating your visualization takes longer than expected. Please stay tuned!'
+    longer_than_expected_text: 'Creating your visualization takes longer than expected. Please stay tuned!'
+    , waiting_title: 'Your knowledge map on <strong id="search_term"></strong> is being created!'
+    , status_waiting: 'Please be patient, this takes around 20 seconds.<br>While you are waiting, find out how the knowledge map is being created below.'
+    , try_again_title: 'Have another try!'
 }
 
 const error_texts = {
@@ -10,7 +13,7 @@ const error_texts = {
         , more_info: 'Alternatively you can <a class="underline" id="more-info-link_na" target="_blank">check out results for your search query on <span id="more-info-link_service"></span></a>. For more information about our service please <a class="underline" href="https://openknowledgemaps.org/faq">see our FAQs</a>.'
         , contact: 'If you think that there is something wrong with our service, please let us know at <a class="underline" href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>. Please include the search query in your message.'
         , "resolution": "Try again"
-        , "resolution_link": "index"
+        , "resolution_link": "index.php"
     },
     connection_error: {
         title: "Connection lost"
@@ -67,5 +70,7 @@ const error_code_translation = {
 const error_always_add = [
     'typo'
 ];
+
+const add_not_enough_results_links = true;
 
 
