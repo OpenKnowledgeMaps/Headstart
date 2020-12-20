@@ -8,7 +8,9 @@ include 'config.php';
           $id = $_GET["id"];
           $query = $_GET["query"];
           $service = $_GET['service'];
+          $has_custom_title = false;
       ?>
+      <script src="https://code.jquery.com/jquery-2.1.4.min.js" integrity="sha256-8WqyJLuWKRBVhxXIL1jBDD7SDxU936oZkCnxQbWwJVw=" crossorigin="anonymous"></script>
     </head>
 
     <body style="margin:0px; padding:0px">
@@ -18,13 +20,13 @@ include 'config.php';
            var fit_to_page = false;
        </script>
        
-       <?php include ($SEARCH_FLOW_PATH . "inc/knowledge-map.php") ?>
+       <?php include ("search-flow/inc/knowledge-map.php") ?>
         <script type="text/javascript" src="data-config_triple.js"></script>
         <script>
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
             data_config.files = [{
-                    title: <?php echo $query; ?>,
-                    file: <?php echo $id; ?>
+                    title: "<?php echo $query; ?>",
+                    file: "<?php echo $id; ?>"
             }];
             data_config.options = options_<?php echo $service ?>.dropdowns;
             if(<?php echo json_encode($service) ?> === "triple_sg") {
