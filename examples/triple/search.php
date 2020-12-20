@@ -30,7 +30,14 @@ include 'config.php';
 </head>
 
 <body style="padding-left:10px; padding-right:10px;">
-        <?php include('search-flow/inc/waiting-page.php') ?>
+        <?php 
+            $params_arrays = array(
+                "triple_km" => array("from", "to", "sorting", "language", "limit")
+                , "triple_sg" => array("from", "to", "sorting", "language", "limit", "sg_method")
+            );
+            
+            include('search-flow/inc/waiting-page.php') 
+        ?>
     <div style="margin-top:20px ">Built with <a href="https://github.com/OpenKnowledgeMaps/Headstart" target="_blank ">Head Start</a>. All content retrieved from <a href="https://www.gotriple.eu/" target="_blank ">TRIPLE</a>.
     </div>
 </body>
