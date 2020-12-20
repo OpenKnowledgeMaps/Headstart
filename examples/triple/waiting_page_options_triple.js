@@ -73,4 +73,10 @@ const error_always_add = [
 
 const add_not_enough_results_links = true;
 
+//Whether the vis_page is a cool URI (e.g. "map/21043904") or uses standard parameter form (e.g. "vis?id=21043904")
+const vis_page_cool_uri = false;
+
+//Parameters for the vis page
+const vis_page_additional_params = [];
+
 

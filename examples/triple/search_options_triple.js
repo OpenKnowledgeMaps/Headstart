@@ -4,13 +4,13 @@ var search_options = {
     , show_filters: false
     , filters_text: "Refine your search"
     , options: [
-        { id: "sg", name: "Streamgraph TRIPLE", disabled: false, default: false 
+        { id: "triple_sg", name: "Streamgraph TRIPLE", disabled: false, default: false 
             , text: "Streamgraph", description: ""
             , script: "searchTRIPLE.php", milliseconds_progressbar: 800
             , max_length_search_term_short: 115, timeout: 120000
             
         }
-        , { id: "km", name: "Knowledge Map TRIPLE", disabled: false, default: true 
+        , { id: "triple_km", name: "Knowledge Map TRIPLE", disabled: false, default: true 
             , text: "Knowledge Map", description: ""
             , script: "searchTRIPLE.php", milliseconds_progressbar: 800
             , max_length_search_term_short: 115, timeout: 120000
@@ -18,19 +18,19 @@ var search_options = {
     ]
 }
 
-var examples_sg = {
+var examples_triple_sg = {
     example_text: "Try out:", 
     examples : [
     ]
 }
 
-var examples_km = {
+var examples_triple_km = {
     example_text: "Try out:", 
     examples : [
     ]
 }
 
-var options_km = {
+var options_triple_km = {
     dropdowns: [
         {id: "year_range", multiple: false, name: "Time Range", type: "dropdown"
             , fields: [
@@ -63,8 +63,8 @@ var options_km = {
     ]}
 
 
-options_sg = $.extend(true, {}, options_km); 
-options_sg.dropdowns.push(
+options_triple_sg = $.extend(true, {}, options_triple_km); 
+options_triple_sg.dropdowns.push(
         {id: "sg_method", multiple: false, name: "Streamgraph method", type: "dropdown"
             , fields: [
                 {id: "count", text: "Count"},
