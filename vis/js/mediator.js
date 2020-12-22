@@ -228,6 +228,7 @@ MyMediator.prototype = {
                 mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
 
             mediator.manager.call('canvas', 'setupCanvas', []);
+            mediator.manager.call('canvas', 'initInfoModal');
             if (config.scale_toolbar) {
                 mediator.manager.registerModule(scale, 'scale');
                 mediator.manager.call('scale', 'drawScaleTypes', []);
