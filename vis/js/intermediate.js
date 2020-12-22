@@ -10,10 +10,7 @@ import {
   zoomInFromMediator,
   zoomOutFromMediator,
   initializeStore,
-  showList,
-  selectPaperFromMediator,
   deselectPaper,
-  setListHeight,
   updateDimensions,
   applyForceAreas,
   applyForcePapers,
@@ -37,56 +34,23 @@ import { applyForce } from "./utils/force";
 class Intermediate {
   constructor(
     modern_frontend_enabled,
-    knowledgeMapZoomOutCallback,
     streamgraphZoomOutCallback,
-    listToggleCallback,
-    searchCallback,
-    filterCallback,
-    areaClickCallback,
-    areaMouseoverCallback,
-    areaMouseoutCallback,
     previewPopoverCallback,
-    titleClickCallback,
     entryBacklinkClickCallback
   ) {
     this.modern_frontend_enabled = modern_frontend_enabled;
     this.actionQueue = [];
 
-    let middleware = undefined;
-    if (modern_frontend_enabled) {
-      middleware = applyMiddleware(
-        createZoomOutMiddleware(
-          null,
-          streamgraphZoomOutCallback
-        ),
-        createFileChangeMiddleware(),
-        createPreviewPopoverMiddleware(previewPopoverCallback),
-        createEntryBacklinkClickMiddleware(entryBacklinkClickCallback),
-        createActionQueueMiddleware(this),
-        createScrollMiddleware(),
-        createRepeatedInitializeMiddleware(this),
-        createChartTypeMiddleware()
-      );
-    } else {
-      // TODO remove all unused middlewares after map refactoring
-      middleware = applyMiddleware(
-        createZoomOutMiddleware(
-          knowledgeMapZoomOutCallback,
-          streamgraphZoomOutCallback
-        ),
-        createFileChangeMiddleware(),
-        createListToggleMiddleware(listToggleCallback),
-        createSearchMiddleware(searchCallback),
-        createFilterMiddleware(filterCallback),
-        createAreaClickMiddleware(areaClickCallback),
-        createAreaMouseoverMiddleware(areaMouseoverCallback),
-        createAreaMouseoutMiddleware(areaMouseoutCallback),
-        createPreviewPopoverMiddleware(previewPopoverCallback),
-        createTitleClickMiddleware(titleClickCallback),
-        createEntryBacklinkClickMiddleware(entryBacklinkClickCallback),
-        createChartTypeMiddleware()
-      );
-    }
+    const middleware = applyMiddleware(
+      createZoomOutMiddleware(streamgraphZoomOutCallback),
+      createFileChangeMiddleware(),
+      createPreviewPopoverMiddleware(previewPopoverCallback),
+      createEntryBacklinkClickMiddleware(entryBacklinkClickCallback),
+      createActionQueueMiddleware(this),
+      createScrollMiddleware(),
+      createRepeatedInitializeMiddleware(this),
+      createChartTypeMiddleware()
+    );
 
     this.store = createStore(rootReducer, middleware);
   }
@@ -136,34 +100,27 @@ class Intermediate {
     this.applyForceLayout();
   }
 
+  // used in streamgraph
   zoomIn(selectedAreaData) {
     this.store.dispatch(zoomInFromMediator(selectedAreaData));
   }
 
+  // used in streamgraph
   zoomOut() {
     this.store.dispatch(zoomOutFromMediator());
   }
 
-  showList() {
-    this.store.dispatch(showList());
-  }
-
-  selectPaper(safeId) {
-    this.store.dispatch(selectPaperFromMediator(safeId));
-  }
-
+  // used in streamgraph
   deselectPaper() {
     this.store.dispatch(deselectPaper());
   }
 
-  setListHeight(newHeight) {
-    this.store.dispatch(setListHeight(newHeight));
-  }
-
+  // used after start and then on window resize
   updateDimensions(chart, list) {
     this.store.dispatch(updateDimensions(chart, list));
   }
 
+  // used after each INITIALIZE
   applyForceLayout() {
     const state = this.store.getState();
     applyForce(
@@ -301,64 +258,12 @@ function createEntryBacklinkClickMiddleware(entryBacklinkClickCallback) {
   };
 }
 
-function createTitleClickMiddleware(titleClickCallback) {
-  return function () {
-    return (next) => (action) => {
-      if (action.type == "SELECT_PAPER" && action.not_from_mediator) {
-        titleClickCallback(action.paper);
-      }
-      return next(action);
-    };
-  };
-}
-
-function createSearchMiddleware(searchCallback) {
-  return function () {
-    return (next) => (action) => {
-      if (action.type == "SEARCH") {
-        searchCallback(action.text);
-      }
-      return next(action);
-    };
-  };
-}
-
-function createFilterMiddleware(filterCallback) {
-  return function () {
-    return (next) => (action) => {
-      if (action.type == "FILTER") {
-        filterCallback(action.id);
-      }
-      return next(action);
-    };
-  };
-}
-
-function createListToggleMiddleware(listToggleCallback) {
-  return function () {
-    return (next) => (action) => {
-      if (action.type == "TOGGLE_LIST") {
-        listToggleCallback();
-      }
-      return next(action);
-    };
-  };
-}
-
-function createZoomOutMiddleware(
-  knowledgeMapZoomOutCallback,
-  streamgraphZoomOutCallback
-) {
+function createZoomOutMiddleware(streamgraphZoomOutCallback) {
   return function ({ getState }) {
     return (next) => (action) => {
       if (action.type == "ZOOM_OUT" && action.not_from_mediator) {
         if (getState().chartType === STREAMGRAPH_MODE) {
           streamgraphZoomOutCallback();
-        } else {
-          // TODO remove this after map refactoring
-          if (knowledgeMapZoomOutCallback) {
-            knowledgeMapZoomOutCallback();
-          }
         }
       }
       const returnValue = next(action);
@@ -369,51 +274,11 @@ function createZoomOutMiddleware(
 
 function createFileChangeMiddleware() {
   return function ({ getState }) {
-    const self = this;
     return (next) => (action) => {
       if (action.type == "FILE_CLICKED") {
         if (getState().files.current !== action.fileIndex) {
           window.headstartInstance.tofile(action.fileIndex);
         }
-      }
-      const returnValue = next(action);
-      returnValue;
-    };
-  };
-}
-
-function createAreaClickMiddleware(areaClickCallback) {
-  return function () {
-    return (next) => (action) => {
-      if (action.type == "ZOOM_IN" && action.source === "list-area") {
-        let d = Object.assign({}, action.selectedAreaData);
-        d.area_uri = d.uri;
-        d.area = d.title;
-        areaClickCallback(d);
-      }
-      const returnValue = next(action);
-      returnValue;
-    };
-  };
-}
-
-function createAreaMouseoverMiddleware(areaMouseoverCallback) {
-  return function () {
-    return (next) => (action) => {
-      if (action.type == "HIGHLIGHT_AREA" && action.paper !== null) {
-        areaMouseoverCallback(action.paper);
-      }
-      const returnValue = next(action);
-      returnValue;
-    };
-  };
-}
-
-function createAreaMouseoutMiddleware(areaMouseoutCallback) {
-  return function () {
-    return (next) => (action) => {
-      if (action.type == "HIGHLIGHT_AREA" && action.paper === null) {
-        areaMouseoutCallback({});
       }
       const returnValue = next(action);
       returnValue;
