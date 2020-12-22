@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <?php
 include 'config.php';
+include 'config_searchflow.php';
 ?>
 <html>
     <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -15,7 +16,6 @@ include 'config.php';
 
     <body style="margin:0px; padding:0px">
 
-       <script src="search_options_triple.js"></script>
        <script>
            var fit_to_page = false;
        </script>
@@ -28,7 +28,7 @@ include 'config.php';
                     title: "<?php echo $query; ?>",
                     file: "<?php echo $id; ?>"
             }];
-            data_config.options = options_<?php echo $service ?>.dropdowns;
+            data_config.options = search_flow_config.search_options.filter_options.options_<?php echo $service ?>.dropdowns;
             if(<?php echo json_encode($service) ?> === "triple_sg") {
                 data_config.is_streamgraph = true;
                 //data_config.embed_modal = false;
