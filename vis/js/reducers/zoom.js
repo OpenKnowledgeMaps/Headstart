@@ -8,6 +8,8 @@ const zoom = (state = false, action) => {
       return true;
     case "ZOOM_OUT":
       return false;
+    case "INITIALIZE":
+      return false;
     default:
       return state;
   }

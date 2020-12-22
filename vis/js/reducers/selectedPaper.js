@@ -2,9 +2,11 @@ const selectedPaper = (state = null, action) => {
   if (action.canceled) {
     return state;
   }
-  
+
   switch (action.type) {
     case "ZOOM_OUT":
+      return null;
+    case "INITIALIZE":
       return null;
     case "DESELECT_PAPER":
       return null;
