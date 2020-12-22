@@ -87,7 +87,7 @@ get_papers <- function(query, params, limit=NULL) {
   tryCatch({
     get_return_values(all_artifacts)
     }, error = function(err){
-      olog$warn(err)
+      olog$warn(paste0(err))
       olog$warn((paste("Empty returns, most likely no results found for project_id", project_id)))
       stop(paste("Empty returns, most likely no results found for project_id", project_id))
     })
