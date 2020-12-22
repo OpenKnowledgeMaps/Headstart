@@ -46,8 +46,8 @@ const KnowledgeMap = ({
   };
 
   const handleOtherAreaZoomIn = (bubble) => {
-    handleZoomIn(bubble, true);
     handleDeselectPaper();
+    handleZoomIn(bubble, true);
   };
 
   const getBubbleZoomClickHandler = (bubble) => {
