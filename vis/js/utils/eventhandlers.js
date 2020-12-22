@@ -29,6 +29,7 @@ export const mapDispatchToListEntriesProps = (dispatch) => ({
   handleAreaMouseover: (paper) => dispatch(highlightArea(paper)),
   handleAreaMouseout: () => dispatch(highlightArea(null)),
   handleSelectPaper: (paper) => dispatch(selectPaper(paper)),
+  handleDeselectPaper: () => dispatch(deselectPaper()),
   handleBacklinkClick: () => dispatch(deselectPaperBacklink()),
 });
 
