@@ -96,8 +96,8 @@ export const getResizedScale = (currentSize, newSize) => {
   return (value) => scale(value);
 };
 
-const PADDING_RATIO = 0.08;
-const ZOOMED_PADDING_SIZE = 60;
+const PADDING_RATIO = { bubble: 0.08, paper: 0 };
+const ZOOMED_PADDING_SIZE = { bubble: 60, paper: 35 };
 
 /**
  * Returns a scaling function that zooms a coordinate (either x or y) based on the current
@@ -106,9 +106,10 @@ const ZOOMED_PADDING_SIZE = 60;
  * @param {Number} coordinateValue x or y coordinate of the zoomed area
  * @param {Number} radius the zoomed area radius
  * @param {Number} size current chart size in px
+ * @param {String} type 'bubble' or 'paper'
  */
-export const getZoomScale = (coordinateValue, radius, size) => {
-  const padding = radius * PADDING_RATIO;
+export const getZoomScale = (coordinateValue, radius, size, type) => {
+  const padding = radius * PADDING_RATIO[type];
 
   const scale = d3.scale
     .linear()
@@ -116,7 +117,7 @@ export const getZoomScale = (coordinateValue, radius, size) => {
       coordinateValue - radius + padding,
       coordinateValue + radius - padding,
     ])
-    .range([ZOOMED_PADDING_SIZE, size - ZOOMED_PADDING_SIZE]);
+    .range([ZOOMED_PADDING_SIZE[type], size - ZOOMED_PADDING_SIZE[type]]);
 
   return (value) => scale(value);
 };
