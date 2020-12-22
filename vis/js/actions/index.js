@@ -100,11 +100,6 @@ export const selectPaper = (paper) => ({
   not_from_mediator: true,
 });
 
-export const selectPaperFromMediator = (safeId) => ({
-  type: "SELECT_PAPER",
-  safeId,
-});
-
 export const deselectPaper = () => ({
   type: "DESELECT_PAPER",
 });
@@ -127,12 +122,6 @@ export const hidePreview = () => ({
 
 export const deselectPaperBacklink = () => ({
   type: "DESELECT_PAPER_BACKLINK",
-});
-
-// TODO delete this - resize done differently (mediator.modern_frontend_enabled)
-export const setListHeight = (listHeight) => ({
-  type: "RESIZE_LIST",
-  listHeight,
 });
 
 export const updateDimensions = (chart, list) => ({
