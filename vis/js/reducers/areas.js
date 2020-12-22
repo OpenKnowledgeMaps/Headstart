@@ -151,14 +151,17 @@ const zoomAreas = (zoomedAreaUri, areas, size, options) => {
   const zoomedAreas = areas.slice(0);
   const zoomedArea = zoomedAreas.find((a) => a.area_uri == zoomedAreaUri);
 
-  const xScale = getZoomScale(zoomedArea.x, zoomedArea.r, size);
-  const yScale = getZoomScale(zoomedArea.y, zoomedArea.r, size);
+  const xBubbleScale = getZoomScale(zoomedArea.x, zoomedArea.r, size, "bubble");
+  const yBubbleScale = getZoomScale(zoomedArea.y, zoomedArea.r, size, "bubble");
+
+  const xPaperScale = getZoomScale(zoomedArea.x, zoomedArea.r, size, "paper");
+  const yPaperScale = getZoomScale(zoomedArea.y, zoomedArea.r, size, "paper");
 
   const sizeCoefficient = (size / 2.0 / zoomedArea.r) * options.zoomFactor;
 
   zoomedAreas.forEach((area) => {
-    area.zoomedX = xScale(area.x);
-    area.zoomedY = yScale(area.y);
+    area.zoomedX = xBubbleScale(area.x);
+    area.zoomedY = yBubbleScale(area.y);
     area.zoomedR = area.r * sizeCoefficient;
 
     area.papers.forEach((paper) => {
@@ -168,8 +171,8 @@ const zoomAreas = (zoomedAreaUri, areas, size, options) => {
       paper.prevZoomedWidth = paper.zoomedWidth;
       paper.prevZoomedHeight = paper.zoomedHeight;
 
-      paper.zoomedX = xScale(paper.x);
-      paper.zoomedY = yScale(paper.y);
+      paper.zoomedX = xPaperScale(paper.x);
+      paper.zoomedY = yPaperScale(paper.y);
 
       paper.zoomedWidth = paper.width * sizeCoefficient;
       paper.zoomedHeight = paper.height * sizeCoefficient;
