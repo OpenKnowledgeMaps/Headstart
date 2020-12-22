@@ -23,7 +23,6 @@ include 'config.php';
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <link type="text/css" rel="stylesheet" href="options.css">
     <script type="text/javascript " src="search_options_triple.js"></script>
     <script type="text/javascript " src="waiting_page_options_triple.js"></script>
     <script type="text/javascript " src="search-flow/js/search.js "></script>
