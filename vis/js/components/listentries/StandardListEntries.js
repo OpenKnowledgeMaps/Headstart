@@ -31,6 +31,7 @@ const StandardListEntries = ({
   isStreamgraph,
   handleZoomIn,
   handleSelectPaper,
+  handleDeselectPaper,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
@@ -41,6 +42,11 @@ const StandardListEntries = ({
       handleZoomIn(paper);
     }
   }
+
+  const handleAreaClick = (paper) => {
+    handleDeselectPaper();
+    handleZoomIn(paper, "list-area");
+  };
 
   return (
     <div
@@ -93,7 +99,6 @@ const StandardListEntries = ({
             onMouseOver: () => handleAreaMouseover(entry),
             onMouseOut: () => handleAreaMouseout(),
           }}
-          handleZoomIn={() => handleZoomIn(entry, "list-area")}
           citations={
             !isContentBased && !!baseUnit && !showMetrics
               ? entry.num_readers
@@ -101,6 +106,7 @@ const StandardListEntries = ({
           }
           baseUnit={baseUnit}
           handleTitleClick={() => handleTitleClick(entry)}
+          handleAreaClick={() => handleAreaClick(entry)}
         />
       ))}
     </div>

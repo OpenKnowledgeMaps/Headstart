@@ -15,6 +15,7 @@ const BasicListEntries = ({
   displayedData,
   handleZoomIn,
   handleSelectPaper,
+  handleDeselectPaper,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
@@ -28,6 +29,11 @@ const BasicListEntries = ({
     handleSelectPaper(paper);
     handleZoomIn(paper);
   }
+
+  const handleAreaClick = (paper) => {
+    handleDeselectPaper();
+    handleZoomIn(paper, "list-area");
+  };
 
   return (
     <div
@@ -68,10 +74,10 @@ const BasicListEntries = ({
             onMouseOver: () => handleAreaMouseover(entry),
             onMouseOut: () => handleAreaMouseout(),
           }}
-          handleZoomIn={() => handleZoomIn(entry, "list-area")}
           readers={entry.num_readers}
           baseUnit={baseUnit}
           handleTitleClick={() => handleTitleClick(entry)}
+          handleAreaClick={() => handleAreaClick(entry)}
         />
       ))}
     </div>

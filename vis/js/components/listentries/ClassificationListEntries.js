@@ -26,6 +26,7 @@ const ClassificationListEntries = ({
   height,
   handleZoomIn,
   handleSelectPaper,
+  handleDeselectPaper,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
@@ -37,6 +38,11 @@ const ClassificationListEntries = ({
       handleZoomIn(paper);
     }
   }
+
+  const handleAreaClick = (paper) => {
+    handleDeselectPaper();
+    handleZoomIn(paper, "list-area");
+  };
 
   return (
     <div
@@ -80,8 +86,8 @@ const ClassificationListEntries = ({
                   onMouseOut: () => handleAreaMouseout(),
                 }
           }
-          handleZoomIn={() => handleZoomIn(entry, "list-area")}
           handleTitleClick={() => handleTitleClick(entry)}
+          handleAreaClick={() => handleAreaClick(entry)}
           backlink={{
             show: showBacklink,
             isInStream: isInStreamBacklink,
