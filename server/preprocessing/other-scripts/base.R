@@ -164,7 +164,7 @@ find_dois <- function(link) {
       || (startsWith(link, "https://doi.org"))
       || (startsWith(link, "http://dx.doi.org"))
       || (startsWith(link, "https://dx.doi.org"))) {
-    doi <- str_replace(link, "http:", "https:")
+    doi <- stringr::str_replace(link, "http:", "https:")
   } else {
     doi <- ""
   }
