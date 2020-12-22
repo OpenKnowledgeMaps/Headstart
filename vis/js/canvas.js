@@ -102,14 +102,6 @@ class Canvas {
                 .classed('streamgraph-canvas', true)
     }
     
-    initEventListenersStreamgraph() {
-        d3.select(window).on("resize", () => {
-            mediator.publish("window_resize");
-        });
-        
-        this.initInfoModal();
-    }
-    
     initInfoModal() {
         // Info Modal Event Listener
         $('#info_modal').on('show.bs.modal', function () {
@@ -231,10 +223,6 @@ class Canvas {
         this.calcChartSize();
         
         this.drawStreamgraphChart();
-    }
-    
-    initEventsStreamgraph() {
-        this.initEventListenersStreamgraph();
     }
 
     showInfoModal() {

@@ -81,7 +81,6 @@ MyMediator.prototype = {
         this.mediator.subscribe("mark_project_changed", this.mark_project_changed);
 
         // canvas events
-        this.mediator.subscribe("window_resize", this.window_resize);
         this.mediator.subscribe("draw_modals", this.draw_modals);
         
         //scale
@@ -228,13 +227,14 @@ MyMediator.prototype = {
                 mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
 
             mediator.manager.call('canvas', 'setupCanvas', []);
-            mediator.manager.call('canvas', 'initInfoModal');
+            
             if (config.scale_toolbar) {
                 mediator.manager.registerModule(scale, 'scale');
                 mediator.manager.call('scale', 'drawScaleTypes', []);
             }
         }
 
+        mediator.manager.call('canvas', 'initInfoModal');
         mediator.manager.call('io', 'prepareAreas', []);
         
         mediator.manager.call('canvas', 'drawModals', [context]);
@@ -248,8 +248,6 @@ MyMediator.prototype = {
             mediator.manager.call('streamgraph', 'start')
             mediator.manager.call('streamgraph', 'setupStreamgraph', [mediator.streamgraph_data])
 
-            mediator.manager.call('canvas', 'initEventsStreamgraph', []);
-            
             mediator.manager.call('list', 'start');
             
             mediator.manager.call('streamgraph', 'initMouseListeners', []);
@@ -263,6 +261,7 @@ MyMediator.prototype = {
         mediator.dimensions_update();
         d3.select(window).on("resize", () => {
             mediator.dimensions_update();
+            mediator.window_resize();
         });
 
         mediator.manager.call('canvas', 'showInfoModal', []);
