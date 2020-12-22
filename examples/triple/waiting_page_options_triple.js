@@ -36,7 +36,7 @@ const error_texts = {
         , reason: 'We apologize for this slight detour. You will be redirected to <a class="underline" href="index">our search page</a> in 10 seconds.'
         , contact: 'For more information about our service please <a class="underline" href="https://openknowledgemaps.org/faq">see our FAQs</a>. If you think that there is something wrong with our service, please let us know at <a class="underline" href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>'
         , "resolution": "Go to search page"
-        , "resolution_link": "index"
+        , "resolution_link": "index.php"
 
     },
     timeout: {
