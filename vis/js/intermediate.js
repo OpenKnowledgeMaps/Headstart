@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import rootReducer from "./reducers";
 import {
   ALLOWED_IN_ANIMATION,
+  NOT_QUEUED_IN_ANIMATION,
   zoomInFromMediator,
   zoomOutFromMediator,
   initializeStore,
@@ -143,7 +144,8 @@ class Intermediate {
  * cancels them and saves them in a queue. They are fired again after the animation
  * finishes.
  *
- * It queues all actions but those in ALLOWED_IN_ANIMATION.
+ * It cancels all actions but those in ALLOWED_IN_ANIMATION. Those actions are then
+ * queued (except those in NOT_QUEUED_IN_ANIMATION).
  *
  * @param {Object} intermediate the intermediate instance (this)
  */
@@ -155,7 +157,9 @@ function createActionQueueMiddleware(intermediate) {
 
       if (getState().animation !== null) {
         if (!ALLOWED_IN_ANIMATION.includes(action.type)) {
-          actionQueue.push({ ...action });
+          if (!NOT_QUEUED_IN_ANIMATION.includes(action.type)) {
+            actionQueue.push({ ...action });
+          }
           action.canceled = true;
           return next(action);
         }
