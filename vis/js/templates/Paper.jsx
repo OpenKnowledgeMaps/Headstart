@@ -87,7 +87,7 @@ class Paper extends React.Component {
     const { maxSize, enlargeFactor } = this.props;
     const { onClick, onMouseOver, onMouseOut } = this.props;
 
-    const { title, authors_string: authors, year } = data;
+    const { title, authors_string: authors, year, area } = data;
     const { num_readers: readers, published_in: publisher } = data;
     const { oa: isOpenAccess, free_access: isFreeAccess } = data;
     const { x, y, width: baseWidth, height: baseHeight } = this.state;
@@ -161,6 +161,7 @@ class Paper extends React.Component {
     return (
       // html template starts here
       <g className={gClass} {...eventHandlers}>
+        {!zoom && <title>{area}</title>}
         <path
           id="region"
           d={path}
