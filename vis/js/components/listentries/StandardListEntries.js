@@ -41,7 +41,7 @@ const StandardListEntries = ({
     if (!isStreamgraph) {
       handleZoomIn(paper);
     }
-  }
+  };
 
   const handleAreaClick = (paper) => {
     handleDeselectPaper();
@@ -94,11 +94,15 @@ const StandardListEntries = ({
                 }
               : null
           }
-          area={{
-            text: entry.area,
-            onMouseOver: () => handleAreaMouseover(entry),
-            onMouseOut: () => handleAreaMouseout(),
-          }}
+          area={
+            !isStreamgraph
+              ? {
+                  text: entry.area,
+                  onMouseOver: () => handleAreaMouseover(entry),
+                  onMouseOut: () => handleAreaMouseout(),
+                }
+              : null
+          }
           citations={
             !isContentBased && !!baseUnit && !showMetrics
               ? entry.num_readers
