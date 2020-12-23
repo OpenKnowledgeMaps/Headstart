@@ -242,6 +242,9 @@ function createRepeatedInitializeMiddleware(intermediate) {
   };
 }
 
+/**
+ * Creates a middleware that adds a boolean 'isStreamgraph' to each action.
+ */
 function createChartTypeMiddleware() {
   return ({ getState }) => {
     return (next) => (action) => {

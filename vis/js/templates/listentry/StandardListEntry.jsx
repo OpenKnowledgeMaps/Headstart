@@ -72,13 +72,15 @@ const StandardListEntry = ({
           baseUnit={metrics.baseUnit}
         />
       )}
-      <Area
-        onClick={handleAreaClick}
-        onMouseOver={area.onMouseOver}
-        onMouseOut={area.onMouseOut}
-      >
-        {area.text}
-      </Area>
+      {!!area && (
+        <Area
+          onClick={handleAreaClick}
+          onMouseOver={area.onMouseOver}
+          onMouseOut={area.onMouseOut}
+        >
+          {area.text}
+        </Area>
+      )}
       {(!!citations || parseInt(citations) === 0) && (
         <Citations number={citations} label={baseUnit} />
       )}
