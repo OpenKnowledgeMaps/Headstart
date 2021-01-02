@@ -1,17 +1,9 @@
 vflog <- getLogger('vis.features')
 
-create_corpus <- function(metadata, text, lang=NULL) {
+create_corpus <- function(metadata, text, languages=c("en")) {
   valid <- getStemLanguages()
-  # if lang not given use lang detection
-  if (is.null(lang)) {
-    text["language"] <- unlist(lapply(metadata$lang_detected,
-                      function(x) { if (x %in% valid) x else "english"
-                                  }
-                              ))
-    } else {
-      text["language"] <- if (lang %in% valid) lang else NA
-    }
-  mapping <- list(content = "content", id = "id", language = "language")
+  text["languages"] <- languages
+  mapping <- list(content = "content", id = "id", languages = "languages")
   myReader <- readTabular(mapping = mapping)
 
   corpus <- Corpus(DataframeSource(text),
@@ -54,14 +46,17 @@ concatenate_features <- function(...) {
   return(cbind(...))
 }
 
-remove_stop_words <- function(x, language = "english") UseMethod("remove_stop_words", x)
-remove_stop_words.character <- function(x, language = "english") {
+remove_stop_words <- function(x, languages) UseMethod("remove_stop_words", x)
+remove_stop_words.character <- function(x, languages) {
   y <- unlist(strsplit(x, " "))
-  stops <- get_stopwords(language, TESTING)
+  stops = list()
+  for (lang in languages) {
+    stops <- c(stops, get_stopwords(lang, TESTING))
+  }
   stopword <- unlist(lapply(y, function(z) z %in% stops))
   doc <- y[which(!stopword)]
   doc <- paste(doc, collapse = " ")
 }
-remove_stop_words.PlainTextDocument <- function(x, language = meta(x, "language")) {
-  content_transformer(remove_stop_words.character)(x, language)
+remove_stop_words.PlainTextDocument <- function(x, languages = meta(x, "languages")) {
+  content_transformer(remove_stop_words.character)(x, languages)
 }
