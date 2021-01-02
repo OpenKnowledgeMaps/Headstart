@@ -85,7 +85,7 @@ create_cluster_labels <- function(clusters, metadata,
 
 
 fix_cluster_labels <- function(clusterlabels, type_counts){
-  unlist(lapply(clusterlabels, function(x) {
+  unlist(mclapply(clusterlabels, function(x) {
     fix_keyword_casing(x, type_counts)
     }))
 }
