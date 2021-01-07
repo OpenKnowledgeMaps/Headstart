@@ -57,6 +57,7 @@ def write_revision(database, vis_id, data, rev_id=None):
     session.add(new_rev)
     vis.vis_latest = rev_id
     session.commit()
+    session.close()
 
 
 def create_visualization(database,
@@ -72,15 +73,15 @@ def create_visualization(database,
                     vis_title=vis_title,
                     vis_params=vis_params)
         session.add(new_vis)
-        session.commit()
         write_revision(database, vis_id, data, 1)
+        session.close()
 
 
 def exists_visualization(database, vis_id):
     session = select_session(sessions.get(database))
     vis = session.query(Visualizations).filter_by(vis_id=vis_id).first()
-    session.commit()
     exists = True if vis else False
+    session.close()
     return exists
 
 
@@ -89,8 +90,8 @@ def get_last_version(database, vis_id, details=False, context=False):
 
 
 def get_revision(database, vis_id, rev_id, details=False, context=False):
-    session = select_session(sessions.get(database))
     try:
+        session = select_session(sessions.get(database))
         if rev_id is None:
             vis, rev = (session
                         .query(Visualizations, Revisions)
@@ -107,7 +108,7 @@ def get_revision(database, vis_id, rev_id, details=False, context=False):
                         .filter(Revisions.rev_vis == vis_id)
                         .filter(Revisions.rev_id == rev_id)
                         ).first()
-        session.commit()
+        session.close()
         if context is True:
             res = {
                 "rev_vis": rev.rev_vis,
@@ -137,7 +138,6 @@ def get_context(database, vis_id, revision_context=False):
                 .filter(Revisions.rev_vis == vis_id)
                 .filter(Revisions.rev_id == Visualizations.vis_latest)
                 ).first()
-    session.commit()
     res = {
         "rev_vis": rev.rev_vis,
         "vis_query": rev.vis_query,
@@ -148,6 +148,7 @@ def get_context(database, vis_id, revision_context=False):
     if revision_context == 'true':
         data = json.loads(rev.rev_data)
         res["additional_context"] = data.get("additional_context", {})
+    session.close()
     return res
 
 
