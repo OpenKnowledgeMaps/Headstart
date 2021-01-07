@@ -73,6 +73,7 @@ def create_visualization(database,
                     vis_title=vis_title,
                     vis_params=vis_params)
         session.add(new_vis)
+        session.commit()
         write_revision(database, vis_id, data, 1)
         session.close()
 
