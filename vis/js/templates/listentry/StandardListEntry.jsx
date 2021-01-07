@@ -6,6 +6,7 @@ import Citations from "./Citations";
 import Comments from "./Comments";
 import Details from "./Details";
 import DocumentType from "./DocumentType";
+import EntryBacklink from "./EntryBacklink";
 import Keywords from "./Keywords";
 import Link from "./Link";
 import ListEntry from "./ListEntry";
@@ -37,6 +38,7 @@ const StandardListEntry = ({
   baseUnit,
   handleTitleClick,
   handleAreaClick,
+  backlink,
 }) => {
   return (
     // html template starts here
@@ -83,6 +85,12 @@ const StandardListEntry = ({
       )}
       {(!!citations || parseInt(citations) === 0) && (
         <Citations number={citations} label={baseUnit} />
+      )}
+      {!!backlink.show && (
+        <EntryBacklink
+          onClick={backlink.onClick}
+          isInStream={backlink.isInStream}
+        />
       )}
     </ListEntry>
     // html template ends here

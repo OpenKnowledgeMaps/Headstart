@@ -29,12 +29,15 @@ const StandardListEntries = ({
   showKeywords,
   height,
   isStreamgraph,
+  showBacklink,
+  isInStreamBacklink,
   handleZoomIn,
   handleSelectPaper,
   handleDeselectPaper,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
+  handleBacklinkClick,
 }) => {
   const handleTitleClick = (paper) => {
     handleSelectPaper(paper);
@@ -111,6 +114,11 @@ const StandardListEntries = ({
           baseUnit={baseUnit}
           handleTitleClick={() => handleTitleClick(entry)}
           handleAreaClick={() => handleAreaClick(entry)}
+          backlink={{
+            show: showBacklink,
+            isInStream: isInStreamBacklink,
+            onClick: () => handleBacklinkClick(),
+          }}
         />
       ))}
     </div>
@@ -131,6 +139,8 @@ const mapStateToProps = (state) => ({
     (!!state.selectedPaper || !state.list.hideUnselectedKeywords),
   height: state.list.height,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+  showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
+  isInStreamBacklink: !!state.selectedBubble,
 });
 
 export default connect(
