@@ -57,10 +57,10 @@ function search($repository, $dirty_query
         , $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
         , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3
         , $id = "area_uri", $subjects = "subject"
-        , $precomputed_id = null, $do_clean_query = true
-        , $backend = "legacy") {
+        , $precomputed_id = null, $do_clean_query = true) {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
+    $processing_backend = $ini_array["general"]["processing_backend"];
     $persistence_backend = $ini_array["general"]["persistence_backend"];
 
     $query = ($do_clean_query === true)
@@ -122,7 +122,7 @@ function search($repository, $dirty_query
 
     $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
 
-    if ($backend === "api") {
+    if ($processing_backend === "api") {
       $route = $ini_array["general"]["api_url"] . $repository . "/search";
       $payload = json_encode($post_params);
       $res = library\CommUtils::call_api($route, $payload);

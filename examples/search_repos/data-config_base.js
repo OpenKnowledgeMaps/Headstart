@@ -1,7 +1,6 @@
 var data_config = {
     tag: "visualization",
     mode: "search_repos",
-    backend: "legacy",
 
     service: "base",
 
