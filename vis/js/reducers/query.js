@@ -59,8 +59,8 @@ const getQueryTerms = (context) => {
     cleanQuery.trim().replace(/\s+/g, " ").split(" ")
   );
 
-  // Remove backslashes and empty words
-  phraseArray = phraseArray.map((x) => x.replace(/\\/g, "")).filter((x) => x !== "");
+  // Remove backslashes, colons and empty words
+  phraseArray = phraseArray.map((x) => x.replace(/[\\\:]/g, "")).filter((x) => x !== "");
 
   phraseArray = [...new Set(phraseArray)];
 
