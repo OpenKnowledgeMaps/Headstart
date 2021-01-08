@@ -68,7 +68,7 @@ export const getChartSize = (config, context) => {
  */
 export const getListSize = (config, context, chartHeight) => {
   if (typeof chartHeight === "undefined") {
-    chartHeight = getChartSize(config, context).height;
+    chartHeight = getChartSize(config, context).size;
   }
 
   let titleImageHeight = 0;

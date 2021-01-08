@@ -397,7 +397,7 @@ MyMediator.prototype = {
 
     dimensions_update: function() {
         const chart = getChartSize(config, io.context);
-        const list = getListSize(config, io.context, chart.height);
+        const list = getListSize(config, io.context, chart.size);
         mediator.modern_frontend_intermediate.updateDimensions(chart, list);
         if(!config.is_streamgraph) {
             d3.select("#headstart-chart")
