@@ -19,10 +19,10 @@ $context = filter_input(INPUT_GET, "context", FILTER_VALIDATE_BOOLEAN,
 $streamgraph = filter_input(INPUT_GET, "streamgraph", FILTER_VALIDATE_BOOLEAN,
     array("flags" => FILTER_NULL_ON_FAILURE));
 $backend = isset($_GET["backend"]) ? library\CommUtils::getParameter($_GET, "backend") : "legacy";
-$persistence_backend = isset($_GET["persistence_backend"]) ? library\CommUtils::getParameter($_GET, "persistence_backend") : "legacy";
 $database = $ini_array["connection"]["database"];
 
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
+$persistence_backend = $ini_array["general"]["persistence_backend"];
 
 if ($backend == "api") {
   # case of streamgraph calculation in backend

@@ -202,15 +202,14 @@ HeadstartFSM.prototype = {
       search_repos: function(that, setupVis) {
         let url = config.server_url + "services/getLatestRevision.php?vis_id=" + mediator.current_bubble.file
                 + "&context=" + config.show_context + "&streamgraph=" + config.is_streamgraph
-                + "&backend=" + config.backend + "&persistence_backend=" + config.persistence_backend;
+                + "&backend=" + config.backend;
         mediator.publish("get_data_from_files", url, 'json', setupVis);
       },
 
       gsheets: function(that, setupVis) {
             let url = config.server_url + "services/getGSheetsMap.php?vis_id=" + mediator.current_bubble.file
                 + "&q=" +mediator.current_bubble.title
-                + "&context=" + config.show_context + "&streamgraph=" + config.is_streamgraph
-                + "&persistence_backend=" + config.persistence_backend;
+                + "&context=" + config.show_context + "&streamgraph=" + config.is_streamgraph;
             mediator.publish("get_data_from_files", url, 'json', setupVis);
       },
 

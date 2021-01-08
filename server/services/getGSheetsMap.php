@@ -13,9 +13,9 @@ $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
-$persistence_backend = isset($_GET["persistence_backend"]) ? library\CommUtils::getParameter($_GET, "persistence_backend") : "legacy";
 
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
+$persistence_backend = $ini_array["general"]["persistence_backend"];
 $database = $ini_array["connection"]["database"];
 
 if ($persistence_backend === "api") {

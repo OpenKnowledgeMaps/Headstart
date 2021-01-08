@@ -58,9 +58,10 @@ function search($repository, $dirty_query
         , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3
         , $id = "area_uri", $subjects = "subject"
         , $precomputed_id = null, $do_clean_query = true
-        , $backend = "legacy", $persistence_backend = "legacy") {
+        , $backend = "legacy") {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
+    $persistence_backend = $ini_array["general"]["persistence_backend"];
 
     $query = ($do_clean_query === true)
                 ?(cleanQuery($dirty_query, $transform_query_tolowercase))
