@@ -21,21 +21,9 @@ const Highlight = ({
 }) => {
   let autoEscape = true;
   let searchWords = searchTerms;
-  let queryWords = queryTerms;
   if (hyphenated) {
     autoEscape = false;
-    searchWords = searchTerms.map((term) =>
-      term
-        .split("")
-        .map((char) => escapeRegExp(char))
-        .join("[\\u00AD]*")
-    );
-    queryWords = queryTerms.map((term) =>
-      term
-        .split("")
-        .map((char) => escapeRegExp(char))
-        .join("[\\u00AD]*")
-    );
+    searchWords = searchTerms.map((term) => hyphenateStringSafely(term));
   }
 
   if (searchTerms.length > 0) {
@@ -54,12 +42,26 @@ const Highlight = ({
     return text;
   }
 
+  let queryWords = queryTerms;
+  if (hyphenated) {
+    queryWords = queryTerms.map((term) => hyphenateString(term));
+  }
+
+  queryWords = queryWords.map(
+    (term) =>
+      // this piece is copied from the legacy code
+      new RegExp(
+        "\\b(" + term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")\\b",
+        "gi"
+      )
+  );
+
   return (
     <ExternalHighlighter
       highlightClassName="query_term_highlight"
       searchWords={queryWords}
       textToHighlight={text}
-      autoEscape={autoEscape}
+      autoEscape={false}
       highlightTag="span"
     />
   );
@@ -76,4 +78,15 @@ export default connect(mapStateToProps)(Highlight);
 // https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 const escapeRegExp = (string) => {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
+const hyphenateStringSafely = (string) => {
+  return string
+    .split("")
+    .map((char) => escapeRegExp(char))
+    .join("[\\u00AD]*");
+};
+
+const hyphenateString = (string) => {
+  return string.split("").join("[\\u00AD]*");
 };
