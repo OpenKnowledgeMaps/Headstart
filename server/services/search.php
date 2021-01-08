@@ -63,11 +63,11 @@ function search($repository, $dirty_query
     $processing_backend = $ini_array["general"]["processing_backend"];
     $persistence_backend = $ini_array["general"]["persistence_backend"];
 
-    if (isset($post_params["optradio"]) && $optradio["optradio"] === "triple_km") {
-      $post_params["vis_type"] == "overview";
+    if (isset($post_params["optradio"]) && $post_params["optradio"] === "triple_km") {
+      $post_params["vis_type"] = "overview";
     }
-    if (isset($post_params["optradio"]) && $optradio["optradio"] === "triple_sg") {
-      $post_params["vis_type"] == "timeline";
+    if (isset($post_params["optradio"]) && $post_params["optradio"] === "triple_sg") {
+      $post_params["vis_type"] = "timeline";
     }
     unset($post_params["optradio"]);
 
