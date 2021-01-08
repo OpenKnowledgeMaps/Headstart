@@ -42,19 +42,12 @@ const Highlight = ({
     return text;
   }
 
-  let queryWords = queryTerms;
+  let queryWords = queryTerms.map((term) => escapeRegExp(term));
   if (hyphenated) {
-    queryWords = queryTerms.map((term) => hyphenateString(term));
+    queryWords = queryTerms.map((term) => hyphenateStringSafely(term));
   }
 
-  queryWords = queryWords.map(
-    (term) =>
-      // this piece is copied from the legacy code
-      new RegExp(
-        "\\b(" + term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")\\b",
-        "gi"
-      )
-  );
+  queryWords = queryWords.map((term) => new RegExp(`\\b(${term})\\b`, "gi"));
 
   return (
     <ExternalHighlighter
@@ -85,8 +78,4 @@ const hyphenateStringSafely = (string) => {
     .split("")
     .map((char) => escapeRegExp(char))
     .join("[\\u00AD]*");
-};
-
-const hyphenateString = (string) => {
-  return string.split("").join("[\\u00AD]*");
 };
