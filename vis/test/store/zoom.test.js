@@ -21,6 +21,8 @@ describe("zoom state", () => {
         not_from_mediator: true,
         source: null,
         selectedAreaData: DATA,
+        alreadyZoomed: false,
+        callback: undefined,
       };
       expect(zoomIn(DATA)).toEqual(EXPECTED_ACTION);
     });
@@ -38,6 +40,8 @@ describe("zoom state", () => {
         not_from_mediator: true,
         source: SOURCE,
         selectedAreaData: DATA,
+        alreadyZoomed: false,
+        callback: undefined,
       };
       expect(zoomIn(DATA, SOURCE)).toEqual(EXPECTED_ACTION);
     });

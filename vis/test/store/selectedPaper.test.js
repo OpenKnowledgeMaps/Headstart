@@ -1,7 +1,6 @@
 import {
   zoomOut,
   selectPaper,
-  selectPaperFromMediator,
   deselectPaper,
   deselectPaperBacklink,
 } from "../../js/actions";
@@ -23,15 +22,6 @@ describe("list state", () => {
         not_from_mediator: true,
       };
       expect(selectPaper(PAPER)).toEqual(EXPECTED_ACTION);
-    });
-
-    it("should create a select paper from mediator action", () => {
-      const SAFE_ID = "safe-id";
-      const EXPECTED_ACTION = {
-        type: "SELECT_PAPER",
-        safeId: SAFE_ID
-      };
-      expect(selectPaperFromMediator(SAFE_ID)).toEqual(EXPECTED_ACTION);
     });
 
     it("should create a deselect paper action", () => {

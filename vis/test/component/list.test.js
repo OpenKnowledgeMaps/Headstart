@@ -19,6 +19,7 @@ import {
   highlightArea,
   deselectPaperBacklink,
   showPreview,
+  deselectPaper,
 } from "../../js/actions";
 
 import covisData from "../data/covis";
@@ -30,11 +31,20 @@ import viperData from "../data/viper";
 import List from "../../js/components/List";
 
 const mockStore = configureStore([]);
-const setup = (overrideListObject = {}, overrideStoreObject = {}) => {
+const setup = (
+  overrideDataObject = {},
+  overrideListObject = {},
+  overrideStoreObject = {}
+) => {
   const storeObject = Object.assign(
     {
       zoom: false,
-      data: initialTestData,
+      data: {
+        list: initialTestData,
+        options: {},
+        size: 100,
+        ...overrideDataObject,
+      },
       list: {
         show: true,
         searchValue: "",
@@ -86,7 +96,7 @@ describe("List entries component", () => {
   });
 
   it("renders shown", () => {
-    const storeObject = setup({ show: true });
+    const storeObject = setup({}, { show: true });
     const store = mockStore(storeObject);
 
     act(() => {
@@ -102,7 +112,7 @@ describe("List entries component", () => {
   });
 
   it("renders hidden", () => {
-    const storeObject = setup({ show: false });
+    const storeObject = setup({}, { show: false });
     const store = mockStore(storeObject);
 
     act(() => {
@@ -119,13 +129,13 @@ describe("List entries component", () => {
 
   it("renders with covis data", () => {
     const storeObject = setup(
+      { list: covisData },
       {
         show: true,
         showFilter: true,
         filterField: "resulttype",
         filterValue: "all",
-      },
-      { data: covisData }
+      }
     );
     const store = mockStore(storeObject);
 
@@ -143,14 +153,14 @@ describe("List entries component", () => {
 
   it("renders with covis data and height", () => {
     const storeObject = setup(
+      { list: covisData },
       {
         show: true,
         showFilter: true,
         filterField: "resulttype",
         filterValue: "all",
         height: 800,
-      },
-      { data: covisData }
+      }
     );
     const store = mockStore(storeObject);
 
@@ -170,9 +180,9 @@ describe("List entries component", () => {
 
   it("renders with covis data and zoomed", () => {
     const storeObject = setup(
+      { list: covisData },
       { show: true, showFilter: true },
       {
-        data: covisData,
         zoom: true,
         selectedBubble: {
           title: "Host biology and clinical findings",
@@ -198,9 +208,9 @@ describe("List entries component", () => {
 
   it("renders with covis data and a selected paper", () => {
     const storeObject = setup(
+      { list: covisData },
       { show: true, showFilter: true },
       {
-        data: covisData,
         zoom: true,
         selectedBubble: {
           title: "Host biology and clinical findings",
@@ -228,9 +238,9 @@ describe("List entries component", () => {
 
   it("renders with covis data and a selected paper (open access)", () => {
     const storeObject = setup(
+      { list: covisData },
       { show: true, showFilter: true },
       {
-        data: covisData,
         zoom: true,
         selectedBubble: {
           title: "Viral biology",
@@ -258,14 +268,14 @@ describe("List entries component", () => {
 
   it("renders with covis data sorted by title", () => {
     const storeObject = setup(
+      { list: covisData },
       {
         show: true,
         showFilter: true,
         filterField: "resulttype",
         filterValue: "all",
         sortValue: "title",
-      },
-      { data: covisData }
+      }
     );
     const store = mockStore(storeObject);
 
@@ -283,8 +293,8 @@ describe("List entries component", () => {
 
   it("renders with viper data", () => {
     const storeObject = setup(
-      { show: true, showFilter: true, linkType: "url", showMetrics: true },
-      { data: viperData }
+      { list: viperData },
+      { show: true, showFilter: true, linkType: "url", showMetrics: true }
     );
     const store = mockStore(storeObject);
 
@@ -302,6 +312,7 @@ describe("List entries component", () => {
 
   it("renders with viper data, base unit = citations", () => {
     const storeObject = setup(
+      { list: viperData },
       {
         show: true,
         showFilter: true,
@@ -309,8 +320,7 @@ describe("List entries component", () => {
         showMetrics: true,
         baseUnit: "citations",
         isContentBased: false,
-      },
-      { data: viperData }
+      }
     );
     const store = mockStore(storeObject);
 
@@ -328,6 +338,7 @@ describe("List entries component", () => {
 
   it("renders with viper data, base unit = tweets", () => {
     const storeObject = setup(
+      { list: viperData },
       {
         show: true,
         showFilter: true,
@@ -335,8 +346,7 @@ describe("List entries component", () => {
         showMetrics: true,
         baseUnit: "tweets",
         isContentBased: false,
-      },
-      { data: viperData }
+      }
     );
     const store = mockStore(storeObject);
 
@@ -354,6 +364,7 @@ describe("List entries component", () => {
 
   it("renders with viper data, base unit = readers", () => {
     const storeObject = setup(
+      { list: viperData },
       {
         show: true,
         showFilter: true,
@@ -361,8 +372,7 @@ describe("List entries component", () => {
         showMetrics: true,
         baseUnit: "readers",
         isContentBased: false,
-      },
-      { data: viperData }
+      }
     );
     const store = mockStore(storeObject);
 
@@ -380,6 +390,7 @@ describe("List entries component", () => {
 
   it("renders with pubmed data", () => {
     const storeObject = setup(
+      { list: pubmedData },
       {
         show: true,
         showFilter: true,
@@ -387,9 +398,6 @@ describe("List entries component", () => {
         isContentBased: false,
         baseUnit: "citations",
         showMetrics: false,
-      },
-      {
-        data: pubmedData,
       }
     );
     const store = mockStore(storeObject);
@@ -408,6 +416,7 @@ describe("List entries component", () => {
 
   it("renders with pubmed data filtered by open_access", () => {
     const storeObject = setup(
+      { list: pubmedData },
       {
         show: true,
         showFilter: true,
@@ -416,9 +425,6 @@ describe("List entries component", () => {
         baseUnit: "citations",
         showMetrics: false,
         filterValue: "open_access",
-      },
-      {
-        data: pubmedData,
       }
     );
     const store = mockStore(storeObject);
@@ -437,6 +443,7 @@ describe("List entries component", () => {
 
   it("renders with pubmed data filtered by publication", () => {
     const storeObject = setup(
+      { list: pubmedData },
       {
         show: true,
         showFilter: true,
@@ -445,9 +452,6 @@ describe("List entries component", () => {
         baseUnit: "citations",
         showMetrics: false,
         filterValue: "publication",
-      },
-      {
-        data: pubmedData,
       }
     );
     const store = mockStore(storeObject);
@@ -466,6 +470,7 @@ describe("List entries component", () => {
 
   it("renders with pubmed data filtered by dataset", () => {
     const storeObject = setup(
+      { list: pubmedData },
       {
         show: true,
         showFilter: true,
@@ -474,9 +479,6 @@ describe("List entries component", () => {
         baseUnit: "citations",
         showMetrics: false,
         filterValue: "dataset",
-      },
-      {
-        data: pubmedData,
       }
     );
     const store = mockStore(storeObject);
@@ -495,8 +497,9 @@ describe("List entries component", () => {
 
   it("renders with local data", () => {
     const storeObject = setup(
+      { list: localData },
       { show: true },
-      { data: localData, service: null }
+      { service: null }
     );
     const store = mockStore(storeObject);
 
@@ -514,8 +517,9 @@ describe("List entries component", () => {
 
   it("renders with local data and set height", () => {
     const storeObject = setup(
+      { list: localData },
       { show: true, height: 800 },
-      { data: localData, service: null }
+      { service: null }
     );
     const store = mockStore(storeObject);
 
@@ -535,8 +539,9 @@ describe("List entries component", () => {
 
   it("renders with local data sorted by year", () => {
     const storeObject = setup(
+      { list: localData },
       { show: true, sortValue: "year" },
-      { data: localData, service: null }
+      { service: null }
     );
     const store = mockStore(storeObject);
 
@@ -554,8 +559,9 @@ describe("List entries component", () => {
 
   it("renders with local data sorted by readers", () => {
     const storeObject = setup(
+      { list: localData },
       { show: true, sortValue: "readers" },
-      { data: localData, service: null }
+      { service: null }
     );
     const store = mockStore(storeObject);
 
@@ -573,9 +579,9 @@ describe("List entries component", () => {
 
   it("renders with local data and selected paper", () => {
     const storeObject = setup(
+      { list: localData },
       { show: true },
       {
-        data: localData,
         service: null,
         selectedBubble: {
           uri: localData[0].area_uri,
@@ -601,9 +607,9 @@ describe("List entries component", () => {
 
   it("renders with linkedcat streamgraph data", () => {
     const storeObject = setup(
+      { list: linkedcatData },
       { show: true },
       {
-        data: linkedcatData,
         service: "linkedcat_streamgraph",
         chartType: STREAMGRAPH_MODE,
         localization: defaultConfig.localization.ger_linkedcat,
@@ -625,9 +631,9 @@ describe("List entries component", () => {
 
   it("renders with linkedcat streamgraph data and set height", () => {
     const storeObject = setup(
+      { list: linkedcatData },
       { show: true, height: 800 },
       {
-        data: linkedcatData,
         service: "linkedcat_streamgraph",
         chartType: STREAMGRAPH_MODE,
         localization: defaultConfig.localization.ger_linkedcat,
@@ -651,9 +657,9 @@ describe("List entries component", () => {
 
   it("renders with linkedcat streamgraph data, zoomed", () => {
     const storeObject = setup(
+      { list: linkedcatData },
       { show: true },
       {
-        data: linkedcatData,
         service: "linkedcat_streamgraph",
         chartType: STREAMGRAPH_MODE,
         localization: defaultConfig.localization.ger_linkedcat,
@@ -680,9 +686,9 @@ describe("List entries component", () => {
 
   it("renders with linkedcat streamgraph data, zoomed and paper selected", () => {
     const storeObject = setup(
+      { list: linkedcatData },
       { show: true },
       {
-        data: linkedcatData,
         service: "linkedcat_streamgraph",
         chartType: STREAMGRAPH_MODE,
         localization: defaultConfig.localization.ger_linkedcat,
@@ -711,9 +717,9 @@ describe("List entries component", () => {
 
   it("renders with linkedcat streamgraph data and paper selected", () => {
     const storeObject = setup(
+      { list: linkedcatData },
       { show: true },
       {
-        data: linkedcatData,
         service: "linkedcat_streamgraph",
         chartType: STREAMGRAPH_MODE,
         localization: defaultConfig.localization.ger_linkedcat,
@@ -738,9 +744,9 @@ describe("List entries component", () => {
 
   it("renders with linkedcat streamgraph data filtered out with search", () => {
     const storeObject = setup(
+      { list: linkedcatData },
       { show: true, searchValue: "Selbstbiographie" },
       {
-        data: linkedcatData,
         service: "linkedcat_streamgraph",
         chartType: STREAMGRAPH_MODE,
         localization: defaultConfig.localization.ger_linkedcat,
@@ -762,11 +768,11 @@ describe("List entries component", () => {
 
   describe("events", () => {
     it("triggers a correct title click action in local files", () => {
-      const EXPECTED_PAYLOAD = selectPaper(initialTestData[0]);
-      const storeObject = setup(
-        { show: true },
-        { data: initialTestData, service: null }
-      );
+      const EXPECTED_PAYLOAD = [
+        selectPaper(initialTestData[0]).type,
+        zoomIn().type,
+      ];
+      const storeObject = setup({ show: true }, { service: null });
       const store = mockStore(storeObject);
 
       act(() => {
@@ -785,18 +791,12 @@ describe("List entries component", () => {
 
       const actions = store.getActions();
 
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
+      expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
     });
 
     it("triggers a correct area click action in local files", () => {
-      const EXPECTED_PAYLOAD = zoomIn(
-        { title: initialTestData[0].area, uri: initialTestData[0].area_uri },
-        "list-area"
-      );
-      const storeObject = setup(
-        { show: true },
-        { data: initialTestData, service: null }
-      );
+      const EXPECTED_PAYLOAD = [deselectPaper().type, zoomIn().type];
+      const storeObject = setup({ show: true }, { service: null });
       const store = mockStore(storeObject);
 
       act(() => {
@@ -815,15 +815,12 @@ describe("List entries component", () => {
 
       const actions = store.getActions();
 
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
+      expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
     });
 
     it("triggers a correct area mouseover action in local files", () => {
       const EXPECTED_PAYLOAD = highlightArea(initialTestData[0]);
-      const storeObject = setup(
-        { show: true },
-        { data: initialTestData, service: null }
-      );
+      const storeObject = setup({ show: true }, { service: null });
       const store = mockStore(storeObject);
 
       act(() => {
@@ -847,10 +844,7 @@ describe("List entries component", () => {
 
     it("triggers a correct area mouseout action in local files", () => {
       const EXPECTED_PAYLOAD = highlightArea(null);
-      const storeObject = setup(
-        { show: true },
-        { data: initialTestData, service: null }
-      );
+      const storeObject = setup({ show: true }, { service: null });
       const store = mockStore(storeObject);
 
       act(() => {
@@ -875,9 +869,9 @@ describe("List entries component", () => {
     it("triggers a correct title click action in linkedcat", () => {
       const EXPECTED_PAYLOAD = selectPaper(linkedcatData[0]);
       const storeObject = setup(
+        { list: [linkedcatData[0]] },
         { show: true },
         {
-          data: [linkedcatData[0]],
           service: "linkedcat_streamgraph",
           chartType: STREAMGRAPH_MODE,
           localization: defaultConfig.localization.ger_linkedcat,
@@ -905,14 +899,11 @@ describe("List entries component", () => {
     });
 
     it("triggers a correct area click action in linkedcat", () => {
-      const EXPECTED_PAYLOAD = zoomIn(
-        { title: linkedcatData[0].area, uri: linkedcatData[0].area_uri },
-        "list-area"
-      );
+      const EXPECTED_PAYLOAD = [deselectPaper().type, zoomIn().type];
       const storeObject = setup(
+        { list: [linkedcatData[0]] },
         { show: true },
         {
-          data: [linkedcatData[0]],
           service: "linkedcat",
           localization: defaultConfig.localization.ger_linkedcat,
         }
@@ -935,15 +926,15 @@ describe("List entries component", () => {
 
       const actions = store.getActions();
 
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
+      expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
     });
 
     it("triggers a correct area mouseover action in linkedcat", () => {
       const EXPECTED_PAYLOAD = highlightArea(linkedcatData[0]);
       const storeObject = setup(
+        { list: [linkedcatData[0]] },
         { show: true },
         {
-          data: [linkedcatData[0]],
           service: "linkedcat",
           localization: defaultConfig.localization.ger_linkedcat,
         }
@@ -972,9 +963,9 @@ describe("List entries component", () => {
     it("triggers a correct area mouseout action in linkedcat", () => {
       const EXPECTED_PAYLOAD = highlightArea(null);
       const storeObject = setup(
+        { list: [linkedcatData[0]] },
         { show: true },
         {
-          data: [linkedcatData[0]],
           service: "linkedcat",
           localization: defaultConfig.localization.ger_linkedcat,
         }
@@ -1004,9 +995,9 @@ describe("List entries component", () => {
       const PAPER = linkedcatData.find((p) => p.safe_id === "AC15093982");
       const EXPECTED_PAYLOAD = deselectPaperBacklink();
       const storeObject = setup(
+        { list: [PAPER] },
         { show: true },
         {
-          data: [PAPER],
           service: "linkedcat_streamgraph",
           chartType: STREAMGRAPH_MODE,
           localization: defaultConfig.localization.ger_linkedcat,
@@ -1044,9 +1035,9 @@ describe("List entries component", () => {
       const PAPER = linkedcatData.find((p) => p.safe_id === "AC15093982");
       const EXPECTED_PAYLOAD = showPreview(PAPER);
       const storeObject = setup(
+        { list: [PAPER] },
         { show: true },
         {
-          data: [PAPER],
           service: "linkedcat_streamgraph",
           chartType: STREAMGRAPH_MODE,
           localization: defaultConfig.localization.ger_linkedcat,
