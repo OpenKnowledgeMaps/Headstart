@@ -1877,7 +1877,7 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject, localData)
       );
 
-      expect(result).toHaveProperty("length", localData.length);
+      expect(result.list).toHaveProperty("length", localData.length);
       expect(mockWarn).toHaveBeenCalled();
     });
 
@@ -1905,7 +1905,7 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject, mockLocalData)
       );
 
-      expect(result).toHaveProperty("length", mockLocalData.length);
+      expect(result.list).toHaveProperty("length", mockLocalData.length);
       expect(mockWarn).toHaveBeenCalled();
     });
   });
