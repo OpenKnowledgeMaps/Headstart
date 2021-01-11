@@ -47,7 +47,7 @@ const Highlight = ({
     queryWords = queryTerms.map((term) => hyphenateStringSafely(term));
   }
 
-  queryWords = queryWords.map((term) => new RegExp(`\\b(${term})\\b`, "gi"));
+  queryWords = queryWords.map((term) => getQueryTermMatcher(term));
 
   return (
     <ExternalHighlighter
@@ -78,4 +78,21 @@ const hyphenateStringSafely = (string) => {
     .split("")
     .map((char) => escapeRegExp(char))
     .join("[\\u00AD]*");
+};
+
+/**
+ * Returns a regex expression for the query term.
+ * 
+ * The query term must match the word in the text exactly. Supported boundaries
+ * are whitespace, period, comma, question mark, exclamation mark, hyphen, 
+ * slash and brackets.
+ * 
+ * The boundary must not be a soft hyphen (that's why we cannot simply use \b).
+ * 
+ * @param {String} term the term to be matched
+ */
+export const getQueryTermMatcher = (term) => {
+  // this should theoretically work but it does not: [^\w\u00AD]
+  // this is used instead: [-\\s.,?!/()[\\]{}]
+  return new RegExp(`(?<=[-\\s.,?!/()[\\]{}]|^)(${term})(?=[-\\s.,?!/()[\\]{}]|$)`, "gi");
 };
