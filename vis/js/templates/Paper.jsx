@@ -75,11 +75,22 @@ class Paper extends React.Component {
   }
 
   componentWillUnmount() {
-    select(this.pathRef.current).interrupt();
-    if (!this.isDataset()) {
-      select(this.dogearRef.current).interrupt();
+    const pathEl = select(this.pathRef.current);
+    if (pathEl.interrupt) {
+      pathEl.interrupt();
     }
-    select(this.paperRef.current).interrupt();
+    
+    if (!this.isDataset()) {
+      const dogearEl = select(this.dogearRef.current);
+      if (dogearEl.interrupt) {
+        dogearEl.interrupt();
+      }
+    }
+    
+    const paperEl = select(this.paperRef.current);
+    if (paperEl.interrupt) {
+      paperEl.interrupt();
+    }
   }
 
   render() {
@@ -332,7 +343,7 @@ class Paper extends React.Component {
 
   getCoordinatesAndDimensions(previous = false) {
     const { data, zoom, animation } = this.props;
-    if (previous && animation.alreadyZoomed) {
+    if (previous && animation && animation.alreadyZoomed) {
       const {
         prevZoomedX: x,
         prevZoomedY: y,
