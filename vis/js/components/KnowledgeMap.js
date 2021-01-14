@@ -142,6 +142,7 @@ const KnowledgeMap = (props) => {
     )
   );
 
+  // TODO the LocalizationProvider is redundant here
   return (
     <LocalizationProvider localization={localization}>
       <Chart

@@ -46,7 +46,9 @@ class Bubble extends React.Component {
 
   componentWillUnmount() {
     const el = select(this.circleRef.current);
-    el.interrupt();
+    if (el.interrupt) {
+      el.interrupt();
+    }
   }
 
   render() {
