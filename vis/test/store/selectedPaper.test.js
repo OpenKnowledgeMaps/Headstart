@@ -107,5 +107,13 @@ describe("list state", () => {
 
       expect(result).toEqual(EXPECTED_STATE);
     });
+
+    it("should not change the state if the action is canceled", () => {
+      const INITIAL_STATE = { some_state: 1 };
+
+      const result = selectedPaperReducer(INITIAL_STATE, { canceled: true });
+
+      expect(result).toEqual(INITIAL_STATE);
+    });
   });
 });
