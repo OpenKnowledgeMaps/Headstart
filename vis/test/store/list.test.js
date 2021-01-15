@@ -5,6 +5,7 @@ import {
   filter,
   sort,
   highlightArea,
+  updateDimensions,
 } from "../../js/actions";
 
 import listReducer from "../../js/reducers/list";
@@ -57,7 +58,7 @@ describe("list state", () => {
         id: "some-id",
         safe_id: "some-safe-id",
         title: "some title",
-      }
+      };
       const EXPECTED_ACTION = {
         type: "HIGHLIGHT_AREA",
         paper: PAPER,
@@ -139,6 +140,18 @@ describe("list state", () => {
       const EXPECTED_STATE = { ...INITIAL_STATE, sortValue: ID };
 
       const result = listReducer(INITIAL_STATE, sort(ID));
+
+      expect(result).toEqual(EXPECTED_STATE);
+    });
+
+    it("should set correct resized height", () => {
+      const INITIAL_STATE = { height: 800 };
+      const EXPECTED_STATE = { ...INITIAL_STATE, height: 500 };
+
+      const result = listReducer(
+        INITIAL_STATE,
+        updateDimensions({}, { height: 500 })
+      );
 
       expect(result).toEqual(EXPECTED_STATE);
     });
