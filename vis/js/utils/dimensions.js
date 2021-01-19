@@ -12,12 +12,15 @@ const MODALS_WIDTH = 43;
 /**
  * Returns the chart size based on config, context and the outer visualization
  * container (e.g. in project website).
- *  
+ *
  * @param {Object} config the headstart config
  * @param {Object} context the headstart context
  */
 export const getChartSize = (config, context) => {
+  const container = $(`#${config.tag}`);
+
   // height section
+  const parentHeight = getRealHeight(container);
   const clientHeight = document.documentElement.clientHeight;
   const innerHeight = window.innerHeight;
 
@@ -32,7 +35,9 @@ export const getChartSize = (config, context) => {
   }
 
   const computedHeight =
-    Math.max(clientHeight, innerHeight) -
+    (parentHeight === 0
+      ? Math.max(clientHeight, innerHeight)
+      : container.height()) -
     Math.max(TITLE_HEIGHT, titleImageHeight) -
     toolbarHeight -
     CHART_HEIGHT_CORRECTION;
@@ -43,7 +48,7 @@ export const getChartSize = (config, context) => {
   );
 
   // width section
-  const visWidth = $(`#${config.tag}`).width();
+  const visWidth = container.width();
 
   const computedWidth = visWidth * VIS_COL_RATIO - MODALS_WIDTH;
 
@@ -61,7 +66,7 @@ export const getChartSize = (config, context) => {
 
 /**
  * Returns the list height based on config, context and the chart height.
- * 
+ *
  * @param {Object} config the headstart config
  * @param {Object} context the headstart context
  * @param {Number} chartHeight knowledge map chart height - if not set, it is computed
@@ -84,4 +89,29 @@ export const getListSize = (config, context, chartHeight) => {
     LIST_HEIGHT_CORRECTION;
 
   return { height };
+};
+
+/**
+ * Determines the actual height of the element.
+ *
+ * Copied from the original helpers.js
+ *
+ * @param {Element} element jquery selected element
+ * @return {Number} real height of the element
+ */
+const getRealHeight = (element) => {
+  let height = 0;
+  if (element.children().length > 0) {
+    const temp = $("<div></div>");
+    temp.append(element.children());
+    height = element.height();
+    element.append(temp.children());
+  } else {
+    const html = element.html();
+    element.html("");
+    height = element.height();
+    element.html(html);
+  }
+
+  return height;
 };
