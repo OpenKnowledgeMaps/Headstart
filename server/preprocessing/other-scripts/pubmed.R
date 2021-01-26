@@ -81,7 +81,7 @@ get_papers <- function(query, params = NULL, limit = 100, retry_opts = rentrez::
     stop(paste("No results retrieved."))
   }
 
-  out <- lapply(xml, function(z) {
+  out <- mclapply(xml, function(z) {
     flds <- switch(
       xml2::xml_name(z),
       PubmedArticle = fields,
