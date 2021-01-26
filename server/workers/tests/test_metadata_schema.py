@@ -86,8 +86,6 @@ knowledgemap_schema = Schema([
                     lambda x: isinstance(x, str), "Not a string.")]),
     Column('relevance', [CustomElementValidation(
                     lambda x: isinstance(x, int), "Not an integer.")]),
-    Column('lang_detected', [CustomElementValidation(
-                    lambda x: isinstance(x, str), "Not a string.")]),
     Column('cluster_labels', [CustomElementValidation(
                     lambda x: isinstance(x, str), "Not a string.")]),
     Column('x', [CustomElementValidation(
