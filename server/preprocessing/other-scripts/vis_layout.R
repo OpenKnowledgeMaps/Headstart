@@ -55,7 +55,7 @@ vis_layout <- function(text, metadata, service,
 
   if(vis_type=='overview'){
     stops <- get_stopwords(lang, testing)
-    corpus <- create_corpus(metadata, text, lang)
+    corpus <- create_corpus(metadata, text, c(lang))
 
     vlog$debug("get features")
     tdm_matrix <- create_tdm_matrix(corpus$stemmed)
