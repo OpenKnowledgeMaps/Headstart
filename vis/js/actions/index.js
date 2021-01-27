@@ -172,3 +172,7 @@ export const hoverPaper = (safeId, enlargeFactor) => ({
   safeId,
   enlargeFactor,
 });
+
+export const openEmbedModal = () => ({ type: "OPEN_EMBED_MODAL" });
+
+export const closeEmbedModal = () => ({ type: "CLOSE_EMBED_MODAL" });

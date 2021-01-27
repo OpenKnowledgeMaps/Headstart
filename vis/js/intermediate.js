@@ -24,6 +24,7 @@ import AuthorImage from "./components/AuthorImage";
 import List from "./components/List";
 import KnowledgeMap from "./components/KnowledgeMap";
 import ModalButtons from "./components/ModalButtons";
+import Modals from "./components/Modals";
 
 import { applyForce } from "./utils/force";
 
@@ -106,6 +107,7 @@ class Intermediate {
     ReactDOM.render(
       <Provider store={this.store}>
         <ModalButtons />
+        <Modals />
       </Provider>,
       document.getElementById("modals")
     );
