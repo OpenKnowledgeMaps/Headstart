@@ -79,14 +79,14 @@ class Paper extends React.Component {
     if (pathEl.interrupt) {
       pathEl.interrupt();
     }
-    
+
     if (!this.isDataset()) {
       const dogearEl = select(this.dogearRef.current);
       if (dogearEl.interrupt) {
         dogearEl.interrupt();
       }
     }
-    
+
     const paperEl = select(this.paperRef.current);
     if (paperEl.interrupt) {
       paperEl.interrupt();
@@ -173,14 +173,16 @@ class Paper extends React.Component {
       // html template starts here
       <g className={gClass} {...eventHandlers}>
         {!zoom && <title>{area}</title>}
-        <path
-          id="region"
-          d={path}
-          className={pathClass}
-          style={{ fillOpacity: 1 }}
-          ref={this.pathRef}
-        ></path>
-        {!this.isDataset() && (
+        {!this.isZoomingOut() && (
+          <path
+            id="region"
+            d={path}
+            className={pathClass}
+            style={{ fillOpacity: 1 }}
+            ref={this.pathRef}
+          ></path>
+        )}
+        {!this.isDataset() && !this.isZoomingOut() && (
           <path className="dogear" d={dogEar} ref={this.dogearRef}></path>
         )}
         <foreignObject
@@ -221,10 +223,6 @@ class Paper extends React.Component {
                     </p>
                   )}
                 </div>
-                <p
-                  id="paper_visual_distributions"
-                  className={sizeModifierClass}
-                ></p>
                 <p id="title" className={sizeModifierClass}>
                   <Hyphenate>
                     <Highlight hyphenated queryHighlight>
