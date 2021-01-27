@@ -125,6 +125,10 @@ MyMediator.prototype = {
         mediator.modern_frontend_intermediate.renderKnowledgeMap(config);
     },
 
+    render_modern_frontend_peripherals: function() {
+        mediator.modern_frontend_intermediate.renderPeripherals();
+    },
+
     // current_bubble needed in the headstart.js and io.js
     register_bubbles: function() {
         mediator.bubbles = [];
@@ -237,7 +241,9 @@ MyMediator.prototype = {
         mediator.manager.call('canvas', 'initInfoModal');
         mediator.manager.call('io', 'prepareAreas', []);
         
-        mediator.manager.call('canvas', 'drawModals', [context]);
+        if (!mediator.modern_frontend_enabled) {
+            mediator.manager.call('canvas', 'drawModals', [context]);
+        }
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
 
         // TODO call this just once (chart size must be known before the map is rendered)
@@ -257,6 +263,7 @@ MyMediator.prototype = {
         }
 
         mediator.render_modern_frontend_list();
+        mediator.render_modern_frontend_peripherals();
         
         mediator.dimensions_update();
         d3.select(window).on("resize", () => {
@@ -380,7 +387,9 @@ MyMediator.prototype = {
     
     draw_modals: function () {
         let context = io.context;
-        mediator.manager.call('canvas', 'drawModals', [context]);
+        if (!mediator.modern_frontend_enabled) {
+            mediator.manager.call('canvas', 'drawModals', [context]);
+        }
     },
     
     update_visual_distributions: function(type) {
