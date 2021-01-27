@@ -17,6 +17,7 @@ const Highlight = ({
   queryHighlight = false,
   // if true, adds &shy; into the search words
   hyphenated = false,
+  useLookBehind,
   children: text,
 }) => {
   let autoEscape = true;
@@ -47,7 +48,7 @@ const Highlight = ({
     queryWords = queryTerms.map((term) => hyphenateStringSafely(term));
   }
 
-  queryWords = queryWords.map((term) => getQueryTermMatcher(term));
+  queryWords = queryWords.map((term) => getQueryTermMatcher(term, useLookBehind));
 
   return (
     <ExternalHighlighter
@@ -64,6 +65,7 @@ const mapStateToProps = (state) => ({
   searchTerms: parseSearchText(state.list.searchValue),
   queryTerms: state.query.parsedTerms,
   queryHighlightEnabled: state.query.highlightTerms,
+  useLookBehind: state.query.useLookBehind,
 });
 
 export default connect(mapStateToProps)(Highlight);
@@ -89,10 +91,16 @@ const hyphenateStringSafely = (string) => {
  * 
  * The boundary must not be a soft hyphen (that's why we cannot simply use \b).
  * 
- * @param {String} term the term to be matched
+ * @param {string} term the term to be matched
+ * @param {boolean} useLookBehind use ?<= if true, else use \b
  */
-export const getQueryTermMatcher = (term) => {
+export const getQueryTermMatcher = (term, useLookBehind) => {
   // this should theoretically work but it does not: [^\w\u00AD]
-  // this is used instead: [-\\s.,?!/()[\\]{}]
-  return new RegExp(`(?<=[-\\s.,?!/()[\\]{}]|^)(${term})(?=[-\\s.,?!/()[\\]{}]|$)`, "gi");
+  // this is used instead:
+  const wordBreakers = "[-\\s.,?!/()[\\]{}]";
+  let lookBehind = `(?<=${wordBreakers}|^)`;
+  if (!useLookBehind) {
+    lookBehind = "\\b";
+  }
+  return new RegExp(`${lookBehind}(${term})(?=${wordBreakers}|$)`, "gi");
 };

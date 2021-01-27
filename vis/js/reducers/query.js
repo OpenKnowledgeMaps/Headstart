@@ -12,6 +12,7 @@ const query = (state = { text: "", parsedTerms: [] }, action) => {
             : null,
         parsedTerms: getQueryTerms(action.contextObject),
         highlightTerms: action.configObject.highlight_query_terms,
+        useLookBehind: isLookBehindSupported(),
       };
     default:
       return state;
@@ -60,11 +61,29 @@ const getQueryTerms = (context) => {
   );
 
   // Remove backslashes, colons and empty words
-  phraseArray = phraseArray.map((x) => x.replace(/[\\\:]/g, "")).filter((x) => x !== "");
+  phraseArray = phraseArray
+    .map((x) => x.replace(/[\\\:]/g, ""))
+    .filter((x) => x !== "");
 
   phraseArray = [...new Set(phraseArray)];
 
   return phraseArray;
+};
+
+/**
+ * Regex lookbehind feature detection (used in the query
+ * highlight component).
+ *
+ * Inspired by
+ * https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent
+ */
+const isLookBehindSupported = () => {
+  try {
+    new RegExp("(?<=)");
+    return true;
+  } catch (err) {
+    return false;
+  }
 };
 
 export default query;
