@@ -23,6 +23,7 @@ import SubdisciplineTitle from "./templates/SubdisciplineTitle";
 import AuthorImage from "./components/AuthorImage";
 import List from "./components/List";
 import KnowledgeMap from "./components/KnowledgeMap";
+import ModalButtons from "./components/ModalButtons";
 
 import { applyForce } from "./utils/force";
 
@@ -99,6 +100,15 @@ class Intermediate {
     };
 
     this.applyForceLayout();
+  }
+
+  renderPeripherals() {
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <ModalButtons />
+      </Provider>,
+      document.getElementById("modals")
+    );
   }
 
   // used in streamgraph

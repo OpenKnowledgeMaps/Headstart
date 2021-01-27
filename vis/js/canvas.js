@@ -124,6 +124,10 @@ class Canvas {
     }
 
     drawModals(context) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the new code.");
+        }
+        
         $('#modals').empty()
         
         if (config.share_modal) {

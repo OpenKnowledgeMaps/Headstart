@@ -119,3 +119,9 @@ img#close-button {
         z-index: 9;
     }
 }
+
+@if $modern_frontend_enabled {
+    .sharebuttons button {
+        margin-left: 3px;
+    }
+}
