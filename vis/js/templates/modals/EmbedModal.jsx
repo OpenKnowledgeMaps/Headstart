@@ -23,12 +23,7 @@ const EmbedModal = ({ open, onClose }) => {
 
   return (
     // html template starts here
-    <Modal
-      id="embed_modal"
-      className="headstart-modal"
-      show={open}
-      onHide={onClose}
-    >
+    <Modal id="embed_modal" show={open} onHide={onClose}>
       <Modal.Header closeButton className="modal-header">
         <Modal.Title
           id="embed-title"
