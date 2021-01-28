@@ -11,6 +11,8 @@ const modals = (state = {}, action) => {
         twitterHashtags: action.configObject.hashtags_twitter_card,
         showEmbedButton: !!action.configObject.embed_modal,
         openEmbedModal: false,
+        showFAQsButton: !!action.configObject.faqs_button,
+        FAQsUrl: action.configObject.faqs_url,
       };
     case "OPEN_EMBED_MODAL":
       return {
