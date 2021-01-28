@@ -174,5 +174,7 @@ export const hoverPaper = (safeId, enlargeFactor) => ({
 });
 
 export const openEmbedModal = () => ({ type: "OPEN_EMBED_MODAL" });
-
 export const closeEmbedModal = () => ({ type: "CLOSE_EMBED_MODAL" });
+
+export const openViperEditModal = () => ({ type: "OPEN_VIPER_EDIT_MODAL" });
+export const closeViperEditModal = () => ({ type: "CLOSE_VIPER_EDIT_MODAL" });
