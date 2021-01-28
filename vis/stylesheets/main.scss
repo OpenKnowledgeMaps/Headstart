@@ -5,10 +5,9 @@
 
 // Load base settings
 /* Base */
-@import 'base/typography';
+@import "base/typography";
 @import "base/colors";
 @import "base/default_settings";
-
 
 /* Vendor Dependencies */
 // @import "vendors/bootstrap";
@@ -22,9 +21,12 @@
 @import "components/input";
 
 .headstart {
-    @import "modules/map";
-    @import "modules/list";
-    @import "modules/multiples";
-    @import "modules/popup";
-    @import "modules/streamgraph";
+  @import "modules/map";
+  @import "modules/list";
+  @import "modules/multiples";
+  @import "modules/popup";
+  @import "modules/streamgraph";
 }
+
+// special modal styling
+@import "modules/modal";

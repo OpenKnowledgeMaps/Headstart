@@ -1,0 +1,137 @@
+// TODO remove the respective code from the other modules
+@if $modern_frontend_enabled {
+  .modal {
+    text-align: center;
+    padding: 0 !important;
+
+    &:before {
+      content: "";
+      /*display: inline-block;*/
+      height: 100%;
+      /*vertical-align: middle;*/
+      margin-right: -4px;
+      /* Adjusts for spacing */
+    }
+
+    //Firefox bug
+    .glyphicon-refresh-animate {
+      animation: spin 0.7s infinite linear;
+      -webkit-animation: spin2 0.7s infinite linear;
+    }
+
+    @-webkit-keyframes spin2 {
+      from {
+        -webkit-transform: rotate(0deg);
+      }
+      to {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: scale(1) rotate(0deg);
+      }
+      to {
+        transform: scale(1) rotate(360deg);
+      }
+    }
+  }
+
+  .modal-body,
+  .modal-header {
+    padding: 0px !important;
+  }
+
+  .modal-content .btn-primary {
+    color: #fff;
+    background-color: $okm-modal-btn;
+    border-color: $okm-modal-btn;
+    font-family: $link-font-family;
+  }
+
+  .modal-content .btn-primary:hover {
+    background-color: white;
+    border-color: $okm-modal-btn;
+    color: $okm-modal-btn;
+  }
+
+  .modal-content th {
+    color: $black;
+    width: 200px;
+  }
+
+  #pdf-modal .modal-content {
+    padding: 15px;
+  }
+
+  .modal-content table {
+    border: 3px solid $okm-clouds;
+    font-family: $base-font-family;
+    font-size: 14px;
+  }
+
+  .modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .modal-header {
+    margin-bottom: 20px;
+    padding-bottom: 0px;
+    border-bottom: 0px !important;
+  }
+
+  //draggable functionality
+  .modal-header {
+    cursor: move; /* fallback: no `url()` support or images disabled */
+    cursor: -webkit-grab; /* Chrome 1-21, Safari 4+ */
+    cursor: -moz-grab; /* Firefox 1.5-26 */
+    cursor: grab; /* W3C standards syntax, should come least */
+  }
+
+  .modal-header-active {
+    cursor: -webkit-grabbing;
+    cursor: -moz-grabbing;
+    cursor: grabbing;
+  }
+
+  #embed-modal-text,
+  #viper-edit-screenshot {
+    margin: 20px 0;
+  }
+
+  #embed_modal {
+    .modal-dialog {
+      width: 100%;
+      max-width: 800px;
+
+      .modal-content {
+        padding: 40px;
+
+        textarea {
+          width: 100%;
+          display: block;
+          padding: 10px;
+        }
+      }
+
+      .modal-body {
+        p {
+          font-family: $base-font-family;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  .embed-modal-title {
+    color: $medium-blue;
+    text-transform: uppercase;
+    margin: 0px;
+    font-size: 16px;
+    font-weight: $fontweight700;
+    line-height: 170%;
+  }
+}
