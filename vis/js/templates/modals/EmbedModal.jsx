@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import { Modal, Button } from "react-bootstrap";
 
@@ -11,9 +11,10 @@ const EmbedModal = ({ open, onClose }) => {
     .toString()
     .replace(/#.*/, "")}&embed=true"></iframe>`;
 
+  const areaRef = useRef(null);
   const handleCopyClick = (event) => {
     event.preventDefault();
-    const embedString = $("#embed-modal-text")[0];
+    const embedString = areaRef.current;
     embedString.focus();
     embedString.setSelectionRange(0, embedString.value.length);
     document.execCommand("copy");
@@ -22,7 +23,12 @@ const EmbedModal = ({ open, onClose }) => {
 
   return (
     // html template starts here
-    <Modal show={open} onHide={onClose}>
+    <Modal
+      id="embed_modal"
+      className="headstart-modal"
+      show={open}
+      onHide={onClose}
+    >
       <Modal.Header closeButton className="modal-header">
         <Modal.Title
           id="embed-title"
@@ -36,18 +42,15 @@ const EmbedModal = ({ open, onClose }) => {
         <p id="embed-body-text">{localization.embed_body_text}</p>
         <form>
           <textarea
+            ref={areaRef}
             id="embed-modal-text"
             rows="3"
-            readonly=""
+            readOnly
             value={embedText}
           ></textarea>
-          <button
-            class="btn btn-primary"
-            id="embed-button"
-            onClick={handleCopyClick}
-          >
+          <Button bsStyle="primary" id="embed-button" onClick={handleCopyClick}>
             {localization.embed_button_text}
-          </button>
+          </Button>
         </form>
       </Modal.Body>
     </Modal>
