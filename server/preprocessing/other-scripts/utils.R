@@ -1,6 +1,12 @@
 library(stringdist)
 library(logging)
 
+sanitize_query <- function(query) {
+  sanitized_query <- stringr::str_replace(query, '“', '"')
+  sanitized_query <- stringr::str_replace(sanitized_query, '“', '"')  
+  return(list(raw_query=query, sanitized_query=sanitized_query))
+}
+
 levenshtein_ratio <- function(a, b) {
   lv_dist = stringdist(a, b, method = "lv")
   lv_ratio = lv_dist/(max(stri_length(a), stri_length(b)))
@@ -110,6 +116,10 @@ detect_error <- function(failed, service) {
         result <- regmatches(failed$query, regexec(phrasepattern, failed$query))
         # if not one of the known data source API errors:
         # apply query error detection heuristics
+        if (grepl('“', failed$query, fixed = TRUE) ||
+            grepl('“', failed$query, fixed = TRUE)) {
+          reason <- c(reason, 'query formatting')
+        }
         if (!identical(result[[1]], character(0)) &&
             length(unlist(strsplit(result[[1]][2], " "))) > 4) {
           reason <- c(reason, 'phrase too long')
