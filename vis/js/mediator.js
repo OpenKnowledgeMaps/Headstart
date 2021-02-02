@@ -298,8 +298,11 @@ MyMediator.prototype = {
             spinner_text: config.localization[config.language].pdf_load_text
         }));
         this.viz.append(imageTemplate());
-        this.viz.append(viperEditTemplate());
-        this.viz.append(embedTemplate());
+        if (!mediator.modern_frontend_enabled) {
+            this.viz.append(viperEditTemplate());
+            this.viz.append(embedTemplate());
+        }
+        
         
         this.viz.append(toolbarTemplate());
        
