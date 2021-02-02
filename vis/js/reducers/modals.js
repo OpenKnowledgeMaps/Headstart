@@ -1,4 +1,4 @@
-const modals = (state = {}, action) => {
+const modals = (state = { reloadApiProperties: {} }, action) => {
   if (action.canceled) {
     return state;
   }
@@ -18,6 +18,13 @@ const modals = (state = {}, action) => {
         viperEditObjID: action.contextObject.params
           ? action.contextObject.params.obj_id
           : null,
+        showReloadButton: action.contextObject.service === "gsheets",
+        reloadLastUpdate: action.contextObject.last_update,
+        reloadApiProperties: {
+          headstartPath: action.configObject.server_url,
+          sheetID: getSheetID(action.configObject, action.contextObject),
+          persistenceBackend: action.configObject.persistence_backend,
+        },
       };
     case "OPEN_EMBED_MODAL":
       return {
@@ -45,3 +52,15 @@ const modals = (state = {}, action) => {
 };
 
 export default modals;
+
+const getSheetID = (config, context) => {
+  if (context.service !== "gsheets") {
+    return null;
+  }
+
+  if (!config.files || !config.files.length) {
+    return null;
+  }
+
+  return config.files[0].file;
+};
