@@ -6,6 +6,7 @@ import { openEmbedModal, openViperEditModal } from "../actions";
 import EditButton from "../templates/buttons/EditButton";
 import EmbedButton from "../templates/buttons/EmbedButton";
 import FAQsButton from "../templates/buttons/FAQsButton";
+import ReloadButton from "../templates/buttons/ReloadButton";
 import ShareButton from "../templates/buttons/ShareButton";
 import LocalizationProvider from "./LocalizationProvider";
 
@@ -18,6 +19,9 @@ const ModalButtons = ({
   FAQsUrl,
   showViperEditButton,
   onViperEditClick,
+  showReloadButton,
+  reloadLastUpdate,
+  reloadApiProperties,
   localization,
 }) => {
   return (
@@ -28,6 +32,7 @@ const ModalButtons = ({
       {showViperEditButton && (
         <EditButton onClick={onViperEditClick} title="Add project resources" />
       )}
+      {showReloadButton && <ReloadButton lastUpdate={reloadLastUpdate} apiProperties={reloadApiProperties} />}
     </LocalizationProvider>
   );
 };
@@ -39,6 +44,9 @@ const mapStateToProps = (state) => ({
   showFAQsButton: state.modals.showFAQsButton,
   FAQsUrl: state.modals.FAQsUrl,
   showViperEditButton: state.modals.showViperEditButton,
+  showReloadButton: state.modals.showReloadButton,
+  reloadLastUpdate: state.modals.reloadLastUpdate,
+  reloadApiProperties: state.modals.reloadApiProperties,
   localization: state.localization,
 });
 
