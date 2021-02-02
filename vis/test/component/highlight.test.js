@@ -19,7 +19,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "car";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -29,7 +29,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "car with no roof";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -39,7 +39,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "a blue car";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -49,7 +49,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "a blue car with no roof";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -59,7 +59,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "the carbonic acid";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).toBe(null);
@@ -69,7 +69,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "a substring at the end";
     const TERM = "string";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).toBe(null);
@@ -79,7 +79,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "substrings in the middle";
     const TERM = "string";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).toBe(null);
@@ -89,7 +89,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "a sub&shy;string at the end";
     const TERM = "string";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).toBe(null);
@@ -99,7 +99,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "the car&shy;bonic acid";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).toBe(null);
@@ -109,7 +109,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "sub&shy;string&shy;s in the middle";
     const TERM = "string";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).toBe(null);
@@ -119,7 +119,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "a sub-string at the end";
     const TERM = "string";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -129,7 +129,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "the car-bonic acid";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -139,7 +139,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "sub-string-s in the middle";
     const TERM = "string";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -149,7 +149,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "The car.";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -159,7 +159,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "The car, whatever.";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -169,7 +169,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "a car/motorbike";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -179,7 +179,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "a car?";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -189,7 +189,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "a car!";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -199,7 +199,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "(car)";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -209,7 +209,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "[car]";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);
@@ -219,7 +219,7 @@ describe("Highlight query term matcher", () => {
     const TEXT = "{car}";
     const TERM = "car";
 
-    const matcher = getQueryTermMatcher(TERM);
+    const matcher = getQueryTermMatcher(TERM, true);
     const result = TEXT.match(matcher);
 
     expect(result).not.toBe(null);

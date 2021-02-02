@@ -1967,7 +1967,18 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <span
                       className=""
                     >
-                       “Tsunami” in Higher Education: Democratisation Movement Towards Open And Free 
+                       “Tsunami” in Higher 
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      : Democratisation Movement Towards Open And Free 
                     </span>
                     <span
                       className="query_term_highlight "
@@ -2343,7 +2354,18 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <span
                       className=""
                     >
-                       Libraries into Distance Education: A Review of Models, Roles, And Strategies
+                       Libraries into Distance 
+                    </span>
+                    <span
+                      className="query_term_highlight "
+                      style={Object {}}
+                    >
+                      Education
+                    </span>
+                    <span
+                      className=""
+                    >
+                      : A Review of Models, Roles, And Strategies
                     </span>
                   </span>
                 </a>
