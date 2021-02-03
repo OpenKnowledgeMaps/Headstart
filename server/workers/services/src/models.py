@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 
 
 class Visualizations(Base):
-    __tablename__ = "Visualizations"
+    __tablename__ = "visualizations"
 
     vis_id = Column(Text, nullable=False, unique=True,
                        primary_key=True)
@@ -21,7 +21,7 @@ class Visualizations(Base):
 
 
 class Revisions(Base):
-    __tablename__ = "Revisions"
+    __tablename__ = "revisions"
 
     rev_id = Column(Integer,
                        nullable=False,
@@ -33,7 +33,7 @@ class Revisions(Base):
     rev_user = Column(Text)
     rev_timestamp = Column(DateTime)
     rev_comment = Column(Text)
-    rev_data = Column(db.Text)
+    rev_data = Column(Text)
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
