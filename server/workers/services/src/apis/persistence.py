@@ -6,7 +6,7 @@ from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 
 from models import Revisions, Visualizations
-from database import db, sessions
+from database import sessions
 
 
 persistence_ns = Namespace("persistence", description="OKMAps persistence operations")
@@ -18,7 +18,7 @@ def select_session(Session=None):
     if Session is not None:
         return Session()
     else:
-        return db.session
+        return sessions.get('dev')()
 
 
 def create_vis_id(params, param_types):
