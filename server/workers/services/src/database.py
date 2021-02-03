@@ -1,10 +1,9 @@
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
 from config import settings
 
 
-db = SQLAlchemy()
 sessions = {}
 sessions[settings.POSTGRES["db"]] = sessionmaker(bind=create_engine(settings.SQLALCHEMY_DATABASE_URI))
 for data_integration, database in settings.SQLALCHEMY_BINDS.items():
@@ -14,3 +13,4 @@ for data_integration, database in settings.SQLALCHEMY_BINDS.items():
                                                                  pool_recycle=3600,
                                                                  pool_size=30
                                                                  ))
+Base = declarative_base()
