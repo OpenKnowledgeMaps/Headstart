@@ -48,8 +48,7 @@ var data_config = {
     credit_embed: true,
     
     is_evaluation: false,
-    evaluation_service: "ga",
-    
+    evaluation_service: "",
     intro: "intro_cris2_en",
 
     files: [{

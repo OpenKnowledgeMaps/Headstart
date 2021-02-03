@@ -494,7 +494,7 @@ var config = {
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
         },
         eng_pubmed: {
-            loading: "Loading...",
+            loading: "Loading knowledge map.",
             search_placeholder: "Search within map...",
             show_list: "Show list",
             hide_list: "Hide list",
