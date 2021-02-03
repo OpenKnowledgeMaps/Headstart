@@ -238,10 +238,10 @@ MyMediator.prototype = {
             }
         }
 
-        mediator.manager.call('canvas', 'initInfoModal');
         mediator.manager.call('io', 'prepareAreas', []);
         
         if (!mediator.modern_frontend_enabled) {
+            mediator.manager.call('canvas', 'initInfoModal');
             mediator.manager.call('canvas', 'drawModals', [context]);
         }
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
@@ -271,7 +271,9 @@ MyMediator.prototype = {
             mediator.window_resize();
         });
 
-        mediator.manager.call('canvas', 'showInfoModal', []);
+        if (!mediator.modern_frontend_enabled) {
+            mediator.manager.call('canvas', 'showInfoModal', []);
+        }
     },
 
     buildHeadstartHTML: function() {
@@ -293,12 +295,12 @@ MyMediator.prototype = {
             $("#loading-text").text(config.localization[config.language].loading);
         }
         
-        this.viz.append(infoTemplate());
         this.viz.append(iFrameTemplate({
             spinner_text: config.localization[config.language].pdf_load_text
         }));
         this.viz.append(imageTemplate());
         if (!mediator.modern_frontend_enabled) {
+            this.viz.append(infoTemplate());
             this.viz.append(viperEditTemplate());
             this.viz.append(embedTemplate());
         }
@@ -415,6 +417,10 @@ MyMediator.prototype = {
             d3.select("#headstart-chart")
                 .style("width", chart.size + "px");
         }
+    },
+
+    open_info_modal: function() {
+        mediator.modern_frontend_intermediate.openInfoModal();
     },
 };
 

@@ -1,5 +1,38 @@
 // TODO remove the respective code from the other modules
 @if $modern_frontend_enabled {
+  #info_modal {
+    .modal-dialog {
+      width: 100%;
+      max-width: 800px;
+
+      .modal-content {
+        padding: 40px;
+
+        p {
+          font-family: $base-font-family;
+          font-size: 16px;
+          margin: 0 0 30px !important;
+        }
+      }
+    }
+  }
+
+  #info-body h3 {
+    font-weight: $fontweight700;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-family: $base-font-family;
+    margin: 20px 0px 10px;
+    color: $medium-blue;
+  }
+
+  @if $skin == "linkedcat" {
+    #info-body h3 {
+      font-weight: normal;
+      font-size: 18px;
+    }
+  }
+
   .modal {
     text-align: center;
     padding: 0 !important;
@@ -37,6 +70,15 @@
       }
     }
   }
+
+  .modal-title {
+    color: $medium-blue;
+    font-size: 20px;
+    font-weight: $fontweight700;
+    font-family: $base-font-family;
+    margin:0px !important;
+    text-transform: uppercase;
+}
 
   .modal-body,
   .modal-header {
@@ -144,24 +186,26 @@
 
 #viper_edit_modal {
   .modal-dialog {
-      width: 100%;
-      max-width: 800px;
+    width: 100%;
+    max-width: 800px;
 
-      .modal-content {
-          padding: 40px;
-          overflow: hidden;
+    .modal-content {
+      padding: 40px;
+      overflow: hidden;
 
-          p {
-              font-family: $base-font-family;
-              font-size: 16px;
-          }
-
-          #viper-edit-screenshot {
-              max-width: 100%;
-              max-height: 100%;
-              -moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
-              box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
-          }
+      p {
+        font-family: $base-font-family;
+        font-size: 16px;
       }
+
+      #viper-edit-screenshot {
+        max-width: 100%;
+        max-height: 100%;
+        -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+          0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+          0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+      }
+    }
   }
 }
