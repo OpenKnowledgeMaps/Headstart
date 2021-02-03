@@ -13,7 +13,7 @@ library(stringi)
 library(stringdist)
 library(plyr)
 library(onehot)
-registerDoParallel(3)
+registerDoParallel(detectCores(all.tests = FALSE, logical = TRUE)-1)
 
 
 vlog <- getLogger('vis')
@@ -54,20 +54,12 @@ vis_layout <- function(text, metadata, service,
   text <- filtered$text
 
   if(vis_type=='overview'){
-    metadata["lang_detected"] <- detect_language(text$content)
     stops <- get_stopwords(lang, testing)
-    corpus <- create_corpus(metadata, text, lang)
+    corpus <- create_corpus(metadata, text, c(lang))
 
     vlog$debug("get features")
     tdm_matrix <- create_tdm_matrix(corpus$stemmed)
     distance_matrix <- get_distance_matrix(tdm_matrix)
-    lang_detected <- get_OHE_feature(metadata, "lang_detected")
-    vlog$info(paste("Languages:",
-                    paste(paste0(names(lang_detected),
-                                 ":",
-                                 apply(lang_detected, 2, sum)),
-                          collapse = " "),
-                     sep=" "))
     features <- concatenate_features(distance_matrix)
     vlog$debug("get clusters")
     clusters <- create_clusters(as.dist(features), max_clusters=max_clusters)

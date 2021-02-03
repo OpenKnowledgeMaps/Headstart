@@ -50,8 +50,7 @@ var data_config = {
     canonical_url: "https://openknowledgemaps.org",
     
     is_evaluation: false,
-    evaluation_service: "ga",
-    
+    evaluation_service: "",
     intro: "intro_cris2_de",
 
     files: [{

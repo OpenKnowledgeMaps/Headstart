@@ -272,6 +272,10 @@ class GSheetsClient(object):
         else:
             return None
 
+    def get_spreadsheet_title(self, sheet_id):
+        res = self.sheet.get(spreadsheetId=sheet_id, fields='properties/title').execute()
+        return res.get('properties').get('title')
+
     def get_new_mapdata(self, sheet_id, sheet_range, params):
         raw = self.get_sheet_content(sheet_id, sheet_range)
         clean_df, errors, errors_df = self.validate_data(raw.copy())
@@ -290,6 +294,11 @@ class GSheetsClient(object):
         additional_context = self.get_additional_context_data(raw.copy())
         if additional_context:
             res["additional_context"] = additional_context
+            res["additional_context"]["query"] = additional_context["topic"]
+        else:
+            # inject CoVis multi-map title from sheet title
+            res["additional_context"] = {}
+            res["additional_context"]["query"] = self.get_spreadsheet_title(sheet_id)
         res["sheet_id"] = sheet_id
         res["last_update"] = self.last_updated.get(sheet_id, {}).get("timestamp_utc")
         return res
@@ -367,6 +376,18 @@ class GSheetsClient(object):
 
 
     def set_new_kb_permissions(self, new_drive, new_kb, main_curator_email):
+        # set folder rights for okmaps
+        new_domain_permission = {
+            'type': 'domain',
+            'role': 'organizer',
+            'domain': 'openknowledgemaps.org'
+        }
+        permission = self.drive_service.permissions().create(
+                fileId=new_drive.get('id'),
+                body=new_domain_permission,
+                supportsAllDrives=True
+        ).execute()
+        # set folder rights for main curator
         new_organizer_permission = {
             'type': 'user',
             'role': 'organizer',
@@ -377,10 +398,22 @@ class GSheetsClient(object):
                 body=new_organizer_permission,
                 supportsAllDrives=True
         ).execute()
+        # set file rights for main curator
         new_fileorganizer_permission = {
             'type': 'user',
             'role': 'writer',
             'emailAddress': main_curator_email
+        }
+        permission = self.drive_service.permissions().create(
+                fileId=new_kb.get('id'),
+                body=new_fileorganizer_permission,
+                supportsAllDrives=True
+        ).execute()
+        # set file rights for info okmaps
+        new_fileorganizer_permission = {
+            'type': 'user',
+            'role': 'writer',
+            'emailAddress': 'info@openknowledgemaps.org'
         }
         permission = self.drive_service.permissions().create(
                 fileId=new_kb.get('id'),

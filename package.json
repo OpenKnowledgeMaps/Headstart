@@ -43,7 +43,7 @@
     "react-highlight-words": "^0.16.0",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
-    "resolve-url-loader": "^3.1.1",
+    "resolve-url-loader": "^3.1.2",
     "shave": "^2.5.7",
     "truncate": "^2.1.0"
   },

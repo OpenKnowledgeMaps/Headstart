@@ -37,9 +37,8 @@ blog <- getLogger('api.base')
 
 
 get_papers <- function(query, params, limit=100,
-                       fields="title,id,counter_total_month,abstract,journal,publication_date,author,subject,article_type",
                        filter=NULL,
-                       retry_opts=rbace::bs_retry_options()) {
+                       retry_opts=rbace::bs_retry_options(3,60,3,4)) {
 
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Search:", query))
   start.time <- Sys.time()
@@ -86,7 +85,7 @@ get_papers <- function(query, params, limit=100,
   # execute search
   (res_raw <- bs_search(hits=limit
                         , query = base_query
-                        , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation"
+                        , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm"
                         , sortby = sortby_string
                         , filter = filter
                         , retry = retry_opts))
@@ -140,6 +139,8 @@ get_papers <- function(query, params, limit=100,
   metadata$oa_state = res$dcoa
   metadata$url = metadata$id
   metadata$relevance = c(nrow(metadata):1)
+  metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
+  metadata$doi = unlist(lapply(metadata$link, find_dois))
 
   text = data.frame(matrix(nrow=length(res$dcdocid)))
   text$id = metadata$id
@@ -155,7 +156,27 @@ get_papers <- function(query, params, limit=100,
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
 
   return(ret_val)
+}
 
+
+find_dois <- function(link) {
+  if ((startsWith(link, "http://doi.org"))
+      || (startsWith(link, "https://doi.org"))
+      || (startsWith(link, "http://dx.doi.org"))
+      || (startsWith(link, "https://dx.doi.org"))) {
+    doi <- stringr::str_replace(link, "http:", "https:")
+  } else {
+    doi <- ""
+  }
+  return(doi)
+}
+
+
+decode_dctypenorm <- function(dctypestring) {
+  typecodes <- strsplit(dctypestring, "; ")
+  typecodes <- lapply(typecodes, function(x) {dctypenorm_decoder[x]})
+  typecodes <- unlist(unname(typecodes[[1]]))
+  return(typecodes)
 }
 
 valid_langs <- list(
@@ -207,4 +228,30 @@ valid_langs <- list(
     'tur'='turkish',
     'ukr'='ukrainian',
     'vie'='vietnamese'
+)
+
+dctypenorm_decoder <- list(
+  "4"="Audio",
+  "11"="Book",
+  "111"="Book part",
+  "13"="Conference object",
+  "16"="Course material",
+  "7"="Dataset",
+  "121"="Journal/newspaper article",
+  "122"="Journal/newspaper other content",
+  "17"="Lecture",
+  "19"="Manuscript",
+  "3"="Map",
+  "2"="Musical notation",
+  "F"="Other/Unknown material",
+  "1A"="Patent",
+  "14"="Report",
+  "15"="Review",
+  "6"="Software",
+  "51"="Still image",
+  "1"="Text",
+  "181"="Thesis: bachelor",
+  "183"="Thesis: doctoral and postdoctoral",
+  "182"="Thesis: master",
+  "52"="Video/moving image"
 )
