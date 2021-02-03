@@ -1,4 +1,9 @@
-const modals = (state = { reloadApiProperties: {} }, action) => {
+import { intros } from "intro";
+
+const modals = (
+  state = { reloadApiProperties: {}, infoContent: {} },
+  action
+) => {
   if (action.canceled) {
     return state;
   }
@@ -25,6 +30,9 @@ const modals = (state = { reloadApiProperties: {} }, action) => {
           sheetID: getSheetID(action.configObject, action.contextObject),
           persistenceBackend: action.configObject.persistence_backend,
         },
+        openInfoModal:
+          state.openInfoModal !== undefined && !!action.configObject.show_intro,
+        infoContent: getInfoContent(action.configObject, action.contextObject),
       };
     case "OPEN_EMBED_MODAL":
       return {
@@ -46,6 +54,16 @@ const modals = (state = { reloadApiProperties: {} }, action) => {
         ...state,
         openViperEditModal: false,
       };
+    case "OPEN_INFO_MODAL":
+      return {
+        ...state,
+        openInfoModal: true,
+      };
+    case "CLOSE_INFO_MODAL":
+      return {
+        ...state,
+        openInfoModal: false,
+      };
     default:
       return state;
   }
@@ -63,4 +81,12 @@ const getSheetID = (config, context) => {
   }
 
   return config.files[0].file;
+};
+
+const getInfoContent = (config, context) => {
+  if (intros[config.intro]) {
+    return intros[config.intro];
+  }
+
+  return config.intro;
 };

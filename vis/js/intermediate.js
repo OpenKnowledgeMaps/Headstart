@@ -15,6 +15,7 @@ import {
   updateDimensions,
   applyForceAreas,
   applyForcePapers,
+  openInfoModal
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
@@ -146,6 +147,11 @@ class Intermediate {
         this.store.dispatch(applyForcePapers(newPapers, state.chart.height)),
       this.forceLayoutParams
     );
+  }
+
+  // TODO delete after the scale toolbar refactoring
+  openInfoModal() {
+    this.store.dispatch(openInfoModal());
   }
 }
 
