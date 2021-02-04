@@ -33,6 +33,11 @@ const modals = (
         openInfoModal:
           state.openInfoModal !== undefined && !!action.configObject.show_intro,
         infoContent: getInfoContent(action.configObject, action.contextObject),
+        showImagePreview: action.configObject.preview_type === "image",
+        showPDFPreview: action.configObject.preview_type === "pdf",
+        previewedPaper: null,
+        service: action.configObject.service,
+        useViewer: action.configObject.use_hypothesis,
       };
     case "OPEN_EMBED_MODAL":
       return {
@@ -63,6 +68,16 @@ const modals = (
       return {
         ...state,
         openInfoModal: false,
+      };
+    case "SHOW_PREVIEW":
+      return {
+        ...state,
+        previewedPaper: action.paper,
+      };
+    case "HIDE_PREVIEW":
+      return {
+        ...state,
+        previewedPaper: null,
       };
     default:
       return state;

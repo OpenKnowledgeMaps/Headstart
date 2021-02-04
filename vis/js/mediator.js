@@ -295,11 +295,11 @@ MyMediator.prototype = {
             $("#loading-text").text(config.localization[config.language].loading);
         }
         
-        this.viz.append(iFrameTemplate({
-            spinner_text: config.localization[config.language].pdf_load_text
-        }));
-        this.viz.append(imageTemplate());
         if (!mediator.modern_frontend_enabled) {
+            this.viz.append(iFrameTemplate({
+                spinner_text: config.localization[config.language].pdf_load_text
+            }));
+            this.viz.append(imageTemplate());
             this.viz.append(infoTemplate());
             this.viz.append(viperEditTemplate());
             this.viz.append(embedTemplate());
