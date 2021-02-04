@@ -5,7 +5,7 @@ import { Modal } from "react-bootstrap";
 import viperEditScreenshot from "../../../images/viper-project-screenshot.png";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 
-const EmbedModal = ({ open, onClose, acronym, title, objectID }) => {
+const ViperEditModal = ({ open, onClose, acronym, title, objectID }) => {
   const localization = useLocalizationContext();
 
   const pageTitle = (acronym !== "" ? acronym + " - " : "") + title;
@@ -64,4 +64,4 @@ const EmbedModal = ({ open, onClose, acronym, title, objectID }) => {
   );
 };
 
-export default EmbedModal;
+export default ViperEditModal;
