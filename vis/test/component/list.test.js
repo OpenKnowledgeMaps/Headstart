@@ -19,8 +19,10 @@ import {
   highlightArea,
   deselectPaperBacklink,
   showPreview,
+  deselectPaper,
 } from "../../js/actions";
 
+import initialTestData from "../data/simple";
 import covisData from "../data/covis";
 import linkedcatData from "../data/linkedcat-streamgraph";
 import localData from "../data/local-files";
@@ -30,11 +32,20 @@ import viperData from "../data/viper";
 import List from "../../js/components/List";
 
 const mockStore = configureStore([]);
-const setup = (overrideListObject = {}, overrideStoreObject = {}) => {
+const setup = (
+  overrideDataObject = {},
+  overrideListObject = {},
+  overrideStoreObject = {}
+) => {
   const storeObject = Object.assign(
     {
       zoom: false,
-      data: initialTestData,
+      data: {
+        list: initialTestData,
+        options: {},
+        size: 100,
+        ...overrideDataObject,
+      },
       list: {
         show: true,
         searchValue: "",
@@ -86,7 +97,7 @@ describe("List entries component", () => {
   });
 
   it("renders shown", () => {
-    const storeObject = setup({ show: true });
+    const storeObject = setup({}, { show: true });
     const store = mockStore(storeObject);
 
     act(() => {
@@ -102,7 +113,7 @@ describe("List entries component", () => {
   });
 
   it("renders hidden", () => {
-    const storeObject = setup({ show: false });
+    const storeObject = setup({}, { show: false });
     const store = mockStore(storeObject);
 
     act(() => {
@@ -119,13 +130,13 @@ describe("List entries component", () => {
 
   it("renders with covis data", () => {
     const storeObject = setup(
+      { list: covisData },
       {
         show: true,
         showFilter: true,
         filterField: "resulttype",
         filterValue: "all",
-      },
-      { data: covisData }
+      }
     );
     const store = mockStore(storeObject);
 
@@ -143,14 +154,14 @@ describe("List entries component", () => {
 
   it("renders with covis data and height", () => {
     const storeObject = setup(
+      { list: covisData },
       {
         show: true,
         showFilter: true,
         filterField: "resulttype",
         filterValue: "all",
         height: 800,
-      },
-      { data: covisData }
+      }
     );
     const store = mockStore(storeObject);
 
@@ -170,9 +181,9 @@ describe("List entries component", () => {
 
   it("renders with covis data and zoomed", () => {
     const storeObject = setup(
+      { list: covisData },
       { show: true, showFilter: true },
       {
-        data: covisData,
         zoom: true,
         selectedBubble: {
           title: "Host biology and clinical findings",
@@ -198,9 +209,9 @@ describe("List entries component", () => {
 
   it("renders with covis data and a selected paper", () => {
     const storeObject = setup(
+      { list: covisData },
       { show: true, showFilter: true },
       {
-        data: covisData,
         zoom: true,
         selectedBubble: {
           title: "Host biology and clinical findings",
@@ -228,9 +239,9 @@ describe("List entries component", () => {
 
   it("renders with covis data and a selected paper (open access)", () => {
     const storeObject = setup(
+      { list: covisData },
       { show: true, showFilter: true },
       {
-        data: covisData,
         zoom: true,
         selectedBubble: {
           title: "Viral biology",
@@ -258,14 +269,14 @@ describe("List entries component", () => {
 
   it("renders with covis data sorted by title", () => {
     const storeObject = setup(
+      { list: covisData },
       {
         show: true,
         showFilter: true,
         filterField: "resulttype",
         filterValue: "all",
         sortValue: "title",
-      },
-      { data: covisData }
+      }
     );
     const store = mockStore(storeObject);
 
@@ -283,8 +294,8 @@ describe("List entries component", () => {
 
   it("renders with viper data", () => {
     const storeObject = setup(
-      { show: true, showFilter: true, linkType: "url", showMetrics: true },
-      { data: viperData }
+      { list: viperData },
+      { show: true, showFilter: true, linkType: "url", showMetrics: true }
     );
     const store = mockStore(storeObject);
 
@@ -302,6 +313,7 @@ describe("List entries component", () => {
 
   it("renders with viper data, base unit = citations", () => {
     const storeObject = setup(
+      { list: viperData },
       {
         show: true,
         showFilter: true,
@@ -309,8 +321,7 @@ describe("List entries component", () => {
         showMetrics: true,
         baseUnit: "citations",
         isContentBased: false,
-      },
-      { data: viperData }
+      }
     );
     const store = mockStore(storeObject);
 
@@ -328,6 +339,7 @@ describe("List entries component", () => {
 
   it("renders with viper data, base unit = tweets", () => {
     const storeObject = setup(
+      { list: viperData },
       {
         show: true,
         showFilter: true,
@@ -335,8 +347,7 @@ describe("List entries component", () => {
         showMetrics: true,
         baseUnit: "tweets",
         isContentBased: false,
-      },
-      { data: viperData }
+      }
     );
     const store = mockStore(storeObject);
 
@@ -354,6 +365,7 @@ describe("List entries component", () => {
 
   it("renders with viper data, base unit = readers", () => {
     const storeObject = setup(
+      { list: viperData },
       {
         show: true,
         showFilter: true,
@@ -361,8 +373,7 @@ describe("List entries component", () => {
         showMetrics: true,
         baseUnit: "readers",
         isContentBased: false,
-      },
-      { data: viperData }
+      }
     );
     const store = mockStore(storeObject);
 
@@ -380,6 +391,7 @@ describe("List entries component", () => {
 
   it("renders with pubmed data", () => {
     const storeObject = setup(
+      { list: pubmedData },
       {
         show: true,
         showFilter: true,
@@ -387,9 +399,6 @@ describe("List entries component", () => {
         isContentBased: false,
         baseUnit: "citations",
         showMetrics: false,
-      },
-      {
-        data: pubmedData,
       }
     );
     const store = mockStore(storeObject);
@@ -408,6 +417,7 @@ describe("List entries component", () => {
 
   it("renders with pubmed data filtered by open_access", () => {
     const storeObject = setup(
+      { list: pubmedData },
       {
         show: true,
         showFilter: true,
@@ -416,9 +426,6 @@ describe("List entries component", () => {
         baseUnit: "citations",
         showMetrics: false,
         filterValue: "open_access",
-      },
-      {
-        data: pubmedData,
       }
     );
     const store = mockStore(storeObject);
@@ -437,6 +444,7 @@ describe("List entries component", () => {
 
   it("renders with pubmed data filtered by publication", () => {
     const storeObject = setup(
+      { list: pubmedData },
       {
         show: true,
         showFilter: true,
@@ -445,9 +453,6 @@ describe("List entries component", () => {
         baseUnit: "citations",
         showMetrics: false,
         filterValue: "publication",
-      },
-      {
-        data: pubmedData,
       }
     );
     const store = mockStore(storeObject);
@@ -466,6 +471,7 @@ describe("List entries component", () => {
 
   it("renders with pubmed data filtered by dataset", () => {
     const storeObject = setup(
+      { list: pubmedData },
       {
         show: true,
         showFilter: true,
@@ -474,9 +480,6 @@ describe("List entries component", () => {
         baseUnit: "citations",
         showMetrics: false,
         filterValue: "dataset",
-      },
-      {
-        data: pubmedData,
       }
     );
     const store = mockStore(storeObject);
@@ -495,8 +498,9 @@ describe("List entries component", () => {
 
   it("renders with local data", () => {
     const storeObject = setup(
+      { list: localData },
       { show: true },
-      { data: localData, service: null }
+      { service: null }
     );
     const store = mockStore(storeObject);
 
@@ -514,8 +518,9 @@ describe("List entries component", () => {
 
   it("renders with local data and set height", () => {
     const storeObject = setup(
+      { list: localData },
       { show: true, height: 800 },
-      { data: localData, service: null }
+      { service: null }
     );
     const store = mockStore(storeObject);
 
@@ -535,8 +540,9 @@ describe("List entries component", () => {
 
   it("renders with local data sorted by year", () => {
     const storeObject = setup(
+      { list: localData },
       { show: true, sortValue: "year" },
-      { data: localData, service: null }
+      { service: null }
     );
     const store = mockStore(storeObject);
 
@@ -554,8 +560,9 @@ describe("List entries component", () => {
 
   it("renders with local data sorted by readers", () => {
     const storeObject = setup(
+      { list: localData },
       { show: true, sortValue: "readers" },
-      { data: localData, service: null }
+      { service: null }
     );
     const store = mockStore(storeObject);
 
@@ -573,9 +580,9 @@ describe("List entries component", () => {
 
   it("renders with local data and selected paper", () => {
     const storeObject = setup(
+      { list: localData },
       { show: true },
       {
-        data: localData,
         service: null,
         selectedBubble: {
           uri: localData[0].area_uri,
@@ -601,9 +608,9 @@ describe("List entries component", () => {
 
   it("renders with linkedcat streamgraph data", () => {
     const storeObject = setup(
+      { list: linkedcatData },
       { show: true },
       {
-        data: linkedcatData,
         service: "linkedcat_streamgraph",
         chartType: STREAMGRAPH_MODE,
         localization: defaultConfig.localization.ger_linkedcat,
@@ -625,9 +632,9 @@ describe("List entries component", () => {
 
   it("renders with linkedcat streamgraph data and set height", () => {
     const storeObject = setup(
+      { list: linkedcatData },
       { show: true, height: 800 },
       {
-        data: linkedcatData,
         service: "linkedcat_streamgraph",
         chartType: STREAMGRAPH_MODE,
         localization: defaultConfig.localization.ger_linkedcat,
@@ -651,9 +658,9 @@ describe("List entries component", () => {
 
   it("renders with linkedcat streamgraph data, zoomed", () => {
     const storeObject = setup(
+      { list: linkedcatData },
       { show: true },
       {
-        data: linkedcatData,
         service: "linkedcat_streamgraph",
         chartType: STREAMGRAPH_MODE,
         localization: defaultConfig.localization.ger_linkedcat,
@@ -680,9 +687,9 @@ describe("List entries component", () => {
 
   it("renders with linkedcat streamgraph data, zoomed and paper selected", () => {
     const storeObject = setup(
+      { list: linkedcatData },
       { show: true },
       {
-        data: linkedcatData,
         service: "linkedcat_streamgraph",
         chartType: STREAMGRAPH_MODE,
         localization: defaultConfig.localization.ger_linkedcat,
@@ -711,9 +718,9 @@ describe("List entries component", () => {
 
   it("renders with linkedcat streamgraph data and paper selected", () => {
     const storeObject = setup(
+      { list: linkedcatData },
       { show: true },
       {
-        data: linkedcatData,
         service: "linkedcat_streamgraph",
         chartType: STREAMGRAPH_MODE,
         localization: defaultConfig.localization.ger_linkedcat,
@@ -738,9 +745,9 @@ describe("List entries component", () => {
 
   it("renders with linkedcat streamgraph data filtered out with search", () => {
     const storeObject = setup(
+      { list: linkedcatData },
       { show: true, searchValue: "Selbstbiographie" },
       {
-        data: linkedcatData,
         service: "linkedcat_streamgraph",
         chartType: STREAMGRAPH_MODE,
         localization: defaultConfig.localization.ger_linkedcat,
@@ -762,11 +769,11 @@ describe("List entries component", () => {
 
   describe("events", () => {
     it("triggers a correct title click action in local files", () => {
-      const EXPECTED_PAYLOAD = selectPaper(initialTestData[0]);
-      const storeObject = setup(
-        { show: true },
-        { data: initialTestData, service: null }
-      );
+      const EXPECTED_PAYLOAD = [
+        selectPaper(initialTestData[0]).type,
+        zoomIn().type,
+      ];
+      const storeObject = setup({ show: true }, { service: null });
       const store = mockStore(storeObject);
 
       act(() => {
@@ -785,18 +792,12 @@ describe("List entries component", () => {
 
       const actions = store.getActions();
 
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
+      expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
     });
 
     it("triggers a correct area click action in local files", () => {
-      const EXPECTED_PAYLOAD = zoomIn(
-        { title: initialTestData[0].area, uri: initialTestData[0].area_uri },
-        "list-area"
-      );
-      const storeObject = setup(
-        { show: true },
-        { data: initialTestData, service: null }
-      );
+      const EXPECTED_PAYLOAD = [deselectPaper().type, zoomIn().type];
+      const storeObject = setup({ show: true }, { service: null });
       const store = mockStore(storeObject);
 
       act(() => {
@@ -815,15 +816,12 @@ describe("List entries component", () => {
 
       const actions = store.getActions();
 
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
+      expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
     });
 
     it("triggers a correct area mouseover action in local files", () => {
       const EXPECTED_PAYLOAD = highlightArea(initialTestData[0]);
-      const storeObject = setup(
-        { show: true },
-        { data: initialTestData, service: null }
-      );
+      const storeObject = setup({ show: true }, { service: null });
       const store = mockStore(storeObject);
 
       act(() => {
@@ -847,10 +845,7 @@ describe("List entries component", () => {
 
     it("triggers a correct area mouseout action in local files", () => {
       const EXPECTED_PAYLOAD = highlightArea(null);
-      const storeObject = setup(
-        { show: true },
-        { data: initialTestData, service: null }
-      );
+      const storeObject = setup({ show: true }, { service: null });
       const store = mockStore(storeObject);
 
       act(() => {
@@ -875,9 +870,9 @@ describe("List entries component", () => {
     it("triggers a correct title click action in linkedcat", () => {
       const EXPECTED_PAYLOAD = selectPaper(linkedcatData[0]);
       const storeObject = setup(
+        { list: [linkedcatData[0]] },
         { show: true },
         {
-          data: [linkedcatData[0]],
           service: "linkedcat_streamgraph",
           chartType: STREAMGRAPH_MODE,
           localization: defaultConfig.localization.ger_linkedcat,
@@ -905,14 +900,11 @@ describe("List entries component", () => {
     });
 
     it("triggers a correct area click action in linkedcat", () => {
-      const EXPECTED_PAYLOAD = zoomIn(
-        { title: linkedcatData[0].area, uri: linkedcatData[0].area_uri },
-        "list-area"
-      );
+      const EXPECTED_PAYLOAD = [deselectPaper().type, zoomIn().type];
       const storeObject = setup(
+        { list: [linkedcatData[0]] },
         { show: true },
         {
-          data: [linkedcatData[0]],
           service: "linkedcat",
           localization: defaultConfig.localization.ger_linkedcat,
         }
@@ -935,15 +927,15 @@ describe("List entries component", () => {
 
       const actions = store.getActions();
 
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
+      expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
     });
 
     it("triggers a correct area mouseover action in linkedcat", () => {
       const EXPECTED_PAYLOAD = highlightArea(linkedcatData[0]);
       const storeObject = setup(
+        { list: [linkedcatData[0]] },
         { show: true },
         {
-          data: [linkedcatData[0]],
           service: "linkedcat",
           localization: defaultConfig.localization.ger_linkedcat,
         }
@@ -972,9 +964,9 @@ describe("List entries component", () => {
     it("triggers a correct area mouseout action in linkedcat", () => {
       const EXPECTED_PAYLOAD = highlightArea(null);
       const storeObject = setup(
+        { list: [linkedcatData[0]] },
         { show: true },
         {
-          data: [linkedcatData[0]],
           service: "linkedcat",
           localization: defaultConfig.localization.ger_linkedcat,
         }
@@ -1004,9 +996,9 @@ describe("List entries component", () => {
       const PAPER = linkedcatData.find((p) => p.safe_id === "AC15093982");
       const EXPECTED_PAYLOAD = deselectPaperBacklink();
       const storeObject = setup(
+        { list: [PAPER] },
         { show: true },
         {
-          data: [PAPER],
           service: "linkedcat_streamgraph",
           chartType: STREAMGRAPH_MODE,
           localization: defaultConfig.localization.ger_linkedcat,
@@ -1044,9 +1036,9 @@ describe("List entries component", () => {
       const PAPER = linkedcatData.find((p) => p.safe_id === "AC15093982");
       const EXPECTED_PAYLOAD = showPreview(PAPER);
       const storeObject = setup(
+        { list: [PAPER] },
         { show: true },
         {
-          data: [PAPER],
           service: "linkedcat_streamgraph",
           chartType: STREAMGRAPH_MODE,
           localization: defaultConfig.localization.ger_linkedcat,
@@ -1081,62 +1073,3 @@ describe("List entries component", () => {
     });
   });
 });
-
-const initialTestData = [
-  {
-    id: "https://doi.org/10.1038/nrmicro2090",
-    title:
-      "The spike protein of SARS-CoV — a target for vaccine and therapeutic development",
-    authors:
-      "Du, Lanying; He, Yuxian; Zhou, Yusen; Liu, Shuwen; Zheng, Bo-Jian; Jiang, Shibo",
-    paper_abstract:
-      "Severe acute respiratory syndrome (SARS) is a newly emerging infectious disease caused by a novel coronavirus, SARS-coronavirus (SARS-CoV). The SARS-CoV spike (S) protein is composed of two subunits; the S1 subunit contains a receptor-binding domain that engages with the host cell receptor angiotensin-converting enzyme 2 and the S2 subunit mediates fusion between the viral and host cell membranes. The S protein plays key parts in the induction of neutralizing-antibody and T-cell responses, as well as protective immunity, during infection with SARS-CoV. In this Review, we highlight recent advances in the development of vaccines and therapeutics based on the S protein.",
-    published_in: "Nature Reviews Microbiology volume 7, pages226–236",
-    year: "2020-02-09",
-    url: "https://doi.org/10.1038/nrmicro2090",
-    readers: 0,
-    subject_orig: "Spike protein, vaccines",
-    subject: "Spike protein, vaccines",
-    oa_state: 3,
-    link: "https://www.nature.com/articles/nrmicro2090.pdf",
-    relevance: 3,
-    comments: [
-      {
-        comment:
-          "The vaccination efforts are focused on the major surface protein of coronavirus called spike protein",
-        author: "ReFigure Team",
-      },
-    ],
-    tags: "Peer-reviewed",
-    resulttype: "Review",
-    lang_detected: "english",
-    cluster_labels:
-      "Antibody-dependent enhancement, Coronavirus entry, Spike protein",
-    x: -339.1506919811518,
-    y: 231.9285358243851,
-    area_uri: 0,
-    area: "Vaccines",
-    file_hash: "hashHash",
-    authors_string:
-      "Lanying Du, Yuxian He, Yusen Zhou, Shuwen Liu, Bo-Jian Zheng, Shibo Jiang",
-    authors_short_string: "L. Du, Y. He, Y. Zhou, S. Liu, B. Zheng, S. Jiang",
-    safe_id:
-      "https__003a__002f__002fdoi__002eorg__002f10__002e1038__002fnrmicro2090",
-    num_readers: 0,
-    internal_readers: 1,
-    num_subentries: 0,
-    paper_selected: false,
-    oa: false,
-    free_access: true,
-    oa_link: "https://www.nature.com/articles/nrmicro2090.pdf",
-    outlink: "https://doi.org/10.1038/nrmicro2090",
-    comments_for_filtering:
-      "The vaccination efforts are focused on the major surface protein of coronavirus called spike protein ReFigure Team",
-    diameter: 37.33846153846154,
-    width: 27.78759700135467,
-    height: 37.05012933513956,
-    orig_x: "-0.21812406",
-    orig_y: "-0.22742917",
-    resized: false,
-  },
-];

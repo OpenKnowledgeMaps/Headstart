@@ -7,9 +7,6 @@ import filesReducer from "../../js/reducers/files";
 import contextLineReducer from "../../js/reducers/contextLine";
 import serviceReducer from "../../js/reducers/service";
 import listReducer from "../../js/reducers/list";
-import dataReducer from "../../js/reducers/data";
-
-import localData from "../data/local-files";
 
 const setup = (overrideConfig = {}, overrideContext = {}) => {
   const configObject = Object.assign(
@@ -304,6 +301,14 @@ describe("config and context state", () => {
 
       expect(result).toEqual(EXPECTED_RESULT);
     });
+
+    it("should not change the state if the action is canceled", () => {
+      const INITIAL_STATE = { some_state: 1 };
+
+      const result = headingReducer(INITIAL_STATE, { canceled: true });
+
+      expect(result).toEqual(INITIAL_STATE);
+    });
   });
 
   describe("localization reducer", () => {
@@ -337,6 +342,14 @@ describe("config and context state", () => {
       );
 
       expect(result).toEqual(EXPECTED_RESULT);
+    });
+
+    it("should not change the state if the action is canceled", () => {
+      const INITIAL_STATE = { some_state: 1 };
+
+      const result = localizationReducer(INITIAL_STATE, { canceled: true });
+
+      expect(result).toEqual(INITIAL_STATE);
     });
   });
 
@@ -394,6 +407,14 @@ describe("config and context state", () => {
 
       expect(result.parsedTerms).toEqual(EXPECTED_RESULT);
     });
+
+    it("should not change the state if the action is canceled", () => {
+      const INITIAL_STATE = { some_state: 1 };
+
+      const result = queryReducer(INITIAL_STATE, { canceled: true });
+
+      expect(result).toEqual(INITIAL_STATE);
+    });
   });
 
   describe("files reducer", () => {
@@ -419,6 +440,14 @@ describe("config and context state", () => {
       );
 
       expect(result).toEqual(EXPECTED_RESULT);
+    });
+
+    it("should not change the state if the action is canceled", () => {
+      const INITIAL_STATE = { some_state: 1 };
+
+      const result = filesReducer(INITIAL_STATE, { canceled: true });
+
+      expect(result).toEqual(INITIAL_STATE);
     });
   });
 
@@ -1638,6 +1667,14 @@ describe("config and context state", () => {
 
       expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
     });
+
+    it("should not change the state if the action is canceled", () => {
+      const INITIAL_STATE = { some_state: 1 };
+
+      const result = contextLineReducer(INITIAL_STATE, { canceled: true });
+
+      expect(result).toEqual(INITIAL_STATE);
+    });
   });
 
   describe("service reducer", () => {
@@ -1686,6 +1723,14 @@ describe("config and context state", () => {
       );
 
       expect(result).toEqual(SERVICE);
+    });
+
+    it("should not change the state if the action is canceled", () => {
+      const INITIAL_STATE = { some_state: 1 };
+
+      const result = serviceReducer(INITIAL_STATE, { canceled: true });
+
+      expect(result).toEqual(INITIAL_STATE);
     });
   });
 
@@ -1856,57 +1901,13 @@ describe("config and context state", () => {
 
       expect(result).toHaveProperty("linkType", EXPECTED_LINK_TYPE);
     });
-  });
 
-  describe("data reducer", () => {
-    it("should initialize correct data with the input data property missing", () => {
-      const mockWarn = jest.fn();
+    it("should not change the state if the action is canceled", () => {
+      const INITIAL_STATE = { some_state: 1 };
 
-      global.console = {
-        log: console.log,
-        warn: mockWarn,
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
+      const result = listReducer(INITIAL_STATE, { canceled: true });
 
-      const { configObject, contextObject } = setup();
-
-      const result = dataReducer(
-        {},
-        initializeStore(configObject, contextObject, localData)
-      );
-
-      expect(result).toHaveProperty("length", localData.length);
-      expect(mockWarn).toHaveBeenCalled();
-    });
-
-    it("should initialize correct data with the input data property missing in all but one entry", () => {
-      const mockWarn = jest.fn();
-
-      const entry1 = Object.assign({}, localData[0]);
-      entry1.area_uri = "some-uri";
-      const entry2 = Object.assign({}, localData[1]);
-      delete entry2.area_uri;
-      const mockLocalData = [entry1, entry2];
-
-      global.console = {
-        log: console.log,
-        warn: mockWarn,
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
-
-      const { configObject, contextObject } = setup();
-
-      const result = dataReducer(
-        {},
-        initializeStore(configObject, contextObject, mockLocalData)
-      );
-
-      expect(result).toHaveProperty("length", mockLocalData.length);
-      expect(mockWarn).toHaveBeenCalled();
+      expect(result).toEqual(INITIAL_STATE);
     });
   });
 });

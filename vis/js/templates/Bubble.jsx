@@ -46,7 +46,9 @@ class Bubble extends React.Component {
 
   componentWillUnmount() {
     const el = select(this.circleRef.current);
-    el.interrupt();
+    if (el.interrupt) {
+      el.interrupt();
+    }
   }
 
   render() {
@@ -101,24 +103,24 @@ class Bubble extends React.Component {
         >
           <title>{title}</title>
         </circle>
-        <foreignObject
-          id="area_title_object"
-          className="headstart"
-          x={x - width / 2}
-          y={y - height / 2}
-          width={width}
-          height={height}
-          style={{ cursor: !zoomed ? "zoom-in" : undefined }}
-        >
-          <div>
-            {!!displayArea && (
+        {!!displayArea && (
+          <foreignObject
+            id="area_title_object"
+            className="headstart"
+            x={x - width / 2}
+            y={y - height / 2}
+            width={width}
+            height={height}
+            style={{ cursor: !zoomed ? "zoom-in" : undefined }}
+          >
+            <div>
               <div id="area_title" style={areaTitleStyle}>
                 <p id="area_visual_distributions"></p>
                 <BubbleTitle height={height}>{title}</BubbleTitle>
               </div>
-            )}
-          </div>
-        </foreignObject>
+            </div>
+          </foreignObject>
+        )}
       </g>
       // html template ends here
     );

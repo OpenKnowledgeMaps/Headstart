@@ -134,9 +134,10 @@ describe("Backlink component", () => {
         });
 
         const actions = store.getActions();
-        const expectedPayload = zoomOut();
+        const expectedAction = zoomOut();
 
-        expect(actions).toEqual([expectedPayload]);
+        expect(actions).toHaveLength(1);
+        expect(actions[0].type).toEqual(expectedAction.type);
       });
     });
   });

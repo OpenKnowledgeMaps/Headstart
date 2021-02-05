@@ -29,19 +29,22 @@ const StandardListEntries = ({
   showKeywords,
   height,
   isStreamgraph,
+  showBacklink,
+  isInStreamBacklink,
   handleZoomIn,
   handleSelectPaper,
   handleDeselectPaper,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
+  handleBacklinkClick,
 }) => {
   const handleTitleClick = (paper) => {
     handleSelectPaper(paper);
     if (!isStreamgraph) {
       handleZoomIn(paper);
     }
-  }
+  };
 
   const handleAreaClick = (paper) => {
     handleDeselectPaper();
@@ -94,11 +97,15 @@ const StandardListEntries = ({
                 }
               : null
           }
-          area={{
-            text: entry.area,
-            onMouseOver: () => handleAreaMouseover(entry),
-            onMouseOut: () => handleAreaMouseout(),
-          }}
+          area={
+            !isStreamgraph
+              ? {
+                  text: entry.area,
+                  onMouseOver: () => handleAreaMouseover(entry),
+                  onMouseOut: () => handleAreaMouseout(),
+                }
+              : null
+          }
           citations={
             !isContentBased && !!baseUnit && !showMetrics
               ? entry.num_readers
@@ -107,6 +114,11 @@ const StandardListEntries = ({
           baseUnit={baseUnit}
           handleTitleClick={() => handleTitleClick(entry)}
           handleAreaClick={() => handleAreaClick(entry)}
+          backlink={{
+            show: showBacklink,
+            isInStream: isInStreamBacklink,
+            onClick: () => handleBacklinkClick(),
+          }}
         />
       ))}
     </div>
@@ -127,6 +139,8 @@ const mapStateToProps = (state) => ({
     (!!state.selectedPaper || !state.list.hideUnselectedKeywords),
   height: state.list.height,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+  showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
+  isInStreamBacklink: !!state.selectedBubble,
 });
 
 export default connect(

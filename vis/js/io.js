@@ -422,12 +422,6 @@ IO.prototype = {
 
         this.data = cur_data;
     },
-
-    updateVis: function() {
-        // from prepareData:
-        mediator.publish("update_canvas_domains", this.data);
-        mediator.publish("update_canvas_data", this.data);
-    },
     
     createCommentStringForFiltering: function(comments) {
         let return_string = "";
@@ -508,7 +502,6 @@ IO.prototype = {
             readers.push(sum_readers);
         }
 
-        mediator.publish('canvas_set_domain', 'circle_size', d3.extent(readers));
         var area_x = [];
         var area_y = [];
 
@@ -533,15 +526,11 @@ IO.prototype = {
             areas[area].x = mean_x;
             areas[area].y = mean_y;
         }
-        mediator.publish("set_area_radii", areas);
-        mediator.publish('canvas_set_domain', 'chart_x_circle', d3.extent(area_x));
-        mediator.publish('canvas_set_domain', 'chart_y_circle', d3.extent(area_y));
 
         for (area in areas) {
             var new_area = [];
             new_area.title = areas[area].title;
             new_area.title_tooltip = areas[area].title;
-            mediator.publish("set_new_area_coords", new_area, areas[area]);
             new_area.orig_x = areas[area].x;
             new_area.orig_y = areas[area].y;
             new_area.r = areas[area].r;

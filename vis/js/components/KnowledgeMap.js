@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 
 import LocalizationProvider from "./LocalizationProvider";
@@ -10,32 +10,16 @@ import Paper from "../templates/Paper";
 
 import { mapDispatchToMapEntriesProps } from "../utils/eventhandlers";
 
-const KnowledgeMap = ({
-  zoom,
-  zoomedBubbleUri,
-  highlightedBubbleUri,
-  selectedPaperId,
-  data,
-  areas,
-  searchSettings,
-  filterSettings,
-  localization,
-  width,
-  height,
-  baseUnit,
-  handleZoomIn,
-  handleZoomOut,
-  handleDeselectPaper,
-  handleSelectPaper,
-  animation,
-  hoveredBubble,
-  bubbleOrder,
-  changeBubbleOrder,
-  hoveredPaper,
-  paperOrder,
-  changePaperOrder,
-  enlargeFactor,
-}) => {
+const KnowledgeMap = (props) => {
+  const { data, areas, zoom, animation } = props;
+  const { width, height, baseUnit, enlargeFactor } = props;
+  const { zoomedBubbleUri, highlightedBubbleUri, selectedPaperId } = props;
+  const { searchSettings, filterSettings, localization } = props;
+  const { handleZoomIn, handleZoomOut } = props;
+  const { handleDeselectPaper, handleSelectPaper } = props;
+  const { hoveredBubble, bubbleOrder, changeBubbleOrder } = props;
+  const { hoveredPaper, paperOrder, changePaperOrder } = props;
+
   // bubble section
   const handleAreaMouseOver = (area) => {
     if (hoveredBubble === area.area_uri) {
@@ -46,8 +30,8 @@ const KnowledgeMap = ({
   };
 
   const handleOtherAreaZoomIn = (bubble) => {
-    handleZoomIn(bubble, true);
     handleDeselectPaper();
+    handleZoomIn(bubble, true);
   };
 
   const getBubbleZoomClickHandler = (bubble) => {
@@ -116,7 +100,7 @@ const KnowledgeMap = ({
 
     const handlePaperMouseOut = () => {
       changePaperOrder(null);
-    }
+    };
 
     return (
       <Paper
@@ -158,6 +142,7 @@ const KnowledgeMap = ({
     )
   );
 
+  // TODO the LocalizationProvider is redundant here
   return (
     <LocalizationProvider localization={localization}>
       <Chart

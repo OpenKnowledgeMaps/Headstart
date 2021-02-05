@@ -80,11 +80,6 @@ const list = (
         ...state,
         height: action.listHeight,
       };
-    case "RESIZE_LIST":
-      return {
-        ...state,
-        height: action.listHeight,
-      };
     default:
       return state;
   }

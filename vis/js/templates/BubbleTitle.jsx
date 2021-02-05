@@ -28,6 +28,7 @@ class BubbleTitle extends React.Component {
     this.hyphenate = this.hyphenate.bind(this);
     this.shorten = this.shorten.bind(this);
     this.highlight = this.highlight.bind(this);
+    this.show = this.show.bind(this);
     this.runAllFeatures = this.runAllFeatures.bind(this);
 
     this.titleRef = null;
@@ -46,7 +47,7 @@ class BubbleTitle extends React.Component {
 
     return (
       <h2
-        style={{ fontSize: 14 }}
+        style={{ fontSize: 14, opacity: 0 }}
         ref={(el) => (this.titleRef = el)}
         dangerouslySetInnerHTML={{
           __html: title,
@@ -60,6 +61,7 @@ class BubbleTitle extends React.Component {
       this.hyphenate();
       this.shorten();
       this.highlight();
+      this.show();
     });
   }
 
@@ -95,6 +97,10 @@ class BubbleTitle extends React.Component {
         className: "highlighted",
       });
     });
+  }
+
+  show() {
+    $(this.titleRef).css("opacity", 1);
   }
 }
 

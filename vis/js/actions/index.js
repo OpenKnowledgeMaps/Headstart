@@ -4,11 +4,27 @@
  * add all actions that don't change anything in the map to here
  */
 export const ALLOWED_IN_ANIMATION = [
-  "TOGGLE_LIST",
-  "SHOW_LIST",
   "SHOW_PREVIEW",
   "HIDE_PREVIEW",
   "STOP_ANIMATION",
+];
+
+/**
+ * All actions in this array are canceled without queuing when the map
+ * is animated.
+ *
+ * add all actions that are triggered after clicking to here
+ */
+export const NOT_QUEUED_IN_ANIMATION = [
+  "ZOOM_IN",
+  "ZOOM_OUT",
+  "SELECT_PAPER",
+  "DESELECT_PAPER",
+  "DESELECT_PAPER_BACKLINK",
+  "FILE_CLICKED",
+  "SEARCH",
+  "FILTER",
+  "SORT",
 ];
 
 export const zoomIn = (
@@ -100,11 +116,6 @@ export const selectPaper = (paper) => ({
   not_from_mediator: true,
 });
 
-export const selectPaperFromMediator = (safeId) => ({
-  type: "SELECT_PAPER",
-  safeId,
-});
-
 export const deselectPaper = () => ({
   type: "DESELECT_PAPER",
 });
@@ -127,12 +138,6 @@ export const hidePreview = () => ({
 
 export const deselectPaperBacklink = () => ({
   type: "DESELECT_PAPER_BACKLINK",
-});
-
-// TODO delete this - resize done differently (mediator.modern_frontend_enabled)
-export const setListHeight = (listHeight) => ({
-  type: "RESIZE_LIST",
-  listHeight,
 });
 
 export const updateDimensions = (chart, list) => ({
