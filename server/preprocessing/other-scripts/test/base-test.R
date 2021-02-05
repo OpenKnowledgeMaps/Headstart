@@ -45,7 +45,7 @@ ADDITIONAL_STOP_WORDS = LANGUAGE$name
 #start.time <- Sys.time()
 failed <- list(params=params)
 tryCatch({
-  input_data = get_papers(query, params, limit=120, filter=I('descsize:[50%20TO%20100]'))
+  input_data = get_papers(query, params, limit=120)
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
   failed$query <<- query
