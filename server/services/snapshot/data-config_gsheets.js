@@ -2,7 +2,6 @@ var data_config = {
     tag: "visualization",
     mode: "gsheets",
     service_name: '<span class="backlink"><a href="data" class="underline" target="_blank" >CoVis database</a></span>',
-    persistence_backend: "api",
 
     bubble_min_scale: 1.1,
     bubble_max_scale: 1.1,
