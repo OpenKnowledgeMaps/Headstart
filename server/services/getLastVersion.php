@@ -17,16 +17,8 @@ $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 $service = library\CommUtils::getParameter($_GET, "service");
 
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
+$persistence_backend = $ini_array["general"]["persistence_backend"];
 
-$backend_mapping = array(
-  "pubmed" => "legacy",
-  "base" => "legacy",
-  "openaire" => "legacy",
-  "triple" => "api",
-  "gsheets" => "api"
-);
-
-$persistence_backend = $backend_mapping[$service];
 if ($persistence_backend === "api") {
   $route = $ini_array["general"]["api_url"] . "persistence/" . "getLastVersion/" . $service;
   $payload = json_encode(array("vis_id" => $vis_id,
