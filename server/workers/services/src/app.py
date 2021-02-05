@@ -11,7 +11,6 @@ from apis.base import base_ns
 from apis.pubmed import pubmed_ns
 from apis.openaire import openaire_ns
 from apis.persistence import persistence_ns
-from database import db
 
 from config import settings
 from utils.monkeypatches import ReverseProxied, __schema__, specs_url, _register_apidoc, inject_flasgger
@@ -40,7 +39,6 @@ app.config.from_object('config.settings')
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(app.logger.level)
 app = inject_flasgger(app)
-db.init_app(app)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_port=1, x_for=1, x_host=1, x_prefix=1)
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 CORS(app, expose_headers=["Content-Disposition", "Access-Control-Allow-Origin"])
