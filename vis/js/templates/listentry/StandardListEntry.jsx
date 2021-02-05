@@ -36,7 +36,7 @@ const StandardListEntry = ({
   citations,
   baseUnit,
   handleTitleClick,
-  handleZoomIn,
+  handleAreaClick,
 }) => {
   return (
     // html template starts here
@@ -73,7 +73,7 @@ const StandardListEntry = ({
         />
       )}
       <Area
-        onClick={handleZoomIn}
+        onClick={handleAreaClick}
         onMouseOver={area.onMouseOver}
         onMouseOut={area.onMouseOut}
       >

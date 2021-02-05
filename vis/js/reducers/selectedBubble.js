@@ -1,6 +1,12 @@
 const selectedBubble = (state = null, action) => {
+  if (action.canceled) {
+    return state;
+  }
+  
   switch (action.type) {
     case "ZOOM_OUT":
+      return null;
+    case "INITIALIZE":
       return null;
     case "ZOOM_IN":
       return {

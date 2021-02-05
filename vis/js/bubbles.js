@@ -12,7 +12,6 @@ const bubbleTemplate = require('templates/map/bubble.handlebars');
 
 import 'hypher';
 import 'lib/en.js';
-import shave from 'shave';
 
 export var BubblesFSM = function () {
     this.id = 0;
@@ -30,6 +29,9 @@ BubblesFSM.prototype = {
     // bubbles consist of a "circle" and "foreignObject"
     // both of which are created here
     draw: function () {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         var bubbleFrames = this.drawBubbleFrames();
 
         if (mediator.is_in_normal_mode) {
@@ -48,12 +50,18 @@ BubblesFSM.prototype = {
     },
 
     drawBubbleFrames: function () {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         return canvas.chart.data(this.areas_array).selectAll("g.node")
                 .data(this.areas_array)
                 .enter().append("g").attr("class", "bubble_frame");
     },
 
     addClassNamesToCircles: function (bubbleFrames) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         bubbleFrames.append("circle")
                 .attr("class", "area")
                 .append("svg:title").text(function (d) {
@@ -62,6 +70,9 @@ BubblesFSM.prototype = {
     },
 
     addClassNamesToCirclesForGrouping: function (bubbleFrames) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         var svgCircles = bubbleFrames.append("circle").attr("id", "area");
 
         // add class name to .circle
@@ -72,6 +83,9 @@ BubblesFSM.prototype = {
     },
 
     onWindowResize: function() {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         d3.selectAll("g.bubble_frame")
           .attr("transform", (d) => {
             d.x_zoomed = mediator.resized_scale_x(d.x_zoomed);
@@ -100,6 +114,9 @@ BubblesFSM.prototype = {
     // initialize all "mouseover", "mouseout" event listeners
     // for bubbles
     initMouseListeners: function () {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         this.initCircleListeners();
         this.initMouseListenersForTitles();
     },
@@ -108,6 +125,9 @@ BubblesFSM.prototype = {
     // blasen -> wenn über blase gehovered und paper sichtbar
     // dann soll auch auf paper geclicked werden können.
     makePaperClickable: function (d) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         mediator.current_circle = canvas.chart.selectAll("#headstart-chart circle")
                 .filter(function (x) {
                     if (d !== null) {
@@ -127,6 +147,9 @@ BubblesFSM.prototype = {
 
     // initialize mouseover, mouseout circle listeners
     initCircleListeners: function () {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         var this_bubble_fsm = this;
         d3.selectAll("#headstart-chart circle").on("mouseover", function (d) {
             if (!this_bubble_fsm.is("hoverbig")) {
@@ -149,6 +172,9 @@ BubblesFSM.prototype = {
 
     // initialize just the circle click listeners
     initCircleClickListener: function () {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         var self = this;
 
         d3.selectAll('#headstart-chart circle').on("click", function (d) {
@@ -170,6 +196,9 @@ BubblesFSM.prototype = {
 
     // initialize just the mousemovement listeners
     initMouseListenersForTitles: function () {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         var this_bubble_fsm = this;
         d3.selectAll("#area_title")
         .on("touchend", function () {
@@ -210,12 +239,18 @@ BubblesFSM.prototype = {
 
     // hide a cirlce
     hideCircle: function (circle) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         var circle_element = circle.parentNode.parentNode.parentNode.firstChild;
         d3.select(circle_element.nextSibling).style("visibility", "hidden");
     },
 
     // show a cirlce
     showCircle: function (circle) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         var circle_element = circle.parentNode.parentNode.parentNode.firstChild;
         d3.select(circle_element).style('opacity', 1);
         d3.select(circle_element.nextSibling).style("visibility", "visible");
@@ -223,6 +258,9 @@ BubblesFSM.prototype = {
 
     // highlight a cirlce
     highlightCircle: function (circle) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         if (!mediator.is_zoomed) {
             circle
                 .classed("zoom_selected", false)
@@ -237,6 +275,9 @@ BubblesFSM.prototype = {
     // used for multiples view, when user hovers over one circle in a
     // time period, we want to highlight the same circle for the time period
     highlightAllCirclesWithLike: function (circle) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         var class_name = $(circle).attr("class").replace("area ", "");
         $("." + class_name).css("fill", "#FE642E");
         $("." + class_name).css("fill-opacity", 1);
@@ -247,6 +288,9 @@ BubblesFSM.prototype = {
     },
     
     highlightBubble: function(d) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         d3.selectAll("circle.area,.zoom_selected").filter(
                 function(x) {
                     if(config.use_area_uri) {
@@ -260,6 +304,9 @@ BubblesFSM.prototype = {
     },
     
     removeHighlightBubble: function(d) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         d3.selectAll("circle.area,.zoom_selected")
                 .classed("highlight-bubble", false)
         
@@ -272,6 +319,9 @@ BubblesFSM.prototype = {
     // sensible manner.
     // the sortCircle method achieves this in a rudamentary way for now.
     drawConnectionLines: function (circle) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         const svg = d3.select("#chart-svg");
         var class_name = $(circle).attr("class").replace("area ", "");
         var circles = $("." + class_name);
@@ -295,6 +345,9 @@ BubblesFSM.prototype = {
     // NOTE: there is probably a much better way of doing this, but it works for
     // now
     sortCircles: function (circles) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         // first push all left values into array
         var left_values = [];
         for (let i = 0; i < circles.length; i++) {
@@ -322,10 +375,16 @@ BubblesFSM.prototype = {
     // delete all connection lines from the svg canvas as soon as the mouse
     // is removed from the circle element.
     removeAllConnections: function () {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         $(".connection").remove();
     },
 
     bringPapersToFront: function (d) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         var papers = d3.selectAll(".paper").filter(function (x) {
             return (config.use_area_uri) ? (x.area_uri == d.area_uri) : (x.area == d.title);
         });
@@ -338,6 +397,9 @@ BubblesFSM.prototype = {
 
     // position the bubbles on chart area
     positionBubbles: function (bubbles) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         bubbles.attr("transform", function (d) {
             return "translate(" + d.x + "," + d.y + ")";
         });
@@ -346,6 +408,9 @@ BubblesFSM.prototype = {
     // for the multiples view we simply translate the "other" bubbles by the
     // current_vis_size
     positionBubbles2: function (bubbles, bubbles_id) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         bubbles.attr("transform", function (d) {
             var x_pos = d.x + ((bubbles_id - 1) * canvas.current_vis_size);
             return "translate(" + x_pos + "," + d.y + ")";
@@ -354,10 +419,16 @@ BubblesFSM.prototype = {
 
     // set the title size of bubbles to px
     adjustBubbleTitleSizeTo: function (bubbles) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         bubbles.selectAll("h2").style("font-size", canvas.calcTitleFontSize());
     },
 
     appendForeignObjectTo: function (bubbleFrame) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         bubbleFrame.append('foreignObject')
                 .attr({
                     'id': 'area_title_object',
@@ -381,6 +452,9 @@ BubblesFSM.prototype = {
     },
     
     updateVisualDistributions: function(attribute, context) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         let bubble_frames = d3.selectAll("g.bubble_frame")
         let  bubble_data = bubble_frames.data();
         for(let i in bubble_data) {           
@@ -395,6 +469,10 @@ BubblesFSM.prototype = {
     },
 
     zoom: function (d) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
+
         var previous_zoom_node = mediator.current_zoom_node;
         mediator.publish("bubble_zoomin", d);
         papers.resetPaths();
@@ -544,6 +622,9 @@ BubblesFSM.prototype = {
     },
 
     zoomOut: function () {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
 
         if (!mediator.is_zoomed || mediator.is_zooming_out) {
             return;
@@ -682,6 +763,9 @@ BubblesFSM.prototype = {
     },
 
     resetCircleDesignMultiples: function () {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         d3.selectAll("#headstart-chart circle")
                 .style("fill", "rgb(210, 228, 240)")
                 .style("fill-opacity", "0.9");
@@ -690,6 +774,9 @@ BubblesFSM.prototype = {
     },
 
     resetCircleDesign: function () {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         if (mediator.current_circle !== null) {
             d3.selectAll("#headstart-chart circle")
                     .attr("class", "area")
@@ -714,6 +801,10 @@ BubblesFSM.prototype = {
     },
 
     resetCirclePosition: function (obj) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
+
         if (typeof (obj) === "undefined") {
             obj = d3;
         }
@@ -729,6 +820,9 @@ BubblesFSM.prototype = {
 
     // on zoom IN
     createTransition: function (t) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
 
         d3.selectAll("#area_title_object")
                 .style("display", "none");
@@ -810,6 +904,9 @@ BubblesFSM.prototype = {
     },
 
     onstart: function (event, from, to, csv, recommendation_data) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         mediator.publish('bubbles_update_data_and_areas', this);
         if (mediator.is_in_multiples_mode) {
             this.draw();
@@ -819,12 +916,18 @@ BubblesFSM.prototype = {
     },
 
     onbeforemouseover: function () {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         if (mediator.is_in_normal_mode) {
             this.resetCircleDesign();
         }
     },
 
     onmouseover: function (event, from, to, d, circle) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
 
         mediator.current_circle = d3.select(circle);
         if (mediator.is_in_multiples_mode) {
@@ -874,6 +977,9 @@ BubblesFSM.prototype = {
     },
 
     onmouseout: function (event, from, to, d, circle) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
 
         if (mediator.is_in_normal_mode) {
             if (event == "notzoomedmouseout") {
@@ -896,6 +1002,10 @@ BubblesFSM.prototype = {
     },
 
     onzoomout: function () {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
+
         if(papers.is("infrontofbubble")) {
             return;
         }
@@ -915,6 +1025,10 @@ BubblesFSM.prototype = {
     },
 
     onzoomin: function (event, from, to, d) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
+
         if (d !== undefined) {
             this.zoom(d);
         }

@@ -14,6 +14,8 @@ import { shorten } from "../../utils/string";
 const BasicListEntries = ({
   displayedData,
   handleZoomIn,
+  handleSelectPaper,
+  handleDeselectPaper,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
@@ -21,9 +23,18 @@ const BasicListEntries = ({
   baseUnit,
   showPreviewImage,
   showRealPreviewImage,
-  handleTitleClick,
   height,
 }) => {
+  const handleTitleClick = (paper) => {
+    handleSelectPaper(paper);
+    handleZoomIn(paper);
+  }
+
+  const handleAreaClick = (paper) => {
+    handleDeselectPaper();
+    handleZoomIn(paper, "list-area");
+  };
+
   return (
     <div
       className="col-xs-12"
@@ -63,10 +74,10 @@ const BasicListEntries = ({
             onMouseOver: () => handleAreaMouseover(entry),
             onMouseOut: () => handleAreaMouseout(),
           }}
-          handleZoomIn={() => handleZoomIn(entry)}
           readers={entry.num_readers}
           baseUnit={baseUnit}
           handleTitleClick={() => handleTitleClick(entry)}
+          handleAreaClick={() => handleAreaClick(entry)}
         />
       ))}
     </div>
