@@ -4,6 +4,10 @@ const exists = (param) =>
   typeof param !== "undefined" && param !== "null" && param !== null;
 
 const contextLine = (state = {}, action) => {
+  if (action.canceled) {
+    return state;
+  }
+  
   const config = action.configObject;
   const context = action.contextObject;
 

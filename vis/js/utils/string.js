@@ -87,7 +87,5 @@ export const shorten = (string, length, end = "...") => {
     return string;
   }
 
-  let newString = string.substr(0, length - end.length) + end;
-
-  return newString;
+  return string.substr(0, length) + end;
 };

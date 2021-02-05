@@ -35,7 +35,7 @@ const List = ({
 };
 
 const mapStateToProps = (state) => ({
-  data: state.data,
+  data: state.data.list,
   searchSettings: {
     value: state.list.searchValue,
   },
