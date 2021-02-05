@@ -1,15 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <?php
 include 'config.php';
-include 'config_searchflow.php';
 ?>
 <html>
     <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <?php
-          $id = $_GET["id"];
-          $query = $_GET["query"];
-          $service = $_GET['service'];
-          $has_custom_title = false;
+          include('config_searchflow.php');
+          include('search-flow/inc/knowledge-map-header.php');
+          $service = "triple_km";
       ?>
       <script src="https://code.jquery.com/jquery-2.1.4.min.js" integrity="sha256-8WqyJLuWKRBVhxXIL1jBDD7SDxU936oZkCnxQbWwJVw=" crossorigin="anonymous"></script>
     </head>
