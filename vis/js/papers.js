@@ -11,9 +11,6 @@ import { mediator } from 'mediator';
 import { toFront } from 'helpers';
 import { canvas } from 'canvas';
 import { updateTags } from 'helpers';
-import { io } from 'io';
-import shave from 'shave';
-
 
 const paperTemplate = require("templates/map/paper.handlebars");
 
@@ -80,8 +77,11 @@ export const papers = StateMachine.create({
     callbacks: {
         onstart: function (event, from, to) {
             this.force_stopped = false;
-            this.drawPapers();
             this.applyForce();
+            if (mediator.modern_frontend_enabled) {
+                return;
+            }
+            this.drawPapers();
             this.initPaperClickHandler();
         },
 
@@ -96,6 +96,9 @@ export const papers = StateMachine.create({
         },
 
         onclick: function (event, from, to, d) {
+            if (mediator.modern_frontend_enabled) {
+                return;
+            }
             if (!mediator.is_zoomed) {
                 return mediator.bubbles.makePaperClickable(d);
             }
@@ -112,10 +115,16 @@ export const papers = StateMachine.create({
         },
 
         onmouseoutpaper: function (event, from, to, d, holder_div) {
+            if (mediator.modern_frontend_enabled) {
+                return;
+            }
             this.shrinkPaper(d, holder_div);
         },
 
         onmouseout: function (event, from, to, d, holder_div) {
+            if (mediator.modern_frontend_enabled) {
+                return;
+            }
             if (holder_div !== undefined) {
                 this.shrinkPaper(d, holder_div);
             }
@@ -127,6 +136,10 @@ export const papers = StateMachine.create({
 });
 
 papers.drawPapers = function () {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called from the refactored code");
+    }
+
     var nodes = canvas.chart.selectAll("g.node")
             .data(mediator.current_bubble.data)
             .enter().append("g")
@@ -201,6 +214,10 @@ papers.drawPapers = function () {
 
 // draw the path "around" the papers, perhaps "border" would be a better name
 papers.drawPaperPath = function (nodes) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called from the refactored code");
+    }
+
     var region = (d) => {
             return this.createPaperPath(0, 0, d.width, d.height, 0.2, 0.2, d.resulttype);
     };
@@ -213,6 +230,10 @@ papers.drawPaperPath = function (nodes) {
 };
 
 papers.resetPaths = function () {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called from the refactored code");
+    }
+
     // this seems illogical but has to be this way because
     // the is_zoomed flag is set after this is executed
     const zoomedClass = mediator.is_zoomed ? "" : " zoomed_in";
@@ -230,6 +251,10 @@ papers.resetPaths = function () {
 
 // draw the path of the dog-ear for the papers
 papers.drawDogEarPath = function (nodes) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called from the refactored code");
+    }
+
     var dogear = (d) => {
         return this.createDogearPath(d.width * 0.8, 0, d.width, d.height, 0.2, 0.2, d.resulttype);
     };
@@ -242,6 +267,10 @@ papers.drawDogEarPath = function (nodes) {
 // if the user clicks on the paper inside of a bubble,
 // it should zoom in. (behave same way when, only the bubble is clicked)
 papers.initPaperClickHandler = function () {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called from the refactored code");
+    }
+
     d3.selectAll(".paper_holder, #article_metadata").on("click", function (d) {
         mediator.publish("paper_click", d);
     });
@@ -249,6 +278,10 @@ papers.initPaperClickHandler = function () {
 
 
 papers.paper_click = function (d) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
+
     if (!this.is("loading")) {
         if (!mediator.is_zoomed) {
             var current_node = canvas.chart.selectAll("#headstart-chart circle")
@@ -273,6 +306,10 @@ papers.paper_click = function (d) {
 
 // add #id element to foreignObject and adjust various other attributes
 papers.prepareForeignObject = function (nodes) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called from the refactored code");
+    }
+
     nodes.append("foreignObject")
             .attr({
                 "id": "article_metadata",
@@ -309,6 +346,10 @@ papers.prepareForeignObject = function (nodes) {
 };
 
 papers.updateVisualDistributions = function(attribute, context) {
+    if (mediator.modern_frontend_enabled) {
+       return;
+    }
+
     let articles = d3.selectAll("#article_metadata")
     let  article_data = articles.data();
     for(let i in article_data) {           
@@ -327,6 +368,9 @@ papers.updateVisualDistributions = function(attribute, context) {
 
 // create the path or "border" for papers
 papers.createPaperPath = function (x, y, width, height, correction_x, correction_y, drawType) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called from the refactored code");
+    }
 
     if(drawType == "dataset") {
         return this.createDatasetPath(x, y, width, height, correction_x)
@@ -353,6 +397,10 @@ papers.createPaperPath = function (x, y, width, height, correction_x, correction
 
 // create the path or "border" for datasets
 papers.createDatasetPath = function (x, y, width, height, correction) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called from the refactored code");
+    }
+
     let r = correction ? correction * 10 : 10
     let corner = correction ? correction * 10 : 10
     let x_left = corner
@@ -409,14 +457,18 @@ papers.applyForce = function () {
             });
         });
 
-        self.drawEntity("g.bubble_frame", alpha, areas_count);
+        if (!mediator.modern_frontend_enabled) {
+            self.drawEntity("g.bubble_frame", alpha, areas_count);
+        }
 
         areas_count++;
         
         if (alpha > 0) {
             requestAnimationFrame(render);
         } else {
-            self.drawEntity("g.bubble_frame", alpha, areas_count, true);
+            if (!mediator.modern_frontend_enabled) {
+                self.drawEntity("g.bubble_frame", alpha, areas_count, true);
+            }
         }
 
     });
@@ -484,14 +536,18 @@ papers.applyForce = function () {
             });
         });
 
-        self.drawEntity("g.paper", alpha, papers_count);
+        if (!mediator.modern_frontend_enabled) {
+            self.drawEntity("g.paper", alpha, papers_count);
+        }
 
         papers_count++;
         
         if (alpha > 0) {
             requestAnimationFrame(render);
         } else {
-            self.drawEntity("g.paper", alpha, papers_count, true);
+            if (!mediator.modern_frontend_enabled) {
+                self.drawEntity("g.paper", alpha, papers_count, true);
+            }
         }
     });
 };
@@ -509,6 +565,9 @@ papers.constructCircle = function (a) {
 
 // figure out translate coordinates
 papers.drawEntity = function (entity, alpha, count, forced=false) {
+    if (mediator.modern_frontend_enabled) {
+        throw new Error("This function must not be called from the refactored code");
+    }
 
     if (forced || alpha > 0.09 && count % 2 === 0 ||
             alpha <= 0.09 && alpha >= 0.08 && count % 2 === 0 ||
@@ -549,6 +608,9 @@ papers.checkCollisions = function (a, b, alpha) {
 };
 
 papers.shrinkPaper = function (d, holder) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
 
     if (!mediator.is_zoomed) {
         return;
@@ -574,6 +636,10 @@ papers.shrinkPaper = function (d, holder) {
 };
 
 papers.resizePaper = function (d, holder_div, resize_factor) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
+
     let current_div = holder_div.node();
     let current_g_paper = d3.select(current_div.parentNode.parentNode.parentNode);
     let current_foreignObject = current_g_paper.select("foreignObject");
@@ -625,6 +691,9 @@ papers.resizePaper = function (d, holder_div, resize_factor) {
 
 // called far too often
 papers.enlargePaper = function (d, holder_div) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
 
     this.mouseoverpaper();
 
@@ -705,6 +774,9 @@ papers.enlargePaper = function (d, holder_div) {
 };
 
 papers.currentbubble_click = function (d) {   
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
     mediator.publish("paper_current_bubble_clicked", d);
     
     this.resetPaths();
@@ -758,6 +830,10 @@ papers.createDogearPath = function (x, y, width, height, correction_x, correctio
 };
 
 papers.framePaper = function(p) {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
+
     d3.selectAll("path#region")
       .filter(function(x) {
           return x.id === p.id;
@@ -766,6 +842,10 @@ papers.framePaper = function(p) {
 };
 
 papers.onWindowResize = function() {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
+
       var area_title_objects = d3.selectAll("#area_title_object");
 
       area_title_objects.each((d) => {

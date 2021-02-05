@@ -8,6 +8,7 @@ import { canvas } from 'canvas';
 import { scale } from './scale';
 import { streamgraph } from 'streamgraph';
 import Intermediate from './intermediate';
+import { getChartSize, getListSize } from "./utils/dimensions";
 
 const headstartTemplate = require("templates/headstart.handlebars");
 const infoTemplate = require("templates/modals/info_modal.handlebars");
@@ -179,11 +180,16 @@ MyMediator.prototype = {
     },
 
     init_modern_frontend_intermediate: function() {
-        mediator.modern_frontend_intermediate.init(config, io.context, io.data);
+        const { size } = getChartSize(config, io.context);
+        mediator.modern_frontend_intermediate.init(config, io.context, io.data, size);
     },
 
     render_modern_frontend_list: function() {
         mediator.modern_frontend_intermediate.renderList();
+    },
+
+    render_modern_frontend_knowledge_map: function() {
+        mediator.modern_frontend_intermediate.renderKnowledgeMap(config);
     },
 
     register_bubbles: function() {
@@ -241,7 +247,9 @@ MyMediator.prototype = {
         mediator.external_vis_url = config.external_vis_url + "?vis_id=" + config.files[mediator.current_file_number].file
         papers.current = "none";
         list.current = "none";
-        mediator.modern_frontend_intermediate.zoomOut();
+        if (!mediator.modern_frontend_enabled) {
+            mediator.modern_frontend_intermediate.zoomOut();
+        }
         mediator.manager.call('canvas', 'setupToFileCanvas', []);
     },
 
@@ -325,6 +333,11 @@ MyMediator.prototype = {
         mediator.manager.call('canvas', 'drawModals', [context]);
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
 
+        if (mediator.modern_frontend_enabled) {
+            // TODO call this just once (chart size must be known before the map is rendered)
+            mediator.dimensions_update();
+        }
+
         if (config.is_streamgraph) {
             mediator.manager.registerModule(streamgraph, 'streamgraph')
             mediator.manager.call('streamgraph', 'start')
@@ -338,21 +351,32 @@ MyMediator.prototype = {
             mediator.manager.call('streamgraph', 'initMouseListeners', []);
             
         } else {
-            mediator.manager.call('bubble', 'start', [data, highlight_data]);
-            mediator.manager.call('canvas', 'initEventsAndLayout', []);
-            mediator.manager.call('papers', 'start', [ mediator.current_bubble ]);
-            mediator.manager.call('bubble', 'draw', []);
+            if (mediator.modern_frontend_enabled) {
+                mediator.render_modern_frontend_knowledge_map();
+            } else {
+                mediator.manager.call('bubble', 'start', [data, highlight_data]);
+                mediator.manager.call('canvas', 'initEventsAndLayout', []);
+                mediator.manager.call('papers', 'start', [ mediator.current_bubble ]);
+                mediator.manager.call('bubble', 'draw', []);
 
-            mediator.manager.call('list', 'start');
-            if (!config.render_bubbles && config.show_list) mediator.list_show();
+                mediator.manager.call('list', 'start');
+                if (!config.render_bubbles && config.show_list) mediator.list_show();
 
-            mediator.manager.call('canvas', 'checkForcePapers', []);
-            mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
-            mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
-            mediator.manager.call('bubble', 'initMouseListeners', []);
+                mediator.manager.call('canvas', 'checkForcePapers', []);
+                mediator.manager.call('canvas', 'hyphenateAreaTitles', []);
+                mediator.manager.call('canvas', 'dotdotdotAreaTitles', []);
+                mediator.manager.call('bubble', 'initMouseListeners', []);
+            }
         }
 
         mediator.render_modern_frontend_list();
+        
+        if (mediator.modern_frontend_enabled) {
+            mediator.dimensions_update();
+            d3.select(window).on("resize", () => {
+                mediator.dimensions_update();
+            });
+        }
 
         mediator.manager.call('canvas', 'showInfoModal', []);
     },
@@ -518,23 +542,28 @@ MyMediator.prototype = {
     },
 
     bubble_zoomin: function(d) {
-        $("#map-rect").removeClass("zoomed_out").addClass('zoomed_in');
-        $("#region.unframed").addClass("zoomed_in");
-        $(".paper_holder").addClass("zoomed_in");
-        if(config.visual_distributions) {
-            d3.selectAll("#paper_visual_distributions").style("display", "block")
-        }
+        if (!mediator.modern_frontend_enabled) {
+            $("#map-rect").removeClass("zoomed_out").addClass('zoomed_in');
+            $("#region.unframed").addClass("zoomed_in");
+            $(".paper_holder").addClass("zoomed_in");
 
-        mediator.manager.call('list', 'scrollTop', []);
-        mediator.modern_frontend_intermediate.zoomIn({title: d.title, uri: d.area_uri});
+            if(config.visual_distributions) {
+                d3.selectAll("#paper_visual_distributions").style("display", "block")
+            }
+    
+            mediator.manager.call('list', 'scrollTop', []);
+
+            mediator.modern_frontend_intermediate.zoomIn({title: d.title, uri: d.area_uri});
+        }
     },
     bubble_zoomout: function() {
-
-        $("#map-rect").removeClass("zoomed_in").addClass('zoomed_out');
-        $("#region.unframed").removeClass("zoomed_in");
-        $(".paper_holder").removeClass("zoomed_in");
-        if (config.visual_distributions) {
-            d3.selectAll("#paper_visual_distributions").style("display", "none")
+        if (!mediator.modern_frontend_enabled) {
+            $("#map-rect").removeClass("zoomed_in").addClass('zoomed_out');
+            $("#region.unframed").removeClass("zoomed_in");
+            $(".paper_holder").removeClass("zoomed_in");
+            if (config.visual_distributions) {
+                d3.selectAll("#paper_visual_distributions").style("display", "none")
+            }
         }
         
         if (mediator.current_enlarged_paper === null) {
@@ -543,8 +572,10 @@ MyMediator.prototype = {
             mediator.manager.call('list', 'scrollToEntry', [mediator.current_enlarged_paper.safe_id]);
             mediator.paper_deselected();
         }
-            
-        mediator.modern_frontend_intermediate.zoomOut();
+        
+        if (!mediator.modern_frontend_enabled) {
+            mediator.modern_frontend_intermediate.zoomOut();
+        }
     },
 
     currentbubble_click: function(d) {
@@ -708,7 +739,17 @@ MyMediator.prototype = {
 
     list_height_change: function(newHeight) {
         mediator.modern_frontend_intermediate.setListHeight(newHeight);
-    }
+    },
+
+    dimensions_update: function() {
+        const chart = getChartSize(config, io.context);
+        const list = getListSize(config, io.context, chart.height);
+        mediator.modern_frontend_intermediate.updateDimensions(chart, list);
+        if(!config.is_streamgraph) {
+            d3.select("#headstart-chart")
+                .style("width", chart.size + "px");
+        }
+    },
 };
 
 export const mediator = new MyMediator();

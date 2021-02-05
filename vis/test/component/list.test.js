@@ -16,7 +16,7 @@ import defaultConfig from "../../js/default-config";
 import {
   zoomIn,
   selectPaper,
-  hoverArea,
+  highlightArea,
   deselectPaperBacklink,
   showPreview,
 } from "../../js/actions";
@@ -819,7 +819,7 @@ describe("List entries component", () => {
     });
 
     it("triggers a correct area mouseover action in local files", () => {
-      const EXPECTED_PAYLOAD = hoverArea(initialTestData[0]);
+      const EXPECTED_PAYLOAD = highlightArea(initialTestData[0]);
       const storeObject = setup(
         { show: true },
         { data: initialTestData, service: null }
@@ -846,7 +846,7 @@ describe("List entries component", () => {
     });
 
     it("triggers a correct area mouseout action in local files", () => {
-      const EXPECTED_PAYLOAD = hoverArea(null);
+      const EXPECTED_PAYLOAD = highlightArea(null);
       const storeObject = setup(
         { show: true },
         { data: initialTestData, service: null }
@@ -939,7 +939,7 @@ describe("List entries component", () => {
     });
 
     it("triggers a correct area mouseover action in linkedcat", () => {
-      const EXPECTED_PAYLOAD = hoverArea(linkedcatData[0]);
+      const EXPECTED_PAYLOAD = highlightArea(linkedcatData[0]);
       const storeObject = setup(
         { show: true },
         {
@@ -970,7 +970,7 @@ describe("List entries component", () => {
     });
 
     it("triggers a correct area mouseout action in linkedcat", () => {
-      const EXPECTED_PAYLOAD = hoverArea(null);
+      const EXPECTED_PAYLOAD = highlightArea(null);
       const storeObject = setup(
         { show: true },
         {

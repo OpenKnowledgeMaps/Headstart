@@ -3,7 +3,6 @@ import config from 'config';
 import { papers } from 'papers';
 import { mediator } from 'mediator';
 import { intros } from 'intro';
-import dateFormat from 'dateformat';
 import shave from 'shave';
 
 const editModalButton = require('templates/buttons/edit_button.handlebars')
@@ -154,12 +153,18 @@ class Canvas {
     // Draw basic SVG canvas
     // NOTE attribute width addition by number of elements
     drawSvg() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         const svg = d3.select("#chart-svg");
         svg.attr("height", this.current_vis_size + "px")
                 .attr("width", this.current_vis_size + "px");
     }
 
     drawMultiplesSvg() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         const svg = d3.select("#chart-svg");
         let s = this.current_vis_size * Object.keys(mediator.bubbles).length;
         svg.attr("width", s)
@@ -185,6 +190,9 @@ class Canvas {
     }
 
     drawChartCanvas() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         const svg = d3.select("#chart-svg");
         this.chart = svg.append("g").attr("id", "chart_canvas");
         // Rectangle to contain nodes in force layout
@@ -193,6 +201,9 @@ class Canvas {
     }
 
     updateChartCanvas() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         d3.select("rect")
                 .attr("height", this.current_vis_size)
                 .attr("width", this.current_vis_size);
@@ -220,6 +231,9 @@ class Canvas {
     }
 
     initEventListeners() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         d3.select(window).on("resize", () => {
             mediator.publish("record_action", config.title, "Map", "resize", config.user_id, "resize_map", null, null, null);
             if (window.headstartInstance.is("multiples")) {
@@ -273,12 +287,18 @@ class Canvas {
 
     // Mouse interaction listeners
     initMouseListeners() {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         this.initMouseMoveListeners();
         this.initMouseClickListeners();
         this.initClickListenersForNav();
     }
 
     initMouseMoveListeners() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         $("rect").on("mouseover", () => {
             mediator.publish("on_rect_mouseover");
         });
@@ -289,6 +309,9 @@ class Canvas {
     }
 
     initMouseClickListeners() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         $("#" + config.tag + ",#chart-svg").bind('click', (event) => {
             if(event.target.className !== "sharebuttons" 
                     && event.target.className !== "btn btn-primary sharebutton" 
@@ -307,6 +330,9 @@ class Canvas {
     }
 
     initClickListenersForNav() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         $("#multiplesview").on("click", () => {
             if ($("#multiplesview a").html() === "TimeLineView") {
                 mediator.publish("to_multiples");
@@ -458,6 +484,9 @@ class Canvas {
     }
     
     drawContextTimestamp(context) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         if(this.paramExists(context.last_update)) {
             $('#timestamp').text(config.localization[config.language].timestamp_label + ": " + context.last_update)
         }
@@ -476,15 +505,24 @@ class Canvas {
     // Grid drawing methods
     // draw x and y lines in svg canvas for multiplesview
     drawGrid() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         this.drawXGrid();
         this.drawYGrid();
     }
 
     removeGrid() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         $("line").remove();
     }
 
     drawYGrid() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         const svg = d3.select("#chart-svg");
         var to = ((mediator.bubbles.length + 1) * this.current_vis_size);
         for (var i = 0; i <= to; i += this.current_vis_size) {
@@ -497,6 +535,9 @@ class Canvas {
     }
 
     drawXGrid() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         const svg = d3.select("#chart-svg");
         for (var i = 0; i <= 900; i += 50) {
             svg.append("line")
@@ -528,6 +569,9 @@ class Canvas {
     }
 
     drawGridTitles(update) {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         update = typeof update !== 'undefined' ? update : false;
 
         if (update === true) {
@@ -544,6 +588,9 @@ class Canvas {
     }
 
     drawNormalViewLink() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         // remove event handler
         var id_multiplesview = $("#multiplesview");
         id_multiplesview.off("click");
@@ -553,9 +600,14 @@ class Canvas {
     }
 
     setupCanvas() {
-        this.setOverflowToHiddenOrAuto("#main");
+        if (!mediator.modern_frontend_enabled) {
+            this.setOverflowToHiddenOrAuto("#main");
+        }
         this.calcChartSize();
         this.setScaleRanges();
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         this.drawSvg();
         this.drawChartCanvas();
     }
@@ -573,6 +625,9 @@ class Canvas {
         // this . chart_x,y chart_x,y_circle, x,y, paper_x, paper_y,
         // circle_size, diameter_size
         this.setScaleRanges();
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         this.drawSvg();
         this.updateChartCanvas();
     }
@@ -588,6 +643,9 @@ class Canvas {
     }
 
     setupMultiplesCanvas() {
+        if (mediator.modern_frontend_enabled) {
+            throw new Error("This function must not be called from the refactored code");
+        }
         this.viz.empty();
         this.viz.append(multiplesTemplate());
 
@@ -610,6 +668,9 @@ class Canvas {
     }
 
     setupToFileCanvas() {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         this.force_areas.stop();
         this.force_papers.stop();
         // clear the canvas & list
@@ -621,6 +682,9 @@ class Canvas {
     }
 
     initEventsAndLayout() {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         this.initEventListeners();
         this.initMouseListeners();
         this.initForcePapers();
@@ -628,16 +692,25 @@ class Canvas {
     }
 
     showInfoModal() {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         if (config.show_intro) {
             $("#infolink").click();
         }
     }
 
     hyphenateAreaTitles() {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         $("#area_title>h2").hyphenate(config.hyphenation_language);
     }
 
   dotdotdotAreaTitles() {
+    if (mediator.modern_frontend_enabled) {
+        return;
+    }
     const check = config.hasOwnProperty('nodot');
     if ((check && config.nodot === false) || !check) {
       d3.selectAll("#area_title_object").each(function() {

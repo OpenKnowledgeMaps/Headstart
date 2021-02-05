@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import StandardListEntry from "../../templates/listentry/StandardListEntry";
 
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
+import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 
 import {
   getPaperPreviewLink,
@@ -27,12 +28,26 @@ const StandardListEntries = ({
   localization,
   showKeywords,
   height,
+  isStreamgraph,
   handleZoomIn,
+  handleSelectPaper,
+  handleDeselectPaper,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
-  handleTitleClick,
 }) => {
+  const handleTitleClick = (paper) => {
+    handleSelectPaper(paper);
+    if (!isStreamgraph) {
+      handleZoomIn(paper);
+    }
+  }
+
+  const handleAreaClick = (paper) => {
+    handleDeselectPaper();
+    handleZoomIn(paper, "list-area");
+  };
+
   return (
     <div
       className="col-xs-12"
@@ -84,7 +99,6 @@ const StandardListEntries = ({
             onMouseOver: () => handleAreaMouseover(entry),
             onMouseOut: () => handleAreaMouseout(),
           }}
-          handleZoomIn={() => handleZoomIn(entry)}
           citations={
             !isContentBased && !!baseUnit && !showMetrics
               ? entry.num_readers
@@ -92,6 +106,7 @@ const StandardListEntries = ({
           }
           baseUnit={baseUnit}
           handleTitleClick={() => handleTitleClick(entry)}
+          handleAreaClick={() => handleAreaClick(entry)}
         />
       ))}
     </div>
@@ -111,6 +126,7 @@ const mapStateToProps = (state) => ({
     state.list.showKeywords &&
     (!!state.selectedPaper || !state.list.hideUnselectedKeywords),
   height: state.list.height,
+  isStreamgraph: state.chartType === STREAMGRAPH_MODE,
 });
 
 export default connect(

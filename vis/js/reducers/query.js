@@ -1,4 +1,8 @@
 const query = (state = { text: "", parsedTerms: [] }, action) => {
+  if (action.canceled) {
+    return state;
+  }
+  
   switch (action.type) {
     case "INITIALIZE":
       return {

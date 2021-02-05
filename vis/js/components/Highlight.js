@@ -4,6 +4,10 @@ import ExternalHighlighter from "react-highlight-words";
 
 import { parseSearchText } from "../utils/data";
 
+// TODO optimize:
+//  1. parseSearchText in store
+//  2. hyphenated search and query terms in store
+
 const Highlight = ({
   searchTerms,
   queryTerms,
@@ -11,15 +15,36 @@ const Highlight = ({
   queryHighlightEnabled,
   // local value specified for the particular element
   queryHighlight = false,
+  // if true, adds &shy; into the search words
+  hyphenated = false,
   children: text,
 }) => {
+  let autoEscape = true;
+  let searchWords = searchTerms;
+  let queryWords = queryTerms;
+  if (hyphenated) {
+    autoEscape = false;
+    searchWords = searchTerms.map((term) =>
+      term
+        .split("")
+        .map((char) => escapeRegExp(char))
+        .join("[\\u00AD]*")
+    );
+    queryWords = queryTerms.map((term) =>
+      term
+        .split("")
+        .map((char) => escapeRegExp(char))
+        .join("[\\u00AD]*")
+    );
+  }
+
   if (searchTerms.length > 0) {
     return (
       <ExternalHighlighter
         highlightClassName="highlighted"
-        searchWords={searchTerms}
+        searchWords={searchWords}
         textToHighlight={text}
-        autoEscape={true}
+        autoEscape={autoEscape}
         highlightTag="span"
       />
     );
@@ -32,9 +57,9 @@ const Highlight = ({
   return (
     <ExternalHighlighter
       highlightClassName="query_term_highlight"
-      searchWords={queryTerms}
+      searchWords={queryWords}
       textToHighlight={text}
-      autoEscape={true}
+      autoEscape={autoEscape}
       highlightTag="span"
     />
   );
@@ -47,3 +72,8 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(Highlight);
+
+// https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+const escapeRegExp = (string) => {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
