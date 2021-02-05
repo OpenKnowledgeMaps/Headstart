@@ -107,6 +107,8 @@
   "jest": {
     "moduleNameMapper": {
       "^config$": "<rootDir>/vis/js/default-config.js",
+      "^lib/en.js$": "<rootDir>/vis/lib/en.js",
+      "^lib/de.js$": "<rootDir>/vis/lib/de.js",
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/vis/test/fileMock.js"
     },
     "collectCoverage": true,

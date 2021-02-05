@@ -1,6 +1,6 @@
 import React from "react";
 
-const Chart = ({ width, height, children, eventHandlers = {}, zoom }) => {
+const Chart = ({ width, height, children, eventHandlers, zoom }) => {
   return (
     // html template starts here
     // TODO move the div back here

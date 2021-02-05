@@ -75,11 +75,22 @@ class Paper extends React.Component {
   }
 
   componentWillUnmount() {
-    select(this.pathRef.current).interrupt();
-    if (!this.isDataset()) {
-      select(this.dogearRef.current).interrupt();
+    const pathEl = select(this.pathRef.current);
+    if (pathEl.interrupt) {
+      pathEl.interrupt();
     }
-    select(this.paperRef.current).interrupt();
+
+    if (!this.isDataset()) {
+      const dogearEl = select(this.dogearRef.current);
+      if (dogearEl.interrupt) {
+        dogearEl.interrupt();
+      }
+    }
+
+    const paperEl = select(this.paperRef.current);
+    if (paperEl.interrupt) {
+      paperEl.interrupt();
+    }
   }
 
   render() {
@@ -87,7 +98,7 @@ class Paper extends React.Component {
     const { maxSize, enlargeFactor } = this.props;
     const { onClick, onMouseOver, onMouseOut } = this.props;
 
-    const { title, authors_string: authors, year } = data;
+    const { title, authors_string: authors, year, area } = data;
     const { num_readers: readers, published_in: publisher } = data;
     const { oa: isOpenAccess, free_access: isFreeAccess } = data;
     const { x, y, width: baseWidth, height: baseHeight } = this.state;
@@ -161,14 +172,17 @@ class Paper extends React.Component {
     return (
       // html template starts here
       <g className={gClass} {...eventHandlers}>
-        <path
-          id="region"
-          d={path}
-          className={pathClass}
-          style={{ fillOpacity: 1 }}
-          ref={this.pathRef}
-        ></path>
-        {!this.isDataset() && (
+        {!zoom && <title>{area}</title>}
+        {!this.isZoomingOut() && (
+          <path
+            id="region"
+            d={path}
+            className={pathClass}
+            style={{ fillOpacity: 1 }}
+            ref={this.pathRef}
+          ></path>
+        )}
+        {!this.isDataset() && !this.isZoomingOut() && (
           <path className="dogear" d={dogEar} ref={this.dogearRef}></path>
         )}
         <foreignObject
@@ -209,10 +223,6 @@ class Paper extends React.Component {
                     </p>
                   )}
                 </div>
-                <p
-                  id="paper_visual_distributions"
-                  className={sizeModifierClass}
-                ></p>
                 <p id="title" className={sizeModifierClass}>
                   <Hyphenate>
                     <Highlight hyphenated queryHighlight>
@@ -331,7 +341,7 @@ class Paper extends React.Component {
 
   getCoordinatesAndDimensions(previous = false) {
     const { data, zoom, animation } = this.props;
-    if (previous && animation.alreadyZoomed) {
+    if (previous && animation && animation.alreadyZoomed) {
       const {
         prevZoomedX: x,
         prevZoomedY: y,

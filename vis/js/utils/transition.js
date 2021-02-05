@@ -7,9 +7,9 @@ import { easePolyInOut } from "d3-ease";
  * 
  * @param {Function} callback callback triggered at the end
  */
-export const createTransition = (callback) => {
+export const createTransition = (duration, callback) => {
   const newTransition = transition()
-    .duration(750)
+    .duration(duration)
     .ease(easePolyInOut.exponent(3));
   newTransition.on("end", callback);
   return newTransition;

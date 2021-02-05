@@ -11,7 +11,7 @@ import data, {
   baseConfig as config,
   baseContext as context,
 } from "../data/base";
-import { initializeStore } from "../../js/actions";
+import { deselectPaper, initializeStore } from "../../js/actions";
 
 import List from "../../js/components/List";
 
@@ -89,16 +89,8 @@ describe("List entries component - special BASE tests", () => {
 
       const actions = store.getActions();
 
-      const firstPaper = realStore
-        .getState()
-        .data.find(
-          (p) =>
-            p.id ===
-            "15e63fc6c5dfa228a39433f46c271946c8cf45f566bb63036ed89f66ce66a5e7"
-        );
-
-      const EXPECTED_PAYLOAD = selectPaper(firstPaper);
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
+      const EXPECTED_PAYLOAD = [selectPaper({}).type, zoomIn().type];
+      expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
     });
 
     it("triggers a correct area click action", () => {
@@ -121,19 +113,8 @@ describe("List entries component - special BASE tests", () => {
 
       const actions = store.getActions();
 
-      const firstPaper = realStore
-        .getState()
-        .data.find(
-          (p) =>
-            p.id ===
-            "15e63fc6c5dfa228a39433f46c271946c8cf45f566bb63036ed89f66ce66a5e7"
-        );
-
-      const EXPECTED_PAYLOAD = zoomIn(
-        { title: firstPaper.area, uri: firstPaper.area_uri },
-        "list-area"
-      );
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
+      const EXPECTED_PAYLOAD = [deselectPaper().type, zoomIn().type];
+      expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
     });
 
     it("triggers a correct area mouseover action", () => {
@@ -158,7 +139,7 @@ describe("List entries component - special BASE tests", () => {
 
       const firstPaper = realStore
         .getState()
-        .data.find(
+        .data.list.find(
           (p) =>
             p.id ===
             "15e63fc6c5dfa228a39433f46c271946c8cf45f566bb63036ed89f66ce66a5e7"
@@ -214,7 +195,7 @@ describe("List entries component - special BASE tests", () => {
 
       const firstPaper = realStore
         .getState()
-        .data.find(
+        .data.list.find(
           (p) =>
             p.id ===
             "008ea92dafd41bdb55abf7cb8b4f43deb52ac003a2b15a8c5eb8743ae021533d"
@@ -358,8 +339,8 @@ describe("List entries component - special BASE tests", () => {
       );
 
       expect(titles).toEqual([
-        '<span class="query_term_highlight">Digital</span> <span class="query_term_highlight">Education</span> And Learning: The Growing Trend In Academic And Business Spaces—An International Overview',
-        'Integrating <span class="query_term_highlight">Digital</span> Libraries into Distance <span class="query_term_highlight">Education</span>: A Review of Models, Roles, And Strategies',
+        "Digital Education And Learning: The Growing Trend In Academic And Business Spaces—An International Overview",
+        "Integrating Digital Libraries into Distance Education: A Review of Models, Roles, And Strategies",
       ]);
     });
   });
