@@ -14,7 +14,7 @@ $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
-$service = library\CommUtils::getParameter($_GET, "service");
+$database = $ini_array["connection"]["database"];
 
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
@@ -28,7 +28,7 @@ $backend_mapping = array(
 
 $persistence_backend = $backend_mapping[$service];
 if ($persistence_backend === "api") {
-  $route = $ini_array["general"]["api_url"] . "persistence/" . "getLastVersion/" . $service;
+  $route = $ini_array["general"]["api_url"] . "persistence/" . "getLastVersion/" . $database;
   $payload = json_encode(array("vis_id" => $vis_id,
                                "details" => false,
                                "context" => false));
