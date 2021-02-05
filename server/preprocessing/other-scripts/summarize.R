@@ -85,7 +85,7 @@ create_cluster_labels <- function(clusters, metadata,
 
 
 fix_cluster_labels <- function(clusterlabels, type_counts){
-  unlist(lapply(clusterlabels, function(x) {
+  unlist(mclapply(clusterlabels, function(x) {
     fix_keyword_casing(x, type_counts)
     }))
 }
@@ -113,7 +113,6 @@ get_cluster_corpus <- function(clusters, metadata, service, stops, taxonomy_sepa
     matches = which(metadata$id %in% group)
     titles =  metadata$title[matches]
     subjects = metadata$subject[matches]
-    langs = metadata$lang_detected[matches]
     titles = lapply(titles, function(x) {gsub("[^[:alnum:]-]", " ", x)})
     titles = lapply(titles, gsub, pattern="\\s+", replacement=" ")
     title_ngrams <- get_title_ngrams(titles, stops)

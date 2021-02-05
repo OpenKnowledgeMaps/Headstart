@@ -94,7 +94,7 @@ replace_keywords_if_empty <- function(metadata, stops, service) {
     metadata$subject[is.na(metadata$subject)] <- ""
   } else {
     candidates = mapply(paste, metadata$title)
-    candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
+    candidates = mclapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
     candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
     candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
     candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
@@ -106,7 +106,7 @@ replace_keywords_if_empty <- function(metadata, stops, service) {
     nn_tfidf = TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
     tfidf_top = apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
     tfidf_top_names = lapply(tfidf_top, names)
-    replacement_keywords <- lapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, 3))
+    replacement_keywords <- mclapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, 3))
     replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse="; ")})
     replacement_keywords = gsub("_", " ", replacement_keywords)
 
