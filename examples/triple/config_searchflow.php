@@ -14,13 +14,13 @@ var search_flow_config_local = {
             options: [
                 { id: "triple_sg", name: "Streamgraph TRIPLE", disabled: false, default: false 
                     , text: "Streamgraph", description: ""
-                    , script: "searchTRIPLE_SG.php", milliseconds_progressbar: 800
+                    , script: "searchTRIPLE.php", milliseconds_progressbar: 800
                     , max_length_search_term_short: 115, timeout: 120000
 
                 }
                 , { id: "triple_km", name: "Knowledge Map TRIPLE", disabled: false, default: true 
                     , text: "Knowledge Map", description: ""
-                    , script: "searchTRIPLE_KM.php", milliseconds_progressbar: 800
+                    , script: "searchTRIPLE.php", milliseconds_progressbar: 800
                     , max_length_search_term_short: 115, timeout: 120000
                 }
             ] 
