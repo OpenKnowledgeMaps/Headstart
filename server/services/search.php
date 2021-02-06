@@ -51,19 +51,6 @@ function cleanQuery($dirty_query, $transform_query_tolowercase) {
     return $query;
 }
 
-$repo2snapshot = array("plos" => "PLOS"
-                        , "pubmed" => "PubMed"
-                        , "doaj" => "DOAJ"
-                        , "base" => "BASE"
-                        , "openaire" => "OpenAire"
-                        , "linkedcat" => "LinkedCat"
-                        , "linkedcat_authorview" => "LinkedCat"
-                        , "linkedcat_browseview" => "LinkedCat"
-                        , "triple" => "TRIPLE"
-                        , "gsheets" => "GSheets");
-$service2endpoint = array("triple_km" => "triple",
-                          "triple_sg" => "triple");
-
 
 function search($service_integration, $dirty_query
         , $post_params, $param_types
@@ -80,6 +67,19 @@ function search($service_integration, $dirty_query
     $persistence_backend = isset($ini_array["general"]["persistence_backend"])
                             ? ($ini_array["general"]["persistence_backend"])
                             : "legacy";
+
+    $repo2snapshot = array("plos" => "PLOS"
+                            , "pubmed" => "PubMed"
+                            , "doaj" => "DOAJ"
+                            , "base" => "BASE"
+                            , "openaire" => "OpenAire"
+                            , "linkedcat" => "LinkedCat"
+                            , "linkedcat_authorview" => "LinkedCat"
+                            , "linkedcat_browseview" => "LinkedCat"
+                            , "triple" => "TRIPLE"
+                            , "gsheets" => "GSheets");
+    $service2endpoint = array("triple_km" => "triple",
+                              "triple_sg" => "triple");
 
     $query = ($do_clean_query === true)
                 ?(cleanQuery($dirty_query, $transform_query_tolowercase))
