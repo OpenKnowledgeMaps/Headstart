@@ -1,4 +1,8 @@
 const query = (state = { text: "", parsedTerms: [] }, action) => {
+  if (action.canceled) {
+    return state;
+  }
+
   switch (action.type) {
     case "INITIALIZE":
       return {
@@ -8,6 +12,7 @@ const query = (state = { text: "", parsedTerms: [] }, action) => {
             : null,
         parsedTerms: getQueryTerms(action.contextObject),
         highlightTerms: action.configObject.highlight_query_terms,
+        useLookBehind: isLookBehindSupported(),
       };
     default:
       return state;
@@ -20,6 +25,8 @@ const query = (state = { text: "", parsedTerms: [] }, action) => {
  *
  * Function copied from io.js
  *
+ * Then cleaned up and fixed.
+ *
  * @returns {Array} array of terms (string)
  */
 const getQueryTerms = (context) => {
@@ -27,33 +34,56 @@ const getQueryTerms = (context) => {
     return [];
   }
 
-  let original_query = context.query;
+  const originalQuery = context.query;
 
-  //Replace terms within square brackets, as they denote fields in PubMed
-  let full_query = original_query.replace(/\[(.*?)\]/g, "");
+  // Replace terms within square brackets, as they denote fields in PubMed
+  const fullQuery = originalQuery.replace(/\[(.*?)\]/g, "");
 
-  //Get all phrases and remove inverted commas from results
-  let match_query = /\"(.*?)\"/g;
-  let term_array = full_query.match(match_query);
-  if (term_array !== null)
-    term_array = term_array.map(function (x) {
-      return x.replace(/\\"|\"/g, "");
-    });
-  else term_array = [];
+  // Get all phrases and remove quotes from results
+  const phraseRegex = /\"(.*?)\"/g;
+  let phraseArray = fullQuery.match(phraseRegex);
+  if (phraseArray === null) {
+    phraseArray = [];
+  }
 
-  //Remove phrases, and, or, +, -, (, ) from query string
-  let query_wt_phrases = full_query.replace(match_query, " ");
-  let query_wt_rest = query_wt_phrases
+  // Replace backslashed quotes??
+  // TODO test this one, it seems to be redundant
+  phraseArray = phraseArray.map((x) => x.replace(/\\"|\"/g, ""));
+
+  // Remove phrases, and, or, +, -, (, ) from query string
+  const queryWtPhrases = fullQuery.replace(phraseRegex, " ");
+  const cleanQuery = queryWtPhrases
     .replace(/\band\b|\bor\b|\(|\)/g, "")
     .replace(/(^|\s)-|\+/g, " ");
 
-  term_array = term_array.concat(
-    query_wt_rest.trim().replace(/\s+/g, " ").split(" ")
+  phraseArray = phraseArray.concat(
+    cleanQuery.trim().replace(/\s+/g, " ").split(" ")
   );
 
-  term_array = [...new Set(term_array)];
+  // Remove backslashes, colons and empty words
+  phraseArray = phraseArray
+    .map((x) => x.replace(/[\\\:]/g, ""))
+    .filter((x) => x !== "");
 
-  return term_array;
+  phraseArray = [...new Set(phraseArray)];
+
+  return phraseArray;
+};
+
+/**
+ * Regex lookbehind feature detection (used in the query
+ * highlight component).
+ *
+ * Inspired by
+ * https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent
+ */
+const isLookBehindSupported = () => {
+  try {
+    new RegExp("(?<=)");
+    return true;
+  } catch (err) {
+    return false;
+  }
 };
 
 export default query;

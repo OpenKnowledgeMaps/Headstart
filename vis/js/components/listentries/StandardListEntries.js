@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import StandardListEntry from "../../templates/listentry/StandardListEntry";
 
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
+import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 
 import {
   getPaperPreviewLink,
@@ -27,12 +28,29 @@ const StandardListEntries = ({
   localization,
   showKeywords,
   height,
+  isStreamgraph,
+  showBacklink,
+  isInStreamBacklink,
   handleZoomIn,
+  handleSelectPaper,
+  handleDeselectPaper,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
-  handleTitleClick,
+  handleBacklinkClick,
 }) => {
+  const handleTitleClick = (paper) => {
+    handleSelectPaper(paper);
+    if (!isStreamgraph) {
+      handleZoomIn(paper);
+    }
+  };
+
+  const handleAreaClick = (paper) => {
+    handleDeselectPaper();
+    handleZoomIn(paper, "list-area");
+  };
+
   return (
     <div
       className="col-xs-12"
@@ -79,12 +97,15 @@ const StandardListEntries = ({
                 }
               : null
           }
-          area={{
-            text: entry.area,
-            onMouseOver: () => handleAreaMouseover(entry),
-            onMouseOut: () => handleAreaMouseout(),
-          }}
-          handleZoomIn={() => handleZoomIn(entry)}
+          area={
+            !isStreamgraph
+              ? {
+                  text: entry.area,
+                  onMouseOver: () => handleAreaMouseover(entry),
+                  onMouseOut: () => handleAreaMouseout(),
+                }
+              : null
+          }
           citations={
             !isContentBased && !!baseUnit && !showMetrics
               ? entry.num_readers
@@ -92,6 +113,12 @@ const StandardListEntries = ({
           }
           baseUnit={baseUnit}
           handleTitleClick={() => handleTitleClick(entry)}
+          handleAreaClick={() => handleAreaClick(entry)}
+          backlink={{
+            show: showBacklink,
+            isInStream: isInStreamBacklink,
+            onClick: () => handleBacklinkClick(),
+          }}
         />
       ))}
     </div>
@@ -111,6 +138,9 @@ const mapStateToProps = (state) => ({
     state.list.showKeywords &&
     (!!state.selectedPaper || !state.list.hideUnselectedKeywords),
   height: state.list.height,
+  isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+  showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
+  isInStreamBacklink: !!state.selectedBubble,
 });
 
 export default connect(

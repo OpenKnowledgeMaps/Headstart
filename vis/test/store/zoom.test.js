@@ -21,6 +21,8 @@ describe("zoom state", () => {
         not_from_mediator: true,
         source: null,
         selectedAreaData: DATA,
+        alreadyZoomed: false,
+        callback: undefined,
       };
       expect(zoomIn(DATA)).toEqual(EXPECTED_ACTION);
     });
@@ -38,6 +40,8 @@ describe("zoom state", () => {
         not_from_mediator: true,
         source: SOURCE,
         selectedAreaData: DATA,
+        alreadyZoomed: false,
+        callback: undefined,
       };
       expect(zoomIn(DATA, SOURCE)).toEqual(EXPECTED_ACTION);
     });
@@ -101,6 +105,14 @@ describe("zoom state", () => {
 
         expect(result).toEqual(EXPECTED_RESULT);
       });
+
+      it("should not change the state if the action is canceled", () => {
+        const INITIAL_STATE = { some_state: 1 };
+  
+        const result = zoomReducer(INITIAL_STATE, { canceled: true });
+  
+        expect(result).toEqual(INITIAL_STATE);
+      });
     });
 
     describe("selectedBubble reducer", () => {
@@ -143,6 +155,14 @@ describe("zoom state", () => {
         const result = selectedBubbleReducer(initialState, zoomOut());
 
         expect(result).toEqual(EXPECTED_RESULT);
+      });
+
+      it("should not change the state if the action is canceled", () => {
+        const INITIAL_STATE = { some_state: 1 };
+  
+        const result = selectedBubbleReducer(INITIAL_STATE, { canceled: true });
+  
+        expect(result).toEqual(INITIAL_STATE);
       });
     });
   });
