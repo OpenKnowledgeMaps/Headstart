@@ -7,7 +7,6 @@ include 'config.php';
       <?php
           include('config_searchflow.php');
           include('search-flow/inc/knowledge-map-header.php');
-          $service = "triple_km";
       ?>
       <script src="https://code.jquery.com/jquery-2.1.4.min.js" integrity="sha256-8WqyJLuWKRBVhxXIL1jBDD7SDxU936oZkCnxQbWwJVw=" crossorigin="anonymous"></script>
     </head>
@@ -17,24 +16,15 @@ include 'config.php';
        <script>
            var fit_to_page = false;
        </script>
-       
+        
+       <script type="text/javascript" src="data-config_triple.js"></script>
        <?php include ("search-flow/inc/knowledge-map.php") ?>
-        <script type="text/javascript" src="data-config_triple.js"></script>
         <script>
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
             data_config.files = [{
                     title: "<?php echo $query; ?>",
                     file: "<?php echo $id; ?>"
             }];
-            data_config.options = search_flow_config.search_options.filter_options.options_<?php echo $service ?>.dropdowns;
-            if(<?php echo json_encode($service) ?> === "triple_sg") {
-                data_config.is_streamgraph = true;
-                //data_config.embed_modal = false;
-                data_config.show_area = false;
-            } else {
-                if (<?php echo json_encode($service) ?> === "triple_km") {
-                }
-            }
         </script>
          <div style="margin-top:20px ">Built with <a href="https://github.com/OpenKnowledgeMaps/Headstart" target="_blank ">Head Start</a>. All content retrieved from <a href="https://www.gotriple.eu/" target="_blank ">TRIPLE</a>.
         </div>
