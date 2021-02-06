@@ -1,10 +1,10 @@
 <?php
 include 'config.php';
-include 'config_searchflow.php';
 ?>
 <html>
 
 <head>
+    <?php include 'config_searchflow.php'; ?>
     <title>Search TRIPLE and turn it into a visualization</title>
     <meta http-equiv="Content-Type">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
