@@ -6,6 +6,7 @@ import Citations from "./Citations";
 import Comments from "./Comments";
 import Details from "./Details";
 import DocumentType from "./DocumentType";
+import EntryBacklink from "./EntryBacklink";
 import Keywords from "./Keywords";
 import Link from "./Link";
 import ListEntry from "./ListEntry";
@@ -36,7 +37,8 @@ const StandardListEntry = ({
   citations,
   baseUnit,
   handleTitleClick,
-  handleZoomIn,
+  handleAreaClick,
+  backlink,
 }) => {
   return (
     // html template starts here
@@ -72,15 +74,23 @@ const StandardListEntry = ({
           baseUnit={metrics.baseUnit}
         />
       )}
-      <Area
-        onClick={handleZoomIn}
-        onMouseOver={area.onMouseOver}
-        onMouseOut={area.onMouseOut}
-      >
-        {area.text}
-      </Area>
+      {!!area && (
+        <Area
+          onClick={handleAreaClick}
+          onMouseOver={area.onMouseOver}
+          onMouseOut={area.onMouseOut}
+        >
+          {area.text}
+        </Area>
+      )}
       {(!!citations || parseInt(citations) === 0) && (
         <Citations number={citations} label={baseUnit} />
+      )}
+      {!!backlink.show && (
+        <EntryBacklink
+          onClick={backlink.onClick}
+          isInStream={backlink.isInStream}
+        />
       )}
     </ListEntry>
     // html template ends here

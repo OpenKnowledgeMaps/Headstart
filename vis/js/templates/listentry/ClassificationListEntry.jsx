@@ -27,7 +27,7 @@ const ClassificationListEntry = ({
   keywords,
   area,
   handleTitleClick,
-  handleZoomIn,
+  handleAreaClick,
   backlink,
 }) => {
   return (
@@ -49,7 +49,7 @@ const ClassificationListEntry = ({
       <Abstract text={abstract} />
       {!!area && (
         <Area
-          onClick={handleZoomIn}
+          onClick={handleAreaClick}
           onMouseOver={area.onMouseOver}
           onMouseOut={area.onMouseOut}
         >

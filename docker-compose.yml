@@ -11,6 +11,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./server/workers/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+      - ./server/workers/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
     ports:
       - '127.0.0.1:5432:5432'
 

@@ -21,10 +21,10 @@ const BasicListEntry = ({
   details,
   abstract,
   area,
-  handleZoomIn,
   readers,
   baseUnit,
   handleTitleClick,
+  handleAreaClick,
 }) => {
   return (
     // html template starts here
@@ -51,7 +51,7 @@ const BasicListEntry = ({
         />
       )}
       <Area
-        onClick={handleZoomIn}
+        onClick={handleAreaClick}
         onMouseOver={area.onMouseOver}
         onMouseOut={area.onMouseOut}
       >
