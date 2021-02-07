@@ -201,16 +201,14 @@ HeadstartFSM.prototype = {
 
       search_repos: function(that, setupVis) {
         let url = config.server_url + "services/getLatestRevision.php?vis_id=" + mediator.current_bubble.file
-                + "&context=" + config.show_context + "&streamgraph=" + config.is_streamgraph
-                + "&backend=" + config.backend + "&persistence_backend=" + config.persistence_backend;
+                + "&context=" + config.show_context + "&streamgraph=" + config.is_streamgraph;
         mediator.publish("get_data_from_files", url, 'json', setupVis);
       },
 
       gsheets: function(that, setupVis) {
             let url = config.server_url + "services/getGSheetsMap.php?vis_id=" + mediator.current_bubble.file
                 + "&q=" +mediator.current_bubble.title
-                + "&context=" + config.show_context + "&streamgraph=" + config.is_streamgraph
-                + "&persistence_backend=" + config.persistence_backend;
+                + "&context=" + config.show_context + "&streamgraph=" + config.is_streamgraph;
             mediator.publish("get_data_from_files", url, 'json', setupVis);
       },
 
@@ -235,44 +233,6 @@ HeadstartFSM.prototype = {
       this.get_files[config.mode](hs, this.makeSetupVisualisation());
   },
 
-  // 'ontomultiples' transitions from Headstarts "normal" view to multiples
-  // view. In a nutshell:
-  // 1. it requires some cleanup
-  //    - objects which re no longer needed
-  //    - the canvas
-  // 2. rendering of new elements, on a bigger
-  //    chart
-  ontomultiples: function() {
-      mediator.publish("ontomultiples");
-      // load bubbles in sync
-      var that = this;
-      $.each(mediator.bubbles, (index, elem) => {
-          var setupMultiplesVisualization = (csv) => {
-              mediator.publish("prepare_data", null, csv, null);
-              mediator.publish("prepare_areas");
-              elem.start(csv);
-          };
-          that.get_multiples_files(elem.file, setupMultiplesVisualization);
-      });
-      mediator.publish("ontomultiples_finish");
-  },
-
-  get_multiples_files: function(file, callback) {
-    var formats = {
-      csv: function (file, callback) {
-        d3.csv(file, callback);
-      },
-      json: function (file, callback) {
-        d3.json(config.server_url + "services/getLatestRevision.php?vis_id=" + file, callback);
-      },
-      default: function() {
-        throw "WRONG INPUT FORMAT";
-      }
-    };
-    var method = (formats[config.input_format] || formats['default']);
-    method(file, callback);
-  },
-
   ontofile: function(event, from, to, file) {
       mediator.publish("ontofile", file);
       let hs = this;
@@ -289,8 +249,7 @@ export var headstart = StateMachine.create({
 
   events: [
     { name: "start",      from: "none",     to: "normal" },
-    { name: "tomultiples", from: ["normal", "switchfiles"],   to: "multiples" },
-    { name: "tofile", from: ["normal", "switchfiles", "multiples"], to: "switchfiles"}
+    { name: "tofile", from: ["normal", "switchfiles"], to: "switchfiles"}
   ]
 
 });

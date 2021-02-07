@@ -77,7 +77,6 @@ $("#searchform").validate({
 
 var doSubmit = function (data, newWindow, callback) {
   data += "&today=" + new Date().toLocaleDateString("en-US");
-  data += "&persistence_backend=" + data_config.persistence_backend;
   var params = $("#searchform").serializeArray().reduce(function(obj, item) {
     obj[item.name] = item.value;
     return obj;
@@ -154,6 +153,6 @@ $(document).ready(function () {
     if (valueExists("id", "time_range")) {
         search_options.addDatePickerFromTo("#from", "#to", "any-time");
     } else if (valueExists("id", "year_range")) {
-        search_options.setDateRangeFromPreset("#from", "#to", "any-time-years", "1809");
+        search_options.setDateRangeFromPreset("#from", "#to", "any-time-years");
     }
 });

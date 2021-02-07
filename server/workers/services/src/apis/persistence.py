@@ -7,6 +7,7 @@ from flask_restx import Namespace, Resource, fields
 
 from models import Revisions, Visualizations
 from database import sessions
+from config import settings
 
 
 persistence_ns = Namespace("persistence", description="OKMAps persistence operations")
@@ -18,7 +19,7 @@ def select_session(Session=None):
     if Session is not None:
         return Session()
     else:
-        return sessions.get('dev')()
+        return sessions.get(settings.DEFAULT["db"])()
 
 
 def create_vis_id(params, param_types):

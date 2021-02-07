@@ -52,15 +52,34 @@ function cleanQuery($dirty_query, $transform_query_tolowercase) {
 }
 
 
-function search($repository, $dirty_query
+function search($service_integration, $dirty_query
         , $post_params, $param_types
         , $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
         , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3
         , $id = "area_uri", $subjects = "subject"
         , $precomputed_id = null, $do_clean_query = true
-        , $backend = "legacy", $persistence_backend = "legacy") {
+        , $processing_backend = "overview") {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
+    $processing_backend = isset($ini_array["general"]["processing_backend"])
+                            ? ($ini_array["general"]["processing_backend"])
+                            : "legacy";
+    $persistence_backend = isset($ini_array["general"]["persistence_backend"])
+                            ? ($ini_array["general"]["persistence_backend"])
+                            : "legacy";
+
+    $repo2snapshot = array("plos" => "PLOS"
+                            , "pubmed" => "PubMed"
+                            , "doaj" => "DOAJ"
+                            , "base" => "BASE"
+                            , "openaire" => "OpenAire"
+                            , "linkedcat" => "LinkedCat"
+                            , "linkedcat_authorview" => "LinkedCat"
+                            , "linkedcat_browseview" => "LinkedCat"
+                            , "triple" => "TRIPLE"
+                            , "gsheets" => "GSheets");
+    $service2endpoint = array("triple_km" => "triple",
+                              "triple_sg" => "triple");
 
     $query = ($do_clean_query === true)
                 ?(cleanQuery($dirty_query, $transform_query_tolowercase))
@@ -68,6 +87,7 @@ function search($repository, $dirty_query
 
     $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
     $database = $ini_array["connection"]["database"];
+    $endpoint = array_key_exists($service_integration, $service2endpoint) ? $service2endpoint[$service_integration] : $service_integration;
 
     $settings = $ini_array["general"];
 
@@ -121,8 +141,8 @@ function search($repository, $dirty_query
 
     $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
 
-    if ($backend === "api") {
-      $route = $ini_array["general"]["api_url"] . $repository . "/search";
+    if ($processing_backend === "api") {
+      $route = $ini_array["general"]["api_url"] . $endpoint . "/search";
       $payload = json_encode($post_params);
       $res = library\CommUtils::call_api($route, $payload);
       if ($res["httpcode"] != 200) {
@@ -132,7 +152,7 @@ function search($repository, $dirty_query
       }
     } else {
       $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
-      $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, $repository);
+      $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, $endpoint);
 
       $output_json = end($output);
       $output_json = mb_convert_encoding($output_json, "UTF-8");
@@ -156,7 +176,7 @@ function search($repository, $dirty_query
     $input_json = json_encode(utf8_converter($result));
     $input_json = preg_replace("/\<U\+(.*?)>/", "&#x$1;", $input_json);
 
-    $vis_title = $repository;
+    $vis_title = $service_integration;
 
     if ($persistence_backend === "api") {
       $route = $ini_array["general"]["api_url"] . "persistence/" . "existsVisualization/" . $database;
@@ -202,24 +222,13 @@ function search($repository, $dirty_query
       }
     }
 
-    $repo_mapping = array("plos" => "PLOS"
-                            , "pubmed" => "PubMed"
-                            , "doaj" => "DOAJ"
-                            , "base" => "BASE"
-                            , "openaire" => "OpenAire"
-                            , "linkedcat" => "LinkedCat"
-                            , "linkedcat_authorview" => "LinkedCat"
-                            , "linkedcat_browseview" => "LinkedCat"
-                            , "triple" => "TRIPLE"
-                            , "gsheets" => "GSheets");
-
     if(!isset($ini_array["snapshot"]["snapshot_enabled"]) || $ini_array["snapshot"]["snapshot_enabled"] > 0) {
         if (isset($post_params["vis_type"]) && $post_params["vis_type"] == "timeline") {
           $vis_type = "timeline";
         } else {
           $vis_type = "overview";
         }
-        $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $repository, $repo_mapping[$repository], $vis_type);
+        $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $service_integration, $repo2snapshot[$service_integration], $vis_type);
         $snapshot->takeSnapshot();
     }
 

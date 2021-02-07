@@ -6,6 +6,7 @@ and open the template in the editor.
 -->
 <?php
 include 'config.php';
+include 'config_searchflow.php';
 ?>
 <html>
 
@@ -22,44 +23,16 @@ include 'config.php';
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-    <link type="text/css" rel="stylesheet" href="options.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 
 <body style="padding-left:10px; padding-right:10px;">
     <div>
         <h2>Search TRIPLE and turn it into a visualization</h2>
-        <form id="searchform" style="margin-top:20px">
-            <label for="q">Search term:</label>
-            <input type="text" name="q" size="61" required>
-            <button type="submit" class="btn">Submit</button>
-            <div id="filter-container"></div>
-            <label class="radio-button">
-                <input type="radio" name="vis_type" value="overview" checked="checked">
-                <span class="checkmark"></span>
-                <span class="popover-selection">Knowledge Map
-                </span>
-            </label>
-            </div>
-            <div>
-            <label class="radio-button">
-                <input type="radio" name="vis_type" value="timeline">
-                <span class="checkmark"></span>
-                <span class=popover-selection>Streamgraph
-                </span>
-            </label>
-        </form>
-    </div>
-    <div id="progress">
-        <div id="progressbar"></div>
-    </div>
+        <?php include('search-flow/inc/search-form.php') ?>
     <div style="margin-top:20px ">Built with <a href="https://github.com/OpenKnowledgeMaps/Headstart" target="_blank ">Head Start</a>. All content retrieved from <a href="https://www.gotriple.eu/" target="_blank ">TRIPLE</a>.
     </div>
-    <script type="text/javascript" src="data-config_triple.js"></script>
-    <script type="text/javascript " src="search_options.js "></script>
-    <script type="text/javascript">
-      data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
-    </script>
-    <script type="text/javascript " src="search.js "></script>
+    <script type="text/javascript " src="search-flow/js/search_form.js "></script>
 </body>
 
 </html>
