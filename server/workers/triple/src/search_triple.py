@@ -251,6 +251,7 @@ class TripleClient(object):
                     res["id"] = k
                     res["input_data"] = self.search(params)
                     res["params"] = params
+                    res["status"] = "success"
                     if params.get('raw') is True:
                         self.redis_store.set(k+"_output", json.dumps(res))
                     else:
@@ -258,3 +259,9 @@ class TripleClient(object):
                 except Exception as e:
                     self.logger.error(e)
                     self.logger.error(params)
+                    res = {}
+                    res["id"] = k
+                    res["params"] = params
+                    res["status"] = "error"
+                    res["error"] = e
+                    self.redis_store.set(k+"_output", json.dumps(res))
