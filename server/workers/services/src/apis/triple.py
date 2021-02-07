@@ -10,7 +10,7 @@ import pandas as pd
 from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
-from apis.utils import get_key
+from apis.utils import get_key, detect_error
 
 
 with open("redis_config.json") as infile:
@@ -71,6 +71,8 @@ class Search(Resource):
         triple_ns.logger.debug(d)
         redis_store.rpush("triple", json.dumps(d))
         result = get_key(redis_store, k)
+        if result.get('status') != "success":
+            code, reason = detect_error("triple", result.get('error'), params)
         try:
             headers = {}
             if request.headers["Accept"] == "application/json":
