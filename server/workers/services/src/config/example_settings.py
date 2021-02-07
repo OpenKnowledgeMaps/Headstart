@@ -1,5 +1,5 @@
 BEHIND_PROXY = True
-DEV = {
+DEFAULT = {
     'user': 'user',
     'pw': 'pw',
     'db': 'dev',
@@ -13,7 +13,7 @@ TEST = {
     'host': '127.0.0.1',
     'port': '5432',
 }
-SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % DEV
+SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % DEFAULT
 SQLALCHEMY_BINDS = {
     'test': 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % TEST
 }

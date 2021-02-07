@@ -5,6 +5,8 @@ import { STREAMGRAPH_MODE } from "../reducers/chartType";
 
 import BacklinkTemplate from "../templates/Backlink";
 
+import { createAnimationCallback } from "../utils/eventhandlers";
+
 export const Backlink = ({
   hidden = false,
   streamgraph = false,
@@ -37,7 +39,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onClick: () => dispatch(zoomOut()),
+  onClick: () => dispatch(zoomOut(createAnimationCallback(dispatch))),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Backlink);
