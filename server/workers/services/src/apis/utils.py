@@ -13,3 +13,8 @@ def get_key(store, key):
             store.delete(key+"_output")
             break
     return result
+
+
+def detect_error(service, error, params):
+    reason = ['unexpected data processing error']
+    return code, reason
