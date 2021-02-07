@@ -8,6 +8,7 @@ $search_flow_config_local = array(
         "triple_km" => array("from", "to", "sorting", "language", "limit")
             , "triple_sg" => array("from", "to", "sorting", "language", "limit", "sg_method")
     )
+    , "enable_get_requests" => true
     , "filter_options" => [
             'options_triple_km' => [
                 'start_date' => '1809',
@@ -257,7 +258,8 @@ var search_flow_config_local = {
                     ]
                 }
             }
-            , waiting_page_options: {
+        }
+        , waiting_page_options: {
                 vis_page_cool_uri: false
                 // Parameters for the vis page
                 // id: id in post_params array
@@ -268,11 +270,10 @@ var search_flow_config_local = {
                 //      , e.g. value: {'triple_km': 'overview', 'triple_sg': 'timeline'} 
                 , vis_page_params: [
                     { id: 'unique_id', name: 'id' }
-                    , {id: "optradio", "name": "vis_type", value: {'triple_km': 'overview', 'triple_sg': 'timeline'}}
+                    , {id: "service", "name": "vis_type", value: {'triple_km': 'overview', 'triple_sg': 'timeline'}}
                 ]
                 , vis_page_additional_params: [
                 ]
             }          
         }
-    }
  </script>

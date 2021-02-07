@@ -12,17 +12,16 @@ $precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
 $post_params = $_POST;
 
-if (isset($post_params["optradio"]) && $post_params["optradio"] === "triple_km") {
+if (isset($post_params["service"]) && $post_params["service"] === "triple_km") {
   $post_params["vis_type"] = "overview";
   $param_types = array("from", "to", "sorting", "language", "limit");
-  $repo = $post_params["optradio"];
+  $repo = $post_params["service"];
 }
-if (isset($post_params["optradio"]) && $post_params["optradio"] === "triple_sg") {
+if (isset($post_params["service"]) && $post_params["service"] === "triple_sg") {
   $post_params["vis_type"] = "timeline";
   $param_types = array("from", "to", "sorting", "language", "limit", "sg_method");
-  $repo = $post_params["optradio"];
+  $repo = $post_params["service"];
 }
-unset($post_params["optradio"]);
 
 $result = search("triple", $dirty_query
                 , $post_params, $param_types
