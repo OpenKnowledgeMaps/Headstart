@@ -271,7 +271,6 @@ var search_flow_config_local = {
                     , {id: "optradio", "name": "vis_type", value: {'triple_km': 'overview', 'triple_sg': 'timeline'}}
                 ]
                 , vis_page_additional_params: [
-                     { id: 'embed', name: 'embed', value: "true" }
                 ]
             }          
         }
