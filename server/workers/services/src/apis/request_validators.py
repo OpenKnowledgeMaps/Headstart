@@ -22,6 +22,8 @@ class SearchParamSchema(Schema):
     raw = fields.Boolean()
     sg_method = fields.Str()
     vis_id = fields.Str(default=None)
+    optradio = fields.Str()
+    service = fields.Str()
 
     @pre_load
     def fix_years(self, in_data, **kwargs):
