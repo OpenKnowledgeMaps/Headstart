@@ -22,7 +22,6 @@ if (isset($post_params["optradio"]) && $post_params["optradio"] === "triple_sg")
   $param_types = array("from", "to", "sorting", "language", "limit", "sg_method");
   $repo = $post_params["optradio"];
 }
-unset($post_params["optradio"]);
 
 $result = search("triple", $dirty_query
                 , $post_params, $param_types

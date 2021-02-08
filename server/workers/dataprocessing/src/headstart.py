@@ -68,16 +68,27 @@ class Dataprocessing(object):
             k, params, input_data = self.next_item()
             self.logger.debug(k)
             self.logger.debug(params)
-            if params.get('vis_type') == "timeline":
-                metadata = self.create_map(params, input_data)
-                sg_data = sg.get_streamgraph_data(json.loads(metadata),
-                                                  params.get('q'),
-                                                  params.get('top_n', 12),
-                                                  params.get('sg_method'))
-                result = {}
-                result["data"] = metadata
-                result["streamgraph"] = json.dumps(sg_data)
-                self.redis_store.set(k+"_output", json.dumps(result))
-            else:
-                result = self.create_map(params, input_data)
-                self.redis_store.set(k+"_output", json.dumps(result))
+            try:
+                if params.get('vis_type') == "timeline":
+                    metadata = self.create_map(params, input_data)
+                    sg_data = sg.get_streamgraph_data(json.loads(metadata),
+                                                    params.get('q'),
+                                                    params.get('top_n', 12),
+                                                    params.get('sg_method'))
+                    res = {}
+                    res["data"] = metadata
+                    res["streamgraph"] = json.dumps(sg_data)
+                    res["status"] = "success"
+                    self.redis_store.set(k+"_output", json.dumps(res))
+                else:
+                    res = self.create_map(params, input_data)
+                    self.redis_store.set(k+"_output", json.dumps(res))
+            except Exception as e:
+                self.logger.error(e)
+                self.logger.error(params)
+                res = {}
+                res["id"] = k
+                res["params"] = params
+                res["status"] = "error"
+                res["error"] = e
+                self.redis_store.set(k+"_output", json.dumps(res))
