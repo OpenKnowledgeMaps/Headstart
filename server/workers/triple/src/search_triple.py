@@ -2,7 +2,7 @@ import sys
 import re
 import json
 from itertools import chain
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch, NotFoundError
 from elasticsearch_dsl import Search, Q
 import pandas as pd
 import logging
@@ -34,8 +34,7 @@ class TripleClient(object):
         )
         self.redis_store = redis_store
         self.nlp = spacy.load("xx_ent_wiki_sm")
-        language_detector = LanguageDetector()
-        self.nlp.add_pipe(language_detector)
+        self.nlp.add_pipe(LanguageDetector())
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(loglevel)
         handler = logging.StreamHandler(sys.stdout)
@@ -47,10 +46,10 @@ class TripleClient(object):
         queue, msg = self.redis_store.blpop("triple")
         msg = json.loads(msg)
         k = msg.get('id')
-        params = msg.get('params')
-        params["service"] = "triple"
+        parameters = msg.get('params')
+        parameters["service"] = "triple"
         endpoint = msg.get('endpoint')
-        return k, params, endpoint
+        return k, parameters, endpoint
 
     def get_mappings(self, index):
         return self.es.indices.get_mapping(index)
@@ -110,15 +109,15 @@ class TripleClient(object):
         return body
 
     def search(self, parameters):
-        index = "isidore-documents-triple"
-        fields = ["title", "abstract"]
+        index = "triple-poc-document"
+        fields = ["headline.text", "abstract.text"]
         s = Search(using=self.es, index=index)
         # TODO: replace from parameters
         q = self.parse_query(parameters.get('q'), fields)
         s = s.query(q)
         if parameters.get('language') != 'all':
-            s = s.filter("match", language__label=self.get_lang(parameters))
-        s = s.query("range", date=self.build_date_field(
+            s = s.filter("match", abstract__detected_lang=self.get_lang(parameters))
+        s = s.query("range", date_published=self.build_date_field(
                     parameters.get('from'),
                     parameters.get('to')))
         #s = s[parameters.get('pagination_from'):parameters.get('pagination_to')]
@@ -128,11 +127,11 @@ class TripleClient(object):
         if parameters.get('sorting') == "most-recent":
             s = s.sort("-date")
         self.logger.debug(s.to_dict())
-        res = s.execute()
+        result = s.execute()
         if parameters.get('raw') is True:
-            return res.to_dict()
+            return result.to_dict()
         else:
-            return self.process_result(res, parameters)
+            return self.process_result(result, parameters)
 
     def process_result(self, result, parameters):
         """
@@ -150,25 +149,24 @@ class TripleClient(object):
         """
         df = pd.DataFrame((d.to_dict() for d in result))
         metadata = pd.DataFrame()
-        metadata["id"] = df.identifier.map(lambda x: x[0] if isinstance(x, list) else "")
-        metadata["title"] = df.title.map(lambda x: x[0] if isinstance(x, list) else "")
-        metadata["title_enriched"] = df.title.map(lambda x: [{"content":d.text, "lang":d._.languages} for d in self.nlp.pipe([self.clean_string(doc) for doc in x])] if isinstance(x, list) else {})
-        metadata["title"] = metadata.title_enriched.map(lambda x: self.filter_lang(x, parameters))
-        metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if isinstance(x, list) else "")
-        metadata["paper_abstract"] = df.abstract.map(lambda x: x[0] if isinstance(x, list) else "")
-        metadata["paper_abstract_enriched"] = df.abstract.map(lambda x: [{"content":d.text, "lang":d._.languages} for d in self.nlp.pipe([self.clean_string(doc) for doc in x])] if isinstance(x, list) else {})
-        metadata["paper_abstract"] = metadata.paper_abstract_enriched.map(lambda x: self.filter_lang(x, parameters))
-        metadata["published_in"] = df.publisher.map(lambda x: x[0].get('name') if isinstance(x, list) else "")
-        metadata["year"] = df.date.map(lambda x: x[0] if isinstance(x, list) else "")
-        metadata["url"] = df.url.map(lambda x: x[0] if isinstance(x, list) else "")
+        metadata["id"] = df.id.map(lambda x: x if isinstance(x, str) else "")
+        metadata["title"] = df.headline.map(lambda x: self.filter_lang(x, parameters, "text"))
+        #metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if isinstance(x, list) else "")
+        metadata["authors"] = df.author.map(lambda x: ", ".join(x))
+        metadata["paper_abstract"] = df.abstract.map(lambda x: self.filter_lang(x, parameters, "text"))
+        metadata["published_in"] = df.publisher.map(lambda x: ", ".join(x))
+        metadata["year"] = df.date_published
+        metadata["url"] = df.url.map(lambda x: x[0] if x else "")
         metadata["readers"] = 0
-        metadata["subject_orig"] = df.keyword.map(lambda x: "; ".join(x) if isinstance(x, list) else "")
-        metadata["subject_cleaned"] = df.keyword.map(lambda x: "; ".join([self.clean_subject(s) for s in x]) if isinstance(x, list) else "")
-        metadata["subject_enriched"] = df.subject.map(lambda x: self.get_subjects(x) if isinstance(x, list) else "")
-        metadata["subject_orig"] = metadata.apply(lambda x: "; ".join(x[["subject_orig", "subject_enriched"]]), axis=1)
-        metadata["subject"] = metadata.apply(lambda x: "; ".join(x[["subject_cleaned", "subject_enriched"]]), axis=1)
+        metadata["subject_orig"] = df.keywords.map(lambda x: [i.get('text') for i in x if i.get('text')] if isinstance(x, list) else [])
+        metadata["subject"] = (df.keywords
+                .map(lambda x: [i.get('text') for i in x if i.get('text')] if isinstance(x, list) else [])
+                .map(lambda x: [self.clean_subject(s) for s in x if s])
+                .map(lambda x: list(filter(lambda l: len(l) > 0, x)))
+                .map(lambda x: "; ".join(x)))
         metadata["oa_state"] = 2
-        metadata["link"] = ""
+        metadata["link"] = (df.url.map(lambda x: list(filter(lambda l: l.lower().endswith('pdf'), x)))
+                              .map(lambda x: x[0] if x else ""))
         metadata["relevance"] = df.index
         text = pd.DataFrame()
         text["id"] = metadata["id"]
@@ -183,20 +181,20 @@ class TripleClient(object):
         return ''.join(x for x in string if x.isprintable())
 
     @staticmethod
-    def filter_lang(field, params):
-        lang = params.get('language')
+    def filter_lang(field, parameters, content_field):
+        lang = parameters.get('language')
         if lang == 'all':
             lang = 'en'
-        filtered = [d.get('content')
+        filtered = [d.get(content_field)
                     for d in field
-                    if (d.get('lang') and d.get('lang')[0] == lang)]
+                    if (d.get('lang', '') == lang)]
         try:
             if filtered == []:
-                filtered.append(field[0].get('content'))
+                filtered.append(field[0].get(content_field))
         except Exception:
             filtered = [""]
         filtered = sorted(filtered, key=len)
-        return filtered[-1]
+        return ". ".join(filtered)
 
     @staticmethod
     def clean_subject(subject):
@@ -240,28 +238,28 @@ class TripleClient(object):
 
     def run(self):
         while True:
-            k, params, endpoint = self.next_item()
-            self.logger.debug(params)
+            k, parameters, endpoint = self.next_item()
+            self.logger.debug(parameters)
             if endpoint == "mappings":
-                res = self.get_mappings(params.get('index'))
+                result = self.get_mappings(parameters.get('index'))
                 self.redis_store.set(k+"_output", json.dumps(res))
             if endpoint == "search":
                 try:
                     res = {}
                     res["id"] = k
-                    res["input_data"] = self.search(params)
-                    res["params"] = params
+                    res["input_data"] = self.search(parameters)
+                    res["params"] = parameters
                     res["status"] = "success"
-                    if params.get('raw') is True:
+                    if parameters.get('raw') is True:
                         self.redis_store.set(k+"_output", json.dumps(res))
                     else:
                         self.redis_store.rpush("input_data", json.dumps(res))
-                except Exception as e:
+                except (NotFoundError, Exception) as e:
                     self.logger.error(e)
-                    self.logger.error(params)
+                    self.logger.error(parameters)
                     res = {}
                     res["id"] = k
-                    res["params"] = params
+                    res["params"] = parameters
                     res["status"] = "error"
-                    res["error"] = e
+                    res["error"] = str(e)
                     self.redis_store.set(k+"_output", json.dumps(res))
