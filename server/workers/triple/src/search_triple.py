@@ -13,11 +13,7 @@ from spacy_cld import LanguageDetector
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
-valid_langs = {
-    'en': 'English',
-    'fr': 'French',
-    'es': 'Spanish'
-}
+valid_langs = ['en', 'es', 'fr']
 
 
 class TripleClient(object):
@@ -74,10 +70,6 @@ class TripleClient(object):
             limit = int(limit)
         return limit
 
-    def get_lang(self, parameters):
-        lang = valid_langs.get(parameters.get('language', 'all'))
-        return lang
-
     @staticmethod
     def parse_query(query, fields):
         if '"' in query:
@@ -115,8 +107,9 @@ class TripleClient(object):
         # TODO: replace from parameters
         q = self.parse_query(parameters.get('q'), fields)
         s = s.query(q)
-        if parameters.get('language') != 'all':
-            s = s.filter("match", abstract__detected_lang=self.get_lang(parameters))
+        lang = parameters.get('language')
+        if lang != 'all' and lang in valid_langs:
+            s = s.filter("match", abstract__lang=lang)
         s = s.query("range", date_published=self.build_date_field(
                     parameters.get('from'),
                     parameters.get('to')))
@@ -188,12 +181,16 @@ class TripleClient(object):
         filtered = [d.get(content_field)
                     for d in field
                     if (d.get('lang', '') == lang)]
-        try:
-            if filtered == []:
-                filtered.append(field[0].get(content_field))
-        except Exception:
-            filtered = [""]
-        filtered = sorted(filtered, key=len)
+        if len(filtered) == 0:
+            filtered = [d.get(content_field)
+                        for d in field
+                        if (d.get('lang', '') == 'en')]
+        if len(filtered) == 0:
+            try:
+                if filtered == []:
+                    filtered.append(field[0].get(content_field))
+            except Exception:
+                filtered = [""]
         return ". ".join(filtered)
 
     @staticmethod
