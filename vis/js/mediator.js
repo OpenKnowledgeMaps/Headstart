@@ -263,7 +263,9 @@ MyMediator.prototype = {
         }
 
         mediator.render_modern_frontend_list();
-        mediator.render_modern_frontend_peripherals();
+        if (mediator.modern_frontend_enabled) {
+            mediator.render_modern_frontend_peripherals();
+        }
         
         mediator.dimensions_update();
         d3.select(window).on("resize", () => {
