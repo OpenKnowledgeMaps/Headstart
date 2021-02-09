@@ -71,7 +71,7 @@ class Search(Resource):
         triple_ns.logger.debug(d)
         redis_store.rpush("triple", json.dumps(d))
         result = get_key(redis_store, k)
-        if result.get('status') != "success":
+        if not isinstance(result, str) and result.get('status') != "success":
             code, reason = detect_error("triple", result.get('error'), params)
         try:
             headers = {}
