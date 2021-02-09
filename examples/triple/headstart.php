@@ -18,6 +18,7 @@ include 'config.php';
        </script>
         
        <script type="text/javascript" src="data-config_triple.js"></script>
+       <?php include('search-flow/inc/browser-unsupported-banner.php') ?>
        <?php include ("search-flow/inc/knowledge-map.php") ?>
         <script>
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
