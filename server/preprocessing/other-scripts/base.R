@@ -81,13 +81,13 @@ get_papers <- function(query, params, limit=100,
   filter <- I(paste0('descsize:[', min_descsize, '%20TO%20*]'))
   
   repo = params$repo
-  repo_coll = params$repo_coll
+  coll = params$coll
   
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE query:", base_query))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Sort by:", sortby_string))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Min descsize:", min_descsize))
-  blog$info(paste("repo:", .GlobalEnv$VIS_ID, "Target:", repo))
-  blog$info(paste("repo_coll:", .GlobalEnv$VIS_ID, "Collection:", repo_coll))
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Target:", repo))
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Collection:", coll))
   
   # execute search
   (res_raw <- bs_search(hits=limit
@@ -96,7 +96,7 @@ get_papers <- function(query, params, limit=100,
                         , sortby = sortby_string
                         , filter = filter
                         , target = repo
-                        , coll = repo_coll
+                        , coll = coll
                         , retry = retry_opts))
   res <- res_raw$docs
   if (nrow(res)==0){
