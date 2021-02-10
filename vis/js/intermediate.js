@@ -15,7 +15,7 @@ import {
   updateDimensions,
   applyForceAreas,
   applyForcePapers,
-  openInfoModal
+  openInfoModal,
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
@@ -26,6 +26,7 @@ import List from "./components/List";
 import KnowledgeMap from "./components/KnowledgeMap";
 import ModalButtons from "./components/ModalButtons";
 import Modals from "./components/Modals";
+import Toolbar from "./components/Toolbar";
 
 import { applyForce } from "./utils/force";
 
@@ -40,7 +41,8 @@ class Intermediate {
     modern_frontend_enabled,
     streamgraphZoomOutCallback,
     previewPopoverCallback,
-    entryBacklinkClickCallback
+    entryBacklinkClickCallback,
+    rescaleCallback
   ) {
     this.modern_frontend_enabled = modern_frontend_enabled;
     this.actionQueue = [];
@@ -53,7 +55,8 @@ class Intermediate {
       createActionQueueMiddleware(this),
       createScrollMiddleware(),
       createRepeatedInitializeMiddleware(this),
-      createChartTypeMiddleware()
+      createChartTypeMiddleware(),
+      createRescaleMiddleware(rescaleCallback)
     );
 
     this.store = createStore(rootReducer, middleware);
@@ -111,6 +114,13 @@ class Intermediate {
         <Modals />
       </Provider>,
       document.getElementById("modals")
+    );
+
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <Toolbar />
+      </Provider>,
+      document.getElementById("toolbar")
     );
   }
 
@@ -272,6 +282,27 @@ function createChartTypeMiddleware() {
   };
 }
 
+/**
+ * Creates a middleware that calls the rescaling function on the 'SCALE' action.
+ * 
+ * @param {Function} rescaleCallback function that rescales the map
+ */
+function createRescaleMiddleware(rescaleCallback) {
+  return () => {
+    return (next) => (action) => {
+      if (action.type === "SCALE") {
+        rescaleCallback(
+          action.value,
+          action.baseUnit,
+          action.contentBased,
+          action.sort
+        );
+      }
+      return next(action);
+    };
+  };
+}
+
 function createEntryBacklinkClickMiddleware(entryBacklinkClickCallback) {
   return function () {
     return (next) => (action) => {
@@ -311,6 +342,7 @@ function createFileChangeMiddleware() {
   };
 }
 
+// TODO delete mediator.modern_frontend_enabled
 function createPreviewPopoverMiddleware(previewPopoverCallback) {
   return function () {
     return (next) => (action) => {

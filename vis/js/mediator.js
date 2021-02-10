@@ -48,6 +48,7 @@ var MyMediator = function() {
         this.streamgraph_chart_clicked, 
         this.list_show_popup,
         this.currentstream_click,
+        this.rescale_map,
     );
     this.init();
     this.init_state();
@@ -104,9 +105,12 @@ MyMediator.prototype = {
         if(config.render_bubbles) {
             mediator.manager.registerModule(canvas, 'canvas');
         }
-        if(config.scale_toolbar) {
-            mediator.manager.registerModule(scale, 'scale')
+        if (!mediator.modern_frontend_enabled) {
+            if(config.scale_toolbar) {
+                mediator.manager.registerModule(scale, 'scale')
+            }
         }
+        
         if(config.is_streamgraph) {
             mediator.manager.registerModule(streamgraph, 'streamgraph')
         }
@@ -232,9 +236,11 @@ MyMediator.prototype = {
 
             mediator.manager.call('canvas', 'setupCanvas', []);
             
-            if (config.scale_toolbar) {
-                mediator.manager.registerModule(scale, 'scale');
-                mediator.manager.call('scale', 'drawScaleTypes', []);
+            if (!mediator.modern_frontend_enabled) {
+                if (config.scale_toolbar) {
+                    mediator.manager.registerModule(scale, 'scale');
+                    mediator.manager.call('scale', 'drawScaleTypes', []);
+                }
             }
         }
 
@@ -264,6 +270,8 @@ MyMediator.prototype = {
 
         mediator.render_modern_frontend_list();
         if (mediator.modern_frontend_enabled) {
+            // TODO remove the warn
+            console.warn("*** MODERN FRONTEND FLAG ENABLED ***");
             mediator.render_modern_frontend_peripherals();
         }
         
@@ -316,11 +324,13 @@ MyMediator.prototype = {
             toolbar.append(crisLegendTemplate());
         }
         
-        if (config.scale_toolbar) {
-            toolbar.append(scaleToolbarTemplate({
-                scale_by_label: config.localization[config.language].scale_by_label,
-                credit: config.credit
-            }));
+        if (!mediator.modern_frontend_enabled) {
+            if (config.scale_toolbar) {
+                toolbar.append(scaleToolbarTemplate({
+                    scale_by_label: config.localization[config.language].scale_by_label,
+                    credit: config.credit
+                }));
+            }
         }
         
         if (!config.render_bubbles) {
@@ -400,10 +410,12 @@ MyMediator.prototype = {
     },
     
     update_visual_distributions: function(type) {
-        let context = io.context;
-        
-        if(config.cris_legend) {
-            mediator.manager.call('scale', 'updateLegend', [type, context]);
+        if (!mediator.modern_frontend_enabled) {
+            let context = io.context;
+            
+            if(config.cris_legend) {
+                mediator.manager.call('scale', 'updateLegend', [type, context]);
+            }
         }
     },
 
@@ -424,6 +436,15 @@ MyMediator.prototype = {
     open_info_modal: function() {
         mediator.modern_frontend_intermediate.openInfoModal();
     },
+
+    rescale_map: function(scale_by, base_unit, content_based, initial_sort) {
+        config.scale_by = scale_by;
+        config.base_unit = base_unit;
+        config.content_based = content_based;
+        config.initial_sort = initial_sort;
+
+        window.headstartInstance.tofile(mediator.current_file_number);
+    }
 };
 
 export const mediator = new MyMediator();
