@@ -11,7 +11,7 @@ $dirty_query = library\CommUtils::getParameter($_POST, "q");
 $precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
 $params_array = array("from", "to", "document_types", "sorting", "min_descsize");
-$optional_get_params = ["repo", "repo_coll"];
+$optional_get_params = ["repo", "coll"];
 
 foreach($optional_get_params as $param) {
     if(isset($_POST[$param])) {
