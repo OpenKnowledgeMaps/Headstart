@@ -8,6 +8,7 @@ const list = (
     filterOptions: [],
     showDropdownSort: true,
     sortValue: null,
+    defaultSort: null,
     sortOptions: [],
     abstractSize: 250,
     linkType: null,
@@ -39,6 +40,7 @@ const list = (
         filterOptions: config.filter_options,
         showDropdownSort: config.sort_menu_dropdown,
         sortValue: getSortValue(config, context),
+        defaultSort: getSortValue(config, context),
         sortOptions: config.sort_options,
         abstractSize: config.abstract_small,
         linkType: getLinkType(config, context),
@@ -74,6 +76,14 @@ const list = (
       return {
         ...state,
         sortValue: action.id,
+      };
+    case "SCALE":
+      return {
+        ...state,
+        sortValue: state.sortOptions.includes(action.sort)
+          ? action.sort
+          : state.defaultSort,
+        baseUnit: action.baseUnit,
       };
     case "RESIZE":
       return {

@@ -23,6 +23,7 @@ import bubbleOrder from "./bubbleOrder";
 import paperOrder from "./paperOrder";
 import hyphenationLang from "./hyphenationLang";
 import modals from "./modals";
+import toolbar from "./toolbar";
 
 export default combineReducers({
   zoom,
@@ -46,4 +47,5 @@ export default combineReducers({
   paperOrder,
   hyphenationLang,
   modals,
+  toolbar,
 });
