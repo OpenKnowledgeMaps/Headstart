@@ -1,23 +1,15 @@
 import Mediator from 'mediator-js';
 import config from 'config';
-import { list } from 'list';
 import { io } from 'io';
 import { canvas } from 'canvas';
-import { scale } from './scale';
 import { streamgraph } from 'streamgraph';
 import Intermediate from './intermediate';
 import { getChartSize, getListSize } from "./utils/dimensions";
 
+// needed for draggable modals (for now, can be refactored with react-bootstrap)
+import "../lib/jquery-ui.min.js";
+
 const headstartTemplate = require("templates/headstart.handlebars");
-const infoTemplate = require("templates/modals/info_modal.handlebars");
-const iFrameTemplate = require("templates/modals/iframe_modal.handlebars");
-const imageTemplate = require("templates/modals/images_modal.handlebars");
-const viperEditTemplate = require("templates/modals/viper_edit_modal.handlebars");
-const embedTemplate = require("templates/modals/embed_modal.handlebars");
-const toolbarTemplate = require("templates/toolbar/toolbar.handlebars");
-const scaleToolbarTemplate = require("templates/toolbar/scale_toolbar.handlebars");
-const crisLegendTemplate = require("templates/toolbar/cris_legend.handlebars");
-const credit_logo = require("images/okmaps-logo-round.png");
 
 class ModuleManager {
     constructor() {
@@ -45,8 +37,7 @@ var MyMediator = function() {
     this.modern_frontend_enabled = config.modern_frontend_enabled
     this.modern_frontend_intermediate = new Intermediate(
         this.modern_frontend_enabled,
-        this.streamgraph_chart_clicked, 
-        this.list_show_popup,
+        this.streamgraph_chart_clicked,
         this.currentstream_click,
         this.rescale_map,
     );
@@ -58,7 +49,7 @@ MyMediator.prototype = {
     constructor: MyMediator,
     init: function() {
         // init logic and state switching
-        this.modules = { list: list, io: io, canvas: canvas, scale: scale, streamgraph: streamgraph};
+        this.modules = { io: io, canvas: canvas, streamgraph: streamgraph};
         this.mediator.subscribe("start_visualization", this.init_start_visualization);
         this.mediator.subscribe("start", this.buildHeadstartHTML);
         this.mediator.subscribe("start", this.register_bubbles);
@@ -79,13 +70,6 @@ MyMediator.prototype = {
 
         // misc
         this.mediator.subscribe("record_action", this.record_action);
-        this.mediator.subscribe("mark_project_changed", this.mark_project_changed);
-
-        // canvas events
-        this.mediator.subscribe("draw_modals", this.draw_modals);
-        
-        //scale
-        this.mediator.subscribe("update_visual_distributions", this.update_visual_distributions);
         
         //streamgraph
         this.mediator.subscribe("stream_clicked", this.stream_clicked)
@@ -100,15 +84,9 @@ MyMediator.prototype = {
     },
 
     init_modules: function() {
-        if(config.render_list) mediator.manager.registerModule(list, 'list');
         mediator.manager.registerModule(io, 'io');
         if(config.render_bubbles) {
             mediator.manager.registerModule(canvas, 'canvas');
-        }
-        if (!mediator.modern_frontend_enabled) {
-            if(config.scale_toolbar) {
-                mediator.manager.registerModule(scale, 'scale')
-            }
         }
         
         if(config.is_streamgraph) {
@@ -148,15 +126,6 @@ MyMediator.prototype = {
         mediator.current_bubble = mediator.bubbles[mediator.current_file_number];
     },
 
-    tryToCall: function(func) {
-        try {
-            func();
-        }
-        catch(e) {
-            console.log(`I ignored error ${e} in ${func}`);
-        }
-    },
-
     publish: function() {
         this.mediator.publish(...arguments);
     },
@@ -185,7 +154,6 @@ MyMediator.prototype = {
         mediator.current_bubble = mediator.bubbles[mediator.current_file_number];
         mediator.current_file = config.files[mediator.current_file_number];
         mediator.external_vis_url = config.external_vis_url + "?vis_id=" + config.files[mediator.current_file_number].file
-        list.current = "none";
     },
 
     init_start_visualization: function(highlight_data, csv) {
@@ -233,23 +201,10 @@ MyMediator.prototype = {
                 mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
             if (config.dynamic_sizing) 
                 mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
-
-            mediator.manager.call('canvas', 'setupCanvas', []);
-            
-            if (!mediator.modern_frontend_enabled) {
-                if (config.scale_toolbar) {
-                    mediator.manager.registerModule(scale, 'scale');
-                    mediator.manager.call('scale', 'drawScaleTypes', []);
-                }
-            }
         }
 
         mediator.manager.call('io', 'prepareAreas', []);
         
-        if (!mediator.modern_frontend_enabled) {
-            mediator.manager.call('canvas', 'initInfoModal');
-            mediator.manager.call('canvas', 'drawModals', [context]);
-        }
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
 
         // TODO call this just once (chart size must be known before the map is rendered)
@@ -259,8 +214,6 @@ MyMediator.prototype = {
             mediator.manager.registerModule(streamgraph, 'streamgraph')
             mediator.manager.call('streamgraph', 'start')
             mediator.manager.call('streamgraph', 'setupStreamgraph', [mediator.streamgraph_data])
-
-            mediator.manager.call('list', 'start');
             
             mediator.manager.call('streamgraph', 'initMouseListeners', []);
             
@@ -269,21 +222,13 @@ MyMediator.prototype = {
         }
 
         mediator.render_modern_frontend_list();
-        if (mediator.modern_frontend_enabled) {
-            // TODO remove the warn
-            console.warn("*** MODERN FRONTEND FLAG ENABLED ***");
-            mediator.render_modern_frontend_peripherals();
-        }
+        mediator.render_modern_frontend_peripherals();
         
         mediator.dimensions_update();
         d3.select(window).on("resize", () => {
             mediator.dimensions_update();
             mediator.window_resize();
         });
-
-        if (!mediator.modern_frontend_enabled) {
-            mediator.manager.call('canvas', 'showInfoModal', []);
-        }
     },
 
     buildHeadstartHTML: function() {
@@ -302,41 +247,11 @@ MyMediator.prototype = {
             $("#loading-text").text(config.localization[config.language].loading);
         }
         
-        if (!mediator.modern_frontend_enabled) {
-            this.viz.append(iFrameTemplate({
-                spinner_text: config.localization[config.language].pdf_load_text
-            }));
-            this.viz.append(imageTemplate());
-            this.viz.append(infoTemplate());
-            this.viz.append(viperEditTemplate());
-            this.viz.append(embedTemplate());
-
-            if(config.credit_embed) {
-                $("#credit_logo").attr("src", credit_logo);
-            }
-        }
-        
-        
-        this.viz.append(toolbarTemplate());
-        
-        if (!mediator.modern_frontend_enabled) {
-            let toolbar = $("#toolbar");
-        
-            if (config.cris_legend) {
-                toolbar.append(crisLegendTemplate());
-            }
-
-            if (config.scale_toolbar) {
-                toolbar.append(scaleToolbarTemplate({
-                    scale_by_label: config.localization[config.language].scale_by_label,
-                    credit: config.credit
-                }));
-            }
-        }
-        
+        // TODO is this even real? modern_frontend_enabled
         if (!config.render_bubbles) {
             $(".vis-col").remove();
             this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            // TODO this shouldn't be happening with react
             if(config.render_list) {
                 $(".list-col").height(this.available_height);
                 $("#papers_list").height(this.available_height);
@@ -352,11 +267,6 @@ MyMediator.prototype = {
         bubbles.data = io.data;
         bubbles.areas = io.areas;
         bubbles.areas_array = io.areas_array;
-    },
-
-    // shows pdf preview
-    list_show_popup: function(d) {
-        mediator.manager.call('list', 'populateOverlay', [d]);
     },
     
     stream_clicked: function(d) {
@@ -376,17 +286,12 @@ MyMediator.prototype = {
     streamgraph_chart_clicked: function() {
         mediator.current_stream = null;
         mediator.manager.call('streamgraph', 'reset');
-        mediator.draw_modals();
         mediator.paper_deselected();
         mediator.modern_frontend_intermediate.zoomOut();
     },
 
     record_action: function(id, category, action, user, type, timestamp, additional_params, post_data) {
         window.headstartInstance.recordAction(id, category, action, user, type, timestamp, additional_params, post_data);
-    },
-    
-    mark_project_changed: function(id) {
-        window.headstartInstance.markProjectChanged(id);
     },
 
     window_resize: function() {
@@ -398,25 +303,6 @@ MyMediator.prototype = {
             mediator.manager.call('streamgraph', 'setupStreamgraph', [mediator.streamgraph_data]);
             mediator.manager.call('streamgraph', 'initMouseListeners', []);
             mediator.manager.call('streamgraph', 'markStream')
-        } else {
-            mediator.manager.call('canvas', 'setupResizedCanvas', []);
-        }
-    },
-    
-    draw_modals: function () {
-        let context = io.context;
-        if (!mediator.modern_frontend_enabled) {
-            mediator.manager.call('canvas', 'drawModals', [context]);
-        }
-    },
-    
-    update_visual_distributions: function(type) {
-        if (!mediator.modern_frontend_enabled) {
-            let context = io.context;
-            
-            if(config.cris_legend) {
-                mediator.manager.call('scale', 'updateLegend', [type, context]);
-            }
         }
     },
 
@@ -432,10 +318,6 @@ MyMediator.prototype = {
             d3.select("#headstart-chart")
                 .style("width", chart.size + "px");
         }
-    },
-
-    open_info_modal: function() {
-        mediator.modern_frontend_intermediate.openInfoModal();
     },
 
     rescale_map: function(scale_by, base_unit, content_based, initial_sort) {

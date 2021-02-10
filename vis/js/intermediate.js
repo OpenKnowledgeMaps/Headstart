@@ -41,7 +41,6 @@ class Intermediate {
   constructor(
     modern_frontend_enabled,
     streamgraphZoomOutCallback,
-    previewPopoverCallback,
     entryBacklinkClickCallback,
     rescaleCallback
   ) {
@@ -51,7 +50,6 @@ class Intermediate {
     const middleware = applyMiddleware(
       createZoomOutMiddleware(streamgraphZoomOutCallback),
       createFileChangeMiddleware(),
-      createPreviewPopoverMiddleware(previewPopoverCallback),
       createEntryBacklinkClickMiddleware(entryBacklinkClickCallback),
       createActionQueueMiddleware(this),
       createScrollMiddleware(),
@@ -343,19 +341,6 @@ function createFileChangeMiddleware() {
         if (getState().files.current !== action.fileIndex) {
           window.headstartInstance.tofile(action.fileIndex);
         }
-      }
-      const returnValue = next(action);
-      returnValue;
-    };
-  };
-}
-
-// TODO delete mediator.modern_frontend_enabled
-function createPreviewPopoverMiddleware(previewPopoverCallback) {
-  return function () {
-    return (next) => (action) => {
-      if (action.type == "SHOW_PREVIEW") {
-        previewPopoverCallback(action.paper);
       }
       const returnValue = next(action);
       returnValue;

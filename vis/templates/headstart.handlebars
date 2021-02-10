@@ -14,18 +14,5 @@
     <div id="list-col" class="list-col">
     </div>
 </div>
-
-{{#if credit_embed}}
-{{#unless modern_frontend_enabled}}
-<div id="credit_embed"
-    style="position:absolute; left:0px; bottom:0px; font-size:10px; background-color:#eff3f4; padding:0px 0px 0px 5px; border-radius: 0px 50px 50px 0px; -webkit-border-radius: 0px 50px 50px 0px; -moz-border-radius: 0px 50px 50px 0px;">
-    <a href="{{ canonical_url }}" target="_blank">created by <b>Open Knowledge Maps </b>
-        <img id="credit_logo" style="height:30px; padding:0px">
-    </a>
-</div>
-{{/unless}}
-{{/if}}
-
-{{#if modern_frontend_enabled}}
 <div id="created_by"></div>
-{{/if}}
+<div id="toolbar" class="toolbar"></div>
