@@ -6,5 +6,5 @@
   "lang_id":"eng",
   "vis_id": "TEST_ID",
   "min_descsize": 300,
-  "repo_coll": "at"
+  "coll": "at"
 }
