@@ -6,7 +6,7 @@ include 'config.php';
     <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <?php
           include('config_searchflow.php');
-          include('search-flow/inc/knowledge-map-header.php');
+          include('search-flow/inc/visualization-header.php');
       ?>
       <script src="https://code.jquery.com/jquery-2.1.4.min.js" integrity="sha256-8WqyJLuWKRBVhxXIL1jBDD7SDxU936oZkCnxQbWwJVw=" crossorigin="anonymous"></script>
     </head>
@@ -18,9 +18,9 @@ include 'config.php';
        </script>
         
        <script type="text/javascript" src="data-config_triple.js"></script>
-       <?php include('search-flow/inc/browser-unsupported-banner.php') ?>
-       <?php include('search-flow/inc/mobile-banner.php') ?>
-       <?php include('search-flow/inc/knowledge-map.php') ?>
+       <?php include('search-flow/inc/banner-browser-unsupported.php') ?>
+       <?php include('search-flow/inc/banner-mobile.php') ?>
+       <?php include('search-flow/inc/visualization.php') ?>
         <script>
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
             data_config.files = [{

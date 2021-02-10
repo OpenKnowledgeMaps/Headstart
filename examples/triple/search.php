@@ -21,7 +21,7 @@ include 'config.php';
 </head>
 
 <body style="padding-left:10px; padding-right:10px;">
-        <?php include('search-flow/inc/browser-unsupported-banner.php') ?>
+        <?php include('search-flow/inc/banner-browser-unsupported.php') ?>
         <?php             
             include('search-flow/inc/waiting-page.php') 
         ?>
