@@ -8,6 +8,7 @@ const ScaleToolbar = ({
   options,
   labels,
   explanations,
+  showCredit,
   onChange,
   onInfoClick,
 }) => {
@@ -54,6 +55,18 @@ const ScaleToolbar = ({
           {localization.scale_by_infolink_label}
         </a>
       </div>
+      {showCredit && (
+        <div id="credit">
+          created by{" "}
+          <a href="https://openknowledgemaps.org/" target="_blank">
+            <img
+              className="logoimg"
+              style={{ border: "0px" }}
+              src="./img/okmaps-logo.png"
+            />
+          </a>
+        </div>
+      )}
     </div>
   );
 };
