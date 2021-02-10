@@ -1,24 +1,13 @@
 import { getRealHeight } from "helpers";
 import config from 'config';
-import { mediator } from 'mediator';
-import { intros } from 'intro';
 
-const editModalButton = require('templates/buttons/edit_button.handlebars')
-const embedModalButton = require('templates/buttons/embed_button.handlebars')
-const shareButton = require('templates/buttons/share_button.handlebars');
-const faqsButton = require('templates/buttons/faqs_button.handlebars');
-const legendTemplate = require("templates/toolbar/cris_legend.handlebars");
-
-// functions in this module are used only for rendering modal buttons, modal windows and streamgraph
-
-// TODO delete unused code in calcChartSize + setupCanvas + setupResizedCanvas
-
+// only used in streamgraph now
 class Canvas {
     constructor() {
         this.available_height = null;
         this.available_width = null;
         this.current_vis_size = null;
-        this.current_vis_width = null; //used in streamgraph
+        this.current_vis_width = null;
     }
 
     // Set this.available_height, this.available_width, this.current_vis_size and this.current_vis_width (for streamgraph)
@@ -102,137 +91,11 @@ class Canvas {
                 .classed('streamgraph-canvas', true)
     }
     
-    initInfoModal() {
-        // Info Modal Event Listener
-        $('#info_modal').on('show.bs.modal', function () {
-            mediator.publish("record_action", config.title, "Map", "open_info_modal", config.user_id, "open_info_modal", null, null, null);
-            var current_intro = config.intro;
-            var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
-            $('#info-title').text(intro.title);
-            $('#info-body').html(intro.body);
-            if (intro.dynamic) {
-                $.each(intro.params, function (paramName, value) {
-                    if (paramName.slice(0,4) === 'html') {
-                        $('.info-modal-'+paramName).html(value)
-                    } else {
-                        value = (value === "true")?("yes"):(value);
-                        $('.info-modal-'+paramName).text(value)
-                    }
-                })
-            }
-        });
-    }
-
-    drawModals(context) {
-        if (mediator.modern_frontend_enabled) {
-            throw new Error("This function must not be called from the new code.");
-        }
-        
-        $('#modals').empty()
-        
-        if (config.share_modal) {
-            $('#modals').append(shareButton);
-            $("#sharebutton").attr("title", config.localization[config.language].share_button_title);
-            
-            let title =  document.title;
-            let url = window.location.href;
-            let description = $("meta[name='description']").attr("content");
-            
-            d3.select(".sharebutton_twitter")
-                    .attr("href", function () {
-                        return "https://twitter.com/intent/tweet?"
-                            + "url=" + encodeURIComponent(url)
-                            + "&hashtags=" + encodeURIComponent(config.hashtags_twitter_card)
-                            + "&text=" + title;
-            });
-            
-            d3.select(".sharebutton_fb")
-                    .attr("href", function () {
-                        return "https://www.facebook.com/sharer/sharer.php?"
-                            + "u=" + encodeURIComponent(url);
-            });
-            
-            d3.select(".sharebutton_mail")
-                    .attr("href", function () {
-                        return "mailto:?subject=" + title
-                            + "&body=" + description + " " + encodeURIComponent(url)
-            });
-            
-            $(".sharebutton")
-                .on('click', (event) => {
-                    event.preventDefault();
-                    $(".sharebuttons").toggle(0, function () {
-                        if ($(this).is(':visible')) {
-                            mediator.publish("record_action", config.title, "Map", "open_share_buttons", config.user_id, "open_share_buttons", null, null, null);
-                            $(this).css('display','inline-block');
-                            $("#sharebutton").focus();
-                        } else {
-                            mediator.publish("record_action", config.title, "Map", "close_share_buttons", config.user_id, "close_share_buttons", null, null, null);
-                        }
-                    });
-                })
-        }
-        
-        if (config.embed_modal) {
-            $('#modals').append(embedModalButton)
-            $("#embedlink").attr("title", config.localization[config.language].embed_button_title);
-            $('#embed-title').html(config.localization[config.language].embed_title)
-            $('#embed-modal-text').val(`<iframe width="1200" height="720" src="${window.location.toString().replace(/#.*/, "")}&embed=true"></iframe>`)
-            $('#embed-body-text').html(config.localization[config.language].embed_body_text)
-            $('#embed-button').text(config.localization[config.language].embed_button_text)
-            .on('click', (event) => {
-                event.preventDefault();
-                mediator.publish("record_action", config.title, "Map", "open_embed_modal", config.user_id, "open_embed_modal", null, null, null);
-                let embedString = $('#embed-modal-text')[0];
-                embedString.focus();
-                embedString.setSelectionRange(0, embedString.value.length);
-                document.execCommand("copy");
-                return false;
-            })
-        }
-        
-        if(config.faqs_button) {
-            $('#modals').append(faqsButton)
-            $('#faqs_button').on('click', event => {
-                                    window.open(config.faqs_url, "_blank");
-                                })
-        }
-        
-        if (config.viper_edit_modal) {
-            $('#modals').append(editModalButton)
-            $('#viper-edit-screenshot').attr('src', require('images/viper-project-screenshot.png'))
-            $('#edit-title').html(config.localization[config.language].viper_edit_title)
-            $('#edit-modal-text').html(config.localization[config.language].viper_edit_desc_label)
-            $('#edit-button-text').html(config.localization[config.language].viper_button_desc_label + " <b>" + ((context.params.acronym !== "")?(context.params.acronym + " - "):("")) + context.params.title + "</b>.")
-            $('#viper-edit-button').text(config.localization[config.language].viper_edit_button_text)
-            $('.viper-edit-link, viper-edit-screenshot').click(function (event) {
-                event.preventDefault();
-                mediator.publish("record_action", config.title, "EditModal", "click_outlink", config.user_id, "click_outlink", null, null, null);
-                mediator.publish("mark_project_changed", context.id);
-                window.open(`https://www.openaire.eu/search/project?projectId=${context.params.obj_id}`);
-            })
-        }
-    }
-
-    setupCanvas() {
-        this.calcChartSize();
-    }
-
-    setupResizedCanvas() {
-        this.calcChartSize(); // Calculate new this.current_vis_size
-    }
-    
     setupStreamgraphCanvas() {
         this.setOverflowToHiddenOrAuto("#main");
         this.calcChartSize();
         
         this.drawStreamgraphChart();
-    }
-
-    showInfoModal() {
-        if (config.show_intro) {
-            $("#infolink").click();
-        }
     }
 }
 

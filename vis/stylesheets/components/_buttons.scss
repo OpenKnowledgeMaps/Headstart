@@ -120,8 +120,6 @@ img#close-button {
     }
 }
 
-@if $modern_frontend_enabled {
-    .sharebuttons button {
-        margin-left: 3px;
-    }
+.sharebuttons button {
+    margin-left: 3px;
 }
