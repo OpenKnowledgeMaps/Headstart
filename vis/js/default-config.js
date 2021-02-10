@@ -330,6 +330,7 @@ var config = {
             share_button_title: "share this map",
             embed_button_title: "Embed this knowledge map on other websites",
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
+            empty_area_warning: "Unfortunately there are no items matching your filter options. Please reset your filter options above to view all items in this area.",
         },
         ger: {
             loading: "Wird geladen...",
@@ -492,6 +493,7 @@ var config = {
             share_button_title: "share this map",
             embed_button_title: "Embed this knowledge map on other websites",
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
+            empty_area_warning: "Unfortunately there are no items matching your filter options. Please reset your filter options above to view all items in this area.",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -557,6 +559,7 @@ var config = {
             low_metadata_quality: "Low metadata quality",
             low_metadata_quality_desc_base: "This knowledge map includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your knowledge map. ",
             low_metadata_quality_desc_pubmed: "This knowledge map includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your knowledge map. ",
+            empty_area_warning: "Unfortunately there are no items matching your filter options. Please reset your filter options above to view all items in this area.",
         },
         eng_openaire: {
             loading: "Loading...",
@@ -629,6 +632,7 @@ var config = {
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
             pdf_not_loaded_linktext: "this website",
             credit_alt: "VIPER was created by Open Knowledge Maps",
+            empty_area_warning: "Unfortunately there are no items matching your filter options. Please reset your filter options above to view all items in this area.",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -780,6 +784,7 @@ var config = {
             scale_by_infolink_label: '',
             scale_by_label: 'Distribution for:',
             credit_alt: "Created by Open Knowledge Maps",
+            empty_area_warning: "Unfortunately there are no items matching your filter options. Please reset your filter options above to view all items in this area.",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -843,6 +848,7 @@ var config = {
             embed_button_text: 'Copy',
             embed_title: 'embed map',
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
+            empty_area_warning: "Unfortunately there are no items matching your filter options. Please reset your filter options above to view all items in this area.",
         },
     },
 

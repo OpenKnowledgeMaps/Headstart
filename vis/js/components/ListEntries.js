@@ -4,10 +4,25 @@ import { connect } from "react-redux";
 import BasicListEntries from "./listentries/BasicListEntries";
 import ClassificationListEntries from "./listentries/ClassificationListEntries";
 import StandardListEntries from "./listentries/StandardListEntries";
+import EntriesWrapper from "./listentries/EntriesWrapper";
 
-const ListEntries = ({ show, service, displayedData }) => {
+import { useLocalizationContext } from "./LocalizationProvider";
+
+const ListEntries = ({ show, service, displayedData, zoom }) => {
+  const localization = useLocalizationContext();
+
   if (!show) {
     return null;
+  }
+
+  if (zoom && displayedData.length === 0) {
+    return (
+      <EntriesWrapper>
+        <div className="empty-area-warning">
+          {localization.empty_area_warning}
+        </div>
+      </EntriesWrapper>
+    );
   }
 
   if (service === null || typeof service === "undefined") {
@@ -24,6 +39,7 @@ const ListEntries = ({ show, service, displayedData }) => {
 const mapStateToProps = (state) => ({
   show: state.list.show,
   service: state.service,
+  zoom: state.zoom,
 });
 
 export default connect(mapStateToProps)(ListEntries);
