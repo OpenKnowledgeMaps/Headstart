@@ -29,6 +29,7 @@ import Modals from "./components/Modals";
 import Toolbar from "./components/Toolbar";
 
 import { applyForce } from "./utils/force";
+import CreatedBy from "./templates/CreatedBy";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -121,6 +122,13 @@ class Intermediate {
         <Toolbar />
       </Provider>,
       document.getElementById("toolbar")
+    );
+
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <CreatedBy />
+      </Provider>,
+      document.getElementById("created_by")
     );
   }
 
@@ -284,7 +292,7 @@ function createChartTypeMiddleware() {
 
 /**
  * Creates a middleware that calls the rescaling function on the 'SCALE' action.
- * 
+ *
  * @param {Function} rescaleCallback function that rescales the map
  */
 function createRescaleMiddleware(rescaleCallback) {

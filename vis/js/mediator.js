@@ -296,9 +296,6 @@ MyMediator.prototype = {
             , is_authorview: config.is_authorview
             , modern_frontend_enabled: mediator.modern_frontend_enabled
         }));
-        if(config.credit_embed) {
-            $("#credit_logo").attr("src", credit_logo);
-        }
         
         if(config.show_loading_screen) {
             $("#map-loading-screen").show();
@@ -313,18 +310,22 @@ MyMediator.prototype = {
             this.viz.append(infoTemplate());
             this.viz.append(viperEditTemplate());
             this.viz.append(embedTemplate());
+
+            if(config.credit_embed) {
+                $("#credit_logo").attr("src", credit_logo);
+            }
         }
         
         
         this.viz.append(toolbarTemplate());
-       
-        let toolbar = $("#toolbar");
-        
-        if (config.cris_legend) {
-            toolbar.append(crisLegendTemplate());
-        }
         
         if (!mediator.modern_frontend_enabled) {
+            let toolbar = $("#toolbar");
+        
+            if (config.cris_legend) {
+                toolbar.append(crisLegendTemplate());
+            }
+
             if (config.scale_toolbar) {
                 toolbar.append(scaleToolbarTemplate({
                     scale_by_label: config.localization[config.language].scale_by_label,
