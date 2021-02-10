@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import ClassificationListEntry from "../../templates/listentry/ClassificationListEntry";
+import EntriesWrapper from "./EntriesWrapper";
 
 import {
   getPaperPreviewLink,
@@ -23,7 +24,6 @@ const ClassificationListEntries = ({
   localization,
   showBacklink,
   isInStreamBacklink,
-  height,
   handleZoomIn,
   handleSelectPaper,
   handleDeselectPaper,
@@ -37,7 +37,7 @@ const ClassificationListEntries = ({
     if (!isStreamgraph) {
       handleZoomIn(paper);
     }
-  }
+  };
 
   const handleAreaClick = (paper) => {
     handleDeselectPaper();
@@ -45,11 +45,7 @@ const ClassificationListEntries = ({
   };
 
   return (
-    <div
-      className="col-xs-12"
-      id="papers_list"
-      style={{ display: "block", height: !!height ? height : undefined }}
-    >
+    <EntriesWrapper>
       {displayedData.map((entry) => (
         <ClassificationListEntry
           key={entry.safe_id}
@@ -95,7 +91,7 @@ const ClassificationListEntries = ({
           }}
         />
       ))}
-    </div>
+    </EntriesWrapper>
   );
 };
 
@@ -106,7 +102,6 @@ const mapStateToProps = (state) => ({
   localization: state.localization,
   showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
   isInStreamBacklink: !!state.selectedBubble,
-  height: state.list.height,
 });
 
 export default connect(

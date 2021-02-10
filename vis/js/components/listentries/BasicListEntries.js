@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import BasicListEntryTemplate from "../../templates/listentry/BasicListEntry";
+import EntriesWrapper from "./EntriesWrapper";
 
 import {
   getPaperPreviewImage,
@@ -23,12 +24,11 @@ const BasicListEntries = ({
   baseUnit,
   showPreviewImage,
   showRealPreviewImage,
-  height,
 }) => {
   const handleTitleClick = (paper) => {
     handleSelectPaper(paper);
     handleZoomIn(paper);
-  }
+  };
 
   const handleAreaClick = (paper) => {
     handleDeselectPaper();
@@ -36,11 +36,7 @@ const BasicListEntries = ({
   };
 
   return (
-    <div
-      className="col-xs-12"
-      id="papers_list"
-      style={{ display: "block", height: !!height ? height : undefined }}
-    >
+    <EntriesWrapper>
       {displayedData.map((entry) => (
         <BasicListEntryTemplate
           key={entry.safe_id}
@@ -80,7 +76,7 @@ const BasicListEntries = ({
           handleAreaClick={() => handleAreaClick(entry)}
         />
       ))}
-    </div>
+    </EntriesWrapper>
   );
 };
 
@@ -89,7 +85,6 @@ const mapStateToProps = (state) => ({
   baseUnit: state.list.baseUnit,
   showPreviewImage: !!state.selectedPaper,
   showRealPreviewImage: state.list.showRealPreviewImage,
-  height: state.list.height,
 });
 
 export default connect(
