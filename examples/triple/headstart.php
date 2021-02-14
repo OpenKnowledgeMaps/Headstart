@@ -12,11 +12,6 @@ include 'config.php';
     </head>
 
     <body style="margin:0px; padding:0px">
-
-       <script>
-           var fit_to_page = false;
-       </script>
-        
        <script type="text/javascript" src="data-config_triple.js"></script>
        <?php include('search-flow/inc/banner-browser-unsupported.php') ?>
        <?php include('search-flow/inc/banner-mobile.php') ?>
