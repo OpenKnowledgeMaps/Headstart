@@ -387,6 +387,7 @@ var config = {
             embed_body_text: 'Sie können diesen Code verwenden, um die Visualisierung auf anderen Seiten einzubetten.',
             pdf_not_loaded: "Leider konnten wir das PDF nicht abrufen. Mehr Informationen finden Sie auf",
             pdf_not_loaded_linktext: "dieser Seite",
+            empty_area_warning: "Unfortunately there are no items matching your filter options. Please reset your filter options above to view all items in this area.",
         },
         ger_linkedcat: {
            loading: "Wird geladen...",
@@ -447,6 +448,7 @@ var config = {
             pdf_load_text: "Dieser Vorgang kann mehrere Minuten dauern, da die gescannten Texte sehr umfangreich sein können. Bitte haben Sie etwas Geduld.",
             pdf_not_loaded: "Leider konnten wir das PDF nicht abrufen. Mehr Informationen finden Sie auf",
             pdf_not_loaded_linktext: "dieser Seite",
+            empty_area_warning: "Unfortunately there are no items matching your filter options. Please reset your filter options above to view all items in this area.",
         },
         eng_plos: {
             loading: "Loading...",
@@ -683,6 +685,7 @@ var config = {
             scale_by_infolink_label: '',
             scale_by_label: 'Verteilung für:',
             credit_alt: "Created by Open Knowledge Maps",
+            empty_area_warning: "Unfortunately there are no items matching your filter options. Please reset your filter options above to view all items in this area.",
         },
         ger_cris_2: {
             loading: "Wird geladen...",
@@ -733,6 +736,7 @@ var config = {
             scale_by_infolink_label: '',
             scale_by_label: 'Verteilung für:',
             credit_alt: "Created by Open Knowledge Maps",
+            empty_area_warning: "Unfortunately there are no items matching your filter options. Please reset your filter options above to view all items in this area.",
         },
         eng_cris_2: {
            loading: "Loading...",
