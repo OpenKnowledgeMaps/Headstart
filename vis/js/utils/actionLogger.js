@@ -110,6 +110,12 @@ const logAction = (action, state, callback, params) => {
       );
     case "INITIALIZE":
       return callback(params.title, "Map", "start", "start_bubble");
+    case "OPEN_INFO_MODAL":
+      return callback(params.title, "Map", "open_info_modal", "open_info_modal");
+    case "OPEN_EMBED_MODAL":
+      return callback(params.title, "Map", "open_embed_modal", "open_embed_modal");
+    case "SCALE":
+      return callback(params.scaleLabel[action.value], "Toolbar", "select", "toolbar_select");
     default:
       return;
   }

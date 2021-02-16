@@ -75,6 +75,7 @@ class Intermediate {
       user: config.user_id,
       localization: config.localization[config.language],
       mouseoverEvaluation: config.enable_mouseover_evaluation,
+      scaleLabel: config.scale_label,
     });
 
     this.store.dispatch(initializeStore(config, context, data, size));
