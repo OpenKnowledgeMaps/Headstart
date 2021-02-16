@@ -15,7 +15,6 @@ import {
   updateDimensions,
   applyForceAreas,
   applyForcePapers,
-  openInfoModal,
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
@@ -30,6 +29,7 @@ import Toolbar from "./components/Toolbar";
 
 import { applyForce } from "./utils/force";
 import CreatedBy from "./templates/CreatedBy";
+import logAction from "./utils/actionLogger";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -42,10 +42,14 @@ class Intermediate {
     modern_frontend_enabled,
     streamgraphZoomOutCallback,
     entryBacklinkClickCallback,
-    rescaleCallback
+    rescaleCallback,
+    recordActionCallback
   ) {
     this.modern_frontend_enabled = modern_frontend_enabled;
     this.actionQueue = [];
+
+    this.recordActionCallback = recordActionCallback;
+    this.recordActionParams = {};
 
     const middleware = applyMiddleware(
       createZoomOutMiddleware(streamgraphZoomOutCallback),
@@ -55,13 +59,24 @@ class Intermediate {
       createScrollMiddleware(),
       createRepeatedInitializeMiddleware(this),
       createChartTypeMiddleware(),
-      createRescaleMiddleware(rescaleCallback)
+      createRescaleMiddleware(rescaleCallback),
+      createRecordActionMiddleware(
+        this.recordAction.bind(this),
+        this.recordActionParams
+      )
     );
 
     this.store = createStore(rootReducer, middleware);
   }
 
   init(config, context, data, size) {
+    Object.assign(this.recordActionParams, {
+      title: config.title,
+      user: config.user_id,
+      localization: config.localization[config.language],
+      mouseoverEvaluation: config.enable_mouseover_evaluation,
+    });
+
     this.store.dispatch(initializeStore(config, context, data, size));
 
     // TODO replace the config.is_authorview with store variable
@@ -165,9 +180,36 @@ class Intermediate {
     );
   }
 
-  // TODO delete after the scale toolbar refactoring
-  openInfoModal() {
-    this.store.dispatch(openInfoModal());
+  /**
+   * Log an action using the mediator's function.
+   *
+   * @param {string} id usually some title, e.g. paper.title / default is the config.title
+   * @param {string} category some static key, such as "List"
+   * @param {string} action some static key, such as "show"
+   * @param {string} type some static key, such as "open_embed_modal"
+   * @param {object} timestamp optional object / default is null
+   * @param {string} additionalParams optional string / default is null
+   * @param {object} postData optional object / default is null
+   */
+  recordAction(
+    id,
+    category,
+    action,
+    type,
+    timestamp = null,
+    additionalParams = null,
+    postData = null
+  ) {
+    this.recordActionCallback(
+      id,
+      category,
+      action,
+      this.recordActionParams.user,
+      type,
+      timestamp,
+      additionalParams,
+      postData
+    );
   }
 }
 
@@ -344,6 +386,16 @@ function createFileChangeMiddleware() {
       }
       const returnValue = next(action);
       returnValue;
+    };
+  };
+}
+
+function createRecordActionMiddleware(callback, params) {
+  return function ({ getState }) {
+    return (next) => (action) => {
+      const state = getState();
+      logAction(action, state, callback, params);
+      return next(action);
     };
   };
 }
