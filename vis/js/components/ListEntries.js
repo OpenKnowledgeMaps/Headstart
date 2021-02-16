@@ -8,14 +8,14 @@ import EntriesWrapper from "./listentries/EntriesWrapper";
 
 import { useLocalizationContext } from "./LocalizationProvider";
 
-const ListEntries = ({ show, service, displayedData, zoom }) => {
+const ListEntries = ({ show, service, displayedData }) => {
   const localization = useLocalizationContext();
 
   if (!show) {
     return null;
   }
 
-  if (zoom && displayedData.length === 0) {
+  if (displayedData.length === 0) {
     return (
       <EntriesWrapper>
         <div className="empty-area-warning">
@@ -39,7 +39,6 @@ const ListEntries = ({ show, service, displayedData, zoom }) => {
 const mapStateToProps = (state) => ({
   show: state.list.show,
   service: state.service,
-  zoom: state.zoom,
 });
 
 export default connect(mapStateToProps)(ListEntries);
