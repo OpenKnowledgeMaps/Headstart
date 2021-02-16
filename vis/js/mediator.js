@@ -191,17 +191,19 @@ MyMediator.prototype = {
         mediator.manager.call('io', 'setContext', [context, data.length]);
         mediator.manager.call('io', 'setInfo', [context]);
 
-        mediator.init_modern_frontend_intermediate();
-        
-        if (config.is_streamgraph) {         
-            mediator.manager.call('canvas', 'setupStreamgraphCanvas', []);
-        } else {
+        if (!config.is_streamgraph) {
             if (config.is_force_papers && config.dynamic_force_papers) 
                 mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
             if (config.is_force_area && config.dynamic_force_area) 
                 mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
             if (config.dynamic_sizing) 
                 mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
+        }
+
+        mediator.init_modern_frontend_intermediate();
+        
+        if (config.is_streamgraph) {         
+            mediator.manager.call('canvas', 'setupStreamgraphCanvas', []);
         }
 
         mediator.manager.call('io', 'prepareAreas', []);
@@ -326,6 +328,9 @@ MyMediator.prototype = {
         config.base_unit = base_unit;
         config.content_based = content_based;
         config.initial_sort = initial_sort;
+        // TODO this might cause a bug (or there might be more params that require setting to false)
+        // bug description: map different after rescaling to the same metric
+        config.dynamic_sizing = false;
 
         window.headstartInstance.tofile(mediator.current_file_number);
     }
