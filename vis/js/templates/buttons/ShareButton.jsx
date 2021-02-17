@@ -17,9 +17,11 @@ const ShareButton = ({ twitterHashtags }) => {
   const buttonRef = useRef(null);
   useOutsideClick(buttonRef, handleOutsideClick);
 
-  const title = document.title;
+  const title = encodeURIComponent(document.title);
   const url = encodeURIComponent(window.location.href);
-  const description = $("meta[name='description']").attr("content");
+  const description = encodeURIComponent(
+    $("meta[name='description']").attr("content")
+  );
   twitterHashtags = encodeURIComponent(twitterHashtags);
 
   const twitterUrl = `https://twitter.com/intent/tweet?url=${url}&hashtags=${twitterHashtags}&text=${title}`;
