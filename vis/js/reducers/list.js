@@ -78,13 +78,15 @@ const list = (
         sortValue: action.id,
       };
     case "SCALE":
-      return {
-        ...state,
-        sortValue: state.sortOptions.includes(action.sort)
-          ? action.sort
-          : state.defaultSort,
-        baseUnit: action.baseUnit,
-      };
+      return state;
+      // TODO enable this once the scaling is refactored properly
+      // return {
+      //   ...state,
+      //   sortValue: state.sortOptions.includes(action.sort)
+      //     ? action.sort
+      //     : state.defaultSort,
+      //   baseUnit: action.baseUnit,
+      // };
     case "RESIZE":
       return {
         ...state,
