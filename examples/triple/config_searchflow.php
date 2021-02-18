@@ -8,6 +8,7 @@ $search_flow_config_local = array(
         "triple_km" => array("from", "to", "sorting", "language", "limit")
             , "triple_sg" => array("from", "to", "sorting", "language", "limit", "sg_method")
     )
+    , "enable_get_requests" => true
     , "filter_options" => [
             'options_triple_km' => [
                 'start_date' => '1809',
@@ -236,44 +237,47 @@ $search_flow_config_local = array(
 <script>
 var search_flow_config_local = {
     search_options: {
-            options: [
-                { id: "triple_sg", name: "Streamgraph TRIPLE", disabled: false, default: false 
-                    , text: "Streamgraph", description: ""
-                    , script: "searchTRIPLE.php", milliseconds_progressbar: 800
-                    , max_length_search_term_short: 115, timeout: 120000
+        options: [
+            { id: "triple_sg", name: "Streamgraph TRIPLE", disabled: false, default: false 
+                , text: "Streamgraph", description: ""
+                , script: "searchTRIPLE.php", milliseconds_progressbar: 800
+                , max_length_search_term_short: 115, timeout: 120000
 
-                }
-                , { id: "triple_km", name: "Knowledge Map TRIPLE", disabled: false, default: true 
-                    , text: "Knowledge Map", description: ""
-                    , script: "searchTRIPLE.php", milliseconds_progressbar: 800
-                    , max_length_search_term_short: 115, timeout: 120000
-                }
-            ] 
-            , examples: {
-                examples_integration1: {
-                    example_text: "Try out:",
-                    examples: [
-                        {text: "covid-19", link: "url"}
-                    ]
-                }
             }
-            , waiting_page_options: {
-                vis_page_cool_uri: false
-                // Parameters for the vis page
-                // id: id in post_params array
-                // name: name of the param passed to vis page
-                // (optional) value: a specific value for this parameter
-                //      example: { id: 'embed', name: 'embed', value: 'true' } sets parameter 'embed' to true
-                //      you can also transform parameter values here with key value pairs
-                //      , e.g. value: {'triple_km': 'overview', 'triple_sg': 'timeline'} 
-                , vis_page_params: [
-                    { id: 'unique_id', name: 'id' }
-                    , {id: "optradio", "name": "vis_type", value: {'triple_km': 'overview', 'triple_sg': 'timeline'}}
+            , { id: "triple_km", name: "Knowledge Map TRIPLE", disabled: false, default: true 
+                , text: "Knowledge Map", description: ""
+                , script: "searchTRIPLE.php", milliseconds_progressbar: 800
+                , max_length_search_term_short: 115, timeout: 120000
+            }
+        ] 
+        , examples: {
+            examples_integration1: {
+                example_text: "Try out:",
+                examples: [
+                    {text: "covid-19", link: "url"}
                 ]
-                , vis_page_additional_params: [
-                     { id: 'embed', name: 'embed', value: "true" }
-                ]
-            }          
+            }
         }
     }
+    , waiting_page_options: {
+        vis_page_cool_uri: false
+        // Parameters for the vis page
+        // id: id in post_params array
+        // name: name of the param passed to vis page
+        // (optional) value: a specific value for this parameter
+        //      example: { id: 'embed', name: 'embed', value: 'true' } sets parameter 'embed' to true
+        //      you can also transform parameter values here with key value pairs
+        //      , e.g. value: {'triple_km': 'overview', 'triple_sg': 'timeline'} 
+        , vis_page_params: [
+            { id: 'unique_id', name: 'id' }
+            , {id: "service", "name": "vis_type", value: {'triple_km': 'overview', 'triple_sg': 'timeline'}}
+        ]
+        , vis_page_additional_params: [
+        ]
+    }
+    , vis_page_options: {
+        //Fit visualization div to page
+        fit_to_page: false
+    }
+}
  </script>
