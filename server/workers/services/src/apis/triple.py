@@ -71,10 +71,14 @@ class Search(Resource):
         triple_ns.logger.debug(d)
         redis_store.rpush("triple", json.dumps(d))
         result = get_key(redis_store, k)
+        headers = {}
         if not isinstance(result, str) and result.get('status') != "success":
             code, reason = detect_error("triple", result.get('error'), params)
+            result = {"status": "error",
+                      "reason": reason}
+            headers["Content-Type"] = "application/json"
+            return make_response(result, code, headers)
         try:
-            headers = {}
             if request.headers["Accept"] == "application/json":
                 headers["Content-Type"] = "application/json"
             if request.headers["Accept"] == "text/csv":
@@ -95,7 +99,10 @@ class Search(Resource):
                                  headers)
         except Exception as e:
             triple_ns.logger.error(e)
-            abort(500, "Problem encountered, check logs.")
+            result = {"status": "error",
+                      "reason": ['unexpected data processing error']}
+            headers["Content-Type"] = "application/json"
+            return make_response(result, 500, headers)
 
 
 @triple_ns.route('/mappings')

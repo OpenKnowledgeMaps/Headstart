@@ -140,18 +140,23 @@ class TripleClient(object):
         # * "oa_state": open access status of the item; has the following possible states: 0 for no, 1 for yes, 2 for unknown
         # * "link": link to the PDF; if this is not available, a list of candidate URLs that may contain a link to the PDF
         """
+        lang = parameters.get('language')
         df = pd.DataFrame((d.to_dict() for d in result))
         metadata = pd.DataFrame()
         metadata["id"] = df.id.map(lambda x: x if isinstance(x, str) else "")
-        metadata["title"] = df.headline.map(lambda x: self.filter_lang(x, parameters, "text"))
+        metadata["title"] = df.headline.map(lambda x: self.filter_lang(x, lang, "text"))
+        metadata["title_en"] = df.headline.map(lambda x: self.filter_lang(x, 'en', "text"))
         #metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if isinstance(x, list) else "")
         metadata["authors"] = df.author.map(lambda x: ", ".join(x))
-        metadata["paper_abstract"] = df.abstract.map(lambda x: self.filter_lang(x, parameters, "text"))
+        metadata["paper_abstract"] = df.abstract.map(lambda x: self.filter_lang(x, lang, "text"))
+        metadata["paper_abstract_en"] = df.abstract.map(lambda x: self.filter_lang(x, 'en', "text"))
         metadata["published_in"] = df.publisher.map(lambda x: ", ".join(x))
         metadata["year"] = df.date_published
         metadata["url"] = df.url.map(lambda x: x[0] if x else "")
         metadata["readers"] = 0
-        metadata["subject_orig"] = df.keywords.map(lambda x: [i.get('text') for i in x if i.get('text')] if isinstance(x, list) else [])
+        metadata["subject_orig"] = (df.keywords
+                .map(lambda x: [i.get('text') for i in x if i.get('text')] if isinstance(x, list) else [])
+                .map(lambda x: "; ".join(x)))
         metadata["subject"] = (df.keywords
                 .map(lambda x: [i.get('text') for i in x if i.get('text')] if isinstance(x, list) else [])
                 .map(lambda x: [self.clean_subject(s) for s in x if s])
@@ -163,7 +168,7 @@ class TripleClient(object):
         metadata["relevance"] = df.index
         text = pd.DataFrame()
         text["id"] = metadata["id"]
-        text["content"] = metadata.apply(lambda x: ". ".join(x[["title", "paper_abstract"]]), axis=1)
+        text["content"] = metadata.apply(lambda x: ". ".join(x[["title_en", "paper_abstract_en"]]), axis=1)
         input_data = {}
         input_data["metadata"] = metadata.to_json(orient='records')
         input_data["text"] = text.to_json(orient='records')
@@ -174,8 +179,7 @@ class TripleClient(object):
         return ''.join(x for x in string if x.isprintable())
 
     @staticmethod
-    def filter_lang(field, parameters, content_field):
-        lang = parameters.get('language')
+    def filter_lang(field, lang, content_field):
         if lang == 'all':
             lang = 'en'
         filtered = [d.get(content_field)
