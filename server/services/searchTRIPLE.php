@@ -23,17 +23,6 @@ if (isset($post_params["optradio"]) && $post_params["optradio"] === "triple_sg")
   $repo = $post_params["optradio"];
 }
 
-if (isset($post_params["optradio"]) && $post_params["optradio"] === "triple_km") {
-  $post_params["vis_type"] = "overview";
-  $param_types = array("from", "to", "sorting", "language", "limit");
-  $repo = $post_params["optradio"];
-}
-if (isset($post_params["optradio"]) && $post_params["optradio"] === "triple_sg") {
-  $post_params["vis_type"] = "timeline";
-  $param_types = array("from", "to", "sorting", "language", "limit", "sg_method");
-  $repo = $post_params["optradio"];
-}
-
 $result = search("triple", $dirty_query
                 , $post_params, $param_types
                 , ";", null, true
