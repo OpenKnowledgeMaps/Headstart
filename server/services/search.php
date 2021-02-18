@@ -51,20 +51,6 @@ function cleanQuery($dirty_query, $transform_query_tolowercase) {
     return $query;
 }
 
-$repo2snapshot = array("plos" => "PLOS"
-                        , "pubmed" => "PubMed"
-                        , "doaj" => "DOAJ"
-                        , "base" => "BASE"
-                        , "openaire" => "OpenAire"
-                        , "linkedcat" => "LinkedCat"
-                        , "linkedcat_authorview" => "LinkedCat"
-                        , "linkedcat_browseview" => "LinkedCat"
-                        , "triple" => "TRIPLE"
-                        , "gsheets" => "GSheets");
-$service2endpoint = array("triple_km" => "triple",
-                          "triple_sg" => "triple");
-
-
 function search($service_integration, $dirty_query
         , $post_params, $param_types
         , $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
@@ -74,6 +60,19 @@ function search($service_integration, $dirty_query
         , $processing_backend = "legacy") {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
+    $repo2snapshot = array("plos" => "PLOS"
+                        , "pubmed" => "PubMed"
+                        , "doaj" => "DOAJ"
+                        , "base" => "BASE"
+                        , "openaire" => "OpenAire"
+                        , "linkedcat" => "LinkedCat"
+                        , "linkedcat_authorview" => "LinkedCat"
+                        , "linkedcat_browseview" => "LinkedCat"
+                        , "triple" => "TRIPLE"
+                        , "gsheets" => "GSheets");
+    $service2endpoint = array("triple_km" => "triple",
+                              "triple_sg" => "triple");
+
     $processing_backend = isset($ini_array["general"]["processing_backend"])
                             ? ($ini_array["general"]["processing_backend"])
                             : "legacy";
