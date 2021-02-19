@@ -2,7 +2,7 @@ import json
 import pandas as pd
 import pytest
 
-from .test_helpers import CASENAMES, CASEDATA, RESULTS
+from .test_helpers import CASENAMES, CASEDATA, RESULTS, TRIPLE, retrieve_results
 
 from pandas_schema import Column, Schema
 from pandas_schema.validation import (InListValidation,
@@ -125,6 +125,15 @@ def test_metadata_schema(testcase):
 @pytest.mark.parametrize("testcase", CASENAMES)
 def test_knowledgemap_schema(testcase):
     testcase = RESULTS[testcase]
+    errors = knowledgemap_schema.validate(
+                        testcase, columns=knowledgemap_schema.get_column_names())
+    assert len(errors) == 0, "\n".join([report_validation_error(e)
+                                             for e in errors])
+
+
+@pytest.mark.parametrize("testcase", TRIPLE)
+def test_metadata_schema_triple(testcase):
+    testcase = retrieve_results(testcase)
     errors = knowledgemap_schema.validate(
                         testcase, columns=knowledgemap_schema.get_column_names())
     assert len(errors) == 0, "\n".join([report_validation_error(e)
