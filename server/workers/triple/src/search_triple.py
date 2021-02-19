@@ -152,7 +152,7 @@ class TripleClient(object):
         metadata["paper_abstract_en"] = df.abstract.map(lambda x: self.filter_lang(x, 'en', "text"))
         metadata["published_in"] = df.publisher.map(lambda x: ", ".join(x))
         metadata["year"] = df.date_published
-        metadata["url"] = df.url.map(lambda x: x[0] if x else "")
+        metadata["url"] = df.main_entity_of_page.map(lambda x: x if x else "")
         metadata["readers"] = 0
         metadata["subject_orig"] = (df.keywords
                 .map(lambda x: [i.get('text') for i in x if i.get('text')] if isinstance(x, list) else [])
