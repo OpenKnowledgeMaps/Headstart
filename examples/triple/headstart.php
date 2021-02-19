@@ -8,15 +8,10 @@ include 'config.php';
           include('config_searchflow.php');
           include('search-flow/inc/visualization-header.php');
       ?>
-      <script src="https://code.jquery.com/jquery-2.1.4.min.js" integrity="sha256-8WqyJLuWKRBVhxXIL1jBDD7SDxU936oZkCnxQbWwJVw=" crossorigin="anonymous"></script>
+      <?php include('search-flow/inc/head-min.php') ?>
     </head>
 
     <body style="margin:0px; padding:0px">
-
-       <script>
-           var fit_to_page = false;
-       </script>
-        
        <script type="text/javascript" src="data-config_triple.js"></script>
        <?php include('search-flow/inc/banner-browser-unsupported.php') ?>
        <?php include('search-flow/inc/banner-mobile.php') ?>
