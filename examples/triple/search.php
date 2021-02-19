@@ -1,6 +1,7 @@
 <?php
-include 'search-flow/inc/waiting-page/waiting-page-header.php';
 include 'config.php';
+include 'search-flow/inc/waiting-page/waiting-page-header.php';
+include 'search-flow/inc/waiting-page/waiting-page-header.php';
 ?>
 <html>
 
