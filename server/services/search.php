@@ -51,35 +51,34 @@ function cleanQuery($dirty_query, $transform_query_tolowercase) {
     return $query;
 }
 
-
 function search($service_integration, $dirty_query
         , $post_params, $param_types
         , $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
         , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3
         , $id = "area_uri", $subjects = "subject"
         , $precomputed_id = null, $do_clean_query = true
-        , $processing_backend = "overview") {
+        , $processing_backend = "legacy") {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
+    $repo2snapshot = array("plos" => "PLOS"
+                        , "pubmed" => "PubMed"
+                        , "doaj" => "DOAJ"
+                        , "base" => "BASE"
+                        , "openaire" => "OpenAire"
+                        , "linkedcat" => "LinkedCat"
+                        , "linkedcat_authorview" => "LinkedCat"
+                        , "linkedcat_browseview" => "LinkedCat"
+                        , "triple" => "TRIPLE"
+                        , "gsheets" => "GSheets");
+    $service2endpoint = array("triple_km" => "triple",
+                              "triple_sg" => "triple");
+
     $processing_backend = isset($ini_array["general"]["processing_backend"])
                             ? ($ini_array["general"]["processing_backend"])
                             : "legacy";
     $persistence_backend = isset($ini_array["general"]["persistence_backend"])
                             ? ($ini_array["general"]["persistence_backend"])
                             : "legacy";
-
-    $repo2snapshot = array("plos" => "PLOS"
-                            , "pubmed" => "PubMed"
-                            , "doaj" => "DOAJ"
-                            , "base" => "BASE"
-                            , "openaire" => "OpenAire"
-                            , "linkedcat" => "LinkedCat"
-                            , "linkedcat_authorview" => "LinkedCat"
-                            , "linkedcat_browseview" => "LinkedCat"
-                            , "triple" => "TRIPLE"
-                            , "gsheets" => "GSheets");
-    $service2endpoint = array("triple_km" => "triple",
-                              "triple_sg" => "triple");
 
     $query = ($do_clean_query === true)
                 ?(cleanQuery($dirty_query, $transform_query_tolowercase))

@@ -11,7 +11,6 @@ for data_integration, database in settings.SQLALCHEMY_BINDS.items():
                                                                  max_overflow=15,
                                                                  pool_pre_ping=True,
                                                                  pool_recycle=3600,
-                                                                 pool_size=30,
-                                                                 isolation_level="AUTOCOMMIT"
+                                                                 pool_size=30
                                                                  ))
 Base = declarative_base()
