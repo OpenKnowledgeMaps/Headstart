@@ -15,14 +15,14 @@ $post_params = $_POST;
 if (isset($post_params["service"]) && $post_params["service"] === "triple_km") {
   $service_integration = $post_params["service"];
   $post_params["vis_type"] = "overview";
+  $post_params["service"] = "triple";
   $param_types = array("from", "to", "sorting", "language", "limit");
-  $repo = $post_params["service"];
 }
 if (isset($post_params["service"]) && $post_params["service"] === "triple_sg") {
   $service_integration = $post_params["service"];
   $post_params["vis_type"] = "timeline";
+  $post_params["service"] = "triple";
   $param_types = array("from", "to", "sorting", "language", "limit", "sg_method");
-  $repo = $post_params["service"];
 }
 
 $result = search($service_integration, $dirty_query
