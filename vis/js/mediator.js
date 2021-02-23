@@ -4,7 +4,7 @@ import { io } from 'io';
 import Intermediate from './intermediate';
 import { getChartSize, getListSize } from "./utils/dimensions";
 
-// needed for draggable modals (for now, can be refactored with react-bootstrap)
+// needed for draggable modals (it can be refactored with react-bootstrap though)
 import "../lib/jquery-ui.min.js";
 
 const headstartTemplate = require("templates/headstart.handlebars");
@@ -53,10 +53,6 @@ MyMediator.prototype = {
         this.mediator.subscribe("start", this.init_modules);
         this.mediator.subscribe("ontofile", this.init_ontofile);
         this.mediator.subscribe("register_bubbles", this.register_bubbles);
-
-        // data transformation and calculation of bubble/paper sizes
-        this.mediator.subscribe("prepare_data", this.io_prepare_data);
-        this.mediator.subscribe("prepare_areas", this.io_prepare_areas);
 
         // async calls
         this.mediator.subscribe("get_data_from_files", this.io_async_get_data);
@@ -130,14 +126,6 @@ MyMediator.prototype = {
         mediator.manager.call('io', 'get_server_files', [callback]);
     },
 
-    io_prepare_data: function (highlight_data, cur_fil_num, context) {
-        mediator.manager.call('io', 'prepareData', [highlight_data, cur_fil_num, context]);
-    },
-
-    io_prepare_areas: function () {
-        mediator.manager.call('io', 'prepareAreas', []);
-    },
-
     init_ontofile: function (file) {
         mediator.current_file_number = file;
         mediator.current_bubble = mediator.bubbles[mediator.current_file_number];
@@ -179,18 +167,16 @@ MyMediator.prototype = {
         mediator.manager.call('io', 'setContext', [context, data.length]);
         mediator.manager.call('io', 'setInfo', [context]);
 
-        // TODO probably a redundant condition
-        if (!config.is_streamgraph) {
-            if (config.is_force_papers && config.dynamic_force_papers) 
-                mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
-            if (config.is_force_area && config.dynamic_force_area) 
-                mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
-            if (config.dynamic_sizing) 
-                mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
-        }
+        if (config.is_force_papers && config.dynamic_force_papers) 
+            mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
+        if (config.is_force_area && config.dynamic_force_area) 
+            mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
+        if (config.dynamic_sizing) 
+            mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
 
         mediator.init_modern_frontend_intermediate();
 
+        // TODO delete this call (redundant) and probably some other calls too
         mediator.manager.call('io', 'prepareAreas', []);
         
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
@@ -217,12 +203,7 @@ MyMediator.prototype = {
         // Build Headstart skeleton
         this.viz = $("#" + config.tag);
         this.viz.addClass("headstart");
-        this.viz.append(headstartTemplate({
-            credit_embed: config.credit_embed
-            , canonical_url: config.canonical_url
-            , is_authorview: config.is_authorview
-            , modern_frontend_enabled: mediator.modern_frontend_enabled
-        }));
+        this.viz.append(headstartTemplate());
         
         if(config.show_loading_screen) {
             $("#map-loading-screen").show();
