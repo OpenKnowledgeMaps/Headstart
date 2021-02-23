@@ -1,8 +1,6 @@
 import Mediator from 'mediator-js';
 import config from 'config';
 import { io } from 'io';
-import { canvas } from 'canvas';
-import { streamgraph } from 'streamgraph';
 import Intermediate from './intermediate';
 import { getChartSize, getListSize } from "./utils/dimensions";
 
@@ -37,8 +35,6 @@ var MyMediator = function() {
     this.modern_frontend_enabled = config.modern_frontend_enabled
     this.modern_frontend_intermediate = new Intermediate(
         this.modern_frontend_enabled,
-        this.streamgraph_chart_clicked,
-        this.currentstream_click,
         this.rescale_map,
         this.record_action,
     );
@@ -50,7 +46,7 @@ MyMediator.prototype = {
     constructor: MyMediator,
     init: function() {
         // init logic and state switching
-        this.modules = { io: io, canvas: canvas, streamgraph: streamgraph};
+        this.modules = { io: io };
         this.mediator.subscribe("start_visualization", this.init_start_visualization);
         this.mediator.subscribe("start", this.buildHeadstartHTML);
         this.mediator.subscribe("start", this.register_bubbles);
@@ -71,11 +67,6 @@ MyMediator.prototype = {
 
         // misc
         this.mediator.subscribe("record_action", this.record_action);
-        
-        //streamgraph
-        this.mediator.subscribe("stream_clicked", this.stream_clicked)
-        this.mediator.subscribe("currentstream_click", this.currentstream_click)
-        this.mediator.subscribe("streamgraph_chart_clicked", this.streamgraph_chart_clicked)
     },
 
     init_state: function() {
@@ -86,13 +77,6 @@ MyMediator.prototype = {
 
     init_modules: function() {
         mediator.manager.registerModule(io, 'io');
-        if(config.render_bubbles) {
-            mediator.manager.registerModule(canvas, 'canvas');
-        }
-        
-        if(config.is_streamgraph) {
-            mediator.manager.registerModule(streamgraph, 'streamgraph')
-        }
     },
 
     init_modern_frontend_intermediate: function() {
@@ -195,6 +179,7 @@ MyMediator.prototype = {
         mediator.manager.call('io', 'setContext', [context, data.length]);
         mediator.manager.call('io', 'setInfo', [context]);
 
+        // TODO probably a redundant condition
         if (!config.is_streamgraph) {
             if (config.is_force_papers && config.dynamic_force_papers) 
                 mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
@@ -205,12 +190,6 @@ MyMediator.prototype = {
         }
 
         mediator.init_modern_frontend_intermediate();
-        
-        if (config.is_streamgraph) {
-            if (!mediator.modern_frontend_enabled) {
-                mediator.manager.call('canvas', 'setupStreamgraphCanvas', []);
-            }
-        }
 
         mediator.manager.call('io', 'prepareAreas', []);
         
@@ -220,16 +199,7 @@ MyMediator.prototype = {
         mediator.dimensions_update();
 
         if (config.is_streamgraph) {
-            mediator.manager.registerModule(streamgraph, 'streamgraph')
-            if (!mediator.modern_frontend_enabled) {
-                mediator.manager.call('streamgraph', 'start')
-                mediator.manager.call('streamgraph', 'setupStreamgraph', [mediator.streamgraph_data])
-                
-                mediator.manager.call('streamgraph', 'initMouseListeners', []);
-            } else {
-                mediator.render_modern_frontend_streamgraph();
-            }
-            
+            mediator.render_modern_frontend_streamgraph();
         } else {
             mediator.render_modern_frontend_knowledge_map();
         }
@@ -240,7 +210,6 @@ MyMediator.prototype = {
         mediator.dimensions_update();
         d3.select(window).on("resize", () => {
             mediator.dimensions_update();
-            mediator.window_resize();
         });
     },
 
@@ -281,59 +250,9 @@ MyMediator.prototype = {
         bubbles.areas = io.areas;
         bubbles.areas_array = io.areas_array;
     },
-    
-    stream_clicked: function(d) {
-        if (mediator.modern_frontend_enabled) {
-            return;
-        }
-
-        let keyword = d.key;
-        let color = d.color;
-        
-        mediator.current_stream = keyword;
-        mediator.manager.call('streamgraph', 'markStream', [keyword]);
-        mediator.paper_deselected();
-        mediator.modern_frontend_intermediate.zoomIn({title: keyword, color});
-    },
-    
-    currentstream_click: function() {
-        if (mediator.modern_frontend_enabled) {
-            return;
-        }
-        mediator.paper_deselected();
-    },
-    
-    streamgraph_chart_clicked: function() {
-        if (mediator.modern_frontend_enabled) {
-            return;
-        }
-        mediator.current_stream = null;
-        mediator.manager.call('streamgraph', 'reset');
-        mediator.paper_deselected();
-        mediator.modern_frontend_intermediate.zoomOut();
-    },
 
     record_action: function(id, category, action, user, type, timestamp, additional_params, post_data) {
         window.headstartInstance.recordAction(id, category, action, user, type, timestamp, additional_params, post_data);
-    },
-
-    window_resize: function() {
-        if(config.is_streamgraph) {
-            if (mediator.modern_frontend_enabled) {
-                return;
-            }
-            $('.line_helper').remove();
-            $('#headstart-chart').empty();
-            mediator.manager.call('canvas', 'calcChartSize');
-            mediator.manager.call('canvas', 'createStreamgraphCanvas');
-            mediator.manager.call('streamgraph', 'setupStreamgraph', [mediator.streamgraph_data]);
-            mediator.manager.call('streamgraph', 'initMouseListeners', []);
-            mediator.manager.call('streamgraph', 'markStream')
-        }
-    },
-
-    paper_deselected: function() {
-        mediator.modern_frontend_intermediate.deselectPaper();
     },
 
     dimensions_update: function() {
