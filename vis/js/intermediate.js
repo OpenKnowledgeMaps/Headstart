@@ -30,6 +30,7 @@ import Toolbar from "./components/Toolbar";
 import { applyForce } from "./utils/force";
 import CreatedBy from "./templates/CreatedBy";
 import logAction from "./utils/actionLogger";
+import Streamgraph from "./components/Streamgraph";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -69,7 +70,7 @@ class Intermediate {
     this.store = createStore(rootReducer, middleware);
   }
 
-  init(config, context, data, size) {
+  init(config, context, mapData, streamData, size, width, height) {
     Object.assign(this.recordActionParams, {
       title: config.title,
       user: config.user_id,
@@ -78,7 +79,7 @@ class Intermediate {
       scaleLabel: config.scale_label,
     });
 
-    this.store.dispatch(initializeStore(config, context, data, size));
+    this.store.dispatch(initializeStore(config, context, mapData, streamData, size, width, height));
 
     // TODO replace the config.is_authorview with store variable
     // after components are wrapped
@@ -143,6 +144,18 @@ class Intermediate {
         <CreatedBy />
       </Provider>,
       document.getElementById("created_by")
+    );
+  }
+
+  renderStreamgraph() {
+    // TODO
+    console.warn("*** new React code rendered ***");
+
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <Streamgraph />
+      </Provider>,
+      document.getElementById("headstart-chart")
     );
   }
 

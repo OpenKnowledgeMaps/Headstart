@@ -68,13 +68,19 @@ export const initializeStore = (
   configObject,
   contextObject,
   dataArray,
-  chartSize
+  streamData,
+  chartSize,
+  streamWidth,
+  streamHeight
 ) => ({
   type: "INITIALIZE",
   configObject,
   contextObject,
   dataArray,
+  streamData,
   chartSize,
+  streamWidth,
+  streamHeight,
 });
 
 /**
@@ -144,6 +150,8 @@ export const updateDimensions = (chart, list) => ({
   type: "RESIZE",
   listHeight: list.height,
   chartSize: chart.size,
+  streamWidth: chart.width,
+  streamHeight: chart.height,
 });
 
 export const applyForceAreas = (areasArray, chartSize) => ({

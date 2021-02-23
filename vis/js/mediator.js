@@ -96,8 +96,8 @@ MyMediator.prototype = {
     },
 
     init_modern_frontend_intermediate: function() {
-        const { size } = getChartSize(config, io.context);
-        mediator.modern_frontend_intermediate.init(config, io.context, io.data, size);
+        const { size, width, height } = getChartSize(config, io.context);
+        mediator.modern_frontend_intermediate.init(config, io.context, io.data, mediator.streamgraph_data, size, width, height);
     },
 
     render_modern_frontend_list: function() {
@@ -110,6 +110,10 @@ MyMediator.prototype = {
 
     render_modern_frontend_peripherals: function() {
         mediator.modern_frontend_intermediate.renderPeripherals();
+    },
+
+    render_modern_frontend_streamgraph: function() {
+        mediator.modern_frontend_intermediate.renderStreamgraph();
     },
 
     // current_bubble needed in the headstart.js and io.js
@@ -202,8 +206,10 @@ MyMediator.prototype = {
 
         mediator.init_modern_frontend_intermediate();
         
-        if (config.is_streamgraph) {         
-            mediator.manager.call('canvas', 'setupStreamgraphCanvas', []);
+        if (config.is_streamgraph) {
+            if (!mediator.modern_frontend_enabled) {
+                mediator.manager.call('canvas', 'setupStreamgraphCanvas', []);
+            }
         }
 
         mediator.manager.call('io', 'prepareAreas', []);
@@ -215,10 +221,14 @@ MyMediator.prototype = {
 
         if (config.is_streamgraph) {
             mediator.manager.registerModule(streamgraph, 'streamgraph')
-            mediator.manager.call('streamgraph', 'start')
-            mediator.manager.call('streamgraph', 'setupStreamgraph', [mediator.streamgraph_data])
-            
-            mediator.manager.call('streamgraph', 'initMouseListeners', []);
+            if (!mediator.modern_frontend_enabled) {
+                mediator.manager.call('streamgraph', 'start')
+                mediator.manager.call('streamgraph', 'setupStreamgraph', [mediator.streamgraph_data])
+                
+                mediator.manager.call('streamgraph', 'initMouseListeners', []);
+            } else {
+                mediator.render_modern_frontend_streamgraph();
+            }
             
         } else {
             mediator.render_modern_frontend_knowledge_map();
@@ -273,6 +283,10 @@ MyMediator.prototype = {
     },
     
     stream_clicked: function(d) {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
+
         let keyword = d.key;
         let color = d.color;
         
@@ -283,10 +297,16 @@ MyMediator.prototype = {
     },
     
     currentstream_click: function() {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         mediator.paper_deselected();
     },
     
     streamgraph_chart_clicked: function() {
+        if (mediator.modern_frontend_enabled) {
+            return;
+        }
         mediator.current_stream = null;
         mediator.manager.call('streamgraph', 'reset');
         mediator.paper_deselected();
@@ -299,6 +319,9 @@ MyMediator.prototype = {
 
     window_resize: function() {
         if(config.is_streamgraph) {
+            if (mediator.modern_frontend_enabled) {
+                return;
+            }
             $('.line_helper').remove();
             $('#headstart-chart').empty();
             mediator.manager.call('canvas', 'calcChartSize');
