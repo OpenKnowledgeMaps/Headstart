@@ -8,10 +8,7 @@ import rootReducer from "./reducers";
 import {
   ALLOWED_IN_ANIMATION,
   NOT_QUEUED_IN_ANIMATION,
-  zoomInFromMediator,
-  zoomOutFromMediator,
   initializeStore,
-  deselectPaper,
   updateDimensions,
   applyForceAreas,
   applyForcePapers,
@@ -39,13 +36,7 @@ import Streamgraph from "./components/Streamgraph";
  * This class should ideally only talk to the mediator and redux
  */
 class Intermediate {
-  constructor(
-    modern_frontend_enabled,
-    streamgraphZoomOutCallback,
-    entryBacklinkClickCallback,
-    rescaleCallback,
-    recordActionCallback
-  ) {
+  constructor(modern_frontend_enabled, rescaleCallback, recordActionCallback) {
     this.modern_frontend_enabled = modern_frontend_enabled;
     this.actionQueue = [];
 
@@ -53,9 +44,7 @@ class Intermediate {
     this.recordActionParams = {};
 
     const middleware = applyMiddleware(
-      createZoomOutMiddleware(streamgraphZoomOutCallback),
       createFileChangeMiddleware(),
-      createEntryBacklinkClickMiddleware(entryBacklinkClickCallback),
       createActionQueueMiddleware(this),
       createScrollMiddleware(),
       createRepeatedInitializeMiddleware(this),
@@ -79,7 +68,9 @@ class Intermediate {
       scaleLabel: config.scale_label,
     });
 
-    this.store.dispatch(initializeStore(config, context, mapData, streamData, size, width, height));
+    this.store.dispatch(
+      initializeStore(config, context, mapData, streamData, size, width, height)
+    );
 
     // TODO replace the config.is_authorview with store variable
     // after components are wrapped
@@ -148,30 +139,12 @@ class Intermediate {
   }
 
   renderStreamgraph() {
-    // TODO
-    console.warn("*** new React code rendered ***");
-
     ReactDOM.render(
       <Provider store={this.store}>
         <Streamgraph />
       </Provider>,
       document.getElementById("headstart-chart")
     );
-  }
-
-  // used in streamgraph
-  zoomIn(selectedAreaData) {
-    this.store.dispatch(zoomInFromMediator(selectedAreaData));
-  }
-
-  // used in streamgraph
-  zoomOut() {
-    this.store.dispatch(zoomOutFromMediator());
-  }
-
-  // used in streamgraph
-  deselectPaper() {
-    this.store.dispatch(deselectPaper());
   }
 
   // used after start and then on window resize
@@ -361,31 +334,6 @@ function createRescaleMiddleware(rescaleCallback) {
         );
       }
       return next(action);
-    };
-  };
-}
-
-function createEntryBacklinkClickMiddleware(entryBacklinkClickCallback) {
-  return function () {
-    return (next) => (action) => {
-      if (action.type == "DESELECT_PAPER_BACKLINK") {
-        entryBacklinkClickCallback();
-      }
-      return next(action);
-    };
-  };
-}
-
-function createZoomOutMiddleware(streamgraphZoomOutCallback) {
-  return function ({ getState }) {
-    return (next) => (action) => {
-      if (action.type == "ZOOM_OUT" && action.not_from_mediator) {
-        if (getState().chartType === STREAMGRAPH_MODE) {
-          streamgraphZoomOutCallback();
-        }
-      }
-      const returnValue = next(action);
-      returnValue;
     };
   };
 }
