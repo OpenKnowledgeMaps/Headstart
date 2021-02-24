@@ -26,7 +26,8 @@ class TripleClient(object):
             scheme="http" if config.get('host') == 'localhost' else "https",
             port=config.get('port'),
             send_get_body_as='POST',
-            http_compress=True
+            http_compress=True,
+            retry_on_timeout=True
         )
         self.redis_store = redis_store
         self.nlp = spacy.load("xx_ent_wiki_sm")
