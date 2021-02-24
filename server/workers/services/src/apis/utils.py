@@ -37,7 +37,7 @@ def detect_error(service, error, params):
         phrases = re.findall(phrasepattern, query)
         if phrases:
             if len(phrases[0].split(" ")) > 4:
-                reason.append('phrase too long')
+                reason.append('too specific')
         elif len(query.split(" ")) < 4:
             reason.append('typo')
             reason.append('too specific')
