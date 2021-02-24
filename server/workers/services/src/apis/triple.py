@@ -77,7 +77,7 @@ class Search(Resource):
             result = {"status": "error",
                       "reason": reason}
             headers["Content-Type"] = "application/json"
-            return make_response(result, code, headers)
+            return jsonify(result)
         try:
             if request.headers["Accept"] == "application/json":
                 headers["Content-Type"] = "application/json"
@@ -102,7 +102,7 @@ class Search(Resource):
             result = {"status": "error",
                       "reason": ['unexpected data processing error']}
             headers["Content-Type"] = "application/json"
-            return make_response(result, 500, headers)
+            return jsonify(result)
 
 
 @triple_ns.route('/mappings')
