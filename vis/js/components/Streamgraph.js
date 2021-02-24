@@ -191,14 +191,13 @@ class Streamgraph extends React.Component {
 
     container.append("g").attr("class", "y axis").call(yAxis.orient("left"));
 
-    // TODO translate
     container
       .append("text")
       .attr("class", "axis-label x")
       .attr("x", width / 2)
       .attr("y", height + AXIS_PADDING.bottom)
       .attr("text-anchor", "middle")
-      .text("Jahr");
+      .text(this.props.localization.stream_year);
 
     container
       .append("text")
@@ -208,7 +207,7 @@ class Streamgraph extends React.Component {
         "transform",
         "translate(" + AXIS_PADDING.left + "," + height / 2 + ")rotate(-90)"
       )
-      .text("Anzahl Dokumente");
+      .text(this.props.localization.stream_doc_num);
   }
 
   /**
@@ -443,13 +442,16 @@ class Streamgraph extends React.Component {
           .style("left", realX + TOOLTIP_OFFSET.left + "px")
           .style("top", realY + TOOLTIP_OFFSET.top + "px")
           .html(() =>
-            getTooltip({
-              year,
-              color,
-              keyword: f.key,
-              currentYearDocs: f.value,
-              allYearsDocs,
-            })
+            getTooltip(
+              {
+                year,
+                color,
+                keyword: f.key,
+                currentYearDocs: f.value,
+                allYearsDocs,
+              },
+              this.props.localization
+            )
           )
           .classed("hidden", false);
       }
@@ -491,14 +493,10 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(Streamgraph);
 
-// TODO translate
-const getTooltip = ({
-  year,
-  color,
-  keyword,
-  currentYearDocs,
-  allYearsDocs,
-}) => {
+const getTooltip = (
+  { year, color, keyword, currentYearDocs, allYearsDocs },
+  localization
+) => {
   return `<div style="font-family: Lato; font-size:10px;">
 <div class='year'>${year}</div>
 <div class='key' style="text-transform: none; font-size:14px; margin-bottom: 5px;">
@@ -507,7 +505,7 @@ const getTooltip = ({
         class='swatch'>&nbsp;</span>
     ${keyword}
 </div>
-<div class='value'> Dokumente: ${currentYearDocs} </div>
-<div class='value'> Gesamt: ${allYearsDocs} </div>
+<div class='value'> ${localization.stream_docs}: ${currentYearDocs} </div>
+<div class='value'> ${localization.stream_total}: ${allYearsDocs} </div>
 </div>`;
 };
