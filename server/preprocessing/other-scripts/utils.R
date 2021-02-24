@@ -112,7 +112,7 @@ detect_error <- function(failed, service) {
         # apply query error detection heuristics
         if (!identical(result[[1]], character(0)) &&
             length(unlist(strsplit(result[[1]][2], " "))) > 4) {
-          reason <- c(reason, 'phrase too long')
+          reason <- c(reason, 'too specific')
         } else if (length(unlist(strsplit(failed$query, " "))) < 4) {
           reason <- c(reason, 'typo', 'too specific')
         } else {
