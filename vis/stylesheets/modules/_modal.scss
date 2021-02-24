@@ -311,6 +311,30 @@ h5 {
   touch-action: none;
 }
 
-.table > thead > tr > th, .table > thead > tr > td, .table > tbody > tr > th, .table > tbody > tr > td, .table > tfoot > tr > th, .table > tfoot > tr > td {
+.table > thead > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > th,
+.table > tbody > tr > td,
+.table > tfoot > tr > th,
+.table > tfoot > tr > td {
   border-top: 3px solid $okm-clouds;
+}
+
+.modal-header button {
+  opacity: 1.0;
+
+  span {
+    border: 1px solid #adadad;
+    border-radius: 4px;
+    padding: 6px 12px 6px 12px;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    display: block;
+  }
+}
+
+.modal-header button:hover {
+  opacity: 1.0;
+  background-color: #eff3f4;
 }
