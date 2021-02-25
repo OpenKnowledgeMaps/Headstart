@@ -4,10 +4,13 @@ import { Modal, Button } from "react-bootstrap";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 
+const IFRAME_WIDTH = 1260;
+const IFRAME_HEIGHT = 756;
+
 const EmbedModal = ({ open, onClose }) => {
   const localization = useLocalizationContext();
 
-  const embedText = `<iframe width="1200" height="720" src="${window.location
+  const embedText = `<iframe width="${IFRAME_WIDTH}" height="${IFRAME_HEIGHT}" src="${window.location
     .toString()
     .replace(/#.*/, "")}&embed=true"></iframe>`;
 
