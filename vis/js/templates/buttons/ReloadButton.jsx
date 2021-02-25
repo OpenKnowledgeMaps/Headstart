@@ -28,7 +28,10 @@ const ReloadButton = ({
     // html template starts here
     <div
       id="reload"
-      className="reload-button show-reload-button"
+      className={
+        "reload-button show-reload-button" +
+        (showDescription ? "" : " small-reload")
+      }
       onClick={handleReload}
     >
       <i className="fas fa-redo"></i>

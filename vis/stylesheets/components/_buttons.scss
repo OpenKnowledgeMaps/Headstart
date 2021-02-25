@@ -132,13 +132,13 @@ img#close-button {
 }
 
 @media screen and (max-width: 1150px) {
-    #modals .btn, .reload-button {
+    #modals .btn, .reload-button.small-reload {
         font-size: 13px;
         width: 38px;
         height: 38px;
     }
 
-    .reload-button {
+    .reload-button.small-reload {
         padding: 10px 12px;
     }
 }
