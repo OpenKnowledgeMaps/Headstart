@@ -72,8 +72,6 @@
     margin-bottom: 10px;
     font-family: $link-font-family;
 
-
-
     .list_title {
         font-size: 14px;
         line-height:120%;
@@ -535,6 +533,12 @@ img#preview_page {
     font-style: italic;
 }
 
+.empty-area-warning {
+    padding: 10px;
+    color: $okm-red;
+    font-size: 12px;
+}
+
 @media screen and (max-width: 1150px) {
 
     .list_metadata .list_title {
@@ -926,10 +930,4 @@ img#preview_page {
         font-size: 12px;
     }
 
-}
-
-.empty-area-warning {
-    padding: 10px;
-    color: red;
-    font-size: 14px;
 }
