@@ -4,8 +4,8 @@ import {
   search,
   filter,
   sort,
-  hoverArea,
-  setListHeight,
+  highlightArea,
+  updateDimensions,
 } from "../../js/actions";
 
 import listReducer from "../../js/reducers/list";
@@ -58,21 +58,12 @@ describe("list state", () => {
         id: "some-id",
         safe_id: "some-safe-id",
         title: "some title",
-      }
+      };
       const EXPECTED_ACTION = {
-        type: "HOVER_AREA",
+        type: "HIGHLIGHT_AREA",
         paper: PAPER,
       };
-      expect(hoverArea(PAPER)).toEqual(EXPECTED_ACTION);
-    });
-
-    it("should create a list resize action", () => {
-      const LIST_HEIGHT = 800;
-      const EXPECTED_ACTION = {
-        type: "RESIZE",
-        listHeight: LIST_HEIGHT,
-      };
-      expect(setListHeight(LIST_HEIGHT)).toEqual(EXPECTED_ACTION);
+      expect(highlightArea(PAPER)).toEqual(EXPECTED_ACTION);
     });
   });
 
@@ -153,12 +144,14 @@ describe("list state", () => {
       expect(result).toEqual(EXPECTED_STATE);
     });
 
-    it("should set height value to some number", () => {
-      const LIST_HEIGHT = 800;
-      const INITIAL_STATE = { height: null };
-      const EXPECTED_STATE = { ...INITIAL_STATE, height: LIST_HEIGHT };
+    it("should set correct resized height", () => {
+      const INITIAL_STATE = { height: 800 };
+      const EXPECTED_STATE = { ...INITIAL_STATE, height: 500 };
 
-      const result = listReducer(INITIAL_STATE, setListHeight(LIST_HEIGHT));
+      const result = listReducer(
+        INITIAL_STATE,
+        updateDimensions({}, { height: 500 })
+      );
 
       expect(result).toEqual(EXPECTED_STATE);
     });

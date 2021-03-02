@@ -1,13 +1,45 @@
 /**
- * This is where all actions are stored.
+ * All actions in this array are not delayed when the map is animated.
+ *
+ * add all actions that don't change anything in the map to here
  */
+export const ALLOWED_IN_ANIMATION = [
+  "SHOW_PREVIEW",
+  "HIDE_PREVIEW",
+  "STOP_ANIMATION",
+];
 
-export const zoomIn = (selectedAreaData, source = null) => ({
+/**
+ * All actions in this array are canceled without queuing when the map
+ * is animated.
+ *
+ * add all actions that are triggered after clicking to here
+ */
+export const NOT_QUEUED_IN_ANIMATION = [
+  "ZOOM_IN",
+  "ZOOM_OUT",
+  "SELECT_PAPER",
+  "DESELECT_PAPER",
+  "DESELECT_PAPER_BACKLINK",
+  "FILE_CLICKED",
+  "SEARCH",
+  "FILTER",
+  "SORT",
+];
+
+export const zoomIn = (
+  selectedAreaData,
+  source = null,
+  callback,
+  alreadyZoomed = false
+) => ({
   type: "ZOOM_IN",
   selectedAreaData,
   // TODO remove this when whole app is refactored
   not_from_mediator: true,
   source,
+  callback,
+  alreadyZoomed,
 });
 
 export const zoomInFromMediator = (selectedAreaData) => ({
@@ -23,6 +55,7 @@ export const zoomOut = (callback) => ({
   type: "ZOOM_OUT",
   // TODO remove this when whole app is refactored
   not_from_mediator: true,
+  callback,
 });
 
 /**
@@ -31,11 +64,17 @@ export const zoomOut = (callback) => ({
  * @param {Object} contextObject the app context
  * @param {Array}  dataArray the papers data
  */
-export const initializeStore = (configObject, contextObject, dataArray) => ({
+export const initializeStore = (
+  configObject,
+  contextObject,
+  dataArray,
+  chartSize
+) => ({
   type: "INITIALIZE",
   configObject,
   contextObject,
   dataArray,
+  chartSize,
 });
 
 /**
@@ -77,17 +116,14 @@ export const selectPaper = (paper) => ({
   not_from_mediator: true,
 });
 
-export const selectPaperFromMediator = (safeId) => ({
-  type: "SELECT_PAPER",
-  safeId,
-});
-
 export const deselectPaper = () => ({
   type: "DESELECT_PAPER",
 });
 
-export const hoverArea = (paper) => ({
-  type: "HOVER_AREA",
+export const highlightArea = (paper) => ({
+  type: "HIGHLIGHT_AREA",
+  uri: paper ? paper.area_uri : null,
+  // TODO won't be needed after map refactoring
   paper,
 });
 
@@ -104,7 +140,35 @@ export const deselectPaperBacklink = () => ({
   type: "DESELECT_PAPER_BACKLINK",
 });
 
-export const setListHeight = (listHeight) => ({
+export const updateDimensions = (chart, list) => ({
   type: "RESIZE",
-  listHeight
+  listHeight: list.height,
+  chartSize: chart.size,
+});
+
+export const applyForceAreas = (areasArray, chartSize) => ({
+  type: "APPLY_FORCE_AREAS",
+  areasArray,
+  chartSize,
+});
+
+export const applyForcePapers = (dataArray, chartSize) => ({
+  type: "APPLY_FORCE_PAPERS",
+  dataArray,
+  chartSize,
+});
+
+export const stopAnimation = () => ({
+  type: "STOP_ANIMATION",
+});
+
+export const hoverBubble = (uri) => ({
+  type: "HOVER_BUBBLE",
+  uri,
+});
+
+export const hoverPaper = (safeId, enlargeFactor) => ({
+  type: "HOVER_PAPER",
+  safeId,
+  enlargeFactor,
 });
