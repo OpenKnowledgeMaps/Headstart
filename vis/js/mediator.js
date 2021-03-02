@@ -80,6 +80,10 @@ MyMediator.prototype = {
         mediator.modern_frontend_intermediate.init(config, io.context, io.data, mediator.streamgraph_data, size, width, height);
     },
 
+    render_modern_frontend_heading: function() {
+        mediator.modern_frontend_intermediate.renderHeading(config);
+    },
+
     render_modern_frontend_list: function() {
         mediator.modern_frontend_intermediate.renderList();
     },
@@ -94,6 +98,10 @@ MyMediator.prototype = {
 
     render_modern_frontend_streamgraph: function() {
         mediator.modern_frontend_intermediate.renderStreamgraph();
+    },
+
+    render_modern_frontend_modals_only: function(selector) {
+        mediator.modern_frontend_intermediate.renderModalsOnly(selector);
     },
 
     // current_bubble needed in the headstart.js and io.js
@@ -184,14 +192,26 @@ MyMediator.prototype = {
         // TODO call this just once (chart size must be known before the map is rendered)
         mediator.dimensions_update();
 
-        if (config.is_streamgraph) {
-            mediator.render_modern_frontend_streamgraph();
+        if (config.render_map) {
+            mediator.render_modern_frontend_heading();
+
+            if (config.is_streamgraph) {
+                mediator.render_modern_frontend_streamgraph();
+            } else {
+                mediator.render_modern_frontend_knowledge_map();
+            }
+
+            mediator.render_modern_frontend_peripherals();
         } else {
-            mediator.render_modern_frontend_knowledge_map();
+            $(".vis-col").remove();
+            $(".list-col").css("width", "100%");
+            $("body").append('<div id="makeshift-modals"></div>')
+            mediator.render_modern_frontend_modals_only("#makeshift-modals");
         }
 
-        mediator.render_modern_frontend_list();
-        mediator.render_modern_frontend_peripherals();
+        if (config.render_list) {
+            mediator.render_modern_frontend_list();
+        }
         
         mediator.dimensions_update();
         d3.select(window).on("resize", () => {
@@ -208,20 +228,6 @@ MyMediator.prototype = {
         if(config.show_loading_screen) {
             $("#map-loading-screen").show();
             $("#loading-text").text(config.localization[config.language].loading);
-        }
-        
-        // TODO is this even real? modern_frontend_enabled
-        if (!config.render_bubbles) {
-            $(".vis-col").remove();
-            this.available_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-            // TODO this shouldn't be happening with react
-            if(config.render_list) {
-                $(".list-col").height(this.available_height);
-                $("#papers_list").height(this.available_height);
-            }
-        }
-        if (!config.render_list) {
-            $(".list-col").remove();
         }
     },
 
