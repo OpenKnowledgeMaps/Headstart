@@ -112,7 +112,7 @@ export const updateDimensions = (chart, list) => ({
   listHeight: list.height,
   chartSize: chart.size,
   streamWidth: chart.width,
-  streamHeight: chart.height,
+  streamHeight: chart.height < chart.width ? chart.height : chart.width,
 });
 
 export const applyForceAreas = (areasArray, chartSize) => ({
