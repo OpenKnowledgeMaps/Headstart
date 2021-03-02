@@ -15,6 +15,13 @@ import service from "./service";
 import list from "./list";
 import data from "./data";
 import previewModal from "./previewModal";
+import areas from "./areas";
+import chart from "./chart";
+import animation from "./animation";
+import highlightedBubble from "./highlightedBubble";
+import bubbleOrder from "./bubbleOrder";
+import paperOrder from "./paperOrder";
+import hyphenationLang from "./hyphenationLang";
 
 export default combineReducers({
   zoom,
@@ -30,4 +37,11 @@ export default combineReducers({
   list,
   data,
   previewModal,
+  areas,
+  chart,
+  animation,
+  highlightedBubble,
+  bubbleOrder,
+  paperOrder,
+  hyphenationLang,
 });
