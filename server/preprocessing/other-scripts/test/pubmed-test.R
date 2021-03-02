@@ -45,10 +45,11 @@ ADDITIONAL_STOP_WORDS = LANGUAGE$name
 #start.time <- Sys.time()
 failed <- list(params=params)
 tryCatch({
-  input_data = get_papers(query, params)
+  query <- sanitize_query(query)
+  input_data = get_papers(query$sanitized_query, params)
 }, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
-  failed$query <<- query
+  tslog$error(gsub("\n", " ", paste("Query failed", service, query$raw_query, paste(params, collapse=" "), err, sep="||")))
+  failed$query <<- query$raw_query
   failed$query_reason <<- err$message
 })
 
@@ -63,8 +64,8 @@ if(exists('input_data')) {
                              lang=LANGUAGE$name,
                              add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
   }, error=function(err){
-    tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
-    failed$query <<- query
+    tslog$error(gsub("\n", " ", paste("Processing failed", query$raw_query, paste(params, collapse=" "), err, sep="||")))
+    failed$query <<- query$raw_query
     failed$processing_reason <<- err$message
   })
 }
