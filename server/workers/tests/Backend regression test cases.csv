@@ -37,3 +37,4 @@ case id,data integration,affected component,search query,from,to,article types,s
 20,pubmed,retrieval,"""Our objective was to explore the effect of depression and anxiety on adherence to antiretroviral therapy (ART) among MSM with newly diagnosed HIV infections.""",1809-01-01,2020-09-25,all,most-relevant,successful map,,,,,
 21,pubmed,preprocessing,canine covid19,1809-01-01,2020-12-07,all,most-relevant,successful map,"Error in if (nchar(x) > 17000) {: Missing value, where TRUE/FALSE is needed",,,,
 22,base,summarization,explosion,2018-10-28,2020-12-08,['121'],most-relevant,no ??? in bubble titles,,,,,
+23,base,retrieval,"“hannah arendt""",1809-01-01,2021-02-28,['121'],most-relevant,successful map,,,,,
