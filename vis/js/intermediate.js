@@ -71,8 +71,10 @@ class Intermediate {
     this.store.dispatch(
       initializeStore(config, context, mapData, streamData, size, width, height)
     );
+  }
 
-    // TODO replace the config.is_authorview with store variable
+  renderHeading(config) {
+    // TODO replace the config.is_authorview with a store variable
     // after components are wrapped
     ReactDOM.render(
       <Provider store={this.store}>
@@ -135,6 +137,16 @@ class Intermediate {
         <CreatedBy />
       </Provider>,
       document.getElementById("created_by")
+    );
+  }
+
+  // used if config.render_map is false
+  renderModalsOnly(selector) {
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <Modals />
+      </Provider>,
+      document.querySelector(selector)
     );
   }
 

@@ -24,6 +24,7 @@ const ClassificationListEntries = ({
   showBacklink,
   isInStreamBacklink,
   height,
+  disableClicks,
   handleZoomIn,
   handleSelectPaper,
   handleDeselectPaper,
@@ -33,6 +34,9 @@ const ClassificationListEntries = ({
   handleBacklinkClick,
 }) => {
   const handleTitleClick = (paper) => {
+    if (disableClicks) {
+      return;
+    }
     handleSelectPaper(paper);
     if (!isStreamgraph) {
       handleZoomIn(paper);
@@ -40,6 +44,9 @@ const ClassificationListEntries = ({
   }
 
   const handleAreaClick = (paper) => {
+    if (disableClicks) {
+      return;
+    }
     handleDeselectPaper();
     handleZoomIn(paper, "list-area");
   };
@@ -107,6 +114,7 @@ const mapStateToProps = (state) => ({
   showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
   isInStreamBacklink: !!state.selectedBubble,
   height: state.list.height,
+  disableClicks: state.list.disableClicks,
 });
 
 export default connect(

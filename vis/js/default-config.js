@@ -3,8 +3,8 @@ var config = {
 /*** basic visualization modes ***/
     //show list
     render_list: true,
-    //show map (should be renamed to reflect that)
-    render_bubbles: true,
+    //show map
+    render_map: true,
     //show toolbar at the bottom
     scale_toolbar: false,
     //show author-based view

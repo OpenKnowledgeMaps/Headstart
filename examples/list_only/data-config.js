@@ -16,7 +16,7 @@ var data_config = {
     is_force_papers:true,
 
     render_list: true,
-    render_bubbles: false,
+    render_map: false,
 
     files: [{
         title: "edu1",

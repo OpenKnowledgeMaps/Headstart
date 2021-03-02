@@ -24,13 +24,20 @@ const BasicListEntries = ({
   showPreviewImage,
   showRealPreviewImage,
   height,
+  disableClicks,
 }) => {
   const handleTitleClick = (paper) => {
+    if (disableClicks) {
+      return;
+    }
     handleSelectPaper(paper);
     handleZoomIn(paper);
   }
 
   const handleAreaClick = (paper) => {
+    if (disableClicks) {
+      return;
+    }
     handleDeselectPaper();
     handleZoomIn(paper, "list-area");
   };
@@ -90,6 +97,7 @@ const mapStateToProps = (state) => ({
   showPreviewImage: !!state.selectedPaper,
   showRealPreviewImage: state.list.showRealPreviewImage,
   height: state.list.height,
+  disableClicks: state.list.disableClicks,
 });
 
 export default connect(
