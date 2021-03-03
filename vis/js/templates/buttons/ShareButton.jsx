@@ -14,8 +14,8 @@ const ShareButton = ({ twitterHashtags }) => {
     setOpened(false);
   };
 
-  const buttonRef = useRef(null);
-  useOutsideClick(buttonRef, handleOutsideClick);
+  const containerRef = useRef(null);
+  useOutsideClick(containerRef, handleOutsideClick);
 
   const title = encodeURIComponent(document.title);
   const url = encodeURIComponent(window.location.href);
@@ -30,13 +30,12 @@ const ShareButton = ({ twitterHashtags }) => {
 
   return (
     // html template starts here
-    <div>
+    <div ref={containerRef}>
       <button
         className="btn btn-primary sharebutton"
         id="sharebutton"
         title={localization.share_button_title}
         onClick={handleClick}
-        ref={buttonRef}
       >
         <i className="fa fa-share-alt fa-fw" aria-hidden="true"></i>
       </button>

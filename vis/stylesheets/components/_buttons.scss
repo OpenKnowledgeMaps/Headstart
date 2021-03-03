@@ -81,14 +81,6 @@ img#close-button {
     color: $okm-modal-btn;
 }
 
-@media screen and (max-width: 1150px) {
-    #modals .btn {
-        font-size: 13px;
-        width: 38px;
-        height: 38px;
-    }
-}
-
 @if ($skin == "cris_vis") {
     #searchclear {
         right: 8px;
@@ -122,4 +114,31 @@ img#close-button {
 
 .sharebuttons button {
     margin-left: 3px;
+}
+
+.reload-button {
+    color: white;
+    background-color: #cc3b6b;
+    cursor: pointer;
+    display: block;
+    padding: 12px 15px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    max-width: 200px;
+    font-family: 'Lato', sans-serif;
+    -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+@media screen and (max-width: 1150px) {
+    #modals .btn, .reload-button.small-reload {
+        font-size: 13px;
+        width: 38px;
+        height: 38px;
+    }
+
+    .reload-button.small-reload {
+        padding: 10px 12px;
+    }
 }
