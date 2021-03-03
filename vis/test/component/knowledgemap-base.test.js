@@ -38,7 +38,7 @@ const FORCE_LAYOUT_PARAMS = {
 
 const setup = () => {
   const store = createStore(reducer);
-  store.dispatch(initializeStore(config, context, data, 500));
+  store.dispatch(initializeStore(config, context, data, null, 500));
   const state = store.getState();
 
   applyForce(
