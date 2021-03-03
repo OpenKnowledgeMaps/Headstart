@@ -8,10 +8,7 @@ import rootReducer from "./reducers";
 import {
   ALLOWED_IN_ANIMATION,
   NOT_QUEUED_IN_ANIMATION,
-  zoomInFromMediator,
-  zoomOutFromMediator,
   initializeStore,
-  deselectPaper,
   updateDimensions,
   applyForceAreas,
   applyForcePapers,
@@ -23,9 +20,14 @@ import SubdisciplineTitle from "./templates/SubdisciplineTitle";
 import AuthorImage from "./components/AuthorImage";
 import List from "./components/List";
 import KnowledgeMap from "./components/KnowledgeMap";
+import ModalButtons from "./components/ModalButtons";
+import Modals from "./components/Modals";
+import Toolbar from "./components/Toolbar";
 
 import { applyForce } from "./utils/force";
+import CreatedBy from "./templates/CreatedBy";
 import logAction from "./utils/actionLogger";
+import Streamgraph from "./components/Streamgraph";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -34,13 +36,7 @@ import logAction from "./utils/actionLogger";
  * This class should ideally only talk to the mediator and redux
  */
 class Intermediate {
-  constructor(
-    modern_frontend_enabled,
-    streamgraphZoomOutCallback,
-    previewPopoverCallback,
-    entryBacklinkClickCallback,
-    recordActionCallback
-  ) {
+  constructor(modern_frontend_enabled, rescaleCallback, recordActionCallback) {
     this.modern_frontend_enabled = modern_frontend_enabled;
     this.actionQueue = [];
 
@@ -48,14 +44,12 @@ class Intermediate {
     this.recordActionParams = {};
 
     const middleware = applyMiddleware(
-      createZoomOutMiddleware(streamgraphZoomOutCallback),
       createFileChangeMiddleware(),
-      createPreviewPopoverMiddleware(previewPopoverCallback),
-      createEntryBacklinkClickMiddleware(entryBacklinkClickCallback),
       createActionQueueMiddleware(this),
       createScrollMiddleware(),
       createRepeatedInitializeMiddleware(this),
       createChartTypeMiddleware(),
+      createRescaleMiddleware(rescaleCallback),
       createRecordActionMiddleware(
         this.recordAction.bind(this),
         this.recordActionParams
@@ -65,17 +59,22 @@ class Intermediate {
     this.store = createStore(rootReducer, middleware);
   }
 
-  init(config, context, data, size) {
+  init(config, context, mapData, streamData, size, width, height) {
     Object.assign(this.recordActionParams, {
       title: config.title,
       user: config.user_id,
       localization: config.localization[config.language],
       mouseoverEvaluation: config.enable_mouseover_evaluation,
+      scaleLabel: config.scale_label,
     });
 
-    this.store.dispatch(initializeStore(config, context, data, size));
+    this.store.dispatch(
+      initializeStore(config, context, mapData, streamData, size, width, height)
+    );
+  }
 
-    // TODO replace the config.is_authorview with store variable
+  renderHeading(config) {
+    // TODO replace the config.is_authorview with a store variable
     // after components are wrapped
     ReactDOM.render(
       <Provider store={this.store}>
@@ -117,19 +116,47 @@ class Intermediate {
     this.applyForceLayout();
   }
 
-  // used in streamgraph
-  zoomIn(selectedAreaData) {
-    this.store.dispatch(zoomInFromMediator(selectedAreaData));
+  renderPeripherals() {
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <ModalButtons />
+        <Modals />
+      </Provider>,
+      document.getElementById("modals")
+    );
+
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <Toolbar />
+      </Provider>,
+      document.getElementById("toolbar")
+    );
+
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <CreatedBy />
+      </Provider>,
+      document.getElementById("created_by")
+    );
   }
 
-  // used in streamgraph
-  zoomOut() {
-    this.store.dispatch(zoomOutFromMediator());
+  // used if config.render_map is false
+  renderModalsOnly(selector) {
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <Modals />
+      </Provider>,
+      document.querySelector(selector)
+    );
   }
 
-  // used in streamgraph
-  deselectPaper() {
-    this.store.dispatch(deselectPaper());
+  renderStreamgraph() {
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <Streamgraph />
+      </Provider>,
+      document.getElementById("headstart-chart")
+    );
   }
 
   // used after start and then on window resize
@@ -302,27 +329,23 @@ function createChartTypeMiddleware() {
   };
 }
 
-function createEntryBacklinkClickMiddleware(entryBacklinkClickCallback) {
-  return function () {
+/**
+ * Creates a middleware that calls the rescaling function on the 'SCALE' action.
+ *
+ * @param {Function} rescaleCallback function that rescales the map
+ */
+function createRescaleMiddleware(rescaleCallback) {
+  return () => {
     return (next) => (action) => {
-      if (action.type == "DESELECT_PAPER_BACKLINK") {
-        entryBacklinkClickCallback();
+      if (action.type === "SCALE") {
+        rescaleCallback(
+          action.value,
+          action.baseUnit,
+          action.contentBased,
+          action.sort
+        );
       }
       return next(action);
-    };
-  };
-}
-
-function createZoomOutMiddleware(streamgraphZoomOutCallback) {
-  return function ({ getState }) {
-    return (next) => (action) => {
-      if (action.type == "ZOOM_OUT" && action.not_from_mediator) {
-        if (getState().chartType === STREAMGRAPH_MODE) {
-          streamgraphZoomOutCallback();
-        }
-      }
-      const returnValue = next(action);
-      returnValue;
     };
   };
 }
@@ -334,18 +357,6 @@ function createFileChangeMiddleware() {
         if (getState().files.current !== action.fileIndex) {
           window.headstartInstance.tofile(action.fileIndex);
         }
-      }
-      const returnValue = next(action);
-      returnValue;
-    };
-  };
-}
-
-function createPreviewPopoverMiddleware(previewPopoverCallback) {
-  return function () {
-    return (next) => (action) => {
-      if (action.type == "SHOW_PREVIEW") {
-        previewPopoverCallback(action.paper);
       }
       const returnValue = next(action);
       returnValue;
