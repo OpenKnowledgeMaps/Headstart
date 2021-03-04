@@ -2,12 +2,9 @@ import Mediator from 'mediator-js';
 import config from 'config';
 import { io } from 'io';
 import Intermediate from './intermediate';
-import { getChartSize, getListSize } from "./utils/dimensions";
 
 // needed for draggable modals (it can be refactored with react-bootstrap though)
 import "../lib/jquery-ui.min.js";
-
-const headstartTemplate = require("templates/headstart.handlebars");
 
 class ModuleManager {
     constructor() {
@@ -33,7 +30,7 @@ var MyMediator = function() {
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
     this.modern_frontend_enabled = config.modern_frontend_enabled
-    this.modern_frontend_intermediate = new Intermediate(
+    this.intermediate_layer = new Intermediate(
         this.modern_frontend_enabled,
         this.rescale_map,
         this.record_action,
@@ -75,33 +72,12 @@ MyMediator.prototype = {
         mediator.manager.registerModule(io, 'io');
     },
 
-    init_modern_frontend_intermediate: function() {
-        const { size, width, height } = getChartSize(config, io.context);
-        mediator.modern_frontend_intermediate.init(config, io.context, io.data, mediator.streamgraph_data, size, width, height);
+    render_frontend: function() {
+        mediator.intermediate_layer.renderFrontend(config);
     },
 
-    render_modern_frontend_heading: function() {
-        mediator.modern_frontend_intermediate.renderHeading(config);
-    },
-
-    render_modern_frontend_list: function() {
-        mediator.modern_frontend_intermediate.renderList();
-    },
-
-    render_modern_frontend_knowledge_map: function() {
-        mediator.modern_frontend_intermediate.renderKnowledgeMap(config);
-    },
-
-    render_modern_frontend_peripherals: function() {
-        mediator.modern_frontend_intermediate.renderPeripherals();
-    },
-
-    render_modern_frontend_streamgraph: function() {
-        mediator.modern_frontend_intermediate.renderStreamgraph();
-    },
-
-    render_modern_frontend_modals_only: function(selector) {
-        mediator.modern_frontend_intermediate.renderModalsOnly(selector);
+    init_store: function() {
+        mediator.intermediate_layer.initStore(config, io.context, io.data, mediator.streamgraph_data);
     },
 
     // current_bubble needed in the headstart.js and io.js
@@ -142,8 +118,6 @@ MyMediator.prototype = {
     },
 
     init_start_visualization: function(highlight_data, csv) {
-        $("#map-loading-screen").hide();
-        
         let data = function () {
             if (config.show_context) {
                 if(typeof csv.data === "string") {
@@ -182,38 +156,15 @@ MyMediator.prototype = {
         if (config.dynamic_sizing) 
             mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
 
-        mediator.init_modern_frontend_intermediate();
-
-        // TODO delete this call (redundant) and probably some other calls too
-        mediator.manager.call('io', 'prepareAreas', []);
+        // TODO delete this call (redundant)
+        //mediator.manager.call('io', 'prepareAreas', []);
         
         mediator.bubbles_update_data_and_areas(mediator.current_bubble);
 
-        // TODO call this just once (chart size must be known before the map is rendered)
-        mediator.dimensions_update();
-
-        if (config.render_map) {
-            mediator.render_modern_frontend_heading();
-
-            if (config.is_streamgraph) {
-                mediator.render_modern_frontend_streamgraph();
-            } else {
-                mediator.render_modern_frontend_knowledge_map();
-            }
-
-            mediator.render_modern_frontend_peripherals();
-        } else {
-            $(".vis-col").remove();
-            $(".list-col").css("width", "100%");
-            $("body").append('<div id="makeshift-modals"></div>')
-            mediator.render_modern_frontend_modals_only("#makeshift-modals");
-        }
-
-        if (config.render_list) {
-            mediator.render_modern_frontend_list();
-        }
+        mediator.init_store();
         
-        mediator.dimensions_update();
+        // TODO this call will be redundant
+        //mediator.dimensions_update();
         d3.select(window).on("resize", () => {
             mediator.dimensions_update();
         });
@@ -223,19 +174,16 @@ MyMediator.prototype = {
         // Build Headstart skeleton
         this.viz = $("#" + config.tag);
         this.viz.addClass("headstart");
-        this.viz.append(headstartTemplate());
-        
-        if(config.show_loading_screen) {
-            $("#map-loading-screen").show();
-            $("#loading-text").text(config.localization[config.language].loading);
-        }
+        this.viz.append('<div id="app-container"></div>');
+
+        mediator.render_frontend();
     },
 
     // loads data used in headstart.js
     bubbles_update_data_and_areas: function(bubbles) {
         bubbles.data = io.data;
-        bubbles.areas = io.areas;
-        bubbles.areas_array = io.areas_array;
+        //bubbles.areas = io.areas;
+        //bubbles.areas_array = io.areas_array;
     },
 
     record_action: function(id, category, action, user, type, timestamp, additional_params, post_data) {
@@ -243,13 +191,7 @@ MyMediator.prototype = {
     },
 
     dimensions_update: function() {
-        const chart = getChartSize(config, io.context);
-        const list = getListSize(config, io.context, chart.size);
-        mediator.modern_frontend_intermediate.updateDimensions(chart, list);
-        if(!config.is_streamgraph) {
-            d3.select("#headstart-chart")
-                .style("width", chart.size + "px");
-        }
+        mediator.intermediate_layer.updateDimensions(config, io.context);
     },
 
     rescale_map: function(scale_by, base_unit, content_based, initial_sort) {

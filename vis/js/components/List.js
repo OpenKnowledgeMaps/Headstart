@@ -1,8 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import LocalizationProvider from "./LocalizationProvider";
-
 import { filterData, sortData } from "../utils/data";
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
 import ListToggle from "./ListToggle";
@@ -14,13 +12,17 @@ const List = ({
   searchSettings,
   filterSettings,
   sortSettings,
-  localization,
+  fullWidth,
 }) => {
   let displayedData = filterData(data, searchSettings, filterSettings);
   displayedData = sortData(displayedData, sortSettings);
 
   return (
-    <LocalizationProvider localization={localization}>
+    <div
+      id="list-col"
+      className="list-col"
+      style={{ width: fullWidth ? "100%" : undefined }}
+    >
       <div id="list_explorer">
         <div>
           <div className="col-xs-12" id="explorer_header">
@@ -30,7 +32,7 @@ const List = ({
           </div>
         </div>
       </div>
-    </LocalizationProvider>
+    </div>
   );
 };
 
@@ -51,7 +53,7 @@ const mapStateToProps = (state) => ({
   sortSettings: {
     value: state.list.sortValue,
   },
-  localization: state.localization,
+  fullWidth: !state.misc.renderMap,
 });
 
 export default connect(mapStateToProps)(List);
