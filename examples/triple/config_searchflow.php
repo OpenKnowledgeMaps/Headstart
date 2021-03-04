@@ -5,7 +5,7 @@ $search_flow_config_local = array(
     , "waiting_page" => "search.php"
     , "vis_page" => "headstart.php"
     , "params_arrays" => array(
-        "triple_km" => array("from", "to", "sorting", "language", "limit")
+        "triple_km" => array("from", "to", "sorting", "language")
             , "triple_sg" => array("from", "to", "sorting", "language", "limit", "sg_method")
     )
     , "enable_get_requests" => true
@@ -87,22 +87,6 @@ $search_flow_config_local = array(
                             [
                                 'id' => 'es',
                                 'text' => 'Español'
-                            ]
-                        ]
-                    ],
-                    [
-                        'id' => 'limit',
-                        'multiple' => false,
-                        'name' => 'Limit',
-                        'type' => 'dropdown',
-                        'fields' => [
-                            [
-                                'id' => '100',
-                                'text' => '100 documents'
-                            ],
-                            [
-                                'id' => '1000',
-                                'text' => '1000 documents'
                             ]
                         ]
                     ]

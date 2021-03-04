@@ -16,7 +16,7 @@ if (isset($post_params["service"]) && $post_params["service"] === "triple_km") {
   $service_integration = $post_params["service"];
   $post_params["vis_type"] = "overview";
   $post_params["service"] = "triple";
-  $param_types = array("from", "to", "sorting", "language", "limit");
+  $param_types = array("from", "to", "sorting", "language");
 }
 if (isset($post_params["service"]) && $post_params["service"] === "triple_sg") {
   $service_integration = $post_params["service"];
