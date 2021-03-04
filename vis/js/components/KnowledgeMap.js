@@ -1,8 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import LocalizationProvider from "./LocalizationProvider";
-
 import { filterData } from "../utils/data";
 import Bubble from "../templates/Bubble";
 import Chart from "../templates/Chart";
@@ -14,7 +12,7 @@ const KnowledgeMap = (props) => {
   const { data, areas, zoom, animation } = props;
   const { width, height, baseUnit, enlargeFactor } = props;
   const { zoomedBubbleUri, highlightedBubbleUri, selectedPaperId } = props;
-  const { searchSettings, filterSettings, localization } = props;
+  const { searchSettings, filterSettings } = props;
   const { handleZoomIn, handleZoomOut } = props;
   const { handleDeselectPaper, handleSelectPaper } = props;
   const { hoveredBubble, bubbleOrder, changeBubbleOrder } = props;
@@ -142,32 +140,29 @@ const KnowledgeMap = (props) => {
     )
   );
 
-  // TODO the LocalizationProvider is redundant here
   return (
-    <LocalizationProvider localization={localization}>
-      <Chart
-        width={width}
-        height={height}
-        eventHandlers={getChartEventHandlers()}
-        zoom={zoom}
-      >
-        {!zoom && inactivePapers.map((paper) => renderPaper(paper))}
-        {sortedAreas.map((bubble) => (
-          <Bubble
-            key={bubble.area_uri}
-            data={bubble}
-            eventHandlers={getBubbleEventHandlers(bubble)}
-            hovered={hoveredBubble === bubble.area_uri}
-            zoom={zoom}
-            zoomed={zoomedBubbleUri === bubble.area_uri}
-            baseUnit={baseUnit}
-            animation={animation}
-            highlighted={highlightedBubbleUri === bubble.area_uri}
-          />
-        ))}
-        {activePapers.map((paper) => renderPaper(paper))}
-      </Chart>
-    </LocalizationProvider>
+    <Chart
+      width={width}
+      height={height}
+      eventHandlers={getChartEventHandlers()}
+      zoom={zoom}
+    >
+      {!zoom && inactivePapers.map((paper) => renderPaper(paper))}
+      {sortedAreas.map((bubble) => (
+        <Bubble
+          key={bubble.area_uri}
+          data={bubble}
+          eventHandlers={getBubbleEventHandlers(bubble)}
+          hovered={hoveredBubble === bubble.area_uri}
+          zoom={zoom}
+          zoomed={zoomedBubbleUri === bubble.area_uri}
+          baseUnit={baseUnit}
+          animation={animation}
+          highlighted={highlightedBubbleUri === bubble.area_uri}
+        />
+      ))}
+      {activePapers.map((paper) => renderPaper(paper))}
+    </Chart>
   );
 };
 
@@ -189,7 +184,6 @@ const mapStateToProps = (state) => ({
     isStreamgraph: false,
     title: state.selectedBubble ? state.selectedBubble.title : null,
   },
-  localization: state.localization,
   width: state.chart.width,
   height: state.chart.height,
   baseUnit: state.list.isContentBased ? undefined : state.list.baseUnit,
