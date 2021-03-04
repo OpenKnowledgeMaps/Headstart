@@ -223,13 +223,13 @@ var search_flow_config_local = {
     search_options: {
         options: [
             { id: "triple_sg", name: "Streamgraph TRIPLE", disabled: false, default: false 
-                , text: "Streamgraph", description: ""
+                , text: "Streamgraph", description: "", vis_type_name: "streamgraph"
                 , script: "searchTRIPLE.php", milliseconds_progressbar: 800
                 , max_length_search_term_short: 115, timeout: 120000
 
             }
             , { id: "triple_km", name: "Knowledge Map TRIPLE", disabled: false, default: true 
-                , text: "Knowledge Map", description: ""
+                , text: "Knowledge Map", description: "", vis_type_name: "knowledge map"
                 , script: "searchTRIPLE.php", milliseconds_progressbar: 800
                 , max_length_search_term_short: 115, timeout: 120000
             }
