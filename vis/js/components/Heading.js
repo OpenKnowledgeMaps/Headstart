@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import ZoomedInHeadingTemplate from "../templates/ZoomedInHeading";
 import ZoomedOutHeadingTemplate from "../templates/ZoomedOutHeading";
 
-import { changeFile } from "../actions/index";
+import { changeFile, openInfoModal } from "../actions/index";
 
 import {
   BasicTitle,
@@ -24,6 +24,7 @@ const Heading = ({
   files,
   onFileChange,
   streamgraph,
+  onInfoModalOpen,
 }) => {
   if (zoomed) {
     let label = streamgraph ? localization.area_streamgraph : localization.area;
@@ -40,6 +41,7 @@ const Heading = ({
         files,
         onFileChange
       )}
+      onInfoClick={onInfoModalOpen}
     >
       {renderTitle(localization, query, headingParams)}
     </ZoomedOutHeadingTemplate>
@@ -58,6 +60,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onFileChange: (fileIndex) => dispatch(changeFile(fileIndex)),
+  onInfoModalOpen: () => dispatch(openInfoModal()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Heading);
@@ -130,11 +133,7 @@ const renderViperTitle = (title, acronym, projectId) => {
 const renderLinkedCatTitle = (label, cleanQuery) => {
   let shortTitle = sliceText(cleanQuery, MAX_LENGTH_LINKEDCAT);
   return (
-    <StandardTitle
-      label={label}
-      title={cleanQuery}
-      shortTitle={shortTitle}
-    />
+    <StandardTitle label={label} title={cleanQuery} shortTitle={shortTitle} />
   );
 };
 
@@ -195,10 +194,13 @@ const unescapeHTML = (string) => {
     "&#x60;": "`",
     "&#x3D;": "=",
   };
-  
-  return String(string).replace(/(&amp;|&lt;|&gt;|&quot;|&#34;|&#39;|&#x2F;|&#x60;|&#x3D;)/g, function (s) {
-    return entityMap[s];
-  });
+
+  return String(string).replace(
+    /(&amp;|&lt;|&gt;|&quot;|&#34;|&#39;|&#x2F;|&#x60;|&#x3D;)/g,
+    function (s) {
+      return entityMap[s];
+    }
+  );
 };
 
 const renderAdditionalFeatures = ({ showDropdown }, files, onFileChange) => {
