@@ -27,6 +27,7 @@ def test_stopwords_not_start_end_keywords_areatitles(testcase, lang):
 
 
 @pytest.mark.parametrize("testcase", CASENAMES)
+@pytest.mark.parametrize("lang", LANGS)
 def test_multiple_questionsmarks_not_in_areatitles(testcase, lang):
     testcase = RESULTS[testcase]
     areatitles = testcase.area.unique()
@@ -36,4 +37,4 @@ def test_multiple_questionsmarks_not_in_areatitles(testcase, lang):
         for kw in keywords:
             tokens = kw.split(" ")
             for t in tokens:
-                assert regexp.search(t) is False
+                assert regexp.search(t) is (False or None)

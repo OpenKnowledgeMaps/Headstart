@@ -96,10 +96,11 @@ print("reading stuff")
 print(params)
 failed <- list(params=params)
 tryCatch({
-  input_data = get_papers(query, params, limit=limit)
+  query <- sanitize_query(query)
+  input_data = get_papers(query$sanitized_query, params, limit=limit)
 }, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
-  failed$query <<- query
+  tslog$error(gsub("\n", " ", paste("Query failed", service, query$raw_query, paste(params, collapse=" "), err, sep="||")))
+  failed$query <<- query$raw_query
   failed$query_reason <<- err$message
 })
 
@@ -113,8 +114,8 @@ if(exists('input_data')) {
                              taxonomy_separator=taxonomy_separator, list_size = list_size,
                              vis_type=vis_type)
   }, error=function(err){
-   tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
-   failed$query <<- query
+   tslog$error(gsub("\n", " ", paste("Processing failed", query$raw_query, paste(params, collapse=" "), err, sep="||")))
+   failed$query <<- query$raw_query
    failed$processing_reason <<- err$message
   })
 }

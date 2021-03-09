@@ -335,6 +335,7 @@ var config = {
             stream_doc_num: "Number of documents",
             stream_docs: "Documents",
             stream_total: "Total",
+            empty_area_warning: "No matches found. Please reset your filter options above.",
         },
         ger: {
             loading: "Wird geladen...",
@@ -396,6 +397,7 @@ var config = {
             stream_doc_num: "Anzahl Dokumente",
             stream_docs: "Dokumente",
             stream_total: "Gesamt",
+            empty_area_warning: "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
         },
         ger_linkedcat: {
            loading: "Wird geladen...",
@@ -460,6 +462,7 @@ var config = {
             pdf_load_text: "Dieser Vorgang kann mehrere Minuten dauern, da die gescannten Texte sehr umfangreich sein können. Bitte haben Sie etwas Geduld.",
             pdf_not_loaded: "Leider konnten wir das PDF nicht abrufen. Mehr Informationen finden Sie auf",
             pdf_not_loaded_linktext: "dieser Seite",
+            empty_area_warning: "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
         },
         eng_plos: {
             loading: "Loading...",
@@ -511,6 +514,7 @@ var config = {
             stream_doc_num: "Number of documents",
             stream_docs: "Documents",
             stream_total: "Total",
+            empty_area_warning: "No matches found. Please reset your filter options above.",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -581,6 +585,7 @@ var config = {
             stream_doc_num: "Number of documents",
             stream_docs: "Documents",
             stream_total: "Total",
+            empty_area_warning: "No matches found. Please reset your filter options above.",
         },
         eng_openaire: {
             loading: "Loading...",
@@ -658,6 +663,7 @@ var config = {
             stream_doc_num: "Number of documents",
             stream_docs: "Documents",
             stream_total: "Total",
+            empty_area_warning: "No matches found. Please reset your filter options above.",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -713,6 +719,7 @@ var config = {
             stream_doc_num: "Anzahl Dokumente",
             stream_docs: "Dokumente",
             stream_total: "Gesamt",
+            empty_area_warning: "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
         },
         ger_cris_2: {
             loading: "Wird geladen...",
@@ -768,6 +775,7 @@ var config = {
             stream_doc_num: "Anzahl Dokumente",
             stream_docs: "Dokumente",
             stream_total: "Gesamt",
+            empty_area_warning: "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
         },
         eng_cris_2: {
            loading: "Loading...",
@@ -824,6 +832,7 @@ var config = {
             stream_doc_num: "Number of documents",
             stream_docs: "Documents",
             stream_total: "Total",
+            empty_area_warning: "No matches found. Please reset your filter options above.",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -892,6 +901,7 @@ var config = {
             stream_doc_num: "Number of documents",
             stream_docs: "Documents",
             stream_total: "Total",
+            empty_area_warning: "No matches found. Please reset your filter options above.",
         },
     },
 
