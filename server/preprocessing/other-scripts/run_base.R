@@ -42,15 +42,18 @@ if (!is.null(params$lang_id)) {
 }
 source('altmetrics.R')
 source('base.R')
+library('doParallel')
+registerDoParallel(detectCores(all.tests = FALSE, logical = TRUE)-1)
 limit = 120
 list_size = 100
 .GlobalEnv$VIS_ID <- params$vis_id
 
 failed <- list(params=params)
 tryCatch({
-  input_data = get_papers(query, params, limit=limit)
+  query <- sanitize_query(query)
+  input_data = get_papers(query$sanitized_query, params, limit=limit)
 }, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
+  tslog$error(gsub("\n", " ", paste("Query failed", service, query$raw_query, paste(params, collapse=" "), err, sep="||")))
   failed$query <<- query
   failed$query_reason <<- err$message
 })

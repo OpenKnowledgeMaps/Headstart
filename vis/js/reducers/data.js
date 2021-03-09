@@ -78,8 +78,13 @@ const MANDATORY_ATTRS = {
   },
 };
 
+const ALLOWED_TYPES = {
+  area_uri: ["number", "string"],
+};
+
 const sanitizeData = (data) => {
   let missingAttributes = new Map();
+  let wrongTypes = new Set();
 
   data.forEach((entry) => {
     ATTRS_TO_CHECK.forEach((attr) => {
@@ -93,6 +98,13 @@ const sanitizeData = (data) => {
           entry[attr] = MANDATORY_ATTRS[attr].derive(entry);
         }
       }
+
+      if (ALLOWED_TYPES[attr]) {
+        if (entry[attr] && !ALLOWED_TYPES[attr].includes(typeof entry[attr])) {
+          entry[attr] = entry[attr].toString();
+          wrongTypes.add(attr);
+        }
+      }
     });
   });
 
@@ -103,6 +115,13 @@ const sanitizeData = (data) => {
       } data entries.`
     );
   });
+
+  if (wrongTypes.size > 0) {
+    console.warn(
+      `Incorrect data types found and corrected in the following properties: `,
+      wrongTypes
+    );
+  }
 
   return data;
 };
