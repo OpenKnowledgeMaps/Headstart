@@ -5,6 +5,8 @@ import "hypher";
 import "lib/en.js";
 import "lib/de.js";
 
+import "markjs";
+
 import shave from "shave";
 import { select } from "d3-selection";
 

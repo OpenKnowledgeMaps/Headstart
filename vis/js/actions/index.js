@@ -35,26 +35,13 @@ export const zoomIn = (
 ) => ({
   type: "ZOOM_IN",
   selectedAreaData,
-  // TODO remove this when whole app is refactored
-  not_from_mediator: true,
   source,
   callback,
   alreadyZoomed,
 });
 
-export const zoomInFromMediator = (selectedAreaData) => ({
-  type: "ZOOM_IN",
-  selectedAreaData,
-});
-
-export const zoomOutFromMediator = () => ({
-  type: "ZOOM_OUT",
-});
-
 export const zoomOut = (callback) => ({
   type: "ZOOM_OUT",
-  // TODO remove this when whole app is refactored
-  not_from_mediator: true,
   callback,
 });
 
@@ -68,73 +55,53 @@ export const initializeStore = (
   configObject,
   contextObject,
   dataArray,
-  chartSize
+  streamData,
+  chartSize,
+  streamWidth,
+  streamHeight
 ) => ({
   type: "INITIALIZE",
   configObject,
   contextObject,
   dataArray,
+  streamData,
   chartSize,
+  streamWidth,
+  streamHeight,
 });
 
 /**
  * Action for changing the local file.
  * @param {Number} fileIndex
  */
-export const changeFile = (fileIndex) => ({
-  type: "FILE_CLICKED",
-  fileIndex,
-});
+export const changeFile = (fileIndex) => ({ type: "FILE_CLICKED", fileIndex });
 
-export const toggleList = () => ({
-  type: "TOGGLE_LIST",
-});
+export const toggleList = () => ({ type: "TOGGLE_LIST" });
 
-export const showList = () => ({
-  type: "SHOW_LIST",
-});
+export const showList = () => ({ type: "SHOW_LIST" });
 
-export const search = (text) => ({
-  type: "SEARCH",
-  text,
-});
+export const search = (text) => ({ type: "SEARCH", text });
 
-export const filter = (id) => ({
-  type: "FILTER",
-  id,
-});
+export const filter = (id) => ({ type: "FILTER", id });
 
-export const sort = (id) => ({
-  type: "SORT",
-  id,
-});
+export const sort = (id) => ({ type: "SORT", id });
 
 export const selectPaper = (paper) => ({
   type: "SELECT_PAPER",
   safeId: paper.safe_id,
   paper,
-  not_from_mediator: true,
 });
 
-export const deselectPaper = () => ({
-  type: "DESELECT_PAPER",
-});
+export const deselectPaper = () => ({ type: "DESELECT_PAPER" });
 
 export const highlightArea = (paper) => ({
   type: "HIGHLIGHT_AREA",
   uri: paper ? paper.area_uri : null,
-  // TODO won't be needed after map refactoring
-  paper,
 });
 
-export const showPreview = (paper) => ({
-  type: "SHOW_PREVIEW",
-  paper,
-});
+export const showPreview = (paper) => ({ type: "SHOW_PREVIEW", paper });
 
-export const hidePreview = () => ({
-  type: "HIDE_PREVIEW",
-});
+export const hidePreview = () => ({ type: "HIDE_PREVIEW" });
 
 export const deselectPaperBacklink = () => ({
   type: "DESELECT_PAPER_BACKLINK",
@@ -144,6 +111,8 @@ export const updateDimensions = (chart, list) => ({
   type: "RESIZE",
   listHeight: list.height,
   chartSize: chart.size,
+  streamWidth: chart.width,
+  streamHeight: chart.height < chart.width ? chart.height : chart.width,
 });
 
 export const applyForceAreas = (areasArray, chartSize) => ({
@@ -158,14 +127,9 @@ export const applyForcePapers = (dataArray, chartSize) => ({
   chartSize,
 });
 
-export const stopAnimation = () => ({
-  type: "STOP_ANIMATION",
-});
+export const stopAnimation = () => ({ type: "STOP_ANIMATION" });
 
-export const hoverBubble = (uri) => ({
-  type: "HOVER_BUBBLE",
-  uri,
-});
+export const hoverBubble = (uri) => ({ type: "HOVER_BUBBLE", uri });
 
 export const hoverPaper = (safeId, enlargeFactor) => ({
   type: "HOVER_PAPER",
