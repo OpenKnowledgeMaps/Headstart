@@ -330,6 +330,7 @@ var config = {
             share_button_title: "share this map",
             embed_button_title: "Embed this knowledge map on other websites",
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
+            empty_area_warning: "No matches found. Please reset your filter options above.",
         },
         ger: {
             loading: "Wird geladen...",
@@ -386,6 +387,7 @@ var config = {
             embed_body_text: 'Sie können diesen Code verwenden, um die Visualisierung auf anderen Seiten einzubetten.',
             pdf_not_loaded: "Leider konnten wir das PDF nicht abrufen. Mehr Informationen finden Sie auf",
             pdf_not_loaded_linktext: "dieser Seite",
+            empty_area_warning: "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
         },
         ger_linkedcat: {
            loading: "Wird geladen...",
@@ -446,6 +448,7 @@ var config = {
             pdf_load_text: "Dieser Vorgang kann mehrere Minuten dauern, da die gescannten Texte sehr umfangreich sein können. Bitte haben Sie etwas Geduld.",
             pdf_not_loaded: "Leider konnten wir das PDF nicht abrufen. Mehr Informationen finden Sie auf",
             pdf_not_loaded_linktext: "dieser Seite",
+            empty_area_warning: "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
         },
         eng_plos: {
             loading: "Loading...",
@@ -492,6 +495,7 @@ var config = {
             share_button_title: "share this map",
             embed_button_title: "Embed this knowledge map on other websites",
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
+            empty_area_warning: "No matches found. Please reset your filter options above.",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -557,6 +561,7 @@ var config = {
             low_metadata_quality: "Low metadata quality",
             low_metadata_quality_desc_base: "This knowledge map includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your knowledge map. ",
             low_metadata_quality_desc_pubmed: "This knowledge map includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your knowledge map. ",
+            empty_area_warning: "No matches found. Please reset your filter options above.",
         },
         eng_openaire: {
             loading: "Loading...",
@@ -629,6 +634,7 @@ var config = {
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
             pdf_not_loaded_linktext: "this website",
             credit_alt: "VIPER was created by Open Knowledge Maps",
+            empty_area_warning: "No matches found. Please reset your filter options above.",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -679,6 +685,7 @@ var config = {
             scale_by_infolink_label: '',
             scale_by_label: 'Verteilung für:',
             credit_alt: "Created by Open Knowledge Maps",
+            empty_area_warning: "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
         },
         ger_cris_2: {
             loading: "Wird geladen...",
@@ -729,6 +736,7 @@ var config = {
             scale_by_infolink_label: '',
             scale_by_label: 'Verteilung für:',
             credit_alt: "Created by Open Knowledge Maps",
+            empty_area_warning: "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
         },
         eng_cris_2: {
            loading: "Loading...",
@@ -780,6 +788,7 @@ var config = {
             scale_by_infolink_label: '',
             scale_by_label: 'Distribution for:',
             credit_alt: "Created by Open Knowledge Maps",
+            empty_area_warning: "No matches found. Please reset your filter options above.",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -843,6 +852,7 @@ var config = {
             embed_button_text: 'Copy',
             embed_title: 'embed map',
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
+            empty_area_warning: "No matches found. Please reset your filter options above.",
         },
     },
 

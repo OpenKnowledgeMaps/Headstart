@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import StandardListEntry from "../../templates/listentry/StandardListEntry";
+import EntriesWrapper from "./EntriesWrapper";
 
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
@@ -27,7 +28,6 @@ const StandardListEntries = ({
   showPreviewImage,
   localization,
   showKeywords,
-  height,
   isStreamgraph,
   showBacklink,
   isInStreamBacklink,
@@ -52,11 +52,7 @@ const StandardListEntries = ({
   };
 
   return (
-    <div
-      className="col-xs-12"
-      id="papers_list"
-      style={{ display: "block", height: !!height ? height : undefined }}
-    >
+    <EntriesWrapper>
       {displayedData.map((entry) => (
         <StandardListEntry
           key={entry.safe_id}
@@ -121,7 +117,7 @@ const StandardListEntries = ({
           }}
         />
       ))}
-    </div>
+    </EntriesWrapper>
   );
 };
 
@@ -137,7 +133,6 @@ const mapStateToProps = (state) => ({
   showKeywords:
     state.list.showKeywords &&
     (!!state.selectedPaper || !state.list.hideUnselectedKeywords),
-  height: state.list.height,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
   isInStreamBacklink: !!state.selectedBubble,
