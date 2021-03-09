@@ -6,10 +6,10 @@ import StateMachine from 'javascript-state-machine';
 import config from 'config';
 import { mediator } from 'mediator';
 
-import { BrowserDetect } from "helpers";
-
 import 'hypher';
 import 'lib/en.js';
+
+import BrowserDetect from "exports-loader?BrowserDetect!../lib/browser_detect.js";
 
 export var HeadstartFSM = function(json_direct_data) {
   this.VERSION = 4.0;

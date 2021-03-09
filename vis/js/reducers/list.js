@@ -51,6 +51,7 @@ const list = (
         showRealPreviewImage: config.preview_type == "image",
         showKeywords: config.show_keywords,
         hideUnselectedKeywords: config.hide_keywords_overview,
+        disableClicks: !config.render_map,
       };
     case "TOGGLE_LIST":
       return {
@@ -79,14 +80,14 @@ const list = (
       };
     case "SCALE":
       return state;
-      // TODO enable this once the scaling is refactored properly
-      // return {
-      //   ...state,
-      //   sortValue: state.sortOptions.includes(action.sort)
-      //     ? action.sort
-      //     : state.defaultSort,
-      //   baseUnit: action.baseUnit,
-      // };
+    // TODO enable this once the scaling is refactored properly
+    // return {
+    //   ...state,
+    //   sortValue: state.sortOptions.includes(action.sort)
+    //     ? action.sort
+    //     : state.defaultSort,
+    //   baseUnit: action.baseUnit,
+    // };
     case "RESIZE":
       return {
         ...state,

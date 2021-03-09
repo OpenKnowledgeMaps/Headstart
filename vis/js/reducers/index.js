@@ -25,6 +25,7 @@ import hyphenationLang from "./hyphenationLang";
 import modals from "./modals";
 import toolbar from "./toolbar";
 import misc from "./misc";
+import streamgraph from "./streamgraph";
 
 export default combineReducers({
   zoom,
@@ -50,4 +51,5 @@ export default combineReducers({
   modals,
   toolbar,
   misc,
+  streamgraph,
 });

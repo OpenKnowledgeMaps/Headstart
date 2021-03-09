@@ -5,7 +5,12 @@ import reducer from "../../js/reducers/chart";
 describe("chart state", () => {
   describe("reducers", () => {
     it("should return the initial state", () => {
-      const EXPECTED_RESULT = { width: null, height: null };
+      const EXPECTED_RESULT = {
+        width: null,
+        height: null,
+        streamWidth: null,
+        streamHeight: null,
+      };
 
       const result = reducer(undefined, {});
 
@@ -13,11 +18,24 @@ describe("chart state", () => {
     });
 
     it("should change the dimensions on initialize", () => {
-      const INITIAL_STATE = { width: null, height: null };
+      const INITIAL_STATE = {
+        width: null,
+        height: null,
+        streamWidth: null,
+        streamHeight: null,
+      };
 
-      const result = reducer(INITIAL_STATE, initializeStore({}, {}, [], 200));
+      const result = reducer(
+        INITIAL_STATE,
+        initializeStore({}, {}, [], "", 200, 400, 200)
+      );
 
-      const EXPECTED_RESULT = { width: 200, height: 200 };
+      const EXPECTED_RESULT = {
+        width: 200,
+        height: 200,
+        streamWidth: 400,
+        streamHeight: 200,
+      };
 
       expect(result).toEqual(EXPECTED_RESULT);
     });
@@ -25,7 +43,10 @@ describe("chart state", () => {
     it("should change the dimensions when updated", () => {
       const INITIAL_STATE = { width: 800, height: 800 };
 
-      const result = reducer(INITIAL_STATE, updateDimensions({size: 300}, {}));
+      const result = reducer(
+        INITIAL_STATE,
+        updateDimensions({ size: 300 }, {})
+      );
 
       const EXPECTED_RESULT = { width: 300, height: 300 };
 
