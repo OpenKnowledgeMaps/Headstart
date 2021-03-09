@@ -33,6 +33,7 @@ describe("areas state", () => {
           },
           {},
           RAW_DATA,
+          "",
           800
         )
       );
@@ -56,6 +57,7 @@ describe("areas state", () => {
           },
           {},
           RAW_DATA_MULTIPLE,
+          "",
           800
         )
       );

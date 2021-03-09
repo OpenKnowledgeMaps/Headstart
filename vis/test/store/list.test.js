@@ -58,10 +58,11 @@ describe("list state", () => {
         id: "some-id",
         safe_id: "some-safe-id",
         title: "some title",
+        area_uri: "some-area-uri",
       };
       const EXPECTED_ACTION = {
         type: "HIGHLIGHT_AREA",
-        paper: PAPER,
+        uri: PAPER.area_uri,
       };
       expect(highlightArea(PAPER)).toEqual(EXPECTED_ACTION);
     });
@@ -79,6 +80,7 @@ describe("list state", () => {
         showDropdownSort: true,
         sortValue: null,
         sortOptions: [],
+        defaultSort: null,
         abstractSize: 250,
         linkType: null,
         showDocumentType: false,

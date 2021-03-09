@@ -5,12 +5,18 @@ const ZoomedOutHeading = ({
   introLabel,
   children: title,
   additionalFeatures,
+  onInfoClick,
 }) => {
+  const handleInfoClick = (event) => {
+    event.preventDefault();
+    onInfoClick();
+  };
+
   return (
     // html template starts here
     <h4>
       {title}{" "}
-      <a data-toggle="modal" data-type="text" href="#info_modal" id="infolink">
+      <a onClick={handleInfoClick} id="infolink" href="#">
         <span
           id="whatsthis"
           dangerouslySetInnerHTML={{ __html: introIcon }}
