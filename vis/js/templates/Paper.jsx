@@ -198,7 +198,7 @@ class Paper extends React.Component {
               <div
                 className="metadata"
                 style={{
-                  height: realHeight - (!!readersLabel ? 22 : 0),
+                  height: getMetadataHeight(realHeight, !!readersLabel, zoom),
                   width: (1 - DOGEAR_WIDTH) * realWidth,
                 }}
                 ref={this.metadataRef}
@@ -443,3 +443,22 @@ const getEnlargeFactor = (offsetWidth, scrollHeight) => {
 
   return (newWidth / offsetWidth) * (1.0 / (1 - DOGEAR_WIDTH));
 };
+
+const getMetadataHeight = (realHeight, hasReaders, isZoomed) => {
+  let readersHeight = 0;
+  if (hasReaders) {
+    if (isZoomed) {
+      readersHeight = 22;
+    } else {
+      readersHeight = 12;
+    }
+  }
+
+  const height = realHeight - readersHeight;
+  
+  if (height >= 20) {
+    return height;
+  }
+
+  return 20;
+}

@@ -48,6 +48,7 @@ var MyMediator = function() {
         this.streamgraph_chart_clicked, 
         this.list_show_popup,
         this.currentstream_click,
+        this.record_action,
     );
     this.init();
     this.init_state();
