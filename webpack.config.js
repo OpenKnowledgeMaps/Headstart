@@ -64,10 +64,9 @@ const common = {
             filename: 'headstart.css',
             chunkFilename: '[id].css',
             ignoreOrder: false, // Enable to remove warnings about conflicting order
-          }),
-          new webpack.EnvironmentPlugin({
-            MODERN_FRONTEND: typeof config.modernFrontendEnabled === "boolean" ? config.modernFrontendEnabled : false
-          })
+        }),
+        // can be used for simulating env variables
+        new webpack.EnvironmentPlugin({})
     ],
     module: {
         rules: [
@@ -137,7 +136,6 @@ const common = {
                   options: {
                     prependData: `
                         $skin: "${config.skin}";
-                        $modern_frontend_enabled: ${process.env.MODERN_FRONTEND ? "true" : "false"};
                     `,
                     sassOptions: {
                       includePaths: ["node_modules"]

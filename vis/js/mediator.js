@@ -29,12 +29,7 @@ var MyMediator = function() {
     this.fileData = [];
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
-    this.modern_frontend_enabled = config.modern_frontend_enabled
-    this.intermediate_layer = new Intermediate(
-        this.modern_frontend_enabled,
-        this.rescale_map,
-        this.record_action,
-    );
+    this.intermediate_layer = new Intermediate(this.rescale_map, this.record_action);
     this.init();
     this.init_state();
 };
@@ -65,7 +60,6 @@ MyMediator.prototype = {
     init_state: function() {
         MyMediator.prototype.current_file_number = 0;
         MyMediator.prototype.current_stream = null;
-        MyMediator.prototype.modern_frontend = false;
     },
 
     init_modules: function() {
