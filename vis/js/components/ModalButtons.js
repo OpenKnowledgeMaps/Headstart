@@ -8,7 +8,6 @@ import EmbedButton from "../templates/buttons/EmbedButton";
 import FAQsButton from "../templates/buttons/FAQsButton";
 import ReloadButton from "../templates/buttons/ReloadButton";
 import ShareButton from "../templates/buttons/ShareButton";
-import LocalizationProvider from "./LocalizationProvider";
 
 const ModalButtons = ({
   showShareButton,
@@ -22,18 +21,22 @@ const ModalButtons = ({
   showReloadButton,
   reloadLastUpdate,
   reloadApiProperties,
-  localization,
 }) => {
   return (
-    <LocalizationProvider localization={localization}>
+    <div id="modals">
       {showShareButton && <ShareButton twitterHashtags={twitterHashtags} />}
       {showEmbedButton && <EmbedButton onClick={onEmbedButtonClick} />}
       {showFAQsButton && <FAQsButton url={FAQsUrl} />}
       {showViperEditButton && (
         <EditButton onClick={onViperEditClick} title="Add project resources" />
       )}
-      {showReloadButton && <ReloadButton lastUpdate={reloadLastUpdate} apiProperties={reloadApiProperties} />}
-    </LocalizationProvider>
+      {showReloadButton && (
+        <ReloadButton
+          lastUpdate={reloadLastUpdate}
+          apiProperties={reloadApiProperties}
+        />
+      )}
+    </div>
   );
 };
 
@@ -47,7 +50,6 @@ const mapStateToProps = (state) => ({
   showReloadButton: state.modals.showReloadButton,
   reloadLastUpdate: state.modals.reloadLastUpdate,
   reloadApiProperties: state.modals.reloadApiProperties,
-  localization: state.localization,
 });
 
 const mapDispatchToProps = (dispatch) => ({

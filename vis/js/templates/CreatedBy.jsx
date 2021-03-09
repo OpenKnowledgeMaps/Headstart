@@ -19,11 +19,13 @@ const CreatedBy = ({ show, url }) => {
   }
 
   return (
-    <div id="credit_embed" style={divStyle}>
-      <a href={url} target="_blank">
-        created by <b>Open Knowledge Maps </b>
-        <img src={logo} id="credit_logo" style={{ height: 30, padding: 0 }} />
-      </a>
+    <div id="created_by">
+      <div id="credit_embed" style={divStyle}>
+        <a href={url} target="_blank">
+          created by <b>Open Knowledge Maps </b>
+          <img src={logo} id="credit_logo" style={{ height: 30, padding: 0 }} />
+        </a>
+      </div>
     </div>
   );
 };
