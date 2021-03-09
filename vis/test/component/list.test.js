@@ -30,6 +30,9 @@ import pubmedData from "../data/pubmed";
 import viperData from "../data/viper";
 
 import List from "../../js/components/List";
+import LocalizationProvider from "../../js/components/LocalizationProvider";
+
+const localization = defaultConfig.localization.eng;
 
 const mockStore = configureStore([]);
 const setup = (
@@ -71,11 +74,15 @@ const setup = (
         parsedTerms: ["test", "query"],
         highlightTerms: true,
       },
+      misc: {
+        renderMap: true,
+        renderList: true,
+      },
       selectedBubble: undefined,
       selectedPaper: undefined,
       chartType: KNOWLEDGEMAP_MODE,
       service: "none",
-      localization: defaultConfig.localization.eng,
+      localization: localization,
     },
     overrideStoreObject
   );
@@ -103,7 +110,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -119,7 +128,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -143,7 +154,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -168,7 +181,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -198,7 +213,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -228,7 +245,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -258,7 +277,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -283,7 +304,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -302,7 +325,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -328,7 +353,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -354,7 +381,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -380,7 +409,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -406,7 +437,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -433,7 +466,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -460,7 +495,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -487,7 +524,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -507,7 +546,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -527,7 +568,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -549,7 +592,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -569,7 +614,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -597,7 +644,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -621,7 +670,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -645,7 +696,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -676,7 +729,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -707,7 +762,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -734,7 +791,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -758,7 +817,9 @@ describe("List entries component", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -779,7 +840,9 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -803,7 +866,9 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -827,7 +892,9 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -851,7 +918,9 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -883,7 +952,9 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -914,7 +985,9 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -945,7 +1018,9 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -976,7 +1051,9 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -1016,7 +1093,9 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -1056,7 +1135,9 @@ describe("List entries component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );

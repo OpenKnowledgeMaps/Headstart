@@ -17,7 +17,6 @@ const misc = (state = { isLoading: true, showLoading: false }, action) => {
         createdByUrl: action.configObject.canonical_url,
         renderMap: action.configObject.render_map,
         renderList: action.configObject.render_list,
-        isAuthorview: action.configObject.is_authorview,
         isLoading: false,
       };
     default:
