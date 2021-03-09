@@ -2,7 +2,7 @@ const selectedBubble = (state = null, action) => {
   if (action.canceled) {
     return state;
   }
-  
+
   switch (action.type) {
     case "ZOOM_OUT":
       return null;
@@ -14,6 +14,8 @@ const selectedBubble = (state = null, action) => {
         uri: action.selectedAreaData.uri,
         color: action.selectedAreaData.color,
       };
+    case "SCALE":
+      return null;
     default:
       return state;
   }

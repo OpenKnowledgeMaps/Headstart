@@ -23,8 +23,12 @@ import SubdisciplineTitle from "./templates/SubdisciplineTitle";
 import AuthorImage from "./components/AuthorImage";
 import List from "./components/List";
 import KnowledgeMap from "./components/KnowledgeMap";
+import ModalButtons from "./components/ModalButtons";
+import Modals from "./components/Modals";
+import Toolbar from "./components/Toolbar";
 
 import { applyForce } from "./utils/force";
+import CreatedBy from "./templates/CreatedBy";
 import logAction from "./utils/actionLogger";
 
 /**
@@ -37,8 +41,8 @@ class Intermediate {
   constructor(
     modern_frontend_enabled,
     streamgraphZoomOutCallback,
-    previewPopoverCallback,
     entryBacklinkClickCallback,
+    rescaleCallback,
     recordActionCallback
   ) {
     this.modern_frontend_enabled = modern_frontend_enabled;
@@ -50,12 +54,12 @@ class Intermediate {
     const middleware = applyMiddleware(
       createZoomOutMiddleware(streamgraphZoomOutCallback),
       createFileChangeMiddleware(),
-      createPreviewPopoverMiddleware(previewPopoverCallback),
       createEntryBacklinkClickMiddleware(entryBacklinkClickCallback),
       createActionQueueMiddleware(this),
       createScrollMiddleware(),
       createRepeatedInitializeMiddleware(this),
       createChartTypeMiddleware(),
+      createRescaleMiddleware(rescaleCallback),
       createRecordActionMiddleware(
         this.recordAction.bind(this),
         this.recordActionParams
@@ -71,6 +75,7 @@ class Intermediate {
       user: config.user_id,
       localization: config.localization[config.language],
       mouseoverEvaluation: config.enable_mouseover_evaluation,
+      scaleLabel: config.scale_label,
     });
 
     this.store.dispatch(initializeStore(config, context, data, size));
@@ -115,6 +120,30 @@ class Intermediate {
     };
 
     this.applyForceLayout();
+  }
+
+  renderPeripherals() {
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <ModalButtons />
+        <Modals />
+      </Provider>,
+      document.getElementById("modals")
+    );
+
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <Toolbar />
+      </Provider>,
+      document.getElementById("toolbar")
+    );
+
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <CreatedBy />
+      </Provider>,
+      document.getElementById("created_by")
+    );
   }
 
   // used in streamgraph
@@ -302,6 +331,27 @@ function createChartTypeMiddleware() {
   };
 }
 
+/**
+ * Creates a middleware that calls the rescaling function on the 'SCALE' action.
+ *
+ * @param {Function} rescaleCallback function that rescales the map
+ */
+function createRescaleMiddleware(rescaleCallback) {
+  return () => {
+    return (next) => (action) => {
+      if (action.type === "SCALE") {
+        rescaleCallback(
+          action.value,
+          action.baseUnit,
+          action.contentBased,
+          action.sort
+        );
+      }
+      return next(action);
+    };
+  };
+}
+
 function createEntryBacklinkClickMiddleware(entryBacklinkClickCallback) {
   return function () {
     return (next) => (action) => {
@@ -334,18 +384,6 @@ function createFileChangeMiddleware() {
         if (getState().files.current !== action.fileIndex) {
           window.headstartInstance.tofile(action.fileIndex);
         }
-      }
-      const returnValue = next(action);
-      returnValue;
-    };
-  };
-}
-
-function createPreviewPopoverMiddleware(previewPopoverCallback) {
-  return function () {
-    return (next) => (action) => {
-      if (action.type == "SHOW_PREVIEW") {
-        previewPopoverCallback(action.paper);
       }
       const returnValue = next(action);
       returnValue;
