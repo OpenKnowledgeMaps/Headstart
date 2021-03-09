@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import ScaleToolbar from "../templates/ScaleToolbar";
 
-import LocalizationProvider from "./LocalizationProvider";
 import { openInfoModal, scaleMap } from "../actions";
 
 const Toolbar = ({
@@ -15,7 +14,6 @@ const Toolbar = ({
   showCreatedBy,
   onInfoClick,
   onScaleChange,
-  localization,
 }) => {
   if (showScaleToolbar) {
     const handleScaleChange = (newScaleBy) => {
@@ -27,7 +25,7 @@ const Toolbar = ({
     };
 
     return (
-      <LocalizationProvider localization={localization}>
+      <div id="toolbar" className="toolbar">
         <ScaleToolbar
           options={scaleOptions}
           labels={scaleLabels}
@@ -37,7 +35,7 @@ const Toolbar = ({
           onInfoClick={onInfoClick}
           onChange={handleScaleChange}
         />
-      </LocalizationProvider>
+      </div>
     );
   }
 
@@ -52,7 +50,6 @@ const mapStateToProps = (state) => ({
   scaleBaseUnit: state.toolbar.scaleBaseUnit,
   scaleValue: state.toolbar.scaleValue,
   showCreatedBy: state.misc.showCreatedByViper,
-  localization: state.localization,
 });
 
 const mapDispatchToProps = (dispatch) => ({

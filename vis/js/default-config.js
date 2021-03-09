@@ -920,9 +920,6 @@ var config = {
         "plos pathogens": "plospathogens",
         "plos clinical trials": "plosclinicaltrials"
     },
-
-    // modern_frontend feature flag
-    modern_frontend_enabled: process.env.MODERN_FRONTEND
 };
 
 if (config.content_based) {

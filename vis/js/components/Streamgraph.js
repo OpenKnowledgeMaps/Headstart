@@ -1,8 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import LocalizationProvider from "./LocalizationProvider";
-
 import StreamgraphChart from "../templates/StreamgraphChart";
 
 import {
@@ -55,13 +53,9 @@ class Streamgraph extends React.Component {
   }
 
   render() {
-    const { width, height, localization } = this.props;
+    const { width, height } = this.props;
 
-    return (
-      <LocalizationProvider localization={localization}>
-        <StreamgraphChart width={width} height={height} eventHandlers={{}} />
-      </LocalizationProvider>
-    );
+    return <StreamgraphChart width={width} height={height} />;
   }
 
   /**
