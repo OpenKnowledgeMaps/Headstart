@@ -6,8 +6,7 @@ import StateMachine from 'javascript-state-machine';
 import config from 'config';
 import { mediator } from 'mediator';
 
-import { getRealHeight } from "helpers";
-import { BrowserDetect, highlight } from "helpers";
+import { BrowserDetect } from "helpers";
 
 import 'hypher';
 import 'lib/en.js';
