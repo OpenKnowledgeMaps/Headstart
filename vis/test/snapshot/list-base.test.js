@@ -12,6 +12,7 @@ import { initializeStore, selectPaper } from "../../js/actions";
 import List from "../../js/components/List";
 
 import reducer from "../../js/reducers";
+import LocalizationProvider from "../../js/components/LocalizationProvider";
 
 const PAPER_OA_SAFE_ID =
   "008ea92dafd41bdb55abf7cb8b4f43deb52ac003a2b15a8c5eb8743ae021533d";
@@ -23,6 +24,8 @@ const setup = () => {
   return store;
 };
 
+const localization = config.localization.eng_pubmed;
+
 /**
  * Extra test suite for testing BASE data integration on real data, config and context.
  */
@@ -33,7 +36,9 @@ describe("List entries component snapshot (BASE)", () => {
     const tree = renderer
       .create(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>
       )
       .toJSON();
@@ -52,7 +57,9 @@ describe("List entries component snapshot (BASE)", () => {
     const tree = renderer
       .create(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>
       )
       .toJSON();

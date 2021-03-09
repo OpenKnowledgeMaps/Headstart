@@ -4,8 +4,6 @@ import { STREAMGRAPH_MODE } from "../reducers/chartType";
 
 import LocalizationProvider from "./LocalizationProvider";
 
-import SubdisciplineTitle from "../templates/SubdisciplineTitle";
-import AuthorImage from "./AuthorImage";
 import Streamgraph from "./Streamgraph";
 import KnowledgeMap from "./KnowledgeMap";
 import ModalButtons from "./ModalButtons";
@@ -14,11 +12,11 @@ import Toolbar from "./Toolbar";
 import CreatedBy from "../templates/CreatedBy";
 import Loading from "../templates/Loading";
 import List from "./List";
+import TitleContext from "./TitleContext";
 
 const Headstart = ({
   renderMap,
   renderList,
-  isAuthorview,
   isStreamgraph,
   isLoading,
   showLoading,
@@ -44,10 +42,7 @@ const Headstart = ({
       <div className="container-headstart">
         {renderMap && (
           <div className="vis-col">
-            <div id="mvp_container" style={{ minHeight: 54 }}>
-              {isAuthorview && <AuthorImage />}
-              <SubdisciplineTitle />
-            </div>
+            <TitleContext />
             <ModalButtons />
             <Map />
           </div>
@@ -64,7 +59,6 @@ const Headstart = ({
 const mapStateToProps = (state) => ({
   renderMap: state.misc.renderMap,
   renderList: state.misc.renderList,
-  isAuthorview: state.misc.isAuthorview,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   isLoading: state.misc.isLoading,
   showLoading: state.misc.showLoading,

@@ -25,6 +25,7 @@ import {
   sort,
 } from "../../js/actions";
 import reducer from "../../js/reducers";
+import LocalizationProvider from "../../js/components/LocalizationProvider";
 
 const setup = () => {
   const store = createStore(reducer);
@@ -34,6 +35,8 @@ const setup = () => {
 };
 
 const mockStore = configureStore([]);
+
+const localization = config.localization.eng_pubmed;
 
 /**
  * Extra test suite for testing BASE data integration on real data, config and context.
@@ -59,7 +62,9 @@ describe("List entries component - special BASE tests", () => {
     act(() => {
       render(
         <Provider store={store}>
-          <List />
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
         </Provider>,
         container
       );
@@ -76,7 +81,9 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -100,7 +107,9 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -124,7 +133,9 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -156,7 +167,9 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -180,7 +193,9 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -213,7 +228,9 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -234,7 +251,9 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -255,7 +274,9 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -308,7 +329,9 @@ describe("List entries component - special BASE tests", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <List />
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
           </Provider>,
           container
         );
