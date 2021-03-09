@@ -30,8 +30,7 @@ import Headstart from "./components/Headstart";
  * This class should ideally only talk to the mediator and redux
  */
 class Intermediate {
-  constructor(modern_frontend_enabled, rescaleCallback, recordActionCallback) {
-    this.modern_frontend_enabled = modern_frontend_enabled;
+  constructor(rescaleCallback, recordActionCallback) {
     this.actionQueue = [];
 
     this.recordActionCallback = recordActionCallback;
