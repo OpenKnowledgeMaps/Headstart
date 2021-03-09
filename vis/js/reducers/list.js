@@ -52,6 +52,7 @@ const list = (
         showKeywords: config.show_keywords,
         hideUnselectedKeywords: config.hide_keywords_overview,
         disableClicks: !config.render_map,
+        height: action.listHeight,
       };
     case "TOGGLE_LIST":
       return {
