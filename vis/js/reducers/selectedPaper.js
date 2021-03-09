@@ -6,6 +6,8 @@ const selectedPaper = (state = null, action) => {
   switch (action.type) {
     case "ZOOM_OUT":
       return null;
+    case "SCALE":
+      return null;
     case "INITIALIZE":
       return null;
     case "DESELECT_PAPER":
