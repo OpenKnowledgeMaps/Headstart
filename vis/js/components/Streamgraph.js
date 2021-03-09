@@ -3,6 +3,10 @@ import { connect } from "react-redux";
 
 import StreamgraphChart from "../templates/StreamgraphChart";
 
+// importing this for the linter
+import d3 from "d3";
+import $ from "jquery";
+
 import {
   getLabelPosition,
   moveOverlappingLabels,
@@ -431,7 +435,7 @@ class Streamgraph extends React.Component {
     const allYearsDocs = d3.sum(d.values, (currentData) => currentData.value);
     currentData.values.forEach((f) => {
       const year = f.date.toString().split(" ")[3];
-      if (xDate == year) {
+      if (xDate === parseInt(year)) {
         d3.select("#tooltip")
           .style("left", realX + TOOLTIP_OFFSET.left + "px")
           .style("top", realY + TOOLTIP_OFFSET.top + "px")
