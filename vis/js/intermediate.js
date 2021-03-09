@@ -12,22 +12,16 @@ import {
   updateDimensions,
   applyForceAreas,
   applyForcePapers,
+  preinitializeStore,
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
 
-import SubdisciplineTitle from "./templates/SubdisciplineTitle";
-import AuthorImage from "./components/AuthorImage";
-import List from "./components/List";
-import KnowledgeMap from "./components/KnowledgeMap";
-import ModalButtons from "./components/ModalButtons";
-import Modals from "./components/Modals";
-import Toolbar from "./components/Toolbar";
-
 import { applyForce } from "./utils/force";
-import CreatedBy from "./templates/CreatedBy";
 import logAction from "./utils/actionLogger";
-import Streamgraph from "./components/Streamgraph";
+
+import { getChartSize, getListSize } from "./utils/dimensions";
+import Headstart from "./components/Headstart";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -36,8 +30,7 @@ import Streamgraph from "./components/Streamgraph";
  * This class should ideally only talk to the mediator and redux
  */
 class Intermediate {
-  constructor(modern_frontend_enabled, rescaleCallback, recordActionCallback) {
-    this.modern_frontend_enabled = modern_frontend_enabled;
+  constructor(rescaleCallback, recordActionCallback) {
     this.actionQueue = [];
 
     this.recordActionCallback = recordActionCallback;
@@ -59,7 +52,21 @@ class Intermediate {
     this.store = createStore(rootReducer, middleware);
   }
 
-  init(config, context, mapData, streamData, size, width, height) {
+  renderFrontend(config) {
+    this.store.dispatch(preinitializeStore(config));
+
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <Headstart />
+      </Provider>,
+      document.getElementById("app-container")
+    );
+  }
+
+  initStore(config, context, mapData, streamData) {
+    const { size, width, height } = getChartSize(config, context);
+    const list = getListSize(config, context, size);
+
     Object.assign(this.recordActionParams, {
       title: config.title,
       user: config.user_id,
@@ -69,98 +76,34 @@ class Intermediate {
     });
 
     this.store.dispatch(
-      initializeStore(config, context, mapData, streamData, size, width, height)
+      initializeStore(
+        config,
+        context,
+        mapData,
+        streamData,
+        size,
+        width,
+        height,
+        list.height
+      )
     );
+
+    if (!config.is_streamgraph) {
+      this.forceLayoutParams = {
+        areasAlpha: config.area_force_alpha,
+        isForceAreas: config.is_force_areas,
+        papersAlpha: config.papers_force_alpha,
+        isForcePapers: config.is_force_papers,
+      };
+
+      this.applyForceLayout();
+    }
   }
 
-  renderHeading(config) {
-    // TODO replace the config.is_authorview with a store variable
-    // after components are wrapped
-    ReactDOM.render(
-      <Provider store={this.store}>
-        {config.is_authorview && <AuthorImage />}
-        <SubdisciplineTitle />
-      </Provider>,
-      document.getElementById("mvp_container")
-    );
-  }
-
-  /**
-   * List cannot be rendered with the initial components (heading etc.),
-   * so it has its own separate function.
-   */
-  renderList() {
-    ReactDOM.render(
-      <Provider store={this.store}>
-        <List />
-      </Provider>,
-      document.getElementById("list-col")
-    );
-  }
-
-  renderKnowledgeMap(config) {
-    ReactDOM.render(
-      <Provider store={this.store}>
-        <KnowledgeMap />
-      </Provider>,
-      document.getElementById("headstart-chart")
-    );
-
-    this.forceLayoutParams = {
-      areasAlpha: config.area_force_alpha,
-      isForceAreas: config.is_force_areas,
-      papersAlpha: config.papers_force_alpha,
-      isForcePapers: config.is_force_papers,
-    };
-
-    this.applyForceLayout();
-  }
-
-  renderPeripherals() {
-    ReactDOM.render(
-      <Provider store={this.store}>
-        <ModalButtons />
-        <Modals />
-      </Provider>,
-      document.getElementById("modals")
-    );
-
-    ReactDOM.render(
-      <Provider store={this.store}>
-        <Toolbar />
-      </Provider>,
-      document.getElementById("toolbar")
-    );
-
-    ReactDOM.render(
-      <Provider store={this.store}>
-        <CreatedBy />
-      </Provider>,
-      document.getElementById("created_by")
-    );
-  }
-
-  // used if config.render_map is false
-  renderModalsOnly(selector) {
-    ReactDOM.render(
-      <Provider store={this.store}>
-        <Modals />
-      </Provider>,
-      document.querySelector(selector)
-    );
-  }
-
-  renderStreamgraph() {
-    ReactDOM.render(
-      <Provider store={this.store}>
-        <Streamgraph />
-      </Provider>,
-      document.getElementById("headstart-chart")
-    );
-  }
-
-  // used after start and then on window resize
-  updateDimensions(chart, list) {
+  // triggered on window resize
+  updateDimensions(config, context) {
+    const chart = getChartSize(config, context);
+    const list = getListSize(config, context, chart.size);
     this.store.dispatch(updateDimensions(chart, list));
   }
 

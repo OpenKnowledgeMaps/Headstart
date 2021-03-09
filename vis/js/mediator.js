@@ -2,12 +2,9 @@ import Mediator from 'mediator-js';
 import config from 'config';
 import { io } from 'io';
 import Intermediate from './intermediate';
-import { getChartSize, getListSize } from "./utils/dimensions";
 
 // needed for draggable modals (it can be refactored with react-bootstrap though)
 import "../lib/jquery-ui.min.js";
-
-const headstartTemplate = require("templates/headstart.handlebars");
 
 class ModuleManager {
     constructor() {
@@ -32,12 +29,7 @@ var MyMediator = function() {
     this.fileData = [];
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
-    this.modern_frontend_enabled = config.modern_frontend_enabled
-    this.modern_frontend_intermediate = new Intermediate(
-        this.modern_frontend_enabled,
-        this.rescale_map,
-        this.record_action,
-    );
+    this.intermediate_layer = new Intermediate(this.rescale_map, this.record_action);
     this.init();
     this.init_state();
 };
@@ -68,40 +60,18 @@ MyMediator.prototype = {
     init_state: function() {
         MyMediator.prototype.current_file_number = 0;
         MyMediator.prototype.current_stream = null;
-        MyMediator.prototype.modern_frontend = false;
     },
 
     init_modules: function() {
         mediator.manager.registerModule(io, 'io');
     },
 
-    init_modern_frontend_intermediate: function() {
-        const { size, width, height } = getChartSize(config, io.context);
-        mediator.modern_frontend_intermediate.init(config, io.context, io.data, mediator.streamgraph_data, size, width, height);
+    render_frontend: function() {
+        mediator.intermediate_layer.renderFrontend(config);
     },
 
-    render_modern_frontend_heading: function() {
-        mediator.modern_frontend_intermediate.renderHeading(config);
-    },
-
-    render_modern_frontend_list: function() {
-        mediator.modern_frontend_intermediate.renderList();
-    },
-
-    render_modern_frontend_knowledge_map: function() {
-        mediator.modern_frontend_intermediate.renderKnowledgeMap(config);
-    },
-
-    render_modern_frontend_peripherals: function() {
-        mediator.modern_frontend_intermediate.renderPeripherals();
-    },
-
-    render_modern_frontend_streamgraph: function() {
-        mediator.modern_frontend_intermediate.renderStreamgraph();
-    },
-
-    render_modern_frontend_modals_only: function(selector) {
-        mediator.modern_frontend_intermediate.renderModalsOnly(selector);
+    init_store: function() {
+        mediator.intermediate_layer.initStore(config, io.context, io.data, mediator.streamgraph_data);
     },
 
     // current_bubble needed in the headstart.js and io.js
@@ -124,9 +94,6 @@ MyMediator.prototype = {
     },
 
     io_async_get_data: function (url, input_format, callback) {
-        // WORKAROUND, if I try to add headstart earlier it doesn't work
-        // TODO find reason
-        mediator.modules.headstart = window.headstartInstance;
         mediator.manager.call('io', 'async_get_data', [url, input_format, callback]);
     },
 
@@ -141,79 +108,33 @@ MyMediator.prototype = {
         mediator.external_vis_url = config.external_vis_url + "?vis_id=" + config.files[mediator.current_file_number].file
     },
 
-    init_start_visualization: function(highlight_data, csv) {
-        $("#map-loading-screen").hide();
+    init_start_visualization: function(csv) {
+        const data = mediator.parse_data(csv);
         
-        let data = function () {
-            if (config.show_context) {
-                if(typeof csv.data === "string") {
-                    return JSON.parse(csv.data);
-                } else {
-                    return csv.data;
-                }
-            } else {
-                if(typeof csv.data === "object") {
-                    return csv.data;
-                } else {
-                    return csv;
-                }
-            }
-        }();
-        
-        //Dispatch an event that the data has been loaded for reuse outside of Headstart
-        let elem = document.getElementById(config.tag);
-        var event = new CustomEvent('headstart.data.loaded', {detail: {data: csv}});
-        elem.dispatchEvent(event);
+        mediator.dispatch_data_event(csv);
         
         let context = (typeof csv.context !== 'object')?({}):(csv.context);
         mediator.streamgraph_data = (config.is_streamgraph)?(csv.streamgraph):{};
-        
-        mediator.manager.registerModule(window.headstartInstance, 'headstart');
 
         mediator.manager.call('io', 'initializeMissingData', [data]);
-        mediator.manager.call('io', 'prepareData', [highlight_data, data, context]);
+        mediator.manager.call('io', 'prepareData', [data, context]);
         mediator.manager.call('io', 'setContext', [context, data.length]);
         mediator.manager.call('io', 'setInfo', [context]);
 
-        if (config.is_force_papers && config.dynamic_force_papers) 
-            mediator.manager.call('headstart', 'dynamicForcePapers', [data.length]);
-        if (config.is_force_area && config.dynamic_force_area) 
-            mediator.manager.call('headstart', 'dynamicForceAreas', [data.length]);
-        if (config.dynamic_sizing) 
-            mediator.manager.call('headstart', 'dynamicSizing', [data.length]);
-
-        mediator.init_modern_frontend_intermediate();
-
-        // TODO delete this call (redundant) and probably some other calls too
-        mediator.manager.call('io', 'prepareAreas', []);
-        
-        mediator.bubbles_update_data_and_areas(mediator.current_bubble);
-
-        // TODO call this just once (chart size must be known before the map is rendered)
-        mediator.dimensions_update();
-
-        if (config.render_map) {
-            mediator.render_modern_frontend_heading();
-
-            if (config.is_streamgraph) {
-                mediator.render_modern_frontend_streamgraph();
-            } else {
-                mediator.render_modern_frontend_knowledge_map();
-            }
-
-            mediator.render_modern_frontend_peripherals();
-        } else {
-            $(".vis-col").remove();
-            $(".list-col").css("width", "100%");
-            $("body").append('<div id="makeshift-modals"></div>')
-            mediator.render_modern_frontend_modals_only("#makeshift-modals");
+        if (config.is_force_papers && config.dynamic_force_papers) {
+            config.papers_force_alpha = mediator.get_papers_force_alpha(data.length);
         }
 
-        if (config.render_list) {
-            mediator.render_modern_frontend_list();
+        if (config.is_force_area && config.dynamic_force_area) {
+            config.area_force_alpha = mediator.get_areas_force_alpha(data.length);
         }
+
+        if (config.dynamic_sizing) {
+            mediator.set_dynamic_sizing(data.length);
+        }
+
+        mediator.init_store();
         
-        mediator.dimensions_update();
         d3.select(window).on("resize", () => {
             mediator.dimensions_update();
         });
@@ -223,19 +144,9 @@ MyMediator.prototype = {
         // Build Headstart skeleton
         this.viz = $("#" + config.tag);
         this.viz.addClass("headstart");
-        this.viz.append(headstartTemplate());
-        
-        if(config.show_loading_screen) {
-            $("#map-loading-screen").show();
-            $("#loading-text").text(config.localization[config.language].loading);
-        }
-    },
+        this.viz.append('<div id="app-container"></div>');
 
-    // loads data used in headstart.js
-    bubbles_update_data_and_areas: function(bubbles) {
-        bubbles.data = io.data;
-        bubbles.areas = io.areas;
-        bubbles.areas_array = io.areas_array;
+        mediator.render_frontend();
     },
 
     record_action: function(id, category, action, user, type, timestamp, additional_params, post_data) {
@@ -243,13 +154,7 @@ MyMediator.prototype = {
     },
 
     dimensions_update: function() {
-        const chart = getChartSize(config, io.context);
-        const list = getListSize(config, io.context, chart.size);
-        mediator.modern_frontend_intermediate.updateDimensions(chart, list);
-        if(!config.is_streamgraph) {
-            d3.select("#headstart-chart")
-                .style("width", chart.size + "px");
-        }
+        mediator.intermediate_layer.updateDimensions(config, io.context);
     },
 
     rescale_map: function(scale_by, base_unit, content_based, initial_sort) {
@@ -262,7 +167,80 @@ MyMediator.prototype = {
         config.dynamic_sizing = false;
 
         window.headstartInstance.tofile(mediator.current_file_number);
-    }
+    },
+
+    parse_data: function(csv) {
+        if (config.show_context) {
+            if (typeof csv.data === "string") {
+                return JSON.parse(csv.data);
+            }
+            return csv.data;
+        }
+        if (typeof csv.data === "object") {
+            return csv.data;
+        }
+        return csv;
+    },
+
+    dispatch_data_event: function(csv) {
+        // Dispatch an event that the data has been loaded for reuse outside of Headstart
+        const elem = document.getElementById(config.tag);
+        var event = new CustomEvent('headstart.data.loaded', {detail: {data: csv}});
+        elem.dispatchEvent(event);
+    },
+
+    get_papers_force_alpha: function(num_items) {
+        if (num_items >= 150 && num_items < 200) {
+            return 0.2;
+        }
+        if (num_items >= 200 && num_items < 350) {
+            return 0.3;
+        }
+        if (num_items >= 350 && num_items < 500) {
+            return 0.4;
+        }
+        if (num_items >= 500) {
+            return 0.6;
+        }
+
+        return config.papers_force_alpha;
+    },
+
+    get_areas_force_alpha: function(num_items) {
+        if (num_items >= 200) {
+            return 0.02;
+        }
+
+        return config.area_force_alpha;
+    },
+
+    set_dynamic_sizing: function(num_items) {
+        if (num_items >= 150 && num_items < 200) {
+            mediator.adjust_sizes(0.9, 1.1);
+        } else if (num_items >= 200 && num_items < 250) {
+            mediator.adjust_sizes(0.8, 1.1);
+        } else if (num_items >= 250 && num_items < 300) {
+            mediator.adjust_sizes(0.7, 1.1);
+        } else if (num_items >= 300 && num_items < 350) {
+            mediator.adjust_sizes(0.7, 1.2);
+        } else if (num_items >= 350 && num_items < 400) {
+            mediator.adjust_sizes(0.7, 1.2);
+        } else if (num_items >= 400 && num_items < 450) {
+            mediator.adjust_sizes(0.7, 1.2);
+        } else if (num_items >= 450 && num_items < 500) {
+            mediator.adjust_sizes(0.7, 1.2);
+        } else if (num_items >= 500) {
+            mediator.adjust_sizes(0.6, 1.2);
+        }
+    },
+  
+    adjust_sizes: function(resize_paper_factor, resize_bubble_factor) {
+        config.paper_min_scale *= resize_paper_factor;
+        config.paper_max_scale *= resize_paper_factor;
+  
+        config.bubble_min_scale *= resize_bubble_factor;
+        config.bubble_max_scale *= resize_bubble_factor;
+    },
 };
 
 export const mediator = new MyMediator();

@@ -1,6 +1,13 @@
 import React from "react";
 
-const AuthorImage = ({ link }) => {
+import defaultImage from "../../images/author_default.png";
+
+const AuthorImage = ({ url = "" }) => {
+  let link = defaultImage;
+  if (url !== "") {
+    link = url;
+  }
+
   return (
     // html template starts here
     <div id="title_image" className="titleimage">

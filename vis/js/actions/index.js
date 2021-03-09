@@ -46,6 +46,15 @@ export const zoomOut = (callback) => ({
 });
 
 /**
+ * Action for initializing the data that are known from the very beginning.
+ * @param {Object} configObject the default_config.json + data_config.json
+ */
+export const preinitializeStore = (configObject) => ({
+  type: "PREINITIALIZE",
+  configObject,
+});
+
+/**
  * Action for initializing the data that aren't known in advance.
  * @param {Object} configObject the default_config.json + data_config.json
  * @param {Object} contextObject the app context
@@ -58,7 +67,8 @@ export const initializeStore = (
   streamData,
   chartSize,
   streamWidth,
-  streamHeight
+  streamHeight,
+  listHeight
 ) => ({
   type: "INITIALIZE",
   configObject,
@@ -68,6 +78,7 @@ export const initializeStore = (
   chartSize,
   streamWidth,
   streamHeight,
+  listHeight,
 });
 
 /**
