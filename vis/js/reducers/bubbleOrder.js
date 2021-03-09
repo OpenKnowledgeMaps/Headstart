@@ -25,6 +25,11 @@ const bubbleOrder = (state = { hoveredBubble: null, order: [] }, action) => {
         ...state,
         hoveredBubble: null,
       };
+    case "SCALE":
+      return {
+        ...state,
+        hoveredBubble: null,
+      };
     default:
       return state;
   }
