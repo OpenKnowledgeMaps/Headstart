@@ -18,6 +18,7 @@ const misc = (state = { isLoading: true, showLoading: false }, action) => {
         renderMap: action.configObject.render_map,
         renderList: action.configObject.render_list,
         isLoading: false,
+        visTag: action.configObject.tag,
       };
     default:
       return state;
