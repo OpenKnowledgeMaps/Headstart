@@ -11,7 +11,7 @@ $page = library\CommUtils::getParameter($_GET, "page");
 $size = library\CommUtils::getParameter($_GET, "size");
 $funders = library\CommUtils::getParameter($_GET, "funders");
 
-$url = 'http://api.openaire.eu/search/projects?format=json&keywords=' 
+$url = 'https://api.openaire.eu/search/projects?format=json&keywords=' 
     . urlencode($keywords) . "&page=" . $page . "&size=" . $size . (($funders !== "all")?("&funder=" . $funders):(""));
 
 $ch = curl_init();
