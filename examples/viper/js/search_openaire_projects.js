@@ -70,7 +70,7 @@ var setupPaginator = function (searchTerm, params) {
         getResourcesAndSetupList(data, pagination, searchTerm);
     },
     formatAjaxError: function (jqXHR, textStatus, errorThrown) {
-      $('#viper-search-results').text('Error Searching: Check your search terms. See Console for error details')
+      $('#viper-search-results').text('An unexpected error occurred while retrieving data from OpenAIRE. We have logged the error and will investigate the issue.')
       console.log(jqXHR, textStatus, errorThrown)
     },
     alias: {
