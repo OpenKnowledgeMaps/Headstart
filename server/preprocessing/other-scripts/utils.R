@@ -100,7 +100,7 @@ detect_error <- function(failed, service) {
   if (!is.null(failed$query_reason)) {
     # map response to individual error codes/messages
     # then return them as json list
-    if (service == 'base' && startsWith(failed$query_reason, "Error in curl::curl_fetch_memory(x$url$url, handle = x$url$handle): Timeout was reached")){
+    if (grepl("Timeout was reached", failed$query_reason, fixed=TRUE)){
         reason <- c(reason, 'API error: timeout')
     }
     if (service == 'pubmed' && startsWith(failed$query_reason, "HTTP failure: 502, bad gateway")){
