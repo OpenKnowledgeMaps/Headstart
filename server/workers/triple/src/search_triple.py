@@ -102,7 +102,7 @@ class TripleClient(object):
         return body
 
     def search(self, parameters):
-        index = "triple-poc-document"
+        index = "triple-poc-document27032021"
         fields = ["headline.text", "abstract.text"]
         s = Search(using=self.es, index=index)
         # TODO: replace from parameters
@@ -147,8 +147,7 @@ class TripleClient(object):
         metadata["id"] = df.id.map(lambda x: x if isinstance(x, str) else "")
         metadata["title"] = df.headline.map(lambda x: self.filter_lang(x, lang, "text"))
         metadata["title_en"] = df.headline.map(lambda x: self.filter_lang(x, 'en', "text"))
-        #metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if isinstance(x, list) else "")
-        metadata["authors"] = df.author.map(lambda x: ", ".join(x))
+        metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if isinstance(x, list) else "")
         metadata["paper_abstract"] = df.abstract.map(lambda x: self.filter_lang(x, lang, "text"))
         metadata["paper_abstract_en"] = df.abstract.map(lambda x: self.filter_lang(x, 'en', "text"))
         metadata["published_in"] = df.publisher.map(lambda x: ", ".join(x))
@@ -232,7 +231,7 @@ class TripleClient(object):
         for a in authorlist:
             if a:
                 author = []
-                for n in ['lastname', 'firstname']:
+                for n in ['family_name', 'given_name']:
                     if a.get(n, [None])[0]:
                         author.append(a.get(n)[0])
                 authors.append(", ".join(author))
