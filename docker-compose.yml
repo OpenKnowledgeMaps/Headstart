@@ -27,8 +27,6 @@ services:
      context: server
      dockerfile: services.docker
    restart: always
-   ports:
-    - '5001:5001'
    depends_on:
     - redis
    network_mode: "host"
@@ -43,8 +41,6 @@ services:
        - 'redis:/var/lib/redis/data'
        - ./server/workers/redis.conf:/etc/redis/redis.conf
     restart: always
-    ports:
-      - '6379:6379'
     network_mode: "host"
 
   search_triple:
