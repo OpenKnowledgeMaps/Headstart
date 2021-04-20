@@ -42,14 +42,10 @@ const common = {
 
             // modules
             'config': path.resolve(__dirname, 'vis/js/default-config.js'),
-            'helpers': path.resolve(__dirname, 'vis/js/helpers.js'),
             'headstart': path.resolve(__dirname, 'vis/js/headstart.js'),
-            'list': path.resolve(__dirname, 'vis/js/list.js'),
             'intro': path.resolve(__dirname, 'vis/js/intro.js'),
             'mediator': path.resolve(__dirname, 'vis/js/mediator.js'),
             'io' : path.resolve(__dirname, 'vis/js/io.js'),
-            'canvas' : path.resolve(__dirname, 'vis/js/canvas.js'),
-            'streamgraph' : path.resolve(__dirname, 'vis/js/streamgraph.js')
         },
     },
 
@@ -68,10 +64,9 @@ const common = {
             filename: 'headstart.css',
             chunkFilename: '[id].css',
             ignoreOrder: false, // Enable to remove warnings about conflicting order
-          }),
-          new webpack.EnvironmentPlugin({
-            MODERN_FRONTEND: typeof config.modernFrontendEnabled === "boolean" ? config.modernFrontendEnabled : false
-          })
+        }),
+        // can be used for simulating env variables
+        new webpack.EnvironmentPlugin({})
     ],
     module: {
         rules: [
@@ -141,7 +136,6 @@ const common = {
                   options: {
                     prependData: `
                         $skin: "${config.skin}";
-                        $modern_frontend_enabled: ${process.env.MODERN_FRONTEND ? "true" : "false"};
                     `,
                     sassOptions: {
                       includePaths: ["node_modules"]

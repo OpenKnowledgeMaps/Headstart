@@ -22,7 +22,7 @@ const Comments = ({ items }) => {
               <>
                 <span id="comment-by-label">
                   {localization.comment_by_label}
-                </span>
+                </span>{" "}
                 <span id="comment-author" className="comment-author">
                   <Highlight>{comment.author}</Highlight>
                 </span>

@@ -8,6 +8,7 @@ const list = (
     filterOptions: [],
     showDropdownSort: true,
     sortValue: null,
+    defaultSort: null,
     sortOptions: [],
     abstractSize: 250,
     linkType: null,
@@ -39,6 +40,7 @@ const list = (
         filterOptions: config.filter_options,
         showDropdownSort: config.sort_menu_dropdown,
         sortValue: getSortValue(config, context),
+        defaultSort: getSortValue(config, context),
         sortOptions: config.sort_options,
         abstractSize: config.abstract_small,
         linkType: getLinkType(config, context),
@@ -49,6 +51,8 @@ const list = (
         showRealPreviewImage: config.preview_type == "image",
         showKeywords: config.show_keywords,
         hideUnselectedKeywords: config.hide_keywords_overview,
+        disableClicks: !config.render_map,
+        height: action.listHeight,
       };
     case "TOGGLE_LIST":
       return {
@@ -75,6 +79,16 @@ const list = (
         ...state,
         sortValue: action.id,
       };
+    case "SCALE":
+      return state;
+    // TODO enable this once the scaling is refactored properly
+    // return {
+    //   ...state,
+    //   sortValue: state.sortOptions.includes(action.sort)
+    //     ? action.sort
+    //     : state.defaultSort,
+    //   baseUnit: action.baseUnit,
+    // };
     case "RESIZE":
       return {
         ...state,

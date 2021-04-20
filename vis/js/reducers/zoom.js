@@ -10,6 +10,8 @@ const zoom = (state = false, action) => {
       return false;
     case "INITIALIZE":
       return false;
+    case "SCALE":
+      return false;
     default:
       return state;
   }

@@ -19,7 +19,6 @@ describe("list state", () => {
         type: "SELECT_PAPER",
         safeId: PAPER.safe_id,
         paper: PAPER,
-        not_from_mediator: true,
       };
       expect(selectPaper(PAPER)).toEqual(EXPECTED_ACTION);
     });

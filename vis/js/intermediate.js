@@ -8,23 +8,20 @@ import rootReducer from "./reducers";
 import {
   ALLOWED_IN_ANIMATION,
   NOT_QUEUED_IN_ANIMATION,
-  zoomInFromMediator,
-  zoomOutFromMediator,
   initializeStore,
-  deselectPaper,
   updateDimensions,
   applyForceAreas,
   applyForcePapers,
+  preinitializeStore,
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
 
-import SubdisciplineTitle from "./templates/SubdisciplineTitle";
-import AuthorImage from "./components/AuthorImage";
-import List from "./components/List";
-import KnowledgeMap from "./components/KnowledgeMap";
-
 import { applyForce } from "./utils/force";
+import logAction from "./utils/actionLogger";
+
+import { getChartSize, getListSize } from "./utils/dimensions";
+import Headstart from "./components/Headstart";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -33,91 +30,80 @@ import { applyForce } from "./utils/force";
  * This class should ideally only talk to the mediator and redux
  */
 class Intermediate {
-  constructor(
-    modern_frontend_enabled,
-    streamgraphZoomOutCallback,
-    previewPopoverCallback,
-    entryBacklinkClickCallback
-  ) {
-    this.modern_frontend_enabled = modern_frontend_enabled;
+  constructor(rescaleCallback, recordActionCallback) {
     this.actionQueue = [];
 
+    this.recordActionCallback = recordActionCallback;
+    this.recordActionParams = {};
+
     const middleware = applyMiddleware(
-      createZoomOutMiddleware(streamgraphZoomOutCallback),
       createFileChangeMiddleware(),
-      createPreviewPopoverMiddleware(previewPopoverCallback),
-      createEntryBacklinkClickMiddleware(entryBacklinkClickCallback),
       createActionQueueMiddleware(this),
       createScrollMiddleware(),
       createRepeatedInitializeMiddleware(this),
-      createChartTypeMiddleware()
+      createChartTypeMiddleware(),
+      createRescaleMiddleware(rescaleCallback),
+      createRecordActionMiddleware(
+        this.recordAction.bind(this),
+        this.recordActionParams
+      )
     );
 
     this.store = createStore(rootReducer, middleware);
   }
 
-  init(config, context, data, size) {
-    this.store.dispatch(initializeStore(config, context, data, size));
+  renderFrontend(config) {
+    this.store.dispatch(preinitializeStore(config));
 
-    // TODO replace the config.is_authorview with store variable
-    // after components are wrapped
     ReactDOM.render(
       <Provider store={this.store}>
-        {config.is_authorview && <AuthorImage />}
-        <SubdisciplineTitle />
+        <Headstart />
       </Provider>,
-      document.getElementById("mvp_container")
+      document.getElementById("app-container")
     );
   }
 
-  /**
-   * List cannot be rendered with the initial components (heading etc.),
-   * so it has its own separate function.
-   */
-  renderList() {
-    ReactDOM.render(
-      <Provider store={this.store}>
-        <List />
-      </Provider>,
-      document.getElementById("list-col")
+  initStore(config, context, mapData, streamData) {
+    const { size, width, height } = getChartSize(config, context);
+    const list = getListSize(config, context, size);
+
+    Object.assign(this.recordActionParams, {
+      title: config.title,
+      user: config.user_id,
+      localization: config.localization[config.language],
+      mouseoverEvaluation: config.enable_mouseover_evaluation,
+      scaleLabel: config.scale_label,
+    });
+
+    this.store.dispatch(
+      initializeStore(
+        config,
+        context,
+        mapData,
+        streamData,
+        size,
+        width,
+        height,
+        list.height
+      )
     );
+
+    if (!config.is_streamgraph) {
+      this.forceLayoutParams = {
+        areasAlpha: config.area_force_alpha,
+        isForceAreas: config.is_force_areas,
+        papersAlpha: config.papers_force_alpha,
+        isForcePapers: config.is_force_papers,
+      };
+
+      this.applyForceLayout();
+    }
   }
 
-  renderKnowledgeMap(config) {
-    ReactDOM.render(
-      <Provider store={this.store}>
-        <KnowledgeMap />
-      </Provider>,
-      document.getElementById("headstart-chart")
-    );
-
-    this.forceLayoutParams = {
-      areasAlpha: config.area_force_alpha,
-      isForceAreas: config.is_force_areas,
-      papersAlpha: config.papers_force_alpha,
-      isForcePapers: config.is_force_papers,
-    };
-
-    this.applyForceLayout();
-  }
-
-  // used in streamgraph
-  zoomIn(selectedAreaData) {
-    this.store.dispatch(zoomInFromMediator(selectedAreaData));
-  }
-
-  // used in streamgraph
-  zoomOut() {
-    this.store.dispatch(zoomOutFromMediator());
-  }
-
-  // used in streamgraph
-  deselectPaper() {
-    this.store.dispatch(deselectPaper());
-  }
-
-  // used after start and then on window resize
-  updateDimensions(chart, list) {
+  // triggered on window resize
+  updateDimensions(config, context) {
+    const chart = getChartSize(config, context);
+    const list = getListSize(config, context, chart.size);
     this.store.dispatch(updateDimensions(chart, list));
   }
 
@@ -133,6 +119,38 @@ class Intermediate {
       (newPapers) =>
         this.store.dispatch(applyForcePapers(newPapers, state.chart.height)),
       this.forceLayoutParams
+    );
+  }
+
+  /**
+   * Log an action using the mediator's function.
+   *
+   * @param {string} id usually some title, e.g. paper.title / default is the config.title
+   * @param {string} category some static key, such as "List"
+   * @param {string} action some static key, such as "show"
+   * @param {string} type some static key, such as "open_embed_modal"
+   * @param {object} timestamp optional object / default is null
+   * @param {string} additionalParams optional string / default is null
+   * @param {object} postData optional object / default is null
+   */
+  recordAction(
+    id,
+    category,
+    action,
+    type,
+    timestamp = null,
+    additionalParams = null,
+    postData = null
+  ) {
+    this.recordActionCallback(
+      id,
+      category,
+      action,
+      this.recordActionParams.user,
+      type,
+      timestamp,
+      additionalParams,
+      postData
     );
   }
 }
@@ -254,27 +272,23 @@ function createChartTypeMiddleware() {
   };
 }
 
-function createEntryBacklinkClickMiddleware(entryBacklinkClickCallback) {
-  return function () {
+/**
+ * Creates a middleware that calls the rescaling function on the 'SCALE' action.
+ *
+ * @param {Function} rescaleCallback function that rescales the map
+ */
+function createRescaleMiddleware(rescaleCallback) {
+  return () => {
     return (next) => (action) => {
-      if (action.type == "DESELECT_PAPER_BACKLINK") {
-        entryBacklinkClickCallback();
+      if (action.type === "SCALE") {
+        rescaleCallback(
+          action.value,
+          action.baseUnit,
+          action.contentBased,
+          action.sort
+        );
       }
       return next(action);
-    };
-  };
-}
-
-function createZoomOutMiddleware(streamgraphZoomOutCallback) {
-  return function ({ getState }) {
-    return (next) => (action) => {
-      if (action.type == "ZOOM_OUT" && action.not_from_mediator) {
-        if (getState().chartType === STREAMGRAPH_MODE) {
-          streamgraphZoomOutCallback();
-        }
-      }
-      const returnValue = next(action);
-      returnValue;
     };
   };
 }
@@ -293,14 +307,12 @@ function createFileChangeMiddleware() {
   };
 }
 
-function createPreviewPopoverMiddleware(previewPopoverCallback) {
-  return function () {
+function createRecordActionMiddleware(callback, params) {
+  return function ({ getState }) {
     return (next) => (action) => {
-      if (action.type == "SHOW_PREVIEW") {
-        previewPopoverCallback(action.paper);
-      }
-      const returnValue = next(action);
-      returnValue;
+      const state = getState();
+      logAction(action, state, callback, params);
+      return next(action);
     };
   };
 }

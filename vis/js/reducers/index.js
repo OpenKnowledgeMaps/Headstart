@@ -22,6 +22,10 @@ import highlightedBubble from "./highlightedBubble";
 import bubbleOrder from "./bubbleOrder";
 import paperOrder from "./paperOrder";
 import hyphenationLang from "./hyphenationLang";
+import modals from "./modals";
+import toolbar from "./toolbar";
+import misc from "./misc";
+import streamgraph from "./streamgraph";
 
 export default combineReducers({
   zoom,
@@ -44,4 +48,8 @@ export default combineReducers({
   bubbleOrder,
   paperOrder,
   hyphenationLang,
+  modals,
+  toolbar,
+  misc,
+  streamgraph,
 });
