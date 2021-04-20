@@ -70,6 +70,7 @@ function search($service_integration, $dirty_query
                         , "linkedcat_browseview" => "LinkedCat"
                         , "triple" => "TRIPLE"
                         , "gsheets" => "GSheets");
+    # TODO: move next 3 to searchXYZ.php and drop in as a parameter instead
     $service2endpoint = array("triple_km" => "triple",
                               "triple_sg" => "triple");
 
