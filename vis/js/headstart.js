@@ -6,11 +6,10 @@ import StateMachine from 'javascript-state-machine';
 import config from 'config';
 import { mediator } from 'mediator';
 
-import { getRealHeight } from "helpers";
-import { BrowserDetect, highlight } from "helpers";
-
 import 'hypher';
 import 'lib/en.js';
+
+import BrowserDetect from "exports-loader?BrowserDetect!../lib/browser_detect.js";
 
 export var HeadstartFSM = function(json_direct_data) {
   this.VERSION = 4.0;
@@ -116,81 +115,8 @@ HeadstartFSM.prototype = {
 
   },
 
-  dynamicForcePapers: function(num_items) {
-      if (num_items >= 150 && num_items < 200) {
-        config.papers_force_alpha = 0.2;
-      } else if (num_items >= 200 && num_items < 350) {
-          config.papers_force_alpha = 0.3;
-      } else if (num_items >= 350 && num_items < 500) {
-          config.papers_force_alpha = 0.4;
-      }else if (num_items >= 500) {
-          config.papers_force_alpha = 0.6;
-      }
-  },
-
-  dynamicForceAreas: function(num_items) {
-      if (num_items >= 200) {
-          config.area_force_alpha = 0.02;
-      }
-  },
-
-  dynamicSizing: function(num_items) {
-      if (num_items >= 150 && num_items < 200) {
-          this.adjustSizes(0.9, 1.1);
-      } else if (num_items >= 200 && num_items < 250) {
-          this.adjustSizes(0.8, 1.1);
-      } else if (num_items >= 250 && num_items < 300) {
-          this.adjustSizes(0.7, 1.1);
-      } else if (num_items >= 300 && num_items < 350) {
-          this.adjustSizes(0.7, 1.2);
-      } else if (num_items >= 350 && num_items < 400) {
-          this.adjustSizes(0.7, 1.2);
-      } else if (num_items >= 400 && num_items < 450) {
-          this.adjustSizes(0.7, 1.2);
-      } else if (num_items >= 450 && num_items < 500) {
-          this.adjustSizes(0.7, 1.2);
-      } else if (num_items >= 500) {
-          this.adjustSizes(0.6, 1.2);
-      }
-  },
-
-  adjustSizes: function(resize_paper_factor, resize_bubble_factor) {
-      config.paper_min_scale *= resize_paper_factor;
-      config.paper_max_scale *= resize_paper_factor;
-
-      config.bubble_min_scale *= resize_bubble_factor;
-      config.bubble_max_scale *= resize_bubble_factor;
-  },
-
-  createRestUrl: function () {
-      let url = config.server_url + "services/getBookmarks.php?user=" + config.user_id;
-
-      //sometimes the conference id array is not recognized
-      let conference_id = eval(config.conference_id);
-
-      if($.isArray(conference_id)) {
-          conference_id.forEach((val) => {
-            url += "&conference[]=" + val;
-          });
-      } else {
-          url += "&conference=" + this.conference_id;
-      }
-      url += "&max_recommendations=" + config.max_recommendations;
-      url += "&jsoncallback=?";
-      return url;
-  },
-
   makeSetupVisualisation: function () {
-      return (csv) => {
-        if (config.is_adaptive) {
-          let url = this.createRestUrl();
-          $.getJSON(url, (data) => {
-              mediator.publish("start_visualization", data, csv);
-            });
-        } else {
-          mediator.publish("start_visualization", null, csv);
-        }
-      };
+      return (csv) => mediator.publish("start_visualization", csv);
   },
 
   get_files: {
@@ -220,7 +146,7 @@ HeadstartFSM.prototype = {
         config.files = mediator.json_direct_data;
         mediator.publish("register_bubbles");
         mediator.current_bubble.data = mediator.current_bubble.file;
-        mediator.publish("start_visualization", null, mediator.current_bubble.data);
+        mediator.publish("start_visualization", mediator.current_bubble.data);
       }
   },
 

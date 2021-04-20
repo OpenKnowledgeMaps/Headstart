@@ -50,7 +50,8 @@ export const getChartSize = (config, context) => {
   // width section
   const visWidth = container.width();
 
-  const computedWidth = visWidth * VIS_COL_RATIO - MODALS_WIDTH;
+  // MODALS_WIDTH subtraction is questionable - I disabled it for streamgraph
+  const computedWidth = visWidth * VIS_COL_RATIO - (config.is_streamgraph ? 0 : MODALS_WIDTH);
 
   const finalWidth = Math.max(
     config.min_width || 0,

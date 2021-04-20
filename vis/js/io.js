@@ -15,7 +15,6 @@ var IO = function() {
     this.num_papers;
     this.num_datasets;
     this.data;
-    this.query_terms;
 };
 
 IO.prototype = {
@@ -44,24 +43,6 @@ IO.prototype = {
             d3[config.input_format](mediator.current_bubble.file, callback);
           }
         });
-    },
-    
-    get_data: function(csv) {
-        var self = this;
-        
-        if (config.show_context) {
-            if(typeof csv.data === "object") {
-                self.data = csv.data;
-            } else {
-                self.data = JSON.parse(csv.data);
-            }
-        } else {
-            if(typeof csv.data === "object") {
-                self.data = csv.data;
-            }else {
-                self.data = csv;
-            }
-        }
     },
 
     convertToFirstNameLastName: function (authors_string) {
@@ -169,10 +150,9 @@ IO.prototype = {
         })
     },
 
-    prepareData: function (highlight_data, fs, context) {
+    prepareData: function (fs, context) {
         this.areas = {};
         this.areas_array = [];
-        this.query_terms = this.getQueryTerms(context);
         
         var _this = this;
         var xy_array = [];
@@ -297,19 +277,6 @@ IO.prototype = {
                     d.num_subentries++;
                 })
             }
-                      
-            if (typeof highlight_data != 'undefined' && highlight_data !== null) {
-                if (highlight_data.bookmarks_all !== null) {
-                    highlight_data.bookmarks_all.forEach(function (x) {
-                        var id_string = x.id;
-                        id_string = id_string.toString();
-                        if (id_string == d.id) {
-                            d.readers += x.num;
-                            d.internal_readers += x.num;
-                        }
-                    });
-                }
-            }
             
             if(config.metric_list) {
                 d.tweets = prepareMetric(d, "cited_by_tweeters_count")
@@ -393,32 +360,6 @@ IO.prototype = {
 
             d.resized = false;
         });
-        if (typeof highlight_data != 'undefined' && highlight_data !== null) {
-            if (highlight_data.bookmarks !== null) {
-                highlight_data.bookmarks.forEach(function (d) {
-
-                    var index =cur_data.filter(function (x) {
-                        return x.id == d.contentID;
-                    });
-                    if (index.length > 0) {
-                        index[0].bookmarked = 1;
-                    }
-                });
-            }
-
-            if (highlight_data.recommendations !== null) {
-                highlight_data.recommendations.forEach(function (d) {
-
-                    var index =cur_data.filter(function (x) {
-                        return x.id == d.contentID;
-                    });
-                    if (index.length > 0) {
-                        index[0].recommended = 1;
-                    }
-                });
-            }
-
-        }
 
         this.data = cur_data;
     },
@@ -441,118 +382,6 @@ IO.prototype = {
             if (c === 32) return '-';
             return '__' + ('000' + c.toString(16)).slice(-4);
         });
-    },
-    
-    highlightTerms: function(full_string, term_array) {
-        let result_string = full_string;
-        for (let term of term_array) {
-            let re = new RegExp("\\b(" + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ")\\b" ,"gi");
-            result_string = result_string.replace(re, "<span class=\"query_term_highlight\">$1</span>");
-        }
-        return result_string;
-    },
-    
-    //Get all terms in a query minus operators
-    getQueryTerms: function (context) {
-        if(!context.hasOwnProperty("query")) {
-            return;
-        }
-        
-        let original_query = context.query;
-        
-        //Replace terms within square brackets, as they denote fields in PubMed
-        let full_query = original_query.replace(/\[(.*?)\]/g, '');
-       
-        //Get all phrases and remove inverted commas from results
-        let match_query = /\"(.*?)\"/g;
-        let term_array = full_query.match(match_query);
-        if(term_array !== null)
-            term_array = term_array.map(function(x){return x.replace(/\\"|\"/g, '');});
-        else
-            term_array = [];
-        
-        //Remove phrases, and, or, +, -, (, ) from query string 
-        let query_wt_phrases = full_query.replace(match_query, " ");
-        let query_wt_rest = query_wt_phrases.replace(/\band\b|\bor\b|\(|\)/g, "").replace(/(^|\s)-|\+/g, " ");
-        
-        term_array = term_array.concat(query_wt_rest.trim().replace(/\s+/g, " ").split(" "));
-        
-        term_array = [...new Set(term_array)];
-        
-        return term_array;
-        
-    },
-
-    // prepare the areas for the bubbles
-    prepareAreas: function () {
-
-        var areas = this.areas;
-        var areas_array = this.areas_array;
-        
-        let _this = this;
-
-        var readers = [];
-
-        for (var area in areas) {
-            var papers = areas[area].papers;
-            var sum_readers = d3.sum(papers, function (d) {
-                return d.internal_readers;
-            });
-
-            readers.push(sum_readers);
-        }
-
-        var area_x = [];
-        var area_y = [];
-
-        for (area in areas) {
-            let papers = areas[area].papers;
-            let sum_readers = d3.sum(papers, function (d) {
-                return d.internal_readers;
-            });
-
-            areas[area].num_readers = sum_readers;
-
-            var mean_x = d3.mean(papers, function (d) {
-                return d.x;
-            });
-            var mean_y = d3.mean(papers, function (d) {
-                return d.y*(-1);
-            });
-
-            area_x.push(mean_x);
-            area_y.push(mean_y);
-
-            areas[area].x = mean_x;
-            areas[area].y = mean_y;
-        }
-
-        for (area in areas) {
-            var new_area = [];
-            new_area.title = areas[area].title;
-            new_area.title_tooltip = areas[area].title;
-            new_area.orig_x = areas[area].x;
-            new_area.orig_y = areas[area].y;
-            new_area.r = areas[area].r;
-            new_area.height_html = Math.sqrt(Math.pow(areas[area].r, 2) * 2);
-            new_area.width_html = Math.sqrt(Math.pow(areas[area].r, 2) * 2);
-            new_area.x_html = 0 - new_area.width_html / 2;
-            new_area.y_html = 0 - new_area.height_html / 2;
-            new_area.area_uri = area;
-            new_area.num_readers = areas[area].num_readers;
-            new_area.papers = areas[area].papers;
-            areas_array.push(new_area);
-        }
-        this.areas = areas;
-        this.areas_array = areas_array;
-    },
-
-    getData: function () {
-        return this.data;
-    },
-
-    getAreas: function() {
-        return this.areas;
     },
 
     createOutlink: function(d) {
