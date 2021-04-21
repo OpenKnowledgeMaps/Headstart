@@ -88,6 +88,7 @@ def data_generation(KNOWNCASES, RANDOMCASES):
 
 KNOWNCASES = get_cases("knowncases")
 RANDOMCASES = get_cases("randomcases")
+TRIPLE = get_cases("triple")
 
 CASENAMES, CASEDATA = data_generation(KNOWNCASES, RANDOMCASES)
 CASENAMES.sort()

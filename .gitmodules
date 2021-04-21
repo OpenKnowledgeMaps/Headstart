@@ -4,3 +4,6 @@
 [submodule "examples/covis"]
 	path = examples/covis
 	url = https://github.com/OpenKnowledgeMaps/CoVis
+[submodule "examples/triple/search-flow"]
+	path = examples/triple/search-flow
+	url = https://github.com/OpenKnowledgeMaps/search-flow
