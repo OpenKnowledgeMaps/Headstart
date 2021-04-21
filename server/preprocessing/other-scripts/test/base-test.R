@@ -7,7 +7,7 @@ options(warn=1)
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(wd) #Don't forget to set your working directory
 
-query <- '“hannah arendt"' #args[2]
+query <- 'open access' #args[2]
 service <- "base"
 params <- NULL
 params_file <- "params_base.json"

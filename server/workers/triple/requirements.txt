@@ -3,5 +3,5 @@ elasticsearch_dsl
 redis
 certifi
 pandas
-spacy
+spacy==2.3
 spacy_cld

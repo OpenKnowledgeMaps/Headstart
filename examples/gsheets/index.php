@@ -28,7 +28,7 @@ function addScheme($url, $scheme = 'http://') {
 
 $protocol = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https:' : 'http:';
 $headstart_url = $protocol . $SITE_URL . $HEADSTART_PATH;
-$context_json = curl_get_contents($headstart_url . "server/services/getContext.php?vis_id=$SHEET_ID&persistence_backend=$PERSISTENCE_BACKEND&revision_context=true");
+$context_json = curl_get_contents($headstart_url . "server/services/getContext.php?vis_id=$SHEET_ID&revision_context=true");
 $context = json_decode($context_json, true);
 
 $topic = checkReturn($context, "topic");
@@ -115,7 +115,7 @@ $project_website = ($project_website_raw !== null)?(addScheme($project_website_r
         function updateCheck(context) {
             let last_update = (typeof context !== "undefined" && context.hasOwnProperty("last_update"))?(context.last_update):("");
             
-            $.getJSON("<?php echo $headstart_url ?>server/services/GSheetUpdateAvailable.php?vis_id=<?php echo $SHEET_ID ?>&persistence_backend=<?php echo $PERSISTENCE_BACKEND ?>&gsheet_last_updated=" + encodeURIComponent(last_update),
+            $.getJSON("<?php echo $headstart_url ?>server/services/GSheetUpdateAvailable.php?vis_id=<?php echo $SHEET_ID ?>&gsheet_last_updated=" + encodeURIComponent(last_update),
                         function(output) {
                             if (output.update_available) {
                                 $("#reload").addClass("show-reload-button");
