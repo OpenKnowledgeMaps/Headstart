@@ -103,7 +103,7 @@ detect_error <- function(failed, service) {
     if (grepl("Timeout was reached", failed$query_reason, fixed=TRUE)){
         reason <- c(reason, 'API error: timeout')
     }
-    if (service == 'pubmed' && grepl("error forwarding request", failed$query_reason, fixed=TRUE)){
+    if (service == 'pubmed' && startsWith(failed$query_reason, "HTTP failure: 500") && grepl("error forwarding request", failed$query_reason, fixed=TRUE)){
         reason <- c(reason, 'API error: requested metadata size')
     }
     if (length(reason) == 0 && service == 'pubmed' && startsWith(failed$query_reason, "HTTP failure: 500")){
