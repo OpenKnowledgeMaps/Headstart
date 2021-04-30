@@ -23,11 +23,11 @@ var config = {
     min_width: 600,
     //maximum height
     max_height: 1000,
-    //[deprecated] size of multiples
+    //[not used][deprecated] size of multiples
     multiples_size: 600,
-    //padding for map range of articles (currently set inline) 
+    //[not used]padding for map range of articles (currently set inline) 
     padding_articles: 0,
-    //padding for map range of bubbles (currently set dynamically inline)
+    //[not used]padding for map range of bubbles (currently set dynamically inline)
     circle_padding: 0,
     
 /*** reference sizes for the map, bubbles and papers (in pixels) ***/    
@@ -57,9 +57,9 @@ var config = {
     //paper width and height ratios (currently at the golden cut)
     paper_width_factor: 1.2,
     paper_height_factor: 1.6,
-    //height of the metrics section of the paper (ratio)
+    //[not used]height of the metrics section of the paper (ratio)
     paper_readers_height_factor: 0.2,
-    //magic number related to the height of the metrics section of the paper
+    //[not used]magic number related to the height of the metrics section of the paper
     paper_metadata_height_correction: 25,
     
 /*** basic list sizes (in pixels) ***/
@@ -81,17 +81,17 @@ var config = {
     dynamic_force_papers: false,
     
 /*** preview image & pdf sizes (list and overlay) ***/
-    //list sizes
+    //[not used]list sizes
     preview_image_width_list: 230,
     preview_image_height_list: 298,
-    //overlay sizes
+    //[not used]overlay sizes
     preview_image_width: 738,
     preview_image_height: 984,
     
  /*** zoom settings ***/    
     //correction factor for zoomed in bubble size
     zoom_factor: 0.9,
-    // transition durations
+    //[not used] transition durations
     transition_duration: 750,
     zoomout_transition: 750,
     
@@ -122,7 +122,7 @@ var config = {
     evaluation_service: "log",
     //enable logging of mouseover events (use only temporarily as it creates A LOT of logging events)
     enable_mouseover_evaluation: false,
-    //[deprecated] enables bookmarking and recommenders for CN3
+    //[not used][deprecated] enables bookmarking and recommenders for CN3
     is_adaptive: false,
     //whether to embed the okmaps credit
     credit_embed: false,
@@ -140,21 +140,21 @@ var config = {
     convert_author_names: true,
     //adds some (currently very limited) debug output to the browser console
     debug: false,
-    //debounce value
+    //[not used]debounce value
     debounce: 50,
 
 /*** settings for title and context line ***/
-    //set map title directly (should be renamed)
+    //[not used]set map title directly (should be renamed)
     subdiscipline_title: "",
-    //[deprecated] show link to load multiples view
+    //[not used][deprecated] show link to load multiples view
     show_multiples: false,
-    //show link to display intro
+    //[not used]show link to display intro
     show_infolink: true,
     //show dropdown to load different map datasets
     show_dropdown: true,
     //show context line
     show_context: false,
-    //[deprecated] show link to display intro to area
+    //[not used][deprecated] show link to display intro to area
     show_infolink_areas: false,
     //create title from context
     create_title_from_context: false,
@@ -178,23 +178,23 @@ var config = {
     url_outlink: false,
     //show keywords in list entry
     show_keywords: false,
-    //show tags in list entry
+    //[not used]show tags in list entry
     show_tags: false,
     //hide keywords when paper is not selected
     hide_keywords_overview: true,
-    //show area in list entry
+    //[not used]show area in list entry
     show_area: true,
     //show result type (document type) in list entry
     show_resulttype: false,
-    //show comments (requires presence of comments in data)
+    //[not used]show comments (requires presence of comments in data)
     show_comments: false,
-    //whether the title of a list entry can be clicked after it has been selected
+    //[not used]whether the title of a list entry can be clicked after it has been selected
     is_title_clickable: true,
     //abstract length in characters when items are not expanded
     abstract_small: 250,
-    //abstract length expanded (null = no character limit)
+    //[not used]abstract length expanded (null = no character limit)
     abstract_large: null,
-    //show a backlink to all papers in bubble at the bottom of a list entry when a paper is selected
+    //[not used]show a backlink to all papers in bubble at the bottom of a list entry when a paper is selected
     list_set_backlink: false,
     //sort options for sort dropdown
     sort_options: ["readers", "title", "authors", "year"],
@@ -206,7 +206,7 @@ var config = {
     sort_menu_dropdown: false,
     //initial field used for sorting
     initial_sort: null,
-    //whether to show other papers in the list view when a paper is selected
+    //[not used]whether to show other papers in the list view when a paper is selected
     list_show_all_papers: false,
     
     highlight_query_terms: false,
@@ -228,7 +228,7 @@ var config = {
     list_sub_entries_readers: false,
     list_sub_entries_number: false,
     list_sub_entries_statistics: false,
-    //[deprecated] list additional images settings
+    //[not used][deprecated] list additional images settings
     list_additional_images: false,
     list_images: [],
     list_images_path: "images/",
@@ -250,18 +250,18 @@ var config = {
     faqs_url: "",
 
 /*** streamgraph settings ***/
-    //[experimental] zoomable streamgraph
+    //[not used][experimental] zoomable streamgraph
     streamgraph_zoom: false,
     //streamgraph color definition
     streamgraph_colors: ["#28a2a3", "#671A54", "#CC3380", "#7acca3", "#c999ff", "#ffe199"
         , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#2856A3"],
     
-/*** [deprecated] settings related to conference navigator integration ***/
-    conference_id: 0,
     user_id: 0,
-    max_recommendations: 10,
     max_documents: 100,
-    
+/*** [not used][deprecated] settings related to conference navigator integration ***/
+    conference_id: 0,
+    max_recommendations: 10,
+    //service names
     service_names: {plos: "PLOS"
                         , base: "BASE"
                         , pubmed: "PubMed"
