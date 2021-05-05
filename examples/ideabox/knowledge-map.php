@@ -15,10 +15,6 @@ include 'config.php';
 </head>
 
 <body class="knowledge-map" style="margin:0px; padding:0px; height:100%;">
-    <header>
-        <?php include('menu.php'); ?>
-    </header>
-    <div class="topheader"></div>
     <?php include "browser_unsupported_banner.php"; ?>
     <?php include "mobile_banner.php"; ?>
     <div id="visualization" class="headstart"></div>

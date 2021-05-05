@@ -74,6 +74,7 @@ const StandardListEntries = ({
           preview={{
             link: getPaperPreviewLink(entry),
             onClickPDF: getPaperPDFClickHandler(entry, handlePDFClick),
+            email: entry.author_email,
             showPreviewImage,
           }}
           details={{

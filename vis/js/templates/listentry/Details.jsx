@@ -12,7 +12,7 @@ const Details = ({ authors, source, year }) => {
       {!!source && (
         <>
           <span className="list_in">
-            <Highlight> in </Highlight>
+            <Highlight> eingereicht in </Highlight>
           </span>
           <span className="list_published_in">
             <Highlight queryHighlight>{source}</Highlight>

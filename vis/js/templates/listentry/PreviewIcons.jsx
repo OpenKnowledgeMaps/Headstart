@@ -1,6 +1,7 @@
 import React from "react";
 
-const PreviewIcons = ({ link, onClickPDF }) => {
+const PreviewIcons = ({ link, onClickPDF, email }) => {
+  // icons pool: https://fontawesome.com/cheatsheet
   return (
     // html template starts here
     <div className="list_links">
@@ -12,6 +13,11 @@ const PreviewIcons = ({ link, onClickPDF }) => {
       {!!onClickPDF && (
         <a className="link2 oa-link" onClick={onClickPDF}>
           PDF <span className="outlink_symbol">&#61550;</span>
+        </a>
+      )}
+      {!!email && (
+        <a href={`mailto:${email}`} className="outlink">
+          MAIL <span className="outlink_symbol">&#61664;</span>
         </a>
       )}
     </div>

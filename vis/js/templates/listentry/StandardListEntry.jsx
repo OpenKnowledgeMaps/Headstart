@@ -51,7 +51,7 @@ const StandardListEntry = ({
           tags={!!tags ? <Tags values={tags} /> : null}
         />
         <Title onClick={handleTitleClick}>{title}</Title>
-        <PreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />
+        <PreviewIcons email={preview.email} />
         <Details
           authors={details.authors}
           source={details.source}
