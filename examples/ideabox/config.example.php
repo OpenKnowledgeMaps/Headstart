@@ -1,5 +1,5 @@
 <?php
-$SITE_URL = "//localhost/covis/";
+$SITE_URL = "//localhost/ideabox/";
 $HEADSTART_PATH = "../../";
 $EXTERNAL_COMPONENTS = false;
 $EXTERNAL_COMPONENTS_PATH = "../components/";
