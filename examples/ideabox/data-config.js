@@ -119,7 +119,7 @@ var data_config = {
       // [Dataset]
       Dataset: "Datensatz",
       // [Journal Article]
-      "Journal Article": "Zeitschriftenartikel",
+      "Journal Article": "Artikel",
       // [List]
       List: "Aufzählung",
       // [Preprint]
