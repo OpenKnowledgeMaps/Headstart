@@ -92,7 +92,7 @@ var data_config = {
       area: "Bereich",
       backlink: "← Zurück zum Überblick",
       backlink_list: "← Zeige alle Dokumente des Bereichs",
-      keywords: "Schlagwörter",
+      keywords: "Kategorie",
       no_keywords: "nicht vorhanden",
       no_title: "Kein Titel",
       overview_label: "Überblick über",
