@@ -9,13 +9,13 @@ const Comments = ({ items }) => {
   return (
     // html template starts here
     <div id="list_comments" className="comments">
-      {items.map((comment) => (
+      {items.filter(c => !!c.comment).map((comment) => (
         <div key={comment.comment} id="list_comment" className="comments">
           <div className="comment-text">
             <span id="comment">
               <Highlight>{comment.comment}</Highlight>
             </span>
-            {!!comment.author && (
+            {/*!!comment.author && (
               <>
                 <span id="comment-by-label">
                   {localization.comment_by_label}
@@ -24,7 +24,7 @@ const Comments = ({ items }) => {
                   <Highlight>{comment.author}</Highlight>
                 </span>
               </>
-            )}
+            )*/}
           </div>
         </div>
       ))}
