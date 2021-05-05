@@ -58,8 +58,8 @@ var data_config = {
     sort_menu_dropdown: true,
     filter_menu_dropdown: true,
 
-    embed_modal: true,
-    share_modal: false,
+    share_modal: true,
+    hashtags_twitter_card: "COVID19,openscience,discovery",
 
   localization: {
     de_ideabox: {
