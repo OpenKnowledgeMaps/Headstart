@@ -71,7 +71,7 @@ var data_config = {
       intro_label: "",
       intro_icon: "&#xf05a;",
       // [relevance]
-      relevance: "missing 'relevance'",
+      relevance: "Relevanz",
       // [citations]
       readers: "Leser",
       // [date]
@@ -95,7 +95,7 @@ var data_config = {
       resulttype_label: "Typ",
       documenttypes_label: "Publikationsarten",
       // [Last updated]
-      timestamp_label: "missing 'timestamp_label'",
+      timestamp_label: "Letzte Aktualisierung",
       documenttypes_tooltip:
         "Die folgenden Publikationsarten wurden bei der Erstellung dieser Visualisierung in Betracht gezogen (nicht alle davon scheinen notwendigerweise in dieser Visualisierung auch auf):",
       default_area: "Kein Bereich",
@@ -111,24 +111,24 @@ var data_config = {
       default_year: "",
       sort_by_label: "sortieren:",
       // [show:]
-      filter_by_label: "missing 'filter_by_label'",
+      filter_by_label: "Zeige an: ",
       // [any]
-      all: "missing 'all'",
+      all: "alle",
       // [Open Access]
-      open_access: "missing 'open_access'",
+      open_access: "Open Access",
       // [Dataset]
-      Dataset: "missing 'Dataset'",
+      Dataset: "Datensatz",
       // [Journal Article]
-      "Journal Article": "missing 'Journal article'",
+      "Journal Article": "Zeitschriftenartikel",
       // [List]
-      List: "missing 'List'",
+      List: "Aufzählung",
       // [Preprint]
-      Preprint: "missing 'Preprint'",
+      Preprint: "Preprint",
       // [ReFigure]
-      ReFigure: "missing 'ReFigure'",
+      ReFigure: "ReFigure",
       // [Review]
-      Review: "missing 'Review'",
-      link: "Eigene Idee Einbringen",
+      Review: "Review",
+      link: "Eigene Idee einbringen",
       items: "Dokumente",
       comment_by_label: "von",
       share_button_title: "Visualisierung teilen",
