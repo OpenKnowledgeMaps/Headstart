@@ -8,6 +8,8 @@ include 'config.php';
 
     <?php
         $title = "Ideenbox Knowledge Map";
+        include 'head_ideabox.php'
+
     ?>
     <link type="text/css" rel="stylesheet" href="./css/map.css">
 </head>
