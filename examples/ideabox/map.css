@@ -8,6 +8,10 @@
     display: block;
 }
 
+.topheader {
+    padding-top: 59px;
+}
+
 .error-row-top, .error-row-entry {
     padding: 5px;
 }
