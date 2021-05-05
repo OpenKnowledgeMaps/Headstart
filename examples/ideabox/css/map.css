@@ -1,0 +1,64 @@
+.errors-container {
+    margin: 20px 10px;
+    display: none;
+    padding-left: 50px;
+}
+
+.show-errors {
+    display: block;
+}
+
+.topheader {
+    padding-top: 59px;
+}
+
+.error-row-top, .error-row-entry {
+    padding: 5px;
+}
+
+.errors-info {
+    line-height: 110% !important;
+    z-index: 99;
+    font-family: 'Lato', sans-serif !important;
+    position: relative;
+}
+
+.errors-info, .expand-icon {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.errors-table-hidden {
+    display: none;
+}
+
+.dismiss-reload {
+    color: white;
+    text-decoration: underline;
+}
+
+.dismiss-reload:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.show-reload-button {
+    display: block;
+}
+
+.hide-reload-text {
+    display: none;
+}
+
+@media screen and (max-width: 1150px) {
+    .reload-button {
+    padding: 10px 12px;
+    max-width: 180px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .errors-container {
+        padding-left: 0px;
+    }
+}
