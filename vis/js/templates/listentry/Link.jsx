@@ -9,7 +9,7 @@ const Link = ({ address, isDoi }) => {
     // html template starts here
     <div className="doi_outlink">
       <span>
-        [{isDoi ? "doi" : localization.link}]:{" "}
+        {isDoi ? "doi" : localization.link}:{" "}
         <a
           className="doi_outlink_link"
           href={isDoi ? `https://dx.doi.org/${address}` : address}

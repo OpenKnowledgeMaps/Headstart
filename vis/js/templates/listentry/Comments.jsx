@@ -11,12 +11,9 @@ const Comments = ({ items }) => {
     <div id="list_comments" className="comments">
       {items.map((comment) => (
         <div key={comment.comment} id="list_comment" className="comments">
-          <span>
-            <i className="fa fa-comment"></i>
-          </span>
           <div className="comment-text">
             <span id="comment">
-              <Highlight>{`"${comment.comment}" `}</Highlight>
+              <Highlight>{comment.comment}</Highlight>
             </span>
             {!!comment.author && (
               <>
