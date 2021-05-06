@@ -141,22 +141,22 @@ RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
  R -e 'install.packages("renv", version="0.11.0-5")'
 
 WORKDIR /headstart
-COPY workers/pubmed/requirements.txt .
+COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY workers/pubmed/renv.lock .
-COPY workers/pubmed/activate.R .
+COPY openaire/renv.lock .
+COPY openaire/activate.R .
 
 RUN R -e 'renv::consent(provided = TRUE)' && \
     R -e 'setwd("./"); renv::activate(); renv::restore(lockfile = "./renv.lock")'
 
-COPY workers/common ./common
-COPY workers/pubmed ./pubmed
+COPY ../common ./common
+COPY ./openaire ./openaire
 COPY preprocessing/resources ./resources
 COPY preprocessing/other-scripts ./other-scripts
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
 
-COPY workers/redis_config.json .
+COPY redis_config.json .
 
-COPY workers/*.py ./
-ENTRYPOINT python3 run_pubmed.py
+COPY *.py ./
+ENTRYPOINT python3 run_openaire.py

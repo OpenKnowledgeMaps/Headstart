@@ -6,11 +6,11 @@ RUN apk update
 RUN apk add build-base gcc
 
 WORKDIR /headstart
-COPY workers/gsheets/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY workers/gsheets/src/ ./gsheets/src
-COPY workers/run_gsheets.py .
-COPY workers/gsheets/token.pickle ./gsheets
-COPY workers/redis_config.json .
+COPY src/ ./gsheets/src
+COPY run_gsheets.py .
+COPY token.pickle ./gsheets
+COPY redis_config.json .
 
 ENTRYPOINT python run_gsheets.py

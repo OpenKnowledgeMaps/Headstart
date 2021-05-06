@@ -7,10 +7,10 @@ RUN apt-get install -y --no-install-recommends gcc
 RUN apt-get install -y --no-install-recommends git
 
 WORKDIR /headstart
-COPY workers/services/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install git+https://github.com/python-restx/flask-restx
-COPY workers/services/src/ ./
-COPY workers/redis_config.json .
+COPY src/ ./
+COPY redis_config.json .
 
 CMD gunicorn --workers 10 --threads 2 -b 127.0.0.1:5001 'app:app' --timeout 300
