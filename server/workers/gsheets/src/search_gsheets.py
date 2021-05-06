@@ -251,7 +251,8 @@ class GSheetsClient(object):
         metadata["comments"] = df.iloc[:, 16:25].apply(lambda x: process_comments(x), axis=1)
         metadata["tags"] = df.Tags.map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         metadata["resulttype"] = df.Type
-        metadata["author_email"] = df["Contact e-mail"].map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
+        if "Contact e-mail" in df:
+            metadata["author_email"] = df["Contact e-mail"].map(lambda x: x.replace("N/A", "") if isinstance(x, str) else "")
         text = pd.DataFrame()
         text["id"] = metadata["id"]
         text["content"] = metadata.apply(lambda x: ". ".join(x[["title",
@@ -433,7 +434,7 @@ class GSheetsClient(object):
                     self.redis_store.set(k+"_output", json.dumps(res))
                 except Exception as e:
                     self.logger.error(e)
-                    self.logger.error(params)
+                    self.logger.error(params, exc_info=True)
             if endpoint == "create_kb":
                 try:
                     res = self.create_knowledgebase(params)
