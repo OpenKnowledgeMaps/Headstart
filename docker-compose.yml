@@ -19,12 +19,11 @@ services:
     image: 'dpage/pgadmin4'
     ports:
       - '127.0.0.1:54323:80'
-    env_file:
-      - .env
 
   redis:
     image: 'redis:4.0-alpine'
     restart: always
+    hostname: "${REDIS_HOST}"
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
@@ -33,94 +32,130 @@ services:
         - 'redis:/var/lib/redis/data'
         - ./server/workers/redis.conf:/etc/redis/redis.conf
     restart: always
+    networks: 
+      - headstart
 
   api:
     build:
-      context: server/workers/services
+      context: server
+      dockerfile: workers/api/Dockerfile
     restart: always
-    depends_on:
-    - redis
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
     ports:
-    - '127.0.0.1:${REDIS_PORT}:${REDIS_PORT}'
+    - '5001:5001'
     depends_on:
       - redis
+    networks: 
+      - headstart
 
   search_triple:
     build:
-      context: server/workers/triple
+      context: server
+      dockerfile: workers/triple/Dockerfile
     env_file:
       - server/workers/triple/triple.env
+    environment:
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
     restart: always
-    network_mode: "host"
     depends_on:
       - redis
+    networks: 
+      - headstart
 
   search_gsheets:
     build:
-      context: server/workers/gsheets
+      context: server
+      dockerfile: workers/gsheets/Dockerfile
     env_file:
       - server/workers/gsheets/gsheets.env
+    environment:
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
     restart: always
-    network_mode: "host"
     depends_on:
       - redis
+    networks: 
+      - headstart
 
   dataprocessing:
     build:
-      context: server/workers/dataprocessing
+      context: server
+      dockerfile: workers/dataprocessing/Dockerfile
     env_file:
-      - server/workers/dataprocessing/dataprocessing.env
+    - server/workers/dataprocessing/dataprocessing.env
+    environment:
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
     restart: always
-    network_mode: "host"
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
+    networks: 
+      - headstart
 
   search_base:
     build:
-      context: server/workers/base
+      context: server
+      dockerfile: workers/base/Dockerfile
     env_file:
       - server/workers/base/base.env
+    environment:
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
     restart: always
-    network_mode: "host"
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
+    networks:
+      - headstart
 
   search_pubmed:
     build:
-      context: server/workers/pubmed
+      context: server
+      dockerfile: workers/pubmed/Dockerfile
     env_file:
       - server/workers/pubmed/pubmed.env
+    environment:
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
     restart: always
-    network_mode: "host"
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
+    networks:
+      - headstart
 
   search_openaire:
     build:
-      context: server/workers/openaire
+      context: server
+      dockerfile: workers/openaire/Dockerfile
     env_file:
       - server/workers/openaire/openaire.env
+    environment:
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
     restart: always
-    network_mode: "host"
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
+    networks:
+      - headstart
 
 volumes:
   redis:
   db-data:
     driver: local
+
+networks:
+  headstart:

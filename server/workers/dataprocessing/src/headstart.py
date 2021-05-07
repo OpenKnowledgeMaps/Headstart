@@ -84,8 +84,8 @@ class Dataprocessing(object):
                     res = self.create_map(params, input_data)
                     self.redis_store.set(k+"_output", json.dumps(res))
             except Exception as e:
-                self.logger.error(e)
                 self.logger.error(params)
+                self.logger.error(e, exc_info=True)
                 res = {}
                 res["id"] = k
                 res["params"] = params

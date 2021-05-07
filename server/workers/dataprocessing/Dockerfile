@@ -144,22 +144,22 @@ RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
  R -e 'install.packages("renv", version="0.11.0-5")'
 
 WORKDIR /headstart
-COPY dataprocessing/requirements.txt .
+COPY workers/dataprocessing/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY dataprocessing/renv.lock .
-COPY dataprocessing/activate.R .
+COPY workers/dataprocessing/renv.lock .
+COPY workers/dataprocessing/activate.R .
 
 RUN R -e 'renv::consent(provided = TRUE)' && \
     R -e 'setwd("./"); renv::activate(); renv::restore(lockfile = "./renv.lock")'
 
-COPY ../common ./common
-COPY ./dataprocessing ./dataprocessing
+COPY workers/common ./common
+COPY workers/dataprocessing ./dataprocessing
 COPY preprocessing/resources ./resources
 COPY preprocessing/other-scripts ./other-scripts
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
 
-COPY redis_config.json .
+COPY workers/dataprocessing/redis_config.json .
 
-COPY *.py ./
+COPY workers/dataprocessing/*.py ./
 ENTRYPOINT python3 run_dataprocessing.py
