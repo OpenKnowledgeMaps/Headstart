@@ -6,12 +6,12 @@ RUN apk update
 RUN apk add build-base gcc
 
 WORKDIR /headstart
-COPY requirements.txt .
+COPY workers/triple/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 RUN python -m spacy download xx_ent_wiki_sm
-COPY src/ ./triple/src
-COPY run_triple.py .
-COPY es_config.json .
-COPY redis_config.json .
+COPY workers/triple/src/ ./triple/src
+COPY workers/triple/run_triple.py .
+COPY workers/triple/es_config.json .
+COPY workers/triple/redis_config.json .
 
 ENTRYPOINT python run_triple.py
