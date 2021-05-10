@@ -156,7 +156,5 @@ COPY preprocessing/resources ./resources
 COPY preprocessing/other-scripts ./other-scripts
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
 
-COPY workers/base/redis_config.json .
-
 COPY workers/base/*.py ./
 ENTRYPOINT python3 run_base.py

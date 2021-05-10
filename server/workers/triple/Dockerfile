@@ -12,6 +12,5 @@ RUN python -m spacy download xx_ent_wiki_sm
 COPY workers/triple/src/ ./triple/src
 COPY workers/triple/run_triple.py .
 COPY workers/triple/es_config.json .
-COPY workers/triple/redis_config.json .
 
 ENTRYPOINT python run_triple.py
