@@ -14,6 +14,8 @@ services:
       - ./server/workers/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
     ports:
       - '127.0.0.1:5432:5432'
+    networks: 
+      - headstart
 
   pgadmin:
     image: 'dpage/pgadmin4'
@@ -43,6 +45,7 @@ services:
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
+    command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "127.0.0.1:${API_PORT}", "app:app", "--timeout", "300"]
     ports:
     - '5001:5001'
     depends_on:
@@ -159,3 +162,4 @@ volumes:
 
 networks:
   headstart:
+    driver: bridge
