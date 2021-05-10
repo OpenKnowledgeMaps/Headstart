@@ -8,10 +8,12 @@ from flask import request, make_response, jsonify, abort, render_template
 from flask_restx import Namespace, Resource, fields
 from apis.utils import get_key
 
-
-with open("redis_config.json") as infile:
-    redis_config = json.load(infile)
-
+redis_config = {
+    "host": os.getenv("REDIS_HOST"),
+    "port": os.getenv("REDIS_PORT"),
+    "db": os.getenv("REDIS_DB"),
+    "password": os.getenv("REDIS_PASSWORD")
+}
 redis_store = redis.StrictRedis(**redis_config)
 
 gsheets_ns = Namespace("google_sheets", description="Google Sheets API operations")

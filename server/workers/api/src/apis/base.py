@@ -13,13 +13,15 @@ from .request_validators import SearchParamSchema
 from apis.utils import get_key
 
 
-with open("redis_config.json") as infile:
-    redis_config = json.load(infile)
-
-redis_store = redis.StrictRedis(**redis_config)
-
 base_ns = Namespace("base", description="BASE API operations")
 
+redis_config = {
+    "host": os.getenv("REDIS_HOST"),
+    "port": os.getenv("REDIS_PORT"),
+    "db": os.getenv("REDIS_DB"),
+    "password": os.getenv("REDIS_PASSWORD")
+}
+redis_store = redis.StrictRedis(**redis_config)
 
 search_param_schema = SearchParamSchema()
 
