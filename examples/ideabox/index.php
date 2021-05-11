@@ -188,7 +188,9 @@ $project_website = ($project_website_raw !== null)?(addScheme($project_website_r
         $(document).ready( function () {
             $(window).on("resize", function () {
                 let div_height = calcDivHeight();
-                $("#visualization").css("height", div_height + "px")
+                // TODO do we even need to calculate height precisely?
+                // $("#visualization").css("min-height", div_height + "px")
+                $("#visualization").css("height", "100vh")
             });
             $(window).trigger('resize');
         });
