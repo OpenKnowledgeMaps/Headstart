@@ -44,12 +44,12 @@ const StandardListEntry = ({
     // html template starts here
     <ListEntry anchorId={id}>
       <div className="list_metadata">
-        <AccessIcons
+        {/*<AccessIcons
           isOpenAccess={access.isOpenAccess}
           isFreeAccess={access.isFreeAccess}
           isDataset={access.isDataset}
           tags={!!tags ? <Tags values={tags} /> : null}
-        />
+        />*/}
         <Title onClick={handleTitleClick}>{title}</Title>
         <PreviewIcons email={preview.email} />
         <Details
@@ -57,7 +57,7 @@ const StandardListEntry = ({
           source={details.source}
           year={details.year}
         />
-        <Link address={link.address} isDoi={link.isDoi} />
+        {/*<Link address={link.address} isDoi={link.isDoi} />*/}
       </div>
       {!!documentType && <DocumentType type={documentType} />}
       <Abstract text={abstract} />
