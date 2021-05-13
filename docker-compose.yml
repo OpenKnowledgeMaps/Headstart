@@ -13,8 +13,8 @@ services:
       - ~/data/OKMaps/postgresql/data:/var/lib/postgresql/data
       - ./server/workers/pg_hba.conf:/etc/pg_hba.conf
       - ./server/workers/postgresql.conf:/etc/postgresql.conf
-    ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    expose:
+      - "${POSTGRES_PORT}"
     networks: 
       - headstart
 
@@ -29,6 +29,8 @@ services:
     image: 'redis:4.0-alpine'
     restart: always
     hostname: "${REDIS_HOST}"
+    expose:
+      - "${REDIS_PORT}"
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
