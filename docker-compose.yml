@@ -29,12 +29,12 @@ services:
     image: 'redis:4.0-alpine'
     restart: always
     hostname: "${REDIS_HOST}"
-    expose:
-      - "${REDIS_PORT}"
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
-    command: ["redis-server", "/etc/redis/redis.conf", "--appendonly", "yes"]
+    command: ["redis-server", "/etc/redis/redis.conf", "--bind", "${REDIS_HOST}", "--appendonly", "yes", "--port", "${REDIS_PORT}"]
     volumes:
         - 'redis:/var/lib/redis/data'
         - ./server/workers/redis.conf:/etc/redis/redis.conf
@@ -71,6 +71,8 @@ services:
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
     restart: always
     depends_on:
       - redis
@@ -86,6 +88,8 @@ services:
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
     restart: always
     depends_on:
       - redis
@@ -101,6 +105,8 @@ services:
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -119,6 +125,8 @@ services:
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -137,6 +145,8 @@ services:
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -155,6 +165,8 @@ services:
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
