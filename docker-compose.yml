@@ -2,18 +2,19 @@ version: '3.7'
 
 services:
 
-  pgsql:
+  db:
     image: 'postgres:12.2-alpine'
     restart: always
     environment:
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    command: postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
     volumes:
-      - db-data:/var/lib/postgresql/data
-      - ./server/workers/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
-      - ./server/workers/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - ~/data/OKMaps/postgresql/data:/var/lib/postgresql/data
+      - ./server/workers/pg_hba.conf:/etc/pg_hba.conf
+      - ./server/workers/postgresql.conf:/etc/postgresql.conf
     ports:
-      - '127.0.0.1:5432:5432'
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     networks: 
       - headstart
 
@@ -21,6 +22,8 @@ services:
     image: 'dpage/pgadmin4'
     ports:
       - '127.0.0.1:54323:80'
+    networks:
+      - headstart
 
   redis:
     image: 'redis:4.0-alpine'
@@ -45,6 +48,10 @@ services:
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_HOST: "${POSTGRES_HOST}"
+      POSTGRES_PORT: "${POSTGRES_PORT}"
     command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "127.0.0.1:${API_PORT}", "app:app", "--timeout", "300"]
     ports:
     - '5001:5001'
@@ -162,4 +169,3 @@ volumes:
 
 networks:
   headstart:
-    driver: bridge
