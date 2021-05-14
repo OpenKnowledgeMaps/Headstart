@@ -10,7 +10,8 @@ services:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     command: postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
     volumes:
-      - ~/data/OKMaps/postgresql/data:/var/lib/postgresql/data
+      # - ~/data/OKMaps/${COMPOSE_PROJECT_NAME}/postgresql/data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
       - ./server/workers/pg_hba.conf:/etc/pg_hba.conf
       - ./server/workers/postgresql.conf:/etc/postgresql.conf
     expose:
@@ -166,7 +167,7 @@ services:
 
 volumes:
   redis:
-  db-data:
+  db_data:
     driver: local
 
 networks:
