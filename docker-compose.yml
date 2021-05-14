@@ -14,8 +14,6 @@ services:
       - db_data:/var/lib/postgresql/data
       - ./server/workers/pg_hba.conf:/etc/pg_hba.conf
       - ./server/workers/postgresql.conf:/etc/postgresql.conf
-    expose:
-      - "${POSTGRES_PORT}"
     networks: 
       - headstart
 
@@ -30,8 +28,6 @@ services:
     image: 'redis:4.0-alpine'
     restart: always
     hostname: "${REDIS_HOST}"
-    ports:
-      - "${REDIS_PORT}:${REDIS_PORT}"
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
@@ -56,8 +52,6 @@ services:
       POSTGRES_HOST: "${POSTGRES_HOST}"
       POSTGRES_PORT: "${POSTGRES_PORT}"
     command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
-    ports:
-    - "${API_PORT}:${API_PORT}"
     depends_on:
       - redis
     networks: 
