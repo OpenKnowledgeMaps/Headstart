@@ -127,3 +127,9 @@ class Mappings(Resource):
         return make_response(result,
                              200,
                              headers)
+
+@triple_ns.route('/healthcheck')
+class Healthcheck(Resource):
+    def get(self):
+        result = {"status": "I'm good"}
+        return make_response(result, 200, {"Content-Type": "application/json"})
