@@ -43,29 +43,27 @@ services:
       - headstart
 
   api:
-    build:
-      context: server
-      dockerfile: workers/api/Dockerfile
+    image: api:${SERVICE_VERSION}
     restart: always
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      REDIS_DB: "${REDIS_DB}"
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
       POSTGRES_HOST: "${POSTGRES_HOST}"
       POSTGRES_PORT: "${POSTGRES_PORT}"
-    command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "127.0.0.1:${API_PORT}", "app:app", "--timeout", "300"]
+    command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
     ports:
-    - '5001:5001'
+    - "${API_PORT}:${API_PORT}"
     depends_on:
       - redis
     networks: 
       - headstart
 
-  search_triple:
-    build:
-      context: server
-      dockerfile: workers/triple/Dockerfile
+  triple:
+    image: triple:${SERVICE_VERSION}
     env_file:
       - server/workers/triple/triple.env
     environment:
@@ -79,10 +77,8 @@ services:
     networks: 
       - headstart
 
-  search_gsheets:
-    build:
-      context: server
-      dockerfile: workers/gsheets/Dockerfile
+  gsheets:
+    image: gsheets:${SERVICE_VERSION}
     env_file:
       - server/workers/gsheets/gsheets.env
     environment:
@@ -97,9 +93,7 @@ services:
       - headstart
 
   dataprocessing:
-    build:
-      context: server
-      dockerfile: workers/dataprocessing/Dockerfile
+    image: dataprocessing:${SERVICE_VERSION}
     env_file:
     - server/workers/dataprocessing/dataprocessing.env
     environment:
@@ -116,10 +110,8 @@ services:
     networks: 
       - headstart
 
-  search_base:
-    build:
-      context: server
-      dockerfile: workers/base/Dockerfile
+  base:
+    image: base:${SERVICE_VERSION}
     env_file:
       - server/workers/base/base.env
     environment:
@@ -136,10 +128,8 @@ services:
     networks:
       - headstart
 
-  search_pubmed:
-    build:
-      context: server
-      dockerfile: workers/pubmed/Dockerfile
+  pubmed:
+    image: pubmed:${SERVICE_VERSION}
     env_file:
       - server/workers/pubmed/pubmed.env
     environment:
@@ -156,10 +146,8 @@ services:
     networks:
       - headstart
 
-  search_openaire:
-    build:
-      context: server
-      dockerfile: workers/openaire/Dockerfile
+  openaire:
+    image: openaire:${SERVICE_VERSION}
     env_file:
       - server/workers/openaire/openaire.env
     environment:
