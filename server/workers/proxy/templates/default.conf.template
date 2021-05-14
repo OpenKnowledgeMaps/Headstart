@@ -6,6 +6,6 @@ server {
     }
 
     location /dev/ {
-        proxy_pass http://dev_api_1:5002/api/;
+        proxy_pass http://dev_api_1:5001/api/;
     }
 }
