@@ -128,3 +128,16 @@ $highlight: #e1e5e5;
     $okm-red: #ed1c24;
     $infolink: #622166;
 }
+
+@if $skin == 'ideabox' {
+    $dark-blue: #2C316E;
+    $okm-blue: #2C316E;
+    $medium-blue: #2C316E;
+    $okm-modal-btn: #7A77A5;
+    $framed-item: #2C316E;
+    $okm-clouds: #F4F4F6;
+    $list_show_hide_button: #7A77A5;
+    $lower_value_tag: #2C316E;
+    $higher_value_tag: #DC2260;
+    $highlight-searchterm: #F4F4F6;
+}
