@@ -43,7 +43,7 @@ class ContextLine extends React.Component {
         )}
         <NumArticles
           articlesCount={params.articlesCount}
-          openAccessArticlesCount={params.openAccessCount}
+          openAccessArticlesCount={null}
           articlesCountLabel={localization.articles_label}
         >
           {this.renderModifier()}
