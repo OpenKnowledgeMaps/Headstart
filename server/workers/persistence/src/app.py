@@ -5,11 +5,7 @@ from flask_restx import Api
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from apis.triple import triple_ns
-from apis.gsheets import gsheets_ns
-from apis.base import base_ns
-from apis.pubmed import pubmed_ns
-from apis.openaire import openaire_ns
+from apis.persistence import persistence_ns
 
 from config import settings
 from utils.monkeypatches import ReverseProxied, __schema__, specs_url, _register_apidoc, inject_flasgger
@@ -43,11 +39,7 @@ app.wsgi_app = ReverseProxied(app.wsgi_app)
 CORS(app, expose_headers=["Content-Disposition", "Access-Control-Allow-Origin"])
 
 api = api_patches(app, settings)
-api.add_namespace(triple_ns, path='/triple')
-api.add_namespace(gsheets_ns, path='/gsheets')
-api.add_namespace(base_ns, path='/base')
-api.add_namespace(pubmed_ns, path='/pubmed')
-api.add_namespace(openaire_ns, path='/openaire')
+api.add_namespace(persistence_ns, path='/persistence')
 app.logger.debug(app.config)
 app.logger.debug(app.url_map)
 
