@@ -139,10 +139,10 @@ var data_config = {
         "Sie können diesen Code verwenden, um die Visualisierung auf anderen Seiten einzubetten.",
       empty_area_warning:
         "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
-      update_available: "An update is available",
-      reload_now: "reload now",
-      reload_or: "or",
-      do_it_later: "do it later",
+      update_available: "Ein Update ist verfügbar!",
+      reload_now: "Update jetzt laden",
+      reload_or: "oder",
+      do_it_later: "zu einem späteren Zeitpunkt",
     },
   },
 };
