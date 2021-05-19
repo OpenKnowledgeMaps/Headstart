@@ -19,8 +19,7 @@ $result = search("linkedcat_authorview",
                  ";",
                  null,
                 $transform_query_tolowercase = false, true, null, 3,
-                 "area_uri", "subject", $precomputed_id, true,
-                 "legacy"
+                 "area_uri", "subject", $precomputed_id, true
                );
 
 echo $result

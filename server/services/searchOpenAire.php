@@ -28,8 +28,7 @@ $result = search("openaire", $acronymtitle
             , ";", null, false
             , true, array("project_id", "funder"), 3
             , "area_uri", "subject"
-            , null, true,
-            "legacy", "legacy");
+            , null, true);
 
 echo $result
 

@@ -21,8 +21,7 @@ $result = search("pubmed", $dirty_query
                     , ";", null, true
                     , true, null, 3
                     , "area_uri", "subject"
-                    , $precomputed_id, false
-                    , "legacy", "legacy");
+                    , $precomputed_id, false);
 
 echo $result
 
