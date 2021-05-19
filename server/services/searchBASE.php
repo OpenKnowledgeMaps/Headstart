@@ -27,7 +27,7 @@ if (!isset($post_params["min_descsize"])) {
 
 $result = search("base", $dirty_query
                   , $post_params, $params_array
-                  , ";", null, true
+                  , true
                   , true, null, 3
                   , "area_uri", "subject"
                   , $precomputed_id, false);

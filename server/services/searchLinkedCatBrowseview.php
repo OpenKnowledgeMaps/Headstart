@@ -16,8 +16,6 @@ $result = search("linkedcat_browseview",
                  $dirty_query,
                  $post_params,
                  array("today", "bkl_level", "bkl_list", "doc_count", "bkl_top_caption", "from", "to", "include_content_type"),
-                 ";",
-                 null,
                  $transform_query_tolowercase = false, true, null, 3,
                  "area_uri", "subject",
                  $precomputed_id, true
