@@ -5,8 +5,12 @@ from triple.src.search_triple import TripleClient
 
 
 if __name__ == '__main__':
-    with open("es_config.json") as infile:
-        es_config = json.load(infile)
+    es_config = {
+        "user": os.getenv("TRIPLE_USER"),
+        "pass": os.getenv("TRIPLE_PASS"),
+        "host": os.getenv("TRIPLE_HOST"),
+        "port": os.getenv("TRIPLE_PORT")
+    }
     redis_config = {
         "host": os.getenv("REDIS_HOST"),
         "port": os.getenv("REDIS_PORT"),

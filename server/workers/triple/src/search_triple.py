@@ -1,3 +1,4 @@
+import os
 import sys
 import re
 import json
@@ -101,8 +102,8 @@ class TripleClient(object):
             body["query"]["bool"]["must"].append({"term": {"language": parameters.get('language')}})
         return body
 
-    def search(self, parameters):
-        index = "triple-poc-document27032021"
+    def search_documents(self, parameters):
+        index = os.getenv("TRIPLE_DOCUMENTS_INDEX")
         fields = ["headline.text", "abstract.text"]
         s = Search(using=self.es, index=index)
         # TODO: replace from parameters
@@ -125,9 +126,9 @@ class TripleClient(object):
         if parameters.get('raw') is True:
             return result.to_dict()
         else:
-            return self.process_result(result, parameters)
+            return self.process_documents(result, parameters)
 
-    def process_result(self, result, parameters):
+    def process_documents(self, result, parameters):
         """
         # * "id": a unique ID, preferably the DOI
         # * "title": the title
@@ -248,7 +249,7 @@ class TripleClient(object):
                 try:
                     res = {}
                     res["id"] = k
-                    res["input_data"] = self.search(parameters)
+                    res["input_data"] = self.search_documents(parameters)
                     res["params"] = parameters
                     res["status"] = "success"
                     if parameters.get('raw') is True:
