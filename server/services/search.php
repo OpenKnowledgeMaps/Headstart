@@ -57,7 +57,7 @@ function search($service_integration, $dirty_query
         , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3
         , $id = "area_uri", $subjects = "subject"
         , $precomputed_id = null, $do_clean_query = true
-        , $processing_backend = "legacy") {
+        , $api_flavor = "stable") {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
     $repo2snapshot = array("plos" => "PLOS"
