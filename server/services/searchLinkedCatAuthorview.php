@@ -16,8 +16,6 @@ $result = search("linkedcat_authorview",
                  $dirty_query,
                  $post_params,
                  array("today", "author_id", "doc_count", "living_dates", "image_link", "vis_type"),
-                 ";",
-                 null,
                 $transform_query_tolowercase = false, true, null, 3,
                  "area_uri", "subject", $precomputed_id, true
                );

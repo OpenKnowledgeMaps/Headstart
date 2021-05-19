@@ -53,7 +53,7 @@ function cleanQuery($dirty_query, $transform_query_tolowercase) {
 
 function search($service_integration, $dirty_query
         , $post_params, $param_types
-        , $keyword_separator, $taxonomy_separator, $transform_query_tolowercase = true
+        , $transform_query_tolowercase = true
         , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3
         , $id = "area_uri", $subjects = "subject"
         , $precomputed_id = null, $do_clean_query = true
