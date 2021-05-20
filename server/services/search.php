@@ -56,8 +56,7 @@ function search($service_integration, $dirty_query
         , $transform_query_tolowercase = true
         , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3
         , $id = "area_uri", $subjects = "subject"
-        , $precomputed_id = null, $do_clean_query = true
-        , $api_flavor = "stable") {
+        , $precomputed_id = null, $do_clean_query = true) {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
     $repo2snapshot = array("plos" => "PLOS"
@@ -80,6 +79,10 @@ function search($service_integration, $dirty_query
     $persistence_backend = isset($ini_array["general"]["persistence_backend"])
                             ? ($ini_array["general"]["persistence_backend"])
                             : "legacy";
+    $api_url = $ini_array["general"]["api_url"];
+    $api_flavor = isset($ini_array["general"]["api_flavor"])
+                            ? ($ini_array["general"]["api_flavor"])
+                            : "stable";
 
     $query = ($do_clean_query === true)
                 ?(cleanQuery($dirty_query, $transform_query_tolowercase))
@@ -96,7 +99,7 @@ function search($service_integration, $dirty_query
     $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
     if ($persistence_backend === "api") {
-      $route = $ini_array["general"]["api_url"] . "persistence/" . "createID";
+      $route = $api_url . $api_flavor . "/" . "persistence/" . "createID";
       $payload = json_encode(array("params" => $post_params,
                                    "param_types" => $param_types));
       $res = library\CommUtils::call_api($route, $payload);
@@ -115,7 +118,7 @@ function search($service_integration, $dirty_query
 
     if($retrieve_cached_map) {
       if ($persistence_backend === "api") {
-        $route = $ini_array["general"]["api_url"] . "persistence/" . "getLastVersion/" . $database;
+        $route = $api_url . $api_flavor . "/" . "persistence/" . "getLastVersion/" . $database;
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "details" => false,
                                      "context" => false));
@@ -142,7 +145,7 @@ function search($service_integration, $dirty_query
     $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
 
     if ($processing_backend === "api") {
-      $route = $ini_array["general"]["api_url"] . $endpoint . "/search";
+      $route = $api_url . $api_flavor . "/" . $endpoint . "/search";
       $payload = json_encode($post_params);
       $res = library\CommUtils::call_api($route, $payload);
       if ($res["httpcode"] != 200) {
@@ -179,7 +182,7 @@ function search($service_integration, $dirty_query
     $vis_title = $service_integration;
 
     if ($persistence_backend === "api") {
-      $route = $ini_array["general"]["api_url"] . "persistence/" . "existsVisualization/" . $database;
+      $route = $api_url . $api_flavor . "/" . "persistence/" . "existsVisualization/" . $database;
       $payload = json_encode(array("vis_id" => $unique_id));
       $res = library\CommUtils::call_api($route, $payload);
       if ($res["httpcode"] != 200) {
@@ -194,7 +197,7 @@ function search($service_integration, $dirty_query
 
     if (!$exists) {
       if ($persistence_backend === "api") {
-        $route = $ini_array["general"]["api_url"] . "persistence/" . "createVisualization/" . $database;
+        $route = $api_url . $api_flavor . "/" . "persistence/" . "createVisualization/" . $database;
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "vis_title" => $vis_title,
                                      "data" => $input_json,
@@ -210,7 +213,7 @@ function search($service_integration, $dirty_query
       }
     } else {
       if ($persistence_backend === "api") {
-        $route = $ini_array["general"]["api_url"] . "persistence/" . "writeRevision/" . $database;
+        $route = $api_url . $api_flavor . "/" . "persistence/" . "writeRevision/" . $database;
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "data" => $input_json));
         $res = library\CommUtils::call_api($route, $payload);
