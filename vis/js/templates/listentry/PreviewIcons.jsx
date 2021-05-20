@@ -17,7 +17,7 @@ const PreviewIcons = ({ link, onClickPDF, email }) => {
       )}
       {!!email && (
         <a href={`mailto:${email}`} className="outlink">
-          MAIL <span className="outlink_symbol">&#61664;</span>
+          MAIL <span className="outlink_symbol"><i class="far fa-envelope"></i></span>
         </a>
       )}
     </div>
