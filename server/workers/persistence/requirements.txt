@@ -3,12 +3,5 @@ flask-cors
 flask_sqlalchemy
 flask_restx
 Werkzeug
-marshmallow
 gunicorn
-redis
-hiredis
-aioredis
-pandas
-pyyaml
-flasgger
 psycopg2-binary
