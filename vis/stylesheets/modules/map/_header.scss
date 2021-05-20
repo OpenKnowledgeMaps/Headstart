@@ -146,6 +146,22 @@
     border-bottom: 3px solid $multiplesview;
 }
 
+.context_item {
+    display: inline-block;
+    margin-right: 1%;
+    height: 15px;
+}
+
+//.context_metadata_high {
+    //color: $okm-green !important;
+    //border-bottom-color: $okm-green !important;
+//}
+
+.context_metadata_low {
+    color: $okm-red !important;
+    border-bottom-color: $okm-red !important;
+}
+
 @media screen and (max-width: 640px) {
     #subdiscipline_title {
         padding-left: 20px;
@@ -167,23 +183,36 @@
     }
 }
 
-@if $skin == 'cris_vis' {
+@if $skin == 'ideabox' {
+ .backlink {
+        a {
+            border-bottom: 1px solid $medium-blue !important;
+            color: $medium-blue !important;
+            
+            &:hover {
+                border-bottom: 2px solid $medium-blue !important;
+            }
+        }
+    }
+}
+
+@if $skin == 'cris_vis' 'ideabox' {
     #infolink, #infolink-areas {
         //border: 1px solid $infolink;
         //padding: 5px;
         //border-radius: 5px;
-        color: $okm-modal-btn;
+        color: $medium-blue;
         font-weight: 400;
         font-size: 12px;
         //text-transform: uppercase;
         //vertical-align: middle;
         text-decoration: none;
-        border-bottom: 1px solid $okm-modal-btn;
+        border-bottom: 1px solid $medium-blue;
     }
 
     #infolink:hover, #infolink:focus, #infolink:active, #infolink-areas:hover, #infolink-areas:focus, #infolink-areas:active{
-        border-bottom: 3px solid $okm-modal-btn;
-        color: $okm-modal-btn;
+        border-bottom: 2px solid $medium-blue;
+        color: $medium-blue;
     }
 
     #infolink {
@@ -285,20 +314,4 @@
             font-size: 14px;
         }
     }
-}
-
-.context_item {
-    display: inline-block;
-    margin-right: 1%;
-    height: 15px;
-}
-
-//.context_metadata_high {
-    //color: $okm-green !important;
-    //border-bottom-color: $okm-green !important;
-//}
-
-.context_metadata_low {
-    color: $okm-red !important;
-    border-bottom-color: $okm-red !important;
 }

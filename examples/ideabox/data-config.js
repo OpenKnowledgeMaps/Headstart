@@ -68,7 +68,7 @@ var data_config = {
       search_placeholder: "Suche in der Liste...",
       show_list: "Liste ausklappen",
       hide_list: "Liste einklappen",
-      intro_label: "Mehr Informationen",
+      intro_label: "mehr Informationen",
       intro_icon: "",
       // [relevance]
       relevance: "Relevanz",
@@ -139,10 +139,10 @@ var data_config = {
         "Sie können diesen Code verwenden, um die Visualisierung auf anderen Seiten einzubetten.",
       empty_area_warning:
         "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
-      update_available: "Ein Update ist verfügbar!",
-      reload_now: "Update jetzt laden",
+      update_available: "Es gibt ein Update!",
+      reload_now: "Jetzt aktualisieren",
       reload_or: "oder",
-      do_it_later: "zu einem späteren Zeitpunkt",
+      do_it_later: "später",
     },
   },
 };
