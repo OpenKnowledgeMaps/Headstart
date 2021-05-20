@@ -44,10 +44,6 @@ class ReverseProxied(object):
 
 
 def api_patches(app, settings):
-    Api._register_apidoc = _register_apidoc
-    Api.__schema__ = __schema__
-    Api.specs_url = specs_url
-
     api_fixed = Api(
         app,
         title="Head Start API",
