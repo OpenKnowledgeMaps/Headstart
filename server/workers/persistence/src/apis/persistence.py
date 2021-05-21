@@ -1,3 +1,4 @@
+import os
 from hashlib import md5
 from datetime import datetime
 import json
@@ -316,3 +317,10 @@ class createID(Resource):
             result = {'success': False, 'reason': e}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 500, headers)
+
+            
+@persistence_ns.route('/service_version')
+class ServiceVersion(Resource):
+    def get(self):
+        result = {"service_version": os.getenv("SERVICE_VERSION")}
+        return make_response(result, 200, {"Content-Type": "application/json"})
