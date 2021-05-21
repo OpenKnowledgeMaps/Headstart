@@ -97,3 +97,9 @@ class Search(Resource):
         except Exception as e:
             pubmed_ns.logger.error(e)
             abort(500, "Problem encountered, check logs.")
+
+@pubmed_ns.route('/service_version')
+class ServiceVersion(Resource):
+    def get(self):
+        result = {"service_version": os.getenv("SERVICE_VERSION")}
+        return make_response(result, 200, {"Content-Type": "application/json"})
