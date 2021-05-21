@@ -102,3 +102,9 @@ class createKnowledgebase(Resource):
         except Exception as e:
             gsheets_ns.logger.error(e)
             abort(500, "Problem encountered during processing, sorry.")
+
+@gsheets_ns.route('/service_version')
+class ServiceVersion(Resource):
+    def get(self):
+        result = {"service_version": os.getenv("SERVICE_VERSION")}
+        return make_response(result, 200, {"Content-Type": "application/json"})

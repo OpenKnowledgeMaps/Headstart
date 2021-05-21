@@ -72,6 +72,11 @@ class Search(Resource):
         d = {"id": k, "params": params,
              "endpoint": "search"}
         triple_ns.logger.debug(d)
+        # if length of queue > ??
+        # make_response with "wait later" and 503+headers
+        # have this handled by lightweight-client in search.php
+        # which then is handled by search-flow under new processing-timeout error 
+        # add to logging
         redis_store.rpush("triple", json.dumps(d))
         result = get_key(redis_store, k)
         headers = {}
@@ -127,6 +132,13 @@ class Mappings(Resource):
         return make_response(result,
                              200,
                              headers)
+
+
+@triple_ns.route('/service_version')
+class ServiceVersion(Resource):
+    def get(self):
+        result = {"service_version": os.getenv("SERVICE_VERSION")}
+        return make_response(result, 200, {"Content-Type": "application/json"})
 
 @triple_ns.route('/healthcheck')
 class Healthcheck(Resource):
