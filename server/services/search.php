@@ -1,7 +1,6 @@
 <?php
 
 require dirname(__FILE__) . '/../classes/headstart/preprocessing/calculation/RCalculation.php';
-require dirname(__FILE__) . '/../classes/headstart/preprocessing/naming/KeywordNaming.php';
 require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
 require_once dirname(__FILE__) . '/../classes/headstart/preprocessing/Snapshot.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
@@ -137,13 +136,6 @@ function search($service_integration, $dirty_query
       }
     }
 
-    $params_file = tmpfile();
-    $params_meta = stream_get_meta_data($params_file);
-    $params_filename = $params_meta["uri"];
-    fwrite($params_file, $params_json);
-
-    $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
-
     if ($processing_backend === "api") {
       $route = $api_url . $api_flavor . "/" . $endpoint . "/search";
       $payload = json_encode($post_params);
@@ -154,6 +146,11 @@ function search($service_integration, $dirty_query
         $output_json = $res["result"];
       }
     } else {
+      $params_file = tmpfile();
+      $params_meta = stream_get_meta_data($params_file);
+      $params_filename = $params_meta["uri"];
+      fwrite($params_file, $params_json);  
+      $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
       $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
       $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, $endpoint);
 
