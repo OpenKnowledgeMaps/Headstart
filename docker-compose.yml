@@ -48,6 +48,7 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_DB: "${REDIS_DB}"
+      PERSISTENCE_HOST: "${PERSISTENCE_HOST}"
       PERSISTENCE_PORT: "${PERSISTENCE_PORT}"
     command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
     depends_on:
