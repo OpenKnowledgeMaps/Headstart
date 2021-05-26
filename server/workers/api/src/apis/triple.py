@@ -61,6 +61,10 @@ class Search(Resource):
     def post(self):
         """
         """
+        if redis_store.llen("input_data") > 10:
+            result = {"status": "error",
+                      "reason": "dataprocessing rate limit"}
+            return jsonify(result)
         params = request.get_json()
         triple_ns.logger.debug(params)
         errors = search_param_schema.validate(params, partial=True)
