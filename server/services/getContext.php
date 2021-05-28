@@ -5,6 +5,7 @@ header('Content-type: application/json');
 require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
+require_once dirname(__FILE__) . '/../classes/headstart/library/APIClient.php';
 
 use headstart\library;
 
@@ -15,14 +16,13 @@ $ini_array = library\Toolkit::loadIni($INI_DIR);
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 $revision_context =  isset($_GET["revision_context"]) ? library\CommUtils::getParameter($_GET, "revision_context") : false;
 
+$apiclient = new \library\APIClient();
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
-$database = $ini_array["connection"]["database"];
 $persistence_backend = $ini_array["general"]["persistence_backend"];
 
 if ($persistence_backend === "api") {
-  $route = $ini_array["general"]["api_url"] . "persistence/" . "getContext/" . $database;
   $payload = json_encode(array("vis_id" => $vis_id, "revision_context" => $revision_context));
-  $res = library\CommUtils::call_api($route, $payload);
+  $res = $apiclient->call_persistence("getContext", $payload);
   if ($res["httpcode"] != 200) {
     library\CommUtils::echoOrCallback($res, $_GET);
   } else {

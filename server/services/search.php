@@ -4,6 +4,7 @@ require dirname(__FILE__) . '/../classes/headstart/preprocessing/calculation/RCa
 require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
 require_once dirname(__FILE__) . '/../classes/headstart/preprocessing/Snapshot.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
+require_once dirname(__FILE__) . '/../classes/headstart/library/APIClient.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
 
 require 'helper.php';
@@ -58,6 +59,7 @@ function search($service_integration, $dirty_query
         , $precomputed_id = null, $do_clean_query = true) {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
+    $apiclient = new \library\APIClient();
     $repo2snapshot = array("plos" => "PLOS"
                         , "pubmed" => "PubMed"
                         , "doaj" => "DOAJ"
@@ -71,17 +73,6 @@ function search($service_integration, $dirty_query
     # TODO: move next 3 to searchXYZ.php and drop in as a parameter instead
     $service2endpoint = array("triple_km" => "triple",
                               "triple_sg" => "triple");
-
-    $processing_backend = isset($ini_array["general"]["processing_backend"])
-                            ? ($ini_array["general"]["processing_backend"])
-                            : "legacy";
-    $persistence_backend = isset($ini_array["general"]["persistence_backend"])
-                            ? ($ini_array["general"]["persistence_backend"])
-                            : "legacy";
-    $api_url = $ini_array["general"]["api_url"];
-    $api_flavor = isset($ini_array["general"]["api_flavor"])
-                            ? ($ini_array["general"]["api_flavor"])
-                            : "stable";
 
     $query = ($do_clean_query === true)
                 ?(cleanQuery($dirty_query, $transform_query_tolowercase))
@@ -98,10 +89,9 @@ function search($service_integration, $dirty_query
     $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
     if ($persistence_backend === "api") {
-      $route = $api_url . $api_flavor . "/" . "persistence/" . "createID";
       $payload = json_encode(array("params" => $post_params,
                                    "param_types" => $param_types));
-      $res = library\CommUtils::call_api($route, $payload);
+      $res = $apiclient->call_persistence("createID", $payload);
       if ($res["httpcode"] != 200) {
         echo json_encode($res);
       } else {
@@ -117,11 +107,10 @@ function search($service_integration, $dirty_query
 
     if($retrieve_cached_map) {
       if ($persistence_backend === "api") {
-        $route = $api_url . $api_flavor . "/" . "persistence/" . "getLastVersion/" . $database;
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "details" => false,
                                      "context" => false));
-        $res = library\CommUtils::call_api($route, $payload);
+        $res = $apiclient->call_persistence("getLastVersion", $payload);
         if ($res["httpcode"] != 200) {
           echo json_encode($res);
         } else {
@@ -137,9 +126,8 @@ function search($service_integration, $dirty_query
     }
 
     if ($processing_backend === "api") {
-      $route = $api_url . $api_flavor . "/" . $endpoint . "/search";
       $payload = json_encode($post_params);
-      $res = library\CommUtils::call_api($route, $payload);
+      $res = $apiclient->call_api($endpoint . "/search", $payload);
       if ($res["httpcode"] != 200) {
         return $res;
       } else {
@@ -179,9 +167,8 @@ function search($service_integration, $dirty_query
     $vis_title = $service_integration;
 
     if ($persistence_backend === "api") {
-      $route = $api_url . $api_flavor . "/" . "persistence/" . "existsVisualization/" . $database;
       $payload = json_encode(array("vis_id" => $unique_id));
-      $res = library\CommUtils::call_api($route, $payload);
+      $res = $apiclient->call_persistence("existsVisualization", $payload);
       if ($res["httpcode"] != 200) {
         return $res;
       } else {
@@ -194,14 +181,13 @@ function search($service_integration, $dirty_query
 
     if (!$exists) {
       if ($persistence_backend === "api") {
-        $route = $api_url . $api_flavor . "/" . "persistence/" . "createVisualization/" . $database;
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "vis_title" => $vis_title,
                                      "data" => $input_json,
                                      "vis_clean_query" => $query,
                                      "vis_query" => $dirty_query,
                                      "vis_params" => $params_json));
-        $res = library\CommUtils::call_api($route, $payload);
+        $res = $apiclient->call_persistence("createVisualization", $payload);
         if ($res["httpcode"] != 200) {
          return $res;
         }
@@ -210,10 +196,9 @@ function search($service_integration, $dirty_query
       }
     } else {
       if ($persistence_backend === "api") {
-        $route = $api_url . $api_flavor . "/" . "persistence/" . "writeRevision/" . $database;
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "data" => $input_json));
-        $res = library\CommUtils::call_api($route, $payload);
+        $res = $apiclient->call_persistence("writeRevision", $payload);
         if ($res["httpcode"] != 200) {
         return $res;
         }

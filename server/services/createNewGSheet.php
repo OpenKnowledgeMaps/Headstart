@@ -3,7 +3,10 @@
 header('Content-type: application/json');
 
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
+require_once dirname(__FILE__) . '/../classes/headstart/library/APIClient.php';
 use headstart\library;
+
+$apiclient = new \library\APIClient();
 
 if(php_sapi_name() == 'cli') {
     // Called from command-line, maybe cron
@@ -24,12 +27,11 @@ if(php_sapi_name() == 'cli') {
   echo "Call not accepted.";
 }
 
-$route = $ini_array["general"]["api_url"] . "/gsheets" . "/createKnowledgebase";
 $payload = json_encode(array("sheet_name" => $sheet_name,
                              "project_name" => $project_name,
                              "main_curator_email" => $main_curator_email,
                              "knowledge_base_template_id" => $knowledge_base_template_id));
-$res = library\CommUtils::call_api($route, $payload);
+$res = $apiclient->call_api("/gsheets" . "/createKnowledgebase", $payload);
 if ($res["httpcode"] != 200) {
   echo json_encode($res);
 } else {
