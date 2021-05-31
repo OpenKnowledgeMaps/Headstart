@@ -114,14 +114,14 @@ Following commands have to be executed from the root folder of the repository, w
 **Start services and send them to the docker daemon**
 
 ```
-docker-compose up --env-file server/workers/flavorconfigs/flavor.env -d
+docker-compose --env-file server/workers/flavorconfigs/flavor.env up -d
 ```
 
 
 **Shutting service down**
 
 ```
-docker-compose down --env-file server/workers/flavorconfigs/flavor.env
+docker-compose --env-file server/workers/flavorconfigs/flavor.env down
 ```
 
 
