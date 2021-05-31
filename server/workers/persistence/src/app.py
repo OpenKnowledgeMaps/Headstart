@@ -57,7 +57,7 @@ def api_patches(app, settings):
 
 
 app = Flask('v1', instance_relative_config=True)
-app.config.from_object('config.settings')
+app.config.from_object('settings')
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(app.logger.level)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_port=1, x_for=1, x_host=1, x_prefix=1)
