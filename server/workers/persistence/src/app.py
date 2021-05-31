@@ -6,7 +6,6 @@ from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from apis.persistence import persistence_ns
-
 import settings
 import logging
 
