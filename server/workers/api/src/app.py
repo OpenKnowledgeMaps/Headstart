@@ -12,7 +12,7 @@ from apis.pubmed import pubmed_ns
 from apis.openaire import openaire_ns
 
 import settings
-from utils.monkeypatches import ReverseProxied, __schema__, specs_url, _register_apidoc, inject_flasgger
+from utils.monkeypatches import ReverseProxied, __schema__, specs_url, _register_apidoc
 import logging
 
 
@@ -37,7 +37,6 @@ app = Flask('v1', instance_relative_config=True)
 app.config.from_object('settings')
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(app.logger.level)
-app = inject_flasgger(app)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_port=1, x_for=1, x_host=1, x_prefix=1)
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 CORS(app, expose_headers=["Content-Disposition", "Access-Control-Allow-Origin"])
