@@ -7,7 +7,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 from apis.persistence import persistence_ns
 
-from config import settings
+import settings
 import logging
 
 class ReverseProxied(object):
