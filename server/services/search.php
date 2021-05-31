@@ -59,7 +59,13 @@ function search($service_integration, $dirty_query
         , $precomputed_id = null, $do_clean_query = true) {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
-    $apiclient = new \library\APIClient();
+    $processing_backend = isset($ini_array["general"]["processing_backend"])
+    ? ($ini_array["general"]["processing_backend"])
+    : "legacy";
+    $persistence_backend = isset($ini_array["general"]["persistence_backend"])
+    ? ($ini_array["general"]["persistence_backend"])
+    : "legacy";
+    $apiclient = new \headstart\library\APIClient($service_integration, $ini_array);
     $repo2snapshot = array("plos" => "PLOS"
                         , "pubmed" => "PubMed"
                         , "doaj" => "DOAJ"
