@@ -15,8 +15,8 @@ from apis.utils import get_key, detect_error
 
 persistence_ns = Namespace("persistence", description="Persistence API operations redirect")
 
-persistence_uri = "%s:%s" %(os.getenv("PERISTENCE_HOST"),
-                             os.getenv("PERISTENCE_PORT"))
+persistence_uri = "%s:%s" %(os.getenv("PERSISTENCE_HOST"),
+                             os.getenv("PERSISTENCE_PORT"))
 
 @persistence_ns.route('/')
 def persistence():
