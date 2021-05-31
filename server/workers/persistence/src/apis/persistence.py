@@ -8,7 +8,7 @@ from flask_restx import Namespace, Resource, fields
 
 from models import Revisions, Visualizations
 from database import sessions
-from config import settings
+import settings
 
 
 persistence_ns = Namespace("persistence", description="OKMAps persistence operations")
