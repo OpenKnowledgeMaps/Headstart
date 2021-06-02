@@ -14,6 +14,7 @@ const Link = ({ address, isDoi }) => {
           className="doi_outlink_link"
           href={isDoi ? `https://dx.doi.org/${address}` : address}
           target="_blank"
+          rel="noreferrer"
         >
           {address}
         </a>

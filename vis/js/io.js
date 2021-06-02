@@ -1,5 +1,8 @@
 // Class for data IO
 // Filename: io.js
+import $ from "jquery";
+import d3 from "d3";
+
 import config from 'config';
 import { mediator } from 'mediator';
 import { intros } from 'intro';
@@ -11,10 +14,10 @@ var IO = function() {
     this.fs = [];
     this.title = "default-title";
     this.context = {};
-    this.num_oa;
-    this.num_papers;
-    this.num_datasets;
-    this.data;
+    this.num_oa = undefined;
+    this.num_papers = undefined;
+    this.num_datasets = undefined;
+    this.data = undefined;
 };
 
 IO.prototype = {
@@ -45,20 +48,20 @@ IO.prototype = {
         });
     },
 
-    convertToFirstNameLastName: function (authors_string) {
-        var authors = authors_string.split(";");
+    convertToFirstNameLastName: function (all_authors) {
+        const authors = all_authors.split(";");
         
-        for(var i = authors.length - 1; i >= 0; i--) {
+        for(let i = authors.length - 1; i >= 0; i--) {
             if(authors[i] === "") {
                authors.splice(i, 1);
             }
         }
         
-        var authors_string = "";
-        var authors_short_string = "";
-        for (var i = 0; i < authors.length; i++) {            
-            var names = authors[i].trim().split(",");
-            var last_name = names[0].trim();
+        let authors_string = "";
+        let authors_short_string = "";
+        for (let i = 0; i < authors.length; i++) {            
+            const names = authors[i].trim().split(",");
+            const last_name = names[0].trim();
             if (names.length > 1) {
                 var first_name = names[1].trim();
                 
@@ -99,7 +102,7 @@ IO.prototype = {
     
     setContext: function(context, num_documents) {
         this.context = context;
-        if(context.hasOwnProperty("params")) {
+        if(Object.prototype.hasOwnProperty.call(context, "params")) {
             context.params = (typeof context.params === "object")
                                 ?(context.params)
                                 :(JSON.parse(context.params));
@@ -188,7 +191,7 @@ IO.prototype = {
             
             d.safe_id = _this.convertToSafeID(d.id);
             
-            if(d.hasOwnProperty("snippets") && d.snippets !== "") {
+            if(Object.prototype.hasOwnProperty.call(d, "snippets") && d.snippets !== "") {
                 d.snippets = d.snippets.replace(/&lt;em&gt;/g, "<em>");
                 d.snippets = d.snippets.replace(/&lt;\/em&gt;/g, "</em>");
                 d.snippets = d.snippets.replace(/&lt;span&gt;/g, "<span>");
@@ -216,7 +219,7 @@ IO.prototype = {
             //if two items have the exact same location,
             // that throws off the force-based layout
             var xy_string = d.x + d.y;
-            while (xy_array.hasOwnProperty(xy_string)) {
+            while (Object.prototype.hasOwnProperty.call(xy_array, xy_string)) {
                 d.y = parseFloat(d.y) + Number(0.00000001);
                 xy_string = d.x + d.y;
             }
@@ -229,7 +232,7 @@ IO.prototype = {
                 config.localization[config.language]["no_title"]);
                 
             var prepareMetric = function(d, metric) {
-                 if(d.hasOwnProperty(metric)) {
+                 if(Object.prototype.hasOwnProperty.call(d, metric)) {
                      if(d[metric] === "N/A") {
                          return "n/a"
                      } else {
@@ -386,13 +389,13 @@ IO.prototype = {
 
     createOutlink: function(d) {
         var url = false;
-        if (config.service == "base") {
+        if (config.service === "base") {
           url = d.oa_link;
-        } else if (config.service == "openaire" && d.resulttype == "dataset") {
+        } else if (config.service === "openaire" && d.resulttype === "dataset") {
             url = config.url_prefix_datasets + d.url;
         } else if(config.url_prefix !== null) {
             url = config.url_prefix + d.url;
-        } else if (typeof d.url != 'undefined') {
+        } else if (typeof d.url !== 'undefined') {
             url = d.url;
         }
 

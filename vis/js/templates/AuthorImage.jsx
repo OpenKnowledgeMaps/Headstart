@@ -11,7 +11,7 @@ const AuthorImage = ({ url = "" }) => {
   return (
     // html template starts here
     <div id="title_image" className="titleimage">
-      <a id="author_image_link" href={link} target="_blank">
+      <a id="author_image_link" href={link} target="_blank" rel="noreferrer">
         <div
           id="author_image"
           className="authorimage"

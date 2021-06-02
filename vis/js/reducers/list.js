@@ -48,7 +48,7 @@ const list = (
         showMetrics: config.metric_list,
         isContentBased: config.content_based,
         baseUnit: config.base_unit,
-        showRealPreviewImage: config.preview_type == "image",
+        showRealPreviewImage: config.preview_type === "image",
         showKeywords: config.show_keywords,
         hideUnselectedKeywords: config.hide_keywords_overview,
         disableClicks: !config.render_map,

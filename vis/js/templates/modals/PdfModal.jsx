@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import $ from "jquery";
 import { Modal } from "react-bootstrap";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
@@ -33,15 +34,16 @@ const PdfModal = ({ open, onClose, paper, serverUrl, service, useViewer }) => {
         {!!url && (
           <iframe
             id="pdf_iframe"
+            title="Document PDF preview"
             className="block"
             src={useViewer ? `${viewerUrl}?file=${url}` : url}
-            frameborder="0"
+            frameBorder="0"
           ></iframe>
         )}
         {!!errorUrl && (
           <div className="wait-message" id="status">
             {localization.pdf_not_loaded}{" "}
-            <a href={errorUrl} target="_blank">
+            <a href={errorUrl} target="_blank" rel="noreferrer">
               {localization.pdf_not_loaded_linktext}
             </a>
             .

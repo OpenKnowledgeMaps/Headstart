@@ -6,7 +6,7 @@ const EntriesWrapper = ({ height, children }) => {
     <div
       className="col-xs-12"
       id="papers_list"
-      style={{ display: "block", height: !!height ? height : undefined }}
+      style={{ display: "block", height: height ? height : undefined }}
     >
       {children}
     </div>

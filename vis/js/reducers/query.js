@@ -40,7 +40,7 @@ const getQueryTerms = (context) => {
   const fullQuery = originalQuery.replace(/\[(.*?)\]/g, "");
 
   // Get all phrases and remove quotes from results
-  const phraseRegex = /\"(.*?)\"/g;
+  const phraseRegex = /"(.*?)"/g;
   let phraseArray = fullQuery.match(phraseRegex);
   if (phraseArray === null) {
     phraseArray = [];
@@ -48,7 +48,7 @@ const getQueryTerms = (context) => {
 
   // Replace backslashed quotes??
   // TODO test this one, it seems to be redundant
-  phraseArray = phraseArray.map((x) => x.replace(/\\"|\"/g, ""));
+  phraseArray = phraseArray.map((x) => x.replace(/\\"|"/g, ""));
 
   // Remove phrases, and, or, +, -, (, ) from query string
   const queryWtPhrases = fullQuery.replace(phraseRegex, " ");
@@ -62,7 +62,7 @@ const getQueryTerms = (context) => {
 
   // Remove backslashes, colons and empty words
   phraseArray = phraseArray
-    .map((x) => x.replace(/[\\\:]/g, ""))
+    .map((x) => x.replace(/[\\:]/g, ""))
     .filter((x) => x !== "");
 
   phraseArray = [...new Set(phraseArray)];
