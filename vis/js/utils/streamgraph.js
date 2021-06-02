@@ -1,3 +1,5 @@
+import d3 from "d3";
+
 export const CHART_MARGIN = { top: 20, right: 50, bottom: 70, left: 50 };
 export const MAX_TICKS_X = 8;
 export const AXIS_PADDING = {
@@ -156,7 +158,7 @@ export const moveOverlappingLabels = (labelPositions) => {
   });
 
   labelPositions.map((label) => {
-    grouppedLabels.map((f) => {
+    grouppedLabels.forEach((f) => {
       if (f.key === label.key) {
         label.y = f.y;
       }

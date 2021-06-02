@@ -1,3 +1,5 @@
+import d3 from "d3";
+
 const CIRCLE_PADDING_SIZE = 45;
 
 /**

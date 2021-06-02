@@ -60,6 +60,7 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
     <a
       href="https://d-nb.info/gnd/100016642"
       id="author_bio_link"
+      rel="noreferrer"
       target="_blank"
     >
       Biografie

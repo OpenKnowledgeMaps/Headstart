@@ -53,11 +53,6 @@ const common = {
         'chart': 'Chart'
     },
     plugins: [
-        new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery",
-            d3: "d3"
-        }),
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // all options are optional

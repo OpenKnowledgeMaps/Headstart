@@ -1,3 +1,5 @@
+import d3 from "d3";
+
 import { getDiameterScale, getResizedScale } from "../utils/scale";
 
 const data = (state = { list: [], options: {}, size: null }, action) => {
@@ -5,13 +7,11 @@ const data = (state = { list: [], options: {}, size: null }, action) => {
     return state;
   }
 
-  let list = null;
-
   switch (action.type) {
-    case "INITIALIZE":
+    case "INITIALIZE": {
       // TODO move the whole io.js dataprocessing somewhere here
-      let data = sanitizeData(action.dataArray);
-      let options = {
+      const data = sanitizeData(action.dataArray);
+      const options = {
         maxAreaSize: action.configObject.max_area_size,
         referenceSize: action.configObject.reference_size,
         bubbleMinScale: action.configObject.bubble_min_scale,
@@ -25,18 +25,19 @@ const data = (state = { list: [], options: {}, size: null }, action) => {
         isStreamgraph: action.configObject.is_streamgraph,
       };
 
-      list = data;
+      let list = data;
       if (!options.isStreamgraph) {
         list = rescalePapers(data, action.chartSize, options);
       }
 
       return { list, options, size: action.chartSize };
-    case "RESIZE":
+    }
+    case "RESIZE": {
       if (state.list.length === 0) {
         return state;
       }
 
-      list = state.list;
+      let list = state.list;
       if (!state.options.isStreamgraph) {
         list = resizePapers(
           state.list,
@@ -47,6 +48,7 @@ const data = (state = { list: [], options: {}, size: null }, action) => {
       }
 
       return { ...state, list, size: action.chartSize };
+    }
     case "APPLY_FORCE_PAPERS":
       return { ...state, list: action.dataArray };
     default:

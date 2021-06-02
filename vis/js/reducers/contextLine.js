@@ -7,7 +7,7 @@ const contextLine = (state = {}, action) => {
   if (action.canceled) {
     return state;
   }
-  
+
   const config = action.configObject;
   const context = action.contextObject;
 
@@ -83,29 +83,36 @@ const getDocumentTypes = (config, context) => {
     return null;
   }
 
-  let propName = "";
-  if (context.params.hasOwnProperty("document_types")) {
-    propName = "document_types";
-  } else if (context.params.hasOwnProperty("include_content_type")) {
-    propName = "include_content_type";
-  } else if (context.params.hasOwnProperty("article_types")) {
-    propName = "article_types";
-  } else {
+  const propName = getPropName(context.params);
+  if (!propName) {
     return null;
   }
 
-  let documentTypesArray = [];
-
-  let documentTypeObj = config.options.find((obj) => obj.id == propName);
+  const documentTypesArray = [];
+  const documentTypeObj = config.options.find((obj) => obj.id === propName);
 
   context.params[propName].forEach((type) => {
-    let typeObj = documentTypeObj.fields.find((obj) => obj.id == type);
+    const typeObj = documentTypeObj.fields.find((obj) => obj.id == type);
     if (typeof typeObj !== "undefined") {
       documentTypesArray.push(typeObj.text);
     }
   });
 
   return documentTypesArray;
+};
+
+const getPropName = (params) => {
+  if (Object.prototype.hasOwnProperty.call(params, "document_types")) {
+    return "document_types";
+  }
+  if (Object.prototype.hasOwnProperty.call(params, "include_content_type")) {
+    return "include_content_type";
+  }
+  if (Object.prototype.hasOwnProperty.call(params, "article_types")) {
+    return "article_types";
+  }
+
+  return null;
 };
 
 const getTimespan = (config, context) => {
@@ -206,7 +213,7 @@ const getMetadataQuality = (config, context) => {
   }
 
   let minDescSize = parseInt(context.params.min_descsize);
-  
+
   if (context.service === "base") {
     if (minDescSize < 300) {
       return "low";
