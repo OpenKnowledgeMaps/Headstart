@@ -11,13 +11,9 @@ services:
     ports:
       - '8080:80'
     networks:
-      - stable_headstart
-      - dev_headstart
+      - triple_staging_headstart
 
 networks:
-    stable_headstart:
+  triple_staging_headstart:
         external: true
-        name: stable_headstart
-    dev_headstart:
-        external: true
-        name: dev_headstart
+        name: triple_staging_headstart
