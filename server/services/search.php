@@ -6,7 +6,6 @@ require_once dirname(__FILE__) . '/../classes/headstart/preprocessing/Snapshot.p
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/APIClient.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
-
 require 'helper.php';
 
 use headstart\library;
