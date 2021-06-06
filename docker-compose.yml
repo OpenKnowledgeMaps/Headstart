@@ -4,6 +4,7 @@ services:
 
   db:
     image: 'postgres:12.2-alpine'
+    hostname: "${POSTGRES_HOSTNAME}"
     restart: always
     environment:
       POSTGRES_USER: "${POSTGRES_USER}"
