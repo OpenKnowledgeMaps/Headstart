@@ -50,7 +50,7 @@ api.add_namespace(openaire_ns, path='/openaire')
 
 persistence_uri = "%s:%s" %(os.getenv("PERSISTENCE_HOST"),
                              os.getenv("PERSISTENCE_PORT"))
-@app.route('/persistence')
+@app.route('/api/persistence')
 def persistence():
     return redirect(persistence_uri + "/api/persistence")
 
