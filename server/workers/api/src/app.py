@@ -48,7 +48,7 @@ api.add_namespace(gsheets_ns, path='/gsheets')
 api.add_namespace(base_ns, path='/base')
 api.add_namespace(pubmed_ns, path='/pubmed')
 api.add_namespace(openaire_ns, path='/openaire')
-api.add_namespace(openaire_ns, path='/persistence')
+api.add_namespace(persistence_ns, path='/persistence')
 app.logger.debug(app.config)
 app.logger.debug(app.url_map)
 
