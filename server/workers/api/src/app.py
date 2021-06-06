@@ -1,6 +1,6 @@
 import os
 import sys
-from flask import Flask
+from flask import Flask, redirect
 from flask_restx import Api
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -10,7 +10,6 @@ from apis.gsheets import gsheets_ns
 from apis.base import base_ns
 from apis.pubmed import pubmed_ns
 from apis.openaire import openaire_ns
-from apis.persistence import persistence_ns
 
 import settings
 from utils.monkeypatches import ReverseProxied, __schema__, specs_url, _register_apidoc
@@ -48,7 +47,13 @@ api.add_namespace(gsheets_ns, path='/gsheets')
 api.add_namespace(base_ns, path='/base')
 api.add_namespace(pubmed_ns, path='/pubmed')
 api.add_namespace(openaire_ns, path='/openaire')
-api.add_namespace(persistence_ns, path='/persistence')
+
+persistence_uri = "%s:%s" %(os.getenv("PERSISTENCE_HOST"),
+                             os.getenv("PERSISTENCE_PORT"))
+@app.route('/persistence')
+def persistence():
+    return redirect(persistence_uri + "/api/persistence")
+
 app.logger.debug(app.config)
 app.logger.debug(app.url_map)
 
