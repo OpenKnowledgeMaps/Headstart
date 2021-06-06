@@ -48,13 +48,6 @@ api.add_namespace(base_ns, path='/base')
 api.add_namespace(pubmed_ns, path='/pubmed')
 api.add_namespace(openaire_ns, path='/openaire')
 
-persistence_uri = "%s:%s/" %(os.getenv("PERSISTENCE_HOST"),
-                             os.getenv("PERSISTENCE_PORT"))
-app.logger.debug(persistence_uri)
-@app.route('/api/persistence/<endpoint>')
-def persistence_redirect(endpoint):
-    return redirect(persistence_uri + endpoint, 303)
-
 app.logger.debug(app.config)
 app.logger.debug(app.url_map)
 
