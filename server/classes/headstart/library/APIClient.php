@@ -29,7 +29,7 @@ class APIClient {
     }
 
     public function call_api($endpoint, $payload) {
-        $route = $this->base_route . $endpoint . "/" . $this->database;
+        $route = $this->base_route . $endpoint;
         $res = CommUtils::call_api($route, $payload);
         return $res;
     }

@@ -85,7 +85,7 @@ PostgreSQL service:
 
 * Manual database creation for Postgres:
 
-Enter container: `docker exec -it VARYINGNAME_pgsql_1 psql -U headstart`
+Enter container: `docker exec -it VARYINGNAME_db_1 psql -U headstart`
 
 Execute command: `CREATE DATABASE databasename;`
 
