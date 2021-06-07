@@ -12,7 +12,7 @@ use headstart\library;
 
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
-$apiclient = new \library\APIClient();
+$apiclient = new \headstart\library\APIClient($ini_array);
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
 $persistence_backend = $ini_array["general"]["persistence_backend"];

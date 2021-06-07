@@ -5,7 +5,7 @@ require_once dirname(__FILE__) . '/CommUtils.php';
 
 class APIClient {
 
-    public function __construct($service_integration, $ini_array) {
+    public function __construct($ini_array) {
 
         $this->load_configs($ini_array);
     }

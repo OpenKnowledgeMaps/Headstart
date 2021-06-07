@@ -89,6 +89,10 @@ Enter container: `docker exec -it VARYINGNAME_db_1 psql -U headstart`
 
 Execute command: `CREATE DATABASE databasename;`
 
+Exit the container and re-enter it as normal user: `docker exec -it VARYINGNAME_db_1 /bin/bash`
+
+Execute command: `python manage.py`
+
 * In `preprocessing/conf/config_local.ini` change "databasename" to the dev/production database name for the specific integration. This should be in line with the database names provided in `settings.py`
 
 
