@@ -53,8 +53,7 @@ function cleanQuery($dirty_query, $transform_query_tolowercase) {
 function search($service_integration, $dirty_query
         , $post_params, $param_types
         , $transform_query_tolowercase = true
-        , $retrieve_cached_map = true, $params_for_id = null, $num_labels = 3
-        , $id = "area_uri", $subjects = "subject"
+        , $retrieve_cached_map = true, $params_for_id = null
         , $precomputed_id = null, $do_clean_query = true) {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
@@ -134,7 +133,7 @@ function search($service_integration, $dirty_query
       $payload = json_encode($post_params);
       $res = $apiclient->call_api($endpoint . "/search", $payload);
       if ($res["httpcode"] != 200) {
-        return $res;
+        return json_encode($res);
       } else {
         $output_json = $res["result"];
       }
@@ -175,7 +174,7 @@ function search($service_integration, $dirty_query
       $payload = json_encode(array("vis_id" => $unique_id));
       $res = $apiclient->call_persistence("existsVisualization", $payload);
       if ($res["httpcode"] != 200) {
-        return $res;
+        return json_encode($res);
       } else {
         $result = json_decode($res["result"], true);
         $exists = $result["exists"];
@@ -194,7 +193,7 @@ function search($service_integration, $dirty_query
                                      "vis_params" => $params_json));
         $res = $apiclient->call_persistence("createVisualization", $payload);
         if ($res["httpcode"] != 200) {
-         return $res;
+         return json_encode($res);
         }
       } else {
         $persistence->createVisualization($unique_id, $vis_title, $input_json, $query, $dirty_query, $params_json);
@@ -205,7 +204,7 @@ function search($service_integration, $dirty_query
                                      "data" => $input_json));
         $res = $apiclient->call_persistence("writeRevision", $payload);
         if ($res["httpcode"] != 200) {
-        return $res;
+          return json_encode($res);
         }
       } else {
         $persistence->writeRevision($unique_id, $input_json);

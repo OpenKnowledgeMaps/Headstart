@@ -31,12 +31,18 @@ class APIClient {
     public function call_api($endpoint, $payload) {
         $route = $this->base_route . $endpoint;
         $res = CommUtils::call_api($route, $payload);
+        if ($res["httpcode"] != 200) {
+            $res["route"] = $route;
+        }
         return $res;
     }
 
     public function call_persistence($endpoint, $payload) {
         $route = $this->base_route . "persistence/" . $endpoint . "/" . $this->database;
         $res = CommUtils::call_api($route, $payload);
+        if ($res["httpcode"] != 200) {
+            $res["route"] = $route;
+        }
         return $res;
     }
 

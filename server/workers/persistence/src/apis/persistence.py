@@ -294,11 +294,11 @@ class getContext(Resource):
                                  headers)
 
 
-@persistence_ns.route('/createID')
+@persistence_ns.route('/createID/<database>')
 class createID(Resource):
 
     @persistence_ns.produces(["application/json"])
-    def post(self):
+    def post(self, database):
         try:
             persistence_ns.logger.debug("createID")
             payload = request.get_json()
