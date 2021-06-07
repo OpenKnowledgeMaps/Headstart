@@ -13,7 +13,7 @@ use headstart\library;
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 
 $ini_array = library\Toolkit::loadIni($INI_DIR);
-$apiclient = new \library\APIClient();
+$apiclient = new \headstart\library\APIClient($ini_array);
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");

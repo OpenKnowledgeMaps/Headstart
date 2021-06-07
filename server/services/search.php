@@ -63,7 +63,7 @@ function search($service_integration, $dirty_query
     $persistence_backend = isset($ini_array["general"]["persistence_backend"])
     ? ($ini_array["general"]["persistence_backend"])
     : "legacy";
-    $apiclient = new \headstart\library\APIClient($service_integration, $ini_array);
+    $apiclient = new \headstart\library\APIClient($ini_array);
     $repo2snapshot = array("plos" => "PLOS"
                         , "pubmed" => "PubMed"
                         , "doaj" => "DOAJ"

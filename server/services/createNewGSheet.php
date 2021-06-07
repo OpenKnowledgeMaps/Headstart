@@ -4,9 +4,12 @@ header('Content-type: application/json');
 
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/APIClient.php';
+require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
 use headstart\library;
 
-$apiclient = new \library\APIClient();
+$INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
+$ini_array = library\Toolkit::loadIni($INI_DIR);
+$apiclient = new \headstart\library\APIClient($ini_array);
 
 if(php_sapi_name() == 'cli') {
     // Called from command-line, maybe cron
