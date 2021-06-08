@@ -77,7 +77,6 @@ include 'config.php';
                 if(<?php echo json_encode($_GET['vis_type']) ?> === "timeline") {
                     data_config.is_streamgraph = true;
                     //data_config.embed_modal = false;
-                    data_config.show_area = false;
                     
                     if(<?php echo json_encode($_GET['vis_mode']) ?> === "authors") {
                         data_config.intro = intro_authors_timeline;
