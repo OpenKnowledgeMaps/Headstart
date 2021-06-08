@@ -12,14 +12,10 @@ var data_config = {
     preview_type: "pdf",
     use_hypothesis: true,
 
-    show_multiples: false,
     show_dropdown: false,
     show_intro: false,
     show_list:true,
     is_force_papers: true,
-    is_title_clickable: false,
-    show_infolink: true,
-    show_infolink_areas: false,
 
     show_context: true,
     create_title_from_context: true,
@@ -43,8 +39,6 @@ var data_config = {
 
     show_keywords: true,
     hide_keywords_overview: false,
-    show_tags: true,
-    show_comments: true,
     show_resulttype: true,
 
     sort_menu_dropdown: true,
