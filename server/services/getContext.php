@@ -16,7 +16,7 @@ $ini_array = library\Toolkit::loadIni($INI_DIR);
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 $revision_context =  isset($_GET["revision_context"]) ? library\CommUtils::getParameter($_GET, "revision_context") : false;
 
-$apiclient = new headstart\library\APIClient();
+$apiclient = new headstart\library\APIClient($ini_array);
 $persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 $persistence_backend = $ini_array["general"]["persistence_backend"];
 

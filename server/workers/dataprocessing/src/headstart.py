@@ -85,7 +85,7 @@ class Dataprocessing(object):
                     self.redis_store.set(k+"_output", json.dumps(res))
             except Exception as e:
                 self.logger.error(params)
-                self.logger.error(e, exc_info=True)
+                self.logger.exception("Exception during visualization creation.")
                 res = {}
                 res["id"] = k
                 res["params"] = params
