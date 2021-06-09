@@ -1,11 +1,11 @@
 server {
     listen ${NGINX_PORT};
 
-    location /triple_staging/ {
-        proxy_pass http://triple_staging_api_1:5001/api/;
+    location /stable/ {
+        proxy_pass http://stable_api_1:5001/api/;
 
-        location /triple_staging/persistence/ {
-            proxy_pass http://triple_staging_persistence_1:5001/api/persistence/;
+        location /stable/persistence/ {
+            proxy_pass http://stable_persistence_1:5001/api/persistence/;
         }
     }
 }
