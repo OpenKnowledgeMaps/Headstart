@@ -56,6 +56,7 @@ class TripleClient(object):
         date = {}
         date["gte"] = _from
         date["lte"] = _to
+        date["format"] = "yyyy-MM-dd"
         return date
 
     def build_sort_order(self, parameters):
@@ -80,28 +81,6 @@ class TripleClient(object):
             q = Q("multi_match", query=query, fields=fields)
         return q
 
-    def build_body(self, parameters):
-        body = {"query": {
-                    "bool": {
-                        "must": [
-                             {"multi_match": {
-                                "query": parameters.get('q'),
-                                "fields": ["title", "abstract"],
-                                "type": "cross_fields",
-                                "operator": "and",
-                             }},
-                             {"range": {
-                                "date": self.build_date_field(
-                                        parameters.get('from'),
-                                        parameters.get('to'))
-                             }}
-                        ]
-                    }
-                }}
-        if parameters.get('language') != "all":
-            body["query"]["bool"]["must"].append({"term": {"language": parameters.get('language')}})
-        return body
-
     def search_documents(self, parameters):
         index = os.getenv("TRIPLE_DOCUMENTS_INDEX")
         fields = ["headline.text", "abstract.text"]
@@ -117,10 +96,6 @@ class TripleClient(object):
                     parameters.get('to')))
         #s = s[parameters.get('pagination_from'):parameters.get('pagination_to')]
         s = s[0:self.get_limit(parameters)*2]
-        if parameters.get('sorting') == "most-relevant":
-            s = s.sort() #  default value
-        if parameters.get('sorting') == "most-recent":
-            s = s.sort("-date")
         self.logger.debug(s.to_dict())
         result = s.execute()
         if parameters.get('raw') is True:
@@ -144,6 +119,8 @@ class TripleClient(object):
         """
         lang = parameters.get('language')
         df = pd.DataFrame((d.to_dict() for d in result))
+        if parameters["sorting"] == "most-recent":
+            df = df.sort_values("date_published", ascending=0)
         metadata = pd.DataFrame()
         metadata["id"] = df.id.map(lambda x: x if isinstance(x, str) else "")
         metadata["title"] = df.headline.map(lambda x: self.filter_lang(x, lang, "text"))
@@ -152,7 +129,7 @@ class TripleClient(object):
         metadata["paper_abstract"] = df.abstract.map(lambda x: self.filter_lang(x, lang, "text"))
         metadata["paper_abstract_en"] = df.abstract.map(lambda x: self.filter_lang(x, 'en', "text"))
         metadata["published_in"] = df.publisher.map(lambda x: ", ".join(x))
-        metadata["year"] = df.date_published
+        metadata["year"] = pd.to_datetime(df.date_published).map(lambda x: x.year)
         metadata["url"] = df.main_entity_of_page.map(lambda x: x if x else "")
         metadata["readers"] = 0
         metadata["subject_orig"] = (df.keywords
@@ -243,7 +220,7 @@ class TripleClient(object):
             k, parameters, endpoint = self.next_item()
             self.logger.debug(parameters)
             if endpoint == "mappings":
-                result = self.get_mappings(parameters.get('index'))
+                res = self.get_mappings(parameters.get('index'))
                 self.redis_store.set(k+"_output", json.dumps(res))
             if endpoint == "search":
                 try:
@@ -257,8 +234,7 @@ class TripleClient(object):
                     else:
                         self.redis_store.rpush("input_data", json.dumps(res))
                 except (NotFoundError, Exception) as e:
-                    self.logger.error(e)
-                    self.logger.error(parameters)
+                    self.logger.exception("Exception during data retrieval.")
                     res = {}
                     res["id"] = k
                     res["params"] = parameters
