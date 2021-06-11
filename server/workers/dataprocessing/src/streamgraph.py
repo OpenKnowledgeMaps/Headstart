@@ -23,11 +23,10 @@ class Streamgraph(object):
         handler.setLevel(loglevel)
         self.logger.addHandler(handler)
 
-    def get_streamgraph_data(self, metadata, query, n=12, method="tfidf"):
+    def get_streamgraph_data(self, metadata, query, n=12, method="tfidf", fields=["subject", "concepts"]):
         df = pd.DataFrame.from_records(metadata)
-        df.year = pd.to_datetime(df.year)
-        df.year = df.year.map(lambda x: x.year)
-        df.year = df.year.map(lambda x: pd.to_datetime(x, format="%Y"))
+        df.subject = metadata.apply(lambda x: "; ".join(x[fields]), axis=1)
+        df.year = pd.to_datetime(df.year, format="%Y")
         df = df[df.subject.map(lambda x: x is not None)]
         df.subject = df.subject.map(lambda x: [s for s in x.split("; ") if s])
         df = df[df.subject.map(lambda x: x != [])]
@@ -57,6 +56,7 @@ class Streamgraph(object):
         daterange = pd.date_range(start=min(boundaries.year).to_datetime64(),
                                   end=max(boundaries.year).to_datetime64(),
                                   freq='AS')
+        daterange = [d.year for d in daterange]
         if len(daterange) > 0:
             return sorted(daterange)
         else:
