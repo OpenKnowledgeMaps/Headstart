@@ -129,7 +129,7 @@ class TripleClient(object):
         metadata["paper_abstract"] = df.abstract.map(lambda x: self.filter_lang(x, lang, "text"))
         metadata["paper_abstract_en"] = df.abstract.map(lambda x: self.filter_lang(x, 'en', "text"))
         metadata["published_in"] = df.publisher.map(lambda x: ", ".join(x))
-        metadata["year"] = pd.to_datetime(df.date_published).map(lambda x: x.year)
+        metadata["year"] = pd.to_datetime(df.date_published, errors='ignore').map(lambda x: x.year)
         metadata["url"] = df.main_entity_of_page.map(lambda x: x if x else "")
         metadata["readers"] = 0
         metadata["subject_orig"] = (df.keywords
@@ -140,6 +140,8 @@ class TripleClient(object):
                 .map(lambda x: [self.clean_subject(s) for s in x if s])
                 .map(lambda x: list(filter(lambda l: len(l) > 0, x)))
                 .map(lambda x: "; ".join(x)))
+        metadata["concepts"] = df.knows_about.map(lambda x: "; ".join(sorted(filter(None, set([self.filter_lang(y["label"], lang, "text") for y in x])))).replace(". ", "; "))
+        metadata["concepts_en"] = df.knows_about.map(lambda x: "; ".join(sorted(filter(None, set([self.filter_lang(y["label"], 'en', "text") for y in x])))).replace(". ", "; "))
         metadata["oa_state"] = 2
         metadata["link"] = (df.url.map(lambda x: list(filter(lambda l: l.lower().endswith('pdf'), x)))
                               .map(lambda x: x[0] if x else ""))
@@ -182,6 +184,7 @@ class TripleClient(object):
         subject_cleaned = re.sub(r"ddc:[0-9]+(;|$)?", "", subject_cleaned) # remove Dewey Decimal Classification
         subject_cleaned = re.sub(r"([\w\/\:-])*?\/ddc\/([\/0-9\.])*", "", subject_cleaned) # remove Dewey Decimal Classification in URI form
         subject_cleaned = re.sub(r"[A-Z,0-9]{2,}-[A-Z,0-9\.]{2,}(;|$)?", "", subject_cleaned) #remove LOC classification
+        subject_cleaned = re.sub(r"bisacsh\:\w+", "", subject_cleaned) # remove trailing '; '
         subject_cleaned = re.sub(r"[^\(;]+\(General\)(;|$)?", "", subject_cleaned) # remove general subjects
         subject_cleaned = re.sub(r"[^\(;]+\(all\)(;|$)?", "", subject_cleaned) # remove general subjects
         subject_cleaned = re.sub(r"[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
