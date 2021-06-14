@@ -90,5 +90,5 @@ class Dataprocessing(object):
                 res["id"] = k
                 res["params"] = params
                 res["status"] = "error"
-                res["error"] = e
+                res["error"] = "unexpected data processing error"
                 self.redis_store.set(k+"_output", json.dumps(res))
