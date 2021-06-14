@@ -28,7 +28,7 @@ class Streamgraph(object):
         df.subject = metadata.apply(lambda x: "; ".join(x[fields]), axis=1)
         df.year = pd.to_datetime(df.year, format="%Y")
         df = df[df.subject.map(lambda x: x is not None)]
-        df.subject = df.subject.map(lambda x: [s for s in x.split("; ") if s])
+        df.subject = df.subject.map(lambda x: [s for s in x.split("; ")] if isinstance(x, str) else "")
         df = df[df.subject.map(lambda x: x != [])]
         df["boundary_label"] = df.year
         df = df.explode('subject')
@@ -56,7 +56,6 @@ class Streamgraph(object):
         daterange = pd.date_range(start=min(boundaries.year).to_datetime64(),
                                   end=max(boundaries.year).to_datetime64(),
                                   freq='AS')
-        daterange = [d.year for d in daterange]
         if len(daterange) > 0:
             return sorted(daterange)
         else:
