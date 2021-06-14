@@ -23,7 +23,7 @@ class Streamgraph(object):
         handler.setLevel(loglevel)
         self.logger.addHandler(handler)
 
-    def get_streamgraph_data(self, metadata, query, n=12, method="tfidf", fields=["subject", "concepts"]):
+    def get_streamgraph_data(self, metadata, query, n=12, method="tfidf", fields=["subject"]):
         df = pd.DataFrame.from_records(metadata)
         df.subject = df.apply(lambda x: "; ".join(x[fields]), axis=1)
         df.year = pd.to_datetime(df.year, format="%Y")
