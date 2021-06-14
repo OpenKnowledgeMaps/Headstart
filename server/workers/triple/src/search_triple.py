@@ -185,8 +185,9 @@ class TripleClient(object):
         subject_cleaned = re.sub(r"ddc:[0-9]+(;|$)?", "", subject_cleaned) # remove Dewey Decimal Classification
         subject_cleaned = re.sub(r"([\w\/\:-])*?\/ddc\/([\/0-9\.])*", "", subject_cleaned) # remove Dewey Decimal Classification in URI form
         subject_cleaned = re.sub(r"[A-Z,0-9]{2,}-[A-Z,0-9\.]{2,}(;|$)?", "", subject_cleaned) #remove LOC classification
+        subject_cleaned = re.sub(r"bisacsh\:\w+", "", subject_cleaned) # remove bisac subject headings
         subject_cleaned = re.sub(r"[A-Z]+\d+", "", subject_cleaned) #remove remaining bisac subject headings
-        subject_cleaned = re.sub(r"bisacsh\:\w+", "", subject_cleaned) # remove trailing '; '
+        subject_cleaned = re.sub(r"JEL\: ", "", subject_cleaned) #remove JEL classifications
         subject_cleaned = re.sub(r"[^\(;]+\(General\)(;|$)?", "", subject_cleaned) # remove general subjects
         subject_cleaned = re.sub(r"[^\(;]+\(all\)(;|$)?", "", subject_cleaned) # remove general subjects
         subject_cleaned = re.sub(r"[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
@@ -195,6 +196,7 @@ class TripleClient(object):
         subject_cleaned = re.sub(r"\[[^\[]+\][^\;]+(;|$)?", "", subject_cleaned) # remove classification
         subject_cleaned = re.sub(r"[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
         subject_cleaned = re.sub(r" -- ", "; ", subject_cleaned) #replace inconsistent keyword separation
+        subject_cleaned = re.sub(r" ?• ?", "; ", subject_cleaned) #replace inconsistent keyword separation
         subject_cleaned = re.sub(r" \(  ", "; ", subject_cleaned) #replace inconsistent keyword separation
         subject_cleaned = re.sub(r"(\w* \w*(\.)( \w* \w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
         subject_cleaned = re.sub(r"\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
