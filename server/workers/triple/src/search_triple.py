@@ -118,6 +118,7 @@ class TripleClient(object):
         # * "link": link to the PDF; if this is not available, a list of candidate URLs that may contain a link to the PDF
         """
         lang = parameters.get('language')
+        subject_fields = os.getenv("SUBJECT_FIELDS").split(",")
         df = pd.DataFrame((d.to_dict() for d in result))
         if parameters["sorting"] == "most-recent":
             df = df.sort_values("date_published", ascending=0)
@@ -147,9 +148,11 @@ class TripleClient(object):
                               .map(lambda x: x[0] if x else ""))
         metadata["relevance"] = df.index
         metadata.dropna(axis=0, subset=["year"], inplace=True)
+        metadata["subject"] = metadata.apply(lambda x: ". ".join(x[subject_fields]), axis=1)
+        metadata["subject_orig"] = metadata.apply(lambda x: ". ".join(x[subject_fields]), axis=1)
         text = pd.DataFrame()
         text["id"] = metadata["id"]
-        text["content"] = metadata.apply(lambda x: ". ".join(x[["title_en", "paper_abstract_en"]]), axis=1)
+        text["content"] = metadata.apply(lambda x: ". ".join(x[["title_en", "paper_abstract_en", "concepts_en"]]), axis=1)        
         input_data = {}
         input_data["metadata"] = metadata.to_json(orient='records')
         input_data["text"] = text.to_json(orient='records')
