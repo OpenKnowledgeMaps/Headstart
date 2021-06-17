@@ -18,7 +18,7 @@ export const filterData = (data, searchSettings, filterSettings) => {
   if (filterSettings.zoomed) {
     if (filterSettings.isStreamgraph) {
       data = data.filter((e) => {
-        let keywords = !!e.subject_orig ? e.subject_orig : "";
+        let keywords = e.subject_orig ? e.subject_orig : "";
         let array = keywords.split("; ");
 
         return array.includes(filterSettings.title);
@@ -90,18 +90,18 @@ const getParamFilterFunction = (param, field) => {
  */
 const getWordFilterFunction = (search_words) => {
   return (d) => {
-    let abstract = getPropertyOrEmptyString(d, "paper_abstract");
-    let title = getPropertyOrEmptyString(d, "title");
-    let authors = getPropertyOrEmptyString(d, "authors_string");
-    let journals = getPropertyOrEmptyString(d, "published_in");
-    let year = getPropertyOrEmptyString(d, "year");
-    let keywords = getPropertyOrEmptyString(d, "subject_orig");
-    let tags = getPropertyOrEmptyString(d, "tags");
-    let comments = getPropertyOrEmptyString(d, "comments_for_filtering");
-    let resulttype = getPropertyOrEmptyString(d, "resulttype");
+    const abstract = getPropertyOrEmptyString(d, "paper_abstract");
+    const title = getPropertyOrEmptyString(d, "title");
+    const authors = getPropertyOrEmptyString(d, "authors_string");
+    const journals = getPropertyOrEmptyString(d, "published_in");
+    const year = getPropertyOrEmptyString(d, "year");
+    const keywords = getPropertyOrEmptyString(d, "subject_orig");
+    const tags = getPropertyOrEmptyString(d, "tags");
+    const comments = getPropertyOrEmptyString(d, "comments_for_filtering");
+    const resulttype = getPropertyOrEmptyString(d, "resulttype");
     // TODO: make these two properties language-aware
-    let open_access = !!d.oa ? "open access" : "";
-    let free_access = !!d.free_access ? "free access" : "";
+    const open_access = d.oa ? "open access" : "";
+    const free_access = d.free_access ? "free access" : "";
 
     let i = 0;
     let word_found = true;
@@ -126,9 +126,11 @@ const getWordFilterFunction = (search_words) => {
 };
 
 const getPropertyOrEmptyString = (object, property) => {
-  return object.hasOwnProperty(property)
-    ? object[property].toString().toLowerCase()
-    : "";
+  if (Object.prototype.hasOwnProperty.call(object, property)) {
+    return object[property].toString().toLowerCase();
+  }
+
+  return "";
 };
 
 /**
@@ -179,7 +181,7 @@ export const isFileAvailable = (url) => {
 /**
  * Returns the paper's preview image.
  * @param {Object} paper
- * 
+ *
  * @returns {String} the preview image url
  */
 export const getPaperPreviewImage = (paper) => {
@@ -189,7 +191,7 @@ export const getPaperPreviewImage = (paper) => {
 /**
  * Returns the paper's preview link.
  * @param {Object} paper
- * 
+ *
  * @returns {String} the preview link url
  */
 export const getPaperPreviewLink = (paper) => {
@@ -204,13 +206,13 @@ export const getPaperPreviewLink = (paper) => {
  * Returns the paper's pdf click handler.
  * @param {Object} paper
  * @param {Function} handlePDFClick
- * 
+ *
  * @returns {Function} function that opens the pdf preview
  */
 export const getPaperPDFClickHandler = (paper, handlePDFClick) => {
   if (
     paper.oa === false ||
-    paper.resulttype == "dataset" ||
+    paper.resulttype === "dataset" ||
     paper.link === ""
   ) {
     return null;
@@ -223,11 +225,11 @@ export const getPaperPDFClickHandler = (paper, handlePDFClick) => {
  * Returns the paper's keywords.
  * @param {Object} paper
  * @param {Object} localization
- * 
+ *
  * @returns {String} the keywords or a fallback string in current language
  */
 export const getPaperKeywords = (paper, localization) => {
-  if (!paper.hasOwnProperty("subject_orig") || paper.subject_orig === "") {
+  if (!Object.prototype.hasOwnProperty.call(paper, "subject_orig") || paper.subject_orig === "") {
     return localization.no_keywords;
   }
 
@@ -238,11 +240,11 @@ export const getPaperKeywords = (paper, localization) => {
  * Returns the paper's classification.
  * @param {Object} paper
  * @param {Object} localization
- * 
+ *
  * @returns {String} the classification or a fallback string in current language
  */
 export const getPaperClassification = (paper, localization) => {
-  if (!paper.hasOwnProperty("bkl_caption") || paper.bkl_caption === "") {
+  if (!Object.prototype.hasOwnProperty.call(paper, "bkl_caption") || paper.bkl_caption === "") {
     return localization.no_keywords;
   }
 
@@ -251,9 +253,9 @@ export const getPaperClassification = (paper, localization) => {
 
 /**
  * Returns the paper's text link.
- * @param {Object} paper 
+ * @param {Object} paper
  * @param {String} linkType covis/url/doi/<null>
- * 
+ *
  * @returns {Object} link object with properties 'address' and 'isDoi'
  */
 export const getPaperTextLink = (paper, linkType) => {
@@ -289,8 +291,8 @@ export const getPaperTextLink = (paper, linkType) => {
 
 /**
  * Returns the paper's comments.
- * @param {Object} paper 
- * 
+ * @param {Object} paper
+ *
  * @returns {Array} comments array or null
  */
 export const getPaperComments = (paper) => {
@@ -304,8 +306,8 @@ export const getPaperComments = (paper) => {
 
 /**
  * Returns the paper's tags.
- * @param {Object} paper 
- * 
+ * @param {Object} paper
+ *
  * @returns {Array} tags array or null
  */
 export const getPaperTags = (paper) => {

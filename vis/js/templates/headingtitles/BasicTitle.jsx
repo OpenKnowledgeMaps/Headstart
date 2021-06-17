@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 
 const BasicTitle = ({ title }) => {
   // dangerously Setting the Inner HTML because of e.g. Covis, where the basic title is HTML

@@ -70,52 +70,70 @@ const logAction = (action, state, callback, params) => {
         null,
         "filter_param=" + action.id
       );
-    case "HOVER_PAPER":
+    case "HOVER_PAPER": {
       if (!params.mouseoverEvaluation) {
         return;
       }
       if (!action.safeId) {
         return;
       }
-      const paperOne = state.data.list.find((p) => p.safe_id === action.safeId);
+      const paper = state.data.list.find((p) => p.safe_id === action.safeId);
       return callback(
-        paperOne.title,
+        paper.title,
         "Paper",
         "enlarge",
-        paperOne.bookmarked + " " + paperOne.recommended
+        paper.bookmarked + " " + paper.recommended
       );
-    case "SELECT_PAPER":
-      const paperTwo = action.paper;
+    }
+    case "SELECT_PAPER": {
+      const paper = action.paper;
       return callback(
-        paperTwo.title,
+        paper.title,
         "Paper",
         "select",
-        paperTwo.bookmarked + " " + paperTwo.recommended
+        paper.bookmarked + " " + paper.recommended
       );
-    case "DESELECT_PAPER":
+    }
+    case "DESELECT_PAPER": {
       if (!state.selectedPaper || !state.selectedPaper.safeId) {
         return;
       }
-      const paperThree = state.data.list.find(
+      const paper = state.data.list.find(
         (p) => p.safe_id === state.selectedPaper.safeId
       );
-      if (!paperThree) {
+      if (!paper) {
         return;
       }
       return callback(
-        paperThree.title,
+        paper.title,
         "Paper",
         "unselect",
-        paperThree.bookmarked + " " + paperThree.recommended
+        paper.bookmarked + " " + paper.recommended
       );
+    }
     case "INITIALIZE":
       return callback(params.title, "Map", "start", "start_bubble");
     case "OPEN_INFO_MODAL":
-      return callback(params.title, "Map", "open_info_modal", "open_info_modal");
+      return callback(
+        params.title,
+        "Map",
+        "open_info_modal",
+        "open_info_modal"
+      );
     case "OPEN_EMBED_MODAL":
-      return callback(params.title, "Map", "open_embed_modal", "open_embed_modal");
+      return callback(
+        params.title,
+        "Map",
+        "open_embed_modal",
+        "open_embed_modal"
+      );
     case "SCALE":
-      return callback(params.scaleLabel[action.value], "Toolbar", "select", "toolbar_select");
+      return callback(
+        params.scaleLabel[action.value],
+        "Toolbar",
+        "select",
+        "toolbar_select"
+      );
     default:
       return;
   }

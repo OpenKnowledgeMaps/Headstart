@@ -11,13 +11,10 @@ var data_config = {
     use_area_uri: true,
     preview_type: "pdf",
     
-    show_multiples: false,
     show_dropdown: false,
     show_intro: false,
     show_list:true,
     is_force_papers:true,
-    is_title_clickable: false,
-    show_infolink_areas: true,
 	
     show_context: false,
     create_title_from_context: false,
@@ -28,8 +25,6 @@ var data_config = {
     list_sub_entries: true,
     list_sub_entries_readers: true,
     list_sub_entries_statistics: true,
-    list_show_all_papers: false,
-    list_additional_images: true,
     list_images: ["Altersgruppe", "Background", "Bundesland", "Geschlecht",
                     "Höchste Ausbildung", "Land"],
     list_images_path: "img/",

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import $ from "jquery";
 
 import { isFileAvailable } from "./data";
 
