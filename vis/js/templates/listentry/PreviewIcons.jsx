@@ -5,7 +5,7 @@ const PreviewIcons = ({ link, onClickPDF }) => {
     // html template starts here
     <div className="list_links">
       {!!link && (
-        <a href={link} target="_blank" className="outlink">
+        <a href={link} target="_blank" rel="noreferrer" className="outlink">
           LINK <span className="outlink_symbol">&#61633;</span>
         </a>
       )}
