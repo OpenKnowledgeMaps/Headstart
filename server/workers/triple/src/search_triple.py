@@ -78,7 +78,7 @@ class TripleClient(object):
         if '"' in query:
             q = Q("multi_match", query=query, fields=fields, type="phrase")
         else:
-            q = Q("multi_match", query=query, fields=fields)
+            q = Q("multi_match", query=query, fields=fields, type="best_fields")
         return q
 
     def search_documents(self, parameters):
