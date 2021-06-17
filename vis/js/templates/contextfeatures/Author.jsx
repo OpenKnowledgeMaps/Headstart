@@ -8,7 +8,7 @@ const Author = ({ bioLabel, livingDates, link }) => {
         {livingDates}
       </span>
       <span id="author_bio" className="context_item">
-        <a id="author_bio_link" target="_blank" href={link}>
+        <a id="author_bio_link" href={link} target="_blank" rel="noreferrer">
           {bioLabel}
         </a>
       </span>

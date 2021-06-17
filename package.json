@@ -11,7 +11,7 @@
     "dev": "webpack --progress --colors --watch --mode=development",
     "prod": "webpack --progress --colors",
     "start": "webpack-dev-server -d --progress --mode=development",
-    "lint": "eslint ./vis/js/components/*.js"
+    "lint": "eslint \"./vis/js/**/*.js?(x)\""
   },
   "repository": {
     "type": "git",
@@ -32,7 +32,7 @@
     "d3-transition": "^2.0.0",
     "dateformat": "^2.0.0",
     "font-awesome": "*",
-    "handlebars": "^4.7.6",
+    "handlebars": "^4.7.7",
     "hyphenation.en-us": "*",
     "hypher": "^0.2.4",
     "javascript-state-machine": "^2.3.5",

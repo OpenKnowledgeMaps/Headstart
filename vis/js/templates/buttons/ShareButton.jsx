@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import $ from "jquery";
 
 import useOutsideClick from "../../utils/useOutsideClick";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
@@ -41,12 +42,12 @@ const ShareButton = ({ twitterHashtags }) => {
       </button>
       {opened && (
         <div className="sharebuttons" style={{ display: "inline-block" }}>
-          <a className="sharebutton_twitter" target="_blank" href={twitterUrl}>
+          <a className="sharebutton_twitter" href={twitterUrl} target="_blank" rel="noreferrer">
             <button className="btn btn-primary">
               <i className="fa fa-twitter-square fa-fw" aria-hidden="true"></i>
             </button>
           </a>
-          <a className="sharebutton_fb" target="_blank" href={facebookUrl}>
+          <a className="sharebutton_fb" href={facebookUrl} target="_blank" rel="noreferrer">
             <button className="btn btn-primary">
               <i className="fa fa-facebook-square"></i>
             </button>

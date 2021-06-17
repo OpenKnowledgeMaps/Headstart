@@ -13,13 +13,10 @@ var data_config = {
     use_area_uri: true,
     preview_type: "pdf",
     
-    show_multiples: false,
     show_dropdown: false,
     show_intro: false,
     show_list:true,
     is_force_papers:true,
-    is_title_clickable: false,
-    show_infolink_areas: false,
 	
     show_context: true,
     create_title_from_context: false,
@@ -31,8 +28,6 @@ var data_config = {
     list_sub_entries_readers: false,
     list_sub_entries_statistics: false,
     list_sub_entries_number: true,
-    list_show_all_papers: false,
-    list_additional_images: false,
     
     is_force_areas: true,
     area_force_alpha: 0.03,

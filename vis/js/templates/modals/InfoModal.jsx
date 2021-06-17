@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-
+import $ from "jquery"
 import { Modal } from "react-bootstrap";
 
 const InfoModal = ({ open, onClose, title, body, params }) => {

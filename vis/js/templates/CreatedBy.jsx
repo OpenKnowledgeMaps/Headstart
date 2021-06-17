@@ -21,9 +21,14 @@ const CreatedBy = ({ show, url }) => {
   return (
     <div id="created_by">
       <div id="credit_embed" style={divStyle}>
-        <a href={url} target="_blank">
+        <a href={url} target="_blank" rel="noreferrer">
           created by <b>Open Knowledge Maps </b>
-          <img src={logo} id="credit_logo" style={{ height: 30, padding: 0 }} />
+          <img
+            src={logo}
+            id="credit_logo"
+            style={{ height: 30, padding: 0 }}
+            alt="OKMaps round logo"
+          />
         </a>
       </div>
     </div>

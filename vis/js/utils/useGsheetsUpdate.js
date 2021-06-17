@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import $ from "jquery";
 
 const CHECK_INTERVAL = 6000;
 

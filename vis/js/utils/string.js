@@ -1,7 +1,4 @@
-/**
- * Since helpers.js is basically untestable (it requires some libraries from lib/),
- * I set up this utils folder and this file.
- */
+import d3 from "d3";
 
 /**
  * Sets first letter of the string to uppercase.

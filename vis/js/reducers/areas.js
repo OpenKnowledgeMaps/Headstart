@@ -1,3 +1,5 @@
+import d3 from "d3";
+
 import {
   getCoordsScale,
   getRadiusScale,
@@ -5,15 +7,12 @@ import {
   getZoomScale,
 } from "../utils/scale";
 
-const areas = (
-  state = { list: [], size: null, options: {} },
-  action
-) => {
+const areas = (state = { list: [], size: null, options: {} }, action) => {
   if (action.canceled || action.isStreamgraph) {
     return state;
   }
   switch (action.type) {
-    case "INITIALIZE":
+    case "INITIALIZE": {
       const options = {
         minAreaSize: action.configObject.min_area_size,
         maxAreaSize: action.configObject.max_area_size,
@@ -27,6 +26,7 @@ const areas = (
         size: action.chartSize,
         options,
       };
+    }
     case "RESIZE":
       return {
         ...state,

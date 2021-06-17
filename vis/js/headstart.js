@@ -1,7 +1,10 @@
+/* eslint-disable import/no-webpack-loader-syntax, no-undef */
+
 // Headstart
 // filename: headstart.js
 
 import StateMachine from 'javascript-state-machine';
+import $ from "jquery";
 
 import config from 'config';
 import { mediator } from 'mediator';
@@ -21,7 +24,7 @@ HeadstartFSM.prototype = {
   // prototype methods
   checkBrowserVersions: function() {
     var browser = BrowserDetect.browser;
-    if (!(browser == "Firefox" || browser == "Safari" || browser == "Chrome")) {
+    if (!(browser === "Firefox" || browser === "Safari" || browser === "Chrome")) {
             var alert_message = 'You are using an unsupported browser. ' +
                                 'This visualization was successfully tested ' +
                                 'with the latest versions of Firefox, Chrome, Safari, ' +

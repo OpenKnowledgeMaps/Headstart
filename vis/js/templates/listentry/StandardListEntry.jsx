@@ -48,7 +48,7 @@ const StandardListEntry = ({
           isOpenAccess={access.isOpenAccess}
           isFreeAccess={access.isFreeAccess}
           isDataset={access.isDataset}
-          tags={!!tags ? <Tags values={tags} /> : null}
+          tags={tags ? <Tags values={tags} /> : null}
         />
         <Title onClick={handleTitleClick}>{title}</Title>
         <PreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />

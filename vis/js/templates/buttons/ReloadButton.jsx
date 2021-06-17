@@ -13,7 +13,7 @@ const ReloadButton = ({
   );
   const [showDescription, setShowDescription] = useState(true);
 
-  const handleReload = () => location.reload();
+  const handleReload = () => window.location.reload();
   const handleHide = (event) => {
     event.preventDefault();
     event.stopPropagation();

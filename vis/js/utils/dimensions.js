@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 // these constants are hardcoded dimensions of various headstart parts
 const TITLE_HEIGHT = 54.2;
 const TOOLBAR_HEIGHT = 66;
