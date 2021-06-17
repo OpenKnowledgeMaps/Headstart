@@ -8,6 +8,7 @@ exports[`Author image component snapshot matches as author image snapshot 1`] = 
   <a
     href="https://example.com/12345"
     id="author_image_link"
+    rel="noreferrer"
     target="_blank"
   >
     <div

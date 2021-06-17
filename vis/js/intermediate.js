@@ -1,9 +1,9 @@
-"use strict";
-
 import ReactDOM from "react-dom";
 import React from "react";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
+import $ from "jquery";
+
 import rootReducer from "./reducers";
 import {
   ALLOWED_IN_ANIMATION,
@@ -296,13 +296,12 @@ function createRescaleMiddleware(rescaleCallback) {
 function createFileChangeMiddleware() {
   return function ({ getState }) {
     return (next) => (action) => {
-      if (action.type == "FILE_CLICKED") {
+      if (action.type === "FILE_CLICKED") {
         if (getState().files.current !== action.fileIndex) {
           window.headstartInstance.tofile(action.fileIndex);
         }
       }
-      const returnValue = next(action);
-      returnValue;
+      return next(action);
     };
   };
 }

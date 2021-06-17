@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
+import $ from "jquery";
 
 import { isFileAvailable } from "../../utils/data";
 
@@ -10,16 +11,20 @@ const ImageModal = ({ open, onClose, paperID }) => {
     const loadAllPages = () => {
       const images = [];
       let page = 1;
-      while (true) {
+      let hasNextPage = true;
+      
+      do {
         const imageURL = "paper_preview/" + paperID + "/page_" + page + ".png";
         // TODO make this async
-        if (!isFileAvailable(imageURL)) {
-          setImages(images);
-          break;
+        if (isFileAvailable(imageURL)) {
+          images.push({ page, url: imageURL });
+          page++;
+        } else {
+          hasNextPage = false;
         }
-        images.push({ page, url: imageURL });
-        page++;
-      }
+      } while(hasNextPage);
+
+      setImages(images);
     };
 
     setImages(null);
@@ -48,7 +53,11 @@ const ImageModal = ({ open, onClose, paperID }) => {
             {images.map((image) => (
               <React.Fragment key={image.url}>
                 <div id="preview_page_index">Page {image.page}</div>
-                <img id="preview_page" src={image.url} />
+                <img
+                  id="preview_page"
+                  src={image.url}
+                  alt={"Preview of page " + image.page}
+                />
               </React.Fragment>
             ))}
           </div>

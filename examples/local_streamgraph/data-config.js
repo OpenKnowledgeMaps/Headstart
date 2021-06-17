@@ -7,9 +7,7 @@ var data_config = {
   title: "",
   base_unit: "citations",
   use_area_uri: true,
-  show_multiples: false,
   show_dropdown: false,
-  show_infolink: true,
   preview_type: "pdf",
   sort_options: ["relevance", "title", "authors", "year"],
   is_force_areas: true,
@@ -37,7 +35,6 @@ var data_config = {
 
   show_context_oa_number: false,
 
-  streamgraph_zoom: false,
   canonical_url: "https://openknowledgemaps.org",
 
   hashtags_twitter_card: "",

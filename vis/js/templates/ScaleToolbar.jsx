@@ -58,11 +58,12 @@ const ScaleToolbar = ({
       {showCredit && (
         <div id="credit">
           created by{" "}
-          <a href="https://openknowledgemaps.org/" target="_blank">
+          <a href="https://openknowledgemaps.org/" target="_blank" rel="noreferrer">
             <img
               className="logoimg"
               style={{ border: "0px" }}
               src="./img/okmaps-logo.png"
+              alt="OKMaps logo"
             />
           </a>
         </div>

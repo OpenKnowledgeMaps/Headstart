@@ -1,3 +1,5 @@
+import d3 from "d3";
+
 /**
  * Applies force layout on the knowledge map bubbles and papers.
  * Doesn't return anything, it directly modifies the store after it's finished.
@@ -80,7 +82,7 @@ const areaForce = (areas, size, alpha, updateAreas) => {
     } else {
       updateAreas(areas.slice(0));
     }
-  };
+  }
 
   iterate();
 };
@@ -143,7 +145,7 @@ const paperForce = (papers, areas, size, alpha, updatePapers) => {
     } else {
       updatePapers(papers.slice(0));
     }
-  };
+  }
 
   iterate();
 };

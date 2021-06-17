@@ -383,6 +383,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     <a
                       className="doi_outlink_link"
                       href="https://doi.org/10.5281/zenodo.1292855"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       https://doi.org/10.5281/zenodo.1292855
@@ -1030,6 +1031,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="https://www.research.manchester.ac.uk/portal/en/publications/conceptualizing-digital-literacies-and-digital-ethics-for-sustainability-education(d99555d3-f49c-4ca4-87ae-ee4a1e8abcad).html"
+                    rel="noreferrer"
                     target="_blank"
                   >
                     LINK 
@@ -1137,6 +1139,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://www.research.manchester.ac.uk/portal/en/publications/conceptualizing-digital-literacies-and-digital-ethics-for-sustainability-education(d99555d3-f49c-4ca4-87ae-ee4a1e8abcad).html"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       https://www.research.manchester.ac.uk/portal/en/publications/conceptualizing-digital-literacies-and-digital-ethics-for-sustainability-education(d99555d3-f49c-4ca4-87ae-ee4a1e8abcad).html
@@ -1333,6 +1336,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://doi.org/10.5281/zenodo.1292855"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       https://doi.org/10.5281/zenodo.1292855
@@ -1466,6 +1470,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="http://hdl.handle.net/1959.13/934096"
+                    rel="noreferrer"
                     target="_blank"
                   >
                     LINK 
@@ -1513,6 +1518,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://hdl.handle.net/1959.13/934096"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       http://hdl.handle.net/1959.13/934096
@@ -1635,6 +1641,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="https://ro.ecu.edu.au/ajte/vol37/iss4/5"
+                    rel="noreferrer"
                     target="_blank"
                   >
                     LINK 
@@ -1704,6 +1711,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://ro.ecu.edu.au/ajte/vol37/iss4/5"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       https://ro.ecu.edu.au/ajte/vol37/iss4/5
@@ -1849,6 +1857,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="https://eprints.soton.ac.uk/71809/"
+                    rel="noreferrer"
                     target="_blank"
                   >
                     LINK 
@@ -1896,6 +1905,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://eprints.soton.ac.uk/71809/"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       https://eprints.soton.ac.uk/71809/
@@ -2014,6 +2024,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="https://dergipark.org.tr/tr/pub/tojde/issue/16897/176081"
+                    rel="noreferrer"
                     target="_blank"
                   >
                     LINK 
@@ -2083,6 +2094,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://dergipark.org.tr/tr/pub/tojde/issue/16897/176081"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       https://dergipark.org.tr/tr/pub/tojde/issue/16897/176081
@@ -2262,6 +2274,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://hdl.handle.net/2117/172239"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       http://hdl.handle.net/2117/172239
@@ -2468,6 +2481,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://doi.org/10.17718/tojde.557742"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       https://doi.org/10.17718/tojde.557742
@@ -2691,6 +2705,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://revistas.uam.es/tendenciaspedagogicas/article/view/7082"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       https://revistas.uam.es/tendenciaspedagogicas/article/view/7082
@@ -2920,6 +2935,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://journals.ru.lv/index.php/ER/article/view/4213"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       http://journals.ru.lv/index.php/ER/article/view/4213
@@ -3037,6 +3053,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="http://hdl.handle.net/2043/28731"
+                    rel="noreferrer"
                     target="_blank"
                   >
                     LINK 
@@ -3084,6 +3101,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://hdl.handle.net/2043/28731"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       http://hdl.handle.net/2043/28731
@@ -3290,6 +3308,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://hdl.handle.net/2078.1/215221"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       http://hdl.handle.net/2078.1/215221
@@ -3418,6 +3437,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="http://nectar.northampton.ac.uk/7284/"
+                    rel="noreferrer"
                     target="_blank"
                   >
                     LINK 
@@ -3465,6 +3485,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://nectar.northampton.ac.uk/7284/"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       http://nectar.northampton.ac.uk/7284/
@@ -3576,6 +3597,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="https://espace.library.uq.edu.au/view/UQ:403365"
+                    rel="noreferrer"
                     target="_blank"
                   >
                     LINK 
@@ -3623,6 +3645,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://espace.library.uq.edu.au/view/UQ:403365"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       https://espace.library.uq.edu.au/view/UQ:403365
@@ -3840,6 +3863,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://www.ajol.info/index.php/saje/article/view/173120"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       https://www.ajol.info/index.php/saje/article/view/173120
@@ -3929,6 +3953,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="http://digital.library.unt.edu/ark:/67531/metadc30842/"
+                    rel="noreferrer"
                     target="_blank"
                   >
                     LINK 
@@ -4025,6 +4050,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://digital.library.unt.edu/ark:/67531/metadc30842/"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       http://digital.library.unt.edu/ark:/67531/metadc30842/
@@ -4182,6 +4208,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://hdl.handle.net/11189/3465"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       http://hdl.handle.net/11189/3465
@@ -4378,6 +4405,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://idus.us.es/xmlui/handle/11441/68940"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       https://idus.us.es/xmlui/handle/11441/68940
@@ -4484,6 +4512,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="http://hdl.handle.net/10342/1956"
+                    rel="noreferrer"
                     target="_blank"
                   >
                     LINK 
@@ -4531,6 +4560,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://hdl.handle.net/10342/1956"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       http://hdl.handle.net/10342/1956
@@ -4715,6 +4745,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://doi.org/10.18778/1505-9057.56.08"
+                      rel="noreferrer"
                       target="_blank"
                     >
                       https://doi.org/10.18778/1505-9057.56.08
