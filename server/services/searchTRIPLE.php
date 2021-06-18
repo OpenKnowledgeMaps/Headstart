@@ -27,9 +27,8 @@ if (isset($post_params["service"]) && $post_params["service"] === "triple_sg") {
 
 $result = search($service_integration, $dirty_query
                 , $post_params, $param_types
-                , ";", null, true
-                , true, null, 3
-                , "area_uri", "subject"
+                , true
+                , true, null
                 , $precomputed_id, true);
 
 echo $result

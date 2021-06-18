@@ -25,11 +25,10 @@ $result = search("openaire", $acronymtitle
                                         "openaire_link",
                                         "obj_id",
                                         "acronym")
-            , ";", null, false
+            , false
             , true, array("project_id", "funder"), 3
             , "area_uri", "subject"
-            , null, true,
-            "legacy", "legacy");
+            , null, true);
 
 echo $result
 

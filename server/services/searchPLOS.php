@@ -14,9 +14,9 @@ $post_params = $_POST;
 
 $result = search("plos", $dirty_query, $post_params
                     , array("article_types", "journals", "from", "to", "sorting")
-                    , ";", "/", true, true, null, 3
-                    , "area_uri", "subject", $precomputed_id, false
-                    , "legacy");
+                    , true, true, null, 3
+                    , "area_uri", "subject"
+                    , $precomputed_id, false);
 
 echo $result
 

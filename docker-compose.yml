@@ -2,126 +2,184 @@ version: '3.7'
 
 services:
 
-  pgsql:
+  db:
     image: 'postgres:12.2-alpine'
+    hostname: "${POSTGRES_HOSTNAME}"
     restart: always
     environment:
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    command: postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
     volumes:
-      - db-data:/var/lib/postgresql/data
-      - ./server/workers/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
-      - ./server/workers/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
-    ports:
-      - '127.0.0.1:5432:5432'
+      # - ~/data/OKMaps/${COMPOSE_PROJECT_NAME}/postgresql/data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
+      - ./server/workers/pg_hba.conf:/etc/pg_hba.conf
+      - ./server/workers/postgresql.conf:/etc/postgresql.conf
+    networks: 
+      - headstart
 
   pgadmin:
     image: 'dpage/pgadmin4'
     ports:
       - '127.0.0.1:54323:80'
-    env_file:
-      - .env
-
-  api:
-   build:
-     context: server
-     dockerfile: services.docker
-   restart: always
-   depends_on:
-    - redis
-   network_mode: "host"
-   depends_on:
-     - redis
+    networks:
+      - headstart
 
   redis:
     image: 'redis:4.0-alpine'
     restart: always
-    command: ["redis-server", "/etc/redis/redis.conf", "--appendonly", "yes"]
+    hostname: "${REDIS_HOST}"
+    environment:
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+    command: ["redis-server", "/etc/redis/redis.conf", "--bind", "${REDIS_HOST}", "--appendonly", "yes", "--port", "${REDIS_PORT}"]
     volumes:
-       - 'redis:/var/lib/redis/data'
-       - ./server/workers/redis.conf:/etc/redis/redis.conf
+        - 'redis:/var/lib/redis/data'
+        - ./server/workers/redis.conf:/etc/redis/redis.conf
     restart: always
-    network_mode: "host"
+    networks: 
+      - headstart
 
-  search_triple:
-    build:
-      context: server
-      dockerfile: search_triple.docker
+  api:
+    image: api:${SERVICE_VERSION}
+    restart: always
+    environment:
+      SERVICE_VERSION: "${SERVICE_VERSION}"
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      REDIS_DB: "${REDIS_DB}"
+    command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
+    depends_on:
+      - redis
+    networks: 
+      - headstart
+
+  persistence:
+    image: persistence:${SERVICE_VERSION}
+    restart: always
+    environment:
+      SERVICE_VERSION: "${SERVICE_VERSION}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_HOST: "${POSTGRES_HOST}"
+      POSTGRES_PORT: "${POSTGRES_PORT}"
+    command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
+    networks: 
+      - headstart
+
+  triple:
+    image: triple:${SERVICE_VERSION}
     env_file:
       - server/workers/triple/triple.env
+    environment:
+      SERVICE_VERSION: "${SERVICE_VERSION}"
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
     restart: always
-    network_mode: "host"
     depends_on:
       - redis
+    networks: 
+      - headstart
 
-  search_gsheets:
-    build:
-      context: server
-      dockerfile: search_gsheets.docker
+  gsheets:
+    image: gsheets:${SERVICE_VERSION}
     env_file:
       - server/workers/gsheets/gsheets.env
+    environment:
+      SERVICE_VERSION: "${SERVICE_VERSION}"
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
     restart: always
-    network_mode: "host"
     depends_on:
       - redis
+    networks: 
+      - headstart
 
   dataprocessing:
-    build:
-      context: server
-      dockerfile: dataprocessing.docker
+    image: dataprocessing:${SERVICE_VERSION}
     env_file:
-      - server/workers/dataprocessing/dataprocessing.env
+    - server/workers/dataprocessing/dataprocessing.env
+    environment:
+      SERVICE_VERSION: "${SERVICE_VERSION}"
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
     restart: always
-    network_mode: "host"
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
+    networks: 
+      - headstart
 
-  search_base:
-    build:
-      context: server
-      dockerfile: base.docker
+  base:
+    image: base:${SERVICE_VERSION}
     env_file:
       - server/workers/base/base.env
+    environment:
+      SERVICE_VERSION: "${SERVICE_VERSION}"
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
     restart: always
-    network_mode: "host"
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
+    networks:
+      - headstart
 
-  search_pubmed:
-    build:
-      context: server
-      dockerfile: pubmed.docker
+  pubmed:
+    image: pubmed:${SERVICE_VERSION}
     env_file:
       - server/workers/pubmed/pubmed.env
+    environment:
+      SERVICE_VERSION: "${SERVICE_VERSION}"
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
     restart: always
-    network_mode: "host"
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
+    networks:
+      - headstart
 
-  search_openaire:
-    build:
-      context: server
-      dockerfile: openaire.docker
+  openaire:
+    image: openaire:${SERVICE_VERSION}
     env_file:
       - server/workers/openaire/openaire.env
+    environment:
+      SERVICE_VERSION: "${SERVICE_VERSION}"
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
     restart: always
-    network_mode: "host"
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
     depends_on:
       - redis
+    networks:
+      - headstart
 
 volumes:
   redis:
-  db-data:
+  db_data:
     driver: local
+
+networks:
+  headstart:

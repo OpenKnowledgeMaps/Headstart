@@ -1,0 +1,11 @@
+server {
+    listen ${NGINX_PORT};
+
+    location /stable/ {
+        proxy_pass http://stable_api_1:5001/api/;
+
+        location /stable/persistence/ {
+            proxy_pass http://stable_persistence_1:5001/api/persistence/;
+        }
+    }
+}
