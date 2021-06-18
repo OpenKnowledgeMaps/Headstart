@@ -64,8 +64,8 @@ $search_flow_config_local = array(
                         ]
                     ],
                     ['id' => 'limit', 'multiple' => false, 'name' => 'Limit', 'type' => 'dropdown', 'fields' => [
-                            ['id' => '100', 'text' => '100 documents'],
-                            ['id' => '1000', 'text' => '1000 documents']
+                            ['id' => '1000', 'text' => '1000 documents'],
+                            ['id' => '100', 'text' => '100 documents']
                         ]
                     ],
                     ['id' => 'sg_method', 'multiple' => false, 'name' => 'Streamgraph method', 'type' => 'dropdown', 'fields' => [

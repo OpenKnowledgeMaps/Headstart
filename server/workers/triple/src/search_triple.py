@@ -180,7 +180,11 @@ class TripleClient(object):
                     filtered.append(field[0].get(content_field))
             except Exception:
                 filtered = [""]
-        return ". ".join(filtered)
+        try:
+            res = ". ".join(filtered)
+        except Exception:
+            res = ""
+        return res
 
     @staticmethod
     def clean_subject(subject):
