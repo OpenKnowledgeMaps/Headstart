@@ -149,7 +149,6 @@ class TripleClient(object):
                               .map(lambda x: x[0] if x else ""))
         metadata["relevance"] = df.index
         metadata.dropna(axis=0, subset=["year"], inplace=True)
-        metadata["subject"] = metadata.apply(lambda x: ". ".join(x[subject_fields]), axis=1)
         metadata = metadata.head(parameters.get('limit'))
         text = pd.DataFrame()
         text["id"] = metadata["id"]
