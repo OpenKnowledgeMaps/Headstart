@@ -35,11 +35,9 @@ if(isset($last_update)) {
 
 $result = search("gsheets", $dirty_query
                     , $params, array("sheet_id")
-                    , ";", null, false
-                    , false, null, 3
-                    , "area_uri", "subject"
-                    , $sheet_id, false
-                    , "api", "api");
+                    , false
+                    , false, null
+                    , $sheet_id, false);
 
 echo $result;
 
