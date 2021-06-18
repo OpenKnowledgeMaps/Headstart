@@ -14,20 +14,10 @@ Each comes with a docker file (ending on `.docker`), which is used for creating 
 
 Please follow the install instructions for your OS:
 
-* Windows: https://docs.docker.com/docker-for-windows/install/
 * Mac: https://docs.docker.com/docker-for-mac/install/
 * Ubuntu: https://docs.docker.com/docker-for-mac/install/ (also available for other Linux)
 
 Please follow the install instructions for docker-compose for your OS: https://docs.docker.com/compose/install/
-
-### Windows
-
-It is recommended to install the latest version of [Docker for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows).
-Additionally, following settings may need to be activated:
-
-* [Volume Sharing](https://docs.microsoft.com/en-us/visualstudio/containers/troubleshooting-docker-errors?view=vs-2019)
-
-(In case Docker for Windows does not seem to start, it may be already running in the background and hiding in the task bar menu in the lower right corner.)
 
 ### Setting up the Apache2 reverse proxy
 
@@ -49,11 +39,12 @@ The following lines have to be added to the appropriate sites-available config o
     # other config
 
     # Proxy server settings for Head Start API
-  	ProxyPass /api http://localhost:5001/api connectiontimeout=120 timeout=120
-  	ProxyPassReverse /api http://localhost:5001/api
-  	ProxyPass /swaggerui http://localhost:5001/swaggerui
-  	ProxyPassReverse /swaggerui http://localhost:5001/swaggerui
-
+        <Location /api>
+            Deny from all    
+            Allow from 127.0.0.1
+            ProxyPass http://127.0.0.1:8080/
+            ProxyPassReverse http://127.0.0.1/api
+        </Location>
 
 </VirtualHost>
 ```
@@ -71,10 +62,8 @@ Services:
 * In `server/workers/services/src/config` copy `example_settings.py` to `settings.py` and change the values for `ENV` (`development` or `production`) and `DEBUG` (`TRUE` or `FALSE`).
 * In `settings.py` you can also configure databases.
 
-
 TRIPLE ElasticSearch core service:
-* In `server/workers/services/triple/` copy `example_es_config.json` to `es_config.json` and fill in the fields.
-* In `server/workers/services/triple/` copy `example_triple.env` to `triple.env` and change the values if necessary.
+* In `server/workers/services/triple/` copy `example_triple.env` to `triple.env` and edit the values regarding the ElasticSearch access accordingly.
 
 GSheets Google API client authentication credentials::
 * In `server/workers/services/gsheets/` copy `example_gsheets.env` to `gsheets.env` and change the values if necessary.
@@ -82,79 +71,84 @@ GSheets Google API client authentication credentials::
 
 
 Secure Redis:
-* In `server/workers` copy `example_redis_config.json` to `redis_config.json`  and `example_redis.conf` to `redis.conf` and in both files replace "long_secure_password" with a long, secure password (Line 507 in redis.conf, parameter `requirepass`).
-
-
-PostgreSQL service:
-* In root folder create `.env` from the `example.env` and fill in the environment variables with the correct login data.
-* Manual database creation:
-
-Enter container: `docker exec -it VARYINGNAME_pgsql_1 psql -U headstart`
-
-Execute command: `CREATE DATABASE databasename;`
-
-* In `preprocessing/conf/config_local.ini` change "databasename" to the dev/production database name for the specific integration. This should be in line with the database names provided in `settings.py`
+* In `server/workers` copy `example_redis.conf` to `redis.conf` and replace "long_secure_password" with a long, secure password (Line 507 in redis.conf, parameter `requirepass`).
 
 Secure Postgres:
 * In `server/workers` duplicate `example_pg_hba.conf` to `pg_hba.conf` and review the settings. The default values should be ok for a default deployment (host connections are only allowed for user "headstart" with an md5-hashed password), but you may want to change access rights.
 
-### Starting the backend services with docker-compose
+
+Overall deployment environment variables:
+PostgreSQL service:
+* In `server/workers/flavorconfigs` folder create a new `flavorname.env` from the `example.env` and fill in the environment variables with the correct login data.
+  * This includes Postgresql and redis settings
+
+
+* Manual database creation for Postgres:
+
+Enter container: `docker exec -it VARYINGNAME_db_1 psql -U headstart`
+
+Execute command: `CREATE DATABASE databasename;`
+
+Exit the container and re-enter it as normal user: `docker exec -it VARYINGNAME_db_1 /bin/bash`
+
+Execute command: `python manage.py`
+
+* In `preprocessing/conf/config_local.ini` change "databasename" to the dev/production database name for the specific integration. This should be in line with the database names provided in `settings.py`
+
+
+### Adding a new versioned "flavor" of the backend
+
+
+1. Make changes to code in `server/workers` (any API /integration, …)
+1. Commit changes
+1. Checkout commit (make note of commit hash)
+1. Run `server/workers/build_docker_images.sh`
+1. Create new {flavor}.env in `server/workers/flavorconfigs/` using `example.env` as template. Set the “COMPOSE_PROJECT_NAME={flavor}” and the SERVICE_VERSION={commit hash} to the values from step 3.
+1. Run `docker-compose up --env-file server/workers/flavorconfigs/flavor.env -d` to start the services
+1. Add new entry to `server/workers/proxy/templates/default.conf.templates`
+1. Add flavored networks to `server/workers/proxy/docker-compose.yml` so that the Nginx-proxy knows where to find the specific versioned services
+1. Down and up the proxy service from `server/workers/proxy` working directory
+1. Test by e.g. `curl -vvvv localhost/api/{flavor}/triple/service_version`
+
+
+### Starting a specific versioned "flavor" of the backend services with docker-compose
 
 Following commands have to be executed from the root folder of the repository, where `docker-compose.yml` is located.
 
-**Build images**
-
-* on Linux:
-```
-docker-compose build
-```
-
-* on Windows:
-```
-docker-compose -f docker-compose_win.yml build
-```
-
 **Start services and send them to the docker daemon**
 
-* on Linux:
 ```
-docker-compose up -d
-```
-
-* on Windows:
-```
-docker-compose -f docker-compose_win.yml up -d
+docker-compose --env-file server/workers/flavorconfigs/flavor.env up -d
 ```
 
-**All in one:**
 
-* on Linux:
-```
-docker-compose up -d --build
-```
+**Shutting service down**
 
-* shut service down
-
-* on Linux:
 ```
-docker-compose down
+docker-compose --env-file server/workers/flavorconfigs/flavor.env down
 ```
 
-* on Windows:
-```
-docker-compose -f docker-compose_win.yml down
-```
 
-### Deploying the example:
+### Adding a new service to the backend
 
-Use a deployment script, or manually deploy an example (currently only TRIPLE is integrated in this way) as described in [HOWTO: search repos](../../doc/howto_search_repos.md):
+1. Add service configuration in docker-compose.yml
+	1. Add required environment variables that need to be passed from .env to container in docker-compose.yml
+1. Add service related changes in build-docker-images.sh
+	1. Add service to build list
+1. Add service source code and Dockerfile in a new folder in `server/workers`
+1. Add new env variables to .env files
 
-Additionally, the `config_local.ini` now requires an additional parameter under `[general]`:
 
+### Integrating with clients
+
+In `server/preprocessing/conf/config_local.ini` change the following configs:
 ```
 # URL to OKMaps API
-api_url = ""
-
+api_url = "http://127.0.0.1/api/"
+# flavor of API, default: "stable"
+api_flavor = "stable"
+# The persistence backend to use - either api or legacy
+persistence_backend = "api"
+# The processing backend to use - either api or legacy
+processing_backend = "api"
 ```
-
-where `api_url` is the full URL to the API endpoint.
