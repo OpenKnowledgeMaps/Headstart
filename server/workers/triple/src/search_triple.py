@@ -254,5 +254,5 @@ class TripleClient(object):
                     res["id"] = k
                     res["params"] = parameters
                     res["status"] = "error"
-                    res["error"] = str(e)
+                    res["reason"] = "unexpected data processing error"
                     self.redis_store.set(k+"_output", json.dumps(res))
