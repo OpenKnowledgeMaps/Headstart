@@ -149,6 +149,10 @@ class TripleClient(object):
                               .map(lambda x: x[0] if x else ""))
         metadata["relevance"] = df.index
         metadata.dropna(axis=0, subset=["year"], inplace=True)
+        try:
+            metadata["subject"] = metadata.apply(lambda x: ". ".join(x[subject_fields]), axis=1)
+        except Exception:
+            self.logger.exception("Exception during data preprocessing.")
         metadata = metadata.head(parameters.get('limit'))
         text = pd.DataFrame()
         text["id"] = metadata["id"]
