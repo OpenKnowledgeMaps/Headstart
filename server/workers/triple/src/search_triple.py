@@ -150,9 +150,11 @@ class TripleClient(object):
         metadata["relevance"] = df.index
         metadata.dropna(axis=0, subset=["year"], inplace=True)
         try:
-            metadata["subject"] = metadata.apply(lambda x: ". ".join(x[subject_fields]), axis=1)
+            metadata["subject"] = metadata.apply(lambda x: ". ".join(x[["subject"] + subject_fields]), axis=1)
+            metadata["subject_orig"] = metadata.apply(lambda x: ". ".join(x[["subject_orig"] + subject_fields]), axis=1)
         except Exception:
             self.logger.exception("Exception during data preprocessing.")
+            self.logger.debug(metadata.columns)
         metadata = metadata.head(parameters.get('limit'))
         text = pd.DataFrame()
         text["id"] = metadata["id"]
