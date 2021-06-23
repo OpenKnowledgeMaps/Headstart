@@ -1,0 +1,89 @@
+body, .refine-search {
+font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;     
+}
+
+.center-div {
+    -webkit-box-shadow: 0px 0px 0px 0px #cacfd3;
+    -moz-box-shadow: 0px 0px 0px 0px #cacfd3;
+    box-shadow: 0px 0px 0px 0px #cacfd3;
+}
+
+.center-div2 {
+    -webkit-box-shadow: 0px 2px 4px 0px #cacfd3;
+    -moz-box-shadow: 0px 2px 4px 0px #cacfd3;
+    box-shadow: 0px 2px 4px 0px #cacfd3;
+}
+
+/*this needs to be added to searchflow css, it wasnt extracted from project website searchflow yet*/
+.searchpage .center-div2 {
+    margin:0;
+}
+
+/*this needs to be added to searchflow css, it wasnt extracted from project website searchflow yet*/
+.noresults-search-form {
+    margin-bottom: 20px;
+}
+
+.searchpage {
+    background-color: #f7f7f7;
+}
+
+.center-div {
+    background-color: transparent;
+}
+
+#progressbar .ui-widget-header {
+    background: #622166;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.bold, .refine-search {
+    color: #333;
+}
+
+.submit-btn {
+    font-size: 18px;
+    font-weight: 300;
+    background-color: #622166;
+    border-color: #622166;
+}
+
+.submit-btn:hover {
+    background-color: #333;
+    color: white;
+    border-color: #333;
+}
+
+#filter-container .frontend-btn, .btn {
+    color: #333;
+    border: 1px solid #333;
+}
+
+#filter-container .frontend-btn:hover, #filter-container .frontend-btn:active, #filter-container .frontend-btn:focus, .btn:hover {
+    background: #333;
+}
+
+.btn-default:hover {
+    background-color: #333;
+}
+
+.filter-btn-highlight, .open > .dropdown-toggle.btn-default, .open > .dropdown-toggle.btn-default:hover, .open > .dropdown-toggle.btn-default:active, .btn-default:active, .btn-default:hover, .btn-default:focus {
+    background-color: #333 !important;
+}
+
+.dropdown-menu > .active > a {
+    background-color: #e7e7e7;
+    color: #333;
+}
+
+#try-again-title {
+    font-size: 18px !important;
+}
+
+#error-title {
+    color: #622166 !important;
+    margin-bottom: 20px !important;
+}
