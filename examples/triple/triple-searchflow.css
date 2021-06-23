@@ -87,3 +87,13 @@ font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: #622166 !important;
     margin-bottom: 20px !important;
 }
+
+.basic-button {
+    border: 2px solid #622166;
+    background-color: #622166;
+}
+
+.basic-button:hover, .basic-button:active, .basic-button:focus {
+    color: #622166;
+    background-color: transparent;
+}
