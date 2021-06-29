@@ -103,17 +103,24 @@ detect_error <- function(failed, service) {
     if (grepl("Timeout was reached", failed$query_reason, fixed=TRUE)){
         reason <- c(reason, 'API error: timeout')
     }
-    if (service == 'pubmed' && startsWith(failed$query_reason, "HTTP failure: 500") && grepl("error forwarding request", failed$query_reason, fixed=TRUE)){
-        reason <- c(reason, 'API error: requested metadata size')
+    if (length(reason) == 0 && service == 'base') {
+      if (grepl("xml_find_first", failed$query_reason, fixed=TRUE)){
+        reason <- c(reason, 'API error: BASE not reachable')
+      }
     }
-    if (length(reason) == 0 && service == 'pubmed' && startsWith(failed$query_reason, "HTTP failure: 500")){
-        reason <- c(reason, 'API error: PubMed not reachable')
-    }
-    if (length(reason) == 0 && service == 'pubmed' && grepl("Could not resolve host", failed$query_reason, fixed=TRUE)){
-        reason <- c(reason, 'API error: PubMed not reachable')
-    }
-    if (length(reason) == 0 && service == 'pubmed' && startsWith(failed$query_reason, "HTTP failure")){
-        reason <- c(reason, 'unexpected PubMed API error')
+    if (length(reason) == 0 && service == 'pubmed') {
+      if (startsWith(failed$query_reason, "HTTP failure: 500") && grepl("error forwarding request", failed$query_reason, fixed=TRUE)){
+          reason <- c(reason, 'API error: requested metadata size')
+      }
+      if (startsWith(failed$query_reason, "HTTP failure: 500")){
+          reason <- c(reason, 'API error: PubMed not reachable')
+      }
+      if (grepl("Could not resolve host", failed$query_reason, fixed=TRUE)){
+          reason <- c(reason, 'API error: PubMed not reachable')
+      }
+      if (startsWith(failed$query_reason, "HTTP failure")){
+          reason <- c(reason, 'unexpected PubMed API error')
+      }
     }
     if (length(reason) == 0) {
         result <- regmatches(failed$query, regexec(phrasepattern, failed$query))
