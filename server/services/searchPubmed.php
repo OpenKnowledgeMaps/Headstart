@@ -19,8 +19,7 @@ $post_params = $_POST;
 $result = search("pubmed", $dirty_query
                     , $post_params, $query_params
                     , true
-                    , true, null, 3
-                    , "area_uri", "subject"
+                    , true, null
                     , $precomputed_id, false);
 
 echo $result
