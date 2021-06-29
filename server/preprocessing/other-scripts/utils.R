@@ -104,7 +104,7 @@ detect_error <- function(failed, service) {
         reason <- c(reason, 'API error: timeout')
     }
     if (length(reason) == 0 && service == 'base') {
-      (grepl("xml_find_first", failed$query_reason, fixed=TRUE)){
+      if (grepl("xml_find_first", failed$query_reason, fixed=TRUE)){
         reason <- c(reason, 'API error: BASE not reachable')
       }
     }
