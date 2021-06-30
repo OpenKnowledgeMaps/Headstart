@@ -43,7 +43,7 @@ class Streamgraph(object):
         x = self.get_x_axis(daterange)
         sg_data = {}
         sg_data["x"] = x
-        sg_data["subject"] = self.postprocess(daterange, data)
+        sg_data["subject"] = self.postprocess(daterange, data, top_n)
         return sg_data
 
     @staticmethod
@@ -138,13 +138,18 @@ class Streamgraph(object):
         return words[:n]
 
     @staticmethod
-    def postprocess(daterange, data):
+    def postprocess(daterange, data, top_n):
         x = pd.DataFrame(daterange, columns=["year"])
         temp = []
-        for item in pd.unique(data.subject):
+        for item in top_n:
             tmp = (pd.merge(data[data.subject.str.contains(item)], x,
                             left_on="year", right_on="year",
                             how="right")
+                     .groupby("year")
+                     .agg({"subject": "sum",
+                           "counts": "sum",
+                           "id": aggregate_ids,
+                           "boundary_label": "max"})
                      .fillna({"counts": 0, "subject": item, "id": "NA"})
                      .sort_values("year"))
             tmp["subject"] = item
@@ -158,3 +163,9 @@ class Streamgraph(object):
                          "ids_timestep": ids_timestep})
         df = pd.DataFrame.from_records(temp)
         return df.to_dict(orient="records")
+
+def aggregate_ids(series):
+    try:
+        return ", ".join(series)
+    except Exception:
+        return "NA"
