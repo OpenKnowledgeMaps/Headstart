@@ -15,8 +15,7 @@ $post_params = $_POST;
 $result = search("linkedcat",
                  $dirty_query, $post_params,
                  array("from", "to", "include_content_type", "today", "vis_type"),
-                 $transform_query_tolowercase=false, true, null, 3,
-                 "area_uri", "subject",
+                 $transform_query_tolowercase=false, true, null,
                  $precomputed_id, true);
 
 echo $result
