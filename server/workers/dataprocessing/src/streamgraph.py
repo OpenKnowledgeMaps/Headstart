@@ -147,6 +147,7 @@ class Streamgraph(object):
                             how="right")
                      .fillna({"counts": 0, "subject": item, "id": "NA"})
                      .sort_values("year"))
+            tmp["subject"] = item
             y = tmp.counts.astype(int).to_list()
             ids_overall = (pd.unique(tmp[tmp.id != "NA"]
                                      .id.map(lambda x: x.split(", "))
