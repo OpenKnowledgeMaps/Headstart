@@ -37,7 +37,7 @@ class Streamgraph(object):
         daterange = self.get_daterange(boundaries)
         data = pd.merge(counts, boundaries, on='year')
         top_n = self.get_top_n(metadata, query, n, method)
-        data = (data[data.subject.map(lambda x: x in top_n)]
+        data = (data[data.subject.str.contains('|'.join(top_n))]
                 .sort_values("year")
                 .reset_index(drop=True))
         x = self.get_x_axis(daterange)
@@ -142,7 +142,7 @@ class Streamgraph(object):
         x = pd.DataFrame(daterange, columns=["year"])
         temp = []
         for item in pd.unique(data.subject):
-            tmp = (pd.merge(data[data.subject == item], x,
+            tmp = (pd.merge(data[data.subject.str.contains(item)], x,
                             left_on="year", right_on="year",
                             how="right")
                      .fillna({"counts": 0, "subject": item, "id": "NA"})
