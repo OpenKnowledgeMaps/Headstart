@@ -1,7 +1,7 @@
 import pandas as pd
 import logging
 import sys
-import os
+import re
 import numpy as np
 
 from itertools import chain
@@ -37,7 +37,7 @@ class Streamgraph(object):
         daterange = self.get_daterange(boundaries)
         data = pd.merge(counts, boundaries, on='year')
         top_n = self.get_top_n(metadata, query, n, method)
-        data = (data[data.subject.str.contains('|'.join(top_n))]
+        data = (data[data.subject.str.contains('|'.join(top_n), flags=re.IGNORECASE)]
                 .sort_values("year")
                 .reset_index(drop=True))
         x = self.get_x_axis(daterange)
@@ -142,7 +142,7 @@ class Streamgraph(object):
         x = pd.DataFrame(daterange, columns=["year"])
         temp = []
         for item in top_n:
-            tmp = (pd.merge(data[data.subject.str.contains(item)], x,
+            tmp = (pd.merge(data[data.subject.str.contains(item, flags=re.IGNORECASE)], x,
                             left_on="year", right_on="year",
                             how="right")
                      .groupby("year")
@@ -153,6 +153,7 @@ class Streamgraph(object):
                      .fillna({"counts": 0, "subject": item, "id": "NA"})
                      .sort_values("year"))
             tmp["subject"] = item
+            tmp["counts"] = tmp["id"].map(lambda x: len(list(filter(lambda x: x!="NA", x.split(",")))))
             y = tmp.counts.astype(int).to_list()
             ids_overall = (pd.unique(tmp[tmp.id != "NA"]
                                      .id.map(lambda x: x.split(", "))
@@ -166,6 +167,6 @@ class Streamgraph(object):
 
 def aggregate_ids(series):
     try:
-        return ", ".join(series)
+        return ", ".join(pd.unique(series))
     except Exception:
         return "NA"
