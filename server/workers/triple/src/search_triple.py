@@ -131,7 +131,7 @@ class TripleClient(object):
         metadata["paper_abstract"] = df.abstract.map(lambda x: self.filter_lang(x, lang, "text"))
         metadata["paper_abstract_en"] = df.abstract.map(lambda x: self.filter_lang(x, 'en', "text"))
         metadata["published_in"] = df.publisher.map(lambda x: ", ".join(x))
-        metadata["year"] = pd.to_datetime(df.date_published, errors='coerce').map(lambda x: x.year)
+        metadata["year"] = pd.to_datetime(df.date_published, errors='coerce').map(lambda x: str(x.year))
         metadata["url"] = df.main_entity_of_page.map(lambda x: x if x else "")
         metadata["readers"] = 0
         metadata["subject_orig"] = (df.keywords
