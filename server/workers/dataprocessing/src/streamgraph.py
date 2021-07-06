@@ -25,7 +25,7 @@ class Streamgraph(object):
 
     def get_streamgraph_data(self, metadata, query, n=12, method="tfidf"):
         df = pd.DataFrame.from_records(metadata)
-        df.year = pd.to_datetime(df.year).map(lambda x: x.year)
+        df.year = pd.to_datetime(df.year)
         df = df[df.subject.map(lambda x: x is not None)]
         df.subject = df.subject.map(lambda x: [s for s in x.split("; ")] if isinstance(x, str) else "")
         df = df[df.subject.map(lambda x: x != [])]
@@ -52,8 +52,8 @@ class Streamgraph(object):
 
     @staticmethod
     def get_daterange(boundaries):
-        daterange = pd.date_range(start=min(boundaries.year).to_datetime64(),
-                                  end=max(boundaries.year).to_datetime64(),
+        daterange = pd.date_range(start=min(boundaries.year),
+                                  end=max(boundaries.year),
                                   freq='AS')
         if len(daterange) > 0:
             return sorted(daterange)
