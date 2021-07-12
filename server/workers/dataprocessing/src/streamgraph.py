@@ -40,10 +40,8 @@ class Streamgraph(object):
         data = (data[data.subject.str.contains('|'.join(top_n), flags=re.IGNORECASE)]
                 .sort_values("year")
                 .reset_index(drop=True))
-        x = self.get_x_axis(daterange)
         sg_data = {}
-        sg_data["x"] = x
-        sg_data["subject"] = self.postprocess(daterange, data, top_n)
+        sg_data["x"], sg_data["subject"] = self.postprocess(daterange, data, top_n)
         return sg_data
 
     @staticmethod
@@ -162,11 +160,11 @@ class Streamgraph(object):
                          "ids_overall": ids_overall,
                          "ids_timestep": ids_timestep})
         df = pd.DataFrame.from_records(temp)
-        df = self.reduce_daterange(df)
-        return df.to_dict(orient="records")
+        x, df = self.reduce_daterange(daterange, df)
+        return x, df.to_dict(orient="records")
     
-    @staticmethod
-    def reduce_daterange(df):
+    def reduce_daterange(self, daterange, df):
+        x = self.get_x_axis(daterange)
         yearly_sums = pd.DataFrame(df.y.to_list()).T.sum(axis=1)
         yearly_sums_cum = yearly_sums.cumsum()
         # 5% which is chosen here is an arbitrary value, could also be higher 10% or lower
@@ -174,7 +172,8 @@ class Streamgraph(object):
         start_index = yearly_sums_cum[yearly_sums_cum > min_value].index[0]
         df.y = df.y.map(lambda x: x[start_index+1:])
         df.ids_timestep = df.ids_timestep.map(lambda x: x[start_index+1:])
-        return df
+        x = x[start_index+1:]
+        return x, df
     
     @staticmethod
     def reduce_metadata_set(metadata, sg_data):
