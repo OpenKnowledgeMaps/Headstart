@@ -137,8 +137,7 @@ class Streamgraph(object):
         words = [w for w in words if len(w) > 2]
         return words[:n]
 
-    @staticmethod
-    def postprocess(daterange, data, top_n):
+    def postprocess(self, daterange, data, top_n):
         x = pd.DataFrame(daterange, columns=["year"])
         temp = []
         for item in top_n:
@@ -163,7 +162,24 @@ class Streamgraph(object):
                          "ids_overall": ids_overall,
                          "ids_timestep": ids_timestep})
         df = pd.DataFrame.from_records(temp)
+        df = self.reduce_daterange(df)
         return df.to_dict(orient="records")
+    
+    @staticmethod
+    def reduce_daterange(df):
+        yearly_sums = pd.DataFrame(df.y.to_list()).T.sum(axis=1)
+        yearly_sums_cum = yearly_sums.cumsum()
+        # 5% which is chosen here is an arbitrary value, could also be higher 10% or lower
+        min_value = int(yearly_sums.sum() * 0.05)
+        start_index = yearly_sums_cum[yearly_sums_cum > min_value].index[0]
+        df.y = df.y.map(lambda x: x[start_index+1:])
+        df.ids_timestep = df.ids_timestep.map(lambda x: x[start_index+1:])
+        return df
+    
+    def reduce_metadata_set(metadata, sg_data):
+        df = pd.read_json(sg_data["subject"])
+        all_ids = set(chain.from_iterable(df.ids_overall))
+        return metadata[metadata.id.map(lambda x: x in all_ids)]
 
 def aggregate_ids(series):
     try:

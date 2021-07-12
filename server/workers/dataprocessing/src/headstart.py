@@ -78,7 +78,7 @@ class Dataprocessing(object):
                                                     params.get('top_n', 12),
                                                     params.get('sg_method'))
                     res = {}
-                    res["data"] = metadata
+                    res["data"] = sg.reduce_metadata_set(metadata, sg_data)
                     res["streamgraph"] = json.dumps(sg_data)
                     res["status"] = "success"
                     self.redis_store.set(k+"_output", json.dumps(res))
