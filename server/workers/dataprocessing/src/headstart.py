@@ -70,6 +70,8 @@ class Dataprocessing(object):
             self.logger.debug(params)
             try:
                 if params.get('vis_type') == "timeline":
+                    # the step of create_map can be dropped once deduplication is possible in API backend as well
+                    # TODO: create deduplicate endpoint in service worker and connect to that
                     metadata = self.create_map(params, input_data)
                     sg_data = sg.get_streamgraph_data(json.loads(metadata),
                                                     params.get('q'),
