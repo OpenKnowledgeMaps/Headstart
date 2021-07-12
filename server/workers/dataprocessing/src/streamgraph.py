@@ -176,6 +176,7 @@ class Streamgraph(object):
         df.ids_timestep = df.ids_timestep.map(lambda x: x[start_index+1:])
         return df
     
+    @staticmethod
     def reduce_metadata_set(metadata, sg_data):
         df = pd.read_json(sg_data["subject"])
         all_ids = set(chain.from_iterable(df.ids_overall))
