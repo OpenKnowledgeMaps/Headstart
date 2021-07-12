@@ -178,7 +178,7 @@ class Streamgraph(object):
     
     @staticmethod
     def reduce_metadata_set(metadata, sg_data):
-        df = pd.read_json(sg_data["subject"])
+        df = pd.DataFrame.from_records(sg_data["subject"])
         all_ids = set(chain.from_iterable(df.ids_overall))
         return metadata[metadata.id.map(lambda x: x in all_ids)]
 
