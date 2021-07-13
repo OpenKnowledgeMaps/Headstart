@@ -1323,6 +1323,34 @@ describe("config and context state", () => {
       );
     });
 
+    it("should initialize a correct timespan 'Until 2019' (triple streamgraph)", () => {
+      const SERVICE_NAME = "triple_sg";
+      const FROM = "1809-01-01T13:30:22.112Z";
+      const TO = "2019-08-12T13:30:22.112Z";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          service: SERVICE_NAME,
+          is_streamgraph: true,
+        },
+        {
+          params: {
+            from: FROM,
+            to: TO,
+            sorting: "most-recent"
+          },
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("timespan", "Until 12 Aug 2019");
+    });
+
     it("should initialize correct papers count", () => {
       const COUNT = 420;
       const initialState = {};

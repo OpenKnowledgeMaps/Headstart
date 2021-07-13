@@ -115,6 +115,12 @@ const getPropName = (params) => {
   return null;
 };
 
+const SERVICE_START = {
+  doaj: "1809",
+  pubmed: "1809-01-01",
+  base: "1665-01-01",
+};
+
 const getTimespan = (config, context) => {
   if (!context.params || !context.params.from || !context.params.to) {
     return null;
@@ -141,32 +147,26 @@ const getTimespan = (config, context) => {
   from.setTime(from.getTime() + from.getTimezoneOffset() * 60 * 1000);
   to.setTime(to.getTime() + to.getTimezoneOffset() * 60 * 1000);
 
-  const defaultFromHyphenated = (function (service) {
-    switch (service) {
-      case "doaj":
-        return "1809";
-      case "pubmed":
-        return "1809-01-01";
-      case "base":
-        return "1665-01-01";
-      default:
-        return "1970-01-01";
-    }
-  })(config.service);
-
-  const fromHyphenated = dateFormat(from, hyphenFormat);
-  const fromFormatted = dateFormat(from, displayFormat);
   const toFormatted = dateFormat(to, displayFormat);
+  const modifier = getModifier(config, context);
+  // most recent streamgraphs straight away display "Until xyz",
+  // other maps have a more complicated logic
+  if (!config.is_streamgraph || modifier !== "most-recent") {
+    const defaultFromHyphenated = SERVICE_START[config.service] || "1970-01-01";
 
-  if (fromHyphenated !== defaultFromHyphenated) {
-    return fromFormatted + " - " + toFormatted;
-  }
+    const fromHyphenated = dateFormat(from, hyphenFormat);
+    const fromFormatted = dateFormat(from, displayFormat);
 
-  const toHyphenated = dateFormat(to, hyphenFormat);
-  const todayHyphenated = dateFormat(today, hyphenFormat);
+    if (fromHyphenated !== defaultFromHyphenated) {
+      return fromFormatted + " - " + toFormatted;
+    }
 
-  if (toHyphenated === todayHyphenated) {
-    return "All time";
+    const toHyphenated = dateFormat(to, hyphenFormat);
+    const todayHyphenated = dateFormat(today, hyphenFormat);
+
+    if (toHyphenated === todayHyphenated) {
+      return "All time";
+    }
   }
 
   return "Until " + toFormatted;
