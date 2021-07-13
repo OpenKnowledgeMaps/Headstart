@@ -528,6 +528,24 @@ describe("Context line component", () => {
         new RegExp(`open access\\)$`)
       );
     });
+
+    it("doesn't contain a number of open access articles in TRIPLE", () => {
+      const OPEN_ACCESS_COUNT = 0;
+      const SERVICE = "triple_km";
+      const storeObject = setup();
+      storeObject.contextLine.openAccessCount = OPEN_ACCESS_COUNT;
+      storeObject.service = SERVICE;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(<ContextLine store={store} />, container);
+      });
+
+      expect(container.querySelector("#num_articles").textContent).not.toMatch(
+        new RegExp(`open access\\)$`)
+      );
+    });
   });
 
   describe("document types part", () => {
