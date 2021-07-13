@@ -123,9 +123,19 @@ const getTimespan = (config, context) => {
   const displayFormat = config.service === "doaj" ? "yyyy" : "d mmm yyyy";
   const hyphenFormat = config.service === "doaj" ? "yyyy" : "yyyy-mm-dd";
 
-  let today = new Date();
-  let from = new Date(context.params.from);
-  let to = new Date(context.params.to);
+  const today = new Date();
+  const from = new Date(context.params.from);
+  const to = new Date(context.params.to);
+  if (
+    typeof context.params.to === "string" &&
+    context.params.to.match(/^\d{4}$/)
+  ) {
+    to.setMonth(11);
+    to.setDate(31);
+  }
+  if (to.getTime() > today.getTime()) {
+    to.setTime(today.getTime());
+  }
 
   today.setTime(today.getTime() + today.getTimezoneOffset() * 60 * 1000);
   from.setTime(from.getTime() + from.getTimezoneOffset() * 60 * 1000);

@@ -1277,6 +1277,52 @@ describe("config and context state", () => {
       expect(result).toHaveProperty("timespan", null);
     });
 
+    it("should initialize a correct timespan to today (triple)", () => {
+      const TODAY = new Date();
+      const SERVICE_NAME = "triple_km";
+      const FROM = "2019";
+      const TO = TODAY.getFullYear().toString();
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          service: SERVICE_NAME,
+        },
+        {
+          params: {
+            from: FROM,
+            to: TO,
+          },
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      const MONTHS = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      expect(result).toHaveProperty(
+        "timespan",
+        `1 Jan 2019 - ${TODAY.getDate()} ${
+          MONTHS[TODAY.getMonth()]
+        } ${TODAY.getFullYear()}`
+      );
+    });
+
     it("should initialize correct papers count", () => {
       const COUNT = 420;
       const initialState = {};
