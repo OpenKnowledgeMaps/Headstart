@@ -13,6 +13,7 @@ import PaperCount from "../templates/contextfeatures/PaperCount";
 import DatasetCount from "../templates/contextfeatures/DatasetCount";
 import Funder from "../templates/contextfeatures/Funder";
 import ProjectRuntime from "../templates/contextfeatures/ProjectRuntime";
+import LegacySearchLang from "../templates/contextfeatures/LegacySearchLang";
 import SearchLang from "../templates/contextfeatures/SearchLang";
 import Timestamp from "../templates/contextfeatures/Timestamp";
 import MetadataQuality from "../templates/contextfeatures/MetadataQuality";
@@ -76,8 +77,8 @@ class ContextLine extends React.Component {
         {defined(params.projectRuntime) && (
           <ProjectRuntime>{params.projectRuntime}</ProjectRuntime>
         )}
-        {defined(params.searchLanguage) && (
-          <SearchLang>{params.searchLanguage}</SearchLang>
+        {defined(params.legacySearchLanguage) && (
+          <LegacySearchLang>{params.legacySearchLanguage}</LegacySearchLang>
         )}
         {defined(params.timestamp) && (
           <Timestamp
@@ -86,6 +87,9 @@ class ContextLine extends React.Component {
           />
         )}
         {this.renderMetadataQuality()}
+        {defined(params.searchLanguage) && (
+          <SearchLang>{params.searchLanguage}</SearchLang>
+        )}
       </ContextLineTemplate>
     );
   }

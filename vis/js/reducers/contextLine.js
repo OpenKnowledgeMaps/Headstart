@@ -57,7 +57,13 @@ const contextLine = (state = {}, action) => {
             ? context.params.funder
             : null,
         projectRuntime: getProjectRuntime(config, context),
-        searchLanguage: getSearchLanguage(config, context),
+        // probably deprecated, used in base in the past
+        legacySearchLanguage: getLegacySearchLanguage(config, context),
+        // new language version, used in triple
+        searchLanguage:
+          context.params && context.params.language
+            ? context.params.language
+            : null,
         timestamp: getTimestamp(config, context),
         metadataQuality: getMetadataQuality(config, context),
       };
@@ -188,7 +194,7 @@ const getProjectRuntime = (config, context) => {
   )}–${context.params.end_date.slice(0, 4)}`;
 };
 
-const getSearchLanguage = (config, context) => {
+const getLegacySearchLanguage = (config, context) => {
   if (
     !context.params ||
     !context.params.lang_id ||

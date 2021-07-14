@@ -33,7 +33,7 @@ const setup = (
         datasetCount: null,
         funder: null,
         projectRuntime: null,
-        searchLanguage: null,
+        legacySearchLanguage: null,
         timestamp: null,
         ...overrideContextLine,
       },

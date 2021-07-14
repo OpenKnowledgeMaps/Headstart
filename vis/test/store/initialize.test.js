@@ -1338,7 +1338,7 @@ describe("config and context state", () => {
           params: {
             from: FROM,
             to: TO,
-            sorting: "most-recent"
+            sorting: "most-recent",
           },
         }
       );
@@ -1510,7 +1510,7 @@ describe("config and context state", () => {
       expect(result).toHaveProperty("projectRuntime", null);
     });
 
-    it("should initialize correct language", () => {
+    it("should initialize correct language (base legacy)", () => {
       const LANG_ID = "cs";
       const LANGUAGES = [
         {
@@ -1540,12 +1540,12 @@ describe("config and context state", () => {
       );
 
       expect(result).toHaveProperty(
-        "searchLanguage",
+        "legacySearchLanguage",
         "Language: čeština (Czech) "
       );
     });
 
-    it("should initialize null language if wrong setting", () => {
+    it("should initialize null language if wrong setting (base legacy)", () => {
       const LANG_ID = "unknown";
       const LANGUAGES = [
         {
@@ -1574,7 +1574,7 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toHaveProperty("searchLanguage", null);
+      expect(result).toHaveProperty("legacySearchLanguage", null);
     });
 
     it("should initialize correct timestamp", () => {
@@ -1748,6 +1748,27 @@ describe("config and context state", () => {
       const result = contextLineReducer(INITIAL_STATE, { canceled: true });
 
       expect(result).toEqual(INITIAL_STATE);
+    });
+
+    it("should initialize correct language (triple)", () => {
+      const LANG_ID = "en";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          params: {
+            language: LANG_ID,
+          },
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("searchLanguage", LANG_ID);
     });
   });
 
