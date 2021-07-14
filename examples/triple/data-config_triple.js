@@ -37,4 +37,5 @@ var data_config = {
         , "#FBB240", "#40FBC8", "#fee4bc", "#bcfeec", "#c6bcfe", "#febcca"],
 
     highlight_query_terms: true,
+    filter_menu_dropdown: false,
 };
