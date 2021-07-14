@@ -28,7 +28,9 @@ var data_config = {
     filter_options: ["all", "open_access"],
 
     embed_modal: true,
-    share_modal: false,
+    share_modal: true,
+    faqs_button: true,
+    faqs_url: "https://openknowledgemaps.org/faq",
 
     streamgraph_colors: ["#215A66", "#66214A", "#5D40FB", "#CB40FB", "#40C0FB", "#FB4068"
         , "#FBB240", "#40FBC8", "#fee4bc", "#bcfeec", "#c6bcfe", "#febcca"],
