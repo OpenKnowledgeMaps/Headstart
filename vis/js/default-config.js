@@ -278,6 +278,10 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
+            lang_all: "All lang",
+            lang_en: "English",
+            lang_fr: "French",
+            lang_es: "Spanish"
         },
         ger: {
             loading: "Wird geladen...",
@@ -457,6 +461,10 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
+            lang_all: "All lang",
+            lang_en: "English",
+            lang_fr: "French",
+            lang_es: "Spanish"
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -528,6 +536,10 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
+            lang_all: "All lang",
+            lang_en: "English",
+            lang_fr: "French",
+            lang_es: "Spanish"
         },
         eng_openaire: {
             loading: "Loading...",
@@ -606,6 +618,10 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
+            lang_all: "All lang",
+            lang_en: "English",
+            lang_fr: "French",
+            lang_es: "Spanish"
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -775,6 +791,10 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
+            lang_all: "All lang",
+            lang_en: "English",
+            lang_fr: "French",
+            lang_es: "Spanish"
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -844,6 +864,10 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
+            lang_all: "All lang",
+            lang_en: "English",
+            lang_fr: "French",
+            lang_es: "Spanish"
         },
     },
 
