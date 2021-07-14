@@ -9,7 +9,7 @@ import $ from "jquery";
 
 import {
   getLabelPosition,
-  moveOverlappingLabels,
+  recalculateOverlappingLabels,
   setTM,
   transformData,
 } from "../utils/streamgraph";
@@ -217,53 +217,87 @@ class Streamgraph extends React.Component {
    * @param {number} width graph width
    */
   renderLabels(container, xScale, yScale, width) {
+    // first render the texts and colors
+    this.renderLabelsContent(container, xScale, yScale, width);
+
+    // then move them if they overlap
+    this.moveOverlappingLabels(container);
+
+    // finally render the white boxes
+    this.renderLabelsBoxes(container, xScale);
+  }
+
+  /**
+   * Renders the stream labels content (rectangle in the stream color + stream name) using d3.
+   *
+   * @param {Object} container the d3 representation of #streamgraph-chart
+   * @param {Function} xScale x coordinate scaling function
+   * @param {Function} yScale y coordinate scaling function
+   * @param {number} width graph width
+   */
+  renderLabelsContent(container, xScale, yScale, width) {
     const self = this;
     const series = container.selectAll(".streamgraph-area");
 
-    const text = container
-      .selectAll("text.label")
+    const labels = container
+      .selectAll("g.label")
       .data(series.data())
       .enter()
-      .append("text")
+      .append("g")
       .attr("dy", "10")
-      .classed("label", true)
+      .classed("label", true);
+
+    labels
+      .append("rect")
+      .style("fill", (d) => d.color)
+      .style("fill-opacity", "1")
+      .attr("x", 0)
+      .attr("y", -8)
+      .attr("width", 12)
+      .attr("height", 8)
+      .attr("rx", LABEL_ROUND_FACTOR);
+
+    labels
+      .append("text")
+      .attr("dx", 15)
       .text((d) => {
         if (d.key === "") {
           d.key = "NO_LABEL";
         }
         return d.key;
-      })
-      .attr("transform", function (d) {
-        const position = getLabelPosition(this, d, xScale, yScale, width);
-        self.labelPositions.push(position);
-        return "translate(" + position.x + ", " + position.y + ")";
       });
 
-    text
+    labels.attr("transform", function (d) {
+      const position = getLabelPosition(this, d, xScale, yScale, width);
+      self.labelPositions.push(position);
+      return "translate(" + position.x + ", " + position.y + ")";
+    });
+
+    labels
       .on("mouseover", (d) => this.handleStreamMouseover(container, d))
       .on("mouseout", () => this.handleStreamMouseout(container))
       .on("mousemove", function (d) {
         self.handleStreamMousemove(container, d3.event, d, xScale);
       });
 
-    text.on("click", (d) => this.props.onAreaClick(d));
+    labels.on("click", (d) => this.props.onAreaClick(d));
+  }
 
-    const repositionedLabels = moveOverlappingLabels(this.labelPositions);
-
-    container.selectAll("text.label").attr("transform", (d) => {
-      const currentLabel = repositionedLabels.find((obj) => {
-        return obj.key === d.key;
-      });
-      return "translate(" + currentLabel.x + "," + currentLabel.y + ")";
-    });
-
+  /**
+   * Renders the stream labels boxes and borders using d3.
+   *
+   * @param {Object} container the d3 representation of #streamgraph-chart
+   * @param {Function} xScale x coordinate scaling function
+   */
+  renderLabelsBoxes(container, xScale) {
+    const self = this;
     const labels = container.selectAll(".label");
     labels[0].forEach((label) => {
       const bbox = label.getBBox();
       const ctm = label.getCTM();
 
-      const rect = container
-        .insert("rect", "text.label")
+      const boxes = container
+        .insert("rect", "g.label")
         .classed("label-background", true)
         .attr("x", bbox.x - CHART_MARGIN.left - LABEL_BORDER_WIDTH)
         .attr("y", bbox.y - CHART_MARGIN.top - LABEL_BORDER_WIDTH)
@@ -273,7 +307,7 @@ class Streamgraph extends React.Component {
 
       const currentData = label.__data__;
 
-      rect
+      boxes
         .on("mouseover", () =>
           this.handleStreamMouseover(container, currentData)
         )
@@ -282,7 +316,7 @@ class Streamgraph extends React.Component {
           self.handleStreamMousemove(container, d3.event, currentData, xScale);
         });
 
-      rect.on("click", () => {
+      boxes.on("click", () => {
         const currentStream = container.selectAll(".stream").filter((el) => {
           return el.key === currentData.key;
         });
@@ -291,7 +325,25 @@ class Streamgraph extends React.Component {
         this.props.onAreaClick({ key: currentData.key, color });
       });
 
-      setTM(rect[0][0], ctm);
+      setTM(boxes[0][0], ctm);
+    });
+  }
+
+  /**
+   * Moves the already rendered labels so they do not collide.
+   *
+   * @param {Object} container the d3 representation of #streamgraph-chart
+   */
+  moveOverlappingLabels(container) {
+    const repositionedLabels = recalculateOverlappingLabels(
+      this.labelPositions
+    );
+
+    container.selectAll("g.label").attr("transform", (d) => {
+      const currentLabel = repositionedLabels.find((obj) => {
+        return obj.key === d.key;
+      });
+      return "translate(" + currentLabel.x + "," + currentLabel.y + ")";
     });
   }
 
