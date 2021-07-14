@@ -56,7 +56,7 @@ const setup = (overrideStoreObject = {}) => {
         low_metadata_quality_desc_base: "Sample BASE low quality description",
         low_metadata_quality_desc_pubmed:
           "Sample PubMed low quality description",
-        lang_en: "English",
+        lang_all: "All lang",
       },
     },
     overrideStoreObject
@@ -377,7 +377,7 @@ describe("Context line component", () => {
       );
     });
 
-    it("contains a correct search language (triple)", () => {
+    it("contains English search language (triple)", () => {
       const SEARCH_LANG = "en";
       const storeObject = setup();
       storeObject.contextLine.searchLanguage = SEARCH_LANG;
@@ -394,12 +394,12 @@ describe("Context line component", () => {
       });
 
       expect(container.querySelector("#search_lang").textContent).toEqual(
-        storeObject.localization[`lang_${SEARCH_LANG}`]
+        "English"
       );
     });
 
-    it("contains a search language code fallback (triple)", () => {
-      const SEARCH_LANG = "cs";
+    it("contains all search languages (triple)", () => {
+      const SEARCH_LANG = "all";
       const storeObject = setup();
       storeObject.contextLine.searchLanguage = SEARCH_LANG;
 
@@ -415,7 +415,7 @@ describe("Context line component", () => {
       });
 
       expect(container.querySelector("#search_lang").textContent).toEqual(
-        SEARCH_LANG
+        storeObject.localization.lang_all
       );
     });
   });
