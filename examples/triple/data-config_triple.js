@@ -29,6 +29,7 @@ var data_config = {
 
     embed_modal: true,
     share_modal: true,
+    hashtags_twitter_card: "okmaps,openscience,dataviz,GOTRIPLE",
     faqs_button: true,
     faqs_url: "https://openknowledgemaps.org/faq",
 
