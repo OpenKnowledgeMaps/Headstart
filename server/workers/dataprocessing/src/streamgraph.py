@@ -24,7 +24,8 @@ class Streamgraph(object):
         self.logger.addHandler(handler)
 
     def get_streamgraph_data(self, metadata, query, n=12, method="tfidf"):
-        df = pd.DataFrame.from_records(metadata)
+        metadata = pd.DataFrame.from_records(metadata)
+        df = metadata.copy()
         df.year = pd.to_datetime(df.year)
         df = df[df.subject.map(lambda x: x is not None)]
         df.subject = df.subject.map(lambda x: [s for s in x.split("; ")] if isinstance(x, str) else "")
@@ -36,8 +37,9 @@ class Streamgraph(object):
         boundaries = self.get_boundaries(df)
         daterange = self.get_daterange(boundaries)
         data = pd.merge(counts, boundaries, on='year')
-        top_n = self.get_top_n(metadata, query, n, method)
-        data = (data[data.subject.str.contains('|'.join(top_n), flags=re.IGNORECASE)]
+        top_n = self.get_top_n(metadata.copy(), query, n, method)
+        sanitized_top_n = [re.escape(t) for t in top_n]
+        data = (data[data.subject.str.contains('|'.join(sanitized_top_n), flags=re.IGNORECASE)]
                 .sort_values("year")
                 .reset_index(drop=True))
         sg_data = {}
@@ -80,8 +82,7 @@ class Streamgraph(object):
         boundaries = df[["boundary_label", "year"]].drop_duplicates()
         return boundaries
 
-    def get_top_n(self, metadata, query, n, method):
-        df = pd.DataFrame.from_records(metadata)
+    def get_top_n(self, df, query, n, method):
         df = df[df.subject.map(lambda x: len(x) > 2)]
         corpus = df.subject.tolist()
         # set stopwords , stop_words='english'
@@ -139,7 +140,7 @@ class Streamgraph(object):
         x = pd.DataFrame(daterange, columns=["year"])
         temp = []
         for item in top_n:
-            tmp = (pd.merge(data[data.subject.str.contains(item, flags=re.IGNORECASE)], x,
+            tmp = (pd.merge(data[data.subject.str.contains(item, case=False, regex=False)], x,
                             left_on="year", right_on="year",
                             how="right")
                      .groupby("year")
