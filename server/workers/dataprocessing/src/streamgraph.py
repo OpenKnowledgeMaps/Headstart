@@ -173,6 +173,8 @@ class Streamgraph(object):
         start_index = yearly_sums_cum[yearly_sums_cum > min_value].index[0]
         df.y = df.y.map(lambda x: x[start_index+1:])
         df.ids_timestep = df.ids_timestep.map(lambda x: x[start_index+1:])
+        all_ids = set(chain.from_iterable(chain.from_iterable(df.ids_timestep)))
+        df["ids_overall"] = df.ids_overall.map(lambda x: [i for i in x if i in all_ids])
         x = x[start_index+1:]
         return x, df
     
