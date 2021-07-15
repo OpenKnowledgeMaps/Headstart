@@ -108,6 +108,10 @@
         padding-top: 5px;
         padding-right: 10px;
 
+        @if $skin == 'triple' {
+            display: none;
+        }
+
         .outlink_symbol {
             vertical-align: baseline;
         }
