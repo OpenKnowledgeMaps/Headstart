@@ -153,12 +153,8 @@ class Streamgraph(object):
             tmp["subject"] = item
             tmp["counts"] = tmp["id"].map(lambda x: len(list(filter(lambda x: x!="NA", x.split(",")))))
             y = tmp.counts.astype(int).to_list()
-            ids_overall = (pd.unique(tmp[tmp.id != "NA"]
-                                     .id.map(lambda x: x.split(", "))
-                                     .explode()).tolist())
             ids_timestep = tmp.id.map(lambda x: list(filter(lambda x: x!="NA", x.split(", ")))).tolist()
             temp.append({"name": item, "y": y,
-                         "ids_overall": ids_overall,
                          "ids_timestep": ids_timestep})
         df = pd.DataFrame.from_records(temp)
         x, df = self.reduce_daterange(daterange, df)
@@ -173,8 +169,7 @@ class Streamgraph(object):
         start_index = yearly_sums_cum[yearly_sums_cum > min_value].index[0]
         df.y = df.y.map(lambda x: x[start_index+1:])
         df.ids_timestep = df.ids_timestep.map(lambda x: x[start_index+1:])
-        all_ids = set(chain.from_iterable(chain.from_iterable(df.ids_timestep)))
-        df["ids_overall"] = df.ids_overall.map(lambda x: [i for i in x if i in all_ids])
+        df["ids_overall"] = df.ids_timestep.map(lambda x: len(list(chain.from_iterable(x))))
         x = x[start_index+1:]
         return x, df
     
