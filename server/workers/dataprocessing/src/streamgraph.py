@@ -156,7 +156,7 @@ class Streamgraph(object):
             ids_overall = (pd.unique(tmp[tmp.id != "NA"]
                                      .id.map(lambda x: x.split(", "))
                                      .explode()).tolist())
-            ids_timestep = tmp.id.map(lambda x: x.split(", ")).tolist()
+            ids_timestep = tmp.id.map(lambda x: list(filter(lambda x: x!="NA", x.split(", ")))).tolist()
             temp.append({"name": item, "y": y,
                          "ids_overall": ids_overall,
                          "ids_timestep": ids_timestep})
