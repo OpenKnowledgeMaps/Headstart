@@ -39,7 +39,7 @@ class Streamgraph(object):
         data = pd.merge(counts, boundaries, on='year')
         top_n = self.get_top_n(metadata.copy(), query, n, method)
         sanitized_top_n = [re.escape(t) for t in top_n]
-        data = (data[data.subject.str.contains('|'.join(sanitized_top_n), flags=re.IGNORECASE)]
+        data = (data[data.subject.str.contains('|'.join(sanitized_top_n))]
                 .sort_values("year")
                 .reset_index(drop=True))
         sg_data = {}
@@ -140,8 +140,7 @@ class Streamgraph(object):
         x = pd.DataFrame(daterange, columns=["year"])
         temp = []
         for item in top_n:
-            exclude = set(top_n) - set([item])
-            tmp = (pd.merge(data[data.subject.str.contains(item, case=False, regex=False) & ~data.subject.isin(exclude)], x,
+            tmp = (pd.merge(data[data.subject == item], x,
                             left_on="year", right_on="year",
                             how="right")
                      .groupby("year")
