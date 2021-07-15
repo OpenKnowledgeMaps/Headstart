@@ -140,7 +140,8 @@ class Streamgraph(object):
         x = pd.DataFrame(daterange, columns=["year"])
         temp = []
         for item in top_n:
-            tmp = (pd.merge(data[data.subject.str.contains(item, case=False, regex=False)], x,
+            exclude = set(top_n) - set([item])
+            tmp = (pd.merge(data[data.subject.str.contains(item, case=False, regex=False) & ~data.subject.isin(exclude)], x,
                             left_on="year", right_on="year",
                             how="right")
                      .groupby("year")
