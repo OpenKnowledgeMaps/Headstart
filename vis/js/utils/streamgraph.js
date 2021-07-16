@@ -212,13 +212,14 @@ export const transformData = (parsedData) => {
   const amendedData = amendData(parsedData);
   const transformedData = [];
 
-  amendedData.subject.forEach((element) => {
+  amendedData.subject.forEach((stream) => {
     let count = 0;
-    element.y.forEach((dataPoint) => {
+    stream.y.forEach((dataPoint) => {
       transformedData.push({
-        key: element.name,
+        key: stream.name,
         value: dataPoint,
         date: new Date(amendedData.x[count]),
+        docIds: stream.ids_overall,
       });
       count++;
     });

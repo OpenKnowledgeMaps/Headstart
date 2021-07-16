@@ -72,6 +72,7 @@ const mapStateToProps = (state) => ({
     area: state.selectedBubble ? state.selectedBubble.uri : null,
     isStreamgraph: state.chartType === STREAMGRAPH_MODE,
     title: state.selectedBubble ? state.selectedBubble.title : null,
+    docIds: state.selectedBubble ? state.selectedBubble.docIds : null,
   },
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
 });
