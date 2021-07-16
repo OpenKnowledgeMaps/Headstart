@@ -316,14 +316,7 @@ class Streamgraph extends React.Component {
           self.handleStreamMousemove(container, d3.event, currentData, xScale);
         });
 
-      boxes.on("click", () => {
-        const currentStream = container.selectAll(".stream").filter((el) => {
-          return el.key === currentData.key;
-        });
-
-        let color = currentStream.style("fill");
-        this.props.onAreaClick({ key: currentData.key, color });
-      });
+      boxes.on("click", () => this.props.onAreaClick(currentData));
 
       setTM(boxes[0][0], ctm);
     });
@@ -519,6 +512,17 @@ class Streamgraph extends React.Component {
     const nestedEntries = this.nest.entries(transformedData);
     const streams = this.stack(nestedEntries);
 
+    streams.forEach((stream) => {
+      const firstTransformedEntry = transformedData.find(
+        (t) => t.key === stream.key
+      );
+      if (!firstTransformedEntry) {
+        stream.docIds = [];
+        return;
+      }
+      stream.docIds = firstTransformedEntry.docIds;
+    });
+
     return streams;
   }
 }
@@ -534,9 +538,11 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onAreaClick: (area) => {
+  onAreaClick: (stream) => {
     dispatch(deselectPaper());
-    dispatch(zoomIn({ title: area.key, color: area.color }));
+    dispatch(
+      zoomIn({ title: stream.key, color: stream.color, docIds: stream.docIds })
+    );
   },
   outsideAreaClick: () => dispatch(zoomOut()),
 });
