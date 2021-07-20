@@ -47,7 +47,9 @@ $project_website = ($project_website_raw !== null)?(addScheme($project_website_r
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     
-    <title>Knowledge Map of <?php echo $topic ?></title>
+    <!--<title>Knowledge Map für <?php echo $topic ?></title>-->
+    <title>Probleme zum Thema Gesundheit</title>
+    <meta name="description" content="Überblick über Probleme zum Thema Gesundheit, die nur durch die Zusammenarbeit von Bürger*innen, Forschenden und Stakeholder*innen gelöst werden können!" >
 </head>
 
 <body class="knowledge-map" style="margin:0px; padding:0px; height:100%;">

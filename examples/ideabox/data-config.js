@@ -59,7 +59,11 @@ var data_config = {
   filter_menu_dropdown: true,
 
   share_modal: true,
-  hashtags_twitter_card: "COVID19,openscience,discovery",
+  // insert more (comma-separated)
+  hashtags_twitter_card: "okmaps",
+  
+  credit_embed: true,
+  canonical_url: "https://openknowledgemaps.org",
 
   localization: {
     de_ideabox: {
@@ -129,7 +133,7 @@ var data_config = {
       // [Review]
       Review: "Review",
       link: "Eigene Idee einbringen",
-      items: "Dokumente",
+      items: "Ideen",
       comment_by_label: "von",
       share_button_title: "Visualisierung teilen",
       embed_button_title: "Visualisierung auf einer anderen Seite einbetten",
@@ -138,7 +142,7 @@ var data_config = {
       embed_body_text:
         "Sie können diesen Code verwenden, um die Visualisierung auf anderen Seiten einzubetten.",
       empty_area_warning:
-        "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
+        "Keine Ideen gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
       update_available: "Es gibt ein Update!",
       reload_now: "Jetzt aktualisieren",
       reload_or: "oder",
