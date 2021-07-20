@@ -1,36 +1,43 @@
 import React from "react";
 
-import { useLocalizationContext } from "../../components/LocalizationProvider";
 import Highlight from "../../components/Highlight";
 
 const Comments = ({ items }) => {
-  const localization = useLocalizationContext();
-
   return (
     // html template starts here
     <div id="list_comments" className="comments">
-      {items.filter(c => !!c.comment).map((comment) => (
-        <div key={comment.comment} id="list_comment" className="comments">
-          <div className="comment-text">
-            <span id="comment">
-              <Highlight>{comment.comment}</Highlight>
-            </span>
-            {/*!!comment.author && (
-              <>
-                <span id="comment-by-label">
-                  {localization.comment_by_label}
-                </span>{" "}
-                <span id="comment-author" className="comment-author">
-                  <Highlight>{comment.author}</Highlight>
-                </span>
-              </>
-            )*/}
-          </div>
-        </div>
-      ))}
+      {items
+        .filter((c) => !!c.comment)
+        .map((comment) => (
+          <Comment key={comment.comment} text={comment.comment} />
+        ))}
     </div>
     // html template ends here
   );
 };
 
 export default Comments;
+
+const Comment = ({ text }) => {
+  const parts = text.split(/:/);
+  let label = "";
+  let content = "";
+  if (parts.length > 1) {
+    label = parts[0] + ":";
+    content = parts.slice(1).join(":");
+  } else {
+    label = "";
+    content = text;
+  }
+
+  return (
+    <div id="list_comment" className="comments">
+      <div className="comment-text">
+        <span id="comment">
+          <span className="comment-label">{label}</span>
+          <Highlight>{content}</Highlight>
+        </span>
+      </div>
+    </div>
+  );
+};
