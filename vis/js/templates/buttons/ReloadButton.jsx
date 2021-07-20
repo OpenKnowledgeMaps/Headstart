@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import useGsheetsUpdate from "../../utils/useGsheetsUpdate";
 
+import { useLocalizationContext } from "../../components/LocalizationProvider";
+
 const ReloadButton = ({
   lastUpdate,
   apiProperties: { headstartPath, sheetID, persistenceBackend },
 }) => {
+  const localization = useLocalizationContext();
+
   const showButton = useGsheetsUpdate(
     lastUpdate,
     headstartPath,
@@ -40,13 +44,13 @@ const ReloadButton = ({
         className={showDescription ? "" : "hide-reload-text"}
       >
         {" "}
-        An update is available <br />
+        {localization.update_available} <br />
         <a id="reload" className="dismiss-reload">
-          reload now
+          {localization.reload_now}
         </a>{" "}
-        or{" "}
+        {localization.reload_or}{" "}
         <a id="dismiss-reload" className="dismiss-reload" onClick={handleHide}>
-          do it later
+          {localization.do_it_later}
         </a>
       </span>
     </div>

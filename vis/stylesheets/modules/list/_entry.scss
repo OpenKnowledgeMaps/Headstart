@@ -829,7 +829,7 @@ img#preview_page {
 
 }
 
-@if $skin == "covis" {
+@if $skin == "covis" "ideabox" {
 
     #open-access-logo_list {
         background-color: $open-access;
@@ -930,12 +930,28 @@ img#preview_page {
             font-weight: $fontweight800;
         }
     }
-    
+
     #list_keywords, #list_area {
         font-size: 12px;
     }
-    
+
     .empty-area-warning {
         color: #cc3b6b;
+    }
+}
+
+@if $skin == "ideabox" {
+
+    .comments {
+        display: inline;
+        margin-right: 10px;
+    }
+
+    #list_keywords {
+        margin-top: 10px !important;
+    }
+    
+    .comments .comment-text {
+        margin-bottom: 5px;
     }
 }
