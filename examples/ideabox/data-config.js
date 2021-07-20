@@ -58,9 +58,8 @@ var data_config = {
   sort_menu_dropdown: true,
   filter_menu_dropdown: true,
 
-  share_modal: true,
-  // insert more (comma-separated)
-  hashtags_twitter_card: "okmaps",
+  share_modal: false,
+  //hashtags_twitter_card: "okmaps",
   
   credit_embed: true,
   canonical_url: "https://openknowledgemaps.org",
