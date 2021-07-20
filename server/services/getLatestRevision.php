@@ -6,23 +6,23 @@ require dirname(__FILE__) . '/../classes/headstart/preprocessing/calculation/RCa
 require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
+require_once dirname(__FILE__) . '/../classes/headstart/library/APIClient.php';
 
 use headstart\library;
 
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
-
 $ini_array = library\Toolkit::loadIni($INI_DIR);
+$apiclient = new \headstart\library\APIClient($ini_array);
+$persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
+
+$persistence_backend = $ini_array["general"]["persistence_backend"];
+$processing_backend = $ini_array["general"]["processing_backend"];
 
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 $context = filter_input(INPUT_GET, "context", FILTER_VALIDATE_BOOLEAN,
     array("flags" => FILTER_NULL_ON_FAILURE));
 $streamgraph = filter_input(INPUT_GET, "streamgraph", FILTER_VALIDATE_BOOLEAN,
     array("flags" => FILTER_NULL_ON_FAILURE));
-$database = $ini_array["connection"]["database"];
-
-$persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
-$persistence_backend = $ini_array["general"]["persistence_backend"];
-$processing_backend = $ini_array["general"]["processing_backend"];
 
 if ($processing_backend == "api") {
   # case of streamgraph calculation in backend
@@ -30,9 +30,8 @@ if ($processing_backend == "api") {
       # context data true start
       if ($persistence_backend === "api") {
         # get data + context from api
-        $route = $ini_array["general"]["api_url"] . "persistence/" . "getLastVersion/" . $database;
         $payload = json_encode(array("vis_id" => $vis_id, "details" => false, "context" => true));
-        $res = library\CommUtils::call_api($route, $payload);
+        $res = $apiclient->call_persistence("getLastVersion", $payload);
         if ($res["httpcode"] != 200) {
           library\CommUtils::echoOrCallback($res, $_GET);
         } else {
@@ -62,9 +61,8 @@ if ($processing_backend == "api") {
       } else {
           if ($persistence_backend === "api") {
             # return data without context from api
-            $route = $ini_array["general"]["api_url"] . "persistence/" . "getLastVersion/" . $database;
             $payload = json_encode(array("vis_id" => $vis_id, "details" => false, "context" => false));
-            $res = library\CommUtils::call_api($route, $payload);
+            $res = $apiclient->call_persistence("getLastVersion", $payload);
             if ($res["httpcode"] != 200) {
               library\CommUtils::echoOrCallback($res, $_GET);
             } else {
@@ -84,9 +82,8 @@ if ($processing_backend == "api") {
   if ($context === true) {
      if ($persistence_backend === "api") {
        # get data + context from api
-       $route = $ini_array["general"]["api_url"] . "persistence/" . "getLastVersion/" . $database;
        $payload = json_encode(array("vis_id" => $vis_id, "details" => false, "context" => true));
-       $res = library\CommUtils::call_api($route, $payload);
+       $res = $apiclient->call_persistence("getLastVersion", $payload);
        if ($res["httpcode"] != 200) {
          library\CommUtils::echoOrCallback($res, $_GET);
        } else {
@@ -117,9 +114,8 @@ if ($processing_backend == "api") {
   } else {
       if ($persistence_backend === "api") {
         # get data without context from api
-        $route = $ini_array["general"]["api_url"] . "persistence/" . "getLastVersion/" . $database;
         $payload = json_encode(array("vis_id" => $vis_id, "details" => false, "context" => false));
-        $res = library\CommUtils::call_api($route, $payload);
+        $res = $apiclient->call_persistence("getLastVersion", $payload);
         if ($res["httpcode"] != 200) {
           library\CommUtils::echoOrCallback($res, $_GET);
         } else {

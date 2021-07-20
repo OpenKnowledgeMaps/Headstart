@@ -5,23 +5,21 @@ header('Content-type: application/json');
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
 require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
+require_once dirname(__FILE__) . '/../classes/headstart/library/APIClient.php';
 use headstart\library;
 
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
-
 $ini_array = library\Toolkit::loadIni($INI_DIR);
+$apiclient = new \headstart\library\APIClient($ini_array);
+$persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 $gsheet_last_updated = library\CommUtils::getParameter($_GET, "gsheet_last_updated");
-$database = $ini_array["connection"]["database"];
-
-$persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 $persistence_backend = $ini_array["general"]["persistence_backend"];
 
 if ($persistence_backend == "api") {
-  $route = $ini_array["general"]["api_url"] . "persistence/" . "getLastVersion/" . $database;
   $payload = json_encode(array("vis_id" => $vis_id, "details" => false, "context" => true));
-  $res = library\CommUtils::call_api($route, $payload);
+  $res = $apiclient->call_persistence("getLastVersion", $payload);
   if ($res["httpcode"] != 200) {
     library\CommUtils::echoOrCallback($res, $_GET);
   } else {
