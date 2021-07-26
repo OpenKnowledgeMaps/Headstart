@@ -2,8 +2,7 @@ library(stringdist)
 library(logging)
 
 sanitize_query <- function(query) {
-  sanitized_query <- stringr::str_replace(query, '“', '"')
-  sanitized_query <- stringr::str_replace(sanitized_query, '“', '"')  
+  sanitized_query <- gsub('[“”]', '"', query)
   return(list(raw_query=query, sanitized_query=sanitized_query))
 }
 
