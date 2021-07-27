@@ -157,6 +157,7 @@ class Streamgraph(object):
             temp.append({"name": item, "y": y,
                          "ids_timestep": ids_timestep})
         df = pd.DataFrame.from_records(temp)
+        df["name"] = df.name.apply(str.capitalize)
         x, df = self.reduce_daterange(daterange, df)
         return x, df.to_dict(orient="records")
     
