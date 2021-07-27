@@ -13,6 +13,7 @@ import PaperCount from "../templates/contextfeatures/PaperCount";
 import DatasetCount from "../templates/contextfeatures/DatasetCount";
 import Funder from "../templates/contextfeatures/Funder";
 import ProjectRuntime from "../templates/contextfeatures/ProjectRuntime";
+import LegacySearchLang from "../templates/contextfeatures/LegacySearchLang";
 import SearchLang from "../templates/contextfeatures/SearchLang";
 import Timestamp from "../templates/contextfeatures/Timestamp";
 import MetadataQuality from "../templates/contextfeatures/MetadataQuality";
@@ -26,7 +27,7 @@ const defined = (param) => param !== undefined && param !== null;
  */
 class ContextLine extends React.Component {
   render() {
-    const { params, localization, hidden } = this.props;
+    const { params, localization, hidden, service } = this.props;
 
     if (hidden) {
       return null;
@@ -43,7 +44,11 @@ class ContextLine extends React.Component {
         )}
         <NumArticles
           articlesCount={params.articlesCount}
-          openAccessArticlesCount={params.openAccessCount}
+          openAccessArticlesCount={
+            service && service.startsWith("triple")
+              ? null
+              : params.openAccessCount
+          }
           articlesCountLabel={localization.articles_label}
         >
           {this.renderModifier()}
@@ -72,8 +77,8 @@ class ContextLine extends React.Component {
         {defined(params.projectRuntime) && (
           <ProjectRuntime>{params.projectRuntime}</ProjectRuntime>
         )}
-        {defined(params.searchLanguage) && (
-          <SearchLang>{params.searchLanguage}</SearchLang>
+        {defined(params.legacySearchLanguage) && (
+          <LegacySearchLang>{params.legacySearchLanguage}</LegacySearchLang>
         )}
         {defined(params.timestamp) && (
           <Timestamp
@@ -82,6 +87,9 @@ class ContextLine extends React.Component {
           />
         )}
         {this.renderMetadataQuality()}
+        {defined(params.searchLanguage) && (
+          <SearchLang>{params.searchLanguage}</SearchLang>
+        )}
       </ContextLineTemplate>
     );
   }

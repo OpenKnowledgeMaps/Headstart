@@ -57,7 +57,13 @@ const contextLine = (state = {}, action) => {
             ? context.params.funder
             : null,
         projectRuntime: getProjectRuntime(config, context),
-        searchLanguage: getSearchLanguage(config, context),
+        // probably deprecated, used in base in the past
+        legacySearchLanguage: getLegacySearchLanguage(config, context),
+        // new language version, used in triple
+        searchLanguage:
+          context.params && context.params.language
+            ? context.params.language
+            : null,
         timestamp: getTimestamp(config, context),
         metadataQuality: getMetadataQuality(config, context),
       };
@@ -115,6 +121,12 @@ const getPropName = (params) => {
   return null;
 };
 
+const SERVICE_START = {
+  doaj: "1809",
+  pubmed: "1809-01-01",
+  base: "1665-01-01",
+};
+
 const getTimespan = (config, context) => {
   if (!context.params || !context.params.from || !context.params.to) {
     return null;
@@ -123,40 +135,44 @@ const getTimespan = (config, context) => {
   const displayFormat = config.service === "doaj" ? "yyyy" : "d mmm yyyy";
   const hyphenFormat = config.service === "doaj" ? "yyyy" : "yyyy-mm-dd";
 
-  let today = new Date();
-  let from = new Date(context.params.from);
-  let to = new Date(context.params.to);
+  const today = new Date();
+  const from = new Date(context.params.from);
+  const to = new Date(context.params.to);
+  if (
+    typeof context.params.to === "string" &&
+    context.params.to.match(/^\d{4}$/)
+  ) {
+    to.setMonth(11);
+    to.setDate(31);
+  }
+  if (to.getTime() > today.getTime()) {
+    to.setTime(today.getTime());
+  }
 
   today.setTime(today.getTime() + today.getTimezoneOffset() * 60 * 1000);
   from.setTime(from.getTime() + from.getTimezoneOffset() * 60 * 1000);
   to.setTime(to.getTime() + to.getTimezoneOffset() * 60 * 1000);
 
-  const defaultFromHyphenated = (function (service) {
-    switch (service) {
-      case "doaj":
-        return "1809";
-      case "pubmed":
-        return "1809-01-01";
-      case "base":
-        return "1665-01-01";
-      default:
-        return "1970-01-01";
-    }
-  })(config.service);
-
-  const fromHyphenated = dateFormat(from, hyphenFormat);
-  const fromFormatted = dateFormat(from, displayFormat);
   const toFormatted = dateFormat(to, displayFormat);
+  const modifier = getModifier(config, context);
+  // most recent streamgraphs straight away display "Until xyz",
+  // other maps have a more complicated logic
+  if (!config.is_streamgraph || modifier !== "most-recent") {
+    const defaultFromHyphenated = SERVICE_START[config.service] || "1970-01-01";
 
-  if (fromHyphenated !== defaultFromHyphenated) {
-    return fromFormatted + " - " + toFormatted;
-  }
+    const fromHyphenated = dateFormat(from, hyphenFormat);
+    const fromFormatted = dateFormat(from, displayFormat);
 
-  const toHyphenated = dateFormat(to, hyphenFormat);
-  const todayHyphenated = dateFormat(today, hyphenFormat);
+    if (fromHyphenated !== defaultFromHyphenated) {
+      return fromFormatted + " - " + toFormatted;
+    }
 
-  if (toHyphenated === todayHyphenated) {
-    return "All time";
+    const toHyphenated = dateFormat(to, hyphenFormat);
+    const todayHyphenated = dateFormat(today, hyphenFormat);
+
+    if (toHyphenated === todayHyphenated) {
+      return "All time";
+    }
   }
 
   return "Until " + toFormatted;
@@ -178,7 +194,7 @@ const getProjectRuntime = (config, context) => {
   )}–${context.params.end_date.slice(0, 4)}`;
 };
 
-const getSearchLanguage = (config, context) => {
+const getLegacySearchLanguage = (config, context) => {
   if (
     !context.params ||
     !context.params.lang_id ||
