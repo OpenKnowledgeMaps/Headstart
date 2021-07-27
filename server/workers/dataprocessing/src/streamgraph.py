@@ -153,7 +153,7 @@ class Streamgraph(object):
             tmp["subject"] = item
             tmp["counts"] = tmp["id"].map(lambda x: len(list(filter(lambda x: x!="NA", x.split(",")))))
             y = tmp.counts.astype(int).to_list()
-            ids_timestep = tmp.id.map(lambda x: list(filter(lambda x: x!="NA", x.split(", ")))).tolist()
+            ids_timestep = tmp.id.map(lambda x: list(set(filter(lambda x: x!="NA", x.split(", "))))).tolist()
             temp.append({"name": item, "y": y,
                          "ids_timestep": ids_timestep})
         df = pd.DataFrame.from_records(temp)
