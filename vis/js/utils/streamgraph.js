@@ -117,20 +117,20 @@ const getOverlap = (rect1, rect2) => {
     rect1.y <= rect2.y + rect2.height &&
     rect2.y <= rect1.y + rect1.height
   ) {
-    return rect2.height + LABEL_BORDER_WIDTH * 2;
+    return rect2.height + (LABEL_BORDER_WIDTH * 2 + 1);
   }
 
   return 0;
 };
 
 /**
- * Finds colliding labels and moves them apart from each other.
+ * Finds colliding labels and recalculates their positions.
  *
  * Migrated from old streamgraph.js...
  *
  * @param {Array} labelPositions array of positions returned by getLabelPosition
  */
-export const moveOverlappingLabels = (labelPositions) => {
+export const recalculateOverlappingLabels = (labelPositions) => {
   const grouppedLabels = groupLabels([...labelPositions]);
   let moveUp = true;
   let currentGroup = 0;
@@ -157,13 +157,12 @@ export const moveOverlappingLabels = (labelPositions) => {
     });
   });
 
-  labelPositions.map((label) => {
+  labelPositions.forEach((label) => {
     grouppedLabels.forEach((f) => {
       if (f.key === label.key) {
         label.y = f.y;
       }
     });
-    return label;
   });
 
   return labelPositions;
@@ -213,13 +212,14 @@ export const transformData = (parsedData) => {
   const amendedData = amendData(parsedData);
   const transformedData = [];
 
-  amendedData.subject.forEach((element) => {
+  amendedData.subject.forEach((stream) => {
     let count = 0;
-    element.y.forEach((dataPoint) => {
+    stream.y.forEach((dataPoint) => {
       transformedData.push({
-        key: element.name,
+        key: stream.name,
         value: dataPoint,
         date: new Date(amendedData.x[count]),
+        docIds: stream.ids_overall,
       });
       count++;
     });

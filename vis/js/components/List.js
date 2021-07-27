@@ -49,6 +49,7 @@ const mapStateToProps = (state) => ({
     paper: state.selectedPaper ? state.selectedPaper.safeId : null,
     isStreamgraph: state.chartType === STREAMGRAPH_MODE,
     title: state.selectedBubble ? state.selectedBubble.title : null,
+    docIds: state.selectedBubble ? state.selectedBubble.docIds : null,
   },
   sortSettings: {
     value: state.list.sortValue,
