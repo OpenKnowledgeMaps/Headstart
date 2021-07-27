@@ -23,7 +23,7 @@ class Streamgraph(object):
         handler.setLevel(loglevel)
         self.logger.addHandler(handler)
 
-    def get_streamgraph_data(self, metadata, query, n=12, method="tfidf"):
+    def get_streamgraph_data(self, metadata, query, n=12, method="count"):
         metadata = pd.DataFrame.from_records(metadata)
         df = metadata.copy()
         df.year = pd.to_datetime(df.year)
@@ -38,7 +38,7 @@ class Streamgraph(object):
         daterange = self.get_daterange(boundaries)
         data = pd.merge(counts, boundaries, on='year')
         top_n = self.get_top_n(metadata.copy(), query, n, method)
-        sanitized_top_n = [re.escape(t) for t in top_n]
+        sanitized_top_n = [re.escape(t).lower() for t in top_n]
         data = (data[data.subject.str.contains('|'.join(sanitized_top_n))]
                 .sort_values("year")
                 .reset_index(drop=True))
@@ -88,12 +88,12 @@ class Streamgraph(object):
         # set stopwords , stop_words='english'
         tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
                                         tokenizer=lambda x: x.split("; "),
-                                        lowercase=False,
+                                        lowercase=True,
                                         stop_words=[query]
                                         )
         tfidf_vectorizer = TfidfVectorizer(max_df=0.95, min_df=2,
                                            tokenizer=lambda x: x.split("; "),
-                                           lowercase=False,
+                                           lowercase=True,
                                            stop_words=[query]
                                            )
         if method == "count":
