@@ -151,7 +151,7 @@ class Streamgraph(object):
                      .fillna({"counts": 0, "subject": item, "id": "NA"})
                      .sort_values("year"))
             tmp["subject"] = item
-            tmp["counts"] = tmp["id"].map(lambda x: len(list(filter(lambda x: x!="NA", x.split(",")))))
+            tmp["counts"] = tmp["id"].map(lambda x: len(set(filter(lambda x: x!="NA", x.split(",")))))
             y = tmp.counts.astype(int).to_list()
             ids_timestep = tmp.id.map(lambda x: list(set(filter(lambda x: x!="NA", x.split(", "))))).tolist()
             temp.append({"name": item, "y": y,
