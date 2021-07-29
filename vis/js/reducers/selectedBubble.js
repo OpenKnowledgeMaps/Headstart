@@ -13,6 +13,7 @@ const selectedBubble = (state = null, action) => {
         title: action.selectedAreaData.title,
         uri: action.selectedAreaData.uri,
         color: action.selectedAreaData.color,
+        docIds: action.selectedAreaData.docIds,
       };
     case "SCALE":
       return null;
