@@ -253,7 +253,7 @@ dctypenorm_decoder <- list(
   "17"="Lecture",
   "19"="Manuscript",
   "3"="Map",
-  "52"="Moving image/video"
+  "52"="Moving image/video",
   "2"="Musical notation",
   "F"="Other/Unknown material",
   "1A"="Patent",
