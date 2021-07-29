@@ -17,6 +17,7 @@ include 'search-flow/inc/waiting-page/waiting-page-header.php';
 <body style="padding-left:10px; padding-right:10px;" class="searchpage">
     <div>
         <?php include('search-flow/inc/shared/banner-browser-unsupported.php') ?>
+        <?php include('search-flow/inc/shared/banner-mobile.php') ?>
         <?php             
             include('search-flow/inc/waiting-page/waiting-page.php') 
         ?>
