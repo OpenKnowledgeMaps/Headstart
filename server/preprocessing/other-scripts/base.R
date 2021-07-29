@@ -246,11 +246,14 @@ dctypenorm_decoder <- list(
   "13"="Conference object",
   "16"="Course material",
   "7"="Dataset",
+  "5"="Image/video",
+  "12"="Journal/newspaper",
   "121"="Journal/newspaper article",
   "122"="Journal/newspaper other content",
   "17"="Lecture",
   "19"="Manuscript",
   "3"="Map",
+  "52"="Moving image/video",
   "2"="Musical notation",
   "F"="Other/Unknown material",
   "1A"="Patent",
@@ -259,8 +262,8 @@ dctypenorm_decoder <- list(
   "6"="Software",
   "51"="Still image",
   "1"="Text",
+  "18"="Thesis",
   "181"="Thesis: bachelor",
   "183"="Thesis: doctoral and postdoctoral",
-  "182"="Thesis: master",
-  "52"="Video/moving image"
+  "182"="Thesis: master"
 )
