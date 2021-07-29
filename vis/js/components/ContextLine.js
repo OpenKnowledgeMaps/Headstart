@@ -27,7 +27,7 @@ const defined = (param) => param !== undefined && param !== null;
  */
 class ContextLine extends React.Component {
   render() {
-    const { params, localization, hidden, service } = this.props;
+    const { params, localization, hidden } = this.props;
 
     if (hidden) {
       return null;
@@ -44,11 +44,7 @@ class ContextLine extends React.Component {
         )}
         <NumArticles
           articlesCount={params.articlesCount}
-          openAccessArticlesCount={
-            service && service.startsWith("triple")
-              ? null
-              : params.openAccessCount
-          }
+          openAccessArticlesCount={params.openAccessCount}
           articlesCountLabel={localization.articles_label}
         >
           {this.renderModifier()}
