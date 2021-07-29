@@ -38,4 +38,6 @@ var data_config = {
 
     highlight_query_terms: true,
     filter_menu_dropdown: false,
+
+    show_context_oa_number: false,
 };
