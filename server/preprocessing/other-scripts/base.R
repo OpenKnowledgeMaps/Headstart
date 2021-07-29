@@ -265,5 +265,5 @@ dctypenorm_decoder <- list(
   "18"="Thesis",
   "181"="Thesis: bachelor",
   "183"="Thesis: doctoral and postdoctoral",
-  "182"="Thesis: master",
+  "182"="Thesis: master"
 )
