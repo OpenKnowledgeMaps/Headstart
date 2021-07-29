@@ -18,6 +18,11 @@ include 'config_searchflow.php';
         <h2>Search TRIPLE and turn it into a visualization</h2>
         <?php include('search-flow/inc/search-form/search-form.php') ?>
     <script type="text/javascript " src="search-flow/js/search_form.js "></script>
+    <link rel="stylesheet" href="triple-searchflow.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;700&display=swap" rel="stylesheet"> 
+    </div>
 </body>
 
 </html>
