@@ -104,14 +104,14 @@ class Streamgraph(object):
             counts = pd.DataFrame(tf.toarray(),
                                   columns=tf_vectorizer.get_feature_names())
             candidates = counts.sum().sort_values(ascending=False).index.tolist()
-            candidates = [c for c in candidates if len(c) > 0]
+            candidates = [c for c in candidates if len(c) > 2]
             top_n = candidates[:n]
         if method == "tfidf":
             tfidf = tfidf_vectorizer.fit_transform(corpus)
             weights = pd.DataFrame(tfidf.toarray(),
                                    columns=tfidf_vectorizer.get_feature_names())
             candidates = weights.sum().sort_values(ascending=False).index.tolist()
-            candidates = [c for c in candidates if len(c) > 0]
+            candidates = [c for c in candidates if len(c) > 2]
             top_n = candidates[:n]
         if method == "nmf":
             tfidf = tfidf_vectorizer.fit_transform(corpus)
