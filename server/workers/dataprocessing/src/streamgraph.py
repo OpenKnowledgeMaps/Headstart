@@ -22,13 +22,17 @@ class Streamgraph(object):
         handler.setFormatter(formatter)
         handler.setLevel(loglevel)
         self.logger.addHandler(handler)
+    
+    def tokenize(self, s):
+        #return re.split("; | - |, |: ", s)
+        return re.split("; ", s)
 
     def get_streamgraph_data(self, metadata, query, n=12, method="count"):
         metadata = pd.DataFrame.from_records(metadata)
         df = metadata.copy()
-        df.year = pd.to_datetime(df.year)
+        df.year = pd.to_datetime(df.year).map(lambda x: x.replace(month=1, day=1))
         df = df[df.subject.map(lambda x: x is not None)]
-        df.subject = df.subject.map(lambda x: [s for s in x.split("; ")] if isinstance(x, str) else "")
+        df.subject = df.subject.map(lambda x: [s.lower() for s in self.tokenize(x)] if isinstance(x, str) else "")
         df = df[df.subject.map(lambda x: x != [])]
         df["boundary_label"] = df.year
         df = df.explode('subject')
@@ -38,8 +42,7 @@ class Streamgraph(object):
         daterange = self.get_daterange(boundaries)
         data = pd.merge(counts, boundaries, on='year')
         top_n = self.get_top_n(metadata.copy(), query, n, method)
-        sanitized_top_n = [re.escape(t).lower() for t in top_n]
-        data = (data[data.subject.str.contains('|'.join(sanitized_top_n))]
+        data = (data[data.subject.str.contains('|'.join(top_n), case=False)]
                 .sort_values("year")
                 .reset_index(drop=True))
         sg_data = {}
@@ -87,12 +90,12 @@ class Streamgraph(object):
         corpus = df.subject.tolist()
         # set stopwords , stop_words='english'
         tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
-                                        tokenizer=lambda x: x.split("; "),
+                                        tokenizer=lambda x: self.tokenize(x),
                                         lowercase=True,
                                         stop_words=[query]
                                         )
         tfidf_vectorizer = TfidfVectorizer(max_df=0.95, min_df=2,
-                                           tokenizer=lambda x: x.split("; "),
+                                           tokenizer=lambda x: self.tokenize(x),
                                            lowercase=True,
                                            stop_words=[query]
                                            )
@@ -140,7 +143,7 @@ class Streamgraph(object):
         x = pd.DataFrame(daterange, columns=["year"])
         temp = []
         for item in top_n:
-            tmp = (pd.merge(data[data.subject == item], x,
+            tmp = (pd.merge(data[data.subject.str.contains(item, case=False)], x,
                             left_on="year", right_on="year",
                             how="right")
                      .groupby("year")
