@@ -329,3 +329,14 @@ text {
         }
     }
 }
+
+@if $skin == 'ideabox' {
+    #credit_embed {
+        a {
+            color: $dark-blue !important;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+}
