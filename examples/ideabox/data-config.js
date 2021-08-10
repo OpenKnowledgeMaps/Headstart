@@ -143,7 +143,7 @@ var data_config = {
       empty_area_warning:
         "Keine Ideen gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
       update_available: "Es gibt ein Update!",
-      reload_now: "Jetzt aktualisieren",
+      reload_now: "Jetzt laden",
       reload_or: "oder",
       do_it_later: "später",
     },

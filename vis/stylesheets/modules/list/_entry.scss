@@ -947,8 +947,7 @@ img#preview_page {
 @if $skin == "ideabox" {
 
     .comments {
-        display: inline;
-        margin-right: 10px;
+        margin-top: 0;
     }
 
     #list_keywords {
@@ -957,5 +956,8 @@ img#preview_page {
     
     .comments .comment-text {
         margin-bottom: 5px;
+        background-color: transparent !important;
+        padding: 0;
+        
     }
 }
