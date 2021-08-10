@@ -94,7 +94,7 @@ var data_config = {
       most_relevant_label: "relevanteste",
       // [To determine the most relevant documents, we use the relevance ranking provided by the source - either BASE or PubMed. Both sources compute the text similarity between your query and the article metadata to establish the relevance ranking. Please consult the FAQ for more information.]
       most_relevant_tooltip: "missing 'most_relevant_tooltip'",
-      source_label: "Quelle",
+      source_label: "Datenquelle",
       resulttype_label: "Typ",
       documenttypes_label: "Publikationsarten",
       // [Last updated]

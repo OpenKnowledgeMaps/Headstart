@@ -78,7 +78,7 @@ $project_website = ($project_website_raw !== null)?(addScheme($project_website_r
                 , file: "<?php echo $SHEET_ID; ?>"
             }]
             
-            data_config.service_name= '<span class="backlink"><a href="https://docs.google.com/spreadsheets/d/<?php echo $SHEET_ID ?>/edit#gid=0" class="underline" target="_blank" >Spreadsheet</a></span>';
+            data_config.service_name= '<span class="backlink"><a href="https://docs.google.com/spreadsheets/d/<?php echo $SHEET_ID ?>/edit#gid=0" class="underline" target="_blank" >Tabelle</a></span>';
             
             data_config.intro = {
                 title: "Über diese Knowledge Map"

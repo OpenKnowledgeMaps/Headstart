@@ -946,18 +946,36 @@ img#preview_page {
 
 @if $skin == "ideabox" {
 
+    #context {
+        margin-top: 5px;
+    }
+
+    #infolink, #infolink_areas {
+        font-size: 18px;
+    }
+
     .comments {
         margin-top: 0;
+        margin-bottom: 0;
     }
 
     #list_keywords {
         margin-top: 10px !important;
     }
-    
+
     .comments .comment-text {
-        margin-bottom: 5px;
         background-color: transparent !important;
         padding: 0;
-        
+        margin-bottom: 5px;
+    }
+    
+    #list_keywords {
+        margin-top: 0 !important;
+    }
+
+    @media screen and (max-width: 640px) {
+        #infolink, #infolink_areas {
+            font-size: 14px;
+        }
     }
 }
