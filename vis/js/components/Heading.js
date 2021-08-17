@@ -25,6 +25,7 @@ const Heading = ({
   onFileChange,
   streamgraph,
   onInfoModalOpen,
+  service,
 }) => {
   if (zoomed) {
     let label = streamgraph ? localization.area_streamgraph : localization.area;
@@ -41,7 +42,10 @@ const Heading = ({
         files,
         onFileChange
       )}
-      onInfoClick={onInfoModalOpen}
+      // TODO remove this during the more info refactoring
+      onInfoClick={
+        typeof service != "string" || !service.startsWith("triple") ? onInfoModalOpen : null
+      }
     >
       {renderTitle(localization, query, headingParams)}
     </ZoomedOutHeadingTemplate>
@@ -56,6 +60,7 @@ const mapStateToProps = (state) => ({
   headingParams: state.heading,
   files: state.files,
   streamgraph: state.chartType === STREAMGRAPH_MODE,
+  service: state.service,
 });
 
 const mapDispatchToProps = (dispatch) => ({
