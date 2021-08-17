@@ -9,20 +9,24 @@ const ZoomedOutHeading = ({
 }) => {
   const handleInfoClick = (event) => {
     event.preventDefault();
-    onInfoClick();
+    if (onInfoClick) {
+      onInfoClick();
+    }
   };
 
   return (
     // html template starts here
     <h4>
       {title}{" "}
-      <a onClick={handleInfoClick} id="infolink" href="#">
-        <span
-          id="whatsthis"
-          dangerouslySetInnerHTML={{ __html: introIcon }}
-        ></span>{" "}
-        {introLabel}
-      </a>
+      {!!onInfoClick && (
+        <a onClick={handleInfoClick} id="infolink" href="#">
+          <span
+            id="whatsthis"
+            dangerouslySetInnerHTML={{ __html: introIcon }}
+          ></span>{" "}
+          {introLabel}
+        </a>
+      )}
       {additionalFeatures}
     </h4>
     // html template ends here
