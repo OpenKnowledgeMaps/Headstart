@@ -161,7 +161,8 @@ class Streamgraph(object):
                          "ids_timestep": ids_timestep})
         df = pd.DataFrame.from_records(temp)
         df["name"] = df.name.apply(str.capitalize)
-        x, df = self.reduce_daterange(daterange, df)
+        if len(x) > 1:
+            x, df = self.reduce_daterange(daterange, df)
         df = df[df["ids_overall"].map(lambda x: len(x) != 0)]
         return x, df.to_dict(orient="records")
     
