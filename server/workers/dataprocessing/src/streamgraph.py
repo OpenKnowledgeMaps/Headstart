@@ -46,7 +46,7 @@ class Streamgraph(object):
                 .sort_values("year")
                 .reset_index(drop=True))
         sg_data = {}
-        sg_data["x"], sg_data["subject"] = self.postprocess(daterange, data, top_n)
+        sg_data["x"], sg_data["subject"] = self.build_sg_data(daterange, data, top_n)
         return sg_data
 
     @staticmethod
@@ -139,7 +139,7 @@ class Streamgraph(object):
         words = [w for w in words if len(w) > 2]
         return words[:n]
 
-    def postprocess(self, daterange, data, top_n):
+    def build_sg_data(self, daterange, data, top_n):
         x = pd.DataFrame(daterange, columns=["year"])
         temp = []
         for item in top_n:
@@ -162,6 +162,7 @@ class Streamgraph(object):
         df = pd.DataFrame.from_records(temp)
         df["name"] = df.name.apply(str.capitalize)
         x, df = self.reduce_daterange(daterange, df)
+        df = df[df["ids_overall"].map(lambda x: len(x) != 0)]
         return x, df.to_dict(orient="records")
     
     def reduce_daterange(self, daterange, df):
