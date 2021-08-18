@@ -161,8 +161,7 @@ class Streamgraph(object):
                          "ids_timestep": ids_timestep})
         df = pd.DataFrame.from_records(temp)
         df["name"] = df.name.apply(str.capitalize)
-        if len(x) > 1:
-            x, df = self.reduce_daterange(daterange, df)
+        x, df = self.reduce_daterange(daterange, df)
         df = df[df["ids_overall"].map(lambda x: len(x) != 0)]
         return x, df.to_dict(orient="records")
     
@@ -173,8 +172,9 @@ class Streamgraph(object):
         # 5% which is chosen here is an arbitrary value, could also be higher 10% or lower
         min_value = int(yearly_sums.sum() * 0.05)
         start_index = yearly_sums_cum[yearly_sums_cum > min_value].index[0]
-        df.y = df.y.map(lambda x: x[start_index+1:])
-        df.ids_timestep = df.ids_timestep.map(lambda x: x[start_index+1:])
+        if len(x) > 1:
+            df.y = df.y.map(lambda x: x[start_index+1:])
+            df.ids_timestep = df.ids_timestep.map(lambda x: x[start_index+1:])
         df["ids_overall"] = df.ids_timestep.map(lambda x: list(chain.from_iterable(x)))
         x = x[start_index+1:]
         return x, df
