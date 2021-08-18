@@ -175,8 +175,8 @@ class Streamgraph(object):
         if len(x) > 1:
             df.y = df.y.map(lambda x: x[start_index+1:])
             df.ids_timestep = df.ids_timestep.map(lambda x: x[start_index+1:])
+            x = x[start_index+1:]
         df["ids_overall"] = df.ids_timestep.map(lambda x: list(chain.from_iterable(x)))
-        x = x[start_index+1:]
         return x, df
     
     @staticmethod
