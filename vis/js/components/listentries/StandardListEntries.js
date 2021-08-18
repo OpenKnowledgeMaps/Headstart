@@ -32,6 +32,7 @@ const StandardListEntries = ({
   showBacklink,
   isInStreamBacklink,
   disableClicks,
+  showComments,
   handleZoomIn,
   handleSelectPaper,
   handleDeselectPaper,
@@ -89,7 +90,7 @@ const StandardListEntries = ({
               ? shorten(entry.paper_abstract, abstractSize)
               : entry.paper_abstract
           }
-          comments={getPaperComments(entry)}
+          comments={showComments ? getPaperComments(entry) : null}
           keywords={showKeywords ? getPaperKeywords(entry, localization) : null}
           metrics={
             showMetrics
@@ -145,6 +146,7 @@ const mapStateToProps = (state) => ({
   showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
   isInStreamBacklink: !!state.selectedBubble,
   disableClicks: state.list.disableClicks,
+  showComments: !!state.selectedPaper,
 });
 
 export default connect(
