@@ -172,10 +172,9 @@ class Streamgraph(object):
         # 5% which is chosen here is an arbitrary value, could also be higher 10% or lower
         min_value = int(yearly_sums.sum() * 0.05)
         start_index = yearly_sums_cum[yearly_sums_cum > min_value].index[0]
-        if len(x) > 1:
-            df.y = df.y.map(lambda x: x[start_index+1:])
-            df.ids_timestep = df.ids_timestep.map(lambda x: x[start_index+1:])
-            x = x[start_index+1:]
+        df.y = df.y.map(lambda x: x[start_index:])
+        df.ids_timestep = df.ids_timestep.map(lambda x: x[start_index:])
+        x = x[start_index:]
         df["ids_overall"] = df.ids_timestep.map(lambda x: list(chain.from_iterable(x)))
         return x, df
     
