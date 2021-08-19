@@ -26,6 +26,7 @@ import modals from "./modals";
 import toolbar from "./toolbar";
 import misc from "./misc";
 import streamgraph from "./streamgraph";
+import isCovis from "./isCovis";
 
 export default combineReducers({
   zoom,
@@ -52,4 +53,5 @@ export default combineReducers({
   toolbar,
   misc,
   streamgraph,
+  isCovis,
 });

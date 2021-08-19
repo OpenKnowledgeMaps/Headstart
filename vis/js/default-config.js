@@ -91,7 +91,7 @@ var config = {
     canonical_url: null,
     //which intro to use for the modal (see intro.js)
     intro: "intro_cris",
-    //show intro (true/false)
+    //display intro dialog after the page opens (true/false)
     show_intro: false,
     //show loading screen before map is loaded (true/false)
     show_loading_screen: false,
