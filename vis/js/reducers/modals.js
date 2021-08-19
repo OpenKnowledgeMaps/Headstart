@@ -40,7 +40,6 @@ const modals = (
         showImagePreview: action.configObject.preview_type === "image",
         showPDFPreview: action.configObject.preview_type === "pdf",
         previewedPaper: null,
-        service: action.configObject.service,
         useViewer: action.configObject.use_hypothesis,
       };
     case "OPEN_EMBED_MODAL":

@@ -81,7 +81,7 @@ const mapStateToProps = (state) => ({
   showPDFPreview: state.modals.showPDFPreview,
   previewedPaper: state.modals.previewedPaper,
   serverUrl: state.modals.reloadApiProperties.headstartPath,
-  service: state.modals.service,
+  service: state.service,
   useViewer: state.modals.useViewer,
   localization: state.localization,
 });

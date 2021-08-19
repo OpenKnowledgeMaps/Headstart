@@ -24,8 +24,8 @@ const AboutSoftware = () => {
         </a>
         .
       </p>
-      <p>
-        If you want to support us financially, you can
+      <p>If you want to support us financially, you can</p>
+      <div>
         <ol>
           <li>
             <a href="TODO" target="_blank" className="underline">
@@ -46,7 +46,7 @@ const AboutSoftware = () => {
             .
           </li>
         </ol>
-      </p>
+      </div>
       <p>
         <a href="TODO" target="_blank" className="underline">
           Sign-up for our newsletter
