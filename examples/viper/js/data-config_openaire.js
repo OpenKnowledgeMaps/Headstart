@@ -38,8 +38,6 @@ var data_config = {
 
     doi_outlink: true,
 
-    intro: 'intro_viper',
-
     metric_list: true,
     
     credit: false,
