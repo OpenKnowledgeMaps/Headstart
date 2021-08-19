@@ -5,7 +5,6 @@ import d3 from "d3";
 
 import config from 'config';
 import { mediator } from 'mediator';
-import { intros } from 'intro';
 
 var IO = function() {
     this.test = 0;
@@ -111,22 +110,6 @@ IO.prototype = {
         this.context.share_oa = this.num_oa;
         this.context.num_datasets = this.num_datasets;
         this.context.num_papers = this.num_papers;
-    },
-
-    setInfo: function(context) {
-        var current_intro = config.intro
-        var intro = (typeof intros[current_intro] != "undefined") ? (intros[current_intro]) : (current_intro)
-        if (intro.dynamic) { 
-            intro.params = context.params
-            // if organisations build pretty url list
-            if (typeof intro.params.organisations != "undefined") {
-                intro.params.html_organisations = intro.params.organisations.map((org) => {
-                    return `<a href='${org.url}' target='_blank'>${org.name}</a>`
-                }).join(', ')
-                delete intro.params.organisations
-            }
-            intro.params.html_openaire_link = `<a href='https://www.openaire.eu/search/project?projectId=${intro.params.obj_id}' target='_blank'>Link</a>`
-        }
     },
 
     initializeMissingData: function(data) {
