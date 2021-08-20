@@ -1277,6 +1277,80 @@ describe("config and context state", () => {
       expect(result).toHaveProperty("timespan", null);
     });
 
+    it("should initialize a correct timespan to today (triple)", () => {
+      const TODAY = new Date();
+      const SERVICE_NAME = "triple_km";
+      const FROM = "2019";
+      const TO = TODAY.getFullYear().toString();
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          service: SERVICE_NAME,
+        },
+        {
+          params: {
+            from: FROM,
+            to: TO,
+          },
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      const MONTHS = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      expect(result).toHaveProperty(
+        "timespan",
+        `1 Jan 2019 - ${TODAY.getDate()} ${
+          MONTHS[TODAY.getMonth()]
+        } ${TODAY.getFullYear()}`
+      );
+    });
+
+    it("should initialize a correct timespan 'Until 2019' (triple streamgraph)", () => {
+      const SERVICE_NAME = "triple_sg";
+      const FROM = "1809-01-01T13:30:22.112Z";
+      const TO = "2019-08-12T13:30:22.112Z";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          service: SERVICE_NAME,
+          is_streamgraph: true,
+        },
+        {
+          params: {
+            from: FROM,
+            to: TO,
+            sorting: "most-recent",
+          },
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("timespan", "Until 12 Aug 2019");
+    });
+
     it("should initialize correct papers count", () => {
       const COUNT = 420;
       const initialState = {};
@@ -1436,7 +1510,7 @@ describe("config and context state", () => {
       expect(result).toHaveProperty("projectRuntime", null);
     });
 
-    it("should initialize correct language", () => {
+    it("should initialize correct language (base legacy)", () => {
       const LANG_ID = "cs";
       const LANGUAGES = [
         {
@@ -1466,12 +1540,12 @@ describe("config and context state", () => {
       );
 
       expect(result).toHaveProperty(
-        "searchLanguage",
+        "legacySearchLanguage",
         "Language: čeština (Czech) "
       );
     });
 
-    it("should initialize null language if wrong setting", () => {
+    it("should initialize null language if wrong setting (base legacy)", () => {
       const LANG_ID = "unknown";
       const LANGUAGES = [
         {
@@ -1500,7 +1574,7 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toHaveProperty("searchLanguage", null);
+      expect(result).toHaveProperty("legacySearchLanguage", null);
     });
 
     it("should initialize correct timestamp", () => {
@@ -1674,6 +1748,27 @@ describe("config and context state", () => {
       const result = contextLineReducer(INITIAL_STATE, { canceled: true });
 
       expect(result).toEqual(INITIAL_STATE);
+    });
+
+    it("should initialize correct language (triple)", () => {
+      const LANG_ID = "en";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {},
+        {
+          params: {
+            language: LANG_ID,
+          },
+        }
+      );
+
+      const result = contextLineReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toHaveProperty("searchLanguage", LANG_ID);
     });
   });
 

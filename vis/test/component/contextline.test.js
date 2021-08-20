@@ -7,6 +7,7 @@ import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
 
 import ContextLine from "../../js/components/ContextLine";
+import LocalizationProvider from "../../js/components/LocalizationProvider";
 
 const mockStore = configureStore([]);
 const setup = (overrideStoreObject = {}) => {
@@ -31,6 +32,7 @@ const setup = (overrideStoreObject = {}) => {
         datasetCount: null,
         funder: null,
         projectRuntime: null,
+        legacySearchLanguage: null,
         searchLanguage: null,
         timestamp: null,
       },
@@ -54,6 +56,7 @@ const setup = (overrideStoreObject = {}) => {
         low_metadata_quality_desc_base: "Sample BASE low quality description",
         low_metadata_quality_desc_pubmed:
           "Sample PubMed low quality description",
+        lang_all: "All lang",
       },
     },
     overrideStoreObject
@@ -314,10 +317,10 @@ describe("Context line component", () => {
       ).toEqual(PROJ_RUNTIME);
     });
 
-    it("doesn't contain a search language", () => {
+    it("doesn't contain a search language (base legacy)", () => {
       const SEARCH_LANG = undefined;
       const storeObject = setup();
-      storeObject.contextLine.searchLanguage = SEARCH_LANG;
+      storeObject.contextLine.legacySearchLanguage = SEARCH_LANG;
 
       const store = mockStore(storeObject);
 
@@ -325,13 +328,13 @@ describe("Context line component", () => {
         render(<ContextLine store={store} />, container);
       });
 
-      expect(container.querySelector("#search_lang")).toBe(null);
+      expect(container.querySelector("#legacy_search_lang")).toBe(null);
     });
 
-    it("contains a correct search language", () => {
+    it("contains a correct search language (base legacy)", () => {
       const SEARCH_LANG = "Custom search language";
       const storeObject = setup();
-      storeObject.contextLine.searchLanguage = SEARCH_LANG;
+      storeObject.contextLine.legacySearchLanguage = SEARCH_LANG;
 
       const store = mockStore(storeObject);
 
@@ -339,9 +342,9 @@ describe("Context line component", () => {
         render(<ContextLine store={store} />, container);
       });
 
-      expect(container.querySelector("#search_lang").textContent).toEqual(
-        SEARCH_LANG
-      );
+      expect(
+        container.querySelector("#legacy_search_lang").textContent
+      ).toEqual(SEARCH_LANG);
     });
 
     it("doesn't contain a timestamp", () => {
@@ -371,6 +374,48 @@ describe("Context line component", () => {
 
       expect(container.querySelector("#timestamp").textContent).toContain(
         TIMESTAMP
+      );
+    });
+
+    it("contains English search language (triple)", () => {
+      const SEARCH_LANG = "en";
+      const storeObject = setup();
+      storeObject.contextLine.searchLanguage = SEARCH_LANG;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <LocalizationProvider localization={storeObject.localization}>
+            <ContextLine store={store} />
+          </LocalizationProvider>,
+          container
+        );
+      });
+
+      expect(container.querySelector("#search_lang").textContent).toEqual(
+        "English"
+      );
+    });
+
+    it("contains all search languages (triple)", () => {
+      const SEARCH_LANG = "all";
+      const storeObject = setup();
+      storeObject.contextLine.searchLanguage = SEARCH_LANG;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <LocalizationProvider localization={storeObject.localization}>
+            <ContextLine store={store} />
+          </LocalizationProvider>,
+          container
+        );
+      });
+
+      expect(container.querySelector("#search_lang").textContent).toEqual(
+        storeObject.localization.lang_all
       );
     });
   });

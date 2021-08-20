@@ -70,13 +70,15 @@ class Dataprocessing(object):
             self.logger.debug(params)
             try:
                 if params.get('vis_type') == "timeline":
+                    # the step of create_map can be dropped once deduplication is possible in API backend as well
+                    # TODO: create deduplicate endpoint in service worker and connect to that
                     metadata = self.create_map(params, input_data)
                     sg_data = sg.get_streamgraph_data(json.loads(metadata),
                                                     params.get('q'),
                                                     params.get('top_n', 12),
                                                     params.get('sg_method'))
                     res = {}
-                    res["data"] = metadata
+                    res["data"] = sg.reduce_metadata_set(metadata, sg_data)
                     res["streamgraph"] = json.dumps(sg_data)
                     res["status"] = "success"
                     self.redis_store.set(k+"_output", json.dumps(res))
@@ -85,10 +87,10 @@ class Dataprocessing(object):
                     self.redis_store.set(k+"_output", json.dumps(res))
             except Exception as e:
                 self.logger.error(params)
-                self.logger.error(e, exc_info=True)
+                self.logger.exception("Exception during visualization creation.")
                 res = {}
                 res["id"] = k
                 res["params"] = params
                 res["status"] = "error"
-                res["error"] = e
+                res["reason"] = "unexpected data processing error"
                 self.redis_store.set(k+"_output", json.dumps(res))

@@ -216,7 +216,8 @@ var config = {
                         , linkedcat: "LinkedCat+"
                         , linkedcat_authorview: "LinkedCat+"
                         , linkedcat_browseview: "LinkedCat+"
-                        , triple: "TRIPLE"
+                        , triple_km: "TRIPLE"
+                        , triple_sg: "TRIPLE"
                     },
 
     localization: {
@@ -241,7 +242,7 @@ var config = {
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
             most_relevant_tooltip: 'At the moment, we use the relevance ranking provided by the source API. Both PubMed and BASE mainly use text similarity between your query and the article metadata to determine the relevance. Please consult the FAQ for more information.',
-            source_label: 'Source',
+            source_label: 'Data source',
             resulttype_label: 'Document type',
             documenttypes_label: 'Document types',
             documenttypes_tooltip: 'The following document types were taken into consideration in the creation of this map (not all of them may appear in the map):',
@@ -278,6 +279,7 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
+            lang_all: "All lang",
         },
         ger: {
             loading: "Wird geladen...",
@@ -429,7 +431,7 @@ var config = {
             articles_label: 'documents',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
-            source_label: 'Source',
+            source_label: 'Data source',
             resulttype_label: 'Article type',
             documenttypes_label: 'Article types',
             documenttypes_tooltip: 'The following article types were taken into consideration in the creation of this map (not all of them may appear in the map):',
@@ -457,6 +459,7 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
+            lang_all: "All lang",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -486,8 +489,8 @@ var config = {
             articles_label: 'documents',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
-            most_relevant_tooltip: 'To determine the most relevant documents, we use the relevance ranking provided by the source - either BASE or PubMed. Both sources compute the text similarity between your query and the article metadata to establish the relevance ranking. Please consult the FAQ for more information.',
-            source_label: 'Source',
+            most_relevant_tooltip: 'To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.',
+            source_label: 'Data source',
             resulttype_label: 'Document type',
             documenttypes_label: 'Document types',
             documenttypes_tooltip: 'The following document types were taken into consideration in the creation of this map (not all of them may appear in the map):',
@@ -528,6 +531,7 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
+            lang_all: "All lang",
         },
         eng_openaire: {
             loading: "Loading...",
@@ -553,7 +557,7 @@ var config = {
             articles_label: 'documents',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
-            source_label: 'Source',
+            source_label: 'Data source',
             resulttype_label: 'Document type',
             documenttypes_label: 'Article types',
             documenttypes_tooltip: 'The following document types were taken into consideration in the creation of this map (not all of them may appear in the map):',
@@ -606,6 +610,7 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
+            lang_all: "All lang",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -737,7 +742,7 @@ var config = {
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
             articles_label: 'documents',
-            source_label: 'Source',
+            source_label: 'Data source',
             documenttypes_label: 'Document types',
             documenttypes_tooltip: 'The following document types were taken into consideration in the creation of this map (not all of them may appear in the map):',
             area: "Area",
@@ -775,6 +780,7 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
+            lang_all: "All lang",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -803,7 +809,7 @@ var config = {
             articles_label: 'resources',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
-            most_relevant_tooltip: 'To determine the most relevant documents, we use the relevance ranking provided by the source - either BASE or PubMed. Both sources compute the text similarity between your query and the article metadata to establish the relevance ranking. Please consult the FAQ for more information.',
+            most_relevant_tooltip: 'To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.',
             source_label: 'Data source',
             resulttype_label: 'Document type',
             documenttypes_label: 'Document types',
@@ -844,6 +850,7 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
+            lang_all: "All lang",
         },
     },
 

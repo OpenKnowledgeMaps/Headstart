@@ -1,7 +1,7 @@
 import pandas as pd
 import logging
 import sys
-import os
+import re
 import numpy as np
 
 from itertools import chain
@@ -22,14 +22,17 @@ class Streamgraph(object):
         handler.setFormatter(formatter)
         handler.setLevel(loglevel)
         self.logger.addHandler(handler)
+    
+    def tokenize(self, s):
+        #return re.split("; | - |, |: ", s)
+        return re.split("; ", s)
 
-    def get_streamgraph_data(self, metadata, query, n=12, method="tfidf"):
-        df = pd.DataFrame.from_records(metadata)
-        df.year = pd.to_datetime(df.year)
-        df.year = df.year.map(lambda x: x.year)
-        df.year = df.year.map(lambda x: pd.to_datetime(x, format="%Y"))
+    def get_streamgraph_data(self, metadata, query, n=12, method="count"):
+        metadata = pd.DataFrame.from_records(metadata)
+        df = metadata.copy()
+        df.year = pd.to_datetime(df.year).map(lambda x: x.replace(month=1, day=1))
         df = df[df.subject.map(lambda x: x is not None)]
-        df.subject = df.subject.map(lambda x: [s for s in x.split("; ") if s])
+        df.subject = df.subject.map(lambda x: [s.lower() for s in self.tokenize(x)] if isinstance(x, str) else "")
         df = df[df.subject.map(lambda x: x != [])]
         df["boundary_label"] = df.year
         df = df.explode('subject')
@@ -38,14 +41,12 @@ class Streamgraph(object):
         boundaries = self.get_boundaries(df)
         daterange = self.get_daterange(boundaries)
         data = pd.merge(counts, boundaries, on='year')
-        top_n = self.get_top_n(metadata, query, n, method)
-        data = (data[data.subject.map(lambda x: x in top_n)]
+        top_n = self.get_top_n(metadata.copy(), query, n, method)
+        data = (data[data.subject.str.contains('|'.join(top_n), case=False)]
                 .sort_values("year")
                 .reset_index(drop=True))
-        x = self.get_x_axis(daterange)
         sg_data = {}
-        sg_data["x"] = x
-        sg_data["subject"] = self.postprocess(daterange, data)
+        sg_data["x"], sg_data["subject"] = self.build_sg_data(daterange, data, top_n)
         return sg_data
 
     @staticmethod
@@ -54,8 +55,8 @@ class Streamgraph(object):
 
     @staticmethod
     def get_daterange(boundaries):
-        daterange = pd.date_range(start=min(boundaries.year).to_datetime64(),
-                                  end=max(boundaries.year).to_datetime64(),
+        daterange = pd.date_range(start=min(boundaries.year),
+                                  end=max(boundaries.year),
                                   freq='AS')
         if len(daterange) > 0:
             return sorted(daterange)
@@ -84,19 +85,18 @@ class Streamgraph(object):
         boundaries = df[["boundary_label", "year"]].drop_duplicates()
         return boundaries
 
-    def get_top_n(self, metadata, query, n, method):
-        df = pd.DataFrame.from_records(metadata)
+    def get_top_n(self, df, query, n, method):
         df = df[df.subject.map(lambda x: len(x) > 2)]
         corpus = df.subject.tolist()
         # set stopwords , stop_words='english'
         tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
-                                        tokenizer=lambda x: x.split("; "),
-                                        lowercase=False,
+                                        tokenizer=lambda x: self.tokenize(x),
+                                        lowercase=True,
                                         stop_words=[query]
                                         )
         tfidf_vectorizer = TfidfVectorizer(max_df=0.95, min_df=2,
-                                           tokenizer=lambda x: x.split("; "),
-                                           lowercase=False,
+                                           tokenizer=lambda x: self.tokenize(x),
+                                           lowercase=True,
                                            stop_words=[query]
                                            )
         if method == "count":
@@ -104,14 +104,14 @@ class Streamgraph(object):
             counts = pd.DataFrame(tf.toarray(),
                                   columns=tf_vectorizer.get_feature_names())
             candidates = counts.sum().sort_values(ascending=False).index.tolist()
-            candidates = [c for c in candidates if len(c) > 0]
+            candidates = [c for c in candidates if len(c) > 2]
             top_n = candidates[:n]
         if method == "tfidf":
             tfidf = tfidf_vectorizer.fit_transform(corpus)
             weights = pd.DataFrame(tfidf.toarray(),
                                    columns=tfidf_vectorizer.get_feature_names())
             candidates = weights.sum().sort_values(ascending=False).index.tolist()
-            candidates = [c for c in candidates if len(c) > 0]
+            candidates = [c for c in candidates if len(c) > 2]
             top_n = candidates[:n]
         if method == "nmf":
             tfidf = tfidf_vectorizer.fit_transform(corpus)
@@ -139,23 +139,55 @@ class Streamgraph(object):
         words = [w for w in words if len(w) > 2]
         return words[:n]
 
-    @staticmethod
-    def postprocess(daterange, data):
+    def build_sg_data(self, daterange, data, top_n):
         x = pd.DataFrame(daterange, columns=["year"])
         temp = []
-        for item in pd.unique(data.subject):
-            tmp = (pd.merge(data[data.subject == item], x,
+        for item in top_n:
+            tmp = (pd.merge(data[data.subject.str.contains(item, case=False)], x,
                             left_on="year", right_on="year",
                             how="right")
+                     .groupby("year")
+                     .agg({"subject": "sum",
+                           "counts": "sum",
+                           "id": aggregate_ids,
+                           "boundary_label": "max"})
                      .fillna({"counts": 0, "subject": item, "id": "NA"})
                      .sort_values("year"))
+            tmp["subject"] = item
+            tmp["counts"] = tmp["id"].map(lambda x: len(set(filter(lambda x: x!="NA", x.split(", ")))))
             y = tmp.counts.astype(int).to_list()
-            ids_overall = (pd.unique(tmp[tmp.id != "NA"]
-                                     .id.map(lambda x: x.split(", "))
-                                     .explode()).tolist())
-            ids_timestep = tmp.id.map(lambda x: x.split(", ")).tolist()
+            ids_timestep = tmp.id.map(lambda x: list(set(filter(lambda x: x!="NA", x.split(", "))))).tolist()
             temp.append({"name": item, "y": y,
-                         "ids_overall": ids_overall,
                          "ids_timestep": ids_timestep})
         df = pd.DataFrame.from_records(temp)
-        return df.to_dict(orient="records")
+        df["name"] = df.name.apply(str.capitalize)
+        x, df = self.reduce_daterange(daterange, df)
+        df = df[df["ids_overall"].map(lambda x: len(x) != 0)]
+        return x, df.to_dict(orient="records")
+    
+    def reduce_daterange(self, daterange, df):
+        x = self.get_x_axis(daterange)
+        yearly_sums = pd.DataFrame(df.y.to_list()).T.sum(axis=1)
+        yearly_sums_cum = yearly_sums.cumsum()
+        # 5% which is chosen here is an arbitrary value, could also be higher 10% or lower
+        min_value = int(yearly_sums.sum() * 0.05)
+        start_index = yearly_sums_cum[yearly_sums_cum > min_value].index[0]
+        df.y = df.y.map(lambda x: x[start_index:])
+        df.ids_timestep = df.ids_timestep.map(lambda x: x[start_index:])
+        x = x[start_index:]
+        df["ids_overall"] = df.ids_timestep.map(lambda x: list(chain.from_iterable(x)))
+        return x, df
+    
+    @staticmethod
+    def reduce_metadata_set(metadata, sg_data):
+        metadata = pd.read_json(metadata)
+        df = pd.DataFrame.from_records(sg_data["subject"])
+        all_ids = set(chain.from_iterable(df.ids_overall))
+        metadata = metadata[metadata.id.map(lambda x: x in all_ids)]
+        return metadata.to_json(orient="records")
+
+def aggregate_ids(series):
+    try:
+        return ", ".join(pd.unique(series))
+    except Exception:
+        return "NA"

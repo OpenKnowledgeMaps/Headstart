@@ -1,10 +1,18 @@
 import React from "react";
+import ISO6391 from "iso-639-1";
 
-const SearchLang = ({ children: value }) => {
+import { useLocalizationContext } from "../../components/LocalizationProvider";
+
+const SearchLang = ({ children: langCode }) => {
+  const localization = useLocalizationContext();
+
+  const lang =
+    langCode === "all" ? localization.lang_all : ISO6391.getName(langCode);
+
   return (
     // html template starts here
     <span id="search_lang" className="context_item">
-      {value}
+      {lang}
     </span>
     // html template ends here
   );
