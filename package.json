@@ -34,6 +34,7 @@
     "handlebars": "^4.7.7",
     "hyphenation.en-us": "*",
     "hypher": "^0.2.4",
+    "iso-639-1": "^2.1.9",
     "javascript-state-machine": "^2.3.5",
     "jquery": "^3.5.1",
     "mark.js": "^8.11.1",

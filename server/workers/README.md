@@ -96,6 +96,10 @@ Execute command: `python manage.py`
 * In `preprocessing/conf/config_local.ini` change "databasename" to the dev/production database name for the specific integration. This should be in line with the database names provided in `settings.py`
 
 
+* Running backup processes for postgres-volumes:
+
+https://hub.docker.com/p/loomchild/volume-backup
+
 ### Adding a new versioned "flavor" of the backend
 
 

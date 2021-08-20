@@ -56,6 +56,7 @@ class TripleClient(object):
         date = {}
         date["gte"] = _from
         date["lte"] = _to
+        date["format"] = "yyyy-MM-dd"
         return date
 
     def build_sort_order(self, parameters):
@@ -77,30 +78,8 @@ class TripleClient(object):
         if '"' in query:
             q = Q("multi_match", query=query, fields=fields, type="phrase")
         else:
-            q = Q("multi_match", query=query, fields=fields)
+            q = Q("multi_match", query=query, fields=fields, type="best_fields", operator="and")
         return q
-
-    def build_body(self, parameters):
-        body = {"query": {
-                    "bool": {
-                        "must": [
-                             {"multi_match": {
-                                "query": parameters.get('q'),
-                                "fields": ["title", "abstract"],
-                                "type": "cross_fields",
-                                "operator": "and",
-                             }},
-                             {"range": {
-                                "date": self.build_date_field(
-                                        parameters.get('from'),
-                                        parameters.get('to'))
-                             }}
-                        ]
-                    }
-                }}
-        if parameters.get('language') != "all":
-            body["query"]["bool"]["must"].append({"term": {"language": parameters.get('language')}})
-        return body
 
     def search_documents(self, parameters):
         index = os.getenv("TRIPLE_DOCUMENTS_INDEX")
@@ -117,10 +96,6 @@ class TripleClient(object):
                     parameters.get('to')))
         #s = s[parameters.get('pagination_from'):parameters.get('pagination_to')]
         s = s[0:self.get_limit(parameters)*2]
-        if parameters.get('sorting') == "most-relevant":
-            s = s.sort() #  default value
-        if parameters.get('sorting') == "most-recent":
-            s = s.sort("-date")
         self.logger.debug(s.to_dict())
         result = s.execute()
         if parameters.get('raw') is True:
@@ -143,7 +118,10 @@ class TripleClient(object):
         # * "link": link to the PDF; if this is not available, a list of candidate URLs that may contain a link to the PDF
         """
         lang = parameters.get('language')
+        subject_fields = list(filter(lambda x: x, os.getenv("SUBJECT_FIELDS").split(",")))
         df = pd.DataFrame((d.to_dict() for d in result))
+        if parameters["sorting"] == "most-recent":
+            df = df.sort_values("date_published", ascending=0)
         metadata = pd.DataFrame()
         metadata["id"] = df.id.map(lambda x: x if isinstance(x, str) else "")
         metadata["title"] = df.headline.map(lambda x: self.filter_lang(x, lang, "text"))
@@ -151,8 +129,8 @@ class TripleClient(object):
         metadata["authors"] = df.author.map(lambda x: self.get_authors(x) if isinstance(x, list) else "")
         metadata["paper_abstract"] = df.abstract.map(lambda x: self.filter_lang(x, lang, "text"))
         metadata["paper_abstract_en"] = df.abstract.map(lambda x: self.filter_lang(x, 'en', "text"))
-        metadata["published_in"] = df.publisher.map(lambda x: ", ".join(x))
-        metadata["year"] = df.date_published
+        metadata["published_in"] = df.publisher.map(lambda x: ", ".join(filter(None, x)) if isinstance(x, list) else "")
+        metadata["year"] = df.date_published.map(lambda x: x[0])
         metadata["url"] = df.main_entity_of_page.map(lambda x: x if x else "")
         metadata["readers"] = 0
         metadata["subject_orig"] = (df.keywords
@@ -163,13 +141,23 @@ class TripleClient(object):
                 .map(lambda x: [self.clean_subject(s) for s in x if s])
                 .map(lambda x: list(filter(lambda l: len(l) > 0, x)))
                 .map(lambda x: "; ".join(x)))
+        metadata["concepts"] = df.knows_about.map(lambda x: "; ".join(sorted(filter(None, set([self.filter_lang(y["label"], lang, "text") for y in x])))).replace(". ", "; "))
+        metadata["concepts_en"] = df.knows_about.map(lambda x: "; ".join(sorted(filter(None, set([self.filter_lang(y["label"], 'en', "text") for y in x])))).replace(". ", "; "))
         metadata["oa_state"] = 2
         metadata["link"] = (df.url.map(lambda x: list(filter(lambda l: l.lower().endswith('pdf'), x)))
                               .map(lambda x: x[0] if x else ""))
         metadata["relevance"] = df.index
+        metadata.dropna(axis=0, subset=["year"], inplace=True)
+        try:
+            metadata["subject"] = metadata.apply(lambda x: ". ".join(x[["subject"] + subject_fields]), axis=1)
+            metadata["subject_orig"] = metadata.apply(lambda x: ". ".join(x[["subject_orig"] + subject_fields]), axis=1)
+        except Exception:
+            self.logger.exception("Exception during data preprocessing.")
+            self.logger.debug(metadata.columns)
+        metadata = metadata.head(parameters.get('limit'))
         text = pd.DataFrame()
         text["id"] = metadata["id"]
-        text["content"] = metadata.apply(lambda x: ". ".join(x[["title_en", "paper_abstract_en"]]), axis=1)
+        text["content"] = metadata.apply(lambda x: ". ".join(x[["title_en", "paper_abstract_en", "concepts_en"]]), axis=1)        
         input_data = {}
         input_data["metadata"] = metadata.to_json(orient='records')
         input_data["text"] = text.to_json(orient='records')
@@ -196,7 +184,11 @@ class TripleClient(object):
                     filtered.append(field[0].get(content_field))
             except Exception:
                 filtered = [""]
-        return ". ".join(filtered)
+        try:
+            res = ". ".join(filtered)
+        except Exception:
+            res = ""
+        return res
 
     @staticmethod
     def clean_subject(subject):
@@ -205,6 +197,9 @@ class TripleClient(object):
         subject_cleaned = re.sub(r"ddc:[0-9]+(;|$)?", "", subject_cleaned) # remove Dewey Decimal Classification
         subject_cleaned = re.sub(r"([\w\/\:-])*?\/ddc\/([\/0-9\.])*", "", subject_cleaned) # remove Dewey Decimal Classification in URI form
         subject_cleaned = re.sub(r"[A-Z,0-9]{2,}-[A-Z,0-9\.]{2,}(;|$)?", "", subject_cleaned) #remove LOC classification
+        subject_cleaned = re.sub(r"bisacsh\:\w+", "", subject_cleaned) # remove bisac subject headings
+        subject_cleaned = re.sub(r"[A-Z]+\d+", "", subject_cleaned) #remove remaining bisac subject headings
+        subject_cleaned = re.sub(r"JEL\: ", "", subject_cleaned) #remove JEL classifications
         subject_cleaned = re.sub(r"[^\(;]+\(General\)(;|$)?", "", subject_cleaned) # remove general subjects
         subject_cleaned = re.sub(r"[^\(;]+\(all\)(;|$)?", "", subject_cleaned) # remove general subjects
         subject_cleaned = re.sub(r"[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
@@ -213,6 +208,7 @@ class TripleClient(object):
         subject_cleaned = re.sub(r"\[[^\[]+\][^\;]+(;|$)?", "", subject_cleaned) # remove classification
         subject_cleaned = re.sub(r"[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
         subject_cleaned = re.sub(r" -- ", "; ", subject_cleaned) #replace inconsistent keyword separation
+        subject_cleaned = re.sub(r" ?• ?", "; ", subject_cleaned) #replace inconsistent keyword separation
         subject_cleaned = re.sub(r" \(  ", "; ", subject_cleaned) #replace inconsistent keyword separation
         subject_cleaned = re.sub(r"(\w* \w*(\.)( \w* \w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
         subject_cleaned = re.sub(r"\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
@@ -243,7 +239,7 @@ class TripleClient(object):
             k, parameters, endpoint = self.next_item()
             self.logger.debug(parameters)
             if endpoint == "mappings":
-                result = self.get_mappings(parameters.get('index'))
+                res = self.get_mappings(parameters.get('index'))
                 self.redis_store.set(k+"_output", json.dumps(res))
             if endpoint == "search":
                 try:
@@ -257,11 +253,10 @@ class TripleClient(object):
                     else:
                         self.redis_store.rpush("input_data", json.dumps(res))
                 except (NotFoundError, Exception) as e:
-                    self.logger.error(e)
-                    self.logger.error(parameters)
+                    self.logger.exception("Exception during data retrieval.")
                     res = {}
                     res["id"] = k
                     res["params"] = parameters
                     res["status"] = "error"
-                    res["error"] = str(e)
+                    res["reason"] = "unexpected data processing error"
                     self.redis_store.set(k+"_output", json.dumps(res))
