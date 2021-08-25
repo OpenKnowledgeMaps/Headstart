@@ -37,7 +37,9 @@ const CreatedBy = ({ show, url }) => {
 
 const mapStateToProps = (state) => ({
   url: state.misc.createdByUrl,
-  show: state.misc.showCreatedBy,
+  show:
+    state.misc.showCreatedBy &&
+    (typeof state.service !== "string" || !state.service.startsWith("triple")),
 });
 
 export default connect(mapStateToProps)(CreatedBy);

@@ -9,6 +9,7 @@ $search_flow_config_local = array(
             , "triple_sg" => array("from", "to", "sorting", "language", "limit", "sg_method")
     )
     , "enable_get_requests" => true
+    , "force_embed" => true
     , "filter_options" => [
             'options_triple_km' => 
                 ['start_date' => '1809', 'dropdowns' => [
