@@ -167,6 +167,11 @@ text {
 #filter_params, #sort {
     width: 140px;
     font-size: 12px;
+
+    @if $skin == 'ideabox' {
+        width: 170px;
+        font-size: 11px;
+    }
 }
 
 #filter-menu-entries {

@@ -41,11 +41,9 @@ var data_config = {
   sort_options: ["year", "title", "area"],
   filter_options: [
     "all",
-    "Dataset",
-    "Journal Article",
-    "Preprint",
-    "ReFigure",
-    "Review",
+    "Statement",
+    "Frage",
+    "Herausforderung",
   ],
   filter_field: "resulttype",
 
@@ -119,18 +117,12 @@ var data_config = {
       all: "alle",
       // [Open Access]
       open_access: "Open Access",
-      // [Dataset]
-      Dataset: "Datensatz",
-      // [Journal Article]
-      "Journal Article": "Artikel",
-      // [List]
-      List: "Aufzählung",
-      // [Preprint]
-      Preprint: "Preprint",
-      // [ReFigure]
-      ReFigure: "ReFigure",
-      // [Review]
-      Review: "Review",
+      // [Statement]
+      Statement: "Statement",
+      // [Frage]
+      Frage: "Frage",
+      // [Herausforderung]
+      Herausforderung: "Herausforderung",
       link: "Eigene Idee einbringen",
       items: "Ideen",
       comment_by_label: "von",
