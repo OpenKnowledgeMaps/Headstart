@@ -69,7 +69,7 @@ var data_config = {
       search_placeholder: "Suche in der Liste...",
       show_list: "Liste ausklappen",
       hide_list: "Liste einklappen",
-      intro_label: "mehr Informationen",
+      intro_label: "(mehr Informationen)",
       intro_icon: "",
       // [relevance]
       relevance: "Relevanz",
