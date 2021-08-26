@@ -5,6 +5,8 @@ import { Provider } from "react-redux";
 
 import ContextLine from "../../js/components/ContextLine";
 
+import LocalizationProvider from "../../js/components/LocalizationProvider";
+
 const mockStore = configureStore([]);
 
 const setup = (
@@ -19,7 +21,6 @@ const setup = (
         show: true,
         articlesCount: 100, // context.num_documents
         modifier: null, // context.params.sorting => most-recent || most-relevant
-        showModifierPopover: false, // context.params.sorting === "most-relevant" && config.context_most_relevant_tooltip
         openAccessCount: null, // config.show_context_oa_number => context.share_oa
         showAuthor: false, // config.is_authorview && context.params.author_id
         author: {
@@ -75,7 +76,6 @@ describe("Context line component snapshot", () => {
       setup(
         {
           modifier: "most-relevant",
-          showModifierPopover: true,
           openAccessCount: 52,
           documentTypes: ["Journal/newspaper article"],
           dataSource: "BASE",
@@ -91,9 +91,11 @@ describe("Context line component snapshot", () => {
 
     const tree = renderer
       .create(
-        <Provider store={store}>
-          <ContextLine />
-        </Provider>
+        <LocalizationProvider localization={store.getState().localization}>
+          <Provider store={store}>
+            <ContextLine />
+          </Provider>
+        </LocalizationProvider>
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -104,7 +106,6 @@ describe("Context line component snapshot", () => {
       setup(
         {
           modifier: "most-relevant",
-          showModifierPopover: true,
           openAccessCount: 52,
           documentTypes: ["Journal/newspaper article"],
           dataSource: "PubMed",
@@ -120,9 +121,11 @@ describe("Context line component snapshot", () => {
 
     const tree = renderer
       .create(
-        <Provider store={store}>
-          <ContextLine />
-        </Provider>
+        <LocalizationProvider localization={store.getState().localization}>
+          <Provider store={store}>
+            <ContextLine />
+          </Provider>
+        </LocalizationProvider>
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -147,9 +150,11 @@ describe("Context line component snapshot", () => {
 
     const tree = renderer
       .create(
-        <Provider store={store}>
-          <ContextLine />
-        </Provider>
+        <LocalizationProvider localization={store.getState().localization}>
+          <Provider store={store}>
+            <ContextLine />
+          </Provider>
+        </LocalizationProvider>
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -170,9 +175,11 @@ describe("Context line component snapshot", () => {
 
     const tree = renderer
       .create(
-        <Provider store={store}>
-          <ContextLine />
-        </Provider>
+        <LocalizationProvider localization={store.getState().localization}>
+          <Provider store={store}>
+            <ContextLine />
+          </Provider>
+        </LocalizationProvider>
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -199,9 +206,11 @@ describe("Context line component snapshot", () => {
 
     const tree = renderer
       .create(
-        <Provider store={store}>
-          <ContextLine />
-        </Provider>
+        <LocalizationProvider localization={store.getState().localization}>
+          <Provider store={store}>
+            <ContextLine />
+          </Provider>
+        </LocalizationProvider>
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -233,9 +242,11 @@ describe("Context line component snapshot", () => {
 
     const tree = renderer
       .create(
-        <Provider store={store}>
-          <ContextLine />
-        </Provider>
+        <LocalizationProvider localization={store.getState().localization}>
+          <Provider store={store}>
+            <ContextLine />
+          </Provider>
+        </LocalizationProvider>
       )
       .toJSON();
     expect(tree).toMatchSnapshot();

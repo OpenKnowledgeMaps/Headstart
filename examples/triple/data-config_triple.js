@@ -20,7 +20,6 @@ var data_config = {
 
     show_context: true,
     create_title_from_context: true,
-    context_most_relevant_tooltip: true,
 
     doi_outlink: true,
     filter_menu_dropdown: true,
