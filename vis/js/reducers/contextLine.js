@@ -17,10 +17,6 @@ const contextLine = (state = {}, action) => {
         show: !!config.show_context && !!context.params,
         articlesCount: context.num_documents,
         modifier: getModifier(config, context),
-        showModifierPopover:
-          !!context.params &&
-          context.params.sorting === "most-relevant" &&
-          !!config.context_most_relevant_tooltip,
         openAccessCount: config.show_context_oa_number
           ? context.share_oa
           : null,

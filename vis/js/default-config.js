@@ -131,8 +131,6 @@ var config = {
     custom_title: null,
     //show number of open access documents in context
     show_context_oa_number: true,
-    //create a tooltip for the label "most relevant" in the context line
-    context_most_relevant_tooltip: false,
     //show timestamp in the context line
     show_context_timestamp: false,
     
@@ -242,6 +240,7 @@ var config = {
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
             most_relevant_tooltip: 'At the moment, we use the relevance ranking provided by the source API. Both PubMed and BASE mainly use text similarity between your query and the article metadata to determine the relevance. Please consult the FAQ for more information.',
+            most_relevant_tooltip_sg: "In this streamgraph you find the most relevant documents matching your query related to the top keywords. To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
             source_label: 'Data source',
             resulttype_label: 'Document type',
             documenttypes_label: 'Document types',
@@ -490,6 +489,7 @@ var config = {
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
             most_relevant_tooltip: 'To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.',
+            most_relevant_tooltip_sg: "In this streamgraph you find the most relevant documents matching your query related to the top keywords. To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
             source_label: 'Data source',
             resulttype_label: 'Document type',
             documenttypes_label: 'Document types',
@@ -810,6 +810,7 @@ var config = {
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
             most_relevant_tooltip: 'To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.',
+            most_relevant_tooltip_sg: "In this streamgraph you find the most relevant documents matching your query related to the top keywords. To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
             source_label: 'Data source',
             resulttype_label: 'Document type',
             documenttypes_label: 'Document types',
