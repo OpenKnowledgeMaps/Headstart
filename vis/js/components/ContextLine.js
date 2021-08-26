@@ -163,7 +163,10 @@ class ContextLine extends React.Component {
 
 const mapStateToProps = (state) => ({
   hidden: state.zoom || !state.contextLine.show,
-  params: state.contextLine,
+  params: {
+    ...state.contextLine,
+    timespan: state.timespan,
+  },
   service: state.service,
   localization: state.localization,
 });

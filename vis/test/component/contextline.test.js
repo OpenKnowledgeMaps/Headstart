@@ -15,6 +15,7 @@ const setup = (overrideStoreObject = {}) => {
   const storeObject = Object.assign(
     {
       zoom: false,
+      timespan: null,
       contextLine: {
         show: true, // config.show_context && context.params
         articlesCount: 100, // context.num_documents
@@ -27,7 +28,6 @@ const setup = (overrideStoreObject = {}) => {
         },
         documentTypes: null,
         dataSource: "Sample data source",
-        timespan: null,
         paperCount: null,
         datasetCount: null,
         funder: null,
@@ -211,10 +211,10 @@ describe("Context line component", () => {
       ).toContain("CoVis database");
     });
 
-    it("doesn't contain the timespan", () => {
+    it("doesn't contain a timespan", () => {
       const TIMESPAN = undefined;
       const storeObject = setup();
-      storeObject.contextLine.timespan = TIMESPAN;
+      storeObject.timespan = TIMESPAN;
 
       const store = mockStore(storeObject);
 
@@ -235,7 +235,7 @@ describe("Context line component", () => {
     it("contains a correct timespan", () => {
       const TIMESPAN = "Custom timespan";
       const storeObject = setup();
-      storeObject.contextLine.timespan = TIMESPAN;
+      storeObject.timespan = TIMESPAN;
 
       const store = mockStore(storeObject);
 
