@@ -7,6 +7,7 @@ import filesReducer from "../../js/reducers/files";
 import contextLineReducer from "../../js/reducers/contextLine";
 import serviceReducer from "../../js/reducers/service";
 import listReducer from "../../js/reducers/list";
+import timespanReducer from "../../js/reducers/timespan";
 
 const setup = (overrideConfig = {}, overrideContext = {}) => {
   const configObject = Object.assign(
@@ -448,6 +449,222 @@ describe("config and context state", () => {
       const result = filesReducer(INITIAL_STATE, { canceled: true });
 
       expect(result).toEqual(INITIAL_STATE);
+    });
+  });
+
+  describe("timespan reducer", () => {
+    it("should not change the state if the action is canceled", () => {
+      const INITIAL_STATE = { some_state: 1 };
+
+      const result = timespanReducer(INITIAL_STATE, {
+        canceled: true,
+        some_state: 2,
+      });
+
+      expect(result).toEqual(INITIAL_STATE);
+    });
+
+    it("should initialize a correct timespan '11 Aug 2019 - 12 Aug 2020' (base)", () => {
+      const SERVICE_NAME = "base";
+      const FROM = "2019-08-11T13:30:22.112Z";
+      const TO = "2020-08-12T13:30:22.112Z";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          service: SERVICE_NAME,
+        },
+        {
+          params: {
+            from: FROM,
+            to: TO,
+          },
+        }
+      );
+
+      const result = timespanReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual("11 Aug 2019 - 12 Aug 2020");
+    });
+
+    it("should initialize a correct timespan 'All time' (pubmed)", () => {
+      const SERVICE_NAME = "pubmed";
+      const FROM = "1809-01-01T13:30:22.112Z";
+      const TO = new Date().toJSON();
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          service: SERVICE_NAME,
+        },
+        {
+          params: {
+            from: FROM,
+            to: TO,
+          },
+        }
+      );
+
+      const result = timespanReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual("All time");
+    });
+
+    it("should initialize a correct timespan 'Until 12 Aug 2020' (default)", () => {
+      const SERVICE_NAME = "some-other";
+      const FROM = "1970-01-01T13:30:22.112Z";
+      const TO = "2020-08-12T13:30:22.112Z";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          service: SERVICE_NAME,
+        },
+        {
+          params: {
+            from: FROM,
+            to: TO,
+          },
+        }
+      );
+
+      const result = timespanReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual("Until 12 Aug 2020");
+    });
+
+    it("should initialize a correct timespan 'Until 2019' (doaj)", () => {
+      const SERVICE_NAME = "doaj";
+      const FROM = "1809-01-01T13:30:22.112Z";
+      const TO = "2019-08-12T13:30:22.112Z";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          service: SERVICE_NAME,
+        },
+        {
+          params: {
+            from: FROM,
+            to: TO,
+          },
+        }
+      );
+
+      const result = timespanReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual("Until 2019");
+    });
+
+    it("should initialize a null timespan (no 'to' param)", () => {
+      const SERVICE_NAME = "doaj";
+      const FROM = "1809-01-01T13:30:22.112Z";
+      const TO = undefined;
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          service: SERVICE_NAME,
+        },
+        {
+          params: {
+            from: FROM,
+            to: TO,
+          },
+        }
+      );
+
+      const result = timespanReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual(null);
+    });
+
+    it("should initialize a correct timespan to today (triple)", () => {
+      const TODAY = new Date();
+      const SERVICE_NAME = "triple_km";
+      const FROM = "2019";
+      const TO = TODAY.getFullYear().toString();
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          service: SERVICE_NAME,
+        },
+        {
+          params: {
+            from: FROM,
+            to: TO,
+          },
+        }
+      );
+
+      const result = timespanReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      const MONTHS = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      expect(result).toEqual(
+        `1 Jan 2019 - ${TODAY.getDate()} ${
+          MONTHS[TODAY.getMonth()]
+        } ${TODAY.getFullYear()}`
+      );
+    });
+
+    it("should initialize a correct timespan 'Until 2019' (triple streamgraph)", () => {
+      const SERVICE_NAME = "triple_sg";
+      const FROM = "1809-01-01T13:30:22.112Z";
+      const TO = "2019-08-12T13:30:22.112Z";
+
+      const initialState = {};
+      const { configObject, contextObject } = setup(
+        {
+          service: SERVICE_NAME,
+          is_streamgraph: true,
+        },
+        {
+          params: {
+            from: FROM,
+            to: TO,
+            sorting: "most-recent",
+          },
+        }
+      );
+
+      const result = timespanReducer(
+        initialState,
+        initializeStore(configObject, contextObject)
+      );
+
+      expect(result).toEqual("Until 12 Aug 2019");
     });
   });
 
@@ -1070,210 +1287,6 @@ describe("config and context state", () => {
       );
 
       expect(result).toHaveProperty("dataSource", EXPECTED_VALUE);
-    });
-
-    it("should initialize a correct timespan '11 Aug 2019 - 12 Aug 2020' (base)", () => {
-      const SERVICE_NAME = "base";
-      const FROM = "2019-08-11T13:30:22.112Z";
-      const TO = "2020-08-12T13:30:22.112Z";
-
-      const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          service: SERVICE_NAME,
-        },
-        {
-          params: {
-            from: FROM,
-            to: TO,
-          },
-        }
-      );
-
-      const result = contextLineReducer(
-        initialState,
-        initializeStore(configObject, contextObject)
-      );
-
-      expect(result).toHaveProperty("timespan", "11 Aug 2019 - 12 Aug 2020");
-    });
-
-    it("should initialize a correct timespan 'All time' (pubmed)", () => {
-      const SERVICE_NAME = "pubmed";
-      const FROM = "1809-01-01T13:30:22.112Z";
-      const TO = new Date().toJSON();
-
-      const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          service: SERVICE_NAME,
-        },
-        {
-          params: {
-            from: FROM,
-            to: TO,
-          },
-        }
-      );
-
-      const result = contextLineReducer(
-        initialState,
-        initializeStore(configObject, contextObject)
-      );
-
-      expect(result).toHaveProperty("timespan", "All time");
-    });
-
-    it("should initialize a correct timespan 'Until 12 Aug 2020' (default)", () => {
-      const SERVICE_NAME = "some-other";
-      const FROM = "1970-01-01T13:30:22.112Z";
-      const TO = "2020-08-12T13:30:22.112Z";
-
-      const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          service: SERVICE_NAME,
-        },
-        {
-          params: {
-            from: FROM,
-            to: TO,
-          },
-        }
-      );
-
-      const result = contextLineReducer(
-        initialState,
-        initializeStore(configObject, contextObject)
-      );
-
-      expect(result).toHaveProperty("timespan", "Until 12 Aug 2020");
-    });
-
-    it("should initialize a correct timespan 'Until 2019' (doaj)", () => {
-      const SERVICE_NAME = "doaj";
-      const FROM = "1809-01-01T13:30:22.112Z";
-      const TO = "2019-08-12T13:30:22.112Z";
-
-      const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          service: SERVICE_NAME,
-        },
-        {
-          params: {
-            from: FROM,
-            to: TO,
-          },
-        }
-      );
-
-      const result = contextLineReducer(
-        initialState,
-        initializeStore(configObject, contextObject)
-      );
-
-      expect(result).toHaveProperty("timespan", "Until 2019");
-    });
-
-    it("should initialize a null timespan (no 'to' param)", () => {
-      const SERVICE_NAME = "doaj";
-      const FROM = "1809-01-01T13:30:22.112Z";
-      const TO = undefined;
-
-      const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          service: SERVICE_NAME,
-        },
-        {
-          params: {
-            from: FROM,
-            to: TO,
-          },
-        }
-      );
-
-      const result = contextLineReducer(
-        initialState,
-        initializeStore(configObject, contextObject)
-      );
-
-      expect(result).toHaveProperty("timespan", null);
-    });
-
-    it("should initialize a correct timespan to today (triple)", () => {
-      const TODAY = new Date();
-      const SERVICE_NAME = "triple_km";
-      const FROM = "2019";
-      const TO = TODAY.getFullYear().toString();
-
-      const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          service: SERVICE_NAME,
-        },
-        {
-          params: {
-            from: FROM,
-            to: TO,
-          },
-        }
-      );
-
-      const result = contextLineReducer(
-        initialState,
-        initializeStore(configObject, contextObject)
-      );
-
-      const MONTHS = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      expect(result).toHaveProperty(
-        "timespan",
-        `1 Jan 2019 - ${TODAY.getDate()} ${
-          MONTHS[TODAY.getMonth()]
-        } ${TODAY.getFullYear()}`
-      );
-    });
-
-    it("should initialize a correct timespan 'Until 2019' (triple streamgraph)", () => {
-      const SERVICE_NAME = "triple_sg";
-      const FROM = "1809-01-01T13:30:22.112Z";
-      const TO = "2019-08-12T13:30:22.112Z";
-
-      const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          service: SERVICE_NAME,
-          is_streamgraph: true,
-        },
-        {
-          params: {
-            from: FROM,
-            to: TO,
-            sorting: "most-recent",
-          },
-        }
-      );
-
-      const result = contextLineReducer(
-        initialState,
-        initializeStore(configObject, contextObject)
-      );
-
-      expect(result).toHaveProperty("timespan", "Until 12 Aug 2019");
     });
 
     it("should initialize correct papers count", () => {

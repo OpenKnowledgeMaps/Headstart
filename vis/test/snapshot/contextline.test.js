@@ -17,6 +17,7 @@ const setup = (
   const storeObject = Object.assign(
     {
       zoom: false,
+      timespan: null,
       contextLine: {
         show: true,
         articlesCount: 100, // context.num_documents
@@ -29,7 +30,6 @@ const setup = (
         },
         documentTypes: null,
         dataSource: "Sample data source",
-        timespan: null,
         paperCount: null,
         datasetCount: null,
         funder: null,
@@ -79,12 +79,12 @@ describe("Context line component snapshot", () => {
           openAccessCount: 52,
           documentTypes: ["Journal/newspaper article"],
           dataSource: "BASE",
-          timespan: "All time",
           metadataQuality: "low",
         },
         {},
         {
           service: "base",
+          timespan: "All time",
         }
       )
     );
@@ -109,12 +109,12 @@ describe("Context line component snapshot", () => {
           openAccessCount: 52,
           documentTypes: ["Journal/newspaper article"],
           dataSource: "PubMed",
-          timespan: "All time",
           metadataQuality: "high",
         },
         {},
         {
           service: "pubmed",
+          timespan: "All time",
         }
       )
     );
@@ -222,7 +222,6 @@ describe("Context line component snapshot", () => {
         {
           articlesCount: 295,
           dataSource: "LinkedCat+",
-          timespan: "1 Jan 1847 - 1 Jan 1918",
           documentTypes: [
             "Anthologie",
             "Bericht",
@@ -236,6 +235,9 @@ describe("Context line component snapshot", () => {
           documenttypes_tooltip:
             "Die folgenden Publikationsarten wurden bei der Erstellung dieser Visualisierung in Betracht gezogen (nicht alle davon scheinen notwendigerweise in dieser Visualisierung auch auf)",
           documenttypes_label: "Dokumentarten",
+        },
+        {
+          timespan: "1 Jan 1847 - 1 Jan 1918",
         }
       )
     );
