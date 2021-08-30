@@ -46,7 +46,7 @@ class RCalculation extends Calculation {
         //library\Toolkit::info($path);
         // exec(ps(if [ $(ps -ef | grep -v grep | grep scrape_data.php | wc -l) -lt 1 ])) if n > 5
         // return $try_later with error handling
-        if(exec("ps -u www-data | grep R | wc -l") <= 8) {
+        if(exec("ps -u www-data | grep R | wc -l") <= 12) {
             exec($path, $output_r);
             return $output_r;
         } else {
