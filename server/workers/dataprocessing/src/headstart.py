@@ -88,28 +88,12 @@ class Dataprocessing(object):
                     self.redis_store.set(k+"_output", json.dumps(res))
             except ValueError as e:
                 self.logger.error(params)
-                self.logger.exception("Exception during visualization creation.")
+                self.logger.exception("Exception during visualization creation, probably not enough documents.")
                 res = {}
                 res["id"] = k
                 res["params"] = params
                 res["status"] = "error"
-                # move to better place
-                reason = []
-                if not reason:
-                    query = params.get('q')
-                    phrasepattern = '"(.*?)"'
-                    phrases = re.findall(phrasepattern, query)
-                    if phrases:
-                        if len(phrases[0].split(" ")) > 4:
-                            reason.append('too specific')
-                    elif len(query.split(" ")) < 4:
-                        reason.append('typo')
-                        reason.append('too specific')
-                    else:
-                        reason.append('query length')
-                        reason.append('too specific')
-                res["reason"] = reason
-                # move to better place
+                res["reason"] = []
                 self.redis_store.set(k+"_output", json.dumps(res))
             except Exception as e:
                 self.logger.error(params)
