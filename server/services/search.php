@@ -37,7 +37,7 @@ function utf8_converter($array)
     return $array;
 }
 
-function cleanQuery($dirty_query, $transform_query_tolowercase) {
+function cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes) {
     $query = strip_tags($dirty_query);
     $query = trim($query);
 
@@ -45,7 +45,9 @@ function cleanQuery($dirty_query, $transform_query_tolowercase) {
         $query = strtolower($query);
     }
 
-    $query = addslashes($query);
+    if ($add_slashes) {
+        $query = addslashes($query);
+    }
 
     return $query;
 }
@@ -54,7 +56,7 @@ function search($service_integration, $dirty_query
         , $post_params, $param_types
         , $transform_query_tolowercase = true
         , $retrieve_cached_map = true, $params_for_id = null
-        , $precomputed_id = null, $do_clean_query = true) {
+        , $precomputed_id = null, $do_clean_query = true, $add_slashes = true) {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
     $processing_backend = isset($ini_array["general"]["processing_backend"])
@@ -79,7 +81,7 @@ function search($service_integration, $dirty_query
                               "triple_sg" => "triple");
 
     $query = ($do_clean_query === true)
-                ?(cleanQuery($dirty_query, $transform_query_tolowercase))
+                ?(cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes))
                 :($dirty_query);
 
     $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
