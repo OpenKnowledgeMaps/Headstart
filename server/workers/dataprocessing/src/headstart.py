@@ -86,7 +86,7 @@ class Dataprocessing(object):
                 else:
                     res = self.create_map(params, input_data)
                     self.redis_store.set(k+"_output", json.dumps(res))
-            except ValueError:
+            except ValueError as e:
                 self.logger.error(params)
                 self.logger.exception("Exception during visualization creation.")
                 res = {}
