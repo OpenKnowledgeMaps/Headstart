@@ -6,6 +6,7 @@ import subprocess
 import pandas as pd
 import logging
 from .streamgraph import Streamgraph
+import re
 
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
@@ -85,6 +86,15 @@ class Dataprocessing(object):
                 else:
                     res = self.create_map(params, input_data)
                     self.redis_store.set(k+"_output", json.dumps(res))
+            except ValueError as e:
+                self.logger.error(params)
+                self.logger.exception("Exception during visualization creation, probably not enough documents.")
+                res = {}
+                res["id"] = k
+                res["params"] = params
+                res["status"] = "error"
+                res["reason"] = []
+                self.redis_store.set(k+"_output", json.dumps(res))
             except Exception as e:
                 self.logger.error(params)
                 self.logger.exception("Exception during visualization creation.")
