@@ -89,7 +89,7 @@ Enter container: `docker exec -it VARYINGNAME_db_1 psql -U headstart`
 
 Execute command: `CREATE DATABASE databasename;`
 
-Exit the container and re-enter it as normal user: `docker exec -it VARYINGNAME_db_1 /bin/bash`
+Exit the container and re-enter it as normal user: `docker exec -it VARYINGNAME_persistence_1 /bin/bash`
 
 Execute command: `python manage.py`
 
