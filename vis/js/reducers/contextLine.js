@@ -1,5 +1,3 @@
-import dateFormat from "dateformat";
-
 const exists = (param) =>
   typeof param !== "undefined" && param !== "null" && param !== null;
 
