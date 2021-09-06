@@ -56,7 +56,7 @@ const setup = (overrideStoreObject = {}) => {
         low_metadata_quality_desc_base: "Sample BASE low quality description",
         low_metadata_quality_desc_pubmed:
           "Sample PubMed low quality description",
-        lang_all: "All lang",
+        lang_all: "All languages",
       },
     },
     overrideStoreObject
