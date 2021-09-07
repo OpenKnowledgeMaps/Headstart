@@ -10,14 +10,18 @@ const Link = ({ address, isDoi }) => {
     <div className="doi_outlink">
       <span>
         [{isDoi ? "doi" : localization.link}]:{" "}
-        <a
-          className="doi_outlink_link"
-          href={isDoi ? `https://dx.doi.org/${address}` : address}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {address}
-        </a>
+        {address ? (
+          <a
+            className="doi_outlink_link"
+            href={isDoi ? `https://dx.doi.org/${address}` : address}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {address}
+          </a>
+        ) : (
+          localization.not_available
+        )}
       </span>
     </div>
     // html template ends here
