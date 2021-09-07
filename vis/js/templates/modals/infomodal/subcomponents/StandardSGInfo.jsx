@@ -23,7 +23,7 @@ const StandardSGInfo = ({
               related to <strong>{customTitle ? customTitle : query}</strong>
             </>
           )}{" "}
-          over time based on up to 1000 documents matching your query. The main
+          over time based on up to 1000 documents matching your query related to the top keywords. The main
           keywords are represented as colored streams. Up to 1000 documents are
           assigned to one or more streams according to their keywords. The
           height of a stream represents the number of documents with this
@@ -43,7 +43,7 @@ const StandardSGInfo = ({
         </p>
         <p>
           Please{" "}
-          <a target="_blank" className="underline" href="faq">
+          <a target="_blank" className="underline" href="https://openknowledgemaps.org/faq">
             read our FAQs
           </a>{" "}
           to find out more about knowledge maps.

@@ -24,11 +24,10 @@ const BaseInfo = ({ params }) => {
             </a>
             .
           </p>
-          <p style={{ textAlign: "center" }}>
+          <p className="datasource-logo">
             <img
               src={baseLogo}
               alt="BASE service logo"
-              style={{ width: "50%" }}
             />
           </p>
         </>
