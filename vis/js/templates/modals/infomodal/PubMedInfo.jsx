@@ -24,13 +24,6 @@ const PubMedInfo = ({ params }) => {
             </a>
             .
           </p>
-          <p style={{ textAlign: "center" }}>
-            <img
-              src={pubmedLogo}
-              alt="PubMed service logo"
-              style={{ width: "50%" }}
-            />
-          </p>
         </>
       }
       params={params}

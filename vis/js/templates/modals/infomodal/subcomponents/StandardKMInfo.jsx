@@ -49,7 +49,7 @@ const StandardKMInfo = ({
         </p>
         <p>
           Please{" "}
-          <a target="_blank" className="underline" href="faq">
+          <a target="_blank" className="underline" href="https://openknowledgemaps.org/faq">
             read our FAQs
           </a>{" "}
           to find out more about knowledge maps.
