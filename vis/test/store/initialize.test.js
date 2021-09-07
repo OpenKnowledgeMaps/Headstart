@@ -596,7 +596,7 @@ describe("config and context state", () => {
 
     it("should initialize a correct timespan to today (triple)", () => {
       const TODAY = new Date();
-      const SERVICE_NAME = "triple_km";
+      const SERVICE_NAME = "triple";
       const FROM = "2019";
       const TO = TODAY.getFullYear().toString();
 
@@ -618,29 +618,13 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject)
       );
 
-      const MONTHS = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
       expect(result).toEqual(
-        `1 Jan 2019 - ${TODAY.getDate()} ${
-          MONTHS[TODAY.getMonth()]
-        } ${TODAY.getFullYear()}`
+        `2019 - ${TODAY.getFullYear()}`
       );
     });
 
     it("should initialize a correct timespan 'Until 2019' (triple streamgraph)", () => {
-      const SERVICE_NAME = "triple_sg";
+      const SERVICE_NAME = "triple";
       const FROM = "1809-01-01T13:30:22.112Z";
       const TO = "2019-08-12T13:30:22.112Z";
 
@@ -664,7 +648,7 @@ describe("config and context state", () => {
         initializeStore(configObject, contextObject)
       );
 
-      expect(result).toEqual("Until 12 Aug 2019");
+      expect(result).toEqual("Until 2019");
     });
   });
 
