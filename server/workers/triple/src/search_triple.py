@@ -76,9 +76,9 @@ class TripleClient(object):
     @staticmethod
     def parse_query(query, fields):
         if '"' in query:
-            q = Q("multi_match", query=query, fields=fields, type="phrase")
+            q = Q("multi_match", query=query, type="phrase")
         else:
-            q = Q("multi_match", query=query, fields=fields, type="best_fields", operator="and")
+            q = Q("multi_match", query=query, type="best_fields", operator="and")
         return q
 
     def search_documents(self, parameters):
