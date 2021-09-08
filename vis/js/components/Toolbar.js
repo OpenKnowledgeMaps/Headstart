@@ -11,7 +11,7 @@ const Toolbar = ({
   scaleExplanations,
   scaleBaseUnit,
   scaleValue,
-  showCreatedBy,
+  showCredit,
   onInfoClick,
   onScaleChange,
 }) => {
@@ -31,7 +31,7 @@ const Toolbar = ({
           labels={scaleLabels}
           explanations={scaleExplanations}
           value={scaleValue}
-          showCredit={showCreatedBy}
+          showCredit={showCredit}
           onInfoClick={onInfoClick}
           onChange={handleScaleChange}
         />
@@ -49,7 +49,7 @@ const mapStateToProps = (state) => ({
   scaleExplanations: state.toolbar.scaleExplanations,
   scaleBaseUnit: state.toolbar.scaleBaseUnit,
   scaleValue: state.toolbar.scaleValue,
-  showCreatedBy: state.misc.showCreatedByViper,
+  showCredit: state.misc.showCreatedByViper,
 });
 
 const mapDispatchToProps = (dispatch) => ({

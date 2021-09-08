@@ -9,10 +9,10 @@ import KnowledgeMap from "./KnowledgeMap";
 import ModalButtons from "./ModalButtons";
 import Modals from "./Modals";
 import Toolbar from "./Toolbar";
-import CreatedBy from "../templates/CreatedBy";
 import Loading from "../templates/Loading";
 import List from "./List";
 import TitleContext from "./TitleContext";
+import Footer from "./Footer";
 
 const Headstart = ({
   renderMap,
@@ -49,9 +49,9 @@ const Headstart = ({
         )}
         {renderList && <List />}
       </div>
-      <CreatedBy />
       <Toolbar />
       <Modals />
+      <Footer />
     </LocalizationProvider>
   );
 };
