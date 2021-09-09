@@ -1152,5 +1152,66 @@ describe("List entries component", () => {
 
       expect(actions).toEqual([EXPECTED_PAYLOAD]);
     });
+
+    it("renders with data without title, authors and abstract", () => {
+      const storeObject = setup(
+        {
+          list: [
+            {
+              id: "https://doi.org/10.1038/nrmicro2090",
+              title: "",
+              authors: "",
+              paper_abstract: "",
+              url: "https://doi.org/10.1038/nrmicro2090",
+              readers: 0,
+              subject_orig: "Spike protein, vaccines",
+              subject: "Spike protein, vaccines",
+              oa_state: 3,
+              link: "https://www.nature.com/articles/nrmicro2090.pdf",
+              relevance: 3,
+              comments: [],
+              tags: "Peer-reviewed",
+              resulttype: "Review",
+              area_uri: 0,
+              area: "Vaccines",
+              authors_string: "",
+              authors_short_string: "",
+              safe_id:
+                "https__003a__002f__002fdoi__002eorg__002f10__002e1038__002fnrmicro2090",
+              num_readers: 0,
+              internal_readers: 1,
+              num_subentries: 0,
+              paper_selected: false,
+              oa: false,
+              free_access: true,
+              oa_link: "https://www.nature.com/articles/nrmicro2090.pdf",
+              outlink: "https://doi.org/10.1038/nrmicro2090",
+            },
+          ],
+        },
+        {
+          show: true,
+          showFilter: true,
+          filterField: "resulttype",
+          filterValue: "all",
+        }
+      );
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={localization}>
+              <List />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
+      });
+
+      expect(container.querySelector("#paper_list_title").textContent).toEqual(storeObject.localization.default_title);
+      expect(container.querySelector(".list_authors").textContent).toEqual(storeObject.localization.default_authors);
+      expect(container.querySelector("#list_abstract").textContent).toEqual(storeObject.localization.default_abstract);
+    });
   });
 });
