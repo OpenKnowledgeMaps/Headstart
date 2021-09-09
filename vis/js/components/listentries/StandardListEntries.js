@@ -70,14 +70,16 @@ const StandardListEntries = ({
             isDataset: entry.resulttype === "dataset",
           }}
           tags={getPaperTags(entry)}
-          title={entry.title}
+          title={entry.title ? entry.title : localization.default_title}
           preview={{
             link: getPaperPreviewLink(entry),
             onClickPDF: getPaperPDFClickHandler(entry, handlePDFClick),
             showPreviewImage,
           }}
           details={{
-            authors: entry.authors_string,
+            authors: entry.authors_string
+              ? entry.authors_string
+              : localization.default_authors,
             source: entry.published_in,
             year: entry.year,
           }}

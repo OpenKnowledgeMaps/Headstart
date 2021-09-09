@@ -22,6 +22,7 @@ const BasicListEntries = ({
   handleAreaMouseout,
   abstractSize,
   baseUnit,
+  localization,
   showPreviewImage,
   showRealPreviewImage,
   disableClicks,
@@ -53,7 +54,7 @@ const BasicListEntries = ({
             isFreeAccess: !!entry.free_access,
             isDataset: entry.resulttype === "dataset",
           }}
-          title={entry.title}
+          title={entry.title ? entry.title : localization.default_title}
           preview={{
             link: getPaperPreviewLink(entry),
             onClickPDF: getPaperPDFClickHandler(entry, handlePDFClick),
@@ -63,7 +64,9 @@ const BasicListEntries = ({
               : null,
           }}
           details={{
-            authors: entry.authors_string,
+            authors: entry.authors_string
+              ? entry.authors_string
+              : localization.default_authors,
             source: entry.published_in,
             year: entry.year,
           }}
@@ -93,6 +96,7 @@ const mapStateToProps = (state) => ({
   showPreviewImage: !!state.selectedPaper,
   showRealPreviewImage: state.list.showRealPreviewImage,
   disableClicks: state.list.disableClicks,
+  localization: state.localization,
 });
 
 export default connect(
