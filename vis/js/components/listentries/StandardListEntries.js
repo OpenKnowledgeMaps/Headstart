@@ -70,7 +70,7 @@ const StandardListEntries = ({
             isDataset: entry.resulttype === "dataset",
           }}
           tags={getPaperTags(entry)}
-          title={entry.title ? entry.title : localization.default_title}
+          title={entry.title ? entry.title : localization.default_paper_title}
           preview={{
             link: getPaperPreviewLink(entry),
             onClickPDF: getPaperPDFClickHandler(entry, handlePDFClick),
