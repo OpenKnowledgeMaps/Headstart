@@ -1,5 +1,3 @@
-import dateFormat from "dateformat";
-
 const exists = (param) =>
   typeof param !== "undefined" && param !== "null" && param !== null;
 
@@ -17,10 +15,6 @@ const contextLine = (state = {}, action) => {
         show: !!config.show_context && !!context.params,
         articlesCount: context.num_documents,
         modifier: getModifier(config, context),
-        showModifierPopover:
-          !!context.params &&
-          context.params.sorting === "most-relevant" &&
-          !!config.context_most_relevant_tooltip,
         openAccessCount: config.show_context_oa_number
           ? context.share_oa
           : null,
@@ -43,7 +37,6 @@ const contextLine = (state = {}, action) => {
           typeof config.service_name !== "undefined"
             ? config.service_name
             : config.service_names[context.service],
-        timespan: getTimespan(config, context),
         paperCount:
           config.create_title_from_context_style === "viper"
             ? context.num_papers
@@ -72,7 +65,15 @@ const contextLine = (state = {}, action) => {
   }
 };
 
-const getModifier = (config, context) => {
+/**
+ * Returns the search modifier (how the searched papers are selected).
+ * 
+ * @param {Object} config the config object
+ * @param {Object} context the context object
+ * 
+ * @returns {string} either most-recent, most-relevant or null
+ */
+export const getModifier = (config, context) => {
   if (
     !context.params ||
     !exists(context.params.sorting) ||
@@ -119,63 +120,6 @@ const getPropName = (params) => {
   }
 
   return null;
-};
-
-const SERVICE_START = {
-  doaj: "1809",
-  pubmed: "1809-01-01",
-  base: "1665-01-01",
-};
-
-const getTimespan = (config, context) => {
-  if (!context.params || !context.params.from || !context.params.to) {
-    return null;
-  }
-
-  const displayFormat = config.service === "doaj" ? "yyyy" : "d mmm yyyy";
-  const hyphenFormat = config.service === "doaj" ? "yyyy" : "yyyy-mm-dd";
-
-  const today = new Date();
-  const from = new Date(context.params.from);
-  const to = new Date(context.params.to);
-  if (
-    typeof context.params.to === "string" &&
-    context.params.to.match(/^\d{4}$/)
-  ) {
-    to.setMonth(11);
-    to.setDate(31);
-  }
-  if (to.getTime() > today.getTime()) {
-    to.setTime(today.getTime());
-  }
-
-  today.setTime(today.getTime() + today.getTimezoneOffset() * 60 * 1000);
-  from.setTime(from.getTime() + from.getTimezoneOffset() * 60 * 1000);
-  to.setTime(to.getTime() + to.getTimezoneOffset() * 60 * 1000);
-
-  const toFormatted = dateFormat(to, displayFormat);
-  const modifier = getModifier(config, context);
-  // most recent streamgraphs straight away display "Until xyz",
-  // other maps have a more complicated logic
-  if (!config.is_streamgraph || modifier !== "most-recent") {
-    const defaultFromHyphenated = SERVICE_START[config.service] || "1970-01-01";
-
-    const fromHyphenated = dateFormat(from, hyphenFormat);
-    const fromFormatted = dateFormat(from, displayFormat);
-
-    if (fromHyphenated !== defaultFromHyphenated) {
-      return fromFormatted + " - " + toFormatted;
-    }
-
-    const toHyphenated = dateFormat(to, hyphenFormat);
-    const todayHyphenated = dateFormat(today, hyphenFormat);
-
-    if (toHyphenated === todayHyphenated) {
-      return "All time";
-    }
-  }
-
-  return "Until " + toFormatted;
 };
 
 const getProjectRuntime = (config, context) => {

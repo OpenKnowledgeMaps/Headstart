@@ -10,13 +10,6 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
   >
     76
      
-    <span
-      className="modifier"
-      id="modifier"
-    >
-      
-    </span>
-     
     resources and collections
      
     (
@@ -72,13 +65,6 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
   >
     45
      
-    <span
-      className="modifier"
-      id="modifier"
-    >
-      
-    </span>
-     
     open access Dokumente
      
   </span>
@@ -103,13 +89,6 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
     id="num_articles"
   >
     295
-     
-    <span
-      className="modifier"
-      id="modifier"
-    >
-      
-    </span>
      
     open access Dokumente
      
@@ -318,13 +297,6 @@ exports[`Context line component snapshot matches a viper snapshot 1`] = `
     id="num_articles"
   >
     36
-     
-    <span
-      className="modifier"
-      id="modifier"
-    >
-      
-    </span>
      
     documents
      
