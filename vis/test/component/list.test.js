@@ -1209,7 +1209,7 @@ describe("List entries component", () => {
         );
       });
 
-      expect(container.querySelector("#paper_list_title").textContent).toEqual(storeObject.localization.default_title);
+      expect(container.querySelector("#paper_list_title").textContent).toEqual(storeObject.localization.default_paper_title);
       expect(container.querySelector(".list_authors").textContent).toEqual(storeObject.localization.default_authors);
       expect(container.querySelector("#list_abstract").textContent).toEqual(storeObject.localization.default_abstract);
     });
