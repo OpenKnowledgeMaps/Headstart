@@ -1,6 +1,6 @@
 import React from "react";
 
-import tripleLogo from "../../../../images/logos/triple_logo.png";
+//import tripleLogo from "../../../../images/logos/triple_logo.png";
 
 import StandardSGInfo from "./subcomponents/StandardSGInfo";
 

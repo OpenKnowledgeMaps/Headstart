@@ -1,6 +1,6 @@
 import React from "react";
 
-import tripleLogo from "../../../../images/logos/triple_logo.png";
+//import tripleLogo from "../../../../images/logos/triple_logo.png";
 
 import StandardKMInfo from "./subcomponents/StandardKMInfo";
 

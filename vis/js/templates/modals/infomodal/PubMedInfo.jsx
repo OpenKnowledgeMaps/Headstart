@@ -1,6 +1,6 @@
 import React from "react";
 
-import pubmedLogo from "../../../../images/logos/pubmed_logo.png";
+//import pubmedLogo from "../../../../images/logos/pubmed_logo.png";
 
 import StandardKMInfo from "./subcomponents/StandardKMInfo";
 
