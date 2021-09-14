@@ -214,8 +214,8 @@ var config = {
                         , linkedcat: "LinkedCat+"
                         , linkedcat_authorview: "LinkedCat+"
                         , linkedcat_browseview: "LinkedCat+"
-                        , triple_km: "TRIPLE"
-                        , triple_sg: "TRIPLE"
+                        , triple_km: "GoTriple"
+                        , triple_sg: "GoTriple"
                     },
 
     localization: {
