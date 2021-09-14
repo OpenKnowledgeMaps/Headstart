@@ -9,11 +9,21 @@ const AboutSoftware = () => {
       <h3>Open source software</h3>
       <p>
         The visualization is created with the award winning open source software{" "}
-        <a href="https://github.com/OpenKnowledgeMaps/Headstart" target="_blank" className="underline">
+        <a
+          href="https://github.com/OpenKnowledgeMaps/Headstart"
+          target="_blank"
+          rel="noreferrer"
+          className="underline"
+        >
           Head Start
         </a>{" "}
         provided by{" "}
-        <a href="https://openknowledgemaps.org/" target="_blank" className="underline">
+        <a
+          href="https://openknowledgemaps.org/"
+          target="_blank"
+          rel="noreferrer"
+          className="underline"
+        >
           Open Knowledge Maps
         </a>
         . Open Knowledge Maps is a non-profit organisation run by a group of
@@ -28,19 +38,34 @@ const AboutSoftware = () => {
       <div>
         <ol className="pop-up-list">
           <li>
-            <a href="https://openknowledgemaps.org/donate-now" target="_blank" className="underline">
+            <a
+              href="https://openknowledgemaps.org/donate-now"
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
               make a donation
             </a>
             ,
           </li>
           <li>
-            <a href="https://openknowledgemaps.org/supporting-membership" target="_blank" className="underline">
+            <a
+              href="https://openknowledgemaps.org/supporting-membership"
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
               become an organisational member
             </a>
             , or
           </li>
           <li>
-            <a href="https://openknowledgemaps.org/faq#faq-funding" target="_blank" className="underline">
+            <a
+              href="https://openknowledgemaps.org/faq#faq-funding"
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
               become a funder of our roadmap
             </a>
             .
@@ -48,7 +73,12 @@ const AboutSoftware = () => {
         </ol>
       </div>
       <p>
-        <a href="https://openknowledgemaps.us13.list-manage.com/subscribe?u=c399f89442d6aa733a9896515&id=f9d9e47566" target="_blank" className="underline">
+        <a
+          href="https://openknowledgemaps.us13.list-manage.com/subscribe?u=c399f89442d6aa733a9896515&id=f9d9e47566"
+          target="_blank"
+          rel="noreferrer"
+          className="underline"
+        >
           Sign-up for our newsletter
         </a>{" "}
         to receive occasional updates.
