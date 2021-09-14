@@ -87,8 +87,6 @@ var config = {
     //bubbles have area uris in the data (if set to false, bubble titles are used)
     //service providing the data
     service: "none",
-    //canonical url for the map
-    canonical_url: null,
     //which intro to use for the modal (see intro.js)
     intro: "intro_cris",
     //show intro (true/false)

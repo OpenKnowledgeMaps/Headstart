@@ -1,0 +1,18 @@
+.builtwith {
+  margin: 20px 10px 10px 50px;
+  font-size: 12px;
+}
+
+.builtwith a {
+  text-decoration: underline;
+}
+
+.builtwith a:hover {
+  text-decoration: none;
+}
+
+@media screen and (max-width: 640px) {
+  .builtwith {
+    margin: 10px 0px 10px 20px;
+  }
+}
