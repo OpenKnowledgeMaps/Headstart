@@ -112,6 +112,14 @@ img#close-button {
     }
 }
 
+@if ($skin == "triple") {
+    #modals .btn {
+        font-size: 13px;
+        width: 38px;
+        height: 38px;
+    }
+}
+
 .sharebuttons button {
     margin-left: 3px;
 }

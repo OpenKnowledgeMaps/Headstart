@@ -29,7 +29,7 @@ $result = search($service_integration, $dirty_query
                 , $post_params, $param_types
                 , true
                 , true, null
-                , $precomputed_id, true);
+                , $precomputed_id, true, false);
 
 echo $result
 
