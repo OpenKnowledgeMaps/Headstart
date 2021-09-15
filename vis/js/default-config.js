@@ -87,8 +87,6 @@ var config = {
     //bubbles have area uris in the data (if set to false, bubble titles are used)
     //service providing the data
     service: "none",
-    //canonical url for the map
-    canonical_url: null,
     //display intro dialog after the page opens (true/false)
     show_intro: false,
     //show loading screen before map is loaded (true/false)
@@ -129,8 +127,6 @@ var config = {
     custom_title: null,
     //show number of open access documents in context
     show_context_oa_number: true,
-    //create a tooltip for the label "most relevant" in the context line
-    context_most_relevant_tooltip: false,
     //show timestamp in the context line
     show_context_timestamp: false,
     
@@ -214,8 +210,8 @@ var config = {
                         , linkedcat: "LinkedCat+"
                         , linkedcat_authorview: "LinkedCat+"
                         , linkedcat_browseview: "LinkedCat+"
-                        , triple_km: "TRIPLE"
-                        , triple_sg: "TRIPLE"
+                        , triple_km: "GoTriple"
+                        , triple_sg: "GoTriple"
                     },
 
     localization: {
@@ -240,6 +236,7 @@ var config = {
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
             most_relevant_tooltip: 'At the moment, we use the relevance ranking provided by the source API. Both PubMed and BASE mainly use text similarity between your query and the article metadata to determine the relevance. Please consult the FAQ for more information.',
+            most_relevant_tooltip_sg: "In this streamgraph you find the most relevant documents matching your query related to the top keywords. To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
             source_label: 'Data source',
             resulttype_label: 'Document type',
             documenttypes_label: 'Document types',
@@ -251,7 +248,8 @@ var config = {
             backlink_list_streamgraph: "← Show all documents",
             backlink_list_streamgraph_stream_selected: "← Show all documents in stream",
             keywords: "Keywords",
-            no_keywords: "n/a",
+            no_keywords: "not available",
+            not_available: "not available",
             no_title: "No title",
             default_area: "No area",
             default_author: "",
@@ -277,7 +275,7 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
-            lang_all: "All lang",
+            lang_all: "All languages",
         },
         ger: {
             loading: "Wird geladen...",
@@ -312,6 +310,7 @@ var config = {
             keywords: "Schlagwörter",
             no_title: "Kein Titel",
             no_keywords: "nicht vorhanden",
+            not_available: "nicht vorhanden",
             default_area: "Kein Bereich",
             default_author: "",
             default_id: "defaultid",
@@ -380,6 +379,7 @@ var config = {
             basic_classification: "Basisklassifikation",
             ddc: "DDC",
             no_keywords: "nicht vorhanden",
+            not_available: "nicht vorhanden",
             no_title: "Kein Titel",
             default_area: "Kein Bereich",
             default_author: "",
@@ -422,7 +422,8 @@ var config = {
             backlink: "← Back to overview",
             backlink_list: "← Show all documents in area",
             keywords: "Keywords",
-            no_keywords: "n/a",
+            no_keywords: "not available",
+            not_available: "not available",
             no_title: "No title",
             overview_label: 'Overview of',
             custom_title_explanation: 'This is a custom title. Please see the info button for more information. Original query:',
@@ -457,7 +458,7 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
-            lang_all: "All lang",
+            lang_all: "All languages",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -477,7 +478,8 @@ var config = {
             backlink_list_streamgraph: "← Show all documents",
             backlink_list_streamgraph_stream_selected: "← Show all documents in stream",
             keywords: "Keywords",
-            no_keywords: "n/a",
+            no_keywords: "not available",
+            not_available: "not available",
             no_title: "No title",
             overview_label: 'Overview of',
             streamgraph_label: 'Streamgraph for',
@@ -488,6 +490,7 @@ var config = {
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
             most_relevant_tooltip: 'To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.',
+            most_relevant_tooltip_sg: "In this streamgraph you find the most relevant documents matching your query related to the top keywords. To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
             source_label: 'Data source',
             resulttype_label: 'Document type',
             documenttypes_label: 'Document types',
@@ -529,7 +532,7 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
-            lang_all: "All lang",
+            lang_all: "All languages",
         },
         eng_openaire: {
             loading: "Loading...",
@@ -549,7 +552,8 @@ var config = {
             backlink: "← Back to overview",
             backlink_list: "← Show all documents in area",
             keywords: "Keywords",
-            no_keywords: "n/a",
+            no_keywords: "not available",
+            not_available: "not available",
             no_title: "No title",
             overview_label: 'Overview of',
             articles_label: 'documents',
@@ -608,7 +612,7 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
-            lang_all: "All lang",
+            lang_all: "All languages",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -636,6 +640,7 @@ var config = {
             backlink_list: "← Zeige alle Themen im Themenfeld",
             keywords: "Keywords",
             no_keywords: "nicht vorhanden",
+            not_available: "nicht vorhanden",
             no_title: "Kein Titel",
             default_area: "Kein Bereich",
             default_author: "",
@@ -692,6 +697,7 @@ var config = {
             backlink_list: "← Zeige alle Themen im Themenfeld",
             keywords: "Keywords",
             no_keywords: "nicht vorhanden",
+            not_available: "nicht vorhanden",
             no_title: "Kein Titel",
             default_area: "Kein Bereich",
             default_author: "",
@@ -747,7 +753,8 @@ var config = {
             backlink: "← Back to overview",
             backlink_list: "← Show all topics in area",
             keywords: "Keywords",
-            no_keywords: "n/a",
+            no_keywords: "not available",
+            not_available: "not available",
             no_title: "No title",
             default_area: "No area",
             default_author: "",
@@ -778,7 +785,7 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
-            lang_all: "All lang",
+            lang_all: "All languages",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -798,7 +805,8 @@ var config = {
             backlink_list_streamgraph: "← Show all documents",
             backlink_list_streamgraph_stream_selected: "← Show all documents in stream",
             keywords: "Keywords",
-            no_keywords: "n/a",
+            no_keywords: "not available",
+            not_available: "not available",
             no_title: "No title",
             overview_label: 'Overview of',
             streamgraph_label: 'Streamgraph for',
@@ -808,6 +816,7 @@ var config = {
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
             most_relevant_tooltip: 'To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.',
+            most_relevant_tooltip_sg: "In this streamgraph you find the most relevant documents matching your query related to the top keywords. To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
             source_label: 'Data source',
             resulttype_label: 'Document type',
             documenttypes_label: 'Document types',
@@ -848,7 +857,7 @@ var config = {
             stream_docs: "Documents",
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
-            lang_all: "All lang",
+            lang_all: "All languages",
         },
     },
 

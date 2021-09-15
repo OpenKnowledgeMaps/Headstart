@@ -61,7 +61,7 @@ const mapStateToProps = (state) => ({
   showReloadButton: state.modals.showReloadButton,
   reloadLastUpdate: state.modals.reloadLastUpdate,
   reloadApiProperties: state.modals.reloadApiProperties,
-  isEmbedded: state.misc.showCreatedBy,
+  isEmbedded: state.misc.isEmbedded,
   visTag: state.misc.visTag,
   service: state.service,
 });
