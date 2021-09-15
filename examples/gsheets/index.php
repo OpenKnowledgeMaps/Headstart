@@ -52,7 +52,6 @@ $project_website = ($project_website_raw !== null)?(addScheme($project_website_r
 <body class="knowledge-map" style="margin:0px; padding:0px; height:100%;">
     <div id="visualization" class="headstart"></div>
     <div id="errors" class="errors-container"></div>
-    <div id="reload" class="reload-button"><i class="fas fa-redo"></i><span id="reload-text"> An update is available <br><a id="reload" class="dismiss-reload">reload now</a> or <a id="dismiss-reload" class="dismiss-reload">do it later</a></span></div>
     <script type="text/javascript">
         
         function displayErrors(errors) {
