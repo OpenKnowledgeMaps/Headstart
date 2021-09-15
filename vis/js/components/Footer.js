@@ -5,7 +5,7 @@ import StandardBuiltWith from "../templates/footers/StandardBuiltWith";
 import TripleBuiltWith from "../templates/footers/TripleBuiltWith";
 
 const Footer = ({ service, timestamp }) => {
-  if (service.startsWith("triple")) {
+  if (typeof service === "string" && service.startsWith("triple")) {
     return <TripleBuiltWith />;
   }
 
