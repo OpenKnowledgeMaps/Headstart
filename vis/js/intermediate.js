@@ -22,6 +22,7 @@ import logAction from "./utils/actionLogger";
 
 import { getChartSize, getListSize } from "./utils/dimensions";
 import Headstart from "./components/Headstart";
+import { sanitizeInputData } from "./utils/data";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -75,11 +76,13 @@ class Intermediate {
       scaleLabel: config.scale_label,
     });
 
+    const sanitizedMapData = sanitizeInputData(mapData);
+
     this.store.dispatch(
       initializeStore(
         config,
         context,
-        mapData,
+        sanitizedMapData,
         streamData,
         size,
         width,
