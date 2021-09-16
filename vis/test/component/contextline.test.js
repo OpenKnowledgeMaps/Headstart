@@ -8,17 +8,18 @@ import { Provider } from "react-redux";
 
 import ContextLine from "../../js/components/ContextLine";
 import LocalizationProvider from "../../js/components/LocalizationProvider";
+import { STREAMGRAPH_MODE } from "../../js/reducers/chartType";
 
 const mockStore = configureStore([]);
 const setup = (overrideStoreObject = {}) => {
   const storeObject = Object.assign(
     {
       zoom: false,
+      timespan: null,
       contextLine: {
         show: true, // config.show_context && context.params
         articlesCount: 100, // context.num_documents
         modifier: null, // context.params.sorting => most-recent || most-relevant
-        showModifierPopover: false, // context.params.sorting === "most-relevant" && config.context_most_relevant_tooltip
         openAccessCount: null, // config.show_context_oa_number => context.share_oa
         showAuthor: false, // config.is_authorview && context.params.author_id
         author: {
@@ -27,7 +28,6 @@ const setup = (overrideStoreObject = {}) => {
         },
         documentTypes: null,
         dataSource: "Sample data source",
-        timespan: null,
         paperCount: null,
         datasetCount: null,
         funder: null,
@@ -56,7 +56,7 @@ const setup = (overrideStoreObject = {}) => {
         low_metadata_quality_desc_base: "Sample BASE low quality description",
         low_metadata_quality_desc_pubmed:
           "Sample PubMed low quality description",
-        lang_all: "All lang",
+        lang_all: "All languages",
       },
     },
     overrideStoreObject
@@ -88,18 +88,34 @@ describe("Context line component", () => {
    * Basic render tests
    */
   it("renders", () => {
-    const store = mockStore(setup());
+    const storeObject = setup();
+    const store = mockStore(storeObject);
     act(() => {
-      render(<ContextLine store={store} />, container);
+      render(
+        <Provider store={store}>
+          <LocalizationProvider localization={storeObject.localization}>
+            <ContextLine />
+          </LocalizationProvider>
+        </Provider>,
+        container
+      );
     });
 
     expect(container.childNodes.length).toBe(1);
   });
 
   it("is hidden (zoomed-in)", () => {
-    const store = mockStore(setup({ zoom: true }));
+    const storeObject = setup({ zoom: true });
+    const store = mockStore(storeObject);
     act(() => {
-      render(<ContextLine store={store} />, container);
+      render(
+        <Provider store={store}>
+          <LocalizationProvider localization={storeObject.localization}>
+            <ContextLine />
+          </LocalizationProvider>
+        </Provider>,
+        container
+      );
     });
 
     expect(container.childNodes.length).toBe(0);
@@ -112,7 +128,14 @@ describe("Context line component", () => {
     const store = mockStore(storeObject);
 
     act(() => {
-      render(<ContextLine store={store} />, container);
+      render(
+        <Provider store={store}>
+          <LocalizationProvider localization={storeObject.localization}>
+            <ContextLine />
+          </LocalizationProvider>
+        </Provider>,
+        container
+      );
     });
 
     expect(container.childNodes.length).toBe(0);
@@ -127,7 +150,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#source")).toBe(null);
@@ -141,7 +171,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#source").textContent).toContain(
@@ -158,7 +195,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(
@@ -167,15 +211,22 @@ describe("Context line component", () => {
       ).toContain("CoVis database");
     });
 
-    it("doesn't contain the timespan", () => {
+    it("doesn't contain a timespan", () => {
       const TIMESPAN = undefined;
       const storeObject = setup();
-      storeObject.contextLine.timespan = TIMESPAN;
+      storeObject.timespan = TIMESPAN;
 
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#timespan")).toBe(null);
@@ -184,12 +235,19 @@ describe("Context line component", () => {
     it("contains a correct timespan", () => {
       const TIMESPAN = "Custom timespan";
       const storeObject = setup();
-      storeObject.contextLine.timespan = TIMESPAN;
+      storeObject.timespan = TIMESPAN;
 
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#timespan").textContent).toEqual(
@@ -205,7 +263,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#context-paper_count")).toBe(null);
@@ -219,7 +284,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(
@@ -235,7 +307,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#context-paper_count")).toBe(null);
@@ -249,7 +328,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(
@@ -265,7 +351,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#context-funder")).toBe(null);
@@ -279,7 +372,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#context-funder").textContent).toContain(
@@ -295,7 +395,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#context-project_runtime")).toBe(null);
@@ -309,7 +416,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(
@@ -325,7 +439,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#legacy_search_lang")).toBe(null);
@@ -339,7 +460,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(
@@ -355,7 +483,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#timestamp")).toBe(null);
@@ -369,7 +504,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#timestamp").textContent).toContain(
@@ -387,7 +529,11 @@ describe("Context line component", () => {
       act(() => {
         render(
           <LocalizationProvider localization={storeObject.localization}>
-            <ContextLine store={store} />
+            <Provider store={store}>
+              <LocalizationProvider localization={storeObject.localization}>
+                <ContextLine />
+              </LocalizationProvider>
+            </Provider>
           </LocalizationProvider>,
           container
         );
@@ -408,7 +554,11 @@ describe("Context line component", () => {
       act(() => {
         render(
           <LocalizationProvider localization={storeObject.localization}>
-            <ContextLine store={store} />
+            <Provider store={store}>
+              <LocalizationProvider localization={storeObject.localization}>
+                <ContextLine />
+              </LocalizationProvider>
+            </Provider>
           </LocalizationProvider>,
           container
         );
@@ -429,7 +579,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#author_living_dates")).toBe(null);
@@ -449,7 +606,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(
@@ -470,7 +634,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(
@@ -488,7 +659,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#num_articles").textContent).toMatch(
@@ -496,7 +674,7 @@ describe("Context line component", () => {
       );
     });
 
-    it("contains a correct modifier label (no modifier)", () => {
+    it("doesn't contain a modifier", () => {
       const MODIFIER = null;
       const storeObject = setup();
       storeObject.contextLine.modifier = MODIFIER;
@@ -504,10 +682,17 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
-      expect(container.querySelector("#modifier").textContent).toEqual("");
+      expect(container.querySelector("#modifier")).toBe(null);
     });
 
     it("contains a correct modifier label (most recent)", () => {
@@ -518,7 +703,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#modifier").textContent).toEqual(
@@ -534,7 +726,38 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
+      });
+
+      expect(container.querySelector("#modifier").textContent).toEqual(
+        storeObject.localization.most_relevant_label
+      );
+    });
+
+    it("contains a correct modifier label in streamgraph (most relevant)", () => {
+      const MODIFIER = "most-relevant";
+      const storeObject = setup();
+      storeObject.contextLine.modifier = MODIFIER;
+      storeObject.chartType = STREAMGRAPH_MODE;
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#modifier").textContent).toEqual(
@@ -550,7 +773,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#num_articles").textContent).toMatch(
@@ -566,7 +796,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#num_articles").textContent).not.toMatch(
@@ -584,7 +821,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#document_types")).toBe(null);
@@ -599,7 +843,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#document_types").textContent).toEqual(
@@ -661,7 +912,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#metadata_quality")).toBe(null);
@@ -675,7 +933,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#metadata_quality")).toBe(null);
@@ -690,7 +955,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#metadata_quality").textContent).toEqual(
@@ -707,7 +979,14 @@ describe("Context line component", () => {
       const store = mockStore(storeObject);
 
       act(() => {
-        render(<ContextLine store={store} />, container);
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
       });
 
       expect(container.querySelector("#metadata_quality").textContent).toEqual(

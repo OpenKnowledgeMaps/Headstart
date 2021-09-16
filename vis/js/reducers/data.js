@@ -9,8 +9,7 @@ const data = (state = { list: [], options: {}, size: null }, action) => {
 
   switch (action.type) {
     case "INITIALIZE": {
-      // TODO move the whole io.js dataprocessing somewhere here
-      const data = sanitizeData(action.dataArray);
+      const data = action.dataArray;
       const options = {
         maxAreaSize: action.configObject.max_area_size,
         referenceSize: action.configObject.reference_size,
@@ -57,76 +56,6 @@ const data = (state = { list: [], options: {}, size: null }, action) => {
 };
 
 export default data;
-
-const ATTRS_TO_CHECK = [
-  "id",
-  "authors",
-  "title",
-  "paper_abstract",
-  "year",
-  "oa_state",
-  "subject_orig",
-  "relevance",
-  "x",
-  "y",
-  "area_uri",
-  "area",
-  "cluster_labels",
-];
-
-const MANDATORY_ATTRS = {
-  area_uri: {
-    derive: (entry) => entry.area,
-  },
-};
-
-const ALLOWED_TYPES = {
-  area_uri: ["number", "string"],
-};
-
-const sanitizeData = (data) => {
-  let missingAttributes = new Map();
-  let wrongTypes = new Set();
-
-  data.forEach((entry) => {
-    ATTRS_TO_CHECK.forEach((attr) => {
-      if (typeof entry[attr] === "undefined") {
-        if (!missingAttributes.has(attr)) {
-          missingAttributes.set(attr, 0);
-        }
-        missingAttributes.set(attr, missingAttributes.get(attr) + 1);
-
-        if (MANDATORY_ATTRS[attr]) {
-          entry[attr] = MANDATORY_ATTRS[attr].derive(entry);
-        }
-      }
-
-      if (ALLOWED_TYPES[attr]) {
-        if (entry[attr] && !ALLOWED_TYPES[attr].includes(typeof entry[attr])) {
-          entry[attr] = entry[attr].toString();
-          wrongTypes.add(attr);
-        }
-      }
-    });
-  });
-
-  missingAttributes.forEach((value, key) => {
-    console.warn(
-      `Attribute '${key}' missing in ${
-        value === data.length ? "all" : value
-      } data entries.`
-    );
-  });
-
-  if (wrongTypes.size > 0) {
-    console.warn(
-      `Incorrect data types found and corrected in the following properties: `,
-      wrongTypes
-    );
-  }
-
-  return data;
-};
 
 const GOLDEN_RATIO = 2.6;
 

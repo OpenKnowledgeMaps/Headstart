@@ -15,6 +15,8 @@ import {
 } from "../utils/streamgraph";
 import {
   CHART_MARGIN,
+  COLOR_RECT_MARGIN_RIGHT,
+  COLOR_RECT_WIDTH,
   MAX_TICKS_X,
   AXIS_PADDING,
   LABEL_BORDER_WIDTH,
@@ -253,13 +255,13 @@ class Streamgraph extends React.Component {
       .style("fill-opacity", "1")
       .attr("x", 0)
       .attr("y", -8)
-      .attr("width", 12)
+      .attr("width", COLOR_RECT_WIDTH)
       .attr("height", 8)
       .attr("rx", LABEL_ROUND_FACTOR);
 
     labels
       .append("text")
-      .attr("dx", 15)
+      .attr("dx", COLOR_RECT_WIDTH + COLOR_RECT_MARGIN_RIGHT)
       .text((d) => {
         if (d.key === "") {
           d.key = "NO_LABEL";

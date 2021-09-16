@@ -5,6 +5,8 @@ import { Provider } from "react-redux";
 
 import ContextLine from "../../js/components/ContextLine";
 
+import LocalizationProvider from "../../js/components/LocalizationProvider";
+
 const mockStore = configureStore([]);
 
 const setup = (
@@ -15,11 +17,11 @@ const setup = (
   const storeObject = Object.assign(
     {
       zoom: false,
+      timespan: null,
       contextLine: {
         show: true,
         articlesCount: 100, // context.num_documents
         modifier: null, // context.params.sorting => most-recent || most-relevant
-        showModifierPopover: false, // context.params.sorting === "most-relevant" && config.context_most_relevant_tooltip
         openAccessCount: null, // config.show_context_oa_number => context.share_oa
         showAuthor: false, // config.is_authorview && context.params.author_id
         author: {
@@ -28,7 +30,6 @@ const setup = (
         },
         documentTypes: null,
         dataSource: "Sample data source",
-        timespan: null,
         paperCount: null,
         datasetCount: null,
         funder: null,
@@ -75,25 +76,26 @@ describe("Context line component snapshot", () => {
       setup(
         {
           modifier: "most-relevant",
-          showModifierPopover: true,
           openAccessCount: 52,
           documentTypes: ["Journal/newspaper article"],
           dataSource: "BASE",
-          timespan: "All time",
           metadataQuality: "low",
         },
         {},
         {
           service: "base",
+          timespan: "All time",
         }
       )
     );
 
     const tree = renderer
       .create(
-        <Provider store={store}>
-          <ContextLine />
-        </Provider>
+        <LocalizationProvider localization={store.getState().localization}>
+          <Provider store={store}>
+            <ContextLine />
+          </Provider>
+        </LocalizationProvider>
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -104,25 +106,26 @@ describe("Context line component snapshot", () => {
       setup(
         {
           modifier: "most-relevant",
-          showModifierPopover: true,
           openAccessCount: 52,
           documentTypes: ["Journal/newspaper article"],
           dataSource: "PubMed",
-          timespan: "All time",
           metadataQuality: "high",
         },
         {},
         {
           service: "pubmed",
+          timespan: "All time",
         }
       )
     );
 
     const tree = renderer
       .create(
-        <Provider store={store}>
-          <ContextLine />
-        </Provider>
+        <LocalizationProvider localization={store.getState().localization}>
+          <Provider store={store}>
+            <ContextLine />
+          </Provider>
+        </LocalizationProvider>
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -147,9 +150,11 @@ describe("Context line component snapshot", () => {
 
     const tree = renderer
       .create(
-        <Provider store={store}>
-          <ContextLine />
-        </Provider>
+        <LocalizationProvider localization={store.getState().localization}>
+          <Provider store={store}>
+            <ContextLine />
+          </Provider>
+        </LocalizationProvider>
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -170,9 +175,11 @@ describe("Context line component snapshot", () => {
 
     const tree = renderer
       .create(
-        <Provider store={store}>
-          <ContextLine />
-        </Provider>
+        <LocalizationProvider localization={store.getState().localization}>
+          <Provider store={store}>
+            <ContextLine />
+          </Provider>
+        </LocalizationProvider>
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -199,9 +206,11 @@ describe("Context line component snapshot", () => {
 
     const tree = renderer
       .create(
-        <Provider store={store}>
-          <ContextLine />
-        </Provider>
+        <LocalizationProvider localization={store.getState().localization}>
+          <Provider store={store}>
+            <ContextLine />
+          </Provider>
+        </LocalizationProvider>
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -213,7 +222,6 @@ describe("Context line component snapshot", () => {
         {
           articlesCount: 295,
           dataSource: "LinkedCat+",
-          timespan: "1 Jan 1847 - 1 Jan 1918",
           documentTypes: [
             "Anthologie",
             "Bericht",
@@ -227,15 +235,20 @@ describe("Context line component snapshot", () => {
           documenttypes_tooltip:
             "Die folgenden Publikationsarten wurden bei der Erstellung dieser Visualisierung in Betracht gezogen (nicht alle davon scheinen notwendigerweise in dieser Visualisierung auch auf)",
           documenttypes_label: "Dokumentarten",
+        },
+        {
+          timespan: "1 Jan 1847 - 1 Jan 1918",
         }
       )
     );
 
     const tree = renderer
       .create(
-        <Provider store={store}>
-          <ContextLine />
-        </Provider>
+        <LocalizationProvider localization={store.getState().localization}>
+          <Provider store={store}>
+            <ContextLine />
+          </Provider>
+        </LocalizationProvider>
       )
       .toJSON();
     expect(tree).toMatchSnapshot();

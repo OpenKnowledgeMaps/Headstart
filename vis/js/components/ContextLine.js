@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import ContextLineTemplate from "../templates/ContextLine";
 import HoverPopover from "../templates/HoverPopover";
 import Author from "../templates/contextfeatures/Author";
-
 import DocumentTypes from "../templates/contextfeatures/DocumentTypes";
 import NumArticles from "../templates/contextfeatures/NumArticles";
 import DataSource from "../templates/contextfeatures/DataSource";
@@ -17,6 +16,7 @@ import LegacySearchLang from "../templates/contextfeatures/LegacySearchLang";
 import SearchLang from "../templates/contextfeatures/SearchLang";
 import Timestamp from "../templates/contextfeatures/Timestamp";
 import MetadataQuality from "../templates/contextfeatures/MetadataQuality";
+import Modifier from "../templates/contextfeatures/Modifier";
 
 const defined = (param) => param !== undefined && param !== null;
 
@@ -47,7 +47,7 @@ class ContextLine extends React.Component {
           openAccessArticlesCount={params.openAccessCount}
           articlesCountLabel={localization.articles_label}
         >
-          {this.renderModifier()}
+          <Modifier popoverContainer={this.props.popoverContainer} />
         </NumArticles>
         {defined(params.dataSource) && (
           <DataSource
@@ -90,48 +90,7 @@ class ContextLine extends React.Component {
     );
   }
 
-  renderModifier() {
-    const {
-      params: { modifier, showModifierPopover },
-      localization,
-      popoverContainer,
-    } = this.props;
-
-    let label = "";
-
-    if (modifier === "most-recent") {
-      label = localization.most_recent_label;
-    }
-
-    if (modifier === "most-relevant") {
-      label = localization.most_relevant_label;
-    }
-
-    if (showModifierPopover && label !== "") {
-      return (
-        <>
-          <HoverPopover
-            id="modifier-popover"
-            container={popoverContainer}
-            content={localization.most_relevant_tooltip}
-          >
-            <span id="modifier" className="modifier context_moreinfo">
-              {label}
-            </span>
-          </HoverPopover>{" "}
-        </>
-      );
-    }
-
-    return (
-      <>
-        <span id="modifier" className="modifier">
-          {label}
-        </span>{" "}
-      </>
-    );
-  }
-
+  // TODO refactor this function to a standalone template
   renderDocTypes() {
     const {
       params: { documentTypes },
@@ -167,6 +126,7 @@ class ContextLine extends React.Component {
     );
   }
 
+  // TODO refactor this function to a standalone template
   renderMetadataQuality() {
     const {
       params: { metadataQuality },
@@ -203,7 +163,10 @@ class ContextLine extends React.Component {
 
 const mapStateToProps = (state) => ({
   hidden: state.zoom || !state.contextLine.show,
-  params: state.contextLine,
+  params: {
+    ...state.contextLine,
+    timespan: state.timespan,
+  },
   service: state.service,
   localization: state.localization,
 });
