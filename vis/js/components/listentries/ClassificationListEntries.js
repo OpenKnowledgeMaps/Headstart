@@ -62,13 +62,15 @@ const ClassificationListEntries = ({
             isFreeAccess: !!entry.free_access,
             isDataset: entry.resulttype === "dataset",
           }}
-          title={entry.title}
+          title={entry.title ? entry.title : localization.default_paper_title}
           preview={{
             link: getPaperPreviewLink(entry),
             onClickPDF: getPaperPDFClickHandler(entry, handlePDFClick),
           }}
           details={{
-            authors: entry.authors_string,
+            authors: entry.authors_string
+              ? entry.authors_string
+              : localization.default_authors,
             source: entry.published_in,
             year: entry.year,
           }}
