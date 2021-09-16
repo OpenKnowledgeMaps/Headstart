@@ -5,8 +5,8 @@ $search_flow_config_local = array(
     , "waiting_page" => "search.php"
     , "vis_page" => "headstart.php"
     , "params_arrays" => array(
-        "triple_km" => array("from", "to", "sorting", "language")
-            , "triple_sg" => array("from", "to", "sorting", "language", "limit", "sg_method")
+        "triple_km" => array("from", "to", "sorting", "language", "today")
+        , "triple_sg" => array("from", "to", "sorting", "language", "limit", "sg_method", "today")
     )
     , "enable_get_requests" => true
     , "force_embed" => true

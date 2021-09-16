@@ -11,6 +11,13 @@ const LIST_HEIGHT_CORRECTION = 10;
 const VIS_COL_RATIO = 0.6;
 const MODALS_WIDTH = 43;
 
+const FOOTER_HEIGHT = {
+  base: 47,
+  pubmed: 47,
+  triple: 47,
+  default: 0,
+};
+
 /**
  * Returns the chart size based on config, context and the outer visualization
  * container (e.g. in project website).
@@ -36,12 +43,15 @@ export const getChartSize = (config, context) => {
     titleImageHeight = TITLE_IMAGE_HEIGHT;
   }
 
+  const footerHeight = getFooterHeight(config);
+
   const computedHeight =
     (parentHeight === 0
       ? Math.max(clientHeight, innerHeight)
       : container.height()) -
     Math.max(TITLE_HEIGHT, titleImageHeight) -
     toolbarHeight -
+    footerHeight -
     CHART_HEIGHT_CORRECTION;
 
   const finalHeight = Math.max(
@@ -53,7 +63,8 @@ export const getChartSize = (config, context) => {
   const visWidth = container.width();
 
   // MODALS_WIDTH subtraction is questionable - I disabled it for streamgraph
-  const computedWidth = visWidth * VIS_COL_RATIO - (config.is_streamgraph ? 0 : MODALS_WIDTH);
+  const computedWidth =
+    visWidth * VIS_COL_RATIO - (config.is_streamgraph ? 0 : MODALS_WIDTH);
 
   const finalWidth = Math.max(
     config.min_width || 0,
@@ -84,9 +95,12 @@ export const getListSize = (config, context, chartHeight) => {
     titleImageHeight = TITLE_IMAGE_HEIGHT;
   }
 
+  const footerHeight = getFooterHeight(config);
+
   const height =
     Math.max(TITLE_HEIGHT, titleImageHeight) +
-    chartHeight -
+    chartHeight +
+    footerHeight -
     SHOW_HIDE_BTN_HEIGHT -
     FILTER_SECTION_HEIGHT +
     LIST_HEIGHT_CORRECTION;
@@ -117,4 +131,16 @@ const getRealHeight = (element) => {
   }
 
   return height;
+};
+
+const getFooterHeight = (config) => {
+  if (!config.credit_embed) {
+    return 0;
+  }
+
+  if (FOOTER_HEIGHT[config.service]) {
+    return FOOTER_HEIGHT[config.service];
+  }
+
+  return FOOTER_HEIGHT.default;
 };

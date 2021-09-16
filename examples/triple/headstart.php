@@ -29,8 +29,6 @@ include 'config.php';
         }];
     </script>
     <?php
-    $builtwith_string = 'Built with <a href="https://github.com/OpenKnowledgeMaps/Headstart" target="_blank ">Head Start</a>. All content retrieved from <a href="https://www.gotriple.eu/" target="_blank ">TRIPLE</a>.';
-    include('search-flow/inc/visualization/context-builtwith.php');
     //$citation = "Open Knowledge Maps (2021). Overview of topic.";
     //include('search-flow/inc/context-citation.php'); 
     ?>
