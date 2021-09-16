@@ -1,6 +1,7 @@
 import { initializeStore, updateDimensions } from "../../js/actions";
 
 import reducer from "../../js/reducers/data";
+import { sanitizeInputData } from "../../js/utils/data";
 
 import localData from "../data/local-files";
 
@@ -112,28 +113,6 @@ describe("data state", () => {
       expect(result).toEqual(EXPECTED_RESULT);
     });
 
-    it("should initialize correct data with the input data property missing", () => {
-      const mockWarn = jest.fn();
-
-      global.console = {
-        log: console.log,
-        warn: mockWarn,
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
-
-      const { configObject, contextObject } = setup();
-
-      const result = reducer(
-        {},
-        initializeStore(configObject, contextObject, localData)
-      );
-
-      expect(result.list).toHaveProperty("length", localData.length);
-      expect(mockWarn).toHaveBeenCalled();
-    });
-
     it("should resize the papers correctly", () => {
       const result = reducer(SOME_DATA, updateDimensions({ size: 500 }, {}));
 
@@ -187,7 +166,31 @@ describe("data state", () => {
       });
     });
 
-    it("should initialize correct data with the input data property missing in all but one entry", () => {
+    it("should sanitize the input data with a property missing", () => {
+      const mockWarn = jest.fn();
+
+      global.console = {
+        log: console.log,
+        warn: mockWarn,
+        error: console.error,
+        info: console.info,
+        debug: console.debug,
+      };
+
+      localData.forEach((entry) => {
+        expect(entry).not.toHaveProperty("area_uri");
+      });
+
+      const sanitizedData = sanitizeInputData(localData);
+
+      expect(mockWarn).toHaveBeenCalled();
+
+      sanitizedData.forEach((entry) => {
+        expect(entry).toHaveProperty("area_uri");
+      });
+    });
+
+    it("should sanitize the input data with a property missing just in some entries", () => {
       const mockWarn = jest.fn();
 
       const entry1 = Object.assign({}, localData[0]);
@@ -204,14 +207,34 @@ describe("data state", () => {
         debug: console.debug,
       };
 
-      const { configObject, contextObject } = setup();
+      const sanitizedData = sanitizeInputData(mockLocalData);
 
-      const result = reducer(
-        {},
-        initializeStore(configObject, contextObject, mockLocalData)
-      );
+      expect(mockWarn).toHaveBeenCalled();
 
-      expect(result.list).toHaveProperty("length", mockLocalData.length);
+      sanitizedData.forEach((entry) => {
+        expect(entry).toHaveProperty("area_uri");
+      });
+    });
+
+    it("should warn that some properties have a bad type", () => {
+      const mockWarn = jest.fn();
+
+      const entry1 = Object.assign({}, localData[0]);
+      entry1.area_uri = "some-uri";
+      const entry2 = Object.assign({}, localData[1]);
+      entry2.area_uri = true;
+      const mockLocalData = [entry1, entry2];
+
+      global.console = {
+        log: console.log,
+        warn: mockWarn,
+        error: console.error,
+        info: console.info,
+        debug: console.debug,
+      };
+
+      sanitizeInputData(mockLocalData);
+
       expect(mockWarn).toHaveBeenCalled();
     });
 
@@ -239,8 +262,7 @@ const SOME_DATA = {
         "Computer-supported collaborative learning (CSCL) is often based on written argumentative discourse of learners, who discuss their perspectives on a problem with the goal to acquire knowledge. Lately, CSCL research focuses on the facilitation of specific processes of argumentative knowledge construction, e.g., with computer-supported collaboration scripts. In order to refine process-oriented instructional support, such as scripts, we need to measure the influence of scripts on specific processes of argumentative knowledge construction. In this article, we propose a multi-dimensional approach to analyze argumentative knowledge construction in CSCL from sampling and segmentation of the discourse corpora to the analysis of four process dimensions (participation, epistemic, argumentative, social mode).",
       published_in: "Computers & Education",
       year: "2006",
-      url:
-        "a-framework-to-analyze-argumentative-knowledge-construction-in-computersupported-collaborative-learning",
+      url: "a-framework-to-analyze-argumentative-knowledge-construction-in-computersupported-collaborative-learning",
       file_hash: "978018f69b3e27b930a6de719bc8f285f2295793",
       authors: "Weinberger,A;Fischer,F;",
       oa_state: "0",
@@ -338,8 +360,7 @@ const RESIZED_DATA = {
         "Computer-supported collaborative learning (CSCL) is often based on written argumentative discourse of learners, who discuss their perspectives on a problem with the goal to acquire knowledge. Lately, CSCL research focuses on the facilitation of specific processes of argumentative knowledge construction, e.g., with computer-supported collaboration scripts. In order to refine process-oriented instructional support, such as scripts, we need to measure the influence of scripts on specific processes of argumentative knowledge construction. In this article, we propose a multi-dimensional approach to analyze argumentative knowledge construction in CSCL from sampling and segmentation of the discourse corpora to the analysis of four process dimensions (participation, epistemic, argumentative, social mode).",
       published_in: "Computers & Education",
       year: "2006",
-      url:
-        "a-framework-to-analyze-argumentative-knowledge-construction-in-computersupported-collaborative-learning",
+      url: "a-framework-to-analyze-argumentative-knowledge-construction-in-computersupported-collaborative-learning",
       file_hash: "978018f69b3e27b930a6de719bc8f285f2295793",
       authors: "Weinberger,A;Fischer,F;",
       oa_state: "0",

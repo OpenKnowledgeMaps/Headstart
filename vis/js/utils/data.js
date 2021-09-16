@@ -226,7 +226,10 @@ export const getPaperPDFClickHandler = (paper, handlePDFClick) => {
  * @returns {String} the keywords or a fallback string in current language
  */
 export const getPaperKeywords = (paper, localization) => {
-  if (!Object.prototype.hasOwnProperty.call(paper, "subject_orig") || paper.subject_orig === "") {
+  if (
+    !Object.prototype.hasOwnProperty.call(paper, "subject_orig") ||
+    paper.subject_orig === ""
+  ) {
     return localization.no_keywords;
   }
 
@@ -241,7 +244,10 @@ export const getPaperKeywords = (paper, localization) => {
  * @returns {String} the classification or a fallback string in current language
  */
 export const getPaperClassification = (paper, localization) => {
-  if (!Object.prototype.hasOwnProperty.call(paper, "bkl_caption") || paper.bkl_caption === "") {
+  if (
+    !Object.prototype.hasOwnProperty.call(paper, "bkl_caption") ||
+    paper.bkl_caption === ""
+  ) {
     return localization.no_keywords;
   }
 
@@ -318,4 +324,84 @@ export const getPaperTags = (paper) => {
   }
 
   return null;
+};
+
+const ATTRS_TO_CHECK = [
+  "id",
+  "authors",
+  "title",
+  "paper_abstract",
+  "year",
+  "oa_state",
+  "subject_orig",
+  "relevance",
+  "x",
+  "y",
+  "area_uri",
+  "area",
+  "cluster_labels",
+];
+
+const MANDATORY_ATTRS = {
+  area_uri: {
+    derive: (entry) => entry.area,
+  },
+};
+
+const ALLOWED_TYPES = {
+  area_uri: ["number", "string"],
+};
+
+/**
+ * Function that sanitizes the papers in the input data array.
+ *
+ * It checks whether some attributes are present and adds fallback values
+ * for mandatory parameters.
+ *
+ * @param {Array} data input papers array
+ * @returns {Array} sanitized papers array
+ */
+export const sanitizeInputData = (data) => {
+  let missingAttributes = new Map();
+  let wrongTypes = new Set();
+
+  data.forEach((entry) => {
+    ATTRS_TO_CHECK.forEach((attr) => {
+      if (typeof entry[attr] === "undefined") {
+        if (!missingAttributes.has(attr)) {
+          missingAttributes.set(attr, 0);
+        }
+        missingAttributes.set(attr, missingAttributes.get(attr) + 1);
+
+        if (MANDATORY_ATTRS[attr]) {
+          entry[attr] = MANDATORY_ATTRS[attr].derive(entry);
+        }
+      }
+
+      if (ALLOWED_TYPES[attr]) {
+        if (entry[attr] && !ALLOWED_TYPES[attr].includes(typeof entry[attr])) {
+          entry[attr] = entry[attr].toString();
+          wrongTypes.add(attr);
+        }
+      }
+    });
+  });
+
+  missingAttributes.forEach((value, key) => {
+    console.warn(
+      `Attribute '${key}' missing in ${
+        value === data.length ? "all" : value
+      } data entries.` +
+        (MANDATORY_ATTRS[key] ? " Fallback value added automatically." : "")
+    );
+  });
+
+  if (wrongTypes.size > 0) {
+    console.warn(
+      `Incorrect data types found and corrected in the following properties: `,
+      wrongTypes
+    );
+  }
+
+  return data;
 };
