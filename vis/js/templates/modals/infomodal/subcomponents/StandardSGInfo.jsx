@@ -7,6 +7,7 @@ import DataSource from "./DataSource";
 const StandardSGInfo = ({
   serviceName,
   serviceDesc,
+  serviceLogo,
   params: { query, customTitle },
 }) => {
   return (
@@ -54,7 +55,11 @@ const StandardSGInfo = ({
           to find out more about knowledge maps.
         </p>
         {!!serviceName && (
-          <DataSource source={serviceName} description={serviceDesc} />
+          <DataSource
+            source={serviceName}
+            description={serviceDesc}
+            logo={serviceLogo}
+          />
         )}
         <AboutSoftware />
       </Modal.Body>
