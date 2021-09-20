@@ -42,18 +42,6 @@ const StandardSGInfo = ({
           Streamgraphs are particularly useful for investigating the evolution
           of keywords over time and to analyse trends in research.
         </p>
-        <p>
-          Please{" "}
-          <a
-            target="_blank"
-            rel="noreferrer"
-            className="underline"
-            href="https://openknowledgemaps.org/faq"
-          >
-            read our FAQs
-          </a>{" "}
-          to find out more about knowledge maps.
-        </p>
         {!!serviceName && (
           <DataSource
             source={serviceName}
