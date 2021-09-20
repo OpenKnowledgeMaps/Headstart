@@ -89,10 +89,8 @@ const renderTitle = (localization, query, headingParams) => {
       );
     }
 
-    let cleanQuery = query.replace(/\\(.?)/g, "$1");
-
     if (headingParams.titleStyle === "linkedcat") {
-      return renderLinkedCatTitle(label, cleanQuery);
+      return renderLinkedCatTitle(label, query);
     }
 
     if (
@@ -103,12 +101,12 @@ const renderTitle = (localization, query, headingParams) => {
       return renderCustomTitle(
         headingParams.customTitle,
         label,
-        cleanQuery,
+        query,
         localization
       );
     }
 
-    return <StandardTitle label={label} title={cleanQuery} />;
+    return <StandardTitle label={label} title={query} />;
   }
 
   return <BasicTitle title={localization.default_title} />;
@@ -130,14 +128,12 @@ const renderViperTitle = (title, acronym, projectId) => {
   );
 };
 
-const renderLinkedCatTitle = (label, cleanQuery) => {
-  let shortTitle = sliceText(cleanQuery, MAX_LENGTH_LINKEDCAT);
-  return (
-    <StandardTitle label={label} title={cleanQuery} shortTitle={shortTitle} />
-  );
+const renderLinkedCatTitle = (label, query) => {
+  let shortTitle = sliceText(query, MAX_LENGTH_LINKEDCAT);
+  return <StandardTitle label={label} title={query} shortTitle={shortTitle} />;
 };
 
-const renderCustomTitle = (title, label, cleanQuery, localization) => {
+const renderCustomTitle = (title, label, query, localization) => {
   let shortTitle = sliceText(title, MAX_LENGTH_CUSTOM);
   // this is necessary, because the custom title is already escaped
   shortTitle = unescapeHTML(shortTitle);
@@ -145,7 +141,7 @@ const renderCustomTitle = (title, label, cleanQuery, localization) => {
     <CustomTitle
       label={label}
       title={shortTitle}
-      query={cleanQuery}
+      query={query}
       explanation={localization.custom_title_explanation}
     />
   );
