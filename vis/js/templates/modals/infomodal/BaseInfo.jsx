@@ -11,27 +11,19 @@ const BaseInfo = ({ params }) => {
       serviceName="BASE"
       serviceDesc={
         <>
-          <p>
-            BASE provides access to over 270 million documents from more than
-            8,900 content sources in all disciplines. For more information
-            please{" "}
-            <a
-              className="underline"
-              href="http://base-search.net"
-              target="_blank "
-            >
-              visit the BASE website
-            </a>
-            .
-          </p>
-          <p className="datasource-logo">
-            <img
-              src={baseLogo}
-              alt="BASE service logo"
-            />
-          </p>
+          BASE provides access to over 270 million documents from more than
+          8,900 content sources in all disciplines. For more information please{" "}
+          <a
+            className="underline"
+            href="http://base-search.net"
+            target="_blank "
+          >
+            visit the BASE website
+          </a>
+          .
         </>
       }
+      serviceLogo={<img src={baseLogo} alt="BASE service logo" />}
       params={params}
     />
     // html template ends here

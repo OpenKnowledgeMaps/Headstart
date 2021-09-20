@@ -11,19 +11,17 @@ const PubMedInfo = ({ params }) => {
       serviceName="PubMed"
       serviceDesc={
         <>
-          <p>
-            PubMed comprises more than 26 million citations for biomedical
-            literature from MEDLINE, life science journals, and online books.
-            For more information please{" "}
-            <a
-              className="underline"
-              href="http://www.ncbi.nlm.nih.gov/pubmed"
-              target="_blank "
-            >
-              visit the PubMed website
-            </a>
-            .
-          </p>
+          PubMed comprises more than 26 million citations for biomedical
+          literature from MEDLINE, life science journals, and online books. For
+          more information please{" "}
+          <a
+            className="underline"
+            href="http://www.ncbi.nlm.nih.gov/pubmed"
+            target="_blank "
+          >
+            visit the PubMed website
+          </a>
+          .
         </>
       }
       params={params}

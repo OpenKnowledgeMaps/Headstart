@@ -7,16 +7,7 @@ import StandardSGInfo from "./subcomponents/StandardSGInfo";
 const TripleSGInfo = ({ params }) => {
   return (
     // html template starts here
-    <StandardSGInfo
-      serviceName="GoTriple"
-      serviceDesc={
-        <>
-          <p>
-          </p>
-        </>
-      }
-      params={params}
-    />
+    <StandardSGInfo serviceName="GoTriple" serviceDesc={null} params={params} />
     // html template ends here
   );
 };
