@@ -72,6 +72,7 @@ const ViperInfo = ({
           >
             Leiden Manifesto for Research Metrics
           </a>
+          .
         </p>
 
         <h3>Project Details</h3>
