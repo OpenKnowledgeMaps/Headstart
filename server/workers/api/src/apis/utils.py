@@ -36,10 +36,7 @@ def detect_error(service, error, params):
         phrasepattern = '"(.*?)"'
         phrases = re.findall(phrasepattern, query)
         if phrases:
-            if len(phrases) > 1 or any(len(p.split(" ")) > 4 for p in phrases):
-                reason.append('too specific')
-            if len(phrases) == 1 and params.get('vis_type', "") == "timeline":
-                reason.append('too specific')
+            reason.append('too specific')
         elif len(query.split(" ")) < 4:
             reason.append('typo')
             reason.append('too specific')
