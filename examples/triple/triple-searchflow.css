@@ -97,3 +97,7 @@ font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: #622166;
     background-color: transparent;
 }
+
+.searchpage .h2reverse, .searchpage .number {
+    color: #333;
+}
