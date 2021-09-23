@@ -24,14 +24,13 @@ const StandardSGInfo = ({
               related to <strong>{customTitle ? customTitle : query}</strong>
             </>
           )}{" "}
-          over time based on up to 1000 documents matching your query related to
-          the top keywords. The main keywords are represented as colored
-          streams. Up to 1000 documents are assigned to one or more streams
-          according to their keywords. The height of a stream represents the
+          over time. It is based on the most relevant documents related to the main keywords. Up to 1000 documents have been taken into consideration for the computation of the streamgraph. 
+        </p>
+        <p>The height of a stream represents the
           number of documents with this keyword at a specific time. It is
           important to note that the number of documents matches the relative
           height, not the absolute height of the stream.
-        </p>
+          </p>
         {!!customTitle && (
           <p>
             This map has a custom title and was created using the following

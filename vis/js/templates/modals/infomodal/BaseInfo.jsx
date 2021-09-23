@@ -16,14 +16,14 @@ const BaseInfo = ({ params }) => {
           <a
             className="underline"
             href="http://base-search.net"
-            target="_blank "
+            target="_blank"
           >
             visit the BASE website
           </a>
           .
         </>
       }
-      serviceLogo={<img src={baseLogo} alt="BASE service logo" />}
+      serviceLogo={<a href="http://base-search.net" target="_blank"><img src={baseLogo} alt="BASE service logo" /></a>}
       params={params}
     />
     // html template ends here

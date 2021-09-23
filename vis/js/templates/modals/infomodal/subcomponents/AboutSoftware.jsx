@@ -44,9 +44,8 @@ const AboutSoftware = () => {
               rel="noreferrer"
               className="underline"
             >
-              make a donation
+              Make a donation
             </a>
-            ,
           </li>
           <li>
             <a
@@ -55,9 +54,8 @@ const AboutSoftware = () => {
               rel="noreferrer"
               className="underline"
             >
-              become an organisational member
+              Become an organisational member
             </a>
-            , or
           </li>
           <li>
             <a
@@ -66,9 +64,8 @@ const AboutSoftware = () => {
               rel="noreferrer"
               className="underline"
             >
-              become a funder of our roadmap
+              Become a funder of our roadmap
             </a>
-            .
           </li>
         </ol>
       </div>
