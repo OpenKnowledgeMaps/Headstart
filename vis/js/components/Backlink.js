@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { zoomOut } from "../actions";
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
@@ -23,6 +23,15 @@ export const Backlink = ({
     }
   };
 
+  // TODO do not trigger on first render
+  const { area } = useQueryParams();
+  useEffect(() => {
+    if (!area) {
+      handleOnClick();
+    }
+    // TODO wtf
+  }, area);
+
   return (
     <BacklinkTemplate
       label={localization.backlink}
@@ -43,3 +52,24 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Backlink);
+
+// TODO hook
+const useQueryParams = () => {
+  const [params, setParams] = useState(
+    new URLSearchParams(window.location.search)
+  );
+
+  const listenToPopstate = () => {
+    const newParams = new URLSearchParams(window.location.search);
+    setParams(newParams);
+  };
+
+  useEffect(() => {
+    window.addEventListener("popstate", listenToPopstate);
+    return () => {
+      window.removeEventListener("popstate", listenToPopstate);
+    };
+  }, []);
+
+  return params;
+};

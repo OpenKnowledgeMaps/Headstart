@@ -13,6 +13,7 @@ import {
   applyForceAreas,
   applyForcePapers,
   preinitializeStore,
+  zoomIn,
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
@@ -23,6 +24,8 @@ import logAction from "./utils/actionLogger";
 import { getChartSize, getListSize } from "./utils/dimensions";
 import Headstart from "./components/Headstart";
 import { sanitizeInputData } from "./utils/data";
+import { createAnimationCallback } from "./utils/eventhandlers";
+import { addQueryParam, removeQueryParam } from "./utils/url";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -47,7 +50,8 @@ class Intermediate {
       createRecordActionMiddleware(
         this.recordAction.bind(this),
         this.recordActionParams
-      )
+      ),
+      createZoomParameterMiddleware()
     );
 
     this.store = createStore(rootReducer, middleware);
@@ -101,6 +105,56 @@ class Intermediate {
 
       this.applyForceLayout();
     }
+
+    this.zoomToUrlArea(config, sanitizedMapData, streamData);
+  }
+
+  /**
+   * After startup, if there's a query param 'area' in the url, zoom in to it immediately.
+   * @param {Object} config
+   * @param {Array} sanitizedMapData
+   * @param {Array} streamData
+   */
+  zoomToUrlArea(config, sanitizedMapData, streamData) {
+    const params = new URLSearchParams(window.location.search);
+
+    if (!params.has("area")) {
+      return;
+    }
+
+    const zoomedArea = params.get("area");
+
+    if (config.is_streamgraph) {
+      const stream = streamData.find((s) => s.title === zoomedArea);
+
+      if (!stream) {
+        return;
+      }
+
+      this.store.dispatch(
+        zoomIn({
+          title: stream.key,
+          color: stream.color,
+          docIds: stream.docIds,
+        })
+      );
+
+      return;
+    }
+
+    const area = sanitizedMapData.find((a) => a.area_uri === zoomedArea);
+
+    if (!area) {
+      return;
+    }
+
+    this.store.dispatch(
+      zoomIn(
+        { title: area.title, uri: area.area_uri },
+        null,
+        createAnimationCallback(this.store.dispatch)
+      )
+    );
   }
 
   // triggered on window resize
@@ -314,6 +368,29 @@ function createRecordActionMiddleware(callback, params) {
     return (next) => (action) => {
       const state = getState();
       logAction(action, state, callback, params);
+      return next(action);
+    };
+  };
+}
+
+function createZoomParameterMiddleware() {
+  return function () {
+    return (next) => (action) => {
+      if (
+        action.type === "ZOOM_IN" &&
+        !action.canceled &&
+        action.selectedAreaData
+      ) {
+        addQueryParam(
+          "area",
+          action.selectedAreaData.uri
+            ? action.selectedAreaData.uri
+            : action.selectedAreaData.title
+        );
+      }
+      if (action.type === "ZOOM_OUT" && !action.canceled) {
+        removeQueryParam("area");
+      }
       return next(action);
     };
   };
