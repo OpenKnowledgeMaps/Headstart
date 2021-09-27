@@ -20,7 +20,17 @@ const StandardKMInfo = ({
         {(!!customTitle || !!query) && (
           <p>
             This knowledge map presents you with a topical overview of research
-            on <strong>{customTitle ? customTitle : query}</strong> based on the 100 <a class="underline" target="_blank" href="https://openknowledgemaps.org/faq#faq-most-relevant">most relevant</a> documents matching your search query.
+            on <strong>{customTitle ? customTitle : query}</strong> based on the
+            100{" "}
+            <a
+              class="underline"
+              target="_blank"
+              rel="noreferrer"
+              href="https://openknowledgemaps.org/faq#faq-most-relevant"
+            >
+              most relevant
+            </a>{" "}
+            documents matching your search query.
           </p>
         )}
         {!customTitle && !query && (
