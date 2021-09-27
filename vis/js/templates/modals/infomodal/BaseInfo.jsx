@@ -17,13 +17,18 @@ const BaseInfo = ({ params }) => {
             className="underline"
             href="http://base-search.net"
             target="_blank"
+            rel="noreferrer"
           >
             visit the BASE website
           </a>
           .
         </>
       }
-      serviceLogo={<a href="http://base-search.net" target="_blank"><img src={baseLogo} alt="BASE service logo" /></a>}
+      serviceLogo={
+        <a href="http://base-search.net" target="_blank" rel="noreferrer">
+          <img src={baseLogo} alt="BASE service logo" />
+        </a>
+      }
       params={params}
     />
     // html template ends here
