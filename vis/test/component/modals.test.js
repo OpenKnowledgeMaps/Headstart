@@ -291,8 +291,11 @@ describe("Modals component", () => {
       );
     });
 
-    it("default knowledge map info modal renders", () => {
-      const storeObject = setup({ openInfoModal: true }, { service: "covis" });
+    it("covis knowledge map info modal renders", () => {
+      const storeObject = setup(
+        { openInfoModal: true },
+        { service: "gsheets", isCovis: true, chartType: KNOWLEDGEMAP_MODE }
+      );
       const store = mockStore(storeObject);
 
       act(() => {
@@ -307,14 +310,14 @@ describe("Modals component", () => {
       });
 
       expect(document.querySelector("#info-title").textContent).toEqual(
-        "What's this?"
+        "KNOWLEDGE MAP OF COVID-19 RESEARCH CURATED BY EXPERTS"
       );
     });
 
     it("default knowledge map info modal renders", () => {
       const storeObject = setup(
         { openInfoModal: true },
-        { service: "gsheets", isCovis: true, chartType: KNOWLEDGEMAP_MODE }
+        { service: "linkedcat", chartType: KNOWLEDGEMAP_MODE }
       );
       const store = mockStore(storeObject);
 
