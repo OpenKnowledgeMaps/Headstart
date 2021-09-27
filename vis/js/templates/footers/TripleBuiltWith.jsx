@@ -12,7 +12,7 @@ const TripleBuiltWith = () => (
     </a>
     . All content retrieved from{" "}
     <a href="https://www.gotriple.eu/" target="_blank " rel="noreferrer">
-      TRIPLE
+      GoTriple
     </a>
     .
   </div>
