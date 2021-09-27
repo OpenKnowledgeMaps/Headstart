@@ -6,6 +6,7 @@ import { closeInfoModal } from "../../actions";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 
 import BaseInfo from "./infomodal/BaseInfo";
+import CovisInfo from "./infomodal/CovisInfo";
 import DefaultKMInfo from "./infomodal/DefaultKMInfo";
 import DefaultSGInfo from "./infomodal/DefaultSGInfo";
 import GsheetsInfo from "./infomodal/GsheetsInfo";
@@ -28,6 +29,8 @@ const getInfoTemplate = (service, isStreamgraph) => {
       return TripleSGInfo;
     case "gsheets":
       return GsheetsInfo;
+    case "covis":
+      return CovisInfo;
     default:
       return isStreamgraph ? DefaultSGInfo : DefaultKMInfo;
   }
