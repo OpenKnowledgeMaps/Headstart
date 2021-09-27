@@ -22,7 +22,12 @@ const CovisInfo = () => {
           the collective editing of subject-matter experts.
         </p>
         <p>
-          <a className="link-popup" href="faqs">
+          <a
+            className="link-popup"
+            target="_blank"
+            rel="noreferrer"
+            href="faqs"
+          >
             Read our FAQs to find out more
           </a>
           .
@@ -36,9 +41,9 @@ const CovisInfo = () => {
           and only understandable after reading several reports from different
           sources. Team{" "}
           <a
+            className="link-popup"
             target="_blank"
             rel="noreferrer"
-            className="link-popup"
             href="https://refigure.org/"
           >
             ReFigure
@@ -49,12 +54,22 @@ const CovisInfo = () => {
         <p>
           Find out more about the curation process and the methodology for paper
           inclusion{" "}
-          <a className="link-popup" href="faqs#methodology">
+          <a
+            className="link-popup"
+            target="_blank"
+            rel="noreferrer"
+            href="faqs#methodology"
+          >
             in our FAQs
           </a>
           . We invite subject-matter experts to help us with our efforts. If you
           would like to contribute to CoVis, please{" "}
-          <a className="link-popup" href="contact-us">
+          <a
+            className="link-popup"
+            target="_blank"
+            rel="noreferrer"
+            href="contact-us"
+          >
             get in touch
           </a>
           .
@@ -81,7 +96,12 @@ const CovisInfo = () => {
           clicking on one of the bubbles, you can inspect the resources assigned
           to it; open access papers can be directly viewed and downloaded within
           the interface. Find out more about knowledge maps and their properties{" "}
-          <a className="link-popup" href="faqs#knowledge-map">
+          <a
+            className="link-popup"
+            target="_blank"
+            rel="noreferrer"
+            href="faqs#knowledge-map"
+          >
             in our FAQs
           </a>
           .
