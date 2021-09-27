@@ -81,7 +81,13 @@ const AboutSoftware = () => {
         to receive occasional updates.
       </p>
       <p className="okmaps-logo">
-        <img src={logo} alt="OKMaps logo" />
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://openknowledgemaps.org/"
+        >
+          <img src={logo} alt="OKMaps logo" />
+        </a>
       </p>
     </>
     // html template ends here

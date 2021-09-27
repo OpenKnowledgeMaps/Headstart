@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
+import AboutSoftware from "./subcomponents/AboutSoftware";
 
 const GsheetsInfo = ({
   params: {
@@ -62,29 +63,6 @@ const GsheetsInfo = ({
           </a>
           , which is then transformed into the knowledge map.
         </p>
-        <h3>Software</h3>
-        <p>
-          The knowledge map is based on the award-winning software developed by
-          Open Knowledge Maps. For more information and the ability to create
-          knowledge maps based on 250+ million documents, please see{" "}
-          <a
-            target="_blank"
-            rel="noreferrer"
-            className="link-popup"
-            href="https://openknowledgemaps.org/"
-          >
-            openknowledgemaps.org
-          </a>
-          . To get in touch, please e-mail us at{" "}
-          <a
-            target="_blank"
-            rel="noreferrer"
-            className="link-popup"
-            href="mailto:info@openknowledgemaps.org"
-          >
-            info@openknowledgemaps.org
-          </a>
-        </p>
         <h3>Rights</h3>
         <p>
           The curator(s) are solely responsible for the content of the knowledge
@@ -117,6 +95,7 @@ const GsheetsInfo = ({
           </a>
           .
         </p>
+        <AboutSoftware />
       </Modal.Body>
     </>
     // html template ends here
