@@ -48,7 +48,7 @@ const ClassificationListEntries = ({
       return;
     }
     handleDeselectPaper();
-    handleZoomIn(paper, "list-area");
+    handleZoomIn(paper);
   };
 
   return (

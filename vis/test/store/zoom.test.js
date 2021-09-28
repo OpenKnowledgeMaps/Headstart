@@ -13,30 +13,12 @@ describe("zoom state", () => {
 
       const EXPECTED_ACTION = {
         type: "ZOOM_IN",
-        source: null,
         selectedAreaData: DATA,
         alreadyZoomed: false,
         callback: undefined,
+        noHistory: false,
       };
       expect(zoomIn(DATA)).toEqual(EXPECTED_ACTION);
-    });
-
-    it("should create a zoom-in action with source", () => {
-      const DATA = {
-        title: "some title",
-        url: "http://example.com",
-      };
-
-      const SOURCE = "some-source";
-
-      const EXPECTED_ACTION = {
-        type: "ZOOM_IN",
-        source: SOURCE,
-        selectedAreaData: DATA,
-        alreadyZoomed: false,
-        callback: undefined,
-      };
-      expect(zoomIn(DATA, SOURCE)).toEqual(EXPECTED_ACTION);
     });
 
     it("should create a zoom-out action", () => {

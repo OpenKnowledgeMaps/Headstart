@@ -55,7 +55,7 @@ const StandardListEntries = ({
       return;
     }
     handleDeselectPaper();
-    handleZoomIn(paper, "list-area");
+    handleZoomIn(paper);
   };
 
   return (

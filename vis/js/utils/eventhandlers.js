@@ -16,12 +16,10 @@ import {
  * @param {Function} dispatch
  */
 export const mapDispatchToListEntriesProps = (dispatch) => ({
-  // TODO remove the source after refactoring
-  handleZoomIn: (paper, source = null) =>
+  handleZoomIn: (paper) =>
     dispatch(
       zoomIn(
         { title: paper.area, uri: paper.area_uri },
-        source,
         createAnimationCallback(dispatch)
       )
     ),
@@ -42,7 +40,6 @@ export const mapDispatchToMapEntriesProps = (dispatch) => ({
     dispatch(
       zoomIn(
         { title: area.title, uri: area.area_uri },
-        null,
         createAnimationCallback(dispatch),
         alreadyZoomed
       )

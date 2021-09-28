@@ -14,6 +14,7 @@ import {
   applyForcePapers,
   preinitializeStore,
   zoomIn,
+  zoomOut,
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
@@ -58,6 +59,8 @@ class Intermediate {
   }
 
   renderFrontend(config) {
+    this.config = config;
+
     this.store.dispatch(preinitializeStore(config));
 
     ReactDOM.render(
@@ -66,6 +69,8 @@ class Intermediate {
       </Provider>,
       document.getElementById("app-container")
     );
+
+    window.addEventListener("popstate", this.onBackButtonClick.bind(this));
   }
 
   initStore(config, context, mapData, streamData) {
@@ -80,14 +85,16 @@ class Intermediate {
       scaleLabel: config.scale_label,
     });
 
-    const sanitizedMapData = sanitizeInputData(mapData);
+    this.config = config;
+    this.sanitizedMapData = sanitizeInputData(mapData);
+    this.streamData = streamData;
 
     this.store.dispatch(
       initializeStore(
         config,
         context,
-        sanitizedMapData,
-        streamData,
+        this.sanitizedMapData,
+        this.streamData,
         size,
         width,
         height,
@@ -106,16 +113,24 @@ class Intermediate {
       this.applyForceLayout();
     }
 
-    this.zoomToUrlArea(config, sanitizedMapData, streamData);
+    this.zoomToUrlArea();
+  }
+
+  onBackButtonClick() {
+    // this almost works: the only problem is that fast back button clicking
+    // ends up on a wrong bubble (because of canceled animations)
+    //const queryParams = new URLSearchParams(window.location.search);
+    //if (queryParams.has("area")) {
+    //  return this.zoomToUrlArea();
+    //}
+
+    this.store.dispatch(zoomOut(createAnimationCallback(this.store.dispatch)));
   }
 
   /**
    * After startup, if there's a query param 'area' in the url, zoom in to it immediately.
-   * @param {Object} config
-   * @param {Array} sanitizedMapData
-   * @param {Array} streamData
    */
-  zoomToUrlArea(config, sanitizedMapData, streamData) {
+  zoomToUrlArea() {
     const params = new URLSearchParams(window.location.search);
 
     if (!params.has("area")) {
@@ -124,25 +139,12 @@ class Intermediate {
 
     const zoomedArea = params.get("area");
 
-    if (config.is_streamgraph) {
-      const stream = streamData.find((s) => s.title === zoomedArea);
-
-      if (!stream) {
-        return;
-      }
-
-      this.store.dispatch(
-        zoomIn({
-          title: stream.key,
-          color: stream.color,
-          docIds: stream.docIds,
-        })
-      );
-
-      return;
+    if (this.config.is_streamgraph) {
+      // the instant zoom in doesn't work for streamgraph, because the data is not processed here yet (this.streamData)
+      return removeQueryParam("area");
     }
 
-    const area = sanitizedMapData.find((a) => a.area_uri === zoomedArea);
+    const area = this.sanitizedMapData.find((a) => a.area_uri == zoomedArea);
 
     if (!area) {
       return;
@@ -151,8 +153,9 @@ class Intermediate {
     this.store.dispatch(
       zoomIn(
         { title: area.title, uri: area.area_uri },
-        null,
-        createAnimationCallback(this.store.dispatch)
+        createAnimationCallback(this.store.dispatch),
+        this.store.getState().zoom,
+        true
       )
     );
   }
@@ -379,7 +382,8 @@ function createZoomParameterMiddleware() {
       if (
         action.type === "ZOOM_IN" &&
         !action.canceled &&
-        action.selectedAreaData
+        action.selectedAreaData &&
+        !action.noHistory
       ) {
         addQueryParam(
           "area",

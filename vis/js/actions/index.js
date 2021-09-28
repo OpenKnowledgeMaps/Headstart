@@ -29,15 +29,15 @@ export const NOT_QUEUED_IN_ANIMATION = [
 
 export const zoomIn = (
   selectedAreaData,
-  source = null,
   callback,
-  alreadyZoomed = false
+  alreadyZoomed = false,
+  noHistory = false
 ) => ({
   type: "ZOOM_IN",
   selectedAreaData,
-  source,
   callback,
   alreadyZoomed,
+  noHistory
 });
 
 export const zoomOut = (callback) => ({
