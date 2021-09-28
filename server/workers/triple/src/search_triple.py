@@ -144,8 +144,7 @@ class TripleClient(object):
         metadata["concepts"] = df.knows_about.map(lambda x: "; ".join(sorted(filter(None, set([self.filter_lang(y["label"], lang, "text") for y in x])))).replace(". ", "; "))
         metadata["concepts_en"] = df.knows_about.map(lambda x: "; ".join(sorted(filter(None, set([self.filter_lang(y["label"], 'en', "text") for y in x])))).replace(". ", "; "))
         metadata["oa_state"] = 2
-        metadata["link"] = (df.url.map(lambda x: list(filter(lambda l: l.lower().endswith('pdf'), x)))
-                              .map(lambda x: x[0] if x else ""))
+        metadata["link"] = df.url.map(lambda x: self.get_link(x))
         metadata["relevance"] = df.index
         metadata.dropna(axis=0, subset=["year"], inplace=True)
         try:
@@ -162,6 +161,12 @@ class TripleClient(object):
         input_data["metadata"] = metadata.to_json(orient='records')
         input_data["text"] = text.to_json(orient='records')
         return input_data
+
+    @staticmethod
+    def get_link(x):
+        x = list(filter(lambda y: y is not None, x))
+        x = list(filter(lambda l: l.lower().endswith('pdf'), x))
+        return x[0] if x else ""
 
     @staticmethod
     def clean_string(string):
