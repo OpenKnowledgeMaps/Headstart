@@ -36,7 +36,14 @@ const formatTimestamp = (timestamp) => {
     return "";
   }
 
-  const date = new Date(timestamp);
-
-  return `on ${dateFormat(date, "d mmm yyyy")} at ${dateFormat(date, "H:MM")}`;
+  try {
+    const date = new Date(timestamp);
+    return `on ${dateFormat(date, "d mmm yyyy")} at ${dateFormat(
+      date,
+      "H:MM"
+    )}`;
+  } catch (error) {
+    console.warn(error);
+    return "";
+  }
 };
