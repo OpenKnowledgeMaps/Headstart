@@ -252,6 +252,15 @@ class TripleClient(object):
                         self.redis_store.set(k+"_output", json.dumps(res))
                     else:
                         self.redis_store.rpush("input_data", json.dumps(res))
+                except AttributeError as e:
+                    self.logger.error(parameters)
+                    self.logger.exception("Exception during metadata preprocessing, probably not enough documents.")
+                    res = {}
+                    res["id"] = k
+                    res["params"] = parameters
+                    res["status"] = "error"
+                    res["reason"] = []
+                    self.redis_store.set(k+"_output", json.dumps(res))
                 except (NotFoundError, Exception) as e:
                     self.logger.exception("Exception during data retrieval.")
                     res = {}
