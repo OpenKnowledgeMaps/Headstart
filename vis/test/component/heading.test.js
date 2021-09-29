@@ -5,7 +5,7 @@ import { act } from "react-dom/test-utils";
 import configureStore from "redux-mock-store";
 
 import Heading, { getHeadingLabel } from "../../js/components/Heading";
-import { changeFile } from "../../js/actions";
+import { changeFile, openInfoModal } from "../../js/actions";
 
 import { STREAMGRAPH_MODE } from "../../js/reducers/chartType";
 
@@ -693,6 +693,27 @@ describe("Heading component", () => {
         expect(() => getHeadingLabel(LABEL, storeObject.localization)).toThrow(
           Error
         );
+      });
+
+      it("triggers a correct redux action when info icon is clicked", () => {
+        const { storeObject } = setupFeatures();
+
+        const store = mockStore(storeObject);
+
+        act(() => {
+          render(<Heading store={store} />, container);
+        });
+
+        const select = document.querySelector("#infolink");
+        act(() => {
+          const event = new Event("click", { bubbles: true });
+          select.dispatchEvent(event);
+        });
+
+        const actions = store.getActions();
+        const expectedPayload = openInfoModal();
+
+        expect(actions).toEqual([expectedPayload]);
       });
     });
   });

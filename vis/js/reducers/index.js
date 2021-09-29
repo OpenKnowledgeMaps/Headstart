@@ -14,6 +14,7 @@ import files from "./files";
 import heading from "./heading";
 import highlightedBubble from "./highlightedBubble";
 import hyphenationLang from "./hyphenationLang";
+import isCovis from "./isCovis";
 import list from "./list";
 import localization from "./localization";
 import misc from "./misc";
@@ -46,6 +47,7 @@ export default combineReducers({
   heading,
   highlightedBubble,
   hyphenationLang,
+  isCovis,
   list,
   localization,
   misc,
