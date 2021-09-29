@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import {
   closeEmbedModal,
   closeViperEditModal,
-  closeInfoModal,
   hidePreview,
 } from "../actions";
 
@@ -25,9 +24,6 @@ const Modals = ({
   viperEditTitle,
   viperEditObjID,
   onViperEditClose,
-  openInfoModal,
-  infoContent,
-  onInfoClose,
   showImagePreview,
   showPDFPreview,
   previewedPaper,
@@ -51,13 +47,7 @@ const Modals = ({
           objectID={viperEditObjID}
         />
       )}
-      <InfoModal
-        open={openInfoModal}
-        onClose={onInfoClose}
-        title={infoContent.title}
-        body={infoContent.body}
-        params={infoContent.dynamic ? infoContent.params : null}
-      />
+      <InfoModal />
       {showImagePreview && (
         <ImageModal
           open={!!previewedPaper}
@@ -87,13 +77,11 @@ const mapStateToProps = (state) => ({
   viperEditAcronym: state.heading.acronym,
   viperEditTitle: state.heading.title,
   viperEditObjID: state.modals.viperEditObjID,
-  openInfoModal: state.modals.openInfoModal,
-  infoContent: state.modals.infoContent,
   showImagePreview: state.modals.showImagePreview,
   showPDFPreview: state.modals.showPDFPreview,
   previewedPaper: state.modals.previewedPaper,
   serverUrl: state.modals.reloadApiProperties.headstartPath,
-  service: state.modals.service,
+  service: state.service,
   useViewer: state.modals.useViewer,
   localization: state.localization,
 });
@@ -101,7 +89,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onEmbedClose: () => dispatch(closeEmbedModal()),
   onViperEditClose: () => dispatch(closeViperEditModal()),
-  onInfoClose: () => dispatch(closeInfoModal()),
   onPreviewClose: () => dispatch(hidePreview()),
 });
 

@@ -29,7 +29,6 @@ const common = {
     resolve: {
         alias: {
             //
-            'handlebars': 'handlebars/dist/handlebars.js',
             'hypher': 'hypher/dist/jquery.hypher.js',
             'markjs': 'mark.js/dist/jquery.mark.js',
 
@@ -42,7 +41,6 @@ const common = {
             // modules
             'config': path.resolve(__dirname, 'vis/js/default-config.js'),
             'headstart': path.resolve(__dirname, 'vis/js/headstart.js'),
-            'intro': path.resolve(__dirname, 'vis/js/intro.js'),
             'mediator': path.resolve(__dirname, 'vis/js/mediator.js'),
             'io' : path.resolve(__dirname, 'vis/js/io.js'),
         },
@@ -83,16 +81,6 @@ const common = {
                         loader: 'babel-loader',
                         options: {
                             presets: ['@babel/preset-env', '@babel/preset-react']
-                        }
-                    }
-                ]
-            }, {
-                test: /\.handlebars$/,
-                use: [
-                    {
-                        loader: "handlebars-loader",
-                        options: {
-                            query: { inlineRequires: '\/images\/' }
                         }
                     }
                 ]
