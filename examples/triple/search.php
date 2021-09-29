@@ -17,7 +17,6 @@ include 'search-flow/inc/waiting-page/waiting-page-header.php';
 <body class="searchpage">
     <div>
         <?php include('search-flow/inc/shared/banner-browser-unsupported.php') ?>
-        <?php include('search-flow/inc/shared/banner-mobile.php') ?>
         <?php include('search-flow/inc/waiting-page/waiting-page.php') ?>
         <?php include('search-flow/inc/how-it-works/how-it-works.php') ?>
     

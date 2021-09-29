@@ -14,7 +14,6 @@ include 'config_searchflow.php';
 
 <body>
     <?php include('search-flow/inc/shared/banner-browser-unsupported.php') ?>
-    <?php include('search-flow/inc/shared/banner-mobile.php') ?>
     <div>
         <h2>Search TRIPLE and turn it into a visualization</h2>
         <?php include('search-flow/inc/search-form/search-form.php') ?>
