@@ -32,12 +32,15 @@ const StandardBuiltWith = ({
 export default StandardBuiltWith;
 
 const formatTimestamp = (timestamp) => {
-  if (!timestamp) {
+  if (typeof timestamp !== "string" || !timestamp) {
     return "";
   }
 
+  timestamp = timestamp.trim().replace(/\s+/, "T");
+
+  const date = new Date(timestamp);
+
   try {
-    const date = new Date(timestamp);
     return `on ${dateFormat(date, "d mmm yyyy")} at ${dateFormat(
       date,
       "H:MM"
