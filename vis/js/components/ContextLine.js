@@ -48,7 +48,7 @@ class ContextLine extends React.Component {
         >
           {this.renderModifier()}
         </NumArticles>
-        {defined(params.dataSource) && (
+        {false && defined(params.dataSource) && (
           <DataSource
             value={params.dataSource}
             label={localization.source_label}
