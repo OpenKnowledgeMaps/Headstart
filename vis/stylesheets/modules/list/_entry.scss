@@ -503,7 +503,7 @@ img#preview_page {
 }
 
 .backlink-list {
-    margin-left: 15px;
+    margin-left: 0px;
     margin-top: 20px;
     font-size: 12px;
     cursor: pointer;
@@ -511,7 +511,8 @@ img#preview_page {
 
     a {
         border: 1px solid $medium-blue;
-        color: $medium-blue;
+        background-color: $medium-blue;
+        color: white;
         padding: 5px;
         border-radius: 5px;
         -moz-border-radius: 5px;
@@ -519,8 +520,8 @@ img#preview_page {
         text-decoration: none;
 
         &:hover {
-            background-color: $medium-blue;
-            color: white;
+            background-color: white;
+            color: $medium-blue;
         }
     }
 }
