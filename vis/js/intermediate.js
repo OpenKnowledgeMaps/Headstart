@@ -124,7 +124,7 @@ class Intermediate {
     //  return this.zoomToUrlArea();
     //}
 
-    this.store.dispatch(zoomOut(createAnimationCallback(this.store.dispatch)));
+    this.store.dispatch(zoomOut(createAnimationCallback(this.store.dispatch), true));
   }
 
   /**
@@ -392,7 +392,7 @@ function createZoomParameterMiddleware() {
             : action.selectedAreaData.title
         );
       }
-      if (action.type === "ZOOM_OUT" && !action.canceled) {
+      if (action.type === "ZOOM_OUT" && !action.canceled && !action.isBackButton) {
         removeQueryParam("area");
       }
       return next(action);

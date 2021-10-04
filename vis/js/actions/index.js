@@ -40,9 +40,10 @@ export const zoomIn = (
   noHistory
 });
 
-export const zoomOut = (callback) => ({
+export const zoomOut = (callback, isBackButton = false) => ({
   type: "ZOOM_OUT",
   callback,
+  isBackButton
 });
 
 /**
