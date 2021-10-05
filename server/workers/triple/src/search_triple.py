@@ -245,6 +245,7 @@ class TripleClient(object):
                         if a.get(n, [None])[0]:
                             author.append(a.get(n)[0])
                     authors.append(", ".join(author))
+        authors = list(filter(None, authors))
         return "; ".join(authors)
 
     def run(self):
