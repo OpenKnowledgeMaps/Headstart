@@ -131,7 +131,7 @@ class TripleClient(object):
         metadata["paper_abstract_en"] = df.abstract.map(lambda x: self.filter_lang(x, 'en', "text"))
         metadata["published_in"] = df.publisher.map(lambda x: ", ".join(filter(None, x)) if isinstance(x, list) else "")
         metadata["year"] = df.date_published.map(lambda x: x[0])
-        metadata["url"] = df.main_entity_of_page.map(lambda x: x if x else "")
+        metadata["url"] = df.main_entity_of_page.map(lambda x: self.get_url(x))
         metadata["readers"] = 0
         metadata["subject_orig"] = (df.keywords
                 .map(lambda x: [i.get('text') for i in x if i.get('text')] if isinstance(x, list) else [])
@@ -161,6 +161,11 @@ class TripleClient(object):
         input_data["metadata"] = metadata.to_json(orient='records')
         input_data["text"] = text.to_json(orient='records')
         return input_data
+
+    @staticmethod
+    def get_url(x):
+        url = x[0] if (isinstance(x, list) and x) else ""
+        return url
 
     @staticmethod
     def get_link(x):
@@ -231,12 +236,15 @@ class TripleClient(object):
     def get_authors(authorlist):
         authors = []
         for a in authorlist:
-            if a:
-                author = []
-                for n in ['family_name', 'given_name']:
-                    if a.get(n, [None])[0]:
-                        author.append(a.get(n)[0])
-                authors.append(", ".join(author))
+            if 'fullname' in a:
+                authors.append(a.get('fullname'))
+            else:
+                if a:
+                    author = []
+                    for n in ['family_name', 'given_name']:
+                        if a.get(n, [None])[0]:
+                            author.append(a.get(n)[0])
+                    authors.append(", ".join(author))
         return "; ".join(authors)
 
     def run(self):
