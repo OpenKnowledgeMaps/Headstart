@@ -12,7 +12,7 @@ import { mediator } from 'mediator';
 import 'hypher';
 import 'lib/en.js';
 
-import BrowserDetect from "exports-loader?BrowserDetect!../lib/browser_detect.js";
+import { BrowserDetect } from "exports-loader?exports=BrowserDetect!../lib/browser_detect.js";
 
 export var HeadstartFSM = function(json_direct_data) {
   this.VERSION = 4.0;
