@@ -8,8 +8,8 @@
   },
   "scripts": {
     "test": "jest",
-    "dev": "webpack --progress --colors --watch --mode=development",
-    "prod": "webpack --progress --colors",
+    "dev": "webpack --progress --watch --mode=development",
+    "prod": "webpack --progress",
     "start": "webpack serve --progress --mode=development",
     "lint": "eslint \"./vis/js/**/*.js?(x)\""
   },
