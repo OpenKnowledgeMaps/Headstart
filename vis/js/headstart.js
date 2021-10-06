@@ -9,7 +9,6 @@ import $ from "jquery";
 import config from 'config';
 import { mediator } from 'mediator';
 
-import 'hypher';
 import 'lib/en.js';
 
 import { BrowserDetect } from "exports-loader?exports=BrowserDetect!../lib/browser_detect.js";
