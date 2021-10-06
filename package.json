@@ -30,7 +30,6 @@
     "d3-selection": "^2.0.0",
     "d3-transition": "^2.0.0",
     "dateformat": "^2.0.0",
-    "font-awesome": "*",
     "hyphenation.en-us": "*",
     "hypher": "^0.2.4",
     "iso-639-1": "^2.1.9",
