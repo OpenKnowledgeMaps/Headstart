@@ -31,19 +31,19 @@ export const zoomIn = (
   selectedAreaData,
   callback,
   alreadyZoomed = false,
-  noHistory = false
+  isFromBackButton = false
 ) => ({
   type: "ZOOM_IN",
   selectedAreaData,
   callback,
   alreadyZoomed,
-  noHistory
+  isFromBackButton,
 });
 
-export const zoomOut = (callback, isBackButton = false) => ({
+export const zoomOut = (callback, isFromBackButton = false) => ({
   type: "ZOOM_OUT",
   callback,
-  isBackButton
+  isFromBackButton,
 });
 
 /**

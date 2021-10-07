@@ -27,6 +27,7 @@ import Headstart from "./components/Headstart";
 import { sanitizeInputData } from "./utils/data";
 import { createAnimationCallback } from "./utils/eventhandlers";
 import { addQueryParam, removeQueryParam } from "./utils/url";
+import debounce from "./utils/debounce";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -70,7 +71,10 @@ class Intermediate {
       document.getElementById("app-container")
     );
 
-    window.addEventListener("popstate", this.onBackButtonClick.bind(this));
+    window.addEventListener(
+      "popstate",
+      debounce(this.onBackButtonClick.bind(this), 300)
+    );
   }
 
   initStore(config, context, mapData, streamData) {
@@ -116,15 +120,23 @@ class Intermediate {
     this.zoomToUrlArea();
   }
 
+  /**
+   * Function for when the browser back button is clicked.
+   *
+   * This function is the reason zoom-in and zoom-out actions are also queued
+   * in the queue middleware.
+   *
+   * For a better user experience, it should be debounced.
+   */
   onBackButtonClick() {
-    // this almost works: the only problem is that fast back button clicking
-    // ends up on a wrong bubble (because of canceled animations)
-    //const queryParams = new URLSearchParams(window.location.search);
-    //if (queryParams.has("area")) {
-    //  return this.zoomToUrlArea();
-    //}
+    const queryParams = new URLSearchParams(window.location.search);
+    if (queryParams.has("area")) {
+      return this.zoomToUrlArea();
+    }
 
-    this.store.dispatch(zoomOut(createAnimationCallback(this.store.dispatch), true));
+    this.store.dispatch(
+      zoomOut(createAnimationCallback(this.store.dispatch), true)
+    );
   }
 
   /**
@@ -152,7 +164,7 @@ class Intermediate {
 
     this.store.dispatch(
       zoomIn(
-        { title: area.title, uri: area.area_uri },
+        { title: area.area, uri: area.area_uri },
         createAnimationCallback(this.store.dispatch),
         this.store.getState().zoom,
         true
@@ -235,7 +247,10 @@ function createActionQueueMiddleware(intermediate) {
 
       if (getState().animation !== null) {
         if (!ALLOWED_IN_ANIMATION.includes(action.type)) {
-          if (!NOT_QUEUED_IN_ANIMATION.includes(action.type)) {
+          if (
+            !NOT_QUEUED_IN_ANIMATION.includes(action.type) ||
+            action.isFromBackButton
+          ) {
             actionQueue.push({ ...action });
           }
           action.canceled = true;
@@ -248,7 +263,13 @@ function createActionQueueMiddleware(intermediate) {
       if (action.type === "STOP_ANIMATION") {
         while (actionQueue.length > 0) {
           const queuedAction = actionQueue.shift();
-          dispatch(queuedAction);
+          if (!NOT_QUEUED_IN_ANIMATION.includes(queuedAction.type)) {
+            dispatch(queuedAction);
+          } else {
+            requestAnimationFrame(() => {
+              dispatch(queuedAction);
+            });
+          }
         }
       }
 
@@ -383,7 +404,7 @@ function createZoomParameterMiddleware() {
         action.type === "ZOOM_IN" &&
         !action.canceled &&
         action.selectedAreaData &&
-        !action.noHistory
+        !action.isFromBackButton
       ) {
         addQueryParam(
           "area",
@@ -392,7 +413,11 @@ function createZoomParameterMiddleware() {
             : action.selectedAreaData.title
         );
       }
-      if (action.type === "ZOOM_OUT" && !action.canceled && !action.isBackButton) {
+      if (
+        action.type === "ZOOM_OUT" &&
+        !action.canceled &&
+        !action.isFromBackButton
+      ) {
         removeQueryParam("area");
       }
       return next(action);

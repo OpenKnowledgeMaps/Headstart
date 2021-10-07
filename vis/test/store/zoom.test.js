@@ -16,7 +16,7 @@ describe("zoom state", () => {
         selectedAreaData: DATA,
         alreadyZoomed: false,
         callback: undefined,
-        noHistory: false,
+        isFromBackButton: false,
       };
       expect(zoomIn(DATA)).toEqual(EXPECTED_ACTION);
     });
@@ -25,6 +25,7 @@ describe("zoom state", () => {
       const EXPECTED_ACTION = {
         type: "ZOOM_OUT",
         callback: undefined,
+        isFromBackButton: false,
       };
       expect(zoomOut()).toEqual(EXPECTED_ACTION);
     });
