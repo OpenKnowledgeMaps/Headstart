@@ -530,18 +530,6 @@
       "Source": "CRAN",
       "Hash": "c41c1a1ade8ced1887350214cec755bd"
     },
-    "ropenaire": {
-      "Package": "ropenaire",
-      "Version": "0.1.7.9210",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "ropenaire",
-      "RemoteUsername": "sckott",
-      "RemoteRef": "master",
-      "RemoteSha": "64ed2560741e53b850fccd70ecf379721ca244fd",
-      "Hash": "d69c0d5e5c613f7a5e02c2622088303f"
-    },
     "rplos": {
       "Package": "rplos",
       "Version": "0.8.6",
