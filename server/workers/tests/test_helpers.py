@@ -2,13 +2,12 @@ import os
 import json
 import uuid
 import pathlib
-import redis
+import requests
 import pandas as pd
 from nltk.corpus import stopwords
 from tqdm import tqdm
 
 from .conftest import RANDOM
-from ..api.src.apis.utils import get_key
 
 # connect via nginx to APIs and submit tests
 
@@ -30,7 +29,10 @@ def get_cases(folder):
         loc = pathlib.Path(__path__).parent
     except NameError:
         loc = pathlib.Path.cwd()
-    testdatadir = os.path.join(loc, "tests", folder)
+    if not str(loc).endswith("tests"):
+        testdatadir = os.path.join(loc, "tests", folder)
+    else:
+        testdatadir = os.path.join(loc, folder)
     casefiles = [f for f in os.listdir(testdatadir) if f.startswith("testcase")]
     casefiles.sort()
     cases = []
@@ -43,27 +45,9 @@ def get_cases(folder):
 
 
 def retrieve_results(casedata):
-    k = str(uuid.uuid4())
-    casedata["params"]["raw"] = True
-    service = casedata["params"]["service"]
-    d = {"id": k, "params": casedata["params"],
-         "endpoint": "search"}
-    redis_store.rpush(service, json.dumps(d))
-    result = get_key(redis_store, k)
+    params = casedata["params"]
+    url = "http://localhost/api/stable/api/%s/search" % params["service"]
     return result
-
-
-def get_dataprocessing_result(testcase_):
-    k = str(uuid.uuid4())
-    params = testcase_["params"]
-    input_data = testcase_["input_data"]
-    res = {}
-    res["id"] = k
-    res["params"] = params
-    res["input_data"] = input_data
-    redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
-    result = get_key(redis_store, k)
-    return pd.DataFrame.from_records(json.loads(result))
 
 
 def data_generation(KNOWNCASES, RANDOMCASES):
@@ -85,7 +69,6 @@ def data_generation(KNOWNCASES, RANDOMCASES):
 
 KNOWNCASES = get_cases("knowncases")
 RANDOMCASES = get_cases("randomcases")
-#TRIPLE = get_cases("triple")
 
 CASENAMES, CASEDATA = data_generation(KNOWNCASES, RANDOMCASES)
 CASENAMES.sort()
