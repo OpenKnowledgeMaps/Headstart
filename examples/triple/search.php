@@ -14,13 +14,11 @@ include 'search-flow/inc/waiting-page/waiting-page-header.php';
     <?php include('search-flow/inc/shared/head-search-form.php') ?>
 </head>
 
-<body style="padding-left:10px; padding-right:10px;" class="searchpage">
+<body class="searchpage">
     <div>
         <?php include('search-flow/inc/shared/banner-browser-unsupported.php') ?>
-        <?php include('search-flow/inc/shared/banner-mobile.php') ?>
-        <?php             
-            include('search-flow/inc/waiting-page/waiting-page.php') 
-        ?>
+        <?php include('search-flow/inc/waiting-page/waiting-page.php') ?>
+        <?php include('search-flow/inc/how-it-works/how-it-works.php') ?>
     
     <script type="text/javascript " src="search-flow/js/search.js "></script>
     <link rel="stylesheet" href="triple-searchflow.css">

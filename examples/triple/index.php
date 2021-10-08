@@ -12,10 +12,9 @@ include 'config_searchflow.php';
     <?php include('search-flow/inc/shared/head-search-form.php') ?>
 </head>
 
-<body style="padding-left:10px; padding-right:10px;">
+<body>
     <?php include('search-flow/inc/shared/banner-browser-unsupported.php') ?>
-    <?php include('search-flow/inc/shared/banner-mobile.php') ?>
-    <div>
+    <div style="padding-right: 10px; padding-left: 10px;">
         <h2>Search TRIPLE and turn it into a visualization</h2>
         <?php include('search-flow/inc/search-form/search-form.php') ?>
     <script type="text/javascript " src="search-flow/js/search_form.js "></script>

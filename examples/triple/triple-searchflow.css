@@ -1,5 +1,5 @@
 body, .refine-search {
-font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;     
+    font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;    
 }
 
 .center-div {
@@ -96,4 +96,35 @@ font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 .basic-button:hover, .basic-button:active, .basic-button:focus {
     color: #622166;
     background-color: transparent;
+}
+
+.searchpage .h2reverse, .searchpage .number {
+    color: #333;
+}
+
+.howitworks-div {
+    padding: 0px 20px;
+}
+
+@media screen and (max-width: 1030px) {
+
+    .center-div {
+        margin: 0px auto 0;
+    }
+}
+
+@media screen and (max-width: 535px) {
+
+    .center-div {
+        padding: 20px;
+        width: 80%;
+        margin: 0px auto;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .center-div {
+        padding: 20px;
+        width: 80%;
+    }
 }
