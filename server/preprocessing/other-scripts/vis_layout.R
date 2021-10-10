@@ -52,7 +52,8 @@ vis_layout <- function(text, metadata, service,
   filtered <- filter_duplicates(metadata, text, list_size)
   metadata <- filtered$metadata
   text <- filtered$text
-
+  vlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "doc count:", nrow(metadata), sep=" "))
+  
   if(vis_type=='overview'){
     stops <- get_stopwords(lang, testing)
     corpus <- create_corpus(metadata, text, c(lang))
