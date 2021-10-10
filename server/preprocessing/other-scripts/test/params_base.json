@@ -1,10 +1,9 @@
 {
   "document_types":["121"],
   "from":"1665-01-01",
-  "to":"2020-03-13",
+  "to":"2021-10-07",
   "sorting":"most-relevant",
   "lang_id":"eng",
   "vis_id": "TEST_ID",
-  "min_descsize": 300,
-  "coll": "at"
+  "min_descsize": 300
 }
