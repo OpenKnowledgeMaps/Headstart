@@ -8,16 +8,9 @@ from nltk.corpus import stopwords
 from tqdm import tqdm
 
 from .conftest import RANDOM
-from ..services.src.apis.utils import get_key
+from ..api.src.apis.utils import get_key
 
-redis_config = {
-    "host": os.getenv("REDIS_HOST"),
-    "port": os.getenv("REDIS_PORT"),
-    "db": os.getenv("REDIS_DB"),
-    "password": os.getenv("REDIS_PASSWORD")
-}
-redis_store = redis.StrictRedis(**redis_config)
-
+# connect via nginx to APIs and submit tests
 
 def get_stopwords(lang):
     try:
@@ -92,7 +85,7 @@ def data_generation(KNOWNCASES, RANDOMCASES):
 
 KNOWNCASES = get_cases("knowncases")
 RANDOMCASES = get_cases("randomcases")
-TRIPLE = get_cases("triple")
+#TRIPLE = get_cases("triple")
 
 CASENAMES, CASEDATA = data_generation(KNOWNCASES, RANDOMCASES)
 CASENAMES.sort()
