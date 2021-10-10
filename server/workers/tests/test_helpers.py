@@ -9,7 +9,6 @@ from tqdm import tqdm
 
 from .conftest import RANDOM
 
-# connect via nginx to APIs and submit tests
 
 def get_stopwords(lang):
     try:
@@ -44,10 +43,19 @@ def get_cases(folder):
     return cases
 
 
-def retrieve_results(casedata):
+def retrieve_input_data(casedata):
     params = casedata["params"]
-    url = "http://localhost/api/stable/api/%s/search" % params["service"]
-    return result
+    url = "http://localhost/api/stable/%s/search" % params["service"]
+    params.pop("list_size", None)
+    params["raw"] = True
+    res = requests.post(url, json=params)
+    return res.json()["input_data"]
+
+
+def get_dataprocessing_result(casedata):
+    url = "http://localhost/api/stable/vis/create"
+    res = requests.post(url, json=casedata)
+    return pd.DataFrame.from_records(res.json())
 
 
 def data_generation(KNOWNCASES, RANDOMCASES):
@@ -57,13 +65,11 @@ def data_generation(KNOWNCASES, RANDOMCASES):
     for c in tqdm(KNOWNCASES):
         CASENAMES.append(c["caseid"])
         CASEDATA[c["caseid"]] = c["casedata"]
-    if RANDOM:
-        print("collecting random test cases")
-        for c in tqdm(RANDOMCASES):
-            CASENAMES.append(c["caseid"])
-            CASEDATA[c["caseid"]] = {
-                        "input_data": retrieve_results(c["casedata"])["input_data"],
-                        "params": c["casedata"]["params"]}
+    print("collecting random test cases")
+    for c in tqdm(RANDOMCASES):
+        CASENAMES.append(c["caseid"])
+        CASEDATA[c["caseid"]] = {"params": c["casedata"]["params"],
+                                 "input_data": retrieve_input_data(c["casedata"])}
     return CASENAMES, CASEDATA
 
 
@@ -75,5 +81,9 @@ CASENAMES.sort()
 
 RESULTS = {}
 print("collecting dataprocessing results")
-for c in tqdm(CASEDATA):
-    RESULTS[c] = get_dataprocessing_result(CASEDATA[c])
+for c in tqdm(KNOWNCASES):
+    caseid = c["caseid"]
+    RESULTS[caseid] = get_dataprocessing_result(CASEDATA[caseid])
+for c in tqdm(RANDOMCASES):
+    caseid = c["caseid"]
+    RESULTS[caseid] = get_dataprocessing_result(CASEDATA[caseid])
