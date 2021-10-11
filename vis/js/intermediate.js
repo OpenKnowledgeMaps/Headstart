@@ -153,7 +153,13 @@ class Intermediate {
 
     if (this.config.is_streamgraph) {
       // the instant zoom in doesn't work for streamgraph, because the data is not processed here yet (this.streamData)
-      return removeQueryParam("area");
+      // proper data processing refactoring is necessary
+      // this is a workaround that simply zooms out
+      removeQueryParam("area");
+      this.store.dispatch(
+        zoomOut(createAnimationCallback(this.store.dispatch), true)
+      );
+      return;
     }
 
     const area = this.sanitizedMapData.find((a) => a.area_uri == zoomedArea);
