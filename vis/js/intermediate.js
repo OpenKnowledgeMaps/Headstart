@@ -408,7 +408,7 @@ function createZoomParameterMiddleware() {
       ) {
         addQueryParam(
           "area",
-          action.selectedAreaData.uri
+          typeof action.selectedAreaData.uri !== "undefined"
             ? action.selectedAreaData.uri
             : action.selectedAreaData.title
         );
