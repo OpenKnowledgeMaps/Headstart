@@ -42,6 +42,9 @@ const common = {
             'headstart': path.resolve(__dirname, 'vis/js/headstart.js'),
             'mediator': path.resolve(__dirname, 'vis/js/mediator.js'),
             'io' : path.resolve(__dirname, 'vis/js/io.js'),
+
+            // building
+            process: "process/browser",
         },
     },
 
