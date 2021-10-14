@@ -222,7 +222,7 @@ class GSheetsClient(object):
         result_df.sort_values(["orig_order"], ascending=[True], inplace=True)
         result_df.drop("orig_order", axis=1, inplace=True)
         result_df.index = clean_df.index
-        result_df["area"] = clean_df.Area
+        result_df["area"] = clean_df.Area.map(lambda x: x.strip())
         uris = {a: i for i, a in enumerate(result_df.area.unique())}
         result_df["area_uri"] = result_df.area.map(lambda x: uris.get(x))
         oa_mapper = {"closed": 0,

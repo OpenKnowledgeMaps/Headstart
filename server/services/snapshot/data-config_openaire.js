@@ -40,8 +40,6 @@ var data_config = {
 
     viper_outlink: true,
 
-    intro: 'intro_openaire',
-
     viper_metric_list: true,
     
     viper_credit: false,

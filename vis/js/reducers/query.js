@@ -6,10 +6,7 @@ const query = (state = { text: "", parsedTerms: [] }, action) => {
   switch (action.type) {
     case "INITIALIZE":
       return {
-        text:
-          typeof action.contextObject.query !== "undefined"
-            ? action.contextObject.query
-            : null,
+        text: cleanQuery(action.contextObject.query),
         parsedTerms: getQueryTerms(action.contextObject),
         highlightTerms: action.configObject.highlight_query_terms,
         useLookBehind: isLookBehindSupported(),
@@ -18,6 +15,16 @@ const query = (state = { text: "", parsedTerms: [] }, action) => {
       return state;
   }
 };
+
+const cleanQuery = (query) => {
+  if (typeof query !== "string") {
+    return null;
+  }
+  
+  let cleanedQuery = query.replace(/\\(.?)/g, "$1");
+
+  return cleanedQuery;
+}
 
 /**
  * Parses query and returns all its terms.

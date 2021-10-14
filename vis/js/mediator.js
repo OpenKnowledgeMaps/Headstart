@@ -122,7 +122,6 @@ MyMediator.prototype = {
         mediator.manager.call('io', 'initializeMissingData', [data]);
         mediator.manager.call('io', 'prepareData', [data, context]);
         mediator.manager.call('io', 'setContext', [context, data.length]);
-        mediator.manager.call('io', 'setInfo', [context]);
 
         if (config.is_force_papers && config.dynamic_force_papers) {
             config.papers_force_alpha = mediator.get_papers_force_alpha(data.length);

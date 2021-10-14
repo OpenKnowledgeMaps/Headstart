@@ -40,6 +40,9 @@ const Highlight = ({
   }
 
   if (!queryHighlightEnabled || !queryHighlight) {
+    if (typeof text !== "string") {
+      return null;
+    }
     return text;
   }
 

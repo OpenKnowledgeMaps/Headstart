@@ -53,6 +53,19 @@ describe("chart state", () => {
       expect(result).toEqual(EXPECTED_RESULT);
     });
 
+    it("should change the dimensions when updated (width > height)", () => {
+      const INITIAL_STATE = { width: 800, height: 800 };
+
+      const result = reducer(
+        INITIAL_STATE,
+        updateDimensions({ size: 300, width: 400, height: 300 }, {})
+      );
+
+      const EXPECTED_RESULT = { width: 300, height: 300, streamWidth: 400, streamHeight: 300 };
+
+      expect(result).toEqual(EXPECTED_RESULT);
+    });
+
     it("should not change the state if the action is canceled", () => {
       const INITIAL_STATE = { some_state: 1 };
 

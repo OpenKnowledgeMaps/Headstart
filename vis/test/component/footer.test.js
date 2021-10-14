@@ -115,7 +115,7 @@ describe("Footer component", () => {
     });
 
     expect(container.querySelectorAll("#builtwith a")[1].textContent).toEqual(
-      "TRIPLE"
+      "GoTriple"
     );
   });
 });
