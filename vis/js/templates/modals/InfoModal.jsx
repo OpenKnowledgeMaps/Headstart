@@ -1,35 +1,66 @@
-import React, { useEffect } from "react";
-import $ from "jquery"
+import React from "react";
+import { connect } from "react-redux";
 import { Modal } from "react-bootstrap";
 
-const InfoModal = ({ open, onClose, title, body, params }) => {
-  // necessary for dynamic modals (Viper)
-  useEffect(() => {
-    if (params) {
-      requestAnimationFrame(() => {
-        Object.keys(params).forEach((paramName) => {
-          if (paramName.slice(0, 4) === "html") {
-            $(".info-modal-" + paramName).html(params[paramName]);
-          } else {
-            const value =
-              params[paramName] === "true" ? "yes" : params[paramName];
-            $(".info-modal-" + paramName).text(value);
-          }
-        });
-      });
-    }
-  }, [params, open]);
+import { closeInfoModal } from "../../actions";
+import { STREAMGRAPH_MODE } from "../../reducers/chartType";
+
+import BaseInfo from "./infomodal/BaseInfo";
+import CovisInfo from "./infomodal/CovisInfo";
+import DefaultKMInfo from "./infomodal/DefaultKMInfo";
+import DefaultSGInfo from "./infomodal/DefaultSGInfo";
+import GsheetsInfo from "./infomodal/GsheetsInfo";
+import PubMedInfo from "./infomodal/PubMedInfo";
+import TripleKMInfo from "./infomodal/TripleKMInfo";
+import TripleSGInfo from "./infomodal/TripleSGInfo";
+import ViperInfo from "./infomodal/ViperInfo";
+
+const getInfoTemplate = (service, isStreamgraph) => {
+  switch (service) {
+    case "base":
+      return BaseInfo;
+    case "pubmed":
+      return PubMedInfo;
+    case "openaire":
+      return ViperInfo;
+    case "triple_km":
+      return TripleKMInfo;
+    case "triple_sg":
+      return TripleSGInfo;
+    case "gsheets":
+      return GsheetsInfo;
+    case "covis":
+      return CovisInfo;
+    default:
+      return isStreamgraph ? DefaultSGInfo : DefaultKMInfo;
+  }
+};
+
+const InfoModal = ({ open, onClose, params, service, isStreamgraph }) => {
+  const InfoTemplate = getInfoTemplate(service, isStreamgraph);
 
   return (
     // html template starts here
     <Modal id="info_modal" show={open} onHide={onClose} animation>
-      <Modal.Header closeButton>
-        <Modal.Title id="info-title">{title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body id="info-body" dangerouslySetInnerHTML={{ __html: body }} />
+      <InfoTemplate params={params} />
     </Modal>
     // html template ends here
   );
 };
 
-export default InfoModal;
+const mapStateToProps = (state) => ({
+  open: state.modals.openInfoModal,
+  params: {
+    ...state.modals.infoParams,
+    query: state.query.text,
+    customTitle: state.heading.customTitle,
+  },
+  service: state.isCovis ? "covis" : state.service,
+  isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onClose: () => dispatch(closeInfoModal()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(InfoModal);

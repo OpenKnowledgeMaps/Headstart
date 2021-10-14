@@ -63,7 +63,7 @@ const mapStateToProps = (state) => ({
   reloadApiProperties: state.modals.reloadApiProperties,
   isEmbedded: state.misc.isEmbedded,
   visTag: state.misc.visTag,
-  service: state.modals.service,
+  service: state.service,
 });
 
 const mapDispatchToProps = (dispatch) => ({
