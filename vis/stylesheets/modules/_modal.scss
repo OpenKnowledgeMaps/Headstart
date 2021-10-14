@@ -2,313 +2,331 @@
 /* ######## former _popup.scss ######### */
 
 #info_modal {
-  .modal-dialog {
-    width: 100%;
-    max-width: 800px;
+    .modal-dialog {
+        width: 100%;
+        max-width: 800px;
 
-    .modal-content {
-      padding: 40px;
+        .modal-content {
+            padding: 40px;
 
-      p {
-        font-family: $base-font-family;
-        font-size: 16px;
-        margin: 0 0 30px !important;
-      }
+            p, .pop-up-list {
+                font-family: $base-font-family;
+                font-size: 16px;
+                margin: 0 0 20px !important;
+            }
+        }
     }
-  }
 }
 
 #info-body h3 {
-  font-weight: $fontweight700;
-  text-transform: uppercase;
-  font-size: 16px;
-  font-family: $base-font-family;
-  margin: 20px 0px 10px;
-  color: $medium-blue;
+    font-weight: $fontweight700;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-family: $base-font-family;
+    margin: 20px 0px 10px;
+    color: $medium-blue;
+}
+
+.datasource-logo {
+    margin-bottom: 0px !important;
+    img {
+        height: 40px;
+    }
+}
+
+.okmaps-logo {
+    margin-bottom: 0px !important;
+    img {
+        height: 80px;
+    }
+}
+
+.pop-up-list {
+    padding: 0px 0px 0px 20px;
 }
 
 @if $skin == "linkedcat" {
-  #info-body h3 {
-    font-weight: normal;
-    font-size: 18px;
-  }
+    #info-body h3 {
+        font-weight: normal;
+        font-size: 18px;
+    }
 }
 
 .modal {
-  text-align: center;
-  padding: 0 !important;
+    text-align: center;
+    padding: 0 !important;
 
-  &:before {
-    content: "";
-    /*display: inline-block;*/
-    height: 100%;
-    /*vertical-align: middle;*/
-    margin-right: -4px;
-    /* Adjusts for spacing */
-  }
+    &:before {
+        content: "";
+        /*display: inline-block;*/
+        height: 100%;
+        /*vertical-align: middle;*/
+        margin-right: -4px;
+        /* Adjusts for spacing */
+    }
 
-  //Firefox bug
-  .glyphicon-refresh-animate {
-    animation: spin 0.7s infinite linear;
-    -webkit-animation: spin2 0.7s infinite linear;
-  }
+    //Firefox bug
+    .glyphicon-refresh-animate {
+        animation: spin 0.7s infinite linear;
+        -webkit-animation: spin2 0.7s infinite linear;
+    }
 
-  @-webkit-keyframes spin2 {
-    from {
-      -webkit-transform: rotate(0deg);
+    @-webkit-keyframes spin2 {
+        from {
+            -webkit-transform: rotate(0deg);
+        }
+        to {
+            -webkit-transform: rotate(360deg);
+        }
     }
-    to {
-      -webkit-transform: rotate(360deg);
-    }
-  }
 
-  @keyframes spin {
-    from {
-      transform: scale(1) rotate(0deg);
+    @keyframes spin {
+        from {
+            transform: scale(1) rotate(0deg);
+        }
+        to {
+            transform: scale(1) rotate(360deg);
+        }
     }
-    to {
-      transform: scale(1) rotate(360deg);
-    }
-  }
 }
 
 .modal-title {
-  color: $medium-blue;
-  font-size: 20px;
-  font-weight: $fontweight700;
-  font-family: $base-font-family;
-  margin: 0px !important;
-  text-transform: uppercase;
+    color: $medium-blue;
+    font-size: 20px;
+    font-weight: $fontweight700;
+    font-family: $base-font-family;
+    margin: 0px !important;
+    text-transform: uppercase;
 }
 
 .modal-body,
 .modal-header {
-  padding: 0px !important;
+    padding: 0px !important;
 }
 
 .modal-content .btn-primary {
-  color: #fff;
-  background-color: $okm-modal-btn;
-  border-color: $okm-modal-btn;
-  font-family: $link-font-family;
+    color: #fff;
+    background-color: $okm-modal-btn;
+    border-color: $okm-modal-btn;
+    font-family: $link-font-family;
 }
 
 .modal-content .btn-primary:hover {
-  background-color: white;
-  border-color: $okm-modal-btn;
-  color: $okm-modal-btn;
+    background-color: white;
+    border-color: $okm-modal-btn;
+    color: $okm-modal-btn;
 }
 
 .modal-content th {
-  color: $black;
-  width: 200px;
+    color: $black;
+    width: 200px;
 }
 
 #pdf-modal .modal-content {
-  padding: 15px;
+    padding: 15px;
 }
 
 .modal-content table {
-  border: 3px solid $okm-clouds;
-  font-family: $base-font-family;
-  font-size: 14px;
+    border: 3px solid $okm-clouds;
+    font-family: $base-font-family;
+    font-size: 14px;
 }
 
 .modal-dialog {
-  display: inline-block;
-  text-align: left;
-  vertical-align: middle;
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
 }
 
 .modal-header {
-  margin-bottom: 20px;
-  padding-bottom: 0px;
-  border-bottom: 0px !important;
+    margin-bottom: 20px;
+    padding-bottom: 0px;
+    border-bottom: 0px !important;
 }
 
 //draggable functionality
 .modal-header {
-  cursor: move; /* fallback: no `url()` support or images disabled */
-  cursor: -webkit-grab; /* Chrome 1-21, Safari 4+ */
-  cursor: -moz-grab; /* Firefox 1.5-26 */
-  cursor: grab; /* W3C standards syntax, should come least */
+    cursor: move; /* fallback: no `url()` support or images disabled */
+    cursor: -webkit-grab; /* Chrome 1-21, Safari 4+ */
+    cursor: -moz-grab; /* Firefox 1.5-26 */
+    cursor: grab; /* W3C standards syntax, should come least */
 }
 
 .modal-header:active {
-  cursor: -webkit-grabbing;
-  cursor: -moz-grabbing;
-  cursor: grabbing;
+    cursor: -webkit-grabbing;
+    cursor: -moz-grabbing;
+    cursor: grabbing;
 }
 
 #embed-modal-text,
 #viper-edit-screenshot {
-  margin: 20px 0;
+    margin: 20px 0;
 }
 
 #embed_modal {
-  .modal-dialog {
-    width: 100%;
-    max-width: 800px;
-
-    .modal-content {
-      padding: 40px;
-
-      textarea {
+    .modal-dialog {
         width: 100%;
-        display: block;
-        padding: 10px;
-      }
-    }
+        max-width: 800px;
 
-    .modal-body {
-      p {
-        font-family: $base-font-family;
-        font-size: 16px;
-      }
+        .modal-content {
+            padding: 40px;
+
+            textarea {
+                width: 100%;
+                display: block;
+                padding: 10px;
+            }
+        }
+
+        .modal-body {
+            p {
+                font-family: $base-font-family;
+                font-size: 16px;
+            }
+        }
     }
-  }
 }
 
 .embed-modal-title {
-  color: $medium-blue;
-  text-transform: uppercase;
-  margin: 0px;
-  font-size: 16px;
-  @if $skin != "viper" {
-    font-weight: $fontweight700;
-  }
-  line-height: 170%;
+    color: $medium-blue;
+    text-transform: uppercase;
+    margin: 0px;
+    font-size: 16px;
+    @if $skin != "viper" {
+        font-weight: $fontweight700;
+    }
+    line-height: 170%;
 }
 
 #images_modal {
-  .modal-lg,
-  .modal-dialog {
-    max-width: 788px;
-  }
-
-  .modal-body {
-    height: 80vh;
-    width: 100%;
-    display: table;
-    overflow: scroll;
-
-    #images_holder {
-      width: 100%;
-      height: 75vh;
-      overflow-y: scroll;
+    .modal-lg,
+    .modal-dialog {
+        max-width: 788px;
     }
-  }
+
+    .modal-body {
+        height: 80vh;
+        width: 100%;
+        display: table;
+        overflow: scroll;
+
+        #images_holder {
+            width: 100%;
+            height: 75vh;
+            overflow-y: scroll;
+        }
+    }
 }
 
 #edit-button-text p {
-  margin: 0 0 30px !important;
+    margin: 0 0 30px !important;
 }
 
 #viper_edit_modal {
-  .modal-dialog {
-    width: 100%;
-    max-width: 800px;
+    .modal-dialog {
+        width: 100%;
+        max-width: 800px;
 
-    .modal-content {
-      padding: 40px;
-      overflow: hidden;
+        .modal-content {
+            padding: 40px;
+            overflow: hidden;
 
-      p {
-        font-family: $base-font-family;
-        font-size: 16px;
-      }
+            p {
+                font-family: $base-font-family;
+                font-size: 16px;
+            }
 
-      #viper-edit-screenshot {
-        max-width: 100%;
-        max-height: 100%;
-        -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-          0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-          0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-      }
+            #viper-edit-screenshot {
+                max-width: 100%;
+                max-height: 100%;
+                -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+            }
+        }
     }
-  }
 }
 
 div {
-  &#preview_page_index {
-    font-size: 12px;
-    height: 20px;
-    margin-top: 15px;
-    padding: 5px;
-    text-align: center;
-    background-color: #eee;
-    text-shadow: 0 1px 1px white;
+    &#preview_page_index {
+        font-size: 12px;
+        height: 20px;
+        margin-top: 15px;
+        padding: 5px;
+        text-align: center;
+        background-color: #eee;
+        text-shadow: 0 1px 1px white;
 
-    &:first-child {
-      margin-top: 0px;
+        &:first-child {
+            margin-top: 0px;
+        }
     }
-  }
 }
 
 img#preview_page {
-  display: block;
-  margin-right: auto;
-  margin-left: auto;
-  text-align: center;
-  border: 1px solid;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+    border: 1px solid;
 }
 
 #iframe_modal {
-  .modal-body {
-    height: 80vh;
-    width: 100%;
-    display: table;
-    overflow: hidden;
-  }
-
-  #status {
-    a {
-      text-decoration: underline;
-      color: $iframe_modal_status;
+    .modal-body {
+        height: 80vh;
+        width: 100%;
+        display: table;
+        overflow: hidden;
     }
-  }
+
+    #status {
+        a {
+            text-decoration: underline;
+            color: $iframe_modal_status;
+        }
+    }
 }
 
 .wait-message {
-  max-width: 650px;
-  margin: 0px auto;
-  font-size: 16px;
-  font-family: $base-font-family;
-  padding-bottom: 20px;
+    max-width: 650px;
+    margin: 0px auto;
+    font-size: 16px;
+    font-family: $base-font-family;
+    padding-bottom: 20px;
 }
 
 .wait-spinner {
-  text-align: center;
+    text-align: center;
 }
 
 #pdf_iframe {
-  width: 100%;
-  height: 75vh;
+    width: 100%;
+    height: 75vh;
 }
 
 h3 {
-  margin: 0px;
+    margin: 0px;
 }
 
 h5 {
-  padding-top: 10px;
+    padding-top: 10px;
 }
 
 .link-popup {
-  color: $medium-blue;
-  text-decoration: underline;
+    color: $medium-blue;
+    text-decoration: underline;
 }
 
 .link-popup:hover {
-  text-decoration: none;
-  color: $medium-blue;
+    text-decoration: none;
+    color: $medium-blue;
 }
 
 // draggable styles taken from jquery-ui
 .ui-draggable-handle {
-  -ms-touch-action: none;
-  touch-action: none;
+    -ms-touch-action: none;
+    touch-action: none;
 }
 
 .table > thead > tr > th,
@@ -317,24 +335,24 @@ h5 {
 .table > tbody > tr > td,
 .table > tfoot > tr > th,
 .table > tfoot > tr > td {
-  border-top: 3px solid $okm-clouds;
+    border-top: 3px solid $okm-clouds;
 }
 
 .modal-header button {
-  opacity: 1.0;
+    opacity: 1.0;
 
-  span {
-    border: 1px solid #adadad;
-    border-radius: 4px;
-    padding: 6px 12px 6px 12px;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 400;
-    display: block;
-  }
+    span {
+        border: 1px solid #adadad;
+        border-radius: 4px;
+        padding: 6px 12px 6px 12px;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 400;
+        display: block;
+    }
 }
 
 .modal-header button:hover {
-  opacity: 1.0;
-  background-color: #eff3f4;
+    opacity: 1.0;
+    background-color: #eff3f4;
 }

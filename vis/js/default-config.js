@@ -87,9 +87,7 @@ var config = {
     //bubbles have area uris in the data (if set to false, bubble titles are used)
     //service providing the data
     service: "none",
-    //which intro to use for the modal (see intro.js)
-    intro: "intro_cris",
-    //show intro (true/false)
+    //display intro dialog after the page opens (true/false)
     show_intro: false,
     //show loading screen before map is loaded (true/false)
     show_loading_screen: false,

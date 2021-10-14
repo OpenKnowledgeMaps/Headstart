@@ -1,7 +1,5 @@
-import { intros } from "intro";
-
 const modals = (
-  state = { reloadApiProperties: {}, infoContent: {} },
+  state = { reloadApiProperties: {}, infoParams: {} },
   action
 ) => {
   if (action.canceled) {
@@ -32,11 +30,16 @@ const modals = (
         },
         openInfoModal:
           state.openInfoModal !== undefined && !!action.configObject.show_intro,
-        infoContent: getInfoContent(action.configObject, action.contextObject),
+        infoParams: action.contextObject
+          ? {
+              ...action.contextObject,
+              params: undefined,
+              ...action.contextObject.params,
+            }
+          : {},
         showImagePreview: action.configObject.preview_type === "image",
         showPDFPreview: action.configObject.preview_type === "pdf",
         previewedPaper: null,
-        service: action.configObject.service,
         useViewer: action.configObject.use_hypothesis,
       };
     case "OPEN_EMBED_MODAL":
@@ -96,12 +99,4 @@ const getSheetID = (config, context) => {
   }
 
   return config.files[0].file;
-};
-
-const getInfoContent = (config, context) => {
-  if (intros[config.intro]) {
-    return intros[config.intro];
-  }
-
-  return config.intro;
 };
