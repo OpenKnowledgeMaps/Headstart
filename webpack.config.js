@@ -3,7 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const TARGET = process.env.npm_lifecycle_event;
+//const TARGET = process.env.npm_lifecycle_event;
 
 const common = {
     devtool: 'eval-source-map',
@@ -19,11 +19,10 @@ const common = {
     },
 
     devServer: {
-        contentBase: path.join( __dirname ),
-        compress: true,
-        disableHostCheck: true,
-        host: '0.0.0.0',
-        publicPath: '/dist/'
+        static: { directory: path.join( __dirname ) },
+        allowedHosts: "all",
+        host: "0.0.0.0",
+        devMiddleware: { publicPath: '/dist/' }
     },
 
     resolve: {
@@ -50,6 +49,9 @@ const common = {
         'chart': 'Chart'
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
+        }),
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // all options are optional
@@ -65,12 +67,28 @@ const common = {
             {
                 test: require.resolve("hypher/dist/jquery.hypher.js"),
                 use: [
-                    { loader: "imports-loader?$=jquery,jQuery=jquery" }
+                    { 
+                        loader: "imports-loader", 
+                        options: {
+                            imports: [
+                                "default jquery $",
+                                "default jquery jQuery"
+                            ]
+                        }
+                    }
                 ]
             }, {
                 test: /lib\/*.js/,
                 use: [
-                    { loader: "imports-loader?$=jquery" }
+                    { 
+                        loader: "imports-loader", 
+                        options: {
+                            imports: [
+                                "default jquery $",
+                                "default jquery jQuery"
+                            ]
+                        }
+                    }
                 ]
             }, {
                 test: /.jsx?$/,
@@ -108,15 +126,13 @@ const common = {
                   loader: 'style-loader',
                 }, {
                   loader: MiniCssExtractPlugin.loader,
-                  options: {
-                    hmr: process.env.NODE_ENV === 'development',
-                    },
+                  options: { esModule: false },
                 }, {
                   loader: 'css-loader',
                 }, {
                   loader: 'sass-loader',
                   options: {
-                    prependData: `
+                    additionalData: `
                         $skin: "${config.skin}";
                     `,
                     sassOptions: {
