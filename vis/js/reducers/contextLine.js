@@ -67,17 +67,20 @@ const contextLine = (state = {}, action) => {
 
 /**
  * Returns the search modifier (how the searched papers are selected).
- * 
+ *
  * @param {Object} config the config object
  * @param {Object} context the context object
- * 
+ *
  * @returns {string} either most-recent, most-relevant or null
  */
 export const getModifier = (config, context) => {
   if (
     !context.params ||
     !exists(context.params.sorting) ||
-    context.num_documents < config.max_documents
+    (context.num_documents < config.max_documents &&
+      // temporarily allowing most relevant label for fewer documents
+      // (after a backend change this should be removed and refactored)
+      context.params.sorting !== "most-relevant")
   ) {
     return null;
   }
