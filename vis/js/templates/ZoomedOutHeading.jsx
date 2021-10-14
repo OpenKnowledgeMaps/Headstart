@@ -19,13 +19,13 @@ const ZoomedOutHeading = ({
     <h4>
       {title}{" "}
       {!!onInfoClick && (
-        <a onClick={handleInfoClick} id="infolink" href="#">
+        <button onClick={handleInfoClick} id="infolink">
           <span
             id="whatsthis"
             dangerouslySetInnerHTML={{ __html: introIcon }}
           ></span>{" "}
           {introLabel}
-        </a>
+        </button>
       )}
       {additionalFeatures}
     </h4>

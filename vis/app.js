@@ -1,6 +1,5 @@
  /* Load stylesheets and bootstrap */
 import 'styles/main.scss';
-require('font-awesome/scss/font-awesome.scss');
 
 /* Import headstart module to initiliase HeadstartFSM */
 /* Notice 'import * as hs' -> hs.headstart is not read-only */
