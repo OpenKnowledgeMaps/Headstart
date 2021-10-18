@@ -41,8 +41,10 @@ var data_config = {
 
     use_hypothesis: true,
     
-    faqs_button: true,
+    faqs_button: false,
     faqs_url: "https://openknowledgemaps.org/faq",
+
+    show_cite_button: true,
     
     highlight_query_terms: true
 
