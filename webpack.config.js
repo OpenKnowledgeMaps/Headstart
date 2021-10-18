@@ -42,6 +42,9 @@ const common = {
             'headstart': path.resolve(__dirname, 'vis/js/headstart.js'),
             'mediator': path.resolve(__dirname, 'vis/js/mediator.js'),
             'io' : path.resolve(__dirname, 'vis/js/io.js'),
+
+            // building
+            process: "process/browser",
         },
     },
 
@@ -49,9 +52,6 @@ const common = {
         'chart': 'Chart'
     },
     plugins: [
-        new webpack.ProvidePlugin({
-            process: 'process/browser',
-        }),
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // all options are optional
