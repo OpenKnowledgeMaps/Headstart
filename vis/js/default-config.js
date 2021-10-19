@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 var config = {
     
 /*** basic visualization modes ***/

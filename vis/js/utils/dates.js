@@ -8,6 +8,10 @@ export const getDateTimeFromTimestamp = (timestamp) => {
   const date = getDateFromTimestamp(timestamp);
   const time = getTimeFromTimestamp(timestamp);
 
+  if (!date) {
+    return "";
+  }
+
   return `on ${date} at ${time}`;
 };
 
