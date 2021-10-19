@@ -109,6 +109,7 @@ class ContextLine extends React.Component {
         <span id="document_types" className="context_item">
           <HoverPopover
             id="doctypes-popover"
+            size="wide"
             container={popoverContainer}
             content={
               <>

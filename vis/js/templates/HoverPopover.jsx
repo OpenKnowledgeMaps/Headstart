@@ -4,12 +4,17 @@ import { OverlayTrigger, Popover } from "react-bootstrap";
 
 const HoverPopover = ({
   id,
+  size,
   content,
   children,
   container, // = null
   placement = "bottom",
 }) => {
-  const popover = <Popover id={id}>{content}</Popover>;
+  const popover = (
+    <Popover id={id} bsClass={(size ? size + " " : "") + "popover"}>
+      {content}
+    </Popover>
+  );
 
   return (
     <OverlayTrigger

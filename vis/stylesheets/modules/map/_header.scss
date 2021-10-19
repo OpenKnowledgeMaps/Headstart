@@ -324,3 +324,9 @@
         padding-right: 10px;
     }
 }
+
+.popover {
+    &.wide {
+        max-width: 400px !important;
+    }
+}
