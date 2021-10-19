@@ -9,12 +9,27 @@ import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 import { getDateFromTimestamp } from "../../utils/dates";
 import { formatString } from "../../utils/string";
 
-const CitationModal = ({ open, onClose, isStreamgraph, query, timestamp }) => {
+const CitationModal = ({
+  open,
+  onClose,
+  isStreamgraph,
+  query,
+  customTitle,
+  timestamp,
+}) => {
   const loc = useLocalizationContext();
+
+  let customQuery = query;
+  if (customQuery.length > 100) {
+    customQuery = customQuery.substr(0, 100) + "...";
+  }
+  if (customTitle) {
+    customQuery = customTitle;
+  }
 
   const citationText = formatString(loc.citation_template, {
     year: new Date().getFullYear(),
-    query,
+    query: customQuery,
     source: window.location.href,
     date: getDateFromTimestamp(timestamp),
   });
@@ -53,6 +68,8 @@ const mapStateToProps = (state) => ({
   open: state.modals.openCitationModal,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   query: state.query.text,
+  customTitle:
+    state.heading.titleStyle === "custom" ? state.heading.customTitle : null,
   timestamp: state.misc.timestamp,
 });
 
