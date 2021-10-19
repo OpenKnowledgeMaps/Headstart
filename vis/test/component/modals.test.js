@@ -171,6 +171,33 @@ describe("Modals component", () => {
       );
     });
 
+    it("citation modal without timestamp renders", () => {
+      const storeObject = setup(
+        { openCitationModal: true },
+        {
+          service: "base",
+          query: { text: "digital education" },
+          misc: { timestamp: null },
+        }
+      );
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <Modals />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
+      });
+
+      expect(document.querySelector(".citation").textContent).toEqual(
+        "Open Knowledge Maps (2021). Overview of research on „digital education“. Retrieved from http://localhost/."
+      );
+    });
+
     it("copies the citation to clipboard when Copy is clicked", () => {
       const storeObject = setup(
         { openCitationModal: true },
@@ -207,7 +234,9 @@ describe("Modals component", () => {
         select.dispatchEvent(event);
       });
 
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith("Open Knowledge Maps (2021). Overview of research on „some query“. Retrieved from http://localhost/ [9 Jul 2020].");
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+        "Open Knowledge Maps (2021). Overview of research on „some query“. Retrieved from http://localhost/ [9 Jul 2020]."
+      );
     });
 
     it("triggers a correct redux action when citation modal is closed", () => {

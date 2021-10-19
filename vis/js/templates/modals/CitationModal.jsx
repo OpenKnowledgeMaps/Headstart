@@ -27,12 +27,18 @@ const CitationModal = ({
     customQuery = customTitle;
   }
 
-  const citationText = formatString(loc.citation_template, {
+  const date = getDateFromTimestamp(timestamp);
+
+  let citationText = formatString(loc.citation_template, {
     year: new Date().getFullYear(),
     query: customQuery,
     source: window.location.href,
-    date: getDateFromTimestamp(timestamp),
+    date,
   });
+
+  if (!date) {
+    citationText = citationText.replace(" [].", ".");
+  }
 
   const handleCopyClick = (event) => {
     event.preventDefault();
