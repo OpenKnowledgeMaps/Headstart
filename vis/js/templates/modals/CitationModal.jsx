@@ -21,7 +21,7 @@ const CitationModal = ({
 
   let customQuery = query;
   if (customQuery.length > 100) {
-    customQuery = customQuery.substr(0, 100) + "...";
+    customQuery = customQuery.substr(0, 100) + "[..]";
   }
   if (customTitle) {
     customQuery = customTitle;

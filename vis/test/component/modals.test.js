@@ -140,7 +140,7 @@ describe("Modals component", () => {
       });
 
       expect(document.querySelector(".citation").textContent).toEqual(
-        "Open Knowledge Maps (2021). Overview of research on „digital education digital education digital education digital education digital education digital ed...“. Retrieved from http://localhost/ [9 Jul 2020]."
+        "Open Knowledge Maps (2021). Overview of research on „digital education digital education digital education digital education digital education digital ed[..]“. Retrieved from http://localhost/ [9 Jul 2020]."
       );
     });
 
