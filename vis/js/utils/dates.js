@@ -20,9 +20,7 @@ export const getDateFromTimestamp = (timestamp) => {
     return "";
   }
 
-  timestamp = timestamp.trim().replace(/\s+/, "T");
-
-  const date = new Date(timestamp);
+  const date = parseTimestamp(timestamp);
 
   try {
     return dateFormat(date, "d mmm yyyy");
@@ -37,9 +35,7 @@ export const getTimeFromTimestamp = (timestamp) => {
     return "";
   }
 
-  timestamp = timestamp.trim().replace(/\s+/, "T");
-
-  const date = new Date(timestamp);
+  const date = parseTimestamp(timestamp);
 
   try {
     return dateFormat(date, "H:MM");
@@ -48,3 +44,11 @@ export const getTimeFromTimestamp = (timestamp) => {
     return "";
   }
 };
+
+const parseTimestamp = (timestamp) => {
+  if (isNaN(new Date(timestamp))) {
+    timestamp = timestamp.trim().replace(/\s+/, "T");
+  }
+
+  return new Date(timestamp);
+}
