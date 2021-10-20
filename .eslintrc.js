@@ -9,7 +9,11 @@ module.exports = {
       jsx: true,
     },
   },
-  extends: ["eslint:recommended", "plugin:react/recommended"],
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:flowtype/recommended",
+  ],
   plugins: ["react", "react-hooks"],
   rules: {
     // we don't use prop-types
