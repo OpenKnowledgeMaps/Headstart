@@ -1,6 +1,6 @@
 import React from "react";
 
-import okmapsRoundLogo from "../../../images/okmaps-logo-round-small.png";
+import okmapsRoundLogo from "../../../images/okmaps-logo-round.svg";
 
 import { getDateTimeFromTimestamp } from "../../utils/dates";
 
