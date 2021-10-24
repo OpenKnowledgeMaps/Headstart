@@ -11,7 +11,7 @@ if __name__ == '__main__':
         "db": os.getenv("REDIS_DB"),
         "password": os.getenv("REDIS_PASSWORD"),
         "client_name": "openaire_retrieval",
-        "username": os.getenv("HOSTNAME")
+        "ssl": True if os.getenv("REDIS_SSL") == "true" else False
     }
     redis_store = redis.StrictRedis(**redis_config)
     wrapper = OpenAIREClient("./other-scripts", "run_openaire.R", redis_store,

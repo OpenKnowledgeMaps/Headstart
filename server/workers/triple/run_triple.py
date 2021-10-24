@@ -16,8 +16,7 @@ if __name__ == '__main__':
         "port": os.getenv("REDIS_PORT"),
         "db": os.getenv("REDIS_DB"),
         "password": os.getenv("REDIS_PASSWORD"),
-        "client_name": "triple_retrieval",
-        "username": os.getenv("HOSTNAME")
+        "client_name": "triple_retrieval"
     }
 
     redis_store = redis.StrictRedis(**redis_config)

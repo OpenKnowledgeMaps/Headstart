@@ -36,6 +36,9 @@ services:
     volumes:
         - 'redis:/var/lib/redis/data'
         - ./server/workers/redis.conf:/etc/redis/redis.conf
+        - ./server/workers/certs:/etc/certs
+    ports:
+     - "127.0.0.1:6379:6379"
     restart: always
     networks: 
       - headstart
@@ -49,6 +52,7 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_DB: "${REDIS_DB}"
+      REDIS_SSL: "${REDIS_SSL}"
     command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
     depends_on:
       - redis
@@ -78,6 +82,7 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      REDIS_SSL: "${REDIS_SSL}"
     restart: always
     depends_on:
       - redis
@@ -94,6 +99,7 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      REDIS_SSL: "${REDIS_SSL}"
     restart: always
     depends_on:
       - redis
@@ -110,6 +116,7 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      REDIS_SSL: "${REDIS_SSL}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -129,6 +136,7 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      REDIS_SSL: "${REDIS_SSL}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -148,6 +156,7 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      REDIS_SSL: "${REDIS_SSL}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -167,6 +176,7 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      REDIS_SSL: "${REDIS_SSL}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
