@@ -69,7 +69,7 @@ const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
         cite_title_km: "Cite this knowledge map",
         cite_title_sg: "Cite this streamgraph",
         citation_template:
-          "Open Knowledge Maps (${year}). Overview of research on „${query}“. Retrieved from ${source} [${date}].",
+          "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
         cite_vis_km: "Please cite this knowledge map as follows",
         cite_vis_sg: "Please cite this streamgraph as follows",
       },
@@ -117,7 +117,7 @@ describe("Modals component", () => {
       );
 
       expect(document.querySelector(".citation").textContent).toEqual(
-        "Open Knowledge Maps (2021). Overview of research on „digital education“. Retrieved from http://localhost/ [9 Jul 2020]."
+        "Open Knowledge Maps (2021). Overview of research on digital education. Retrieved from http://localhost/ [9 Jul 2020]."
       );
     });
 
@@ -140,7 +140,7 @@ describe("Modals component", () => {
       });
 
       expect(document.querySelector(".citation").textContent).toEqual(
-        "Open Knowledge Maps (2021). Overview of research on „digital education digital education digital education digital education digital education digital ed[..]“. Retrieved from http://localhost/ [9 Jul 2020]."
+        "Open Knowledge Maps (2021). Overview of research on digital education digital education digital education digital education digital education digital ed[..]. Retrieved from http://localhost/ [9 Jul 2020]."
       );
     });
 
@@ -167,7 +167,7 @@ describe("Modals component", () => {
       });
 
       expect(document.querySelector(".citation").textContent).toEqual(
-        "Open Knowledge Maps (2021). Overview of research on „sample title“. Retrieved from http://localhost/ [9 Jul 2020]."
+        "Open Knowledge Maps (2021). Overview of research on sample title. Retrieved from http://localhost/ [9 Jul 2020]."
       );
     });
 
@@ -194,7 +194,7 @@ describe("Modals component", () => {
       });
 
       expect(document.querySelector(".citation").textContent).toEqual(
-        "Open Knowledge Maps (2021). Overview of research on „digital education“. Retrieved from http://localhost/."
+        "Open Knowledge Maps (2021). Overview of research on digital education. Retrieved from http://localhost/."
       );
     });
 
@@ -235,7 +235,7 @@ describe("Modals component", () => {
       });
 
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-        "Open Knowledge Maps (2021). Overview of research on „some query“. Retrieved from http://localhost/ [9 Jul 2020]."
+        "Open Knowledge Maps (2021). Overview of research on some query. Retrieved from http://localhost/ [9 Jul 2020]."
       );
     });
 
