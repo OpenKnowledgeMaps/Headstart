@@ -53,7 +53,7 @@ class Intermediate {
         this.recordAction.bind(this),
         this.recordActionParams
       ),
-      createZoomParameterMiddleware()
+      createZoomParameterMiddleware(this)
     );
 
     this.store = createStore(rootReducer, middleware);
@@ -61,6 +61,7 @@ class Intermediate {
 
   renderFrontend(config) {
     this.config = config;
+    this.originalTitle = document.title;
 
     this.store.dispatch(preinitializeStore(config));
 
@@ -117,7 +118,13 @@ class Intermediate {
       this.applyForceLayout();
     }
 
-    this.zoomToUrlArea();
+    // enable this for ability to share link to a zoomed bubble
+    //this.zoomToUrlArea();
+    // remove the following three lines if the previous line is uncommented
+    const queryParams = new URLSearchParams(window.location.search);
+    if (queryParams.has("area")) {
+      removeQueryParam("area");
+    }
   }
 
   /**
@@ -403,28 +410,29 @@ function createRecordActionMiddleware(callback, params) {
   };
 }
 
-function createZoomParameterMiddleware() {
+function createZoomParameterMiddleware(itm) {
   return function () {
     return (next) => (action) => {
       if (
         action.type === "ZOOM_IN" &&
         !action.canceled &&
-        action.selectedAreaData &&
-        !action.isFromBackButton
+        action.selectedAreaData
       ) {
-        addQueryParam(
-          "area",
-          typeof action.selectedAreaData.uri !== "undefined"
-            ? action.selectedAreaData.uri
-            : action.selectedAreaData.title
-        );
+        document.title = `${action.selectedAreaData.title} | ${itm.originalTitle}`;
+        if (!action.isFromBackButton) {
+          addQueryParam(
+            "area",
+            typeof action.selectedAreaData.uri !== "undefined"
+              ? action.selectedAreaData.uri
+              : action.selectedAreaData.title
+          );
+        }
       }
-      if (
-        action.type === "ZOOM_OUT" &&
-        !action.canceled &&
-        !action.isFromBackButton
-      ) {
-        removeQueryParam("area");
+      if (action.type === "ZOOM_OUT" && !action.canceled) {
+        document.title = itm.originalTitle;
+        if (!action.isFromBackButton) {
+          removeQueryParam("area");
+        }
       }
       return next(action);
     };
