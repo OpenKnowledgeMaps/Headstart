@@ -2,9 +2,12 @@ import os
 import sys
 import copy
 import json
+import time
 import subprocess
 import pandas as pd
 import logging
+
+from redis import RedisError
 from .streamgraph import Streamgraph
 import re
 
@@ -35,6 +38,7 @@ class Dataprocessing(object):
         handler.setFormatter(formatter)
         handler.setLevel(loglevel)
         self.logger.addHandler(handler)
+        self.tunnel_open = False
 
     def add_default_params(self, params):
         default_params = copy.deepcopy(self.default_params)
@@ -65,8 +69,17 @@ class Dataprocessing(object):
         return pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
 
     def run(self):
-        while True:
-            k, params, input_data = self.next_item()
+        while not self.tunnel_open:
+            try:
+                self.redis_store.ping()
+                self.tunnel_open = True
+            except (RedisError, ConnectionRefusedError):
+                time.sleep(60)
+        while self.tunnel_open:
+            try:
+                k, params, input_data = self.next_item()
+            except (RedisError, ConnectionRefusedError):
+                self.tunnel_open = False
             self.logger.debug(k)
             self.logger.debug(params)
             try:
