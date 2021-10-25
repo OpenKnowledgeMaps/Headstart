@@ -1,4 +1,4 @@
-/* eslint-disable import/no-webpack-loader-syntax, no-undef */
+/* eslint-disable no-undef */
 
 // Headstart
 // filename: headstart.js
