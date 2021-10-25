@@ -3,7 +3,7 @@ import json
 import uuid
 import pandas as pd
 
-from flask import Blueprint, request, make_response, jsonify, abort
+from flask import request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
 from apis.utils import get_key, redis_store
@@ -13,7 +13,7 @@ base_ns = Namespace("base", description="BASE API operations")
 search_param_schema = SearchParamSchema()
 
 
-search_query = base_ns.model("SearchQuery",
+base_querymodel = base_ns.model("SearchQuery",
                                {"q": fields.String(example='feminicide',
                                                    description='query string',
                                                    required=True),
@@ -31,6 +31,7 @@ search_query = base_ns.model("SearchQuery",
                                                           required=True),
                                 "limit": fields.Integer(example=100,
                                                         description='max. number of results'),
+                                "list_size": fields.Integer(),
                                 "language": fields.String(example='en',
                                                           description='language code, optional',
                                                           required=False),
@@ -42,7 +43,7 @@ search_query = base_ns.model("SearchQuery",
 class Search(Resource):
     @base_ns.doc(responses={200: 'OK',
                               400: 'Invalid search parameters'})
-    @base_ns.expect(search_query)
+    @base_ns.expect(base_querymodel)
     @base_ns.produces(["application/json", "text/csv"])
     def post(self):
         """

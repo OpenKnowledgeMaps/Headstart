@@ -14,7 +14,7 @@ pubmed_ns = Namespace("pubmed", description="PubMed API operations")
 search_param_schema = SearchParamSchema()
 
 
-search_query = pubmed_ns.model("SearchQuery",
+pubmed_querymodel = pubmed_ns.model("SearchQuery",
                                {"q": fields.String(example='feminicide',
                                                    description='query string',
                                                    required=True),
@@ -43,7 +43,7 @@ search_query = pubmed_ns.model("SearchQuery",
 class Search(Resource):
     @pubmed_ns.doc(responses={200: 'OK',
                               400: 'Invalid search parameters'})
-    @pubmed_ns.expect(search_query)
+    @pubmed_ns.expect(pubmed_querymodel)
     @pubmed_ns.produces(["application/json", "text/csv"])
     def post(self):
         """

@@ -536,8 +536,8 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "ropenaire",
-      "RemoteUsername": "OpenKnowledgeMaps",
+      "RemoteRepo": "OpenKnowledgeMaps",
+      "RemoteUsername": "sckott",
       "RemoteRef": "master"
     },
     "rplos": {
