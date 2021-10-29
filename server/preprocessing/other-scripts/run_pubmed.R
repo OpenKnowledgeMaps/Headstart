@@ -13,6 +13,8 @@ Sys.setlocale(category="LC_ALL", locale = "en_US.UTF-8")
 
 library(jsonlite)
 library(logging)
+library(doParallel)
+
 source('utils.R')
 if (Sys.getenv("PUBMED_LOGLEVEL") == "DEBUG") {
   DEBUG <- FALSE
@@ -40,9 +42,9 @@ if (!is.null(params$lang_id)) {
 } else {
   lang_id <- 'all'
 }
-source('altmetrics.R')
+
 source('pubmed.R')
-library('doParallel')
+
 registerDoParallel(detectCores(all.tests = FALSE, logical = TRUE)-1)
 limit = params$limit
 

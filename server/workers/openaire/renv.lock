@@ -1,6 +1,6 @@
 {
   "renv": {
-    "Version": "0.11.0"
+    "Version": "0.14.0"
   },
   "R": {
     "Version": "3.6.3",
@@ -536,8 +536,8 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "OpenKnowledgeMaps",
-      "RemoteUsername": "sckott",
+      "RemoteRepo": "ropenaire",
+      "RemoteUsername": "OpenKnowledgeMaps",
       "RemoteRef": "master"
     },
     "rplos": {
