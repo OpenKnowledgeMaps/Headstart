@@ -39,8 +39,8 @@ class Create(Resource):
         """
         """
         data = request.get_json()
-        vis_ns.logger.debug(data)
         params = data["params"]
+        vis_ns.logger.debug(params)
         input_data = data["input_data"]
         k = str(uuid.uuid4())
         d = {"id": k, "params": params,

@@ -47,7 +47,6 @@ source('base.R')
 
 registerDoParallel(detectCores(all.tests = FALSE, logical = TRUE)-1)
 limit = 120
-list_size = 100
 .GlobalEnv$VIS_ID <- params$vis_id
 
 failed <- list(params=params)
@@ -56,9 +55,15 @@ tryCatch({
   input_data = get_papers(query$sanitized_query, params, limit=limit)
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Query failed", service, query$raw_query, paste(params, collapse=" "), err, sep="||")))
-  failed$query <<- query
+  failed$query <<- query$raw_query
   failed$query_reason <<- err$message
 })
 
-print(toJSON(input_data$metadata))
-print(toJSON(input_data$text))
+if (exists('input_data')) {
+  print(toJSON(input_data$metadata))
+  print(toJSON(input_data$text))
+} else {
+  output_json <- detect_error(failed, service)
+  print(output_json)
+  print(output_json)
+}

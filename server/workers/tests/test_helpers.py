@@ -6,8 +6,7 @@ import requests
 import pandas as pd
 from nltk.corpus import stopwords
 from tqdm import tqdm
-
-from .conftest import RANDOM
+from requests.adapters import HTTPAdapter
 
 
 def get_stopwords(lang):
@@ -42,14 +41,18 @@ def get_cases(folder):
         cases.append({"caseid": casename, "casedata": testcase_})
     return cases
 
+http = requests.Session()
+adapter = HTTPAdapter(max_retries=1)
+http.mount("https://", adapter)
+http.mount("http://", adapter)
 
 def retrieve_input_data(casedata):
     params = casedata["params"]
-    url = "http://localhost/api/stable/%s/search" % params["service"]
+    url = "http://127.0.0.1/api/dev/%s/search" % params["service"]
     params.pop("list_size", None)
     params["raw"] = True
-    res = requests.post(url, json=params)
-    return res.json()["input_data"]
+    res = http.post(url, json=params, timeout=20)
+    return res.json()
 
 
 def get_dataprocessing_result(casedata):
@@ -67,9 +70,14 @@ def data_generation(KNOWNCASES, RANDOMCASES):
         CASEDATA[c["caseid"]] = c["casedata"]
     print("collecting random test cases")
     for c in tqdm(RANDOMCASES):
-        CASENAMES.append(c["caseid"])
-        CASEDATA[c["caseid"]] = {"params": c["casedata"]["params"],
-                                 "input_data": retrieve_input_data(c["casedata"])}
+        try:
+            CASENAMES.append(c["caseid"])
+            res = retrieve_input_data(c["casedata"])
+            CASEDATA[c["caseid"]] = {"params": c["casedata"]["params"],
+                                    "input_data": res["input_data"]}
+        except Exception as e:
+            print(e, c["casedata"]["params"])
+            print(res)
     return CASENAMES, CASEDATA
 
 
