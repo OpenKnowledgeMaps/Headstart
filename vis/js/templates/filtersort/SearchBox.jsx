@@ -2,6 +2,7 @@ import React from "react";
 import { Glyphicon } from "react-bootstrap";
 
 import debounce from "../../utils/debounce";
+import { trackMatomoEvent } from "../../utils/useMatomo";
 
 // inspired by
 // https://medium.com/@justintulk/debouncing-reacts-controlled-textareas-w-redux-lodash-4383084ca090
@@ -31,6 +32,12 @@ class DebouncedSearchBox extends React.Component {
 
   render() {
     const { placeholder } = this.props;
+
+    const handleClearSearch = () => {
+      this.handleChangeImmediately("");
+      trackMatomoEvent("List controls", "Clear search", "Search box");
+    };
+
     return (
       // html template starts here
       <div id="filter_container">
@@ -48,7 +55,7 @@ class DebouncedSearchBox extends React.Component {
             <Glyphicon
               id="searchclear"
               glyph="remove-circle"
-              onClick={() => this.handleChangeImmediately("")}
+              onClick={handleClearSearch}
             />
           )}
         </div>

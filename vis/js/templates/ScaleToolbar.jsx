@@ -2,6 +2,7 @@ import React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
 
 import { useLocalizationContext } from "../components/LocalizationProvider";
+import useMatomo from "../utils/useMatomo";
 
 const ScaleToolbar = ({
   value,
@@ -13,10 +14,16 @@ const ScaleToolbar = ({
   onInfoClick,
 }) => {
   const localization = useLocalizationContext();
+  const { trackEvent } = useMatomo();
+  const handleScaleChange = (id) => {
+    onChange(id);
+    trackEvent("Added components", "Rescale map", labels[id]);
+  };
 
   const handleInfoClick = (event) => {
     event.preventDefault();
     onInfoClick();
+    trackEvent("Added components", "Open more info modal", "Toolbar");
   };
 
   return (
@@ -36,7 +43,7 @@ const ScaleToolbar = ({
               className="scale_item"
               key={key}
               eventKey={key}
-              onSelect={onChange}
+              onSelect={handleScaleChange}
               active={key === value}
             >
               {labels[key]}
@@ -58,7 +65,11 @@ const ScaleToolbar = ({
       {showCredit && (
         <div id="credit">
           created by{" "}
-          <a href="https://openknowledgemaps.org/" target="_blank" rel="noreferrer">
+          <a
+            href="https://openknowledgemaps.org/"
+            target="_blank"
+            rel="noreferrer"
+          >
             <img
               className="logoimg"
               style={{ border: "0px" }}

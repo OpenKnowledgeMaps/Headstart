@@ -3,11 +3,13 @@ import { connect } from "react-redux";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
+import useMatomo from "../../utils/useMatomo";
 
 import HoverPopover from "../HoverPopover";
 
 const Modifier = ({ popoverContainer, modifier, isStreamgraph }) => {
   const localization = useLocalizationContext();
+  const { trackEvent } = useMatomo();
 
   if (modifier === "most-recent") {
     return (
@@ -19,9 +21,12 @@ const Modifier = ({ popoverContainer, modifier, isStreamgraph }) => {
     );
   }
 
+  const trackMouseOver = () =>
+    trackEvent("Heading", "Hover most relevant", "Context line");
+
   if (modifier === "most-relevant") {
     return (
-      <>
+      <span onMouseOver={trackMouseOver}>
         <HoverPopover
           id="modifier-popover"
           container={popoverContainer}
@@ -35,7 +40,7 @@ const Modifier = ({ popoverContainer, modifier, isStreamgraph }) => {
             {localization.most_relevant_label}
           </span>
         </HoverPopover>{" "}
-      </>
+      </span>
     );
   }
 

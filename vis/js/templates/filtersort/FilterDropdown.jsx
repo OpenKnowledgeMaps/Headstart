@@ -1,5 +1,6 @@
 import React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
+import useMatomo from "../../utils/useMatomo";
 
 const FilterDropdown = ({
   label,
@@ -8,6 +9,18 @@ const FilterDropdown = ({
   options,
   handleChange,
 }) => {
+  const { trackEvent } = useMatomo();
+  const handleFilterChange = (id) => {
+    handleChange(id);
+    const selectedOption = options.find((o) => o.id === id);
+    const isOA = options.some((o) => o.label === "Open Access");
+    trackEvent(
+      "List controls",
+      isOA ? "Filter open access" : "Filter document types",
+      selectedOption ? selectedOption.label : undefined
+    );
+  };
+
   return (
     <div className="dropdown" id="filter_parameter_container">
       <DropdownButton
@@ -23,7 +36,7 @@ const FilterDropdown = ({
             id={"filter_option_" + o.id}
             key={o.id}
             eventKey={o.id}
-            onSelect={handleChange}
+            onSelect={handleFilterChange}
             active={o.id === value}
           >
             {o.label}

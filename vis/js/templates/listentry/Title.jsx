@@ -1,11 +1,19 @@
 import React from "react";
 
 import Highlight from "../../components/Highlight";
+import useMatomo from "../../utils/useMatomo";
 
 const Title = ({ children, onClick }) => {
+  const { trackEvent } = useMatomo();
+
+  const handleClick = () => {
+    onClick();
+    trackEvent("List paper", "Select paper", "List title");
+  };
+
   return (
     // html template starts here
-    <div className="list_title" onClick={onClick}>
+    <div className="list_title" onClick={handleClick}>
       <a id="paper_list_title">
         <Highlight queryHighlight>{children}</Highlight>
       </a>

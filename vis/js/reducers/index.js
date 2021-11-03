@@ -28,6 +28,7 @@ import service from "./service";
 import streamgraph from "./streamgraph";
 import timespan from "./timespan";
 import toolbar from "./toolbar";
+import tracking from "./tracking";
 import zoom from "./zoom";
 
 export default combineReducers({
@@ -61,5 +62,6 @@ export default combineReducers({
   streamgraph,
   timespan,
   toolbar,
+  tracking,
   zoom,
 });
