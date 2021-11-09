@@ -26,7 +26,7 @@ import { getChartSize, getListSize } from "./utils/dimensions";
 import Headstart from "./components/Headstart";
 import { sanitizeInputData } from "./utils/data";
 import { createAnimationCallback } from "./utils/eventhandlers";
-import { addQueryParam, removeQueryParam } from "./utils/url";
+import { removeQueryParams, handleReduxAction } from "./utils/url";
 import debounce from "./utils/debounce";
 
 /**
@@ -53,7 +53,7 @@ class Intermediate {
         this.recordAction.bind(this),
         this.recordActionParams
       ),
-      createZoomParameterMiddleware(this)
+      createQueryParameterMiddleware()
     );
 
     this.store = createStore(rootReducer, middleware);
@@ -119,12 +119,18 @@ class Intermediate {
     }
 
     // enable this for ability to share link to a zoomed bubble
-    //this.zoomToUrlArea();
-    // remove the following three lines if the previous line is uncommented
+    //this.zoomUrlArea();
+    // remove the following lines if the previous line is uncommented
     const queryParams = new URLSearchParams(window.location.search);
+    const paramsToRemove = [];
     if (queryParams.has("area")) {
-      removeQueryParam("area");
+      paramsToRemove.push("area");
     }
+    if (queryParams.has("paper")) {
+      paramsToRemove.push("paper");
+    }
+
+    removeQueryParams(...paramsToRemove);
   }
 
   /**
@@ -137,19 +143,71 @@ class Intermediate {
    */
   onBackButtonClick() {
     const queryParams = new URLSearchParams(window.location.search);
-    if (queryParams.has("area")) {
-      return this.zoomToUrlArea();
+
+    if (!queryParams.has("area")) {
+      if (this.config.is_streamgraph && queryParams.has("paper")) {
+        removeQueryParams("paper");
+      }
+      this.store.dispatch(
+        zoomOut(createAnimationCallback(this.store.dispatch), true)
+      );
+
+      return;
+    }
+
+    // this can be optimized: if the area is the same as before, simply 
+    // deselect the paper or select a different one
+
+    if (queryParams.has("area") && !queryParams.has("paper")) {
+      this.zoomUrlArea();
+
+      return;
+    }
+
+    if (queryParams.has("paper")) {
+      this.selectUrlPaper();
+    }
+  }
+
+  /**
+   * Selects the paper that's specified in the query params.
+   */
+  selectUrlPaper() {
+    if (this.config.is_streamgraph) {
+      // paper cannot be selected in streamgraph
+      removeQueryParams("area", "paper");
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+
+    if (!params.has("paper")) {
+      return;
+    }
+
+    const zoomedPaper = params.get("paper");
+
+    const paper = this.sanitizedMapData.find((p) => p.safe_id === zoomedPaper);
+
+    if (!paper) {
+      return;
     }
 
     this.store.dispatch(
-      zoomOut(createAnimationCallback(this.store.dispatch), true)
+      zoomIn(
+        { title: paper.area, uri: paper.area_uri },
+        createAnimationCallback(this.store.dispatch),
+        this.store.getState().zoom,
+        true,
+        paper
+      )
     );
   }
 
   /**
-   * After startup, if there's a query param 'area' in the url, zoom in to it immediately.
+   * Zooms into an area that's specified in the query params.
    */
-  zoomToUrlArea() {
+  zoomUrlArea() {
     const params = new URLSearchParams(window.location.search);
 
     if (!params.has("area")) {
@@ -162,7 +220,7 @@ class Intermediate {
       // the instant zoom in doesn't work for streamgraph, because the data is not processed here yet (this.streamData)
       // proper data processing refactoring is necessary
       // this is a workaround that simply zooms out
-      removeQueryParam("area");
+      removeQueryParams("area");
       this.store.dispatch(
         zoomOut(createAnimationCallback(this.store.dispatch), true)
       );
@@ -410,30 +468,13 @@ function createRecordActionMiddleware(callback, params) {
   };
 }
 
-function createZoomParameterMiddleware(itm) {
+function createQueryParameterMiddleware() {
   return function () {
     return (next) => (action) => {
-      if (
-        action.type === "ZOOM_IN" &&
-        !action.canceled &&
-        action.selectedAreaData
-      ) {
-        document.title = `${action.selectedAreaData.title} | ${itm.originalTitle}`;
-        if (!action.isFromBackButton) {
-          addQueryParam(
-            "area",
-            typeof action.selectedAreaData.uri !== "undefined"
-              ? action.selectedAreaData.uri
-              : action.selectedAreaData.title
-          );
-        }
+      if (!action.canceled && !action.isFromBackButton) {
+        handleReduxAction(action);
       }
-      if (action.type === "ZOOM_OUT" && !action.canceled) {
-        document.title = itm.originalTitle;
-        if (!action.isFromBackButton) {
-          removeQueryParam("area");
-        }
-      }
+
       return next(action);
     };
   };

@@ -31,13 +31,15 @@ export const zoomIn = (
   selectedAreaData,
   callback,
   alreadyZoomed = false,
-  isFromBackButton = false
+  isFromBackButton = false,
+  selectedPaperData = null
 ) => ({
   type: "ZOOM_IN",
   selectedAreaData,
   callback,
   alreadyZoomed,
   isFromBackButton,
+  selectedPaperData,
 });
 
 export const zoomOut = (callback, isFromBackButton = false) => ({
@@ -98,10 +100,11 @@ export const filter = (id) => ({ type: "FILTER", id });
 
 export const sort = (id) => ({ type: "SORT", id });
 
-export const selectPaper = (paper) => ({
+export const selectPaper = (paper, isFromBackButton = false) => ({
   type: "SELECT_PAPER",
   safeId: paper.safe_id,
   paper,
+  isFromBackButton,
 });
 
 export const deselectPaper = () => ({ type: "DESELECT_PAPER" });

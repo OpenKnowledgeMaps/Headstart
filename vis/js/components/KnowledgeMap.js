@@ -28,7 +28,6 @@ const KnowledgeMap = (props) => {
   };
 
   const handleOtherAreaZoomIn = (bubble) => {
-    handleDeselectPaper();
     handleZoomIn(bubble, true);
   };
 

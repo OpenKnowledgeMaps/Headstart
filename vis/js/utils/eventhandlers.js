@@ -27,6 +27,16 @@ export const mapDispatchToListEntriesProps = (dispatch) => ({
   handleAreaMouseover: (paper) => dispatch(highlightArea(paper)),
   handleAreaMouseout: () => dispatch(highlightArea(null)),
   handleSelectPaper: (paper) => dispatch(selectPaper(paper)),
+  handleSelectPaperWithZoom: (paper) =>
+    dispatch(
+      zoomIn(
+        { title: paper.area, uri: paper.area_uri },
+        createAnimationCallback(dispatch),
+        false,
+        false,
+        paper
+      )
+    ),
   handleDeselectPaper: () => dispatch(deselectPaper()),
   handleBacklinkClick: () => dispatch(deselectPaperBacklink()),
 });
@@ -48,7 +58,8 @@ export const mapDispatchToMapEntriesProps = (dispatch) => ({
   handleDeselectPaper: () => dispatch(deselectPaper()),
   handleSelectPaper: (paper) => dispatch(selectPaper(paper)),
   changeBubbleOrder: (uri) => dispatch(hoverBubble(uri)),
-  changePaperOrder: (safeId, enlargeFactor) => dispatch(hoverPaper(safeId, enlargeFactor)),
+  changePaperOrder: (safeId, enlargeFactor) =>
+    dispatch(hoverPaper(safeId, enlargeFactor)),
 });
 
 /**

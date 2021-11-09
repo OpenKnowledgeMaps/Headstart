@@ -27,7 +27,7 @@ const ClassificationListEntries = ({
   disableClicks,
   handleZoomIn,
   handleSelectPaper,
-  handleDeselectPaper,
+  handleSelectPaperWithZoom,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
@@ -37,9 +37,10 @@ const ClassificationListEntries = ({
     if (disableClicks) {
       return;
     }
-    handleSelectPaper(paper);
     if (!isStreamgraph) {
-      handleZoomIn(paper);
+      handleSelectPaperWithZoom(paper);
+    } else {
+      handleSelectPaper(paper);
     }
   };
 
@@ -47,7 +48,6 @@ const ClassificationListEntries = ({
     if (disableClicks) {
       return;
     }
-    handleDeselectPaper();
     handleZoomIn(paper);
   };
 
