@@ -22,19 +22,21 @@ const ZoomedOutHeading = ({
 
   return (
     // html template starts here
-    <h4>
-      {title}{" "}
-      {!!onInfoClick && (
-        <button onClick={handleInfoClick} id="infolink">
-          <span
-            id="whatsthis"
-            dangerouslySetInnerHTML={{ __html: introIcon }}
-          ></span>{" "}
-          {introLabel}
-        </button>
-      )}
-      {additionalFeatures}
-    </h4>
+    <div className="heading-container">
+      <h4 className="heading">{title}</h4>
+      <h4 className="features">
+        {!!onInfoClick && (
+          <button onClick={handleInfoClick} id="infolink">
+            <span
+              id="whatsthis"
+              dangerouslySetInnerHTML={{ __html: introIcon }}
+            ></span>{" "}
+            {introLabel}
+          </button>
+        )}
+        {additionalFeatures}
+      </h4>
+    </div>
     // html template ends here
   );
 };

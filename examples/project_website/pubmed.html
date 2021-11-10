@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <base href="//localhost:8080/examples/project_website/">
+
+
+    <script type="text/javascript" src="./data-config_pubmed.js"></script>
+    <title>
+        Overview of research on &quot;climate change&quot; - Open Knowledge Maps</title>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="content-style-type" content="text/css">
+    <meta http-equiv="content-language" content="en">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="follow">
+    <meta name="revisit-after" content="1 month">
+    <meta name="distribution" content="global">
+    <meta name="author" content="Open Knowledge Maps">
+    <meta name="publisher" content="Open Knowledge Maps">
+    <meta name="keywords" content="knowldege visualization, open knowledge, open science">
+
+    <meta name="description"
+        content="Get an overview of &quot;climate change&quot;, find relevant papers, and identify important concepts.">
+
+    <!-- FAVICONS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=xQz6nej7eR">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=xQz6nej7eR">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=xQz6nej7eR">
+    <link rel="manifest" href="/site.webmanifest?v=xQz6nej7eR">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg?v=xQz6nej7eR" color="#263d54">
+    <link rel="shortcut icon" href="/favicon.ico?v=xQz6nej7eR">
+    <meta name="apple-mobile-web-app-title" content="OKMaps">
+    <meta name="application-name" content="OKMaps">
+    <meta name="msapplication-TileColor" content="#263d54">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- TODO -->
+    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="./css/font-awesome.min.css">
+    <!-- TODO <script src="lib/bootstrap.min.js"></script> -->
+
+    <!-- TODO <link rel="stylesheet" href="./css/main.css?v=2021-10-11-1"> -->
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover({ trigger: "hover", placement: "right" });
+        });
+    </script>
+</head>
+
+<body class="vis">
+
+    <link rel="stylesheet" href="//localhost/project-website/search-flow/css/search-flow.css">
+    <script type="text/javascript" src="//localhost/project-website/search-flow/lib/browser-detect.js"></script>
+    <script>
+        var browser = BrowserDetect.browser;
+        var is_supported_browser = false;
+        if ((browser === "Firefox" || browser === "Safari" || browser === "Chrome")) {
+            is_supported_browser = true;
+        }
+    </script>
+
+
+    <script src="//localhost/project-website/search-flow/js/visualization.js"></script>
+    <script>
+    </script>
+
+
+    <div class="overflow-vis">
+
+        <div id="visualization" style="background-color:white;"></div>
+
+    </div>
+    <script type="text/javascript" src="../../dist/headstart.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            headstart.start();
+        })
+    </script>
+
+    <link rel="stylesheet" href="../../dist/headstart.css">
+    <script>
+        data_config.options = [{ "id": "time_range", "multiple": false, "name": "Time Range", "type": "dropdown", "fields": [{ "id": "any-time", "text": "All time" }, { "id": "last-month", "text": "Last month" }, { "id": "last-year", "text": "Last year" }, { "id": "user-defined", "text": "Custom range", "class": "user-defined", "inputs": [{ "id": "from", "label": "From: ", "class": "time_input" }, { "id": "to", "label": "To: ", "class": "time_input" }] }] }, { "id": "sorting", "multiple": false, "name": "Sorting", "type": "dropdown", "fields": [{ "id": "most-relevant", "text": "Most relevant" }, { "id": "most-recent", "text": "Most recent" }] }, { "id": "article_types", "multiple": true, "width": "140px", "name": "Article types", "type": "dropdown", "fields": [{ "id": "adaptive clinical trial", "text": "Adaptive Clinical Trial", "selected": true }, { "id": "address", "text": "Address", "selected": true }, { "id": "autobiography", "text": "Autobiography", "selected": true }, { "id": "bibliography", "text": "Bibliography", "selected": true }, { "id": "biography", "text": "Biography", "selected": true }, { "id": "book illustrations", "text": "Book Illustrations", "selected": true }, { "id": "case reports", "text": "Case Reports", "selected": true }, { "id": "classical article", "text": "Classical Article", "selected": true }, { "id": "clinical conference", "text": "Clinical Conference", "selected": true }, { "id": "clinical study", "text": "Clinical Study", "selected": true }, { "id": "clinical trial", "text": "Clinical Trial", "selected": true }, { "id": "clinical trial protocol", "text": "Clinical Trial Protocol", "selected": true }, { "id": "clinical trial, phase i", "text": "Clinical Trial, Phase I", "selected": true }, { "id": "clinical trial, phase ii", "text": "Clinical Trial, Phase II", "selected": true }, { "id": "clinical trial, phase iii", "text": "Clinical Trial, Phase III", "selected": true }, { "id": "clinical trial, phase iv", "text": "Clinical Trial, Phase IV", "selected": true }, { "id": "clinical trial, veterinary", "text": "Clinical Trial, Veterinary", "selected": true }, { "id": "collected work", "text": "Collected Work", "selected": true }, { "id": "collected works", "text": "Collected Works", "selected": true }, { "id": "comment", "text": "Comment", "selected": true }, { "id": "comparative study", "text": "Comparative Study", "selected": true }, { "id": "congress", "text": "Congress", "selected": true }, { "id": "consensus development conference", "text": "Consensus Development Conference", "selected": true }, { "id": "consensus development conference, nih", "text": "Consensus Development Conference, NIH", "selected": true }, { "id": "controlled clinical trial", "text": "Controlled Clinical Trial", "selected": true }, { "id": "corrected and republished article", "text": "Corrected and Republished Article", "selected": true }, { "id": "dataset", "text": "Dataset", "selected": true }, { "id": "dictionary", "text": "Dictionary", "selected": true }, { "id": "directory", "text": "Directory", "selected": true }, { "id": "duplicate publication", "text": "Duplicate publication", "selected": true }, { "id": "editorial", "text": "Editorial", "selected": true }, { "id": "electronic supplementary materials", "text": "Electronic Supplementary Materials", "selected": true }, { "id": "english abstract", "text": "English Abstract", "selected": true }, { "id": "ephemera", "text": "Ephemera", "selected": true }, { "id": "equivalence trial", "text": "Equivalence Trial", "selected": true }, { "id": "evaluation studies", "text": "Evaluation Studies", "selected": true }, { "id": "evaluation study", "text": "Evaluation Study", "selected": true }, { "id": "expression of concern", "text": "Expression of Concern", "selected": true }, { "id": "festschrift", "text": "Festschrift", "selected": true }, { "id": "government publication", "text": "Government Publication", "selected": true }, { "id": "guideline", "text": "Guideline", "selected": true }, { "id": "historical article", "text": "Historical Article", "selected": true }, { "id": "interactive tutorial", "text": "Interactive Tutorial", "selected": true }, { "id": "interview", "text": "Interview", "selected": true }, { "id": "introductory journal article", "text": "Introductory Journal Article", "selected": true }, { "id": "journal article", "text": "Journal Article", "selected": true }, { "id": "lecture", "text": "Lecture", "selected": true }, { "id": "legal case", "text": "Legal Case", "selected": true }, { "id": "legislation", "text": "Legislation", "selected": true }, { "id": "letter", "text": "Letter", "selected": true }, { "id": "manuscript", "text": "Manuscript", "selected": true }, { "id": "meta analysis", "text": "Meta Analysis", "selected": true }, { "id": "multicenter study", "text": "Multicenter Study", "selected": true }, { "id": "news", "text": "News", "selected": true }, { "id": "newspaper article", "text": "Newspaper Article", "selected": true }, { "id": "observational study", "text": "Observational Study", "selected": true }, { "id": "observational study, veterinary", "text": "Observational Study, Veterinary", "selected": true }, { "id": "overall", "text": "Overall", "selected": true }, { "id": "patient education handout", "text": "Patient Education Handout", "selected": true }, { "id": "periodical index", "text": "Periodical Index", "selected": true }, { "id": "personal narrative", "text": "Personal Narrative", "selected": true }, { "id": "pictorial work", "text": "Pictorial Work", "selected": true }, { "id": "popular work", "text": "Popular Work", "selected": true }, { "id": "portrait", "text": "Portrait", "selected": true }, { "id": "practice guideline", "text": "Practice Guideline", "selected": true }, { "id": "pragmatic clinical trial", "text": "Pragmatic Clinical Trial", "selected": true }, { "id": "preprint", "text": "Preprint", "selected": true }, { "id": "publication components", "text": "Publication Components", "selected": true }, { "id": "publication formats", "text": "Publication Formats", "selected": true }, { "id": "publication type category", "text": "Publication Type Category", "selected": true }, { "id": "published erratum", "text": "Published Erratum", "selected": true }, { "id": "randomized controlled trial", "text": "Randomized Controlled Trial", "selected": true }, { "id": "randomized controlled trial, veterinary", "text": "Randomized Controlled Trial, Veterinary", "selected": true }, { "id": "research support, american recovery and reinvestment act", "text": "Research Support, American Recovery and Reinvestment Act", "selected": true }, { "id": "research support, n i h, extramural", "text": "Research Support, NIH Extramural", "selected": true }, { "id": "research support, n i h, intramural", "text": "Research Support, NIH Intramural", "selected": true }, { "id": "research support, non u s gov't", "text": "Research Support, U.S. Gov't", "selected": true }, { "id": "research support, u s gov't, non p h s", "text": "Research Support, U.S. Gov't, Non P.H.S", "selected": true }, { "id": "research support, u s gov't, p h s", "text": "Research Support, U.S. Gov't, P.H.S", "selected": true }, { "id": "research support, u s government", "text": "Research Support, U.S. Government", "selected": true }, { "id": "retracted publication", "text": "Retracted Publication", "selected": false }, { "id": "retraction of publication", "text": "Retraction of Publication", "selected": true }, { "id": "review", "text": "Review", "selected": true }, { "id": "scientific integrity review", "text": "Scientific Integrity Review", "selected": true }, { "id": "study characteristics", "text": "Study Characteristics", "selected": true }, { "id": "support of research", "text": "Support of Research", "selected": true }, { "id": "systematic review", "text": "Systematic Review", "selected": true }, { "id": "technical report", "text": "Technical Report", "selected": true }, { "id": "twin study", "text": "Twin Study", "selected": true }, { "id": "validation study", "text": "Validation Study", "selected": true }, { "id": "video audio media", "text": "Video Audio Media", "selected": true }, { "id": "webcasts", "text": "Webcasts", "selected": true }] }];
+
+
+        data_config.credit_embed = true;
+    </script>
+
+
+    <link rel="stylesheet" href="./css/main.css">
+    <script>
+        data_config.files = [{
+            //title: "&quot;climate change&quot;",
+            //file: "./data/climate-change.json",
+            title: "covid",
+            file: "./data/covid.json",
+        }]
+        data_config.server_url = "//localhost/project-website/headstart/server/";
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(window).resize(function () {
+            });
+
+            $(window).trigger("resize");
+        })
+
+    </script>
+</body>
+
+</html>

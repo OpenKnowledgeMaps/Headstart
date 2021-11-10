@@ -12,9 +12,9 @@ const VIS_COL_RATIO = 0.6;
 const MODALS_WIDTH = 43;
 
 const FOOTER_HEIGHT = {
-  base: 47,
-  pubmed: 47,
-  triple: 47,
+  base: 50,
+  pubmed: 50,
+  triple: 50,
   default: 0,
 };
 

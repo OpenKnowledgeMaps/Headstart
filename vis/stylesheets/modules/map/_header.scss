@@ -307,3 +307,27 @@
     color: $okm-red !important;
     border-bottom-color: $okm-red !important;
 }
+
+.heading-container {
+    display: flex;
+    align-items: center;
+
+    .heading {
+        text-overflow: ellipsis;
+        height: min-content; // 19.8px
+        overflow: hidden;
+        white-space: nowrap;
+        max-width: 660px;
+    }
+
+    .features {
+        padding-left: 5px;
+        padding-right: 10px;
+    }
+}
+
+.popover {
+    &.wide {
+        max-width: 400px !important;
+    }
+}

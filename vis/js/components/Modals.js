@@ -1,12 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import {
-  closeEmbedModal,
-  closeViperEditModal,
-  hidePreview,
-} from "../actions";
+import { closeEmbedModal, closeViperEditModal, hidePreview } from "../actions";
 
+import CitationModal from "../templates/modals/CitationModal";
 import EmbedModal from "../templates/modals/EmbedModal";
 import ImageModal from "../templates/modals/ImageModal";
 import InfoModal from "../templates/modals/InfoModal";
@@ -31,6 +28,7 @@ const Modals = ({
   service,
   useViewer,
   onPreviewClose,
+  showCitationModal,
   localization,
 }) => {
   return (
@@ -65,6 +63,7 @@ const Modals = ({
           useViewer={useViewer}
         />
       )}
+      {showCitationModal && <CitationModal />}
     </LocalizationProvider>
   );
 };
@@ -84,6 +83,7 @@ const mapStateToProps = (state) => ({
   service: state.service,
   useViewer: state.modals.useViewer,
   localization: state.localization,
+  showCitationModal: state.modals.showCitationButton,
 });
 
 const mapDispatchToProps = (dispatch) => ({

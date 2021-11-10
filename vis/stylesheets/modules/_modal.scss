@@ -163,7 +163,7 @@
     margin: 20px 0;
 }
 
-#embed_modal {
+#embed_modal, #cite_modal {
     .modal-dialog {
         width: 100%;
         max-width: 800px;
@@ -187,7 +187,7 @@
     }
 }
 
-.embed-modal-title {
+.embed-modal-title, .cite-modal-title {
     color: $medium-blue;
     text-transform: uppercase;
     margin: 0px;
@@ -196,6 +196,10 @@
         font-weight: $fontweight700;
     }
     line-height: 170%;
+}
+
+#cite-button {
+    margin-top: 20px;
 }
 
 #images_modal {

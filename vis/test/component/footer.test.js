@@ -16,6 +16,9 @@ const setup = (overrideStoreObject = {}) => {
       misc: {
         timestamp: "2020-07-09 18:20:14",
       },
+      modals: {
+        FAQsUrl: "https://example.com",
+      },
       localization: {},
     },
     overrideStoreObject
@@ -55,6 +58,24 @@ describe("Footer component", () => {
     expect(container.querySelector("#builtwith")).toBeNull();
   });
 
+  it("doesn't render on null data integration", () => {
+    const storeObject = setup({ service: null });
+    const store = mockStore(storeObject);
+
+    act(() => {
+      render(
+        <Provider store={store}>
+          <LocalizationProvider localization={storeObject.localization}>
+            <Footer />
+          </LocalizationProvider>
+        </Provider>,
+        container
+      );
+    });
+
+    expect(container.querySelector("#builtwith")).toBeNull();
+  });
+
   it("renders correctly in BASE", () => {
     const storeObject = setup({ service: "base" });
     const store = mockStore(storeObject);
@@ -70,12 +91,12 @@ describe("Footer component", () => {
       );
     });
 
-    expect(container.querySelectorAll("#builtwith a")[2].textContent).toEqual(
-      "BASE"
+    expect(container.querySelector("#builtwith").textContent.trim()).toEqual(
+      "This visualization was created by Open Knowledge Maps on 9 Jul 2020 at 18:20. For more information read our FAQs."
     );
   });
 
-  it("renders correctly in PubMed (no timestamp)", () => {
+  it("renders correctly without timestamp", () => {
     const storeObject = setup({ service: "pubmed", misc: { timestamp: null } });
     const store = mockStore(storeObject);
 
@@ -90,32 +111,8 @@ describe("Footer component", () => {
       );
     });
 
-    expect(container.querySelectorAll("#builtwith a")[2].textContent).toEqual(
-      "PubMed"
-    );
-
-    expect(container.querySelector("#builtwith").textContent).toContain(
-      "Created  with"
-    );
-  });
-
-  it("renders correctly in TRIPLE", () => {
-    const storeObject = setup({ service: "triple" });
-    const store = mockStore(storeObject);
-
-    act(() => {
-      render(
-        <Provider store={store}>
-          <LocalizationProvider localization={storeObject.localization}>
-            <Footer />
-          </LocalizationProvider>
-        </Provider>,
-        container
-      );
-    });
-
-    expect(container.querySelectorAll("#builtwith a")[1].textContent).toEqual(
-      "GoTriple"
+    expect(container.querySelector("#builtwith").textContent.trim()).toEqual(
+      "This visualization was created by Open Knowledge Maps. For more information read our FAQs."
     );
   });
 });

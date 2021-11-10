@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 
 import {
+  closeCitationModal,
   closeEmbedModal,
   closeInfoModal,
   closeViperEditModal,
@@ -27,7 +28,10 @@ const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
         acronym: null,
       },
       query: {
-        text: null,
+        text: "sample query",
+      },
+      misc: {
+        timestamp: "2020-07-09 18:20:14",
       },
       modals: {
         showShareButton: true,
@@ -52,6 +56,8 @@ const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
         showPDFPreview: false,
         previewedPaper: null,
         useViewer: false,
+        showCitationButton: true,
+        openCitationModal: false,
         ...overrideModalsObject,
       },
       service: "base",
@@ -59,6 +65,13 @@ const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
         embed_title: "Some embed title",
         viper_edit_title: "Some viper edit title",
         viper_button_desc_label: "some button label",
+        cite: "Cite",
+        cite_title_km: "Cite this knowledge map",
+        cite_title_sg: "Cite this streamgraph",
+        citation_template:
+          "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
+        cite_vis_km: "Please cite this knowledge map as follows",
+        cite_vis_sg: "Please cite this streamgraph as follows",
       },
     },
     overrideStoreObject
@@ -78,6 +91,183 @@ describe("Modals component", () => {
     unmountComponentAtNode(container);
     container.remove();
     container = null;
+  });
+
+  describe("citation modal", () => {
+    it("base citation modal renders", () => {
+      const storeObject = setup(
+        { openCitationModal: true },
+        { service: "base", query: { text: "digital education" } }
+      );
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <Modals />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
+      });
+
+      expect(document.querySelector("#cite-title").textContent).toEqual(
+        "Cite this knowledge map"
+      );
+
+      expect(document.querySelector(".citation").textContent).toEqual(
+        "Open Knowledge Maps (2021). Overview of research on digital education. Retrieved from http://localhost/ [9 Jul 2020]."
+      );
+    });
+
+    it("citation modal with long query renders", () => {
+      const storeObject = setup(
+        { openCitationModal: true },
+        { service: "base", query: { text: "digital education ".repeat(10) } }
+      );
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <Modals />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
+      });
+
+      expect(document.querySelector(".citation").textContent).toEqual(
+        "Open Knowledge Maps (2021). Overview of research on digital education digital education digital education digital education digital education digital ed[..]. Retrieved from http://localhost/ [9 Jul 2020]."
+      );
+    });
+
+    it("citation modal with custom title renders", () => {
+      const storeObject = setup(
+        { openCitationModal: true },
+        {
+          service: "base",
+          query: { text: "digital education" },
+          heading: { titleStyle: "custom", customTitle: "sample title" },
+        }
+      );
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <Modals />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
+      });
+
+      expect(document.querySelector(".citation").textContent).toEqual(
+        "Open Knowledge Maps (2021). Overview of research on sample title. Retrieved from http://localhost/ [9 Jul 2020]."
+      );
+    });
+
+    it("citation modal without timestamp renders", () => {
+      const storeObject = setup(
+        { openCitationModal: true },
+        {
+          service: "base",
+          query: { text: "digital education" },
+          misc: { timestamp: null },
+        }
+      );
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <Modals />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
+      });
+
+      expect(document.querySelector(".citation").textContent).toEqual(
+        "Open Knowledge Maps (2021). Overview of research on digital education. Retrieved from http://localhost/."
+      );
+    });
+
+    it("copies the citation to clipboard when Copy is clicked", () => {
+      const storeObject = setup(
+        { openCitationModal: true },
+        {
+          service: "triple_sg",
+          chartType: STREAMGRAPH_MODE,
+          query: { text: "some query" },
+        }
+      );
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <Modals />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
+      });
+
+      Object.assign(navigator, {
+        clipboard: {
+          writeText: () => {},
+        },
+      });
+
+      jest.spyOn(navigator.clipboard, "writeText");
+
+      const select = document.querySelector("#cite-button");
+      act(() => {
+        const event = new Event("click", { bubbles: true });
+        select.dispatchEvent(event);
+      });
+
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+        "Open Knowledge Maps (2021). Overview of research on some query. Retrieved from http://localhost/ [9 Jul 2020]."
+      );
+    });
+
+    it("triggers a correct redux action when citation modal is closed", () => {
+      const storeObject = setup(
+        { openCitationModal: true },
+        { service: "triple_sg", chartType: STREAMGRAPH_MODE }
+      );
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <Modals />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
+      });
+
+      const select = document.querySelector(".modal-header .close");
+      act(() => {
+        const event = new Event("click", { bubbles: true });
+        select.dispatchEvent(event);
+      });
+
+      const actions = store.getActions();
+      const expectedPayload = closeCitationModal();
+
+      expect(actions).toEqual([expectedPayload]);
+    });
   });
 
   describe("info modal", () => {
