@@ -1,4 +1,5 @@
 import React from "react";
+import useMatomo from "../utils/useMatomo";
 
 const ZoomedOutHeading = ({
   introIcon,
@@ -7,8 +8,13 @@ const ZoomedOutHeading = ({
   additionalFeatures,
   onInfoClick,
 }) => {
+  const { trackEvent } = useMatomo();
+
   const handleInfoClick = (event) => {
     event.preventDefault();
+
+    trackEvent("Title & Context line", "Open more info modal", "More info button");
+
     if (onInfoClick) {
       onInfoClick();
     }

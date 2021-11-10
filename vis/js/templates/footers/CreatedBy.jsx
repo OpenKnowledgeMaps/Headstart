@@ -3,14 +3,28 @@ import React from "react";
 import okmapsRoundLogo from "../../../images/okmaps-logo-round.svg";
 
 import { getDateTimeFromTimestamp } from "../../utils/dates";
+import useMatomo from "../../utils/useMatomo";
 
 const CreatedBy = ({ timestamp, faqsUrl }) => {
   const dateTime = getDateTimeFromTimestamp(timestamp);
+  const { trackEvent } = useMatomo();
+
+  const trackVisLink = () =>
+    trackEvent(
+      "Added components",
+      "Open this visualization",
+      "Visualization link in footer"
+    );
 
   return (
     <div className="builtwith" id="builtwith">
       <img src={okmapsRoundLogo} alt="OKMaps round logo" />{" "}
-      <a href={window.location.href} target="_blank" rel="noreferrer">
+      <a
+        href={window.location.href}
+        target="_blank"
+        rel="noreferrer"
+        onClick={trackVisLink}
+      >
         This visualization
       </a>{" "}
       was created by{" "}
