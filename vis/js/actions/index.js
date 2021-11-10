@@ -20,7 +20,6 @@ export const NOT_QUEUED_IN_ANIMATION = [
   "ZOOM_OUT",
   "SELECT_PAPER",
   "DESELECT_PAPER",
-  "DESELECT_PAPER_BACKLINK",
   "FILE_CLICKED",
   "SEARCH",
   "FILTER",
@@ -117,10 +116,6 @@ export const highlightArea = (paper) => ({
 export const showPreview = (paper) => ({ type: "SHOW_PREVIEW", paper });
 
 export const hidePreview = () => ({ type: "HIDE_PREVIEW" });
-
-export const deselectPaperBacklink = () => ({
-  type: "DESELECT_PAPER_BACKLINK",
-});
 
 export const updateDimensions = (chart, list) => ({
   type: "RESIZE",

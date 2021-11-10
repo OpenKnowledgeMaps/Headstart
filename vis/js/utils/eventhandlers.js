@@ -5,7 +5,6 @@ import {
   showPreview,
   selectPaper,
   deselectPaper,
-  deselectPaperBacklink,
   stopAnimation,
   hoverBubble,
   hoverPaper,
@@ -38,7 +37,7 @@ export const mapDispatchToListEntriesProps = (dispatch) => ({
       )
     ),
   handleDeselectPaper: () => dispatch(deselectPaper()),
-  handleBacklinkClick: () => dispatch(deselectPaperBacklink()),
+  handleBacklinkClick: () => dispatch(deselectPaper()),
 });
 
 /**

@@ -21,7 +21,6 @@ export const handleTitleAction = (action, defaultTitle, state) => {
       document.title = getSelectPaperTitle(action.paper, defaultTitle);
       return;
     case "DESELECT_PAPER":
-    case "DESELECT_PAPER_BACKLINK":
       document.title = getDeselectPaperTitle(defaultTitle, state);
       return;
     default:

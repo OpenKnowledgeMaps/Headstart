@@ -8,7 +8,6 @@ const selectedPaper = (state = null, action) => {
     case "ZOOM_OUT":
     case "SCALE":
     case "DESELECT_PAPER":
-    case "DESELECT_PAPER_BACKLINK":
       return null;
     case "ZOOM_IN": {
       if (!action.selectedPaperData) {
