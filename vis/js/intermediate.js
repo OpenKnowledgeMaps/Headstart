@@ -53,7 +53,8 @@ class Intermediate {
         this.recordAction.bind(this),
         this.recordActionParams
       ),
-      createQueryParameterMiddleware()
+      createQueryParameterMiddleware(),
+      createPageTitleMiddleware(this)
     );
 
     this.store = createStore(rootReducer, middleware);
@@ -155,7 +156,7 @@ class Intermediate {
       return;
     }
 
-    // this can be optimized: if the area is the same as before, simply 
+    // this can be optimized: if the area is the same as before, simply
     // deselect the paper or select a different one
 
     if (queryParams.has("area") && !queryParams.has("paper")) {
@@ -474,6 +475,27 @@ function createQueryParameterMiddleware() {
       if (!action.canceled && !action.isFromBackButton) {
         handleReduxAction(action);
       }
+
+      return next(action);
+    };
+  };
+}
+
+function createPageTitleMiddleware(itm) {
+  return function () {
+    return (next) => (action) => {
+      if (
+        action.type === "ZOOM_IN" &&
+        !action.canceled &&
+        action.selectedAreaData
+      ) {
+        document.title = `${action.selectedAreaData.title} | ${itm.originalTitle}`;
+      }
+      if (action.type === "ZOOM_OUT" && !action.canceled) {
+        document.title = itm.originalTitle;
+      }
+
+      // TODO select paper / deselect paper ?
 
       return next(action);
     };
