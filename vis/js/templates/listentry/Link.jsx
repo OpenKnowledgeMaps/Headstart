@@ -1,9 +1,14 @@
 import React from "react";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
+import useMatomo from "../../utils/useMatomo";
 
 const Link = ({ address, isDoi }) => {
   const localization = useLocalizationContext();
+  const { trackEvent } = useMatomo();
+
+  const trackClick = () =>
+    trackEvent("List document", "Open paper link", "Text link");
 
   return (
     // html template starts here
@@ -16,6 +21,7 @@ const Link = ({ address, isDoi }) => {
             href={isDoi ? `https://dx.doi.org/${address}` : address}
             target="_blank"
             rel="noreferrer"
+            onClick={trackClick}
           >
             {address}
           </a>

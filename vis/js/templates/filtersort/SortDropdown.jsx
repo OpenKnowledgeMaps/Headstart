@@ -1,7 +1,19 @@
 import React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
+import useMatomo from "../../utils/useMatomo";
 
 const SortDropdown = ({ label, value, valueLabel, options, handleChange }) => {
+  const { trackEvent } = useMatomo();
+  const handleSortChange = (id) => {
+    handleChange(id);
+    const selectedOption = options.find((o) => o.id === id);
+    trackEvent(
+      "List controls",
+      "Sort list",
+      selectedOption ? selectedOption.label : undefined
+    );
+  };
+
   return (
     <div
       className="dropdown"
@@ -21,7 +33,7 @@ const SortDropdown = ({ label, value, valueLabel, options, handleChange }) => {
             id={"sort_option_" + o.id}
             key={o.id}
             eventKey={o.id}
-            onSelect={handleChange}
+            onSelect={handleSortChange}
             active={o.id === value}
           >
             {o.label}

@@ -5,6 +5,7 @@ import { openEmbedModal, openViperEditModal } from "../actions";
 
 import $ from "jquery";
 
+import CitationButton from "../templates/buttons/CitationButton";
 import EditButton from "../templates/buttons/EditButton";
 import EmbedButton from "../templates/buttons/EmbedButton";
 import FAQsButton from "../templates/buttons/FAQsButton";
@@ -26,6 +27,7 @@ const ModalButtons = ({
   isEmbedded,
   visTag,
   service,
+  showCitationButton,
 }) => {
   useEffect(() => {
     if (["base", "pubmed"].includes(service) && !isEmbedded) {
@@ -47,6 +49,7 @@ const ModalButtons = ({
           apiProperties={reloadApiProperties}
         />
       )}
+      {showCitationButton && <CitationButton />}
     </div>
   );
 };
@@ -64,6 +67,7 @@ const mapStateToProps = (state) => ({
   isEmbedded: state.misc.isEmbedded,
   visTag: state.misc.visTag,
   service: state.service,
+  showCitationButton: state.modals.showCitationButton,
 });
 
 const mapDispatchToProps = (dispatch) => ({

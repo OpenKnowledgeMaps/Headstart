@@ -36,11 +36,8 @@ import debounce from "./utils/debounce";
  * This class should ideally only talk to the mediator and redux
  */
 class Intermediate {
-  constructor(rescaleCallback, recordActionCallback) {
+  constructor(rescaleCallback) {
     this.actionQueue = [];
-
-    this.recordActionCallback = recordActionCallback;
-    this.recordActionParams = {};
 
     const middleware = applyMiddleware(
       createFileChangeMiddleware(),
@@ -49,10 +46,7 @@ class Intermediate {
       createRepeatedInitializeMiddleware(this),
       createChartTypeMiddleware(),
       createRescaleMiddleware(rescaleCallback),
-      createRecordActionMiddleware(
-        this.recordAction.bind(this),
-        this.recordActionParams
-      ),
+      createRecordActionMiddleware(),
       createQueryParameterMiddleware(),
       createPageTitleMiddleware(this)
     );
@@ -82,14 +76,6 @@ class Intermediate {
   initStore(config, context, mapData, streamData) {
     const { size, width, height } = getChartSize(config, context);
     const list = getListSize(config, context, size);
-
-    Object.assign(this.recordActionParams, {
-      title: config.title,
-      user: config.user_id,
-      localization: config.localization[config.language],
-      mouseoverEvaluation: config.enable_mouseover_evaluation,
-      scaleLabel: config.scale_label,
-    });
 
     this.config = config;
     this.sanitizedMapData = sanitizeInputData(mapData);
@@ -265,38 +251,6 @@ class Intermediate {
       this.forceLayoutParams
     );
   }
-
-  /**
-   * Log an action using the mediator's function.
-   *
-   * @param {string} id usually some title, e.g. paper.title / default is the config.title
-   * @param {string} category some static key, such as "List"
-   * @param {string} action some static key, such as "show"
-   * @param {string} type some static key, such as "open_embed_modal"
-   * @param {object} timestamp optional object / default is null
-   * @param {string} additionalParams optional string / default is null
-   * @param {object} postData optional object / default is null
-   */
-  recordAction(
-    id,
-    category,
-    action,
-    type,
-    timestamp = null,
-    additionalParams = null,
-    postData = null
-  ) {
-    this.recordActionCallback(
-      id,
-      category,
-      action,
-      this.recordActionParams.user,
-      type,
-      timestamp,
-      additionalParams,
-      postData
-    );
-  }
 }
 
 /**
@@ -459,11 +413,11 @@ function createFileChangeMiddleware() {
   };
 }
 
-function createRecordActionMiddleware(callback, params) {
+function createRecordActionMiddleware() {
   return function ({ getState }) {
     return (next) => (action) => {
       const state = getState();
-      logAction(action, state, callback, params);
+      logAction(action, state);
       return next(action);
     };
   };

@@ -41,6 +41,8 @@ const modals = (
         showPDFPreview: action.configObject.preview_type === "pdf",
         previewedPaper: null,
         useViewer: action.configObject.use_hypothesis,
+        showCitationButton: !!action.configObject.show_cite_button,
+        openCitationModal: false,
       };
     case "OPEN_EMBED_MODAL":
       return {
@@ -82,6 +84,16 @@ const modals = (
         ...state,
         previewedPaper: null,
       };
+    case "OPEN_CITATION_MODAL":
+      return {
+        ...state,
+        openCitationModal: true,
+      };
+    case "CLOSE_CITATION_MODAL":
+      return {
+        ...state,
+        openCitationModal: false,
+      };
     case "ZOOM_IN":
     case "ZOOM_OUT":
       return {
@@ -89,9 +101,10 @@ const modals = (
         openInfoModal: false,
         openEmbedModal: false,
         openViperEditModal: false,
+        openCitationModal: false,
         previewedPaper: null,
-        // TODO close cite modal too
       };
+
     default:
       return state;
   }

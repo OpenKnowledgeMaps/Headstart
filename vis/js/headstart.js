@@ -1,4 +1,4 @@
-/* eslint-disable import/no-webpack-loader-syntax, no-undef */
+/* eslint-disable no-undef */
 
 // Headstart
 // filename: headstart.js
@@ -32,6 +32,7 @@ HeadstartFSM.prototype = {
     }
   },
 
+  // TODO delete this completely
   recordAction: function(id, category, action, user, timestamp, additional_params, post_data) {
 
     if(!config.is_evaluation) {
@@ -46,9 +47,6 @@ HeadstartFSM.prototype = {
 
     if (services.includes("log")) {
         this.recordActionLog(category, action, id, user, timestamp, additional_params, post_data);
-    }
-    if (services.includes("matomo")) {
-        this.recordActionMatomo(category, action, id, user, timestamp, additional_params, post_data);
     }
     if (services.includes("ga")) {
         this.recordActionGA(category, action, id, user, timestamp, additional_params, post_data);
@@ -81,12 +79,6 @@ HeadstartFSM.prototype = {
             console.log(output);
         }
     });
-  },
-
-  recordActionMatomo: function(category, action, id) {
-    if(typeof _paq !== "undefined") {
-        _paq.push(['trackEvent', category, action, id]);
-    }
   },
 
   recordActionGA: function(category, action, id) {

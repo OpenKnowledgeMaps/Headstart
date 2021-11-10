@@ -7,6 +7,7 @@ import Chart from "../templates/Chart";
 import Paper from "../templates/Paper";
 
 import { mapDispatchToMapEntriesProps } from "../utils/eventhandlers";
+import { trackMatomoEvent } from "../utils/useMatomo";
 
 const KnowledgeMap = (props) => {
   const { data, areas, zoom, animation } = props;
@@ -17,6 +18,7 @@ const KnowledgeMap = (props) => {
   const { handleDeselectPaper, handleSelectPaper } = props;
   const { hoveredBubble, bubbleOrder, changeBubbleOrder } = props;
   const { hoveredPaper, paperOrder, changePaperOrder } = props;
+  const { trackMouseOver } = props;
 
   // bubble section
   const handleAreaMouseOver = (area) => {
@@ -24,23 +26,37 @@ const KnowledgeMap = (props) => {
       return;
     }
 
+    if (trackMouseOver) {
+      trackMatomoEvent("Knowledge map", "Hover bubble", "Bubble");
+    }
+
     changeBubbleOrder(area.area_uri);
   };
 
   const handleOtherAreaZoomIn = (bubble) => {
     handleZoomIn(bubble, true);
+    trackMatomoEvent("Knowledge map", "Zoom in", "Bubble");
   };
 
   const getBubbleZoomClickHandler = (bubble) => {
     if (zoomedBubbleUri === bubble.area_uri) {
-      return handleDeselectPaper;
+      if (!selectedPaperId) {
+        return undefined;
+      }
+      return () => {
+        handleDeselectPaper();
+        trackMatomoEvent("Knowledge map", "Deselect paper", "Bubble");
+      };
     }
 
     if (zoom) {
       return () => handleOtherAreaZoomIn(bubble);
     }
 
-    return () => handleZoomIn(bubble);
+    return () => {
+      handleZoomIn(bubble);
+      trackMatomoEvent("Knowledge map", "Zoom in", "Bubble");
+    };
   };
 
   const sortedAreas = sortAreasByIds(areas, bubbleOrder);
@@ -49,7 +65,10 @@ const KnowledgeMap = (props) => {
     let onClick = undefined;
     let onMouseOver = () => changeBubbleOrder(null);
     if (zoom) {
-      onClick = handleZoomOut;
+      onClick = () => {
+        handleZoomOut();
+        trackMatomoEvent("Knowledge map", "Zoom out", "Chart");
+      };
       onMouseOver = undefined;
     }
 
@@ -64,7 +83,10 @@ const KnowledgeMap = (props) => {
     }
     let onDoubleClick = undefined;
     if (zoomedBubbleUri === bubble.area_uri) {
-      onDoubleClick = handleZoomOut;
+      onDoubleClick = () => {
+        handleZoomOut();
+        trackMatomoEvent("Knowledge map", "Zoom out", "Bubble");
+      };
     }
 
     return { onClick, onMouseOver, onDoubleClick };
@@ -78,6 +100,7 @@ const KnowledgeMap = (props) => {
         handleZoomIn(
           areas.find((bubble) => bubble.area_uri === paper.area_uri)
         );
+        trackMatomoEvent("Knowledge map", "Zoom in", "Bubble");
         return;
       }
 
@@ -89,10 +112,15 @@ const KnowledgeMap = (props) => {
       // bubble click event
       event.stopPropagation();
       handleSelectPaper(paper);
+      trackMatomoEvent("Knowledge map", "Select paper", "Paper");
     };
 
     const handlePaperMouseOver = (newEnlargeFactor) => {
       changePaperOrder(paper.safe_id, newEnlargeFactor);
+
+      if (trackMouseOver) {
+        trackMatomoEvent("Knowledge map", "Hover paper", "Paper");
+      }
     };
 
     const handlePaperMouseOut = () => {
@@ -192,6 +220,7 @@ const mapStateToProps = (state) => ({
   hoveredPaper: state.paperOrder.hoveredPaper,
   paperOrder: state.paperOrder.order,
   enlargeFactor: state.paperOrder.enlargeFactor,
+  trackMouseOver: state.tracking.trackMouseOver,
 });
 
 export default connect(

@@ -168,3 +168,6 @@ export const scaleMap = (value, baseUnit, contentBased, sort) => ({
   contentBased,
   sort,
 });
+
+export const openCitationModal = () => ({ type: "OPEN_CITATION_MODAL" });
+export const closeCitationModal = () => ({ type: "CLOSE_CITATION_MODAL" });

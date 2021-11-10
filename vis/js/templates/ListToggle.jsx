@@ -1,13 +1,24 @@
 import React from "react";
 
 import { useLocalizationContext } from "../components/LocalizationProvider";
+import useMatomo from "../utils/useMatomo";
 
 const ListToggle = ({ show, docsNumber, onClick }) => {
   const localization = useLocalizationContext();
+  const { trackEvent } = useMatomo();
+
+  const handleClick = () => {
+    onClick();
+    if (show) {
+      trackEvent("List controls", "Hide list", "List toggle");
+    } else {
+      trackEvent("List controls", "Show list", "List toggle");
+    }
+  };
 
   return (
     // html template starts here
-    <div id="show_hide_button" className="row" onClick={onClick}>
+    <div id="show_hide_button" className="row" onClick={handleClick}>
       <div className="col-xs-2">▼</div>
       <div className="col-xs-8" id="show_hide_button_label">
         <span id="show_hide_label">

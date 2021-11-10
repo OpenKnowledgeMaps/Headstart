@@ -4,15 +4,22 @@ import { Modal } from "react-bootstrap";
 
 import viperEditScreenshot from "../../../images/viper-project-screenshot.png";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
+import useMatomo from "../../utils/useMatomo";
 
 const ViperEditModal = ({ open, onClose, acronym, title, objectID }) => {
   const localization = useLocalizationContext();
+  const { trackEvent } = useMatomo();
 
   const pageTitle = (acronym !== "" ? acronym + " - " : "") + title;
   const buttonLabel = localization.viper_button_desc_label.replace(/^<p>/, "");
 
   const handleClick = (event) => {
     event.preventDefault();
+    trackEvent(
+      "Added components",
+      "Open Viper edit outlink",
+      "Viper edit modal"
+    );
     window.open(`https://www.openaire.eu/search/project?projectId=${objectID}`);
   };
 
