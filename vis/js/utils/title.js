@@ -1,6 +1,6 @@
 /**
  * Sets correct page title based on the current action and state.
- * 
+ *
  * @param {Object} action the Redux action object
  * @param {string} defaultTitle the original page title Headstart has when it loads
  * @param {Object} state the Redux state object
@@ -21,6 +21,7 @@ export const handleTitleAction = (action, defaultTitle, state) => {
       document.title = getSelectPaperTitle(action.paper, defaultTitle);
       return;
     case "DESELECT_PAPER":
+    case "DESELECT_PAPER_BACKLINK":
       document.title = getDeselectPaperTitle(defaultTitle, state);
       return;
     default:
