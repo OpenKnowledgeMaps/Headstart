@@ -24,7 +24,7 @@ const PreviewImage = ({ imageURL = defaultImage, onClick }) => {
 
   const handleClick = () => {
     onClick();
-    trackEvent("List paper", "Show PDF preview", "Preview image");
+    trackEvent("List document", "Show PDF preview", "Preview image");
   };
 
   return (

@@ -21,7 +21,7 @@ export const Backlink = ({
   }
 
   const handleOnClick = () => {
-    trackEvent("Heading", "Zoom out", "Backlink");
+    trackEvent("Title & Context line", "Zoom out", "Backlink");
     if (onClick && typeof onClick === "function") {
       onClick();
     }

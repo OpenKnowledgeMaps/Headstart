@@ -106,7 +106,7 @@ class ContextLine extends React.Component {
     const text = documentTypes.join(", ");
 
     const trackMouseOver = () =>
-      trackMatomoEvent("Heading", "Hover document types", "Context line");
+      trackMatomoEvent("Title & Context line", "Hover document types", "Context line");
 
     return (
       <>

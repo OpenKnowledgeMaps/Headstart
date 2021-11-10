@@ -5,13 +5,13 @@ const PreviewIcons = ({ link, onClickPDF }) => {
   const { trackEvent } = useMatomo();
 
   const trackLinkClick = () => {
-    trackEvent("List paper", "Open paper link", "Button link");
+    trackEvent("List document", "Open paper link", "Button link");
   };
 
   const handlePDFClick = (event) => {
     event.preventDefault();
     onClickPDF();
-    trackEvent("List paper", "Show PDF preview", "PDF button");
+    trackEvent("List document", "Show PDF preview", "PDF button");
   };
 
   return (

@@ -13,7 +13,7 @@ const ZoomedOutHeading = ({
   const handleInfoClick = (event) => {
     event.preventDefault();
 
-    trackEvent("Heading", "Open more info modal", "More info button");
+    trackEvent("Title & Context line", "Open more info modal", "More info button");
 
     if (onInfoClick) {
       onInfoClick();

@@ -8,7 +8,7 @@ const Link = ({ address, isDoi }) => {
   const { trackEvent } = useMatomo();
 
   const trackClick = () =>
-    trackEvent("List paper", "Open paper link", "Text link");
+    trackEvent("List document", "Open paper link", "Text link");
 
   return (
     // html template starts here

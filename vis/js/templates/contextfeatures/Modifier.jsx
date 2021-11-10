@@ -22,7 +22,7 @@ const Modifier = ({ popoverContainer, modifier, isStreamgraph }) => {
   }
 
   const trackMouseOver = () =>
-    trackEvent("Heading", "Hover most relevant", "Context line");
+    trackEvent("Title & Context line", "Hover most relevant", "Context line");
 
   if (modifier === "most-relevant") {
     return (

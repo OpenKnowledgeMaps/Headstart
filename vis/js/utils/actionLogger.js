@@ -11,9 +11,9 @@ import { trackMatomoEvent } from "./useMatomo";
 const logAction = (action, state) => {
   switch (action.type) {
     case "INITIALIZE":
-      return trackMatomoEvent("Application", "Load");
+      return trackMatomoEvent("Headstart", "Load");
     case "RESIZE":
-      return trackMatomoEvent("Application", "Resize window");
+      return trackMatomoEvent("Headstart", "Resize window");
     case "SEARCH":
       // TODO trackSiteSearch ?
       // https://developer.matomo.org/guides/tracking-javascript-guide

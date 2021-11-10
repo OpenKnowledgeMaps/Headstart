@@ -8,7 +8,7 @@ const Title = ({ children, onClick }) => {
 
   const handleClick = () => {
     onClick();
-    trackEvent("List paper", "Select paper", "List title");
+    trackEvent("List document", "Select paper", "List title");
   };
 
   return (

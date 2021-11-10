@@ -17,13 +17,13 @@ const Area = ({
   const handleMouseOver = () => {
     onMouseOver();
     if (trackMouseOver) {
-      trackEvent("List paper", "Hover bubble", "Area name");
+      trackEvent("List document", "Hover bubble", "Area name");
     }
   };
 
   const handleClick = () => {
     onClick();
-    trackEvent("List paper", "Zoom in", "Area name");
+    trackEvent("List document", "Zoom in", "Area name");
   };
 
   return (
