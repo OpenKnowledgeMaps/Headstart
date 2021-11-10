@@ -490,32 +490,6 @@ describe("config and context state", () => {
       expect(result).toEqual("11 Aug 2019 - 12 Aug 2020");
     });
 
-    it("should initialize a correct timespan 'All time' (pubmed)", () => {
-      const SERVICE_NAME = "pubmed";
-      const FROM = "1809-01-01T13:30:22.112Z";
-      const TO = new Date().toJSON();
-
-      const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          service: SERVICE_NAME,
-        },
-        {
-          params: {
-            from: FROM,
-            to: TO,
-          },
-        }
-      );
-
-      const result = timespanReducer(
-        initialState,
-        initializeStore(configObject, contextObject)
-      );
-
-      expect(result).toEqual("All time");
-    });
-
     it("should initialize a correct timespan 'Until 12 Aug 2020' (default)", () => {
       const SERVICE_NAME = "some-other";
       const FROM = "1970-01-01T13:30:22.112Z";

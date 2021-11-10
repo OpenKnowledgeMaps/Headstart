@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 var config = {
     
 /*** basic visualization modes ***/
@@ -193,6 +194,8 @@ var config = {
     faqs_button: false,
     //url for link to faqs
     faqs_url: "",
+    // show citation button
+    show_cite_button: false,
 
 /*** streamgraph settings ***/
     //streamgraph color definition
@@ -268,7 +271,7 @@ var config = {
             comment_by_label: "by",
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
             pdf_not_loaded_linktext: "this website",
-            share_button_title: "share this map",
+            share_button_title: "Share this knowledge map",
             embed_button_title: "Embed this knowledge map on other websites",
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
             area_streamgraph: "Stream",
@@ -278,6 +281,12 @@ var config = {
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
             lang_all: "All languages",
+            cite: "Cite",
+            cite_title_km: "Cite this knowledge map",
+            cite_title_sg: "Cite this streamgraph",
+            citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
+            cite_vis_km: "Please cite this knowledge map as follows",
+            cite_vis_sg: "Please cite this streamgraph as follows",
         },
         ger: {
             loading: "Wird geladen...",
@@ -341,6 +350,12 @@ var config = {
             stream_docs: "Dokumente",
             stream_total: "Gesamt",
             empty_area_warning: "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
+            cite: "Cite",
+            cite_title_km: "Cite this knowledge map",
+            cite_title_sg: "Cite this streamgraph",
+            citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
+            cite_vis_km: "Please cite this knowledge map as follows",
+            cite_vis_sg: "Please cite this streamgraph as follows",
         },
         ger_linkedcat: {
            loading: "Wird geladen...",
@@ -407,6 +422,12 @@ var config = {
             pdf_not_loaded: "Leider konnten wir das PDF nicht abrufen. Mehr Informationen finden Sie auf",
             pdf_not_loaded_linktext: "dieser Seite",
             empty_area_warning: "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
+            cite: "Cite",
+            cite_title_km: "Cite this knowledge map",
+            cite_title_sg: "Cite this streamgraph",
+            citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
+            cite_vis_km: "Please cite this knowledge map as follows",
+            cite_vis_sg: "Please cite this streamgraph as follows",
         },
         eng_plos: {
             loading: "Loading...",
@@ -453,7 +474,7 @@ var config = {
             comment_by_label: "by",
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
             pdf_not_loaded_linktext: "this website",
-            share_button_title: "share this map",
+            share_button_title: "Share this knowledge map",
             embed_button_title: "Embed this knowledge map on other websites",
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
             area_streamgraph: "Stream",
@@ -463,6 +484,12 @@ var config = {
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
             lang_all: "All languages",
+            cite: "Cite",
+            cite_title_km: "Cite this knowledge map",
+            cite_title_sg: "Cite this streamgraph",
+            citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
+            cite_vis_km: "Please cite this knowledge map as follows",
+            cite_vis_sg: "Please cite this streamgraph as follows",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -521,7 +548,7 @@ var config = {
             comment_by_label: "by",
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
             pdf_not_loaded_linktext: "this website",
-            share_button_title: "share this map",
+            share_button_title: "Share this knowledge map",
             embed_button_title: "Embed this knowledge map on other websites",
             embed_button_text: 'Copy',
             embed_title: 'embed map',
@@ -539,6 +566,12 @@ var config = {
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
             lang_all: "All languages",
+            cite: "Cite",
+            cite_title_km: "Cite this knowledge map",
+            cite_title_sg: "Cite this streamgraph",
+            citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
+            cite_vis_km: "Please cite this knowledge map as follows",
+            cite_vis_sg: "Please cite this streamgraph as follows",
         },
         eng_openaire: {
             loading: "Loading...",
@@ -592,7 +625,7 @@ var config = {
             viper_button_desc_label: `<p>By clicking on the button below, you are redirected to the\
                 OpenAIRE page for`,
             viper_edit_button_text: 'continue to openaire',
-            share_button_title: "share this map",
+            share_button_title: "Share this knowledge map",
             embed_button_title: "Embed this knowledge map on other websites",
             embed_button_text: 'Copy',
             embed_title: 'embed map',
@@ -621,6 +654,12 @@ var config = {
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
             lang_all: "All languages",
+            cite: "Cite",
+            cite_title_km: "Cite this knowledge map",
+            cite_title_sg: "Cite this streamgraph",
+            citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
+            cite_vis_km: "Please cite this knowledge map as follows",
+            cite_vis_sg: "Please cite this streamgraph as follows",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -678,6 +717,12 @@ var config = {
             stream_docs: "Dokumente",
             stream_total: "Gesamt",
             empty_area_warning: "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
+            cite: "Cite",
+            cite_title_km: "Cite this knowledge map",
+            cite_title_sg: "Cite this streamgraph",
+            citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
+            cite_vis_km: "Please cite this knowledge map as follows",
+            cite_vis_sg: "Please cite this streamgraph as follows",
         },
         ger_cris_2: {
             loading: "Wird geladen...",
@@ -735,6 +780,12 @@ var config = {
             stream_docs: "Dokumente",
             stream_total: "Gesamt",
             empty_area_warning: "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
+            cite: "Cite",
+            cite_title_km: "Cite this knowledge map",
+            cite_title_sg: "Cite this streamgraph",
+            citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
+            cite_vis_km: "Please cite this knowledge map as follows",
+            cite_vis_sg: "Please cite this streamgraph as follows",
         },
         eng_cris_2: {
            loading: "Loading...",
@@ -796,6 +847,12 @@ var config = {
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
             lang_all: "All languages",
+            cite: "Cite",
+            cite_title_km: "Cite this knowledge map",
+            cite_title_sg: "Cite this streamgraph",
+            citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
+            cite_vis_km: "Please cite this knowledge map as follows",
+            cite_vis_sg: "Please cite this streamgraph as follows",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -858,7 +915,7 @@ var config = {
             comment_by_label: "by",
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
             pdf_not_loaded_linktext: "this website",
-            share_button_title: "share this map",
+            share_button_title: "Share this knowledge map",
             embed_button_title: "Embed this knowledge map on other websites",
             embed_button_text: 'Copy',
             embed_title: 'embed map',
@@ -870,6 +927,12 @@ var config = {
             stream_total: "Total",
             empty_area_warning: "No matches found. Please reset your filter options above.",
             lang_all: "All languages",
+            cite: "Cite",
+            cite_title_km: "Cite this knowledge map",
+            cite_title_sg: "Cite this streamgraph",
+            citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
+            cite_vis_km: "Please cite this knowledge map as follows",
+            cite_vis_sg: "Please cite this streamgraph as follows",
         },
     },
 
