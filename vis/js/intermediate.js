@@ -26,8 +26,9 @@ import { getChartSize, getListSize } from "./utils/dimensions";
 import Headstart from "./components/Headstart";
 import { sanitizeInputData } from "./utils/data";
 import { createAnimationCallback } from "./utils/eventhandlers";
-import { removeQueryParams, handleReduxAction } from "./utils/url";
+import { removeQueryParams, handleUrlAction } from "./utils/url";
 import debounce from "./utils/debounce";
+import { handleTitleAction } from "./utils/title";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -427,7 +428,7 @@ function createQueryParameterMiddleware() {
   return function () {
     return (next) => (action) => {
       if (!action.canceled && !action.isFromBackButton) {
-        handleReduxAction(action);
+        handleUrlAction(action);
       }
 
       return next(action);
@@ -436,20 +437,12 @@ function createQueryParameterMiddleware() {
 }
 
 function createPageTitleMiddleware(itm) {
-  return function () {
+  return function ({ getState }) {
     return (next) => (action) => {
-      if (
-        action.type === "ZOOM_IN" &&
-        !action.canceled &&
-        action.selectedAreaData
-      ) {
-        document.title = `${action.selectedAreaData.title} | ${itm.originalTitle}`;
+      if (!action.canceled && !action.isFromBackButton) {
+        const state = getState();
+        handleTitleAction(action, itm.originalTitle, state);
       }
-      if (action.type === "ZOOM_OUT" && !action.canceled) {
-        document.title = itm.originalTitle;
-      }
-
-      // TODO select paper / deselect paper ?
 
       return next(action);
     };

@@ -37,14 +37,12 @@ const addRemoveQueryParams = (paramsToAdd, paramsToRemove) => {
   window.history.pushState("", "", url.pathname + url.search);
 };
 
-//document.title = `${action.selectedAreaData.title} | ${itm.originalTitle}`;
-//document.title = itm.originalTitle;
-
-//document.title = `${action.paper.title} | ${itm.originalTitle}`;
-//document.title = itm.originalTitle;
-
-// TODO docs
-export const handleReduxAction = (action) => {
+/**
+ * Changes page url based on the current Redux action.
+ * 
+ * @param {Object} action the Redux action object
+ */
+export const handleUrlAction = (action) => {
   switch (action.type) {
     case "ZOOM_IN":
       return handleZoomIn(action);
