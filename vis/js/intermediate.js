@@ -106,8 +106,12 @@ class Intermediate {
       this.applyForceLayout();
     }
 
-    // enable this for ability to share link to a zoomed bubble
-    //this.zoomUrlArea();
+    // enable this for ability to share link to a zoomed bubble / paper
+    // if (queryParams.has("paper")) {
+    //   this.selectUrlPaper();
+    // } else {
+    //   this.zoomUrlArea();
+    // }
     // remove the following lines if the previous line is uncommented
     const queryParams = new URLSearchParams(window.location.search);
     const paramsToRemove = [];
@@ -117,8 +121,9 @@ class Intermediate {
     if (queryParams.has("paper")) {
       paramsToRemove.push("paper");
     }
-
-    removeQueryParams(...paramsToRemove);
+    if (paramsToRemove.length > 0) {
+      removeQueryParams(...paramsToRemove);
+    }
   }
 
   /**
