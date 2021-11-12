@@ -17,6 +17,11 @@ var data_config = {
 	show_context: false,
 	create_title_from_context: false,
 
+    share_modal: true,
+    embed_modal: false,
+
+    enable_mouseover_evaluation: false,
+
     files: [{
         title: "edu1",
         file: "./data/edu1.csv"

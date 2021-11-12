@@ -6,6 +6,7 @@ import { STREAMGRAPH_MODE } from "../reducers/chartType";
 import BacklinkTemplate from "../templates/Backlink";
 
 import { createAnimationCallback } from "../utils/eventhandlers";
+import useMatomo from "../utils/useMatomo";
 
 export const Backlink = ({
   hidden = false,
@@ -13,11 +14,14 @@ export const Backlink = ({
   onClick,
   localization = {},
 }) => {
+  const { trackEvent } = useMatomo();
+
   if (hidden) {
     return null;
   }
 
   const handleOnClick = () => {
+    trackEvent("Title & Context line", "Zoom out", "Backlink");
     if (onClick && typeof onClick === "function") {
       onClick();
     }
