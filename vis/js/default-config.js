@@ -220,7 +220,7 @@ var config = {
     localization: {
         eng: {
             loading: "Loading...",
-            search_placeholder: "Search within map...",
+            search_placeholder: "Search within visualization...",
             show_list: "Show list",
             hide_list: "Hide list",
             intro_label: "More information",
@@ -428,7 +428,7 @@ var config = {
         },
         eng_plos: {
             loading: "Loading...",
-            search_placeholder: "Search within map...",
+            search_placeholder: "Search within visualization...",
             show_list: "Show list",
             hide_list: "Hide list",
             intro_label: "More information",
@@ -489,7 +489,7 @@ var config = {
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
-            search_placeholder: "Search within map...",
+            search_placeholder: "Search within visualization...",
             show_list: "Show list",
             hide_list: "Hide list",
             intro_label: "More information",
@@ -570,7 +570,7 @@ var config = {
         },
         eng_openaire: {
             loading: "Loading...",
-            search_placeholder: "Search within map...",
+            search_placeholder: "Search within visualization...",
             show_list: "Show list",
             hide_list: "Hide list",
             intro_label: "more info",
@@ -781,7 +781,7 @@ var config = {
         },
         eng_cris_2: {
            loading: "Loading...",
-            search_placeholder: "Search within map...",
+            search_placeholder: "Search within visualization...",
             show_list: "Show list",
             hide_list: "Hide list",
             intro_label: "more information",
@@ -847,7 +847,7 @@ var config = {
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
-            search_placeholder: "Search within map...",
+            search_placeholder: "Search within visualization...",
             show_list: "Show list",
             hide_list: "Hide list",
             intro_label: "[more info]",
