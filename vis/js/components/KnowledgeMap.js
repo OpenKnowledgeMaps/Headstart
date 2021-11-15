@@ -34,7 +34,6 @@ const KnowledgeMap = (props) => {
   };
 
   const handleOtherAreaZoomIn = (bubble) => {
-    handleDeselectPaper();
     handleZoomIn(bubble, true);
     trackMatomoEvent("Knowledge map", "Zoom in", "Bubble");
   };

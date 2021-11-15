@@ -16,7 +16,7 @@ describe("animation state", () => {
       const INITIAL_STATE = null;
       const F = jest.fn();
 
-      const result = reducer(INITIAL_STATE, zoomIn({}, undefined, F, false));
+      const result = reducer(INITIAL_STATE, zoomIn({}, F, false));
 
       const EXPECTED_RESULT = {
         type: "ZOOM_IN",

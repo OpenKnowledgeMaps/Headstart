@@ -79,7 +79,6 @@ describe("areas state", () => {
         zoomIn(
           { uri: INITIALIZED_STATE.list[0].area_uri },
           undefined,
-          undefined,
           false
         )
       );

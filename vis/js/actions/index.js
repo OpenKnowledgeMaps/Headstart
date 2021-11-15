@@ -20,7 +20,6 @@ export const NOT_QUEUED_IN_ANIMATION = [
   "ZOOM_OUT",
   "SELECT_PAPER",
   "DESELECT_PAPER",
-  "DESELECT_PAPER_BACKLINK",
   "FILE_CLICKED",
   "SEARCH",
   "FILTER",
@@ -29,20 +28,23 @@ export const NOT_QUEUED_IN_ANIMATION = [
 
 export const zoomIn = (
   selectedAreaData,
-  source = null,
   callback,
-  alreadyZoomed = false
+  alreadyZoomed = false,
+  isFromBackButton = false,
+  selectedPaperData = null
 ) => ({
   type: "ZOOM_IN",
   selectedAreaData,
-  source,
   callback,
   alreadyZoomed,
+  isFromBackButton,
+  selectedPaperData,
 });
 
-export const zoomOut = (callback) => ({
+export const zoomOut = (callback, isFromBackButton = false) => ({
   type: "ZOOM_OUT",
   callback,
+  isFromBackButton,
 });
 
 /**
@@ -97,10 +99,11 @@ export const filter = (id) => ({ type: "FILTER", id });
 
 export const sort = (id) => ({ type: "SORT", id });
 
-export const selectPaper = (paper) => ({
+export const selectPaper = (paper, isFromBackButton = false) => ({
   type: "SELECT_PAPER",
   safeId: paper.safe_id,
   paper,
+  isFromBackButton,
 });
 
 export const deselectPaper = () => ({ type: "DESELECT_PAPER" });
@@ -113,10 +116,6 @@ export const highlightArea = (paper) => ({
 export const showPreview = (paper) => ({ type: "SHOW_PREVIEW", paper });
 
 export const hidePreview = () => ({ type: "HIDE_PREVIEW" });
-
-export const deselectPaperBacklink = () => ({
-  type: "DESELECT_PAPER_BACKLINK",
-});
 
 export const updateDimensions = (chart, list) => ({
   type: "RESIZE",
