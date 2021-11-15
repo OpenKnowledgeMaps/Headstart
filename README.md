@@ -9,7 +9,7 @@ Head Start is a web-based knowledge mapping software intended to give researcher
 ### Client
 To get started, clone this repository. Next, duplicate the file `config.example.js` in the root folder and rename it to `config.js`.
 
-Make sure to have `npm` version 6.11.3 installed (it comes with Node.js 10.17.0, best way to install is with [nvm](https://github.com/nvm-sh/nvm), `nvm install 10.17.0`) and run the following two commands to build the Headstart client:
+Make sure to have installed `node` version >= 14.18.1 and `npm` version >=8.1.1 (best way to install is with [nvm](https://github.com/nvm-sh/nvm), `nvm install 14.18.1`) and run the following two commands to build the Headstart client:
 
     npm install
     npm run dev
@@ -24,9 +24,12 @@ To run Headstart on a different server (e.g. Apache), you need to set the public
 * Dev: specify the full path including protocol, e.g. `http://localhost/headstart/dist`
 * Production: specify the full path excluding protocol, e.g. `//example.org/headstart/dist`
 
-Point your browser to the following address:
+Point your browser to one of the following addresses:
 
-	http://localhost:8080/examples/local_files/index.html
+	http://localhost:8080/local_files/
+	http://localhost:8080/local_streamgraph/
+	http://localhost:8080/project_website/base.html
+	http://localhost:8080/project_website/pubmed.html
 
 If everything has worked out, you should see the visualization shown above.
 
@@ -42,7 +45,7 @@ See [Installing and configuring the server](doc/server_config.md) for instructio
 
 Maintainer: [Peter Kraker](https://github.com/pkraker) ([pkraker@openknowledgemaps.org](mailto:pkraker@openknowledgemaps.org))
 
-Authors: [Maxi Schramm](https://github.com/tanteuschi), [Christopher Kittel](https://github.com/chreman), [Asura Enkhbayar](https://github.com/Bubblbu), [Scott Chamberlain](https://github.com/sckott), [Rainer Bachleitner](https://github.com/rbachleitner), [Yael Stein](https://github.com/jaels), [Thomas Arrow](https://github.com/tarrow), [Mike Skaug](https://github.com/mikeskaug), [Philipp Weissensteiner](https://github.com/wpp), and the [Open Knowledge Maps team](http://openknowledgemaps.org/team)
+Authors: [Maxi Schramm](https://github.com/tanteuschi), [Christopher Kittel](https://github.com/chreman), [Jan Konstant](https://github.com/konstiman), [Asura Enkhbayar](https://github.com/Bubblbu), [Scott Chamberlain](https://github.com/sckott), [Rainer Bachleitner](https://github.com/rbachleitner), [Yael Stein](https://github.com/jaels), [Thomas Arrow](https://github.com/tarrow), [Mike Skaug](https://github.com/mikeskaug), [Philipp Weissensteiner](https://github.com/wpp), and the [Open Knowledge Maps team](http://openknowledgemaps.org/team)
 
 
 ## Features

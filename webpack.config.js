@@ -19,10 +19,12 @@ const common = {
     },
 
     devServer: {
-        static: { directory: path.join( __dirname ) },
+        static: { 
+            directory: path.resolve(__dirname, 'examples/'), 
+        },
         allowedHosts: "all",
         host: "0.0.0.0",
-        devMiddleware: { publicPath: '/dist/' }
+        devMiddleware: { publicPath: '/dist/' },
     },
 
     resolve: {
