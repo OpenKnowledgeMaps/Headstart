@@ -31,7 +31,6 @@ const BasicListEntry = ({
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
-  handleTitleClick,
   handleAreaClick,
   // deprecated
   showPreviewImage,
@@ -45,17 +44,11 @@ const BasicListEntry = ({
     isFreeAccess: !!paper.free_access,
     isDataset: paper.resulttype === "dataset",
   };
-  const title = paper.title ? paper.title : loc.default_paper_title;
   const preview = {
     link: getPaperPreviewLink(paper),
     onClickPDF: getPaperPDFClickHandler(paper, handlePDFClick),
     showPreviewImage,
     previewImage: showRealPreviewImage ? getPaperPreviewImage(paper) : null,
-  };
-  const details = {
-    authors: paper.authors_string ? paper.authors_string : loc.default_authors,
-    source: paper.published_in,
-    year: paper.year,
   };
   const abstract = abstractSize
     ? shorten(paper.paper_abstract, abstractSize)
@@ -76,12 +69,13 @@ const BasicListEntry = ({
           isFreeAccess={access.isFreeAccess}
           isDataset={access.isDataset}
         />
-        <Title onClick={handleTitleClick}>{title}</Title>
+        <Title paper={paper} />
         <PreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />
         <Details
-          authors={details.authors}
-          source={details.source}
-          year={details.year}
+          authors={
+            paper.authors_string ? paper.authors_string : loc.default_authors
+          }
+          source={paper.published_in}
         />
       </div>
       <Abstract text={abstract} />

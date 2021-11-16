@@ -329,6 +329,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                          And Learning: The Growing Trend In Academic And Business Spaces—An International Overview
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2018)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -357,17 +364,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                         className=""
                       >
                         P. K. Paul, P. S. Aithal
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2018)
                       </span>
                     </span>
                   </span>
@@ -1024,6 +1020,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         education
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2014-08-14)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -1115,17 +1118,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                          , vol 15 , no. 3 , pp. 280-290 . DOI:10.1108/IJSHE-08-2012-0078
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2014-08-14)
                       </span>
                     </span>
                   </span>
@@ -1285,6 +1277,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                          And Learning: The Growing Trend In Academic And Business Spaces—An International Overview
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2018)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -1313,17 +1312,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         P. K. Paul, P. S. Aithal
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2018)
                       </span>
                     </span>
                   </span>
@@ -1466,6 +1454,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                          Revolution
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2011)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -1497,17 +1492,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         Rachel Buchanan
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2011)
                       </span>
                     </span>
                   </span>
@@ -1639,6 +1623,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                          System
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2012-04-01)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -1692,17 +1683,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         style={Object {}}
                       >
                         Education
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2012-04-01T07:00:00Z)
                       </span>
                     </span>
                   </span>
@@ -1857,6 +1837,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         education
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2010)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -1888,17 +1875,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         Jane Seale, E.A. Draffan, Mike Wald
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2010)
                       </span>
                     </span>
                   </span>
@@ -2026,6 +2002,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Education
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2013-09-01)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -2079,17 +2062,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         style={Object {}}
                       >
                         Education
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2013-09-01T00:00:00Z)
                       </span>
                     </span>
                   </span>
@@ -2232,6 +2204,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                          institutions
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2019)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -2260,17 +2239,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         Thamasan Suwanroj, Punnee Leekitchwatana, Paitoon Pimdee
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2019-09)
                       </span>
                     </span>
                   </span>
@@ -2413,6 +2381,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         : A Review of Models, Roles, And Strategies
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2019-04-01)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -2468,17 +2443,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         , Vol 20, Iss 2, Pp 89-104 (2019)
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2019-04-01T00:00:00Z)
                       </span>
                     </span>
                   </span>
@@ -2649,6 +2613,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Digital
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2017-01-17)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -2693,17 +2664,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         Tendencias Pedagógicas; Vol. 29 (2017): Tecnologías, educación y brecha digital; 7-8 ; 1989-8614 ; 1133-2654 ; 10.15366/tp2017.29
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2017-01-17)
                       </span>
                     </span>
                   </span>
@@ -2841,6 +2801,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                          INSTITUTIONS
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2019-05-23)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -2924,17 +2891,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                          Content Research and Implementation Problems; 67-78 ; 2661-5266 ; 2661-5258
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2019-05-23)
                       </span>
                     </span>
                   </span>
@@ -3061,6 +3017,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                          Competence : Conceptualizations in Nordic Curricula
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2019)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -3092,17 +3055,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         Anna-Lena Godhe
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2019)
                       </span>
                     </span>
                   </span>
@@ -3256,6 +3208,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                          (in)equity in teaching and learning: a sociocritical approach
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2019)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -3300,17 +3259,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         The International Journal of Information and Learning Technology, Vol. 36, no.2, p. 169-18 (2019)
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2019)
                       </span>
                     </span>
                   </span>
@@ -3448,6 +3396,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         digital
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2014)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -3479,17 +3434,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         Jean Edwards
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2014-09)
                       </span>
                     </span>
                   </span>
@@ -3610,6 +3554,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                          resources
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2016-08-26)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -3641,17 +3592,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         Michael Gard, Eimear Enright
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2016-08-26)
                       </span>
                     </span>
                   </span>
@@ -3816,6 +3756,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                          identity narratives
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2018-06-14)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -3860,17 +3807,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         South African Journal of Education; Vol 38, No 2 (2018); 1-9 ; 2076-3433 ; 0256-0100
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2018-06-14)
                       </span>
                     </span>
                   </span>
@@ -3969,6 +3905,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Motivating and Retaining CS2 Students with a Competative Game Programming Project
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2007)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -4049,17 +3992,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                          and Research, pp. 1-9
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2007)
                       </span>
                     </span>
                   </span>
@@ -4180,6 +4112,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                          natives' classrooms.
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2014)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -4208,17 +4147,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         Agnes Chigona
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2014)
                       </span>
                     </span>
                   </span>
@@ -4378,6 +4306,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         education
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2018-01-12)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -4406,17 +4341,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         Pilar Aristizabal Llorente, Esther Cruz Iglesias
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2018-01-12T14:18:08Z)
                       </span>
                     </span>
                   </span>
@@ -4532,6 +4456,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Education
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2008)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -4563,17 +4494,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         Alicia Stewart, Krista Radspinner
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2008)
                       </span>
                     </span>
                   </span>
@@ -4705,6 +4625,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                          age. Is it still present at Polish schools and universities?
                       </span>
                     </span>
+                    <span>
+                      <span
+                        className=""
+                      >
+                         (2020-03-01)
+                      </span>
+                    </span>
                   </a>
                 </div>
                 <div
@@ -4749,17 +4676,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         className=""
                       >
                         Acta Universitatis Lodziensis. Folia Litteraria Polonica, Vol 56, Iss 1, Pp 127-141 (2020)
-                      </span>
-                    </span>
-                  </span>
-                  <span
-                    className="list_pubyear"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                         (2020-03-01T00:00:00Z)
                       </span>
                     </span>
                   </span>

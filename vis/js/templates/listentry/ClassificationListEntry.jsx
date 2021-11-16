@@ -37,7 +37,6 @@ const ClassificationListEntry = ({
   isStreamgraph,
   handleAreaMouseover,
   handleAreaMouseout,
-  handleTitleClick,
   handleAreaClick,
   showBacklink,
   isInStreamBacklink,
@@ -51,15 +50,9 @@ const ClassificationListEntry = ({
     isFreeAccess: !!paper.free_access,
     isDataset: paper.resulttype === "dataset",
   };
-  const title = paper.title ? paper.title : loc.default_paper_title;
   const preview = {
     link: getPaperPreviewLink(paper),
     onClickPDF: getPaperPDFClickHandler(paper, handlePDFClick),
-  };
-  const details = {
-    authors: paper.authors_string ? paper.authors_string : loc.default_authors,
-    source: paper.published_in,
-    year: paper.year,
   };
   const link = getPaperTextLink(paper, linkType);
   const classification = getPaperClassification(paper, loc);
@@ -89,9 +82,14 @@ const ClassificationListEntry = ({
           isFreeAccess={access.isFreeAccess}
           isDataset={access.isDataset}
         />
-        <Title onClick={handleTitleClick}>{title}</Title>
+        <Title paper={paper} />
         <PreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />
-        <Details authors={details.authors} year={details.year} />
+        <Details
+          authors={
+            paper.authors_string ? paper.authors_string : loc.default_authors
+          }
+          source={paper.published_in}
+        />
         <Link address={link.address} isDoi={link.isDoi} />
       </div>
       <Classification>{classification}</Classification>

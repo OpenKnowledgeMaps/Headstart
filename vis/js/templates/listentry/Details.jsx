@@ -2,7 +2,7 @@ import React from "react";
 
 import Highlight from "../../components/Highlight";
 
-const Details = ({ authors, source, year }) => {
+const Details = ({ authors, source }) => {
   return (
     // html template starts here
     <div className="list_details">
@@ -18,11 +18,6 @@ const Details = ({ authors, source, year }) => {
             <Highlight queryHighlight>{source}</Highlight>
           </span>
         </>
-      )}
-      {!!year && (
-        <span className="list_pubyear">
-          <Highlight queryHighlight>{` (${year})`}</Highlight>
-        </span>
       )}
     </div>
     // html template ends here

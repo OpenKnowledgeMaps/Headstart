@@ -24,21 +24,8 @@ const ListEntries = ({
   disableClicks,
   // functions
   handleZoomIn,
-  handleSelectPaper,
-  handleSelectPaperWithZoom,
 }) => {
   const localization = useLocalizationContext();
-
-  const handleTitleClick = (paper) => {
-    if (disableClicks) {
-      return;
-    }
-    if (!isStreamgraph) {
-      handleSelectPaperWithZoom(paper);
-    } else {
-      handleSelectPaper(paper);
-    }
-  };
 
   const handleAreaClick = (paper) => {
     if (disableClicks) {
@@ -80,7 +67,6 @@ const ListEntries = ({
         <ListEntryComponent
           key={paper.safe_id}
           paper={paper}
-          handleTitleClick={() => handleTitleClick(paper)}
           handleAreaClick={() => handleAreaClick(paper)}
         />
       ))}

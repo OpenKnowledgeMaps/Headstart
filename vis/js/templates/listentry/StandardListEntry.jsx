@@ -48,7 +48,6 @@ const StandardListEntry = ({
   isStreamgraph,
   handleAreaMouseover,
   handleAreaMouseout,
-  handleTitleClick,
   handleAreaClick,
   showBacklink,
   isInStreamBacklink,
@@ -65,16 +64,10 @@ const StandardListEntry = ({
     isDataset: paper.resulttype === "dataset",
   };
   const tags = getPaperTags(paper);
-  const title = paper.title ? paper.title : loc.default_paper_title;
   const preview = {
     link: getPaperPreviewLink(paper),
     onClickPDF: getPaperPDFClickHandler(paper, handlePDFClick),
     showPreviewImage,
-  };
-  const details = {
-    authors: paper.authors_string ? paper.authors_string : loc.default_authors,
-    source: paper.published_in,
-    year: paper.year,
   };
   const link = getPaperTextLink(paper, linkType);
   const documentType = showDocumentType ? paper.resulttype : null;
@@ -116,12 +109,13 @@ const StandardListEntry = ({
           isDataset={access.isDataset}
           tags={tags ? <Tags values={tags} /> : null}
         />
-        <Title onClick={handleTitleClick}>{title}</Title>
+        <Title paper={paper} />
         <PreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />
         <Details
-          authors={details.authors}
-          source={details.source}
-          year={details.year}
+          authors={
+            paper.authors_string ? paper.authors_string : loc.default_authors
+          }
+          source={paper.published_in}
         />
         <Link address={link.address} isDoi={link.isDoi} />
       </div>
