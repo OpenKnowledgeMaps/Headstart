@@ -383,6 +383,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     <a
                       className="doi_outlink_link"
                       href="https://doi.org/10.5281/zenodo.1292855"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -1031,6 +1032,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="https://www.research.manchester.ac.uk/portal/en/publications/conceptualizing-digital-literacies-and-digital-ethics-for-sustainability-education(d99555d3-f49c-4ca4-87ae-ee4a1e8abcad).html"
+                    onClick={[Function]}
                     rel="noreferrer"
                     target="_blank"
                   >
@@ -1139,6 +1141,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://www.research.manchester.ac.uk/portal/en/publications/conceptualizing-digital-literacies-and-digital-ethics-for-sustainability-education(d99555d3-f49c-4ca4-87ae-ee4a1e8abcad).html"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -1336,6 +1339,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://doi.org/10.5281/zenodo.1292855"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -1470,6 +1474,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="http://hdl.handle.net/1959.13/934096"
+                    onClick={[Function]}
                     rel="noreferrer"
                     target="_blank"
                   >
@@ -1518,6 +1523,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://hdl.handle.net/1959.13/934096"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -1641,6 +1647,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="https://ro.ecu.edu.au/ajte/vol37/iss4/5"
+                    onClick={[Function]}
                     rel="noreferrer"
                     target="_blank"
                   >
@@ -1711,6 +1718,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://ro.ecu.edu.au/ajte/vol37/iss4/5"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -1857,6 +1865,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="https://eprints.soton.ac.uk/71809/"
+                    onClick={[Function]}
                     rel="noreferrer"
                     target="_blank"
                   >
@@ -1905,6 +1914,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://eprints.soton.ac.uk/71809/"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -2024,6 +2034,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="https://dergipark.org.tr/tr/pub/tojde/issue/16897/176081"
+                    onClick={[Function]}
                     rel="noreferrer"
                     target="_blank"
                   >
@@ -2094,6 +2105,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://dergipark.org.tr/tr/pub/tojde/issue/16897/176081"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -2274,6 +2286,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://hdl.handle.net/2117/172239"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -2481,6 +2494,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://doi.org/10.17718/tojde.557742"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -2705,6 +2719,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://revistas.uam.es/tendenciaspedagogicas/article/view/7082"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -2935,6 +2950,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://journals.ru.lv/index.php/ER/article/view/4213"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -3053,6 +3069,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="http://hdl.handle.net/2043/28731"
+                    onClick={[Function]}
                     rel="noreferrer"
                     target="_blank"
                   >
@@ -3101,6 +3118,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://hdl.handle.net/2043/28731"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -3308,6 +3326,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://hdl.handle.net/2078.1/215221"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -3437,6 +3456,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="http://nectar.northampton.ac.uk/7284/"
+                    onClick={[Function]}
                     rel="noreferrer"
                     target="_blank"
                   >
@@ -3485,6 +3505,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://nectar.northampton.ac.uk/7284/"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -3597,6 +3618,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="https://espace.library.uq.edu.au/view/UQ:403365"
+                    onClick={[Function]}
                     rel="noreferrer"
                     target="_blank"
                   >
@@ -3645,6 +3667,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://espace.library.uq.edu.au/view/UQ:403365"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -3863,6 +3886,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://www.ajol.info/index.php/saje/article/view/173120"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -3953,6 +3977,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="http://digital.library.unt.edu/ark:/67531/metadc30842/"
+                    onClick={[Function]}
                     rel="noreferrer"
                     target="_blank"
                   >
@@ -4050,6 +4075,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://digital.library.unt.edu/ark:/67531/metadc30842/"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -4208,6 +4234,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://hdl.handle.net/11189/3465"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -4405,6 +4432,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://idus.us.es/xmlui/handle/11441/68940"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -4512,6 +4540,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <a
                     className="outlink"
                     href="http://hdl.handle.net/10342/1956"
+                    onClick={[Function]}
                     rel="noreferrer"
                     target="_blank"
                   >
@@ -4560,6 +4589,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="http://hdl.handle.net/10342/1956"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
@@ -4745,6 +4775,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <a
                       className="doi_outlink_link"
                       href="https://doi.org/10.18778/1505-9057.56.08"
+                      onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
                     >
