@@ -1,4 +1,15 @@
 import React from "react";
+import { connect } from "react-redux";
+
+import { useLocalizationContext } from "../../components/LocalizationProvider";
+import {
+  getPaperPDFClickHandler,
+  getPaperPreviewImage,
+  getPaperPreviewLink,
+} from "../../utils/data";
+import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
+import { shorten } from "../../utils/string";
+
 import Abstract from "./Abstract";
 import AccessIcons from "./AccessIcons";
 import Area from "./Area";
@@ -14,18 +25,48 @@ import Title from "./Title";
  * @param {Object} props
  */
 const BasicListEntry = ({
-  id,
-  access,
-  title,
-  preview,
-  details,
-  abstract,
-  area,
-  readers,
+  paper,
+  abstractSize,
   baseUnit,
+  handlePDFClick,
+  handleAreaMouseover,
+  handleAreaMouseout,
   handleTitleClick,
   handleAreaClick,
+  // deprecated
+  showPreviewImage,
+  showRealPreviewImage,
 }) => {
+  const loc = useLocalizationContext();
+
+  const id = paper.safe_id;
+  const access = {
+    isOpenAccess: !!paper.oa,
+    isFreeAccess: !!paper.free_access,
+    isDataset: paper.resulttype === "dataset",
+  };
+  const title = paper.title ? paper.title : loc.default_paper_title;
+  const preview = {
+    link: getPaperPreviewLink(paper),
+    onClickPDF: getPaperPDFClickHandler(paper, handlePDFClick),
+    showPreviewImage,
+    previewImage: showRealPreviewImage ? getPaperPreviewImage(paper) : null,
+  };
+  const details = {
+    authors: paper.authors_string ? paper.authors_string : loc.default_authors,
+    source: paper.published_in,
+    year: paper.year,
+  };
+  const abstract = abstractSize
+    ? shorten(paper.paper_abstract, abstractSize)
+    : paper.paper_abstract;
+  const area = {
+    text: paper.area,
+    onMouseOver: () => handleAreaMouseover(paper),
+    onMouseOut: () => handleAreaMouseout(),
+  };
+  const readers = paper.num_readers;
+
   return (
     // html template starts here
     <ListEntry anchorId={id}>
@@ -63,4 +104,14 @@ const BasicListEntry = ({
   );
 };
 
-export default BasicListEntry;
+const mapStateToProps = (state) => ({
+  abstractSize: state.selectedPaper ? null : state.list.abstractSize,
+  baseUnit: state.list.baseUnit,
+  showPreviewImage: !!state.selectedPaper,
+  showRealPreviewImage: state.list.showRealPreviewImage,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToListEntriesProps
+)(BasicListEntry);

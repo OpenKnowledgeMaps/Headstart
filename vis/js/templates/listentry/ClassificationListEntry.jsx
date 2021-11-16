@@ -1,4 +1,18 @@
 import React from "react";
+import { connect } from "react-redux";
+
+import { useLocalizationContext } from "../../components/LocalizationProvider";
+import { STREAMGRAPH_MODE } from "../../reducers/chartType";
+import {
+  getPaperClassification,
+  getPaperKeywords,
+  getPaperPDFClickHandler,
+  getPaperPreviewLink,
+  getPaperTextLink,
+} from "../../utils/data";
+import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
+import { shorten } from "../../utils/string";
+
 import Abstract from "./Abstract";
 import AccessIcons from "./AccessIcons";
 import Area from "./Area";
@@ -16,20 +30,56 @@ import Title from "./Title";
  * @param {Object} props
  */
 const ClassificationListEntry = ({
-  id,
-  access,
-  title,
-  preview,
-  details,
-  link,
-  classification,
-  abstract,
-  keywords,
-  area,
+  paper,
+  handlePDFClick,
+  linkType,
+  abstractSize,
+  isStreamgraph,
+  handleAreaMouseover,
+  handleAreaMouseout,
   handleTitleClick,
   handleAreaClick,
-  backlink,
+  showBacklink,
+  isInStreamBacklink,
+  handleBacklinkClick,
 }) => {
+  const loc = useLocalizationContext();
+
+  const id = paper.safe_id;
+  const access = {
+    isOpenAccess: !!paper.oa,
+    isFreeAccess: !!paper.free_access,
+    isDataset: paper.resulttype === "dataset",
+  };
+  const title = paper.title ? paper.title : loc.default_paper_title;
+  const preview = {
+    link: getPaperPreviewLink(paper),
+    onClickPDF: getPaperPDFClickHandler(paper, handlePDFClick),
+  };
+  const details = {
+    authors: paper.authors_string ? paper.authors_string : loc.default_authors,
+    source: paper.published_in,
+    year: paper.year,
+  };
+  const link = getPaperTextLink(paper, linkType);
+  const classification = getPaperClassification(paper, loc);
+  const abstract = abstractSize
+    ? shorten(paper.paper_abstract, abstractSize)
+    : paper.paper_abstract;
+  const keywords = getPaperKeywords(paper, loc);
+  const area = !isStreamgraph
+    ? {
+        text: paper.area,
+        onMouseOver: () => handleAreaMouseover(paper),
+        onMouseOut: () => handleAreaMouseout(),
+      }
+    : null;
+  const backlink = {
+    show: showBacklink,
+    isInStream: isInStreamBacklink,
+    onClick: () => handleBacklinkClick(),
+  };
+
   return (
     // html template starts here
     <ListEntry anchorId={id}>
@@ -67,4 +117,16 @@ const ClassificationListEntry = ({
   );
 };
 
-export default ClassificationListEntry;
+const mapStateToProps = (state) => ({
+  abstractSize: state.selectedPaper ? null : state.list.abstractSize,
+  linkType: state.list.linkType,
+  isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+  showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
+  isInStreamBacklink: !!state.selectedBubble,
+  disableClicks: state.list.disableClicks,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToListEntriesProps
+)(ClassificationListEntry);
