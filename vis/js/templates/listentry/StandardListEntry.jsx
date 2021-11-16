@@ -7,7 +7,6 @@ import {
   getPaperComments,
   getPaperKeywords,
   getPaperPDFClickHandler,
-  getPaperPreviewLink,
   getPaperTags,
   getPaperTextLink,
 } from "../../utils/data";
@@ -26,8 +25,7 @@ import Keywords from "./Keywords";
 import Link from "./Link";
 import ListEntry from "./ListEntry";
 import Metrics from "./Metrics";
-import PreviewIcons from "./PreviewIcons";
-import PreviewImage from "./PreviewImage";
+import SidePreviewIcons from "./SidePreviewIcons";
 import Tags from "./Tags";
 import Title from "./Title";
 
@@ -52,7 +50,7 @@ const StandardListEntry = ({
   showBacklink,
   isInStreamBacklink,
   handleBacklinkClick,
-  // deprecated
+  // TODO deprecated
   showPreviewImage,
 }) => {
   const loc = useLocalizationContext();
@@ -65,7 +63,6 @@ const StandardListEntry = ({
   };
   const tags = getPaperTags(paper);
   const preview = {
-    link: getPaperPreviewLink(paper),
     onClickPDF: getPaperPDFClickHandler(paper, handlePDFClick),
     showPreviewImage,
   };
@@ -110,7 +107,7 @@ const StandardListEntry = ({
           tags={tags ? <Tags values={tags} /> : null}
         />
         <Title paper={paper} />
-        <PreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />
+        <SidePreviewIcons onClickPDF={preview.onClickPDF} />
         <Details
           authors={
             paper.authors_string ? paper.authors_string : loc.default_authors
@@ -122,9 +119,6 @@ const StandardListEntry = ({
       {!!documentType && <DocumentType type={documentType} />}
       <Abstract text={abstract} />
       {!!comments && <Comments items={comments} />}
-      {!!preview.showPreviewImage && !!preview.onClickPDF && (
-        <PreviewImage onClick={preview.onClickPDF} />
-      )}
       {!!keywords && <Keywords>{keywords}</Keywords>}
       {!!metrics && (
         <Metrics

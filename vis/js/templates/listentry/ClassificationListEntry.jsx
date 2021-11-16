@@ -7,7 +7,6 @@ import {
   getPaperClassification,
   getPaperKeywords,
   getPaperPDFClickHandler,
-  getPaperPreviewLink,
   getPaperTextLink,
 } from "../../utils/data";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
@@ -22,7 +21,7 @@ import EntryBacklink from "./EntryBacklink";
 import Keywords from "./Keywords";
 import Link from "./Link";
 import ListEntry from "./ListEntry";
-import PreviewIcons from "./PreviewIcons";
+import SidePreviewIcons from "./SidePreviewIcons";
 import Title from "./Title";
 
 /**
@@ -51,7 +50,6 @@ const ClassificationListEntry = ({
     isDataset: paper.resulttype === "dataset",
   };
   const preview = {
-    link: getPaperPreviewLink(paper),
     onClickPDF: getPaperPDFClickHandler(paper, handlePDFClick),
   };
   const link = getPaperTextLink(paper, linkType);
@@ -83,7 +81,7 @@ const ClassificationListEntry = ({
           isDataset={access.isDataset}
         />
         <Title paper={paper} />
-        <PreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />
+        <SidePreviewIcons onClickPDF={preview.onClickPDF} />
         <Details
           authors={
             paper.authors_string ? paper.authors_string : loc.default_authors

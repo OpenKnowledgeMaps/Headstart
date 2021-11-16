@@ -15,7 +15,7 @@ import AccessIcons from "./AccessIcons";
 import Area from "./Area";
 import Details from "./Details";
 import ListEntry from "./ListEntry";
-import PreviewIcons from "./PreviewIcons";
+import SidePreviewIcons from "./SidePreviewIcons";
 import PreviewImage from "./PreviewImage";
 import Readers from "./Readers";
 import Title from "./Title";
@@ -70,7 +70,7 @@ const BasicListEntry = ({
           isDataset={access.isDataset}
         />
         <Title paper={paper} />
-        <PreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />
+        <SidePreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />
         <Details
           authors={
             paper.authors_string ? paper.authors_string : loc.default_authors

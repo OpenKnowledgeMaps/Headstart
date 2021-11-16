@@ -587,29 +587,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                 </span>
               </p>
               <div
-                id="preview_image"
-                onClick={[Function]}
-                style={
-                  Object {
-                    "background": "url(test-file-stub) 0% 0% / 230px,  0% 0% / 298px",
-                    "height": 298,
-                    "width": 230,
-                  }
-                }
-              >
-                <div
-                  id="transbox"
-                  style={
-                    Object {
-                      "height": 298,
-                      "width": 230,
-                    }
-                  }
-                >
-                  Click here to open preview
-                </div>
-              </div>
-              <div
                 id="list_keywords"
                 style={
                   Object {
@@ -1031,22 +1008,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
                 <div
                   className="list_links"
-                >
-                  <a
-                    className="outlink"
-                    href="https://www.research.manchester.ac.uk/portal/en/publications/conceptualizing-digital-literacies-and-digital-ethics-for-sustainability-education(d99555d3-f49c-4ca4-87ae-ee4a1e8abcad).html"
-                    onClick={[Function]}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    LINK 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
+                />
                 <div
                   className="list_details"
                 >
@@ -1465,22 +1427,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
                 <div
                   className="list_links"
-                >
-                  <a
-                    className="outlink"
-                    href="http://hdl.handle.net/1959.13/934096"
-                    onClick={[Function]}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    LINK 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
+                />
                 <div
                   className="list_details"
                 >
@@ -1634,22 +1581,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
                 <div
                   className="list_links"
-                >
-                  <a
-                    className="outlink"
-                    href="https://ro.ecu.edu.au/ajte/vol37/iss4/5"
-                    onClick={[Function]}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    LINK 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
+                />
                 <div
                   className="list_details"
                 >
@@ -1848,22 +1780,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
                 <div
                   className="list_links"
-                >
-                  <a
-                    className="outlink"
-                    href="https://eprints.soton.ac.uk/71809/"
-                    onClick={[Function]}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    LINK 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
+                />
                 <div
                   className="list_details"
                 >
@@ -2013,22 +1930,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
                 <div
                   className="list_links"
-                >
-                  <a
-                    className="outlink"
-                    href="https://dergipark.org.tr/tr/pub/tojde/issue/16897/176081"
-                    onClick={[Function]}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    LINK 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
+                />
                 <div
                   className="list_details"
                 >
@@ -3028,22 +2930,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
                 <div
                   className="list_links"
-                >
-                  <a
-                    className="outlink"
-                    href="http://hdl.handle.net/2043/28731"
-                    onClick={[Function]}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    LINK 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
+                />
                 <div
                   className="list_details"
                 >
@@ -3407,22 +3294,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
                 <div
                   className="list_links"
-                >
-                  <a
-                    className="outlink"
-                    href="http://nectar.northampton.ac.uk/7284/"
-                    onClick={[Function]}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    LINK 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
+                />
                 <div
                   className="list_details"
                 >
@@ -3565,22 +3437,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
                 <div
                   className="list_links"
-                >
-                  <a
-                    className="outlink"
-                    href="https://espace.library.uq.edu.au/view/UQ:403365"
-                    onClick={[Function]}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    LINK 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
+                />
                 <div
                   className="list_details"
                 >
@@ -3916,22 +3773,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
                 <div
                   className="list_links"
-                >
-                  <a
-                    className="outlink"
-                    href="http://digital.library.unt.edu/ark:/67531/metadc30842/"
-                    onClick={[Function]}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    LINK 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
+                />
                 <div
                   className="list_details"
                 >
@@ -4467,22 +4309,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
                 <div
                   className="list_links"
-                >
-                  <a
-                    className="outlink"
-                    href="http://hdl.handle.net/10342/1956"
-                    onClick={[Function]}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    LINK 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
+                />
                 <div
                   className="list_details"
                 >
