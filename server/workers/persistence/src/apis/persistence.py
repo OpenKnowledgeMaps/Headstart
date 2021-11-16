@@ -20,7 +20,7 @@ def select_session(Session=None):
     if Session is not None:
         return Session()
     else:
-        return sessions.get(settings.DEFAULT["db"])()
+        return sessions.get(settings.DEFAULT_DATABASE)()
 
 
 def create_vis_id(params, param_types):
