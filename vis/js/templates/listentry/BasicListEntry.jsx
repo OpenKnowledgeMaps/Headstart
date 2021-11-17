@@ -8,7 +8,6 @@ import {
   getPaperPreviewLink,
 } from "../../utils/data";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
-import { shorten } from "../../utils/string";
 
 import Abstract from "./Abstract";
 import AccessIcons from "./AccessIcons";
@@ -26,7 +25,6 @@ import Title from "./Title";
  */
 const BasicListEntry = ({
   paper,
-  abstractSize,
   baseUnit,
   handlePDFClick,
   // deprecated
@@ -47,9 +45,6 @@ const BasicListEntry = ({
     showPreviewImage,
     previewImage: showRealPreviewImage ? getPaperPreviewImage(paper) : null,
   };
-  const abstract = abstractSize
-    ? shorten(paper.paper_abstract, abstractSize)
-    : paper.paper_abstract;
   const readers = paper.num_readers;
 
   return (
@@ -70,7 +65,7 @@ const BasicListEntry = ({
           source={paper.published_in}
         />
       </div>
-      <Abstract text={abstract} />
+      <Abstract text={paper.paper_abstract} />
       {!!preview.showPreviewImage && !!preview.onClickPDF && (
         <PreviewImage
           imageURL={preview.previewImage}
@@ -85,7 +80,6 @@ const BasicListEntry = ({
 };
 
 const mapStateToProps = (state) => ({
-  abstractSize: state.selectedPaper ? null : state.list.abstractSize,
   baseUnit: state.list.baseUnit,
   showPreviewImage: !!state.selectedPaper,
   showRealPreviewImage: state.list.showRealPreviewImage,

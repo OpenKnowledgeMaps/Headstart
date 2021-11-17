@@ -10,7 +10,6 @@ import {
   getPaperTextLink,
 } from "../../utils/data";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
-import { shorten } from "../../utils/string";
 import PaperButtons from "./PaperButtons";
 
 import Abstract from "./Abstract";
@@ -37,7 +36,6 @@ const StandardListEntry = ({
   paper,
   linkType,
   showDocumentType,
-  abstractSize,
   showKeywords,
   showMetrics,
   isContentBased,
@@ -59,9 +57,6 @@ const StandardListEntry = ({
   const tags = getPaperTags(paper);
   const link = getPaperTextLink(paper, linkType);
   const documentType = showDocumentType ? paper.resulttype : null;
-  const abstract = abstractSize
-    ? shorten(paper.paper_abstract, abstractSize)
-    : paper.paper_abstract;
   const comments = getPaperComments(paper);
   const keywords = showKeywords ? getPaperKeywords(paper, loc) : null;
   const metrics = showMetrics
@@ -100,7 +95,7 @@ const StandardListEntry = ({
         <Link address={link.address} isDoi={link.isDoi} />
       </div>
       {!!documentType && <DocumentType type={documentType} />}
-      <Abstract text={abstract} />
+      <Abstract text={paper.paper_abstract} />
       {!!comments && <Comments items={comments} />}
       {!!keywords && <Keywords>{keywords}</Keywords>}
       {!!metrics && (
@@ -128,7 +123,6 @@ const StandardListEntry = ({
 };
 
 const mapStateToProps = (state) => ({
-  abstractSize: state.selectedPaper ? null : state.list.abstractSize,
   linkType: state.list.linkType,
   showDocumentType: state.list.showDocumentType,
   showMetrics: state.list.showMetrics,

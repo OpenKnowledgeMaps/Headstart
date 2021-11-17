@@ -9,7 +9,6 @@ import {
   getPaperTextLink,
 } from "../../utils/data";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
-import { shorten } from "../../utils/string";
 import PaperButtons from "./PaperButtons";
 
 import Abstract from "./Abstract";
@@ -30,7 +29,6 @@ import Title from "./Title";
 const ClassificationListEntry = ({
   paper,
   linkType,
-  abstractSize,
   isStreamgraph,
   showBacklink,
   isInStreamBacklink,
@@ -46,9 +44,6 @@ const ClassificationListEntry = ({
   };
   const link = getPaperTextLink(paper, linkType);
   const classification = getPaperClassification(paper, loc);
-  const abstract = abstractSize
-    ? shorten(paper.paper_abstract, abstractSize)
-    : paper.paper_abstract;
   const keywords = getPaperKeywords(paper, loc);
   const backlink = {
     show: showBacklink,
@@ -76,7 +71,7 @@ const ClassificationListEntry = ({
       </div>
       <Classification>{classification}</Classification>
       <Keywords>{keywords}</Keywords>
-      <Abstract text={abstract} />
+      <Abstract text={paper.paper_abstract} />
       <PaperButtons paper={paper} />
       {!isStreamgraph && <Area paper={paper} />}
       {!!backlink.show && (
@@ -91,7 +86,6 @@ const ClassificationListEntry = ({
 };
 
 const mapStateToProps = (state) => ({
-  abstractSize: state.selectedPaper ? null : state.list.abstractSize,
   linkType: state.list.linkType,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
