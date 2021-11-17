@@ -5,7 +5,6 @@ import { useLocalizationContext } from "./LocalizationProvider";
 
 import { filterData } from "../utils/data";
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
-import { mapDispatchToListEntriesProps } from "../utils/eventhandlers";
 
 import EntriesWrapper from "./EntriesWrapper";
 import BasicListEntry from "../templates/listentry/BasicListEntry";
@@ -21,18 +20,8 @@ const ListEntries = ({
   searchSettings,
   filterSettings,
   isStreamgraph,
-  disableClicks,
-  // functions
-  handleZoomIn,
 }) => {
   const localization = useLocalizationContext();
-
-  const handleAreaClick = (paper) => {
-    if (disableClicks) {
-      return;
-    }
-    handleZoomIn(paper);
-  };
 
   if (!show) {
     return null;
@@ -64,11 +53,7 @@ const ListEntries = ({
   return (
     <EntriesWrapper>
       {displayedData.map((paper) => (
-        <ListEntryComponent
-          key={paper.safe_id}
-          paper={paper}
-          handleAreaClick={() => handleAreaClick(paper)}
-        />
+        <ListEntryComponent key={paper.safe_id} paper={paper} />
       ))}
     </EntriesWrapper>
   );
@@ -91,13 +76,9 @@ const mapStateToProps = (state) => ({
     docIds: state.selectedBubble ? state.selectedBubble.docIds : null,
   },
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
-  disableClicks: state.list.disableClicks,
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToListEntriesProps
-)(ListEntries);
+export default connect(mapStateToProps)(ListEntries);
 
 const getListEntryComponent = (service) => {
   if (service === null || typeof service === "undefined") {

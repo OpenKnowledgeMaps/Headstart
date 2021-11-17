@@ -46,9 +46,6 @@ const StandardListEntry = ({
   showBacklink,
   isInStreamBacklink,
   // event handlers
-  handleAreaMouseover,
-  handleAreaMouseout,
-  handleAreaClick,
   handleBacklinkClick,
 }) => {
   const loc = useLocalizationContext();
@@ -73,13 +70,6 @@ const StandardListEntry = ({
         readers: paper["readers.mendeley"],
         citations: paper.citation_count,
         baseUnit: !isContentBased ? baseUnit : null,
-      }
-    : null;
-  const area = !isStreamgraph
-    ? {
-        text: paper.area,
-        onMouseOver: () => handleAreaMouseover(paper),
-        onMouseOut: () => handleAreaMouseout(),
       }
     : null;
   const backlink = {
@@ -122,15 +112,7 @@ const StandardListEntry = ({
         />
       )}
       <PaperButtons paper={paper} />
-      {!!area && (
-        <Area
-          onClick={handleAreaClick}
-          onMouseOver={area.onMouseOver}
-          onMouseOut={area.onMouseOut}
-        >
-          {area.text}
-        </Area>
-      )}
+      {!isStreamgraph && <Area paper={paper} />}
       {(!!citations || parseInt(citations) === 0) && (
         <Citations number={citations} label={baseUnit} />
       )}

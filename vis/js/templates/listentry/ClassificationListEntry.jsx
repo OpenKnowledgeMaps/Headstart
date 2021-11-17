@@ -32,9 +32,6 @@ const ClassificationListEntry = ({
   linkType,
   abstractSize,
   isStreamgraph,
-  handleAreaMouseover,
-  handleAreaMouseout,
-  handleAreaClick,
   showBacklink,
   isInStreamBacklink,
   handleBacklinkClick,
@@ -53,13 +50,6 @@ const ClassificationListEntry = ({
     ? shorten(paper.paper_abstract, abstractSize)
     : paper.paper_abstract;
   const keywords = getPaperKeywords(paper, loc);
-  const area = !isStreamgraph
-    ? {
-        text: paper.area,
-        onMouseOver: () => handleAreaMouseover(paper),
-        onMouseOut: () => handleAreaMouseout(),
-      }
-    : null;
   const backlink = {
     show: showBacklink,
     isInStream: isInStreamBacklink,
@@ -88,15 +78,7 @@ const ClassificationListEntry = ({
       <Keywords>{keywords}</Keywords>
       <Abstract text={abstract} />
       <PaperButtons paper={paper} />
-      {!!area && (
-        <Area
-          onClick={handleAreaClick}
-          onMouseOver={area.onMouseOver}
-          onMouseOut={area.onMouseOut}
-        >
-          {area.text}
-        </Area>
-      )}
+      {!isStreamgraph && <Area paper={paper} />}
       {!!backlink.show && (
         <EntryBacklink
           onClick={backlink.onClick}

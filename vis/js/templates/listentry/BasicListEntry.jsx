@@ -29,9 +29,6 @@ const BasicListEntry = ({
   abstractSize,
   baseUnit,
   handlePDFClick,
-  handleAreaMouseover,
-  handleAreaMouseout,
-  handleAreaClick,
   // deprecated
   showPreviewImage,
   showRealPreviewImage,
@@ -53,11 +50,6 @@ const BasicListEntry = ({
   const abstract = abstractSize
     ? shorten(paper.paper_abstract, abstractSize)
     : paper.paper_abstract;
-  const area = {
-    text: paper.area,
-    onMouseOver: () => handleAreaMouseover(paper),
-    onMouseOut: () => handleAreaMouseout(),
-  };
   const readers = paper.num_readers;
 
   return (
@@ -85,13 +77,7 @@ const BasicListEntry = ({
           onClick={preview.onClickPDF}
         />
       )}
-      <Area
-        onClick={handleAreaClick}
-        onMouseOver={area.onMouseOver}
-        onMouseOut={area.onMouseOut}
-      >
-        {area.text}
-      </Area>
+      <Area paper={paper} />
       <Readers number={readers} label={baseUnit} />
     </ListEntry>
     // html template ends here
