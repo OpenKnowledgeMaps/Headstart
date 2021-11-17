@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 // these constants are hardcoded dimensions of various headstart parts
-const TITLE_HEIGHT = 54.2;
+const TITLE_HEIGHT = 54.7;
 const TOOLBAR_HEIGHT = 66;
 const TITLE_IMAGE_HEIGHT = 70;
 const SHOW_HIDE_BTN_HEIGHT = 34;
@@ -11,10 +11,12 @@ const LIST_HEIGHT_CORRECTION = 10;
 const VIS_COL_RATIO = 0.6;
 const MODALS_WIDTH = 43;
 
+const CREATED_BY_HEIGHT = 50;
+
 const FOOTER_HEIGHT = {
-  base: 50,
-  pubmed: 50,
-  triple: 50,
+  base: CREATED_BY_HEIGHT,
+  pubmed: CREATED_BY_HEIGHT,
+  triple: CREATED_BY_HEIGHT,
   default: 0,
 };
 
