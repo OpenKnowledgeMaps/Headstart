@@ -61,12 +61,7 @@ const ClassificationListEntry = ({
           isDataset={access.isDataset}
         />
         <Title paper={paper} />
-        <Details
-          authors={
-            paper.authors_string ? paper.authors_string : loc.default_authors
-          }
-          source={paper.published_in}
-        />
+        <Details authors={paper.authors} source={paper.published_in} />
         <Link address={link.address} isDoi={link.isDoi} />
       </div>
       <Classification>{classification}</Classification>

@@ -5,6 +5,7 @@ import d3 from "d3";
 
 import config from 'config';
 import { mediator } from 'mediator';
+import { getAuthorsList } from "./utils/data";
 
 var IO = function() {
     this.test = 0;
@@ -45,43 +46,6 @@ IO.prototype = {
             d3[config.input_format](mediator.current_bubble.file, callback);
           }
         });
-    },
-
-    convertToFirstNameLastName: function (all_authors) {
-        const authors = all_authors.split(";");
-        
-        for(let i = authors.length - 1; i >= 0; i--) {
-            if(authors[i] === "") {
-               authors.splice(i, 1);
-            }
-        }
-        
-        let authors_string = "";
-        let authors_short_string = "";
-        for (let i = 0; i < authors.length; i++) {            
-            const names = authors[i].trim().split(",");
-            const last_name = names[0].trim();
-            if (names.length > 1) {
-                var first_name = names[1].trim();
-                
-                if(config.convert_author_names === true) { 
-                    authors_string += first_name + " " + last_name;
-                    authors_short_string += first_name.substr(0, 1) + ". " + last_name;
-                } else {
-                    authors_string += last_name + ", " + first_name;
-                    authors_short_string += last_name + ", " + first_name.substr(0, 1) + ". ";
-                }
-            } else {
-                authors_string += last_name;
-                authors_short_string += last_name;
-            }
-
-            if (i < (authors.length - 1)) {
-                authors_string += ", ";
-                authors_short_string += ", ";
-            }
-        }
-        return { string: authors_string, short_string: authors_short_string };
     },
 
     setToStringIfNullOrUndefined: function (element, strng) {
@@ -158,11 +122,8 @@ IO.prototype = {
                 }
             }
 
-            // convert authors to "[first name] [last name]"
-            // var authors = d.authors.split(";");
-            var authors = _this.convertToFirstNameLastName(d.authors);
-            d.authors_string = authors.string;
-            d.authors_short_string = authors.short_string;
+            var authorsList = getAuthorsList(d.authors, config.convert_author_names);
+            d.authors_string = authorsList.join(", ");
             
             //replace "<" and ">" to avoid having HTML tags
             for (let field in d) {
