@@ -180,18 +180,24 @@
             font-weight: $fontweight400;
         }
 
-        .list_in {
-            color: $list_detail_in;
-        }
+        .list_source {
+            padding-top: 3px;
 
-        .list_published_in {
-            color: $black;
-            font-style: italic;
-        }
+            &.short {
+                text-overflow: ellipsis;
+                height: min-content;
+                overflow: hidden;
+                white-space: nowrap;
+            }
 
-        .list_pubyear {
-            font-weight: $fontweight700;
-            color: $black;
+            .list_in {
+                color: $list_detail_in;
+            }
+
+            .list_published_in {
+                color: $black;
+                font-style: italic;
+            }
         }
     }
 }
