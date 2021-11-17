@@ -6,12 +6,12 @@ import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 import {
   getPaperComments,
   getPaperKeywords,
-  getPaperPDFClickHandler,
   getPaperTags,
   getPaperTextLink,
 } from "../../utils/data";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import { shorten } from "../../utils/string";
+import PaperButtons from "../PaperButtons";
 
 import Abstract from "./Abstract";
 import AccessIcons from "./AccessIcons";
@@ -25,7 +25,6 @@ import Keywords from "./Keywords";
 import Link from "./Link";
 import ListEntry from "./ListEntry";
 import Metrics from "./Metrics";
-import SidePreviewIcons from "./SidePreviewIcons";
 import Tags from "./Tags";
 import Title from "./Title";
 
@@ -34,8 +33,8 @@ import Title from "./Title";
  * @param {Object} props
  */
 const StandardListEntry = ({
+  // data
   paper,
-  handlePDFClick,
   linkType,
   showDocumentType,
   abstractSize,
@@ -44,14 +43,13 @@ const StandardListEntry = ({
   isContentBased,
   baseUnit,
   isStreamgraph,
+  showBacklink,
+  isInStreamBacklink,
+  // event handlers
   handleAreaMouseover,
   handleAreaMouseout,
   handleAreaClick,
-  showBacklink,
-  isInStreamBacklink,
   handleBacklinkClick,
-  // TODO deprecated
-  showPreviewImage,
 }) => {
   const loc = useLocalizationContext();
 
@@ -62,10 +60,6 @@ const StandardListEntry = ({
     isDataset: paper.resulttype === "dataset",
   };
   const tags = getPaperTags(paper);
-  const preview = {
-    onClickPDF: getPaperPDFClickHandler(paper, handlePDFClick),
-    showPreviewImage,
-  };
   const link = getPaperTextLink(paper, linkType);
   const documentType = showDocumentType ? paper.resulttype : null;
   const abstract = abstractSize
@@ -107,7 +101,6 @@ const StandardListEntry = ({
           tags={tags ? <Tags values={tags} /> : null}
         />
         <Title paper={paper} />
-        <SidePreviewIcons onClickPDF={preview.onClickPDF} />
         <Details
           authors={
             paper.authors_string ? paper.authors_string : loc.default_authors
@@ -128,6 +121,7 @@ const StandardListEntry = ({
           baseUnit={metrics.baseUnit}
         />
       )}
+      <PaperButtons paper={paper} />
       {!!area && (
         <Area
           onClick={handleAreaClick}
@@ -158,14 +152,12 @@ const mapStateToProps = (state) => ({
   showMetrics: state.list.showMetrics,
   isContentBased: state.list.isContentBased,
   baseUnit: state.list.baseUnit,
-  showPreviewImage: !!state.selectedPaper,
   showKeywords:
     state.list.showKeywords &&
     (!!state.selectedPaper || !state.list.hideUnselectedKeywords),
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
   isInStreamBacklink: !!state.selectedBubble,
-  disableClicks: state.list.disableClicks,
 });
 
 export default connect(

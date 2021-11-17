@@ -147,6 +147,24 @@ img#close-button {
     font-size: 10px;
 }
 
+.paper_buttons_row {
+    margin: 10px 0px;
+}
+
+.paper_button {
+    color: white;
+    border: 1px solid #E55137;
+    background-color: #E55137;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+        color: #E55137;
+        background-color: white;
+    }
+}
+
 @media screen and (max-width: 1150px) {
     #modals .btn, .reload-button.small-reload {
         font-size: 13px;
