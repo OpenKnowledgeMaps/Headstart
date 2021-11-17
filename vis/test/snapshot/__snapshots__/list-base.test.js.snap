@@ -304,6 +304,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                 >
                   <a
                     id="paper_list_title"
+                    title="Digital Education And Learning: The Growing Trend In Academic And Business Spaces—An International Overview (2018)"
                   >
                     <span>
                       <span
@@ -339,24 +340,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                >
-                  <a
-                    className="link2 oa-link"
-                    onClick={[Function]}
-                  >
-                    PDF 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -366,7 +352,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                         P. K. Paul, P. S. Aithal
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -641,6 +627,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                 </span>
               </div>
               <div
+                className="paper_buttons_row"
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-file"
+                  />
+                    PDF
+                </button>
+              </div>
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -655,6 +654,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                  
                 <span
                   className="area_name"
+                  title="Digital citizenship, Digital education revolution, Digital literacies"
                 >
                   Digital citizenship, Digital education revolution, Digital literacies
                 </span>
@@ -961,6 +961,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Conceptualizing digital literacies and digital ethics for sustainability education (2014-08-14)"
                   >
                     <span>
                       <span
@@ -1007,12 +1008,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                />
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -1022,67 +1020,71 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         S Brown
                       </span>
                     </span>
-                  </span>
-                  <span
-                    className="list_in"
+                  </div>
+                  <div
+                    className="list_source short"
                   >
-                     in 
-                  </span>
-                  <span
-                    className="list_published_in"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                        Brown , S 2014 , ' Conceptualizing 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        digital
-                      </span>
-                      <span
-                        className=""
-                      >
-                         literacies and 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        digital
-                      </span>
-                      <span
-                        className=""
-                      >
-                         ethics for sustainability 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        education
-                      </span>
-                      <span
-                        className=""
-                      >
-                         ' International Journal of Sustainability in Higher 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        Education
-                      </span>
-                      <span
-                        className=""
-                      >
-                         , vol 15 , no. 3 , pp. 280-290 . DOI:10.1108/IJSHE-08-2012-0078
+                    <span
+                      className="list_in"
+                    >
+                       in 
+                    </span>
+                    <span
+                      className="list_published_in"
+                    >
+                      <span>
+                        <span
+                          className=""
+                        >
+                          Brown , S 2014 , ' Conceptualizing 
+                        </span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          digital
+                        </span>
+                        <span
+                          className=""
+                        >
+                           literacies and 
+                        </span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          digital
+                        </span>
+                        <span
+                          className=""
+                        >
+                           ethics for sustainability 
+                        </span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          education
+                        </span>
+                        <span
+                          className=""
+                        >
+                           ' International Journal of Sustainability in Higher 
+                        </span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          Education
+                        </span>
+                        <span
+                          className=""
+                        >
+                           , vol 15 , no. 3 , pp. 280-290 . DOI:10.1108/IJSHE-08-2012-0078
+                        </span>
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -1160,6 +1162,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              />
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -1174,6 +1179,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Digital citizenship, Digital education revolution, Digital literacies"
                 >
                   Digital citizenship, Digital education revolution, Digital literacies
                 </span>
@@ -1214,6 +1220,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Digital Education And Learning: The Growing Trend In Academic And Business Spaces—An International Overview (2018)"
                   >
                     <span>
                       <span
@@ -1249,24 +1256,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                >
-                  <a
-                    className="link2 oa-link"
-                    onClick={[Function]}
-                  >
-                    PDF 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -1276,7 +1268,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         P. K. Paul, P. S. Aithal
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -1343,6 +1335,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-file"
+                  />
+                    PDF
+                </button>
+              </div>
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -1357,6 +1362,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Digital citizenship, Digital education revolution, Digital literacies"
                 >
                   Digital citizenship, Digital education revolution, Digital literacies
                 </span>
@@ -1386,6 +1392,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Paradox, promise and public pedagogy: implications of the federal government's Digital Education Revolution (2011)"
                   >
                     <span>
                       <span
@@ -1426,12 +1433,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                />
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -1441,7 +1445,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Rachel Buchanan
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -1497,6 +1501,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              />
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -1511,6 +1518,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Digital citizenship, Digital education revolution, Digital literacies"
                 >
                   Digital citizenship, Digital education revolution, Digital literacies
                 </span>
@@ -1540,6 +1548,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Developing The Vision: Preparing Teachers To Deliver A Digital World-Class Education System (2012-04-01)"
                   >
                     <span>
                       <span
@@ -1580,12 +1589,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                />
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -1595,29 +1601,33 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Jenny M Lane
                       </span>
                     </span>
-                  </span>
-                  <span
-                    className="list_in"
+                  </div>
+                  <div
+                    className="list_source short"
                   >
-                     in 
-                  </span>
-                  <span
-                    className="list_published_in"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                        Australian Journal of Teacher 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        Education
+                    <span
+                      className="list_in"
+                    >
+                       in 
+                    </span>
+                    <span
+                      className="list_published_in"
+                    >
+                      <span>
+                        <span
+                          className=""
+                        >
+                          Australian Journal of Teacher 
+                        </span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          Education
+                        </span>
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -1684,6 +1694,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              />
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -1698,6 +1711,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Decision support, Digital food education, Education revolution"
                 >
                   Decision support, Digital food education, Education revolution
                 </span>
@@ -1727,6 +1741,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Digital agility and digital decision-making: conceptualising digital inclusion in the context of disabled learners in higher education (2010)"
                   >
                     <span>
                       <span
@@ -1779,12 +1794,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                />
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -1794,7 +1806,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Jane Seale, E.A. Draffan, Mike Wald
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -1845,6 +1857,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              />
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -1859,6 +1874,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Higher education institutions, Digital inclusion, Higher education students"
                 >
                   Higher education institutions, Digital inclusion, Higher education students
                 </span>
@@ -1888,6 +1904,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Digital “Tsunami” in Higher Education: Democratisation Movement Towards Open And Free Education (2013-09-01)"
                   >
                     <span>
                       <span
@@ -1929,12 +1946,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                />
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -1944,29 +1958,33 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Jean D. COMEAU, Tung Lai CHENG
                       </span>
                     </span>
-                  </span>
-                  <span
-                    className="list_in"
+                  </div>
+                  <div
+                    className="list_source short"
                   >
-                     in 
-                  </span>
-                  <span
-                    className="list_published_in"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                        Volume: 14, Issue: 3 198-224 ; 1302-6488 ; Turkish Online Journal of Distance 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        Education
+                    <span
+                      className="list_in"
+                    >
+                       in 
+                    </span>
+                    <span
+                      className="list_published_in"
+                    >
+                      <span>
+                        <span
+                          className=""
+                        >
+                          Volume: 14, Issue: 3 198-224 ; 1302-6488 ; Turkish Online Journal of Distance 
+                        </span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          Education
+                        </span>
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -2022,6 +2040,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              />
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -2036,6 +2057,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Decision support, Digital food education, Education revolution"
                 >
                   Decision support, Digital food education, Education revolution
                 </span>
@@ -2076,6 +2098,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Confirmatory factor analysis of the essential digital competencies for undergraduate students in thai higher education institutions (2019)"
                   >
                     <span>
                       <span
@@ -2116,24 +2139,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                >
-                  <a
-                    className="link2 oa-link"
-                    onClick={[Function]}
-                  >
-                    PDF 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -2143,7 +2151,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Thamasan Suwanroj, Punnee Leekitchwatana, Paitoon Pimdee
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -2199,6 +2207,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-file"
+                  />
+                    PDF
+                </button>
+              </div>
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -2213,6 +2234,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Higher education institutions, Digital inclusion, Higher education students"
                 >
                   Higher education institutions, Digital inclusion, Higher education students
                 </span>
@@ -2253,6 +2275,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Integrating Digital Libraries into Distance Education: A Review of Models, Roles, And Strategies (2019-04-01)"
                   >
                     <span>
                       <span
@@ -2293,24 +2316,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                >
-                  <a
-                    className="link2 oa-link"
-                    onClick={[Function]}
-                  >
-                    PDF 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -2320,34 +2328,38 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Christopher M. OWUSU-ANSAH, Antonio da Silva RODRIGUES, Thomas B. van der WALT
                       </span>
                     </span>
-                  </span>
-                  <span
-                    className="list_in"
+                  </div>
+                  <div
+                    className="list_source short"
                   >
-                     in 
-                  </span>
-                  <span
-                    className="list_published_in"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                        The Turkish Online Journal of Distance 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        Education
-                      </span>
-                      <span
-                        className=""
-                      >
-                        , Vol 20, Iss 2, Pp 89-104 (2019)
+                    <span
+                      className="list_in"
+                    >
+                       in 
+                    </span>
+                    <span
+                      className="list_published_in"
+                    >
+                      <span>
+                        <span
+                          className=""
+                        >
+                          The Turkish Online Journal of Distance 
+                        </span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          Education
+                        </span>
+                        <span
+                          className=""
+                        >
+                          , Vol 20, Iss 2, Pp 89-104 (2019)
+                        </span>
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -2425,6 +2437,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-file"
+                  />
+                    PDF
+                </button>
+              </div>
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -2439,6 +2464,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Digital libraries, European debate, Information science education"
                 >
                   Digital libraries, European debate, Information science education
                 </span>
@@ -2479,6 +2505,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Presentation of the monograph: Technologies, Education and Digital Divide ; Presentación del Monográfico: Tecnologías, Educación y Brecha Digital (2017-01-17)"
                   >
                     <span>
                       <span
@@ -2506,13 +2533,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       <span
                         className=""
                       >
-                         Divide ; Presentación del Monográfico: Tecnologías, Educación y Brecha 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        Digital
+                         Divide ; Presentación del Monográfico: Tecnologías, Educación y Bre...
                       </span>
                     </span>
                     <span>
@@ -2525,24 +2546,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                >
-                  <a
-                    className="link2 oa-link"
-                    onClick={[Function]}
-                  >
-                    PDF 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -2552,23 +2558,27 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Melchor Gómez
                       </span>
                     </span>
-                  </span>
-                  <span
-                    className="list_in"
+                  </div>
+                  <div
+                    className="list_source short"
                   >
-                     in 
-                  </span>
-                  <span
-                    className="list_published_in"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                        Tendencias Pedagógicas; Vol. 29 (2017): Tecnologías, educación y brecha digital; 7-8 ; 1989-8614 ; 1133-2654 ; 10.15366/tp2017.29
+                    <span
+                      className="list_in"
+                    >
+                       in 
+                    </span>
+                    <span
+                      className="list_published_in"
+                    >
+                      <span>
+                        <span
+                          className=""
+                        >
+                          Tendencias Pedagógicas; Vol. 29 (2017): Tecnologías, educación y brecha digital; 7-8 ; 1989-8614 ; 1133-2654 ; 10.15366/tp2017.29
+                        </span>
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -2624,6 +2634,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-file"
+                  />
+                    PDF
+                </button>
+              </div>
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -2638,6 +2661,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Digital age, Academic dishonesty, Brecha digital"
                 >
                   Digital age, Academic dishonesty, Brecha digital
                 </span>
@@ -2678,6 +2702,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="DIGITAL COMPETENCE IN THE CONTEXT OF LEARNING CONCEPTUAL ASPECTS IN HIGHER EDUCATION INSTITUTIONS (2019-05-23)"
                   >
                     <span>
                       <span
@@ -2713,24 +2738,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                >
-                  <a
-                    className="link2 oa-link"
-                    onClick={[Function]}
-                  >
-                    PDF 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -2740,62 +2750,66 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Olga Vindača
                       </span>
                     </span>
-                  </span>
-                  <span
-                    className="list_in"
+                  </div>
+                  <div
+                    className="list_source short"
                   >
-                     in 
-                  </span>
-                  <span
-                    className="list_published_in"
-                  >
-                    <span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        Education
-                      </span>
-                      <span
-                        className=""
-                      >
-                         Reform: 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        Education
-                      </span>
-                      <span
-                        className=""
-                      >
-                         Content Research and Implementation Problems; Vol 1 (2019): 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        Education
-                      </span>
-                      <span
-                        className=""
-                      >
-                         Reform: 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        Education
-                      </span>
-                      <span
-                        className=""
-                      >
-                         Content Research and Implementation Problems; 67-78 ; 2661-5266 ; 2661-5258
+                    <span
+                      className="list_in"
+                    >
+                       in 
+                    </span>
+                    <span
+                      className="list_published_in"
+                    >
+                      <span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          Education
+                        </span>
+                        <span
+                          className=""
+                        >
+                           Reform: 
+                        </span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          Education
+                        </span>
+                        <span
+                          className=""
+                        >
+                           Content Research and Implementation Problems; Vol 1 (2019): 
+                        </span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          Education
+                        </span>
+                        <span
+                          className=""
+                        >
+                           Reform: 
+                        </span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          Education
+                        </span>
+                        <span
+                          className=""
+                        >
+                           Content Research and Implementation Problems; 67-78 ; 2661-5266 ; 2661-5258
+                        </span>
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -2851,6 +2865,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-file"
+                  />
+                    PDF
+                </button>
+              </div>
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -2865,6 +2892,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Higher education institutions, Digital inclusion, Higher education students"
                 >
                   Higher education institutions, Digital inclusion, Higher education students
                 </span>
@@ -2894,6 +2922,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Digital Literacies or Digital Competence : Conceptualizations in Nordic Curricula (2019)"
                   >
                     <span>
                       <span
@@ -2929,12 +2958,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                />
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -2944,7 +2970,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Anna-Lena Godhe
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -3022,6 +3048,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              />
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -3036,6 +3065,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Digital competence, Teacher education, Competencia digital"
                 >
                   Digital competence, Teacher education, Competencia digital
                 </span>
@@ -3076,6 +3106,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Capturing digital (in)equity in teaching and learning: a sociocritical approach (2019)"
                   >
                     <span>
                       <span
@@ -3105,24 +3136,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                >
-                  <a
-                    className="link2 oa-link"
-                    onClick={[Function]}
-                  >
-                    PDF 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -3132,23 +3148,27 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Simon Collin, Périne Brotcorne
                       </span>
                     </span>
-                  </span>
-                  <span
-                    className="list_in"
+                  </div>
+                  <div
+                    className="list_source short"
                   >
-                     in 
-                  </span>
-                  <span
-                    className="list_published_in"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                        The International Journal of Information and Learning Technology, Vol. 36, no.2, p. 169-18 (2019)
+                    <span
+                      className="list_in"
+                    >
+                       in 
+                    </span>
+                    <span
+                      className="list_published_in"
+                    >
+                      <span>
+                        <span
+                          className=""
+                        >
+                          The International Journal of Information and Learning Technology, Vol. 36, no.2, p. 169-18 (2019)
+                        </span>
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -3226,6 +3246,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-file"
+                  />
+                    PDF
+                </button>
+              </div>
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -3240,6 +3273,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Digital citizenship, Digital education revolution, Digital literacies"
                 >
                   Digital citizenship, Digital education revolution, Digital literacies
                 </span>
@@ -3269,6 +3303,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Inspired by digital (2014)"
                   >
                     <span>
                       <span
@@ -3293,12 +3328,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                />
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -3308,7 +3340,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Jean Edwards
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -3353,6 +3385,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              />
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -3367,6 +3402,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Higher education institutions, Digital inclusion, Higher education students"
                 >
                   Higher education institutions, Digital inclusion, Higher education students
                 </span>
@@ -3396,6 +3432,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Computer says no: an analysis of three digital food education resources (2016-08-26)"
                   >
                     <span>
                       <span
@@ -3436,12 +3473,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                />
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -3451,7 +3485,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Michael Gard, Eimear Enright
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -3529,6 +3563,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              />
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -3543,6 +3580,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Decision support, Digital food education, Education revolution"
                 >
                   Decision support, Digital food education, Education revolution
                 </span>
@@ -3583,6 +3621,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Teacher education students engaging with digital identity narratives (2018-06-14)"
                   >
                     <span>
                       <span
@@ -3623,24 +3662,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                >
-                  <a
-                    className="link2 oa-link"
-                    onClick={[Function]}
-                  >
-                    PDF 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -3650,23 +3674,27 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Leila Kajee
                       </span>
                     </span>
-                  </span>
-                  <span
-                    className="list_in"
+                  </div>
+                  <div
+                    className="list_source short"
                   >
-                     in 
-                  </span>
-                  <span
-                    className="list_published_in"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                        South African Journal of Education; Vol 38, No 2 (2018); 1-9 ; 2076-3433 ; 0256-0100
+                    <span
+                      className="list_in"
+                    >
+                       in 
+                    </span>
+                    <span
+                      className="list_published_in"
+                    >
+                      <span>
+                        <span
+                          className=""
+                        >
+                          South African Journal of Education; Vol 38, No 2 (2018); 1-9 ; 2076-3433 ; 0256-0100
+                        </span>
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -3711,6 +3739,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-file"
+                  />
+                    PDF
+                </button>
+              </div>
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -3725,6 +3766,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Digital citizenship, Digital education revolution, Digital literacies"
                 >
                   Digital citizenship, Digital education revolution, Digital literacies
                 </span>
@@ -3754,6 +3796,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Motivating and Retaining CS2 Students with a Competative Game Programming Project (2007)"
                   >
                     <span>
                       <span
@@ -3772,12 +3815,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                />
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -3787,56 +3827,60 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Ryan Garlick, Robert G. Akl
                       </span>
                     </span>
-                  </span>
-                  <span
-                    className="list_in"
+                  </div>
+                  <div
+                    className="list_source short"
                   >
-                     in 
-                  </span>
-                  <span
-                    className="list_published_in"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                        International Network for Engineering 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        Education
-                      </span>
-                      <span
-                        className=""
-                      >
-                         and Research (iNEER) Special Volume: Innovations 2007 - World Innovations in Engineering 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        Education
-                      </span>
-                      <span
-                        className=""
-                      >
-                         and Research, 2007, Arlington: International Network for Engineering 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        Education
-                      </span>
-                      <span
-                        className=""
-                      >
-                         and Research, pp. 1-9
+                    <span
+                      className="list_in"
+                    >
+                       in 
+                    </span>
+                    <span
+                      className="list_published_in"
+                    >
+                      <span>
+                        <span
+                          className=""
+                        >
+                          International Network for Engineering 
+                        </span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          Education
+                        </span>
+                        <span
+                          className=""
+                        >
+                           and Research (iNEER) Special Volume: Innovations 2007 - World Innovations in Engineering 
+                        </span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          Education
+                        </span>
+                        <span
+                          className=""
+                        >
+                           and Research, 2007, Arlington: International Network for Engineering 
+                        </span>
+                        <span
+                          className="query_term_highlight "
+                          style={Object {}}
+                        >
+                          Education
+                        </span>
+                        <span
+                          className=""
+                        >
+                           and Research, pp. 1-9
+                        </span>
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -3870,6 +3914,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              />
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -3884,6 +3931,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Information commons, Metadata education, Public education"
                 >
                   Information commons, Metadata education, Public education
                 </span>
@@ -3924,6 +3972,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Using digital storytelling to prepare new teachers for multicultural and digital natives' classrooms. (2014)"
                   >
                     <span>
                       <span
@@ -3964,24 +4013,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                >
-                  <a
-                    className="link2 oa-link"
-                    onClick={[Function]}
-                  >
-                    PDF 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -3991,7 +4025,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Agnes Chigona
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -4047,6 +4081,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-file"
+                  />
+                    PDF
+                </button>
+              </div>
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -4061,6 +4108,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Digital storytelling, Citizenship education, Distance education"
                 >
                   Digital storytelling, Citizenship education, Distance education
                 </span>
@@ -4101,6 +4149,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Desarrollo de la competencia digital en la formación inicial del profesorado de Educación Infantil ; Development of Digital Competence in the initial teacher education of early childhood education (2018-01-12)"
                   >
                     <span>
                       <span
@@ -4128,24 +4177,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       <span
                         className=""
                       >
-                         Competence in the initial teacher 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        education
-                      </span>
-                      <span
-                        className=""
-                      >
-                         of early childhood 
-                      </span>
-                      <span
-                        className="query_term_highlight "
-                        style={Object {}}
-                      >
-                        education
+                         Competence...
                       </span>
                     </span>
                     <span>
@@ -4158,24 +4190,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                >
-                  <a
-                    className="link2 oa-link"
-                    onClick={[Function]}
-                  >
-                    PDF 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -4185,7 +4202,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Pilar Aristizabal Llorente, Esther Cruz Iglesias
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -4241,6 +4258,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-file"
+                  />
+                    PDF
+                </button>
+              </div>
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -4255,6 +4285,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Digital competence, Teacher education, Competencia digital"
                 >
                   Digital competence, Teacher education, Competencia digital
                 </span>
@@ -4284,6 +4315,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="The Unplugged Office Space and the Role of Sustainable Design in Higher Education (2008)"
                   >
                     <span>
                       <span
@@ -4308,12 +4340,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                />
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -4323,7 +4352,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Alicia Stewart, Krista Radspinner
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -4368,6 +4397,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              />
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -4382,6 +4414,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Information commons, Metadata education, Public education"
                 >
                   Information commons, Metadata education, Public education
                 </span>
@@ -4422,6 +4455,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 >
                   <a
                     id="paper_list_title"
+                    title="Polish philology education in the digital age. Is it still present at Polish schools and universities? (2020-03-01)"
                   >
                     <span>
                       <span
@@ -4462,24 +4496,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </a>
                 </div>
                 <div
-                  className="list_links"
-                >
-                  <a
-                    className="link2 oa-link"
-                    onClick={[Function]}
-                  >
-                    PDF 
-                    <span
-                      className="outlink_symbol"
-                    >
-                      
-                    </span>
-                  </a>
-                </div>
-                <div
                   className="list_details"
                 >
-                  <span
+                  <div
                     className="list_authors"
                   >
                     <span>
@@ -4489,23 +4508,27 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         Agnieszka Wierzbicka
                       </span>
                     </span>
-                  </span>
-                  <span
-                    className="list_in"
+                  </div>
+                  <div
+                    className="list_source short"
                   >
-                     in 
-                  </span>
-                  <span
-                    className="list_published_in"
-                  >
-                    <span>
-                      <span
-                        className=""
-                      >
-                        Acta Universitatis Lodziensis. Folia Litteraria Polonica, Vol 56, Iss 1, Pp 127-141 (2020)
+                    <span
+                      className="list_in"
+                    >
+                       in 
+                    </span>
+                    <span
+                      className="list_published_in"
+                    >
+                      <span>
+                        <span
+                          className=""
+                        >
+                          Acta Universitatis Lodziensis. Folia Litteraria Polonica, Vol 56, Iss 1, Pp 127-141 (2020)
+                        </span>
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
                 <div
                   className="doi_outlink"
@@ -4572,6 +4595,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </span>
               </p>
               <div
+                className="paper_buttons_row"
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-file"
+                  />
+                    PDF
+                </button>
+              </div>
+              <div
                 id="list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
@@ -4586,6 +4622,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                  
                 <span
                   className="area_name"
+                  title="Decision support, Digital food education, Education revolution"
                 >
                   Decision support, Digital food education, Education revolution
                 </span>

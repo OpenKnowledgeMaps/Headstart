@@ -11,7 +11,7 @@ import {
 } from "../../utils/data";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import { shorten } from "../../utils/string";
-import PaperButtons from "../PaperButtons";
+import PaperButtons from "./PaperButtons";
 
 import Abstract from "./Abstract";
 import AccessIcons from "./AccessIcons";

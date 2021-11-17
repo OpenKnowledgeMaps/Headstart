@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import useMatomo from "../utils/useMatomo";
-import { getPaperPDFClickHandler } from "../utils/data";
-import { mapDispatchToListEntriesProps } from "../utils/eventhandlers";
+import useMatomo from "../../utils/useMatomo";
+import { getPaperPDFClickHandler } from "../../utils/data";
+import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 
 const PaperButtons = ({ paper, handlePDFClick }) => {
   const { trackEvent } = useMatomo();

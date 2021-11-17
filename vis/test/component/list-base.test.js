@@ -201,7 +201,7 @@ describe("List entries component - special BASE tests", () => {
         );
       });
 
-      const pdfPreview = container.querySelector(".link2.oa-link");
+      const pdfPreview = container.querySelector(".paper_button");
       act(() => {
         ReactTestUtils.Simulate.click(pdfPreview);
       });
