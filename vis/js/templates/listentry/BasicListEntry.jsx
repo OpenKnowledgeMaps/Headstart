@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { useLocalizationContext } from "../../components/LocalizationProvider";
 import {
   getPaperPDFClickHandler,
   getPaperPreviewImage,
@@ -31,8 +30,6 @@ const BasicListEntry = ({
   showPreviewImage,
   showRealPreviewImage,
 }) => {
-  const loc = useLocalizationContext();
-
   const id = paper.safe_id;
   const access = {
     isOpenAccess: !!paper.oa,
