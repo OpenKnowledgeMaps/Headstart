@@ -198,10 +198,8 @@ fill_empty_clusters <- function(nn_tfidf, nn_corpus){
 
 get_title_ngrams <- function(titles, stops) {
   # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
-  titles_bigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), 2), paste, collapse  = "_"))), paste, collapse = " ")
-  titles_bigrams = prune_ngrams(titles_bigrams, stops)
-  titles_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), 3), paste, collapse = "_"))), paste, collapse = " ")
-  titles_trigrams = prune_ngrams(titles_trigrams, stops)
+  titles_bigrams = prune_ngrams(lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), 2), paste, collapse  = "_"))), paste, collapse = " "), stops)
+  titles_trigrams = prune_ngrams(lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), 3), paste, collapse = "_"))), paste, collapse = " "), stops)
   #titles_quadgrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 4), paste, collapse="_"))), paste, collapse=" ")
   #titles_quadgrams = prune_ngrams(titles_quadgrams, stops)
   #titles_fivegrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 5), paste, collapse="_"))), paste, collapse=" ")

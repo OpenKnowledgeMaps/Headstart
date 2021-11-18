@@ -67,6 +67,12 @@ class Create(Resource):
             abort(500, "Problem encountered, check logs.")
 
 
+@vis_ns.route('/queue_length')
+class ServiceVersion(Resource):
+    def get(self):
+        q_len = redis_store.llen("input_data")
+        result = {"queue_length": q_len}
+        return make_response(result, 200, {"Content-Type": "application/json"})
 
 @vis_ns.route('/service_version')
 class ServiceVersion(Resource):
