@@ -64,7 +64,6 @@ var data_config = {
     },
     
     is_evaluation: true,
-    evaluation_service: ["ga", "matomo"],
     
     use_hypothesis: true,
     
