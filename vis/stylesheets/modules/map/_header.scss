@@ -59,16 +59,14 @@
 #context {
     font-size: 11px;
     color: $black;
-    button {
-        background: none!important;
-        border: none;
-        padding: 0!important;
-        cursor: pointer!important;
-    }
     .context_moreinfo {
         border-bottom: 1px solid $medium-blue;
         cursor: help;
         color: $medium-blue;
+
+        &.clickable {
+            cursor: pointer;
+        }
 
         &:hover {
             border-bottom: 2px solid $medium-blue;
