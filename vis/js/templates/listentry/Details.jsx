@@ -5,7 +5,7 @@ import Highlight from "../../components/Highlight";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import { getAuthorsList } from "../../utils/data";
 
-const MAX_AUTHORS_LENGTH = 100;
+const MAX_AUTHORS_LENGTH = 90;
 
 const Details = ({ authors, source, isSelected }) => {
   const loc = useLocalizationContext();
