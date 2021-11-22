@@ -1,10 +1,9 @@
 library(logging)
-library(GMD)
-library(MASS)
 library(vegan)
 library(tm)
 library(textcat)
 library(proxy)
+library(GMD)
 library(SnowballC)
 library(jsonlite)
 library(parfossil)
@@ -12,7 +11,6 @@ library(doParallel)
 library(stringi)
 library(stringdist)
 library(plyr)
-library(onehot)
 registerDoParallel(detectCores(all.tests = FALSE, logical = TRUE)-1)
 
 
@@ -56,7 +54,7 @@ vis_layout <- function(text, metadata, service,
   
   if(vis_type=='overview'){
     stops <- get_stopwords(lang, testing)
-    corpus <- create_corpus(metadata, text, c(lang))
+    corpus <- create_corpus(metadata, text, stops)
 
     vlog$debug("get features")
     tdm_matrix <- create_tdm_matrix(corpus$stemmed)
@@ -68,9 +66,10 @@ vis_layout <- function(text, metadata, service,
 
     vlog$debug("get cluster summaries")
     metadata = replace_keywords_if_empty(metadata, stops, service)
+    type_counts <- get_type_counts(corpus$unlowered)
     named_clusters <- create_cluster_labels(clusters, metadata,
                                             service, lang,
-                                            corpus$unlowered,
+                                            type_counts,
                                             weightingspec="ntn", top_n=3,
                                             stops=stops, taxonomy_separator)
     output <- create_overview_output(named_clusters, layout, metadata)

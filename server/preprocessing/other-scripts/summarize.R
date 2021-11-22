@@ -6,12 +6,6 @@ SplitTokenizer <- function(x) {
   return(tokens)
 }
 
-TypeCountTokenizer <- function(x) {
-  tokens = unlist(lapply(strsplit(words(x), split=";"), paste), use.names = FALSE)
-  tokens = unlist(lapply(tokens, stri_replace_all, regex='[^[:alnum:]-]', replacement=""))
-  return(tokens)
-}
-
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
@@ -43,7 +37,7 @@ prune_ngrams <- function(ngrams, stops){
 
 create_cluster_labels <- function(clusters, metadata,
                                   service, lang,
-                                  unlowered_corpus,
+                                  type_counts,
                                   weightingspec,
                                   top_n, stops, taxonomy_separator="/") {
   nn_corpus <- get_cluster_corpus(clusters, metadata, service, stops, taxonomy_separator)
@@ -78,7 +72,6 @@ create_cluster_labels <- function(clusters, metadata,
     }
     clusters$cluster_labels[c(matches)] = summary
   }
-  type_counts <- get_type_counts(unlowered_corpus)
   clusters$cluster_labels <- fix_cluster_labels(clusters$cluster_labels, type_counts)
   return(clusters)
 }
@@ -141,7 +134,7 @@ get_cluster_corpus <- function(clusters, metadata, service, stops, taxonomy_sepa
     all_subjects <- str_replace_all(all_subjects, " ?; ?", ";")
     subjectlist = c(subjectlist, all_subjects)
   }
-  nn_corpus <- Corpus(VectorSource(subjectlist))
+  nn_corpus <- VCorpus(VectorSource(subjectlist))
   return(nn_corpus)
 }
 
@@ -231,8 +224,3 @@ filter_out_nested_ngrams <- function(top_ngrams, top_n) {
   return(head(unique(top_names), top_n))
 }
 
-
-get_type_counts <- function(corpus) {
-  type_counts = apply(TermDocumentMatrix(corpus, control=list(tokenize=TypeCountTokenizer, tolower = FALSE)), 1, sum)
-  return(type_counts)
-}
