@@ -11,11 +11,11 @@ import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import Abstract from "./Abstract";
 import AccessIcons from "./AccessIcons";
 import Area from "./Area";
+import Citations from "./Citations";
 import Details from "./Details";
 import ListEntry from "./ListEntry";
 import SidePreviewIcons from "./SidePreviewIcons";
 import PreviewImage from "./PreviewImage";
-import Readers from "./Readers";
 import Title from "./Title";
 
 /**
@@ -64,8 +64,8 @@ const BasicListEntry = ({
           onClick={preview.onClickPDF}
         />
       )}
-      <Area paper={paper} />
-      <Readers number={readers} label={baseUnit} />
+      <Area paper={paper} isShort />
+      <Citations number={readers} label={baseUnit} />
     </ListEntry>
     // html template ends here
   );

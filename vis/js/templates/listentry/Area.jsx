@@ -7,6 +7,7 @@ import useMatomo from "../../utils/useMatomo";
 
 const Area = ({
   paper,
+  isShort = false,
   trackMouseOver,
   disableClicks,
   handleZoomIn,
@@ -35,6 +36,7 @@ const Area = ({
     // html template starts here
     <div
       id="list_area"
+      className={isShort ? "short" : undefined}
       onClick={handleClick}
       onMouseOver={handleMouseOver}
       onMouseOut={handleAreaMouseout}

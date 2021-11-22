@@ -72,8 +72,13 @@ const StandardListEntry = ({
     isInStream: isInStreamBacklink,
     onClick: () => handleBacklinkClick(),
   };
-  const citations =
-    !isContentBased && !!baseUnit && !showMetrics ? paper.num_readers : null;
+
+  const citations = paper.num_readers;
+  const showCitations =
+    !isContentBased &&
+    !!baseUnit &&
+    !showMetrics &&
+    (!!citations || parseInt(citations) === 0);
 
   return (
     // html template starts here
@@ -102,10 +107,8 @@ const StandardListEntry = ({
         />
       )}
       <PaperButtons paper={paper} />
-      {!isStreamgraph && <Area paper={paper} />}
-      {(!!citations || parseInt(citations) === 0) && (
-        <Citations number={citations} label={baseUnit} />
-      )}
+      {!isStreamgraph && <Area paper={paper} isShort={showCitations} />}
+      {showCitations && <Citations number={citations} label={baseUnit} />}
       {!!backlink.show && (
         <EntryBacklink
           onClick={backlink.onClick}

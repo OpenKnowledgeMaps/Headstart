@@ -251,8 +251,12 @@ s.resulttype {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    max-width: 82%;
+    max-width: 95%;
     padding-right: 0;
+
+    &.short {
+        max-width: 82%;
+    }
 
     .area_name {
         color: $medium-blue;
