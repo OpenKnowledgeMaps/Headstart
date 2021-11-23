@@ -422,8 +422,10 @@ function createFileChangeMiddleware() {
 function createRecordActionMiddleware() {
   return function ({ getState }) {
     return (next) => (action) => {
-      const state = getState();
-      logAction(action, state);
+      if (!action.canceled) {
+        const state = getState();
+        logAction(action, state);
+      }
       return next(action);
     };
   };
