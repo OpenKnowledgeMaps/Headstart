@@ -1138,7 +1138,7 @@ describe("Context line component", () => {
         );
       });
 
-      const select = document.querySelector("#more-info-link button");
+      const select = document.querySelector("#more-info-link span");
       act(() => {
         const event = new Event("click", { bubbles: true });
         select.dispatchEvent(event);

@@ -37,8 +37,8 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
     className="context_item"
     id="more-info-link"
   >
-    <button
-      className="context_moreinfo"
+    <span
+      className="context_moreinfo clickable"
       onClick={[Function]}
     />
   </span>
@@ -90,8 +90,8 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
     className="context_item"
     id="more-info-link"
   >
-    <button
-      className="context_moreinfo"
+    <span
+      className="context_moreinfo clickable"
       onClick={[Function]}
     />
   </span>
@@ -148,8 +148,8 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
     className="context_item"
     id="more-info-link"
   >
-    <button
-      className="context_moreinfo"
+    <span
+      className="context_moreinfo clickable"
       onClick={[Function]}
     />
   </span>
@@ -242,8 +242,8 @@ exports[`Context line component snapshot matches a project website (base low qua
     className="context_item"
     id="more-info-link"
   >
-    <button
-      className="context_moreinfo"
+    <span
+      className="context_moreinfo clickable"
       onClick={[Function]}
     />
   </span>
@@ -336,8 +336,8 @@ exports[`Context line component snapshot matches a project website (pubmed high 
     className="context_item"
     id="more-info-link"
   >
-    <button
-      className="context_moreinfo"
+    <span
+      className="context_moreinfo clickable"
       onClick={[Function]}
     />
   </span>
@@ -402,8 +402,8 @@ exports[`Context line component snapshot matches a viper snapshot 1`] = `
     className="context_item"
     id="more-info-link"
   >
-    <button
-      className="context_moreinfo"
+    <span
+      className="context_moreinfo clickable"
       onClick={[Function]}
     />
   </span>
