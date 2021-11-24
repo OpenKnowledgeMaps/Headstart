@@ -24,7 +24,7 @@
     font-size: 16px;
     font-family: $base-font-family;
     margin: 20px 0px 10px;
-    color: $medium-blue;
+    color: $modal-title;
 }
 
 .datasource-logo {
@@ -91,7 +91,7 @@
 }
 
 .modal-title {
-    color: $medium-blue;
+    color: $modal-title;
     font-size: 20px;
     font-weight: $fontweight700;
     font-family: $base-font-family;
@@ -188,7 +188,7 @@
 }
 
 .embed-modal-title, .cite-modal-title {
-    color: $medium-blue;
+    color: $modal-title;
     text-transform: uppercase;
     margin: 0px;
     font-size: 16px;

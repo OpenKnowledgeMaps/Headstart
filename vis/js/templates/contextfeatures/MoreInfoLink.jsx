@@ -22,7 +22,7 @@ const MoreInfoLink = ({ onClick }) => {
   return (
     // html template starts here
     <span id="more-info-link" className="context_item">
-      <span onClick={handleClick} className="context_moreinfo clickable">
+      <span onClick={handleClick} className="context_moreinfo infolink">
         {loc.intro_label}
       </span>
     </span>

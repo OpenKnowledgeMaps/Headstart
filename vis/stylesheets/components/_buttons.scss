@@ -148,16 +148,18 @@ img#close-button {
 }
 
 .paper_buttons_row {
-    margin: 10px 0px;
+    margin: 10px 0px 15px;
 }
 
 .paper_button {
     color: white;
     border: 1px solid #E55137;
     background-color: #E55137;
-    padding: 5px;
+    padding: 6px 4px;
     border-radius: 5px;
     cursor: pointer;
+    width: 100px;
+    font-weight: normal;
 
     &:hover {
         color: #E55137;

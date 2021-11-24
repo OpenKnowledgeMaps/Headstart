@@ -133,8 +133,8 @@ text {
 }
 
 #filter_params, #sort {
-    color: $okm-modal-btn;
-    background-color: $white;
+    color: $white;
+    background-color: $okm-modal-btn;
     border-color: $okm-modal-btn;
     padding: 6px 4px !important;
 }
@@ -145,8 +145,8 @@ text {
 }
 
 #filter_params:hover, #sort:hover {
-    color: $white;
-    background-color: $okm-modal-btn;
+    color: $okm-modal-btn;
+    background-color: $white;
     border-color: $okm-modal-btn;
 }
 

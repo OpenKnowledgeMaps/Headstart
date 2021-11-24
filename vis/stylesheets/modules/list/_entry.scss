@@ -153,12 +153,12 @@
     }
 
     .doi_outlink_link {
-        color: $framed-item;
+        color: $link-gray;
         text-decoration: none;
-        border-bottom: 1px solid $framed-item;
+        border-bottom: 1px solid $link-gray;
 
         &:hover {
-            border-bottom: 3px solid $framed-item;
+            border-bottom: 3px solid $link-gray;
         }
     }
 
@@ -245,6 +245,11 @@ s.resulttype {
     .area_tag, .keyword_tag {
         font-weight: $fontweight700;
     }
+
+    .keywords {
+        font-weight: normal;
+        color: #333;
+    }
 }
 
 #list_area {
@@ -264,13 +269,13 @@ s.resulttype {
     }
 
     .area_name {
-        color: $medium-blue;
+        color: $link-gray;
         cursor: pointer;
-        border-bottom: 1px solid $medium-blue;
+        border-bottom: 1px solid $link-gray;
 
         &:hover {
             text-decoration: none;
-            border-bottom: 2px solid $medium-blue;
+            border-bottom: 2px solid $link-gray;
         }
     }
 }

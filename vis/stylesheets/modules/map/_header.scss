@@ -32,12 +32,12 @@
         height: 15px;
 
         a {
-            border-bottom: 1px solid $medium-blue;
-            color: $medium-blue;
+            border-bottom: 1px solid $link-gray;
+            color: $link-gray;
             text-decoration: none;
 
             &:hover {
-                border-bottom: 2px solid $medium-blue;
+                border-bottom: 2px solid $link-gray;
             }
         }
     }
@@ -60,16 +60,18 @@
     font-size: 11px;
     color: $black;
     .context_moreinfo {
-        border-bottom: 1px solid $medium-blue;
+        border-bottom: 1px solid $link-gray;
         cursor: help;
-        color: $medium-blue;
-
-        &.clickable {
-            cursor: pointer;
-        }
+        color: $link-gray;
 
         &:hover {
-            border-bottom: 2px solid $medium-blue;
+            border-bottom-width: 2px;
+        }
+
+        &.infolink {
+            cursor: pointer;
+            color: $infolink;
+            border-bottom-color: $infolink;
         }
     }
     .modifier {
@@ -321,7 +323,7 @@
         height: min-content; // 19.8px
         overflow: hidden;
         white-space: nowrap;
-        max-width: 660px;
+        max-width: 800px;
     }
 
     .features {

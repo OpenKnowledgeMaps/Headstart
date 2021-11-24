@@ -5,11 +5,13 @@
 }
 
 .builtwith a {
-  text-decoration: underline;
-}
-
-.builtwith a:hover {
   text-decoration: none;
+  border-bottom: 1px solid $link-gray;
+  color: $link-gray;
+
+  &:hover {
+    border-bottom-width: 2px;
+  }
 }
 
 @media screen and (max-width: 640px) {
