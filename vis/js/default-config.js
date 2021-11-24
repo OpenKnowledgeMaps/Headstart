@@ -94,8 +94,6 @@ var config = {
     show_loading_screen: false,
     //evaluation mode/events logging
     is_evaluation: false,
-    //which evaluation service to use. can also be an array. currently possible: "log", "matomo" and "ga"
-    evaluation_service: "log",
     //enable logging of mouseover events (use only temporarily as it creates A LOT of logging events)
     enable_mouseover_evaluation: false,
     //whether to embed the okmaps credit
