@@ -22,27 +22,6 @@ create_overview_output <- function(named_clusters, layout, metadata) {
 
   output_json = toJSON(output)
 
-  if(exists("DEBUG") && DEBUG == TRUE) {
-    library(ggplot2)
-    # Plot results from multidimensional scaling, highlight clusters with symbols
-    temp <- fromJSON(output_json)
-    temp$x <- as.numeric(temp$x)
-    temp$y <- as.numeric(temp$y)
-    temp$title <- unlist(lapply(temp$title, substr, start=0, stop=15))
-    g <- ggplot(temp, aes(x, y, label=title)) +
-          geom_point(aes(colour=area_uri)) +
-          geom_text(size=2)
-    ggsave(file = "debug_nmds.svg", plot = g, width = 15, height = 15)
-  }
-
-  # NEEDS FIX
-  # if(exists("DEBUG") && DEBUG == TRUE) {
-  #   # Write output to file
-  #   file_handle = file("output_file.csv", open="w")
-  #   write.csv(output, file=file_handle, row.names=FALSE)
-  #   close(file_handle)
-  # }
-
   return(output_json)
 
 }
