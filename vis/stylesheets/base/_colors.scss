@@ -28,6 +28,7 @@ $list_metadata_title_paper: #333;
 $list_show_hide_button: #2d3e52; //#5c6d7f;
 $highlight-searchterm: #eff3f4;
 $modal-title: #2d3e52;
+$area-title-h2: #333;
 
 // Additional colors for buttons etc.
 $okm-modal-btn: #2d3e52;
@@ -66,6 +67,7 @@ $highlight: #e1e5e5;
     $list_show_hide_button: #3696e0;
     $highlight-searchterm: #F8F8F8;
     $modal-title: $medium-blue;
+    $area-title-h2: $okm-blue;
 
     // Additional colors
     $okm-modal-btn: #3696e0;
@@ -86,6 +88,7 @@ $highlight: #e1e5e5;
     $higher_value_tag: #DC2260;
     $highlight-searchterm: #F4F4F6;
     $modal-title: $medium-blue;
+    $area-title-h2: $okm-blue;
 }
 
 @if $skin == 'linkedcat' {
@@ -102,6 +105,7 @@ $highlight: #e1e5e5;
     $paper-icon: #cbcbcb;
     $highlight-searchterm: #dadada;
     $modal-title: $medium-blue;
+    $area-title-h2: $okm-blue;
 }
 
 @if $skin == 'covis' {
@@ -120,6 +124,7 @@ $highlight: #e1e5e5;
     $okm-red: #1e6662;
     $infolink: #1e6662;
     $modal-title: $medium-blue;
+    $area-title-h2: $okm-blue;
 }
 
 @if $skin == 'triple' {
@@ -138,4 +143,5 @@ $highlight: #e1e5e5;
     $okm-red: #ed1c24;
     $infolink: #622166;
     $modal-title: $medium-blue;
+    $area-title-h2: $okm-blue;
 }
