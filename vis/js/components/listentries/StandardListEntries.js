@@ -34,7 +34,7 @@ const StandardListEntries = ({
   disableClicks,
   handleZoomIn,
   handleSelectPaper,
-  handleDeselectPaper,
+  handleSelectPaperWithZoom,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
@@ -44,9 +44,10 @@ const StandardListEntries = ({
     if (disableClicks) {
       return;
     }
-    handleSelectPaper(paper);
     if (!isStreamgraph) {
-      handleZoomIn(paper);
+      handleSelectPaperWithZoom(paper);
+    } else {
+      handleSelectPaper(paper);
     }
   };
 
@@ -54,8 +55,7 @@ const StandardListEntries = ({
     if (disableClicks) {
       return;
     }
-    handleDeselectPaper();
-    handleZoomIn(paper, "list-area");
+    handleZoomIn(paper);
   };
 
   return (

@@ -32,7 +32,7 @@ var MyMediator = function() {
     this.fileData = [];
     this.mediator = new Mediator();
     this.manager = new ModuleManager();
-    this.intermediate_layer = new Intermediate(this.rescale_map, this.record_action);
+    this.intermediate_layer = new Intermediate(this.rescale_map);
     this.init();
     this.init_state();
 };
@@ -55,9 +55,6 @@ MyMediator.prototype = {
 
         // bubbles events
         this.mediator.subscribe("bubbles_update_data_and_areas", this.bubbles_update_data_and_areas);
-
-        // misc
-        this.mediator.subscribe("record_action", this.record_action);
     },
 
     init_state: function() {
@@ -149,10 +146,6 @@ MyMediator.prototype = {
         this.viz.append('<div id="app-container"></div>');
 
         mediator.render_frontend();
-    },
-
-    record_action: function(id, category, action, user, type, timestamp, additional_params, post_data) {
-        window.headstartInstance.recordAction(id, category, action, user, type, timestamp, additional_params, post_data);
     },
 
     dimensions_update: function() {

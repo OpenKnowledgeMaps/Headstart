@@ -94,6 +94,17 @@ const modals = (
         ...state,
         openCitationModal: false,
       };
+    case "ZOOM_IN":
+    case "ZOOM_OUT":
+      return {
+        ...state,
+        openInfoModal: false,
+        openEmbedModal: false,
+        openViperEditModal: false,
+        openCitationModal: false,
+        previewedPaper: null,
+      };
+
     default:
       return state;
   }

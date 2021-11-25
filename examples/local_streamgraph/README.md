@@ -11,7 +11,7 @@ module.exports = {
 
 Then the process is the same as with the local files example: start the dev server npm start. When the build is done, the streamgraph can be accessed at
 
-`http://localhost:8080/examples/local_streamgraph/index.html`
+`http://localhost:8080/local_streamgraph/`
 
 In future, it might be nice to come up with a solution that doesn't involve config file, but uses for example a system variable or a specific npm run command.
 

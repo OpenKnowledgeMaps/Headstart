@@ -15,8 +15,7 @@ import { shorten } from "../../utils/string";
 const BasicListEntries = ({
   displayedData,
   handleZoomIn,
-  handleSelectPaper,
-  handleDeselectPaper,
+  handleSelectPaperWithZoom,
   handlePDFClick,
   handleAreaMouseover,
   handleAreaMouseout,
@@ -31,16 +30,14 @@ const BasicListEntries = ({
     if (disableClicks) {
       return;
     }
-    handleSelectPaper(paper);
-    handleZoomIn(paper);
+    handleSelectPaperWithZoom(paper);
   };
 
   const handleAreaClick = (paper) => {
     if (disableClicks) {
       return;
     }
-    handleDeselectPaper();
-    handleZoomIn(paper, "list-area");
+    handleZoomIn(paper);
   };
 
   return (

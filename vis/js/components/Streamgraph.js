@@ -25,7 +25,7 @@ import {
   TOOLTIP_OFFSET,
 } from "../utils/streamgraph";
 
-import { deselectPaper, zoomIn, zoomOut } from "../actions";
+import { zoomIn, zoomOut } from "../actions";
 
 /**
  * Class representing the streamgraph visualization.
@@ -541,7 +541,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onAreaClick: (stream) => {
-    dispatch(deselectPaper());
     dispatch(
       zoomIn({ title: stream.key, color: stream.color, docIds: stream.docIds })
     );

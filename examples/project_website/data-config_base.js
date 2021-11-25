@@ -38,7 +38,6 @@ var data_config = {
   show_keywords: true,
 
   is_evaluation: true,
-  evaluation_service: ["matomo"],
 
   use_hypothesis: true,
 

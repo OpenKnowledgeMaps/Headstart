@@ -13,6 +13,8 @@ import {
   applyForceAreas,
   applyForcePapers,
   preinitializeStore,
+  zoomIn,
+  zoomOut,
 } from "./actions";
 
 import { STREAMGRAPH_MODE } from "./reducers/chartType";
@@ -23,6 +25,10 @@ import logAction from "./utils/actionLogger";
 import { getChartSize, getListSize } from "./utils/dimensions";
 import Headstart from "./components/Headstart";
 import { sanitizeInputData } from "./utils/data";
+import { createAnimationCallback } from "./utils/eventhandlers";
+import { removeQueryParams, handleUrlAction } from "./utils/url";
+import debounce from "./utils/debounce";
+import { handleTitleAction } from "./utils/title";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -41,13 +47,18 @@ class Intermediate {
       createRepeatedInitializeMiddleware(this),
       createChartTypeMiddleware(),
       createRescaleMiddleware(rescaleCallback),
-      createRecordActionMiddleware()
+      createRecordActionMiddleware(),
+      createQueryParameterMiddleware(),
+      createPageTitleMiddleware(this)
     );
 
     this.store = createStore(rootReducer, middleware);
   }
 
   renderFrontend(config) {
+    this.config = config;
+    this.originalTitle = document.title;
+
     this.store.dispatch(preinitializeStore(config));
 
     ReactDOM.render(
@@ -56,20 +67,27 @@ class Intermediate {
       </Provider>,
       document.getElementById("app-container")
     );
+
+    window.addEventListener(
+      "popstate",
+      debounce(this.onBackButtonClick.bind(this), 300)
+    );
   }
 
   initStore(config, context, mapData, streamData) {
     const { size, width, height } = getChartSize(config, context);
     const list = getListSize(config, context, size);
 
-    const sanitizedMapData = sanitizeInputData(mapData);
+    this.config = config;
+    this.sanitizedMapData = sanitizeInputData(mapData);
+    this.streamData = streamData;
 
     this.store.dispatch(
       initializeStore(
         config,
         context,
-        sanitizedMapData,
-        streamData,
+        this.sanitizedMapData,
+        this.streamData,
         size,
         width,
         height,
@@ -87,6 +105,135 @@ class Intermediate {
 
       this.applyForceLayout();
     }
+
+    // enable this for ability to share link to a zoomed bubble / paper
+    // if (queryParams.has("paper")) {
+    //   this.selectUrlPaper();
+    // } else {
+    //   this.zoomUrlArea();
+    // }
+    // remove the following lines if the previous line is uncommented
+    const queryParams = new URLSearchParams(window.location.search);
+    const paramsToRemove = [];
+    if (queryParams.has("area")) {
+      paramsToRemove.push("area");
+    }
+    if (queryParams.has("paper")) {
+      paramsToRemove.push("paper");
+    }
+    if (paramsToRemove.length > 0) {
+      removeQueryParams(...paramsToRemove);
+    }
+  }
+
+  /**
+   * Function for when the browser back button is clicked.
+   *
+   * This function is the reason zoom-in and zoom-out actions are also queued
+   * in the queue middleware.
+   *
+   * For a better user experience, it should be debounced.
+   */
+  onBackButtonClick() {
+    const queryParams = new URLSearchParams(window.location.search);
+
+    if (!queryParams.has("area")) {
+      if (this.config.is_streamgraph && queryParams.has("paper")) {
+        removeQueryParams("paper");
+      }
+      this.store.dispatch(
+        zoomOut(createAnimationCallback(this.store.dispatch), true)
+      );
+
+      return;
+    }
+
+    // this can be optimized: if the area is the same as before, simply
+    // deselect the paper or select a different one
+
+    if (queryParams.has("area") && !queryParams.has("paper")) {
+      this.zoomUrlArea();
+
+      return;
+    }
+
+    if (queryParams.has("paper")) {
+      this.selectUrlPaper();
+    }
+  }
+
+  /**
+   * Selects the paper that's specified in the query params.
+   */
+  selectUrlPaper() {
+    if (this.config.is_streamgraph) {
+      // paper cannot be selected in streamgraph
+      removeQueryParams("area", "paper");
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+
+    if (!params.has("paper")) {
+      return;
+    }
+
+    const zoomedPaper = params.get("paper");
+
+    const paper = this.sanitizedMapData.find((p) => p.safe_id === zoomedPaper);
+
+    if (!paper) {
+      return;
+    }
+
+    this.store.dispatch(
+      zoomIn(
+        { title: paper.area, uri: paper.area_uri },
+        createAnimationCallback(this.store.dispatch),
+        this.store.getState().zoom,
+        true,
+        paper
+      )
+    );
+  }
+
+  /**
+   * Zooms into an area that's specified in the query params.
+   */
+  zoomUrlArea() {
+    const params = new URLSearchParams(window.location.search);
+
+    if (!params.has("area")) {
+      return;
+    }
+
+    const zoomedArea = params.get("area");
+
+    if (this.config.is_streamgraph) {
+      // the instant zoom in doesn't work for streamgraph, because the data is not processed here yet (this.streamData)
+      // proper data processing refactoring is necessary
+      // this is a workaround that simply zooms out
+      removeQueryParams("area");
+      this.store.dispatch(
+        zoomOut(createAnimationCallback(this.store.dispatch), true)
+      );
+      return;
+    }
+
+    const area = this.sanitizedMapData.find((a) => a.area_uri == zoomedArea);
+
+    if (!area) {
+      return;
+    }
+
+    this.store.dispatch(
+      zoomIn(
+        { title: area.area, uri: area.area_uri },
+        createAnimationCallback(this.store.dispatch),
+        this.store.getState().zoom,
+        true
+      )
+    );
   }
 
   // triggered on window resize
@@ -132,7 +279,10 @@ function createActionQueueMiddleware(intermediate) {
 
       if (getState().animation !== null) {
         if (!ALLOWED_IN_ANIMATION.includes(action.type)) {
-          if (!NOT_QUEUED_IN_ANIMATION.includes(action.type)) {
+          if (
+            !NOT_QUEUED_IN_ANIMATION.includes(action.type) ||
+            action.isFromBackButton
+          ) {
             actionQueue.push({ ...action });
           }
           action.canceled = true;
@@ -145,7 +295,13 @@ function createActionQueueMiddleware(intermediate) {
       if (action.type === "STOP_ANIMATION") {
         while (actionQueue.length > 0) {
           const queuedAction = actionQueue.shift();
-          dispatch(queuedAction);
+          if (!NOT_QUEUED_IN_ANIMATION.includes(queuedAction.type)) {
+            dispatch(queuedAction);
+          } else {
+            requestAnimationFrame(() => {
+              dispatch(queuedAction);
+            });
+          }
         }
       }
 
@@ -266,8 +422,35 @@ function createFileChangeMiddleware() {
 function createRecordActionMiddleware() {
   return function ({ getState }) {
     return (next) => (action) => {
-      const state = getState();
-      logAction(action, state);
+      if (!action.canceled) {
+        const state = getState();
+        logAction(action, state);
+      }
+      return next(action);
+    };
+  };
+}
+
+function createQueryParameterMiddleware() {
+  return function () {
+    return (next) => (action) => {
+      if (!action.canceled && !action.isFromBackButton) {
+        handleUrlAction(action);
+      }
+
+      return next(action);
+    };
+  };
+}
+
+function createPageTitleMiddleware(itm) {
+  return function ({ getState }) {
+    return (next) => (action) => {
+      if (!action.canceled && !action.isFromBackButton) {
+        const state = getState();
+        handleTitleAction(action, itm.originalTitle, state);
+      }
+
       return next(action);
     };
   };

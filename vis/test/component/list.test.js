@@ -17,7 +17,6 @@ import {
   zoomIn,
   selectPaper,
   highlightArea,
-  deselectPaperBacklink,
   showPreview,
   deselectPaper,
 } from "../../js/actions";
@@ -1071,7 +1070,7 @@ describe("List entries component", () => {
 
     it("triggers a correct backlink click action in linkedcat (zoomed)", () => {
       const PAPER = linkedcatData.find((p) => p.safe_id === "AC15093982");
-      const EXPECTED_PAYLOAD = deselectPaperBacklink();
+      const EXPECTED_PAYLOAD = deselectPaper();
       const storeObject = setup(
         { list: [PAPER] },
         { show: true },
