@@ -20,7 +20,7 @@ const PaperButtons = ({ paper, handlePDFClick }) => {
     <div className="paper_buttons_row">
       {!!onPDFClick && (
         <button className="paper_button" onClick={handlePDFButtonClick}>
-          <i className="fa fa-file"></i>&nbsp;&nbsp;PDF
+          <i className="fa fa-eye"></i>&nbsp;&nbsp;PDF
         </button>
       )}
     </div>
