@@ -56,7 +56,7 @@ def retrieve_input_data(casedata):
 
 
 def get_dataprocessing_result(casedata):
-    url = "http://localhost/api/stable/vis/create"
+    url = "http://127.0.0.1/api/dev/vis/create"
     res = requests.post(url, json=casedata)
     return pd.DataFrame.from_records(res.json())
 
