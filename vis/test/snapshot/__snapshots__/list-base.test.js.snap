@@ -266,7 +266,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
           style={
             Object {
               "display": "block",
-              "height": undefined,
+              "height": 800,
             }
           }
         >
@@ -934,7 +934,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
           style={
             Object {
               "display": "block",
-              "height": undefined,
+              "height": 800,
             }
           }
         >

@@ -27,14 +27,16 @@ describe("areas state", () => {
             min_area_size: 50,
             max_area_size: 110,
             reference_size: 650,
-            bubble_min_scale: 1,
-            bubble_max_scale: 1.1,
             zoom_factor: 0.9,
           },
           {},
           RAW_DATA,
           "",
-          800
+          800,
+          null,
+          null,
+          800,
+          { bubbleMinScale: 1, bubbleMaxScale: 1.1 }
         )
       );
 
@@ -51,14 +53,16 @@ describe("areas state", () => {
             min_area_size: 50,
             max_area_size: 110,
             reference_size: 650,
-            bubble_min_scale: 1,
-            bubble_max_scale: 1.1,
             zoom_factor: 0.9,
           },
           {},
           RAW_DATA_MULTIPLE,
           "",
-          800
+          800,
+          null,
+          null,
+          800,
+          { bubbleMinScale: 1, bubbleMaxScale: 1.1 }
         )
       );
 
@@ -76,11 +80,7 @@ describe("areas state", () => {
     it("should return the zoomed in state", () => {
       const result = reducer(
         INITIALIZED_STATE,
-        zoomIn(
-          { uri: INITIALIZED_STATE.list[0].area_uri },
-          undefined,
-          false
-        )
+        zoomIn({ uri: INITIALIZED_STATE.list[0].area_uri }, undefined, false)
       );
       expect(result).toEqual(ZOOMED_STATE);
     });

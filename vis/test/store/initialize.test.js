@@ -139,7 +139,17 @@ describe("config and context state", () => {
 
         const result = headingReducer(
           initialState,
-          initializeStore(configObject, contextObject)
+          initializeStore(
+            configObject,
+            contextObject,
+            [],
+            null,
+            500,
+            null,
+            null,
+            500,
+            {}
+          )
         );
 
         expect(result).toEqual(EXPECTED_RESULT);
@@ -167,7 +177,17 @@ describe("config and context state", () => {
 
         const result = headingReducer(
           initialState,
-          initializeStore(configObject, contextObject)
+          initializeStore(
+            configObject,
+            contextObject,
+            [],
+            null,
+            500,
+            null,
+            null,
+            500,
+            {}
+          )
         );
 
         expect(result).toEqual(EXPECTED_RESULT);
@@ -192,7 +212,17 @@ describe("config and context state", () => {
 
         const result = headingReducer(
           initialState,
-          initializeStore(configObject, contextObject)
+          initializeStore(
+            configObject,
+            contextObject,
+            [],
+            null,
+            500,
+            null,
+            null,
+            500,
+            {}
+          )
         );
 
         expect(result).toEqual(EXPECTED_RESULT);
@@ -219,7 +249,17 @@ describe("config and context state", () => {
 
       const result = headingReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual(EXPECTED_RESULT);
@@ -245,7 +285,17 @@ describe("config and context state", () => {
 
       const result = headingReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual(EXPECTED_RESULT);
@@ -271,7 +321,17 @@ describe("config and context state", () => {
 
       const result = headingReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual(EXPECTED_RESULT);
@@ -297,7 +357,17 @@ describe("config and context state", () => {
 
       const result = headingReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual(EXPECTED_RESULT);
@@ -339,7 +409,17 @@ describe("config and context state", () => {
 
       const result = localizationReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual(EXPECTED_RESULT);
@@ -370,7 +450,17 @@ describe("config and context state", () => {
 
       const result = queryReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result.text).toEqual(EXPECTED_RESULT);
@@ -384,7 +474,17 @@ describe("config and context state", () => {
 
       const result = queryReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result.text).toEqual(EXPECTED_RESULT);
@@ -403,7 +503,17 @@ describe("config and context state", () => {
 
       const result = queryReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result.parsedTerms).toEqual(EXPECTED_RESULT);
@@ -437,7 +547,17 @@ describe("config and context state", () => {
 
       const result = filesReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual(EXPECTED_RESULT);
@@ -484,7 +604,17 @@ describe("config and context state", () => {
 
       const result = timespanReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual("11 Aug 2019 - 12 Aug 2020");
@@ -510,7 +640,17 @@ describe("config and context state", () => {
 
       const result = timespanReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual("Until 12 Aug 2020");
@@ -536,7 +676,17 @@ describe("config and context state", () => {
 
       const result = timespanReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual("Until 2019");
@@ -562,7 +712,17 @@ describe("config and context state", () => {
 
       const result = timespanReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual(null);
@@ -589,12 +749,20 @@ describe("config and context state", () => {
 
       const result = timespanReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
-      expect(result).toEqual(
-        `2019 - ${TODAY.getFullYear()}`
-      );
+      expect(result).toEqual(`2019 - ${TODAY.getFullYear()}`);
     });
 
     it("should initialize a correct timespan 'Until 2019' (triple streamgraph)", () => {
@@ -619,7 +787,17 @@ describe("config and context state", () => {
 
       const result = timespanReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual("Until 2019");
@@ -648,7 +826,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("show", true);
@@ -667,7 +855,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("show", false);
@@ -686,51 +884,48 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("show", false);
     });
 
     it("should initialize correct articles count", () => {
-      const ARTICLES_COUNT = 42;
+      const FAKE_DATA = [...Array(42).keys()];
       const initialState = {};
-      const { configObject, contextObject } = setup(
-        {},
-        {
-          num_documents: ARTICLES_COUNT,
-        }
-      );
+      const { configObject, contextObject } = setup({}, {});
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          FAKE_DATA,
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
-      expect(result).toHaveProperty("articlesCount", ARTICLES_COUNT);
-    });
-
-    it("should initialize null articles count", () => {
-      const ARTICLES_COUNT = undefined;
-
-      const initialState = {};
-      const { configObject, contextObject } = setup(
-        {},
-        {
-          num_documents: ARTICLES_COUNT,
-        }
-      );
-
-      const result = contextLineReducer(
-        initialState,
-        initializeStore(configObject, contextObject)
-      );
-
-      expect(result).toHaveProperty("articlesCount", ARTICLES_COUNT);
+      expect(result).toHaveProperty("articlesCount", FAKE_DATA.length);
     });
 
     it("should initialize correct modifier type", () => {
       const MODIFIER = "most-recent";
+      const FAKE_DATA = [...Array(101).keys()];
 
       const initialState = {};
       const { configObject, contextObject } = setup(
@@ -741,13 +936,22 @@ describe("config and context state", () => {
           params: {
             sorting: MODIFIER,
           },
-          num_documents: 101,
         }
       );
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          FAKE_DATA,
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("modifier", MODIFIER);
@@ -755,6 +959,7 @@ describe("config and context state", () => {
 
     it("should initialize correct modifier type if number of docs is equal to max", () => {
       const MODIFIER = "most-relevant";
+      const FAKE_DATA = [...Array(100).keys()];
 
       const initialState = {};
       const { configObject, contextObject } = setup(
@@ -765,13 +970,22 @@ describe("config and context state", () => {
           params: {
             sorting: MODIFIER,
           },
-          num_documents: 100,
         }
       );
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          FAKE_DATA,
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("modifier", MODIFIER);
@@ -796,7 +1010,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("modifier", EXPECTED_MODIFIER);
@@ -804,25 +1028,29 @@ describe("config and context state", () => {
 
     it("should initialize correct open access count", () => {
       const SHOW_COUNT = true;
-      const COUNT = 22;
-      const EXPECTED_VALUE = COUNT;
+      const FAKE_DATA = [{ oa: true }, { oa: true }, { oa: true }];
 
       const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          show_context_oa_number: SHOW_COUNT,
-        },
-        {
-          share_oa: COUNT,
-        }
-      );
+      const { configObject, contextObject } = setup({
+        show_context_oa_number: SHOW_COUNT,
+      });
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          FAKE_DATA,
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
-      expect(result).toHaveProperty("openAccessCount", EXPECTED_VALUE);
+      expect(result).toHaveProperty("openAccessCount", FAKE_DATA.length);
     });
 
     it("should hide open access count", () => {
@@ -842,7 +1070,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("openAccessCount", EXPECTED_VALUE);
@@ -868,7 +1106,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("showAuthor", EXPECTED_VALUE);
@@ -893,7 +1141,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("showAuthor", EXPECTED_VALUE);
@@ -918,7 +1176,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("showAuthor", EXPECTED_VALUE);
@@ -948,7 +1216,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("author", EXPECTED_VALUE);
@@ -971,7 +1249,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("author", EXPECTED_VALUE);
@@ -1010,7 +1298,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("documentTypes", [EXPECTED_VALUE]);
@@ -1060,7 +1358,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("documentTypes", EXPECTED_VALUE);
@@ -1099,7 +1407,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("documentTypes", [EXPECTED_VALUE]);
@@ -1138,7 +1456,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("documentTypes", [EXPECTED_VALUE]);
@@ -1170,7 +1498,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("documentTypes", EXPECTED_VALUE);
@@ -1197,7 +1535,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("documentTypes", EXPECTED_VALUE);
@@ -1214,7 +1562,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("dataSource", EXPECTED_VALUE);
@@ -1241,91 +1599,124 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("dataSource", EXPECTED_VALUE);
     });
 
     it("should initialize correct papers count", () => {
-      const COUNT = 420;
+      const FAKE_DATA = [
+        { resulttype: "publication" },
+        { resulttype: "publication" },
+      ];
       const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          create_title_from_context_style: "viper",
-        },
-        {
-          num_papers: COUNT,
-        }
-      );
+      const { configObject, contextObject } = setup({
+        create_title_from_context_style: "viper",
+      });
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          FAKE_DATA,
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
-      expect(result).toHaveProperty("paperCount", COUNT);
+      expect(result).toHaveProperty("paperCount", FAKE_DATA.length);
     });
 
-    it("should initialize null articles count", () => {
-      const COUNT = 420;
+    it("should initialize null papers count", () => {
+      const FAKE_DATA = [...Array(42).keys()];
       const EXPECTED_VALUE = null;
 
       const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          create_title_from_context_style: "linkedcat",
-        },
-        {
-          num_papers: COUNT,
-        }
-      );
+      const { configObject, contextObject } = setup({
+        create_title_from_context_style: "linkedcat",
+      });
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          FAKE_DATA,
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("paperCount", EXPECTED_VALUE);
     });
 
     it("should initialize correct datasets count", () => {
-      const COUNT = 420;
+      const FAKE_DATA = [{ resulttype: "dataset" }, { resulttype: "dataset" }];
       const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          create_title_from_context_style: "viper",
-        },
-        {
-          num_datasets: COUNT,
-        }
-      );
+      const { configObject, contextObject } = setup({
+        create_title_from_context_style: "viper",
+      });
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          FAKE_DATA,
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
-      expect(result).toHaveProperty("datasetCount", COUNT);
+      expect(result).toHaveProperty("datasetCount", FAKE_DATA.length);
     });
 
-    it("should initialize null articles count", () => {
-      const COUNT = 420;
+    it("should initialize null dataset count", () => {
+      const FAKE_DATA = [...Array(42).keys()];
       const EXPECTED_VALUE = null;
 
       const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          create_title_from_context_style: "linkedcat",
-        },
-        {
-          num_datasets: COUNT,
-        }
-      );
+      const { configObject, contextObject } = setup({
+        create_title_from_context_style: "linkedcat",
+      });
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          FAKE_DATA,
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("datasetCount", EXPECTED_VALUE);
@@ -1350,7 +1741,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("projectRuntime", "2009–2012");
@@ -1375,7 +1776,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("projectRuntime", null);
@@ -1400,7 +1811,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("projectRuntime", null);
@@ -1432,7 +1853,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty(
@@ -1467,7 +1898,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("legacySearchLanguage", null);
@@ -1488,7 +1929,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("timestamp", LAST_UPDATED);
@@ -1512,7 +1963,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
@@ -1536,7 +1997,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
@@ -1560,7 +2031,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
@@ -1584,7 +2065,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
@@ -1608,7 +2099,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
@@ -1632,7 +2133,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("metadataQuality", EXPECTED_QUALITY);
@@ -1661,7 +2172,17 @@ describe("config and context state", () => {
 
       const result = contextLineReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("searchLanguage", LANG_ID);
@@ -1691,7 +2212,17 @@ describe("config and context state", () => {
 
       const result = serviceReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual(EXPECTED_SERVICE);
@@ -1710,7 +2241,17 @@ describe("config and context state", () => {
 
       const result = serviceReducer(
         initialState,
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual(SERVICE);
@@ -1737,7 +2278,17 @@ describe("config and context state", () => {
 
       const result = listReducer(
         {},
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("show", SHOW_LIST);
@@ -1752,7 +2303,17 @@ describe("config and context state", () => {
 
       const result = listReducer(
         {},
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("showFilter", SHOW_FILTER);
@@ -1767,7 +2328,17 @@ describe("config and context state", () => {
 
       const result = listReducer(
         {},
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("filterOptions", FILTER_OPTIONS);
@@ -1783,7 +2354,17 @@ describe("config and context state", () => {
 
       const result = listReducer(
         {},
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("showDropdownSort", SHOW_SORT);
@@ -1798,7 +2379,17 @@ describe("config and context state", () => {
 
       const result = listReducer(
         {},
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("sortOptions", SORT_OPTIONS);
@@ -1816,7 +2407,17 @@ describe("config and context state", () => {
 
       const result = listReducer(
         {},
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("sortValue", INITIAL_SORT);
@@ -1834,7 +2435,17 @@ describe("config and context state", () => {
 
       const result = listReducer(
         {},
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("linkType", EXPECTED_LINK_TYPE);
@@ -1849,7 +2460,17 @@ describe("config and context state", () => {
 
       const result = listReducer(
         {},
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("linkType", EXPECTED_LINK_TYPE);
@@ -1864,7 +2485,17 @@ describe("config and context state", () => {
 
       const result = listReducer(
         {},
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("linkType", EXPECTED_LINK_TYPE);
@@ -1887,7 +2518,17 @@ describe("config and context state", () => {
 
       const result = listReducer(
         {},
-        initializeStore(configObject, contextObject)
+        initializeStore(
+          configObject,
+          contextObject,
+          [],
+          null,
+          500,
+          null,
+          null,
+          500,
+          {}
+        )
       );
 
       expect(result).toHaveProperty("linkType", EXPECTED_LINK_TYPE);

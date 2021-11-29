@@ -55,7 +55,7 @@ const BasicListEntry = ({
         />
         <Title paper={paper} />
         <SidePreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />
-        <Details authors={paper.authors} source={paper.published_in} />
+        <Details authors={paper.authors_list} source={paper.published_in} />
       </div>
       <Abstract text={paper.paper_abstract} />
       {!!preview.showPreviewImage && !!preview.onClickPDF && (

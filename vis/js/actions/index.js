@@ -70,7 +70,8 @@ export const initializeStore = (
   chartSize,
   streamWidth,
   streamHeight,
-  listHeight
+  listHeight,
+  scalingFactors,
 ) => ({
   type: "INITIALIZE",
   configObject,
@@ -81,6 +82,7 @@ export const initializeStore = (
   streamWidth,
   streamHeight,
   listHeight,
+  scalingFactors,
 });
 
 /**

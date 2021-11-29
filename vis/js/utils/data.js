@@ -358,6 +358,139 @@ export const getAuthorsList = (authors, firstNameFirst = true) => {
     });
 };
 
+/**
+ * Sanitizes paper coordinate.
+ *
+ * Function migrated from the old code (io.js).
+ *
+ * @param {string} coordinate x or y coordinate
+ * @param {number} decimalDigits number of decimals
+ *
+ * @returns sanitized coordinate
+ */
+export const parseCoordinate = (coordinate, decimalDigits) => {
+  if (isNaN(parseFloat(coordinate))) {
+    return parseFloat(0).toFixed(decimalDigits);
+  }
+
+  const fixedCoordinate = parseFloat(coordinate).toFixed(decimalDigits);
+  if (fixedCoordinate === "-" + parseFloat(0).toFixed(decimalDigits)) {
+    return parseFloat(0).toFixed(decimalDigits);
+  }
+
+  return fixedCoordinate;
+};
+
+/**
+ * Determines whether the paper is open access.
+ *
+ * Function migrated from the old code (io.js).
+ *
+ * @param {object} paper
+ * @param {object} config
+ *
+ * @returns true/false
+ */
+export const isOpenAccess = (paper, config) => {
+  if (config.service === "pubmed") {
+    return typeof paper.pmcid !== "undefined" && paper.pmcid !== "";
+  }
+
+  return paper.oa_state === 1 || paper.oa_state === "1";
+};
+
+/**
+ * Returns paper's open access link.
+ *
+ * Function migrated from the old code (io.js).
+ *
+ * @param {object} paper
+ * @param {object} config
+ *
+ * @returns oa link
+ */
+export const getOpenAccessLink = (paper, config) => {
+  if (config.service === "pubmed") {
+    if (typeof paper.pmcid !== "undefined" && paper.pmcid !== "") {
+      return (
+        "http://www.ncbi.nlm.nih.gov/pmc/articles/" + paper.pmcid + "/pdf/"
+      );
+    }
+
+    return "";
+  }
+
+  return paper.link;
+};
+
+/**
+ * Returns paper's outlink.
+ *
+ * Function migrated from the old code (io.js) - yeah it's shitty.
+ *
+ * @param {object} paper
+ * @param {object} config
+ *
+ * @returns outlink
+ */
+export const getOutlink = (paper, config) => {
+  if (config.service === "base") {
+    return paper.oa_link;
+  }
+
+  if (config.service === "openaire" && paper.resulttype === "dataset") {
+    return config.url_prefix_datasets + paper.url;
+  }
+
+  if (config.url_prefix !== null) {
+    return config.url_prefix + paper.url;
+  }
+
+  if (typeof paper.url !== "undefined") {
+    return paper.url;
+  }
+
+  return "";
+};
+
+/**
+ * Returns displayable metric value.
+ *
+ * Function migrated from the old code (io.js).
+ *
+ * @param {object} paper
+ * @param {string} metric paper property name
+ *
+ * @returns metric value
+ */
+export const getVisibleMetric = (paper, metric) => {
+  if (Object.prototype.hasOwnProperty.call(paper, metric)) {
+    if (paper[metric] === "N/A") {
+      return "n/a";
+    }
+
+    return +paper[metric];
+  }
+};
+
+/**
+ * Returns internal metric value.
+ *
+ * Function migrated from the old code (io.js).
+ *
+ * @param {object} paper
+ * @param {string} metric paper property name
+ *
+ * @returns metric value
+ */
+export const getInternalMetric = (paper, metric) => {
+  if (!paper[metric] || paper[metric].toString().toLowerCase() === "n/a") {
+    return 0;
+  }
+
+  return +paper[metric];
+};
+
 const ATTRS_TO_CHECK = [
   "id",
   "authors",

@@ -17,8 +17,8 @@ const areas = (state = { list: [], size: null, options: {} }, action) => {
         minAreaSize: action.configObject.min_area_size,
         maxAreaSize: action.configObject.max_area_size,
         referenceSize: action.configObject.reference_size,
-        bubbleMinScale: action.configObject.bubble_min_scale,
-        bubbleMaxScale: action.configObject.bubble_max_scale,
+        bubbleMinScale: action.scalingFactors.bubbleMinScale,
+        bubbleMaxScale: action.scalingFactors.bubbleMaxScale,
         zoomFactor: action.configObject.zoom_factor,
       };
       return {

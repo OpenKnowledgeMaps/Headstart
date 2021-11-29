@@ -11,12 +11,11 @@ import data, {
   baseConfig as config,
   baseContext as context,
 } from "../data/base";
-import { deselectPaper, initializeStore } from "../../js/actions";
+import { initializeStore } from "../../js/actions";
 
 import List from "../../js/components/List";
 
 import {
-  selectPaper,
   zoomIn,
   highlightArea,
   showPreview,
@@ -26,10 +25,20 @@ import {
 } from "../../js/actions";
 import reducer from "../../js/reducers";
 import LocalizationProvider from "../../js/components/LocalizationProvider";
+import { getAuthorsList } from "../../js/utils/data";
 
 const setup = () => {
+  data.forEach((d) => (d.authors_list = getAuthorsList(d.authors, true)));
+
   const store = createStore(reducer);
-  store.dispatch(initializeStore(config, context, data));
+  store.dispatch(
+    initializeStore(config, context, data, null, 800, null, null, 800, {
+      bubbleMinScale: config.bubble_min_scale,
+      bubbleMaxScale: config.bubble_max_scale,
+      paperMinScale: config.paper_min_scale,
+      paperMaxScale: config.paper_max_scale,
+    })
+  );
 
   return store;
 };

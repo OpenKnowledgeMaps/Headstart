@@ -144,7 +144,17 @@ describe("data state", () => {
     it("should not initialize the papers if streamgraph", () => {
       const result = reducer(
         { list: [], options: {}, size: null },
-        initializeStore({ is_streamgraph: true }, {}, [], "", 500, 500, 500)
+        initializeStore(
+          { is_streamgraph: true },
+          {},
+          [],
+          "",
+          500,
+          500,
+          500,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual({

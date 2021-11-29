@@ -9,11 +9,9 @@ import configureStore from "redux-mock-store";
 
 import {
   initializeStore,
-  updateDimensions,
   hoverBubble,
   applyForceAreas,
   applyForcePapers,
-  deselectPaper,
   zoomIn,
   selectPaper,
   hoverPaper,
@@ -38,7 +36,14 @@ const FORCE_LAYOUT_PARAMS = {
 
 const setup = () => {
   const store = createStore(reducer);
-  store.dispatch(initializeStore(config, context, data, null, 500));
+  store.dispatch(
+    initializeStore(config, context, data, null, 500, null, null, 500, {
+      bubbleMinScale: config.bubble_min_scale,
+      bubbleMaxScale: config.bubble_max_scale,
+      paperMinScale: config.paper_min_scale,
+      paperMaxScale: config.paper_max_scale,
+    })
+  );
   const state = store.getState();
 
   applyForce(
@@ -353,7 +358,7 @@ describe("Knowledge map component - special BASE tests", () => {
       const realStore = setup();
       const state = { ...realStore.getState() };
       state.zoom = true;
-      const bubble = state.areas.list.find(a => a.papers.length === 1);
+      const bubble = state.areas.list.find((a) => a.papers.length === 1);
       state.selectedBubble = {
         uri: bubble.area_uri,
       };

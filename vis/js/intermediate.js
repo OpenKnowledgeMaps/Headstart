@@ -29,6 +29,7 @@ import { createAnimationCallback } from "./utils/eventhandlers";
 import { removeQueryParams, handleUrlAction } from "./utils/url";
 import debounce from "./utils/debounce";
 import { handleTitleAction } from "./utils/title";
+import DataManager from "./datamanagers/DataManager";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -37,7 +38,11 @@ import { handleTitleAction } from "./utils/title";
  * This class should ideally only talk to the mediator and redux
  */
 class Intermediate {
-  constructor(rescaleCallback) {
+  constructor(config, rescaleCallback) {
+    this.config = config;
+    this.dataManager = new DataManager(config);
+
+    this.originalTitle = "";
     this.actionQueue = [];
 
     const middleware = applyMiddleware(
@@ -55,11 +60,10 @@ class Intermediate {
     this.store = createStore(rootReducer, middleware);
   }
 
-  renderFrontend(config) {
-    this.config = config;
+  renderFrontend() {
     this.originalTitle = document.title;
 
-    this.store.dispatch(preinitializeStore(config));
+    this.store.dispatch(preinitializeStore(this.config));
 
     ReactDOM.render(
       <Provider store={this.store}>
@@ -74,13 +78,19 @@ class Intermediate {
     );
   }
 
-  initStore(config, context, mapData, streamData) {
+  initStore(backendData) {
+    this.dataManager.parseData(backendData);
+    
+    const context = this.dataManager.context;
+    const config = this.config;
+
     const { size, width, height } = getChartSize(config, context);
     const list = getListSize(config, context, size);
 
-    this.config = config;
-    this.sanitizedMapData = sanitizeInputData(mapData);
-    this.streamData = streamData;
+    this.sanitizedMapData = sanitizeInputData(this.dataManager.papers);
+    this.streamData = config.is_streamgraph ? backendData.streamgraph : {};
+
+    const scalingFactors = this.getScalingFactors();
 
     this.store.dispatch(
       initializeStore(
@@ -91,18 +101,12 @@ class Intermediate {
         size,
         width,
         height,
-        list.height
+        list.height,
+        scalingFactors
       )
     );
 
-    if (!config.is_streamgraph) {
-      this.forceLayoutParams = {
-        areasAlpha: config.area_force_alpha,
-        isForceAreas: config.is_force_areas,
-        papersAlpha: config.papers_force_alpha,
-        isForcePapers: config.is_force_papers,
-      };
-
+    if (!this.config.is_streamgraph) {
       this.applyForceLayout();
     }
 
@@ -237,9 +241,9 @@ class Intermediate {
   }
 
   // triggered on window resize
-  updateDimensions(config, context) {
-    const chart = getChartSize(config, context);
-    const list = getListSize(config, context, chart.size);
+  updateDimensions() {
+    const chart = getChartSize(this.config, this.dataManager.context);
+    const list = getListSize(this.config, this.dataManager.context, chart.size);
     this.store.dispatch(updateDimensions(chart, list));
   }
 
@@ -254,8 +258,112 @@ class Intermediate {
         this.store.dispatch(applyForceAreas(newAreas, state.chart.height)),
       (newPapers) =>
         this.store.dispatch(applyForcePapers(newPapers, state.chart.height)),
-      this.forceLayoutParams
+      {
+        areasAlpha: this.getAreasForceAlpha(this.sanitizedMapData.length),
+        isForceAreas: this.config.is_force_areas,
+        papersAlpha: this.getPapersForceAlpha(this.sanitizedMapData.length),
+        isForcePapers: this.config.is_force_papers,
+      }
     );
+  }
+
+  /**
+   * Returns alpha value needed for the force layout.
+   *
+   * The alpha values are adopted from the legacy code.
+   *
+   * @param {number} numOfPapers how many papers are in the vis
+   *
+   * @returns paper force layout alpha value
+   */
+  getPapersForceAlpha(numOfPapers) {
+    if (!this.config.is_force_papers || !this.config.dynamic_force_papers) {
+      return this.config.papers_force_alpha;
+    }
+    if (numOfPapers < 150) {
+      return this.config.papers_force_alpha;
+    }
+    if (numOfPapers < 200) {
+      return 0.2;
+    }
+    if (numOfPapers < 350) {
+      return 0.3;
+    }
+    if (numOfPapers < 500) {
+      return 0.4;
+    }
+
+    return 0.6;
+  }
+
+  /**
+   * Returns alpha value needed for the force layout.
+   *
+   * The alpha values are adopted from the legacy code.
+   *
+   * @param {number} numOfPapers how many papers are in the vis
+   *
+   * @returns area force layout alpha value
+   */
+  getAreasForceAlpha(numOfPapers) {
+    if (!this.config.is_force_area || !this.config.dynamic_force_area) {
+      return this.config.area_force_alpha;
+    }
+
+    if (numOfPapers < 200) {
+      return this.config.area_force_alpha;
+    }
+
+    return 0.02;
+  }
+
+  /**
+   * Returns scaling coefficients for the min and max bubble/paper size.
+   *
+   * @returns object containing the coefficients
+   */
+  getScalingFactors() {
+    const [paperFactor, bubbleFactor] = this.getResizeFactors();
+
+    return {
+      bubbleMinScale: this.config.bubble_min_scale * bubbleFactor,
+      bubbleMaxScale: this.config.bubble_max_scale * bubbleFactor,
+      paperMinScale: this.config.paper_min_scale * paperFactor,
+      paperMaxScale: this.config.paper_max_scale * paperFactor,
+    };
+  }
+
+  /**
+   * Returns resizing coefficients for the min and max bubble/paper size.
+   *
+   * The values were adopted from the legacy code.
+   *
+   * @returns object containing the coefficients
+   */
+  getResizeFactors() {
+    if (!this.config.dynamic_sizing) {
+      return [1, 1];
+    }
+
+    const numOfPapers = this.sanitizedMapData.length;
+
+    if (numOfPapers < 150) {
+      return [1, 1];
+    }
+    if (numOfPapers < 200) {
+      return [0.9, 1.1];
+    }
+    if (numOfPapers < 250) {
+      return [0.8, 1.1];
+    }
+    if (numOfPapers < 300) {
+      return [0.7, 1.1];
+    }
+    if (numOfPapers < 500) {
+      return [0.7, 1.2];
+    }
+
+    return [0.6, 1.2];
   }
 }
 
