@@ -24,7 +24,6 @@ import logAction from "./utils/actionLogger";
 
 import { getChartSize, getListSize } from "./utils/dimensions";
 import Headstart from "./components/Headstart";
-import { sanitizeInputData } from "./utils/data";
 import { createAnimationCallback } from "./utils/eventhandlers";
 import { removeQueryParams, handleUrlAction } from "./utils/url";
 import debounce from "./utils/debounce";
@@ -87,7 +86,6 @@ class Intermediate {
     const { size, width, height } = getChartSize(config, context);
     const list = getListSize(config, context, size);
 
-    this.sanitizedMapData = sanitizeInputData(this.dataManager.papers);
     this.streamData = config.is_streamgraph ? backendData.streamgraph : {};
 
     const scalingFactors = this.getScalingFactors();
@@ -96,7 +94,7 @@ class Intermediate {
       initializeStore(
         config,
         context,
-        this.sanitizedMapData,
+        this.dataManager.papers,
         this.streamData,
         size,
         width,
@@ -184,7 +182,7 @@ class Intermediate {
 
     const zoomedPaper = params.get("paper");
 
-    const paper = this.sanitizedMapData.find((p) => p.safe_id === zoomedPaper);
+    const paper = this.dataManager.papers.find((p) => p.safe_id === zoomedPaper);
 
     if (!paper) {
       return;
@@ -224,7 +222,7 @@ class Intermediate {
       return;
     }
 
-    const area = this.sanitizedMapData.find((a) => a.area_uri == zoomedArea);
+    const area = this.dataManager.papers.find((a) => a.area_uri == zoomedArea);
 
     if (!area) {
       return;
@@ -259,9 +257,9 @@ class Intermediate {
       (newPapers) =>
         this.store.dispatch(applyForcePapers(newPapers, state.chart.height)),
       {
-        areasAlpha: this.getAreasForceAlpha(this.sanitizedMapData.length),
+        areasAlpha: this.getAreasForceAlpha(this.dataManager.papers.length),
         isForceAreas: this.config.is_force_areas,
-        papersAlpha: this.getPapersForceAlpha(this.sanitizedMapData.length),
+        papersAlpha: this.getPapersForceAlpha(this.dataManager.papers.length),
         isForcePapers: this.config.is_force_papers,
       }
     );
@@ -345,7 +343,7 @@ class Intermediate {
       return [1, 1];
     }
 
-    const numOfPapers = this.sanitizedMapData.length;
+    const numOfPapers = this.dataManager.papers.length;
 
     if (numOfPapers < 150) {
       return [1, 1];

@@ -1,7 +1,6 @@
 import { initializeStore, updateDimensions } from "../../js/actions";
 
 import reducer from "../../js/reducers/data";
-import { sanitizeInputData } from "../../js/utils/data";
 
 import localData from "../data/local-files";
 
@@ -174,78 +173,6 @@ describe("data state", () => {
         },
         size: 500,
       });
-    });
-
-    it("should sanitize the input data with a property missing", () => {
-      const mockWarn = jest.fn();
-
-      global.console = {
-        log: console.log,
-        warn: mockWarn,
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
-
-      localData.forEach((entry) => {
-        expect(entry).not.toHaveProperty("area_uri");
-      });
-
-      const sanitizedData = sanitizeInputData(localData);
-
-      expect(mockWarn).toHaveBeenCalled();
-
-      sanitizedData.forEach((entry) => {
-        expect(entry).toHaveProperty("area_uri");
-      });
-    });
-
-    it("should sanitize the input data with a property missing just in some entries", () => {
-      const mockWarn = jest.fn();
-
-      const entry1 = Object.assign({}, localData[0]);
-      entry1.area_uri = "some-uri";
-      const entry2 = Object.assign({}, localData[1]);
-      delete entry2.area_uri;
-      const mockLocalData = [entry1, entry2];
-
-      global.console = {
-        log: console.log,
-        warn: mockWarn,
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
-
-      const sanitizedData = sanitizeInputData(mockLocalData);
-
-      expect(mockWarn).toHaveBeenCalled();
-
-      sanitizedData.forEach((entry) => {
-        expect(entry).toHaveProperty("area_uri");
-      });
-    });
-
-    it("should warn that some properties have a bad type", () => {
-      const mockWarn = jest.fn();
-
-      const entry1 = Object.assign({}, localData[0]);
-      entry1.area_uri = "some-uri";
-      const entry2 = Object.assign({}, localData[1]);
-      entry2.area_uri = true;
-      const mockLocalData = [entry1, entry2];
-
-      global.console = {
-        log: console.log,
-        warn: mockWarn,
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
-
-      sanitizeInputData(mockLocalData);
-
-      expect(mockWarn).toHaveBeenCalled();
     });
 
     it("should not change the state if the action is canceled", () => {

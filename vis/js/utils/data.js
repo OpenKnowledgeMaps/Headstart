@@ -491,82 +491,42 @@ export const getInternalMetric = (paper, metric) => {
   return +paper[metric];
 };
 
-const ATTRS_TO_CHECK = [
-  "id",
-  "authors",
-  "title",
-  "paper_abstract",
-  "year",
-  "oa_state",
-  "subject_orig",
-  "relevance",
-  "x",
-  "y",
-  "area_uri",
-  "area",
-  "cluster_labels",
-];
+/**
+ * Validator function for paper.year property.
+ *
+ * @param {string} date validated date string
+ * @returns {boolean}
+ */
+export const dateValidator = (date) => {
+  if (date.match(/^\d{3,4}$/)) {
+    return true;
+  }
+  if (date.match(/^\d{3,4}-\d{2}$/)) {
+    return true;
+  }
+  if (date.match(/^\d{3,4}-\d{2}-\d{2}$/)) {
+    return true;
+  }
+  if (date.match(/^\d{3,4}-\d{2}-\d{2}\w?\s*[-:\d]*\w?$/)) {
+    return true;
+  }
 
-const MANDATORY_ATTRS = {
-  area_uri: {
-    derive: (entry) => entry.area,
-  },
-};
-
-const ALLOWED_TYPES = {
-  area_uri: ["number", "string"],
+  return false;
 };
 
 /**
- * Function that sanitizes the papers in the input data array.
- *
- * It checks whether some attributes are present and adds fallback values
- * for mandatory parameters.
- *
- * @param {Array} data input papers array
- * @returns {Array} sanitized papers array
+ * Validator function for paper.oa_state property.
+ * @param {string | number} oaState paper.oa_state property
+ * @returns {boolean}
  */
-export const sanitizeInputData = (data) => {
-  let missingAttributes = new Map();
-  let wrongTypes = new Set();
+export const oaStateValidator = (oaState) =>
+  [0, 1, 2].includes(parseInt(oaState));
 
-  data.forEach((entry) => {
-    ATTRS_TO_CHECK.forEach((attr) => {
-      if (typeof entry[attr] === "undefined") {
-        if (!missingAttributes.has(attr)) {
-          missingAttributes.set(attr, 0);
-        }
-        missingAttributes.set(attr, missingAttributes.get(attr) + 1);
-
-        if (MANDATORY_ATTRS[attr]) {
-          entry[attr] = MANDATORY_ATTRS[attr].derive(entry);
-        }
-      }
-
-      if (ALLOWED_TYPES[attr]) {
-        if (entry[attr] && !ALLOWED_TYPES[attr].includes(typeof entry[attr])) {
-          entry[attr] = entry[attr].toString();
-          wrongTypes.add(attr);
-        }
-      }
-    });
-  });
-
-  missingAttributes.forEach((value, key) => {
-    console.warn(
-      `Attribute '${key}' missing in ${
-        value === data.length ? "all" : value
-      } data entries.` +
-        (MANDATORY_ATTRS[key] ? " Fallback value added automatically." : "")
-    );
-  });
-
-  if (wrongTypes.size > 0) {
-    console.warn(
-      `Incorrect data types found and corrected in the following properties: `,
-      wrongTypes
-    );
-  }
-
-  return data;
-};
+/**
+ * Validator for string array.
+ *
+ * @param {[string]} list string array
+ * @returns {boolean}
+ */
+export const stringArrayValidator = (list) =>
+  !list.map((e) => typeof e === "string").some((e) => !e);

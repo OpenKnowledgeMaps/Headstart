@@ -1,17 +1,118 @@
 import $ from "jquery";
 
 import {
+  dateValidator,
   getAuthorsList,
   getInternalMetric,
   getOpenAccessLink,
   getOutlink,
   getVisibleMetric,
   isOpenAccess,
+  oaStateValidator,
   parseCoordinate,
+  stringArrayValidator,
 } from "../utils/data";
 
-// attributes that aren't escaped
-const PROTECTED_ATTRS = new Set(["paper_abstract", "authors"]);
+// name; required?; type?; protected?; validator?; fallback?;
+const PAPER_PROPS = [
+  {
+    name: "id",
+    required: true,
+    type: ["string"],
+    unique: true,
+    fallback: (loc) => loc.default_id,
+  },
+  { name: "identifier", type: ["string"] },
+  {
+    name: "authors",
+    required: true,
+    type: ["string"],
+    protected: true,
+    fallback: (loc) => loc.default_author,
+  },
+  {
+    name: "title",
+    required: true,
+    type: ["string"],
+    fallback: (loc) => loc.no_title,
+  },
+  {
+    name: "paper_abstract",
+    required: true,
+    type: ["string"],
+    protected: true,
+    fallback: (loc) => loc.default_abstract,
+  },
+  {
+    name: "year",
+    required: true,
+    type: ["string"],
+    validator: dateValidator,
+    fallback: (loc) => loc.default_year,
+  },
+  {
+    name: "oa_state",
+    type: ["number", "string"],
+    required: true,
+    validator: oaStateValidator,
+  },
+  {
+    name: "subject_orig",
+    required: true,
+    type: ["string"],
+    fallback: () => "",
+  },
+  { name: "subject_cleaned", required: true, type: ["string"] },
+  { name: "relevance", required: true, type: ["number"] },
+  { name: "link", type: ["string"] },
+  {
+    name: "published_in",
+    type: ["string"],
+    fallback: (loc) => loc.default_published_in,
+  },
+  { name: "fulltext", type: ["string"] },
+  { name: "language", type: ["string"] },
+  { name: "subject", type: ["string"] },
+  {
+    name: "url",
+    type: ["string"],
+    fallback: (loc) => loc.default_url,
+  },
+  {
+    name: "resulttype",
+    type: ["object"],
+    validator: stringArrayValidator,
+    fallback: () => [],
+  },
+  {
+    name: "comments",
+    type: ["object"],
+    validator: stringArrayValidator,
+    fallback: () => [],
+  },
+  { name: "readers", fallback: (loc) => loc.default_readers },
+  {
+    name: "x",
+    type: ["string", "number"],
+    required: true,
+    fallback: (loc) => loc.default_x,
+  },
+  {
+    name: "y",
+    type: ["string", "number"],
+    required: true,
+    fallback: (loc) => loc.default_y,
+  },
+  { name: "area", required: true, fallback: (loc) => loc.default_area },
+  {
+    name: "area_uri",
+    type: ["string", "number"],
+    required: true,
+    fallback: (l, paper) => paper.area,
+  },
+  { name: "cluster_labels", required: true },
+  { name: "file_hash", fallback: (loc) => loc.default_hash },
+];
 
 class DataManager {
   constructor(config) {
@@ -66,22 +167,77 @@ class DataManager {
   }
 
   __sanitizePapers() {
+    this.__checkProperties();
+    this.__addMissingProperties();
+    this.__checkUniqueProperties();
+  }
+
+  __checkProperties() {
+    const missingProps = new Map();
+    const wrongTypes = new Set();
+    const wrongData = new Set();
+
+    this.papers.forEach((paper) => {
+      PAPER_PROPS.forEach((prop) => {
+        if (prop.required && typeof paper[prop.name] === "undefined") {
+          if (!missingProps.has(prop.name)) {
+            missingProps.set(prop.name, 0);
+          }
+          missingProps.set(prop.name, missingProps.get(prop.name) + 1);
+        }
+
+        if (typeof paper[prop.name] !== "undefined") {
+          if (prop.type && !prop.type.includes(typeof paper[prop.name])) {
+            wrongTypes.add(prop.name);
+          }
+          if (prop.validator && !prop.validator(paper[prop.name])) {
+            wrongData.add(prop.name);
+          }
+        }
+      });
+    });
+
+    this.__printMissingPropsWarning(missingProps, this.papers.length);
+    this.__printWrongTypesWarning(wrongTypes);
+    this.__printWrongDataWarning(wrongData);
+  }
+
+  __printMissingPropsWarning(missingProps, dataLength) {
+    missingProps.forEach((value, key) => {
+      console.warn(
+        `Property '${key}' missing in ${
+          value === dataLength ? "all" : value
+        } papers.`
+      );
+    });
+  }
+
+  __printWrongTypesWarning(wrongTypes) {
+    if (wrongTypes.size > 0) {
+      console.warn(
+        `Incorrect data types found in the following properties: `,
+        wrongTypes
+      );
+    }
+  }
+
+  __printWrongDataWarning(wrongTypes) {
+    if (wrongTypes.size > 0) {
+      console.warn(
+        `Malformed data found in the following properties: `,
+        wrongTypes
+      );
+    }
+  }
+
+  __addMissingProperties() {
+    const fallbackProps = PAPER_PROPS.filter((p) => !!p.fallback);
     const loc = this.config.localization[this.config.language];
     this.papers.forEach((paper) => {
-      this.__setFallbackValue(paper, "area", loc.default_area);
-      this.__setFallbackValue(paper, "authors", loc.default_author);
-      this.__setFallbackValue(paper, "file_hash", loc.default_hash);
-      this.__setFallbackValue(paper, "id", loc.default_id);
-      this.__setFallbackValue(paper, "paper_abstract", loc.default_abstract);
-      this.__setFallbackValue(paper, "published_in", loc.default_published_in);
-      this.__setFallbackValue(paper, "readers", loc.default_readers);
-      this.__setFallbackValue(paper, "title", loc.no_title);
-      this.__setFallbackValue(paper, "url", loc.default_url);
-      this.__setFallbackValue(paper, "x", loc.default_x);
-      this.__setFallbackValue(paper, "y", loc.default_y);
-      this.__setFallbackValue(paper, "year", loc.default_year);
-      this.__setFallbackValue(paper, "comments", []);
-      this.__setFallbackValue(paper, "subject_orig", "");
+      fallbackProps.forEach((prop) => {
+        this.__setFallbackValue(paper, prop.name, prop.fallback(loc, paper));
+      });
+
       this.config.scale_types.forEach((type) => {
         this.__setFallbackValue(paper, type, loc.default_readers);
       });
@@ -91,6 +247,27 @@ class DataManager {
   __setFallbackValue(paper, property, fallback) {
     if (typeof paper[property] === "undefined" || paper[property] === null) {
       paper[property] = fallback;
+    }
+  }
+
+  __checkUniqueProperties() {
+    const uniqueProps = PAPER_PROPS.filter((p) => p.unique);
+    const duplicateProps = new Set();
+    uniqueProps.forEach((prop) => {
+      const values = new Set();
+      this.papers.forEach((paper) => {
+        if (values.has(paper[prop.name])) {
+          duplicateProps.add(prop.name);
+        }
+        values.add(paper[prop.name]);
+      });
+    });
+
+    if (duplicateProps.size > 0) {
+      console.warn(
+        `Properties with duplicate values that should be unique found: `,
+        duplicateProps
+      );
     }
   }
 
@@ -136,10 +313,14 @@ class DataManager {
 
   // migrated from legacy code
   __escapeStrings(paper) {
+    const protectedProps = new Set(
+      PAPER_PROPS.filter((p) => p.protected).map((p) => p.name)
+    );
+
     for (const field in paper) {
       if (typeof paper[field] === "string") {
         paper[field] = $("<textarea/>").html(paper[field]).val();
-        if (!PROTECTED_ATTRS.has(field)) {
+        if (!protectedProps.has(field)) {
           paper[field] = paper[field].replace(/</g, "&lt;");
           paper[field] = paper[field].replace(/>/g, "&gt;");
         }
