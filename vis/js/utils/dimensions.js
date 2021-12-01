@@ -25,9 +25,8 @@ const FOOTER_HEIGHT = {
  * container (e.g. in project website).
  *
  * @param {Object} config the headstart config
- * @param {Object} context the headstart context
  */
-export const getChartSize = (config, context) => {
+export const getChartSize = (config) => {
   const container = $(`#${config.tag}`);
 
   // height section

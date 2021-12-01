@@ -78,29 +78,27 @@ class Intermediate {
   }
 
   initStore(backendData) {
-    this.dataManager.parseData(backendData);
-    
-    const context = this.dataManager.context;
     const config = this.config;
+    const { size, width, height } = getChartSize(config);
 
-    const { size, width, height } = getChartSize(config, context);
+    this.dataManager.parseData(backendData, size);
+
+    const context = this.dataManager.context;
+
     const list = getListSize(config, context, size);
-
-    this.streamData = config.is_streamgraph ? backendData.streamgraph : {};
-
-    const scalingFactors = this.getScalingFactors();
 
     this.store.dispatch(
       initializeStore(
         config,
         context,
         this.dataManager.papers,
-        this.streamData,
+        this.dataManager.areas,
+        this.dataManager.streams,
         size,
         width,
         height,
         list.height,
-        scalingFactors
+        this.dataManager.scalingFactors
       )
     );
 
@@ -182,7 +180,9 @@ class Intermediate {
 
     const zoomedPaper = params.get("paper");
 
-    const paper = this.dataManager.papers.find((p) => p.safe_id === zoomedPaper);
+    const paper = this.dataManager.papers.find(
+      (p) => p.safe_id === zoomedPaper
+    );
 
     if (!paper) {
       return;
@@ -313,55 +313,6 @@ class Intermediate {
     }
 
     return 0.02;
-  }
-
-  /**
-   * Returns scaling coefficients for the min and max bubble/paper size.
-   *
-   * @returns object containing the coefficients
-   */
-  getScalingFactors() {
-    const [paperFactor, bubbleFactor] = this.getResizeFactors();
-
-    return {
-      bubbleMinScale: this.config.bubble_min_scale * bubbleFactor,
-      bubbleMaxScale: this.config.bubble_max_scale * bubbleFactor,
-      paperMinScale: this.config.paper_min_scale * paperFactor,
-      paperMaxScale: this.config.paper_max_scale * paperFactor,
-    };
-  }
-
-  /**
-   * Returns resizing coefficients for the min and max bubble/paper size.
-   *
-   * The values were adopted from the legacy code.
-   *
-   * @returns object containing the coefficients
-   */
-  getResizeFactors() {
-    if (!this.config.dynamic_sizing) {
-      return [1, 1];
-    }
-
-    const numOfPapers = this.dataManager.papers.length;
-
-    if (numOfPapers < 150) {
-      return [1, 1];
-    }
-    if (numOfPapers < 200) {
-      return [0.9, 1.1];
-    }
-    if (numOfPapers < 250) {
-      return [0.8, 1.1];
-    }
-    if (numOfPapers < 300) {
-      return [0.7, 1.1];
-    }
-    if (numOfPapers < 500) {
-      return [0.7, 1.2];
-    }
-
-    return [0.6, 1.2];
   }
 }
 

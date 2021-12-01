@@ -60,24 +60,28 @@ export const preinitializeStore = (configObject) => ({
  * Action for initializing the data that aren't known in advance.
  * @param {Object} configObject the default_config.json + data_config.json
  * @param {Object} contextObject the app context
- * @param {Array}  dataArray the papers data
+ * @param {Array}  papers the papers data array
+ * @param {Array}  areas the areas data array
+ * @param {Array}  streams the streams data array
  */
 export const initializeStore = (
   configObject,
   contextObject,
-  dataArray,
-  streamData,
+  papers,
+  areas,
+  streams,
   chartSize,
   streamWidth,
   streamHeight,
   listHeight,
-  scalingFactors,
+  scalingFactors
 ) => ({
   type: "INITIALIZE",
   configObject,
   contextObject,
-  dataArray,
-  streamData,
+  papers,
+  areas,
+  streams,
   chartSize,
   streamWidth,
   streamHeight,

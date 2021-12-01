@@ -8,16 +8,16 @@ const contextLine = (state = {}, action) => {
 
   const config = action.configObject;
   const context = action.contextObject;
-  const data = action.dataArray;
+  const papers = action.papers;
 
   switch (action.type) {
     case "INITIALIZE":
       return {
         show: !!config.show_context && !!context.params,
-        articlesCount: data.length,
-        modifier: getModifier(config, context, data.length),
+        articlesCount: papers.length,
+        modifier: getModifier(config, context, papers.length),
         openAccessCount: config.show_context_oa_number
-          ? data.filter((p) => p.oa).length
+          ? papers.filter((p) => p.oa).length
           : null,
         showAuthor:
           !!config.is_authorview &&
@@ -40,11 +40,11 @@ const contextLine = (state = {}, action) => {
             : config.service_names[context.service],
         paperCount:
           config.create_title_from_context_style === "viper"
-            ? data.filter((p) => p.resulttype === "publication").length
+            ? papers.filter((p) => p.resulttype === "publication").length
             : null,
         datasetCount:
           config.create_title_from_context_style === "viper"
-            ? data.filter((p) => p.resulttype === "dataset").length
+            ? papers.filter((p) => p.resulttype === "dataset").length
             : null,
         funder:
           config.create_title_from_context_style === "viper" && context.params

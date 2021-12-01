@@ -1,136 +1,58 @@
 import $ from "jquery";
+import d3 from "d3";
 
 import {
-  dateValidator,
+  getDiameterScale,
+  getInitialCoordsScale,
+  getCoordsScale,
+  getRadiusScale,
+} from "../utils/scale";
+import {
   getAuthorsList,
   getInternalMetric,
   getOpenAccessLink,
   getOutlink,
   getVisibleMetric,
   isOpenAccess,
-  oaStateValidator,
   parseCoordinate,
-  stringArrayValidator,
 } from "../utils/data";
+import { transformData } from "../utils/streamgraph";
 
-// name; required?; type?; protected?; validator?; fallback?;
-const PAPER_PROPS = [
-  {
-    name: "id",
-    required: true,
-    type: ["string"],
-    unique: true,
-    fallback: (loc) => loc.default_id,
-  },
-  { name: "identifier", type: ["string"] },
-  {
-    name: "authors",
-    required: true,
-    type: ["string"],
-    protected: true,
-    fallback: (loc) => loc.default_author,
-  },
-  {
-    name: "title",
-    required: true,
-    type: ["string"],
-    fallback: (loc) => loc.no_title,
-  },
-  {
-    name: "paper_abstract",
-    required: true,
-    type: ["string"],
-    protected: true,
-    fallback: (loc) => loc.default_abstract,
-  },
-  {
-    name: "year",
-    required: true,
-    type: ["string"],
-    validator: dateValidator,
-    fallback: (loc) => loc.default_year,
-  },
-  {
-    name: "oa_state",
-    type: ["number", "string"],
-    required: true,
-    validator: oaStateValidator,
-  },
-  {
-    name: "subject_orig",
-    required: true,
-    type: ["string"],
-    fallback: () => "",
-  },
-  { name: "subject_cleaned", required: true, type: ["string"] },
-  { name: "relevance", required: true, type: ["number"] },
-  { name: "link", type: ["string"] },
-  {
-    name: "published_in",
-    type: ["string"],
-    fallback: (loc) => loc.default_published_in,
-  },
-  { name: "fulltext", type: ["string"] },
-  { name: "language", type: ["string"] },
-  { name: "subject", type: ["string"] },
-  {
-    name: "url",
-    type: ["string"],
-    fallback: (loc) => loc.default_url,
-  },
-  {
-    name: "resulttype",
-    type: ["object"],
-    validator: stringArrayValidator,
-    fallback: () => [],
-  },
-  {
-    name: "comments",
-    type: ["object"],
-    validator: stringArrayValidator,
-    fallback: () => [],
-  },
-  { name: "readers", fallback: (loc) => loc.default_readers },
-  {
-    name: "x",
-    type: ["string", "number"],
-    required: true,
-    fallback: (loc) => loc.default_x,
-  },
-  {
-    name: "y",
-    type: ["string", "number"],
-    required: true,
-    fallback: (loc) => loc.default_y,
-  },
-  { name: "area", required: true, fallback: (loc) => loc.default_area },
-  {
-    name: "area_uri",
-    type: ["string", "number"],
-    required: true,
-    fallback: (l, paper) => paper.area,
-  },
-  { name: "cluster_labels", required: true },
-  { name: "file_hash", fallback: (loc) => loc.default_hash },
-];
+import DEFAULT_SCHEME from "../dataschemes/defaultScheme";
+
+const GOLDEN_RATIO = 2.6;
 
 class DataManager {
   constructor(config) {
     this.config = config;
+    this.paperProps = DEFAULT_SCHEME;
     // outputs
     this.context = {};
     this.papers = [];
+    this.scalingFactors = {};
     this.streams = [];
     this.areas = [];
   }
 
-  parseData(backendData) {
+  parseData(backendData, chartSize) {
+    // initialize this.context
     this.__parseContext(backendData);
-
+    // initialize this.papers
     this.__parsePapers(backendData);
+    // initialize this.scalingFactors
+    this.__computeScalingFactors(this.papers.length);
 
-    this.__parseAreas(backendData);
-    this.__parseStreams(backendData);
+    if (!this.config.is_streamgraph) {
+      // scale this.papers based on the chart size
+      this.__scalePapers(chartSize);
+      // initialize this.areas
+      this.__parseAreas(backendData);
+      // scale this.areas based on the chart size
+      this.__scaleAreas(chartSize);
+    } else {
+      // initialize this.streams
+      this.__parseStreams(backendData);
+    }
   }
 
   __parseContext(backendData) {
@@ -178,7 +100,7 @@ class DataManager {
     const wrongData = new Set();
 
     this.papers.forEach((paper) => {
-      PAPER_PROPS.forEach((prop) => {
+      this.paperProps.forEach((prop) => {
         if (prop.required && typeof paper[prop.name] === "undefined") {
           if (!missingProps.has(prop.name)) {
             missingProps.set(prop.name, 0);
@@ -189,8 +111,7 @@ class DataManager {
         if (typeof paper[prop.name] !== "undefined") {
           if (prop.type && !prop.type.includes(typeof paper[prop.name])) {
             wrongTypes.add(prop.name);
-          }
-          if (prop.validator && !prop.validator(paper[prop.name])) {
+          } else if (prop.validator && !prop.validator(paper[prop.name])) {
             wrongData.add(prop.name);
           }
         }
@@ -203,35 +124,39 @@ class DataManager {
   }
 
   __printMissingPropsWarning(missingProps, dataLength) {
-    missingProps.forEach((value, key) => {
-      console.warn(
-        `Property '${key}' missing in ${
-          value === dataLength ? "all" : value
-        } papers.`
-      );
-    });
+    console.warn(
+      `Missing properties found: ${[...missingProps.entries()]
+        .map((e) => `'${e[0]}' (${e[1] === dataLength ? "all" : e[1]} papers)`)
+        .join(", ")}.`
+    );
   }
 
   __printWrongTypesWarning(wrongTypes) {
     if (wrongTypes.size > 0) {
       console.warn(
-        `Incorrect data types found in the following properties: `,
-        wrongTypes
+        `Incorrect data type found in the following properties: ${[
+          ...wrongTypes.keys(),
+        ]
+          .map((t) => `'${t}'`)
+          .join(", ")}.`
       );
     }
   }
 
-  __printWrongDataWarning(wrongTypes) {
-    if (wrongTypes.size > 0) {
+  __printWrongDataWarning(wrongData) {
+    if (wrongData.size > 0) {
       console.warn(
-        `Malformed data found in the following properties: `,
-        wrongTypes
+        `Malformed data found in the following properties: ${[
+          ...wrongData.keys(),
+        ]
+          .map((d) => `'${d}'`)
+          .join(", ")}.`
       );
     }
   }
 
   __addMissingProperties() {
-    const fallbackProps = PAPER_PROPS.filter((p) => !!p.fallback);
+    const fallbackProps = this.paperProps.filter((p) => !!p.fallback);
     const loc = this.config.localization[this.config.language];
     this.papers.forEach((paper) => {
       fallbackProps.forEach((prop) => {
@@ -251,7 +176,7 @@ class DataManager {
   }
 
   __checkUniqueProperties() {
-    const uniqueProps = PAPER_PROPS.filter((p) => p.unique);
+    const uniqueProps = this.paperProps.filter((p) => p.unique);
     const duplicateProps = new Set();
     uniqueProps.forEach((prop) => {
       const values = new Set();
@@ -314,7 +239,7 @@ class DataManager {
   // migrated from legacy code
   __escapeStrings(paper) {
     const protectedProps = new Set(
-      PAPER_PROPS.filter((p) => p.protected).map((p) => p.name)
+      this.paperProps.filter((p) => p.protected).map((p) => p.name)
     );
 
     for (const field in paper) {
@@ -376,12 +301,173 @@ class DataManager {
     }
   }
 
-  __parseAreas(backendData) {
-    // TODO
+  __scalePapers(size) {
+    const paperWidthFactor = this.config.paper_width_factor;
+    const paperHeightFactor = this.config.paper_width_factor;
+
+    const xs = this.papers.map((e) => e.x);
+    const xScale = getInitialCoordsScale(d3.extent(xs), size);
+
+    const ys = this.papers.map((e) => e.y);
+    const yScale = getInitialCoordsScale(d3.extent(ys), size);
+
+    const diameters = this.papers.map((e) => e.internal_readers);
+    const dScale = getDiameterScale(d3.extent(diameters), size, {
+      referenceSize: this.config.reference_size,
+      minDiameterSize: this.config.min_diameter_size,
+      maxDiameterSize: this.config.max_diameter_size,
+      paperMinScale: this.scalingFactors.paperMinScale,
+      paperMaxScale: this.scalingFactors.paperMaxScale,
+    });
+
+    this.papers.forEach((paper) => {
+      paper.x = xScale(paper.x);
+      paper.y = yScale(paper.y);
+      paper.diameter = dScale(paper.internal_readers);
+      paper.width =
+        paperWidthFactor *
+        Math.sqrt(Math.pow(paper.diameter, 2) / GOLDEN_RATIO);
+      paper.height =
+        paperHeightFactor *
+        Math.sqrt(Math.pow(paper.diameter, 2) / GOLDEN_RATIO);
+
+      // some fallback values
+      paper.zoomedX = paper.x;
+      paper.zoomedY = paper.y;
+      paper.zoomedWidth = paper.width;
+      paper.zoomedHeight = paper.height;
+    });
+  }
+
+  __computeScalingFactors(numOfPapers) {
+    const [paperFactor, bubbleFactor] = this.__getResizeFactors(numOfPapers);
+
+    this.scalingFactors = {
+      bubbleMinScale: this.config.bubble_min_scale * bubbleFactor,
+      bubbleMaxScale: this.config.bubble_max_scale * bubbleFactor,
+      paperMinScale: this.config.paper_min_scale * paperFactor,
+      paperMaxScale: this.config.paper_max_scale * paperFactor,
+    };
+  }
+
+  // coefficients taken from legacy code
+  __getResizeFactors(numOfPapers) {
+    if (!this.config.dynamic_sizing) {
+      return [1, 1];
+    }
+
+    if (numOfPapers < 150) {
+      return [1, 1];
+    }
+    if (numOfPapers < 200) {
+      return [0.9, 1.1];
+    }
+    if (numOfPapers < 250) {
+      return [0.8, 1.1];
+    }
+    if (numOfPapers < 300) {
+      return [0.7, 1.1];
+    }
+    if (numOfPapers < 500) {
+      return [0.7, 1.2];
+    }
+
+    return [0.6, 1.2];
+  }
+
+  __parseAreas() {
+    const areas = {};
+
+    this.papers.forEach((paper) => {
+      const areaUri = paper.area_uri;
+      if (!areas[areaUri]) {
+        areas[areaUri] = {
+          area_uri: areaUri,
+          title: paper.area,
+          papers: [],
+        };
+      }
+
+      areas[areaUri].papers.push(paper);
+    });
+
+    this.areas = [];
+    for (const areaUri in areas) {
+      const papers = areas[areaUri].papers;
+
+      const x =
+        papers.map((e) => parseFloat(e.x)).reduce((a, b) => a + b, 0) /
+        (1.0 * papers.length);
+      const y =
+        papers.map((e) => -parseFloat(e.y)).reduce((a, b) => a + b, 0) /
+        (1.0 * papers.length);
+
+      areas[areaUri].origX = x;
+      areas[areaUri].origY = y;
+
+      const readers = papers
+        .map((e) => e.internal_readers)
+        .reduce((a, b) => a + b, 0);
+      areas[areaUri].num_readers = readers;
+      areas[areaUri].origR = readers;
+
+      this.areas.push(areas[areaUri]);
+    }
+  }
+
+  __scaleAreas(size) {
+    const scaleOptions = {
+      minAreaSize: this.config.min_area_size,
+      maxAreaSize: this.config.max_area_size,
+      referenceSize: this.config.reference_size,
+      bubbleMinScale: this.scalingFactors.bubbleMinScale,
+      bubbleMaxScale: this.scalingFactors.bubbleMaxScale,
+    };
+
+    const xs = this.areas.map((e) => e.origX);
+    const xScale = getCoordsScale(d3.extent(xs), size, scaleOptions);
+
+    const ys = this.areas.map((e) => e.origY);
+    const yScale = getCoordsScale(d3.extent(ys), size, scaleOptions);
+
+    const rs = this.areas.map((e) => e.origR);
+    const rScale = getRadiusScale(d3.extent(rs), size, scaleOptions);
+
+    this.areas.forEach((area) => {
+      area.x = xScale(area.origX);
+      area.y = yScale(area.origY);
+      area.r = rScale(area.origR);
+
+      // some fallback values
+      area.zoomedX = area.x;
+      area.zoomedY = area.y;
+      area.zoomedR = area.r;
+    });
   }
 
   __parseStreams(backendData) {
-    // TODO
+    const parsedData = JSON.parse(backendData.streamgraph);
+    const transformedData = transformData(parsedData);
+
+    const nest = d3.nest().key((d) => d.key);
+
+    const nestedEntries = nest.entries(transformedData);
+
+    const stack = d3.layout
+      .stack()
+      .offset("silhouette")
+      .values((d) => d.values)
+      .x((d) => d.date)
+      .y((d) => d.value);
+
+    this.streams = stack(nestedEntries);
+
+    this.streams.forEach((stream) => {
+      const firstTransformedEntry = transformedData.find(
+        (t) => t.key === stream.key
+      );
+      stream.docIds = firstTransformedEntry ? firstTransformedEntry.docIds : [];
+    });
   }
 }
 

@@ -9,12 +9,8 @@ const data = (state = { list: [], options: {}, size: null }, action) => {
 
   switch (action.type) {
     case "INITIALIZE": {
-      const data = action.dataArray;
       const options = {
-        maxAreaSize: action.configObject.max_area_size,
         referenceSize: action.configObject.reference_size,
-        bubbleMinScale: action.scalingFactors.bubbleMinScale,
-        bubbleMaxScale: action.scalingFactors.bubbleMaxScale,
         minDiameterSize: action.configObject.min_diameter_size,
         maxDiameterSize: action.configObject.max_diameter_size,
         paperMinScale: action.scalingFactors.paperMinScale,
@@ -24,12 +20,7 @@ const data = (state = { list: [], options: {}, size: null }, action) => {
         isStreamgraph: action.configObject.is_streamgraph,
       };
 
-      let list = data;
-      if (!options.isStreamgraph) {
-        list = rescalePapers(data, action.chartSize, options);
-      }
-
-      return { list, options, size: action.chartSize };
+      return { list: action.papers, options, size: action.chartSize };
     }
     case "RESIZE": {
       if (state.list.length === 0) {
@@ -57,51 +48,6 @@ const data = (state = { list: [], options: {}, size: null }, action) => {
 
 export default data;
 
-const GOLDEN_RATIO = 2.6;
-
-const rescalePapers = (papers, size, options) => {
-  let rescaledPapers = papers.slice(0);
-
-  let xs = rescaledPapers.map((e) => e.x);
-  let xScale = getInitialCoordsScale(d3.extent(xs), size, options);
-
-  let ys = rescaledPapers.map((e) => e.y);
-  let yScale = getInitialCoordsScale(d3.extent(ys), size, options);
-
-  let diameters = rescaledPapers.map((e) => e.internal_readers);
-  let dScale = getDiameterScale(d3.extent(diameters), size, options);
-
-  rescaledPapers.forEach((paper) => {
-    paper.x = xScale(paper.x);
-    paper.y = yScale(paper.y);
-    paper.diameter = dScale(paper.internal_readers);
-    paper.width =
-      options.paperWidthFactor *
-      Math.sqrt(Math.pow(paper.diameter, 2) / GOLDEN_RATIO);
-    paper.height =
-      options.paperHeightFactor *
-      Math.sqrt(Math.pow(paper.diameter, 2) / GOLDEN_RATIO);
-
-    // some fallback values
-    paper.zoomedX = paper.x;
-    paper.zoomedY = paper.y;
-    paper.zoomedWidth = paper.width;
-    paper.zoomedHeight = paper.height;
-  });
-
-  return rescaledPapers;
-};
-
-const COORDS_PADDING = 5;
-
-const getInitialCoordsScale = (extent, size) => {
-  const scale = d3.scale
-    .linear()
-    .range([COORDS_PADDING, size - COORDS_PADDING])
-    .domain(extent);
-
-  return (value) => scale(value);
-};
 
 const resizePapers = (papers, currentSize, newSize, options) => {
   const resizedPapers = papers.slice(0);
