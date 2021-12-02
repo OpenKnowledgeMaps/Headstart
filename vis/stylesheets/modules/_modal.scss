@@ -347,8 +347,10 @@ h5 {
 
     span {
         border: 1px solid #adadad;
-        border-radius: 4px;
-        padding: 6px 12px 6px 12px;
+        border-radius: 14px;
+        -moz-border-radius: 14px;
+        -webkit-border-radius: 14px;
+        padding: 6px 22px;
         font-size: 14px;
         line-height: 20px;
         font-weight: 400;

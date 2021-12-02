@@ -19,7 +19,7 @@
 }
 
 #oa {
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 #open-access-logo_list, #free-access-logo_list {
@@ -27,12 +27,15 @@
     color: $open-access;
     border: 1px solid $open-access;
     padding: 2px 4px;
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
     font-size: 10px;
     vertical-align: top;
     font-weight: $fontweight400;
+    display: inline-block;
+    width: 100px;
+    text-align: center;
 }
 
 .tag {
@@ -73,8 +76,8 @@
     font-family: $link-font-family;
 
     .list_title {
-        font-size: 14px;
-        line-height:120%;
+        font-size: 15px;
+        line-height: 150%;
         margin-bottom: 10px;
         padding-right: 10px;
         display: inline-block;

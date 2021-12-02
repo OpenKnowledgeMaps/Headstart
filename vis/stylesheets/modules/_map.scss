@@ -137,6 +137,9 @@ text {
     background-color: $okm-modal-btn;
     border-color: $okm-modal-btn;
     padding: 6px 4px !important;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
 }
 
 #filter_params {
@@ -166,7 +169,7 @@ text {
 
 #filter_params, #sort {
     width: 140px;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 #filter-menu-entries {
