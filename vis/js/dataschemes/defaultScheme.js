@@ -1,4 +1,5 @@
 import {
+  commentArrayValidator,
   dateValidator,
   oaStateValidator,
   stringArrayValidator,
@@ -13,19 +14,19 @@ const DEFAULT_SCHEME = [
     unique: true,
     fallback: (loc) => loc.default_id,
   },
-  { name: "identifier", type: ["string"] },
+  { name: "identifier", type: ["string"], fallback: () => "" },
   {
     name: "authors",
     required: true,
     type: ["string"],
     protected: true,
-    fallback: (loc) => loc.default_author,
+    fallback: () => "",
   },
   {
     name: "title",
     required: true,
     type: ["string"],
-    fallback: (loc) => loc.no_title,
+    fallback: () => "",
   },
   {
     name: "paper_abstract",
@@ -46,12 +47,13 @@ const DEFAULT_SCHEME = [
     type: ["number", "string"],
     required: true,
     validator: oaStateValidator,
+    fallback: () => 2,
   },
   {
     name: "subject_orig",
     required: true,
     type: ["string"],
-    fallback: () => "",
+    fallback: (loc) => loc.no_keywords,
   },
   { name: "subject_cleaned", required: true, type: ["string"] },
   { name: "relevance", required: true, type: ["number"] },
@@ -70,6 +72,11 @@ const DEFAULT_SCHEME = [
     fallback: (loc) => loc.default_url,
   },
   {
+    name: "relation",
+    type: ["string"],
+    fallback: () => "",
+  },
+  {
     name: "resulttype",
     type: ["object"],
     validator: stringArrayValidator,
@@ -78,10 +85,13 @@ const DEFAULT_SCHEME = [
   {
     name: "comments",
     type: ["object"],
-    validator: stringArrayValidator,
+    validator: commentArrayValidator,
     fallback: () => [],
   },
   { name: "readers", fallback: (loc) => loc.default_readers },
+  { name: "tags", type: ["string"], fallback: () => "" },
+  { name: "bkl_caption", type: ["string"], fallback: (loc) => loc.no_keywords },
+  { name: "doi", type: ["string"] },
   {
     name: "x",
     type: ["string", "number"],
@@ -102,7 +112,7 @@ const DEFAULT_SCHEME = [
     fallback: (l, paper) => paper.area,
   },
   { name: "cluster_labels", required: true },
-  { name: "file_hash", fallback: (loc) => loc.default_hash },
+  { name: "file_hash", type: ["string"], fallback: (loc) => loc.default_hash },
 ];
 
 export default DEFAULT_SCHEME;

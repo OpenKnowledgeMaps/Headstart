@@ -10,6 +10,7 @@ import {
 import {
   getAuthorsList,
   getInternalMetric,
+  getListLink,
   getOpenAccessLink,
   getOutlink,
   getVisibleMetric,
@@ -124,11 +125,15 @@ class DataManager {
   }
 
   __printMissingPropsWarning(missingProps, dataLength) {
-    console.warn(
-      `Missing properties found: ${[...missingProps.entries()]
-        .map((e) => `'${e[0]}' (${e[1] === dataLength ? "all" : e[1]} papers)`)
-        .join(", ")}.`
-    );
+    if (missingProps.size > 0) {
+      console.warn(
+        `Missing properties found: ${[...missingProps.entries()]
+          .map(
+            (e) => `'${e[0]}' (${e[1] === dataLength ? "all" : e[1]} papers)`
+          )
+          .join(", ")}.`
+      );
+    }
   }
 
   __printWrongTypesWarning(wrongTypes) {
@@ -170,7 +175,11 @@ class DataManager {
   }
 
   __setFallbackValue(paper, property, fallback) {
-    if (typeof paper[property] === "undefined" || paper[property] === null) {
+    if (
+      typeof paper[property] === "undefined" ||
+      paper[property] === null ||
+      paper[property] === ""
+    ) {
       paper[property] = fallback;
     }
   }
@@ -211,6 +220,9 @@ class DataManager {
       this.__parseLink(paper);
       this.__parseComments(paper);
       this.__countMetrics(paper);
+      this.__parseTags(paper);
+      this.__parseKeywords(paper);
+      this.__parseClassification(paper);
     });
   }
 
@@ -270,6 +282,7 @@ class DataManager {
   __parseLink(paper) {
     paper.oa_link = getOpenAccessLink(paper, this.config);
     paper.outlink = getOutlink(paper, this.config);
+    paper.list_link = getListLink(paper, this.config, this.context);
   }
 
   __parseComments(paper) {
@@ -301,9 +314,24 @@ class DataManager {
     }
   }
 
+  __parseTags(paper) {
+    paper.tags = paper.tags
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter((tag) => !!tag);
+  }
+
+  __parseKeywords(paper) {
+    paper.keywords = paper.subject_orig;
+  }
+
+  __parseClassification(paper) {
+    paper.classification = paper.bkl_caption;
+  }
+
   __scalePapers(size) {
     const paperWidthFactor = this.config.paper_width_factor;
-    const paperHeightFactor = this.config.paper_width_factor;
+    const paperHeightFactor = this.config.paper_height_factor;
 
     const xs = this.papers.map((e) => e.x);
     const xScale = getInitialCoordsScale(d3.extent(xs), size);

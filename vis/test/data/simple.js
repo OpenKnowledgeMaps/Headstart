@@ -12,9 +12,14 @@ const initialTestData = [
     url: "https://doi.org/10.1038/nrmicro2090",
     readers: 0,
     subject_orig: "Spike protein, vaccines",
+    keywords: "Spike protein, vaccines",
     subject: "Spike protein, vaccines",
     oa_state: 3,
     link: "https://www.nature.com/articles/nrmicro2090.pdf",
+    list_link: {
+      address: "https://www.nature.com/articles/nrmicro2090.pdf",
+      isDoi: false,
+    },
     relevance: 3,
     comments: [
       {
@@ -23,7 +28,7 @@ const initialTestData = [
         author: "ReFigure Team",
       },
     ],
-    tags: "Peer-reviewed",
+    tags: ["Peer-reviewed"],
     resulttype: "dataset",
     lang_detected: "english",
     cluster_labels:

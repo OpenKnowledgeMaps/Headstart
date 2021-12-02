@@ -57,7 +57,6 @@ MyMediator.prototype = {
 
     init_state: function() {
         MyMediator.prototype.current_file_number = 0;
-        MyMediator.prototype.current_stream = null;
     },
 
     // current_bubble needed in the headstart.js

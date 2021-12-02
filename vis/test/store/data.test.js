@@ -147,6 +147,7 @@ describe("data state", () => {
           { is_streamgraph: true },
           {},
           [],
+          [],
           "",
           500,
           500,

@@ -219,50 +219,16 @@ export const getPaperPDFClickHandler = (paper, handlePDFClick) => {
 };
 
 /**
- * Returns the paper's keywords.
- * @param {Object} paper
- * @param {Object} localization
+ * Returns correct link respecting the configs and link types.
  *
- * @returns {String} the keywords or a fallback string in current language
- */
-export const getPaperKeywords = (paper, localization) => {
-  if (
-    !Object.prototype.hasOwnProperty.call(paper, "subject_orig") ||
-    paper.subject_orig === ""
-  ) {
-    return localization.no_keywords;
-  }
-
-  return paper.subject_orig;
-};
-
-/**
- * Returns the paper's classification.
- * @param {Object} paper
- * @param {Object} localization
+ * @param {object} paper paper object
+ * @param {object} config
+ * @param {object} context
  *
- * @returns {String} the classification or a fallback string in current language
+ * @returns {object} link entry {address: string, isDoi: bool}
  */
-export const getPaperClassification = (paper, localization) => {
-  if (
-    !Object.prototype.hasOwnProperty.call(paper, "bkl_caption") ||
-    paper.bkl_caption === ""
-  ) {
-    return localization.no_keywords;
-  }
-
-  return paper.bkl_caption;
-};
-
-/**
- * Returns the paper's text link.
- * @param {Object} paper
- * @param {String} linkType covis/url/doi/<null>
- *
- * @returns {Object} link object with properties 'address' and 'isDoi'
- */
-export const getPaperTextLink = (paper, linkType) => {
-  if (linkType === "covis") {
+export const getListLink = (paper, config, context) => {
+  if (context.service === "gsheets") {
     let address = paper.url;
     if (typeof address !== "string" || address === "") {
       address = "n/a";
@@ -270,11 +236,11 @@ export const getPaperTextLink = (paper, linkType) => {
     return { address, isDoi: false };
   }
 
-  if (linkType === "url") {
+  if (config.url_outlink) {
     return { address: paper.outlink, isDoi: false };
   }
 
-  if (linkType === "doi") {
+  if (config.doi_outlink) {
     if (paper.doi) {
       return { address: paper.doi, isDoi: true };
     }
@@ -290,40 +256,6 @@ export const getPaperTextLink = (paper, linkType) => {
   }
 
   return {};
-};
-
-/**
- * Returns the paper's comments.
- * @param {Object} paper
- *
- * @returns {Array} comments array or null
- */
-export const getPaperComments = (paper) => {
-  let comments = paper.comments;
-  if (!comments || comments.length === 0) {
-    return null;
-  }
-
-  return comments;
-};
-
-/**
- * Returns the paper's tags.
- * @param {Object} paper
- *
- * @returns {Array} tags array or null
- */
-export const getPaperTags = (paper) => {
-  if (!paper.tags) {
-    return null;
-  }
-
-  let tags = paper.tags.split(/, |,/g).filter((tag) => !!tag);
-  if (tags.length > 0) {
-    return tags;
-  }
-
-  return null;
 };
 
 /**
@@ -396,7 +328,7 @@ export const isOpenAccess = (paper, config) => {
     return typeof paper.pmcid !== "undefined" && paper.pmcid !== "";
   }
 
-  return paper.oa_state === 1 || paper.oa_state === "1";
+  return parseInt(paper.oa_state) === 1;
 };
 
 /**
@@ -520,7 +452,7 @@ export const dateValidator = (date) => {
  * @returns {boolean}
  */
 export const oaStateValidator = (oaState) =>
-  [0, 1, 2].includes(parseInt(oaState));
+  [0, 1, 2, 3].includes(parseInt(oaState));
 
 /**
  * Validator for string array.
@@ -530,3 +462,18 @@ export const oaStateValidator = (oaState) =>
  */
 export const stringArrayValidator = (list) =>
   !list.map((e) => typeof e === "string").some((e) => !e);
+
+/**
+ * Validator for comments array.
+ *
+ * @param {[object]} list comments array
+ * @returns {boolean}
+ */
+export const commentArrayValidator = (list) =>
+  !list
+    .map(
+      (e) =>
+        typeof e.comment === "string" &&
+        (!e.author || typeof e.author === "string")
+    )
+    .some((e) => !e);
