@@ -128,6 +128,7 @@ $highlight: #e1e5e5;
 }
 
 @if $skin == 'triple' {
+    $okm-red: #622166;
     $dark-blue: #666666;
     $medium-blue: #622166;
     $link-gray: $medium-blue;
@@ -140,7 +141,6 @@ $highlight: #e1e5e5;
     $okm-gray: #818181;
     $paper-icon: #cbcbcb;
     $highlight-searchterm: #EAEAEA;
-    $okm-red: #ed1c24;
     $infolink: #622166;
     $modal-title: $medium-blue;
     $area-title-h2: $okm-blue;

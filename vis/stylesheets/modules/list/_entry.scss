@@ -861,13 +861,6 @@ img#preview_page {
 @if $skin == "covis" {
 
     #open-access-logo_list {
-        background-color: $open-access;
-        color: white;
-        border: 1px solid $open-access;
-        padding: 2px 4px;
-        border-radius: 5px;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
         font-size: 10px;
         vertical-align: top;
         font-weight: $fontweight400;
@@ -940,7 +933,6 @@ img#preview_page {
     }
 
     #free-access-logo_list, #open-access-logo_list {
-        display: inline;
         margin-right: 3px;
     }
 
