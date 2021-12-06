@@ -57,7 +57,7 @@
 }
 
 #context {
-    font-size: 11px;
+    font-size: 12px;
     color: $black;
     .context_moreinfo {
         border-bottom: 1px solid $link-gray;
@@ -302,6 +302,7 @@
     display: inline-block;
     margin-right: 1%;
     height: 15px;
+    margin-bottom: 3px;
 }
 
 //.context_metadata_high {

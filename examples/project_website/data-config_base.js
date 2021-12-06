@@ -48,4 +48,5 @@ var data_config = {
   show_cite_button: true,
 
   highlight_query_terms: true,
+  show_context_oa_number: false,
 };

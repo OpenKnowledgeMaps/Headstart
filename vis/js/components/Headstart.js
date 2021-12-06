@@ -48,10 +48,10 @@ const Headstart = ({
           </div>
         )}
         {renderList && <List />}
+        <Footer />
       </div>
       <Toolbar />
       <Modals />
-      <Footer />
     </LocalizationProvider>
   );
 };

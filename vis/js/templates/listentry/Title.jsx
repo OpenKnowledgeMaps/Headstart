@@ -8,7 +8,7 @@ import { getDateFromTimestamp } from "../../utils/dates";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import useMatomo from "../../utils/useMatomo";
 
-const MAX_TITLE_LENGTH = 150;
+const MAX_TITLE_LENGTH = 160;
 
 const Title = ({
   paper,
@@ -37,7 +37,7 @@ const Title = ({
 
   const rawTitle = paper.title ? paper.title : loc.default_paper_title;
 
-  const formattedDate = ` (${formatDate(paper.year)})`;
+  const formattedDate = ` (${formatPaperDate(paper.year)})`;
   const formattedTitle = isSelected
     ? rawTitle
     : formatTitle(rawTitle, MAX_TITLE_LENGTH - formattedDate.length);
@@ -62,7 +62,7 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, mapDispatchToListEntriesProps)(Title);
 
-const formatDate = (date) => {
+export const formatPaperDate = (date) => {
   const strDate = date.toString();
   let format = "yyyy-mm-dd";
   if (strDate.match(/^\d{4}(-\d{2})?$/)) {
