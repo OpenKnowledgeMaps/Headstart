@@ -58,14 +58,16 @@ const StandardListEntry = ({
         <AccessIcons
           isOpenAccess={!!paper.oa}
           isFreeAccess={!!paper.free_access}
-          isDataset={paper.resulttype === "dataset"}
+          isDataset={paper.resulttype.includes("dataset")}
           tags={paper.tags.length > 0 ? <Tags values={paper.tags} /> : null}
         />
         <Title paper={paper} />
         <Details authors={paper.authors_list} source={paper.published_in} />
         <Link address={paper.list_link.address} isDoi={paper.list_link.isDoi} />
       </div>
-      {showDocumentType && <DocumentType type={paper.resulttype} />}
+      {showDocumentType && paper.resulttype.length > 0 && (
+        <DocumentType type={paper.resulttype[0]} />
+      )}
       <Abstract text={paper.paper_abstract} />
       {paper.comments.length > 0 && <Comments items={paper.comments} />}
       {showKeywords && <Keywords>{paper.keywords}</Keywords>}

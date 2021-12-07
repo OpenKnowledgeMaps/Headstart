@@ -2,12 +2,10 @@ const data = `[{"id":"1a015a70-6d03-11df-a2b2-0026b95e3eb7","title":"A framework
 
 const rawData = JSON.parse(data);
 rawData.forEach((paper) => {
+  paper.resulttype = [];
   paper.keywords = paper.subject_orig;
   paper.list_link = { address: paper.link, isDoi: false };
-  paper.tags = (paper.tags ? paper.tags : "")
-    .split(",")
-    .map((tag) => tag.trim())
-    .filter((tag) => !!tag);
+  paper.tags = [];
 });
 
 export default rawData;

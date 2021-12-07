@@ -60,11 +60,11 @@ const getParamFilterFunction = (param, field) => {
     }
 
     if (param === "publication") {
-      return (d) => d.resulttype === "publication";
+      return (d) => d.resulttype.includes("publication");
     }
 
     if (param === "dataset") {
-      return (d) => d.resulttype === "dataset";
+      return (d) => d.resulttype.includes("dataset");
     }
 
     return () => true;
@@ -209,7 +209,7 @@ export const getPaperPreviewLink = (paper) => {
 export const getPaperPDFClickHandler = (paper, handlePDFClick) => {
   if (
     paper.oa === false ||
-    paper.resulttype === "dataset" ||
+    paper.resulttype.includes("dataset") ||
     paper.link === ""
   ) {
     return null;
@@ -370,7 +370,7 @@ export const getOutlink = (paper, config) => {
     return paper.oa_link;
   }
 
-  if (config.service === "openaire" && paper.resulttype === "dataset") {
+  if (config.service === "openaire" && paper.resulttype.includes("dataset")) {
     return config.url_prefix_datasets + paper.url;
   }
 
@@ -460,8 +460,30 @@ export const oaStateValidator = (oaState) =>
  * @param {[string]} list string array
  * @returns {boolean}
  */
-export const stringArrayValidator = (list) =>
-  !list.map((e) => typeof e === "string").some((e) => !e);
+export const stringArrayValidator = (list) => {
+  if (!Array.isArray(list)) {
+    return false;
+  }
+
+  return !list.map((e) => typeof e === "string").some((e) => !e);
+};
+
+/**
+ * Sanitization function for resulttype property.
+ *
+ * @param {any} value paper.resulttype
+ * @returns {[string]}
+ */
+export const resultTypeSanitizer = (value) => {
+  if (typeof value === "string") {
+    return [value];
+  }
+
+  return undefined;
+};
+
+const commentValidator = (e) =>
+  typeof e.comment === "string" && (!e.author || typeof e.author === "string");
 
 /**
  * Validator for comments array.
@@ -469,11 +491,24 @@ export const stringArrayValidator = (list) =>
  * @param {[object]} list comments array
  * @returns {boolean}
  */
-export const commentArrayValidator = (list) =>
-  !list
-    .map(
-      (e) =>
-        typeof e.comment === "string" &&
-        (!e.author || typeof e.author === "string")
-    )
-    .some((e) => !e);
+export const commentArrayValidator = (list) => {
+  if (!Array.isArray(list)) {
+    return false;
+  }
+
+  return !list.map(commentValidator).some((e) => !e);
+};
+
+/**
+ * Sanitization function for comments property.
+ *
+ * @param {any} value paper.comments
+ * @returns {[object]}
+ */
+export const commentsSanitizer = (value) => {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  return value.filter(commentValidator);
+};

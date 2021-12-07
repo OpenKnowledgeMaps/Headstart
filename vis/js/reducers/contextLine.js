@@ -40,11 +40,11 @@ const contextLine = (state = {}, action) => {
             : config.service_names[context.service],
         paperCount:
           config.create_title_from_context_style === "viper"
-            ? papers.filter((p) => p.resulttype === "publication").length
+            ? papers.filter((p) => p.resulttype.includes("publication")).length
             : null,
         datasetCount:
           config.create_title_from_context_style === "viper"
-            ? papers.filter((p) => p.resulttype === "dataset").length
+            ? papers.filter((p) => p.resulttype.includes("dataset")).length
             : null,
         funder:
           config.create_title_from_context_style === "viper" && context.params

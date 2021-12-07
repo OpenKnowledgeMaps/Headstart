@@ -34,7 +34,7 @@ const ClassificationListEntry = ({
         <AccessIcons
           isOpenAccess={!!paper.oa}
           isFreeAccess={!!paper.free_access}
-          isDataset={paper.resulttype === "dataset"}
+          isDataset={paper.resulttype.includes("dataset")}
         />
         <Title paper={paper} />
         <Details authors={paper.authors_list} source={paper.published_in} />

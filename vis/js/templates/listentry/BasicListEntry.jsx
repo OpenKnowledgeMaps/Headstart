@@ -34,7 +34,7 @@ const BasicListEntry = ({
   const access = {
     isOpenAccess: !!paper.oa,
     isFreeAccess: !!paper.free_access,
-    isDataset: paper.resulttype === "dataset",
+    isDataset: paper.resulttype.includes("dataset"),
   };
   const preview = {
     link: getPaperPreviewLink(paper),

@@ -29,7 +29,7 @@ const initialTestData = [
       },
     ],
     tags: ["Peer-reviewed"],
-    resulttype: "dataset",
+    resulttype: ["dataset"],
     lang_detected: "english",
     cluster_labels:
       "Antibody-dependent enhancement, Coronavirus entry, Spike protein",

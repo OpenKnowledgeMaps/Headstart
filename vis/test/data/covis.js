@@ -2,6 +2,7 @@ const data = `[{"id":"https://doi.org/10.1038/nrmicro2090","title":"The spike pr
 
 const rawData = JSON.parse(data);
 rawData.forEach((paper) => {
+  paper.resulttype = [paper.resulttype];
   paper.keywords = paper.subject_orig;
   paper.list_link = { address: paper.link, isDoi: false };
   paper.tags = (paper.tags ? paper.tags : "")

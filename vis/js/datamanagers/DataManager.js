@@ -20,19 +20,23 @@ import {
 import { transformData } from "../utils/streamgraph";
 
 import DEFAULT_SCHEME from "../dataschemes/defaultScheme";
+import PaperSanitizer from "../utils/PaperSanitizer";
 
 const GOLDEN_RATIO = 2.6;
 
 class DataManager {
-  constructor(config) {
+  config = {};
+  paperProps = [];
+  // outputs
+  context = {};
+  papers = [];
+  scalingFactors = {};
+  streams = [];
+  areas = [];
+
+  constructor(config, scheme = DEFAULT_SCHEME) {
     this.config = config;
-    this.paperProps = DEFAULT_SCHEME;
-    // outputs
-    this.context = {};
-    this.papers = [];
-    this.scalingFactors = {};
-    this.streams = [];
-    this.areas = [];
+    this.paperProps = scheme;
   }
 
   parseData(backendData, chartSize) {
@@ -90,119 +94,11 @@ class DataManager {
   }
 
   __sanitizePapers() {
-    this.__checkProperties();
-    this.__addMissingProperties();
-    this.__checkUniqueProperties();
-  }
+    const paperSanitizer = new PaperSanitizer(this.config);
 
-  __checkProperties() {
-    const missingProps = new Map();
-    const wrongTypes = new Set();
-    const wrongData = new Set();
-
-    this.papers.forEach((paper) => {
-      this.paperProps.forEach((prop) => {
-        if (prop.required && typeof paper[prop.name] === "undefined") {
-          if (!missingProps.has(prop.name)) {
-            missingProps.set(prop.name, 0);
-          }
-          missingProps.set(prop.name, missingProps.get(prop.name) + 1);
-        }
-
-        if (typeof paper[prop.name] !== "undefined") {
-          if (prop.type && !prop.type.includes(typeof paper[prop.name])) {
-            wrongTypes.add(prop.name);
-          } else if (prop.validator && !prop.validator(paper[prop.name])) {
-            wrongData.add(prop.name);
-          }
-        }
-      });
-    });
-
-    this.__printMissingPropsWarning(missingProps, this.papers.length);
-    this.__printWrongTypesWarning(wrongTypes);
-    this.__printWrongDataWarning(wrongData);
-  }
-
-  __printMissingPropsWarning(missingProps, dataLength) {
-    if (missingProps.size > 0) {
-      console.warn(
-        `Missing properties found: ${[...missingProps.entries()]
-          .map(
-            (e) => `'${e[0]}' (${e[1] === dataLength ? "all" : e[1]} papers)`
-          )
-          .join(", ")}.`
-      );
-    }
-  }
-
-  __printWrongTypesWarning(wrongTypes) {
-    if (wrongTypes.size > 0) {
-      console.warn(
-        `Incorrect data type found in the following properties: ${[
-          ...wrongTypes.keys(),
-        ]
-          .map((t) => `'${t}'`)
-          .join(", ")}.`
-      );
-    }
-  }
-
-  __printWrongDataWarning(wrongData) {
-    if (wrongData.size > 0) {
-      console.warn(
-        `Malformed data found in the following properties: ${[
-          ...wrongData.keys(),
-        ]
-          .map((d) => `'${d}'`)
-          .join(", ")}.`
-      );
-    }
-  }
-
-  __addMissingProperties() {
-    const fallbackProps = this.paperProps.filter((p) => !!p.fallback);
-    const loc = this.config.localization[this.config.language];
-    this.papers.forEach((paper) => {
-      fallbackProps.forEach((prop) => {
-        this.__setFallbackValue(paper, prop.name, prop.fallback(loc, paper));
-      });
-
-      this.config.scale_types.forEach((type) => {
-        this.__setFallbackValue(paper, type, loc.default_readers);
-      });
-    });
-  }
-
-  __setFallbackValue(paper, property, fallback) {
-    if (
-      typeof paper[property] === "undefined" ||
-      paper[property] === null ||
-      paper[property] === ""
-    ) {
-      paper[property] = fallback;
-    }
-  }
-
-  __checkUniqueProperties() {
-    const uniqueProps = this.paperProps.filter((p) => p.unique);
-    const duplicateProps = new Set();
-    uniqueProps.forEach((prop) => {
-      const values = new Set();
-      this.papers.forEach((paper) => {
-        if (values.has(paper[prop.name])) {
-          duplicateProps.add(prop.name);
-        }
-        values.add(paper[prop.name]);
-      });
-    });
-
-    if (duplicateProps.size > 0) {
-      console.warn(
-        `Properties with duplicate values that should be unique found: `,
-        duplicateProps
-      );
-    }
+    paperSanitizer.checkRequiredProps(this.papers, this.paperProps);
+    this.papers = paperSanitizer.sanitizeProps(this.papers, this.paperProps);
+    paperSanitizer.checkUniqueProps(this.papers, this.paperProps);
   }
 
   __processPapers() {

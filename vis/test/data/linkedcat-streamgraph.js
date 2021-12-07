@@ -2,14 +2,11 @@ const data = `[{"id":"AC13315760","subject":"","authors":"Hammer-Purgstall, Jose
 
 const rawData = JSON.parse(data);
 rawData.forEach((paper) => {
-  paper.paper_abstract = paper.paper_abstract ? paper.paper_abstract : "";
+  paper.resulttype = [];
   paper.classification = paper.bkl_caption ? paper.bkl_caption : "";
   paper.keywords = paper.subject_orig;
   paper.list_link = { address: paper.link, isDoi: false };
-  paper.tags = (paper.tags ? paper.tags : "")
-    .split(",")
-    .map((tag) => tag.trim())
-    .filter((tag) => !!tag);
+  paper.tags = [];
 });
 
 export default rawData;

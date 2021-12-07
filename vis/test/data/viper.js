@@ -2,12 +2,10 @@ const data = `[{"doi":"","id":"erc_________::47a5fc4a4f37e441d881c0b3a35321dd","
 
 const rawData = JSON.parse(data);
 rawData.forEach((paper) => {
+  paper.resulttype = [paper.resulttype];
   paper.keywords = paper.subject_orig;
   paper.list_link = { address: paper.link, isDoi: false };
-  paper.tags = (paper.tags ? paper.tags : "")
-    .split(",")
-    .map((tag) => tag.trim())
-    .filter((tag) => !!tag);
+  paper.tags = [];
 });
 
 export default rawData;

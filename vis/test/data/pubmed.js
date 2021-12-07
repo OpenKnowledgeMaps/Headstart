@@ -2,12 +2,10 @@ const data = `[{"id":"31967321","title":"Cross-species transmission of the newly
 
 const rawData = JSON.parse(data);
 rawData.forEach((paper) => {
+  paper.resulttype = paper.resulttype ? [paper.resulttype] : [];
   paper.keywords = paper.subject_orig;
   paper.list_link = { address: paper.link, isDoi: false };
-  paper.tags = (paper.tags ? paper.tags : "")
-    .split(",")
-    .map((tag) => tag.trim())
-    .filter((tag) => !!tag);
+  paper.tags = [];
 });
 
 export default rawData;

@@ -901,7 +901,10 @@ describe("config and context state", () => {
     });
 
     it("should initialize correct articles count", () => {
-      const FAKE_DATA = [...Array(42).keys()];
+      const FAKE_DATA = [...Array(42).keys()].map((e) => ({
+        id: e,
+        resulttype: [],
+      }));
       const initialState = {};
       const { configObject, contextObject } = setup({}, {});
 
@@ -925,7 +928,10 @@ describe("config and context state", () => {
 
     it("should initialize correct modifier type", () => {
       const MODIFIER = "most-recent";
-      const FAKE_DATA = [...Array(101).keys()];
+      const FAKE_DATA = [...Array(101).keys()].map((e) => ({
+        id: e,
+        resulttype: [],
+      }));
 
       const initialState = {};
       const { configObject, contextObject } = setup(
@@ -959,7 +965,10 @@ describe("config and context state", () => {
 
     it("should initialize correct modifier type if number of docs is equal to max", () => {
       const MODIFIER = "most-relevant";
-      const FAKE_DATA = [...Array(100).keys()];
+      const FAKE_DATA = [...Array(100).keys()].map((e) => ({
+        id: e,
+        resulttype: [],
+      }));
 
       const initialState = {};
       const { configObject, contextObject } = setup(
@@ -1028,7 +1037,11 @@ describe("config and context state", () => {
 
     it("should initialize correct open access count", () => {
       const SHOW_COUNT = true;
-      const FAKE_DATA = [{ oa: true }, { oa: true }, { oa: true }];
+      const FAKE_DATA = [
+        { oa: true, resulttype: [] },
+        { oa: true, resulttype: [] },
+        { oa: true, resulttype: [] },
+      ];
 
       const initialState = {};
       const { configObject, contextObject } = setup({
@@ -1617,8 +1630,8 @@ describe("config and context state", () => {
 
     it("should initialize correct papers count", () => {
       const FAKE_DATA = [
-        { resulttype: "publication" },
-        { resulttype: "publication" },
+        { resulttype: ["publication"] },
+        { resulttype: ["publication"] },
       ];
       const initialState = {};
       const { configObject, contextObject } = setup({
@@ -1671,7 +1684,10 @@ describe("config and context state", () => {
     });
 
     it("should initialize correct datasets count", () => {
-      const FAKE_DATA = [{ resulttype: "dataset" }, { resulttype: "dataset" }];
+      const FAKE_DATA = [
+        { resulttype: ["dataset"] },
+        { resulttype: ["dataset"] },
+      ];
       const initialState = {};
       const { configObject, contextObject } = setup({
         create_title_from_context_style: "viper",

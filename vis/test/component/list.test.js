@@ -1165,7 +1165,7 @@ describe("List entries component", () => {
               relevance: 3,
               comments: [],
               tags: ["Peer-reviewed"],
-              resulttype: "Review",
+              resulttype: ["Review"],
               area_uri: 0,
               area: "Vaccines",
               authors_string: "",

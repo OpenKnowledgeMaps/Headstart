@@ -1,11 +1,13 @@
 import {
   commentArrayValidator,
+  commentsSanitizer,
   dateValidator,
   oaStateValidator,
+  resultTypeSanitizer,
   stringArrayValidator,
 } from "../utils/data";
 
-// name; required?; type?; protected?; validator?; fallback?;
+// name; required?; type?; protected?; validator?; sanitizer?; fallback?;
 const DEFAULT_SCHEME = [
   {
     name: "id",
@@ -40,6 +42,8 @@ const DEFAULT_SCHEME = [
     required: true,
     type: ["string"],
     validator: dateValidator,
+    // we use whatever we have, it's better than not displaying anything
+    sanitizer: (val) => val,
     fallback: (loc) => loc.default_year,
   },
   {
@@ -80,12 +84,14 @@ const DEFAULT_SCHEME = [
     name: "resulttype",
     type: ["object"],
     validator: stringArrayValidator,
+    sanitizer: resultTypeSanitizer,
     fallback: () => [],
   },
   {
     name: "comments",
     type: ["object"],
     validator: commentArrayValidator,
+    sanitizer: commentsSanitizer,
     fallback: () => [],
   },
   { name: "readers", fallback: (loc) => loc.default_readers },
