@@ -31,7 +31,6 @@
     -webkit-border-radius: 14px;
     -moz-border-radius: 14px;
     font-size: 10px;
-    vertical-align: top;
     font-weight: $fontweight400;
     display: inline-block;
     width: 100px;
@@ -61,9 +60,16 @@
     border: 1px solid $dataset;
     background-color: white;
     padding: 2px 4px;
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
+    width: 100px;
+    text-align: center;
+    margin-left: 6px;
+}
+
+.fa-database {
+    margin-right: 3px;
 }
 
 .resulttype-dataset {
@@ -161,7 +167,7 @@
         border-bottom: 1px solid $link-gray;
 
         &:hover {
-            border-bottom: 3px solid $link-gray;
+            border-bottom: 2px solid $link-gray;
         }
     }
 

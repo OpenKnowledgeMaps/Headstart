@@ -166,6 +166,10 @@
             font-size: 14px;
         }
     }
+    
+    #context {
+        font-size: 11px;
+    }
 }
 
 @if $skin == 'viper' {
@@ -174,7 +178,7 @@
     }
 
     #infolink:hover, #infolink:focus, #infolink:active {
-        border-bottom: 3px solid $framed-item;
+        border-bottom: 2px solid $black;
     }
 }
 
@@ -302,7 +306,7 @@
     display: inline-block;
     margin-right: 1%;
     height: 15px;
-    margin-bottom: 3px;
+    margin-bottom: 6px;
 }
 
 //.context_metadata_high {
@@ -320,6 +324,7 @@
     align-items: center;
 
     .heading {
+        color: $area-title-h2;
         text-overflow: ellipsis;
         height: min-content; // 19.8px
         overflow: hidden;
