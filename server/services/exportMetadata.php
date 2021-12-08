@@ -29,7 +29,6 @@ $download=$_REQUEST['download'];
 if (isset($download)) {
     header('Content-type: application/text');
     header('Content-Disposition: attachment; filename=metadata.' . $format);
-} else {
 }
 
 $result = '
