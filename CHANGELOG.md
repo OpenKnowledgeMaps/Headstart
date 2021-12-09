@@ -1,5 +1,24 @@
 # Changelog
 
+## 2021-12-09
+
+### New features
+
+- added abbreviation to list entry items (heading, source, authors)
+
+### Changes
+
+- refactored list entries code
+- heading & list UI changes
+    - moved info button to the context line
+    - moved pdf button
+    - minor list changes
+- major CSS changes (restyled the whole Headstart)
+
+### Removed
+
+- link buttons from list
+
 ## 2021-11-25
 
 ### New features
