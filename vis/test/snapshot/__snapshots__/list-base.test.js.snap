@@ -290,12 +290,12 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                   <span
                     id="open-access-logo_list"
                   >
-                    open access
                     <span
                       className="access_icon outlink_symbol"
                     >
                       
                     </span>
+                    open access
                   </span>
                 </div>
                 <div
@@ -634,7 +634,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-file"
+                    className="fa fa-eye"
                   />
                     PDF
                 </button>
@@ -1206,12 +1206,12 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <span
                     id="open-access-logo_list"
                   >
-                    open access
                     <span
                       className="access_icon outlink_symbol"
                     >
                       
                     </span>
+                    open access
                   </span>
                 </div>
                 <div
@@ -1342,7 +1342,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-file"
+                    className="fa fa-eye"
                   />
                     PDF
                 </button>
@@ -2084,12 +2084,12 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <span
                     id="open-access-logo_list"
                   >
-                    open access
                     <span
                       className="access_icon outlink_symbol"
                     >
                       
                     </span>
+                    open access
                   </span>
                 </div>
                 <div
@@ -2214,7 +2214,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-file"
+                    className="fa fa-eye"
                   />
                     PDF
                 </button>
@@ -2261,12 +2261,12 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <span
                     id="open-access-logo_list"
                   >
-                    open access
                     <span
                       className="access_icon outlink_symbol"
                     >
                       
                     </span>
+                    open access
                   </span>
                 </div>
                 <div
@@ -2444,7 +2444,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-file"
+                    className="fa fa-eye"
                   />
                     PDF
                 </button>
@@ -2491,12 +2491,12 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <span
                     id="open-access-logo_list"
                   >
-                    open access
                     <span
                       className="access_icon outlink_symbol"
                     >
                       
                     </span>
+                    open access
                   </span>
                 </div>
                 <div
@@ -2533,7 +2533,13 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       <span
                         className=""
                       >
-                         Divide ; Presentación del Monográfico: Tecnologías, Educación y Bre...
+                         Divide ; Presentación del Monográfico: Tecnologías, Educación y Brecha 
+                      </span>
+                      <span
+                        className="query_term_highlight "
+                        style={Object {}}
+                      >
+                        Digital
                       </span>
                     </span>
                     <span>
@@ -2641,7 +2647,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-file"
+                    className="fa fa-eye"
                   />
                     PDF
                 </button>
@@ -2688,12 +2694,12 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <span
                     id="open-access-logo_list"
                   >
-                    open access
                     <span
                       className="access_icon outlink_symbol"
                     >
                       
                     </span>
+                    open access
                   </span>
                 </div>
                 <div
@@ -2872,7 +2878,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-file"
+                    className="fa fa-eye"
                   />
                     PDF
                 </button>
@@ -3092,12 +3098,12 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <span
                     id="open-access-logo_list"
                   >
-                    open access
                     <span
                       className="access_icon outlink_symbol"
                     >
                       
                     </span>
+                    open access
                   </span>
                 </div>
                 <div
@@ -3253,7 +3259,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-file"
+                    className="fa fa-eye"
                   />
                     PDF
                 </button>
@@ -3607,12 +3613,12 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <span
                     id="open-access-logo_list"
                   >
-                    open access
                     <span
                       className="access_icon outlink_symbol"
                     >
                       
                     </span>
+                    open access
                   </span>
                 </div>
                 <div
@@ -3746,7 +3752,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-file"
+                    className="fa fa-eye"
                   />
                     PDF
                 </button>
@@ -3958,12 +3964,12 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <span
                     id="open-access-logo_list"
                   >
-                    open access
                     <span
                       className="access_icon outlink_symbol"
                     >
                       
                     </span>
+                    open access
                   </span>
                 </div>
                 <div
@@ -4088,7 +4094,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-file"
+                    className="fa fa-eye"
                   />
                     PDF
                 </button>
@@ -4135,12 +4141,12 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <span
                     id="open-access-logo_list"
                   >
-                    open access
                     <span
                       className="access_icon outlink_symbol"
                     >
                       
                     </span>
+                    open access
                   </span>
                 </div>
                 <div
@@ -4177,7 +4183,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       <span
                         className=""
                       >
-                         Competence...
+                         Competence in the in...
                       </span>
                     </span>
                     <span>
@@ -4265,7 +4271,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-file"
+                    className="fa fa-eye"
                   />
                     PDF
                 </button>
@@ -4441,12 +4447,12 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <span
                     id="open-access-logo_list"
                   >
-                    open access
                     <span
                       className="access_icon outlink_symbol"
                     >
                       
                     </span>
+                    open access
                   </span>
                 </div>
                 <div
@@ -4602,7 +4608,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-file"
+                    className="fa fa-eye"
                   />
                     PDF
                 </button>
