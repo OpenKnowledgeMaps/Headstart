@@ -18,23 +18,14 @@ function export($export_format, $metadata_json) {
 
 use headstart\library;
 
-$format=$_REQUEST['format'];
-$download=$_REQUEST['download'];
+$format = (isset($_REQUEST['format'])) ? $_REQUEST['format'] : "bibtex";
+$download = (isset($_REQUEST['download'])) ? $_REQUEST['download'] : false;
 #$metadata_json = library\CommUtils::getParameter($_POST, "metadata");
 
 #$result = export($format, $metadata_json);
 
 
-
-if (isset($download)) {
-    header('Content-type: application/text');
-    header('Content-Disposition: attachment; filename=metadata.' . $format);
-} else {
-    header('Content-type: application/text');
-}
-
-$result = '
-@article{007f9e706022c47e76dc473387c78cd95c867ccd10a962ea6daa9fdeca329ca0,
+$result = '@article{007f9e706022c47e76dc473387c78cd95c867ccd10a962ea6daa9fdeca329ca0,
     title={Calcium deposition within coronary atherosclerotic lesion: Implications for plaque stability},
     author={Hiroyuki Jinnouchi, Yu Sato, Atsushi Sakamoto, Anne Cornelissen, Masayuki Mori, Rika Kawakami, Neel V. Gadhoke, Frank D. Kolodgie, Renu Virmani, Aloke V. Finn},
     year={2020},
@@ -43,9 +34,16 @@ $result = '
     pages={85--95}
     issn={0021-9150}
     doi={10.1016/j.atherosclerosis.2020.05.017}
-  }
-';
+}';
 
-echo $download
+
+if (isset($download) & $download==true ) {
+    header('Content-type: application/text');
+    header('Content-Disposition: attachment; filename=metadata.' . $format);
+} else {
+    header('Content-type: text/plain');
+}
+
+echo $result
 
 ?>
