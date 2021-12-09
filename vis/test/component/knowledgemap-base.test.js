@@ -234,7 +234,7 @@ describe("Knowledge map component - special BASE tests", () => {
 
       const actions = store.getActions();
 
-      const EXPECTED_PAYLOAD = [deselectPaper().type, zoomIn().type];
+      const EXPECTED_PAYLOAD = [zoomIn().type];
       expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
     });
 

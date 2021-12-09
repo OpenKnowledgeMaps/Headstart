@@ -14,6 +14,7 @@ describe("list state", () => {
         type: "SELECT_PAPER",
         safeId: PAPER.safe_id,
         paper: PAPER,
+        isFromBackButton: false,
       };
       expect(selectPaper(PAPER)).toEqual(EXPECTED_ACTION);
     });

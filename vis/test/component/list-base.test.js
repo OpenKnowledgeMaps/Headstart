@@ -96,7 +96,7 @@ describe("List entries component - special BASE tests", () => {
 
       const actions = store.getActions();
 
-      const EXPECTED_PAYLOAD = [selectPaper({}).type, zoomIn().type];
+      const EXPECTED_PAYLOAD = [zoomIn().type];
       expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
     });
 
@@ -122,7 +122,7 @@ describe("List entries component - special BASE tests", () => {
 
       const actions = store.getActions();
 
-      const EXPECTED_PAYLOAD = [deselectPaper().type, zoomIn().type];
+      const EXPECTED_PAYLOAD = [zoomIn().type];
       expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
     });
 
@@ -201,7 +201,7 @@ describe("List entries component - special BASE tests", () => {
         );
       });
 
-      const pdfPreview = container.querySelector(".link2.oa-link");
+      const pdfPreview = container.querySelector(".paper_button");
       act(() => {
         ReactTestUtils.Simulate.click(pdfPreview);
       });
@@ -291,33 +291,15 @@ describe("List entries component - special BASE tests", () => {
       const regexp = /\((?<year>\d{4})/;
 
       let years = [...papers]
-        .map((e) => e.querySelector(".list_pubyear").textContent)
+        .map((e) => e.querySelector(".list_title").textContent)
         .map((y) => {
           const found = y.match(regexp);
           return parseInt(found.groups.year);
         });
 
       expect(years).toEqual([
-        2020,
-        2019,
-        2019,
-        2019,
-        2019,
-        2019,
-        2018,
-        2018,
-        2018,
-        2017,
-        2016,
-        2014,
-        2014,
-        2014,
-        2013,
-        2012,
-        2011,
-        2010,
-        2008,
-        2007,
+        2020, 2019, 2019, 2019, 2019, 2019, 2018, 2018, 2018, 2017, 2016, 2014,
+        2014, 2014, 2013, 2012, 2011, 2010, 2008, 2007,
       ]);
     });
 
@@ -362,8 +344,8 @@ describe("List entries component - special BASE tests", () => {
       );
 
       expect(titles).toEqual([
-        "Digital Education And Learning: The Growing Trend In Academic And Business Spaces—An International Overview",
-        "Integrating Digital Libraries into Distance Education: A Review of Models, Roles, And Strategies",
+        "Digital Education And Learning: The Growing Trend In Academic And Business Spaces—An International Overview (2018)",
+        "Integrating Digital Libraries into Distance Education: A Review of Models, Roles, And Strategies (2019-04-01)",
       ]);
     });
   });

@@ -59,6 +59,7 @@ const setup = (overrideStoreObject = {}) => {
         isContentBased: false,
         baseUnit: undefined,
       },
+      tracking: {},
       localization: {},
     },
     overrideStoreObject

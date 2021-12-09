@@ -15,7 +15,7 @@ export const getDateTimeFromTimestamp = (timestamp) => {
   return `on ${date} at ${time}`;
 };
 
-export const getDateFromTimestamp = (timestamp) => {
+export const getDateFromTimestamp = (timestamp, format = "d mmm yyyy") => {
   if (typeof timestamp !== "string" || !timestamp) {
     return "";
   }
@@ -23,14 +23,14 @@ export const getDateFromTimestamp = (timestamp) => {
   const date = parseTimestamp(timestamp);
 
   try {
-    return dateFormat(date, "d mmm yyyy");
+    return dateFormat(date, format);
   } catch (error) {
     console.warn(error);
     return "";
   }
 };
 
-export const getTimeFromTimestamp = (timestamp) => {
+export const getTimeFromTimestamp = (timestamp, format = "H:MM") => {
   if (typeof timestamp !== "string" || !timestamp) {
     return "";
   }
@@ -38,7 +38,7 @@ export const getTimeFromTimestamp = (timestamp) => {
   const date = parseTimestamp(timestamp);
 
   try {
-    return dateFormat(date, "H:MM");
+    return dateFormat(date, format);
   } catch (error) {
     console.warn(error);
     return "";
@@ -51,4 +51,4 @@ const parseTimestamp = (timestamp) => {
   }
 
   return new Date(timestamp);
-}
+};

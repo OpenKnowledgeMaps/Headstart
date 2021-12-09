@@ -77,6 +77,7 @@ const setup = (
         renderMap: true,
         renderList: true,
       },
+      tracking: {},
       selectedBubble: undefined,
       selectedPaper: undefined,
       chartType: KNOWLEDGEMAP_MODE,
@@ -829,10 +830,7 @@ describe("List entries component", () => {
 
   describe("events", () => {
     it("triggers a correct title click action in local files", () => {
-      const EXPECTED_PAYLOAD = [
-        selectPaper(initialTestData[0]).type,
-        zoomIn().type,
-      ];
+      const EXPECTED_PAYLOAD = [zoomIn().type];
       const storeObject = setup({ show: true }, { service: null });
       const store = mockStore(storeObject);
 
@@ -858,7 +856,7 @@ describe("List entries component", () => {
     });
 
     it("triggers a correct area click action in local files", () => {
-      const EXPECTED_PAYLOAD = [deselectPaper().type, zoomIn().type];
+      const EXPECTED_PAYLOAD = [zoomIn().type];
       const storeObject = setup({ show: true }, { service: null });
       const store = mockStore(storeObject);
 
@@ -970,7 +968,7 @@ describe("List entries component", () => {
     });
 
     it("triggers a correct area click action in linkedcat", () => {
-      const EXPECTED_PAYLOAD = [deselectPaper().type, zoomIn().type];
+      const EXPECTED_PAYLOAD = [zoomIn().type];
       const storeObject = setup(
         { list: [linkedcatData[0]] },
         { show: true },
@@ -1142,7 +1140,7 @@ describe("List entries component", () => {
         );
       });
 
-      const pdfPreview = container.querySelector(".link2.oa-link");
+      const pdfPreview = container.querySelector(".paper_button");
       act(() => {
         ReactTestUtils.Simulate.click(pdfPreview);
       });
@@ -1185,6 +1183,7 @@ describe("List entries component", () => {
               free_access: true,
               oa_link: "https://www.nature.com/articles/nrmicro2090.pdf",
               outlink: "https://doi.org/10.1038/nrmicro2090",
+              year: "2020",
             },
           ],
         },
@@ -1208,9 +1207,15 @@ describe("List entries component", () => {
         );
       });
 
-      expect(container.querySelector("#paper_list_title").textContent).toEqual(storeObject.localization.default_paper_title);
-      expect(container.querySelector(".list_authors").textContent).toEqual(storeObject.localization.default_authors);
-      expect(container.querySelector("#list_abstract").textContent).toEqual(storeObject.localization.default_abstract);
+      expect(container.querySelector("#paper_list_title").textContent).toEqual(
+        `${storeObject.localization.default_paper_title} (2020)`
+      );
+      expect(container.querySelector(".list_authors").textContent).toEqual(
+        storeObject.localization.default_authors
+      );
+      expect(container.querySelector("#list_abstract").textContent).toEqual(
+        storeObject.localization.default_abstract
+      );
     });
   });
 });

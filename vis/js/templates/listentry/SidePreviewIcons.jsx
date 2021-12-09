@@ -1,7 +1,7 @@
 import React from "react";
 import useMatomo from "../../utils/useMatomo";
 
-const PreviewIcons = ({ link, onClickPDF }) => {
+const SidePreviewIcons = ({ link, onClickPDF }) => {
   const { trackEvent } = useMatomo();
 
   const trackLinkClick = () => {
@@ -38,4 +38,4 @@ const PreviewIcons = ({ link, onClickPDF }) => {
   );
 };
 
-export default PreviewIcons;
+export default SidePreviewIcons;

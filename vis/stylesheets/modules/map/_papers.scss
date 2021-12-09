@@ -147,20 +147,20 @@
     color: white;
     padding: 4px;
     font-size: 6px;
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
+    border-radius: 14px;
+    -moz-border-radius: 14px;
+    -webkit-border-radius: 14px;
     
     &.large {
         margin: 0 0 0 5px;
         font-size: 12px;
-        padding: 4px;
+        padding: 4px 10px;
     }
 
     &.larger {
         font-size: 12px;
         margin: 0 0 0 5px;
-        padding: 4px;
+        padding: 4px 10px;
     }
 
     img {
@@ -325,5 +325,5 @@
 }
 
 .access_icon {
-    margin-left: 3px;
+    margin-right: 3px;
 }
