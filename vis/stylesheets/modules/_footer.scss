@@ -1,7 +1,8 @@
 .builtwith {
   margin: 15px 10px 15px 50px;
   font-size: 12px;
-  //height: 20px; might have to reintroduce this if it causes problems for embedded maps
+  // TODO this doesn't work on mobile (footer is unreadable)
+  height: 20px;
 }
 
 .builtwith a {
