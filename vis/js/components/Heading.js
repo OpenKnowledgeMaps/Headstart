@@ -4,8 +4,6 @@ import { connect } from "react-redux";
 import ZoomedInHeadingTemplate from "../templates/ZoomedInHeading";
 import ZoomedOutHeadingTemplate from "../templates/ZoomedOutHeading";
 
-import { changeFile, openInfoModal } from "../actions/index";
-
 import {
   BasicTitle,
   ProjectTitle,
@@ -21,10 +19,7 @@ const Heading = ({
   query,
   bubbleTitle,
   headingParams,
-  files,
-  onFileChange,
   streamgraph,
-  onInfoModalOpen,
 }) => {
   if (zoomed) {
     let label = streamgraph ? localization.area_streamgraph : localization.area;
@@ -33,16 +28,7 @@ const Heading = ({
   }
 
   return (
-    <ZoomedOutHeadingTemplate
-      introIcon={localization.intro_icon}
-      introLabel={localization.intro_label}
-      additionalFeatures={renderAdditionalFeatures(
-        headingParams,
-        files,
-        onFileChange
-      )}
-      onInfoClick={onInfoModalOpen}
-    >
+    <ZoomedOutHeadingTemplate>
       {renderTitle(localization, query, headingParams)}
     </ZoomedOutHeadingTemplate>
   );
@@ -54,16 +40,10 @@ const mapStateToProps = (state) => ({
   query: state.query.text,
   bubbleTitle: state.selectedBubble ? state.selectedBubble.title : null,
   headingParams: state.heading,
-  files: state.files,
   streamgraph: state.chartType === STREAMGRAPH_MODE,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onFileChange: (fileIndex) => dispatch(changeFile(fileIndex)),
-  onInfoModalOpen: () => dispatch(openInfoModal()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Heading);
+export default connect(mapStateToProps)(Heading);
 
 // This should probably make its way to a more global config
 const MAX_LENGTH_VIPER = 47;
@@ -197,28 +177,4 @@ const unescapeHTML = (string) => {
       return entityMap[s];
     }
   );
-};
-
-const renderAdditionalFeatures = ({ showDropdown }, files, onFileChange) => {
-  if (showDropdown && files.list.length > 0) {
-    const handleChange = (e) => {
-      onFileChange(parseInt(e.target.value));
-    };
-
-    return (
-      <>
-        {" "}
-        Select dataset:{" "}
-        <select id="datasets" value={files.current} onChange={handleChange}>
-          {files.list.map((entry, index) => (
-            <option key={entry.file} value={index}>
-              {entry.title}
-            </option>
-          ))}
-        </select>
-      </>
-    );
-  }
-
-  return null;
 };

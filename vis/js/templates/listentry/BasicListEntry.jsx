@@ -1,12 +1,21 @@
 import React from "react";
+import { connect } from "react-redux";
+
+import {
+  getPaperPDFClickHandler,
+  getPaperPreviewImage,
+  getPaperPreviewLink,
+} from "../../utils/data";
+import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
+
 import Abstract from "./Abstract";
 import AccessIcons from "./AccessIcons";
 import Area from "./Area";
+import Citations from "./Citations";
 import Details from "./Details";
 import ListEntry from "./ListEntry";
-import PreviewIcons from "./PreviewIcons";
+import SidePreviewIcons from "./SidePreviewIcons";
 import PreviewImage from "./PreviewImage";
-import Readers from "./Readers";
 import Title from "./Title";
 
 /**
@@ -14,18 +23,27 @@ import Title from "./Title";
  * @param {Object} props
  */
 const BasicListEntry = ({
-  id,
-  access,
-  title,
-  preview,
-  details,
-  abstract,
-  area,
-  readers,
+  paper,
   baseUnit,
-  handleTitleClick,
-  handleAreaClick,
+  handlePDFClick,
+  // deprecated
+  showPreviewImage,
+  showRealPreviewImage,
 }) => {
+  const id = paper.safe_id;
+  const access = {
+    isOpenAccess: !!paper.oa,
+    isFreeAccess: !!paper.free_access,
+    isDataset: paper.resulttype === "dataset",
+  };
+  const preview = {
+    link: getPaperPreviewLink(paper),
+    onClickPDF: getPaperPDFClickHandler(paper, handlePDFClick),
+    showPreviewImage,
+    previewImage: showRealPreviewImage ? getPaperPreviewImage(paper) : null,
+  };
+  const readers = paper.num_readers;
+
   return (
     // html template starts here
     <ListEntry anchorId={id}>
@@ -35,32 +53,31 @@ const BasicListEntry = ({
           isFreeAccess={access.isFreeAccess}
           isDataset={access.isDataset}
         />
-        <Title onClick={handleTitleClick}>{title}</Title>
-        <PreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />
-        <Details
-          authors={details.authors}
-          source={details.source}
-          year={details.year}
-        />
+        <Title paper={paper} />
+        <SidePreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />
+        <Details authors={paper.authors} source={paper.published_in} />
       </div>
-      <Abstract text={abstract} />
+      <Abstract text={paper.paper_abstract} />
       {!!preview.showPreviewImage && !!preview.onClickPDF && (
         <PreviewImage
           imageURL={preview.previewImage}
           onClick={preview.onClickPDF}
         />
       )}
-      <Area
-        onClick={handleAreaClick}
-        onMouseOver={area.onMouseOver}
-        onMouseOut={area.onMouseOut}
-      >
-        {area.text}
-      </Area>
-      <Readers number={readers} label={baseUnit} />
+      <Area paper={paper} isShort />
+      <Citations number={readers} label={baseUnit} />
     </ListEntry>
     // html template ends here
   );
 };
 
-export default BasicListEntry;
+const mapStateToProps = (state) => ({
+  baseUnit: state.list.baseUnit,
+  showPreviewImage: !!state.selectedPaper,
+  showRealPreviewImage: state.list.showRealPreviewImage,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToListEntriesProps
+)(BasicListEntry);
