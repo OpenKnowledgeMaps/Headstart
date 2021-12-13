@@ -48,15 +48,17 @@ const getAuthorsString = (authorsList, maxLength) => {
     return "";
   }
 
+  const authorsListCopy = [...authorsList];
+
   const ellipsis = "...";
   const join = ", ";
-  let finalString = authorsList.shift();
-  while (authorsList.length > 0) {
-    const nextAuthor = authorsList.shift();
+  let finalString = authorsListCopy.shift();
+  while (authorsListCopy.length > 0) {
+    const nextAuthor = authorsListCopy.shift();
     let nextPossibleLength =
       finalString.length + join.length + nextAuthor.length;
 
-    if (authorsList.length !== 0) {
+    if (authorsListCopy.length !== 0) {
       nextPossibleLength += ellipsis.length;
     }
 
