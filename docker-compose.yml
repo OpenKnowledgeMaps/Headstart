@@ -38,7 +38,7 @@ services:
         - ./server/workers/redis.conf:/etc/redis/redis.conf
         - ./server/workers/certs:/etc/certs
     ports:
-     - "127.0.0.1:6379:6379"
+     - "127.0.0.1:${REDIS_PORT}:6379"
     restart: always
     networks: 
       - headstart
