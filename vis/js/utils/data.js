@@ -74,7 +74,13 @@ const getParamFilterFunction = (param, field) => {
     return () => true;
   }
 
-  return (d) => d[field] === param;
+  return (d) => {
+    if (Array.isArray(d[field])) {
+      return d[field].includes(param);
+    }
+
+    return d[field] === param;
+  };
 };
 
 /**
