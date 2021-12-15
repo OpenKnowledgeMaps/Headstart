@@ -1,4 +1,16 @@
 import React from "react";
+import { connect } from "react-redux";
+
+import { useLocalizationContext } from "../../components/LocalizationProvider";
+import { STREAMGRAPH_MODE } from "../../reducers/chartType";
+import {
+  getPaperClassification,
+  getPaperKeywords,
+  getPaperTextLink,
+} from "../../utils/data";
+import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
+import PaperButtons from "./PaperButtons";
+
 import Abstract from "./Abstract";
 import AccessIcons from "./AccessIcons";
 import Area from "./Area";
@@ -8,7 +20,6 @@ import EntryBacklink from "./EntryBacklink";
 import Keywords from "./Keywords";
 import Link from "./Link";
 import ListEntry from "./ListEntry";
-import PreviewIcons from "./PreviewIcons";
 import Title from "./Title";
 
 /**
@@ -16,20 +27,30 @@ import Title from "./Title";
  * @param {Object} props
  */
 const ClassificationListEntry = ({
-  id,
-  access,
-  title,
-  preview,
-  details,
-  link,
-  classification,
-  abstract,
-  keywords,
-  area,
-  handleTitleClick,
-  handleAreaClick,
-  backlink,
+  paper,
+  linkType,
+  isStreamgraph,
+  showBacklink,
+  isInStreamBacklink,
+  handleBacklinkClick,
 }) => {
+  const loc = useLocalizationContext();
+
+  const id = paper.safe_id;
+  const access = {
+    isOpenAccess: !!paper.oa,
+    isFreeAccess: !!paper.free_access,
+    isDataset: paper.resulttype === "dataset",
+  };
+  const link = getPaperTextLink(paper, linkType);
+  const classification = getPaperClassification(paper, loc);
+  const keywords = getPaperKeywords(paper, loc);
+  const backlink = {
+    show: showBacklink,
+    isInStream: isInStreamBacklink,
+    onClick: () => handleBacklinkClick(),
+  };
+
   return (
     // html template starts here
     <ListEntry anchorId={id}>
@@ -39,23 +60,15 @@ const ClassificationListEntry = ({
           isFreeAccess={access.isFreeAccess}
           isDataset={access.isDataset}
         />
-        <Title onClick={handleTitleClick}>{title}</Title>
-        <PreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />
-        <Details authors={details.authors} year={details.year} />
+        <Title paper={paper} />
+        <Details authors={paper.authors} source={paper.published_in} />
         <Link address={link.address} isDoi={link.isDoi} />
       </div>
       <Classification>{classification}</Classification>
       <Keywords>{keywords}</Keywords>
-      <Abstract text={abstract} />
-      {!!area && (
-        <Area
-          onClick={handleAreaClick}
-          onMouseOver={area.onMouseOver}
-          onMouseOut={area.onMouseOut}
-        >
-          {area.text}
-        </Area>
-      )}
+      <Abstract text={paper.paper_abstract} />
+      <PaperButtons paper={paper} />
+      {!isStreamgraph && <Area paper={paper} />}
       {!!backlink.show && (
         <EntryBacklink
           onClick={backlink.onClick}
@@ -67,4 +80,14 @@ const ClassificationListEntry = ({
   );
 };
 
-export default ClassificationListEntry;
+const mapStateToProps = (state) => ({
+  linkType: state.list.linkType,
+  isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+  showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
+  isInStreamBacklink: !!state.selectedBubble,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToListEntriesProps
+)(ClassificationListEntry);

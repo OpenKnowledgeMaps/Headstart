@@ -326,6 +326,38 @@ export const getPaperTags = (paper) => {
   return null;
 };
 
+/**
+ * Parses the paper's authors string.
+ *
+ * @param {string} authors semicolon-separated authors
+ *
+ * @returns list of authors names and surnames
+ */
+export const getAuthorsList = (authors, firstNameFirst = true) => {
+  if (typeof authors !== "string") {
+    return "";
+  }
+
+  return authors
+    .split(";")
+    .filter((a) => !!a)
+    .map((a) => {
+      const namesList = a.trim().split(",");
+      const lastName = namesList[0].trim();
+      if (namesList.length < 2) {
+        return lastName;
+      }
+
+      const firstName = namesList[1].trim();
+
+      if (firstNameFirst) {
+        return `${firstName} ${lastName}`;
+      }
+
+      return `${lastName} ${firstName}`;
+    });
+};
+
 const ATTRS_TO_CHECK = [
   "id",
   "authors",

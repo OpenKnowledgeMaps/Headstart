@@ -17,6 +17,7 @@ describe("zoom state", () => {
         alreadyZoomed: false,
         callback: undefined,
         isFromBackButton: false,
+        selectedPaperData: null,
       };
       expect(zoomIn(DATA)).toEqual(EXPECTED_ACTION);
     });

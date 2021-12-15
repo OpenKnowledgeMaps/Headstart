@@ -1,20 +1,24 @@
 .builtwith {
   margin: 15px 10px 15px 50px;
   font-size: 12px;
+  // TODO this doesn't work on mobile (footer is unreadable)
   height: 20px;
 }
 
 .builtwith a {
-  text-decoration: underline;
-}
-
-.builtwith a:hover {
   text-decoration: none;
+  border-bottom: 1px solid $link-gray;
+  color: $link-gray;
+
+  &:hover {
+    border-bottom-width: 2px;
+  }
 }
 
 @media screen and (max-width: 640px) {
   .builtwith {
     margin: 10px 0px 10px 20px;
+    font-size: 11px;
   }
 }
 

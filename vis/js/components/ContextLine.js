@@ -18,6 +18,7 @@ import Timestamp from "../templates/contextfeatures/Timestamp";
 import MetadataQuality from "../templates/contextfeatures/MetadataQuality";
 import Modifier from "../templates/contextfeatures/Modifier";
 import { trackMatomoEvent } from "../utils/useMatomo";
+import MoreInfoLink from "../templates/contextfeatures/MoreInfoLink";
 
 const defined = (param) => param !== undefined && param !== null;
 
@@ -87,6 +88,7 @@ class ContextLine extends React.Component {
         {defined(params.searchLanguage) && (
           <SearchLang>{params.searchLanguage}</SearchLang>
         )}
+        <MoreInfoLink />
       </ContextLineTemplate>
     );
   }

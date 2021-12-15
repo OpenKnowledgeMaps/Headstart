@@ -2,27 +2,33 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
+import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import useMatomo from "../../utils/useMatomo";
 
 const Area = ({
-  children,
-  onClick,
-  onMouseOver,
-  onMouseOut,
+  paper,
+  isShort = false,
   trackMouseOver,
+  disableClicks,
+  handleZoomIn,
+  handleAreaMouseover,
+  handleAreaMouseout,
 }) => {
   const localization = useLocalizationContext();
   const { trackEvent } = useMatomo();
 
   const handleMouseOver = () => {
-    onMouseOver();
+    handleAreaMouseover(paper);
     if (trackMouseOver) {
       trackEvent("List document", "Hover bubble", "Area name");
     }
   };
 
   const handleClick = () => {
-    onClick();
+    if (disableClicks) {
+      return;
+    }
+    handleZoomIn(paper);
     trackEvent("List document", "Zoom in", "Area name");
   };
 
@@ -30,12 +36,15 @@ const Area = ({
     // html template starts here
     <div
       id="list_area"
+      className={isShort ? "short" : undefined}
       onClick={handleClick}
       onMouseOver={handleMouseOver}
-      onMouseOut={onMouseOut}
+      onMouseOut={handleAreaMouseout}
     >
       <span className="area_tag">{localization.area}:</span>{" "}
-      <span className="area_name">{children}</span>
+      <span className="area_name" title={paper.area}>
+        {paper.area}
+      </span>
     </div>
     // html template ends here
   );
@@ -43,6 +52,7 @@ const Area = ({
 
 const mapStateToProps = (state) => ({
   trackMouseOver: state.tracking.trackMouseOver,
+  disableClicks: state.list.disableClicks,
 });
 
-export default connect(mapStateToProps)(Area);
+export default connect(mapStateToProps, mapDispatchToListEntriesProps)(Area);

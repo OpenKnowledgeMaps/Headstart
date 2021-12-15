@@ -3,14 +3,14 @@ import Highlight from "../components/Highlight";
 import Hyphenate from "../components/Hyphenate";
 
 import { select } from "d3-selection";
+import { formatPaperDate } from "./listentry/Title";
 
 class Paper extends React.Component {
   constructor(props) {
     super(props);
     // TODO rewrite this using https://www.npmjs.com/package/core-decorators#autobind ?
-    this.getCoordinatesAndDimensions = this.getCoordinatesAndDimensions.bind(
-      this
-    );
+    this.getCoordinatesAndDimensions =
+      this.getCoordinatesAndDimensions.bind(this);
     this.isAnimated = this.isAnimated.bind(this);
     this.animate = this.animate.bind(this);
     this.animatePath = this.animatePath.bind(this);
@@ -104,10 +104,8 @@ class Paper extends React.Component {
     const { x, y, width: baseWidth, height: baseHeight } = this.state;
     const { path: basePath, dogEar: baseDogEar } = this.state;
 
-    let {
-      width: realWidth,
-      height: realHeight,
-    } = this.getCoordinatesAndDimensions();
+    let { width: realWidth, height: realHeight } =
+      this.getCoordinatesAndDimensions();
 
     const handleMouseOver = () => {
       let newEnlargeFactor = null;
@@ -227,7 +225,12 @@ class Paper extends React.Component {
                   <Hyphenate>
                     <Highlight hyphenated queryHighlight>
                       {title}
+                    </Highlight>{" "}
+                    (
+                    <Highlight queryHighlight>
+                      {formatPaperDate(year)}
                     </Highlight>
+                    )
                   </Hyphenate>
                 </p>
                 <p id="details" className={sizeModifierClass}>
@@ -248,10 +251,6 @@ class Paper extends React.Component {
                       </Hyphenate>
                     </>
                   )}
-                  <span className="pubyear">
-                    {" "}
-                    (<Highlight queryHighlight>{year}</Highlight>)
-                  </span>
                 </p>
               </div>
               {!!readersLabel &&
@@ -455,10 +454,10 @@ const getMetadataHeight = (realHeight, hasReaders, isZoomed) => {
   }
 
   const height = realHeight - readersHeight;
-  
+
   if (height >= 20) {
     return height;
   }
 
   return 20;
-}
+};

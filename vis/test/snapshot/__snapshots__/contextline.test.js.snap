@@ -33,6 +33,15 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
     : 
     2020-08-12 02:40:04 UTC
   </span>
+  <span
+    className="context_item"
+    id="more-info-link"
+  >
+    <span
+      className="context_moreinfo infolink"
+      onClick={[Function]}
+    />
+  </span>
 </p>
 `;
 
@@ -77,6 +86,15 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
     }
     id="source"
   />
+  <span
+    className="context_item"
+    id="more-info-link"
+  >
+    <span
+      className="context_moreinfo infolink"
+      onClick={[Function]}
+    />
+  </span>
 </p>
 `;
 
@@ -111,6 +129,7 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
   <span
     className="context_item"
     id="document_types"
+    onMouseOver={[Function]}
   >
     <span
       className="context_moreinfo"
@@ -125,6 +144,15 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
     </span>
   </span>
    
+  <span
+    className="context_item"
+    id="more-info-link"
+  >
+    <span
+      className="context_moreinfo infolink"
+      onClick={[Function]}
+    />
+  </span>
 </p>
 `;
 
@@ -139,17 +167,21 @@ exports[`Context line component snapshot matches a project website (base low qua
     100
      
     <span
-      className="modifier context_moreinfo"
-      id="modifier"
-      onBlur={[Function]}
-      onClick={null}
-      onFocus={[Function]}
-      onMouseOut={[Function]}
       onMouseOver={[Function]}
     >
-      most relevant
+      <span
+        className="modifier context_moreinfo"
+        id="modifier"
+        onBlur={[Function]}
+        onClick={null}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
+      >
+        most relevant
+      </span>
+       
     </span>
-     
     documents
      
     (
@@ -174,6 +206,7 @@ exports[`Context line component snapshot matches a project website (base low qua
   <span
     className="context_item"
     id="document_types"
+    onMouseOver={[Function]}
   >
     <span
       className="context_moreinfo"
@@ -205,6 +238,15 @@ exports[`Context line component snapshot matches a project website (base low qua
       low metadata quality
     </span>
   </span>
+  <span
+    className="context_item"
+    id="more-info-link"
+  >
+    <span
+      className="context_moreinfo infolink"
+      onClick={[Function]}
+    />
+  </span>
 </p>
 `;
 
@@ -219,17 +261,21 @@ exports[`Context line component snapshot matches a project website (pubmed high 
     100
      
     <span
-      className="modifier context_moreinfo"
-      id="modifier"
-      onBlur={[Function]}
-      onClick={null}
-      onFocus={[Function]}
-      onMouseOut={[Function]}
       onMouseOver={[Function]}
     >
-      most relevant
+      <span
+        className="modifier context_moreinfo"
+        id="modifier"
+        onBlur={[Function]}
+        onClick={null}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
+      >
+        most relevant
+      </span>
+       
     </span>
-     
     documents
      
     (
@@ -254,6 +300,7 @@ exports[`Context line component snapshot matches a project website (pubmed high 
   <span
     className="context_item"
     id="document_types"
+    onMouseOver={[Function]}
   >
     <span
       className="context_moreinfo"
@@ -284,6 +331,15 @@ exports[`Context line component snapshot matches a project website (pubmed high 
     >
       high metadata quality
     </span>
+  </span>
+  <span
+    className="context_item"
+    id="more-info-link"
+  >
+    <span
+      className="context_moreinfo infolink"
+      onClick={[Function]}
+    />
   </span>
 </p>
 `;
@@ -341,6 +397,15 @@ exports[`Context line component snapshot matches a viper snapshot 1`] = `
     id="context-project_runtime"
   >
     2011-2016
+  </span>
+  <span
+    className="context_item"
+    id="more-info-link"
+  >
+    <span
+      className="context_moreinfo infolink"
+      onClick={[Function]}
+    />
   </span>
 </p>
 `;
