@@ -147,7 +147,7 @@ const common = {
                 },
               ],
             },
-
+            { test: /\.csl$/, type: 'asset/source' }
         ]
     }
 };

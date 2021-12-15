@@ -437,6 +437,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                   />
                     PDF
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
               </div>
               <div
                 id="list_area"
@@ -867,6 +876,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     PDF
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
               </div>
               <div
                 id="list_area"
@@ -999,7 +1017,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -1152,6 +1180,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     PDF
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
               </div>
               <div
                 id="list_area"
@@ -1284,7 +1321,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -1416,7 +1463,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -1569,6 +1626,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     PDF
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
               </div>
               <div
                 id="list_area"
@@ -1701,7 +1767,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -1833,7 +1909,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -1965,7 +2051,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -2097,7 +2193,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -2229,7 +2335,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -2361,7 +2477,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -2493,7 +2619,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -2625,7 +2761,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -2778,6 +2924,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     PDF
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
               </div>
               <div
                 id="list_area"
@@ -2910,7 +3065,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -3043,6 +3208,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     PDF
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
               </div>
               <div
                 id="list_area"
@@ -3155,7 +3329,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -3319,6 +3503,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     PDF
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
               </div>
               <div
                 id="list_area"
@@ -3431,7 +3624,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}

@@ -265,15 +265,15 @@ export const getListLink = (paper, config, context) => {
 };
 
 /**
- * Parses the paper's authors string.
+ * Parses the paper's authors string into an object array.
  *
  * @param {string} authors semicolon-separated authors
  *
  * @returns list of authors names and surnames
  */
-export const getAuthorsList = (authors, firstNameFirst = true) => {
+export const extractAuthors = (authors) => {
   if (typeof authors !== "string") {
-    return "";
+    return [];
   }
 
   return authors
@@ -283,17 +283,36 @@ export const getAuthorsList = (authors, firstNameFirst = true) => {
       const namesList = a.trim().split(",");
       const lastName = namesList[0].trim();
       if (namesList.length < 2) {
-        return lastName;
+        return { lastName };
       }
 
       const firstName = namesList[1].trim();
 
-      if (firstNameFirst) {
-        return `${firstName} ${lastName}`;
-      }
-
-      return `${lastName} ${firstName}`;
+      return { firstName, lastName };
     });
+};
+
+/**
+ * Parses the paper's authors string into a string array.
+ *
+ * @param {string} authors semicolon-separated authors
+ *
+ * @returns list of authors names and surnames
+ */
+export const getAuthorsList = (authors, firstNameFirst = true) => {
+  const authorObjects = extractAuthors(authors);
+  return authorObjects.map((ao) => {
+    const { firstName, lastName } = ao;
+    if (!firstName) {
+      return lastName;
+    }
+
+    if (firstNameFirst) {
+      return `${firstName} ${lastName}`;
+    }
+
+    return `${lastName} ${firstName}`;
+  });
 };
 
 /**

@@ -6,6 +6,8 @@
 export const ALLOWED_IN_ANIMATION = [
   "SHOW_PREVIEW",
   "HIDE_PREVIEW",
+  "SHOW_CITE_PREVIEW",
+  "HIDE_CITE_PREVIEW",
   "STOP_ANIMATION",
 ];
 
@@ -120,8 +122,10 @@ export const highlightArea = (paper) => ({
 });
 
 export const showPreview = (paper) => ({ type: "SHOW_PREVIEW", paper });
-
 export const hidePreview = () => ({ type: "HIDE_PREVIEW" });
+
+export const showCitePaper = (paper) => ({ type: "SHOW_CITE_PAPER", paper });
+export const hideCitePaper = () => ({ type: "HIDE_CITE_PAPER" });
 
 export const updateDimensions = (chart, list) => ({
   type: "RESIZE",

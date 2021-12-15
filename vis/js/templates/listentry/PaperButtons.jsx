@@ -5,7 +5,12 @@ import useMatomo from "../../utils/useMatomo";
 import { getPaperPDFClickHandler } from "../../utils/data";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 
-const PaperButtons = ({ paper, handlePDFClick }) => {
+const PaperButtons = ({
+  paper,
+  showCiteButton,
+  handlePDFClick,
+  handleCiteClick,
+}) => {
   const { trackEvent } = useMatomo();
 
   const onPDFClick = getPaperPDFClickHandler(paper, handlePDFClick);
@@ -13,6 +18,11 @@ const PaperButtons = ({ paper, handlePDFClick }) => {
   const handlePDFButtonClick = () => {
     onPDFClick();
     trackEvent("List document", "Show PDF preview", "PDF button");
+  };
+
+  const handleCiteButtonClick = () => {
+    handleCiteClick(paper);
+    trackEvent("List document", "Open paper citation", "Cite paper button");
   };
 
   return (
@@ -23,9 +33,21 @@ const PaperButtons = ({ paper, handlePDFClick }) => {
           <i className="fa fa-eye"></i>&nbsp;&nbsp;PDF
         </button>
       )}
+      {showCiteButton && (
+        <button className="paper_button" onClick={handleCiteButtonClick}>
+          <i className="fa fa-quote-right"></i>&nbsp;&nbsp;Cite as
+        </button>
+      )}
     </div>
     // html template ends here
   );
 };
 
-export default connect(null, mapDispatchToListEntriesProps)(PaperButtons);
+const mapStateToProps = (state) => ({
+  showCiteButton: ["base", "pubmed"].includes(state.service),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToListEntriesProps
+)(PaperButtons);
