@@ -20,9 +20,8 @@ use headstart\library;
 
 $format = (isset($_REQUEST['format'])) ? $_REQUEST['format'] : "bibtex";
 $download = (isset($_REQUEST['download'])) ? $_REQUEST['download'] : false;
-#$metadata_json = library\CommUtils::getParameter($_POST, "metadata");
-
-#$result = export($format, $metadata_json);
+$metadata_json = library\CommUtils::getParameter($_POST, "metadata");
+$result = export($format, $metadata_json);
 
 
 $result = '@article{007f9e706022c47e76dc473387c78cd95c867ccd10a962ea6daa9fdeca329ca0,

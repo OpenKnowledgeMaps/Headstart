@@ -19,12 +19,14 @@ def transform2bibtex(metadata):
     year = metadata.get("year", "")
     doi = metadata.get("doi", "")
     id = metadata.get("id", "")
+    published_in = metadata.get("published_in", "")
     fields = {
         "title": title,
         "author": author,
         "abstract": abstract,
         "year": year,
         "doi": doi,
+        "published_in": published_in,
         "ENTRYTYPE": "article",
         "ID": id
     }
