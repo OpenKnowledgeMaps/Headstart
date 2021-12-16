@@ -1,39 +1,23 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 
-import { Modal, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { hideCitePaper } from "../../actions";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import useCitationStyle, {
   availableStyles,
 } from "../../utils/useCitationStyle";
-import { useState } from "react";
-import selectText from "../../utils/selectText";
+import CopyButton from "../CopyButton";
 
 const CitePaperModal = ({ open, onClose, paper }) => {
   const loc = useLocalizationContext();
-  const [copied, setCopied] = useState(false);
   const [currentStyle, setStyle, getCitation] = useCitationStyle();
 
-  useEffect(() => {
-    setCopied(false);
-  }, [paper, currentStyle]);
-
-  if (!paper) {
-    return null;
-  }
-
-  const citationText = getCitation(paper);
-
-  const handleCopyClick = () => {
-    navigator.clipboard.writeText(citationText).then(() => {
-      selectText("copy-citation");
-      setCopied(true);
-    });
-  };
+  const citationText = paper ? getCitation(paper) : "";
 
   const metadataMissing =
+    !paper ||
     !paper.title ||
     !paper.authors_objects ||
     paper.authors_objects.length === 0 ||
@@ -66,20 +50,12 @@ const CitePaperModal = ({ open, onClose, paper }) => {
             </span>
           ))}
         </p>
-        <div id="copy-citation" className="citation">
+        <div id="copy-paper-citation" className="citation">
           {citationText}
         </div>
         <p className="cit-style-desc">{currentStyle.description}</p>
-        <Button
-          bsStyle="primary"
-          onClick={handleCopyClick}
-          className={copied ? "copied-button" : "copy-button"}
-        >
-          <i className="fa fa-copy"></i>
-          &nbsp;&nbsp;
-          {copied ? loc.copied_button_text : loc.embed_button_text}
-        </Button>
-        {metadataMissing && (
+        <CopyButton textId={"copy-paper-citation"} textContent={citationText} />
+        {metadataMissing && paper && (
           <p className="cite-paper-warning">
             <strong>{loc.cite_metadata_warn_1}</strong>{" "}
             {loc.cite_metadata_warn_2}{" "}

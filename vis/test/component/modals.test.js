@@ -72,6 +72,7 @@ const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
           "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
         cite_vis_km: "Please cite this knowledge map as follows",
         cite_vis_sg: "Please cite this streamgraph as follows",
+        copied_button_text: "Copied",
       },
     },
     overrideStoreObject
@@ -198,7 +199,7 @@ describe("Modals component", () => {
       );
     });
 
-    it("copies the citation to clipboard when Copy is clicked", () => {
+    it("copies the citation to clipboard when Copy is clicked", async () => {
       const storeObject = setup(
         { openCitationModal: true },
         {
@@ -209,6 +210,15 @@ describe("Modals component", () => {
       );
       const store = mockStore(storeObject);
 
+      const promise = Promise.resolve();
+      Object.assign(navigator, {
+        clipboard: {
+          writeText: () => promise,
+        },
+      });
+
+      jest.spyOn(navigator.clipboard, "writeText");
+
       act(() => {
         render(
           <Provider store={store}>
@@ -218,18 +228,8 @@ describe("Modals component", () => {
           </Provider>,
           container
         );
-      });
 
-      Object.assign(navigator, {
-        clipboard: {
-          writeText: () => {},
-        },
-      });
-
-      jest.spyOn(navigator.clipboard, "writeText");
-
-      const select = document.querySelector("#cite-button");
-      act(() => {
+        const select = document.querySelector(".indented-modal-btn");
         const event = new Event("click", { bubbles: true });
         select.dispatchEvent(event);
       });
@@ -237,6 +237,12 @@ describe("Modals component", () => {
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
         "Open Knowledge Maps (2021). Overview of research on some query. Retrieved from http://localhost/ [9 Jul 2020]."
       );
+
+      await act(() => promise);
+      const buttonLabel = document
+        .querySelector(".indented-modal-btn")
+        .textContent.trim();
+      expect(buttonLabel).toEqual(storeObject.localization.copied_button_text);
     });
 
     it("triggers a correct redux action when citation modal is closed", () => {
