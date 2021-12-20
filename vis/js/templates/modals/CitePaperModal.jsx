@@ -28,7 +28,7 @@ const CitePaperModal = ({ open, onClose, paper }) => {
     <Modal id="cite_paper_modal" show={open} onHide={onClose}>
       <Modal.Header closeButton className="modal-header">
         <Modal.Title
-          id="cite-title"
+          id="cite-paper-title"
           className="cite-paper-modal-title"
           style={{ fontSize: 20 }}
         >
