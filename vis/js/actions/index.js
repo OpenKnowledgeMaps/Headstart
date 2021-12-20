@@ -3,13 +3,7 @@
  *
  * add all actions that don't change anything in the map to here
  */
-export const ALLOWED_IN_ANIMATION = [
-  "SHOW_PREVIEW",
-  "HIDE_PREVIEW",
-  "SHOW_CITE_PREVIEW",
-  "HIDE_CITE_PREVIEW",
-  "STOP_ANIMATION",
-];
+export const ALLOWED_IN_ANIMATION = ["STOP_ANIMATION"];
 
 /**
  * All actions in this array are canceled without queuing when the map
