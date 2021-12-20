@@ -288,7 +288,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                   id="oa"
                 >
                   <span
-                    id="open-access-logo_list"
+                    className="paper-tag open-access-tag"
                   >
                     <span
                       className="access_icon outlink_symbol"
@@ -755,7 +755,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   id="oa"
                 >
                   <span
-                    id="open-access-logo_list"
+                    className="paper-tag open-access-tag"
                   >
                     <span
                       className="access_icon outlink_symbol"
@@ -1040,7 +1040,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   id="oa"
                 >
                   <span
-                    id="open-access-logo_list"
+                    className="paper-tag open-access-tag"
                   >
                     <span
                       className="access_icon outlink_symbol"
@@ -1457,7 +1457,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   id="oa"
                 >
                   <span
-                    id="open-access-logo_list"
+                    className="paper-tag open-access-tag"
                   >
                     <span
                       className="access_icon outlink_symbol"
@@ -2666,7 +2666,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   id="oa"
                 >
                   <span
-                    id="open-access-logo_list"
+                    className="paper-tag open-access-tag"
                   >
                     <span
                       className="access_icon outlink_symbol"
@@ -2951,7 +2951,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   id="oa"
                 >
                   <span
-                    id="open-access-logo_list"
+                    className="paper-tag open-access-tag"
                   >
                     <span
                       className="access_icon outlink_symbol"
@@ -3196,7 +3196,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   id="oa"
                 >
                   <span
-                    id="open-access-logo_list"
+                    className="paper-tag open-access-tag"
                   >
                     <span
                       className="access_icon outlink_symbol"
