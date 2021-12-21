@@ -446,6 +446,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                   />
                     Cite as
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
+                </button>
               </div>
               <div
                 id="list_area"
@@ -885,6 +894,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     Cite as
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
+                </button>
               </div>
               <div
                 id="list_area"
@@ -1026,6 +1044,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="fa fa-quote-right"
                   />
                     Cite as
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
                 </button>
               </div>
               <div
@@ -1189,6 +1216,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     Cite as
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
+                </button>
               </div>
               <div
                 id="list_area"
@@ -1331,6 +1367,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     Cite as
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
+                </button>
               </div>
               <div
                 id="list_area"
@@ -1472,6 +1517,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="fa fa-quote-right"
                   />
                     Cite as
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
                 </button>
               </div>
               <div
@@ -1635,6 +1689,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     Cite as
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
+                </button>
               </div>
               <div
                 id="list_area"
@@ -1776,6 +1839,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="fa fa-quote-right"
                   />
                     Cite as
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
                 </button>
               </div>
               <div
@@ -1919,6 +1991,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     Cite as
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
+                </button>
               </div>
               <div
                 id="list_area"
@@ -2060,6 +2141,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="fa fa-quote-right"
                   />
                     Cite as
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
                 </button>
               </div>
               <div
@@ -2203,6 +2293,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     Cite as
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
+                </button>
               </div>
               <div
                 id="list_area"
@@ -2344,6 +2443,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="fa fa-quote-right"
                   />
                     Cite as
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
                 </button>
               </div>
               <div
@@ -2487,6 +2595,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     Cite as
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
+                </button>
               </div>
               <div
                 id="list_area"
@@ -2629,6 +2746,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     Cite as
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
+                </button>
               </div>
               <div
                 id="list_area"
@@ -2770,6 +2896,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="fa fa-quote-right"
                   />
                     Cite as
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
                 </button>
               </div>
               <div
@@ -2933,6 +3068,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     Cite as
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
+                </button>
               </div>
               <div
                 id="list_area"
@@ -3074,6 +3218,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="fa fa-quote-right"
                   />
                     Cite as
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
                 </button>
               </div>
               <div
@@ -3217,6 +3370,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     Cite as
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
+                </button>
               </div>
               <div
                 id="list_area"
@@ -3338,6 +3500,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="fa fa-quote-right"
                   />
                     Cite as
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
                 </button>
               </div>
               <div
@@ -3512,6 +3683,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     Cite as
                 </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
+                </button>
               </div>
               <div
                 id="list_area"
@@ -3633,6 +3813,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="fa fa-quote-right"
                   />
                     Cite as
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-arrow-down"
+                  />
+                    Export
                 </button>
               </div>
               <div
