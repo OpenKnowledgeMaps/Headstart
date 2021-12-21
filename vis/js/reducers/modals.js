@@ -44,6 +44,7 @@ const modals = (
         showCitationButton: !!action.configObject.show_cite_button,
         openCitationModal: false,
         citedPaper: null,
+        exportedPaper: null,
       };
     case "OPEN_EMBED_MODAL":
       return {
@@ -95,6 +96,16 @@ const modals = (
         ...state,
         citedPaper: null,
       };
+    case "SHOW_EXPORT_PAPER":
+      return {
+        ...state,
+        exportedPaper: action.paper,
+      };
+    case "HIDE_EXPORT_PAPER":
+      return {
+        ...state,
+        exportedPaper: null,
+      };
     case "OPEN_CITATION_MODAL":
       return {
         ...state,
@@ -115,6 +126,7 @@ const modals = (
         openCitationModal: false,
         previewedPaper: null,
         citedPaper: null,
+        exportedPaper: null,
       };
 
     default:

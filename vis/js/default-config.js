@@ -277,6 +277,8 @@ var config = {
             cite_metadata_warn_1: "Unfortunately important metadata is missing",
             cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
             cite_metadata_warn_3: "document's website",
+            export_paper: "Export this document",
+            download: "Download",
         },
         ger: {
             loading: "Wird geladen...",
@@ -350,6 +352,8 @@ var config = {
             cite_metadata_warn_1: "Unfortunately important metadata is missing",
             cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
             cite_metadata_warn_3: "document's website",
+            export_paper: "Export this document",
+            download: "Download",
         },
         ger_linkedcat: {
            loading: "Wird geladen...",
@@ -426,6 +430,8 @@ var config = {
             cite_metadata_warn_1: "Unfortunately important metadata is missing",
             cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
             cite_metadata_warn_3: "document's website",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_plos: {
             loading: "Loading...",
@@ -491,6 +497,8 @@ var config = {
             cite_metadata_warn_1: "Unfortunately important metadata is missing",
             cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
             cite_metadata_warn_3: "document's website",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -577,6 +585,8 @@ var config = {
             cite_metadata_warn_1: "Unfortunately important metadata is missing",
             cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
             cite_metadata_warn_3: "document's website",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_openaire: {
             loading: "Loading...",
@@ -669,6 +679,8 @@ var config = {
             cite_metadata_warn_1: "Unfortunately important metadata is missing",
             cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
             cite_metadata_warn_3: "document's website",
+            export_paper: "Export this document",
+            download: "Download",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -735,6 +747,8 @@ var config = {
             cite_metadata_warn_1: "Unfortunately important metadata is missing",
             cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
             cite_metadata_warn_3: "document's website",
+            export_paper: "Export this document",
+            download: "Download",
         },
         ger_cris_2: {
             loading: "Wird geladen...",
@@ -801,6 +815,8 @@ var config = {
             cite_metadata_warn_1: "Unfortunately important metadata is missing",
             cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
             cite_metadata_warn_3: "document's website",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_cris_2: {
            loading: "Loading...",
@@ -871,6 +887,8 @@ var config = {
             cite_metadata_warn_1: "Unfortunately important metadata is missing",
             cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
             cite_metadata_warn_3: "document's website",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -955,6 +973,8 @@ var config = {
             cite_metadata_warn_1: "Unfortunately important metadata is missing",
             cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
             cite_metadata_warn_3: "document's website",
+            export_paper: "Export this document",
+            download: "Download",
         },
     },
 
