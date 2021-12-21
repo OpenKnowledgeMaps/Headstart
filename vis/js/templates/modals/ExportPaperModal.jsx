@@ -9,11 +9,26 @@ import CopyButton from "../CopyButton";
 import usePaperExport, {
   PAPER_EXPORT_ENDPOINT,
 } from "../../utils/usePaperExport";
+import useMatomo from "../../utils/useMatomo";
 
 const ExportPaperModal = ({ open, onClose, paper }) => {
   const loc = useLocalizationContext();
+  const { trackEvent } = useMatomo();
 
   const exportContent = usePaperExport(paper);
+
+  const handleCopyClick = () => {
+    trackEvent("List document", "Copy paper export", "Copy export button");
+  };
+
+  const handleDownloadClick = () => {
+    startExportDownload(paper);
+    trackEvent(
+      "List document",
+      "Download paper export",
+      "Download export button"
+    );
+  };
 
   return (
     // html template starts here
@@ -51,11 +66,12 @@ const ExportPaperModal = ({ open, onClose, paper }) => {
               className="indented-modal-btn"
               textId={"copy-paper-export"}
               textContent={exportContent}
+              onClick={handleCopyClick}
             />
             <Button
               className="indented-modal-btn"
               bsStyle="primary"
-              onClick={() => startExportDownload(paper)}
+              onClick={handleDownloadClick}
             >
               <i className="fa fa-download"></i>
               &nbsp;&nbsp;{loc.download}

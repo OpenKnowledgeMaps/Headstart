@@ -9,10 +9,20 @@ import useCitationStyle, {
   availableStyles,
 } from "../../utils/useCitationStyle";
 import CopyButton from "../CopyButton";
+import useMatomo from "../../utils/useMatomo";
 
 const CitePaperModal = ({ open, onClose, paper }) => {
   const loc = useLocalizationContext();
+  const { trackEvent } = useMatomo();
   const [currentStyle, setStyle, getCitation] = useCitationStyle();
+
+  const trackCopyClick = () => {
+    trackEvent(
+      "List document",
+      "Copy paper citation",
+      "Copy paper citation button"
+    );
+  };
 
   const citationText = paper ? getCitation(paper) : "";
 
@@ -54,7 +64,11 @@ const CitePaperModal = ({ open, onClose, paper }) => {
           {citationText}
         </div>
         <p className="cit-style-desc">{currentStyle.description}</p>
-        <CopyButton textId={"copy-paper-citation"} textContent={citationText} />
+        <CopyButton
+          textId={"copy-paper-citation"}
+          textContent={citationText}
+          onClick={trackCopyClick}
+        />
         {metadataMissing && paper && (
           <p className="cite-paper-warning">
             <strong>{loc.cite_metadata_warn_1}</strong>{" "}
