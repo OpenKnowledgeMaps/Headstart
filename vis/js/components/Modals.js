@@ -6,6 +6,7 @@ import { closeEmbedModal, closeViperEditModal, hidePreview } from "../actions";
 import CitationModal from "../templates/modals/CitationModal";
 import CitePaperModal from "../templates/modals/CitePaperModal";
 import EmbedModal from "../templates/modals/EmbedModal";
+import ExportPaperModal from "../templates/modals/ExportPaperModal";
 import InfoModal from "../templates/modals/InfoModal";
 import PdfModal from "../templates/modals/PdfModal";
 import ViperEditModal from "../templates/modals/ViperEditModal";
@@ -57,6 +58,7 @@ const Modals = ({
       )}
       {showCitationModal && <CitationModal />}
       <CitePaperModal />
+      <ExportPaperModal />
     </LocalizationProvider>
   );
 };

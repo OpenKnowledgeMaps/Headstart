@@ -267,6 +267,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         ger: {
             loading: "Wird geladen...",
@@ -337,6 +339,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         ger_linkedcat: {
            loading: "Wird geladen...",
@@ -410,6 +414,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_plos: {
             loading: "Loading...",
@@ -472,6 +478,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -555,6 +563,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_openaire: {
             loading: "Loading...",
@@ -644,6 +654,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -707,6 +719,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         ger_cris_2: {
             loading: "Wird geladen...",
@@ -770,6 +784,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_cris_2: {
            loading: "Loading...",
@@ -837,6 +853,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -918,6 +936,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
     },
 
