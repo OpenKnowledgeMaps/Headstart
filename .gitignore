@@ -18,6 +18,7 @@ dist/
 .Rhistory
 .ipynb_checkpoints
 .Rprofile
+.Rproj*
 coverage/
 
 # local deployment files

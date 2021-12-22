@@ -17,5 +17,5 @@ if __name__ == '__main__':
     redis_store = redis.StrictRedis(**redis_config)
     wrapper = BaseClient("./other-scripts", "run_base.R", redis_store,
                          "english",
-                         os.environ.get("BASE_LOGLEVEL", "INFO"))
+                         os.environ.get("LOGLEVEL", "INFO"))
     wrapper.run()

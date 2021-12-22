@@ -17,5 +17,5 @@ if __name__ == '__main__':
     redis_store = redis.StrictRedis(**redis_config)
     dp = Dataprocessing("./other-scripts", "run_vis_layout.R",
                         redis_store=redis_store,
-                        loglevel=os.environ.get("HEADSTART_LOGLEVEL", "INFO"))
+                        loglevel=os.environ.get("LOGLEVEL", "INFO"))
     dp.run()

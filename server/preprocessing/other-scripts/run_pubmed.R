@@ -16,7 +16,7 @@ library(logging)
 library(doParallel)
 
 source('utils.R')
-if (Sys.getenv("PUBMED_LOGLEVEL") == "DEBUG") {
+if (Sys.getenv("LOGLEVEL") == "DEBUG") {
   DEBUG <- FALSE
 } else {
   DEBUG <- TRUE

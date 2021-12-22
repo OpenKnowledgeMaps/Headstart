@@ -14,5 +14,5 @@ if __name__ == '__main__':
         "ssl": True if os.getenv("REDIS_SSL") == "true" else False
     }
     redis_store = redis.StrictRedis(**redis_config)
-    gc = GSheetsClient(redis_store, os.environ.get("GSHEETS_LOGLEVEL", "INFO"))
+    gc = GSheetsClient(redis_store, os.environ.get("LOGLEVEL", "INFO"))
     gc.run()

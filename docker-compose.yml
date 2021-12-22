@@ -83,6 +83,7 @@ services:
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_SSL: "${REDIS_SSL}"
+      LOGLEVEL: "${LOGLEVEL}"
     restart: always
     depends_on:
       - redis
@@ -100,6 +101,7 @@ services:
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_SSL: "${REDIS_SSL}"
+      LOGLEVEL: "${LOGLEVEL}"
     restart: always
     depends_on:
       - redis
@@ -117,6 +119,7 @@ services:
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_SSL: "${REDIS_SSL}"
+      LOGLEVEL: "${LOGLEVEL}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -137,6 +140,7 @@ services:
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_SSL: "${REDIS_SSL}"
+      LOGLEVEL: "${LOGLEVEL}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -157,6 +161,7 @@ services:
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_SSL: "${REDIS_SSL}"
+      LOGLEVEL: "${LOGLEVEL}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -177,6 +182,7 @@ services:
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_SSL: "${REDIS_SSL}"
+      LOGLEVEL: "${LOGLEVEL}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
