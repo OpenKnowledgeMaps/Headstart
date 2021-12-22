@@ -1,5 +1,11 @@
 # Changelog
 
+## 2021-12-22
+
+### Changes
+
+- unified HTML & CSS of various paper tags (access tags, dataset tag, custom tags)
+
 ## 2021-12-09
 
 ### New features
