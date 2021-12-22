@@ -177,6 +177,10 @@ img#close-button {
     width: 100px;
     font-weight: normal;
 
+    .highlighted {
+        color: $okm-red;
+    }
+
     &:hover {
         color: $okm-red;
         background-color: white;

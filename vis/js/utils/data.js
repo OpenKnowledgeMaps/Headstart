@@ -83,54 +83,48 @@ const getParamFilterFunction = (param, field) => {
   };
 };
 
+const SEARCHED_PROPS = [
+  "title",
+  "authors_string",
+  "published_in",
+  "year",
+  "subject_orig",
+  "tags",
+  "comments_for_filtering",
+  "resulttype",
+  "paper_abstract",
+];
+
 /**
  * Creates a paper filtering function from the search words.
  *
- * Function taken from legacy list.js
- * @param {Array} search_words array of search words (plaintext strings)
+ * @param {Array} searchedKeywords array of search keywords (plaintext strings)
  *
- * @returns {Function} filtering function
+ * @returns {Function} filtering function that returns true if paper contains all the searched keywords
  */
-const getWordFilterFunction = (search_words) => {
-  return (d) => {
-    const abstract = getPropertyOrEmptyString(d, "paper_abstract");
-    const title = getPropertyOrEmptyString(d, "title");
-    const authors = getPropertyOrEmptyString(d, "authors_string");
-    const journals = getPropertyOrEmptyString(d, "published_in");
-    const year = getPropertyOrEmptyString(d, "year");
-    const keywords = getPropertyOrEmptyString(d, "subject_orig");
-    const tags = getPropertyOrEmptyString(d, "tags");
-    const comments = getPropertyOrEmptyString(d, "comments_for_filtering");
-    const resulttype = getPropertyOrEmptyString(d, "resulttype");
-    // TODO: make these two properties language-aware
-    const open_access = d.oa ? "open access" : "";
-    const free_access = d.free_access ? "free access" : "";
+const getWordFilterFunction = (searchedKeywords) => {
+  return (paper) => {
+    const paperKeywords = SEARCHED_PROPS.map((prop) =>
+      getPropertyOrEmptyString(paper, prop)
+    );
 
-    let i = 0;
-    let word_found = true;
-    while (word_found && i < search_words.length) {
-      word_found =
-        abstract.indexOf(search_words[i]) !== -1 ||
-        title.indexOf(search_words[i]) !== -1 ||
-        authors.indexOf(search_words[i]) !== -1 ||
-        journals.indexOf(search_words[i]) !== -1 ||
-        year.indexOf(search_words[i]) !== -1 ||
-        keywords.indexOf(search_words[i]) !== -1 ||
-        tags.indexOf(search_words[i]) !== -1 ||
-        comments.indexOf(search_words[i]) !== -1 ||
-        resulttype.indexOf(search_words[i]) !== -1 ||
-        open_access.indexOf(search_words[i]) !== -1 ||
-        free_access.indexOf(search_words[i]) !== -1;
-      i++;
+    if (paper.oa) {
+      paperKeywords.push("open access");
+      paperKeywords.push("pdf");
+    }
+    if (paper.free_access) {
+      paperKeywords.push("free access");
     }
 
-    return word_found;
+    const paperString = paperKeywords.join(" ");
+
+    return !searchedKeywords.some((keyword) => !paperString.includes(keyword));
   };
 };
 
 const getPropertyOrEmptyString = (object, property) => {
   if (Object.prototype.hasOwnProperty.call(object, property)) {
-    return object[property].toString().toLowerCase();
+    return object[property].toString().toLowerCase().trim();
   }
 
   return "";

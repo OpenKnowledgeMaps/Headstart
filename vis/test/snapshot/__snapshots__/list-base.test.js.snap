@@ -435,7 +435,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
               </div>
               <div
@@ -865,7 +866,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
               </div>
               <div
@@ -1150,7 +1152,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
               </div>
               <div
@@ -1567,7 +1570,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
               </div>
               <div
@@ -2776,7 +2780,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
               </div>
               <div
@@ -3041,7 +3046,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
               </div>
               <div
@@ -3317,7 +3323,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
               </div>
               <div
