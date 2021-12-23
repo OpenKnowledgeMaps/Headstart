@@ -57,8 +57,7 @@ create_cluster_labels <- function(clusters, metadata,
   tfidf_top_names <- get_top_names(tfidf_top, top_n, stops)
   clusters$cluster_labels = ""
   for (k in seq(1, clusters$num_clusters)) {
-    group = c(names(clusters$groups[clusters$groups == k]))
-    matches = which(clusters$labels%in%group)
+    matches = which(unname(clusters$groups == k) == TRUE)
     summary = tfidf_top_names[[k]]
     if (summary == "") {
       candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
@@ -106,8 +105,7 @@ get_cluster_corpus <- function(clusters, metadata, service, stops, taxonomy_sepa
                                add_title_ngrams = T) {
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
-    group = c(names(clusters$groups[clusters$groups == k]))
-    matches = which(metadata$id %in% group)
+    matches = which(unname(clusters$groups == k) == TRUE)
     titles =  metadata$title[matches]
     subjects = metadata$subject[matches]
     titles = lapply(titles, function(x) {gsub("[^[:alnum:]-]", " ", x)})

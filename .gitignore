@@ -35,3 +35,4 @@ coverage/
 /lc_cache.json
 /linkedcat.sqlite
 .env
+.Rproj.user
