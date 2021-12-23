@@ -64,7 +64,7 @@ class Dataprocessing(object):
                                 encoding="utf-8")
         stdout, stderr = proc.communicate(json.dumps(data))
         output = [o for o in stdout.split('\n') if len(o) > 0]
-        error = [o for o in stderr.split('\n') if len(o) > 0]
+        error = [o.encode("utf-8") for o in stderr.split('\n') if len(o) > 0]
         self.logger.debug(error)
         try:
             res = pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
