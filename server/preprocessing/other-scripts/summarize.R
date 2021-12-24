@@ -9,6 +9,11 @@ SplitTokenizer <- function(x) {
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
+expand_ngrams <- function(text, n) {
+  text <- trimws(text)
+  lapply(lapply(text, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), n), paste, collapse  = "_"))), paste, collapse = " ")
+}
+
 prune_ngrams <- function(ngrams, stops){
   ngrams = mapply(strsplit, ngrams, split=" |;")
   tokenized_ngrams = mapply(function(x) {
@@ -64,8 +69,8 @@ create_cluster_labels <- function(clusters, metadata,
       candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
       candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
       candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
-      candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
-      candidates_trigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
+      candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
+      candidates_trigrams = lapply(lapply(candidates, expand_ngrams, n=3), paste, collapse=" ")
       candidates = mapply(paste, candidates, candidates_bigrams, candidates_trigrams)
       nn_count = sort(table(strsplit(paste(candidates, collapse=" "), " ")), decreasing = T)
       summary <- filter_out_nested_ngrams(names(nn_count), 3)
@@ -191,10 +196,11 @@ fill_empty_clusters <- function(nn_tfidf, nn_corpus){
   return(replacement_tfidf_top)
 }
 
+
 get_title_ngrams <- function(titles, stops, ngram_lengths) {
   # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
-  titles_bigrams = prune_ngrams(lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), 2), paste, collapse  = "_"))), paste, collapse = " "), stops)
-  titles_trigrams = prune_ngrams(lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), 3), paste, collapse = "_"))), paste, collapse = " "), stops)
+  titles_bigrams = prune_ngrams(expand_ngrams(titles, 2), stops)
+  titles_trigrams = prune_ngrams(expand_ngrams(titles, 3), stops)
   return(c(titles_bigrams, titles_trigrams))
 }
 

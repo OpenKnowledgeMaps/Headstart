@@ -65,7 +65,7 @@ vis_layout <- function(text, metadata, service,
     layout <- get_ndms(as.dist(features), mindim=2, maxdim=2)
 
     vlog$debug("get cluster summaries")
-    metadata = replace_keywords_if_empty(metadata, stops, service)
+    metadata = replace_keywords_if_empty(metadata, stops)
     type_counts <- get_type_counts(corpus$unlowered)
     named_clusters <- create_cluster_labels(clusters, metadata,
                                             service, lang,
