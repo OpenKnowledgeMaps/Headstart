@@ -26,8 +26,6 @@ To run Headstart on a different server (e.g. Apache), you need to set the public
 
 Point your browser to one of the following addresses:
 
-	http://localhost:8080/local_files/
-	http://localhost:8080/local_streamgraph/
 	http://localhost:8080/project_website/base.html
 	http://localhost:8080/project_website/pubmed.html
 
@@ -93,4 +91,4 @@ Head Start is licensed under [MIT](LICENSE).
 ## Citation
 If you use Head Start in your research, please cite it as follows:
 
-Peter Kraker, Christopher Kittel, Maxi Schramm, Rainer Bachleitner, Thomas Arrow, Scott Chamberlain, Asura Enkhbayar, Yael Stein, Philipp Weissensteiner, Mike Skaug, Katrin Leinweber & Open Knowledge Maps team and contributors. (2019, March 7). Headstart 5 (Version v5). Zenodo. http://doi.org/10.5281/zenodo.2587129
+Peter Kraker, Christopher Kittel, Maxi Schramm, Jan Konstant, Rainer Bachleitner, Thomas Arrow, Scott Chamberlain, Asura Enkhbayar, Yael Stein, Philipp Weissensteiner, Mike Skaug, Katrin Leinweber & Open Knowledge Maps team and contributors. (2019, March 7). Headstart 5 (Version v5). Zenodo. http://doi.org/10.5281/zenodo.2587129
