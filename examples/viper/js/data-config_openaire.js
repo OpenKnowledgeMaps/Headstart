@@ -15,7 +15,6 @@ var data_config = {
     service: "openaire",
     base_unit: "citations",
     use_area_uri: true,
-    show_dropdown: false,
     preview_type: "pdf",
     sort_options: ["title", "authors", "year", "citations", "tweets", "readers"],
     filter_menu_dropdown: true,

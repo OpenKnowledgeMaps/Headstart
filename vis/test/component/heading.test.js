@@ -6,7 +6,6 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 
 import Heading, { getHeadingLabel } from "../../js/components/Heading";
-import { changeFile, openInfoModal } from "../../js/actions";
 
 import { STREAMGRAPH_MODE } from "../../js/reducers/chartType";
 
@@ -27,7 +26,6 @@ const setup = (overrideStore = {}) => {
         titleStyle: null, // config.create_title_from_context_style + config.create_title_from_context if true, then = 'standard'
         titleLabelType: "keywordview-knowledgemap", // config.is_authorview + config.is_streamgraph
         customTitle: null, // config.custom_title
-        showDropdown: false, // config.show_dropdown
         files: null, // config.files
       },
       localization: {
@@ -552,86 +550,6 @@ describe("Heading component", () => {
             file: "./data/edu2.csv",
           },
         ];
-
-        it("renders with a dropdown", () => {
-          const { storeObject } = setupFeatures();
-          storeObject.heading.showDropdown = true;
-          storeObject.files = {
-            current: 0,
-            list: FILES,
-          };
-
-          const store = mockStore(storeObject);
-
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
-
-          expect(
-            container.querySelector("#datasets").querySelectorAll("option")
-              .length
-          ).toBe(2);
-
-          expect(
-            container.querySelector("#datasets").querySelectorAll("option")[0]
-              .textContent
-          ).toEqual("edu1");
-
-          expect(
-            container
-              .querySelector("#datasets")
-              .querySelectorAll("option")[0]
-              .getAttribute("value")
-          ).toEqual("0");
-
-          expect(
-            container.querySelector("#datasets").querySelectorAll("option")[1]
-              .textContent
-          ).toEqual("edu2");
-
-          expect(
-            container
-              .querySelector("#datasets")
-              .querySelectorAll("option")[1]
-              .getAttribute("value")
-          ).toEqual("1");
-        });
-
-        it("triggers a correct redux action when dropdown changes", () => {
-          const { storeObject } = setupFeatures();
-          storeObject.heading.showDropdown = true;
-          storeObject.files = {
-            current: 0,
-            list: FILES,
-          };
-
-          const store = mockStore(storeObject);
-
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
-
-          const select = document.querySelector("#datasets");
-          act(() => {
-            const event = new Event("change", { bubbles: true });
-            select.dispatchEvent(event);
-          });
-
-          const actions = store.getActions();
-          const expectedPayload = changeFile(0);
-
-          expect(actions).toEqual([expectedPayload]);
-        });
 
         it("throws error on unknown label type", () => {
           const { storeObject } = setup();

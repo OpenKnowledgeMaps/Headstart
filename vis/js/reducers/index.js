@@ -10,7 +10,6 @@ import chart from "./chart";
 import chartType from "./chartType";
 import contextLine from "./contextLine";
 import data from "./data";
-import files from "./files";
 import heading from "./heading";
 import highlightedBubble from "./highlightedBubble";
 import hyphenationLang from "./hyphenationLang";
@@ -38,7 +37,6 @@ export default combineReducers({
   chartType,
   contextLine,
   data,
-  files,
   heading,
   highlightedBubble,
   hyphenationLang,

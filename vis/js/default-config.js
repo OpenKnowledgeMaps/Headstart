@@ -114,8 +114,6 @@ var config = {
     debug: false,
 
 /*** settings for title and context line ***/
-    //show dropdown to load different map datasets
-    show_dropdown: true,
     //show context line
     show_context: false,
     //create title from context

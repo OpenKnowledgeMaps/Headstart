@@ -16,7 +16,6 @@ export const NOT_QUEUED_IN_ANIMATION = [
   "ZOOM_OUT",
   "SELECT_PAPER",
   "DESELECT_PAPER",
-  "FILE_CLICKED",
   "SEARCH",
   "FILTER",
   "SORT",
@@ -84,12 +83,6 @@ export const initializeStore = (
   listHeight,
   scalingFactors,
 });
-
-/**
- * Action for changing the local file.
- * @param {Number} fileIndex
- */
-export const changeFile = (fileIndex) => ({ type: "FILE_CLICKED", fileIndex });
 
 export const toggleList = () => ({ type: "TOGGLE_LIST" });
 

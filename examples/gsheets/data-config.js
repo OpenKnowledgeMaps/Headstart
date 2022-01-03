@@ -12,7 +12,6 @@ var data_config = {
     preview_type: "pdf",
     use_hypothesis: true,
 
-    show_dropdown: false,
     show_intro: false,
     show_list:true,
     is_force_papers: true,
