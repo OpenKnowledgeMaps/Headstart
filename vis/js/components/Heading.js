@@ -1,9 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import ZoomedInHeadingTemplate from "../templates/ZoomedInHeading";
-import ZoomedOutHeadingTemplate from "../templates/ZoomedOutHeading";
-
 import {
   BasicTitle,
   ProjectTitle,
@@ -22,15 +19,31 @@ const Heading = ({
   streamgraph,
 }) => {
   if (zoomed) {
-    let label = streamgraph ? localization.area_streamgraph : localization.area;
+    const label = streamgraph
+      ? localization.area_streamgraph
+      : localization.area;
 
-    return <ZoomedInHeadingTemplate label={label} title={bubbleTitle} />;
+    return (
+      // html template starts here
+      <h4>
+        <span id="area-bold">{label}:</span>{" "}
+        <span
+          id="area-not-bold"
+          dangerouslySetInnerHTML={{ __html: bubbleTitle }}
+        ></span>
+      </h4>
+      // html template ends here
+    );
   }
 
   return (
-    <ZoomedOutHeadingTemplate>
-      {renderTitle(localization, query, headingParams)}
-    </ZoomedOutHeadingTemplate>
+    // html template starts here
+    <div className="heading-container">
+      <h4 className="heading">
+        {renderTitle(localization, query, headingParams)}
+      </h4>
+    </div>
+    // html template ends here
   );
 };
 
