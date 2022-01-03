@@ -40,7 +40,6 @@ var data_config = {
     hide_keywords_overview: false,
     show_resulttype: true,
 
-    sort_menu_dropdown: true,
     filter_menu_dropdown: true,
 
     embed_modal: true,

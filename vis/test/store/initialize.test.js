@@ -2361,31 +2361,6 @@ describe("config and context state", () => {
       expect(result).toHaveProperty("filterValue", FILTER_OPTIONS[0]);
     });
 
-    it("should initialize correct sort visibility", () => {
-      const SHOW_SORT = false;
-
-      const { configObject, contextObject } = setup({
-        sort_menu_dropdown: SHOW_SORT,
-      });
-
-      const result = listReducer(
-        {},
-        initializeStore(
-          configObject,
-          contextObject,
-          [],
-          null,
-          500,
-          null,
-          null,
-          500,
-          {}
-        )
-      );
-
-      expect(result).toHaveProperty("showDropdownSort", SHOW_SORT);
-    });
-
     it("should initialize correct sort options and initial value", () => {
       const SORT_OPTIONS = ["relevance", "readers", "year"];
 

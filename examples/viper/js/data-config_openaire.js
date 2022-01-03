@@ -19,7 +19,6 @@ var data_config = {
     preview_type: "pdf",
     sort_options: ["title", "authors", "year", "citations", "tweets", "readers"],
     filter_menu_dropdown: true,
-    sort_menu_dropdown: true,
     is_force_areas: true,
     language: "eng_openaire",
     area_force_alpha: 0.015,

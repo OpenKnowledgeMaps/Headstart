@@ -77,7 +77,6 @@ describe("list state", () => {
         filterField: null,
         filterValue: null,
         filterOptions: [],
-        showDropdownSort: true,
         sortValue: null,
         sortOptions: [],
         defaultSort: null,

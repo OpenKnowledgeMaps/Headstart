@@ -150,8 +150,6 @@ var config = {
     filter_options: ["all", "open_access", "publication", "dataset"],
     //custom data property to filter for. if null, defaults are used with above filter options
     filter_field: null,
-    //display sort menu dropdown
-    sort_menu_dropdown: false,
     //initial field used for sorting
     initial_sort: null,
     

@@ -87,6 +87,8 @@ const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
 };
 
 describe("Modals component", () => {
+  jest.useFakeTimers().setSystemTime(new Date("2021-01-01").getTime());
+
   let container = null;
   beforeEach(() => {
     container = document.createElement("div");

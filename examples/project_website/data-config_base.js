@@ -33,7 +33,6 @@ var data_config = {
 
   doi_outlink: true,
   filter_menu_dropdown: true,
-  sort_menu_dropdown: true,
   filter_options: ["all", "open_access"],
   show_keywords: true,
 
