@@ -37,9 +37,6 @@ const setup = (overrideConfig = {}, overrideContext = {}) => {
         pubmed: "PubMed",
         doaj: "DOAJ",
         openaire: "OpenAIRE",
-        linkedcat: "LinkedCat+",
-        linkedcat_authorview: "LinkedCat+",
-        linkedcat_browseview: "LinkedCat+",
       },
       show_context_oa_number: true,
       context_most_relevant_tooltip: undefined,
@@ -1662,7 +1659,7 @@ describe("config and context state", () => {
 
       const initialState = {};
       const { configObject, contextObject } = setup({
-        create_title_from_context_style: "linkedcat",
+        create_title_from_context_style: "base",
       });
 
       const result = contextLineReducer(
@@ -1717,7 +1714,7 @@ describe("config and context state", () => {
 
       const initialState = {};
       const { configObject, contextObject } = setup({
-        create_title_from_context_style: "linkedcat",
+        create_title_from_context_style: "base",
       });
 
       const result = contextLineReducer(
@@ -1815,7 +1812,7 @@ describe("config and context state", () => {
       const initialState = {};
       const { configObject, contextObject } = setup(
         {
-          create_title_from_context_style: "linkedcat",
+          create_title_from_context_style: "base",
         },
         {
           params: {

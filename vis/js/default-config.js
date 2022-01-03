@@ -195,9 +195,6 @@ var config = {
                         , pubmed: "PubMed"
                         , doaj: "DOAJ"
                         , openaire: "OpenAIRE"
-                        , linkedcat: "LinkedCat+"
-                        , linkedcat_authorview: "LinkedCat+"
-                        , linkedcat_browseview: "LinkedCat+"
                         , triple_km: "GoTriple"
                         , triple_sg: "GoTriple"
                     },

@@ -47,7 +47,6 @@ export default connect(mapStateToProps)(Heading);
 
 // This should probably make its way to a more global config
 const MAX_LENGTH_VIPER = 47;
-const MAX_LENGTH_LINKEDCAT = 115;
 const MAX_LENGTH_CUSTOM = 100;
 
 /**
@@ -67,10 +66,6 @@ const renderTitle = (localization, query, headingParams) => {
         headingParams.acronym,
         headingParams.projectId
       );
-    }
-
-    if (headingParams.titleStyle === "linkedcat") {
-      return renderLinkedCatTitle(label, query);
     }
 
     if (
@@ -106,11 +101,6 @@ const renderViperTitle = (title, acronym, projectId) => {
       projectId={projectId}
     />
   );
-};
-
-const renderLinkedCatTitle = (label, query) => {
-  let shortTitle = sliceText(query, MAX_LENGTH_LINKEDCAT);
-  return <StandardTitle label={label} title={query} shortTitle={shortTitle} />;
 };
 
 const renderCustomTitle = (title, label, query, localization) => {
