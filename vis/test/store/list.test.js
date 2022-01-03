@@ -85,7 +85,6 @@ describe("list state", () => {
         showMetrics: false,
         isContentBased: false,
         baseUnit: null,
-        showRealPreviewImage: false,
         showKeywords: false,
         hideUnselectedKeywords: true,
         height: null,

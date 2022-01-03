@@ -61,7 +61,6 @@ const setup = (
         abstractSize: 250,
         isContentBased: true,
         baseUnit: "questions",
-        showRealPreviewImage: false,
         showKeywords: true,
         showDocumentType: true,
         showMetrics: false,

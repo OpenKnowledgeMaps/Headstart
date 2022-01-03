@@ -15,7 +15,6 @@ import DocumentType from "./DocumentType";
 import EntryBacklink from "./EntryBacklink";
 import Keywords from "./Keywords";
 import Link from "./Link";
-import ListEntry from "./ListEntry";
 import Metrics from "./Metrics";
 import Tags from "./Tags";
 import Title from "./Title";
@@ -53,42 +52,48 @@ const StandardListEntry = ({
 
   return (
     // html template starts here
-    <ListEntry anchorId={paper.safe_id}>
-      <div className="list_metadata">
-        <AccessIcons
-          isOpenAccess={!!paper.oa}
-          isFreeAccess={!!paper.free_access}
-          isDataset={paper.resulttype.includes("dataset")}
-          tags={paper.tags.length > 0 ? <Tags values={paper.tags} /> : null}
-        />
-        <Title paper={paper} />
-        <Details authors={paper.authors_list} source={paper.published_in} />
-        <Link address={paper.list_link.address} isDoi={paper.list_link.isDoi} />
+    <div id="list_holder" className="resulttype-paper">
+      <div className="list_entry">
+        <a className="list_anchor" id={paper.safe_id}></a>
+        <div className="list_metadata">
+          <AccessIcons
+            isOpenAccess={!!paper.oa}
+            isFreeAccess={!!paper.free_access}
+            isDataset={paper.resulttype.includes("dataset")}
+            tags={paper.tags.length > 0 ? <Tags values={paper.tags} /> : null}
+          />
+          <Title paper={paper} />
+          <Details authors={paper.authors_list} source={paper.published_in} />
+          <Link
+            address={paper.list_link.address}
+            isDoi={paper.list_link.isDoi}
+          />
+        </div>
+        {showDocumentType && paper.resulttype.length > 0 && (
+          <DocumentType type={paper.resulttype[0]} />
+        )}
+        <Abstract text={paper.paper_abstract} />
+        {paper.comments.length > 0 && <Comments items={paper.comments} />}
+        {showKeywords && <Keywords>{paper.keywords}</Keywords>}
+        {showMetrics && (
+          <Metrics
+            citations={paper.citation_count}
+            tweets={paper.cited_by_tweeters_count}
+            readers={paper["readers.mendeley"]}
+            baseUnit={!isContentBased ? baseUnit : null}
+          />
+        )}
+        <PaperButtons paper={paper} />
+        {!isStreamgraph && <Area paper={paper} isShort={showCitations} />}
+        {showCitations && <Citations number={citations} label={baseUnit} />}
+        {!!backlink.show && (
+          <EntryBacklink
+            onClick={backlink.onClick}
+            isInStream={backlink.isInStream}
+          />
+        )}
       </div>
-      {showDocumentType && paper.resulttype.length > 0 && (
-        <DocumentType type={paper.resulttype[0]} />
-      )}
-      <Abstract text={paper.paper_abstract} />
-      {paper.comments.length > 0 && <Comments items={paper.comments} />}
-      {showKeywords && <Keywords>{paper.keywords}</Keywords>}
-      {showMetrics && (
-        <Metrics
-          citations={paper.citation_count}
-          tweets={paper.cited_by_tweeters_count}
-          readers={paper["readers.mendeley"]}
-          baseUnit={!isContentBased ? baseUnit : null}
-        />
-      )}
-      <PaperButtons paper={paper} />
-      {!isStreamgraph && <Area paper={paper} isShort={showCitations} />}
-      {showCitations && <Citations number={citations} label={baseUnit} />}
-      {!!backlink.show && (
-        <EntryBacklink
-          onClick={backlink.onClick}
-          isInStream={backlink.isInStream}
-        />
-      )}
-    </ListEntry>
+    </div>
     // html template ends here
   );
 };

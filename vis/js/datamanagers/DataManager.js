@@ -119,7 +119,6 @@ class DataManager {
       this.__countMetrics(paper);
       this.__parseTags(paper);
       this.__parseKeywords(paper);
-      this.__parseClassification(paper);
     });
   }
 
@@ -221,10 +220,6 @@ class DataManager {
 
   __parseKeywords(paper) {
     paper.keywords = paper.subject_orig;
-  }
-
-  __parseClassification(paper) {
-    paper.classification = paper.bkl_caption;
   }
 
   __scalePapers(size) {

@@ -106,8 +106,8 @@ var config = {
     input_format: "csv",
     //base unit for metrics
     base_unit: "readers",
-    //preview type
-    preview_type: "image",
+    //preview type (currently we support only pdf)
+    preview_type: "pdf",
     //convert author names from "[last name], [first name]" to "[first name] [last name]"
     convert_author_names: true,
     //adds some (currently very limited) debug output to the browser console
