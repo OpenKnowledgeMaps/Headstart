@@ -57,6 +57,7 @@ const DEFAULT_SCHEME = [
     name: "subject_orig",
     required: true,
     type: ["string"],
+    validator: (val) => val !== "",
     fallback: (loc) => loc.no_keywords,
   },
   { name: "subject_cleaned", required: true, type: ["string"] },
