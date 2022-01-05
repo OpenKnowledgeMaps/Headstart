@@ -9,6 +9,15 @@ Head Start is a web-based knowledge mapping software intended to give researcher
 ### Client
 To get started, clone this repository. Next, duplicate the file `config.example.js` in the root folder and rename it to `config.js`.
 
+Set the `skin` property in the config to one of the following values to use the
+particular data integration skin:
+
+- `"covis"`
+- `"triple"`
+- `"viper"`
+
+or leave it empty (`""`) for the default project website skin.
+
 Make sure to have installed `node` version >= 14.18.1 and `npm` version >=8.1.1 (best way to install is with [nvm](https://github.com/nvm-sh/nvm), `nvm install 14.18.1`) and run the following two commands to build the Headstart client:
 
     npm install
@@ -20,16 +29,20 @@ Now you can run a local dev server:
 
 	npm start
 
-To run Headstart on a different server (e.g. Apache), you need to set the publicPath in `config.js` to the URL of the `dist` directory:
-* Dev: specify the full path including protocol, e.g. `http://localhost/headstart/dist`
-* Production: specify the full path excluding protocol, e.g. `//example.org/headstart/dist`
-
 Point your browser to one of the following addresses:
 
 	http://localhost:8080/project_website/base.html
 	http://localhost:8080/project_website/pubmed.html
+	http://localhost:8080/local_covis/
+	http://localhost:8080/local_triple/map.html
+	http://localhost:8080/local_triple/stream.html
+	http://localhost:8080/local_viper/
 
-If everything has worked out, you should see the visualization shown above.
+If everything has worked out, you should see the example visualization.
+
+To run Headstart on a different server (e.g. Apache), you need to set the publicPath in `config.js` to the URL of the `dist` directory:
+* Dev: specify the full path including protocol, e.g. `http://localhost/headstart/dist`
+* Production: specify the full path excluding protocol, e.g. `//example.org/headstart/dist`
 
 See [client configuration](doc/README.md) for details on adapting the client.
 
