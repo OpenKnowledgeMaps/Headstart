@@ -7,7 +7,24 @@ import {
   stringArrayValidator,
 } from "../utils/data";
 
-// name; required?; type?; protected?; validator?; sanitizer?; fallback?;
+/**
+ * Scheme object based on the metadata spreadsheet.
+ *
+ * https://docs.google.com/spreadsheets/d/112Anbf-sJYkehyFvjuxr1DuMih-fPB9nt3E8ll19Iyc/edit#gid=0
+ *
+ * It's an array of objects, each object describes a paper property.
+ *
+ * It has the following properties:
+ *
+ * - name: string - the paper property's name
+ * - required?: boolean - true for mandatory properties
+ * - type?: string[] - list of allowed js types
+ * - protected?: boolean - true for properties that shouldn't be escaped
+ * - validator?: (value: any) => boolean - validator function that receives the property value and returns true if the value is valid
+ * - sanitizer?: (value: any) => any - sanitizer function that sanitizes the property value
+ * - fallback?: (localization?: object, paper?: object) => any - fallback function that returns a fallback value
+ *
+ */
 const DEFAULT_SCHEME = [
   {
     name: "id",
