@@ -29,7 +29,11 @@ Now you can run a local dev server:
 
 	npm start
 
-Point your browser to one of the following addresses:
+Note: you can also set the skin in this step as an argument to the `npm start` command (e.g. `npm start -- --env skin=triple`).
+
+The browser will automatically open a new window with the example specified by the skin.
+
+Alternatively, you can point your browser to one of the following addresses:
 
 	http://localhost:8080/project_website/base.html
 	http://localhost:8080/project_website/pubmed.html
