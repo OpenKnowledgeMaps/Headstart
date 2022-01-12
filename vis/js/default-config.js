@@ -162,23 +162,12 @@ var config = {
                                 , "year"
                                 , "published_in"
                                 , "subject_orig"],
-    
-    //extension for fields that are highlighted that contain the original text,
-    //not the text including the spans
-    sort_field_exentsion: "_sort",
 
     //display filter menu dropdown
     filter_menu_dropdown: false,
-    //[deprecated] list subentry settings
-    list_sub_entries: false,
-    list_sub_entries_readers: false,
-    list_sub_entries_number: false,
-    list_sub_entries_statistics: false,
     list_images: [],
     list_images_path: "images/",
     visual_distributions: false,
-    //[deprecated] list link to an external visualization settings
-    list_show_external_vis: false,
     external_vis_url: "",
     
 /*** button/modal settings ***/

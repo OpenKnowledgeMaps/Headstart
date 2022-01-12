@@ -11,7 +11,6 @@ const list = (
     defaultSort: null,
     sortOptions: [],
     abstractSize: 250,
-    linkType: null,
     showDocumentType: false,
     showMetrics: false,
     isContentBased: false,
@@ -43,7 +42,6 @@ const list = (
         defaultSort: getSortValue(config, context),
         sortOptions: config.sort_options,
         abstractSize: config.abstract_small,
-        linkType: getLinkType(config, context),
         showDocumentType: config.show_resulttype,
         showMetrics: config.metric_list,
         isContentBased: config.content_based,
@@ -100,22 +98,6 @@ const list = (
 };
 
 export default list;
-
-const getLinkType = (config, context) => {
-  if (context.service === "gsheets") {
-    return "covis";
-  }
-
-  if (config.doi_outlink) {
-    return "doi";
-  }
-
-  if (config.url_outlink) {
-    return "url";
-  }
-
-  return null;
-};
 
 const getSortValue = (config, context) => {
   if (!config.sort_options || config.sort_options.length === 0) {
