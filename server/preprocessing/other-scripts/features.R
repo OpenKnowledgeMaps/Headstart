@@ -2,10 +2,9 @@ library(stringr)
 vflog <- getLogger('vis.features')
 
 TypeCountTokenizer <- function(x) {
-  tokens = unlist(lapply(strsplit(words(x), split=";"), paste), use.names = FALSE)
-  tokens = unlist(lapply(tokens, stri_replace_all, regex='[^[:alnum:]-]', replacement=""))
-  return(tokens)
+  unlist(strsplit(as.character(x), "[^[:alnum:]-]"))
 }
+
 
 create_corpus <- function(metadata, text, stops) {
   docs <- data.frame(doc_id = text$id, text = text$content)
