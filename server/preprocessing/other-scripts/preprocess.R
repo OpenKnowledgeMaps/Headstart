@@ -111,7 +111,7 @@ replace_keywords_if_empty <- function(metadata, stops) {
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
   vplog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Documents without subjects after replacing from title:", length(missing_subjects)))
   if (length(missing_subjects) > 0) {
-    for (i in missing_subjects) {
+    foreach (i = missing_subjects) %dopar% {
       candidates = mapply(paste, metadata$title[i], metadata$paper_abstract[i])
       candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
       candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
