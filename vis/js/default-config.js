@@ -274,9 +274,6 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
-            cite_metadata_warn_1: "Unfortunately important metadata is missing",
-            cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
-            cite_metadata_warn_3: "document's website",
         },
         ger: {
             loading: "Wird geladen...",
@@ -347,9 +344,6 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
-            cite_metadata_warn_1: "Unfortunately important metadata is missing",
-            cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
-            cite_metadata_warn_3: "document's website",
         },
         ger_linkedcat: {
            loading: "Wird geladen...",
@@ -423,9 +417,6 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
-            cite_metadata_warn_1: "Unfortunately important metadata is missing",
-            cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
-            cite_metadata_warn_3: "document's website",
         },
         eng_plos: {
             loading: "Loading...",
@@ -488,9 +479,6 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
-            cite_metadata_warn_1: "Unfortunately important metadata is missing",
-            cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
-            cite_metadata_warn_3: "document's website",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -574,9 +562,6 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
-            cite_metadata_warn_1: "Unfortunately important metadata is missing",
-            cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
-            cite_metadata_warn_3: "document's website",
         },
         eng_openaire: {
             loading: "Loading...",
@@ -666,9 +651,6 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
-            cite_metadata_warn_1: "Unfortunately important metadata is missing",
-            cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
-            cite_metadata_warn_3: "document's website",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -732,9 +714,6 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
-            cite_metadata_warn_1: "Unfortunately important metadata is missing",
-            cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
-            cite_metadata_warn_3: "document's website",
         },
         ger_cris_2: {
             loading: "Wird geladen...",
@@ -798,9 +777,6 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
-            cite_metadata_warn_1: "Unfortunately important metadata is missing",
-            cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
-            cite_metadata_warn_3: "document's website",
         },
         eng_cris_2: {
            loading: "Loading...",
@@ -868,9 +844,6 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
-            cite_metadata_warn_1: "Unfortunately important metadata is missing",
-            cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
-            cite_metadata_warn_3: "document's website",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -952,9 +925,6 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
-            cite_metadata_warn_1: "Unfortunately important metadata is missing",
-            cite_metadata_warn_2: "for this document (e.g. title, authors, year). Therefore we are unable to provide meaningful citations. If you'd like to find out more about this document, please visit the",
-            cite_metadata_warn_3: "document's website",
         },
     },
 

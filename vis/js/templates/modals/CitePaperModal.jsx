@@ -16,13 +16,6 @@ const CitePaperModal = ({ open, onClose, paper }) => {
 
   const citationText = paper ? getCitation(paper) : "";
 
-  const metadataMissing =
-    !paper ||
-    !paper.title ||
-    !paper.authors_objects ||
-    paper.authors_objects.length === 0 ||
-    !paper.year;
-
   return (
     // html template starts here
     <Modal id="cite_paper_modal" show={open} onHide={onClose}>
@@ -55,24 +48,6 @@ const CitePaperModal = ({ open, onClose, paper }) => {
         </div>
         <p className="cit-style-desc">{currentStyle.description}</p>
         <CopyButton textId={"copy-paper-citation"} textContent={citationText} />
-        {metadataMissing && paper && (
-          <p className="cite-paper-warning">
-            <strong>{loc.cite_metadata_warn_1}</strong>{" "}
-            {loc.cite_metadata_warn_2}{" "}
-            <a
-              href={
-                paper.list_link.isDoi
-                  ? `https://dx.doi.org/${paper.list_link.address}`
-                  : paper.list_link.address
-              }
-              target="_blank"
-              rel="noreferrer"
-            >
-              {loc.cite_metadata_warn_3}
-            </a>
-            .
-          </p>
-        )}
       </Modal.Body>
     </Modal>
     // html template ends here
