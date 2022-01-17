@@ -29,7 +29,7 @@ const PaperButtons = ({
     // html template starts here
     <div className="paper_buttons_row">
       {!!onPDFClick && (
-        <button className="paper_button" onClick={handlePDFButtonClick}>
+        <button className="paper_button main" onClick={handlePDFButtonClick}>
           <i className="fa fa-eye"></i>&nbsp;&nbsp;PDF
         </button>
       )}
