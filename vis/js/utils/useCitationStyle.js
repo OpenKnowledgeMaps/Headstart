@@ -46,6 +46,7 @@ const useCitationStyle = () => {
 
   const getCitation = (paper) => {
     // format derived from the example JSON: https://citation.js.org/demo/
+    // full list of parameters: node_modules/@citation-js/core/lib/plugins/input/csl.js
     const cite = new Cite({
       id: paper.safe_id,
       title: paper.title,
@@ -56,8 +57,9 @@ const useCitationStyle = () => {
       issued: [{ "date-parts": paper.year.split("-") }],
       "container-title": paper.published_in,
       DOI: paper.list_link.isDoi ? paper.list_link.address : undefined,
-      url: paper.list_link.isDoi ? undefined : paper.list_link.address,
-      // other possible attributes: "type", "volume", "issue", "page", ???
+      URL: paper.list_link.isDoi ? undefined : paper.list_link.address,
+      source: "Open Knowledge Maps",
+      type: getType(paper),
     });
 
     return cite.format("bibliography", {
@@ -69,3 +71,41 @@ const useCitationStyle = () => {
 };
 
 export default useCitationStyle;
+
+// mapping of BASE type to CSL type
+const TYPE_TO_TYPE = [
+  ["Journal/newspaper article", "article-journal"],
+  ["Journal/newspaper other content", "article-journal"],
+  ["Journal/newspaper", "periodical"],
+  ["Book", "book"],
+  ["Book part", "chapter"],
+  ["Conference object", "paper-conference"],
+  ["Dataset", "dataset"],
+  ["Manuscript", "manuscript"],
+  ["Map", "map"],
+  ["Moving image/video", "motion_picture"],
+  ["Patent", "patent"],
+  ["Report", "report"],
+  ["Review", "review"],
+  ["Software", "software"],
+  ["Still image", "graphic"],
+  ["Thesis", "thesis"],
+  ["Thesis: bachelor", "thesis"],
+  ["Thesis: doctoral and postdoctoral", "thesis"],
+  ["Thesis: master", "thesis"],
+];
+
+const getType = (paper) => {
+  const types = paper.resulttype;
+  if (!types || types.length === 0) {
+    return undefined;
+  }
+
+  for (const entry of TYPE_TO_TYPE) {
+    if (types.includes(entry[0])) {
+      return entry[1];
+    }
+  }
+
+  return undefined;
+};
