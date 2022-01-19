@@ -374,7 +374,7 @@ describe("Modals component", () => {
       // tbh I don't get it why the output is this and not ACM
       expect(
         document.querySelector("#copy-paper-citation").textContent.trim()
-      ).toBe("Doe, J. (2021). Test paper. https://example.com");
+      ).toBe("Doe, J. (2021). Test paper. https://example.com\n https://example.com");
     });
   });
 

@@ -38,6 +38,14 @@ export const availableStyles = [
     name: "ACM",
     template: "custom-acm",
     description: 'ACM SIG Proceedings ("et al." for 3+ authors)',
+    append: (paper) => {
+      // feature request from Peter, not an official part of ACM
+      if (!paper.list_link.isDoi) {
+        return " " + paper.list_link.address;
+      }
+
+      return "";
+    },
   },
 ];
 
@@ -62,9 +70,15 @@ const useCitationStyle = () => {
       type: getType(paper),
     });
 
-    return cite.format("bibliography", {
+    let output = cite.format("bibliography", {
       template: style.template,
     });
+
+    if (style.append) {
+      output += style.append(paper);
+    }
+
+    return output;
   };
 
   return [style, setStyle, getCitation];
