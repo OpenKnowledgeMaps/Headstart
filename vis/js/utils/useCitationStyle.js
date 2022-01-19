@@ -68,7 +68,8 @@ const useCitationStyle = () => {
         ? paper.list_link.address.replace(/(https?:\/\/)?(\w+\.)?doi.org\//, "")
         : undefined,
       URL: paper.list_link.isDoi ? undefined : paper.list_link.address,
-      source: "Open Knowledge Maps",
+      // this information could be misleading, so we'll hide it for now:
+      //source: "Open Knowledge Maps",
       type: getType(paper),
     });
 
