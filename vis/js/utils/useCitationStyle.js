@@ -64,7 +64,9 @@ const useCitationStyle = () => {
       })),
       issued: [{ "date-parts": paper.year.split("-") }],
       "container-title": paper.published_in,
-      DOI: paper.list_link.isDoi ? paper.list_link.address : undefined,
+      DOI: paper.list_link.isDoi
+        ? paper.list_link.address.replace(/(https?:\/\/)?(\w+\.)?doi.org\//, "")
+        : undefined,
       URL: paper.list_link.isDoi ? undefined : paper.list_link.address,
       source: "Open Knowledge Maps",
       type: getType(paper),
