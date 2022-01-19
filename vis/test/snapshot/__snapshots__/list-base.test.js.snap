@@ -340,11 +340,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     className="list_source"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -816,11 +811,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -966,11 +956,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <div
                     className="list_source short"
                   >
-                    <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
                     <span
                       className="list_published_in"
                     >
@@ -1120,11 +1105,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -1271,11 +1251,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -1412,11 +1387,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <div
                     className="list_source short"
                   >
-                    <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
                     <span
                       className="list_published_in"
                     >
@@ -1566,11 +1536,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -1717,11 +1682,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -1858,11 +1818,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <div
                     className="list_source short"
                   >
-                    <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
                     <span
                       className="list_published_in"
                     >
@@ -2001,11 +1956,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -2142,11 +2092,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <div
                     className="list_source short"
                   >
-                    <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
                     <span
                       className="list_published_in"
                     >
@@ -2285,11 +2230,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -2426,11 +2366,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <div
                     className="list_source short"
                   >
-                    <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
                     <span
                       className="list_published_in"
                     >
@@ -2569,11 +2504,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -2710,11 +2640,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <div
                     className="list_source short"
                   >
-                    <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
                     <span
                       className="list_published_in"
                     >
@@ -2864,11 +2789,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -3014,11 +2934,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <div
                     className="list_source short"
                   >
-                    <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
                     <span
                       className="list_published_in"
                     >
@@ -3431,11 +3346,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <div
                     className="list_source short"
                   >
-                    <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
                     <span
                       className="list_published_in"
                     >

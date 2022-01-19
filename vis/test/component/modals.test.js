@@ -310,7 +310,7 @@ describe("Modals component", () => {
 
       expect(
         document.querySelector("#copy-paper-citation").textContent.trim()
-      ).toEqual("Doe, J. (2021). Test paper.");
+      ).toEqual("Doe, J. (2021). Test paper. https://example.com");
     });
 
     it("triggers a correct redux action when citation modal is closed", () => {
@@ -374,7 +374,7 @@ describe("Modals component", () => {
       // tbh I don't get it why the output is this and not ACM
       expect(
         document.querySelector("#copy-paper-citation").textContent.trim()
-      ).toBe("Doe, J. (2021). Test paper.");
+      ).toBe("Doe, J. (2021). Test paper. https://example.com");
     });
   });
 
