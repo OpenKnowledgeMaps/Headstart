@@ -1,6 +1,6 @@
 # Changelog
 
-## 22-01-20
+## 2022-01-20
 
 ### New features
 
