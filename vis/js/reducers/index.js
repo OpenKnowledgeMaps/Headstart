@@ -32,18 +32,13 @@ import tracking from "./tracking";
 import zoom from "./zoom";
 
 export default combineReducers({
-  // the data reducer has to go first because it has some side effects (it changes
-  // the input data)
-  // therefore the order of the reducers affects performance
-  // TODO remove the side effects
-  data,
-  // the rest goes in the alphabetic order
   animation,
   areas,
   bubbleOrder,
   chart,
   chartType,
   contextLine,
+  data,
   files,
   heading,
   highlightedBubble,

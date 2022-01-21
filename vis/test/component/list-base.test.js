@@ -11,12 +11,11 @@ import data, {
   baseConfig as config,
   baseContext as context,
 } from "../data/base";
-import { deselectPaper, initializeStore } from "../../js/actions";
+import { initializeStore } from "../../js/actions";
 
 import List from "../../js/components/List";
 
 import {
-  selectPaper,
   zoomIn,
   highlightArea,
   showPreview,
@@ -26,10 +25,20 @@ import {
 } from "../../js/actions";
 import reducer from "../../js/reducers";
 import LocalizationProvider from "../../js/components/LocalizationProvider";
+import { getAuthorsList } from "../../js/utils/data";
 
 const setup = () => {
+  data.forEach((d) => (d.authors_list = getAuthorsList(d.authors, true)));
+
   const store = createStore(reducer);
-  store.dispatch(initializeStore(config, context, data));
+  store.dispatch(
+    initializeStore(config, context, data, [], null, 800, null, null, 800, {
+      bubbleMinScale: config.bubble_min_scale,
+      bubbleMaxScale: config.bubble_max_scale,
+      paperMinScale: config.paper_min_scale,
+      paperMaxScale: config.paper_max_scale,
+    })
+  );
 
   return store;
 };
@@ -153,7 +162,7 @@ describe("List entries component - special BASE tests", () => {
         .data.list.find(
           (p) =>
             p.id ===
-            "15e63fc6c5dfa228a39433f46c271946c8cf45f566bb63036ed89f66ce66a5e7"
+            "18cabd2db11b6c2f6108b9fb11d07ce9ec55f2b3037f6cac6e1ea00710728958"
         );
 
       const EXPECTED_PAYLOAD = highlightArea(firstPaper);
@@ -213,7 +222,7 @@ describe("List entries component - special BASE tests", () => {
         .data.list.find(
           (p) =>
             p.id ===
-            "008ea92dafd41bdb55abf7cb8b4f43deb52ac003a2b15a8c5eb8743ae021533d"
+            "18cabd2db11b6c2f6108b9fb11d07ce9ec55f2b3037f6cac6e1ea00710728958"
         );
       const EXPECTED_PAYLOAD = showPreview(firstPaper);
 
@@ -222,7 +231,7 @@ describe("List entries component - special BASE tests", () => {
   });
 
   describe("search, filter and sort", () => {
-    it("searches the list for 'sustainability education'", () => {
+    it("searches the list for 'calcium homeostasis'", () => {
       const store = setup();
 
       act(() => {
@@ -237,12 +246,12 @@ describe("List entries component - special BASE tests", () => {
       });
 
       act(() => {
-        store.dispatch(search("sustainability education"));
+        store.dispatch(search("calcium homeostasis"));
       });
 
       const papers = container.querySelectorAll(".list_entry");
 
-      expect(papers.length).toEqual(2);
+      expect(papers.length).toEqual(1);
     });
 
     it("filters the list for open access papers only", () => {
@@ -265,7 +274,7 @@ describe("List entries component - special BASE tests", () => {
 
       const papers = container.querySelectorAll(".list_entry");
 
-      expect(papers.length).toEqual(10);
+      expect(papers.length).toEqual(6);
     });
 
     it("sorts the list by year", () => {
@@ -306,7 +315,7 @@ describe("List entries component - special BASE tests", () => {
     it("searches, filters and sorts at the same time", () => {
       const store = setup();
 
-      const SEARCH_TEXT = "Online Education";
+      const SEARCH_TEXT = "calcium silicate";
 
       act(() => {
         render(
@@ -324,7 +333,7 @@ describe("List entries component - special BASE tests", () => {
       });
 
       let papers = container.querySelectorAll(".list_entry");
-      expect(papers.length).toEqual(3);
+      expect(papers.length).toEqual(4);
 
       act(() => {
         store.dispatch(filter("open_access"));
@@ -344,8 +353,8 @@ describe("List entries component - special BASE tests", () => {
       );
 
       expect(titles).toEqual([
-        "Digital Education And Learning: The Growing Trend In Academic And Business Spaces—An International Overview (2018)",
-        "Integrating Digital Libraries into Distance Education: A Review of Models, Roles, And Strategies (2019-04-01)",
+        "Efficacy of different calcium silicate materials as pulp-capping agents: Randomized clinical trial (2019)",
+        "Erosion and weathering of the Northern Apennines with implications for the tectonics and kinematics of the orogen (2008)",
       ]);
     });
   });

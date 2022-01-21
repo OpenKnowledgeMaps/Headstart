@@ -82,7 +82,6 @@ describe("list state", () => {
         sortOptions: [],
         defaultSort: null,
         abstractSize: 250,
-        linkType: null,
         showDocumentType: false,
         showMetrics: false,
         isContentBased: false,

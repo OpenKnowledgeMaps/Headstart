@@ -1,5 +1,24 @@
 # Changelog
 
+## 2022-01-20
+
+### New features
+
+- backend data sanitization
+- pdfs searchable by the searchbox
+
+### Changes
+
+- data preprocessing refactoring
+
+### Bug fixes
+
+- footer size on narrow screens
+
+### Internal
+
+- test database update
+
 ## 2021-12-22
 
 ### Changes

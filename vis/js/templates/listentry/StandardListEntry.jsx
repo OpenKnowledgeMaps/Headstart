@@ -1,14 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { useLocalizationContext } from "../../components/LocalizationProvider";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
-import {
-  getPaperComments,
-  getPaperKeywords,
-  getPaperTags,
-  getPaperTextLink,
-} from "../../utils/data";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import PaperButtons from "./PaperButtons";
 
@@ -34,7 +27,6 @@ import Title from "./Title";
 const StandardListEntry = ({
   // data
   paper,
-  linkType,
   showDocumentType,
   showKeywords,
   showMetrics,
@@ -46,27 +38,6 @@ const StandardListEntry = ({
   // event handlers
   handleBacklinkClick,
 }) => {
-  const loc = useLocalizationContext();
-
-  const id = paper.safe_id;
-  const access = {
-    isOpenAccess: !!paper.oa,
-    isFreeAccess: !!paper.free_access,
-    isDataset: paper.resulttype === "dataset",
-  };
-  const tags = getPaperTags(paper);
-  const link = getPaperTextLink(paper, linkType);
-  const documentType = showDocumentType ? paper.resulttype : null;
-  const comments = getPaperComments(paper);
-  const keywords = showKeywords ? getPaperKeywords(paper, loc) : null;
-  const metrics = showMetrics
-    ? {
-        tweets: paper.cited_by_tweeters_count,
-        readers: paper["readers.mendeley"],
-        citations: paper.citation_count,
-        baseUnit: !isContentBased ? baseUnit : null,
-      }
-    : null;
   const backlink = {
     show: showBacklink,
     isInStream: isInStreamBacklink,
@@ -82,28 +53,30 @@ const StandardListEntry = ({
 
   return (
     // html template starts here
-    <ListEntry anchorId={id}>
+    <ListEntry anchorId={paper.safe_id}>
       <div className="list_metadata">
         <AccessIcons
-          isOpenAccess={access.isOpenAccess}
-          isFreeAccess={access.isFreeAccess}
-          isDataset={access.isDataset}
-          tags={tags ? <Tags values={tags} /> : null}
+          isOpenAccess={!!paper.oa}
+          isFreeAccess={!!paper.free_access}
+          isDataset={paper.resulttype.includes("dataset")}
+          tags={paper.tags.length > 0 ? <Tags values={paper.tags} /> : null}
         />
         <Title paper={paper} />
-        <Details authors={paper.authors} source={paper.published_in} />
-        <Link address={link.address} isDoi={link.isDoi} />
+        <Details authors={paper.authors_list} source={paper.published_in} />
+        <Link address={paper.list_link.address} isDoi={paper.list_link.isDoi} />
       </div>
-      {!!documentType && <DocumentType type={documentType} />}
+      {showDocumentType && paper.resulttype.length > 0 && (
+        <DocumentType type={paper.resulttype[0]} />
+      )}
       <Abstract text={paper.paper_abstract} />
-      {!!comments && <Comments items={comments} />}
-      {!!keywords && <Keywords>{keywords}</Keywords>}
-      {!!metrics && (
+      {paper.comments.length > 0 && <Comments items={paper.comments} />}
+      {showKeywords && <Keywords>{paper.keywords}</Keywords>}
+      {showMetrics && (
         <Metrics
-          citations={metrics.citations}
-          tweets={metrics.tweets}
-          readers={metrics.readers}
-          baseUnit={metrics.baseUnit}
+          citations={paper.citation_count}
+          tweets={paper.cited_by_tweeters_count}
+          readers={paper["readers.mendeley"]}
+          baseUnit={!isContentBased ? baseUnit : null}
         />
       )}
       <PaperButtons paper={paper} />
@@ -121,7 +94,6 @@ const StandardListEntry = ({
 };
 
 const mapStateToProps = (state) => ({
-  linkType: state.list.linkType,
   showDocumentType: state.list.showDocumentType,
   showMetrics: state.list.showMetrics,
   isContentBased: state.list.isContentBased,

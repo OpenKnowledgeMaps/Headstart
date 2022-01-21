@@ -83,6 +83,24 @@ export const getDiameterScale = (extent, size, options) => {
   return (value) => scale(value);
 };
 
+const COORDS_PADDING = 5;
+/**
+ * Returns a scaling function that scales the papers according to the chart size.
+ * 
+ * @param {Array} extent min and max paper coordinate
+ * @param {number} size chart size in px
+ * 
+ * @returns scaling function
+ */
+export const getInitialCoordsScale = (extent, size) => {
+  const scale = d3.scale
+    .linear()
+    .range([COORDS_PADDING, size - COORDS_PADDING])
+    .domain(extent);
+
+  return (value) => scale(value);
+};
+
 /**
  * Returns a scaling function that scales any coordinates from the previous chart size
  * to the new one.
