@@ -22,7 +22,7 @@ const EditButton = ({ onClick, title }) => {
         title={title}
         onClick={handleClick}
       >
-        <i className="fa fa-pencil fa-fw" aria-hidden="true"></i>
+        <i className="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>
       </Button>
     </div>
   );
