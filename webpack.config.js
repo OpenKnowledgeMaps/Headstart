@@ -1,33 +1,18 @@
-var config = require("./config.js");
 const path = require("path");
-const webpack = require("webpack");
+
+const { ProvidePlugin } = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const BundleAnalyzerPlugin =
-  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
-//const TARGET = process.env.npm_lifecycle_event;
-
-const getSkinExample = (skin) => {
-  switch (skin) {
-    case "":
-      return ["/project_website/base.html"];
-    case "covis":
-      return ["/local_covis/"];
-    case "triple":
-      return ["/local_triple/map.html"];
-    case "viper":
-      return "/local_viper/";
-    default:
-      return false;
-  }
-};
+const config = require("./config.js");
 
 module.exports = (env) => {
   const { publicPath, skin, analyzeBundle } = { ...config, ...env };
 
   return {
     devtool: "eval-source-map",
+
     entry: {
       headstart: "./vis/entrypoint.js",
     },
@@ -35,7 +20,6 @@ module.exports = (env) => {
     output: {
       filename: "[name].[contenthash].bundle.js",
       path: path.resolve(__dirname, "dist"),
-      clean: true,
       // dev: specify a full path including protocol
       // production: specify full path excluding protocol
       publicPath: publicPath,
@@ -43,6 +27,7 @@ module.exports = (env) => {
         name: "headstart",
         type: "var",
       },
+      clean: true,
     },
 
     devServer: {
@@ -55,13 +40,13 @@ module.exports = (env) => {
     },
 
     resolve: {
+      // TODO clean up the aliases once the old modules are refactored
       alias: {
         //
         hypher: "hypher/dist/jquery.hypher.js",
         markjs: "mark.js/dist/jquery.mark.js",
 
         // paths
-        templates: path.resolve(__dirname, "vis/templates"),
         images: path.resolve(__dirname, "vis/images"),
         lib: path.resolve(__dirname, "vis/lib"),
         styles: path.resolve(__dirname, "vis/stylesheets"),
@@ -70,16 +55,12 @@ module.exports = (env) => {
         config: path.resolve(__dirname, "vis/js/default-config.js"),
         headstart: path.resolve(__dirname, "vis/js/headstart.js"),
         mediator: path.resolve(__dirname, "vis/js/mediator.js"),
-        io: path.resolve(__dirname, "vis/js/io.js"),
 
         // building
         process: "process/browser",
       },
     },
 
-    externals: {
-      chart: "Chart",
-    },
     plugins: [
       new HtmlWebpackPlugin({
         inject: false,
@@ -88,31 +69,19 @@ module.exports = (env) => {
           `${htmlWebpackPlugin.tags.headTags}
           ${htmlWebpackPlugin.tags.bodyTags}`,
       }),
-      new webpack.ProvidePlugin({
+      new ProvidePlugin({
         process: "process/browser",
       }),
       new MiniCssExtractPlugin({
         filename: "[name].[contenthash].css",
       }),
-      // can be used for simulating env variables
-      new webpack.EnvironmentPlugin({}),
       ...(analyzeBundle ? [new BundleAnalyzerPlugin()] : []),
     ],
+
     module: {
       rules: [
         {
-          test: require.resolve("hypher/dist/jquery.hypher.js"),
-          use: [
-            {
-              loader: "imports-loader",
-              options: {
-                imports: ["default jquery $", "default jquery jQuery"],
-              },
-            },
-          ],
-        },
-        {
-          test: /lib\/*.js/,
+          test: [require.resolve("hypher/dist/jquery.hypher.js"), /lib\/*.js/],
           use: [
             {
               loader: "imports-loader",
@@ -177,6 +146,7 @@ module.exports = (env) => {
         { test: /\.csl$/, type: "asset/source" },
       ],
     },
+
     optimization: {
       // deterministic = stable hashes between builds
       moduleIds: "deterministic",
@@ -195,4 +165,19 @@ module.exports = (env) => {
       },
     },
   };
+};
+
+const getSkinExample = (skin) => {
+  switch (skin) {
+    case "":
+      return ["/project_website/base.html"];
+    case "covis":
+      return ["/local_covis/"];
+    case "triple":
+      return ["/local_triple/map.html"];
+    case "viper":
+      return "/local_viper/";
+    default:
+      return false;
+  }
 };
