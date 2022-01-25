@@ -1,7 +1,10 @@
 var config = require("./config.js");
 const path = require("path");
 const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 //const TARGET = process.env.npm_lifecycle_event;
 
@@ -21,19 +24,25 @@ const getSkinExample = (skin) => {
 };
 
 module.exports = (env) => {
-  const { publicPath, skin } = { ...config, ...env };
+  const { publicPath, skin, analyzeBundle } = { ...config, ...env };
 
   return {
     devtool: "eval-source-map",
-    entry: "./vis/entrypoint.js",
+    entry: {
+      headstart: "./vis/entrypoint.js",
+    },
 
     output: {
+      filename: "[name].[contenthash].bundle.js",
       path: path.resolve(__dirname, "dist"),
-      //dev: specify a full path including protocol, production: specify full path excluding protocol
+      clean: true,
+      // dev: specify a full path including protocol
+      // production: specify full path excluding protocol
       publicPath: publicPath,
-      filename: "headstart.js",
-      libraryTarget: "var",
-      library: "headstart",
+      library: {
+        name: "headstart",
+        type: "var",
+      },
     },
 
     devServer: {
@@ -72,18 +81,22 @@ module.exports = (env) => {
       chart: "Chart",
     },
     plugins: [
+      new HtmlWebpackPlugin({
+        inject: false,
+        filename: "headstart.php",
+        templateContent: ({ htmlWebpackPlugin }) =>
+          `${htmlWebpackPlugin.tags.headTags}
+          ${htmlWebpackPlugin.tags.bodyTags}`,
+      }),
       new webpack.ProvidePlugin({
         process: "process/browser",
       }),
       new MiniCssExtractPlugin({
-        // Options similar to the same options in webpackOptions.output
-        // all options are optional
-        filename: "headstart.css",
-        chunkFilename: "[id].css",
-        ignoreOrder: false, // Enable to remove warnings about conflicting order
+        filename: "[name].[contenthash].css",
       }),
       // can be used for simulating env variables
       new webpack.EnvironmentPlugin({}),
+      ...(analyzeBundle ? [new BundleAnalyzerPlugin()] : []),
     ],
     module: {
       rules: [
@@ -163,6 +176,23 @@ module.exports = (env) => {
         },
         { test: /\.csl$/, type: "asset/source" },
       ],
+    },
+    optimization: {
+      // deterministic = stable hashes between builds
+      moduleIds: "deterministic",
+      // single = optimized for import into same page
+      runtimeChunk: "single",
+      splitChunks: {
+        // max chunk size in B
+        maxSize: 500000,
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: "vendors",
+            chunks: "all",
+          },
+        },
+      },
     },
   };
 };
