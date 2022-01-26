@@ -273,6 +273,7 @@ var config = {
             citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
+            cite_paper: "Cite this document as",
         },
         ger: {
             loading: "Wird geladen...",
@@ -326,6 +327,7 @@ var config = {
             share_button_title: "Visualisierung teilen",
             embed_button_title: "Visualisierung auf einer anderen Seite einbetten",
             embed_button_text: 'Kopieren',
+            copied_button_text: 'Kopiert',
             embed_body_text: 'Sie können diesen Code verwenden, um die Visualisierung auf anderen Seiten einzubetten.',
             pdf_not_loaded: "Leider konnten wir das PDF nicht abrufen. Mehr Informationen finden Sie auf",
             pdf_not_loaded_linktext: "dieser Seite",
@@ -341,6 +343,7 @@ var config = {
             citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
+            cite_paper: "Cite this document as",
         },
         ger_linkedcat: {
            loading: "Wird geladen...",
@@ -401,6 +404,7 @@ var config = {
             share_button_title: "Visualisierung teilen",
             embed_button_title: "Visualisierung auf einer anderen Seite einbetten",
             embed_button_text: 'Kopieren',
+            copied_button_text: 'Kopiert',
             embed_body_text: 'Sie können diesen Code verwenden, um die Visualisierung auf anderen Seiten einzubetten.',
             pdf_load_text: "Dieser Vorgang kann mehrere Minuten dauern, da die gescannten Texte sehr umfangreich sein können. Bitte haben Sie etwas Geduld.",
             pdf_not_loaded: "Leider konnten wir das PDF nicht abrufen. Mehr Informationen finden Sie auf",
@@ -412,6 +416,7 @@ var config = {
             citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
+            cite_paper: "Cite this document as",
         },
         eng_plos: {
             loading: "Loading...",
@@ -473,6 +478,7 @@ var config = {
             citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
+            cite_paper: "Cite this document as",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -533,6 +539,7 @@ var config = {
             share_button_title: "Share this knowledge map",
             embed_button_title: "Embed this knowledge map on other websites",
             embed_button_text: 'Copy',
+            copied_button_text: 'Copied',
             embed_title: 'embed map',
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
             high_metadata_quality: "Data quality",
@@ -554,6 +561,7 @@ var config = {
             citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
+            cite_paper: "Cite this document as",
         },
         eng_openaire: {
             loading: "Loading...",
@@ -609,6 +617,7 @@ var config = {
             share_button_title: "Share this knowledge map",
             embed_button_title: "Embed this knowledge map on other websites",
             embed_button_text: 'Copy',
+            copied_button_text: 'Copied',
             embed_title: 'embed map',
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
             link: 'link',
@@ -641,6 +650,7 @@ var config = {
             citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
+            cite_paper: "Cite this document as",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -703,6 +713,7 @@ var config = {
             citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
+            cite_paper: "Cite this document as",
         },
         ger_cris_2: {
             loading: "Wird geladen...",
@@ -765,6 +776,7 @@ var config = {
             citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
+            cite_paper: "Cite this document as",
         },
         eng_cris_2: {
            loading: "Loading...",
@@ -831,6 +843,7 @@ var config = {
             citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
+            cite_paper: "Cite this document as",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -895,6 +908,7 @@ var config = {
             share_button_title: "Share this knowledge map",
             embed_button_title: "Embed this knowledge map on other websites",
             embed_button_text: 'Copy',
+            copied_button_text: 'Copied',
             embed_title: 'embed map',
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
             area_streamgraph: "Stream",
@@ -910,6 +924,7 @@ var config = {
             citation_template: "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
+            cite_paper: "Cite this document as",
         },
     },
 

@@ -1,28 +1,20 @@
-import React, { useRef } from "react";
+import React from "react";
 
-import { Modal, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
+
+import CopyButton from "../CopyButton";
 
 const IFRAME_WIDTH = 1260;
 const IFRAME_HEIGHT = 756;
 
 const EmbedModal = ({ open, onClose }) => {
-  const localization = useLocalizationContext();
+  const loc = useLocalizationContext();
 
   const embedText = `<iframe width="${IFRAME_WIDTH}" height="${IFRAME_HEIGHT}" src="${window.location
     .toString()
     .replace(/#.*/, "")}&embed=true"></iframe>`;
-
-  const areaRef = useRef(null);
-  const handleCopyClick = (event) => {
-    event.preventDefault();
-    const embedString = areaRef.current;
-    embedString.focus();
-    embedString.setSelectionRange(0, embedString.value.length);
-    document.execCommand("copy");
-    return false;
-  };
 
   return (
     // html template starts here
@@ -33,23 +25,19 @@ const EmbedModal = ({ open, onClose }) => {
           className="embed-modal-title"
           style={{ fontSize: 20 }}
         >
-          {localization.embed_title}
+          {loc.embed_title}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body id="embed-body" className="modal-body">
-        <p id="embed-body-text">{localization.embed_body_text}</p>
-        <form>
-          <textarea
-            ref={areaRef}
-            id="embed-modal-text"
-            rows="3"
-            readOnly
-            value={embedText}
-          ></textarea>
-          <Button bsStyle="primary" id="embed-button" onClick={handleCopyClick}>
-            {localization.embed_button_text}
-          </Button>
-        </form>
+        <p id="embed-body-text">{loc.embed_body_text}</p>
+        <div id="copy-embed" className="citation">
+          {embedText}
+        </div>
+        <CopyButton
+          className="indented-modal-btn"
+          textId={"copy-embed"}
+          textContent={open ? embedText : ""}
+        />
       </Modal.Body>
     </Modal>
     // html template ends here

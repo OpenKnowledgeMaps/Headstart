@@ -20,7 +20,6 @@ import localization from "./localization";
 import misc from "./misc";
 import modals from "./modals";
 import paperOrder from "./paperOrder";
-import previewModal from "./previewModal";
 import query from "./query";
 import selectedBubble from "./selectedBubble";
 import selectedPaper from "./selectedPaper";
@@ -49,7 +48,6 @@ export default combineReducers({
   misc,
   modals,
   paperOrder,
-  previewModal,
   query,
   selectedBubble,
   selectedPaper,

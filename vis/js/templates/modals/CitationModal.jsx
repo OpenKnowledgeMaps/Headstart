@@ -1,13 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { Modal, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { closeCitationModal } from "../../actions";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 import { getDateFromTimestamp } from "../../utils/dates";
 import { formatString } from "../../utils/string";
+import CopyButton from "../CopyButton";
 
 const CitationModal = ({
   open,
@@ -40,12 +41,6 @@ const CitationModal = ({
     citationText = citationText.replace(" [].", ".");
   }
 
-  const handleCopyClick = (event) => {
-    event.preventDefault();
-    navigator.clipboard.writeText(citationText);
-    return false;
-  };
-
   return (
     // html template starts here
     <Modal id="cite_modal" show={open} onHide={onClose}>
@@ -60,10 +55,14 @@ const CitationModal = ({
       </Modal.Header>
       <Modal.Body id="cite-body" className="modal-body">
         <p>{isStreamgraph ? loc.cite_vis_sg : loc.cite_vis_km}:</p>
-        <div className="citation">{citationText}</div>
-        <Button bsStyle="primary" id="cite-button" onClick={handleCopyClick}>
-          {loc.embed_button_text}
-        </Button>
+        <div id="copy-map-citation" className="citation">
+          {citationText}
+        </div>
+        <CopyButton
+          className="indented-modal-btn"
+          textId={"copy-map-citation"}
+          textContent={open ? citationText : ""}
+        />
       </Modal.Body>
     </Modal>
     // html template ends here

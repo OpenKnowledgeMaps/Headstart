@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { closeEmbedModal, closeViperEditModal, hidePreview } from "../actions";
 
 import CitationModal from "../templates/modals/CitationModal";
+import CitePaperModal from "../templates/modals/CitePaperModal";
 import EmbedModal from "../templates/modals/EmbedModal";
 import ImageModal from "../templates/modals/ImageModal";
 import InfoModal from "../templates/modals/InfoModal";
@@ -64,6 +65,7 @@ const Modals = ({
         />
       )}
       {showCitationModal && <CitationModal />}
+      <CitePaperModal />
     </LocalizationProvider>
   );
 };

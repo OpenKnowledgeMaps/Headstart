@@ -8,6 +8,7 @@ import {
   getRadiusScale,
 } from "../utils/scale";
 import {
+  extractAuthors,
   getAuthorsList,
   getInternalMetric,
   getListLink,
@@ -136,6 +137,7 @@ class DataManager {
   }
 
   __parseAuthors(paper) {
+    paper.authors_objects = extractAuthors(paper.authors);
     paper.authors_list = getAuthorsList(
       paper.authors,
       this.config.convert_author_names
