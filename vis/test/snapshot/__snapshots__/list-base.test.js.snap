@@ -430,7 +430,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
                 <button
                   className="paper_button"
@@ -864,7 +865,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
                 <button
                   className="paper_button"
@@ -1158,7 +1160,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
                 <button
                   className="paper_button"
@@ -1589,7 +1592,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
                 <button
                   className="paper_button"
@@ -2842,7 +2846,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
                 <button
                   className="paper_button"
@@ -3121,7 +3126,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
                 <button
                   className="paper_button"
@@ -3411,7 +3417,8 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   <i
                     className="fa fa-eye"
                   />
-                    PDF
+                    
+                  PDF
                 </button>
                 <button
                   className="paper_button"

@@ -180,6 +180,10 @@ img#close-button {
     -moz-border-radius: 14px;
     -webkit-border-radius: 14px;
 
+    .highlighted {
+        color: $okm-red;
+    }
+
     &:hover {
         color: $okm-modal-btn;
         background-color: white;
