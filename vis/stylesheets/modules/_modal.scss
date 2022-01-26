@@ -386,15 +386,3 @@ h5 {
     margin-top: 5px;
     font-style: italic;
 }
-
-.cite-paper-warning {
-    margin-top: 20px;
-
-    a {
-        border-bottom: 1px solid $link-gray;
-
-        &:hover {
-            border-bottom-width: 2px;
-        }
-    }
-}

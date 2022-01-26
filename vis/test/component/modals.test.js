@@ -75,9 +75,6 @@ const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
         cite_vis_sg: "Please cite this streamgraph as follows",
         copied_button_text: "Copied",
         cite_paper: "Cite this paper",
-        cite_metadata_warn_1: "Some warning in bold font",
-        cite_metadata_warn_2: "and the warning continues",
-        cite_metadata_warn_3: "with a link",
       },
     },
     overrideStoreObject
@@ -315,71 +312,7 @@ describe("Modals component", () => {
 
       expect(
         document.querySelector("#copy-paper-citation").textContent.trim()
-      ).toEqual("Doe, J. (2021). Test paper.");
-    });
-
-    it("renders citation modal with missing metadata (no DOI)", () => {
-      const paper = { ...EXAMPLE_PAPER, title: undefined };
-
-      const storeObject = setup(
-        { citedPaper: paper },
-        { service: "base", query: { text: "digital education" } }
-      );
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={storeObject.localization}>
-              <Modals />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      expect(document.querySelector(".cite-paper-warning").textContent).toEqual(
-        storeObject.localization.cite_metadata_warn_1 +
-          " " +
-          storeObject.localization.cite_metadata_warn_2 +
-          " " +
-          storeObject.localization.cite_metadata_warn_3 +
-          "."
-      );
-    });
-
-    it("renders citation modal with missing metadata (DOI available)", () => {
-      const paper = {
-        ...EXAMPLE_PAPER,
-        title: undefined,
-        list_link: { ...EXAMPLE_PAPER.list_link, isDoi: true },
-      };
-
-      const storeObject = setup(
-        { citedPaper: paper },
-        { service: "base", query: { text: "digital education" } }
-      );
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={storeObject.localization}>
-              <Modals />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      expect(document.querySelector(".cite-paper-warning").textContent).toEqual(
-        storeObject.localization.cite_metadata_warn_1 +
-          " " +
-          storeObject.localization.cite_metadata_warn_2 +
-          " " +
-          storeObject.localization.cite_metadata_warn_3 +
-          "."
-      );
+      ).toEqual("Doe, J. (2021). Test paper. https://example.com");
     });
 
     it("triggers a correct redux action when citation modal is closed", () => {
@@ -443,7 +376,7 @@ describe("Modals component", () => {
       // tbh I don't get it why the output is this and not ACM
       expect(
         document.querySelector("#copy-paper-citation").textContent.trim()
-      ).toBe("Doe, J. (2021). Test paper.");
+      ).toBe("Doe, J. (2021). Test paper. https://example.com\n https://example.com");
     });
   });
 

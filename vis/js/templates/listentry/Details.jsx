@@ -24,9 +24,6 @@ const Details = ({ authors, source, isSelected }) => {
       </div>
       {!!source && (
         <div className={"list_source" + (isSelected ? "" : " short")}>
-          <span className="list_in">
-            <Highlight> in </Highlight>
-          </span>
           <span className="list_published_in">
             <Highlight queryHighlight>{source}</Highlight>
           </span>
