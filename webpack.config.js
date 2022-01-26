@@ -123,17 +123,8 @@ module.exports = (env) => {
           ],
         },
         {
-          test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-          use: [
-            {
-              loader:
-                "url-loader?limit=10000&minetype=application/font-woff&name=/assets/[name].[ext]",
-            },
-          ],
-        },
-        {
-          test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-          use: [{ loader: "file-loader?name=/assets/[name].[ext]" }],
+          test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+          type: "asset/resource",
         },
         {
           test: /\.png$/,

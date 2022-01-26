@@ -8,13 +8,17 @@ const AccessIcons = ({ isOpenAccess, isFreeAccess, isDataset, tags }) => {
     <div id="oa">
       {!!isOpenAccess && (
         <span className="paper-tag open-access-tag">
-          <span className="access_icon outlink_symbol">&#61596;</span>
+          <span className="access_icon outlink_symbol">
+            <i className="fas fa-lock-open"></i>
+          </span>
           <Highlight>open access</Highlight>
         </span>
       )}
       {!!isFreeAccess && (
         <span className="paper-tag free-access-tag">
-          <span className="access_icon outlink_symbol">&#61596;</span>
+          <span className="access_icon outlink_symbol">
+            <i className="fas fa-lock-open"></i>
+          </span>
           <Highlight>free access</Highlight>
         </span>
       )}

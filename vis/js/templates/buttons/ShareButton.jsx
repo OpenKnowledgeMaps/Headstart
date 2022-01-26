@@ -71,7 +71,7 @@ const ShareButton = ({ twitterHashtags }) => {
               className="btn btn-primary"
               onClick={() => trackShare("Twitter button")}
             >
-              <i className="fa fa-twitter-square fa-fw" aria-hidden="true"></i>
+              <i className="fab fa-twitter-square fa-fw" aria-hidden="true"></i>
             </button>
           </a>
           <a
@@ -84,7 +84,7 @@ const ShareButton = ({ twitterHashtags }) => {
               className="btn btn-primary"
               onClick={() => trackShare("Facebook button")}
             >
-              <i className="fa fa-facebook-square"></i>
+              <i className="fab fa-facebook-square"></i>
             </button>
           </a>
           <a className="sharebutton_mail" href={emailUrl}>

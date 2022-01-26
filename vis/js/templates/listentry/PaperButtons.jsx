@@ -31,7 +31,7 @@ const PaperButtons = ({
     <div className="paper_buttons_row">
       {!!onPDFClick && (
         <button className="paper_button main" onClick={handlePDFButtonClick}>
-          <i className="fa fa-eye"></i>&nbsp;&nbsp;<Highlight>PDF</Highlight>
+          <i className="far fa-file-pdf"></i>&nbsp;&nbsp;<Highlight>PDF</Highlight>
         </button>
       )}
       {showCiteButton && (

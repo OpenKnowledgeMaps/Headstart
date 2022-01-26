@@ -48,24 +48,6 @@ rect {
     stroke-width: 0;
 }
 
-path {
-    fill: white;
-    fill-opacity: 1;
-    stroke: $paper-icon;
-    stroke-width: 1px;
-    cursor: zoom-in;
-
-    &#region {
-        &.zoomed_in {
-            cursor: pointer;
-        }
-    }
-}
-
-.dogear {
-    fill: $paper-icon;
-}
-
 line {
     stroke: rgb(31, 119, 180);
     stroke-width: 1px;
