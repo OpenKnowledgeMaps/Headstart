@@ -106,16 +106,14 @@ var config = {
     input_format: "csv",
     //base unit for metrics
     base_unit: "readers",
-    //preview type
-    preview_type: "image",
+    //preview type (currently we support only pdf)
+    preview_type: "pdf",
     //convert author names from "[last name], [first name]" to "[first name] [last name]"
     convert_author_names: true,
     //adds some (currently very limited) debug output to the browser console
     debug: false,
 
 /*** settings for title and context line ***/
-    //show dropdown to load different map datasets
-    show_dropdown: true,
     //show context line
     show_context: false,
     //create title from context
@@ -150,8 +148,6 @@ var config = {
     filter_options: ["all", "open_access", "publication", "dataset"],
     //custom data property to filter for. if null, defaults are used with above filter options
     filter_field: null,
-    //display sort menu dropdown
-    sort_menu_dropdown: false,
     //initial field used for sorting
     initial_sort: null,
     
@@ -197,9 +193,6 @@ var config = {
                         , pubmed: "PubMed"
                         , doaj: "DOAJ"
                         , openaire: "OpenAIRE"
-                        , linkedcat: "LinkedCat+"
-                        , linkedcat_authorview: "LinkedCat+"
-                        , linkedcat_browseview: "LinkedCat+"
                         , triple_km: "GoTriple"
                         , triple_sg: "GoTriple"
                     },

@@ -3,47 +3,55 @@ var data_config = {
   mode: "local_files",
   input_format: "json",
 
-  service: "base",
-
-  bubble_min_scale: 1,
-  bubble_max_scale: 1,
-  paper_min_scale: 1,
-  paper_max_scale: 1,
+  service: "triple",
 
   title: "",
   base_unit: "citations",
   use_area_uri: true,
-  show_multiples: false,
+  show_dropdown: false,
   preview_type: "pdf",
   sort_options: ["relevance", "title", "authors", "year"],
   is_force_areas: true,
   language: "eng_pubmed",
-  area_force_alpha: 0.02,
+  area_force_alpha: 0.015,
+  show_keywords: true,
   show_list: true,
   content_based: true,
-  url_prefix: "https://www.base-search.net/Record/",
+  url_prefix: "",
 
   show_context: true,
   create_title_from_context: true,
-  context_most_relevant_tooltip: true,
-
-  embed_modal: true,
-  share_modal: true,
 
   doi_outlink: true,
   filter_menu_dropdown: true,
+  sort_menu_dropdown: true,
   filter_options: ["all", "open_access"],
-  show_keywords: true,
 
-  is_evaluation: true,
-
-  use_hypothesis: true,
-
+  embed_modal: true,
+  share_modal: true,
+  hashtags_twitter_card: "okmaps,openscience,dataviz,GOTRIPLE",
   faqs_button: false,
   faqs_url: "https://openknowledgemaps.org/faq",
-  
-  show_cite_button: true,
+
+  streamgraph_colors: [
+    "#215A66",
+    "#66214A",
+    "#5D40FB",
+    "#CB40FB",
+    "#40C0FB",
+    "#FB4068",
+    "#FBB240",
+    "#40FBC8",
+    "#fee4bc",
+    "#bcfeec",
+    "#c6bcfe",
+    "#febcca",
+  ],
 
   highlight_query_terms: true,
+  filter_menu_dropdown: false,
+
+  show_cite_button: true,
+
   show_context_oa_number: false,
 };

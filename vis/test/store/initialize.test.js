@@ -3,7 +3,6 @@ import { initializeStore } from "../../js/actions";
 import headingReducer from "../../js/reducers/heading";
 import localizationReducer from "../../js/reducers/localization";
 import queryReducer from "../../js/reducers/query";
-import filesReducer from "../../js/reducers/files";
 import contextLineReducer from "../../js/reducers/contextLine";
 import serviceReducer from "../../js/reducers/service";
 import listReducer from "../../js/reducers/list";
@@ -37,9 +36,6 @@ const setup = (overrideConfig = {}, overrideContext = {}) => {
         pubmed: "PubMed",
         doaj: "DOAJ",
         openaire: "OpenAIRE",
-        linkedcat: "LinkedCat+",
-        linkedcat_authorview: "LinkedCat+",
-        linkedcat_browseview: "LinkedCat+",
       },
       show_context_oa_number: true,
       context_most_relevant_tooltip: undefined,
@@ -132,7 +128,6 @@ describe("config and context state", () => {
           titleStyle: "viper",
           titleLabelType: "keywordview-knowledgemap",
           customTitle: "customTitle",
-          showDropdown: false,
         };
 
         const { configObject, contextObject } = setup();
@@ -165,7 +160,6 @@ describe("config and context state", () => {
           titleStyle: "viper",
           titleLabelType: "keywordview-knowledgemap",
           customTitle: "customTitle",
-          showDropdown: false,
         };
 
         const { configObject, contextObject } = setup(
@@ -203,7 +197,6 @@ describe("config and context state", () => {
           titleStyle: "standard",
           titleLabelType: "keywordview-knowledgemap",
           customTitle: "customTitle",
-          showDropdown: false,
         };
 
         const { configObject, contextObject } = setup({
@@ -239,7 +232,6 @@ describe("config and context state", () => {
         titleStyle: null,
         titleLabelType: "keywordview-knowledgemap",
         customTitle: "customTitle",
-        showDropdown: false,
       };
 
       const { configObject, contextObject } = setup({
@@ -275,7 +267,6 @@ describe("config and context state", () => {
         titleStyle: "viper",
         titleLabelType: "authorview-streamgraph",
         customTitle: "customTitle",
-        showDropdown: false,
       };
 
       const { configObject, contextObject } = setup({
@@ -311,7 +302,6 @@ describe("config and context state", () => {
         titleStyle: "viper",
         titleLabelType: "authorview-knowledgemap",
         customTitle: "customTitle",
-        showDropdown: false,
       };
 
       const { configObject, contextObject } = setup({
@@ -347,7 +337,6 @@ describe("config and context state", () => {
         titleStyle: "viper",
         titleLabelType: "keywordview-streamgraph",
         customTitle: "customTitle",
-        showDropdown: false,
       };
 
       const { configObject, contextObject } = setup({
@@ -523,50 +512,6 @@ describe("config and context state", () => {
       const INITIAL_STATE = { some_state: 1 };
 
       const result = queryReducer(INITIAL_STATE, { canceled: true });
-
-      expect(result).toEqual(INITIAL_STATE);
-    });
-  });
-
-  describe("files reducer", () => {
-    it("should return the initial state", () => {
-      const EXPECTED_RESULT = { current: 0, list: [] };
-
-      const result = filesReducer(undefined, {});
-
-      expect(result).toEqual(EXPECTED_RESULT);
-    });
-
-    it("should handle the initialization", () => {
-      const initialState = { current: 0, list: [] };
-      const { configObject, contextObject } = setup();
-      const EXPECTED_RESULT = {
-        current: 0,
-        list: configObject.files,
-      };
-
-      const result = filesReducer(
-        initialState,
-        initializeStore(
-          configObject,
-          contextObject,
-          [],
-          null,
-          500,
-          null,
-          null,
-          500,
-          {}
-        )
-      );
-
-      expect(result).toEqual(EXPECTED_RESULT);
-    });
-
-    it("should not change the state if the action is canceled", () => {
-      const INITIAL_STATE = { some_state: 1 };
-
-      const result = filesReducer(INITIAL_STATE, { canceled: true });
 
       expect(result).toEqual(INITIAL_STATE);
     });
@@ -1662,7 +1607,7 @@ describe("config and context state", () => {
 
       const initialState = {};
       const { configObject, contextObject } = setup({
-        create_title_from_context_style: "linkedcat",
+        create_title_from_context_style: "base",
       });
 
       const result = contextLineReducer(
@@ -1717,7 +1662,7 @@ describe("config and context state", () => {
 
       const initialState = {};
       const { configObject, contextObject } = setup({
-        create_title_from_context_style: "linkedcat",
+        create_title_from_context_style: "base",
       });
 
       const result = contextLineReducer(
@@ -1815,7 +1760,7 @@ describe("config and context state", () => {
       const initialState = {};
       const { configObject, contextObject } = setup(
         {
-          create_title_from_context_style: "linkedcat",
+          create_title_from_context_style: "base",
         },
         {
           params: {
@@ -2359,31 +2304,6 @@ describe("config and context state", () => {
 
       expect(result).toHaveProperty("filterOptions", FILTER_OPTIONS);
       expect(result).toHaveProperty("filterValue", FILTER_OPTIONS[0]);
-    });
-
-    it("should initialize correct sort visibility", () => {
-      const SHOW_SORT = false;
-
-      const { configObject, contextObject } = setup({
-        sort_menu_dropdown: SHOW_SORT,
-      });
-
-      const result = listReducer(
-        {},
-        initializeStore(
-          configObject,
-          contextObject,
-          [],
-          null,
-          500,
-          null,
-          null,
-          500,
-          {}
-        )
-      );
-
-      expect(result).toHaveProperty("showDropdownSort", SHOW_SORT);
     });
 
     it("should initialize correct sort options and initial value", () => {

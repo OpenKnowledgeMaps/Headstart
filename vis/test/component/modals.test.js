@@ -617,7 +617,7 @@ describe("Modals component", () => {
     it("default knowledge map info modal renders", () => {
       const storeObject = setup(
         { openInfoModal: true },
-        { service: "linkedcat", chartType: KNOWLEDGEMAP_MODE }
+        { service: "triple_km", chartType: KNOWLEDGEMAP_MODE }
       );
       const store = mockStore(storeObject);
 
@@ -640,7 +640,7 @@ describe("Modals component", () => {
     it("default streamgraph info modal renders", () => {
       const storeObject = setup(
         { openInfoModal: true },
-        { service: "linkedcat", chartType: STREAMGRAPH_MODE }
+        { service: "triple_sg", chartType: STREAMGRAPH_MODE }
       );
       const store = mockStore(storeObject);
 
@@ -663,7 +663,7 @@ describe("Modals component", () => {
     it("triggers a correct redux action when info modal is closed", () => {
       const storeObject = setup(
         { openInfoModal: true },
-        { service: "linkedcat", chartType: STREAMGRAPH_MODE }
+        { service: "triple_sg", chartType: STREAMGRAPH_MODE }
       );
       const store = mockStore(storeObject);
 

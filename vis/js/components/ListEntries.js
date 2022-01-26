@@ -7,14 +7,11 @@ import { filterData } from "../utils/data";
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
 
 import EntriesWrapper from "./EntriesWrapper";
-import BasicListEntry from "../templates/listentry/BasicListEntry";
-import ClassificationListEntry from "../templates/listentry/ClassificationListEntry";
 import StandardListEntry from "../templates/listentry/StandardListEntry";
 
 const ListEntries = ({
   // data
   show,
-  service,
   displayedData,
   rawData,
   searchSettings,
@@ -48,12 +45,10 @@ const ListEntries = ({
     );
   }
 
-  const ListEntryComponent = getListEntryComponent(service);
-
   return (
     <EntriesWrapper>
       {displayedData.map((paper) => (
-        <ListEntryComponent key={paper.safe_id} paper={paper} />
+        <StandardListEntry key={paper.safe_id} paper={paper} />
       ))}
     </EntriesWrapper>
   );
@@ -61,7 +56,6 @@ const ListEntries = ({
 
 const mapStateToProps = (state) => ({
   show: state.list.show,
-  service: state.service,
   rawData: state.data.list,
   searchSettings: {
     value: state.list.searchValue,
@@ -79,15 +73,3 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(ListEntries);
-
-const getListEntryComponent = (service) => {
-  if (service === null || typeof service === "undefined") {
-    return BasicListEntry;
-  }
-
-  if (service.startsWith("linkedcat")) {
-    return ClassificationListEntry;
-  }
-
-  return StandardListEntry;
-};

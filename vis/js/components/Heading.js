@@ -1,9 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import ZoomedInHeadingTemplate from "../templates/ZoomedInHeading";
-import ZoomedOutHeadingTemplate from "../templates/ZoomedOutHeading";
-
 import {
   BasicTitle,
   ProjectTitle,
@@ -22,15 +19,31 @@ const Heading = ({
   streamgraph,
 }) => {
   if (zoomed) {
-    let label = streamgraph ? localization.area_streamgraph : localization.area;
+    const label = streamgraph
+      ? localization.area_streamgraph
+      : localization.area;
 
-    return <ZoomedInHeadingTemplate label={label} title={bubbleTitle} />;
+    return (
+      // html template starts here
+      <h4>
+        <span id="area-bold">{label}:</span>{" "}
+        <span
+          id="area-not-bold"
+          dangerouslySetInnerHTML={{ __html: bubbleTitle }}
+        ></span>
+      </h4>
+      // html template ends here
+    );
   }
 
   return (
-    <ZoomedOutHeadingTemplate>
-      {renderTitle(localization, query, headingParams)}
-    </ZoomedOutHeadingTemplate>
+    // html template starts here
+    <div className="heading-container">
+      <h4 className="heading">
+        {renderTitle(localization, query, headingParams)}
+      </h4>
+    </div>
+    // html template ends here
   );
 };
 
@@ -47,7 +60,6 @@ export default connect(mapStateToProps)(Heading);
 
 // This should probably make its way to a more global config
 const MAX_LENGTH_VIPER = 47;
-const MAX_LENGTH_LINKEDCAT = 115;
 const MAX_LENGTH_CUSTOM = 100;
 
 /**
@@ -67,10 +79,6 @@ const renderTitle = (localization, query, headingParams) => {
         headingParams.acronym,
         headingParams.projectId
       );
-    }
-
-    if (headingParams.titleStyle === "linkedcat") {
-      return renderLinkedCatTitle(label, query);
     }
 
     if (
@@ -106,11 +114,6 @@ const renderViperTitle = (title, acronym, projectId) => {
       projectId={projectId}
     />
   );
-};
-
-const renderLinkedCatTitle = (label, query) => {
-  let shortTitle = sliceText(query, MAX_LENGTH_LINKEDCAT);
-  return <StandardTitle label={label} title={query} shortTitle={shortTitle} />;
 };
 
 const renderCustomTitle = (title, label, query, localization) => {

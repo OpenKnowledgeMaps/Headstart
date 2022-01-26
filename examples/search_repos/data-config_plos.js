@@ -7,7 +7,6 @@ var data_config = {
     title: "",
     base_unit: "views",
     use_area_uri: true,
-    show_dropdown: false,
     preview_type: "pdf",
     sort_options: ["readers", "title", "authors", "year"],
     is_force_areas: true,

@@ -176,16 +176,6 @@ export const isFileAvailable = (url) => {
 };
 
 /**
- * Returns the paper's preview image.
- * @param {Object} paper
- *
- * @returns {String} the preview image url
- */
-export const getPaperPreviewImage = (paper) => {
-  return "paper_preview/" + paper.id + "/page_1.png";
-};
-
-/**
  * Returns the paper's preview link.
  * @param {Object} paper
  *
