@@ -12,12 +12,11 @@ from apis.pubmed import pubmed_ns
 from apis.openaire import openaire_ns
 from apis.create_vis import vis_ns
 
-import settings
 from utils.monkeypatches import ReverseProxied, __schema__, specs_url, _register_apidoc
 import logging
 
 
-def api_patches(app, settings):
+def api_patches(app):
     Api._register_apidoc = _register_apidoc
     Api.__schema__ = __schema__
     Api.specs_url = specs_url
@@ -29,20 +28,19 @@ def api_patches(app, settings):
         version="0.1",
         prefix='/api',
         doc="/docs")
-    if settings.BEHIND_PROXY:
+    if os.getenv("BEHIND_PROXY") == "True":
         api_fixed.behind_proxy = True
     return api_fixed
 
 
 app = Flask('v1', instance_relative_config=True)
-app.config.from_object('settings')
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(app.logger.level)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_port=1, x_for=1, x_host=1, x_prefix=1)
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 CORS(app, expose_headers=["Content-Disposition", "Access-Control-Allow-Origin"])
 
-api = api_patches(app, settings)
+api = api_patches(app)
 api.add_namespace(triple_ns, path='/triple')
 api.add_namespace(gsheets_ns, path='/gsheets')
 api.add_namespace(base_ns, path='/base')
