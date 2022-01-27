@@ -53,6 +53,10 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_SSL: "${REDIS_SSL}"
+      BEHIND_PROXY: "${BEHIND_PROXY}"
+      DEFAULT_DATABASE: "${DEFAULT_DATABASE}"
+      DATABASES: "${DATABASES}"
+      FLASK_ENV: "${FLASK_ENV}"
     command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
     depends_on:
       - redis
@@ -68,6 +72,10 @@ services:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
       POSTGRES_HOST: "${POSTGRES_HOST}"
       POSTGRES_PORT: "${POSTGRES_PORT}"
+      BEHIND_PROXY: "${BEHIND_PROXY}"
+      DEFAULT_DATABASE: "${DEFAULT_DATABASE}"
+      DATABASES: "${DATABASES}"
+      FLASK_ENV: "${FLASK_ENV}"
     command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
     networks: 
       - headstart
@@ -84,6 +92,13 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
+      TRIPLE_USER: "${TRIPLE_USER}"
+      TRIPLE_PASS: "${TRIPLE_PASS}"
+      TRIPLE_HOST: "${TRIPLE_HOST}"
+      TRIPLE_PORT: "${TRIPLE_PORT}"
+      TRIPLE_DOCUMENTS_INDEX: "${TRIPLE_DOCUMENTS_INDEX}"
+      TRIPLE_PROJECTS_INDEX: "${TRIPLE_PROJECTS_INDEX}"
+      TRIPLE_AUTHORS_INDEX: "${TRIPLE_AUTHORS_INDEX}"
     restart: always
     depends_on:
       - redis
@@ -131,8 +146,6 @@ services:
 
   base:
     image: base:${SERVICE_VERSION}
-    env_file:
-      - server/workers/base/base.env
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
@@ -141,6 +154,13 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
+      LOGFILE: "/var/log/headstart/headstart.log"
+      RENV_VERSION: 0.14.0-5
+      CRAN_REPOS: https://cran.wu.ac.at
+      LC_ALL: "en_US.UTF-8"
+      LANG: "en_US.UTF-8"
+      RENV_PATHS_CACHE: /renv/cache
+      PYTHONIOENCODING: "utf-8"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -152,8 +172,6 @@ services:
 
   pubmed:
     image: pubmed:${SERVICE_VERSION}
-    env_file:
-      - server/workers/pubmed/pubmed.env
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
@@ -162,6 +180,13 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
+      LOGFILE: "/var/log/headstart/headstart.log"
+      RENV_VERSION: 0.14.0-5
+      CRAN_REPOS: https://cran.wu.ac.at
+      LC_ALL: "en_US.UTF-8"
+      LANG: "en_US.UTF-8"
+      RENV_PATHS_CACHE: /renv/cache
+      PYTHONIOENCODING: "utf-8"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -173,8 +198,6 @@ services:
 
   openaire:
     image: openaire:${SERVICE_VERSION}
-    env_file:
-      - server/workers/openaire/openaire.env
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
@@ -183,6 +206,13 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
+      LOGFILE: "/var/log/headstart/headstart.log"
+      RENV_VERSION: 0.14.0-5
+      CRAN_REPOS: https://cran.wu.ac.at
+      LC_ALL: "en_US.UTF-8"
+      LANG: "en_US.UTF-8"
+      RENV_PATHS_CACHE: /renv/cache
+      PYTHONIOENCODING: "utf-8"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
