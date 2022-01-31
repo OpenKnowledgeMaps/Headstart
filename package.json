@@ -10,7 +10,12 @@
     "test": "jest",
     "dev": "webpack --progress --mode=development",
     "prod": "webpack --progress",
-    "start": "webpack serve --progress --mode=development --env publicPath=http://localhost:8080/dist/",
+    "start": "webpack serve --progress --mode=development --env example=base",
+    "example:base": "npm start",
+    "example:pubmed": "npm start -- --env example=pubmed",
+    "example:triple": "npm start -- --env example=triple",
+    "example:viper": "npm start -- --env example=viper",
+    "example:covis": "npm start -- --env example=covis",
     "lint": "eslint \"./vis/js/**/*.js?(x)\""
   },
   "repository": {

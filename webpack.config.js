@@ -8,7 +8,42 @@ const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const config = require("./config.js");
 
 module.exports = (env) => {
-  const { publicPath, skin, analyzeBundle } = { ...config, ...env };
+  let { publicPath, skin } = { ...config, ...env };
+  const { analyzeBundle, example } = { ...config, ...env };
+
+  // output filename: deployment config
+  let outputFilename = "[name].[contenthash].bundle.js";
+
+  // HtmlWebpackPlugin: deployment config
+  let htmlConfig = {
+    inject: false,
+    filename: "headstart.php",
+    templateContent: ({ htmlWebpackPlugin }) =>
+      `${htmlWebpackPlugin.tags.headTags}
+      ${htmlWebpackPlugin.tags.bodyTags}`,
+  };
+
+  // MiniCssExtractPlugin: deployment config
+  const miniCssConfig = {
+    filename: "[name].[contenthash].css",
+  };
+
+  // local examples config overrides
+  const exampleConfig = getExampleConfig(example);
+  if (exampleConfig) {
+    publicPath = "http://localhost:8080/dist/";
+    skin = exampleConfig.skin;
+
+    outputFilename = "[name].bundle.js";
+
+    // HtmlWebpackPlugin
+    htmlConfig = {
+      template: exampleConfig.template,
+    };
+
+    // MiniCssExtractPlugin
+    miniCssConfig.filename = "[name].css";
+  }
 
   return {
     devtool: "eval-source-map",
@@ -18,10 +53,8 @@ module.exports = (env) => {
     },
 
     output: {
-      filename: "[name].[contenthash].bundle.js",
+      filename: outputFilename,
       path: path.resolve(__dirname, "dist"),
-      // dev: specify a full path including protocol
-      // production: specify full path excluding protocol
       publicPath: publicPath,
       library: {
         name: "headstart",
@@ -31,12 +64,12 @@ module.exports = (env) => {
     },
 
     devServer: {
-      open: getSkinExample(skin),
-      static: {
-        directory: path.resolve(__dirname, "examples/"),
-      },
-      allowedHosts: "all",
-      devMiddleware: { publicPath: "/dist/" },
+      open: true,
+      static: [
+        path.resolve(__dirname, "dist/"),
+        path.resolve(__dirname, "examples/public/"),
+      ],
+      devMiddleware: { publicPath: "/dist/", writeToDisk: true },
     },
 
     resolve: {
@@ -62,19 +95,12 @@ module.exports = (env) => {
     },
 
     plugins: [
-      new HtmlWebpackPlugin({
-        inject: false,
-        filename: "headstart.php",
-        templateContent: ({ htmlWebpackPlugin }) =>
-          `${htmlWebpackPlugin.tags.headTags}
-          ${htmlWebpackPlugin.tags.bodyTags}`,
-      }),
+      new HtmlWebpackPlugin(htmlConfig),
       new ProvidePlugin({
         process: "process/browser",
+        jQuery: "jquery",
       }),
-      new MiniCssExtractPlugin({
-        filename: "[name].[contenthash].css",
-      }),
+      new MiniCssExtractPlugin(miniCssConfig),
       ...(analyzeBundle ? [new BundleAnalyzerPlugin()] : []),
     ],
 
@@ -167,17 +193,34 @@ module.exports = (env) => {
   };
 };
 
-const getSkinExample = (skin) => {
-  switch (skin) {
-    case "":
-      return ["/project_website/base.html"];
-    case "covis":
-      return ["/local_covis/"];
+const getExampleConfig = (example) => {
+  switch (example) {
+    case "base":
+      return {
+        skin: "",
+        template: "examples/templates/base.html",
+      };
+    case "pubmed":
+      return {
+        skin: "",
+        template: "examples/templates/pubmed.html",
+      };
     case "triple":
-      return ["/local_triple/map.html"];
+      return {
+        skin: "triple",
+        template: "examples/templates/triple.html",
+      };
     case "viper":
-      return "/local_viper/";
+      return {
+        skin: "viper",
+        template: "examples/templates/viper.html",
+      };
+    case "covis":
+      return {
+        skin: "covis",
+        template: "examples/templates/covis.html",
+      };
     default:
-      return false;
+      return null;
   }
 };
