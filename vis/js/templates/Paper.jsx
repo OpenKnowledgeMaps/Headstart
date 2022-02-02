@@ -383,7 +383,7 @@ class Paper extends React.Component {
 
   isDataset() {
     const { resulttype } = this.props.data;
-    return resulttype === "dataset";
+    return resulttype.includes("dataset");
   }
 }
 

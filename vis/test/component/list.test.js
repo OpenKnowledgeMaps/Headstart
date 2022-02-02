@@ -62,7 +62,6 @@ const setup = (
         isContentBased: true,
         baseUnit: "questions",
         showRealPreviewImage: false,
-        linkType: "covis",
         showKeywords: true,
         showDocumentType: true,
         showMetrics: false,
@@ -318,7 +317,7 @@ describe("List entries component", () => {
   it("renders with viper data", () => {
     const storeObject = setup(
       { list: viperData },
-      { show: true, showFilter: true, linkType: "url", showMetrics: true }
+      { show: true, showFilter: true, showMetrics: true }
     );
     const store = mockStore(storeObject);
 
@@ -342,7 +341,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "url",
         showMetrics: true,
         baseUnit: "citations",
         isContentBased: false,
@@ -370,7 +368,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "url",
         showMetrics: true,
         baseUnit: "tweets",
         isContentBased: false,
@@ -398,7 +395,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "url",
         showMetrics: true,
         baseUnit: "readers",
         isContentBased: false,
@@ -426,7 +422,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
         showMetrics: false,
@@ -454,7 +449,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
         showMetrics: false,
@@ -483,7 +477,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
         showMetrics: false,
@@ -512,7 +505,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
         showMetrics: false,
@@ -1162,13 +1154,18 @@ describe("List entries component", () => {
               url: "https://doi.org/10.1038/nrmicro2090",
               readers: 0,
               subject_orig: "Spike protein, vaccines",
+              keywords: "Spike protein, vaccines",
               subject: "Spike protein, vaccines",
               oa_state: 3,
               link: "https://www.nature.com/articles/nrmicro2090.pdf",
+              list_link: {
+                address: "https://www.nature.com/articles/nrmicro2090.pdf",
+                isDoi: false,
+              },
               relevance: 3,
               comments: [],
-              tags: "Peer-reviewed",
-              resulttype: "Review",
+              tags: ["Peer-reviewed"],
+              resulttype: ["Review"],
               area_uri: 0,
               area: "Vaccines",
               authors_string: "",

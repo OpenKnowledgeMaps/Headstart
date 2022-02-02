@@ -2591,15 +2591,6 @@ time {
     margin-bottom: 0px;
 }
 
-.citation {
-    display: inline-block;
-    padding: 10px;
-    background-color: rgba(239,243,244,1);
-    hyphens: none;
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-}
-
 .overflow-vis {
     overflow-y: hidden;
 }

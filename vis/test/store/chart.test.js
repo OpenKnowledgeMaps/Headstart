@@ -27,7 +27,7 @@ describe("chart state", () => {
 
       const result = reducer(
         INITIAL_STATE,
-        initializeStore({}, {}, [], "", 200, 400, 200)
+        initializeStore({}, {}, [], [], "", 200, 400, 200, 200, {})
       );
 
       const EXPECTED_RESULT = {
@@ -61,7 +61,12 @@ describe("chart state", () => {
         updateDimensions({ size: 300, width: 400, height: 300 }, {})
       );
 
-      const EXPECTED_RESULT = { width: 300, height: 300, streamWidth: 400, streamHeight: 300 };
+      const EXPECTED_RESULT = {
+        width: 300,
+        height: 300,
+        streamWidth: 400,
+        streamHeight: 300,
+      };
 
       expect(result).toEqual(EXPECTED_RESULT);
     });

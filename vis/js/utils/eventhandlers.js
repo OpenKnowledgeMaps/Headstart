@@ -8,6 +8,8 @@ import {
   stopAnimation,
   hoverBubble,
   hoverPaper,
+  showCitePaper,
+  showExportPaper,
 } from "../actions";
 
 /**
@@ -38,6 +40,8 @@ export const mapDispatchToListEntriesProps = (dispatch) => ({
     ),
   handleDeselectPaper: () => dispatch(deselectPaper()),
   handleBacklinkClick: () => dispatch(deselectPaper()),
+  handleCiteClick: (paper) => dispatch(showCitePaper(paper)),
+  handleExportClick: (paper) => dispatch(showExportPaper(paper)),
 });
 
 /**

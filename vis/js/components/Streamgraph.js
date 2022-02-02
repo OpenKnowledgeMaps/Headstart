@@ -11,7 +11,6 @@ import {
   getLabelPosition,
   recalculateOverlappingLabels,
   setTM,
-  transformData,
 } from "../utils/streamgraph";
 import {
   CHART_MARGIN,
@@ -36,15 +35,6 @@ import { zoomIn, zoomOut } from "../actions";
 class Streamgraph extends React.Component {
   constructor(props) {
     super(props);
-
-    this.stack = d3.layout
-      .stack()
-      .offset("silhouette")
-      .values((d) => d.values)
-      .x((d) => d.date)
-      .y((d) => d.value);
-
-    this.nest = d3.nest().key((d) => d.key);
 
     this.labelPositions = [];
   }
@@ -71,16 +61,18 @@ class Streamgraph extends React.Component {
     const { colors } = this.props;
     const { width, height } = this.getDimensions();
 
-    const parsedData = JSON.parse(this.props.data);
-    const transformedData = transformData(parsedData);
-    const streams = this.getStreams(transformedData);
-
     const xScale = d3.time.scale().range([0, width]);
     const yScale = d3.scale.linear().range([height, 0]);
     const colorScale = d3.scale.ordinal().range(colors);
 
-    xScale.domain(d3.extent(transformedData, (d) => d.date));
-    yScale.domain([0, d3.max(transformedData, (d) => d.y0 + d.y)]);
+    const streams = this.props.streams;
+    const streamEntries = streams.reduce(
+      (l, stream) => [...l, ...stream.values],
+      []
+    );
+
+    xScale.domain(d3.extent(streamEntries, (d) => d.date));
+    yScale.domain([0, d3.max(streamEntries, (d) => d.y0 + d.y)]);
 
     const area = d3.svg
       .area()
@@ -94,7 +86,7 @@ class Streamgraph extends React.Component {
 
     this.renderBackground(container, width, height);
     this.renderStreams(container, streams, area, colorScale);
-    this.renderAxes(container, parsedData, xScale, yScale, width, height);
+    this.renderAxes(container, streams, xScale, yScale, width, height);
     this.renderLabels(container, xScale, yScale, width);
     this.renderTooltip(container, xScale);
     this.renderLineHelper(container);
@@ -159,19 +151,19 @@ class Streamgraph extends React.Component {
    * Renders the graph axes using d3.
    *
    * @param {Object} container the d3 representation of #streamgraph-chart
-   * @param {Object} parsedData the parsed JSON containing the streamgraph data
+   * @param {Object} streams the stream array
    * @param {Function} xScale x coordinate scaling function
    * @param {Function} yScale y coordinate scaling function
    * @param {number} width graph width
    * @param {number} height graph height
    */
-  renderAxes(container, parsedData, xScale, yScale, width, height) {
+  renderAxes(container, streams, xScale, yScale, width, height) {
     const xAxis = d3.svg
       .axis()
       .scale(xScale)
       .orient("bottom")
       .tickFormat(d3.time.format("%Y"))
-      .ticks(d3.time.year, Math.ceil(parsedData.x.length / MAX_TICKS_X));
+      .ticks(d3.time.year, Math.ceil(streams.length / MAX_TICKS_X));
 
     const yAxis = d3.svg
       .axis()
@@ -509,28 +501,10 @@ class Streamgraph extends React.Component {
 
     return { width, height };
   }
-
-  getStreams(transformedData) {
-    const nestedEntries = this.nest.entries(transformedData);
-    const streams = this.stack(nestedEntries);
-
-    streams.forEach((stream) => {
-      const firstTransformedEntry = transformedData.find(
-        (t) => t.key === stream.key
-      );
-      if (!firstTransformedEntry) {
-        stream.docIds = [];
-        return;
-      }
-      stream.docIds = firstTransformedEntry.docIds;
-    });
-
-    return streams;
-  }
 }
 
 const mapStateToProps = (state) => ({
-  data: state.streamgraph.data,
+  streams: state.streamgraph.streams,
   colors: state.streamgraph.colors,
   width: state.chart.streamWidth,
   height: state.chart.streamHeight,
