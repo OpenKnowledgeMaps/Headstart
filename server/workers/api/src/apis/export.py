@@ -42,12 +42,13 @@ def parse_published_in(published_in):
 def transform2ris(metadata):
     pass
 
-@export_ns.route('/export/<format>')
+@export_ns.route('/<format>')
 class exportMetadata(Resource):
 
     def post(self, format):
         try:
-            metadata = request.get_json()
+            metadata = request.json
+            export_ns.logger.debug(metadata)
             if format == "bibtex":
                 result = transform2bibtex(metadata)
             elif format == "ris":
@@ -57,6 +58,7 @@ class exportMetadata(Resource):
                         "reason": "output format not recognized, must bei either bibtex or ris"}
                 return jsonify(result)
         except Exception as e:
+            export_ns.logger.error(e)
             result = {'success': False, 'reason': e}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
