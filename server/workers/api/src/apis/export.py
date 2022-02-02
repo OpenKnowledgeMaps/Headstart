@@ -46,22 +46,12 @@ def transform2ris(metadata):
 class exportMetadata(Resource):
 
     def post(self, format):
-        result = """@article{007f9e706022c47e76dc473387c78cd95c867ccd10a962ea6daa9fdeca329ca0,
-            title={Calcium deposition within coronary atherosclerotic lesion: Implications for plaque stability},
-            author={Hiroyuki Jinnouchi, Yu Sato, Atsushi Sakamoto, Anne Cornelissen, Masayuki Mori, Rika Kawakami, Neel V. Gadhoke, Frank D. Kolodgie, Renu Virmani, Aloke V. Finn},
-            year={2020},
-            journal={Atherosclerosis},
-            volume={306},
-            pages={85--95}
-            issn={0021-9150}
-            doi={10.1016/j.atherosclerosis.2020.05.017}
-        }"""
         try:
             metadata = request.get_json()
             if format == "bibtex":
-                exported_metadata = transform2bibtex(metadata)
+                result = transform2bibtex(metadata)
             elif format == "ris":
-                exported_metadata = transform2ris(metadata)
+                result = transform2ris(metadata)
             else: 
                 result = {"status": "error",
                         "reason": "output format not recognized, must bei either bibtex or ris"}

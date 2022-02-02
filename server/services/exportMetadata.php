@@ -24,18 +24,6 @@ $metadata_json = library\CommUtils::getParameter($_POST, "metadata");
 $result = export($format, $metadata_json);
 
 
-$result = '@article{007f9e706022c47e76dc473387c78cd95c867ccd10a962ea6daa9fdeca329ca0,
-    title={Calcium deposition within coronary atherosclerotic lesion: Implications for plaque stability},
-    author={Hiroyuki Jinnouchi, Yu Sato, Atsushi Sakamoto, Anne Cornelissen, Masayuki Mori, Rika Kawakami, Neel V. Gadhoke, Frank D. Kolodgie, Renu Virmani, Aloke V. Finn},
-    year={2020},
-    journal={Atherosclerosis},
-    volume={306},
-    pages={85--95}
-    issn={0021-9150}
-    doi={10.1016/j.atherosclerosis.2020.05.017}
-}';
-
-
 if (isset($download) & $download==true ) {
     header('Content-type: application/text');
     header('Content-Disposition: attachment; filename=metadata.' . $format);
