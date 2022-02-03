@@ -61,13 +61,6 @@ const getTimespan = (config, context) => {
     if (fromHyphenated !== defaultFromHyphenated) {
       return fromFormatted + " - " + toFormatted;
     }
-
-    const toHyphenated = dateFormat(to, hyphenFormat);
-    const todayHyphenated = dateFormat(today, hyphenFormat);
-
-    if (toHyphenated === todayHyphenated) {
-      return "All time";
-    }
   }
 
   return "Until " + toFormatted;

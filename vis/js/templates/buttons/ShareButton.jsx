@@ -3,16 +3,35 @@ import $ from "jquery";
 
 import useOutsideClick from "../../utils/useOutsideClick";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
+import useMatomo from "../../utils/useMatomo";
 
 const ShareButton = ({ twitterHashtags }) => {
   const localization = useLocalizationContext();
+  const { trackEvent } = useMatomo();
+
+  const trackToggle = (opening) => {
+    if (opening) {
+      trackEvent("Added components", "Open share buttons", "Share button");
+    } else {
+      trackEvent("Added components", "Close share buttons", "Share button");
+    }
+
+    return opening;
+  };
+
+  const trackShare = (type) => trackEvent("Added components", "Share", type);
 
   const [opened, setOpened] = useState(false);
   const handleClick = () => {
-    setOpened((prev) => !prev);
+    setOpened((prevOpened) => trackToggle(!prevOpened));
   };
   const handleOutsideClick = () => {
-    setOpened(false);
+    setOpened((prevOpened) => {
+      if (prevOpened) {
+        trackToggle(false);
+      }
+      return false;
+    });
   };
 
   const containerRef = useRef(null);
@@ -42,18 +61,37 @@ const ShareButton = ({ twitterHashtags }) => {
       </button>
       {opened && (
         <div className="sharebuttons" style={{ display: "inline-block" }}>
-          <a className="sharebutton_twitter" href={twitterUrl} target="_blank" rel="noreferrer">
-            <button className="btn btn-primary">
-              <i className="fa fa-twitter-square fa-fw" aria-hidden="true"></i>
+          <a
+            className="sharebutton_twitter"
+            href={twitterUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <button
+              className="btn btn-primary"
+              onClick={() => trackShare("Twitter button")}
+            >
+              <i className="fab fa-twitter-square fa-fw" aria-hidden="true"></i>
             </button>
           </a>
-          <a className="sharebutton_fb" href={facebookUrl} target="_blank" rel="noreferrer">
-            <button className="btn btn-primary">
-              <i className="fa fa-facebook-square"></i>
+          <a
+            className="sharebutton_fb"
+            href={facebookUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <button
+              className="btn btn-primary"
+              onClick={() => trackShare("Facebook button")}
+            >
+              <i className="fab fa-facebook-square"></i>
             </button>
           </a>
           <a className="sharebutton_mail" href={emailUrl}>
-            <button className="btn btn-primary">
+            <button
+              className="btn btn-primary"
+              onClick={() => trackShare("E-mail button")}
+            >
               <i className="fa fa-envelope"></i>
             </button>
           </a>

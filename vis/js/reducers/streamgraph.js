@@ -7,7 +7,7 @@ const streamgraph = (state = { data: "", colors: [], visTag: "" }, action) => {
     case "INITIALIZE":
       return {
         ...state,
-        data: action.streamData,
+        streams: action.streams,
         colors: action.configObject.streamgraph_colors,
         visTag: action.configObject.tag,
       };

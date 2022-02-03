@@ -9,7 +9,16 @@ Head Start is a web-based knowledge mapping software intended to give researcher
 ### Client
 To get started, clone this repository. Next, duplicate the file `config.example.js` in the root folder and rename it to `config.js`.
 
-Make sure to have `npm` version 6.11.3 installed (it comes with Node.js 10.17.0, best way to install is with [nvm](https://github.com/nvm-sh/nvm), `nvm install 10.17.0`) and run the following two commands to build the Headstart client:
+Set the `skin` property in the config to one of the following values to use the
+particular data integration skin:
+
+- `"covis"`
+- `"triple"`
+- `"viper"`
+
+or leave it empty (`""`) for the default project website skin.
+
+Make sure to have installed `node` version >= 14.18.1 and `npm` version >=8.1.1 (best way to install is with [nvm](https://github.com/nvm-sh/nvm), `nvm install 14.18.1`) and run the following two commands to build the Headstart client:
 
     npm install
     npm run dev
@@ -20,15 +29,24 @@ Now you can run a local dev server:
 
 	npm start
 
+Note: you can also set the skin in this step as an argument to the `npm start` command (e.g. `npm start -- --env skin=triple`).
+
+The browser will automatically open a new window with the example specified by the skin.
+
+Alternatively, you can point your browser to one of the following addresses:
+
+	http://localhost:8080/project_website/base.html
+	http://localhost:8080/project_website/pubmed.html
+	http://localhost:8080/local_covis/
+	http://localhost:8080/local_triple/map.html
+	http://localhost:8080/local_triple/stream.html
+	http://localhost:8080/local_viper/
+
+If everything has worked out, you should see the example visualization.
+
 To run Headstart on a different server (e.g. Apache), you need to set the publicPath in `config.js` to the URL of the `dist` directory:
 * Dev: specify the full path including protocol, e.g. `http://localhost/headstart/dist`
 * Production: specify the full path excluding protocol, e.g. `//example.org/headstart/dist`
-
-Point your browser to the following address:
-
-	http://localhost:8080/examples/local_files/index.html
-
-If everything has worked out, you should see the visualization shown above.
 
 See [client configuration](doc/README.md) for details on adapting the client.
 
@@ -42,7 +60,7 @@ See [Installing and configuring the server](doc/server_config.md) for instructio
 
 Maintainer: [Peter Kraker](https://github.com/pkraker) ([pkraker@openknowledgemaps.org](mailto:pkraker@openknowledgemaps.org))
 
-Authors: [Maxi Schramm](https://github.com/tanteuschi), [Christopher Kittel](https://github.com/chreman), [Asura Enkhbayar](https://github.com/Bubblbu), [Scott Chamberlain](https://github.com/sckott), [Rainer Bachleitner](https://github.com/rbachleitner), [Yael Stein](https://github.com/jaels), [Thomas Arrow](https://github.com/tarrow), [Mike Skaug](https://github.com/mikeskaug), [Philipp Weissensteiner](https://github.com/wpp), and the [Open Knowledge Maps team](http://openknowledgemaps.org/team)
+Authors: [Maxi Schramm](https://github.com/tanteuschi), [Christopher Kittel](https://github.com/chreman), [Jan Konstant](https://github.com/konstiman), [Asura Enkhbayar](https://github.com/Bubblbu), [Scott Chamberlain](https://github.com/sckott), [Rainer Bachleitner](https://github.com/rbachleitner), [Yael Stein](https://github.com/jaels), [Thomas Arrow](https://github.com/tarrow), [Mike Skaug](https://github.com/mikeskaug), [Philipp Weissensteiner](https://github.com/wpp), and the [Open Knowledge Maps team](http://openknowledgemaps.org/team)
 
 
 ## Features
@@ -90,4 +108,4 @@ Head Start is licensed under [MIT](LICENSE).
 ## Citation
 If you use Head Start in your research, please cite it as follows:
 
-Peter Kraker, Christopher Kittel, Maxi Schramm, Rainer Bachleitner, Thomas Arrow, Scott Chamberlain, Asura Enkhbayar, Yael Stein, Philipp Weissensteiner, Mike Skaug, Katrin Leinweber & Open Knowledge Maps team and contributors. (2019, March 7). Headstart 5 (Version v5). Zenodo. http://doi.org/10.5281/zenodo.2587129
+Peter Kraker, Christopher Kittel, Maxi Schramm, Jan Konstant, Rainer Bachleitner, Thomas Arrow, Scott Chamberlain, Asura Enkhbayar, Yael Stein, Philipp Weissensteiner, Mike Skaug, Katrin Leinweber & Open Knowledge Maps team and contributors. (2019, March 7). Headstart 5 (Version v5). Zenodo. http://doi.org/10.5281/zenodo.2587129

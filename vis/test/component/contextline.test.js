@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import ContextLine from "../../js/components/ContextLine";
 import LocalizationProvider from "../../js/components/LocalizationProvider";
 import { STREAMGRAPH_MODE } from "../../js/reducers/chartType";
+import { openInfoModal } from "../../js/actions";
 
 const mockStore = configureStore([]);
 const setup = (overrideStoreObject = {}) => {
@@ -528,13 +529,11 @@ describe("Context line component", () => {
 
       act(() => {
         render(
-          <LocalizationProvider localization={storeObject.localization}>
-            <Provider store={store}>
-              <LocalizationProvider localization={storeObject.localization}>
-                <ContextLine />
-              </LocalizationProvider>
-            </Provider>
-          </LocalizationProvider>,
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
           container
         );
       });
@@ -553,13 +552,11 @@ describe("Context line component", () => {
 
       act(() => {
         render(
-          <LocalizationProvider localization={storeObject.localization}>
-            <Provider store={store}>
-              <LocalizationProvider localization={storeObject.localization}>
-                <ContextLine />
-              </LocalizationProvider>
-            </Provider>
-          </LocalizationProvider>,
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <ContextLine />
+            </LocalizationProvider>
+          </Provider>,
           container
         );
       });
@@ -877,7 +874,9 @@ describe("Context line component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <MockContextLineContainer />
+            <LocalizationProvider localization={storeObject.localization}>
+              <MockContextLineContainer />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -1005,7 +1004,9 @@ describe("Context line component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <MockContextLineContainer />
+            <LocalizationProvider localization={storeObject.localization}>
+              <MockContextLineContainer />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -1035,7 +1036,9 @@ describe("Context line component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <MockContextLineContainer />
+            <LocalizationProvider localization={storeObject.localization}>
+              <MockContextLineContainer />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -1065,7 +1068,9 @@ describe("Context line component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <MockContextLineContainer />
+            <LocalizationProvider localization={storeObject.localization}>
+              <MockContextLineContainer />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -1095,7 +1100,9 @@ describe("Context line component", () => {
       act(() => {
         render(
           <Provider store={store}>
-            <MockContextLineContainer />
+            <LocalizationProvider localization={storeObject.localization}>
+              <MockContextLineContainer />
+            </LocalizationProvider>
           </Provider>,
           container
         );
@@ -1112,6 +1119,35 @@ describe("Context line component", () => {
       ).toEqual(
         storeObject.localization[`${QUALITY}_metadata_quality_desc_${SERVICE}`]
       );
+    });
+
+    it("triggers a correct redux action when info icon is clicked", () => {
+      const SERVICE = "pubmed";
+      const storeObject = setup({ service: SERVICE });
+
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <MockContextLineContainer />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
+      });
+
+      const select = document.querySelector("#more-info-link span");
+      act(() => {
+        const event = new Event("click", { bubbles: true });
+        select.dispatchEvent(event);
+      });
+
+      const actions = store.getActions();
+      const expectedPayload = openInfoModal()
+
+      expect(actions).toEqual([expectedPayload]);
     });
   });
 });

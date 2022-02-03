@@ -1,4 +1,10 @@
 import React from "react";
+import { connect } from "react-redux";
+
+import { STREAMGRAPH_MODE } from "../../reducers/chartType";
+import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
+import PaperButtons from "./PaperButtons";
+
 import Abstract from "./Abstract";
 import AccessIcons from "./AccessIcons";
 import Area from "./Area";
@@ -9,10 +15,7 @@ import DocumentType from "./DocumentType";
 import EntryBacklink from "./EntryBacklink";
 import Keywords from "./Keywords";
 import Link from "./Link";
-import ListEntry from "./ListEntry";
 import Metrics from "./Metrics";
-import PreviewIcons from "./PreviewIcons";
-import PreviewImage from "./PreviewImage";
 import Tags from "./Tags";
 import Title from "./Title";
 
@@ -21,80 +24,94 @@ import Title from "./Title";
  * @param {Object} props
  */
 const StandardListEntry = ({
-  id,
-  access,
-  tags,
-  title,
-  preview,
-  details,
-  link,
-  documentType,
-  abstract,
-  comments,
-  keywords,
-  metrics,
-  area,
-  citations,
+  // data
+  paper,
+  showDocumentType,
+  showKeywords,
+  showMetrics,
+  isContentBased,
   baseUnit,
-  handleTitleClick,
-  handleAreaClick,
-  backlink,
+  isStreamgraph,
+  showBacklink,
+  isInStreamBacklink,
+  // event handlers
+  handleBacklinkClick,
 }) => {
+  const backlink = {
+    show: showBacklink,
+    isInStream: isInStreamBacklink,
+    onClick: () => handleBacklinkClick(),
+  };
+
+  const citations = paper.num_readers;
+  const showCitations =
+    !isContentBased &&
+    !!baseUnit &&
+    !showMetrics &&
+    (!!citations || parseInt(citations) === 0);
+
   return (
     // html template starts here
-    <ListEntry anchorId={id}>
-      <div className="list_metadata">
-        <AccessIcons
-          isOpenAccess={access.isOpenAccess}
-          isFreeAccess={access.isFreeAccess}
-          isDataset={access.isDataset}
-          tags={tags ? <Tags values={tags} /> : null}
-        />
-        <Title onClick={handleTitleClick}>{title}</Title>
-        <PreviewIcons link={preview.link} onClickPDF={preview.onClickPDF} />
-        <Details
-          authors={details.authors}
-          source={details.source}
-          year={details.year}
-        />
-        <Link address={link.address} isDoi={link.isDoi} />
+    <div id="list_holder" className="resulttype-paper">
+      <div className="list_entry">
+        <a className="list_anchor" id={paper.safe_id}></a>
+        <div className="list_metadata">
+          <AccessIcons
+            isOpenAccess={!!paper.oa}
+            isFreeAccess={!!paper.free_access}
+            isDataset={paper.resulttype.includes("dataset")}
+            tags={paper.tags.length > 0 ? <Tags values={paper.tags} /> : null}
+          />
+          <Title paper={paper} />
+          <Details authors={paper.authors_list} source={paper.published_in} />
+          <Link
+            address={paper.list_link.address}
+            isDoi={paper.list_link.isDoi}
+          />
+        </div>
+        {showDocumentType && paper.resulttype.length > 0 && (
+          <DocumentType type={paper.resulttype[0]} />
+        )}
+        <Abstract text={paper.paper_abstract} />
+        {paper.comments.length > 0 && <Comments items={paper.comments} />}
+        {showKeywords && <Keywords>{paper.keywords}</Keywords>}
+        {showMetrics && (
+          <Metrics
+            citations={paper.citation_count}
+            tweets={paper.cited_by_tweeters_count}
+            readers={paper["readers.mendeley"]}
+            baseUnit={!isContentBased ? baseUnit : null}
+          />
+        )}
+        <PaperButtons paper={paper} />
+        {!isStreamgraph && <Area paper={paper} isShort={showCitations} />}
+        {showCitations && <Citations number={citations} label={baseUnit} />}
+        {!!backlink.show && (
+          <EntryBacklink
+            onClick={backlink.onClick}
+            isInStream={backlink.isInStream}
+          />
+        )}
       </div>
-      {!!documentType && <DocumentType type={documentType} />}
-      <Abstract text={abstract} />
-      {!!comments && <Comments items={comments} />}
-      {!!preview.showPreviewImage && !!preview.onClickPDF && (
-        <PreviewImage onClick={preview.onClickPDF} />
-      )}
-      {!!keywords && <Keywords>{keywords}</Keywords>}
-      {!!metrics && (
-        <Metrics
-          citations={metrics.citations}
-          tweets={metrics.tweets}
-          readers={metrics.readers}
-          baseUnit={metrics.baseUnit}
-        />
-      )}
-      {!!area && (
-        <Area
-          onClick={handleAreaClick}
-          onMouseOver={area.onMouseOver}
-          onMouseOut={area.onMouseOut}
-        >
-          {area.text}
-        </Area>
-      )}
-      {(!!citations || parseInt(citations) === 0) && (
-        <Citations number={citations} label={baseUnit} />
-      )}
-      {!!backlink.show && (
-        <EntryBacklink
-          onClick={backlink.onClick}
-          isInStream={backlink.isInStream}
-        />
-      )}
-    </ListEntry>
+    </div>
     // html template ends here
   );
 };
 
-export default StandardListEntry;
+const mapStateToProps = (state) => ({
+  showDocumentType: state.list.showDocumentType,
+  showMetrics: state.list.showMetrics,
+  isContentBased: state.list.isContentBased,
+  baseUnit: state.list.baseUnit,
+  showKeywords:
+    state.list.showKeywords &&
+    (!!state.selectedPaper || !state.list.hideUnselectedKeywords),
+  isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+  showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
+  isInStreamBacklink: !!state.selectedBubble,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToListEntriesProps
+)(StandardListEntry);

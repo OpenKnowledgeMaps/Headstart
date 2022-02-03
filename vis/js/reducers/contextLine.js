@@ -8,15 +8,16 @@ const contextLine = (state = {}, action) => {
 
   const config = action.configObject;
   const context = action.contextObject;
+  const papers = action.papers;
 
   switch (action.type) {
     case "INITIALIZE":
       return {
         show: !!config.show_context && !!context.params,
-        articlesCount: context.num_documents,
-        modifier: getModifier(config, context),
+        articlesCount: papers.length,
+        modifier: getModifier(config, context, papers.length),
         openAccessCount: config.show_context_oa_number
-          ? context.share_oa
+          ? papers.filter((p) => p.oa).length
           : null,
         showAuthor:
           !!config.is_authorview &&
@@ -39,11 +40,11 @@ const contextLine = (state = {}, action) => {
             : config.service_names[context.service],
         paperCount:
           config.create_title_from_context_style === "viper"
-            ? context.num_papers
+            ? papers.filter((p) => p.resulttype.includes("publication")).length
             : null,
         datasetCount:
           config.create_title_from_context_style === "viper"
-            ? context.num_datasets
+            ? papers.filter((p) => p.resulttype.includes("dataset")).length
             : null,
         funder:
           config.create_title_from_context_style === "viper" && context.params
@@ -73,11 +74,11 @@ const contextLine = (state = {}, action) => {
  *
  * @returns {string} either most-recent, most-relevant or null
  */
-export const getModifier = (config, context) => {
+export const getModifier = (config, context, numOfPapers) => {
   if (
     !context.params ||
     !exists(context.params.sorting) ||
-    (context.num_documents < config.max_documents &&
+    (numOfPapers < config.max_documents &&
       // temporarily allowing most relevant label for fewer documents
       // (after a backend change this should be removed and refactored)
       context.params.sorting !== "most-relevant")

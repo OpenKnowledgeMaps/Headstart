@@ -1,18 +1,51 @@
 .builtwith {
-  margin: 20px 10px 10px 50px;
+  margin: 15px 10px 15px 50px;
   font-size: 12px;
+  height: 20px;
 }
 
 .builtwith a {
-  text-decoration: underline;
-}
-
-.builtwith a:hover {
   text-decoration: none;
+  border-bottom: 1px solid $link-gray;
+  color: $link-gray;
+
+  &:hover {
+    border-bottom-width: 2px;
+  }
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 1210px) {
+  .builtwith {
+    font-size: 11px;
+  }
+}
+
+@media screen and (max-width: 1120px) {
+  .builtwith {
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 1030px) {
+  .builtwith {
+    font-size: 9px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .builtwith {
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 900px) {
   .builtwith {
     margin: 10px 0px 10px 20px;
+    font-size: 11px;
   }
+}
+
+.builtwith img {
+  width: 28px;
+  height: 28px;
 }

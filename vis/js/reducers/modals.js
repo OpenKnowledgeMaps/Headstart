@@ -37,10 +37,12 @@ const modals = (
               ...action.contextObject.params,
             }
           : {},
-        showImagePreview: action.configObject.preview_type === "image",
         showPDFPreview: action.configObject.preview_type === "pdf",
         previewedPaper: null,
         useViewer: action.configObject.use_hypothesis,
+        showCitationButton: !!action.configObject.show_cite_button,
+        openCitationModal: false,
+        citedPaper: null,
       };
     case "OPEN_EMBED_MODAL":
       return {
@@ -82,6 +84,38 @@ const modals = (
         ...state,
         previewedPaper: null,
       };
+    case "SHOW_CITE_PAPER":
+      return {
+        ...state,
+        citedPaper: action.paper,
+      };
+    case "HIDE_CITE_PAPER":
+      return {
+        ...state,
+        citedPaper: null,
+      };
+    case "OPEN_CITATION_MODAL":
+      return {
+        ...state,
+        openCitationModal: true,
+      };
+    case "CLOSE_CITATION_MODAL":
+      return {
+        ...state,
+        openCitationModal: false,
+      };
+    case "ZOOM_IN":
+    case "ZOOM_OUT":
+      return {
+        ...state,
+        openInfoModal: false,
+        openEmbedModal: false,
+        openViperEditModal: false,
+        openCitationModal: false,
+        previewedPaper: null,
+        citedPaper: null,
+      };
+
     default:
       return state;
   }

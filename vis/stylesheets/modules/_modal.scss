@@ -24,7 +24,7 @@
     font-size: 16px;
     font-family: $base-font-family;
     margin: 20px 0px 10px;
-    color: $medium-blue;
+    color: $modal-title;
 }
 
 .datasource-logo {
@@ -91,7 +91,7 @@
 }
 
 .modal-title {
-    color: $medium-blue;
+    color: $modal-title;
     font-size: 20px;
     font-weight: $fontweight700;
     font-family: $base-font-family;
@@ -163,7 +163,7 @@
     margin: 20px 0;
 }
 
-#embed_modal {
+#embed_modal, #cite_modal, #cite_paper_modal {
     .modal-dialog {
         width: 100%;
         max-width: 800px;
@@ -187,8 +187,8 @@
     }
 }
 
-.embed-modal-title {
-    color: $medium-blue;
+.embed-modal-title, .cite-modal-title, .cite-paper-modal-title {
+    color: $modal-title;
     text-transform: uppercase;
     margin: 0px;
     font-size: 16px;
@@ -196,6 +196,10 @@
         font-weight: $fontweight700;
     }
     line-height: 170%;
+}
+
+.indented-modal-btn {
+    margin-top: 20px;
 }
 
 #images_modal {
@@ -343,8 +347,10 @@ h5 {
 
     span {
         border: 1px solid #adadad;
-        border-radius: 4px;
-        padding: 6px 12px 6px 12px;
+        border-radius: 14px;
+        -moz-border-radius: 14px;
+        -webkit-border-radius: 14px;
+        padding: 6px 22px;
         font-size: 14px;
         line-height: 20px;
         font-weight: 400;
@@ -355,4 +361,28 @@ h5 {
 .modal-header button:hover {
     opacity: 1.0;
     background-color: #eff3f4;
+}
+
+.cit-style-label {
+    text-decoration: none;
+    color: $link-gray;
+    cursor: pointer;
+    font-weight: normal;
+
+    margin-right: 15px;
+
+    border-bottom: 1px solid $link-gray;
+
+    &:hover, &.selected {
+        border-bottom-width: 2px;
+    }
+
+    &.selected {
+        font-weight: 800;
+    }
+}
+
+.cit-style-desc {
+    margin-top: 5px;
+    font-style: italic;
 }

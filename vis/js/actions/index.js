@@ -3,11 +3,7 @@
  *
  * add all actions that don't change anything in the map to here
  */
-export const ALLOWED_IN_ANIMATION = [
-  "SHOW_PREVIEW",
-  "HIDE_PREVIEW",
-  "STOP_ANIMATION",
-];
+export const ALLOWED_IN_ANIMATION = ["STOP_ANIMATION"];
 
 /**
  * All actions in this array are canceled without queuing when the map
@@ -20,8 +16,6 @@ export const NOT_QUEUED_IN_ANIMATION = [
   "ZOOM_OUT",
   "SELECT_PAPER",
   "DESELECT_PAPER",
-  "DESELECT_PAPER_BACKLINK",
-  "FILE_CLICKED",
   "SEARCH",
   "FILTER",
   "SORT",
@@ -29,20 +23,23 @@ export const NOT_QUEUED_IN_ANIMATION = [
 
 export const zoomIn = (
   selectedAreaData,
-  source = null,
   callback,
-  alreadyZoomed = false
+  alreadyZoomed = false,
+  isFromBackButton = false,
+  selectedPaperData = null
 ) => ({
   type: "ZOOM_IN",
   selectedAreaData,
-  source,
   callback,
   alreadyZoomed,
+  isFromBackButton,
+  selectedPaperData,
 });
 
-export const zoomOut = (callback) => ({
+export const zoomOut = (callback, isFromBackButton = false) => ({
   type: "ZOOM_OUT",
   callback,
+  isFromBackButton,
 });
 
 /**
@@ -58,34 +55,34 @@ export const preinitializeStore = (configObject) => ({
  * Action for initializing the data that aren't known in advance.
  * @param {Object} configObject the default_config.json + data_config.json
  * @param {Object} contextObject the app context
- * @param {Array}  dataArray the papers data
+ * @param {Array}  papers the papers data array
+ * @param {Array}  areas the areas data array
+ * @param {Array}  streams the streams data array
  */
 export const initializeStore = (
   configObject,
   contextObject,
-  dataArray,
-  streamData,
-  chartSize,
-  streamWidth,
-  streamHeight,
-  listHeight
-) => ({
-  type: "INITIALIZE",
-  configObject,
-  contextObject,
-  dataArray,
-  streamData,
+  papers,
+  areas,
+  streams,
   chartSize,
   streamWidth,
   streamHeight,
   listHeight,
+  scalingFactors
+) => ({
+  type: "INITIALIZE",
+  configObject,
+  contextObject,
+  papers,
+  areas,
+  streams,
+  chartSize,
+  streamWidth,
+  streamHeight,
+  listHeight,
+  scalingFactors,
 });
-
-/**
- * Action for changing the local file.
- * @param {Number} fileIndex
- */
-export const changeFile = (fileIndex) => ({ type: "FILE_CLICKED", fileIndex });
 
 export const toggleList = () => ({ type: "TOGGLE_LIST" });
 
@@ -97,10 +94,11 @@ export const filter = (id) => ({ type: "FILTER", id });
 
 export const sort = (id) => ({ type: "SORT", id });
 
-export const selectPaper = (paper) => ({
+export const selectPaper = (paper, isFromBackButton = false) => ({
   type: "SELECT_PAPER",
   safeId: paper.safe_id,
   paper,
+  isFromBackButton,
 });
 
 export const deselectPaper = () => ({ type: "DESELECT_PAPER" });
@@ -111,12 +109,10 @@ export const highlightArea = (paper) => ({
 });
 
 export const showPreview = (paper) => ({ type: "SHOW_PREVIEW", paper });
-
 export const hidePreview = () => ({ type: "HIDE_PREVIEW" });
 
-export const deselectPaperBacklink = () => ({
-  type: "DESELECT_PAPER_BACKLINK",
-});
+export const showCitePaper = (paper) => ({ type: "SHOW_CITE_PAPER", paper });
+export const hideCitePaper = () => ({ type: "HIDE_CITE_PAPER" });
 
 export const updateDimensions = (chart, list) => ({
   type: "RESIZE",
@@ -164,3 +160,6 @@ export const scaleMap = (value, baseUnit, contentBased, sort) => ({
   contentBased,
   sort,
 });
+
+export const openCitationModal = () => ({ type: "OPEN_CITATION_MODAL" });
+export const closeCitationModal = () => ({ type: "CLOSE_CITATION_MODAL" });

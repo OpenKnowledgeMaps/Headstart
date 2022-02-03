@@ -12,7 +12,6 @@ import KnowledgeMap from "../../js/components/KnowledgeMap";
 
 import initialTestData, { initialTestAreas } from "../data/simple";
 import covisData from "../data/covis";
-import linkedcatData from "../data/linkedcat-streamgraph";
 import localData from "../data/local-files";
 import pubmedData from "../data/pubmed";
 import viperData from "../data/viper";
@@ -59,6 +58,7 @@ const setup = (overrideStoreObject = {}) => {
         isContentBased: false,
         baseUnit: undefined,
       },
+      tracking: {},
       localization: {},
     },
     overrideStoreObject

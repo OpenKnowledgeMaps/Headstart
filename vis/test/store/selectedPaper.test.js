@@ -1,9 +1,4 @@
-import {
-  zoomOut,
-  selectPaper,
-  deselectPaper,
-  deselectPaperBacklink,
-} from "../../js/actions";
+import { zoomOut, selectPaper, deselectPaper } from "../../js/actions";
 
 import selectedPaperReducer from "../../js/reducers/selectedPaper";
 
@@ -14,11 +9,12 @@ describe("list state", () => {
         id: "some-id",
         safe_id: "some-safe-id",
         title: "some title",
-      }
+      };
       const EXPECTED_ACTION = {
         type: "SELECT_PAPER",
         safeId: PAPER.safe_id,
         paper: PAPER,
+        isFromBackButton: false,
       };
       expect(selectPaper(PAPER)).toEqual(EXPECTED_ACTION);
     });
@@ -28,13 +24,6 @@ describe("list state", () => {
         type: "DESELECT_PAPER",
       };
       expect(deselectPaper()).toEqual(EXPECTED_ACTION);
-    });
-
-    it("should create a deselect paper backlink action", () => {
-      const EXPECTED_ACTION = {
-        type: "DESELECT_PAPER_BACKLINK",
-      };
-      expect(deselectPaperBacklink()).toEqual(EXPECTED_ACTION);
     });
   });
 
@@ -73,21 +62,6 @@ describe("list state", () => {
       const EXPECTED_STATE = null;
 
       const result = selectedPaperReducer(INITIAL_STATE, deselectPaper());
-
-      expect(result).toEqual(EXPECTED_STATE);
-    });
-
-    it("should deselect the paper (from backlink)", () => {
-      const PAPER = {
-        safe_id: "some-id",
-      };
-
-      const INITIAL_STATE = {
-        safeId: PAPER.safe_id,
-      };
-      const EXPECTED_STATE = null;
-
-      const result = selectedPaperReducer(INITIAL_STATE, deselectPaperBacklink());
 
       expect(result).toEqual(EXPECTED_STATE);
     });

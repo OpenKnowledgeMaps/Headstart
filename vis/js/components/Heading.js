@@ -1,11 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import ZoomedInHeadingTemplate from "../templates/ZoomedInHeading";
-import ZoomedOutHeadingTemplate from "../templates/ZoomedOutHeading";
-
-import { changeFile, openInfoModal } from "../actions/index";
-
 import {
   BasicTitle,
   ProjectTitle,
@@ -21,30 +16,34 @@ const Heading = ({
   query,
   bubbleTitle,
   headingParams,
-  files,
-  onFileChange,
   streamgraph,
-  onInfoModalOpen,
 }) => {
   if (zoomed) {
-    let label = streamgraph ? localization.area_streamgraph : localization.area;
+    const label = streamgraph
+      ? localization.area_streamgraph
+      : localization.area;
 
-    return <ZoomedInHeadingTemplate label={label} title={bubbleTitle} />;
+    return (
+      // html template starts here
+      <h4>
+        <span id="area-bold">{label}:</span>{" "}
+        <span
+          id="area-not-bold"
+          dangerouslySetInnerHTML={{ __html: bubbleTitle }}
+        ></span>
+      </h4>
+      // html template ends here
+    );
   }
 
   return (
-    <ZoomedOutHeadingTemplate
-      introIcon={localization.intro_icon}
-      introLabel={localization.intro_label}
-      additionalFeatures={renderAdditionalFeatures(
-        headingParams,
-        files,
-        onFileChange
-      )}
-      onInfoClick={onInfoModalOpen}
-    >
-      {renderTitle(localization, query, headingParams)}
-    </ZoomedOutHeadingTemplate>
+    // html template starts here
+    <div className="heading-container">
+      <h4 className="heading">
+        {renderTitle(localization, query, headingParams)}
+      </h4>
+    </div>
+    // html template ends here
   );
 };
 
@@ -54,20 +53,13 @@ const mapStateToProps = (state) => ({
   query: state.query.text,
   bubbleTitle: state.selectedBubble ? state.selectedBubble.title : null,
   headingParams: state.heading,
-  files: state.files,
   streamgraph: state.chartType === STREAMGRAPH_MODE,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onFileChange: (fileIndex) => dispatch(changeFile(fileIndex)),
-  onInfoModalOpen: () => dispatch(openInfoModal()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Heading);
+export default connect(mapStateToProps)(Heading);
 
 // This should probably make its way to a more global config
 const MAX_LENGTH_VIPER = 47;
-const MAX_LENGTH_LINKEDCAT = 115;
 const MAX_LENGTH_CUSTOM = 100;
 
 /**
@@ -87,10 +79,6 @@ const renderTitle = (localization, query, headingParams) => {
         headingParams.acronym,
         headingParams.projectId
       );
-    }
-
-    if (headingParams.titleStyle === "linkedcat") {
-      return renderLinkedCatTitle(label, query);
     }
 
     if (
@@ -126,11 +114,6 @@ const renderViperTitle = (title, acronym, projectId) => {
       projectId={projectId}
     />
   );
-};
-
-const renderLinkedCatTitle = (label, query) => {
-  let shortTitle = sliceText(query, MAX_LENGTH_LINKEDCAT);
-  return <StandardTitle label={label} title={query} shortTitle={shortTitle} />;
 };
 
 const renderCustomTitle = (title, label, query, localization) => {
@@ -197,28 +180,4 @@ const unescapeHTML = (string) => {
       return entityMap[s];
     }
   );
-};
-
-const renderAdditionalFeatures = ({ showDropdown }, files, onFileChange) => {
-  if (showDropdown && files.list.length > 0) {
-    const handleChange = (e) => {
-      onFileChange(parseInt(e.target.value));
-    };
-
-    return (
-      <>
-        {" "}
-        Select dataset:{" "}
-        <select id="datasets" value={files.current} onChange={handleChange}>
-          {files.list.map((entry, index) => (
-            <option key={entry.file} value={index}>
-              {entry.title}
-            </option>
-          ))}
-        </select>
-      </>
-    );
-  }
-
-  return null;
 };

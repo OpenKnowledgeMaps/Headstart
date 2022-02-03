@@ -3,14 +3,14 @@ import Highlight from "../components/Highlight";
 import Hyphenate from "../components/Hyphenate";
 
 import { select } from "d3-selection";
+import { formatPaperDate } from "./listentry/Title";
 
 class Paper extends React.Component {
   constructor(props) {
     super(props);
     // TODO rewrite this using https://www.npmjs.com/package/core-decorators#autobind ?
-    this.getCoordinatesAndDimensions = this.getCoordinatesAndDimensions.bind(
-      this
-    );
+    this.getCoordinatesAndDimensions =
+      this.getCoordinatesAndDimensions.bind(this);
     this.isAnimated = this.isAnimated.bind(this);
     this.animate = this.animate.bind(this);
     this.animatePath = this.animatePath.bind(this);
@@ -104,10 +104,8 @@ class Paper extends React.Component {
     const { x, y, width: baseWidth, height: baseHeight } = this.state;
     const { path: basePath, dogEar: baseDogEar } = this.state;
 
-    let {
-      width: realWidth,
-      height: realHeight,
-    } = this.getCoordinatesAndDimensions();
+    let { width: realWidth, height: realHeight } =
+      this.getCoordinatesAndDimensions();
 
     const handleMouseOver = () => {
       let newEnlargeFactor = null;
@@ -146,7 +144,7 @@ class Paper extends React.Component {
     }
 
     let gClass = "paper";
-    let pathClass = selected ? "framed" : "unframed";
+    let pathClass = "paper_path" + (selected ? " framed" : " unframed");
     let paperClass = "paper_holder";
     let sizeModifierClass = "";
     if (zoom || this.isZoomingIn()) {
@@ -183,7 +181,11 @@ class Paper extends React.Component {
           ></path>
         )}
         {!this.isDataset() && !this.isZoomingOut() && (
-          <path className="dogear" d={dogEar} ref={this.dogearRef}></path>
+          <path
+            className="paper_path dogear"
+            d={dogEar}
+            ref={this.dogearRef}
+          ></path>
         )}
         <foreignObject
           id="article_metadata"
@@ -206,7 +208,7 @@ class Paper extends React.Component {
                 <div id="icons">
                   {isOpenAccess && (
                     <p id="open-access-logo" className={sizeModifierClass}>
-                      &#61596;
+                      <i className="fas fa-lock-open"></i>
                     </p>
                   )}
                   {this.isDataset() && (
@@ -219,7 +221,7 @@ class Paper extends React.Component {
                   )}
                   {isFreeAccess && (
                     <p id="free-access-logo" className={sizeModifierClass}>
-                      &#61596;
+                      <i className="fas fa-lock-open"></i>
                     </p>
                   )}
                 </div>
@@ -227,7 +229,12 @@ class Paper extends React.Component {
                   <Hyphenate>
                     <Highlight hyphenated queryHighlight>
                       {title}
+                    </Highlight>{" "}
+                    (
+                    <Highlight queryHighlight>
+                      {formatPaperDate(year)}
                     </Highlight>
+                    )
                   </Hyphenate>
                 </p>
                 <p id="details" className={sizeModifierClass}>
@@ -248,10 +255,6 @@ class Paper extends React.Component {
                       </Hyphenate>
                     </>
                   )}
-                  <span className="pubyear">
-                    {" "}
-                    (<Highlight queryHighlight>{year}</Highlight>)
-                  </span>
                 </p>
               </div>
               {!!readersLabel &&
@@ -384,7 +387,7 @@ class Paper extends React.Component {
 
   isDataset() {
     const { resulttype } = this.props.data;
-    return resulttype === "dataset";
+    return resulttype.includes("dataset");
   }
 }
 
@@ -455,10 +458,10 @@ const getMetadataHeight = (realHeight, hasReaders, isZoomed) => {
   }
 
   const height = realHeight - readersHeight;
-  
+
   if (height >= 20) {
     return height;
   }
 
   return 20;
-}
+};

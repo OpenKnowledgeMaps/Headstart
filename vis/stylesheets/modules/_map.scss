@@ -48,24 +48,6 @@ rect {
     stroke-width: 0;
 }
 
-path {
-    fill: white;
-    fill-opacity: 1;
-    stroke: $paper-icon;
-    stroke-width: 1px;
-    cursor: zoom-in;
-
-    &#region {
-        &.zoomed_in {
-            cursor: pointer;
-        }
-    }
-}
-
-.dogear {
-    fill: $paper-icon;
-}
-
 line {
     stroke: rgb(31, 119, 180);
     stroke-width: 1px;
@@ -133,10 +115,13 @@ text {
 }
 
 #filter_params, #sort {
-    color: $okm-modal-btn;
-    background-color: $white;
+    color: $white;
+    background-color: $okm-modal-btn;
     border-color: $okm-modal-btn;
     padding: 6px 4px !important;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
 }
 
 #filter_params {
@@ -145,8 +130,8 @@ text {
 }
 
 #filter_params:hover, #sort:hover {
-    color: $white;
-    background-color: $okm-modal-btn;
+    color: $okm-modal-btn;
+    background-color: $white;
     border-color: $okm-modal-btn;
 }
 
@@ -166,7 +151,7 @@ text {
 
 #filter_params, #sort {
     width: 140px;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 #filter-menu-entries {

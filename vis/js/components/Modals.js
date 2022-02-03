@@ -1,14 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import {
-  closeEmbedModal,
-  closeViperEditModal,
-  hidePreview,
-} from "../actions";
+import { closeEmbedModal, closeViperEditModal, hidePreview } from "../actions";
 
+import CitationModal from "../templates/modals/CitationModal";
+import CitePaperModal from "../templates/modals/CitePaperModal";
 import EmbedModal from "../templates/modals/EmbedModal";
-import ImageModal from "../templates/modals/ImageModal";
 import InfoModal from "../templates/modals/InfoModal";
 import PdfModal from "../templates/modals/PdfModal";
 import ViperEditModal from "../templates/modals/ViperEditModal";
@@ -24,13 +21,13 @@ const Modals = ({
   viperEditTitle,
   viperEditObjID,
   onViperEditClose,
-  showImagePreview,
   showPDFPreview,
   previewedPaper,
   serverUrl,
   service,
   useViewer,
   onPreviewClose,
+  showCitationModal,
   localization,
 }) => {
   return (
@@ -48,13 +45,6 @@ const Modals = ({
         />
       )}
       <InfoModal />
-      {showImagePreview && (
-        <ImageModal
-          open={!!previewedPaper}
-          onClose={onPreviewClose}
-          paperID={previewedPaper ? previewedPaper.id : null}
-        />
-      )}
       {showPDFPreview && (
         <PdfModal
           open={!!previewedPaper}
@@ -65,6 +55,8 @@ const Modals = ({
           useViewer={useViewer}
         />
       )}
+      {showCitationModal && <CitationModal />}
+      <CitePaperModal />
     </LocalizationProvider>
   );
 };
@@ -77,13 +69,13 @@ const mapStateToProps = (state) => ({
   viperEditAcronym: state.heading.acronym,
   viperEditTitle: state.heading.title,
   viperEditObjID: state.modals.viperEditObjID,
-  showImagePreview: state.modals.showImagePreview,
   showPDFPreview: state.modals.showPDFPreview,
   previewedPaper: state.modals.previewedPaper,
   serverUrl: state.modals.reloadApiProperties.headstartPath,
   service: state.service,
   useViewer: state.modals.useViewer,
   localization: state.localization,
+  showCitationModal: state.modals.showCitationButton,
 });
 
 const mapDispatchToProps = (dispatch) => ({

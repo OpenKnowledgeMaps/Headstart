@@ -17,6 +17,8 @@ import SearchLang from "../templates/contextfeatures/SearchLang";
 import Timestamp from "../templates/contextfeatures/Timestamp";
 import MetadataQuality from "../templates/contextfeatures/MetadataQuality";
 import Modifier from "../templates/contextfeatures/Modifier";
+import { trackMatomoEvent } from "../utils/useMatomo";
+import MoreInfoLink from "../templates/contextfeatures/MoreInfoLink";
 
 const defined = (param) => param !== undefined && param !== null;
 
@@ -86,6 +88,7 @@ class ContextLine extends React.Component {
         {defined(params.searchLanguage) && (
           <SearchLang>{params.searchLanguage}</SearchLang>
         )}
+        <MoreInfoLink />
       </ContextLineTemplate>
     );
   }
@@ -104,11 +107,19 @@ class ContextLine extends React.Component {
 
     const text = documentTypes.join(", ");
 
+    const trackMouseOver = () =>
+      trackMatomoEvent("Title & Context line", "Hover document types", "Context line");
+
     return (
       <>
-        <span id="document_types" className="context_item">
+        <span
+          id="document_types"
+          className="context_item"
+          onMouseOver={trackMouseOver}
+        >
           <HoverPopover
             id="doctypes-popover"
+            size="wide"
             container={popoverContainer}
             content={
               <>

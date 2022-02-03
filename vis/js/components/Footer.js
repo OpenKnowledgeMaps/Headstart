@@ -1,36 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import StandardBuiltWith from "../templates/footers/StandardBuiltWith";
-import TripleBuiltWith from "../templates/footers/TripleBuiltWith";
+import CreatedBy from "../templates/footers/CreatedBy";
 
-const Footer = ({ service, timestamp }) => {
-  if (typeof service === "string" && service.startsWith("triple")) {
-    return <TripleBuiltWith />;
+const Footer = ({ service, timestamp, faqsUrl }) => {
+  if (typeof service !== "string") {
+    return null;
   }
 
-  if (service === "base") {
-    return (
-      <StandardBuiltWith
-        timestamp={timestamp}
-        codebaseUrl="https://github.com/ropenscilabs/rbace"
-        codebaseName="rbace"
-        sourceUrl="http://base-search.net"
-        sourceName="BASE"
-      />
-    );
-  }
-
-  if (service === "pubmed") {
-    return (
-      <StandardBuiltWith
-        timestamp={timestamp}
-        codebaseUrl="https://github.com/ropensci/rentrez"
-        codebaseName="rentrez"
-        sourceUrl="http://www.ncbi.nlm.nih.gov/pubmed"
-        sourceName="PubMed"
-      />
-    );
+  if (service.startsWith("triple") || ["base", "pubmed"].includes(service)) {
+    return <CreatedBy timestamp={timestamp} faqsUrl={faqsUrl} />;
   }
 
   return null;
@@ -39,6 +18,7 @@ const Footer = ({ service, timestamp }) => {
 const mapStateToProps = (state) => ({
   service: state.service,
   timestamp: state.misc.timestamp,
+  faqsUrl: state.modals.FAQsUrl,
 });
 
 export default connect(mapStateToProps)(Footer);

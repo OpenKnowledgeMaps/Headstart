@@ -5,10 +5,10 @@ import {
   showPreview,
   selectPaper,
   deselectPaper,
-  deselectPaperBacklink,
   stopAnimation,
   hoverBubble,
   hoverPaper,
+  showCitePaper,
 } from "../actions";
 
 /**
@@ -16,12 +16,10 @@ import {
  * @param {Function} dispatch
  */
 export const mapDispatchToListEntriesProps = (dispatch) => ({
-  // TODO remove the source after refactoring
-  handleZoomIn: (paper, source = null) =>
+  handleZoomIn: (paper) =>
     dispatch(
       zoomIn(
         { title: paper.area, uri: paper.area_uri },
-        source,
         createAnimationCallback(dispatch)
       )
     ),
@@ -29,8 +27,19 @@ export const mapDispatchToListEntriesProps = (dispatch) => ({
   handleAreaMouseover: (paper) => dispatch(highlightArea(paper)),
   handleAreaMouseout: () => dispatch(highlightArea(null)),
   handleSelectPaper: (paper) => dispatch(selectPaper(paper)),
+  handleSelectPaperWithZoom: (paper) =>
+    dispatch(
+      zoomIn(
+        { title: paper.area, uri: paper.area_uri },
+        createAnimationCallback(dispatch),
+        false,
+        false,
+        paper
+      )
+    ),
   handleDeselectPaper: () => dispatch(deselectPaper()),
-  handleBacklinkClick: () => dispatch(deselectPaperBacklink()),
+  handleBacklinkClick: () => dispatch(deselectPaper()),
+  handleCiteClick: (paper) => dispatch(showCitePaper(paper)),
 });
 
 /**
@@ -42,7 +51,6 @@ export const mapDispatchToMapEntriesProps = (dispatch) => ({
     dispatch(
       zoomIn(
         { title: area.title, uri: area.area_uri },
-        null,
         createAnimationCallback(dispatch),
         alreadyZoomed
       )
@@ -51,7 +59,8 @@ export const mapDispatchToMapEntriesProps = (dispatch) => ({
   handleDeselectPaper: () => dispatch(deselectPaper()),
   handleSelectPaper: (paper) => dispatch(selectPaper(paper)),
   changeBubbleOrder: (uri) => dispatch(hoverBubble(uri)),
-  changePaperOrder: (safeId, enlargeFactor) => dispatch(hoverPaper(safeId, enlargeFactor)),
+  changePaperOrder: (safeId, enlargeFactor) =>
+    dispatch(hoverPaper(safeId, enlargeFactor)),
 });
 
 /**
