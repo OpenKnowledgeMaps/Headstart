@@ -29,15 +29,15 @@
 .paper-tag {
     display: inline-block;
     padding: 2px 4px;
-    width: 100px;
+    min-width: 100px;
     background-color: white;
     
-    color: $medium-blue;
+    color: $tag-color;
     text-align: center;
     font-size: 10px;
     font-weight: $fontweight400;
 
-    border: 1px solid $medium-blue;
+    border: 1px solid $tag-color;
     border-radius: 14px;
     -webkit-border-radius: 14px;
     -moz-border-radius: 14px;
@@ -51,8 +51,8 @@
 }
 
 .dataset-tag {
-    color: $dataset;
-    border-color: $dataset;
+    color: $tag-color;
+    border-color: $tag-color;
 }
 
 .resulttype-dataset {
@@ -156,7 +156,8 @@
 
     .outlink_symbol {
         font-family: FontAwesome;
-        vertical-align: middle;
+        //vertical-align: middle;
+        font-size: 9px;
     }
 
     .list_details, .doi_outlink, .conceptgraph {
@@ -224,27 +225,27 @@ s.resulttype {
     margin-bottom: 10px;
 }
 
-#list_area, #list_keywords, #list_basic_classification, #list_ddc {
+.list_row {
     font-family: $link-font-family;
     font-size: 12px;
     line-height: 120%;
     margin-bottom: 5px;
     padding: 0;
     text-align: left;
-    display: inline-block;
+    display: block;
     padding-right: 10px;
 
-    .area_tag, .keyword_tag {
+    .list_row_label {
         font-weight: $fontweight700;
     }
 
-    .keywords {
+    .list_row_content {
         font-weight: normal;
         color: #333;
     }
 }
 
-#list_area {
+.list_area {
 
     text-decoration: none;
     font-weight: $fontweight400;
@@ -377,7 +378,7 @@ s.resulttype {
     display: none;
 }
 
-#list_keywords, #list_basic_classification {
+.list_row {
     margin-bottom: 10px;
 }
 
@@ -760,7 +761,7 @@ img#preview_page {
         border: 1px solid $medium-blue;
     }
 
-    #list_keywords, #list_basic_classification, #list_ddc {
+    .list_row, #list_basic_classification, #list_ddc {
         display: block;
         margin-bottom: 10px;
     }
@@ -799,7 +800,7 @@ img#preview_page {
         }
     }
 
-    #list_area, #list_keywords, #list_basic_classification, #list_ddc, #list_abstract {
+    .list_row, #list_basic_classification, #list_ddc, #list_abstract {
         font-size: 14px;
     }
 
@@ -838,7 +839,7 @@ img#preview_page {
             }
         }
 
-        #list_basic_classification, #list_keywords, #list_abstract, #list_area {
+        #list_basic_classification, .list_row, #list_abstract {
             font-size: 12px;
             max-width:100%;
         }
@@ -872,7 +873,7 @@ img#preview_page {
         display: none;
     }
 
-    #list_area {
+    .list_area {
         display: block;
         margin-top: 5px;
     }
@@ -916,28 +917,18 @@ img#preview_page {
         font-size: 14px;
         color: $medium-blue;
     }
-    #list_keywords {
+
+    .list_row {
         margin-bottom: 5px;
-    }
-
-    #list_keywords {
-
-        .keyword_tag {
-            font-weight: $fontweight800;
-        }
-    }
-
-    #list_area {
-
-        margin-top: 0px;
-
-        .area_tag {
-            font-weight: $fontweight800;
-        }
-    }
-    
-    #list_keywords, #list_area {
         font-size: 12px;
+
+        .list_row_label {
+            font-weight: $fontweight800;
+        }
+    }
+
+    .list_area {
+        margin-top: 0px;
     }
     
     .empty-area-warning {
