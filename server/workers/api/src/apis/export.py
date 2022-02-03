@@ -56,7 +56,11 @@ class exportMetadata(Resource):
             else: 
                 result = {"status": "error",
                         "reason": "output format not recognized, must bei either bibtex or ris"}
-                return jsonify(result)
+                headers = {'ContentType': 'application/json'}
+                result = jsonify(result)
+            return make_response(result,
+                                 500,
+                                 headers)
         except Exception as e:
             export_ns.logger.error(e)
             result = {'success': False, 'reason': e}

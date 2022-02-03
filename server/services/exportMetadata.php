@@ -23,12 +23,27 @@ $download = (isset($_REQUEST['download'])) ? $_REQUEST['download'] : false;
 $metadata_json = library\CommUtils::getParameter($_POST, "metadata");
 $result = export($format, $metadata_json);
 
+if (isset($result["status"]) && $result["status"] === "error") {
+    return json_encode($result);
+}
 
 if (isset($download) & $download==true ) {
     header('Content-type: application/text');
     header('Content-Disposition: attachment; filename=metadata.' . $format);
 } else {
     header('Content-type: text/plain');
+}
+
+$origin = $_SERVER['HTTP_ORIGIN'];
+$allowed_domains = [
+    'http://openknowledgemaps.org',
+    'https://openknowledgemaps.org',
+    'http://dev.openknowledgemaps.org',
+    'https://dev.openknowledgemaps.org'
+];
+
+if (in_array($origin, $allowed_domains)) {
+    header('Access-Control-Allow-Origin: ' . $origin);
 }
 
 echo $result
