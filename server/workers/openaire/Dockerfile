@@ -138,7 +138,7 @@ RUN apt-get -y install python3 python3-pip
 
 RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
  R -e 'install.packages("remotes")' && \
- R -e 'install.packages("renv", version="0.11.0-5")'
+ R -e 'install.packages("renv", version="0.14.0-5")'
 
 WORKDIR /headstart
 COPY workers/openaire/requirements.txt .
