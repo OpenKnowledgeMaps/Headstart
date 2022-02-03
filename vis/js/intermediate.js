@@ -24,11 +24,11 @@ import logAction from "./utils/actionLogger";
 
 import { getChartSize, getListSize } from "./utils/dimensions";
 import Headstart from "./components/Headstart";
-import { sanitizeInputData } from "./utils/data";
 import { createAnimationCallback } from "./utils/eventhandlers";
 import { removeQueryParams, handleUrlAction } from "./utils/url";
 import debounce from "./utils/debounce";
 import { handleTitleAction } from "./utils/title";
+import DataManager from "./datamanagers/DataManager";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -37,11 +37,14 @@ import { handleTitleAction } from "./utils/title";
  * This class should ideally only talk to the mediator and redux
  */
 class Intermediate {
-  constructor(rescaleCallback) {
+  constructor(config, rescaleCallback) {
+    this.config = config;
+    this.dataManager = new DataManager(config);
+
+    this.originalTitle = "";
     this.actionQueue = [];
 
     const middleware = applyMiddleware(
-      createFileChangeMiddleware(),
       createActionQueueMiddleware(this),
       createScrollMiddleware(),
       createRepeatedInitializeMiddleware(this),
@@ -55,11 +58,10 @@ class Intermediate {
     this.store = createStore(rootReducer, middleware);
   }
 
-  renderFrontend(config) {
-    this.config = config;
+  renderFrontend() {
     this.originalTitle = document.title;
 
-    this.store.dispatch(preinitializeStore(config));
+    this.store.dispatch(preinitializeStore(this.config));
 
     ReactDOM.render(
       <Provider store={this.store}>
@@ -74,35 +76,32 @@ class Intermediate {
     );
   }
 
-  initStore(config, context, mapData, streamData) {
-    const { size, width, height } = getChartSize(config, context);
-    const list = getListSize(config, context, size);
+  initStore(backendData) {
+    const config = this.config;
+    const { size, width, height } = getChartSize(config);
 
-    this.config = config;
-    this.sanitizedMapData = sanitizeInputData(mapData);
-    this.streamData = streamData;
+    this.dataManager.parseData(backendData, size);
+
+    const context = this.dataManager.context;
+
+    const list = getListSize(config, context, size);
 
     this.store.dispatch(
       initializeStore(
         config,
         context,
-        this.sanitizedMapData,
-        this.streamData,
+        this.dataManager.papers,
+        this.dataManager.areas,
+        this.dataManager.streams,
         size,
         width,
         height,
-        list.height
+        list.height,
+        this.dataManager.scalingFactors
       )
     );
 
-    if (!config.is_streamgraph) {
-      this.forceLayoutParams = {
-        areasAlpha: config.area_force_alpha,
-        isForceAreas: config.is_force_areas,
-        papersAlpha: config.papers_force_alpha,
-        isForcePapers: config.is_force_papers,
-      };
-
+    if (!this.config.is_streamgraph) {
       this.applyForceLayout();
     }
 
@@ -180,7 +179,9 @@ class Intermediate {
 
     const zoomedPaper = params.get("paper");
 
-    const paper = this.sanitizedMapData.find((p) => p.safe_id === zoomedPaper);
+    const paper = this.dataManager.papers.find(
+      (p) => p.safe_id === zoomedPaper
+    );
 
     if (!paper) {
       return;
@@ -220,7 +221,7 @@ class Intermediate {
       return;
     }
 
-    const area = this.sanitizedMapData.find((a) => a.area_uri == zoomedArea);
+    const area = this.dataManager.papers.find((a) => a.area_uri == zoomedArea);
 
     if (!area) {
       return;
@@ -237,9 +238,9 @@ class Intermediate {
   }
 
   // triggered on window resize
-  updateDimensions(config, context) {
-    const chart = getChartSize(config, context);
-    const list = getListSize(config, context, chart.size);
+  updateDimensions() {
+    const chart = getChartSize(this.config, this.dataManager.context);
+    const list = getListSize(this.config, this.dataManager.context, chart.size);
     this.store.dispatch(updateDimensions(chart, list));
   }
 
@@ -254,8 +255,63 @@ class Intermediate {
         this.store.dispatch(applyForceAreas(newAreas, state.chart.height)),
       (newPapers) =>
         this.store.dispatch(applyForcePapers(newPapers, state.chart.height)),
-      this.forceLayoutParams
+      {
+        areasAlpha: this.getAreasForceAlpha(this.dataManager.papers.length),
+        isForceAreas: this.config.is_force_areas,
+        papersAlpha: this.getPapersForceAlpha(this.dataManager.papers.length),
+        isForcePapers: this.config.is_force_papers,
+      }
     );
+  }
+
+  /**
+   * Returns alpha value needed for the force layout.
+   *
+   * The alpha values are adopted from the legacy code.
+   *
+   * @param {number} numOfPapers how many papers are in the vis
+   *
+   * @returns paper force layout alpha value
+   */
+  getPapersForceAlpha(numOfPapers) {
+    if (!this.config.is_force_papers || !this.config.dynamic_force_papers) {
+      return this.config.papers_force_alpha;
+    }
+    if (numOfPapers < 150) {
+      return this.config.papers_force_alpha;
+    }
+    if (numOfPapers < 200) {
+      return 0.2;
+    }
+    if (numOfPapers < 350) {
+      return 0.3;
+    }
+    if (numOfPapers < 500) {
+      return 0.4;
+    }
+
+    return 0.6;
+  }
+
+  /**
+   * Returns alpha value needed for the force layout.
+   *
+   * The alpha values are adopted from the legacy code.
+   *
+   * @param {number} numOfPapers how many papers are in the vis
+   *
+   * @returns area force layout alpha value
+   */
+  getAreasForceAlpha(numOfPapers) {
+    if (!this.config.is_force_area || !this.config.dynamic_force_area) {
+      return this.config.area_force_alpha;
+    }
+
+    if (numOfPapers < 200) {
+      return this.config.area_force_alpha;
+    }
+
+    return 0.02;
   }
 }
 
@@ -400,19 +456,6 @@ function createRescaleMiddleware(rescaleCallback) {
           action.contentBased,
           action.sort
         );
-      }
-      return next(action);
-    };
-  };
-}
-
-function createFileChangeMiddleware() {
-  return function ({ getState }) {
-    return (next) => (action) => {
-      if (action.type === "FILE_CLICKED") {
-        if (getState().files.current !== action.fileIndex) {
-          window.headstartInstance.tofile(action.fileIndex);
-        }
       }
       return next(action);
     };

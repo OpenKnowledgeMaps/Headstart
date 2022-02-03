@@ -6,44 +6,47 @@ SplitTokenizer <- function(x) {
   return(tokens)
 }
 
-TypeCountTokenizer <- function(x) {
-  tokens = unlist(lapply(strsplit(words(x), split=";"), paste), use.names = FALSE)
-  tokens = unlist(lapply(tokens, stri_replace_all, regex='[^[:alnum:]-]', replacement=""))
-  return(tokens)
-}
-
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
+expand_ngrams <- function(text, n) {
+  text <- trimws(text)
+  lapply(lapply(text, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), n), paste, collapse  = "_"))), paste, collapse = " ")
+}
+
 prune_ngrams <- function(ngrams, stops){
-  tokens = mapply(strsplit, ngrams, split=" |;")
-  tokens = mapply(strsplit, tokens, split="_")
-  tokens = lapply(tokens, function(y){
-                          Filter(function(x){
-                                  if (!purrr::is_empty(x))
-                                  if (x[1] != "") !any(stri_detect_fixed(stops, x[1]))
-                                            }, y)})
-  tokens = lapply(tokens, function(y){
-                          Filter(function(x){
-                                  if (!purrr::is_empty(x))
-                                  if (tail(x,1) != "") !any(stri_detect_fixed(stops, tail(x,1)))
-                                            }, y)})
-  tokens = lapply(tokens, function(y){
-                          Filter(function(x){
-                                  if (!purrr::is_empty(x))
-                                      !(x[1]==tail(x,1))
-                                        }, y)})
-  tokens = lapply(tokens, function(y){Filter(function(x){length(x)>1},y)})
-  empties = which(lapply(tokens, length)==0)
-  tokens[c(empties)] = list("")
-  tokens = lapply(tokens, function(x){mapply(paste, x, collapse="_")})
-  tokens = lapply(tokens, paste, collapse=";")
-  return (tokens)
+  ngrams = mapply(strsplit, ngrams, split=" |;")
+  tokenized_ngrams = mapply(function(x) {
+                            strsplit(x, split="_")
+                          }, ngrams)
+  # filter out empty tokens
+  tokenized_ngrams = lapply(tokenized_ngrams, function(ngrams){ngrams[lapply(ngrams, length)>0]})
+  # remove ngrams starting with a stopword
+  tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
+                            Filter(function(tokens){
+                              !any(stri_detect_fixed(stops, tolower(tokens[[1]])))
+                            }, x)})
+  # remove ngrams ending with a stopword
+  tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
+                            Filter(function(tokens){
+                              !any(stri_detect_fixed(stops, tolower(tail(tokens,1))))
+                            }, x)})
+  # remove ngrams starting and ending with the same word
+  tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
+                            Filter(function(tokens){
+                              !(tokens[[1]]==tail(tokens,1))
+                            }, x)})
+  # keep ngrams with min length 2
+  tokenized_ngrams = lapply(tokenized_ngrams, function(x){x[lapply(x, length)>1]})
+  tokenized_ngrams = tokenized_ngrams[lapply(tokenized_ngrams, length)>1]
+  tokenized_ngrams = lapply(tokenized_ngrams, function(x){mapply(paste, x, collapse="_")})
+  pruned_ngrams = lapply(tokenized_ngrams, paste, collapse=";")
+  return (pruned_ngrams)
 }
 
 create_cluster_labels <- function(clusters, metadata,
                                   service, lang,
-                                  unlowered_corpus,
+                                  type_counts,
                                   weightingspec,
                                   top_n, stops, taxonomy_separator="/") {
   nn_corpus <- get_cluster_corpus(clusters, metadata, service, stops, taxonomy_separator)
@@ -59,16 +62,15 @@ create_cluster_labels <- function(clusters, metadata,
   tfidf_top_names <- get_top_names(tfidf_top, top_n, stops)
   clusters$cluster_labels = ""
   for (k in seq(1, clusters$num_clusters)) {
-    group = c(names(clusters$groups[clusters$groups == k]))
-    matches = which(clusters$labels%in%group)
+    matches = which(unname(clusters$groups == k) == TRUE)
     summary = tfidf_top_names[[k]]
     if (summary == "") {
       candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
       candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
       candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
       candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
-      candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
-      candidates_trigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
+      candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
+      candidates_trigrams = lapply(lapply(candidates, expand_ngrams, n=3), paste, collapse=" ")
       candidates = mapply(paste, candidates, candidates_bigrams, candidates_trigrams)
       nn_count = sort(table(strsplit(paste(candidates, collapse=" "), " ")), decreasing = T)
       summary <- filter_out_nested_ngrams(names(nn_count), 3)
@@ -78,7 +80,6 @@ create_cluster_labels <- function(clusters, metadata,
     }
     clusters$cluster_labels[c(matches)] = summary
   }
-  type_counts <- get_type_counts(unlowered_corpus)
   clusters$cluster_labels <- fix_cluster_labels(clusters$cluster_labels, type_counts)
   return(clusters)
 }
@@ -109,13 +110,12 @@ get_cluster_corpus <- function(clusters, metadata, service, stops, taxonomy_sepa
                                add_title_ngrams = T) {
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
-    group = c(names(clusters$groups[clusters$groups == k]))
-    matches = which(metadata$id %in% group)
+    matches = which(unname(clusters$groups == k) == TRUE)
     titles =  metadata$title[matches]
     subjects = metadata$subject[matches]
     titles = lapply(titles, function(x) {gsub("[^[:alnum:]-]", " ", x)})
     titles = lapply(titles, gsub, pattern="\\s+", replacement=" ")
-    title_ngrams <- get_title_ngrams(titles, stops)
+    title_ngrams <- get_title_ngrams(titles, stops, c(2, 3))
     titles = lapply(titles, function(x) {removeWords(x, stops)})
 
     subjects = mapply(gsub, subjects, pattern = "; ", replacement=";")
@@ -132,16 +132,17 @@ get_cluster_corpus <- function(clusters, metadata, service, stops, taxonomy_sepa
       subjects = mapply(paste, subjects, taxons, collapse=";")
     }
     if (add_title_ngrams == T) {
-      all_subjects = paste(subjects, title_ngrams$bigrams, title_ngrams$trigrams, collapse=" ")
+      all_subjects = paste(subjects, title_ngrams, collapse=" ")
     } else {
       all_subjects = paste(subjects, collapse=" ")
     }
     all_subjects <- str_replace_all(all_subjects, "\\?+_\\?+|\\?+|\\?+ ", "")
     all_subjects <- str_replace_all(all_subjects, ";+", ";")
     all_subjects <- str_replace_all(all_subjects, " ?; ?", ";")
+    all_subjects <- str_replace_all(all_subjects, " +", ";")
     subjectlist = c(subjectlist, all_subjects)
   }
-  nn_corpus <- Corpus(VectorSource(subjectlist))
+  nn_corpus <- VCorpus(VectorSource(subjectlist))
   return(nn_corpus)
 }
 
@@ -161,16 +162,15 @@ another_prune_ngrams <- function(ngrams, stops){
   tokens <- unname(unlist(ngrams))
   # split ngrams
   tokens = lapply(tokens, strsplit, split="_")
+  tokens = tokens[lapply(tokens, length)>0]
   # check if first token of ngrams in stopword list
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
-                                  if (!purrr::is_empty(x))
                                   if (x[1] != "") !any(stri_detect_fixed(stops, x[1]))
                                             }, y)})
   # check if last token of ngrams in stopword list
   tokens = lapply(tokens, function(y){
                           Filter(function(x){
-                                  if (!purrr::is_empty(x))
                                   if (tail(x,1) != "") !any(stri_detect_fixed(stops, tail(x,1)))
                                             }, y)})
   # check that first token is not the same as the last token
@@ -196,17 +196,12 @@ fill_empty_clusters <- function(nn_tfidf, nn_corpus){
   return(replacement_tfidf_top)
 }
 
-get_title_ngrams <- function(titles, stops) {
+
+get_title_ngrams <- function(titles, stops, ngram_lengths) {
   # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
-  titles_bigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), 2), paste, collapse  = "_"))), paste, collapse = " ")
-  titles_bigrams = prune_ngrams(titles_bigrams, stops)
-  titles_trigrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), 3), paste, collapse = "_"))), paste, collapse = " ")
-  titles_trigrams = prune_ngrams(titles_trigrams, stops)
-  #titles_quadgrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 4), paste, collapse="_"))), paste, collapse=" ")
-  #titles_quadgrams = prune_ngrams(titles_quadgrams, stops)
-  #titles_fivegrams = lapply(lapply(titles, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 5), paste, collapse="_"))), paste, collapse=" ")
-  #titles_fivegrams = prune_ngrams(titles_fivegrams, stops)
-  return(list("bigrams" = titles_bigrams, "trigrams" = titles_trigrams))
+  titles_bigrams = prune_ngrams(expand_ngrams(titles, 2), stops)
+  titles_trigrams = prune_ngrams(expand_ngrams(titles, 3), stops)
+  return(c(titles_bigrams, titles_trigrams))
 }
 
 
@@ -233,8 +228,3 @@ filter_out_nested_ngrams <- function(top_ngrams, top_n) {
   return(head(unique(top_names), top_n))
 }
 
-
-get_type_counts <- function(corpus) {
-  type_counts = apply(TermDocumentMatrix(corpus, control=list(tokenize=TypeCountTokenizer, tolower = FALSE)), 1, sum)
-  return(type_counts)
-}

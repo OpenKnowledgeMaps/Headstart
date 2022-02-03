@@ -163,7 +163,7 @@
     margin: 20px 0;
 }
 
-#embed_modal, #cite_modal {
+#embed_modal, #cite_modal, #cite_paper_modal {
     .modal-dialog {
         width: 100%;
         max-width: 800px;
@@ -187,7 +187,7 @@
     }
 }
 
-.embed-modal-title, .cite-modal-title {
+.embed-modal-title, .cite-modal-title, .cite-paper-modal-title {
     color: $modal-title;
     text-transform: uppercase;
     margin: 0px;
@@ -198,7 +198,7 @@
     line-height: 170%;
 }
 
-#cite-button {
+.indented-modal-btn {
     margin-top: 20px;
 }
 
@@ -361,4 +361,28 @@ h5 {
 .modal-header button:hover {
     opacity: 1.0;
     background-color: #eff3f4;
+}
+
+.cit-style-label {
+    text-decoration: none;
+    color: $link-gray;
+    cursor: pointer;
+    font-weight: normal;
+
+    margin-right: 15px;
+
+    border-bottom: 1px solid $link-gray;
+
+    &:hover, &.selected {
+        border-bottom-width: 2px;
+    }
+
+    &.selected {
+        font-weight: 800;
+    }
+}
+
+.cit-style-desc {
+    margin-top: 5px;
+    font-style: italic;
 }

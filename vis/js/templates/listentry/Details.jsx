@@ -3,16 +3,14 @@ import { connect } from "react-redux";
 
 import Highlight from "../../components/Highlight";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
-import { getAuthorsList } from "../../utils/data";
 
 const MAX_AUTHORS_LENGTH = 90;
 
 const Details = ({ authors, source, isSelected }) => {
   const loc = useLocalizationContext();
 
-  const authorsList = getAuthorsList(authors);
   const authorsString = getAuthorsString(
-    authorsList,
+    authors,
     isSelected ? Number.POSITIVE_INFINITY : MAX_AUTHORS_LENGTH
   );
 
@@ -26,9 +24,6 @@ const Details = ({ authors, source, isSelected }) => {
       </div>
       {!!source && (
         <div className={"list_source" + (isSelected ? "" : " short")}>
-          <span className="list_in">
-            <Highlight> in </Highlight>
-          </span>
           <span className="list_published_in">
             <Highlight queryHighlight>{source}</Highlight>
           </span>
@@ -50,15 +45,17 @@ const getAuthorsString = (authorsList, maxLength) => {
     return "";
   }
 
+  const authorsListCopy = [...authorsList];
+
   const ellipsis = "...";
   const join = ", ";
-  let finalString = authorsList.shift();
-  while (authorsList.length > 0) {
-    const nextAuthor = authorsList.shift();
+  let finalString = authorsListCopy.shift();
+  while (authorsListCopy.length > 0) {
+    const nextAuthor = authorsListCopy.shift();
     let nextPossibleLength =
       finalString.length + join.length + nextAuthor.length;
 
-    if (authorsList.length !== 0) {
+    if (authorsListCopy.length !== 0) {
       nextPossibleLength += ellipsis.length;
     }
 

@@ -6,24 +6,14 @@ import { act } from "react-dom/test-utils";
 
 import configureStore from "redux-mock-store";
 
-import {
-  KNOWLEDGEMAP_MODE,
-  STREAMGRAPH_MODE,
-} from "../../js/reducers/chartType";
+import { KNOWLEDGEMAP_MODE } from "../../js/reducers/chartType";
 
 import defaultConfig from "../../js/default-config";
 
-import {
-  zoomIn,
-  selectPaper,
-  highlightArea,
-  showPreview,
-  deselectPaper,
-} from "../../js/actions";
+import { zoomIn, highlightArea } from "../../js/actions";
 
 import initialTestData from "../data/simple";
 import covisData from "../data/covis";
-import linkedcatData from "../data/linkedcat-streamgraph";
 import localData from "../data/local-files";
 import pubmedData from "../data/pubmed";
 import viperData from "../data/viper";
@@ -61,8 +51,6 @@ const setup = (
         abstractSize: 250,
         isContentBased: true,
         baseUnit: "questions",
-        showRealPreviewImage: false,
-        linkType: "covis",
         showKeywords: true,
         showDocumentType: true,
         showMetrics: false,
@@ -318,7 +306,7 @@ describe("List entries component", () => {
   it("renders with viper data", () => {
     const storeObject = setup(
       { list: viperData },
-      { show: true, showFilter: true, linkType: "url", showMetrics: true }
+      { show: true, showFilter: true, showMetrics: true }
     );
     const store = mockStore(storeObject);
 
@@ -342,7 +330,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "url",
         showMetrics: true,
         baseUnit: "citations",
         isContentBased: false,
@@ -370,7 +357,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "url",
         showMetrics: true,
         baseUnit: "tweets",
         isContentBased: false,
@@ -398,7 +384,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "url",
         showMetrics: true,
         baseUnit: "readers",
         isContentBased: false,
@@ -426,7 +411,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
         showMetrics: false,
@@ -454,7 +438,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
         showMetrics: false,
@@ -483,7 +466,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
         showMetrics: false,
@@ -512,7 +494,6 @@ describe("List entries component", () => {
       {
         show: true,
         showFilter: true,
-        linkType: "doi",
         isContentBased: false,
         baseUnit: "citations",
         showMetrics: false,
@@ -655,179 +636,6 @@ describe("List entries component", () => {
     expect(container.querySelector(".list_metadata")).not.toBe(null);
   });
 
-  it("renders with linkedcat streamgraph data", () => {
-    const storeObject = setup(
-      { list: linkedcatData },
-      { show: true },
-      {
-        service: "linkedcat_streamgraph",
-        chartType: STREAMGRAPH_MODE,
-        localization: defaultConfig.localization.ger_linkedcat,
-      }
-    );
-    const store = mockStore(storeObject);
-
-    act(() => {
-      render(
-        <Provider store={store}>
-          <LocalizationProvider localization={localization}>
-            <List />
-          </LocalizationProvider>
-        </Provider>,
-        container
-      );
-    });
-
-    expect(container.querySelector(".list_metadata")).not.toBe(null);
-  });
-
-  it("renders with linkedcat streamgraph data and set height", () => {
-    const storeObject = setup(
-      { list: linkedcatData },
-      { show: true, height: 800 },
-      {
-        service: "linkedcat_streamgraph",
-        chartType: STREAMGRAPH_MODE,
-        localization: defaultConfig.localization.ger_linkedcat,
-      }
-    );
-    const store = mockStore(storeObject);
-
-    act(() => {
-      render(
-        <Provider store={store}>
-          <LocalizationProvider localization={localization}>
-            <List />
-          </LocalizationProvider>
-        </Provider>,
-        container
-      );
-    });
-
-    expect(
-      container.querySelector("#papers_list").getAttribute("style")
-    ).toContain("height");
-  });
-
-  it("renders with linkedcat streamgraph data, zoomed", () => {
-    const storeObject = setup(
-      { list: linkedcatData },
-      { show: true },
-      {
-        service: "linkedcat_streamgraph",
-        chartType: STREAMGRAPH_MODE,
-        localization: defaultConfig.localization.ger_linkedcat,
-        zoom: true,
-        selectedBubble: {
-          title: "Orient",
-          color: "red",
-        },
-      }
-    );
-    const store = mockStore(storeObject);
-
-    act(() => {
-      render(
-        <Provider store={store}>
-          <LocalizationProvider localization={localization}>
-            <List />
-          </LocalizationProvider>
-        </Provider>,
-        container
-      );
-    });
-
-    expect(container.querySelector(".list_metadata")).not.toBe(null);
-  });
-
-  it("renders with linkedcat streamgraph data, zoomed and paper selected", () => {
-    const storeObject = setup(
-      { list: linkedcatData },
-      { show: true },
-      {
-        service: "linkedcat_streamgraph",
-        chartType: STREAMGRAPH_MODE,
-        localization: defaultConfig.localization.ger_linkedcat,
-        zoom: true,
-        selectedBubble: {
-          title: "Orient",
-        },
-        selectedPaper: {
-          safeId: "AC15093982",
-        },
-      }
-    );
-    const store = mockStore(storeObject);
-
-    act(() => {
-      render(
-        <Provider store={store}>
-          <LocalizationProvider localization={localization}>
-            <List />
-          </LocalizationProvider>
-        </Provider>,
-        container
-      );
-    });
-
-    expect(container.querySelector(".list_metadata")).not.toBe(null);
-  });
-
-  it("renders with linkedcat streamgraph data and paper selected", () => {
-    const storeObject = setup(
-      { list: linkedcatData },
-      { show: true },
-      {
-        service: "linkedcat_streamgraph",
-        chartType: STREAMGRAPH_MODE,
-        localization: defaultConfig.localization.ger_linkedcat,
-        selectedPaper: {
-          safeId: "AC15093982",
-        },
-      }
-    );
-    const store = mockStore(storeObject);
-
-    act(() => {
-      render(
-        <Provider store={store}>
-          <LocalizationProvider localization={localization}>
-            <List />
-          </LocalizationProvider>
-        </Provider>,
-        container
-      );
-    });
-
-    expect(container.querySelector(".list_metadata")).not.toBe(null);
-  });
-
-  it("renders with linkedcat streamgraph data filtered out with search", () => {
-    const storeObject = setup(
-      { list: linkedcatData },
-      { show: true, searchValue: "Selbstbiographie" },
-      {
-        service: "linkedcat_streamgraph",
-        chartType: STREAMGRAPH_MODE,
-        localization: defaultConfig.localization.ger_linkedcat,
-      }
-    );
-    const store = mockStore(storeObject);
-
-    act(() => {
-      render(
-        <Provider store={store}>
-          <LocalizationProvider localization={localization}>
-            <List />
-          </LocalizationProvider>
-        </Provider>,
-        container
-      );
-    });
-
-    expect(container.querySelector(".list_metadata")).not.toBe(null);
-  });
-
   describe("events", () => {
     it("triggers a correct title click action in local files", () => {
       const EXPECTED_PAYLOAD = [zoomIn().type];
@@ -933,223 +741,6 @@ describe("List entries component", () => {
       expect(actions).toEqual([EXPECTED_PAYLOAD]);
     });
 
-    it("triggers a correct title click action in linkedcat", () => {
-      const EXPECTED_PAYLOAD = selectPaper(linkedcatData[0]);
-      const storeObject = setup(
-        { list: [linkedcatData[0]] },
-        { show: true },
-        {
-          service: "linkedcat_streamgraph",
-          chartType: STREAMGRAPH_MODE,
-          localization: defaultConfig.localization.ger_linkedcat,
-        }
-      );
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      const title = container.querySelector(".list_title");
-      act(() => {
-        ReactTestUtils.Simulate.click(title);
-      });
-
-      const actions = store.getActions();
-
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
-    });
-
-    it("triggers a correct area click action in linkedcat", () => {
-      const EXPECTED_PAYLOAD = [zoomIn().type];
-      const storeObject = setup(
-        { list: [linkedcatData[0]] },
-        { show: true },
-        {
-          service: "linkedcat",
-          localization: defaultConfig.localization.ger_linkedcat,
-        }
-      );
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      const area = container.querySelector("#list_area");
-      act(() => {
-        ReactTestUtils.Simulate.click(area);
-      });
-
-      const actions = store.getActions();
-
-      expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
-    });
-
-    it("triggers a correct area mouseover action in linkedcat", () => {
-      const EXPECTED_PAYLOAD = highlightArea(linkedcatData[0]);
-      const storeObject = setup(
-        { list: [linkedcatData[0]] },
-        { show: true },
-        {
-          service: "linkedcat",
-          localization: defaultConfig.localization.ger_linkedcat,
-        }
-      );
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      const area = container.querySelector("#list_area");
-      act(() => {
-        ReactTestUtils.Simulate.mouseOver(area);
-      });
-
-      const actions = store.getActions();
-
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
-    });
-
-    it("triggers a correct area mouseout action in linkedcat", () => {
-      const EXPECTED_PAYLOAD = highlightArea(null);
-      const storeObject = setup(
-        { list: [linkedcatData[0]] },
-        { show: true },
-        {
-          service: "linkedcat",
-          localization: defaultConfig.localization.ger_linkedcat,
-        }
-      );
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      const area = container.querySelector("#list_area");
-      act(() => {
-        ReactTestUtils.Simulate.mouseOut(area);
-      });
-
-      const actions = store.getActions();
-
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
-    });
-
-    it("triggers a correct backlink click action in linkedcat (zoomed)", () => {
-      const PAPER = linkedcatData.find((p) => p.safe_id === "AC15093982");
-      const EXPECTED_PAYLOAD = deselectPaper();
-      const storeObject = setup(
-        { list: [PAPER] },
-        { show: true },
-        {
-          service: "linkedcat_streamgraph",
-          chartType: STREAMGRAPH_MODE,
-          localization: defaultConfig.localization.ger_linkedcat,
-          zoom: true,
-          selectedBubble: {
-            title: "Orient",
-          },
-          selectedPaper: {
-            safeId: "AC15093982",
-          },
-        }
-      );
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      const area = container.querySelector("#backlink_list");
-      act(() => {
-        ReactTestUtils.Simulate.click(area);
-      });
-
-      const actions = store.getActions();
-
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
-    });
-
-    it("triggers a correct pdf preview click action in linkedcat", () => {
-      const PAPER = linkedcatData.find((p) => p.safe_id === "AC15093982");
-      const EXPECTED_PAYLOAD = showPreview(PAPER);
-      const storeObject = setup(
-        { list: [PAPER] },
-        { show: true },
-        {
-          service: "linkedcat_streamgraph",
-          chartType: STREAMGRAPH_MODE,
-          localization: defaultConfig.localization.ger_linkedcat,
-          zoom: true,
-          selectedBubble: {
-            title: "Orient",
-          },
-          selectedPaper: {
-            safeId: "AC15093982",
-          },
-        }
-      );
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      const pdfPreview = container.querySelector(".paper_button");
-      act(() => {
-        ReactTestUtils.Simulate.click(pdfPreview);
-      });
-
-      const actions = store.getActions();
-
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
-    });
-
     it("renders with data without title, authors and abstract", () => {
       const storeObject = setup(
         {
@@ -1162,13 +753,18 @@ describe("List entries component", () => {
               url: "https://doi.org/10.1038/nrmicro2090",
               readers: 0,
               subject_orig: "Spike protein, vaccines",
+              keywords: "Spike protein, vaccines",
               subject: "Spike protein, vaccines",
               oa_state: 3,
               link: "https://www.nature.com/articles/nrmicro2090.pdf",
+              list_link: {
+                address: "https://www.nature.com/articles/nrmicro2090.pdf",
+                isDoi: false,
+              },
               relevance: 3,
               comments: [],
-              tags: "Peer-reviewed",
-              resulttype: "Review",
+              tags: ["Peer-reviewed"],
+              resulttype: ["Review"],
               area_uri: 0,
               area: "Vaccines",
               authors_string: "",

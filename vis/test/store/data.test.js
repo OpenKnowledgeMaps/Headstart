@@ -1,107 +1,6 @@
 import { initializeStore, updateDimensions } from "../../js/actions";
 
 import reducer from "../../js/reducers/data";
-import { sanitizeInputData } from "../../js/utils/data";
-
-import localData from "../data/local-files";
-
-const setup = (overrideConfig = {}, overrideContext = {}) => {
-  const configObject = Object.assign(
-    {
-      max_area_size: 200,
-      reference_size: 650,
-      bubble_min_scale: 1,
-      bubble_max_scale: 1.1,
-      min_diameter_size: 30,
-      max_diameter_size: 50,
-      paper_min_scale: 0.8,
-      paper_max_scale: 1,
-      paper_width_factor: 1.2,
-      paper_height_factor: 1.6,
-      is_streamgraph: false,
-      title: "presetTitle",
-      create_title_from_context: true,
-      create_title_from_context_style: "viper",
-      is_authorview: false,
-      is_streamgraph: false,
-      custom_title: "customTitle",
-      show_dropdown: false,
-      files: [
-        {
-          title: "edu1",
-          file: "./data/edu1.csv",
-        },
-        {
-          title: "edu2",
-          file: "./data/edu2.csv",
-        },
-      ],
-      show_context: true,
-      service: "base",
-      service_names: {
-        plos: "PLOS",
-        base: "BASE",
-        pubmed: "PubMed",
-        doaj: "DOAJ",
-        openaire: "OpenAIRE",
-        linkedcat: "LinkedCat+",
-        linkedcat_authorview: "LinkedCat+",
-        linkedcat_browseview: "LinkedCat+",
-      },
-      show_context_oa_number: true,
-      context_most_relevant_tooltip: undefined,
-      options: undefined,
-      show_context_timestamp: false,
-
-      language: "eng",
-      localization: {
-        eng: {
-          area: "Area",
-          intro_icon: "++intro icon++",
-          intro_label: "Some intro label",
-          default_title: "Sample title",
-          overview_label: "Overview of",
-          streamgraph_authors_label: "Sample streamgraph authors label",
-          overview_authors_label: "Sample knowledgemap authors label",
-          streamgraph_label: "Sample streamgraph keywords label",
-          custom_title_explanation: "Sample explanation",
-        },
-      },
-      service: undefined,
-    },
-    overrideConfig
-  );
-
-  const contextObject = Object.assign(
-    {
-      query: "test query",
-      params: {
-        title: "title",
-        acronym: "acronym",
-        project_id: "projectId",
-        num_documents: 100,
-        author_id: undefined,
-        living_dates: undefined,
-        sorting: "",
-        document_types: undefined,
-        include_content_type: undefined,
-        article_types: undefined,
-        from: undefined,
-        to: undefined,
-        num_papers: undefined,
-        num_datasets: undefined,
-        start_date: undefined,
-        end_date: undefined,
-        lang_id: undefined,
-      },
-      share_oa: 1,
-      last_update: undefined,
-    },
-    overrideContext
-  );
-
-  return { configObject, contextObject };
-};
 
 describe("data state", () => {
   describe("reducers", () => {
@@ -144,7 +43,18 @@ describe("data state", () => {
     it("should not initialize the papers if streamgraph", () => {
       const result = reducer(
         { list: [], options: {}, size: null },
-        initializeStore({ is_streamgraph: true }, {}, [], "", 500, 500, 500)
+        initializeStore(
+          { is_streamgraph: true },
+          {},
+          [],
+          [],
+          "",
+          500,
+          500,
+          500,
+          500,
+          {}
+        )
       );
 
       expect(result).toEqual({
@@ -164,78 +74,6 @@ describe("data state", () => {
         },
         size: 500,
       });
-    });
-
-    it("should sanitize the input data with a property missing", () => {
-      const mockWarn = jest.fn();
-
-      global.console = {
-        log: console.log,
-        warn: mockWarn,
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
-
-      localData.forEach((entry) => {
-        expect(entry).not.toHaveProperty("area_uri");
-      });
-
-      const sanitizedData = sanitizeInputData(localData);
-
-      expect(mockWarn).toHaveBeenCalled();
-
-      sanitizedData.forEach((entry) => {
-        expect(entry).toHaveProperty("area_uri");
-      });
-    });
-
-    it("should sanitize the input data with a property missing just in some entries", () => {
-      const mockWarn = jest.fn();
-
-      const entry1 = Object.assign({}, localData[0]);
-      entry1.area_uri = "some-uri";
-      const entry2 = Object.assign({}, localData[1]);
-      delete entry2.area_uri;
-      const mockLocalData = [entry1, entry2];
-
-      global.console = {
-        log: console.log,
-        warn: mockWarn,
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
-
-      const sanitizedData = sanitizeInputData(mockLocalData);
-
-      expect(mockWarn).toHaveBeenCalled();
-
-      sanitizedData.forEach((entry) => {
-        expect(entry).toHaveProperty("area_uri");
-      });
-    });
-
-    it("should warn that some properties have a bad type", () => {
-      const mockWarn = jest.fn();
-
-      const entry1 = Object.assign({}, localData[0]);
-      entry1.area_uri = "some-uri";
-      const entry2 = Object.assign({}, localData[1]);
-      entry2.area_uri = true;
-      const mockLocalData = [entry1, entry2];
-
-      global.console = {
-        log: console.log,
-        warn: mockWarn,
-        error: console.error,
-        info: console.info,
-        debug: console.debug,
-      };
-
-      sanitizeInputData(mockLocalData);
-
-      expect(mockWarn).toHaveBeenCalled();
     });
 
     it("should not change the state if the action is canceled", () => {

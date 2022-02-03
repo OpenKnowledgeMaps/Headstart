@@ -60,11 +60,11 @@ const getParamFilterFunction = (param, field) => {
     }
 
     if (param === "publication") {
-      return (d) => d.resulttype === "publication";
+      return (d) => d.resulttype.includes("publication");
     }
 
     if (param === "dataset") {
-      return (d) => d.resulttype === "dataset";
+      return (d) => d.resulttype.includes("dataset");
     }
 
     return () => true;
@@ -74,57 +74,57 @@ const getParamFilterFunction = (param, field) => {
     return () => true;
   }
 
-  return (d) => d[field] === param;
+  return (d) => {
+    if (Array.isArray(d[field])) {
+      return d[field].includes(param);
+    }
+
+    return d[field] === param;
+  };
 };
+
+const SEARCHED_PROPS = [
+  "title",
+  "authors_string",
+  "published_in",
+  "year",
+  "subject_orig",
+  "tags",
+  "comments_for_filtering",
+  "resulttype",
+  "paper_abstract",
+];
 
 /**
  * Creates a paper filtering function from the search words.
  *
- * Function taken from legacy list.js
- * @param {Array} search_words array of search words (plaintext strings)
+ * @param {Array} searchedKeywords array of search keywords (plaintext strings)
  *
- * @returns {Function} filtering function
+ * @returns {Function} filtering function that returns true if paper contains all the searched keywords
  */
-const getWordFilterFunction = (search_words) => {
-  return (d) => {
-    const abstract = getPropertyOrEmptyString(d, "paper_abstract");
-    const title = getPropertyOrEmptyString(d, "title");
-    const authors = getPropertyOrEmptyString(d, "authors_string");
-    const journals = getPropertyOrEmptyString(d, "published_in");
-    const year = getPropertyOrEmptyString(d, "year");
-    const keywords = getPropertyOrEmptyString(d, "subject_orig");
-    const tags = getPropertyOrEmptyString(d, "tags");
-    const comments = getPropertyOrEmptyString(d, "comments_for_filtering");
-    const resulttype = getPropertyOrEmptyString(d, "resulttype");
-    // TODO: make these two properties language-aware
-    const open_access = d.oa ? "open access" : "";
-    const free_access = d.free_access ? "free access" : "";
+const getWordFilterFunction = (searchedKeywords) => {
+  return (paper) => {
+    const paperKeywords = SEARCHED_PROPS.map((prop) =>
+      getPropertyOrEmptyString(paper, prop)
+    );
 
-    let i = 0;
-    let word_found = true;
-    while (word_found && i < search_words.length) {
-      word_found =
-        abstract.indexOf(search_words[i]) !== -1 ||
-        title.indexOf(search_words[i]) !== -1 ||
-        authors.indexOf(search_words[i]) !== -1 ||
-        journals.indexOf(search_words[i]) !== -1 ||
-        year.indexOf(search_words[i]) !== -1 ||
-        keywords.indexOf(search_words[i]) !== -1 ||
-        tags.indexOf(search_words[i]) !== -1 ||
-        comments.indexOf(search_words[i]) !== -1 ||
-        resulttype.indexOf(search_words[i]) !== -1 ||
-        open_access.indexOf(search_words[i]) !== -1 ||
-        free_access.indexOf(search_words[i]) !== -1;
-      i++;
+    if (paper.oa) {
+      paperKeywords.push("open access");
+      paperKeywords.push("pdf");
+    }
+    if (paper.free_access) {
+      paperKeywords.push("free access");
     }
 
-    return word_found;
+    const paperString = paperKeywords.join(" ");
+
+    return !searchedKeywords.some((keyword) => !paperString.includes(keyword));
   };
 };
 
 const getPropertyOrEmptyString = (object, property) => {
   if (Object.prototype.hasOwnProperty.call(object, property)) {
-    return object[property].toString().toLowerCase();
+    return object[property].toString().toLowerCase().trim();
   }
 
   return "";
@@ -176,16 +176,6 @@ export const isFileAvailable = (url) => {
 };
 
 /**
- * Returns the paper's preview image.
- * @param {Object} paper
- *
- * @returns {String} the preview image url
- */
-export const getPaperPreviewImage = (paper) => {
-  return "paper_preview/" + paper.id + "/page_1.png";
-};
-
-/**
  * Returns the paper's preview link.
  * @param {Object} paper
  *
@@ -209,7 +199,7 @@ export const getPaperPreviewLink = (paper) => {
 export const getPaperPDFClickHandler = (paper, handlePDFClick) => {
   if (
     paper.oa === false ||
-    paper.resulttype === "dataset" ||
+    paper.resulttype.includes("dataset") ||
     paper.link === ""
   ) {
     return null;
@@ -219,50 +209,16 @@ export const getPaperPDFClickHandler = (paper, handlePDFClick) => {
 };
 
 /**
- * Returns the paper's keywords.
- * @param {Object} paper
- * @param {Object} localization
+ * Returns correct link respecting the configs and link types.
  *
- * @returns {String} the keywords or a fallback string in current language
- */
-export const getPaperKeywords = (paper, localization) => {
-  if (
-    !Object.prototype.hasOwnProperty.call(paper, "subject_orig") ||
-    paper.subject_orig === ""
-  ) {
-    return localization.no_keywords;
-  }
-
-  return paper.subject_orig;
-};
-
-/**
- * Returns the paper's classification.
- * @param {Object} paper
- * @param {Object} localization
+ * @param {object} paper paper object
+ * @param {object} config
+ * @param {object} context
  *
- * @returns {String} the classification or a fallback string in current language
+ * @returns {object} link entry {address: string, isDoi: bool}
  */
-export const getPaperClassification = (paper, localization) => {
-  if (
-    !Object.prototype.hasOwnProperty.call(paper, "bkl_caption") ||
-    paper.bkl_caption === ""
-  ) {
-    return localization.no_keywords;
-  }
-
-  return paper.bkl_caption;
-};
-
-/**
- * Returns the paper's text link.
- * @param {Object} paper
- * @param {String} linkType covis/url/doi/<null>
- *
- * @returns {Object} link object with properties 'address' and 'isDoi'
- */
-export const getPaperTextLink = (paper, linkType) => {
-  if (linkType === "covis") {
+export const getListLink = (paper, config, context) => {
+  if (context.service === "gsheets") {
     let address = paper.url;
     if (typeof address !== "string" || address === "") {
       address = "n/a";
@@ -270,11 +226,11 @@ export const getPaperTextLink = (paper, linkType) => {
     return { address, isDoi: false };
   }
 
-  if (linkType === "url") {
+  if (config.url_outlink) {
     return { address: paper.outlink, isDoi: false };
   }
 
-  if (linkType === "doi") {
+  if (config.doi_outlink) {
     if (paper.doi) {
       return { address: paper.doi, isDoi: true };
     }
@@ -293,49 +249,15 @@ export const getPaperTextLink = (paper, linkType) => {
 };
 
 /**
- * Returns the paper's comments.
- * @param {Object} paper
- *
- * @returns {Array} comments array or null
- */
-export const getPaperComments = (paper) => {
-  let comments = paper.comments;
-  if (!comments || comments.length === 0) {
-    return null;
-  }
-
-  return comments;
-};
-
-/**
- * Returns the paper's tags.
- * @param {Object} paper
- *
- * @returns {Array} tags array or null
- */
-export const getPaperTags = (paper) => {
-  if (!paper.tags) {
-    return null;
-  }
-
-  let tags = paper.tags.split(/, |,/g).filter((tag) => !!tag);
-  if (tags.length > 0) {
-    return tags;
-  }
-
-  return null;
-};
-
-/**
- * Parses the paper's authors string.
+ * Parses the paper's authors string into an object array.
  *
  * @param {string} authors semicolon-separated authors
  *
  * @returns list of authors names and surnames
  */
-export const getAuthorsList = (authors, firstNameFirst = true) => {
+export const extractAuthors = (authors) => {
   if (typeof authors !== "string") {
-    return "";
+    return [];
   }
 
   return authors
@@ -345,95 +267,257 @@ export const getAuthorsList = (authors, firstNameFirst = true) => {
       const namesList = a.trim().split(",");
       const lastName = namesList[0].trim();
       if (namesList.length < 2) {
-        return lastName;
+        return { lastName };
       }
 
       const firstName = namesList[1].trim();
 
-      if (firstNameFirst) {
-        return `${firstName} ${lastName}`;
-      }
-
-      return `${lastName} ${firstName}`;
+      return { firstName, lastName };
     });
-};
-
-const ATTRS_TO_CHECK = [
-  "id",
-  "authors",
-  "title",
-  "paper_abstract",
-  "year",
-  "oa_state",
-  "subject_orig",
-  "relevance",
-  "x",
-  "y",
-  "area_uri",
-  "area",
-  "cluster_labels",
-];
-
-const MANDATORY_ATTRS = {
-  area_uri: {
-    derive: (entry) => entry.area,
-  },
-};
-
-const ALLOWED_TYPES = {
-  area_uri: ["number", "string"],
 };
 
 /**
- * Function that sanitizes the papers in the input data array.
+ * Parses the paper's authors string into a string array.
  *
- * It checks whether some attributes are present and adds fallback values
- * for mandatory parameters.
+ * @param {string} authors semicolon-separated authors
  *
- * @param {Array} data input papers array
- * @returns {Array} sanitized papers array
+ * @returns list of authors names and surnames
  */
-export const sanitizeInputData = (data) => {
-  let missingAttributes = new Map();
-  let wrongTypes = new Set();
+export const getAuthorsList = (authors, firstNameFirst = true) => {
+  const authorObjects = extractAuthors(authors);
+  return authorObjects.map((ao) => {
+    const { firstName, lastName } = ao;
+    if (!firstName) {
+      return lastName;
+    }
 
-  data.forEach((entry) => {
-    ATTRS_TO_CHECK.forEach((attr) => {
-      if (typeof entry[attr] === "undefined") {
-        if (!missingAttributes.has(attr)) {
-          missingAttributes.set(attr, 0);
-        }
-        missingAttributes.set(attr, missingAttributes.get(attr) + 1);
+    if (firstNameFirst) {
+      return `${firstName} ${lastName}`;
+    }
 
-        if (MANDATORY_ATTRS[attr]) {
-          entry[attr] = MANDATORY_ATTRS[attr].derive(entry);
-        }
-      }
-
-      if (ALLOWED_TYPES[attr]) {
-        if (entry[attr] && !ALLOWED_TYPES[attr].includes(typeof entry[attr])) {
-          entry[attr] = entry[attr].toString();
-          wrongTypes.add(attr);
-        }
-      }
-    });
+    return `${lastName} ${firstName}`;
   });
+};
 
-  missingAttributes.forEach((value, key) => {
-    console.warn(
-      `Attribute '${key}' missing in ${
-        value === data.length ? "all" : value
-      } data entries.` +
-        (MANDATORY_ATTRS[key] ? " Fallback value added automatically." : "")
-    );
-  });
-
-  if (wrongTypes.size > 0) {
-    console.warn(
-      `Incorrect data types found and corrected in the following properties: `,
-      wrongTypes
-    );
+/**
+ * Sanitizes paper coordinate.
+ *
+ * Function migrated from the old code (io.js).
+ *
+ * @param {string} coordinate x or y coordinate
+ * @param {number} decimalDigits number of decimals
+ *
+ * @returns sanitized coordinate
+ */
+export const parseCoordinate = (coordinate, decimalDigits) => {
+  if (isNaN(parseFloat(coordinate))) {
+    return parseFloat(0).toFixed(decimalDigits);
   }
 
-  return data;
+  const fixedCoordinate = parseFloat(coordinate).toFixed(decimalDigits);
+  if (fixedCoordinate === "-" + parseFloat(0).toFixed(decimalDigits)) {
+    return parseFloat(0).toFixed(decimalDigits);
+  }
+
+  return fixedCoordinate;
+};
+
+/**
+ * Determines whether the paper is open access.
+ *
+ * Function migrated from the old code (io.js).
+ *
+ * @param {object} paper
+ * @param {object} config
+ *
+ * @returns true/false
+ */
+export const isOpenAccess = (paper, config) => {
+  if (config.service === "pubmed") {
+    return typeof paper.pmcid !== "undefined" && paper.pmcid !== "";
+  }
+
+  return parseInt(paper.oa_state) === 1;
+};
+
+/**
+ * Returns paper's open access link.
+ *
+ * Function migrated from the old code (io.js).
+ *
+ * @param {object} paper
+ * @param {object} config
+ *
+ * @returns oa link
+ */
+export const getOpenAccessLink = (paper, config) => {
+  if (config.service === "pubmed") {
+    if (typeof paper.pmcid !== "undefined" && paper.pmcid !== "") {
+      return (
+        "http://www.ncbi.nlm.nih.gov/pmc/articles/" + paper.pmcid + "/pdf/"
+      );
+    }
+
+    return "";
+  }
+
+  return paper.link;
+};
+
+/**
+ * Returns paper's outlink.
+ *
+ * Function migrated from the old code (io.js) - yeah it's shitty.
+ *
+ * @param {object} paper
+ * @param {object} config
+ *
+ * @returns outlink
+ */
+export const getOutlink = (paper, config) => {
+  if (config.service === "base") {
+    return paper.oa_link;
+  }
+
+  if (config.service === "openaire" && paper.resulttype.includes("dataset")) {
+    return config.url_prefix_datasets + paper.url;
+  }
+
+  if (config.url_prefix !== null) {
+    return config.url_prefix + paper.url;
+  }
+
+  if (typeof paper.url !== "undefined") {
+    return paper.url;
+  }
+
+  return "";
+};
+
+/**
+ * Returns displayable metric value.
+ *
+ * Function migrated from the old code (io.js).
+ *
+ * @param {object} paper
+ * @param {string} metric paper property name
+ *
+ * @returns metric value
+ */
+export const getVisibleMetric = (paper, metric) => {
+  if (Object.prototype.hasOwnProperty.call(paper, metric)) {
+    if (paper[metric] === "N/A") {
+      return "n/a";
+    }
+
+    return +paper[metric];
+  }
+};
+
+/**
+ * Returns internal metric value.
+ *
+ * Function migrated from the old code (io.js).
+ *
+ * @param {object} paper
+ * @param {string} metric paper property name
+ *
+ * @returns metric value
+ */
+export const getInternalMetric = (paper, metric) => {
+  if (!paper[metric] || paper[metric].toString().toLowerCase() === "n/a") {
+    return 0;
+  }
+
+  return +paper[metric];
+};
+
+/**
+ * Validator function for paper.year property.
+ *
+ * @param {string} date validated date string
+ * @returns {boolean}
+ */
+export const dateValidator = (date) => {
+  if (date.match(/^\d{3,4}$/)) {
+    return true;
+  }
+  if (date.match(/^\d{3,4}-\d{2}$/)) {
+    return true;
+  }
+  if (date.match(/^\d{3,4}-\d{2}-\d{2}$/)) {
+    return true;
+  }
+  if (date.match(/^\d{3,4}-\d{2}-\d{2}\w?\s*[-:\d]*\w?$/)) {
+    return true;
+  }
+
+  return false;
+};
+
+/**
+ * Validator function for paper.oa_state property.
+ * @param {string | number} oaState paper.oa_state property
+ * @returns {boolean}
+ */
+export const oaStateValidator = (oaState) =>
+  [0, 1, 2, 3].includes(parseInt(oaState));
+
+/**
+ * Validator for string array.
+ *
+ * @param {[string]} list string array
+ * @returns {boolean}
+ */
+export const stringArrayValidator = (list) => {
+  if (!Array.isArray(list)) {
+    return false;
+  }
+
+  return !list.map((e) => typeof e === "string").some((e) => !e);
+};
+
+/**
+ * Sanitization function for resulttype property.
+ *
+ * @param {any} value paper.resulttype
+ * @returns {[string]}
+ */
+export const resultTypeSanitizer = (value) => {
+  if (typeof value === "string") {
+    return [value];
+  }
+
+  return undefined;
+};
+
+const commentValidator = (e) =>
+  typeof e.comment === "string" && (!e.author || typeof e.author === "string");
+
+/**
+ * Validator for comments array.
+ *
+ * @param {[object]} list comments array
+ * @returns {boolean}
+ */
+export const commentArrayValidator = (list) => {
+  if (!Array.isArray(list)) {
+    return false;
+  }
+
+  return !list.map(commentValidator).some((e) => !e);
+};
+
+/**
+ * Sanitization function for comments property.
+ *
+ * @param {any} value paper.comments
+ * @returns {[object]}
+ */
+export const commentsSanitizer = (value) => {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  return value.filter(commentValidator);
 };

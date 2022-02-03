@@ -144,7 +144,7 @@ class Paper extends React.Component {
     }
 
     let gClass = "paper";
-    let pathClass = selected ? "framed" : "unframed";
+    let pathClass = "paper_path" + (selected ? " framed" : " unframed");
     let paperClass = "paper_holder";
     let sizeModifierClass = "";
     if (zoom || this.isZoomingIn()) {
@@ -181,7 +181,11 @@ class Paper extends React.Component {
           ></path>
         )}
         {!this.isDataset() && !this.isZoomingOut() && (
-          <path className="dogear" d={dogEar} ref={this.dogearRef}></path>
+          <path
+            className="paper_path dogear"
+            d={dogEar}
+            ref={this.dogearRef}
+          ></path>
         )}
         <foreignObject
           id="article_metadata"
@@ -204,7 +208,7 @@ class Paper extends React.Component {
                 <div id="icons">
                   {isOpenAccess && (
                     <p id="open-access-logo" className={sizeModifierClass}>
-                      &#61596;
+                      <i className="fas fa-lock-open"></i>
                     </p>
                   )}
                   {this.isDataset() && (
@@ -217,7 +221,7 @@ class Paper extends React.Component {
                   )}
                   {isFreeAccess && (
                     <p id="free-access-logo" className={sizeModifierClass}>
-                      &#61596;
+                      <i className="fas fa-lock-open"></i>
                     </p>
                   )}
                 </div>
@@ -383,7 +387,7 @@ class Paper extends React.Component {
 
   isDataset() {
     const { resulttype } = this.props.data;
-    return resulttype === "dataset";
+    return resulttype.includes("dataset");
   }
 }
 

@@ -13,13 +13,23 @@ import List from "../../js/components/List";
 
 import reducer from "../../js/reducers";
 import LocalizationProvider from "../../js/components/LocalizationProvider";
+import { getAuthorsList } from "../../js/utils/data";
 
 const PAPER_OA_SAFE_ID =
-  "008ea92dafd41bdb55abf7cb8b4f43deb52ac003a2b15a8c5eb8743ae021533d";
+  "18cabd2db11b6c2f6108b9fb11d07ce9ec55f2b3037f6cac6e1ea00710728958";
 
 const setup = () => {
+  data.forEach((d) => (d.authors_list = getAuthorsList(d.authors, true)));
+
   const store = createStore(reducer);
-  store.dispatch(initializeStore(config, context, data));
+  store.dispatch(
+    initializeStore(config, context, data, [], null, 800, null, null, 800, {
+      bubbleMinScale: config.bubble_min_scale,
+      bubbleMaxScale: config.bubble_max_scale,
+      paperMinScale: config.paper_min_scale,
+      paperMaxScale: config.paper_max_scale,
+    })
+  );
 
   return store;
 };

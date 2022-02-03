@@ -3,11 +3,7 @@
  *
  * add all actions that don't change anything in the map to here
  */
-export const ALLOWED_IN_ANIMATION = [
-  "SHOW_PREVIEW",
-  "HIDE_PREVIEW",
-  "STOP_ANIMATION",
-];
+export const ALLOWED_IN_ANIMATION = ["STOP_ANIMATION"];
 
 /**
  * All actions in this array are canceled without queuing when the map
@@ -20,7 +16,6 @@ export const NOT_QUEUED_IN_ANIMATION = [
   "ZOOM_OUT",
   "SELECT_PAPER",
   "DESELECT_PAPER",
-  "FILE_CLICKED",
   "SEARCH",
   "FILTER",
   "SORT",
@@ -60,34 +55,34 @@ export const preinitializeStore = (configObject) => ({
  * Action for initializing the data that aren't known in advance.
  * @param {Object} configObject the default_config.json + data_config.json
  * @param {Object} contextObject the app context
- * @param {Array}  dataArray the papers data
+ * @param {Array}  papers the papers data array
+ * @param {Array}  areas the areas data array
+ * @param {Array}  streams the streams data array
  */
 export const initializeStore = (
   configObject,
   contextObject,
-  dataArray,
-  streamData,
-  chartSize,
-  streamWidth,
-  streamHeight,
-  listHeight
-) => ({
-  type: "INITIALIZE",
-  configObject,
-  contextObject,
-  dataArray,
-  streamData,
+  papers,
+  areas,
+  streams,
   chartSize,
   streamWidth,
   streamHeight,
   listHeight,
+  scalingFactors
+) => ({
+  type: "INITIALIZE",
+  configObject,
+  contextObject,
+  papers,
+  areas,
+  streams,
+  chartSize,
+  streamWidth,
+  streamHeight,
+  listHeight,
+  scalingFactors,
 });
-
-/**
- * Action for changing the local file.
- * @param {Number} fileIndex
- */
-export const changeFile = (fileIndex) => ({ type: "FILE_CLICKED", fileIndex });
 
 export const toggleList = () => ({ type: "TOGGLE_LIST" });
 
@@ -114,8 +109,10 @@ export const highlightArea = (paper) => ({
 });
 
 export const showPreview = (paper) => ({ type: "SHOW_PREVIEW", paper });
-
 export const hidePreview = () => ({ type: "HIDE_PREVIEW" });
+
+export const showCitePaper = (paper) => ({ type: "SHOW_CITE_PAPER", paper });
+export const hideCitePaper = () => ({ type: "HIDE_CITE_PAPER" });
 
 export const updateDimensions = (chart, list) => ({
   type: "RESIZE",

@@ -167,19 +167,36 @@ img#close-button {
 
 .paper_button {
     color: white;
-    border: 1px solid $okm-red;
-    background-color: $okm-red;
+    background-color: $okm-modal-btn;
+    cursor: pointer;
+    font-weight: normal;
+
     padding: 6px 4px;
+    width: 70px;
+    margin-right: 3px;
+
+    border: 1px solid $okm-modal-btn;
     border-radius: 14px;
     -moz-border-radius: 14px;
     -webkit-border-radius: 14px;
-    cursor: pointer;
-    width: 100px;
-    font-weight: normal;
+
+    .highlighted {
+        color: $okm-red;
+    }
 
     &:hover {
-        color: $okm-red;
+        color: $okm-modal-btn;
         background-color: white;
+    }
+
+    &.main {
+        background-color: $okm-red;
+        border-color: $okm-red;
+    
+        &:hover {
+            color: $okm-red;
+            background-color: white;
+        }
     }
 }
 

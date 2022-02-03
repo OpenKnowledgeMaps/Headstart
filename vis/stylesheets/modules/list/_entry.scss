@@ -22,54 +22,37 @@
     margin-bottom: 6px;
 }
 
-#open-access-logo_list, #free-access-logo_list {
-    background-color: white;
-    color: $open-access;
-    border: 1px solid $open-access;
+.tags {
+    display: inline-block;
+}
+
+.paper-tag {
+    display: inline-block;
     padding: 2px 4px;
+    width: 100px;
+    background-color: white;
+    
+    color: $medium-blue;
+    text-align: center;
+    font-size: 10px;
+    font-weight: $fontweight400;
+
+    border: 1px solid $medium-blue;
     border-radius: 14px;
     -webkit-border-radius: 14px;
     -moz-border-radius: 14px;
-    font-size: 10px;
-    font-weight: $fontweight400;
-    display: inline-block;
-    width: 100px;
-    text-align: center;
-}
 
-.tag {
-    background-color: white;
-    display: inline;
-    color: $medium-blue;
-    border: 1px solid $medium-blue;
-    padding: 2px 4px;
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    font-size: 10px;
-    font-weight: $fontweight400;
     margin-right: 3px;
 }
 
-.tags {
-    display: inline;
+.open-access-tag, .free-access-tag {
+    color: $open-access;
+    border-color: $open-access;
 }
 
 .dataset-tag {
     color: $dataset;
-    border: 1px solid $dataset;
-    background-color: white;
-    padding: 2px 4px;
-    border-radius: 14px;
-    -webkit-border-radius: 14px;
-    -moz-border-radius: 14px;
-    width: 100px;
-    text-align: center;
-    margin-left: 6px;
-}
-
-.fa-database {
-    margin-right: 3px;
+    border-color: $dataset;
 }
 
 .resulttype-dataset {
@@ -173,7 +156,7 @@
 
     .outlink_symbol {
         font-family: FontAwesome;
-        vertical-align: top;
+        vertical-align: middle;
     }
 
     .list_details, .doi_outlink, .conceptgraph {
@@ -865,7 +848,7 @@ img#preview_page {
 
 @if $skin == "covis" {
 
-    #open-access-logo_list {
+    .open-access-tag {
         font-size: 10px;
         vertical-align: top;
         font-weight: $fontweight400;
@@ -935,10 +918,6 @@ img#preview_page {
     }
     #list_keywords {
         margin-bottom: 5px;
-    }
-
-    #free-access-logo_list, #open-access-logo_list {
-        margin-right: 3px;
     }
 
     #list_keywords {

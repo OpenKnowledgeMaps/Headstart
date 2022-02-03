@@ -7,7 +7,7 @@ options(warn=1)
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(wd) #Don't forget to set your working directory
 
-query <- 'open access' #args[2]
+query <- 'initial sediment quality guidelines' #args[2]
 service <- "base"
 params <- NULL
 params_file <- "params_base.json"
@@ -74,4 +74,5 @@ if (!exists('output_json')) {
   output_json <- detect_error(failed, service)
 }
 
-print(output_json)
+output <- fromJSON(output_json)
+#print(output_json)
