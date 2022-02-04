@@ -1,7 +1,6 @@
 .builtwith {
   margin: 15px 10px 15px 50px;
   font-size: 12px;
-  // TODO this doesn't work on mobile (footer is unreadable)
   height: 20px;
 }
 
@@ -15,7 +14,31 @@
   }
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 1210px) {
+  .builtwith {
+    font-size: 11px;
+  }
+}
+
+@media screen and (max-width: 1120px) {
+  .builtwith {
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 1030px) {
+  .builtwith {
+    font-size: 9px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .builtwith {
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 900px) {
   .builtwith {
     margin: 10px 0px 10px 20px;
     font-size: 11px;

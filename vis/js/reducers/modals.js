@@ -37,7 +37,6 @@ const modals = (
               ...action.contextObject.params,
             }
           : {},
-        showImagePreview: action.configObject.preview_type === "image",
         showPDFPreview: action.configObject.preview_type === "pdf",
         previewedPaper: null,
         useViewer: action.configObject.use_hypothesis,

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import useMatomo from "../../utils/useMatomo";
 import { getPaperPDFClickHandler } from "../../utils/data";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
+import Highlight from "../../components/Highlight";
 
 const PaperButtons = ({
   paper,
@@ -36,8 +37,8 @@ const PaperButtons = ({
     // html template starts here
     <div className="paper_buttons_row">
       {!!onPDFClick && (
-        <button className="paper_button" onClick={handlePDFButtonClick}>
-          <i className="fa fa-eye"></i>&nbsp;&nbsp;PDF
+        <button className="paper_button main" onClick={handlePDFButtonClick}>
+          <i className="far fa-file-pdf"></i>&nbsp;&nbsp;<Highlight>PDF</Highlight>
         </button>
       )}
       {showCiteButton && (

@@ -19,7 +19,6 @@ const context = (state = {}, action) => {
         titleStyle: getTitleStyle(action.configObject),
         titleLabelType: getTitleLabelType(action.configObject),
         customTitle: action.configObject.custom_title,
-        showDropdown: action.configObject.show_dropdown,
       };
     default:
       return state;

@@ -7,7 +7,6 @@ var data_config = {
     title: "",
     base_unit: "citations",
     use_area_uri: true,
-    show_dropdown: false,
     preview_type: "pdf",
     sort_options: ["relevance", "title", "authors", "year"],
     is_force_areas: true,
@@ -23,7 +22,6 @@ var data_config = {
 
     doi_outlink: true,
     filter_menu_dropdown: true,
-    sort_menu_dropdown: true,
     filter_options: ["all", "open_access"],
 
     embed_modal: true,

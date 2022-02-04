@@ -26,13 +26,6 @@ const CitePaperModal = ({ open, onClose, paper }) => {
 
   const citationText = paper ? getCitation(paper) : "";
 
-  const metadataMissing =
-    !paper ||
-    !paper.title ||
-    !paper.authors_objects ||
-    paper.authors_objects.length === 0 ||
-    !paper.year;
-
   return (
     // html template starts here
     <Modal id="cite_paper_modal" show={open} onHide={onClose}>
@@ -87,6 +80,7 @@ const CitePaperModal = ({ open, onClose, paper }) => {
             .
           </p>
         )}
+        <CopyButton textId={"copy-paper-citation"} textContent={citationText} />
       </Modal.Body>
     </Modal>
     // html template ends here

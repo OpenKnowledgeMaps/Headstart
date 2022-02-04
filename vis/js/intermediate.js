@@ -45,7 +45,6 @@ class Intermediate {
     this.actionQueue = [];
 
     const middleware = applyMiddleware(
-      createFileChangeMiddleware(),
       createActionQueueMiddleware(this),
       createScrollMiddleware(),
       createRepeatedInitializeMiddleware(this),
@@ -457,19 +456,6 @@ function createRescaleMiddleware(rescaleCallback) {
           action.contentBased,
           action.sort
         );
-      }
-      return next(action);
-    };
-  };
-}
-
-function createFileChangeMiddleware() {
-  return function ({ getState }) {
-    return (next) => (action) => {
-      if (action.type === "FILE_CLICKED") {
-        if (getState().files.current !== action.fileIndex) {
-          window.headstartInstance.tofile(action.fileIndex);
-        }
       }
       return next(action);
     };

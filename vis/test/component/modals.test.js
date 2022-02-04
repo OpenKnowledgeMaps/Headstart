@@ -89,6 +89,8 @@ const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
 };
 
 describe("Modals component", () => {
+  jest.useFakeTimers().setSystemTime(new Date("2021-01-01").getTime());
+
   let container = null;
   beforeEach(() => {
     container = document.createElement("div");
@@ -315,71 +317,7 @@ describe("Modals component", () => {
 
       expect(
         document.querySelector("#copy-paper-citation").textContent.trim()
-      ).toEqual("Doe, J. (2021). Test paper.");
-    });
-
-    it("renders citation modal with missing metadata (no DOI)", () => {
-      const paper = { ...EXAMPLE_PAPER, title: undefined };
-
-      const storeObject = setup(
-        { citedPaper: paper },
-        { service: "base", query: { text: "digital education" } }
-      );
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={storeObject.localization}>
-              <Modals />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      expect(document.querySelector(".cite-paper-warning").textContent).toEqual(
-        storeObject.localization.cite_metadata_warn_1 +
-          " " +
-          storeObject.localization.cite_metadata_warn_2 +
-          " " +
-          storeObject.localization.cite_metadata_warn_3 +
-          "."
-      );
-    });
-
-    it("renders citation modal with missing metadata (DOI available)", () => {
-      const paper = {
-        ...EXAMPLE_PAPER,
-        title: undefined,
-        list_link: { ...EXAMPLE_PAPER.list_link, isDoi: true },
-      };
-
-      const storeObject = setup(
-        { citedPaper: paper },
-        { service: "base", query: { text: "digital education" } }
-      );
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={storeObject.localization}>
-              <Modals />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      expect(document.querySelector(".cite-paper-warning").textContent).toEqual(
-        storeObject.localization.cite_metadata_warn_1 +
-          " " +
-          storeObject.localization.cite_metadata_warn_2 +
-          " " +
-          storeObject.localization.cite_metadata_warn_3 +
-          "."
-      );
+      ).toEqual("Doe, J. (2021). Test paper. https://example.com");
     });
 
     it("triggers a correct redux action when citation modal is closed", () => {
@@ -443,7 +381,7 @@ describe("Modals component", () => {
       // tbh I don't get it why the output is this and not ACM
       expect(
         document.querySelector("#copy-paper-citation").textContent.trim()
-      ).toBe("Doe, J. (2021). Test paper.");
+      ).toBe("Doe, J. (2021). Test paper. https://example.com\n https://example.com");
     });
 
     it("copies the citation to clipboard when Copy is clicked", async () => {
@@ -895,7 +833,7 @@ describe("Modals component", () => {
     it("default knowledge map info modal renders", () => {
       const storeObject = setup(
         { openInfoModal: true },
-        { service: "linkedcat", chartType: KNOWLEDGEMAP_MODE }
+        { service: "triple_km", chartType: KNOWLEDGEMAP_MODE }
       );
       const store = mockStore(storeObject);
 
@@ -918,7 +856,7 @@ describe("Modals component", () => {
     it("default streamgraph info modal renders", () => {
       const storeObject = setup(
         { openInfoModal: true },
-        { service: "linkedcat", chartType: STREAMGRAPH_MODE }
+        { service: "triple_sg", chartType: STREAMGRAPH_MODE }
       );
       const store = mockStore(storeObject);
 
@@ -941,7 +879,7 @@ describe("Modals component", () => {
     it("triggers a correct redux action when info modal is closed", () => {
       const storeObject = setup(
         { openInfoModal: true },
-        { service: "linkedcat", chartType: STREAMGRAPH_MODE }
+        { service: "triple_sg", chartType: STREAMGRAPH_MODE }
       );
       const store = mockStore(storeObject);
 
