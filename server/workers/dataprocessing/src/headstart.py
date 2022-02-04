@@ -2,16 +2,18 @@ import os
 import sys
 import copy
 import json
+import time
 import subprocess
 import pandas as pd
 import logging
+
+from redis import RedisError
 from .streamgraph import Streamgraph
-import re
 
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
-sg = Streamgraph(loglevel=os.environ.get("HEADSTART_LOGLEVEL", "INFO"))
+sg = Streamgraph(loglevel=os.environ.get("LOGLEVEL", "INFO"))
 
 
 class Dataprocessing(object):
@@ -35,6 +37,7 @@ class Dataprocessing(object):
         handler.setFormatter(formatter)
         handler.setLevel(loglevel)
         self.logger.addHandler(handler)
+        self.tunnel_open = False
 
     def add_default_params(self, params):
         default_params = copy.deepcopy(self.default_params)
@@ -49,7 +52,7 @@ class Dataprocessing(object):
         input_data = msg.get('input_data')
         return k, params, input_data
 
-    def create_map(self, params, input_data):
+    def execute_r(self, params, input_data):
         q = params.get('q')
         service = params.get('service')
         data = {}
@@ -61,19 +64,35 @@ class Dataprocessing(object):
                                 encoding="utf-8")
         stdout, stderr = proc.communicate(json.dumps(data))
         output = [o for o in stdout.split('\n') if len(o) > 0]
-        error = [o for o in stderr.split('\n') if len(o) > 0]
-        return pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
+        error = [o.encode('ascii', errors='replace').decode() for o in stderr.split('\n') if len(o) > 0]
+        self.logger.debug(error)
+        try:
+            res = pd.DataFrame(json.loads(output[-1])).to_json(orient="records")
+            return res
+        except Exception as e:
+            self.logger.error(e)
+            self.logger.error(error)
+            raise
 
     def run(self):
-        while True:
-            k, params, input_data = self.next_item()
+        while not self.tunnel_open:
+            try:
+                self.redis_store.ping()
+                self.tunnel_open = True
+            except (RedisError, ConnectionRefusedError):
+                time.sleep(600)
+        while self.tunnel_open:
+            try:
+                k, params, input_data = self.next_item()
+            except (RedisError, ConnectionRefusedError):
+                self.tunnel_open = False
             self.logger.debug(k)
             self.logger.debug(params)
             try:
                 if params.get('vis_type') == "timeline":
                     # the step of create_map can be dropped once deduplication is possible in API backend as well
                     # TODO: create deduplicate endpoint in service worker and connect to that
-                    metadata = self.create_map(params, input_data)
+                    metadata = self.execute_r(params, input_data)
                     sg_data = sg.get_streamgraph_data(json.loads(metadata),
                                                     params.get('q'),
                                                     params.get('top_n', 12),
@@ -84,7 +103,7 @@ class Dataprocessing(object):
                     res["status"] = "success"
                     self.redis_store.set(k+"_output", json.dumps(res))
                 else:
-                    res = self.create_map(params, input_data)
+                    res = self.execute_r(params, input_data)
                     self.redis_store.set(k+"_output", json.dumps(res))
             except ValueError as e:
                 self.logger.error(params)

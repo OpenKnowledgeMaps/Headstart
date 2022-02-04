@@ -85,44 +85,39 @@ deduplicate_titles <- function(metadata, list_size) {
 
 }
 
-replace_keywords_if_empty <- function(metadata, stops, service) {
+replace_keywords_if_empty <- function(metadata, stops) {
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub(" +", " ", x)}))
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
-  vplog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Documents without subjects:", length(missing_subjects)))
-  if (service == "linkedcat" || service == "linkedcat_authorview" || service == "linkedcat_browseview") {
-    metadata$subject[missing_subjects] <- metadata$bkl_caption[missing_subjects]
-    metadata$subject[is.na(metadata$subject)] <- ""
-  } else {
-    candidates = mapply(paste, metadata$title)
-    candidates = mclapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
-    candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
-    candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
-    candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
-    #candidates_trigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
-    candidates = mapply(paste, candidates, candidates_bigrams)
-    #candidates = lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
-
-    nn_corpus = Corpus(VectorSource(candidates))
-    nn_tfidf = TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec="ntn")))
-    tfidf_top = apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
-    tfidf_top_names = lapply(tfidf_top, names)
-    replacement_keywords <- mclapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, 3))
-    replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse="; ")})
-    replacement_keywords = gsub("_", " ", replacement_keywords)
-
-    metadata$subject[missing_subjects] <- replacement_keywords[missing_subjects]
+  if (length(missing_subjects) == 0) {
+    return(metadata)
   }
+  vplog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Documents without subjects:", length(missing_subjects)))
+  candidates = mapply(paste, metadata$title)
+  candidates = mclapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
+  candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
+  candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
+  candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
+  candidates = mapply(paste, candidates, candidates_bigrams)
+
+  nn_corpus = Corpus(VectorSource(candidates))
+  nn_tfidf = TermDocumentMatrix(nn_corpus)
+  tfidf_top = apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>=x2[3]]})
+  tfidf_top_names = lapply(tfidf_top, names)
+  replacement_keywords <- mclapply(tfidf_top_names, function(x) filter_out_nested_ngrams(x, 3))
+  replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse="; ")})
+  replacement_keywords = gsub("_", " ", replacement_keywords)
+
+  metadata$subject[missing_subjects] <- replacement_keywords[missing_subjects]
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
+  vplog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Documents without subjects after replacing from title:", length(missing_subjects)))
   if (length(missing_subjects) > 0) {
-    for (i in missing_subjects) {
+    foreach (i = missing_subjects) %dopar% {
       candidates = mapply(paste, metadata$title[i], metadata$paper_abstract[i])
       candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
       candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
       candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
-      candidates_bigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 2), paste, collapse="_"))), paste, collapse=" ")
-      #candidates_trigrams = lapply(lapply(candidates, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split=" ")), 3), paste, collapse="_"))), paste, collapse=" ")
+      candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
       candidates = mapply(paste, candidates, candidates_bigrams)
-      #candidates = lapply(candidates, function(x) {gsub('\\b\\d+\\s','', x)})
       nn_count = sort(table(strsplit(candidates, " ")), decreasing = T)
       replacement_keywords <- filter_out_nested_ngrams(names(nn_count), 3)
       replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse="; ")})

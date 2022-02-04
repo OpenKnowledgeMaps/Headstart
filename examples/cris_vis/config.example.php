@@ -1,3 +1,0 @@
-<?php
-$HEADSTART_PATH = "../../";
-?>

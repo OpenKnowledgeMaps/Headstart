@@ -340,11 +340,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     className="list_source"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -429,7 +424,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                 className="paper_buttons_row"
               >
                 <button
-                  className="paper_button"
+                  className="paper_button main"
                   onClick={[Function]}
                 >
                   <i
@@ -437,6 +432,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                   />
                     
                   PDF
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
                 </button>
               </div>
               <div
@@ -808,11 +812,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -860,7 +859,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 className="paper_buttons_row"
               >
                 <button
-                  className="paper_button"
+                  className="paper_button main"
                   onClick={[Function]}
                 >
                   <i
@@ -868,6 +867,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     
                   PDF
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
                 </button>
               </div>
               <div
@@ -951,11 +959,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -1001,7 +1004,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -1094,11 +1107,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -1146,7 +1154,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 className="paper_buttons_row"
               >
                 <button
-                  className="paper_button"
+                  className="paper_button main"
                   onClick={[Function]}
                 >
                   <i
@@ -1154,6 +1162,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     
                   PDF
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
                 </button>
               </div>
               <div
@@ -1237,11 +1254,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -1287,7 +1299,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -1369,11 +1391,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -1419,7 +1436,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -1512,11 +1539,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -1564,7 +1586,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 className="paper_buttons_row"
               >
                 <button
-                  className="paper_button"
+                  className="paper_button main"
                   onClick={[Function]}
                 >
                   <i
@@ -1572,6 +1594,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     
                   PDF
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
                 </button>
               </div>
               <div
@@ -1655,11 +1686,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -1705,7 +1731,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -1787,11 +1823,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -1837,7 +1868,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -1919,11 +1960,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -1969,7 +2005,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -2051,11 +2097,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -2101,7 +2142,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -2183,11 +2234,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -2233,7 +2279,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -2315,11 +2371,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -2365,7 +2416,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -2447,11 +2508,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -2497,7 +2553,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -2579,11 +2645,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -2629,7 +2690,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -2722,11 +2793,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -2774,7 +2840,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 className="paper_buttons_row"
               >
                 <button
-                  className="paper_button"
+                  className="paper_button main"
                   onClick={[Function]}
                 >
                   <i
@@ -2782,6 +2848,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     
                   PDF
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
                 </button>
               </div>
               <div
@@ -2865,11 +2940,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -2915,7 +2985,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -3040,7 +3120,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 className="paper_buttons_row"
               >
                 <button
-                  className="paper_button"
+                  className="paper_button main"
                   onClick={[Function]}
                 >
                   <i
@@ -3048,6 +3128,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     
                   PDF
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
                 </button>
               </div>
               <div
@@ -3161,7 +3250,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}
@@ -3254,11 +3353,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     className="list_source short"
                   >
                     <span
-                      className="list_in"
-                    >
-                       in 
-                    </span>
-                    <span
                       className="list_published_in"
                     >
                       <span>
@@ -3317,7 +3411,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 className="paper_buttons_row"
               >
                 <button
-                  className="paper_button"
+                  className="paper_button main"
                   onClick={[Function]}
                 >
                   <i
@@ -3325,6 +3419,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   />
                     
                   PDF
+                </button>
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
                 </button>
               </div>
               <div
@@ -3438,7 +3541,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              />
+              >
+                <button
+                  className="paper_button"
+                  onClick={[Function]}
+                >
+                  <i
+                    className="fa fa-quote-right"
+                  />
+                    Cite as
+                </button>
+              </div>
               <div
                 id="list_area"
                 onClick={[Function]}

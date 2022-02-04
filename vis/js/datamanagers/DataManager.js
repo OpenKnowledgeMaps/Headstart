@@ -8,6 +8,7 @@ import {
   getRadiusScale,
 } from "../utils/scale";
 import {
+  extractAuthors,
   getAuthorsList,
   getInternalMetric,
   getListLink,
@@ -118,7 +119,6 @@ class DataManager {
       this.__countMetrics(paper);
       this.__parseTags(paper);
       this.__parseKeywords(paper);
-      this.__parseClassification(paper);
     });
   }
 
@@ -136,6 +136,7 @@ class DataManager {
   }
 
   __parseAuthors(paper) {
+    paper.authors_objects = extractAuthors(paper.authors);
     paper.authors_list = getAuthorsList(
       paper.authors,
       this.config.convert_author_names
@@ -219,10 +220,6 @@ class DataManager {
 
   __parseKeywords(paper) {
     paper.keywords = paper.subject_orig;
-  }
-
-  __parseClassification(paper) {
-    paper.classification = paper.bkl_caption;
   }
 
   __scalePapers(size) {

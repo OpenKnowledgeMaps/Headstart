@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import requests
 
-from .test_helpers import KNOWNCASES, CASENAMES, CASEDATA, RESULTS, get_dataprocessing_result
+from .test_helpers import RANDOMCASES, CASENAMES, CASEDATA, RESULTS
 
 
 @pytest.mark.persistence
@@ -494,7 +494,7 @@ def test_get_last_version():
 
 
 @pytest.mark.persistence
-@pytest.mark.parametrize("testcase", KNOWNCASES)
+@pytest.mark.parametrize("testcase", RANDOMCASES)
 def test_create_visualization(testcase):
     caseid = testcase["caseid"]
     payload = {}
@@ -510,7 +510,7 @@ def test_create_visualization(testcase):
 
 
 @pytest.mark.persistence
-@pytest.mark.parametrize("testcase", KNOWNCASES)
+@pytest.mark.parametrize("testcase", RANDOMCASES)
 def test_write_revision(testcase):
     caseid = testcase["caseid"]
     payload = {}
@@ -522,7 +522,7 @@ def test_write_revision(testcase):
 
 
 @pytest.mark.persistence
-@pytest.mark.parametrize("testcase", KNOWNCASES)
+@pytest.mark.parametrize("testcase", RANDOMCASES)
 def test_map_exists(testcase):
     caseid = testcase["caseid"]
     payload = {}
@@ -534,7 +534,7 @@ def test_map_exists(testcase):
 
 
 @pytest.mark.persistence
-@pytest.mark.parametrize("testcase", KNOWNCASES)
+@pytest.mark.parametrize("testcase", RANDOMCASES)
 def test_map_exists_not(testcase):
     caseid = testcase["caseid"]
     invalid_id = caseid[2:]

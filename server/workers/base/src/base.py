@@ -33,12 +33,20 @@ class BaseClient(RWrapper):
             stdout, stderr = proc.communicate(json.dumps(data))
             output = [o for o in stdout.split('\n') if len(o) > 0]
             error = [o for o in stderr.split('\n') if len(o) > 0]
-            metadata = pd.DataFrame(json.loads(output[-2]))
-            text = pd.DataFrame(json.loads(output[-1]))
-            input_data = {}
-            input_data["metadata"] = metadata.to_json(orient='records')
-            input_data["text"] = text.to_json(orient='records')
-            return input_data
+            raw_metadata = json.loads(output[-2])
+            raw_text = json.loads(output[-1])
+            if isinstance(raw_metadata, dict) and raw_metadata.get('status') == "error":
+                res = raw_metadata
+            else:
+                metadata = pd.DataFrame(raw_metadata)
+                text = pd.DataFrame(raw_text)
+                input_data = {}
+                input_data["metadata"] = metadata.to_json(orient='records')
+                input_data["text"] = text.to_json(orient='records')
+                res = {}
+                res["input_data"] = input_data
+                res["params"] = params
+            return res
         except Exception as e:
             self.logger.error(e)
             self.logger.error(error)
@@ -51,14 +59,12 @@ class BaseClient(RWrapper):
             self.logger.debug(params)
             if endpoint == "search":
                 try:
-                    res = {}
+                    res = self.execute_r(params)
                     res["id"] = k
-                    res["input_data"] = self.execute_r(params)
-                    res["params"] = params
-                    if params.get('raw') is True:
+                    if res.get("status") == "error" or params.get('raw') is True:
                         self.redis_store.set(k+"_output", json.dumps(res))
                     else:
                         self.redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
                 except Exception as e:
-                    self.logger.error(e)
+                    self.logger.exception("Exception during data retrieval.")
                     self.logger.error(params)

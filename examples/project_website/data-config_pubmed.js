@@ -14,7 +14,6 @@ var data_config = {
     base_unit: "citations",
     use_area_uri: true,
     show_multiples: false,
-    show_dropdown: false,
     preview_type: "pdf",
     sort_options: ["readers", "title", "authors", "year"],
     is_force_areas: true,
@@ -32,7 +31,6 @@ var data_config = {
 
     doi_outlink: true,
     filter_menu_dropdown: true,
-    sort_menu_dropdown: true,
     filter_options: ["all", "open_access"],
 	show_keywords: true,
     

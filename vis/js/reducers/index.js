@@ -10,7 +10,6 @@ import chart from "./chart";
 import chartType from "./chartType";
 import contextLine from "./contextLine";
 import data from "./data";
-import files from "./files";
 import heading from "./heading";
 import highlightedBubble from "./highlightedBubble";
 import hyphenationLang from "./hyphenationLang";
@@ -20,7 +19,6 @@ import localization from "./localization";
 import misc from "./misc";
 import modals from "./modals";
 import paperOrder from "./paperOrder";
-import previewModal from "./previewModal";
 import query from "./query";
 import selectedBubble from "./selectedBubble";
 import selectedPaper from "./selectedPaper";
@@ -39,7 +37,6 @@ export default combineReducers({
   chartType,
   contextLine,
   data,
-  files,
   heading,
   highlightedBubble,
   hyphenationLang,
@@ -49,7 +46,6 @@ export default combineReducers({
   misc,
   modals,
   paperOrder,
-  previewModal,
   query,
   selectedBubble,
   selectedPaper,

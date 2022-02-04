@@ -10,6 +10,7 @@ import {
   closeEmbedModal,
   closeInfoModal,
   closeViperEditModal,
+  hideCitePaper,
 } from "../../js/actions";
 import {
   STREAMGRAPH_MODE,
@@ -72,6 +73,8 @@ const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
           "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
         cite_vis_km: "Please cite this knowledge map as follows",
         cite_vis_sg: "Please cite this streamgraph as follows",
+        copied_button_text: "Copied",
+        cite_paper: "Cite this paper",
       },
     },
     overrideStoreObject
@@ -81,6 +84,8 @@ const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
 };
 
 describe("Modals component", () => {
+  jest.useFakeTimers().setSystemTime(new Date("2021-01-01").getTime());
+
   let container = null;
   beforeEach(() => {
     container = document.createElement("div");
@@ -93,7 +98,7 @@ describe("Modals component", () => {
     container = null;
   });
 
-  describe("citation modal", () => {
+  describe("map citation modal", () => {
     it("base citation modal renders", () => {
       const storeObject = setup(
         { openCitationModal: true },
@@ -198,7 +203,7 @@ describe("Modals component", () => {
       );
     });
 
-    it("copies the citation to clipboard when Copy is clicked", () => {
+    it("copies the citation to clipboard when Copy is clicked", async () => {
       const storeObject = setup(
         { openCitationModal: true },
         {
@@ -209,6 +214,15 @@ describe("Modals component", () => {
       );
       const store = mockStore(storeObject);
 
+      const promise = Promise.resolve();
+      Object.assign(navigator, {
+        clipboard: {
+          writeText: () => promise,
+        },
+      });
+
+      jest.spyOn(navigator.clipboard, "writeText");
+
       act(() => {
         render(
           <Provider store={store}>
@@ -218,18 +232,8 @@ describe("Modals component", () => {
           </Provider>,
           container
         );
-      });
 
-      Object.assign(navigator, {
-        clipboard: {
-          writeText: () => {},
-        },
-      });
-
-      jest.spyOn(navigator.clipboard, "writeText");
-
-      const select = document.querySelector("#cite-button");
-      act(() => {
+        const select = document.querySelector(".indented-modal-btn");
         const event = new Event("click", { bubbles: true });
         select.dispatchEvent(event);
       });
@@ -237,6 +241,12 @@ describe("Modals component", () => {
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
         "Open Knowledge Maps (2021). Overview of research on some query. Retrieved from http://localhost/ [9 Jul 2020]."
       );
+
+      await act(() => promise);
+      const buttonLabel = document
+        .querySelector(".indented-modal-btn")
+        .textContent.trim();
+      expect(buttonLabel).toEqual(storeObject.localization.copied_button_text);
     });
 
     it("triggers a correct redux action when citation modal is closed", () => {
@@ -267,6 +277,106 @@ describe("Modals component", () => {
       const expectedPayload = closeCitationModal();
 
       expect(actions).toEqual([expectedPayload]);
+    });
+  });
+
+  describe("paper citation modal", () => {
+    const EXAMPLE_PAPER = {
+      title: "Test paper",
+      year: "2021",
+      authors_objects: [{ firstName: "John", lastName: "Doe" }],
+      list_link: { isDoi: false, address: "https://example.com" },
+    };
+
+    it("renders citation modal", () => {
+      const storeObject = setup(
+        { citedPaper: Object.assign({}, EXAMPLE_PAPER) },
+        { service: "base", query: { text: "digital education" } }
+      );
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <Modals />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
+      });
+
+      expect(document.querySelector("#cite-paper-title").textContent).toEqual(
+        storeObject.localization.cite_paper
+      );
+
+      expect(
+        document.querySelector("#copy-paper-citation").textContent.trim()
+      ).toEqual("Doe, J. (2021). Test paper. https://example.com");
+    });
+
+    it("triggers a correct redux action when citation modal is closed", () => {
+      const storeObject = setup(
+        { citedPaper: Object.assign({}, EXAMPLE_PAPER) },
+        { service: "pubmed" }
+      );
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <Modals />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
+      });
+
+      const select = document.querySelector(".modal-header .close");
+      act(() => {
+        const event = new Event("click", { bubbles: true });
+        select.dispatchEvent(event);
+      });
+
+      const actions = store.getActions();
+      const expectedPayload = hideCitePaper();
+
+      expect(actions).toEqual([expectedPayload]);
+    });
+
+    it("changes the citation style", () => {
+      const storeObject = setup(
+        { citedPaper: Object.assign({}, EXAMPLE_PAPER) },
+        {
+          service: "base",
+          query: { text: "some query" },
+        }
+      );
+      const store = mockStore(storeObject);
+
+      act(() => {
+        render(
+          <Provider store={store}>
+            <LocalizationProvider localization={storeObject.localization}>
+              <Modals />
+            </LocalizationProvider>
+          </Provider>,
+          container
+        );
+      });
+
+      const buttons = document.querySelectorAll(".cit-style-label");
+
+      act(() => {
+        const event = new MouseEvent("click", { bubbles: true });
+        buttons[3].dispatchEvent(event);
+      });
+
+      // tbh I don't get it why the output is this and not ACM
+      expect(
+        document.querySelector("#copy-paper-citation").textContent.trim()
+      ).toBe("Doe, J. (2021). Test paper. https://example.com\n https://example.com");
     });
   });
 
@@ -507,7 +617,7 @@ describe("Modals component", () => {
     it("default knowledge map info modal renders", () => {
       const storeObject = setup(
         { openInfoModal: true },
-        { service: "linkedcat", chartType: KNOWLEDGEMAP_MODE }
+        { service: "triple_km", chartType: KNOWLEDGEMAP_MODE }
       );
       const store = mockStore(storeObject);
 
@@ -530,7 +640,7 @@ describe("Modals component", () => {
     it("default streamgraph info modal renders", () => {
       const storeObject = setup(
         { openInfoModal: true },
-        { service: "linkedcat", chartType: STREAMGRAPH_MODE }
+        { service: "triple_sg", chartType: STREAMGRAPH_MODE }
       );
       const store = mockStore(storeObject);
 
@@ -553,7 +663,7 @@ describe("Modals component", () => {
     it("triggers a correct redux action when info modal is closed", () => {
       const storeObject = setup(
         { openInfoModal: true },
-        { service: "linkedcat", chartType: STREAMGRAPH_MODE }
+        { service: "triple_sg", chartType: STREAMGRAPH_MODE }
       );
       const store = mockStore(storeObject);
 

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>
+        COVID-19 Knowledge Map - CoVis</title>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="content-style-type" content="text/css">
+    <meta http-equiv="content-language" content="en">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="follow">
+    <meta name="revisit-after" content="1 month">
+    <meta name="distribution" content="global">
+    <meta name="author" content="Open Knowledge Maps">
+    <meta name="publisher" content="Open Knowledge Maps">
+    <meta name="keywords" content="knowldege visualization, open knowledge, open science">
+
+    <meta name="description"
+        content="CoVis provides a curated knowledge map of seminal works on COVID-19 research. The knowledge map is constantly evolving thanks to the collective editing of subject-matter experts.">
+
+    <!-- FAVICONS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://openknowledgemaps.org/covis/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://openknowledgemaps.org/covis/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://openknowledgemaps.org/covis/favicon-16x16.png">
+    <link rel="manifest" href="https://openknowledgemaps.org/covis/site.webmanifest">
+    <link rel="mask-icon" href="https://openknowledgemaps.org/covis/safari-pinned-tab.svg" color="#263d54">
+    <link rel="shortcut icon" href="https://openknowledgemaps.org/covis/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="CoVis">
+    <meta name="application-name" content="CoVis">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../covis/js/menu.js "></script>
+    <link type="text/css" rel="stylesheet" href="../covis/css/menu.css">
+    <link type="text/css" rel="stylesheet" href="../covis/css/main.css">
+    <link type="text/css" rel="stylesheet" href="../covis/css/map.css">
+</head>
+
+<body class="knowledge-map" style="margin:0px; padding:0px; height:100%;">
+    <header>
+        <div>
+            <div class="menu">
+                <!-- Menu icon -->
+                <div class="icon-close">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </div>
+
+                <!-- Mobile Menu -->
+                <ul>
+                    <li><a href="index">About</a></li>
+                    <li><a href="knowledge-map">COVID-19 Knowledge Map</a></li>
+                    <li><a href="data">
+                            <!--<i class="fas fa-pencil-alt"></i>--> Data Source
+                        </a></li>
+                    <li><a href="team">Team</a></li>
+                    <li><a href="faqs">FAQs</a></li>
+                    <li><a href="contact-us">Contact us</a></li>
+                </ul>
+            </div>
+
+            <div class="icon-menu">
+                <span class="awesome"><i class="fas fa-bars"></i></span>
+            </div>
+
+            <!--<div class="imglogo">
+        <a href="index"><img src="https://www.oeaw.ac.at/typo3conf/ext/oeaw_redesign/Resources/Public/Icons/logo-kurz.png"></a>
+    </div>-->
+
+            <p class="description">
+                <a href="index">CoVis</a>
+            </p>
+
+            <ul class="nav_top">
+                <li><a href="index">About</a></li>
+                <li><a href="knowledge-map">COVID-19 Knowledge Map</a></li>
+                <li><a href="data">
+                        <!--<i class="fas fa-pencil-alt"></i>--> Data Source
+                    </a></li>
+                <li><a href="team">Team</a></li>
+                <li><a href="faqs">FAQs</a></li>
+                <li><a href="contact-us">Contact us</a></li>
+            </ul>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                let hash_compare = null;
+                let path_compare = null;
+                $(".nav_top > li > a").each(function (key, item) {
+                    let hash1 = item.href.substr(item.href.lastIndexOf('#') + 1);
+                    let hash2 = location.hash.substr(location.hash.lastIndexOf('#') + 1);
+                    if (hash1 === hash2) {
+                        hash_compare = $(this);
+                    } else if (item.href.substr(item.href.lastIndexOf('/') + 1) === location.pathname.substr(location.pathname.lastIndexOf('/') + 1)) {
+                        path_compare = $(this);
+                    }
+                });
+                if (hash_compare !== null) {
+                    hash_compare.addClass("underline-menu");
+                } else if (path_compare !== null) {
+                    path_compare.addClass("underline-menu");
+                }
+            });
+        </script>
+    </header>
+    <div class="topheader"></div>
+    <div class="alert alert-warning" id="desktop-warning" style="display:none">
+
+        <a class="close" data-dismiss="alert">&times;</a>
+
+        You are using <strong>an unsupported browser</strong>. This website was successfully tested
+        with the latest versions of <strong>Firefox, Chrome, Safari, Opera, and Edge</strong>.
+        We strongly suggest <strong>to switch to one of the supported browsers.</strong>
+
+    </div>
+    <script type="text/javascript" src="../covis/js/browser-detect.js"></script>
+    <script>
+        var browser = BrowserDetect.browser;
+        if (!(browser === "Firefox" || browser === "Safari" || browser === "Chrome")) {
+            $("#desktop-warning").css("display", "block")
+        }
+    </script>
+    <div id="visualization" class="headstart"></div>
+    <div id="errors" class="errors-container"></div>
+    <footer class="builtby">
+        <div class="builtby-container">
+            <div class="info">
+                <h3 style="margin-bottom: 10px !important;">CoVis</h3>
+                <p>CoVis is a collaboration project of Open Knowledge Maps and ReFigure<br>
+                    <a href="https://openknowledgemaps.org/" target="_blank"><img class="logoimg"
+                            style="margin-right:10px"
+                            src="https://openknowledgemaps.org/img/logos/Logo-Open-Knowledge-Maps-BGwhite.png"
+                            alt="Open Knowledge Maps Logo"></a>
+                    <a href="https://refigure.org/" target="_blank"><img class="logoimg" style="margin-right:10px"
+                            src="https://openknowledgemaps.org/img/partners/refigure.png" alt="ReFigure Logo"></a>
+                </p>
+
+                <!--<p><img src="img/EU-flag_small-270x183.png" style="max-width: 50px;"> CoVis is financially supported by the <a href="https://www.eoscsecretariat.eu/funding-opportunities/COVID-19-Fast-Track-Funding" target="_blank">EOSC Secretariat</a>. EOSCsecretariat.eu has received funding from the European Union's Horizon Programme call H2020-INFRAEOSC-05-2018-2019, grant Agreement number 831644.
+            </p>-->
+            </div>
+
+            <div class="info">
+                <h3 style="margin-bottom: 10px !important;">License</h3>
+                <p>Unless otherwise noted, all content on CoVis is licensed under a Creative Commons Attribution 4.0
+                    International License. The CoVis database is made available under CC0 (Public Domain Dedication).
+                    Our software is open source and hosted on <a style="font-weight:300; text-decoration: underline;"
+                        target="_blank" href="https://github.com/OpenKnowledgeMaps/Headstart"
+                        target="_blank">Github</a>.<br>
+                    <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank"><img height="30px"
+                            style="margin-top: 10px !important;" src="https://openknowledgemaps.org/img/cc-by.png"
+                            alt="licensed under cc by"></a>
+                </p>
+            </div>
+
+            <div class="info">
+                <address style="margin-bottom: 0 !important;">
+                    <h3 style="margin-bottom: 10px !important;">Get in touch</h3>
+                    <ul class="nav_bottom">
+                        <li><a href="contact-us"><i class="fas fa-envelope"></i> Contact details</a></li>
+                        <li><a href="https://twitter.com/ok_maps" target="_blank"><i class="fab fa-twitter"></i>
+                                twitter.com/OK_Maps</a></li>
+                        <li><a href="https://twitter.com/re_figure" target="_blank"><i class="fab fa-twitter"></i>
+                                twitter.com/re_figure</a> </li>
+                    </ul>
+                </address>
+            </div>
+
+            <div class="info" style="margin-right: 0px;">
+                <h3 style="margin-bottom: 10px !important;">Legal and privacy</h3>
+                <ul class="nav_bottom">
+                    <li><a href="https://openknowledgemaps.org/imprint" target="_blank"><i class="fas fa-link"></i>
+                            Legal Notice / Impressum</a></li>
+                    <li><a href="https://openknowledgemaps.org/privacy" target="_blank"><i class="fas fa-lock"></i>
+                            Privacy Policy</a></li>
+                    <li><a href="https://openknowledgemaps.org/datenschutz" target="_blank"><i class="fas fa-lock"></i>
+                            Datenschutzerklärung</a></li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="funding-container">
+            <img src="../covis/img/EU-flag_small-270x183.png" class="funding-flag"> <span class="funding-text">This project is
+                financially supported by <a href="https://www.eoscsecretariat.eu/"
+                    target="_blank">EOSCSecretariat.eu</a>. EOSCsecretariat.eu has received funding from the European
+                Union's Horizon Programme call H2020-INFRAEOSC-05-2018-2019, grant agreement number 831644.</span>
+        </div>
+    </footer>
+    <script type="text/javascript">
+
+        function displayErrors(errors) {
+            if (errors.length > 0) {
+                $("#errors").addClass("show-errors")
+
+                let errors_info =
+                    $("<p/>", {
+                        id: "errors-info"
+                        , class: "errors-info"
+                        , html: '<i id="expand-icon" class="fa fa-plus-circle expand-icon" aria-hidden="true"/> The following errors were detected in the data sheet:</i>'
+                    });
+                $("#errors").append(errors_info);
+
+                let errors_table =
+                    $("<table/>", {
+                        id: "errors-table"
+                        , class: "errors-table errors-table-hidden"
+                    });
+
+                $("#errors").append(errors_table);
+
+                $("<tr/>", {
+                    id: "top-row"
+                    , class: "top-row"
+                }).appendTo("#errors-table");
+
+                for (let field of ["Row", "Column", "Details"]) {
+                    $("<th/>", {
+                        class: "error-row-top"
+                        , text: field
+                    }).appendTo("#top-row");
+
+                }
+
+                for (let error_num in errors) {
+                    let current_id = "error-row-" + error_num;
+                    $("<tr/>", {
+                        id: current_id
+                        , class: "error-row-entry"
+                    }).appendTo("#errors-table")
+
+                    for (let field of ["row", "column", "reason"]) {
+                        $("<td/>", {
+                            id: "error-row-row"
+                            , class: "error-row-entry"
+                            , text: errors[error_num][field]
+                        }).appendTo("#" + current_id)
+                    }
+                }
+
+            }
+
+            $("#errors-info").on("click", function () {
+                $("#errors-table").toggleClass("errors-table-hidden");
+                $("#expand-icon").toggleClass("fa-minus-circle");
+            });
+        }
+
+
+        let elem = document.getElementById('visualization');
+
+        elem.addEventListener('headstart.data.loaded', function (e) {
+            let errors = e.detail.data.errors;
+            displayErrors(errors);
+        });
+
+    </script>
+    <script type="text/javascript" src="../covis/js/data-config.js"></script>
+    <script type="text/javascript" src="../../dist/headstart.js"></script>
+    <link type="text/css" rel="stylesheet" href="../../dist/headstart.css">
+    </link>
+    <script>
+        data_config.mode = "local_files";
+        data_config.files = [{
+            title: "CoVis",
+            file: "./data/covis.json"
+        }]
+        data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "/";
+
+        $(document).ready(function () {
+            headstart.start();
+        })
+
+    </script>
+
+    <script>
+        var calcDivHeight = function () {
+
+            let height = $(window).height();
+            let width = $(window).width();
+            let calculated_height = 0;
+            let calculation_method = "";
+
+            if (height <= 730 || width < 904 || (width >= 985 && width < 1070)) {
+                calculation_method = "Height calculation min_height";
+                calculated_height = 689;
+            } else if (width >= 904 && width <= 984) {
+                calculation_method = "Height calculation no. 1";
+                calculated_height = 670 + (width - 904);
+            } else if (height >= 890 && width >= 1070 && width < 1400) {
+                calculation_method = "Height calculation no. 2";
+                calculated_height = 670 + (width - 1070) / 2;
+            } else if (width >= 1441 && height >= 1053) {
+                calculation_method = "Height calculation large";
+                calculated_height = 1000;
+            } else if (height >= 988 && height < 1053 && width >= 1404 && width < 1435) {
+                calculation_method = "Height calculation no. 3";
+                calculated_height = 670 + (width - 1170);
+            } else {
+                calculation_method = "Height calculation default";
+                calculated_height = $(window).height() - $("header").outerHeight();
+            }
+
+
+            return calculated_height;
+        }
+
+
+        $(document).ready(function () {
+            $(window).on("resize", function () {
+                let div_height = calcDivHeight();
+                $("#visualization").css("height", div_height + "px")
+            });
+            $(window).trigger('resize');
+        });
+
+    </script>
+
+</body>
+
+</html>

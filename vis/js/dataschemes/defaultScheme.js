@@ -114,7 +114,6 @@ const DEFAULT_SCHEME = [
   },
   { name: "readers", fallback: (loc) => loc.default_readers },
   { name: "tags", type: ["string"], fallback: () => "" },
-  { name: "bkl_caption", type: ["string"], fallback: (loc) => loc.no_keywords },
   { name: "doi", type: ["string"] },
   {
     name: "x",
