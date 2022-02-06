@@ -3,7 +3,7 @@
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/APIClient.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
-
+use headstart\library;
 
 function export($export_format, $metadata_json) {
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
@@ -12,19 +12,19 @@ function export($export_format, $metadata_json) {
 
 
     $payload = $metadata_json;
-    $res = $apiclient->call_persistence("export/" . $export_format, $payload);
+    #$res = $apiclient->call_persistence("export/" . $export_format, $payload);
+    $res = $apiclient->call_api("export/" . $export_format, $payload);
     return $res;
 };
 
-use headstart\library;
-
+$json = file_get_contents('php://input');
 $format = (isset($_REQUEST['format'])) ? $_REQUEST['format'] : "bibtex";
 $download = (isset($_REQUEST['download'])) ? $_REQUEST['download'] : false;
-$metadata_json = library\CommUtils::getParameter($_POST, "metadata");
-$result = export($format, $metadata_json);
+$result = export($format, $json);
 
 if (isset($result["status"]) && $result["status"] === "error") {
-    return json_encode($result);
+    header('Content-type: application/json');
+    echo json_encode($result);
 }
 
 if (isset($download) & $download==true ) {
@@ -34,18 +34,18 @@ if (isset($download) & $download==true ) {
     header('Content-type: text/plain');
 }
 
-$origin = $_SERVER['HTTP_ORIGIN'];
-$allowed_domains = [
-    'http://openknowledgemaps.org',
-    'https://openknowledgemaps.org',
-    'http://dev.openknowledgemaps.org',
-    'https://dev.openknowledgemaps.org'
-];
+// $origin = $_SERVER['HTTP_ORIGIN'];
+// $allowed_domains = [
+//     'http://openknowledgemaps.org',
+//     'https://openknowledgemaps.org',
+//     'http://dev.openknowledgemaps.org',
+//     'https://dev.openknowledgemaps.org'
+// ];
 
-if (in_array($origin, $allowed_domains)) {
-    header('Access-Control-Allow-Origin: ' . $origin);
-}
+// if (in_array($origin, $allowed_domains)) {
+//     header('Access-Control-Allow-Origin: ' . $origin);
+// }
 
-echo $result
+echo $result["result"]["export"];
 
 ?>

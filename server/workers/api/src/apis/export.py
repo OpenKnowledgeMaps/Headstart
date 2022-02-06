@@ -34,7 +34,11 @@ def transform2bibtex(metadata):
     writer = BibTexWriter()
     db.entries.append(fields)
     export = writer.write(db)
-    return export
+    result = {
+        "format": "bibtex",
+        "export": export
+    }
+    return result
 
 def parse_published_in(published_in):
     pass
@@ -51,23 +55,28 @@ class exportMetadata(Resource):
             export_ns.logger.debug(metadata)
             if format == "bibtex":
                 result = transform2bibtex(metadata)
+                headers = {'ContentType': 'application/text'}
+                code = 200
             elif format == "ris":
                 result = transform2ris(metadata)
+                headers = {'ContentType': 'application/text'}
+                code = 200
             else: 
                 result = {"status": "error",
                         "reason": "output format not recognized, must bei either bibtex or ris"}
-                headers = {'ContentType': 'application/json'}
-                result = jsonify(result)
-            return make_response(result,
-                                 500,
-                                 headers)
+                code = 400
+            export_ns.logger.debug(result)
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result),
+                                code,
+                                headers)
         except Exception as e:
             export_ns.logger.error(e)
             result = {'success': False, 'reason': e}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
-                                 500,
-                                 headers)
+                                    500,
+                                    headers)
 
 
 @export_ns.route('/service_version')
