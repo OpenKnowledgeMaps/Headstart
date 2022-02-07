@@ -22,7 +22,7 @@ const ExportPaperModal = ({ open, onClose, paper, serverUrl }) => {
   };
 
   const handleDownloadClick = () => {
-    startExportDownload(paper);
+    startExportDownload(paper, serverUrl);
     trackEvent(
       "List document",
       "Download paper export",
@@ -97,8 +97,8 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(ExportPaperModal);
 
 // the alternative solution is to really create a form in the JSX
-const startExportDownload = (paper) => {
-  const url = PAPER_EXPORT_ENDPOINT + "&download=true";
+const startExportDownload = (paper, serverUrl) => {
+  const url = serverUrl + PAPER_EXPORT_ENDPOINT + "&download=true";
 
   const form = document.createElement("form");
 

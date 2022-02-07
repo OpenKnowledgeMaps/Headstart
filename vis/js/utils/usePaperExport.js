@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const PAPER_EXPORT_ENDPOINT = "services/exportMetadata.php";
+export const PAPER_EXPORT_ENDPOINT = "services/exportMetadata.php?format=bibtex";
 
 const DATA_FALLBACK = "No data available.";
 
