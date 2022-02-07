@@ -46,6 +46,7 @@ if (isset($download) & $download==true ) {
 //     header('Access-Control-Allow-Origin: ' . $origin);
 // }
 
-echo $result["result"]["export"];
+$result = json_decode($result["result"], true);
+echo $result["export"];
 
 ?>
