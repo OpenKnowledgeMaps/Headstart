@@ -17,7 +17,7 @@ function export($export_format, $metadata_json) {
     return $res;
 };
 
-$json = file_get_contents('php://input');
+$json = $_POST['paper'];
 $format = (isset($_REQUEST['format'])) ? $_REQUEST['format'] : "bibtex";
 $download = (isset($_REQUEST['download'])) ? $_REQUEST['download'] : false;
 $result = export($format, $json);
