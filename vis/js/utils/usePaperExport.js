@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
 
-export const PAPER_EXPORT_ENDPOINT =
-  process.env.NODE_ENV === "development"
-    ? "https://dev.openknowledgemaps.org/export-endpoint/headstart/server/services/exportMetadata?format=bibtex"
-    : "https://openknowledgemaps.org/search_api/server/services/exportMetadata?format=bibtex";
+export const PAPER_EXPORT_ENDPOINT = "services/exportMetadata.php";
 
 const DATA_FALLBACK = "No data available.";
 
-const usePaperExport = (paper) => {
+const usePaperExport = (paper, serverUrl) => {
   const [exports, setExports] = useState({});
 
   useEffect(() => {
@@ -15,8 +12,8 @@ const usePaperExport = (paper) => {
       return;
     }
 
-    loadPaperExport(paper, setExports);
-  }, [setExports, paper]);
+    loadPaperExport(paper, serverUrl, setExports);
+  }, [setExports, paper, serverUrl]);
 
   if (!paper || !exports[paper.safe_id]) {
     return "";
@@ -27,8 +24,8 @@ const usePaperExport = (paper) => {
 
 export default usePaperExport;
 
-const loadPaperExport = (paper, callback) => {
-  fetch(PAPER_EXPORT_ENDPOINT, {
+const loadPaperExport = (paper, serverUrl, callback) => {
+  fetch(serverUrl + PAPER_EXPORT_ENDPOINT, {
     method: "POST",
     mode: "cors",
     headers: {

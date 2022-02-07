@@ -73,7 +73,7 @@ const mapStateToProps = (state) => ({
   viperEditObjID: state.modals.viperEditObjID,
   showPDFPreview: state.modals.showPDFPreview,
   previewedPaper: state.modals.previewedPaper,
-  serverUrl: state.modals.reloadApiProperties.headstartPath,
+  serverUrl: state.modals.apiProperties.headstartPath,
   service: state.service,
   useViewer: state.modals.useViewer,
   localization: state.localization,

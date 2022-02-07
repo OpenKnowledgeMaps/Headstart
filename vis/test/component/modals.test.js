@@ -47,7 +47,7 @@ const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
         viperEditObjID: null,
         showReloadButton: false,
         reloadLastUpdate: null,
-        reloadApiProperties: {
+        apiProperties: {
           headstartPath: null,
           sheetID: null,
           persistenceBackend: null,

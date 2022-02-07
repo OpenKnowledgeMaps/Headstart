@@ -11,11 +11,11 @@ import usePaperExport, {
 } from "../../utils/usePaperExport";
 import useMatomo from "../../utils/useMatomo";
 
-const ExportPaperModal = ({ open, onClose, paper }) => {
+const ExportPaperModal = ({ open, onClose, paper, serverUrl }) => {
   const loc = useLocalizationContext();
   const { trackEvent } = useMatomo();
 
-  const exportContent = usePaperExport(paper);
+  const exportContent = usePaperExport(paper, serverUrl);
 
   const handleCopyClick = () => {
     trackEvent("List document", "Copy paper export", "Copy export button");
@@ -87,6 +87,7 @@ const ExportPaperModal = ({ open, onClose, paper }) => {
 const mapStateToProps = (state) => ({
   open: state.modals.exportedPaper !== null,
   paper: state.modals.exportedPaper,
+  serverUrl: state.modals.apiProperties.headstartPath,
 });
 
 const mapDispatchToProps = (dispatch) => ({

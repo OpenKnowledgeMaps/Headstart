@@ -1,5 +1,5 @@
 const modals = (
-  state = { reloadApiProperties: {}, infoParams: {} },
+  state = { apiProperties: {}, infoParams: {} },
   action
 ) => {
   if (action.canceled) {
@@ -23,7 +23,7 @@ const modals = (
           : null,
         showReloadButton: action.contextObject.service === "gsheets",
         reloadLastUpdate: action.contextObject.last_update,
-        reloadApiProperties: {
+        apiProperties: {
           headstartPath: action.configObject.server_url,
           sheetID: getSheetID(action.configObject, action.contextObject),
           persistenceBackend: action.configObject.persistence_backend,

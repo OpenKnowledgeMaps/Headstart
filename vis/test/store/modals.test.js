@@ -24,7 +24,7 @@ describe("modals state", () => {
   };
 
   it("should return the initial state", () => {
-    const EXPECTED_RESULT = { reloadApiProperties: {}, infoParams: {} };
+    const EXPECTED_RESULT = { apiProperties: {}, infoParams: {} };
 
     const result = reducer(undefined, {});
 
