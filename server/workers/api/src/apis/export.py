@@ -15,18 +15,18 @@ def transform2bibtex(metadata):
     # use different field for ID
     title = metadata.get("title", "")
     author = metadata.get("authors", "")
-    abstract = metadata.get("abstract", "")
     year = metadata.get("year", "")
     doi = metadata.get("doi", "")
     id = metadata.get("id", "")
     published_in = metadata.get("published_in", "")
+    url = metadata.get("list_link", {}).get("address", "")
     fields = {
         "title": title,
         "author": author,
-        "abstract": abstract,
         "year": year,
         "doi": doi,
         "published_in": published_in,
+        "url": url,
         "ENTRYTYPE": "article",
         "ID": id
     }

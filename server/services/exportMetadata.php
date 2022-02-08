@@ -34,18 +34,6 @@ if (isset($download) & $download==true ) {
     header('Content-type: text/plain');
 }
 
-// $origin = $_SERVER['HTTP_ORIGIN'];
-// $allowed_domains = [
-//     'http://openknowledgemaps.org',
-//     'https://openknowledgemaps.org',
-//     'http://dev.openknowledgemaps.org',
-//     'https://dev.openknowledgemaps.org'
-// ];
-
-// if (in_array($origin, $allowed_domains)) {
-//     header('Access-Control-Allow-Origin: ' . $origin);
-// }
-
 $result = json_decode($result["result"], true);
 echo $result["export"];
 
