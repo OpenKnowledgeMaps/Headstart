@@ -25,7 +25,7 @@ def transform2bibtex(metadata):
         "author": author,
         "year": year,
         "doi": doi,
-        "published_in": published_in,
+        "journal": published_in,
         "url": url,
         "ENTRYTYPE": "article",
         "ID": id
