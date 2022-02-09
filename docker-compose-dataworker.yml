@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+
+  dataprocessing:
+    image: dataprocessing:${SERVICE_VERSION}
+    env_file:
+    - server/workers/dataprocessing/dataprocessing.env
+    environment:
+      SERVICE_VERSION: "${SERVICE_VERSION}"
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      REDIS_SSL: "${REDIS_SSL}"
+    restart: always
+    volumes:
+      - /opt/local/renv/cache:/renv/cache
+      - /var/log/headstart:/var/log/headstart
+    network_mode: host

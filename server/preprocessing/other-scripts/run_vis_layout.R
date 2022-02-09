@@ -15,7 +15,7 @@ library(tibble)
 library(tidyr)
 source('utils.R')
 source("vis_layout.R")
-if (Sys.getenv("HEADSTART_LOGLEVEL") == "DEBUG") {
+if (Sys.getenv("LOGLEVEL") == "DEBUG") {
   DEBUG <- FALSE
 } else {
   DEBUG <- TRUE

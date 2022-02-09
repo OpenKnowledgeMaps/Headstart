@@ -91,7 +91,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
     vclog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Number of Clusters:", num_clusters, sep=" "))
     vclog$debug(paste("CutOff-Description:", attributes(cut_off)$description))
   }
-  clusters = list("labels"=labels, "cluster"=cluster, "groups"=groups, "num_clusters"=num_clusters)
+  clusters = list("labels"=labels, "groups"=groups, "num_clusters"=num_clusters)
   return(clusters)
 
 }
