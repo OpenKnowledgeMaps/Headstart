@@ -1,33 +1,20 @@
 import os
 import json
 import uuid
-import time
-import redis
-import asyncio
-import aioredis
 import pandas as pd
 
 from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
-from apis.utils import get_key
+from apis.utils import get_key, redis_store
 
 
-redis_config = {
-    "host": os.getenv("REDIS_HOST"),
-    "port": os.getenv("REDIS_PORT"),
-    "db": os.getenv("REDIS_DB"),
-    "password": os.getenv("REDIS_PASSWORD")
-}
-redis_store = redis.StrictRedis(**redis_config)
 
 pubmed_ns = Namespace("pubmed", description="PubMed API operations")
-
-
 search_param_schema = SearchParamSchema()
 
 
-search_query = pubmed_ns.model("SearchQuery",
+pubmed_querymodel = pubmed_ns.model("SearchQuery",
                                {"q": fields.String(example='feminicide',
                                                    description='query string',
                                                    required=True),
@@ -56,7 +43,7 @@ search_query = pubmed_ns.model("SearchQuery",
 class Search(Resource):
     @pubmed_ns.doc(responses={200: 'OK',
                               400: 'Invalid search parameters'})
-    @pubmed_ns.expect(search_query)
+    @pubmed_ns.expect(pubmed_querymodel)
     @pubmed_ns.produces(["application/json", "text/csv"])
     def post(self):
         """

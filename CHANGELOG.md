@@ -1,5 +1,24 @@
 # Changelog
 
+## 2022-01-31
+
+### New features
+
+- new citation button & modal generating citations (APA, MLA, Chicago, ACM) for each paper
+
+### Changes
+
+- unified appearance and functionality of copy buttons in modals
+- FontAwesome update: new icons; reduced dependency on outer page imports
+
+### Bug fixes
+
+- fixed crashing app when a pdf preview was opened during animation
+
+### Internal
+
+- removed unused local examples; added new local examples (triple, viper, covis)
+
 ## 2022-01-20
 
 ### New features
