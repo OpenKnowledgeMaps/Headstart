@@ -33,7 +33,7 @@ library(stringr)
 
 olog <- getLogger('api.openaire')
 
-get_papers <- function(query, params, limit=NULL) {
+get_papers <- function(query, params) {
 
   olog$info(paste("vis_id:", .GlobalEnv$VIS_ID, query))
   start.time <- Sys.time()

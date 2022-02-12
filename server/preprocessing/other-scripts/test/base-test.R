@@ -7,7 +7,7 @@ options(warn=1)
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(wd) #Don't forget to set your working directory
 
-query <- 'initial sediment quality guidelines' #args[2]
+query <- 'species' #args[2]
 service <- "base"
 params <- NULL
 params_file <- "params_base.json"
@@ -46,7 +46,7 @@ ADDITIONAL_STOP_WORDS = LANGUAGE$name
 failed <- list(params=params)
 tryCatch({
   query <- sanitize_query(query)
-  input_data = get_papers(query$sanitized_query, params, limit=120)
+  input_data = get_papers(query$sanitized_query, params)
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Query failed", service, query$raw_query, paste(params, collapse=" "), err, sep="||")))
   failed$query <<- query$raw_query
