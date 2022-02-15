@@ -46,9 +46,10 @@ const PaperButtons = ({
 };
 
 const mapStateToProps = (state) => ({
-  showCiteButton: ["base", "pubmed", "triple_km", "triple_sg"].includes(
-    state.service
-  ),
+  // showCiteButton: ["base", "pubmed", "triple_km", "triple_sg"].includes(
+  //   state.service
+  // ),
+  showCiteButton: state.list.citePapers,
 });
 
 export default connect(
