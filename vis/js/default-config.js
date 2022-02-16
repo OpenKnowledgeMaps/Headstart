@@ -177,8 +177,10 @@ var config = {
     faqs_button: false,
     //url for link to faqs
     faqs_url: "",
-    // show citation button
+    // show citation button for the whole map
     show_cite_button: false,
+    // show citation button for each paper
+    cite_papers: false,
 
 /*** streamgraph settings ***/
     //streamgraph color definition
