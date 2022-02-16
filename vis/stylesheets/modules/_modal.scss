@@ -396,6 +396,8 @@ h5 {
     border-radius: 3px;
     -moz-border-radius: 3px;
 
+    word-break: break-word;
+
     &.code {
         white-space: pre-wrap;
     }
