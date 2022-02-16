@@ -18,6 +18,7 @@ const list = (
     hideUnselectedKeywords: true,
     height: null,
     citePapers: false,
+    exportPapers: false,
   },
   action
 ) => {
@@ -49,6 +50,7 @@ const list = (
         disableClicks: !config.render_map,
         height: action.listHeight,
         citePapers: config.cite_papers,
+        exportPapers: config.export_papers,
       };
     case "TOGGLE_LIST":
       return {

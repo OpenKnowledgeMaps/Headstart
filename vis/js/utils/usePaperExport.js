@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
-export const PAPER_EXPORT_ENDPOINT = "services/exportMetadata.php?format=bibtex";
+export const PAPER_EXPORT_ENDPOINT =
+  "services/exportMetadata.php?format=bibtex";
 
 const DATA_FALLBACK = "No data available.";
 
@@ -35,7 +36,12 @@ const loadPaperExport = (paper, serverUrl, callback) => {
     body: "paper=" + encodeURIComponent(JSON.stringify(paper)),
   })
     .then((response) => response.text())
-    .then((data) => callback((prev) => ({ ...prev, [paper.safe_id]: data })))
+    .then((data) =>
+      callback((prev) => ({
+        ...prev,
+        [paper.safe_id]: data ? data : DATA_FALLBACK,
+      }))
+    )
     .catch((error) => {
       console.error(error);
       callback((prev) => ({

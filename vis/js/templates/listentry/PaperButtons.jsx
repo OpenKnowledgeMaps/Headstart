@@ -62,7 +62,8 @@ const mapStateToProps = (state) => ({
   //   state.service
   // ),
   showCiteButton: state.list.citePapers,
-  showExportButton: ["base", "pubmed"].includes(state.service),
+  // showExportButton: ["base", "pubmed"].includes(state.service),
+  showExportButton: state.list.exportPapers,
 });
 
 export default connect(
