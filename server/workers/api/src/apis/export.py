@@ -36,13 +36,9 @@ def transform2bibtex(metadata):
         fields["doi"] = doi
     if url != "":
         fields["url"] = url
-    if entrytype == "article":
-        if published_in != "":
-            fields["journal"] = published_in
-        else:
-            entrytype = "misc"
     if entrytype == "misc" and published_in != "":
         entrytype = "article"
+        fields["journal"] = published_in
     if entrytype == "book":
         fields["publisher"] = published_in
     if entrytype == "inbook":
