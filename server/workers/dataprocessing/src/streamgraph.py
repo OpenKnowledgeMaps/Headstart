@@ -30,7 +30,8 @@ class Streamgraph(object):
     def get_streamgraph_data(self, metadata, query, n=12, method="count"):
         metadata = pd.DataFrame.from_records(metadata)
         df = metadata.copy()
-        df.year = pd.to_datetime(df.year).map(lambda x: x.replace(month=1, day=1))
+        df.year = pd.to_datetime(df.year, utc=True).dt.tz_convert(None)
+        df.year = pd.to_datetime(df.year.map(lambda x: x.replace(month=1, day=1).strftime('%Y-%m-%d')))
         df = df[df.subject.map(lambda x: x is not None)]
         df.subject = df.subject.map(lambda x: [s.lower() for s in self.tokenize(x)] if isinstance(x, str) else "")
         df = df[df.subject.map(lambda x: x != [])]

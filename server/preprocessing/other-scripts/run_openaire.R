@@ -46,7 +46,7 @@ limit = params$limit
 
 failed <- list(params=params)
 tryCatch({
-  input_data = get_papers(query, params, limit=limit)
+  input_data = get_papers(query, params)
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
   failed$query <<- query

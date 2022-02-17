@@ -53,8 +53,14 @@ class Search(Resource):
         if "optradio" in params:
             del params["optradio"]
         errors = search_param_schema.validate(params, partial=True)
-        params["limit"] = 120
-        params["list_size"] = 100
+        if "limit" not in params:
+            params["limit"] = 120
+        if params["limit"] > 1000:
+            params["limit"] = 1000
+        if params.get('vis_type') == "timeline":
+            params["list_size"] = params["limit"]
+        else:
+            params["list_size"] = 100
         base_ns.logger.debug(errors)
         if errors:
             abort(400, str(errors))
