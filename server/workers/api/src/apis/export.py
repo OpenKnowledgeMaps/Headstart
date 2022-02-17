@@ -55,6 +55,12 @@ def transform2bibtex(metadata):
         fields["school"] = published_in
     if entrytype == "conference":
         fields["booktitle"] = published_in
+    if entrytype == "video":
+        fields["publisher"] = published_in
+    if entrytype == "software":
+        fields["publisher"] = published_in
+    if entrytype == "thesis":
+        fields["school"] = published_in
     fields["ENTRYTYPE"] = entrytype
 
     db = BibDatabase()
@@ -125,7 +131,7 @@ def get_bibtextype(resulttype):
         "Audio": "audio",
         "Book": "book",
         "Book part": "inbook",
-        "Conference object": "conference / inproceedings // proceedings",
+        "Conference object": "inproceedings",
         "Course material": "misc",
         "Dataset": "misc",
         "Image/video": "misc",
@@ -133,13 +139,13 @@ def get_bibtextype(resulttype):
         "Journal/newspaper article": "article",
         "Journal/newspaper other content": "misc",
         "Lecture": "misc",
-        "Manuscript": "unpublished / misc",
+        "Manuscript": "unpublished",
         "Map": "misc",
         "Moving image/video": "video",
         "Musical notation": "misc",
         "Other/Unknown material": "misc",
         "Patent": "patent",
-        "Report": "techreport / report",
+        "Report": "techreport",
         "Review": "misc",
         "Software": "software",
         "Still image": "misc",
@@ -234,7 +240,7 @@ def get_bibtextype(resulttype):
         "Study Characteristics": "misc",
         "Support of Research": "misc",
         "Systematic Review": "misc",
-        "Technical Report": "techreport / report",
+        "Technical Report": "techreport",
         "Twin Study": "misc",
         "Validation Study": "misc",
         "Video Audio Media": "video",
