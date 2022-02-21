@@ -29,6 +29,10 @@ import { removeQueryParams, handleUrlAction } from "./utils/url";
 import debounce from "./utils/debounce";
 import { handleTitleAction } from "./utils/title";
 import DataManager from "./dataprocessing/managers/DataManager";
+import FetcherFactory from "./dataprocessing/fetchers/FetcherFactory";
+
+// TODO use an npm package instead
+import { BrowserDetect } from "exports-loader?exports=BrowserDetect!../lib/browser_detect.js";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -37,7 +41,7 @@ import DataManager from "./dataprocessing/managers/DataManager";
  * This class should ideally only talk to the mediator and redux
  */
 class Intermediate {
-  constructor(config, rescaleCallback) {
+  constructor(config) {
     this.config = config;
     this.dataManager = new DataManager(config);
 
@@ -49,7 +53,7 @@ class Intermediate {
       createScrollMiddleware(),
       createRepeatedInitializeMiddleware(this),
       createChartTypeMiddleware(),
-      createRescaleMiddleware(rescaleCallback),
+      createRescaleMiddleware(this.rescaleMap.bind(this)),
       createRecordActionMiddleware(),
       createQueryParameterMiddleware(),
       createPageTitleMiddleware(this)
@@ -58,7 +62,16 @@ class Intermediate {
     this.store = createStore(rootReducer, middleware);
   }
 
+  render() {
+    this.renderFrontend();
+    this.initStore();
+  }
+
   renderFrontend() {
+    const container = $("#" + this.config.tag);
+    container.addClass("headstart");
+    container.append('<div id="app-container"></div>');
+
     this.originalTitle = document.title;
 
     this.store.dispatch(preinitializeStore(this.config));
@@ -74,10 +87,23 @@ class Intermediate {
       "popstate",
       debounce(this.onBackButtonClick.bind(this), 300)
     );
+
+    this.checkBrowserVersion();
   }
 
-  initStore(backendData) {
+  // TODO split to multiple functions
+  async initStore() {
     const config = this.config;
+
+    const dataFetcher = FetcherFactory.getInstance(config.mode, {
+      serverUrl: config.server_url,
+      files: config.files,
+      isStreamgraph: config.is_streamgraph,
+    });
+    const backendData = await dataFetcher.getData();
+
+    this.dispatchDataEvent(backendData);
+
     const { size, width, height } = getChartSize(config);
 
     this.dataManager.parseData(backendData, size);
@@ -123,6 +149,9 @@ class Intermediate {
     if (paramsToRemove.length > 0) {
       removeQueryParams(...paramsToRemove);
     }
+
+    // window resizing listener
+    window.addEventListener("resize", () => this.updateDimensions());
   }
 
   /**
@@ -312,6 +341,43 @@ class Intermediate {
     }
 
     return 0.02;
+  }
+
+  checkBrowserVersion() {
+    const browser = BrowserDetect.browser;
+    if (!["Chrome", "Firefox", "Safari"].includes(browser)) {
+      const alertMsg =
+        "You are using an unsupported browser. " +
+        "This visualization was successfully tested " +
+        "with the latest versions of Firefox, Chrome, Safari, " +
+        "Opera and Edge.";
+      alert(alertMsg);
+    }
+  }
+
+  /**
+   * Dispatches a custom event that the data has been loaded for reuse outside of Headstart.
+   * @param {Object} data the raw data
+   */
+  dispatchDataEvent(data) {
+    const elem = document.getElementById(this.config.tag);
+    const event = new CustomEvent("headstart.data.loaded", {
+      detail: { data },
+    });
+    elem.dispatchEvent(event);
+  }
+
+  rescaleMap(scaleBy, baseUnit, isContentBased, initialSort) {
+    this.config.scale_by = scaleBy;
+    this.config.base_unit = baseUnit;
+    this.config.content_based = isContentBased;
+    this.config.initial_sort = initialSort;
+    // TODO this might cause a bug (or there might be more params that require setting to false)
+    // bug description: map different after rescaling to the same metric
+    this.config.dynamic_sizing = false;
+
+    // TODO this can be optimized (omit another download)
+    this.initStore();
   }
 }
 
