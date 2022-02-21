@@ -33,14 +33,12 @@ export const applyForce = (
   updatePapers,
   { areasAlpha, isForceAreas, papersAlpha, isForcePapers }
 ) => {
-  const paddedSize = size - (window.headstartInstance.padding || 0);
-
   if (isForceAreas) {
-    areaForce(areas, paddedSize, areasAlpha, updateAreas);
+    areaForce(areas, size, areasAlpha, updateAreas);
   }
 
   if (isForcePapers) {
-    paperForce(papers, areas, paddedSize, papersAlpha, updatePapers);
+    paperForce(papers, areas, size, papersAlpha, updatePapers);
   }
 };
 

@@ -28,7 +28,7 @@ import { createAnimationCallback } from "./utils/eventhandlers";
 import { removeQueryParams, handleUrlAction } from "./utils/url";
 import debounce from "./utils/debounce";
 import { handleTitleAction } from "./utils/title";
-import DataManager from "./datamanagers/DataManager";
+import DataManager from "./dataprocessing/managers/DataManager";
 
 /**
  * Class to sit between the "old" mediator and the

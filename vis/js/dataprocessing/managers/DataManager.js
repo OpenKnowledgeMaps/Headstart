@@ -6,7 +6,7 @@ import {
   getInitialCoordsScale,
   getCoordsScale,
   getRadiusScale,
-} from "../utils/scale";
+} from "../../utils/scale";
 import {
   extractAuthors,
   getAuthorsList,
@@ -17,11 +17,11 @@ import {
   getVisibleMetric,
   isOpenAccess,
   parseCoordinate,
-} from "../utils/data";
-import { transformData } from "../utils/streamgraph";
+} from "../../utils/data";
+import { transformData } from "../../utils/streamgraph";
 
-import DEFAULT_SCHEME from "../dataschemes/defaultScheme";
-import PaperSanitizer from "../utils/PaperSanitizer";
+import DEFAULT_SCHEME from "../schemes/defaultScheme";
+import PaperSanitizer from "../../utils/PaperSanitizer";
 
 const GOLDEN_RATIO = 2.6;
 
