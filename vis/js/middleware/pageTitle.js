@@ -1,11 +1,11 @@
 import { handleTitleAction } from "../utils/title";
 
-const createPageTitleMiddleware = (itm) => {
+const createPageTitleMiddleware = (originalTitle) => {
   return function ({ getState }) {
     return (next) => (action) => {
       if (!action.canceled && !action.isFromBackButton) {
         const state = getState();
-        handleTitleAction(action, itm.originalTitle, state);
+        handleTitleAction(action, originalTitle, state);
       }
 
       return next(action);

@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // needed for draggable modals (it can be refactored with react-bootstrap though)
 import "./lib/jquery-ui.min.js";
 
-import Intermediate from "./js/intermediate";
+import HeadstartRunner from "./js/HeadstartRunner";
 
 const start = (additional_config) => {
   if (data_config) {
@@ -17,8 +17,8 @@ const start = (additional_config) => {
     Object.assign(config, additional_config);
   }
 
-  const headstartRunner = new Intermediate(config);
-  headstartRunner.render();
+  const headstartRunner = new HeadstartRunner(config);
+  headstartRunner.run();
 };
 
 export { start };

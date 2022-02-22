@@ -31,7 +31,7 @@ const applyHeadstartMiddleware = (intermediate) => {
     rescaleMiddleware(intermediate.rescaleMap.bind(intermediate)),
     recordActionMiddleware,
     queryParameterMiddleware,
-    pageTitleMiddleware(intermediate)
+    pageTitleMiddleware(intermediate.originalTitle)
   );
 };
 
