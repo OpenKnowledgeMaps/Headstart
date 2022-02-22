@@ -271,63 +271,8 @@ class Intermediate {
         this.store.dispatch(applyForceAreas(newAreas, state.chart.height)),
       (newPapers) =>
         this.store.dispatch(applyForcePapers(newPapers, state.chart.height)),
-      {
-        areasAlpha: this.getAreasForceAlpha(this.dataManager.papers.length),
-        isForceAreas: this.config.is_force_areas,
-        papersAlpha: this.getPapersForceAlpha(this.dataManager.papers.length),
-        isForcePapers: this.config.is_force_papers,
-      }
+      this.config
     );
-  }
-
-  /**
-   * Returns alpha value needed for the force layout.
-   *
-   * The alpha values are adopted from the legacy code.
-   *
-   * @param {number} numOfPapers how many papers are in the vis
-   *
-   * @returns paper force layout alpha value
-   */
-  getPapersForceAlpha(numOfPapers) {
-    if (!this.config.is_force_papers || !this.config.dynamic_force_papers) {
-      return this.config.papers_force_alpha;
-    }
-    if (numOfPapers < 150) {
-      return this.config.papers_force_alpha;
-    }
-    if (numOfPapers < 200) {
-      return 0.2;
-    }
-    if (numOfPapers < 350) {
-      return 0.3;
-    }
-    if (numOfPapers < 500) {
-      return 0.4;
-    }
-
-    return 0.6;
-  }
-
-  /**
-   * Returns alpha value needed for the force layout.
-   *
-   * The alpha values are adopted from the legacy code.
-   *
-   * @param {number} numOfPapers how many papers are in the vis
-   *
-   * @returns area force layout alpha value
-   */
-  getAreasForceAlpha(numOfPapers) {
-    if (!this.config.is_force_area || !this.config.dynamic_force_area) {
-      return this.config.area_force_alpha;
-    }
-
-    if (numOfPapers < 200) {
-      return this.config.area_force_alpha;
-    }
-
-    return 0.02;
   }
 
   checkBrowserVersion() {
