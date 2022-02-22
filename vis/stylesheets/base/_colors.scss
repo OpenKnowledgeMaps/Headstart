@@ -29,6 +29,7 @@ $list_show_hide_button: #2d3e52; //#5c6d7f;
 $highlight-searchterm: #eff3f4;
 $modal-title: #2d3e52;
 $area-title-h2: #333;
+$tag-color: #333;
 
 // Additional colors for buttons etc.
 $okm-modal-btn: #2d3e52;
@@ -74,6 +75,7 @@ $highlight: #e1e5e5;
     $infolink: #444444;
     $framed-item: #3696e0;
     $dataset: #444444;
+    $tag-color: $dataset;
 }
 
 @if $skin == 'cris_vis' {
@@ -125,6 +127,7 @@ $highlight: #e1e5e5;
     $infolink: #1e6662;
     $modal-title: $medium-blue;
     $area-title-h2: $okm-blue;
+    $tag-color: $medium-blue;
 }
 
 @if $skin == 'triple' {
