@@ -1,13 +1,11 @@
 import ReactDOM from "react-dom";
 import React from "react";
-import { createStore, applyMiddleware } from "redux";
+import { createStore } from "redux";
 import { Provider } from "react-redux";
 import $ from "jquery";
 
 import rootReducer from "./reducers";
 import {
-  ALLOWED_IN_ANIMATION,
-  NOT_QUEUED_IN_ANIMATION,
   initializeStore,
   updateDimensions,
   applyForceAreas,
@@ -17,17 +15,15 @@ import {
   zoomOut,
 } from "./actions";
 
-import { STREAMGRAPH_MODE } from "./reducers/chartType";
+import applyHeadstartMiddleware from "./middleware";
 
 import { applyForce } from "./utils/force";
-import logAction from "./utils/actionLogger";
 
 import { getChartSize, getListSize } from "./utils/dimensions";
 import Headstart from "./components/Headstart";
 import { createAnimationCallback } from "./utils/eventhandlers";
-import { removeQueryParams, handleUrlAction } from "./utils/url";
+import { removeQueryParams } from "./utils/url";
 import debounce from "./utils/debounce";
-import { handleTitleAction } from "./utils/title";
 import DataManager from "./dataprocessing/managers/DataManager";
 import FetcherFactory from "./dataprocessing/fetchers/FetcherFactory";
 
@@ -48,16 +44,7 @@ class Intermediate {
     this.originalTitle = "";
     this.actionQueue = [];
 
-    const middleware = applyMiddleware(
-      createActionQueueMiddleware(this),
-      createScrollMiddleware(),
-      createRepeatedInitializeMiddleware(this),
-      createChartTypeMiddleware(),
-      createRescaleMiddleware(this.rescaleMap.bind(this)),
-      createRecordActionMiddleware(),
-      createQueryParameterMiddleware(),
-      createPageTitleMiddleware(this)
-    );
+    const middleware = applyHeadstartMiddleware(this);
 
     this.store = createStore(rootReducer, middleware);
   }
@@ -379,190 +366,6 @@ class Intermediate {
     // TODO this can be optimized (omit another download)
     this.initStore();
   }
-}
-
-/**
- * Creates an action-queuing middleware.
- *
- * When the chart is animated, most actions must not be triggered. This middleware
- * cancels them and saves them in a queue. They are fired again after the animation
- * finishes.
- *
- * It cancels all actions but those in ALLOWED_IN_ANIMATION. Those actions are then
- * queued (except those in NOT_QUEUED_IN_ANIMATION).
- *
- * @param {Object} intermediate the intermediate instance (this)
- */
-function createActionQueueMiddleware(intermediate) {
-  return ({ getState }) => {
-    return (next) => (action) => {
-      const actionQueue = intermediate.actionQueue;
-      const dispatch = intermediate.store.dispatch;
-
-      if (getState().animation !== null) {
-        if (!ALLOWED_IN_ANIMATION.includes(action.type)) {
-          if (
-            !NOT_QUEUED_IN_ANIMATION.includes(action.type) ||
-            action.isFromBackButton
-          ) {
-            actionQueue.push({ ...action });
-          }
-          action.canceled = true;
-          return next(action);
-        }
-      }
-
-      const returnValue = next(action);
-
-      if (action.type === "STOP_ANIMATION") {
-        while (actionQueue.length > 0) {
-          const queuedAction = actionQueue.shift();
-          if (!NOT_QUEUED_IN_ANIMATION.includes(queuedAction.type)) {
-            dispatch(queuedAction);
-          } else {
-            requestAnimationFrame(() => {
-              dispatch(queuedAction);
-            });
-          }
-        }
-      }
-
-      return returnValue;
-    };
-  };
-}
-
-/**
- * Creates a middleware that scrolls to a previously selected paper
- * after a zoom out.
- */
-function createScrollMiddleware() {
-  return ({ getState }) => {
-    return (next) => (action) => {
-      const selectedPaper = getState().selectedPaper;
-      const returnValue = next(action);
-      if (action.type === "ZOOM_OUT") {
-        if (selectedPaper !== null) {
-          scrollList(selectedPaper.safeId);
-        } else {
-          scrollList();
-        }
-      }
-
-      if (action.type === "ZOOM_IN") {
-        scrollList();
-      }
-
-      return returnValue;
-    };
-  };
-}
-
-/**
- * Scrolls the list on the next animation frame.
- *
- * @param {String} safeId if specified, scrolls to that paper
- */
-function scrollList(safeId) {
-  requestAnimationFrame(() => {
-    let scrollTop = 0;
-    if (safeId) {
-      scrollTop = $("#" + safeId).offset().top - $("#papers_list").offset().top;
-    }
-    $("#papers_list").animate({ scrollTop }, 0);
-  });
-}
-
-/**
- * Creates a middleware that reapplies the force layout after
- * each additional initialization.
- *
- * Used in Viper rescaling
- *
- * @param {Object} intermediate the intermediate instance (this)
- */
-function createRepeatedInitializeMiddleware(intermediate) {
-  return ({ getState }) => {
-    return (next) => (action) => {
-      const data = getState().data.list;
-      const returnValue = next(action);
-      if (action.type === "INITIALIZE" && data.length > 0) {
-        intermediate.applyForceLayout();
-      }
-
-      return returnValue;
-    };
-  };
-}
-
-/**
- * Creates a middleware that adds a boolean 'isStreamgraph' to each action.
- */
-function createChartTypeMiddleware() {
-  return ({ getState }) => {
-    return (next) => (action) => {
-      action.isStreamgraph = getState().chartType === STREAMGRAPH_MODE;
-      return next(action);
-    };
-  };
-}
-
-/**
- * Creates a middleware that calls the rescaling function on the 'SCALE' action.
- *
- * @param {Function} rescaleCallback function that rescales the map
- */
-function createRescaleMiddleware(rescaleCallback) {
-  return () => {
-    return (next) => (action) => {
-      if (action.type === "SCALE") {
-        rescaleCallback(
-          action.value,
-          action.baseUnit,
-          action.contentBased,
-          action.sort
-        );
-      }
-      return next(action);
-    };
-  };
-}
-
-function createRecordActionMiddleware() {
-  return function ({ getState }) {
-    return (next) => (action) => {
-      if (!action.canceled) {
-        const state = getState();
-        logAction(action, state);
-      }
-      return next(action);
-    };
-  };
-}
-
-function createQueryParameterMiddleware() {
-  return function () {
-    return (next) => (action) => {
-      if (!action.canceled && !action.isFromBackButton) {
-        handleUrlAction(action);
-      }
-
-      return next(action);
-    };
-  };
-}
-
-function createPageTitleMiddleware(itm) {
-  return function ({ getState }) {
-    return (next) => (action) => {
-      if (!action.canceled && !action.isFromBackButton) {
-        const state = getState();
-        handleTitleAction(action, itm.originalTitle, state);
-      }
-
-      return next(action);
-    };
-  };
 }
 
 export default Intermediate;
