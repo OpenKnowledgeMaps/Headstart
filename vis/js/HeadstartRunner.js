@@ -24,8 +24,7 @@ import DataManager from "./dataprocessing/managers/DataManager";
 import FetcherFactory from "./dataprocessing/fetchers/FetcherFactory";
 import onBackButtonClick from "./utils/backButton";
 
-// TODO use an npm package instead
-import { BrowserDetect } from "exports-loader?exports=BrowserDetect!../lib/browser_detect.js";
+import Bowser from "bowser";
 
 /**
  * Class to sit between the "old" mediator and the
@@ -64,14 +63,19 @@ class HeadstartRunner {
   }
 
   checkBrowserVersion() {
-    const browser = BrowserDetect.browser;
-    if (!["Chrome", "Firefox", "Safari"].includes(browser)) {
-      const alertMsg =
+    const browser = Bowser.getParser(window.navigator.userAgent);
+    // TODO use proper browser filtering https://www.npmjs.com/package/bowser#filtering-browsers
+    if (
+      !["chrome", "firefox", "safari", "opera", "edge"].includes(
+        browser.getBrowserName(true)
+      )
+    ) {
+      alert(
         "You are using an unsupported browser. " +
-        "This visualization was successfully tested " +
-        "with the latest versions of Firefox, Chrome, Safari, " +
-        "Opera and Edge.";
-      alert(alertMsg);
+          "This visualization was successfully tested " +
+          "with the latest versions of Firefox, Chrome, Safari, " +
+          "Opera and Edge."
+      );
     }
   }
 

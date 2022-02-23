@@ -28,6 +28,7 @@
     "@citation-js/core": "^0.5.4",
     "@citation-js/plugin-csl": "^0.5.4",
     "bootstrap": "3.4.1",
+    "bowser": "^2.11.0",
     "d3": "^3.5.17",
     "d3-ease": "^2.0.0",
     "d3-selection": "^2.0.0",
