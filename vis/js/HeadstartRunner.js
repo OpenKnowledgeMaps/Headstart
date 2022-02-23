@@ -3,13 +3,12 @@ import React from "react";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 
-import rootReducer from "./reducers";
+import rootReducer, { getInitialState } from "./reducers";
 import {
   initializeStore,
   updateDimensions,
   applyForceAreas,
   applyForcePapers,
-  preinitializeStore,
 } from "./actions";
 
 import applyHeadstartMiddleware from "./middleware";
@@ -26,12 +25,6 @@ import onBackButtonClick from "./utils/backButton";
 
 import Bowser from "bowser";
 
-/**
- * Class to sit between the "old" mediator and the
- * "new" modern frontend.
- *
- * This class should ideally only talk to the mediator and redux
- */
 class HeadstartRunner {
   constructor(config) {
     this.config = config;
@@ -40,10 +33,9 @@ class HeadstartRunner {
     this.originalTitle = document.title;
     this.actionQueue = [];
 
+    const initialState = getInitialState(this.config);
     const middleware = applyHeadstartMiddleware(this);
-    this.store = createStore(rootReducer, middleware);
-    // TODO different way to do this? - e.g. an initial state object?
-    this.store.dispatch(preinitializeStore(this.config));
+    this.store = createStore(rootReducer, initialState, middleware);
 
     this.hsContainer = document.getElementById(this.config.tag);
     this.hsContainer.classList.add("headstart");
