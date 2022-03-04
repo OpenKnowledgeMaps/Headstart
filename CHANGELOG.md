@@ -1,5 +1,11 @@
 # Changelog
 
+## 2022-03-03
+
+### Security
+
+- Routine npm security update
+
 ## 2022-02-17
 
 ### Changes
