@@ -105,16 +105,28 @@
 }
 
 .modal-content .btn-primary {
-    color: #fff;
-    background-color: $okm-modal-btn;
+    color: $okm-modal-btn;
+    background-color: white;
+    min-width: 120px;
     border-color: $okm-modal-btn;
     font-family: $link-font-family;
 }
 
 .modal-content .btn-primary:hover {
+    border-color: $link-gray;
+    color: $link-gray;
+}
+
+.modal-content .btn-primary:focus {
     background-color: white;
-    border-color: $okm-modal-btn;
-    color: $okm-modal-btn;
+    border-color: #333;
+    color: #333;
+}
+
+.modal-content .btn-primary:active {
+    background-color: white;
+    border-color: $link-gray;
+    color: $link-gray;
 }
 
 .modal-content th {
@@ -344,10 +356,11 @@ h5 {
 }
 
 .modal-header button {
-    opacity: 1.0;
+    opacity: 1;
 
     span {
-        border: 1px solid #adadad;
+        color: $okm-modal-btn;
+        border: 1px solid $okm-modal-btn;
         border-radius: 14px;
         -moz-border-radius: 14px;
         -webkit-border-radius: 14px;
@@ -356,13 +369,15 @@ h5 {
         line-height: 20px;
         font-weight: 400;
         display: block;
-    }
-}
-
-.modal-header button:hover {
-    opacity: 1.0;
-    background-color: #eff3f4;
-}
+        
+        :hover {
+            color: $link-gray;
+            opacity: 1.0;
+            background-color: transparent;
+            border: 0px solid $link-gray;
+            }
+         }
+} 
 
 .cit-style-label {
     text-decoration: none;

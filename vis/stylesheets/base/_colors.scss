@@ -9,7 +9,7 @@ $dark-blue: #2C3E52; // old: #1F77B4
 $paper-icon: #cacfd3;
 
 // OKMaps
-$okm-red: #E55137;
+$okm-red: #1F997C; //now a dark minty green 
 $okm-blue: #2C3E52;
 $okm-gray: #808B8D;
 $okm-light-gray: #E1E5E6;
@@ -25,21 +25,21 @@ $abstract-gray: #333; //#5c6d7f; //old: #444444
 $link-gray: #333;
 $journal-gray: #2C3E52; // old:#666666, 5c6d7f
 $list_metadata_title_paper: #333;
-$list_show_hide_button: #2d3e52; //#5c6d7f;
+$list_show_hide_button: #818181; //#5c6d7f;
 $highlight-searchterm: #eff3f4;
-$modal-title: #2d3e52;
+$modal-title: #333;
 $area-title-h2: #333;
 $tag-color: #333;
 
 // Additional colors for buttons etc.
-$okm-modal-btn: #2d3e52;
-$infolink: #E55137;
+$okm-modal-btn: #818181;
+$infolink: #333;
 $framed-item: #2C3E52;//gelb:#f1c500;
 $dataset: #2C3E52;
 
 $lower_value_tag: #2C316E;
 $higher_value_tag: #DC2260;
-$highlight: #e1e5e5;
+$highlight: #d4e1de;
 
 @if $skin == 'viper' {
     // Map Bubble Colors

@@ -28,26 +28,26 @@
 
 .paper-tag {
     display: inline-block;
-    padding: 2px 4px;
-    min-width: 100px;
-    background-color: white;
+    padding: 2px 20px;
+    min-width: 90px;
+    background-color: #F4F4F6;
     
     color: $tag-color;
     text-align: center;
     font-size: 10px;
     font-weight: $fontweight400;
 
-    border: 1px solid $tag-color;
     border-radius: 14px;
     -webkit-border-radius: 14px;
     -moz-border-radius: 14px;
 
     margin-right: 3px;
+    margin-bottom: 3px;
 }
 
 .open-access-tag, .free-access-tag {
-    color: $open-access;
-    border-color: $open-access;
+    color: white;
+    background-color: $open-access;
 }
 
 .dataset-tag {
@@ -190,6 +190,7 @@
             .list_published_in {
                 color: $black;
                 font-style: italic;
+                line-height: 150%;
             }
         }
     }

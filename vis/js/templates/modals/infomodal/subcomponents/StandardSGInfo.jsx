@@ -21,7 +21,7 @@ const StandardSGInfo = ({
           This streamgraph presents you with an overview of the main keywords{" "}
           {(!!customTitle || !!query) && (
             <>
-              related to <strong>{customTitle ? customTitle : query}</strong>
+              related to <strong class="hs-strong">{customTitle ? customTitle : query}</strong>
             </>
           )}{" "}
           over time. It is based on the most relevant documents related to the main keywords. Up to 1000 documents have been taken into consideration for the computation of the streamgraph. 
@@ -34,7 +34,7 @@ const StandardSGInfo = ({
         {!!customTitle && (
           <p>
             This map has a custom title and was created using the following
-            query: <strong>{query}</strong>
+            query: <strong class="hs-strong">{query}</strong>
           </p>
         )}
         <p>

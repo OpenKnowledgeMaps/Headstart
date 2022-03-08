@@ -115,8 +115,8 @@ text {
 }
 
 #filter_params, #sort {
-    color: $white;
-    background-color: $okm-modal-btn;
+    color: $okm-modal-btn;
+    background-color: $white;
     border-color: $okm-modal-btn;
     padding: 6px 4px !important;
     border-radius: 14px;
@@ -130,9 +130,8 @@ text {
 }
 
 #filter_params:hover, #sort:hover {
-    color: $okm-modal-btn;
-    background-color: $white;
-    border-color: $okm-modal-btn;
+    color: #333;
+    border-color: #333;
 }
 
 .dropdown-menu, #scale-menu {

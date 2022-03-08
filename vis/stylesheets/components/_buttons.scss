@@ -34,37 +34,36 @@ img#close-button {
     vertical-align:top;
     margin: 20px 20px 0 0;
     font-family: $link-font-family;
+    background-color: $okm-modal-btn;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
+    -moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
 }
 
 #modals .btn {
     font-size: 15px;
     height: 46px;
     width: 46px;
-    background-color: $okm-modal-btn;
-    border-color: $okm-modal-btn;
-    margin-bottom: 5px;
-    border-radius: 14px;
-    -webkit-border-radius: 14px;
-    -moz-border-radius: 14px;
+    color: white;
+    background-color: transparent;
+    border: 0px;
+    border-color: transparent;
+    margin-bottom: 0px;
     padding: 0px;
-    -moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
 }
 
 #modals .btn:hover {
-    background-color: white;
-    border-color: $okm-modal-btn;
-    color: $okm-modal-btn;
-    -moz-box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
-    box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
+    background-color: transparent;
+    border-color: transparent;
+    color: #333;
 }
 
 #modals .btn:active {
-    background-color: white;
-    border-color: $okm-modal-btn;
-    color: $okm-modal-btn;
-    -moz-box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
-    box-shadow: 0 0px 0px 0 rgba(0,0,0,0),0 0px 0px 0px rgba(0,0,0,0),0 0px 0px 0 rgba(0,0,0,0);
+    background-color: transparent;
+    border-color: transparent;
+    color: #333;
 }
 
 #modals .sharebuttons {
@@ -72,10 +71,11 @@ img#close-button {
 }
 
 .modal-content .btn-primary {
-    color: #fff;
-    background-color: $okm-modal-btn;
+    color: $okm-modal-btn;
+    background-color: white;
     border-color: $okm-modal-btn;
     font-family: $link-font-family;
+    
     border-radius: 14px;
     -moz-border-radius: 14px;
     -webkit-border-radius: 14px;
@@ -85,14 +85,20 @@ img#close-button {
 
 .modal-content .btn-primary:hover {
     background-color: white;
-    border-color: $okm-modal-btn;
-    color: $okm-modal-btn;
+    border-color: #333;
+    color: #333;
 }
 
 .modal-content .btn-primary:focus {
-    background-color: $okm-modal-btn;
-    border-color: $okm-modal-btn;
-    color: white;
+    background-color: white;
+    border-color: #333;
+    color: #333;
+}
+
+.modal-content .btn-primary:active {
+    background-color: white;
+    border-color: #333;
+    color: #333;
 }
 
 @if ($skin == "cris_vis") {
@@ -166,8 +172,8 @@ img#close-button {
 }
 
 .paper_button {
-    color: white;
-    background-color: $okm-modal-btn;
+    color: $okm-modal-btn;
+    background-color: white;
     cursor: pointer;
     font-weight: normal;
 
@@ -185,13 +191,15 @@ img#close-button {
     }
 
     &:hover {
-        color: $okm-modal-btn;
+        color: #333;
         background-color: white;
+        border: 1px solid #333;
     }
 
     &.main {
         background-color: $okm-red;
         border-color: $okm-red;
+        color: white;
     
         &:hover {
             color: $okm-red;
