@@ -21,7 +21,7 @@
     margin: auto;
     font-size: 14px;
     cursor: pointer;
-    color: #ccc;
+    color: $okm-modal-btn;
     z-index: 9; /*it was at 100 previously but that means it'll stick on top of the header of the website'*/
 }
 
@@ -35,9 +35,9 @@ img#close-button {
     margin: 20px 20px 0 0;
     font-family: $link-font-family;
     background-color: $okm-modal-btn;
-    border-radius: 14px;
-    -webkit-border-radius: 14px;
-    -moz-border-radius: 14px;
+    border-radius: 27px;
+    -webkit-border-radius: 27px;
+    -moz-border-radius: 27x;
     -moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
 }
