@@ -23,7 +23,7 @@ const ModalButtons = ({
   onViperEditClick,
   showReloadButton,
   reloadLastUpdate,
-  reloadApiProperties,
+  apiProperties,
   isEmbedded,
   visTag,
   service,
@@ -46,7 +46,7 @@ const ModalButtons = ({
       {showReloadButton && (
         <ReloadButton
           lastUpdate={reloadLastUpdate}
-          apiProperties={reloadApiProperties}
+          apiProperties={apiProperties}
         />
       )}
       {showCitationButton && <CitationButton />}
@@ -63,7 +63,7 @@ const mapStateToProps = (state) => ({
   showViperEditButton: state.modals.showViperEditButton,
   showReloadButton: state.modals.showReloadButton,
   reloadLastUpdate: state.modals.reloadLastUpdate,
-  reloadApiProperties: state.modals.reloadApiProperties,
+  apiProperties: state.modals.apiProperties,
   isEmbedded: state.misc.isEmbedded,
   visTag: state.misc.visTag,
   service: state.service,

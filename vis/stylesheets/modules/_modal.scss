@@ -163,7 +163,7 @@
     margin: 20px 0;
 }
 
-#embed_modal, #cite_modal, #cite_paper_modal {
+#embed_modal, #cite_modal, #cite_paper_modal, #export_paper_modal {
     .modal-dialog {
         width: 100%;
         max-width: 800px;
@@ -187,7 +187,7 @@
     }
 }
 
-.embed-modal-title, .cite-modal-title, .cite-paper-modal-title {
+.embed-modal-title, .cite-modal-title, .cite-paper-modal-title, .export-paper-modal-title {
     color: $modal-title;
     text-transform: uppercase;
     margin: 0px;
@@ -200,6 +200,7 @@
 
 .indented-modal-btn {
     margin-top: 20px;
+    margin-right: 10px;
 }
 
 #images_modal {
@@ -394,5 +395,10 @@ h5 {
     hyphens: none;
     border-radius: 3px;
     -moz-border-radius: 3px;
+
     word-break: break-word;
+
+    &.code {
+        white-space: pre-wrap;
+    }
 }

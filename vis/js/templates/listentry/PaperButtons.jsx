@@ -9,8 +9,10 @@ import Highlight from "../../components/Highlight";
 const PaperButtons = ({
   paper,
   showCiteButton,
+  showExportButton,
   handlePDFClick,
   handleCiteClick,
+  handleExportClick,
 }) => {
   const { trackEvent } = useMatomo();
 
@@ -24,6 +26,11 @@ const PaperButtons = ({
   const handleCiteButtonClick = () => {
     handleCiteClick(paper);
     trackEvent("List document", "Open paper citation", "Cite paper button");
+  };
+
+  const handleExportButtonClick = () => {
+    handleExportClick(paper);
+    trackEvent("List document", "Open paper export", "Export paper button");
   };
 
   return (
@@ -40,6 +47,11 @@ const PaperButtons = ({
           <i className="fa fa-quote-right"></i>&nbsp;&nbsp;Cite as
         </button>
       )}
+      {showExportButton && (
+        <button className="paper_button" onClick={handleExportButtonClick}>
+          <i className="fa fa-arrow-down"></i>&nbsp;&nbsp;Export
+        </button>
+      )}
     </div>
     // html template ends here
   );
@@ -50,6 +62,8 @@ const mapStateToProps = (state) => ({
   //   state.service
   // ),
   showCiteButton: state.list.citePapers,
+  // showExportButton: ["base", "pubmed"].includes(state.service),
+  showExportButton: state.list.exportPapers,
 });
 
 export default connect(
