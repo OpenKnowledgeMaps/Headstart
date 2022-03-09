@@ -37,17 +37,23 @@
     font-size: 10px;
     font-weight: $fontweight400;
 
-    border-radius: 14px;
-    -webkit-border-radius: 14px;
-    -moz-border-radius: 14px;
+    border-radius: 27px;
+    -webkit-border-radius: 27px;
+    -moz-border-radius: 27px;
 
     margin-right: 3px;
     margin-bottom: 3px;
 }
 
-.open-access-tag, .free-access-tag {
+.open-access-tag {
     color: white;
     background-color: $open-access;
+}
+
+.free-access-tag {
+    color: $open-access;
+    border: 1px solid $open-access;
+    background-color: white;
 }
 
 .dataset-tag {

@@ -361,9 +361,9 @@ h5 {
     span {
         color: $okm-modal-btn;
         border: 1px solid $okm-modal-btn;
-        border-radius: 14px;
-        -moz-border-radius: 14px;
-        -webkit-border-radius: 14px;
+        border-radius: 27px;
+        -moz-border-radius: 27px;
+        -webkit-border-radius: 27px;
         padding: 6px 22px;
         font-size: 14px;
         line-height: 20px;
@@ -406,7 +406,7 @@ h5 {
 .citation {
     display: block;
     padding: 10px;
-    background-color: rgba(239,243,244,1);
+    background-color: $okm-clouds;
     hyphens: none;
     border-radius: 3px;
     -moz-border-radius: 3px;
