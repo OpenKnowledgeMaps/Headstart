@@ -98,9 +98,13 @@ text {
 }
 
 #scale-menu {
-    color: $white;
-    background-color: $okm-modal-btn;
+    color: $okm-modal-btn;
+    background-color: $white;
     border-color: $okm-modal-btn;
+    border-radius: 27px;
+    -webkit-border-radius: 27px;
+    -moz-border-radius: 27x;
+    font-size: 11px;
 }
 
 .context-scale-toolbar {
@@ -109,9 +113,8 @@ text {
 }
 
 #scale-menu:hover {
-    color: $okm-modal-btn;
-    background-color: $white;
-    border-color: $okm-modal-btn;
+  color: #333;
+  border-color: #333;
 }
 
 #filter_params, #sort {
@@ -136,7 +139,7 @@ text {
 
 .dropdown-menu, #scale-menu {
     width: 190px;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .dropdown-menu {
