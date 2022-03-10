@@ -57,7 +57,7 @@ const ExportPaperModal = ({ open, onClose, paper, serverUrl }) => {
         {(!paper || !!exportContent) && (
           <>
             <p>
-              <strong style={{ fontWeight: 800 }}>BibTeX</strong>
+              <strong className="hs-strong" style={{ fontWeight: 800 }}>BibTeX</strong>
             </p>
             <div id="copy-paper-export" className="citation code">
               {exportContent}

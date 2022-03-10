@@ -31,7 +31,7 @@
     padding: 2px 20px;
     min-width: 90px;
     background-color: #F4F4F6;
-    
+
     color: $tag-color;
     text-align: center;
     font-size: 10px;
@@ -43,6 +43,8 @@
 
     margin-right: 3px;
     margin-bottom: 3px;
+
+    box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.14), 0 0px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .open-access-tag {
@@ -937,7 +939,7 @@ img#preview_page {
     .list_area {
         margin-top: 0px;
     }
-    
+
     .empty-area-warning {
         color: #cc3b6b;
     }
