@@ -386,3 +386,13 @@ h5 {
     margin-top: 5px;
     font-style: italic;
 }
+
+.citation {
+    display: block;
+    padding: 10px;
+    background-color: rgba(239,243,244,1);
+    hyphens: none;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    word-break: break-word;
+}

@@ -1,5 +1,18 @@
 # Changelog
 
+## 2022-03-03
+
+### Security
+
+- Routine npm security update
+
+## 2022-02-17
+
+### Changes
+
+- disabled the cite paper feature in main integration
+- enabled the cite paper feature in Triple
+
 ## 2022-01-31
 
 ### New features
