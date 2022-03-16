@@ -67,4 +67,10 @@ body {
 
 .modal-body a {
     color: #333;
+    text-decoration: underline;
+    
+    &:hover, &:focus {
+        color: #333 !important;
+        text-decoration: none !important;
+    }
 }

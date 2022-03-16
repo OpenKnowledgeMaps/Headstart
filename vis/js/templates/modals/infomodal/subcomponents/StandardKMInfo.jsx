@@ -23,7 +23,6 @@ const StandardKMInfo = ({
             on <strong class="hs-strong">{customTitle ? customTitle : query}</strong> based on the
             100{" "}
             <a
-              className="underline"
               target="_blank"
               rel="noreferrer"
               href="https://openknowledgemaps.org/faq#faq-most-relevant"
@@ -62,7 +61,6 @@ const StandardKMInfo = ({
           <a
             target="_blank"
             rel="noreferrer"
-            className="underline"
             href="https://openknowledgemaps.org/faq"
           >
             read our FAQs
