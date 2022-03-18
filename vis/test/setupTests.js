@@ -7,8 +7,6 @@ import Hypher from "hypher";
 window["Hypher"] = Hypher;
 window["Hypher"]["languages"] = {};
 
-window.headstartInstance = {};
-
 // replaceAll on node
 // https://stackoverflow.com/questions/9641481/how-to-create-a-string-replace-all-function/9641786
 RegExp.escape = function(text) {
