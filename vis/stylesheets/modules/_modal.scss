@@ -122,15 +122,15 @@
 }
 
 .modal-content .btn-primary:focus {
-    background-color: white;
+    background-color: white !important;
     border-color: #333;
     color: #333;
 }
 
 .modal-content .btn-primary:active {
-    background-color: white;
+    background-color: white !important;
     border-color: $link-gray;
-    color: $link-gray;
+    color: $link-gray !important;
 }
 
 .modal-content th {

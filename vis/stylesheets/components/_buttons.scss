@@ -97,9 +97,9 @@ img#close-button {
 }
 
 .modal-content .btn-primary:active {
-    background-color: white;
+    background-color: white !important;
     border-color: #333;
-    color: #333;
+    color: #333 !important;
 }
 
 @if ($skin == "cris_vis") {
