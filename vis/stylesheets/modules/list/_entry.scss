@@ -563,7 +563,7 @@ img#preview_page {
 
 .empty-area-warning {
     padding: 10px;
-    color: $okm-red;
+    color: red;
     font-size: 12px;
 }
 
@@ -599,10 +599,6 @@ img#preview_page {
                 font-weight:$fontweight400;
             }
         }
-    }
-
-    .empty-area-warning {
-        color: red;
     }
 }
 
