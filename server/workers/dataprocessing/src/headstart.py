@@ -96,7 +96,7 @@ class Dataprocessing(object):
                     sg_data = sg.get_streamgraph_data(json.loads(metadata),
                                                     params.get('q'),
                                                     params.get('top_n', 12),
-                                                    params.get('sg_method'))
+                                                    params.get('sg_method', "count"))
                     res = {}
                     res["data"] = sg.reduce_metadata_set(metadata, sg_data)
                     res["streamgraph"] = json.dumps(sg_data)

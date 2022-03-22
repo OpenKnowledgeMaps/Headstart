@@ -22,7 +22,7 @@ class Streamgraph(object):
         handler.setFormatter(formatter)
         handler.setLevel(loglevel)
         self.logger.addHandler(handler)
-    
+
     def tokenize(self, s):
         #return re.split("; | - |, |: ", s)
         return re.split("; ", s)
@@ -165,7 +165,7 @@ class Streamgraph(object):
         x, df = self.reduce_daterange(daterange, df)
         df = df[df["ids_overall"].map(lambda x: len(x) != 0)]
         return x, df.to_dict(orient="records")
-    
+
     def reduce_daterange(self, daterange, df):
         x = self.get_x_axis(daterange)
         yearly_sums = pd.DataFrame(df.y.to_list()).T.sum(axis=1)
@@ -178,7 +178,7 @@ class Streamgraph(object):
         x = x[start_index:]
         df["ids_overall"] = df.ids_timestep.map(lambda x: list(chain.from_iterable(x)))
         return x, df
-    
+
     @staticmethod
     def reduce_metadata_set(metadata, sg_data):
         metadata = pd.read_json(metadata)
