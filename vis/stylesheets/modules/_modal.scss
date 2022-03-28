@@ -421,3 +421,14 @@ h5 {
         white-space: pre-wrap;
     }
 }
+
+button.close > span {
+    font-weight: bold;
+    font-size: 14px;
+
+    &::after {
+        content: " Close";
+        font-weight: normal;
+        font-size: 12px;
+    }
+}
