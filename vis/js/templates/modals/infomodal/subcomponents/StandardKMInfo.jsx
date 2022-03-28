@@ -20,8 +20,11 @@ const StandardKMInfo = ({
         {(!!customTitle || !!query) && (
           <p>
             This knowledge map presents you with a topical overview of research
-            on <strong class="hs-strong">{customTitle ? customTitle : query}</strong> based on the
-            100{" "}
+            on{" "}
+            <strong className="hs-strong">
+              {customTitle ? customTitle : query}
+            </strong>{" "}
+            based on the 100{" "}
             <a
               target="_blank"
               rel="noreferrer"
@@ -41,7 +44,7 @@ const StandardKMInfo = ({
         {!!customTitle && (
           <p>
             This map has a custom title and was created using the following
-            query: <strong class="hs-strong">{query}</strong>
+            query: <strong className="hs-strong">{query}</strong>
           </p>
         )}
         <p>
