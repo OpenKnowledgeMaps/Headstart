@@ -140,8 +140,6 @@ var config = {
     hide_keywords_overview: true,
     //show result type (document type) in list entry
     show_resulttype: false,
-    //abstract length in characters when items are not expanded
-    abstract_small: 250,
     //sort options for sort dropdown
     sort_options: ["readers", "title", "authors", "year"],
     //filter options for filter dropdown

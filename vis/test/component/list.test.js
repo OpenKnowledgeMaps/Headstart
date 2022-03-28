@@ -48,7 +48,6 @@ const setup = (
         showDropdownSort: true,
         sortValue: "relevance",
         sortOptions: ["relevance", "year"],
-        abstractSize: 250,
         isContentBased: true,
         baseUnit: "questions",
         showKeywords: true,
