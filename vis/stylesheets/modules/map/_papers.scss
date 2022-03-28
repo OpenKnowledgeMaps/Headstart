@@ -72,10 +72,12 @@
         margin: 0px;
     }
 
-    #icons {
+    .icons {
         padding-top: 2px;
         padding-left: 2px;
         font-size: 0px;
+        white-space: nowrap;
+        overflow: hidden;
     }
 
     .large {
@@ -140,7 +142,7 @@
     }
 }
 
-#dataset-icon {
+.dataset-icon {
     display: inline-block;
     border: 0px solid $black;
     border-radius: 27px;
@@ -165,7 +167,7 @@
     }
 }
 
-#open-access-logo {
+.open-access-logo {
     font-family: 'FontAwesome';
     display:inline-block;
     background-color: $open-access;
@@ -194,7 +196,7 @@
     }
 }
 
-#free-access-logo {
+.free-access-logo {
     font-family: 'FontAwesome';
     display:inline-block;
     background-color: white;
@@ -224,12 +226,12 @@
     }
 }
 
-#title {
+.title {
     color: $papers_title;
     margin-top: 0px;
 
     &.large {
-        margin-top: 15px;
+        margin-top: 10px;
     }
     &.larger {
         margin-top: 15px;
@@ -314,7 +316,7 @@
         }
     }
     
-    #title {
+    .title {
         &.large {
             margin-top: 10px;
         }
@@ -325,7 +327,7 @@
 }
 
 @if $skin == 'linkedcat' {
-    #open-access-logo {
+    .open-access-logo {
         background-color: white;
         color: $open-access;
     }
