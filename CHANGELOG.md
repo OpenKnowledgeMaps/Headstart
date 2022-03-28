@@ -1,5 +1,12 @@
 # Changelog
 
+## 2022-03-28
+
+### Changes
+
+- Streamgraph CSS changes: rounded buttons, heading color.
+- Default timespan date in GoTriple.
+
 ## 2022-03-17
 
 ### Deprecations
