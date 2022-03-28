@@ -4,16 +4,7 @@ const localization = (state = {}, action) => {
   }
 
   switch (action.type) {
-    case "PREINITIALIZE":
-      return Object.assign(
-        {},
-        action.configObject.localization[action.configObject.language]
-      );
-    case "INITIALIZE":
-      return Object.assign(
-        {},
-        action.configObject.localization[action.configObject.language]
-      );
+    // localization does not change after the first setup
     default:
       return state;
   }

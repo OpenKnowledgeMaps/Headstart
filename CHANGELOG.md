@@ -1,5 +1,15 @@
 # Changelog
 
+## 2022-03-17
+
+### Deprecations
+
+- Unsupported browser warning is now displayed also in Opera and Edge (the only supported browsers are Chrome, Firefox and Safari).
+
+### Internal
+
+- Refactored remaining old code.
+
 ## 2022-03-03
 
 ### Security

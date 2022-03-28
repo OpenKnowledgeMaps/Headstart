@@ -5,7 +5,7 @@ import {
   oaStateValidator,
   resultTypeSanitizer,
   stringArrayValidator,
-} from "../utils/data";
+} from "../../utils/data";
 
 /**
  * Scheme object based on the metadata spreadsheet.
