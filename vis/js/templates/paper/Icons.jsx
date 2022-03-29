@@ -21,7 +21,7 @@ const Icons = ({ paper, iconClasses }) => {
         </p>
       )}
       {doctypeIcons.map((icon) => (
-        <p className={"dataset-icon " + iconClasses}>
+        <p key={icon} className={"dataset-icon " + iconClasses}>
           <i className={icon}></i>
         </p>
       ))}

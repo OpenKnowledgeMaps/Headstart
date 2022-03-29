@@ -119,10 +119,10 @@ const positionButtons = (tag) => {
     $("#modals").followTo(height, topPosition, leftOffset, 0);
   };
 
-  $(".close").click(function () {
+  $(".close").click(function (event) {
     $("#modals").css(
       "top",
-      $("#modals").position().top - $("#desktop-warning").outerHeight()
+      $("#modals").position().top - $(event.target).parent().outerHeight()
     );
 
     topPosition = $("#modals").position().top;
