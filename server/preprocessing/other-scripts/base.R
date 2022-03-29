@@ -39,7 +39,6 @@ blog <- getLogger('api.base')
 
 
 get_papers <- function(query, params,
-                       filter=NULL,
                        retry_opts=rbace::bs_retry_options(3,60,3,4)) {
 
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Search:", query))

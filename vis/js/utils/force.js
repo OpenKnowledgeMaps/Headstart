@@ -3,44 +3,44 @@ import d3 from "d3";
 /**
  * Applies force layout on the knowledge map bubbles and papers.
  * Doesn't return anything, it directly modifies the store after it's finished.
- * 
+ *
  * It doesn't depend on anything in DOM - the whole calculation doesn't render
  * anything and it doesn't use any rendered properties either. The only parameters
  * it uses are the data coordinates and dimensions and the chart size.
- * 
+ *
  * The algorithm is simple. It works iteratively in two parts.
- * 
+ *
  * Bubbles part (repeated iteratively):
  *  - moves bubbles into the chart (if they're overflowing)
  *  - pushes bubbles apart from each other if there's a collision
- * 
+ *
  * Papers part (repeated iteratively):
  *  - moves papers into the bubbles
  *  - pushes papers apart from each other if there's a collision
- * 
+ *
  * @param {Array} areas bubbles array
  * @param {Array} papers papers array (data)
- * @param {Number} size headstart chart initial size
+ * @param {Number} chartSize headstart chart initial size
  * @param {Function} updateAreas function that modifies the areas store
  * @param {Function} updatePapers function that modifies the papers store
- * @param {Object} options the config options
+ * @param {Object} config the config object
  */
 export const applyForce = (
   areas,
   papers,
-  size,
+  chartSize,
   updateAreas,
   updatePapers,
-  { areasAlpha, isForceAreas, papersAlpha, isForcePapers }
+  config
 ) => {
-  const paddedSize = size - (window.headstartInstance.padding || 0);
-
-  if (isForceAreas) {
-    areaForce(areas, paddedSize, areasAlpha, updateAreas);
+  if (config.is_force_areas) {
+    const areasAlpha = getAreasForceAlpha(papers.length, config);
+    areaForce(areas, chartSize, areasAlpha, updateAreas);
   }
 
-  if (isForcePapers) {
-    paperForce(papers, areas, paddedSize, papersAlpha, updatePapers);
+  if (config.is_force_papers) {
+    const papersAlpha = getPapersForceAlpha(papers.length, config);
+    paperForce(papers, areas, chartSize, papersAlpha, updatePapers);
   }
 };
 
@@ -175,4 +175,54 @@ const getPaperCircle = (paper) => {
   };
 
   return circle;
+};
+
+/**
+ * Returns alpha value needed for the force layout.
+ *
+ * The alpha values are adopted from the legacy code.
+ *
+ * @param {number} numOfPapers how many papers are in the vis
+ *
+ * @returns paper force layout alpha value
+ */
+const getPapersForceAlpha = (numOfPapers, config) => {
+  if (!config.is_force_papers || !config.dynamic_force_papers) {
+    return config.papers_force_alpha;
+  }
+  if (numOfPapers < 150) {
+    return config.papers_force_alpha;
+  }
+  if (numOfPapers < 200) {
+    return 0.2;
+  }
+  if (numOfPapers < 350) {
+    return 0.3;
+  }
+  if (numOfPapers < 500) {
+    return 0.4;
+  }
+
+  return 0.6;
+};
+
+/**
+ * Returns alpha value needed for the force layout.
+ *
+ * The alpha values are adopted from the legacy code.
+ *
+ * @param {number} numOfPapers how many papers are in the vis
+ *
+ * @returns area force layout alpha value
+ */
+const getAreasForceAlpha = (numOfPapers, config) => {
+  if (!config.is_force_area || !config.dynamic_force_area) {
+    return config.area_force_alpha;
+  }
+
+  if (numOfPapers < 200) {
+    return config.area_force_alpha;
+  }
+
+  return 0.02;
 };

@@ -1,4 +1,4 @@
-import DataManager from "../../js/datamanagers/DataManager";
+import DataManager from "../../js/dataprocessing/managers/DataManager";
 
 const config = {
   language: "en",
