@@ -179,6 +179,10 @@ var config = {
     show_cite_button: false,
     // show citation button for each paper
     cite_papers: false,
+    // show twitter sharing button
+    show_twitter_button: false,
+    // show email sharing button
+    show_email_button: false,
 
 /*** streamgraph settings ***/
     //streamgraph color definition

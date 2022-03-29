@@ -11,6 +11,8 @@ import EmbedButton from "../templates/buttons/EmbedButton";
 import FAQsButton from "../templates/buttons/FAQsButton";
 import ReloadButton from "../templates/buttons/ReloadButton";
 import ShareButton from "../templates/buttons/ShareButton";
+import TwitterButton from "../templates/buttons/TwitterButton";
+import EmailButton from "../templates/buttons/EmailButton";
 
 const ModalButtons = ({
   showShareButton,
@@ -28,6 +30,8 @@ const ModalButtons = ({
   visTag,
   service,
   showCitationButton,
+  showTwitterButton,
+  showEmailButton,
 }) => {
   useEffect(() => {
     if (["base", "pubmed"].includes(service) && !isEmbedded) {
@@ -38,6 +42,8 @@ const ModalButtons = ({
   return (
     <div id="modals">
       {showShareButton && <ShareButton twitterHashtags={twitterHashtags} />}
+      {showTwitterButton && <TwitterButton />}
+      {showEmailButton && <EmailButton />}
       {showEmbedButton && <EmbedButton onClick={onEmbedButtonClick} />}
       {showFAQsButton && <FAQsButton url={FAQsUrl} />}
       {showViperEditButton && (
@@ -68,6 +74,8 @@ const mapStateToProps = (state) => ({
   visTag: state.misc.visTag,
   service: state.service,
   showCitationButton: state.modals.showCitationButton,
+  showTwitterButton: state.modals.showTwitterButton,
+  showEmailButton: state.modals.showEmailButton,
 });
 
 const mapDispatchToProps = (dispatch) => ({
