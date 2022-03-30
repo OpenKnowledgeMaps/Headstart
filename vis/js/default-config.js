@@ -179,6 +179,8 @@ var config = {
     show_cite_button: false,
     // show citation button for each paper
     cite_papers: false,
+    // show export button for each paper
+    export_papers: false,
     // show twitter sharing button
     show_twitter_button: false,
     // show email sharing button
