@@ -87,6 +87,8 @@ describe("list state", () => {
         showKeywords: false,
         hideUnselectedKeywords: true,
         height: null,
+        citePapers: false,
+        exportPapers: false,
       };
 
       const result = listReducer(undefined, {});

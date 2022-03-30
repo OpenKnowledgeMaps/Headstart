@@ -2,7 +2,7 @@ import React from "react";
 import renderer from "react-test-renderer";
 import configureStore from "redux-mock-store";
 
-import ListToggle from "../../js/components/ListToggle";
+import ListToggle from "../../js/templates/ListToggle";
 import LocalizationProvider from "../../js/components/LocalizationProvider";
 
 const mockStore = configureStore([]);
