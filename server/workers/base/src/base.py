@@ -54,6 +54,23 @@ class BaseClient(RWrapper):
 
     def get_contentproviders(self):
         cmd = [self.command, "run_base_contentproviders.R", self.wd]
+        try:
+            proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                    encoding='utf-8')
+            stdout, stderr = proc.communicate(json.dumps({}))
+            output = [o for o in stdout.split('\n') if len(o) > 0]
+            error = [o for o in stderr.split('\n') if len(o) > 0]
+            raw = json.loads(output[-1])
+            if isinstance(raw, dict) and raw.get('status') == "error":
+                res = raw
+            else:
+                contentproviders = pd.DataFrame(raw)
+                res = {}
+                res["contentproviders"] = contentproviders
+            return res
+        except Exception as e:
+            self.logger.error(e)
+            self.logger.error(error)
 
     def run(self):
         while True:
@@ -74,4 +91,13 @@ class BaseClient(RWrapper):
 
             if endpoint == "contentproviders":
                 try:
-                    res = self.execute
+                    res = self.get_contentproviders()
+                    res["id"] = k
+                    if res.get("status") == "error" or params.get('raw') is True:
+                        self.redis_store.set(k+"_output", json.dumps(res))
+                    else:
+                        self.redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
+                except Exception as e:
+                    self.logger.exception("Exception during retrieval of contentproviders.")
+                    self.logger.error(params)
+
