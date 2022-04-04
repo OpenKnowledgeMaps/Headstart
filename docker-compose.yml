@@ -52,7 +52,6 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_DB: "${REDIS_DB}"
-      REDIS_SSL: "${REDIS_SSL}"
       BEHIND_PROXY: "${BEHIND_PROXY}"
       DEFAULT_DATABASE: "${DEFAULT_DATABASE}"
       DATABASES: "${DATABASES}"
@@ -90,7 +89,6 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
       TRIPLE_USER: "${TRIPLE_USER}"
       TRIPLE_PASS: "${TRIPLE_PASS}"
@@ -115,7 +113,6 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
     restart: always
     depends_on:
@@ -133,7 +130,6 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
     restart: always
     volumes:
@@ -152,7 +148,6 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
       LOGFILE: "/var/log/headstart/headstart.log"
       RENV_VERSION: 0.14.0-5
@@ -178,7 +173,6 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
       LOGFILE: "/var/log/headstart/headstart.log"
       RENV_VERSION: 0.14.0-5
@@ -204,7 +198,6 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
       LOGFILE: "/var/log/headstart/headstart.log"
       RENV_VERSION: 0.14.0-5
