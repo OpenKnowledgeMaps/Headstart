@@ -90,6 +90,7 @@ class BaseClient(RWrapper):
                 except Exception as e:
                     self.logger.exception("Exception during data retrieval.")
                     self.logger.error(params)
+                    self.logger.error(e)
 
             if endpoint == "contentproviders":
                 try:
@@ -99,4 +100,5 @@ class BaseClient(RWrapper):
                 except Exception as e:
                     self.logger.exception("Exception during retrieval of contentproviders.")
                     self.logger.error(params)
+                    self.logger.error(e)
 
