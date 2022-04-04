@@ -20,7 +20,7 @@ class BaseClient(RWrapper):
         endpoint = msg.get('endpoint')
         return k, params, endpoint
 
-    def execute_r(self, params):
+    def execute_search(self, params):
         q = params.get('q')
         service = params.get('service')
         data = {}
@@ -52,6 +52,8 @@ class BaseClient(RWrapper):
             self.logger.error(error)
             raise
 
+    def execute_contentproviders(self):
+
     def run(self):
         while True:
             k, params, endpoint = self.next_item()
@@ -59,7 +61,7 @@ class BaseClient(RWrapper):
             self.logger.debug(params)
             if endpoint == "search":
                 try:
-                    res = self.execute_r(params)
+                    res = self.execute_search(params)
                     res["id"] = k
                     if res.get("status") == "error" or params.get('raw') is True:
                         self.redis_store.set(k+"_output", json.dumps(res))
@@ -68,3 +70,7 @@ class BaseClient(RWrapper):
                 except Exception as e:
                     self.logger.exception("Exception during data retrieval.")
                     self.logger.error(params)
+
+            if endpoint == "contentproviders":
+                try:
+                    res = self.execute
