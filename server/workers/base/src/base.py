@@ -52,7 +52,8 @@ class BaseClient(RWrapper):
             self.logger.error(error)
             raise
 
-    def execute_contentproviders(self):
+    def get_contentproviders(self):
+        cmd = [self.command, "run_base_contentproviders.R", self.wd]
 
     def run(self):
         while True:
