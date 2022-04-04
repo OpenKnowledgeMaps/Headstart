@@ -9,6 +9,7 @@ renv::restore(lockfile = '../renv.lock')
 Sys.setlocale(category="LC_ALL", locale = "en_US.UTF-8")
 
 library(jsonlite)
+library(rbace)
 library(logging)
 
 source('utils.R')
