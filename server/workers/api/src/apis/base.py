@@ -112,13 +112,14 @@ class ContentProvider(Resource):
     def post(self):
         """
         params: can be empty
-        content_provider: BASE internal name, e.g. "fthsaugsburg"
+        content_provider: BASE internal name, e.g. "ftunivlausanne"
 
         returns: json
-        {"contentprovider_short": "fthsaugsburg",
-         "contentprovider_long": "OPUS - Publikationsserver der Hochschule Augsburg"}
+        {"contentprovider_short": "ftunivlausanne",
+         "contentprovider_long": "Université de Lausanne (UNIL): Serval - Serveur académique lausannois"}
         """
         params = request.get_json()
+        base_ns.logger.debug(params)
         if not params:
             result = contentprovider_lookup
         else:

@@ -109,6 +109,15 @@ function search($service_integration, $dirty_query
     }
     $unique_id = ($precomputed_id === null)?($unique_id):($precomputed_id);
     $post_params["vis_id"] = $unique_id;
+    if (array_key_exists("repo", $post_params)) {
+      $payload = json_encode(array("repo" => $post_params["repo"]));
+      $res = $apiclient->call_api($endpoint . "/contentproviders", $payload);
+      $res = $res["result"];
+      $res = json_decode($res, true);
+      $contentprovider_long = $res["contentprovider_long"];
+      $post_params["contentprovider_long"] = $contentprovider_long;
+      $param_types[] = "contentprovider_long";
+    }
     $params_json = packParamsJSON($param_types, $post_params);
 
     if($retrieve_cached_map) {
