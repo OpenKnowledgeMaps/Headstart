@@ -21,6 +21,8 @@ class SearchParamSchema(Schema):
     unique_id = fields.Str()
     raw = fields.Boolean()
     sg_method = fields.Str()
+    repo = fields.Str()
+    coll = fields.Str()
     vis_id = fields.Str(default=None)
     optradio = fields.Str()
     service = fields.Str()
