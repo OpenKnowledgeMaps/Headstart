@@ -4,8 +4,16 @@ from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 from bibtexparser.bwriter import BibTexWriter 
 from bibtexparser.bibdatabase import BibDatabase
+import dateutil.parser as parser
 
 export_ns = Namespace("export", description="metadata export API operations")
+
+
+def parse_date(date):
+    parsed_date = {}
+    tmp = parser.parse(date)
+    parsed_date["year"] = tmp.year
+    return parsed_date
 
 def transform2bibtex(metadata):
     # TODO: add mapping from resulttype to ARTICLETYPE
@@ -15,7 +23,11 @@ def transform2bibtex(metadata):
     # use different field for ID
     title = metadata.get("title", "")
     author = metadata.get("authors", "")
-    year = metadata.get("year", "")
+    if year in metadata:
+        parsed_date = parse_date(metadata.get("year", ""))
+        year = parsed_date.year
+    else:
+        year = ""
     doi = metadata.get("doi", "")
     id = metadata.get("id", "")
     published_in = metadata.get("published_in", "")

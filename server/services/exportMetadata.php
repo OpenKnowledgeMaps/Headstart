@@ -27,6 +27,10 @@ if (isset($result["status"]) && $result["status"] === "error") {
     echo json_encode($result);
 }
 
+if ($format == "bibtex") {
+    $format = "bib";
+}
+
 if (isset($download) & $download==true ) {
     header('Content-type: application/text');
     header('Content-Disposition: attachment; filename=metadata.' . $format);
