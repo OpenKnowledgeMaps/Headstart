@@ -23,7 +23,7 @@ def transform2bibtex(metadata):
     # use different field for ID
     title = metadata.get("title", "")
     author = metadata.get("authors", "")
-    if year in metadata:
+    if "year" in metadata:
         parsed_date = parse_date(metadata.get("year", ""))
         year = parsed_date.year
     else:
