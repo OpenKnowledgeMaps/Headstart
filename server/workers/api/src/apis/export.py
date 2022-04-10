@@ -25,7 +25,7 @@ def transform2bibtex(metadata):
     author = metadata.get("authors", "")
     if "year" in metadata:
         parsed_date = parse_date(metadata.get("year", ""))
-        year = parsed_date.year
+        year = parsed_date["year"]
     else:
         year = ""
     doi = metadata.get("doi", "")
