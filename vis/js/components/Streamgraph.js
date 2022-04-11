@@ -268,11 +268,11 @@ class Streamgraph extends React.Component {
     });
 
     labels
-      .on("mouseover", (d) => this.handleStreamMouseover(container, d))
+      .on("mouseover", (label) => this.handleStreamMouseover(container, label))
       .on("mouseout", () => this.handleStreamMouseout(container))
-      .on("mousemove", function (d) {
-        self.handleStreamMousemove(container, d3.event, d, xScale);
-      });
+      .on("mousemove", (label) =>
+        this.handleStreamMousemove(d3.event, label, xScale)
+      );
 
     labels.on("click", (d) => this.props.onAreaClick(d));
   }
@@ -284,7 +284,6 @@ class Streamgraph extends React.Component {
    * @param {Function} xScale x coordinate scaling function
    */
   renderLabelsBoxes(container, xScale) {
-    const self = this;
     const labels = container.selectAll(".label");
     labels[0].forEach((label) => {
       const bbox = label.getBBox();
@@ -306,9 +305,9 @@ class Streamgraph extends React.Component {
           this.handleStreamMouseover(container, currentData)
         )
         .on("mouseout", () => this.handleStreamMouseout(container))
-        .on("mousemove", function (d) {
-          self.handleStreamMousemove(container, d3.event, currentData, xScale);
-        });
+        .on("mousemove", (d) =>
+          this.handleStreamMousemove(d3.event, currentData, xScale)
+        );
 
       boxes.on("click", () => this.props.onAreaClick(currentData));
 
@@ -341,8 +340,6 @@ class Streamgraph extends React.Component {
    * @param {Function} xScale x coordinate scaling function
    */
   renderTooltip(container, xScale) {
-    let self = this;
-
     const previousTooltip = d3.select("#tooltip");
     if (previousTooltip.empty() || previousTooltip.classed("hidden")) {
       previousTooltip.remove();
@@ -356,11 +353,21 @@ class Streamgraph extends React.Component {
 
     container
       .selectAll(".stream")
-      .on("mouseover", (d) => this.handleStreamMouseover(container, d))
+      .on("mouseover", (s) => this.handleStreamMouseover(container, s))
       .on("mouseout", () => this.handleStreamMouseout(container))
-      .on("mousemove", function (d) {
-        self.handleStreamMousemove(container, d3.event, d, xScale);
-      });
+      .on("mousemove", (s) => this.handleStreamMousemove(d3.event, s, xScale));
+  }
+
+  getRelativeMouseCoords(event) {
+    const realX = event.clientX;
+    const realY = event.clientY;
+
+    const sgOffset = $("#streamgraph_subject").offset();
+
+    return {
+      x: realX - sgOffset.left,
+      y: realY - sgOffset.top,
+    };
   }
 
   /**
@@ -379,17 +386,14 @@ class Streamgraph extends React.Component {
       .attr("class", "line_helper")
       .style("height", height);
 
-    const moveLine = function (event) {
-      lineHelper.style("left", event.clientX + LINE_HELPER_MARGIN + "px");
+    const moveLine = (event) => {
+      const { x } = this.getRelativeMouseCoords(event);
+      lineHelper.style("left", x + LINE_HELPER_MARGIN + "px");
     };
 
     container
-      .on("mousemove", function () {
-        moveLine(d3.event);
-      })
-      .on("mouseover", function () {
-        moveLine(d3.event);
-      });
+      .on("mousemove", () => moveLine(d3.event))
+      .on("mouseover", () => moveLine(d3.event));
   }
 
   /**
@@ -453,46 +457,42 @@ class Streamgraph extends React.Component {
    * @param {Object} d the d3 element where the event was triggered
    * @param {Function} xScale x coordinate scaling function
    */
-  handleStreamMousemove(container, event, d, xScale) {
-    if (typeof d === "undefined") {
+  handleStreamMousemove(event, element, xScale) {
+    if (typeof element === "undefined") {
       return;
     }
 
-    let realX = event.clientX;
-    let realY = event.clientY;
-    let invertedX = xScale.invert(
-      realX - $("#streamgraph_subject").offset().left - CHART_MARGIN.left
+    const { x, y } = this.getRelativeMouseCoords(event);
+
+    const invertedX = xScale.invert(x - CHART_MARGIN.left);
+    const streamYear = invertedX.getFullYear();
+
+    const totalDocs = element.values
+      .map((v) => v.value)
+      .reduce((a, b) => a + b, 0);
+
+    const currentYearData = element.values.find(
+      (v) => streamYear === v.date.getFullYear()
     );
-    let xDate = invertedX.getFullYear();
-    const currentStream = container
-      .selectAll(".stream")
-      .filter((el) => el.key === d.key);
 
-    const color = currentStream.style("fill");
-    const currentData = currentStream.data()[0];
-
-    const allYearsDocs = d3.sum(d.values, (currentData) => currentData.value);
-    currentData.values.forEach((f) => {
-      const year = f.date.toString().split(" ")[3];
-      if (xDate === parseInt(year)) {
-        d3.select("#tooltip")
-          .style("left", realX + TOOLTIP_OFFSET.left + "px")
-          .style("top", realY + TOOLTIP_OFFSET.top + "px")
-          .html(() =>
-            getTooltip(
-              {
-                year,
-                color,
-                keyword: f.key,
-                currentYearDocs: f.value,
-                allYearsDocs,
-              },
-              this.props.localization
-            )
+    if (currentYearData) {
+      d3.select("#tooltip")
+        .style("left", x + TOOLTIP_OFFSET.left + "px")
+        .style("top", Math.max(0, y + TOOLTIP_OFFSET.top) + "px")
+        .html(() =>
+          getTooltip(
+            {
+              year: streamYear,
+              color: element.color,
+              keyword: currentYearData.key,
+              yearDocs: currentYearData.value,
+              totalDocs,
+            },
+            this.props.localization
           )
-          .classed("hidden", false);
-      }
-    });
+        )
+        .classed("hidden", false);
+    }
   }
 
   getDimensions() {
@@ -525,7 +525,7 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Streamgraph);
 
 const getTooltip = (
-  { year, color, keyword, currentYearDocs, allYearsDocs },
+  { year, color, keyword, yearDocs, totalDocs },
   localization
 ) => {
   return `<div style="font-family: Lato; font-size:10px;">
@@ -536,7 +536,7 @@ const getTooltip = (
         class='swatch'>&nbsp;</span>
     ${keyword}
 </div>
-<div class='value'> ${localization.stream_docs}: ${currentYearDocs} </div>
-<div class='value'> ${localization.stream_total}: ${allYearsDocs} </div>
+<div class='value'> ${localization.stream_docs}: ${yearDocs} </div>
+<div class='value'> ${localization.stream_total}: ${totalDocs} </div>
 </div>`;
 };
