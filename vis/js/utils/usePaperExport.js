@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 export const PAPER_EXPORT_ENDPOINT =
   "services/exportMetadata.php?format=bibtex";
 
-const DATA_FALLBACK = "No data available.";
-
 const usePaperExport = (paper, serverUrl) => {
   const [exports, setExports] = useState({});
 
@@ -17,7 +15,7 @@ const usePaperExport = (paper, serverUrl) => {
   }, [setExports, paper, serverUrl]);
 
   if (!paper || !exports[paper.safe_id]) {
-    return "";
+    return null;
   }
 
   return exports[paper.safe_id];
@@ -35,18 +33,24 @@ const loadPaperExport = (paper, serverUrl, callback) => {
     },
     body: "paper=" + encodeURIComponent(JSON.stringify(paper)),
   })
-    .then((response) => response.text())
-    .then((data) =>
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+
+      return response.text();
+    })
+    .then((content) =>
       callback((prev) => ({
         ...prev,
-        [paper.safe_id]: data ? data : DATA_FALLBACK,
+        [paper.safe_id]: { error: false, content },
       }))
     )
     .catch((error) => {
       console.error(error);
       callback((prev) => ({
         ...prev,
-        [paper.safe_id]: DATA_FALLBACK,
+        [paper.safe_id]: { error: true, content: "" },
       }));
     });
 };

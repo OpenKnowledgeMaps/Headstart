@@ -380,40 +380,6 @@ describe("config and context state", () => {
       expect(result).toEqual(EXPECTED_RESULT);
     });
 
-    it("should handle the initialization", () => {
-      const initialState = {};
-      const EXPECTED_RESULT = {
-        area: "Area",
-        intro_icon: "++intro icon++",
-        intro_label: "Some intro label",
-        default_title: "Sample title",
-        overview_label: "Overview of",
-        streamgraph_authors_label: "Sample streamgraph authors label",
-        overview_authors_label: "Sample knowledgemap authors label",
-        streamgraph_label: "Sample streamgraph keywords label",
-        custom_title_explanation: "Sample explanation",
-      };
-
-      const { configObject, contextObject } = setup();
-
-      const result = localizationReducer(
-        initialState,
-        initializeStore(
-          configObject,
-          contextObject,
-          [],
-          null,
-          500,
-          null,
-          null,
-          500,
-          {}
-        )
-      );
-
-      expect(result).toEqual(EXPECTED_RESULT);
-    });
-
     it("should not change the state if the action is canceled", () => {
       const INITIAL_STATE = { some_state: 1 };
 

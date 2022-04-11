@@ -1,33 +1,45 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { hideExportPaper } from "../../actions";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
-import CopyButton from "../CopyButton";
-import usePaperExport, {
-  PAPER_EXPORT_ENDPOINT,
-} from "../../utils/usePaperExport";
-import useMatomo from "../../utils/useMatomo";
+import usePaperExport from "../../utils/usePaperExport";
+import Loading from "./exportmodal/Loading";
+import Content from "./exportmodal/Content";
+import Error from "./exportmodal/Error";
 
 const ExportPaperModal = ({ open, onClose, paper, serverUrl }) => {
   const loc = useLocalizationContext();
-  const { trackEvent } = useMatomo();
 
-  const exportContent = usePaperExport(paper, serverUrl);
+  const exp = usePaperExport(paper, serverUrl);
 
-  const handleCopyClick = () => {
-    trackEvent("List document", "Copy paper export", "Copy export button");
-  };
+  const hasFailed = exp && (exp.error || exp.content === "");
 
-  const handleDownloadClick = () => {
-    startExportDownload(paper, serverUrl);
-    trackEvent(
-      "List document",
-      "Download paper export",
-      "Download export button"
-    );
+  const renderBody = () => {
+    // no data = closed modal
+    if (!paper) {
+      return null;
+    }
+    // loading in progress
+    if (!exp) {
+      return <Loading />;
+    }
+    // error while loading
+    if (hasFailed) {
+      return <Error />;
+    }
+    // successfully loaded
+    if (exp.content) {
+      return (
+        <Content paper={paper} serverUrl={serverUrl}>
+          {exp.content}
+        </Content>
+      );
+    }
+    // fallback
+    return null;
   };
 
   return (
@@ -37,48 +49,12 @@ const ExportPaperModal = ({ open, onClose, paper, serverUrl }) => {
         <Modal.Title
           id="export-paper-title"
           className="export-paper-modal-title"
-          style={{ fontSize: 20 }}
+          style={{ fontSize: 20, color: hasFailed ? "#e55137" : undefined }}
         >
-          {loc.export_paper}
+          {loc.export_paper + (hasFailed ? " - connection lost" : "")}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body className="modal-body">
-        {!!paper && !exportContent && (
-          <div id="spinner-iframe">
-            <p className="wait-message">{loc.pdf_load_text}</p>
-            <p className="wait-spinner">
-              <span
-                id="spinner-iframe-icon"
-                className="glyphicon glyphicon-refresh glyphicon-refresh-animate"
-              ></span>{" "}
-            </p>
-          </div>
-        )}
-        {(!paper || !!exportContent) && (
-          <>
-            <p>
-              <strong style={{ fontWeight: 800 }}>BibTeX</strong>
-            </p>
-            <div id="copy-paper-export" className="citation code">
-              {exportContent}
-            </div>
-            <CopyButton
-              className="indented-modal-btn"
-              textId={"copy-paper-export"}
-              textContent={exportContent}
-              onClick={handleCopyClick}
-            />
-            <Button
-              className="indented-modal-btn"
-              bsStyle="primary"
-              onClick={handleDownloadClick}
-            >
-              <i className="fa fa-download"></i>
-              &nbsp;&nbsp;{loc.download}
-            </Button>
-          </>
-        )}
-      </Modal.Body>
+      <Modal.Body className="modal-body">{renderBody()}</Modal.Body>
     </Modal>
     // html template ends here
   );
@@ -95,24 +71,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExportPaperModal);
-
-// the alternative solution is to really create a form in the JSX
-const startExportDownload = (paper, serverUrl) => {
-  const url = serverUrl + PAPER_EXPORT_ENDPOINT + "&download=true";
-
-  const form = document.createElement("form");
-
-  form.setAttribute("method", "post");
-  form.setAttribute("action", url);
-  form.setAttribute("target", "_blank");
-
-  const input = document.createElement("input");
-  input.type = "hidden";
-  input.name = "paper";
-  input.value = JSON.stringify(paper);
-  form.appendChild(input);
-
-  document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
-};

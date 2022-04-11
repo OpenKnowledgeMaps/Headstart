@@ -2,6 +2,7 @@ library(stringdist)
 library(logging)
 
 sanitize_query <- function(query) {
+  query <- gsub("\\", "", query, fixed=T)
   sanitized_query <- gsub('[“”]', '"', query)
   return(list(raw_query=query, sanitized_query=sanitized_query))
 }
@@ -103,6 +104,9 @@ detect_error <- function(failed, service) {
         reason <- c(reason, 'API error: timeout')
     }
     if (length(reason) == 0 && service == 'base') {
+      if (grepl("Timeout was reached: [api.base-search.net]", failed$query_reason, fixed=TRUE)){
+          reason <- list('BASE error: timeout')
+      }
       if (grepl("xml_find_first", failed$query_reason, fixed=TRUE)){
         reason <- c(reason, 'API error: BASE not reachable')
       }

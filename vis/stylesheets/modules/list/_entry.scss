@@ -22,32 +22,46 @@
     margin-bottom: 6px;
 }
 
+.lowercase {
+    text-transform: lowercase;
+}
+
 .tags {
     display: inline-block;
 }
 
 .paper-tag {
     display: inline-block;
-    padding: 2px 4px;
-    min-width: 100px;
-    background-color: white;
-    
+    padding: 2px 20px;
+    min-width: 90px;
+    background-color: #F4F4F6;
+
     color: $tag-color;
     text-align: center;
     font-size: 10px;
     font-weight: $fontweight400;
 
-    border: 1px solid $tag-color;
-    border-radius: 14px;
-    -webkit-border-radius: 14px;
-    -moz-border-radius: 14px;
+    border-radius: 27px;
+    -webkit-border-radius: 27px;
+    -moz-border-radius: 27px;
 
     margin-right: 3px;
+    margin-bottom: 5px;
+
+    box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.14), 0 0px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+
+    text-transform: lowercase;
 }
 
-.open-access-tag, .free-access-tag {
+.open-access-tag {
+    color: white;
+    background-color: $open-access;
+}
+
+.free-access-tag {
     color: $open-access;
-    border-color: $open-access;
+    border: 1px solid $open-access;
+    background-color: white;
 }
 
 .dataset-tag {
@@ -190,6 +204,7 @@
             .list_published_in {
                 color: $black;
                 font-style: italic;
+                line-height: 150%;
             }
         }
     }
@@ -208,6 +223,15 @@
     padding-left: 0px;
     color: $list_abstract;
     font-weight: $fontweight400;
+
+    &.short {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+                line-clamp: 3; 
+        -webkit-box-orient: vertical;
+    }
 
     em {
         font-weight: $fontweight400;
@@ -528,9 +552,9 @@ img#preview_page {
         background-color: $medium-blue;
         color: white;
         padding: 5px;
-        border-radius: 5px;
-        -moz-border-radius: 5px;
-        -webkit-border-radius:5px;
+        border-radius: 14px;
+        -moz-border-radius: 14px;
+        -webkit-border-radius: 14px;
         text-decoration: none;
 
         &:hover {
@@ -554,7 +578,7 @@ img#preview_page {
 
 .empty-area-warning {
     padding: 10px;
-    color: $okm-red;
+    color: red;
     font-size: 12px;
 }
 
@@ -583,7 +607,6 @@ img#preview_page {
     .list_metadata {
         .list_title {
             font-size: 14px;
-            font-weight: $fontweight400;
         }
 
         .list_details, .doi_outlink {
@@ -591,15 +614,6 @@ img#preview_page {
                 font-weight:$fontweight400;
             }
         }
-        .doi_outlink_link {
-            color: $black;
-            text-decoration: none;
-            border-bottom: 1px solid $black;
-        }
-    }
-
-    .empty-area-warning {
-        color: red;
     }
 }
 
@@ -930,7 +944,7 @@ img#preview_page {
     .list_area {
         margin-top: 0px;
     }
-    
+
     .empty-area-warning {
         color: #cc3b6b;
     }

@@ -26,7 +26,7 @@ const ViperInfo = ({
         <p>
           VIPER, the Visual Project Explorer, is a unique open science
           application developed by{" "}
-          <a
+          <a     
             href="https://openknowledgemaps.org"
             target="_blank"
             rel="noreferrer"
@@ -41,20 +41,35 @@ const ViperInfo = ({
         <h3>Acknowledgements</h3>
         <p>
           VIPER is made possible thanks to funding received from{" "}
-          <a href="https://openaire.eu" target="_blank" rel="noreferrer">
+          <a 
+            href="https://openaire.eu" 
+            target="_blank" 
+            rel="noreferrer"
+            >
             OpenAIRE
           </a>
           , a key infrastructure that enables the European transition to open
           science. We would also like to thank our data providers{" "}
-          <a href="https://openaire.eu" target="_blank" rel="noreferrer">
+          <a  
+          href="https://openaire.eu" 
+          target="_blank" rel="noreferrer"
+          >
             OpenAIRE
           </a>{" "}
           (all metadata),{" "}
-          <a href="https://crossref.org" target="_blank" rel="noreferrer">
+          <a  
+          href="https://crossref.org" 
+          target="_blank" 
+          rel="noreferrer"
+          >
             CrossRef
           </a>{" "}
           (all citation data), and{" "}
-          <a href="https://altmetric.com" target="_blank" rel="noreferrer">
+          <a  
+          href="https://altmetric.com" 
+          target="_blank" 
+          rel="noreferrer"
+          >
             Altmetric
           </a>{" "}
           (all other metrics data).
@@ -140,7 +155,11 @@ const ViperInfo = ({
                     organisations.map((org, i) => (
                       <Fragment key={org.url}>
                         {i !== 0 ? ", " : ""}
-                        <a href={org.url} target="_blank" rel="noreferrer">
+                        <a 
+                        href={org.url} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        >
                           {org.name}
                         </a>
                       </Fragment>

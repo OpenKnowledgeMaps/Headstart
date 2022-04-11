@@ -14,7 +14,6 @@ const BaseInfo = ({ params }) => {
           BASE provides access to over 270 million documents from more than
           8,900 content sources in all disciplines. For more information please{" "}
           <a
-            className="underline"
             href="http://base-search.net"
             target="_blank"
             rel="noreferrer"

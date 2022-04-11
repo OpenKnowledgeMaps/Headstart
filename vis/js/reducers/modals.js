@@ -44,6 +44,8 @@ const modals = (
         openCitationModal: false,
         citedPaper: null,
         exportedPaper: null,
+        showTwitterButton: !!action.configObject.show_twitter_button,
+        showEmailButton: !!action.configObject.show_email_button,
       };
     case "OPEN_EMBED_MODAL":
       return {
