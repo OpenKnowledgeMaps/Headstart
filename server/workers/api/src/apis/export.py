@@ -5,17 +5,19 @@ from flask_restx import Namespace, Resource, fields
 from bibtexparser.bwriter import BibTexWriter 
 from bibtexparser.bibdatabase import BibDatabase
 import dateutil.parser as parser
+import pytz
 
 export_ns = Namespace("export", description="metadata export API operations")
 
 
 def parse_date(date):
     parsed_date = {}
-    tmp = parser.parse(date)
-    parsed_date["year"] = str(tmp.year)
+    dt = parser.parse(date)
+    dt = dt.astimezone(pytz.utc)
+    parsed_date["year"] = str(dt.year)
     if len(date) > 4:
-        parsed_date["month"] = str(tmp.month)
-        parsed_date["day"] = str(tmp.day)
+        parsed_date["month"] = str(dt.month)
+        parsed_date["day"] = str(dt.day)
     return parsed_date
 
 def transform2bibtex(metadata):
