@@ -5,14 +5,19 @@ from flask_restx import Namespace, Resource, fields
 from bibtexparser.bwriter import BibTexWriter 
 from bibtexparser.bibdatabase import BibDatabase
 import dateutil.parser as parser
+import pytz
 
 export_ns = Namespace("export", description="metadata export API operations")
 
 
 def parse_date(date):
     parsed_date = {}
-    tmp = parser.parse(date)
-    parsed_date["year"] = tmp.year
+    dt = parser.parse(date)
+    dt = dt.astimezone(pytz.utc)
+    parsed_date["year"] = str(dt.year)
+    if len(date) > 4:
+        parsed_date["month"] = str(dt.month)
+        parsed_date["day"] = str(dt.day)
     return parsed_date
 
 def transform2bibtex(metadata):
@@ -23,11 +28,6 @@ def transform2bibtex(metadata):
     # use different field for ID
     title = metadata.get("title", "")
     author = metadata.get("authors", "")
-    if "year" in metadata:
-        parsed_date = parse_date(metadata.get("year", ""))
-        year = str(parsed_date["year"])
-    else:
-        year = ""
     doi = metadata.get("doi", "")
     id = metadata.get("id", "")
     published_in = metadata.get("published_in", "")
@@ -41,9 +41,15 @@ def transform2bibtex(metadata):
     fields = {
         "title": title,
         "author": author,
-        "year": year,
         "ID": id
     }
+    if "year" in metadata:
+        parsed_date = parse_date(metadata.get("year", ""))
+        for k,v in parsed_date.items():
+            fields[k] = v
+    else:
+        fields["year"] = ""
+
     if doi != "":
         fields["doi"] = doi
     if url != "":
