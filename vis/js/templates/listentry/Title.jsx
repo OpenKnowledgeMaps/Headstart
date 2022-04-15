@@ -69,7 +69,7 @@ export const formatPaperDate = (date) => {
     format = "yyyy";
   }
 
-  const formatted = getDateFromTimestamp(date, format);
+  const formatted = getDateFromTimestamp(date, { format, inUTC: true });
   if (!formatted) {
     return strDate;
   }

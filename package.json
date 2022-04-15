@@ -7,7 +7,7 @@
     "doc": "doc"
   },
   "scripts": {
-    "test": "jest",
+    "test": "TZ='Europe/Vienna' jest",
     "dev": "webpack --progress --watch --mode=development",
     "prod": "webpack --progress",
     "start": "webpack serve --progress --mode=development --env publicPath=http://localhost:8080/dist/",
