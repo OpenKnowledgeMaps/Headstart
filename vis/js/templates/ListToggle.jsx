@@ -51,7 +51,9 @@ const ListToggle = ({
   return (
     // html template starts here
     <div id="show_hide_button" className="row" onClick={handleClick}>
-      <div className="col-xs-2">▼</div>
+      <div className="col-xs-2">
+        <i className="fas fa-chevron-down chevron"></i>
+      </div>
       <div className="col-xs-8" id="show_hide_button_label">
         <span id="show_hide_label">
           <span>
@@ -62,7 +64,9 @@ const ListToggle = ({
           </span>
         </span>
       </div>
-      <div className="col-xs-2 text-right">▼</div>
+      <div className="col-xs-2 text-right">
+        <i className="fas fa-chevron-down chevron"></i>
+      </div>
     </div>
     // html template ends here
   );
