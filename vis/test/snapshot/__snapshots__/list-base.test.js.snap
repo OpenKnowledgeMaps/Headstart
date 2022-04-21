@@ -26,7 +26,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
           <div
             className="col-xs-2"
           >
-            ▼
+            <i
+              className="fas fa-chevron-down chevron"
+            />
           </div>
           <div
             className="col-xs-8"
@@ -57,7 +59,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
           <div
             className="col-xs-2 text-right"
           >
-            ▼
+            <i
+              className="fas fa-chevron-down chevron"
+            />
           </div>
         </div>
         <div
@@ -511,7 +515,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
           <div
             className="col-xs-2"
           >
-            ▼
+            <i
+              className="fas fa-chevron-down chevron"
+            />
           </div>
           <div
             className="col-xs-8"
@@ -542,7 +548,9 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
           <div
             className="col-xs-2 text-right"
           >
-            ▼
+            <i
+              className="fas fa-chevron-down chevron"
+            />
           </div>
         </div>
         <div
@@ -1014,7 +1022,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.jdent.2020.103370"
+                      href="https://dx.doi.org/10.1016/j.jdent.2020.103370"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -1163,7 +1171,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.jmrt.2020.10.054"
+                      href="https://dx.doi.org/10.1016/j.jmrt.2020.10.054"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -1311,7 +1319,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.joen.2020.01.007"
+                      href="https://dx.doi.org/10.1016/j.joen.2020.01.007"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -1448,7 +1456,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.cej.2020.124728"
+                      href="https://dx.doi.org/10.1016/j.cej.2020.124728"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -1597,7 +1605,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.atherosclerosis.2020.05.017"
+                      href="https://dx.doi.org/10.1016/j.atherosclerosis.2020.05.017"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -1745,7 +1753,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.ecoenv.2020.110382"
+                      href="https://dx.doi.org/10.1016/j.ecoenv.2020.110382"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -1882,7 +1890,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.bbadis.2020.165682"
+                      href="https://dx.doi.org/10.1016/j.bbadis.2020.165682"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -2019,7 +2027,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.bja.2020.11.020"
+                      href="https://dx.doi.org/10.1016/j.bja.2020.11.020"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -2156,7 +2164,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.micromeso.2019.109899"
+                      href="https://dx.doi.org/10.1016/j.micromeso.2019.109899"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -2293,7 +2301,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.jcrc.2020.05.005"
+                      href="https://dx.doi.org/10.1016/j.jcrc.2020.05.005"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -2430,7 +2438,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.jclepro.2020.122253"
+                      href="https://dx.doi.org/10.1016/j.jclepro.2020.122253"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -2567,7 +2575,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.ceca.2019.102135"
+                      href="https://dx.doi.org/10.1016/j.ceca.2019.102135"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -2704,7 +2712,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.jmst.2019.04.038"
+                      href="https://dx.doi.org/10.1016/j.jmst.2019.04.038"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -2853,7 +2861,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.jds.2020.08.016"
+                      href="https://dx.doi.org/10.1016/j.jds.2020.08.016"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
@@ -3001,7 +3009,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                      
                     <a
                       className="doi_outlink_link"
-                      href="https://dx.doi.org/https://dx.doi.org/10.1016/j.ijhydene.2020.01.243"
+                      href="https://dx.doi.org/10.1016/j.ijhydene.2020.01.243"
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
