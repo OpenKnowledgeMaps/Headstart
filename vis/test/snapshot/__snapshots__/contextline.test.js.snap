@@ -139,11 +139,10 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
   <span
     className="context_item"
     id="document_types"
-    onMouseOver={[Function]}
+    onMouseEnter={[Function]}
   >
     <span
       className="context_moreinfo"
-      label="Dokumentarten"
       onBlur={[Function]}
       onClick={null}
       onFocus={[Function]}
@@ -182,7 +181,7 @@ exports[`Context line component snapshot matches a project website (base low qua
     100
      
     <span
-      onMouseOver={[Function]}
+      onMouseEnter={[Function]}
     >
       <span
         className="modifier context_moreinfo"
@@ -221,11 +220,10 @@ exports[`Context line component snapshot matches a project website (base low qua
   <span
     className="context_item"
     id="document_types"
-    onMouseOver={[Function]}
+    onMouseEnter={[Function]}
   >
     <span
       className="context_moreinfo"
-      label="Document types"
       onBlur={[Function]}
       onClick={null}
       onFocus={[Function]}
@@ -239,16 +237,15 @@ exports[`Context line component snapshot matches a project website (base low qua
   <span
     className="context_item"
     id="metadata_quality"
+    onMouseEnter={[Function]}
   >
     <span
       className="context_moreinfo context_metadata_low"
-      label="low metadata quality"
       onBlur={[Function]}
       onClick={null}
       onFocus={[Function]}
       onMouseOut={[Function]}
       onMouseOver={[Function]}
-      quality="low"
     >
       low metadata quality
     </span>
@@ -281,7 +278,7 @@ exports[`Context line component snapshot matches a project website (pubmed high 
     100
      
     <span
-      onMouseOver={[Function]}
+      onMouseEnter={[Function]}
     >
       <span
         className="modifier context_moreinfo"
@@ -320,11 +317,10 @@ exports[`Context line component snapshot matches a project website (pubmed high 
   <span
     className="context_item"
     id="document_types"
-    onMouseOver={[Function]}
+    onMouseEnter={[Function]}
   >
     <span
       className="context_moreinfo"
-      label="Document types"
       onBlur={[Function]}
       onClick={null}
       onFocus={[Function]}
@@ -338,16 +334,15 @@ exports[`Context line component snapshot matches a project website (pubmed high 
   <span
     className="context_item"
     id="metadata_quality"
+    onMouseEnter={[Function]}
   >
     <span
       className="context_moreinfo context_metadata_high"
-      label="high metadata quality"
       onBlur={[Function]}
       onClick={null}
       onFocus={[Function]}
       onMouseOut={[Function]}
       onMouseOver={[Function]}
-      quality="high"
     >
       high metadata quality
     </span>
