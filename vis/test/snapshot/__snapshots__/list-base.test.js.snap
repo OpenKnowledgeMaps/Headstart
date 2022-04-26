@@ -22,6 +22,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
           className="row"
           id="show_hide_button"
           onClick={[Function]}
+          title="Hide list"
         >
           <div
             className="col-xs-2"
@@ -378,6 +379,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://elar.urfu.ru/handle/10995/90559
                     </a>
@@ -453,6 +455,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                 <button
                   className="paper_button main"
                   onClick={[Function]}
+                  title="Open the PDF"
                 >
                   <i
                     className="far fa-file-pdf"
@@ -511,6 +514,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
           className="row"
           id="show_hide_button"
           onClick={[Function]}
+          title="Hide list"
         >
           <div
             className="col-xs-2"
@@ -867,6 +871,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://elar.urfu.ru/handle/10995/90559
                     </a>
@@ -902,6 +907,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 <button
                   className="paper_button main"
                   onClick={[Function]}
+                  title="Open the PDF"
                 >
                   <i
                     className="far fa-file-pdf"
@@ -1026,6 +1032,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.jdent.2020.103370
                     </a>
@@ -1175,6 +1182,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.jmrt.2020.10.054
                     </a>
@@ -1199,6 +1207,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 <button
                   className="paper_button main"
                   onClick={[Function]}
+                  title="Open the PDF"
                 >
                   <i
                     className="far fa-file-pdf"
@@ -1323,6 +1332,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.joen.2020.01.007
                     </a>
@@ -1460,6 +1470,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.cej.2020.124728
                     </a>
@@ -1609,6 +1620,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.atherosclerosis.2020.05.017
                     </a>
@@ -1633,6 +1645,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 <button
                   className="paper_button main"
                   onClick={[Function]}
+                  title="Open the PDF"
                 >
                   <i
                     className="far fa-file-pdf"
@@ -1757,6 +1770,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.ecoenv.2020.110382
                     </a>
@@ -1894,6 +1908,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.bbadis.2020.165682
                     </a>
@@ -2031,6 +2046,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.bja.2020.11.020
                     </a>
@@ -2168,6 +2184,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.micromeso.2019.109899
                     </a>
@@ -2305,6 +2322,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.jcrc.2020.05.005
                     </a>
@@ -2442,6 +2460,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.jclepro.2020.122253
                     </a>
@@ -2579,6 +2598,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.ceca.2019.102135
                     </a>
@@ -2716,6 +2736,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.jmst.2019.04.038
                     </a>
@@ -2865,6 +2886,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.jds.2020.08.016
                     </a>
@@ -2889,6 +2911,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 <button
                   className="paper_button main"
                   onClick={[Function]}
+                  title="Open the PDF"
                 >
                   <i
                     className="far fa-file-pdf"
@@ -3013,6 +3036,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       https://dx.doi.org/10.1016/j.ijhydene.2020.01.243
                     </a>
@@ -3147,6 +3171,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       http://hdl.handle.net/20.500.11850/393261
                     </a>
@@ -3171,6 +3196,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 <button
                   className="paper_button main"
                   onClick={[Function]}
+                  title="Open the PDF"
                 >
                   <i
                     className="far fa-file-pdf"
@@ -3280,6 +3306,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       http://repository.ust.hk/ir/Record/1783.1-105762
                     </a>
@@ -3440,6 +3467,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       http://hdl.handle.net/11458/3789
                     </a>
@@ -3464,6 +3492,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 <button
                   className="paper_button main"
                   onClick={[Function]}
+                  title="Open the PDF"
                 >
                   <i
                     className="far fa-file-pdf"
@@ -3573,6 +3602,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       onClick={[Function]}
                       rel="noreferrer"
                       target="_blank"
+                      title="Open link in new tab"
                     >
                       http://hdl.handle.net/20.500.12627/2022
                     </a>

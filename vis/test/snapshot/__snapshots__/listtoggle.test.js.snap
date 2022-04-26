@@ -5,6 +5,7 @@ exports[`List toggle component snapshot matches a snapshot 1`] = `
   className="row"
   id="show_hide_button"
   onClick={[Function]}
+  title="Hide list"
 >
   <div
     className="col-xs-2"

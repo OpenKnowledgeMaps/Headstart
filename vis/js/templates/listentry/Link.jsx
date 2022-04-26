@@ -19,6 +19,7 @@ const Link = ({ address, isDoi }) => {
           <a
             className="doi_outlink_link"
             href={address}
+            title="Open link in new tab"
             target="_blank"
             rel="noreferrer"
             onClick={trackClick}
