@@ -211,11 +211,11 @@ class Paper extends React.Component {
                     <Highlight hyphenated queryHighlight>
                       {title}
                     </Highlight>{" "}
-                    (
-                    <Highlight queryHighlight>
-                      {formatPaperDate(year)}
-                    </Highlight>
-                    )
+                    {!!year && (
+                      <Highlight queryHighlight>
+                        {`(${formatPaperDate(year)})`}
+                      </Highlight>
+                    )}
                   </Hyphenate>
                 </p>
                 <p id="details" className={sizeModifierClass}>

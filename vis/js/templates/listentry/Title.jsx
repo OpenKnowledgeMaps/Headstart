@@ -45,7 +45,10 @@ const Title = ({
   return (
     // html template starts here
     <div className="list_title" onClick={handleClick}>
-      <a id="paper_list_title" title={rawTitle + formattedDate}>
+      <a
+        id="paper_list_title"
+        title={rawTitle + (paper.year ? formattedDate : "")}
+      >
         <Highlight queryHighlight>{formattedTitle}</Highlight>
         {!!paper.year && <Highlight queryHighlight>{formattedDate}</Highlight>}
       </a>
@@ -63,6 +66,9 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, mapDispatchToListEntriesProps)(Title);
 
 export const formatPaperDate = (date) => {
+  if (!date) {
+    return "";
+  }
   const strDate = date.toString();
   let format = "yyyy-mm-dd";
   if (strDate.match(/^\d{4}(-\d{2})?$/)) {
