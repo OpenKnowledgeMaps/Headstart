@@ -21,7 +21,7 @@ import { removeQueryParams } from "./utils/url";
 import debounce from "./utils/debounce";
 import DataManager from "./dataprocessing/managers/DataManager";
 import FetcherFactory from "./dataprocessing/fetchers/FetcherFactory";
-import onBackButtonClick from "./utils/backButton";
+import handleZoomSelectQuery from "./utils/backButton";
 
 import Bowser from "bowser";
 
@@ -79,7 +79,7 @@ class HeadstartRunner {
 
   addBackButtonListener() {
     const handleBackButtonClick = () => {
-      onBackButtonClick(this.dataManager, this.store, this.config);
+      handleZoomSelectQuery(this.dataManager, this.store, this.config);
     };
 
     window.addEventListener("popstate", debounce(handleBackButtonClick, 300));
@@ -131,11 +131,7 @@ class HeadstartRunner {
   applyQueryParams() {
     const queryParams = new URLSearchParams(window.location.search);
     // enable this for ability to share link to a zoomed bubble / paper
-    // if (queryParams.has("paper")) {
-    //   selectUrlPaper(this.dataManager, this.store, this.config);
-    // } else {
-    //   zoomUrlArea(this.dataManager, this.store, this.config);
-    // }
+    // handleZoomSelectQuery(this.dataManager, this.store, this.config);
     // remove the following lines if the previous line is uncommented
     const paramsToRemove = [];
     if (queryParams.has("area")) {
