@@ -23,7 +23,7 @@
     text-transform: uppercase;
     font-size: 16px;
     font-family: $base-font-family;
-    margin: 20px 0px 10px;
+    margin: 30px 0px 10px;
     color: $modal-title;
 }
 
@@ -31,13 +31,17 @@
     margin-bottom: 0px !important;
     img {
         height: 40px;
+        display: none;
     }
 }
 
 .okmaps-logo {
     margin-bottom: 0px !important;
+    text-align: center;
+    padding-top: 10px;
+    
     img {
-        height: 80px;
+        height: 70px;
     }
 }
 
@@ -105,16 +109,28 @@
 }
 
 .modal-content .btn-primary {
-    color: #fff;
-    background-color: $okm-modal-btn;
+    color: $okm-modal-btn;
+    background-color: white;
+    min-width: 120px;
     border-color: $okm-modal-btn;
     font-family: $link-font-family;
 }
 
 .modal-content .btn-primary:hover {
-    background-color: white;
-    border-color: $okm-modal-btn;
-    color: $okm-modal-btn;
+    border-color: $link-gray;
+    color: $link-gray;
+}
+
+.modal-content .btn-primary:focus {
+    background-color: white !important;
+    border-color: #333;
+    color: #333;
+}
+
+.modal-content .btn-primary:active {
+    background-color: white !important;
+    border-color: $link-gray;
+    color: $link-gray !important;
 }
 
 .modal-content th {
@@ -296,7 +312,7 @@ img#preview_page {
 .wait-message {
     max-width: 650px;
     margin: 0px auto;
-    font-size: 16px;
+    font-size: 22px;
     font-family: $base-font-family;
     padding-bottom: 20px;
 }
@@ -344,25 +360,28 @@ h5 {
 }
 
 .modal-header button {
-    opacity: 1.0;
+    opacity: 1;
 
     span {
-        border: 1px solid #adadad;
-        border-radius: 14px;
-        -moz-border-radius: 14px;
-        -webkit-border-radius: 14px;
+        color: $okm-modal-btn;
+        border: 1px solid $okm-modal-btn;
+        border-radius: 27px;
+        -moz-border-radius: 27px;
+        -webkit-border-radius: 27px;
         padding: 6px 22px;
         font-size: 14px;
         line-height: 20px;
         font-weight: 400;
         display: block;
-    }
-}
-
-.modal-header button:hover {
-    opacity: 1.0;
-    background-color: #eff3f4;
-}
+        
+        :hover {
+            color: $link-gray;
+            opacity: 1.0;
+            background-color: transparent;
+            border: 0px solid $link-gray;
+            }
+         }
+} 
 
 .cit-style-label {
     text-decoration: none;
@@ -391,7 +410,7 @@ h5 {
 .citation {
     display: block;
     padding: 10px;
-    background-color: rgba(239,243,244,1);
+    background-color: $okm-clouds;
     hyphens: none;
     border-radius: 3px;
     -moz-border-radius: 3px;
@@ -400,5 +419,16 @@ h5 {
 
     &.code {
         white-space: pre-wrap;
+    }
+}
+
+button.close > span {
+    font-weight: bold;
+    font-size: 14px;
+
+    &::after {
+        content: " Close";
+        font-weight: normal;
+        font-size: 12px;
     }
 }

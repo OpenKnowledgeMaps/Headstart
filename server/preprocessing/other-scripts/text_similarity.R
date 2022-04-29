@@ -6,11 +6,6 @@ query <- args[2]
 service <- args[3]
 params_file <- args[4]
 
-print(wd)
-print(query)
-print(service)
-print(params_file)
-
 setwd(wd) #Don't forget to set your working directory
 
 source('../other-scripts/utils.R')
@@ -86,14 +81,10 @@ switch(service,
       }
 )
 
-print("inhere")
-
 MAX_CLUSTERS = 15
 LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
 ADDITIONAL_STOP_WORDS = LANGUAGE$name
 
-print("reading stuff")
-print(params)
 failed <- list(params=params)
 tryCatch({
   query <- sanitize_query(query)
@@ -105,7 +96,6 @@ tryCatch({
 })
 
 if(exists('input_data')) {
-  print("got the input")
   tryCatch({
     output_json = vis_layout(input_data$text, input_data$metadata,
                              service,

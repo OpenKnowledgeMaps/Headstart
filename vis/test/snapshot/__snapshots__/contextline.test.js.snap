@@ -40,7 +40,12 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
     <span
       className="context_moreinfo infolink"
       onClick={[Function]}
-    />
+    >
+      <i
+        className="fas fa-info-circle"
+      />
+       
+    </span>
   </span>
 </p>
 `;
@@ -93,7 +98,12 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
     <span
       className="context_moreinfo infolink"
       onClick={[Function]}
-    />
+    >
+      <i
+        className="fas fa-info-circle"
+      />
+       
+    </span>
   </span>
 </p>
 `;
@@ -151,7 +161,12 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
     <span
       className="context_moreinfo infolink"
       onClick={[Function]}
-    />
+    >
+      <i
+        className="fas fa-info-circle"
+      />
+       
+    </span>
   </span>
 </p>
 `;
@@ -245,7 +260,12 @@ exports[`Context line component snapshot matches a project website (base low qua
     <span
       className="context_moreinfo infolink"
       onClick={[Function]}
-    />
+    >
+      <i
+        className="fas fa-info-circle"
+      />
+       
+    </span>
   </span>
 </p>
 `;
@@ -339,7 +359,12 @@ exports[`Context line component snapshot matches a project website (pubmed high 
     <span
       className="context_moreinfo infolink"
       onClick={[Function]}
-    />
+    >
+      <i
+        className="fas fa-info-circle"
+      />
+       
+    </span>
   </span>
 </p>
 `;
@@ -405,7 +430,12 @@ exports[`Context line component snapshot matches a viper snapshot 1`] = `
     <span
       className="context_moreinfo infolink"
       onClick={[Function]}
-    />
+    >
+      <i
+        className="fas fa-info-circle"
+      />
+       
+    </span>
   </span>
 </p>
 `;

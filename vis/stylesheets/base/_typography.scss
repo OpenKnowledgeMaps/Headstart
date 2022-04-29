@@ -3,6 +3,10 @@
     min-height: 50px;
 }*/
 
+.hs-strong {
+    color: #333 !important;
+}
+
 /*fonts*/
 $base-font-size: 10px; //not in use
 $base-font-family: 'Open Sans', Helvetica, sans-serif;
@@ -58,4 +62,15 @@ $fontweight800: 800;
 
 body {
     font-family: $base-font-family !important;
+    color: #333 !important;
+}
+
+.modal-body a {
+    color: #333;
+    text-decoration: underline;
+    
+    &:hover, &:focus {
+        color: #333 !important;
+        text-decoration: none !important;
+    }
 }

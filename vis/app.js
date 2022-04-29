@@ -1,18 +1,24 @@
- /* Load stylesheets and bootstrap */
-import 'styles/main.scss';
+import "styles/main.scss";
 
-/* Import headstart module to initiliase HeadstartFSM */
-/* Notice 'import * as hs' -> hs.headstart is not read-only */
-import config from 'config';
-import * as hs from 'headstart';
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import config from "config";
+import "bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-var start = function(json_data) {
-    if(data_config) Object.assign(config, data_config);
-    window.namespace = "headstart";
-    window.headstartInstance = new hs.HeadstartFSM(json_data);
-    window.headstartInstance.start();
-}
+// needed for draggable modals (it can be refactored with react-bootstrap though)
+import "./lib/jquery-ui.min.js";
 
-export {start};
+import HeadstartRunner from "./js/HeadstartRunner";
+
+const start = (additional_config) => {
+  if (data_config) {
+    Object.assign(config, data_config);
+  }
+  if (additional_config) {
+    Object.assign(config, additional_config);
+  }
+
+  const headstartRunner = new HeadstartRunner(config);
+  headstartRunner.run();
+};
+
+export { start };

@@ -12,7 +12,7 @@ const Keywords = ({ types }) => {
     // html template starts here
     <div className="list_row">
       <span className="list_row_label">{loc.doctypes}: </span>
-      <span className="list_row_content">
+      <span className="list_row_content lowercase">
         <Highlight queryHighlight>{typesString}</Highlight>
       </span>
     </div>

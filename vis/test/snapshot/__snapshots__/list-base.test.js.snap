@@ -6,7 +6,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
   id="list-col"
   style={
     Object {
-      "width": undefined,
+      "width": "100%",
     }
   }
 >
@@ -36,7 +36,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
               id="show_hide_label"
             >
               <span>
-                Hide list
+                Overview
                  
                 <span
                   id="list_item_banner"
@@ -48,7 +48,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     1
                   </span>
                    
-                  items
+                  document
                   )
                 </span>
               </span>
@@ -82,7 +82,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                 className="form-control"
                 id="filter_input"
                 onChange={[Function]}
-                placeholder="Search within map..."
                 type="text"
                 value=""
               />
@@ -106,16 +105,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                 role="button"
                 type="button"
               >
-                show: 
                  
                 <span
                   id="curr-filter-type"
                 >
-                  Any
+                  
                 </span>
                  
-                <span
-                  className="caret"
+                <i
+                  className="fas fa-chevron-down chevron"
                 />
               </button>
               <ul
@@ -135,7 +133,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Any
+                    
                   </a>
                 </li>
                 <li
@@ -150,7 +148,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Open Access
+                    
                   </a>
                 </li>
               </ul>
@@ -179,16 +177,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                 role="button"
                 type="button"
               >
-                sort by:
                  
                 <span
                   id="curr-sort-type"
                 >
-                  Relevance
+                  
                 </span>
                  
-                <span
-                  className="caret"
+                <i
+                  className="fas fa-chevron-down chevron"
                 />
               </button>
               <ul
@@ -208,7 +205,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Relevance
+                    
                   </a>
                 </li>
                 <li
@@ -223,7 +220,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Title
+                    
                   </a>
                 </li>
                 <li
@@ -238,7 +235,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Authors
+                    
                   </a>
                 </li>
                 <li
@@ -253,7 +250,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Year
+                    
                   </a>
                 </li>
               </ul>
@@ -293,10 +290,21 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     <span
                       className="access_icon outlink_symbol"
                     >
-                      
+                      <i
+                        className="fas fa-lock-open"
+                      />
                     </span>
                     open access
                   </span>
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
                 </div>
                 <div
                   className="list_title"
@@ -395,27 +403,42 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                 </span>
               </p>
               <div
-                id="list_keywords"
-                style={
-                  Object {
-                    "display": "block",
-                  }
-                }
+                className="list_row"
               >
                 <span
-                  className="keyword_tag"
+                  className="list_row_label"
                 >
                   Keywords
                   : 
                 </span>
                 <span
-                  className="keywords"
+                  className="list_row_content"
                 >
                   <span>
                     <span
                       className=""
                     >
                       APLYSINA AEROPHOBA; BIOMIMETICS; BIOMINERALIZATION; CHITIN; ELECTROLYSIS; HEMOLYMPH; MARINE SPONGES; SCAFFOLDS; BIOMIMETIC PROCESSES; BIOPOLYMERS; BLOOD; CALCITE; CALCIUM CARBONATE; FOURIER TRANSFORM INFRARED SPECTROSCOPY; BIOMIMETIC SCAFFOLDS; DECELLULARIZATION; DEPROTEINIZATION; DESILICIFICATION; ELECTROCHEMICAL METHODS; INTERDISCIPLINARY FIELDS; THREEDIMENSIONAL (3-D); SCAFFOLDS (BIOLOGY)
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                className="list_row"
+              >
+                <span
+                  className="list_row_label"
+                >
+                  : 
+                </span>
+                <span
+                  className="list_row_content lowercase"
+                >
+                  <span>
+                    <span
+                      className=""
+                    >
+                      Journal/newspaper article
                     </span>
                   </span>
                 </span>
@@ -428,43 +451,24 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-eye"
+                    className="far fa-file-pdf"
                   />
                     
                   PDF
                 </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
               </div>
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Aplysina aerophoba, Bone cements, Cement production"
@@ -487,7 +491,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
   id="list-col"
   style={
     Object {
-      "width": undefined,
+      "width": "100%",
     }
   }
 >
@@ -517,7 +521,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               id="show_hide_label"
             >
               <span>
-                Hide list
+                Overview
                  
                 <span
                   id="list_item_banner"
@@ -529,7 +533,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     20
                   </span>
                    
-                  items
+                  documents
                   )
                 </span>
               </span>
@@ -563,7 +567,6 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 className="form-control"
                 id="filter_input"
                 onChange={[Function]}
-                placeholder="Search within map..."
                 type="text"
                 value=""
               />
@@ -587,16 +590,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 role="button"
                 type="button"
               >
-                show: 
                  
                 <span
                   id="curr-filter-type"
                 >
-                  Any
+                  
                 </span>
                  
-                <span
-                  className="caret"
+                <i
+                  className="fas fa-chevron-down chevron"
                 />
               </button>
               <ul
@@ -616,7 +618,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Any
+                    
                   </a>
                 </li>
                 <li
@@ -631,7 +633,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Open Access
+                    
                   </a>
                 </li>
               </ul>
@@ -660,16 +662,15 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 role="button"
                 type="button"
               >
-                sort by:
                  
                 <span
                   id="curr-sort-type"
                 >
-                  Relevance
+                  
                 </span>
                  
-                <span
-                  className="caret"
+                <i
+                  className="fas fa-chevron-down chevron"
                 />
               </button>
               <ul
@@ -689,7 +690,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Relevance
+                    
                   </a>
                 </li>
                 <li
@@ -704,7 +705,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Title
+                    
                   </a>
                 </li>
                 <li
@@ -719,7 +720,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Authors
+                    
                   </a>
                 </li>
                 <li
@@ -734,7 +735,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Year
+                    
                   </a>
                 </li>
               </ul>
@@ -774,10 +775,21 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <span
                       className="access_icon outlink_symbol"
                     >
-                      
+                      <i
+                        className="fas fa-lock-open"
+                      />
                     </span>
                     open access
                   </span>
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
                 </div>
                 <div
                   className="list_title"
@@ -813,7 +825,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       <span
                         className=""
                       >
-                        K. Nowacki, I. Stępniak, T. Machałowski, M. Wysokowski, I. Petrenko, C. Schimpf...
+                        K. Nowacki, I. Stępniak, T. Machałowski, M. Wysokowski, I. Petrenko, C. Schimpf, D. Rafaja...
                       </span>
                     </span>
                   </div>
@@ -854,13 +866,25 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
                   <span
                     className=""
                   >
-                    Three-dimensional (3D) biopolymer-based scaffolds including chitinous matrices have been widely used for tissue engineering, regenerative medicine and other modern interdisciplinary fields including extreme biomimetics. In this study, we introduce a ...
+                    Three-dimensional (3D) biopolymer-based scaffolds including chitinous matrices have been widely used for tissue engineering, regenerative medicine and other modern interdisciplinary fields including extreme biomimetics. In this study, we introduce a novel, electrochemically assisted method for 3D chitin scaffolds isolation from the cultivated marine demosponge Aplysina aerophoba which consists of three main steps: (1) decellularization, (2) decalcification and (3) main deproteinization along with desilicification and depigmentation. For the first time, the obtained electrochemically isolated 3D chitinous scaffolds have been further biomineralized ex vivo using hemolymph of Cornu aspersum edible snail aimed to generate calcium carbonates-based layered biomimetic scaffolds. The analysis of prior to, during and post-electrochemical isolation samples as well as samples treated with molluscan hemolymph was conducted employing analytical techniques such as SEM, XRD, ATR–FTIR and Raman spectroscopy. Finally, the use of described method for chitin isolation combined with biomineralization ex vivo resulted in the formation of crystalline (calcite) calcium carbonate-based deposits on the surface of chitinous scaffolds, which could serve as promising biomaterials for the wide range of biomedical, environmental and biomimetic applications. © 2020, The Author(s). ; Politechnika PoznaÅ ska, PUT: 0911/SBAD/0380/2019 ; Deutsche Forschungsgemeinschaft, DFG: HE 394/3 ; Deutscher Akademischer Austauschdienst, DAAD ; Russian Science Foundation, RSF: 18-13-00220 ; PPN/BEK/2018/1/00071 ; 03/32/SBAD/0906 ; SÃ¤chsisches Staatsministerium fÃ¼r Wissenschaft und Kunst, SMWK: 02010311 ; This work was performed with the financial support of Poznan University of Technology, Poland (Grant No. 0911/SBAD/0380/2019), as well as by the Ministry of Science and Higher 
+                  </span>
+                  <span
+                    className="query_term_highlight "
+                    style={Object {}}
+                  >
+                    Education
+                  </span>
+                  <span
+                    className=""
+                  >
+                     (Poland) as financial subsidy to PUT No. 03/32/SBAD/0906. Krzysztof Nowacki was supported by the Erasmus Plus program (2019). Also, this study was partially supported by the DFG Project HE 394/3 and SMWK Project No. 02010311 (Germany). Marcin Wysokowski is financially supported by the Polish National Agency for Academic Exchange (PPN/BEK/2018/1/00071). Tomasz Machałowski is supported by DAAD (Personal Ref. No. 91734605). Yuliya Khrunyk is supported by the Russian Science Foundation (Grant No. 18-13-00220).
                   </span>
                 </span>
               </p>
@@ -872,43 +896,24 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-eye"
+                    className="far fa-file-pdf"
                   />
                     
                   PDF
                 </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
               </div>
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Aplysina aerophoba, Bone cements, Cement production"
@@ -934,7 +939,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -1010,6 +1025,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -1022,39 +1038,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="General Dentistry, Calcium silicate"
@@ -1087,10 +1083,21 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <span
                       className="access_icon outlink_symbol"
                     >
-                      
+                      <i
+                        className="fas fa-lock-open"
+                      />
                     </span>
                     open access
                   </span>
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
                 </div>
                 <div
                   className="list_title"
@@ -1167,6 +1174,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -1185,43 +1193,24 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-eye"
+                    className="far fa-file-pdf"
                   />
                     
                   PDF
                 </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
               </div>
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Additive manufacturing, Calcium soda, Glass Ceramics"
@@ -1247,7 +1236,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -1282,7 +1281,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       <span
                         className=""
                       >
-                        Ivana Milanovic, Petar Milovanovic, Djordje Antonijevic, Bojan Dzeletovic...
+                        Ivana Milanovic, Petar Milovanovic, Djordje Antonijevic, Bojan Dzeletovic, Marija Djuric...
                       </span>
                     </span>
                   </div>
@@ -1323,6 +1322,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -1335,39 +1335,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="General Dentistry, Calcium silicate"
@@ -1393,7 +1373,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -1469,6 +1459,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -1481,39 +1472,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Environmental Chemistry, General Chemistry, General chemical engineering"
@@ -1546,10 +1517,21 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <span
                       className="access_icon outlink_symbol"
                     >
-                      
+                      <i
+                        className="fas fa-lock-open"
+                      />
                     </span>
                     open access
                   </span>
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
                 </div>
                 <div
                   className="list_title"
@@ -1585,7 +1567,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       <span
                         className=""
                       >
-                        Hiroyuki Jinnouchi, Yu Sato, Atsushi Sakamoto, Anne Cornelissen, Masayuki Mori...
+                        Hiroyuki Jinnouchi, Yu Sato, Atsushi Sakamoto, Anne Cornelissen, Masayuki Mori, Rika Kawakami...
                       </span>
                     </span>
                   </div>
@@ -1626,6 +1608,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -1644,43 +1627,24 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-eye"
+                    className="far fa-file-pdf"
                   />
                     
                   PDF
                 </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
               </div>
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Cardiology and Cardiovascular medicine, Anesthesiology and Pain medicine, Biomedical engineering"
@@ -1706,7 +1670,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -1719,7 +1693,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       <span
                         className=""
                       >
-                        Mechanism of deoxynivalenol-induced neurotoxicity in weaned piglets is linked to lipid peroxidation, dampened neurotransmitter levels, and interferenc...
+                        Mechanism of deoxynivalenol-induced neurotoxicity in weaned piglets is linked to lipid peroxidation, dampened neurotransmitter levels, and interference wi...
                       </span>
                     </span>
                     <span>
@@ -1782,6 +1756,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -1794,39 +1769,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Health, Toxicology and Mutagenesis, Pollution, Public health, Environmental and Occupational health"
@@ -1852,7 +1807,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -1928,6 +1893,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -1940,39 +1906,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Cardiology and Cardiovascular medicine, Anesthesiology and Pain medicine, Biomedical engineering"
@@ -1998,7 +1944,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -2033,7 +1989,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       <span
                         className=""
                       >
-                        Danny Epstein, Neta Solomon, Alexander Korytny, Erez Marcusohn, Yaacov Freund...
+                        Danny Epstein, Neta Solomon, Alexander Korytny, Erez Marcusohn, Yaacov Freund, Ron Avrahami...
                       </span>
                     </span>
                   </div>
@@ -2074,6 +2030,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -2086,39 +2043,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Cardiology and Cardiovascular medicine, Anesthesiology and Pain medicine, Biomedical engineering"
@@ -2144,7 +2081,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -2220,6 +2167,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -2232,39 +2180,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Materials Chemistry, Ceramics and composites, Mechanics of materials"
@@ -2290,7 +2218,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -2366,6 +2304,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -2378,39 +2317,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Cardiology and Cardiovascular medicine, Anesthesiology and Pain medicine, Biomedical engineering"
@@ -2436,7 +2355,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -2512,6 +2441,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -2524,39 +2454,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Environmental Chemistry, General Chemistry, General chemical engineering"
@@ -2582,7 +2492,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -2658,6 +2578,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -2670,39 +2591,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Cell Biology, Molecular Biology, Biochemistry"
@@ -2728,7 +2629,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -2804,6 +2715,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -2816,39 +2728,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Materials Chemistry, Ceramics and composites, Mechanics of materials"
@@ -2881,10 +2773,21 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <span
                       className="access_icon outlink_symbol"
                     >
-                      
+                      <i
+                        className="fas fa-lock-open"
+                      />
                     </span>
                     open access
                   </span>
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
                 </div>
                 <div
                   className="list_title"
@@ -2961,6 +2864,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -2979,43 +2883,24 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-eye"
+                    className="far fa-file-pdf"
                   />
                     
                   PDF
                 </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
               </div>
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="General Dentistry, Calcium silicate"
@@ -3041,7 +2926,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -3076,7 +2971,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       <span
                         className=""
                       >
-                        Long Han, Qi Liu, Yuan Zhang, Kang Lin, Guoqiang Xu, Qinhui Wang, Nai Rong...
+                        Long Han, Qi Liu, Yuan Zhang, Kang Lin, Guoqiang Xu, Qinhui Wang, Nai Rong, Xiaorui Liang...
                       </span>
                     </span>
                   </div>
@@ -3117,6 +3012,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
@@ -3129,39 +3025,19 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Energy engineering and power technology, Fuel technology, Renewable energy, Sustainability and the environment"
@@ -3194,10 +3070,21 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <span
                       className="access_icon outlink_symbol"
                     >
-                      
+                      <i
+                        className="fas fa-lock-open"
+                      />
                     </span>
                     open access
                   </span>
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Thesis: doctoral and postdoctoral
+                    </div>
+                  </div>
                 </div>
                 <div
                   className="list_title"
@@ -3259,13 +3146,14 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
                   <span
                     className=""
                   >
-                    Mountainous landscapes reflect the competition between denudation, uplift, and climate, which produce, modify, and destroy relief and topography. Bedrock rivers are dynamic topographic features and a critical link between these processes, as they rec...
+                    Mountainous landscapes reflect the competition between denudation, uplift, and climate, which produce, modify, and destroy relief and topography. Bedrock rivers are dynamic topographic features and a critical link between these processes, as they record and convey changes in tectonics, climate, and sea level across the landscape. River incision models, such as the stream power model, are often used to quantify the relationship between topography and rock motion in the context of landscapes at steady state. At steady state, the stream power model predicts higher denudation rates for steeper river channels, while accounting for only the vertical motion of rock due to rock uplift or denudation. However, natural landscapes often have more complicated histories, particularly in convergent orogens with asymmetric topography, where steady state requires that denudation must balance both vertical and horizontal rock motion. This thesis addresses this central issue by comparing the spatial and temporal pattern of denudation with metrics of topographic steepness in the Northern Apennine Mountains of Italy, a young and active orogen with asymmetric topography. New and existing catchment-averaged denudation rates from cosmogenic 10Be concentrations demonstrate that the steeper flank of the Northern Apennines is eroding more slowly than the gentler flank. Long-term denudation rates inverted from low-temperature thermochronometers show that this pattern of denudation across the orogen is long-lived, since at the least 3—5 Ma, and that denudation rates have decreased on the Ligurian side through time. The apparent decoupling between denudation rates and topography is resolved with a kinematic model of the orogenic wedge that accounts for the full vertical and horizontal rock velocity field. This model reconciles the 10Be concentrations, geomorphic observations, and geodetic rates of rock motion with the topography of the Northern Apennines, and provides new estimates for slab retreat rates consistent with recent estimates from tomography, surface geology, and morphology. This thesis also explores the partitioning of denudation into physical erosion and chemical weathering in the Northern Apennines. Chemical weathering in particular is an important control on landscape evolution and the global CO2 budget. Most studies have focused on weathering in orogens comprised of silicate-rich lithologies, which can remove CO2 from the atmosphere over geologic timescales, whereas carbonate weathering is generally considered to be CO2 neutral. However, even in silicate-rich landscapes, carbonate weathering dominates total solute fluxes. Recently uplifted orogens in particular are often characterized by carbonate-rich, marine sedimentary sequences, so the global weathering flux of carbon and calcium to the oceans should be more strongly influenced by these orogens. However, the partitioning of denudation fluxes remains largely unexplored in mixed lithology orogens, so, it is unclear whether the same processes that control erosion and weathering apply to both silicate-rich and mixed lithology settings. Here, denudation fluxes from the Northern Apennines are partitioned into carbonate and silicate chemical weathering and physical erosion fluxes. These fluxes demonstrate that denudation is dominated by physical erosion of both silicate and carbonate rocks; carbonate physical erosion is controlled by lithology; weathering fluxes are dominated by carbonate dissolution; and denudation is negatively correlated with runoff. Finally, denudation fluxes from the Northern Apennines are similar to other temperature mountain ranges (e.g. Southern Alps of New Zealand), although total weathering fluxes from this study are generally higher, due to greater carbonate weathering fluxes. The results from this thesis challenge current interpretations regarding denudation rates through space and time and contribute to a broader understanding of surface and crustal processes in the Northern Apennines.
                   </span>
                 </span>
               </p>
@@ -3277,43 +3165,24 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-eye"
+                    className="far fa-file-pdf"
                   />
                     
                   PDF
                 </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
               </div>
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Aplysina aerophoba, Bone cements, Cement production"
@@ -3339,7 +3208,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -3400,51 +3279,32 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
                   <span
                     className=""
                   >
-                    Introduction: Hypocalcemia has been widely recognized in sepsis patients. However, the cause of hypocalcemia in sepsis is still not clear, and little is known about the subcellular distribution of Ca2+ in tissues during sepsis. Methodology: We measur...
+                    Introduction: Hypocalcemia has been widely recognized in sepsis patients. However, the cause of hypocalcemia in sepsis is still not clear, and little is known about the subcellular distribution of Ca2+ in tissues during sepsis. Methodology: We measured the dynamic change in Ca2+ levels in body fluid and subcellular compartments, including the cytosol, endoplasmic reticulum and mitochondria, in major organs of cecal ligation and puncture (CLP)-operated rats, as well as the subcellular Ca2+ flux in HUVECs which treated by endotoxin and cytokines. Results: In the model of CLP-induced sepsis, the blood and urinary Ca2+ concentrations decreased rapidly, while the Ca2+ concentration in ascites fluid increased. The Ca2+ concentrations in the cytosol, ER, and mitochondria were elevated nearly synchronously in major organs in our sepsis model. Moreover, the calcium overload in CLP-operated rats treated with calcium supplementation was more severe than that in the non-calcium-supplemented rats but was alleviated by treatment with the calcium channel blocker verapamil. Similar subcellular Ca2+ flux was found in vitro in HUVECs and was triggered by lipopolysaccharide (LPS)/TNF-α. Conclusions: Ca2+ influx from the blood into the intercellular space and Ca2+ release into ascites fluid may cause hypocalcemia in sepsis and that this process may be due to the synergistic effect of endotoxin and cytokines. Copyright © 2020 He et al.
                   </span>
                 </span>
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Aplysina aerophoba, Bone cements, Cement production"
@@ -3477,10 +3337,21 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     <span
                       className="access_icon outlink_symbol"
                     >
-                      
+                      <i
+                        className="fas fa-lock-open"
+                      />
                     </span>
                     open access
                   </span>
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Thesis: bachelor
+                    </div>
+                  </div>
                 </div>
                 <div
                   className="list_title"
@@ -3568,13 +3439,14 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
                   <span
                     className=""
                   >
-                    En el presente trabajo de investigación, tuvo como objetivo determinar la influencia de la participación comunitaria en el mejoramiento de la calidad del agua para consumo humano en asentamiento humano San Genaro, para lo cual se analizaron los parám...
+                    En el presente trabajo de investigación, tuvo como objetivo determinar la influencia de la participación comunitaria en el mejoramiento de la calidad del agua para consumo humano en asentamiento humano San Genaro, para lo cual se analizaron los parámetros microbiológicos como son coliformes totales y termotolerantes y fisicoquímicos como son color, turbiedad, cloro residual y pH del agua antes de recibir el tratamiento que involucraba a participación comunitaria. Asimismo, se diseñó y aplicó una metodología apropiada para el tratamiento con hipoclorito de calcio al 70%. En la parte metodológica, se trabajó con un solo grupo bajo un diseño pre experimental con una muestra de 40 familias de las cuales se tomaron dos muestras de agua de un litro cada, las mismas que fueron llevadas al laboratorio para su análisis microbiológicos y físico químico de acuerdo a lo estipulado en el D.S. 031 – 2010. S.A. En cuanto a los resultados encontramos que antes del tratamiento en el domicilio el agua no era apta para el consumo humano dado que los parámetros microbiológicos, superaban los límites máximos permisibles. En el pos tratamiento no se logró que dichos parámetros se reduzcan a cero como lo establece la norma pero no se logró que dichos parámetros se reduzcan a cero como lo establece la norma pero se logró un avance significativo. En cuanto a los parámetros fisicoquímicos después del tratamiento todos se encontraron bajo los límites máximos permisibles. La metodología diseñada para capacitar en el uso adecuado y tratamiento del agua a nivel domiciliario, fue determinante para que los pobladores conozcan sobre el agua, y su tratamiento. ; This research aimed to determine the influence of community participation in the improvement of water quality for human consumption in the settlement “San Genaro”, to which the microbiological parameters of total coliforms, thermotolerants and physicochemicals such as color, turbidity, chlorine residual and pH of water were analyzed before applying the treatment that involves the community participation. It was also designed and applied an appropriate methodology of 70% calcium hypochlorite treatment. In the methodological part, it has been worked with a single group by the pre-experimCnta1 design with a sample of 40 families from those who two water of one liter each one were sampled, which were taken to the laboratory for the microbiological and physical- chemical analysis as it was stipulated in D.S. 031 — 2010. S.A. Regarding the results it was found that before the treatment in households the water was not suitable for human consumption since the microbiological parameters exceeded the maximum permissible limits. The post-treatment did not reduce these parameters to zero as it is set forth in the standard, but a significant progress was made. As for the physical- chemical parameters after the treatment all the parameters were found under the maximum permissible limits. The methodology which was designed to train people in the appropriately to a given use and treatment of water in the households was decisive for the settlers to know about water and its treatment. ; Tesis ; Apa
                   </span>
                 </span>
               </p>
@@ -3586,43 +3458,24 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   onClick={[Function]}
                 >
                   <i
-                    className="fa fa-eye"
+                    className="far fa-file-pdf"
                   />
                     
                   PDF
                 </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
               </div>
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Calcio por"
@@ -3648,7 +3501,17 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
               >
                 <div
                   id="oa"
-                />
+                >
+                  <div
+                    className="tags"
+                  >
+                    <div
+                      className="paper-tag"
+                    >
+                      Journal/newspaper article
+                    </div>
+                  </div>
+                </div>
                 <div
                   className="list_title"
                   onClick={[Function]}
@@ -3709,51 +3572,32 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 </div>
               </div>
               <p
+                className="short"
                 id="list_abstract"
               >
                 <span>
                   <span
                     className=""
                   >
-                    Hypothesis: The ototoxic effects of aminoglycosides are well known. Gentamicin carries a substantial risk of hearing loss. Gentamicin is widely used to combat life-threatening infections, despite its ototoxic effects. Calcium dobesilate is a pharmaco...
+                    Hypothesis: The ototoxic effects of aminoglycosides are well known. Gentamicin carries a substantial risk of hearing loss. Gentamicin is widely used to combat life-threatening infections, despite its ototoxic effects. Calcium dobesilate is a pharmacologically active agent used to treat many disorders due to its vasoprotective and antioxidant effects. We investigated the therapeutic role of calcium dobesilate against gentamicin-induced cochlear nerve ototoxicity in an animal model. Methods: Thirty-two Sprague Dawley rats were divided into four groups: Gentamicin, Gentamicin + Calcium Dobesilate, Calcium Dobesilate, and Control. Preoperative and postoperative hearing thresholds were determined using auditory brainstem response thresholds with click and 16-kHz tone-burst stimuli. Histological analysis of the tympanic bulla specimens was performed under light and transmission electron microscopy. The histological findings were subjected to semiquantitative grading, of which the results were compared between the groups. Results: Gentamicin + Calcium Dobesilate group had, on average, 27 dB better click-evoked hearing than Gentamicin group (p 0.01). Histologically examining the Control and Calcium Dobesilate groups revealed normal ultrastructural appearances. The Gentamicin group showed the most severe histological alterations including myelin destruction, total axonal degeneration, and edema. The histological evidence of damage was significantly reduced in the Gentamicin + Calcium Dobesilate group compared with the Gentamicin group. Conclusion: Adding oral calcium dobesilate to systemic gentamicin was demonstrated to exert beneficial effects on click-evoked hearing thresholds, as supported by the histological findings.
                   </span>
                 </span>
               </p>
               <div
                 className="paper_buttons_row"
-              >
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-quote-right"
-                  />
-                    Cite as
-                </button>
-                <button
-                  className="paper_button"
-                  onClick={[Function]}
-                >
-                  <i
-                    className="fa fa-arrow-down"
-                  />
-                    Export
-                </button>
-              </div>
+              />
               <div
-                id="list_area"
+                className="list_row list_area"
                 onClick={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
                 <span
-                  className="area_tag"
+                  className="list_row_label"
                 >
                   Area
-                  :
+                  : 
                 </span>
-                 
                 <span
                   className="area_name"
                   title="Calcium dobesilate, Calcium hydroxide, Sağlık Bilimleri"

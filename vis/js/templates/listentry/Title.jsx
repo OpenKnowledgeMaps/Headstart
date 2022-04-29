@@ -8,7 +8,7 @@ import { getDateFromTimestamp } from "../../utils/dates";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import useMatomo from "../../utils/useMatomo";
 
-const MAX_TITLE_LENGTH = 160;
+const MAX_TITLE_LENGTH = 164;
 
 const Title = ({
   paper,

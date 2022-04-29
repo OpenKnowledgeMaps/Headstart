@@ -124,7 +124,7 @@ describe("List entries component - special BASE tests", () => {
         );
       });
 
-      const area = container.querySelector("#list_area");
+      const area = container.querySelector(".list_area");
       act(() => {
         ReactTestUtils.Simulate.click(area);
       });
@@ -150,7 +150,7 @@ describe("List entries component - special BASE tests", () => {
         );
       });
 
-      const area = container.querySelector("#list_area");
+      const area = container.querySelector(".list_area");
       act(() => {
         ReactTestUtils.Simulate.mouseOver(area);
       });
@@ -184,7 +184,7 @@ describe("List entries component - special BASE tests", () => {
         );
       });
 
-      const area = container.querySelector("#list_area");
+      const area = container.querySelector(".list_area");
       act(() => {
         ReactTestUtils.Simulate.mouseOut(area);
       });
