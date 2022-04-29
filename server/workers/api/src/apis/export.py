@@ -6,6 +6,7 @@ from bibtexparser.bwriter import BibTexWriter
 from bibtexparser.bibdatabase import BibDatabase
 import dateutil.parser as parser
 import pytz
+import re
 
 export_ns = Namespace("export", description="metadata export API operations")
 
@@ -20,6 +21,17 @@ def parse_date(date):
         parsed_date["day"] = str(dt.day)
     return parsed_date
 
+def create_authorfield(authors_objects):
+    authors = []
+    for ao in authors_objects:
+        if "lastName" in ao:
+            author = ao["lastName"]
+        if "lastName" in ao and "firstName" in ao:
+            author = "{lastName}, {firstName}".format(**ao)
+        authors.append(author)
+    authorstring = " and ".join(authors)
+    return authorstring
+
 def transform2bibtex(metadata):
     # TODO: add mapping from resulttype to ARTICLETYPE
     # possible published_in parser
@@ -27,8 +39,9 @@ def transform2bibtex(metadata):
     # choose correct fields, e.g. author_string for author
     # use different field for ID
     title = metadata.get("title", "")
-    author = metadata.get("authors", "")
+    author = create_authorfield(metadata.get("authors_objects", []))
     doi = metadata.get("doi", "")
+    doi = re.sub("https://|http://|dx.doi.org/|doi.org/", "", doi)
     id = metadata.get("id", "")
     published_in = metadata.get("published_in", "")
     url = metadata.get("list_link", {}).get("address", "")
