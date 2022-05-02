@@ -21,7 +21,11 @@ const MoreInfoLink = ({ onClick }) => {
 
   return (
     // html template starts here
-    <span id="more-info-link" className="context_item">
+    <span
+      id="more-info-link"
+      className="context_item"
+      title="More information about the visualization"
+    >
       <span onClick={handleClick} className="context_moreinfo infolink">
         <i className="fas fa-info-circle"></i> {loc.intro_label}
       </span>

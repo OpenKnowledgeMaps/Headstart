@@ -422,13 +422,24 @@ h5 {
     }
 }
 
-button.close > span {
-    font-weight: bold;
-    font-size: 14px;
+button.close {
+    &:hover {
+        opacity: 1;
+    }
 
-    &::after {
-        content: " Close";
-        font-weight: normal;
-        font-size: 12px;
+    &> span {
+        font-weight: bold;
+        font-size: 14px;
+    
+        &::after {
+            content: " Close";
+            font-weight: normal;
+            font-size: 12px;
+        }
+
+        &:hover {
+            color: #333;
+            border-color: #333;
+        }
     }
 }
