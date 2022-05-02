@@ -55,11 +55,22 @@ const list = (
         ...state,
         show: !state.show,
       };
+    case "SELECT_PAPER":
     case "SHOW_LIST":
       return {
         ...state,
         show: true,
       };
+    case "ZOOM_IN": {
+      if (!action.selectedPaperData) {
+        return state;
+      }
+
+      return {
+        ...state,
+        show: true,
+      };
+    }
     case "SEARCH":
       return {
         ...state,

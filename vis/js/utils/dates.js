@@ -28,7 +28,7 @@ export const getDateFromTimestamp = (
   try {
     return dateFormat(date, format, inUTC);
   } catch (error) {
-    console.warn(error);
+    console.warn(`Error while formatting timestamp '${timestamp}'`, error);
     return "";
   }
 };
@@ -46,7 +46,7 @@ export const getTimeFromTimestamp = (
   try {
     return dateFormat(date, format, inUTC);
   } catch (error) {
-    console.warn(error);
+    console.warn(`Error while formatting date '${date}'`, error);
     return "";
   }
 };
