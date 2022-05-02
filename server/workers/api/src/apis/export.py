@@ -44,7 +44,10 @@ def transform2bibtex(metadata):
     except Exception:
         author = metadata.get("authors", "")
     doi = metadata.get("doi", "")
-    doi = re.sub("https://|http://|dx.doi.org/|doi.org/", "", doi)
+    try:
+        doi = re.sub("https://|http://|dx.doi.org/|doi.org/", "", doi)
+    except Exception:
+        pass
     id = metadata.get("id", "")
     published_in = metadata.get("published_in", "")
     url = metadata.get("list_link", {}).get("address", "")
