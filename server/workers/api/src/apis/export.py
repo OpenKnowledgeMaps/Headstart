@@ -39,7 +39,10 @@ def transform2bibtex(metadata):
     # choose correct fields, e.g. author_string for author
     # use different field for ID
     title = metadata.get("title", "")
-    author = create_authorfield(metadata.get("authors_objects", []))
+    try:
+        author = create_authorfield(metadata.get("authors_objects", []))
+    except Exception:
+        author = metadata.get("authors", "")
     doi = metadata.get("doi", "")
     doi = re.sub("https://|http://|dx.doi.org/|doi.org/", "", doi)
     id = metadata.get("id", "")
@@ -57,9 +60,12 @@ def transform2bibtex(metadata):
         "ID": id
     }
     if "year" in metadata:
-        parsed_date = parse_date(metadata.get("year", ""))
-        for k,v in parsed_date.items():
-            fields[k] = v
+        try:
+            parsed_date = parse_date(metadata.get("year", ""))
+            for k,v in parsed_date.items():
+                fields[k] = v
+        except Exception:
+            fields["year"] = ""
     else:
         fields["year"] = ""
 
