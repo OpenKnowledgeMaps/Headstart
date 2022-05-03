@@ -114,9 +114,9 @@ function search($service_integration, $dirty_query
       $res = $apiclient->call_api($endpoint . "/contentproviders", $payload);
       $res = $res["result"];
       $res = json_decode($res, true);
-      $contentprovider_long = $res["contentprovider_long"];
-      $post_params["contentprovider_long"] = $contentprovider_long;
-      $param_types[] = "contentprovider_long";
+      $repo_name = $res["repo_name"];
+      $post_params["repo_name"] = $repo_name;
+      $param_types[] = "repo_name";
     }
     $params_json = packParamsJSON($param_types, $post_params);
 

@@ -70,8 +70,8 @@ class Search(Resource):
             del params["optradio"]
         errors = search_param_schema.validate(params, partial=True)
         if "repo" in params:
-            contentprovider_long = contentprovider_lookup.get(params["repo"])
-            params["contentprovider_long"] = contentprovider_long
+            repo_name = contentprovider_lookup.get(params["repo"])
+            params["repo_name"] = repo_name
         params["limit"] = 120
         params["list_size"] = 100
         base_ns.logger.debug(errors)
@@ -116,14 +116,14 @@ class ContentProvider(Resource):
 
         returns: json
         {"contentprovider_short": "ftunivlausanne",
-         "contentprovider_long": "Université de Lausanne (UNIL): Serval - Serveur académique lausannois"}
+         "repo_name": "Université de Lausanne (UNIL): Serval - Serveur académique lausannois"}
         """
         params = request.get_json()
         base_ns.logger.debug(params)
         if not params:
             result = contentprovider_lookup
         else:
-            result = {"contentprovider_long": contentprovider_lookup.get(params["repo"])}
+            result = {"repo_name": contentprovider_lookup.get(params["repo"])}
         try:
             headers = {}
             headers["Content-Type"] = "application/json"

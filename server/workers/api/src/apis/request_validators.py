@@ -22,7 +22,7 @@ class SearchParamSchema(Schema):
     raw = fields.Boolean()
     sg_method = fields.Str()
     repo = fields.Str()
-    contentprovider_long = fields.Str()
+    repo_name = fields.Str()
     coll = fields.Str()
     vis_id = fields.Str(default=None)
     optradio = fields.Str()
