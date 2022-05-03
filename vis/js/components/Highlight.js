@@ -98,9 +98,8 @@ const hyphenateStringSafely = (string) => {
  * @param {boolean} useLookBehind use ?<= if true, else use \b
  */
 export const getQueryTermMatcher = (term, useLookBehind) => {
-  // this should theoretically work but it does not: [^\w\u00AD] (??? is this still true?)
-  // this is used instead:
-  const wordBreakers = "[-\\s.,:;?!/()[\\]{}]";
+  // former regex: [-\\s.,:;?!/()[\\]{}]
+  const wordBreakers = "[^\\w\u00AD]";
   let lookBehind = `(?<=${wordBreakers}|^)`;
   if (!useLookBehind) {
     lookBehind = "\\b";
