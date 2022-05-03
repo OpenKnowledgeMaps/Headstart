@@ -53,8 +53,10 @@ class ContextLine extends React.Component {
         </NumArticles>
         {defined(params.dataSource) && (
           <DataSource
-            value={params.dataSource}
             label={localization.source_label}
+            source={params.dataSource}
+            contentProvider={params.contentProvider}
+            popoverContainer={this.props.popoverContainer}
           />
         )}
         {defined(params.timespan) && <Timespan>{params.timespan}</Timespan>}
