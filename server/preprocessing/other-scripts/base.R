@@ -38,7 +38,6 @@ blog <- getLogger('api.base')
 
 
 get_papers <- function(query, params, limit=100,
-                       filter=NULL,
                        retry_opts=rbace::bs_retry_options(3,60,3,4)) {
 
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Search:", query))
@@ -140,6 +139,8 @@ get_papers <- function(query, params, limit=100,
   subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
   subject_cleaned = gsub("\\w+:\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
   subject_cleaned = gsub("^; $", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
+  subject_cleaned = gsub(",", ", ", subject_cleaned) # clean up keyword separation
+  subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
 
   metadata$subject = subject_cleaned
 

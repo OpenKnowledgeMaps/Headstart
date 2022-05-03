@@ -56,3 +56,22 @@ export default combineReducers({
   tracking,
   zoom,
 });
+
+export const getInitialState = (config) => {
+  // TODO where possible, move the config values from INITIALIZE to here
+  return {
+    localization: {
+      ...config.localization[config.language],
+    },
+    misc: {
+      isEmbedded: config.credit_embed,
+      isLoading: true,
+      showCreatedByViper: config.credit,
+      showLoading: config.show_loading_screen,
+      renderList: config.render_list,
+      renderMap: config.render_map,
+      timestamp: config.timestamp,
+      visTag: config.tag,
+    },
+  };
+};

@@ -31,7 +31,8 @@ const PaperButtons = ({
     <div className="paper_buttons_row">
       {!!onPDFClick && (
         <button className="paper_button main" onClick={handlePDFButtonClick}>
-          <i className="far fa-file-pdf"></i>&nbsp;&nbsp;<Highlight>PDF</Highlight>
+          <i className="far fa-file-pdf"></i>&nbsp;&nbsp;
+          <Highlight>PDF</Highlight>
         </button>
       )}
       {showCiteButton && (
@@ -45,7 +46,10 @@ const PaperButtons = ({
 };
 
 const mapStateToProps = (state) => ({
-  showCiteButton: ["base", "pubmed"].includes(state.service),
+  // showCiteButton: ["base", "pubmed", "triple_km", "triple_sg"].includes(
+  //   state.service
+  // ),
+  showCiteButton: state.list.citePapers,
 });
 
 export default connect(
