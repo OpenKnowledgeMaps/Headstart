@@ -22,9 +22,11 @@ const SortDropdown = ({ label, value, valueLabel, options, handleChange }) => {
     >
       <DropdownButton
         id="sort"
+        noCaret
         title={
           <>
-            {label} <span id="curr-sort-type">{valueLabel}</span>
+            {label} <span id="curr-sort-type">{valueLabel}</span>{" "}
+            <i className="fas fa-chevron-down chevron"></i>
           </>
         }
       >

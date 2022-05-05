@@ -3,6 +3,7 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
+import useMatomo from "../../utils/useMatomo";
 
 import CopyButton from "../CopyButton";
 
@@ -11,6 +12,11 @@ const IFRAME_HEIGHT = 756;
 
 const EmbedModal = ({ open, onClose }) => {
   const loc = useLocalizationContext();
+  const { trackEvent } = useMatomo();
+
+  const trackCopyClick = () => {
+    trackEvent("Added components", "Copy embed", "Copy embed button");
+  };
 
   const embedText = `<iframe width="${IFRAME_WIDTH}" height="${IFRAME_HEIGHT}" src="${window.location
     .toString()
@@ -37,6 +43,7 @@ const EmbedModal = ({ open, onClose }) => {
           className="indented-modal-btn"
           textId={"copy-embed"}
           textContent={open ? embedText : ""}
+          onClick={trackCopyClick}
         />
       </Modal.Body>
     </Modal>

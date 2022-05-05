@@ -4,12 +4,14 @@ import {
   closeInfoModal,
   closeViperEditModal,
   hideCitePaper,
+  hideExportPaper,
   hidePreview,
   openCitationModal,
   openEmbedModal,
   openInfoModal,
   openViperEditModal,
   showCitePaper,
+  showExportPaper,
   showPreview,
   zoomIn,
 } from "../../js/actions";
@@ -22,7 +24,7 @@ describe("modals state", () => {
   };
 
   it("should return the initial state", () => {
-    const EXPECTED_RESULT = { reloadApiProperties: {}, infoParams: {} };
+    const EXPECTED_RESULT = { apiProperties: {}, infoParams: {} };
 
     const result = reducer(undefined, {});
 
@@ -42,6 +44,7 @@ describe("modals state", () => {
       openCitationModal: false,
       previewedPaper: null,
       citedPaper: null,
+      exportedPaper: null,
     };
 
     expect(result).toEqual(EXPECTED_RESULT);
@@ -68,6 +71,32 @@ describe("modals state", () => {
     const EXPECTED_RESULT = {
       ...INITIAL_STATE,
       citedPaper: null,
+    };
+
+    expect(result).toEqual(EXPECTED_RESULT);
+  });
+
+  it("should show the paper export modal", () => {
+    const INITIAL_STATE = {};
+
+    const result = reducer(INITIAL_STATE, showExportPaper(EXAMPLE_PAPER));
+
+    const EXPECTED_RESULT = {
+      ...INITIAL_STATE,
+      exportedPaper: EXAMPLE_PAPER,
+    };
+
+    expect(result).toEqual(EXPECTED_RESULT);
+  });
+
+  it("should hide the paper export modal", () => {
+    const INITIAL_STATE = {};
+
+    const result = reducer(INITIAL_STATE, hideExportPaper());
+
+    const EXPECTED_RESULT = {
+      ...INITIAL_STATE,
+      exportedPaper: null,
     };
 
     expect(result).toEqual(EXPECTED_RESULT);

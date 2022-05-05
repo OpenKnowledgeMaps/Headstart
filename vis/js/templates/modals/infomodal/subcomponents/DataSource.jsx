@@ -6,7 +6,8 @@ const DataSource = ({ source, description, logo }) => {
     <>
       <h3>Data source</h3>
       <p>
-        The data is taken from <strong>{source}</strong>. {description}
+        The data is taken from <strong className="hs-strong">{source}</strong>.{" "}
+        {description}
       </p>
       {!!logo && <p className="datasource-logo">{logo}</p>}
     </>

@@ -71,22 +71,6 @@ export const stringCompare = (a, b, sort_order) => {
   return d3.ascending(a, b);
 };
 
-/**
- * Shortens the input string to selected length.
- * @param {String} string input to shorten
- * @param {Number} length output length
- * @param {String} end the ending if the string was shortened
- *
- * @returns shortened string
- */
-export const shorten = (string, length, end = "...") => {
-  if (string.length <= length) {
-    return string;
-  }
-
-  return string.substr(0, length) + end;
-};
-
 export const formatString = (string, params) => {
   Object.keys(params).forEach((param) => {
     string = string.replaceAll("${" + param + "}", params[param]);

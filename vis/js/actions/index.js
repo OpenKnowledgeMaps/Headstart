@@ -105,6 +105,9 @@ export const hidePreview = () => ({ type: "HIDE_PREVIEW" });
 export const showCitePaper = (paper) => ({ type: "SHOW_CITE_PAPER", paper });
 export const hideCitePaper = () => ({ type: "HIDE_CITE_PAPER" });
 
+export const showExportPaper = (paper) => ({ type: "SHOW_EXPORT_PAPER", paper });
+export const hideExportPaper = () => ({ type: "HIDE_EXPORT_PAPER" });
+
 export const updateDimensions = (chart, list) => ({
   type: "RESIZE",
   listHeight: list.height,
