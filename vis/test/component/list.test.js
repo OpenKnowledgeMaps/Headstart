@@ -48,7 +48,6 @@ const setup = (
         showDropdownSort: true,
         sortValue: "relevance",
         sortOptions: ["relevance", "year"],
-        abstractSize: 250,
         isContentBased: true,
         baseUnit: "questions",
         showKeywords: true,
@@ -637,9 +636,9 @@ describe("List entries component", () => {
   });
 
   describe("events", () => {
-    it("triggers a correct title click action in local files", () => {
+    it("triggers a correct title click action in pubmed", () => {
       const EXPECTED_PAYLOAD = [zoomIn().type];
-      const storeObject = setup({ show: true }, { service: null });
+      const storeObject = setup({ show: true }, { service: "pubmed" });
       const store = mockStore(storeObject);
 
       act(() => {
@@ -661,84 +660,6 @@ describe("List entries component", () => {
       const actions = store.getActions();
 
       expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
-    });
-
-    it("triggers a correct area click action in local files", () => {
-      const EXPECTED_PAYLOAD = [zoomIn().type];
-      const storeObject = setup({ show: true }, { service: null });
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      const area = container.querySelector("#list_area");
-      act(() => {
-        ReactTestUtils.Simulate.click(area);
-      });
-
-      const actions = store.getActions();
-
-      expect(actions.map((a) => a.type)).toEqual(EXPECTED_PAYLOAD);
-    });
-
-    it("triggers a correct area mouseover action in local files", () => {
-      const EXPECTED_PAYLOAD = highlightArea(initialTestData[0]);
-      const storeObject = setup({ show: true }, { service: null });
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      const area = container.querySelector("#list_area");
-      act(() => {
-        ReactTestUtils.Simulate.mouseOver(area);
-      });
-
-      const actions = store.getActions();
-
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
-    });
-
-    it("triggers a correct area mouseout action in local files", () => {
-      const EXPECTED_PAYLOAD = highlightArea(null);
-      const storeObject = setup({ show: true }, { service: null });
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      const area = container.querySelector("#list_area");
-      act(() => {
-        ReactTestUtils.Simulate.mouseOut(area);
-      });
-
-      const actions = store.getActions();
-
-      expect(actions).toEqual([EXPECTED_PAYLOAD]);
     });
 
     it("renders with data without title, authors and abstract", () => {

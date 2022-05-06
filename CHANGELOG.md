@@ -1,5 +1,21 @@
 # Changelog
 
+## 2022-05-05
+
+### New features
+
+- Added export to BibTex for each paper (frontend interface & backend endpoint).
+- Added BASE document type tags with icons.
+- New share buttons.
+
+### Changes
+
+- New look and feel (design & CSS changes).
+
+### Security
+
+- Periodical npm security update.
+
 ## 2022-03-28
 
 ### Changes

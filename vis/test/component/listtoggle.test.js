@@ -6,7 +6,7 @@ import configureStore from "redux-mock-store";
 
 import { toggleList } from "../../js/actions";
 
-import ListToggle from "../../js/components/ListToggle";
+import ListToggle from "../../js/templates/ListToggle";
 import LocalizationProvider from "../../js/components/LocalizationProvider";
 
 const mockStore = configureStore([]);
@@ -63,7 +63,7 @@ describe("List toggle component", () => {
     });
 
     expect(container.querySelector("#show_hide_label").textContent).toContain(
-      storeObject.localization.hide_list
+      "Overview (42 documents)"
     );
   });
 
@@ -81,7 +81,7 @@ describe("List toggle component", () => {
     });
 
     expect(container.querySelector("#show_hide_label").textContent).toContain(
-      storeObject.localization.show_list
+      "Overview (42 documents)"
     );
   });
 

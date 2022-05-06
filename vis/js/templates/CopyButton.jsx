@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import { useLocalizationContext } from "../components/LocalizationProvider";
 import selectText from "../utils/selectText";
 
-const CopyButton = ({ id, className = "", textId, textContent }) => {
+const CopyButton = ({ id, className = "", textId, textContent, onClick }) => {
   const loc = useLocalizationContext();
   const [copied, setCopied] = useState(false);
 
@@ -17,6 +17,9 @@ const CopyButton = ({ id, className = "", textId, textContent }) => {
       selectText(textId);
       setCopied(true);
     });
+    if (typeof onClick === "function") {
+      onClick();
+    }
   };
 
   return (

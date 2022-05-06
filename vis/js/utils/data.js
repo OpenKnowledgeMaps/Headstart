@@ -231,8 +231,13 @@ export const getListLink = (paper, config, context) => {
   }
 
   if (config.doi_outlink) {
-    if (paper.doi) {
-      return { address: paper.doi, isDoi: true };
+    if (typeof paper.doi === "string" && paper.doi !== "") {
+      return {
+        address: paper.doi.match(/^(https?:\/\/)?(\w+\.)?doi.org\//)
+          ? paper.doi
+          : `https://doi.org/${paper.doi}`,
+        isDoi: true,
+      };
     }
 
     if (paper.link) {
