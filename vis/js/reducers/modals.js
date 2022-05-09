@@ -44,8 +44,8 @@ const modals = (
         openCitationModal: false,
         citedPaper: null,
         exportedPaper: null,
-        showTwitterButton: !!action.configObject.show_twitter_button,
-        showEmailButton: !!action.configObject.show_email_button,
+        showTwitterButton: showTwitterShare(action.configObject, action.contextObject),
+        showEmailButton: showEmailShare(action.configObject, action.contextObject),
       };
     case "OPEN_EMBED_MODAL":
       return {
@@ -147,4 +147,18 @@ const getSheetID = (config, context) => {
   }
 
   return config.files[0].file;
+};
+
+const showTwitterShare = (config, context) => {
+  if (config.credit_embed) {
+    return false;
+  }
+  return !!config.show_twitter_button;
+};
+
+const showEmailShare = (config, context) => {
+  if (config.credit_embed) {
+    return false;
+  }
+  return !!config.show_email_button;
 };
