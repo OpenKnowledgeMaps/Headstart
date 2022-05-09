@@ -26,6 +26,8 @@ class SearchParamSchema(Schema):
     service = fields.Str()
     embed = fields.Str()
     min_descsize = fields.Int()
+    repo = fields.Str()
+    coll = fields.Str()
 
     @pre_load
     def fix_years(self, in_data, **kwargs):
