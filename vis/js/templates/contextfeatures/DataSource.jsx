@@ -2,13 +2,11 @@ import React from "react";
 import { shorten } from "../../utils/string";
 import HoverPopover from "../HoverPopover";
 
-const MAX_CONTENT_PROVIDER_LENGTH = 20;
+const MAX_CONTENT_PROVIDER_LENGTH = 6;
 
 const DataSource = ({ label, source, contentProvider, popoverContainer }) => {
   if (contentProvider) {
-    const content = (
-      shorten(contentProvider, MAX_CONTENT_PROVIDER_LENGTH) + ` via ${source}`
-    ).replace("... via ", "...via ");
+    const content = shorten(contentProvider, MAX_CONTENT_PROVIDER_LENGTH);
 
     return (
       // html template starts here
