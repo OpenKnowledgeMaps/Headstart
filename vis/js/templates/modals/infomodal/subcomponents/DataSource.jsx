@@ -3,7 +3,7 @@ import React from "react";
 const DataSource = ({ source, contentProvider, description, logo }) => {
   const getDataSource = () => {
     if (!contentProvider) {
-      return <strong>{source}</strong>;
+      return <strong className="hs-strong">{source}</strong>;
     }
 
     return (

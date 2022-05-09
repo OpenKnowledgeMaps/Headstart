@@ -21,20 +21,26 @@ const StandardSGInfo = ({
           This streamgraph presents you with an overview of the main keywords{" "}
           {(!!customTitle || !!query) && (
             <>
-              related to <strong>{customTitle ? customTitle : query}</strong>
+              related to{" "}
+              <strong className="hs-strong">
+                {customTitle ? customTitle : query}
+              </strong>
             </>
           )}{" "}
-          over time. It is based on the most relevant documents related to the main keywords. Up to 1000 documents have been taken into consideration for the computation of the streamgraph. 
+          over time. It is based on the most relevant documents related to the
+          main keywords. Up to 1000 documents have been taken into consideration
+          for the computation of the streamgraph.
         </p>
-        <p>The height of a stream represents the
-          number of documents with this keyword at a specific time. It is
-          important to note that the number of documents matches the relative
-          height, not the absolute height of the stream.
-          </p>
+        <p>
+          The height of a stream represents the number of documents with this
+          keyword at a specific time. It is important to note that the number of
+          documents matches the relative height, not the absolute height of the
+          stream.
+        </p>
         {!!customTitle && (
           <p>
             This map has a custom title and was created using the following
-            query: <strong>{query}</strong>
+            query: <strong className="hs-strong">{query}</strong>
           </p>
         )}
         <p>

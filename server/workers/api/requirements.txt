@@ -12,3 +12,4 @@ pandas
 pyyaml
 flasgger
 psycopg2-binary
+bibtexparser

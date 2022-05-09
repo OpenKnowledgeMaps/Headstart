@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 
 import ContextLineTemplate from "../templates/ContextLine";
-import HoverPopover from "../templates/HoverPopover";
 import Author from "../templates/contextfeatures/Author";
 import DocumentTypes from "../templates/contextfeatures/DocumentTypes";
 import NumArticles from "../templates/contextfeatures/NumArticles";
@@ -15,10 +14,9 @@ import ProjectRuntime from "../templates/contextfeatures/ProjectRuntime";
 import LegacySearchLang from "../templates/contextfeatures/LegacySearchLang";
 import SearchLang from "../templates/contextfeatures/SearchLang";
 import Timestamp from "../templates/contextfeatures/Timestamp";
-import MetadataQuality from "../templates/contextfeatures/MetadataQuality";
 import Modifier from "../templates/contextfeatures/Modifier";
-import { trackMatomoEvent } from "../utils/useMatomo";
 import MoreInfoLink from "../templates/contextfeatures/MoreInfoLink";
+import MetadataQuality from "../templates/contextfeatures/MetadataQuality";
 
 const defined = (param) => param !== undefined && param !== null;
 
@@ -29,7 +27,8 @@ const defined = (param) => param !== undefined && param !== null;
  */
 class ContextLine extends React.Component {
   render() {
-    const { params, localization, hidden } = this.props;
+    const { params, localization, hidden, service } = this.props;
+    const { popoverContainer } = this.props;
 
     if (hidden) {
       return null;
@@ -49,7 +48,7 @@ class ContextLine extends React.Component {
           openAccessArticlesCount={params.openAccessCount}
           articlesCountLabel={localization.articles_label}
         >
-          <Modifier popoverContainer={this.props.popoverContainer} />
+          <Modifier popoverContainer={popoverContainer} />
         </NumArticles>
         {defined(params.dataSource) && (
           <DataSource
@@ -60,7 +59,10 @@ class ContextLine extends React.Component {
           />
         )}
         {defined(params.timespan) && <Timespan>{params.timespan}</Timespan>}
-        {this.renderDocTypes()}
+        <DocumentTypes
+          documentTypes={params.documentTypes}
+          popoverContainer={popoverContainer}
+        />
         {defined(params.paperCount) && (
           <PaperCount
             value={params.paperCount}
@@ -86,90 +88,16 @@ class ContextLine extends React.Component {
             label={localization.timestamp_label}
           />
         )}
-        {this.renderMetadataQuality()}
+        <MetadataQuality
+          quality={params.metadataQuality}
+          service={service}
+          popoverContainer={popoverContainer}
+        />
         {defined(params.searchLanguage) && (
           <SearchLang>{params.searchLanguage}</SearchLang>
         )}
         <MoreInfoLink />
       </ContextLineTemplate>
-    );
-  }
-
-  // TODO refactor this function to a standalone template
-  renderDocTypes() {
-    const {
-      params: { documentTypes },
-      localization,
-      popoverContainer,
-    } = this.props;
-
-    if (!documentTypes || documentTypes.length === 0) {
-      return null;
-    }
-
-    const text = documentTypes.join(", ");
-
-    const trackMouseOver = () =>
-      trackMatomoEvent("Title & Context line", "Hover document types", "Context line");
-
-    return (
-      <>
-        <span
-          id="document_types"
-          className="context_item"
-          onMouseOver={trackMouseOver}
-        >
-          <HoverPopover
-            id="doctypes-popover"
-            size="wide"
-            container={popoverContainer}
-            content={
-              <>
-                {localization.documenttypes_tooltip}
-                <br />
-                <br />
-                {text}
-              </>
-            }
-          >
-            <DocumentTypes label={localization.documenttypes_label} />
-          </HoverPopover>
-        </span>{" "}
-      </>
-    );
-  }
-
-  // TODO refactor this function to a standalone template
-  renderMetadataQuality() {
-    const {
-      params: { metadataQuality },
-      localization,
-      popoverContainer,
-      service,
-    } = this.props;
-
-    if (
-      !metadataQuality ||
-      (metadataQuality !== "low" && metadataQuality !== "high")
-    ) {
-      return null;
-    }
-
-    return (
-      <span className="context_item" id="metadata_quality">
-        <HoverPopover
-          id="metadata-quality-popover"
-          container={popoverContainer}
-          content={
-            localization[metadataQuality + "_metadata_quality_desc_" + service]
-          }
-        >
-          <MetadataQuality
-            quality={metadataQuality}
-            label={localization[[metadataQuality + "_metadata_quality"]]}
-          />
-        </HoverPopover>
-      </span>
     );
   }
 }

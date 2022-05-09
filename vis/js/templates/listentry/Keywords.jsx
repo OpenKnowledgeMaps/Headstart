@@ -8,9 +8,9 @@ const Keywords = ({ children: text }) => {
 
   return (
     // html template starts here
-    <div id="list_keywords" style={{ display: "block" }}>
-      <span className="keyword_tag">{localization.keywords}: </span>
-      <span className="keywords">
+    <div className="list_row">
+      <span className="list_row_label">{localization.keywords}: </span>
+      <span className="list_row_content">
         <Highlight queryHighlight>{text}</Highlight>
       </span>
     </div>

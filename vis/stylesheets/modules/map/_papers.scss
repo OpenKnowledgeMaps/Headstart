@@ -72,10 +72,12 @@
         margin: 0px;
     }
 
-    #icons {
+    .icons {
         padding-top: 2px;
         padding-left: 2px;
         font-size: 0px;
+        white-space: nowrap;
+        overflow: hidden;
     }
 
     .large {
@@ -140,44 +142,46 @@
     }
 }
 
-#dataset-icon {
+.dataset-icon {
     display: inline-block;
     border: 0px solid $black;
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
+    border-radius: 27px;
+    -moz-border-radius: 27px;
+    -webkit-border-radius: 27px;
     color: $black;
 
     &.large {
         display: inline-block;
-        border: 1px solid $black;
-        padding: 4px;
+        background-color: #F4F4F6;
+        font-size: 10px;
+        padding: 4px 8px;
         margin: 0 0 0 5px;
     }
 
     &.larger {
-        border: 1px solid $black;
-        padding: 4px;
+        font-size: 12px;
+        background-color: #F4F4F6;
+        padding: 4px 10px;
         display: inline-block;
         margin: 0 0 0 5px;
     }
 }
 
-#open-access-logo {
+.open-access-logo {
     font-family: 'FontAwesome';
     display:inline-block;
     background-color: $open-access;
     color: white;
     padding: 4px;
     font-size: 6px;
-    border-radius: 14px;
-    -moz-border-radius: 14px;
-    -webkit-border-radius: 14px;
+    border-radius: 27px;
+    -moz-border-radius: 27px;
+    -webkit-border-radius: 27px;
     
     &.large {
         margin: 0 0 0 5px;
-        font-size: 12px;
-        padding: 4px 10px;
+        font-size: 10px;
+        padding: 4px 6px;
     }
 
     &.larger {
@@ -192,7 +196,7 @@
     }
 }
 
-#free-access-logo {
+.free-access-logo {
     font-family: 'FontAwesome';
     display:inline-block;
     background-color: white;
@@ -200,9 +204,9 @@
     border: 1px solid $open-access;
     padding: 4px;
     font-size: 6px;
-    border-radius: 14px;
-    -moz-border-radius: 14px;
-    -webkit-border-radius: 14px;
+    border-radius: 27px;
+    -moz-border-radius: 27px;
+    -webkit-border-radius: 27px;
 
     &.large {
         margin: 0 0 0 5px;
@@ -222,12 +226,12 @@
     }
 }
 
-#title {
+.title {
     color: $papers_title;
     margin-top: 0px;
 
     &.large {
-        margin-top: 15px;
+        margin-top: 10px;
     }
     &.larger {
         margin-top: 15px;
@@ -312,7 +316,7 @@
         }
     }
     
-    #title {
+    .title {
         &.large {
             margin-top: 10px;
         }
@@ -323,7 +327,7 @@
 }
 
 @if $skin == 'linkedcat' {
-    #open-access-logo {
+    .open-access-logo {
         background-color: white;
         color: $open-access;
     }

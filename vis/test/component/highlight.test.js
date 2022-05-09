@@ -86,7 +86,7 @@ describe("Highlight query term matcher", () => {
   });
 
   it("doesn't match a substring with a soft hyphen at start", () => {
-    const TEXT = "a sub&shy;string at the end";
+    const TEXT = "a sub\u00ADstring at the end";
     const TERM = "string";
 
     const matcher = getQueryTermMatcher(TERM, true);
@@ -96,7 +96,7 @@ describe("Highlight query term matcher", () => {
   });
 
   it("doesn't match a substring with a soft hyphen at the end", () => {
-    const TEXT = "the car&shy;bonic acid";
+    const TEXT = "the car\u00ADbonic acid";
     const TERM = "car";
 
     const matcher = getQueryTermMatcher(TERM, true);
@@ -106,7 +106,7 @@ describe("Highlight query term matcher", () => {
   });
 
   it("doesn't match a substring with a soft hyphen in the middle", () => {
-    const TEXT = "sub&shy;string&shy;s in the middle";
+    const TEXT = "sub\u00ADstring\u00ADs in the middle";
     const TERM = "string";
 
     const matcher = getQueryTermMatcher(TERM, true);
