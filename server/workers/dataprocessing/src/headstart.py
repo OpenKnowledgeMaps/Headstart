@@ -52,7 +52,7 @@ class Dataprocessing(object):
         input_data = msg.get('input_data')
         return k, params, input_data
 
-    def execute_r(self, params, input_data):
+    def execute_search(self, params, input_data):
         q = params.get('q')
         service = params.get('service')
         data = {}
@@ -92,7 +92,7 @@ class Dataprocessing(object):
                 if params.get('vis_type') == "timeline":
                     # the step of create_map can be dropped once deduplication is possible in API backend as well
                     # TODO: create deduplicate endpoint in service worker and connect to that
-                    metadata = self.execute_r(params, input_data)
+                    metadata = self.execute_search(params, input_data)
                     sg_data = sg.get_streamgraph_data(json.loads(metadata),
                                                     params.get('q'),
                                                     params.get('top_n', 12),
@@ -103,7 +103,7 @@ class Dataprocessing(object):
                     res["status"] = "success"
                     self.redis_store.set(k+"_output", json.dumps(res))
                 else:
-                    res = self.execute_r(params, input_data)
+                    res = self.execute_search(params, input_data)
                     self.redis_store.set(k+"_output", json.dumps(res))
             except ValueError as e:
                 self.logger.error(params)

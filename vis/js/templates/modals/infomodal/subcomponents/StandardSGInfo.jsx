@@ -8,7 +8,7 @@ const StandardSGInfo = ({
   serviceName,
   serviceDesc,
   serviceLogo,
-  params: { query, customTitle },
+  params: { query, customTitle, repo_name },
 }) => {
   return (
     // html template starts here
@@ -50,6 +50,7 @@ const StandardSGInfo = ({
         {!!serviceName && (
           <DataSource
             source={serviceName}
+            contentProvider={repo_name}
             description={serviceDesc}
             logo={serviceLogo}
           />
