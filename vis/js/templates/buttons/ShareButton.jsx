@@ -5,7 +5,7 @@ import useOutsideClick from "../../utils/useOutsideClick";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import useMatomo from "../../utils/useMatomo";
 
-const ShareButton = ({ twitterHashtags }) => {
+const ShareButton = ({ twitterHashtags, isStreamgraph }) => {
   const localization = useLocalizationContext();
   const { trackEvent } = useMatomo();
 
@@ -54,7 +54,11 @@ const ShareButton = ({ twitterHashtags }) => {
       <button
         className="btn btn-primary sharebutton"
         id="sharebutton"
-        title={localization.share_button_title}
+        title={
+          isStreamgraph
+            ? localization.share_button_title_sg
+            : localization.share_button_title
+        }
         onClick={handleClick}
       >
         <i className="fa fa-share-alt fa-fw" aria-hidden="true"></i>

@@ -3,11 +3,14 @@ import React from "react";
 //import pubmedLogo from "../../../../images/logos/pubmed_logo.png";
 
 import StandardKMInfo from "./subcomponents/StandardKMInfo";
+import StandardSGInfo from "./subcomponents/StandardSGInfo";
 
-const PubMedInfo = ({ params }) => {
+const PubMedInfo = ({ params, isStreamgraph }) => {
+  const MainTemplate = isStreamgraph ? StandardSGInfo : StandardKMInfo;
+
   return (
     // html template starts here
-    <StandardKMInfo
+    <MainTemplate
       serviceName="PubMed"
       serviceDesc={
         <>

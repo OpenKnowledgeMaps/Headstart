@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
 import { openEmbedModal, openViperEditModal } from "../actions";
+import { STREAMGRAPH_MODE } from "../reducers/chartType";
 
 import $ from "jquery";
 
@@ -28,6 +29,7 @@ const ModalButtons = ({
   visTag,
   service,
   showCitationButton,
+  isStreamgraph,
 }) => {
   useEffect(() => {
     if (["base", "pubmed"].includes(service) && !isEmbedded) {
@@ -37,8 +39,18 @@ const ModalButtons = ({
 
   return (
     <div id="modals">
-      {showShareButton && <ShareButton twitterHashtags={twitterHashtags} />}
-      {showEmbedButton && <EmbedButton onClick={onEmbedButtonClick} />}
+      {showShareButton && (
+        <ShareButton
+          twitterHashtags={twitterHashtags}
+          isStreamgraph={isStreamgraph}
+        />
+      )}
+      {showEmbedButton && (
+        <EmbedButton
+          onClick={onEmbedButtonClick}
+          isStreamgraph={isStreamgraph}
+        />
+      )}
       {showFAQsButton && <FAQsButton url={FAQsUrl} />}
       {showViperEditButton && (
         <EditButton onClick={onViperEditClick} title="Add project resources" />
@@ -68,6 +80,7 @@ const mapStateToProps = (state) => ({
   visTag: state.misc.visTag,
   service: state.service,
   showCitationButton: state.modals.showCitationButton,
+  isStreamgraph: state.chartType === STREAMGRAPH_MODE,
 });
 
 const mapDispatchToProps = (dispatch) => ({

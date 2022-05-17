@@ -87,10 +87,14 @@
     <script>
         data_config.files = [{
             //title: "digital education",
-            title: "calcium",
+            //title: "calcium",
+            title: "digital education",
             //file: "./data/digital-education.json"
-            file: "./data/calcium.json"
+            //file: "./data/calcium.json",
+            file: "./data/digital-education-sg.json",
         }]
+        data_config.is_streamgraph = true;
+        data_config.show_area = false;
         data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "./headstart/server/";
     </script>
 </body>
