@@ -53,6 +53,8 @@ def get_or_create_contentprovider_lookup():
     except Exception as e:
         base_ns.logger.error(e)
    
+
+global contentprovider_lookup
 contentprovider_lookup = get_or_create_contentprovider_lookup()
 
 @base_ns.route('/search')
@@ -119,7 +121,6 @@ class ContentProvider(Resource):
         params = request.get_json()
         base_ns.logger.debug(params)
         if not contentprovider_lookup:
-            global contentprovider_lookup
             contentprovider_lookup = get_or_create_contentprovider_lookup()
         if not params:
             result = contentprovider_lookup
