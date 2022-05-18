@@ -11,8 +11,7 @@ redis_config = {
     "port": os.getenv("REDIS_PORT"),
     "db": os.getenv("REDIS_DB"),
     "password": os.getenv("REDIS_PASSWORD"),
-    "client_name": "api",
-    "ssl": True if os.getenv("REDIS_SSL") == "true" else False
+    "client_name": "api"
 }
 redis_store = redis.StrictRedis(**redis_config)
 

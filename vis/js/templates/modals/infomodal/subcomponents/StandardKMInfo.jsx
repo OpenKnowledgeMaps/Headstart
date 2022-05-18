@@ -8,7 +8,7 @@ const StandardKMInfo = ({
   serviceName,
   serviceDesc,
   serviceLogo,
-  params: { query, customTitle },
+  params: { query, customTitle, repo_name },
 }) => {
   return (
     // html template starts here
@@ -20,10 +20,12 @@ const StandardKMInfo = ({
         {(!!customTitle || !!query) && (
           <p>
             This knowledge map presents you with a topical overview of research
-            on <strong>{customTitle ? customTitle : query}</strong> based on the
-            100{" "}
+            on{" "}
+            <strong className="hs-strong">
+              {customTitle ? customTitle : query}
+            </strong>{" "}
+            based on the 100{" "}
             <a
-              className="underline"
               target="_blank"
               rel="noreferrer"
               href="https://openknowledgemaps.org/faq#faq-most-relevant"
@@ -42,7 +44,7 @@ const StandardKMInfo = ({
         {!!customTitle && (
           <p>
             This map has a custom title and was created using the following
-            query: <strong>{query}</strong>
+            query: <strong className="hs-strong">{query}</strong>
           </p>
         )}
         <p>
@@ -62,7 +64,6 @@ const StandardKMInfo = ({
           <a
             target="_blank"
             rel="noreferrer"
-            className="underline"
             href="https://openknowledgemaps.org/faq"
           >
             read our FAQs
@@ -72,6 +73,7 @@ const StandardKMInfo = ({
         {!!serviceName && (
           <DataSource
             source={serviceName}
+            contentProvider={repo_name}
             description={serviceDesc}
             logo={serviceLogo}
           />

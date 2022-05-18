@@ -25,9 +25,11 @@ const FilterDropdown = ({
     <div className="dropdown" id="filter_parameter_container">
       <DropdownButton
         id="filter_params"
+        noCaret
         title={
           <>
-            {label} <span id="curr-filter-type">{valueLabel}</span>
+            {label} <span id="curr-filter-type">{valueLabel}</span>{" "}
+            <i className="fas fa-chevron-down chevron"></i>
           </>
         }
       >

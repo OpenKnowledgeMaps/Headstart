@@ -80,7 +80,6 @@ describe("list state", () => {
         sortValue: null,
         sortOptions: [],
         defaultSort: null,
-        abstractSize: 250,
         showDocumentType: false,
         showMetrics: false,
         isContentBased: false,
@@ -88,6 +87,8 @@ describe("list state", () => {
         showKeywords: false,
         hideUnselectedKeywords: true,
         height: null,
+        citePapers: false,
+        exportPapers: false,
       };
 
       const result = listReducer(undefined, {});

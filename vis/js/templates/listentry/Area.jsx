@@ -35,13 +35,12 @@ const Area = ({
   return (
     // html template starts here
     <div
-      id="list_area"
-      className={isShort ? "short" : undefined}
+      className={"list_row list_area" + (isShort ? " short" : "")}
       onClick={handleClick}
       onMouseOver={handleMouseOver}
       onMouseOut={handleAreaMouseout}
     >
-      <span className="area_tag">{localization.area}:</span>{" "}
+      <span className="list_row_label">{localization.area}: </span>
       <span className="area_name" title={paper.area}>
         {paper.area}
       </span>

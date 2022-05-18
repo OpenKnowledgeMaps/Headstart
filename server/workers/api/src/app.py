@@ -1,9 +1,10 @@
 import os
 import sys
-from flask import Flask, redirect, url_for
+from flask import Flask
 from flask_restx import Api
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
+import logging
 
 from apis.triple import triple_ns
 from apis.gsheets import gsheets_ns
@@ -11,20 +12,47 @@ from apis.base import base_ns
 from apis.pubmed import pubmed_ns
 from apis.openaire import openaire_ns
 from apis.create_vis import vis_ns
+from apis.export import export_ns
 
-from utils.monkeypatches import ReverseProxied, __schema__, specs_url, _register_apidoc
-import logging
 
+class ReverseProxied(object):
+    '''Wrap the application in this middleware and configure the
+    front-end server to add these headers, to let you quietly bind
+    this to a URL other than / and to an HTTP scheme that is
+    different than what is used locally.
+
+    location /myprefix {
+        proxy_pass http://192.168.0.1:5001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Scheme $scheme;
+        proxy_set_header X-Script-Name /myprefix;
+        }
+
+    :param app: the WSGI application
+    '''
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self, environ, start_response):
+        script_name = environ.get('HTTP_X_SCRIPT_NAME', '')
+        if script_name:
+            environ['SCRIPT_NAME'] = script_name
+            path_info = environ['PATH_INFO']
+            if path_info.startswith(script_name):
+                environ['PATH_INFO'] = path_info[len(script_name):]
+
+        scheme = environ.get('HTTP_X_SCHEME', '')
+        if scheme:
+            environ['wsgi.url_scheme'] = scheme
+        return self.app(environ, start_response)
 
 def api_patches(app):
-    Api._register_apidoc = _register_apidoc
-    Api.__schema__ = __schema__
-    Api.specs_url = specs_url
 
     api_fixed = Api(
         app,
         title="Head Start API",
-        description="Head Start API demo",
+        description="Head Start API",
         version="0.1",
         prefix='/api',
         doc="/docs")
@@ -47,6 +75,7 @@ api.add_namespace(base_ns, path='/base')
 api.add_namespace(pubmed_ns, path='/pubmed')
 api.add_namespace(openaire_ns, path='/openaire')
 api.add_namespace(vis_ns, path='/vis')
+api.add_namespace(export_ns, path='/export')
 
 app.logger.debug(app.config)
 app.logger.debug(app.url_map)

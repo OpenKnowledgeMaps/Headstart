@@ -140,8 +140,6 @@ var config = {
     hide_keywords_overview: true,
     //show result type (document type) in list entry
     show_resulttype: false,
-    //abstract length in characters when items are not expanded
-    abstract_small: 250,
     //sort options for sort dropdown
     sort_options: ["readers", "title", "authors", "year"],
     //filter options for filter dropdown
@@ -181,6 +179,12 @@ var config = {
     show_cite_button: false,
     // show citation button for each paper
     cite_papers: false,
+    // show export button for each paper
+    export_papers: false,
+    // show twitter sharing button
+    show_twitter_button: false,
+    // show email sharing button
+    show_email_button: false,
 
 /*** streamgraph settings ***/
     //streamgraph color definition
@@ -232,6 +236,8 @@ var config = {
             backlink_list_streamgraph: "← Show all documents",
             backlink_list_streamgraph_stream_selected: "← Show all documents in stream",
             keywords: "Keywords",
+            doctypes: "Document type(s)",
+            unknown: "Unknown",
             no_keywords: "not available",
             not_available: "not available",
             no_title: "No title",
@@ -271,6 +277,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         ger: {
             loading: "Wird geladen...",
@@ -343,6 +351,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         ger_linkedcat: {
            loading: "Wird geladen...",
@@ -418,6 +428,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_plos: {
             loading: "Loading...",
@@ -434,6 +446,8 @@ var config = {
             backlink: "← Back to overview",
             backlink_list: "← Show all documents in area",
             keywords: "Keywords",
+            doctypes: "Document type(s)",
+            unknown: "Unknown",
             no_keywords: "not available",
             not_available: "not available",
             no_title: "No title",
@@ -482,6 +496,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -500,6 +516,8 @@ var config = {
             backlink_list_streamgraph: "← Show all documents",
             backlink_list_streamgraph_stream_selected: "← Show all documents in stream",
             keywords: "Keywords",
+            doctypes: "Document type(s)",
+            unknown: "Unknown",
             no_keywords: "not available",
             not_available: "not available",
             no_title: "No title",
@@ -545,7 +563,7 @@ var config = {
             embed_button_title_sg: "Embed this streamgraph on other websites",
             embed_button_text: 'Copy',
             copied_button_text: 'Copied',
-            embed_title: 'embed map',
+            embed_title: 'embed visualization',
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
             high_metadata_quality: "Data quality",
             high_metadata_quality_desc_base: "This visualization only includes documents with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
@@ -567,6 +585,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_openaire: {
             loading: "Loading...",
@@ -585,6 +605,8 @@ var config = {
             backlink: "← Back to overview",
             backlink_list: "← Show all documents in area",
             keywords: "Keywords",
+            doctypes: "Document type(s)",
+            unknown: "Unknown",
             no_keywords: "not available",
             not_available: "not available",
             no_title: "No title",
@@ -625,7 +647,7 @@ var config = {
             embed_button_title_sg: "Embed this streamgraph on other websites",
             embed_button_text: 'Copy',
             copied_button_text: 'Copied',
-            embed_title: 'embed map',
+            embed_title: 'embed visualization',
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
             link: 'link',
             tweets_count_label: " tweets",
@@ -658,6 +680,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -683,6 +707,8 @@ var config = {
             backlink: "← Zurück zur Übersicht",
             backlink_list: "← Zeige alle Themen im Themenfeld",
             keywords: "Keywords",
+            doctypes: "Document type(s)",
+            unknown: "Unknown",
             no_keywords: "nicht vorhanden",
             not_available: "nicht vorhanden",
             no_title: "Kein Titel",
@@ -721,6 +747,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         ger_cris_2: {
             loading: "Wird geladen...",
@@ -746,6 +774,8 @@ var config = {
             backlink: "← Zurück zur Übersicht",
             backlink_list: "← Zeige alle Themen im Themenfeld",
             keywords: "Keywords",
+            doctypes: "Document type(s)",
+            unknown: "Unknown",
             no_keywords: "nicht vorhanden",
             not_available: "nicht vorhanden",
             no_title: "Kein Titel",
@@ -784,6 +814,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_cris_2: {
            loading: "Loading...",
@@ -809,6 +841,8 @@ var config = {
             backlink: "← Back to overview",
             backlink_list: "← Show all topics in area",
             keywords: "Keywords",
+            doctypes: "Document type(s)",
+            unknown: "Unknown",
             no_keywords: "not available",
             not_available: "not available",
             no_title: "No title",
@@ -851,6 +885,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -869,6 +905,8 @@ var config = {
             backlink_list_streamgraph: "← Show all documents",
             backlink_list_streamgraph_stream_selected: "← Show all documents in stream",
             keywords: "Keywords",
+            doctypes: "Document type(s)",
+            unknown: "Unknown",
             no_keywords: "not available",
             not_available: "not available",
             no_title: "No title",
@@ -918,7 +956,7 @@ var config = {
             embed_button_title_sg: "Embed this streamgraph on other websites",
             embed_button_text: 'Copy',
             copied_button_text: 'Copied',
-            embed_title: 'embed map',
+            embed_title: 'embed visualization',
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
             area_streamgraph: "Stream",
             stream_year: "Year",
@@ -934,6 +972,8 @@ var config = {
             cite_vis_km: "Please cite this knowledge map as follows",
             cite_vis_sg: "Please cite this streamgraph as follows",
             cite_paper: "Cite this document as",
+            export_paper: "Export this document",
+            download: "Download",
         },
     },
 

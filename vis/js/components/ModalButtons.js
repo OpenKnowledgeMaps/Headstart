@@ -12,6 +12,8 @@ import EmbedButton from "../templates/buttons/EmbedButton";
 import FAQsButton from "../templates/buttons/FAQsButton";
 import ReloadButton from "../templates/buttons/ReloadButton";
 import ShareButton from "../templates/buttons/ShareButton";
+import TwitterButton from "../templates/buttons/TwitterButton";
+import EmailButton from "../templates/buttons/EmailButton";
 
 const ModalButtons = ({
   showShareButton,
@@ -24,12 +26,14 @@ const ModalButtons = ({
   onViperEditClick,
   showReloadButton,
   reloadLastUpdate,
-  reloadApiProperties,
+  apiProperties,
   isEmbedded,
   visTag,
   service,
   showCitationButton,
   isStreamgraph,
+  showTwitterButton,
+  showEmailButton,
 }) => {
   useEffect(() => {
     if (["base", "pubmed"].includes(service) && !isEmbedded) {
@@ -45,6 +49,8 @@ const ModalButtons = ({
           isStreamgraph={isStreamgraph}
         />
       )}
+      {showTwitterButton && <TwitterButton />}
+      {showEmailButton && <EmailButton />}
       {showEmbedButton && (
         <EmbedButton
           onClick={onEmbedButtonClick}
@@ -58,7 +64,7 @@ const ModalButtons = ({
       {showReloadButton && (
         <ReloadButton
           lastUpdate={reloadLastUpdate}
-          apiProperties={reloadApiProperties}
+          apiProperties={apiProperties}
         />
       )}
       {showCitationButton && <CitationButton />}
@@ -75,12 +81,14 @@ const mapStateToProps = (state) => ({
   showViperEditButton: state.modals.showViperEditButton,
   showReloadButton: state.modals.showReloadButton,
   reloadLastUpdate: state.modals.reloadLastUpdate,
-  reloadApiProperties: state.modals.reloadApiProperties,
+  apiProperties: state.modals.apiProperties,
   isEmbedded: state.misc.isEmbedded,
   visTag: state.misc.visTag,
   service: state.service,
   showCitationButton: state.modals.showCitationButton,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+  showTwitterButton: state.modals.showTwitterButton,
+  showEmailButton: state.modals.showEmailButton,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -124,10 +132,10 @@ const positionButtons = (tag) => {
     $("#modals").followTo(height, topPosition, leftOffset, 0);
   };
 
-  $(".close").click(function () {
+  $(".close").click(function (event) {
     $("#modals").css(
       "top",
-      $("#modals").position().top - $("#desktop-warning").outerHeight()
+      $("#modals").position().top - $(event.target).parent().outerHeight()
     );
 
     topPosition = $("#modals").position().top;

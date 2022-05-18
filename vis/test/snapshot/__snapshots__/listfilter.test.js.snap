@@ -60,8 +60,8 @@ exports[`List filter component snapshot matches a snapshot 1`] = `
           All
         </span>
          
-        <span
-          className="caret"
+        <i
+          className="fas fa-chevron-down chevron"
         />
       </button>
       <ul
@@ -133,8 +133,8 @@ exports[`List filter component snapshot matches a snapshot 1`] = `
           Relevance
         </span>
          
-        <span
-          className="caret"
+        <i
+          className="fas fa-chevron-down chevron"
         />
       </button>
       <ul

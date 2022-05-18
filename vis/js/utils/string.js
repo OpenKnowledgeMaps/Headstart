@@ -79,12 +79,12 @@ export const stringCompare = (a, b, sort_order) => {
  *
  * @returns shortened string
  */
-export const shorten = (string, length, end = "...") => {
+ export const shorten = (string, length, end = "...") => {
   if (string.length <= length) {
     return string;
   }
 
-  return string.substr(0, length) + end;
+  return string.slice(0, length) + end;
 };
 
 export const formatString = (string, params) => {

@@ -11,12 +11,12 @@ import Area from "./Area";
 import Citations from "./Citations";
 import Comments from "./Comments";
 import Details from "./Details";
+import DocTypesRow from "./DocTypesRow";
 import DocumentType from "./DocumentType";
 import EntryBacklink from "./EntryBacklink";
 import Keywords from "./Keywords";
 import Link from "./Link";
 import Metrics from "./Metrics";
-import Tags from "./Tags";
 import Title from "./Title";
 
 /**
@@ -34,6 +34,8 @@ const StandardListEntry = ({
   isStreamgraph,
   showBacklink,
   isInStreamBacklink,
+  showDocTags,
+  showAllDocTypes,
   // event handlers
   handleBacklinkClick,
 }) => {
@@ -56,12 +58,7 @@ const StandardListEntry = ({
       <div className="list_entry">
         <a className="list_anchor" id={paper.safe_id}></a>
         <div className="list_metadata">
-          <AccessIcons
-            isOpenAccess={!!paper.oa}
-            isFreeAccess={!!paper.free_access}
-            isDataset={paper.resulttype.includes("dataset")}
-            tags={paper.tags.length > 0 ? <Tags values={paper.tags} /> : null}
-          />
+          <AccessIcons paper={paper} showDocTypes={showDocTags} />
           <Title paper={paper} />
           <Details authors={paper.authors_list} source={paper.published_in} />
           <Link
@@ -75,6 +72,7 @@ const StandardListEntry = ({
         <Abstract text={paper.paper_abstract} />
         {paper.comments.length > 0 && <Comments items={paper.comments} />}
         {showKeywords && <Keywords>{paper.keywords}</Keywords>}
+        {showAllDocTypes && <DocTypesRow types={paper.resulttype} />}
         {showMetrics && (
           <Metrics
             citations={paper.citation_count}
@@ -109,6 +107,8 @@ const mapStateToProps = (state) => ({
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
   isInStreamBacklink: !!state.selectedBubble,
+  showDocTags: state.service === "base",
+  showAllDocTypes: state.service === "base" && !!state.selectedPaper,
 });
 
 export default connect(

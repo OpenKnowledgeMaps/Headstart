@@ -13,7 +13,6 @@ const AboutSoftware = () => {
           href="https://github.com/OpenKnowledgeMaps/Headstart"
           target="_blank"
           rel="noreferrer"
-          className="underline"
         >
           Head Start
         </a>{" "}
@@ -22,14 +21,13 @@ const AboutSoftware = () => {
           href="https://openknowledgemaps.org/"
           target="_blank"
           rel="noreferrer"
-          className="underline"
         >
           Open Knowledge Maps
         </a>
         . Open Knowledge Maps is a non-profit organisation run by a group of
         dedicated team members and volunteers. In order to improve our free and
         open service, we need your support. Please send us your feedback to{" "}
-        <a href="mailto:info@openknowledgemaps.org" className="underline">
+        <a href="mailto:info@openknowledgemaps.org">
           info@openknowledgemaps.org
         </a>
         .
@@ -42,7 +40,6 @@ const AboutSoftware = () => {
               href="https://openknowledgemaps.org/donate-now"
               target="_blank"
               rel="noreferrer"
-              className="underline"
             >
               Make a donation
             </a>
@@ -52,7 +49,6 @@ const AboutSoftware = () => {
               href="https://openknowledgemaps.org/supporting-membership"
               target="_blank"
               rel="noreferrer"
-              className="underline"
             >
               Become an organisational member
             </a>
@@ -62,7 +58,6 @@ const AboutSoftware = () => {
               href="https://openknowledgemaps.org/faq#faq-funding"
               target="_blank"
               rel="noreferrer"
-              className="underline"
             >
               Become a funder of our roadmap
             </a>
@@ -74,7 +69,6 @@ const AboutSoftware = () => {
           href="https://openknowledgemaps.us13.list-manage.com/subscribe?u=c399f89442d6aa733a9896515&id=f9d9e47566"
           target="_blank"
           rel="noreferrer"
-          className="underline"
         >
           Sign-up for our newsletter
         </a>{" "}

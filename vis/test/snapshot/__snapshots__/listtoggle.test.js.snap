@@ -5,11 +5,14 @@ exports[`List toggle component snapshot matches a snapshot 1`] = `
   className="row"
   id="show_hide_button"
   onClick={[Function]}
+  title="Hide list"
 >
   <div
     className="col-xs-2"
   >
-    ▼
+    <i
+      className="fas fa-chevron-down chevron"
+    />
   </div>
   <div
     className="col-xs-8"
@@ -19,7 +22,7 @@ exports[`List toggle component snapshot matches a snapshot 1`] = `
       id="show_hide_label"
     >
       <span>
-        Liste einklappen
+        Overview
          
         <span
           id="list_item_banner"
@@ -31,7 +34,7 @@ exports[`List toggle component snapshot matches a snapshot 1`] = `
             13
           </span>
            
-          Dokumente
+          documents
           )
         </span>
       </span>
@@ -40,7 +43,9 @@ exports[`List toggle component snapshot matches a snapshot 1`] = `
   <div
     className="col-xs-2 text-right"
   >
-    ▼
+    <i
+      className="fas fa-chevron-down chevron"
+    />
   </div>
 </div>
 `;
