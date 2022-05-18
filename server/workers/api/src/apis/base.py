@@ -111,15 +111,16 @@ class ContentProvider(Resource):
     @base_ns.produces(["application/json"])
     def post(self):
         """
-        params: can be empty
-        content_provider: BASE internal name, e.g. "ftunivlausanne"
+        params: can be empty, or {"repo": "ft..."}, BASE internal name, e.g. "ftunivlausanne"
 
         returns: json
-        {"contentprovider_short": "ftunivlausanne",
-         "repo_name": "Université de Lausanne (UNIL): Serval - Serveur académique lausannois"}
+        {"repo_name": "Université de Lausanne (UNIL): Serval - Serveur académique lausannois"}
         """
         params = request.get_json()
         base_ns.logger.debug(params)
+        if not contentprovider_lookup:
+            global contentprovider_lookup
+            contentprovider_lookup = get_or_create_contentprovider_lookup()
         if not params:
             result = contentprovider_lookup
         else:
