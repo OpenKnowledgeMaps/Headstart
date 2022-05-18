@@ -186,7 +186,7 @@ class Streamgraph(object):
         df = pd.DataFrame.from_records(sg_data["subject"])
         all_ids = set(chain.from_iterable(df.ids_overall))
         metadata = metadata[metadata.id.map(lambda x: x in all_ids)]
-        metadata.drop_duplicates(inplace=True)
+        metadata.drop_duplicates(inplace=True, subset=["id"])
         return metadata.to_json(orient="records")
 
 def aggregate_ids(series):
