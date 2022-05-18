@@ -72,6 +72,9 @@ class Search(Resource):
             del params["optradio"]
         errors = search_param_schema.validate(params, partial=True)
         if "repo" in params:
+            global contentprovider_lookup
+            if not contentprovider_lookup:
+                contentprovider_lookup = get_or_create_contentprovider_lookup()
             repo_name = contentprovider_lookup.get(params["repo"])
             params["repo_name"] = repo_name
         params["limit"] = 120
@@ -120,6 +123,7 @@ class ContentProvider(Resource):
         """
         params = request.get_json()
         base_ns.logger.debug(params)
+        global contentprovider_lookup
         if not contentprovider_lookup:
             contentprovider_lookup = get_or_create_contentprovider_lookup()
         if not params:
