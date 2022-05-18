@@ -80,8 +80,6 @@ class Search(Resource):
         if "repo" in params:
             repo_name = contentprovider_lookup.get(params["repo"])
             params["repo_name"] = repo_name
-        params["limit"] = 120
-        params["list_size"] = 100
         base_ns.logger.debug(errors)
         if errors:
             abort(400, str(errors))
