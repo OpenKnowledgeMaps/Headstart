@@ -187,7 +187,6 @@ get_papers <- function(query, params,
 get_raw_data <- function(limit, base_query, sortby_string, filter, repo, coll, retry_opts, offset) {
   (res_raw <- bs_search(hits=limit
                       , query = base_query
-                      , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm"
                       , sortby = sortby_string
                       , filter = filter
                       , target = repo
