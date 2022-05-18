@@ -31,10 +31,12 @@ const ScaleToolbar = ({
       <div className="dropdown">
         <DropdownButton
           id="scale-menu"
+          noCaret
           title={
             <>
               {localization.scale_by_label}{" "}
-              <span id="curr-filter-type">{labels[value]}</span>
+              <span id="curr-filter-type">{labels[value]}</span>{" "}
+              <i className="fas fa-chevron-down chevron"></i>
             </>
           }
         >

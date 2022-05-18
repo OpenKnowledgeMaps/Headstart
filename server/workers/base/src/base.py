@@ -1,3 +1,4 @@
+import os
 import json
 import subprocess
 import pandas as pd
@@ -20,7 +21,7 @@ class BaseClient(RWrapper):
         endpoint = msg.get('endpoint')
         return k, params, endpoint
 
-    def execute_r(self, params):
+    def execute_search(self, params):
         q = params.get('q')
         service = params.get('service')
         data = {}
@@ -52,6 +53,27 @@ class BaseClient(RWrapper):
             self.logger.error(error)
             raise
 
+    def get_contentproviders(self):
+        runner = os.path.abspath(os.path.join(self.wd, "run_base_contentproviders.R"))
+        cmd = [self.command, runner, self.wd]
+        try:
+            proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                    encoding='utf-8')
+            stdout, stderr = proc.communicate()
+            output = [o for o in stdout.split('\n') if len(o) > 0]
+            error = [o for o in stderr.split('\n') if len(o) > 0]
+            raw = json.loads(output[-1])
+            if isinstance(raw, dict) and raw.get('status') == "error":
+                res = raw
+            else:
+                contentproviders = pd.DataFrame(raw)
+                res = {}
+                res["contentproviders"] = contentproviders.to_json(orient='records')
+            return res
+        except Exception as e:
+            self.logger.error(e)
+            self.logger.error(error)
+
     def run(self):
         while True:
             k, params, endpoint = self.next_item()
@@ -59,7 +81,7 @@ class BaseClient(RWrapper):
             self.logger.debug(params)
             if endpoint == "search":
                 try:
-                    res = self.execute_r(params)
+                    res = self.execute_search(params)
                     res["id"] = k
                     if res.get("status") == "error" or params.get('raw') is True:
                         self.redis_store.set(k+"_output", json.dumps(res))
@@ -68,3 +90,15 @@ class BaseClient(RWrapper):
                 except Exception as e:
                     self.logger.exception("Exception during data retrieval.")
                     self.logger.error(params)
+                    self.logger.error(e)
+
+            if endpoint == "contentproviders":
+                try:
+                    res = self.get_contentproviders()
+                    res["id"] = k
+                    self.redis_store.set(k+"_output", json.dumps(res))
+                except Exception as e:
+                    self.logger.exception("Exception during retrieval of contentproviders.")
+                    self.logger.error(params)
+                    self.logger.error(e)
+

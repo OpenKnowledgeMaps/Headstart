@@ -107,6 +107,7 @@ class DataManager {
     this.papers.forEach((paper) => {
       paper.safe_id = this.__getSafeId(paper);
       this.__escapeStrings(paper);
+      this.__sanitizeTitle(paper);
       this.__parseAuthors(paper);
       this.__parseCoordinates(paper);
       while (blockedCoords[`${paper.x}:${paper.y}`]) {
@@ -133,6 +134,10 @@ class DataManager {
       }
       return "__" + ("000" + c.toString(16)).slice(-4);
     });
+  }
+
+  __sanitizeTitle(paper) {
+    paper.title = paper.title.trim();
   }
 
   __parseAuthors(paper) {

@@ -18,7 +18,6 @@ const PubMedInfo = ({ params, isStreamgraph }) => {
           literature from MEDLINE, life science journals, and online books. For
           more information please{" "}
           <a
-            className="underline"
             href="http://www.ncbi.nlm.nih.gov/pubmed"
             target="_blank "
           >

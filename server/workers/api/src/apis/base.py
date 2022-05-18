@@ -39,6 +39,22 @@ base_querymodel = base_ns.model("SearchQuery",
                                                       description='raw results from ElasticSearch')})
 
 
+def get_or_create_contentprovider_lookup():
+    try:
+        k = str(uuid.uuid4())
+        d = {"id": k, "params": {},"endpoint": "contentproviders"}
+        base_ns.logger.debug(d)
+        redis_store.rpush("base", json.dumps(d))
+        result = get_key(redis_store, k)
+        df = pd.DataFrame(json.loads(result["contentproviders"]))
+        df.set_index("internal_name", inplace=True)
+        cp_dict = df.name.to_dict()
+        return cp_dict
+    except Exception as e:
+        base_ns.logger.error(e)
+   
+contentprovider_lookup = get_or_create_contentprovider_lookup()
+
 @base_ns.route('/search')
 class Search(Resource):
     @base_ns.doc(responses={200: 'OK',
@@ -61,6 +77,11 @@ class Search(Resource):
             params["list_size"] = params["limit"]
         else:
             params["list_size"] = 100
+        if "repo" in params:
+            repo_name = contentprovider_lookup.get(params["repo"])
+            params["repo_name"] = repo_name
+        params["limit"] = 120
+        params["list_size"] = 100
         base_ns.logger.debug(errors)
         if errors:
             abort(400, str(errors))
@@ -91,6 +112,36 @@ class Search(Resource):
             base_ns.logger.error(e)
             abort(500, "Problem encountered, check logs.")
 
+@base_ns.route('/contentproviders')
+class ContentProvider(Resource):
+    @base_ns.doc(responses={200: 'OK',
+                              400: 'Invalid search parameters'})
+    @base_ns.produces(["application/json"])
+    def post(self):
+        """
+        params: can be empty
+        content_provider: BASE internal name, e.g. "ftunivlausanne"
+
+        returns: json
+        {"contentprovider_short": "ftunivlausanne",
+         "repo_name": "Université de Lausanne (UNIL): Serval - Serveur académique lausannois"}
+        """
+        params = request.get_json()
+        base_ns.logger.debug(params)
+        if not params:
+            result = contentprovider_lookup
+        else:
+            result = {"repo_name": contentprovider_lookup.get(params["repo"])}
+        try:
+            headers = {}
+            headers["Content-Type"] = "application/json"
+            return make_response(result,
+                                 200,
+                                 headers)
+        except Exception as e:
+            base_ns.logger.error(e)
+            abort(500, "Problem encountered, check logs.")
+        
 
 
 @base_ns.route('/service_version')
