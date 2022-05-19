@@ -94,9 +94,12 @@
             //file: "./data/calcium.json",
             file: "./data/production.json",
             //file: "./data/digital-education-sg.json",
+            // other attributes:
+            is_streamgraph: false, // set true for streamgraph data
+            show_area: true, // set false for streamgraph data
         }]
-        data_config.is_streamgraph = true;
-        data_config.show_area = false;
+        data_config.is_streamgraph = data_config.files[0].is_streamgraph;
+        data_config.show_area = data_config.files[0].show_area;
         data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "./headstart/server/";
     </script>
 </body>
