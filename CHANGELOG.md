@@ -1,5 +1,15 @@
 # Changelog
 
+## 2022-05-19
+
+### New features
+
+- The BASE content provider is now displayed in the context line & more info modal.
+
+### Changes
+
+- The new share buttons are now hidden in the embed mode.
+
 ## 2022-05-05
 
 ### New features
