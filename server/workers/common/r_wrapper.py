@@ -37,7 +37,7 @@ class RWrapper(object):
     def next_item(self):
         raise NotImplementedError
 
-    def execute_r(self, params):
+    def execute_search(self, params):
         raise NotImplementedError
 
     def run(self):
@@ -49,7 +49,7 @@ class RWrapper(object):
                 try:
                     res = {}
                     res["id"] = k
-                    res["input_data"] = self.execute_r(params)
+                    res["input_data"] = self.execute_search(params)
                     res["params"] = params
                     if params.get('raw') is True:
                         redis_store.set(k+"_output", json.dumps(res))

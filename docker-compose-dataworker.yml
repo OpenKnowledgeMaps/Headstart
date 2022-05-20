@@ -12,7 +12,6 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      REDIS_SSL: "${REDIS_SSL}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache

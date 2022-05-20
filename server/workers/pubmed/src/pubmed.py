@@ -19,7 +19,7 @@ class PubMedClient(RWrapper):
         endpoint = msg.get('endpoint')
         return k, params, endpoint
 
-    def execute_r(self, params):
+    def execute_search(self, params):
         q = params.get('q')
         service = params.get('service')
         data = {}
@@ -52,7 +52,7 @@ class PubMedClient(RWrapper):
                 try:
                     res = {}
                     res["id"] = k
-                    res["input_data"] = self.execute_r(params)
+                    res["input_data"] = self.execute_search(params)
                     res["params"] = params
                     if params.get('raw') is True:
                         self.redis_store.set(k+"_output", json.dumps(res))

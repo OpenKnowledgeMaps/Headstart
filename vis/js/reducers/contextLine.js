@@ -38,6 +38,7 @@ const contextLine = (state = {}, action) => {
           typeof config.service_name !== "undefined"
             ? config.service_name
             : config.service_names[context.service],
+        contentProvider: context.params ? context.params.repo_name : null,
         paperCount:
           config.create_title_from_context_style === "viper"
             ? papers.filter((p) => p.resulttype.includes("publication")).length

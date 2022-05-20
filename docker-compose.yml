@@ -11,10 +11,9 @@ services:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     command: postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
     volumes:
-      # - ~/data/OKMaps/${COMPOSE_PROJECT_NAME}/postgresql/data:/var/lib/postgresql/data
       - db_data:/var/lib/postgresql/data
-      - ./server/workers/pg_hba.conf:/etc/pg_hba.conf
-      - ./server/workers/postgresql.conf:/etc/postgresql.conf
+      - ./pg_hba.conf:/etc/pg_hba.conf
+      - ./postgresql.conf:/etc/postgresql.conf
     networks: 
       - headstart
 
@@ -35,8 +34,7 @@ services:
     command: ["redis-server", "/etc/redis/redis.conf", "--bind", "${REDIS_HOST}", "--appendonly", "yes", "--port", "${REDIS_PORT}"]
     volumes:
         - 'redis:/var/lib/redis/data'
-        - ./server/workers/redis.conf:/etc/redis/redis.conf
-        - ./server/workers/certs:/etc/certs
+        - ./redis.conf:/etc/redis/redis.conf
     ports:
      - "127.0.0.1:${REDIS_PORT}:6379"
     restart: always
@@ -52,12 +50,13 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_DB: "${REDIS_DB}"
-      REDIS_SSL: "${REDIS_SSL}"
       BEHIND_PROXY: "${BEHIND_PROXY}"
       DEFAULT_DATABASE: "${DEFAULT_DATABASE}"
       DATABASES: "${DATABASES}"
       FLASK_ENV: "${FLASK_ENV}"
     command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
+    volumes:
+      - ./api_cache:/var/api_cache
     depends_on:
       - redis
     networks: 
@@ -82,15 +81,12 @@ services:
 
   triple:
     image: triple:${SERVICE_VERSION}
-    env_file:
-      - server/workers/triple/triple.env
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
       TRIPLE_USER: "${TRIPLE_USER}"
       TRIPLE_PASS: "${TRIPLE_PASS}"
@@ -107,15 +103,12 @@ services:
 
   gsheets:
     image: gsheets:${SERVICE_VERSION}
-    env_file:
-      - server/workers/gsheets/gsheets.env
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
     restart: always
     depends_on:
@@ -125,16 +118,19 @@ services:
 
   dataprocessing:
     image: dataprocessing:${SERVICE_VERSION}
-    env_file:
-    - server/workers/dataprocessing/dataprocessing.env
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
+      LOGFILE: "${LOGFILE}"
+      RENV_VERSION: 0.14.0-5
+      CRAN_REPOS: https://cran.wu.ac.at
+      LC_ALL: "en_US.UTF-8"
+      LANG: "en_US.UTF-8"
+      RENV_PATHS_CACHE: /renv/cache
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -152,7 +148,6 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
       LOGFILE: "/var/log/headstart/headstart.log"
       RENV_VERSION: 0.14.0-5
@@ -178,15 +173,13 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
-      LOGFILE: "/var/log/headstart/headstart.log"
+      LOGFILE: "${LOGFILE}"
       RENV_VERSION: 0.14.0-5
       CRAN_REPOS: https://cran.wu.ac.at
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
-      PYTHONIOENCODING: "utf-8"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -204,15 +197,13 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      REDIS_SSL: "${REDIS_SSL}"
       LOGLEVEL: "${LOGLEVEL}"
-      LOGFILE: "/var/log/headstart/headstart.log"
+      LOGFILE: "${LOGFILE}"
       RENV_VERSION: 0.14.0-5
       CRAN_REPOS: https://cran.wu.ac.at
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
-      PYTHONIOENCODING: "utf-8"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -225,6 +216,8 @@ services:
 volumes:
   redis:
   db_data:
+    driver: local
+  api_cache:
     driver: local
 
 networks:
