@@ -32,7 +32,7 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
       num_clusters <- tryCatch({
         cut_off <- get_cut_off(css_cluster, attempt)
         attempt <- attempt+1
-        if (attempt > 500) cut_off$k else NA
+        if (attempt > 250) cut_off$k else max_clusters
       }, error = function(err){
         vclog$debug(err$message)
         return (NA)
@@ -102,7 +102,8 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2) {
   # Perform non-metric multidimensional scaling
   # nm <- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
   # nm.nmin = nmds.min(nm)
-  if (nrow(distance_matrix) <= 2) {
+  dm_nrows <- max(nrow(distance_matrix),1)
+  if (dm_nrows <= 2) {
     points <- tryCatch({
       ord <- metaMDS(distance_matrix, k = 2, parallel = 7, trymax=30,
                      engine="monoMDS", distance='cao',
@@ -114,12 +115,13 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2) {
       vclog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "NMDS-Stress:", min(ord$stress), sep=" "))
       points <- ord$points
     }, error=function(err){
-      points <- cbind(runif(nrow(distance_matrix), min=-1, max=0),
-                      runif(nrow(distance_matrix), min=0, max=1))
+      points <- cbind(runif(dm_nrows, min=-1, max=0),
+                      runif(dm_nrows, min=0, max=1))
       return(points)
     })
-  } else if (nrow(distance_matrix) == 1) {
-    points <- cbind(0, 0)
+  } else if (dm_nrows == 0) {
+    points <- cbind(runif(1, min=-1, max=0),
+                    runif(1, min=0, max=1))
   } else {
     points <- tryCatch({
       ord <- metaMDS(distance_matrix, k = 2, parallel = 7, trymax=30,
@@ -132,8 +134,8 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2) {
       vclog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "NMDS-Stress:", min(ord$stress), sep=" "))
       points <- ord$points
     }, error=function(err){
-      points <- cbind(runif(nrow(distance_matrix), min=-1, max=0),
-                      runif(nrow(distance_matrix), min=0, max=1))
+      points <- cbind(runif(dm_nrows, min=-1, max=0),
+                      runif(dm_nrows, min=0, max=1))
       return(points)
     })
   }
