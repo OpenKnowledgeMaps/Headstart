@@ -4,7 +4,7 @@ import subprocess
 import pandas as pd
 import logging
 from common.r_wrapper import RWrapper
-from parsers import improved_df_parsing
+from .parsers import improved_df_parsing
 
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
@@ -49,6 +49,7 @@ class BaseClient(RWrapper):
                 res = raw_metadata
             else:
                 metadata = pd.DataFrame(raw_metadata)
+                metadata = self.enrich_metadata(metadata)
                 text = pd.DataFrame(raw_text)
                 input_data = {}
                 input_data["metadata"] = metadata.to_json(orient='records')
@@ -66,6 +67,7 @@ class BaseClient(RWrapper):
         metadata["repo"] = metadata["content_provider"].map(lambda x: self.content_providers.get(x, ""))
         enrichment = improved_df_parsing(metadata)
         metadata = pd.concat([metadata, enrichment], axis=1)
+        return metadata
 
     def get_contentproviders(self):
         runner = os.path.abspath(os.path.join(self.wd, "run_base_contentproviders.R"))
