@@ -4,6 +4,7 @@ import Hyphenate from "../components/Hyphenate";
 
 import { select } from "d3-selection";
 import { formatPaperDate } from "./listentry/Title";
+import Icons from "./paper/Icons";
 
 class Paper extends React.Component {
   constructor(props) {
@@ -100,7 +101,6 @@ class Paper extends React.Component {
 
     const { title, authors_string: authors, year, area } = data;
     const { num_readers: readers, published_in: publisher } = data;
-    const { oa: isOpenAccess, free_access: isFreeAccess } = data;
     const { x, y, width: baseWidth, height: baseHeight } = this.state;
     const { path: basePath, dogEar: baseDogEar } = this.state;
 
@@ -205,36 +205,17 @@ class Paper extends React.Component {
                 }}
                 ref={this.metadataRef}
               >
-                <div id="icons">
-                  {isOpenAccess && (
-                    <p id="open-access-logo" className={sizeModifierClass}>
-                      <i className="fas fa-lock-open"></i>
-                    </p>
-                  )}
-                  {this.isDataset() && (
-                    <p id="dataset-icon" className={sizeModifierClass}>
-                      <span
-                        id="dataset-icon_list"
-                        className="fa fa-database"
-                      ></span>
-                    </p>
-                  )}
-                  {isFreeAccess && (
-                    <p id="free-access-logo" className={sizeModifierClass}>
-                      <i className="fas fa-lock-open"></i>
-                    </p>
-                  )}
-                </div>
-                <p id="title" className={sizeModifierClass}>
+                <Icons paper={data} iconClasses={sizeModifierClass} />
+                <p className={"title " + sizeModifierClass}>
                   <Hyphenate>
                     <Highlight hyphenated queryHighlight>
                       {title}
                     </Highlight>{" "}
-                    (
-                    <Highlight queryHighlight>
-                      {formatPaperDate(year)}
-                    </Highlight>
-                    )
+                    {!!year && (
+                      <Highlight queryHighlight>
+                        {`(${formatPaperDate(year)})`}
+                      </Highlight>
+                    )}
                   </Hyphenate>
                 </p>
                 <p id="details" className={sizeModifierClass}>

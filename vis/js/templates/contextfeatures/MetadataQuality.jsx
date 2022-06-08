@@ -1,28 +1,36 @@
 import React from "react";
 
-/**
- * Template for the metadata quality context line item.
- * @param {Object} props contain: 
- *     - label: any text description
- *     - quality: either 'low' or 'high'
- */
-const MetadataQuality = (props) => {
-  const { label, quality } = props;
+import HoverPopover from "../HoverPopover";
+import { useLocalizationContext } from "../../components/LocalizationProvider";
+import useMatomo from "../../utils/useMatomo";
 
-  let metadataClass = "";
-  if (quality === "low") {
-    metadataClass = "context_metadata_low";
+const MetadataQuality = ({ quality, popoverContainer, service }) => {
+  const loc = useLocalizationContext();
+  const { trackEvent } = useMatomo();
+
+  if (!["low", "high"].includes(quality)) {
+    return null;
   }
-  if (quality === "high") {
-    metadataClass = "context_metadata_high";
-  }
+
+  const trackMouseEnter = () =>
+    trackEvent("Title & Context line", "Hover data quality", "Context line");
 
   return (
-    // html template starts here
-    <span className={`context_moreinfo ${metadataClass}`} {...props}>
-      {label}
+    <span
+      id="metadata_quality"
+      className="context_item"
+      onMouseEnter={trackMouseEnter}
+    >
+      <HoverPopover
+        id="metadata-quality-popover"
+        container={popoverContainer}
+        content={loc[quality + "_metadata_quality_desc_" + service]}
+      >
+        <span className={`context_moreinfo context_metadata_${quality}`}>
+          {loc[[quality + "_metadata_quality"]]}
+        </span>
+      </HoverPopover>
     </span>
-    // html template ends here
   );
 };
 

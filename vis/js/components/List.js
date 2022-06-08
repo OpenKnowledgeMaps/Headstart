@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { filterData, sortData } from "../utils/data";
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
-import ListToggle from "./ListToggle";
+import ListToggle from "../templates/ListToggle";
 import FilterSort from "./FilterSort";
 import ListEntries from "./ListEntries";
 

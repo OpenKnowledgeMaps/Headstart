@@ -110,6 +110,9 @@ detect_error <- function(failed, service) {
       if (grepl("xml_find_first", failed$query_reason, fixed=TRUE)){
         reason <- c(reason, 'API error: BASE not reachable')
       }
+      if (grepl("read_xml.raw", failed$query_reason, fixed=TRUE)){
+        reason <- c(reason, 'API error: BASE not reachable')
+      }
     }
     if (length(reason) == 0 && service == 'pubmed') {
       if (startsWith(failed$query_reason, "HTTP failure: 500") && grepl("error forwarding request", failed$query_reason, fixed=TRUE)){

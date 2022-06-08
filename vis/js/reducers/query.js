@@ -20,11 +20,11 @@ const cleanQuery = (query) => {
   if (typeof query !== "string") {
     return null;
   }
-  
-  let cleanedQuery = query.replace(/\\(.?)/g, "$1");
+
+  const cleanedQuery = query.replace(/\\(.?)/g, "$1");
 
   return cleanedQuery;
-}
+};
 
 /**
  * Parses query and returns all its terms.
@@ -41,30 +41,30 @@ const getQueryTerms = (context) => {
     return [];
   }
 
-  const originalQuery = context.query;
-
-  // Replace terms within square brackets, as they denote fields in PubMed
-  const fullQuery = originalQuery.replace(/\[(.*?)\]/g, "");
+  const cleanedQuery = context.query
+    // Remove terms within square brackets, as they denote fields in PubMed
+    .replace(/\[(.*?)\]/g, "")
+    // Replace different types of quotes
+    .replace(/[“”„]/g, '"');
 
   // Get all phrases and remove quotes from results
   const phraseRegex = /"(.*?)"/g;
-  let phraseArray = fullQuery.match(phraseRegex);
+  let phraseArray = cleanedQuery.match(phraseRegex);
   if (phraseArray === null) {
     phraseArray = [];
   }
 
   // Replace backslashed quotes??
-  // TODO test this one, it seems to be redundant
   phraseArray = phraseArray.map((x) => x.replace(/\\"|"/g, ""));
 
   // Remove phrases, and, or, +, -, (, ) from query string
-  const queryWtPhrases = fullQuery.replace(phraseRegex, " ");
-  const cleanQuery = queryWtPhrases
+  const queryWtPhrases = cleanedQuery
+    .replace(phraseRegex, " ")
     .replace(/\band\b|\bor\b|\(|\)/g, "")
     .replace(/(^|\s)-|\+/g, " ");
 
   phraseArray = phraseArray.concat(
-    cleanQuery.trim().replace(/\s+/g, " ").split(" ")
+    queryWtPhrases.trim().split(/\s+/)
   );
 
   // Remove backslashes, colons and empty words
