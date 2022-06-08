@@ -4,6 +4,7 @@ import subprocess
 import pandas as pd
 import logging
 from common.r_wrapper import RWrapper
+from parsers import improved_df_parsing
 
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
@@ -11,6 +12,14 @@ formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
 
 
 class BaseClient(RWrapper):
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        result = self.get_contentproviders()
+        df = pd.DataFrame(json.loads(result["contentproviders"]))
+        df.set_index("name", inplace=True)
+        cp_dict = df.internal_name.to_dict()
+        self.content_providers = cp_dict
 
     def next_item(self):
         queue, msg = self.redis_store.blpop("base")
@@ -52,6 +61,11 @@ class BaseClient(RWrapper):
             self.logger.error(e)
             self.logger.error(error)
             raise
+
+    def enrich_metadata(self, metadata):
+        metadata["repo"] = metadata["content_provider"].map(lambda x: self.content_providers.get(x, ""))
+        enrichment = improved_df_parsing(metadata)
+        metadata = pd.concat([metadata, enrichment], axis=1)
 
     def get_contentproviders(self):
         runner = os.path.abspath(os.path.join(self.wd, "run_base_contentproviders.R"))
@@ -101,4 +115,5 @@ class BaseClient(RWrapper):
                     self.logger.exception("Exception during retrieval of contentproviders.")
                     self.logger.error(params)
                     self.logger.error(e)
+
 
