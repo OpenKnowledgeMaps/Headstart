@@ -53,6 +53,8 @@ def get_or_create_contentprovider_lookup():
     except Exception as e:
         base_ns.logger.error(e)
    
+
+global contentprovider_lookup
 contentprovider_lookup = get_or_create_contentprovider_lookup()
 
 @base_ns.route('/search')
@@ -78,6 +80,9 @@ class Search(Resource):
         else:
             params["list_size"] = 100
         if "repo" in params:
+            global contentprovider_lookup
+            if not contentprovider_lookup:
+                contentprovider_lookup = get_or_create_contentprovider_lookup()
             repo_name = contentprovider_lookup.get(params["repo"])
             params["repo_name"] = repo_name
         base_ns.logger.debug(errors)
@@ -117,15 +122,16 @@ class ContentProvider(Resource):
     @base_ns.produces(["application/json"])
     def post(self):
         """
-        params: can be empty
-        content_provider: BASE internal name, e.g. "ftunivlausanne"
+        params: can be empty, or {"repo": "ft..."}, BASE internal name, e.g. "ftunivlausanne"
 
         returns: json
-        {"contentprovider_short": "ftunivlausanne",
-         "repo_name": "Université de Lausanne (UNIL): Serval - Serveur académique lausannois"}
+        {"repo_name": "Université de Lausanne (UNIL): Serval - Serveur académique lausannois"}
         """
         params = request.get_json()
         base_ns.logger.debug(params)
+        global contentprovider_lookup
+        if not contentprovider_lookup:
+            contentprovider_lookup = get_or_create_contentprovider_lookup()
         if not params:
             result = contentprovider_lookup
         else:
