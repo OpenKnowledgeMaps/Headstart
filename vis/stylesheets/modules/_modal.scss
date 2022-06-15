@@ -443,3 +443,25 @@ button.close {
         }
     }
 }
+
+.sg-tooltip {
+    font-family: $base-font-family;
+    font-size: 10px;
+    font-weight: $fontweight400;
+
+    .year {
+        font-weight: $fontweight700;
+    }
+
+    .key {
+        text-transform: none;
+        font-size:14px;
+        margin-bottom: 5px;
+    }
+
+    .swatch {
+        border-radius: 4px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+    }
+}

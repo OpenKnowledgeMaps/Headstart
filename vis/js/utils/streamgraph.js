@@ -1,6 +1,6 @@
 import d3 from "d3";
 
-export const CHART_MARGIN = { top: 20, right: 50, bottom: 70, left: 50 };
+export const CHART_MARGIN = { top: 20, right: 50, bottom: 70, left: 70 };
 export const MAX_TICKS_X = 8;
 export const AXIS_PADDING = {
   left: -30,

@@ -528,15 +528,24 @@ const getTooltip = (
   { year, color, keyword, yearDocs, totalDocs },
   localization
 ) => {
-  return `<div style="font-family: Lato; font-size:10px;">
-<div class='year'>${year}</div>
-<div class='key' style="text-transform: none; font-size:14px; margin-bottom: 5px;">
+  return `
+<div class="sg-tooltip">
+  <div class="year">${year}</div>
+  <div class="key">
     <span
-        style='background:${color}; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; width:15px; height: 10px;'
-        class='swatch'>&nbsp;</span>
+      style="background:${color}; width:15px; height: 10px;"
+      class="swatch"
+    >
+      &nbsp;
+    </span>
     ${keyword}
+  </div>
+  <div class="value">
+    ${localization.stream_docs} ${year}: ${yearDocs}
+  </div>
+  <div class="value">
+    ${localization.stream_total}: ${totalDocs}
+  </div>
 </div>
-<div class='value'> ${localization.stream_docs}: ${yearDocs} </div>
-<div class='value'> ${localization.stream_total}: ${totalDocs} </div>
-</div>`;
+`.trim();
 };
