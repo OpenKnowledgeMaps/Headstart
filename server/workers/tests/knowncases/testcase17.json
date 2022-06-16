@@ -10,7 +10,7 @@
         "from": "1665-01-01",
         "language": "english",
         "limit": 120,
-        "list_size": 100,
+        "retain_size": 100,
         "q": "stuff",
         "raw": true,
         "service": "base",

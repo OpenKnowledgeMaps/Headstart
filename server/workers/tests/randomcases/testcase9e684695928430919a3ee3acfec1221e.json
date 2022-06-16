@@ -6,7 +6,7 @@
         "from": "2019-01-18",
         "language": "english",
         "limit": 120,
-        "list_size": 100,
+        "retain_size": 100,
         "q": "leadership",
         "service": "base",
         "sorting": "most-recent",

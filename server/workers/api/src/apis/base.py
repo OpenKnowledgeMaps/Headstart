@@ -31,7 +31,7 @@ base_querymodel = base_ns.model("SearchQuery",
                                                           required=True),
                                 "limit": fields.Integer(example=100,
                                                         description='max. number of results'),
-                                "list_size": fields.Integer(),
+                                "retain_size": fields.Integer(),
                                 "language": fields.String(example='en',
                                                           description='language code, optional',
                                                           required=False),
@@ -76,9 +76,9 @@ class Search(Resource):
         if params["limit"] > 1000:
             params["limit"] = 1000
         if params.get('vis_type') == "timeline":
-            params["list_size"] = params["limit"]
+            params["retain_size"] = params["limit"]
         else:
-            params["list_size"] = 100
+            params["retain_size"] = 100
         if "repo" in params:
             global contentprovider_lookup
             if not contentprovider_lookup:

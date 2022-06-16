@@ -6,7 +6,7 @@
         "from": "2018-07-09",
         "language": "english",
         "limit": 120,
-        "list_size": 100,
+        "retain_size": 100,
         "q": "data mining",
         "service": "base",
         "sorting": "most-relevant",

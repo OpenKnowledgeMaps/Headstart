@@ -6,7 +6,7 @@
         "from": "2020-03-07",
         "language": "english",
         "limit": 120,
-        "list_size": 100,
+        "retain_size": 100,
         "q": "kompensasi",
         "service": "base",
         "sorting": "most-relevant",

@@ -10,7 +10,7 @@
         "from": "2018-08-17",
         "language": "english",
         "limit": 120,
-        "list_size": 100,
+        "retain_size": 100,
         "q": "social attention",
         "raw": true,
         "service": "base",

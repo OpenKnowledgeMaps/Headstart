@@ -6,7 +6,7 @@
         "from": "2017-10-26",
         "language": "english",
         "limit": 120,
-        "list_size": 100,
+        "retain_size": 100,
         "q": "blockchain",
         "service": "base",
         "sorting": "most-relevant",

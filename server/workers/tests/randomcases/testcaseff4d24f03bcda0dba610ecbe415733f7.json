@@ -6,7 +6,7 @@
         "from": "2020-07-15",
         "language": "english",
         "limit": 120,
-        "list_size": 100,
+        "retain_size": 100,
         "q": "stunting",
         "service": "base",
         "sorting": "most-relevant",

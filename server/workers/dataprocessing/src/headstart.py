@@ -30,7 +30,7 @@ class Dataprocessing(object):
         self.default_params["MAX_CLUSTERS"] = 15
         self.default_params["language"] = "english"
         self.default_params["taxonomy_separator"] = ";"
-        self.default_params["list_size"] = -1
+        self.default_params["retain_size"] = -1
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(loglevel)
         handler = logging.StreamHandler(sys.stdout)

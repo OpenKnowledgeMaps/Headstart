@@ -6,7 +6,7 @@
         "from": "2018-10-29",
         "language": "english",
         "limit": 120,
-        "list_size": 100,
+        "retain_size": 100,
         "q": "covid",
         "service": "base",
         "sorting": "most-relevant",

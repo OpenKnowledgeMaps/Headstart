@@ -6,7 +6,7 @@
         "from": "2019-10-27",
         "language": "english",
         "limit": 120,
-        "list_size": 100,
+        "retain_size": 100,
         "q": "mathematics",
         "service": "base",
         "sorting": "most-relevant",

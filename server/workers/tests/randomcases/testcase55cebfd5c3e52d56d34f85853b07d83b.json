@@ -6,7 +6,7 @@
         "from": "2018-03-29",
         "language": "english",
         "limit": 120,
-        "list_size": 100,
+        "retain_size": 100,
         "q": "communication",
         "service": "base",
         "sorting": "most-relevant",

@@ -240,7 +240,7 @@ class BaseParamSpace(ParamSpace):
         params["sorting"] = self.random_sorting()
         params["service"] = "base"
         params["limit"] = 120
-        params["list_size"] = 100
+        params["retain_size"] = 100
         params["language"] = "english"
         return params
 
@@ -279,7 +279,7 @@ class PubmedParamSpace(ParamSpace):
         params["sorting"] = self.random_sorting()
         params["service"] = "base"
         params["limit"] = 100
-        params["list_size"] = -1
+        params["retain_size"] = -1
         params["language"] = "english"
         return params
 

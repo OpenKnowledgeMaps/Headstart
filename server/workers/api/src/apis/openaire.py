@@ -51,7 +51,7 @@ class Search(Resource):
         openaire_ns.logger.debug(params)
         #errors = search_param_schema.validate(params, partial=True)
         params["limit"] = 100
-        params["list_size"] = -1
+        params["retain_size"] = -1
         # openaire_ns.logger.debug(errors)
         # if errors:
         #     abort(400, str(errors))

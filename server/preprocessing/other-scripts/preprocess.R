@@ -26,21 +26,26 @@ detect_language <- function(text) {
 }
 
 
-filter_duplicates <- function(metadata, text, list_size) {
-  #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
-  if(list_size > -1) {
-    output = deduplicate_titles(metadata, list_size)
+drop_duplicates <- function(metadata, text, retain_size, how="retain_size") {
+  #If retain_size is greater than -1 and smaller than the actual list size, deduplicate titles
+  if(how=="retain_size") {
+    output = deduplicate_titles(metadata, retain_size, how)
     text = subset(text, !(id %in% output))
     metadata = subset(metadata, !(id %in% output))
 
-    text = head(text, list_size)
-    metadata = head(metadata, list_size)
+    text = head(text, retain_size)
+    metadata = head(metadata, retain_size)
+  }
+  if(how=="all") {
+    output = deduplicate_titles(metadata, 0, how)
+    text = subset(text, !(id %in% output))
+    metadata = subset(metadata, !(id %in% output))
   }
   return(list(metadata=metadata, text=text))
 }
 
 
-deduplicate_titles <- function(metadata, list_size) {
+deduplicate_titles <- function(metadata, retain_size, how="retain_size") {
   output <- c()
 
   metadata$oa_state[metadata$oa_state == "2"] <- 0
@@ -52,7 +57,13 @@ deduplicate_titles <- function(metadata, list_size) {
   metadata$title[index] <- paste(metadata$title[index], metadata$authors[index], sep=" ")
 
   num_items = length(metadata$id)
-  max_replacements = ifelse(num_items > list_size, num_items - list_size, -1)
+  max_replacements = ifelse(num_items > retain_size, num_items - retain_size, -1)
+  if(how=="retain_size") {
+    max_replacements = ifelse(num_items > retain_size, num_items - retain_size, -1)
+  }
+  if(how=="all") {
+    max_replacements = -1
+  }
 
   ids = metadata$id
   titles = metadata$title

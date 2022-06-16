@@ -6,7 +6,7 @@
         "from": "2018-10-16",
         "language": "english",
         "limit": 120,
-        "list_size": 100,
+        "retain_size": 100,
         "q": "loyalitas",
         "service": "base",
         "sorting": "most-relevant",

@@ -49,7 +49,7 @@ http.mount("http://", adapter)
 def retrieve_input_data(casedata):
     params = casedata["params"]
     url = "http://127.0.0.1/api/dev/%s/search" % params["service"]
-    params.pop("list_size", None)
+    params.pop("retain_size", None)
     params["raw"] = True
     res = http.post(url, json=params, timeout=20)
     return res.json()

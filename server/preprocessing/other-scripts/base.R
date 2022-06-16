@@ -1,6 +1,7 @@
 library(rbace)
 library(stringr)
 library(dplyr)
+source('preprocess.R')
 
 # get_papers
 #
@@ -36,7 +37,6 @@ library(dplyr)
 
 
 blog <- getLogger('api.base')
-
 
 get_papers <- function(query, params,
                        retry_opts=rbace::bs_retry_options(3,60,3,4)) {
@@ -105,7 +105,14 @@ get_papers <- function(query, params,
   if (nrow(res)==0){
     stop(paste("No results retrieved."))
   }
-  while (nrow(res) < limit && attr(res_raw, "numFound")>+offset+120) {
+  ret_val <- etl(res)
+  metadata <- ret_val$metadata
+  text <- ret_val$text
+  metadata <- sanitize(metadata)
+  filtered <- drop_duplicates(metadata, text, 0, "all")
+  metadata <- filtered$metadata
+  text <- filtered$text
+  while (nrow(metadata) < limit && attr(res_raw, "numFound")>+offset+120) {
     offset <- offset+120
     res_raw <- get_raw_data(limit,
                             base_query,
@@ -116,8 +123,28 @@ get_papers <- function(query, params,
                             retry_opts,
                             offset)
     res <- bind_rows(res, res_raw$docs)
+    ret_val <- etl(res)
+    metadata <- ret_val$metadata
+    text <- ret_val$text
+    metadata <- sanitize(metadata)
+    filtered <- drop_duplicates(metadata, text, 0, "all")
+    metadata <- head(filtered$metadata, limit+1)
+    text <- head(filtered$text, limit+1)
   }
 
+
+
+
+  ret_val=list("metadata" = metadata, "text"=text)
+
+  end.time <- Sys.time()
+  time.taken <- end.time - start.time
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
+
+  return(ret_val)
+}
+
+etl <- function(res) {
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
 
   metadata$id = res$dcdocid
@@ -176,12 +203,6 @@ get_papers <- function(query, params,
                        sep=" ")
 
   ret_val=list("metadata" = metadata, "text"=text)
-
-  end.time <- Sys.time()
-  time.taken <- end.time - start.time
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
-
-  return(ret_val)
 }
 
 get_raw_data <- function(limit, base_query, sortby_string, filter, repo, coll, retry_opts, offset) {

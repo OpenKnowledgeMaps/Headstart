@@ -6,7 +6,7 @@
         "from": "2019-09-23",
         "language": "english",
         "limit": 120,
-        "list_size": 100,
+        "retain_size": 100,
         "q": "fintech",
         "service": "base",
         "sorting": "most-relevant",
