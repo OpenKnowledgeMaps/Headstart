@@ -46,6 +46,8 @@ get_papers <- function(query, params = NULL, retry_opts = rentrez::entrez_retry_
   # safe to add queries to the database
   query <- gsub("\\\\", "", query)
 
+  limit <- params$limit
+
   plog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Search:", query))
   start.time <- Sys.time()
 

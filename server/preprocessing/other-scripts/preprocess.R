@@ -1,4 +1,5 @@
 vplog <- getLogger('vis.preprocess')
+library("stringi")
 
 
 sanitize <- function(metadata) {
@@ -27,21 +28,25 @@ detect_language <- function(text) {
 
 
 drop_duplicates <- function(metadata, text, retain_size, how="retain_size") {
-  #If retain_size is greater than -1 and smaller than the actual list size, deduplicate titles
-  if(how=="retain_size") {
-    output = deduplicate_titles(metadata, retain_size, how)
-    text = subset(text, !(id %in% output))
-    metadata = subset(metadata, !(id %in% output))
+  #If retain_size is greater than -1 and smaller than the actual list size, deduplicate titles  
+  if(how=="keep_all") {
+    return(list(metadata=metadata, text=text))
+  } else {
+    if(how=="retain_size") {
+      output = deduplicate_titles(metadata, retain_size, how)
+      text = subset(text, !(id %in% output))
+      metadata = subset(metadata, !(id %in% output))
 
-    text = head(text, retain_size)
-    metadata = head(metadata, retain_size)
+      text = head(text, retain_size)
+      metadata = head(metadata, retain_size)
+    }
+    if(how=="remove_all") {
+      output = deduplicate_titles(metadata, 0, how)
+      text = subset(text, !(id %in% output))
+      metadata = subset(metadata, !(id %in% output))
+    }
+    return(list(metadata=metadata, text=text))
   }
-  if(how=="all") {
-    output = deduplicate_titles(metadata, 0, how)
-    text = subset(text, !(id %in% output))
-    metadata = subset(metadata, !(id %in% output))
-  }
-  return(list(metadata=metadata, text=text))
 }
 
 
@@ -61,7 +66,7 @@ deduplicate_titles <- function(metadata, retain_size, how="retain_size") {
   if(how=="retain_size") {
     max_replacements = ifelse(num_items > retain_size, num_items - retain_size, -1)
   }
-  if(how=="all") {
+  if(how=="remove_all") {
     max_replacements = -1
   }
 
