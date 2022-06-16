@@ -11,6 +11,13 @@ library(doParallel)
 library(stringi)
 library(stringdist)
 library(plyr)
+
+source('preprocess.R')
+source('features.R')
+source('cluster.R')
+source('summarize.R')
+source('postprocess.R')
+
 registerDoParallel(detectCores(all.tests = FALSE, logical = TRUE)-1)
 
 
@@ -23,37 +30,20 @@ vis_layout <- function(text, metadata, service,
                        max_clusters=15, maxit=500,
                        mindim=2, maxdim=2,
                        lang=NULL, add_stop_words=NULL,
-                       testing=FALSE, taxonomy_separator=NULL, list_size=-1,
+                       taxonomy_separator=NULL, list_size=-1,
                        vis_type='overview') {
-  TESTING <<- testing # makes testing param a global variable
   start.time <- Sys.time()
 
-  tryCatch({
-   if(!isTRUE(testing)) {
-     source('preprocess.R')
-     source('features.R')
-     source('cluster.R')
-     source('summarize.R')
-     source('postprocess.R')
-   } else {
-     source('../preprocess.R')
-     source('../features.R')
-     source('../cluster.R')
-     source('../summarize.R')
-     source('../postprocess.R')
-   }
-  }, error = function(err) print(err)
-  )
 
   vlog$debug("preprocess")
   metadata <- sanitize(metadata)
-  filtered <- filter_duplicates(metadata, text, list_size)
+  filtered <- filter_duplicates(metadata, text, -1)
   metadata <- filtered$metadata
   text <- filtered$text
   vlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "doc count:", nrow(metadata), sep=" "))
   
   if(vis_type=='overview'){
-    stops <- get_stopwords(lang, testing)
+    stops <- get_stopwords(lang)
     corpus <- create_corpus(metadata, text, stops)
 
     vlog$debug("get features")

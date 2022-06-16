@@ -4,15 +4,15 @@ library(rstudioapi)
 
 options(warn=1)
 
-wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
+wd <- dirname(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd(wd) #Don't forget to set your working directory
 
 query <- 'species' #args[2]
 service <- "base"
 params <- NULL
-params_file <- "params_base.json"
+params_file <- "test/params_base.json"
 
-source('../utils.R')
+source('utils.R')
 DEBUG = FALSE
 
 if (DEBUG==TRUE){
@@ -23,8 +23,8 @@ if (DEBUG==TRUE){
 
 tslog <- getLogger('ts')
 
-source("../vis_layout.R")
-source('../base.R')
+source("vis_layout.R")
+source('base.R')
 
 MAX_CLUSTERS = 15
 
@@ -62,7 +62,7 @@ if(exists('input_data')) {
                            service,
                            max_clusters=MAX_CLUSTERS,
                            lang=LANGUAGE$name,
-                           add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
+                           add_stop_words=ADDITIONAL_STOP_WORDS, list_size=100)
   }, error=function(err){
     tslog$error(gsub("\n", " ", paste("Processing failed", query$raw_query, paste(params, collapse=" "), err, sep="||")))
     failed$query <<- query$raw_query
