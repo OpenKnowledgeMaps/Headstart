@@ -197,7 +197,7 @@ class createVisualization(Resource):
                                  200,
                                  headers)
         except Exception as e:
-            result = {'success': False, 'reason': e}
+            result = {'success': False, 'reason': str(e)}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  500,
@@ -220,7 +220,7 @@ class writeRevision(Resource):
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 200, headers)
         except Exception as e:
-            result = {'success': False, 'reason': e}
+            result = {'success': False, 'reason': str(e)}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 500, headers)
 
@@ -313,7 +313,7 @@ class createID(Resource):
             headers["Content-Type"] = "application/json"
             return make_response(jsonify(result), 200, headers)
         except Exception as e:
-            result = {'success': False, 'reason': e}
+            result = {'success': False, 'reason': str(e)}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 500, headers)
 
