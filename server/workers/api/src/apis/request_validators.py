@@ -31,6 +31,7 @@ class SearchParamSchema(Schema):
     min_descsize = fields.Int()
     repo = fields.Str()
     coll = fields.Str()
+    non_public = fields.Bool()
 
     @pre_load
     def fix_years(self, in_data, **kwargs):

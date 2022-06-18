@@ -165,7 +165,7 @@
     },
     "rbace": {
       "Package": "rbace",
-      "Version": "0.2.2.91",
+      "Version": "0.2.2.92",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
