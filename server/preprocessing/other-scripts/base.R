@@ -93,7 +93,7 @@ get_papers <- function(query, params, limit=100,
   # execute search
   (res_raw <- bs_search(hits=limit
                         , query = base_query
-                        , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm"
+                        , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider"
                         , sortby = sortby_string
                         , filter = filter
                         , target = repo
@@ -154,6 +154,7 @@ get_papers <- function(query, params, limit=100,
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
+  metadata$content_provider = check_metadata(res$dcprovider)
 
   text = data.frame(matrix(nrow=length(res$dcdocid)))
   text$id = metadata$id
