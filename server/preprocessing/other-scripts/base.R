@@ -82,6 +82,7 @@ get_papers <- function(query, params, limit=100,
   
   repo = params$repo
   coll = params$coll
+  non_public = params$non_public
   
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE query:", base_query))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Sort by:", sortby_string))
@@ -97,7 +98,8 @@ get_papers <- function(query, params, limit=100,
                         , filter = filter
                         , target = repo
                         , coll = coll
-                        , retry = retry_opts))
+                        , retry = retry_opts
+                        , non_public = non_public))
   res <- res_raw$docs
   if (nrow(res)==0){
     stop(paste("No results retrieved."))
