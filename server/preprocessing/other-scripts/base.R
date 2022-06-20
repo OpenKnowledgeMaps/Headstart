@@ -155,6 +155,9 @@ get_papers <- function(query, params, limit=100,
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
   metadata$content_provider = check_metadata(res$dcprovider)
+  if(repo=="fttriple" && non_public==TRUE) {
+    metadata$content_provider <- "GoTriple"
+  }
 
   text = data.frame(matrix(nrow=length(res$dcdocid)))
   text$id = metadata$id
