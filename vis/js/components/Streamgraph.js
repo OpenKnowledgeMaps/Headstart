@@ -478,7 +478,7 @@ class Streamgraph extends React.Component {
     if (currentYearData) {
       d3.select("#tooltip")
         .style("left", x + TOOLTIP_OFFSET.left + "px")
-        .style("top", Math.max(0, y + TOOLTIP_OFFSET.top) + "px")
+        .style("top", Math.max(window.scrollY, y + TOOLTIP_OFFSET.top) + "px")
         .html(() =>
           getTooltip(
             {

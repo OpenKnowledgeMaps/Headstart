@@ -10,7 +10,7 @@ export const LABEL_ROUND_FACTOR = 4; // border-radius labels
 export const LINE_HELPER_MARGIN = -10; // relative to mouse position
 export const TOOLTIP_OFFSET = {
   // relative to mouse position
-  top: -150,
+  top: -100,
   left: -10,
 };
 
