@@ -82,6 +82,7 @@ get_papers <- function(query, params,
 
   min_descsize <- if (is.null(params$min_descsize)) 300 else params$min_descsize
   filter <- I(paste0('descsize:[', min_descsize, '%20TO%20*]'))
+  limit <- params$limit
   
   repo = params$repo
   coll = params$coll
