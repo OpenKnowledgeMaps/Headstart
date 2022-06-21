@@ -95,15 +95,17 @@ const areEqualEnough = (a, b, delta = 0.01) => {
  *
  * @returns {number} -1/0/1 based on what rectangle is "greater"
  */
-const sortComparator = (a, b) => {
+const labelSortComparator = (a, b) => {
   if (areEqualEnough(a.center_x, b.center_x)) {
     if (areEqualEnough(a.y, b.y)) {
       return 0;
     }
 
-    return 1 * Math.sign(a.y - b.y);
+    // the higher on screen the label is, the later we want to reposition it (higher y is less)
+    return -1 * Math.sign(a.y - b.y);
   }
 
+  // the more on the right on screen the label is, the later we want to reposition it (lower x is less)
   return 1 * Math.sign(a.center_x - b.center_x);
 };
 
@@ -142,6 +144,61 @@ const getShiftDistance = (shiftedRect, otherRect, moveUp = true) => {
 };
 
 /**
+ * This function moves the labels from the `labels` array by `offsetY` one by one,
+ * while there's an overlap with the next label below.
+ *
+ * The offset changes in the loop: its value is determined by the last
+ * repositioning.
+ *
+ * @param {Array} labels the list of already positioned labels
+ * @param {Number} offsetY the initial offset in px
+ */
+const moveLabelsCheckOverlap = (labels, offsetY) => {
+  labels.sort((a, b) => a.y - b.y);
+
+  for (let i = 0; i < labels.length - 1; i++) {
+    const label = labels[i];
+    const nextLabel = labels[i + 1];
+
+    label.y = label.y + offsetY;
+    if (!areOverlapping(label, nextLabel)) {
+      break;
+    }
+    offsetY = -getShiftDistance(label, nextLabel, false);
+  }
+};
+
+/**
+ * Group the labels into columns by their `center_x` value.
+ *
+ * @param {Array} labelPositions array of positions returned by getLabelPosition
+ * @returns array of arrays of positions groupped by their `center_x` value
+ */
+const groupLabelColumns = (labelPositions) => {
+  labelPositions.sort(labelSortComparator);
+  let currentColumn = [];
+  const result = [];
+
+  labelPositions.forEach((label) => {
+    if (
+      currentColumn.length > 0 &&
+      currentColumn[0].center_x !== label.center_x
+    ) {
+      result.push(currentColumn);
+      currentColumn = [];
+    }
+
+    currentColumn.push(label);
+  });
+
+  if (currentColumn.length > 0) {
+    result.push(currentColumn);
+  }
+
+  return result;
+};
+
+/**
  * Finds colliding labels and recalculates their positions.
  *
  * Algorithm:
@@ -157,32 +214,40 @@ const getShiftDistance = (shiftedRect, otherRect, moveUp = true) => {
  * @param {Array} labelPositions array of positions returned by getLabelPosition
  */
 export const recalculateOverlappingLabels = (labelPositions) => {
-  labelPositions.sort(sortComparator);
+  const columns = groupLabelColumns(labelPositions);
 
-  let moveUp = true;
-  let lastCenter = null;
+  let moveUp = false;
+  for (const column of columns) {
+    moveUp = !moveUp;
+    const labelComparator = (a, b) => (moveUp ? a.y - b.y : b.y - a.y);
+    column.sort(labelComparator);
 
-  labelPositions.forEach((label) => {
-    if (label.repositioned) {
-      return;
-    }
-
-    if (label.center_x !== lastCenter) {
-      lastCenter = label.center_x;
-      moveUp = !moveUp;
-    }
-
-    const repositionedLabels = labelPositions.filter((l) => l.repositioned);
-    repositionedLabels.sort((a, b) => (moveUp ? a.y - b.y : b.y - a.y));
-    repositionedLabels.forEach((otherLabel) => {
-      if (areOverlapping(label, otherLabel)) {
-        const shiftDistance = getShiftDistance(label, otherLabel, moveUp);
-        label.y = label.y + shiftDistance;
+    for (const label of column) {
+      if (label.repositioned) {
+        continue;
       }
-    });
 
-    label.repositioned = true;
-  });
+      const repositionedLabels = labelPositions.filter((l) => l.repositioned);
+      repositionedLabels.sort(labelComparator);
+
+      for (const otherLabel of repositionedLabels) {
+        if (areOverlapping(label, otherLabel)) {
+          const shiftDistance = getShiftDistance(label, otherLabel, moveUp);
+          label.y = label.y + shiftDistance;
+        }
+      }
+
+      // label overflowing the vis
+      if (label.y < 0) {
+        const overflow = 0 - label.y;
+        label.y = 0;
+
+        moveLabelsCheckOverlap(repositionedLabels, overflow);
+      }
+
+      label.repositioned = true;
+    }
+  }
 
   return labelPositions;
 };
