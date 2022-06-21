@@ -92,7 +92,10 @@ export const selectPaper = (paper, isFromBackButton = false) => ({
   isFromBackButton,
 });
 
-export const deselectPaper = () => ({ type: "DESELECT_PAPER" });
+export const deselectPaper = (isFromBackButton = false) => ({
+  type: "DESELECT_PAPER",
+  isFromBackButton,
+});
 
 export const highlightArea = (paper) => ({
   type: "HIGHLIGHT_AREA",

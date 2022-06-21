@@ -21,8 +21,6 @@ class SearchParamSchema(Schema):
     unique_id = fields.Str()
     raw = fields.Boolean()
     sg_method = fields.Str()
-    repo = fields.Str()
-    repo_name = fields.Str()
     coll = fields.Str()
     vis_id = fields.Str(default=None)
     optradio = fields.Str()
@@ -30,6 +28,7 @@ class SearchParamSchema(Schema):
     embed = fields.Str()
     min_descsize = fields.Int()
     repo = fields.Str()
+    repo_name = fields.Str()
     coll = fields.Str()
     non_public = fields.Bool()
 

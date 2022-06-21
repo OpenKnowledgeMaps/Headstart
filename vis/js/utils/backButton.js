@@ -1,5 +1,4 @@
-import { zoomIn, zoomOut } from "../actions";
-
+import { deselectPaper, selectPaper, zoomIn, zoomOut } from "../actions";
 import { createAnimationCallback } from "./eventhandlers";
 
 /**
@@ -10,61 +9,39 @@ import { createAnimationCallback } from "./eventhandlers";
  *
  * For a better user experience, it should be debounced.
  */
-const onBackButtonClick = (dataManager, store, config) => {
-  const queryParams = new URLSearchParams(window.location.search);
-
-  if (!queryParams.has("area")) {
-    if (config.is_streamgraph && queryParams.has("paper")) {
-      removeQueryParams("paper");
-    }
-    store.dispatch(zoomOut(createAnimationCallback(store.dispatch), true));
-
-    return;
-  }
-
-  // this can be optimized: if the area is the same as before, simply
-  // deselect the paper or select a different one
-
-  if (queryParams.has("area") && !queryParams.has("paper")) {
-    zoomUrlArea(dataManager, store, config);
-
-    return;
-  }
-
-  if (queryParams.has("paper")) {
-    selectUrlPaper(dataManager, store, config);
-  }
-};
-
-export default onBackButtonClick;
-
-/**
- * Selects the paper that's specified in the query params.
- */
-export const selectUrlPaper = (dataManager, store, config) => {
-  if (config.is_streamgraph) {
-    // paper cannot be selected in streamgraph
-    removeQueryParams("area", "paper");
-    return;
-  }
-
+const handleZoomSelectQuery = (dataManager, store, config) => {
   const params = new URLSearchParams(window.location.search);
 
-  if (!params.has("paper")) {
+  if (params.has("area") && params.has("paper")) {
+    selectPaperWithZoom(dataManager, store, params, config);
     return;
   }
 
-  const zoomedPaper = params.get("paper");
+  if (params.has("area")) {
+    deselectAndZoomIn(dataManager, store, params, config);
+    return;
+  }
 
-  const paper = dataManager.papers.find((p) => p.safe_id === zoomedPaper);
+  if (config.is_streamgraph && params.has("paper")) {
+    selectPaperWithoutZoom(dataManager, store, params);
+    return;
+  }
 
-  if (!paper) {
+  deselectAndZoomOut(store, config);
+};
+
+export default handleZoomSelectQuery;
+
+const zoomKnowledgeMap = (dataManager, store, areaID, paper) => {
+  const area = dataManager.areas.find((a) => a.area_uri == areaID);
+
+  if (!area) {
     return;
   }
 
   store.dispatch(
     zoomIn(
-      { title: paper.area, uri: paper.area_uri },
+      { title: area.title, uri: area.area_uri },
       createAnimationCallback(store.dispatch),
       store.getState().zoom,
       true,
@@ -73,40 +50,86 @@ export const selectUrlPaper = (dataManager, store, config) => {
   );
 };
 
-/**
- * Zooms into an area that's specified in the query params.
- *
- * IMPORTANT: expects to be bound with the HeadstartRunner's this.
- */
-export const zoomUrlArea = (dataManager, store, config) => {
-  const params = new URLSearchParams(window.location.search);
+const zoomStreamgraph = (dataManager, store, streamID, paper) => {
+  const stream = dataManager.streams.find((s) => s.key == streamID);
 
-  if (!params.has("area")) {
-    return;
-  }
-
-  const zoomedArea = params.get("area");
-
-  if (config.is_streamgraph) {
-    // this is a workaround that simply zooms out
-    // TODO implement a proper solution for streamgraph
-    removeQueryParams("area");
-    store.dispatch(zoomOut(createAnimationCallback(store.dispatch), true));
-    return;
-  }
-
-  const area = dataManager.papers.find((a) => a.area_uri == zoomedArea);
-
-  if (!area) {
+  if (!stream) {
     return;
   }
 
   store.dispatch(
     zoomIn(
-      { title: area.area, uri: area.area_uri },
-      createAnimationCallback(store.dispatch),
+      { title: stream.key, color: stream.color, docIds: stream.docIds },
+      null,
       store.getState().zoom,
-      true
+      true,
+      paper
     )
   );
+};
+
+const selectPaperWithZoom = (dataManager, store, params, config) => {
+  const paper = dataManager.papers.find(
+    (p) => p.safe_id === params.get("paper")
+  );
+
+  if (!paper) {
+    return;
+  }
+
+  // possible optimization: only selecting a paper if the area is the same
+
+  const areaID = params.get("area");
+
+  if (config.is_streamgraph) {
+    return zoomStreamgraph(dataManager, store, areaID, paper);
+  }
+
+  zoomKnowledgeMap(dataManager, store, areaID, paper);
+};
+
+const selectPaperWithoutZoom = (dataManager, store, params) => {
+  const paper = dataManager.papers.find(
+    (p) => p.safe_id === params.get("paper")
+  );
+
+  if (!paper) {
+    return;
+  }
+
+  store.dispatch(selectPaper(paper, true));
+};
+
+const deselectAndZoomIn = (dataManager, store, params, config) => {
+  const areaID = params.get("area");
+
+  // possible optimization: only deselecting a paper if the area is the same
+  // if (store.getState().selectedPaper) {
+  //   store.dispatch(deselectPaper());
+  // }
+
+  if (config.is_streamgraph) {
+    return zoomStreamgraph(dataManager, store, areaID);
+  }
+
+  zoomKnowledgeMap(dataManager, store, areaID);
+};
+
+const deselectAndZoomOut = (store, config) => {
+  const { zoom, selectedPaper } = store.getState();
+
+  if (zoom) {
+    store.dispatch(
+      zoomOut(
+        config.is_streamgraph ? null : createAnimationCallback(store.dispatch),
+        true
+      )
+    );
+
+    return;
+  }
+
+  if (selectedPaper) {
+    store.dispatch(deselectPaper(true));
+  }
 };

@@ -1,5 +1,6 @@
 library(rbace)
 library(stringr)
+library(dplyr)
 
 # get_papers
 #
@@ -37,7 +38,7 @@ library(stringr)
 blog <- getLogger('api.base')
 
 
-get_papers <- function(query, params, limit=100,
+get_papers <- function(query, params,
                        retry_opts=rbace::bs_retry_options(3,60,3,4)) {
 
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Search:", query))
@@ -61,6 +62,7 @@ get_papers <- function(query, params, limit=100,
 
   year_from = params$from
   year_to = params$to
+  limit = params$limit
 
   # prepare query fields
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
@@ -74,6 +76,7 @@ get_papers <- function(query, params, limit=100,
     lang_query <- ""
   }
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
+  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider"
 
   base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, collapse=" ")
 
@@ -91,18 +94,34 @@ get_papers <- function(query, params, limit=100,
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Collection:", coll))
   
   # execute search
-  (res_raw <- bs_search(hits=limit
-                        , query = base_query
-                        , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider"
-                        , sortby = sortby_string
-                        , filter = filter
-                        , target = repo
-                        , coll = coll
-                        , retry = retry_opts
-                        , non_public = non_public))
+  offset = 0
+  res_raw <- get_raw_data(limit,
+                          base_query,
+                          return_fields,
+                          sortby_string,
+                          filter,
+                          repo,
+                          coll,
+                          retry_opts,
+                          offset,
+                          non_public)
   res <- res_raw$docs
   if (nrow(res)==0){
     stop(paste("No results retrieved."))
+  }
+  while (nrow(res) < limit && attr(res_raw, "numFound")>+offset+120) {
+    offset <- offset+120
+    res_raw <- get_raw_data(limit,
+                            base_query,
+                            return_fields,
+                            sortby_string,
+                            filter,
+                            repo,
+                            coll,
+                            retry_opts,
+                            offset,
+                            non_public)
+    res <- bind_rows(res, res_raw$docs)
   }
 
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
@@ -173,6 +192,20 @@ get_papers <- function(query, params, limit=100,
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
 
   return(ret_val)
+}
+
+get_raw_data <- function(limit, base_query, return_fields, sortby_string, filter, repo, coll, retry_opts, offset, non_public) {
+  (res_raw <- bs_search(hits=limit
+                      , fields = return_fields,
+                      , query = base_query
+                      , sortby = sortby_string
+                      , filter = filter
+                      , target = repo
+                      , coll = coll
+                      , retry = retry_opts
+                      , offset = offset
+                      , non_public = non_public))
+  return(res_raw)
 }
 
 

@@ -8,6 +8,7 @@ import data, {
   baseContext as context,
 } from "../data/base";
 import { initializeStore, selectPaper } from "../../js/actions";
+import { getInitialState } from "../../js/reducers";
 
 import List from "../../js/components/List";
 
@@ -21,7 +22,8 @@ const PAPER_OA_SAFE_ID =
 const setup = () => {
   data.forEach((d) => (d.authors_list = getAuthorsList(d.authors, true)));
 
-  const store = createStore(reducer);
+  const initialState = getInitialState(config);
+  const store = createStore(reducer, initialState);
   store.dispatch(
     initializeStore(config, context, data, [], null, 800, null, null, 800, {
       bubbleMinScale: config.bubble_min_scale,
