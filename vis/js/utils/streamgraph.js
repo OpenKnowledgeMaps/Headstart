@@ -30,6 +30,7 @@ export const CANVAS_PADDING_LEFT = 8;
  * Returns a position object of a streamgraph area label.
  *
  * Migrated from old streamgraph.js...
+ * Needs refactoring before any extension: the forEach is a mess.
  *
  * @param {Object} label d3 node representing the label
  * @param {Object} area d3 node representing the labelled area
@@ -202,10 +203,12 @@ const groupLabelColumns = (labelPositions) => {
  * Finds colliding labels and recalculates their positions.
  *
  * Algorithm:
- *  1) sort the labels from the leftmost top to rightmost bottom
- *  2) in the sorted order, position the labels one by one
+ *  1) sort the labels by their x value (ascending) and group them into columns
+ *  2) in the sorted order one column by one, position the labels
  *   a) check whether the currently positioned label overlaps some of the already positioned labels
  *   b) if there's an overlap, move the currently positioned label and keep checking
+ *      (move the label up in odd columns and down in even columns)
+ *   c) if a label overflows from the visualization, move it back and adjust the positions of the other labels
  *
  * To produce better-looking results, the direction of the positioned label shift changes
  * in each column. That means also the direction of the cycle that goes through the already positioned
@@ -214,7 +217,7 @@ const groupLabelColumns = (labelPositions) => {
  * @param {Array} labelPositions array of positions returned by getLabelPosition
  */
 export const recalculateOverlappingLabels = (labelPositions) => {
-  const columns = groupLabelColumns(labelPositions);
+  const columns = groupLabelColumns([...labelPositions]);
 
   let moveUp = false;
   for (const column of columns) {
