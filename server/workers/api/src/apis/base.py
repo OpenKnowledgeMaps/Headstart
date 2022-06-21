@@ -73,9 +73,8 @@ class Search(Resource):
         errors = search_param_schema.validate(params, partial=True)
         if "limit" not in params:
             params["limit"] = 120
-        if params["limit"] > 1000:
-            params["limit"] = 1000
         if params.get('vis_type') == "timeline":
+            params["limit"] = 1000
             params["list_size"] = params["limit"]
         else:
             params["list_size"] = 100
