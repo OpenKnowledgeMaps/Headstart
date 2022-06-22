@@ -277,6 +277,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
         },
         ger: {
             loading: "Wird geladen...",
@@ -349,6 +351,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
         },
         ger_linkedcat: {
            loading: "Wird geladen...",
@@ -424,6 +428,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
         },
         eng_plos: {
             loading: "Loading...",
@@ -490,6 +496,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -577,6 +585,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
         },
         eng_openaire: {
             loading: "Loading...",
@@ -670,6 +680,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -737,6 +749,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
         },
         ger_cris_2: {
             loading: "Wird geladen...",
@@ -804,6 +818,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
         },
         eng_cris_2: {
            loading: "Loading...",
@@ -875,6 +891,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -960,6 +978,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
         },
     },
 
