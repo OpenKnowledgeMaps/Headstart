@@ -30,7 +30,6 @@ class SearchParamSchema(Schema):
     repo = fields.Str()
     repo_name = fields.Str()
     coll = fields.Str()
-    non_public = fields.Bool()
 
     @pre_load
     def fix_years(self, in_data, **kwargs):

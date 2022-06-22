@@ -86,7 +86,11 @@ get_papers <- function(query, params,
   
   repo = params$repo
   coll = params$coll
-  non_public = params$non_public
+  if(!is.null(repo) && repo=="fttriple") {
+    non_public = TRUE
+  } else {
+    non_public = FALSE
+  }
   
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE query:", base_query))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Sort by:", sortby_string))
