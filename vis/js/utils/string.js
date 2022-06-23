@@ -79,7 +79,7 @@ export const stringCompare = (a, b, sort_order) => {
  *
  * @returns shortened string
  */
- export const shorten = (string, length, end = "...") => {
+export const shorten = (string, length, end = "...") => {
   if (string.length <= length) {
     return string;
   }
@@ -93,4 +93,21 @@ export const formatString = (string, params) => {
   });
 
   return string;
+};
+
+export const addEmbedParam = (urlString) => {
+  const url = new URL(urlString);
+
+  url.searchParams.delete("embed");
+  url.searchParams.set("embed", "true");
+
+  return url.toString();
+};
+
+export const removeEmbedParam = (urlString) => {
+  const url = new URL(urlString);
+
+  url.searchParams.delete("embed");
+
+  return url.toString();
 };
