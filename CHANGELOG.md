@@ -1,5 +1,12 @@
 # Changelog
 
+## 2022-06-23
+
+### Bugfixes
+
+- Removed the embed=true parameter from the vis citation.
+- Making sure the embed=true parameter is only once in the embed modal.
+
 ## 2022-05-19
 
 ### New features
