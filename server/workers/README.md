@@ -1,3 +1,6 @@
+# This documentation is not up-to-date and following it will not result in a running server backend for Headstart. We apologize for any inconvenience this may cause and ask for patience until the public documentation has been updated.
+
+
 ## Folder structure
 
 Following backend component containers are currently in `workers`:
