@@ -46,4 +46,5 @@ var data_config = {
     highlight_query_terms: true,
     show_context_oa_number: false,
 
+    cite_papers: true,
 };
