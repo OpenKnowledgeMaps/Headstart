@@ -7,11 +7,11 @@ export const AXIS_PADDING = {
   bottom: 35,
 };
 export const LABEL_ROUND_FACTOR = 4; // border-radius labels
-export const LINE_HELPER_MARGIN = -10; // relative to mouse position
+export const LINE_HELPER_MARGIN = 10; // relative to mouse position
 export const TOOLTIP_OFFSET = {
   // relative to mouse position
-  top: -100,
-  left: -10,
+  top: -10,
+  left: LINE_HELPER_MARGIN,
 };
 
 // white label background dimensions
