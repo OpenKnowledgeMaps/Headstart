@@ -3,6 +3,7 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
+import { addEmbedParam } from "../../utils/string";
 import useMatomo from "../../utils/useMatomo";
 
 import CopyButton from "../CopyButton";
@@ -18,9 +19,8 @@ const EmbedModal = ({ open, onClose }) => {
     trackEvent("Added components", "Copy embed", "Copy embed button");
   };
 
-  const embedText = `<iframe width="${IFRAME_WIDTH}" height="${IFRAME_HEIGHT}" src="${window.location
-    .toString()
-    .replace(/#.*/, "")}&embed=true"></iframe>`;
+  const embedUrl = addEmbedParam(window.location.toString().replace(/#.*/, ""));
+  const embedText = `<iframe width="${IFRAME_WIDTH}" height="${IFRAME_HEIGHT}" src="${embedUrl}"></iframe>`;
 
   return (
     // html template starts here
