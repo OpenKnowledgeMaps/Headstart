@@ -382,9 +382,9 @@ class Paper extends React.Component {
 export default Paper;
 
 // config.dogear_width
-const DOGEAR_WIDTH = 0.1;
+const DOGEAR_WIDTH = 0.15;
 // config.dogear_height
-const DOGEAR_HEIGHT = 0.1;
+const DOGEAR_HEIGHT = 0.15;
 
 const getDogEar = ({ x, y, width: w, height: h }) => {
   return `M ${x + (1 - DOGEAR_WIDTH) * w} ${y} v ${DOGEAR_HEIGHT * h} h ${
