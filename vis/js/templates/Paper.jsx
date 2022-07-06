@@ -19,14 +19,15 @@ class Paper extends React.Component {
     this.animatePaper = this.animatePaper.bind(this);
     this.isZoomingIn = this.isZoomingIn.bind(this);
     this.isZoomingOut = this.isZoomingOut.bind(this);
-    this.isDataset = this.isDataset.bind(this);
+    this.hasRoundedDesign = this.hasRoundedDesign.bind(this);
+    this.getPath = this.getPath.bind(this);
 
     this.isAnimatedOnMount = this.isAnimated();
 
     const { x, y, width, height } = this.getCoordinatesAndDimensions(
       this.isAnimatedOnMount
     );
-    const path = getPath({ x, y, width, height }, this.isDataset());
+    const path = this.getPath({ x, y, width, height });
     const dogEar = getDogEar({ x, y, width, height });
     this.state = { x, y, width, height, path, dogEar };
 
@@ -68,7 +69,7 @@ class Paper extends React.Component {
         width: newWidth,
         height: newHeight,
       };
-      const path = getPath(newCoords, this.isDataset());
+      const path = this.getPath(newCoords);
       const dogEar = getDogEar(newCoords);
 
       this.setState({ ...this.state, ...newCoords, path, dogEar });
@@ -81,7 +82,7 @@ class Paper extends React.Component {
       pathEl.interrupt();
     }
 
-    if (!this.isDataset()) {
+    if (!this.hasRoundedDesign()) {
       const dogearEl = select(this.dogearRef.current);
       if (dogearEl.interrupt) {
         dogearEl.interrupt();
@@ -137,7 +138,7 @@ class Paper extends React.Component {
       width *= realEnlargeFactor;
       height *= realEnlargeFactor;
 
-      path = getPath({ x, y, width, height }, this.isDataset());
+      path = this.getPath({ x, y, width, height });
       dogEar = getDogEar({ x, y, width, height });
       realWidth = width;
       realHeight = height;
@@ -155,7 +156,7 @@ class Paper extends React.Component {
     if (hovered) {
       sizeModifierClass = "larger";
     }
-    if (this.isDataset()) {
+    if (this.hasRoundedDesign()) {
       gClass += " resulttype-dataset";
     }
 
@@ -180,7 +181,7 @@ class Paper extends React.Component {
             ref={this.pathRef}
           ></path>
         )}
-        {!this.isDataset() && !this.isZoomingOut() && (
+        {!this.hasRoundedDesign() && !this.isZoomingOut() && (
           <path
             className="paper_path dogear"
             d={dogEar}
@@ -262,7 +263,7 @@ class Paper extends React.Component {
 
   animate() {
     this.animatePath();
-    if (!this.isDataset()) {
+    if (!this.hasRoundedDesign()) {
       this.animateDogEar();
     }
     this.animatePaper();
@@ -272,7 +273,7 @@ class Paper extends React.Component {
     const { x, y, width, height } = this.getCoordinatesAndDimensions();
     const el = select(this.pathRef.current);
 
-    const path = getPath({ x, y, width, height }, this.isDataset());
+    const path = this.getPath({ x, y, width, height });
 
     el.transition(this.props.animation.transition)
       .attr("d", path)
@@ -366,10 +367,17 @@ class Paper extends React.Component {
     return !!animation && animation.type === "ZOOM_OUT";
   }
 
-  isDataset() {
+  hasRoundedDesign() {
     const { resulttype } = this.props.data;
-    return resulttype.includes("dataset");
+    return resulttype.some(isNonTextDocType);
   }
+
+  getPath = ({ x, y, width, height }) => {
+    if (this.hasRoundedDesign()) {
+      return getRoundedPath({ x, y, width, height });
+    }
+    return getSquarePath({ x, y, width, height });
+  };
 }
 
 export default Paper;
@@ -385,16 +393,7 @@ const getDogEar = ({ x, y, width: w, height: h }) => {
   }`;
 };
 
-const getPath = ({ x, y, width: w, height: h }, isDataset) => {
-  if (isDataset) {
-    return getDatasetPath({ x, y, width: w, height: h });
-  }
-  return `M ${x} ${y} h ${(1 - DOGEAR_WIDTH) * w} l ${DOGEAR_HEIGHT * w} ${
-    DOGEAR_WIDTH * h
-  } v ${(1 - DOGEAR_HEIGHT) * h} h ${-w} v ${-h}`;
-};
-
-const getDatasetPath = ({ x, y, width, height }) => {
+const getRoundedPath = ({ x, y, width, height }) => {
   const r = 10;
   const lineWidth = width - 2 * r;
   const lineHeight = height - 2 * r;
@@ -408,6 +407,12 @@ const getDatasetPath = ({ x, y, width, height }) => {
   a ${r} ${r} 0 0 0 ${-r} ${-r} \
   h ${-lineWidth} \
   a ${r} ${r} 0 0 0 ${-r} ${r} Z`;
+};
+
+const getSquarePath = ({ x, y, width: w, height: h }) => {
+  return `M ${x} ${y} h ${(1 - DOGEAR_WIDTH) * w} l ${DOGEAR_HEIGHT * w} ${
+    DOGEAR_WIDTH * h
+  } v ${(1 - DOGEAR_HEIGHT) * h} h ${-w} v ${-h}`;
 };
 
 const getEnlargeFactor = (offsetWidth, scrollHeight) => {
@@ -446,3 +451,16 @@ const getMetadataHeight = (realHeight, hasReaders, isZoomed) => {
 
   return 20;
 };
+
+export const isNonTextDocType = (t) =>
+  [
+    "dataset",
+    "musical notation",
+    "map",
+    "audio",
+    "image/video",
+    "still image",
+    "moving image/video",
+    "software",
+    "other/unknown material",
+  ].includes(t.toLowerCase());
