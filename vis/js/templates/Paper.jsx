@@ -368,8 +368,7 @@ class Paper extends React.Component {
   }
 
   hasRoundedDesign() {
-    const { resulttype } = this.props.data;
-    return resulttype.some(isNonTextDocType);
+    return isNonTextDocument(this.props.data);
   }
 
   getPath = ({ x, y, width, height }) => {
@@ -452,7 +451,7 @@ const getMetadataHeight = (realHeight, hasReaders, isZoomed) => {
   return 20;
 };
 
-export const isNonTextDocType = (t) =>
+const isNonTextDocType = (t) =>
   [
     "dataset",
     "musical notation",
@@ -464,3 +463,6 @@ export const isNonTextDocType = (t) =>
     "software",
     "other/unknown material",
   ].includes(t.toLowerCase());
+
+export const isNonTextDocument = (paper) =>
+  paper.resulttype.some(isNonTextDocType);

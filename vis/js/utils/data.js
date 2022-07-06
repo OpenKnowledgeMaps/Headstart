@@ -1,3 +1,4 @@
+import { isNonTextDocument } from "../templates/Paper";
 import { stringCompare } from "./string";
 
 /**
@@ -114,6 +115,9 @@ const getWordFilterFunction = (searchedKeywords) => {
     }
     if (paper.free_access) {
       paperKeywords.push("free access");
+    }
+    if (isNonTextDocument(paper)) {
+      paperKeywords.push("file");
     }
 
     const paperString = paperKeywords.join(" ");
