@@ -1,7 +1,8 @@
 .paper {
     &.resulttype-dataset {
         #region {
-            stroke: $dataset;
+            stroke: $paper-icon;
+            stroke-width: 2px;
         }
 
         #region.framed {
