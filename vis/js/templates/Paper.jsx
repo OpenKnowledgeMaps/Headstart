@@ -461,8 +461,28 @@ const isNonTextDocType = (t) =>
     "still image",
     "moving image/video",
     "software",
-    "other/unknown material",
   ].includes(t.toLowerCase());
 
-export const isNonTextDocument = (paper) =>
-  paper.resulttype.some(isNonTextDocType);
+const UNKNOWN_TYPE = "other/unknown material";
+
+export const isNonTextDocument = (paper) => {
+  // the following complex logic was required by Maxi:
+  // https://docs.google.com/document/d/11ybT41oceMA29tplmBsyXxqswio-WFdpebcR7qhWoH0/edit#heading=h.y9ftuuxdxyx0
+
+  const hasUnknown = paper.resulttype.some(
+    (t) => t.toLowerCase() === UNKNOWN_TYPE
+  );
+
+  if (!hasUnknown) {
+    return paper.resulttype.some(isNonTextDocType);
+  }
+
+  const knownTypes = paper.resulttype.filter((t) => t.toLowerCase() !== UNKNOWN_TYPE);
+  
+  // the only type is unknown
+  if (knownTypes.length === 0) {
+    return true;
+  }
+
+  return isNonTextDocType(knownTypes[0]);
+};

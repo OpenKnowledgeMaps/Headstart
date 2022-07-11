@@ -109,14 +109,18 @@ const getWordFilterFunction = (searchedKeywords) => {
       getPropertyOrEmptyString(paper, prop)
     );
 
+    const isNonText = isNonTextDocument(paper);
+
     if (paper.oa) {
       paperKeywords.push("open access");
-      paperKeywords.push("pdf");
+      if (!isNonText) {
+        paperKeywords.push("pdf");
+      }
     }
     if (paper.free_access) {
       paperKeywords.push("free access");
     }
-    if (isNonTextDocument(paper)) {
+    if (isNonText) {
       paperKeywords.push("file");
     }
 
