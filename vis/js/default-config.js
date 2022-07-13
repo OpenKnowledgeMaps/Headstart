@@ -179,6 +179,8 @@ var config = {
     show_cite_button: false,
     // show citation button for each paper
     cite_papers: false,
+    // list of document types where the citation button is hidden
+    no_citation_doctypes: [],
     // show export button for each paper
     export_papers: false,
     // show twitter sharing button
@@ -278,7 +280,7 @@ var config = {
             export_paper: "Export this document",
             download: "Download",
             please_note: "Please note",
-            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         ger: {
             loading: "Wird geladen...",
@@ -352,7 +354,7 @@ var config = {
             export_paper: "Export this document",
             download: "Download",
             please_note: "Please note",
-            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         ger_linkedcat: {
            loading: "Wird geladen...",
@@ -429,7 +431,7 @@ var config = {
             export_paper: "Export this document",
             download: "Download",
             please_note: "Please note",
-            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         eng_plos: {
             loading: "Loading...",
@@ -497,7 +499,7 @@ var config = {
             export_paper: "Export this document",
             download: "Download",
             please_note: "Please note",
-            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -586,7 +588,7 @@ var config = {
             export_paper: "Export this document",
             download: "Download",
             please_note: "Please note",
-            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         eng_openaire: {
             loading: "Loading...",
@@ -681,7 +683,7 @@ var config = {
             export_paper: "Export this document",
             download: "Download",
             please_note: "Please note",
-            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -750,7 +752,7 @@ var config = {
             export_paper: "Export this document",
             download: "Download",
             please_note: "Please note",
-            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         ger_cris_2: {
             loading: "Wird geladen...",
@@ -819,7 +821,7 @@ var config = {
             export_paper: "Export this document",
             download: "Download",
             please_note: "Please note",
-            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         eng_cris_2: {
            loading: "Loading...",
@@ -892,7 +894,7 @@ var config = {
             export_paper: "Export this document",
             download: "Download",
             please_note: "Please note",
-            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -979,7 +981,7 @@ var config = {
             export_paper: "Export this document",
             download: "Download",
             please_note: "Please note",
-            citation_warning: "some citations may be faulty or incorrectly formatted due to erroneous metadata and/or missing markup",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
     },
 

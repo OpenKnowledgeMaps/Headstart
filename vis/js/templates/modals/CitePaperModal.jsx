@@ -68,7 +68,7 @@ const CitePaperModal = ({ open, onClose, paper, service }) => {
         {showLowQualityWarning && (
           <p className="citation-warning">
             <strong className="hs-strong">{loc.please_note}: </strong>
-            {loc.citation_warning}.
+            {loc.citation_warning}
           </p>
         )}
       </Modal.Body>
