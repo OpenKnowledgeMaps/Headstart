@@ -1,5 +1,11 @@
 # Changelog
 
+## 2022-07-14
+
+### Bugfixes
+
+- Fixed a few loopholes in the error handling logic of the backend (PR #672).
+
 ## 2022-06-23
 
 ### Bugfixes
