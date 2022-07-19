@@ -3,7 +3,7 @@ import d3 from "d3";
 export const CHART_MARGIN = { top: 20, right: 50, bottom: 70, left: 70 };
 export const MAX_TICKS_X = 8;
 export const AXIS_PADDING = {
-  left: -30,
+  left: -35,
   bottom: 35,
 };
 export const LABEL_ROUND_FACTOR = 4; // border-radius labels
