@@ -1,5 +1,14 @@
 # Changelog
 
+## 2022-07-20
+
+### Changes
+
+- Improved streamgraph so that it works with the BASE data too.
+- Improved streamgraph UI (labels, tooltip, axes).
+- Improved the citation feature: added more metadata (issue, page, volume, issn).
+- Improved the UI in general: customized behavior for non-textual documents.
+
 ## 2022-07-14
 
 ### Bugfixes
