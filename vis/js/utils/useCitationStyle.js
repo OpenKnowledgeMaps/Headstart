@@ -49,6 +49,14 @@ export const availableStyles = [
   },
 ];
 
+const returnIfDefined = (value) => {
+  if (value || value === 0) {
+    return value;
+  }
+
+  return undefined;
+};
+
 const useCitationStyle = () => {
   const [style, setStyle] = useState(availableStyles[0]);
 
@@ -63,7 +71,7 @@ const useCitationStyle = () => {
         family: a.lastName,
       })),
       issued: [{ "date-parts": paper.year.split("-") }],
-      "container-title": paper.published_in,
+      "container-title": paper.source,
       DOI: paper.list_link.isDoi
         ? paper.list_link.address.replace(/(https?:\/\/)?(\w+\.)?doi.org\//, "")
         : undefined,
@@ -71,6 +79,10 @@ const useCitationStyle = () => {
       // this information could be misleading, so we'll hide it for now:
       //source: "Open Knowledge Maps",
       type: getType(paper),
+      volume: returnIfDefined(paper.volume),
+      issue: returnIfDefined(paper.issue),
+      page: returnIfDefined(paper.page),
+      ISSN: returnIfDefined(paper.issn),
     });
 
     let output = cite.format("bibliography", {

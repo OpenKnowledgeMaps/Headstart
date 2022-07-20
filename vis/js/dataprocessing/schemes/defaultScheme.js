@@ -18,7 +18,7 @@ import {
  *
  * - name: string - the paper property's name
  * - required?: boolean - true for mandatory properties
- * - type?: string[] - list of allowed js types
+ * - type?: string[] - list of allowed js types (typeof result) + "null"
  * - protected?: boolean - true for properties that shouldn't be escaped
  * - validator?: (value: any) => boolean - validator function that receives the property value and returns true if the value is valid
  * - sanitizer?: (value: any) => any - sanitizer function that sanitizes the property value
@@ -85,6 +85,15 @@ const DEFAULT_SCHEME = [
     type: ["string"],
     fallback: (loc) => loc.default_published_in,
   },
+  {
+    name: "source",
+    type: ["string"],
+    fallback: (l, paper) => paper.published_in,
+  },
+  { name: "volume", type: ["string", "number", "null"] },
+  { name: "issue", type: ["string", "number", "null"] },
+  { name: "page", type: ["string", "number", "null"] },
+  { name: "issn", type: ["string", "null"] },
   { name: "fulltext", type: ["string"] },
   { name: "language", type: ["string"] },
   { name: "subject", type: ["string"] },
