@@ -9,6 +9,7 @@ import Highlight from "../../components/Highlight";
 const PaperButtons = ({
   paper,
   showCiteButton,
+  noCitationDoctypes,
   showExportButton,
   handlePDFClick,
   handleCiteClick,
@@ -33,6 +34,11 @@ const PaperButtons = ({
     trackEvent("List document", "Open paper export", "Export paper button");
   };
 
+  noCitationDoctypes = noCitationDoctypes.map((t) => t.toLowerCase());
+  const hasCiteButton =
+    showCiteButton &&
+    !paper.resulttype.some((t) => noCitationDoctypes.includes(t.toLowerCase()));
+
   return (
     // html template starts here
     <div className="paper_buttons_row">
@@ -46,7 +52,7 @@ const PaperButtons = ({
           <Highlight>PDF</Highlight>
         </button>
       )}
-      {showCiteButton && (
+      {hasCiteButton && (
         <button
           className="paper_button"
           title="Cite this document"
@@ -70,11 +76,8 @@ const PaperButtons = ({
 };
 
 const mapStateToProps = (state) => ({
-  // showCiteButton: ["base", "pubmed", "triple_km", "triple_sg"].includes(
-  //   state.service
-  // ),
   showCiteButton: state.list.citePapers,
-  // showExportButton: ["base", "pubmed"].includes(state.service),
+  noCitationDoctypes: state.list.noCitationDoctypes,
   showExportButton: state.list.exportPapers,
 });
 
