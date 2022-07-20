@@ -61,7 +61,7 @@ class PaperSanitizer {
         // does it have a value?
         if (typeof paper[prop.name] !== "undefined") {
           // is the type correct?
-          if (!prop.type || prop.type.includes(typeof paper[prop.name])) {
+          if (this.__isTypeValid(paper, prop.name, prop.type)) {
             // is the format correct?
             if (!prop.validator || prop.validator(paper[prop.name])) {
               // everything's correct!
@@ -146,6 +146,20 @@ class PaperSanitizer {
     ) {
       paper[property] = fallback;
     }
+  }
+
+  __isTypeValid(paper, property, supportedTypes) {
+    if (!Array.isArray(supportedTypes)) {
+      return true;
+    }
+    if (supportedTypes.includes(typeof paper[property])) {
+      return true;
+    }
+    if (supportedTypes.includes("null") && paper[property] === null) {
+      return true;
+    }
+
+    return false;
   }
 }
 
