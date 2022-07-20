@@ -42,6 +42,7 @@ const CitationModal = ({
 
   let citationText = formatString(loc.citation_template, {
     year: new Date().getFullYear(),
+    type: isStreamgraph ? "Streamgraph" : "Knowledge Map",
     query: customQuery,
     source: removeEmbedParam(window.location.href),
     date,

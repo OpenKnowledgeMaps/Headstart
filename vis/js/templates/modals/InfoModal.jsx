@@ -42,7 +42,7 @@ const InfoModal = ({ open, onClose, params, service, isStreamgraph }) => {
   return (
     // html template starts here
     <Modal id="info_modal" show={open} onHide={onClose} animation>
-      <InfoTemplate params={params} />
+      <InfoTemplate params={params} isStreamgraph={isStreamgraph} />
     </Modal>
     // html template ends here
   );

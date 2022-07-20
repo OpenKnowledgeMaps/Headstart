@@ -30,6 +30,8 @@ log <- getLogger('base_repos')
 
 tryCatch({
   contentproviders <- bs_repositories("")
+  triple <- list(name="GoTriple", "internal_name"="fttriple")
+  contentproviders <- rbind(contentproviders, triple)
 }, error=function(err){
   log$error(paste("Contentprovider failed", "base", "retrieve_contentproviders", "", err, sep="||"))
   failed <- list()

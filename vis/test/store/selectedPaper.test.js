@@ -22,6 +22,7 @@ describe("list state", () => {
     it("should create a deselect paper action", () => {
       const EXPECTED_ACTION = {
         type: "DESELECT_PAPER",
+        isFromBackButton: false,
       };
       expect(deselectPaper()).toEqual(EXPECTED_ACTION);
     });

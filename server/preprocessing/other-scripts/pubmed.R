@@ -41,7 +41,7 @@ library("xml2")
 plog <- getLogger('api.pubmed')
 
 
-get_papers <- function(query, params = NULL, limit = 100, retry_opts = rentrez::entrez_retry_options()) {
+get_papers <- function(query, params = NULL, retry_opts = rentrez::entrez_retry_options()) {
   # remove slashes in query that are added on php side to make it
   # safe to add queries to the database
   query <- gsub("\\\\", "", query)

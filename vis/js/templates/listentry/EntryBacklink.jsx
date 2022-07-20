@@ -7,13 +7,18 @@ const EntryBacklink = ({ isInStream, onClick }) => {
 
   return (
     // html template starts here
-    <div id="backlink_list" className="backlink-list" onClick={onClick}>
-      <a className="underline">
+    <button
+      className="paper_button backlink_list"
+      style={{ width: "auto" }}
+      onClick={onClick}
+    >
+      <i className="fas fa-arrow-left"></i>
+      <span className="backlink-label">
         {isInStream
           ? localization.backlink_list_streamgraph_stream_selected
           : localization.backlink_list_streamgraph}
-      </a>
-    </div>
+      </span>
+    </button>
     // html template ends here
   );
 };

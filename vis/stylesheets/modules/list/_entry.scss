@@ -540,27 +540,14 @@ img#preview_page {
     font-family: $base-font-family;
 }
 
-.backlink-list {
-    margin-left: 0px;
-    margin-top: 20px;
-    font-size: 12px;
-    cursor: pointer;
-    margin-bottom: 20px;
+.backlink_list {
+    width: auto;
+    padding-left: 10px;
+    padding-right: 14px;
+    font-size: 11px;
 
-    a {
-        border: 1px solid $medium-blue;
-        background-color: $medium-blue;
-        color: white;
-        padding: 5px;
-        border-radius: 14px;
-        -moz-border-radius: 14px;
-        -webkit-border-radius: 14px;
-        text-decoration: none;
-
-        &:hover {
-            background-color: white;
-            color: $medium-blue;
-        }
+    .backlink-label {
+        margin-left: 6px;
     }
 }
 
@@ -816,33 +803,6 @@ img#preview_page {
 
     .list_row, #list_basic_classification, #list_ddc, #list_abstract {
         font-size: 14px;
-    }
-
-    .backlink-list {
-        margin-left: 15px;
-        margin-top: 15px;
-        font-size: 12px;
-        cursor: pointer;
-
-        a {
-            /*border-bottom: 1px solid $medium-blue;*/
-            color: $medium-blue;
-            display: block;
-            width: 250px;
-            border: 1px solid $medium-blue;
-            color: $medium-blue;
-            text-align: center;
-            margin: 20px 0 0 0;
-            text-decoration: none;
-            border-radius: 17px;
-            -moz-border-radius: 17px;
-            -webkit-border-radius:17px;
-            padding: 5px 3px;
-
-            &:hover {
-                border: 1px solid $medium-blue;
-            }
-        }
     }
 
     @media screen and (max-width: 1000px) {
