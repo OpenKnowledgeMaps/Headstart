@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+    <base href="//localhost:8080/challenge/">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    
+    <script type="text/javascript" src="./data-config.js"></script>
+    <script type="text/javascript" src="../../dist/headstart.js"></script>
+    <link rel="stylesheet" href="../../dist/headstart.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <script type="text/javascript" src="./data-config.js"></script>
+</head>
+    <body class="vis">
+    
+        <div class="overflow-vis">
+            <div id="visualization" style="background-color:white;"></div>
+        </div>
+        <script>
+
+            data_config.server_url = "https://dev.openknowledgemaps.org/challenge/headstart/server/"
+            data_config.files = [{
+                title: 'Challenge'
+                , file: "77761756f191e19a17a376a7ee98d5f9"
+            }]
+            
+            $(document).ready(function () {
+                headstart.start();
+            })        
+        </script>
+    </body>
+</html>

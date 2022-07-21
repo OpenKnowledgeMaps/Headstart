@@ -9,8 +9,15 @@ class ServerFetcher extends Fetcher {
       "&context=true&streamgraph=" +
       this.config.isStreamgraph;
 
-    const response = await fetch(url);
-    const data = await response.json();
+
+    // Your changes go here
+
+
+
+
+
+    
+    // Your changes go here
 
     return data;
   }
