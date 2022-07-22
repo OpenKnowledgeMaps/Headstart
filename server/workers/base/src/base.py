@@ -15,11 +15,15 @@ class BaseClient(RWrapper):
 
     def __init__(self, *args):
         super().__init__(*args)
-        result = self.get_contentproviders()
-        df = pd.DataFrame(json.loads(result["contentproviders"]))
-        df.set_index("name", inplace=True)
-        cp_dict = df.internal_name.to_dict()
-        self.content_providers = cp_dict
+        try:
+            result = self.get_contentproviders()
+            df = pd.DataFrame(json.loads(result["contentproviders"]))
+            df.set_index("name", inplace=True)
+            cp_dict = df.internal_name.to_dict()
+            self.content_providers = cp_dict
+        except Exception as e:
+            self.logger.error(e)
+            self.content_providers = {}
 
     def next_item(self):
         queue, msg = self.redis_store.blpop("base")
