@@ -51,7 +51,12 @@ def get_or_create_contentprovider_lookup():
         cp_dict = df.name.to_dict()
         return cp_dict
     except Exception as e:
+        base_ns.logger.error("Falling back to cached contentproviders.json")
         base_ns.logger.error(e)
+        df = pd.read_json("contentproviders.json")
+        df.set_index("internal_name", inplace=True)
+        cp_dict = df.name.to_dict()
+        return cp_dict
    
 
 global contentprovider_lookup
@@ -71,14 +76,19 @@ class Search(Resource):
         if "optradio" in params:
             del params["optradio"]
         errors = search_param_schema.validate(params, partial=True)
+        if "limit" not in params:
+            params["limit"] = 120
+        if params.get('vis_type') == "timeline":
+            params["limit"] = 1000
+            params["list_size"] = params["limit"]
+        else:
+            params["list_size"] = 100
         if "repo" in params:
             global contentprovider_lookup
             if not contentprovider_lookup:
                 contentprovider_lookup = get_or_create_contentprovider_lookup()
             repo_name = contentprovider_lookup.get(params["repo"])
             params["repo_name"] = repo_name
-        params["limit"] = 120
-        params["list_size"] = 100
         base_ns.logger.debug(errors)
         if errors:
             abort(400, str(errors))

@@ -5,10 +5,12 @@ import useMatomo from "../../utils/useMatomo";
 import { getPaperPDFClickHandler } from "../../utils/data";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import Highlight from "../../components/Highlight";
+import { isNonTextDocument } from "../Paper";
 
 const PaperButtons = ({
   paper,
   showCiteButton,
+  noCitationDoctypes,
   showExportButton,
   handlePDFClick,
   handleCiteClick,
@@ -33,10 +35,17 @@ const PaperButtons = ({
     trackEvent("List document", "Open paper export", "Export paper button");
   };
 
+  const isText = !isNonTextDocument(paper);
+
+  noCitationDoctypes = noCitationDoctypes.map((t) => t.toLowerCase());
+  const hasCiteButton =
+    showCiteButton &&
+    !paper.resulttype.some((t) => noCitationDoctypes.includes(t.toLowerCase()));
+
   return (
     // html template starts here
     <div className="paper_buttons_row">
-      {!!onPDFClick && (
+      {isText && !!onPDFClick && (
         <button
           className="paper_button main"
           title="Open the PDF"
@@ -46,7 +55,15 @@ const PaperButtons = ({
           <Highlight>PDF</Highlight>
         </button>
       )}
-      {showCiteButton && (
+      {!isText && (
+        <a href={paper.list_link.address} title="Open the file" target="_blank">
+          <div className="paper_button main">
+            <i className="far fa-file"></i>&nbsp;&nbsp;
+            <Highlight>File</Highlight>
+          </div>
+        </a>
+      )}
+      {hasCiteButton && (
         <button
           className="paper_button"
           title="Cite this document"
@@ -70,11 +87,8 @@ const PaperButtons = ({
 };
 
 const mapStateToProps = (state) => ({
-  // showCiteButton: ["base", "pubmed", "triple_km", "triple_sg"].includes(
-  //   state.service
-  // ),
   showCiteButton: state.list.citePapers,
-  // showExportButton: ["base", "pubmed"].includes(state.service),
+  noCitationDoctypes: state.list.noCitationDoctypes,
   showExportButton: state.list.exportPapers,
 });
 

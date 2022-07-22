@@ -86,13 +86,26 @@
     <link rel="stylesheet" href="./css/main.css">
     <script>
         data_config.files = [{
-            //title: "digital education",
+            title: "digital education",
             //title: "calcium",
-            title: "production",
-            //file: "./data/digital-education.json"
+            //title: "production",
+            //title: "digital education",
+            //title: "fake news",
+            //title: "dotcom",
+            //title: "cognitive dissonance",
+            file: "./data/digital-education.json",
             //file: "./data/calcium.json",
-            file: "./data/production.json"
+            //file: "./data/production.json",
+            //file: "./data/digital-education-sg.json",
+            //file: "./data/fake-news-sg.json",
+            //file: "./data/dotcom-sg.json",
+            //file: "./data/cognitive-dissonance.json"
+            // other attributes:
+            is_streamgraph: false, // set true for streamgraph data
+            show_area: true, // set false for streamgraph data
         }]
+        data_config.is_streamgraph = data_config.files[0].is_streamgraph;
+        data_config.show_area = data_config.files[0].show_area;
         data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "./headstart/server/";
     </script>
 </body>
