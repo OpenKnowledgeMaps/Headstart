@@ -31,13 +31,12 @@ services:
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
-    command: ["redis-server", "/etc/redis/redis.conf", "--bind", "${REDIS_HOST}", "--appendonly", "yes", "--port", "${REDIS_PORT}"]
+    command: ["redis-server", "/etc/redis/redis.conf", "--bind", "${REDIS_HOST}", "--port", "${REDIS_PORT}"]
     volumes:
         - 'redis:/var/lib/redis/data'
         - ./redis.conf:/etc/redis/redis.conf
     ports:
      - "127.0.0.1:${REDIS_PORT}:6379"
-    restart: always
     networks: 
       - headstart
 
