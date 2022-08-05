@@ -70,7 +70,7 @@ get_papers <- function(query, params,
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
   return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider"
 
-  if (!is.null(exact_query)) {
+  if (!is.null(exact_query) && exact_query != '') {
     base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, collapse=" ")
   } else {
     base_query <- paste(lang_query, date_string, document_types, collapse=" ")
