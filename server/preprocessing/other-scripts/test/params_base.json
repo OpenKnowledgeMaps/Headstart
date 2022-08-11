@@ -5,7 +5,8 @@
   "sorting":"most-relevant",
   "lang_id":"eng",
   "vis_id": "TEST_ID",
-  "min_descsize": 300,
+  "min_descsize": 0,
   "limit": 120,
-  "list_size": 100
+  "list_size": 100,
+  "q_advanced": "orcid:000-0002-5238-4195"
 }
