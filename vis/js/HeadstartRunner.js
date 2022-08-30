@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
 import React from "react";
-import { createStore } from "redux";
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from "react-redux";
 
 import rootReducer, { getInitialState } from "./reducers";
@@ -25,6 +25,8 @@ import handleZoomSelectQuery from "./utils/backButton";
 
 import Bowser from "bowser";
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 class HeadstartRunner {
   constructor(config) {
     this.config = config;
@@ -35,7 +37,8 @@ class HeadstartRunner {
 
     const initialState = getInitialState(this.config);
     const middleware = applyHeadstartMiddleware(this);
-    this.store = createStore(rootReducer, initialState, middleware);
+    this.store = createStore(rootReducer, initialState, composeEnhancers(middleware)
+    );
 
     this.hsContainer = document.getElementById(this.config.tag);
     this.hsContainer.classList.add("headstart");
