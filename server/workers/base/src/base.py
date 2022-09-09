@@ -3,9 +3,10 @@ import json
 import subprocess
 import pandas as pd
 import logging
+from datetime import timedelta
 from common.r_wrapper import RWrapper
 from .parsers import improved_df_parsing
-
+import time
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
@@ -96,6 +97,9 @@ class BaseClient(RWrapper):
 
     def run(self):
         while True:
+            while request_is_limited(self.redis_store, 'base-ratelimit', 1, timedelta(seconds=1)):
+                self.logger.debug('🛑 Request is limited')
+                time.sleep(0.1)
             k, params, endpoint = self.next_item()
             self.logger.debug(k)
             self.logger.debug(params)
@@ -123,3 +127,22 @@ class BaseClient(RWrapper):
                     self.logger.error(e)
 
 
+def request_is_limited(r, key: str, limit: int, period: timedelta):
+    """
+    This implementation of Generic Cell Rate Algorithm based rate limiting
+    is taken from https://github.com/astagi/python-limit-requests
+    """
+    period_in_seconds = int(period.total_seconds())
+    t = r.time()[0]
+    separation = round(period_in_seconds / limit)
+    r.setnx(key, 0)
+    try:
+        with r.lock('lock:' + key, blocking_timeout=5) as lock:
+            tat = max(int(r.get(key)), t)
+            if tat - t <= period_in_seconds - separation:
+                new_tat = max(tat, t) + separation
+                r.set(key, new_tat)
+                return False
+            return True
+    except LockError:
+        return True
