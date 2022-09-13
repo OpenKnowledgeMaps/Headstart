@@ -12,9 +12,9 @@ include 'config.php';
         );
         ?>
         <link type="text/css" rel="stylesheet" href="./lib/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <link type="text/css" rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+        <script src="./lib/jquery-2.2.4.min.js"></script>
+        <script src="./lib/jquery-ui.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="./lib/jquery-ui.min.css">
        
         <link rel="stylesheet" href="./lib/font-awesome.min.css">
         <link type="text/css" rel="stylesheet" href="./css/openaire.css">

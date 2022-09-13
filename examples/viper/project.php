@@ -30,7 +30,7 @@ include 'config.php';
         ?>
         
         <link type="text/css" rel="stylesheet" href="./css/openaire.css"></link>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="./lib/jquery-2.2.4.min.js"></script>
         <link rel="stylesheet" href="./lib/font-awesome.min.css" >
     </head>
 
