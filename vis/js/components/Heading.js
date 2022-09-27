@@ -9,6 +9,7 @@ import {
 } from "../templates/headingtitles";
 
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
+import { queryConcatenator } from "../utils/data";
 
 const Heading = ({
   localization,
@@ -37,15 +38,12 @@ const Heading = ({
     );
   }
 
-  let terms = [query, q_advanced].filter(element => {
-    return element !== '';
-  });
-  let titleString = terms.join(" ");
+  let queryString = queryConcatenator([query, q_advanced])
   return (
     // html template starts here
     <div className="heading-container">
       <h4 className="heading">
-        {renderTitle(localization, titleString, headingParams)}
+        {renderTitle(localization, queryString, headingParams)}
       </h4>
     </div>
     // html template ends here
