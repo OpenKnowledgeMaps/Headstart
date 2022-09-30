@@ -78,28 +78,6 @@ services:
     networks: 
       - headstart
 
-  triple:
-    image: triple:${SERVICE_VERSION}
-    environment:
-      SERVICE_VERSION: "${SERVICE_VERSION}"
-      REDIS_HOST: "${REDIS_HOST}"
-      REDIS_PORT: "${REDIS_PORT}"
-      REDIS_DB: "${REDIS_DB}"
-      REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      LOGLEVEL: "${LOGLEVEL}"
-      TRIPLE_USER: "${TRIPLE_USER}"
-      TRIPLE_PASS: "${TRIPLE_PASS}"
-      TRIPLE_HOST: "${TRIPLE_HOST}"
-      TRIPLE_PORT: "${TRIPLE_PORT}"
-      TRIPLE_DOCUMENTS_INDEX: "${TRIPLE_DOCUMENTS_INDEX}"
-      TRIPLE_PROJECTS_INDEX: "${TRIPLE_PROJECTS_INDEX}"
-      TRIPLE_AUTHORS_INDEX: "${TRIPLE_AUTHORS_INDEX}"
-    restart: always
-    depends_on:
-      - redis
-    networks: 
-      - headstart
-
   gsheets:
     image: gsheets:${SERVICE_VERSION}
     environment:
