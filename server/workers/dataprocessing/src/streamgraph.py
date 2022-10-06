@@ -22,7 +22,7 @@ class Streamgraph(object):
         handler.setFormatter(formatter)
         handler.setLevel(loglevel)
         self.logger.addHandler(handler)
-    
+
     def tokenize(self, s):
         #return re.split("; | - |, |: ", s)
         return re.split("; ", s)
@@ -30,7 +30,9 @@ class Streamgraph(object):
     def get_streamgraph_data(self, metadata, query, n=12, method="count"):
         metadata = pd.DataFrame.from_records(metadata)
         df = metadata.copy()
-        df.year = pd.to_datetime(df.year).map(lambda x: x.replace(month=1, day=1))
+        df.year = pd.to_datetime(df.year, utc=True, errors="coerce").dt.tz_convert(None)
+        df.dropna(axis=0, subset=["year"], inplace=True)
+        df.year = pd.to_datetime(df.year.map(lambda x: x.replace(month=1, day=1).strftime('%Y-%m-%d')))
         df = df[df.subject.map(lambda x: x is not None)]
         df.subject = df.subject.map(lambda x: [s.lower() for s in self.tokenize(x)] if isinstance(x, str) else "")
         df = df[df.subject.map(lambda x: x != [])]
@@ -164,7 +166,7 @@ class Streamgraph(object):
         x, df = self.reduce_daterange(daterange, df)
         df = df[df["ids_overall"].map(lambda x: len(x) != 0)]
         return x, df.to_dict(orient="records")
-    
+
     def reduce_daterange(self, daterange, df):
         x = self.get_x_axis(daterange)
         yearly_sums = pd.DataFrame(df.y.to_list()).T.sum(axis=1)
@@ -177,13 +179,14 @@ class Streamgraph(object):
         x = x[start_index:]
         df["ids_overall"] = df.ids_timestep.map(lambda x: list(chain.from_iterable(x)))
         return x, df
-    
+
     @staticmethod
     def reduce_metadata_set(metadata, sg_data):
         metadata = pd.read_json(metadata)
         df = pd.DataFrame.from_records(sg_data["subject"])
         all_ids = set(chain.from_iterable(df.ids_overall))
         metadata = metadata[metadata.id.map(lambda x: x in all_ids)]
+        metadata.drop_duplicates(inplace=True, subset=["id"])
         return metadata.to_json(orient="records")
 
 def aggregate_ids(series):

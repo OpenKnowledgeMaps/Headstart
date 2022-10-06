@@ -1,4 +1,6 @@
 library(rbace)
+library(stringr)
+library(dplyr)
 
 # get_papers
 #
@@ -36,8 +38,7 @@ library(rbace)
 blog <- getLogger('api.base')
 
 
-get_papers <- function(query, params, limit=100,
-                       filter=NULL,
+get_papers <- function(query, params,
                        retry_opts=rbace::bs_retry_options(3,60,3,4)) {
 
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Search:", query))
@@ -61,6 +62,7 @@ get_papers <- function(query, params, limit=100,
 
   year_from = params$from
   year_to = params$to
+  limit = params$limit
 
   # prepare query fields
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
@@ -74,14 +76,21 @@ get_papers <- function(query, params, limit=100,
     lang_query <- ""
   }
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
+  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider"
 
   base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, collapse=" ")
 
   min_descsize <- if (is.null(params$min_descsize)) 300 else params$min_descsize
   filter <- I(paste0('descsize:[', min_descsize, '%20TO%20*]'))
+  limit <- params$limit
   
   repo = params$repo
   coll = params$coll
+  if(!is.null(repo) && repo=="fttriple") {
+    non_public = TRUE
+  } else {
+    non_public = FALSE
+  }
   
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE query:", base_query))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Sort by:", sortby_string))
@@ -90,17 +99,34 @@ get_papers <- function(query, params, limit=100,
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Collection:", coll))
   
   # execute search
-  (res_raw <- bs_search(hits=limit
-                        , query = base_query
-                        , fields = "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm"
-                        , sortby = sortby_string
-                        , filter = filter
-                        , target = repo
-                        , coll = coll
-                        , retry = retry_opts))
+  offset = 0
+  res_raw <- get_raw_data(limit,
+                          base_query,
+                          return_fields,
+                          sortby_string,
+                          filter,
+                          repo,
+                          coll,
+                          retry_opts,
+                          offset,
+                          non_public)
   res <- res_raw$docs
   if (nrow(res)==0){
     stop(paste("No results retrieved."))
+  }
+  while (nrow(res) < limit && attr(res_raw, "numFound")>+offset+120) {
+    offset <- offset+120
+    res_raw <- get_raw_data(limit,
+                            base_query,
+                            return_fields,
+                            sortby_string,
+                            filter,
+                            repo,
+                            coll,
+                            retry_opts,
+                            offset,
+                            non_public)
+    res <- bind_rows(res, res_raw$docs)
   }
 
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
@@ -139,6 +165,8 @@ get_papers <- function(query, params, limit=100,
   subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
   subject_cleaned = gsub("\\w+:\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
   subject_cleaned = gsub("^; $", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
+  subject_cleaned = gsub(",", ", ", subject_cleaned) # clean up keyword separation
+  subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
 
   metadata$subject = subject_cleaned
 
@@ -150,6 +178,10 @@ get_papers <- function(query, params, limit=100,
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
+  metadata$content_provider = check_metadata(res$dcprovider)
+  if(repo=="fttriple" && non_public==TRUE) {
+    metadata$content_provider <- "GoTriple"
+  }
 
   text = data.frame(matrix(nrow=length(res$dcdocid)))
   text$id = metadata$id
@@ -167,13 +199,27 @@ get_papers <- function(query, params, limit=100,
   return(ret_val)
 }
 
+get_raw_data <- function(limit, base_query, return_fields, sortby_string, filter, repo, coll, retry_opts, offset, non_public) {
+  (res_raw <- bs_search(hits=limit
+                      , fields = return_fields,
+                      , query = base_query
+                      , sortby = sortby_string
+                      , filter = filter
+                      , target = repo
+                      , coll = coll
+                      , retry = retry_opts
+                      , offset = offset
+                      , non_public = non_public))
+  return(res_raw)
+}
+
 
 find_dois <- function(link) {
   if ((startsWith(link, "http://doi.org"))
       || (startsWith(link, "https://doi.org"))
       || (startsWith(link, "http://dx.doi.org"))
       || (startsWith(link, "https://dx.doi.org"))) {
-    doi <- stringr::str_replace(link, "http:", "https:")
+    doi <- str_replace(link, "http:", "https:")
   } else {
     doi <- ""
   }

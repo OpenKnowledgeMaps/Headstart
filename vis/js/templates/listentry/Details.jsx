@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Highlight from "../../components/Highlight";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 
-const MAX_AUTHORS_LENGTH = 90;
+const MAX_AUTHORS_LENGTH = 100;
 
 const Details = ({ authors, source, isSelected }) => {
   const loc = useLocalizationContext();

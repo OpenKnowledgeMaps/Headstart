@@ -6,11 +6,6 @@ query <- args[2]
 service <- args[3]
 params_file <- args[4]
 
-print(wd)
-print(query)
-print(service)
-print(params_file)
-
 setwd(wd) #Don't forget to set your working directory
 
 source('../other-scripts/utils.R')
@@ -51,53 +46,28 @@ taxonomy_separator = NULL
 limit = 100
 list_size = -1
 switch(service,
-       plos={
-         source("../other-scripts/rplos_fast.R")
-         taxonomy_separator = "/"
-       },
        pubmed={
          source('../other-scripts/pubmed.R')
-       },
-       doaj={
-        source('../other-scripts/doaj.R')
+         params$limit = 100
        },
        base={
          source('../other-scripts/base.R')
-         limit = 120
+         params$limit = 120
          list_size = 100
        },
        openaire={
          source('../other-scripts/openaire.R')
-       },
-       linkedcat={
-         source('../other-scripts/linkedcat.R')
-         limit = ifelse(vis_type=='timeline', 9999, 100)
-       },
-       linkedcat_authorview={
-         source('../other-scripts/linkedcat_authorview.R')
-         limit = 500
-       },
-       linkedcat_browseview={
-         source('../other-scripts/linkedcat_browseview.R')
-         limit = 500
-       },
-      {
-        source("../other-scripts/rplos_fast.R")
-      }
+       }
 )
-
-print("inhere")
 
 MAX_CLUSTERS = 15
 LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
 ADDITIONAL_STOP_WORDS = LANGUAGE$name
 
-print("reading stuff")
-print(params)
 failed <- list(params=params)
 tryCatch({
   query <- sanitize_query(query)
-  input_data = get_papers(query$sanitized_query, params, limit=limit)
+  input_data = get_papers(query$sanitized_query, params)
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Query failed", service, query$raw_query, paste(params, collapse=" "), err, sep="||")))
   failed$query <<- query$raw_query
@@ -105,7 +75,6 @@ tryCatch({
 })
 
 if(exists('input_data')) {
-  print("got the input")
   tryCatch({
     output_json = vis_layout(input_data$text, input_data$metadata,
                              service,

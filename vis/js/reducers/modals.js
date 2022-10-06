@@ -1,5 +1,5 @@
 const modals = (
-  state = { reloadApiProperties: {}, infoParams: {} },
+  state = { apiProperties: {}, infoParams: {} },
   action
 ) => {
   if (action.canceled) {
@@ -23,7 +23,7 @@ const modals = (
           : null,
         showReloadButton: action.contextObject.service === "gsheets",
         reloadLastUpdate: action.contextObject.last_update,
-        reloadApiProperties: {
+        apiProperties: {
           headstartPath: action.configObject.server_url,
           sheetID: getSheetID(action.configObject, action.contextObject),
           persistenceBackend: action.configObject.persistence_backend,
@@ -43,6 +43,9 @@ const modals = (
         showCitationButton: !!action.configObject.show_cite_button,
         openCitationModal: false,
         citedPaper: null,
+        exportedPaper: null,
+        showTwitterButton: showTwitterShare(action.configObject, action.contextObject),
+        showEmailButton: showEmailShare(action.configObject, action.contextObject),
       };
     case "OPEN_EMBED_MODAL":
       return {
@@ -94,6 +97,16 @@ const modals = (
         ...state,
         citedPaper: null,
       };
+    case "SHOW_EXPORT_PAPER":
+      return {
+        ...state,
+        exportedPaper: action.paper,
+      };
+    case "HIDE_EXPORT_PAPER":
+      return {
+        ...state,
+        exportedPaper: null,
+      };
     case "OPEN_CITATION_MODAL":
       return {
         ...state,
@@ -114,6 +127,7 @@ const modals = (
         openCitationModal: false,
         previewedPaper: null,
         citedPaper: null,
+        exportedPaper: null,
       };
 
     default:
@@ -133,4 +147,18 @@ const getSheetID = (config, context) => {
   }
 
   return config.files[0].file;
+};
+
+const showTwitterShare = (config, context) => {
+  if (config.credit_embed) {
+    return false;
+  }
+  return !!config.show_twitter_button;
+};
+
+const showEmailShare = (config, context) => {
+  if (config.credit_embed) {
+    return false;
+  }
+  return !!config.show_email_button;
 };

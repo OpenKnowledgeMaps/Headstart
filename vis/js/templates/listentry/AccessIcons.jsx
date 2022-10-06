@@ -1,12 +1,28 @@
 import React from "react";
 
 import Highlight from "../../components/Highlight";
+import Tags from "./Tags";
 
-const AccessIcons = ({ isOpenAccess, isFreeAccess, isDataset, tags }) => {
+const datasetPredicate = (e) => e.toLowerCase() === "dataset";
+const unknownPredicate = (e) => e.toLowerCase().includes("unknown");
+
+const AccessIcons = ({ paper, showDocTypes }) => {
+  const isDataset = paper.resulttype.some(datasetPredicate);
+
+  const tags = [...paper.tags];
+  if (showDocTypes) {
+    tags.push(
+      ...paper.resulttype
+        .filter((e) => !datasetPredicate(e))
+        .filter((e) => !unknownPredicate(e))
+        .slice(0, isDataset ? 1 : 2)
+    );
+  }
+
   return (
     // html template starts here
     <div id="oa">
-      {!!isOpenAccess && (
+      {!!paper.oa && (
         <span className="paper-tag open-access-tag">
           <span className="access_icon outlink_symbol">
             <i className="fas fa-lock-open"></i>
@@ -14,7 +30,7 @@ const AccessIcons = ({ isOpenAccess, isFreeAccess, isDataset, tags }) => {
           <Highlight>open access</Highlight>
         </span>
       )}
-      {!!isFreeAccess && (
+      {!!paper.free_access && (
         <span className="paper-tag free-access-tag">
           <span className="access_icon outlink_symbol">
             <i className="fas fa-lock-open"></i>
@@ -22,13 +38,13 @@ const AccessIcons = ({ isOpenAccess, isFreeAccess, isDataset, tags }) => {
           <Highlight>free access</Highlight>
         </span>
       )}
-      {!!isDataset && (
+      {isDataset && (
         <span className="paper-tag dataset-tag">
-          <span className="fa fa-database access_icon"></span>
+          <span className="fas fa-database access_icon"></span>
           <Highlight>dataset</Highlight>
         </span>
       )}
-      {tags}
+      {tags.length > 0 && <Tags values={tags} />}
     </div>
     // html template ends here
   );

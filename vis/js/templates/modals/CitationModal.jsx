@@ -7,8 +7,9 @@ import { closeCitationModal } from "../../actions";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 import { getDateFromTimestamp } from "../../utils/dates";
-import { formatString } from "../../utils/string";
+import { formatString, removeEmbedParam } from "../../utils/string";
 import CopyButton from "../CopyButton";
+import useMatomo from "../../utils/useMatomo";
 
 const CitationModal = ({
   open,
@@ -19,6 +20,15 @@ const CitationModal = ({
   timestamp,
 }) => {
   const loc = useLocalizationContext();
+  const { trackEvent } = useMatomo();
+
+  const trackCopyClick = () => {
+    trackEvent(
+      "Added components",
+      "Copy map citation",
+      "Copy map citation button"
+    );
+  };
 
   let customQuery = query;
   if (customQuery.length > 100) {
@@ -32,8 +42,9 @@ const CitationModal = ({
 
   let citationText = formatString(loc.citation_template, {
     year: new Date().getFullYear(),
+    type: isStreamgraph ? "Streamgraph" : "Knowledge Map",
     query: customQuery,
-    source: window.location.href,
+    source: removeEmbedParam(window.location.href),
     date,
   });
 
@@ -62,6 +73,7 @@ const CitationModal = ({
           className="indented-modal-btn"
           textId={"copy-map-citation"}
           textContent={open ? citationText : ""}
+          onClick={trackCopyClick}
         />
       </Modal.Body>
     </Modal>

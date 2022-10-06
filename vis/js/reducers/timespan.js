@@ -18,6 +18,7 @@ const SERVICE_START = {
   doaj: "1809",
   pubmed: "1809-01-01",
   base: "1665-01-01",
+  triple: "1750",
   default: "1970-01-01",
 };
 

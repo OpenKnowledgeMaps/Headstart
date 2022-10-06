@@ -9,12 +9,8 @@ const CreatedBy = ({ timestamp, faqsUrl }) => {
   const dateTime = getDateTimeFromTimestamp(timestamp);
   const { trackEvent } = useMatomo();
 
-  const trackVisLink = () =>
-    trackEvent(
-      "Added components",
-      "Open this visualization",
-      "Visualization link in footer"
-    );
+  const trackLink = (action) =>
+    trackEvent("Added components", action, "Footer");
 
   return (
     <div className="builtwith" id="builtwith">
@@ -23,16 +19,26 @@ const CreatedBy = ({ timestamp, faqsUrl }) => {
         href={window.location.href}
         target="_blank"
         rel="noreferrer"
-        onClick={trackVisLink}
+        onClick={() => trackLink("Open this visualization")}
       >
         This visualization
       </a>{" "}
       was created by{" "}
-      <a href="https://openknowledgemaps.org" target="_blank" rel="noreferrer">
+      <a
+        href="https://openknowledgemaps.org"
+        target="_blank"
+        rel="noreferrer"
+        onClick={() => trackLink("Open main page")}
+      >
         Open Knowledge Maps
       </a>
       {dateTime ? " " + dateTime : ""}. For more information{" "}
-      <a href={faqsUrl} target="_blank" rel="noreferrer">
+      <a
+        href={faqsUrl}
+        target="_blank"
+        rel="noreferrer"
+        onClick={() => trackLink("Open FAQs")}
+      >
         read our FAQs
       </a>
       .

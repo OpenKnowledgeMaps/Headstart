@@ -28,7 +28,7 @@ var data_config = {
   context_most_relevant_tooltip: true,
 
   embed_modal: true,
-  share_modal: true,
+  share_modal: false,
 
   doi_outlink: true,
   filter_menu_dropdown: true,
@@ -46,4 +46,9 @@ var data_config = {
 
   highlight_query_terms: true,
   show_context_oa_number: false,
+
+  show_twitter_button: true,
+  show_email_button: true,
+
+  cite_papers: true,
 };

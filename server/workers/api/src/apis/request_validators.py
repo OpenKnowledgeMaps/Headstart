@@ -21,10 +21,15 @@ class SearchParamSchema(Schema):
     unique_id = fields.Str()
     raw = fields.Boolean()
     sg_method = fields.Str()
+    coll = fields.Str()
     vis_id = fields.Str(default=None)
     optradio = fields.Str()
     service = fields.Str()
     embed = fields.Str()
+    min_descsize = fields.Int()
+    repo = fields.Str()
+    repo_name = fields.Str()
+    coll = fields.Str()
 
     @pre_load
     def fix_years(self, in_data, **kwargs):
@@ -38,6 +43,14 @@ class SearchParamSchema(Schema):
     def fix_limit(self, in_data, **kwargs):
         try:
             in_data["limit"] = int(in_data["limit"])
+            return in_data
+        except Exception:
+            return in_data
+
+    @pre_load
+    def filter_nonpublic(self, in_data, **kwargs):
+        try:
+            in_data["non_public"] = in_data["non_public"].lower().capitalize() == "True"
             return in_data
         except Exception:
             return in_data

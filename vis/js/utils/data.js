@@ -1,3 +1,4 @@
+import { isNonTextDocument } from "../templates/Paper";
 import { stringCompare } from "./string";
 
 /**
@@ -108,12 +109,19 @@ const getWordFilterFunction = (searchedKeywords) => {
       getPropertyOrEmptyString(paper, prop)
     );
 
+    const isNonText = isNonTextDocument(paper);
+
     if (paper.oa) {
       paperKeywords.push("open access");
-      paperKeywords.push("pdf");
+      if (!isNonText) {
+        paperKeywords.push("pdf");
+      }
     }
     if (paper.free_access) {
       paperKeywords.push("free access");
+    }
+    if (isNonText) {
+      paperKeywords.push("file");
     }
 
     const paperString = paperKeywords.join(" ");
@@ -231,8 +239,13 @@ export const getListLink = (paper, config, context) => {
   }
 
   if (config.doi_outlink) {
-    if (paper.doi) {
-      return { address: paper.doi, isDoi: true };
+    if (typeof paper.doi === "string" && paper.doi !== "") {
+      return {
+        address: paper.doi.match(/^(https?:\/\/)?(\w+\.)?doi.org\//)
+          ? paper.doi
+          : `https://doi.org/${paper.doi}`,
+        isDoi: true,
+      };
     }
 
     if (paper.link) {

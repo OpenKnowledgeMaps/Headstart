@@ -43,15 +43,6 @@ export const zoomOut = (callback, isFromBackButton = false) => ({
 });
 
 /**
- * Action for initializing the data that are known from the very beginning.
- * @param {Object} configObject the default_config.json + data_config.json
- */
-export const preinitializeStore = (configObject) => ({
-  type: "PREINITIALIZE",
-  configObject,
-});
-
-/**
  * Action for initializing the data that aren't known in advance.
  * @param {Object} configObject the default_config.json + data_config.json
  * @param {Object} contextObject the app context
@@ -101,7 +92,10 @@ export const selectPaper = (paper, isFromBackButton = false) => ({
   isFromBackButton,
 });
 
-export const deselectPaper = () => ({ type: "DESELECT_PAPER" });
+export const deselectPaper = (isFromBackButton = false) => ({
+  type: "DESELECT_PAPER",
+  isFromBackButton,
+});
 
 export const highlightArea = (paper) => ({
   type: "HIGHLIGHT_AREA",
@@ -113,6 +107,9 @@ export const hidePreview = () => ({ type: "HIDE_PREVIEW" });
 
 export const showCitePaper = (paper) => ({ type: "SHOW_CITE_PAPER", paper });
 export const hideCitePaper = () => ({ type: "HIDE_CITE_PAPER" });
+
+export const showExportPaper = (paper) => ({ type: "SHOW_EXPORT_PAPER", paper });
+export const hideExportPaper = () => ({ type: "HIDE_EXPORT_PAPER" });
 
 export const updateDimensions = (chart, list) => ({
   type: "RESIZE",

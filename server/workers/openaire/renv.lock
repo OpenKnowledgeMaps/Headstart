@@ -1,6 +1,6 @@
 {
   "renv": {
-    "Version": "0.11.0"
+    "Version": "0.14.0"
   },
   "R": {
     "Version": "3.6.3",

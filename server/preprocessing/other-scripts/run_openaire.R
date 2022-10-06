@@ -14,7 +14,7 @@ Sys.setlocale(category="LC_ALL", locale = "en_US.UTF-8")
 library(jsonlite)
 library(logging)
 source('utils.R')
-if (Sys.getenv("OPENAIRE_LOGLEVEL") == "DEBUG") {
+if (Sys.getenv("LOGLEVEL") == "DEBUG") {
   DEBUG <- FALSE
 } else {
   DEBUG <- TRUE
@@ -46,7 +46,7 @@ limit = params$limit
 
 failed <- list(params=params)
 tryCatch({
-  input_data = get_papers(query, params, limit=limit)
+  input_data = get_papers(query, params)
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
   failed$query <<- query

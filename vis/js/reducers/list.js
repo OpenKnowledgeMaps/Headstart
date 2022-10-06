@@ -9,7 +9,6 @@ const list = (
     sortValue: null,
     defaultSort: null,
     sortOptions: [],
-    abstractSize: 250,
     showDocumentType: false,
     showMetrics: false,
     isContentBased: false,
@@ -17,6 +16,8 @@ const list = (
     showKeywords: false,
     hideUnselectedKeywords: true,
     height: null,
+    citePapers: false,
+    exportPapers: false,
   },
   action
 ) => {
@@ -38,7 +39,6 @@ const list = (
         sortValue: getSortValue(config, context),
         defaultSort: getSortValue(config, context),
         sortOptions: config.sort_options,
-        abstractSize: config.abstract_small,
         showDocumentType: config.show_resulttype,
         showMetrics: config.metric_list,
         isContentBased: config.content_based,
@@ -47,17 +47,33 @@ const list = (
         hideUnselectedKeywords: config.hide_keywords_overview,
         disableClicks: !config.render_map,
         height: action.listHeight,
+        citePapers: config.cite_papers,
+        noCitationDoctypes: Array.isArray(config.no_citation_doctypes)
+          ? config.no_citation_doctypes
+          : [],
+        exportPapers: config.export_papers,
       };
     case "TOGGLE_LIST":
       return {
         ...state,
         show: !state.show,
       };
+    case "SELECT_PAPER":
     case "SHOW_LIST":
       return {
         ...state,
         show: true,
       };
+    case "ZOOM_IN": {
+      if (!action.selectedPaperData) {
+        return state;
+      }
+
+      return {
+        ...state,
+        show: true,
+      };
+    }
     case "SEARCH":
       return {
         ...state,

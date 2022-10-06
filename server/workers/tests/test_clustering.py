@@ -50,4 +50,4 @@ def test_n_cluster_lower_bound(testcase):
     test_result = get_dataprocessing_result(testcase)
     n_items = len(test_result)
     if n_items <= 30:
-        assert test_result.area.nunique() == round(np.sqrt(n_items)) + 1
+        assert test_result.area.nunique() <= round(np.sqrt(n_items)) + 1

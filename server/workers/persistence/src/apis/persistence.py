@@ -8,7 +8,6 @@ from flask_restx import Namespace, Resource, fields
 
 from models import Revisions, Visualizations
 from database import sessions
-import settings
 
 
 persistence_ns = Namespace("persistence", description="OKMAps persistence operations")
@@ -20,7 +19,7 @@ def select_session(Session=None):
     if Session is not None:
         return Session()
     else:
-        return sessions.get(settings.DEFAULT["db"])()
+        return sessions.get(os.getenv("DEFAULT_DATABASE"))()
 
 
 def create_vis_id(params, param_types):
@@ -52,7 +51,7 @@ def write_revision(database, vis_id, data, rev_id=None):
                 rev_id=rev_id,
                 rev_vis=vis_id,
                 rev_user="System",
-                rev_timestamp=datetime.utcnow(),
+                rev_timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 rev_comment="Visualization created",
                 rev_data=data,
                 vis_query=query)
@@ -198,7 +197,7 @@ class createVisualization(Resource):
                                  200,
                                  headers)
         except Exception as e:
-            result = {'success': False, 'reason': e}
+            result = {'success': False, 'reason': str(e)}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  500,
@@ -221,7 +220,7 @@ class writeRevision(Resource):
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 200, headers)
         except Exception as e:
-            result = {'success': False, 'reason': e}
+            result = {'success': False, 'reason': str(e)}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 500, headers)
 
@@ -314,7 +313,7 @@ class createID(Resource):
             headers["Content-Type"] = "application/json"
             return make_response(jsonify(result), 200, headers)
         except Exception as e:
-            result = {'success': False, 'reason': e}
+            result = {'success': False, 'reason': str(e)}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 500, headers)
 

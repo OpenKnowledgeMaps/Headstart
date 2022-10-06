@@ -1,29 +1,15 @@
 import os
 import json
 import uuid
-import time
-import redis
-import asyncio
-import aioredis
 import pandas as pd
 
 from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
-from apis.utils import get_key
+from apis.utils import get_key, redis_store
 
-
-redis_config = {
-    "host": os.getenv("REDIS_HOST"),
-    "port": os.getenv("REDIS_PORT"),
-    "db": os.getenv("REDIS_DB"),
-    "password": os.getenv("REDIS_PASSWORD")
-}
-redis_store = redis.StrictRedis(**redis_config)
 
 openaire_ns = Namespace("openaire", description="OpenAIRE API operations")
-
-
 search_param_schema = SearchParamSchema()
 
 

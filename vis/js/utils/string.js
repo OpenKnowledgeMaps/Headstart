@@ -84,7 +84,7 @@ export const shorten = (string, length, end = "...") => {
     return string;
   }
 
-  return string.substr(0, length) + end;
+  return string.slice(0, length) + end;
 };
 
 export const formatString = (string, params) => {
@@ -93,4 +93,21 @@ export const formatString = (string, params) => {
   });
 
   return string;
+};
+
+export const addEmbedParam = (urlString) => {
+  const url = new URL(urlString);
+
+  url.searchParams.delete("embed");
+  url.searchParams.set("embed", "true");
+
+  return url.toString();
+};
+
+export const removeEmbedParam = (urlString) => {
+  const url = new URL(urlString);
+
+  url.searchParams.delete("embed");
+
+  return url.toString();
 };
