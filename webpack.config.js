@@ -1,67 +1,85 @@
-var config = require("./config.js");
 const path = require("path");
-const webpack = require("webpack");
+
+const { ProvidePlugin } = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const BundleAnalyzerPlugin =
-  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
-//const TARGET = process.env.npm_lifecycle_event;
-
-const getSkinExample = (skin) => {
-  switch (skin) {
-    case "":
-      return ["/project_website/base.html"];
-    case "covis":
-      return ["/local_covis/"];
-    case "triple":
-      return ["/local_triple/map.html"];
-    case "viper":
-      return "/local_viper/";
-    default:
-      return false;
-  }
-};
+const config = require("./config.js");
 
 module.exports = (env) => {
-  const { publicPath, skin, analyzeBundle } = { ...config, ...env };
+  let { publicPath, skin } = { ...config, ...env };
+  const { analyzeBundle, example } = { ...config, ...env };
+
+  // output filename: deployment config
+  let outputFilename = "[name].[contenthash].bundle.js";
+
+  // HtmlWebpackPlugin: deployment config
+  let htmlConfig = {
+    inject: false,
+    filename: "headstart.php",
+    templateContent: ({ htmlWebpackPlugin }) =>
+      `${htmlWebpackPlugin.tags.headTags}
+      ${htmlWebpackPlugin.tags.bodyTags}`,
+  };
+
+  // MiniCssExtractPlugin: deployment config
+  const miniCssConfig = {
+    filename: "[name].[contenthash].css",
+  };
+
+  // local examples config overrides
+  const exampleConfig = getExampleConfig(example);
+  if (exampleConfig) {
+    publicPath = "http://localhost:8080/dist/";
+    skin = exampleConfig.skin;
+
+    outputFilename = "[name].bundle.js";
+
+    // HtmlWebpackPlugin
+    htmlConfig = {
+      template: exampleConfig.template,
+    };
+
+    // MiniCssExtractPlugin
+    miniCssConfig.filename = "[name].css";
+  }
 
   return {
     devtool: "eval-source-map",
+
     entry: {
       headstart: "./vis/entrypoint.js",
     },
 
     output: {
-      filename: "[name].[contenthash].bundle.js",
+      filename: outputFilename,
       path: path.resolve(__dirname, "dist"),
-      clean: true,
-      // dev: specify a full path including protocol
-      // production: specify full path excluding protocol
       publicPath: publicPath,
       library: {
         name: "headstart",
         type: "var",
       },
+      clean: true,
     },
 
     devServer: {
-      open: getSkinExample(skin),
-      static: {
-        directory: path.resolve(__dirname, "examples/"),
-      },
-      allowedHosts: "all",
-      devMiddleware: { publicPath: "/dist/" },
+      open: true,
+      static: [
+        path.resolve(__dirname, "dist/"),
+        path.resolve(__dirname, "examples/public/"),
+      ],
+      devMiddleware: { publicPath: "/dist/", writeToDisk: true },
     },
 
     resolve: {
+      // TODO clean up the aliases once the old modules are refactored
       alias: {
         //
         hypher: "hypher/dist/jquery.hypher.js",
         markjs: "mark.js/dist/jquery.mark.js",
 
         // paths
-        templates: path.resolve(__dirname, "vis/templates"),
         images: path.resolve(__dirname, "vis/images"),
         lib: path.resolve(__dirname, "vis/lib"),
         styles: path.resolve(__dirname, "vis/stylesheets"),
@@ -70,49 +88,26 @@ module.exports = (env) => {
         config: path.resolve(__dirname, "vis/js/default-config.js"),
         headstart: path.resolve(__dirname, "vis/js/headstart.js"),
         mediator: path.resolve(__dirname, "vis/js/mediator.js"),
-        io: path.resolve(__dirname, "vis/js/io.js"),
 
         // building
         process: "process/browser",
       },
     },
 
-    externals: {
-      chart: "Chart",
-    },
     plugins: [
-      new HtmlWebpackPlugin({
-        inject: false,
-        filename: "headstart.php",
-        templateContent: ({ htmlWebpackPlugin }) =>
-          `${htmlWebpackPlugin.tags.headTags}
-          ${htmlWebpackPlugin.tags.bodyTags}`,
-      }),
-      new webpack.ProvidePlugin({
+      new HtmlWebpackPlugin(htmlConfig),
+      new ProvidePlugin({
         process: "process/browser",
+        jQuery: "jquery",
       }),
-      new MiniCssExtractPlugin({
-        filename: "[name].[contenthash].css",
-      }),
-      // can be used for simulating env variables
-      new webpack.EnvironmentPlugin({}),
+      new MiniCssExtractPlugin(miniCssConfig),
       ...(analyzeBundle ? [new BundleAnalyzerPlugin()] : []),
     ],
+
     module: {
       rules: [
         {
-          test: require.resolve("hypher/dist/jquery.hypher.js"),
-          use: [
-            {
-              loader: "imports-loader",
-              options: {
-                imports: ["default jquery $", "default jquery jQuery"],
-              },
-            },
-          ],
-        },
-        {
-          test: /lib\/*.js/,
+          test: [require.resolve("hypher/dist/jquery.hypher.js"), /lib\/*.js/],
           use: [
             {
               loader: "imports-loader",
@@ -177,6 +172,7 @@ module.exports = (env) => {
         { test: /\.csl$/, type: "asset/source" },
       ],
     },
+
     optimization: {
       // deterministic = stable hashes between builds
       moduleIds: "deterministic",
@@ -195,4 +191,36 @@ module.exports = (env) => {
       },
     },
   };
+};
+
+const getExampleConfig = (example) => {
+  switch (example) {
+    case "base":
+      return {
+        skin: "",
+        template: "examples/templates/base.html",
+      };
+    case "pubmed":
+      return {
+        skin: "",
+        template: "examples/templates/pubmed.html",
+      };
+    case "triple":
+      return {
+        skin: "triple",
+        template: "examples/templates/triple.html",
+      };
+    case "viper":
+      return {
+        skin: "viper",
+        template: "examples/templates/viper.html",
+      };
+    case "covis":
+      return {
+        skin: "covis",
+        template: "examples/templates/covis.html",
+      };
+    default:
+      return null;
+  }
 };

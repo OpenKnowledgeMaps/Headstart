@@ -1,12 +1,11 @@
-<!DOCTYPE HTML>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 
 <head>
-    <base href="//localhost:8080/project_website/">
+    <meta charset="utf-8">
+    <title>Overview of research on digital education - Open Knowledge Maps</title>
 
-    <script type="text/javascript" src="./data-config_base.js"></script>
-    <title>
-        Overview of research on digital education - Open Knowledge Maps</title>
+    <script type="text/javascript" src="./main_integration/data-config-base.js"></script>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="content-style-type" content="text/css">
@@ -19,57 +18,40 @@
     <meta name="publisher" content="Open Knowledge Maps">
     <meta name="keywords" content="knowldege visualization, open knowledge, open science">
 
+    <link rel="icon" type="image/png" sizes="32x32" href="./main_integration/img/favicon-32x32.png?v=xQz6nej7eR">
+    <link rel="icon" type="image/png" sizes="16x16" href="./main_integration/img/favicon-16x16.png?v=xQz6nej7eR">
+
     <meta name="description"
         content="Get an overview of digital education, find relevant papers, and identify important concepts.">
 
-    <!-- FAVICONS -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=xQz6nej7eR">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=xQz6nej7eR">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=xQz6nej7eR">
-    <link rel="manifest" href="/site.webmanifest?v=xQz6nej7eR">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg?v=xQz6nej7eR" color="#263d54">
-    <link rel="shortcut icon" href="/favicon.ico?v=xQz6nej7eR">
-    <meta name="apple-mobile-web-app-title" content="OKMaps">
-    <meta name="application-name" content="OKMaps">
-    <meta name="msapplication-TileColor" content="#263d54">
-    <meta name="theme-color" content="#ffffff">
-
-    <!-- TODO -->
     <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- TODO <script src="lib/bootstrap.min.js"></script> -->
-
-    <!-- TODO <link rel="stylesheet" href="./css/main.css?v=2021-10-11-1"> -->
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('[data-toggle="popover"]').popover({ trigger: "hover", placement: "right" });
-        });
-    </script>
 </head>
 
 <body class="vis">
-    <!-- TODO <link rel="stylesheet" href="./search-flow/css/search-flow.css"> -->
-
     <div class="overflow-vis">
         <div id="visualization" style="background-color:white;"></div>
     </div>
 
-    <!-- TODO -->
-    <script type="text/javascript" src="../../dist/headstart.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
-            headstart.start();
-        })
-    </script>
+        const availableFiles = {
+            calcium: {
+                title: "calcium",
+                file: "./main_integration/data/calcium.json",
+            },
+            digital_education: {
+                title: "digital education",
+                file: "./main_integration/data/digital-education.json",
+            }
+        };
 
-    
-    <link rel="stylesheet" href="../../dist/headstart.css">
+        data_config.files = [availableFiles.digital_education];
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        if (urlSearchParams.has("file") && availableFiles[urlSearchParams.get("file")]) {
+            data_config.files = [availableFiles[urlSearchParams.get("file")]];
+        }
 
-    <script>
         data_config.options = [{
             "id": "time_range", "multiple": false, "name": "Time Range", "type": "dropdown", "fields": [{ "id": "any-time", "text": "All time" }, { "id": "last-month", "text": "Last month" }, { "id": "last-year", "text": "Last year" }, { "id": "user-defined", "text": "Custom range", "class": "user-defined", "inputs": [{ "id": "from", "label": "From: ", "class": "time_input" }, { "id": "to", "label": "To: ", "class": "time_input" }] }]
         }, {
@@ -81,8 +63,8 @@
         }];
 
         data_config.credit_embed = true;
-    </script>
 
+<<<<<<< HEAD:examples/project_website/base.html
     <link rel="stylesheet" href="./css/main.css">
     <script>
         data_config.files = [{
@@ -107,7 +89,17 @@
         data_config.is_streamgraph = data_config.files[0].is_streamgraph;
         data_config.show_area = data_config.files[0].show_area;
         data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "./headstart/server/";
+=======
+        data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "./main_integration/";
+
+        document.title = `Overview of research on ${data_config.files[0].title} - Open Knowledge Maps`;
+
+        $(document).ready(function () {
+            headstart.start();
+        })
+>>>>>>> upstream/webpack-optimization:examples/templates/base.html
     </script>
+    <link rel="stylesheet" href="./main_integration/css/main.css">
 </body>
 
 <!-- Matomo -->
@@ -129,5 +121,7 @@
     }
 </script>
 <!-- End Matomo Code -->
+
+</html>
 
 </html>
