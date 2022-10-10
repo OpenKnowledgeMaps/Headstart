@@ -98,7 +98,7 @@ class BaseClient(RWrapper):
     def run(self):
         while True:
             while request_is_limited(self.redis_store, 'base-ratelimit', 1, timedelta(seconds=1)):
-                self.logger.debug('🛑 Request is limited')
+                self.logger.info('🛑 Request is limited')
                 time.sleep(0.1)
             k, params, endpoint = self.next_item()
             self.logger.debug(k)
