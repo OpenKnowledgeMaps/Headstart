@@ -51,7 +51,12 @@ def get_or_create_contentprovider_lookup():
         cp_dict = df.name.to_dict()
         return cp_dict
     except Exception as e:
+        base_ns.logger.error("Falling back to cached contentproviders.json")
         base_ns.logger.error(e)
+        df = pd.read_json("contentproviders.json")
+        df.set_index("internal_name", inplace=True)
+        cp_dict = df.name.to_dict()
+        return cp_dict
    
 
 global contentprovider_lookup
@@ -73,9 +78,8 @@ class Search(Resource):
         errors = search_param_schema.validate(params, partial=True)
         if "limit" not in params:
             params["limit"] = 120
-        if params["limit"] > 1000:
-            params["limit"] = 1000
         if params.get('vis_type') == "timeline":
+            params["limit"] = 1000
             params["retain_size"] = params["limit"]
         else:
             params["retain_size"] = 100

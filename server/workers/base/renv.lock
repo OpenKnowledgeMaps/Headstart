@@ -186,15 +186,15 @@
     },
     "rbace": {
       "Package": "rbace",
-      "Version": "0.2.2.91",
+      "Version": "0.2.2.92",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "rbace",
       "RemoteUsername": "OpenKnowledgeMaps",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "814cfc7375deb090583f581bf6b54a5785092e30",
-      "Hash": "1ce15695e05bd62877a683d56c7ec626"
+      "RemoteRef": "triple-base-params",
+      "RemoteSha": "61e95e7c8fcf6372d34cc01fdc88f3ad5d889799",
+      "Hash": "d4af2d9e4e8e2236b5e0dd099148434d"
     },
     "renv": {
       "Package": "renv",

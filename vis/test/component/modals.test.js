@@ -986,7 +986,7 @@ describe("Modals component", () => {
       });
 
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-        '<iframe width="1260" height="756" src="http://localhost/&embed=true"></iframe>'
+        '<iframe width="1260" height="756" src="http://localhost/?embed=true"></iframe>'
       );
 
       await act(() => promise);

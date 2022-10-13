@@ -48,6 +48,9 @@ const list = (
         disableClicks: !config.render_map,
         height: action.listHeight,
         citePapers: config.cite_papers,
+        noCitationDoctypes: Array.isArray(config.no_citation_doctypes)
+          ? config.no_citation_doctypes
+          : [],
         exportPapers: config.export_papers,
       };
     case "TOGGLE_LIST":

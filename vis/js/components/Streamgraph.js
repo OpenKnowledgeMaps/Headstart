@@ -347,8 +347,7 @@ class Streamgraph extends React.Component {
       d3.select("#" + this.props.visTag)
         .append("div")
         .attr("id", "tooltip")
-        .attr("class", "tip hidden")
-        .style("top", $("#headstart-chart").offset().top + "px");
+        .attr("class", "tip hidden");
     }
 
     container
@@ -358,15 +357,31 @@ class Streamgraph extends React.Component {
       .on("mousemove", (s) => this.handleStreamMousemove(d3.event, s, xScale));
   }
 
+  /**
+   * Mouse x, y relative to the whole document.
+   * @param {Object} event
+   * @returns {x,y} mouse coords
+   */
+  getAbsoluteMouseCoords(event) {
+    return {
+      x: event.pageX,
+      y: event.pageY,
+    };
+  }
+
+  /**
+   * Mouse x, y relative to the streamgraph chart.
+   * @param {Object} event
+   * @returns {x,y} mouse coords
+   */
   getRelativeMouseCoords(event) {
-    const realX = event.clientX;
-    const realY = event.clientY;
+    const { x, y } = this.getAbsoluteMouseCoords(event);
 
     const sgOffset = $("#streamgraph_subject").offset();
 
     return {
-      x: realX - sgOffset.left,
-      y: realY - sgOffset.top,
+      x: x - sgOffset.left,
+      y: y - sgOffset.top,
     };
   }
 
@@ -452,9 +467,8 @@ class Streamgraph extends React.Component {
   /**
    * Displays the stream tooltip using d3.
    *
-   * @param {Object} container the d3 representation of #streamgraph-chart
    * @param {Object} event the d3 event that triggered the call of this function
-   * @param {Object} d the d3 element where the event was triggered
+   * @param {Object} element the d3 element where the event was triggered
    * @param {Function} xScale x coordinate scaling function
    */
   handleStreamMousemove(event, element, xScale) {
@@ -462,7 +476,8 @@ class Streamgraph extends React.Component {
       return;
     }
 
-    const { x, y } = this.getRelativeMouseCoords(event);
+    const { x } = this.getRelativeMouseCoords(event);
+    const { y } = this.getAbsoluteMouseCoords(event);
 
     const invertedX = xScale.invert(x - CHART_MARGIN.left);
     const streamYear = invertedX.getFullYear();
@@ -476,9 +491,8 @@ class Streamgraph extends React.Component {
     );
 
     if (currentYearData) {
-      d3.select("#tooltip")
-        .style("left", x + TOOLTIP_OFFSET.left + "px")
-        .style("top", Math.max(0, y + TOOLTIP_OFFSET.top) + "px")
+      const tooltipEl = d3.select("#tooltip");
+      tooltipEl
         .html(() =>
           getTooltip(
             {
@@ -492,6 +506,15 @@ class Streamgraph extends React.Component {
           )
         )
         .classed("hidden", false);
+
+      const tooltipHeight = tooltipEl.node().getBoundingClientRect().height;
+      const tooltipY = Math.max(
+        window.scrollY,
+        y - tooltipHeight + TOOLTIP_OFFSET.top
+      );
+      tooltipEl
+        .style("top", tooltipY + "px")
+        .style("left", x + TOOLTIP_OFFSET.left + "px");
     }
   }
 
@@ -528,15 +551,24 @@ const getTooltip = (
   { year, color, keyword, yearDocs, totalDocs },
   localization
 ) => {
-  return `<div style="font-family: Lato; font-size:10px;">
-<div class='year'>${year}</div>
-<div class='key' style="text-transform: none; font-size:14px; margin-bottom: 5px;">
+  return `
+<div class="sg-tooltip">
+  <div class="year">${year}</div>
+  <div class="key">
     <span
-        style='background:${color}; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; width:15px; height: 10px;'
-        class='swatch'>&nbsp;</span>
+      style="background:${color}; width:15px; height: 10px;"
+      class="swatch"
+    >
+      &nbsp;
+    </span>
     ${keyword}
+  </div>
+  <div class="value">
+    ${localization.stream_docs} ${year}: ${yearDocs}
+  </div>
+  <div class="value">
+    ${localization.stream_total}: ${totalDocs}
+  </div>
 </div>
-<div class='value'> ${localization.stream_docs}: ${yearDocs} </div>
-<div class='value'> ${localization.stream_total}: ${totalDocs} </div>
-</div>`;
+`.trim();
 };

@@ -53,6 +53,7 @@ const setup = (
         showKeywords: true,
         showDocumentType: true,
         showMetrics: false,
+        noCitationDoctypes: [],
         ...overrideListObject,
       },
       query: {

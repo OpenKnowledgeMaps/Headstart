@@ -143,7 +143,7 @@ class exportMetadata(Resource):
                                 headers)
         except Exception as e:
             export_ns.logger.error(e)
-            result = {'success': False, 'reason': e}
+            result = {'success': False, 'reason': str(e)}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                     500,

@@ -77,14 +77,21 @@ get_papers <- function(query, params,
     lang_query <- ""
   }
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
+  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider"
 
   base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, collapse=" ")
 
   min_descsize <- if (is.null(params$min_descsize)) 300 else params$min_descsize
   filter <- I(paste0('descsize:[', min_descsize, '%20TO%20*]'))
+  limit <- params$limit
   
   repo = params$repo
   coll = params$coll
+  if(!is.null(repo) && repo=="fttriple") {
+    non_public = TRUE
+  } else {
+    non_public = FALSE
+  }
   
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE query:", base_query))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Sort by:", sortby_string))
@@ -96,12 +103,14 @@ get_papers <- function(query, params,
   offset = 0
   res_raw <- get_raw_data(limit,
                           base_query,
+                          return_fields,
                           sortby_string,
                           filter,
                           repo,
                           coll,
                           retry_opts,
-                          offset)
+                          offset,
+                          non_public)
   res <- res_raw$docs
   if (nrow(res)==0){
     stop(paste("No results retrieved."))
@@ -117,12 +126,14 @@ get_papers <- function(query, params,
     offset <- offset+120
     res_raw <- get_raw_data(limit,
                             base_query,
+                            return_fields,
                             sortby_string,
                             filter,
                             repo,
                             coll,
                             retry_opts,
-                            offset)
+                            offset,
+                            non_public)
     res <- bind_rows(res, res_raw$docs)
     ret_val <- etl(res)
     metadata <- ret_val$metadata
@@ -195,6 +206,10 @@ etl <- function(res) {
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
+  metadata$content_provider = check_metadata(res$dcprovider)
+  if(repo=="fttriple" && non_public==TRUE) {
+    metadata$content_provider <- "GoTriple"
+  }
 
   text = data.frame(matrix(nrow=length(res$dcdocid)))
   text$id = metadata$id
@@ -206,15 +221,17 @@ etl <- function(res) {
   ret_val=list("metadata" = metadata, "text"=text)
 }
 
-get_raw_data <- function(limit, base_query, sortby_string, filter, repo, coll, retry_opts, offset) {
+get_raw_data <- function(limit, base_query, return_fields, sortby_string, filter, repo, coll, retry_opts, offset, non_public) {
   (res_raw <- bs_search(hits=limit
+                      , fields = return_fields,
                       , query = base_query
                       , sortby = sortby_string
                       , filter = filter
                       , target = repo
                       , coll = coll
                       , retry = retry_opts
-                      , offset = offset))
+                      , offset = offset
+                      , non_public = non_public))
   return(res_raw)
 }
 

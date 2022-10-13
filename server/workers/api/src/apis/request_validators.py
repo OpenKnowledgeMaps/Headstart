@@ -47,6 +47,14 @@ class SearchParamSchema(Schema):
         except Exception:
             return in_data
 
+    @pre_load
+    def filter_nonpublic(self, in_data, **kwargs):
+        try:
+            in_data["non_public"] = in_data["non_public"].lower().capitalize() == "True"
+            return in_data
+        except Exception:
+            return in_data
+
     @validates('from_')
     def is_not_in_future(self, date):
         if date > datetime.today().date():

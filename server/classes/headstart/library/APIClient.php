@@ -30,18 +30,61 @@ class APIClient {
 
     public function call_api($endpoint, $payload) {
         $route = $this->base_route . $endpoint;
-        $res = CommUtils::call_api($route, $payload);
-        if ($res["httpcode"] != 200) {
-            $res["route"] = $route;
+        try {
+            $res = CommUtils::call_api($route, $payload);
+            if ($res["httpcode"] != 200) {
+                $res["route"] = $route;
+                $res = $this->handle_api_errors($res);
+            }
+            return $res;
         }
-        return $res;
+        catch (Exception $e) {
+            $res = array("status"=>"error",
+                         "httpcode"=>500,
+                         "reason"=>array("unexpected data processing error"));
+            error_log(print_r($res, TRUE));
+            return $res;
+        }
+        finally {
+        }        
     }
 
     public function call_persistence($endpoint, $payload) {
         $route = $this->base_route . "persistence/" . $endpoint . "/" . $this->database;
-        $res = CommUtils::call_api($route, $payload);
-        if ($res["httpcode"] != 200) {
-            $res["route"] = $route;
+        try {
+            $res = CommUtils::call_api($route, $payload);
+            if ($res["httpcode"] != 200) {
+                $res["route"] = $route;
+                $res = $this->handle_api_errors($res);
+            }
+            return $res;
+        }
+        catch (Exception $e) {
+            $res = array("status"=>"error",
+                         "httpcode"=>500,
+                         "reason"=>array("unexpected data processing error"));
+            error_log(print_r($res, TRUE));
+            return $res;
+        }
+        finally {
+        }        
+    }
+
+    public function handle_api_errors($res) {
+        // if (is_string($res)) {
+        //     if (str_contains($res, "503 Service Unavailable")) {
+        //         $res = array("status"=>"error", reason=>array());
+        //     }
+        // }
+        if ($res["httpcode"] == 503) {
+            $res["status"] = "error";
+            $res["reason"] = array();
+        }
+        if (!array_key_exists("reason", $res)) {
+            $res["reason"] = array();
+        }
+        if (count($res["reason"])==0) {
+            array_push($res["reason"], "unexpected data processing error");
         }
         return $res;
     }
