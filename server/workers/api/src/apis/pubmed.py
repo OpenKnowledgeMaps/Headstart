@@ -55,7 +55,7 @@ class Search(Resource):
         errors = search_param_schema.validate(params, partial=True)
         params["limit"] = 100
         params["retain_size"] = -1
-        params["how_deduplicate"] = "keep_all"
+        params["deduplication_method"] = "keep_all"
         pubmed_ns.logger.debug(errors)
         if errors:
             abort(400, str(errors))

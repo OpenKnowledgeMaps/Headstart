@@ -31,13 +31,12 @@ vis_layout <- function(text, metadata, service,
                        mindim=2, maxdim=2,
                        lang=NULL, add_stop_words=NULL,
                        taxonomy_separator=NULL,
-                       retain_size=100, deduplication_method="remove_all",
                        vis_type='overview') {
   start.time <- Sys.time()
   vlog$debug("preprocess")
 
   metadata <- sanitize(metadata)
-  filtered <- drop_duplicates(metadata, text, retain_size, deduplication_method)
+  filtered <- mark_duplicates(metadata, text)
   metadata <- filtered$metadata
   text <- filtered$text
   vlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "doc count:", nrow(metadata), sep=" "))

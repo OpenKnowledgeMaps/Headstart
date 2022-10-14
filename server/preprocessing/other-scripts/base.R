@@ -63,7 +63,6 @@ get_papers <- function(query, params,
   year_from = params$from
   year_to = params$to
   limit = params$limit
-  retain_size = params$retain_size
 
   # prepare query fields
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
@@ -119,10 +118,10 @@ get_papers <- function(query, params,
   metadata <- ret_val$metadata
   text <- ret_val$text
   metadata <- sanitize(metadata)
-  filtered <- drop_duplicates(metadata, text, 0, "remove_all")
+  filtered <- mark_duplicates(metadata, text)
   metadata <- filtered$metadata
   text <- filtered$text
-  while (nrow(metadata) < retain_size && attr(res_raw, "numFound")>+offset+120) {
+  while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound")>+offset+120) {
     offset <- offset+120
     res_raw <- get_raw_data(limit,
                             base_query,
@@ -139,9 +138,7 @@ get_papers <- function(query, params,
     metadata <- ret_val$metadata
     text <- ret_val$text
     metadata <- sanitize(metadata)
-    filtered <- drop_duplicates(metadata, text, NULL, "remove_all")
-    metadata <- head(filtered$metadata, retain_size+1)
-    text <- head(filtered$text, retain_size+1)
+    filtered <- mark_duplicates(metadata, text)
   }
 
 

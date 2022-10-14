@@ -44,22 +44,17 @@ if (!is.null(params$vis_type)) {
 .GlobalEnv$VIS_ID <- params$vis_id
 taxonomy_separator = NULL
 limit = 100
-retain_size = -1
 switch(service,
        pubmed={
          source('../other-scripts/pubmed.R')
          params$limit = 100
-         deduplication_method = "keep_all"
        },
        base={
          source('../other-scripts/base.R')
          params$limit = 120
-         deduplication_method = "remove_all"
-         retain_size = 100
        },
        openaire={
          source('../other-scripts/openaire.R')
-         deduplication_method = "keep_all"
        }
 )
 
@@ -83,8 +78,7 @@ if(exists('input_data')) {
                              service,
                              max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
                              lang=LANGUAGE$name,
-                             taxonomy_separator=taxonomy_separator, 
-                             etain_size = retain_size, deduplication_method = deduplication_method,
+                             taxonomy_separator=taxonomy_separator,
                              vis_type=vis_type)
   }, error=function(err){
    tslog$error(gsub("\n", " ", paste("Processing failed", query$raw_query, paste(params, collapse=" "), err, sep="||")))

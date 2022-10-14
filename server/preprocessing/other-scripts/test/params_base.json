@@ -6,7 +6,5 @@
   "lang_id":"eng",
   "vis_id": "TEST_ID",
   "min_descsize": 300,
-  "limit": 120,
-  "deduplication_method": "remove_all",
-  "retain_size": 100
+  "limit": 200
 }

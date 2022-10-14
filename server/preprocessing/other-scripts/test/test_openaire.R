@@ -60,7 +60,7 @@ if(exists('input_data')) {
                            service,
                            max_clusters=MAX_CLUSTERS,
                            lang=LANGUAGE$name,
-                           add_stop_words=ADDITIONAL_STOP_WORDS, retain_size=-1)
+                           add_stop_words=ADDITIONAL_STOP_WORDS)
   }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
     failed$query <<- query
