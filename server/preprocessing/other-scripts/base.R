@@ -115,7 +115,7 @@ get_papers <- function(query, params,
   if (nrow(res)==0){
     stop(paste("No results retrieved."))
   }
-  ret_val <- etl(res)
+  ret_val <- etl(res, repo, non_public)
   metadata <- ret_val$metadata
   text <- ret_val$text
   metadata <- sanitize(metadata)
@@ -135,7 +135,7 @@ get_papers <- function(query, params,
                             offset,
                             non_public)
     res <- bind_rows(res, res_raw$docs)
-    ret_val <- etl(res)
+    ret_val <- etl(res, repo, non_public)
     metadata <- ret_val$metadata
     text <- ret_val$text
     metadata <- sanitize(metadata)
@@ -156,7 +156,7 @@ get_papers <- function(query, params,
   return(ret_val)
 }
 
-etl <- function(res) {
+etl <- function(res, repo, non_public) {
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
 
   metadata$id = res$dcdocid

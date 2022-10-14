@@ -49,17 +49,17 @@ switch(service,
        pubmed={
          source('../other-scripts/pubmed.R')
          params$limit = 100
-         how_deduplicate = "keep_all"
+         deduplication_method = "keep_all"
        },
        base={
          source('../other-scripts/base.R')
          params$limit = 120
-         how_deduplicate = "remove_all"
+         deduplication_method = "remove_all"
          retain_size = 100
        },
        openaire={
          source('../other-scripts/openaire.R')
-         how_deduplicate = "keep_all"
+         deduplication_method = "keep_all"
        }
 )
 
@@ -84,7 +84,7 @@ if(exists('input_data')) {
                              max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
                              lang=LANGUAGE$name,
                              taxonomy_separator=taxonomy_separator, 
-                             etain_size = retain_size, how_deduplicate = how_deduplicate,
+                             etain_size = retain_size, deduplication_method = deduplication_method,
                              vis_type=vis_type)
   }, error=function(err){
    tslog$error(gsub("\n", " ", paste("Processing failed", query$raw_query, paste(params, collapse=" "), err, sep="||")))

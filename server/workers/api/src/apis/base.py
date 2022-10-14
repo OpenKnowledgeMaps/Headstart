@@ -83,7 +83,7 @@ class Search(Resource):
             params["retain_size"] = params["limit"]
         else:
             params["retain_size"] = 100
-        params["how_deduplicate"] = "remove_all"
+        params["deduplication_method"] = "remove_all"
         if "repo" in params:
             global contentprovider_lookup
             if not contentprovider_lookup:
