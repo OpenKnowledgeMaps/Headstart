@@ -178,6 +178,7 @@ get_papers <- function(query, params,
   metadata$url = metadata$id
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
+  metadata$dctype = check_metadata(res$dctype)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
   metadata$content_provider = check_metadata(res$dcprovider)
   if(repo=="fttriple" && non_public==TRUE) {

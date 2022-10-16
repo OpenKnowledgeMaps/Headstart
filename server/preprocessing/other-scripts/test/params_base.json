@@ -1,12 +1,12 @@
 {
-  "document_types":["121"],
+  "document_types":["121", "1", "11", "111", "12", "122", "13", "14", "15", "16", "17", "18", "181", "182", "183", "19", "1A", "2", "3", "4", "5", "51", "52", "6", "7", "F"],
   "from":"1665-01-01",
   "to":"2022-01-13",
   "sorting":"most-relevant",
   "lang_id":"eng",
   "vis_id": "TEST_ID",
   "min_descsize": 0,
-  "limit": 120,
-  "list_size": 100,
-  "q_advanced": "orcid:000-0002-5238-4195"
+  "limit": 500,
+  "list_size": 500,
+  "q_advanced": "dctype:Hypothesis"
 }
