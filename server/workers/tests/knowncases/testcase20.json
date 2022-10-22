@@ -7,7 +7,7 @@
         "from": "1809-01-01",
         "language": "english",
         "limit": 100,
-        "retain_size": -1,
+        "list_size": -1,
         "q": "\"Our objective was to explore the effect of depression and anxiety on adherence to antiretroviral therapy (ART) among MSM with newly diagnosed HIV infections.\"",
         "raw": true,
         "service": "pubmed",

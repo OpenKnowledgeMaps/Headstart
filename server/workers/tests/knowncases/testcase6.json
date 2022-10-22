@@ -10,7 +10,7 @@
         "from": "2019-01-06",
         "language": "english",
         "limit": 120,
-        "retain_size": 100,
+        "list_size": 100,
         "q": "heart disease",
         "raw": true,
         "service": "base",

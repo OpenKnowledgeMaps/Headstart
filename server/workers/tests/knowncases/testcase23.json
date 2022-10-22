@@ -10,7 +10,7 @@
         "from": "1809-01-01",
         "language": "english",
         "limit": 120,
-        "retain_size": 100,
+        "list_size": 100,
         "q": "\u201channah arendt\"",
         "raw": true,
         "service": "base",

@@ -120,8 +120,9 @@ get_papers <- function(query, params,
   metadata <- sanitize(metadata)
   filtered <- mark_duplicates(metadata, text)
   metadata <- filtered$metadata
+  metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
   text <- filtered$text
-  while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound")>+offset+120) {
+  while (nrow(metadata) - sum(metadata$is_duplicate & !metadata$has_dataset) < limit && attr(res_raw, "numFound")>+offset+120) {
     offset <- offset+120
     res_raw <- get_raw_data(limit,
                             base_query,
@@ -139,6 +140,9 @@ get_papers <- function(query, params,
     text <- ret_val$text
     metadata <- sanitize(metadata)
     filtered <- mark_duplicates(metadata, text)
+    metadata <- filtered$metadata
+    metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
+    text <- filtered$text
   }
 
 

@@ -31,7 +31,7 @@ base_querymodel = base_ns.model("SearchQuery",
                                                           required=True),
                                 "limit": fields.Integer(example=100,
                                                         description='max. number of results'),
-                                "retain_size": fields.Integer(),
+                                "list_size": fields.Integer(),
                                 "language": fields.String(example='en',
                                                           description='language code, optional',
                                                           required=False),
@@ -80,10 +80,9 @@ class Search(Resource):
             params["limit"] = 120
         if params.get('vis_type') == "timeline":
             params["limit"] = 1000
-            params["retain_size"] = params["limit"]
+            params["list_size"] = params["limit"]
         else:
-            params["retain_size"] = 100
-        params["deduplication_method"] = "remove_all"
+            params["list_size"] = 100
         if "repo" in params:
             global contentprovider_lookup
             if not contentprovider_lookup:

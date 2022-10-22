@@ -6,7 +6,7 @@
         "from": "2018-06-28",
         "language": "english",
         "limit": 120,
-        "retain_size": 100,
+        "list_size": 100,
         "q": "stuff",
         "service": "base",
         "sorting": "most-relevant",

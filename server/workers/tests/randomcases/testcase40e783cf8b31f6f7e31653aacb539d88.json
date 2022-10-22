@@ -6,7 +6,7 @@
         "from": "2019-04-05",
         "language": "english",
         "limit": 120,
-        "retain_size": 100,
+        "list_size": 100,
         "q": "education",
         "service": "base",
         "sorting": "most-relevant",

@@ -6,7 +6,7 @@
         "from": "2017-08-19",
         "language": "english",
         "limit": 120,
-        "retain_size": 100,
+        "list_size": 100,
         "q": "heart disease",
         "service": "base",
         "sorting": "most-relevant",

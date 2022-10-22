@@ -7,7 +7,7 @@
         "from": "1809-01-01",
         "language": "english",
         "limit": 100,
-        "retain_size": -1,
+        "list_size": -1,
         "q": "edelstahl",
         "raw": true,
         "service": "pubmed",

@@ -54,8 +54,7 @@ class Search(Resource):
             del params["optradio"]
         errors = search_param_schema.validate(params, partial=True)
         params["limit"] = 100
-        params["retain_size"] = -1
-        params["deduplication_method"] = "keep_all"
+        params["list_size"] = -1
         pubmed_ns.logger.debug(errors)
         if errors:
             abort(400, str(errors))

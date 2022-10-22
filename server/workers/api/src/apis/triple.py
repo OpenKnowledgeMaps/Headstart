@@ -54,7 +54,7 @@ class Search(Resource):
         params = request.get_json()
         triple_ns.logger.debug(params)
         errors = search_param_schema.validate(params, partial=True)
-        params["retain_size"] = params.get('limit', 100)
+        params["list_size"] = params.get('limit', 100)
         triple_ns.logger.debug(errors)
         if errors:
             abort(400, str(errors))
