@@ -128,6 +128,7 @@ class BaseClient(RWrapper):
                     self.logger.error(params)
                     self.logger.error(e)
 
+
 pattern = re.compile(r"\.v(\d)+$")
 def identify_versioned_doi(doi):
     m = pattern.findall(doi)
@@ -185,11 +186,11 @@ def identify_relations(df):
     return df
 
 def remove_false_positives_doi(df):
-    df.loc[df[(df.is_duplicate) & (~df.doi_duplicate)].index, "is_duplicate"] = False
+    df.loc[df[(df.doi != "") & (df.is_duplicate) & (~df.doi_duplicate)].index, "is_duplicate"] = False
     return df
 
 def remove_false_positives_link(df):
-    df.loc[df[(df.is_duplicate) & (~df.link_duplicate)].index, "is_duplicate"] = False
+    df.loc[df[(df.link != "") & (df.is_duplicate) & (~df.link_duplicate)].index, "is_duplicate"] = False
     return df
 
 def add_false_negatives(df):
@@ -210,5 +211,5 @@ def filter_duplicates(df):
     df = remove_false_positives_doi(df)
     df = remove_false_positives_link(df)
     df = add_false_negatives(df)
-    df = df[(df.is_latest) | (~df.is_duplicate)]
+    df = df[df.is_latest]
     return df
