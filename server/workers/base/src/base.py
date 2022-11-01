@@ -4,6 +4,7 @@ import subprocess
 import pandas as pd
 import logging
 from common.r_wrapper import RWrapper
+import re
 from .parsers import improved_df_parsing
 
 
@@ -53,8 +54,11 @@ class BaseClient(RWrapper):
                 res = raw_metadata
             else:
                 metadata = pd.DataFrame(raw_metadata)
+                metadata = filter_duplicates(metadata)
+                metadata = metadata.head(params.get('limit'))
                 metadata = self.enrich_metadata(metadata)
-                text = pd.DataFrame(raw_text)
+                text = pd.concat([metadata.id, metadata.apply(lambda x: " ".join([x["title"], x["paper_abstract"], x["subject_orig"], x["published_in"], x["authors"]]), axis=1)], axis=1)
+                text.columns = ["id", "content"]
                 input_data = {}
                 input_data["metadata"] = metadata.to_json(orient='records')
                 input_data["text"] = text.to_json(orient='records')
@@ -123,3 +127,79 @@ class BaseClient(RWrapper):
                     self.logger.error(e)
 
 
+
+pattern = re.compile(r"\.v(\d)+$")
+def identify_versioned_doi(doi):
+    m = pattern.findall(doi)
+    if m:
+        return int(m[0])
+    else:
+        return None
+    
+def extract_doi_suffix(doi):
+    return doi.split("/")[4:]
+
+def get_unversioned_doi(doi):
+    return pattern.sub("", doi)
+
+def mark_duplicate_dois(df):
+    df["doi_duplicate"] = False
+    for doi, index in df.groupby("doi").groups.items():
+        if len(index) > 1:
+            df.loc[index, "doi_duplicate"] = True
+    return df
+
+def mark_duplicate_links(df):
+    df["link_duplicate"] = False
+    for link, index in df.groupby("link").groups.items():
+        if len(index) > 1:
+            df.loc[index, "link_duplicate"] = True
+    return df
+
+def mark_latest(df):
+    df["is_latest"] = True
+    for udoi in df.unversioned_doi.unique():
+        if udoi:
+            tmp = df[df.doi.str.contains(udoi)]
+            if len(tmp) > 1:
+                df.loc[tmp.index, "is_latest"] = False
+                versions = tmp.id
+                latest = tmp.sort_values("versioned_doi").head(1).id
+                v = [{"versions": versions.values.tolist(), "latest": latest.values.tolist()}]*len(tmp)
+                df.loc[versions.index, "versions"] = v
+                df.loc[latest.index, "is_latest"] = True
+    return df
+
+def identify_relations(df):
+    df["has_relations"] = False
+    for udoi in df.unversioned_doi.unique():
+        if udoi:
+            tmp = df[df.identifier.str.contains(udoi)]
+            if len(tmp) > 1:
+                relations = tmp.id
+                r = pd.Series([relations.values.tolist()]*len(tmp), index=relations.index)
+                df.loc[relations.index, "relations"] = r
+                df.loc[relations.index, "has_relations"] = True
+    return df
+
+def remove_false_positives_doi(df):
+    df.loc[df[(df.is_duplicate) & (~df.doi_duplicate)].index, "is_duplicate"] = False
+    return df
+
+def remove_false_positives_link(df):
+    df.loc[df[(df.is_duplicate) & (~df.link_duplicate)].index, "is_duplicate"] = False
+    return df
+
+def filter_duplicates(df):
+    df["versioned_doi"] = df.doi.map(lambda x: identify_versioned_doi(x) if type(x) is str else None)
+    df["unversioned_doi"] = df.doi.map(lambda x: get_unversioned_doi(x) if type(x) is str else None)
+    df["doi_suffix"] = df.doi.map(lambda x: extract_doi_suffix(x) if type(x) is str else None)
+    df["doi_suffix_0"] =  df.doi_suffix.map(lambda x: x[0] if len(x) > 0 else None)
+    df["doi_suffix_1"] =  df.doi_suffix.map(lambda x: "/".join(x[:-1]) if len(x) > 0 else None)
+    df = mark_duplicate_dois(df)
+    df = mark_duplicate_links(df)
+    df = identify_relations(df)
+    df = mark_latest(df)
+    df = remove_false_positives_doi(df)
+    df = remove_false_positives_link(df)
+    return df[((df.has_relations) | (df.is_latest)) & (~df.is_duplicate)]
