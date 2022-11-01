@@ -130,7 +130,8 @@ class BaseClient(RWrapper):
 
 
 pattern = re.compile(r"\.v(\d)+$")
-def identify_versioned_doi(doi):
+
+def find_version_in_doi(doi):
     m = pattern.findall(doi)
     if m:
         return int(m[0])
@@ -141,6 +142,7 @@ def extract_doi_suffix(doi):
     return doi.split("/")[4:]
 
 def get_unversioned_doi(doi):
+    doi = "/".join(doi.split("/")[3:6])
     return pattern.sub("", doi)
 
 def mark_duplicate_dois(df):
@@ -167,7 +169,7 @@ def mark_latest(df):
             if len(tmp) > 1:
                 df.loc[tmp.index, "is_latest"] = False
                 versions = tmp.id
-                latest = tmp.sort_values("versioned_doi", ascending=False).head(1).id
+                latest = tmp.sort_values("doi_version", ascending=False).head(1).id
                 v = [{"versions": versions.values.tolist(), "latest": latest.values.tolist()}]*len(tmp)
                 df.loc[versions.index, "versions"] = v
                 df.loc[latest.index, "is_latest"] = True
@@ -199,7 +201,7 @@ def add_false_negatives(df):
     return df
 
 def filter_duplicates(df):
-    df["versioned_doi"] = df.doi.map(lambda x: identify_versioned_doi(x) if type(x) is str else None)
+    df["doi_version"] = df.doi.map(lambda x: find_version_in_doi(x) if type(x) is str else None)
     df["unversioned_doi"] = df.doi.map(lambda x: get_unversioned_doi(x) if type(x) is str else None)
     df["doi_suffix"] = df.doi.map(lambda x: extract_doi_suffix(x) if type(x) is str else None)
     df["doi_suffix_0"] =  df.doi_suffix.map(lambda x: x[0] if len(x) > 0 else None)
