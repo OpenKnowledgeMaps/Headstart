@@ -57,7 +57,8 @@ class BaseClient(RWrapper):
                 metadata = filter_duplicates(metadata)
                 metadata = metadata.head(params.get('list_size'))
                 metadata = self.enrich_metadata(metadata)
-                text = pd.concat([metadata.id, metadata.fillna("").apply(lambda x: " ".join([x["title"], x["paper_abstract"], x["subject_orig"], x["published_in"], x["authors"]]), axis=1)], axis=1)
+                text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subject_orig", "published_in", "authors"]].fillna("")
+                                         .apply(lambda x: " ".join(x), axis=1)], axis=1)
                 text.columns = ["id", "content"]
                 input_data = {}
                 input_data["metadata"] = metadata.to_json(orient='records')
