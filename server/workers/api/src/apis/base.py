@@ -81,7 +81,7 @@ class Search(Resource):
         if params.get('vis_type') == "timeline":
             params["limit"] = 1000
             params["list_size"] = params["limit"]
-        else:
+        if "list_size" not in params:
             params["list_size"] = 100
         if "repo" in params:
             global contentprovider_lookup
