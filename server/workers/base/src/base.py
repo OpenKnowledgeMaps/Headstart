@@ -56,8 +56,9 @@ class BaseClient(RWrapper):
                 metadata = pd.DataFrame(raw_metadata)
                 metadata = filter_duplicates(metadata)
                 metadata = metadata.head(params.get('list_size'))
+                metadata.reset_index(inplace=True, drop=True)
                 metadata = self.enrich_metadata(metadata)
-                text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subject_orig", "published_in", "authors"]].fillna("")
+                text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subject_orig", "published_in", "authors"]]
                                          .apply(lambda x: " ".join(x), axis=1)], axis=1)
                 text.columns = ["id", "content"]
                 input_data = {}
