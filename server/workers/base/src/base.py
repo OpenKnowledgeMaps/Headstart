@@ -209,6 +209,5 @@ def filter_duplicates(df):
     df = mark_latest(df)
     df = remove_false_positives_doi(df)
     df = remove_false_positives_link(df)
-    df = df[df.is_latest]
-    df = df[~df.is_duplicate]
+    df = df[(df.is_latest) | (~df.is_duplicate)]
     return df
