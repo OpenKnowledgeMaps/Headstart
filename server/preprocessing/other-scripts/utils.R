@@ -92,7 +92,7 @@ get_service_lang <- function(lang_id, valid_langs, service) {
 }
 
 
-detect_error <- function(failed, service) {
+detect_error <- function(failed, service, params) {
   output <- list()
   reason <- list()
   phrasepattern <- '"(.*?)"'
@@ -127,6 +127,9 @@ detect_error <- function(failed, service) {
       if (startsWith(failed$query_reason, "HTTP failure")){
           reason <- c(reason, 'unexpected PubMed API error')
       }
+    }
+    if ("q_advanced" %in% params) {
+      reason <- c(reason, "API error: q_advanced")
     }
     if (length(reason) == 0) {
         result <- regmatches(failed$query, regexec(phrasepattern, failed$query))

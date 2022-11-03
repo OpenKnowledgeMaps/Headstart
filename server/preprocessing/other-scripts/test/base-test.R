@@ -71,7 +71,7 @@ if(exists('input_data')) {
 }
 
 if (!exists('output_json')) {
-  output_json <- detect_error(failed, service)
+  output_json <- detect_error(failed, service, params)
 }
 
 output <- fromJSON(output_json)
