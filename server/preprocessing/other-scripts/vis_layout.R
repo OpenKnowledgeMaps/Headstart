@@ -36,9 +36,6 @@ vis_layout <- function(text, metadata, service,
   vlog$debug("preprocess")
 
   metadata <- sanitize(metadata)
-  filtered <- mark_duplicates(metadata, text)
-  metadata <- filtered$metadata
-  text <- filtered$text
   vlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "doc count:", nrow(metadata), sep=" "))
   
   if(vis_type=='overview'){

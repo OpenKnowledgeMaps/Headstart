@@ -31,7 +31,8 @@ detect_language <- function(text) {
 filter_duplicates <- function(metadata, text, list_size) {
   #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
   if(list_size > -1) {
-    output = deduplicate_titles(metadata, list_size)
+    dt = deduplicate_titles(metadata, list_size)
+    output = dt$output
     text = subset(text, !(id %in% output))
     metadata = subset(metadata, !(id %in% output))
 
@@ -43,8 +44,10 @@ filter_duplicates <- function(metadata, text, list_size) {
 
 mark_duplicates <- function(metadata, text) {
   #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
-  output = deduplicate_titles(metadata, 0)
+  dt = deduplicate_titles(metadata, 0)
+  output = dt$output
   metadata$is_duplicate <- metadata$id %in% output
+  metadata <- cbind(metadata, as.data.frame(dt$identified_duplicates))
   text$is_duplicate <- text$id %in% output
   return(list(metadata=metadata, text=text))
 }
@@ -79,6 +82,12 @@ deduplicate_titles <- function(metadata, list_size) {
   lv_ratio_matrix = as.matrix(lv_matrix)/str_max_matrix
 
   duplicates <- lv_ratio_matrix < 1/15.83
+  tmp <- duplicates
+  diag(tmp) <- FALSE
+  tmp <- apply(tmp, 2, function(x) ids[which(x)])
+  tmp[lengths(tmp) == 0] <- ""
+  identified_duplicates <- as.data.frame(do.call(rbind, lapply(tmp, paste, collapse=",")))
+  names(identified_duplicates) <- "duplicates"
   duplicates[lower.tri(duplicates, diag=TRUE)] <- NA
   remove_ids <- which(apply(duplicates, 2, FUN=function(x){any(x)}))
   output = ids[remove_ids]
@@ -91,7 +100,7 @@ deduplicate_titles <- function(metadata, list_size) {
 
   vplog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Number of duplicate entries:", length(output)))
 
-  return(output)
+  return(list("output"=output, "identified_duplicates"=identified_duplicates))
 
 }
 
