@@ -128,7 +128,7 @@ detect_error <- function(failed, service, params) {
           reason <- c(reason, 'unexpected PubMed API error')
       }
     }
-    if ("q_advanced" %in% params) {
+    if ("q_advanced" %in% names(params)) {
       reason <- c(reason, "API error: q_advanced")
     }
     if (length(reason) == 0) {
