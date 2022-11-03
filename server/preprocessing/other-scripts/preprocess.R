@@ -82,7 +82,8 @@ deduplicate_titles <- function(metadata, list_size) {
   lv_ratio_matrix = as.matrix(lv_matrix)/str_max_matrix
 
   duplicates <- lv_ratio_matrix < 1/15.83
-  tmp <- duplicates
+  strict_duplicates <- lv_ratio_matrix < 0.02
+  tmp <- strict_duplicates
   diag(tmp) <- FALSE
   tmp <- apply(tmp, 2, function(x) ids[which(x)])
   tmp[lengths(tmp) == 0] <- ""
