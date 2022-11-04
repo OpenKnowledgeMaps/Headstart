@@ -37,7 +37,7 @@
     "d3": "^3.5.17",
     "d3-ease": "^2.0.0",
     "d3-selection": "^2.0.0",
-    "d3-transition": "^2.0.0",
+    "d3-transition": "^3.0.1",
     "dateformat": "^2.0.0",
     "hyphenation.en-us": "*",
     "hypher": "^0.2.4",
