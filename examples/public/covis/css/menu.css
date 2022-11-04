@@ -1,0 +1,232 @@
+/*MENU*/
+header {
+    padding: 30px 0px;
+    position: fixed;
+    width: 100%;
+    background-color: white;
+    text-align: left;
+    -webkit-box-shadow: 0px 0px 4px 0px #cacfd3;
+    -moz-box-shadow: 0px 0px 4px 0px #cacfd3;
+    box-shadow: 0px 0px 4px 0px #cacfd3;
+}
+
+header a {
+    color: #333;
+    text-decoration: none;
+}
+
+header #logo a:hover {
+    text-decoration: none;
+}
+
+.nav_top {
+    display: inline-block;
+    text-align: left;
+    color:white;
+    background-color: transparent;
+    font-size: 20px;
+    margin: 0px 0px 0px 50px !important;
+    vertical-align: middle;
+    position: absolute;
+    right: 20px;
+    top: 40%;
+    font-family: 'Lato', sans-serif;
+}
+
+.imglogo {
+    display: inline-block; 
+    vertical-align: bottom;
+    margin-bottom: 10px; 
+    padding: 0px 10px;
+}
+
+.imglogo img {
+    max-height: 42px;
+    width: auto;
+}
+
+.description a {
+    color: #1e6662;
+}
+
+.description a:hover, .description a:focus, .description a:active {
+    text-decoration: none;
+}
+
+.description {
+    text-transform: none;
+    font-size: 34px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    color: #1e6662;
+    vertical-align: middle;
+    display: inline-block;
+    margin: 0px 0px 0px 50px;
+    padding: 0;
+}
+
+.nav_top li {
+    display: inline-block;
+    margin-right: 30px;
+    text-transform: none;
+    vertical-align: bottom;
+}
+
+.nav_top li {
+    transition: all .5s ease-in-out;
+    border-bottom: 2px solid transparent;
+}
+
+.nav_top a:hover, .nav_top a:active, .nav_top a:focus, .underline-menu  {
+    border-bottom: 2px solid #1e6662;
+    text-decoration: none;
+    color: #1e6662;
+}
+/*TOGGLE MENU CSS*/
+.menu {
+    top: 0;
+    display:none;
+    background-color: white;
+    left: -285px;
+    height: 100%;
+    position: fixed;
+    width: 285px;
+}
+
+.menu ul {
+    border-top: 1px solid #cacfd3;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+
+.menu li {
+    border-bottom: 1px solid #cacfd3;
+    font-family: 'Lato', sans-serif;
+    line-height: 230%;
+    padding-bottom: 3px;
+    padding-left: 20px;
+    padding-top: 3px;
+}
+
+.menu a {
+    font-size: 16px;
+    text-decoration: none;
+    text-transform: none;
+    display: block;
+    color: #1e6662;
+    text-transform: uppercase;
+}
+
+.icon-close {
+    cursor: pointer;
+    padding: 5px 0px 5px 20px;
+    background-color: #1e6662;
+    color: white;
+    font-size: 28px;
+}
+
+.icon-menu {
+    display:none;
+    cursor: pointer;
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+    margin: 0px 0px 0px 50px;
+    text-decoration: none;
+    text-transform: uppercase;
+    vertical-align: middle;
+    text-align:left;
+    background-color: transparent;
+    color: #1e6662;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+.fa-bars {
+    padding: 6px 8px 8px;
+    font-size: 18px;
+    border: 1px solid #1e6662;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+/*Headstart Menu*/
+
+.knowledge-map .description a, .knowledge-map .description a:hover, .knowledge-map .description a:active, .knowledge-map .description a:focus {
+    color: white;
+    font-size: 20px;
+}
+
+.knowledge-map .description {
+    line-height: 100%;
+}
+
+.knowledge-map header a {
+    color: white;
+}
+
+.knowledge-map header .menu a {
+    color: #1e6662;
+    text-transform: uppercase;
+}
+
+.knowledge-map .nav_top {
+    font-size: 13px;
+}
+
+.knowledge-map header {
+    background-color: #1e6662;
+    padding: 10px 0;
+}
+
+.knowledge-map .nav_top a:hover, .knowledge-map .nav_top a:active, .knowledge-map .nav_top a:focus, .knowledge-map .underline-menu  {
+    border-bottom: 2px solid white;
+    text-decoration: none;
+    color: white;
+}
+
+.knowledge-map .icon-menu {
+    color: white;
+    border: 1px solid white;
+}
+
+@media screen and (max-width: 1200px) {
+    
+    .nav_top {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+
+    .menu {
+        display: block;
+    }
+
+    .icon-menu {
+        display: inline-block;
+    }
+
+    .nav_top {
+        display:none;
+    }
+
+    header {
+        padding: 12px 0px;
+    }
+    
+    .description {
+        font-size: 24px;
+        padding-top: 0px;
+        margin-left: 20px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .icon-menu {
+        margin: 0px 0px 0px 20px;
+    }
+}

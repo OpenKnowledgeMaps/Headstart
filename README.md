@@ -9,7 +9,32 @@ Head Start is a web-based knowledge mapping software intended to give researcher
 ### Client
 To get started, clone this repository. Next, duplicate the file `config.example.js` in the root folder and rename it to `config.js`.
 
-Set the `skin` property in the config to one of the following values to use the
+Make sure to have installed `node` version >= 14.18.1 and `npm` version >=8.1.1 (best way to install is with [nvm](https://github.com/nvm-sh/nvm), `nvm install 14.18.1`) and run the following command to install the Headstart dependencies:
+
+    npm install
+
+We use [webpack](https://webpack.github.io/) to build our client-side application. The development server is based on the `webpack serve` utility, which means that changes to files are tracked and the page is reloaded automatically. Run the local BASE example with the following command:
+
+	npm run example:base
+
+The browser will automatically open a new window with the example.
+
+You can run also different examples
+
+- `npm run example:pubmed` will run the PubMed example
+- `npm run example:triple` will run the GoTriple example
+- `npm run example:viper` will run the Viper example
+- `npm run example:covis` will run the CoVis example
+
+If everything has worked out, you should see the example visualization.
+
+To run Headstart on a different server (e.g. Apache), you need to set the publicPath in `config.js` to the URL of the `dist` directory:
+* Dev: specify the full path including protocol, e.g. `http://localhost/headstart/dist`
+* Production: specify the full path excluding protocol, e.g. `//example.org/headstart/dist`
+
+Then build it with the command `npm run prod`. The build will appear in the _dist/_ folder in the root directory.
+
+You can also set the `skin` property in the config to one of the following values to use the
 particular data integration skin:
 
 - `"covis"`
@@ -17,36 +42,6 @@ particular data integration skin:
 - `"viper"`
 
 or leave it empty (`""`) for the default project website skin.
-
-Make sure to have installed `node` version >= 14.18.1 and `npm` version >=8.1.1 (best way to install is with [nvm](https://github.com/nvm-sh/nvm), `nvm install 14.18.1`) and run the following two commands to build the Headstart client:
-
-    npm install
-    npm run dev
-
-We are using [webpack](https://webpack.github.io/) to build our client-side application. `webpack` is started in *watch mode* which means that changes to files are tracked and the created `headstart.js` is automatically updated.
-
-Now you can run a local dev server:
-
-	npm start
-
-Note: you can also set the skin in this step as an argument to the `npm start` command (e.g. `npm start -- --env skin=triple`).
-
-The browser will automatically open a new window with the example specified by the skin.
-
-Alternatively, you can point your browser to one of the following addresses:
-
-	http://localhost:8080/project_website/base.html
-	http://localhost:8080/project_website/pubmed.html
-	http://localhost:8080/local_covis/
-	http://localhost:8080/local_triple/map.html
-	http://localhost:8080/local_triple/stream.html
-	http://localhost:8080/local_viper/
-
-If everything has worked out, you should see the example visualization.
-
-To run Headstart on a different server (e.g. Apache), you need to set the publicPath in `config.js` to the URL of the `dist` directory:
-* Dev: specify the full path including protocol, e.g. `http://localhost/headstart/dist`
-* Production: specify the full path excluding protocol, e.g. `//example.org/headstart/dist`
 
 See [client configuration](doc/README.md) for details on adapting the client.
 

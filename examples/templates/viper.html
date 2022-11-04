@@ -19,23 +19,10 @@
     <meta name="publisher" content="Open Knowledge Maps">
     <meta name="keywords" content="knowldege visualization, open knowledge, open science">
 
-    <!-- FAVICONS -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://openknowledgemaps.org/viper/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://openknowledgemaps.org/viper/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://openknowledgemaps.org/viper/favicon-16x16.png">
-    <link rel="manifest" href="https://openknowledgemaps.org/viper/site.webmanifest">
-    <link rel="mask-icon" href="https://openknowledgemaps.org/viper/safari-pinned-tab.svg" color="#4294d0">
-    <link rel="shortcut icon" href="https://openknowledgemaps.org/viper/favicon.ico">
-    <meta name="apple-mobile-web-app-title" content="VIPER">
-    <meta name="application-name" content="VIPER">
-    <meta name="msapplication-TileColor" content="#4294d0">
-    <meta name="msapplication-config" content="https://openknowledgemaps.org/viper/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
-
     <meta name="description"
         content="Get an overview of BLACARAT - Black Carbon in the Atmosphere: Emissions, Aging and Cloud Interactions, find relevant resources, and understand their reception in different areas.">
 
-    <link type="text/css" rel="stylesheet" href="../viper/css/openaire.css">
+    <link type="text/css" rel="stylesheet" href="viper/css/openaire.css">
     </link>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
     </link>
@@ -45,25 +32,28 @@
 <body style="margin:0px; padding:0px; max-width:1600px; margin: 0px auto;">
 
     <div id="visualization"></div>
-    <script type="text/javascript" src="../viper/js/data-config_openaire.js"></script>
+    <script type="text/javascript" src="viper/data-config_openaire.js"></script>
     <script>
         data_config.mode = "local_files";
         data_config.input_format = "json";
         data_config.files = [{
+            // original map: https://openknowledgemaps.org/viper/project?id=f0c1a74bf805fa0b94c0e7a33b28b314
             title: "BLACARAT - Black Carbon in the Atmosphere: Emissions, Aging and Cloud Interactions",
-            file: "./data/blacarat.json"
+            file: "./viper/data/blacarat.json"
         }];
         data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "./server/";
+
+        $(document).ready(function () {
+            headstart.start();
+        });
     </script>
-    <script type="text/javascript" src="../../dist/headstart.js"></script>
-    <link type="text/css" rel="stylesheet" href="../../dist/headstart.css">
     </link>
     <footer class="builtby" style="background-color: white; border-top: 2px solid #eff3f4;">
         <div class="builtby-container">
 
             <div class="info">
                 <a href="" target="_blank"><img style="max-width:100px; width:100%;"
-                        src="../viper/img/viper-logo-color.png"></a>
+                        src="viper/img/viper-logo-color.png"></a>
             </div>
 
             <div class="info">
@@ -74,9 +64,9 @@
                     For more information please contact <a
                         href="mailto:info@openknowledgemaps.org">info@openknowledgemaps.org</a>.</p>
                 <a href="https://openknowledgemaps.org/" target="_blank"><img class="logoimg" style="margin-right:10px"
-                        src="../viper/img/okmaps-logo.png"></a>
+                        src="viper/img/okmaps-logo.png"></a>
                 <a href="https://openaire.eu" target="_blank"><img class="logoimg"
-                        src="../viper/img/openaire-logo.png"></a>
+                        src="viper/img/openaire-logo.png"></a>
             </div>
 
             <div class="info">
@@ -122,9 +112,6 @@
         </div>
 
     </footer>
-    <script type="text/javascript">
-        headstart.start();
-    </script>
 </body>
 
 </html>
