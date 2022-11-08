@@ -1,4 +1,5 @@
 library(stringi)
+library(plyr)
 
 vplog <- getLogger('vis.preprocess')
 
@@ -47,7 +48,7 @@ mark_duplicates <- function(metadata, text) {
   dt = deduplicate_titles(metadata, 0)
   output = dt$output
   metadata$is_duplicate <- metadata$id %in% output
-  metadata <- join(metadata, identified_duplicates, by="id")
+  metadata <- join(metadata, dt$identified_duplicates, by="id")
   text$is_duplicate <- text$id %in% output
   return(list(metadata=metadata, text=text))
 }
