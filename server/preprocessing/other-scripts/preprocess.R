@@ -47,7 +47,7 @@ mark_duplicates <- function(metadata, text) {
   dt = deduplicate_titles(metadata, 0)
   output = dt$output
   metadata$is_duplicate <- metadata$id %in% output
-  metadata <- cbind(metadata, as.data.frame(dt$identified_duplicates))
+  metadata <- join(metadata, identified_duplicates, by="id")
   text$is_duplicate <- text$id %in% output
   return(list(metadata=metadata, text=text))
 }
@@ -88,7 +88,9 @@ deduplicate_titles <- function(metadata, list_size) {
   tmp <- apply(tmp, 2, function(x) ids[which(x)])
   tmp[lengths(tmp) == 0] <- ""
   identified_duplicates <- as.data.frame(do.call(rbind, lapply(tmp, paste, collapse=",")))
-  names(identified_duplicates) <- "duplicates"
+  identified_duplicates$id <- ids
+  names(identified_duplicates) <- c("duplicates", "id")
+  identified_duplicates<- identified_duplicates[!duplicated(identified_duplicates),]
   duplicates[lower.tri(duplicates, diag=TRUE)] <- NA
   remove_ids <- which(apply(duplicates, 2, FUN=function(x){any(x)}))
   output = ids[remove_ids]
