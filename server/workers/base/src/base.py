@@ -153,7 +153,6 @@ def get_publisher_doi(doi):
         return ""
 
 def mark_duplicate_dois(df):
-    df["doi_duplicate"] = False
     for doi, index in df.groupby("doi").groups.items():
         if doi:
             if len(index) > 1:
@@ -161,29 +160,13 @@ def mark_duplicate_dois(df):
     return df
 
 def mark_duplicate_links(df):
-    df["link_duplicate"] = False
     for link, index in df.groupby("link").groups.items():
         if link:
             if len(index) > 1:
                 df.loc[index, "link_duplicate"] = True
     return df
 
-def mark_latest(df):
-    df["is_latest"] = True
-    for udoi in df.unversioned_doi.unique():
-        if udoi:
-            tmp = df[df.doi.str.contains(udoi)]
-            if len(tmp) > 1:
-                df.loc[tmp.index, "is_latest"] = False
-                versions = tmp.id
-                latest = tmp.sort_values("doi_version", ascending=False).head(1).id
-                v = [{"versions": versions.values.tolist(), "latest": latest.values.tolist()}]*len(tmp)
-                df.loc[versions.index, "versions"] = v
-                df.loc[latest.index, "is_latest"] = True
-    return df
-
 def identify_relations(df):
-    df["has_relations"] = False
     for udoi in df.unversioned_doi.unique():
         if udoi:
             tmp = df[df.identifier.str.contains(udoi)]
@@ -210,36 +193,53 @@ def add_false_negatives(df):
 def find_duplicate_indexes(df):    
     dupind = df.id.map(lambda x: df[df.duplicates.str.contains(x)].index)
     return dupind
+
+def mark_latest_doi(df):
+    for udoi in df.unversioned_doi.unique():
+        if udoi:
+            tmp = df[df.doi.str.contains(udoi)]
+            if len(tmp) > 1:
+                df.loc[tmp.index, "is_latest"] = False
+                versions = tmp.id
+                latest = tmp.sort_values("doi_version", ascending=False).head(1).id
+                v = [{"versions": versions.values.tolist(), "latest": latest.values.tolist()}]*len(tmp)
+                df.loc[versions.index, "versions"] = v
+                df.loc[latest.index, "is_latest"] = True
+    return df
     
 def remove_textual_duplicates_from_different_sources(df):
-    df["duplicates"] = df.apply(lambda x: ",".join([x["id"], x["duplicates"]]) if len(x["duplicates"].split(",")) >= 1 else x["duplicates"], axis=1)
     dupind = find_duplicate_indexes(df)
     for _, idx in dupind.iteritems():
         if len(idx) > 1:
             tmp = df.loc[idx]
+            df.loc[tmp.index, "is_duplicate"] = True
+            df.loc[tmp.index, "is_latest"] = False
             publisher_dois = list(filter(None, tmp.publisher_doi.unique().tolist()))
-            if len(publisher_dois) >= 1:
-                # mark empty doi as duplicate
-                df.loc[tmp[tmp.publisher_doi==""].index, "is_duplicate"] = True
-                df.loc[tmp.index, "is_latest"] = False
+            if len(publisher_dois) > 0:
                 # keep entry with doi
                 df.loc[tmp[tmp.publisher_doi!=""].index, "is_latest"] = True
+                df.loc[tmp[tmp.publisher_doi!=""].index, "is_duplicate"] = False
             else:
-                df.loc[tmp.index, "is_latest"] = False
-                df.loc[tmp.sort_values("year", ascending=False).head(1).index, "is_latest"] = True
+                df.loc[tmp.sort_values(["year", "doi"], ascending=[False, False]).head(1).index, "is_latest"] = True
+                df.loc[tmp.sort_values(["year", "doi"], ascending=[False, False]).head(1).index, "is_duplicate"] = False
     return df
 
 def filter_duplicates(df):
+    df["is_latest"] = True
+    df["doi_duplicate"] = False
+    df["has_relations"] = False
+    df["link_duplicate"] = False
+    df["duplicates"] = df.apply(lambda x: ",".join([x["id"], x["duplicates"]]) if len(x["duplicates"].split(",")) >= 1 else x["duplicates"], axis=1)
     df["doi_version"] = df.doi.map(lambda x: find_version_in_doi(x) if type(x) is str else None)
     df["unversioned_doi"] = df.doi.map(lambda x: get_unversioned_doi(x) if type(x) is str else None)
     df["publisher_doi"] = df.doi.map(lambda x: get_publisher_doi(x))
     df = mark_duplicate_dois(df)
     df = mark_duplicate_links(df)
     df = identify_relations(df)
-    df = mark_latest(df)
     df = remove_false_positives_doi(df)
-    df = remove_textual_duplicates_from_different_sources(df)
     df = remove_false_positives_link(df)
+    df = mark_latest_doi(df)
+    df = remove_textual_duplicates_from_different_sources(df)
     df = add_false_negatives(df)
-    df = df[df.is_latest]
+    df = df[(df.is_latest==True) & (df.is_duplicate==False)]
     return df
