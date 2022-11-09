@@ -164,6 +164,7 @@ etl <- function(res, repo, non_public) {
   metadata$relation = check_metadata(res$dcrelation)
   metadata$identifier = check_metadata(res$dcidentifier)
   metadata$title = check_metadata(res$dctitle)
+  metadata$title = str_replace(metadata$title, " ...$", "")
   metadata$paper_abstract = check_metadata(res$dcdescription)
   metadata$published_in = check_metadata(res$dcsource)
   metadata$year = check_metadata(res$dcdate)
