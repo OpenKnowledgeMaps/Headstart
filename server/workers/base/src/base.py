@@ -238,8 +238,8 @@ def filter_duplicates(df):
     df = identify_relations(df)
     df = remove_false_positives_doi(df)
     df = remove_false_positives_link(df)
-    df = mark_latest_doi(df)
     df = remove_textual_duplicates_from_different_sources(df)
+    df = mark_latest_doi(df)
     df = add_false_negatives(df)
     df = df[(df.is_latest==True) & (df.is_duplicate==False)]
     return df
