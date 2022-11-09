@@ -217,11 +217,15 @@ def remove_textual_duplicates_from_different_sources(df):
     for _, idx in dupind.iteritems():
         if len(idx) >= 2:
             tmp = df.loc[idx]
-            if tmp.publisher_doi.nunique() != 1:
+            if tmp.publisher_doi.nunique() > 0:
                 # mark empty doi as duplicate
-                df.loc[tmp[tmp.publisher_doi==""].index, "is_duplicate"] == True
-                df.loc[tmp[tmp.publisher_doi==""].index, "is_latest"] == False
+                df.loc[tmp[tmp.publisher_doi==""].index, "is_duplicate"] = True
+                df.loc[tmp.index, "is_latest"] = False
                 # keep entry with doi
+                df.loc[tmp[tmp.publisher_doi!=""].index, "is_latest"] = True
+            else:
+                df.loc[tmp.index, "is_latest"] = False
+                df.loc[tmp.sort_values("year", ascending=False).head(1).index, "is_latest"] = True
     return df
 
 def filter_duplicates(df):
