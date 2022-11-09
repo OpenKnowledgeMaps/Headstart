@@ -212,12 +212,13 @@ def find_duplicate_indexes(df):
     return dupind
     
 def remove_textual_duplicates_from_different_sources(df):
-    df["duplicates"] = df.apply(lambda x: ",".join([x["id"], x["duplicates"]]) if len(x["duplicates"].split(",")) > 1 else x["duplicates"], axis=1)
+    df["duplicates"] = df.apply(lambda x: ",".join([x["id"], x["duplicates"]]) if len(x["duplicates"].split(",")) >= 1 else x["duplicates"], axis=1)
     dupind = find_duplicate_indexes(df)
     for _, idx in dupind.iteritems():
-        if len(idx) >= 2:
+        if len(idx) > 1:
             tmp = df.loc[idx]
-            if tmp.publisher_doi.nunique() > 0:
+            publisher_dois = list(filter(None, tmp.publisher_doi.unique().tolist()))
+            if len(publisher_dois) >= 1:
                 # mark empty doi as duplicate
                 df.loc[tmp[tmp.publisher_doi==""].index, "is_duplicate"] = True
                 df.loc[tmp.index, "is_latest"] = False
@@ -231,17 +232,14 @@ def remove_textual_duplicates_from_different_sources(df):
 def filter_duplicates(df):
     df["doi_version"] = df.doi.map(lambda x: find_version_in_doi(x) if type(x) is str else None)
     df["unversioned_doi"] = df.doi.map(lambda x: get_unversioned_doi(x) if type(x) is str else None)
-    df["doi_suffix"] = df.doi.map(lambda x: extract_doi_suffix(x) if type(x) is str else None)
-    df["doi_suffix_0"] =  df.doi_suffix.map(lambda x: x[0] if len(x) > 0 else None)
-    df["doi_suffix_1"] =  df.doi_suffix.map(lambda x: "/".join(x[:-1]) if len(x) > 0 else None)
     df["publisher_doi"] = df.doi.map(lambda x: get_publisher_doi(x))
     df = mark_duplicate_dois(df)
     df = mark_duplicate_links(df)
     df = identify_relations(df)
     df = mark_latest(df)
     df = remove_false_positives_doi(df)
+    df = remove_textual_duplicates_from_different_sources(df)
     df = remove_false_positives_link(df)
     df = add_false_negatives(df)
-    df = remove_textual_duplicates_from_different_sources(df)
     df = df[df.is_latest]
     return df
