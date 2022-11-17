@@ -11,6 +11,7 @@
         font-size: 18px;
         min-height: 24px;
         font-weight: $fontweight400;
+        text-transform: none !important;
     }
 
     #area-not-bold, #area-bold, #infolink-areas {
