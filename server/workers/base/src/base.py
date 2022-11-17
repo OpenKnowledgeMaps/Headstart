@@ -35,6 +35,33 @@ class BaseClient(RWrapper):
         endpoint = msg.get('endpoint')
         return k, params, endpoint
 
+    def base_rate_limit_reached(self):
+        """
+        This implementation is inspired by an implementation of
+        Generic Cell Rate Algorithm based rate limiting,
+        seen on https://dev.to/astagi/rate-limiting-using-python-and-redis-58gk.
+        It has been simplified and adjusted to our use case.
+
+        BASE demands one request per second (1 QPS), per
+        https://www.base-search.net/about/download/base_interface.pdf
+        """
+        key = 'base-ratelimit'
+        t = self.redis_store.time()[0]
+        #separation = round(period_in_seconds / limit)
+        separation = 1
+        self.redis_store.setnx(key, 0)
+        try:
+            with self.redis_store.lock('lock:' + key, blocking_timeout=5) as lock:
+                theoretical_arrival_time = max(int(self.redis_store.get(key)), t)
+                if theoretical_arrival_time - t <= 0:
+                    new_theoretical_arrival_time = max(theoretical_arrival_time, t) + separation
+                    self.redis_store.set(key, new_theoretical_arrival_time)
+                    return False
+                return True
+        # the locking mechanism is needed if a key is requested multiple times at the same time
+        except LockError:
+            return True
+
     def execute_search(self, params):
         q = params.get('q')
         service = params.get('service')
@@ -97,7 +124,7 @@ class BaseClient(RWrapper):
 
     def run(self):
         while True:
-            while request_is_limited(self.redis_store, 'base-ratelimit', 1, timedelta(seconds=1)):
+            while self.base_rate_limit_reached():
                 self.logger.info('🛑 Request is limited')
                 time.sleep(0.1)
             k, params, endpoint = self.next_item()
@@ -126,23 +153,3 @@ class BaseClient(RWrapper):
                     self.logger.error(params)
                     self.logger.error(e)
 
-
-def request_is_limited(r, key: str, limit: int, period: timedelta):
-    """
-    This implementation of Generic Cell Rate Algorithm based rate limiting
-    is taken from https://github.com/astagi/python-limit-requests
-    """
-    period_in_seconds = int(period.total_seconds())
-    t = r.time()[0]
-    separation = round(period_in_seconds / limit)
-    r.setnx(key, 0)
-    try:
-        with r.lock('lock:' + key, blocking_timeout=5) as lock:
-            tat = max(int(r.get(key)), t)
-            if tat - t <= period_in_seconds - separation:
-                new_tat = max(tat, t) + separation
-                r.set(key, new_tat)
-                return False
-            return True
-    except LockError:
-        return True
