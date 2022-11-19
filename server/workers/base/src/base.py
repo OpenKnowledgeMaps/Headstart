@@ -241,5 +241,5 @@ def filter_duplicates(df):
     df = remove_textual_duplicates_from_different_sources(df, dupind)
     df = mark_latest_doi(df, dupind)
     df = add_false_negatives(df)
-    df = df[(df.is_latest==True) & (df.is_duplicate==False)]
+    df = df[((df.has_dataset==True) & ((df.is_latest==True) & (df.is_duplicate==False))) | ((df.has_dataset!=True) & (df.is_duplicate==False))]
     return df
