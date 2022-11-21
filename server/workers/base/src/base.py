@@ -128,7 +128,6 @@ class BaseClient(RWrapper):
                     self.logger.error(params)
                     self.logger.error(e)
 
-
 pattern = re.compile(r"\.v(\d)+$")
 
 def find_version_in_doi(doi):
