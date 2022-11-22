@@ -17,6 +17,7 @@ import Timestamp from "../templates/contextfeatures/Timestamp";
 import Modifier from "../templates/contextfeatures/Modifier";
 import MoreInfoLink from "../templates/contextfeatures/MoreInfoLink";
 import MetadataQuality from "../templates/contextfeatures/MetadataQuality";
+import ContextTimeFrame from "../templates/contextfeatures/ContextTimeFrame";
 
 const defined = (param) => param !== undefined && param !== null;
 
@@ -58,7 +59,11 @@ class ContextLine extends React.Component {
             popoverContainer={this.props.popoverContainer}
           />
         )}
-        {defined(params.timespan) && <Timespan>{params.timespan}</Timespan>}
+        {/*{defined(params.timespan) && <Timespan>{params.timespan}</Timespan>}*/}
+        {defined(params.timespan) &&
+            <Timespan>
+                <ContextTimeFrame popoverContainer={popoverContainer} timespan={params.timespan}/>
+            </Timespan>}
         <DocumentTypes
           documentTypes={params.documentTypes}
           popoverContainer={popoverContainer}
