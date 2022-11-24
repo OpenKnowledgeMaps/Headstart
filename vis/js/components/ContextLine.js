@@ -59,7 +59,6 @@ class ContextLine extends React.Component {
             popoverContainer={this.props.popoverContainer}
           />
         )}
-        {/*{defined(params.timespan) && <Timespan>{params.timespan}</Timespan>}*/}
         {defined(params.timespan) &&
             <Timespan>
                 <ContextTimeFrame popoverContainer={popoverContainer} timespan={params.timespan}/>
