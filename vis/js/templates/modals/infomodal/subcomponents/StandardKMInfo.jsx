@@ -3,13 +3,15 @@ import { Modal } from "react-bootstrap";
 
 import AboutSoftware from "./AboutSoftware";
 import DataSource from "./DataSource";
+import { queryConcatenator } from "../../../../utils/data";
 
 const StandardKMInfo = ({
   serviceName,
   serviceDesc,
   serviceLogo,
-  params: { query, customTitle, repo_name },
+  params: { query, customTitle, repo_name, q_advanced },
 }) => {
+  let queryString = queryConcatenator([query, q_advanced])
   return (
     // html template starts here
     <>
@@ -17,12 +19,12 @@ const StandardKMInfo = ({
         <Modal.Title id="info-title">What's this?</Modal.Title>
       </Modal.Header>
       <Modal.Body id="info-body">
-        {(!!customTitle || !!query) && (
+        {(!!customTitle || !!query || !!q_advanced) && (
           <p>
             This knowledge map presents you with a topical overview of research
             on{" "}
             <strong className="hs-strong">
-              {customTitle ? customTitle : query}
+              {customTitle ? customTitle : queryString}
             </strong>{" "}
             based on the 100{" "}
             <a

@@ -10,6 +10,7 @@ import { getDateFromTimestamp } from "../../utils/dates";
 import { formatString, removeEmbedParam } from "../../utils/string";
 import CopyButton from "../CopyButton";
 import useMatomo from "../../utils/useMatomo";
+import { queryConcatenator } from "../../utils/data";
 
 const CitationModal = ({
   open,
@@ -18,6 +19,7 @@ const CitationModal = ({
   query,
   customTitle,
   timestamp,
+  q_advanced,
 }) => {
   const loc = useLocalizationContext();
   const { trackEvent } = useMatomo();
@@ -30,7 +32,7 @@ const CitationModal = ({
     );
   };
 
-  let customQuery = query;
+  let customQuery = queryConcatenator([query, q_advanced]);
   if (customQuery.length > 100) {
     customQuery = customQuery.substr(0, 100) + "[..]";
   }
@@ -88,6 +90,7 @@ const mapStateToProps = (state) => ({
   customTitle:
     state.heading.titleStyle === "custom" ? state.heading.customTitle : null,
   timestamp: state.misc.timestamp,
+  q_advanced: state.q_advanced.text,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -1,7 +1,6 @@
 library(logging)
 library(vegan)
 library(tm)
-library(textcat)
 library(proxy)
 library(GMD)
 library(SnowballC)
@@ -46,7 +45,7 @@ vis_layout <- function(text, metadata, service,
   )
 
   vlog$debug("preprocess")
-  metadata <- sanitize(metadata)
+  metadata <- sanitize_abstract(metadata)
   filtered <- filter_duplicates(metadata, text, list_size)
   metadata <- filtered$metadata
   text <- filtered$text

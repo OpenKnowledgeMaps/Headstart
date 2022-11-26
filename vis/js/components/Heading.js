@@ -9,6 +9,7 @@ import {
 } from "../templates/headingtitles";
 
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
+import { queryConcatenator } from "../utils/data";
 
 const Heading = ({
   localization,
@@ -17,6 +18,7 @@ const Heading = ({
   bubbleTitle,
   headingParams,
   streamgraph,
+  q_advanced,
 }) => {
   if (zoomed) {
     const label = streamgraph
@@ -36,11 +38,12 @@ const Heading = ({
     );
   }
 
+  let queryString = queryConcatenator([query, q_advanced])
   return (
     // html template starts here
     <div className="heading-container">
       <h4 className="heading">
-        {renderTitle(localization, query, headingParams)}
+        {renderTitle(localization, queryString, headingParams)}
       </h4>
     </div>
     // html template ends here
@@ -54,6 +57,7 @@ const mapStateToProps = (state) => ({
   bubbleTitle: state.selectedBubble ? state.selectedBubble.title : null,
   headingParams: state.heading,
   streamgraph: state.chartType === STREAMGRAPH_MODE,
+  q_advanced: state.q_advanced.text,
 });
 
 export default connect(mapStateToProps)(Heading);

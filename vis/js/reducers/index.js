@@ -28,6 +28,7 @@ import timespan from "./timespan";
 import toolbar from "./toolbar";
 import tracking from "./tracking";
 import zoom from "./zoom";
+import q_advanced from "./q_advanced";
 
 export default combineReducers({
   animation,
@@ -55,6 +56,7 @@ export default combineReducers({
   toolbar,
   tracking,
   zoom,
+  q_advanced,
 });
 
 export const getInitialState = (config) => {
