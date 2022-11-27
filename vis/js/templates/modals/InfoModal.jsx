@@ -54,6 +54,7 @@ const mapStateToProps = (state) => ({
     ...state.modals.infoParams,
     query: state.query.text,
     customTitle: state.heading.customTitle,
+    q_advanced: state.q_advanced.text,
   },
   service: state.isCovis ? "covis" : state.service,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
