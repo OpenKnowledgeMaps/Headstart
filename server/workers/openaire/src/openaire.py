@@ -20,7 +20,7 @@ class OpenAIREClient(RWrapper):
         return k, params, endpoint
 
     def execute_search(self, params):
-        q = params.get('acronym')
+        q = params.get('acronym', params.get('project_id'))
         service = params.get('service')
         data = {}
         data["params"] = params
