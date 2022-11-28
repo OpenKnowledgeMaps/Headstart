@@ -1,5 +1,7 @@
 library(stringdist)
 library(logging)
+library(stringi)
+
 
 sanitize_query <- function(query) {
   if (!is.null(query)) {
