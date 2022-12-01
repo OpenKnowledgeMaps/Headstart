@@ -28,7 +28,7 @@ if (array_key_exists("acronymtitle", $_POST)) {
 } else {
     $q = library\CommUtils::getParameter($_POST, "project_id");
     $param_array = array("project_id", "funder");
-    $id_array = array("project_id", "funder", "today");
+    $id_array = array("project_id", "funder");
 }
 
 
