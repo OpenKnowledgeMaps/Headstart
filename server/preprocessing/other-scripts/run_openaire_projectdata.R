@@ -28,7 +28,7 @@ if (DEBUG==TRUE){
 }
 
 
-log <- getLogger('openaire_projects')
+log <- getLogger('openaire_projectdata')
 
 tryCatch({
   project_data <- ropenaire::roa_projects(project_id, funder=funder)

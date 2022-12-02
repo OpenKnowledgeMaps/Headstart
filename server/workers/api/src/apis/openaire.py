@@ -82,6 +82,32 @@ class Search(Resource):
             openaire_ns.logger.error(e)
             abort(500, "Problem encountered, check logs.")
 
+@openaire_ns.route('/projectdata')
+class ProjectData(Resource):
+    @openaire_ns.doc(responses={200: 'OK',
+                              400: 'Invalid search parameters'})
+    @openaire_ns.produces(["application/json"])
+    def post(self):
+        params = request.get_json()
+        k = str(uuid.uuid4())
+        d = {"id": k, "params": params,
+             "endpoint": "projectdata"}
+        openaire_ns.logger.debug(d)
+        redis_store.rpush("openaire", json.dumps(d))
+        result = get_key(redis_store, k)
+        try:
+            headers = {}
+            if request.headers["Accept"] == "application/json":
+                headers["Content-Type"] = "application/json"
+            return make_response(result,
+                                 200,
+                                 headers)
+        except Exception as e:
+            openaire_ns.logger.error(e)
+            abort(500, "Problem encountered, check logs.")
+
+
+
 @openaire_ns.route('/service_version')
 class ServiceVersion(Resource):
     def get(self):

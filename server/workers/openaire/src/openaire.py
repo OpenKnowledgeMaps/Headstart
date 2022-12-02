@@ -46,7 +46,9 @@ class OpenAIREClient(RWrapper):
     
     def get_projectdata(self, params):
         runner = os.path.abspath(os.path.join(self.wd, "run_openaire_projectdata.R"))
-        cmd = [self.command, runner, self.wd]
+        project_id = params.get('project_id')
+        funder = params.get('funder')
+        cmd = [self.command, runner, self.wd, project_id, funder]
         try:
             proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                     encoding='utf-8')
@@ -85,9 +87,9 @@ class OpenAIREClient(RWrapper):
                     self.logger.error(e)
                     self.logger.error(params)
 
-            if endpoint == "project_data":
+            if endpoint == "projectdata":
                 try:
-                    res = self.get_projectdata(params)
+                    res = self.get_projectdata(params.get('params'))
                     res["id"] = k
                     self.redis_store.set(k+"_output", json.dumps(res))
                 except Exception as e:

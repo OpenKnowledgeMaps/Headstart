@@ -54,9 +54,11 @@ function cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes) {
 
 function enrich_context($service, $post_params, $apiclient) {
   if ($service == "openaire") {
-    $payload = json_encode($post_params);
-    $res = $apiclient->call_api($service . "/project_data", $payload);
-    $post_params = array_merge($post_params, $res["projectdata"][0]);
+    $payload = json_encode(array("params" => $post_params));
+    $res = $apiclient->call_api($service . "/projectdata", $payload);
+    $result = json_decode($res["result"], true);
+    $projectdata = json_decode($result["projectdata"], true);
+    $post_params = array_merge($post_params, $projectdata);
   }
   return $post_params;
 }
@@ -91,6 +93,8 @@ function search($service, $dirty_query
     $service = $service;
 
     $settings = $ini_array["general"];
+
+    $post_params = enrich_context($service, $post_params, $apiclient);
 
     $params_json = packParamsJSON($param_types, $post_params);
 
