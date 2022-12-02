@@ -30,8 +30,63 @@ if (DEBUG==TRUE){
 
 log <- getLogger('openaire_projectdata')
 
+projectdata_nodes <- c(
+  grantID = ".//code",
+  acronym = ".//acronym",
+  title = ".//title",
+  start_date = ".//startdate",
+  end_date = ".//enddate",
+  call_id = ".//callidentifier",
+  ecsc39 = ".//ecsc39",
+  funding_level_0 = ".//funding_level_0/name",
+  oa_mandate = ".//oamandatepublications",
+  obj_id = ".//header/dri:objIdentifier",
+  openaire_link = ".//websiteurl"
+)
+
+orgdata_nodes <- c(
+  name = ".//rels/rel/legalshortname",
+  long_name = ".//rels/rel/legalname",
+  website = ".//rels/rel/websiteurl",
+  org_id = ".//rels/rel/to"
+)
+
+fundingtree_nodes <- c(
+  funding_level_2 = ".//fundingtree//funding_level_2/name",
+  funding_level_1 = ".//fundingtree//funding_level_1/name",
+  funding_level_0 = ".//fundingtree//funding_level_0/name"
+)
+
+`%|m|%` <- function(x, y) {
+  if (length(x) == 0) return(y)
+  if (is.null(x) || !nzchar(x)) y else x
+}
+
+extract_metadata <- function(xml, nodes) {
+  lapply(xml, function(z) {
+    lapply(nodes, function(w) {
+      xml2::xml_text(xml2::xml_find_all(z, w)) %|m|% NA_character_
+    })
+  })
+}
+
+parse_project <- function(raw_xml) {
+  parsed_xml <- xml2::read_xml(raw_xml)
+  result <- xml2::xml_find_all(parsed_xml, xpath = '//results/result')
+  projectdata <- extract_metadata(result, projectdata_nodes)
+  projectdata <- as.list(data.frame(projectdata))
+  fundingtree <- unname(unlist(extract_metadata(result, fundingtree_nodes)))
+  orgdata <- data.frame(extract_metadata(result, orgdata_nodes))
+  orgdata["org_id"] <- lapply(orgdata["org_id"], function(x) {paste0("https://www.openaire.eu/search/organization?organizationId=", x)})
+  orgdata["url"] <- ifelse(is.na(orgdata$website), orgdata$org_id, orgdata$website)
+  projectdata$organisations <- orgdata
+  projectdata$funding_tree <- fundingtree
+  return (projectdata)
+}
+
 tryCatch({
-  project_data <- ropenaire::roa_projects(project_id, funder=funder)
+  raw_xml <- ropenaire::roa_projects(project_id, funder=funder, format="xml", raw=TRUE)
+  projectdata <- parse_project(raw_xml)
 }, error=function(err){
   log$error(paste("Project data retrieval failed", "openaire", "retrieve_projectdata", "", err, sep="||"))
   failed <- list()
@@ -41,7 +96,7 @@ tryCatch({
 
 
 if (exists('project_data')) {
-  print(toJSON(project_data))
+  print(toJSON(projectdata, auto_unbox=T))
 } else {
   print(toJSON(failed))
 }
