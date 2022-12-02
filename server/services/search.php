@@ -52,7 +52,16 @@ function cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes) {
     return $query;
 }
 
-function search($service_integration, $dirty_query
+function enrich_context($service, $post_params, $apiclient) {
+  if ($service == "openaire") {
+    $payload = json_encode($post_params);
+    $res = $apiclient->call_api($service . "/project_data", $payload);
+    $post_params = array_merge($post_params, $res["projectdata"][0]);
+  }
+  return $post_params;
+}
+
+function search($service, $dirty_query
         , $post_params, $param_types
         , $transform_query_tolowercase = true
         , $retrieve_cached_map = true, $params_for_id = null
@@ -71,14 +80,7 @@ function search($service_integration, $dirty_query
                         , "doaj" => "DOAJ"
                         , "base" => "BASE"
                         , "openaire" => "OpenAire"
-                        , "linkedcat" => "LinkedCat"
-                        , "linkedcat_authorview" => "LinkedCat"
-                        , "linkedcat_browseview" => "LinkedCat"
-                        , "triple" => "TRIPLE"
                         , "gsheets" => "GSheets");
-    # TODO: move next 3 to searchXYZ.php and drop in as a parameter instead
-    $service2endpoint = array("triple_km" => "triple",
-                              "triple_sg" => "triple");
 
     $query = ($do_clean_query === true)
                 ?(cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes))
@@ -86,7 +88,7 @@ function search($service_integration, $dirty_query
 
     $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
     $database = $ini_array["connection"]["database"];
-    $endpoint = array_key_exists($service_integration, $service2endpoint) ? $service2endpoint[$service_integration] : $service_integration;
+    $service = $service;
 
     $settings = $ini_array["general"];
 
@@ -111,7 +113,7 @@ function search($service_integration, $dirty_query
     $post_params["vis_id"] = $unique_id;
     if (array_key_exists("repo", $post_params)) {
       $payload = json_encode(array("repo" => $post_params["repo"]));
-      $res = $apiclient->call_api($endpoint . "/contentproviders", $payload);
+      $res = $apiclient->call_api($service . "/contentproviders", $payload);
       $res = $res["result"];
       $res = json_decode($res, true);
       $repo_name = $res["repo_name"];
@@ -142,7 +144,7 @@ function search($service_integration, $dirty_query
 
     if ($processing_backend === "api") {
       $payload = json_encode($post_params);
-      $res = $apiclient->call_api($endpoint . "/search", $payload);
+      $res = $apiclient->call_api($service . "/search", $payload);
       if ($res["httpcode"] != 200) {
         return json_encode($res);
       } else {
@@ -155,7 +157,7 @@ function search($service_integration, $dirty_query
       fwrite($params_file, $params_json);  
       $WORKING_DIR = $ini_array["general"]["preprocessing_dir"] . $ini_array["output"]["output_dir"];
       $calculation = new \headstart\preprocessing\calculation\RCalculation($ini_array);
-      $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, $endpoint);
+      $output = $calculation->performCalculationAndReturnOutputAsJSON($WORKING_DIR, $query, $params_filename, $service);
 
       $output_json = end($output);
       $output_json = mb_convert_encoding($output_json, "UTF-8");
@@ -179,7 +181,7 @@ function search($service_integration, $dirty_query
     $input_json = json_encode(utf8_converter($result));
     $input_json = preg_replace("/\<U\+(.*?)>/", "&#x$1;", $input_json);
 
-    $vis_title = $service_integration;
+    $vis_title = $service;
 
     if ($persistence_backend === "api") {
       $payload = json_encode(array("vis_id" => $unique_id));
@@ -228,7 +230,7 @@ function search($service_integration, $dirty_query
         } else {
           $vis_type = "overview";
         }
-        $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $service_integration, $repo2snapshot[$service_integration], $vis_type);
+        $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $service, $repo2snapshot[$service], $vis_type);
         $snapshot->takeSnapshot();
     }
 

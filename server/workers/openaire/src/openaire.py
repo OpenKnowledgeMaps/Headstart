@@ -1,3 +1,4 @@
+import os
 import json
 import subprocess
 import pandas as pd
@@ -42,6 +43,28 @@ class OpenAIREClient(RWrapper):
             self.logger.error(e)
             self.logger.error(error)
             raise
+    
+    def get_projectdata(self, params):
+        runner = os.path.abspath(os.path.join(self.wd, "run_openaire_projectdata.R"))
+        cmd = [self.command, runner, self.wd]
+        try:
+            proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                    encoding='utf-8')
+            stdout, stderr = proc.communicate()
+            output = [o for o in stdout.split('\n') if len(o) > 0]
+            error = [o for o in stderr.split('\n') if len(o) > 0]
+            raw = json.loads(output[-1])
+            if isinstance(raw, dict) and raw.get('status') == "error":
+                res = raw
+            else:
+                projectdata = pd.DataFrame(raw)
+                res = {}
+                res["projectdata"] = projectdata.to_json(orient='records')
+            return res
+        except Exception as e:
+            self.logger.error(e)
+            self.logger.error(error)
+
 
     def run(self):
         while True:
@@ -61,3 +84,13 @@ class OpenAIREClient(RWrapper):
                 except Exception as e:
                     self.logger.error(e)
                     self.logger.error(params)
+
+            if endpoint == "project_data":
+                try:
+                    res = self.get_projectdata(params)
+                    res["id"] = k
+                    self.redis_store.set(k+"_output", json.dumps(res))
+                except Exception as e:
+                    self.logger.exception("Exception during retrieval of project data.")
+                    self.logger.error(params)
+                    self.logger.error(e)
