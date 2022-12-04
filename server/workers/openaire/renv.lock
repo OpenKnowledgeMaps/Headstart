@@ -151,10 +151,10 @@
     },
     "data.table": {
       "Package": "data.table",
-      "Version": "1.12.2",
+      "Version": "1.14.6",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "2acfeb805afc84b919dcbe1f32a23529"
+      "Hash": "aecef50008ea7b57c76f1cb5c127fb02"
     },
     "digest": {
       "Package": "digest",
@@ -406,10 +406,10 @@
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "rcrossref",
-      "RemoteUsername": "ropensci",
+      "RemoteUsername": "OpenKnowledgeMaps",
       "RemoteRef": "async",
       "RemoteSha": "9b1223f79dffa9280b77cba8b476f3210cdaeccb",
-      "Hash": "61c788aba4626363f14f8ac4c09933e3"
+      "Hash": "2599d3059098bdb3bf3301cbfc3f5a97"
     },
     "readr": {
       "Package": "readr",
@@ -420,10 +420,10 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "0.11.0",
+      "Version": "0.14.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "1c3ef87cbb81c23ac96797781ec7aecc"
+      "Hash": "30e5eba91b67f7f4d75d31de14bbfbdc"
     },
     "rlang": {
       "Package": "rlang",
@@ -447,9 +447,9 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "ropenaire",
       "RemoteUsername": "OpenKnowledgeMaps",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "af0ea1564595229fa0f7dda06b6e063fe8313837",
-      "Hash": "3f59c485f4ae23528499ba942e6763aa"
+      "RemoteRef": "raw-projectdata",
+      "RemoteSha": "aca6c728326da9868bf16d11d2cf3bb52723f006",
+      "Hash": "0b93ced1a7a269dcdde1659412dde30b"
     },
     "sass": {
       "Package": "sass",
@@ -481,17 +481,17 @@
     },
     "stringi": {
       "Package": "stringi",
-      "Version": "1.4.3",
+      "Version": "1.5.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "74a50760af835563fb2c124e66aa134e"
+      "Hash": "a063ebea753c92910a4cca7b18bc1f05"
     },
     "stringr": {
       "Package": "stringr",
-      "Version": "1.4.1",
+      "Version": "1.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "a66ad12140cd34d4f9dfcc19e84fc2a5"
+      "Hash": "671a4d384ae9d32fc47a14e98bfa3dc8"
     },
     "sys": {
       "Package": "sys",
