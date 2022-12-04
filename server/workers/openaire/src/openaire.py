@@ -59,9 +59,8 @@ class OpenAIREClient(RWrapper):
             if isinstance(raw, dict) and raw.get('status') == "error":
                 res = raw
             else:
-                projectdata = pd.DataFrame(raw)
                 res = {}
-                res["projectdata"] = projectdata.to_json(orient='records')
+                res["projectdata"] = raw
             return res
         except Exception as e:
             self.logger.error(e)
@@ -96,3 +95,4 @@ class OpenAIREClient(RWrapper):
                     self.logger.exception("Exception during retrieval of project data.")
                     self.logger.error(params)
                     self.logger.error(e)
+                    self.logger.error(res)

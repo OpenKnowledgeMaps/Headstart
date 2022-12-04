@@ -57,7 +57,7 @@ function enrich_context($service, $post_params, $apiclient) {
     $payload = json_encode(array("params" => $post_params));
     $res = $apiclient->call_api($service . "/projectdata", $payload);
     $result = json_decode($res["result"], true);
-    $projectdata = json_decode($result["projectdata"], true);
+    $projectdata = $result["projectdata"];
     $post_params = array_merge($post_params, $projectdata);
   }
   return $post_params;

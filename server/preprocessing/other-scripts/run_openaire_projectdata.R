@@ -37,7 +37,7 @@ projectdata_nodes <- c(
   start_date = ".//startdate",
   end_date = ".//enddate",
   call_id = ".//callidentifier",
-  ecsc39 = ".//ecsc39",
+  special_clause = ".//ecsc39",
   funding_level_0 = ".//funding_level_0/name",
   oa_mandate = ".//oamandatepublications",
   obj_id = ".//header/dri:objIdentifier",
@@ -75,6 +75,7 @@ parse_project <- function(raw_xml) {
   result <- xml2::xml_find_all(parsed_xml, xpath = '//results/result')
   projectdata <- extract_metadata(result, projectdata_nodes)
   projectdata <- as.list(data.frame(projectdata))
+  projectdata[is.na(projectdata)] <- ""
   fundingtree <- unname(unlist(extract_metadata(result, fundingtree_nodes)))
   orgdata <- data.frame(extract_metadata(result, orgdata_nodes))
   orgdata["org_id"] <- lapply(orgdata["org_id"], function(x) {paste0("https://www.openaire.eu/search/organization?organizationId=", x)})
@@ -95,7 +96,7 @@ tryCatch({
 })
 
 
-if (exists('project_data')) {
+if (exists('projectdata')) {
   print(toJSON(projectdata, auto_unbox=T))
 } else {
   print(toJSON(failed))
