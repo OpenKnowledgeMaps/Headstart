@@ -52,16 +52,6 @@ function cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes) {
     return $query;
 }
 
-function enrich_context($service, $post_params, $apiclient) {
-  if ($service == "openaire") {
-    $payload = json_encode(array("params" => $post_params));
-    $res = $apiclient->call_api($service . "/projectdata", $payload);
-    $result = json_decode($res["result"], true);
-    $projectdata = $result["projectdata"];
-    $post_params = array_merge($post_params, $projectdata);
-  }
-  return $post_params;
-}
 
 function search($service, $dirty_query
         , $post_params, $param_types
@@ -94,7 +84,18 @@ function search($service, $dirty_query
 
     $settings = $ini_array["general"];
 
-    $post_params = enrich_context($service, $post_params, $apiclient);
+    // todo: move back into own function once error handling is refactored
+    if ($service == "openaire") {
+      $payload = json_encode(array("params" => $post_params));
+      $res = $apiclient->call_api($service . "/projectdata", $payload);
+      $result = json_decode($res["result"], true);
+      if (isset($result["status"]) && $result["status"] === "error") {
+        return json_encode($result);
+      } else {
+        $projectdata = $result["projectdata"];
+        $post_params = array_merge($post_params, $projectdata);
+      }
+    }
 
     $params_json = packParamsJSON($param_types, $post_params);
 

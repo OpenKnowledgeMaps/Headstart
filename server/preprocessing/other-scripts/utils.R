@@ -130,6 +130,10 @@ detect_error <- function(failed, service, params) {
           reason <- c(reason, 'unexpected PubMed API error')
       }
     }
+    if (length(reason) == 0 && service == 'openaire') {
+      reason <- c(reason, "project query wrong")
+      reason <- c(reason, "funder query wrong")
+    }
     if ("q_advanced" %in% names(params)) {
       reason <- c(reason, "API error: q_advanced")
     }

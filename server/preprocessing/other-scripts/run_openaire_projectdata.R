@@ -13,8 +13,8 @@ Sys.setlocale(category="LC_ALL", locale = "en_US.UTF-8")
 library(jsonlite)
 library(ropenaire)
 library(logging)
-
 source('utils.R')
+
 if (Sys.getenv("LOGLEVEL") == "DEBUG") {
   DEBUG <- FALSE
 } else {
@@ -29,6 +29,9 @@ if (DEBUG==TRUE){
 
 
 log <- getLogger('openaire_projectdata')
+
+params=list(project_id=project_id,
+            funder=funder)
 
 projectdata_nodes <- c(
   grantID = ".//code",
@@ -85,19 +88,19 @@ parse_project <- function(raw_xml) {
   return (projectdata)
 }
 
+failed <- list(params=params)
 tryCatch({
   raw_xml <- ropenaire::roa_projects(project_id, funder=funder, format="xml", raw=TRUE)
   projectdata <- parse_project(raw_xml)
 }, error=function(err){
   log$error(paste("Project data retrieval failed", "openaire", "retrieve_projectdata", "", err, sep="||"))
-  failed <- list()
-  failed$reason <- list(err)
-  failed$status <- 'error'
+  failed$query <<- project_id
+  failed$query_reason <<- 'Project data retrieval failed'
 })
 
 
 if (exists('projectdata')) {
   print(toJSON(projectdata, auto_unbox=T))
 } else {
-  print(toJSON(failed))
+  print(detect_error(failed, "openaire", params))
 }
