@@ -8,7 +8,7 @@ const Footer = ({ service, timestamp, faqsUrl }) => {
     return null;
   }
 
-  if (service.startsWith("triple") || ["base", "pubmed"].includes(service)) {
+  if (service.startsWith("triple") || ["base", "pubmed", "openaire"].includes(service)) {
     return <CreatedBy timestamp={timestamp} faqsUrl={faqsUrl} />;
   }
 
