@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <base href="//localhost:8080/project_website/">
+
+    <script type="text/javascript" src="./data-config_base_sg.js"></script>
+    <title>
+        Overview of research on digital education - Open Knowledge Maps</title>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="content-style-type" content="text/css">
+    <meta http-equiv="content-language" content="en">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="follow">
+    <meta name="revisit-after" content="1 month">
+    <meta name="distribution" content="global">
+    <meta name="author" content="Open Knowledge Maps">
+    <meta name="publisher" content="Open Knowledge Maps">
+    <meta name="keywords" content="knowldege visualization, open knowledge, open science">
+
+    <meta name="description"
+        content="Get an overview of digital education, find relevant papers, and identify important concepts.">
+
+    <!-- FAVICONS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=xQz6nej7eR">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=xQz6nej7eR">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=xQz6nej7eR">
+    <link rel="manifest" href="/site.webmanifest?v=xQz6nej7eR">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg?v=xQz6nej7eR" color="#263d54">
+    <link rel="shortcut icon" href="/favicon.ico?v=xQz6nej7eR">
+    <meta name="apple-mobile-web-app-title" content="OKMaps">
+    <meta name="application-name" content="OKMaps">
+    <meta name="msapplication-TileColor" content="#263d54">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- TODO -->
+    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- TODO <script src="lib/bootstrap.min.js"></script> -->
+
+    <!-- TODO <link rel="stylesheet" href="./css/main.css?v=2021-10-11-1"> -->
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover({ trigger: "hover", placement: "right" });
+        });
+    </script>
+</head>
+
+<body class="vis">
+    <!-- TODO <link rel="stylesheet" href="./search-flow/css/search-flow.css"> -->
+
+    <div class="overflow-vis">
+        <div id="visualization" style="background-color:white;"></div>
+    </div>
+
+    <!-- TODO -->
+    <script type="text/javascript" src="../../dist/headstart.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            headstart.start();
+        })
+    </script>
+
+    
+    <link rel="stylesheet" href="../../dist/headstart.css">
+
+    <script>
+        data_config.options = [{
+            "id": "time_range", "multiple": false, "name": "Time Range", "type": "dropdown", "fields": [{ "id": "any-time", "text": "All time" }, { "id": "last-month", "text": "Last month" }, { "id": "last-year", "text": "Last year" }, { "id": "user-defined", "text": "Custom range", "class": "user-defined", "inputs": [{ "id": "from", "label": "From: ", "class": "time_input" }, { "id": "to", "label": "To: ", "class": "time_input" }] }]
+        }, {
+            "id": "sorting", "multiple": false, "name": "Sorting", "type": "dropdown", "fields": [{ "id": "most-relevant", "text": "Most relevant" }, { "id": "most-recent", "text": "Most recent" }]
+        }, {
+            "id": "document_types", "multiple": true, "name": "Document types", "type": "dropdown", "width": "140px", "fields": [{ "id": "4", "text": "Audio", "selected": false }, { "id": "11", "text": "Book", "selected": false }, { "id": "111", "text": "Book part", "selected": false }, { "id": "13", "text": "Conference object", "selected": false }, { "id": "16", "text": "Course material", "selected": false }, { "id": "7", "text": "Dataset", "selected": false }, { "id": "5", "text": "Image\/video", "selected": false }, { "id": "12", "text": "Journal\/newspaper", "selected": false }, { "id": "121", "text": "Journal\/newspaper article", "selected": true }, { "id": "122", "text": "Journal\/newspaper other content", "selected": false }, { "id": "17", "text": "Lecture", "selected": false }, { "id": "19", "text": "Manuscript", "selected": false }, { "id": "3", "text": "Map", "selected": false }, { "id": "52", "text": "Moving image\/video", "selected": false }, { "id": "2", "text": "Musical notation", "selected": false }, { "id": "F", "text": "Other\/Unknown material", "selected": false }, { "id": "1A", "text": "Patent", "selected": false }, { "id": "14", "text": "Report", "selected": false }, { "id": "15", "text": "Review", "selected": false }, { "id": "6", "text": "Software", "selected": false }, { "id": "51", "text": "Still image", "selected": false }, { "id": "1", "text": "Text", "selected": false }, { "id": "18", "text": "Thesis", "selected": false }, { "id": "181", "text": "Thesis: bachelor", "selected": false }, { "id": "183", "text": "Thesis: doctoral and postdoctoral", "selected": false }, { "id": "182", "text": "Thesis: master", "selected": false }]
+        }, {
+            "id": "min_descsize", "multiple": false, "name": "Abstract", "type": "dropdown", "width": "145px", "fields": [{ "id": "300", "text": "High metadata quality (abstract required, minimum length: 300 characters)" }, { "id": "0", "text": "Low metadata quality (no abstract required, which may significantly reduce map quality)" }]
+        }];
+
+        data_config.credit_embed = true;
+    </script>
+
+    <link rel="stylesheet" href="./css/main.css">
+    <script>
+        data_config.files = [{
+            title: "digital education",
+            //title: "calcium",
+            //title: "production",
+            //title: "digital education",
+            //title: "fake news",
+            //title: "dotcom",
+            //title: "cognitive dissonance",
+            file: "./data/digital-education-sg.json",
+            //file: "./data/calcium.json",
+            //file: "./data/production.json",
+            //file: "./data/digital-education-sg.json",
+            //file: "./data/fake-news-sg.json",
+            //file: "./data/dotcom-sg.json",
+            //file: "./data/cognitive-dissonance.json"
+            // other attributes:
+            is_streamgraph: false, // set true for streamgraph data
+            show_area: true, // set false for streamgraph data
+        }]
+        data_config.is_streamgraph = true;
+        data_config.show_area = data_config.files[0].show_area;
+        data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "./headstart/server/";
+    </script>
+</body>
+
+<!-- Matomo -->
+<script>
+    // set this to true to enable Matomo tracking
+    var enable_tracking = false;
+    if (enable_tracking) {
+        var _paq = window._paq = window._paq || [];
+        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function () {
+            var u = "//dev.openknowledgemaps.org/piwik_stats/";
+            _paq.push(['setTrackerUrl', u + 'matomo.php']);
+            _paq.push(['setSiteId', '1']);
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+        })();
+    }
+</script>
+<!-- End Matomo Code -->
+
+</html>
