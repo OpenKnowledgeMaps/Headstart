@@ -7,7 +7,7 @@ options(warn=1)
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(wd) #Don't forget to set your working directory
 
-query <- NULL #args[2]
+query <- "test" #args[2]
 service <- "base"
 params <- NULL
 params_file <- "params_base.json"
@@ -32,14 +32,6 @@ if(!is.null(params_file)) {
   params <- fromJSON(params_file)
 }
 
-if ('lang_id' %in% names(params)){
-    lang_id <- params$lang_id
-  } else {
-    lang_id <- 'all'
-}
-
-LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
-ADDITIONAL_STOP_WORDS = LANGUAGE$name
 .GlobalEnv$VIS_ID <- params$vis_id
 
 #start.time <- Sys.time()
@@ -61,8 +53,7 @@ if(exists('input_data')) {
   output_json = vis_layout(input_data$text, input_data$metadata,
                            service,
                            max_clusters=MAX_CLUSTERS,
-                           lang=LANGUAGE$name,
-                           add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=params$list_size)
+                           testing=TRUE, list_size=params$list_size)
   }, error=function(err){
     tslog$error(gsub("\n", " ", paste("Processing failed", query$raw_query, paste(params, collapse=" "), err, sep="||")))
     failed$query <<- query$raw_query

@@ -10,7 +10,7 @@ use headstart\library;
 $dirty_query = library\CommUtils::getParameter($_POST, "q");
 $precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
-$params_array = array("from", "to", "document_types", "sorting", "min_descsize");
+$params_array = array("from", "to", "document_types", "sorting", "min_descsize", "lang_id");
 $optional_get_params = ["repo", "coll", "vis_type", "q_advanced"];
 
 
