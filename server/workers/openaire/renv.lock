@@ -407,9 +407,9 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "rcrossref",
       "RemoteUsername": "OpenKnowledgeMaps",
-      "RemoteRef": "async",
-      "RemoteSha": "9b1223f79dffa9280b77cba8b476f3210cdaeccb",
-      "Hash": "2599d3059098bdb3bf3301cbfc3f5a97"
+      "RemoteRef": "fix-stopifnot",
+      "RemoteSha": "0b32daf44f714a7f44f54bf47a6ebff63fcf5d72",
+      "Hash": "42b06a96c665fedcb7e1eb081d118ed1"
     },
     "readr": {
       "Package": "readr",
