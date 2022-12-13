@@ -605,7 +605,7 @@ var config = {
             search_placeholder: "Search within visualization...",
             show_list: "Show list",
             hide_list: "Hide list",
-            intro_label: "More info",
+            intro_label: "More information",
             relevance: "relevance",
             readers: "readers",
             tweets: "tweets",
