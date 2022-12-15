@@ -185,18 +185,23 @@ fill_dois <- function(df) {
     olog$debug("Time for filling missing DOIs")
     olog$debug(system.time(cr_works(query=queries(titles), async=TRUE)))
   }
-  if (length(titles) > 1) {
-    response <- cr_works(query=queries(titles))
-    candidates <- lapply(response, get_doi_candidates)
-    dois <- mapply(check_distance, titles, candidates, USE.NAMES=FALSE)
-  } else if (length(titles) == 1) {
-    response <- cr_works(flq=c('query.title'=titles))$data
-    candidate_response = response[1,]
-    dois <- check_distance(titles, candidate_response)
-  } else {
-    dois <- ""
-  }
-  df$doi[c(missing_doi_indices)] <- dois
+  tryCatch({
+    if (length(titles) > 1) {
+      response <- cr_works(query=queries(titles))
+      candidates <- lapply(response, get_doi_candidates)
+      dois <- mapply(check_distance, titles, candidates, USE.NAMES=FALSE)
+    } else if (length(titles) == 1) {
+      response <- cr_works(flq=c('query.title'=titles))$data
+      candidate_response = response[1,]
+      dois <- check_distance(titles, candidate_response)
+    } else {
+      dois <- ""
+    }
+    df$doi[c(missing_doi_indices)] <- dois
+    }, error=function(err){
+      olog$error(paste("vis_id:", .GlobalEnv$VIS_ID, "DOI enrichment failed:", paste(err)))
+    }
+  )
   return (df)
 }
 
