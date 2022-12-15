@@ -92,7 +92,6 @@ class ProjectData(Resource):
         k = str(uuid.uuid4())
         d = {"id": k, "params": params,
              "endpoint": "projectdata"}
-        openaire_ns.logger.debug(d)
         redis_store.rpush("openaire", json.dumps(d))
         result = get_key(redis_store, k)
         try:
