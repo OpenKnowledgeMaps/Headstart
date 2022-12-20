@@ -132,11 +132,10 @@ detect_error <- function(failed, service, params) {
     }
     if (length(reason) == 0 && service == 'openaire') {
       if (grepl("Project not found", failed$query_reason, fixed=TRUE)) {
-        reason <- c(reason, "project query wrong")
-        reason <- c(reason, "funder query wrong")
+        reason <- c(reason, "project id or funder id wrong")
       }
       if (grepl("No results retrieved", failed$query_reason, fixed=TRUE)) {
-        reason <- c(reason, "Not enough results for project")
+        reason <- c(reason, "not enough results for project")
       }
     }
     if ("q_advanced" %in% names(params)) {
