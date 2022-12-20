@@ -41,6 +41,10 @@ get_papers <- function(query, params) {
   project_id <- params$project_id
   funder <- params$funder
 
+  if (nrow(roa_projects(grant_id = params$project_id, funder = params$funder)) == 0) {
+    stop(paste("Project not found."))
+  }
+
   pubs_metadata <- tryCatch({
     response <- roa_pubs(project_id = project_id,
                          funder = funder,
@@ -89,7 +93,7 @@ get_papers <- function(query, params) {
     }, error = function(err){
       olog$warn(paste0(err))
       olog$warn((paste("Empty returns, most likely no results found for project_id", project_id)))
-      stop(paste("Empty returns, most likely no results found for project_id", project_id))
+      stop(paste("No results retrieved."))
     })
 }
 

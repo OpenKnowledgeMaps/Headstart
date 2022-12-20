@@ -131,8 +131,13 @@ detect_error <- function(failed, service, params) {
       }
     }
     if (length(reason) == 0 && service == 'openaire') {
-      reason <- c(reason, "project query wrong")
-      reason <- c(reason, "funder query wrong")
+      if (grepl("Project not found", failed$query_reason, fixed=TRUE)) {
+        reason <- c(reason, "project query wrong")
+        reason <- c(reason, "funder query wrong")
+      }
+      if (grepl("No results retrieved", failed$query_reason, fixed=TRUE)) {
+        reason <- c(reason, "Not enough results for project")
+      }
     }
     if ("q_advanced" %in% names(params)) {
       reason <- c(reason, "API error: q_advanced")
