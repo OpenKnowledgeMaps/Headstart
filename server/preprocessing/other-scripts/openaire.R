@@ -70,6 +70,10 @@ get_papers <- function(query, params) {
     return (data.frame())
   })
 
+  if ((nrow(pubs_metadata) == 0) && nrow(pubs_metadata) == 0) {
+    stop(paste("No results retrieved."))
+  }
+
   all_artifacts <- tryCatch({
       all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
     }, error = function(err){
