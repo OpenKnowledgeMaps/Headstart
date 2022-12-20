@@ -78,7 +78,7 @@ class OpenAIREClient(RWrapper):
                     res["id"] = k
                     res["input_data"] = self.execute_search(params)
                     res["params"] = params
-                    if params.get('raw') is True:
+                    if res.get("status") == "error" or params.get('raw') is True:
                         self.redis_store.set(k+"_output", json.dumps(res))
                     else:
                         self.redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
