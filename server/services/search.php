@@ -84,6 +84,21 @@ function search($service, $dirty_query
 
     $settings = $ini_array["general"];
 
+    // todo: move back into own function once error handling is refactored
+    if ($service == "openaire") {
+      $payload = json_encode(array("params" => $post_params));
+      $res = $apiclient->call_api($service . "/projectdata", $payload);
+      $result = json_decode($res["result"], true);
+      if (isset($result["status"]) && $result["status"] === "error") {
+        return json_encode($result);
+      } else {
+        $projectdata = $result["projectdata"];
+        $post_params = array_merge($post_params, $projectdata);
+      }
+    }
+
+    $params_json = packParamsJSON($param_types, $post_params);
+
     $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
     if ($persistence_backend === "api") {
@@ -110,7 +125,6 @@ function search($service, $dirty_query
       $post_params["repo_name"] = $repo_name;
       $param_types[] = "repo_name";
     }
-    
 
     if($retrieve_cached_map) {
       if ($persistence_backend === "api") {
@@ -131,8 +145,6 @@ function search($service, $dirty_query
           return;
       }
     }
-
-    $params_json = packParamsJSON($param_types, $post_params);
 
     if ($processing_backend === "api") {
       $payload = json_encode($post_params);
@@ -189,19 +201,6 @@ function search($service, $dirty_query
     }
 
     if (!$exists) {
-      // todo: move back into own function once error handling is refactored
-      if ($service == "openaire") {
-        $payload = json_encode(array("params" => $post_params));
-        $res = $apiclient->call_api($service . "/projectdata", $payload);
-        $result = json_decode($res["result"], true);
-        if (isset($result["status"]) && $result["status"] === "error") {
-          return json_encode($result);
-        } else {
-          $projectdata = $result["projectdata"];
-          $post_params = array_merge($post_params, $projectdata);
-        }
-        $params_json = packParamsJSON($param_types, $post_params);
-      }
       if ($persistence_backend === "api") {
         $payload = json_encode(array("vis_id" => $unique_id,
                                      "vis_title" => $vis_title,
