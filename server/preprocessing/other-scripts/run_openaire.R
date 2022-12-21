@@ -53,5 +53,11 @@ tryCatch({
   failed$query_reason <<- err$message
 })
 
-print(toJSON(input_data$metadata))
-print(toJSON(input_data$text))
+if (exists('input_data')) {
+  print(toJSON(input_data$metadata))
+  print(toJSON(input_data$text))
+} else {
+  output_json <- detect_error(failed, service, params)
+  print(output_json)
+  print(output_json)
+}

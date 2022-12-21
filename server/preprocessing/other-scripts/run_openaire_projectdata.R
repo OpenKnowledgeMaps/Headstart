@@ -89,13 +89,14 @@ parse_project <- function(raw_xml) {
 }
 
 failed <- list(params=params)
+
 tryCatch({
   raw_xml <- ropenaire::roa_projects(project_id, funder=funder, format="xml", raw=TRUE)
   projectdata <- parse_project(raw_xml)
 }, error=function(err){
-  log$error(paste("Project data retrieval failed", "openaire", "retrieve_projectdata", "", err, sep="||"))
+  log$error(paste("Project data retrieval failed", "openaire", "retrieve_projectdata", "", paste0(err), sep="||"))
   failed$query <<- project_id
-  failed$query_reason <<- 'Project data retrieval failed'
+  failed$query_reason <<- 'Project not found.'
 })
 
 
