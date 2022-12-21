@@ -39,7 +39,6 @@ class OpenAIREClient(RWrapper):
                 res = raw_metadata
             else:
                 metadata = pd.DataFrame(raw_metadata)
-                metadata = self.enrich_metadata(metadata)
                 text = pd.DataFrame(raw_text)
                 input_data = {}
                 input_data["metadata"] = metadata.to_json(orient='records')
