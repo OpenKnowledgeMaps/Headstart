@@ -22,6 +22,8 @@ class OpenAIREClient(RWrapper):
 
     def execute_search(self, params):
         q = params.get('acronym', params.get('project_id'))
+        if isinstance(q, list) and len(list(filter(None, q))) == 0:
+            q = params.get('project_id')
         service = params.get('service')
         data = {}
         data["params"] = params

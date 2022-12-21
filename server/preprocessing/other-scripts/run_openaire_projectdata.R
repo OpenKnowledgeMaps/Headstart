@@ -68,7 +68,7 @@ fundingtree_nodes <- c(
 extract_metadata <- function(xml, nodes) {
   lapply(xml, function(z) {
     lapply(nodes, function(w) {
-      xml2::xml_text(xml2::xml_find_all(z, w)) %|m|% NA_character_
+      xml2::xml_text(xml2::xml_find_all(z, w))[1] %|m|% NA_character_
     })
   })
 }
