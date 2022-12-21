@@ -83,17 +83,16 @@ class OpenAIREClient(RWrapper):
             self.logger.debug(params)
             if endpoint == "search":
                 try:
-                    res = {}
+                    res = self.execute_search(params)
                     res["id"] = k
-                    res["input_data"] = self.execute_search(params)
-                    res["params"] = params
                     if res.get("status") == "error" or params.get('raw') is True:
                         self.redis_store.set(k+"_output", json.dumps(res))
                     else:
                         self.redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
                 except Exception as e:
-                    self.logger.error(e)
+                    self.logger.exception("Exception during data retrieval.")
                     self.logger.error(params)
+                    self.logger.error(e)
 
             if endpoint == "projectdata":
                 try:
