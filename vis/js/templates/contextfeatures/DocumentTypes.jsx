@@ -29,17 +29,19 @@ const DocumentTypes = ({ documentTypes, popoverContainer }) => {
           size="wide"
           container={popoverContainer}
           content={
-            <>
-              {loc.documenttypes_tooltip}
-              <br />
-              <br />
-              {text}
-            </>
+              <>
+                  {loc.documenttypes_tooltip}
+                  <br/>
+                  <br/>
+                  {text}
+              </>
           }
         >
           <span className="context_moreinfo">{loc.documenttypes_label}</span>
         </HoverPopover>
-      </span>{" "}
+      </span>
+        {/* this empty space was on web interface in context line */}
+        {/*{" "}*/}
     </>
   );
 };
