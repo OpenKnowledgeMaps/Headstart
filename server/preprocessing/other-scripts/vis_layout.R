@@ -21,6 +21,7 @@ vlog <- getLogger('vis')
 vis_layout <- function(text, metadata, service,
                        max_clusters=15, maxit=500,
                        mindim=2, maxdim=2,
+                       lang="english", 
                        testing=FALSE, taxonomy_separator=NULL, list_size=-1,
                        vis_type='overview') {
   TESTING <<- testing # makes testing param a global variable
