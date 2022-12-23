@@ -17,6 +17,7 @@ import Timestamp from "../templates/contextfeatures/Timestamp";
 import Modifier from "../templates/contextfeatures/Modifier";
 import MoreInfoLink from "../templates/contextfeatures/MoreInfoLink";
 import MetadataQuality from "../templates/contextfeatures/MetadataQuality";
+import DocumentLang from "../templates/contextfeatures/DocumentLang";
 
 const defined = (param) => param !== undefined && param !== null;
 
@@ -35,69 +36,75 @@ class ContextLine extends React.Component {
     }
 
     return (
-      <ContextLineTemplate>
-        {params.showAuthor && (
-          <Author
-            bioLabel={localization.bio_link}
-            livingDates={params.author.livingDates}
-            link={"https://d-nb.info/gnd/" + params.author.id}
-          />
-        )}
-        <NumArticles
-          articlesCount={params.articlesCount}
-          openAccessArticlesCount={params.openAccessCount}
-          articlesCountLabel={localization.articles_label}
-        >
-          <Modifier popoverContainer={popoverContainer} />
-        </NumArticles>
-        {defined(params.dataSource) && (
-          <DataSource
-            label={localization.source_label}
-            source={params.dataSource}
-            contentProvider={params.contentProvider}
-            popoverContainer={this.props.popoverContainer}
-          />
-        )}
-        {defined(params.timespan) && <Timespan>{params.timespan}</Timespan>}
-        <DocumentTypes
-          documentTypes={params.documentTypes}
-          popoverContainer={popoverContainer}
-        />
-        {defined(params.paperCount) && (
-          <PaperCount
-            value={params.paperCount}
-            label={localization.paper_count_label}
-          />
-        )}
-        {defined(params.datasetCount) && (
-          <DatasetCount
-            value={params.datasetCount}
-            label={localization.dataset_count_label}
-          />
-        )}
-        {defined(params.funder) && <Funder>{params.funder}</Funder>}
-        {defined(params.projectRuntime) && (
-          <ProjectRuntime>{params.projectRuntime}</ProjectRuntime>
-        )}
-        {defined(params.legacySearchLanguage) && (
-          <LegacySearchLang>{params.legacySearchLanguage}</LegacySearchLang>
-        )}
-        {defined(params.timestamp) && (
-          <Timestamp
-            value={params.timestamp}
-            label={localization.timestamp_label}
-          />
-        )}
-        <MetadataQuality
-          quality={params.metadataQuality}
-          service={service}
-          popoverContainer={popoverContainer}
-        />
-        {defined(params.searchLanguage) && (
-          <SearchLang>{params.searchLanguage}</SearchLang>
-        )}
-        <MoreInfoLink />
-      </ContextLineTemplate>
+        <ContextLineTemplate>
+            {params.showAuthor && (
+                <Author
+                    bioLabel={localization.bio_link}
+                    livingDates={params.author.livingDates}
+                    link={"https://d-nb.info/gnd/" + params.author.id}
+                />
+            )}
+            <NumArticles
+                articlesCount={params.articlesCount}
+                openAccessArticlesCount={params.openAccessCount}
+                articlesCountLabel={localization.articles_label}
+            >
+                <Modifier popoverContainer={popoverContainer}/>
+            </NumArticles>
+            {defined(params.dataSource) && (
+                <DataSource
+                    label={localization.source_label}
+                    source={params.dataSource}
+                    contentProvider={params.contentProvider}
+                    popoverContainer={this.props.popoverContainer}
+                />
+            )}
+            {defined(params.timespan) && <Timespan>{params.timespan}</Timespan>}
+            <DocumentTypes
+                documentTypes={params.documentTypes}
+                popoverContainer={popoverContainer}
+            />
+            {/* place for document Lang */}
+            {defined(params.documentLang) && (
+                <DocumentLang
+                    value={params.documentLang}
+                />
+            )}
+            {defined(params.paperCount) && (
+                <PaperCount
+                    value={params.paperCount}
+                    label={localization.paper_count_label}
+                />
+            )}
+            {defined(params.datasetCount) && (
+                <DatasetCount
+                    value={params.datasetCount}
+                    label={localization.dataset_count_label}
+                />
+            )}
+            {defined(params.funder) && <Funder>{params.funder}</Funder>}
+            {defined(params.projectRuntime) && (
+                <ProjectRuntime>{params.projectRuntime}</ProjectRuntime>
+            )}
+            {defined(params.legacySearchLanguage) && (
+                <LegacySearchLang>{params.legacySearchLanguage}</LegacySearchLang>
+            )}
+            {defined(params.timestamp) && (
+                <Timestamp
+                    value={params.timestamp}
+                    label={localization.timestamp_label}
+                />
+            )}
+            <MetadataQuality
+                quality={params.metadataQuality}
+                service={service}
+                popoverContainer={popoverContainer}
+            />
+            {defined(params.searchLanguage) && (
+                <SearchLang>{params.searchLanguage}</SearchLang>
+            )}
+            <MoreInfoLink/>
+        </ContextLineTemplate>
     );
   }
 }
