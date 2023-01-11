@@ -63,6 +63,8 @@ class Search(Resource):
              "endpoint": "search"}
         pubmed_ns.logger.debug(d)
         redis_store.rpush("pubmed", json.dumps(d))
+        pos = self.redis_store.llen("pubmed")
+        pubmed_ns.logger.info("%s %s %d" %(k, "pubmed", pos))
         result = get_key(redis_store, k)
         try:
             headers = {}

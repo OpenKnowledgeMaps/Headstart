@@ -46,6 +46,8 @@ class Create(Resource):
         d = {"id": k, "params": params,
              "input_data": input_data}
         redis_store.rpush("input_data", json.dumps(d).encode('utf8'))
+        pos = redis_store.llen("input_data")
+        vis_ns.logger.info("%s %s %d" %(k, "input_data", pos))
         result = get_key(redis_store, k)
         try:
             headers = {}
