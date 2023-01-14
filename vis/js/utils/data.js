@@ -534,3 +534,11 @@ export const commentsSanitizer = (value) => {
 
   return value.filter(commentValidator);
 };
+
+export const queryConcatenator = (terms) => {
+  let filtered_terms = terms.filter(element => {
+    return element !== '' && element !== null;
+  });
+  let concatenatedQueries = filtered_terms.join(" and ");
+  return concatenatedQueries
+}

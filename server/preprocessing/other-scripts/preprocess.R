@@ -1,7 +1,7 @@
 vplog <- getLogger('vis.preprocess')
 
 
-sanitize <- function(metadata) {
+sanitize_abstract <- function(metadata) {
   metadata$paper_abstract <- unlist(lapply(metadata$paper_abstract,
                               function(x) {
                                 if (!is.na(x) && nchar(x) > 17000) {
@@ -13,18 +13,6 @@ sanitize <- function(metadata) {
                               }))
   return(metadata)
 }
-
-
-detect_language <- function(text) {
-  lang_detected <- lapply(text, textcat)
-  # from russian-iso8859_5 only take russian
-  lang_detected <- unlist(lapply(lang_detected,
-                    function(x) {vapply(strsplit(x,"-"), `[`, 1, FUN.VALUE=character(1))}
-                  ))
-  lang_detected <-
-  return(lang_detected)
-}
-
 
 filter_duplicates <- function(metadata, text, list_size) {
   #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles

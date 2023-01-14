@@ -44,19 +44,11 @@ get_papers <- function(query, params,
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Search:", query))
   start.time <- Sys.time()
 
-  # remove pluses between terms
-  query_wt_plus = gsub("(?!\\B\"[^\"]*)[\\+]+(?![^\"]*\"\\B)", " ", query, perl=T)
-  # remove multiple minuses and spaces after minuses
-  query_wt_multi_minus = gsub("(?!\\B\"[^\"]*)((^|\\s))[\\-]+[\\s]*(?![^\"]*\"\\B)", "\\1-", query_wt_plus, perl=T)
-  # remove multiple spaces inside the query
-  query_wt_multi_spaces = gsub("(?!\\B\"[^\"]*)[\\s]{2,}(?![^\"]*\"\\B)", " ", query_wt_multi_minus, perl=T)
-  # trim query, if needed
-  query_cleaned = gsub("^\\s+|\\s+$", "", query_wt_multi_spaces, perl=T)
-
-  # add "textus:" to each word/phrase to enable verbatim search
-  # make sure it is added after any opening parentheses to enable queries such as "(a and b) or (a and c)"
-  exact_query = gsub('([\"]+(.*?)[\"]+)|(?<=\\(\\b|\\+|-\\"\\b|\\s-\\b|^-\\b)|(?!or\\b|and\\b|[-]+[\\"\\(]*\\b)(?<!\\S)(?=\\S)(?!\\(|\\+)'
-                     , "textus:\\1", query_cleaned, perl=T)
+  if (!is.null(query)) {
+    exact_query <- preprocess_query((query))
+  } else {
+    exact_query <- NULL
+  }
 
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "exact query:", exact_query))
 
@@ -78,7 +70,16 @@ get_papers <- function(query, params,
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
   return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider"
 
-  base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, collapse=" ")
+  if (!is.null(exact_query) && exact_query != '') {
+    base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, collapse=" ")
+  } else {
+    base_query <- paste(lang_query, date_string, document_types, collapse=" ")
+  }
+    
+  q_advanced = params$q_advanced
+  if (!is.null(q_advanced)) {
+    base_query <- paste(base_query, q_advanced)
+  }
 
   min_descsize <- if (is.null(params$min_descsize)) 300 else params$min_descsize
   filter <- I(paste0('descsize:[', min_descsize, '%20TO%20*]'))
@@ -177,6 +178,7 @@ get_papers <- function(query, params,
   metadata$url = metadata$id
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
+  metadata$dctype = check_metadata(res$dctype)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
   metadata$content_provider = check_metadata(res$dcprovider)
   if(repo=="fttriple" && non_public==TRUE) {
@@ -198,6 +200,25 @@ get_papers <- function(query, params,
 
   return(ret_val)
 }
+
+
+preprocess_query <- function(query) {
+    # remove pluses between terms
+  query_wt_plus = gsub("(?!\\B\"[^\"]*)[\\+]+(?![^\"]*\"\\B)", " ", query, perl=T)
+  # remove multiple minuses and spaces after minuses
+  query_wt_multi_minus = gsub("(?!\\B\"[^\"]*)((^|\\s))[\\-]+[\\s]*(?![^\"]*\"\\B)", "\\1-", query_wt_plus, perl=T)
+  # remove multiple spaces inside the query
+  query_wt_multi_spaces = gsub("(?!\\B\"[^\"]*)[\\s]{2,}(?![^\"]*\"\\B)", " ", query_wt_multi_minus, perl=T)
+  # trim query, if needed
+  query_cleaned = gsub("^\\s+|\\s+$", "", query_wt_multi_spaces, perl=T)
+
+  # add "textus:" to each word/phrase to enable verbatim search
+  # make sure it is added after any opening parentheses to enable queries such as "(a and b) or (a and c)"
+  exact_query = gsub('([\"]+(.*?)[\"]+)|(?<=\\(\\b|\\+|-\\"\\b|\\s-\\b|^-\\b)|(?!or\\b|and\\b|[-]+[\\"\\(]*\\b)(?<!\\S)(?=\\S)(?!\\(|\\+)'
+                     , "textus:\\1", query_cleaned, perl=T)
+  return(exact_query)
+}
+
 
 get_raw_data <- function(limit, base_query, return_fields, sortby_string, filter, repo, coll, retry_opts, offset, non_public) {
   (res_raw <- bs_search(hits=limit

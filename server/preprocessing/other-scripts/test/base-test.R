@@ -7,7 +7,7 @@ options(warn=1)
 wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(wd) #Don't forget to set your working directory
 
-query <- 'species' #args[2]
+query <- NULL #args[2]
 service <- "base"
 params <- NULL
 params_file <- "params_base.json"
@@ -62,7 +62,7 @@ if(exists('input_data')) {
                            service,
                            max_clusters=MAX_CLUSTERS,
                            lang=LANGUAGE$name,
-                           add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=100)
+                           add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=params$list_size)
   }, error=function(err){
     tslog$error(gsub("\n", " ", paste("Processing failed", query$raw_query, paste(params, collapse=" "), err, sep="||")))
     failed$query <<- query$raw_query
@@ -71,7 +71,7 @@ if(exists('input_data')) {
 }
 
 if (!exists('output_json')) {
-  output_json <- detect_error(failed, service)
+  output_json <- detect_error(failed, service, params)
 }
 
 output <- fromJSON(output_json)
