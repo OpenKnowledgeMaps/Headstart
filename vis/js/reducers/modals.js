@@ -16,11 +16,12 @@ const modals = (
         openEmbedModal: false,
         showFAQsButton: !!action.configObject.faqs_button,
         FAQsUrl: action.configObject.faqs_url,
+        FAQsUrlStr: action.configObject.faqs_url_streamgraph,
         showViperEditButton: !!action.configObject.viper_edit_modal,
         openViperEditModal: false,
         viperEditObjID: action.contextObject.params
-          ? action.contextObject.params.obj_id
-          : null,
+            ? action.contextObject.params.obj_id
+            : null,
         showReloadButton: action.contextObject.service === "gsheets",
         reloadLastUpdate: action.contextObject.last_update,
         apiProperties: {
