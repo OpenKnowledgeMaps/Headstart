@@ -60,21 +60,22 @@ get_papers <- function(query, params,
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
   # language query field flag
+  # CHANGE TO MORE LANGUAGES!!! look up dclang specifications
+  lang_id <- params$lang_id
+  if (!is.null(valid_langs$lang_id)) {
+    lang_query <- paste0("dclang:", lang_id)
+    } else {
+    lang_query <- ""
+  }
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
   return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider"
 
   if (!is.null(exact_query) && exact_query != '') {
-    base_query <- paste(paste0("(",exact_query,")") , date_string, document_types, collapse=" ")
+    base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, collapse=" ")
   } else {
-    base_query <- paste(date_string, document_types, collapse=" ")
+    base_query <- paste(lang_query, date_string, document_types, collapse=" ")
   }
 
-  lang_id <- params$lang_id
-  if (lang_id != "all-lang") {
-    lang_query <- paste0("dclang:", lang_id)
-    base_query <- paste(base_query, lang_query)
-  }
-    
   q_advanced = params$q_advanced
   if (!is.null(q_advanced)) {
     base_query <- paste(base_query, q_advanced)
@@ -83,7 +84,7 @@ get_papers <- function(query, params,
   min_descsize <- if (is.null(params$min_descsize)) 300 else params$min_descsize
   filter <- I(paste0('descsize:[', min_descsize, '%20TO%20*]'))
   limit <- params$limit
-  
+
   repo = params$repo
   coll = params$coll
   if(!is.null(repo) && repo=="fttriple") {
@@ -91,13 +92,13 @@ get_papers <- function(query, params,
   } else {
     non_public = FALSE
   }
-  
+
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE query:", base_query))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Sort by:", sortby_string))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Min descsize:", min_descsize))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Target:", repo))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Collection:", coll))
-  
+
   # execute search
   offset = 0
   res_raw <- get_raw_data(limit,
@@ -253,6 +254,57 @@ decode_dctypenorm <- function(dctypestring) {
   typecodes <- unlist(unname(typecodes[[1]]))
   return(typecodes)
 }
+
+valid_langs <- list(
+    'afr'='afrikaans',
+    'akk'='akkadian',
+    'ara'='arabic',
+    'baq'='basque',
+    'bel'='belarusian',
+    'chi'='chinese',
+    'cze'='czech',
+    'dan'='danish',
+    'dut'='dutch',
+    'eng'='english',
+    'est'='estonian',
+    'fin'='finnish',
+    'fre'='french',
+    'geo'='georgian',
+    'ger'='german',
+    'gle'='irish',
+    'glg'='galician',
+    'grc'='greek',
+    'gre'='greek',
+    'heb'='hebrew',
+    'hrv'='croatian',
+    'hun'='hungarian',
+    'ice'='icelandic',
+    'ind'='indonesian',
+    'ita'='italian',
+    'jpn'='japanese',
+    'kor'='korean',
+    'lat'='latin',
+    'lit'='lithuanian',
+    'nau'='nauru',
+    'nob'='norwegian',
+    'nor'='norwegian',
+    'ota'='turkish',
+    'per'='persian',
+    'pol'='polish',
+    'por'='portuguese',
+    'rum'='romanian',
+    'rus'='russian',
+    'slo'='slovak',
+    'slv'='slovenian',
+    'spa'='spanish',
+    'srp'='serbian',
+    'sux'='sumerian',
+    'swe'='swedish',
+    'tha'='thai',
+    'tur'='turkish',
+    'ukr'='ukrainian',
+    'vie'='vietnamese'
+)
 
 dctypenorm_decoder <- list(
   "4"="Audio",
