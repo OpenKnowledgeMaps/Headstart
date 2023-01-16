@@ -6,6 +6,7 @@ import logging
 from datetime import timedelta
 from common.r_wrapper import RWrapper
 from .parsers import improved_df_parsing
+from redis.exceptions import LockError
 import time
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
@@ -16,6 +17,12 @@ class BaseClient(RWrapper):
 
     def __init__(self, *args):
         super().__init__(*args)
+        # set separation for requests
+        # respecting BASE rate limit of 1/ps
+        # separation = round(period_in_seconds / rate limit per second)
+        self.separation = 1.1
+        self.rate_key = 'base-ratelimit'
+
         try:
             result = self.get_contentproviders()
             df = pd.DataFrame(json.loads(result["contentproviders"]))
@@ -45,17 +52,15 @@ class BaseClient(RWrapper):
         BASE demands one request per second (1 QPS), per
         https://www.base-search.net/about/download/base_interface.pdf
         """
-        key = 'base-ratelimit'
+        
         t = self.redis_store.time()[0]
-        #separation = round(period_in_seconds / limit)
-        separation = 1
-        self.redis_store.setnx(key, 0)
+        self.redis_store.setnx(self.rate_key, 0)
         try:
-            with self.redis_store.lock('lock:' + key, blocking_timeout=5) as lock:
-                theoretical_arrival_time = max(int(self.redis_store.get(key)), t)
+            with self.redis_store.lock('lock:' + self.rate_key, blocking_timeout=5) as lock:
+                theoretical_arrival_time = max(float(self.redis_store.get(self.rate_key)), t)
                 if theoretical_arrival_time - t <= 0:
-                    new_theoretical_arrival_time = max(theoretical_arrival_time, t) + separation
-                    self.redis_store.set(key, new_theoretical_arrival_time)
+                    new_theoretical_arrival_time = max(theoretical_arrival_time, t) + self.separation
+                    self.redis_store.set(self.rate_key, new_theoretical_arrival_time)
                     return False
                 return True
         # the locking mechanism is needed if a key is requested multiple times at the same time
@@ -125,7 +130,7 @@ class BaseClient(RWrapper):
     def run(self):
         while True:
             while self.base_rate_limit_reached():
-                self.logger.info('🛑 Request is limited')
+                self.logger.debug('🛑 Request is limited')
                 time.sleep(0.1)
             k, params, endpoint = self.next_item()
             self.logger.debug(k)
