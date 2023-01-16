@@ -21,7 +21,7 @@ vlog <- getLogger('vis')
 vis_layout <- function(text, metadata, service,
                        max_clusters=15, maxit=500,
                        mindim=2, maxdim=2,
-                       lang="english", 
+                       lang=NULL, add_stop_words=NULL,
                        testing=FALSE, taxonomy_separator=NULL, list_size=-1,
                        vis_type='overview') {
   TESTING <<- testing # makes testing param a global variable
@@ -50,7 +50,7 @@ vis_layout <- function(text, metadata, service,
   metadata <- filtered$metadata
   text <- filtered$text
   vlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "doc count:", nrow(metadata), sep=" "))
-  
+
   if(vis_type=='overview'){
     stops <- get_stopwords(lang, testing)
     corpus <- create_corpus(metadata, text, stops)

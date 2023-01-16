@@ -112,6 +112,8 @@ tryCatch({
   output_json = vis_layout(text, metadata,
                            service,
                            max_clusters = MAX_CLUSTERS,
+                           add_stop_words = ADDITIONAL_STOP_WORDS,
+                           lang = LANGUAGE$name,
                            taxonomy_separator = params$taxonomy_separator,
                            list_size = params$list_size,
                            vis_type=vis_type)
