@@ -70,7 +70,7 @@ get_papers <- function(query, params,
   }
 
   lang_id <- params$lang_id
-  if (lang_id != "all-lang") {
+  if (!is.null(lang_id) && lang_id != "all-lang") {
     lang_query <- paste0("dclang:", lang_id)
     base_query <- paste(base_query, lang_query)
   }
