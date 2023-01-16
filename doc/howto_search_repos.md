@@ -1,4 +1,6 @@
-# HOWTO: Get the search repos example to work
+# Warning: Please note that this documentation is outdated and installing/running server components on a OS-level is no longer supported
+
+## HOWTO: Get the search repos example to work
 
 The search repos example lets you perform a search in either PLOS or Pubmed and visualize the result. Getting it to work can be a little tricky, that's why we have created a little guide.
 
