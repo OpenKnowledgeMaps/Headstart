@@ -97,6 +97,11 @@ class Streamgraph(object):
                                         lowercase=True,
                                         stop_words=[query]
                                         )
+        tfidf_vectorizer = TfidfVectorizer(max_df=0.95, min_df=2,
+                                           tokenizer=lambda x: self.tokenize(x),
+                                           lowercase=True,
+                                           stop_words=[query]
+                                           )
         if method == "count":
             tf = tf_vectorizer.fit_transform(corpus)
             counts = pd.DataFrame(tf.toarray(),
@@ -104,6 +109,30 @@ class Streamgraph(object):
             candidates = counts.sum().sort_values(ascending=False).index.tolist()
             candidates = [c for c in candidates if len(c) > 2]
             top_n = candidates[:n]
+        if method == "tfidf":
+            tfidf = tfidf_vectorizer.fit_transform(corpus)
+            weights = pd.DataFrame(tfidf.toarray(),
+                                   columns=tfidf_vectorizer.get_feature_names())
+            candidates = weights.sum().sort_values(ascending=False).index.tolist()
+            candidates = [c for c in candidates if len(c) > 2]
+            top_n = candidates[:n]
+        if method == "nmf":
+            tfidf = tfidf_vectorizer.fit_transform(corpus)
+            nmf = NMF(n_components=n,
+                      alpha=.1, l1_ratio=.5, init='nndsvd',
+                      random_state=42).fit(tfidf)
+            top_n = list(chain.from_iterable(
+                            [self.get_top_words(t, tfidf_vectorizer.get_feature_names(), 1)
+                             for t in nmf.components_]))
+        if method == "lda":
+            tf = tf_vectorizer.fit_transform(corpus)
+            lda = LatentDirichletAllocation(n_components=n, max_iter=20,
+                                            learning_method='batch',
+                                            learning_offset=50.,
+                                            random_state=42).fit(tf)
+            top_n = list(chain.from_iterable(
+                            [self.get_top_words(t, tf_vectorizer.get_feature_names(), 1)
+                             for t in lda.components_]))
         return top_n
 
     @staticmethod
