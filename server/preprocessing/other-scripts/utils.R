@@ -137,6 +137,9 @@ detect_error <- function(failed, service, params) {
       if (grepl("No results retrieved", failed$query_reason, fixed=TRUE)) {
         reason <- c(reason, "not enough results for project")
       }
+      if (length(reason) == 0) {
+        reason <- c(reason, "API error: OpenAIRE not reachable")
+      }
     }
     if ("q_advanced" %in% names(params)) {
       reason <- c(reason, "API error: q_advanced")

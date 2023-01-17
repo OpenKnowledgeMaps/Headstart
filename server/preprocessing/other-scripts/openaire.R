@@ -41,6 +41,8 @@ get_papers <- function(query, params) {
   project_id <- params$project_id
   funder <- params$funder
 
+
+  
   if (nrow(roa_projects(grant_id = params$project_id, funder = params$funder)) == 0) {
     stop(paste("Project not found."))
   }
