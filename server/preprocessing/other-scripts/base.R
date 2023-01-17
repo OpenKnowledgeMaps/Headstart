@@ -59,21 +59,14 @@ get_papers <- function(query, params,
   # prepare query fields
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
-  # language query field flag
-  # CHANGE TO MORE LANGUAGES!!! look up dclang specifications
-  lang_id <- params$lang_id
-  if (!is.null(valid_langs$lang_id)) {
-    lang_query <- paste0("dclang:", lang_id)
-    } else {
-    lang_query <- ""
-  }
+  
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
   return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider"
 
   if (!is.null(exact_query) && exact_query != '') {
-    base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, collapse=" ")
+    base_query <- paste(paste0("(",exact_query,")"), date_string, document_types, collapse=" ")
   } else {
-    base_query <- paste(lang_query, date_string, document_types, collapse=" ")
+    base_query <- paste(date_string, document_types, collapse=" ")
   }
 
   lang_id <- params$lang_id
@@ -152,6 +145,8 @@ get_papers <- function(query, params,
 
   #subject = ifelse(subject !="", paste(unique(strsplit(subject, "; ")), "; "),"")
 
+  #pattern <- paste0("(;? ?|^)", paste0(triple_disciplines, collapse="($|; )|(;? ?|^)"), "($|; )")
+
   subject_cleaned = gsub("DOAJ:[^;]*(;|$)?", "", subject_all) # remove DOAJ classification
   subject_cleaned = gsub("/dk/atira[^;]*(;|$)?", "", subject_cleaned) # remove atira classification
   subject_cleaned = gsub("ddc:[0-9]+(;|$)?", "", subject_cleaned) # remove Dewey Decimal Classification
@@ -171,7 +166,8 @@ get_papers <- function(query, params,
   subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
   subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
   subject_cleaned = gsub("\\w+:\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
-  subject_cleaned = gsub("^; $", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
+  #subject_cleaned = gsub(pattern=pattern, replacement="", subject_cleaned) # remove TRIPLE discipline classification codes
+  subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(",", ", ", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
 

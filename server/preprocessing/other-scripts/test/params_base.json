@@ -3,10 +3,10 @@
   "from":"1665-01-01",
   "to":"2022-01-13",
   "sorting":"most-relevant",
-  "lang_id":"eng",
+  "lang_id":"fre",
   "vis_id": "TEST_ID",
   "min_descsize": 0,
-  "limit": 500,
-  "list_size": 500,
-  "q_advanced": "dctype:Hypothesis"
+  "limit": 120,
+  "list_size": 100,
+  "repo": "fttriple"
 }
