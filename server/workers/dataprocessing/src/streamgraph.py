@@ -95,12 +95,12 @@ class Streamgraph(object):
         tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
                                         tokenizer=lambda x: self.tokenize(x),
                                         lowercase=True,
-                                        stop_words=[query]
+                                        stop_words=[query] + stopwords
                                         )
         tfidf_vectorizer = TfidfVectorizer(max_df=0.95, min_df=2,
                                            tokenizer=lambda x: self.tokenize(x),
                                            lowercase=True,
-                                           stop_words=[query]
+                                           stop_words=[query] + stopwords
                                            )
         if method == "count":
             tf = tf_vectorizer.fit_transform(corpus)
