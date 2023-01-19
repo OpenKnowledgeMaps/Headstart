@@ -48,10 +48,10 @@ projectdata_nodes <- c(
 )
 
 orgdata_nodes <- c(
-  name = ".//rels/rel/legalshortname",
-  long_name = ".//rels/rel/legalname",
-  website = ".//rels/rel/websiteurl",
-  org_id = ".//rels/rel/to"
+  name = ".//legalshortname",
+  long_name = ".//legalname",
+  website = ".//websiteurl",
+  org_id = ".//to"
 )
 
 fundingtree_nodes <- c(
@@ -73,10 +73,14 @@ extract_metadata <- function(xml, nodes) {
   })
 }
 
+find_orgs <- function(xml) {
+  xml2::xml_find_all(xml, "//rels/rel")
+}
+
 extract_org_metadata <- function(xml, nodes) {
   lapply(xml, function(z) {
     lapply(nodes, function(w) {
-      xml2::xml_text(xml2::xml_find_all(z, w)) %|m|% NA_character_
+      data.frame(xml2::xml_text(xml2::xml_find_all(z, w)) %|m|% NA_character_)
     })
   })
 }
@@ -88,7 +92,7 @@ parse_project <- function(raw_xml) {
   projectdata <- as.list(data.frame(projectdata))
   projectdata[is.na(projectdata)] <- ""
   fundingtree <- unname(unlist(extract_metadata(result, fundingtree_nodes)))
-  orgdata <- data.frame(extract_org_metadata(result, orgdata_nodes))
+  orgdata <- data.frame(do.call(rbind.data.frame, extract_metadata(find_orgs(parsed_xml), orgdata_nodes)))
   orgdata["org_id"] <- lapply(orgdata["org_id"], function(x) {paste0("https://www.openaire.eu/search/organization?organizationId=", x)})
   orgdata["url"] <- ifelse(is.na(orgdata$website), orgdata$org_id, orgdata$website)
   projectdata$organisations <- orgdata
