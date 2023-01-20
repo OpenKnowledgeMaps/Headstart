@@ -89,12 +89,15 @@ parse_project <- function(raw_xml) {
   parsed_xml <- xml2::read_xml(raw_xml)
   result <- xml2::xml_find_all(parsed_xml, xpath = '//results/result')
   projectdata <- extract_metadata(result, projectdata_nodes)
+  if (length(projectdata) == 0) stop("No project metadata found.")
   projectdata <- as.list(data.frame(projectdata))
   projectdata[is.na(projectdata)] <- ""
   fundingtree <- unname(unlist(extract_metadata(result, fundingtree_nodes)))
   orgdata <- data.frame(do.call(rbind.data.frame, extract_metadata(find_orgs(parsed_xml), orgdata_nodes)))
-  orgdata["org_id"] <- lapply(orgdata["org_id"], function(x) {paste0("https://www.openaire.eu/search/organization?organizationId=", x)})
-  orgdata["url"] <- ifelse(is.na(orgdata$website), orgdata$org_id, orgdata$website)
+  if (nrow(orgdata)>0) {
+    orgdata["org_id"] <- lapply(orgdata["org_id"], function(x) {paste0("https://www.openaire.eu/search/organization?organizationId=", x)})
+    orgdata["url"] <- ifelse(is.na(orgdata$website), orgdata$org_id, orgdata$website)
+  }
   projectdata$organisations <- orgdata
   projectdata$funding_tree <- fundingtree
   return (projectdata)
