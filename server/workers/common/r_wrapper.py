@@ -52,9 +52,11 @@ class RWrapper(object):
                     res["input_data"] = self.execute_search(params)
                     res["params"] = params
                     if params.get('raw') is True:
-                        redis_store.set(k+"_output", json.dumps(res))
+                        self.redis_store.set(k+"_output", json.dumps(res))
                     else:
-                        redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
+                        self.redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
+                        pos = self.redis_store.llen("input_data")
+                        self.logger.info("%s %s %d" %(k, "input_data", pos))
                 except Exception as e:
                     self.logger.error(e)
                     self.logger.error(params)

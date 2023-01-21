@@ -97,8 +97,8 @@ class Search(Resource):
              "endpoint": "search"}
         base_ns.logger.debug(d)
         redis_store.rpush("base", json.dumps(d))
-        q_len = redis_store.llen("base")
-        base_ns.logger.info("Queue length BASE: %d" %q_len)
+        pos = redis_store.llen("base")
+        base_ns.logger.info("%s %s %d" %(k, "base", pos))
         result = get_key(redis_store, k)
         try:
             headers = {}

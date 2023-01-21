@@ -140,9 +140,11 @@ class BaseClient(RWrapper):
                     res = self.execute_search(params)
                     res["id"] = k
                     if res.get("status") == "error" or params.get('raw') is True:
-                        self.redis_store.set(k+"_output", json.dumps(res))
+                        self.redis_store.set(k+"_output", json.dumps(res))                        
                     else:
                         self.redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
+                        pos = self.redis_store.llen("input_data")
+                        self.logger.info("%s %s %d" %(k, "input_data", pos))
                 except Exception as e:
                     self.logger.exception("Exception during data retrieval.")
                     self.logger.error(params)
