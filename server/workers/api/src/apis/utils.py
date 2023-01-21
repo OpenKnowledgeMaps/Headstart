@@ -16,11 +16,20 @@ redis_config = {
 redis_store = redis.StrictRedis(**redis_config)
 
 
-def get_key(store, key):
-    while True:
+def get_key(store, key, timeout=60):
+    wait_s = 1
+    max_tries = timeout / wait_s
+    tries = 0
+    result = {
+        "k": key,
+        "status": "error",
+        "error": "timeout"        
+    }
+    while tries <= max_tries:
         res = store.get(key+"_output")
         if res is None:
-            time.sleep(1)
+            time.sleep(wait_s)
+            tries += 1
         else:
             result = json.loads(res.decode('utf-8'))
             store.delete(key)
