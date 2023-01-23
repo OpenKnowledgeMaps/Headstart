@@ -14,6 +14,8 @@ import PubMedInfo from "./infomodal/PubMedInfo";
 import TripleKMInfo from "./infomodal/TripleKMInfo";
 import TripleSGInfo from "./infomodal/TripleSGInfo";
 import ViperInfo from "./infomodal/ViperInfo";
+import OpenAireInfo from "./infomodal/OpenAireInfo";
+
 
 const getInfoTemplate = (service, isStreamgraph) => {
   switch (service) {
@@ -22,7 +24,9 @@ const getInfoTemplate = (service, isStreamgraph) => {
     case "pubmed":
       return PubMedInfo;
     case "openaire":
-      return ViperInfo;
+      // return  OpenAIRE info modal
+      return OpenAireInfo;
+      // return ViperInfo;
     case "triple_km":
       return TripleKMInfo;
     case "triple_sg":
