@@ -1,4 +1,7 @@
-# Installing and configuring the server
+# Warning: Please note that this documentation is outdated and installing server components on a OS-level is no longer supported
+
+
+## Installing and configuring the server
 
 If you want to do more than just displaying static CSV files, you need to configure your server components. Also, see [HOWTO: Get the search repos example to work](howto_search_repos.md).
 

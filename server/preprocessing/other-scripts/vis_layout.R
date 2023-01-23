@@ -1,7 +1,6 @@
 library(logging)
 library(vegan)
 library(tm)
-library(textcat)
 library(proxy)
 library(GMD)
 library(SnowballC)
@@ -34,8 +33,10 @@ vis_layout <- function(text, metadata, service,
                        vis_type='overview') {
   start.time <- Sys.time()
   vlog$debug("preprocess")
-
-  metadata <- sanitize(metadata)
+  metadata <- sanitize_abstract(metadata)
+  filtered <- filter_duplicates(metadata, text, list_size)
+  metadata <- filtered$metadata
+  text <- filtered$text
   vlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "doc count:", nrow(metadata), sep=" "))
   
   if(vis_type=='overview'){

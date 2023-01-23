@@ -3,13 +3,15 @@ import { Modal } from "react-bootstrap";
 
 import AboutSoftware from "./AboutSoftware";
 import DataSource from "./DataSource";
+import { queryConcatenator } from "../../../../utils/data";
 
 const StandardSGInfo = ({
   serviceName,
   serviceDesc,
   serviceLogo,
-  params: { query, customTitle, repo_name },
+  params: { query, customTitle, repo_name, q_advanced  },
 }) => {
+  let queryString = queryConcatenator([query, q_advanced])
   return (
     // html template starts here
     <>
@@ -19,11 +21,11 @@ const StandardSGInfo = ({
       <Modal.Body id="info-body">
         <p>
           This streamgraph presents you with an overview of the main keywords{" "}
-          {(!!customTitle || !!query) && (
+          {(!!customTitle || !!query || !!q_advanced) && (
             <>
               related to{" "}
               <strong className="hs-strong">
-                {customTitle ? customTitle : query}
+                {customTitle ? customTitle : queryString}
               </strong>
             </>
           )}{" "}
@@ -38,24 +40,35 @@ const StandardSGInfo = ({
           stream.
         </p>
         {!!customTitle && (
-          <p>
-            This map has a custom title and was created using the following
-            query: <strong className="hs-strong">{query}</strong>
-          </p>
+            <p>
+              This map has a custom title and was created using the following
+              query: <strong className="hs-strong">{query}</strong>
+            </p>
         )}
         <p>
           Streamgraphs are particularly useful for investigating the evolution
           of keywords over time and to analyse trends in research.
         </p>
+        <p>
+          Please{" "}
+          <a
+              target="_blank"
+              rel="noreferrer"
+              href="https://openknowledgemaps.org/faqs_streamgraph"
+          >
+            read our FAQs
+          </a>{" "}
+          to find out more about streamgraphs.
+        </p>
         {!!serviceName && (
-          <DataSource
-            source={serviceName}
-            contentProvider={repo_name}
-            description={serviceDesc}
-            logo={serviceLogo}
-          />
+            <DataSource
+                source={serviceName}
+                contentProvider={repo_name}
+                description={serviceDesc}
+                logo={serviceLogo}
+            />
         )}
-        <AboutSoftware />
+        <AboutSoftware/>
       </Modal.Body>
     </>
     // html template ends here

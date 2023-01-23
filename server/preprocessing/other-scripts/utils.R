@@ -2,8 +2,12 @@ library(stringdist)
 library(logging)
 
 sanitize_query <- function(query) {
-  query <- gsub("\\", "", query, fixed=T)
-  sanitized_query <- gsub('[“”]', '"', query)
+  if (!is.null(query)) {
+    query <- gsub("\\", "", query, fixed=T)
+    sanitized_query <- gsub('[“”]', '"', query)
+  } else {
+    sanitized_query <- NULL
+  }
   return(list(raw_query=query, sanitized_query=sanitized_query))
 }
 
@@ -80,15 +84,11 @@ get_service_lang <- function(lang_id, valid_langs, service) {
   } else {
     LANGUAGE <- 'english'
   }
-  if (service == 'linkedcat' || service == 'linkedcat_authorview' || service == "linkedcat_browseview") {
-      lang_id <- 'ger'
-      LANGUAGE <- 'german'
-    }
   return (list(lang_id = lang_id, name = LANGUAGE))
 }
 
 
-detect_error <- function(failed, service) {
+detect_error <- function(failed, service, params) {
   output <- list()
   reason <- list()
   phrasepattern <- '"(.*?)"'
@@ -123,6 +123,9 @@ detect_error <- function(failed, service) {
       if (startsWith(failed$query_reason, "HTTP failure")){
           reason <- c(reason, 'unexpected PubMed API error')
       }
+    }
+    if ("q_advanced" %in% names(params)) {
+      reason <- c(reason, "API error: q_advanced")
     }
     if (length(reason) == 0) {
         result <- regmatches(failed$query, regexec(phrasepattern, failed$query))

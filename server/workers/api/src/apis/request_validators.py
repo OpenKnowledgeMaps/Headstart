@@ -3,7 +3,8 @@ from marshmallow import Schema, fields, pre_load, validates, ValidationError
 
 
 class SearchParamSchema(Schema):
-    q = fields.Str(required=True)
+    q = fields.Str()
+    q_advanced = fields.Str()
     sorting = fields.Str(required=True)
     from_ = fields.Date(required=True, data_key="from",
                         format="%Y-%m-%d")
@@ -31,6 +32,7 @@ class SearchParamSchema(Schema):
     repo_name = fields.Str()
     coll = fields.Str()
     list_size = fields.Int()
+
 
     @pre_load
     def fix_years(self, in_data, **kwargs):
