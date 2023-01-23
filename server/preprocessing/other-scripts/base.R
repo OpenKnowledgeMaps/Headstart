@@ -118,7 +118,7 @@ get_papers <- function(query, params,
   ret_val <- etl(res, repo, non_public)
   metadata <- ret_val$metadata
   text <- ret_val$text
-  metadata <- sanitize(metadata)
+  metadata <- sanitize_abstract(metadata)
   filtered <- mark_duplicates(metadata, text)
   metadata <- filtered$metadata
   metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
@@ -139,7 +139,7 @@ get_papers <- function(query, params,
     ret_val <- etl(res, repo, non_public)
     metadata <- ret_val$metadata
     text <- ret_val$text
-    metadata <- sanitize(metadata)
+    metadata <- sanitize_abstract(metadata)
     filtered <- mark_duplicates(metadata, text)
     metadata <- filtered$metadata
     metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
