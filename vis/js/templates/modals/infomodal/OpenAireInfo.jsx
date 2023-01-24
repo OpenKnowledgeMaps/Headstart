@@ -2,8 +2,6 @@ import React, {Fragment} from "react";
 import {Modal} from "react-bootstrap";
 
 import DataSource from "./subcomponents/DataSource";
-// import baseLogo from "images/logos/base_logo.png";
-import baseLogo from "../../../../images/logos/base_logo.png";
 import AboutSoftware from "./subcomponents/AboutSoftware";
 
 
@@ -23,7 +21,6 @@ const OpenAireInfo = ({
                         },
                       }) => {
 
-  // console.log()
   return (
       // html template starts here
       <>
@@ -152,7 +149,6 @@ const OpenAireInfo = ({
 
           <DataSource
               source={"OpenAIRE"}
-              // contentProvider={repo_name}
               description={
                 <>
                   <a
@@ -166,12 +162,6 @@ const OpenAireInfo = ({
                   data sources.
                 </>
               }
-
-              // logo={
-              //   <a href="http://base-search.net" target="_blank" rel="noreferrer">
-              //     <img src={baseLogo} alt="BASE service logo"/>
-              //   </a>
-              // }
           />
           <AboutSoftware/>
         </Modal.Body>
