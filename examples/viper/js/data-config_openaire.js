@@ -4,10 +4,10 @@ var data_config = {
 
     bubble_min_scale: 1,
     bubble_max_scale: 1,
-    
+
     paper_min_scale: 1,
     paper_max_scale: 1,
-    
+
     dynamic_sizing: true,
     dynamic_force_area: true,
     dynamic_force_papers: true,
@@ -25,11 +25,11 @@ var data_config = {
     content_based: true,
     url_prefix: "https://www.openaire.eu/search/publication?articleId=",
     url_prefix_datasets: "https://www.openaire.eu/en/search/dataset?datasetId=",
-    
+
     show_context: true,
     create_title_from_context: true,
     create_title_from_context_style: 'viper',
-    
+
     viper_edit_modal: true,
     embed_modal: true,
     share_modal: true,
@@ -37,11 +37,11 @@ var data_config = {
     doi_outlink: true,
 
     metric_list: true,
-    
+
     credit: false,
 
     scale_toolbar: true,
-    
+
     scale_types: ['content_based', 'citation_count', 'cited_by_tweeters_count', 'readers.mendeley'],
     scale_explanation: {
         content_based: 'The size of the bubbles is relative to the number of documents related to them.',
@@ -60,9 +60,12 @@ var data_config = {
         cited_by_tweeters_count: 'tweets',
         'readers.mendeley': 'readers'
     },
-    
+
     is_evaluation: true,
-    
+
     use_hypothesis: true,
-    
+
+    // a new field for specifying the type of information to render correct type of info modal window
+    modal_info_type: "viper",
+
 };

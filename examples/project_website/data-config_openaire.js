@@ -68,4 +68,7 @@ var data_config = {
 
     use_hypothesis: true,
 
+    // a new field for specifying the type of information to render correct type of info modal window
+    modal_info_type: "openaire",
+
 };

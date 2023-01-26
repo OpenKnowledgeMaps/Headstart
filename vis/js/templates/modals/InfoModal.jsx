@@ -17,16 +17,19 @@ import ViperInfo from "./infomodal/ViperInfo";
 import OpenAireInfo from "./infomodal/OpenAireInfo";
 
 
-const getInfoTemplate = (service, isStreamgraph) => {
+const getInfoTemplate = (service, isStreamgraph, modalType) => {
   switch (service) {
     case "base":
       return BaseInfo;
     case "pubmed":
       return PubMedInfo;
     case "openaire":
-      // return  OpenAIRE info modal
-      return OpenAireInfo;
-      // return ViperInfo;
+      if (modalType && modalType === 'openaire') {
+        return OpenAireInfo;
+      } else if (modalType && modalType === 'viper') {
+        return ViperInfo;
+      }
+      return ViperInfo;
     case "triple_km":
       return TripleKMInfo;
     case "triple_sg":
@@ -40,17 +43,18 @@ const getInfoTemplate = (service, isStreamgraph) => {
   }
 };
 
-const InfoModal = ({ open, onClose, params, service, isStreamgraph }) => {
-  const InfoTemplate = getInfoTemplate(service, isStreamgraph);
+const InfoModal = ({open, onClose, params, service, isStreamgraph, modalInfoType}) => {
+  const InfoTemplate = getInfoTemplate(service, isStreamgraph, modalInfoType);
 
   return (
-    // html template starts here
-    <Modal id="info_modal" show={open} onHide={onClose} animation>
-      <InfoTemplate params={params} isStreamgraph={isStreamgraph} />
-    </Modal>
-    // html template ends here
+      // html template starts here
+      <Modal id="info_modal" show={open} onHide={onClose} animation>
+        <InfoTemplate params={params} isStreamgraph={isStreamgraph}/>
+      </Modal>
+      // html template ends here
   );
 };
+
 
 const mapStateToProps = (state) => ({
   open: state.modals.openInfoModal,
@@ -62,6 +66,8 @@ const mapStateToProps = (state) => ({
   },
   service: state.isCovis ? "covis" : state.service,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+  // new parameter from config to render correct type of info modal window
+  modalInfoType: state.modalInfoType
 });
 
 const mapDispatchToProps = (dispatch) => ({
