@@ -90,6 +90,8 @@ class OpenAIREClient(RWrapper):
                         self.redis_store.set(k+"_output", json.dumps(res))
                     else:
                         self.redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
+                        q_len = self.redis_store.llen("input_data")
+                        self.logger.info("Queue length: %s %d %s" %("input_data", q_len, k))
                 except Exception as e:
                     self.logger.exception("Exception during data retrieval.")
                     self.logger.error(params)

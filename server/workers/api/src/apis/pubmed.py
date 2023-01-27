@@ -63,6 +63,8 @@ class Search(Resource):
              "endpoint": "search"}
         pubmed_ns.logger.debug(d)
         redis_store.rpush("pubmed", json.dumps(d))
+        q_len = self.redis_store.llen("pubmed")
+        pubmed_ns.logger.info("Queue length: %s %d %s" %("pubmed", q_len, k))
         result = get_key(redis_store, k)
         try:
             headers = {}
