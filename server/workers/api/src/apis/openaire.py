@@ -60,7 +60,7 @@ class Search(Resource):
              "endpoint": "search"}
         openaire_ns.logger.debug(d)
         redis_store.rpush("openaire", json.dumps(d))
-        q_len = self.redis_store.llen("openaire")
+        q_len = redis_store.llen("openaire")
         openaire_ns.logger.info("Queue length: %s %d %s" %("openaire", q_len, k))
         result = get_key(redis_store, k)
         try:
