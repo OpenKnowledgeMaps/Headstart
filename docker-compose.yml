@@ -100,6 +100,7 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      PYTHONIOENCODING: "utf-8"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -149,6 +150,7 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      PYTHONIOENCODING: "utf-8"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -173,6 +175,7 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      PYTHONIOENCODING: "utf-8"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
