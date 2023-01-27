@@ -6,7 +6,6 @@
   "lang_id":"eng",
   "vis_id": "TEST_ID",
   "min_descsize": 0,
-  "limit": 500,
-  "list_size": 500,
-  "q_advanced": "dctype:Hypothesis"
+  "limit": 120,
+  "list_size": 100
 }
