@@ -16,14 +16,6 @@ services:
       - ./postgresql.conf:/etc/postgresql.conf
     networks: 
       - headstart
-
-  pgadmin:
-    image: 'dpage/pgadmin4'
-    ports:
-      - '127.0.0.1:54323:80'
-    networks:
-      - headstart
-
   redis:
     image: 'redis:6.0-alpine'
     restart: always
@@ -108,6 +100,7 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      PYTHONIOENCODING: "utf-8"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -157,6 +150,7 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      PYTHONIOENCODING: "utf-8"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache
@@ -181,6 +175,7 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      PYTHONIOENCODING: "utf-8"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache

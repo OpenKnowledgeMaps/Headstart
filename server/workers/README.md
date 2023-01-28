@@ -7,7 +7,6 @@ Following backend component containers are currently in `workers`:
 
 * dataprocessing: Executing the machine learning and natural language processing
 * services: a Flask-based API, providing endpoints for each integrated data source (e.g. TRIPLE)
-* triple: the elasticsearch-connector to TRIPLE
 
 Each comes with a docker file (ending on `.docker`), which is used for creating a container, and a source code folder.
 
@@ -65,9 +64,6 @@ Services:
 * In `server/workers/services/src/config` copy `example_settings.py` to `settings.py` and change the values for `ENV` (`development` or `production`) and `DEBUG` (`TRUE` or `FALSE`).
 * In `settings.py` you can also configure databases.
 
-TRIPLE ElasticSearch core service:
-* In `server/workers/services/triple/` copy `example_triple.env` to `triple.env` and edit the values regarding the ElasticSearch access accordingly.
-
 GSheets Google API client authentication credentials::
 * In `server/workers/services/gsheets/` copy `example_gsheets.env` to `gsheets.env` and change the values if necessary.
 * In `server/workers/services/gsheets/` add a `credentials.json` for Google app authentication (ask your system admin if unsure).
@@ -115,7 +111,7 @@ https://hub.docker.com/p/loomchild/volume-backup
 1. Add new entry to `server/workers/proxy/templates/default.conf.templates`
 1. Add flavored networks to `server/workers/proxy/docker-compose.yml` so that the Nginx-proxy knows where to find the specific versioned services
 1. Down and up the proxy service from `server/workers/proxy` working directory
-1. Test by e.g. `curl -vvvv localhost/api/{flavor}/triple/service_version`
+1. Test by e.g. `curl -vvvv localhost/api/{flavor}/base/service_version`
 
 
 ### Starting a specific versioned "flavor" of the backend services with docker-compose
