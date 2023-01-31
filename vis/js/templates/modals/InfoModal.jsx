@@ -29,7 +29,7 @@ const getInfoTemplate = (service, isStreamgraph, modalType) => {
       } else if (modalType && modalType === 'viper') {
         return ViperInfo;
       }
-      return ViperInfo;
+      return OpenAireInfo;
     case "triple_km":
       return TripleKMInfo;
     case "triple_sg":
