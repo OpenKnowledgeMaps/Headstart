@@ -124,6 +124,8 @@ function search($service, $dirty_query
       $repo_name = $res["repo_name"];
       $post_params["repo_name"] = $repo_name;
       $param_types[] = "repo_name";
+      // this is not duplicate code, the $params_json needs to be updated with the addition metadata
+      $params_json = packParamsJSON($param_types, $post_params);
     }
 
     if($retrieve_cached_map) {
