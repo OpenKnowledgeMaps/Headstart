@@ -32,6 +32,7 @@ var data_config = {
   hashtags_twitter_card: "okmaps,openscience,dataviz,GOTRIPLE",
   faqs_button: false,
   faqs_url: "https://openknowledgemaps.org/faq",
+  faqs_url_streamgraph: "https://openknowledgemaps.org/faqs_streamgraph",
 
   streamgraph_colors: [
     "#215A66",
