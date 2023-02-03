@@ -59,21 +59,21 @@ get_papers <- function(query, params,
   # prepare query fields
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
-  # language query field flag
-  # CHANGE TO MORE LANGUAGES!!! look up dclang specifications
-  lang_id <- params$lang_id
-  if (!is.null(valid_langs$lang_id)) {
-    lang_query <- paste0("dclang:", lang_id)
-    } else {
-    lang_query <- ""
-  }
+
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
-  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider"
+  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage"
 
   if (!is.null(exact_query) && exact_query != '') {
-    base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, collapse=" ")
+    base_query <- paste(paste0("(",exact_query,")"), date_string, document_types, collapse=" ")
   } else {
-    base_query <- paste(lang_query, date_string, document_types, collapse=" ")
+    base_query <- paste(date_string, document_types, collapse=" ")
+  }
+
+  # apply language filter if parameter is set
+  lang_id <- params$lang_id
+  if (!is.null(lang_id) && lang_id != "all-lang") {
+    lang_query <- paste0("dclang:", lang_id)
+    base_query <- paste(base_query, lang_query)
   }
     
   q_advanced = params$q_advanced
@@ -84,7 +84,7 @@ get_papers <- function(query, params,
   min_descsize <- if (is.null(params$min_descsize)) 300 else params$min_descsize
   filter <- I(paste0('descsize:[', min_descsize, '%20TO%20*]'))
   limit <- params$limit
-  
+
   repo = params$repo
   coll = params$coll
   if(!is.null(repo) && repo=="fttriple") {
@@ -92,13 +92,13 @@ get_papers <- function(query, params,
   } else {
     non_public = FALSE
   }
-  
+
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE query:", base_query))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Sort by:", sortby_string))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Min descsize:", min_descsize))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Target:", repo))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Collection:", coll))
-  
+
   # execute search
   offset = 0
   res_raw <- get_raw_data(limit,
@@ -180,6 +180,8 @@ get_papers <- function(query, params,
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
   metadata$dctype = check_metadata(res$dctype)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
+  metadata$dclang = check_metadata(res$dclang)
+  metadata$dclanguage = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)
   if(repo=="fttriple" && non_public==TRUE) {
     metadata$content_provider <- "GoTriple"
