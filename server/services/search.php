@@ -86,14 +86,16 @@ function search($service, $dirty_query
 
     // todo: move back into own function once error handling is refactored
     if ($service == "openaire") {
-      $payload = json_encode(array("params" => $post_params));
-      $res = $apiclient->call_api($service . "/projectdata", $payload);
-      $result = json_decode($res["result"], true);
-      if (isset($result["status"]) && $result["status"] === "error") {
-        return json_encode($result);
-      } else {
-        $projectdata = $result["projectdata"];
-        $post_params = array_merge($post_params, $projectdata);
+      if ($processing_backend === "api") {
+        $payload = json_encode(array("params" => $post_params));
+        $res = $apiclient->call_api($service . "/projectdata", $payload);
+        $result = json_decode($res["result"], true);
+        if (isset($result["status"]) && $result["status"] === "error") {
+          return json_encode($result);
+        } else {
+          $projectdata = $result["projectdata"];
+          $post_params = array_merge($post_params, $projectdata);
+        }
       }
     }
 
