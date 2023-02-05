@@ -1,4 +1,5 @@
 library(stringi)
+library(dplyr)
 vplog <- getLogger('vis.preprocess')
 
 

@@ -46,10 +46,18 @@ def get_or_create_contentprovider_lookup():
         base_ns.logger.debug(d)
         redis_store.rpush("base", json.dumps(d))
         result = get_key(redis_store, k)
-        df = pd.DataFrame(json.loads(result["contentproviders"]))
-        df.set_index("internal_name", inplace=True)
-        cp_dict = df.name.to_dict()
-        return cp_dict
+        if result.get("status") == "error":
+            base_ns.logger.error("Falling back to cached contentproviders.json")
+            base_ns.logger.error(result["error"])
+            df = pd.read_json("contentproviders.json")
+            df.set_index("internal_name", inplace=True)
+            cp_dict = df.name.to_dict()
+            return cp_dict
+        else:
+            df = pd.DataFrame(json.loads(result["contentproviders"]))
+            df.set_index("internal_name", inplace=True)
+            cp_dict = df.name.to_dict()
+            return cp_dict
     except Exception as e:
         base_ns.logger.error("Falling back to cached contentproviders.json")
         base_ns.logger.error(e)
