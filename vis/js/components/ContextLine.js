@@ -18,6 +18,7 @@ import Modifier from "../templates/contextfeatures/Modifier";
 import MoreInfoLink from "../templates/contextfeatures/MoreInfoLink";
 import MetadataQuality from "../templates/contextfeatures/MetadataQuality";
 import ContextTimeFrame from "../templates/contextfeatures/ContextTimeFrame";
+import DocumentLang from "../templates/contextfeatures/DocumentLang";
 
 const defined = (param) => param !== undefined && param !== null;
 
@@ -67,6 +68,12 @@ class ContextLine extends React.Component {
           documentTypes={params.documentTypes}
           popoverContainer={popoverContainer}
         />
+        {/* place for document Lang */}
+        {defined(params.documentLang) && (
+            <DocumentLang
+                value={params.documentLang}
+            />
+        )}
         {defined(params.paperCount) && (
           <PaperCount
             value={params.paperCount}

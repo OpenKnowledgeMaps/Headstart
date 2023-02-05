@@ -606,7 +606,7 @@ var config = {
             search_placeholder: "Search within visualization...",
             show_list: "Show list",
             hide_list: "Hide list",
-            intro_label: "More info",
+            intro_label: "More information",
             relevance: "relevance",
             readers: "readers",
             tweets: "tweets",
@@ -697,6 +697,7 @@ var config = {
             download: "Download",
             please_note: "Please note",
             citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
+            faqs_url: "https://openknowledgemaps.org/faq",
         },
          ger_cris: {
             loading: "Wird geladen...",
