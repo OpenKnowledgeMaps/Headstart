@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
 
@@ -29,7 +29,7 @@ RUN apt-get update \
     libpangocairo-1.0-0 \
     libpcre3 \
     libpng16-16 \
-    libreadline7 \
+    libreadline-dev \
     libtiff5 \
     liblzma5 \
     locales \
@@ -147,6 +147,7 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 COPY workers/openaire/renv.lock .
 COPY workers/openaire/activate.R .
 
+RUN apt install -y automake
 RUN R -e 'renv::consent(provided = TRUE)' && \
     R -e 'setwd("./"); renv::activate(); renv::restore(lockfile = "./renv.lock")'
 
