@@ -209,6 +209,7 @@ etl <- function(res, repo, non_public) {
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
   metadata$dctype = check_metadata(res$dctype)
+  metadata$dctypenorm = check_metadata(res$dctypenorm)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
   metadata$dclang = check_metadata(res$dclang)
   metadata$dclanguage = check_metadata(res$dclanguage)

@@ -254,10 +254,19 @@ def remove_textual_duplicates_from_different_sources(df, dupind):
             if len(publisher_dois) > 0:
                 # keep entry with doi
                 df.loc[tmp[tmp.publisher_doi!=""].index, "is_latest"] = True
-                df.loc[tmp[tmp.publisher_doi!=""].index, "is_duplicate"] = False
+                df.loc[tmp[tmp.publisher_doi!=""].index, "keep"] = True
             else:
                 df.loc[tmp.sort_values(["doi", "year"], ascending=[False, False]).head(1).index, "is_latest"] = True
-                df.loc[tmp.sort_values(["doi", "year"], ascending=[False, False]).head(1).index, "is_duplicate"] = False
+                df.loc[tmp.sort_values(["doi", "year"], ascending=[False, False]).head(1).index, "keep"] = True
+    return df
+
+def prioritize_OA(df, dupind):
+    for _, idx in dupind.iteritems():
+        tmp = df.loc[idx]
+        if len(tmp[tmp.oa_state==1]) > 0:
+            df.loc[tmp[tmp.oa_state==1].index, "keep"] = True
+        else:
+            df.loc[df[(df.is_duplicate) & (df.is_latest)].index, "keep"] = True
     return df
 
 def filter_duplicates(df):
@@ -265,6 +274,7 @@ def filter_duplicates(df):
     df["doi_duplicate"] = False
     df["has_relations"] = False
     df["link_duplicate"] = False
+    df["keep"] = False
     df["duplicates"] = df.apply(lambda x: ",".join([x["id"], x["duplicates"]]) if len(x["duplicates"].split(",")) >= 1 else x["duplicates"], axis=1)
     df["doi_version"] = df.doi.map(lambda x: find_version_in_doi(x) if type(x) is str else None)
     df["unversioned_doi"] = df.doi.map(lambda x: get_unversioned_doi(x) if type(x) is str else None)
@@ -278,5 +288,12 @@ def filter_duplicates(df):
     df = remove_textual_duplicates_from_different_sources(df, dupind)
     df = mark_latest_doi(df, dupind)
     df = add_false_negatives(df)
-    df = df[((df.has_dataset==True) & ((df.is_latest==True) & (df.is_duplicate==False))) | ((df.has_dataset!=True) & (df.is_duplicate==False))]
+    df = prioritize_OA(df, dupind)
+    journal_articles = df[df.typenorm.str.contains("121")]
+    non_journal_articles = df[~df.typenorm.str.contains("121")]
+    filtered_journal_articles = journal_articles[((journal_articles.is_duplicate==False) & (journal_articles.is_latest==True)))]
+    df = df[
+        ((df.has_dataset==True) & ((df.is_latest==True) & df.keep==True)) |
+        ((df.has_dataset!=True) & (df.keep==True) & (df.is_latest==True))
+        ]
     return df
