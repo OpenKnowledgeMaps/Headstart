@@ -48,13 +48,6 @@ To run Headstart on a different server (e.g. Apache), you need to set the public
 * Dev: specify the full path including protocol, e.g. `http://localhost/headstart/dist`
 * Production: specify the full path excluding protocol, e.g. `//example.org/headstart/dist`
 
-See [client configuration](doc/README.md) for details on adapting the client.
-
- Also see visualization [options](doc/README.md#visualisation-settings).
-
-### Server
-
-See [Installing and configuring the server](doc/server_config.md) for instructions on how to install and configure the server. Also, see [HOWTO: Get the search repos example to work](doc/howto_search_repos.md).
 
 ## Contributors
 
