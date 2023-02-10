@@ -37,7 +37,7 @@ library("xml2")
 # get_papers(query = "ecology")
 # get_papers(query = "ecology", params = list(from = "2016/04/01", to = "2016/06/05"))
 
-
+source('preprocess.R')
 plog <- getLogger('api.pubmed')
 
 
@@ -173,6 +173,7 @@ get_papers <- function(query, params = NULL, retry_opts = rentrez::entrez_retry_
   end.time <- Sys.time()
   time.taken <- end.time - start.time
   plog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
+  df <- deduplicate_titles(df, -1)
 
   return(list(metadata = df, text = df[,c('id', 'content')]))
 }

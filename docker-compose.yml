@@ -50,6 +50,9 @@ services:
       - ./api_cache:/var/api_cache
     depends_on:
       - redis
+      - base
+      - pubmed
+      - openaire
     networks: 
       - headstart
 

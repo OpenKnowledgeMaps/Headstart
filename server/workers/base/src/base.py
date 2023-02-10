@@ -132,6 +132,7 @@ class BaseClient(RWrapper):
         except Exception as e:
             self.logger.error(e)
             self.logger.error(error)
+            raise
 
     def run(self):
         while True:
@@ -289,11 +290,10 @@ def filter_duplicates(df):
     df = mark_latest_doi(df, dupind)
     df = add_false_negatives(df)
     df = prioritize_OA(df, dupind)
-    journal_articles = df[df.typenorm.str.contains("121")]
-    non_journal_articles = df[~df.typenorm.str.contains("121")]
-    filtered_journal_articles = journal_articles[((journal_articles.is_duplicate==False) & (journal_articles.is_latest==True)))]
-    df = df[
-        ((df.has_dataset==True) & ((df.is_latest==True) & df.keep==True)) |
-        ((df.has_dataset!=True) & (df.keep==True) & (df.is_latest==True))
-        ]
-    return df
+    journal_articles = df[df.dctypenorm.str.contains("121")]
+    non_journal_articles = df[~df.dctypenorm.str.contains("121")]
+    filtered_journal_articles = journal_articles[((journal_articles.is_duplicate==False) & (journal_articles.keep==True))]
+    filtered_non_journal_articles = non_journal_articles[((non_journal_articles.is_duplicate==False) & (non_journal_articles.keep==True))]
+    filtered = pd.concat([filtered_journal_articles, filtered_non_journal_articles])
+    filtered.sort_index(inplace=True)
+    return filtered
