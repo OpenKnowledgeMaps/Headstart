@@ -263,11 +263,12 @@ def remove_textual_duplicates_from_different_sources(df, dupind):
 
 def prioritize_OA(df, dupind):
     for _, idx in dupind.iteritems():
-        tmp = df.loc[idx]
-        if len(tmp[tmp.oa_state==1]) > 0:
-            df.loc[tmp[tmp.oa_state==1].index, "keep"] = True
-        else:
-            df.loc[df[(df.is_duplicate) & (df.is_latest)].index, "keep"] = True
+        if len(idx) > 1:
+            tmp = df.loc[idx]
+            if len(tmp[tmp.oa_state=="1"]) > 0:
+                df.loc[tmp[tmp.oa_state=="1"].sort_values("is_latest", ascending=False).head(1).index, "keep"] = True
+            else:
+                df.loc[tmp.sort_values("is_latest", ascending=False).head(1).index, "keep"] = True
     return df
 
 def filter_duplicates(df):
@@ -292,8 +293,9 @@ def filter_duplicates(df):
     df = prioritize_OA(df, dupind)
     journal_articles = df[df.dctypenorm.str.contains("121")]
     non_journal_articles = df[~df.dctypenorm.str.contains("121")]
-    filtered_journal_articles = journal_articles[((journal_articles.is_duplicate==False) & (journal_articles.keep==True))]
-    filtered_non_journal_articles = non_journal_articles[((non_journal_articles.is_duplicate==False) & (non_journal_articles.keep==True))]
+    filtered_journal_articles = journal_articles[journal_articles.is_latest==True]
+    filtered_non_journal_articles = non_journal_articles[non_journal_articles.keep==True]
     filtered = pd.concat([filtered_journal_articles, filtered_non_journal_articles])
     filtered.sort_index(inplace=True)
+    filtered.drop(["doi_duplicate", "link_duplicate", "is_latest", "keep", "duplicates", "doi_version", "unversioned_doi", "publisher_doi", "has_relations", "versions"], axis=1, inplace=True)
     return filtered
