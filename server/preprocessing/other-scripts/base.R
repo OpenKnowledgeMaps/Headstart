@@ -61,14 +61,16 @@ get_papers <- function(query, params,
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
   
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
-  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider"
+  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage"
 
   if (!is.null(exact_query) && exact_query != '') {
+    base_query <- paste(paste0("(",exact_query,")"), date_string, document_types, collapse=" ")
     base_query <- paste(paste0("(",exact_query,")"), date_string, document_types, collapse=" ")
   } else {
     base_query <- paste(date_string, document_types, collapse=" ")
   }
 
+  # apply language filter if parameter is set
   lang_id <- params$lang_id
   if (!is.null(lang_id) && lang_id != "all-lang") {
     lang_query <- paste0("dclang:", lang_id)
@@ -182,6 +184,8 @@ get_papers <- function(query, params,
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
   metadata$dctype = check_metadata(res$dctype)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
+  metadata$dclang = check_metadata(res$dclang)
+  metadata$dclanguage = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)
   if(repo=="fttriple" && non_public==TRUE) {
     metadata$content_provider <- "GoTriple"

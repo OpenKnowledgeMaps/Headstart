@@ -1,5 +1,7 @@
 library(stringdist)
 library(logging)
+library(stringi)
+
 
 sanitize_query <- function(query) {
   if (!is.null(query)) {
@@ -125,6 +127,17 @@ detect_error <- function(failed, service, params) {
       }
       if (startsWith(failed$query_reason, "HTTP failure")){
           reason <- c(reason, 'unexpected PubMed API error')
+      }
+    }
+    if (length(reason) == 0 && service == 'openaire') {
+      if (grepl("Project not found", failed$query_reason, fixed=TRUE)) {
+        reason <- c(reason, "project id or funder id wrong")
+      }
+      if (grepl("No results retrieved", failed$query_reason, fixed=TRUE)) {
+        reason <- c(reason, "not enough results for project")
+      }
+      if (length(reason) == 0) {
+        reason <- c(reason, "API error: OpenAIRE not reachable")
       }
     }
     if ("q_advanced" %in% names(params)) {

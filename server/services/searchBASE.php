@@ -26,14 +26,6 @@ if (!isset($post_params["min_descsize"])) {
     $post_params["min_descsize"] = 300;
 }
 
-if (isset($post_params["lang_id"])) {
-    $raw_lang_options = file_get_contents("lang_options.json");
-    $valid_langs = json_decode($raw_lang_options, true);
-    if (!array_key_exists($post_params["lang_id"], $valid_langs)) {
-        $post_params["lang_id"] = "all-lang";
-    }
-}
-
 $result = search("base", $dirty_query
                   , $post_params, $params_array
                   , true

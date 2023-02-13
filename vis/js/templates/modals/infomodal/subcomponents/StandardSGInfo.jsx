@@ -40,24 +40,35 @@ const StandardSGInfo = ({
           stream.
         </p>
         {!!customTitle && (
-          <p>
-            This map has a custom title and was created using the following
-            query: <strong className="hs-strong">{query}</strong>
-          </p>
+            <p>
+              This map has a custom title and was created using the following
+              query: <strong className="hs-strong">{query}</strong>
+            </p>
         )}
         <p>
           Streamgraphs are particularly useful for investigating the evolution
           of keywords over time and to analyse trends in research.
         </p>
+        <p>
+          Please{" "}
+          <a
+              target="_blank"
+              rel="noreferrer"
+              href="https://openknowledgemaps.org/faqs_streamgraph"
+          >
+            read our FAQs
+          </a>{" "}
+          to find out more about streamgraphs.
+        </p>
         {!!serviceName && (
-          <DataSource
-            source={serviceName}
-            contentProvider={repo_name}
-            description={serviceDesc}
-            logo={serviceLogo}
-          />
+            <DataSource
+                source={serviceName}
+                contentProvider={repo_name}
+                description={serviceDesc}
+                logo={serviceLogo}
+            />
         )}
-        <AboutSoftware />
+        <AboutSoftware/>
       </Modal.Body>
     </>
     // html template ends here

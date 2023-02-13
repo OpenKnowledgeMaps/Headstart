@@ -7,6 +7,5 @@
   "vis_id": "TEST_ID",
   "min_descsize": 0,
   "limit": 120,
-  "list_size": 100,
-  "repo": "fttriple"
+  "list_size": 100
 }
