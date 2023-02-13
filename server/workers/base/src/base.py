@@ -254,6 +254,7 @@ def remove_textual_duplicates_from_different_sources(df, dupind):
             publisher_dois = list(filter(None, tmp.publisher_doi.unique().tolist()))
             if len(publisher_dois) > 0:
                 # keep entry with doi
+                df.loc[idx, "keep"] = False
                 df.loc[tmp[tmp.publisher_doi!=""].index, "is_latest"] = True
                 df.loc[tmp[tmp.publisher_doi!=""].index, "keep"] = True
             else:
@@ -266,6 +267,7 @@ def prioritize_OA(df, dupind):
         if len(idx) > 1:
             tmp = df.loc[idx]
             if len(tmp[tmp.oa_state=="1"]) > 0:
+                df.loc[idx, "keep"] = False
                 df.loc[tmp[tmp.oa_state=="1"].sort_values("is_latest", ascending=False).head(1).index, "keep"] = True
             else:
                 df.loc[tmp.sort_values("is_latest", ascending=False).head(1).index, "keep"] = True
