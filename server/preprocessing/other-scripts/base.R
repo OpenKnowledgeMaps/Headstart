@@ -130,7 +130,7 @@ get_papers <- function(query, params,
   }
   
   r <- 0
-  while (nrow(metadata) - sum(grepl("121", metadata$dctypenorm) & metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit) {
+  while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit) {
     offset <- offset+120
     res_raw <- get_raw_data(limit,
                             base_query,

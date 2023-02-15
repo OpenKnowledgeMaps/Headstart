@@ -19,6 +19,7 @@ create_overview_output <- function(named_clusters, layout, metadata) {
 
   names(output)[names(output)=="groups"] <- "area_uri"
   output["area"] = paste(output$cluster_labels, sep="")
+  output %>% distinct(id, .keep_all = TRUE)
 
   output_json = toJSON(output)
 
