@@ -115,14 +115,10 @@ get_papers <- function(query, params,
   if (nrow(res)==0){
     stop(paste("No results retrieved."))
   }
-  ret_val <- etl(res, repo, non_public)
-  metadata <- ret_val$metadata
-  text <- ret_val$text
+  metadata <- etl(res, repo, non_public)
   metadata <- sanitize_abstract(metadata)
-  filtered <- mark_duplicates(metadata, text)
-  metadata <- filtered$metadata
+  metadata <- mark_duplicates(metadata)
   metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
-  text <- filtered$text
   if (!is.null(params$vis_type) && params$vis_type == "timeline") {
     req_limit <- 10
   } else {
@@ -143,18 +139,20 @@ get_papers <- function(query, params,
                             offset,
                             non_public)
     res <- bind_rows(res, res_raw$docs)
-    ret_val <- etl(res, repo, non_public)
-    metadata <- ret_val$metadata
-    text <- ret_val$text
+    metadata <- etl(res, repo, non_public)
     metadata <- sanitize_abstract(metadata)
-    filtered <- mark_duplicates(metadata, text)
-    metadata <- filtered$metadata
+    metadata <- mark_duplicates(metadata)
     metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
-    text <- filtered$text
     r <- r+1
   }
 
-
+  text = data.frame(matrix(nrow=length(res$dcdocid)))
+  text$id = metadata$id
+  subject_all = check_metadata(res$dcsubject)
+  # Add all keywords, including classification to text
+  text$content = paste(metadata$title, metadata$paper_abstract,
+                       subject_all, metadata$published_in, metadata$authors,
+                       sep=" ")
 
 
   ret_val=list("metadata" = metadata, "text"=text)
@@ -226,14 +224,7 @@ etl <- function(res, repo, non_public) {
     metadata$content_provider <- "GoTriple"
   }
 
-  text = data.frame(matrix(nrow=length(res$dcdocid)))
-  text$id = metadata$id
-  # Add all keywords, including classification to text
-  text$content = paste(metadata$title, metadata$paper_abstract,
-                       subject_all, metadata$published_in, metadata$authors,
-                       sep=" ")
-
-  ret_val=list("metadata" = metadata, "text"=text)
+  return (metadata)
 }
 
 

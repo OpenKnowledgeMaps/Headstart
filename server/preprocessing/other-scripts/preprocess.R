@@ -30,14 +30,13 @@ filter_duplicates <- function(metadata, text, list_size) {
   return(list(metadata=metadata, text=text))
 }
 
-mark_duplicates <- function(metadata, text) {
+mark_duplicates <- function(metadata) {
   #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
   dt = deduplicate_titles(metadata, 0)
   duplicate_candidates = dt$duplicate_candidates
   metadata$is_duplicate <- metadata$id %in% duplicate_candidates
   metadata <- inner_join(metadata, dt$identified_duplicates, by="id")
-  text$is_duplicate <- text$id %in% duplicate_candidates
-  return(list(metadata=metadata, text=text))
+  return(metadata)
 }
 
 
