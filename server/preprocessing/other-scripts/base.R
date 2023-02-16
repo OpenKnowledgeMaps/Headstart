@@ -147,22 +147,22 @@ get_papers <- function(query, params,
   }
 
   metadata <- unique(metadata, by = "id")
-  text = data.frame(matrix(nrow=length(res$dcdocid)))
+  metadata <- head(metadata, n = params$list_size)
+  text = data.frame(matrix(nrow=length(metadata$id)))
   text$id = metadata$id
-  subject_all = check_metadata(res$dcsubject)
   # Add all keywords, including classification to text
   text$content = paste(metadata$title, metadata$paper_abstract,
-                       subject_all, metadata$published_in, metadata$authors,
+                       metadata$subject_orig, metadata$published_in, metadata$authors,
                        sep=" ")
 
 
-  ret_val=list("metadata" = metadata, "text"=text)
+  input_data=list("metadata" = metadata, "text"=text)
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
 
-  return(ret_val)
+  return(input_data)
 }
 
 etl <- function(res, repo, non_public) {

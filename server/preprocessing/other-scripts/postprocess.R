@@ -15,11 +15,10 @@ create_overview_output <- function(named_clusters, layout, metadata) {
   colnames(unique_groups) <- "cluster_labels"
   unique_groups$groups <- seq_along(unique_groups$cluster_labels)
   result = merge(result, unique_groups, by='cluster_labels')
-  output = merge(metadata, result, by.x="id", by.y="id", all=TRUE)
+  output = merge(metadata, result, by.x="id", by.y="id", all=FALSE, no.dups=TRUE)
 
   names(output)[names(output)=="groups"] <- "area_uri"
   output["area"] = paste(output$cluster_labels, sep="")
-  output <- unique(output, by = "id")
 
   output_json = toJSON(output)
 
