@@ -146,6 +146,7 @@ get_papers <- function(query, params,
     r <- r+1
   }
 
+  metadata <- unique(metadata, by = "id")
   text = data.frame(matrix(nrow=length(res$dcdocid)))
   text$id = metadata$id
   subject_all = check_metadata(res$dcsubject)
