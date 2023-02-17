@@ -140,6 +140,7 @@ get_papers <- function(query, params,
                             non_public)
     res <- bind_rows(res, res_raw$docs)
     metadata <- etl(res, repo, non_public)
+    metadata <- unique(metadata, by = "id")
     metadata <- sanitize_abstract(metadata)
     metadata <- mark_duplicates(metadata)
     metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
@@ -147,7 +148,7 @@ get_papers <- function(query, params,
   }
 
   metadata <- unique(metadata, by = "id")
-  metadata <- head(metadata, n = params$list_size)
+  metadata <- head(metadata, n = params$limit)
   text = data.frame(matrix(nrow=length(metadata$id)))
   text$id = metadata$id
   # Add all keywords, including classification to text

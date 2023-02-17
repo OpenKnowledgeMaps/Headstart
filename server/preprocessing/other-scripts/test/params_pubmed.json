@@ -96,4 +96,5 @@
   "to":"2020-09-04",
   "sorting":"most-relevant",
   "limit": 100,
+  "list_size": 100,
   "vis_id": "TEST_ID"}

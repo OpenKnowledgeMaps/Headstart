@@ -30,7 +30,7 @@ vis_layout <- function(text, metadata, service,
                        mindim=2, maxdim=2,
                        lang=NULL, add_stop_words=NULL,
                        taxonomy_separator=NULL,
-                       vis_type='overview') {
+                       vis_type='overview', list_size=-1) {
   start.time <- Sys.time()
   vlog$debug("preprocess")
   metadata <- sanitize_abstract(metadata)
@@ -56,9 +56,9 @@ vis_layout <- function(text, metadata, service,
                                             type_counts,
                                             weightingspec="ntn", top_n=3,
                                             stops=stops, taxonomy_separator)
-    output <- create_overview_output(named_clusters, layout, metadata)
+    output <- create_overview_output(named_clusters, layout, metadata, list_size)
   } else {
-    output <- create_streamgraph_output(metadata)
+    output <- create_streamgraph_output(metadata, list_size)
   }
 
   end.time <- Sys.time()

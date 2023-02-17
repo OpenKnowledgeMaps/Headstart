@@ -7,7 +7,7 @@ options(warn=1)
 wd <- dirname(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd(wd) #Don't forget to set your working directory
 
-query <- 'invasion ecology' #args[2]
+query <- '"world bank"' #args[2]
 service <- "base"
 params <- NULL
 params_file <- "test/params_base.json"
@@ -62,7 +62,7 @@ if(exists('input_data')) {
                            service,
                            max_clusters=MAX_CLUSTERS,
                            lang=LANGUAGE$name,
-                           add_stop_words=ADDITIONAL_STOP_WORDS)
+                           add_stop_words=ADDITIONAL_STOP_WORDS, list_size = params$list_size)
   }, error=function(err){
     tslog$error(gsub("\n", " ", paste("Processing failed", query$raw_query, paste(params, collapse=" "), err, sep="||")))
     failed$query <<- query$raw_query
