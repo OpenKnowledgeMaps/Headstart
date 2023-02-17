@@ -72,7 +72,7 @@ include 'config.php';
                     console.log(data)
                     if (data.status === "success") {
                         $("#progressbar").progressbar("option", "value", 100);
-                        window.clearTimeout(progessbar_timeout);
+                        window.clearTimeout(progressbar_timeout);
 
                         var file = data.id;
                         window.location.replace("project?id=" + file);
@@ -100,7 +100,7 @@ include 'config.php';
             }
 
             var showErrorCreation = function () {
-                clearTimeout(progessbar_timeout);
+                clearTimeout(progressbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
                 $(".waiting-title").html('Creating an overview for <span class="project_name">' + window.dataParamsForOpening.acronymtitle + '</span> failed.');
@@ -113,7 +113,7 @@ include 'config.php';
             }
 
             var showErrorBackend = function (error) {
-                clearTimeout(progessbar_timeout);
+                clearTimeout(progressbar_timeout);
                 $("#progressbar").hide();
                 $(".waiting-description").hide();
                 $(".waiting-title").html('Creating an overview for <span class="project_name">' + window.dataParamsForOpening.acronymtitle + '</span> failed.');
@@ -134,7 +134,7 @@ include 'config.php';
 
                 $("#progressbar").progressbar("option", "value", value);
 
-                progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
+                progressbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
 
                 if (value >= 100) {
                     $("#progress").html("Creating your visualization takes longer than expected. Please stay tuned!")
@@ -166,7 +166,7 @@ include 'config.php';
                 var milliseconds = 6000;
             }
             
-            var progessbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
+            var progressbar_timeout = window.setTimeout(tick_function, tick_interval * milliseconds);
         </script>
 
     </body>
