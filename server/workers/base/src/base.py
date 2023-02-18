@@ -274,6 +274,7 @@ def prioritize_OA(df, dupind):
     return df
 
 def filter_duplicates(df):
+    df.drop_duplicates("id", inplace=True, keep="first")
     df["is_latest"] = True
     df["doi_duplicate"] = False
     df["has_relations"] = False
@@ -296,7 +297,7 @@ def filter_duplicates(df):
     journal_articles = df[df.dctypenorm.str.contains("121")]
     non_journal_articles = df[~df.dctypenorm.str.contains("121")]
     filtered_journal_articles = journal_articles[journal_articles.is_latest==True]
-    filtered_non_journal_articles = non_journal_articles[non_journal_articles.keep==True]
+    filtered_non_journal_articles = non_journal_articles[(non_journal_articles.keep==True) | (non_journal_articles.is_duplicate==False)]
     filtered = pd.concat([filtered_journal_articles, filtered_non_journal_articles])
     filtered.sort_index(inplace=True)
     filtered.drop(["doi_duplicate", "link_duplicate", "is_latest", "keep", "duplicates", "doi_version", "unversioned_doi", "publisher_doi", "has_relations", "versions"], axis=1, inplace=True)
