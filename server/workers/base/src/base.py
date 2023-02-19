@@ -230,7 +230,8 @@ def add_false_negatives(df):
 
 def find_duplicate_indexes(df):    
     dupind = df.id.map(lambda x: df[df.duplicates.str.contains(x)].index)
-    return dupind
+    tmp = pd.DataFrame(dupind).astype(str).drop_duplicates().index
+    return dupind[tmp]
 
 def mark_latest_doi(df, dupind):
     for _, idx in dupind.iteritems():

@@ -148,7 +148,6 @@ get_papers <- function(query, params,
   }
 
   metadata <- unique(metadata, by = "id")
-  metadata <- head(metadata, n = params$limit)
   text = data.frame(matrix(nrow=length(metadata$id)))
   text$id = metadata$id
   # Add all keywords, including classification to text
