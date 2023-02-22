@@ -99,7 +99,7 @@ class Search(Resource):
         redis_store.rpush("base", json.dumps(d))
         q_len = redis_store.llen("base")
         base_ns.logger.info("Queue length: %s %d %s" %("base", q_len, k))
-        result = get_key(redis_store, k)
+        result = get_key(redis_store, k, 120)
         try:
             headers = {}
             if request.headers["Accept"] == "application/json":
