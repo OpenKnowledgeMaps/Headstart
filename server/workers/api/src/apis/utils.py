@@ -16,7 +16,7 @@ redis_config = {
 redis_store = redis.StrictRedis(**redis_config)
 
 
-def get_key(store, key, timeout=60):
+def get_key(store, key, timeout=180):
     wait_s = 1
     max_tries = timeout / wait_s
     tries = 0

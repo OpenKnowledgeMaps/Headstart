@@ -22,17 +22,15 @@ prune_ngrams <- function(ngrams, stops){
   # filter out empty tokens
   tokenized_ngrams = lapply(tokenized_ngrams, function(ngrams){ngrams[lapply(ngrams, length)>0]})
   # remove ngrams starting with a stopword
-  for (l in stops) {
-    tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
-                              Filter(function(tokens){
-                                !any(stri_detect_fixed(l, tolower(tokens[[1]])))
-                              }, x)})
-    # remove ngrams ending with a stopword
-    tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
-                              Filter(function(tokens){
-                                !any(stri_detect_fixed(l, tolower(tail(tokens,1))))
-                              }, x)})
-  }
+  tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
+                            Filter(function(tokens){
+                              !any(stri_detect_fixed(stops, tolower(tokens[[1]])))
+                            }, x)})
+  # remove ngrams ending with a stopword
+  tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
+                            Filter(function(tokens){
+                              !any(stri_detect_fixed(stops, tolower(tail(tokens,1))))
+                            }, x)})
   # remove ngrams starting and ending with the same word
   tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
                             Filter(function(tokens){
@@ -68,9 +66,7 @@ create_cluster_labels <- function(clusters, metadata,
     summary = tfidf_top_names[[k]]
     if (summary == "") {
       candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
-      for (l in stops) {
-        candidates = lapply(candidates, function(x)paste(removeWords(x, l), collapse=""))
-      }
+      candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
       candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
       candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
       candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
@@ -120,9 +116,7 @@ get_cluster_corpus <- function(clusters, metadata, service, stops, taxonomy_sepa
     titles = lapply(titles, function(x) {gsub("[^[:alnum:]-]", " ", x)})
     titles = lapply(titles, gsub, pattern="\\s+", replacement=" ")
     title_ngrams <- get_title_ngrams(titles, stops, c(2, 3))
-    for (l in stops) {
-      titles = lapply(titles, function(x) {removeWords(x, l)})
-    }
+    titles = lapply(titles, function(x) {removeWords(x, stops)})
     subjects = mapply(gsub, subjects, pattern = "; ", replacement=";")
     subjects = mapply(gsub, subjects, pattern=" ", replacement="_")
     titles = mapply(gsub, titles, pattern=" ", replacement=";")
@@ -168,18 +162,16 @@ another_prune_ngrams <- function(ngrams, stops){
   # split ngrams
   tokens = lapply(tokens, strsplit, split="_")
   tokens = tokens[lapply(tokens, length)>0]
-  for (l in stops) {
-    # check if first token of ngrams in stopword list
-    tokens = lapply(tokens, function(y){
-                            Filter(function(x){
-                                    if (x[1] != "") !any(stri_detect_fixed(l, x[1]))
-                                              }, y)})
-    # check if last token of ngrams in stopword list
-    tokens = lapply(tokens, function(y){
-                            Filter(function(x){
-                                    if (tail(x,1) != "") !any(stri_detect_fixed(l, tail(x,1)))
-                                              }, y)})
-  }
+  # check if first token of ngrams in stopword list
+  tokens = lapply(tokens, function(y){
+                          Filter(function(x){
+                                  if (x[1] != "") !any(stri_detect_fixed(stops, x[1]))
+                                            }, y)})
+  # check if last token of ngrams in stopword list
+  tokens = lapply(tokens, function(y){
+                          Filter(function(x){
+                                  if (tail(x,1) != "") !any(stri_detect_fixed(stops, tail(x,1)))
+                                            }, y)})
   # check that first token is not the same as the last token
   tokens = lapply(tokens, function(y){
                     if(length(y) > 1) {

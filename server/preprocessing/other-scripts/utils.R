@@ -28,15 +28,22 @@ check_metadata <- function (field) {
 }
 
 
-get_stopwords <- function(testing) {
+get_stopwords <- function(testing, languages) {
   if (!isTRUE(testing)) {
-      stops <- fromJSON(paste0("../resources/stopwords_iso_cleaned.json"))
+      stops <- fromJSON("../resources/stopwords_iso_cleaned.json")
     } else if (dir.exists("./resources")) {
-      stops <- fromJSON(paste0("./resources/stopwords_iso_cleaned.json"))
+      stops <- fromJSON("./resources/stopwords_iso_cleaned.json")
     } else {
-      stops <- fromJSON(paste0("../../resources/stopwords_iso_cleaned.json"))
+      stops <- fromJSON("../../resources/stopwords_iso_cleaned.json")
     }
-  return(stops)
+  stopwords <- list()
+  for (l in languages) {
+    if (l %in% names(stops)) {
+      stopwords <- c(stopwords, stops[[l]])
+    }
+  }
+  stopwords <- unlist(stopwords)
+  return(stopwords)
 }
 
 
