@@ -28,12 +28,12 @@ check_metadata <- function (field) {
 }
 
 
-get_stopwords <- function(testing, languages) {
+get_stopwords <- function(languages) {
   triple_disciplines = c("archeo", "archi", "art", "anthro-bio", "class", "info", "museo", "demo",
                        "eco", "edu", "envir", "genre", "geo", "hist", "hisphilso", "droit",
                        "lang", "litt", "manag", "stat", "musiq", "phil", "scipo", "psy",
                        "relig", "anthro-se", "socio")
-  if (!isTRUE(testing)) {
+  if (dir.exists("../resources")) {
       stops <- fromJSON("../resources/stopwords_iso_cleaned.json")
     } else if (dir.exists("./resources")) {
       stops <- fromJSON("./resources/stopwords_iso_cleaned.json")

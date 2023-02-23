@@ -41,7 +41,7 @@ vis_layout <- function(text, metadata, service,
   vlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "doc count:", nrow(metadata), sep=" "))
 
   if(vis_type=='overview'){
-    stops <- get_stopwords(testing, languages)
+    stops <- get_stopwords(languages)
     corpus <- create_corpus(metadata, text, stops)
 
     vlog$debug("get features")
