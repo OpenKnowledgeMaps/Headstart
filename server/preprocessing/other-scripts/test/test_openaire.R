@@ -4,7 +4,7 @@ library(rstudioapi)
 
 options(warn=1)
 
-wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
+wd <- dirname(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd(wd) #Don't forget to set your working directory
 
 # query: project acryonm
@@ -12,9 +12,9 @@ setwd(wd) #Don't forget to set your working directory
 query <- "GRINDOOR" #args[2]
 service <- "openaire"
 params <- NULL
-params_file <- "params_openaire.json"
+params_file <- "test/params_openaire.json"
 
-source('../utils.R')
+source('utils.R')
 DEBUG = FALSE
 
 if (DEBUG==TRUE){
@@ -25,9 +25,9 @@ if (DEBUG==TRUE){
 
 tslog <- getLogger('ts')
 
-source("../vis_layout.R")
-source('../openaire.R')
-source('../altmetrics.R')
+source("vis_layout.R")
+source('openaire.R')
+source('altmetrics.R')
 
 MAX_CLUSTERS = 15
 
@@ -60,7 +60,7 @@ if(exists('input_data')) {
                            service,
                            max_clusters=MAX_CLUSTERS,
                            lang=LANGUAGE$name,
-                           add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=-1)
+                           add_stop_words=ADDITIONAL_STOP_WORDS, list_size = params$list_size)
   }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
     failed$query <<- query

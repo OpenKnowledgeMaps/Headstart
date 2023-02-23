@@ -10,6 +10,13 @@ library(doParallel)
 library(stringi)
 library(stringdist)
 library(plyr)
+
+source('preprocess.R')
+source('features.R')
+source('cluster.R')
+source('summarize.R')
+source('postprocess.R')
+
 registerDoParallel(detectCores(all.tests = FALSE, logical = TRUE)-1)
 
 
@@ -22,28 +29,9 @@ vis_layout <- function(text, metadata, service,
                        max_clusters=15, maxit=500,
                        mindim=2, maxdim=2,
                        lang=NULL, add_stop_words=NULL,
-                       testing=FALSE, taxonomy_separator=NULL, list_size=-1,
-                       vis_type='overview') {
-  TESTING <<- testing # makes testing param a global variable
+                       taxonomy_separator=NULL,
+                       vis_type='overview', list_size=-1) {
   start.time <- Sys.time()
-
-  tryCatch({
-   if(!isTRUE(testing)) {
-     source('preprocess.R')
-     source('features.R')
-     source('cluster.R')
-     source('summarize.R')
-     source('postprocess.R')
-   } else {
-     source('../preprocess.R')
-     source('../features.R')
-     source('../cluster.R')
-     source('../summarize.R')
-     source('../postprocess.R')
-   }
-  }, error = function(err) print(err)
-  )
-
   vlog$debug("preprocess")
   metadata <- sanitize_abstract(metadata)
   filtered <- filter_duplicates(metadata, text, list_size)
@@ -72,9 +60,9 @@ vis_layout <- function(text, metadata, service,
                                             type_counts,
                                             weightingspec="ntn", top_n=3,
                                             stops=stops, taxonomy_separator)
-    output <- create_overview_output(named_clusters, layout, metadata)
+    output <- create_overview_output(named_clusters, layout, metadata, list_size)
   } else {
-    output <- create_streamgraph_output(metadata)
+    output <- create_streamgraph_output(metadata, list_size)
   }
 
   end.time <- Sys.time()

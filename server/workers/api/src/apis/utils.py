@@ -1,10 +1,12 @@
 import os
 import json
 import time
+import uuid
 from dateutil.parser import parse
 from datetime import timedelta
 import re
 import redis
+import pandas as pd
 
 redis_config = {
     "host": os.getenv("REDIS_HOST"),
@@ -70,3 +72,28 @@ def detect_error(service, error, params):
     if not reason:
         reason = ['unexpected data processing error']
     return code, reason
+
+
+def get_or_create_contentprovider_lookup():
+    try:
+        k = str(uuid.uuid4())
+        d = {"id": k, "params": {},"endpoint": "contentproviders"}
+        redis_store.rpush("base", json.dumps(d))
+        result = get_key(redis_store, k, timeout=120)
+        if result.get("status") == "error":
+            df = pd.read_json("contentproviders.json")
+            df.set_index("internal_name", inplace=True)
+            cp_dict = df.name.to_dict()
+            return cp_dict
+        else:
+            df = pd.DataFrame(json.loads(result["contentproviders"]))
+            df.set_index("internal_name", inplace=True)
+            cp_dict = df.name.to_dict()
+            return cp_dict
+    except Exception as e:
+        df = pd.read_json("contentproviders.json")
+        df.set_index("internal_name", inplace=True)
+        cp_dict = df.name.to_dict()
+        return cp_dict
+
+contentprovider_lookup = get_or_create_contentprovider_lookup()

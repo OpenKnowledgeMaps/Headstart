@@ -4,15 +4,15 @@ library(rstudioapi)
 
 options(warn=1)
 
-wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
+wd <- dirname(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd(wd) #Don't forget to set your working directory
 
-query <- "sustainable development goals" #args[2]
-service <- "pubmed"
+query <- '"world bank"' #args[2]
+service <- "base"
 params <- NULL
-params_file <- "params_pubmed.json"
+params_file <- "test/params_base.json"
 
-source('../utils.R')
+source('utils.R')
 DEBUG = FALSE
 
 if (DEBUG==TRUE){
@@ -23,8 +23,8 @@ if (DEBUG==TRUE){
 
 tslog <- getLogger('ts')
 
-source("../vis_layout.R")
-source('../pubmed.R')
+source("vis_layout.R")
+source('base.R')
 
 MAX_CLUSTERS = 15
 
@@ -58,11 +58,11 @@ tryCatch({
 #time.taken
 if(exists('input_data')) {
   tryCatch({
-    output_json = vis_layout(input_data$text, input_data$metadata,
-                             service,
-                             max_clusters=MAX_CLUSTERS,
-                             lang=LANGUAGE$name,
-                             add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE)
+  output_json = vis_layout(input_data$text, input_data$metadata,
+                           service,
+                           max_clusters=MAX_CLUSTERS,
+                           lang=LANGUAGE$name,
+                           add_stop_words=ADDITIONAL_STOP_WORDS, list_size = params$list_size)
   }, error=function(err){
     tslog$error(gsub("\n", " ", paste("Processing failed", query$raw_query, paste(params, collapse=" "), err, sep="||")))
     failed$query <<- query$raw_query
@@ -71,7 +71,8 @@ if(exists('input_data')) {
 }
 
 if (!exists('output_json')) {
-  output_json <- detect_error(failed, service, params)
+  output_json <- detect_error(failed, service)
 }
 
-print(output_json)
+output <- fromJSON(output_json)
+#print(output_json)

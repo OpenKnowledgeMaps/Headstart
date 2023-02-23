@@ -115,8 +115,7 @@ tryCatch({
                            add_stop_words = ADDITIONAL_STOP_WORDS,
                            lang = LANGUAGE$name,
                            taxonomy_separator = params$taxonomy_separator,
-                           list_size = params$list_size,
-                           vis_type=vis_type)
+                           vis_type=vis_type, list_size = params$list_size)
 }, error=function(err){
  tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
  failed$query <<- query
