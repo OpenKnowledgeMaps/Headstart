@@ -29,6 +29,10 @@ check_metadata <- function (field) {
 
 
 get_stopwords <- function(testing, languages) {
+  triple_disciplines = c("archeo", "archi", "art", "anthro-bio", "class", "info", "museo", "demo",
+                       "eco", "edu", "envir", "genre", "geo", "hist", "hisphilso", "droit",
+                       "lang", "litt", "manag", "stat", "musiq", "phil", "scipo", "psy",
+                       "relig", "anthro-se", "socio")
   if (!isTRUE(testing)) {
       stops <- fromJSON("../resources/stopwords_iso_cleaned.json")
     } else if (dir.exists("./resources")) {
@@ -43,9 +47,9 @@ get_stopwords <- function(testing, languages) {
     }
   }
   stopwords <- unlist(stopwords)
+  stopwords <- c(stopwords, triple_disciplines)
   return(stopwords)
 }
-
 
 conditional_lowercase <- function(text, lang) {
   if (lang == 'german') {
@@ -53,7 +57,12 @@ conditional_lowercase <- function(text, lang) {
   } else {
     return(tolower(text))
   }
+  stopwords <- unlist(stopwords)
+  stopwords <- c(stopwords, triple_disciplines)
+  return(stopwords)
 }
+
+
 
 setup_logging <- function(loglevel) {
   # checks if LOGFILE is defined,
@@ -74,7 +83,7 @@ setup_logging <- function(loglevel) {
 
 
 get_service_lang <- function(lang_id, valid_langs, service) {
-  if (lang_id == 'all'){
+  if (lang_id == 'all-lang'){
     LANGUAGE <- 'english'
   } else if (!is.null(valid_langs$lang_id)){
     LANGUAGE <- valid_langs$lang_id
