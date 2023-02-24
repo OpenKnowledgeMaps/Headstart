@@ -301,5 +301,7 @@ def filter_duplicates(df):
     filtered_non_journal_articles = non_journal_articles[(non_journal_articles.keep==True) | (non_journal_articles.is_duplicate==False)]
     filtered = pd.concat([filtered_journal_articles, filtered_non_journal_articles])
     filtered.sort_index(inplace=True)
-    filtered.drop(["doi_duplicate", "link_duplicate", "is_latest", "keep", "duplicates", "doi_version", "unversioned_doi", "publisher_doi", "has_relations", "versions"], axis=1, inplace=True)
+    for c in ["doi_duplicate", "link_duplicate", "is_latest", "keep", "duplicates", "doi_version", "unversioned_doi", "publisher_doi", "has_relations", "versions"]:
+        if c in filtered.columns:
+            filtered.drop(c, axis=1, inplace=True)
     return filtered
