@@ -173,6 +173,7 @@ get_papers <- function(query, params = NULL, retry_opts = rentrez::entrez_retry_
   end.time <- Sys.time()
   time.taken <- end.time - start.time
   plog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
+  df["oa_state"] <- 2
   df <- deduplicate_titles(df, -1)
 
   return(list(metadata = df, text = df[,c('id', 'content')]))
