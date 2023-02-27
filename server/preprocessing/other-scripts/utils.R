@@ -29,6 +29,8 @@ check_metadata <- function (field) {
 
 
 get_stopwords <- function(languages) {
+  languages <- c(languages, "spa", "eng", "fre", "ger")
+  languages <- unique(languages)
   triple_disciplines = c("archeo", "archi", "art", "anthro-bio", "class", "info", "museo", "demo",
                        "eco", "edu", "envir", "genre", "geo", "hist", "hisphilso", "droit",
                        "lang", "litt", "manag", "stat", "musiq", "phil", "scipo", "psy",

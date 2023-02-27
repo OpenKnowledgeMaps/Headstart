@@ -66,14 +66,17 @@ create_cluster_labels <- function(clusters, metadata,
     summary = tfidf_top_names[[k]]
     if (summary == "") {
       candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
-      candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
+      candidates = lapply(candidates, tolower)
+      candidates = lapply(candidates, function(x) {paste(removeWords(x, stops), collapse="")})
       candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
       candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
       candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
       candidates_trigrams = lapply(lapply(candidates, expand_ngrams, n=3), paste, collapse=" ")
-      candidates = mapply(paste, candidates, candidates_bigrams, candidates_trigrams)
-      nn_count = sort(table(strsplit(paste(candidates, collapse=" "), " ")), decreasing = T)
-      summary <- filter_out_nested_ngrams(names(nn_count), 3)
+      candidates = unname(mapply(paste, candidates_bigrams, candidates_trigrams))
+      candidates =  unlist(lapply(candidates, str_split, " "), recursive = F)
+      candidates = unlist(lapply(candidates, function(x) {another_prune_ngrams(x, stops)}))
+      top_ngrams = sort(table(strsplit(paste(candidates, collapse=" "), " ")), decreasing = T)
+      summary <- filter_out_nested_ngrams(names(top_ngrams), 3)
       summary = lapply(summary, FUN = function(x) {paste(unlist(x), collapse="; ")})
       summary = gsub("_", " ", summary)
       summary = paste(summary, collapse="; ")
@@ -180,8 +183,8 @@ another_prune_ngrams <- function(ngrams, stops){
                           }, y)}
                     else y})
   tokens = lapply(tokens, function(y){Filter(function(x){length(x)>=1},y)})
-  empties = which(lapply(tokens, length)==0)
-  tokens[c(empties)] = list("")
+  keep = which(lapply(tokens, length)!=0)
+  tokens = tokens[keep]
   tokens = lapply(tokens, function(x){mapply(paste, x, collapse="_")})
   return(tokens)
 }
