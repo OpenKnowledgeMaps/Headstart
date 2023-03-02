@@ -147,6 +147,7 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 COPY workers/openaire/renv.lock .
 COPY workers/openaire/activate.R .
 
+RUN apt-get -y install automake
 RUN R -e 'renv::consent(provided = TRUE)' && \
     R -e 'setwd("./"); renv::activate(); renv::restore(lockfile = "./renv.lock")'
 
