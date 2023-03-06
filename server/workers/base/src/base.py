@@ -237,13 +237,15 @@ def mark_latest_doi(df, dupind):
     for _, idx in dupind.iteritems():
         tmp = df.loc[idx]
         for udoi in list(filter(None, tmp.unversioned_doi.unique().tolist())):
-            if len(tmp) > 0:
-                df.loc[tmp.index, "is_latest"] = False
-                versions = tmp.id
-                latest = tmp.sort_values("doi_version", ascending=False).head(1).id
-                v = [{"versions": versions.values.tolist(), "latest": latest.values.tolist()}]*len(tmp)
+            tmp2 = tmp[tmp.unversioned_doi == udoi]
+            if len(tmp2) > 0:
+                df.loc[tmp2.index, "is_latest"] = False
+                versions = tmp2.id
+                latest = tmp2.sort_values("doi_version", ascending=False).head(1).id
+                v = [{"versions": versions.values.tolist(), "latest": latest.values.tolist()}]*len(tmp2)
                 df.loc[versions.index, "versions"] = v
                 df.loc[latest.index, "is_latest"] = True
+                df.loc[latest.index, "keep"] = True
     return df
     
 def remove_textual_duplicates_from_different_sources(df, dupind):
@@ -292,9 +294,9 @@ def filter_duplicates(df):
     df = remove_false_positives_doi(df)
     df = remove_false_positives_link(df)
     df = remove_textual_duplicates_from_different_sources(df, dupind)
-    df = mark_latest_doi(df, dupind)
     df = add_false_negatives(df)
     df = prioritize_OA(df, dupind)
+    df = mark_latest_doi(df, dupind)
     datasets = df[(df.dctypenorm.str.contains("7")) & (~df.dctypenorm.str.contains("121"))]
     non_datasets = df[~df.dctypenorm.str.contains("7")]
     filtered_non_datasets = non_datasets[non_datasets.is_latest==True]
