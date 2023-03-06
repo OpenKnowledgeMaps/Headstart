@@ -120,9 +120,9 @@ get_papers <- function(query, params,
   metadata <- mark_duplicates(metadata)
   metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
   if (!is.null(params$vis_type) && params$vis_type == "timeline") {
-    req_limit <- 12
+    req_limit <- 20
   } else {
-    req_limit <- 6
+    req_limit <- 10
   }
   
   r <- 0
