@@ -297,10 +297,10 @@ def filter_duplicates(df):
     df = add_false_negatives(df)
     df = prioritize_OA(df, dupind)
     df = mark_latest_doi(df, dupind)
-    datasets = df[(df.dctypenorm.str.contains("7")) & (~df.dctypenorm.str.contains("121"))]
-    non_datasets = df[~df.dctypenorm.str.contains("7")]
+    pure_datasets = df[df.dctypenorm == "7"]
+    non_datasets = df.loc[df.index.difference(pure_datasets.index)]
     filtered_non_datasets = non_datasets[non_datasets.is_latest==True]
-    filtered_datasets = datasets[(datasets.keep==True) | (datasets.is_duplicate==False)]
+    filtered_datasets = pure_datasets[(pure_datasets.keep==True) | (pure_datasets.is_duplicate==False)]
     filtered = pd.concat([filtered_non_datasets, filtered_datasets])
     filtered.sort_index(inplace=True)
     filtered.drop(["doi_duplicate", "link_duplicate", "is_latest", "keep", "duplicates", "doi_version", "unversioned_doi", "publisher_doi", "has_relations", "versions"], axis=1, inplace=True)
