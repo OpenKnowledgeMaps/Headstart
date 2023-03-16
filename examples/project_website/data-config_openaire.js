@@ -1,6 +1,6 @@
 var data_config = {
     tag: "visualization",
-    mode: "search_repos",
+    mode: "local_files",
 
     bubble_min_scale: 1,
     bubble_max_scale: 1,
@@ -16,7 +16,8 @@ var data_config = {
     base_unit: "citations",
     use_area_uri: true,
     preview_type: "pdf",
-    sort_options: ["title", "authors", "year", "citations", "tweets", "readers"],
+    sort_options: ["relevance", "title", "authors", "year"],
+    filter_options: ["all", "open_access"],
     filter_menu_dropdown: true,
     is_force_areas: true,
     language: "eng_openaire",
@@ -29,18 +30,19 @@ var data_config = {
     show_context: true,
     create_title_from_context: true,
     create_title_from_context_style: 'viper',
+    show_context_oa_number: false,
 
-    viper_edit_modal: true,
+    viper_edit_modal: false,
     embed_modal: true,
     share_modal: true,
 
     doi_outlink: true,
 
-    metric_list: true,
+    metric_list: false,
 
-    credit: false,
+    credit: true,
 
-    scale_toolbar: true,
+    scale_toolbar: false,
 
     scale_types: ['content_based', 'citation_count', 'cited_by_tweeters_count', 'readers.mendeley'],
     scale_explanation: {
@@ -62,10 +64,11 @@ var data_config = {
     },
 
     is_evaluation: true,
+    evaluation_service: ["matomo"],
 
     use_hypothesis: true,
 
     // a new field for specifying the type of information to render correct type of info modal window
-    modal_info_type: "viper",
+    modal_info_type: "openaire",
 
 };

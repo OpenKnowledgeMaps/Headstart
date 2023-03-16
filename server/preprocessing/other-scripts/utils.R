@@ -28,12 +28,18 @@ check_metadata <- function (field) {
 }
 
 
+triple_disciplines = c("archeo", "archi", "art", "anthro-bio", "class", "info", "museo", "demo",
+                       "eco", "edu", "envir", "genre", "geo", "hist", "hisphilso", "droit",
+                       "lang", "litt", "manag", "stat", "musiq", "phil", "scipo", "psy",
+                       "relig", "anthro-se", "socio")
+
 get_stopwords <- function(lang) {
   stops <- tryCatch({
     stops <- stopwords(lang)
   }, error = function(err){
     return(unlist(""))
   })
+  stops = c(stops, triple_disciplines)
 
   stops <- tryCatch({
       # trycatch switch when in test mode
@@ -52,13 +58,6 @@ get_stopwords <- function(lang) {
   return(stops)
 }
 
-conditional_lowercase <- function(text, lang) {
-  if (lang == 'german') {
-    return(text)
-  } else {
-    return(tolower(text))
-  }
-}
 
 setup_logging <- function(loglevel) {
   # checks if LOGFILE is defined,
@@ -79,7 +78,7 @@ setup_logging <- function(loglevel) {
 
 
 get_service_lang <- function(lang_id, valid_langs, service) {
-  if (lang_id == 'all'){
+  if (lang_id == 'all-lang'){
     LANGUAGE <- 'english'
   } else if (!is.null(valid_langs$lang_id)){
     LANGUAGE <- valid_langs$lang_id

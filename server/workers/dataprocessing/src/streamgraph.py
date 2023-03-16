@@ -39,6 +39,7 @@ class Streamgraph(object):
         df["boundary_label"] = df.year
         df = df.explode('subject')
         df = df[df.subject != ""]
+        df = df[~df.subject.isin(stopwords)]
         counts = self.get_counts(df)
         boundaries = self.get_boundaries(df)
         daterange = self.get_daterange(boundaries)
@@ -94,12 +95,12 @@ class Streamgraph(object):
         tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
                                         tokenizer=lambda x: self.tokenize(x),
                                         lowercase=True,
-                                        stop_words=[query]
+                                        stop_words=[query] + stopwords
                                         )
         tfidf_vectorizer = TfidfVectorizer(max_df=0.95, min_df=2,
                                            tokenizer=lambda x: self.tokenize(x),
                                            lowercase=True,
-                                           stop_words=[query]
+                                           stop_words=[query] + stopwords
                                            )
         if method == "count":
             tf = tf_vectorizer.fit_transform(corpus)
@@ -194,3 +195,8 @@ def aggregate_ids(series):
         return ", ".join(pd.unique(series))
     except Exception:
         return "NA"
+
+stopwords = ["archeo", "archi", "art", "anthro-bio", "class", "info", "museo", "demo",
+                       "eco", "edu", "envir", "genre", "geo", "hist", "hisphilso", "droit",
+                       "lang", "litt", "manag", "stat", "musiq", "phil", "scipo", "psy",
+                       "relig", "anthro-se", "socio"]
