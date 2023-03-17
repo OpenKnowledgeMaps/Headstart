@@ -2,11 +2,13 @@ import os
 import json
 import uuid
 import pandas as pd
+import time
 
-from flask import request, make_response, jsonify, abort
+from flask import request, make_response, jsonify, abort, g
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
-from apis.utils import get_key, redis_store
+from apis.utils import get_key, redis_store, contentprovider_lookup
+
 
 
 base_ns = Namespace("base", description="BASE API operations")
@@ -39,28 +41,6 @@ base_querymodel = base_ns.model("SearchQuery",
                                                       description='raw results from ElasticSearch')})
 
 
-def get_or_create_contentprovider_lookup():
-    try:
-        k = str(uuid.uuid4())
-        d = {"id": k, "params": {},"endpoint": "contentproviders"}
-        base_ns.logger.debug(d)
-        redis_store.rpush("base", json.dumps(d))
-        result = get_key(redis_store, k)
-        df = pd.DataFrame(json.loads(result["contentproviders"]))
-        df.set_index("internal_name", inplace=True)
-        cp_dict = df.name.to_dict()
-        return cp_dict
-    except Exception as e:
-        base_ns.logger.error("Falling back to cached contentproviders.json")
-        base_ns.logger.error(e)
-        df = pd.read_json("contentproviders.json")
-        df.set_index("internal_name", inplace=True)
-        cp_dict = df.name.to_dict()
-        return cp_dict
-   
-
-global contentprovider_lookup
-contentprovider_lookup = get_or_create_contentprovider_lookup()
 
 @base_ns.route('/search')
 class Search(Resource):
@@ -81,12 +61,9 @@ class Search(Resource):
         if params.get('vis_type') == "timeline":
             params["limit"] = 1000
             params["list_size"] = params["limit"]
-        else:
+        if "list_size" not in params:
             params["list_size"] = 100
         if "repo" in params:
-            global contentprovider_lookup
-            if not contentprovider_lookup:
-                contentprovider_lookup = get_or_create_contentprovider_lookup()
             repo_name = contentprovider_lookup.get(params["repo"])
             params["repo_name"] = repo_name
         base_ns.logger.debug(errors)
@@ -135,9 +112,6 @@ class ContentProvider(Resource):
         """
         params = request.get_json()
         base_ns.logger.debug(params)
-        global contentprovider_lookup
-        if not contentprovider_lookup:
-            contentprovider_lookup = get_or_create_contentprovider_lookup()
         if not params:
             result = contentprovider_lookup
         else:

@@ -40,7 +40,7 @@ if (!is.null(params$lang_id)) {
 } else {
   lang_id <- 'all'
 }
-source('altmetrics.R')
+
 source('openaire.R')
 limit = params$limit
 
