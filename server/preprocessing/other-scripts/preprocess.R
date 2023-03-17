@@ -1,4 +1,5 @@
 library(stringi)
+library(dplyr)
 vplog <- getLogger('vis.preprocess')
 
 
@@ -18,9 +19,10 @@ sanitize_abstract <- function(metadata) {
 filter_duplicates <- function(metadata, text, list_size) {
   #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
   if(list_size > -1) {
-    output = deduplicate_titles(metadata, list_size)
-    text = subset(text, !(id %in% output))
-    metadata = subset(metadata, !(id %in% output))
+    dt = deduplicate_titles(metadata, list_size)
+    duplicate_candidates = dt$duplicate_candidates
+    text = subset(text, !(id %in% duplicate_candidates))
+    metadata = subset(metadata, !(id %in% duplicate_candidates))
 
     text = head(text, list_size)
     metadata = head(metadata, list_size)
@@ -28,9 +30,18 @@ filter_duplicates <- function(metadata, text, list_size) {
   return(list(metadata=metadata, text=text))
 }
 
+mark_duplicates <- function(metadata) {
+  #If list_size is greater than -1 and smaller than the actual list size, deduplicate titles
+  dt = deduplicate_titles(metadata, 0)
+  duplicate_candidates = dt$duplicate_candidates
+  metadata$is_duplicate <- metadata$id %in% duplicate_candidates
+  metadata <- inner_join(metadata, dt$identified_duplicates, by="id")
+  return(metadata)
+}
+
 
 deduplicate_titles <- function(metadata, list_size) {
-  output <- c()
+  duplicate_candidates <- c()
 
   metadata$oa_state[metadata$oa_state == "2"] <- 0
   metadata = metadata[order(-as.numeric(metadata$oa_state),-stri_length(metadata$subject),
@@ -58,19 +69,32 @@ deduplicate_titles <- function(metadata, list_size) {
   lv_ratio_matrix = as.matrix(lv_matrix)/str_max_matrix
 
   duplicates <- lv_ratio_matrix < 1/15.83
-  duplicates[lower.tri(duplicates, diag=TRUE)] <- NA
-  remove_ids <- which(apply(duplicates, 2, FUN=function(x){any(x)}))
-  output = ids[remove_ids]
-
-  vplog$info(paste("Number of max. duplicate entries:", length(output)))
-
-  if(max_replacements > -1) {
-    output = head(output, max_replacements)
+  strict_duplicates <- lv_ratio_matrix < 0.03
+  tmp <- strict_duplicates
+  diag(tmp) <- FALSE
+  tmp <- apply(tmp, 2, function(x) ids[which(x)])
+  tmp[lengths(tmp) == 0] <- ""
+  if(!(identical(tmp, character(0)))) {
+    identified_duplicates <- as.data.frame(do.call(rbind, lapply(tmp, paste, collapse=",")))
+    identified_duplicates$id <- ids
+    names(identified_duplicates) <- c("duplicates", "id")
+    identified_duplicates<- identified_duplicates[!duplicated(identified_duplicates),]
+    duplicates[lower.tri(duplicates, diag=TRUE)] <- NA
+    remove_ids <- which(apply(duplicates, 2, FUN=function(x){any(x)}))
+    duplicate_candidates = ids[remove_ids]
+  } else {
+    identified_duplicates <- data.frame(id=ids, duplicates="")
   }
 
-  vplog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Number of duplicate entries:", length(output)))
+  vplog$info(paste("Number of max. duplicate entries:", length(duplicate_candidates)))
 
-  return(output)
+  if(max_replacements > -1) {
+    duplicate_candidates = head(duplicate_candidates, max_replacements)
+  }
+
+  vplog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Number of duplicate entries:", length(duplicate_candidates)))
+
+  return(list("duplicate_candidates"=duplicate_candidates, "identified_duplicates"=identified_duplicates))
 
 }
 

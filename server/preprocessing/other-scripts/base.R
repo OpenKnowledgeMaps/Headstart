@@ -1,6 +1,7 @@
 library(rbace)
 library(stringr)
 library(dplyr)
+source('preprocess.R')
 
 # get_papers
 #
@@ -36,7 +37,6 @@ library(dplyr)
 
 
 blog <- getLogger('api.base')
-
 
 get_papers <- function(query, params,
                        retry_opts=rbace::bs_retry_options(3,60,3,4)) {
@@ -116,7 +116,18 @@ get_papers <- function(query, params,
   if (nrow(res)==0){
     stop(paste("No results retrieved."))
   }
-  while (nrow(res) < limit && attr(res_raw, "numFound")>+offset+120) {
+  metadata <- etl(res, repo, non_public)
+  metadata <- sanitize_abstract(metadata)
+  metadata <- mark_duplicates(metadata)
+  metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
+  if (!is.null(params$vis_type) && params$vis_type == "timeline") {
+    req_limit <- 20
+  } else {
+    req_limit <- 10
+  }
+  
+  r <- 0
+  while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit) {
     offset <- offset+120
     res_raw <- get_raw_data(limit,
                             base_query,
@@ -129,14 +140,40 @@ get_papers <- function(query, params,
                             offset,
                             non_public)
     res <- bind_rows(res, res_raw$docs)
+    metadata <- etl(res, repo, non_public)
+    metadata <- unique(metadata, by = "id")
+    metadata <- sanitize_abstract(metadata)
+    metadata <- mark_duplicates(metadata)
+    metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
+    r <- r+1
   }
 
+  metadata <- unique(metadata, by = "id")
+  text = data.frame(matrix(nrow=length(metadata$id)))
+  text$id = metadata$id
+  # Add all keywords, including classification to text
+  text$content = paste(metadata$title, metadata$paper_abstract,
+                       metadata$subject_orig, metadata$published_in, metadata$authors,
+                       sep=" ")
+
+
+  input_data=list("metadata" = metadata, "text"=text)
+
+  end.time <- Sys.time()
+  time.taken <- end.time - start.time
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
+
+  return(input_data)
+}
+
+etl <- function(res, repo, non_public) {
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
 
   metadata$id = res$dcdocid
   metadata$relation = check_metadata(res$dcrelation)
   metadata$identifier = check_metadata(res$dcidentifier)
   metadata$title = check_metadata(res$dctitle)
+  metadata$title = str_replace(metadata$title, " ...$", "")
   metadata$paper_abstract = check_metadata(res$dcdescription)
   metadata$published_in = check_metadata(res$dcsource)
   metadata$year = check_metadata(res$dcdate)
@@ -183,6 +220,7 @@ get_papers <- function(query, params,
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
   metadata$dctype = check_metadata(res$dctype)
+  metadata$dctypenorm = check_metadata(res$dctypenorm)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
   metadata$dclang = check_metadata(res$dclang)
   metadata$dclanguage = check_metadata(res$dclanguage)
@@ -191,20 +229,7 @@ get_papers <- function(query, params,
     metadata$content_provider <- "GoTriple"
   }
 
-  text = data.frame(matrix(nrow=length(res$dcdocid)))
-  text$id = metadata$id
-  # Add all keywords, including classification to text
-  text$content = paste(metadata$title, metadata$paper_abstract,
-                       subject_all, metadata$published_in, metadata$authors,
-                       sep=" ")
-
-  ret_val=list("metadata" = metadata, "text"=text)
-
-  end.time <- Sys.time()
-  time.taken <- end.time - start.time
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
-
-  return(ret_val)
+  return (metadata)
 }
 
 
