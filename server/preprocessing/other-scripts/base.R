@@ -143,6 +143,7 @@ get_papers <- function(query, params,
     metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
     r <- r+1
   }
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Deduplication retrieval requests:", r))
 
   metadata <- unique(metadata, by = "id")
   text = data.frame(matrix(nrow=length(metadata$id)))
