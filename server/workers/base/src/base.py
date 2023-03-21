@@ -265,15 +265,18 @@ def remove_textual_duplicates_from_different_sources(df, dupind):
                 df.loc[tmp.sort_values(["doi", "year"], ascending=[False, False]).head(1).index, "keep"] = True
     return df
 
-def prioritize_OA(df, dupind):
+def prioritize_OA_and_latest(df, dupind):
     for _, idx in dupind.iteritems():
         if len(idx) > 1:
             tmp = df.loc[idx]
             if len(tmp[tmp.oa_state=="1"]) > 0:
                 df.loc[idx, "keep"] = False
-                df.loc[tmp[tmp.oa_state=="1"].sort_values("is_latest", ascending=False).head(1).index, "keep"] = True
+                df.loc[idx, "is_latest"] = False
+                df.loc[tmp[tmp.oa_state=="1"].sort_values("year", ascending=False).head(1).index, "keep"] = True
+                df.loc[tmp[tmp.oa_state=="1"].sort_values("year", ascending=False).head(1).index, "is_latest"] = True
             else:
-                df.loc[tmp.sort_values("is_latest", ascending=False).head(1).index, "keep"] = True
+                df.loc[tmp.sort_values("year", ascending=False).head(1).index, "keep"] = True
+                df.loc[tmp.sort_values("year", ascending=False).head(1).index, "is_latest"] = True
     return df
 
 def filter_duplicates(df):
@@ -295,8 +298,8 @@ def filter_duplicates(df):
     df = remove_false_positives_link(df)
     df = remove_textual_duplicates_from_different_sources(df, dupind)
     df = add_false_negatives(df)
-    df = prioritize_OA(df, dupind)
     df = mark_latest_doi(df, dupind)
+    df = prioritize_OA_and_latest(df, dupind)
     pure_datasets = df[df.dctypenorm == "7"]
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
     filtered_non_datasets = non_datasets[non_datasets.is_latest==True]
