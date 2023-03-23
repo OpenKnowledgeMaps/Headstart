@@ -241,6 +241,7 @@ def mark_latest_doi(df, dupind):
             tmp2 = tmp[tmp.unversioned_doi == udoi]
             if len(tmp2) > 0:
                 df.loc[tmp2.index, "is_latest"] = False
+                df.loc[tmp2.index, "keep"] = False
                 versions = tmp2.id
                 latest = tmp2.sort_values("doi_version", ascending=False).head(1).id
                 v = [{"versions": versions.values.tolist(), "latest": latest.values.tolist()}]*len(tmp2)
