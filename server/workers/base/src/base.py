@@ -269,9 +269,9 @@ def prioritize_OA_and_latest(df, dupind):
     for _, idx in dupind.iteritems():
         if len(idx) > 1:
             tmp = df.loc[idx]
+            df.loc[idx, "keep"] = False
+            df.loc[idx, "is_latest"] = False
             if len(tmp[tmp.oa_state=="1"]) > 0:
-                df.loc[idx, "keep"] = False
-                df.loc[idx, "is_latest"] = False
                 df.loc[tmp[tmp.oa_state=="1"].sort_values("year", ascending=False).head(1).index, "keep"] = True
                 df.loc[tmp[tmp.oa_state=="1"].sort_values("year", ascending=False).head(1).index, "is_latest"] = True
             else:
