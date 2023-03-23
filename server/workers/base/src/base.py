@@ -267,6 +267,7 @@ def remove_textual_duplicates_from_different_sources(df, dupind):
 
 def prioritize_OA_and_latest(df, dupind):
     for _, idx in dupind.iteritems():
+        idx = df.index.intersection(idx)
         if len(idx) > 1:
             tmp = df.loc[idx]
             df.loc[idx, "keep"] = False
