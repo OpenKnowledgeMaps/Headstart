@@ -235,6 +235,7 @@ def find_duplicate_indexes(df):
 
 def mark_latest_doi(df, dupind):
     for _, idx in dupind.iteritems():
+        idx = df.index.intersection(idx)
         tmp = df.loc[idx]
         for udoi in list(filter(None, tmp.unversioned_doi.unique().tolist())):
             tmp2 = tmp[tmp.unversioned_doi == udoi]
@@ -303,6 +304,7 @@ def filter_duplicates(df):
     pure_datasets = df[df.dctypenorm == "7"]
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
     non_datasets = prioritize_OA_and_latest(non_datasets, dupind)
+    non_datasets = mark_latest_doi(non_datasets, dupind)
     filtered_non_datasets = non_datasets[non_datasets.is_latest==True]
     filtered_datasets = pure_datasets[(pure_datasets.keep==True) | (pure_datasets.is_duplicate==False)]
     filtered = pd.concat([filtered_non_datasets, filtered_datasets])
