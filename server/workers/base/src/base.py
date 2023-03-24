@@ -235,11 +235,13 @@ def find_duplicate_indexes(df):
 
 def mark_latest_doi(df, dupind):
     for _, idx in dupind.iteritems():
+        idx = df.index.intersection(idx)
         tmp = df.loc[idx]
         for udoi in list(filter(None, tmp.unversioned_doi.unique().tolist())):
             tmp2 = tmp[tmp.unversioned_doi == udoi]
             if len(tmp2) > 0:
                 df.loc[tmp2.index, "is_latest"] = False
+                df.loc[tmp2.index, "keep"] = False
                 versions = tmp2.id
                 latest = tmp2.sort_values("doi_version", ascending=False).head(1).id
                 v = [{"versions": versions.values.tolist(), "latest": latest.values.tolist()}]*len(tmp2)
@@ -265,15 +267,19 @@ def remove_textual_duplicates_from_different_sources(df, dupind):
                 df.loc[tmp.sort_values(["doi", "year"], ascending=[False, False]).head(1).index, "keep"] = True
     return df
 
-def prioritize_OA(df, dupind):
+def prioritize_OA_and_latest(df, dupind):
     for _, idx in dupind.iteritems():
+        idx = df.index.intersection(idx)
         if len(idx) > 1:
             tmp = df.loc[idx]
+            df.loc[idx, "keep"] = False
+            df.loc[idx, "is_latest"] = False
             if len(tmp[tmp.oa_state=="1"]) > 0:
-                df.loc[idx, "keep"] = False
-                df.loc[tmp[tmp.oa_state=="1"].sort_values("is_latest", ascending=False).head(1).index, "keep"] = True
+                df.loc[tmp[tmp.oa_state=="1"].sort_values("year", ascending=False).head(1).index, "keep"] = True
+                df.loc[tmp[tmp.oa_state=="1"].sort_values("year", ascending=False).head(1).index, "is_latest"] = True
             else:
-                df.loc[tmp.sort_values("is_latest", ascending=False).head(1).index, "keep"] = True
+                df.loc[tmp.sort_values("year", ascending=False).head(1).index, "keep"] = True
+                df.loc[tmp.sort_values("year", ascending=False).head(1).index, "is_latest"] = True
     return df
 
 def filter_duplicates(df):
@@ -295,13 +301,16 @@ def filter_duplicates(df):
     df = remove_false_positives_link(df)
     df = remove_textual_duplicates_from_different_sources(df, dupind)
     df = add_false_negatives(df)
-    df = prioritize_OA(df, dupind)
     df = mark_latest_doi(df, dupind)
     pure_datasets = df[df.dctypenorm == "7"]
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
+    non_datasets = prioritize_OA_and_latest(non_datasets, dupind)
+    pure_datasets = mark_latest_doi(pure_datasets, dupind)
     filtered_non_datasets = non_datasets[non_datasets.is_latest==True]
     filtered_datasets = pure_datasets[(pure_datasets.keep==True) | (pure_datasets.is_duplicate==False)]
     filtered = pd.concat([filtered_non_datasets, filtered_datasets])
     filtered.sort_index(inplace=True)
-    filtered.drop(["doi_duplicate", "link_duplicate", "is_latest", "keep", "duplicates", "doi_version", "unversioned_doi", "publisher_doi", "has_relations", "versions"], axis=1, inplace=True)
+    for c in ["doi_duplicate", "link_duplicate", "is_latest", "keep", "duplicates", "doi_version", "unversioned_doi", "publisher_doi", "has_relations", "versions"]:
+        if c in filtered.columns:
+            filtered.drop(c, axis=1, inplace=True)
     return filtered
