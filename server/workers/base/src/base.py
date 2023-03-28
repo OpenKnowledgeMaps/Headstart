@@ -19,9 +19,9 @@ class BaseClient(RWrapper):
     def __init__(self, *args):
         super().__init__(*args)
         # set separation for requests
-        # respecting BASE rate limit of 1/ps
+        # respecting BASE rate limit of 1 qps
         # separation = round(period_in_seconds / rate limit per second)
-        self.separation = 1.1
+        self.separation = 1.5
         self.rate_key = 'base-ratelimit'
 
         try:
