@@ -263,7 +263,7 @@ get_raw_data <- function(limit, base_query, return_fields, sortby_string, filter
                   , offset = offset
                   , non_public = non_public)))
     if (inherits(res_raw, "try-error")) {
-      if (grepl("Timeout was reached: [api.base-search.net]", res_raw$message, fixed=TRUE)) {
+      if (grepl("Timeout was reached: [api.base-search.net]", res_raw, fixed=TRUE)) {
         t <- t + 1
         Sys.sleep(2)
         blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE API Timeout retry attempt:", t, sep=" "))
