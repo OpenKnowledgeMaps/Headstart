@@ -27,7 +27,7 @@ const DocumentLang = ({value, popoverContainer}) => {
         const selectedLangOption = LangOptions.find(langOption => langOption.id === value);
         lang = selectedLangOption ? selectedLangOption.label : '';
         popoverText = (value === 'all-lang') ? allLangMessage : (lang.length > 10 && selectedLangOption?.label) || '';
-        if (lang.length > 10) {
+        if (lang.length > 10 && value !== 'all-lang') {
             lang = cutString(lang, 10);
         }
     }
@@ -39,7 +39,7 @@ const DocumentLang = ({value, popoverContainer}) => {
         } else if (value.length === 1) {
             lang = LangOptions.filter((item) => item.id === value[0] && item)[0].label
             popoverText = lang.length > 10 ? lang : '';
-            if (lang.length > 10) {
+            if (lang.length > 10 && value[0] !== 'all-lang') {
                 lang = cutString(lang, 10);
             }
         } else {
