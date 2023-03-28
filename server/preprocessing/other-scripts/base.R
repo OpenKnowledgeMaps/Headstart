@@ -249,18 +249,28 @@ preprocess_query <- function(query) {
 
 
 get_raw_data <- function(limit, base_query, return_fields, sortby_string, filter, repo, coll, retry_opts, offset, non_public) {
-  (res_raw <- bs_search(hits=limit
-                      , fields = return_fields,
-                      , query = base_query
-                      , sortby = sortby_string
-                      , filter = filter
-                      , target = repo
-                      , coll = coll
-                      , retry = retry_opts
-                      , offset = offset
-                      , non_public = non_public))
+  t <- 0
+  while (t < retry_opts$times) {
+    res_raw <- try(
+      (bs_search(hits=limit
+                  , fields = return_fields,
+                  , query = base_query
+                  , sortby = sortby_string
+                  , filter = filter
+                  , target = repo
+                  , coll = coll
+                  , retry = retry_opts
+                  , offset = offset
+                  , non_public = non_public)))
+    if (inherits(res_raw, "try-error")) {
+      if (grepl("Timeout was reached: [api.base-search.net]", res_raw$message, fixed=TRUE)) {
+        t <- t + 1
+        Sys.sleep(2)
+        blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE API Timeout retry attempt:", t, sep=" "))
+      }
+    }
   return(res_raw)
-}
+}}
 
 
 find_dois <- function(link) {
