@@ -31,15 +31,14 @@ const getSkinExample = (skin) => {
 };
 
 module.exports = (env) => {
-  cfg = { ...config };
-  const { publicPath, skin } = { ...cfg, ...env };
+  const { publicPath, skin } = { ...config, ...env };
 
   return {
     devtool: "eval-source-map",
     entry: "./vis/entrypoint.js",
 
     output: {
-      path: path.resolve(__dirname, "dist"),
+      path: path.resolve(__dirname, "examples/tome.gg/dist"),
       //dev: specify a full path including protocol, production: specify full path excluding protocol
       publicPath: publicPath,
       filename: "headstart.js",
