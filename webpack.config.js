@@ -38,7 +38,7 @@ module.exports = (env) => {
     entry: "./vis/entrypoint.js",
 
     output: {
-      path: path.resolve(__dirname, "examples/tome.gg/dist"),
+      path: path.resolve(__dirname, "examples/tome.gg"),
       //dev: specify a full path including protocol, production: specify full path excluding protocol
       publicPath: publicPath,
       filename: "headstart.js",
