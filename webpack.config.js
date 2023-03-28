@@ -1,4 +1,14 @@
-var config = require("./config.js");
+let config;
+
+try {
+  config = require("./config.js");
+} catch (e) {
+  config = {
+    publicPath: process.env.PUBLIC_PATH,
+    skin: process.env.SKIN || "",
+  };
+}
+
 const path = require("path");
 const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -21,7 +31,8 @@ const getSkinExample = (skin) => {
 };
 
 module.exports = (env) => {
-  const { publicPath, skin } = { ...config, ...env };
+  cfg = { ...config };
+  const { publicPath, skin } = { ...cfg, ...env };
 
   return {
     devtool: "eval-source-map",
