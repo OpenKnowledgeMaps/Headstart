@@ -268,9 +268,12 @@ get_raw_data <- function(limit, base_query, return_fields, sortby_string, filter
         Sys.sleep(2)
         blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE API Timeout retry attempt:", t, sep=" "))
       }
+    } else {
+      break
     }
+  }
   return(res_raw)
-}}
+}
 
 
 find_dois <- function(link) {
