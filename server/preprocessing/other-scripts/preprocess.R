@@ -48,7 +48,7 @@ rearrange_authornames <- function(authors) {
     } else {
       tmp <- author
     }
-    trim(tmp)
+    stringi::stri_trim(tmp)
   })
   paste(rearranged, collapse="; ")
 }
