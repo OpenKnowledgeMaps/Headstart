@@ -203,10 +203,11 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
   subject_cleaned = gsub("\\w+:\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
   #subject_cleaned = gsub(pattern=pattern, replacement="", subject_cleaned) # remove TRIPLE discipline classification codes
+  subject_cleaned = gsub("[A-Za-z]+:[A-Za-z0-9 \\/\\.]+;?", "", subject_cleaned) # clean up annotations
   subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(",", ", ", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
-
+  subject_cleaned = stringi::stri_trim(subject_cleaned) # clean up keyword separation
   metadata$subject = subject_cleaned
 
   metadata$authors = check_metadata(res$dccreator)

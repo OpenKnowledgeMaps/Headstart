@@ -1,10 +1,12 @@
 {
-  "document_types":["7"],
+  "document_types":["121"],
   "from":"1665-01-01",
-  "to":"2023-02-02",
+  "to":"2023-03-20",
   "sorting":"most-relevant",
   "vis_id": "TEST_ID",
   "min_descsize": 300,
   "limit": 120,
-  "list_size": 100
+  "list_size": 100,
+  "q_advanced": "(dcsubject:\"theme:invasion management\" AND dcsubject:\"theme:invasion impact\")",
+  "repo": "ftenkore"
 }
