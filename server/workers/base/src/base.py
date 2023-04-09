@@ -90,6 +90,7 @@ class BaseClient(RWrapper):
                 metadata = pd.DataFrame(raw_metadata)
                 metadata = filter_duplicates(metadata)
                 metadata = pd.concat([metadata, parse_annotations_for_all(metadata, "subject_orig")], axis=1)
+                metadata = clean_up_annotations(metadata, "subject_orig")
                 metadata = metadata.head(params.get('list_size'))
                 metadata.reset_index(inplace=True, drop=True)
                 metadata = self.enrich_metadata(metadata)
@@ -345,3 +346,6 @@ def expand_dict_columns(df):
                     df[c+"_"+uk] = df[c+"_"+uk].map(lambda x: [uk for uk in x if uk is not np.nan])
     return df
 
+def clean_up_annotations(df, field):
+    df[field] = df[field].map(lambda x: pattern_annotations.sub("", x).strip())
+    return df
