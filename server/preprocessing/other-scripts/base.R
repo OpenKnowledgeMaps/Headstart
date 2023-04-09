@@ -209,6 +209,7 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
   subject_cleaned = stringi::stri_trim(subject_cleaned) # clean up keyword separation
   metadata$subject = subject_cleaned
+  metadata$subject_orig = stringi::stri_trim(gsub("[A-Za-z]+:[A-Za-z0-9 \\/\\.]+;?", "", metadata$subject_orig)) # clean up annotations
 
   metadata$authors = check_metadata(res$dccreator)
 
