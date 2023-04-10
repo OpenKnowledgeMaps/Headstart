@@ -42,8 +42,8 @@ mark_duplicates <- function(metadata) {
 rearrange_authornames <- function(authors) {
   authorlist <- unlist(strsplit(authors, "; "))
   rearranged <- lapply(authorlist, function(author) {
-    tmp <- strsplit(author, ",")
-    if (length(tmp) == 2) {
+    tmp <- strsplit(author, ", ")
+    if (length(tmp[[1]]) == 2) {
       tmp <- paste(tmp[[1]][2], tmp[[1]][1], sep=" ")
     } else {
       tmp <- author
