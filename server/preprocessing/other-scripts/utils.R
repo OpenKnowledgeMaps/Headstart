@@ -53,18 +53,6 @@ get_stopwords <- function(languages) {
   return(stopwords)
 }
 
-conditional_lowercase <- function(text, lang) {
-  if (lang == 'german') {
-    return(text)
-  } else {
-    return(tolower(text))
-  }
-  stopwords <- unlist(stopwords)
-  stopwords <- c(stopwords, triple_disciplines)
-  return(stopwords)
-}
-
-
 
 setup_logging <- function(loglevel) {
   # checks if LOGFILE is defined,
@@ -104,9 +92,6 @@ detect_error <- function(failed, service, params) {
   if (!is.null(failed$query_reason)) {
     # map response to individual error codes/messages
     # then return them as json list
-    if (grepl("Timeout was reached", failed$query_reason, fixed=TRUE)){
-        reason <- c(reason, 'API error: timeout')
-    }
     if (length(reason) == 0 && service == 'base') {
       if (grepl("Timeout was reached: [api.base-search.net]", failed$query_reason, fixed=TRUE)){
           reason <- list('BASE error: timeout')
@@ -116,6 +101,11 @@ detect_error <- function(failed, service, params) {
       }
       if (grepl("read_xml.raw", failed$query_reason, fixed=TRUE)){
         reason <- c(reason, 'API error: BASE not reachable')
+      }
+    }
+    if (length(reason) == 0 && service == 'base') {
+      if (grepl("Timeout was reached", failed$query_reason, fixed=TRUE)){
+          reason <- c(reason, 'API error: timeout')
       }
     }
     if (length(reason) == 0 && service == 'pubmed') {
