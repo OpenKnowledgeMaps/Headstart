@@ -39,6 +39,19 @@ mark_duplicates <- function(metadata) {
   return(metadata)
 }
 
+rearrange_authornames <- function(authors) {
+  authorlist <- unlist(strsplit(authors, "; "))
+  rearranged <- lapply(authorlist, function(author) {
+    tmp <- strsplit(author, ", ")
+    if (length(tmp[[1]]) == 2) {
+      tmp <- paste(tmp[[1]][2], tmp[[1]][1], sep=" ")
+    } else {
+      tmp <- author
+    }
+    stringi::stri_trim(tmp)
+  })
+  paste(rearranged, collapse="; ")
+}
 
 deduplicate_titles <- function(metadata, list_size) {
   duplicate_candidates <- c()
@@ -49,7 +62,8 @@ deduplicate_titles <- function(metadata, list_size) {
                       -stri_length(metadata$published_in)),]
 
   index = (grepl(" ", metadata$title) == FALSE | stri_length(metadata$title) < 15)
-  metadata$title[index] <- paste(metadata$title[index], metadata$authors[index], sep=" ")
+  author_candidates <- unlist(lapply(metadata$authors, rearrange_authornames))
+  metadata$title[index] <- paste(metadata$title[index], author_candidates[index], sep=" ")
 
   num_items = length(metadata$id)
   max_replacements = ifelse(num_items > list_size, num_items - list_size, -1)
