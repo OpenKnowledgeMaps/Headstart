@@ -61,7 +61,7 @@ get_papers <- function(query, params,
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
   
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
-  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage"
+  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage,dccoverage"
 
   if (!is.null(exact_query) && exact_query != '') {
     base_query <- paste(paste0("(",exact_query,")"), date_string, document_types, collapse=" ")
@@ -222,6 +222,7 @@ etl <- function(res, repo, non_public) {
   metadata$dclang = check_metadata(res$dclang)
   metadata$dclanguage = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)
+  metadata$dccoverage = check_metadata(res$dccoverage)
   if(repo=="fttriple" && non_public==TRUE) {
     metadata$content_provider <- "GoTriple"
   }
@@ -268,7 +269,7 @@ get_raw_data <- function(limit, base_query, return_fields, sortby_string, filter
         Sys.sleep(2)
         blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE API Timeout retry attempt:", t, sep=" "))
       } else {
-        stop(res_raw)
+        stop("Timeout was reached: [api.base-search.net]")
       }
     } else {
       break

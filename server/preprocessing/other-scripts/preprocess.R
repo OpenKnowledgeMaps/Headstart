@@ -120,7 +120,7 @@ replace_keywords_if_empty <- function(metadata, stops) {
   }
   vplog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Documents without subjects:", length(missing_subjects)))
   candidates = mapply(paste, metadata$title)
-  candidates = mclapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
+  candidates = mclapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))  
   candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
   candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
   candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
@@ -140,7 +140,7 @@ replace_keywords_if_empty <- function(metadata, stops) {
   if (length(missing_subjects) > 0) {
     foreach (i = missing_subjects) %dopar% {
       candidates = mapply(paste, metadata$title[i], metadata$paper_abstract[i])
-      candidates = lapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
+      candidates = mclapply(candidates, function(x)paste(removeWords(x, stops), collapse=""))
       candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
       candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
       candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
