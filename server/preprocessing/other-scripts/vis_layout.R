@@ -34,10 +34,7 @@ vis_layout <- function(text, metadata, service,
   start.time <- Sys.time()
   vlog$debug("preprocess")
   metadata <- sanitize_abstract(metadata)
-  filtered <- filter_duplicates(metadata, text, list_size)
-  metadata <- filtered$metadata
   languages <- names(head(sort(table(unlist(lapply(metadata$dclang, strsplit, "; "))), decreasing = TRUE), 2))
-  text <- filtered$text
   vlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "doc count:", nrow(metadata), sep=" "))
 
   if(vis_type=='overview'){
