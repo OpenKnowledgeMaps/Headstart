@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "relation": {
+        "type": "string"
+      },
+      "identifier": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      },
+      "paper_abstract": {
+        "type": "string"
+      },
+      "published_in": {
+        "type": "string"
+      },
+      "year": {
+        "type": "string",
+        "format": "date"
+      },
+      "subject_orig": {
+        "type": "string"
+      },
+      "subject": {
+        "type": "string"
+      },
+      "authors": {
+        "type": "string"
+      },
+      "link": {
+        "type": "string"
+      },
+      "oa_state": {
+        "type": "string",
+        "enum": ["0", "1", "2", "3", "4", "5"]
+      },
+      "url": {
+        "type": "string"
+      },
+      "relevance": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "lang_detected": {
+        "type": "string"
+      },
+      "cluster_labels": {
+        "type": "string"
+      },
+      "x": {
+        "type": "string"
+      },
+      "y": {
+        "type": "string"
+      },
+      "area_uri": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4
+      },
+      "area": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "relation",
+      "identifier",
+      "title",
+      "paper_abstract",
+      "year",
+      "subject_orig",
+      "subject",
+      "authors",
+      "link",
+      "oa_state",
+      "url",
+      "relevance",
+      "lang_detected",
+      "cluster_labels",
+      "x",
+      "y",
+      "area_uri",
+      "area"
+    ]
+  }
+}
