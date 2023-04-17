@@ -1,18 +1,14 @@
 const fs = require('fs');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const { create, all, random } = require('mathjs');
-const { exit } = require('process');
 const { randomUUID } = require('crypto');
-
-const math = create(all);
 
 // Parse CLI arguments
 const url = process.argv[2];
 
 // Load the contents of the page into memory
 console.log("Getting blog data...")
-axios.get(url)
+axios.get(url, { timeout: 1000 * 120 })
   .then(response => {
     const html = response.data;
     const $ = cheerio.load(html);
@@ -59,7 +55,8 @@ axios.get(url)
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + process.env.OPENAI_KEY
-        }
+        },
+        timeout: 1000 * 120
       })
       .then(response => {
 
