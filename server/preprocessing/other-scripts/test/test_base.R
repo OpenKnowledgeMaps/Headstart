@@ -7,7 +7,7 @@ options(warn=1)
 wd <- dirname(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd(wd) #Don't forget to set your working directory
 
-query <- '"world bank"' #args[2]
+query <- NULL #args[2]
 service <- "base"
 params <- NULL
 params_file <- "test/params_base.json"
@@ -71,7 +71,7 @@ if(exists('input_data')) {
 }
 
 if (!exists('output_json')) {
-  output_json <- detect_error(failed, service)
+  output_json <- detect_error(failed, service, params)
 }
 
 output <- fromJSON(output_json)
