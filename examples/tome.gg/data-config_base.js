@@ -3,7 +3,7 @@ var data_config = {
   mode: "local_files",
   input_format: "json",
 
-  service: "base",
+  service: "Tome.gg",
 
   bubble_min_scale: 1,
   bubble_max_scale: 1,
