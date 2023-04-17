@@ -61,7 +61,7 @@ get_papers <- function(query, params,
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
   
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
-  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage"
+  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage,dccoverage"
 
   if (!is.null(exact_query) && exact_query != '') {
     base_query <- paste(paste0("(",exact_query,")"), date_string, document_types, collapse=" ")
@@ -143,6 +143,7 @@ get_papers <- function(query, params,
     metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
     r <- r+1
   }
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Deduplication retrieval requests:", r))
 
   metadata <- unique(metadata, by = "id")
   text = data.frame(matrix(nrow=length(metadata$id)))
@@ -221,6 +222,7 @@ etl <- function(res, repo, non_public) {
   metadata$dclang = check_metadata(res$dclang)
   metadata$dclanguage = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)
+  metadata$dccoverage = check_metadata(res$dccoverage)
   if(repo=="fttriple" && non_public==TRUE) {
     metadata$content_provider <- "GoTriple"
   }
@@ -248,16 +250,31 @@ preprocess_query <- function(query) {
 
 
 get_raw_data <- function(limit, base_query, return_fields, sortby_string, filter, repo, coll, retry_opts, offset, non_public) {
-  (res_raw <- bs_search(hits=limit
-                      , fields = return_fields,
-                      , query = base_query
-                      , sortby = sortby_string
-                      , filter = filter
-                      , target = repo
-                      , coll = coll
-                      , retry = retry_opts
-                      , offset = offset
-                      , non_public = non_public))
+  t <- 0
+  while (t < retry_opts$times) {
+    res_raw <- try(
+      (bs_search(hits=limit
+                  , fields = return_fields,
+                  , query = base_query
+                  , sortby = sortby_string
+                  , filter = filter
+                  , target = repo
+                  , coll = coll
+                  , retry = retry_opts
+                  , offset = offset
+                  , non_public = non_public)))
+    if (inherits(res_raw, "try-error")) {
+      if (grepl("Timeout was reached: [api.base-search.net]", res_raw, fixed=TRUE)) {
+        t <- t + 1
+        Sys.sleep(2)
+        blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE API Timeout retry attempt:", t, sep=" "))
+      } else {
+        stop("Timeout was reached: [api.base-search.net]")
+      }
+    } else {
+      break
+    }
+  }
   return(res_raw)
 }
 
