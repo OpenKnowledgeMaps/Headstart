@@ -28,7 +28,7 @@ function encodeStringFromFile(filePath) {
   // Write the decoded string to the new file
   fs.writeFileSync(processedFilePath, processedData, 'utf-8');
 
-  console.log(`Encoded string written to ${processedFilePath}`);
+  // console.log(`Encoded string written to ${processedFilePath}`);
 }
 
 // Call the function with the provided file path
