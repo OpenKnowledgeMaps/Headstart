@@ -397,6 +397,29 @@
       "area_uri": 5,
       "area": "maps",
       "resulttype": "Resource"
+    },
+    {
+      "id": "9e9fe6c8-3150-5bb0-a5d4-de5ab202da8f",
+      "relation": "",
+      "identifier": "https://roadmap.sh/",
+      "title": "Roadmap.sh",
+      "paper_abstract": "roadmap.sh is a community effort to create roadmaps, guides and other educational content to help guide the developers in picking up the path and guide their learnings.",
+      "published_in": "Roadmap.sh",
+      "year": "2023",
+      "subject_orig": "career track, software engineering",
+      "subject": "career track, software engineering",
+      "authors": "Ahmed, Kamran",
+      "link": "https://roadmap.sh/",
+      "oa_state": "2",
+      "url": "https://roadmap.sh/",
+      "relevance": 78,
+      "lang_detected": "english",
+      "x": "0.0536057408338733",
+      "y": "0.0336057408338733",
+      "cluster_labels": "maps",
+      "area_uri": 5,
+      "area": "maps",
+      "resulttype": "Resource"
     }
   ]
 }
