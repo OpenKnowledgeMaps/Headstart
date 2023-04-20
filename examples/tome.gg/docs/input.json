@@ -420,6 +420,29 @@
       "area_uri": 5,
       "area": "maps",
       "resulttype": "Resource"
+    },
+    {
+      "id": "9e9fe6c8-3150-5bb0-a5d4-de5ab202da8f",
+      "relation": "",
+      "identifier": "https://www.amazon.com/Stages-Psychological-Safety-Inclusion-Innovation/dp/1523087684",
+      "title": "The 4 Stages of Psychological Safety: Defining the Path to Inclusion and Innovation",
+      "paper_abstract": "This book is the first practical, hands-on guide that shows how leaders can build psychological safety in their organizations, creating an environment where employees feel included, fully engaged, and encouraged to contribute their best efforts and ideas.",
+      "published_in": "Paperback",
+      "year": "2020",
+      "subject_orig": "psychological safety, leadership, innovation, collaboration, learning",
+      "subject": "psychological safety, leadership, innovation, collaboration, learning",
+      "authors": "Clark, Timothy R.",
+      "link": "https://www.amazon.com/Stages-Psychological-Safety-Inclusion-Innovation/dp/1523087684",
+      "oa_state": "2",
+      "url": "https://www.amazon.com/Stages-Psychological-Safety-Inclusion-Innovation/dp/1523087684",
+      "relevance": 78,
+      "lang_detected": "english",
+      "x": "0.0536057408338733",
+      "y": "0.0336057408338733",
+      "cluster_labels": "culture, values",
+      "area_uri": 1,
+      "area": "culture, values",
+      "resulttype": "Book"
     }
   ]
 }
