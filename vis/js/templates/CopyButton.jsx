@@ -12,13 +12,25 @@ const CopyButton = ({ id, className = "", textId, textContent, onClick }) => {
     setCopied(false);
   }, [textId, textContent]);
 
-  const handleCopyClick = () => {
-    navigator.clipboard.writeText(textContent).then(() => {
+  // const handleCopyClick = () => {
+  //   navigator.clipboard.writeText(textContent).then(() => {
+  //     selectText(textId);
+  //     setCopied(true);
+  //   });
+  //   if (typeof onClick === "function") {
+  //     onClick();
+  //   }
+  // };
+  const handleCopyClick = async () => {
+    try {
+      await navigator.clipboard.writeText(textContent);
       selectText(textId);
       setCopied(true);
-    });
-    if (typeof onClick === "function") {
-      onClick();
+      if (typeof onClick === "function") {
+        onClick();
+      }
+    } catch (err) {
+      console.error('Failed to copy: ', err);
     }
   };
 
