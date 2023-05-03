@@ -1,6 +1,7 @@
 library(rbace)
 library(stringr)
 library(dplyr)
+source('preprocess.R')
 
 # get_papers
 #
@@ -37,7 +38,6 @@ library(dplyr)
 
 blog <- getLogger('api.base')
 
-
 get_papers <- function(query, params,
                        retry_opts=rbace::bs_retry_options(3,60,3,4)) {
 
@@ -59,11 +59,12 @@ get_papers <- function(query, params,
   # prepare query fields
   date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
-
+  
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
-  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage"
+  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage,dccoverage"
 
   if (!is.null(exact_query) && exact_query != '') {
+    base_query <- paste(paste0("(",exact_query,")"), date_string, document_types, collapse=" ")
     base_query <- paste(paste0("(",exact_query,")"), date_string, document_types, collapse=" ")
   } else {
     base_query <- paste(date_string, document_types, collapse=" ")
@@ -115,7 +116,14 @@ get_papers <- function(query, params,
   if (nrow(res)==0){
     stop(paste("No results retrieved."))
   }
-  while (nrow(res) < limit && attr(res_raw, "numFound")>+offset+120) {
+  metadata <- etl(res, repo, non_public)
+  metadata <- sanitize_abstract(metadata)
+  metadata <- mark_duplicates(metadata)
+  metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
+  req_limit <- 9
+  
+  r <- 0
+  while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit) {
     offset <- offset+120
     res_raw <- get_raw_data(limit,
                             base_query,
@@ -128,14 +136,41 @@ get_papers <- function(query, params,
                             offset,
                             non_public)
     res <- bind_rows(res, res_raw$docs)
+    metadata <- etl(res, repo, non_public)
+    metadata <- unique(metadata, by = "id")
+    metadata <- sanitize_abstract(metadata)
+    metadata <- mark_duplicates(metadata)
+    metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
+    r <- r+1
   }
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Deduplication retrieval requests:", r))
 
+  metadata <- unique(metadata, by = "id")
+  text = data.frame(matrix(nrow=length(metadata$id)))
+  text$id = metadata$id
+  # Add all keywords, including classification to text
+  text$content = paste(metadata$title, metadata$paper_abstract,
+                       metadata$subject_orig, metadata$published_in, metadata$authors,
+                       sep=" ")
+
+
+  input_data=list("metadata" = metadata, "text"=text)
+
+  end.time <- Sys.time()
+  time.taken <- end.time - start.time
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
+
+  return(input_data)
+}
+
+etl <- function(res, repo, non_public) {
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
 
   metadata$id = res$dcdocid
   metadata$relation = check_metadata(res$dcrelation)
   metadata$identifier = check_metadata(res$dcidentifier)
   metadata$title = check_metadata(res$dctitle)
+  metadata$title = str_replace(metadata$title, " ...$", "")
   metadata$paper_abstract = check_metadata(res$dcdescription)
   metadata$published_in = check_metadata(res$dcsource)
   metadata$year = check_metadata(res$dcdate)
@@ -145,6 +180,8 @@ get_papers <- function(query, params,
   metadata$subject_orig = subject_all
 
   #subject = ifelse(subject !="", paste(unique(strsplit(subject, "; ")), "; "),"")
+
+  #pattern <- paste0("(;? ?|^)", paste0(triple_disciplines, collapse="($|; )|(;? ?|^)"), "($|; )")
 
   subject_cleaned = gsub("DOAJ:[^;]*(;|$)?", "", subject_all) # remove DOAJ classification
   subject_cleaned = gsub("/dk/atira[^;]*(;|$)?", "", subject_cleaned) # remove atira classification
@@ -165,7 +202,8 @@ get_papers <- function(query, params,
   subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
   subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
   subject_cleaned = gsub("\\w+:\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
-  subject_cleaned = gsub("^; $", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
+  #subject_cleaned = gsub(pattern=pattern, replacement="", subject_cleaned) # remove TRIPLE discipline classification codes
+  subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(",", ", ", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
 
@@ -179,28 +217,17 @@ get_papers <- function(query, params,
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
   metadata$dctype = check_metadata(res$dctype)
+  metadata$dctypenorm = check_metadata(res$dctypenorm)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
   metadata$dclang = check_metadata(res$dclang)
   metadata$dclanguage = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)
+  metadata$dccoverage = check_metadata(res$dccoverage)
   if(repo=="fttriple" && non_public==TRUE) {
     metadata$content_provider <- "GoTriple"
   }
 
-  text = data.frame(matrix(nrow=length(res$dcdocid)))
-  text$id = metadata$id
-  # Add all keywords, including classification to text
-  text$content = paste(metadata$title, metadata$paper_abstract,
-                       subject_all, metadata$published_in, metadata$authors,
-                       sep=" ")
-
-  ret_val=list("metadata" = metadata, "text"=text)
-
-  end.time <- Sys.time()
-  time.taken <- end.time - start.time
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
-
-  return(ret_val)
+  return (metadata)
 }
 
 
@@ -223,16 +250,31 @@ preprocess_query <- function(query) {
 
 
 get_raw_data <- function(limit, base_query, return_fields, sortby_string, filter, repo, coll, retry_opts, offset, non_public) {
-  (res_raw <- bs_search(hits=limit
-                      , fields = return_fields,
-                      , query = base_query
-                      , sortby = sortby_string
-                      , filter = filter
-                      , target = repo
-                      , coll = coll
-                      , retry = retry_opts
-                      , offset = offset
-                      , non_public = non_public))
+  t <- 0
+  while (t < retry_opts$times) {
+    res_raw <- try(
+      (bs_search(hits=limit
+                  , fields = return_fields,
+                  , query = base_query
+                  , sortby = sortby_string
+                  , filter = filter
+                  , target = repo
+                  , coll = coll
+                  , retry = retry_opts
+                  , offset = offset
+                  , non_public = non_public)))
+    if (inherits(res_raw, "try-error")) {
+      if (grepl("Timeout was reached: [api.base-search.net]", res_raw, fixed=TRUE)) {
+        t <- t + 1
+        Sys.sleep(2)
+        blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE API Timeout retry attempt:", t, sep=" "))
+      } else {
+        stop("Timeout was reached: [api.base-search.net]")
+      }
+    } else {
+      break
+    }
+  }
   return(res_raw)
 }
 

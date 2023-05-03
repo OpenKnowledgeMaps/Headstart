@@ -4,17 +4,15 @@ library(rstudioapi)
 
 options(warn=1)
 
-wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
+wd <- dirname(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd(wd) #Don't forget to set your working directory
 
-# query: project acryonm
-# params: grant_id and funding_stream
-query <- "GRINDOOR" #args[2]
-service <- "openaire"
+query <- NULL #args[2]
+service <- "base"
 params <- NULL
-params_file <- "params_openaire.json"
+params_file <- "test/params_base.json"
 
-source('../utils.R')
+source('utils.R')
 DEBUG = FALSE
 
 if (DEBUG==TRUE){
@@ -25,9 +23,8 @@ if (DEBUG==TRUE){
 
 tslog <- getLogger('ts')
 
-source("../vis_layout.R")
-source('../openaire.R')
-source('../altmetrics.R')
+source("vis_layout.R")
+source('base.R')
 
 MAX_CLUSTERS = 15
 
@@ -45,33 +42,37 @@ LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
 ADDITIONAL_STOP_WORDS = LANGUAGE$name
 .GlobalEnv$VIS_ID <- params$vis_id
 
+#start.time <- Sys.time()
 failed <- list(params=params)
 tryCatch({
-  input_data = get_papers(query, params)
+  query <- sanitize_query(query)
+  input_data = get_papers(query$sanitized_query, params)
 }, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Query failed", service, query, paste(params, collapse=" "), err, sep="||")))
-  failed$query <<- query
+  tslog$error(gsub("\n", " ", paste("Query failed", service, query$raw_query, paste(params, collapse=" "), err, sep="||")))
+  failed$query <<- query$raw_query
   failed$query_reason <<- err$message
 })
 
+#end.time <- Sys.time()
+#time.taken <- end.time - start.time
+#time.taken
 if(exists('input_data')) {
   tryCatch({
   output_json = vis_layout(input_data$text, input_data$metadata,
                            service,
                            max_clusters=MAX_CLUSTERS,
                            lang=LANGUAGE$name,
-                           add_stop_words=ADDITIONAL_STOP_WORDS, testing=TRUE, list_size=-1)
+                           add_stop_words=ADDITIONAL_STOP_WORDS, list_size = params$list_size)
   }, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
-    failed$query <<- query
+    tslog$error(gsub("\n", " ", paste("Processing failed", query$raw_query, paste(params, collapse=" "), err, sep="||")))
+    failed$query <<- query$raw_query
     failed$processing_reason <<- err$message
   })
 }
 
 if (!exists('output_json')) {
   output_json <- detect_error(failed, service, params)
-} else if (service=='openaire' && exists('output_json')) {
-  output_json <- enrich_output_json(output_json)
 }
 
-print(output_json)
+output <- fromJSON(output_json)
+#print(output_json)

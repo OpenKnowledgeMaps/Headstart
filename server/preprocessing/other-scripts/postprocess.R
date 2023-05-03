@@ -1,6 +1,6 @@
 vpplog <- getLogger('vis.postprocess')
 
-create_overview_output <- function(named_clusters, layout, metadata) {
+create_overview_output <- function(named_clusters, layout, metadata, list_size) {
 
   x = layout$X1
   y = layout$X2
@@ -15,10 +15,13 @@ create_overview_output <- function(named_clusters, layout, metadata) {
   colnames(unique_groups) <- "cluster_labels"
   unique_groups$groups <- seq_along(unique_groups$cluster_labels)
   result = merge(result, unique_groups, by='cluster_labels')
-  output = merge(metadata, result, by.x="id", by.y="id", all=TRUE)
+  output = merge(metadata, result, by.x="id", by.y="id", all=TRUE, no.dups=TRUE)
 
   names(output)[names(output)=="groups"] <- "area_uri"
   output["area"] = paste(output$cluster_labels, sep="")
+  if (list_size >0) {
+    output <- head(output, list_size)
+  }
 
   output_json = toJSON(output)
 
@@ -26,8 +29,11 @@ create_overview_output <- function(named_clusters, layout, metadata) {
 
 }
 
-create_streamgraph_output <- function(metadata) {
+create_streamgraph_output <- function(metadata, list_size) {
   output <- metadata
+  if (list_size >0) {
+    output <- head(output, list_size)
+  }
   output_json = toJSON(output)
   return(output_json)
 }

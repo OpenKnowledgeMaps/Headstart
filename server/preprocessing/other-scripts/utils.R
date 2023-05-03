@@ -28,41 +28,31 @@ check_metadata <- function (field) {
 }
 
 
-get_stopwords <- function(lang, testing) {
-  stops <- tryCatch({
-    stops <- stopwords(lang)
-  }, error = function(err){
-    return(unlist(""))
-  })
-
-  stops <- tryCatch({
-      # trycatch switch when in test mode
-      if (!isTRUE(testing)) {
-          add_stop_path <- paste0("../resources/", lang, ".stop")
-          additional_stops <- scan(add_stop_path, what="", sep="\n")
-          stops = c(stops, additional_stops)
-        } else if (dir.exists("./resources")) {
-          add_stop_path <- paste0("./resources/", lang, ".stop")
-          additional_stops <- scan(add_stop_path, what="", sep="\n")
-          stops = c(stops, additional_stops)
-        } else {
-          add_stop_path <- paste0("../../resources/", lang, ".stop")
-          additional_stops <- scan(add_stop_path, what="", sep="\n")
-          stops = c(stops, additional_stops)
-          return(stops)
-        }}, error = function(err) {
-        return(stops)
-      })
-  return(stops)
-}
-
-conditional_lowercase <- function(text, lang) {
-  if (lang == 'german') {
-    return(text)
-  } else {
-    return(tolower(text))
+get_stopwords <- function(languages) {
+  languages <- c(languages, "spa", "eng", "fre", "ger")
+  languages <- unique(languages)
+  triple_disciplines = c("archeo", "archi", "art", "anthro-bio", "class", "info", "museo", "demo",
+                       "eco", "edu", "envir", "genre", "geo", "hist", "hisphilso", "droit",
+                       "lang", "litt", "manag", "stat", "musiq", "phil", "scipo", "psy",
+                       "relig", "anthro-se", "socio")
+  if (dir.exists("../resources")) {
+      stops <- fromJSON("../resources/stopwords_iso_cleaned.json")
+    } else if (dir.exists("./resources")) {
+      stops <- fromJSON("./resources/stopwords_iso_cleaned.json")
+    } else {
+      stops <- fromJSON("../../resources/stopwords_iso_cleaned.json")
+    }
+  stopwords <- list()
+  for (l in languages) {
+    if (l %in% names(stops)) {
+      stopwords <- c(stopwords, stops[[l]])
+    }
   }
+  stopwords <- unlist(stopwords)
+  stopwords <- c(stopwords, triple_disciplines)
+  return(stopwords)
 }
+
 
 setup_logging <- function(loglevel) {
   # checks if LOGFILE is defined,
@@ -83,7 +73,7 @@ setup_logging <- function(loglevel) {
 
 
 get_service_lang <- function(lang_id, valid_langs, service) {
-  if (lang_id == 'all'){
+  if (lang_id == 'all-lang'){
     LANGUAGE <- 'english'
   } else if (!is.null(valid_langs$lang_id)){
     LANGUAGE <- valid_langs$lang_id
@@ -102,9 +92,6 @@ detect_error <- function(failed, service, params) {
   if (!is.null(failed$query_reason)) {
     # map response to individual error codes/messages
     # then return them as json list
-    if (grepl("Timeout was reached", failed$query_reason, fixed=TRUE)){
-        reason <- c(reason, 'API error: timeout')
-    }
     if (length(reason) == 0 && service == 'base') {
       if (grepl("Timeout was reached: [api.base-search.net]", failed$query_reason, fixed=TRUE)){
           reason <- list('BASE error: timeout')
@@ -114,6 +101,11 @@ detect_error <- function(failed, service, params) {
       }
       if (grepl("read_xml.raw", failed$query_reason, fixed=TRUE)){
         reason <- c(reason, 'API error: BASE not reachable')
+      }
+    }
+    if (length(reason) == 0 && service == 'base') {
+      if (grepl("Timeout was reached", failed$query_reason, fixed=TRUE)){
+          reason <- c(reason, 'API error: timeout')
       }
     }
     if (length(reason) == 0 && service == 'pubmed') {

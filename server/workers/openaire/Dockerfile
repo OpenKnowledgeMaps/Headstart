@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
 
@@ -29,7 +29,7 @@ RUN apt-get update \
     libpangocairo-1.0-0 \
     libpcre3 \
     libpng16-16 \
-    libreadline7 \
+    libreadline-dev \
     libtiff5 \
     liblzma5 \
     locales \
@@ -136,6 +136,7 @@ RUN apt update && apt full-upgrade -y && \
 
 RUN apt-get -y install python3 python3-pip
 
+RUN apt-get -y install automake
 RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
  R -e 'install.packages("remotes")' && \
  R -e 'install.packages("renv", version="0.14.0-5")'
