@@ -129,6 +129,7 @@ services:
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
+      R_BASE_APIKEY: "${R_BASE_APIKEY}"
     restart: always
     volumes:
       - /opt/local/renv/cache:/renv/cache

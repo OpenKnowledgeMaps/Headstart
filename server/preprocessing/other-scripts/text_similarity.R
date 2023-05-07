@@ -41,6 +41,10 @@ if (!is.null(params$vis_type)) {
     vis_type <- 'overview'
 }
 
+if ("q_advanced" %in% names(params)) {
+  params$q_advanced <- sanitize_query(params$q_advanced)
+}
+
 .GlobalEnv$VIS_ID <- params$vis_id
 taxonomy_separator = NULL
 limit = 100
