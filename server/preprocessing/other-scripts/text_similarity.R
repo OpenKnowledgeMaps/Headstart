@@ -42,7 +42,7 @@ if (!is.null(params$vis_type)) {
 }
 
 if ("q_advanced" %in% names(params)) {
-  params$q_advanced <- sanitize_query(params$q_advanced)
+  params$q_advanced <- sanitize_query(params$q_advanced)$sanitized_query
 }
 
 .GlobalEnv$VIS_ID <- params$vis_id
