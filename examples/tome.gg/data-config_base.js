@@ -3,7 +3,7 @@ var data_config = {
   mode: "local_files",
   input_format: "json",
 
-  service: "Tome.gg",
+  service: "tomegg",
 
   bubble_min_scale: 1,
   bubble_max_scale: 1,
@@ -17,7 +17,7 @@ var data_config = {
   preview_type: "pdf",
   sort_options: ["relevance", "title", "authors", "year"],
   is_force_areas: true,
-  language: "eng_pubmed",
+  language: "eng_tomegg",
   area_force_alpha: 0.02,
   show_list: true,
   content_based: true,

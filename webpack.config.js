@@ -6,6 +6,7 @@ try {
   config = {
     publicPath: process.env.PUBLIC_PATH,
     skin: process.env.SKIN || "",
+    ouputDirectory: './dist/'
   };
 }
 
@@ -38,7 +39,7 @@ module.exports = (env) => {
     entry: "./vis/entrypoint.js",
 
     output: {
-      path: path.resolve(__dirname, "examples/tome.gg"),
+      path: config.outputDirectory ?  path.resolve(__dirname, config.outputDirectory) : path.resolve(__dirname, "examples/tome.gg/dist"),
       //dev: specify a full path including protocol, production: specify full path excluding protocol
       publicPath: publicPath,
       filename: "headstart.js",

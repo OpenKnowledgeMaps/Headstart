@@ -2,7 +2,7 @@
   "context": {
     "id": "530133cf1768e6606f63c641a1a96768",
     "query": "software engineering apprenticeship",
-    "service": "base",
+    "service": "tomegg",
     "timestamp": "2020-07-09 18:20:14",
     "params": "{\"from\":\"1665-01-01\",\"to\":\"2020-07-09\",\"document_types\":[\"121\"],\"sorting\":\"most-relevant\",\"lang_id\":\"all-lang\"}"
   },
