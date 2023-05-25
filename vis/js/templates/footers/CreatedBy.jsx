@@ -24,7 +24,7 @@ const CreatedBy = ({ timestamp, faqsUrl }) => {
             <a
                 // href={window.location.href}
                 href={urlWithoutEmbed()}
-                name={"open this visualization"}
+                name={"openVisualization"}
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => trackLink("Open this visualization")}
