@@ -13,17 +13,18 @@ const CreatedBy = ({ timestamp, faqsUrl }) => {
         trackEvent("Added components", action, "Footer");
 
 
-    // function urlWithoutEmbed() {
-    //     return window.location.href.replace("?embed=true", "");
-    // }
+    function urlWithoutEmbed() {
+        return window.location.href.replace("?embed=true", "");
+    }
+
 
     return (
         <div className="builtwith" id="builtwith">
             <img src={okmapsRoundLogo} alt="OKMaps round logo"/>{" "}
             <a
                 // href={window.location.href}
-                // href={urlWithoutEmbed()}
-                href={window.location.href.replace("?embed=true", "")}
+                href={urlWithoutEmbed()}
+                name={"open this visualization"}
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => trackLink("Open this visualization")}
