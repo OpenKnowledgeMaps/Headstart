@@ -17,7 +17,6 @@ const CreatedBy = ({ timestamp, faqsUrl }) => {
         return window.location.href.replace("?embed=true", "");
     }
 
-
     return (
         <div className="builtwith" id="builtwith">
             <img src={okmapsRoundLogo} alt="OKMaps round logo"/>{" "}
