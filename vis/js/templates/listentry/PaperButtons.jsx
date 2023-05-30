@@ -65,7 +65,7 @@ const PaperButtons = ({
                 <a href={paper.list_link.address} title="Open the file" target="_blank" rel="noreferrer">
                   <div className="paper_button main">
                     <i className="far fa-file"></i>&nbsp;&nbsp;
-                    <Highlight>File!!!</Highlight>
+                    <Highlight>File</Highlight>
                   </div>
                 </a>
             )
