@@ -43,8 +43,6 @@ const PaperButtons = ({
       showCiteButton &&
       !paper.resulttype.some((t) => noCitationDoctypes.includes(t.toLowerCase()));
 
-  console.log('paperButtons.jsx: paper = ', paper);
-
   return (
       // html template starts here
       <div className="paper_buttons_row">
@@ -59,7 +57,6 @@ const PaperButtons = ({
             </button>
         )}
         {/*add paper.oa condition to avoid show file button if no access */}
-
         {!!paper.oa &&
             (!isText &&
                 <a href={paper.list_link.address} title="Open the file" target="_blank" rel="noreferrer">
