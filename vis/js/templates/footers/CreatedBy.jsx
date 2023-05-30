@@ -13,6 +13,7 @@ const CreatedBy = ({ timestamp, faqsUrl }) => {
         trackEvent("Added components", action, "Footer");
 
 
+    // function remove "?embed=true" parameter from url
     function urlWithoutEmbed() {
         return window.location.href.replace("?embed=true", "");
     }
@@ -21,7 +22,6 @@ const CreatedBy = ({ timestamp, faqsUrl }) => {
         <div className="builtwith" id="builtwith">
             <img src={okmapsRoundLogo} alt="OKMaps round logo"/>{" "}
             <a
-                // href={window.location.href}
                 href={urlWithoutEmbed()}
                 name={"openVisualization"}
                 target="_blank"
