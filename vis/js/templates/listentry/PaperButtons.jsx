@@ -17,7 +17,6 @@ const PaperButtons = ({
   handleExportClick,
 }) => {
   const { trackEvent } = useMatomo();
-  console.log("PaperButtons.jsx: paper = ", paper);
 
   const onPDFClick = getPaperPDFClickHandler(paper, handlePDFClick);
 
