@@ -40,8 +40,10 @@ const PaperButtons = ({
 
   noCitationDoctypes = noCitationDoctypes.map((t) => t.toLowerCase());
   const hasCiteButton =
-    showCiteButton &&
-    !paper.resulttype.some((t) => noCitationDoctypes.includes(t.toLowerCase()));
+      showCiteButton &&
+      !paper.resulttype.some((t) => noCitationDoctypes.includes(t.toLowerCase()));
+
+  console.log('paperButtons.jsx: paper = ', paper);
 
   return (
       // html template starts here
@@ -58,7 +60,7 @@ const PaperButtons = ({
         )}
         {/*add paper.oa condition to avoid show file button if no access */}
 
-        {paper.oa &&
+        {!!paper.oa &&
             (!isText && (
                     <a href={paper.list_link.address} title="Open the file" target="_blank" rel="noreferrer">
                       <div className="paper_button main">
@@ -66,7 +68,8 @@ const PaperButtons = ({
                         <Highlight>File</Highlight>
                       </div>
                     </a>)
-            )}
+            )
+        }
         {hasCiteButton && (
             <button
                 className="paper_button"
