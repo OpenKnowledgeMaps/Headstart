@@ -57,14 +57,16 @@ const PaperButtons = ({
             </button>
         )}
         {/*add paper.oa condition to avoid show file button if no access */}
-        {(paper.oa && !isText) && (
-            <a href={paper.list_link.address} title="Open the file" target="_blank" rel="noreferrer">
-              <div className="paper_button main">
-                <i className="far fa-file"></i>&nbsp;&nbsp;
-                <Highlight>File</Highlight>
-              </div>
-            </a>
-        )}
+
+        {paper.oa &&
+            (!isText && (
+                    <a href={paper.list_link.address} title="Open the file" target="_blank" rel="noreferrer">
+                      <div className="paper_button main">
+                        <i className="far fa-file"></i>&nbsp;&nbsp;
+                        <Highlight>File</Highlight>
+                      </div>
+                    </a>)
+            )}
         {hasCiteButton && (
             <button
                 className="paper_button"
