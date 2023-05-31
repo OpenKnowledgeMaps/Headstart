@@ -12,33 +12,18 @@ const CopyButton = ({ id, className = "", textId, textContent, onClick }) => {
     setCopied(false);
   }, [textId, textContent]);
 
-  // Update of usage navigator.clipboard.writeText() to async/await
-  const handleCopyClick = async () => {
-    try {
-      await navigator.clipboard.writeText(textContent);
+  const handleCopyClick = () => {
+    navigator.clipboard.writeText(textContent).then(() => {
       selectText(textId);
       setCopied(true);
-      if (typeof onClick === "function") {
-        onClick();
-      }
-    } catch (err) {
-      console.error('Failed to copy: ', err);
+    });
+    if (typeof onClick === "function") {
+      onClick();
     }
   };
 
-  // const handleCopyClick = () => {
-  //   navigator.clipboard.writeText(textContent).then(() => {
-  //     selectText(textId);
-  //     setCopied(true);
-  //   });
-  //   if (typeof onClick === "function") {
-  //     onClick();
-  //   }
-  // };
-
-
   return (
-    <Button
+      <Button
       id={id}
       className={className + " " + (copied ? "copied-button" : "copy-button")}
       bsStyle="primary"
