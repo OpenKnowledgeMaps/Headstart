@@ -6,7 +6,5 @@
   "vis_id": "TEST_ID",
   "min_descsize": 300,
   "limit": 120,
-  "list_size": 100,
-  "q_advanced": "(dcsubject:\"theme:invasion management\" AND dcsubject:\"theme:invasion impact\")",
-  "repo": "ftenkore"
+  "list_size": 100
 }
