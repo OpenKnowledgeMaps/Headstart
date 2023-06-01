@@ -6,7 +6,7 @@ library(stringi)
 sanitize_query <- function(query) {
   if (!is.null(query)) {
     query <- gsub("\\", "", query, fixed=T)
-    sanitized_query <- gsub('[“”]', '"', query)
+    sanitized_query <- gsub('[“”„”]', '"', query)
   } else {
     sanitized_query <- NULL
   }
