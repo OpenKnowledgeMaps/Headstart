@@ -28,34 +28,29 @@ check_metadata <- function (field) {
 }
 
 
-triple_disciplines = c("archeo", "archi", "art", "anthro-bio", "class", "info", "museo", "demo",
+get_stopwords <- function(languages) {
+  languages <- c(languages, "spa", "eng", "fre", "ger")
+  languages <- unique(languages)
+  triple_disciplines = c("archeo", "archi", "art", "anthro-bio", "class", "info", "museo", "demo",
                        "eco", "edu", "envir", "genre", "geo", "hist", "hisphilso", "droit",
                        "lang", "litt", "manag", "stat", "musiq", "phil", "scipo", "psy",
                        "relig", "anthro-se", "socio")
-
-get_stopwords <- function(lang) {
-  stops <- tryCatch({
-    stops <- stopwords(lang)
-  }, error = function(err){
-    return(unlist(""))
-  })
-  stops = c(stops, triple_disciplines)
-
-  stops <- tryCatch({
-      # trycatch switch when in test mode
-      if (dir.exists("./resources")) {
-          add_stop_path <- paste0("resources/", lang, ".stop")
-          additional_stops <- scan(add_stop_path, what="", sep="\n")
-          stops = c(stops, additional_stops)
-        } else {
-          add_stop_path <- paste0("../resources/", lang, ".stop")
-          additional_stops <- scan(add_stop_path, what="", sep="\n")
-          stops = c(stops, additional_stops)
-          return(stops)
-        }}, error = function(err) {
-        return(stops)
-      })
-  return(stops)
+  if (dir.exists("../resources")) {
+      stops <- fromJSON("../resources/stopwords_iso_cleaned.json")
+    } else if (dir.exists("./resources")) {
+      stops <- fromJSON("./resources/stopwords_iso_cleaned.json")
+    } else {
+      stops <- fromJSON("../../resources/stopwords_iso_cleaned.json")
+    }
+  stopwords <- list()
+  for (l in languages) {
+    if (l %in% names(stops)) {
+      stopwords <- c(stopwords, stops[[l]])
+    }
+  }
+  stopwords <- unlist(stopwords)
+  stopwords <- c(stopwords, triple_disciplines)
+  return(stopwords)
 }
 
 
