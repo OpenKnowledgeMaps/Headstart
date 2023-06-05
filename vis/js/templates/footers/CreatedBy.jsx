@@ -15,7 +15,15 @@ const CreatedBy = ({ timestamp, faqsUrl }) => {
 
     // function remove "?embed=true" parameter from url
     function urlWithoutEmbed() {
-        return window.location.href.replace("?embed=true", "");
+        if (window.location.href.includes("?embed=true&")) {
+            return window.location.href.replace("embed=true&", "");
+        } else if (window.location.href.includes("?embed=true")) {
+            return window.location.href.replace("?embed=true", "");
+        }
+        if (window.location.href.includes("&embed=true")) {
+            return window.location.href.replace("&embed=true", "");
+        }
+        return window.location.href
     }
 
     return (
