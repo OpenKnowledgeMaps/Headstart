@@ -20,9 +20,9 @@ const EmbedModal = ({ open, onClose }) => {
     };
 
     const embedUrl = addEmbedParam(window.location.toString().replace(/#.*/, ""));
-    // add allow="geolocation https:// openknowledgemaps.org/; clipboard-write"
+    // add allow="clipboard-write; self https://openknowledgemaps.org/;"
     const embedText = `<iframe width="${IFRAME_WIDTH}" height="${IFRAME_HEIGHT}" src="${embedUrl}" 
-                                allow="geolocation https://openknowledgemaps.org/; clipboard-write"></iframe>`;
+                                allow="clipboard-write; self https://openknowledgemaps.org/;"></iframe>`;
 
     return (
         // html template starts here
