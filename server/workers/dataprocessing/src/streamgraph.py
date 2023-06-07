@@ -25,6 +25,7 @@ class Streamgraph(object):
 
     def tokenize(self, s):
         #return re.split("; | - |, |: ", s)
+        s = re.sub(r"[\(\)]", "", s)
         return re.split("; ", s)
 
     def get_streamgraph_data(self, metadata, query, n=12, method="count"):

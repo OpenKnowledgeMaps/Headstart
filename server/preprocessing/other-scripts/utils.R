@@ -6,7 +6,7 @@ library(stringi)
 sanitize_query <- function(query) {
   if (!is.null(query)) {
     query <- gsub("\\", "", query, fixed=T)
-    sanitized_query <- gsub('[“”]', '"', query)
+    sanitized_query <- gsub('[“”„”]', '"', query)
   } else {
     sanitized_query <- NULL
   }
@@ -132,9 +132,6 @@ detect_error <- function(failed, service, params) {
       if (length(reason) == 0) {
         reason <- c(reason, "API error: OpenAIRE not reachable")
       }
-    }
-    if ("q_advanced" %in% names(params)) {
-      reason <- c(reason, "API error: q_advanced")
     }
     if (length(reason) == 0) {
         result <- regmatches(failed$query, regexec(phrasepattern, failed$query))
