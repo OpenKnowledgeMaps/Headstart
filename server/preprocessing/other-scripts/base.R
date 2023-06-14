@@ -73,7 +73,7 @@ get_papers <- function(query, params,
   # apply language filter if parameter is set
   lang_id <- params$lang_id
   if (!is.null(lang_id) && lang_id != "all-lang") {
-    lang_query <- paste0("dclang:", lang_id)
+    lang_query = paste("dclang:", "(", paste(params$lang_id, collapse=" OR "), ")", sep="")
     base_query <- paste(base_query, lang_query)
   }
     

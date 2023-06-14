@@ -1,7 +1,7 @@
 export const LangOptions = [
     {
         "id": "all-lang",
-        "label": "All languages"
+        "label": "All lang"
     },
     {
         "id": "aar",

@@ -133,9 +133,6 @@ detect_error <- function(failed, service, params) {
         reason <- c(reason, "API error: OpenAIRE not reachable")
       }
     }
-    if ("q_advanced" %in% names(params)) {
-      reason <- c(reason, "API error: q_advanced")
-    }
     if (length(reason) == 0) {
         result <- regmatches(failed$query, regexec(phrasepattern, failed$query))
         # if not one of the known data source API errors:
