@@ -242,8 +242,3 @@ queries <- function(titles){
   }
   return (queries)
 }
-
-
-valid_langs <- list(
-    'eng'='english'
-)

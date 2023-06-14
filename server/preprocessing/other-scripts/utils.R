@@ -72,18 +72,6 @@ setup_logging <- function(loglevel) {
 }
 
 
-get_service_lang <- function(lang_id, valid_langs, service) {
-  if (lang_id == 'all-lang'){
-    LANGUAGE <- 'english'
-  } else if (!is.null(valid_langs$lang_id)){
-    LANGUAGE <- valid_langs$lang_id
-  } else {
-    LANGUAGE <- 'english'
-  }
-  return (list(lang_id = lang_id, name = LANGUAGE))
-}
-
-
 detect_error <- function(failed, service, params) {
   output <- list()
   reason <- list()

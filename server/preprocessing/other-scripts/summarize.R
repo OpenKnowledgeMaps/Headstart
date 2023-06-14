@@ -45,11 +45,10 @@ prune_ngrams <- function(ngrams, stops){
 }
 
 create_cluster_labels <- function(clusters, metadata,
-                                  service, lang,
                                   type_counts,
                                   weightingspec,
                                   top_n, stops, taxonomy_separator="/") {
-  nn_corpus <- get_cluster_corpus(clusters, metadata, service, stops, taxonomy_separator)
+  nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
   nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
                                       tokenize = SplitTokenizer,
                                       weighting = function(x) weightSMART(x, spec="ntn"),
@@ -109,7 +108,7 @@ match_keyword_case <- function(x, type_counts) {
   if (!is.na(y)) return(y) else return(x)
 }
 
-get_cluster_corpus <- function(clusters, metadata, service, stops, taxonomy_separator,
+get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
                                add_title_ngrams = T) {
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
