@@ -194,7 +194,7 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("[^\\[;]+\\[[A-Z,0-9]+\\](;|$)?", "", subject_cleaned) # remove WHO classification
   subject_cleaned = gsub("FOS [A-Za-z ]+", "", subject_cleaned) # remove FOS classifications (Fields of Science and Technology)
   subject_cleaned = gsub("(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+" , "", subject_cleaned) # remove arXiv classification
-  subject_cleaned = gsub("(wikidata)?\\.org/entity/Q[\\d]+", "", subject_cleaned) # remove wikidata classification
+  subject_cleaned = gsub("(wikidata)?\\.org/entity/[qQ]([\\d]+)?", "", subject_cleaned) # remove wikidata classification
   subject_cleaned = gsub("</keyword><keyword>", "", subject_cleaned) # remove </keyword><keyword>
   subject_cleaned = gsub("\\[No keyword\\]", "", subject_cleaned)
   subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification
