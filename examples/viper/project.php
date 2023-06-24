@@ -6,7 +6,7 @@ include 'config.php';
     <head>       
         <?php
         
-        $id = $_GET['id'];
+        $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING);
 
         $protocol = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://';
         
