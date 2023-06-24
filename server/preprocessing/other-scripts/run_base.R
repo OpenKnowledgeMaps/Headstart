@@ -35,6 +35,9 @@ f <- file("stdin")
 open(f)
 data = fromJSON(readLines(f))
 params <- data$params
+if ("q_advanced" %in% names(params)) {
+  params$q_advanced <- sanitize_query(params$q_advanced)$sanitized_query
+}
 
 
 if (!is.null(params$lang_id)) {

@@ -3,6 +3,7 @@
   "from":"1665-01-01",
   "to":"2023-06-24",
   "sorting":"most-relevant",
+  "lang_id":["ger", "gre"],
   "vis_id": "TEST_ID",
   "min_descsize": 300,
   "limit": 120,
