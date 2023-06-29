@@ -1,0 +1,27 @@
+# docker-compose-phptest.yml
+
+version: '3.7'
+services:
+  composer:
+    image: composer:2.5.8
+    environment:
+      - COMPOSER_CACHE_DIR=/app/var/cache/composer
+    volumes:
+      - ./server/classes/headstart:/app
+    restart: never
+
+  phpunit80:
+    image: php:8.0-cli
+    restart: never
+    volumes:
+      - ./server/classes/headstart:/app
+    working_dir: /app
+    entrypoint: vendor/bin/phpunit
+
+  phpunit82:
+    image: php:8.2-cli
+    restart: never
+    volumes:
+      - ./server/classes/headstart:/app
+    working_dir: /app
+    entrypoint: vendor/bin/phpunit

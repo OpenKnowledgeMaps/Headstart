@@ -36,3 +36,7 @@ coverage/
 /linkedcat.sqlite
 .env
 .Rproj.user
+
+# php files
+/server/classes/headstart/vendor
+/server/classes/headstart/var/*
