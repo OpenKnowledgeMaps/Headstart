@@ -15,6 +15,7 @@ services:
     restart: never
     volumes:
       - ./server/classes/headstart:/app
+      - ./server/storage/test.sqlite:/app/storage/test.sqlite
     working_dir: /app
     entrypoint: vendor/bin/phpunit
 
