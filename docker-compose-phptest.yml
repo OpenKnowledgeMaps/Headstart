@@ -14,7 +14,7 @@ services:
     image: cytopia/phpcs:latest-php8.0
     restart: never
     volumes:
-      - ./server/classes/headstart:/data
+      - ./server:/data
     working_dir: /data
 
   phpunit80:

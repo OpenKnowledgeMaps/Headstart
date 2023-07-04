@@ -18,7 +18,12 @@ docker-compose -f docker-compose-phptest.yml run phpunit82 --version
 Run linting
 
 ```
-docker-compose -f docker-compose-phptest.yml run phpcs ./persistence/Persistence.php ./persistence/SQLitePersistence.php
+docker-compose -f docker-compose-phptest.yml run phpcs ./classes/headstart/persistence/Persistence.php \
+                                                       ./classes/headstart/persistence/SQLitePersistence.php \
+                                                       ./services/search.php \
+                                                       ./services/getLatestRevision.php \
+                                                       ./services/getLastVersion.php
+
 ```
 
 Run tests
