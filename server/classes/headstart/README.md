@@ -14,3 +14,16 @@ On root level of Headstart:
 docker-compose -f docker-compose-phptest.yml run phpunit80 --version
 docker-compose -f docker-compose-phptest.yml run phpunit82 --version
 ```
+
+Run linting
+
+```
+docker-compose -f docker-compose-phptest.yml run phpcs ./persistence/Persistence.php ./persistence/SQLitePersistence.php
+```
+
+Run tests
+
+```
+docker-compose -f docker-compose-phptest.yml run phpunit80
+docker-compose -f docker-compose-phptest.yml run phpunit82
+```
