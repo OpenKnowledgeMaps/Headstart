@@ -25,7 +25,3 @@ psy
 relig
 anthro-se
 socio
-invasion management
-invasion success
-invasion impact
-invasion pathway
