@@ -4,7 +4,9 @@
   "to":"2023-03-30",
   "sorting":"most-relevant",
   "vis_id": "TEST_ID",
-  "min_descsize": 300,
+  "min_descsize": 0,
   "limit": 120,
-  "list_size": 100
+  "list_size": 100,
+  "repo": "ftenkore",
+  "q_advanced": "dcsubject:\"theme:invasion management\""
 }
