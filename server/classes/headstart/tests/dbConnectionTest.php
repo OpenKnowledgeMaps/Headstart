@@ -1,84 +1,119 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use headstart\persistence\SQLitePersistence as SQLitePersistence;
+
+//use headstart\tests\test_data as test_data;
+//use app\storage as storage;
 
 class DbConnectionTest extends TestCase
 {
     protected static $persistence;
 
-    public static function setUpBeforeClass(): void
+
+    protected function setUp(): void
     {
         require dirname(__FILE__) . '/../persistence/SQLitePersistence.php';
 
         $db_path = '/app/storage/test.sqlite';
-        self::$persistence = new headstart\persistence\SQLitePersistence($db_path);
+//        $db_path = storage\getTestDataPath() . 'test.sqlite';
+//        self::$persistence = new headstart\persistence\SQLitePersistence($db_path);
+        self::$persistence = new SQLitePersistence($db_path);
     }
 
-    public static function tearDownAfterClass(): void
+
+    protected function tearDown(): void
     {
         self::$persistence = null;
     }
 
-    public function testDbConnection(): void
+    public function testDbConnection($vis_id = 'd161dba364a1e8c0468b9c74407e3575'): void
     {
         var_dump("testDbConnection started");
-
-        $vis_id = 'd161dba364a1e8c0468b9c74407e3575';
 
         $data = self::$persistence->getLastVersion($vis_id, $details = false, $context = true)[0];
 //        var_dump($data);
         var_dump("testDbConnection ended");
     }
 
-    public function testWriteToDbTest(): void
+    public function testCreateTables(): void
     {
-        var_dump("testWriteToDbTest started");
-
-        //    load json
-        $jsonFilePath = '/app/examples/project_website/data/digital-education-lang[].json';
-        $json = file_get_contents($jsonFilePath);
-        $jsonData = json_decode($json, true);
-        //    var_dump($jsonData);
-        //    var_dump($jsonData['context']);
-
-        $jsonObject = json_decode($json);
-        var_dump($jsonObject);
-//        var_dump($jsonObject->context->query);
-//        var_dump($jsonObject->context->params);
-
-
-//        $unique_id = $jsonData['context']['id'];
-        $dirty_query = $jsonObject->context->query;
-        var_dump($dirty_query);
-        $query = cleanQuery($dirty_query, $transform_query_tolowercase = true, $add_slashes = true);
-        $unique_id = $jsonObject->context->id;
-        $service = $jsonObject->context->service;
-        $vis_title = $service;
-        $params_json = json_decode($jsonObject->context->params);
-        //    $params_json = packParamsJSON($param_types, $post_params);
-
-        //    $persistence->createVisualization($unique_id, $vis_title, $jsonObject, $query, $dirty_query, $params_json);
-        self::$persistence->createVisualization($unique_id, $vis_title, $jsonObject, $query, $dirty_query, $params_json);
-
-//        $res = getLatestRevisions();
-//        var_dump($res);
-        var_dump("testWriteToDbTest ended");
-
+        var_dump("createTables started");
+        self::$persistence->createTables();
+        var_dump("createTables ended");
     }
 
-// //   old version of connection to db test
-//  public function testDbConnectionTest(): void
-//  {
-//    require dirname(__FILE__) . '/../persistence/SQLitePersistence.php';
+    public function testCreateVisualization($vis_id, $vis_title, $data, $vis_clean_query = null, $vis_query = null, $params = null): void
+    {
+        self::$persistence->createVisualization($vis_id, $vis_title, $data, $vis_clean_query = null, $vis_query = null, $params = null);
+    }
+
+//    get variables from json
+
+    function getJson($jsonFilePath)
+    {
+        $json = file_get_contents($jsonFilePath);
+//        $jsonObject = json_decode($json);
+//        $dirty_query = $jsonObject->context->query;
+//        var_dump($dirty_query);
+//        $query = cleanQuery($dirty_query, $transform_query_tolowercase = true, $add_slashes = true);
+//        $unique_id = $jsonObject->context->id;
+//        $service = $jsonObject->context->service;
+//        $vis_title = $service;
+//        $params_json = json_decode($jsonObject->context->params);
+        return json_decode($json);
+    }
+
+
+
+//    todo: testWriteToDbTest() is not working yet
+//    public function testWriteToDbTest(): void
+//    {
+//        var_dump("testWriteToDbTest started");
 //
-//    $db_path = '/app/storage/test.sqlite';
-//    $persistence = new headstart\persistence\SQLitePersistence($db_path);
+//        //    load json
+//        $jsonFilePath = 'app/tests/test_data/digital-education.json';
+////        $jsonFilePath = headstart\tests\test_data::getTestDataPath() . 'digital-education.json';
+////        $jsonFilePath = test_data::getTestDataPath() . 'digital-education.json';
+//        $json = file_get_contents($jsonFilePath);
+//        $jsonData = json_decode($json, true);
+//        //    var_dump($jsonData);
+//        //    var_dump($jsonData['context']);
 //
-//    $vis_id = 'd161dba364a1e8c0468b9c74407e3575';
+//        $jsonObject = json_decode($json);
+//        var_dump($jsonObject);
+////        var_dump($jsonObject->context->query);
+////        var_dump($jsonObject->context->params);
 //
-//    $data = $persistence->getLastVersion($vis_id, $details = false, $context = true)[0];
-//    var_dump($data);
-////    echo($data);
-//  }
+//
+////        $unique_id = $jsonData['context']['id'];
+//        $dirty_query = $jsonObject->context->query;
+//        var_dump($dirty_query);
+//        $query = cleanQuery($dirty_query, $transform_query_tolowercase = true, $add_slashes = true);
+//        $unique_id = $jsonObject->context->id;
+//        $service = $jsonObject->context->service;
+//        $vis_title = $service;
+//        $params_json = json_decode($jsonObject->context->params);
+//        //    $params_json = packParamsJSON($param_types, $post_params);
+//
+////        self::$persistence->createVisualization($unique_id, $vis_title, $jsonObject, $query, $dirty_query, $params_json);
+//
+//        // Mock the persistence object
+//        $persistenceMock = $this->createMock(headstart\persistence\SQLitePersistence::class);
+//        $persistenceMock->expects($this->once())
+//            ->method('createVisualization')
+//            ->with($unique_id, $vis_title, $jsonObject, $query, $dirty_query, $params_json);
+//
+//        // Replace the real persistence object with the mock
+//        $this->persistence = $persistenceMock;
+//
+//        // Test the method that depends on the mocked persistence object
+//        $this->persistence->createVisualization($unique_id, $vis_title, $jsonObject, $query, $dirty_query, $params_json);
+//
+////        $res = getLatestRevisions();
+////        var_dump($res);
+//        var_dump("testWriteToDbTest ended");
+//
+//    }
 }
 

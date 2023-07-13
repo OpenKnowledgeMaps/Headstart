@@ -23,7 +23,8 @@ services:
     volumes:
       - ./server/classes/headstart:/app
       - ./server/storage/test.sqlite:/app/storage/test.sqlite
-      - ./examples/project_website/data/digital-education-lang[].json:/app/examples/project_website/data/digital-education-lang[].json
+      - ./headstart/tests/test_data:/app/tests/test_data
+      #      - ./examples/project_website/data/digital-education-lang[].json:/app/examples/project_website/data/digital-education-lang[].json
       #      - ./server/services/search.php:/app/server/services/search.php
       #      - ./server/services/getLastVersion.php:/app/server/services/getLastVersion.php
       #      - ./server/services/getLatestRevision.php:/app/server/services/getLatestRevision.php
