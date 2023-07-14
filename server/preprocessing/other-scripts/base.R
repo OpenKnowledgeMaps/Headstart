@@ -207,7 +207,7 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("\\w+:\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
   subject_cleaned = gsub(": ", "", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
-  subject_cleaned = gsub(";+", "", subject_cleaned) # clean up keyword separation
+  subject_cleaned = gsub(";+", ";", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(",", ", ", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
   subject_cleaned = stringi::stri_trim(subject_cleaned) # clean up keyword separation
