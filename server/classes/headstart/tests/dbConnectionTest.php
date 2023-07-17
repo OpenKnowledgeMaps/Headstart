@@ -22,6 +22,9 @@ class DbConnectionTest extends TestCase
 
 //        $this->db_path = '/../../storage/tmp_test.sqlite';
 //        $db_path = '/app/storage/test.sqlite';
+//        $db_path = dirname(__FILE__) . '/../../storage/tmp_test.sqlite';
+//        self::$persistence = new SQLitePersistence($db_path);
+        
 // Specify the folder path
         $folderPath = __DIR__ . '/../tests/test_data/';
 
@@ -31,10 +34,8 @@ class DbConnectionTest extends TestCase
 // Rename the temporary file with the desired name
         $newFile = $tempFile . '.sqlite';
         rename($tempFile, $newFile);
-        self::$persistence = new SQLitePersistence($folderPath . 'temp_test_db.sqlite');
+        self::$persistence = new SQLitePersistence($folderPath . $newFile);
 
-//        $db_path = dirname(__FILE__) . '/../../storage/tmp_test.sqlite';
-//        self::$persistence = new SQLitePersistence($db_path);
     }
 
 
