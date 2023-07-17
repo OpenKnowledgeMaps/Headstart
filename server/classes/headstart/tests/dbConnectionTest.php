@@ -1,7 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+
 use headstart\persistence\SQLitePersistence as SQLitePersistence;
+//use app\persistence\SQLitePersistence as SQLitePersistence;
 
 //use headstart\tests\test_data as test_data;
 //use app\storage as storage;
@@ -9,23 +11,42 @@ use headstart\persistence\SQLitePersistence as SQLitePersistence;
 class DbConnectionTest extends TestCase
 {
     protected static $persistence;
+    private $db_path;
 
 
     protected function setUp(): void
     {
-        require dirname(__FILE__) . '/../persistence/SQLitePersistence.php';
+        parent::setUp();
 
-        $db_path = '/app/storage/test.sqlite';
-//        $db_path = storage\getTestDataPath() . 'test.sqlite';
-//        self::$persistence = new headstart\persistence\SQLitePersistence($db_path);
+//        require dirname(__FILE__) . '/../persistence/SQLitePersistence.php';
+
+//        $this->db_path = '/../../storage/tmp_test.sqlite';
+//        $db_path = '/app/storage/test.sqlite';
+        $db_path = dirname(__FILE__) . '/../../storage/tmp_test.sqlite';
         self::$persistence = new SQLitePersistence($db_path);
     }
 
 
     protected function tearDown(): void
     {
-        self::$persistence = null;
+//        self::$persistence = null;
+
+        // Clean up the temporary database file after the test
+        if (file_exists($this->db_path)) {
+            unlink($this->db_path);
+        }
+
+        parent::tearDown();
+
     }
+
+    public function testCreateTables(): void
+    {
+        var_dump("createTables started");
+        self::$persistence->createTables();
+        var_dump("createTables ended");
+    }
+
 
     public function testDbConnection($vis_id = 'd161dba364a1e8c0468b9c74407e3575'): void
     {
@@ -36,12 +57,6 @@ class DbConnectionTest extends TestCase
         var_dump("testDbConnection ended");
     }
 
-    public function testCreateTables(): void
-    {
-        var_dump("createTables started");
-        self::$persistence->createTables();
-        var_dump("createTables ended");
-    }
 
     public function testCreateVisualization($vis_id, $vis_title, $data, $vis_clean_query = null, $vis_query = null, $params = null): void
     {
@@ -53,20 +68,11 @@ class DbConnectionTest extends TestCase
     function getJson($jsonFilePath)
     {
         $json = file_get_contents($jsonFilePath);
-//        $jsonObject = json_decode($json);
-//        $dirty_query = $jsonObject->context->query;
-//        var_dump($dirty_query);
-//        $query = cleanQuery($dirty_query, $transform_query_tolowercase = true, $add_slashes = true);
-//        $unique_id = $jsonObject->context->id;
-//        $service = $jsonObject->context->service;
-//        $vis_title = $service;
-//        $params_json = json_decode($jsonObject->context->params);
         return json_decode($json);
     }
 
 
-
-//    todo: testWriteToDbTest() is not working yet
+////    todo: testWriteToDbTest() is not working yet
 //    public function testWriteToDbTest(): void
 //    {
 //        var_dump("testWriteToDbTest started");
