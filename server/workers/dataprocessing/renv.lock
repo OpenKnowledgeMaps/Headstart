@@ -16,6 +16,22 @@
       "Repository": "CRAN",
       "Hash": "e4c04affc2cac20c8fec18385cd14691"
     },
+    "GMD": {
+      "Package": "GMD",
+      "Version": "0.3.3",
+      "Source": "URL",
+      "Repository": "CRAN",
+      "RemoteType": "url",
+      "RemoteUrl": "https://cran.r-project.org/src/contrib/Archive/GMD/GMD_0.3.3.tar.gz",
+      "Hash": "519509ff9c3fb0546ef35c059607327a"
+    },
+    "KernSmooth": {
+      "Package": "KernSmooth",
+      "Version": "2.23-16",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "997471f25a7ed6c782f0090ce52cc63a"
+    },
     "MASS": {
       "Package": "MASS",
       "Version": "7.3-51.5",
@@ -57,6 +73,20 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "bc26e07c0d747fd287c370fe355e7b85"
+    },
+    "bitops": {
+      "Package": "bitops",
+      "Version": "1.0-7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b7d8d8ee39869c18d8846a184dd8a1af"
+    },
+    "caTools": {
+      "Package": "caTools",
+      "Version": "1.18.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "34d90fa5845004236b9eacafc51d07b2"
     },
     "cli": {
       "Package": "cli",
@@ -135,6 +165,20 @@
       "Repository": "CRAN",
       "Hash": "e32cfc0973caba11b65b1fa691b4d8c9"
     },
+    "foreign": {
+      "Package": "foreign",
+      "Version": "0.8-75",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "9a7efaa7320b9f327a904d1e615b0b46"
+    },
+    "fossil": {
+      "Package": "fossil",
+      "Version": "0.4.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "40516c0ab0d9da3e1415618e5c95ed3a"
+    },
     "generics": {
       "Package": "generics",
       "Version": "0.1.1",
@@ -148,6 +192,20 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "4f2596dfb05dac67b9dc558e5c6fba2e"
+    },
+    "gplots": {
+      "Package": "gplots",
+      "Version": "3.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e65e5d5dea4cbb9ba822dcd782b2ee1f"
+    },
+    "gtools": {
+      "Package": "gtools",
+      "Version": "3.9.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "2ace6c4a06297d0b364e0444384a2b82"
     },
     "iterators": {
       "Package": "iterators",
@@ -191,6 +249,13 @@
       "Repository": "CRAN",
       "Hash": "41287f1ac7d28a92f0a286ed507928d3"
     },
+    "maps": {
+      "Package": "maps",
+      "Version": "3.4.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b3d98a967ec17c80f795719529812fa0"
+    },
     "mgcv": {
       "Package": "mgcv",
       "Version": "1.8-31",
@@ -204,6 +269,15 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "e80d41932d3cc235ccbbbb9732ae162e"
+    },
+    "parfossil": {
+      "Package": "parfossil",
+      "Version": "0.2.0",
+      "Source": "URL",
+      "Repository": "CRAN",
+      "RemoteType": "url",
+      "RemoteUrl": "https://cran.r-project.org/src/contrib/Archive/parfossil/parfossil_0.2.0.tar.gz",
+      "Hash": "58d1da76330eee614904d8cea80200b9"
     },
     "permute": {
       "Package": "permute",
@@ -254,12 +328,26 @@
       "Repository": "CRAN",
       "Hash": "4ed1f8336c8d52c3e750adcdc57228a7"
     },
+    "shapefiles": {
+      "Package": "shapefiles",
+      "Version": "0.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "80dde2abbbe641a1dd783cfbd1d23596"
+    },
     "slam": {
       "Package": "slam",
       "Version": "0.1-49",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "be4af0d3420f164f135a210da1d2ba5e"
+    },
+    "sp": {
+      "Package": "sp",
+      "Version": "1.4-6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ce8613f4e8c84ef4da9eba65b874ebe9"
     },
     "stringdist": {
       "Package": "stringdist",
