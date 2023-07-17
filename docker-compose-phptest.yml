@@ -21,15 +21,8 @@ services:
     image: php:8.0-cli
     restart: never
     volumes:
-      - ./server/classes/headstart:/app
-      - ./server/storage/test.sqlite:/app/storage/test.sqlite
-      - ./headstart/tests/test_data:/app/tests/test_data
-      #      - ./examples/project_website/data/digital-education-lang[].json:/app/examples/project_website/data/digital-education-lang[].json
-      #      - ./server/services/search.php:/app/server/services/search.php
-      #      - ./server/services/getLastVersion.php:/app/server/services/getLastVersion.php
-      #      - ./server/services/getLatestRevision.php:/app/server/services/getLatestRevision.php
-      - ./server/services:/app/server/services
-    working_dir: /app
+      - ./server/:/app
+    working_dir: /app/classes/headstart
     entrypoint: vendor/bin/phpunit
 
   phpunit82:
