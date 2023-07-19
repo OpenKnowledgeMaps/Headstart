@@ -27,56 +27,6 @@ if (DEBUG==TRUE){
   setup_logging('INFO')
 }
 
-valid_langs <- list(
-  'afr'='afrikaans',
-  'akk'='akkadian',
-  'ara'='arabic',
-  'baq'='basque',
-  'bel'='belarusian',
-  'chi'='chinese',
-  'cze'='czech',
-  'dan'='danish',
-  'dut'='dutch',
-  'eng'='english',
-  'est'='estonian',
-  'fin'='finnish',
-  'fre'='french',
-  'geo'='georgian',
-  'ger'='german',
-  'gle'='irish',
-  'glg'='galician',
-  'grc'='greek',
-  'gre'='greek',
-  'heb'='hebrew',
-  'hrv'='croatian',
-  'hun'='hungarian',
-  'ice'='icelandic',
-  'ind'='indonesian',
-  'ita'='italian',
-  'jpn'='japanese',
-  'kor'='korean',
-  'lat'='latin',
-  'lit'='lithuanian',
-  'nau'='nauru',
-  'nob'='norwegian',
-  'nor'='norwegian',
-  'ota'='turkish',
-  'per'='persian',
-  'pol'='polish',
-  'por'='portuguese',
-  'rum'='romanian',
-  'rus'='russian',
-  'slo'='slovak',
-  'slv'='slovenian',
-  'spa'='spanish',
-  'srp'='serbian',
-  'sux'='sumerian',
-  'swe'='swedish',
-  'tha'='thai',
-  'tur'='turkish',
-  'ukr'='ukrainian',
-  'vie'='vietnamese'
-)
 
 tslog <- getLogger('ts')
 
@@ -104,16 +54,13 @@ text <- fromJSON(input_data$text)
 metadata <- fromJSON(input_data$metadata)
 
 MAX_CLUSTERS = params$MAX_CLUSTERS
-LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
-ADDITIONAL_STOP_WORDS = LANGUAGE$name
+
 
 failed <- list(params=params)
 tryCatch({
   output_json = vis_layout(text, metadata,
                            service,
                            max_clusters = MAX_CLUSTERS,
-                           add_stop_words = ADDITIONAL_STOP_WORDS,
-                           lang = LANGUAGE$name,
                            taxonomy_separator = params$taxonomy_separator,
                            vis_type=vis_type, list_size = params$list_size)
 }, error=function(err){

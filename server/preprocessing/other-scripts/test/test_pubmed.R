@@ -38,8 +38,7 @@ if ('lang_id' %in% names(params)){
     lang_id <- 'all'
 }
 
-LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
-ADDITIONAL_STOP_WORDS = LANGUAGE$name
+
 .GlobalEnv$VIS_ID <- params$vis_id
 
 #start.time <- Sys.time()
@@ -60,9 +59,7 @@ if(exists('input_data')) {
   tryCatch({
     output_json = vis_layout(input_data$text, input_data$metadata,
                              service,
-                             max_clusters=MAX_CLUSTERS,
-                             lang=LANGUAGE$name,
-                             add_stop_words=ADDITIONAL_STOP_WORDS, list_size = params$list_size)
+                             max_clusters=MAX_CLUSTERS, list_size = params$list_size)
   }, error=function(err){
     tslog$error(gsub("\n", " ", paste("Processing failed", query$raw_query, paste(params, collapse=" "), err, sep="||")))
     failed$query <<- query$raw_query

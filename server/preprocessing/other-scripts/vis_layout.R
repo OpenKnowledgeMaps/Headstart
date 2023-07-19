@@ -28,7 +28,6 @@ vlog <- getLogger('vis')
 vis_layout <- function(text, metadata, service,
                        max_clusters=15, maxit=500,
                        mindim=2, maxdim=2,
-                       lang=NULL, add_stop_words=NULL,
                        taxonomy_separator=NULL,
                        vis_type='overview', list_size=-1) {
   start.time <- Sys.time()
@@ -53,7 +52,6 @@ vis_layout <- function(text, metadata, service,
     metadata = replace_keywords_if_empty(metadata, stops)
     type_counts <- get_type_counts(corpus$unlowered)
     named_clusters <- create_cluster_labels(clusters, metadata,
-                                            service, lang,
                                             type_counts,
                                             weightingspec="ntn", top_n=3,
                                             stops=stops, taxonomy_separator)

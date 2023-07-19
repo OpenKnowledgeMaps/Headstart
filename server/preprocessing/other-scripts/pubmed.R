@@ -179,7 +179,3 @@ get_papers <- function(query, params = NULL, retry_opts = rentrez::entrez_retry_
 
 xtext <- function(x) xml2::xml_text(x)
 
-
-valid_langs <- list(
-    'eng'='english'
-)
