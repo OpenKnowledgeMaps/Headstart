@@ -143,11 +143,17 @@ class DataManager {
   __parseAuthors(paper) {
     paper.authors_objects = extractAuthors(paper.authors);
     paper.authors_list = getAuthorsList(
-      paper.authors,
-      this.config.convert_author_names
+        paper.authors,
+        this.config.convert_author_names
     );
-
     paper.authors_string = paper.authors_list.join(", ");
+
+    // in the case of more than 20 authors left an array of 21 authors to define
+    // that wee need to cut lust author and set "..." in the visible part of the list of authors
+    if (paper.authors_list.length > 20) {
+      paper.authors_list = paper.authors_list.slice(0, 20).concat(paper.authors_list[paper.authors_list.length - 1]);
+    }
+
   }
 
   // migrated from legacy code
