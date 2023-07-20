@@ -61,9 +61,10 @@ class SearchParamSchema(Schema):
     @pre_load
     def lang_id_empty_fallback(self, in_data, **kwargs):
         lang_id = in_data.get("lang_id")
-        lang_id = list(filter(lambda x: x != "", lang_id))
-        if len(lang_id) == 0:
-            in_data["lang_id"] = ["all-lang"]
+        if lang_id:
+            lang_id = list(filter(lambda x: x != "", lang_id))
+            if len(lang_id) == 0:
+                in_data["lang_id"] = ["all-lang"]
         return in_data
 
     @validates('from_')
