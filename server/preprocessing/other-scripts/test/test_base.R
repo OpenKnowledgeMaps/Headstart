@@ -7,7 +7,7 @@ options(warn=1)
 wd <- dirname(dirname(rstudioapi::getActiveDocumentContext()$path))
 setwd(wd) #Don't forget to set your working directory
 
-query <- 'orcid' #args[2]
+query <- 'test' #args[2]
 service <- "base"
 params <- NULL
 params_file <- "test/params_base.json"
