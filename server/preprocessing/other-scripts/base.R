@@ -179,10 +179,6 @@ etl <- function(res, repo, non_public) {
 
   metadata$subject_orig = subject_all
 
-  #subject = ifelse(subject !="", paste(unique(strsplit(subject, "; ")), "; "),"")
-
-  #pattern <- paste0("(;? ?|^)", paste0(triple_disciplines, collapse="($|; )|(;? ?|^)"), "($|; )")
-
   subject_cleaned = gsub("DOAJ:[^;]*(;|$)?", "", subject_all) # remove DOAJ classification
   subject_cleaned = gsub("/dk/atira[^;]*(;|$)?", "", subject_cleaned) # remove atira classification
   subject_cleaned = gsub("ddc:[0-9]+(;|$)?", "", subject_cleaned) # remove Dewey Decimal Classification
@@ -192,6 +188,8 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("[^\\(;]+\\(all\\)(;|$)?", "", subject_cleaned) # remove general subjects
   subject_cleaned = gsub("[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
   subject_cleaned = gsub("[^\\[;]+\\[[A-Z,0-9]+\\](;|$)?", "", subject_cleaned) # remove WHO classification
+  subject_cleaned = gsub("([A-Za-z]+:[A-Za-z0-9 \\/\\.]+);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
+  subject_cleaned = gsub("(wikidata)?\\.org/entity/[qQ]([\\d]+)?", "", subject_cleaned) # remove wikidata classification
   subject_cleaned = gsub("</keyword><keyword>", "", subject_cleaned) # remove </keyword><keyword>
   subject_cleaned = gsub("\\[No keyword\\]", "", subject_cleaned)
   subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification
@@ -202,11 +200,10 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
   subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
   subject_cleaned = gsub("\\w+:\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
-  #subject_cleaned = gsub(pattern=pattern, replacement="", subject_cleaned) # remove TRIPLE discipline classification codes
   subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(",", ", ", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
-
+  subject_cleaned = stringi::stri_trim(subject_cleaned) # clean up keyword separation
   metadata$subject = subject_cleaned
 
   metadata$authors = check_metadata(res$dccreator)
@@ -298,57 +295,6 @@ decode_dctypenorm <- function(dctypestring) {
   typecodes <- unlist(unname(typecodes[[1]]))
   return(typecodes)
 }
-
-valid_langs <- list(
-    'afr'='afrikaans',
-    'akk'='akkadian',
-    'ara'='arabic',
-    'baq'='basque',
-    'bel'='belarusian',
-    'chi'='chinese',
-    'cze'='czech',
-    'dan'='danish',
-    'dut'='dutch',
-    'eng'='english',
-    'est'='estonian',
-    'fin'='finnish',
-    'fre'='french',
-    'geo'='georgian',
-    'ger'='german',
-    'gle'='irish',
-    'glg'='galician',
-    'grc'='greek',
-    'gre'='greek',
-    'heb'='hebrew',
-    'hrv'='croatian',
-    'hun'='hungarian',
-    'ice'='icelandic',
-    'ind'='indonesian',
-    'ita'='italian',
-    'jpn'='japanese',
-    'kor'='korean',
-    'lat'='latin',
-    'lit'='lithuanian',
-    'nau'='nauru',
-    'nob'='norwegian',
-    'nor'='norwegian',
-    'ota'='turkish',
-    'per'='persian',
-    'pol'='polish',
-    'por'='portuguese',
-    'rum'='romanian',
-    'rus'='russian',
-    'slo'='slovak',
-    'slv'='slovenian',
-    'spa'='spanish',
-    'srp'='serbian',
-    'sux'='sumerian',
-    'swe'='swedish',
-    'tha'='thai',
-    'tur'='turkish',
-    'ukr'='ukrainian',
-    'vie'='vietnamese'
-)
 
 dctypenorm_decoder <- list(
   "4"="Audio",

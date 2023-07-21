@@ -66,8 +66,6 @@ switch(service,
 )
 
 MAX_CLUSTERS = 15
-LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
-ADDITIONAL_STOP_WORDS = LANGUAGE$name
 
 failed <- list(params=params)
 tryCatch({
@@ -83,8 +81,7 @@ if(exists('input_data')) {
   tryCatch({
     output_json = vis_layout(input_data$text, input_data$metadata,
                              service,
-                             max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
-                             lang=LANGUAGE$name,
+                             max_clusters=MAX_CLUSTERS,
                              taxonomy_separator=taxonomy_separator,
                              vis_type=vis_type, list_size = params$list_size)
   }, error=function(err){

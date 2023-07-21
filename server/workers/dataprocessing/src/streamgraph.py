@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import logging
 import sys
@@ -197,7 +198,12 @@ def aggregate_ids(series):
     except Exception:
         return "NA"
 
-stopwords = ["archeo", "archi", "art", "anthro-bio", "class", "info", "museo", "demo",
-                       "eco", "edu", "envir", "genre", "geo", "hist", "hisphilso", "droit",
-                       "lang", "litt", "manag", "stat", "musiq", "phil", "scipo", "psy",
-                       "relig", "anthro-se", "socio"]
+
+def load_stopwords():
+    stopwords = []
+    if os.path.isfile("../../resources/additional_stopwords.txt"):
+        with open ("../../resources/additional_stopwords.txt") as infile:
+            stopwords = infile.read().splitlines()
+    return stopwords
+
+stopwords = load_stopwords()

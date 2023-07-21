@@ -31,16 +31,15 @@ check_metadata <- function (field) {
 get_stopwords <- function(languages) {
   languages <- c(languages, "spa", "eng", "fre", "ger")
   languages <- unique(languages)
-  triple_disciplines = c("archeo", "archi", "art", "anthro-bio", "class", "info", "museo", "demo",
-                       "eco", "edu", "envir", "genre", "geo", "hist", "hisphilso", "droit",
-                       "lang", "litt", "manag", "stat", "musiq", "phil", "scipo", "psy",
-                       "relig", "anthro-se", "socio")
   if (dir.exists("../resources")) {
       stops <- fromJSON("../resources/stopwords_iso_cleaned.json")
+      additional_stopwords <- readLines("../resources/additional_stopwords.txt")
     } else if (dir.exists("./resources")) {
       stops <- fromJSON("./resources/stopwords_iso_cleaned.json")
+      additional_stopwords <- readLines("./resources/additional_stopwords.txt")
     } else {
       stops <- fromJSON("../../resources/stopwords_iso_cleaned.json")
+      additional_stopwords <- readLines("../../resources/additional_stopwords.txt")
     }
   stopwords <- list()
   for (l in languages) {
@@ -49,7 +48,7 @@ get_stopwords <- function(languages) {
     }
   }
   stopwords <- unlist(stopwords)
-  stopwords <- c(stopwords, triple_disciplines)
+  stopwords <- c(stopwords, additional_stopwords)
   return(stopwords)
 }
 
@@ -69,18 +68,6 @@ setup_logging <- function(loglevel) {
     removeHandler('basic.stdout')
     addHandler(writeToFile, file=Sys.getenv("LOGFILE"))
   }
-}
-
-
-get_service_lang <- function(lang_id, valid_langs, service) {
-  if (lang_id == 'all-lang'){
-    LANGUAGE <- 'english'
-  } else if (!is.null(valid_langs$lang_id)){
-    LANGUAGE <- valid_langs$lang_id
-  } else {
-    LANGUAGE <- 'english'
-  }
-  return (list(lang_id = lang_id, name = LANGUAGE))
 }
 
 

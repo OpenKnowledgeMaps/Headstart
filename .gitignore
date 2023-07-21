@@ -17,6 +17,7 @@ dist/
 .cache
 .Rhistory
 .ipynb_checkpoints
+*.ipynb
 .Rprofile
 .Rproj*
 coverage/
@@ -35,4 +36,9 @@ coverage/
 /lc_cache.json
 /linkedcat.sqlite
 .env
+*.env
 .Rproj.user
+
+# PHP dev env files
+/server/classes/headstart/var/*
+/server/classes/headstart/vendor/*
