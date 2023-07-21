@@ -87,6 +87,7 @@ class BaseClient(RWrapper):
                 res = raw_metadata
             else:
                 metadata = pd.DataFrame(raw_metadata)
+                metadata = self.sanitize_metadata(metadata)
                 metadata = filter_duplicates(metadata)
                 metadata = metadata.head(params.get('list_size'))
                 metadata.reset_index(inplace=True, drop=True)
@@ -105,6 +106,10 @@ class BaseClient(RWrapper):
             self.logger.error(e)
             self.logger.error(error)
             raise
+
+    def sanitize_metadata(self, metadata):
+        metadata["authors"] = metadata["authors"].map(lambda x: sanitize_authors(x))
+        return metadata
 
     def enrich_metadata(self, metadata):
         metadata["repo"] = metadata["content_provider"].map(lambda x: self.content_providers.get(x, ""))
@@ -314,3 +319,7 @@ def filter_duplicates(df):
         if c in filtered.columns:
             filtered.drop(c, axis=1, inplace=True)
     return filtered
+
+def sanitize_authors(authors):
+    authors = authors.split(", ")
+    return authors
