@@ -120,7 +120,7 @@ replace_keywords_if_empty <- function(metadata, stops) {
   }
   vplog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Documents without subjects:", length(missing_subjects)))
   candidates = mapply(paste, metadata$title)
-  batch_size <- 2000
+  batch_size <- 1000
   total_length <- length(stops)
   for (i in seq(1, total_length, batch_size)) {
     candidates = mclapply(candidates, function(x)paste(removeWords(x, stops[i:min(i+batch_size -1, total_length)]), collapse=""))  
