@@ -86,7 +86,7 @@ create_cluster_labels <- function(clusters, metadata,
       summary <- filter_out_nested_ngrams(names(top_ngrams), 3)
       summary = lapply(summary, FUN = function(x) {paste(unlist(x), collapse="; ")})
       summary = gsub("_", " ", summary)
-      summary = paste(summary, collapse="; ")
+      summary = paste(summary, collapse=", ")
     }
     clusters$cluster_labels[c(matches)] = summary
   }
