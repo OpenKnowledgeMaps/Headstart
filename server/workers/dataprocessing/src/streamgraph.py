@@ -204,6 +204,9 @@ def load_stopwords():
     if os.path.isfile("../../resources/additional_stopwords.txt"):
         with open ("../../resources/additional_stopwords.txt") as infile:
             stopwords = infile.read().splitlines()
+    if os.path.isfile("../resources/additional_stopwords.txt"):
+        with open ("../resources/additional_stopwords.txt") as infile:
+            stopwords = infile.read().splitlines()
     return stopwords
 
 stopwords = load_stopwords()
