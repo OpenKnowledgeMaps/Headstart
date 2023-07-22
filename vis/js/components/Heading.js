@@ -41,7 +41,7 @@ const Heading = ({
 
   let queryString = queryConcatenator([query, q_advanced])
 
-  console.log("customTitle", headingParams.customTitle)
+  // console.log("customTitle", headingParams.customTitle)
 
   return (
       // html template starts here
@@ -62,7 +62,7 @@ const mapStateToProps = (state) => ({
   headingParams: state.heading,
   streamgraph: state.chartType === STREAMGRAPH_MODE,
   q_advanced: state.q_advanced.text,
-  context: state,
+  // context: state,
   // customTitle: state.heading.customTitle,
 });
 
