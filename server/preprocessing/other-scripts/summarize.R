@@ -22,7 +22,7 @@ prune_ngrams <- function(ngrams, stops){
   # filter out empty tokens
   tokenized_ngrams = lapply(tokenized_ngrams, function(ngrams){ngrams[lapply(ngrams, length)>0]})
   # remove ngrams starting with a stopword
-  batch_size <- 2000
+  batch_size <- 1000
   total_length <- length(stops)
   for (i in seq(1, total_length, batch_size)) {
     tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
@@ -64,7 +64,7 @@ create_cluster_labels <- function(clusters, metadata,
   tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(nn_tfidf, nn_corpus)[c(empty_tfidf)]
   tfidf_top_names <- get_top_names(tfidf_top, top_n, stops)
   clusters$cluster_labels = ""
-  batch_size <- 2000
+  batch_size <- 1000
   total_length <- length(stops)
   for (k in seq(1, clusters$num_clusters)) {
     matches = which(unname(clusters$groups == k) == TRUE)
@@ -81,7 +81,7 @@ create_cluster_labels <- function(clusters, metadata,
       candidates_trigrams = lapply(lapply(candidates, expand_ngrams, n=3), paste, collapse=" ")
       candidates = unname(mapply(paste, candidates_bigrams, candidates_trigrams))
       candidates =  unlist(lapply(candidates, str_split, " "), recursive = F)
-      candidates = unlist(lapply(candidates, function(x) {another_prune_ngrams(x, stops[i:min(i+batch_size -1, total_length)])}))
+      candidates = unlist(lapply(candidates, function(x) {another_prune_ngrams(x, stops)}))
       top_ngrams = sort(table(strsplit(paste(candidates, collapse=" "), " ")), decreasing = T)
       summary <- filter_out_nested_ngrams(names(top_ngrams), 3)
       summary = lapply(summary, FUN = function(x) {paste(unlist(x), collapse="; ")})
@@ -126,7 +126,7 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
     titles = lapply(titles, function(x) {gsub("[^[:alnum:]-]", " ", x)})
     titles = lapply(titles, gsub, pattern="\\s+", replacement=" ")
     title_ngrams <- get_title_ngrams(titles, stops, c(2, 3))
-    batch_size <- 2000
+    batch_size <- 1000
     total_length <- length(stops)
     for (i in seq(1, total_length, batch_size)) {
       titles = lapply(titles, function(x) {removeWords(x, stops[i:min(i+batch_size -1, total_length)])})
@@ -177,7 +177,7 @@ another_prune_ngrams <- function(ngrams, stops){
   tokens = lapply(tokens, strsplit, split="_")
   tokens = tokens[lapply(tokens, length)>0]
   # check if first token of ngrams in stopword list
-  batch_size <- 2000
+  batch_size <- 1000
   total_length <- length(stops)
   for (i in seq(1, total_length, batch_size)) {
     tokens = lapply(tokens, function(y){
