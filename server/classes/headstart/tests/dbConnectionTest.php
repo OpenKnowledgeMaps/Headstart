@@ -35,19 +35,20 @@ class DbConnectionTest extends TestCase
         // Now let's try to retrieve the visualisation that we stored
         $resultFromDataBase = $persistence->getLastVersion($vis_id);
 
+//        $persistence->writeRevision($vis_id, $data);
+
         $jsonRes = $resultFromDataBase["rev_data"];
         $jsonDecoded = json_decode($jsonRes);
-
 
         $resId = $jsonDecoded->context->id;
         $resTitle = $jsonDecoded->context->service;
 
-//        var_dump($jsonRes);
-        var_dump($resId);
-        var_dump($resTitle);
         $this->assertEquals($resId, $vis_id, "actual value of ID is not equals to expected");
         $this->assertEquals($resTitle, $vis_title, "actual value of Title is not equals to expected");
-        
+        $this->assertObjectHasAttribute("context", $jsonDecoded, "context is not in jsonDecoded");
+//        $this->assertIsArray($jsonDecoded->context, "context is not an array");
+        $this->assertIsObject($jsonDecoded->context, "context is not an object");
+        $this->assertIsString($jsonDecoded->data, "data is not a string");
     }
 
 }
