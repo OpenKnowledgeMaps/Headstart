@@ -354,7 +354,7 @@ def clean_up_annotations(df, field):
     df[field] = df[field].map(lambda x: pattern_annotations.sub("", x).strip())
     return df
 
-def sanitize_authors(authors, n=20):
+def sanitize_authors(authors, n=15):
     authors = authors.split("; ")
     if len(authors) > n:
         authors = authors[:n-1] + authors[-1:]
