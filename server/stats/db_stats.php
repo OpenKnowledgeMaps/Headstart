@@ -16,7 +16,7 @@
         <?php
         require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
         require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
-        require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
+        require_once dirname(__FILE__) . '/../classes/headstart/library/Toolkit.php';
 
         use headstart\library;
 

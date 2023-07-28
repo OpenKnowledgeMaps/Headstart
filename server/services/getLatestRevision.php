@@ -5,7 +5,7 @@ header('Content-type: application/json');
 require dirname(__FILE__) . '/../classes/headstart/preprocessing/calculation/RCalculation.php';
 require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
-require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
+require_once dirname(__FILE__) . '/../classes/headstart/library/Toolkit.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/APIClient.php';
 
 use headstart\library;

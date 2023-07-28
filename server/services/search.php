@@ -5,7 +5,7 @@ require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence
 require_once dirname(__FILE__) . '/../classes/headstart/preprocessing/Snapshot.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/APIClient.php';
-require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
+require_once dirname(__FILE__) . '/../classes/headstart/library/Toolkit.php';
 require 'helper.php';
 
 use headstart\library;
