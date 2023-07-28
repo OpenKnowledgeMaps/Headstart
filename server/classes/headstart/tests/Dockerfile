@@ -8,4 +8,4 @@ RUN apt-get install -y --no-install-recommends git
 
 WORKDIR /app
 RUN pip install git+https://github.com/python-restx/flask-restx
-RUN pip install pytest
+RUN pip install pytest requests
