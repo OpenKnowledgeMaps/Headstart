@@ -1,0 +1,38 @@
+# docker-compose-end2endtest.yml
+
+version: '3.7'
+services:
+
+  end2endtest:
+    build:
+      context: ./server/classes/headstart/tests
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./server/:/app
+    depends_on:
+      - db
+    restart: "no"
+    entrypoint: ["pytest", '/app/classes/headstart/tests/test_end2end.py', '-s', '-rf']
+    networks: 
+      - test
+
+  db:
+    image: 'postgres:12.2-alpine'
+    hostname: "testdb"
+    restart: "no"
+    environment:
+      POSTGRES_USER: "testuser"
+      POSTGRES_PASSWORD: "testpassword"
+    command: postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
+    volumes:
+      # - db_data:/var/lib/postgresql/data
+      - ./server/workers/example_pg_hba.conf:/etc/pg_hba.conf
+      - ./server/workers/example_postgresql.conf:/etc/postgresql.conf
+    networks: 
+      - test
+
+volumes:
+  db_data:
+
+networks:
+  test:
