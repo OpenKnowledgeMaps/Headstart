@@ -35,13 +35,36 @@ def test_base_search(test_client):
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
 
-def test_base_url(app):
-    # Test that the base URL returns a 200 (OK) HTTP status code
-    url = "http://backend/server/services/searchBASE.php"
-    # assert response.status_code == 200
+def test_apache_php():
+    url = "http://backend/server/services/test.php"
     try:
         response = requests.get(url)
         response.raise_for_status()
         print("Request successful!")
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
+        print(response.content)
+
+def test_base_url(app):
+    # Test that the base URL returns a 200 (OK) HTTP status code
+    url = "http://backend/server/services/searchBASE.php"
+    params = {
+        "unique_id": "530133cf1768e6606f63c641a1a96768",
+        "from": "1809-01-01",
+        "to": "2023-07-28",
+        "document_types": ["121"],
+        "q": "digital education",
+        "sorting": "most-recent"
+    }
+    # assert response.status_code == 200
+    try:
+        response = requests.post(url, data=params)
+        response.raise_for_status()
+        data = response.json()
+        assert "query" in data
+        assert "id" in data
+        assert "status" in data
+        print("Request successful!")
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+        print(response.json())
