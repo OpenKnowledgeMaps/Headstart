@@ -5,7 +5,7 @@ services:
 
   end2endtest:
     build:
-      context: ./server/classes/headstart/tests
+      context: ./server/workers/tests
       dockerfile: ./Dockerfile_tests
     volumes:
       - ./server/:/app
@@ -13,13 +13,13 @@ services:
       - db
       - backend
     restart: "no"
-    entrypoint: ["pytest", '/app/classes/headstart/tests/test_end2end.py', '-s', '-rfA']
+    entrypoint: ["pytest", '/app/server/workers/tests/test_end2end.py', '-s', '-rfA']
     networks: 
       - test
 
   backend:
     build:
-      context: ./server/classes/headstart/tests
+      context: ./server/workers/tests
       dockerfile: ./Dockerfile_backend
     volumes:
       - ./server/:/var/www/html/server
