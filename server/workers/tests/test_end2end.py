@@ -1,7 +1,7 @@
 import json
 import pytest
 import requests
-from mock_app import create_app
+from .mock_app import create_app
 
 
 @pytest.fixture

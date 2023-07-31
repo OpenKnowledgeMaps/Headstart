@@ -14,7 +14,7 @@ def create_app(config_name):
     @app.route('/api/stable/base/search')
     def base_search():
         try:
-            with open("/app/workers/test/test_data/digital-education.json") as f:
+            with open("/app/workers/tests/test_data/digital-education.json") as f:
                 data = json.load(f)
             headers = {}
             headers["Content-Type"] = "application/json"
