@@ -7,6 +7,13 @@ services:
     build:
       context: ./server/workers/tests
       dockerfile: ./Dockerfile_tests
+    environment:
+      POSTGRES_USER: "testuser"
+      POSTGRES_PASSWORD: "testpassword"
+      POSTGRES_HOST: "db_server"
+      POSTGRES_PORT: 5432
+      DEFAULT_DATABASE: "testdb"
+      SERVICE_VERSION: "test_version"
     volumes:
       - ./server/:/app
     depends_on:
@@ -32,14 +39,20 @@ services:
   db:
     image: 'postgres:12.2-alpine'
     restart: "no"
+    hostname: "db_server"
     environment:
       POSTGRES_USER: "testuser"
       POSTGRES_PASSWORD: "testpassword"
+      POSTGRES_HOST: "db_server"
+      POSTGRES_PORT: 5432
+      DEFAULT_DATABASE: "testdb"
     command: postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
     volumes:
       # - db_data:/var/lib/postgresql/data
       - ./server/workers/example_pg_hba.conf:/etc/pg_hba.conf
       - ./server/workers/example_postgresql.conf:/etc/postgresql.conf
+    ports:
+      - "5432:5432"
     networks: 
       - test
 

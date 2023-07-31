@@ -1,7 +1,7 @@
 import json
 import pytest
 import requests
-from .mock_app import create_app
+from workers.tests.mock_app import create_app
 
 
 @pytest.fixture
@@ -16,11 +16,8 @@ def test_client(app):
     # Create a test client using the test Flask app
     return app.test_client()
 
-def test_docker():
-    print("Hello World!")
-
 def test_hello_world(test_client):
-    response = test_client.get('/')
+    response = test_client.get('/hello')
     assert response.status_code == 200
     assert b"Hello, World!" in response.data
 
@@ -106,3 +103,14 @@ def test_getLatestRevisionWithDetails():
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
         print(response.content)
+
+def test_persistence_api(test_client):
+    url = "/api/stable/persistence/service_version"
+    try:
+        response = test_client.get(url)
+        assert response.status_code == 200
+        assert b"test_version" in response.data
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+        print(response.content)
+    

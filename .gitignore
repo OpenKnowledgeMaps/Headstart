@@ -28,6 +28,7 @@ coverage/
 backend_*.sh
 server/workers/tests/*.csv
 server/workers/tests/*.txt
+server/workers/tests/testutils/
 
 # php files
 /server/classes/headstart/vendor

@@ -18,9 +18,11 @@ sessions[os.getenv("DEFAULT_DATABASE")] = sessionmaker(bind=create_engine('postg
                                                                  pool_pre_ping=True,
                                                                  pool_recycle=3600,
                                                                  pool_size=30))
-for database in os.getenv("DATABASES").split(","):
-    bind_params["db"] = database
-    sessions[database] = sessionmaker(bind=create_engine('postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % bind_params,
+if "DATABASES" in os.environ:
+    if os.getenv("DATABASES") != "":
+        for database in os.getenv("DATABASES").split(","):
+            bind_params["db"] = database
+            sessions[database] = sessionmaker(bind=create_engine('postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % bind_params,
                                                                  max_overflow=15,
                                                                  pool_pre_ping=True,
                                                                  pool_recycle=3600,
