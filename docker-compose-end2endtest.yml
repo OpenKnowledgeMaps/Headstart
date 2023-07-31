@@ -6,19 +6,31 @@ services:
   end2endtest:
     build:
       context: ./server/classes/headstart/tests
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile_tests
     volumes:
       - ./server/:/app
     depends_on:
       - db
+      - backend
     restart: "no"
-    entrypoint: ["pytest", '/app/classes/headstart/tests/test_end2end.py', '-s', '-rf']
+    entrypoint: ["pytest", '/app/classes/headstart/tests/test_end2end.py', '-s', '-rfA']
     networks: 
       - test
 
+  backend:
+    build:
+      context: ./server/classes/headstart/tests
+      dockerfile: ./Dockerfile_backend
+    volumes:
+      - ./server/:/var/www/html/server
+    restart: "no"
+    networks: 
+      - test
+    ports:
+      - "80:80"
+
   db:
     image: 'postgres:12.2-alpine'
-    hostname: "testdb"
     restart: "no"
     environment:
       POSTGRES_USER: "testuser"
