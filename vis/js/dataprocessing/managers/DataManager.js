@@ -148,12 +148,11 @@ class DataManager {
     );
     // paper.authors_string = paper.authors_list.join(", ");
 
-    // in the case of more than 20 authors left an array of 21 authors to define
+    // in the case of more than 15 authors left an array of 16 authors to define
     // that wee need to cut lust author and set "..." in the visible part of the list of authors
-    if (paper.authors_list.length > 10) {
-      paper.authors_list = paper.authors_list.slice(0, 10).concat(paper.authors_list[paper.authors_list.length - 1]);
-
-      const first19Authors = paper.authors_list.slice(0, 9).join(", ");
+    if (paper.authors_list.length > 15) {
+      paper.authors_list = paper.authors_list.slice(0, 15).concat(paper.authors_list[paper.authors_list.length - 1]);
+      const first19Authors = paper.authors_list.slice(0, 14).join(", ");
       const lastAuthor = paper.authors_list[paper.authors_list.length - 1];
       paper.authors_string = `${first19Authors}, ... ${lastAuthor}`;
     }
