@@ -150,3 +150,46 @@ def test_persistence_api_create_visualization(test_client):
     assert "vis_title" in response.json.keys()
     return_data = response.json["rev_data"]
     assert data == return_data
+
+def test_search_and_getLatestRevision():
+    """
+    This test will be able to test SQLite and Postgres persistence.
+    """
+    url = "http://backend/server/services/searchBASE.php"
+    params = {
+        "unique_id": "530133cf1768e6606f63c641a1a96768",
+        "from": "1809-01-01",
+        "to": "2023-07-28",
+        "document_types": ["121"],
+        "q": "digital education",
+        "sorting": "most-recent"
+    }
+    try:
+        response = requests.post(url, data=params)
+        response.raise_for_status()
+        data = response.json()
+        assert "query" in data
+        assert "id" in data
+        assert "status" in data
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+        print(response.json())
+    url = "http://backend/server/services/getLatestRevision.php"
+    params = {
+        "vis_id": "530133cf1768e6606f63c641a1a96768",
+        "context": True
+    }
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        r = response.json()
+        assert type(r) == dict
+        assert "context" in r.keys()
+        assert "data" in r.keys()
+        assert type(r["context"]) == dict
+        assert type(r["data"]) == str
+        data = json.loads(r["data"])
+        assert type(data) == list
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+        print(response.content)
