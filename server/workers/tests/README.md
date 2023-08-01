@@ -31,7 +31,7 @@ processing_backend = "api"
 sqlite_db = "/var/www/localstorage/local.sqlite"
 
 # PostgreSQL database
-database = "test"
+database = "testdb"
 
 
 ```
