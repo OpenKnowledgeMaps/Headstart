@@ -2,14 +2,19 @@ import json
 import pytest
 import requests
 from workers.tests.mock_app import create_app
-
+from workers.persistence.src.models import Base
 
 @pytest.fixture
 def app():
     # Create a test Flask app with a temporary test database
+    # It will setup the Visualizations and Revisions tables
+    # each time the test runs and drop them when the test is done
     app = create_app(config_name="testing")
+    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     with app.app_context():
+        Base.metadata.reflect(engine)
         yield app
+        Base.metadata.clear()
 
 @pytest.fixture
 def test_client(app):
@@ -114,3 +119,12 @@ def test_persistence_api(test_client):
         print(f"Request failed: {e}")
         print(response.content)
     
+def test_list_databases(test_client, app):
+    url = "/list_databases"
+    try:
+        response = test_client.get(url)
+        assert response.status_code == 200
+        assert b'["postgres","testuser","testdb"]\n' in response.data
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+        print(response.content)

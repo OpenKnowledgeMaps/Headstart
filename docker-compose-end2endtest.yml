@@ -10,7 +10,7 @@ services:
     environment:
       POSTGRES_USER: "testuser"
       POSTGRES_PASSWORD: "testpassword"
-      POSTGRES_HOST: "db_server"
+      POSTGRES_HOST: "headstart_db_1"
       POSTGRES_PORT: 5432
       DEFAULT_DATABASE: "testdb"
       SERVICE_VERSION: "test_version"
@@ -49,8 +49,8 @@ services:
     command: postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
     volumes:
       # - db_data:/var/lib/postgresql/data
-      - ./server/workers/example_pg_hba.conf:/etc/pg_hba.conf
-      - ./server/workers/example_postgresql.conf:/etc/postgresql.conf
+      - ./server/workers/tests/test_data/pg_hba_test.conf:/etc/pg_hba.conf
+      - ./server/workers/tests/test_data/postgresql_test.conf:/etc/postgresql.conf
     ports:
       - "5432:5432"
     networks: 

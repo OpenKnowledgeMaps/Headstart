@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 
 class Visualizations(Base):
     __tablename__ = "visualizations"
+    __table_args__ = {'keep_existing': True}
 
     vis_id = Column(Text, nullable=False, unique=True,
                        primary_key=True)
@@ -22,6 +23,7 @@ class Visualizations(Base):
 
 class Revisions(Base):
     __tablename__ = "revisions"
+    __table_args__ = {'keep_existing': True}
 
     rev_id = Column(Integer,
                        nullable=False,
