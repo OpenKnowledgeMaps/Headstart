@@ -41,20 +41,6 @@ def create_app(config_name):
             print(e)
             return make_response("Error", 500)
         
-    @app.route('/list_databases')
-    def list_databases():
-        try:
-            session = sessions["testdb"]()
-            engine = session.get_bind()
-            connection = engine.connect()
-            sql_query = "SELECT datname FROM pg_database WHERE datistemplate = false;"
-            result = connection.execute(sql_query)
-            database_names = [row[0] for row in result.fetchall()]
-            return make_response(jsonify(database_names), 200, {"Content-Type": "application/json"})
-        except Exception as e:
-            print(e)
-            return make_response("Error", 500)
-
     api = Api(app)
     api.add_namespace(persistence_ns, path='/api/stable/persistence')
 

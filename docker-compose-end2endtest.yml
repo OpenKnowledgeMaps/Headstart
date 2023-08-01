@@ -7,6 +7,7 @@ services:
     build:
       context: ./server/workers/tests
       dockerfile: ./Dockerfile_tests
+    hostname: "end2endtest"
     environment:
       POSTGRES_USER: "testuser"
       POSTGRES_PASSWORD: "testpassword"

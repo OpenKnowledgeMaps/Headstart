@@ -119,13 +119,34 @@ def test_persistence_api(test_client):
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
         print(response.content)
-    
-def test_list_databases(test_client, app):
-    url = "/list_databases"
-    try:
-        response = test_client.get(url)
-        assert response.status_code == 200
-        assert b'["postgres","testuser","testdb"]\n' in response.data
-    except requests.exceptions.RequestException as e:
-        print(f"Request failed: {e}")
-        print(response.content)
+
+def test_persistence_api_create_visualization(test_client):
+    with open("/app/workers/tests/test_data/digital-education.json") as f:
+        raw = json.load(f)
+    data = raw["data"]
+    vis_params = raw["context"]
+    url = "/api/stable/persistence/createVisualization/testdb"
+    params = {
+        "vis_id": "530133cf1768e6606f63c641a1a96768",
+        "vis_title": "digital education",
+        "data": data,
+        "vis_clean_query": "digital education",
+        "vis_query": "digital education",
+        "vis_params": {"context": json.dumps(vis_params)}
+    }
+    response = test_client.post(url, json=params)
+    assert b'{"success":true}\n' in response.data
+    url = "/api/stable/persistence/getLastVersion/testdb"
+    params = {
+        "vis_id": "530133cf1768e6606f63c641a1a96768",
+        "context": True
+    }
+    response = test_client.post(url, json=params)
+    assert "rev_data" in response.json.keys()
+    assert "rev_timestamp" in response.json.keys()
+    assert "rev_vis" in response.json.keys()
+    assert "vis_params" in response.json.keys()
+    assert "vis_query" in response.json.keys()
+    assert "vis_title" in response.json.keys()
+    return_data = response.json["rev_data"]
+    assert data == return_data
