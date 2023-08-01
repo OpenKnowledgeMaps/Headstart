@@ -2,6 +2,7 @@ import json
 import pytest
 import requests
 from workers.tests.mock_app import create_app
+from sqlalchemy import create_engine
 from workers.persistence.src.models import Base
 
 @pytest.fixture
