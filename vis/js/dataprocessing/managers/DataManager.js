@@ -146,17 +146,18 @@ class DataManager {
         paper.authors,
         this.config.convert_author_names
     );
+
+      // old variable with all authors_string
     // paper.authors_string = paper.authors_list.join(", ");
 
-    // in the case of more than 15 authors left an array of 16 authors to define
-    // that wee need to cut lust author and set "..." in the visible part of the list of authors
     if (paper.authors_list.length > 15) {
-      paper.authors_list = paper.authors_list.slice(0, 15).concat(paper.authors_list[paper.authors_list.length - 1]);
-      const first19Authors = paper.authors_list.slice(0, 14).join(", ");
+        const firstAuthors = paper.authors_list.slice(0, 14).join(", ");
       const lastAuthor = paper.authors_list[paper.authors_list.length - 1];
-      paper.authors_string = `${first19Authors}, ... ${lastAuthor}`;
+        // get first 14 authors and add "..." and last author for the visual part the map
+        paper.authors_string = `${firstAuthors}, ... ${lastAuthor}`;
+        // in the case of more than 15 authors left an array of 16 authors for further processing in the visual part with "..." between the authors
+        paper.authors_list = paper.authors_list.slice(0, 15).concat(lastAuthor);
     }
-
   }
 
   // migrated from legacy code
