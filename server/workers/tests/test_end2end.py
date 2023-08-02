@@ -3,6 +3,7 @@ import pytest
 import requests
 from workers.tests.mock_app import create_app
 from sqlalchemy import create_engine
+from sqlalchemy_utils import database_exists, create_database, drop_database
 from workers.persistence.src.models import Base
 
 @pytest.fixture
@@ -12,6 +13,8 @@ def app():
     # each time the test runs and drop them when the test is done
     app = create_app(config_name="testing")
     engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+    if not database_exists(engine.url):
+        create_database(engine.url)
     with app.app_context():
         Base.metadata.reflect(engine)
         yield app
