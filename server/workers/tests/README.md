@@ -31,7 +31,7 @@ processing_backend = "api"
 sqlite_db = "/var/www/localstorage/local.sqlite"
 
 # PostgreSQL database
-database = "test"
+database = "testdb"
 
 
 ```
@@ -45,7 +45,7 @@ docker-compose -f docker-compose-end2endtest.yml run end2endtest
 
 ## Notes about the end-to-end test setup
 
-The test is designed to test functionality of search.php. 
+The test is designed to test functionality of search.php and data retrieval endpoints, e.g. getLatestRevision.php . 
 
 It consists of multiple containers which replicate a production setup:
 
