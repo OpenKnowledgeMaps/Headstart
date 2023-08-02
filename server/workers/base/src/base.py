@@ -88,6 +88,7 @@ class BaseClient(RWrapper):
                 res = raw_metadata
             else:
                 metadata = pd.DataFrame(raw_metadata)
+                metadata = self.sanitize_metadata(metadata)
                 metadata = filter_duplicates(metadata)
                 metadata = pd.concat([metadata, parse_annotations_for_all(metadata, "subject_orig")], axis=1)
                 metadata = metadata.head(params.get('list_size'))
@@ -107,6 +108,10 @@ class BaseClient(RWrapper):
             self.logger.error(e)
             self.logger.error(error)
             raise
+
+    def sanitize_metadata(self, metadata):
+        metadata["authors"] = metadata["authors"].map(lambda x: sanitize_authors(x))
+        return metadata
 
     def enrich_metadata(self, metadata):
         metadata["repo"] = metadata["content_provider"].map(lambda x: self.content_providers.get(x, ""))
@@ -331,7 +336,7 @@ def parse_annotations_for_all(metadata, field_name):
     parsed_annotations = pd.DataFrame(metadata[field_name].map(lambda x: parse_annotations(x)))
     parsed_annotations.columns = ["annotations"]
     expanded_annotations = expand_dict_columns(parsed_annotations)
-    return parsed_annotations
+    return expanded_annotations
 
 # convert DataFrame with dict columns to DataFrame with columns for each dict key
 def expand_dict_columns(df):
@@ -348,3 +353,9 @@ def expand_dict_columns(df):
 def clean_up_annotations(df, field):
     df[field] = df[field].map(lambda x: pattern_annotations.sub("", x).strip())
     return df
+
+def sanitize_authors(authors, n=15):
+    authors = authors.split("; ")
+    if len(authors) > n:
+        authors = authors[:n-1] + authors[-1:]
+    return "; ".join(authors)
