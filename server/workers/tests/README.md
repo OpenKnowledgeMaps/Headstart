@@ -1,6 +1,6 @@
 # How to run end-to-end test with docker
 
-Prepare local configs:
+## Prepare local configs:
 
 * Adapt the following settings in `server/preprocessing/conf/config_local.ini`:
 
@@ -33,9 +33,30 @@ sqlite_db = "/var/www/localstorage/local.sqlite"
 # PostgreSQL database
 database = "testdb"
 
-
 ```
 
+* Duplicate the postgres config files `pg_hba_test.conf` and `postgresql_test.conf` in `tests/test_data` and rename the duplicates to `pg_hba_test_local.conf` and `postgresql_test_local.conf`
+
+* Make sure that the postgres container is correctly referred to in `docker-compose-end2endtest.yml` and `postgresql_test_local.conf`:
+
+In `docker-compose-end2endtest.yml`, the POSTGRES_HOST should be the name of the db container as assigned by your local Docker, this could be either `headstart_db_1` or `headstart-db-1`, depending on your Docker system and OS.
+
+```
+  end2endtest:
+    build:
+      context: ./server/workers/tests
+      dockerfile: ./Dockerfile_tests
+    hostname: "end2endtest"
+    environment:
+      POSTGRES_USER: "testuser"
+      POSTGRES_PASSWORD: "testpassword"
+      POSTGRES_HOST: "headstart_db_1"
+```
+In `postgresql_test_local.conf` the `listen_addresses` should include the correct name of the db container as well:
+
+```
+listen_addresses = 'localhost,headstart_db_1,headstart-db-1'
+```
 
 Run tests
 
