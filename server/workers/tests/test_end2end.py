@@ -154,7 +154,7 @@ def test_persistence_api_create_visualization(test_client):
     return_data = response.json["rev_data"]
     assert data == return_data
 
-def test_search_and_getLatestRevision():
+def test_search_and_getLatestRevision(app):
     """
     This test will be able to test SQLite and Postgres persistence.
     """
