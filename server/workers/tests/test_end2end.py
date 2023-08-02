@@ -2,7 +2,7 @@ import json
 import pytest
 import requests
 from workers.tests.mock_app import create_app
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 from sqlalchemy_utils import database_exists, create_database, drop_database
 from workers.persistence.src.models import Base
 
@@ -17,9 +17,10 @@ def app():
         create_database(engine.url)
     Base.metadata.bind = engine
     with app.app_context():
-        Base.metadata.reflect(engine)
+        Base.metadata.create_all(bind=engine)
         yield app
-        Base.metadata.clear()
+        engine.execute('DROP TABLE IF EXISTS visualizations;')
+        engine.execute('DROP TABLE IF EXISTS revisions;')
 
 @pytest.fixture
 def test_client(app):
@@ -136,7 +137,7 @@ def test_persistence_api_create_visualization(test_client, app):
         "data": data,
         "vis_clean_query": "digital education",
         "vis_query": "digital education",
-        "vis_params": {"context": json.dumps(vis_params)}
+        "vis_params": json.dumps({"context": vis_params})
     }
     response = test_client.post(url, json=params)
     assert b'{"success":true}\n' in response.data
