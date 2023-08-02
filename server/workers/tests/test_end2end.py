@@ -15,6 +15,7 @@ def app():
     engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     if not database_exists(engine.url):
         create_database(engine.url)
+    Base.metadata.bind = engine
     with app.app_context():
         Base.metadata.reflect(engine)
         yield app
@@ -123,7 +124,7 @@ def test_persistence_api(test_client):
         print(f"Request failed: {e}")
         print(response.content)
 
-def test_persistence_api_create_visualization(test_client):
+def test_persistence_api_create_visualization(test_client, app):
     with open("/app/workers/tests/test_data/digital-education.json") as f:
         raw = json.load(f)
     data = raw["data"]
