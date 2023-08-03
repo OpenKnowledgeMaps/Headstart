@@ -8,7 +8,7 @@
     <body style="margin:0px; padding:0px">
 
         <div id="visualization"></div>
-        <script type="text/javascript" src="data-config_<?php echo $_GET['service'] ?>.js"></script>
+        <script type="text/javascript" src="data-config_<?php echo htmlspecialchars($_GET['service']) ?>.js"></script>
 		<script src="../../../../js/search_options.js"></script>
         <script>
             data_config.files = [{
@@ -18,7 +18,7 @@
             data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "../../";
             data_config.show_context = true;
             data_config.create_title_from_context= true;
-            data_config.options = options_<?php echo $_GET['service']; ?>.dropdowns;
+            data_config.options = options_<?php echo htmlspecialchars($_GET['service']); ?>.dropdowns;
             if (<?php echo json_encode($_GET['service']) ?> === "linkedcat" ||
                 <?php echo json_encode($_GET['service']) ?> === "linkedcat_authorview" ||
                 <?php echo json_encode($_GET['service']) ?> === "linkedcat_browseview") {
