@@ -9,11 +9,12 @@ require "SQLitePersistence.php";
 class DispatchingPersistence implements Persistence
 {
 
-    public function __construct($sqliteDbPath, $shiftReadPercentage = 0.5)
+    public function __construct($ini_array, $sqliteDbPath, $shiftReadPercentage = 0.5)
     {
         $persistence = new \headstart\persistence\SQLitePersistence($sqliteDbPath);
+        $persistence2 = new \headstart\persistence\PostgresPersistence($ini_array);
         $this->sqlPersistence = $persistence;
-        $this->postgresPersistence = $persistence;
+        $this->postgresPersistence = $persistence2;
         $this->shiftReadPercentage = $shiftReadPercentage;
     }
 
@@ -94,6 +95,19 @@ class DispatchingPersistence implements Persistence
             $result = $this->sqlPersistence->getContext($vis_id);
         } else {
             $result = $this->postgresPersistence->getContext($vis_id);
+        }
+
+        return $result;
+    }
+
+    public function createId($string_array)
+    {
+        $randomFloat = getRandomFloat();
+
+        if ($randomFloat * 100 < $this->shiftReadPercentage * 100) {
+            $result = $this->sqlPersistence->createId($string_array);
+        } else {
+            $result = $this->postgresPersistence->createId($string_array);
         }
 
         return $result;

@@ -27,6 +27,8 @@ interface Persistence
     public function getLatestRevisions();
 
     public function getContext($vis_id);
+
+    public function createId($string_array);
 }
 
 

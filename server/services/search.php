@@ -68,17 +68,19 @@ function search($service, $dirty_query
     : "legacy";
     $apiclient = new \headstart\library\APIClient($ini_array);
     $repo2snapshot = array("plos" => "PLOS"
-                        , "pubmed" => "PubMed"
-                        , "doaj" => "DOAJ"
-                        , "base" => "BASE"
-                        , "openaire" => "OpenAire"
-                        , "gsheets" => "GSheets");
+    , "pubmed" => "PubMed"
+    , "doaj" => "DOAJ"
+    , "base" => "BASE"
+    , "openaire" => "OpenAire"
+    , "gsheets" => "GSheets");
 
     $query = ($do_clean_query === true)
-                ?(cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes))
-                :($dirty_query);
+        ? (cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes))
+        : ($dirty_query);
 
     $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
+//    $persistence = new \headstart\persistence\DispatchingPersistence($sqliteDbPath, $postgresPersistence, $shiftReadPercentage,); // add variable of the path
+
     $database = $ini_array["connection"]["database"];
     $service = $service;
 
@@ -86,17 +88,17 @@ function search($service, $dirty_query
 
     // todo: move back into own function once error handling is refactored
     if ($service == "openaire") {
-      if ($processing_backend === "api") {
-        $payload = json_encode(array("params" => $post_params));
-        $res = $apiclient->call_api($service . "/projectdata", $payload);
-        $result = json_decode($res["result"], true);
-        if (isset($result["status"]) && $result["status"] === "error") {
-          return json_encode($result);
-        } else {
-          $projectdata = $result["projectdata"];
-          $post_params = array_merge($post_params, $projectdata);
+        if ($processing_backend === "api") {
+            $payload = json_encode(array("params" => $post_params));
+            $res = $apiclient->call_api($service . "/projectdata", $payload);
+            $result = json_decode($res["result"], true);
+            if (isset($result["status"]) && $result["status"] === "error") {
+                return json_encode($result);
+            } else {
+                $projectdata = $result["projectdata"];
+                $post_params = array_merge($post_params, $projectdata);
+            }
         }
-      }
     }
 
     $params_json = packParamsJSON($param_types, $post_params);
@@ -116,6 +118,8 @@ function search($service, $dirty_query
     } else {
       $unique_id = $persistence->createID(array($query, $params_for_id_creation));
     }
+
+
     $unique_id = ($precomputed_id === null)?($unique_id):($precomputed_id);
     $post_params["vis_id"] = $unique_id;
     if (array_key_exists("repo", $post_params)) {
