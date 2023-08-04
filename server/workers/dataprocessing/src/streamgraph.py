@@ -199,11 +199,7 @@ def aggregate_ids(series):
         return "NA"
 
 
-def load_stopwords():
-    stopwords = []
-    if os.path.isfile("../../resources/additional_stopwords.txt"):
-        with open ("../../resources/additional_stopwords.txt") as infile:
-            stopwords = infile.read().splitlines()
-    return stopwords
-
-stopwords = load_stopwords()
+stopwords = ["archeo", "archi", "art", "anthro-bio", "class", "info", "museo", "demo",
+                       "eco", "edu", "envir", "genre", "geo", "hist", "hisphilso", "droit",
+                       "lang", "litt", "manag", "stat", "musiq", "phil", "scipo", "psy",
+                       "relig", "anthro-se", "socio"]

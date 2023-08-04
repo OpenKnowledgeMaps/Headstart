@@ -6,31 +6,34 @@ import { useLocalizationContext } from "../../components/LocalizationProvider";
 
 const MAX_AUTHORS_LENGTH = 100;
 
-const Details = ({ authors, source, isSelected }) => {
+const Details = ({authors, source, isSelected}) => {
   const loc = useLocalizationContext();
 
   const authorsString = getAuthorsString(
-    authors,
-    isSelected ? Number.POSITIVE_INFINITY : MAX_AUTHORS_LENGTH
+      authors,
+      isSelected ? Number.POSITIVE_INFINITY : MAX_AUTHORS_LENGTH
   );
 
+  // console.log("Details.jsx: authorsString: ", authorsString);
+  console.log("Details.jsx: loc.default_authors: ", loc.default_authors);
+
   return (
-    // html template starts here
-    <div className="list_details">
-      <div className="list_authors">
-        <Highlight queryHighlight>
-          {authorsString ? authorsString : loc.default_authors}
-        </Highlight>
-      </div>
-      {!!source && (
-        <div className={"list_source" + (isSelected ? "" : " short")}>
+      // html template starts here
+      <div className="list_details">
+        <div className="list_authors">
+          <Highlight queryHighlight>
+            {authorsString ? authorsString : loc.default_authors}
+          </Highlight>
+        </div>
+        {!!source && (
+            <div className={"list_source" + (isSelected ? "" : " short")}>
           <span className="list_published_in">
             <Highlight queryHighlight>{source}</Highlight>
           </span>
-        </div>
-      )}
-    </div>
-    // html template ends here
+            </div>
+        )}
+      </div>
+      // html template ends here
   );
 };
 
@@ -45,15 +48,22 @@ const getAuthorsString = (authorsList, maxLength) => {
     return "";
   }
 
+
   const authorsListCopy = [...authorsList];
 
   const ellipsis = "...";
   const join = ", ";
   let finalString = authorsListCopy.shift();
+  if (authorsList.length > 15) {
+    const first19Authors = authorsList.slice(0, 14).join(", ");
+    const lastAuthor = authorsList[authorsList.length - 1];
+    finalString = `${first19Authors}, ... ${lastAuthor}`;
+    return finalString;
+  }
   while (authorsListCopy.length > 0) {
     const nextAuthor = authorsListCopy.shift();
     let nextPossibleLength =
-      finalString.length + join.length + nextAuthor.length;
+        finalString.length + join.length + nextAuthor.length;
 
     if (authorsListCopy.length !== 0) {
       nextPossibleLength += ellipsis.length;
