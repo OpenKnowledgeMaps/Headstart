@@ -9,15 +9,16 @@ require "SQLitePersistence.php";
 class PostgresPersistence implements Persistence
 {
 
-    public function __construct($ini_array)
+    private function __construct($ini_array)
     {
         $apiclient = new \headstart\library\APIClient($ini_array);
         $this->api_client = $apiclient;
+        
     }
 
     public function createVisualization($vis_id, $vis_title, $data)
     {
-        // TODO: Implement createVisualization() method.
+        // Implement createVisualization() method.
     }
 
     public function getRevision($vis_id, $rev_id)

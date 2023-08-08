@@ -12,16 +12,12 @@ class DispatchingPersistence implements Persistence
     public function __construct($ini_array, $sqliteDbPath, $shiftReadPercentage = 0.5)
     {
         $persistence = new \headstart\persistence\SQLitePersistence($sqliteDbPath);
-        $persistence2 = new \headstart\persistence\PostgresPersistence($ini_array);
+//        $persistence2 = new \headstart\persistence\PostgresPersistence($ini_array);
         $this->sqlPersistence = $persistence;
-        $this->postgresPersistence = $persistence2;
+//        $this->postgresPersistence = $persistence2;
+        $this->postgresPersistence = $persistence;
         $this->shiftReadPercentage = $shiftReadPercentage;
     }
-
-//    public function createTables()
-//    {
-//        // Implementation goes here
-//    }
 
     public function createVisualization($vis_id, $vis_title, $data)
     {
