@@ -2,7 +2,7 @@
 
 namespace headstart;
 
-require_once("autoload.inc.php"); // use some autoloading script that was already present
+//require_once("autoload.inc.php"); // use some autoloading script that was already present
 
 use PHPUnit\Framework\TestCase;
 
@@ -45,7 +45,7 @@ class DbConnectionTest extends TestCase
 
         $this->assertEquals($resId, $vis_id, "actual value of ID is not equals to expected");
         $this->assertEquals($resTitle, $vis_title, "actual value of Title is not equals to expected");
-        $this->assertObjectHasAttribute("context", $jsonDecoded, "context is not in jsonDecoded");
+//        $this->assertObjectHasAttribute("context", $jsonDecoded, "context is not in jsonDecoded");
 //        $this->assertIsArray($jsonDecoded->context, "context is not an array");
         $this->assertIsObject($jsonDecoded->context, "context is not an object");
         $this->assertIsString($jsonDecoded->data, "data is not a string");

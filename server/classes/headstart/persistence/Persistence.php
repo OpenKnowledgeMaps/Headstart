@@ -12,9 +12,8 @@ namespace headstart\persistence;
  */
 interface Persistence
 {
-//    public function createTables();
 
-    public function createVisualization($vis_id, $vis_title, $data);
+    public function createVisualization($vis_id, $vis_title, $data): void;
 
     public function getRevision($vis_id, $rev_id);
 
@@ -30,19 +29,3 @@ interface Persistence
 
     public function createId($string_array);
 }
-
-
-//class Persistence {
-//
-//    public function createVisualization($vis_id, $vis_title, $data) {
-//
-//    }
-//
-//    public function getRevision($vis_id, $rev_id) {
-//
-//    }
-//
-//    public function writeRevision($vis_id, $data) {
-//
-//    }
-//}

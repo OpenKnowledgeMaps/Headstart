@@ -7,7 +7,7 @@ namespace headstart\persistence;
  *
  * @author pkraker
  */
-require 'Persistence.php';
+require_once 'Persistence.php';
 
 class SQLitePersistence implements Persistence
 {

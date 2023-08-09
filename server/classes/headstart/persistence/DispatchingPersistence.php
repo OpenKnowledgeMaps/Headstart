@@ -1,7 +1,7 @@
 <?php
 
 namespace headstart\persistence;
-require "SQLitePersistence.php";
+//require "SQLitePersistence.php";
 
 /**
  * This class implements the PersistenceInterface and provides methods to interact with the database.
@@ -9,20 +9,21 @@ require "SQLitePersistence.php";
 class DispatchingPersistence implements Persistence
 {
 
-    public function __construct($ini_array, $sqliteDbPath, $shiftReadPercentage = 0.5)
+//    public function __construct($ini_array, $sqliteDbPath, $shiftReadPercentage = 0.5)
+    private Persistence $oldPersistence;
+    private Persistence $newPersistence;
+
+    public function __construct(Persistence $oldPersistence, Persistence $newPersistence, $shiftReadPercentage = 0.5)
     {
-        $persistence = new \headstart\persistence\SQLitePersistence($sqliteDbPath);
-//        $persistence2 = new \headstart\persistence\PostgresPersistence($ini_array);
-        $this->sqlPersistence = $persistence;
-//        $this->postgresPersistence = $persistence2;
-        $this->postgresPersistence = $persistence;
         $this->shiftReadPercentage = $shiftReadPercentage;
+        $this->oldPersistence = $oldPersistence;
+        $this->newPersistence = $newPersistence;
     }
 
     public function createVisualization($vis_id, $vis_title, $data)
     {
-        $this->sqlPersistence->createVisualization($vis_id, $vis_title, $data);
-        $this->postgresPersistence->createVisualization($vis_id, $vis_title, $data);
+        $this->oldPersistence->createVisualization($vis_id, $vis_title, $data);
+        $this->newPersistence->createVisualization($vis_id, $vis_title, $data);
     }
 
     public function getRevision($vis_id, $rev_id)
@@ -30,9 +31,9 @@ class DispatchingPersistence implements Persistence
         $randomFloat = getRandomFloat();
 
         if ($randomFloat * 100 < $this->shiftReadPercentage * 100) {
-            $result = $this->sqlPersistence->getRevision($vis_id, $rev_id);
+            $result = $this->oldPersistence->getRevision($vis_id, $rev_id);
         } else {
-            $result = $this->postgresPersistence->getRevision($vis_id, $rev_id);
+            $result = $this->newPersistence->getRevision($vis_id, $rev_id);
         }
 
         return $result;
@@ -40,8 +41,8 @@ class DispatchingPersistence implements Persistence
 
     public function writeRevision($vis_id, $data)
     {
-        $this->sqlPersistence->writeRevision($vis_id, $data);
-        $this->postgresPersistence->writeRevision($vis_id, $data);
+        $this->oldPersistence->writeRevision($vis_id, $data);
+        $this->newPersistence->writeRevision($vis_id, $data);
     }
 
     public function existsVisualization($vis_id)
@@ -49,9 +50,9 @@ class DispatchingPersistence implements Persistence
         $randomFloat = getRandomFloat();
 
         if ($randomFloat * 100 < $this->shiftReadPercentage * 100) {
-            $result = $this->sqlPersistence->existsVisualization($vis_id);
+            $result = $this->oldPersistence->existsVisualization($vis_id);
         } else {
-            $result = $this->postgresPersistence->existsVisualization($vis_id);
+            $result = $this->newPersistence->existsVisualization($vis_id);
         }
 
         return $result;
@@ -62,9 +63,9 @@ class DispatchingPersistence implements Persistence
         $randomFloat = getRandomFloat();
 
         if ($randomFloat * 100 < $this->shiftReadPercentage * 100) {
-            $result = $this->sqlPersistence->getLastVersion($vis_id);
+            $result = $this->oldPersistence->getLastVersion($vis_id);
         } else {
-            $result = $this->postgresPersistence->getLastVersion($vis_id);
+            $result = $this->newPersistence->getLastVersion($vis_id);
         }
 
         return $result;
@@ -75,9 +76,9 @@ class DispatchingPersistence implements Persistence
         $randomFloat = getRandomFloat();
 
         if ($randomFloat * 100 < $this->shiftReadPercentage * 100) {
-            $result = $this->sqlPersistence->getLatestRevisions();
+            $result = $this->oldPersistence->getLatestRevisions();
         } else {
-            $result = $this->postgresPersistence->getLatestRevisions();
+            $result = $this->newPersistence->getLatestRevisions();
         }
 
         return $result;
@@ -88,9 +89,9 @@ class DispatchingPersistence implements Persistence
         $randomFloat = getRandomFloat();
 
         if ($randomFloat * 100 < $this->shiftReadPercentage * 100) {
-            $result = $this->sqlPersistence->getContext($vis_id);
+            $result = $this->oldPersistence->getContext($vis_id);
         } else {
-            $result = $this->postgresPersistence->getContext($vis_id);
+            $result = $this->newPersistence->getContext($vis_id);
         }
 
         return $result;
@@ -101,9 +102,9 @@ class DispatchingPersistence implements Persistence
         $randomFloat = getRandomFloat();
 
         if ($randomFloat * 100 < $this->shiftReadPercentage * 100) {
-            $result = $this->sqlPersistence->createId($string_array);
+            $result = $this->oldPersistence->createId($string_array);
         } else {
-            $result = $this->postgresPersistence->createId($string_array);
+            $result = $this->newPersistence->createId($string_array);
         }
 
         return $result;
