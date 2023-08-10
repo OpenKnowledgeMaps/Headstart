@@ -25,7 +25,7 @@ class DispatchingPersistence implements Persistence
         $this->newPersistence->createVisualization($vis_id, $vis_title, $data);
     }
 
-    public function getRevision($vis_id, $rev_id): bool|array
+    public function getRevision($vis_id, $rev_id): array
     {
         $randomFloat = getRandomFloat();
 
@@ -44,7 +44,7 @@ class DispatchingPersistence implements Persistence
         $this->newPersistence->writeRevision($vis_id, $data);
     }
 
-    public function existsVisualization($vis_id): mixed
+    public function existsVisualization($vis_id): array
     {
         $randomFloat = getRandomFloat();
 
@@ -57,7 +57,7 @@ class DispatchingPersistence implements Persistence
         return $result;
     }
 
-    public function getLastVersion($vis_id): bool|array
+    public function getLastVersion($vis_id): array
     {
         $randomFloat = getRandomFloat();
 
@@ -70,7 +70,7 @@ class DispatchingPersistence implements Persistence
         return $result;
     }
 
-    public function getLatestRevisions(): bool|array
+    public function getLatestRevisions(): array
     {
         $randomFloat = getRandomFloat();
 
@@ -83,7 +83,7 @@ class DispatchingPersistence implements Persistence
         return $result;
     }
 
-    public function getContext($vis_id): bool|array
+    public function getContext($vis_id): array
     {
         $randomFloat = getRandomFloat();
 

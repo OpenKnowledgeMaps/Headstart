@@ -21,10 +21,9 @@ class PostgresPersistence implements Persistence
     public function createVisualization($vis_id, $vis_title, $data): void
     {
 //        temporary values defined for testing
-        $dirty_query = $data["query"];
-        $query = cleanQuery($data["query"], $transform_query_tolowercase = true, $add_slashes = true);
-
-        $params_json = $data["params"];
+        $dirty_query = $data->context->query;
+        $query = cleanQuery($dirty_query, $transform_query_tolowercase = true, $add_slashes = true);
+        $params_json = $data->context->params;
 
         $payload = json_encode(array("vis_id" => $vis_id,
             "vis_title" => $vis_title,
