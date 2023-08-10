@@ -32,7 +32,6 @@ class DispatchingPersistenceTest extends TestCase
         $dispatcherPersistence = new \headstart\persistence\DispatchingPersistence($oldPersistence,
             $newPersistence, 0.5);
         $dispatcherPersistence->createVisualization("test", "test", "test");
-
     }
 
 }

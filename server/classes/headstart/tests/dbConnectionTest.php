@@ -45,8 +45,8 @@ class DbConnectionTest extends TestCase
 
         $this->assertEquals($resId, $vis_id, "actual value of ID is not equals to expected");
         $this->assertEquals($resTitle, $vis_title, "actual value of Title is not equals to expected");
+//        does not work anymore for version 10
 //        $this->assertObjectHasAttribute("context", $jsonDecoded, "context is not in jsonDecoded");
-//        $this->assertIsArray($jsonDecoded->context, "context is not an array");
         $this->assertIsObject($jsonDecoded->context, "context is not an object");
         $this->assertIsString($jsonDecoded->data, "data is not a string");
     }

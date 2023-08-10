@@ -9,7 +9,6 @@ namespace headstart\persistence;
 class DispatchingPersistence implements Persistence
 {
 
-//    public function __construct($ini_array, $sqliteDbPath, $shiftReadPercentage = 0.5)
     private Persistence $oldPersistence;
     private Persistence $newPersistence;
 
@@ -20,13 +19,13 @@ class DispatchingPersistence implements Persistence
         $this->newPersistence = $newPersistence;
     }
 
-    public function createVisualization($vis_id, $vis_title, $data)
+    public function createVisualization($vis_id, $vis_title, $data): void
     {
         $this->oldPersistence->createVisualization($vis_id, $vis_title, $data);
         $this->newPersistence->createVisualization($vis_id, $vis_title, $data);
     }
 
-    public function getRevision($vis_id, $rev_id)
+    public function getRevision($vis_id, $rev_id): bool|array
     {
         $randomFloat = getRandomFloat();
 
@@ -39,13 +38,13 @@ class DispatchingPersistence implements Persistence
         return $result;
     }
 
-    public function writeRevision($vis_id, $data)
+    public function writeRevision($vis_id, $data): void
     {
         $this->oldPersistence->writeRevision($vis_id, $data);
         $this->newPersistence->writeRevision($vis_id, $data);
     }
 
-    public function existsVisualization($vis_id)
+    public function existsVisualization($vis_id): mixed
     {
         $randomFloat = getRandomFloat();
 
@@ -58,7 +57,7 @@ class DispatchingPersistence implements Persistence
         return $result;
     }
 
-    public function getLastVersion($vis_id)
+    public function getLastVersion($vis_id): bool|array
     {
         $randomFloat = getRandomFloat();
 
@@ -71,7 +70,7 @@ class DispatchingPersistence implements Persistence
         return $result;
     }
 
-    public function getLatestRevisions()
+    public function getLatestRevisions(): bool|array
     {
         $randomFloat = getRandomFloat();
 
@@ -84,7 +83,7 @@ class DispatchingPersistence implements Persistence
         return $result;
     }
 
-    public function getContext($vis_id)
+    public function getContext($vis_id): bool|array
     {
         $randomFloat = getRandomFloat();
 
@@ -97,7 +96,7 @@ class DispatchingPersistence implements Persistence
         return $result;
     }
 
-    public function createId($string_array)
+    public function createId($string_array): string
     {
         $randomFloat = getRandomFloat();
 
@@ -113,7 +112,7 @@ class DispatchingPersistence implements Persistence
 
 
 //    function for random float number generation from 0 to 1
-function getRandomFloat()
+function getRandomFloat(): float
 {
     return mt_rand() / mt_getrandmax();
 }

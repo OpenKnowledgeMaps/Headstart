@@ -12,65 +12,79 @@ require "SQLitePersistence.php";
 class PostgresPersistence implements Persistence
 {
 
-//    private function __construct($ini_array)
+    private APIClient $api_client;
     private function __construct(APIClient $apiclient)
     {
-//        $apiclient = new \headstart\library\APIClient($ini_array);
         $this->api_client = $apiclient;
-//        set persistence to postgres
     }
 
     public function createVisualization($vis_id, $vis_title, $data): void
     {
 //        temporary values defined for testing
-        $unique_id = "test";
-        $input_json = json_encode($data);
-        $input_json = preg_replace("/\<U\+(.*?)>/", "&#x$1;", $input_json);
-        $query = $vis_id;
-        $dirty_query = $vis_id;
-        $params_json = json_encode(array());
+        $dirty_query = $data["query"];
+        $query = cleanQuery($data["query"], $transform_query_tolowercase = true, $add_slashes = true);
 
-        $payload = json_encode(array("vis_id" => $unique_id,
+        $params_json = $data["params"];
+
+        $payload = json_encode(array("vis_id" => $vis_id,
             "vis_title" => $vis_title,
-            "data" => $input_json,
+            "data" => $data,
             "vis_clean_query" => $query,
             "vis_query" => $dirty_query,
             "vis_params" => $params_json));
         $this->api_client->call_persistence("createVisualization", $payload);
     }
 
-    public function getRevision($vis_id, $rev_id)
+    public function getRevision($vis_id, $rev_id): array
     {
-        // TODO: Implement getRevision() method.
+        $payload = json_encode(array("vis_id" => $vis_id,
+            "rev_id" => $rev_id));
+        $result = $this->api_client->call_persistence("getRevision", $payload);
+        return $result;
     }
 
-    public function writeRevision($vis_id, $data)
+    public function writeRevision($vis_id, $data): void
     {
-        // TODO: Implement writeRevision() method.
+        $payload = json_encode(array("vis_id" => $vis_id,
+            "data" => $data));
+        $this->api_client->call_persistence("writeRevision", $payload);
     }
 
-    public function existsVisualization($vis_id)
+    public function existsVisualization($vis_id): array
     {
-        // TODO: Implement existsVisualization() method.
+        $payload = json_encode(array("vis_id" => $vis_id));
+        $result = $this->api_client->call_persistence("existsVisualization", $payload);
+        return $result;
     }
 
-    public function getLastVersion($vis_id)
+    public function getLastVersion($vis_id): array
     {
-        // TODO: Implement getLastVersion() method.
+        $payload = json_encode(array("vis_id" => $vis_id,
+            "details" => false,
+            "context" => false));
+        $result = $this->api_client->call_persistence("getLastVersion", $payload);
+        return $result;
     }
 
-    public function getLatestRevisions()
+    public function getLatestRevisions(): array
     {
-        // TODO: Implement getLatestRevisions() method.
+        $result = $this->api_client->call_persistence("getLatestRevisions", "{}");
+        return $result;
     }
 
-    public function getContext($vis_id)
+    public function getContext($vis_id): array
     {
-        // TODO: Implement getContext() method.
+        $payload = json_encode(array("vis_id" => $vis_id));
+        $result = $this->api_client->call_persistence("getContext", $payload);
+        return $result;
     }
 
-    public function createId($string_array)
+    public function createId($string_array): string
     {
-        // TODO: Implement createId() method.
+//        $payload = json_encode(array("params" => $post_params,
+//            "param_types" => $param_types));
+        $payload = $string_array;
+        $result = $this->api_client->call_persistence("createId", $payload);
+        return $result;
     }
 }
