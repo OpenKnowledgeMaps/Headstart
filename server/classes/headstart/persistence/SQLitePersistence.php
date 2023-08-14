@@ -48,7 +48,8 @@ class SQLitePersistence implements Persistence
         )");
     }
 
-    public function createVisualization($vis_id, $vis_title, $data, $vis_clean_query=null, $vis_query = null, $params = null) {
+    public function createVisualization($vis_id, $vis_title, $data, $vis_clean_query = null, $vis_query = null, $params = null): void
+    {
         //create entry in visualization and first revision
 
         $this->prepareAndExecute("INSERT INTO visualizations (vis_id, vis_query, vis_clean_query, vis_title, vis_params) "
@@ -58,7 +59,8 @@ class SQLitePersistence implements Persistence
         $this->writeRevision($vis_id, $data, $rev_id = 1);
     }
 
-    public function existsVisualization($vis_id) {
+    public function existsVisualization($vis_id): array|bool
+    {
         $result = $this->prepareExecuteAndReturnResult(
                 "SELECT EXISTS(SELECT 1 FROM visualizations WHERE vis_id=?)"
                 , array($vis_id)
@@ -67,11 +69,13 @@ class SQLitePersistence implements Persistence
         return $result[0];
     }
 
-    public function getLastVersion($vis_id, $details = false, $context = false) {
+    public function getLastVersion($vis_id, $details = false, $context = false): array
+    {
         return $this->getRevision($vis_id, null, $details, $context);
     }
 
-    public function getRevision($vis_id, $rev_id, $details=false, $context = false) {
+    public function getRevision($vis_id, $rev_id, $details = false, $context = false): array
+    {
 
         $id = ($rev_id == null)?("revisions.rev_id"):("?");
         $array = ($rev_id == null)?(array(addslashes($vis_id))):(array(addslashes($vis_id), $rev_id));
@@ -92,7 +96,8 @@ class SQLitePersistence implements Persistence
         return $result;
     }
 
-     public function getContext($vis_id) {
+    public function getContext($vis_id): array
+    {
          $return_fields = "revisions.rev_vis, revisions.vis_query, visualizations.vis_title, "
                     . "revisions.rev_timestamp, visualizations.vis_params";
 
@@ -105,7 +110,8 @@ class SQLitePersistence implements Persistence
         return $result;
      }
 
-    public function getLatestRevisions($limit=30, $details=false) {
+    public function getLatestRevisions($limit = 30, $details = false): array
+    {
 
         $count_query = $this->prepareExecuteAndReturnResult("SELECT Count(*) FROM revisions", array(), $first = true);
         $count = $count_query[0];
@@ -122,7 +128,8 @@ class SQLitePersistence implements Persistence
         return $result;
     }
 
-    public function writeRevision($vis_id, $data, $rev_id=null) {
+    public function writeRevision($vis_id, $data, $rev_id = null): void
+    {
 
         $rev = $rev_id;
 
@@ -178,7 +185,8 @@ class SQLitePersistence implements Persistence
         }
     }
 
-    public function createID($string_array) {
+    public function createID($string_array): string
+    {
         $string_to_hash = implode(" ", $string_array);
 
         return md5($string_to_hash);

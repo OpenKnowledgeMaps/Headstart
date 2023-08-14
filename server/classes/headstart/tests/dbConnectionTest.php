@@ -8,7 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 use headstart\persistence\SQLitePersistence as SQLitePersistence;
 
-
+/**
+ * @covers \headstart\persistence\SQLitePersistence
+ */
 class DbConnectionTest extends TestCase
 {
 

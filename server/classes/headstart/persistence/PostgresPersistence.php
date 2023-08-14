@@ -1,10 +1,7 @@
 <?php
 
 namespace headstart\persistence;
-
 use headstart\library\APIClient;
-
-require "SQLitePersistence.php";
 
 /**
  * This class implements the PersistenceInterface and provides methods to interact with the database.
@@ -34,7 +31,7 @@ class PostgresPersistence implements Persistence
         $this->api_client->call_persistence("createVisualization", $payload);
     }
 
-    public function getRevision($vis_id, $rev_id): array
+    public function getRevision($vis_id, $rev_id): array|bool
     {
         $payload = json_encode(array("vis_id" => $vis_id,
             "rev_id" => $rev_id));
@@ -49,14 +46,14 @@ class PostgresPersistence implements Persistence
         $this->api_client->call_persistence("writeRevision", $payload);
     }
 
-    public function existsVisualization($vis_id): array
+    public function existsVisualization($vis_id): array|bool
     {
         $payload = json_encode(array("vis_id" => $vis_id));
         $result = $this->api_client->call_persistence("existsVisualization", $payload);
         return $result;
     }
 
-    public function getLastVersion($vis_id): array
+    public function getLastVersion($vis_id): array|bool
     {
         $payload = json_encode(array("vis_id" => $vis_id,
             "details" => false,
@@ -65,13 +62,13 @@ class PostgresPersistence implements Persistence
         return $result;
     }
 
-    public function getLatestRevisions(): array
+    public function getLatestRevisions(): array|bool
     {
         $result = $this->api_client->call_persistence("getLatestRevisions", "{}");
         return $result;
     }
 
-    public function getContext($vis_id): array
+    public function getContext($vis_id): array|bool
     {
         $payload = json_encode(array("vis_id" => $vis_id));
         $result = $this->api_client->call_persistence("getContext", $payload);
