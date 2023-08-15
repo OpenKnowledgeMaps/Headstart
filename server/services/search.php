@@ -7,6 +7,8 @@ require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/APIClient.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/Toolkit.php';
 require 'helper.php';
+require_once dirname(__FILE__) . '/../classes/headstart/persistence/PostgresPersistence.php';
+require_once dirname(__FILE__) . '/../classes/headstart/persistence/DispatchingPersistence.php';
 
 use headstart\library;
 
@@ -78,8 +80,11 @@ function search($service, $dirty_query
         ? (cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes))
         : ($dirty_query);
 
-    $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
-//    $persistence = new \headstart\persistence\DispatchingPersistence($sqliteDbPath, $postgresPersistence, $shiftReadPercentage,); // add variable of the path
+//  $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
+    $sqlitePersistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
+    $postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient);
+    $shiftReadPercentage = 1;
+    $persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersistence, $postgresPersistence, $shiftReadPercentage);
 
     $database = $ini_array["connection"]["database"];
     $service = $service;

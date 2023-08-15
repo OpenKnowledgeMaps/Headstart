@@ -13,7 +13,11 @@ use headstart\library;
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 $apiclient = new \headstart\library\APIClient($ini_array);
-$persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
+//$persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
+$sqlitePersistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
+$postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient);
+$shiftReadPercentage = 0;
+$persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersistence, $postgresPersistence, $shiftReadPercentage);
 
 $persistence_backend = $ini_array["general"]["persistence_backend"];
 $processing_backend = $ini_array["general"]["processing_backend"];

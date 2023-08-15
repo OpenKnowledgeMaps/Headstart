@@ -10,7 +10,8 @@ class PostgresPersistence implements Persistence
 {
 
     private APIClient $api_client;
-    private function __construct(APIClient $apiclient)
+
+    public function __construct(APIClient $apiclient)
     {
         $this->api_client = $apiclient;
     }
@@ -77,10 +78,20 @@ class PostgresPersistence implements Persistence
 
     public function createId($string_array): string
     {
+//        $payload = $string_array;
+//        $result = $this->api_client->call_persistence("createId", $payload);
+//        return $result;
+// we dont know whats going on here, Christopher help pls
+        $payload = $string_array;
 //        $payload = json_encode(array("params" => $post_params,
 //            "param_types" => $param_types));
-        $payload = $string_array;
-        $result = $this->api_client->call_persistence("createId", $payload);
-        return $result;
+        $res = $this->api_client->call_persistence("createID", $payload);
+        if ($res["httpcode"] != 200) {
+            echo json_encode($res);
+        } else {
+            $result = json_decode($res["result"], true);
+            $unique_id = $result["unique_id"];
+        }
+        return $unique_id;
     }
 }

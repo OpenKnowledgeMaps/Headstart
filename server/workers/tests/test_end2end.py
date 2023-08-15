@@ -74,6 +74,7 @@ def test_getLatestRevision():
         data = response.json()
         assert type(data) == list
     except requests.exceptions.RequestException as e:
+        print('! test test_getLatestRevision with Fail state !')
         print(f"Request failed: {e}")
         print(response.content)
 
@@ -88,11 +89,9 @@ def test_getLatestRevisionWithContext():
         response = requests.get(url, params=params)
         response.raise_for_status()
         data = response.json()
-        print(data.keys())
-        print(type(data["context"]))
-        print(type(data["data"]))
         assert type(data) == dict
     except requests.exceptions.RequestException as e:
+        print('! test test_getLatestRevisionWithContext with Fail state !')
         print(f"Request failed: {e}")
         print(response.content)
 
@@ -107,11 +106,9 @@ def test_getLatestRevisionWithDetails():
         response = requests.get(url, params=params)
         response.raise_for_status()
         data = response.json()
-        print(data.keys())
-        print(type(data["context"]))
-        print(type(data["data"]))
         assert type(data) == dict
     except requests.exceptions.RequestException as e:
+        print('! test test_getLatestRevisionWithDetails with Fail state !')
         print(f"Request failed: {e}")
         print(response.content)
 

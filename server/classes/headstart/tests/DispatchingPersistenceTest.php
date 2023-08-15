@@ -225,7 +225,6 @@ class DispatchingPersistenceTest extends TestCase
         $result = $dispatcherPersistence->createId("string_array");
         return $result;
     }
-
 }
 
 
