@@ -78,11 +78,9 @@ class PostgresPersistence implements Persistence
 
     public function createId($string_array): string
     {
+//        we dont know whats going on here, Christopher help pls
 //        $payload = $string_array;
-//        $result = $this->api_client->call_persistence("createId", $payload);
-//        return $result;
-// we dont know whats going on here, Christopher help pls
-        $payload = $string_array;
+        $payload = json_encode($string_array);
 //        $payload = json_encode(array("params" => $post_params,
 //            "param_types" => $param_types));
         $res = $this->api_client->call_persistence("createID", $payload);
@@ -91,7 +89,9 @@ class PostgresPersistence implements Persistence
         } else {
             $result = json_decode($res["result"], true);
             $unique_id = $result["unique_id"];
+            return $unique_id;
         }
-        return $unique_id;
+
+        throw new \Exception("Could not create ID, response code was : " . $res["httpcode"]);
     }
 }

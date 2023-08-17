@@ -11,7 +11,7 @@ services:
     environment:
       POSTGRES_USER: "testuser"
       POSTGRES_PASSWORD: "testpassword"
-      POSTGRES_HOST: "headstart_db_1"
+      POSTGRES_HOST: "headstart-db-1"
       POSTGRES_PORT: 5432
       DEFAULT_DATABASE: "testdb"
       SERVICE_VERSION: "test_version"
@@ -22,7 +22,7 @@ services:
       - backend
     restart: "no"
     entrypoint: ["pytest", '/app/workers/tests/test_end2end.py', '-s', '-rfA']
-    networks: 
+    networks:
       - test
 
   backend:
@@ -32,7 +32,7 @@ services:
     volumes:
       - ./server/:/var/www/html/server
     restart: "no"
-    networks: 
+    networks:
       - test
     ports:
       - "80:80"
@@ -54,7 +54,21 @@ services:
       - ./server/workers/tests/test_data/postgresql_test_local.conf:/etc/postgresql.conf
     ports:
       - "5432:5432"
-    networks: 
+    networks:
+      - test
+
+  persistence:
+    image: persistence:${SERVICE_VERSION}
+    restart: always
+    environment:
+      POSTGRES_USER: "testuser"
+      POSTGRES_PASSWORD: "testpassword"
+      POSTGRES_HOST: "headstart-db-1"
+      POSTGRES_PORT: 5432
+      DEFAULT_DATABASE: "testdb"
+      SERVICE_VERSION: "test_version"
+    command: [ "gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300" ]
+    networks:
       - test
 
 volumes:

@@ -74,7 +74,6 @@ def test_getLatestRevision():
         data = response.json()
         assert type(data) == list
     except requests.exceptions.RequestException as e:
-        print('! test test_getLatestRevision with Fail state !')
         print(f"Request failed: {e}")
         print(response.content)
 
