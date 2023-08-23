@@ -147,7 +147,7 @@ class DataManager {
         this.config.convert_author_names
     );
 
-      // old variable with all authors_string
+    // old variable with all authors_string
     // paper.authors_string = paper.authors_list.join(", ");
 
     if (paper.authors_list.length > 20) {
