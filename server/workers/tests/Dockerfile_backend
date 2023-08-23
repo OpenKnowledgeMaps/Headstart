@@ -2,8 +2,8 @@
 FROM php:8.0-apache
 
 RUN a2enmod rewrite
-RUN apt-get update && apt-get install -y curl libsqlite3-dev php7.4-sqlite libonig-dev libxml2-dev
-RUN docker-php-ext-install pdo pdo_sqlite mbstring xml fileinfo
+RUN apt-get update && apt-get install -y curl libsqlite3-dev php7.4-sqlite libonig-dev libxml2-dev libcurl4-openssl-dev
+RUN docker-php-ext-install pdo pdo_sqlite mbstring xml fileinfo curl
 
 RUN mkdir -p /var/www/localstorage
 COPY test_data/test.sqlite /var/www/localstorage/local.sqlite

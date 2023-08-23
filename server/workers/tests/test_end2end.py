@@ -27,7 +27,7 @@ def test_client(app):
     # Create a test client using the test Flask app
     return app.test_client()
 
-def test_hello_world(test_client):
+def test_hello_world(app, test_client):
     response = test_client.get('/hello')
     assert response.status_code == 200
     assert b"Hello, World!" in response.data
@@ -111,7 +111,7 @@ def test_getLatestRevisionWithDetails():
         print(f"Request failed: {e}")
         print(response.content)
 
-def test_persistence_api(test_client):
+def test_persistence_api(test_client, app):
     url = "/api/stable/persistence/service_version"
     try:
         response = test_client.get(url)
@@ -152,7 +152,7 @@ def test_persistence_api_create_visualization(test_client, app):
     return_data = response.json["rev_data"]
     assert data == return_data
 
-def test_search_and_getLatestRevision(app):
+def test_search_and_getLatestRevision():
     """
     This test will be able to test SQLite and Postgres persistence.
     """
@@ -194,3 +194,4 @@ def test_search_and_getLatestRevision(app):
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
         print(response.content)
+

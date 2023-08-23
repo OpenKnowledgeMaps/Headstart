@@ -76,13 +76,8 @@ class PostgresPersistence implements Persistence
         return $result;
     }
 
-    public function createId($string_array): string
+    public function createId($string_array, $payload): string
     {
-//        we dont know whats going on here, Christopher help pls
-//        $payload = $string_array;
-        $payload = json_encode($string_array);
-//        $payload = json_encode(array("params" => $post_params,
-//            "param_types" => $param_types));
         $res = $this->api_client->call_persistence("createID", $payload);
         if ($res["httpcode"] != 200) {
             echo json_encode($res);

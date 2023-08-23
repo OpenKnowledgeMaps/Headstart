@@ -4,6 +4,7 @@ version: '3.7'
 services:
 
   end2endtest:
+    container_name: test_end2endtest
     build:
       context: ./server/workers/tests
       dockerfile: ./Dockerfile_tests
@@ -11,7 +12,7 @@ services:
     environment:
       POSTGRES_USER: "testuser"
       POSTGRES_PASSWORD: "testpassword"
-      POSTGRES_HOST: "headstart-db-1"
+      POSTGRES_HOST: "test_db"
       POSTGRES_PORT: 5432
       DEFAULT_DATABASE: "testdb"
       SERVICE_VERSION: "test_version"
@@ -26,6 +27,7 @@ services:
       - test
 
   backend:
+    container_name: test_backend
     build:
       context: ./server/workers/tests
       dockerfile: ./Dockerfile_backend
@@ -38,6 +40,7 @@ services:
       - "80:80"
 
   db:
+    container_name: test_db
     image: 'postgres:12.2-alpine'
     restart: "no"
     hostname: "db_server"
@@ -54,20 +57,6 @@ services:
       - ./server/workers/tests/test_data/postgresql_test_local.conf:/etc/postgresql.conf
     ports:
       - "5432:5432"
-    networks:
-      - test
-
-  persistence:
-    image: persistence:${SERVICE_VERSION}
-    restart: always
-    environment:
-      POSTGRES_USER: "testuser"
-      POSTGRES_PASSWORD: "testpassword"
-      POSTGRES_HOST: "headstart-db-1"
-      POSTGRES_PORT: 5432
-      DEFAULT_DATABASE: "testdb"
-      SERVICE_VERSION: "test_version"
-    command: [ "gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300" ]
     networks:
       - test
 

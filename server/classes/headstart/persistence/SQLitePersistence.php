@@ -185,7 +185,7 @@ class SQLitePersistence implements Persistence
         }
     }
 
-    public function createID($string_array): string
+    public function createID($string_array, $payload): string
     {
         $string_to_hash = implode(" ", $string_array);
 

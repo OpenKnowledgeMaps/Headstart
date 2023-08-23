@@ -97,14 +97,14 @@ class DispatchingPersistence implements Persistence
         return $result;
     }
 
-    public function createId($string_array): string
+    public function createId($string_array, $payload): string
     {
         $randomFloat = getRandomFloat();
 
         if ($randomFloat * 100 > $this->shiftReadPercentage * 100) {
-            $result = $this->oldPersistence->createId($string_array);
+            $result = $this->oldPersistence->createId($string_array, $payload);
         } else {
-            $result = $this->newPersistence->createId($string_array);
+            $result = $this->newPersistence->createId($string_array, $payload);
         }
 
         return $result;

@@ -121,7 +121,9 @@ function search($service, $dirty_query
         $unique_id = $result["unique_id"];
       }
     } else {
-      $unique_id = $persistence->createID(array($query, $params_for_id_creation));
+      $payload = json_encode(array("params" => $post_params,
+                                   "param_types" => $param_types));
+      $unique_id = $persistence->createID(array($query, $params_for_id_creation), $payload);
     }
 
 
