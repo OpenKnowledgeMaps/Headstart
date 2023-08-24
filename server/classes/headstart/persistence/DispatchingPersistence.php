@@ -2,8 +2,6 @@
 
 namespace headstart\persistence;
 
-////get values from config.ini
-//$ini_array = parse_ini_file(dirname(__FILE__) . "/../../config.ini", true);
 
 /**
  * This class implements the PersistenceInterface and provides methods to interact with the database.
@@ -15,12 +13,9 @@ class DispatchingPersistence implements Persistence
     private int|float $shiftReadPercentage;
 
 
-//    public function __construct(Persistence $oldPersistence, Persistence $newPersistence, $shiftReadPercentage = 0)
-    public function __construct(Persistence $oldPersistence, Persistence $newPersistence, $shiftReadPercentage = null)
+    public function __construct(Persistence $oldPersistence, Persistence $newPersistence, $shiftReadPercentage)
     {
-        $ini_array = parse_ini_file(dirname(__FILE__) . "/../../config.ini", true);
-        $defShiftReadPercentage = $ini_array["general"]["shift_read_percentage"];
-        $this->shiftReadPercentage = $shiftReadPercentage ?? $defShiftReadPercentage;;
+        $this->shiftReadPercentage = $shiftReadPercentage;
         $this->oldPersistence = $oldPersistence;
         $this->newPersistence = $newPersistence;
     }
