@@ -59,7 +59,7 @@ def test_hello_world(app, test_client):
     assert response.status_code == 200
     assert b"Hello, World!" in response.data
 
-def test_search_api_reachability(test_client):
+def test_search_api_reachability(app, test_client):
     # Test that the base URL returns a 200 (OK) HTTP status code
     try:
         response = test_client.get('/api/stable/base/search')
@@ -70,7 +70,7 @@ def test_search_api_reachability(test_client):
         print('! test test_search_api_reachability with Fail state !')
         print(f"Request failed: {e}")
 
-def test_search_endpoint():
+def test_search_endpoint(app):
     url = "http://backend/server/services/searchBASE.php"
     params = {
         "unique_id": "530133cf1768e6606f63c641a1a96768",
@@ -92,8 +92,18 @@ def test_search_endpoint():
         print(f"Request failed: {e}")
         print(response.json())
 
-def test_createId(app):
-    url = "/api/stable/persistence/createId/testdb"
+def test_createID(app, test_client):
+    url = "/api/stable/persistence/createID/testdb"
+    params = {
+        "params": {"q": "digital education",
+                   "from": "1809-01-01",
+                   "to": "2023-07-28",
+                   "document_types": ["121"],
+                   "sorting": "most-recent"},
+        "param_types": ["q", "from", "to", "document_types", "sorting"]
+    }
+    response = test_client.post(url, json=params)
+    assert b'{"unique_id":"dffef32544bc14a48e9f3aa2824e2513"}\n' in response.data
 
 def test_getLatestRevision(app):
     url = "http://backend/server/services/getLatestRevision.php"
@@ -144,7 +154,7 @@ def test_getLatestRevisionWithDetails(app, populate_db):
         print(f"Request failed: {e}")
         print(response.content)
 
-def test_persistence_api(test_client, app):
+def test_persistence_api(app, test_client):
     url = "/api/stable/persistence/service_version"
     try:
         response = test_client.get(url)
@@ -155,7 +165,7 @@ def test_persistence_api(test_client, app):
         print(f"Request failed: {e}")
         print(response.content)
 
-def test_persistence_api_create_visualization(test_client, app):
+def test_persistence_api_create_visualization(app, test_client):
     data, vis_params = load_test_data()
     url = "/api/stable/persistence/createVisualization/testdb"
     params = {

@@ -199,7 +199,7 @@ class createVisualization(Resource):
                                  200,
                                  headers)
         except Exception as e:
-            result = {'success': False, 'reason': str(e)}
+            result = {'success': False, 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  500,
@@ -222,7 +222,7 @@ class writeRevision(Resource):
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 200, headers)
         except Exception as e:
-            result = {'success': False, 'reason': str(e)}
+            result = {'success': False, 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 500, headers)
 
@@ -250,7 +250,7 @@ class getLastVersion(Resource):
                                  200,
                                  headers)
         except Exception as e:
-            result = {'success': False, 'reason': str(e)}
+            result = {'success': False, 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  500,
@@ -288,7 +288,7 @@ class getContext(Resource):
                                  200,
                                  headers)
         except Exception as e:
-            result = {'success': False, 'reason': str(e)}
+            result = {'success': False, 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  500,
@@ -300,8 +300,8 @@ class createID(Resource):
 
     @persistence_ns.produces(["application/json"])
     def post(self, database):
+        persistence_ns.logger.debug("createID")
         try:
-            persistence_ns.logger.debug("createID")
             payload = request.get_json()
             params = payload.get("params")
             param_types = payload.get("param_types")
@@ -315,7 +315,7 @@ class createID(Resource):
             headers["Content-Type"] = "application/json"
             return make_response(jsonify(result), 200, headers)
         except Exception as e:
-            result = {'success': False, 'reason': str(e)}
+            result = {'success': False, 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 500, headers)
 
