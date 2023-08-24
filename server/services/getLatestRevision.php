@@ -18,7 +18,7 @@ $apiclient = new \headstart\library\APIClient($ini_array);
 //$persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 $sqlitePersistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 $postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient);
-$shiftReadPercentage = 1; // 1
+$shiftReadPercentage = $ini_array["general"]["shift_read_percentage"];
 $persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersistence, $postgresPersistence, $shiftReadPercentage);
 
 $persistence_backend = $ini_array["general"]["persistence_backend"];

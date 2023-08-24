@@ -11,15 +11,17 @@ from database import sessions
 
 
 persistence_ns = Namespace("persistence", description="OKMAps persistence operations")
+DATABASE_ENV_VARIABLE = "DEFAULT_DATABASE"
 
 
 def select_session(Session=None):
     """Select session according to database,
         else select session for default database."""
-    if Session is not None:
+    # if Session is not None:
+    if Session:
         return Session()
     else:
-        return sessions.get(os.getenv("DEFAULT_DATABASE"))()
+        return sessions.get(os.getenv(DATABASE_ENV_VARIABLE))()
 
 
 def create_vis_id(params, param_types):
@@ -317,7 +319,7 @@ class createID(Resource):
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 500, headers)
 
-            
+
 @persistence_ns.route('/service_version')
 class ServiceVersion(Resource):
     def get(self):

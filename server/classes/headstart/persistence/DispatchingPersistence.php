@@ -1,19 +1,19 @@
 <?php
 
 namespace headstart\persistence;
-//require "SQLitePersistence.php";
+
 
 /**
  * This class implements the PersistenceInterface and provides methods to interact with the database.
  */
 class DispatchingPersistence implements Persistence
 {
-
     private Persistence $oldPersistence;
     private Persistence $newPersistence;
     private int|float $shiftReadPercentage;
 
-    public function __construct(Persistence $oldPersistence, Persistence $newPersistence, $shiftReadPercentage = 0)
+
+    public function __construct(Persistence $oldPersistence, Persistence $newPersistence, $shiftReadPercentage)
     {
         $this->shiftReadPercentage = $shiftReadPercentage;
         $this->oldPersistence = $oldPersistence;
