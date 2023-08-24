@@ -18,7 +18,7 @@ $apiclient = new \headstart\library\APIClient($ini_array);
 //$persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 $sqlitePersistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 $postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient);
-$shiftReadPercentage = 0; // 1
+$shiftReadPercentage = 1; // 1
 $persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersistence, $postgresPersistence, $shiftReadPercentage);
 
 $persistence_backend = $ini_array["general"]["persistence_backend"];
@@ -32,7 +32,7 @@ $streamgraph = filter_input(INPUT_GET, "streamgraph", FILTER_VALIDATE_BOOLEAN,
 # get data depending on context parameter
 if ($context === true) {
   # context data true start
-  $data = $persistence->getLastVersion($vis_id, $details = false, $context = true)[0];
+  $data = $persistence->getLastVersion($vis_id)[0];
 
   # transform data depending on streamgraph parameter and return transformed data
   if ($streamgraph === true) {

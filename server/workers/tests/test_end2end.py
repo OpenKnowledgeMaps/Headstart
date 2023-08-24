@@ -21,11 +21,38 @@ def app():
         yield app
         engine.execute('DROP TABLE IF EXISTS visualizations;')
         engine.execute('DROP TABLE IF EXISTS revisions;')
+        drop_database(engine.url)
 
 @pytest.fixture
 def test_client(app):
     # Create a test client using the test Flask app
     return app.test_client()
+
+@pytest.fixture
+def populate_db(test_client):
+    """
+    This fixture can in future be used to add more diverse test data
+    """
+    data, vis_params = load_test_data()
+    url = "/api/stable/persistence/createVisualization/testdb"
+    params = {
+        "vis_id": "530133cf1768e6606f63c641a1a96768",
+        "vis_title": "digital education",
+        "data": data,
+        "vis_clean_query": "digital education",
+        "vis_query": "digital education",
+        "vis_params": json.dumps({"context": vis_params})
+    }
+    response = test_client.post(url, json=params)
+
+
+def load_test_data():
+    with open("/app/workers/tests/test_data/digital-education.json") as f:
+        raw = json.load(f)
+    data = raw["data"]
+    vis_params = raw["context"]
+    return data, vis_params
+
 
 def test_hello_world(app, test_client):
     response = test_client.get('/hello')
@@ -40,6 +67,7 @@ def test_search_api_reachability(test_client):
         assert response.content_type == "application/json"
         data = json.loads(response.get_data(as_text=True))
     except requests.exceptions.RequestException as e:
+        print('! test test_search_api_reachability with Fail state !')
         print(f"Request failed: {e}")
 
 def test_search_endpoint():
@@ -60,10 +88,14 @@ def test_search_endpoint():
         assert "id" in data
         assert "status" in data
     except requests.exceptions.RequestException as e:
+        print('! test test_search_endpoint with Fail state !')
         print(f"Request failed: {e}")
         print(response.json())
 
-def test_getLatestRevision():
+def test_createId(app):
+    url = "/api/stable/persistence/createId/testdb"
+
+def test_getLatestRevision(app):
     url = "http://backend/server/services/getLatestRevision.php"
     params = {
         "vis_id": "530133cf1768e6606f63c641a1a96768",
@@ -74,11 +106,12 @@ def test_getLatestRevision():
         data = response.json()
         assert type(data) == list
     except requests.exceptions.RequestException as e:
+        print('! test test_getLatestRevision with Fail state !')
         print(f"Request failed: {e}")
         print(response.content)
 
 
-def test_getLatestRevisionWithContext():
+def test_getLatestRevisionWithContext(app, populate_db):
     url = "http://backend/server/services/getLatestRevision.php"
     params = {
         "vis_id": "530133cf1768e6606f63c641a1a96768",
@@ -94,7 +127,7 @@ def test_getLatestRevisionWithContext():
         print(f"Request failed: {e}")
         print(response.content)
 
-def test_getLatestRevisionWithDetails():
+def test_getLatestRevisionWithDetails(app, populate_db):
     url = "http://backend/server/services/getLatestRevision.php"
     params = {
         "vis_id": "530133cf1768e6606f63c641a1a96768",
@@ -118,14 +151,12 @@ def test_persistence_api(test_client, app):
         assert response.status_code == 200
         assert b"test_version" in response.data
     except requests.exceptions.RequestException as e:
+        print('! test test_persistence_api with Fail state !')
         print(f"Request failed: {e}")
         print(response.content)
 
 def test_persistence_api_create_visualization(test_client, app):
-    with open("/app/workers/tests/test_data/digital-education.json") as f:
-        raw = json.load(f)
-    data = raw["data"]
-    vis_params = raw["context"]
+    data, vis_params = load_test_data()
     url = "/api/stable/persistence/createVisualization/testdb"
     params = {
         "vis_id": "530133cf1768e6606f63c641a1a96768",
@@ -152,7 +183,7 @@ def test_persistence_api_create_visualization(test_client, app):
     return_data = response.json["rev_data"]
     assert data == return_data
 
-def test_search_and_getLatestRevision():
+def test_search_and_getLatestRevision(app, populate_db):
     """
     This test will be able to test SQLite and Postgres persistence.
     """
@@ -173,6 +204,7 @@ def test_search_and_getLatestRevision():
         assert "id" in data
         assert "status" in data
     except requests.exceptions.RequestException as e:
+        print('! test test_search_and_getLatestRevision with Fail state !')
         print(f"Request failed: {e}")
         print(response.json())
     url = "http://backend/server/services/getLatestRevision.php"
@@ -194,4 +226,3 @@ def test_search_and_getLatestRevision():
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
         print(response.content)
-

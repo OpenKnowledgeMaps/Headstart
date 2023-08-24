@@ -1,6 +1,7 @@
 import os
 import json
 import sys
+import logging
 from flask import Flask, make_response, jsonify
 from flask_restx import Api
 
@@ -41,8 +42,15 @@ def create_app(config_name):
             print(e)
             return make_response("Error", 500)
         
+
     api = Api(app)
     api.add_namespace(persistence_ns, path='/api/stable/persistence')
+
+    handler = logging.StreamHandler(sys.stderr)
+    handler.setLevel(logging.DEBUG)
+    app.logger.addHandler(handler)
+    app.logger.debug(app.config)
+    app.logger.debug(app.url_map)
 
     # print(app.url_map)
     return app

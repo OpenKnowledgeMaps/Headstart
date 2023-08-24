@@ -59,8 +59,13 @@ class PostgresPersistence implements Persistence
         $payload = json_encode(array("vis_id" => $vis_id,
             "details" => false,
             "context" => false));
-        $result = $this->api_client->call_persistence("getLastVersion", $payload);
-        return $result;
+        $res = $this->api_client->call_persistence("getLastVersion", $payload);
+        if ($res["httpcode"] != 200) {
+            $data = $res;
+          } else {
+            $data = json_decode($res["result"], true);
+          }
+        return array($data);
     }
 
     public function getLatestRevisions(): array|bool
