@@ -15,6 +15,7 @@ $optional_get_params = ["repo", "coll", "vis_type", "q_advanced", "lang_id"];
 
 
 foreach($optional_get_params as $param) {
+    var_dump('searchBASE.php $_POST params: ' . isset($_POST[$param]));
     if(isset($_POST[$param])) {
         $params_array[] = $param;
     }
@@ -31,7 +32,7 @@ $result = search("base", $dirty_query
                   , true
                   , true, null
                   , $precomputed_id, false);
-
+var_dump('searchBASE.php $result:' . $result);
 echo $result
 
 ?>
