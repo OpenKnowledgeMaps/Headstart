@@ -83,7 +83,7 @@ function search($service, $dirty_query
 //  $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
     $sqlitePersistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
     $postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient);
-    $shiftReadPercentage = $ini_array["general"]["shift_read_percentage"];
+    $shiftReadPercentage = isset($ini_array["general"]["shift_read_percentage"]);
     $persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersistence, $postgresPersistence, $shiftReadPercentage);
 
     $database = $ini_array["connection"]["database"];
@@ -114,16 +114,21 @@ function search($service, $dirty_query
       $payload = json_encode(array("params" => $post_params,
                                    "param_types" => $param_types));
       $res = $apiclient->call_persistence("createID", $payload);
+        var_dump("search.php (persistence_backend === api ) call_persistence result is: " . $res["result"]);
+        echo("search.php call_persistence result is: " . $res["result"]);
       if ($res["httpcode"] != 200) {
-        echo json_encode($res);
+          var_dump("search.php if httpcode is 200 res: " . $res["result"]);
+          echo json_encode($res);
       } else {
+          var_dump("search.php persistence_backend if httpcode != 200 res: " . $res["result"]);
         $result = json_decode($res["result"], true);
         $unique_id = $result["unique_id"];
       }
     } else {
-      $payload = json_encode(array("params" => $post_params,
+        $payload = json_encode(array("params" => $post_params,
                                    "param_types" => $param_types));
-      $unique_id = $persistence->createID(array($query, $params_for_id_creation), $payload);
+        $unique_id = $persistence->createID(array($query, $params_for_id_creation), $payload);
+        var_dump("search.php => string(131); (persistence_backend != api ) call_persistence unique_id: " . $unique_id);
     }
 
 

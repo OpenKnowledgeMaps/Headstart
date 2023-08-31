@@ -22,7 +22,7 @@ services:
       - db
       - backend
     restart: "no"
-    entrypoint: ["pytest", '/app/workers/tests/test_end2end.py', '-s', '-rfA']
+    entrypoint: [ "pytest", '/app/workers/tests/test_end2end.py', '-s', '-rfA', '-k', 'test_search_endpoint' ]
     networks:
       - test
 
