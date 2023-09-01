@@ -60,6 +60,7 @@ function search($service, $dirty_query
         , $transform_query_tolowercase = true
         , $retrieve_cached_map = true, $params_for_id = null
         , $precomputed_id = null, $do_clean_query = true, $add_slashes = true) {
+    var_dump('search.php start function search()');
     $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
     $ini_array = library\Toolkit::loadIni($INI_DIR);
     $processing_backend = isset($ini_array["general"]["processing_backend"])
@@ -110,7 +111,10 @@ function search($service, $dirty_query
 
     $params_for_id_creation = ($params_for_id === null)?($params_json):(packParamsJSON($params_for_id, $post_params));
 
+    var_dump("!!!!! search.php persistence_backend: " . $persistence_backend);
+
     if ($persistence_backend === "api") {
+        var_dump("search.php (persistence_backend === api ) call_persistence params_json: ");
       $payload = json_encode(array("params" => $post_params,
                                    "param_types" => $param_types));
       $res = $apiclient->call_persistence("createID", $payload);
