@@ -4,7 +4,6 @@ version: '3.7'
 services:
 
   end2endtest:
-    container_name: test_end2endtest
     build:
       context: ./server/workers/tests
       dockerfile: ./Dockerfile_tests
@@ -27,7 +26,6 @@ services:
       - test
 
   backend:
-    container_name: test_backend
     build:
       context: ./server/workers/tests
       dockerfile: ./Dockerfile_backend
