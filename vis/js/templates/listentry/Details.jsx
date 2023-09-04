@@ -53,11 +53,12 @@ const getAuthorsString = (authorsList, maxLength) => {
 
   const ellipsis = "...";
   const join = ", ";
+  const maxLengthAuthors = 15;
   let finalString = authorsListCopy.shift();
-  if (authorsList.length > 15) {
-    const first19Authors = authorsList.slice(0, 14).join(", ");
+  if (authorsList.length > maxLengthAuthors) {
+    const firstAuthors = authorsList.slice(0, maxLengthAuthors - 1).join(join);
     const lastAuthor = authorsList[authorsList.length - 1];
-    finalString = `${first19Authors}, ... ${lastAuthor}`;
+    finalString = `${firstAuthors}, ... ${lastAuthor}`;
     return finalString;
   }
   while (authorsListCopy.length > 0) {
