@@ -69,12 +69,12 @@ class SQLitePersistence implements Persistence
         return $result[0];
     }
 
-    public function getLastVersion($vis_id, $details = false, $context = false): array
+    public function getLastVersion($vis_id, $details = false, $context = false): array|bool
     {
         return $this->getRevision($vis_id, null, $details, $context);
     }
 
-    public function getRevision($vis_id, $rev_id, $details = false, $context = false): array
+    public function getRevision($vis_id, $rev_id, $details = false, $context = false): array|bool
     {
 
         $id = ($rev_id == null)?("revisions.rev_id"):("?");

@@ -13,7 +13,7 @@ namespace headstart\persistence;
 interface Persistence
 {
 
-    public function createVisualization($vis_id, $vis_title, $data): void;
+    public function createVisualization($vis_id, $vis_title, $input_json, $query, $dirty_query, $params_json): void;
 
     public function getRevision($vis_id, $rev_id): array|bool;
 
@@ -21,7 +21,7 @@ interface Persistence
 
     public function existsVisualization($vis_id): array|bool;
 
-    public function getLastVersion($vis_id): array|bool;
+    public function getLastVersion($vis_id, $details, $context): array|bool;
 
     public function getLatestRevisions(): array|bool;
 

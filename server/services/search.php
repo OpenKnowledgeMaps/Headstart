@@ -77,7 +77,7 @@ function search($service, $dirty_query
 //  $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
     $sqlitePersistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
     $postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient);
-    $shiftReadPercentage = isset($ini_array["general"]["shift_read_percentage"]);
+    $shiftReadPercentage = $ini_array["general"]["shift_read_percentage"];
     $persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersistence, $postgresPersistence, $shiftReadPercentage);
 
     $database = $ini_array["connection"]["database"];
@@ -117,7 +117,7 @@ function search($service, $dirty_query
     }
 
     if($retrieve_cached_map) {
-      $last_version = $persistence->getLastVersion($unique_id);
+      $last_version = $persistence->getLastVersion($unique_id, false, false);
       if ($last_version != null && $last_version != "null" && $last_version != false) {
           echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
           return;

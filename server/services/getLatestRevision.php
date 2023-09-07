@@ -18,7 +18,7 @@ $apiclient = new \headstart\library\APIClient($ini_array);
 //$persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 $sqlitePersistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 $postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient);
-$shiftReadPercentage = isset($ini_array["general"]["shift_read_percentage"]);
+$shiftReadPercentage = $ini_array["general"]["shift_read_percentage"];
 $persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersistence, $postgresPersistence, $shiftReadPercentage);
 
 
@@ -31,7 +31,7 @@ $streamgraph = filter_input(INPUT_GET, "streamgraph", FILTER_VALIDATE_BOOLEAN,
 # get data depending on context parameter
 if ($context === true) {
   # context data true start
-  $data = $persistence->getLastVersion($vis_id)[0];
+  $data = $persistence->getLastVersion($vis_id, false, true)[0];
 
   # transform data depending on streamgraph parameter and return transformed data
   if ($streamgraph === true) {
@@ -53,6 +53,6 @@ if ($context === true) {
   # context data true end
   } else {
   # return data without context from legacy
-  $jsonData = $persistence->getLastVersion($vis_id);
+  $jsonData = $persistence->getLastVersion($vis_id, false, false);
   library\CommUtils::echoOrCallback($jsonData[0], $_GET);
 }

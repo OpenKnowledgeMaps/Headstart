@@ -21,7 +21,7 @@ $revision_context =  isset($_GET["revision_context"]) ? library\CommUtils::getPa
 $apiclient = new headstart\library\APIClient($ini_array);
 $sqlitePersistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 $postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient);
-$shiftReadPercentage = isset($ini_array["general"]["shift_read_percentage"]);
+$shiftReadPercentage = $ini_array["general"]["shift_read_percentage"];
 $persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersistence, $postgresPersistence, $shiftReadPercentage);
 
 

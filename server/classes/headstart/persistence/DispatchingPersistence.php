@@ -20,10 +20,10 @@ class DispatchingPersistence implements Persistence
         $this->newPersistence = $newPersistence;
     }
 
-    public function createVisualization($vis_id, $vis_title, $data): void
+    public function createVisualization($vis_id, $vis_title, $input_json, $query, $dirty_query, $params_json): void
     {
-        $this->oldPersistence->createVisualization($vis_id, $vis_title, $data);
-        $this->newPersistence->createVisualization($vis_id, $vis_title, $data);
+        $this->oldPersistence->createVisualization($vis_id, $vis_title, $input_json, $query, $dirty_query, $params_json);
+        $this->newPersistence->createVisualization($vis_id, $vis_title, $input_json, $query, $dirty_query, $params_json);
     }
 
     public function getRevision($vis_id, $rev_id): array|bool
@@ -58,14 +58,14 @@ class DispatchingPersistence implements Persistence
         return $result;
     }
 
-    public function getLastVersion($vis_id, $details): array|bool
+    public function getLastVersion($vis_id, $details, $context): array|bool
     {
         $randomFloat = getRandomFloat();
 
         if ($randomFloat * 100 > $this->shiftReadPercentage * 100) {
-            $result = $this->oldPersistence->getLastVersion($vis_id);
+            $result = $this->oldPersistence->getLastVersion($vis_id, $details, $context);
         } else {
-            $result = $this->newPersistence->getLastVersion($vis_id);
+            $result = $this->newPersistence->getLastVersion($vis_id, $details, $context);
         }
 
         return $result;
