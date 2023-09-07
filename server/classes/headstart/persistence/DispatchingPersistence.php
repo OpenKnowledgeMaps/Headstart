@@ -99,6 +99,7 @@ class DispatchingPersistence implements Persistence
 
     public function createId($string_array, $payload): string
     {
+        var_dump("DispatchingPersistence createId");
         $randomFloat = getRandomFloat();
 
         if ($randomFloat * 100 > $this->shiftReadPercentage * 100) {
@@ -107,6 +108,7 @@ class DispatchingPersistence implements Persistence
             $result = $this->newPersistence->createId($string_array, $payload);
         }
 
+        var_dump("DispatchingPersistence createId result: " . $result);
         return $result;
     }
 }

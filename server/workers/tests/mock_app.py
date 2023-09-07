@@ -51,6 +51,6 @@ def create_app(config_name):
     app.logger.setLevel(logging.DEBUG)
     app.logger.addHandler(handler)
     # app.logger.debug(app.config)
-    # app.logger.debug(app.url_map)
+    app.logger.debug(app.url_map)
 
     return app

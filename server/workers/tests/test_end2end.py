@@ -74,6 +74,7 @@ def test_search_endpoint(app):
     url = "http://backend/server/services/searchBASE.php"
     params = {
         "unique_id": "530133cf1768e6606f63c641a1a96768",
+#         "unique_id": "148509425cb28d50dad5f1798188f27b",
         "from": "1809-01-01",
         "to": "2023-07-28",
         "document_types": ["121"],
@@ -81,6 +82,8 @@ def test_search_endpoint(app):
         "sorting": "most-recent"
     }
     try:
+        print("STARTING TEST TRY !")
+        print(f"Testing {url} with params {params}")
         response = requests.post(url, data=params)
         response.raise_for_status()
         data = response.json()
@@ -89,7 +92,7 @@ def test_search_endpoint(app):
         assert "status" in data
     except requests.exceptions.RequestException as e:
         print('! test test_search_endpoint with Fail state !')
-        print(f"Request failed: {e}")
+        print(f" ! test_search_endpoint; Request failed: {e}")
         print(response.json())
 
 def test_createID(app, test_client):

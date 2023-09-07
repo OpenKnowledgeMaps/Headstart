@@ -83,15 +83,21 @@ class PostgresPersistence implements Persistence
 
     public function createId($string_array, $payload): string
     {
+        var_dump("PostgresPersistence createId called and started !");
+        var_dump("PostgresPersistence payload: " . $payload);
         $res = $this->api_client->call_persistence("createID", $payload);
         if ($res["httpcode"] != 200) {
+            var_dump("PostgresPersistence => createId() $res[httpcode] != 200");
             echo json_encode($res);
         } else {
             $result = json_decode($res["result"], true);
             $unique_id = $result["unique_id"];
+            var_dump('PostgresPersistence => createId() $res["httpcode"] === 200 $result: ' . $result);
+            var_dump('PostgresPersistence => createId() $unique_id: ' . $unique_id);
             return $unique_id;
         }
 
+        var_dump("test var_dump:  PostgresPersistence some work result or not...");
         throw new \Exception("Could not create ID, response code was : " . $res["httpcode"]);
     }
 }
