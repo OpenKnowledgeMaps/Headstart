@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import logging
 import sys
@@ -196,6 +197,7 @@ def aggregate_ids(series):
         return ", ".join(pd.unique(series))
     except Exception:
         return "NA"
+
 
 stopwords = ["archeo", "archi", "art", "anthro-bio", "class", "info", "museo", "demo",
                        "eco", "edu", "envir", "genre", "geo", "hist", "hisphilso", "droit",

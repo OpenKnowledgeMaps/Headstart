@@ -192,16 +192,14 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "rbace",
       "RemoteUsername": "OpenKnowledgeMaps",
-      "RemoteRef": "HEAD",
+      "RemoteRef": "master",
       "RemoteSha": "f4d5f21afdf090d939c4e563c48b601ee6ef1599",
-      "Hash": "6078efcd2189b2bd33351dc069ff9862"
+      "Hash": "7712a7e9219c323cd7a610daf058f331"
     },
     "renv": {
       "Package": "renv",
       "Version": "0.14.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "30e5eba91b67f7f4d75d31de14bbfbdc"
+      "Source": "Repository"
     },
     "rlang": {
       "Package": "rlang",

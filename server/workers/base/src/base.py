@@ -9,6 +9,7 @@ import re
 from .parsers import improved_df_parsing
 from redis.exceptions import LockError
 import time
+import numpy as np
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
@@ -87,11 +88,13 @@ class BaseClient(RWrapper):
                 res = raw_metadata
             else:
                 metadata = pd.DataFrame(raw_metadata)
+                metadata = self.sanitize_metadata(metadata)
                 metadata = filter_duplicates(metadata)
+                metadata = pd.concat([metadata, parse_annotations_for_all(metadata, "subject_orig")], axis=1)
                 metadata = metadata.head(params.get('list_size'))
                 metadata.reset_index(inplace=True, drop=True)
                 metadata = self.enrich_metadata(metadata)
-                text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subject_orig", "published_in", "authors"]]
+                text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]]
                                          .apply(lambda x: " ".join(x), axis=1)], axis=1)
                 text.columns = ["id", "content"]
                 input_data = {}
@@ -105,6 +108,10 @@ class BaseClient(RWrapper):
             self.logger.error(e)
             self.logger.error(error)
             raise
+
+    def sanitize_metadata(self, metadata):
+        metadata["sanitized_authors"] = metadata["authors"].map(lambda x: sanitize_authors(x))
+        return metadata
 
     def enrich_metadata(self, metadata):
         metadata["repo"] = metadata["content_provider"].map(lambda x: self.content_providers.get(x, ""))
@@ -167,10 +174,11 @@ class BaseClient(RWrapper):
                     self.logger.error(params)
                     self.logger.error(e)
 
-pattern = re.compile(r"\.v(\d)+$")
+pattern_doi = re.compile(r"\.v(\d)+$")
+pattern_annotations = re.compile(r'([A-Za-z]+:[\w ]+);?')
 
 def find_version_in_doi(doi):
-    m = pattern.findall(doi)
+    m = pattern_doi.findall(doi)
     if m:
         return int(m[0])
     else:
@@ -181,7 +189,7 @@ def extract_doi_suffix(doi):
 
 def get_unversioned_doi(doi):
     doi = "/".join(doi.split("/")[3:6])
-    return pattern.sub("", doi)
+    return pattern_doi.sub("", doi)
 
 def get_publisher_doi(doi):
     pdoi = re.findall(r"org/10\.(\d+)", doi)
@@ -314,3 +322,40 @@ def filter_duplicates(df):
         if c in filtered.columns:
             filtered.drop(c, axis=1, inplace=True)
     return filtered
+
+def parse_annotations(field):
+    if type(field) is str:
+        matches = pattern_annotations.findall(field)
+        matches = [{m.split(":")[0]: m.split(":")[1]} for m in matches]
+        annotations = pd.DataFrame(matches)
+        return annotations.to_dict("list")
+    else:
+        return {}
+    
+def parse_annotations_for_all(metadata, field_name):
+    parsed_annotations = pd.DataFrame(metadata[field_name].map(lambda x: parse_annotations(x)))
+    parsed_annotations.columns = ["annotations"]
+    expanded_annotations = expand_dict_columns(parsed_annotations)
+    return expanded_annotations
+
+# convert DataFrame with dict columns to DataFrame with columns for each dict key
+def expand_dict_columns(df):
+    unique_annotation_keys = df.annotations.map(lambda x: set(x.keys()))
+    unique_annotation_keys = set().union(*unique_annotation_keys.to_list())
+    if len(unique_annotation_keys) > 0:
+        for c in df.columns:
+            if type(df[c].iloc[0]) is dict:            
+                for uk in unique_annotation_keys:
+                    df[c+"_"+uk] = df[c].map(lambda x: x[uk] if uk in x.keys() else [])
+                    df[c+"_"+uk] = df[c+"_"+uk].map(lambda x: [uk for uk in x if uk is not np.nan])
+    return df
+
+def clean_up_annotations(df, field):
+    df[field] = df[field].map(lambda x: pattern_annotations.sub("", x).strip())
+    return df
+
+def sanitize_authors(authors, n=15):
+    authors = authors.split("; ")
+    if len(authors) > n:
+        authors = authors[:n-1] + authors[-1:]
+    return "; ".join(authors)

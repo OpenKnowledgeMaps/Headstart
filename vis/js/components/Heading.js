@@ -12,41 +12,45 @@ import { STREAMGRAPH_MODE } from "../reducers/chartType";
 import { queryConcatenator } from "../utils/data";
 
 const Heading = ({
-  localization,
-  zoomed,
-  query,
-  bubbleTitle,
-  headingParams,
-  streamgraph,
-  q_advanced,
-}) => {
+                   localization,
+                   zoomed,
+                   query,
+                   bubbleTitle,
+                   headingParams,
+                   streamgraph,
+                   q_advanced,
+                   // customTitle,
+                 }) => {
   if (zoomed) {
     const label = streamgraph
-      ? localization.area_streamgraph
-      : localization.area;
+        ? localization.area_streamgraph
+        : localization.area;
 
     return (
-      // html template starts here
-      <h4>
-        <span id="area-bold">{label}:</span>{" "}
-        <span
-          id="area-not-bold"
-          dangerouslySetInnerHTML={{ __html: bubbleTitle }}
-        ></span>
-      </h4>
-      // html template ends here
+        // html template starts here
+        <h4>
+          <span id="area-bold">{label}:</span>{" "}
+          <span
+              id="area-not-bold"
+              dangerouslySetInnerHTML={{__html: bubbleTitle}}
+          ></span>
+        </h4>
+        // html template ends here
     );
   }
 
   let queryString = queryConcatenator([query, q_advanced])
+
+  // console.log("customTitle", headingParams.customTitle)
+
   return (
-    // html template starts here
-    <div className="heading-container">
-      <h4 className="heading">
-        {renderTitle(localization, queryString, headingParams)}
-      </h4>
-    </div>
-    // html template ends here
+      // html template starts here
+      <div className="heading-container">
+        <h4 className="heading">
+          {renderTitle(localization, queryString, headingParams)}
+        </h4>
+      </div>
+      // html template ends here
   );
 };
 
@@ -58,6 +62,8 @@ const mapStateToProps = (state) => ({
   headingParams: state.heading,
   streamgraph: state.chartType === STREAMGRAPH_MODE,
   q_advanced: state.q_advanced.text,
+  // context: state,
+  // customTitle: state.heading.customTitle,
 });
 
 export default connect(mapStateToProps)(Heading);

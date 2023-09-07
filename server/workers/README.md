@@ -156,3 +156,14 @@ persistence_backend = "api"
 processing_backend = "api"
 ```
 
+
+## Updating R dependencies
+
+1. start rstudio
+2. navigate to folder of worker file, e.g. /workers/base: setwd("~/projects/OpenKnowledgeMaps/Headstart/server/workers/base")
+3. initiate renv with renv::activate()
+4. check if dependencies.R is up to date
+5. make any updates to packages as required, e.g. installing remotes::install_github('OpenKnowledgeMaps/rbace@triple-base-params', force=TRUE)
+6. update renv.lock file with renv::snapshot()
+7. review lock file
+8. if OK, commit lockfile

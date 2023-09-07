@@ -51,3 +51,13 @@ server/preprocessing/other-scripts/renv
 /server/nbproject/private/
 .pytest_cache
 *__pycache__*
+
+# python files
+*.pyc
+*.pkl
+.ipynb_checkpoints
+*.ipynb
+/nbproject/private/
+/server/nbproject/private/
+.pytest_cache
+*__pycache__*
