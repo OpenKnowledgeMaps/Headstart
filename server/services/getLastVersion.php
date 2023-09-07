@@ -23,7 +23,7 @@ $persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersiste
 
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 
-$last_version = $persistence->getLastVersion($vis_id, false);
+$last_version = $persistence->getLastVersion($vis_id, false, false);
 
 
 if ($last_version != null && $last_version != "null" && $last_version != false) {
