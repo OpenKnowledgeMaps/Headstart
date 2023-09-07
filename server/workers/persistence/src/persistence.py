@@ -300,7 +300,7 @@ class createID(Resource):
 
     @persistence_ns.produces(["application/json"])
     def post(self, database):
-        print('start persistence.py !!!!!!')
+        persistence_ns.logger.debug('start persistence.py !!!!!!')
         persistence_ns.logger.debug("createID")
         try:
             print('start persistence.py !!!!!!')
@@ -317,7 +317,7 @@ class createID(Resource):
             headers["Content-Type"] = "application/json"
             return make_response(jsonify(result), 200, headers)
         except Exception as e:
-            print("Exception persistence.py !!!!!")
+            persistence_ns.logger.error("Exception persistence.py !!!!!", exc_info=True)
             result = {'success': False, 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 500, headers)

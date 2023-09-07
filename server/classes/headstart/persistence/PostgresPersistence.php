@@ -16,16 +16,11 @@ class PostgresPersistence implements Persistence
         $this->api_client = $apiclient;
     }
 
-    public function createVisualization($vis_id, $vis_title, $data): void
+    public function createVisualization($vis_id, $vis_title, $input_json, $query, $dirty_query, $params_json): void
     {
-//        temporary values defined for testing
-        $dirty_query = $data->context->query;
-        $query = cleanQuery($dirty_query, $transform_query_tolowercase = true, $add_slashes = true);
-        $params_json = $data->context->params;
-
         $payload = json_encode(array("vis_id" => $vis_id,
             "vis_title" => $vis_title,
-            "data" => $data,
+            "data" => $input_json,
             "vis_clean_query" => $query,
             "vis_query" => $dirty_query,
             "vis_params" => $params_json));
@@ -50,14 +45,20 @@ class PostgresPersistence implements Persistence
     public function existsVisualization($vis_id): array|bool
     {
         $payload = json_encode(array("vis_id" => $vis_id));
-        $result = $this->api_client->call_persistence("existsVisualization", $payload);
-        return $result;
+        $res = $this->api_client->call_persistence("existsVisualization", $payload);
+        if ($res["httpcode"] != 200) {
+          return json_encode($res);
+        } else {
+          $result = json_decode($res["result"], true);
+          $exists = $result["exists"];
+        }
+        return $exists;
     }
 
-    public function getLastVersion($vis_id): array|bool
+    public function getLastVersion($vis_id, $details): array|bool
     {
         $payload = json_encode(array("vis_id" => $vis_id,
-            "details" => false,
+            "details" => $details,
             "context" => false));
         $res = $this->api_client->call_persistence("getLastVersion", $payload);
         if ($res["httpcode"] != 200) {
@@ -77,27 +78,22 @@ class PostgresPersistence implements Persistence
     public function getContext($vis_id): array|bool
     {
         $payload = json_encode(array("vis_id" => $vis_id));
-        $result = $this->api_client->call_persistence("getContext", $payload);
-        return $result;
+        $res = $this->api_client->call_persistence("getContext", $payload);
+        $data = json_decode($res["result"], true);
+        return array($data);
     }
 
-    public function createId($string_array, $payload): string
+    public function createID($string_array, $payload): string
     {
-        var_dump("PostgresPersistence createId called and started !");
-        var_dump("PostgresPersistence payload: " . $payload);
         $res = $this->api_client->call_persistence("createID", $payload);
         if ($res["httpcode"] != 200) {
-            var_dump("PostgresPersistence => createId() $res[httpcode] != 200");
             echo json_encode($res);
         } else {
             $result = json_decode($res["result"], true);
             $unique_id = $result["unique_id"];
-            var_dump('PostgresPersistence => createId() $res["httpcode"] === 200 $result: ' . $result);
-            var_dump('PostgresPersistence => createId() $unique_id: ' . $unique_id);
             return $unique_id;
         }
 
-        var_dump("test var_dump:  PostgresPersistence some work result or not...");
         throw new \Exception("Could not create ID, response code was : " . $res["httpcode"]);
     }
 }

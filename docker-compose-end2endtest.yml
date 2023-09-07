@@ -7,6 +7,7 @@ services:
     build:
       context: ./server/workers/tests
       dockerfile: ./Dockerfile_tests
+    container_name: end2endtest
     hostname: "end2endtest"
     environment:
       POSTGRES_USER: "testuser"
@@ -15,17 +16,22 @@ services:
       POSTGRES_PORT: 5432
       DEFAULT_DATABASE: "testdb"
       SERVICE_VERSION: "test_version"
+    ports:
+      - "0.0.0.0:5000:5000"
     volumes:
       - ./server/:/app
     depends_on:
       - db
       - backend
     restart: "no"
-    entrypoint: [ "pytest", '/app/workers/tests/test_end2end.py', '-s', '-rfA', '-k', 'test_search_endpoint' ]
+    entrypoint: [ "pytest", '/app/workers/tests/test_end2end.py', '-s', '-rfA']
     networks:
-      - test
+      test:
+        ipv4_address: 172.18.0.2
 
   backend:
+    container_name: backend
+    hostname: "backend"
     build:
       context: ./server/workers/tests
       dockerfile: ./Dockerfile_backend
@@ -33,7 +39,8 @@ services:
       - ./server/:/var/www/html/server
     restart: "no"
     networks:
-      - test
+      test:
+        ipv4_address: 172.18.0.3
     ports:
       - "80:80"
 
@@ -56,10 +63,16 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - test
+      test:
+        ipv4_address: 172.18.0.4
 
 volumes:
   db_data:
 
 networks:
   test:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1

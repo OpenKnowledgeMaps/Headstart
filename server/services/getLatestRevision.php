@@ -21,7 +21,6 @@ $postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient
 $shiftReadPercentage = isset($ini_array["general"]["shift_read_percentage"]);
 $persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersistence, $postgresPersistence, $shiftReadPercentage);
 
-$persistence_backend = $ini_array["general"]["persistence_backend"];
 
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 $context = filter_input(INPUT_GET, "context", FILTER_VALIDATE_BOOLEAN,

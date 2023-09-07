@@ -10,15 +10,11 @@ use headstart\library;
 $dirty_query = library\CommUtils::getParameter($_POST, "q");
 $precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
-var_dump('searchBASE.php $precomputed_id: ' . $precomputed_id);
-
-
 $params_array = array("from", "to", "document_types", "sorting", "min_descsize");
 $optional_get_params = ["repo", "coll", "vis_type", "q_advanced", "lang_id"];
 
 
 foreach($optional_get_params as $param) {
-    var_dump('searchBASE.php $_POST params: ' . isset($_POST[$param]));
     if(isset($_POST[$param])) {
         $params_array[] = $param;
     }
@@ -35,7 +31,6 @@ $result = search("base", $dirty_query
                   , true
                   , true, null
                   , $precomputed_id, false);
-var_dump('searchBASE.php $result:' . $result);
 echo $result
 
 ?>

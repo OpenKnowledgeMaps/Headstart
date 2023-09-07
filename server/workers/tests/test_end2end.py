@@ -61,16 +61,13 @@ def test_hello_world(app, test_client):
 
 def test_search_api_reachability(app, test_client):
     # Test that the base URL returns a 200 (OK) HTTP status code
-    try:
-        response = test_client.get('/api/stable/base/search')
-        assert response.status_code == 200
-        assert response.content_type == "application/json"
-        data = json.loads(response.get_data(as_text=True))
-    except requests.exceptions.RequestException as e:
-        print('! test test_search_api_reachability with Fail state !')
-        print(f"Request failed: {e}")
+    response = test_client.get('/api/stable/base/search')
+    assert response.status_code == 200
+    assert response.content_type == "application/json"
+    data = json.loads(response.get_data(as_text=True))
 
 def test_search_endpoint(app):
+    time.sleep(100)
     url = "http://backend/server/services/searchBASE.php"
     params = {
         "unique_id": "530133cf1768e6606f63c641a1a96768",
@@ -81,19 +78,12 @@ def test_search_endpoint(app):
         "q": "digital education",
         "sorting": "most-recent"
     }
-    try:
-        print("STARTING TEST TRY !")
-        print(f"Testing {url} with params {params}")
-        response = requests.post(url, data=params)
-        response.raise_for_status()
-        data = response.json()
-        assert "query" in data
-        assert "id" in data
-        assert "status" in data
-    except requests.exceptions.RequestException as e:
-        print('! test test_search_endpoint with Fail state !')
-        print(f" ! test_search_endpoint; Request failed: {e}")
-        print(response.json())
+    response = requests.post(url, data=params)
+    response.raise_for_status()
+    data = response.json()
+    assert "query" in data
+    assert "id" in data
+    assert "status" in data
 
 def test_createID(app, test_client):
     url = "/api/stable/persistence/createID/testdb"
@@ -113,16 +103,10 @@ def test_getLatestRevision(app):
     params = {
         "vis_id": "530133cf1768e6606f63c641a1a96768",
     }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        assert type(data) == list
-    except requests.exceptions.RequestException as e:
-        print('! test test_getLatestRevision with Fail state !')
-        print(f"Request failed: {e}")
-        print(response.content)
-
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    data = response.json()
+    assert type(data) == list
 
 def test_getLatestRevisionWithContext(app, populate_db):
     url = "http://backend/server/services/getLatestRevision.php"
@@ -130,15 +114,10 @@ def test_getLatestRevisionWithContext(app, populate_db):
         "vis_id": "530133cf1768e6606f63c641a1a96768",
         "context": True
     }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        assert type(data) == dict
-    except requests.exceptions.RequestException as e:
-        print('! test test_getLatestRevisionWithContext with Fail state !')
-        print(f"Request failed: {e}")
-        print(response.content)
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    data = response.json()
+    assert type(data) == dict
 
 def test_getLatestRevisionWithDetails(app, populate_db):
     url = "http://backend/server/services/getLatestRevision.php"
@@ -147,26 +126,16 @@ def test_getLatestRevisionWithDetails(app, populate_db):
         "context": True,
         "details": True
     }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        assert type(data) == dict
-    except requests.exceptions.RequestException as e:
-        print('! test test_getLatestRevisionWithDetails with Fail state !')
-        print(f"Request failed: {e}")
-        print(response.content)
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    data = response.json()
+    assert type(data) == dict
 
 def test_persistence_api(app, test_client):
     url = "/api/stable/persistence/service_version"
-    try:
-        response = test_client.get(url)
-        assert response.status_code == 200
-        assert b"test_version" in response.data
-    except requests.exceptions.RequestException as e:
-        print('! test test_persistence_api with Fail state !')
-        print(f"Request failed: {e}")
-        print(response.content)
+    response = test_client.get(url)
+    assert response.status_code == 200
+    assert b"test_version" in response.data
 
 def test_persistence_api_create_visualization(app, test_client):
     data, vis_params = load_test_data()
@@ -209,33 +178,28 @@ def test_search_and_getLatestRevision(app, populate_db):
         "q": "digital education",
         "sorting": "most-recent"
     }
-    try:
-        response = requests.post(url, data=params)
-        response.raise_for_status()
-        data = response.json()
-        assert "query" in data
-        assert "id" in data
-        assert "status" in data
-    except requests.exceptions.RequestException as e:
-        print('! test test_search_and_getLatestRevision with Fail state !')
-        print(f"Request failed: {e}")
-        print(response.json())
+    response = requests.post(url, data=params)
+    response.raise_for_status()
+    data = response.json()
+    assert "query" in data
+    assert "id" in data
+    assert "status" in data
     url = "http://backend/server/services/getLatestRevision.php"
     params = {
         "vis_id": "530133cf1768e6606f63c641a1a96768",
         "context": True
     }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        r = response.json()
-        assert type(r) == dict
-        assert "context" in r.keys()
-        assert "data" in r.keys()
-        assert type(r["context"]) == dict
-        assert type(r["data"]) == str
-        data = json.loads(r["data"])
-        assert type(data) == list
-    except requests.exceptions.RequestException as e:
-        print(f"Request failed: {e}")
-        print(response.content)
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    r = response.json()
+    assert type(r) == dict
+    assert "context" in r.keys()
+    assert "data" in r.keys()
+    assert type(r["context"]) == dict
+    assert type(r["data"]) == str
+    data = json.loads(r["data"])
+    assert type(data) == list
+
+import time
+while True:
+    time.sleep(100)

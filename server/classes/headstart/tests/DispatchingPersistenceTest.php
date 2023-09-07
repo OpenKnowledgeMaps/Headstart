@@ -209,20 +209,20 @@ class DispatchingPersistenceTest extends TestCase
         return $result;
     }
 
-    public function testCreateId()
+    public function testCreateID()
     {
         $oldPersistence = $this->createMock(Persistence::class);
         $newPersistence = $this->createMock(Persistence::class);
 
         $oldPersistence->expects($this->once())
-            ->method('createId')
+            ->method('createID')
             ->with(
                 $this->equalTo("string_array"),
             );
 
         $dispatcherPersistence = new \headstart\persistence\DispatchingPersistence($oldPersistence,
             $newPersistence, 0);
-        $result = $dispatcherPersistence->createId("string_array");
+        $result = $dispatcherPersistence->createID("string_array");
         return $result;
     }
 }

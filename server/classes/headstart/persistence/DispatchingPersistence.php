@@ -58,7 +58,7 @@ class DispatchingPersistence implements Persistence
         return $result;
     }
 
-    public function getLastVersion($vis_id): array|bool
+    public function getLastVersion($vis_id, $details): array|bool
     {
         $randomFloat = getRandomFloat();
 
@@ -97,18 +97,16 @@ class DispatchingPersistence implements Persistence
         return $result;
     }
 
-    public function createId($string_array, $payload): string
+    public function createID($string_array, $payload): string
     {
-        var_dump("DispatchingPersistence createId");
         $randomFloat = getRandomFloat();
 
         if ($randomFloat * 100 > $this->shiftReadPercentage * 100) {
-            $result = $this->oldPersistence->createId($string_array, $payload);
+            $result = $this->oldPersistence->createID($string_array, $payload);
         } else {
-            $result = $this->newPersistence->createId($string_array, $payload);
+            $result = $this->newPersistence->createID($string_array, $payload);
         }
 
-        var_dump("DispatchingPersistence createId result: " . $result);
         return $result;
     }
 }

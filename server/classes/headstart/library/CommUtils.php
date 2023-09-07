@@ -41,10 +41,6 @@ class CommUtils {
     }
 
     public static function call_api($route, $payload) {
-        var_dump('CommUtils start function call_api()');
-        var_dump('CommUtils::call_api() $route: ' . $route);
-        var_dump('CommUtils::call_api() $payload: ' . $payload);
-
         self::initialize();
         
         $ch = curl_init();
@@ -54,9 +50,10 @@ class CommUtils {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
+        curl_close($ch);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        var_dump('CommUtils::call_api() $result: ' . $result);
-        var_dump('CommUtils::call_api() $httpcode: ' . $httpcode);
+        if ($result === false) 
+            $result = curl_error($ch);
         return array("result" => $result, "httpcode" => $httpcode);
     }
 }

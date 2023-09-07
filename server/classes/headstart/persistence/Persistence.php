@@ -27,5 +27,5 @@ interface Persistence
 
     public function getContext($vis_id): array|bool;
 
-    public function createId($string_array, $payload): string;
+    public function createID($string_array, $payload): string;
 }

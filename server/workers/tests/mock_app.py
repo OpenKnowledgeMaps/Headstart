@@ -22,6 +22,10 @@ def create_app(config_name):
     }
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % bind_params
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['PORT'] = 5000
+    app.config['DEBUG'] = True
+    app.config['TESTING'] = True
+    app.config['ENV'] = 'development'
 
     # Add any configuration settings based on `config_name` (e.g., development, testing, production)
     # ...
@@ -51,6 +55,6 @@ def create_app(config_name):
     app.logger.setLevel(logging.DEBUG)
     app.logger.addHandler(handler)
     # app.logger.debug(app.config)
-    app.logger.debug(app.url_map)
+    # app.logger.debug(app.url_map)
 
     return app
