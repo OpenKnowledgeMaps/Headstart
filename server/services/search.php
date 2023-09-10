@@ -80,10 +80,6 @@ function search($service, $dirty_query
     $shiftReadPercentage = $ini_array["general"]["shift_read_percentage"];
     $persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersistence, $postgresPersistence, $shiftReadPercentage);
 
-    $database = $ini_array["connection"]["database"];
-
-    $settings = $ini_array["general"];
-
     // todo: move back into own function once error handling is refactored
     if ($service == "openaire") {
           $payload = json_encode(array("params" => $post_params));
@@ -118,6 +114,7 @@ function search($service, $dirty_query
 
     if($retrieve_cached_map) {
       $last_version = $persistence->getLastVersion($unique_id, false, false);
+      error_log(print_r($last_version, TRUE));
       if ($last_version != null && $last_version != "null" && $last_version != false) {
           echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
           return;

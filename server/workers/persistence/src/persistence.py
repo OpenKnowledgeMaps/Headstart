@@ -125,35 +125,39 @@ def get_revision(database, vis_id, rev_id, details=False, context=False):
             return res
         else:
             if details is True:
-                return rev.as_dict()
+                return [rev.as_dict()]
             else:
-                return rev.rev_data
+                return [rev.rev_data]
     except TypeError:
-        persistence_ns.logger.info("Vis ID not found: %s in database %s" % (vis_id, database))
-        return None
+        persistence_ns.logger.debug("get_revision: Vis ID not found: %s in database %s" % (vis_id, database))
+        return "null"
 
 
 def get_context(database, vis_id, revision_context=False):
-    session = select_session(sessions.get(database))
-    vis, rev = (session
-                .query(Visualizations, Revisions)
-                .select_from(Visualizations, Revisions)
-                .filter(Visualizations.vis_id == vis_id)
-                .filter(Revisions.rev_vis == vis_id)
-                .filter(Revisions.rev_id == Visualizations.vis_latest)
-                ).first()
-    res = {
-        "rev_vis": rev.rev_vis,
-        "vis_query": rev.vis_query,
-        "vis_title": vis.vis_title,
-        "rev_timestamp": rev.rev_timestamp,
-        "vis_params": vis.vis_params
-    }
-    if revision_context == 'true':
-        data = json.loads(rev.rev_data)
-        res["additional_context"] = data.get("additional_context", {})
-    session.close()
-    return res
+    try:
+        session = select_session(sessions.get(database))
+        vis, rev = (session
+                    .query(Visualizations, Revisions)
+                    .select_from(Visualizations, Revisions)
+                    .filter(Visualizations.vis_id == vis_id)
+                    .filter(Revisions.rev_vis == vis_id)
+                    .filter(Revisions.rev_id == Visualizations.vis_latest)
+                    ).first()
+        res = {
+            "rev_vis": rev.rev_vis,
+            "vis_query": rev.vis_query,
+            "vis_title": vis.vis_title,
+            "rev_timestamp": rev.rev_timestamp,
+            "vis_params": vis.vis_params
+        }
+        if revision_context == 'true':
+            data = json.loads(rev.rev_data)
+            res["additional_context"] = data.get("additional_context", {})
+        session.close()
+        return res
+    except TypeError:
+        persistence_ns.logger.debug("get_context: Vis ID not found: %s in database %s" % (vis_id, database))
+        return [False]
 
 
 @persistence_ns.route('/existsVisualization/<database>')
@@ -300,7 +304,6 @@ class createID(Resource):
 
     @persistence_ns.produces(["application/json"])
     def post(self, database):
-        persistence_ns.logger.debug('start persistence.py !!!!!!')
         persistence_ns.logger.debug("createID")
         try:
             print('start persistence.py !!!!!!')
