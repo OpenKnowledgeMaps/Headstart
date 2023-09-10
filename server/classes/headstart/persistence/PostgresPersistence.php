@@ -66,7 +66,10 @@ class PostgresPersistence implements Persistence
           } else {
             $data = json_decode($res["result"], true);
           }
-        return array($data);
+        if ($data != "null") {
+            $data = array($data);
+        }
+        return $data;
     }
 
     public function getLatestRevisions(): array|bool

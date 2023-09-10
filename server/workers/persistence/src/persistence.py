@@ -125,9 +125,9 @@ def get_revision(database, vis_id, rev_id, details=False, context=False):
             return res
         else:
             if details is True:
-                return [rev.as_dict()]
+                return rev.as_dict()
             else:
-                return [rev.rev_data]
+                return rev.rev_data
     except TypeError:
         persistence_ns.logger.debug("get_revision: Vis ID not found: %s in database %s" % (vis_id, database))
         return "null"
