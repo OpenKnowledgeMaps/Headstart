@@ -95,7 +95,7 @@ def test_createID(app, test_client):
         "param_types": ["q", "from", "to", "document_types", "sorting"]
     }
     response = test_client.post(url, json=params)
-    assert b'{"unique_id":"dffef32544bc14a48e9f3aa2824e2513"}\n' in response.data
+    assert b'{\n  "unique_id": "dffef32544bc14a48e9f3aa2824e2513"\n}\n' in response.data
 
 def test_getLatestRevision(app):
     url = "http://backend/server/services/getLatestRevision.php"
@@ -148,7 +148,7 @@ def test_persistence_api_create_visualization(app, test_client):
         "vis_params": json.dumps({"context": vis_params})
     }
     response = test_client.post(url, json=params)
-    assert b'{"success":true}\n' in response.data
+    assert b'{\n  "success": true\n}\n' in response.data
     url = "/api/stable/persistence/getLastVersion/testdb"
     params = {
         "vis_id": "530133cf1768e6606f63c641a1a96768",
