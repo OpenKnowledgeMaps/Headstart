@@ -67,7 +67,6 @@ def test_search_api_reachability(app, test_client):
     data = json.loads(response.get_data(as_text=True))
 
 def test_search_endpoint(app):
-    time.sleep(100)
     url = "http://backend/server/services/searchBASE.php"
     params = {
         "unique_id": "530133cf1768e6606f63c641a1a96768",
