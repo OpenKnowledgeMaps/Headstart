@@ -1,12 +1,10 @@
 {
   "document_types":["121"],
   "from":"1665-01-01",
-  "to":"2023-06-30",
+  "to":"2023-07-21",
   "sorting":"most-relevant",
   "vis_id": "TEST_ID",
-  "min_descsize": 0,
+  "min_descsize": 300,
   "limit": 120,
-  "list_size": 100,
-  "repo": "ftenkore",
-  "q_advanced": "dcsubject:\"theme:invasion pathway\""
+  "list_size": 100
 }

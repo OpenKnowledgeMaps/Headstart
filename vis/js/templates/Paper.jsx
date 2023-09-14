@@ -100,7 +100,7 @@ class Paper extends React.Component {
     const { maxSize, enlargeFactor } = this.props;
     const { onClick, onMouseOver, onMouseOut } = this.props;
 
-    const { title, authors_string: authors, year, area } = data;
+    const {title, authors_string: authors, authors_list: authors_list, year, area} = data;
     const { num_readers: readers, published_in: publisher } = data;
     const { x, y, width: baseWidth, height: baseHeight } = this.state;
     const { path: basePath, dogEar: baseDogEar } = this.state;
@@ -168,6 +168,19 @@ class Paper extends React.Component {
       eventHandlers.onMouseOut = handleMouseOut;
     }
 
+
+    // function returns a string of authors with conditionals if the list is too long, it's cut off and an ellipsis is added
+    // if less than maxLength authors, the full list is returned
+    function cutAuthors(authorsList, maxLength) {
+      if (authorsList.length > maxLength) {
+        const firstAuthors = authorsList.slice(0, maxLength - 1).join(', ');
+        const lastAuthor = authorsList[authorsList.length - 1];
+        return `${firstAuthors}, ... ${lastAuthor}`;
+      } else {
+        return authors
+      }
+    }
+
     return (
       // html template starts here
       <g className={gClass} {...eventHandlers}>
@@ -222,7 +235,8 @@ class Paper extends React.Component {
                 <p id="details" className={sizeModifierClass}>
                   <Hyphenate>
                     <Highlight hyphenated queryHighlight>
-                      {authors}
+                      {/*{authors}*/}
+                      {cutAuthors(authors_list, 15)}
                     </Highlight>
                   </Hyphenate>
                 </p>
@@ -478,7 +492,7 @@ export const isNonTextDocument = (paper) => {
   }
 
   const knownTypes = paper.resulttype.filter((t) => t.toLowerCase() !== UNKNOWN_TYPE);
-  
+
   // the only type is unknown
   if (knownTypes.length === 0) {
     return true;

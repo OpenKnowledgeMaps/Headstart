@@ -58,6 +58,15 @@ class SearchParamSchema(Schema):
         except Exception:
             return in_data
 
+    @pre_load
+    def lang_id_empty_fallback(self, in_data, **kwargs):
+        lang_id = in_data.get("lang_id")
+        if lang_id:
+            lang_id = list(filter(lambda x: x != "", lang_id))
+            if len(lang_id) == 0:
+                in_data["lang_id"] = ["all-lang"]
+        return in_data
+
     @validates('from_')
     def is_not_in_future(self, date):
         if date > datetime.today().date():
