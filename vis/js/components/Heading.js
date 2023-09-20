@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import {getParameterValueFromLink} from "../utils/getParamValueFromLink";
+
 import {
   BasicTitle,
   ProjectTitle,
@@ -40,8 +42,6 @@ const Heading = ({
   }
 
   let queryString = queryConcatenator([query, q_advanced])
-
-  // console.log("customTitle", headingParams.customTitle)
 
   return (
       // html template starts here
@@ -108,12 +108,12 @@ const renderTitle = (localization, query, headingParams, service) => {
         localization
       );
     }
+      // get parameter "custom_title" from the path
+      const customTitleFromPath = getParameterValueFromLink("custom_title")
 
-      console.log(getParameterValueFromLink("custom_title"))
+      // this condition for BASE service and custom title if its exists in the path or goes from the context params
+      if ((headingParams.customTitle || customTitleFromPath) && service === "BASE") {
 
-      if (headingParams.customTitle && service === "BASE") {
-          // get parameter "custom_title" from the path
-          let customTitleFromPath = getParameterValueFromLink("custom_title")
           if (customTitleFromPath !== null) {
               return <StandardTitle label={label} title={customTitleFromPath}/>
           }
@@ -208,27 +208,3 @@ const unescapeHTML = (string) => {
     }
   );
 };
-
-function getParameterValueFromLink(parameterName) {
-    // Get the URL of the current page
-    const url = window.location.href;
-
-    // Parse the URL to extract the query parameters
-    const queryString = url.split('?')[1];
-    if (!queryString) {
-        return null; // No query parameters found
-    }
-
-    // Split the query string into individual parameters
-    const parameters = queryString.split('&');
-
-    // Loop through the parameters to find the one with the matching name
-    for (const parameter of parameters) {
-        const [name, value] = parameter.split('=');
-        if (name === parameterName) {
-            return decodeURIComponent(value); // Return the parameter value
-        }
-    }
-
-    return null; // Parameter not found
-}
