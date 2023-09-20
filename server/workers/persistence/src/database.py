@@ -13,19 +13,9 @@ bind_params = {
 }
 
 sessions = {}
-sessions[os.getenv("DEFAULT_DATABASE")] = sessionmaker(bind=create_engine('postgresql+psycopg2://%(user)s:%(pw)s@/%(db)s?%(host)s' % bind_params,
+sessions[os.getenv("DEFAULT_DATABASE")] = sessionmaker(bind=create_engine('postgresql+psycopg2://%(user)s:%(pw)s@/%(db)s?host=127.0.01:7432&host=127.0.01:6432&target_session_attrs=read-write' % bind_params,
                                                                  max_overflow=15,
                                                                  pool_pre_ping=True,
                                                                  pool_recycle=3600,
                                                                  pool_size=30))
-if "DATABASES" in os.environ:
-    if os.getenv("DATABASES") != "":
-        for database in os.getenv("DATABASES").split(","):
-            bind_params["db"] = database
-            sessions[database] = sessionmaker(bind=create_engine('postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % bind_params,
-                                                                 max_overflow=15,
-                                                                 pool_pre_ping=True,
-                                                                 pool_recycle=3600,
-                                                                 pool_size=30
-                                                                 ))
 Base = declarative_base()
