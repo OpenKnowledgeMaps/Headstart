@@ -13,7 +13,7 @@ bind_params = {
 }
 
 sessions = {}
-sessions[os.getenv("DEFAULT_DATABASE")] = sessionmaker(bind=create_engine('postgresql+psycopg2://%(user)s:%(pw)s@/%(db)s?host=213.136.75.45:7432&host=213.136.75.45:6432&target_session_attrs=read-write' % bind_params,
+sessions[os.getenv("DEFAULT_DATABASE")] = sessionmaker(bind=create_engine('postgresql+psycopg2://%(user)s:%(pw)s@/%(db)s?host=host.docker.internal:7432&host=host.docker.internal:6432&target_session_attrs=read-write' % bind_params,
                                                                  max_overflow=15,
                                                                  pool_pre_ping=True,
                                                                  pool_recycle=3600,
