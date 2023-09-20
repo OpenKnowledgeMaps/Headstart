@@ -28,7 +28,7 @@ const StandardKMInfo = ({
             on{" "}
             <strong className="hs-strong">
               {/*{customTitle ? customTitle : queryString}*/}
-              {customTitleFromPath ? customTitleFromPath : (customTitle ? customTitle : queryString)}
+              {serviceName === 'BASE' ? (customTitleFromPath ? customTitleFromPath : (customTitle ? customTitle : queryString)) : queryString}
             </strong>{" "}
             based on the 100{" "}
             <a
