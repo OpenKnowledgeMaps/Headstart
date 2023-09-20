@@ -12,6 +12,7 @@ const StandardKMInfo = ({
   params: { query, customTitle, repo_name, q_advanced },
 }) => {
   let queryString = queryConcatenator([query, q_advanced])
+  let customTitleFromPath = getParameterValueFromLink("custom_title")
   return (
     // html template starts here
     <>
@@ -24,7 +25,8 @@ const StandardKMInfo = ({
             This knowledge map presents you with a topical overview of research
             on{" "}
             <strong className="hs-strong">
-              {customTitle ? customTitle : queryString}
+              {/*{customTitle ? customTitle : queryString}*/}
+              {customTitleFromPath ? customTitleFromPath : (customTitle ? customTitle : queryString)}
             </strong>{" "}
             based on the 100{" "}
             <a
@@ -86,5 +88,29 @@ const StandardKMInfo = ({
     // html template ends here
   );
 };
+
+function getParameterValueFromLink(parameterName) {
+  // Get the URL of the current page
+  const url = window.location.href;
+
+  // Parse the URL to extract the query parameters
+  const queryString = url.split('?')[1];
+  if (!queryString) {
+    return null; // No query parameters found
+  }
+
+  // Split the query string into individual parameters
+  const parameters = queryString.split('&');
+
+  // Loop through the parameters to find the one with the matching name
+  for (const parameter of parameters) {
+    const [name, value] = parameter.split('=');
+    if (name === parameterName) {
+      return decodeURIComponent(value); // Return the parameter value
+    }
+  }
+
+  return null; // Parameter not found
+}
 
 export default StandardKMInfo;

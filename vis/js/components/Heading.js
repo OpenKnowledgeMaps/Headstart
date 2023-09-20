@@ -19,7 +19,7 @@ const Heading = ({
                    headingParams,
                    streamgraph,
                    q_advanced,
-                   // customTitle,
+                     service,
                  }) => {
   if (zoomed) {
     const label = streamgraph
@@ -47,7 +47,7 @@ const Heading = ({
       // html template starts here
       <div className="heading-container">
         <h4 className="heading">
-          {renderTitle(localization, queryString, headingParams)}
+            {renderTitle(localization, queryString, headingParams, service)}
         </h4>
       </div>
       // html template ends here
@@ -62,9 +62,10 @@ const mapStateToProps = (state) => ({
   headingParams: state.heading,
   streamgraph: state.chartType === STREAMGRAPH_MODE,
   q_advanced: state.q_advanced.text,
-  // context: state,
-  // customTitle: state.heading.customTitle,
+    // get source BASE or PubMed
+    service: state.contextLine.dataSource,
 });
+
 
 export default connect(mapStateToProps)(Heading);
 
@@ -75,7 +76,11 @@ const MAX_LENGTH_CUSTOM = 100;
 /**
  * Renders the title for the correct setup.
  */
-const renderTitle = (localization, query, headingParams) => {
+const renderTitle = (localization, query, headingParams, service) => {
+    console.log("headingParams", headingParams)
+    console.log("headingParams.titleStyle", headingParams.titleStyle)
+    console.log("service", service)
+
   if (headingParams.presetTitle) {
     return <BasicTitle title={headingParams.presetTitle} />;
   }
@@ -104,10 +109,22 @@ const renderTitle = (localization, query, headingParams) => {
       );
     }
 
+      console.log(getParameterValueFromLink("custom_title"))
+
+      if (headingParams.customTitle && service === "BASE") {
+          // get parameter "custom_title" from the path
+          let customTitleFromPath = getParameterValueFromLink("custom_title")
+          if (customTitleFromPath !== null) {
+              return <StandardTitle label={label} title={customTitleFromPath}/>
+          }
+          return <StandardTitle label={label} title={headingParams.customTitle}/>;
+      }
+
     return <StandardTitle label={label} title={query} />;
   }
 
-  return <BasicTitle title={localization.default_title} />;
+
+    return <BasicTitle title={localization.default_title} />;
 };
 
 const renderViperTitle = (title, acronym, projectId) => {
@@ -191,3 +208,27 @@ const unescapeHTML = (string) => {
     }
   );
 };
+
+function getParameterValueFromLink(parameterName) {
+    // Get the URL of the current page
+    const url = window.location.href;
+
+    // Parse the URL to extract the query parameters
+    const queryString = url.split('?')[1];
+    if (!queryString) {
+        return null; // No query parameters found
+    }
+
+    // Split the query string into individual parameters
+    const parameters = queryString.split('&');
+
+    // Loop through the parameters to find the one with the matching name
+    for (const parameter of parameters) {
+        const [name, value] = parameter.split('=');
+        if (name === parameterName) {
+            return decodeURIComponent(value); // Return the parameter value
+        }
+    }
+
+    return null; // Parameter not found
+}

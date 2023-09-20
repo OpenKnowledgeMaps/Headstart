@@ -5,9 +5,6 @@ const context = (state = {}, action) => {
 
   switch (action.type) {
     case "INITIALIZE":
-      // console.log("action", action)
-      // console.log("params", action.contextObject.params)
-      // console.log("custom_title", action.contextObject.params.custom_title)
       return {
         title: action.contextObject.params
             ? action.contextObject.params.title
@@ -21,8 +18,8 @@ const context = (state = {}, action) => {
         presetTitle: action.configObject.title,
         titleStyle: getTitleStyle(action.configObject),
         titleLabelType: getTitleLabelType(action.configObject),
-        customTitle: action.configObject.custom_title,
-        // customTitle: action.contextObject.params.custom_title,
+        // customTitle: action.configObject.custom_title,
+        customTitle: action.contextObject.params.custom_title,
       };
     default:
       return state;
