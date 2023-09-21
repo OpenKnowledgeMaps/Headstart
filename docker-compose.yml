@@ -69,6 +69,7 @@ services:
       DEFAULT_DATABASE: "${DEFAULT_DATABASE}"
       DATABASES: "${DATABASES}"
       FLASK_ENV: "${FLASK_ENV}"
+      SSH_AUTH_SOCK: "/run/host-services/ssh-auth.sock"
     command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
     networks: 
       - headstart
