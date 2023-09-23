@@ -112,7 +112,6 @@ def get_revision(database, vis_id, rev_id, details=False, context=False):
                         .filter(Revisions.rev_vis == vis_id)
                         .filter(Revisions.rev_id == rev_id)
                         ).first()
-        session.close()
         if context is True:
             res = {
                 "rev_vis": rev.rev_vis,
@@ -122,12 +121,13 @@ def get_revision(database, vis_id, rev_id, details=False, context=False):
                 "vis_params": vis.vis_params,
                 "rev_data": rev.rev_data
             }
-            return res
         else:
             if details is True:
-                return rev.as_dict()
+                res = rev.as_dict()
             else:
-                return rev.rev_data
+                res = rev.rev_data
+        session.close()
+        return res
     except TypeError:
         persistence_ns.logger.debug("get_revision: Vis ID not found: %s in database %s" % (vis_id, database))
         return "null"
