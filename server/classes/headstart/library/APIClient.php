@@ -36,7 +36,6 @@ class APIClient {
             $res = array("status"=>"error",
                          "httpcode"=>500,
                          "reason"=>array("unexpected data processing error"));
-            error_log(print_r($res, TRUE));
             return $res;
         }
         finally {
@@ -57,7 +56,6 @@ class APIClient {
             $res = array("status"=>"error",
                          "httpcode"=>500,
                          "reason"=>array("unexpected data processing error"));
-            error_log(print_r($res, TRUE));
             return $res;
         }
         finally {
