@@ -13,8 +13,8 @@ bind_params = {
 }
 
 Session = sessionmaker(bind=create_engine('postgresql+psycopg2://%(user)s:%(pw)s@/%(db)s?host=%(host)s:7432&host=%(host)s:6432&target_session_attrs=read-write' % bind_params,
-                                                                 max_overflow=15,
+                                                                 max_overflow=5,
                                                                  pool_pre_ping=True,
-                                                                 pool_recycle=3600,
-                                                                 pool_size=30))
+                                                                 pool_recycle=600,
+                                                                 pool_size=5))
 Base = declarative_base()
