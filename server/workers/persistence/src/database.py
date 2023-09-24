@@ -12,8 +12,7 @@ bind_params = {
     "db": os.getenv("DEFAULT_DATABASE")
 }
 
-sessions = {}
-sessions[os.getenv("DEFAULT_DATABASE")] = sessionmaker(bind=create_engine('postgresql+psycopg2://%(user)s:%(pw)s@/%(db)s?host=%(host)s:7432&host=%(host)s:6432&target_session_attrs=read-write' % bind_params,
+Session = sessionmaker(bind=create_engine('postgresql+psycopg2://%(user)s:%(pw)s@/%(db)s?host=%(host)s:7432&host=%(host)s:6432&target_session_attrs=read-write' % bind_params,
                                                                  max_overflow=15,
                                                                  pool_pre_ping=True,
                                                                  pool_recycle=3600,

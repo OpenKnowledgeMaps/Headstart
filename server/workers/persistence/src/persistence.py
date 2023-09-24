@@ -7,22 +7,10 @@ from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 
 from models import Revisions, Visualizations
-from database import sessions
+from database import Session
 
 
 persistence_ns = Namespace("persistence", description="OKMAps persistence operations")
-DATABASE_ENV_VARIABLE = "DEFAULT_DATABASE"
-
-
-def select_session(Session=None):
-    """Select session according to database,
-        else select session for default database."""
-    # if Session is not None:
-    if Session:
-        return Session()
-    else:
-        return sessions.get(os.getenv(DATABASE_ENV_VARIABLE))()
-
 
 def create_vis_id(params, param_types):
     # create map id
@@ -38,28 +26,32 @@ def create_vis_id(params, param_types):
 
 
 def write_revision(database, vis_id, data, rev_id=None):
-    session = select_session(sessions.get(database))
-    vis = session.query(Visualizations).filter_by(vis_id=vis_id).first()
+    session = Session()
+    try:
+        vis = session.query(Visualizations).filter_by(vis_id=vis_id).first()
 
-    if rev_id is None:
-        if vis.vis_latest is None:
-            rev_id = 1
-        else:
-            rev_id = vis.vis_latest + 1
+        if rev_id is None:
+            if vis.vis_latest is None:
+                rev_id = 1
+            else:
+                rev_id = vis.vis_latest + 1
 
-    query = vis.vis_clean_query
+        query = vis.vis_clean_query
 
-    new_rev = Revisions(
-                rev_id=rev_id,
-                rev_vis=vis_id,
-                rev_user="System",
-                rev_timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                rev_comment="Visualization created",
-                rev_data=data,
-                vis_query=query)
-    session.add(new_rev)
-    vis.vis_latest = rev_id
-    session.commit()
+        new_rev = Revisions(
+                    rev_id=rev_id,
+                    rev_vis=vis_id,
+                    rev_user="System",
+                    rev_timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    rev_comment="Visualization created",
+                    rev_data=data,
+                    vis_query=query)
+        session.add(new_rev)
+        vis.vis_latest = rev_id
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        persistence_ns.logger.error("write_revision: %s" % str(e))
     session.close()
 
 
@@ -67,24 +59,31 @@ def create_visualization(database,
                          vis_id, vis_title, data,
                          vis_clean_query=None, vis_query=None,
                          vis_params=None):
-    if not exists_visualization(database, vis_id):
-        session = select_session(sessions.get(database))
-        new_vis = Visualizations(
-                    vis_id=vis_id,
-                    vis_clean_query=vis_clean_query,
-                    vis_query=vis_query,
-                    vis_title=vis_title,
-                    vis_params=vis_params)
-        session.add(new_vis)
-        session.commit()
-        write_revision(database, vis_id, data, 1)
-        session.close()
+    session = Session()
+    try:
+        if not exists_visualization(database, vis_id):
+            new_vis = Visualizations(
+                        vis_id=vis_id,
+                        vis_clean_query=vis_clean_query,
+                        vis_query=vis_query,
+                        vis_title=vis_title,
+                        vis_params=vis_params)
+            session.add(new_vis)
+            session.commit()
+            write_revision(database, vis_id, data, 1)
+    except Exception as e:
+        session.rollback()
+        persistence_ns.logger.error("create_visualization: %s" % str(e))
+    session.close()
 
 
 def exists_visualization(database, vis_id):
-    session = select_session(sessions.get(database))
-    vis = session.query(Visualizations).filter_by(vis_id=vis_id).first()
-    exists = True if vis else False
+    session = Session()
+    try:
+        vis = session.query(Visualizations).filter_by(vis_id=vis_id).first()
+        exists = True if vis else False
+    except Exception as e:
+        persistence_ns.logger.error("exists_visualization: %s" % str(e))
     session.close()
     return exists
 
@@ -94,8 +93,8 @@ def get_last_version(database, vis_id, details=False, context=False):
 
 
 def get_revision(database, vis_id, rev_id, details=False, context=False):
+    session = Session()
     try:
-        session = select_session(sessions.get(database))
         if rev_id is None:
             vis, rev = (session
                         .query(Visualizations, Revisions)
@@ -126,16 +125,16 @@ def get_revision(database, vis_id, rev_id, details=False, context=False):
                 res = rev.as_dict()
             else:
                 res = rev.rev_data
-        session.close()
-        return res
     except TypeError:
         persistence_ns.logger.debug("get_revision: Vis ID not found: %s in database %s" % (vis_id, database))
-        return "null"
+        res = "null"    
+    session.close()
+    return res
 
 
 def get_context(database, vis_id, revision_context=False):
+    session = Session()
     try:
-        session = select_session(sessions.get(database))
         vis, rev = (session
                     .query(Visualizations, Revisions)
                     .select_from(Visualizations, Revisions)
@@ -153,11 +152,11 @@ def get_context(database, vis_id, revision_context=False):
         if revision_context == 'true':
             data = json.loads(rev.rev_data)
             res["additional_context"] = data.get("additional_context", {})
-        session.close()
-        return res
     except TypeError:
         persistence_ns.logger.debug("get_context: Vis ID not found: %s in database %s" % (vis_id, database))
-        return [False]
+        res = [False]
+    session.close()
+    return res
 
 
 @persistence_ns.route('/existsVisualization/<database>')
