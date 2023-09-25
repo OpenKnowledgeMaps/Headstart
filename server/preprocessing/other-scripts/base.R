@@ -179,7 +179,6 @@ etl <- function(res, repo, non_public) {
 
   metadata$subject_orig = subject_all
 
-  arxiv_classification_string = "([\\w ]+ )?(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+|([\\w ]+ )(astro-ph|gr-qc|quant-ph|cond-mat)"
   subject_cleaned = gsub("DOAJ:[^;]*(;|$)?", "", subject_all) # remove DOAJ classification
   subject_cleaned = gsub("/dk/atira[^;]*(;|$)?", "", subject_cleaned) # remove atira classification
   subject_cleaned = gsub("ddc:[0-9]+(;|$)?", "", subject_cleaned) # remove Dewey Decimal Classification
@@ -192,7 +191,13 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("([A-Za-z]+:[A-Za-z0-9][A-Za-z0-9 \\/\\.]+);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
   if (!is.null(params$vis_type) && params$vis_type != "timeline") {
     subject_cleaned = gsub("FOS [A-Za-z ]+", "", subject_cleaned) # remove FOS classifications (Fields of Science and Technology)
+    arxiv_classification_string = "([\\w ]+ )?(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+|([\\w ]+ )(astro-ph|gr-qc|quant-ph|cond-mat)"
     subject_cleaned = gsub(arxiv_classification_string, "", subject_cleaned, perl=TRUE) # remove arXiv classification, except on streamgraphs
+  }
+  if (!is.null(params$vis_type) && params$vis_type == "timeline") {
+    subject_cleaned = gsub("FOS ", "", subject_cleaned) # remove FOS classification tag, but keep classifcation name
+    arxiv_classification_string = "(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+|(astro-ph|gr-qc|quant-ph|cond-mat)"
+    subject_cleaned = gsub(arxiv_classification_string, "", subject_cleaned, perl=TRUE) # remove arXiv classification short code, but keep classifcation name
   }
   subject_cleaned = gsub("([A-Za-z]+:[A-Za-z0-9 \\/\\.]+);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
   subject_cleaned = gsub("(wikidata)?\\.org/entity/[qQ]([\\d]+)?", "", subject_cleaned) # remove wikidata classification
@@ -201,6 +206,8 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification
   subject_cleaned = gsub("[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
   subject_cleaned = gsub(" -- ", "; ", subject_cleaned) #replace inconsistent keyword separation
+  subject_cleaned = gsub("[-]{2,}", "; ", subject_cleaned) #replace inconsistent keyword separation
+  subject_cleaned = gsub("^\\d\\.\\d$", "", subject_cleaned) #replace inconsistent keyword separation
   subject_cleaned = gsub(" \\(  ", "; ", subject_cleaned) #replace inconsistent keyword separation
   subject_cleaned = gsub("(\\w* \\w*(\\.)( \\w* \\w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
   subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
