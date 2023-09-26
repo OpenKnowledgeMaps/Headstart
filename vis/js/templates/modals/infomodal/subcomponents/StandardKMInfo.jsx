@@ -10,11 +10,10 @@ const StandardKMInfo = ({
   serviceName,
   serviceDesc,
   serviceLogo,
-                          params: {query, customTitle, customTitleFromParam, repo_name, q_advanced},
+                          params: {query, customTitle, customTitleFromContextParam, repo_name, q_advanced},
 }) => {
   let queryString = queryConcatenator([query, q_advanced])
-  console.log("customTitle: ", customTitle)
-  console.log("customTitleFromParam: ", customTitleFromParam)
+
   return (
     // html template starts here
     <>
@@ -28,7 +27,7 @@ const StandardKMInfo = ({
             on{" "}
             <strong className="hs-strong">
               {/*{customTitle ? customTitle : queryString}*/}
-              {(customTitle || customTitleFromParam) ? (customTitle ? customTitle : customTitleFromParam) : queryString}
+              {(customTitle || customTitleFromContextParam) ? (customTitle ? customTitle : customTitleFromContextParam) : queryString}
             </strong>{" "}
             based on the 100{" "}
             <a
