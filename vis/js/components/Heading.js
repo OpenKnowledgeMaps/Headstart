@@ -109,21 +109,21 @@ const renderTitle = (localization, query, headingParams, service) => {
         localization
       );
     }
-      // get parameter "custom_title" from the path
-      const customTitleFromPath = getParameterValueFromLink("custom_title")
-      console.log("customTitleFromPath = ", customTitleFromPath)
-
-      console.log("service name = ", service)
-      // this condition for BASE service and custom title if its exists in the path or goes from the context params
-      if (service === "BASE") {
-          if (customTitleFromPath !== null) {
-              return <StandardTitle label={label} title={customTitleFromPath}/>
-          }
-          // if ((headingParams.customTitle || customTitleFromPath) && service === "BASE") {
-          if (headingParams.customTitle) {
-          return <StandardTitle label={label} title={headingParams.customTitle}/>;
-      }
-      }
+      // // get parameter "custom_title" from the path
+      // const customTitleFromPath = getParameterValueFromLink("custom_title")
+      // console.log("customTitleFromPath = ", customTitleFromPath)
+      //
+      // console.log("service name = ", service)
+      // // this condition for BASE service and custom title if its exists in the path or goes from the context params
+      // if (service === "BASE") {
+      //     if (customTitleFromPath !== null) {
+      //         return <StandardTitle label={label} title={customTitleFromPath}/>
+      //     }
+      //     // if ((headingParams.customTitle || customTitleFromPath) && service === "BASE") {
+      //     if (headingParams.customTitle) {
+      //     return <StandardTitle label={label} title={headingParams.customTitle}/>;
+      // }
+      // }
 
     return <StandardTitle label={label} title={query} />;
   }
