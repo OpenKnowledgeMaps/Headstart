@@ -207,7 +207,7 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
   subject_cleaned = gsub(" -- ", "; ", subject_cleaned) #replace inconsistent keyword separation
   subject_cleaned = gsub("[-]{2,}", "; ", subject_cleaned) #replace inconsistent keyword separation
-  subject_cleaned = gsub("^\\d\\.\\d$", "", subject_cleaned) #replace inconsistent keyword separation
+  subject_cleaned = gsub("^I\\.\\d\\.\\d$", "", subject_cleaned) #replace inconsistent keyword separation
   subject_cleaned = gsub(" \\(  ", "; ", subject_cleaned) #replace inconsistent keyword separation
   subject_cleaned = gsub("(\\w* \\w*(\\.)( \\w* \\w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
   subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
