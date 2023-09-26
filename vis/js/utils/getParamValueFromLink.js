@@ -1,6 +1,11 @@
+import {useLocation} from 'react-router-dom';
+
 export function getParameterValueFromLink(parameterName) {
     // Get the URL of the current page
     const url = window.location.href;
+
+    const location = useLocation(); // React Hook
+    console.log(location.pathname); // returns relative path, without domain name
 
     // Parse the URL to extract the query parameters
     const queryString = url.split('?')[1];
