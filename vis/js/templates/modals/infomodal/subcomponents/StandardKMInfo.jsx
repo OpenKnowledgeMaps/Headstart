@@ -4,17 +4,17 @@ import { Modal } from "react-bootstrap";
 import AboutSoftware from "./AboutSoftware";
 import DataSource from "./DataSource";
 import { queryConcatenator } from "../../../../utils/data";
-import {getParameterValueFromLink} from "../../../../utils/getParamValueFromLink";
 
 
 const StandardKMInfo = ({
   serviceName,
   serviceDesc,
   serviceLogo,
-  params: { query, customTitle, repo_name, q_advanced },
+                          params: {query, customTitle, customTitleFromParam, repo_name, q_advanced},
 }) => {
   let queryString = queryConcatenator([query, q_advanced])
-  let customTitleFromPath = getParameterValueFromLink("custom_title")
+  console.log("customTitle: ", customTitle)
+  console.log("customTitleFromParam: ", customTitleFromParam)
   return (
     // html template starts here
     <>
@@ -27,8 +27,8 @@ const StandardKMInfo = ({
             This knowledge map presents you with a topical overview of research
             on{" "}
             <strong className="hs-strong">
-              {/*{customTitle ? customTitle : queryString}*/}
-              {serviceName === 'BASE' ? (customTitleFromPath ? customTitleFromPath : (customTitle ? customTitle : queryString)) : queryString}
+              {customTitle ? customTitle : queryString}
+              {/*{customTitleFromParam ? customTitleFromParam : queryString}*/}
             </strong>{" "}
             based on the 100{" "}
             <a

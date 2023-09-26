@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import {getParameterValueFromLink} from "../utils/getParamValueFromLink";
 
 import {
   BasicTitle,
@@ -105,16 +104,16 @@ const renderTitle = (localization, query, headingParams, service) => {
         localization
       );
     }
-      // get parameter "custom_title" from the path
-      const customTitleFromPath = getParameterValueFromLink("custom_title")
 
+      console.log('customTitleFromParam = ', headingParams.customTitleFromContextParam)
+      console.log('customTitle from path = ', headingParams.customTitle)
       // this condition for BASE service and custom title if its exists in the path or goes from the context params
       if (service === "BASE") {
-          if (headingParams.customTitle !== null) {
-              if (customTitleFromPath !== null) {
-                  headingParams.customTitle = customTitleFromPath
+          if (headingParams.customTitleFromContextParam || headingParams.customTitle) {
+              if (headingParams.customTitle) {
+                  headingParams.customTitleFromContextParam = headingParams.customTitle
               }
-              return <StandardTitle label={label} title={headingParams.customTitle}/>;
+              return <StandardTitle label={label} title={headingParams.customTitleFromContextParam}/>;
           }
       }
 

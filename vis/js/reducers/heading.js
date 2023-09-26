@@ -18,7 +18,8 @@ const context = (state = {}, action) => {
         presetTitle: action.configObject.title,
         titleStyle: getTitleStyle(action.configObject),
         titleLabelType: getTitleLabelType(action.configObject),
-        customTitle: action.contextObject.params.custom_title,
+        customTitle: action.configObject.custom_title,
+        customTitleFromContextParam: action.contextObject.params.custom_title,
       };
     default:
       return state;
