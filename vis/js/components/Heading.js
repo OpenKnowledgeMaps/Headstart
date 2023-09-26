@@ -77,6 +77,7 @@ const MAX_LENGTH_CUSTOM = 100;
  * Renders the title for the correct setup.
  */
 const renderTitle = (localization, query, headingParams, service) => {
+    console.log("localization", localization)
     console.log("headingParams", headingParams)
     console.log("headingParams.titleStyle", headingParams.titleStyle)
     console.log("service", service)

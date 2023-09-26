@@ -1,7 +1,11 @@
 export function getParameterValueFromLink(parameterName) {
     // Get the URL of the current page
     const url = window.location.href;
-    console.log("url", url)
+    const pathname = window.location.pathname;
+    const search = window.location.search;
+    // console.log("pathname", pathname)
+    console.log("search", search)
+    // console.log("url", url)
 
     // Parse the URL to extract the query parameters
     const queryString = url.split('?')[1];
