@@ -14,6 +14,10 @@ const StandardKMInfo = ({
 }) => {
   let queryString = queryConcatenator([query, q_advanced])
 
+  console.log("customTitle: ", customTitle)
+  console.log("customTitleFromContextParam: ", customTitleFromContextParam)
+
+
   return (
     // html template starts here
     <>
