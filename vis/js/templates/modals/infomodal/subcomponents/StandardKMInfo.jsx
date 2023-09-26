@@ -30,8 +30,8 @@ const StandardKMInfo = ({
             This knowledge map presents you with a topical overview of research
             on{" "}
             <strong className="hs-strong">
-              {/*{customTitle ? customTitle : queryString}*/}
-              {(customTitle || customTitleFromContextParam) ? (customTitle ? customTitle : customTitleFromContextParam) : queryString}
+              {customTitle ? customTitle : queryString}
+              {/*{(customTitle || customTitleFromContextParam) ? (customTitle ? customTitle : customTitleFromContextParam) : queryString}*/}
             </strong>{" "}
             based on the 100{" "}
             <a

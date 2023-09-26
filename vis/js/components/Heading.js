@@ -105,16 +105,19 @@ const renderTitle = (localization, query, headingParams, service) => {
       );
     }
 
-      console.log('customTitleFromParam = ', headingParams.customTitleFromContextParam)
-      console.log('customTitle from path = ', headingParams.customTitle)
       // this condition for BASE service and custom title if its exists in the path or goes from the context params
       if (service === "BASE") {
-          if (headingParams.customTitleFromContextParam || headingParams.customTitle) {
+          // if (headingParams.customTitleFromContextParam || headingParams.customTitle) {
+          //     if (headingParams.customTitle) {
+          //         headingParams.customTitleFromContextParam = headingParams.customTitle
+          //     }
+          //     return <StandardTitle label={label} title={headingParams.customTitleFromContextParam}/>;
+          // }
+          // }
               if (headingParams.customTitle) {
-                  headingParams.customTitleFromContextParam = headingParams.customTitle
+                  return <StandardTitle label={label} title={headingParams.customTitle}/>;
               }
-              return <StandardTitle label={label} title={headingParams.customTitleFromContextParam}/>;
-          }
+
       }
 
     return <StandardTitle label={label} title={query} />;

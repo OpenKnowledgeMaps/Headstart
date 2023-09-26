@@ -20,7 +20,7 @@ const context = (state = {}, action) => {
         titleLabelType: getTitleLabelType(action.configObject),
         // customTitle: action.configObject.custom_title,
         customTitle: action.configObject.custom_title ? action.configObject.custom_title : action.contextObject.params.custom_title,
-        customTitleFromContextParam: action.contextObject.params.custom_title,
+        // customTitleFromContextParam: action.contextObject.params.custom_title,
       };
     default:
       return state;
