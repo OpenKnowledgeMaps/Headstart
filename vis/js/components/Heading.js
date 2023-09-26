@@ -110,10 +110,12 @@ const renderTitle = (localization, query, headingParams, service) => {
 
       // this condition for BASE service and custom title if its exists in the path or goes from the context params
       if (service === "BASE") {
-          if (customTitleFromPath !== null) {
-              headingParams.customTitle = customTitleFromPath
+          if (headingParams.customTitle === null) {
+              if (customTitleFromPath !== null) {
+                  headingParams.customTitle = customTitleFromPath
+              }
+              return <StandardTitle label={label} title={headingParams.customTitle}/>;
           }
-          return <StandardTitle label={label} title={headingParams.customTitle}/>;
       }
 
     return <StandardTitle label={label} title={query} />;
