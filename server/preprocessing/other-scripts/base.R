@@ -211,7 +211,7 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("(\\w* \\w*(\\.)( \\w* \\w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
   subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
   subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
-  subject_cleaned = gsub("\\w+:\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
+  subject_cleaned = gsub("\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like eu-repo/classification/
   subject_cleaned = gsub(": ", "", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(";+", ";", subject_cleaned) # clean up keyword separation
