@@ -10,13 +10,9 @@ const StandardKMInfo = ({
   serviceName,
   serviceDesc,
   serviceLogo,
-                          params: {query, customTitle, customTitleFromContextParam, repo_name, q_advanced},
+                          params: {query, customTitle, repo_name, q_advanced},
 }) => {
   let queryString = queryConcatenator([query, q_advanced])
-
-  console.log("customTitle: ", customTitle)
-  console.log("customTitleFromContextParam: ", customTitleFromContextParam)
-
 
   return (
     // html template starts here
@@ -30,8 +26,7 @@ const StandardKMInfo = ({
             This knowledge map presents you with a topical overview of research
             on{" "}
             <strong className="hs-strong">
-              {customTitle ? customTitle : queryString}
-              {/*{(customTitle || customTitleFromContextParam) ? (customTitle ? customTitle : customTitleFromContextParam) : queryString}*/}
+              {(customTitle && repo_name === 'BASE') ? customTitle : queryString}
             </strong>{" "}
             based on the 100{" "}
             <a
