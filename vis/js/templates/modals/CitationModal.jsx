@@ -92,8 +92,8 @@ const mapStateToProps = (state) => ({
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   query: state.query.text,
   customTitle:
-  // state.heading.titleStyle === "custom" ? state.heading.customTitle : null,
-  state.heading.customTitle,
+      state.heading.titleStyle === "custom" ? state.heading.customTitle : null,
+  // state.heading.customTitle,
   timestamp: state.misc.timestamp,
   q_advanced: state.q_advanced.text,
   titleStyle: state.heading.titleStyle
