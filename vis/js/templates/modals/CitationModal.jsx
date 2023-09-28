@@ -20,6 +20,7 @@ const CitationModal = ({
   customTitle,
   timestamp,
   q_advanced,
+                         titleStyle
 }) => {
   const loc = useLocalizationContext();
   const { trackEvent } = useMatomo();
@@ -31,6 +32,9 @@ const CitationModal = ({
       "Copy map citation button"
     );
   };
+
+  console.log('CitationModal customTitle = ', customTitle)
+  console.log('CitationModal titleStyle = ', titleStyle)
 
   let customQuery = queryConcatenator([query, q_advanced]);
   if (customQuery.length > 100) {
@@ -88,9 +92,11 @@ const mapStateToProps = (state) => ({
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   query: state.query.text,
   customTitle:
-    state.heading.titleStyle === "custom" ? state.heading.customTitle : null,
+  // state.heading.titleStyle === "custom" ? state.heading.customTitle : null,
+  state.heading.customTitle,
   timestamp: state.misc.timestamp,
   q_advanced: state.q_advanced.text,
+  titleStyle: state.heading.titleStyle
 });
 
 const mapDispatchToProps = (dispatch) => ({
