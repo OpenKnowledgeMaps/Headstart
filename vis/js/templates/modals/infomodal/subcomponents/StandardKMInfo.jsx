@@ -26,7 +26,7 @@ const StandardKMInfo = ({
             This knowledge map presents you with a topical overview of research
             on{" "}
             <strong className="hs-strong">
-              {(customTitle && repo_name === 'BASE') ? customTitle : queryString}
+              {customTitle ? customTitle : queryString}
             </strong>{" "}
             based on the 100{" "}
             <a
