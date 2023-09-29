@@ -75,7 +75,7 @@ class Search(Resource):
         base_ns.logger.debug(d)
         redis_store.rpush("base", json.dumps(d))
         q_len = redis_store.llen("base")
-        base_ns.logger.info("Queue length: %s %d %s" %("base", q_len, k))
+        base_ns.logger.debug("Queue length: %s %d %s" %("base", q_len, k))
         result = get_key(redis_store, k, 300)
         try:
             headers = {}

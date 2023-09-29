@@ -43,7 +43,6 @@ $result = search("base", $dirty_query
                   , true
                   , true, null
                   , $precomputed_id, false);
-
 echo $result
 
 ?>
