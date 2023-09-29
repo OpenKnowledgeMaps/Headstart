@@ -50,7 +50,10 @@ class CommUtils {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
+        curl_close($ch);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if ($result === false) 
+            $result = curl_error($ch);
         return array("result" => $result, "httpcode" => $httpcode);
     }
 }
