@@ -305,7 +305,6 @@ class createID(Resource):
     def post(self, database):
         persistence_ns.logger.debug("createID")
         try:
-            print('start persistence.py !!!!!!')
             payload = request.get_json()
             params = payload.get("params")
             param_types = payload.get("param_types")
@@ -319,7 +318,6 @@ class createID(Resource):
             headers["Content-Type"] = "application/json"
             return make_response(jsonify(result), 200, headers)
         except Exception as e:
-            persistence_ns.logger.error("Exception persistence.py !!!!!", exc_info=True)
             result = {'success': False, 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 500, headers)
