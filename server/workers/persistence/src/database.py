@@ -3,27 +3,31 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 
+hosts = []
+for host, port in zip(os.getenv("POSTGRES_HOSTS").split(","),
+                      os.getenv("POSTGRES_PORTS").split(",")):
+    hosts.append(f"{host}:{port}")
+host_string = "&host=".join(hosts)
 
 bind_params = {
     "user": os.getenv("POSTGRES_USER"),
     "pw": os.getenv("POSTGRES_PASSWORD"),
-    "host": os.getenv("POSTGRES_HOST"),
-    "port": os.getenv("POSTGRES_PORT"),
+    "host": host_string,
     "db": os.getenv("DEFAULT_DATABASE")
 }
 
-sessions = {}
-sessions[os.getenv("DEFAULT_DATABASE")] = sessionmaker(bind=create_engine('postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % bind_params,
-                                                                 max_overflow=15,
-                                                                 pool_pre_ping=True,
-                                                                 pool_recycle=3600,
-                                                                 pool_size=30))
-for database in os.getenv("DATABASES").split(","):
-    bind_params["db"] = database
-    sessions[database] = sessionmaker(bind=create_engine('postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % bind_params,
-                                                                 max_overflow=15,
-                                                                 pool_pre_ping=True,
-                                                                 pool_recycle=3600,
-                                                                 pool_size=30
-                                                                 ))
+if len(hosts) == 1:
+    engine = create_engine('postgresql+psycopg2://%(user)s:%(pw)s@%(host)s/%(db)s' % bind_params,
+                                                    max_overflow=5,
+                                                    pool_pre_ping=True,
+                                                    pool_recycle=600,
+                                                    pool_size=5)
+else:
+    engine = create_engine('postgresql+psycopg2://%(user)s:%(pw)s@/%(db)s?host=%(host)s&target_session_attrs=read-write' % bind_params,
+                                                    max_overflow=5,
+                                                    pool_pre_ping=True,
+                                                    pool_recycle=600,
+                                                    pool_size=5)
+
+Session = sessionmaker(bind=engine)
 Base = declarative_base()

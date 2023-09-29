@@ -56,7 +56,7 @@ class RWrapper(object):
                     else:
                         self.redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
                         q_len = self.redis_store.llen("input_data")
-                        self.logger.info("Queue length: %s %d %s" %("input_data", q_len, k))
+                        self.logger.debug("Queue length: %s %d %s" %("input_data", q_len, k))
                 except Exception as e:
                     self.logger.error(e)
                     self.logger.error(params)
