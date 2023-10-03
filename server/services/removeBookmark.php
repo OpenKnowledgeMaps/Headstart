@@ -4,7 +4,7 @@ header('Content-type: application/json');
 
 require dirname(__FILE__) . '/../classes/headstart/personalization/DBConnectionPersonalization.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
-require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
+require_once dirname(__FILE__) . '/../classes/headstart/library/Toolkit.php';
 
 use headstart\library;
 

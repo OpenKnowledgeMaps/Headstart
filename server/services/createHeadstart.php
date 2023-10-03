@@ -11,7 +11,7 @@ $path = $ini_services["path_to_headstart_server"];
 require $path . 'classes/headstart/preprocessing/calculation/RCalculation.php';
 require $path . 'classes/headstart/preprocessing/naming/KeywordNaming.php';
 require_once $path . 'classes/headstart/library/CommUtils.php';
-require_once $path . 'classes/headstart/library/toolkit.php';
+require_once $path . 'classes/headstart/library/Toolkit.php';
 
 require $path . 'services/helper.php';
 

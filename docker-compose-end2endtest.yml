@@ -1,0 +1,78 @@
+# docker-compose-end2endtest.yml
+
+version: '3.7'
+services:
+
+  end2endtest:
+    build:
+      context: ./server/workers/tests
+      dockerfile: ./Dockerfile_tests
+    container_name: end2endtest
+    hostname: "end2endtest"
+    environment:
+      POSTGRES_USER: "testuser"
+      POSTGRES_PASSWORD: "testpassword"
+      POSTGRES_HOST: "test_db"
+      POSTGRES_PORT: 5432
+      DEFAULT_DATABASE: "testdb"
+      SERVICE_VERSION: "test_version"
+    ports:
+      - "0.0.0.0:5000:5000"
+    volumes:
+      - ./server/:/app
+    depends_on:
+      - db
+      - backend
+    restart: "no"
+    entrypoint: [ "pytest", '/app/workers/tests/test_end2end.py', '-s', '-rfA']
+    networks:
+      test:
+        ipv4_address: 172.18.0.2
+
+  backend:
+    container_name: backend
+    hostname: "backend"
+    build:
+      context: ./server/workers/tests
+      dockerfile: ./Dockerfile_backend
+    volumes:
+      - ./server/:/var/www/html/server
+    restart: "no"
+    networks:
+      test:
+        ipv4_address: 172.18.0.3
+    ports:
+      - "80:80"
+
+  db:
+    container_name: test_db
+    image: 'postgres:12.2-alpine'
+    restart: "no"
+    hostname: "db_server"
+    environment:
+      POSTGRES_USER: "testuser"
+      POSTGRES_PASSWORD: "testpassword"
+      POSTGRES_HOST: "db_server"
+      POSTGRES_PORT: 5432
+      DEFAULT_DATABASE: "testdb"
+    command: postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
+    volumes:
+      # - db_data:/var/lib/postgresql/data
+      - ./server/workers/tests/test_data/pg_hba_test_local.conf:/etc/pg_hba.conf
+      - ./server/workers/tests/test_data/postgresql_test_local.conf:/etc/postgresql.conf
+    ports:
+      - "5432:5432"
+    networks:
+      test:
+        ipv4_address: 172.18.0.4
+
+volumes:
+  db_data:
+
+networks:
+  test:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1

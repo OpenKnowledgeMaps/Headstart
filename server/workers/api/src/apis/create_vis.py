@@ -47,7 +47,7 @@ class Create(Resource):
              "input_data": input_data}
         redis_store.rpush("input_data", json.dumps(d).encode('utf8'))
         q_len = redis_store.llen("input_data")
-        vis_ns.logger.info("Queue length: %s %d %s" %("input_data", q_len, k))
+        vis_ns.logger.debug("Queue length: %s %d %s" %("input_data", q_len, k))
         result = get_key(redis_store, k)
         try:
             headers = {}

@@ -1,6 +1,7 @@
 flask
 flask-cors
 flask_sqlalchemy
+sqlalchemy_utils
 flask_restx
 Werkzeug
 gunicorn

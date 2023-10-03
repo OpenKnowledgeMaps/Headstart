@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 
 class Visualizations(Base):
     __tablename__ = "visualizations"
+    __table_args__ = {'keep_existing': True}
 
     vis_id = Column(Text, nullable=False, unique=True,
                        primary_key=True)
@@ -13,8 +14,6 @@ class Visualizations(Base):
     vis_title = Column(Text)
     vis_latest = Column(Integer)
     vis_params = Column(Text)
-    vis_changed = Column(Boolean)
-    vis_changed_timestamp = Column(Time)
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -22,6 +21,7 @@ class Visualizations(Base):
 
 class Revisions(Base):
     __tablename__ = "revisions"
+    __table_args__ = {'keep_existing': True}
 
     rev_id = Column(Integer,
                        nullable=False,
