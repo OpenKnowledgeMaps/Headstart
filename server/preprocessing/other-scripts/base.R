@@ -188,6 +188,7 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("[^\\(;]+\\(all\\)(;|$)?", "", subject_cleaned) # remove general subjects
   subject_cleaned = gsub("[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
   subject_cleaned = gsub("[^\\[;]+\\[[A-Z,0-9]+\\](;|$)?", "", subject_cleaned) # remove WHO classification
+  subject_cleaned = gsub("Info:\\w+-(\\w+\\/)+", "", subject_cleaned) # remove Info:eu-repo/classification/
   subject_cleaned = gsub("([A-Za-z]+:[A-Za-z0-9][A-Za-z0-9 \\/\\.]+);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
   if (!is.null(params$vis_type) && params$vis_type == "timeline") {
     subject_cleaned = gsub("FOS ", "", subject_cleaned) # remove FOS classification tag, but keep classifcation name
@@ -211,7 +212,6 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("(\\w* \\w*(\\.)( \\w* \\w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
   subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
   subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
-  subject_cleaned = gsub("\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like eu-repo/classification/
   subject_cleaned = gsub(": ", "", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(";+", ";", subject_cleaned) # clean up keyword separation
