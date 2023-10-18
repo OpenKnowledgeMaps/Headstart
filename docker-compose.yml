@@ -44,9 +44,10 @@ services:
       BEHIND_PROXY: "${BEHIND_PROXY}"
       DEFAULT_DATABASE: "${DEFAULT_DATABASE}"
       FLASK_ENV: "${FLASK_ENV}"
-    command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
+    command: ["python", "app.py"]
     volumes:
       - ./api_cache:/var/api_cache
+      - ./server/workers/api/src:/api
     depends_on:
       - redis
       - base
@@ -107,6 +108,7 @@ services:
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
     networks: 
@@ -133,6 +135,7 @@ services:
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
     networks:
@@ -158,6 +161,7 @@ services:
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
     networks:
@@ -183,10 +187,24 @@ services:
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
     networks:
       - headstart
+
+  searchflow:
+    build: server/workers/tests/searchflow-container
+    volumes:
+      - ../project-website:/var/www/html
+      - ../search-flow/:/var/www/html/search-flow
+      - ../Headstart:/var/www/html/headstart
+      - ./entrypoint.php:/var/www/html/entrypoint.php
+    ports:
+      - 127.0.0.1:8085:80
+    networks:
+      - headstart
+
 
 volumes:
   redis:

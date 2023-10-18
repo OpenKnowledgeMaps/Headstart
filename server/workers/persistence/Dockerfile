@@ -1,5 +1,4 @@
-FROM python:3.6.11-slim
-
+FROM python:3.7
 MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
 
 RUN apt-get update
