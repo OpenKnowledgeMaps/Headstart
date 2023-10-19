@@ -50,7 +50,7 @@ services:
     command: ["python", "app.py"]
     volumes:
       - ./api_cache:/var/api_cache
-      - ./src:/api
+      - ./server/workers/api/src:/api
     depends_on:
       - redis
       - base
@@ -75,6 +75,8 @@ services:
       FLASK_ENV: "${FLASK_ENV}"
       SSH_AUTH_SOCK: "/run/host-services/ssh-auth.sock"
     command: ["python", "app.py"]
+    volumes:
+      - ./server/workers/persistence/src:/api
     networks: 
       - headstart
 
