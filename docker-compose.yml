@@ -5,7 +5,7 @@ services:
   db:
     image: 'postgres:12.2-alpine'
     hostname: "${POSTGRES_HOSTNAME}"
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
@@ -19,7 +19,7 @@ services:
   
   redis:
     image: 'redis:6.0-alpine'
-    restart: always
+    restart: unless-stopped
     hostname: "${REDIS_HOST}"
     environment:
       REDIS_HOST: "${REDIS_HOST}"
@@ -37,7 +37,7 @@ services:
     build:
       context: server
       dockerfile: workers/api/Dockerfile
-    restart: always
+    restart: unless-stopped
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
@@ -63,7 +63,7 @@ services:
     build:
       context: server
       dockerfile: workers/persistence/Dockerfile
-    restart: always
+    restart: unless-stopped
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       POSTGRES_USER: "${POSTGRES_USER}"
@@ -98,7 +98,7 @@ services:
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
-    restart: always
+    restart: unless-stopped
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
@@ -127,7 +127,7 @@ services:
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
       R_BASE_APIKEY: "${R_BASE_APIKEY}"
-    restart: always
+    restart: unless-stopped
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
@@ -155,7 +155,7 @@ services:
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
-    restart: always
+    restart: unless-stopped
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
@@ -183,7 +183,7 @@ services:
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
-    restart: always
+    restart: unless-stopped
     volumes:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
