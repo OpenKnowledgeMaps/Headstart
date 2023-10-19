@@ -197,8 +197,8 @@ services:
       - ../project-website:/var/www/html
       - ../search-flow/:/var/www/html/search-flow
       - ../Headstart:/var/www/html/headstart
-      - ./localdev/config_local.ini:/var/www/html/headstart/server/preprocessing/conf/config_local.ini
-      - ./localdev/entrypoint.php:/var/www/html/entrypoint.php
+      - ./local_dev/config_local.ini:/var/www/html/headstart/server/preprocessing/conf/config_local.ini
+      - ./local_dev/entrypoint.php:/var/www/html/entrypoint.php
     ports:
       - 127.0.0.1:8085:80
     networks:
