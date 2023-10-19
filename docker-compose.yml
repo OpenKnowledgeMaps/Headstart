@@ -12,10 +12,11 @@ services:
     command: postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
     volumes:
       - db_data:/var/lib/postgresql/data
-      - ./pg_hba.conf:/etc/pg_hba.conf
-      - ./postgresql.conf:/etc/postgresql.conf
+      - ./local_dev/pg_hba.conf:/etc/pg_hba.conf
+      - ./local_dev/postgresql.conf:/etc/postgresql.conf
     networks: 
       - headstart
+  
   redis:
     image: 'redis:6.0-alpine'
     restart: always
@@ -26,14 +27,16 @@ services:
     command: ["redis-server", "/etc/redis/redis.conf", "--bind", "${REDIS_HOST}", "--port", "${REDIS_PORT}"]
     volumes:
         - 'redis:/var/lib/redis/data'
-        - ./redis.conf:/etc/redis/redis.conf
+        - ./local_dev/redis.conf:/etc/redis/redis.conf
     ports:
      - "127.0.0.1:${REDIS_PORT}:6379"
     networks: 
       - headstart
 
   api:
-    image: api:${SERVICE_VERSION}
+    build:
+      context: server
+      dockerfile: workers/api/Dockerfile
     restart: always
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
@@ -47,7 +50,7 @@ services:
     command: ["python", "app.py"]
     volumes:
       - ./api_cache:/var/api_cache
-      - ./server/workers/api/src:/api
+      - ./src:/api
     depends_on:
       - redis
       - base
@@ -57,7 +60,9 @@ services:
       - headstart
 
   persistence:
-    image: persistence:${SERVICE_VERSION}
+    build:
+      context: server
+      dockerfile: workers/persistence/Dockerfile
     restart: always
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
@@ -69,27 +74,14 @@ services:
       DEFAULT_DATABASE: "${DEFAULT_DATABASE}"
       FLASK_ENV: "${FLASK_ENV}"
       SSH_AUTH_SOCK: "/run/host-services/ssh-auth.sock"
-    command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
-    networks: 
-      - headstart
-
-  gsheets:
-    image: gsheets:${SERVICE_VERSION}
-    environment:
-      SERVICE_VERSION: "${SERVICE_VERSION}"
-      REDIS_HOST: "${REDIS_HOST}"
-      REDIS_PORT: "${REDIS_PORT}"
-      REDIS_DB: "${REDIS_DB}"
-      REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      LOGLEVEL: "${LOGLEVEL}"
-    restart: always
-    depends_on:
-      - redis
+    command: ["python", "app.py"]
     networks: 
       - headstart
 
   dataprocessing:
-    image: dataprocessing:${SERVICE_VERSION}
+    build:
+      context: server
+      dockerfile: workers/dataprocessing/Dockerfile
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
@@ -115,7 +107,9 @@ services:
       - headstart
 
   base:
-    image: base:${SERVICE_VERSION}
+    build:
+      context: server
+      dockerfile: workers/base/Dockerfile
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
@@ -142,7 +136,9 @@ services:
       - headstart
 
   pubmed:
-    image: pubmed:${SERVICE_VERSION}
+    build:
+      context: server
+      dockerfile: workers/pubmed/Dockerfile
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
@@ -168,7 +164,9 @@ services:
       - headstart
 
   openaire:
-    image: openaire:${SERVICE_VERSION}
+    build:
+      context: server
+      dockerfile: workers/openaire/Dockerfile
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
@@ -199,7 +197,8 @@ services:
       - ../project-website:/var/www/html
       - ../search-flow/:/var/www/html/search-flow
       - ../Headstart:/var/www/html/headstart
-      - ./entrypoint.php:/var/www/html/entrypoint.php
+      - ./localdev/config_local.ini:/var/www/html/headstart/server/preprocessing/conf/config_local.ini
+      - ./localdev/entrypoint.php:/var/www/html/entrypoint.php
     ports:
       - 127.0.0.1:8085:80
     networks:

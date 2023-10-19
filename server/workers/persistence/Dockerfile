@@ -2,8 +2,7 @@ FROM python:3.7
 MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
 
 RUN apt-get update
-RUN apt-get install -y gcc git
-RUN apt-get install -y libpq-dev
+RUN apt-get install -y gcc git libpq-dev
 
 WORKDIR /persistence
 COPY workers/persistence/requirements.txt .
