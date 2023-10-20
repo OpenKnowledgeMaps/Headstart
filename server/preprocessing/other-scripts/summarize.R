@@ -179,7 +179,7 @@ another_prune_ngrams <- function(ngrams, stops){
   # check if first token of ngrams in stopword list
   batch_size <- 1000
   total_length <- length(stops)
-  for (i in seq(1, total_length, batch_size)) {
+  for (i in seq(1, total_length, batch_size)) try({
     tokens = lapply(tokens, function(y){
                             Filter(function(x){
                                     if (x[1] != "") !any(stri_detect_fixed(stops[i:min(i+batch_size -1, total_length)], x[1]))
@@ -189,7 +189,7 @@ another_prune_ngrams <- function(ngrams, stops){
                             Filter(function(x){
                                     if (tail(x,1) != "") !any(stri_detect_fixed(stops[i:min(i+batch_size -1, total_length)], tail(x,1)))
                                               }, y)})
-  }
+  })
   # check that first token is not the same as the last token
   tokens = lapply(tokens, function(y){
                     if(length(y) > 1) {
