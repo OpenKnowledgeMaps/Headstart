@@ -11,9 +11,9 @@ services:
     ports:
       - '127.0.0.1:8081:80'
     networks:
-      - dev-headstart
+      - dev_headstart
 
 networks:
   dev-headstart:
         external: true
-        name: dev-headstart
+        name: dev_headstart
