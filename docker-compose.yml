@@ -103,6 +103,7 @@ services:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
+      - ./server/workers/dataprocessing:/headstart
     depends_on:
       - redis
     networks: 
@@ -132,6 +133,7 @@ services:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
+      - ./server/workers/base:/headstart
     depends_on:
       - redis
     networks:
@@ -160,6 +162,7 @@ services:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
+      - ./server/workers/pubmed:/headstart
     depends_on:
       - redis
     networks:
@@ -188,6 +191,7 @@ services:
       - /opt/local/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
+      - ./server/workers/dataprocessing:/headstart
     depends_on:
       - redis
     networks:
