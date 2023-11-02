@@ -189,7 +189,7 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
   subject_cleaned = gsub("[^\\[;]+\\[[A-Z,0-9]+\\](;|$)?", "", subject_cleaned) # remove WHO classification
   subject_cleaned = gsub("Info:\\w+-(\\w+\\/)+", "", subject_cleaned) # remove Info:eu-repo/classification/
-  subject_cleaned = gsub("([A-Za-z]+:[A-Za-z0-9][A-Za-z0-9 \\/\\.]+);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
+  subject_cleaned = gsub("([A-Za-z]+:[A-Za-z0-9 \\/\\.-]+);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
   if (!is.null(params$vis_type) && params$vis_type == "timeline") {
     subject_cleaned = gsub("FOS ", "", subject_cleaned) # remove FOS classification tag, but keep classifcation name
     arxiv_classification_string = "(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+|(astro-ph|gr-qc|quant-ph|cond-mat)"
@@ -215,6 +215,7 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub(": ", "", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(";+", ";", subject_cleaned) # clean up keyword separation
+  subject_cleaned = gsub(",+", ",", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(",", ", ", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
   subject_cleaned = stringi::stri_trim(subject_cleaned) # clean up keyword separation
