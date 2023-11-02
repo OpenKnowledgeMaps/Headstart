@@ -11,6 +11,7 @@ import { formatString, removeEmbedParam } from "../../utils/string";
 import CopyButton from "../CopyButton";
 import useMatomo from "../../utils/useMatomo";
 import { queryConcatenator } from "../../utils/data";
+import {unescapeHTML} from "../../utils/unescapeHTMLentities.js";
 
 const CitationModal = ({
   open,
@@ -38,7 +39,6 @@ const CitationModal = ({
     customQuery = customQuery.substr(0, 100) + "[..]";
   }
   if (customTitle) {
-    // customQuery = customTitle;
     customQuery = unescapeHTML(customTitle);
   }
 
@@ -99,26 +99,5 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onClose: () => dispatch(closeCitationModal()),
 });
-
-const unescapeHTML = (string) => {
-  let entityMap = {
-    "&amp;": "&",
-    "&lt;": "<",
-    "&gt;": ">",
-    "&quot;": '"',
-    "&#34;": '"',
-    "&#39;": "'",
-    "&#x2F;": "/",
-    "&#x60;": "`",
-    "&#x3D;": "=",
-  };
-
-  return String(string).replace(
-      /(&amp;|&lt;|&gt;|&quot;|&#34;|&#39;|&#x2F;|&#x60;|&#x3D;)/g,
-      function (s) {
-        return entityMap[s];
-      }
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CitationModal);

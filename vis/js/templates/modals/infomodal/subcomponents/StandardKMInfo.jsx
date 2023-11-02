@@ -4,6 +4,8 @@ import { Modal } from "react-bootstrap";
 import AboutSoftware from "./AboutSoftware";
 import DataSource from "./DataSource";
 import { queryConcatenator } from "../../../../utils/data";
+import {unescapeHTML} from "../../../../utils/unescapeHTMLentities.js";
+
 
 
 const StandardKMInfo = ({
@@ -88,27 +90,6 @@ const StandardKMInfo = ({
       </Modal.Body>
     </>
     // html template ends here
-  );
-};
-
-const unescapeHTML = (string) => {
-  let entityMap = {
-    "&amp;": "&",
-    "&lt;": "<",
-    "&gt;": ">",
-    "&quot;": '"',
-    "&#34;": '"',
-    "&#39;": "'",
-    "&#x2F;": "/",
-    "&#x60;": "`",
-    "&#x3D;": "=",
-  };
-
-  return String(string).replace(
-      /(&amp;|&lt;|&gt;|&quot;|&#34;|&#39;|&#x2F;|&#x60;|&#x3D;)/g,
-      function (s) {
-        return entityMap[s];
-      }
   );
 };
 
