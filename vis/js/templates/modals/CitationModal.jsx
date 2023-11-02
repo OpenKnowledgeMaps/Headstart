@@ -33,15 +33,13 @@ const CitationModal = ({
     );
   };
 
-  console.log('CitationModal customTitle = ', customTitle)
-  console.log('CitationModal titleStyle = ', titleStyle)
-
   let customQuery = queryConcatenator([query, q_advanced]);
   if (customQuery.length > 100) {
     customQuery = customQuery.substr(0, 100) + "[..]";
   }
   if (customTitle) {
-    customQuery = customTitle;
+    // customQuery = customTitle;
+    customQuery = unescapeHTML(customTitle);
   }
 
   const date = getDateFromTimestamp(timestamp);
@@ -101,5 +99,26 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onClose: () => dispatch(closeCitationModal()),
 });
+
+const unescapeHTML = (string) => {
+  let entityMap = {
+    "&amp;": "&",
+    "&lt;": "<",
+    "&gt;": ">",
+    "&quot;": '"',
+    "&#34;": '"',
+    "&#39;": "'",
+    "&#x2F;": "/",
+    "&#x60;": "`",
+    "&#x3D;": "=",
+  };
+
+  return String(string).replace(
+      /(&amp;|&lt;|&gt;|&quot;|&#34;|&#39;|&#x2F;|&#x60;|&#x3D;)/g,
+      function (s) {
+        return entityMap[s];
+      }
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CitationModal);
