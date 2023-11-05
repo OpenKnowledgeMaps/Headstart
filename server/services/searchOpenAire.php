@@ -8,6 +8,7 @@ require 'search.php';
 use headstart\library;
 
 $post_params = $_POST;
+$precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
 if (array_key_exists("acronymtitle", $_POST)) {
     $q = library\CommUtils::getParameter($_POST, "acronymtitle");
@@ -41,7 +42,7 @@ $result = search("openaire", $q
                   , $post_params, $param_array
                   , false
                   , true, $id_array
-                  , null, true);
+                  , $precomputed_id, true);
 
 echo $result
 
