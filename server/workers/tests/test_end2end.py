@@ -198,7 +198,3 @@ def test_search_and_getLatestRevision(app, populate_db):
     assert type(r["data"]) == str
     data = json.loads(r["data"])
     assert type(data) == list
-
-import time
-while True:
-    time.sleep(100)
