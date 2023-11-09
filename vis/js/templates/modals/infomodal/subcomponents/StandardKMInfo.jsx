@@ -52,7 +52,7 @@ const StandardKMInfo = ({
         {!!customTitle && (
           <p>
             This map has a custom title and was created using the following
-            query: <strong className="hs-strong">{query}</strong>
+            query: <strong className="hs-strong">{queryString}</strong>
           </p>
         )}
         <p>
