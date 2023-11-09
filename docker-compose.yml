@@ -203,7 +203,6 @@ services:
       - ../Headstart:/var/www/html/headstart
       - ./local_dev/config_local_headstart.ini:/var/www/html/headstart/server/preprocessing/conf/config_local.ini
       - ./local_dev/entrypoint.php:/var/www/html/entrypoint.php
-      - ./local_dev/localstorage/local.sqlite:/var/www/localstorage/local.sqlite
     ports:
       - 127.0.0.1:8085:80
     networks:
