@@ -6,7 +6,7 @@ from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 import logging
 
-from apis.persistence import persistence_ns
+from persistence import persistence_ns
 
 class ReverseProxied(object):
     '''Wrap the application in this middleware and configure the
