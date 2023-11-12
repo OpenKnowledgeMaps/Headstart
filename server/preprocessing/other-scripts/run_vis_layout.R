@@ -62,7 +62,8 @@ tryCatch({
                            service,
                            max_clusters = MAX_CLUSTERS,
                            taxonomy_separator = params$taxonomy_separator,
-                           vis_type=vis_type, list_size = params$list_size)
+                           vis_type=vis_type, list_size = params$list_size,
+                           params=params)
 }, error=function(err){
  tslog$error(gsub("\n", " ", paste("Processing failed", query, paste(params, collapse=" "), err, sep="||")))
  failed$query <<- query

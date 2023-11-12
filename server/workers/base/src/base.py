@@ -83,7 +83,6 @@ class BaseClient(RWrapper):
             output = [o for o in stdout.split('\n') if len(o) > 0]
             error = [o for o in stderr.split('\n') if len(o) > 0]
             raw_metadata = json.loads(output[-2])
-            raw_text = json.loads(output[-1])
             if isinstance(raw_metadata, dict) and raw_metadata.get('status') == "error":
                 res = raw_metadata
             else:
@@ -94,8 +93,11 @@ class BaseClient(RWrapper):
                 metadata = metadata.head(params.get('list_size'))
                 metadata.reset_index(inplace=True, drop=True)
                 metadata = self.enrich_metadata(metadata)
-                text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]]
-                                         .apply(lambda x: " ".join(x), axis=1)], axis=1)
+                if "custom_clustering" in params.keys():
+                    text = pd.concat([metadata.id, metadata[params.get("custom_clustering")]], axis=1)
+                else:
+                    text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]]
+                                                     .apply(lambda x: " ".join(x), axis=1)], axis=1)
                 text.columns = ["id", "content"]
                 input_data = {}
                 input_data["metadata"] = metadata.to_json(orient='records')

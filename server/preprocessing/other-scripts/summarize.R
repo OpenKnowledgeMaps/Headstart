@@ -51,8 +51,13 @@ prune_ngrams <- function(ngrams, stops){
 create_cluster_labels <- function(clusters, metadata,
                                   type_counts,
                                   weightingspec,
-                                  top_n, stops, taxonomy_separator="/") {
-  nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
+                                  top_n, stops, taxonomy_separator="/",
+                                  params=NULL) {
+  if (is.null(params$custom_clustering)) {
+    nn_corpus <- get_custom_cluster_corpus(clusters, metadata, stops, params$custom_clustering)
+  } else {
+    nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
+  }
   nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
                                       tokenize = SplitTokenizer,
                                       weighting = function(x) weightSMART(x, spec="ntn"),
@@ -94,6 +99,16 @@ create_cluster_labels <- function(clusters, metadata,
   return(clusters)
 }
 
+get_custom_cluster_corpus <- function(clusters, metadata, stops, params) {
+  subjectlist = list()
+  for (k in seq(1, clusters$num_clusters)) {
+    matches = which(unname(clusters$groups == k) == TRUE)
+    matches_content = metadata[matches, params$custom_clustering]
+    subjectlist = c(subjectlist, matches_content)
+  }
+  nn_corpus <- VCorpus(VectorSource(subjectlist))
+  return(nn_corpus)
+}
 
 fix_cluster_labels <- function(clusterlabels, type_counts){
   unlist(mclapply(clusterlabels, function(x) {
