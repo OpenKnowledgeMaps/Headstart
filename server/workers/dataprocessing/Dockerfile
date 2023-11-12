@@ -156,7 +156,6 @@ RUN R -e 'renv::consent(provided = TRUE)' && \
 COPY workers/common ./common
 COPY workers/dataprocessing ./dataprocessing
 COPY preprocessing/resources ./resources
-COPY preprocessing/other-scripts ./other-scripts
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
 
 COPY workers/dataprocessing/*.py ./
