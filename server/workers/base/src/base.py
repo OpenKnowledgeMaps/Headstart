@@ -93,8 +93,14 @@ class BaseClient(RWrapper):
                 metadata = metadata.head(params.get('list_size'))
                 metadata.reset_index(inplace=True, drop=True)
                 metadata = self.enrich_metadata(metadata)
+                custom_clustering = params.get("custom_clustering")
                 if "custom_clustering" in params.keys():
-                    text = pd.concat([metadata.id, metadata[params.get("custom_clustering")]], axis=1)
+                    if "annotations_"+custom_clustering in metadata.columns:
+                        text = pd.concat([metadata.id, metadata["annotations_"+custom_clustering]], axis=1)
+                    elif custom_clustering in metadata.columns:
+                        text = pd.concat([metadata.id, metadata[custom_clustering]], axis=1)
+                    else:
+                        raise Exception("Custom clustering metadata not found.")
                 else:
                     text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]]
                                                      .apply(lambda x: " ".join(x), axis=1)], axis=1)
@@ -327,9 +333,10 @@ def filter_duplicates(df):
 
 def parse_annotations(field):
     if type(field) is str:
-        matches = pattern_annotations.findall(field)
-        matches = [{m.split(":")[0]: m.split(":")[1]} for m in matches]
-        annotations = pd.DataFrame(matches)
+        # keep only first annotation of each type
+        match = pattern_annotations.findall(field)[0]
+        match = {match.split(":")[0]: match.split(":")[1]}
+        annotations = pd.DataFrame(match)
         return annotations.to_dict("list")
     else:
         return {}
