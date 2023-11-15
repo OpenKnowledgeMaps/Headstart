@@ -15,7 +15,8 @@ const StandardKMInfo = ({
                           params: {query, customTitle, repo_name, q_advanced},
 }) => {
   let queryString = queryConcatenator([query, q_advanced])
-  customTitle = unescapeHTML(customTitle)
+
+  customTitle = customTitle && unescapeHTML(customTitle)
 
   return (
     // html template starts here
@@ -29,7 +30,8 @@ const StandardKMInfo = ({
             This knowledge map presents you with a topical overview of research
             on{" "}
             <strong className="hs-strong">
-              {(customTitle && true && customTitle !== "undefined") ? customTitle : queryString}
+              {/*{(customTitle && true && customTitle !== "undefined") ? customTitle : queryString}*/}
+              {customTitle ? customTitle : queryString}
             </strong>{" "}
             based on the 100{" "}
             <a
