@@ -10,8 +10,8 @@ use headstart\library;
 $dirty_query = library\CommUtils::getParameter($_POST, "q");
 $precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
-$params_array = array("from", "to", "document_types", "sorting", "min_descsize", "exclude_date_filters");
-$optional_get_params = ["repo", "coll", "vis_type", "q_advanced", "lang_id"];
+$params_array = array("from", "to", "document_types", "sorting", "min_descsize");
+$optional_get_params = ["repo", "coll", "vis_type", "q_advanced", "lang_id", "exclude_date_filters", "today"];
 
 function filterEmptyString($value)
 {
@@ -37,10 +37,11 @@ if (isset($post_params["lang_id"])) {
     }
 }
 
-// Check if the condition is true
-if (isset($post_params["exclude_date_filters"])) {
-    // Remove "from" and "to" from the $params_array
-    $params_array = array_diff($params_array, ["from", "to"]);
+// check if exclude_date_filters is set and true
+if (isset($post_params["exclude_date_filters"]) && $post_params["exclude_date_filters"] === true) {
+    // Add "today" and exclude "from" and "to" from the $params_array
+    $params_array = array_merge($params_array, ["today"]);
+    unset($params_array["from"], $params_array["to"]);
 }
 
 
