@@ -6,10 +6,10 @@ import logging
 from datetime import timedelta
 from common.r_wrapper import RWrapper
 import re
-from .parsers import improved_df_parsing
 from redis.exceptions import LockError
 import time
 import numpy as np
+from .parsers import improved_df_parsing
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
@@ -95,8 +95,8 @@ class BaseClient(RWrapper):
                 metadata = self.enrich_metadata(metadata)
                 custom_clustering = params.get("custom_clustering")
                 if "custom_clustering" in params.keys():
-                    if "annotations_"+custom_clustering in metadata.columns:
-                        text = pd.concat([metadata.id, metadata["annotations_"+custom_clustering]], axis=1)
+                    if custom_clustering not in metadata.columns:
+                        text = pd.concat([metadata.id, metadata["annotations"].map(lambda x: x.get(custom_clustering, ""))], axis=1)
                     elif custom_clustering in metadata.columns:
                         text = pd.concat([metadata.id, metadata[custom_clustering]], axis=1)
                     else:
@@ -334,30 +334,19 @@ def filter_duplicates(df):
 def parse_annotations(field):
     if type(field) is str:
         # keep only first annotation of each type
-        match = pattern_annotations.findall(field)[0]
-        match = {match.split(":")[0]: match.split(":")[1]}
-        annotations = pd.DataFrame(match)
-        return annotations.to_dict("list")
+        matches = pattern_annotations.findall(field)
+        matches = [{m.split(":")[0]: m.split(":")[1]} for m in matches]
+        annotations = pd.DataFrame(matches)
+        annotations = annotations.fillna(method="backfill").head(1).T[0]
+        return annotations.to_dict()
     else:
         return {}
     
 def parse_annotations_for_all(metadata, field_name):
     parsed_annotations = pd.DataFrame(metadata[field_name].map(lambda x: parse_annotations(x)))
     parsed_annotations.columns = ["annotations"]
-    expanded_annotations = expand_dict_columns(parsed_annotations)
-    return expanded_annotations
+    return parsed_annotations
 
-# convert DataFrame with dict columns to DataFrame with columns for each dict key
-def expand_dict_columns(df):
-    unique_annotation_keys = df.annotations.map(lambda x: set(x.keys()))
-    unique_annotation_keys = set().union(*unique_annotation_keys.to_list())
-    if len(unique_annotation_keys) > 0:
-        for c in df.columns:
-            if type(df[c].iloc[0]) is dict:            
-                for uk in unique_annotation_keys:
-                    df[c+"_"+uk] = df[c].map(lambda x: x[uk] if uk in x.keys() else [])
-                    df[c+"_"+uk] = df[c+"_"+uk].map(lambda x: [uk for uk in x if uk is not np.nan])
-    return df
 
 def clean_up_annotations(df, field):
     df[field] = df[field].map(lambda x: pattern_annotations.sub("", x).strip())

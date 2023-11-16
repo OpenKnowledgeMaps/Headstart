@@ -53,62 +53,57 @@ create_cluster_labels <- function(clusters, metadata,
                                   weightingspec,
                                   top_n, stops, taxonomy_separator="/",
                                   params=NULL) {
-  if (is.null(params$custom_clustering)) {
-    nn_corpus <- get_custom_cluster_corpus(clusters, metadata, stops, params$custom_clustering)
-  } else {
+  if (is.null(params["custom_clustering"])) {
     nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
-  }
-  nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
-                                      tokenize = SplitTokenizer,
-                                      weighting = function(x) weightSMART(x, spec="ntn"),
-                                      bounds = list(local = c(2, Inf)),
-                                      tolower = TRUE
-                                ))
-  tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
-  empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
-  tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(nn_tfidf, nn_corpus)[c(empty_tfidf)]
-  tfidf_top_names <- get_top_names(tfidf_top, top_n, stops)
-  clusters$cluster_labels = ""
-  batch_size <- 1000
-  total_length <- length(stops)
-  for (k in seq(1, clusters$num_clusters)) {
-    matches = which(unname(clusters$groups == k) == TRUE)
-    summary = tfidf_top_names[[k]]
-    if (summary == "") {
-      candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
-      candidates = lapply(candidates, tolower)
-      for (i in seq(1, total_length, batch_size)) {
-        candidates = lapply(candidates, function(x) {paste(removeWords(x, stops[i:min(i+batch_size -1, total_length)]), collapse="")})
+    nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
+      tokenize = SplitTokenizer,
+      weighting = function(x) weightSMART(x, spec="ntn"),
+      bounds = list(local = c(2, Inf)),
+      tolower = TRUE
+    ))
+    tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
+    empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
+    tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(nn_tfidf, nn_corpus)[c(empty_tfidf)]
+    tfidf_top_names <- get_top_names(tfidf_top, top_n, stops)
+    clusters$cluster_labels = ""
+    batch_size <- 1000
+    total_length <- length(stops)
+    for (k in seq(1, clusters$num_clusters)) {
+      matches = which(unname(clusters$groups == k) == TRUE)
+      summary = tfidf_top_names[[k]]
+      if (summary == "") {
+        candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
+        candidates = lapply(candidates, tolower)
+        for (i in seq(1, total_length, batch_size)) {
+          candidates = lapply(candidates, function(x) {paste(removeWords(x, stops[i:min(i+batch_size -1, total_length)]), collapse="")})
+        }
+        candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
+        candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
+        candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
+        candidates_trigrams = lapply(lapply(candidates, expand_ngrams, n=3), paste, collapse=" ")
+        candidates = unname(mapply(paste, candidates_bigrams, candidates_trigrams))
+        candidates =  unlist(lapply(candidates, str_split, " "), recursive = F)
+        candidates = unlist(lapply(candidates, function(x) {another_prune_ngrams(x, stops)}))
+        top_ngrams = sort(table(strsplit(paste(candidates, collapse=" "), " ")), decreasing = T)
+        summary <- filter_out_nested_ngrams(names(top_ngrams), 3)
+        summary = lapply(summary, FUN = function(x) {paste(unlist(x), collapse="; ")})
+        summary = gsub("_", " ", summary)
+        summary = paste(summary, collapse=", ")
       }
-      candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
-      candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
-      candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
-      candidates_trigrams = lapply(lapply(candidates, expand_ngrams, n=3), paste, collapse=" ")
-      candidates = unname(mapply(paste, candidates_bigrams, candidates_trigrams))
-      candidates =  unlist(lapply(candidates, str_split, " "), recursive = F)
-      candidates = unlist(lapply(candidates, function(x) {another_prune_ngrams(x, stops)}))
-      top_ngrams = sort(table(strsplit(paste(candidates, collapse=" "), " ")), decreasing = T)
-      summary <- filter_out_nested_ngrams(names(top_ngrams), 3)
-      summary = lapply(summary, FUN = function(x) {paste(unlist(x), collapse="; ")})
-      summary = gsub("_", " ", summary)
-      summary = paste(summary, collapse=", ")
+      clusters$cluster_labels[c(matches)] = summary
     }
-    clusters$cluster_labels[c(matches)] = summary
+  } else {
+    if (cc %in% names(metadata)) {
+      clusters$cluster_labels = metadata[, cc]
+    }
+    if (cc %in% names(metadata$annotations)) {
+      clusters$cluster_labels = metadata$annotations[, cc]
+    }
   }
   clusters$cluster_labels <- fix_cluster_labels(clusters$cluster_labels, type_counts)
   return(clusters)
 }
 
-get_custom_cluster_corpus <- function(clusters, metadata, stops, params) {
-  subjectlist = list()
-  for (k in seq(1, clusters$num_clusters)) {
-    matches = which(unname(clusters$groups == k) == TRUE)
-    matches_content = metadata[matches, params$custom_clustering]
-    subjectlist = c(subjectlist, matches_content)
-  }
-  nn_corpus <- VCorpus(VectorSource(subjectlist))
-  return(nn_corpus)
-}
 
 fix_cluster_labels <- function(clusterlabels, type_counts){
   unlist(mclapply(clusterlabels, function(x) {
