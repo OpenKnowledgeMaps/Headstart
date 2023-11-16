@@ -26,8 +26,12 @@ class Streamgraph(object):
 
     def tokenize(self, s):
         #return re.split("; | - |, |: ", s)
-        s = re.sub(r"[\(\)]", "", s)
-        return re.split("; ", s)
+        t = re.sub(r"[\(\)]", "", s)
+        t = re.split("; ", t)
+        t = [s for s in t]
+        t = [s.replace(";", "") for s in t]
+        t = [s.strip() for s in t]
+        return t
 
     def get_streamgraph_data(self, metadata, query, n=12, method="count"):
         metadata = pd.DataFrame.from_records(metadata)
@@ -36,7 +40,7 @@ class Streamgraph(object):
         df.dropna(axis=0, subset=["year"], inplace=True)
         df.year = pd.to_datetime(df.year.map(lambda x: x.replace(month=1, day=1).strftime('%Y-%m-%d')))
         df = df[df.subject.map(lambda x: x is not None)]
-        df.subject = df.subject.map(lambda x: [s.lower() for s in self.tokenize(x)] if isinstance(x, str) else "")
+        df.subject = df.subject.map(lambda x: self.tokenize(x.lower()) if isinstance(x, str) else [])
         df = df[df.subject.map(lambda x: x != [])]
         df["boundary_label"] = df.year
         df = df.explode('subject')
@@ -177,6 +181,8 @@ class Streamgraph(object):
         # 5% which is chosen here is an arbitrary value, could also be higher 10% or lower
         min_value = int(yearly_sums.sum() * 0.05)
         start_index = yearly_sums_cum[yearly_sums_cum > min_value].index[0]
+        self.logger.debug(f"Start index: {start_index}")
+        self.logger.debug(f"Start year: {x[start_index]}")
         df.y = df.y.map(lambda x: x[start_index:])
         df.ids_timestep = df.ids_timestep.map(lambda x: x[start_index:])
         x = x[start_index:]

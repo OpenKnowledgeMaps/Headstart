@@ -19,7 +19,7 @@ create_corpus <- function(metadata, text, stops) {
   batch_size <- 1000
   total_length <- length(stops)
   for (i in seq(1, total_length, batch_size)) {
-    corpus <- tm_map(corpus, removeWords, stops[i:min(i+batch_size -1, total_length)])
+    try(corpus <- tm_map(corpus, removeWords, stops[i:min(i+batch_size -1, total_length)]))
   }
   corpus <- tm_map(corpus, stripWhitespace)
   unstemmed <- corpus
