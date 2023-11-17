@@ -93,6 +93,10 @@ get_papers <- function(query, params,
   } else {
     non_public = FALSE
   }
+  if (!is.null(params$custom_clustering)) {
+    custom_clustering_query <- paste("dcsubject:", params$custom_clustering, "*", sep="")
+    base_query <- paste(base_query, custom_clustering_query)
+  }
 
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE query:", base_query))
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Sort by:", sortby_string))

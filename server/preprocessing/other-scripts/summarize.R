@@ -53,7 +53,7 @@ create_cluster_labels <- function(clusters, metadata,
                                   weightingspec,
                                   top_n, stops, taxonomy_separator="/",
                                   params=NULL) {
-  if (is.null(params["custom_clustering"])) {
+  if (is.null(params$custom_clustering)) {
     nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
     nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
       tokenize = SplitTokenizer,
@@ -93,6 +93,7 @@ create_cluster_labels <- function(clusters, metadata,
       clusters$cluster_labels[c(matches)] = summary
     }
   } else {
+    cc <- params$custom_clustering
     if (cc %in% names(metadata)) {
       clusters$cluster_labels = metadata[, cc]
     }
