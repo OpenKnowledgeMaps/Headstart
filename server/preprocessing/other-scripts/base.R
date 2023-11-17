@@ -93,16 +93,19 @@ get_papers <- function(query, params,
   } else {
     non_public = FALSE
   }
+
   if (!is.null(params$custom_clustering)) {
-    custom_clustering_query <- paste("dcsubject:", params$custom_clustering, "*", sep="")
-    base_query <- paste(base_query, custom_clustering_query)
+    internal_metadata_fields <- c("id", "relation", "identifier", "title", "paper_abstract",
+                                  "published_in", "year", "subject", "authors", "link", "oa_state",
+                                  "url", "relevance", "resulttype", "dctype", "dctypenorm", "doi",
+                                  "dclang", "dclanguage", "content_provider", "dccoverage")
+    if (!(params$custom_clustering %in% internal_metadata_fields)) {
+      custom_clustering_query <- paste("dcsubject:", params$custom_clustering, "*", sep="")
+      base_query <- paste(base_query, custom_clustering_query)
+    }
   }
 
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE query:", base_query))
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Sort by:", sortby_string))
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Min descsize:", min_descsize))
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Target:", repo))
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Collection:", coll))
 
   # execute search
   offset = 0

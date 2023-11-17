@@ -8,5 +8,5 @@
   "limit": 120,
   "list_size": 100,
   "repo": "ftenkore",
-  "q_advanced": "dcsubject:theme*"
+  "custom_clustering": "theme"
 }
