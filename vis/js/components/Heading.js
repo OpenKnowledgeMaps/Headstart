@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
+
 import {
   BasicTitle,
   ProjectTitle,
@@ -19,7 +20,7 @@ const Heading = ({
                    headingParams,
                    streamgraph,
                    q_advanced,
-                   // customTitle,
+                     service,
                  }) => {
   if (zoomed) {
     const label = streamgraph
@@ -41,13 +42,11 @@ const Heading = ({
 
   let queryString = queryConcatenator([query, q_advanced])
 
-  // console.log("customTitle", headingParams.customTitle)
-
   return (
       // html template starts here
       <div className="heading-container">
         <h4 className="heading">
-          {renderTitle(localization, queryString, headingParams)}
+            {renderTitle(localization, queryString, headingParams, service)}
         </h4>
       </div>
       // html template ends here
@@ -62,9 +61,10 @@ const mapStateToProps = (state) => ({
   headingParams: state.heading,
   streamgraph: state.chartType === STREAMGRAPH_MODE,
   q_advanced: state.q_advanced.text,
-  // context: state,
-  // customTitle: state.heading.customTitle,
+    // get source BASE or PubMed
+    service: state.contextLine.dataSource,
 });
+
 
 export default connect(mapStateToProps)(Heading);
 
@@ -75,7 +75,8 @@ const MAX_LENGTH_CUSTOM = 100;
 /**
  * Renders the title for the correct setup.
  */
-const renderTitle = (localization, query, headingParams) => {
+const renderTitle = (localization, query, headingParams, service) => {
+
   if (headingParams.presetTitle) {
     return <BasicTitle title={headingParams.presetTitle} />;
   }
@@ -104,10 +105,18 @@ const renderTitle = (localization, query, headingParams) => {
       );
     }
 
+    // this condition for BASE service and custom title if its value exists in config params
+      if (service === "BASE") {
+              if (headingParams.customTitle) {
+                  return <StandardTitle label={label} title={headingParams.customTitle}/>;
+              }
+      }
+
     return <StandardTitle label={label} title={query} />;
   }
 
-  return <BasicTitle title={localization.default_title} />;
+
+    return <BasicTitle title={localization.default_title} />;
 };
 
 const renderViperTitle = (title, acronym, projectId) => {

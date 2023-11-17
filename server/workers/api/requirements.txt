@@ -1,6 +1,5 @@
 flask
 flask-cors
-flask_sqlalchemy
 flask_restx
 Werkzeug
 marshmallow
