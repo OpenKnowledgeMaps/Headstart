@@ -132,6 +132,7 @@ get_papers <- function(query, params,
   r <- 0
 
   duplicate_backfill <- (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
+  custom_clustering_backfill <- FALSE
   if (!is.null(params$custom_clustering)) {
     if (params$custom_clustering %in% internal_metadata_fields) {
       custom_clustering_backfill <- (nrow(metadata) - sum(metadata[[params$custom_clustering]] == "") < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
@@ -172,12 +173,16 @@ get_papers <- function(query, params,
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Deduplication retrieval requests:", r))
 
   metadata <- unique(metadata, by = "id")
-  text = data.frame(matrix(nrow=length(metadata$id)))
-  text$id = metadata$id
-  # Add all keywords, including classification to text
-  text$content = paste(metadata$title, metadata$paper_abstract,
-                       metadata$subject_orig, metadata$published_in, metadata$authors,
-                       sep=" ")
+  # log number of results
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Number of results:", nrow(metadata), sep=" "))
+  if (nrow(metadata)==0){
+    stop(paste("No results retrieved for this custom clustering parameter."))
+  }
+  # Add all keywords, including classification to text content for clustering
+  text <- data.frame(id = metadata$id,
+                     content = paste(metadata$title, metadata$paper_abstract,
+                                     metadata$subject_orig, metadata$published_in, metadata$authors,
+                                     sep=" "))
 
 
   input_data=list("metadata" = metadata, "text"=text)
