@@ -45,10 +45,6 @@ failed <- list(params=params)
 tryCatch({
   query <- sanitize_query(query)
   input_data = get_papers(query$sanitized_query, params)
-  #raw <- fromJSON("test/hierarchical_clustering_data.json")
-  input_data <- raw$input_data
-  input_data$metadata <- fromJSON(raw$input_data$metadata)
-  input_data$text <- fromJSON(raw$input_data$text)
 }, error=function(err){
   tslog$error(gsub("\n", " ", paste("Query failed", service, query$raw_query, paste(params, collapse=" "), err, sep="||")))
   failed$query <<- query$raw_query
