@@ -94,11 +94,11 @@ get_papers <- function(query, params,
     non_public = FALSE
   }
 
+  internal_metadata_fields <- c("id", "relation", "identifier", "title", "paper_abstract",
+                                "published_in", "year", "subject", "authors", "link", "oa_state",
+                                "url", "relevance", "resulttype", "dctype", "dctypenorm", "doi",
+                                "dclang", "dclanguage", "content_provider", "dccoverage")
   if (!is.null(params$custom_clustering)) {
-    internal_metadata_fields <- c("id", "relation", "identifier", "title", "paper_abstract",
-                                  "published_in", "year", "subject", "authors", "link", "oa_state",
-                                  "url", "relevance", "resulttype", "dctype", "dctypenorm", "doi",
-                                  "dclang", "dclanguage", "content_provider", "dccoverage")
     if (!(params$custom_clustering %in% internal_metadata_fields)) {
       custom_clustering_query <- paste("dcsubject:", params$custom_clustering, "*", sep="")
       base_query <- paste(base_query, custom_clustering_query)
@@ -127,10 +127,19 @@ get_papers <- function(query, params,
   metadata <- sanitize_abstract(metadata)
   metadata <- mark_duplicates(metadata)
   metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
-  req_limit <- 9
   
+  req_limit <- 9  
   r <- 0
-  while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit) {
+
+  duplicate_backfill <- (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
+  if (!is.null(params$custom_clustering)) {
+    if (params$custom_clustering %in% internal_metadata_fields) {
+      custom_clustering_backfill <- (nrow(metadata) - sum(metadata[[params$custom_clustering]] == "") < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
+    } else {
+      custom_clustering_backfill <- (nrow(metadata) - sum(metadata$annotations[[params$custom_clustering]] == "") < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
+    }
+  }
+  while (duplicate_backfill || custom_clustering_backfill) {
     offset <- offset+120
     res_raw <- get_raw_data(limit,
                             base_query,
@@ -149,6 +158,16 @@ get_papers <- function(query, params,
     metadata <- mark_duplicates(metadata)
     metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
     r <- r+1
+    duplicate_backfill <- (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
+    if (!is.null(params$custom_clustering)) {
+      if (params$custom_clustering %in% internal_metadata_fields) {
+        metadata <- metadata[metadata[[params$custom_clustering]] != "",]
+        custom_clustering_backfill <- (nrow(metadata) - sum(metadata[[params$custom_clustering]] == "") < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
+      } else {
+        metadata <- metadata[metadata$annotations[[params$custom_clustering]] != "",]
+        custom_clustering_backfill <- (nrow(metadata) - sum(metadata$annotations[[params$custom_clustering]] == "") < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
+      }
+    }
   }
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Deduplication retrieval requests:", r))
 
