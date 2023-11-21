@@ -96,8 +96,8 @@ get_papers <- function(query, params,
 
   internal_metadata_fields <- c("id", "relation", "identifier", "title", "paper_abstract",
                                 "published_in", "year", "subject", "authors", "link", "oa_state",
-                                "url", "relevance", "resulttype", "dctype", "dctypenorm", "doi",
-                                "dclang", "dclanguage", "content_provider", "dccoverage")
+                                "url", "relevance", "resulttype", "type", "typenorm", "doi",
+                                "lang", "language", "content_provider", "coverage")
   if (!is.null(params$custom_clustering)) {
     if (!(params$custom_clustering %in% internal_metadata_fields)) {
       custom_clustering_query <- paste("dcsubject:", params$custom_clustering, "*", sep="")
@@ -259,13 +259,13 @@ etl <- function(res, repo, non_public) {
   metadata$url = metadata$id
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
-  metadata$dctype = check_metadata(res$dctype)
-  metadata$dctypenorm = check_metadata(res$dctypenorm)
+  metadata$type = check_metadata(res$dctype)
+  metadata$typenorm = check_metadata(res$dctypenorm)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
-  metadata$dclang = check_metadata(res$dclang)
-  metadata$dclanguage = check_metadata(res$dclanguage)
+  metadata$lang = check_metadata(res$dclang)
+  metadata$language = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)
-  metadata$dccoverage = check_metadata(res$dccoverage)
+  metadata$coverage = check_metadata(res$dccoverage)
   if(repo=="fttriple" && non_public==TRUE) {
     metadata$content_provider <- "GoTriple"
   }

@@ -318,7 +318,7 @@ def filter_duplicates(df):
     df = remove_textual_duplicates_from_different_sources(df, dupind)
     df = add_false_negatives(df)
     df = mark_latest_doi(df, dupind)
-    pure_datasets = df[df.dctypenorm == "7"]
+    pure_datasets = df[df.typenorm == "7"]
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
     non_datasets = prioritize_OA_and_latest(non_datasets, dupind)
     pure_datasets = mark_latest_doi(pure_datasets, dupind)
