@@ -6,5 +6,6 @@
   "vis_id": "TEST_ID",
   "min_descsize": 300,
   "limit": 120,
-  "list_size": 100
+  "list_size": 100,
+  "exclude_date_filters": "true"
 }

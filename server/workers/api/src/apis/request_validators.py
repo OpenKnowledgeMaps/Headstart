@@ -1,8 +1,11 @@
 from datetime import datetime
-from marshmallow import Schema, fields, pre_load, validates, ValidationError
+from marshmallow import Schema, fields, pre_load, validates, ValidationError, EXCLUDE
 
 
 class SearchParamSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+        
     q = fields.Str()
     q_advanced = fields.Str()
     sorting = fields.Str(required=True)
@@ -32,6 +35,7 @@ class SearchParamSchema(Schema):
     repo_name = fields.Str()
     coll = fields.Str()
     list_size = fields.Int()
+    exclude_date_filters = fields.Boolean()
 
 
     @pre_load
