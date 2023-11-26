@@ -65,7 +65,6 @@ get_papers <- function(query, params,
 
   if (!is.null(exact_query) && exact_query != '') {
     base_query <- paste(paste0("(",exact_query,")"), date_string, document_types, collapse=" ")
-    base_query <- paste(paste0("(",exact_query,")"), date_string, document_types, collapse=" ")
   } else {
     base_query <- paste(date_string, document_types, collapse=" ")
   }
@@ -98,10 +97,16 @@ get_papers <- function(query, params,
                                 "published_in", "year", "subject", "authors", "link", "oa_state",
                                 "url", "relevance", "resulttype", "type", "typenorm", "doi",
                                 "lang", "language", "content_provider", "coverage")
-  if (!is.null(params$custom_clustering)) {
-    if (!(params$custom_clustering %in% internal_metadata_fields)) {
-      custom_clustering_query <- paste("dcsubject:", params$custom_clustering, "*", sep="")
+  cc <- params$custom_clustering
+  if (!is.null(cc)) {
+    if (!(cc %in% internal_metadata_fields)) {
+      custom_clustering_query <- paste("dcsubject:", cc, "*", sep="")
       base_query <- paste(base_query, custom_clustering_query)
+    } else {
+      if (cc %in% names(fieldmapper)) {
+        custom_clustering_query <- paste(fieldmapper[[cc]], ":", "*", sep="")
+        base_query <- paste(base_query, custom_clustering_query)
+      }
     }
   }
 
@@ -128,19 +133,9 @@ get_papers <- function(query, params,
   metadata <- mark_duplicates(metadata)
   metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
   
-  req_limit <- 9  
+  req_limit <- 9
   r <- 0
-
-  duplicate_backfill <- (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
-  custom_clustering_backfill <- FALSE
-  if (!is.null(params$custom_clustering)) {
-    if (params$custom_clustering %in% internal_metadata_fields) {
-      custom_clustering_backfill <- (nrow(metadata) - sum(metadata[[params$custom_clustering]] == "") < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
-    } else {
-      custom_clustering_backfill <- (nrow(metadata) - sum(metadata$annotations[[params$custom_clustering]] == "") < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
-    }
-  }
-  while (duplicate_backfill || custom_clustering_backfill) {
+  while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit) {
     offset <- offset+120
     res_raw <- get_raw_data(limit,
                             base_query,
@@ -159,25 +154,10 @@ get_papers <- function(query, params,
     metadata <- mark_duplicates(metadata)
     metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
     r <- r+1
-    duplicate_backfill <- (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
-    if (!is.null(params$custom_clustering)) {
-      if (params$custom_clustering %in% internal_metadata_fields) {
-        metadata <- metadata[metadata[[params$custom_clustering]] != "",]
-        custom_clustering_backfill <- (nrow(metadata) - sum(metadata[[params$custom_clustering]] == "") < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
-      } else {
-        metadata <- metadata[metadata$annotations[[params$custom_clustering]] != "",]
-        custom_clustering_backfill <- (nrow(metadata) - sum(metadata$annotations[[params$custom_clustering]] == "") < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit)
-      }
-    }
   }
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Deduplication retrieval requests:", r))
 
   metadata <- unique(metadata, by = "id")
-  # log number of results
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Number of results:", nrow(metadata), sep=" "))
-  if (nrow(metadata)==0){
-    stop(paste("No results retrieved for this custom clustering parameter."))
-  }
   # Add all keywords, including classification to text content for clustering
   text <- data.frame(id = metadata$id,
                      content = paste(metadata$title, metadata$paper_abstract,
@@ -369,4 +349,27 @@ dctypenorm_decoder <- list(
   "181"="Thesis: bachelor",
   "183"="Thesis: doctoral and postdoctoral",
   "182"="Thesis: master"
+)
+
+fieldmapper <- list(
+  "relation"="dcrelation",
+  "identifier"="identifier",
+  "title"="dctitle",
+  "paper_abstract"="dcdescription",
+  "published_in"="dcsource",
+  "year"="dcdate",
+  "subject"="dcsubject",
+  "authors"="dccreator",
+  "link"="dclink",
+  "oa_state"="dcoa",
+  "url"="dcdocid",
+  "relevance"="relevance",
+  "resulttype"="dctypenorm",
+  "type"="dctype",
+  "typenorm"="dctypenorm",
+  "doi"="doi",
+  "lang"="dclang",
+  "language"="dclanguage",
+  "content_provider"="dcprovider",
+  "coverage"="dccoverage"
 )

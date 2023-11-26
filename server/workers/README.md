@@ -64,11 +64,6 @@ Services:
 * In `server/workers/services/src/config` copy `example_settings.py` to `settings.py` and change the values for `ENV` (`development` or `production`) and `DEBUG` (`TRUE` or `FALSE`).
 * In `settings.py` you can also configure databases.
 
-GSheets Google API client authentication credentials::
-* In `server/workers/services/gsheets/` copy `example_gsheets.env` to `gsheets.env` and change the values if necessary.
-* In `server/workers/services/gsheets/` add a `credentials.json` for Google app authentication (ask your system admin if unsure).
-
-
 Secure Redis:
 * In `server/workers` copy `example_redis.conf` to `redis.conf` and replace "long_secure_password" with a long, secure password (Line 507 in redis.conf, parameter `requirepass`).
 
