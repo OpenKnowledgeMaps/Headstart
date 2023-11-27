@@ -93,20 +93,14 @@ get_papers <- function(query, params,
     non_public = FALSE
   }
 
-  internal_metadata_fields <- c("id", "relation", "identifier", "title", "paper_abstract",
-                                "published_in", "year", "subject", "authors", "link", "oa_state",
-                                "url", "relevance", "resulttype", "type", "typenorm", "doi",
-                                "lang", "language", "content_provider", "coverage")
   cc <- params$custom_clustering
   if (!is.null(cc)) {
-    if (!(cc %in% internal_metadata_fields)) {
-      custom_clustering_query <- paste("dcsubject:", cc, "*", sep="")
+    if (cc %in% names(fieldmapper)) {
+      custom_clustering_query <- paste(fieldmapper[[cc]], ":", "*", sep="")
       base_query <- paste(base_query, custom_clustering_query)
     } else {
-      if (cc %in% names(fieldmapper)) {
-        custom_clustering_query <- paste(fieldmapper[[cc]], ":", "*", sep="")
-        base_query <- paste(base_query, custom_clustering_query)
-      }
+      custom_clustering_query <- paste("dcsubject:", cc, "*", sep="")
+      base_query <- paste(base_query, custom_clustering_query)
     }
   }
 
