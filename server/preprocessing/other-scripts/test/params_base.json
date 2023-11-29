@@ -7,5 +7,6 @@
   "min_descsize": 300,
   "limit": 120,
   "list_size": 100,
-  "custom_clustering": "coverage"
+  "repo": "ftenkore",
+  "custom_clustering": "theme"
 }
