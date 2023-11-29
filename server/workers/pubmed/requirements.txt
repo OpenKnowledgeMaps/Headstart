@@ -1,2 +1,3 @@
 redis
+numpy
 pandas
