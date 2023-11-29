@@ -4,14 +4,20 @@ import { Modal } from "react-bootstrap";
 import AboutSoftware from "./AboutSoftware";
 import DataSource from "./DataSource";
 import { queryConcatenator } from "../../../../utils/data";
+import {unescapeHTML} from "../../../../utils/unescapeHTMLentities.js";
+
+
 
 const StandardKMInfo = ({
   serviceName,
   serviceDesc,
   serviceLogo,
-  params: { query, customTitle, repo_name, q_advanced },
+                          params: {query, customTitle, repo_name, q_advanced},
 }) => {
   let queryString = queryConcatenator([query, q_advanced])
+
+  customTitle = customTitle && unescapeHTML(customTitle)
+
   return (
     // html template starts here
     <>
@@ -24,6 +30,7 @@ const StandardKMInfo = ({
             This knowledge map presents you with a topical overview of research
             on{" "}
             <strong className="hs-strong">
+              {/*{(customTitle && true && customTitle !== "undefined") ? customTitle : queryString}*/}
               {customTitle ? customTitle : queryString}
             </strong>{" "}
             based on the 100{" "}
@@ -46,7 +53,7 @@ const StandardKMInfo = ({
         {!!customTitle && (
           <p>
             This map has a custom title and was created using the following
-            query: <strong className="hs-strong">{query}</strong>
+            query: <strong className="hs-strong">{queryString}</strong>
           </p>
         )}
         <p>

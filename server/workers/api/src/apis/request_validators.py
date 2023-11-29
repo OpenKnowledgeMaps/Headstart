@@ -32,6 +32,7 @@ class SearchParamSchema(Schema):
     repo_name = fields.Str()
     coll = fields.Str()
     list_size = fields.Int()
+    custom_title = fields.Str()
 
 
     @pre_load
