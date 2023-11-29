@@ -4,7 +4,7 @@ async-timeout==4.0.2
 attrs==22.2.0
 bibtexparser==1.4.1
 click==8.0.4
-dataclasses==0.8
+dataclasses>=0.6
 flasgger==0.9.7.1
 Flask==2.0.3
 Flask-Cors==4.0.0
