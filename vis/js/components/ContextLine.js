@@ -35,8 +35,7 @@ class ContextLine extends React.Component {
     if (hidden) {
       return null;
     }
-
-    return (
+      return (
       <ContextLineTemplate>
           {params.showAuthor && (
               <Author
@@ -60,10 +59,12 @@ class ContextLine extends React.Component {
                   popoverContainer={this.props.popoverContainer}
               />
           )}
-          {defined(params.timespan) &&
+          {(defined(params.timespan) && (!params.excludeDateFilters || params.excludeDateFilters === "false")) &&
+              // {defined(params.timespan) &&
               <Timespan>
                   <ContextTimeFrame popoverContainer={popoverContainer} timespan={params.timespan}/>
-              </Timespan>}
+              </Timespan>
+          }
           <DocumentTypes
               documentTypes={params.documentTypes}
               popoverContainer={popoverContainer}
