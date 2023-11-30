@@ -29,6 +29,7 @@ backend_*.sh
 server/workers/tests/*.csv
 server/workers/tests/*.txt
 server/workers/tests/testutils/
+local_dev/renv/*
 
 # php files
 /server/classes/headstart/vendor
