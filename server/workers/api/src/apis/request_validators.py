@@ -9,10 +9,9 @@ class SearchParamSchema(Schema):
     q = fields.Str()
     q_advanced = fields.Str()
     sorting = fields.Str(required=True)
-    from_ = fields.Date(required=True, data_key="from",
+    from_ = fields.Date(data_key="from",
                         format="%Y-%m-%d")
-    to = fields.Date(required=True,
-                     format="%Y-%m-%d")
+    to = fields.Date(format="%Y-%m-%d")
     vis_type = fields.Str(require=True)
     limit = fields.Int()
     year_range = fields.Str()
@@ -41,10 +40,12 @@ class SearchParamSchema(Schema):
 
     @pre_load
     def fix_years(self, in_data, **kwargs):
-        if len(in_data.get('from')) == 4:
-            in_data["from"] = in_data["from"]+"-01-01"
-        if len(in_data.get('to')) == 4:
-            in_data["to"] = in_data["to"]+"-12-31"
+        if "from" in in_data:
+            if len(in_data.get('from')) == 4:
+                in_data["from"] = in_data["from"]+"-01-01"
+        if "to" in in_data:
+            if len(in_data.get('to')) == 4:
+                in_data["to"] = in_data["to"]+"-12-31"
         return in_data
 
     @pre_load
