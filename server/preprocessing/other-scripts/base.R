@@ -52,8 +52,6 @@ get_papers <- function(query, params,
 
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "exact query:", exact_query))
 
-  year_from = params$from
-  year_to = params$to
   limit = params$limit
 
   # prepare query fields
@@ -68,10 +66,10 @@ get_papers <- function(query, params,
     base_query <- paste(document_types, collapse=" ")
   }
 
-  date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   if (!is.null(params$exclude_date_filters) && (params$exclude_date_filters == TRUE ||
                                                 params$exclude_date_filters == "true")) {
   } else {
+    date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
     base_query <- paste(date_string, base_query)
   }
 
