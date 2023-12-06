@@ -91,9 +91,12 @@ def get_or_create_contentprovider_lookup():
             cp_dict = df.name.to_dict()
             return cp_dict
     except Exception as e:
-        df = pd.read_json("contentproviders.json")
-        df.set_index("internal_name", inplace=True)
-        cp_dict = df.name.to_dict()
-        return cp_dict
+        try:
+            df = pd.read_json("contentproviders.json")
+            df.set_index("internal_name", inplace=True)
+            cp_dict = df.name.to_dict()
+            return cp_dict
+        except Exception as e:
+            return {}
 
 contentprovider_lookup = get_or_create_contentprovider_lookup()
