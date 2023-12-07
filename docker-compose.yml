@@ -14,9 +14,9 @@ services:
       - db_data:/var/lib/postgresql/data
       - ./local_dev/pg_hba.conf:/etc/pg_hba.conf
       - ./local_dev/postgresql.conf:/etc/postgresql.conf
-    networks: 
+    networks:
       - headstart
-  
+
   redis:
     image: 'redis:6.0-alpine'
     restart: unless-stopped
@@ -30,7 +30,7 @@ services:
         - ./local_dev/redis.conf:/etc/redis/redis.conf
     ports:
      - "127.0.0.1:${REDIS_PORT}:6379"
-    networks: 
+    networks:
       - headstart
 
   api:
@@ -56,7 +56,7 @@ services:
       - base
       - pubmed
       - openaire
-    networks: 
+    networks:
       - headstart
 
   persistence:
@@ -77,7 +77,7 @@ services:
     command: ["python", "app.py"]
     volumes:
       - ./server/workers/persistence/src:/api
-    networks: 
+    networks:
       - headstart
 
   dataprocessing:
@@ -100,12 +100,12 @@ services:
       PYTHONIOENCODING: "utf-8"
     restart: unless-stopped
     volumes:
-      - /opt/local/renv/cache:/renv/cache
+      - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
-    networks: 
+    networks:
       - headstart
 
   base:
@@ -129,7 +129,7 @@ services:
       R_BASE_APIKEY: "${R_BASE_APIKEY}"
     restart: unless-stopped
     volumes:
-      - /opt/local/renv/cache:/renv/cache
+      - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
@@ -157,7 +157,7 @@ services:
       PYTHONIOENCODING: "utf-8"
     restart: unless-stopped
     volumes:
-      - /opt/local/renv/cache:/renv/cache
+      - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
@@ -185,7 +185,7 @@ services:
       PYTHONIOENCODING: "utf-8"
     restart: unless-stopped
     volumes:
-      - /opt/local/renv/cache:/renv/cache
+      - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
