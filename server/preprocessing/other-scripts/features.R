@@ -7,6 +7,8 @@ TypeCountTokenizer <- function(x) {
 
 
 create_corpus <- function(metadata, text, stops) {
+  # log text example content
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "text example content:", text$content[1], collapse="\n"))
   docs <- data.frame(doc_id = text$id, text = text$content)
   corpus <- VCorpus(DataframeSource(docs))
 
@@ -30,7 +32,15 @@ create_corpus <- function(metadata, text, stops) {
 
 
 create_tdm_matrix <- function(corpus, sparsity=1) {
+  # log example content from the corpus object
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "corpus example content:", corpus[[1]]$content, collapse="\n"))
   tdm <- TermDocumentMatrix(corpus)
+  # log all available information about tdm
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm dimensions:", dim(tdm)))
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm sparsity:", sum(tdm == 0) / prod(dim(tdm))))
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm max value:", max(tdm)))
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm min value:", min(tdm)))
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm NA values:", sum(is.na(tdm))))
   if(sparsity < 1) {
     tdm <- removeSparseTerms(tdm, sparsity)
   }
@@ -39,9 +49,37 @@ create_tdm_matrix <- function(corpus, sparsity=1) {
 }
 
 get_distance_matrix <- function(tdm_matrix, method = "cosine") {
+  # log all available information about tdm_matrix
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm_matrix dimensions:", dim(tdm_matrix)))
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm_matrix sparsity:", sum(tdm_matrix == 0) / prod(dim(tdm_matrix))))
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm_matrix max value:", max(tdm_matrix)))
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm_matrix min value:", min(tdm_matrix)))
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm_matrix NA values:", sum(is.na(tdm_matrix))))
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm_matrix infinite values:", sum(!is.finite(tdm_matrix))))
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm_matrix NaN values:", sum(is.nan(tdm_matrix))))
   distance_matrix <- as.matrix(dist(tdm_matrix, method))
   if (nrow(distance_matrix) == 0) {
     colnames(distance_matrix) <- labels(tdm_matrix)$Docs
+  }
+  vflog$info(distance_matrix)
+  # log min and max value of distance matrix
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "max distance:", max(distance_matrix)))
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "min distance:", min(distance_matrix)))
+  # log if any values are NA, infinite or NaN
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "NA values:", sum(is.na(distance_matrix))))
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "infinite values:", sum(!is.finite(distance_matrix))))
+  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "NaN values:", sum(is.nan(distance_matrix))))
+  if (is.na(distance_matrix)) {
+    vflog$warn("Distance matrix contains NA values, imputing with row means.")
+    distance_matrix[is.na(distance_matrix)] <- rowMeans(as.matrix(distance_matrix), na.rm = FALSE)
+  }
+  if (!is.finite(distance_matrix)) {
+    vflog$warn("Distance matrix contains infinite values, imputing with row means.")
+    distance_matrix[!is.finite(distance_matrix)] <- rowMeans(as.matrix(distance_matrix), na.rm = FALSE)
+  }
+  if (is.nan(distance_matrix)) {
+    vflog$warn("Distance matrix contains NaN values, imputing with row means.")
+    distance_matrix[is.nan(distance_matrix)] <- rowMeans(as.matrix(distance_matrix), na.rm = FALSE)
   }
   return(distance_matrix)
 }

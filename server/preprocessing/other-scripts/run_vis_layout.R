@@ -55,6 +55,12 @@ metadata <- fromJSON(input_data$metadata)
 
 MAX_CLUSTERS = params$MAX_CLUSTERS
 
+options(error = function() {
+  sink(stderr())
+  on.exit(sink(NULL))
+  traceback(3, max.lines = 1L)
+  tslog$error(paste(traceback(3, max.lines = 1L)), collapse="\n")
+})
 
 failed <- list(params=params)
 tryCatch({

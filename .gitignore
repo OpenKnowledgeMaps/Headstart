@@ -41,7 +41,9 @@ server/preprocessing/other-scripts/renv
 .Rhistory
 .Rprofile
 .Rproj*
+/*.Rproj
 .Rproj.user
+
 
 # python files
 *.pyc

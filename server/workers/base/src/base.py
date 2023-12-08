@@ -9,7 +9,7 @@ import re
 from redis.exceptions import LockError
 import time
 import numpy as np
-from .parsers import improved_df_parsing
+from parsers import improved_df_parsing
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
@@ -105,6 +105,10 @@ class BaseClient(RWrapper):
                     text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]]
                                                      .apply(lambda x: " ".join(x), axis=1)], axis=1)
                 text.columns = ["id", "content"]
+                # if text.content is a list, force it to be a string
+                text.content = text.content.map(lambda x: ", ".join(x) if isinstance(x, list) else x)
+                # clean up content, start with stripping whitespace
+                text.content = text.content.map(lambda x: x.strip())
                 input_data = {}
                 input_data["metadata"] = metadata.to_json(orient='records')
                 input_data["text"] = text.to_json(orient='records')
