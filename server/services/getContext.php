@@ -2,7 +2,6 @@
 
 header('Content-type: application/json');
 
-require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
 require_once dirname(__FILE__) . '/../classes/headstart/persistence/PostgresPersistence.php';
 require_once dirname(__FILE__) . '/../classes/headstart/persistence/DispatchingPersistence.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
@@ -19,10 +18,8 @@ $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 $revision_context =  isset($_GET["revision_context"]) ? library\CommUtils::getParameter($_GET, "revision_context") : false;
 
 $apiclient = new headstart\library\APIClient($ini_array);
-$sqlitePersistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 $postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient);
-$shiftReadPercentage = $ini_array["general"]["shift_read_percentage"];
-$persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersistence, $postgresPersistence, $shiftReadPercentage);
+$persistence = new \headstart\persistence\DispatchingPersistence($postgresPersistence);
 
 
 $data = $persistence->getContext($vis_id)[0];
