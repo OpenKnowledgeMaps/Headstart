@@ -101,8 +101,6 @@ get_papers <- function(query, params,
     } else {
       custom_clustering_query <- paste("dcsubject:", cc, "*", sep="")
       base_query <- paste(base_query, custom_clustering_query)
-      custom_clustering_query <- paste('"', cc, '"', sep="")
-      base_query <- paste(base_query, custom_clustering_query)
     }
   }
 

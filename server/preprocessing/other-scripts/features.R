@@ -7,8 +7,6 @@ TypeCountTokenizer <- function(x) {
 
 
 create_corpus <- function(metadata, text, stops) {
-  # log text example content
-  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "text example content:", text$content[1], collapse="\n"))
   docs <- data.frame(doc_id = text$id, text = text$content)
   corpus <- VCorpus(DataframeSource(docs))
 
@@ -32,15 +30,7 @@ create_corpus <- function(metadata, text, stops) {
 
 
 create_tdm_matrix <- function(corpus, sparsity=1) {
-  # log example content from the corpus object
-  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "corpus example content:", corpus[[1]]$content, collapse="\n"))
   tdm <- TermDocumentMatrix(corpus)
-  # log all available information about tdm
-  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm dimensions:", dim(tdm)))
-  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm sparsity:", sum(tdm == 0) / prod(dim(tdm))))
-  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm max value:", max(tdm)))
-  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm min value:", min(tdm)))
-  vflog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "tdm NA values:", sum(is.na(tdm))))
   if(sparsity < 1) {
     tdm <- removeSparseTerms(tdm, sparsity)
   }
