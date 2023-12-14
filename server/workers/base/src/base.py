@@ -11,11 +11,20 @@ from redis.exceptions import LockError
 import time
 import numpy as np
 
+from datetime import datetime
+import sys
+
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
 
 
 class BaseClient(RWrapper):
+    print('BaseClient starts')
+
+    logging.basicConfig(level=logging.INFO)
+    logging.info('BaseClient starts. This will be written in the logs.')
+
+    print("BaseClient starts. This will be written to stderr.", file=sys.stderr)
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -54,7 +63,7 @@ class BaseClient(RWrapper):
         BASE demands one request per second (1 QPS), per
         https://www.base-search.net/about/download/base_interface.pdf
         """
-        
+
         t = self.redis_store.time()[0]
         self.redis_store.setnx(self.rate_key, 0)
         try:
@@ -110,7 +119,17 @@ class BaseClient(RWrapper):
             raise
 
     def sanitize_metadata(self, metadata):
+        print('sanitize_metadata starts')
+
+        print('metadata', metadata)
         metadata["sanitized_authors"] = metadata["authors"].map(lambda x: sanitize_authors(x))
+
+        print('year_str', metadata.get("year"))
+        print('year_str', metadata["year"])
+        metadata["year"] = sanitize_year(metadata.get("year"))
+        # metadata["year"] = sanitize_year(metadata["year"])
+        # metadata["year"] = metadata["year"].map(lambda x: sanitize_year(x))
+
         return metadata
 
     def enrich_metadata(self, metadata):
@@ -154,7 +173,7 @@ class BaseClient(RWrapper):
                     res = self.execute_search(params)
                     res["id"] = k
                     if res.get("status") == "error" or params.get('raw') is True:
-                        self.redis_store.set(k+"_output", json.dumps(res))                        
+                        self.redis_store.set(k + "_output", json.dumps(res))
                     else:
                         self.redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
                         q_len = self.redis_store.llen("input_data")
@@ -183,7 +202,7 @@ def find_version_in_doi(doi):
         return int(m[0])
     else:
         return None
-    
+
 def extract_doi_suffix(doi):
     return doi.split("/")[4:]
 
@@ -236,7 +255,8 @@ def add_false_negatives(df):
     df.loc[df[(~df.is_duplicate) & (df.doi_duplicate)].index, "is_duplicate"] = True
     return df
 
-def find_duplicate_indexes(df):    
+
+def find_duplicate_indexes(df):
     dupind = df.id.map(lambda x: df[df.duplicates.str.contains(x)].index)
     tmp = pd.DataFrame(dupind).astype(str).drop_duplicates().index
     return dupind[tmp]
@@ -257,7 +277,8 @@ def mark_latest_doi(df, dupind):
                 df.loc[latest.index, "is_latest"] = True
                 df.loc[latest.index, "keep"] = True
     return df
-    
+
+
 def remove_textual_duplicates_from_different_sources(df, dupind):
     for _, idx in dupind.iteritems():
         if len(idx) > 1:
@@ -331,7 +352,8 @@ def parse_annotations(field):
         return annotations.to_dict("list")
     else:
         return {}
-    
+
+
 def parse_annotations_for_all(metadata, field_name):
     parsed_annotations = pd.DataFrame(metadata[field_name].map(lambda x: parse_annotations(x)))
     parsed_annotations.columns = ["annotations"]
@@ -344,7 +366,7 @@ def expand_dict_columns(df):
     unique_annotation_keys = set().union(*unique_annotation_keys.to_list())
     if len(unique_annotation_keys) > 0:
         for c in df.columns:
-            if type(df[c].iloc[0]) is dict:            
+            if type(df[c].iloc[0]) is dict:
                 for uk in unique_annotation_keys:
                     df[c+"_"+uk] = df[c].map(lambda x: x[uk] if uk in x.keys() else [])
                     df[c+"_"+uk] = df[c+"_"+uk].map(lambda x: [uk for uk in x if uk is not np.nan])
@@ -359,3 +381,30 @@ def sanitize_authors(authors, n=15):
     if len(authors) > n:
         authors = authors[:n-1] + authors[-1:]
     return "; ".join(authors)
+
+
+def sanitize_year(year_str):
+    logging.basicConfig(level=logging.INFO)
+    logging.info('This will be written in the logs 1.')
+
+    print("This will be written to stderr 1.", file=sys.stderr)
+
+    print('sanitize_year starts!!!')
+    print('year_str', year_str)
+
+    sanitized_year = ''
+    date_formats = ["%Y-%m-%d", "%Y-%m-%dT%H:%M:%SZ"]
+
+    for fmt in date_formats:
+        try:
+            date_time_obj = datetime.strptime(year_str, fmt)
+            sanitized_year = year_str  # here we keep the original string
+            break
+        except ValueError:
+            continue
+
+    # Handle formats like "2019"
+    if year_str.isdigit() and not sanitized_year:  # check sanitized_year to avoid overwriting
+        sanitized_year = year_str  # here we keep the original string
+
+    return sanitized_year
