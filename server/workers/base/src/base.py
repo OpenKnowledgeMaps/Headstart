@@ -19,12 +19,6 @@ formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
 
 
 class BaseClient(RWrapper):
-    print('BaseClient starts')
-
-    logging.basicConfig(level=logging.INFO)
-    logging.info('BaseClient starts. This will be written in the logs.')
-
-    print("BaseClient starts. This will be written to stderr.", file=sys.stderr)
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -119,16 +113,9 @@ class BaseClient(RWrapper):
             raise
 
     def sanitize_metadata(self, metadata):
-        print('sanitize_metadata starts')
 
-        print('metadata', metadata)
         metadata["sanitized_authors"] = metadata["authors"].map(lambda x: sanitize_authors(x))
-
-        print('year_str', metadata.get("year"))
-        print('year_str', metadata["year"])
-        metadata["year"] = sanitize_year(metadata.get("year"))
-        # metadata["year"] = sanitize_year(metadata["year"])
-        # metadata["year"] = metadata["year"].map(lambda x: sanitize_year(x))
+        metadata["year"] = metadata["year"].map(lambda x: sanitize_year(x))
 
         return metadata
 
@@ -384,13 +371,6 @@ def sanitize_authors(authors, n=15):
 
 
 def sanitize_year(year_str):
-    logging.basicConfig(level=logging.INFO)
-    logging.info('This will be written in the logs 1.')
-
-    print("This will be written to stderr 1.", file=sys.stderr)
-
-    print('sanitize_year starts!!!')
-    print('year_str', year_str)
 
     sanitized_year = ''
     date_formats = ["%Y-%m-%d", "%Y-%m-%dT%H:%M:%SZ"]
