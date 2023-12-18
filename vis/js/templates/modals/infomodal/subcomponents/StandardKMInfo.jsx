@@ -7,12 +7,28 @@ import { queryConcatenator } from "../../../../utils/data";
 import {unescapeHTML} from "../../../../utils/unescapeHTMLentities.js";
 
 
+const fieldmapper = {
+  relation: "relation",
+  identifier: "identifier",
+  title: "title",
+  paper_abstract: "abstract",
+  published_in: "publication source",
+  year: "publication date",
+  authors: "authors",
+  link: "link",
+  oa_state: "open access status",
+  resulttype: "result type",
+  language: "language",
+  content_provider: "content provider",
+  coverage: "coverage"
+}
+
 
 const StandardKMInfo = ({
   serviceName,
   serviceDesc,
   serviceLogo,
-                            params: {query, customTitle, repo_name, q_advanced, custom_clustering},
+                            params: {query, customTitle, sorting, repo_name, q_advanced, custom_clustering},
 }) => {
   let queryString = queryConcatenator([query, q_advanced])
 
@@ -28,19 +44,23 @@ const StandardKMInfo = ({
       <Modal.Body id="info-body">
         {(!!customTitle || !!query || !!q_advanced) && (
           <p>
-            This knowledge map presents you with a topical overview of research
+            This knowledge map presents you with {!!custom_clustering ? "an overview" : "a topical overview"} of research
             on{" "}
             <strong className="hs-strong">
               {customTitle ? customTitle : queryString}
             </strong>{" "}
             based on the 100{" "}
+            {(sorting === "most-relevant") ? (
             <a
               target="_blank"
               rel="noreferrer"
               href="https://openknowledgemaps.org/faq#faq-most-relevant"
             >
               most relevant
-            </a>{" "}
+            </a> ) : (
+            "most recent" )
+            }
+            {" "}
             documents matching your search query.
               {custom_clustering && (
                   <span>
@@ -89,9 +109,10 @@ const StandardKMInfo = ({
           {custom_clustering && (
               <p>
                   <strong className="hs-strong">Please note:</strong>
-                  {" "}For this knowledge map we use a custom clustering.
-                  Area titles are created from custom
-                  keywords and may behave slightly differently to regular knowledge maps described in our FAQs.
+                  {" "}For this knowledge map we do not use topical clustering 
+                  as described in our FAQs. In this knowledge map we use the keywords 
+                  available in the {custom_clustering in fieldmapper ? fieldmapper[custom_clustering]: "subject"} metadata field for the creation of the area titles.
+
               </p>
           )}
           {!custom_clustering && (
