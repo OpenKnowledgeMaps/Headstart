@@ -96,10 +96,16 @@ get_papers <- function(query, params,
   cc <- params$custom_clustering
   if (!is.null(cc)) {
     if (cc %in% names(fieldmapper)) {
+      # this is the generic case for existing metadata
       custom_clustering_query <- paste(fieldmapper[[cc]], ":", "*", sep="")
       base_query <- paste(base_query, custom_clustering_query)
     } else {
+      # this is the speciality case for custom clustering on annotations
       custom_clustering_query <- paste("dcsubject:", cc, "*", sep="")
+      base_query <- paste(base_query, custom_clustering_query)
+      custom_clustering_query <- paste('textus:', '"', cc, ':"', sep="")
+      base_query <- paste(base_query, custom_clustering_query)
+      custom_clustering_query <- paste(cc, ':*', sep="")
       base_query <- paste(base_query, custom_clustering_query)
     }
   }
@@ -129,6 +135,12 @@ get_papers <- function(query, params,
   
   req_limit <- 9
   r <- 0
+  # check if custom clustering annotation param is in metadata
+  if (!is.null(cc)) {
+    if (!(cc %in% names(fieldmapper))) {
+      has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
+      metadata <- metadata[has_custom_clustering_annotation,]
+  }}
   while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit) {
     offset <- offset+120
     res_raw <- get_raw_data(limit,
@@ -147,8 +159,20 @@ get_papers <- function(query, params,
     metadata <- sanitize_abstract(metadata)
     metadata <- mark_duplicates(metadata)
     metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
+    # check if custom clustering annotation param is in metadata
+    if (!is.null(cc)) {
+      if (!(cc %in% names(fieldmapper))) {
+        has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
+        metadata <- metadata[has_custom_clustering_annotation,]
+    }}
     r <- r+1
   }
+  # check if custom clustering annotation param is in metadata
+  if (!is.null(cc)) {
+    if (!(cc %in% names(fieldmapper))) {
+      has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
+      metadata <- metadata[has_custom_clustering_annotation,]
+  }}
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Deduplication retrieval requests:", r))
 
   metadata <- unique(metadata, by = "id")
