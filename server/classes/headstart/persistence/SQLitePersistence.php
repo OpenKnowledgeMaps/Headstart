@@ -2,7 +2,7 @@
 
 namespace headstart\persistence;
 
-// ToDo: Remove this file after cleunuping all references to it
+// ToDo: Remove this file after cleaning all references to it
 
 /**
  * Description of SQLitePersistence
