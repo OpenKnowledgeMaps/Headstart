@@ -11,15 +11,15 @@ const fieldmapper = {
   relation: "relation",
   identifier: "identifier",
   title: "title",
-  paper_abstract: "abstract",
-  published_in: "publication source",
-  year: "publication date",
-  authors: "authors",
+  paper_abstract: "description",
+  published_in: "publisher",
+  year: "date",
+  authors: "creator",
   link: "link",
-  oa_state: "open access status",
-  resulttype: "result type",
+  oa_state: "open access",
+  resulttype: "type",
   language: "language",
-  content_provider: "content provider",
+  content_provider: "provider",
   coverage: "coverage"
 }
 
