@@ -9,7 +9,7 @@ const StandardSGInfo = ({
   serviceName,
   serviceDesc,
   serviceLogo,
-  params: { query, customTitle, repo_name, q_advanced  },
+  params: { query, customTitle, sorting, repo_name, q_advanced  },
 }) => {
   let queryString = queryConcatenator([query, q_advanced])
   return (
@@ -29,7 +29,20 @@ const StandardSGInfo = ({
               </strong>
             </>
           )}{" "}
-          over time. It is based on the most relevant documents related to the
+          over time. It is based
+          on the{" "}
+          {(sorting === "most-relevant") ? (
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://openknowledgemaps.org/faq#faq-most-relevant"
+          >
+            most relevant
+          </a> ) : (
+          "most recent" )
+          }
+          {" "}
+          documents related to the
           main keywords. Up to 1000 documents have been taken into consideration
           for the computation of the streamgraph.
         </p>
