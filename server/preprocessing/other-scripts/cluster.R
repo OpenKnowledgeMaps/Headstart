@@ -79,15 +79,6 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
       groups <- cutree(cluster, k=num_clusters)
     }
 
-    # NEEDS FIX
-    # if(exists("DEBUG") && DEBUG == TRUE) {
-    #   # Plot result of clustering to PDF file
-    #   pdf("clustering.pdf", width=19, height=12)
-    #   plot(cluster, labels=metadata$title, cex=0.6)
-    #   rect.hclust(cluster, k=num_clusters, border="red")
-    #   dev.off()
-    # }
-
     vclog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Number of Clusters:", num_clusters, sep=" "))
     vclog$debug(paste("CutOff-Description:", attributes(cut_off)$description))
   }

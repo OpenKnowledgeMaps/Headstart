@@ -127,7 +127,7 @@ RUN locale-gen en_US.UTF-8 && \
 RUN apt update && apt full-upgrade -y && \
   apt install -y links curl vim libcurl4-openssl-dev \
                  libxml2-dev libz-dev libpoppler-cpp-dev \
-                 libopenmpi-dev libzmq3-dev \
+                 libopenmpi-dev libzmq3-dev build-essential python3-dev \
                  libssl1.1 libssl-dev && \
   apt clean && \
   rm -f /etc/localtime && \
@@ -140,8 +140,12 @@ RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
  R -e 'install.packages("remotes")' && \
  R -e 'install.packages("renv", version="0.14.0-5")'
 
+ENV PYTHONPATH="${PYTHONPATH}:/headstart/:/headstart/base/:/headstart/base/src/"
+
 WORKDIR /headstart
 COPY workers/base/requirements.txt .
+RUN pip3 install --no-cache-dir Cython
+RUN pip3 install --upgrade pip
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY workers/base/renv.lock .
