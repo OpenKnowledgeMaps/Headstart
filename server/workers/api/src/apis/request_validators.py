@@ -33,6 +33,7 @@ class SearchParamSchema(Schema):
     coll = fields.Str()
     list_size = fields.Int()
     custom_title = fields.Str()
+    custom_clustering = fields.Str()
 
 
     @pre_load
