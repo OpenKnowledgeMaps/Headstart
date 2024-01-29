@@ -51,14 +51,20 @@ prune_ngrams <- function(ngrams, stops){
 create_cluster_labels <- function(clusters, metadata,
                                   type_counts,
                                   weightingspec,
-                                  top_n, stops, taxonomy_separator="/") {
-  nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
+                                  top_n, stops, taxonomy_separator="/",
+                                  params=NULL) {
+  cc <- params$custom_clustering
+  if (!(is.null(cc)) && (cc %in% names(metadata))) {
+    nn_corpus <- get_custom_cluster_corpus(clusters, metadata, stops, taxonomy_separator, custom_clustering=cc)
+  } else {
+    nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
+  }
   nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
-                                      tokenize = SplitTokenizer,
-                                      weighting = function(x) weightSMART(x, spec="ntn"),
-                                      bounds = list(local = c(2, Inf)),
-                                      tolower = TRUE
-                                ))
+    tokenize = SplitTokenizer,
+    weighting = function(x) weightSMART(x, spec="ntn"),
+    bounds = list(local = c(2, Inf)),
+    tolower = TRUE
+  ))
   tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
   empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
   tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(nn_tfidf, nn_corpus)[c(empty_tfidf)]
@@ -90,6 +96,9 @@ create_cluster_labels <- function(clusters, metadata,
     }
     clusters$cluster_labels[c(matches)] = summary
   }
+  if (!(is.null(cc)) && (cc %in% names(metadata$annotations))) {
+    clusters$cluster_labels = metadata$annotations[[cc]]
+  }
   clusters$cluster_labels <- fix_cluster_labels(clusters$cluster_labels, type_counts)
   return(clusters)
 }
@@ -118,8 +127,33 @@ match_keyword_case <- function(x, type_counts) {
   if (!is.na(y)) return(y) else return(x)
 }
 
+get_custom_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
+                               add_title_ngrams = T, custom_clustering=NULL) {
+  subjectlist = list()
+  for (k in seq(1, clusters$num_clusters)) {
+    matches = which(unname(clusters$groups == k) == TRUE)
+    custom_input = metadata[[custom_clustering]][matches]
+    batch_size <- 1000
+    total_length <- length(stops)
+    for (i in seq(1, total_length, batch_size)) {
+      custom_input = lapply(custom_input, function(x) {removeWords(x, stops[i:min(i+batch_size -1, total_length)])})
+    }
+    custom_input = mapply(gsub, custom_input, pattern = "; ", replacement=";")
+    custom_input = mapply(gsub, custom_input, pattern=" ", replacement="_")
+
+    all_subjects = paste(custom_input, collapse=" ")
+    all_subjects <- str_replace_all(all_subjects, "\\?+_\\?+|\\?+|\\?+ ", "")
+    all_subjects <- str_replace_all(all_subjects, ";+", ";")
+    all_subjects <- str_replace_all(all_subjects, " ?; ?", ";")
+    all_subjects <- str_replace_all(all_subjects, " +", ";")
+    subjectlist = c(subjectlist, all_subjects)
+  }
+  nn_corpus <- VCorpus(VectorSource(subjectlist))
+  return(nn_corpus)
+}
+
 get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
-                               add_title_ngrams = T) {
+                               add_title_ngrams = T, custom_clustering=NULL) {
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
     matches = which(unname(clusters$groups == k) == TRUE)

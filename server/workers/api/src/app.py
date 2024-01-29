@@ -6,7 +6,6 @@ from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 import logging
 
-from apis.gsheets import gsheets_ns
 from apis.base import base_ns
 from apis.pubmed import pubmed_ns
 from apis.openaire import openaire_ns
@@ -68,7 +67,6 @@ app.wsgi_app = ReverseProxied(app.wsgi_app)
 CORS(app, expose_headers=["Content-Disposition", "Access-Control-Allow-Origin"])
 
 api = api_patches(app)
-api.add_namespace(gsheets_ns, path='/gsheets')
 api.add_namespace(base_ns, path='/base')
 api.add_namespace(pubmed_ns, path='/pubmed')
 api.add_namespace(openaire_ns, path='/openaire')

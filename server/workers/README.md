@@ -6,7 +6,7 @@
 Following backend component containers are currently in `workers`:
 
 * dataprocessing: Executing the machine learning and natural language processing
-* services: a Flask-based API, providing endpoints for each integrated data source (e.g. TRIPLE)
+* services: a Flask-based API, providing endpoints for each integrated data source
 
 Each comes with a docker file (ending on `.docker`), which is used for creating a container, and a source code folder.
 
@@ -63,11 +63,6 @@ Dataprocessing:
 Services:
 * In `server/workers/services/src/config` copy `example_settings.py` to `settings.py` and change the values for `ENV` (`development` or `production`) and `DEBUG` (`TRUE` or `FALSE`).
 * In `settings.py` you can also configure databases.
-
-GSheets Google API client authentication credentials::
-* In `server/workers/services/gsheets/` copy `example_gsheets.env` to `gsheets.env` and change the values if necessary.
-* In `server/workers/services/gsheets/` add a `credentials.json` for Google app authentication (ask your system admin if unsure).
-
 
 Secure Redis:
 * In `server/workers` copy `example_redis.conf` to `redis.conf` and replace "long_secure_password" with a long, secure password (Line 507 in redis.conf, parameter `requirepass`).
@@ -163,7 +158,7 @@ processing_backend = "api"
 2. navigate to folder of worker file, e.g. /workers/base: setwd("~/projects/OpenKnowledgeMaps/Headstart/server/workers/base")
 3. initiate renv with renv::activate()
 4. check if dependencies.R is up to date
-5. make any updates to packages as required, e.g. installing remotes::install_github('OpenKnowledgeMaps/rbace@triple-base-params', force=TRUE)
+5. make any updates to packages as required, e.g. installing remotes::install_github('OpenKnowledgeMaps/rbace', force=TRUE)
 6. update renv.lock file with renv::snapshot()
 7. review lock file
 8. if OK, commit lockfile
