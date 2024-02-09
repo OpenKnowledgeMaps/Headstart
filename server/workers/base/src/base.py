@@ -187,7 +187,7 @@ class BaseClient(RWrapper):
                     self.logger.error(e)
 
 pattern_doi = re.compile(r"\.v(\d)+$")
-pattern_annotations = re.compile(r'([A-Za-z]+:[\w ]+);?')
+pattern_annotations = re.compile(r"([A-Za-z]+:[\w'\- ]+);?")
 
 def find_version_in_doi(doi):
     m = pattern_doi.findall(doi)
