@@ -1,7 +1,6 @@
 <?php
 
 require dirname(__FILE__) . '/../classes/headstart/preprocessing/calculation/RCalculation.php';
-require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
 require_once dirname(__FILE__) . '/../classes/headstart/persistence/PostgresPersistence.php';
 require_once dirname(__FILE__) . '/../classes/headstart/persistence/DispatchingPersistence.php';
 require_once dirname(__FILE__) . '/../classes/headstart/preprocessing/Snapshot.php';
@@ -74,11 +73,8 @@ function search($service, $dirty_query
         ? (cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes))
         : ($dirty_query);
 
-//  $persistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
-    $sqlitePersistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
     $postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient);
-    $shiftReadPercentage = $ini_array["general"]["shift_read_percentage"];
-    $persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersistence, $postgresPersistence, $shiftReadPercentage);
+    $persistence = new \headstart\persistence\DispatchingPersistence($postgresPersistence);
 
     // todo: move back into own function once error handling is refactored
     if ($service == "openaire") {
