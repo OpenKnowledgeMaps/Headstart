@@ -3,7 +3,6 @@
 header('Content-type: application/json');
 
 require dirname(__FILE__) . '/../classes/headstart/preprocessing/calculation/RCalculation.php';
-require dirname(__FILE__) . '/../classes/headstart/persistence/SQLitePersistence.php';
 require dirname(__FILE__) . '/../classes/headstart/persistence/PostgresPersistence.php';
 require dirname(__FILE__) . '/../classes/headstart/persistence/DispatchingPersistence.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
@@ -15,11 +14,8 @@ use headstart\library;
 $INI_DIR = dirname(__FILE__) . "/../preprocessing/conf/";
 $ini_array = library\Toolkit::loadIni($INI_DIR);
 $apiclient = new \headstart\library\APIClient($ini_array);
-//$persistence = new headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
-$sqlitePersistence = new \headstart\persistence\SQLitePersistence($ini_array["connection"]["sqlite_db"]);
 $postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient);
-$shiftReadPercentage = $ini_array["general"]["shift_read_percentage"];
-$persistence = new \headstart\persistence\DispatchingPersistence($sqlitePersistence, $postgresPersistence, $shiftReadPercentage);
+$persistence = new \headstart\persistence\DispatchingPersistence($postgresPersistence);
 
 
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
