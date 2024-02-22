@@ -144,6 +144,8 @@ preprocess_data <- function(all_artifacts){
                                                                              else {
                                                                                return (x)}
                                                                               })) # removes ;dk;atira;pure;researchoutput;pubmedpublicationtype;D013486
+   # remove greater / smaller than signs
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("&gt|&lt", "", x)}))
   all_artifacts$paper_abstract <- unlist(lapply(all_artifacts$paper_abstract, function(x){gsub("\\n", " ", x)}))
   all_artifacts$doi <- unlist(lapply(all_artifacts$doi, function(x) {str_replace_all(x, "[\r\n\t]" , "")}))
   return (all_artifacts)
