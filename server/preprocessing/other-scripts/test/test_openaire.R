@@ -9,7 +9,7 @@ setwd(wd) #Don't forget to set your working directory
 
 # query: project acryonm
 # params: grant_id and funding_stream
-query <- "GRINDOOR" #args[2]
+query <- "openaire2020" #args[2]
 service <- "openaire"
 params <- NULL
 params_file <- "test/params_openaire.json"
@@ -71,4 +71,5 @@ if (!exists('output_json')) {
   output_json <- enrich_output_json(output_json)
 }
 
-print(output_json)
+#print(output_json)
+output <- fromJSON(output_json)

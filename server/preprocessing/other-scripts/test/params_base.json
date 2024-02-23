@@ -7,5 +7,5 @@
   "min_descsize": 300,
   "limit": 120,
   "list_size": 100,
-  "custom_clustering": "mesh"
+  "repo": "ftunivbern"
 }
