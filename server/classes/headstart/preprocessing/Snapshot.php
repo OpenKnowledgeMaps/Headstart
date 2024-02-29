@@ -10,22 +10,9 @@ class Snapshot
             "query" => $query,
             "file" => $id,
             "service_name" => $service_name,
-            "service" => $service
+            "service" => $service,
+            "vis_type" => $vis_type
         );
-        if ($service_name == "LinkedCat") {
-          $post_data["vis_type"] = $vis_type;
-          $post_data["service_name"] = "linkedcat";
-          }
-        if ($service == "linkedcat_authorview") {
-          $post_data["vis_mode"] = "authors";
-          $post_data["service"] = "linkedcat";
-          $post_data["service_name"] = "linkedcat";
-        }
-        if ($service == "linkedcat_browseview") {
-          $post_data["vis_mode"] = "browse";
-          $post_data["service"] = "linkedcat";
-          $post_data["service_name"] = "linkedcat";
-        }
         $url_postfix = http_build_query($post_data);
 
         $node_path = $ini_array["snapshot"]["node_path"];
@@ -44,6 +31,10 @@ class Snapshot
 
         $url = "{$host}{$snap_php}?{$url_postfix}";
         $this->cmd = "{$node_path} {$getsvg} \"{$url}\" {$storage}{$post_data['file']}.png {$nodemodules}";
+        // Use 2>&1 to redirect both standard output and standard error to the same file
+        $this->cmd .= ' 2>&1';
+        error_log("Snapshot command");
+        error_log($this->cmd);
     }
 
     public function takeSnapshot() {
@@ -51,7 +42,9 @@ class Snapshot
             pclose(popen("start /B ". $this->cmd, "r"));
         }
         else {
-            exec($this->cmd . " &");
+            $output = shell_exec($this->cmd . " &");
+            error_log("Snapshot output");
+            error_log($output);
         }
     }
 }
