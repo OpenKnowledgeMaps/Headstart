@@ -31,10 +31,6 @@ class Snapshot
 
         $url = "{$host}{$snap_php}?{$url_postfix}";
         $this->cmd = "{$node_path} {$getsvg} \"{$url}\" {$storage}{$post_data['file']}.png {$nodemodules}";
-        // Use 2>&1 to redirect both standard output and standard error to the same file
-        $this->cmd .= ' 2>&1';
-        error_log("Snapshot command");
-        error_log($this->cmd);
     }
 
     public function takeSnapshot() {
@@ -42,9 +38,7 @@ class Snapshot
             pclose(popen("start /B ". $this->cmd, "r"));
         }
         else {
-            $output = shell_exec($this->cmd . " &");
-            error_log("Snapshot output");
-            error_log($output);
+            exec($this->cmd . " &");
         }
     }
 }
