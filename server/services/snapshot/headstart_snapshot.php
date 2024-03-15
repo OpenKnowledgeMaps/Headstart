@@ -26,7 +26,6 @@
             } else {
                 data_config.options = options_<?php echo htmlspecialchars($_GET['service']); ?>.dropdowns;
             }
-            console.log(data_config);
         </script>
         <script type="text/javascript" src="../../../dist/headstart.js"></script>
         <link type="text/css" rel="stylesheet" href="../../../dist/headstart.css"></link>
