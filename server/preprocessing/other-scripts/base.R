@@ -97,11 +97,24 @@ get_papers <- function(query, params,
     non_public = FALSE
   }
 
+  cc <- params$custom_clustering
+  if (!is.null(cc)) {
+    if (cc %in% names(fieldmapper)) {
+      # this is the generic case for existing metadata
+      custom_clustering_query <- paste(fieldmapper[[cc]], ":", "*", sep="")
+      base_query <- paste(base_query, custom_clustering_query)
+    } else {
+      # this is the speciality case for custom clustering on annotations
+      custom_clustering_query <- paste("dcsubject:", cc, "*", sep="")
+      base_query <- paste(base_query, custom_clustering_query)
+      custom_clustering_query <- paste('textus:', '"', cc, ':"', sep="")
+      base_query <- paste(base_query, custom_clustering_query)
+      custom_clustering_query <- paste(cc, ':*', sep="")
+      base_query <- paste(base_query, custom_clustering_query)
+    }
+  }
+
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE query:", base_query))
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Sort by:", sortby_string))
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Min descsize:", min_descsize))
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Target:", repo))
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Collection:", coll))
 
   # execute search
   offset = 0
@@ -123,9 +136,15 @@ get_papers <- function(query, params,
   metadata <- sanitize_abstract(metadata)
   metadata <- mark_duplicates(metadata)
   metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
-  req_limit <- 9
   
+  req_limit <- 9
   r <- 0
+  # check if custom clustering annotation param is in metadata
+  if (!is.null(cc)) {
+    if (!(cc %in% names(fieldmapper))) {
+      has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
+      metadata <- metadata[has_custom_clustering_annotation,]
+  }}
   while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit) {
     offset <- offset+120
     res_raw <- get_raw_data(limit,
@@ -144,17 +163,28 @@ get_papers <- function(query, params,
     metadata <- sanitize_abstract(metadata)
     metadata <- mark_duplicates(metadata)
     metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
+    # check if custom clustering annotation param is in metadata
+    if (!is.null(cc)) {
+      if (!(cc %in% names(fieldmapper))) {
+        has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
+        metadata <- metadata[has_custom_clustering_annotation,]
+    }}
     r <- r+1
   }
+  # check if custom clustering annotation param is in metadata
+  if (!is.null(cc)) {
+    if (!(cc %in% names(fieldmapper))) {
+      has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
+      metadata <- metadata[has_custom_clustering_annotation,]
+  }}
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Deduplication retrieval requests:", r))
 
   metadata <- unique(metadata, by = "id")
-  text = data.frame(matrix(nrow=length(metadata$id)))
-  text$id = metadata$id
-  # Add all keywords, including classification to text
-  text$content = paste(metadata$title, metadata$paper_abstract,
-                       metadata$subject_orig, metadata$published_in, metadata$authors,
-                       sep=" ")
+  # Add all keywords, including classification to text content for clustering
+  text <- data.frame(id = metadata$id,
+                     content = paste(metadata$title, metadata$paper_abstract,
+                                     metadata$subject_orig, metadata$published_in, metadata$authors,
+                                     sep=" "))
 
 
   input_data=list("metadata" = metadata, "text"=text)
@@ -173,7 +203,7 @@ etl <- function(res, repo, non_public) {
   metadata$relation = check_metadata(res$dcrelation)
   metadata$identifier = check_metadata(res$dcidentifier)
   metadata$title = check_metadata(res$dctitle)
-  metadata$title = str_replace(metadata$title, " ...$", "")
+  metadata$title = gsub(" \\.\\.\\.$", "", metadata$title)
   metadata$paper_abstract = check_metadata(res$dcdescription)
   metadata$published_in = check_metadata(res$dcsource)
   metadata$year = check_metadata(res$dcdate)
@@ -231,13 +261,13 @@ etl <- function(res, repo, non_public) {
   metadata$url = metadata$id
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
-  metadata$dctype = check_metadata(res$dctype)
-  metadata$dctypenorm = check_metadata(res$dctypenorm)
+  metadata$type = check_metadata(res$dctype)
+  metadata$typenorm = check_metadata(res$dctypenorm)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
-  metadata$dclang = check_metadata(res$dclang)
-  metadata$dclanguage = check_metadata(res$dclanguage)
+  metadata$lang = check_metadata(res$dclang)
+  metadata$language = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)
-  metadata$dccoverage = check_metadata(res$dccoverage)
+  metadata$coverage = check_metadata(res$dccoverage)
   if(repo=="fttriple" && non_public==TRUE) {
     metadata$content_provider <- "GoTriple"
   }
@@ -341,4 +371,27 @@ dctypenorm_decoder <- list(
   "181"="Thesis: bachelor",
   "183"="Thesis: doctoral and postdoctoral",
   "182"="Thesis: master"
+)
+
+fieldmapper <- list(
+  "relation"="dcrelation",
+  "identifier"="identifier",
+  "title"="dctitle",
+  "paper_abstract"="dcdescription",
+  "published_in"="dcsource",
+  "year"="dcdate",
+  "subject"="dcsubject",
+  "authors"="dccreator",
+  "link"="dclink",
+  "oa_state"="dcoa",
+  "url"="dcdocid",
+  "relevance"="relevance",
+  "resulttype"="dctypenorm",
+  "type"="dctype",
+  "typenorm"="dctypenorm",
+  "doi"="doi",
+  "lang"="dclang",
+  "language"="dclanguage",
+  "content_provider"="dcprovider",
+  "coverage"="dccoverage"
 )

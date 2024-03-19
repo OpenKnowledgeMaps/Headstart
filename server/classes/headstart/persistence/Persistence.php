@@ -1,11 +1,6 @@
 <?php
 
 namespace headstart\persistence;
-/**
- * Description of Logger
- *
- * @author pkraker
- */
 
 /**
  * Interface Persistence

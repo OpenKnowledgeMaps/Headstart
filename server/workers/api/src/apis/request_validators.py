@@ -36,6 +36,7 @@ class SearchParamSchema(Schema):
     list_size = fields.Int()
     custom_title = fields.Str()
     exclude_date_filters = fields.Boolean()
+    custom_clustering = fields.Str()
 
 
     @pre_load

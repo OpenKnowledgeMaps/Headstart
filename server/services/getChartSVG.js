@@ -10,7 +10,7 @@ function timeout(ms) {
     const page = await browser.newPage();
     await page.setViewport({width: 1920, height: 1080})
     await page.goto(process.argv[2], {waitUntil: 'networkidle2'});
-    await timeout(2000)
+    await timeout(3000)
     await page.screenshot({path: process.argv[3], clip: { x: 0, y: 0, width: 1150, height: 1080 }});
     browser.close();
 

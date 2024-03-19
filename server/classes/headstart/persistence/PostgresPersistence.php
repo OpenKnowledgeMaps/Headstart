@@ -3,9 +3,12 @@
 namespace headstart\persistence;
 use headstart\library\APIClient;
 
+require_once 'Persistence.php';
+
 /**
  * This class implements the PersistenceInterface and provides methods to interact with the database.
  */
+
 class PostgresPersistence implements Persistence
 {
 

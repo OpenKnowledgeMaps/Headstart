@@ -14,7 +14,6 @@ class APIClient {
         $this->ini_array = $ini_array;
         $this->settings = $this->ini_array["general"];
         $this->database = $this->ini_array["connection"]["database"];
-        $this->WORKING_DIR = $this->ini_array["general"]["preprocessing_dir"] . $this->ini_array["output"]["output_dir"];
         $api_url = $this->ini_array["general"]["api_url"];
         $api_flavor = isset($this->ini_array["general"]["api_flavor"])
                                 ? ($this->ini_array["general"]["api_flavor"])

@@ -6,10 +6,10 @@ import logging
 from datetime import timedelta
 from common.r_wrapper import RWrapper
 import re
-from .parsers import improved_df_parsing
 from redis.exceptions import LockError
 import time
 import numpy as np
+from parsers import improved_df_parsing
 
 from datetime import datetime
 import sys
@@ -86,7 +86,6 @@ class BaseClient(RWrapper):
             output = [o for o in stdout.split('\n') if len(o) > 0]
             error = [o for o in stderr.split('\n') if len(o) > 0]
             raw_metadata = json.loads(output[-2])
-            raw_text = json.loads(output[-1])
             if isinstance(raw_metadata, dict) and raw_metadata.get('status') == "error":
                 res = raw_metadata
             else:
@@ -97,9 +96,22 @@ class BaseClient(RWrapper):
                 metadata = metadata.head(params.get('list_size'))
                 metadata.reset_index(inplace=True, drop=True)
                 metadata = self.enrich_metadata(metadata)
-                text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]]
-                                         .apply(lambda x: " ".join(x), axis=1)], axis=1)
+                custom_clustering = params.get("custom_clustering")
+                if "custom_clustering" in params.keys():
+                    if custom_clustering not in metadata.columns:
+                        text = pd.concat([metadata.id, metadata["annotations"].map(lambda x: x.get(custom_clustering, ""))], axis=1)
+                    elif custom_clustering in metadata.columns:
+                        text = pd.concat([metadata.id, metadata[custom_clustering]], axis=1)
+                    else:
+                        raise Exception("Custom clustering metadata not found.")
+                else:
+                    text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]]
+                                                     .apply(lambda x: " ".join(x), axis=1)], axis=1)
                 text.columns = ["id", "content"]
+                # if text.content is a list, force it to be a string
+                text.content = text.content.map(lambda x: ", ".join(x) if isinstance(x, list) else x)
+                # clean up content, start with stripping whitespace
+                text.content = text.content.map(lambda x: x.strip())
                 input_data = {}
                 input_data["metadata"] = metadata.to_json(orient='records')
                 input_data["text"] = text.to_json(orient='records')
@@ -181,7 +193,7 @@ class BaseClient(RWrapper):
                     self.logger.error(e)
 
 pattern_doi = re.compile(r"\.v(\d)+$")
-pattern_annotations = re.compile(r'([A-Za-z]+:[\w ]+);?')
+pattern_annotations = re.compile(r"([A-Za-z]+:[\w'\- ]+);?")
 
 def find_version_in_doi(doi):
     m = pattern_doi.findall(doi)
@@ -318,7 +330,7 @@ def filter_duplicates(df):
     df = remove_textual_duplicates_from_different_sources(df, dupind)
     df = add_false_negatives(df)
     df = mark_latest_doi(df, dupind)
-    pure_datasets = df[df.dctypenorm == "7"]
+    pure_datasets = df[df.typenorm == "7"]
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
     non_datasets = prioritize_OA_and_latest(non_datasets, dupind)
     pure_datasets = mark_latest_doi(pure_datasets, dupind)
@@ -333,10 +345,15 @@ def filter_duplicates(df):
 
 def parse_annotations(field):
     if type(field) is str:
-        matches = pattern_annotations.findall(field)
-        matches = [{m.split(":")[0]: m.split(":")[1]} for m in matches]
-        annotations = pd.DataFrame(matches)
-        return annotations.to_dict("list")
+        try:
+            # keep only first annotation of each type
+            matches = pattern_annotations.findall(field)
+            matches = [{m.split(":")[0]: m.split(":")[1]} for m in matches]
+            annotations = pd.DataFrame(matches)
+            annotations = annotations.fillna(method="backfill").head(1).T[0]
+            return annotations.to_dict()
+        except Exception as e:
+            return {}
     else:
         return {}
 
@@ -344,20 +361,8 @@ def parse_annotations(field):
 def parse_annotations_for_all(metadata, field_name):
     parsed_annotations = pd.DataFrame(metadata[field_name].map(lambda x: parse_annotations(x)))
     parsed_annotations.columns = ["annotations"]
-    expanded_annotations = expand_dict_columns(parsed_annotations)
-    return expanded_annotations
+    return parsed_annotations
 
-# convert DataFrame with dict columns to DataFrame with columns for each dict key
-def expand_dict_columns(df):
-    unique_annotation_keys = df.annotations.map(lambda x: set(x.keys()))
-    unique_annotation_keys = set().union(*unique_annotation_keys.to_list())
-    if len(unique_annotation_keys) > 0:
-        for c in df.columns:
-            if type(df[c].iloc[0]) is dict:
-                for uk in unique_annotation_keys:
-                    df[c+"_"+uk] = df[c].map(lambda x: x[uk] if uk in x.keys() else [])
-                    df[c+"_"+uk] = df[c+"_"+uk].map(lambda x: [uk for uk in x if uk is not np.nan])
-    return df
 
 def clean_up_annotations(df, field):
     df[field] = df[field].map(lambda x: pattern_annotations.sub("", x).strip())

@@ -14,7 +14,7 @@ const PubMedInfo = ({ params, isStreamgraph }) => {
       serviceName="PubMed"
       serviceDesc={
         <>
-          PubMed comprises more than 26 million citations for biomedical
+          PubMed comprises more than 35 million citations for biomedical
           literature from MEDLINE, life science journals, and online books. For
           more information please{" "}
           <a
