@@ -378,7 +378,7 @@ def sanitize_authors(authors, n=15):
 def sanitize_year(year_str):
 
     sanitized_year = ''
-    date_formats = ["%Y-%m-%d", "%Y-%m-%dT%H:%M:%SZ"]
+    date_formats = ["%Y-%m-%d", "%Y-%m", "%Y-%m-%dT%H:%M:%SZ"]
 
     for fmt in date_formats:
         try:
