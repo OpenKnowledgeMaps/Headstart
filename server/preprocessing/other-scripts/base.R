@@ -66,8 +66,14 @@ get_papers <- function(query, params,
     base_query <- paste(document_types, collapse=" ")
   }
 
-  if (!is.null(params$exclude_date_filters) && (params$exclude_date_filters == TRUE ||
-                                                params$exclude_date_filters == "true")) {
+  if (!is.null(params$vis_type) && params$vis_type == "timeline") {
+    if (!is.null(params$exclude_date_filters)) {
+      params$exclude_date_filters <- NULL
+    }
+  }
+
+  if (!is.null(params$exclude_date_filters)
+      && (params$exclude_date_filters == TRUE || params$exclude_date_filters == "true")) {
   } else {
     date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
     base_query <- paste(date_string, base_query)
