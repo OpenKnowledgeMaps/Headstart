@@ -80,18 +80,18 @@ class Dataprocessing(object):
                 self.redis_store.ping()
                 self.tunnel_open = True
             except (RedisError, ConnectionRefusedError):
-                time.sleep(600)
+                self.logger.info("SSH tunnel still closed, retrying again in 30 seconds.")
+                time.sleep(30)
         while self.tunnel_open:
             try:
                 k, params, input_data = self.next_item()
+                self.logger.debug(k)
+                self.logger.debug(params)
             except (RedisError, ConnectionRefusedError):
                 self.tunnel_open = False
-            self.logger.debug(k)
-            self.logger.debug(params)
+                self.logger.error("Could not connect to remote Redis server, is the SSH tunnel open?")
             try:
                 if params.get('vis_type') == "timeline":
-                    # the step of create_map can be dropped once deduplication is possible in API backend as well
-                    # TODO: create deduplicate endpoint in service worker and connect to that
                     metadata = self.execute_search(params, input_data)
                     sg_data = sg.get_streamgraph_data(json.loads(metadata),
                                                     params.get('q'),

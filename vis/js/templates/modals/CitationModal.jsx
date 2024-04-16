@@ -10,6 +10,8 @@ import { getDateFromTimestamp } from "../../utils/dates";
 import { formatString, removeEmbedParam } from "../../utils/string";
 import CopyButton from "../CopyButton";
 import useMatomo from "../../utils/useMatomo";
+import { queryConcatenator } from "../../utils/data";
+import {unescapeHTML} from "../../utils/unescapeHTMLentities.js";
 
 const CitationModal = ({
   open,
@@ -18,6 +20,8 @@ const CitationModal = ({
   query,
   customTitle,
   timestamp,
+  q_advanced,
+                         titleStyle,
 }) => {
   const loc = useLocalizationContext();
   const { trackEvent } = useMatomo();
@@ -30,12 +34,12 @@ const CitationModal = ({
     );
   };
 
-  let customQuery = query;
+  let customQuery = queryConcatenator([query, q_advanced]);
   if (customQuery.length > 100) {
     customQuery = customQuery.substr(0, 100) + "[..]";
   }
   if (customTitle) {
-    customQuery = customTitle;
+    customQuery = unescapeHTML(customTitle);
   }
 
   const date = getDateFromTimestamp(timestamp);
@@ -86,8 +90,10 @@ const mapStateToProps = (state) => ({
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   query: state.query.text,
   customTitle:
-    state.heading.titleStyle === "custom" ? state.heading.customTitle : null,
+      state.heading.titleStyle === "custom" ? state.heading.customTitle : null,
   timestamp: state.misc.timestamp,
+  q_advanced: state.q_advanced.text,
+  titleStyle: state.heading.titleStyle
 });
 
 const mapDispatchToProps = (dispatch) => ({

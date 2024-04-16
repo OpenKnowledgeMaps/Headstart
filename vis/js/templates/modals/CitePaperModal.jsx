@@ -11,7 +11,7 @@ import useCitationStyle, {
 import CopyButton from "../CopyButton";
 import useMatomo from "../../utils/useMatomo";
 
-const CitePaperModal = ({ open, onClose, paper }) => {
+const CitePaperModal = ({ open, onClose, paper, service }) => {
   const loc = useLocalizationContext();
   const { trackEvent } = useMatomo();
   const [currentStyle, setStyle, getCitation] = useCitationStyle();
@@ -25,6 +25,9 @@ const CitePaperModal = ({ open, onClose, paper }) => {
   };
 
   const citationText = paper ? getCitation(paper) : "";
+
+  const showLowQualityWarning =
+    service === "base" && paper && paper.published_in === paper.source;
 
   return (
     // html template starts here
@@ -62,6 +65,12 @@ const CitePaperModal = ({ open, onClose, paper }) => {
           textContent={citationText}
           onClick={trackCopyClick}
         />
+        {showLowQualityWarning && (
+          <p className="citation-warning">
+            <strong className="hs-strong">{loc.please_note}: </strong>
+            {loc.citation_warning}
+          </p>
+        )}
       </Modal.Body>
     </Modal>
     // html template ends here
@@ -71,6 +80,7 @@ const CitePaperModal = ({ open, onClose, paper }) => {
 const mapStateToProps = (state) => ({
   open: state.modals.citedPaper !== null,
   paper: state.modals.citedPaper,
+  service: state.service,
 });
 
 const mapDispatchToProps = (dispatch) => ({

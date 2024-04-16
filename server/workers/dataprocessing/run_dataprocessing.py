@@ -1,5 +1,4 @@
 import os
-import json
 import redis
 from dataprocessing.src.headstart import Dataprocessing
 

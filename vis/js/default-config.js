@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 var config = {
-    
+
 /*** basic visualization modes ***/
     //show list
     render_list: true,
@@ -14,18 +14,18 @@ var config = {
     content_based: false,
     //show streamgraph instead of map
     is_streamgraph: false,
-    //tag that headstart is appended to 
+    //tag that headstart is appended to
     tag: "visualization",
-       
-/*** basic map dimensions for the canvas (in pixels) ***/  
+
+/*** basic map dimensions for the canvas (in pixels) ***/
     //minimum height
     min_height: 600,
     //minimum width
     min_width: 600,
     //maximum height
     max_height: 1000,
-    
-/*** reference sizes for the map, bubbles and papers (in pixels) ***/    
+
+/*** reference sizes for the map, bubbles and papers (in pixels) ***/
     // map reference size
     reference_size: 650,
     //max paper size
@@ -36,45 +36,45 @@ var config = {
     max_area_size: 110,
     //min bubble size
     min_area_size: 50,
-    
-/*** adapt min and max sizes for bubbles and papers (1 = reference size) ***/    
+
+/*** adapt min and max sizes for bubbles and papers (1 = reference size) ***/
     bubble_min_scale: 1,
     bubble_max_scale: 1,
     paper_min_scale: 1,
     paper_max_scale: 1,
     //enables a mode for dynamic sizing based on the number of papers (for n > 150)
     dynamic_sizing: false,
-    
-/*** paper ratios ***/    
+
+/*** paper ratios ***/
     // dogear height and width in relationship to paper height and widht
     dogear_width: 0.1,
     dogear_height: 0.1,
     //paper width and height ratios (currently at the golden cut)
     paper_width_factor: 1.2,
     paper_height_factor: 1.6,
-    
+
 /*** basic list sizes (in pixels) ***/
     //currently set inline - should be moved to config
-    
+
 /*** force-directed layout settings ***/
     //enable force-directed layout for bubbles
     is_force_areas: false,
     //alpha for force-directed layout for bubbles
     area_force_alpha: 0.02,
-    
+
     //enable force-directed layout for papers
     is_force_papers: true,
     //alpha for force-directed layout for papers
     papers_force_alpha: 0.1,
-    
+
     //enables a mode for dynamic alpha setting for force-directed layouts
     dynamic_force_area: false,
     dynamic_force_papers: false,
-    
- /*** zoom settings ***/    
+
+ /*** zoom settings ***/
     //correction factor for zoomed in bubble size
     zoom_factor: 0.9,
-    
+
 /*** basic data- and third-party-service related settings ***/
     //mode for retrieving data
     mode: "local_files",
@@ -126,7 +126,7 @@ var config = {
     show_context_oa_number: true,
     //show timestamp in the context line
     show_context_timestamp: false,
-    
+
 /*** list behaviour ***/
     //show list onload (can be shown on click)
     show_list: false,
@@ -148,7 +148,7 @@ var config = {
     filter_field: null,
     //initial field used for sorting
     initial_sort: null,
-    
+
     highlight_query_terms: false,
     highlight_query_fields: ["title"
                                 , "authors_string"
@@ -163,7 +163,7 @@ var config = {
     list_images_path: "images/",
     visual_distributions: false,
     external_vis_url: "",
-    
+
 /*** button/modal settings ***/
     //show embed modal button
     embed_modal: false,
@@ -179,6 +179,8 @@ var config = {
     show_cite_button: false,
     // show citation button for each paper
     cite_papers: false,
+    // list of document types where the citation button is hidden
+    no_citation_doctypes: [],
     // show export button for each paper
     export_papers: false,
     // show twitter sharing button
@@ -190,7 +192,7 @@ var config = {
     //streamgraph color definition
     streamgraph_colors: ["#28a2a3", "#671A54", "#CC3380", "#7acca3", "#c999ff", "#ffe199"
         , "#ccfff2", "#99DFFF", "#FF99AA", "#c5d5cf", "#FFBD99", "#2856A3"],
-    
+
     user_id: 0,
     max_documents: 100,
     //service names
@@ -215,10 +217,10 @@ var config = {
             authors: "authors",
             title: "title",
             default_title: 'Overview of <span id="num_articles"></span> documents',
-            overview_label: 'Overview of',
-            streamgraph_label: 'Streamgraph for',
-            overview_authors_label: 'Overview of the works of',
-            streamgraph_authors_label: 'Streamgraph for the works of',
+            overview_label: 'Knowledge Map of',
+            streamgraph_label: 'Streamgraph of',
+            overview_authors_label: 'Knowledge Map of the works of',
+            streamgraph_authors_label: 'Streamgraph of the works of',
             custom_title_explanation: 'This is a custom title. Please see the info button for more information. Original query:',
             articles_label: 'documents',
             most_recent_label: 'most recent',
@@ -279,6 +281,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         ger: {
             loading: "Wird geladen...",
@@ -353,6 +357,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         ger_linkedcat: {
            loading: "Wird geladen...",
@@ -430,6 +436,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         eng_plos: {
             loading: "Loading...",
@@ -451,7 +459,7 @@ var config = {
             no_keywords: "not available",
             not_available: "not available",
             no_title: "No title",
-            overview_label: 'Overview of',
+            overview_label: 'Knowledge Map of',
             custom_title_explanation: 'This is a custom title. Please see the info button for more information. Original query:',
             articles_label: 'documents',
             most_recent_label: 'most recent',
@@ -498,6 +506,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         eng_pubmed: {
             loading: "Loading knowledge map.",
@@ -521,10 +531,10 @@ var config = {
             no_keywords: "not available",
             not_available: "not available",
             no_title: "No title",
-            overview_label: 'Overview of',
-            streamgraph_label: 'Streamgraph for',
+            overview_label: 'Knowledge Map of',
+            streamgraph_label: 'Streamgraph of',
             overview_authors_label: 'Overview of the works of',
-            streamgraph_authors_label: 'Streamgraph for the works of',
+            streamgraph_authors_label: 'Streamgraph of the works of',
             custom_title_explanation: 'This is a custom title. Please see the info button for more information. Original query:',
             articles_label: 'documents',
             most_recent_label: 'most recent',
@@ -567,7 +577,7 @@ var config = {
             embed_body_text: 'You can use this code to embed the visualization on your own website or in a dashboard.',
             high_metadata_quality: "Data quality",
             high_metadata_quality_desc_base: "This visualization only includes documents with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
-            high_metadata_quality_desc_pubmed: "This visualization only includes documents with an abstract. High metadata quality significantly improves the quality of your visualization.", 
+            high_metadata_quality_desc_pubmed: "This visualization only includes documents with an abstract. High metadata quality significantly improves the quality of your visualization.",
             low_metadata_quality: "Data quality",
             low_metadata_quality_desc_base: "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
             low_metadata_quality_desc_pubmed: "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
@@ -587,13 +597,16 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
+            time_frame_context_sg: "Please note that we remove time intervals with only a few associated papers during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
         },
         eng_openaire: {
             loading: "Loading...",
             search_placeholder: "Search within visualization...",
             show_list: "Show list",
             hide_list: "Hide list",
-            intro_label: "More info",
+            intro_label: "More information",
             relevance: "relevance",
             readers: "readers",
             tweets: "tweets",
@@ -610,7 +623,7 @@ var config = {
             no_keywords: "not available",
             not_available: "not available",
             no_title: "No title",
-            overview_label: 'Overview of',
+            overview_label: 'Knowledge Map of',
             articles_label: 'documents',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
@@ -682,6 +695,9 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
+            faqs_url: "https://openknowledgemaps.org/faq",
         },
          ger_cris: {
             loading: "Wird geladen...",
@@ -749,6 +765,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         ger_cris_2: {
             loading: "Wird geladen...",
@@ -816,6 +834,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         eng_cris_2: {
            loading: "Loading...",
@@ -830,7 +850,7 @@ var config = {
             authors: "authors",
             title: "alphabetically",
             default_title: 'Overview of <span id="num_articles"></span> documents',
-            overview_label: 'Overview of',
+            overview_label: 'Knowledge Map of',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
             articles_label: 'documents',
@@ -887,6 +907,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         eng_gsheets: {
             loading: "Updating and retrieving map. This may take a few seconds, please hold on.",
@@ -910,10 +932,10 @@ var config = {
             no_keywords: "not available",
             not_available: "not available",
             no_title: "No title",
-            overview_label: 'Overview of',
-            streamgraph_label: 'Streamgraph for',
+            overview_label: 'Knowledge Map of',
+            streamgraph_label: 'Streamgraph of',
             overview_authors_label: 'Overview of the works of',
-            streamgraph_authors_label: 'Streamgraph for the works of',
+            streamgraph_authors_label: 'Streamgraph of the works of',
             articles_label: 'resources',
             most_recent_label: 'most recent',
             most_relevant_label: 'most relevant',
@@ -974,6 +996,8 @@ var config = {
             cite_paper: "Cite this document as",
             export_paper: "Export this document",
             download: "Download",
+            please_note: "Please note",
+            citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
     },
 

@@ -14,7 +14,6 @@ include 'config.php';
         
         <link type="text/css" rel="stylesheet" href="./lib/bootstrap.min.css">
         <script src="https://code.jquery.com/jquery-2.1.4.min.js" integrity="sha256-8WqyJLuWKRBVhxXIL1jBDD7SDxU936oZkCnxQbWwJVw=" crossorigin="anonymous"></script>
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="./lib/font-awesome.min.css" >
         <link type="text/css" rel="stylesheet" href="./css/options.css">
         <link type="text/css" rel="stylesheet" href="./css/openaire.css">

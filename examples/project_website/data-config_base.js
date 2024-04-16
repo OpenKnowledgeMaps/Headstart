@@ -49,4 +49,6 @@ var data_config = {
 
   show_twitter_button: true,
   show_email_button: true,
+
+  cite_papers: true,
 };

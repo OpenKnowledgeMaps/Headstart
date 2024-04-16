@@ -2,7 +2,7 @@
 header('Content-type: application/json');
 
 require dirname(__FILE__) . '/../classes/headstart/persistence/ViperUpdater.php';
-require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
+require_once dirname(__FILE__) . '/../classes/headstart/library/Toolkit.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 
 use headstart\library;

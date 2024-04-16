@@ -1,0 +1,24 @@
+# Use the official PHP image with Apache as the base image
+FROM php:8.0-apache
+
+RUN a2enmod rewrite
+RUN apt-get update && apt-get install -y curl libsqlite3-dev php7.4-sqlite libonig-dev libxml2-dev libcurl4-openssl-dev
+RUN docker-php-ext-install pdo pdo_sqlite mbstring xml fileinfo curl
+
+RUN mkdir -p /var/www/localstorage
+COPY test_data/test.sqlite /var/www/localstorage/local.sqlite
+RUN chown -R www-data:www-data /var/www/localstorage
+
+ENV APACHE_DOCUMENT_ROOT /var/www/html
+
+# Configure Apache to use the new document root
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+
+# Enable Apache's configuration
+RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+
+# Expose port 80 for Apache
+EXPOSE 80
+
+# Start Apache in the foreground when the container runs
+CMD ["apache2-foreground"]

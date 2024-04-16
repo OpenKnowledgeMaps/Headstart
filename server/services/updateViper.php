@@ -2,7 +2,7 @@
 
 require 'search.php';
 require_once dirname(__FILE__) . '/../classes/headstart/persistence/ViperUpdater.php';
-require_once dirname(__FILE__) . '/../classes/headstart/library/toolkit.php';
+require_once dirname(__FILE__) . '/../classes/headstart/library/Toolkit.php';
 use headstart\library;
 use headstart\persistence;
 use headstart\search;

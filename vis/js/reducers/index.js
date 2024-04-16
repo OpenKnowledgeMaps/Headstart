@@ -28,6 +28,8 @@ import timespan from "./timespan";
 import toolbar from "./toolbar";
 import tracking from "./tracking";
 import zoom from "./zoom";
+import q_advanced from "./q_advanced";
+import modalInfoType from "./modalInfoType";
 
 export default combineReducers({
   animation,
@@ -55,6 +57,8 @@ export default combineReducers({
   toolbar,
   tracking,
   zoom,
+  q_advanced,
+  modalInfoType,
 });
 
 export const getInitialState = (config) => {
@@ -73,5 +77,6 @@ export const getInitialState = (config) => {
       timestamp: config.timestamp,
       visTag: config.tag,
     },
+    modalInfoType: config.modal_info_type,
   };
 };

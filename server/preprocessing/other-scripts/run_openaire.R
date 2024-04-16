@@ -40,7 +40,7 @@ if (!is.null(params$lang_id)) {
 } else {
   lang_id <- 'all'
 }
-source('altmetrics.R')
+
 source('openaire.R')
 limit = params$limit
 
@@ -53,5 +53,11 @@ tryCatch({
   failed$query_reason <<- err$message
 })
 
-print(toJSON(input_data$metadata))
-print(toJSON(input_data$text))
+if (exists('input_data')) {
+  print(toJSON(input_data$metadata))
+  print(toJSON(input_data$text))
+} else {
+  output_json <- detect_error(failed, service, params)
+  print(output_json)
+  print(output_json)
+}

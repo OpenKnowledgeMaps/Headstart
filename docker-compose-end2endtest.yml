@@ -1,0 +1,105 @@
+# docker-compose-end2endtest.yml
+
+version: '3.7'
+services:
+
+  end2endtest:
+    build:
+      context: ./server/workers/tests
+      dockerfile: ./Dockerfile_tests
+    container_name: end2endtest
+    hostname: "end2endtest"
+    environment:
+      POSTGRES_USER: "testuser"
+      POSTGRES_PASSWORD: "testpassword"
+      POSTGRES_HOST: "test_db"
+      POSTGRES_PORT: 5432
+      DEFAULT_DATABASE: "testdb"
+      SERVICE_VERSION: "test_version"
+    ports:
+      - "0.0.0.0:5000:5000"
+    volumes:
+      - ./server/:/app
+    depends_on:
+      - db
+      - backend
+    restart: "no"
+    entrypoint: ["pytest", '/app/workers/tests/test_end2end.py', '-s', '-rfA']
+    networks:
+      - test
+
+  backend:
+    container_name: backend
+    hostname: "backend"
+    build:
+      context: ./server/workers/tests
+      dockerfile: ./Dockerfile_backend
+    volumes:
+      - ./server/:/var/www/html/server
+      - ./server/workers/tests/test_data/test.sqlite:/var/www/localstorage/test.sqlite
+    restart: "no"
+    networks:
+      - test
+    ports:
+      - "80:80"
+
+  api:
+    build:
+      context: server
+      dockerfile: workers/api/Dockerfile
+    restart: unless-stopped
+    environment:
+      SERVICE_VERSION: "test"
+      BEHIND_PROXY: "false"
+      DEFAULT_DATABASE: "testdb"
+      FLASK_ENV: "development"
+    volumes:
+      - ./server/workers/tests/mock_app.py:/app/mock_app.py
+    command: ["python", "mock_app.py"]
+    networks: 
+      - test
+
+  persistence:
+    container_name: api
+    hostname: "test_api"
+    build:
+      context: server
+      dockerfile: workers/persistence/Dockerfile
+    restart: "no"
+    environment:
+      SERVICE_VERSION: "test"
+      BEHIND_PROXY: "false"
+      DEFAULT_DATABASE: "testdb"
+      FLASK_ENV: "development"
+    volumes:
+      - ./server/workers/tests/mock_app.py:/app/mock_app.py
+    command: ["python", "mock_app.py"]
+    networks:
+      - test
+
+  db:
+    container_name: test_db
+    image: 'postgres:12.2-alpine'
+    restart: "no"
+    hostname: "db_server"
+    environment:
+      POSTGRES_USER: "testuser"
+      POSTGRES_PASSWORD: "testpassword"
+      POSTGRES_HOST: "db_server"
+      POSTGRES_PORT: 5432
+      DEFAULT_DATABASE: "testdb"
+    command: postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
+    volumes:
+      # - db_data:/var/lib/postgresql/data
+      - ./server/workers/tests/test_data/pg_hba_test_local.conf:/etc/pg_hba.conf
+      - ./server/workers/tests/test_data/postgresql_test_local.conf:/etc/postgresql.conf
+    ports:
+      - "5432:5432"
+    networks:
+      - test
+
+volumes:
+  db_data:
+
+networks:
+  test:

@@ -54,7 +54,7 @@ class Search(Resource):
             del params["optradio"]
         errors = search_param_schema.validate(params, partial=True)
         params["limit"] = 100
-        params["list_size"] = -1
+        params["list_size"] = 100
         pubmed_ns.logger.debug(errors)
         if errors:
             abort(400, str(errors))
@@ -63,6 +63,8 @@ class Search(Resource):
              "endpoint": "search"}
         pubmed_ns.logger.debug(d)
         redis_store.rpush("pubmed", json.dumps(d))
+        q_len = redis_store.llen("pubmed")
+        pubmed_ns.logger.debug("Queue length: %s %d %s" %("pubmed", q_len, k))
         result = get_key(redis_store, k)
         try:
             headers = {}

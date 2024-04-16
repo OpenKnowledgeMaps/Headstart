@@ -1,3 +1,4 @@
+import { isNonTextDocument } from "../templates/Paper";
 import { stringCompare } from "./string";
 
 /**
@@ -108,12 +109,19 @@ const getWordFilterFunction = (searchedKeywords) => {
       getPropertyOrEmptyString(paper, prop)
     );
 
+    const isNonText = isNonTextDocument(paper);
+
     if (paper.oa) {
       paperKeywords.push("open access");
-      paperKeywords.push("pdf");
+      if (!isNonText) {
+        paperKeywords.push("pdf");
+      }
     }
     if (paper.free_access) {
       paperKeywords.push("free access");
+    }
+    if (isNonText) {
+      paperKeywords.push("file");
     }
 
     const paperString = paperKeywords.join(" ");
@@ -526,3 +534,11 @@ export const commentsSanitizer = (value) => {
 
   return value.filter(commentValidator);
 };
+
+export const queryConcatenator = (terms) => {
+  let filtered_terms = terms.filter(element => {
+    return element !== '' && element !== null;
+  });
+  let concatenatedQueries = filtered_terms.join(" and ");
+  return concatenatedQueries
+}

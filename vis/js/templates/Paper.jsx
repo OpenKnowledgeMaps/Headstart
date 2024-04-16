@@ -19,14 +19,15 @@ class Paper extends React.Component {
     this.animatePaper = this.animatePaper.bind(this);
     this.isZoomingIn = this.isZoomingIn.bind(this);
     this.isZoomingOut = this.isZoomingOut.bind(this);
-    this.isDataset = this.isDataset.bind(this);
+    this.hasRoundedDesign = this.hasRoundedDesign.bind(this);
+    this.getPath = this.getPath.bind(this);
 
     this.isAnimatedOnMount = this.isAnimated();
 
     const { x, y, width, height } = this.getCoordinatesAndDimensions(
       this.isAnimatedOnMount
     );
-    const path = getPath({ x, y, width, height }, this.isDataset());
+    const path = this.getPath({ x, y, width, height });
     const dogEar = getDogEar({ x, y, width, height });
     this.state = { x, y, width, height, path, dogEar };
 
@@ -68,7 +69,7 @@ class Paper extends React.Component {
         width: newWidth,
         height: newHeight,
       };
-      const path = getPath(newCoords, this.isDataset());
+      const path = this.getPath(newCoords);
       const dogEar = getDogEar(newCoords);
 
       this.setState({ ...this.state, ...newCoords, path, dogEar });
@@ -81,7 +82,7 @@ class Paper extends React.Component {
       pathEl.interrupt();
     }
 
-    if (!this.isDataset()) {
+    if (!this.hasRoundedDesign()) {
       const dogearEl = select(this.dogearRef.current);
       if (dogearEl.interrupt) {
         dogearEl.interrupt();
@@ -99,7 +100,7 @@ class Paper extends React.Component {
     const { maxSize, enlargeFactor } = this.props;
     const { onClick, onMouseOver, onMouseOut } = this.props;
 
-    const { title, authors_string: authors, year, area } = data;
+    const {title, authors_string: authors, authors_list: authors_list, year, area} = data;
     const { num_readers: readers, published_in: publisher } = data;
     const { x, y, width: baseWidth, height: baseHeight } = this.state;
     const { path: basePath, dogEar: baseDogEar } = this.state;
@@ -137,7 +138,7 @@ class Paper extends React.Component {
       width *= realEnlargeFactor;
       height *= realEnlargeFactor;
 
-      path = getPath({ x, y, width, height }, this.isDataset());
+      path = this.getPath({ x, y, width, height });
       dogEar = getDogEar({ x, y, width, height });
       realWidth = width;
       realHeight = height;
@@ -155,7 +156,7 @@ class Paper extends React.Component {
     if (hovered) {
       sizeModifierClass = "larger";
     }
-    if (this.isDataset()) {
+    if (this.hasRoundedDesign()) {
       gClass += " resulttype-dataset";
     }
 
@@ -165,6 +166,19 @@ class Paper extends React.Component {
     if (zoom) {
       eventHandlers.onMouseOver = handleMouseOver;
       eventHandlers.onMouseOut = handleMouseOut;
+    }
+
+
+    // function returns a string of authors with conditionals if the list is too long, it's cut off and an ellipsis is added
+    // if less than maxLength authors, the full list is returned
+    function cutAuthors(authorsList, maxLength) {
+      if (authorsList.length > maxLength) {
+        const firstAuthors = authorsList.slice(0, maxLength - 1).join(', ');
+        const lastAuthor = authorsList[authorsList.length - 1];
+        return `${firstAuthors}, ... ${lastAuthor}`;
+      } else {
+        return authors
+      }
     }
 
     return (
@@ -180,7 +194,7 @@ class Paper extends React.Component {
             ref={this.pathRef}
           ></path>
         )}
-        {!this.isDataset() && !this.isZoomingOut() && (
+        {!this.hasRoundedDesign() && !this.isZoomingOut() && (
           <path
             className="paper_path dogear"
             d={dogEar}
@@ -221,7 +235,8 @@ class Paper extends React.Component {
                 <p id="details" className={sizeModifierClass}>
                   <Hyphenate>
                     <Highlight hyphenated queryHighlight>
-                      {authors}
+                      {/*{authors}*/}
+                      {cutAuthors(authors_list, 15)}
                     </Highlight>
                   </Hyphenate>
                 </p>
@@ -262,7 +277,7 @@ class Paper extends React.Component {
 
   animate() {
     this.animatePath();
-    if (!this.isDataset()) {
+    if (!this.hasRoundedDesign()) {
       this.animateDogEar();
     }
     this.animatePaper();
@@ -272,7 +287,7 @@ class Paper extends React.Component {
     const { x, y, width, height } = this.getCoordinatesAndDimensions();
     const el = select(this.pathRef.current);
 
-    const path = getPath({ x, y, width, height }, this.isDataset());
+    const path = this.getPath({ x, y, width, height });
 
     el.transition(this.props.animation.transition)
       .attr("d", path)
@@ -366,18 +381,24 @@ class Paper extends React.Component {
     return !!animation && animation.type === "ZOOM_OUT";
   }
 
-  isDataset() {
-    const { resulttype } = this.props.data;
-    return resulttype.includes("dataset");
+  hasRoundedDesign() {
+    return isNonTextDocument(this.props.data);
   }
+
+  getPath = ({ x, y, width, height }) => {
+    if (this.hasRoundedDesign()) {
+      return getRoundedPath({ x, y, width, height });
+    }
+    return getSquarePath({ x, y, width, height });
+  };
 }
 
 export default Paper;
 
 // config.dogear_width
-const DOGEAR_WIDTH = 0.1;
+const DOGEAR_WIDTH = 0.15;
 // config.dogear_height
-const DOGEAR_HEIGHT = 0.1;
+const DOGEAR_HEIGHT = 0.15;
 
 const getDogEar = ({ x, y, width: w, height: h }) => {
   return `M ${x + (1 - DOGEAR_WIDTH) * w} ${y} v ${DOGEAR_HEIGHT * h} h ${
@@ -385,16 +406,7 @@ const getDogEar = ({ x, y, width: w, height: h }) => {
   }`;
 };
 
-const getPath = ({ x, y, width: w, height: h }, isDataset) => {
-  if (isDataset) {
-    return getDatasetPath({ x, y, width: w, height: h });
-  }
-  return `M ${x} ${y} h ${(1 - DOGEAR_WIDTH) * w} l ${DOGEAR_HEIGHT * w} ${
-    DOGEAR_WIDTH * h
-  } v ${(1 - DOGEAR_HEIGHT) * h} h ${-w} v ${-h}`;
-};
-
-const getDatasetPath = ({ x, y, width, height }) => {
+const getRoundedPath = ({ x, y, width, height }) => {
   const r = 10;
   const lineWidth = width - 2 * r;
   const lineHeight = height - 2 * r;
@@ -408,6 +420,12 @@ const getDatasetPath = ({ x, y, width, height }) => {
   a ${r} ${r} 0 0 0 ${-r} ${-r} \
   h ${-lineWidth} \
   a ${r} ${r} 0 0 0 ${-r} ${r} Z`;
+};
+
+const getSquarePath = ({ x, y, width: w, height: h }) => {
+  return `M ${x} ${y} h ${(1 - DOGEAR_WIDTH) * w} l ${DOGEAR_HEIGHT * w} ${
+    DOGEAR_WIDTH * h
+  } v ${(1 - DOGEAR_HEIGHT) * h} h ${-w} v ${-h}`;
 };
 
 const getEnlargeFactor = (offsetWidth, scrollHeight) => {
@@ -445,4 +463,40 @@ const getMetadataHeight = (realHeight, hasReaders, isZoomed) => {
   }
 
   return 20;
+};
+
+const isNonTextDocType = (t) =>
+  [
+    "dataset",
+    "musical notation",
+    "map",
+    "audio",
+    "image/video",
+    "still image",
+    "moving image/video",
+    "software",
+  ].includes(t.toLowerCase());
+
+const UNKNOWN_TYPE = "other/unknown material";
+
+export const isNonTextDocument = (paper) => {
+  // the following complex logic was required by Maxi:
+  // https://docs.google.com/document/d/11ybT41oceMA29tplmBsyXxqswio-WFdpebcR7qhWoH0/edit#heading=h.y9ftuuxdxyx0
+
+  const hasUnknown = paper.resulttype.some(
+    (t) => t.toLowerCase() === UNKNOWN_TYPE
+  );
+
+  if (!hasUnknown) {
+    return paper.resulttype.some(isNonTextDocType);
+  }
+
+  const knownTypes = paper.resulttype.filter((t) => t.toLowerCase() !== UNKNOWN_TYPE);
+
+  // the only type is unknown
+  if (knownTypes.length === 0) {
+    return true;
+  }
+
+  return isNonTextDocType(knownTypes[0]);
 };
