@@ -37,7 +37,11 @@ if (isset($post_params["lang_id"])) {
         $post_params["lang_id"] = ["all-lang"];
     }
 }
-
+// ignore date filters if vis_type is set to timeline
+if (isset($post_params["vis_type"]) && $post_params["vis_type"] == "timeline") {
+    unset($params_array[array_search("exclude_date_filters", $params_array)]);
+    unset($post_params["exclude_date_filters"]);
+}
 // check if exclude_date_filters is set and true
 if (isset($post_params["exclude_date_filters"]) && $post_params["exclude_date_filters"] === true) {
     // Add "today" and exclude "from" and "to" from the $params_array
