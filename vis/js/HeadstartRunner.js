@@ -58,7 +58,7 @@ class HeadstartRunner {
     const browser = Bowser.getParser(window.navigator.userAgent);
     // TODO use proper browser filtering https://www.npmjs.com/package/bowser#filtering-browsers
     if (
-      !["chrome", "firefox", "safari", "edge"].includes(browser.getBrowserName(true))
+      !["chrome", "firefox", "safari", "edg"].includes(browser.getBrowserName(true))
     ) {
       alert(
         "You are using an unsupported browser. " +
