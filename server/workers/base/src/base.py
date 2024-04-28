@@ -12,6 +12,7 @@ import numpy as np
 from parsers import improved_df_parsing
 
 from datetime import datetime
+import dateparser
 import sys
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
@@ -382,7 +383,8 @@ def sanitize_year(year_str):
 
     for fmt in date_formats:
         try:
-            date_time_obj = datetime.strptime(year_str, fmt)
+            #date_time_obj = datetime.strptime(year_str, fmt)
+            dateparser.parse(year_str)
             sanitized_year = year_str  # here we keep the original string
             break
         except ValueError:
