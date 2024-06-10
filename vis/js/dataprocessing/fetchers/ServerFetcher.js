@@ -9,18 +9,21 @@ class ServerFetcher extends Fetcher {
       "&context=true&streamgraph=" +
       this.config.isStreamgraph;
 
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
+      const data = await response.json();
 
-    // Your changes go here
-
-
-
-
-
-    
-    // Your changes go here
-
-    return data;
+      return data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
   }
+
 }
+
 
 export default ServerFetcher;
