@@ -80,6 +80,29 @@ services:
     networks:
       - headstart
 
+  orcid:
+    build:
+      context: server
+      dockerfile: workers/orcid/Dockerfile
+    restart: unless-stopped
+    environment:
+      SERVICE_VERSION: "${SERVICE_VERSION}"
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      LOGLEVEL: "${LOGLEVEL}"
+      LC_ALL: "en_US.UTF-8"
+      LANG: "en_US.UTF-8"
+      PYTHONIOENCODING: "utf-8"
+      ORCID_CLIENT_ID: "${ORCID_CLIENT_ID}"
+      ORCID_CLIENT_SECRET: "${ORCID_CLIENT_SECRET}"
+    command: ["python", "app.py"]
+    depends_on:
+      - redis
+    networks:
+      - headstart
+
   dataprocessing:
     build:
       context: server
