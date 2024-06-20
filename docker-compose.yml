@@ -97,7 +97,6 @@ services:
       PYTHONIOENCODING: "utf-8"
       ORCID_CLIENT_ID: "${ORCID_CLIENT_ID}"
       ORCID_CLIENT_SECRET: "${ORCID_CLIENT_SECRET}"
-    command: ["python", "app.py"]
     depends_on:
       - redis
     networks:
