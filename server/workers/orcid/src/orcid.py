@@ -55,8 +55,8 @@ class OrcidClient():
         seen on https://dev.to/astagi/rate-limiting-using-python-and-redis-58gk.
         It has been simplified and adjusted to our use case.
 
-        BASE demands one request per second (1 QPS), per
-        https://www.base-search.net/about/download/base_interface.pdf
+        ORCID allows 24 requests per second, with a burst limit of 40 requests. See also:
+        https://info.orcid.org/ufaqs/what-are-the-api-limits/
         """
         
         t = self.redis_store.time()[0]
@@ -75,7 +75,7 @@ class OrcidClient():
         
     def run(self) -> None:
         while True:
-            while self.base_rate_limit_reached():
+            while self.orcid_rate_limit_reached():
                 self.logger.debug('🛑 Request is limited')
                 time.sleep(0.1)
             k, params, endpoint = self.next_item()
@@ -104,6 +104,7 @@ class OrcidClient():
         orcid_id = params.get("orcid")
         try:
             orcid = Orcid(orcid_id=orcid_id, orcid_access_token=self.access_token, state = "public", sandbox=self.sandbox)
+            author_info = extract_author_info(orcid)
             works = retrieve_full_works_metadata(orcid)
             metadata = apply_metadata_schema(works)
             # in BASE it is ["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]
@@ -115,6 +116,8 @@ class OrcidClient():
             input_data["text"] = text.to_json(orient='records')
             res = {}
             res["input_data"] = input_data
+            # merge author info into params
+            params = params.update(author_info)
             res["params"] = params
             return res
         except Exception as e:
