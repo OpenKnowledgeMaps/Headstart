@@ -9,9 +9,9 @@ import logging
 from apis.base import base_ns
 from apis.pubmed import pubmed_ns
 from apis.openaire import openaire_ns
+from apis.orcid import orcid_ns
 from apis.create_vis import vis_ns
 from apis.export import export_ns
-from apis.orcid import orcid_ns
 
 
 class ReverseProxied(object):

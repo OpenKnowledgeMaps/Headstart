@@ -20,7 +20,7 @@ formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
 
 class OrcidClient():
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.separation = 0.1
         self.rate_key = 'orcid-ratelimit'
         self.ORCID_CLIENT_ID = os.getenv("ORCID_CLIENT_ID")
@@ -31,14 +31,14 @@ class OrcidClient():
         else:
             self.sandbox = False
 
-    def authenticate(self):
+    def authenticate(self) -> str:
         orcid_auth = OrcidAuthentication(client_id=self.ORCID_CLIENT_ID,
                                          client_secret=self.ORCID_CLIENT_SECRET)
         access_token = orcid_auth.get_public_access_token()
         return access_token
 
 
-    def next_item(self):
+    def next_item(self) -> tuple:
         queue, msg = self.redis_store.blpop("orcid")
         msg = json.loads(msg.decode('utf-8'))
         k = msg.get('id')
@@ -48,7 +48,7 @@ class OrcidClient():
         return k, params, endpoint
     
 
-    def orcid_rate_limit_reached(self):
+    def orcid_rate_limit_reached(self) -> bool:
         """
         This implementation is inspired by an implementation of
         Generic Cell Rate Algorithm based rate limiting,
@@ -73,7 +73,7 @@ class OrcidClient():
         except LockError:
             return True
         
-    def run(self):
+    def run(self) -> None:
         while True:
             while self.base_rate_limit_reached():
                 self.logger.debug('🛑 Request is limited')
@@ -96,7 +96,7 @@ class OrcidClient():
                     self.logger.error(params)
                     self.logger.error(e)
         
-    def execute_search(self, params):
+    def execute_search(self, params) -> dict:
         q = params.get('q')
         service = params.get('service')
         data = {}
@@ -121,22 +121,68 @@ class OrcidClient():
             self.logger.error(e)
             raise
 
-def retrieve_full_works_metadata(orcid):
+def extract_author_info(orcid) -> dict:
+    personal_details = orcid.personal_details()
+    orcid_id = orcid._orcid_id
+    author_name = " ".join(
+        [personal_details.get("name", {}).get("given-names", {}).get("value", ""),
+         personal_details.get("name", {}).get("family-name", {}).get("value", "")]
+    )
+    author_keywords = ", ".join(orcid.keywords()[0])
+    biography = personal_details.get("biography", {}).get("content", "") \
+                    if personal_details.get("biography", {}).get("visibility") == "public" \
+                    else ""
+    external_identifiers = extract_external_identifiers(orcid)
+    countries = extract_countries(orcid)
+    websites = extract_websites(orcid)
+    author_info = {
+        "orcid_id": orcid_id,
+        "author_name": author_name,
+        "author_keywords": author_keywords,
+        "biography": biography,
+        "websites": websites,
+        "external_identifiers": external_identifiers,
+        "country": countries
+    }
+    return author_info
+
+def extract_countries(orcid) -> list:
+    countries = pd.DataFrame(orcid.address()["address"])
+    countries = countries[countries["visibility"] == "public"]
+    countries["country"] = countries["country"].apply(lambda x: x.get("value"))
+    countries = countries["country"]
+    return countries.tolist()
+
+def extract_external_identifiers(orcid) -> list:
+    external_identifiers = pd.DataFrame(orcid.external_identifiers()["external-identifier"])
+    external_identifiers = external_identifiers[external_identifiers["visibility"] == "public"]
+    external_identifiers["external-id-url"] = external_identifiers["external-id-url"].apply(lambda x: x.get("value"))
+    external_identifiers = external_identifiers[[ "external-id-type", "external-id-url", "external-id-value", "external-id-relationship"]]
+    return external_identifiers.to_dict(orient='records')
+
+def extract_websites(orcid) -> list:
+    urls = pd.DataFrame(orcid.researcher_urls()["researcher-url"])
+    urls = urls[urls["visibility"] == "public"]
+    urls["url"] = urls["url"].apply(lambda x: x.get("value"))
+    urls = urls[[ "url-name", "url"]]
+    return urls.to_dict(orient='records')
+
+def retrieve_full_works_metadata(orcid) -> pd.DataFrame:
     raw_works = pd.DataFrame(orcid.works()[1]["group"]).explode("work-summary")
     works = pd.json_normalize(pd.DataFrame(raw_works["work-summary"]))
     works["publication-date"] = works.apply(get_publication_date, axis=1)
     works["doi"] = works.apply(extract_dois, axis=1)
     return works
     
-def apply_metadata_schema(works):
+def apply_metadata_schema(works) -> pd.DataFrame:
     works.rename(columns=works_mapping, inplace=True)
     metadata = works
     return metadata
     
-def filter_dicts_by_value(dicts, key, value):
+def filter_dicts_by_value(dicts, key, value) -> list:
     return [d for d in dicts if d.get(key) == value]
     
-def extract_dois(work):
+def extract_dois(work) -> str:
     external_ids = work["external-ids.external-id"]
     external_ids = external_ids if isinstance(external_ids, list) else []
     external_ids = (filter_dicts_by_value(
@@ -147,7 +193,7 @@ def extract_dois(work):
     return doi
 
 
-def get_publication_date(work):
+def get_publication_date(work) -> str:
     year = work["publication-date.year.value"]
     month = work["publication-date.month.value"]
     day = work["publication-date.day.value"]
