@@ -49,7 +49,6 @@ const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
         reloadLastUpdate: null,
         apiProperties: {
           headstartPath: null,
-          sheetID: null,
           persistenceBackend: null,
         },
         openInfoModal: false,
@@ -739,93 +738,6 @@ describe("Modals component", () => {
 
       expect(document.querySelector("#info-title").textContent).toEqual(
         "What's this?"
-      );
-    });
-
-    it("gsheets info modal renders", () => {
-      const storeObject = setup(
-        {
-          openInfoModal: true,
-          infoParams: {
-            main_curator_name: "John Doe",
-            main_curator_email: "john@doe.com",
-            project_name: "John's research",
-            project_website: null,
-            sheet_id: "xyz123",
-          },
-        },
-        { service: "gsheets" }
-      );
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={storeObject.localization}>
-              <Modals />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      expect(document.querySelector("#info-title").textContent).toEqual(
-        "About this knowledge map"
-      );
-    });
-
-    it("gsheets info modal renders with project website", () => {
-      const storeObject = setup(
-        {
-          openInfoModal: true,
-          infoParams: {
-            main_curator_name: "John Doe",
-            main_curator_email: "john@doe.com",
-            project_name: "John's research",
-            project_website: "johnswebsite.com",
-            sheet_id: "xyz123",
-          },
-        },
-        { service: "gsheets" }
-      );
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={storeObject.localization}>
-              <Modals />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      expect(document.querySelector("#info-title").textContent).toEqual(
-        "About this knowledge map"
-      );
-    });
-
-    it("covis knowledge map info modal renders", () => {
-      const storeObject = setup(
-        { openInfoModal: true },
-        { service: "gsheets", isCovis: true, chartType: KNOWLEDGEMAP_MODE }
-      );
-      const store = mockStore(storeObject);
-
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={storeObject.localization}>
-              <Modals />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
-
-      expect(document.querySelector("#info-title").textContent).toEqual(
-        "KNOWLEDGE MAP OF COVID-19 RESEARCH CURATED BY EXPERTS"
       );
     });
 

@@ -34,8 +34,6 @@ const getInfoTemplate = (service, isStreamgraph, modalType) => {
       return TripleKMInfo;
     case "triple_sg":
       return TripleSGInfo;
-    case "gsheets":
-      return GsheetsInfo;
     case "covis":
       return CovisInfo;
     default:
